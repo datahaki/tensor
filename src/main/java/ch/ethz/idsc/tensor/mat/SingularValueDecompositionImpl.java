@@ -1,6 +1,7 @@
 // code adapted by jph
 package ch.ethz.idsc.tensor.mat;
 
+import java.io.Serializable;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -19,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-/* package */ class SingularValueDecompositionImpl implements SingularValueDecomposition {
+/* package */ class SingularValueDecompositionImpl implements SingularValueDecomposition, Serializable {
   private static final Scalar _0 = DoubleScalar.of(0);
   private static final Scalar _1 = DoubleScalar.of(1);
   /** Difference between 1.0 and the minimum double greater than 1.0

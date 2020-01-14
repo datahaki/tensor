@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from Scalar
   public Scalar negate() {
-    return of(re.negate(), im.negate());
+    return new ComplexScalarImpl(re.negate(), im.negate());
   }
 
   @Override // from Scalar

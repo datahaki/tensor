@@ -36,7 +36,7 @@ public enum Fourier {
   public static Tensor of(Tensor vector, int b) {
     final int n = vector.length();
     if (n == 0 || 0 != (n & (n - 1)))
-      throw TensorRuntimeException.of(vector);
+      throw TensorRuntimeException.of(vector); // vector length is not a power of two
     Scalar[] array = vector.stream().map(Scalar.class::cast).toArray(Scalar[]::new);
     {
       int j = 0;

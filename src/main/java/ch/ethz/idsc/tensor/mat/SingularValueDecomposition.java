@@ -1,13 +1,11 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
-import java.io.Serializable;
-
 import ch.ethz.idsc.tensor.Tensor;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/SingularValueDecomposition.html">SingularValueDecomposition</a> */
-public interface SingularValueDecomposition extends Serializable {
+public interface SingularValueDecomposition {
   /** performs a singular value decomposition of matrix A
    * <ul>
    * <li>u.dot(DiagonalMatrix.of(values())).dot(Transpose.of(v)) == A

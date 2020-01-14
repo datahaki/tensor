@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.qty;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -111,6 +112,21 @@ public class QuantityMagnitudeTest extends TestCase {
     Scalar _1kg_in_tons = scalarUnaryOperator.apply(Quantity.of(1000, "g"));
     ExactScalarQ.require(_1kg_in_tons);
     assertEquals(_1kg_in_tons, RationalScalar.of(1, 1000));
+  }
+
+  public void testVolume() {
+    Chop._10.requireClose( //
+        QuantityMagnitude.SI().in("L").apply(Quantity.of(1.0, "cups")), //
+        DoubleScalar.of(0.2365882365));
+    Chop._10.requireClose( //
+        QuantityMagnitude.SI().in("L").apply(Quantity.of(1.0, "gal")), //
+        DoubleScalar.of(3.785411784));
+    Chop._10.requireClose( //
+        QuantityMagnitude.SI().in("L").apply(Quantity.of(1.0, "tsp")), //
+        DoubleScalar.of(0.00492892159375));
+    Chop._10.requireClose( //
+        QuantityMagnitude.SI().in("L").apply(Quantity.of(1.0, "sticks")), //
+        DoubleScalar.of(0.11829411825));
   }
 
   public void testFailConversion() {

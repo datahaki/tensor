@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 
 public class UnitSystemTest extends TestCase {
   public void testSize() {
-    assertTrue(72 <= UnitSystem.SI().map().size());
+    assertTrue(75 <= UnitSystem.SI().map().size());
   }
 
   public void testExact() {

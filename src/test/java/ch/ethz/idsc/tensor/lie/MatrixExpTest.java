@@ -134,6 +134,15 @@ public class MatrixExpTest extends TestCase {
     }
   }
 
+  public void testScalarFail() {
+    try {
+      MatrixExp.of(RealScalar.ONE);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testEmptyFail() {
     try {
       MatrixExp.of(Tensors.empty());
