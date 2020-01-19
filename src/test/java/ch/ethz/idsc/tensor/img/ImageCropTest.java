@@ -25,10 +25,10 @@ public class ImageCropTest extends TestCase {
     assertEquals(result, Tensors.fromString("{{1}}"));
   }
 
-  public void testColor() {
+  public void testColor() throws ClassNotFoundException, IOException {
     Tensor image = Tensors.fromString("{{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}");
     image = ArrayPlot.of(image, ColorDataGradients.CLASSIC);
-    TensorUnaryOperator tensorUnaryOperator = ImageCrop.color(image.get(0, 0));
+    TensorUnaryOperator tensorUnaryOperator = Serialization.copy(ImageCrop.color(image.get(0, 0)));
     Tensor result = tensorUnaryOperator.apply(image);
     assertEquals(result, Tensors.fromString("{{{255, 237, 237, 255}}}"));
   }

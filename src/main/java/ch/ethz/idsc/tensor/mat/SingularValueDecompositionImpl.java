@@ -72,17 +72,17 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from SingularValueDecomposition
   public Tensor getU() {
-    return u.unmodifiable();
+    return u;
   }
 
   @Override // from SingularValueDecomposition
   public Tensor values() {
-    return w.unmodifiable();
+    return w;
   }
 
   @Override // from SingularValueDecomposition
   public Tensor getV() {
-    return v.unmodifiable();
+    return v;
   }
 
   private void initU1(int i) {

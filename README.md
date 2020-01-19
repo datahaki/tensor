@@ -292,7 +292,7 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
 <repositories>
   <repository>
     <id>tensor-mvn-repo</id>
-    <url>https://raw.github.com/idsc-frazzoli/tensor/mvn-repo/</url>
+    <url>https://raw.github.com/datahaki/tensor/mvn-repo/</url>
     <snapshots>
       <enabled>true</enabled>
       <updatePolicy>always</updatePolicy>
