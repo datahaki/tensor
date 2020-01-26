@@ -85,6 +85,13 @@ public class RigidMotionFitTest extends TestCase {
     }
   }
 
+  public void testSingle() {
+    Tensor points = Tensors.of(Tensors.vector(1, 2, 3));
+    RigidMotionFit rigidMotionFit = RigidMotionFit.of(points, points);
+    Chop._10.requireClose(rigidMotionFit.rotation(), IdentityMatrix.of(3));
+    Chop._10.allZero(rigidMotionFit.translation());
+  }
+
   public void testFormatFail() {
     Distribution distribution = NormalDistribution.standard();
     Tensor points = RandomVariate.of(distribution, 6, 3);

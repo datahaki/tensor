@@ -31,7 +31,7 @@ public class SqrtTest extends TestCase {
       scalar.zero();
     }
     {
-      RationalScalar tensor = (RationalScalar) RationalScalar.of(-2, 3);
+      Scalar tensor = RationalScalar.of(-2, 3);
       Sqrt.of(tensor);
       Scalar scalar = Sqrt.of(tensor);
       scalar.zero();
@@ -51,10 +51,13 @@ public class SqrtTest extends TestCase {
 
   public void testRational() {
     assertEquals(Sqrt.of(RationalScalar.of(16, 25)).toString(), "4/5");
-    assertEquals(Sqrt.of(RationalScalar.of(-16, 25)).toString(), "4/5*I");
+    Scalar scalar = Sqrt.of(RationalScalar.of(-16, 25));
+    assertTrue(scalar instanceof ComplexScalar);
+    assertEquals(scalar.toString(), "4/5*I");
   }
 
   public void testReal() {
+    assertEquals(Sqrt.of(RationalScalar.of(-16, 25)).toString(), "4/5*I");
     assertEquals(Sqrt.FUNCTION.apply(RealScalar.of(16 / 25.)), Scalars.fromString("4/5"));
     assertEquals(Sqrt.FUNCTION.apply(RealScalar.of(-16 / 25.)), Scalars.fromString("4/5*I"));
   }
