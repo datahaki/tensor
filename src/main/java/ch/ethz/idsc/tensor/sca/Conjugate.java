@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
  * @see ConjugateTranspose */
 public enum Conjugate implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ConjugateInterface) {

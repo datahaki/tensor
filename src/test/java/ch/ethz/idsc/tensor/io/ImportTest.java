@@ -62,7 +62,7 @@ public class ImportTest extends TestCase {
   /** gjoel noticed that on java9/windows Files::lines in an old implementation of
    * Import::of the file was not closed sufficiently fast to allow the deletion of
    * the file. */
-  public void testCsvClosed() throws IOException, ClassNotFoundException, DataFormatException {
+  public void testCsvClosed() throws IOException {
     File file = TestFile.withExtension("csv");
     Export.of(file, Tensors.fromString("{{1, 2}, {3, 4}}"));
     assertTrue(file.isFile());
@@ -81,7 +81,7 @@ public class ImportTest extends TestCase {
     assertTrue(file.delete());
   }
 
-  public void testFolderCsvClosed() throws IOException, ClassNotFoundException, DataFormatException {
+  public void testFolderCsvClosed() throws IOException {
     File dir = HomeDirectory.file("tensorTest" + System.currentTimeMillis());
     assertFalse(dir.exists());
     dir.mkdir();

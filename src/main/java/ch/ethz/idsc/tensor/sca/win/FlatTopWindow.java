@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/FlatTopWindow.html">FlatTopWindow</a> */
 public enum FlatTopWindow implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Scalar A0 = RationalScalar.of(215578947, 1000000000);
   private static final Scalar A1 = RationalScalar.of(416631580, 1000000000);
   private static final Scalar A2 = RationalScalar.of(277263158, 1000000000);

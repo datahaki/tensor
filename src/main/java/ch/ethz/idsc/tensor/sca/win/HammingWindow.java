@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/HammingWindow.html">HammingWindow</a> */
 public enum HammingWindow implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Scalar A0 = RationalScalar.of(25, 46);
   private static final Scalar A1 = RationalScalar.of(21, 46);
 

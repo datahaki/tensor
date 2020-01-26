@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
 
 /* package */ enum CirclePoint {
   INSTANCE;
-  // ---
+
   private final Map<Scalar, Tensor> map = new HashMap<>();
 
   private CirclePoint() {

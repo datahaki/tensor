@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 /** -p Log[p] with continuation at p == 0 */
 public enum ShannonEntropy implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     return Scalars.isZero(scalar) //

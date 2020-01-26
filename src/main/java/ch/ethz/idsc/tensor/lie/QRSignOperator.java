@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       return ONE_NEGATE;
     }
   };
-  // ---
+
   private static final Scalar ONE_NEGATE = RealScalar.ONE.negate();
 
   /** @param xk

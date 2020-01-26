@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.qty.Boole;
  * <a href="https://reference.wolfram.com/language/ref/Unitize.html">Unitize</a> */
 public enum Unitize implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     return Boole.of(Scalars.nonZero(scalar));

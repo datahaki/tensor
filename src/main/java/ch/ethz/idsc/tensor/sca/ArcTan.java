@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * @see Tan */
 public enum ArcTan implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Scalar I_HALF = ComplexScalar.I.multiply(RationalScalar.HALF);
 
   @Override

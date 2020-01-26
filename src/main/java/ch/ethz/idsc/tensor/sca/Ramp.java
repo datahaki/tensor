@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.red.Max;
  * <a href="https://reference.wolfram.com/language/ref/Ramp.html">Ramp</a> */
 public enum Ramp implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     return Max.of(scalar.zero(), scalar);

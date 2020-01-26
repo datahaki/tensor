@@ -29,8 +29,8 @@ public enum Norm implements NormInterface {
   /** 2-norm, uses SVD for matrices */
   _2(Norm2.INSTANCE), //
   /** infinity-norm, for vectors max_i |a_i| */
-  INFINITY(NormInfinity.INSTANCE), //
-  ;
+  INFINITY(NormInfinity.INSTANCE);
+
   private final NormInterface normInterface;
 
   private Norm(NormInterface normInterface) {

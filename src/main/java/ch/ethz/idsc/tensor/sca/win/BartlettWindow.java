@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/BartlettWindow.html">BartlettWindow</a> */
 public enum BartlettWindow implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar x) {
     x = x.abs();

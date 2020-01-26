@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
  * @see Norm */
 public enum Norm1 implements NormInterface {
   INSTANCE;
-  // ---
+
   @Override // from VectorNormInterface
   public Scalar ofVector(Tensor vector) {
     return ofVector(vector.stream().map(Scalar.class::cast));

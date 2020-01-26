@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.alg.Series;
  * <a href="https://reference.wolfram.com/language/ref/Sinc.html">Sinc</a> */
 public enum Sinc implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   /* package */ static final Scalar THRESHOLD = DoubleScalar.of(0.05);
   private static final ScalarUnaryOperator SERIES = Series.of( //
       Tensors.vector(1, 0, -6, 0, 120, 0, -5040, 0, 362880, 0, -39916800) //

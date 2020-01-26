@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/ParzenWindow.html">ParzenWindow</a> */
 public enum ParzenWindow implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final ScalarUnaryOperator S1 = Series.of(Tensors.vector(1, 0, -24, 48));
   private static final ScalarUnaryOperator S2 = Series.of(Tensors.vector(2, -12, 24, -16));

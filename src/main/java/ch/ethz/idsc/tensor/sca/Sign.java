@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
  * <a href="https://reference.wolfram.com/language/ref/Sign.html">Sign</a> */
 public enum Sign implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Scalar[] LOOKUP = { //
       RealScalar.ONE.negate(), // -1
       RealScalar.ZERO, // 0

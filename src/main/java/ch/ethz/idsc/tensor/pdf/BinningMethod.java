@@ -60,7 +60,7 @@ public enum BinningMethod implements TensorScalarFunction {
       return division(tensor, Sqrt.FUNCTION.apply(RealScalar.of(tensor.length())));
     }
   };
-  // ---
+
   /** @param tensor
    * @return tensor.length() ^ (1/3) */
   private static Scalar crt_length(Tensor tensor) {

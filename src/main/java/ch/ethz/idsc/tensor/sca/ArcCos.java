@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * @see Cos */
 public enum ArcCos implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Scalar I_NEGATE = ComplexScalar.I.negate();
 
   @Override

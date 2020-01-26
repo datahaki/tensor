@@ -29,8 +29,8 @@ package ch.ethz.idsc.tensor.io;
   PNG,
   /** ".vector" is an extension specific to the tensor library
    * @see VectorFormat */
-  VECTOR, //
-  ;
+  VECTOR;
+
   /** @param string
    * @return
    * @throws Exception if given string does not match */

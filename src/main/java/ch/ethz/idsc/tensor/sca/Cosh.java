@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * @see ArcCosh */
 public enum Cosh implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof TrigonometryInterface) {

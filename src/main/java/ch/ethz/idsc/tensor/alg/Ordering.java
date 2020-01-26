@@ -21,9 +21,8 @@ public enum Ordering {
   INCREASING(vector -> IntStream.range(0, vector.length()) //
       .boxed().sorted((i, j) -> Scalars.compare(vector.Get(i), vector.Get(j)))), //
   DECREASING(vector -> IntStream.range(0, vector.length()) //
-      .boxed().sorted((i, j) -> Scalars.compare(vector.Get(j), vector.Get(i)))), //
-  ;
-  // ---
+      .boxed().sorted((i, j) -> Scalars.compare(vector.Get(j), vector.Get(i))));
+
   private static interface OrderingInterface {
     /** @param vector
      * @return stream of indices i[:] so that vector[i[0]], vector[i[1]], ... is ordered */

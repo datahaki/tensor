@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
  * <a href="https://reference.wolfram.com/language/ref/Gudermannian.html">Gudermannian</a> */
 public enum Gudermannian implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     Scalar value = ArcTan.FUNCTION.apply(Exp.FUNCTION.apply(scalar));

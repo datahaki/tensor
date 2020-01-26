@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/InverseErfc.html">InverseErfc</a> */
 public enum InverseErfc implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     return InverseErf.of(scalar.subtract(RealScalar.ONE)).negate();

@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
  * <a href="https://reference.wolfram.com/language/ref/UnitStep.html">UnitStep</a> */
 public enum UnitStep implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     return Boole.of(Sign.isPositiveOrZero(scalar));

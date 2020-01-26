@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * @see Tanh */
 public enum ArcTanh implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     return RationalScalar.HALF.multiply( //

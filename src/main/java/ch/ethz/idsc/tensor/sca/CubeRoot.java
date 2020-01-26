@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * <a href="https://reference.wolfram.com/language/ref/CubeRoot.html">CubeRoot</a> */
 public enum CubeRoot implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final ScalarUnaryOperator POWER = Power.function(RationalScalar.of(1, 3));
 
   @Override

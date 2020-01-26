@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/InverseErf.html">InverseErf</a> */
 public enum InverseErf implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Scalar ONE_NEGATE = RealScalar.ONE.negate();
   private static final ScalarUnaryOperator SERIES = Series.of(Tensors.vectorDouble( //
       0, 0.8842319013499945, //

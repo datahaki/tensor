@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/HannWindow.html">HannWindow</a> */
 public enum HannWindow implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Scalar _1_3 = RationalScalar.of(1, 3);
   private static final Scalar _1_4 = RationalScalar.of(1, 4);
   private static final Scalar _1_6 = RationalScalar.of(1, 6);

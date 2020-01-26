@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * is non-zero, but also if none of the candidates is non-zero */
 /* package */ enum PivotFirstNonZero implements Pivot {
   INSTANCE;
-  // ---
+
   @Override // from Pivot
   public int get(int row, int col, int[] ind, Tensor[] lhs) {
     return IntStream.range(row, ind.length) //

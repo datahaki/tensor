@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Scalar;
 /* package */ enum ScalarSummaryStatisticsCollector implements //
     Collector<Scalar, ScalarSummaryStatistics, ScalarSummaryStatistics> {
   INSTANCE;
-  // ---
+
   @Override // from Collector
   public Supplier<ScalarSummaryStatistics> supplier() {
     return ScalarSummaryStatistics::new;

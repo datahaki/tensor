@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * @see Exp */
 public enum Log implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof LogInterface) {
