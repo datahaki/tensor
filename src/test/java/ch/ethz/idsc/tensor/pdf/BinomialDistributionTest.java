@@ -33,7 +33,7 @@ public class BinomialDistributionTest extends TestCase {
     Distribution distribution = BinomialDistribution.of(10, RationalScalar.of(1, 2));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(RealScalar.of(0)), RationalScalar.of(1, 1024));
-    assertEquals(pdf.at(RealScalar.of(0.5)), RationalScalar.ZERO);
+    assertEquals(pdf.at(RealScalar.of(0.5)), RealScalar.ZERO);
     assertEquals(pdf.at(RealScalar.of(1)), RationalScalar.of(5, 512));
   }
 
@@ -79,8 +79,8 @@ public class BinomialDistributionTest extends TestCase {
   }
 
   public void testCornerCase() {
-    assertEquals(RandomVariate.of(BinomialDistribution.of(0, RationalScalar.ONE)), RealScalar.ZERO);
-    assertEquals(RandomVariate.of(BinomialDistribution.of(0, RationalScalar.ZERO)), RealScalar.ZERO);
+    assertEquals(RandomVariate.of(BinomialDistribution.of(0, RealScalar.ONE)), RealScalar.ZERO);
+    assertEquals(RandomVariate.of(BinomialDistribution.of(0, RealScalar.ZERO)), RealScalar.ZERO);
     assertEquals(RandomVariate.of(BinomialDistribution.of(0, RealScalar.of(0.3))), RealScalar.ZERO);
   }
 

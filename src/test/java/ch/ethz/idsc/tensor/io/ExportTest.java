@@ -158,7 +158,7 @@ public class ExportTest extends TestCase {
     assertFalse(file.exists());
   }
 
-  public void testGzOnlyFail() throws IOException {
+  public void testGzOnlyFail() {
     File file = TestFile.withExtension("gz");
     Tensor tensor = Tensors.vector(1, 2, 3, 4);
     try {
@@ -182,7 +182,7 @@ public class ExportTest extends TestCase {
     assertFalse(file.exists());
   }
 
-  public void testBmpNull() throws IOException {
+  public void testBmpNull() {
     File file = TestFile.withExtension("bmp");
     try {
       Export.of(file, null);
@@ -193,7 +193,7 @@ public class ExportTest extends TestCase {
     assertFalse(file.exists());
   }
 
-  public void testBmpGzNull() throws IOException {
+  public void testBmpGzNull() {
     File file = TestFile.withExtension("bmp.gz");
     try {
       Export.of(file, null);

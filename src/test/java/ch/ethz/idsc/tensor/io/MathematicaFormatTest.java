@@ -67,7 +67,7 @@ public class MathematicaFormatTest extends TestCase {
     checkNonString(tensor);
   }
 
-  public void testBasicResource() throws IOException {
+  public void testBasicResource() {
     Tensor tensor = ResourceData.of("/io/basic.mathematica");
     checkNonString(tensor);
   }

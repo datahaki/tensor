@@ -25,7 +25,7 @@ public class GetTest extends TestCase {
     assertTrue(tensor instanceof StringScalar);
   }
 
-  public void testMissing() throws IOException {
+  public void testMissing() {
     File file = new File("/io/doesnotexist");
     try {
       Get.of(file);

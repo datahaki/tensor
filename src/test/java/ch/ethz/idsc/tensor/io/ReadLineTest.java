@@ -43,7 +43,7 @@ public class ReadLineTest extends TestCase {
     }
   }
 
-  public void testFail() throws IOException {
+  public void testFail() {
     try (Stream<String> stream = ReadLine.of(getClass().getResource("/io/doesnotexist.csv").openStream())) {
       fail();
     } catch (Exception exception) {

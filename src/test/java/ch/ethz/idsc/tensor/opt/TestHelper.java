@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import junit.framework.TestCase;
+import junit.framework.Assert;
 
 /* package */ enum TestHelper {
   ;
@@ -16,7 +16,7 @@ import junit.framework.TestCase;
     Distribution distribution = UniformDistribution.of(0, 2);
     for (int count = 0; count < 20; ++count) {
       Scalar scalar = RandomVariate.of(distribution);
-      TestCase.assertEquals( //
+      Assert.assertEquals( //
           interpolation.get(Tensors.of(scalar)), //
           interpolation.at(scalar));
     }
@@ -26,7 +26,7 @@ import junit.framework.TestCase;
     Distribution distribution = DiscreteUniformDistribution.of(0, 3);
     for (int count = 0; count < 20; ++count) {
       Scalar scalar = RandomVariate.of(distribution);
-      TestCase.assertEquals( //
+      Assert.assertEquals( //
           interpolation.get(Tensors.of(scalar)), //
           interpolation.at(scalar));
     }
@@ -35,13 +35,13 @@ import junit.framework.TestCase;
   static void getScalarFail(Interpolation interpolation) {
     try {
       interpolation.get(RealScalar.of(1.4));
-      TestCase.fail();
+      Assert.fail();
     } catch (Exception exception) {
       // ---
     }
     try {
       interpolation.get(RealScalar.ONE);
-      TestCase.fail();
+      Assert.fail();
     } catch (Exception exception) {
       // ---
     }

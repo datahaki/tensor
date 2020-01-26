@@ -64,7 +64,7 @@ public class DeleteDirectoryTest extends TestCase {
     assertEquals(deleteDirectory.deletedCount(), 5);
   }
 
-  public void testNotFound() throws IOException {
+  public void testNotFound() {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "NotFound");
     try {
       DeleteDirectory.of(folder, 1, 10);

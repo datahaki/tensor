@@ -117,14 +117,14 @@ public class RoundTest extends TestCase {
   public void testRoundOptions3() {
     Scalar pi = (Scalar) Scalars.fromString("1234.100000000000008").map(Round._2);
     DecimalScalar ds = (DecimalScalar) pi;
-    BigDecimal bd = (BigDecimal) ds.number();
+    BigDecimal bd = ds.number();
     assertEquals(bd.precision(), 4 + 2);
   }
 
   public void testPrecision() {
     Scalar pi = DecimalScalar.of("1234.10");
     DecimalScalar ds = (DecimalScalar) pi;
-    BigDecimal bd = (BigDecimal) ds.number();
+    BigDecimal bd = ds.number();
     assertEquals(bd.precision(), 4 + 2);
   }
 

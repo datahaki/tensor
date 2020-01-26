@@ -50,8 +50,8 @@ public class QuaternionToRotationMatrixTest extends TestCase {
       quaternion = quaternion.divide(quaternion.abs()); // normalize
       Tensor vector = RandomVariate.of(NormalDistribution.standard(), 3);
       Scalar v = Quaternion.of(RealScalar.ZERO, vector);
-      Quaternion qvq = (Quaternion) quaternion.multiply(v).multiply(Conjugate.FUNCTION.apply(quaternion));
-      Quaternion qq = (Quaternion) quaternion;
+      Quaternion qvq = quaternion.multiply(v).multiply(Conjugate.FUNCTION.apply(quaternion));
+      Quaternion qq = quaternion;
       Tensor matrix = QuaternionToRotationMatrix.of(qq);
       assertTrue(OrthogonalMatrixQ.of(matrix, Chop._12));
       Chop._12.requireClose(Det.of(matrix), RealScalar.ONE);
