@@ -5,7 +5,9 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** inspired by
- * <a href="https://reference.wolfram.com/language/ref/LeastSquares.html">LeastSquares</a> */
+ * <a href="https://reference.wolfram.com/language/ref/LeastSquares.html">LeastSquares</a>
+ * 
+ * @see PseudoInverse */
 public enum LeastSquares {
   ;
   /** @param matrix with rows >= cols, and maximum rank

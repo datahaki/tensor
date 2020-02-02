@@ -56,7 +56,7 @@ public class Timing {
     frozen += current();
     tic = null;
     // intended: function does not return anything !
-    // use display_...() to obtain absolute time
+    // use seconds() or nanoSeconds() to obtain absolute time
     // DO NOT MODIFY
   }
 

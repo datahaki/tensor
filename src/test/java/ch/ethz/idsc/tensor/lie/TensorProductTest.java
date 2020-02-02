@@ -13,14 +13,19 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
 public class TensorProductTest extends TestCase {
-  public void testVectors() {
-    Tensor tensor = TensorProduct.of(Tensors.vector(1, 2, 3), Tensors.vector(-1, 2));
-    assertEquals(Dimensions.of(tensor), Arrays.asList(3, 2));
+  public void testEmpty() {
+    assertEquals(TensorProduct.of(Tensors.empty(), LieAlgebras.sl2()), Tensors.reserve(123));
+    assertEquals(TensorProduct.of(Tensors.empty(), Quantity.of(2, "s")), Tensors.reserve(4));
   }
 
   public void testScalar() {
     Tensor s = TensorProduct.of(Quantity.of(3, "m*s"), Quantity.of(4, "s"));
     assertEquals(s, Quantity.of(12, "s^2*m"));
+  }
+
+  public void testVectors() {
+    Tensor tensor = TensorProduct.of(Tensors.vector(1, 2, 3), Tensors.vector(-1, 2));
+    assertEquals(Dimensions.of(tensor), Arrays.asList(3, 2));
   }
 
   public void testFour1() {

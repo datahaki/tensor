@@ -19,6 +19,7 @@ public class TensorsTest extends TestCase {
     assertEquals(tensor, Tensors.empty());
     assertEquals(tensor, Tensors.vector());
     assertEquals(tensor, Tensors.of());
+    assertEquals(tensor, Tensors.reserve(10));
   }
 
   public void testReserveFail() {
