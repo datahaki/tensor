@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.num;
+package ch.ethz.idsc.tensor.alg;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;

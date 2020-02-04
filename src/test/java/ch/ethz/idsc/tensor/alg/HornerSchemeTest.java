@@ -26,11 +26,12 @@ public class HornerSchemeTest extends TestCase {
     ExactScalarQ.require(actual);
     Scalar expected = RealScalar.of(-3 + 4 * (2) - 5 * (2 * 2));
     assertEquals(expected, actual);
-    assertEquals(expected, new HornerScheme(coeffs).apply(x));
+    assertEquals(expected, new HornerScheme(Reverse.of(coeffs)).apply(x));
   }
 
   public void testPackageVisibility() {
     assertTrue(Modifier.isPublic(Series.class.getModifiers()));
+    assertTrue(Modifier.isPublic(FromDigits.class.getModifiers()));
     assertFalse(Modifier.isPublic(HornerScheme.class.getModifiers()));
   }
 }

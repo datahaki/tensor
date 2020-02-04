@@ -1,11 +1,10 @@
 // code by jph
-package ch.ethz.idsc.tensor.num;
+package ch.ethz.idsc.tensor.alg;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Reverse;
-import ch.ethz.idsc.tensor.alg.Series;
+import ch.ethz.idsc.tensor.num.IntegerDigits;
 
 /** Implementation is consistent with Mathematica
  * 
@@ -19,9 +18,10 @@ public enum FromDigits {
   ;
   private static final Scalar TEN = RealScalar.of(10);
 
-  /** @param digits
-   * @return */
+  /** @param digits vector
+   * @return
+   * @throws Exception if input is not a vector */
   public static Scalar of(Tensor digits) {
-    return Series.of(Reverse.of(digits)).apply(TEN);
+    return new HornerScheme(digits).apply(TEN);
   }
 }

@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 public enum PseudoInverse {
   ;
   /** @param matrix
-   * @return pseudoinverse of matrix */
+   * @return pseudoinverse of given matrix */
   public static Tensor of(Tensor matrix) {
     return Unprotect.dimension1(matrix) <= matrix.length() //
         ? of(SingularValueDecomposition.of(matrix)) //

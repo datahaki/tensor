@@ -15,16 +15,16 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * 
  * <p>https://en.wikipedia.org/wiki/Horner%27s_method */
 /* package */ class HornerScheme implements ScalarUnaryOperator {
-  private final Tensor reversed;
+  private final Tensor coeffs;
 
   public HornerScheme(Tensor coeffs) {
-    reversed = Reverse.of(coeffs);
+    this.coeffs = coeffs;
   }
 
   @Override
   public Scalar apply(Scalar scalar) {
     Scalar total = scalar.zero();
-    for (Tensor entry : reversed)
+    for (Tensor entry : coeffs)
       total = total.multiply(scalar).add(entry);
     return total;
   }
