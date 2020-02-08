@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Unprotect;
  * <a href="https://reference.wolfram.com/language/ref/MatrixLog.html">MatrixLog</a> */
 public enum MatrixLog {
   ;
-  /** Hint: currently only matrices of dimensions 2x2 are supported
+  /** Hint: currently only matrices of dimensions 2 x 2 are supported
    * 
    * @param matrix
    * @return

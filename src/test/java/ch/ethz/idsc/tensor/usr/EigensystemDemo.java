@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Put;
 import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.lie.Symmetrize;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -29,7 +30,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
       Inverse.of(a);
       a.dot(b);
       Parallelize.dot(a, b);
-      a = a.add(Transpose.of(a));
+      a = Symmetrize.of(a);
       Eigensystem.ofSymmetric(a);
     }
     Tensor timings = Tensors.empty();
@@ -39,7 +40,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
       final int trials = 70 - dim;
       for (int count = 0; count < trials; ++count) {
         Tensor a = RandomVariate.of(distribution, dim, dim);
-        a = a.add(Transpose.of(a));
+        a = Symmetrize.of(a);
         timing.start();
         Eigensystem.ofSymmetric(a);
         timing.stop();

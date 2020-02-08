@@ -44,9 +44,13 @@ public class Normalize implements TensorUnaryOperator {
     return new Normalize(norm::ofVector);
   }
 
-  /** Examples:
+  /** Hint: Mathematica requires that the function maps any tensor to
+   * a non-negative scalar, whereas the tensor library does not make this
+   * requirement.
+   * 
+   * Examples:
    * <pre>
-   * Normalize.with(v -> Total.of(v).Get())
+   * Normalize.with(Total::ofVector)
    * </pre>
    * 
    * @param tensorScalarFunction

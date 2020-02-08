@@ -21,6 +21,9 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -260,6 +263,32 @@ public class NullSpaceTest extends TestCase {
       fail();
     } catch (Exception exception) {
       // ---
+    }
+  }
+
+  public void testExtended() {
+    Distribution distribution = UniformDistribution.unit();
+    int n = 10;
+    for (int d = 1; d < n; ++d) {
+      Tensor matrix = RandomVariate.of(distribution, n, d);
+      assertEquals(NullSpace.of(matrix), Tensors.empty());
+      Tensor mt = Transpose.of(matrix);
+      {
+        Tensor nullspace = NullSpace.usingRowReduce(mt);
+        assertEquals(Dimensions.of(nullspace), Arrays.asList(n - d, n));
+        Chop._10.requireAllZero(mt.dot(Transpose.of(nullspace)));
+      }
+      {
+        Tensor nullspace = NullSpace.usingQR(mt);
+        assertEquals(Dimensions.of(nullspace), Arrays.asList(n - d, n));
+        Chop._10.requireAllZero(mt.dot(Transpose.of(nullspace)));
+        Chop._10.requireClose(nullspace.dot(Transpose.of(nullspace)), IdentityMatrix.of(n - d));
+      }
+      {
+        Tensor nullspace = NullSpace.of(mt);
+        assertEquals(Dimensions.of(nullspace), Arrays.asList(n - d, n));
+        Chop._10.requireAllZero(mt.dot(Transpose.of(nullspace)));
+      }
     }
   }
 

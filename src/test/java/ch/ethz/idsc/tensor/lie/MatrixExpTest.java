@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.HermitianMatrixQ;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
@@ -40,9 +39,7 @@ public class MatrixExpTest extends TestCase {
     double[][] mat = new double[][] { { 0, val, va2 }, { -val, 0, va3 }, { -va2, -va3, 0 } };
     Tensor bu = Tensors.matrixDouble(mat);
     Tensor o = MatrixExp.of(bu);
-    assertEquals( //
-        Chop._12.of(o.dot(Transpose.of(o)).subtract(IdentityMatrix.of(o.length()))), //
-        Array.zeros(Dimensions.of(o)));
+    Chop._12.requireAllZero(o.dot(Transpose.of(o)).subtract(IdentityMatrix.of(o.length())));
   }
 
   public void testExp1() {
@@ -54,11 +51,9 @@ public class MatrixExpTest extends TestCase {
   public void testExp2() {
     int n = 10;
     Tensor A = Tensors.matrix((i, j) -> DoubleScalar.of(RANDOM.nextGaussian()), n, n);
-    Tensor S = A.subtract(Transpose.of(A));
+    Tensor S = TensorWedge.of(A);
     Tensor o = MatrixExp.of(S);
-    assertEquals( //
-        o.dot(Transpose.of(o)).subtract(IdentityMatrix.of(o.length())).map(Chop._10), //
-        Array.zeros(Dimensions.of(o)));
+    Chop._10.requireAllZero(o.dot(Transpose.of(o)).subtract(IdentityMatrix.of(o.length())));
   }
 
   public void testGoldenThompsonInequality() {

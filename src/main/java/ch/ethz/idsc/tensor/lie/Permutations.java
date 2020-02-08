@@ -40,7 +40,6 @@ public class Permutations {
     return Unprotect.using(new Permutations(tensor).list);
   }
 
-  // ---
   private final List<Tensor> list = new LinkedList<>();
 
   private Permutations(Tensor tensor) {
