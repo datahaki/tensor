@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * <p>Three methods are available:
  * 
  * <ul>
- * <li>{@link NullSpace#usingRowReduce(Tensor)}
+ * <li>{@link LeftNullSpace#usingRowReduce(Tensor)}
  * <li>{@link NullSpace#usingQR(Tensor)}
  * <li>{@link NullSpace#usingSvd(Tensor)}
  * </ul>
@@ -65,7 +65,7 @@ public enum NullSpace {
   /** @param matrix with exact precision entries
    * @return tensor of vectors that span the kernel of given matrix */
   public static Tensor usingRowReduce(Tensor matrix) {
-    return NullSpaceRowReduce.of(matrix, IdentityMatrix.of(Unprotect.dimension1(matrix)));
+    return LeftNullSpace.usingRowReduce(Transpose.of(matrix));
   }
 
   /** @param matrix of dimensions n x m with exact precision entries
@@ -73,7 +73,7 @@ public enum NullSpace {
    * for the scalar type of each column
    * @return tensor of vectors that span the kernel of given matrix */
   public static Tensor usingRowReduce(Tensor matrix, Tensor identity) {
-    return NullSpaceRowReduce.of(matrix, SquareMatrixQ.require(identity));
+    return LeftNullSpace.usingRowReduce(Transpose.of(matrix), SquareMatrixQ.require(identity));
   }
 
   /** @param matrix

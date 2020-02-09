@@ -3,9 +3,11 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.util.stream.Stream;
 
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.QRDecomposition;
 
@@ -20,6 +22,12 @@ public enum LeftNullSpace {
   /** @param matrix
    * @return list of vectors that span the left nullspace of given matrix */
   public static Tensor of(Tensor matrix) {
+    return ExactTensorQ.of(matrix) //
+        ? usingRowReduce(matrix)
+        : usingQR(matrix);
+  }
+
+  public static Tensor usingQR(Tensor matrix) {
     int rows = matrix.length();
     int cols = Unprotect.dimension1(matrix);
     if (rows <= cols)
@@ -38,5 +46,26 @@ public enum LeftNullSpace {
           qinv.stream().skip(cols)));
     }
     return Tensor.of(qinv.stream().skip(cols));
+  }
+
+  /** @param matrix
+   * @return list of vectors that span the left nullspace of given matrix */
+  public static Tensor usingRowReduce(Tensor matrix) {
+    return usingRowReduce(matrix, IdentityMatrix.of(matrix.length()));
+  }
+
+  /** @param matrix
+   * @param identity
+   * @return list of vectors that span the left nullspace of given matrix */
+  public static Tensor usingRowReduce(Tensor matrix, Tensor identity) {
+    final int rows = matrix.length(); // == identity.length()
+    final int cols = Unprotect.dimension1(matrix);
+    Tensor lhs = RowReduce.of(Join.of(1, matrix, identity));
+    int j = 0;
+    int c0 = 0;
+    while (c0 < cols && j < rows)
+      if (Scalars.nonZero(lhs.Get(j, c0++))) // <- careful: c0 is modified
+        ++j;
+    return Tensor.of(lhs.extract(j, rows).stream().map(row -> row.extract(cols, cols + rows)));
   }
 }
