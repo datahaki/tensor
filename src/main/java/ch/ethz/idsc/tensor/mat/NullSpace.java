@@ -8,9 +8,7 @@ import ch.ethz.idsc.tensor.MachineNumberQ;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
-import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.lie.QRDecomposition;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** {@link NullSpace#of(Tensor)} picks the most suited algorithm to determine the
@@ -35,7 +33,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * low condition number.
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/NullSpace.html">NullSpace</a> */
+ * <a href="https://reference.wolfram.com/language/ref/NullSpace.html">NullSpace</a>
+ * 
+ * @see LeftNullSpace */
 public enum NullSpace {
   ;
   /** if matrix has any entry in machine precision, i.e. {@link MachineNumberQ} returns true,
@@ -65,7 +65,7 @@ public enum NullSpace {
   /** @param matrix with exact precision entries
    * @return tensor of vectors that span the kernel of given matrix */
   public static Tensor usingRowReduce(Tensor matrix) {
-    return _usingRowReduce(matrix, IdentityMatrix.of(Unprotect.dimension1(matrix)));
+    return NullSpaceRowReduce.of(matrix, IdentityMatrix.of(Unprotect.dimension1(matrix)));
   }
 
   /** @param matrix of dimensions n x m with exact precision entries
@@ -73,30 +73,13 @@ public enum NullSpace {
    * for the scalar type of each column
    * @return tensor of vectors that span the kernel of given matrix */
   public static Tensor usingRowReduce(Tensor matrix, Tensor identity) {
-    return _usingRowReduce(matrix, SquareMatrixQ.require(identity));
-  }
-
-  // helper function
-  private static Tensor _usingRowReduce(Tensor matrix, Tensor identity) {
-    final int n = matrix.length();
-    final int m = identity.length();
-    Tensor lhs = RowReduce.of(Join.of(1, Transpose.of(matrix), identity));
-    int j = 0;
-    int c0 = 0;
-    while (c0 < n)
-      if (Scalars.nonZero(lhs.Get(j, c0++))) // <- careful: c0 is modified
-        ++j;
-    return Tensor.of(lhs.extract(j, m).stream().map(row -> row.extract(n, n + m)));
+    return NullSpaceRowReduce.of(matrix, SquareMatrixQ.require(identity));
   }
 
   /** @param matrix
    * @return list of orthogonal vectors that span the nullspace */
   public static Tensor usingQR(Tensor matrix) {
-    Tensor mt = Transpose.of(matrix);
-    int d = Unprotect.dimension1(mt);
-    QRDecomposition qrDecomposition = QRDecomposition.of(mt);
-    // TODO logic below is yet too simple
-    return Tensor.of(qrDecomposition.getInverseQ().stream().skip(d));
+    return LeftNullSpace.of(Transpose.of(matrix));
   }
 
   /** @param matrix of dimensions rows x cols with rows >= cols

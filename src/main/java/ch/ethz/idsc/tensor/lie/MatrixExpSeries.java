@@ -17,9 +17,11 @@ import ch.ethz.idsc.tensor.sca.N;
    * @throws Exception if given matrix is non-square */
   public static Tensor of(Tensor matrix) {
     final int n = matrix.length();
-    Tensor sum = IdentityMatrix.of(n);
-    Tensor nxt = IdentityMatrix.of(n); // LONGTERM can simplify? e.g. nxt = sum?
-    for (int k = 1; k <= n; ++k) {
+    Tensor nxt = matrix;
+    Tensor sum = IdentityMatrix.of(n).add(nxt);
+    if (Chop.NONE.allZero(nxt))
+      return sum;
+    for (int k = 2; k <= n; ++k) {
       nxt = nxt.dot(matrix).divide(RealScalar.of(k));
       sum = sum.add(nxt);
       if (Chop.NONE.allZero(nxt))

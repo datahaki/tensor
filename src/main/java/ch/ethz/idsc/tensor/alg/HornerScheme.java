@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 /* package */ class HornerScheme implements ScalarUnaryOperator {
   private final Tensor coeffs;
 
+  // careful: the coeffs are in reversed order in comparison to Series
   public HornerScheme(Tensor coeffs) {
     this.coeffs = coeffs;
   }
