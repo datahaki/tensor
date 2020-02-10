@@ -5,7 +5,6 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.ScalarQ;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.Signature;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
@@ -16,17 +15,18 @@ import ch.ethz.idsc.tensor.mat.Eigensystem;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Ordering.html">Ordering</a>
  * 
+ * @see Sort
  * @see Signature */
 public enum Ordering {
-  INCREASING(vector -> IntStream.range(0, vector.length()) //
-      .boxed().sorted((i, j) -> Scalars.compare(vector.Get(i), vector.Get(j)))), //
-  DECREASING(vector -> IntStream.range(0, vector.length()) //
-      .boxed().sorted((i, j) -> Scalars.compare(vector.Get(j), vector.Get(i))));
+  INCREASING(tensor -> IntStream.range(0, tensor.length()) //
+      .boxed().sorted((i, j) -> TensorComparator.INSTANCE.compare(tensor.get(i), tensor.get(j)))), //
+  DECREASING(tensor -> IntStream.range(0, tensor.length()) //
+      .boxed().sorted((i, j) -> TensorComparator.INSTANCE.compare(tensor.get(j), tensor.get(i))));
 
   private static interface OrderingInterface {
-    /** @param vector
-     * @return stream of indices i[:] so that vector[i[0]], vector[i[1]], ... is ordered */
-    Stream<Integer> stream(Tensor vector);
+    /** @param tensor
+     * @return stream of indices i[:] so that tensor[i[0]], tensor[i[1]], ... is ordered */
+    Stream<Integer> stream(Tensor tensor);
   }
 
   // ---
@@ -36,18 +36,18 @@ public enum Ordering {
     this.orderingInterface = orderingInterface;
   }
 
-  /** @param vector
-   * @return stream of indices i[:] so that vector[i[0]], vector[i[1]], ... is ordered
-   * @throws Exception if given vector cannot be sorted */
-  public Stream<Integer> stream(Tensor vector) {
-    ScalarQ.thenThrow(vector);
-    return orderingInterface.stream(vector);
+  /** @param tensor
+   * @return stream of indices i[:] so that tensor[i[0]], tensor[i[1]], ... is ordered
+   * @throws Exception if given tensor cannot be sorted */
+  public Stream<Integer> stream(Tensor tensor) {
+    ScalarQ.thenThrow(tensor);
+    return orderingInterface.stream(tensor);
   }
 
-  /** @param vector
+  /** @param tensor
    * @return array of indices i[:] so that vector[i[0]], vector[i[1]], ... is ordered
-   * @throws Exception if given vector cannot be sorted */
-  public Integer[] of(Tensor vector) {
-    return stream(vector).toArray(Integer[]::new);
+   * @throws Exception if given tensor cannot be sorted */
+  public Integer[] of(Tensor tensor) {
+    return stream(tensor).toArray(Integer[]::new);
   }
 }

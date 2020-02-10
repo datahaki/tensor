@@ -13,11 +13,6 @@ import ch.ethz.idsc.tensor.alg.Ordering;
  * Signature[{0, 0, 2}] == 0
  * </pre>
  * 
- * <p>The implementation in the tensor library only operates on vectors (unlike Mathematica):
- * <pre>
- * Tensor::Signature[{{0, 0}, {0, 0}}] throws an Exception
- * </pre>
- * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Signature.html">Signature</a>
  * 
@@ -28,13 +23,13 @@ public enum Signature {
       RealScalar.ONE, //
       RealScalar.ONE.negate() };
 
-  /** @param vector
+  /** @param tensor not a scalar
    * @return either +1 or -1, or zero if given vector contains duplicate values
-   * @throws Exception if given vector is not a tensor of rank 1 */
-  public static Scalar of(Tensor vector) {
-    long count = vector.stream().map(Scalar.class::cast).distinct().count();
-    return vector.length() == count //
-        ? of(Ordering.INCREASING.of(vector))
+   * @throws Exception if given tensor is a scalar */
+  public static Scalar of(Tensor tensor) {
+    long count = tensor.stream().distinct().count();
+    return tensor.length() == count //
+        ? of(Ordering.INCREASING.of(tensor))
         : RealScalar.ZERO;
   }
 

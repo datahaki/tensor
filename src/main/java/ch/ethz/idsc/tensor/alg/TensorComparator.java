@@ -6,8 +6,14 @@ import java.util.Comparator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.lie.Signature;
 
-/** consistent with Mathematica::Sort */
+/** consistent with Mathematica::Sort
+ * 
+ * @see Sort
+ * @see Ordering
+ * @see OrderedQ
+ * @see Signature */
 public enum TensorComparator implements Comparator<Tensor> {
   INSTANCE;
 
