@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.StringScalar;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
@@ -95,6 +96,19 @@ public class SortTest extends TestCase {
     assertEquals(Sort.of(Tensors.empty()), Tensors.empty());
     assertEquals(Sort.of(Tensors.empty(), Collections.reverseOrder()), Tensors.empty());
     assertEquals(Sort.ofTensor(Tensors.empty(), Collections.reverseOrder()), Tensors.empty());
+  }
+
+  public void testMatrix() {
+    assertEquals(Sort.of(IdentityMatrix.of(3)), Tensors.fromString("{{0, 0, 1}, {0, 1, 0}, {1, 0, 0}}"));
+    assertEquals(Sort.of(Tensors.fromString("{{1, 2, 4}, {1, 2}, 3}")), Tensors.fromString("{3, {1, 2}, {1, 2, 4}}"));
+    assertEquals(Sort.of(Tensors.fromString("{{1, 2, 4}, {2, 1}, 5, {}}")), Tensors.fromString("{5, {}, {2, 1}, {1, 2, 4}}"));
+  }
+
+  public void testMatrixReference() {
+    Tensor matrix = IdentityMatrix.of(3);
+    Tensor sorted = Sort.of(matrix);
+    sorted.set(RealScalar.ONE::add, Tensor.ALL, Tensor.ALL);
+    assertEquals(matrix, IdentityMatrix.of(3));
   }
 
   public void testScalarFail() {

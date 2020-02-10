@@ -31,6 +31,11 @@ public class OrderedQTest extends TestCase {
     }
   }
 
+  public void testMatrixFail() {
+    assertFalse(OrderedQ.of(IdentityMatrix.of(4)));
+    assertTrue(OrderedQ.of(Reverse.of(IdentityMatrix.of(4))));
+  }
+
   public void testRequire() {
     OrderedQ.require(Tensors.vector(1, 1, 2, 4, 4, 4));
     try {
@@ -64,15 +69,6 @@ public class OrderedQTest extends TestCase {
     Tensor tensor = Tensors.fromString("{3[s], 1[s], 2[m]}");
     try {
       OrderedQ.of(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testMatrixFail() {
-    try {
-      OrderedQ.of(IdentityMatrix.of(4));
       fail();
     } catch (Exception exception) {
       // ---

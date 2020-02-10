@@ -37,7 +37,7 @@ public enum BinningMethod implements TensorScalarFunction {
   IQR() {
     @Override
     public Scalar apply(Tensor tensor) {
-      Scalar iqr = InterquartileRange.of(tensor);
+      Scalar iqr = InterquartileRange.of(tensor).Get();
       return iqr.add(iqr).divide(crt_length(tensor));
     }
   },

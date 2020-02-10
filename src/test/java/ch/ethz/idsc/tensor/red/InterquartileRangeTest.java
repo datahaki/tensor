@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.ExponentialDistribution;
 import ch.ethz.idsc.tensor.pdf.PoissonDistribution;
@@ -44,7 +44,7 @@ public class InterquartileRangeTest extends TestCase {
     Scalar iqr = InterquartileRange.of(distribution);
     assertEquals(iqr, RealScalar.of(5));
     Tensor random = RandomVariate.of(distribution, 1100);
-    Scalar test = InterquartileRange.of(random);
+    Scalar test = InterquartileRange.of(random).Get();
     assertTrue(Clips.interval(4, 6).isInside(test));
   }
 
@@ -59,7 +59,7 @@ public class InterquartileRangeTest extends TestCase {
 
   public void testMatrixFail() {
     try {
-      InterquartileRange.of(HilbertMatrix.of(3, 4));
+      InterquartileRange.of(IdentityMatrix.of(5));
       fail();
     } catch (Exception exception) {
       // ---

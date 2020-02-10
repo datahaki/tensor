@@ -136,6 +136,11 @@ public class NullSpaceTest extends TestCase {
     assertTrue(ExactTensorQ.of(nul));
   }
 
+  public void testSingleVector() {
+    Tensor nullsp = NullSpace.of(Tensors.of(Tensors.vector(0.0, 1.0)));
+    Chop._12.requireClose(nullsp, Tensors.of(Tensors.vector(1.0, 0.0)));
+  }
+
   public void testComplex() {
     // {{17/101-32/101*I, 0, 1, -99/101+20/101*I},
     // {106/505-253/505*I, 1, 0, -89/101+19/101*I}}
@@ -185,10 +190,6 @@ public class NullSpaceTest extends TestCase {
     Tensor nul = NullSpace.of(mat);
     assertEquals(Dimensions.of(nul), Arrays.asList(1, 3));
     assertTrue(Chop.NONE.allZero(mat.dot(Transpose.of(nul))));
-  }
-
-  public void testQuantityNumeric() {
-    // TODO currently not supported
   }
 
   public void testRectangle2x3() {

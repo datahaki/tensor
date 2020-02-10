@@ -6,19 +6,21 @@ import java.util.Comparator;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** inspired by
+/** implementation is consistent with Mathematica::Sort
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Sort.html">Sort</a>
  * 
  * @see Ordering */
 public enum Sort {
   ;
-  /** @param vector
-   * @return vector with entries sorted according to canonic ordering
+  /** @param tensor
+   * @return tensor with entries sorted according to canonic ordering
    * @throws Exception if input is a scalar */
-  public static Tensor of(Tensor vector) {
-    if (vector.length() == 1)
-      return vector.copy();
-    return Tensor.of(vector.stream().sorted());
+  public static Tensor of(Tensor tensor) {
+    return Tensor.of(tensor.stream() //
+        .sorted(TensorComparator.INSTANCE) //
+        .map(Tensor::copy));
   }
 
   /** @param vector

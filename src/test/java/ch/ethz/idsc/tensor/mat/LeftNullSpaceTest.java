@@ -14,8 +14,14 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
@@ -50,6 +56,13 @@ public class LeftNullSpaceTest extends TestCase {
   private static void _matrix(Tensor A) {
     assertTrue(NullSpace.of(A).stream().map(vector -> A.dot(vector)).allMatch(Chop.NONE::allZero));
     assertTrue(LeftNullSpace.of(A).stream().map(vector -> vector.dot(A)).allMatch(Chop.NONE::allZero));
+    _matrixNumeric(A);
+  }
+
+  private static void _matrixNumeric(Tensor A) {
+    assertTrue(NullSpace.of(A.map(N.DOUBLE)).stream().map(vector -> A.dot(vector)).allMatch(Chop._12::allZero));
+    assertTrue(LeftNullSpace.of(A.map(N.DOUBLE)).stream().map(vector -> vector.dot(A)).allMatch(Chop._12::allZero));
+    assertTrue(NullSpace.usingQR(A.map(N.DOUBLE)).stream().map(vector -> A.dot(vector)).allMatch(Chop._12::allZero));
   }
 
   private static void _check(Tensor A) {
@@ -57,14 +70,27 @@ public class LeftNullSpaceTest extends TestCase {
     _matrix(Transpose.of(A));
   }
 
-  public void testSome() {
+  public void testBulk() {
     _check(Tensors.fromString("{{0, 0}}"));
     _check(Tensors.fromString("{{0, 1}}"));
     _check(Tensors.fromString("{{1, 0, 3}}"));
+    _check(Tensors.fromString("{{1[m], 0[m], 3[m]}}"));
     _check(Tensors.fromString("{{0, 0}, {0, 2}, {1, 0}}"));
     _check(Tensors.fromString("{{0, 0}, {0, 3}, {1, 0}, {0, 0}}"));
     _check(Tensors.fromString("{{0, 0}, {0, 0}, {0, 0}, {0, 0}}"));
     _check(Tensors.fromString("{{0, 0}, {0, 0}, {1, 0}, {0, 0}}"));
+    _check(Tensors.fromString("{{0, 0, 1}, {0, 0, 0}, {1, 0, 0}}").map(s -> Quantity.of(s, "m")));
+    _check(Tensors.fromString("{{0, 0, 0}, {0, 0, 0}, {1, 0, 0}, {3, 2, 0}}").map(s -> Quantity.of(s, "m")));
+    _check(Tensors.fromString("{{0, 0, 1}, {0, 0, 0}, {1, 0, 0}, {1, 0, 1}}").map(s -> Quantity.of(s, "m")));
+    _check(Tensors.fromString("{{0, 5, 1}, {0, 0, 0}, {1, 0, 0}, {3, 2, 0}}").map(s -> Quantity.of(s, "m")));
+  }
+
+  public void testRandom() {
+    Distribution distribution = NormalDistribution.standard();
+    Tensor x = RandomVariate.of(distribution, 3);
+    Tensor y = RandomVariate.of(distribution, 7);
+    _matrixNumeric(TensorProduct.of(x, y));
+    _matrixNumeric(TensorProduct.of(y, x));
   }
 
   public void testGaussScalar() {

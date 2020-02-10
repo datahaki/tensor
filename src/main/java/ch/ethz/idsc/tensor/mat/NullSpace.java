@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * <li>{@link NullSpace#usingSvd(Tensor)}
  * </ul>
  * 
- * <p>Let N = NullSpace[V]. If N is non-empty, then V.Transpose[N] == 0.
+ * <p>Let N = NullSpace[A]. If N is non-empty, then A.Transpose[N] == 0.
  * 
  * <p>Quote from Wikipedia:
  * For matrices whose entries are floating-point numbers, the problem of computing the kernel
@@ -76,10 +76,10 @@ public enum NullSpace {
     return LeftNullSpace.usingRowReduce(Transpose.of(matrix), SquareMatrixQ.require(identity));
   }
 
-  /** @param matrix
+  /** @param matrix of any dimensions
    * @return list of orthogonal vectors that span the nullspace */
   public static Tensor usingQR(Tensor matrix) {
-    return LeftNullSpace.of(Transpose.of(matrix));
+    return LeftNullSpace.usingQR(Transpose.of(matrix));
   }
 
   /** @param matrix of dimensions rows x cols with rows >= cols
