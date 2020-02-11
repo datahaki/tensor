@@ -43,7 +43,7 @@ public class RigidMotionFitTest extends TestCase {
     Tensor skew3 = Cross.skew3(Tensors.vector(-.1, .2, .3));
     Tensor rotation = OrthogonalMatrixQ.require(MatrixExp.of(skew3));
     for (int n = 5; n < 11; ++n) {
-      Tensor weights = RandomVariate.of(UniformDistribution.unit(), 10);
+      Tensor weights = RandomVariate.of(UniformDistribution.of(-0.1, 1), 10);
       Tensor points = RandomVariate.of(distribution, 10, 3);
       Tensor translation = RandomVariate.of(distribution, 3);
       Tensor target = Tensor.of(points.stream().map(p -> rotation.dot(p).add(translation)));
@@ -128,15 +128,10 @@ public class RigidMotionFitTest extends TestCase {
     }
   }
 
-  public void testNegativeFail() {
+  public void testNegativeOk() {
     Distribution distribution = NormalDistribution.standard();
     Tensor points = RandomVariate.of(distribution, 6, 3);
     Tensor target = RandomVariate.of(distribution, 6, 3);
-    try {
-      RigidMotionFit.of(points, target, Tensors.vector(1, -2, 3, 4, 5, 6));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    RigidMotionFit.of(points, target, Tensors.vector(1, -2, 3, 4, 5, 6));
   }
 }

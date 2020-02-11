@@ -2,7 +2,6 @@
 package ch.ethz.idsc.tensor.opt;
 
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Last;
@@ -11,7 +10,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** function computes the best-fitting rigid transformation that aligns
@@ -21,14 +20,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * "Least-Squares Rigid Motion Using SVD"
  * Olga Sorkine-Hornung and Michael Rabinovich, 2016 */
 public class RigidMotionFit implements TensorUnaryOperator {
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._1);
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
 
   /** @param points matrix of dimension n x d
    * @param target matrix of dimension n x d
-   * @param weights vector
+   * @param weights vector of length n
    * @return */
   public static RigidMotionFit of(Tensor points, Tensor target, Tensor weights) {
-    weights.stream().map(Scalar.class::cast).forEach(Sign::requirePositiveOrZero);
     return _of(points, target, NORMALIZE.apply(weights));
   }
 
@@ -41,7 +39,7 @@ public class RigidMotionFit implements TensorUnaryOperator {
 
   /** @param points
    * @param target
-   * @param weights normalized
+   * @param weights normalized to sum up to 1
    * @return */
   private static RigidMotionFit _of(Tensor points, Tensor target, Tensor weights) {
     Tensor pm = weights.dot(points);
