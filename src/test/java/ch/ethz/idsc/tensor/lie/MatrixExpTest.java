@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.lie;
 
 import java.util.Random;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
@@ -14,6 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.io.MathematicaFormat;
 import ch.ethz.idsc.tensor.mat.HermitianMatrixQ;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
@@ -92,9 +94,9 @@ public class MatrixExpTest extends TestCase {
   public void testQuantity1() {
     // Mathematica can't do this :-)
     Scalar qs1 = Quantity.of(3, "m");
-    Tensor ve1 = Tensors.of(RealScalar.ZERO, qs1);
-    Tensor ve2 = Tensors.vector(0, 0);
-    Tensor mat = Tensors.of(ve1, ve2);
+    Tensor mat = Tensors.of( //
+        Tensors.of(RealScalar.ZERO, qs1), //
+        Tensors.vector(0, 0));
     Tensor sol = MatrixExp.of(mat);
     assertTrue(Chop.NONE.close(sol, mat.add(IdentityMatrix.of(2))));
   }
@@ -112,6 +114,14 @@ public class MatrixExpTest extends TestCase {
     Tensor actual = IdentityMatrix.of(3).add(mat).add(mat.dot(mat).multiply(RationalScalar.of(1, 2)));
     // assertEquals(MatrixExp.of(mat), actual);
     assertTrue(Chop.NONE.close(MatrixExp.of(mat), actual));
+  }
+
+  public void testLarge() {
+    // without scaling, the loop of the series requires ~300 steps
+    // with scaling, the loop requires only ~20 steps
+    Tensor tensor = MatrixExp.of(Tensors.fromString("{{100, 100}, {100, 100}}"));
+    Tensor result = MathematicaFormat.parse(Stream.of("{{3.6129868840627414*^86, 3.6129868840627414*^86}, {3.6129868840627414*^86, 3.6129868840627414*^86}}"));
+    Chop.below(1e75).requireClose(tensor, result);
   }
 
   public void testFail() {

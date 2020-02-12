@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.lie.MatrixExp;
@@ -18,11 +19,14 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 import junit.framework.TestCase;
 
 public class RigidMotionFitTest extends TestCase {
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
+
   public void testExact() throws ClassNotFoundException, IOException {
     Distribution distribution = NormalDistribution.standard();
     Tensor skew3 = Cross.skew3(Tensors.vector(-.1, .2, .3));
@@ -43,7 +47,7 @@ public class RigidMotionFitTest extends TestCase {
     Tensor skew3 = Cross.skew3(Tensors.vector(-.1, .2, .3));
     Tensor rotation = OrthogonalMatrixQ.require(MatrixExp.of(skew3));
     for (int n = 5; n < 11; ++n) {
-      Tensor weights = RandomVariate.of(UniformDistribution.of(-0.1, 1), 10);
+      Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.of(-0.1, 1), 10));
       Tensor points = RandomVariate.of(distribution, 10, 3);
       Tensor translation = RandomVariate.of(distribution, 3);
       Tensor target = Tensor.of(points.stream().map(p -> rotation.dot(p).add(translation)));
@@ -65,7 +69,7 @@ public class RigidMotionFitTest extends TestCase {
       for (int n = d + 1; n < 11; ++n) {
         Tensor points = RandomVariate.of(distribution, n, d);
         Tensor target = RandomVariate.of(distribution, n, d);
-        Tensor weights = RandomVariate.of(UniformDistribution.unit(), n);
+        Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.unit(), n));
         RigidMotionFit rigidMotionFit = RigidMotionFit.of(points, target, weights);
         Chop._08.requireClose(Det.of(rigidMotionFit.rotation()), RealScalar.ONE);
       }
@@ -77,7 +81,7 @@ public class RigidMotionFitTest extends TestCase {
       for (int n = d + 1; n < 11; ++n) {
         Distribution distribution = NormalDistribution.standard();
         Tensor points = RandomVariate.of(distribution, n, d);
-        Tensor weights = RandomVariate.of(UniformDistribution.unit(), n);
+        Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.unit(), n));
         RigidMotionFit rigidMotionFit = RigidMotionFit.of(points, points, weights);
         Chop._07.requireClose(rigidMotionFit.rotation(), IdentityMatrix.of(d));
         Chop._07.requireClose(rigidMotionFit.translation(), Array.zeros(d));
@@ -132,6 +136,6 @@ public class RigidMotionFitTest extends TestCase {
     Distribution distribution = NormalDistribution.standard();
     Tensor points = RandomVariate.of(distribution, 6, 3);
     Tensor target = RandomVariate.of(distribution, 6, 3);
-    RigidMotionFit.of(points, target, Tensors.vector(1, -2, 3, 4, 5, 6));
+    RigidMotionFit.of(points, target, NORMALIZE.apply(Tensors.vector(1, -2, 3, 4, 5, 6)));
   }
 }

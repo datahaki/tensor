@@ -1,11 +1,14 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.Projection;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
@@ -91,9 +94,10 @@ public class NormalizeTest extends TestCase {
     _checkNormalizeAllNorms(n);
   }
 
-  public void testComplex() {
+  public void testComplex() throws ClassNotFoundException, IOException {
+    TensorUnaryOperator normalize = Serialization.copy(Normalize.with(Norm._2::ofVector));
     Tensor vector = Tensors.fromString("{1+I, 2*I, -3-9.2*I}");
-    Tensor s = Normalize.with(Norm._2::ofVector).apply(vector);
+    Tensor s = normalize.apply(vector);
     assertTrue(Chop._13.close(s.dot(Conjugate.of(s)), RealScalar.ONE));
     assertTrue(Chop._13.close(Conjugate.of(s).dot(s), RealScalar.ONE));
   }
