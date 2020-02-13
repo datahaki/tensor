@@ -1,5 +1,7 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.lie;
+
+import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -7,7 +9,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
+import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
+import ch.ethz.idsc.tensor.mat.UnitaryMatrixQ;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -68,6 +72,26 @@ public class OrthogonalizeTest extends TestCase {
     assertTrue(UnitaryMatrixQ.of(orth));
   }
 
+  public void test3x4() {
+    Tensor a = Transpose.of(Tensors.fromString("{{1, 2, 3}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}}"));
+    _check(a);
+    Tensor m = Orthogonalize.of(a);
+    assertEquals(Dimensions.of(m), Dimensions.of(a));
+    Tensor m_mt = m.dot(Transpose.of(m));
+    Chop._12.requireClose(m_mt, DiagonalMatrix.of(1, 1, 1));
+  }
+
+  public void test4x3() {
+    Tensor a = Tensors.fromString("{{1, 2, 3}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}}");
+    assertEquals(Dimensions.of(a), Arrays.asList(4, 3));
+    Tensor m = Orthogonalize.of(a);
+    assertEquals(Dimensions.of(m), Dimensions.of(a));
+    Tensor m_mt = m.dot(Transpose.of(m));
+    Tensor mt_m = Transpose.of(m).dot(m);
+    Chop._12.requireClose(m_mt, DiagonalMatrix.of(1, 1, 1, 0));
+    Chop._12.requireClose(mt_m, DiagonalMatrix.of(1, 1, 1));
+  }
+
   public void testFailVector() {
     try {
       Orthogonalize.of(Tensors.vector(1, 2, 3, 4));
@@ -81,7 +105,7 @@ public class OrthogonalizeTest extends TestCase {
     try {
       Tensor matrix = Transpose.of(Tensors.fromString("{{1, 0, 1}, {1, 1, 1}}"));
       Orthogonalize.of(matrix);
-      fail();
+      // fail();
     } catch (Exception exception) {
       // ---
     }

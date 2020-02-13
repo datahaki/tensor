@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -49,6 +50,7 @@ public class SymmetrizeTest extends TestCase {
     Distribution distribution = NormalDistribution.standard();
     Tensor tensor = RandomVariate.of(distribution, 9, 9);
     assertTrue(SymmetricMatrixQ.of(Symmetrize.of(tensor)));
+    assertEquals(Symmetrize.of(IdentityMatrix.of(10)), IdentityMatrix.of(10));
   }
 
   public void testRectangularFail() {
@@ -61,6 +63,16 @@ public class SymmetrizeTest extends TestCase {
     }
     try {
       Symmetrize.of(RandomVariate.of(distribution, 3, 3, 2));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNonArrayFail() {
+    Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
+    try {
+      Symmetrize.of(tensor);
       fail();
     } catch (Exception exception) {
       // ---
