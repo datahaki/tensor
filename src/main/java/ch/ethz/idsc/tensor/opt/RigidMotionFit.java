@@ -60,7 +60,7 @@ public class RigidMotionFit implements TensorUnaryOperator {
     return new RigidMotionFit(rotation, qm.subtract(rotation.dot(pm)));
   }
 
-  // ---
+  /***************************************************/
   private final Tensor rotation;
   private final Tensor translation;
 

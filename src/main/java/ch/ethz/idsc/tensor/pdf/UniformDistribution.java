@@ -56,7 +56,7 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
     return UNIT;
   }
 
-  // ---
+  /***************************************************/
   private final Clip clip;
   private final Scalar width;
 

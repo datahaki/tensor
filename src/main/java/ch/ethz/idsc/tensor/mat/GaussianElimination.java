@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
     return new GaussianElimination(matrix, pivot, b).solve();
   }
 
-  // ---
+  /***************************************************/
   private final Tensor rhs;
 
   private GaussianElimination(Tensor matrix, Pivot pivot, Tensor b) {

@@ -30,7 +30,7 @@ public class PoissonBinomialDistribution implements Distribution, //
         .map(Clips.unit()::requireInside)));
   }
 
-  // ---
+  /***************************************************/
   private final Tensor p_vector;
 
   private PoissonBinomialDistribution(Tensor p_vector) {

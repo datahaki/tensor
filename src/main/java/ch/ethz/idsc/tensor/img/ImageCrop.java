@@ -31,7 +31,7 @@ public class ImageCrop implements TensorUnaryOperator {
     // ---
   }
 
-  // ---
+  /***************************************************/
   private final TensorPredicate predicate;
 
   private ImageCrop(TensorPredicate predicate) {

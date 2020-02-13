@@ -23,7 +23,7 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
     throw TensorRuntimeException.of(k);
   }
 
-  // ---
+  /***************************************************/
   private final Scalar k;
   private final Scalar alpha;
   private final Scalar k_alpha;

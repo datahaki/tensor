@@ -26,7 +26,7 @@ public class DeBoor implements ScalarTensorFunction {
     throw TensorRuntimeException.of(knots, control);
   }
 
-  // ---
+  /***************************************************/
   private final BinaryAverage binaryAverage;
   private final int degree;
   private final Tensor knots;

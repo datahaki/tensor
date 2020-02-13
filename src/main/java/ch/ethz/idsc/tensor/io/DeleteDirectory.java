@@ -34,7 +34,7 @@ public class DeleteDirectory {
     return new DeleteDirectory(directory, max_nested, max_delete);
   }
 
-  // ---
+  /***************************************************/
   private final int max_depth;
   private long deleted = 0;
 

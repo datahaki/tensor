@@ -37,7 +37,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     return new TrapezoidalDistribution(a, b, c, d);
   }
 
-  // ---
+  /***************************************************/
   private final Clip clip;
   private final Scalar a;
   private final Scalar b;

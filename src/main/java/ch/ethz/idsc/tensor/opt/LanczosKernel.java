@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.sca.Sinc;
  * 
  * The implementation only evaluates the kernel in [-semi, semi] */
 /* package */ class LanczosKernel implements ScalarUnaryOperator {
-  static final LanczosKernel _3 = new LanczosKernel(3);
+  public static final LanczosKernel _3 = new LanczosKernel(3);
   // ---
   /* package */ final int semi;
   private final Scalar bound;

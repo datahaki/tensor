@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.lie;
 import java.util.Random;
 import java.util.stream.Stream;
 
+import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.ExactTensorQ;
@@ -19,6 +20,9 @@ import ch.ethz.idsc.tensor.io.MathematicaFormat;
 import ch.ethz.idsc.tensor.mat.HermitianMatrixQ;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Trace;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -122,6 +126,28 @@ public class MatrixExpTest extends TestCase {
     Tensor tensor = MatrixExp.of(Tensors.fromString("{{100, 100}, {100, 100}}"));
     Tensor result = MathematicaFormat.parse(Stream.of("{{3.6129868840627414*^86, 3.6129868840627414*^86}, {3.6129868840627414*^86, 3.6129868840627414*^86}}"));
     Chop.below(1e75).requireClose(tensor, result);
+  }
+
+  public void testNoScale() {
+    Distribution distribution = NormalDistribution.of(0, 6);
+    for (int count = 0; count < 10; ++count) {
+      Tensor matrix = RandomVariate.of(distribution, 2, 2);
+      Tensor exp1 = MatrixExp.of(matrix);
+      Tensor exp2 = MatrixExp.series(matrix);
+      Chop._01.requireClose(exp1, exp2);
+    }
+  }
+
+  public void testNoScaleComplex() {
+    Distribution distribution = NormalDistribution.of(0, 5);
+    for (int count = 0; count < 10; ++count) {
+      Tensor mr = RandomVariate.of(distribution, 2, 2);
+      Tensor mi = RandomVariate.of(distribution, 2, 2);
+      Tensor matrix = mi.multiply(ComplexScalar.I).add(mr);
+      Tensor exp1 = MatrixExp.of(matrix);
+      Tensor exp2 = MatrixExp.series(matrix);
+      Chop._01.requireClose(exp1, exp2);
+    }
   }
 
   public void testFail() {

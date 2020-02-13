@@ -29,7 +29,7 @@ public class Rationalize implements ScalarUnaryOperator {
    * given argument, with denominator less or equals to max, and ties rounding to positive infinity.
    * @throws Exception if max does not satisfy {@link IntegerQ}, or is negative */
   public static ScalarUnaryOperator withDenominatorLessEquals(Scalar max) {
-    return new Rationalize(max);
+    return new Rationalize(IntegerQ.require(max));
   }
 
   /** @param max positive integer
@@ -37,14 +37,14 @@ public class Rationalize implements ScalarUnaryOperator {
    * given argument, with denominator less or equals to max, and ties rounding to positive infinity.
    * @throws Exception if max does not satisfy {@link IntegerQ}, or is negative */
   public static ScalarUnaryOperator withDenominatorLessEquals(long max) {
-    return withDenominatorLessEquals(RealScalar.of(max));
+    return new Rationalize(RealScalar.of(max));
   }
-  // ---
 
+  /***************************************************/
   private final Scalar max;
 
   private Rationalize(Scalar max) {
-    this.max = Sign.requirePositive(IntegerQ.require(max));
+    this.max = Sign.requirePositive(max);
   }
 
   /** Quote from David Eppstein / UC Irvine / 8 Aug 1993:

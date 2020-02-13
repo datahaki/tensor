@@ -13,6 +13,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 public class UnitConvert implements Serializable {
   private static final UnitConvert SI = of(UnitSystem.SI());
 
+  /** @param unitSystem non-null
+   * @return */
   public static UnitConvert of(UnitSystem unitSystem) {
     return new UnitConvert(Objects.requireNonNull(unitSystem));
   }
@@ -21,8 +23,8 @@ public class UnitConvert implements Serializable {
   public static UnitConvert SI() {
     return SI;
   }
-  // ---
 
+  /***************************************************/
   private final UnitSystem unitSystem;
 
   /** @param unitSystem non-null

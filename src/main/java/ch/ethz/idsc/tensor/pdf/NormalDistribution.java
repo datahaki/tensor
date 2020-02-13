@@ -45,7 +45,7 @@ public class NormalDistribution implements //
         Sqrt.FUNCTION.apply(Expectation.variance(distribution))); // standard deviation
   }
 
-  // ---
+  /***************************************************/
   private final Scalar mean;
   private final Scalar sigma;
 

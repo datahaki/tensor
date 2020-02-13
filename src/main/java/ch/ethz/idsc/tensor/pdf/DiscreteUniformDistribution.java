@@ -19,6 +19,9 @@ import ch.ethz.idsc.tensor.sca.Floor;
  * <a href="https://reference.wolfram.com/language/ref/DiscreteUniformDistribution.html">DiscreteUniformDistribution</a> */
 public class DiscreteUniformDistribution extends AbstractDiscreteDistribution implements //
     CDF, VarianceInterface, Serializable {
+  private static final Scalar TWO = RealScalar.of(2);
+  private static final Scalar _12 = RealScalar.of(12);
+
   /** Example:
    * PDF[DiscreteUniformDistribution[{0, 10}], x] == 1/10 for 0 <= x < 10 and x integer
    * 
@@ -38,9 +41,7 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
     return new DiscreteUniformDistribution(min, max);
   }
 
-  private static final Scalar TWO = RealScalar.of(2);
-  private static final Scalar _12 = RealScalar.of(12);
-  // ---
+  /***************************************************/
   private final int min; // inclusive
   private final Scalar _min;
   private final int max; // exclusive

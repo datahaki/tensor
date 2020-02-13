@@ -49,7 +49,7 @@ public class Quantile implements ScalarUnaryOperator {
     return new Quantile(OrderedQ.require(sorted));
   }
 
-  // ---
+  /***************************************************/
   private final Tensor tensor;
   private final Scalar length;
 

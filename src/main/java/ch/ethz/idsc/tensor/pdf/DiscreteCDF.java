@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.Scalars;
   private final NavigableMap<Scalar, Scalar> cdf = new TreeMap<>();
   private boolean cdf_finished = false;
 
-  DiscreteCDF(DiscreteDistribution discreteDistribution) {
+  public DiscreteCDF(DiscreteDistribution discreteDistribution) {
     this.discreteDistribution = discreteDistribution;
   }
 

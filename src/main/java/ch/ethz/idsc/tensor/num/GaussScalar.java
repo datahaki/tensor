@@ -43,7 +43,7 @@ public class GaussScalar extends AbstractScalar implements //
     return new GaussScalar(value.mod(prime), prime);
   }
 
-  // ---
+  /***************************************************/
   private final BigInteger value;
   private final BigInteger prime;
 

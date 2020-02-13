@@ -14,7 +14,7 @@ public class CompatibleUnitQ implements Serializable {
   private static final CompatibleUnitQ SI = in(UnitSystem.SI());
 
   /** @param unitSystem non-null
-   * @return */
+   * @return predicate supplier according to given unit system */
   public static CompatibleUnitQ in(UnitSystem unitSystem) {
     return new CompatibleUnitQ(Objects.requireNonNull(unitSystem));
   }
@@ -25,12 +25,12 @@ public class CompatibleUnitQ implements Serializable {
    * CompatibleUnitQ.SI().with(Unit.of("m*s^-1")).test(Quantity.of(2, "m*s")) == false
    * </pre>
    * 
-   * @return */
+   * @return predicate supplier according to built-in unit system */
   public static CompatibleUnitQ SI() {
     return SI;
   }
 
-  // ---
+  /***************************************************/
   private final UnitSystem unitSystem;
 
   private CompatibleUnitQ(UnitSystem unitSystem) {

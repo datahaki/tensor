@@ -37,7 +37,7 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution implement
     return new PoissonDistribution(lambda);
   }
 
-  // ---
+  /***************************************************/
   private final Scalar lambda;
   private final Tensor values = Tensors.reserve(32);
 

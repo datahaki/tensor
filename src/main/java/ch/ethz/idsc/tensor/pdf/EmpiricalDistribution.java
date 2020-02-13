@@ -41,7 +41,7 @@ public class EmpiricalDistribution extends EvaluatedDiscreteDistribution impleme
     return new EmpiricalDistribution(unscaledPDF);
   }
 
-  // ---
+  /***************************************************/
   private final Tensor pdf;
   private final Tensor cdf;
 

@@ -39,7 +39,7 @@ public class FrechetDistribution extends AbstractAlphaBetaDistribution implement
     return of(RealScalar.of(alpha), RealScalar.of(beta));
   }
 
-  // ---
+  /***************************************************/
   private FrechetDistribution(Scalar alpha, Scalar beta) {
     super(alpha, beta);
   }

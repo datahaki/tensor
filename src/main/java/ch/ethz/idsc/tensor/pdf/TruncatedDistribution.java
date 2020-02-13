@@ -27,7 +27,7 @@ public class TruncatedDistribution implements Distribution, RandomVariateInterfa
         Objects.requireNonNull(clip));
   }
 
-  // ---
+  /***************************************************/
   private final RandomVariateInterface randomVariateInterface;
   private final Clip clip;
 
