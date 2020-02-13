@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
 import ch.ethz.idsc.tensor.mat.UnitaryMatrixQ;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -53,8 +54,9 @@ public class OrthogonalizeTest extends TestCase {
 
   public void testRandom() {
     Distribution distribution = NormalDistribution.standard();
-    Tensor matrix = RandomVariate.of(distribution, 10, 10);
-    _check(matrix);
+    for (int rows = 1; rows < 10; ++rows)
+      for (int cols = 1; cols < 10; ++cols)
+        _check(RandomVariate.of(distribution, cols, cols));
   }
 
   public void testSpan() {
@@ -90,6 +92,15 @@ public class OrthogonalizeTest extends TestCase {
     Tensor mt_m = Transpose.of(m).dot(m);
     Chop._12.requireClose(m_mt, DiagonalMatrix.of(1, 1, 1, 0));
     Chop._12.requireClose(mt_m, DiagonalMatrix.of(1, 1, 1));
+  }
+
+  public void testFailScalar() {
+    try {
+      Orthogonalize.of(Pi.VALUE);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 
   public void testFailVector() {

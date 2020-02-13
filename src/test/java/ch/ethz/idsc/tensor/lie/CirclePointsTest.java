@@ -13,9 +13,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.opt.ConvexHull;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
-import ch.ethz.idsc.tensor.red.Tally;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Decrement;
 import junit.framework.TestCase;
@@ -60,12 +58,6 @@ public class CirclePointsTest extends TestCase {
     Tensor tensor = CirclePoints.of(n);
     assertEquals(tensor.get(0), Tensors.vector(1, 0));
     assertEquals(tensor.get(0), UnitVector.of(2, 0));
-  }
-
-  public void testConvexHull() {
-    Tensor tensor = CirclePoints.of(6);
-    Tensor hull = ConvexHull.of(tensor);
-    assertEquals(Tally.of(tensor), Tally.of(hull));
   }
 
   public void testSmall() {

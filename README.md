@@ -184,12 +184,6 @@ The arithmetic for the scalar type `Quantity` was developed in collaboration wit
 <tr>
 <td>
 
-![convexhullimage](https://user-images.githubusercontent.com/4012178/45925029-c8d9d800-bf0d-11e8-9ca3-1c7ee65ab812.png)
-
-Graham's scan
-
-<td>
-
 ![spherefitimage](https://user-images.githubusercontent.com/4012178/45925049-24a46100-bf0e-11e8-84a7-ebd6d1d7b01a.png)
 
 Sphere fit

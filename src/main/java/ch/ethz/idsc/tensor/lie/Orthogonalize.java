@@ -17,8 +17,12 @@ import ch.ethz.idsc.tensor.mat.UnitaryMatrixQ;
  * @see UnitaryMatrixQ */
 public enum Orthogonalize {
   ;
-  /** @param matrix
-   * @return matrix with pairwise orthogonal row vectors with the same span as input vectors */
+  /** the matrix returned satisfies the predicate {@link OrthogonalMatrixQ}
+   * 
+   * @param matrix of dimensions n x m
+   * @return matrix of dimensions n x m with pairwise orthogonal row vectors
+   * with the same span as the rows of the input matrix
+   * @throws Exception if given matrix is not a tensor of rank 2 */
   public static Tensor of(Tensor matrix) {
     Tensor tensor = QRMathematica.wrap(QRDecomposition.of(ConjugateTranspose.of(matrix))).getInverseQ();
     return PadRight.zeros(Dimensions.of(matrix)).apply(tensor);
