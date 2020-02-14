@@ -1,13 +1,13 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
+import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import junit.framework.TestCase;
 
@@ -59,7 +59,7 @@ public class LieAlgebrasTest extends TestCase {
   }
 
   public void testBracketMatrixFail() {
-    Tensor x = RotationMatrix.of(RealScalar.ONE);
+    Tensor x = HilbertMatrix.of(2);
     Tensor y = Tensors.vector(3, 4);
     try {
       LieAlgebras.bracketMatrix(x, y);

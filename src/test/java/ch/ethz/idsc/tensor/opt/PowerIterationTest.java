@@ -1,12 +1,10 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt;
 
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.lie.RotationMatrix;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -35,10 +33,6 @@ public class PowerIterationTest extends TestCase {
     assertEquals(v.Get(0).abs(), RealScalar.ONE);
     Tensor x = PowerIteration.of(matrix).get();
     assertEquals(x.Get(0).abs(), RealScalar.ONE);
-  }
-
-  public void testRotationFail() {
-    assertFalse(PowerIteration.of(RotationMatrix.of(DoubleScalar.of(0.3))).isPresent());
   }
 
   public void testZerosFail() {

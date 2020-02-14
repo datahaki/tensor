@@ -3,12 +3,10 @@ package ch.ethz.idsc.tensor.lie;
 
 import java.util.Arrays;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
-import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -20,7 +18,7 @@ public class Cross2DTest extends TestCase {
 
   public void testRotation() {
     Tensor x = Tensors.vector(1, 2);
-    Tensor mat = RotationMatrix.of(Pi.HALF);
+    Tensor mat = Tensors.fromString("{{0, -1}, {1, 0}}");
     assertTrue(Chop._10.close(Cross.of(x), mat.dot(x)));
   }
 
@@ -31,7 +29,7 @@ public class Cross2DTest extends TestCase {
 
   public void testFail() {
     try {
-      Cross.of(RotationMatrix.of(RealScalar.ONE));
+      Cross.of(HilbertMatrix.of(2));
       fail();
     } catch (Exception exception) {
       // ---
