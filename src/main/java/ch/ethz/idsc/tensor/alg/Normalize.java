@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -27,7 +28,12 @@ import ch.ethz.idsc.tensor.red.Norm;
  * </pre>
  * 
  * <p>The implementation divides a given vector by the norm until the
- * iteration stops improving. The implementation is parameter free.
+ * iteration stops improving. The result is checked for proximity to 1 using
+ * {@link Tolerance} convention.
+ * 
+ * <p>Hint: normalization is not consistent with Mathematica for empty vectors:
+ * Mathematica::Normalize[{}] == {}
+ * Tensor-Lib.::Normalize[{}] throws an Exception
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Normalize.html">Normalize</a> */
@@ -86,6 +92,7 @@ public class Normalize implements TensorUnaryOperator {
         error_prev = error_next;
         error_next = scalar.subtract(RealScalar.ONE).abs();
       }
+    Tolerance.CHOP.requireZero(error_next);
     return vector;
   }
 }

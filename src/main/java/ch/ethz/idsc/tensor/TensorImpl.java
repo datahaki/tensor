@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -184,8 +185,10 @@ import java.util.stream.Stream;
   @Override // from Tensor
   public Tensor dot(Tensor tensor) {
     if (list.isEmpty() || list.get(0) instanceof Scalar) { // quick hint whether this is a vector
-      TensorImpl impl = (TensorImpl) tensor;
-      return _range(impl).mapToObj(index -> impl.list.get(index).multiply((Scalar) list.get(index))) //
+      if (length() != tensor.length()) // <- check is necessary otherwise error might be undetected
+        throw TensorRuntimeException.of(this, tensor); // dimensions mismatch
+      AtomicInteger atomicInteger = new AtomicInteger(-1);
+      return tensor.stream().map(rhs -> rhs.multiply((Scalar) list.get(atomicInteger.incrementAndGet()))) //
           .reduce(Tensor::add).orElse(RealScalar.ZERO);
     }
     return Tensor.of(list.stream().map(entry -> entry.dot(tensor)));

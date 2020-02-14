@@ -118,6 +118,16 @@ public class ChopTest extends TestCase {
     }
   }
 
+  public void testRequireZero() {
+    Chop._04.requireAllZero(RealScalar.of(1e-8));
+    try {
+      Chop._04.requireAllZero(RealScalar.of(1e-2));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testRequireAllZero() {
     Tensor tensor = Tensors.vector(0, 0, 0, 1e-5);
     Chop._04.requireAllZero(tensor);

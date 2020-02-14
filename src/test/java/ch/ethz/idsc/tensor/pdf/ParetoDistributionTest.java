@@ -17,11 +17,11 @@ public class ParetoDistributionTest extends TestCase {
     PDF pdf = PDF.of(distribution);
     Chop._10.requireClose(pdf.at(RealScalar.of(4.0)), RealScalar.of(0.16619372965993448));
     Chop._10.requireClose(pdf.at(RealScalar.of(2.3)), RealScalar.of(0.7826086956521743));
-    Chop._10.requireAllZero(pdf.at(RealScalar.of(2.2)));
+    Chop._10.requireZero(pdf.at(RealScalar.of(2.2)));
     CDF cdf = CDF.of(distribution);
     Chop._10.requireClose(cdf.p_lessEquals(RealScalar.of(4.0)), RealScalar.of(0.6306806007557013));
-    Chop._10.requireAllZero(cdf.p_lessEquals(RealScalar.of(2.3)));
-    Chop._10.requireAllZero(cdf.p_lessEquals(RealScalar.of(2.2)));
+    Chop._10.requireZero(cdf.p_lessEquals(RealScalar.of(2.3)));
+    Chop._10.requireZero(cdf.p_lessEquals(RealScalar.of(2.2)));
   }
 
   public void testMeanVariance() {

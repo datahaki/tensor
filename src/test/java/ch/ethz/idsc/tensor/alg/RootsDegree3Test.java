@@ -28,11 +28,11 @@ public class RootsDegree3Test extends TestCase {
     ScalarUnaryOperator polynomial = Series.of(coeffs);
     // roots obtained by Mathematica:
     Scalar cR = RealScalar.of(-1.2487729899770943);
-    Chop._12.requireAllZero(polynomial.apply(cR));
+    Chop._12.requireZero(polynomial.apply(cR));
     Scalar cP = ComplexScalar.of(0.3943861563603456, +0.9486756887529066);
     Scalar cN = ComplexScalar.of(0.3943861563603456, -0.9486756887529066);
-    Chop._12.requireAllZero(polynomial.apply(cP));
-    Chop._12.requireAllZero(polynomial.apply(cN));
+    Chop._12.requireZero(polynomial.apply(cP));
+    Chop._12.requireZero(polynomial.apply(cN));
     Tensor roots = Roots.of(coeffs);
     assertTrue(roots.stream().map(root -> root.subtract(cR)).anyMatch(Chop._12::allZero));
     assertTrue(roots.stream().map(root -> root.subtract(cP)).anyMatch(Chop._12::allZero));

@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
@@ -116,10 +117,37 @@ public class NormalizeTest extends TestCase {
     _checkNormalizeAllNorms(vector);
   }
 
+  public void testEmpty() {
+    for (Norm norm : Norm.values())
+      try {
+        Normalize.with(norm).apply(Tensors.empty());
+        fail();
+      } catch (Exception exception) {
+        // ---
+      }
+  }
+
   public void testNormalizeTotal() {
-    TensorUnaryOperator tensorUnaryOperator = Normalize.with(v -> Total.of(v).Get());
+    TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);
     Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2));
     assertEquals(tensor, Tensors.fromString("{-1/4, 3/4, 1/2}"));
+    try {
+      tensorUnaryOperator.apply(Tensors.empty());
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testInconsistentFail() {
+    Distribution distribution = UniformDistribution.of(3, 5);
+    TensorUnaryOperator tensorUnaryOperator = Normalize.with(v -> RandomVariate.of(distribution));
+    try {
+      tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 
   public void testNormalizeTotalFail() {
