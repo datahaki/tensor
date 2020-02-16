@@ -21,13 +21,13 @@ public enum CopySign {
    * in the special case when the second argument b == -0.0.
    * The tensor library treats the case b == b.zero() as if b was positive.
    * 
-   * @param a implements {@link SignInterface}
-   * @param b implements {@link SignInterface}
+   * @param magnitude implements {@link SignInterface}
+   * @param signum implements {@link SignInterface}
    * @return {@link Scalar} of type of a with the magnitude of a and the sign of b */
-  public static Scalar of(Scalar a, Scalar b) {
-    boolean sa = Sign.isPositiveOrZero(a);
-    return Sign.isPositiveOrZero(b) //
-        ? (sa ? a : a.negate())
-        : (sa ? a.negate() : a);
+  public static Scalar of(Scalar magnitude, Scalar signum) {
+    boolean sign = Sign.isPositiveOrZero(magnitude);
+    return Sign.isPositiveOrZero(signum) //
+        ? (sign ? magnitude : magnitude.negate())
+        : (sign ? magnitude.negate() : magnitude);
   }
 }
