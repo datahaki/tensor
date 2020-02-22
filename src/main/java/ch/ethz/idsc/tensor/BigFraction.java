@@ -56,7 +56,7 @@ import java.util.Objects;
         : new BigFraction(num.divide(gcd).negate(), res.negate());
   }
 
-  // ---
+  /***************************************************/
   /** numerator */
   private final BigInteger num;
   /** denominator (always greater than zero) */

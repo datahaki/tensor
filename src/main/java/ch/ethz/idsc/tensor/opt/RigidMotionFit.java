@@ -21,32 +21,29 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * "Least-Squares Rigid Motion Using SVD"
  * Olga Sorkine-Hornung and Michael Rabinovich, 2016 */
 public class RigidMotionFit implements TensorUnaryOperator {
-  /** @param points matrix of dimension n x d
+  /** @param origin matrix of dimension n x d
    * @param target matrix of dimension n x d
    * @param weights vector of length n with entries that sum up to 1
    * @return
    * @throws Exception if total of weights does not equal 1 */
-  public static RigidMotionFit of(Tensor points, Tensor target, Tensor weights) {
+  public static RigidMotionFit of(Tensor origin, Tensor target, Tensor weights) {
     Chop._12.requireClose(Total.of(weights), RealScalar.ONE);
-    return _of(points, target, weights);
+    return _of(origin, target, weights);
   }
 
-  /** @param points matrix of dimension n x d
+  /** @param origin matrix of dimension n x d
    * @param target matrix of dimension n x d
    * @return */
-  public static RigidMotionFit of(Tensor points, Tensor target) {
-    return _of(points, target, ConstantArray.of(RationalScalar.of(1, points.length()), points.length()));
+  public static RigidMotionFit of(Tensor origin, Tensor target) {
+    return _of(origin, target, ConstantArray.of(RationalScalar.of(1, origin.length()), origin.length()));
   }
 
-  /** @param points
-   * @param target
-   * @param weights normalized to sum up to 1
-   * @return */
-  private static RigidMotionFit _of(Tensor points, Tensor target, Tensor weights) {
-    Tensor pm = weights.dot(points);
-    Tensor qm = weights.dot(target);
-    Tensor xt = Tensor.of(points.stream().map(pm::subtract));
-    Tensor yt = Tensor.of(target.stream().map(qm::subtract));
+  // helper function
+  private static RigidMotionFit _of(Tensor origin, Tensor target, Tensor weights) {
+    Tensor pm = weights.dot(origin); // weighted mean of origin coordinates
+    Tensor qm = weights.dot(target); // weighted mean of target coordinates
+    Tensor xt = Tensor.of(origin.stream().map(pm::subtract)); // levers to origin coordinates
+    Tensor yt = Tensor.of(target.stream().map(qm::subtract)); // levers to target coordinates
     SingularValueDecomposition svd = //
         SingularValueDecomposition.of(Transpose.of(xt).dot(weights.pmul(yt)));
     Tensor ut = Transpose.of(svd.getU());

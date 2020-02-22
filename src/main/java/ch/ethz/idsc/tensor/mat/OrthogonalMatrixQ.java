@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
 /** Mathematica definition:
  * "A matrix m is orthogonal if m.Transpose[m] is the identity matrix."
  * 
+ * <p>The determinant of an orthogonal matrix is either +1 or -1.
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/OrthogonalMatrixQ.html">OrthogonalMatrixQ</a>
  * 

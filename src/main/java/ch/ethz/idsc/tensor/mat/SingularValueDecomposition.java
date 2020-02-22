@@ -6,22 +6,22 @@ import ch.ethz.idsc.tensor.Tensor;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/SingularValueDecomposition.html">SingularValueDecomposition</a> */
 public interface SingularValueDecomposition {
-  /** performs a singular value decomposition of matrix A
+  /** performs a singular value decomposition of a given matrix
    * <ul>
-   * <li>u.dot(DiagonalMatrix.of(values())).dot(Transpose.of(v)) == A
+   * <li>u.dot(DiagonalMatrix.of(values())).dot(Transpose.of(v)) == matrix
    * <li>Transpose.of(U).dot(U) == IdentityMatrix
    * <li>V.dot(Transpose.of(V) == IdentityMatrix
    * <li>Transpose.of(V).dot(V) == IdentityMatrix
    * </ul>
    * 
-   * @param A is rows x cols matrix with rows >= cols
-   * @return singular value decomposition of matrix A
+   * @param matrix is rows x cols matrix with rows >= cols
+   * @return singular value decomposition of given matrix
    * @throws Exception input is not a matrix, or if decomposition cannot be established */
-  static SingularValueDecomposition of(Tensor A) {
-    return new SingularValueDecompositionImpl(A);
+  static SingularValueDecomposition of(Tensor matrix) {
+    return new SingularValueDecompositionImpl(matrix);
   }
 
-  /** @return matrix of dimensions A, rows x cols */
+  /** @return matrix of dimensions rows x cols */
   Tensor getU();
 
   /** @return vector of non-negative singular values */

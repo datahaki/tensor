@@ -29,6 +29,12 @@ import junit.framework.TestCase;
 
 public class QRDecompositionTest extends TestCase {
   private static QRDecomposition specialOps(Tensor A) {
+    QRDecomposition qrDecomposition = specialOpsRegular(A);
+    specialOpsPres(A);
+    return qrDecomposition;
+  }
+
+  private static QRDecomposition specialOpsRegular(Tensor A) {
     QRDecomposition qrDecomposition = QRDecomposition.of(A);
     Tensor Q = qrDecomposition.getQ();
     Tensor Qi = qrDecomposition.getInverseQ();
@@ -40,6 +46,21 @@ public class QRDecompositionTest extends TestCase {
     Tensor lower = LowerTriangularize.of(R, -1);
     assertTrue(Chop.NONE.allZero(lower));
     assertTrue(Chop._10.close(qrDet, qrDecomposition.det()));
+    return qrDecomposition;
+  }
+
+  private static QRDecomposition specialOpsPres(Tensor A) {
+    QRDecomposition qrDecomposition = QRDecomposition.preserveOrientation(A);
+    Tensor Q = qrDecomposition.getQ();
+    Tensor Qi = qrDecomposition.getInverseQ();
+    Tensor R = qrDecomposition.getR();
+    assertTrue(Chop._10.close(Q.dot(R), A));
+    assertTrue(Chop._10.close(Q.dot(Qi), IdentityMatrix.of(A.length())));
+    Scalar qrDet = Det.of(Q).multiply(Det.of(R));
+    assertTrue(Chop._10.close(qrDet, Det.of(A)));
+    Tensor lower = LowerTriangularize.of(R, -1);
+    assertTrue(Chop.NONE.allZero(lower));
+    assertTrue(Chop._10.close(qrDet, qrDecomposition.det()) || Chop._10.close(qrDet, qrDecomposition.det().negate()));
     return qrDecomposition;
   }
 
@@ -147,12 +168,6 @@ public class QRDecompositionTest extends TestCase {
   public void testMathematica2() {
     Tensor matrix = Tensors.fromString("{{1., 2., 3.}, {4., 5., 6.}}");
     specialOps(matrix);
-    try {
-      QRDecomposition.preserveOrientation(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
   }
 
   public void testLower() {

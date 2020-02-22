@@ -35,13 +35,13 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   private final Tensor r;
   private final Tensor v;
 
-  /** @param A with cols <= rows */
-  public SingularValueDecompositionImpl(Tensor A) {
-    rows = A.length();
-    cols = Unprotect.dimension1(A);
+  /** @param matrix with cols <= rows */
+  public SingularValueDecompositionImpl(Tensor matrix) {
+    rows = matrix.length();
+    cols = Unprotect.dimension1(matrix);
     if (rows < cols)
       throw new IllegalArgumentException("rows=" + rows + " cols=" + cols);
-    u = A.copy();
+    u = matrix.copy();
     w = Array.zeros(cols);
     r = Array.zeros(cols);
     // ---

@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.lie;
 
 import java.util.Arrays;
 
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -11,20 +12,30 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.mat.UnitaryMatrixQ;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class OrthogonalizeTest extends TestCase {
+  private static void orthogonalMatrixQ_require(Tensor q) {
+    Tensor id = q.dot(Transpose.of(q));
+    Tensor diagonal = Diagonal.of(id);
+    Tolerance.CHOP.requireClose(id, DiagonalMatrix.with(diagonal));
+    for (Tensor d : diagonal)
+      assertTrue(Tolerance.CHOP.close(d, RealScalar.ONE) || Tolerance.CHOP.close(d, RealScalar.ZERO));
+  }
+
   private static void _check(Tensor matrix) {
     Tensor q = Orthogonalize.of(matrix);
     assertEquals(Dimensions.of(matrix), Dimensions.of(q));
-    assertTrue(OrthogonalMatrixQ.of(q));
+    orthogonalMatrixQ_require(q);
   }
 
   public void testMatrix1X3() {
@@ -56,7 +67,13 @@ public class OrthogonalizeTest extends TestCase {
     Distribution distribution = NormalDistribution.standard();
     for (int rows = 1; rows < 10; ++rows)
       for (int cols = 1; cols < 10; ++cols)
-        _check(RandomVariate.of(distribution, cols, cols));
+        _check(RandomVariate.of(distribution, rows, cols));
+  }
+
+  public void test2x1() {
+    Tensor matrix = Tensors.fromString("{{-1.63342010908827}, {0.07817413797055835}}");
+    Tensor tensor = Orthogonalize.of(matrix);
+    Tolerance.CHOP.requireClose(tensor, Tensors.fromString("{{-1}, {0}}"));
   }
 
   public void testSpan() {
