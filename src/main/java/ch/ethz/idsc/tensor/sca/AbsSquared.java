@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * <code>abs(x) ^ 2</code> */
 public enum AbsSquared implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ConjugateInterface)

@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * resource associated to a color data gradient fails. */
 /* package */ enum FallbackColorDataGradient implements ColorDataGradient {
   INSTANCE;
-  // ---
+
   @Override // from ColorDataGradient
   public Tensor apply(Scalar scalar) {
     Objects.requireNonNull(scalar);

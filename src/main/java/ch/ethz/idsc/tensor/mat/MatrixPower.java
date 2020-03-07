@@ -34,7 +34,7 @@ public class MatrixPower extends BinaryPower<Tensor> {
         .apply(SquareMatrixQ.require(matrix), exponent);
   }
 
-  // ---
+  /***************************************************/
   private final int n;
 
   private MatrixPower(int n) {

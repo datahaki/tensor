@@ -38,7 +38,7 @@ public class LinearColorDataGradient implements ColorDataGradient {
     return new LinearColorDataGradient(tensor.map(CLIP::requireInside));
   }
 
-  // ---
+  /***************************************************/
   private final Tensor tensor;
   private final Interpolation interpolation;
   private final Scalar scale;

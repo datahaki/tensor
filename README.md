@@ -1,6 +1,6 @@
 # ch.ethz.idsc.tensor <a href="https://travis-ci.org/idsc-frazzoli/tensor"><img src="https://travis-ci.org/idsc-frazzoli/tensor.svg?branch=master" alt="Build Status"></a>
 
-Library for tensor computations in Java, version `0.8.1`
+Library for tensor computations in Java, version `0.8.2`
 
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions
@@ -184,12 +184,6 @@ The arithmetic for the scalar type `Quantity` was developed in collaboration wit
 <tr>
 <td>
 
-![convexhullimage](https://user-images.githubusercontent.com/4012178/45925029-c8d9d800-bf0d-11e8-9ca3-1c7ee65ab812.png)
-
-Graham's scan
-
-<td>
-
 ![spherefitimage](https://user-images.githubusercontent.com/4012178/45925049-24a46100-bf0e-11e8-84a7-ebd6d1d7b01a.png)
 
 Sphere fit
@@ -292,7 +286,7 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
 <repositories>
   <repository>
     <id>tensor-mvn-repo</id>
-    <url>https://raw.github.com/idsc-frazzoli/tensor/mvn-repo/</url>
+    <url>https://raw.github.com/datahaki/tensor/mvn-repo/</url>
     <snapshots>
       <enabled>true</enabled>
       <updatePolicy>always</updatePolicy>
@@ -304,7 +298,7 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
   <dependency>
     <groupId>ch.ethz.idsc</groupId>
     <artifactId>tensor</artifactId>
-    <version>0.8.1</version>
+    <version>0.8.2</version>
   </dependency>
 </dependencies>
 ```

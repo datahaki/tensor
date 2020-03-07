@@ -25,7 +25,7 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
     return new GompertzMakehamDistribution(Sign.requirePositive(lambda), xi);
   }
 
-  // ---
+  /***************************************************/
   private final Scalar lambda;
   private final Scalar xi;
   private final Scalar lambda_xi;

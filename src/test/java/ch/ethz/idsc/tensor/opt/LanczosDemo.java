@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.opt;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.zip.DataFormatException;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -24,7 +23,7 @@ enum LanczosDemo {
     return Tensor.of(sy.stream().map(vy -> interpolation.get(Tensors.of(vy))));
   }
 
-  public static void main(String[] args) throws ClassNotFoundException, DataFormatException, IOException {
+  public static void main(String[] args) throws IOException {
     Tensor images = Import.of(HomeDirectory.file("summary.png"));
     List<Integer> list = Dimensions.of(images);
     Interpolation interpolation = LanczosInterpolation.of(images, SEMI);

@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.io.Serialization;
-import ch.ethz.idsc.tensor.lie.CirclePoints;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -100,12 +99,6 @@ public class BSplineFunctionStringTest extends TestCase {
     assertEquals(bSplineFunction.apply(RealScalar.of(2)), RealScalar.of(0));
     assertTrue(Chop._12.close(bSplineFunction.apply(RealScalar.of(3.999999999999)), RealScalar.of(-2)));
     assertEquals(bSplineFunction.apply(RealScalar.of(4)), RealScalar.of(-2));
-  }
-
-  public void testCirclePoints() {
-    ScalarTensorFunction bSplineFunction = BSplineFunction.string(3, CirclePoints.of(10));
-    Tensor polygon = Subdivide.of(0, 9, 20).map(bSplineFunction::apply);
-    assertTrue(MatrixQ.of(polygon));
   }
 
   public void testSymmetric() {

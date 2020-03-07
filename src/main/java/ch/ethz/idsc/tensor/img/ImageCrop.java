@@ -3,7 +3,7 @@ package ch.ethz.idsc.tensor.img;
 
 import java.io.Serializable;
 import java.util.OptionalInt;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.RealScalar;
@@ -24,17 +24,18 @@ public class ImageCrop implements TensorUnaryOperator {
    * @param value
    * @return operator that removes the boundary of images of given color value */
   public static TensorUnaryOperator color(Tensor value) {
-    return new ImageCrop(entry -> entry.equals(value));
+    return new ImageCrop(value::equals);
   }
 
-  private static interface TensorBooleanFunction extends Function<Tensor, Boolean>, Serializable {
+  private static interface TensorPredicate extends Predicate<Tensor>, Serializable {
+    // ---
   }
 
-  // ---
-  private final TensorBooleanFunction function;
+  /***************************************************/
+  private final TensorPredicate predicate;
 
-  private ImageCrop(TensorBooleanFunction function) {
-    this.function = function;
+  private ImageCrop(TensorPredicate predicate) {
+    this.predicate = predicate;
   }
 
   @Override
@@ -42,7 +43,7 @@ public class ImageCrop implements TensorUnaryOperator {
     // LONGTERM not as efficient as could be
     int dim0 = image.length();
     int dim1 = Unprotect.dimension1(image);
-    Tensor boole = TensorMap.of(entry -> Boole.of(function.apply(entry)), image, 2);
+    Tensor boole = TensorMap.of(entry -> Boole.of(predicate.test(entry)), image, 2);
     Tensor vectorX = TensorMap.of(Total::of, boole, 0);
     Tensor vectorY = TensorMap.of(Total::of, boole, 1);
     Scalar dimS0 = RealScalar.of(dim0);

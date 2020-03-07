@@ -29,7 +29,7 @@ public class ImageFilter {
     return Array.of(index -> function.apply(imageFilter.block(index)), Dimensions.of(tensor));
   }
 
-  // ---
+  /***************************************************/
   private final Tensor tensor;
   private final int radius;
   private final List<Integer> dimensions;

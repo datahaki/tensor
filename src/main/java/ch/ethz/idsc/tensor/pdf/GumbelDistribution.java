@@ -24,7 +24,7 @@ public class GumbelDistribution extends AbstractAlphaBetaDistribution {
     return new GumbelDistribution(alpha, Sign.requirePositive(beta));
   }
 
-  // ---
+  /***************************************************/
   private GumbelDistribution(Scalar alpha, Scalar beta) {
     super(alpha, beta);
   }

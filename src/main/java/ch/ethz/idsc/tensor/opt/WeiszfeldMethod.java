@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * by Amir Beck, Shoham Sabach */
 /* package */ class WeiszfeldMethod implements SpatialMedian, Serializable {
   private static final int MAX_ITERATIONS = 512;
-  static final SpatialMedian DEFAULT = new WeiszfeldMethod(RealScalar.ZERO);
+  public static final SpatialMedian DEFAULT = new WeiszfeldMethod(RealScalar.ZERO);
   // ---
   private final Scalar tolerance;
 

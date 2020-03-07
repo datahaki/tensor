@@ -16,9 +16,15 @@ public enum Series {
    * == a + x*(b + x*(c + x*(d)))
    * </pre>
    * 
+   * Given an empty list of coefficients the operator evaluates to zero for any parameter x
+   * <pre>
+   * Series.of({}).apply(x) == 0
+   * </pre>
+   * 
    * @param coeffs of polynomial
-   * @return evaluation of polynomial for scalar input */
+   * @return evaluation of polynomial for scalar input
+   * @throws Exception if input is not a vector */
   public static ScalarUnaryOperator of(Tensor coeffs) {
-    return new HornerScheme(coeffs);
+    return new HornerScheme(Reverse.of(VectorQ.require(coeffs)));
   }
 }

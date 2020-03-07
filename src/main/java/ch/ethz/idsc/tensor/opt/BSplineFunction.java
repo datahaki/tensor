@@ -51,7 +51,7 @@ public abstract class BSplineFunction implements ScalarTensorFunction {
     return new BSplineFunctionCyclic(Integers.requirePositiveOrZero(degree), control);
   }
 
-  // ---
+  /***************************************************/
   private final int degree;
   private final Tensor control;
   /** half == degree / 2 */

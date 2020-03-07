@@ -98,7 +98,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     {
       Scalar prob = cdf.p_lessEquals(Quantity.of(6, "m"));
       ExactScalarQ.require(prob);
-      assertEquals(prob, RationalScalar.ONE);
+      assertEquals(prob, RealScalar.ONE);
     }
     Scalar random = RandomVariate.of(distribution);
     Scalar apply = QuantityMagnitude.SI().in("km").apply(random);
@@ -136,7 +136,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     {
       Scalar prob = cdf.p_lessEquals(Quantity.of(6, "m"));
       ExactScalarQ.require(prob);
-      assertEquals(prob, RationalScalar.ONE);
+      assertEquals(prob, RealScalar.ONE);
     }
     Scalar random = RandomVariate.of(distribution);
     Scalar apply = QuantityMagnitude.SI().in("km").apply(random);

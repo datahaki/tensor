@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
  * the pivot is computer over the absolute numeric value of the columns */
 /* package */ enum PivotArgMaxAbs implements Pivot {
   INSTANCE;
-  // ---
+
   @Override // from Pivot
   public int get(int row, int col, int[] ind, Tensor[] lhs) {
     Scalar max = value(lhs[ind[row]].Get(col).abs());

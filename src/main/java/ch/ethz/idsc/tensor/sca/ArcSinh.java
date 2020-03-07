@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * @see Sinh */
 public enum ArcSinh implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     Scalar x2_o = Sqrt.FUNCTION.apply(scalar.multiply(scalar).add(RealScalar.ONE));

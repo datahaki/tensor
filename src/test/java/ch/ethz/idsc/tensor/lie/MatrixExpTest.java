@@ -2,7 +2,9 @@
 package ch.ethz.idsc.tensor.lie;
 
 import java.util.Random;
+import java.util.stream.Stream;
 
+import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.ExactTensorQ;
@@ -13,11 +15,14 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.io.MathematicaFormat;
 import ch.ethz.idsc.tensor.mat.HermitianMatrixQ;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Trace;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -40,9 +45,7 @@ public class MatrixExpTest extends TestCase {
     double[][] mat = new double[][] { { 0, val, va2 }, { -val, 0, va3 }, { -va2, -va3, 0 } };
     Tensor bu = Tensors.matrixDouble(mat);
     Tensor o = MatrixExp.of(bu);
-    assertEquals( //
-        Chop._12.of(o.dot(Transpose.of(o)).subtract(IdentityMatrix.of(o.length()))), //
-        Array.zeros(Dimensions.of(o)));
+    Chop._12.requireAllZero(o.dot(Transpose.of(o)).subtract(IdentityMatrix.of(o.length())));
   }
 
   public void testExp1() {
@@ -54,11 +57,9 @@ public class MatrixExpTest extends TestCase {
   public void testExp2() {
     int n = 10;
     Tensor A = Tensors.matrix((i, j) -> DoubleScalar.of(RANDOM.nextGaussian()), n, n);
-    Tensor S = A.subtract(Transpose.of(A));
+    Tensor S = TensorWedge.of(A);
     Tensor o = MatrixExp.of(S);
-    assertEquals( //
-        o.dot(Transpose.of(o)).subtract(IdentityMatrix.of(o.length())).map(Chop._10), //
-        Array.zeros(Dimensions.of(o)));
+    Chop._10.requireAllZero(o.dot(Transpose.of(o)).subtract(IdentityMatrix.of(o.length())));
   }
 
   public void testGoldenThompsonInequality() {
@@ -97,9 +98,9 @@ public class MatrixExpTest extends TestCase {
   public void testQuantity1() {
     // Mathematica can't do this :-)
     Scalar qs1 = Quantity.of(3, "m");
-    Tensor ve1 = Tensors.of(RealScalar.ZERO, qs1);
-    Tensor ve2 = Tensors.vector(0, 0);
-    Tensor mat = Tensors.of(ve1, ve2);
+    Tensor mat = Tensors.of( //
+        Tensors.of(RealScalar.ZERO, qs1), //
+        Tensors.vector(0, 0));
     Tensor sol = MatrixExp.of(mat);
     assertTrue(Chop.NONE.close(sol, mat.add(IdentityMatrix.of(2))));
   }
@@ -119,6 +120,36 @@ public class MatrixExpTest extends TestCase {
     assertTrue(Chop.NONE.close(MatrixExp.of(mat), actual));
   }
 
+  public void testLarge() {
+    // without scaling, the loop of the series requires ~300 steps
+    // with scaling, the loop requires only ~20 steps
+    Tensor tensor = MatrixExp.of(Tensors.fromString("{{100, 100}, {100, 100}}"));
+    Tensor result = MathematicaFormat.parse(Stream.of("{{3.6129868840627414*^86, 3.6129868840627414*^86}, {3.6129868840627414*^86, 3.6129868840627414*^86}}"));
+    Chop.below(1e75).requireClose(tensor, result);
+  }
+
+  public void testNoScale() {
+    Distribution distribution = NormalDistribution.of(0, 6);
+    for (int count = 0; count < 10; ++count) {
+      Tensor matrix = RandomVariate.of(distribution, 2, 2);
+      Tensor exp1 = MatrixExp.of(matrix);
+      Tensor exp2 = MatrixExp.series(matrix);
+      Chop._01.requireClose(exp1, exp2);
+    }
+  }
+
+  public void testNoScaleComplex() {
+    Distribution distribution = NormalDistribution.of(0, 5);
+    for (int count = 0; count < 10; ++count) {
+      Tensor mr = RandomVariate.of(distribution, 2, 2);
+      Tensor mi = RandomVariate.of(distribution, 2, 2);
+      Tensor matrix = mi.multiply(ComplexScalar.I).add(mr);
+      Tensor exp1 = MatrixExp.of(matrix);
+      Tensor exp2 = MatrixExp.series(matrix);
+      Chop._01.requireClose(exp1, exp2);
+    }
+  }
+
   public void testFail() {
     try {
       MatrixExp.of(Array.zeros(4, 3));
@@ -128,6 +159,15 @@ public class MatrixExpTest extends TestCase {
     }
     try {
       MatrixExp.of(Array.zeros(3, 4));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testScalarFail() {
+    try {
+      MatrixExp.of(RealScalar.ONE);
       fail();
     } catch (Exception exception) {
       // ---

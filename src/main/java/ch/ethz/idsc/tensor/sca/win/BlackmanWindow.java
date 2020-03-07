@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/BlackmanWindow.html">BlackmanWindow</a> */
 public enum BlackmanWindow implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Scalar A0 = RationalScalar.of(21, 50);
   private static final Scalar A2 = RationalScalar.of(2, 25);
 

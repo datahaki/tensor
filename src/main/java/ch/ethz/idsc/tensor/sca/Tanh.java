@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * @see ArcTanh */
 public enum Tanh implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof RealScalar)

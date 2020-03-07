@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Tolerance.html">Tolerance</a> */
-/* package */ enum Tolerance {
+public enum Tolerance {
   ;
   /** default threshold below which to consider:
    * a singular value as zero,

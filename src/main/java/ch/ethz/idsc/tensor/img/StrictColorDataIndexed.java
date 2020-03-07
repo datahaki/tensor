@@ -19,7 +19,7 @@ public class StrictColorDataIndexed extends BaseColorDataIndexed {
     return new StrictColorDataIndexed(tensor.copy());
   }
 
-  // ---
+  /***************************************************/
   /** @param tensor with dimensions N x 4 where each row encodes {R, G, B, A} */
   StrictColorDataIndexed(Tensor tensor) {
     super(tensor);
@@ -36,7 +36,7 @@ public class StrictColorDataIndexed extends BaseColorDataIndexed {
   }
 
   @Override // from BaseColorDataIndexed
-  int toInt(Scalar scalar) {
+  protected int toInt(Scalar scalar) {
     return scalar.number().intValue();
   }
 }

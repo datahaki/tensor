@@ -6,7 +6,9 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Mod;
@@ -53,5 +55,27 @@ public class SeriesTest extends TestCase {
     Scalar val = Quantity.of(2, "s");
     Scalar res = Series.of(Tensors.of(qs1, qs2)).apply(val);
     assertEquals(res.toString(), "2[m*s]");
+  }
+
+  public void testEmpty() {
+    assertEquals(Series.of(Tensors.empty()).apply(Pi.VALUE), RealScalar.ZERO);
+  }
+
+  public void testNullFail() {
+    try {
+      Series.of(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testMatrixFail() {
+    try {
+      Series.of(HilbertMatrix.of(3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

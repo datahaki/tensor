@@ -33,8 +33,8 @@ import javax.imageio.stream.ImageOutputStream;
       file.delete();
     return new AnimatedGifWriter(new FileImageOutputStream(file), period, true);
   }
-  // ---
 
+  /***************************************************/
   private final ImageOutputStream imageOutputStream;
   private final int period;
   private final boolean loop;

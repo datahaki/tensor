@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * @see Sin */
 public enum ArcSin implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Scalar I_NEGATE = ComplexScalar.I.negate();
 
   @Override

@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * <a href="https://reference.wolfram.com/language/ref/Im.html">Im</a> */
 public enum Imag implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ComplexEmbedding) {

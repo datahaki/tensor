@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.alg.MatrixQ;
  * Norm[{3, 4}, "Frobenius"] == 5 */
 public enum Frobenius implements NormInterface {
   NORM;
-  // ---
+
   @Override // from VectorNormInterface
   public Scalar ofVector(Tensor vector) {
     return Norm._2.ofVector(vector);

@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * </pre> */
 /* package */ enum LinearBinaryAverage implements BinaryAverage {
   INSTANCE;
-  // ---
+
   @Override // from BinaryAverage
   public Tensor split(Tensor p, Tensor q, Scalar scalar) {
     return q.subtract(p).multiply(scalar).add(p);

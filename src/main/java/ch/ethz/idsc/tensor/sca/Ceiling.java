@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * @see Round */
 public enum Ceiling implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   /** @param scalar instance if {@link RealScalar}
    * @return best integer scalar approximation to ceiling of scalar
    * @throws TensorRuntimeException if scalar is Infinity, or NaN */

@@ -32,7 +32,7 @@ public class QuantileTest extends TestCase {
   public void testScalar() {
     Tensor vector = Tensors.vector(0, 2, 1, 4, 3);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(vector);
-    Scalar p = scalarUnaryOperator.apply(RealScalar.of(0.71233));
+    Tensor p = scalarUnaryOperator.apply(RealScalar.of(0.71233));
     assertEquals(p, RealScalar.of(3));
   }
 
@@ -144,9 +144,18 @@ public class QuantileTest extends TestCase {
     }
   }
 
-  public void testFailMatrix() {
+  public void testMatrixFail() {
     try {
       Quantile.of(HilbertMatrix.of(3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testEmptyVectorFail() {
+    try {
+      Quantile.of(Tensors.empty());
       fail();
     } catch (Exception exception) {
       // ---

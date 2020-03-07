@@ -1,6 +1,7 @@
 // code adapted by jph
 package ch.ethz.idsc.tensor.mat;
 
+import java.io.Serializable;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -19,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-/* package */ class SingularValueDecompositionImpl implements SingularValueDecomposition {
+/* package */ class SingularValueDecompositionImpl implements SingularValueDecomposition, Serializable {
   private static final Scalar _0 = DoubleScalar.of(0);
   private static final Scalar _1 = DoubleScalar.of(1);
   /** Difference between 1.0 and the minimum double greater than 1.0
@@ -34,13 +35,13 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   private final Tensor r;
   private final Tensor v;
 
-  /** @param A with cols <= rows */
-  public SingularValueDecompositionImpl(Tensor A) {
-    rows = A.length();
-    cols = Unprotect.dimension1(A);
+  /** @param matrix with cols <= rows */
+  public SingularValueDecompositionImpl(Tensor matrix) {
+    rows = matrix.length();
+    cols = Unprotect.dimension1(matrix);
     if (rows < cols)
       throw new IllegalArgumentException("rows=" + rows + " cols=" + cols);
-    u = A.copy();
+    u = matrix.copy();
     w = Array.zeros(cols);
     r = Array.zeros(cols);
     // ---
@@ -71,17 +72,17 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from SingularValueDecomposition
   public Tensor getU() {
-    return u.unmodifiable();
+    return u;
   }
 
   @Override // from SingularValueDecomposition
   public Tensor values() {
-    return w.unmodifiable();
+    return w;
   }
 
   @Override // from SingularValueDecomposition
   public Tensor getV() {
-    return v.unmodifiable();
+    return v;
   }
 
   private void initU1(int i) {

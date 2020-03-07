@@ -38,7 +38,7 @@ public class ExponentialDistribution extends AbstractContinuousDistribution impl
     return of(RealScalar.of(lambda));
   }
 
-  // ---
+  /***************************************************/
   private final Scalar lambda;
   private final Scalar lambda_negate;
 

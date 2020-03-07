@@ -37,7 +37,7 @@ public class QuantityMagnitude implements Serializable {
     return singleton(Unit.of(string));
   }
 
-  // ---
+  /***************************************************/
   private final UnitSystem unitSystem;
 
   /** creates instance for quantity conversion and magnitude extraction

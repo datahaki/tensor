@@ -11,9 +11,9 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ abstract class BaseColorDataIndexed implements ColorDataIndexed {
   private final Tensor tensor;
-  final Color[] colors;
+  protected final Color[] colors;
 
-  BaseColorDataIndexed(Tensor tensor) {
+  public BaseColorDataIndexed(Tensor tensor) {
     this.tensor = tensor;
     colors = tensor.stream() //
         .map(ColorFormat::toColor) //
@@ -34,11 +34,11 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
   /** @param scalar
    * @return */
-  abstract int toInt(Scalar scalar);
+  protected abstract int toInt(Scalar scalar);
 
   /** @param alpha in the range [0, 1, ..., 255]
    * @return */
-  final Tensor tableWithAlpha(int alpha) {
+  protected final Tensor tableWithAlpha(int alpha) {
     return Tensor.of(tensor.stream().map(withAlpha(alpha)));
   }
 

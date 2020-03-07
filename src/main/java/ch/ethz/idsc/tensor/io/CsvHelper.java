@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ enum CsvHelper implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Scalar EMPTY = StringScalar.of("\"\"");
 
   @Override

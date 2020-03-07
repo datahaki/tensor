@@ -20,7 +20,7 @@ public class PascalDistribution extends EvaluatedDiscreteDistribution implements
     return new PascalDistribution(Integers.requirePositive(n), Clips.unit().requireInside(p));
   }
 
-  // ---
+  /***************************************************/
   private final int n;
   private final Scalar p;
   private final Scalar o_p;

@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
     return new Determinant(matrix, pivot).solve();
   }
 
-  // ---
+  /***************************************************/
   private Determinant(Tensor matrix, Pivot pivot) {
     super(matrix, pivot);
   }
@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.Tensor;
   }
 
   private void eliminate(int c0, Scalar piv) {
-    for (int c1 = c0 + 1; c1 < lhs.length; ++c1) { // deliberately without parallel
+    for (int c1 = c0 + 1; c1 < lhs.length; ++c1) {
       int ic1 = ind[c1];
       Scalar fac = lhs[ic1].Get(c0).divide(piv).negate();
       lhs[ic1] = lhs[ic1].add(lhs[ind[c0]].multiply(fac));

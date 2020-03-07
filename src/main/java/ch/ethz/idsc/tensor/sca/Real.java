@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * <a href="https://reference.wolfram.com/language/ref/Re.html">Re</a> */
 public enum Real implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ComplexEmbedding) {

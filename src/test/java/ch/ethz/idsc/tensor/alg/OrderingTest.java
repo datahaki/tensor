@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.alg;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -76,18 +77,14 @@ public class OrderingTest extends TestCase {
     assertEquals(Tensors.vector(a), Tensors.vector(1, 2, 3).map(RealScalar.ONE::add));
   }
 
+  public void testMatrix() {
+    assertEquals(Arrays.asList(Ordering.INCREASING.of(HilbertMatrix.of(4))), Arrays.asList(3, 2, 1, 0));
+    assertEquals(Arrays.asList(Ordering.DECREASING.of(HilbertMatrix.of(4))), Arrays.asList(0, 1, 2, 3));
+  }
+
   public void testScalarFail() {
     try {
       Ordering.INCREASING.of(Pi.HALF);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testMatrixFail() {
-    try {
-      Ordering.INCREASING.of(HilbertMatrix.of(4));
       fail();
     } catch (Exception exception) {
       // ---

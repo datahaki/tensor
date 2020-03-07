@@ -45,7 +45,7 @@ public class SimpleUnitSystem implements UnitSystem {
         entry -> UnitHelper.requireValid(entry.getKey()), entry -> requireNumeric(entry.getValue()))));
   }
 
-  // ---
+  /***************************************************/
   private final Map<String, Scalar> map;
   private final Set<String> set;
 

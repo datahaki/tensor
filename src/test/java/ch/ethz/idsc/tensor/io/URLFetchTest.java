@@ -28,7 +28,7 @@ public class URLFetchTest extends TestCase {
     }
   }
 
-  public void testNoFileFail() throws MalformedURLException, IOException {
+  public void testNoFileFail() {
     if (UserName.is("travis"))
       try {
         try (URLFetch urlFetch = new URLFetch(new URL("http://www.hakenberg.de/doesnotexist.file.unknown"))) {

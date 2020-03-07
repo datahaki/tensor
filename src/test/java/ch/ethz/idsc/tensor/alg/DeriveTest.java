@@ -21,6 +21,15 @@ public class DeriveTest extends TestCase {
     assertEquals(Derive.of(Tensors.vector(3)), Tensors.empty());
   }
 
+  public void testScalarFail() {
+    try {
+      Derive.of(RealScalar.ONE);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testMatrixFail() {
     try {
       Derive.of(HilbertMatrix.of(4, 5));
@@ -30,9 +39,9 @@ public class DeriveTest extends TestCase {
     }
   }
 
-  public void testScalarFail() {
+  public void testUnstructuredFail() {
     try {
-      Derive.of(RealScalar.ONE);
+      Derive.of(Tensors.fromString("{2, {1}}"));
       fail();
     } catch (Exception exception) {
       // ---

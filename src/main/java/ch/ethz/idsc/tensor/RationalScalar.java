@@ -176,10 +176,10 @@ public final class RationalScalar extends AbstractRealScalar implements //
         // intValueExact throws an exception when exp > Integer.MAX_VALUE
         int expInt = Scalars.intValueExact(exp);
         if (0 <= expInt)
-          return RationalScalar.of( //
+          return of( //
               numerator().pow(expInt), //
               denominator().pow(expInt));
-        return RationalScalar.of( //
+        return of( //
             denominator().pow(-expInt), //
             numerator().pow(-expInt));
       } catch (Exception exception) {

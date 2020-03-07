@@ -25,7 +25,7 @@ public class EqualizingDistribution implements //
     return new EqualizingDistribution(unscaledPDF);
   }
 
-  // ---
+  /***************************************************/
   private final EmpiricalDistribution empiricalDistribution;
 
   private EqualizingDistribution(Tensor unscaledPDF) {

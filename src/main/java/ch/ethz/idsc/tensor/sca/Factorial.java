@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.alg.Last;
  * <a href="https://reference.wolfram.com/language/ref/Factorial.html">Factorial</a> */
 public enum Factorial implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Tensor MEMO = Tensors.vector(1); // initialize value for 0!
 
   /** @param scalar non-negative integer

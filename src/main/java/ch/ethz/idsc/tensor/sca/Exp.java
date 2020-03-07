@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * @see Log */
 public enum Exp implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ExpInterface) {

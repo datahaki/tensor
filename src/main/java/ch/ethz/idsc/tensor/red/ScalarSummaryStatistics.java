@@ -37,7 +37,6 @@ public class ScalarSummaryStatistics implements Consumer<Scalar> {
     return ScalarSummaryStatisticsCollector.INSTANCE;
   }
 
-  // ---
   private Scalar sum = null;
   private Scalar min = null;
   private Scalar max = null;

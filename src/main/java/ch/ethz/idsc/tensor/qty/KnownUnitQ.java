@@ -20,7 +20,7 @@ public class KnownUnitQ implements Serializable {
   private static final KnownUnitQ SI = in(UnitSystem.SI());
 
   /** @param unitSystem non-null
-   * @return */
+   * @return predicate according to given unit system */
   public static KnownUnitQ in(UnitSystem unitSystem) {
     return new KnownUnitQ(unitSystem.units());
   }
@@ -31,12 +31,12 @@ public class KnownUnitQ implements Serializable {
    * KnownUnitQ.SI().of(Unit.of("CHF")) == false
    * </pre>
    * 
-   * @return */
+   * @return predicate according to built-in unit system */
   public static KnownUnitQ SI() {
     return SI;
   }
 
-  // ---
+  /***************************************************/
   private final Set<String> set;
 
   private KnownUnitQ(Set<String> set) {

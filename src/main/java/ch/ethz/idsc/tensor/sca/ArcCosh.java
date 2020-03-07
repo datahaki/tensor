@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * @see Cosh */
 public enum ArcCosh implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     Scalar x2_o = Sqrt.FUNCTION.apply(scalar.multiply(scalar).subtract(RealScalar.ONE));

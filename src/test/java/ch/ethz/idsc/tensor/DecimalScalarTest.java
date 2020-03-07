@@ -22,7 +22,7 @@ public class DecimalScalarTest extends TestCase {
   public void testReciprocal() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL32));
     DecimalScalar r = (DecimalScalar) s.reciprocal();
-    assertTrue(7 <= ((BigDecimal) r.number()).precision());
+    assertTrue(7 <= r.number().precision());
   }
 
   public void testDivide() {
@@ -62,7 +62,7 @@ public class DecimalScalarTest extends TestCase {
 
   public void testTrig() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL32));
-    Chop._06.requireAllZero(Sin.of(s));
+    Chop._06.requireZero(Sin.of(s));
     Chop._06.requireClose(Cos.of(s), RealScalar.ONE.negate());
   }
 

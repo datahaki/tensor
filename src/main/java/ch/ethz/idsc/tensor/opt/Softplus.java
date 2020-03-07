@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <a href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks)">documentation</a> */
 public enum Softplus implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final Scalar LO = DoubleScalar.of(-50);
   private static final Scalar HI = DoubleScalar.of(+50);
 

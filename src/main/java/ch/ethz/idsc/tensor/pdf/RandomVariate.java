@@ -40,7 +40,6 @@ public enum RandomVariate {
     return of(distribution, RANDOM); // of # interface, random
   }
 
-  // ---
   /** @param randomVariateInterface
    * @param random
    * @param dimensions
@@ -57,7 +56,6 @@ public enum RandomVariate {
     return of(distribution, RANDOM, dimensions); // of # interface, random, list
   }
 
-  // ---
   /** @param randomVariateInterface
    * @param random
    * @param dimensions

@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor.io;
 
-import java.io.IOException;
-
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -16,7 +14,7 @@ public class TableBuilderTest extends TestCase {
     assertEquals(tableBuilder.getTable(), Tensors.empty());
   }
 
-  public void testAppendRow() throws IOException {
+  public void testAppendRow() {
     TableBuilder tableBuilder = new TableBuilder();
     tableBuilder.appendRow(RealScalar.ONE, Tensors.vector(2, 3, 4), RealScalar.of(5));
     assertEquals(tableBuilder.getRowCount(), 1);

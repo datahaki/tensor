@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * @see Log */
 public enum Log10 implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final double PI_LOG10 = 1.36437635384184134748578362543;
   private static final Scalar LOG10 = Log.FUNCTION.apply(RealScalar.of(10));
 

@@ -21,12 +21,9 @@ public enum OrderedQ {
     boolean status = true;
     if (iterator.hasNext()) {
       Tensor prev = iterator.next();
-      while (iterator.hasNext()) {
-        @SuppressWarnings("unchecked")
-        Comparable<Tensor> comparable = (Comparable<Tensor>) prev;
-        if (0 < comparable.compareTo(prev = iterator.next()))
+      while (iterator.hasNext())
+        if (0 < TensorComparator.INSTANCE.compare(prev, prev = iterator.next()))
           status = false;
-      }
     }
     return status;
   }

@@ -30,7 +30,7 @@ public class GammaDistribution implements Distribution, MeanInterface, PDF, Vari
     return new GammaDistribution(alpha, beta);
   }
 
-  // ---
+  /***************************************************/
   private final Scalar alpha;
   private final Scalar beta;
   private final Scalar factor;

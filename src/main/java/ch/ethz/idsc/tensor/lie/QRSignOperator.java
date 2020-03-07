@@ -14,7 +14,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
   STABILITY() {
     @Override
     public Scalar apply(Scalar xk) {
-      return Sign.isPositive(xk) ? ONE_NEGATE : RealScalar.ONE;
+      return Sign.isPositive(xk) //
+          ? ONE_NEGATE
+          : RealScalar.ONE;
     }
   }, //
   ORIENTATION() {
@@ -23,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       return ONE_NEGATE;
     }
   };
-  // ---
+
   private static final Scalar ONE_NEGATE = RealScalar.ONE.negate();
 
   /** @param xk

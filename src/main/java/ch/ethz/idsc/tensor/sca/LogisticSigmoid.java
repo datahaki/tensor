@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * <a href="https://reference.wolfram.com/language/ref/LogisticSigmoid.html">LogisticSigmoid</a> */
 public enum LogisticSigmoid implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     return RealScalar.ONE.add(Exp.FUNCTION.apply(scalar.negate())).reciprocal();

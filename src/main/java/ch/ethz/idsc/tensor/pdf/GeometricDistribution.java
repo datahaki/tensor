@@ -29,7 +29,7 @@ public class GeometricDistribution extends AbstractDiscreteDistribution implemen
     return new GeometricDistribution(p);
   }
 
-  // ---
+  /***************************************************/
   private final Scalar p;
   private final Scalar _1_p; // _1_p == 1 - p
 

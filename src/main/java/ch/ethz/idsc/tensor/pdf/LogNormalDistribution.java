@@ -31,7 +31,7 @@ public class LogNormalDistribution implements //
     throw TensorRuntimeException.of(mu, sigma);
   }
 
-  // ---
+  /***************************************************/
   private final Scalar mu;
   private final NormalDistribution normalDistribution;
   private final Scalar variance;

@@ -49,7 +49,7 @@ public class GaussScalarTest extends TestCase {
   }
 
   public void testGetter() {
-    GaussScalar num = (GaussScalar) GaussScalar.of(32, 193);
+    GaussScalar num = GaussScalar.of(32, 193);
     assertEquals(num.number().intValue(), 32);
     assertEquals(num.number().longValue(), 32);
     assertEquals(num.prime(), BigInteger.valueOf(193));

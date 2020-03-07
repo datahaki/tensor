@@ -60,7 +60,7 @@ public class HistogramDistribution implements //
     return of(samples, BinningMethod.IQR);
   }
 
-  // ---
+  /***************************************************/
   private final ScalarUnaryOperator discrete;
   private final ScalarUnaryOperator original;
   private final EmpiricalDistribution empiricalDistribution;

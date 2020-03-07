@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.qty.Unit;
+import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.red.Tally;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
@@ -76,6 +77,17 @@ public class RescaleTest extends TestCase {
     Tensor vector = Tensors.fromString("{3[s], Infinity[s], 6[s], 2[s]}");
     Tensor result = Tensors.fromString("{1/4, Infinity, 1, 0}");
     assertEquals(Rescale.of(vector), result);
+  }
+
+  public void testQuantityExStats() {
+    Tensor vector = Tensors.fromString("{3[s], Infinity[s], 6[s], 2[s]}");
+    Tensor result = Tensors.fromString("{1/4, Infinity, 1, 0}");
+    Rescale rescale = new Rescale(vector);
+    ScalarSummaryStatistics scalarSummaryStatistics = rescale.scalarSummaryStatistics();
+    assertEquals(scalarSummaryStatistics.getCount(), 3);
+    assertEquals(scalarSummaryStatistics.getMin(), Quantity.of(2, "s"));
+    assertEquals(scalarSummaryStatistics.getMax(), Quantity.of(6, "s"));
+    assertEquals(rescale.result(), result);
   }
 
   public void testQuantitySpecial() {

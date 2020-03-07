@@ -127,6 +127,13 @@ public class Chop implements ScalarUnaryOperator {
         .allMatch(Scalars::isZero);
   }
 
+  /** @param scalar
+   * @throws Exception if {@link #apply(Scalar)} evaluates to non zero */
+  public void requireZero(Scalar scalar) {
+    if (Scalars.nonZero(apply(scalar)))
+      throw TensorRuntimeException.of(scalar);
+  }
+
   /** @param tensor
    * @throws Exception if {@link #allZero(Tensor)} evaluates to false */
   public void requireAllZero(Tensor tensor) {

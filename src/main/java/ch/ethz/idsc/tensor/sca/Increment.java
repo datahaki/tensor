@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 public enum Increment implements ScalarUnaryOperator {
   /** increments a given {@link Scalar} by RealScalar.ONE */
   ONE;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     return scalar.add(RealScalar.ONE);

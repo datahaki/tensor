@@ -1,10 +1,14 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
+import java.util.Arrays;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.StringTensor;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import junit.framework.TestCase;
 
 public class PermutationsTest extends TestCase {
@@ -45,6 +49,11 @@ public class PermutationsTest extends TestCase {
     Tensor vector = StringTensor.vector("a", "b", "a");
     Tensor tensor = Permutations.of(vector);
     assertEquals(tensor, Tensors.fromString("{{a, b, a}, {a, a, b}, {b, a, a}}"));
+  }
+
+  public void testMatrix() {
+    assertEquals(Dimensions.of(Permutations.of(IdentityMatrix.of(3))), Arrays.asList(6, 3, 3));
+    assertEquals(Dimensions.of(Permutations.of(IdentityMatrix.of(3).extract(0, 2))), Arrays.asList(2, 2, 3));
   }
 
   public void testFail() {

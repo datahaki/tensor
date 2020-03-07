@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.red.Tally;
@@ -55,33 +56,20 @@ public class SignatureTest extends TestCase {
     assertEquals(Signature.of(Tensors.vector(3.5, -1)), RealScalar.ONE.negate());
   }
 
-  public void testScalarFail() {
-    try {
-      Signature.of(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testMatrixFail() {
-    try {
-      Signature.of(Array.zeros(2, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Signature.of(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+  public void testMatrix() {
+    assertEquals(Signature.of(Array.zeros(2, 2)), RealScalar.ZERO);
+    assertEquals(Signature.of(HilbertMatrix.of(3)), RealScalar.ONE.negate());
+    assertEquals(Signature.of(Reverse.of(HilbertMatrix.of(3))), RealScalar.ONE);
   }
 
   public void testUnstructuredFail() {
+    assertEquals(Signature.of(Tensors.fromString("{1, {2}}")), RealScalar.ONE);
+    assertEquals(Signature.of(Tensors.fromString("{3, 1, {2}}")), RealScalar.ONE.negate());
+  }
+
+  public void testScalarFail() {
     try {
-      Signature.of(Tensors.fromString("{1, {2}}"));
+      Signature.of(RealScalar.ZERO);
       fail();
     } catch (Exception exception) {
       // ---

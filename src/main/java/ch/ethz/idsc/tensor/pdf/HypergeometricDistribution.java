@@ -26,7 +26,7 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution im
     return new HypergeometricDistribution(N, n, m_n);
   }
 
-  // ---
+  /***************************************************/
   private final int N;
   private final int n;
   private final int m_n;

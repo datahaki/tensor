@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.alg.Series;
  * <a href="https://reference.wolfram.com/language/ref/Gamma.html">Gamma</a> */
 public enum Gamma implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   /** EulerGamma is the negative of the derivative D[Gamma[x]] at x == 1 */
   public static final Scalar EULER = DoubleScalar.of(0.577215664901532860606512090082);
   static final Scalar NEGATIVE_THREE = RealScalar.of(-3);

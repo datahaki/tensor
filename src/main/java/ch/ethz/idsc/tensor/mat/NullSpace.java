@@ -8,15 +8,21 @@ import ch.ethz.idsc.tensor.MachineNumberQ;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
-import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.sca.Chop;
 
-/** for matrices in exact precision use {@link NullSpace#usingRowReduce(Tensor)}
+/** {@link NullSpace#of(Tensor)} picks the most suited algorithm to determine the
+ * nullspace of a given matrix.
  * 
- * <p>for matrices in numeric precision use {@link NullSpace#usingSvd(Tensor)}
+ * <p>Three methods are available:
  * 
- * <p>{@link NullSpace#of(Tensor)} automatically switches between these two cases.
+ * <ul>
+ * <li>{@link LeftNullSpace#usingRowReduce(Tensor)}
+ * <li>{@link NullSpace#usingQR(Tensor)}
+ * <li>{@link NullSpace#usingSvd(Tensor)}
+ * </ul>
+ * 
+ * <p>Let N = NullSpace[A]. If N is non-empty, then A.Transpose[N] == 0.
  * 
  * <p>Quote from Wikipedia:
  * For matrices whose entries are floating-point numbers, the problem of computing the kernel
@@ -27,7 +33,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * low condition number.
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/NullSpace.html">NullSpace</a> */
+ * <a href="https://reference.wolfram.com/language/ref/NullSpace.html">NullSpace</a>
+ * 
+ * @see LeftNullSpace */
 public enum NullSpace {
   ;
   /** if matrix has any entry in machine precision, i.e. {@link MachineNumberQ} returns true,
@@ -41,17 +49,23 @@ public enum NullSpace {
    * <p>Function is consistent with Mathematica.
    * 
    * @param matrix
-   * @return vectors that span the nullspace */
+   * @return list of vectors that span the nullspace; if the nullspace is trivial, then
+   * the return value is the empty tensor {}
+   * @throws Exception if given parameter is not a matrix */
   public static Tensor of(Tensor matrix) {
-    return ExactTensorQ.of(matrix) //
-        ? usingRowReduce(matrix)
+    if (ExactTensorQ.of(matrix))
+      return usingRowReduce(matrix);
+    int rows = matrix.length();
+    int cols = Unprotect.dimension1(matrix);
+    return rows < cols //
+        ? usingQR(matrix)
         : usingSvd(matrix);
   }
 
   /** @param matrix with exact precision entries
    * @return tensor of vectors that span the kernel of given matrix */
   public static Tensor usingRowReduce(Tensor matrix) {
-    return _usingRowReduce(matrix, IdentityMatrix.of(Unprotect.dimension1(matrix)));
+    return LeftNullSpace.usingRowReduce(Transpose.of(matrix));
   }
 
   /** @param matrix of dimensions n x m with exact precision entries
@@ -59,24 +73,18 @@ public enum NullSpace {
    * for the scalar type of each column
    * @return tensor of vectors that span the kernel of given matrix */
   public static Tensor usingRowReduce(Tensor matrix, Tensor identity) {
-    return _usingRowReduce(matrix, SquareMatrixQ.require(identity));
+    return LeftNullSpace.usingRowReduce(Transpose.of(matrix), SquareMatrixQ.require(identity));
   }
 
-  // helper function
-  private static Tensor _usingRowReduce(Tensor matrix, Tensor identity) {
-    final int n = matrix.length();
-    final int m = identity.length();
-    Tensor lhs = RowReduce.of(Join.of(1, Transpose.of(matrix), identity));
-    int j = 0;
-    int c0 = 0;
-    while (c0 < n)
-      if (Scalars.nonZero(lhs.Get(j, c0++))) // <- careful: c0 is modified
-        ++j;
-    return Tensor.of(lhs.extract(j, m).stream().map(row -> row.extract(n, n + m)));
+  /** @param matrix of any dimensions
+   * @return list of orthogonal vectors that span the nullspace */
+  public static Tensor usingQR(Tensor matrix) {
+    return LeftNullSpace.usingQR(Transpose.of(matrix));
   }
 
-  /** @param matrix
-   * @return (cols - rank()) x cols matrix */
+  /** @param matrix of dimensions rows x cols with rows >= cols
+   * @return (cols - rank()) x cols matrix
+   * @throws Exception if given matrix has rows &lt; cols */
   public static Tensor usingSvd(Tensor matrix) {
     return of(SingularValueDecomposition.of(matrix));
   }

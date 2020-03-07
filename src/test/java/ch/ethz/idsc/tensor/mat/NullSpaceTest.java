@@ -2,17 +2,13 @@
 package ch.ethz.idsc.tensor.mat;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.MachineNumberQ;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Normalize;
@@ -20,13 +16,14 @@ import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.LieAlgebras;
-import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class NullSpaceTest extends TestCase {
@@ -139,6 +136,11 @@ public class NullSpaceTest extends TestCase {
     assertTrue(ExactTensorQ.of(nul));
   }
 
+  public void testSingleVector() {
+    Tensor nullsp = NullSpace.of(Tensors.of(Tensors.vector(0.0, 1.0)));
+    Chop._12.requireClose(nullsp, Tensors.of(Tensors.vector(1.0, 0.0)));
+  }
+
   public void testComplex() {
     // {{17/101-32/101*I, 0, 1, -99/101+20/101*I},
     // {106/505-253/505*I, 1, 0, -89/101+19/101*I}}
@@ -190,24 +192,6 @@ public class NullSpaceTest extends TestCase {
     assertTrue(Chop.NONE.allZero(mat.dot(Transpose.of(nul))));
   }
 
-  public void testQuantityNumeric() {
-    // currently not supported
-  }
-
-  public void testGaussScalar() {
-    Random random = new Random();
-    int prime = 7741;
-    int dim1 = 6;
-    Tensor matrix = Array.fill(() -> GaussScalar.of(random.nextInt(), prime), dim1 - 2, dim1);
-    Tensor identi = IdentityMatrix.of(Unprotect.dimension1(matrix), GaussScalar.of(1, prime));
-    List<Integer> list = Dimensions.of(identi);
-    assertEquals(list, Arrays.asList(dim1, dim1));
-    Tensor nullsp = NullSpace.usingRowReduce(matrix, identi);
-    Scalar det = Det.of(matrix);
-    assertEquals(det, GaussScalar.of(0, prime));
-    assertEquals(Dimensions.of(nullsp), Arrays.asList(2, 6));
-  }
-
   public void testRectangle2x3() {
     Tensor matrix = Tensors.fromString("{{1, 0, 0}, {0, 0, 0}}");
     Tensor tensor = NullSpace.of(matrix);
@@ -223,43 +207,38 @@ public class NullSpaceTest extends TestCase {
     assertTrue(Scalars.isZero(Det.of(matrix)));
   }
 
-  public void testRectangle2x3G() {
-    ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
-    Tensor matrix = Tensors.fromString("{{1, 0, 0}, {0, 0, 0}}").map(suo);
-    Tensor tensor = NullSpace.usingRowReduce(matrix, IdentityMatrix.of(3, GaussScalar.of(1, 7)));
-    assertEquals(tensor.get(0), UnitVector.of(3, 1).map(suo));
-    assertEquals(tensor.get(1), UnitVector.of(3, 2).map(suo));
-    assertTrue(Scalars.isZero(Det.of(matrix)));
-  }
-
-  public void testRectangle3x2G() {
-    ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
-    Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
-    Tensor tensor = NullSpace.usingRowReduce(matrix, IdentityMatrix.of(2, GaussScalar.of(1, 7)));
-    assertEquals(tensor.get(0), UnitVector.of(2, 1).map(suo));
-    assertTrue(Scalars.isZero(Det.of(matrix)));
-  }
-
-  public void testRectangle3x2GVectorFail() {
-    ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
-    Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
-    try {
-      NullSpace.usingRowReduce(matrix, IdentityMatrix.of(2, GaussScalar.of(1, 7)).get(0));
-      fail();
-    } catch (Exception exception) {
-      // ---
+  public void testZeros() {
+    for (int d = 3; d < 6; ++d) {
+      Tensor matrix = Array.zeros(3, d);
+      Tensor id = IdentityMatrix.of(d);
+      assertEquals(id, NullSpace.of(matrix));
+      assertEquals(id, NullSpace.usingQR(matrix.map(N.DOUBLE)));
     }
   }
 
-  public void testRectangle3x2GRectFail() {
-    ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
-    Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
-    Tensor identity = IdentityMatrix.of(3, GaussScalar.of(1, 7)).extract(0, 2);
-    try {
-      NullSpace.usingRowReduce(matrix, identity);
-      fail();
-    } catch (Exception exception) {
-      // ---
+  public void testExtended() {
+    Distribution distribution = UniformDistribution.unit();
+    int n = 10;
+    for (int d = 1; d < n; ++d) {
+      Tensor matrix = RandomVariate.of(distribution, n, d);
+      assertEquals(NullSpace.of(matrix), Tensors.empty());
+      Tensor mt = Transpose.of(matrix);
+      {
+        Tensor nullspace = NullSpace.usingRowReduce(mt);
+        assertEquals(Dimensions.of(nullspace), Arrays.asList(n - d, n));
+        Chop._10.requireAllZero(mt.dot(Transpose.of(nullspace)));
+      }
+      {
+        Tensor nullspace = NullSpace.usingQR(mt);
+        assertEquals(Dimensions.of(nullspace), Arrays.asList(n - d, n));
+        Chop._10.requireAllZero(mt.dot(Transpose.of(nullspace)));
+        Chop._10.requireClose(nullspace.dot(Transpose.of(nullspace)), IdentityMatrix.of(n - d));
+      }
+      {
+        Tensor nullspace = NullSpace.of(mt);
+        assertEquals(Dimensions.of(nullspace), Arrays.asList(n - d, n));
+        Chop._10.requireAllZero(mt.dot(Transpose.of(nullspace)));
+      }
     }
   }
 

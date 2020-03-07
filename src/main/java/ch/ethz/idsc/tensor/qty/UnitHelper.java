@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.Scalars;
 /** associates strings with instances of unit */
 /* package */ enum UnitHelper {
   MEMO;
-  // ---
+
   private static final int SIZE = 500;
   /** atomic unit may consist of roman letters in lower case a-z,
    * upper case A-Z, as well as the underscore character '_' */

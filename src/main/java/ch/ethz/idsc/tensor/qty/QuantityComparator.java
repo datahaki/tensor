@@ -26,7 +26,7 @@ public class QuantityComparator implements Comparator<Scalar>, Serializable {
     return SI;
   }
 
-  // ---
+  /***************************************************/
   private final UnitSystem unitSystem;
 
   /** @param unitSystem */

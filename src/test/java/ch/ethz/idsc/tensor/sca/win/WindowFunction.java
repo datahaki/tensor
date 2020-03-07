@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   Parzen(ParzenWindow.FUNCTION), //
   Tukey(TukeyWindow.FUNCTION), //
   ;
+
   private final ScalarUnaryOperator scalarUnaryOperator;
 
   private WindowFunction(ScalarUnaryOperator scalarUnaryOperator) {

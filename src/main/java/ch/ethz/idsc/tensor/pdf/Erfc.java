@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/Erfc.html">Erfc</a> */
 public enum Erfc implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   @Override
   public Scalar apply(Scalar scalar) {
     return RealScalar.ONE.subtract(Erf.FUNCTION.apply(scalar));

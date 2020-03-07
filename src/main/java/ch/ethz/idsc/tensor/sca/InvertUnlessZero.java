@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
  * for input of type {@link Quantity} the unit is inverted regardless of the value */
 public enum InvertUnlessZero implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   /** @param scalar
    * @return if the given scalar is an instance of {@link RealScalar} the function simplifies to
    * Scalars.isZero(scalar) ? scalar : scalar.reciprocal(); */

@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.alg.TensorRank;
     return Tensor.of(IntStream.range(0, tensor.length()).mapToObj(tensorExtract::extract).map(function));
   }
 
-  // ---
+  /***************************************************/
   private final Tensor tensor;
   private final int radius;
   private final int length;

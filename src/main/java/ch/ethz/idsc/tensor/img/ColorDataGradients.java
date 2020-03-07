@@ -90,9 +90,8 @@ public enum ColorDataGradients implements ColorDataGradient {
   /** yellow, orange, red, magenta */
   NEON,
   /** dark-gray, dark-yellow, magenta */
-  AURORA, //
-  ;
-  // ---
+  AURORA;
+
   private final ColorDataGradient colorDataGradient;
 
   private ColorDataGradients(ColorDataGradient colorDataGradient) {

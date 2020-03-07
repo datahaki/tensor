@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/Erf.html">Erf</a> */
 public enum Erf implements ScalarUnaryOperator {
   FUNCTION;
-  // ---
+
   private static final ScalarUnaryOperator SERIES = Series.of(Tensors.vector( //
       -1.26551223, //
       +1.00002368, // x
