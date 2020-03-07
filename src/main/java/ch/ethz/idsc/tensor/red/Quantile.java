@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * Mathematica::Quantile also operates (trivially) on matrices.
  * 
  * Quantile does not average as {@link Median}:
- * <code>Quantile[{1, 2}, 0.5] == 1</code>,
+ * <code>Quantile[{1, 2}].apply(0.5) == 1</code>,
  * <code>Median[{1, 2}] == 3/2</code>
  * 
  * <p>for vector input, the implementation is compliant to Mathematica.
@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <p>Function arguments are required to be in the interval [0, 1].
  * 
  * <p>Example:
- * <code>Quantile[{0, 1, 2, 3, 4}, {0, 1/5, 2/5, 1}] == {0, 0, 1, 4}</code>
+ * <code>Quantile[{0, 1, 2, 3, 4}] applied to {0, 1/5, 2/5, 1} == {0, 0, 1, 4}</code>
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Quantile.html">Quantile</a> */

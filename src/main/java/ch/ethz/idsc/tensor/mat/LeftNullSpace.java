@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.lie.QRDecomposition;
  * </pre>
  * 
  * <p>The tensor library provides LeftNullSpace for convenience.
- * LeftNullSpace does not exist in Mathematica.
+ * The command "LeftNullSpace" does not exist in Mathematica.
  * 
  * @see NullSpace */
 public enum LeftNullSpace {
