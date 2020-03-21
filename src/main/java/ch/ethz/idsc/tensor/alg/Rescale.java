@@ -48,6 +48,18 @@ public class Rescale {
     return Double.isFinite(scalar.number().doubleValue());
   }
 
+  // helper function
+  private static Tensor _result(Tensor tensor, ScalarSummaryStatistics scalarSummaryStatistics) {
+    if (0 < scalarSummaryStatistics.getCount()) {
+      Scalar min = scalarSummaryStatistics.getMin();
+      Scalar max = scalarSummaryStatistics.getMax();
+      Scalar width = max.subtract(min);
+      if (Scalars.nonZero(width)) // operation is not identical to Clip#rescale
+        return tensor.map(scalar -> scalar.subtract(min).divide(width));
+    }
+    return tensor.map(FINITE_NUMBER_ZERO); // set all finite number entries to 0
+  }
+
   /***************************************************/
   private final ScalarSummaryStatistics scalarSummaryStatistics;
   private final Tensor result;
@@ -60,16 +72,7 @@ public class Rescale {
         .map(Scalar.class::cast) //
         .filter(Rescale::isFiniteNumber) //
         .collect(ScalarSummaryStatistics.collector());
-    if (0 < scalarSummaryStatistics.getCount()) {
-      Scalar min = scalarSummaryStatistics.getMin();
-      Scalar max = scalarSummaryStatistics.getMax();
-      Scalar width = max.subtract(min);
-      if (Scalars.nonZero(width)) { // operation is not identical to Clip#rescale
-        result = tensor.map(scalar -> scalar.subtract(min).divide(width));
-        return;
-      }
-    }
-    result = tensor.map(FINITE_NUMBER_ZERO); // set all finite number entries to 0
+    result = _result(tensor, scalarSummaryStatistics);
   }
 
   public ScalarSummaryStatistics scalarSummaryStatistics() {
