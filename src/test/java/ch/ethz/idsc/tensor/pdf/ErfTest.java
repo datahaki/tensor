@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -50,13 +51,17 @@ public class ErfTest extends TestCase {
     assertTrue(Chop._07.close(Erf.of(xs), Tensors.vectorDouble(values)));
   }
 
-  public void testComplexFail() {
-    Scalar scalar = ComplexScalar.of(1.2, 3.4);
-    try {
-      Erf.FUNCTION.apply(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+  public void testComplex() {
+    Scalar scalar = ComplexScalar.of(1.2, 1.4);
+    Scalar expect = ComplexScalar.of(1.294669945215742, -0.4089868112498779); // Mathematica
+    Scalar result = Erf.FUNCTION.apply(scalar);
+    Tolerance.CHOP.requireClose(expect, result);
+  }
+
+  public void testComplexNeg() {
+    Scalar scalar = ComplexScalar.of(-1.2, 1.4);
+    Scalar expect = ComplexScalar.of(-1.294669945215742, -0.4089868112498779); // Mathematica
+    Scalar result = Erf.FUNCTION.apply(scalar);
+    Tolerance.CHOP.requireClose(expect, result);
   }
 }

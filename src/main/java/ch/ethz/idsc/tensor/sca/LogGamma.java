@@ -5,14 +5,18 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** <pre>
  * Log[Gamma[x]]
  * </pre>
  * 
- * Reference:
+ * References:
  * "Gamma, Beta, and Related Functions" in NR, 2007
+ * 
+ * "A Precision Approximation of the Gamma Function"
+ * by C. Lanczos, 1964
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/LogGamma.html">LogGamma</a> */
@@ -31,7 +35,12 @@ public enum LogGamma implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar z) {
-    Sign.requirePositive(Real.FUNCTION.apply(z));
+    if (Sign.isPositive(Real.FUNCTION.apply(z)))
+      return positive(z);
+    throw TensorRuntimeException.of(z);
+  }
+
+  private static Scalar positive(Scalar z) {
     Scalar y = z;
     Scalar tmp = z.add(_671_128);
     tmp = z.add(RationalScalar.HALF).multiply(Log.FUNCTION.apply(tmp)).subtract(tmp);

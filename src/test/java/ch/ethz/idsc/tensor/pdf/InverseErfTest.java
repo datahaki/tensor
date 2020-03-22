@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.pdf;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -12,9 +13,9 @@ public class InverseErfTest extends TestCase {
 
   public void testSymmetry() {
     Scalar v1 = InverseErf.FUNCTION.apply(RealScalar.of(0.3));
-    assertTrue(CHOP_04.close(v1, RealScalar.of(0.2724627147267544)));
+    Tolerance.CHOP.requireClose(v1, RealScalar.of(0.2724627147267544));
     Scalar v2 = InverseErf.FUNCTION.apply(RealScalar.of(-0.3));
-    assertTrue(CHOP_04.close(v2, RealScalar.of(-0.2724627147267544)));
+    Tolerance.CHOP.requireClose(v2, RealScalar.of(-0.2724627147267544));
   }
 
   public void testCorners() {
