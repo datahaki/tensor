@@ -38,6 +38,7 @@ public class GammaDistribution implements Distribution, MeanInterface, PDF, Vari
   public GammaDistribution(Scalar alpha, Scalar beta) {
     this.alpha = alpha;
     this.beta = beta;
+    // TODO use LogGamma
     factor = Power.of(beta, alpha.negate()).divide(Gamma.FUNCTION.apply(alpha));
   }
 

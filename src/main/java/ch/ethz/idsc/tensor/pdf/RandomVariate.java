@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -25,7 +26,7 @@ public enum RandomVariate {
   /** The default constructor of {@link Random} determines the seed at time of creation
    * using {@link System#nanoTime()}. Typically, the implementation will produce a different
    * random sequence for two successive program executions. */
-  private static final Random RANDOM = new Random();
+  private static final Random RANDOM = new SecureRandom();
 
   /** @param randomVariateInterface
    * @param random
