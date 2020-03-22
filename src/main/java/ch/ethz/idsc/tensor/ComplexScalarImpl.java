@@ -23,7 +23,6 @@ import ch.ethz.idsc.tensor.sca.NInterface;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sin;
 import ch.ethz.idsc.tensor.sca.Sinh;
-import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ final class ComplexScalarImpl extends AbstractScalar implements ComplexScalar, //
     ChopInterface, ExactScalarQInterface, MachineNumberQInterface, NInterface, Serializable {
@@ -33,7 +32,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
    * @param im neither a {@link ComplexScalar}, or {@link Quantity}
    * @return */
   /* package */ static Scalar of(Scalar re, Scalar im) {
-    return Scalars.isZero(im) ? re : new ComplexScalarImpl(re, im);
+    return Scalars.isZero(im) //
+        ? re
+        : new ComplexScalarImpl(re, im);
   }
 
   /** @param scalar
@@ -212,7 +213,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from SqrtInterface
   public Scalar sqrt() {
-    return ComplexScalar.fromPolar(Sqrt.FUNCTION.apply(abs()), arg().multiply(RationalScalar.HALF));
+    return ComplexHelper.sqrt(re, im);
   }
 
   @Override // from TrigonometryInterface

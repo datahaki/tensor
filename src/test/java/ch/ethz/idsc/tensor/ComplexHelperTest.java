@@ -1,6 +1,10 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
@@ -79,6 +83,58 @@ public class ComplexHelperTest extends TestCase {
     Scalar q = Quantity.of(0, "V");
     Scalar p = c.add(q);
     assertTrue(p instanceof ComplexScalar);
+  }
+
+  public void testSqrt() {
+    Distribution distribution = NormalDistribution.standard();
+    for (int count = 0; count < 100; ++count) {
+      Scalar re = RandomVariate.of(distribution);
+      Scalar im = RandomVariate.of(distribution);
+      Scalar scalar = ComplexScalar.of(re, im);
+      Scalar ref = ComplexHelper.sqrtPolar(scalar);
+      Scalar cmp = ComplexHelper.sqrt(re, im);
+      Tolerance.CHOP.requireClose(ref, cmp);
+    }
+  }
+
+  public void testEpsilonP1() {
+    Scalar re = RealScalar.of(4.9E-324);
+    Scalar im = RealScalar.of(4.9E-324);
+    Scalar scalar = ComplexScalar.of(re, im);
+    Scalar ref = ComplexHelper.sqrtPolar(scalar);
+    Scalar cmp = ComplexHelper.sqrt(re, im);
+    Scalar mathematica = ComplexScalar.of(2.432040959320809E-162, 1.007384349597552E-162);
+    boolean lessThan = Scalars.lessThan( //
+        cmp.subtract(mathematica).abs(), //
+        ref.subtract(mathematica).abs());
+    assertTrue(lessThan);
+  }
+
+  public void testEpsilonN1() {
+    Scalar re = RealScalar.of(-4.9E-324);
+    Scalar im = RealScalar.of(4.9E-324);
+    Scalar scalar = ComplexScalar.of(re, im);
+    Scalar ref = ComplexHelper.sqrtPolar(scalar);
+    Scalar cmp = ComplexHelper.sqrt(re, im);
+    Scalar mathematica = ComplexScalar.of(1.007384349597552E-162, 2.432040959320809E-162);
+    boolean lessThan = Scalars.lessThan( //
+        cmp.subtract(mathematica).abs(), //
+        ref.subtract(mathematica).abs());
+    assertTrue(lessThan);
+  }
+
+  public void testEpsilon01() {
+    Scalar re = RealScalar.of(0);
+    Scalar im = RealScalar.of(4.9E-324);
+    Scalar scalar = ComplexScalar.of(re, im);
+    Scalar ref = ComplexHelper.sqrtPolar(scalar);
+    Scalar cmp = ComplexHelper.sqrt(re, im);
+    // TODO result not satisfactory!
+    System.out.println(ref);
+    System.out.println(cmp);
+    System.out.println(ref.multiply(ref));
+    System.out.println(cmp.multiply(cmp));
+    // 2.432040959320809*10^-162 + 1.007384349597552*10^-162 I
   }
 
   public void testPlusQuantityFail() {

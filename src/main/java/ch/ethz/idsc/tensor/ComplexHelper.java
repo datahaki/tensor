@@ -1,6 +1,10 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import ch.ethz.idsc.tensor.sca.ArgInterface;
+import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.sca.Sqrt;
+
 /** auxiliary functions used in {@link ComplexScalarImpl} */
 /* package */ enum ComplexHelper {
   ;
@@ -39,5 +43,36 @@ package ch.ethz.idsc.tensor;
    * @return c + d / c * d */
   static Scalar c_dcd(Scalar c, Scalar d) {
     return c.add(d.divide(c).multiply(d));
+  }
+
+  /** Reference: NR 2007, eqs. 5.5.6 and 5.5.7
+   * 
+   * @param c
+   * @param d non-zero
+   * @return */
+  static Scalar sqrt(Scalar c, Scalar d) {
+    Scalar ca = c.abs();
+    Scalar da = d.abs();
+    final Scalar w;
+    if (Scalars.lessEquals(ca, da)) {
+      Scalar c_d = c.divide(d);
+      Scalar fraction = c_d.abs().add(Sqrt.FUNCTION.apply(RealScalar.ONE.add(c_d.multiply(c_d)))).multiply(RationalScalar.HALF);
+      w = Sqrt.FUNCTION.apply(da).multiply(Sqrt.FUNCTION.apply(fraction));
+    } else {
+      Scalar d_c = d.divide(c);
+      Scalar fraction = RealScalar.ONE.add(Sqrt.FUNCTION.apply(RealScalar.ONE.add(d_c.multiply(d_c)))).multiply(RationalScalar.HALF);
+      w = Sqrt.FUNCTION.apply(ca).multiply(Sqrt.FUNCTION.apply(fraction));
+    }
+    if (Sign.isPositiveOrZero(c))
+      return ComplexScalarImpl.of(w, d.divide(w.add(w)));
+    if (Sign.isPositiveOrZero(d))
+      return ComplexScalarImpl.of(da.divide(w.add(w)), w);
+    return ComplexScalarImpl.of(da.divide(w.add(w)), w.negate());
+  }
+
+  static Scalar sqrtPolar(Scalar z) {
+    return ComplexScalar.fromPolar( //
+        Sqrt.FUNCTION.apply(z.abs()), //
+        ((ArgInterface) z).arg().multiply(RationalScalar.HALF));
   }
 }

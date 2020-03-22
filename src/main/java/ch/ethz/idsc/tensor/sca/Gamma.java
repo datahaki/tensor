@@ -63,14 +63,16 @@ public enum Gamma implements ScalarUnaryOperator {
   private static final Scalar HALF_N = DoubleScalar.of(-0.5);
 
   @Override
-  public Scalar apply(Scalar scalar) {
-    Scalar round = Round.FUNCTION.apply(Real.of(scalar));
-    if (scalar.equals(round)) { // ..., -2, -1, 0, 1, 2, ...
-      scalar = round;
-      if (Scalars.lessEquals(scalar, RealScalar.ZERO)) // ..., -2, -1, 0
-        throw TensorRuntimeException.of(scalar);
-    }
-    return evaluate(scalar);
+  public Scalar apply(Scalar z) {
+    Scalar re = Real.of(z);
+    Scalar round = Round.FUNCTION.apply(re);
+    if (z.equals(round)) { // ..., -2, -1, 0, 1, 2, ...
+      z = round;
+      if (Scalars.lessEquals(z, RealScalar.ZERO)) // ..., -2, -1, 0
+        throw TensorRuntimeException.of(z);
+    } else if (Sign.isPositive(re))
+      return Exp.FUNCTION.apply(LogGamma.FUNCTION.apply(z));
+    return evaluate(z);
   }
 
   private static Scalar evaluate(Scalar scalar) {

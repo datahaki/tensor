@@ -25,7 +25,7 @@ public class ArcSinhTest extends TestCase {
     Scalar s = ComplexScalar.of(5, -7);
     Scalar r = ArcSinh.of(s);
     // 2.8441 - 0.947341 I
-    Scalar a = Scalars.fromString("2.8440976626506527-0.9473406443130488*I");
+    Scalar a = Scalars.fromString("2.8440976626506527-0.9473406443130489*I");
     Chop._14.requireClose(a, r);
     assertEquals(a, ArcSinh.of(s));
   }
