@@ -11,7 +11,9 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/** inspired by
+/** evaluates polynomial at given point without solving for the coefficients
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/InterpolatingPolynomial.html">InterpolatingPolynomial</a> */
 public class InterpolatingPolynomial implements Serializable {
   /** @param binaryAverage

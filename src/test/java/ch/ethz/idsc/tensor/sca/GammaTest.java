@@ -14,40 +14,39 @@ import ch.ethz.idsc.tensor.red.Nest;
 import junit.framework.TestCase;
 
 public class GammaTest extends TestCase {
-  // recursive implementation fails for large values; used only as reference
-  @SuppressWarnings("unused")
-  private static Scalar recursive(Scalar scalar) {
-    if (!NumberQ.of(scalar))
-      return scalar;
-    Scalar real = Real.FUNCTION.apply(scalar);
-    if (Scalars.lessThan(real, Gamma.LO))
-      return recursive(scalar.add(RealScalar.ONE)).divide(scalar);
-    if (Scalars.lessThan(Gamma.HI, real)) {
-      Scalar decrement = scalar.subtract(RealScalar.ONE);
-      return recursive(decrement).multiply(decrement);
-    }
-    return Gamma.SERIES.apply(scalar.add(Gamma.NEGATIVE_THREE));
-  }
-
   public void testFactorial() {
     for (int index = 0; index < 20; ++index)
       assertEquals(Gamma.of(RealScalar.of(index + 1)), Factorial.of(RealScalar.of(index)));
   }
 
+  public void testPositiveMathematica() {
+    Scalar expect = ComplexScalar.of(0.25437472214867807, -1.9167734838293429);
+    Scalar z = ComplexScalar.of(4.2, 3.4);
+    Scalar result = Gamma.FUNCTION.apply(z);
+    Tolerance.CHOP.requireClose(expect, result);
+  }
+
+  public void testNegativeMathematica() {
+    Scalar expect = ComplexScalar.of(-0.00004914938770081672, -0.00043368292844823665);
+    Scalar z = ComplexScalar.of(-2.2, -3.3);
+    Scalar result = Gamma.FUNCTION.apply(z);
+    Tolerance.CHOP.requireClose(expect, result);
+  }
+
   public void testGammaNumPos() {
-    assertTrue(Chop._08.close(Gamma.of(RealScalar.of(3.0)), RealScalar.of(2)));
-    assertTrue(Chop._08.close(Gamma.of(RealScalar.of(4.0)), RealScalar.of(6)));
-    assertTrue(Chop._08.close(Gamma.of(RealScalar.of(5.0)), RealScalar.of(24)));
-    assertTrue(Chop._10.close(Gamma.of(RealScalar.of(3.2)), RealScalar.of(2.4239654799353683)));
-    assertTrue(Chop._10.close(Gamma.of(RealScalar.of(7.9)), RealScalar.of(4122.709484285446)));
+    Chop._08.requireClose(Gamma.of(RealScalar.of(3.0)), RealScalar.of(2));
+    Chop._08.requireClose(Gamma.of(RealScalar.of(4.0)), RealScalar.of(6));
+    Chop._08.requireClose(Gamma.of(RealScalar.of(5.0)), RealScalar.of(24));
+    Chop._10.requireClose(Gamma.of(RealScalar.of(3.2)), RealScalar.of(2.4239654799353683));
+    Chop._10.requireClose(Gamma.of(RealScalar.of(7.9)), RealScalar.of(4122.709484285446));
   }
 
   public void testGammaNum() {
-    assertTrue(Chop._08.close(Gamma.of(RealScalar.of(2.0)), RealScalar.of(1)));
-    assertTrue(Chop._08.close(Gamma.of(RealScalar.of(1.0)), RealScalar.of(1)));
-    assertTrue(Chop._08.close(Gamma.of(RealScalar.of(-1.2)), RealScalar.of(4.850957140522099)));
-    assertTrue(Chop._08.close(Gamma.of(RealScalar.of(-3.8)), RealScalar.of(0.29963213450284565)));
-    assertTrue(Chop._10.close(Gamma.of(RealScalar.of(-2.1)), RealScalar.of(-4.626098277572807)));
+    Chop._08.requireClose(Gamma.of(RealScalar.of(2.0)), RealScalar.of(1));
+    Chop._08.requireClose(Gamma.of(RealScalar.of(1.0)), RealScalar.of(1));
+    Chop._08.requireClose(Gamma.of(RealScalar.of(-1.2)), RealScalar.of(4.850957140522099));
+    Chop._08.requireClose(Gamma.of(RealScalar.of(-3.8)), RealScalar.of(0.29963213450284565));
+    Chop._10.requireClose(Gamma.of(RealScalar.of(-2.1)), RealScalar.of(-4.626098277572807));
   }
 
   public void testLargeInt() {

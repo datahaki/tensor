@@ -15,12 +15,8 @@ public enum Beta {
    * @param b
    * @return */
   public static Scalar of(Scalar a, Scalar b) {
-    if (Sign.isPositive(Real.FUNCTION.apply(a)) && //
-        Sign.isPositive(Real.FUNCTION.apply(b)))
-      return Exp.FUNCTION.apply(LogGamma.FUNCTION.apply(a).add(LogGamma.FUNCTION.apply(b)).subtract(LogGamma.FUNCTION.apply(a.add(b))));
-    // TODO make code below obsolete
-    return Gamma.FUNCTION.apply(a).multiply(Gamma.FUNCTION.apply(b)) //
-        .divide(Gamma.FUNCTION.apply(a.add(b)));
+    return Exp.FUNCTION.apply( //
+        LogGamma.FUNCTION.apply(a).add(LogGamma.FUNCTION.apply(b)).subtract(LogGamma.FUNCTION.apply(a.add(b))));
   }
 
   /** @param a

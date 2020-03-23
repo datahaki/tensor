@@ -5,12 +5,14 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.Pi;
 
 /** <pre>
  * Log[Gamma[x]]
  * </pre>
+ * 
+ * Careful: Not consistent with Mathematica for z with Re[z] < 0
  * 
  * References:
  * "Gamma, Beta, and Related Functions" in NR, 2007
@@ -37,10 +39,13 @@ public enum LogGamma implements ScalarUnaryOperator {
   public Scalar apply(Scalar z) {
     if (Sign.isPositive(Real.FUNCTION.apply(z)))
       return positive(z);
-    throw TensorRuntimeException.of(z);
+    Scalar zp = RealScalar.ONE.subtract(z);
+    return Log.FUNCTION.apply(Sinc.FUNCTION.apply(Pi.VALUE.multiply(zp))).add(positive(RealScalar.ONE.add(zp))).negate();
   }
 
-  private static Scalar positive(Scalar z) {
+  /** @param z with Re[z] positive
+   * @return */
+  static Scalar positive(Scalar z) {
     Scalar y = z;
     Scalar tmp = z.add(_671_128);
     tmp = z.add(RationalScalar.HALF).multiply(Log.FUNCTION.apply(tmp)).subtract(tmp);

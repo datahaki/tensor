@@ -27,6 +27,13 @@ public class LogGammaTest extends TestCase {
     Tolerance.CHOP.requireClose(result, expect);
   }
 
+  public void testNegativeMathematica() {
+    Scalar z = ComplexScalar.of(-0.2, 0.3);
+    Scalar result = LogGamma.FUNCTION.apply(z);
+    Scalar expect = ComplexScalar.of(1.0734581009508424, -2.429743746722234);
+    Tolerance.CHOP.requireClose(result, expect);
+  }
+
   public void testComplex() {
     Distribution distribution = UniformDistribution.of(0.2, 3.5);
     for (int count = 0; count < 100; ++count) {
