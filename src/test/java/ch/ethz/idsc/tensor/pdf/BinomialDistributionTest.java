@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.red.Median;
 import ch.ethz.idsc.tensor.red.Tally;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
@@ -190,6 +191,14 @@ public class BinomialDistributionTest extends TestCase {
     Distribution distribution = BinomialDistribution.of(3, RationalScalar.of(1, 2));
     String string = distribution.toString();
     assertEquals(string, "BinomialDistribution[3, 1/2]");
+  }
+
+  public void testMedian() {
+    for (int index = 0; index < 5; ++index) {
+      Distribution distribution = BinomialDistribution.of(index * 2, RationalScalar.HALF);
+      Scalar scalar = Median.of(distribution);
+      assertEquals(scalar, RealScalar.of(index));
+    }
   }
 
   public void testFailN() {

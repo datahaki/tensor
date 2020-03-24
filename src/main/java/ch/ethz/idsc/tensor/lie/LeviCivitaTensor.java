@@ -15,6 +15,10 @@ import ch.ethz.idsc.tensor.alg.Array;
  * Tensor-lib.::LeviCivitaTensor[0] == 1
  * </pre>
  * 
+ * <pre>
+ * Fold.of((t, v) -> v.dot(t), LeviCivitaTensor.of(n), matrix) == Det.of(matrix)
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/LeviCivitaTensor.html">LeviCivitaTensor</a> */
 public enum LeviCivitaTensor {

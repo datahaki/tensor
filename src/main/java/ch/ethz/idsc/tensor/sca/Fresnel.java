@@ -8,7 +8,11 @@ import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Erf;
 import ch.ethz.idsc.tensor.red.Times;
 
-/** Fresnel[z] = FresnelC[z] + FresnelS[z] * I
+/** <pre>
+ * Fresnel[z] = FresnelC[z] + FresnelS[z] * I
+ * 
+ * Fresnel[z] = Integral 0 -> z Exp[I * pi / 2 * s ^ 2] ds
+ * </pre>
  * 
  * <p>Reference:
  * "Fresnel Integrals, Cosine and Sine Integrals" in NR, 2007
