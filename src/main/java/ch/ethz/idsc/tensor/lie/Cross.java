@@ -62,6 +62,7 @@ public enum Cross {
    * 
    * @param vector with 3 entries
    * @return skew symmetric 3 x 3 matrix representing cross product mapping */
+  // HodgeDual
   public static Tensor skew3(Tensor vector) {
     if (vector.length() != 3)
       throw TensorRuntimeException.of(vector);

@@ -4,6 +4,8 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
@@ -14,7 +16,9 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
  * @see LeastSquares */
 public enum PseudoInverse {
   ;
-  /** @param matrix
+  /** Remark: Entries of given matrix may be of type {@link Quantity} with identical {@link Unit}.
+   * 
+   * @param matrix
    * @return pseudoinverse of given matrix */
   public static Tensor of(Tensor matrix) {
     return Unprotect.dimension1(matrix) <= matrix.length() //

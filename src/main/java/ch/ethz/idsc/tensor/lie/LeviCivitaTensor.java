@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.alg.Array;
  * Tensor-lib.::LeviCivitaTensor[0] == 1
  * </pre>
  * 
+ * For a matrix of dimensions n x n, the relation holds
  * <pre>
  * Fold.of((t, v) -> v.dot(t), LeviCivitaTensor.of(n), matrix) == Det.of(matrix)
  * </pre>

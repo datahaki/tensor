@@ -24,13 +24,12 @@ public class ToeplitzMatrixTest extends TestCase {
   }
 
   public void testSymmetric() {
-    Tensor matrix = ToeplitzMatrix.of(Tensors.vector(5, 4, 3, 4, 5));
-    assertTrue(SymmetricMatrixQ.of(matrix));
+    SymmetricMatrixQ.require(ToeplitzMatrix.of(Tensors.vector(5, 4, 3, 4, 5)));
   }
 
   public void testRank2() {
     Tensor matrix = ToeplitzMatrix.of(Tensors.vector(0, 1, 0, 1, 0));
-    assertTrue(SymmetricMatrixQ.of(matrix));
+    SymmetricMatrixQ.require(matrix);
     assertEquals(RowReduce.of(matrix), Tensors.fromString("{{1, 0, 1}, {0, 1, 0}, {0, 0, 0}}"));
   }
 

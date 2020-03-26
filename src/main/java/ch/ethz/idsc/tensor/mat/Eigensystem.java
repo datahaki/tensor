@@ -2,7 +2,6 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 /** <pre>
  * LinearSolve.of(vectors, values.pmul(vectors)) == matrix
@@ -21,9 +20,7 @@ public interface Eigensystem {
    * @return eigensystem with vectors scaled to unit length
    * @throws Exception if input is not a symmetric matrix */
   static Eigensystem ofSymmetric(Tensor matrix) {
-    if (SymmetricMatrixQ.of(matrix))
-      return new JacobiMethod(matrix);
-    throw TensorRuntimeException.of(matrix);
+    return new JacobiMethod(SymmetricMatrixQ.require(matrix));
   }
 
   /** Careful: Mathematica orders the eigenvalues according to absolute value.

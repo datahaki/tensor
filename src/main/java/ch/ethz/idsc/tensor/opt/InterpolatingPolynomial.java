@@ -17,16 +17,18 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/InterpolatingPolynomial.html">InterpolatingPolynomial</a> */
 public class InterpolatingPolynomial implements Serializable {
   /** @param binaryAverage
-   * @param knots vector
-   * @return */
+   * @param knots vector not necessarily ordered
+   * @return
+   * @throws Exception if knots is not a vector */
   public static InterpolatingPolynomial of(BinaryAverage binaryAverage, Tensor knots) {
     return new InterpolatingPolynomial(Objects.requireNonNull(binaryAverage), knots);
   }
 
   /** uses linear interpolation as binary average
    * 
-   * @param knots vector
-   * @return */
+   * @param knots vector not necessarily ordered
+   * @return
+   * @throws Exception if knots is not a vector */
   public static InterpolatingPolynomial of(Tensor knots) {
     return new InterpolatingPolynomial(LinearBinaryAverage.INSTANCE, knots);
   }
@@ -40,17 +42,19 @@ public class InterpolatingPolynomial implements Serializable {
     this.knots = knots.stream().map(Scalar.class::cast).toArray(Scalar[]::new);
   }
 
-  /** @param tensor
-   * @return */
+  /** @param tensor of values of polynomial evaluated at knots
+   * @return
+   * @throws Exception if length of tensor is different from number of knots */
   public ScalarTensorFunction scalarTensorFunction(Tensor tensor) {
     if (knots.length == tensor.length())
       return new Neville(tensor);
     throw TensorRuntimeException.of(tensor);
   }
 
-  /** @param vector
+  /** @param vector of values of polynomial evaluated at knots
    * @return
-   * @throws Exception if given vector is not a tensor of rank 1 */
+   * @throws Exception if given vector is not a tensor of rank 1
+   * @throws Exception if length of vector is different from number of knots */
   public ScalarUnaryOperator scalarUnaryOperator(Tensor vector) {
     return new TensorScalarFunctionCast(new Neville(VectorQ.requireLength(vector, knots.length)));
   }

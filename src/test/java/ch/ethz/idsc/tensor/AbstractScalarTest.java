@@ -32,7 +32,7 @@ public class AbstractScalarTest extends TestCase {
     matrix.set(Tensor::negate, 3, Tensor.ALL);
     matrix.set(Tensor::negate, 1);
     matrix.set(Tensor::negate, Tensor.ALL, 3);
-    assertTrue(SymmetricMatrixQ.of(matrix));
+    SymmetricMatrixQ.require(matrix);
   }
 
   public void testGetFail() {

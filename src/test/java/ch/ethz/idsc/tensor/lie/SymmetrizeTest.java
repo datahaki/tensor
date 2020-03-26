@@ -49,7 +49,7 @@ public class SymmetrizeTest extends TestCase {
   public void testMatrix() {
     Distribution distribution = NormalDistribution.standard();
     Tensor tensor = RandomVariate.of(distribution, 9, 9);
-    assertTrue(SymmetricMatrixQ.of(Symmetrize.of(tensor)));
+    SymmetricMatrixQ.require(Symmetrize.of(tensor));
     assertEquals(Symmetrize.of(IdentityMatrix.of(10)), IdentityMatrix.of(10));
   }
 
