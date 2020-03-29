@@ -27,7 +27,7 @@ public enum Fresnel implements ScalarUnaryOperator {
   private static final Scalar SCALE = Times.of(Sqrt.FUNCTION.apply(Pi.VALUE), RationalScalar.HALF, ComplexScalar.of(1, -1));
 
   @Override
-  public Scalar apply(Scalar z) {
-    return FACTOR.multiply(Erf.FUNCTION.apply(SCALE.multiply(z)));
+  public Scalar apply(Scalar t) {
+    return FACTOR.multiply(Erf.FUNCTION.apply(SCALE.multiply(t)));
   }
 }
