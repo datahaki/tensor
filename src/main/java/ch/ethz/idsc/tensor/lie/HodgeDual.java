@@ -1,34 +1,29 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
-import java.util.Collections;
-import java.util.List;
-
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.TensorRank;
+import ch.ethz.idsc.tensor.red.Nest;
+import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Factorial;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/HodgeDual.html">HodgeDual</a> */
 public enum HodgeDual {
   ;
-  /** @param tensor of array structure
+  /** @param tensor of array structure with dimensions d x ... x d
    * @param d
-   * @return */
+   * @return
+   * @throws Exception if tensor is empty, or is not a regular array */
   public static Tensor of(Tensor tensor, int d) {
-    Dimensions dimensions = new Dimensions(tensor);
-    if (dimensions.isArray()) {
-      List<Integer> list = dimensions.list();
-      int rank = list.size();
-      if (!list.equals(Collections.nCopies(rank, d)))
-        throw new IllegalArgumentException("" + list);
-      // implementation is not efficient
-      Tensor product = TensorProduct.of(tensor, LeviCivitaTensor.of(d));
-      for (int index = 0; index < rank; ++index)
-        product = TensorContract.of(product, 0, rank - index);
-      return product.divide(Factorial.of(rank));
-    }
-    throw TensorRuntimeException.of(tensor);
+    int rank = TensorRank.ofArray(tensor).get();
+    return Nest.of(Total::of, tensor.pmul(LeviCivitaTensor.of(d)), rank).divide(Factorial.of(rank));
+  }
+
+  /** @param tensor of rank at least 1
+   * @return
+   * @throws Exception if tensor is a scalar */
+  public static Tensor of(Tensor tensor) {
+    return of(tensor, tensor.length());
   }
 }

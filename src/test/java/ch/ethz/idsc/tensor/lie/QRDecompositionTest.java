@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.LowerTriangularize;
+import ch.ethz.idsc.tensor.pdf.ComplexNormalDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -25,6 +26,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class QRDecompositionTest extends TestCase {
@@ -196,5 +198,44 @@ public class QRDecompositionTest extends TestCase {
         "{{ 12+3*I[s], -51[A], 4[m] }, { 6[s], 167-7*I[A], -68[m] }, { -4*I[s], 24[A], -41-9*I[m] } }");
     specialOps(matrix);
     specialOps(N.DOUBLE.of(matrix));
+  }
+
+  private static void _check(Tensor matrix, QRDecomposition qrDecomposition) {
+    Tensor q = qrDecomposition.getQ();
+    Tensor r = qrDecomposition.getR();
+    Scalar d1 = Det.of(matrix);
+    Scalar d2 = qrDecomposition.det();
+    Chop._08.requireClose(d1, d2);
+    Chop._08.requireClose(q.dot(r), matrix);
+  }
+
+  public void testDet() {
+    Distribution distribution = NormalDistribution.standard();
+    for (int d = 2; d < 5; ++d)
+      for (int count = 0; count < 10; ++count) {
+        Tensor matrix = RandomVariate.of(distribution, d, d);
+        QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
+        _check(matrix, qrDecomposition);
+      }
+  }
+
+  public void testDetComplex() {
+    Distribution distribution = ComplexNormalDistribution.STANDARD;
+    for (int d = 2; d < 5; ++d)
+      for (int count = 0; count < 10; ++count) {
+        Tensor matrix = RandomVariate.of(distribution, d, d);
+        QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
+        _check(matrix, qrDecomposition);
+      }
+  }
+
+  public void testPreserveOrientation() {
+    Distribution distribution = NormalDistribution.standard();
+    for (int d = 2; d < 5; ++d)
+      for (int count = 0; count < 10; ++count) {
+        Tensor matrix = RandomVariate.of(distribution, d, d);
+        QRDecomposition qrDecomposition = QRDecomposition.preserveOrientation(matrix);
+        assertEquals(Sign.FUNCTION.apply(Det.of(matrix)), Sign.FUNCTION.apply(Det.of(qrDecomposition.getQ())));
+      }
   }
 }

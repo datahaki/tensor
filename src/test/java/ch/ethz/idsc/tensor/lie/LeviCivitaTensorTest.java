@@ -40,6 +40,13 @@ public class LeviCivitaTensorTest extends TestCase {
     }
   }
 
+  public void testAlternating() {
+    for (int n = 0; n < 5; ++n) {
+      Tensor tensor = LeviCivitaTensor.of(n);
+      assertEquals(tensor, TensorWedge.of(tensor));
+    }
+  }
+
   public void testRankNegativeFail() {
     try {
       LeviCivitaTensor.of(-1);

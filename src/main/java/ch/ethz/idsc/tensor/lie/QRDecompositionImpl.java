@@ -13,12 +13,12 @@ import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.NormalizeUnlessZero;
 import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.red.Times;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 
 /** decomposition Q.R = A with Det[Q] == +1
@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
     // chop lower entries to symbolic zero
     for (int k = 0; k < m; ++k)
       for (int i = k + 1; i < n; ++i)
-        R.set(Chop._12, i, k);
+        R.set(Tolerance.CHOP, i, k);
   }
 
   // suggestion of wikipedia
@@ -96,7 +96,6 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 
   @Override // from QRDecomposition
   public Scalar det() {
-    // FIXME the determinant is only valid up to sign!
     return n == m //
         ? Times.pmul(Diagonal.of(R)).Get()
         : RealScalar.ZERO;
