@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor.opt;
 import java.io.IOException;
 import java.util.Optional;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
@@ -24,7 +23,7 @@ public class SpatialMedianTest extends TestCase {
         Tensors.vector(0, 0), //
         Tensors.vector(2, 0) //
     );
-    Tensor sol = SpatialMedian.of(tensor).get();
+    Tensor sol = SpatialMedian.with(Chop.NONE).uniform(tensor).get();
     assertEquals(sol, Tensors.vector(0, 0));
   }
 
@@ -38,9 +37,11 @@ public class SpatialMedianTest extends TestCase {
   public void testMathematicaWeighted() {
     Tensor points = Tensors.fromString("{{1, 3, 5}, {-4, 1, 2}, {3, 3, 1}, {4, 5, 6}}");
     Tensor weights = Tensors.vector(1, 3, 4, 5);
-    Optional<Tensor> weighted = SpatialMedian.with(0).weighted(points, weights);
+    Optional<Tensor> weighted = SpatialMedian.with(Chop._10).weighted(points, weights);
     Tensor solution = Tensors.vector(2.3866562926712105936, 3.5603713896189638861, 3.5379382804133292184);
     assertTrue(Chop._08.close(weighted.get(), solution));
+    Optional<Tensor> optional = SpatialMedian.of(points);
+    assertTrue(optional.isPresent());
   }
 
   public void testPoles() throws ClassNotFoundException, IOException {
@@ -50,8 +51,8 @@ public class SpatialMedianTest extends TestCase {
         Tensors.vector(2, 10), //
         Tensors.vector(2, -10) //
     );
-    SpatialMedian fermatWeberProblem = Serialization.copy(SpatialMedian.with(RealScalar.of(1e-2)));
-    Tensor sol = fermatWeberProblem.uniform(tensor).get();
+    SpatialMedian spatialMedian = Serialization.copy(SpatialMedian.with(Chop._02));
+    Tensor sol = spatialMedian.uniform(tensor).get();
     assertTrue(Norm._2.between(sol, tensor.get(1)).Get().number().doubleValue() < 2e-2);
   }
 
@@ -62,9 +63,9 @@ public class SpatialMedianTest extends TestCase {
         Tensors.vector(2, 10), //
         Tensors.vector(2, -10) //
     );
-    SpatialMedian fermatWeberProblem = SpatialMedian.with(1e-10);
+    SpatialMedian spatialMedian = SpatialMedian.with(Chop._10);
     Tensor weights = Tensors.vector(10, 1, 1, 1);
-    Tensor sol = fermatWeberProblem.weighted(tensor, weights).get();
+    Tensor sol = spatialMedian.weighted(tensor, weights).get();
     assertTrue(Norm._2.between(sol, tensor.get(0)).Get().number().doubleValue() < 2e-2);
   }
 
@@ -72,8 +73,8 @@ public class SpatialMedianTest extends TestCase {
     int present = 0;
     for (int count = 0; count < 10; ++count) {
       Tensor tensor = RandomVariate.of(UniformDistribution.unit(), 20, 2).map(value -> Quantity.of(value, "m"));
-      SpatialMedian fermatWeberProblem = SpatialMedian.with(Quantity.of(1e-10, "m"));
-      Optional<Tensor> optional = fermatWeberProblem.uniform(tensor);
+      SpatialMedian spatialMedian = SpatialMedian.with(Chop._10);
+      Optional<Tensor> optional = spatialMedian.uniform(tensor);
       if (optional.isPresent()) {
         ++present;
         Tensor weiszfeld = optional.get();
@@ -83,15 +84,6 @@ public class SpatialMedianTest extends TestCase {
       }
     }
     assertTrue(5 < present);
-  }
-
-  public void testNegativeFail() {
-    try {
-      SpatialMedian.with(RealScalar.of(-0.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
   }
 
   public void testNullFail() {

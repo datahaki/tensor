@@ -1,11 +1,11 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt;
 
+import java.util.Objects;
 import java.util.Optional;
 
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 /** result of optimization is typically
  * 1) approximate, and
@@ -17,23 +17,17 @@ import ch.ethz.idsc.tensor.Tensor;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/SpatialMedian.html">SpatialMedian</a> */
 public interface SpatialMedian {
+  /** @param chop non null
+   * @return */
+  static SpatialMedian with(Chop chop) {
+    return new WeiszfeldMethod(Objects.requireNonNull(chop));
+  }
+
   /** @param points
    * @return point minimizing the sum of distances from given points, or empty,
-   * if no such point could be computed with the given tolerance */
+   * if no such point could be computed with default precision */
   static Optional<Tensor> of(Tensor points) {
     return WeiszfeldMethod.DEFAULT.uniform(points);
-  }
-
-  /** @param tolerance non-negative
-   * @return */
-  static SpatialMedian with(Scalar tolerance) {
-    return new WeiszfeldMethod(tolerance);
-  }
-
-  /** @param tolerance non-negative
-   * @return */
-  static SpatialMedian with(double tolerance) {
-    return with(RealScalar.of(tolerance));
   }
 
   /** @param points

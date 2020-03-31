@@ -5,16 +5,17 @@ import java.io.Serializable;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.red.ArgMin;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
-import ch.ethz.idsc.tensor.sca.Sign;
 
 /** iterative method to find solution to Fermat-Weber Problem
  * iteration based on Endre Vaszonyi Weiszfeld
@@ -24,21 +25,22 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * by Amir Beck, Shoham Sabach */
 /* package */ class WeiszfeldMethod implements SpatialMedian, Serializable {
   private static final int MAX_ITERATIONS = 512;
-  public static final SpatialMedian DEFAULT = new WeiszfeldMethod(RealScalar.ZERO);
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
+  public static final SpatialMedian DEFAULT = new WeiszfeldMethod(Tolerance.CHOP);
   /***************************************************/
-  private final Scalar tolerance;
+  private final Chop chop;
 
-  /** @param tolerance non-negative */
-  public WeiszfeldMethod(Scalar tolerance) {
-    this.tolerance = Sign.requirePositiveOrZero(tolerance);
+  /** @param chop */
+  public WeiszfeldMethod(Chop chop) {
+    this.chop = chop;
   }
 
-  @Override // from FermatWeberProblem
+  @Override // from SpatialMedian
   public Optional<Tensor> uniform(Tensor points) {
     return minimum(points, t -> t);
   }
 
-  @Override // from FermatWeberProblem
+  @Override // from SpatialMedian
   public Optional<Tensor> weighted(Tensor points, Tensor weights) {
     return minimum(points, weights::pmul);
   }
@@ -48,14 +50,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
     int iteration = 0;
     while (++iteration < MAX_ITERATIONS) {
       Tensor prev = point;
-      Tensor dist = Tensor.of(points.stream().map(anchor -> Norm._2.between(anchor, prev)));
+      Tensor dist = Tensor.of(points.stream().map(prev::subtract).map(Norm._2::ofVector));
       int index = ArgMin.of(dist);
       if (Scalars.isZero(dist.Get(index)))
         return Optional.of(point.copy());
-      Tensor distinv = unaryOperator.apply(dist.map(Scalar::reciprocal));
-      point = distinv.dot(points).divide(Total.ofVector(distinv));
-      Scalar delta = Norm._2.between(point, prev);
-      if (Scalars.lessEquals(delta, tolerance))
+      Tensor invdist = dist.map(Scalar::reciprocal);
+      point = NORMALIZE.apply(unaryOperator.apply(invdist)).dot(points);
+      if (chop.close(point, prev))
         return Optional.of(point);
     }
     return Optional.empty();
