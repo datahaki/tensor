@@ -16,11 +16,11 @@ import ch.ethz.idsc.tensor.Tensor;
  * There is no import from MATLAB built in the tensor library. */
 /* package */ enum MatFileFormat {
   ;
-  static byte[] of(Tensor tensor) {
+  public static byte[] of(Tensor tensor) {
     throw new UnsupportedOperationException();
   }
 
-  static Tensor parse(byte[] bytes) {
+  public static Tensor parse(byte[] bytes) {
     throw new UnsupportedOperationException();
   }
 }

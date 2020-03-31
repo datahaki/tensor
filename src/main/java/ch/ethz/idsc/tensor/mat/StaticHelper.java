@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
    * @param tensorUnaryOperator
    * @return
    * @see SquareMatrixQ */
-  static boolean addId(Tensor tensor, Chop chop, TensorUnaryOperator tensorUnaryOperator) {
+  public static boolean addId(Tensor tensor, Chop chop, TensorUnaryOperator tensorUnaryOperator) {
     return SquareMatrixQ.of(tensor) //
         && chop.close(tensor, tensorUnaryOperator.apply(tensor));
   }
@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
    * @param chop
    * @param tensorUnaryOperator
    * @return */
-  static boolean dotId(Tensor tensor, Chop chop, TensorUnaryOperator tensorUnaryOperator) {
+  public static boolean dotId(Tensor tensor, Chop chop, TensorUnaryOperator tensorUnaryOperator) {
     return MatrixQ.of(tensor) //
         && chop.close(tensor.dot(tensorUnaryOperator.apply(tensor)), IdentityMatrix.of(tensor.length()));
   }
@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   /** @param tensor
    * @param predicate
    * @return */
-  static boolean definite(Tensor tensor, Predicate<Scalar> predicate) {
+  public static boolean definite(Tensor tensor, Predicate<Scalar> predicate) {
     return SquareMatrixQ.of(tensor) //
         && CholeskyDecomposition.of(tensor).diagonal().stream() //
             .map(Scalar.class::cast) //

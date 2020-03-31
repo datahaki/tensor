@@ -1,12 +1,10 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
-import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Series;
 
 /** for a complex scalar z the Sinc function is defined as
  * <pre>
@@ -19,16 +17,12 @@ import ch.ethz.idsc.tensor.alg.Series;
 public enum Sinc implements ScalarUnaryOperator {
   FUNCTION;
 
-  /* package */ static final Scalar THRESHOLD = DoubleScalar.of(0.05);
-  private static final ScalarUnaryOperator SERIES = Series.of( //
-      Tensors.vector(1, 0, -6, 0, 120, 0, -5040, 0, 362880, 0, -39916800) //
-          .map(InvertUnlessZero.FUNCTION).map(N.DOUBLE));
-
   @Override
   public Scalar apply(Scalar scalar) {
-    return Scalars.lessThan(scalar.abs(), THRESHOLD) //
-        ? SERIES.apply(scalar)
-        : Sin.FUNCTION.apply(scalar).divide(scalar);
+    Scalar sin = Sin.FUNCTION.apply(scalar);
+    return Scalars.isZero(scalar) //
+        ? RealScalar.ONE
+        : sin.divide(scalar);
   }
 
   /** @param tensor

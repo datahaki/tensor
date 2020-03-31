@@ -34,13 +34,13 @@ public final class StringScalar extends AbstractScalar implements Comparable<Sca
     return new StringScalar(Objects.requireNonNull(string));
   }
 
+  /***************************************************/
   private final String string;
 
   private StringScalar(String string) {
     this.string = string;
   }
 
-  /***************************************************/
   @Override // from Scalar
   public Scalar abs() {
     throw TensorRuntimeException.of(this);

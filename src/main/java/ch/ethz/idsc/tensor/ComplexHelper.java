@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
    * @param d_re not instance of {@link ComplexScalar}
    * @param d_im not instance of {@link ComplexScalar}
    * @return (n_re + n_im * I) / (d_re + d_im * I) */
-  static Scalar division(Scalar n_re, Scalar n_im, Scalar d_re, Scalar d_im) {
+  public static Scalar division(Scalar n_re, Scalar n_im, Scalar d_re, Scalar d_im) {
     if (Scalars.isZero(d_im))
       return ComplexScalarImpl.of(n_re.divide(d_re), n_im.divide(d_re));
     final Scalar res_re1;
@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
    * @param c non-zero
    * @param d
    * @return c + d / c * d */
-  static Scalar c_dcd(Scalar c, Scalar d) {
+  public static Scalar c_dcd(Scalar c, Scalar d) {
     return c.add(d.divide(c).multiply(d));
   }
 
@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
    * @param c
    * @param d non-zero
    * @return */
-  static Scalar sqrt(Scalar c, Scalar d) {
+  public static Scalar sqrt(Scalar c, Scalar d) {
     Scalar ca = c.abs();
     Scalar da = d.abs();
     final Scalar w;
@@ -70,7 +70,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     return ComplexScalarImpl.of(da.divide(w.add(w)), w.negate());
   }
 
-  static Scalar sqrtPolar(Scalar z) {
+  public static Scalar sqrtPolar(Scalar z) {
     return ComplexScalar.fromPolar( //
         Sqrt.FUNCTION.apply(z.abs()), //
         ((ArgInterface) z).arg().multiply(RationalScalar.HALF));

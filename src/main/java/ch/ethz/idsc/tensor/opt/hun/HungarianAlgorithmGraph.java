@@ -2,6 +2,7 @@
 // adapted by jph
 package ch.ethz.idsc.tensor.opt.hun;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -12,7 +13,7 @@ import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Transpose;
 
-/* package */ abstract class HungarianAlgorithmGraph implements HungarianAlgorithm {
+/* package */ abstract class HungarianAlgorithmGraph implements HungarianAlgorithm, Serializable {
   private final int rows;
   private final int cols;
   protected final Scalar[][] matrix;

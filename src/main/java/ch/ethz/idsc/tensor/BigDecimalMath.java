@@ -16,7 +16,7 @@ import java.math.MathContext;
    * @return root of given square */
   // implementation inspired by Luciano Culacciatti
   // http://www.codeproject.com/Tips/257031/Implementing-SqrtRoot-in-BigDecimal
-  static BigDecimal sqrt(BigDecimal square, MathContext mathContext) {
+  public static BigDecimal sqrt(BigDecimal square, MathContext mathContext) {
     int signum = square.signum();
     if (signum == 0)
       return BigDecimal.ZERO;
@@ -39,7 +39,7 @@ import java.math.MathContext;
    * @param x
    * @param mathContext
    * @return */
-  static BigDecimal exp(BigDecimal x, MathContext mathContext) {
+  public static BigDecimal exp(BigDecimal x, MathContext mathContext) {
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = BigDecimal.ONE;
     BigDecimal add = x;
@@ -57,7 +57,7 @@ import java.math.MathContext;
    * @param x
    * @param mathContext
    * @return */
-  static BigDecimal sin(BigDecimal x, MathContext mathContext) {
+  public static BigDecimal sin(BigDecimal x, MathContext mathContext) {
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = x;
     BigDecimal add = x;
@@ -79,7 +79,7 @@ import java.math.MathContext;
    * @param x
    * @param mathContext
    * @return */
-  static BigDecimal sinh(BigDecimal x, MathContext mathContext) {
+  public static BigDecimal sinh(BigDecimal x, MathContext mathContext) {
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = x;
     BigDecimal add = x;
@@ -98,7 +98,7 @@ import java.math.MathContext;
    * @param x
    * @param mathContext
    * @return */
-  static BigDecimal cos(BigDecimal x, MathContext mathContext) {
+  public static BigDecimal cos(BigDecimal x, MathContext mathContext) {
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = BigDecimal.ONE;
     BigDecimal add = BigDecimal.ONE;
@@ -120,7 +120,7 @@ import java.math.MathContext;
    * @param x
    * @param mathContext
    * @return */
-  static BigDecimal cosh(BigDecimal x, MathContext mathContext) {
+  public static BigDecimal cosh(BigDecimal x, MathContext mathContext) {
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = BigDecimal.ONE;
     BigDecimal add = BigDecimal.ONE;

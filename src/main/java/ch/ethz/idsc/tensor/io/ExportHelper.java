@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.Tensor;
    * @param tensor
    * @param outputStream
    * @throws IOException */
-  static void of(Filename filename, Tensor tensor, OutputStream outputStream) throws IOException {
+  public static void of(Filename filename, Tensor tensor, OutputStream outputStream) throws IOException {
     Extension extension = filename.extension();
     if (extension.equals(Extension.GZ))
       try (GZIPOutputStream gzipOutputStream = new GZIPOutputStream(outputStream)) {
@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.Tensor;
    * @param tensor
    * @param outputStream
    * @throws IOException */
-  static void of(Extension extension, Tensor tensor, OutputStream outputStream) throws IOException {
+  public static void of(Extension extension, Tensor tensor, OutputStream outputStream) throws IOException {
     switch (extension) {
     case BMP:
     case JPG:
@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
   // the use of BufferedOutputStream is motivated by
   // http://www.oracle.com/technetwork/articles/javase/perftuning-137844.html
-  static void lines(Stream<String> stream, OutputStream outputStream) {
+  public static void lines(Stream<String> stream, OutputStream outputStream) {
     try (PrintWriter printWriter = new PrintWriter(new BufferedOutputStream(outputStream))) {
       stream.sequential().forEach(printWriter::println);
     }

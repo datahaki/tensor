@@ -13,16 +13,21 @@ import ch.ethz.idsc.tensor.Tensors;
 /** LONGTERM
  * StringFormat should be the replacement of TensorParser
  * that is used in {@link Tensors#fromString(String)} */
-class StringFormat<T> {
+/* package */ class StringFormat<T> {
+  /** @param string
+   * @param function
+   * @return */
   public static Tensor parse(String string, Function<String, Scalar> function) {
     return new StringFormat<>(new TensorJoiningInverse(function), string).parse();
   }
 
+  /** @param string
+   * @return */
   public static Tensor parse(String string) {
     return parse(string, Scalars::fromString);
   }
 
-  // ---
+  /***************************************************/
   private final JoiningInverse<T> inverseJoining;
   private final String string;
   private int head = 0;
@@ -62,7 +67,7 @@ class StringFormat<T> {
   }
 }
 
-interface JoiningInverse<T> {
+/* package */ interface JoiningInverse<T> {
   void prefix();
 
   void suffix(String string);
@@ -75,7 +80,7 @@ interface JoiningInverse<T> {
   T fallback(String string);
 }
 
-class TensorJoiningInverse implements JoiningInverse<Tensor> {
+/* package */ class TensorJoiningInverse implements JoiningInverse<Tensor> {
   private final Function<String, Scalar> function;
   private final Deque<Tensor> deque = new ArrayDeque<>();
 

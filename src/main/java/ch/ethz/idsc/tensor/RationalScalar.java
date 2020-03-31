@@ -47,7 +47,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
     return new RationalScalar(BigFraction.integer(num));
   }
 
-  // ---
+  /***************************************************/
   private final BigFraction bigFraction;
 
   /** private constructor is only called from of(...)
@@ -57,7 +57,6 @@ public final class RationalScalar extends AbstractRealScalar implements //
     this.bigFraction = bigFraction;
   }
 
-  /***************************************************/
   @Override // from Scalar
   public Scalar negate() {
     return new RationalScalar(bigFraction.negate());

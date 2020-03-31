@@ -35,7 +35,7 @@ public class LanczosInterpolation extends AbstractInterpolation implements Seria
     return new LanczosInterpolation(tensor, LanczosKernel._3);
   }
 
-  // ---
+  /***************************************************/
   private final Tensor tensor;
   private final LanczosKernel lanczosKernel;
 

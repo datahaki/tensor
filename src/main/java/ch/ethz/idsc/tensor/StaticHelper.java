@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   );
 
   // throws an exception if value is Infinity
-  static BigInteger floor(BigDecimal bigDecimal) {
+  public static BigInteger floor(BigDecimal bigDecimal) {
     BigInteger bigInteger = bigDecimal.toBigInteger();
     if (0 < new BigDecimal(bigInteger).compareTo(bigDecimal)) {
       bigDecimal = bigDecimal.subtract(BigDecimal.ONE);
@@ -61,7 +61,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   }
 
   // throws an exception if value is Infinity
-  static BigInteger ceiling(BigDecimal bigDecimal) {
+  public static BigInteger ceiling(BigDecimal bigDecimal) {
     BigInteger bigInteger = bigDecimal.toBigInteger();
     if (new BigDecimal(bigInteger).compareTo(bigDecimal) < 0) {
       bigDecimal = bigDecimal.add(BigDecimal.ONE);
@@ -73,7 +73,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   /** @param x complex scalar
    * @param y complex scalar
    * @return Mathematica::ArcTan[x, y] */
-  static Scalar arcTan(Scalar x, Scalar y) {
+  public static Scalar arcTan(Scalar x, Scalar y) {
     if (Scalars.isZero(x)) { // prevent division by zero
       ComplexEmbedding complexEmbedding = (ComplexEmbedding) y;
       return Sign.FUNCTION.apply(complexEmbedding.real()).multiply(Pi.HALF);

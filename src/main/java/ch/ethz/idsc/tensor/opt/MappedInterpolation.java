@@ -25,7 +25,7 @@ public class MappedInterpolation extends AbstractInterpolation implements Serial
         Objects.requireNonNull(function));
   }
 
-  // ---
+  /***************************************************/
   private final Tensor tensor;
   private final ScalarUnaryOperator function;
 

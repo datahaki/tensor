@@ -31,7 +31,6 @@ public abstract class AbstractDiscreteDistribution implements DiscreteDistributi
         : RealScalar.ZERO;
   }
 
-  /***************************************************/
   /** @param p in the semi-open interval [0, 1)
    * @return */
   protected abstract Scalar protected_quantile(Scalar p);

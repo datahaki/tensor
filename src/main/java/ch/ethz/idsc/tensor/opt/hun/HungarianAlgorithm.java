@@ -15,6 +15,8 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * https://en.wikipedia.org/wiki/Hungarian_algorithm */
 public interface HungarianAlgorithm {
+  /** @param matrix
+   * @return */
   static HungarianAlgorithm of(Tensor matrix) {
     return new HungarianAlgorithmImpl(matrix);
   }

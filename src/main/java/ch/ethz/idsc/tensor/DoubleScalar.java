@@ -59,6 +59,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
     return new DoubleScalar(value);
   }
 
+  /***************************************************/
   private final double value;
 
   /** private constructor is only called from of(...)
@@ -68,7 +69,6 @@ public final class DoubleScalar extends AbstractRealScalar implements //
     this.value = value;
   }
 
-  /***************************************************/
   @Override // from Scalar
   public Scalar negate() {
     return of(-value);
