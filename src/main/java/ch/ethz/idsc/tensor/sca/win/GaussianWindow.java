@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca.win;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -22,7 +24,7 @@ public class GaussianWindow implements ScalarUnaryOperator {
 
   /** @param alpha */
   public GaussianWindow(Scalar sigma) {
-    this.sigma = sigma;
+    this.sigma = Objects.requireNonNull(sigma);
   }
 
   @Override

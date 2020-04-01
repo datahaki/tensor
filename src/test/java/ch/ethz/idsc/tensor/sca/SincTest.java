@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.StringScalar;
@@ -83,6 +84,15 @@ public class SincTest extends TestCase {
   public void testEps() {
     Scalar eps = DoubleScalar.of(1e-12);
     Tolerance.CHOP.requireClose(Sinc.FUNCTION.apply(eps), RealScalar.ONE);
+  }
+
+  public void testInfinity() {
+    Tolerance.CHOP.requireZero(Sinc.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY));
+    Tolerance.CHOP.requireZero(Sinc.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY));
+  }
+
+  public void testNan() {
+    assertFalse(NumberQ.of(Sinc.FUNCTION.apply(DoubleScalar.INDETERMINATE)));
   }
 
   public void testQuantity() {

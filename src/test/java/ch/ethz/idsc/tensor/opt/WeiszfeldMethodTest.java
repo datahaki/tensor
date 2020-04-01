@@ -7,40 +7,44 @@ import java.util.Optional;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import junit.framework.TestCase;
 
-public class SpatialMedianTest extends TestCase {
+public class WeiszfeldMethodTest extends TestCase {
+  public static final SpatialMedian DEFAULT = WeiszfeldMethod.with(Tolerance.CHOP);
+
   public void testSimple() {
     Tensor tensor = Tensors.of( //
         Tensors.vector(-1, 0), //
         Tensors.vector(0, 0), //
         Tensors.vector(2, 0) //
     );
-    Tensor sol = SpatialMedian.with(Chop.NONE).uniform(tensor).get();
+    Tensor sol = WeiszfeldMethod.with(Chop.NONE).uniform(tensor).get();
     assertEquals(sol, Tensors.vector(0, 0));
   }
 
   public void testMathematica() {
     Tensor points = Tensors.fromString("{{1, 3, 5}, {7, 1, 2}, {9, 3, 1}, {4, 5, 6}}");
     Tensor solution = Tensors.vector(5.6583732018553249826, 2.7448562522811917613, 3.2509991568890024191);
-    Optional<Tensor> uniform = SpatialMedian.of(points);
+    Optional<Tensor> uniform = DEFAULT.uniform(points);
     assertTrue(Chop._08.close(uniform.get(), solution));
   }
 
   public void testMathematicaWeighted() {
     Tensor points = Tensors.fromString("{{1, 3, 5}, {-4, 1, 2}, {3, 3, 1}, {4, 5, 6}}");
     Tensor weights = Tensors.vector(1, 3, 4, 5);
-    Optional<Tensor> weighted = SpatialMedian.with(Chop._10).weighted(points, weights);
+    Optional<Tensor> weighted = WeiszfeldMethod.with(Chop._10).weighted(points, weights.divide(Total.ofVector(weights)));
     Tensor solution = Tensors.vector(2.3866562926712105936, 3.5603713896189638861, 3.5379382804133292184);
     assertTrue(Chop._08.close(weighted.get(), solution));
-    Optional<Tensor> optional = SpatialMedian.of(points);
+    Optional<Tensor> optional = DEFAULT.uniform(points);
     assertTrue(optional.isPresent());
   }
 
@@ -51,7 +55,7 @@ public class SpatialMedianTest extends TestCase {
         Tensors.vector(2, 10), //
         Tensors.vector(2, -10) //
     );
-    SpatialMedian spatialMedian = Serialization.copy(SpatialMedian.with(Chop._02));
+    SpatialMedian spatialMedian = Serialization.copy(WeiszfeldMethod.with(Chop._02));
     Tensor sol = spatialMedian.uniform(tensor).get();
     assertTrue(Norm._2.between(sol, tensor.get(1)).Get().number().doubleValue() < 2e-2);
   }
@@ -63,9 +67,9 @@ public class SpatialMedianTest extends TestCase {
         Tensors.vector(2, 10), //
         Tensors.vector(2, -10) //
     );
-    SpatialMedian spatialMedian = SpatialMedian.with(Chop._10);
+    SpatialMedian spatialMedian = WeiszfeldMethod.with(Chop._10);
     Tensor weights = Tensors.vector(10, 1, 1, 1);
-    Tensor sol = spatialMedian.weighted(tensor, weights).get();
+    Tensor sol = spatialMedian.weighted(tensor, weights.divide(Total.ofVector(weights))).get();
     assertTrue(Norm._2.between(sol, tensor.get(0)).Get().number().doubleValue() < 2e-2);
   }
 
@@ -73,7 +77,7 @@ public class SpatialMedianTest extends TestCase {
     int present = 0;
     for (int count = 0; count < 10; ++count) {
       Tensor tensor = RandomVariate.of(UniformDistribution.unit(), 20, 2).map(value -> Quantity.of(value, "m"));
-      SpatialMedian spatialMedian = SpatialMedian.with(Chop._10);
+      SpatialMedian spatialMedian = WeiszfeldMethod.with(Chop._10);
       Optional<Tensor> optional = spatialMedian.uniform(tensor);
       if (optional.isPresent()) {
         ++present;
@@ -88,7 +92,7 @@ public class SpatialMedianTest extends TestCase {
 
   public void testNullFail() {
     try {
-      SpatialMedian.with(null);
+      WeiszfeldMethod.with(null);
       fail();
     } catch (Exception exception) {
       // ---

@@ -43,8 +43,8 @@ public class Mod implements ScalarUnaryOperator {
   public static Mod function(Number n, Number d) {
     return function(RealScalar.of(n), RealScalar.of(d));
   }
-  // ---
 
+  /***************************************************/
   private final Scalar n;
   private final Scalar d;
 

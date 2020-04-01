@@ -31,7 +31,7 @@ import ch.ethz.idsc.tensor.Scalars;
 
   /** @param string, for instance "A*kg^-1*s^2"
    * @return unit */
-  /* package */ Unit lookup(String string) {
+  public Unit lookup(String string) {
     Unit unit = map.get(string);
     if (Objects.isNull(unit)) {
       unit = create(string);
@@ -43,7 +43,7 @@ import ch.ethz.idsc.tensor.Scalars;
   /** @param key atomic unit expression, for instance "kg"
    * @return given key
    * @throws Exception if given key is not an atomic unit expression */
-  /* package */ static String requireValid(String key) {
+  public static String requireValid(String key) {
     if (!PATTERN.matcher(key).matches())
       throw new IllegalArgumentException(key);
     return key;

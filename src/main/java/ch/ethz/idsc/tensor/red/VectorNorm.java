@@ -40,7 +40,7 @@ public class VectorNorm implements VectorNormInterface, Serializable {
     return with(RealScalar.of(p));
   }
 
-  // ---
+  /***************************************************/
   private final ScalarUnaryOperator p_power;
   private final Scalar p_reciprocal;
 

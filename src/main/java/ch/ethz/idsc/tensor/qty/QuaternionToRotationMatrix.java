@@ -13,12 +13,12 @@ public enum QuaternionToRotationMatrix {
   ;
   /** @param quaternion non-zero
    * @return orthogonal 3x3 matrix
-   * @throws Exception if quaternion cannot be normalized */
+   * @throws Exception if given quaternion cannot be normalized */
   public static Tensor of(Quaternion quaternion) {
     Scalar abs = quaternion.abs();
     if (Scalars.isZero(abs))
       throw TensorRuntimeException.of(quaternion);
-    Quaternion unit = quaternion.divide(abs);
+    Quaternion unit = quaternion.divide(abs); // normalize
     Scalar q_w = unit.w();
     Tensor xyz = unit.xyz();
     Scalar q_x = xyz.Get(0);

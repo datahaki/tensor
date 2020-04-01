@@ -10,8 +10,8 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.red.Total;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** function computes the best-fitting rigid transformation that aligns
@@ -27,7 +27,7 @@ public class RigidMotionFit implements TensorUnaryOperator {
    * @return
    * @throws Exception if total of weights does not equal 1 */
   public static RigidMotionFit of(Tensor origin, Tensor target, Tensor weights) {
-    Chop._12.requireClose(Total.of(weights), RealScalar.ONE);
+    Tolerance.CHOP.requireClose(Total.of(weights), RealScalar.ONE);
     return _of(origin, target, weights);
   }
 

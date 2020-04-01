@@ -27,6 +27,7 @@ public interface UnitSystem extends ScalarUnaryOperator {
     return LazyHolder.SI.unitSystem;
   }
 
+  /***************************************************/
   /** @return unmodifiable view on map that defines the unit system */
   Map<String, Scalar> map();
 

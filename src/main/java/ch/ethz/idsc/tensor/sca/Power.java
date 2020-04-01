@@ -19,7 +19,6 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * <a href="https://reference.wolfram.com/language/ref/Power.html">Power</a> */
 public enum Power {
   ;
-  // ---
   /** function attempts to give power as accurately as possible
    * and ultimately makes use of the identity
    * <code>x^y == Exp(y * Log(x))</code>

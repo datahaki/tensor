@@ -45,7 +45,7 @@ public enum LogGamma implements ScalarUnaryOperator {
 
   /** @param z with Re[z] positive
    * @return */
-  static Scalar positive(Scalar z) {
+  /* package */ static Scalar positive(Scalar z) {
     Scalar y = z;
     Scalar tmp = z.add(_671_128);
     tmp = z.add(RationalScalar.HALF).multiply(Log.FUNCTION.apply(tmp)).subtract(tmp);

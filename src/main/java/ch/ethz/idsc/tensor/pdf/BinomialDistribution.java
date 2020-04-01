@@ -9,8 +9,8 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Reverse;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.red.Total;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Power;
 
@@ -52,7 +52,7 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
     }
     table = revert ? Reverse.of(table) : table;
     Scalar sum = Total.ofVector(table);
-    return Chop._12.close(sum, RealScalar.ONE) //
+    return Tolerance.CHOP.close(sum, RealScalar.ONE) //
         ? new BinomialDistribution(n, p, table) //
         : new BinomialRandomVariate(n, p);
   }

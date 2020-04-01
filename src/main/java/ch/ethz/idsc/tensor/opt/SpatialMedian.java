@@ -1,11 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.Chop;
 
 /** result of optimization is typically
  * 1) approximate, and
@@ -17,29 +15,16 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/SpatialMedian.html">SpatialMedian</a> */
 public interface SpatialMedian {
-  /** @param chop non null
-   * @return */
-  static SpatialMedian with(Chop chop) {
-    return new WeiszfeldMethod(Objects.requireNonNull(chop));
-  }
-
-  /** @param points
-   * @return point minimizing the sum of distances from given points, or empty,
-   * if no such point could be computed with default precision */
-  static Optional<Tensor> of(Tensor points) {
-    return WeiszfeldMethod.DEFAULT.uniform(points);
-  }
-
-  /** @param points
+  /** @param sequence of points
    * @return point minimizing the sum of distances from given points, or empty,
    * if no such point could be computed with the given tolerance */
-  Optional<Tensor> uniform(Tensor points);
+  Optional<Tensor> uniform(Tensor sequence);
 
   /** "Weber problem"
    * 
-   * @param points
-   * @param weights
+   * @param sequence of points
+   * @param weights vector with entries that sum up to 1
    * @return point minimizing the sum of weighted distances from given (point, weight) pairs,
    * or empty, if no such point could be computed with the given tolerance */
-  Optional<Tensor> weighted(Tensor points, Tensor weights);
+  Optional<Tensor> weighted(Tensor sequence, Tensor weights);
 }
