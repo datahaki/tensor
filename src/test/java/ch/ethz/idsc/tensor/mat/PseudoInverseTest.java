@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.util.Arrays;
 
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -54,6 +55,33 @@ public class PseudoInverseTest extends TestCase {
     for (int n = 1; n < 7; ++n) {
       Tensor matrix = RandomVariate.of(distribution, n, n);
       Chop._09.requireClose(Inverse.of(matrix), PseudoInverse.of(matrix));
+    }
+  }
+
+  public void testEmptyMatrixFail() {
+    try {
+      PseudoInverse.of(Tensors.of(Tensors.empty()));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testEmptyFail() {
+    try {
+      PseudoInverse.of(Tensors.empty());
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testScalarFail() {
+    try {
+      PseudoInverse.of(RealScalar.ONE);
+      fail();
+    } catch (Exception exception) {
+      // ---
     }
   }
 }

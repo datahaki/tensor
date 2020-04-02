@@ -30,7 +30,7 @@ public enum PseudoInverse {
    * @param chop
    * @return pseudoinverse of matrix determined by given svd */
   public static Tensor of(SingularValueDecomposition svd, Chop chop) {
-    Tensor wi = svd.values().map(InvertUnlessZero.FUNCTION.compose(chop));
+    Tensor wi = svd.values().map(chop).map(InvertUnlessZero.FUNCTION);
     return Tensor.of(svd.getV().stream().map(wi::pmul)).dot(Transpose.of(svd.getU()));
   }
 
