@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.ScalarArray;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
@@ -37,7 +38,7 @@ public enum Fourier {
     final int n = vector.length();
     if (n == 0 || 0 != (n & (n - 1)))
       throw TensorRuntimeException.of(vector); // vector length is not a power of two
-    Scalar[] array = vector.stream().map(Scalar.class::cast).toArray(Scalar[]::new);
+    Scalar[] array = ScalarArray.ofVector(vector);
     {
       int j = 0;
       for (int i = 0; i < n; ++i) {

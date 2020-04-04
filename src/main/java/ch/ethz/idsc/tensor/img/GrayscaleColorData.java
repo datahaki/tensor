@@ -20,13 +20,17 @@ import ch.ethz.idsc.tensor.sca.Clips;
   public Tensor apply(Scalar scalar) {
     double value = scalar.number().doubleValue();
     return Double.isFinite(value) //
-        ? tensors[(int) (value * 255 + 0.5)].copy()
+        ? tensors[toInt(value)].copy()
         : Transparent.rgba();
   }
 
   @Override // from ColorDataGradient
   public ColorDataGradient deriveWithOpacity(Scalar opacity) {
     double value = Clips.unit().requireInside(opacity).number().doubleValue();
-    return new GrayscaleColorData((int) (value * 255 + 0.5));
+    return new GrayscaleColorData(toInt(value));
+  }
+
+  private static int toInt(double value) {
+    return (int) (value * 255 + 0.5);
   }
 }

@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.io.ScalarArray;
 
 /* package */ abstract class HungarianAlgorithmGraph implements HungarianAlgorithm, Serializable {
   private final int rows;

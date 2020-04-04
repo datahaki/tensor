@@ -26,21 +26,6 @@ public enum LeastSquares {
     return usingSvd(matrix, b);
   }
 
-  /** when m does not have full rank, and for numerical stability
-   * the function usingSvd(...) is preferred over the function usingLinearSolve(...)
-   * 
-   * @param matrix with rows >= cols
-   * @param b
-   * @return x with matrix.dot(x) ~ b */
-  public static Tensor usingSvd(Tensor matrix, Tensor b) {
-    SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
-    if (VectorQ.of(b)) { // when b is vector then bypass construction of pseudo inverse matrix
-      Tensor wi = svd.values().map(Tolerance.CHOP).map(InvertUnlessZero.FUNCTION);
-      return svd.getV().dot(wi.pmul(b.dot(svd.getU()))); // U^t . b == b . U
-    }
-    return PseudoInverse.of(svd).dot(b);
-  }
-
   /** @param matrix with rows >= cols, and maximum rank
    * @param b
    * @return x with matrix.dot(x) ~ b
@@ -48,5 +33,26 @@ public enum LeastSquares {
   public static Tensor usingLinearSolve(Tensor matrix, Tensor b) {
     Tensor mt = ConjugateTranspose.of(matrix);
     return LinearSolve.of(mt.dot(matrix), mt.dot(b));
+  }
+
+  /** when m does not have full rank, and for numerical stability
+   * the function usingSvd(...) is preferred over the function usingLinearSolve(...)
+   * 
+   * @param matrix with rows >= cols
+   * @param b
+   * @return x with matrix.dot(x) ~ b */
+  public static Tensor usingSvd(Tensor matrix, Tensor b) {
+    return of(SingularValueDecomposition.of(matrix), b);
+  }
+
+  /** @param svd
+   * @param b
+   * @return */
+  public static Tensor of(SingularValueDecomposition svd, Tensor b) {
+    if (VectorQ.of(b)) { // when b is vector then bypass construction of pseudo inverse matrix
+      Tensor wi = svd.values().map(Tolerance.CHOP).map(InvertUnlessZero.FUNCTION);
+      return svd.getV().dot(wi.pmul(b.dot(svd.getU()))); // U^t . b == b . U
+    }
+    return PseudoInverse.of(svd).dot(b);
   }
 }

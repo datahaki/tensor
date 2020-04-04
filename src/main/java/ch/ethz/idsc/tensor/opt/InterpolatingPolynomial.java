@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.io.ScalarArray;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** evaluates polynomial at given point without solving for the coefficients
@@ -39,7 +40,7 @@ public class InterpolatingPolynomial implements Serializable {
 
   private InterpolatingPolynomial(BinaryAverage binaryAverage, Tensor knots) {
     this.binaryAverage = binaryAverage;
-    this.knots = knots.stream().map(Scalar.class::cast).toArray(Scalar[]::new);
+    this.knots = ScalarArray.ofVector(knots);
   }
 
   /** @param tensor of values of polynomial evaluated at knots

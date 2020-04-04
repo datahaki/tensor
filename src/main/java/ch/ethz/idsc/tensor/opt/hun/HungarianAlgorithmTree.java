@@ -10,6 +10,7 @@ import java.util.Set;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.io.ScalarArray;
 import ch.ethz.idsc.tensor.red.Min;
 
 /* package */ class HungarianAlgorithmTree implements Serializable {

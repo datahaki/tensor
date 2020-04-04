@@ -7,13 +7,18 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.MatrixExp;
 import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.MatrixPower;
 import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Power;
 import junit.framework.TestCase;
 
@@ -41,6 +46,17 @@ public class TraceTest extends TestCase {
       Tensor cmp = Total.of(vector);
       assertTrue(Chop._10.close(cmp, res)); // 2. Viete
     }
+  }
+
+  public void testDetExpIsExpTrace() {
+    Distribution distribution = NormalDistribution.of(0, 0.3);
+    for (int n = 1; n < 5; ++n)
+      for (int count = 0; count < 5; ++count) {
+        Tensor matrix = RandomVariate.of(distribution, n, n);
+        Scalar exp1 = Det.of(MatrixExp.of(matrix));
+        Scalar exp2 = Exp.FUNCTION.apply(Trace.of(matrix));
+        Chop._10.requireClose(exp1, exp2);
+      }
   }
 
   public void testIdentityMatrix() {
