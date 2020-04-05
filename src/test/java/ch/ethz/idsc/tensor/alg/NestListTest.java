@@ -19,6 +19,11 @@ public class NestListTest extends TestCase {
     return Tensors.vector(1, 2, 3);
   }
 
+  public void testProduct() {
+    Tensor tensor = NestList.of(RealScalar.of(3)::multiply, RealScalar.ONE, 5);
+    assertEquals(tensor.toString(), "{1, 3, 9, 27, 81, 243}");
+  }
+
   public void testClear() {
     Tensor t = Tensors.vector(1, 2, 3);
     Tensor x = Tensors.vector(1, 2, 3);

@@ -105,15 +105,14 @@ public class DoubleScalarTest extends TestCase {
   }
 
   public void testNaN() {
+    DoubleScalar nan = (DoubleScalar) DoubleScalar.INDETERMINATE;
     try {
-      DoubleScalar nan = (DoubleScalar) DoubleScalar.INDETERMINATE;
       nan.isNonNegative();
       fail();
     } catch (Exception exception) {
       // ---
     }
     try {
-      DoubleScalar nan = (DoubleScalar) DoubleScalar.INDETERMINATE;
       nan.signInt();
       fail();
     } catch (Exception exception) {

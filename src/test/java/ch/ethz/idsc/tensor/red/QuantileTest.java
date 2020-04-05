@@ -12,9 +12,11 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.OrderedQ;
+import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.io.Serialization;
-import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
@@ -145,8 +147,16 @@ public class QuantileTest extends TestCase {
   }
 
   public void testMatrixFail() {
+    Tensor matrix = Reverse.of(IdentityMatrix.of(7));
+    OrderedQ.require(matrix);
     try {
-      Quantile.of(HilbertMatrix.of(3));
+      Quantile.of(matrix);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      Quantile.ofSorted(matrix);
       fail();
     } catch (Exception exception) {
       // ---
@@ -156,6 +166,12 @@ public class QuantileTest extends TestCase {
   public void testEmptyVectorFail() {
     try {
       Quantile.of(Tensors.empty());
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      Quantile.ofSorted(Tensors.empty());
       fail();
     } catch (Exception exception) {
       // ---
