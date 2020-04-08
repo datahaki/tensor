@@ -18,12 +18,12 @@ import ch.ethz.idsc.tensor.sca.N;
   /** BigDecimal precision of a double */
   private static final int DOUBLE_PRECISION = 17;
 
-  static Scalar of(BigDecimal value) {
+  public static Scalar of(BigDecimal value) {
     int precision = value.precision();
     return new DecimalScalarImpl(value, precision <= DEFAULT_CONTEXT ? DEFAULT_CONTEXT : precision);
   }
 
-  // ---
+  /***************************************************/
   private final BigDecimal value;
   private final int precision;
 

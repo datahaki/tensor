@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 
@@ -9,6 +10,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import junit.framework.TestCase;
 
@@ -63,9 +65,9 @@ public class DimensionsTest extends TestCase {
     assertEquals(new Dimensions(tensor).maxDepth(), 3);
   }
 
-  public void testLengths() {
+  public void testLengths() throws ClassNotFoundException, IOException {
     Tensor tensor = Tensors.fromString("{{{2, 3}, {{}}}, {4, 5, 7}, 3}");
-    Dimensions dimensions = new Dimensions(tensor);
+    Dimensions dimensions = Serialization.copy(new Dimensions(tensor));
     assertEquals(dimensions.lengths(0), new HashSet<>(Arrays.asList(3)));
     assertEquals(dimensions.lengths(1), new HashSet<>(Arrays.asList(Scalar.LENGTH, 2, 3)));
     assertEquals(dimensions.lengths(2), new HashSet<>(Arrays.asList(Scalar.LENGTH, 1, 2)));

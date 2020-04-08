@@ -3,8 +3,6 @@ package ch.ethz.idsc.tensor.opt;
 
 import java.util.Optional;
 
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** result of optimization is typically
@@ -17,35 +15,16 @@ import ch.ethz.idsc.tensor.Tensor;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/SpatialMedian.html">SpatialMedian</a> */
 public interface SpatialMedian {
-  /** @param points
+  /** @param sequence of points
    * @return point minimizing the sum of distances from given points, or empty,
    * if no such point could be computed with the given tolerance */
-  static Optional<Tensor> of(Tensor points) {
-    return WeiszfeldMethod.DEFAULT.uniform(points);
-  }
-
-  /** @param tolerance non-negative
-   * @return */
-  static SpatialMedian with(Scalar tolerance) {
-    return new WeiszfeldMethod(tolerance);
-  }
-
-  /** @param tolerance non-negative
-   * @return */
-  static SpatialMedian with(double tolerance) {
-    return with(RealScalar.of(tolerance));
-  }
-
-  /** @param points
-   * @return point minimizing the sum of distances from given points, or empty,
-   * if no such point could be computed with the given tolerance */
-  Optional<Tensor> uniform(Tensor points);
+  Optional<Tensor> uniform(Tensor sequence);
 
   /** "Weber problem"
    * 
-   * @param points
-   * @param weights
+   * @param sequence of points
+   * @param weights vector with entries that sum up to 1
    * @return point minimizing the sum of weighted distances from given (point, weight) pairs,
    * or empty, if no such point could be computed with the given tolerance */
-  Optional<Tensor> weighted(Tensor points, Tensor weights);
+  Optional<Tensor> weighted(Tensor sequence, Tensor weights);
 }

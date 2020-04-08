@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
         : new QuantityImpl(value, unit);
   }
 
-  // ---
+  /***************************************************/
   private Quantity ofUnit(Scalar scalar) {
     return new QuantityImpl(scalar, unit);
   }

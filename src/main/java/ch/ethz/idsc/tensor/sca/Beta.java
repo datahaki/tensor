@@ -4,7 +4,10 @@ package ch.ethz.idsc.tensor.sca;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
-/** <p>inspired by
+/** Reference:
+ * "Gamma, Beta, and Related Functions" in NR, 2007
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Beta.html">Beta</a> */
 public enum Beta {
   ;
@@ -12,8 +15,8 @@ public enum Beta {
    * @param b
    * @return */
   public static Scalar of(Scalar a, Scalar b) {
-    return Gamma.FUNCTION.apply(a).multiply(Gamma.FUNCTION.apply(b)) //
-        .divide(Gamma.FUNCTION.apply(a.add(b)));
+    return Exp.FUNCTION.apply( //
+        LogGamma.FUNCTION.apply(a).add(LogGamma.FUNCTION.apply(b)).subtract(LogGamma.FUNCTION.apply(a.add(b))));
   }
 
   /** @param a

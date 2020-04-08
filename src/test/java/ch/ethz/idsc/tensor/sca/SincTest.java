@@ -3,12 +3,17 @@ package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.StringScalar;
+import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
 public class SincTest extends TestCase {
+  static final Scalar THRESHOLD = DoubleScalar.of(0.05);
+
   private static Scalar checkBoth(Scalar scalar) {
     Scalar c = Sinc.of(scalar);
     Scalar s = Sin.of(scalar).divide(scalar);
@@ -47,6 +52,7 @@ public class SincTest extends TestCase {
 
   public void testZero() {
     assertEquals(Sinc.of(RealScalar.ZERO), RealScalar.ONE);
+    assertEquals(Sinc.FUNCTION.apply(RealScalar.ZERO), RealScalar.ONE);
   }
 
   public void testComplex() {
@@ -54,16 +60,48 @@ public class SincTest extends TestCase {
     checkBoth(Sinc.of(ComplexScalar.of(-0.002, 0.03)));
     checkBoth(Sinc.of(ComplexScalar.of(0.002, -0.003)));
     checkBoth(Sinc.of(ComplexScalar.of(-0.002, -0.003)));
+    checkBoth(Sinc.of(ComplexScalar.of(Double.MIN_VALUE, Double.MIN_VALUE)));
+    checkBoth(Sinc.of(ComplexScalar.of(Double.MIN_VALUE, -Double.MIN_VALUE)));
+    checkBoth(Sinc.of(ComplexScalar.of(-Double.MIN_VALUE, Double.MIN_VALUE)));
+    checkBoth(Sinc.of(ComplexScalar.of(-Double.MIN_VALUE, -Double.MIN_VALUE)));
   }
 
   public void testThreshold() {
-    Scalar res1 = Sinc.of(Sinc.THRESHOLD);
-    double val1 = Sinc.THRESHOLD.number().doubleValue();
+    Scalar res1 = Sinc.of(THRESHOLD);
+    double val1 = THRESHOLD.number().doubleValue();
     double val0 = val1;
     for (int count = 0; count < 100; ++count)
       val0 = Math.nextDown(val0);
     Scalar res0 = Sinc.of(DoubleScalar.of(val0));
-    assertEquals(res1, res0);
+    Tolerance.CHOP.requireClose(res1, res0);
+  }
+
+  public void testMin() {
+    Scalar eps = DoubleScalar.of(Double.MIN_VALUE);
+    Tolerance.CHOP.requireClose(Sinc.FUNCTION.apply(eps), RealScalar.ONE);
+  }
+
+  public void testEps() {
+    Scalar eps = DoubleScalar.of(1e-12);
+    Tolerance.CHOP.requireClose(Sinc.FUNCTION.apply(eps), RealScalar.ONE);
+  }
+
+  public void testInfinity() {
+    Tolerance.CHOP.requireZero(Sinc.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY));
+    Tolerance.CHOP.requireZero(Sinc.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY));
+  }
+
+  public void testNan() {
+    assertFalse(NumberQ.of(Sinc.FUNCTION.apply(DoubleScalar.INDETERMINATE)));
+  }
+
+  public void testQuantity() {
+    try {
+      Sinc.FUNCTION.apply(Quantity.of(0, "m"));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 
   public void testTypeFail() {

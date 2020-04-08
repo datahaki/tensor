@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.alg.BinaryPower;
 /** instantiated by {@link Scalars#binaryPower(Scalar)} */
 /* package */ class ScalarBinaryPower<T extends Scalar> extends BinaryPower<T> implements Serializable {
   public static final BinaryPower<Scalar> REAL = new ScalarBinaryPower<>(RealScalar.ONE);
-  // ---
+  /***************************************************/
   private final T one;
 
   /** @param one assumed to be non-null */

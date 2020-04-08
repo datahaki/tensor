@@ -23,4 +23,13 @@ public class QRMathematicaTest extends TestCase {
     Chop._10.requireClose(q.dot(r), a);
     Chop._10.requireClose(ConjugateTranspose.of(q), qrDecomposition.getInverseQ());
   }
+
+  public void testNullFail() {
+    try {
+      QRMathematica.wrap(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

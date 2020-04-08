@@ -26,7 +26,7 @@ public class GifAnimationWriter implements AnimationWriter {
    * @return
    * @throws IOException */
   public GifAnimationWriter(File file, int period, TimeUnit timeUnit) throws IOException {
-    animatedGifWriter = AnimatedGifWriter.of(file, (int) TimeUnit.MILLISECONDS.convert(period, timeUnit));
+    animatedGifWriter = AnimatedGifWriter.of(file, Math.toIntExact(TimeUnit.MILLISECONDS.convert(period, timeUnit)));
   }
 
   @Override // from AnimationWriter

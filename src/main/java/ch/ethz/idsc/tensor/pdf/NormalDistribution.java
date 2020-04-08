@@ -17,7 +17,9 @@ public class NormalDistribution implements //
     ContinuousDistribution, InverseCDF, MeanInterface, VarianceInterface, Serializable {
   private static final Distribution STANDARD = of(RealScalar.ZERO, RealScalar.ONE);
 
-  /** @param mean
+  /** The parameters mean and sigma may be of type Quantity with identical Unit.
+   * 
+   * @param mean
    * @param sigma standard deviation
    * @return instance of NormalDistribution with given characteristics */
   public static Distribution of(Scalar mean, Scalar sigma) {

@@ -7,9 +7,17 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.qty.Boole;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/** not completely consistent with Mathematica since
- * Mathematica::KroneckerDelta[ ] == 1 (<-consistent)
- * Mathematica::KroneckerDelta[1] == 0 (inconsistent)
+/** not consistent with Mathematica for singleton collection
+ * <pre>
+ * Mathematica::KroneckerDelta[3] == 0
+ * Tensor-Lib.::KroneckerDelta[3] == 1
+ * </pre>
+ * 
+ * <p>consistent with Mathematica for empty collection
+ * <pre>
+ * Mathematica::KroneckerDelta[ ] == 1
+ * Tensor-Lib.::KroneckerDelta[ ] == 1
+ * </pre>
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/KroneckerDelta.html">KroneckerDelta</a> */

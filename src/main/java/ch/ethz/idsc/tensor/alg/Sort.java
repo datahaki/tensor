@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Sort.html">Sort</a>
  * 
- * @see Ordering 
+ * @see Ordering
  * @see TensorComparator */
 public enum Sort {
   ;

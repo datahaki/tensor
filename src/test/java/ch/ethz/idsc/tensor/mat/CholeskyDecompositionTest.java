@@ -123,7 +123,7 @@ public class CholeskyDecompositionTest extends TestCase {
     CholeskyDecomposition cd = CholeskyDecomposition.of(mat);
     assertTrue(Scalars.nonZero(cd.det()));
     assertEquals(cd.diagonal().toString(), "{2[m], 3/2[m]}");
-    assertTrue(SymmetricMatrixQ.of(mat));
+    SymmetricMatrixQ.require(mat);
     assertTrue(HermitianMatrixQ.of(mat));
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(mat));
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(mat));
@@ -153,7 +153,7 @@ public class CholeskyDecompositionTest extends TestCase {
       Tensor res = lower.dot(upper);
       assertTrue(Chop._10.close(mat, res));
     }
-    assertTrue(SymmetricMatrixQ.of(mat));
+    SymmetricMatrixQ.require(mat);
     assertTrue(HermitianMatrixQ.of(mat));
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(mat));
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(mat));

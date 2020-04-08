@@ -16,7 +16,9 @@ import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.CubeRoot;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-/** bin size computations are inspired by Wikipedia:
+/** BinningMethod maps samples to recommended width of bins.
+ * 
+ * <p>The bin size computations are inspired by Wikipedia:
  * <a href="https://en.wikipedia.org/wiki/Histogram">Histogram</a>
  * 
  * <p>The bin size computation works on samples of type {@link Quantity}. */

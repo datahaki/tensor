@@ -2,19 +2,22 @@
 package ch.ethz.idsc.tensor.opt;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.function.UnaryOperator;
 
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
+import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.red.ArgMin;
-import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
-import ch.ethz.idsc.tensor.sca.Sign;
 
 /** iterative method to find solution to Fermat-Weber Problem
  * iteration based on Endre Vaszonyi Weiszfeld
@@ -22,40 +25,43 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>implementation based on
  * "Weiszfeld’s Method: Old and New Results"
  * by Amir Beck, Shoham Sabach */
-/* package */ class WeiszfeldMethod implements SpatialMedian, Serializable {
+public class WeiszfeldMethod implements SpatialMedian, Serializable {
   private static final int MAX_ITERATIONS = 512;
-  public static final SpatialMedian DEFAULT = new WeiszfeldMethod(RealScalar.ZERO);
-  // ---
-  private final Scalar tolerance;
+  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
 
-  /** @param tolerance non-negative */
-  public WeiszfeldMethod(Scalar tolerance) {
-    this.tolerance = Sign.requirePositiveOrZero(tolerance);
+  /** @param chop non null
+   * @return */
+  public static SpatialMedian with(Chop chop) {
+    return new WeiszfeldMethod(Objects.requireNonNull(chop));
   }
 
-  @Override // from FermatWeberProblem
-  public Optional<Tensor> uniform(Tensor points) {
-    return minimum(points, t -> t);
+  /***************************************************/
+  private final Chop chop;
+
+  /** @param chop */
+  private WeiszfeldMethod(Chop chop) {
+    this.chop = chop;
   }
 
-  @Override // from FermatWeberProblem
-  public Optional<Tensor> weighted(Tensor points, Tensor weights) {
-    return minimum(points, weights::pmul);
+  @Override // from SpatialMedian
+  public Optional<Tensor> uniform(Tensor sequence) {
+    return weighted(sequence, ConstantArray.of(RationalScalar.of(1, sequence.length()), sequence.length()));
   }
 
-  private Optional<Tensor> minimum(Tensor points, UnaryOperator<Tensor> unaryOperator) {
-    Tensor point = N.DOUBLE.of(Mean.of(unaryOperator.apply(points))); // initial value
+  @Override // from SpatialMedian
+  public Optional<Tensor> weighted(Tensor sequence, Tensor weights) {
+    Tolerance.CHOP.requireClose(Total.of(weights), RealScalar.ONE);
+    Tensor point = N.DOUBLE.of(weights.dot(sequence)); // initial value
     int iteration = 0;
     while (++iteration < MAX_ITERATIONS) {
       Tensor prev = point;
-      Tensor dist = Tensor.of(points.stream().map(anchor -> Norm._2.between(anchor, prev)));
+      Tensor dist = Tensor.of(sequence.stream().map(prev::subtract).map(Norm._2::ofVector));
       int index = ArgMin.of(dist);
       if (Scalars.isZero(dist.Get(index)))
         return Optional.of(point.copy());
-      Tensor distinv = unaryOperator.apply(dist.map(Scalar::reciprocal));
-      point = distinv.dot(points).divide(Total.ofVector(distinv));
-      Scalar delta = Norm._2.between(point, prev);
-      if (Scalars.lessEquals(delta, tolerance))
+      Tensor invdist = dist.map(Scalar::reciprocal);
+      point = NORMALIZE.apply(weights.pmul(invdist)).dot(sequence);
+      if (chop.close(point, prev))
         return Optional.of(point);
     }
     return Optional.empty();

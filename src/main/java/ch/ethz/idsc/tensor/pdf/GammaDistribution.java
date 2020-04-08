@@ -6,7 +6,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Exp;
-import ch.ethz.idsc.tensor.sca.Gamma;
+import ch.ethz.idsc.tensor.sca.Log;
+import ch.ethz.idsc.tensor.sca.LogGamma;
 import ch.ethz.idsc.tensor.sca.Power;
 
 /** special cases of the Gamma distribution are
@@ -35,10 +36,10 @@ public class GammaDistribution implements Distribution, MeanInterface, PDF, Vari
   private final Scalar beta;
   private final Scalar factor;
 
-  public GammaDistribution(Scalar alpha, Scalar beta) {
+  private GammaDistribution(Scalar alpha, Scalar beta) {
     this.alpha = alpha;
     this.beta = beta;
-    factor = Power.of(beta, alpha.negate()).divide(Gamma.FUNCTION.apply(alpha));
+    factor = Exp.FUNCTION.apply(Log.FUNCTION.apply(beta).multiply(alpha).add(LogGamma.FUNCTION.apply(alpha)).negate());
   }
 
   @Override // from PDF

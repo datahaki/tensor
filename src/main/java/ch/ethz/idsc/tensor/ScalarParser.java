@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
   /** suffix that is appended to imaginary part of {@link ComplexScalar} in function toString() */
   private static final String I_SYMBOL = "I";
 
-  static Scalar of(final String _string) {
+  public static Scalar of(final String _string) {
     final String string = _string.trim();
     final char[] chars = string.toCharArray();
     final List<Integer> plusMinus = new ArrayList<>();
@@ -101,7 +101,7 @@ import java.util.regex.Pattern;
    * 
    * @param im
    * @return */
-  /* package */ static String imagToString(Scalar im) {
+  public static String imagToString(Scalar im) {
     if (im instanceof RationalScalar) {
       RationalScalar rationalScalar = (RationalScalar) im;
       BigInteger num = rationalScalar.numerator();

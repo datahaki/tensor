@@ -15,7 +15,7 @@ package ch.ethz.idsc.tensor.io;
    * @param string
    * @return null if string does not equal "true" or "false"
    * @throws Exception if parameter is null */
-  static Boolean orNull(String string) {
+  public static Boolean orNull(String string) {
     if (string.equals(FALSE))
       return false;
     return string.equals(TRUE) //

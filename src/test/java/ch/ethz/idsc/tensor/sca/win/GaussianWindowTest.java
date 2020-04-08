@@ -36,4 +36,13 @@ public class GaussianWindowTest extends TestCase {
     Scalar exact = RealScalar.of(0.13533528323661262);
     Chop._10.requireClose(apply, exact);
   }
+
+  public void testNullFail() {
+    try {
+      new GaussianWindow(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

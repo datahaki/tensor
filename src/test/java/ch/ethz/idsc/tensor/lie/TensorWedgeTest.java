@@ -53,6 +53,16 @@ public class TensorWedgeTest extends TestCase {
     assertEquals(matrix, TensorWedge.of(matrix));
   }
 
+  public void testFailIrrectangular() {
+    Tensor matrix = Tensors.fromString("{{1, 2}, {0, 4, 3}}");
+    try {
+      TensorWedge.of(matrix);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testFailRectangularMatrix() {
     try {
       TensorWedge.of(HilbertMatrix.of(3, 4));

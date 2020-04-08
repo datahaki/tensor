@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -36,6 +37,11 @@ public class AbsSquaredTest extends TestCase {
     Scalar scalar = AbsSquared.between(a, b);
     assertEquals(scalar, GaussScalar.of(5338, 12347));
     assertEquals(scalar, GaussScalar.of(3959 * 3959, 12347));
+  }
+
+  public void testInfinity() {
+    assertEquals(AbsSquared.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY), DoubleScalar.POSITIVE_INFINITY);
+    assertEquals(AbsSquared.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), DoubleScalar.POSITIVE_INFINITY);
   }
 
   public void testFail() {

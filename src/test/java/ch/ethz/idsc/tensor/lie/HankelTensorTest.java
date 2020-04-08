@@ -11,17 +11,17 @@ import junit.framework.TestCase;
 public class HankelTensorTest extends TestCase {
   public void testRank2() {
     Tensor tensor = HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5), 2);
-    assertTrue(SymmetricMatrixQ.of(tensor));
+    SymmetricMatrixQ.require(tensor);
   }
 
   public void testRank3a() {
     Tensor tensor = HankelTensor.of(Tensors.vector(1, 2, 3, 4), 3);
-    tensor.stream().forEach(matrix -> assertTrue(SymmetricMatrixQ.of(matrix)));
+    tensor.stream().forEach(SymmetricMatrixQ::require);
   }
 
   public void testRank3b() {
     Tensor tensor = HankelTensor.of(Tensors.vector(0, 1, 2, 3, 4, 5, 6), 3);
-    tensor.stream().forEach(matrix -> assertTrue(SymmetricMatrixQ.of(matrix)));
+    tensor.stream().forEach(SymmetricMatrixQ::require);
   }
 
   public void testRank4() {

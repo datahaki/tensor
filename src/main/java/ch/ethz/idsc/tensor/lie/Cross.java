@@ -56,9 +56,16 @@ public enum Cross {
   }
 
   /** gives skew matrix based on 3 vector entries
+   * <pre>
    * [ 0 -a2 a1 ]
    * [ a2 0 -a0 ]
    * [ -a1 a0 0 ]
+   * </pre>
+   * 
+   * The identity holds:
+   * <pre>
+   * Cross[a, b] == skew3(a) . b
+   * </pre>
    * 
    * @param vector with 3 entries
    * @return skew symmetric 3 x 3 matrix representing cross product mapping */

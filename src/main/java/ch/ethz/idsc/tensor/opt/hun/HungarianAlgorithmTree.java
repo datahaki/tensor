@@ -2,6 +2,7 @@
 // adapted by jph
 package ch.ethz.idsc.tensor.opt.hun;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -9,9 +10,10 @@ import java.util.Set;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.io.ScalarArray;
 import ch.ethz.idsc.tensor.red.Min;
 
-/* package */ class HungarianAlgorithmTree {
+/* package */ class HungarianAlgorithmTree implements Serializable {
   private final Bipartition bipartition;
   private final Set<Integer> S = new HashSet<>();
   private final Set<Integer> nlsMinusT = new HashSet<>();

@@ -55,7 +55,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     return new RootsDegree3(coeffs).roots();
   }
 
-  // ---
+  /***************************************************/
   private final Scalar d;
   private final Scalar c;
   private final Scalar a;

@@ -8,6 +8,9 @@ import ch.ethz.idsc.tensor.Scalars;
  * <a href="https://reference.wolfram.com/language/ref/CoprimeQ.html">CoprimeQ</a> */
 public enum CoprimeQ {
   ;
+  /** @param a
+   * @param b
+   * @return */
   public static boolean of(Scalar a, Scalar b) {
     Scalar c = StaticHelper.normalForm(a.multiply(b));
     return Scalars.isZero(a) && Scalars.isZero(b) //

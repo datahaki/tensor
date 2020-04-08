@@ -1,6 +1,7 @@
 // code by cr and jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.io.Serializable;
 import java.util.Random;
 import java.util.stream.DoubleStream;
 
@@ -17,11 +18,11 @@ import ch.ethz.idsc.tensor.Scalar;
  * @see BinomialDistribution */
 // implementation by Claudio Ruch
 /* package */ class BinomialRandomVariate implements Distribution, //
-    MeanInterface, RandomVariateInterface, VarianceInterface {
+    MeanInterface, RandomVariateInterface, VarianceInterface, Serializable {
   private final int n;
   private final Scalar p;
 
-  /* package */ BinomialRandomVariate(int n, Scalar p) {
+  public BinomialRandomVariate(int n, Scalar p) {
     this.n = n;
     this.p = p;
   }

@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.Tensor;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ExtendedGCD.html">ExtendedGCD</a> */
 public interface ExtendedGCD {
+  /** @param one
+   * @return */
   static Function<Tensor, ExtendedGCD> function(Scalar one) {
     return new ExtendedGCDWrap(one)::function;
   }

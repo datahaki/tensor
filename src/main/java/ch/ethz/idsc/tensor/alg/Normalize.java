@@ -65,7 +65,7 @@ public class Normalize implements TensorUnaryOperator {
     return new Normalize(Objects.requireNonNull(tensorScalarFunction));
   }
 
-  // ---
+  /***************************************************/
   /* package */ final TensorScalarFunction tensorScalarFunction;
 
   /* package */ Normalize(TensorScalarFunction tensorScalarFunction) {

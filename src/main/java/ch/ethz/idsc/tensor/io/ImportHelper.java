@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.Tensor;
    * @param inputStream
    * @return
    * @throws IOException */
-  static Tensor of(Filename filename, InputStream inputStream) throws IOException {
+  public static Tensor of(Filename filename, InputStream inputStream) throws IOException {
     Extension extension = filename.extension();
     if (extension.equals(Extension.GZ))
       try (GZIPInputStream gzipInputStream = new GZIPInputStream(inputStream)) {
@@ -50,7 +50,7 @@ import ch.ethz.idsc.tensor.Tensor;
    * @throws IOException
    * @throws ClassNotFoundException
    * @throws DataFormatException */
-  static <T> T object(InputStream inputStream) throws IOException, ClassNotFoundException, DataFormatException {
+  public static <T> T object(InputStream inputStream) throws IOException, ClassNotFoundException, DataFormatException {
     int length = inputStream.available();
     byte[] bytes = new byte[length];
     inputStream.read(bytes);
@@ -60,7 +60,7 @@ import ch.ethz.idsc.tensor.Tensor;
   /** @param inputStream
    * @return
    * @throws IOException */
-  static Properties properties(InputStream inputStream) throws IOException {
+  public static Properties properties(InputStream inputStream) throws IOException {
     Properties properties = new Properties();
     properties.load(inputStream);
     return properties;

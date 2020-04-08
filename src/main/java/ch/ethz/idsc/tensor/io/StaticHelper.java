@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
   /** @param field
    * @return if field is managed by {@link TensorProperties} */
-  /* package */ static boolean isTracked(Field field) {
+  public static boolean isTracked(Field field) {
     if ((field.getModifiers() & MASK_TESTED) == MASK_FILTER) {
       Class<?> type = field.getType();
       return type.equals(Tensor.class) //
@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.Tensors;
    * @param string to parse to an instance of given class
    * @return new instance of class that was constructed from given string
    * @throws Exception if given class is not supported */
-  /* package */ static Object parse(Class<?> cls, String string) {
+  public static Object parse(Class<?> cls, String string) {
     if (cls.equals(Tensor.class))
       return Tensors.fromString(string);
     if (cls.equals(Scalar.class))

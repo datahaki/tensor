@@ -69,8 +69,10 @@ public class SphereFitTest extends TestCase {
         Tensors.vector(0, 0), //
         Tensors.vector(0, 1)).unmodifiable();
     for (Tensor shift : Tensors.fromString("{{0, 0}, {0, -5/3}, {10, 0}, {20, 20}}")) {
-      Tensor points = Tensor.of(_points.stream().map(point -> point.add(shift)));
+      Tensor points = Tensor.of(_points.stream().map(shift::add));
       Optional<SphereFit> optional = SphereFit.of(points);
+      // SphereFit sphereFit = optional.get();
+      // System.out.println(sphereFit);
       assertFalse(optional.isPresent());
     }
   }

@@ -4,13 +4,13 @@ package ch.ethz.idsc.tensor.opt;
 import java.io.Serializable;
 import java.util.Optional;
 
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
-import ch.ethz.idsc.tensor.mat.LinearSolve;
+import ch.ethz.idsc.tensor.mat.LeastSquares;
 import ch.ethz.idsc.tensor.mat.MatrixRank;
-import ch.ethz.idsc.tensor.mat.PseudoInverse;
 import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Sqrt;
@@ -29,14 +29,24 @@ public class SphereFit implements Serializable {
     Tensor b = Tensor.of(points.stream().map(Norm2Squared::ofVector));
     int rows = A.length();
     int cols = Unprotect.dimension1(A);
+    // try {
+    // Tensor x = LeastSquares.of(A, b);
+    // Tensor center = x.extract(0, cols - 1);
+    // return Optional.of(new SphereFit( //
+    // center, //
+    // Sqrt.FUNCTION.apply(x.Get(cols - 1).add(Norm2Squared.ofVector(center)))));
+    // } catch (Exception e) {
+    // // TODO: handle exception
+    // }
     if (rows < cols)
       return Optional.empty();
+    // TODO too much effort to establish solution of linear system here!
     SingularValueDecomposition svd = SingularValueDecomposition.of(A);
     if (MatrixRank.of(svd) < cols)
       return Optional.empty();
-    Tensor x = rows == cols //
-        ? LinearSolve.of(A, b)
-        : PseudoInverse.of(svd).dot(b);
+    Tensor x = ExactTensorQ.of(b) // implies that A is in exact precision
+        ? LeastSquares.usingLinearSolve(A, b)
+        : LeastSquares.of(svd, b);
     Tensor center = x.extract(0, cols - 1);
     return Optional.of(new SphereFit( //
         center, //

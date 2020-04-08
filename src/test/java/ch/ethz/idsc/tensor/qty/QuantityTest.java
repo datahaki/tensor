@@ -132,7 +132,7 @@ public class QuantityTest extends TestCase {
     String path = getClass().getResource("/io/qty/quantity0.csv").getPath();
     Tensor tensor = CsvFormat.parse( //
         Files.readAllLines(Paths.get(path)).stream(), //
-        string -> Tensors.fromString(string));
+        string -> Tensors.fromString("{" + string + "}"));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 2));
     assertTrue(tensor.Get(0, 0) instanceof Quantity);
     assertTrue(tensor.Get(0, 1) instanceof Quantity);

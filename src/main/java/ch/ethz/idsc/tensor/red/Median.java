@@ -1,8 +1,12 @@
 // code by jph
 package ch.ethz.idsc.tensor.red;
 
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Sort;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.InverseCDF;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Median.html">Median</a> */
@@ -25,5 +29,12 @@ public enum Median {
     return length % 2 == 0 //
         ? Mean.of(sorted.extract(index - 1, index + 1))
         : sorted.get(index);
+  }
+
+  /** @param distribution
+   * @return median of given probability distribution
+   * @throws Exception if distribution does not implement {@link InverseCDF} */
+  public static Scalar of(Distribution distribution) {
+    return InverseCDF.of(distribution).quantile(RationalScalar.HALF);
   }
 }

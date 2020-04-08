@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -8,6 +10,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.DeleteDuplicates;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
@@ -19,9 +22,9 @@ public class BinomialRandomVariateTest extends TestCase {
     assertEquals(BinomialDistribution.of(120000, DoubleScalar.of(0.0001)).getClass(), BinomialRandomVariate.class);
   }
 
-  public void testRandom() {
+  public void testRandom() throws ClassNotFoundException, IOException {
     int n = 200;
-    Distribution distribution = new BinomialRandomVariate(n, RealScalar.of(0.4));
+    Distribution distribution = Serialization.copy(new BinomialRandomVariate(n, RealScalar.of(0.4)));
     Scalar value = RandomVariate.of(distribution);
     assertTrue(Sign.isPositive(value));
     assertTrue(Scalars.lessThan(value, RealScalar.of(n)));

@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 /* package */ class NDecimal extends N {
   private final MathContext mathContext;
 
-  NDecimal(MathContext mathContext) {
+  public NDecimal(MathContext mathContext) {
     this.mathContext = mathContext;
   }
 

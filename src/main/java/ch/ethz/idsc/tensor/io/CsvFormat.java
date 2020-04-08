@@ -82,20 +82,17 @@ public enum CsvFormat {
    * @param stream of lines of file
    * @return tensor with rows defined by the entries of the input stream */
   public static Tensor parse(Stream<String> stream) {
-    return parse(stream, Tensors::fromString);
+    return parse(stream, CsvFormat::embrace);
   }
 
   /** Default function for parsing:
    * Tensors::fromString
    * 
-   * Example for extended functionality:
-   * string -> Tensors.fromString(string, Quantity::fromString)
-   * 
    * @param stream of lines of file
-   * @param function that parses a string to a tensor
+   * @param function that parses a row to a tensor
    * @return */
   public static Tensor parse(Stream<String> stream, Function<String, Tensor> function) {
-    return Tensor.of(stream.parallel().map(CsvFormat::embrace).map(function));
+    return Tensor.of(stream.parallel().map(function).sequential());
   }
 
   /** the scalar operator attempts to guarantee that the CSV import in Mathematica
@@ -125,7 +122,7 @@ public enum CsvFormat {
   }
 
   // helper function
-  private static String embrace(String string) {
-    return Tensor.OPENING_BRACKET + string + Tensor.CLOSING_BRACKET;
+  private static Tensor embrace(String string) {
+    return Tensors.fromString(Tensor.OPENING_BRACKET + string + Tensor.CLOSING_BRACKET);
   }
 }

@@ -187,8 +187,8 @@ import java.util.stream.Stream;
     if (list.isEmpty() || list.get(0) instanceof Scalar) { // quick hint whether this is a vector
       if (length() != tensor.length()) // <- check is necessary otherwise error might be undetected
         throw TensorRuntimeException.of(this, tensor); // dimensions mismatch
-      AtomicInteger atomicInteger = new AtomicInteger(-1);
-      return tensor.stream().map(rhs -> rhs.multiply((Scalar) list.get(atomicInteger.incrementAndGet()))) //
+      AtomicInteger atomicInteger = new AtomicInteger();
+      return tensor.stream().map(rhs -> rhs.multiply((Scalar) list.get(atomicInteger.getAndIncrement()))) //
           .reduce(Tensor::add).orElse(RealScalar.ZERO);
     }
     return Tensor.of(list.stream().map(entry -> entry.dot(tensor)));

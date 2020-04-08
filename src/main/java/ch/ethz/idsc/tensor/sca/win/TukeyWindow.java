@@ -17,7 +17,7 @@ public enum TukeyWindow implements ScalarUnaryOperator {
   FUNCTION;
 
   private static final Scalar _1_6 = RationalScalar.of(1, 6);
-  private static final Scalar _3_PI = RealScalar.of(3 * Math.PI);
+  private static final Scalar PI3 = RealScalar.of(Math.PI * 3);
 
   @Override
   public Scalar apply(Scalar x) {
@@ -25,7 +25,7 @@ public enum TukeyWindow implements ScalarUnaryOperator {
     if (Scalars.lessEquals(x, _1_6))
       return RealScalar.ONE;
     if (Scalars.lessThan(x, RationalScalar.HALF))
-      return RationalScalar.HALF.add(RationalScalar.HALF.multiply(Cos.FUNCTION.apply(x.subtract(_1_6).multiply(_3_PI))));
+      return RationalScalar.HALF.add(RationalScalar.HALF.multiply(Cos.FUNCTION.apply(x.subtract(_1_6).multiply(PI3))));
     return RealScalar.ZERO;
   }
 

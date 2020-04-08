@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,7 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Dimensions.html">Dimensions</a> */
-public class Dimensions {
+public class Dimensions implements Serializable {
   /** Examples:
    * <pre>
    * Dimensions.of[3.14] = {}
@@ -30,7 +31,7 @@ public class Dimensions {
     return new Dimensions(tensor).list();
   }
 
-  // ---
+  /***************************************************/
   /** list of set of lengths on all levels also includes length of scalars as Scalar.LENGTH == -1 */
   private final List<Set<Integer>> lengths = new ArrayList<>();
 

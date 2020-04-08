@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.pdf;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.red.Median;
 
 /** inverse of the cumulative distribution function of a given distribution
  * 
@@ -17,7 +18,9 @@ import ch.ethz.idsc.tensor.Scalar;
  * <p>Another application is to state confidence intervals to test hypotheses.
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/InverseCDF.html">InverseCDF</a> */
+ * <a href="https://reference.wolfram.com/language/ref/InverseCDF.html">InverseCDF</a>
+ * 
+ * @see Median */
 @FunctionalInterface
 public interface InverseCDF {
   /** @param distribution

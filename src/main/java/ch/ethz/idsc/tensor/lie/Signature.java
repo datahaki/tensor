@@ -13,6 +13,10 @@ import ch.ethz.idsc.tensor.alg.Ordering;
  * Signature[{0, 0, 2}] == 0
  * </pre>
  * 
+ * <pre>
+ * Signature[{}] == +1
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Signature.html">Signature</a>
  * 

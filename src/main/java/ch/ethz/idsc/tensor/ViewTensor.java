@@ -15,12 +15,14 @@ import ch.ethz.idsc.tensor.opt.LinearInterpolation;
  * Within the tensor library, ViewTensor is used to speed up the computations in
  * {@link LinearInterpolation}, and {@link ListCorrelate}. */
 /* package */ class ViewTensor extends TensorImpl {
-  static TensorImpl wrap(Tensor tensor) {
+  /** @param tensor
+   * @return */
+  public static TensorImpl wrap(Tensor tensor) {
     TensorImpl impl = (TensorImpl) tensor;
     return new ViewTensor(impl.list);
   }
 
-  // ---
+  /***************************************************/
   private ViewTensor(List<Tensor> list) {
     super(list);
   }

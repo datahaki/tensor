@@ -2,7 +2,6 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 /** <pre>
  * LinearSolve.of(vectors, values.pmul(vectors)) == matrix
@@ -12,13 +11,16 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Eigensystem.html">Eigensystem</a> */
 public interface Eigensystem {
-  /** @param matrix symmetric, non-empty, and real valued
+  /** Quote from Compact Numerical Methods:
+   * 1) All the eigenvalues of a real symmetric matrix are real.
+   * 2) It is possible to find a complete set of n eigenvectors for an order-n real
+   * symmetric matrix and these can be made mutually orthogonal.
+   * 
+   * @param matrix symmetric, non-empty, and real valued
    * @return eigensystem with vectors scaled to unit length
    * @throws Exception if input is not a symmetric matrix */
   static Eigensystem ofSymmetric(Tensor matrix) {
-    if (SymmetricMatrixQ.of(matrix))
-      return new JacobiMethod(matrix);
-    throw TensorRuntimeException.of(matrix);
+    return new JacobiMethod(SymmetricMatrixQ.require(matrix));
   }
 
   /** Careful: Mathematica orders the eigenvalues according to absolute value.

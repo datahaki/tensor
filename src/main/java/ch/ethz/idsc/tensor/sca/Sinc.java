@@ -2,11 +2,10 @@
 package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Series;
 
 /** for a complex scalar z the Sinc function is defined as
  * <pre>
@@ -14,21 +13,25 @@ import ch.ethz.idsc.tensor.alg.Series;
  * Sinc[0] = 1
  * </pre>
  * 
+ * <pre>
+ * Sinc[+Infinity] = 0
+ * Sinc[-Infinity] = 0
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Sinc.html">Sinc</a> */
 public enum Sinc implements ScalarUnaryOperator {
   FUNCTION;
 
-  /* package */ static final Scalar THRESHOLD = DoubleScalar.of(0.05);
-  private static final ScalarUnaryOperator SERIES = Series.of( //
-      Tensors.vector(1, 0, -6, 0, 120, 0, -5040, 0, 362880, 0, -39916800) //
-          .map(InvertUnlessZero.FUNCTION).map(N.DOUBLE));
-
   @Override
   public Scalar apply(Scalar scalar) {
-    return Scalars.lessThan(scalar.abs(), THRESHOLD) //
-        ? SERIES.apply(scalar)
-        : Sin.FUNCTION.apply(scalar).divide(scalar);
+    if (scalar.equals(DoubleScalar.POSITIVE_INFINITY) || //
+        scalar.equals(DoubleScalar.NEGATIVE_INFINITY))
+      return RealScalar.ZERO;
+    Scalar sin = Sin.FUNCTION.apply(scalar);
+    return Scalars.isZero(scalar) //
+        ? RealScalar.ONE
+        : sin.divide(scalar);
   }
 
   /** @param tensor

@@ -23,7 +23,12 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** traditional simplex algorithm that performs poorly on Klee-Minty cube */
 /* package */ class SimplexMethod {
-  static Tensor of(Tensor c, Tensor A, Tensor b, SimplexPivot simplexPivot) {
+  /** @param c
+   * @param A
+   * @param b
+   * @param simplexPivot
+   * @return */
+  public static Tensor of(Tensor c, Tensor A, Tensor b, SimplexPivot simplexPivot) {
     final int m = b.length();
     final int n = c.length();
     // System.out.println(m + " x " + n);
@@ -46,6 +51,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     return new SimplexMethod(tab, simplexImpl.ind, simplexPivot).getX(); // phase 2
   }
 
+  /***************************************************/
   final Tensor tab; // (m+1) x (n+1)
   final Tensor ind; // vector of length m
   final int m;

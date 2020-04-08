@@ -34,8 +34,8 @@ public class SchattenNorm extends VectorNorm implements NormInterface {
     return with(RealScalar.of(p));
   }
 
-  // ---
-  SchattenNorm(Scalar p) {
+  /***************************************************/
+  /* package */ SchattenNorm(Scalar p) {
     super(p);
   }
 

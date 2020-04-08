@@ -22,9 +22,15 @@ public interface QRDecomposition {
     return new QRDecompositionImpl(matrix, QRSignOperator.STABILITY);
   }
 
-  /** householder reflections that aim to preserve orientation.
-   * Attention: Function fails on general matrices!
+  /** householder reflections that aim to preserve orientation:
+   * Sign[Det[matrix]] == Sign[Det[Q]]
+   * 
+   * <p>Attention: Function fails on general matrices!
    * Use function to correct small deviations in an "almost"-orthogonal matrix
+   * 
+   * <p>Careful: when using "preserveOrientation" {@link #det()} of the returned
+   * instance of {@link QRDecomposition} gives the determinant of the matrix
+   * only up to sign!
    * 
    * @param matrix
    * @return qr-decomposition of matrix

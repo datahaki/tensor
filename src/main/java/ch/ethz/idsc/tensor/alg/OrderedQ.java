@@ -10,7 +10,8 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * <a href="https://reference.wolfram.com/language/ref/OrderedQ.html">OrderedQ</a> */
 public enum OrderedQ {
   ;
-  /** Hint:
+  /** Hint: the entries of the given tensor have to be comparable.
+   * For instance scalars of different unit are not comparable:
    * OrderedQ[{3[s], 1[s], 2[m]}] throws an Exception
    * 
    * @param tensor

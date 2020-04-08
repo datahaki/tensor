@@ -19,28 +19,28 @@ import ch.ethz.idsc.tensor.Unprotect;
   private final QRDecomposition qrDecomposition;
   private final int length;
 
-  public QRMathematica(QRDecomposition qrDecomposition) {
+  private QRMathematica(QRDecomposition qrDecomposition) {
     this.qrDecomposition = qrDecomposition;
     Tensor r = qrDecomposition.getR();
     length = Math.min(r.length(), Unprotect.dimension1(r));
   }
 
-  @Override
+  @Override // from QRDecomposition
   public Tensor getInverseQ() {
     return qrDecomposition.getInverseQ().extract(0, length);
   }
 
-  @Override
+  @Override // from QRDecomposition
   public Tensor getR() {
     return qrDecomposition.getR().extract(0, length);
   }
 
-  @Override
+  @Override // from QRDecomposition
   public Tensor getQ() {
     return Tensor.of(qrDecomposition.getQ().stream().map(row -> row.extract(0, length)));
   }
 
-  @Override
+  @Override // from QRDecomposition
   public Scalar det() {
     return qrDecomposition.det();
   }
