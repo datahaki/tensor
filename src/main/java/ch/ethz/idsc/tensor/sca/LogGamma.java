@@ -9,19 +9,22 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.Pi;
 
 /** <pre>
- * Log[Gamma[x]]
+ * LogGamma[x] == Log[Gamma[x]]
  * </pre>
  * 
- * Careful: Not consistent with Mathematica for z with Re[z] < 0
+ * <p>Careful: Generally not consistent with Mathematica for z with Re[z] < 0.
  * 
- * References:
+ * <p>References:
  * "Gamma, Beta, and Related Functions" in NR, 2007
  * 
  * "A Precision Approximation of the Gamma Function"
  * by C. Lanczos, 1964
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/LogGamma.html">LogGamma</a> */
+ * <a href="https://reference.wolfram.com/language/ref/LogGamma.html">LogGamma</a>
+ * 
+ * @see Gamma
+ * @see Beta */
 public enum LogGamma implements ScalarUnaryOperator {
   FUNCTION;
 

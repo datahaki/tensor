@@ -23,7 +23,7 @@ public class NormalizeUnlessZero extends Normalize {
     return new NormalizeUnlessZero(tensorScalarFunction);
   }
 
-  // ---
+  /***************************************************/
   private NormalizeUnlessZero(TensorScalarFunction tensorScalarFunction) {
     super(tensorScalarFunction);
   }

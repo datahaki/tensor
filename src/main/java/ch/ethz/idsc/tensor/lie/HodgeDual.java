@@ -7,11 +7,21 @@ import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Factorial;
 
-/** inspired by
- * <a href="https://reference.wolfram.com/language/ref/HodgeDual.html">HodgeDual</a> */
+/** <pre>
+ * Mathematica::HodgeDual[scalar, 0] is not defined
+ * Tensor-lib.::HodgeDual[scalar, 0] == scalar
+ * </pre>
+ * 
+ * <p>inspired by
+ * <a href="https://reference.wolfram.com/language/ref/HodgeDual.html">HodgeDual</a>
+ * 
+ * @see TensorRank
+ * @see LeviCivitaTensor */
 public enum HodgeDual {
   ;
-  /** @param tensor of array structure with dimensions d x ... x d
+  /** implementation is consistent with Mathematica for input restricted to the form below
+   * 
+   * @param tensor of array structure with dimensions d x ... x d
    * @param d
    * @return
    * @throws Exception if tensor is empty, or is not a regular array */

@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -65,6 +66,20 @@ public class HodgeDualTest extends TestCase {
       assertEquals(LeviCivitaTensor.of(d), HodgeDual.of(RealScalar.ONE, d));
     for (int d = 1; d < 5; ++d)
       assertEquals(RealScalar.ONE, HodgeDual.of(LeviCivitaTensor.of(d), d));
+  }
+
+  public void testScalar0() {
+    Tensor tensor = HodgeDual.of(Pi.HALF, 0);
+    assertEquals(tensor, Pi.HALF);
+  }
+
+  public void testScalar1() {
+    try {
+      HodgeDual.of(Tensors.vector(1, 2, 3), 0);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 
   public void testNonAlternating() {
