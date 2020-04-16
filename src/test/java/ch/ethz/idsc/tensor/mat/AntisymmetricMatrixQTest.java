@@ -28,4 +28,14 @@ public class AntisymmetricMatrixQTest extends TestCase {
     assertFalse(AntisymmetricMatrixQ.of(RealScalar.ONE));
     assertFalse(AntisymmetricMatrixQ.of(LieAlgebras.sl2()));
   }
+
+  public void testRequire() {
+    AntisymmetricMatrixQ.require(Tensors.fromString("{{0, 2}, {-2, 0}}"));
+    try {
+      AntisymmetricMatrixQ.require(Tensors.fromString("{{0, 2}, {-1, 0}}"));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

@@ -77,7 +77,8 @@ public enum NullSpace {
   }
 
   /** @param matrix of any dimensions
-   * @return list of orthogonal vectors that span the nullspace */
+   * @return list of orthogonal vectors that span the nullspace
+   * @see OrthogonalMatrixQ */
   public static Tensor usingQR(Tensor matrix) {
     return LeftNullSpace.usingQR(Transpose.of(matrix));
   }

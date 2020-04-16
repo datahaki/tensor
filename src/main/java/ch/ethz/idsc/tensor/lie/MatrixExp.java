@@ -31,7 +31,7 @@ public enum MatrixExp {
    * @throws Exception if given matrix is not a square matrix */
   public static Tensor of(Tensor matrix) {
     // LONGTERM the infinity norm is recommended
-    Scalar max = RealScalar.of(matrix.flatten(-1) //
+    Scalar max = RealScalar.of(matrix.flatten(1) //
         .map(Scalar.class::cast) //
         .map(Scalar::abs) //
         .map(Scalar::number) //

@@ -12,13 +12,8 @@ public class GammaDistributionTest extends TestCase {
   public void testPdf() {
     Distribution distribution = GammaDistribution.of(RealScalar.of(1.123), RealScalar.of(2.3));
     PDF pdf = PDF.of(distribution);
-    {
-      Scalar prob = pdf.at(RealScalar.of(0.78));
-      assertTrue(Chop._08.close(prob, DoubleScalar.of(0.28770929331586703)));
-    }
-    {
-      assertTrue(Scalars.isZero(pdf.at(RealScalar.of(-0.3))));
-    }
+    Chop._08.requireClose(pdf.at(RealScalar.of(0.78)), DoubleScalar.of(0.28770929331586703));
+    assertTrue(Scalars.isZero(pdf.at(RealScalar.of(-0.3))));
   }
 
   public void testExp() {

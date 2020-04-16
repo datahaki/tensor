@@ -157,4 +157,22 @@ public class PowerTest extends TestCase {
       // ---
     }
   }
+
+  public void testFailNullNumber() {
+    try {
+      Power.function((Number) null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testFailNullScalar() {
+    try {
+      Power.function((Scalar) null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

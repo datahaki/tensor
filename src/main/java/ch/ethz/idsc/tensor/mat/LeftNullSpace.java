@@ -54,7 +54,8 @@ public enum LeftNullSpace {
   }
 
   /** @param matrix of any dimensions
-   * @return */
+   * @return list of orthogonal vectors that span the left nullspace
+   * @see OrthogonalMatrixQ */
   public static Tensor usingQR(Tensor matrix) {
     int rows = matrix.length();
     int cols = Unprotect.dimension1(matrix);
@@ -63,7 +64,12 @@ public enum LeftNullSpace {
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
     Tensor r = qrDecomposition.getR();
     Tensor qinv = qrDecomposition.getInverseQ();
+    // return Tensor.of(IntStream.range(0, qinv.length()) //
+    // .filter(i->cols<=i || Tolerance.CHOP.allZero(r.Get(i, i))) //
+    // .mapToObj(qinv::get));
     if (IntStream.range(0, cols).mapToObj(i -> r.Get(i, i)).map(Tolerance.CHOP).anyMatch(Scalars::isZero)) {
+      // TODO implementation is not satisfactory
+      // System.out.println("LNS USING SVD");
       Tensor nspace = NullSpace.usingSvd(Transpose.of(qrDecomposition.getR().extract(0, cols)));
       Tensor upper = Tensor.of(qinv.stream().limit(cols));
       return Tensor.of(Stream.concat( //

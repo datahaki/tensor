@@ -23,12 +23,12 @@ public class CsvHelperTest extends TestCase {
   }
 
   public void testString1() {
-    Scalar scalar = StringScalar.of("here!");
-    assertEquals(CsvHelper.FUNCTION.apply(scalar).toString(), "\"here!\"");
+    Scalar scalar = StringScalar.of("abc!");
+    assertEquals(CsvHelper.FUNCTION.apply(scalar).toString(), "\"abc!\"");
   }
 
   public void testString2() {
-    String string = "\"here!\"";
+    String string = "\"abc!\"";
     Scalar scalar = StringScalar.of(string);
     assertEquals(CsvHelper.FUNCTION.apply(scalar).toString(), string);
   }
@@ -41,8 +41,8 @@ public class CsvHelperTest extends TestCase {
   }
 
   public void testQuotes() {
-    Scalar inQuotes = StringScalar.of("\"here\"");
-    assertEquals(CsvHelper.wrap(StringScalar.of("here")), inQuotes);
+    Scalar inQuotes = StringScalar.of("\"abc\"");
+    assertEquals(CsvHelper.wrap(StringScalar.of("abc")), inQuotes);
     assertEquals(CsvHelper.wrap(inQuotes), inQuotes);
   }
 
@@ -88,19 +88,19 @@ public class CsvHelperTest extends TestCase {
 
   public void testFail() {
     try {
-      CsvHelper.wrap(StringScalar.of("\"here\"\""));
+      CsvHelper.wrap(StringScalar.of("\"abc\"\""));
       fail();
     } catch (Exception exception) {
       // ---
     }
     try {
-      CsvHelper.wrap(StringScalar.of("here\""));
+      CsvHelper.wrap(StringScalar.of("abc\""));
       fail();
     } catch (Exception exception) {
       // ---
     }
     try {
-      CsvHelper.wrap(StringScalar.of("\"here"));
+      CsvHelper.wrap(StringScalar.of("\"abc"));
       fail();
     } catch (Exception exception) {
       // ---

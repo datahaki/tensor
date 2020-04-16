@@ -3,8 +3,11 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.math.BigInteger;
 
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.BinaryPower;
+import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.sca.Power;
 
 /** Implementation is consistent with Mathematica.
  * 
@@ -32,6 +35,15 @@ public class MatrixPower extends BinaryPower<Tensor> {
   public static Tensor of(Tensor matrix, BigInteger exponent) {
     return new MatrixPower(matrix.length()) //
         .apply(SquareMatrixQ.require(matrix), exponent);
+  }
+
+  /** @param matrix symmetric
+   * @param exponent
+   * @return */
+  public static Tensor ofSymmetric(Tensor matrix, Scalar exponent) {
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+    Tensor avec = eigensystem.vectors(); // OrthogonalMatrixQ
+    return Transpose.of(avec).dot(eigensystem.values().map(Power.function(exponent)).pmul(avec));
   }
 
   /***************************************************/

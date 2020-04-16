@@ -45,9 +45,9 @@ public enum LeastSquares {
     return of(SingularValueDecomposition.of(matrix), b);
   }
 
-  /** @param svd
+  /** @param svd of matrix
    * @param b
-   * @return */
+   * @return pseudo inverse of given matrix dot b */
   public static Tensor of(SingularValueDecomposition svd, Tensor b) {
     if (VectorQ.of(b)) { // when b is vector then bypass construction of pseudo inverse matrix
       Tensor wi = svd.values().map(Tolerance.CHOP).map(InvertUnlessZero.FUNCTION);
