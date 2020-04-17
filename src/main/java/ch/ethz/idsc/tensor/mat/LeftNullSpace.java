@@ -68,9 +68,10 @@ public enum LeftNullSpace {
     // .filter(i->cols<=i || Tolerance.CHOP.allZero(r.Get(i, i))) //
     // .mapToObj(qinv::get));
     if (IntStream.range(0, cols).mapToObj(i -> r.Get(i, i)).map(Tolerance.CHOP).anyMatch(Scalars::isZero)) {
-      // TODO implementation is not satisfactory
+      // LONGTERM implementation is not satisfactory
       // System.out.println("LNS USING SVD");
       Tensor nspace = NullSpace.usingSvd(Transpose.of(qrDecomposition.getR().extract(0, cols)));
+      // System.out.println(Pretty.of(nspace.map(Round._4)));
       Tensor upper = Tensor.of(qinv.stream().limit(cols));
       return Tensor.of(Stream.concat( //
           nspace.stream().map(row -> row.dot(upper)), //

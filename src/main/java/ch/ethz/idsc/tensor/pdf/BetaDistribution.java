@@ -12,57 +12,59 @@ import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/BetaDistribution.html">BetaDistribution</a> */
+ * <a href="https://reference.wolfram.com/language/ref/BetaDistribution.html">BetaDistribution</a>
+ * 
+ * @see DirichletDistribution */
 public class BetaDistribution implements Distribution, MeanInterface, PDF, VarianceInterface, Serializable {
-  /** @param alpha positive
-   * @param beta positive
+  /** @param a1 positive
+   * @param a2 positive
    * @return */
-  public static Distribution of(Scalar alpha, Scalar beta) {
-    if (Scalars.lessEquals(alpha, RealScalar.ZERO) || //
-        Scalars.lessEquals(beta, RealScalar.ZERO))
-      throw TensorRuntimeException.of(alpha, beta);
-    // LONGTERM for beta == 1 OR alpha == 1 the distribution does not require the beta function
-    return new BetaDistribution(alpha, beta);
+  public static Distribution of(Scalar a1, Scalar a2) {
+    if (Scalars.lessEquals(a1, RealScalar.ZERO) || //
+        Scalars.lessEquals(a2, RealScalar.ZERO))
+      throw TensorRuntimeException.of(a1, a2);
+    // LONGTERM for a1 == 1 OR a2 == 1 the distribution does not require the beta function
+    return new BetaDistribution(a1, a2);
   }
 
-  /** @param alpha positive
-   * @param beta positive
+  /** @param a1 positive
+   * @param a2 positive
    * @return */
-  public static Distribution of(Number alpha, Number beta) {
-    return of(RealScalar.of(alpha), RealScalar.of(beta));
+  public static Distribution of(Number a1, Number a2) {
+    return of(RealScalar.of(a1), RealScalar.of(a2));
   }
 
   /***************************************************/
-  private final Scalar alpha;
-  private final Scalar beta;
+  private final Scalar a1;
+  private final Scalar a2;
   private final Scalar factor;
-  private final ScalarUnaryOperator power_a;
-  private final ScalarUnaryOperator power_b;
+  private final ScalarUnaryOperator power1;
+  private final ScalarUnaryOperator power2;
 
-  private BetaDistribution(Scalar alpha, Scalar beta) {
-    this.alpha = alpha;
-    this.beta = beta;
-    power_a = Power.function(alpha.subtract(RealScalar.ONE));
-    power_b = Power.function(beta.subtract(RealScalar.ONE));
-    factor = Beta.of(alpha, beta);
+  private BetaDistribution(Scalar a1, Scalar a2) {
+    this.a1 = a1;
+    this.a2 = a2;
+    power1 = Power.function(a1.subtract(RealScalar.ONE));
+    power2 = Power.function(a2.subtract(RealScalar.ONE));
+    factor = Beta.of(a1, a2);
   }
 
   @Override // from PDF
   public Scalar at(Scalar x) {
     return Scalars.lessThan(RealScalar.ZERO, x) //
         && Scalars.lessThan(x, RealScalar.ONE) //
-            ? power_a.apply(x).multiply(power_b.apply(RealScalar.ONE.subtract(x))).divide(factor)
+            ? power1.apply(x).multiply(power2.apply(RealScalar.ONE.subtract(x))).divide(factor)
             : RealScalar.ZERO;
   }
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return alpha.divide(alpha.add(beta));
+    return a1.divide(a1.add(a2));
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    Scalar a_b = alpha.add(beta);
-    return alpha.divide(a_b).multiply(beta).divide(a_b).divide(RealScalar.ONE.add(a_b));
+    Scalar a12 = a1.add(a2);
+    return a1.divide(a12).multiply(a2).divide(a12).divide(RealScalar.ONE.add(a12));
   }
 }

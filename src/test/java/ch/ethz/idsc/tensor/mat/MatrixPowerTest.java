@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import java.util.BitSet;
 
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -14,6 +15,8 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Imag;
+import ch.ethz.idsc.tensor.sca.Real;
 import junit.framework.TestCase;
 
 public class MatrixPowerTest extends TestCase {
@@ -115,6 +118,19 @@ public class MatrixPowerTest extends TestCase {
         Chop._08.requireClose(sqrt.dot(sqrt).dot(sqrt).dot(sqrt), matrix);
       }
     }
+  }
+
+  public void testComplexDiagnoal() {
+    Tensor tensor = MatrixPower.ofSymmetric(DiagonalMatrix.of(-1, 4), RationalScalar.HALF);
+    Tolerance.CHOP.requireClose(tensor, Tensors.fromString("{{I, 0}, {0, 2}}"));
+  }
+
+  public void testComplex() {
+    Tensor tensor = MatrixPower.ofSymmetric(Tensors.fromString("{{3, 4}, {4, -5.}}"), RealScalar.of(0.345));
+    Tensor re = Tensors.fromString("{{1.58297621781119750, +0.28292717088123903}, {+0.2829271708812389, 1.0171218760487195}}");
+    Tensor im = Tensors.fromString("{{0.24891109223875751, -0.60092453470790870}, {-0.6009245347079087, 1.4507601616545749}}");
+    Tolerance.CHOP.requireClose(Real.of(tensor), re);
+    Tolerance.CHOP.requireClose(Imag.of(tensor), im);
   }
 
   public void testNonSymmetricFail() {
