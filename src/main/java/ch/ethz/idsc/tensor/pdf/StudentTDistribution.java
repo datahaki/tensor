@@ -16,7 +16,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/StudentTDistribution.html">StudentTDistribution</a> */
-public class StudentTDistribution implements Distribution, MeanInterface, PDF, VarianceInterface, Serializable {
+public class StudentTDistribution implements Distribution, //
+    MeanInterface, PDF, VarianceInterface, Serializable {
   private static final Scalar TWO = RealScalar.of(2);
 
   /** @param mu
@@ -53,23 +54,28 @@ public class StudentTDistribution implements Distribution, MeanInterface, PDF, V
     factor = Sqrt.FUNCTION.apply(v).multiply(sigma).multiply(Beta.of(v.multiply(RationalScalar.HALF), RationalScalar.HALF));
   }
 
-  @Override
+  @Override // from PDF
   public Scalar at(Scalar x) {
     Scalar f = x.subtract(mu).divide(sigma);
     return power.apply(v.divide(f.multiply(f).add(v))).divide(factor);
   }
 
-  @Override
+  @Override // from MeanInterface
   public Scalar mean() {
     return Scalars.lessThan(RealScalar.ONE, v) //
         ? mu
         : DoubleScalar.INDETERMINATE;
   }
 
-  @Override
+  @Override // from VarianceInterface
   public Scalar variance() {
     return Scalars.lessThan(TWO, v) //
         ? v.multiply(sigma).multiply(sigma).divide(v.subtract(TWO))
         : DoubleScalar.INDETERMINATE;
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%s, %s, %s]", getClass().getSimpleName(), mu, sigma, v);
   }
 }

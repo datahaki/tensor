@@ -15,8 +15,8 @@ import ch.ethz.idsc.tensor.sca.Tan;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CauchyDistribution.html">CauchyDistribution</a> */
-public class CauchyDistribution extends AbstractContinuousDistribution //
-    implements InverseCDF, Serializable {
+public class CauchyDistribution extends AbstractContinuousDistribution implements //
+    InverseCDF, Serializable {
   /** @param a
    * @param b positive
    * @return */
@@ -43,7 +43,7 @@ public class CauchyDistribution extends AbstractContinuousDistribution //
   @Override // from PDF
   public Scalar at(Scalar x) {
     Scalar ax_b = x.subtract(a).divide(b);
-    return RealScalar.ONE.add(ax_b.multiply(ax_b)).multiply(Pi.VALUE).multiply(b);
+    return RealScalar.ONE.add(ax_b.multiply(ax_b)).reciprocal().divide(Pi.VALUE).divide(b);
   }
 
   @Override // from CDF

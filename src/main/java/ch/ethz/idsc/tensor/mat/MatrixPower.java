@@ -42,8 +42,8 @@ public class MatrixPower extends BinaryPower<Tensor> {
    * @return */
   public static Tensor ofSymmetric(Tensor matrix, Scalar exponent) {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-    Tensor avec = eigensystem.vectors(); // OrthogonalMatrixQ
-    return Transpose.of(avec).dot(eigensystem.values().map(Power.function(exponent)).pmul(avec));
+    Tensor vectors = eigensystem.vectors(); // OrthogonalMatrixQ
+    return Transpose.of(vectors).dot(eigensystem.values().map(Power.function(exponent)).pmul(vectors));
   }
 
   /***************************************************/

@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.sca.Beta;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
-/** <p>inspired by
+/** inspired by
  * <a href="https://reference.wolfram.com/language/ref/BetaDistribution.html">BetaDistribution</a>
  * 
  * @see DirichletDistribution */

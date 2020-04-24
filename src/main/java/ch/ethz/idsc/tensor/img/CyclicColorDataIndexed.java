@@ -21,7 +21,7 @@ public class CyclicColorDataIndexed extends BaseColorDataIndexed {
   private final Mod mod;
 
   /** @param tensor with dimensions N x 4 where each row encodes {R, G, B, A} */
-  CyclicColorDataIndexed(Tensor tensor) {
+  /* package */ CyclicColorDataIndexed(Tensor tensor) {
     super(tensor);
     mod = Mod.function(tensor.length());
   }

@@ -21,7 +21,7 @@ public class StrictColorDataIndexed extends BaseColorDataIndexed {
 
   /***************************************************/
   /** @param tensor with dimensions N x 4 where each row encodes {R, G, B, A} */
-  StrictColorDataIndexed(Tensor tensor) {
+  /* package */ StrictColorDataIndexed(Tensor tensor) {
     super(tensor);
   }
 

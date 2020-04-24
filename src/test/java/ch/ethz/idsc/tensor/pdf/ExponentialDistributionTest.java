@@ -11,11 +11,14 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.qty.UnitConvert;
 import ch.ethz.idsc.tensor.red.Mean;
+import ch.ethz.idsc.tensor.red.Median;
 import ch.ethz.idsc.tensor.sca.Exp;
+import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
@@ -70,6 +73,7 @@ public class ExponentialDistributionTest extends TestCase {
     assertEquals(Expectation.mean(distribution), mean);
     Scalar diff = Mean.of(all).Get().subtract(mean).abs();
     assertTrue(Scalars.lessThan(diff, RealScalar.of(0.05)));
+    Tolerance.CHOP.requireClose(Median.of(distribution), Log.FUNCTION.apply(RealScalar.of(2)).divide(lambda));
   }
 
   public void testFailL() {
