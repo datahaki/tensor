@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.sca.Abs;
 import junit.framework.TestCase;
 
 public class DiscreteCDFTest extends TestCase {
@@ -47,7 +48,7 @@ public class DiscreteCDFTest extends TestCase {
     assertFalse(discreteCDF.cdf_finished());
     Scalar top = cdf.p_lessEquals(RealScalar.of(1000000));
     assertTrue(Scalars.lessThan( //
-        top.subtract(RealScalar.ONE).abs(), //
+        Abs.between(top, RealScalar.ONE), //
         DiscreteCDF.CDF_NUMERIC_THRESHOLD));
     assertTrue(discreteCDF.cdf_finished());
   }

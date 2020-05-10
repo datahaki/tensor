@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
@@ -56,7 +57,7 @@ public class VectorNorm implements VectorNormInterface, Serializable {
   public Scalar ofVector(Tensor vector) {
     return Power.of(vector.stream() //
         .map(Scalar.class::cast) //
-        .map(Scalar::abs) //
+        .map(Abs.FUNCTION) //
         .map(p_power) //
         .reduce(Scalar::add).get(), //
         p_reciprocal);

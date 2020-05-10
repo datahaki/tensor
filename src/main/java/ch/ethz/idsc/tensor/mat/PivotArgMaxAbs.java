@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.Abs;
 
 /** selects entry with largest absolute value
  * 
@@ -16,10 +17,10 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 
   @Override // from Pivot
   public int get(int row, int col, int[] ind, Tensor[] lhs) {
-    Scalar max = value(lhs[ind[row]].Get(col).abs());
+    Scalar max = value(Abs.FUNCTION.apply(lhs[ind[row]].Get(col)));
     int arg = row;
     for (int i = row + 1; i < ind.length; ++i) {
-      Scalar cmp = value(lhs[ind[i]].Get(col).abs());
+      Scalar cmp = Abs.FUNCTION.apply(value(lhs[ind[i]].Get(col)));
       if (Scalars.lessThan(max, cmp)) {
         max = cmp;
         arg = i;

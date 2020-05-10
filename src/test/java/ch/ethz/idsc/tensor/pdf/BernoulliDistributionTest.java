@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Tally;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
 import junit.framework.TestCase;
 
@@ -50,7 +51,7 @@ public class BernoulliDistributionTest extends TestCase {
     long v0 = map.get(RealScalar.ZERO);
     long v1 = map.get(RealScalar.ONE);
     Scalar ratio = RationalScalar.of(v1, v0 + v1);
-    Scalar dev = N.DOUBLE.of(ratio.subtract(p).abs());
+    Scalar dev = N.DOUBLE.of(Abs.between(ratio, p));
     assertTrue(Scalars.lessThan(dev, RealScalar.of(0.07)));
   }
 

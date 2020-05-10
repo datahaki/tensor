@@ -19,7 +19,7 @@ public enum AbsSquared implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ConjugateInterface)
       return scalar.multiply(Conjugate.FUNCTION.apply(scalar));
-    Scalar abs = scalar.abs();
+    Scalar abs = Abs.FUNCTION.apply(scalar);
     return abs.multiply(abs);
   }
 

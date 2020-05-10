@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.mat.SpectrogramArray;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
 
 /** Mathematica::Spectrogram has the option to multiply the data segments with a window function,
@@ -37,6 +38,6 @@ public enum Spectrogram {
   public static Tensor array(Tensor vector) {
     Tensor tensor = SpectrogramArray.of(vector);
     int half = Unprotect.dimension1(tensor) / 2;
-    return Tensors.vector(i -> tensor.get(Tensor.ALL, half - i - 1).map(Scalar::abs), half);
+    return Tensors.vector(i -> tensor.get(Tensor.ALL, half - i - 1).map(Abs.FUNCTION), half);
   }
 }

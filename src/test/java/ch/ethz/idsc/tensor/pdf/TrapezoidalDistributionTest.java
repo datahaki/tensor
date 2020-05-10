@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.red.Mean;
+import ch.ethz.idsc.tensor.sca.Abs;
 import junit.framework.TestCase;
 
 public class TrapezoidalDistributionTest extends TestCase {
@@ -74,7 +75,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     }
     Scalar meanCalc = distribution.mean();
     Scalar meanSamples = (Scalar) Mean.of(all);
-    Scalar diff = meanCalc.subtract(meanSamples).abs();
+    Scalar diff = Abs.between(meanCalc, meanSamples);
     assertTrue(Scalars.lessEquals(diff, RealScalar.of(0.5)));
   }
 

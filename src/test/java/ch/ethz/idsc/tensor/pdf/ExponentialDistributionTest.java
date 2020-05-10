@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.qty.UnitConvert;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Median;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -71,7 +72,7 @@ public class ExponentialDistributionTest extends TestCase {
     }
     Scalar mean = lambda.reciprocal();
     assertEquals(Expectation.mean(distribution), mean);
-    Scalar diff = Mean.of(all).Get().subtract(mean).abs();
+    Scalar diff = Abs.between(Mean.of(all).Get(), mean);
     assertTrue(Scalars.lessThan(diff, RealScalar.of(0.05)));
     Tolerance.CHOP.requireClose(Median.of(distribution), Log.FUNCTION.apply(RealScalar.of(2)).divide(lambda));
   }

@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.sca.Abs;
 
 /** class performs the integration of probabilities to calculate the cumulative distribution function
  * whenever there is no closed form expression for the terms. */
@@ -71,7 +72,7 @@ import ch.ethz.idsc.tensor.Scalars;
     finished |= cumprob.equals(RealScalar.ONE);
     finished |= !ExactScalarQ.of(cumprob) && //
         p_equals.equals(RealScalar.ZERO) && //
-        Scalars.lessThan(cumprob.subtract(RealScalar.ONE).abs(), CDF_NUMERIC_THRESHOLD);
+        Scalars.lessThan(Abs.between(cumprob, RealScalar.ONE), CDF_NUMERIC_THRESHOLD);
     return finished;
   }
 

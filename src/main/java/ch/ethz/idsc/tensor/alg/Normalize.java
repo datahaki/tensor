@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Abs;
 
 /** Normalize also works for tensors with entries of type Quantity.
  * The computation is consistent with Mathematica:
@@ -83,14 +84,14 @@ public class Normalize implements TensorUnaryOperator {
   /* package */ final Tensor normalize(Tensor vector, Scalar scalar) {
     vector = vector.divide(scalar); // eliminate common Unit if present
     scalar = tensorScalarFunction.apply(vector); // for verification
-    Scalar error_next = scalar.subtract(RealScalar.ONE).abs(); // error
+    Scalar error_next = Abs.between(scalar, RealScalar.ONE); // error
     Scalar error_prev = DoubleScalar.POSITIVE_INFINITY;
     if (Scalars.nonZero(error_next))
       while (Scalars.lessThan(error_next, error_prev)) { // iteration
         vector = vector.divide(scalar);
         scalar = tensorScalarFunction.apply(vector);
         error_prev = error_next;
-        error_next = scalar.subtract(RealScalar.ONE).abs();
+        error_next = Abs.between(scalar, RealScalar.ONE);
       }
     Tolerance.CHOP.requireZero(error_next);
     return vector;

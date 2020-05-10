@@ -27,6 +27,6 @@ public enum Norm1 implements NormInterface {
    * @return sum of absolute values of scalars in given stream
    * @throws Exception if stream is empty */
   public static Scalar ofVector(Stream<Scalar> stream) {
-    return stream.map(Scalar::abs).reduce(Scalar::add).get();
+    return stream.map(Abs.FUNCTION).reduce(Scalar::add).get();
   }
 }

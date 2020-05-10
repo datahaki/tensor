@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** Hypot computes
@@ -21,8 +22,8 @@ public enum Hypot {
    * @param b
    * @return Sqrt[a * a + b * b] */
   public static Scalar of(Scalar a, Scalar b) {
-    Scalar ax = a.abs();
-    Scalar ay = b.abs();
+    Scalar ax = Abs.FUNCTION.apply(a);
+    Scalar ay = Abs.FUNCTION.apply(b);
     Scalar min = Min.of(ax, ay);
     Scalar max = Max.of(ax, ay);
     if (Scalars.isZero(min))
@@ -46,7 +47,7 @@ public enum Hypot {
    * @return 2-norm of vector
    * @throws Exception if vector is empty, or vector contains NaN */
   public static Scalar ofVector(Tensor vector) {
-    Tensor abs = vector.map(Scalar::abs);
+    Tensor abs = vector.map(Abs.FUNCTION);
     Scalar max = abs.stream().reduce(Max::of).get().Get();
     if (Scalars.isZero(max))
       return max;

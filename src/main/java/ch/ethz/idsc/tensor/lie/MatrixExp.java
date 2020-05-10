@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.MatrixPower;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Log;
@@ -33,7 +34,7 @@ public enum MatrixExp {
     // LONGTERM the infinity norm is recommended
     Scalar max = RealScalar.of(matrix.flatten(1) //
         .map(Scalar.class::cast) //
-        .map(Scalar::abs) //
+        .map(Abs.FUNCTION) //
         .map(Scalar::number) //
         .mapToDouble(Number::doubleValue) //
         .reduce(Math::max) //

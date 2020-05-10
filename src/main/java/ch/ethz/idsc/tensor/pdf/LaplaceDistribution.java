@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -40,12 +41,12 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
 
   @Override // from PDF
   public Scalar at(Scalar x) {
-    return Exp.FUNCTION.apply(x.subtract(mean).abs().negate().divide(beta)).divide(beta.add(beta));
+    return Exp.FUNCTION.apply(Abs.between(x, mean).negate().divide(beta)).divide(beta.add(beta));
   }
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
-    Scalar p = Exp.FUNCTION.apply(x.subtract(mean).abs().negate().divide(beta)).multiply(RationalScalar.HALF);
+    Scalar p = Exp.FUNCTION.apply(Abs.between(x, mean).negate().divide(beta)).multiply(RationalScalar.HALF);
     return Scalars.lessEquals(mean, x) //
         ? RealScalar.ONE.subtract(p)
         : p;

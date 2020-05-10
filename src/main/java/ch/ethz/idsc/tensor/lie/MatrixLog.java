@@ -38,7 +38,7 @@ public enum MatrixLog {
    * @return */
   public static Tensor ofSymmetric(Tensor matrix) {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-    Scalar exponent = RationalScalar.of(1, 2); // TODO
+    Scalar exponent = RationalScalar.of(1, 2); // TODO adapt exponent to matrix
     Tensor avec = eigensystem.vectors();
     Tensor m = Transpose.of(avec).dot(eigensystem.values().map(Power.function(exponent)).pmul(avec));
     return series(m).multiply(exponent.reciprocal());

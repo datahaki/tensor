@@ -29,15 +29,6 @@ public class SphereFit implements Serializable {
     Tensor b = Tensor.of(points.stream().map(Norm2Squared::ofVector));
     int rows = A.length();
     int cols = Unprotect.dimension1(A);
-    // try {
-    // Tensor x = LeastSquares.of(A, b);
-    // Tensor center = x.extract(0, cols - 1);
-    // return Optional.of(new SphereFit( //
-    // center, //
-    // Sqrt.FUNCTION.apply(x.Get(cols - 1).add(Norm2Squared.ofVector(center)))));
-    // } catch (Exception e) {
-    // // TODO: handle exception
-    // }
     if (rows < cols)
       return Optional.empty();
     // TODO too much effort to establish solution of linear system here!

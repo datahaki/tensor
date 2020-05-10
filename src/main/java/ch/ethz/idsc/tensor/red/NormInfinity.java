@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.red;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.sca.Abs;
 
 /** infinity-norm, for vectors max_i |a_i| */
 /* package */ enum NormInfinity implements NormInterface {
@@ -12,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
   public Scalar ofVector(Tensor vector) {
     return vector.stream() //
         .map(Scalar.class::cast) //
-        .map(Scalar::abs) //
+        .map(Abs.FUNCTION) //
         .reduce(Max::of).get();
   }
 

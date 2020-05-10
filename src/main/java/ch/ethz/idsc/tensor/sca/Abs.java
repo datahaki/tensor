@@ -25,6 +25,6 @@ public enum Abs implements ScalarUnaryOperator {
    * @param b
    * @return |a - b| */
   public static Scalar between(Scalar a, Scalar b) {
-    return a.subtract(b).abs();
+    return FUNCTION.apply(a.subtract(b));
   }
 }

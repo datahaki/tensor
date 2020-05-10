@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.alg.Ordering;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Norm1;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** The Jacobi transformations of a real symmetric matrix establishes the
@@ -63,20 +64,20 @@ import ch.ethz.idsc.tensor.sca.Sign;
           : RealScalar.ZERO;
       for (int ip = 0; ip < n - 1; ++ip) {
         for (int iq = ip + 1; iq < n; ++iq) {
-          Scalar g = HUNDRED.multiply(A.Get(ip, iq).abs());
+          Scalar g = HUNDRED.multiply(Abs.FUNCTION.apply(A.Get(ip, iq)));
           if (4 < iteration && //
-              Scalars.lessEquals(g, EPS.multiply(d.Get(ip).abs())) && //
-              Scalars.lessEquals(g, EPS.multiply(d.Get(iq).abs()))) {
+              Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(d.Get(ip)))) && //
+              Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(d.Get(iq))))) {
             A.set(Scalar::zero, ip, iq);
           } else //
-          if (Scalars.lessThan(tresh, A.Get(ip, iq).abs())) {
+          if (Scalars.lessThan(tresh, Abs.FUNCTION.apply(A.Get(ip, iq)))) {
             Scalar h = d.Get(iq).subtract(d.Get(ip));
             Scalar t;
-            if (Scalars.lessEquals(g, EPS.multiply(h.abs()))) {
+            if (Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(h)))) {
               t = A.Get(ip, iq).divide(h);
             } else {
               Scalar theta = RationalScalar.HALF.multiply(h).divide(A.Get(ip, iq));
-              t = theta.abs().add(Hypot.of(theta, RealScalar.ONE)).reciprocal();
+              t = Abs.FUNCTION.apply(theta).add(Hypot.of(theta, RealScalar.ONE)).reciprocal();
               if (Sign.isNegative(theta))
                 t = t.negate();
             }
