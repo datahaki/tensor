@@ -46,11 +46,6 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
   }
 
   @Override // from Scalar
-  public Scalar abs() {
-    return this;
-  }
-
-  @Override // from Scalar
   public Number number() {
     // since Boolean is not an instance of Number, we return type Integer
     return value //

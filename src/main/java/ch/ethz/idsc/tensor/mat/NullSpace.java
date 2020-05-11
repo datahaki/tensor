@@ -76,6 +76,10 @@ public enum NullSpace {
     return LeftNullSpace.usingRowReduce(Transpose.of(matrix), SquareMatrixQ.require(identity));
   }
 
+  public static Tensor usingRowReduce(Tensor matrix, Tensor identity, Pivot pivot) {
+    return LeftNullSpace.usingRowReduce(Transpose.of(matrix), SquareMatrixQ.require(identity), pivot);
+  }
+
   /** @param matrix of any dimensions
    * @return list of orthogonal vectors that span the nullspace
    * @see OrthogonalMatrixQ */

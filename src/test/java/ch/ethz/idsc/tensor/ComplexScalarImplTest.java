@@ -24,7 +24,7 @@ public class ComplexScalarImplTest extends TestCase {
   public void testAbs() {
     ComplexScalar s = (ComplexScalar) ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));
     // ----------------------------------------- 0.668539037337719303091638399542
-    Scalar a = s.abs(); // --------------------- 0.6685390373377194
+    Scalar a = Abs.of(s); // --------------------- 0.6685390373377194
     Scalar c = RationalScalar.of(1609, 3600); // 0.6685390373377192
     Tensor r = Sqrt.of(c);
     double d = Math.sqrt(c.number().doubleValue());
@@ -37,7 +37,7 @@ public class ComplexScalarImplTest extends TestCase {
 
   public void testAbs2() {
     Scalar s = ComplexScalar.of(RealScalar.of(-3), RealScalar.of(4));
-    assertTrue(s.abs() instanceof RationalScalar);
+    assertTrue(Abs.of(s) instanceof RationalScalar);
   }
 
   public void testFalseConstruct() {

@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.sca.AbsInterface;
 import ch.ethz.idsc.tensor.sca.ConjugateInterface;
 import ch.ethz.idsc.tensor.sca.ExpInterface;
 import ch.ethz.idsc.tensor.sca.LogInterface;
@@ -26,7 +27,7 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Quaternion.html">Quaternion</a> */
 public interface Quaternion extends Scalar, //
-    ConjugateInterface, ExpInterface, LogInterface, PowerInterface, SqrtInterface {
+    AbsInterface, ConjugateInterface, ExpInterface, LogInterface, PowerInterface, SqrtInterface {
   static final Quaternion ZERO = of(0, 0, 0, 0);
   static final Quaternion ONE = of(1, 0, 0, 0);
 

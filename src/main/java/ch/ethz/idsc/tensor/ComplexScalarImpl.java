@@ -55,11 +55,6 @@ import ch.ethz.idsc.tensor.sca.Sinh;
 
   /***************************************************/
   @Override // from Scalar
-  public Scalar abs() { // "complex modulus"
-    return Hypot.of(re, im);
-  }
-
-  @Override // from Scalar
   public Scalar negate() {
     return new ComplexScalarImpl(re.negate(), im.negate());
   }
@@ -123,6 +118,11 @@ import ch.ethz.idsc.tensor.sca.Sinh;
   }
 
   /***************************************************/
+  @Override // from AbsInterface
+  public Scalar abs() { // "complex modulus"
+    return Hypot.of(re, im);
+  }
+
   @Override // from ArcTanInterface
   public Scalar arcTan(Scalar x) {
     return StaticHelper.arcTan(x, this);

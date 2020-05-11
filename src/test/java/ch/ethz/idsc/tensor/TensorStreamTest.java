@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.sca.Abs;
 import junit.framework.TestCase;
 
 public class TensorStreamTest extends TestCase {
@@ -27,7 +28,7 @@ public class TensorStreamTest extends TestCase {
     Tensor a = Tensors.vectorLong(2, -3, 4, -1);
     double ods = a.flatten(0) //
         .map(Scalar.class::cast) //
-        .map(Scalar::abs) //
+        .map(Abs.FUNCTION) //
         .map(Scalar::number) //
         .map(Number::doubleValue) //
         .reduce(Double::max) //
@@ -39,7 +40,7 @@ public class TensorStreamTest extends TestCase {
     Tensor a = Tensors.vectorLong(2, -3, 4, -1);
     double ods = a.flatten(0) //
         .map(s -> (Scalar) s) //
-        .map(Scalar::abs) //
+        .map(Abs.FUNCTION) //
         .map(Scalar::number) //
         .map(Number::doubleValue) //
         .reduce(Double::sum) //

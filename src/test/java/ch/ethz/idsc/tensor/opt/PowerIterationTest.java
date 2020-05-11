@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -16,23 +17,23 @@ public class PowerIterationTest extends TestCase {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor v = eigensystem.vectors().get(0).unmodifiable();
     Tensor x = PowerIteration.of(matrix).get();
-    assertTrue(Chop._12.close(x.dot(v).Get().abs(), RealScalar.ONE));
+    assertTrue(Chop._12.close(Abs.of(x.dot(v)), RealScalar.ONE));
   }
 
   public void testNegative() {
     Tensor matrix = Tensors.fromString("{{-1, 0}, {0, 0}}");
     Tensor x = PowerIteration.of(matrix).get();
-    assertEquals(x.Get(0).abs(), RealScalar.ONE);
-    assertEquals(x.Get(1).abs(), RealScalar.ZERO);
+    assertEquals(Abs.of(x.Get(0)), RealScalar.ONE);
+    assertEquals(Abs.of(x.Get(1)), RealScalar.ZERO);
   }
 
   public void testScalar() {
     Tensor matrix = Tensors.fromString("{{2}}");
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor v = eigensystem.vectors().get(0).unmodifiable();
-    assertEquals(v.Get(0).abs(), RealScalar.ONE);
+    assertEquals(Abs.of(v.Get(0)), RealScalar.ONE);
     Tensor x = PowerIteration.of(matrix).get();
-    assertEquals(x.Get(0).abs(), RealScalar.ONE);
+    assertEquals(Abs.of(x.Get(0)), RealScalar.ONE);
   }
 
   public void testZerosFail() {

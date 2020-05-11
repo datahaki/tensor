@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 import junit.framework.TestCase;
 
@@ -19,11 +20,11 @@ public class DistributionTest extends TestCase {
     assertTrue(Scalars.nonZero(var));
     Scalar tmean = Expectation.mean(distribution); // theoretical mean
     Scalar tvar = Expectation.variance(distribution); // theoretical variance
-    Scalar dmean = mean.subtract(tmean).divide(tmean).abs();
+    Scalar dmean = Abs.of(mean.subtract(tmean).divide(tmean));
     // LONGTERM https://en.wikipedia.org/wiki/Central_limit_theorem
     @SuppressWarnings("unused")
     Scalar limmean = Sqrt.of(RealScalar.of(n)).multiply(mean.subtract(tmean)).divide(Sqrt.of(tvar));
-    Scalar dvar = var.subtract(tvar).divide(tvar).abs();
+    Scalar dvar = Abs.of(var.subtract(tvar).divide(tvar));
     assertTrue(Scalars.lessThan(dmean, RealScalar.of(0.2)));
     assertTrue(Scalars.lessThan(dvar, RealScalar.of(0.22)));
   }

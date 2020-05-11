@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Times;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Power;
@@ -101,7 +102,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     // the sign must be chosen so that the two terms inside the cube root do not cancel.
     Scalar cp = D1n.add(res);
     Scalar cn = D1n.subtract(res);
-    Scalar C = POWER_1_3.apply(Scalars.lessThan(cn.abs(), cp.abs()) ? cp : cn);
+    Scalar C = POWER_1_3.apply(Scalars.lessThan( //
+        Abs.FUNCTION.apply(cn), //
+        Abs.FUNCTION.apply(cp)) ? cp : cn);
     //
     Scalar s2 = c.divide(C);
     Scalar s3 = C.divide(a).divide(P1_3);

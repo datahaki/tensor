@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Arg;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Imag;
@@ -33,7 +34,7 @@ import ch.ethz.idsc.tensor.sca.Sin;
     Scalar z = ComplexScalar.of(re, im);
     for (int count = 0; count < MAX_ITERATIONS; ++count) {
       z = Sin.FUNCTION.apply(z).multiply(c);
-      if (Scalars.lessThan(MAX, Imag.FUNCTION.apply(z).abs()))
+      if (Scalars.lessThan(MAX, Abs.of(Imag.of(z))))
         return DoubleScalar.INDETERMINATE;
     }
     return Arg.FUNCTION.apply(z);

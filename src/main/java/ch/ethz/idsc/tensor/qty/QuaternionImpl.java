@@ -88,11 +88,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override // from Scalar
-  public Scalar abs() {
-    return Norm._2.ofVector(xyz.copy().append(w));
-  }
-
-  @Override // from Scalar
   public Number number() {
     throw TensorRuntimeException.of(this);
   }
@@ -103,6 +98,11 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   /***************************************************/
+  @Override // from AbsInterface
+  public Scalar abs() {
+    return Norm._2.ofVector(xyz.copy().append(w));
+  }
+
   @Override // from ChopInterface
   public Quaternion chop(Chop chop) {
     return new QuaternionImpl(chop.apply(w), xyz.map(chop));

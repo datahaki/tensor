@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Power;
 import junit.framework.TestCase;
 
@@ -58,7 +59,7 @@ public class PascalDistributionTest extends TestCase {
     Tensor tensor = RandomVariate.of(distribution, 2300);
     Tensor mean = Mean.of(tensor);
     Scalar diff = Mean.of(distribution).subtract(mean);
-    assertTrue(Scalars.lessThan(diff.abs(), RealScalar.of(0.2)));
+    assertTrue(Scalars.lessThan(Abs.of(diff), RealScalar.of(0.2)));
     ExactScalarQ.require(diff);
   }
 

@@ -56,11 +56,6 @@ public class GaussScalar extends AbstractScalar implements //
 
   /***************************************************/
   @Override // from Scalar
-  public GaussScalar abs() {
-    return this;
-  }
-
-  @Override // from Scalar
   public GaussScalar reciprocal() {
     return new GaussScalar(value.modInverse(prime), prime);
   }

@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.Abs;
 import junit.framework.TestCase;
 
 public class ComplexHelperTest extends TestCase {
@@ -22,7 +23,7 @@ public class ComplexHelperTest extends TestCase {
     Scalar abs = Quantity.of(2, "V*m^-1");
     Scalar q = ComplexScalar.fromPolar(abs, RealScalar.ONE);
     assertTrue(q instanceof Quantity);
-    Scalar modulus = q.abs();
+    Scalar modulus = Abs.of(q);
     assertEquals(modulus, abs);
   }
 
@@ -105,8 +106,8 @@ public class ComplexHelperTest extends TestCase {
     Scalar cmp = ComplexHelper.sqrt(re, im);
     Scalar mathematica = ComplexScalar.of(2.432040959320809E-162, 1.007384349597552E-162);
     boolean lessThan = Scalars.lessThan( //
-        cmp.subtract(mathematica).abs(), //
-        ref.subtract(mathematica).abs());
+        Abs.between(cmp, mathematica), //
+        Abs.between(ref, mathematica));
     assertTrue(lessThan);
   }
 
@@ -118,8 +119,8 @@ public class ComplexHelperTest extends TestCase {
     Scalar cmp = ComplexHelper.sqrt(re, im);
     Scalar mathematica = ComplexScalar.of(1.007384349597552E-162, 2.432040959320809E-162);
     boolean lessThan = Scalars.lessThan( //
-        cmp.subtract(mathematica).abs(), //
-        ref.subtract(mathematica).abs());
+        Abs.between(cmp, mathematica), //
+        Abs.between(ref, mathematica));
     assertTrue(lessThan);
   }
 

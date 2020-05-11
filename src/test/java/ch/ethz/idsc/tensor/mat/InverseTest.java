@@ -38,16 +38,9 @@ public class InverseTest extends TestCase {
     Tensor x = LinearSolve.withoutAbs(A, b);
     assertEquals(A.dot(x), b);
     Tensor id = IdentityMatrix.of(n, GaussScalar.of(1, p));
-    {
-      Tensor Ai = LinearSolve.withoutAbs(A, id);
-      assertEquals(A.dot(Ai), id);
-      assertEquals(Ai.dot(A), id);
-    }
-    {
-      Tensor Ai = LinearSolve.of(A, id);
-      assertEquals(A.dot(Ai), id);
-      assertEquals(Ai.dot(A), id);
-    }
+    Tensor Ai = LinearSolve.withoutAbs(A, id);
+    assertEquals(A.dot(Ai), id);
+    assertEquals(Ai.dot(A), id);
   }
 
   public void testGeneralIdentity() {

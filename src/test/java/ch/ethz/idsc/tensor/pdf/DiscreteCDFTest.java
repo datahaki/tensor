@@ -65,7 +65,7 @@ public class DiscreteCDFTest extends TestCase {
     assertEquals(cdf.p_lessEquals(RealScalar.of(-10)), RealScalar.ZERO);
     Scalar top = cdf.p_lessEquals(RealScalar.of(1000000));
     assertTrue(Scalars.lessThan( //
-        top.subtract(RealScalar.ONE).abs(), //
+        Abs.between(top, RealScalar.ONE), //
         DiscreteCDF.CDF_NUMERIC_THRESHOLD));
   }
 

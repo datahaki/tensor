@@ -12,6 +12,8 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.sca.AbsInterface;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.ArcTanInterface;
 import ch.ethz.idsc.tensor.sca.Arg;
@@ -36,9 +38,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
 /* package */ class QuantityImpl extends AbstractScalar implements Quantity, //
-    ArcTanInterface, ArgInterface, ChopInterface, ComplexEmbedding, ConjugateInterface, //
-    ExactScalarQInterface, NInterface, PowerInterface, RoundingInterface, SignInterface, //
-    SqrtInterface, Comparable<Scalar>, Serializable {
+    AbsInterface, ArcTanInterface, ArgInterface, ChopInterface, ComplexEmbedding, //
+    ConjugateInterface, ExactScalarQInterface, NInterface, PowerInterface, RoundingInterface, //
+    SignInterface, SqrtInterface, Comparable<Scalar>, Serializable {
   /** @param value is assumed to be not instance of {@link Quantity}
    * @param unit
    * @return */
@@ -113,11 +115,6 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
   }
 
   @Override // from Scalar
-  public Scalar abs() {
-    return ofUnit(value.abs());
-  }
-
-  @Override // from Scalar
   public Number number() {
     return value.number();
   }
@@ -143,6 +140,11 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
   }
 
   /***************************************************/
+  @Override // from AbsInterface
+  public Scalar abs() {
+    return ofUnit(Abs.FUNCTION.apply(value));
+  }
+
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
     // Mathematica allows 2[m]^3[s], but the tensor library does not:

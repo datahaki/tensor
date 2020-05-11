@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.KroneckerDelta;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 import ch.ethz.idsc.tensor.sca.N;
@@ -150,7 +151,7 @@ public class QuaternionTest extends TestCase {
       Tensor vec = RandomVariate.of(distribution, 4);
       Scalar q1 = _createQ(vec);
       Scalar nrm = Norm._2.ofVector(vec);
-      Scalar abs = q1.abs();
+      Scalar abs = Abs.of(q1);
       assertTrue(Chop._12.close(nrm, abs));
     }
   }

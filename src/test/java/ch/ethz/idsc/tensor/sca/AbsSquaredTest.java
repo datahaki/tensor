@@ -34,9 +34,8 @@ public class AbsSquaredTest extends TestCase {
   public void testNonConjugate() {
     GaussScalar a = GaussScalar.of(3, 12347);
     GaussScalar b = GaussScalar.of(3962, 12347);
-    Scalar scalar = AbsSquared.between(a, b);
-    assertEquals(scalar, GaussScalar.of(5338, 12347));
-    assertEquals(scalar, GaussScalar.of(3959 * 3959, 12347));
+    Scalar scalar = b.subtract(a);
+    assertEquals(scalar.multiply(scalar), GaussScalar.of(3959 * 3959, 12347));
   }
 
   public void testInfinity() {

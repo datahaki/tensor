@@ -42,11 +42,6 @@ public final class StringScalar extends AbstractScalar implements Comparable<Sca
   }
 
   @Override // from Scalar
-  public Scalar abs() {
-    throw TensorRuntimeException.of(this);
-  }
-
-  @Override // from Scalar
   public Scalar reciprocal() {
     throw TensorRuntimeException.of(this);
   }

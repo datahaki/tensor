@@ -19,8 +19,6 @@ import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.red.ArgMax;
-import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Power;
@@ -68,19 +66,6 @@ public class GaussScalarTest extends TestCase {
     assertEquals(m.dot(a), b);
   }
 
-  public void testMatrix2() {
-    Tensor m = Tensors.matrix(new Scalar[][] { //
-        { GaussScalar.of(0, 7), GaussScalar.of(3, 7) }, //
-        { GaussScalar.of(1, 7), GaussScalar.of(3, 7) } //
-    });
-    Tensor b = Tensors.matrix(new Scalar[][] { //
-        { GaussScalar.of(6, 7), GaussScalar.of(4, 7) }, //
-        { GaussScalar.of(5, 7), GaussScalar.of(0, 7) } //
-    });
-    Tensor a = LinearSolve.of(m, b);
-    assertEquals(m.dot(a), b);
-  }
-
   public void testNegativePrime() {
     Scalar a = GaussScalar.of(2, 7);
     Scalar b = GaussScalar.of(3, 7);
@@ -91,10 +76,6 @@ public class GaussScalarTest extends TestCase {
     Scalar a = GaussScalar.of(4, 7);
     Scalar s = GaussScalar.of(2, 7);
     assertEquals(Sqrt.of(a), s);
-    Scalar n2 = Norm._2.ofVector(Tensors.of(s));
-    Scalar n2s = Norm2Squared.ofVector(Tensors.of(s));
-    assertEquals(n2, s);
-    assertEquals(n2s, a);
   }
 
   public void testSqrt0() {

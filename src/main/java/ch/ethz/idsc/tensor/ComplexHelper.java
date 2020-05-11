@@ -1,7 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
-import ch.ethz.idsc.tensor.sca.ArgInterface;
+import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.sca.Arg;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
@@ -51,12 +52,12 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
    * @param d non-zero
    * @return */
   public static Scalar sqrt(Scalar c, Scalar d) {
-    Scalar ca = c.abs();
-    Scalar da = d.abs();
+    Scalar ca = Abs.FUNCTION.apply(c);
+    Scalar da = Abs.FUNCTION.apply(d);
     final Scalar w;
     if (Scalars.lessEquals(ca, da)) {
       Scalar c_d = c.divide(d);
-      Scalar fraction = c_d.abs().add(Sqrt.FUNCTION.apply(RealScalar.ONE.add(c_d.multiply(c_d)))).multiply(RationalScalar.HALF);
+      Scalar fraction = Abs.FUNCTION.apply(c_d).add(Sqrt.FUNCTION.apply(RealScalar.ONE.add(c_d.multiply(c_d)))).multiply(RationalScalar.HALF);
       w = Sqrt.FUNCTION.apply(da).multiply(Sqrt.FUNCTION.apply(fraction));
     } else {
       Scalar d_c = d.divide(c);
@@ -72,7 +73,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   public static Scalar sqrtPolar(Scalar z) {
     return ComplexScalar.fromPolar( //
-        Sqrt.FUNCTION.apply(z.abs()), //
-        ((ArgInterface) z).arg().multiply(RationalScalar.HALF));
+        Sqrt.FUNCTION.apply(Abs.FUNCTION.apply(z)), //
+        Arg.FUNCTION.apply(z).multiply(RationalScalar.HALF));
   }
 }

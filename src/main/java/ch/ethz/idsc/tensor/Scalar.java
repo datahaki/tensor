@@ -2,7 +2,6 @@
 package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 
 /** on top of the capabilities of a {@link Tensor} a scalar can be inverted
@@ -94,13 +93,6 @@ public interface Scalar extends Tensor {
    * @return multiplicative inverse of this scalar
    * @throws ArithmeticException if scalar equals to 0, or cannot be inverted */
   Scalar reciprocal();
-
-  /** absolute value
-   * 
-   * @return non-negative distance from zero of this
-   * @throws TensorRuntimeException if absolute value is not defined
-   * in the case of {@link StringScalar} for instance */
-  Scalar abs();
 
   /** classes should override this method only if consistency is possible
    * for instance, a {@link ComplexScalar} would require two numbers:

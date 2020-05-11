@@ -38,13 +38,17 @@ public enum LeftNullSpace {
     return usingRowReduce(matrix, IdentityMatrix.of(matrix.length()));
   }
 
+  public static Tensor usingRowReduce(Tensor matrix, Tensor identity) {
+    return usingRowReduce(matrix, identity, PivotArgMaxAbs.INSTANCE);
+  }
+
   /** @param matrix
    * @param identity
    * @return list of vectors that span the left nullspace of given matrix */
-  public static Tensor usingRowReduce(Tensor matrix, Tensor identity) {
+  public static Tensor usingRowReduce(Tensor matrix, Tensor identity, Pivot pivot) {
     final int rows = matrix.length(); // == identity.length()
     final int cols = Unprotect.dimension1(matrix);
-    Tensor lhs = RowReduce.of(Join.of(1, matrix, identity));
+    Tensor lhs = RowReduce.of(Join.of(1, matrix, identity), pivot);
     int j = 0;
     int c0 = 0;
     while (c0 < cols && j < rows)

@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Derive;
 import ch.ethz.idsc.tensor.alg.Series;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** https://en.wikipedia.org/wiki/Newton%27s_method */
@@ -27,10 +28,10 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   @Override // from ScalarUnaryOperator
   public Scalar apply(Scalar prev_root) {
-    Scalar prev_error = function.apply(prev_root).abs();
+    Scalar prev_error = Abs.of(function.apply(prev_root));
     while (true) {
       Scalar next_root = iteration.apply(prev_root);
-      Scalar next_error = function.apply(next_root).abs();
+      Scalar next_error = Abs.of(function.apply(next_root));
       if (Scalars.lessEquals(prev_error, next_error))
         return prev_root;
       prev_error = next_error;

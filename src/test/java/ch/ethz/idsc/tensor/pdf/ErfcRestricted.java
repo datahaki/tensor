@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Series;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** IMPLEMENTATION IS BASED ON THE TAYLOR SERIES
@@ -31,7 +32,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (Scalars.lessThan(scalar.abs(), DoubleScalar.of(0.7))) // error < 10^-9
+    if (Scalars.lessThan(Abs.of(scalar), DoubleScalar.of(0.7))) // error < 10^-9
       return SERIES.apply(scalar);
     throw TensorRuntimeException.of(scalar);
   }
