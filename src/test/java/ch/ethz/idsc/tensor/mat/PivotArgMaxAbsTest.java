@@ -7,6 +7,6 @@ import junit.framework.TestCase;
 
 public class PivotArgMaxAbsTest extends TestCase {
   public void testPackageVisibility() {
-    assertFalse(Modifier.isPublic(PivotArgMaxAbs.class.getModifiers()));
+    assertTrue(Modifier.isPublic(PivotArgMaxAbs.class.getModifiers()));
   }
 }

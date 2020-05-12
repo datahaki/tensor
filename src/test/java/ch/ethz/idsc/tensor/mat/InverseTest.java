@@ -35,10 +35,10 @@ public class InverseTest extends TestCase {
     Random random = new SecureRandom();
     Tensor A = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(p), p), n, n);
     Tensor b = Tensors.vector(i -> GaussScalar.of(random.nextInt(p), p), n);
-    Tensor x = LinearSolve.withoutAbs(A, b);
+    Tensor x = LinearSolve.of(A, b, PivotFirstNonZero.INSTANCE);
     assertEquals(A.dot(x), b);
     Tensor id = IdentityMatrix.of(n, GaussScalar.of(1, p));
-    Tensor Ai = LinearSolve.withoutAbs(A, id);
+    Tensor Ai = LinearSolve.of(A, id, PivotFirstNonZero.INSTANCE);
     assertEquals(A.dot(Ai), id);
     assertEquals(Ai.dot(A), id);
   }
@@ -77,7 +77,7 @@ public class InverseTest extends TestCase {
       // ---
     }
     try {
-      Inverse.withoutAbs(matrix);
+      Inverse.of(matrix, PivotFirstNonZero.INSTANCE);
       fail();
     } catch (Exception exception) {
       // ---
@@ -137,7 +137,7 @@ public class InverseTest extends TestCase {
       Chop.NONE.requireClose(eye, res);
     }
     {
-      Tensor inv = LinearSolve.withoutAbs(matrix, eye);
+      Tensor inv = LinearSolve.of(matrix, eye, PivotFirstNonZero.INSTANCE);
       Tensor res = matrix.dot(inv);
       Chop.NONE.requireClose(eye, res);
     }

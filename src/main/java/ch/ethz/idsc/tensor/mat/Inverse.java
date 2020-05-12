@@ -21,7 +21,7 @@ public enum Inverse {
    * @param matrix with square dimensions
    * @return inverse of given matrix
    * @throws Exception if given matrix is not invertible */
-  public static Tensor withoutAbs(Tensor matrix) {
-    return LinearSolve.withoutAbs(matrix, IdentityMatrix.of(matrix.length()));
+  public static Tensor of(Tensor matrix, Pivot pivot) {
+    return LinearSolve.of(matrix, IdentityMatrix.of(matrix.length()), pivot);
   }
 }

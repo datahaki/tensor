@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.Tensor;
 
 @FunctionalInterface
-/* package */ interface Pivot {
+public interface Pivot {
   /** @param row
    * @param col fixed column
    * @param ind permutation

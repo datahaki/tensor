@@ -76,6 +76,10 @@ public enum NullSpace {
     return LeftNullSpace.usingRowReduce(Transpose.of(matrix), SquareMatrixQ.require(identity));
   }
 
+  /** @param matrix
+   * @param identity
+   * @param pivot
+   * @return */
   public static Tensor usingRowReduce(Tensor matrix, Tensor identity, Pivot pivot) {
     return LeftNullSpace.usingRowReduce(Transpose.of(matrix), SquareMatrixQ.require(identity), pivot);
   }

@@ -7,6 +7,6 @@ import junit.framework.TestCase;
 
 public class PivotFirstNonZeroTest extends TestCase {
   public void testPackageVisibility() {
-    assertFalse(Modifier.isPublic(PivotFirstNonZero.class.getModifiers()));
+    assertTrue(Modifier.isPublic(PivotFirstNonZero.class.getModifiers()));
   }
 }

@@ -25,7 +25,7 @@ public enum LinearSolve {
    * @return x with matrix.dot(x) == b
    * @throws TensorRuntimeException if matrix m is singular */
   public static Tensor of(Tensor matrix, Tensor b) {
-    return GaussianElimination.of(matrix, PivotArgMaxAbs.INSTANCE, b);
+    return GaussianElimination.of(matrix, b, PivotArgMaxAbs.INSTANCE);
   }
 
   /** method only checks for non-zero
@@ -33,10 +33,11 @@ public enum LinearSolve {
    * 
    * @param matrix square
    * @param b tensor with first dimension identical to size of matrix
+   * @param pivot
    * @return x with matrix.dot(x) == b
    * @throws TensorRuntimeException if given matrix is singular */
-  public static Tensor withoutAbs(Tensor matrix, Tensor b) {
-    return GaussianElimination.of(matrix, PivotFirstNonZero.INSTANCE, b);
+  public static Tensor of(Tensor matrix, Tensor b, Pivot pivot) {
+    return GaussianElimination.of(matrix, b, pivot);
   }
 
   /** function for matrix not necessarily invertible, or square

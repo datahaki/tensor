@@ -29,14 +29,14 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
    * @param b tensor with first dimension identical to size of matrix
    * @param pivot
    * @throws TensorRuntimeException if matrix m is singular */
-  public static Tensor of(Tensor matrix, Pivot pivot, Tensor b) {
-    return new GaussianElimination(matrix, pivot, b).solve();
+  public static Tensor of(Tensor matrix, Tensor b, Pivot pivot) {
+    return new GaussianElimination(matrix, b, pivot).solve();
   }
 
   /***************************************************/
   private final Tensor rhs;
 
-  private GaussianElimination(Tensor matrix, Pivot pivot, Tensor b) {
+  private GaussianElimination(Tensor matrix, Tensor b, Pivot pivot) {
     super(matrix, pivot);
     rhs = b.copy();
     for (int c0 = 0; c0 < lhs.length; ++c0) {

@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 /** picks the first non-zero element in the column as pivot
  * the return value is c0 in the case when the element at (ind[c0], j)
  * is non-zero, but also if none of the candidates is non-zero */
-/* package */ enum PivotFirstNonZero implements Pivot {
+public enum PivotFirstNonZero implements Pivot {
   INSTANCE;
 
   @Override // from Pivot
