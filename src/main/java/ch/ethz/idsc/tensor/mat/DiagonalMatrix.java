@@ -21,6 +21,16 @@ public enum DiagonalMatrix {
     return Tensors.matrix((i, j) -> i.equals(j) ? vector.Get(i) : vector.Get(i).zero(), length, length);
   }
 
+  /** @param n
+   * @param value
+   * @return matrix of dimensions n x n with value as diagonal entries
+   * @throws Exception if n is negative or zero */
+  public static Tensor of(int n, Scalar value) {
+    Integers.requirePositive(n);
+    Scalar zero = value.zero();
+    return Tensors.matrix((i, j) -> i.equals(j) ? value : zero, n, n);
+  }
+
   /** @param scalars
    * @return square matrix with scalars along diagonal
    * @throws Exception if list of scalars is empty */

@@ -17,7 +17,6 @@ import ch.ethz.idsc.tensor.sca.Power;
  * <a href="https://reference.wolfram.com/language/ref/MatrixLog.html">MatrixLog</a> */
 public enum MatrixLog {
   ;
-  /** with scaling the series typically converges in few steps */
   private static final int MAX_ITERATIONS = 500;
 
   /** Hint: currently only matrices of dimensions 2 x 2 are supported

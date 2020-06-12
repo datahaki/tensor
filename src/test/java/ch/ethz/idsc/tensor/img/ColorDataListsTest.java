@@ -26,11 +26,22 @@ public class ColorDataListsTest extends TestCase {
     assertEquals(colorDataIndexed.apply(Quantity.of(2, "s")), Array.zeros(4));
   }
 
-  public void testInfinityTransparent() {
-    ColorDataIndexed colorDataIndexed = ColorDataLists._104.cyclic();
-    assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
-    assertEquals(colorDataIndexed.apply(DoubleScalar.NEGATIVE_INFINITY), Array.zeros(4));
-    assertEquals(colorDataIndexed.apply(DoubleScalar.POSITIVE_INFINITY), Array.zeros(4));
+  public void testInfinityTransparentCyclic() {
+    for (ColorDataLists colorDataLists : ColorDataLists.values()) {
+      ColorDataIndexed colorDataIndexed = colorDataLists.cyclic();
+      assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
+      assertEquals(colorDataIndexed.apply(DoubleScalar.NEGATIVE_INFINITY), Array.zeros(4));
+      assertEquals(colorDataIndexed.apply(DoubleScalar.POSITIVE_INFINITY), Array.zeros(4));
+    }
+  }
+
+  public void testInfinityTransparentStrict() {
+    for (ColorDataLists colorDataLists : ColorDataLists.values()) {
+      ColorDataIndexed colorDataIndexed = colorDataLists.strict();
+      assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
+      assertEquals(colorDataIndexed.apply(DoubleScalar.NEGATIVE_INFINITY), Array.zeros(4));
+      assertEquals(colorDataIndexed.apply(DoubleScalar.POSITIVE_INFINITY), Array.zeros(4));
+    }
   }
 
   public void testDerive() {

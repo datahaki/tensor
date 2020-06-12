@@ -123,7 +123,7 @@ public class LinearSolveTest extends TestCase {
     Tensor ve1 = Tensors.of(qs1, qs2);
     Tensor ve2 = Tensors.of(qs3, qs4);
     Tensor mat = Tensors.of(ve1, ve2);
-    Tensor eye = IdentityMatrix.of(2, one);
+    Tensor eye = DiagonalMatrix.of(2, one);
     Tensor inv = LinearSolve.of(mat, eye);
     Tensor res = mat.dot(inv);
     assertEquals(res, eye);

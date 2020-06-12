@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 
 public class IdentityMatrixTest extends TestCase {
   public void testOneQuantity() {
-    Tensor matrix = IdentityMatrix.of(2, Quantity.of(1, "s"));
+    Tensor matrix = DiagonalMatrix.of(2, Quantity.of(1, "s"));
     assertEquals(matrix, Tensors.fromString("{{1[s], 0[s]}, {0[s], 1[s]}}"));
   }
 
@@ -32,7 +32,7 @@ public class IdentityMatrixTest extends TestCase {
 
   public void testFailOneZero() {
     try {
-      IdentityMatrix.of(0, Quantity.of(1, "s"));
+      DiagonalMatrix.of(0, Quantity.of(1, "s"));
       fail();
     } catch (Exception exception) {
       // ---
@@ -41,7 +41,7 @@ public class IdentityMatrixTest extends TestCase {
 
   public void testFailOneNegative() {
     try {
-      IdentityMatrix.of(-3, Quantity.of(1, "s"));
+      DiagonalMatrix.of(-3, Quantity.of(1, "s"));
       fail();
     } catch (Exception exception) {
       // ---
