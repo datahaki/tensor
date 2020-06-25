@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** Quote from Wikipedia: A Hermitian matrix (or self-adjoint matrix) is
@@ -24,5 +25,24 @@ public enum HermitianMatrixQ {
    * @return true if tensor is a Hermitian matrix */
   public static boolean of(Tensor tensor) {
     return of(tensor, Tolerance.CHOP);
+  }
+
+  /** @param tensor
+   * @param chop
+   * @return
+   * @throws Exception if given tensor is not a Hermitian matrix with given tolerance */
+  public static Tensor require(Tensor tensor, Chop chop) {
+    if (of(tensor, chop))
+      return tensor;
+    throw TensorRuntimeException.of(tensor);
+  }
+
+  /** @param tensor
+   * @return
+   * @throws Exception if given tensor is not a Hermitian matrix */
+  public static Tensor require(Tensor tensor) {
+    if (of(tensor))
+      return tensor;
+    throw TensorRuntimeException.of(tensor);
   }
 }

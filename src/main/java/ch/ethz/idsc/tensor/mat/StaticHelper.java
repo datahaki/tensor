@@ -37,12 +37,14 @@ import ch.ethz.idsc.tensor.sca.Chop;
   }
 
   /** @param tensor
+   * @param chop
    * @param predicate
    * @return */
-  public static boolean definite(Tensor tensor, Predicate<Scalar> predicate) {
+  public static boolean definite(Tensor tensor, Chop chop, Predicate<Scalar> predicate) {
     return SquareMatrixQ.of(tensor) //
         && CholeskyDecomposition.of(tensor).diagonal().stream() //
             .map(Scalar.class::cast) //
+            .map(chop) //
             .allMatch(predicate);
   }
 }

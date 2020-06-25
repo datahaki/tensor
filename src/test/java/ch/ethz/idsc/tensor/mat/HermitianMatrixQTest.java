@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class HermitianMatrixQTest extends TestCase {
@@ -25,5 +26,23 @@ public class HermitianMatrixQTest extends TestCase {
   public void testNonMatrix() {
     assertFalse(HermitianMatrixQ.of(Tensors.vector(1, 2, 3)));
     assertFalse(HermitianMatrixQ.of(RealScalar.ONE));
+  }
+
+  public void testRequire() {
+    try {
+      HermitianMatrixQ.require(Tensors.vector(1, 2, 3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testRequireChop() {
+    try {
+      HermitianMatrixQ.require(Tensors.vector(1, 2, 3), Chop._02);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }
