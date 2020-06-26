@@ -10,6 +10,7 @@ import junit.framework.TestCase;
 
 public class SymmetricMatrixQTest extends TestCase {
   public void testHilbert() {
+    SymmetricMatrixQ.require(HilbertMatrix.of(7));
     assertTrue(SymmetricMatrixQ.of(HilbertMatrix.of(10)));
   }
 
@@ -60,6 +61,15 @@ public class SymmetricMatrixQTest extends TestCase {
     }
     try {
       SymmetricMatrixQ.require(Cross.skew3(Tensors.vector(1, 2, 3)));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testRequireEmptyFail() {
+    try {
+      SymmetricMatrixQ.require(Tensors.empty());
       fail();
     } catch (Exception exception) {
       // ---

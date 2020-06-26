@@ -10,7 +10,10 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * SymmetricMatrixQ[ {} ] == false
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/SymmetricMatrixQ.html">SymmetricMatrixQ</a> */
+ * <a href="https://reference.wolfram.com/language/ref/SymmetricMatrixQ.html">SymmetricMatrixQ</a>
+ * 
+ * @see HermitianMatrixQ
+ * @see UnitaryMatrixQ */
 public enum SymmetricMatrixQ {
   ;
   /** @param tensor
@@ -40,8 +43,6 @@ public enum SymmetricMatrixQ {
    * @return
    * @throws Exception if given tensor is not a symmetric matrix */
   public static Tensor require(Tensor tensor) {
-    if (of(tensor))
-      return tensor;
-    throw TensorRuntimeException.of(tensor);
+    return require(tensor, Tolerance.CHOP);
   }
 }

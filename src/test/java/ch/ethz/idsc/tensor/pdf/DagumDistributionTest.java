@@ -44,7 +44,7 @@ public class DagumDistributionTest extends TestCase {
     assertEquals(distribution.toString(), "DagumDistribution[1, 2, 3]");
   }
 
-  public void testFailNegative() {
+  public void testFailNonPositive() {
     try {
       DagumDistribution.of(0, 2, 3);
       fail();
@@ -59,6 +59,27 @@ public class DagumDistributionTest extends TestCase {
     }
     try {
       DagumDistribution.of(1, 2, 0);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testFailNegative() {
+    try {
+      DagumDistribution.of(-1, 2, 3);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      DagumDistribution.of(1, -1, 3);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      DagumDistribution.of(1, 2, -1);
       fail();
     } catch (Exception exception) {
       // ---

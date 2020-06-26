@@ -41,8 +41,6 @@ public enum HermitianMatrixQ {
    * @return
    * @throws Exception if given tensor is not a Hermitian matrix */
   public static Tensor require(Tensor tensor) {
-    if (of(tensor))
-      return tensor;
-    throw TensorRuntimeException.of(tensor);
+    return require(tensor, Tolerance.CHOP);
   }
 }

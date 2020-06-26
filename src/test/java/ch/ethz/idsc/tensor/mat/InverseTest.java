@@ -51,6 +51,12 @@ public class InverseTest extends TestCase {
     assertEquals(Inverse.of(A).dot(b), x);
   }
 
+  public void testFourier() {
+    Tensor inv1 = Inverse.of(FourierMatrix.of(5), PivotFirstNonZero.INSTANCE);
+    Tensor inv2 = Inverse.of(FourierMatrix.of(5), PivotArgMaxAbs.INSTANCE);
+    Chop._10.requireClose(inv1, inv2);
+  }
+
   public void testDet0() {
     Tensor matrix = ResourceData.of("/mat/det0-matlab.csv"); // det(matrix) == 0
     assertNotNull(matrix);

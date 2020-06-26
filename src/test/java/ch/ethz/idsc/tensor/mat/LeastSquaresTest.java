@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.N;
 import junit.framework.TestCase;
 
 public class LeastSquaresTest extends TestCase {
@@ -24,6 +25,17 @@ public class LeastSquaresTest extends TestCase {
     Tensor x1 = LeastSquares.usingLinearSolve(m, b);
     assertEquals(x1, Tensors.vector(1, 1, 1));
     Tensor x2 = LeastSquares.usingSvd(m, b);
+    Tolerance.CHOP.requireClose(x1, x2);
+  }
+
+  public void testEasyNumeric() {
+    Tensor m = N.DOUBLE.of(Tensors.matrix( //
+        (i, j) -> i.equals(j) ? RationalScalar.of(1, 1) : RealScalar.ZERO, 4, 3));
+    assertEquals(MatrixRank.of(m), 3);
+    Tensor b = Tensors.vector(1, 1, 1, 1);
+    Tensor x1 = LeastSquares.usingLinearSolve(m, b);
+    assertEquals(x1, Tensors.vector(1, 1, 1));
+    Tensor x2 = LeastSquares.of(m, b);
     Tolerance.CHOP.requireClose(x1, x2);
   }
 

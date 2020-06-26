@@ -29,6 +29,7 @@ public class HermitianMatrixQTest extends TestCase {
   }
 
   public void testRequire() {
+    HermitianMatrixQ.require(HilbertMatrix.of(10));
     try {
       HermitianMatrixQ.require(Tensors.vector(1, 2, 3));
       fail();

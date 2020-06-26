@@ -30,7 +30,7 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
    * @param b positive
    * @return */
   public static Distribution of(Number p, Number a, Number b) {
-    return new DagumDistribution( //
+    return of( //
         RealScalar.of(p), //
         RealScalar.of(a), //
         RealScalar.of(b));

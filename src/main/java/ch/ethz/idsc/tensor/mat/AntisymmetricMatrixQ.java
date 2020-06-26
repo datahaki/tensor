@@ -39,8 +39,6 @@ public enum AntisymmetricMatrixQ {
    * @return
    * @throws Exception if given tensor is not a anti-symmetric matrix */
   public static Tensor require(Tensor tensor) {
-    if (of(tensor))
-      return tensor;
-    throw TensorRuntimeException.of(tensor);
+    return require(tensor, Tolerance.CHOP);
   }
 }
