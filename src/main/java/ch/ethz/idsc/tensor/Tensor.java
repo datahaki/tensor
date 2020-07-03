@@ -266,6 +266,9 @@ public interface Tensor extends Iterable<Tensor> {
    * <p>The {@link Dimensions} of the dotted tensors reduce according to the pattern
    * <code>[n1, n2, n3, n4, n5] . [n5, n6, ..., n9] == [n1, n2, n3, n4, n6, ..., n9]</code>
    * 
+   * <p>The implementation in the tensor library also support non-rectangular arrays
+   * Example: {1, 2} . {{3, {4}}, {5, {6}}} == {13, {16}}
+   * 
    * @param tensor
    * @return dot product between this and input tensor */
   Tensor dot(Tensor tensor);

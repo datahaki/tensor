@@ -46,4 +46,13 @@ public class MachineNumberQTest extends TestCase {
     assertTrue(MachineNumberQ.any(Tensors.vector(1, 1, 1.)));
     assertFalse(MachineNumberQ.any(Tensors.vector(1, 2, 3)));
   }
+
+  public void testNullFail() {
+    try {
+      MachineNumberQ.of(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

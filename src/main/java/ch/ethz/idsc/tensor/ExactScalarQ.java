@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.tensor.mat.RowReduce;
 import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -36,7 +38,7 @@ public enum ExactScalarQ {
   /** @param tensor
    * @return true, if tensor is instance of {@link ExactScalarQInterface} which evaluates to true */
   public static boolean of(Tensor tensor) {
-    return tensor instanceof ExactScalarQInterface //
+    return Objects.requireNonNull(tensor) instanceof ExactScalarQInterface //
         && ((ExactScalarQInterface) tensor).isExactScalar();
   }
 

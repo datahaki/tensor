@@ -70,4 +70,13 @@ public class NumberQTest extends TestCase {
       // ---
     }
   }
+
+  public void testNullFail() {
+    try {
+      NumberQ.of(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

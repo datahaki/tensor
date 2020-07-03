@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.tensor.sca.MachineNumberQInterface;
 
 /** implementation consistent with Mathematica
@@ -26,7 +28,7 @@ public enum MachineNumberQ {
    * @return true, if tensor is instance of {@link MachineNumberQInterface} which evaluates to true,
    * otherwise false */
   public static boolean of(Tensor tensor) {
-    return tensor instanceof MachineNumberQInterface //
+    return Objects.requireNonNull(tensor) instanceof MachineNumberQInterface //
         && ((MachineNumberQInterface) tensor).isMachineNumber();
   }
 

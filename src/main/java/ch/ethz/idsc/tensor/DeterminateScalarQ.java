@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 public enum DeterminateScalarQ {
   ;
   /** @param tensor
-   * @return */
+   * @return whether scalar is in exact precision or a machine number but not Infinity or NaN */
   public static boolean of(Tensor tensor) {
     if (tensor instanceof ComplexScalar) {
       ComplexScalar complexScalar = (ComplexScalar) tensor;

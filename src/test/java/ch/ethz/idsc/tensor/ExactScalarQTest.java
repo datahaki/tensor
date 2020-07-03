@@ -60,4 +60,13 @@ public class ExactScalarQTest extends TestCase {
       // ---
     }
   }
+
+  public void testNullFail() {
+    try {
+      ExactScalarQ.of(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

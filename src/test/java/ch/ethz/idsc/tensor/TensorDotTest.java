@@ -50,9 +50,23 @@ public class TensorDotTest extends TestCase {
     assertEquals(f, g);
   }
 
-  public void testDotIrregular() {
+  public void testDotIrregularExample() {
+    Tensor a = Tensors.vector(1, 2);
+    Tensor b = Tensors.fromString("{{3, {4}}, {5, {6}}}");
+    assertEquals(a.dot(b), Tensors.fromString("{13, {16}}"));
+  }
+
+  public void testDotIrregularRight() {
     Tensor a = Tensors.vector(1, 2, 3);
     Tensor b = Tensors.fromString("{{1, {2}}, {2, {3}}, {4, {5}}}");
     assertEquals(a.dot(b), Tensors.fromString("{17, {23}}"));
+  }
+
+  public void testDotIrregularLeft() {
+    Tensor a = Tensors.fromString("{{1, 2, 3}, {{2, 3, 4}, {5, 6, 7}}}");
+    Tensor b = Tensors.vector(4, 5, 6);
+    Tensor c = a.dot(b);
+    assertEquals(c, Tensors.fromString("{32, {47, 92}}"));
+    ExactTensorQ.require(c);
   }
 }
