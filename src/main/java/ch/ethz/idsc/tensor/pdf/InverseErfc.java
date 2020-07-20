@@ -21,8 +21,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 public enum InverseErfc implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar TWO = RealScalar.of(2.0);
   private static final Clip CLIP = Clips.interval(0, 2.0);
+  private static final Scalar TWO = RealScalar.of(2.0);
+  private static final Scalar FAC = RealScalar.of(1.12837916709551257);
 
   @Override
   public Scalar apply(Scalar p) {
@@ -37,7 +38,7 @@ public enum InverseErfc implements ScalarUnaryOperator {
     Scalar x = RealScalar.of(-0.70711 * ((2.30753 + t * 0.27061) / (1. + t * (0.99229 + t * 0.04481)) - t));
     for (int j = 0; j < 2; ++j) {
       Scalar err = Erfc.FUNCTION.apply(x).subtract(pp);
-      Scalar den = RealScalar.of(1.12837916709551257).multiply(Exp.FUNCTION.apply(x.multiply(x).negate())).subtract(x.multiply(err));
+      Scalar den = FAC.multiply(Exp.FUNCTION.apply(x.multiply(x).negate())).subtract(x.multiply(err));
       x = x.add(err.divide(den));
     }
     return lessThan1 ? x : x.negate();

@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -18,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ErlangDistribution.html">ErlangDistribution</a> */
-public class ErlangDistribution implements Distribution, MeanInterface, PDF, VarianceInterface {
+public class ErlangDistribution implements Distribution, MeanInterface, PDF, VarianceInterface, Serializable {
   /** @param k positive integer
    * @param lambda, may be instance of {@link Quantity}
    * @return

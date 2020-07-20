@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -18,7 +20,8 @@ import ch.ethz.idsc.tensor.sca.Power;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/GammaDistribution.html">GammaDistribution</a> */
-public class GammaDistribution implements Distribution, MeanInterface, PDF, VarianceInterface {
+public class GammaDistribution implements Distribution, //
+    MeanInterface, PDF, VarianceInterface, Serializable {
   /** @param alpha positive
    * @param beta positive
    * @return */

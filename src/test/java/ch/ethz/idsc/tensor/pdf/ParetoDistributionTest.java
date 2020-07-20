@@ -1,10 +1,13 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
@@ -12,8 +15,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class ParetoDistributionTest extends TestCase {
-  public void testSimple() {
-    Distribution distribution = ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(1.8));
+  public void testSimple() throws ClassNotFoundException, IOException {
+    Distribution distribution = Serialization.copy(ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(1.8)));
     PDF pdf = PDF.of(distribution);
     Chop._10.requireClose(pdf.at(RealScalar.of(4.0)), RealScalar.of(0.16619372965993448));
     Chop._10.requireClose(pdf.at(RealScalar.of(2.3)), RealScalar.of(0.7826086956521743));

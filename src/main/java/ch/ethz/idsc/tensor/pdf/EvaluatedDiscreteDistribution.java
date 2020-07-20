@@ -34,7 +34,7 @@ public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDist
    * safeguard when computing CDF for probabilities with machine precision
    * 
    * @param upperBound greatest integer n for which 0 < p(n), i.e. upper bound is inclusive */
-  protected final void inverse_cdf_build(final int upperBound) {
+  protected final void inverse_cdf_build(int upperBound) {
     Scalar cumprob = RealScalar.ZERO;
     for (int sample = lowerBound(); sample < upperBound; ++sample) {
       Scalar prob = p_equals(sample);

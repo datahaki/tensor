@@ -1,9 +1,12 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityUnit;
 import ch.ethz.idsc.tensor.qty.Unit;
@@ -11,8 +14,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class ErlangDistributionTest extends TestCase {
-  public void testPdf() {
-    Distribution distribution = ErlangDistribution.of(3, RealScalar.of(1.8));
+  public void testPdf() throws ClassNotFoundException, IOException {
+    Distribution distribution = Serialization.copy(ErlangDistribution.of(3, RealScalar.of(1.8)));
     PDF pdf = PDF.of(distribution);
     Scalar p = pdf.at(RealScalar.of(3.2));
     assertTrue(Chop._06.close(p, RealScalar.of(0.0940917)));

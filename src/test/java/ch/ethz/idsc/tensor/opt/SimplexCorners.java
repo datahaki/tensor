@@ -27,7 +27,7 @@ import ch.ethz.idsc.tensor.mat.LinearSolve;
    * @param A
    * @param b
    * @return all non-negative solutions */
-  static NavigableMap<Scalar, Tensor> minEquals(Tensor c, Tensor A, Tensor b, boolean isNonNegative) {
+  public static NavigableMap<Scalar, Tensor> minEquals(Tensor c, Tensor A, Tensor b, boolean isNonNegative) {
     List<Integer> list = Dimensions.of(A);
     final int m = b.length();
     final int n = c.length();
@@ -69,7 +69,7 @@ import ch.ethz.idsc.tensor.mat.LinearSolve;
     return map;
   }
 
-  static void show(NavigableMap<Scalar, Tensor> map) {
+  public static void show(NavigableMap<Scalar, Tensor> map) {
     for (Entry<Scalar, Tensor> entry : map.entrySet()) {
       System.out.println("--------------------------------------");
       System.out.println("cost=" + entry.getKey());

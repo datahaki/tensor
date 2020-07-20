@@ -13,12 +13,11 @@ import ch.ethz.idsc.tensor.io.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Import;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-enum LanczosDemo {
+/* package */ enum LanczosDemo {
   ;
   private static final int SEMI = 4;
 
-  // ---
-  static Tensor interp(Tensor row, Tensor sy) {
+  private static Tensor interp(Tensor row, Tensor sy) {
     Interpolation interpolation = LanczosInterpolation.of(row, SEMI);
     return Tensor.of(sy.stream().map(vy -> interpolation.get(Tensors.of(vy))));
   }

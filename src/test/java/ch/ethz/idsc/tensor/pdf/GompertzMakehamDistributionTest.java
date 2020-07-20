@@ -69,8 +69,7 @@ public class GompertzMakehamDistributionTest extends TestCase {
       assertTrue(Scalars.isZero(prob));
       QuantityMagnitude.SI().in(Unit.of("in^-1")).apply(prob);
     }
-    // assertEquals(CDF.of(distribution).p_lessThan(RealScalar.ZERO), RealScalar.ZERO);
-    // assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.ZERO), RealScalar.ZERO);
+    assertEquals(CDF.of(distribution).p_lessThan(Quantity.of(-2, "m^1*s^0")), RealScalar.ZERO);
   }
 
   public void testToString() {

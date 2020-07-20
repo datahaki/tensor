@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.HomeDirectory;
 
-enum GaussianMatrixDemo {
+/* package */ enum GaussianMatrixDemo {
   ;
   public static void main(String[] args) throws IOException {
     Tensor tensor = GaussianMatrix.of(255);

@@ -1,18 +1,21 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
 import junit.framework.TestCase;
 
 public class PoissonBinomialDistributionTest extends TestCase {
-  public void testEmpty() {
-    Distribution distribution = PoissonBinomialDistribution.of(Tensors.empty());
+  public void testEmpty() throws ClassNotFoundException, IOException {
+    Distribution distribution = Serialization.copy(PoissonBinomialDistribution.of(Tensors.empty()));
     Tensor samples = RandomVariate.of(distribution, 10);
     assertEquals(samples, Array.zeros(10));
     assertEquals(Mean.of(distribution), RealScalar.ZERO);

@@ -1,16 +1,19 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class GammaDistributionTest extends TestCase {
-  public void testPdf() {
-    Distribution distribution = GammaDistribution.of(RealScalar.of(1.123), RealScalar.of(2.3));
+  public void testPdf() throws ClassNotFoundException, IOException {
+    Distribution distribution = Serialization.copy(GammaDistribution.of(RealScalar.of(1.123), RealScalar.of(2.3)));
     PDF pdf = PDF.of(distribution);
     Chop._08.requireClose(pdf.at(RealScalar.of(0.78)), DoubleScalar.of(0.28770929331586703));
     assertTrue(Scalars.isZero(pdf.at(RealScalar.of(-0.3))));
@@ -33,7 +36,6 @@ public class GammaDistributionTest extends TestCase {
     Scalar a = RealScalar.of(1.123);
     Scalar b = RealScalar.of(2.3);
     Distribution distribution = GammaDistribution.of(a, b);
-    // Distribution distribution = GeometricDistribution.of(RationalScalar.of(1, 3));
     assertEquals(distribution.toString(), "GammaDistribution[1.123, 2.3]");
   }
 

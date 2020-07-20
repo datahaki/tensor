@@ -5,7 +5,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Beta;
 
-public class DirichletDistribution {
+// LONGTERM
+/* package */ class DirichletDistribution {
   @SuppressWarnings("unused")
   private final Tensor alphas;
   @SuppressWarnings("unused")

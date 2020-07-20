@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -12,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ParetoDistribution.html">ParetoDistribution</a> */
 public class ParetoDistribution extends AbstractContinuousDistribution implements //
-    MeanInterface, VarianceInterface {
+    MeanInterface, VarianceInterface, Serializable {
   private static final Scalar TWO = RealScalar.of(2);
 
   /** @param k strictly positive real number
