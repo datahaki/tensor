@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -20,7 +22,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FrechetDistribution.html">FrechetDistribution</a> */
-public class FrechetDistribution extends AbstractAlphaBetaDistribution implements InverseCDF {
+public class FrechetDistribution extends AbstractContinuousDistribution implements //
+    InverseCDF, MeanInterface, VarianceInterface, Serializable {
+  private static final double NEXT_DOWN_ONE = Math.nextDown(1.0);
   private static final Scalar TWO = RealScalar.of(2);
 
   /** @param alpha positive
@@ -40,8 +44,12 @@ public class FrechetDistribution extends AbstractAlphaBetaDistribution implement
   }
 
   /***************************************************/
+  private final Scalar alpha;
+  private final Scalar beta;
+
   private FrechetDistribution(Scalar alpha, Scalar beta) {
-    super(alpha, beta);
+    this.alpha = alpha;
+    this.beta = beta;
   }
 
   @Override
@@ -88,5 +96,10 @@ public class FrechetDistribution extends AbstractAlphaBetaDistribution implement
     return Sign.isPositive(x) //
         ? Exp.FUNCTION.apply(Power.of(x.divide(beta), alpha.negate()).negate())
         : RealScalar.ZERO;
+  }
+
+  @Override // from Object
+  public final String toString() {
+    return String.format("%s[%s, %s]", getClass().getSimpleName(), alpha, beta);
   }
 }

@@ -76,9 +76,15 @@ public class GumbelDistributionTest extends TestCase {
     assertEquals(distribution.toString(), "GumbelDistribution[3, 0.2]");
   }
 
-  public void testFail() {
+  public void testBetaNonPositiveFail() {
     try {
       GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      GumbelDistribution.of(RealScalar.of(3), RealScalar.of(-1));
       fail();
     } catch (Exception exception) {
       // ---

@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -12,7 +14,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GumbelDistribution.html">GumbelDistribution</a> */
-public class GumbelDistribution extends AbstractAlphaBetaDistribution {
+public class GumbelDistribution extends AbstractContinuousDistribution implements //
+    MeanInterface, VarianceInterface, Serializable {
+  private static final double NEXT_DOWN_ONE = Math.nextDown(1.0);
   private static final Scalar PISQUARED_6 = DoubleScalar.of(1.644934066848226436472415166646);
 
   /** parameters may be instance of {@link Quantity} with identical units
@@ -25,8 +29,12 @@ public class GumbelDistribution extends AbstractAlphaBetaDistribution {
   }
 
   /***************************************************/
+  private final Scalar alpha;
+  private final Scalar beta;
+
   private GumbelDistribution(Scalar alpha, Scalar beta) {
-    super(alpha, beta);
+    this.alpha = alpha;
+    this.beta = beta;
   }
 
   @Override
@@ -58,5 +66,10 @@ public class GumbelDistribution extends AbstractAlphaBetaDistribution {
   public Scalar p_lessThan(Scalar x) {
     return RealScalar.ONE.subtract(Exp.FUNCTION.apply( //
         Exp.FUNCTION.apply(x.subtract(alpha).divide(beta)).negate()));
+  }
+
+  @Override // from Object
+  public final String toString() {
+    return String.format("%s[%s, %s]", getClass().getSimpleName(), alpha, beta);
   }
 }

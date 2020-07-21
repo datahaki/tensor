@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
+import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class PoissonBinomialDistributionTest extends TestCase {
@@ -36,6 +37,15 @@ public class PoissonBinomialDistributionTest extends TestCase {
     assertEquals(samples, Array.of(l -> RealScalar.of(4), 10));
     assertEquals(Mean.of(distribution), RealScalar.of(4));
     assertEquals(Variance.of(distribution), RealScalar.ZERO);
+  }
+
+  public void testMixed() {
+    Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 0, 0.2, 0.3, 0.4, 0.5, 1, 0, 0));
+    RandomVariate.of(distribution, 10);
+    Chop._12.requireClose(Mean.of(distribution), RealScalar.of(3.4));
+    Chop._12.requireClose(Variance.of(distribution), RealScalar.of(0.86));
+    DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
+    assertEquals(discreteDistribution.lowerBound(), 2);
   }
 
   public void testFail() {

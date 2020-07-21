@@ -5,10 +5,11 @@ package ch.ethz.idsc.tensor.pdf;
 import java.io.Serializable;
 import java.util.Random;
 
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Clips;
 
@@ -16,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
  * 
  * @see BinomialDistribution
  * @see BinomialRandomVariate */
-public class PoissonBinomialDistribution implements Distribution, //
+public class PoissonBinomialDistribution implements DiscreteDistribution, //
     MeanInterface, RandomVariateInterface, VarianceInterface, Serializable {
   /** Hint:
    * if p_vector consists of identical entries, the {@link BinomialDistribution}
@@ -26,31 +27,41 @@ public class PoissonBinomialDistribution implements Distribution, //
    * @return
    * @throws Exception if any entry in given p_vector is outside the unit interval */
   public static Distribution of(Tensor p_vector) {
-    return new PoissonBinomialDistribution(Tensor.of(p_vector.stream() //
-        .map(Scalar.class::cast) //
-        .map(Clips.unit()::requireInside)));
+    Tensor p_result = Tensors.reserve(p_vector.length());
+    int lowerBound = 0;
+    for (Tensor _p : p_vector) {
+      Scalar p = Clips.unit().requireInside((Scalar) _p);
+      if (RealScalar.ONE.equals(p))
+        ++lowerBound;
+      else //
+      if (Scalars.nonZero(p))
+        p_result.append(p);
+    }
+    return new PoissonBinomialDistribution(lowerBound, p_result);
   }
 
   /***************************************************/
+  private final int lowerBound;
   private final Tensor p_vector;
 
-  private PoissonBinomialDistribution(Tensor p_vector) {
+  private PoissonBinomialDistribution(int lowerBound, Tensor p_vector) {
+    this.lowerBound = lowerBound;
     this.p_vector = p_vector;
   }
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return Total.ofVector(p_vector);
+    return RealScalar.of(lowerBound).add(Total.of(p_vector));
   }
 
   @Override // from RandomVariateInterface
   public Scalar randomVariate(Random random) {
-    return RationalScalar.of(p_vector.stream() //
+    return RealScalar.of(lowerBound + p_vector.stream() //
         .map(Scalar.class::cast) //
         .map(Scalar::number) //
         .mapToDouble(Number::doubleValue) //
         .filter(p -> random.nextDouble() < p) //
-        .count(), 1);
+        .count());
   }
 
   @Override // from VarianceInterface
@@ -60,5 +71,20 @@ public class PoissonBinomialDistribution implements Distribution, //
         .map(p -> RealScalar.ONE.subtract(p).multiply(p)) //
         .reduce(Scalar::add) //
         .orElse(RealScalar.ZERO);
+  }
+
+  @Override // from DiscreteDistribution
+  public int lowerBound() {
+    return lowerBound;
+  }
+
+  @Override // from PDF
+  public Scalar at(Scalar x) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override // from DiscreteDistribution
+  public Scalar p_equals(int n) {
+    throw new UnsupportedOperationException();
   }
 }
