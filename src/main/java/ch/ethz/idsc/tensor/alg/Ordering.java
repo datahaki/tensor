@@ -29,7 +29,7 @@ public enum Ordering {
     Stream<Integer> stream(Tensor tensor);
   }
 
-  // ---
+  /***************************************************/
   private final OrderingInterface orderingInterface;
 
   private Ordering(OrderingInterface orderingInterface) {

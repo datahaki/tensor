@@ -98,6 +98,15 @@ public class RealScalarTest extends TestCase {
     assertEquals(scalar, RealScalar.of(123));
   }
 
+  public void testMiscTypes() {
+    short vals = -312;
+    assertEquals(RealScalar.of(vals), RealScalar.of(-312));
+    ExactScalarQ.require(RealScalar.of(vals));
+    byte valb = -122;
+    assertEquals(RealScalar.of(valb), RealScalar.of(-122));
+    ExactScalarQ.require(RealScalar.of(valb));
+  }
+
   public void testCreateFail() {
     Number number = new AtomicInteger(123);
     Scalar scalar = RealScalar.of(number.intValue());

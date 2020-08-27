@@ -8,7 +8,9 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -70,6 +72,12 @@ public class LeastSquaresTest extends TestCase {
     Tensor s1 = Tensors.fromString(
         "{726086997/5793115330933+44069346/5793115330933*I, 67991764500/5793115330933+4521379500/5793115330933*I,-22367102670/827587904419-1672185060/827587904419*I, 11662258824/827587904419+1019978082/827587904419*I}");
     assertEquals(d1, s1);
+  }
+
+  public void testRankDeficient() {
+    assertEquals(LeastSquares.of(Array.zeros(3, 3), UnitVector.of(3, 1)), Array.zeros(3));
+    assertEquals(LeastSquares.of(Array.zeros(3, 2), UnitVector.of(3, 1)), Array.zeros(2));
+    assertEquals(LeastSquares.of(DiagonalMatrix.of(0, 1, 0), UnitVector.of(3, 0)), Array.zeros(3));
   }
 
   public void testFullRankComplex2() {

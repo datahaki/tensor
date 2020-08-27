@@ -59,6 +59,12 @@ public class InterpolatingPolynomialTest extends TestCase {
     Tolerance.CHOP.requireClose( //
         domain.map(suo1), //
         domain.multiply(RealScalar.of(3)).map(RealScalar.ONE::subtract).map(suo2));
+    try {
+      InterpolatingPolynomial.of(suppor).scalarTensorFunction(Tensors.vector(2, 3, 4, 5));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 
   public void testQuantity() {
@@ -70,7 +76,7 @@ public class InterpolatingPolynomialTest extends TestCase {
     domain.map(suo1).map(QuantityMagnitude.singleton("s"));
   }
 
-  public void testLengthFail() throws ClassNotFoundException, IOException {
+  public void testScalarLengthFail() throws ClassNotFoundException, IOException {
     InterpolatingPolynomial interpolatingPolynomial = //
         Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
     try {
@@ -81,6 +87,23 @@ public class InterpolatingPolynomialTest extends TestCase {
     }
     try {
       interpolatingPolynomial.scalarUnaryOperator(HilbertMatrix.of(3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testTensorLengthFail() throws ClassNotFoundException, IOException {
+    InterpolatingPolynomial interpolatingPolynomial = //
+        Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
+    try {
+      interpolatingPolynomial.scalarTensorFunction(Tensors.vector(1, 2));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      interpolatingPolynomial.scalarTensorFunction(HilbertMatrix.of(2, 3));
       fail();
     } catch (Exception exception) {
       // ---

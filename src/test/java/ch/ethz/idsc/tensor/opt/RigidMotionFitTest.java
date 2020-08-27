@@ -141,6 +141,8 @@ public class RigidMotionFitTest extends TestCase {
     Distribution distribution = NormalDistribution.standard();
     Tensor points = RandomVariate.of(distribution, 6, 3);
     Tensor target = RandomVariate.of(distribution, 6, 3);
-    RigidMotionFit.of(points, target, NORMALIZE.apply(Tensors.vector(1, -2, 3, 4, 5, 6)));
+    RigidMotionFit rigidMotionFit = //
+        RigidMotionFit.of(points, target, NORMALIZE.apply(Tensors.vector(1, -2, 3, 4, 5, 6)));
+    assertTrue(rigidMotionFit.toString().startsWith("RigidMotionFit"));
   }
 }

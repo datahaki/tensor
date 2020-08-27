@@ -7,6 +7,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
+import ch.ethz.idsc.tensor.mat.Det;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -22,6 +26,15 @@ public class QRMathematicaTest extends TestCase {
     Tensor q = qrDecomposition.getQ();
     Chop._10.requireClose(q.dot(r), a);
     Chop._10.requireClose(ConjugateTranspose.of(q), qrDecomposition.getInverseQ());
+  }
+
+  public void testDet() {
+    Distribution distribution = UniformDistribution.unit();
+    for (int n = 3; n < 6; ++n) {
+      Tensor matrix = RandomVariate.of(distribution, n, n);
+      QRDecomposition qrDecomposition = QRMathematica.wrap(QRDecomposition.of(matrix));
+      Chop._10.requireClose(qrDecomposition.det(), Det.of(matrix));
+    }
   }
 
   public void testNullFail() {

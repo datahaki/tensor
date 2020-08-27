@@ -84,6 +84,7 @@ public class FrechetDistributionTest extends TestCase {
     assertEquals(var, Quantity.of(Double.POSITIVE_INFINITY, "m^-2"));
     assertEquals(CDF.of(distribution).p_lessThan(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.ZERO), RealScalar.ZERO);
+    assertTrue(distribution.toString().startsWith("FrechetDistribution"));
   }
 
   public void testInverseCDF() {

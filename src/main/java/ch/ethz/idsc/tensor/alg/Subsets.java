@@ -24,7 +24,7 @@ public class Subsets {
     return Unprotect.using(new Subsets(tensor, k).list);
   }
 
-  // ---
+  /***************************************************/
   private final List<Tensor> list = new LinkedList<>();
 
   private Subsets(Tensor tensor, int k) {

@@ -104,6 +104,8 @@ public class NullSpaceTest extends TestCase {
     assertEquals(Dimensions.of(nul), Arrays.asList(1, 3));
     assertFalse(MachineNumberQ.any(nul));
     assertTrue(ExactTensorQ.of(nul));
+    Tensor nrr = NullSpace.usingRowReduce(A, IdentityMatrix.of(3));
+    assertEquals(nul, nrr);
   }
 
   public void testSome2() {

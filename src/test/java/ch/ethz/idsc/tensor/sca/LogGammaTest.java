@@ -21,8 +21,8 @@ public class LogGammaTest extends TestCase {
   }
 
   private static void _check(Scalar z, Scalar expect) {
-    Scalar result = LogGamma.FUNCTION.apply(z);
-    Tolerance.CHOP.requireClose(result, expect);
+    Tolerance.CHOP.requireClose(LogGamma.FUNCTION.apply(z), expect);
+    Tolerance.CHOP.requireClose(LogGamma.of(z), expect);
   }
 
   public void testMathematica() {
