@@ -86,7 +86,7 @@ public class RootsDegree3FullTest extends TestCase {
     Tensor tensor = roots.map(scalarUnaryOperator);
     Chop._05.requireAllZero(tensor);
     Tensor depres = RootsDegree3.of(coeffs);
-    if (!Chop._10.close(depres, roots)) {
+    if (!Chop._10.isClose(depres, roots)) {
       System.out.println(depres);
       System.out.println(roots);
       fail();

@@ -20,8 +20,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
     for (int count = 0; count < MAX_ITERATIONS; ++count) {
       Tensor yn = y0.add(Inverse.of(z0)).multiply(RationalScalar.HALF);
       Tensor zn = z0.add(Inverse.of(y0)).multiply(RationalScalar.HALF);
-      if (Chop._20.close(y0, yn) && //
-          Chop._20.close(z0, zn))
+      if (Chop._20.isClose(y0, yn) && //
+          Chop._20.isClose(z0, zn))
         return;
       y0 = yn;
       z0 = zn;

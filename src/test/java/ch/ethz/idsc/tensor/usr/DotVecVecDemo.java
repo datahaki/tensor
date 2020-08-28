@@ -42,7 +42,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
         s_par.start();
         Tensor cp = Parallelize.dot(a, b);
         s_par.stop();
-        if (!Chop._12.close(cs, cp))
+        if (!Chop._12.isClose(cs, cp))
           throw TensorRuntimeException.of(cs);
       }
       timing.append(Tensors.vector(s_ser.nanoSeconds() / trials, s_par.nanoSeconds() / trials));

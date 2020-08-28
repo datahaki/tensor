@@ -24,8 +24,8 @@ public class ChopTest extends TestCase {
 
   public void testCustom() {
     Chop chop = Chop.below(3.142);
-    assertTrue(chop.close(DoubleScalar.of(Math.PI), RealScalar.ZERO));
-    assertFalse(chop.close(DoubleScalar.of(3.15), RealScalar.ZERO));
+    assertTrue(chop.isClose(DoubleScalar.of(Math.PI), RealScalar.ZERO));
+    assertFalse(chop.isClose(DoubleScalar.of(3.15), RealScalar.ZERO));
   }
 
   public void testExclusive() {
@@ -49,7 +49,7 @@ public class ChopTest extends TestCase {
   }
 
   public void testComplex() {
-    assertTrue(Chop._05.close( //
+    assertTrue(Chop._05.isClose( //
         Scalars.fromString("1.2+3.1*I"), //
         Scalars.fromString("1.2+3.1000006*I")));
   }
@@ -69,19 +69,19 @@ public class ChopTest extends TestCase {
   public void testClose() {
     Scalar s1 = DoubleScalar.of(1);
     Scalar s2 = DoubleScalar.of(1 + 1e-10);
-    assertTrue(Chop._07.close(s1, s2));
-    assertTrue(Chop._09.close(s1, s2));
-    assertFalse(Chop._10.close(s1, s2));
-    assertFalse(Chop._12.close(s1, s2));
+    assertTrue(Chop._07.isClose(s1, s2));
+    assertTrue(Chop._09.isClose(s1, s2));
+    assertFalse(Chop._10.isClose(s1, s2));
+    assertFalse(Chop._12.isClose(s1, s2));
   }
 
   public void testCloseExact() {
     Scalar s1 = RationalScalar.of(1, 10000000);
     Scalar s2 = RationalScalar.of(2, 10000000);
-    assertFalse(Chop._05.close(s1, s2));
-    assertTrue(Chop._05.close(N.DOUBLE.apply(s1), N.DOUBLE.apply(s2)));
+    assertFalse(Chop._05.isClose(s1, s2));
+    assertTrue(Chop._05.isClose(N.DOUBLE.apply(s1), N.DOUBLE.apply(s2)));
     Scalar s3 = RationalScalar.of(1, 10000000);
-    assertTrue(Chop._05.close(s1, s3));
+    assertTrue(Chop._05.isClose(s1, s3));
   }
 
   public void testDecimal() {
@@ -102,7 +102,7 @@ public class ChopTest extends TestCase {
 
   public void testCloseFail() {
     try {
-      Chop._05.close(Tensors.vector(1), Tensors.vector(1, 1));
+      Chop._05.isClose(Tensors.vector(1), Tensors.vector(1, 1));
       fail();
     } catch (Exception exception) {
       // ---

@@ -167,7 +167,7 @@ public class RootsTest extends TestCase {
       for (int index = 0; index < LIMIT; ++index) {
         Tensor roots = Sort.of(RandomVariate.of(distribution, length));
         Tensor solve = Roots.of(CoefficientList.of(roots));
-        if (!Chop._03.close(roots, solve)) {
+        if (!Chop._03.isClose(roots, solve)) {
           System.err.println("real unique");
           System.err.println(roots);
           System.err.println(solve);
@@ -182,7 +182,7 @@ public class RootsTest extends TestCase {
       for (int index = 0; index < LIMIT; ++index) {
         Tensor zeros = ConstantArray.of(RandomVariate.of(distribution), length);
         Tensor roots = Roots.of(CoefficientList.of(zeros));
-        if (!Chop._01.close(zeros, roots)) {
+        if (!Chop._01.isClose(zeros, roots)) {
           System.err.println(zeros);
           fail();
         }

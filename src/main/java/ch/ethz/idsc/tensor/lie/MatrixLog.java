@@ -54,7 +54,7 @@ public enum MatrixLog {
       nxt = nxt.dot(x);
       Tensor prv = sum;
       sum = sum.add(nxt.divide(RealScalar.of(k % 2 == 0 ? -k : k)));
-      if (Chop.NONE.close(sum, prv))
+      if (Chop.NONE.isClose(sum, prv))
         return sum;
     }
     throw TensorRuntimeException.of(matrix); // insufficient convergence

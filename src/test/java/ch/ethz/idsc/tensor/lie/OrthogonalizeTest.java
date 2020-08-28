@@ -29,7 +29,7 @@ public class OrthogonalizeTest extends TestCase {
     Tensor diagonal = Diagonal.of(id);
     Tolerance.CHOP.requireClose(id, DiagonalMatrix.with(diagonal));
     for (Tensor d : diagonal)
-      assertTrue(Tolerance.CHOP.close(d, RealScalar.ONE) || Tolerance.CHOP.close(d, RealScalar.ZERO));
+      assertTrue(Tolerance.CHOP.isClose(d, RealScalar.ONE) || Tolerance.CHOP.isClose(d, RealScalar.ZERO));
   }
 
   private static void _check(Tensor matrix) {

@@ -94,41 +94,7 @@ public class Chop implements ScalarUnaryOperator {
     return scalar;
   }
 
-  /** Careful:
-   * if lhs and rhs are of exact precision, for instance instances of
-   * {@link RationalScalar}, the chop difference is non-zero
-   * unless the scalars are exactly equal. Then, the function returns
-   * false although numerically the values are sufficiently close.
-   * 
-   * @param lhs
-   * @param rhs
-   * @return true, if the chop difference between lhs and rhs is entry-wise zero
-   * @throws Exception if difference of lhs and rhs cannot be computed,
-   * for example due to different dimensions */
-  public boolean close(Tensor lhs, Tensor rhs) {
-    return allZero(lhs.subtract(rhs));
-  }
-
-  public boolean isClose(Scalar lhs, Scalar rhs) {
-    return isZero(lhs.subtract(rhs));
-  }
-
-  /** @param lhs
-   * @param rhs
-   * @throws Exception if close(lhs, rhs) evaluates to false
-   * @see #close(Tensor, Tensor) */
-  public void requireClose(Tensor lhs, Tensor rhs) {
-    if (!close(lhs, rhs))
-      throw TensorRuntimeException.of(lhs, rhs);
-  }
-
-  /** @param lhs
-   * @param rhs */
-  public void requireClose(Scalar lhs, Scalar rhs) {
-    if (!isZero(lhs.subtract(rhs)))
-      throw TensorRuntimeException.of(lhs, rhs);
-  }
-
+  /***************************************************/
   /** @param scalar
    * @return true, if chop(scalar) is zero */
   public boolean isZero(Scalar scalar) {
@@ -147,7 +113,7 @@ public class Chop implements ScalarUnaryOperator {
   /** @param scalar
    * @throws Exception if {@link #apply(Scalar)} evaluates to non zero */
   public void requireZero(Scalar scalar) {
-    if (Scalars.nonZero(apply(scalar)))
+    if (!isZero(scalar))
       throw TensorRuntimeException.of(scalar);
   }
 
@@ -158,6 +124,48 @@ public class Chop implements ScalarUnaryOperator {
       throw TensorRuntimeException.of(tensor);
   }
 
+  /***************************************************/
+  /** Careful:
+   * if lhs and rhs are of exact precision, for instance instances of
+   * {@link RationalScalar}, the chop difference is non-zero
+   * unless the scalars are exactly equal. Then, the function returns
+   * false although numerically the values are sufficiently close.
+   * 
+   * @param lhs
+   * @param rhs
+   * @return true, if the chop difference between lhs and rhs is entry-wise zero
+   * @throws Exception if difference of lhs and rhs cannot be computed,
+   * for example due to different dimensions */
+  public boolean isClose(Tensor lhs, Tensor rhs) {
+    return allZero(lhs.subtract(rhs));
+  }
+
+  /** @param lhs
+   * @param rhs
+   * @return true, if the chop difference between lhs and rhs is zero */
+  public boolean isClose(Scalar lhs, Scalar rhs) {
+    return isZero(lhs.subtract(rhs));
+  }
+
+  /** @param lhs
+   * @param rhs
+   * @throws Exception if isClose(lhs, rhs) evaluates to false
+   * @see #isClose(Tensor, Tensor) */
+  public void requireClose(Tensor lhs, Tensor rhs) {
+    if (!isClose(lhs, rhs))
+      throw TensorRuntimeException.of(lhs, rhs);
+  }
+
+  /** @param lhs
+   * @param rhs
+   * @throws Exception if isClose(lhs, rhs) evaluates to false
+   * @see #isClose(Scalar, Scalar) */
+  public void requireClose(Scalar lhs, Scalar rhs) {
+    if (!isClose(lhs, rhs))
+      throw TensorRuntimeException.of(lhs, rhs);
+  }
+
+  /***************************************************/
   /** @param tensor
    * @return */
   @SuppressWarnings("unchecked")

@@ -19,19 +19,18 @@ import javax.imageio.stream.ImageOutputStream;
 
 /** AnimatedGifWriter is a standalone implementation to generate animated .gif image files */
 /* package */ class AnimatedGifWriter implements AutoCloseable {
-  /** initializes animation to loop indefinitely
-   * 
-   * @param file with extension "gif"
+  /** @param file with extension "gif"
    * @param period between frames in milliseconds
+   * @param loop whether for animation to loop indefinitely
    * @return
    * @throws Exception */
-  public static AnimatedGifWriter of(File file, int period) throws IOException {
+  public static AnimatedGifWriter of(File file, int period, boolean loop) throws IOException {
     // deletion of existing file is mandatory:
     // if the gif output is smaller than the existing file
     // trailing bytes of the existing file are not removed
     if (file.isFile())
       file.delete();
-    return new AnimatedGifWriter(new FileImageOutputStream(file), period, true);
+    return new AnimatedGifWriter(new FileImageOutputStream(file), period, loop);
   }
 
   /***************************************************/

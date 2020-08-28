@@ -63,7 +63,7 @@ public enum MatrixExp {
       nxt = nxt.dot(matrix).divide(RealScalar.of(k));
       Tensor prv = sum;
       sum = sum.add(nxt);
-      if (Chop.NONE.close(sum, prv))
+      if (Chop.NONE.isClose(sum, prv))
         return sum;
     }
     throw TensorRuntimeException.of(matrix); // insufficient convergence

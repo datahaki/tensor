@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
    * @see SquareMatrixQ */
   public static boolean addId(Tensor tensor, Chop chop, TensorUnaryOperator tensorUnaryOperator) {
     return SquareMatrixQ.of(tensor) //
-        && chop.close(tensor, tensorUnaryOperator.apply(tensor));
+        && chop.isClose(tensor, tensorUnaryOperator.apply(tensor));
   }
 
   /** predicate checks a matrix A for A . f(A) == Id
@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
    * @return */
   public static boolean dotId(Tensor tensor, Chop chop, TensorUnaryOperator tensorUnaryOperator) {
     return MatrixQ.of(tensor) //
-        && chop.close(tensor.dot(tensorUnaryOperator.apply(tensor)), IdentityMatrix.of(tensor.length()));
+        && chop.isClose(tensor.dot(tensorUnaryOperator.apply(tensor)), IdentityMatrix.of(tensor.length()));
   }
 
   /** @param tensor
