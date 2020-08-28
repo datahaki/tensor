@@ -22,7 +22,7 @@ public class FrechetDistributionTest extends TestCase {
         Serialization.copy(FrechetDistribution.of(RealScalar.of(1.3), RealScalar.of(1.2)));
     PDF pdf = PDF.of(distribution);
     Scalar prob = pdf.at(RealScalar.of(2.9));
-    assertTrue(Chop._13.close(prob, RealScalar.of(0.10362186999648638)));
+    Chop._13.requireClose(prob, RealScalar.of(0.10362186999648638));
     assertFalse(pdf.at(RealScalar.of(20000)).equals(RealScalar.ZERO));
   }
 
@@ -30,7 +30,7 @@ public class FrechetDistributionTest extends TestCase {
     Distribution distribution = FrechetDistribution.of(1.5, 1.3);
     CDF cdf = CDF.of(distribution);
     Scalar prob = cdf.p_lessEquals(RealScalar.of(2.3));
-    assertTrue(Chop._13.close(prob, RealScalar.of(0.6538117883387893)));
+    Chop._13.requireClose(prob, RealScalar.of(0.6538117883387893));
   }
 
   public void testRandomVariate() {
@@ -60,7 +60,7 @@ public class FrechetDistributionTest extends TestCase {
     Distribution distribution = //
         FrechetDistribution.of(Quantity.of(1.3, ""), Quantity.of(2.4, "m^-1"));
     Scalar mean = Expectation.mean(distribution);
-    assertTrue(Chop._13.close(mean, Quantity.of(9.470020440153482, "m^-1")));
+    Chop._13.requireClose(mean, Quantity.of(9.470020440153482, "m^-1"));
   }
 
   public void testMeanInf() {
@@ -74,7 +74,7 @@ public class FrechetDistributionTest extends TestCase {
     Distribution distribution = //
         FrechetDistribution.of(Quantity.of(2.3, ""), Quantity.of(1.5, "m^-1"));
     Scalar var = Expectation.variance(distribution);
-    assertTrue(Chop._13.close(var, Quantity.of(10.631533530833654, "m^-2")));
+    Chop._13.requireClose(var, Quantity.of(10.631533530833654, "m^-2"));
   }
 
   public void testVarianceInf() {

@@ -46,7 +46,7 @@ public class Norm2Test extends TestCase {
     Scalar nrm = Norm._2.ofMatrix(matrix);
     assertEquals(nrm, Norm._2.ofMatrix(Transpose.of(matrix)));
     // Mathematica: 9.493062577750756
-    assertTrue(Chop._14.close(nrm, DoubleScalar.of(9.493062577750756)));
+    Chop._14.requireClose(nrm, DoubleScalar.of(9.493062577750756));
   }
 
   public void testQuantity() {

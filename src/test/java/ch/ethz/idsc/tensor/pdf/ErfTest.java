@@ -27,7 +27,7 @@ public class ErfTest extends TestCase {
     for (Tensor x : xs) {
       Scalar res = Erf.FUNCTION.apply(x.Get());
       Scalar erf = DoubleScalar.of(values[index]);
-      assertTrue(Chop._07.close(res, erf));
+      Chop._07.requireClose(res, erf);
       ++index;
     }
   }
@@ -48,7 +48,7 @@ public class ErfTest extends TestCase {
         0.9999999945765992, 0.9999999988065282, 0.9999999997526137, //
         0.999999999951703, 0.9999999999911201, 0.9999999999984626 //
     };
-    assertTrue(Chop._07.close(Erf.of(xs), Tensors.vectorDouble(values)));
+    Chop._07.requireClose(Erf.of(xs), Tensors.vectorDouble(values));
   }
 
   public void testComplex() {

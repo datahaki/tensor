@@ -85,7 +85,7 @@ public class RationalizeTest extends TestCase {
       if (Scalars.lessThan(THND, RealScalar.of(input.denominator()))) {
         assertFalse(input.equals(result));
         Scalar residual = N.DOUBLE.apply(input.subtract(result));
-        assertTrue(Chop._04.allZero(residual));
+        Chop._04.requireZero(residual);
       } else {
         assertTrue(input.equals(result));
       }

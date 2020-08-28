@@ -33,7 +33,7 @@ public class NormalDistributionTest extends TestCase {
     Distribution distribution = BinomialDistribution.of(1000, RealScalar.of(1 / 3.));
     Distribution normal = NormalDistribution.fit(distribution);
     assertEquals(Expectation.mean(distribution), Expectation.mean(normal));
-    assertTrue(Chop._12.close(Expectation.variance(distribution), Expectation.variance(normal)));
+    Chop._12.requireClose(Expectation.variance(distribution), Expectation.variance(normal));
   }
 
   public void testCdf() {
@@ -56,9 +56,9 @@ public class NormalDistributionTest extends TestCase {
       Scalar prob = PDF.of(distribution).at(mean);
       QuantityMagnitude.SI().in(Unit.of("in^-1")).apply(prob);
     }
-    assertTrue(Chop._07.close( //
+    Chop._07.requireClose( //
         CDF.of(distribution).p_lessEquals(mean), //
-        RationalScalar.of(1, 2)));
+        RationalScalar.of(1, 2));
   }
 
   public void testToString() {

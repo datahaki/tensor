@@ -16,7 +16,7 @@ public class Norm2SquaredTest extends TestCase {
     Tensor v2 = Tensors.vector(0, -2, 10);
     Scalar n1 = Norm2Squared.between(v1, v2);
     Scalar n2 = Norm._2.between(v1, v2);
-    assertTrue(Chop._13.close(n1, AbsSquared.FUNCTION.apply(n2)));
+    Chop._13.requireClose(n1, AbsSquared.FUNCTION.apply(n2));
   }
 
   public void testMatrix() {
@@ -25,7 +25,7 @@ public class Norm2SquaredTest extends TestCase {
     assertEquals(nrm, Norm2Squared.ofMatrix(Transpose.of(matrix)));
     // Mathematica: 9.493062577750756
     Scalar s = DoubleScalar.of(9.493062577750756);
-    assertTrue(Chop._14.close(nrm, s.multiply(s)));
+    Chop._14.requireClose(nrm, s.multiply(s));
   }
 
   public void testEmpty() {

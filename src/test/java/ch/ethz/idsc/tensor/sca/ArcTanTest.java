@@ -86,7 +86,7 @@ public class ArcTanTest extends TestCase {
       assertFalse(qs1 instanceof RealScalar);
       Scalar res = ArcTan.of(qs1, qs2);
       assertTrue(res instanceof RealScalar);
-      assertTrue(Chop._10.close(res, RealScalar.of(0.32175055439664219340)));
+      Chop._10.requireClose(res, RealScalar.of(0.32175055439664219340));
     }
   }
 
@@ -96,12 +96,12 @@ public class ArcTanTest extends TestCase {
     {
       Scalar res = ArcTan.of(qs0, qs1);
       assertTrue(res instanceof RealScalar);
-      assertTrue(Chop._10.close(res, RealScalar.of(Math.PI / 2)));
+      Chop._10.requireClose(res, RealScalar.of(Math.PI / 2));
     }
     {
       Scalar res = ArcTan.of(qs1, qs0);
       assertTrue(res instanceof RealScalar);
-      assertTrue(Chop._10.allZero(res));
+      Chop._10.requireZero(res);
     }
   }
 
@@ -116,7 +116,7 @@ public class ArcTanTest extends TestCase {
       Scalar v2 = ArcTan.of(x, y.negate());
       Scalar v3 = ArcTan.of(x.multiply(lambda), y.multiply(lambda));
       assertEquals(v1, v2.negate());
-      assertTrue(Chop._10.close(v1, v3));
+      Chop._10.requireClose(v1, v3);
     }
   }
 

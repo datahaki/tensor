@@ -109,7 +109,8 @@ public class ChopTest extends TestCase {
     }
   }
 
-  public void testRequireClose() {
+  public void testRequireCloseScalar() {
+    Chop._06.requireClose(RealScalar.of(2), RealScalar.of(2.000000001));
     try {
       Chop._06.requireClose(RealScalar.of(2), RealScalar.of(2.1));
       fail();
@@ -118,8 +119,25 @@ public class ChopTest extends TestCase {
     }
   }
 
+  public void testRequireCloseTensor() {
+    Chop._03.requireClose(Tensors.vector(1, 2, 3.00001), Tensors.vector(1, 2.00001, 3));
+    try {
+      Chop._03.requireClose(Tensors.vector(1, 2, 3.00001), Tensors.vector(1, 2.01, 3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testRequireZero() {
+    Chop._04.requireZero(RealScalar.of(1e-8));
     Chop._04.requireAllZero(RealScalar.of(1e-8));
+    try {
+      Chop._04.requireZero(RealScalar.of(1e-2));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
     try {
       Chop._04.requireAllZero(RealScalar.of(1e-2));
       fail();

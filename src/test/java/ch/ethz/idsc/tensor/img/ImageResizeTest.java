@@ -34,7 +34,7 @@ public class ImageResizeTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{0, 1}, {0, 0}}");
     Tensor resize = ImageResize.nearest(tensor, 3);
     assertEquals(resize.get(1), Tensors.vector(0, 0, 0, 1, 1, 1));
-    assertTrue(Chop.NONE.allZero(resize.get(Tensor.ALL, 2)));
+    Chop.NONE.requireAllZero(resize.get(Tensor.ALL, 2));
     assertEquals(resize.get(Tensor.ALL, 3), Tensors.vector(1, 1, 1, 0, 0, 0));
     assertEquals(resize.get(Tensor.ALL, 4), Tensors.vector(1, 1, 1, 0, 0, 0));
     assertEquals(resize.get(Tensor.ALL, 5), Tensors.vector(1, 1, 1, 0, 0, 0));
@@ -45,7 +45,7 @@ public class ImageResizeTest extends TestCase {
     Tensor resize = ImageResize.nearest(tensor, 2, 3); // dims=[4, 6]
     assertEquals(resize.get(1), Tensors.vector(0, 0, 0, 1, 1, 1));
     assertEquals(resize.get(Tensor.ALL, 1), Tensors.vector(0, 0, 0, 0));
-    assertTrue(Chop.NONE.allZero(resize.get(Tensor.ALL, 2)));
+    Chop.NONE.requireAllZero(resize.get(Tensor.ALL, 2));
     assertEquals(resize.get(Tensor.ALL, 3), Tensors.vector(1, 1, 0, 0));
     assertEquals(resize.get(Tensor.ALL, 4), Tensors.vector(1, 1, 0, 0));
     assertEquals(resize.get(Tensor.ALL, 5), Tensors.vector(1, 1, 0, 0));

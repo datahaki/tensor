@@ -98,7 +98,7 @@ public class RigidMotionFitTest extends TestCase {
     Tensor points = Tensors.of(Tensors.vector(1, 2, 3));
     RigidMotionFit rigidMotionFit = RigidMotionFit.of(points, points);
     Chop._10.requireClose(rigidMotionFit.rotation(), IdentityMatrix.of(3));
-    Chop._10.allZero(rigidMotionFit.translation());
+    Chop._10.requireAllZero(rigidMotionFit.translation());
   }
 
   public void testFormatFail() {

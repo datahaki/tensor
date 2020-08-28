@@ -35,7 +35,7 @@ public class WeiszfeldMethodTest extends TestCase {
     Tensor points = Tensors.fromString("{{1, 3, 5}, {7, 1, 2}, {9, 3, 1}, {4, 5, 6}}");
     Tensor solution = Tensors.vector(5.6583732018553249826, 2.7448562522811917613, 3.2509991568890024191);
     Optional<Tensor> uniform = DEFAULT.uniform(points);
-    assertTrue(Chop._08.close(uniform.get(), solution));
+    Chop._08.requireClose(uniform.get(), solution);
   }
 
   public void testMathematicaWeighted() {
@@ -43,7 +43,7 @@ public class WeiszfeldMethodTest extends TestCase {
     Tensor weights = Tensors.vector(1, 3, 4, 5);
     Optional<Tensor> weighted = WeiszfeldMethod.with(Chop._10).weighted(points, weights.divide(Total.ofVector(weights)));
     Tensor solution = Tensors.vector(2.3866562926712105936, 3.5603713896189638861, 3.5379382804133292184);
-    assertTrue(Chop._08.close(weighted.get(), solution));
+    Chop._08.requireClose(weighted.get(), solution);
     Optional<Tensor> optional = DEFAULT.uniform(points);
     assertTrue(optional.isPresent());
   }

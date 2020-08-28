@@ -19,7 +19,7 @@ public class Cross2DTest extends TestCase {
   public void testRotation() {
     Tensor x = Tensors.vector(1, 2);
     Tensor mat = Tensors.fromString("{{0, -1}, {1, 0}}");
-    assertTrue(Chop._10.close(Cross.of(x), mat.dot(x)));
+    Chop._10.requireClose(Cross.of(x), mat.dot(x));
   }
 
   public void testApply() {

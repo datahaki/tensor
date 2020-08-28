@@ -41,13 +41,13 @@ public class QRDecompositionTest extends TestCase {
     Tensor Q = qrDecomposition.getQ();
     Tensor Qi = qrDecomposition.getInverseQ();
     Tensor R = qrDecomposition.getR();
-    assertTrue(Chop._10.close(Q.dot(R), A));
-    assertTrue(Chop._10.close(Q.dot(Qi), IdentityMatrix.of(A.length())));
+    Chop._10.requireClose(Q.dot(R), A);
+    Chop._10.requireClose(Q.dot(Qi), IdentityMatrix.of(A.length()));
     Scalar qrDet = Det.of(Q).multiply(Det.of(R));
-    assertTrue(Chop._10.close(qrDet, Det.of(A)));
+    Chop._10.requireClose(qrDet, Det.of(A));
     Tensor lower = LowerTriangularize.of(R, -1);
-    assertTrue(Chop.NONE.allZero(lower));
-    assertTrue(Chop._10.close(qrDet, qrDecomposition.det()));
+    Chop.NONE.requireAllZero(lower);
+    Chop._10.requireClose(qrDet, qrDecomposition.det());
     return qrDecomposition;
   }
 
@@ -56,13 +56,15 @@ public class QRDecompositionTest extends TestCase {
     Tensor Q = qrDecomposition.getQ();
     Tensor Qi = qrDecomposition.getInverseQ();
     Tensor R = qrDecomposition.getR();
-    assertTrue(Chop._10.close(Q.dot(R), A));
-    assertTrue(Chop._10.close(Q.dot(Qi), IdentityMatrix.of(A.length())));
+    Chop._10.requireClose(Q.dot(R), A);
+    Chop._10.requireClose(Q.dot(Qi), IdentityMatrix.of(A.length()));
     Scalar qrDet = Det.of(Q).multiply(Det.of(R));
-    assertTrue(Chop._10.close(qrDet, Det.of(A)));
+    Chop._10.requireClose(qrDet, Det.of(A));
     Tensor lower = LowerTriangularize.of(R, -1);
-    assertTrue(Chop.NONE.allZero(lower));
-    assertTrue(Chop._10.close(qrDet, qrDecomposition.det()) || Chop._10.close(qrDet, qrDecomposition.det().negate()));
+    Chop.NONE.requireAllZero(lower);
+    assertTrue( //
+        Chop._10.isClose(qrDet, qrDecomposition.det()) || //
+            Chop._10.isClose(qrDet, qrDecomposition.det().negate()));
     return qrDecomposition;
   }
 
@@ -85,7 +87,7 @@ public class QRDecompositionTest extends TestCase {
   public void testRandomReal2() throws ClassNotFoundException, IOException {
     Tensor A = Tensors.matrix((i, j) -> RealScalar.of(random.nextDouble()), 3, 5);
     QRDecomposition qrDecomposition = Serialization.copy(specialOps(A));
-    assertTrue(Chop.NONE.allZero(qrDecomposition.det()));
+    Chop.NONE.requireZero(qrDecomposition.det());
     ExactScalarQ.require(qrDecomposition.det());
   }
 
@@ -164,7 +166,7 @@ public class QRDecompositionTest extends TestCase {
     specialOps(matrix);
     QRDecomposition qr = QRDecomposition.preserveOrientation(matrix);
     Tensor reference = Tensors.fromString("{5.916079783099616`, 0.828078671210825`}");
-    assertTrue(Chop._10.close(reference, Diagonal.of(qr.getR())));
+    Chop._10.requireClose(reference, Diagonal.of(qr.getR()));
   }
 
   public void testMathematica2() {

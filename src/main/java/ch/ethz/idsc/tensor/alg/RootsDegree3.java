@@ -88,8 +88,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     Scalar _3a = _3.multiply(a);
     Scalar _3ac = _3a.multiply(c); // D0 wikipedia up to sign
     //
-    if (Chop._13.allZero(Dn)) {
-      if (Chop._13.allZero(_3ac))
+    if (Chop._13.isZero(Dn)) {
+      if (Chop._13.isZero(_3ac))
         return ZEROS;
       Scalar _3d_c = d.divide(c).multiply(_3);
       Scalar dr = _3d_c.multiply(N1_2);

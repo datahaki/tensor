@@ -19,7 +19,7 @@ public class GumbelDistributionTest extends TestCase {
         GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     PDF pdf = PDF.of(distribution);
     Scalar prob = pdf.at(RealScalar.of(2.9));
-    assertTrue(Chop._13.close(prob, RealScalar.of(1.65352149445209)));
+    Chop._13.requireClose(prob, RealScalar.of(1.65352149445209));
     assertEquals(pdf.at(RealScalar.of(4.5)), RealScalar.ZERO);
   }
 
@@ -28,7 +28,7 @@ public class GumbelDistributionTest extends TestCase {
         GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     CDF cdf = CDF.of(distribution);
     Scalar prob = cdf.p_lessEquals(RealScalar.of(2.9));
-    assertTrue(Chop._13.close(prob, RealScalar.of(0.45476078810739484)));
+    Chop._13.requireClose(prob, RealScalar.of(0.45476078810739484));
     assertEquals(cdf.p_lessEquals(RealScalar.of(4)), RealScalar.ONE);
   }
 
@@ -60,14 +60,14 @@ public class GumbelDistributionTest extends TestCase {
     Distribution distribution = //
         GumbelDistribution.of(Quantity.of(-0.3, "m^-1"), Quantity.of(0.4, "m^-1"));
     Scalar mean = Expectation.mean(distribution);
-    assertTrue(Chop._13.close(mean, Quantity.of(-0.5308862659606132, "m^-1")));
+    Chop._13.requireClose(mean, Quantity.of(-0.5308862659606132, "m^-1"));
   }
 
   public void testVariance() {
     Distribution distribution = //
         GumbelDistribution.of(Quantity.of(-1.3, "m^-1"), Quantity.of(1.5, "m^-1"));
     Scalar var = Expectation.variance(distribution);
-    assertTrue(Chop._13.close(var, Quantity.of(3.7011016504085092, "m^-2")));
+    Chop._13.requireClose(var, Quantity.of(3.7011016504085092, "m^-2"));
   }
 
   public void testToString() {

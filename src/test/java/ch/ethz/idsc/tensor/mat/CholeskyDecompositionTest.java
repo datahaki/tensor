@@ -138,12 +138,12 @@ public class CholeskyDecompositionTest extends TestCase {
       Tensor eye = IdentityMatrix.of(3);
       Tensor inv = LinearSolve.of(mat, eye);
       Tensor res = mat.dot(inv);
-      assertTrue(Chop.NONE.close(eye, res));
+      Chop.NONE.requireClose(eye, res);
     }
     {
       Tensor inv = Inverse.of(mat);
-      assertTrue(Chop.NONE.close(mat.dot(inv), inv.dot(mat)));
-      assertTrue(Chop.NONE.close(mat.dot(inv), IdentityMatrix.of(3)));
+      Chop.NONE.requireClose(mat.dot(inv), inv.dot(mat));
+      Chop.NONE.requireClose(mat.dot(inv), IdentityMatrix.of(3));
     }
     {
       CholeskyDecomposition cd = CholeskyDecomposition.of(mat);
@@ -151,7 +151,7 @@ public class CholeskyDecompositionTest extends TestCase {
       Tensor lower = rows_pmul_v(cd.getL(), Sqrt.of(cd.diagonal()));
       Tensor upper = Sqrt.of(cd.diagonal()).pmul(ConjugateTranspose.of(cd.getL()));
       Tensor res = lower.dot(upper);
-      assertTrue(Chop._10.close(mat, res));
+      Chop._10.requireClose(mat, res);
     }
     SymmetricMatrixQ.require(mat);
     assertTrue(HermitianMatrixQ.of(mat));
@@ -172,14 +172,14 @@ public class CholeskyDecompositionTest extends TestCase {
     Tensor upper = sdiag.pmul(ConjugateTranspose.of(cd.getL()));
     {
       Tensor res = ConjugateTranspose.of(upper).dot(upper);
-      assertTrue(Chop._10.close(mat, res));
+      Chop._10.requireClose(mat, res);
     }
     {
       // the construction of the lower triangular matrix L . L* is not so convenient
       // Tensor lower = Transpose.of(sdiag.pmul(Transpose.of(cd.getL())));
       Tensor lower = rows_pmul_v(cd.getL(), sdiag);
       Tensor res = lower.dot(upper);
-      assertTrue(Chop._10.close(mat, res));
+      Chop._10.requireClose(mat, res);
     }
   }
 }

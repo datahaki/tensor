@@ -109,6 +109,10 @@ public class Chop implements ScalarUnaryOperator {
     return allZero(lhs.subtract(rhs));
   }
 
+  public boolean isClose(Scalar lhs, Scalar rhs) {
+    return isZero(lhs.subtract(rhs));
+  }
+
   /** @param lhs
    * @param rhs
    * @throws Exception if close(lhs, rhs) evaluates to false
@@ -116,6 +120,19 @@ public class Chop implements ScalarUnaryOperator {
   public void requireClose(Tensor lhs, Tensor rhs) {
     if (!close(lhs, rhs))
       throw TensorRuntimeException.of(lhs, rhs);
+  }
+
+  /** @param lhs
+   * @param rhs */
+  public void requireClose(Scalar lhs, Scalar rhs) {
+    if (!isZero(lhs.subtract(rhs)))
+      throw TensorRuntimeException.of(lhs, rhs);
+  }
+
+  /** @param scalar
+   * @return true, if chop(scalar) is zero */
+  public boolean isZero(Scalar scalar) {
+    return Scalars.isZero(apply(scalar));
   }
 
   /** @param tensor

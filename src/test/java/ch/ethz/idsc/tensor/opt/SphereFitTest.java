@@ -42,7 +42,7 @@ public class SphereFitTest extends TestCase {
       Tensor radius = sphereFit.radius();
       assertEquals(center, Tensors.vector(0.5, 0.5).add(shift));
       assertTrue(ExactTensorQ.of(center));
-      assertTrue(Chop._13.close(radius, RealScalar.of(Math.sqrt(0.5))));
+      Chop._13.requireClose(radius, RealScalar.of(Math.sqrt(0.5)));
     }
   }
 
@@ -58,8 +58,8 @@ public class SphereFitTest extends TestCase {
       SphereFit sphereFit = Serialization.copy(optional.get());
       Tensor center = sphereFit.center();
       Tensor radius = sphereFit.radius();
-      assertTrue(Chop._13.close(center, Tensors.vector(0.39894957983193285, 0.4067226890756306).add(shift)));
-      assertTrue(Chop._09.close(radius, RealScalar.of(0.6342832218291473)));
+      Chop._13.requireClose(center, Tensors.vector(0.39894957983193285, 0.4067226890756306).add(shift));
+      Chop._09.requireClose(radius, RealScalar.of(0.6342832218291473));
     }
   }
 

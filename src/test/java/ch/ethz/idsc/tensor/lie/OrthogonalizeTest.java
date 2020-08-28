@@ -59,7 +59,7 @@ public class OrthogonalizeTest extends TestCase {
     Tensor q = Orthogonalize.of(matrix);
     Scalar angle1 = VectorAngle.of(q.get(0), v0).get();
     Scalar angle2 = VectorAngle.of(q.get(1), v1).get();
-    assertTrue(Chop._07.allZero(angle1));
+    Chop._07.requireAllZero(angle1);
     assertTrue(Scalars.isZero(angle2));
   }
 

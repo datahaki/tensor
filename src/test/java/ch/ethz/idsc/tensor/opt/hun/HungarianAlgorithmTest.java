@@ -17,7 +17,7 @@ import junit.framework.TestCase;
 public class HungarianAlgorithmTest extends TestCase {
   private static void _verify(Tensor matrix, Scalar minimum, Tensor expected) {
     HungarianAlgorithm hungarianAlgorithm = HungarianAlgorithm.of(matrix);
-    assertTrue(Chop._12.close(hungarianAlgorithm.minimum(), minimum));
+    Chop._12.requireClose(hungarianAlgorithm.minimum(), minimum);
     assertEquals(Tensors.vectorInt(hungarianAlgorithm.matching()), expected);
   }
 

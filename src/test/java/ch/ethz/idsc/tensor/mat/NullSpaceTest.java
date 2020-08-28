@@ -180,7 +180,7 @@ public class NullSpaceTest extends TestCase {
     Tensor mat = Tensors.of( //
         Tensors.of(Quantity.of(-2, "m"), Quantity.of(1, "kg"), Quantity.of(3, "s")));
     Tensor nul = NullSpace.of(mat);
-    assertTrue(Chop.NONE.allZero(mat.dot(Transpose.of(nul))));
+    Chop.NONE.requireAllZero(mat.dot(Transpose.of(nul)));
   }
 
   public void testQuantityMixed2() {
@@ -191,7 +191,7 @@ public class NullSpaceTest extends TestCase {
     );
     Tensor nul = NullSpace.of(mat);
     assertEquals(Dimensions.of(nul), Arrays.asList(1, 3));
-    assertTrue(Chop.NONE.allZero(mat.dot(Transpose.of(nul))));
+    Chop.NONE.requireAllZero(mat.dot(Transpose.of(nul)));
   }
 
   public void testRectangle2x3() {

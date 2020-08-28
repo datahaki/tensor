@@ -39,7 +39,7 @@ public class FourierMatrixTest extends TestCase {
   private static void _check(int n) {
     Tensor matrix = FourierMatrix.of(n);
     Tensor inverse = FourierMatrix.inverse(n);
-    assertTrue(Chop._10.close(matrix.dot(inverse), IdentityMatrix.of(n)));
+    Chop._10.requireClose(matrix.dot(inverse), IdentityMatrix.of(n));
   }
 
   public void testInverse() {

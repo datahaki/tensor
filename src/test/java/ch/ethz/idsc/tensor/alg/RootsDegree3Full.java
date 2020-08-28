@@ -54,8 +54,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     Scalar D0 = Times.of(_3a, c).subtract(b2); // wikipedia up to sign
     //
     Scalar b3 = b2.multiply(b);
-    if (Chop._11.allZero(D)) {
-      if (Chop._11.allZero(D0))
+    if (Chop._11.isZero(D)) {
+      if (Chop._11.isZero(D0))
         return Tensors.of(b_3a, b_3a, b_3a);
       Scalar dr = Times.of(_9, a, d).subtract(b.multiply(c)).divide(D0.add(D0)).negate();
       Scalar srn = Times.of(_4, a, b, c).subtract(Times.of(_3a, _3a, d)).subtract(b3);

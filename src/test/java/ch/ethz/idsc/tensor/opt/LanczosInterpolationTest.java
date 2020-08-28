@@ -27,7 +27,7 @@ public class LanczosInterpolationTest extends TestCase {
       Interpolation interpolation = LanczosInterpolation.of(vector, size);
       for (int index = 0; index < vector.length(); ++index) {
         Scalar scalar = interpolation.Get(Tensors.vector(index));
-        assertTrue(Chop._14.close(vector.Get(index), scalar));
+        Chop._14.requireClose(vector.Get(index), scalar);
       }
     }
   }
@@ -46,7 +46,7 @@ public class LanczosInterpolationTest extends TestCase {
     Tensor result = interpolation.get(Tensors.vector(6.2));
     assertEquals(Dimensions.of(result), Arrays.asList(15));
     Scalar scalar = interpolation.Get(Tensors.vector(4.4, 7.2));
-    assertTrue(Chop._14.close(scalar, RealScalar.of(105.27240539882584)));
+    Chop._14.requireClose(scalar, RealScalar.of(105.27240539882584));
   }
 
   public void testImage3() {
@@ -57,7 +57,7 @@ public class LanczosInterpolationTest extends TestCase {
     Tensor result = interpolation.get(Tensors.vector(6.2));
     assertEquals(Dimensions.of(result), Arrays.asList(15));
     Scalar scalar = interpolation.Get(Tensors.vector(4.4, 7.2));
-    assertTrue(Chop._14.close(scalar, RealScalar.of(94.24810834850828)));
+    Chop._14.requireClose(scalar, RealScalar.of(94.24810834850828));
   }
 
   public void testUseCase() {

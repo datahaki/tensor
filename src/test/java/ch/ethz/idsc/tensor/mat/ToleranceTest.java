@@ -10,7 +10,7 @@ public class ToleranceTest extends TestCase {
   public void testSimple() {
     Scalar scalar = Scalars.fromString("1E-20");
     assertEquals(scalar, DoubleScalar.of(1E-20));
-    assertTrue(Tolerance.CHOP.allZero(scalar));
+    Tolerance.CHOP.requireZero(scalar);
     assertFalse(Tolerance.CHOP.allZero(Scalars.fromString("1E-8")));
   }
 }

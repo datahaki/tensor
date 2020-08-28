@@ -33,7 +33,7 @@ public class NestTest extends TestCase {
   public void testGamma() {
     Scalar expected = ComplexScalar.of(0.024484718696096586, -0.3838080212320521);
     Scalar actual = Nest.of(Gamma.FUNCTION, ComplexScalar.of(0.3, 0.9), 3);
-    assertTrue(Chop._08.close(expected, actual));
+    Chop._08.requireClose(expected, actual);
   }
 
   public void testCopy() {

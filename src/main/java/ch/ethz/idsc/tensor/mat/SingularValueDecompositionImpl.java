@@ -176,15 +176,15 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   private int levelW(int k, Chop chop) {
     for (int l = k; l > 0; --l) {
-      if (chop.allZero(r.Get(l)))
+      if (chop.isZero(r.Get(l)))
         return l;
-      if (chop.allZero(w.Get(l - 1))) {
+      if (chop.isZero(w.Get(l - 1))) {
         Scalar c = _0;
         Scalar s = _1;
         for (int i = l; i < k + 1; ++i) {
           Scalar f = s.multiply(r.Get(i));
           r.set(c.multiply(r.Get(i)), i);
-          if (chop.allZero(f)) // <- never true in tests
+          if (chop.isZero(f)) // <- never true in tests
             break;
           Scalar g = w.Get(i);
           Scalar h = Hypot.of(f, g);

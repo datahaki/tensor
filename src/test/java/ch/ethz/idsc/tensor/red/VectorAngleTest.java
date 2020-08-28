@@ -41,19 +41,19 @@ public class VectorAngleTest extends TestCase {
     // mathematica gives 1.9215250682210188` - 2.8189256484623115`*^-17 I +
     Scalar s1 = VectorAngle.of(u, v).get();
     assertTrue(s1 instanceof RealScalar);
-    assertTrue(Chop._14.close(s1, Scalars.fromString("1.921525068221019")));
+    Chop._14.requireClose(s1, Scalars.fromString("1.921525068221019"));
   }
 
   public void testLarge() {
     Tensor u = Tensors.vector(1e300, 0);
     Tensor v = Tensors.vector(1e300, 1e300);
-    assertTrue(Chop._14.close(VectorAngle.of(u, v).get(), DoubleScalar.of(0.7853981633974484)));
+    Chop._14.requireClose(VectorAngle.of(u, v).get(), DoubleScalar.of(0.7853981633974484));
   }
 
   public void testSmall() {
     Tensor u = Tensors.vector(1e-300, 0);
     Tensor v = Tensors.vector(-1e-300, -1e-300);
-    assertTrue(Chop._14.close(VectorAngle.of(u, v).get(), DoubleScalar.of(2.356194490192345)));
+    Chop._14.requireClose(VectorAngle.of(u, v).get(), DoubleScalar.of(2.356194490192345));
   }
 
   public void testFail() {

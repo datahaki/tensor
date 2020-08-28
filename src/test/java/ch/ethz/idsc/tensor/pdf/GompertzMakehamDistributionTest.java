@@ -22,7 +22,7 @@ public class GompertzMakehamDistributionTest extends TestCase {
         Serialization.copy(GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2)));
     PDF pdf = PDF.of(distribution);
     Scalar prob = pdf.at(RealScalar.of(0.35));
-    assertTrue(Chop._13.close(prob, RealScalar.of(1.182515740643019)));
+    Chop._13.requireClose(prob, RealScalar.of(1.182515740643019));
     assertEquals(pdf.at(RealScalar.of(4.35)), RealScalar.ZERO);
   }
 
@@ -31,7 +31,7 @@ public class GompertzMakehamDistributionTest extends TestCase {
         GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     CDF cdf = CDF.of(distribution);
     Scalar prob = cdf.p_lessEquals(RealScalar.of(0.35));
-    assertTrue(Chop._13.close(prob, RealScalar.of(0.3103218390514517)));
+    Chop._13.requireClose(prob, RealScalar.of(0.3103218390514517));
     assertEquals(cdf.p_lessEquals(RealScalar.of(4.35)), RealScalar.ONE);
     assertEquals(CDF.of(distribution).p_lessThan(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.ZERO), RealScalar.ZERO);

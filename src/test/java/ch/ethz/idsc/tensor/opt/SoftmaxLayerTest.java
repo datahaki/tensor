@@ -23,7 +23,7 @@ public class SoftmaxLayerTest extends TestCase {
   public void testSumOne() {
     Tensor tensor = Range.of(-3, 6);
     Tensor actual = SoftmaxLayer.of(tensor);
-    assertTrue(Chop._15.close(Total.of(actual), RealScalar.ONE));
+    Chop._15.requireClose(Total.of(actual), RealScalar.ONE);
   }
 
   public void testEmptyFail() {

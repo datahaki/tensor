@@ -45,6 +45,6 @@ public class GeometricMeanTest extends TestCase {
   public void testFailMatrix() {
     Tensor mean = GeometricMean.of(HilbertMatrix.of(4));
     Tensor expected = Tensors.vector(0.4518010018049224, 0.3021375397356768, 0.2295748846661433, 0.18575057999133598);
-    assertTrue(Chop._14.close(mean, expected));
+    Chop._14.requireClose(mean, expected);
   }
 }

@@ -12,9 +12,9 @@ import junit.framework.TestCase;
 public class StandardizeTest extends TestCase {
   public void testNumeric() {
     Tensor tensor = Standardize.ofVector(Tensors.vector(6.5, 3.8, 6.6, 5.7, 6.0, 6.4, 5.3));
-    assertTrue(Chop._12.allZero(Mean.of(tensor)));
-    assertTrue(Chop._12.close(Variance.ofVector(tensor), RealScalar.ONE));
-    assertTrue(Chop._12.close(StandardDeviation.ofVector(tensor), RealScalar.ONE));
+    Chop._12.requireAllZero(Mean.of(tensor));
+    Chop._12.requireClose(Variance.ofVector(tensor), RealScalar.ONE);
+    Chop._12.requireClose(StandardDeviation.ofVector(tensor), RealScalar.ONE);
   }
 
   public void testExact1() {

@@ -59,7 +59,7 @@ public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDist
       if (Scalars.nonZero(prob)) {
         cumprob = cumprob.add(prob);
         inverse_cdf.put(cumprob, RealScalar.of(upperBound));
-        if (chop.close(_1, cumprob))
+        if (chop.isClose(_1, cumprob))
           break;
       }
       ++upperBound;

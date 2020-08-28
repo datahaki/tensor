@@ -84,13 +84,13 @@ public class GammaTest extends TestCase {
   public void testComplex1() {
     Scalar result = Gamma.of(ComplexScalar.of(1.1, 0.3));
     Scalar actual = ComplexScalar.of(0.886904759534451, -0.10608824042449128);
-    assertTrue(Chop._10.close(result, actual));
+    Chop._10.requireClose(result, actual);
   }
 
   public void testComplex2() {
     Scalar result = Gamma.of(ComplexScalar.of(0, 1));
     Scalar actual = ComplexScalar.of(-0.15494982830181073, -0.4980156681183565);
-    assertTrue(Chop._09.close(result, actual));
+    Chop._09.requireClose(result, actual);
   }
 
   public void testNest1() {

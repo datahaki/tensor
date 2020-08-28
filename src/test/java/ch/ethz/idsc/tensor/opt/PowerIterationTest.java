@@ -17,7 +17,7 @@ public class PowerIterationTest extends TestCase {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor v = eigensystem.vectors().get(0).unmodifiable();
     Tensor x = PowerIteration.of(matrix).get();
-    assertTrue(Chop._12.close(Abs.of(x.dot(v)), RealScalar.ONE));
+    Chop._12.requireClose(Abs.of(x.dot(v)), RealScalar.ONE);
   }
 
   public void testNegative() {

@@ -52,7 +52,7 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
     }
     table = revert ? Reverse.of(table) : table;
     Scalar sum = Total.ofVector(table);
-    return Tolerance.CHOP.close(sum, RealScalar.ONE) //
+    return Tolerance.CHOP.isClose(sum, RealScalar.ONE) //
         ? new BinomialDistribution(n, p, table) //
         : new BinomialRandomVariate(n, p);
   }

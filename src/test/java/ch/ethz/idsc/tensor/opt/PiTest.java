@@ -13,8 +13,8 @@ public class PiTest extends TestCase {
     Scalar pi = Pi.in(100);
     Scalar sin_pi = Sin.of(pi);
     Scalar cos_pi = Cos.of(pi);
-    assertTrue(Chop._40.close(sin_pi, RealScalar.ZERO));
-    assertTrue(Chop._40.close(cos_pi, RealScalar.ONE.negate()));
+    Chop._40.requireClose(sin_pi, RealScalar.ZERO);
+    Chop._40.requireClose(cos_pi, RealScalar.ONE.negate());
   }
 
   public void testTwo2() {

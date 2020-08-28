@@ -24,7 +24,7 @@ public class MeanDeviationTest extends TestCase {
   public void testMathematica2() {
     Scalar value = MeanDeviation.ofVector(Tensors.fromString("{1, 2, 3, 7/11}"));
     assertEquals(value, RationalScalar.of(37, 44));
-    assertTrue(Chop._14.close(N.DOUBLE.apply(value), RealScalar.of(0.84090909090909090909090909091)));
+    Chop._14.requireClose(N.DOUBLE.apply(value), RealScalar.of(0.84090909090909090909090909091));
   }
 
   public void testArray() {

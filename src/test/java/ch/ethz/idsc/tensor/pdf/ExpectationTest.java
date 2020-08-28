@@ -24,20 +24,20 @@ public class ExpectationTest extends TestCase {
     Scalar mean = Expectation.mean(distribution);
     {
       Scalar E_X = Expectation.of(Function.identity(), distribution);
-      assertTrue(Chop._12.close(E_X, mean));
+      Chop._12.requireClose(E_X, mean);
     }
     {
       Scalar E_X = Expectation.of(s -> s.multiply(RealScalar.of(2)), distribution);
-      assertTrue(Chop._12.close(E_X, mean.multiply(RealScalar.of(2))));
+      Chop._12.requireClose(E_X, mean.multiply(RealScalar.of(2)));
     }
     {
       Scalar E_X = Expectation.of(s -> s.multiply(RealScalar.of(2)), distribution);
-      assertTrue(Chop._12.close(E_X, mean.multiply(RealScalar.of(2))));
+      Chop._12.requireClose(E_X, mean.multiply(RealScalar.of(2)));
     }
     Scalar var = Expectation.variance(distribution);
     {
       Scalar Var = Expectation.of(s -> AbsSquared.of(s.subtract(mean)), distribution);
-      assertTrue(Chop._12.close(Var, var));
+      Chop._12.requireClose(Var, var);
     }
   }
 

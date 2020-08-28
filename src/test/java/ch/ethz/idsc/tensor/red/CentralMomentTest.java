@@ -25,7 +25,7 @@ public class CentralMomentTest extends TestCase {
     Tensor tensor = Tensors.vector(10, 2, 3, 4, 1);
     Scalar result = CentralMoment.of(tensor, 1.3);
     Scalar gndtru = Scalars.fromString("1.1567572194352718 - 1.2351191805935866* I");
-    assertTrue(Chop._12.close(result, gndtru));
+    Chop._12.requireClose(result, gndtru);
   }
 
   public void testQuantity() {

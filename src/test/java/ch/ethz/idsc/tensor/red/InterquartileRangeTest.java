@@ -29,12 +29,12 @@ public class InterquartileRangeTest extends TestCase {
   public void testDistributionExp() { // continuous
     Scalar lambda = RealScalar.of(5);
     Distribution distribution = ExponentialDistribution.of(lambda);
-    assertTrue(Chop._12.close(InterquartileRange.of(distribution), Log.of(RealScalar.of(3)).divide(lambda)));
+    Chop._12.requireClose(InterquartileRange.of(distribution), Log.of(RealScalar.of(3)).divide(lambda));
   }
 
   public void testDistributionUniform() { // continuous
     Distribution distribution = UniformDistribution.of(22, 30);
-    assertTrue(Chop._12.close(InterquartileRange.of(distribution), RealScalar.of(4)));
+    Chop._12.requireClose(InterquartileRange.of(distribution), RealScalar.of(4));
   }
 
   public void testDistributionPoisson() { // discrete

@@ -27,8 +27,8 @@ public class NormalizeTest extends TestCase {
   // function requires that vector != 0
   private static void _checkNormalize(Tensor vector, Norm norm) {
     Scalar value = norm.of(Normalize.with(norm).apply(vector));
-    assertTrue(Chop._13.close(value, RealScalar.ONE));
-    assertTrue(Chop._13.close(norm.of(NormalizeUnlessZero.with(norm).apply(vector)), RealScalar.ONE));
+    Chop._13.requireClose(value, RealScalar.ONE);
+    Chop._13.requireClose(norm.of(NormalizeUnlessZero.with(norm).apply(vector)), RealScalar.ONE);
   }
 
   private static void _checkNormalizeAllNorms(Tensor vector) {
@@ -99,8 +99,8 @@ public class NormalizeTest extends TestCase {
     TensorUnaryOperator normalize = Serialization.copy(Normalize.with(Norm._2::ofVector));
     Tensor vector = Tensors.fromString("{1+I, 2*I, -3-9.2*I}");
     Tensor s = normalize.apply(vector);
-    assertTrue(Chop._13.close(s.dot(Conjugate.of(s)), RealScalar.ONE));
-    assertTrue(Chop._13.close(Conjugate.of(s).dot(s), RealScalar.ONE));
+    Chop._13.requireClose(s.dot(Conjugate.of(s)), RealScalar.ONE);
+    Chop._13.requireClose(Conjugate.of(s).dot(s), RealScalar.ONE);
   }
 
   public void testComplex2() {
@@ -108,8 +108,8 @@ public class NormalizeTest extends TestCase {
     Tensor s = Normalize.with(Norm._2::ofVector).apply(vector);
     assertEquals(Projection.on(vector).apply(s), s);
     assertEquals(Projection.on(s).apply(vector), vector);
-    assertTrue(Chop._13.close(s.dot(Conjugate.of(s)), RealScalar.ONE));
-    assertTrue(Chop._13.close(Conjugate.of(s).dot(s), RealScalar.ONE));
+    Chop._13.requireClose(s.dot(Conjugate.of(s)), RealScalar.ONE);
+    Chop._13.requireClose(Conjugate.of(s).dot(s), RealScalar.ONE);
   }
 
   public void testQuantityTensor() {

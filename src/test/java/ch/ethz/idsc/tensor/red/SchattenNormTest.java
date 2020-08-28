@@ -22,7 +22,7 @@ public class SchattenNormTest extends TestCase {
     Tensor matrix = RandomVariate.of(distribution, 5, 10);
     Scalar norm1 = normInterface.ofMatrix(matrix);
     Scalar norm2 = Frobenius.NORM.ofMatrix(matrix);
-    assertTrue(Chop._13.close(norm1, norm2));
+    Chop._13.requireClose(norm1, norm2);
   }
 
   public void testFrobeniusInstance() {

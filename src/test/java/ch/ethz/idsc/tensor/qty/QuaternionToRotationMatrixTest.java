@@ -39,7 +39,7 @@ public class QuaternionToRotationMatrixTest extends TestCase {
       Quaternion quaternion = Quaternion.of(wxyz.Get(0), wxyz.Get(1), wxyz.Get(2), wxyz.Get(3));
       Quaternion reciprocal = quaternion.reciprocal();
       Tensor invmat = QuaternionToRotationMatrix.of(reciprocal);
-      assertTrue(Chop._12.close(matrix.dot(invmat), ID3));
+      Chop._12.requireClose(matrix.dot(invmat), ID3);
     }
   }
 
@@ -56,7 +56,7 @@ public class QuaternionToRotationMatrixTest extends TestCase {
       assertTrue(OrthogonalMatrixQ.of(matrix, Chop._12));
       Chop._12.requireClose(Det.of(matrix), RealScalar.ONE);
       Tensor result = matrix.dot(vector);
-      assertTrue(Chop._12.close(result, qvq.xyz()));
+      Chop._12.requireClose(result, qvq.xyz());
     }
   }
 

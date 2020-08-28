@@ -19,7 +19,7 @@ public class RootsDegree3FullTest extends TestCase {
     Tensor roots = Roots.of(coeffs);
     ScalarUnaryOperator scalarUnaryOperator = Series.of(coeffs);
     Tensor tensor = roots.map(scalarUnaryOperator);
-    assertTrue(Chop._13.allZero(tensor));
+    Chop._13.requireAllZero(tensor);
     Tensor depres = RootsDegree3.of(coeffs);
     Chop._10.requireClose(depres, roots);
   }
@@ -64,7 +64,7 @@ public class RootsDegree3FullTest extends TestCase {
     assertEquals((long) map.get(RealScalar.ONE.negate()), 2);
     ScalarUnaryOperator scalarUnaryOperator = Series.of(coeffs);
     Tensor tensor = roots.map(scalarUnaryOperator);
-    assertTrue(Chop._07.allZero(tensor));
+    Chop._07.requireAllZero(tensor);
     Tensor depres = RootsDegree3.of(coeffs);
     Chop._10.requireClose(depres, roots);
   }
@@ -74,7 +74,7 @@ public class RootsDegree3FullTest extends TestCase {
     Tensor roots = Roots.of(coeffs);
     ScalarUnaryOperator scalarUnaryOperator = Series.of(coeffs);
     Tensor tensor = roots.map(scalarUnaryOperator);
-    assertTrue(Chop._13.allZero(tensor));
+    Chop._13.requireAllZero(tensor);
     Tensor depres = RootsDegree3.of(coeffs);
     Chop._10.requireClose(depres, roots);
   }
@@ -84,7 +84,7 @@ public class RootsDegree3FullTest extends TestCase {
     Tensor roots = Roots.of(coeffs);
     ScalarUnaryOperator scalarUnaryOperator = Series.of(coeffs);
     Tensor tensor = roots.map(scalarUnaryOperator);
-    assertTrue(Chop._05.allZero(tensor));
+    Chop._05.requireAllZero(tensor);
     Tensor depres = RootsDegree3.of(coeffs);
     if (!Chop._10.close(depres, roots)) {
       System.out.println(depres);

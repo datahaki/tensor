@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 public class ErfcTest extends TestCase {
   public void testCompare() {
     Tensor x = Subdivide.of(-0.6, 0.6, 50);
-    assertTrue(Chop._07.close(Erfc.of(x), x.map(ErfcRestricted.FUNCTION)));
+    Chop._07.requireClose(Erfc.of(x), x.map(ErfcRestricted.FUNCTION));
   }
 
   public void testLimits() {

@@ -33,7 +33,7 @@ public class QuantityMagnitudeTest extends TestCase {
   public void testRad() throws ClassNotFoundException, IOException {
     QuantityMagnitude quantityMagnitude = Serialization.copy(QuantityMagnitude.SI());
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in(Unit.of("rad"));
-    assertTrue(Chop._12.close(scalarUnaryOperator.apply(Quantity.of(360, "deg")), RealScalar.of(Math.PI * 2)));
+    Chop._12.requireClose(scalarUnaryOperator.apply(Quantity.of(360, "deg")), RealScalar.of(Math.PI * 2));
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(2));
     assertEquals(scalar, RealScalar.of(2));
     assertTrue(ExactScalarQ.of(scalar));

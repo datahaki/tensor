@@ -18,7 +18,7 @@ public class ErlangDistributionTest extends TestCase {
     Distribution distribution = Serialization.copy(ErlangDistribution.of(3, RealScalar.of(1.8)));
     PDF pdf = PDF.of(distribution);
     Scalar p = pdf.at(RealScalar.of(3.2));
-    assertTrue(Chop._06.close(p, RealScalar.of(0.0940917)));
+    Chop._06.requireClose(p, RealScalar.of(0.0940917));
     assertEquals(pdf.at(RealScalar.of(0)), RealScalar.ZERO);
     assertEquals(pdf.at(RealScalar.of(-0.12)), RealScalar.ZERO);
   }

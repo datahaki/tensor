@@ -79,9 +79,9 @@ public class BSplineFunctionStringTest extends TestCase {
     Tensor r1 = bSplineFunction.apply(RealScalar.of(0.5));
     Tensor r2 = bSplineFunction.apply(RealScalar.of(1.5));
     Tensor r3 = bSplineFunction.apply(RealScalar.of(2.5)); // does not evaluate correctly
-    assertTrue(Chop._12.close(r1, RealScalar.of(1 / 3.0)));
+    Chop._12.requireClose(r1, RealScalar.of(1 / 3.0));
     assertEquals(r2, RealScalar.of(1.5));
-    assertTrue(Chop._12.close(r3, RealScalar.of(8 / 3.0)));
+    Chop._12.requireClose(r3, RealScalar.of(8 / 3.0));
   }
 
   public void testCubic() {
@@ -97,7 +97,7 @@ public class BSplineFunctionStringTest extends TestCase {
     assertEquals(bSplineFunction.apply(RealScalar.of(0)), RealScalar.of(2));
     assertEquals(bSplineFunction.apply(RealScalar.of(1)), RationalScalar.of(13, 12));
     assertEquals(bSplineFunction.apply(RealScalar.of(2)), RealScalar.of(0));
-    assertTrue(Chop._12.close(bSplineFunction.apply(RealScalar.of(3.999999999999)), RealScalar.of(-2)));
+    Chop._12.requireClose(bSplineFunction.apply(RealScalar.of(3.999999999999)), RealScalar.of(-2));
     assertEquals(bSplineFunction.apply(RealScalar.of(4)), RealScalar.of(-2));
   }
 

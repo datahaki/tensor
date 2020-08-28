@@ -51,7 +51,7 @@ public class MatrixExpTest extends TestCase {
   public void testExp1() {
     Scalar exp1 = MatrixExp.of(Tensors.fromString("{{1}}")).Get(0, 0);
     assertFalse(ExactScalarQ.of(exp1));
-    assertTrue(Chop._13.close(exp1, RealScalar.of(Math.exp(1))));
+    Chop._13.requireClose(exp1, RealScalar.of(Math.exp(1)));
   }
 
   public void testExp2() {
@@ -69,8 +69,8 @@ public class MatrixExpTest extends TestCase {
     assertTrue(HermitianMatrixQ.of(b));
     Scalar tra = Trace.of(MatrixExp.of(a.add(b)));
     Scalar trb = Trace.of(MatrixExp.of(a).dot(MatrixExp.of(b)));
-    assertTrue(Chop._05.close(tra, RealScalar.of(168.49869602))); // mathematica
-    assertTrue(Chop._05.close(trb, RealScalar.of(191.43054831))); // mathematica
+    Chop._05.requireClose(tra, RealScalar.of(168.49869602)); // mathematica
+    Chop._05.requireClose(trb, RealScalar.of(191.43054831)); // mathematica
   }
 
   public void testExact() {
@@ -92,7 +92,7 @@ public class MatrixExpTest extends TestCase {
     Tensor result = MatrixExp.of(mat);
     Tensor diaexp = MatrixExp.of(diag);
     Tensor altexp = A.dot(diaexp).dot(Inverse.of(A));
-    assertTrue(Chop._08.close(altexp, result));
+    Chop._08.requireClose(altexp, result);
   }
 
   public void testQuantity1() {
@@ -102,7 +102,7 @@ public class MatrixExpTest extends TestCase {
         Tensors.of(RealScalar.ZERO, qs1), //
         Tensors.vector(0, 0));
     Tensor sol = MatrixExp.of(mat);
-    assertTrue(Chop.NONE.close(sol, mat.add(IdentityMatrix.of(2))));
+    Chop.NONE.requireClose(sol, mat.add(IdentityMatrix.of(2)));
   }
 
   public void testQuantity2() {
@@ -117,7 +117,7 @@ public class MatrixExpTest extends TestCase {
     );
     Tensor actual = IdentityMatrix.of(3).add(mat).add(mat.dot(mat).multiply(RationalScalar.of(1, 2)));
     // assertEquals(MatrixExp.of(mat), actual);
-    assertTrue(Chop.NONE.close(MatrixExp.of(mat), actual));
+    Chop.NONE.requireClose(MatrixExp.of(mat), actual);
   }
 
   public void testLarge() {

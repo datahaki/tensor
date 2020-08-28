@@ -41,9 +41,9 @@ public class FrobeniusTest extends TestCase {
   public void testRank3() {
     Scalar expected = RealScalar.of(2.449489742783178);
     Scalar norm = Frobenius.of(LieAlgebras.so3());
-    assertTrue(Chop._14.close(norm, expected));
+    Chop._14.requireClose(norm, expected);
     Scalar scalar = Frobenius.of(Array.of(i -> RealScalar.ONE, 6));
-    assertTrue(Chop._14.close(scalar, expected));
+    Chop._14.requireClose(scalar, expected);
   }
 
   public void testVectorFail() {

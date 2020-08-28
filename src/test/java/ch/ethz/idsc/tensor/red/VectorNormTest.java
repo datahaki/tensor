@@ -31,7 +31,7 @@ public class VectorNormTest extends TestCase {
   public void testNormalize() {
     VectorNormInterface vni = VectorNorm.with(2.6);
     Tensor nrm = Normalize.with(vni::ofVector).apply(Tensors.vector(1, 2, 3));
-    assertTrue(Chop._15.close(vni.ofVector(nrm), RealScalar.ONE));
+    Chop._15.requireClose(vni.ofVector(nrm), RealScalar.ONE);
   }
 
   public void testNormalize2() {
@@ -40,7 +40,7 @@ public class VectorNormTest extends TestCase {
     Tensor vector = RandomVariate.of(distribution, 1000);
     Tensor result = Normalize.with(vni::ofVector).apply(vector);
     Scalar norm = vni.ofVector(result);
-    assertTrue(Chop._15.close(norm, RealScalar.ONE));
+    Chop._15.requireClose(norm, RealScalar.ONE);
   }
 
   public void testQuantity1() {
@@ -49,7 +49,7 @@ public class VectorNormTest extends TestCase {
     Tensor vec = Tensors.of(qs1, RealScalar.ZERO, qs2);
     Scalar lhs = VectorNorm.with(RationalScalar.of(7, 3)).ofVector(vec);
     Scalar rhs = Quantity.of(4.774145448367236, "m");
-    assertTrue(Chop._13.close(lhs, rhs));
+    Chop._13.requireClose(lhs, rhs);
   }
 
   public void testQuantity2() {
@@ -58,7 +58,7 @@ public class VectorNormTest extends TestCase {
     Tensor vec = Tensors.of(qs1, RealScalar.ZERO, qs2);
     Scalar lhs = VectorNorm.with(Math.PI).ofVector(vec); // the result has unit [m^1.0]
     Scalar rhs = Quantity.of(4.457284396597481, "m");
-    assertTrue(Chop._13.close(lhs, rhs));
+    Chop._13.requireClose(lhs, rhs);
   }
 
   public void testNormPFail() {

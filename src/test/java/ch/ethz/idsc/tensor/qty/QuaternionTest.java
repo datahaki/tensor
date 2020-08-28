@@ -52,7 +52,7 @@ public class QuaternionTest extends TestCase {
     Tensor xya = Tensors.vector(1, 2, 3);
     Quaternion quaternion = Quaternion.of(RealScalar.ONE, xya);
     xya.set(Scalar::zero, Tensor.ALL);
-    assertTrue(Chop.NONE.allZero(xya));
+    Chop.NONE.requireAllZero(xya);
     assertEquals(quaternion.xyz(), Tensors.vector(1, 2, 3));
   }
 
@@ -152,7 +152,7 @@ public class QuaternionTest extends TestCase {
       Scalar q1 = _createQ(vec);
       Scalar nrm = Norm._2.ofVector(vec);
       Scalar abs = Abs.of(q1);
-      assertTrue(Chop._12.close(nrm, abs));
+      Chop._12.requireClose(nrm, abs);
     }
   }
 

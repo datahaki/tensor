@@ -11,7 +11,7 @@ public class PDFTest extends TestCase {
   public void testExponentialDistribution() {
     PDF pdf = PDF.of(ExponentialDistribution.of(RationalScalar.of(3, 2)));
     Scalar density = pdf.at(RealScalar.of(3));
-    assertTrue(Chop._15.close(density, RealScalar.of(0.016663494807363458)));
+    Chop._15.requireClose(density, RealScalar.of(0.016663494807363458));
   }
 
   public void testNullFail() {
