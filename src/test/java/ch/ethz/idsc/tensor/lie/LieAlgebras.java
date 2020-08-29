@@ -5,7 +5,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.MatrixQ;
 
 /** class provides ad-tensors of several low-dimensional Lie-algebras */
 public enum LieAlgebras {
@@ -15,14 +14,6 @@ public enum LieAlgebras {
   private static final Scalar P2 = RealScalar.of(+2);
   private static final Scalar N2 = RealScalar.of(-2);
   private static final Tensor SO3 = LeviCivitaTensor.of(3).negate().unmodifiable();
-
-  /** @param x square matrix
-   * @param y square matrix
-   * @return Lie-bracket [x, y] == x.y - y.x
-   * @throws Exception if x or y are not square matrices */
-  public static Tensor bracketMatrix(Tensor x, Tensor y) {
-    return MatrixQ.require(x).dot(y).subtract(MatrixQ.require(y).dot(x));
-  }
 
   /** @return ad tensor of 3-dimensional Heisenberg Lie-algebra */
   public static Tensor he1() {

@@ -8,6 +8,14 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import junit.framework.TestCase;
 
 public class JacobiIdentityTest extends TestCase {
+  public void testHeisenberg() {
+    Tensor ad = LieAlgebras.he1();
+    Tensor eye = IdentityMatrix.of(3);
+    assertEquals(Dot.of(ad, eye.get(0), eye.get(1)), eye.get(2));
+    assertEquals(Dot.of(ad, eye.get(1), eye.get(0)), eye.get(2).negate());
+    assertEquals(JacobiIdentity.of(ad), Array.zeros(3, 3, 3, 3));
+  }
+
   public void testSo3() {
     Tensor so3 = LieAlgebras.so3();
     Tensor eye = IdentityMatrix.of(3);
