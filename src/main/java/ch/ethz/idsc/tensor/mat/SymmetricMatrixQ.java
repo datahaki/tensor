@@ -13,7 +13,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * <a href="https://reference.wolfram.com/language/ref/SymmetricMatrixQ.html">SymmetricMatrixQ</a>
  * 
  * @see HermitianMatrixQ
- * @see UnitaryMatrixQ */
+ * @see UnitaryMatrixQ
+ * @see AntisymmetricMatrixQ */
 public enum SymmetricMatrixQ {
   ;
   /** @param tensor

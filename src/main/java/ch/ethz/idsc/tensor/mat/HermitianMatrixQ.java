@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/HermitianMatrixQ.html">HermitianMatrixQ</a>
  * 
+ * @see SymmetricMatrixQ
  * @see AntisymmetricMatrixQ */
 public enum HermitianMatrixQ {
   ;

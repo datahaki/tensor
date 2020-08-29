@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.BinaryPower;
 import ch.ethz.idsc.tensor.alg.Sort;
+import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.mat.PivotFirstNonZero;
@@ -208,5 +209,17 @@ public class GaussScalarTest extends TestCase {
     assertTrue(0 < string.indexOf('3'));
     assertTrue(0 < string.indexOf('7'));
     // assertEquals(string, "{\"value\": 3, \"prime\": 7}");
+  }
+
+  public void testPrimes() {
+    Tensor tensor = ResourceData.of("/number/primes.vector");
+    tensor.extract(3, tensor.length()).stream() //
+        .parallel() //
+        .forEach(_x -> { // skip 2 3 5
+          long prime = _x.Get().number().longValue();
+          GaussScalar gaussScalar = GaussScalar.of(10, prime);
+          GaussScalar inverse = gaussScalar.reciprocal();
+          assertEquals(gaussScalar.multiply(inverse).number(), BigInteger.ONE);
+        });
   }
 }

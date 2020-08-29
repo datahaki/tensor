@@ -7,10 +7,17 @@ import ch.ethz.idsc.tensor.Scalars;
 import junit.framework.TestCase;
 
 public class ToleranceTest extends TestCase {
-  public void testSimple() {
+  public void testTrue() {
     Scalar scalar = Scalars.fromString("1E-20");
     assertEquals(scalar, DoubleScalar.of(1E-20));
     Tolerance.CHOP.requireZero(scalar);
-    assertFalse(Tolerance.CHOP.allZero(Scalars.fromString("1E-8")));
+    assertTrue(Tolerance.CHOP.isZero(scalar));
+    assertTrue(Tolerance.CHOP.allZero(scalar));
+  }
+
+  public void testFalse() {
+    Scalar scalar = Scalars.fromString("1E-8");
+    assertFalse(Tolerance.CHOP.isZero(scalar));
+    assertFalse(Tolerance.CHOP.allZero(scalar));
   }
 }

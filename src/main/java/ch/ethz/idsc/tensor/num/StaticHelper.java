@@ -11,8 +11,14 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
 /* package */ enum StaticHelper {
   ;
+  /** Quote from BigInteger:
+   * "certainty a measure of the uncertainty that the caller is
+   * willing to tolerate: if the call returns {@code true}
+   * the probability that this BigInteger is prime exceeds
+   * (1 - 1/2<sup>{@code certainty}</sup>). The execution time of
+   * this method is proportional to the value of this parameter." */
   private static final int CERTAINTY = 20;
-  private static final int MEMO_SIZE = 64;
+  private static final int MEMO_SIZE = 512;
   private static final Map<BigInteger, BigInteger> MEMO = //
       new LinkedHashMap<BigInteger, BigInteger>(MEMO_SIZE * 4 / 3, 0.75f, true) {
         @Override

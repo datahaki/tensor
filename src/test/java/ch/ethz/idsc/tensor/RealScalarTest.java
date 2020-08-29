@@ -98,13 +98,24 @@ public class RealScalarTest extends TestCase {
     assertEquals(scalar, RealScalar.of(123));
   }
 
-  public void testMiscTypes() {
+  public void testMiscPrimitives() {
     short vals = -312;
     assertEquals(RealScalar.of(vals), RealScalar.of(-312));
     ExactScalarQ.require(RealScalar.of(vals));
     byte valb = -122;
     assertEquals(RealScalar.of(valb), RealScalar.of(-122));
     ExactScalarQ.require(RealScalar.of(valb));
+  }
+
+  public void testMiscTypes() {
+    Short vals = -312;
+    assertEquals(RealScalar.of(vals), RealScalar.of(-312));
+    ExactScalarQ.require(RealScalar.of(vals));
+    Byte valb = -122;
+    assertEquals(RealScalar.of(valb), RealScalar.of(-122));
+    ExactScalarQ.require(RealScalar.of(valb));
+    Number number = BigDecimal.TEN;
+    assertEquals(RealScalar.of(number), RealScalar.of(10));
   }
 
   public void testCreateFail() {

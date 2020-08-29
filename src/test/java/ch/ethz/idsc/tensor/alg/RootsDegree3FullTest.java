@@ -99,9 +99,9 @@ public class RootsDegree3FullTest extends TestCase {
     Scalar m0 = Scalars.fromString("-0.6590816994450482 - 0.9180824258012533 * I");
     Scalar m1 = Scalars.fromString("-0.6590816994450482 + 0.9180824258012533 * I");
     Scalar m2 = RealScalar.of(0.9314107665802999);
-    assertTrue(roots.stream().map(scalar -> scalar.subtract(m0)).anyMatch(Chop._05::allZero));
-    assertTrue(roots.stream().map(scalar -> scalar.subtract(m1)).anyMatch(Chop._05::allZero));
-    assertTrue(roots.stream().map(scalar -> scalar.subtract(m2)).anyMatch(Chop._05::allZero));
+    assertTrue(roots.stream().anyMatch(root -> Chop._05.isClose(root, m0)));
+    assertTrue(roots.stream().anyMatch(root -> Chop._05.isClose(root, m1)));
+    assertTrue(roots.stream().anyMatch(root -> Chop._05.isClose(root, m2)));
   }
   // {4.403491745360149, -3.6065243114260417, -4.588031155616683, -4.8648946627594114E-4}
 }

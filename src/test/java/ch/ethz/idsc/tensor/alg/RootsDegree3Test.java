@@ -34,13 +34,13 @@ public class RootsDegree3Test extends TestCase {
     Chop._12.requireZero(polynomial.apply(cP));
     Chop._12.requireZero(polynomial.apply(cN));
     Tensor roots = Roots.of(coeffs);
-    assertTrue(roots.stream().map(root -> root.subtract(cR)).anyMatch(Chop._12::allZero));
-    assertTrue(roots.stream().map(root -> root.subtract(cP)).anyMatch(Chop._12::allZero));
-    assertTrue(roots.stream().map(root -> root.subtract(cN)).anyMatch(Chop._12::allZero));
+    assertTrue(roots.stream().anyMatch(root -> Chop._12.isClose(root, cR)));
+    assertTrue(roots.stream().anyMatch(root -> Chop._12.isClose(root, cP)));
+    assertTrue(roots.stream().anyMatch(root -> Chop._12.isClose(root, cN)));
     Tensor rootz = RootsDegree3Full.of(coeffs);
-    assertTrue(rootz.stream().map(root -> root.subtract(cR)).anyMatch(Chop._07::allZero));
-    assertTrue(rootz.stream().map(root -> root.subtract(cP)).anyMatch(Chop._07::allZero));
-    assertTrue(rootz.stream().map(root -> root.subtract(cN)).anyMatch(Chop._07::allZero));
+    assertTrue(rootz.stream().anyMatch(root -> Chop._07.isClose(root, cR)));
+    assertTrue(rootz.stream().anyMatch(root -> Chop._07.isClose(root, cP)));
+    assertTrue(rootz.stream().anyMatch(root -> Chop._07.isClose(root, cN)));
   }
 
   public void testRoots3() {
