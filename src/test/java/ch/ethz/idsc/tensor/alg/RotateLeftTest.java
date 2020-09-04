@@ -26,6 +26,12 @@ public class RotateLeftTest extends TestCase {
     assertEquals(tensor, RotateLeft.of(HilbertMatrix.of(3), 1));
   }
 
+  public void testEmpty() {
+    assertEquals(RotateLeft.of(Tensors.empty(), +1), Tensors.empty());
+    assertEquals(RotateLeft.of(Tensors.empty(), +0), Tensors.empty());
+    assertEquals(RotateLeft.of(Tensors.empty(), -1), Tensors.empty());
+  }
+
   public void testFailScalar() {
     try {
       RotateLeft.of(RealScalar.ONE, 0);

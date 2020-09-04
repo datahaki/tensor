@@ -27,6 +27,12 @@ public class RotateRightTest extends TestCase {
     }
   }
 
+  public void testEmpty() {
+    assertEquals(RotateRight.of(Tensors.empty(), +1), Tensors.empty());
+    assertEquals(RotateRight.of(Tensors.empty(), +0), Tensors.empty());
+    assertEquals(RotateRight.of(Tensors.empty(), -1), Tensors.empty());
+  }
+
   public void testFailScalar() {
     try {
       RotateRight.of(RealScalar.ONE, 0);

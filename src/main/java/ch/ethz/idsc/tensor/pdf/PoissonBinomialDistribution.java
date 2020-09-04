@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
  * @see BinomialDistribution
  * @see BinomialRandomVariate */
 public class PoissonBinomialDistribution implements DiscreteDistribution, //
-    MeanInterface, RandomVariateInterface, VarianceInterface, Serializable {
+    MeanInterface, VarianceInterface, Serializable {
   /** Hint:
    * if p_vector consists of identical entries, the {@link BinomialDistribution}
    * or {@link BinomialRandomVariate} should be used instead.

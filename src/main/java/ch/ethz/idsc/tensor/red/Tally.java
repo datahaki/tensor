@@ -31,7 +31,10 @@ public enum Tally {
     return of(tensor.stream());
   }
 
-  /** @param stream
+  /** Hint: the keys in the map are references to the elements in the provided stream.
+   * This is a feature and not a bug.
+   * 
+   * @param stream
    * @return map that assigns elements of the stream their multiplicity in given stream */
   public static <T extends Tensor> Map<T, Long> of(Stream<T> stream) {
     return stream.collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
@@ -51,6 +54,15 @@ public enum Tally {
    * @return navigable map that assigns entries of the tensor their multiplicity in the tensor
    * @throws Exception if given tensor is a {@link Scalar} */
   public static NavigableMap<Tensor, Long> sorted(Tensor tensor) {
-    return tensor.stream().collect(Collectors.groupingBy(Function.identity(), TreeMap::new, Collectors.counting()));
+    return sorted(tensor.stream());
+  }
+
+  /** Hint: the keys in the map are references to the elements in the provided stream.
+   * This is a feature and not a bug.
+   * 
+   * @param stream
+   * @return */
+  public static <T extends Tensor> NavigableMap<T, Long> sorted(Stream<T> stream) {
+    return stream.collect(Collectors.groupingBy(Function.identity(), TreeMap::new, Collectors.counting()));
   }
 }

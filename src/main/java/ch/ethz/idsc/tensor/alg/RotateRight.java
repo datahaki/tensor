@@ -10,7 +10,10 @@ import ch.ethz.idsc.tensor.Tensor;
  * @see RotateLeft */
 public enum RotateRight {
   ;
-  /** RotateRight[{a, b, c, d, e}, 2] == {d, e, a, b, c}
+  /** <pre>
+   * RotateRight[{a, b, c, d, e}, 2] == {d, e, a, b, c}
+   * RotateRight[{}, n] == {}
+   * </pre>
    * 
    * @param tensor
    * @param n any integer
