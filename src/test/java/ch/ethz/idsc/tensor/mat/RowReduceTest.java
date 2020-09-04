@@ -70,7 +70,7 @@ public class RowReduceTest extends TestCase {
   public void testPivots() {
     Tensor matrix = HilbertMatrix.of(3, 5);
     Tensor gf1 = RowReduce.of(matrix);
-    Tensor gf2 = RowReduce.of(Reverse.of(matrix), PivotFirstNonZero.INSTANCE);
+    Tensor gf2 = RowReduce.of(Reverse.of(matrix), Pivots.FIRST_NON_ZERO);
     assertEquals(gf1, gf2);
   }
 

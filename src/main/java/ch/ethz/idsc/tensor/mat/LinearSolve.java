@@ -25,7 +25,7 @@ public enum LinearSolve {
    * @return x with matrix.dot(x) == b
    * @throws TensorRuntimeException if matrix m is singular */
   public static Tensor of(Tensor matrix, Tensor b) {
-    return GaussianElimination.of(matrix, b, PivotArgMaxAbs.INSTANCE);
+    return GaussianElimination.of(matrix, b, Pivots.ARGMAX_ABS);
   }
 
   /** method only checks for non-zero

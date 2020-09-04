@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
-import ch.ethz.idsc.tensor.mat.PivotFirstNonZero;
+import ch.ethz.idsc.tensor.mat.Pivots;
 import ch.ethz.idsc.tensor.red.ArgMax;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Floor;
@@ -64,7 +64,7 @@ public class GaussScalarTest extends TestCase {
         { GaussScalar.of(6, 7), GaussScalar.of(4, 7) }, //
         { GaussScalar.of(5, 7), GaussScalar.of(0, 7) } //
     });
-    Tensor a = LinearSolve.of(m, b, PivotFirstNonZero.INSTANCE);
+    Tensor a = LinearSolve.of(m, b, Pivots.FIRST_NON_ZERO);
     assertEquals(m.dot(a), b);
   }
 

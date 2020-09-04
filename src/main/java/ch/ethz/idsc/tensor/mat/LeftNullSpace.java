@@ -42,7 +42,7 @@ public enum LeftNullSpace {
    * @param identity
    * @return */
   public static Tensor usingRowReduce(Tensor matrix, Tensor identity) {
-    return usingRowReduce(matrix, identity, PivotArgMaxAbs.INSTANCE);
+    return usingRowReduce(matrix, identity, Pivots.ARGMAX_ABS);
   }
 
   /** @param matrix

@@ -21,13 +21,13 @@ public enum Det {
   /** @param matrix
    * @return determinant of matrix */
   public static Scalar of(Tensor matrix) {
-    return of(matrix, PivotArgMaxAbs.INSTANCE);
+    return of(matrix, Pivots.ARGMAX_ABS);
   }
 
   /** @param matrix square matrix
    * @return determinant of m */
   public static Scalar withoutAbs(Tensor matrix) {
-    return of(matrix, PivotFirstNonZero.INSTANCE);
+    return of(matrix, Pivots.FIRST_NON_ZERO);
   }
 
   // helper function

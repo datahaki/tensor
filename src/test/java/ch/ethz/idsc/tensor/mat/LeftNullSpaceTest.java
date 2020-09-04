@@ -101,7 +101,7 @@ public class LeftNullSpaceTest extends TestCase {
     Tensor identi = DiagonalMatrix.of(Unprotect.dimension1(matrix), GaussScalar.of(1, prime));
     List<Integer> list = Dimensions.of(identi);
     assertEquals(list, Arrays.asList(dim1, dim1));
-    Tensor nullsp = NullSpace.usingRowReduce(matrix, identi, PivotFirstNonZero.INSTANCE);
+    Tensor nullsp = NullSpace.usingRowReduce(matrix, identi, Pivots.FIRST_NON_ZERO);
     Scalar det = Det.of(matrix);
     assertEquals(det, GaussScalar.of(0, prime));
     assertEquals(Dimensions.of(nullsp), Arrays.asList(2, 6));
@@ -110,7 +110,7 @@ public class LeftNullSpaceTest extends TestCase {
   public void testRectangle3x2G() {
     ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
-    Tensor tensor = NullSpace.usingRowReduce(matrix, DiagonalMatrix.of(2, GaussScalar.of(1, 7)), PivotFirstNonZero.INSTANCE);
+    Tensor tensor = NullSpace.usingRowReduce(matrix, DiagonalMatrix.of(2, GaussScalar.of(1, 7)), Pivots.FIRST_NON_ZERO);
     assertEquals(tensor.get(0), UnitVector.of(2, 1).map(suo));
     assertTrue(Scalars.isZero(Det.of(matrix)));
   }
@@ -118,7 +118,7 @@ public class LeftNullSpaceTest extends TestCase {
   public void testRectangle2x3G() {
     ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
     Tensor matrix = Tensors.fromString("{{1, 0, 0}, {0, 0, 0}}").map(suo);
-    Tensor tensor = NullSpace.usingRowReduce(matrix, DiagonalMatrix.of(3, GaussScalar.of(1, 7)), PivotFirstNonZero.INSTANCE);
+    Tensor tensor = NullSpace.usingRowReduce(matrix, DiagonalMatrix.of(3, GaussScalar.of(1, 7)), Pivots.FIRST_NON_ZERO);
     assertEquals(tensor.get(0), UnitVector.of(3, 1).map(suo));
     assertEquals(tensor.get(1), UnitVector.of(3, 2).map(suo));
     assertTrue(Scalars.isZero(Det.of(matrix)));

@@ -23,18 +23,15 @@ public class ImageCrop implements TensorUnaryOperator {
    * 
    * @param value
    * @return operator that removes the boundary of images of given color value */
+  @SuppressWarnings("unchecked")
   public static TensorUnaryOperator color(Tensor value) {
-    return new ImageCrop(value::equals);
-  }
-
-  private static interface TensorPredicate extends Predicate<Tensor>, Serializable {
-    // ---
+    return new ImageCrop((Predicate<Tensor> & Serializable) value::equals);
   }
 
   /***************************************************/
-  private final TensorPredicate predicate;
+  private final Predicate<Tensor> predicate;
 
-  private ImageCrop(TensorPredicate predicate) {
+  private ImageCrop(Predicate<Tensor> predicate) {
     this.predicate = predicate;
   }
 

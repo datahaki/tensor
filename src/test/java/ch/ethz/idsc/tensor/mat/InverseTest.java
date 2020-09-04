@@ -35,10 +35,10 @@ public class InverseTest extends TestCase {
     Random random = new SecureRandom();
     Tensor A = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(p), p), n, n);
     Tensor b = Tensors.vector(i -> GaussScalar.of(random.nextInt(p), p), n);
-    Tensor x = LinearSolve.of(A, b, PivotFirstNonZero.INSTANCE);
+    Tensor x = LinearSolve.of(A, b, Pivots.FIRST_NON_ZERO);
     assertEquals(A.dot(x), b);
     Tensor id = DiagonalMatrix.of(n, GaussScalar.of(1, p));
-    Tensor Ai = LinearSolve.of(A, id, PivotFirstNonZero.INSTANCE);
+    Tensor Ai = LinearSolve.of(A, id, Pivots.FIRST_NON_ZERO);
     assertEquals(A.dot(Ai), id);
     assertEquals(Ai.dot(A), id);
   }
@@ -52,8 +52,8 @@ public class InverseTest extends TestCase {
   }
 
   public void testFourier() {
-    Tensor inv1 = Inverse.of(FourierMatrix.of(5), PivotFirstNonZero.INSTANCE);
-    Tensor inv2 = Inverse.of(FourierMatrix.of(5), PivotArgMaxAbs.INSTANCE);
+    Tensor inv1 = Inverse.of(FourierMatrix.of(5), Pivots.FIRST_NON_ZERO);
+    Tensor inv2 = Inverse.of(FourierMatrix.of(5), Pivots.ARGMAX_ABS);
     Chop._10.requireClose(inv1, inv2);
   }
 
@@ -83,7 +83,7 @@ public class InverseTest extends TestCase {
       // ---
     }
     try {
-      Inverse.of(matrix, PivotFirstNonZero.INSTANCE);
+      Inverse.of(matrix, Pivots.FIRST_NON_ZERO);
       fail();
     } catch (Exception exception) {
       // ---
@@ -143,7 +143,7 @@ public class InverseTest extends TestCase {
       Chop.NONE.requireClose(eye, res);
     }
     {
-      Tensor inv = LinearSolve.of(matrix, eye, PivotFirstNonZero.INSTANCE);
+      Tensor inv = LinearSolve.of(matrix, eye, Pivots.FIRST_NON_ZERO);
       Tensor res = matrix.dot(inv);
       Chop.NONE.requireClose(eye, res);
     }

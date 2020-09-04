@@ -16,7 +16,7 @@ public class RowReduce extends AbstractReduce {
   /** @param matrix
    * @return reduced row echelon form (also called row canonical form) of matrix */
   public static Tensor of(Tensor matrix) {
-    return of(matrix, PivotArgMaxAbs.INSTANCE);
+    return of(matrix, Pivots.ARGMAX_ABS);
   }
 
   /** @param matrix

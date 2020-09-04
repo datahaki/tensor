@@ -37,7 +37,7 @@ public enum LinearProgramming {
    * @param b
    * @return x >= 0 that minimizes c.x subject to m.x == b */
   public static Tensor minEquals(Tensor c, Tensor m, Tensor b) {
-    return minEquals(c, m, b, SimplexPivot.NONBASIC_GRADIENT);
+    return minEquals(c, m, b, SimplexPivots.NONBASIC_GRADIENT);
   }
 
   /** @param c

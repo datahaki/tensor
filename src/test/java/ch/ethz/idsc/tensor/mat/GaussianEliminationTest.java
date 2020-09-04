@@ -15,8 +15,8 @@ public class GaussianEliminationTest extends TestCase {
   public void testPivots() {
     Tensor matrix = HilbertMatrix.of(3);
     Tensor rhs = Tensors.vector(-1, -2, 3);
-    Tensor ge1 = GaussianElimination.of(matrix, rhs, PivotArgMaxAbs.INSTANCE);
-    Tensor ge2 = GaussianElimination.of(matrix, rhs, PivotFirstNonZero.INSTANCE);
+    Tensor ge1 = GaussianElimination.of(matrix, rhs, Pivots.ARGMAX_ABS);
+    Tensor ge2 = GaussianElimination.of(matrix, rhs, Pivots.FIRST_NON_ZERO);
     assertEquals(ge1, ge2);
     ExactTensorQ.require(ge1);
     ExactTensorQ.require(ge2);
