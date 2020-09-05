@@ -29,8 +29,8 @@ import ch.ethz.idsc.tensor.mat.LinearSolve;
    * @return all non-negative solutions */
   public static NavigableMap<Scalar, Tensor> minEquals(Tensor c, Tensor A, Tensor b, boolean isNonNegative) {
     List<Integer> list = Dimensions.of(A);
-    final int m = b.length();
-    final int n = c.length();
+    int m = b.length();
+    int n = c.length();
     if (!list.equals(Arrays.asList(m, n)))
       throw TensorRuntimeException.of(c, A, b);
     NavigableMap<Scalar, Tensor> map = new TreeMap<>();

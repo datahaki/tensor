@@ -14,8 +14,8 @@ import ch.ethz.idsc.tensor.Tensors;
   public static Size of(int[] dims) {
     return new Size(Arrays.copyOf(dims, dims.length));
   }
-  // ---
 
+  /***************************************************/
   private final int[] size;
   private final int[] prod;
 

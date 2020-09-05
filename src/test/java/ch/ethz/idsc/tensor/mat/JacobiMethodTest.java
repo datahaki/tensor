@@ -41,7 +41,7 @@ public class JacobiMethodTest extends TestCase {
     Chop._12.requireClose(norm, Tensors.vector(i -> RealScalar.ONE, norm.length()));
     // testing orthogonality
     final Tensor Vt = Transpose.of(eigensystem.vectors());
-    final int n = eigensystem.values().length();
+    int n = eigensystem.values().length();
     Tensor id = IdentityMatrix.of(n);
     Chop._12.requireClose(Vt.dot(eigensystem.vectors()), id);
     Chop._12.requireClose(eigensystem.vectors().dot(Vt), id);

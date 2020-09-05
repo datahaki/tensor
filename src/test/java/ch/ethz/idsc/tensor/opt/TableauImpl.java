@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.sca.SignInterface;
       // System.out.println("current tableau");
       // System.out.println(Pretty.of(tab));
       Tensor c = tab.get(m).extract(0, n);
-      final int j = ArgMin.of(c);
+      int j = ArgMin.of(c);
       if (((SignInterface) c.Get(j)).signInt() == -1) {
         int argmax = ArgMax.of(tab.get(Tensor.ALL, j).extract(0, m));
         if (((SignInterface) tab.Get(argmax, j)).signInt() != 1)

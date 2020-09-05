@@ -34,7 +34,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
     for (int dim = 0; dim < 40; ++dim) {
       System.out.println(dim);
       Timing timing = Timing.stopped();
-      final int trials = 50;
+      int trials = 50;
       for (int count = 0; count < trials; ++count) {
         Tensor a = RandomVariate.of(distribution, dim, dim);
         Tensor b = RandomVariate.of(distribution, dim, dim);

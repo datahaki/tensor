@@ -32,7 +32,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
       System.out.println(dim);
       Timing s_ser = Timing.stopped();
       Timing s_par = Timing.stopped();
-      final int trials = 200;
+      int trials = 200;
       for (int count = 0; count < trials; ++count) {
         Tensor a = RandomVariate.of(distribution, dim);
         Tensor b = RandomVariate.of(distribution, dim);

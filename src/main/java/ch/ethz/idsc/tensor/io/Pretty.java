@@ -32,7 +32,7 @@ public class Pretty {
   private int level = 0;
 
   private Pretty(Tensor tensor) {
-    final int max = tensor.flatten(-1) //
+    int max = tensor.flatten(-1) //
         .map(Object::toString) //
         .mapToInt(String::length) //
         .max().orElse(0);

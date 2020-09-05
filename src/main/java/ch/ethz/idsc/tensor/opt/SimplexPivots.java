@@ -32,7 +32,7 @@ public enum SimplexPivots implements SimplexPivot {
       }
       return pivot;
     }
-  }, //
+  },
   /** first viable index
    * for experimentation only, does not work on all problems yet */
   FIRST() {

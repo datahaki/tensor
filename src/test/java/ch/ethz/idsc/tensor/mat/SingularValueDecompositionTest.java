@@ -26,7 +26,7 @@ public class SingularValueDecompositionTest extends TestCase {
   static SingularValueDecomposition specialOps(Tensor A) {
     SingularValueDecomposition svd = SingularValueDecomposition.of(A);
     List<Integer> dims = Dimensions.of(A);
-    final int N = dims.get(1);
+    int N = dims.get(1);
     final Tensor U = svd.getU();
     assertEquals(dims, Dimensions.of(U));
     final Tensor w = svd.values();

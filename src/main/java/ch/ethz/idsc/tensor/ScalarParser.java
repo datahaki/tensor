@@ -83,7 +83,7 @@ import java.util.regex.Pattern;
       return RationalScalar.of(new BigInteger(string), BigInteger.ONE);
     if (PATTERN_DOUBLE.matcher(string).matches()) // check double
       return DoubleScalar.of(Double.parseDouble(string));
-    final int prime = string.indexOf(DECIMAL_PRIME); // check decimal
+    int prime = string.indexOf(DECIMAL_PRIME); // check decimal
     if (0 < prime) {
       String ante = string.substring(0, prime);
       String post = string.substring(prime + 1);

@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
     for (int dim = 1; dim <= 25; ++dim) {
       System.out.println(dim);
       Timing timing = Timing.stopped();
-      final int trials = 70 - dim;
+      int trials = 70 - dim;
       for (int count = 0; count < trials; ++count) {
         Tensor a = RandomVariate.of(distribution, dim, dim);
         a = Symmetrize.of(a);

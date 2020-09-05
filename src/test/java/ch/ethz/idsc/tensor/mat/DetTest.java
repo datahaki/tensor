@@ -152,8 +152,26 @@ public class DetTest extends TestCase {
   }
 
   public void testSingular() {
-    Tensor m = Array.zeros(5, 5);
-    assertEquals(Det.of(m), RealScalar.ZERO);
+    for (Pivot pivot : Pivots.values()) {
+      assertEquals(Det.of(Array.zeros(5, 5), pivot), RealScalar.ZERO);
+      assertEquals(Det.of(Array.zeros(2, 5), pivot), RealScalar.ZERO);
+      assertEquals(Det.of(Array.zeros(5, 2), pivot), RealScalar.ZERO);
+    }
+  }
+
+  public void testNullFail() {
+    try {
+      Det.of(Array.zeros(5, 2), null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+    try {
+      Det.of(Array.zeros(2, 5), null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 
   // https://ch.mathworks.com/help/matlab/ref/det.html
@@ -167,7 +185,7 @@ public class DetTest extends TestCase {
     Scalar num1 = Det.of(N.DOUBLE.of(matrix)); // indeed, our algo is no different:
     // num1 == 105968.67122221774
     num1.toString(); // to eliminate warning
-    Scalar num2 = Det.withoutAbs(N.DOUBLE.of(matrix)); // indeed, our algo is no different:
+    Scalar num2 = Det.of(N.DOUBLE.of(matrix), Pivots.FIRST_NON_ZERO); // indeed, our algo is no different:
     // num2 == 105968.67122221774
     num2.toString(); // to eliminate warning
   }
@@ -179,7 +197,7 @@ public class DetTest extends TestCase {
   }
 
   public void testHilbert2() {
-    Scalar det = Det.withoutAbs(HilbertMatrix.of(8));
+    Scalar det = Det.of(HilbertMatrix.of(8), Pivots.FIRST_NON_ZERO);
     assertEquals(det, Scalars.fromString("1/365356847125734485878112256000000"));
   }
 }

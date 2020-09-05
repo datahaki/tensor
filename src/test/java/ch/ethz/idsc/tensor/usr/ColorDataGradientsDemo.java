@@ -27,9 +27,9 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
   private static final Scalar TFF = RealScalar.of(255);
 
   public static void main(String[] args) throws IOException {
-    final int spa = 0;
-    final int hei = 15 + spa;
-    final int sep = 142;
+    int spa = 0;
+    int hei = 15 + spa;
+    int sep = 142;
     Tensor array = Array.of(list -> RealScalar.of(list.get(1)), hei - spa, 256);
     Tensor image = Tensors.empty();
     Tensor white = Array.of(l -> TFF, hei - spa, sep, 4);

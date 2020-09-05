@@ -50,8 +50,8 @@ public enum LeftNullSpace {
    * @param pivot
    * @return list of vectors that span the left nullspace of given matrix */
   public static Tensor usingRowReduce(Tensor matrix, Tensor identity, Pivot pivot) {
-    final int rows = matrix.length(); // == identity.length()
-    final int cols = Unprotect.dimension1(matrix);
+    int rows = matrix.length(); // == identity.length()
+    int cols = Unprotect.dimension1(matrix);
     Tensor lhs = RowReduce.of(Join.of(1, matrix, identity), pivot);
     int j = 0;
     int c0 = 0;

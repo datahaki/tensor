@@ -19,6 +19,7 @@ public enum Inverse {
   /** function doesn't invoke Scalar::abs but pivots at the first non-zero column entry
    * 
    * @param matrix with square dimensions
+   * @param pivot
    * @return inverse of given matrix
    * @throws Exception if given matrix is not invertible */
   public static Tensor of(Tensor matrix, Pivot pivot) {

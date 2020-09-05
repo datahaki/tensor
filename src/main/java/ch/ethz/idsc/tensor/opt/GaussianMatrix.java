@@ -20,10 +20,10 @@ public enum GaussianMatrix {
    * @return m x m matrix where m == 2 * r + 1
    * @throws Exception if r is zero or negative */
   public static Tensor of(int r) {
-    final Scalar sigmas = AbsSquared.FUNCTION.apply(RationalScalar.of(r, 2));
-    final Scalar factor = sigmas.add(sigmas).negate();
-    final int m = 2 * r + 1;
-    final Tensor offset = Tensors.vector(-r, -r);
+    Scalar sigmas = AbsSquared.FUNCTION.apply(RationalScalar.of(r, 2));
+    Scalar factor = sigmas.add(sigmas).negate();
+    int m = 2 * r + 1;
+    Tensor offset = Tensors.vector(-r, -r);
     Tensor matrix = Array.of(list -> Norm2Squared.ofVector(Tensors.vector(list).add(offset)), m, m) //
         .divide(factor).map(Exp.FUNCTION);
     return matrix.divide(matrix.flatten(2).reduce(Tensor::add).get().Get());

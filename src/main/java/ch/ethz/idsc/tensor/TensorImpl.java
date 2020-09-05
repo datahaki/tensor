@@ -46,7 +46,7 @@ import java.util.stream.Stream;
 
   private Tensor _get(List<Integer> index) {
     List<Integer> sublist = index.subList(1, index.size());
-    final int head = index.get(0);
+    int head = index.get(0);
     if (head == ALL)
       return Tensor.of(list.stream().map(tensor -> tensor.get(sublist)));
     return list.get(head).get(sublist);
@@ -59,7 +59,7 @@ import java.util.stream.Stream;
 
   // package visibility in order to override in UnmodifiableTensor
   /* package */ void _set(Tensor tensor, List<Integer> index) {
-    final int head = index.get(0);
+    int head = index.get(0);
     if (index.size() == 1)
       if (head == ALL) {
         TensorImpl impl = (TensorImpl) tensor;
@@ -84,7 +84,7 @@ import java.util.stream.Stream;
   @SuppressWarnings("unchecked")
   // package visibility in order to override in UnmodifiableTensor
   /* package */ <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
-    final int head = index.get(0);
+    int head = index.get(0);
     if (index.size() == 1)
       if (head == ALL)
         IntStream.range(0, list.size()).forEach(pos -> list.set(pos, function.apply((T) list.get(pos)).copy()));

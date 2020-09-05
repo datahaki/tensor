@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.mat;
 
 import java.util.List;
+import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -24,24 +25,21 @@ public enum Det {
     return of(matrix, Pivots.ARGMAX_ABS);
   }
 
-  /** @param matrix square matrix
-   * @return determinant of m */
-  public static Scalar withoutAbs(Tensor matrix) {
-    return of(matrix, Pivots.FIRST_NON_ZERO);
-  }
-
-  // helper function
-  private static Scalar of(Tensor matrix, Pivot pivot) {
+  /** @param matrix
+   * @param pivot
+   * @return determinant of matrix */
+  public static Scalar of(Tensor matrix, Pivot pivot) {
     Dimensions dimensions = new Dimensions(matrix);
     List<Integer> list = dimensions.list();
-    final int n = list.get(0);
-    final int m = list.get(1);
+    int n = list.get(0);
+    int m = list.get(1);
     if (m == 0 || //
         !dimensions.isArray() || //
         dimensions.maxDepth() != 2)
       throw TensorRuntimeException.of(matrix);
     if (n == m) // square
       return Determinant.of(matrix, pivot);
+    Objects.requireNonNull(pivot);
     return Diagonal.of(matrix).stream() //
         .map(Scalar.class::cast) //
         .map(Scalar::zero) //

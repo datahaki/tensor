@@ -29,8 +29,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
    * @param simplexPivot
    * @return */
   public static Tensor of(Tensor c, Tensor A, Tensor b, SimplexPivot simplexPivot) {
-    final int m = b.length();
-    final int n = c.length();
+    int m = b.length();
+    int n = c.length();
     // System.out.println(m + " x " + n);
     SimplexMethod simplexImpl;
     {

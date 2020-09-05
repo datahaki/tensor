@@ -86,7 +86,7 @@ public class GaussScalarTest extends TestCase {
   }
 
   public void testSqrt11() {
-    final int prime = 11;
+    int prime = 11;
     int count = 0;
     for (int c = 0; c < prime; ++c) {
       Scalar s = GaussScalar.of(c, prime);

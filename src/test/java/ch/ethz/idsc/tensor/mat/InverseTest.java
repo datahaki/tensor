@@ -137,13 +137,8 @@ public class InverseTest extends TestCase {
     Tensor matrix = Tensors.fromString( //
         "{{1[m^2], 2[m*rad], 3[kg*m]}, {4[m*rad], 2[rad^2], 2[kg*rad]}, {5[kg*m], 1[kg*rad], 7[kg^2]}}");
     final Tensor eye = IdentityMatrix.of(3).unmodifiable();
-    {
-      Tensor inv = LinearSolve.of(matrix, eye);
-      Tensor res = matrix.dot(inv);
-      Chop.NONE.requireClose(eye, res);
-    }
-    {
-      Tensor inv = LinearSolve.of(matrix, eye, Pivots.FIRST_NON_ZERO);
+    for (Pivot pivot : Pivots.values()) {
+      Tensor inv = LinearSolve.of(matrix, eye, pivot);
       Tensor res = matrix.dot(inv);
       Chop.NONE.requireClose(eye, res);
     }

@@ -12,9 +12,9 @@ import ch.ethz.idsc.tensor.qty.Unit;
    * @param string
    * @return */
   public static Scalar of(String string) {
-    final int index = string.indexOf(Quantity.UNIT_OPENING_BRACKET);
+    int index = string.indexOf(Quantity.UNIT_OPENING_BRACKET);
     if (0 < index) {
-      final int last = string.indexOf(Quantity.UNIT_CLOSING_BRACKET);
+      int last = string.indexOf(Quantity.UNIT_CLOSING_BRACKET);
       if (index < last && string.substring(last + 1).trim().isEmpty())
         return Quantity.of( //
             Scalars.fromString(string.substring(0, index)), //
