@@ -114,6 +114,12 @@ public class QuantityMagnitudeTest extends TestCase {
     assertEquals(_1kg_in_tons, RationalScalar.of(1, 1000));
   }
 
+  public void testPercent() {
+    ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("pct");
+    Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(2));
+    assertEquals(scalar, RealScalar.of(200));
+  }
+
   public void testVolume() {
     Chop._10.requireClose( //
         QuantityMagnitude.SI().in("L").apply(Quantity.of(1.0, "cups")), //

@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -57,12 +59,15 @@ public interface Quantity extends Scalar {
    * @param value
    * @param unit for instance Unit.of("m*s^-1")
    * @return
-   * @throws Exception if value is instance of {@code Quantity} or {@link StringScalar} */
+   * @throws Exception if value is instance of {@code Quantity} or {@link StringScalar}
+   * @throws Exception if value or unit is null */
   static Scalar of(Scalar value, Unit unit) {
     if (value instanceof Quantity || //
         value instanceof StringScalar)
       throw TensorRuntimeException.of(value);
-    return QuantityImpl.of(value, unit);
+    return QuantityImpl.of( //
+        Objects.requireNonNull(value), //
+        unit);
   }
 
   /** Hint: function does not check parameters for null, although

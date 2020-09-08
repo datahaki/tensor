@@ -174,7 +174,25 @@ public class QuantityTest extends TestCase {
     }
   }
 
-  public void testNullFail() {
+  public void testNullScalarStringFail() {
+    try {
+      Quantity.of((Scalar) null, "s");
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNullScalarUnitFail() {
+    try {
+      Quantity.of((Scalar) null, Unit.of("s"));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNullUnitFail() {
     try {
       Quantity.of(RealScalar.ZERO, (Unit) null);
       fail();
