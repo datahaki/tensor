@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.CsvFormat;
 import ch.ethz.idsc.tensor.io.StringScalar;
+import ch.ethz.idsc.tensor.opt.Pi;
 import junit.framework.TestCase;
 
 public class QuantityTest extends TestCase {
@@ -150,40 +151,8 @@ public class QuantityTest extends TestCase {
     }
   }
 
-  public void testNullFail1() {
-    try {
-      Quantity.of((Number) null, Unit.of("s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testNullFail2() {
-    try {
-      Quantity.of((Number) null, "s");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quantity.of(123, (String) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testNullScalarStringFail() {
-    try {
-      Quantity.of((Scalar) null, "s");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testNullScalarUnitFail() {
+  /***************************************************/
+  public void testScalarUnit01Fail() {
     try {
       Quantity.of((Scalar) null, Unit.of("s"));
       fail();
@@ -192,9 +161,66 @@ public class QuantityTest extends TestCase {
     }
   }
 
-  public void testNullUnitFail() {
+  public void testScalarUnit10Fail() {
     try {
-      Quantity.of(RealScalar.ZERO, (Unit) null);
+      Quantity.of(Pi.VALUE, (Unit) null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  /***************************************************/
+  public void testScalarString01Fail() {
+    try {
+      Quantity.of((Scalar) null, "s");
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testScalarString10Fail() {
+    try {
+      Quantity.of(RealScalar.ONE, (String) null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  /***************************************************/
+  public void testNumberUnit01Fail() {
+    try {
+      Quantity.of((Number) null, Unit.of("s"));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNumberUnit10Fail() {
+    try {
+      Quantity.of(123, (Unit) null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  /***************************************************/
+  public void testNumberString01Fail() {
+    try {
+      Quantity.of((Number) null, "s");
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNumberString10Fail() {
+    try {
+      Quantity.of(123, (String) null);
       fail();
     } catch (Exception exception) {
       // ---

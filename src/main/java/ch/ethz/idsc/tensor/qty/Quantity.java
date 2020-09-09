@@ -60,7 +60,7 @@ public interface Quantity extends Scalar {
    * @param unit for instance Unit.of("m*s^-1")
    * @return
    * @throws Exception if value is instance of {@code Quantity} or {@link StringScalar}
-   * @throws Exception if value or unit is null */
+   * @throws Exception if either parameter equals null */
   static Scalar of(Scalar value, Unit unit) {
     if (value instanceof Quantity || //
         value instanceof StringScalar)
@@ -77,7 +77,8 @@ public interface Quantity extends Scalar {
    * @param string for instance "m*s^-2"
    * @return
    * @throws Exception if value is instance of {@code Quantity}
-   * @throws Exception if string does not represent unit */
+   * @throws Exception if string does not represent unit
+   * @throws Exception if either parameter equals null */
   static Scalar of(Scalar value, String string) {
     return of(value, Unit.of(string));
   }

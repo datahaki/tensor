@@ -45,7 +45,7 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
    * @param unit
    * @return */
   /* package */ static Scalar of(Scalar value, Unit unit) {
-    return Units.isOne(unit) //
+    return UnitQ.isOne(unit) //
         ? value
         : new QuantityImpl(value, unit);
   }
