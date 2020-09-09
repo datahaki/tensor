@@ -31,13 +31,13 @@ public class UnitTest extends TestCase {
   public void testMultiplyZero() {
     Unit unit = Unit.of("kg");
     Unit gone = unit.multiply(RealScalar.ZERO);
-    assertTrue(Units.isOne(gone));
+    assertTrue(UnitQ.isOne(gone));
   }
 
   public void testMultiplyZero2() {
     Unit unit = Unit.of("kg*m^-3");
     Unit gone = unit.multiply(RealScalar.ZERO);
-    assertTrue(Units.isOne(gone));
+    assertTrue(UnitQ.isOne(gone));
   }
 
   public void testMultiplyFail() {
