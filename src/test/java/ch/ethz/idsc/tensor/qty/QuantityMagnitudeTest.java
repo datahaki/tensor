@@ -115,7 +115,7 @@ public class QuantityMagnitudeTest extends TestCase {
   }
 
   public void testPercent() {
-    ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("pct");
+    ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("%");
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(2));
     assertEquals(scalar, RealScalar.of(200));
   }

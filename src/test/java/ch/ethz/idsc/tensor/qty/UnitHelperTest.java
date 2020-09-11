@@ -46,4 +46,19 @@ public class UnitHelperTest extends TestCase {
     assertTrue(UnitHelper.MEMO.lookup("____").equals(UnitHelper.MEMO.lookup("____")));
     assertFalse(UnitHelper.MEMO.lookup("___").equals(UnitHelper.MEMO.lookup("____")));
   }
+
+  public void testMap() {
+    for (int c1 = 0; c1 < 26; ++c1) {
+      char chr1 = (char) (65 + c1);
+      for (int c2 = 0; c2 < 26; ++c2) {
+        char chr2 = (char) (65 + c2);
+        for (int c3 = 0; c3 < 13; ++c3) {
+          char chr3 = (char) (65 + c3);
+          Unit.of(chr1 + "" + chr2 + "" + chr3);
+        }
+      }
+    }
+    int map_size = UnitHelper.MEMO.map_size();
+    assertTrue(map_size < 1000);
+  }
 }

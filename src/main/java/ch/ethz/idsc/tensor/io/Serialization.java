@@ -18,7 +18,7 @@ public enum Serialization {
    * <p>In order to store the object <b>uncompressed</b> to a file, use
    * <code>Files.write(Paths.get("filePath"), bytes)</code>
    * 
-   * @param object
+   * @param object may be null
    * @return serialization of object
    * @throws IOException */
   public static byte[] of(Object object) throws IOException {
@@ -50,7 +50,7 @@ public enum Serialization {
 
   /** function also known as "deepcopy"
    * 
-   * @param object that implements {@link Serializable}
+   * @param object that implements {@link Serializable} may be null
    * @return new instance of T with identical content as given object
    * @throws ClassNotFoundException
    * @throws IOException */

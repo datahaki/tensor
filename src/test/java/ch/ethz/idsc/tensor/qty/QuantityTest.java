@@ -7,6 +7,9 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DecimalScalar;
+import ch.ethz.idsc.tensor.DeterminateScalarQ;
+import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -48,6 +51,18 @@ public class QuantityTest extends TestCase {
     _check("-7[m*kg^-2");
     _check("1abc[m]");
     _check("1abc[]");
+  }
+
+  public void testPercent() {
+    Scalar of = Quantity.of(50, "%");
+    DeterminateScalarQ.require(of);
+    Scalar pr = Scalars.fromString("50[%]");
+    assertEquals(of, pr);
+    Scalar n1 = UnitSystem.SI().apply(pr);
+    ExactScalarQ.require(n1);
+    assertEquals(n1, RationalScalar.HALF);
+    Scalar n2 = QuantityMagnitude.SI().in(Unit.ONE).apply(pr);
+    assertEquals(n2, RationalScalar.HALF);
   }
 
   public void testFromStringComplex() {

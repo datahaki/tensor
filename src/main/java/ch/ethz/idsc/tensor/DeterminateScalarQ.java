@@ -20,4 +20,10 @@ public enum DeterminateScalarQ {
     return MachineNumberQ.of(tensor) //
         || ExactScalarQ.of(tensor);
   }
+
+  public static Scalar require(Scalar scalar) {
+    if (of(scalar))
+      return scalar;
+    throw TensorRuntimeException.of(scalar);
+  }
 }

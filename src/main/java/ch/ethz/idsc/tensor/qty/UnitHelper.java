@@ -17,10 +17,10 @@ import ch.ethz.idsc.tensor.Scalars;
 /* package */ enum UnitHelper {
   MEMO;
 
-  private static final int SIZE = 500;
+  private static final int SIZE = 384;
   /** atomic unit may consist of roman letters in lower case a-z,
    * upper case A-Z, as well as the underscore character '_' */
-  private static final Pattern PATTERN = Pattern.compile("[a-zA-Z_]+");
+  private static final Pattern PATTERN = Pattern.compile("[%A-Z_a-z]+");
   // ---
   private final Map<String, Unit> map = new LinkedHashMap<String, Unit>(SIZE * 4 / 3, 0.75f, true) {
     @Override
@@ -77,5 +77,9 @@ import ch.ethz.idsc.tensor.Scalars;
         map.put(key, exponent);
     }
     return new UnitImpl(map);
+  }
+
+  /* package for testing */ int map_size() {
+    return map.size();
   }
 }
