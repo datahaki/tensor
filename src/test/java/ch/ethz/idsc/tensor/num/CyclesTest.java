@@ -2,6 +2,10 @@
 package ch.ethz.idsc.tensor.num;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -20,8 +24,8 @@ public class CyclesTest extends TestCase {
     Cycles cycles = Cycles.of(_input);
     Tensor tensor = cycles.toTensor();
     assertEquals(tensor, Tensors.fromString("{{1, 20}, {4, 10, 19, 6, 18}, {5, 9}, {7, 14, 13}}"));
-    assertEquals(cycles, tensor.stream().map(Tensors::of).map(Cycles::of).reduce(Cycles::product).get());
-    assertEquals(cycles, _input.stream().map(Tensors::of).map(Cycles::of).reduce(Cycles::product).get());
+    assertEquals(cycles, tensor.stream().map(Tensors::of).map(Cycles::of).reduce(Cycles::combine).get());
+    assertEquals(cycles, _input.stream().map(Tensors::of).map(Cycles::of).reduce(Cycles::combine).get());
   }
 
   public void testInverse() {
@@ -31,18 +35,18 @@ public class CyclesTest extends TestCase {
   }
 
   private static String _combo(String a, String b) {
-    Cycles ca = Cycles.of(Tensors.fromString(a));
+    Cycles ca = Cycles.of(a);
     assertTrue(1 < ca.map().size());
     Cycles ci = ca.inverse();
     assertEquals(ca.map().size(), ci.map().size());
     assertEquals(ca.toTensor().length(), ci.toTensor().length());
-    assertEquals(ca.product(ci), Cycles.identity());
-    assertEquals(ci.product(ca), Cycles.identity());
-    Cycles cb = Cycles.of(Tensors.fromString(b));
+    assertEquals(ca.combine(ci), Cycles.identity());
+    assertEquals(ci.combine(ca), Cycles.identity());
+    Cycles cb = Cycles.of(b);
     assertTrue(1 < cb.map().size());
-    assertEquals(cb.product(cb.inverse()), Cycles.identity());
-    assertEquals(cb.inverse().product(cb), Cycles.identity());
-    return ca.product(cb).toString();
+    assertEquals(cb.combine(cb.inverse()), Cycles.identity());
+    assertEquals(cb.inverse().combine(cb), Cycles.identity());
+    return ca.combine(cb).toString();
   }
 
   public void testCombine() {
@@ -64,6 +68,33 @@ public class CyclesTest extends TestCase {
   public void testNonEquals() throws ClassNotFoundException, IOException {
     Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));
     assertFalse(cycles.equals(Pi.VALUE));
+  }
+
+  private static Set<Cycles> _group(Set<Cycles> gen) {
+    Set<Cycles> all = new HashSet<>();
+    Set<Cycles> ite = new HashSet<>(gen);
+    while (all.addAll(ite))
+      ite = ite.stream().flatMap(cycles -> gen.stream().map(cycles::combine)).collect(Collectors.toSet());
+    return all;
+  }
+
+  public void testGroupEx0() {
+    assertEquals(_group(Collections.singleton(Cycles.identity())).size(), 1);
+  }
+
+  public void testGroupEx1() {
+    Set<Cycles> gen = new HashSet<>();
+    gen.add(Cycles.of("{{2, 10}, {4, 11}, {5, 7}}"));
+    gen.add(Cycles.of("{{1, 4, 3}, {2, 5, 6}}"));
+    // ---
+    assertEquals(_group(gen).size(), 1440);
+  }
+
+  public void testGroupEx2() {
+    Cycles cycles = Cycles.of( //
+        "{{1, 18, 25, 8, 11, 33, 45, 34, 19, 39, 4, 35, 46, 37, 10, 48, 7, 31, 6, 42, 36, 15, 29}, {2, 21, 14, 38, 26, 24, 41, 22, 12, 49}, {3, 28,  20, 50, 43, 23, 9, 5, 16, 44, 30, 27, 17}, {13, 40, 32, 47}}");
+    Set<Cycles> set = _group(Collections.singleton(cycles));
+    assertEquals(set.size(), 5980);
   }
 
   public void testScalarFail() {

@@ -5,8 +5,8 @@ import java.math.BigInteger;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.BinaryPower;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.num.BinaryPower;
 import ch.ethz.idsc.tensor.sca.Power;
 
 /** Implementation is consistent with Mathematica.
@@ -19,7 +19,8 @@ import ch.ethz.idsc.tensor.sca.Power;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/MatrixPower.html">MatrixPower</a> */
-public class MatrixPower extends BinaryPower<Tensor> {
+public enum MatrixPower {
+  ;
   /** @param matrix square
    * @param exponent
    * @return matrix ^ exponent
@@ -33,8 +34,8 @@ public class MatrixPower extends BinaryPower<Tensor> {
    * @return matrix ^ exponent
    * @throws Exception if matrix is not square */
   public static Tensor of(Tensor matrix, BigInteger exponent) {
-    return new MatrixPower(matrix.length()) //
-        .apply(SquareMatrixQ.require(matrix), exponent);
+    BinaryPower<Tensor> binaryPower = new BinaryPower<>(new MatrixProduct(matrix.length()));
+    return binaryPower.raise(SquareMatrixQ.require(matrix), exponent);
   }
 
   /** @param matrix symmetric
@@ -44,27 +45,5 @@ public class MatrixPower extends BinaryPower<Tensor> {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor vectors = eigensystem.vectors(); // OrthogonalMatrixQ
     return Transpose.of(vectors).dot(eigensystem.values().map(Power.function(exponent)).pmul(vectors));
-  }
-
-  /***************************************************/
-  private final int n;
-
-  private MatrixPower(int n) {
-    this.n = n;
-  }
-
-  @Override // from BinaryPower
-  protected Tensor zeroth() {
-    return IdentityMatrix.of(n);
-  }
-
-  @Override // from BinaryPower
-  protected Tensor invert(Tensor matrix) {
-    return Inverse.of(matrix);
-  }
-
-  @Override // from BinaryPower
-  protected Tensor multiply(Tensor matrix1, Tensor matrix2) {
-    return matrix1.dot(matrix2);
   }
 }

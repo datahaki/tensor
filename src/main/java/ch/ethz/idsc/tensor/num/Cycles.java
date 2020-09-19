@@ -47,6 +47,12 @@ public class Cycles implements Serializable {
     return new Cycles(map(check(tensor)));
   }
 
+  /** @param string for instance "{{1, 20}, {4, 10, 19, 6, 18}, {5, 9}, {7, 14, 13}}"
+   * @return */
+  public static Cycles of(String string) {
+    return of(Tensors.fromString(string));
+  }
+
   /** @return identity permutation corresponding to Cycles[{}] */
   public static Cycles identity() {
     return IDENTITY;
@@ -122,7 +128,7 @@ public class Cycles implements Serializable {
    * 
    * @param cycles
    * @return */
-  public Cycles product(Cycles cycles) {
+  public Cycles combine(Cycles cycles) {
     Map<Integer, Integer> b_map = cycles.map;
     Map<Integer, Integer> result = new HashMap<>();
     Set<Integer> set = new HashSet<>();
@@ -142,6 +148,8 @@ public class Cycles implements Serializable {
     return new Cycles(result);
   }
 
+  private static final BinaryPower<Cycles> BINARY_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
+
   /** @param exponent
    * @return */
   public Cycles power(Scalar exponent) {
@@ -154,7 +162,7 @@ public class Cycles implements Serializable {
    * @return */
   public Cycles power(BigInteger bigInteger) {
     Tensor cycles = Tensors.empty();
-    cycleInterate(cycle -> PermutationBinaryPower.of(new Cycles(map(Tensors.of(cycle))), //
+    cycleInterate(cycle -> BINARY_POWER.raise(new Cycles(map(Tensors.of(cycle))), //
         bigInteger.mod(BigInteger.valueOf(cycle.length()))).cycleInterate(cycles::append));
     return new Cycles(map(cycles)); // most efficient?
   }

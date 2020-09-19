@@ -11,10 +11,8 @@ import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.BinaryPower;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.io.Serialization;
@@ -141,14 +139,14 @@ public class GaussScalarTest extends TestCase {
 
   public void testPower2() {
     long prime = 59;
-    BinaryPower<GaussScalar> binaryPower = Scalars.binaryPower(GaussScalar.of(1, prime));
+    BinaryPower<Scalar> binaryPower = new BinaryPower<>(new ScalarProduct(GaussScalar.of(1, prime)));
     Random random = new SecureRandom();
     for (int index = 0; index < prime; ++index) {
       GaussScalar gaussScalar = GaussScalar.of(random.nextInt(), prime);
       if (!gaussScalar.number().equals(BigInteger.ZERO))
         for (int exponent = -10; exponent <= 10; ++exponent) {
           Scalar p1 = Power.of(gaussScalar, exponent);
-          Scalar p2 = binaryPower.apply(gaussScalar, exponent);
+          Scalar p2 = binaryPower.raise(gaussScalar, BigInteger.valueOf(exponent));
           assertEquals(p1, p2);
         }
     }

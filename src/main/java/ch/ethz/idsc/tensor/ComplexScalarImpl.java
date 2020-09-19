@@ -196,7 +196,7 @@ import ch.ethz.idsc.tensor.sca.Sinh;
   public Scalar power(Scalar exponent) {
     if (IntegerQ.of(exponent)) {
       RationalScalar rationalScalar = (RationalScalar) exponent;
-      return ScalarBinaryPower.REAL.apply(this, rationalScalar.numerator());
+      return StaticHelper.REAL_POWER.raise(this, rationalScalar.numerator());
     }
     return Exp.FUNCTION.apply(exponent.multiply(Log.FUNCTION.apply(this)));
   }

@@ -2,9 +2,7 @@
 package ch.ethz.idsc.tensor;
 
 import java.math.BigInteger;
-import java.util.Objects;
 
-import ch.ethz.idsc.tensor.alg.BinaryPower;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.num.Divisible;
 import ch.ethz.idsc.tensor.num.GaussScalar;
@@ -84,16 +82,6 @@ public enum Scalars {
    * @see Divisible */
   public static boolean divides(Scalar m, Scalar n) {
     return Divisible.of(n, m);
-  }
-
-  /***************************************************/
-  /** utility to compute the power of a scalar type to an integer exponent
-   * 
-   * @param one non-null
-   * @return
-   * @throws Exception if given parameter one is null */
-  public static <T extends Scalar> BinaryPower<T> binaryPower(T one) {
-    return new ScalarBinaryPower<>(Objects.requireNonNull(one));
   }
 
   /***************************************************/
