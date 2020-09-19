@@ -40,10 +40,13 @@ public interface Unit {
    * @return */
   Unit add(Unit unit);
 
-  /** [kg*m^2] * 3 -> [kg^3*m^6]
+  /** Hint: used in power, and sqrt
+   * 
+   * [kg*m^2] * 3 -> [kg^3*m^6]
    * 
    * @param factor
-   * @return */
+   * @return
+   * @throws Exception if factor is not instance of RealScalar */
   Unit multiply(Scalar factor);
 
   /** Example: Unit.of("kg^2*m^-1*s") returns an unmodifiable map with the entry set

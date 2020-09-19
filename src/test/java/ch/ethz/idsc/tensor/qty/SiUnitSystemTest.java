@@ -7,9 +7,9 @@ import java.util.Map;
 import ch.ethz.idsc.tensor.Scalar;
 import junit.framework.TestCase;
 
-public class LazyHolderTest extends TestCase {
+public class SiUnitSystemTest extends TestCase {
   public void testInstances() {
-    assertEquals(UnitSystem.SI(), LazyHolder.SI.unitSystem);
+    assertEquals(UnitSystem.SI(), SiUnitSystem.INSTANCE.unitSystem);
   }
 
   public void testExtension() {

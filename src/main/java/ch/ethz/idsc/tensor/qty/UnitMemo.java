@@ -25,13 +25,12 @@ import ch.ethz.idsc.tensor.Scalars;
   };
 
   /** @param string, for instance "A*kg^-1*s^2"
-   * @return unit */
+   * @return unit
+   * @throws Exception if string is not a valid expression for a unit */
   public synchronized Unit lookup(String string) {
     Unit unit = map.get(string);
-    if (Objects.isNull(unit)) {
-      unit = create(string);
-      map.put(string, unit);
-    }
+    if (Objects.isNull(unit))
+      map.put(string, unit = create(string));
     return unit;
   }
 

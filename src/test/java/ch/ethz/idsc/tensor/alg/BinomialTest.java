@@ -39,7 +39,7 @@ public class BinomialTest extends TestCase {
   // assertEquals(Binomial.of(5).row, Tensors.vector(1, 5, 10));
   // }
   public void testTreadSafe() {
-    IntStream.range(0, 20000).parallel() //
+    IntStream.range(0, 10000).parallel() //
         .forEach(n -> Binomial.of(50 + (n % 500)));
   }
 

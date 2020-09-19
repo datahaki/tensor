@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.lang.reflect.Modifier;
 import java.util.stream.IntStream;
 
 import junit.framework.TestCase;
@@ -62,5 +63,9 @@ public class UnitMemoTest extends TestCase {
     });
     int map_size = UnitMemo.INSTANCE.map_size();
     assertTrue(map_size <= UnitMemo.MAX_SIZE);
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(UnitMemo.class.getModifiers()));
   }
 }

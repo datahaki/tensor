@@ -33,7 +33,7 @@ public class Binomial implements Serializable {
   /** @param n non-negative integer
    * @return binomial function that computes n choose k */
   public static Binomial of(int n) {
-    return BinomialMemo.INSTANCE.binomial(Integers.requirePositiveOrZero(n));
+    return BinomialMemo.INSTANCE.lookup(Integers.requirePositiveOrZero(n));
   }
 
   /** <code>Mathematica::Binomial[n, m]</code>
@@ -61,7 +61,7 @@ public class Binomial implements Serializable {
       // LONGTERM this case is defined in Mathematica
       throw new IllegalArgumentException(String.format("Binomial[%d,%d]", n, m));
     }
-    return BinomialMemo.INSTANCE.binomial(n).over(m);
+    return BinomialMemo.INSTANCE.lookup(n).over(m);
   }
 
   /***************************************************/
@@ -77,17 +77,15 @@ public class Binomial implements Serializable {
           }
         };
 
-    synchronized Binomial binomial(int n) {
+    public synchronized Binomial lookup(int n) {
       Binomial binomial = map.get(n);
-      if (Objects.isNull(binomial)) {
-        binomial = new Binomial(n);
-        map.put(n, binomial);
-      }
+      if (Objects.isNull(binomial))
+        map.put(n, binomial = new Binomial(n));
       return binomial;
     }
   }
 
-  // ---
+  /***************************************************/
   private final int n;
   private final Tensor row;
 
