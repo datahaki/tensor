@@ -6,19 +6,23 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.Permutations;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
 import junit.framework.TestCase;
 
 public class SubsetsTest extends TestCase {
   public void testCardinality() {
     Tensor vector = Tensors.vector(3, 4, 5, 6);
-    for (int k = 0; k <= vector.length(); ++k)
+    for (int k = 0; k <= vector.length(); ++k) {
+      assertEquals(Subsets.stream(vector, k).count(), Binomial.of(4, k).number().intValue());
       assertEquals(Subsets.of(vector, k).length(), Binomial.of(4, k).number().intValue());
+    }
   }
 
   public void testZero() {
-    Tensor tensor = Subsets.of(Tensors.vector(2, 3, 4), 0);
-    assertEquals(tensor, Tensors.fromString("{{}}"));
+    assertEquals(Subsets.of(Tensors.empty(), 0), Tensors.fromString("{{}}"));
+    assertEquals(Subsets.of(Tensors.vector(1, 2, 3), 0), Tensors.fromString("{{}}"));
+    assertEquals(Subsets.of(IdentityMatrix.of(2), 0), Tensors.fromString("{{}}"));
   }
 
   public void testOne() {
@@ -29,6 +33,9 @@ public class SubsetsTest extends TestCase {
   public void testTwo() {
     Tensor tensor = Subsets.of(Tensors.vector(2, 3, 4), 2);
     assertEquals(tensor, Tensors.fromString("{{2, 3}, {2, 4}, {3, 4}}"));
+    assertEquals( //
+        Subsets.of(Tensors.vector(2, 3, 4), 2), //
+        Tensor.of(Subsets.stream(Tensors.vector(2, 3, 4), 2)));
   }
 
   public void testThree() {
@@ -60,6 +67,15 @@ public class SubsetsTest extends TestCase {
   public void testNegativeFail() {
     try {
       Subsets.of(Tensors.vector(2, 3, 4), -1);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNegative2Fail() {
+    try {
+      Subsets.of(Tensors.empty(), -1);
       fail();
     } catch (Exception exception) {
       // ---

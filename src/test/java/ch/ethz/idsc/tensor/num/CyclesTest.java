@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.num;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -75,6 +76,9 @@ public class CyclesTest extends TestCase {
     Set<Cycles> ite = new HashSet<>(gen);
     while (all.addAll(ite))
       ite = ite.stream().flatMap(cycles -> gen.stream().map(cycles::combine)).collect(Collectors.toSet());
+    for (Cycles cycles : all)
+      for (Entry<Integer, Integer> entry : cycles.map().entrySet())
+        assertFalse(entry.getKey().equals(entry.getValue()));
     return all;
   }
 

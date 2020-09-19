@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.Permutations;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.sca.Factorial;
 import junit.framework.TestCase;
 
 public class OrderedQTest extends TestCase {
@@ -24,7 +25,8 @@ public class OrderedQTest extends TestCase {
 
   public void testPermutations() {
     for (int index = 0; index < 5; ++index) {
-      long count = Permutations.of(Range.of(0, index)).stream() //
+      assertEquals(Permutations.stream(Range.of(0, index)).count(), Factorial.of(index).number().intValue());
+      long count = Permutations.stream(Range.of(0, index)) //
           .filter(OrderedQ::of) //
           .count();
       assertEquals(count, 1);

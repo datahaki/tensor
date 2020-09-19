@@ -39,7 +39,7 @@ public enum Symmetrize {
       case 2: // matrix
         return Tensors.vector(i -> tensor.get(Tensor.ALL, i).add(tensor.get(i)).divide(TWO), tensor.length());
       default:
-        return Permutations.of(Range.of(0, rank)).stream() //
+        return Permutations.stream(Range.of(0, rank)) //
             .map(permutation -> Transpose.of(tensor, IntStream.range(0, rank) //
                 .mapToObj(index -> permutation.Get(index).number()) //
                 .toArray(Integer[]::new)))
