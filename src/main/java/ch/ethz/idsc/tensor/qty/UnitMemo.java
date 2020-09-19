@@ -7,31 +7,26 @@ import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-import java.util.regex.Pattern;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 
 /** associates strings with instances of unit */
-/* package */ enum UnitHelper {
-  MEMO;
+/* package */ enum UnitMemo {
+  INSTANCE;
 
-  private static final int SIZE = 384;
-  /** atomic unit may consist of roman letters in lower case a-z,
-   * upper case A-Z, as well as the underscore character '_' */
-  private static final Pattern PATTERN = Pattern.compile("[%A-Z_a-z]+");
-  // ---
-  private final Map<String, Unit> map = new LinkedHashMap<String, Unit>(SIZE * 4 / 3, 0.75f, true) {
+  /* package for testing */ static final int MAX_SIZE = 768;
+  private final Map<String, Unit> map = new LinkedHashMap<String, Unit>(MAX_SIZE * 4 / 3, 0.75f, true) {
     @Override
     protected boolean removeEldestEntry(Map.Entry<String, Unit> eldest) {
-      return size() > SIZE;
+      return MAX_SIZE < size();
     }
   };
 
   /** @param string, for instance "A*kg^-1*s^2"
    * @return unit */
-  public Unit lookup(String string) {
+  public synchronized Unit lookup(String string) {
     Unit unit = map.get(string);
     if (Objects.isNull(unit)) {
       unit = create(string);
@@ -40,22 +35,13 @@ import ch.ethz.idsc.tensor.Scalars;
     return unit;
   }
 
-  /** @param key atomic unit expression, for instance "kg"
-   * @return given key
-   * @throws Exception if given key is not an atomic unit expression */
-  public static String requireValid(String key) {
-    if (!PATTERN.matcher(key).matches())
-      throw new IllegalArgumentException(key);
-    return key;
-  }
-
   // helper function
   private static Unit create(String string) {
     NavigableMap<String, Scalar> map = new TreeMap<>();
     StringTokenizer stringTokenizer = new StringTokenizer(string, Unit.JOIN_DELIMITER);
     while (stringTokenizer.hasMoreTokens()) {
       String token = stringTokenizer.nextToken();
-      int index = token.indexOf('^');
+      int index = token.indexOf(Unit.POWER_DELIMITER);
       final String unit;
       final Scalar exponent;
       if (0 <= index) {
@@ -65,7 +51,7 @@ import ch.ethz.idsc.tensor.Scalars;
         unit = token;
         exponent = RealScalar.ONE;
       }
-      String key = requireValid(unit.trim());
+      String key = StaticHelper.requireAtomic(unit.trim());
       if (map.containsKey(key)) { // exponent exists
         Scalar sum = map.get(key).add(exponent);
         if (Scalars.isZero(sum))

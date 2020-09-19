@@ -4,11 +4,13 @@ package ch.ethz.idsc.tensor.sca;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
+/** inspired by
+ * <a href="https://reference.wolfram.com/language/ref/Surd.html">Surd</a> */
 public class Surd implements ScalarUnaryOperator {
   /** @param exponent non-zero
    * @return
    * @throws Exception if given exponent is zero */
-  public static ScalarUnaryOperator of(int exponent) {
+  public static ScalarUnaryOperator of(long exponent) {
     return new Surd(Power.function(RationalScalar.of(1, exponent)));
   }
 

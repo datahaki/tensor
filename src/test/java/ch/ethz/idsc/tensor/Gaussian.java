@@ -45,7 +45,7 @@ public class Gaussian extends AbstractScalar implements //
     return of(RealScalar.of(mean), RealScalar.of(variance));
   }
 
-  // ---
+  /***************************************************/
   private final Scalar mean;
   private final Scalar variance; // sigma ^ 2
 

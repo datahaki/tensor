@@ -33,7 +33,7 @@ public class Binomial implements Serializable {
   /** @param n non-negative integer
    * @return binomial function that computes n choose k */
   public static Binomial of(int n) {
-    return binomial(Integers.requirePositiveOrZero(n));
+    return BinomialMemo.INSTANCE.binomial(Integers.requirePositiveOrZero(n));
   }
 
   /** <code>Mathematica::Binomial[n, m]</code>
@@ -61,26 +61,30 @@ public class Binomial implements Serializable {
       // LONGTERM this case is defined in Mathematica
       throw new IllegalArgumentException(String.format("Binomial[%d,%d]", n, m));
     }
-    return binomial(n).over(m);
+    return BinomialMemo.INSTANCE.binomial(n).over(m);
   }
 
   /***************************************************/
-  private static final int MEMO_SIZE = 100;
-  private static final Map<Integer, Binomial> MEMO = new LinkedHashMap<Integer, Binomial>(MEMO_SIZE * 4 / 3, 0.75f, true) {
-    @Override
-    protected boolean removeEldestEntry(Map.Entry<Integer, Binomial> eldest) {
-      return MEMO_SIZE < size();
-    }
-  };
+  private static enum BinomialMemo {
+    INSTANCE;
 
-  // function does not require synchronized
-  private static Binomial binomial(int n) {
-    Binomial binomial = MEMO.get(n);
-    if (Objects.isNull(binomial)) {
-      binomial = new Binomial(n);
-      MEMO.put(n, binomial);
+    private static final int MAX_SIZE = 384;
+    private final Map<Integer, Binomial> map = //
+        new LinkedHashMap<Integer, Binomial>(MAX_SIZE * 4 / 3, 0.75f, true) {
+          @Override
+          protected boolean removeEldestEntry(Map.Entry<Integer, Binomial> eldest) {
+            return MAX_SIZE < size();
+          }
+        };
+
+    synchronized Binomial binomial(int n) {
+      Binomial binomial = map.get(n);
+      if (Objects.isNull(binomial)) {
+        binomial = new Binomial(n);
+        map.put(n, binomial);
+      }
+      return binomial;
     }
-    return binomial;
   }
 
   // ---

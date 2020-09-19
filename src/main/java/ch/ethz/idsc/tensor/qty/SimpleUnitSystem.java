@@ -35,14 +35,14 @@ public class SimpleUnitSystem implements UnitSystem {
    * @throws Exception if keys do not define unit conversions */
   public static UnitSystem from(Properties properties) {
     return new SimpleUnitSystem(properties.stringPropertyNames().stream().collect(Collectors.toMap( //
-        UnitHelper::requireValid, key -> requireNumeric(Scalars.fromString(properties.getProperty(key))))));
+        StaticHelper::requireAtomic, key -> requireNumeric(Scalars.fromString(properties.getProperty(key))))));
   }
 
   /** @param map
    * @return unit system */
   public static UnitSystem from(Map<String, Scalar> map) {
     return new SimpleUnitSystem(map.entrySet().stream().collect(Collectors.toMap( //
-        entry -> UnitHelper.requireValid(entry.getKey()), entry -> requireNumeric(entry.getValue()))));
+        entry -> StaticHelper.requireAtomic(entry.getKey()), entry -> requireNumeric(entry.getValue()))));
   }
 
   /***************************************************/
