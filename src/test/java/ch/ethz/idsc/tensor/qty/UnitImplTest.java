@@ -25,6 +25,16 @@ public class UnitImplTest extends TestCase {
     assertFalse(unit.map().containsKey("A"));
   }
 
+  public void testMultiplyFail() {
+    Unit unit = Unit.of("kg^2*m^-1");
+    try {
+      unit.multiply(Quantity.of(3, "s"));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testUnmodifiableMap() {
     Unit unit = Unit.of("kg^2*m^-1");
     try {

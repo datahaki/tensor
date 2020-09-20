@@ -109,9 +109,7 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
   @Override // from Scalar
   public Scalar reciprocal() {
-    return new QuantityImpl( //
-        value.reciprocal(), //
-        unit.negate());
+    return new QuantityImpl(value.reciprocal(), unit.negate());
   }
 
   @Override // from Scalar
@@ -147,9 +145,8 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
+    // exponent has to be RealScalar, otherwise an Exception is thrown
     // Mathematica allows 2[m]^3[s], but the tensor library does not:
-    if (exponent instanceof Quantity)
-      throw TensorRuntimeException.of(this, exponent);
     return of(Power.of(value, exponent), unit.multiply(exponent));
   }
 
@@ -212,8 +209,7 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
   @Override // from NInterface
   public Scalar n(MathContext mathContext) {
-    N n = N.in(mathContext.getPrecision());
-    return ofUnit(n.apply(value));
+    return ofUnit(N.in(mathContext.getPrecision()).apply(value));
   }
 
   @Override // from SignInterface

@@ -6,6 +6,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.sca.Power;
 import junit.framework.TestCase;
 
 public class QuantityImplTest extends TestCase {
@@ -47,5 +49,33 @@ public class QuantityImplTest extends TestCase {
     Scalar s3 = q1.divide(q2);
     assertTrue(s3 instanceof RationalScalar);
     assertTrue(q1.under(q2) instanceof RationalScalar);
+  }
+
+  public void testPowerQuantityQuantityFail() {
+    Scalar scalar = Scalars.fromString("-7+3*I[kg^-2*m*s]");
+    try {
+      Power.of(scalar, Quantity.of(3, "s"));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testPowerRealQuantityFail() {
+    try {
+      Power.of(RealScalar.ONE, Quantity.of(3, "s"));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testPowerDoubleQuantityFail() {
+    try {
+      Power.of(Pi.VALUE, Quantity.of(3, "s"));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }
