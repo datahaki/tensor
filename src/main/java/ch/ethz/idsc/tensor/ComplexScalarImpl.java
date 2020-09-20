@@ -2,8 +2,10 @@
 package ch.ethz.idsc.tensor;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.Objects;
+import java.util.Optional;
 
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Hypot;
@@ -194,9 +196,10 @@ import ch.ethz.idsc.tensor.sca.Sinh;
 
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
-    if (IntegerQ.of(exponent)) {
-      RationalScalar rationalScalar = (RationalScalar) exponent;
-      return StaticHelper.REAL_POWER.raise(this, rationalScalar.numerator());
+    if (isExactScalar()) {
+      Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
+      if (optional.isPresent())
+        return StaticHelper.REAL_POWER.raise(this, optional.get());
     }
     return Exp.FUNCTION.apply(exponent.multiply(Log.FUNCTION.apply(this)));
   }

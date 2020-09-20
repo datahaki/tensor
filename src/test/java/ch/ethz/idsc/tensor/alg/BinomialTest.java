@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.tensor.DeterminateScalarQ;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -30,17 +31,9 @@ public class BinomialTest extends TestCase {
     assertEquals(Binomial.of(10).over(10), RealScalar.ONE);
   }
 
-  // public void testRow() {
-  // assertEquals(Binomial.of(0).row, Tensors.vector(1));
-  // assertEquals(Binomial.of(1).row, Tensors.vector(1));
-  // assertEquals(Binomial.of(2).row, Tensors.vector(1, 2));
-  // assertEquals(Binomial.of(3).row, Tensors.vector(1, 3));
-  // assertEquals(Binomial.of(RealScalar.of(4)).row, Tensors.vector(1, 4, 6));
-  // assertEquals(Binomial.of(5).row, Tensors.vector(1, 5, 10));
-  // }
   public void testTreadSafe() {
-    IntStream.range(0, 10000).parallel() //
-        .forEach(n -> Binomial.of(50 + (n % 500)));
+    IntStream.range(0, 2000).parallel() //
+        .forEach(n -> Binomial.of(10 + (n % 500)));
   }
 
   public void testOrder() {
@@ -99,12 +92,7 @@ public class BinomialTest extends TestCase {
   }
 
   public void testLargeFail() {
-    try {
-      Binomial.of(RealScalar.of(123412341234324L), RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertFalse(DeterminateScalarQ.of(Binomial.of(RealScalar.of(123412341234324L), RealScalar.ZERO)));
     try {
       Binomial.of(RealScalar.of(-123412341234324L), RealScalar.ZERO);
       fail();

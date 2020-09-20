@@ -151,7 +151,8 @@ public class Cycles implements Serializable {
   private static final BinaryPower<Cycles> BINARY_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
 
   /** @param exponent
-   * @return */
+   * @return
+   * @throws Exception if exponent is not an integer */
   public Cycles power(Scalar exponent) {
     return power(Scalars.bigIntegerValueExact(exponent));
   }

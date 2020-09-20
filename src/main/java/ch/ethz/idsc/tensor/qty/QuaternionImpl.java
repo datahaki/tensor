@@ -3,8 +3,10 @@
 package ch.ethz.idsc.tensor.qty;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.Objects;
+import java.util.Optional;
 
 import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
@@ -148,8 +150,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     return new QuaternionImpl(n.apply(w), xyz.map(n));
   }
 
-  @Override // from PowerInterface
-  public Quaternion power(Scalar exponent) {
+  /** @param exponent
+   * @return result in numeric precision */
+  private Quaternion _power(Scalar exponent) {
     Scalar abs = abs();
     Scalar et = exponent.multiply(ArcCos.FUNCTION.apply(w.divide(abs)));
     Scalar qa = Power.of(abs, exponent);
@@ -159,6 +162,16 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         Scalars.isZero(vn) //
             ? xyz.map(Scalar::zero)
             : xyz.multiply(Sin.FUNCTION.apply(et).multiply(qa).divide(vn)));
+  }
+
+  @Override // from PowerInterface
+  public Quaternion power(Scalar exponent) {
+    if (isExactScalar()) {
+      Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
+      if (optional.isPresent())
+        return (Quaternion) StaticHelper.QUATERNION_POWER.raise(this, optional.get());
+    }
+    return _power(exponent);
   }
 
   @Override // from SqrtInterface

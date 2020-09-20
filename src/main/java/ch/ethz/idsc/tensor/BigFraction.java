@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 /** immutable integer fraction in normal form, i.e. denominator is strictly positive */
-/* package */ final class BigFraction implements Serializable {
+/* package */ final class BigFraction implements Comparable<BigFraction>, Serializable {
   private static final String DIVIDE = "/";
 
   /** @param value
@@ -142,10 +142,21 @@ import java.util.Objects;
   }
 
   /***************************************************/
-  // intentional: no override of Object::equals(Object)
+  @Override // from Comparable
+  public int compareTo(BigFraction bigFraction) {
+    return num.multiply(bigFraction.den).compareTo(bigFraction.num.multiply(den));
+  }
+
   @Override // from Object
   public int hashCode() {
     return Objects.hash(num, den);
+  }
+
+  @Override // from Object
+  public boolean equals(Object object) {
+    if (object instanceof BigFraction)
+      return _equals((BigFraction) object);
+    return false;
   }
 
   @Override // from Object

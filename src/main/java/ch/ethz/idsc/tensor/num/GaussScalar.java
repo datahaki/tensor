@@ -7,9 +7,8 @@ import java.util.Objects;
 
 import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.ExactScalarQInterface;
-import ch.ethz.idsc.tensor.IntegerQ;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
 import ch.ethz.idsc.tensor.sca.PowerInterface;
@@ -138,11 +137,8 @@ public class GaussScalar extends AbstractScalar implements //
 
   @Override // from PowerInterface
   public GaussScalar power(Scalar exponent) {
-    if (IntegerQ.of(exponent)) {
-      RationalScalar exp = (RationalScalar) exponent;
-      return new GaussScalar(value.modPow(exp.numerator(), prime), prime);
-    }
-    throw TensorRuntimeException.of(this, exponent);
+    // exponents of the form 1/2, 1/3, etc. could also be valid
+    return new GaussScalar(value.modPow(Scalars.bigIntegerValueExact(exponent), prime), prime);
   }
 
   @Override // from RoundingInterface

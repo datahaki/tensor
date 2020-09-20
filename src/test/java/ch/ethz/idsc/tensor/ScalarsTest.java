@@ -213,4 +213,22 @@ public class ScalarsTest extends TestCase {
       // ---
     }
   }
+
+  public void testBigIntegerExactNullFail() {
+    try {
+      Scalars.bigIntegerValueExact(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testOptionalBigIntegerNullFail() {
+    try {
+      Scalars.optionalBigInteger(null);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
 }

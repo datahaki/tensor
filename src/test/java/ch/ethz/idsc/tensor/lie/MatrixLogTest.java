@@ -22,7 +22,7 @@ public class MatrixLogTest extends TestCase {
   // }
   public void testSymmetric() {
     for (int n = 2; n < 10; ++n) {
-      Distribution distribution = NormalDistribution.of(0, 0.2);
+      Distribution distribution = NormalDistribution.of(0, 0.4 / n);
       Tensor matrix = Symmetrize.of(IdentityMatrix.of(n).add(RandomVariate.of(distribution, n, n)));
       Tensor log = MatrixLog.ofSymmetric(matrix);
       Tensor exp = MatrixExp.of(log);

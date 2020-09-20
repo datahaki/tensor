@@ -1,10 +1,10 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.util.OptionalInt;
 import java.util.Random;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
-import ch.ethz.idsc.tensor.IntegerQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -19,8 +19,9 @@ public abstract class AbstractDiscreteDistribution implements DiscreteDistributi
 
   @Override // from PDF
   public final Scalar at(Scalar x) {
-    return IntegerQ.of(x) //
-        ? p_equals(Scalars.intValueExact(x))
+    OptionalInt optionalInt = Scalars.optionalInt(x);
+    return optionalInt.isPresent() //
+        ? p_equals(optionalInt.getAsInt())
         : RealScalar.ZERO;
   }
 

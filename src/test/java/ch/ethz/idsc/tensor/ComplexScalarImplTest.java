@@ -129,9 +129,7 @@ public class ComplexScalarImplTest extends TestCase {
   }
 
   public void testPower() {
-    Scalar s = ComplexScalar.I;
-    Scalar r = Power.of(s, 3);
-    assertEquals(r, ComplexScalar.I.negate());
+    assertEquals(Power.of(ComplexScalar.I, 3), ComplexScalar.I.negate());
   }
 
   public void testFloor() {

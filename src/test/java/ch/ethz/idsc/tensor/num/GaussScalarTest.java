@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.mat.Pivots;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.red.ArgMax;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Floor;
@@ -158,6 +159,16 @@ public class GaussScalarTest extends TestCase {
     for (int index = 0; index < prime; ++index) {
       GaussScalar gaussScalar = GaussScalar.of(index, prime);
       assertEquals(Power.of(gaussScalar, 0), scalar);
+    }
+  }
+
+  public void testPowerFail() {
+    GaussScalar gaussScalar = GaussScalar.of(3, 107);
+    try {
+      Power.of(gaussScalar, Pi.HALF);
+      fail();
+    } catch (Exception exception) {
+      // ---
     }
   }
 

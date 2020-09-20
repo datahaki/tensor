@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.OptionalInt;
 
-import ch.ethz.idsc.tensor.IntegerQ;
 import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -42,8 +42,10 @@ public class Binomial implements Serializable {
    * @param m, and m <= n
    * @return binomial coefficient defined by n and m */
   public static Scalar of(Scalar n, Scalar m) {
-    if (IntegerQ.of(n) && IntegerQ.of(m))
-      return of(Scalars.intValueExact(n), Scalars.intValueExact(m));
+    OptionalInt _n = Scalars.optionalInt(n);
+    OptionalInt _m = Scalars.optionalInt(m);
+    if (_n.isPresent() && _m.isPresent())
+      return of(_n.getAsInt(), _m.getAsInt());
     Scalar np1 = n.add(RealScalar.ONE);
     return Gamma.FUNCTION.apply(np1).divide( //
         Gamma.FUNCTION.apply(m.add(RealScalar.ONE)).multiply(Gamma.FUNCTION.apply(np1.subtract(m))));

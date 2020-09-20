@@ -86,6 +86,12 @@ public class QuaternionImplTest extends TestCase {
     assertEquals(Power.of(Quaternion.of(0, 1, 2, 3), RealScalar.ZERO), Quaternion.ONE);
   }
 
+  public void testPowerExact() {
+    Scalar scalar = Power.of(Quaternion.of(-2, 1, 2, 3), RealScalar.of(4));
+    assertEquals(scalar, Quaternion.of(-124, 80, 160, 240));
+    ExactScalarQ.require(scalar);
+  }
+
   public void testUnaffected() {
     Tensor vector = Tensors.vector(1, 2, 3);
     Quaternion quaternion = Quaternion.of(RealScalar.ZERO, vector);

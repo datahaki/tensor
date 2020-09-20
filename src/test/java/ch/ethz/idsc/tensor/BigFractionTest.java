@@ -30,6 +30,8 @@ public class BigFractionTest extends TestCase {
   public void testEquals() {
     assertFalse(BigFraction.of(7, 3).equals(null));
     assertFalse(BigFraction.of(7, 3).equals("abc"));
+    assertTrue(BigFraction.of(7, 3).equals(BigFraction.of(14, 6)));
+    assertTrue(BigFraction.of(-1, 3).equals(BigFraction.of(1, -3)));
   }
 
   public void testDenZero() {
