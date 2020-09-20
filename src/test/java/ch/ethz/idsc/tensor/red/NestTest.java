@@ -20,13 +20,13 @@ public class NestTest extends TestCase {
   public void testPolynomial() {
     Tensor actual = Nest.of( //
         scalar -> Power.of(scalar.add(RealScalar.ONE), RealScalar.of(2)), RealScalar.of(1), 3);
-    assertTrue(ExactScalarQ.of(actual));
+    ExactScalarQ.require(actual.Get());
     assertEquals(RealScalar.of(676), actual);
   }
 
   public void testSeries() {
     Tensor actual = Nest.of(Series.of(Tensors.vector(1, 2, 1)), RealScalar.ONE, 3);
-    assertTrue(ExactScalarQ.of(actual));
+    ExactScalarQ.require(actual.Get());
     assertEquals(RealScalar.of(676), actual);
   }
 

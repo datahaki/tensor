@@ -130,7 +130,7 @@ public class InverseTest extends TestCase {
     Tensor expected = Tensors.fromString( //
         "{{-4/5[m^-2], 3/10[m^-1*rad^-1]}, {3/10[m^-1*rad^-1], -1/20[rad^-2]}}");
     assertEquals(inverse, expected);
-    assertTrue(ExactTensorQ.of(inverse));
+    ExactTensorQ.require(inverse);
   }
 
   public void testQuantity2() {

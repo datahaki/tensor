@@ -29,11 +29,11 @@ public class CrossTest extends TestCase {
     Tensor v1 = UnitVector.of(3, 0);
     Tensor v2 = UnitVector.of(3, 1);
     Tensor v3 = UnitVector.of(3, 2);
-    assertTrue(ExactTensorQ.of(Cross.of(v1, v2)));
+    ExactTensorQ.require(Cross.of(v1, v2));
     assertEquals(Cross.of(v1, v2), v3);
-    assertTrue(ExactTensorQ.of(Cross.of(v2, v3)));
+    ExactTensorQ.require(Cross.of(v2, v3));
     assertEquals(Cross.of(v2, v3), v1);
-    assertTrue(ExactTensorQ.of(Cross.of(v3, v1)));
+    ExactTensorQ.require(Cross.of(v3, v1));
     assertEquals(Cross.of(v3, v1), v2);
   }
 

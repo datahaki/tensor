@@ -19,13 +19,13 @@ public class StandardizeTest extends TestCase {
 
   public void testExact1() {
     Tensor tensor = Standardize.ofVector(Tensors.vector(1, 2, 3));
-    assertTrue(ExactTensorQ.of(tensor));
+    ExactTensorQ.require(tensor);
     assertEquals(tensor, Tensors.vector(-1, 0, 1));
   }
 
   public void testExact2() {
     Tensor tensor = Standardize.ofVector(Tensors.vector(1, 3, 5));
-    assertTrue(ExactTensorQ.of(tensor));
+    ExactTensorQ.require(tensor);
     assertEquals(tensor, Tensors.vector(-1, 0, 1));
   }
 

@@ -16,7 +16,7 @@ public class TensorContractTest extends TestCase {
     Tensor vector = TensorContract.of(LieAlgebras.so3(), 0, 2);
     assertTrue(VectorQ.ofLength(vector, 3));
     assertEquals(vector, Array.zeros(3));
-    assertTrue(ExactTensorQ.of(vector));
+    ExactTensorQ.require(vector);
   }
 
   public void testFail() {

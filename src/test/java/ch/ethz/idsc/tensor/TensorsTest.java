@@ -34,10 +34,10 @@ public class TensorsTest extends TestCase {
 
   public void testNorm() {
     Tensor vector = Tensors.vectorLong(2, 3, 4, 5);
-    assertTrue(ExactTensorQ.of(vector));
+    ExactTensorQ.require(vector);
     Scalar scalar = (Scalar) vector.dot(vector);
     assertEquals(scalar, RationalScalar.of(4 + 9 + 16 + 25, 1));
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testNorm2() {

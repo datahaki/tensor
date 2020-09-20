@@ -18,14 +18,14 @@ public class ProjectionTest extends TestCase {
     assertEquals(projection, UnitVector.of(3, 0));
     Tensor p2 = Projection.on(Tensors.vector(1, 1, 1)).apply(Tensors.vector(5, 6, 7));
     assertEquals(p2, Tensors.vector(6, 6, 6));
-    assertTrue(ExactTensorQ.of(p2));
+    ExactTensorQ.require(p2);
   }
 
   public void testComplex() {
     TensorUnaryOperator tensorUnaryOperator = Projection.on(Tensors.vector(1, 1, 1));
     Tensor p2 = tensorUnaryOperator.apply(Tensors.fromString("{5, I, 7}"));
     assertEquals(Tensors.fromString("{4 + I/3, 4 + I/3, 4 + I/3}"), p2);
-    assertTrue(ExactTensorQ.of(p2));
+    ExactTensorQ.require(p2);
     try {
       tensorUnaryOperator.apply(HilbertMatrix.of(3, 3));
       fail();

@@ -16,13 +16,13 @@ public class ScalarParserTest extends TestCase {
   public void testDivisions() {
     Scalar scalar = ScalarParser.of("40*3/4/5/6");
     assertEquals(scalar, ComplexScalar.of(1, 0));
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testMix() {
     Scalar scalar = ScalarParser.of("80*3/4/2*5/6");
     assertEquals(scalar, ComplexScalar.of(25, 0));
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testImagFormat() {

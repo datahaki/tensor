@@ -23,7 +23,7 @@ public class TruncatedDistributionTest extends TestCase {
     Clip clip = Clips.interval(10, 11);
     Distribution distribution = TruncatedDistribution.of(BinomialDistribution.of(20, DoubleScalar.of(0.5)), clip);
     Scalar scalar = RandomVariate.of(distribution);
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
     assertTrue(clip.isInside(scalar));
     Serialization.copy(distribution);
     Serialization.copy(TruncatedDistribution.of(NormalDistribution.of(10, 2), clip));

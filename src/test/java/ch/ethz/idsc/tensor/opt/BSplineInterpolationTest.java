@@ -95,7 +95,7 @@ public class BSplineInterpolationTest extends TestCase {
     Tensor interp = Tensors.vector(1, 0, 3, 2);
     for (int degree = 0; degree < 4; ++degree) {
       Tensor tensor = BSplineInterpolation.solve(degree, interp);
-      assertTrue(ExactTensorQ.of(tensor));
+      ExactTensorQ.require(tensor);
       ScalarTensorFunction bSplineFunction = BSplineFunction.string(degree, tensor);
       for (int index = 0; index < interp.length(); ++index)
         assertEquals(bSplineFunction.apply(RealScalar.of(index)), interp.get(index));
@@ -106,7 +106,7 @@ public class BSplineInterpolationTest extends TestCase {
     for (int n = 1; n < 6; ++n) {
       Tensor tensor = BSplineInterpolation.matrix(1, n);
       assertEquals(tensor, IdentityMatrix.of(n));
-      assertTrue(ExactTensorQ.of(tensor));
+      ExactTensorQ.require(tensor);
     }
   }
 
@@ -116,7 +116,7 @@ public class BSplineInterpolationTest extends TestCase {
       Tensor tensor = BSplineInterpolation.matrix(2, n);
       assertEquals(Dimensions.of(tensor), Arrays.asList(n, n));
       assertEquals(tensor.dot(vector), vector);
-      assertTrue(ExactTensorQ.of(tensor));
+      ExactTensorQ.require(tensor);
     }
   }
 
@@ -126,7 +126,7 @@ public class BSplineInterpolationTest extends TestCase {
       Tensor tensor = BSplineInterpolation.matrix(3, n);
       assertEquals(Dimensions.of(tensor), Arrays.asList(n, n));
       assertEquals(tensor.dot(vector), vector);
-      assertTrue(ExactTensorQ.of(tensor));
+      ExactTensorQ.require(tensor);
     }
   }
 }

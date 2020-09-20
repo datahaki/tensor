@@ -41,7 +41,7 @@ public class SphereFitTest extends TestCase {
       Tensor center = sphereFit.center();
       Tensor radius = sphereFit.radius();
       assertEquals(center, Tensors.vector(0.5, 0.5).add(shift));
-      assertTrue(ExactTensorQ.of(center));
+      ExactTensorQ.require(center);
       Chop._13.requireClose(radius, RealScalar.of(Math.sqrt(0.5)));
     }
   }

@@ -99,8 +99,8 @@ public class BooleanScalarTest extends TestCase {
   }
 
   public void testExactNumberQ() {
-    assertTrue(ExactScalarQ.of(BooleanScalar.FALSE));
-    assertTrue(ExactScalarQ.of(BooleanScalar.TRUE));
+    ExactScalarQ.require(BooleanScalar.FALSE);
+    ExactScalarQ.require(BooleanScalar.TRUE);
   }
 
   public void testSqrt() {

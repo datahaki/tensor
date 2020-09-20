@@ -64,7 +64,7 @@ public class ExportTest extends TestCase {
     Tensor imported = Import.of(file);
     assertTrue(file.delete());
     assertEquals(tensor, imported);
-    assertTrue(ExactTensorQ.of(imported));
+    ExactTensorQ.require(imported);
   }
 
   public void testPngColor() throws IOException {

@@ -24,7 +24,7 @@ public class DirichletWindowTest extends TestCase {
   public void testSemiExact() {
     Scalar scalar = DirichletWindow.FUNCTION.apply(RealScalar.of(0.5));
     assertTrue(Scalars.nonZero(scalar));
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testOf() {

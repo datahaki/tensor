@@ -84,7 +84,7 @@ public class TrapezoidalDistributionTest extends TestCase {
         TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(5, "m"));
     Scalar mean = Mean.of(distribution);
     assertEquals(mean, Scalars.fromString("14/5[m]"));
-    assertTrue(ExactScalarQ.of(mean));
+    ExactScalarQ.require(mean);
     PDF pdf = PDF.of(distribution);
     {
       Scalar density = pdf.at(Quantity.of(3, "m"));

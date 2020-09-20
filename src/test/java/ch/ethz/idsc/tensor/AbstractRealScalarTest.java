@@ -35,7 +35,7 @@ public class AbstractRealScalarTest extends TestCase {
 
   public void testPower00Numeric() {
     Scalar one = Power.of(0.0, 0.0);
-    assertTrue(ExactScalarQ.of(one));
+    ExactScalarQ.require(one);
     assertEquals(one, RealScalar.ONE);
   }
 

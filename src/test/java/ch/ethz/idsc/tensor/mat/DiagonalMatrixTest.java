@@ -18,7 +18,7 @@ public class DiagonalMatrixTest extends TestCase {
   public void testMisc1() {
     Tensor matrix = DiagonalMatrix.of(-2, 3, -4);
     assertEquals(Det.of(matrix).number(), 2 * 3 * 4);
-    assertTrue(ExactTensorQ.of(matrix));
+    ExactTensorQ.require(matrix);
   }
 
   public void testDiagonalMatrix() {
@@ -30,7 +30,7 @@ public class DiagonalMatrixTest extends TestCase {
   public void testMisc2() {
     Tensor matrix = DiagonalMatrix.of( //
         RealScalar.of(-2), RealScalar.of(3), RealScalar.of(-4));
-    assertTrue(ExactTensorQ.of(matrix));
+    ExactTensorQ.require(matrix);
     assertEquals(Det.of(matrix).number(), 2 * 3 * 4);
   }
 
@@ -49,7 +49,7 @@ public class DiagonalMatrixTest extends TestCase {
     Scalar qs2 = Quantity.of(2, "s");
     Tensor vec = Tensors.of(qs1, qs2);
     Tensor matrix = DiagonalMatrix.with(vec);
-    assertTrue(ExactTensorQ.of(matrix));
+    ExactTensorQ.require(matrix);
     assertEquals(matrix.toString(), "{{1[m], 0[m]}, {0[s], 2[s]}}");
   }
 

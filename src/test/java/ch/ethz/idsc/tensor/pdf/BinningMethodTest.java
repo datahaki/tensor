@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 public class BinningMethodTest extends TestCase {
   public void testRice() {
     Scalar width = BinningMethod.RICE.apply(Tensors.vector(2, 4, 3, 6));
-    assertTrue(ExactScalarQ.of(width));
+    ExactScalarQ.require(width);
     assertEquals(width, RealScalar.ONE);
   }
 

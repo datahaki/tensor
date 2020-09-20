@@ -60,7 +60,7 @@ public class DeBoorTest extends TestCase {
     Tensor result = Tensors.fromString( //
         "{{10, 1}, {51/5, 17/10}, {52/5, 11/5}, {53/5, 5/2}, {54/5, 13/5}, {11, 5/2}}");
     assertEquals(result, points);
-    assertTrue(ExactTensorQ.of(points));
+    ExactTensorQ.require(points);
   }
 
   public void testQuadratic2() {
@@ -73,7 +73,7 @@ public class DeBoorTest extends TestCase {
     Tensor result = Tensors.fromString( //
         "{{10, 1}, {51/5, 17/10}, {52/5, 11/5}, {53/5, 5/2}, {54/5, 13/5}, {11, 5/2}}");
     assertEquals(result, points);
-    assertTrue(ExactTensorQ.of(points));
+    ExactTensorQ.require(points);
     assertEquals(deBoor.degree(), 2);
     assertEquals(deBoor.knots(), knots);
     assertEquals(deBoor.control(), control);
@@ -89,7 +89,7 @@ public class DeBoorTest extends TestCase {
     Tensor result = Tensors.fromString( //
         "{{11, 13/6}, {56/5, 893/375}, {57/5, 621/250}, {58/5, 961/375}, {59/5, 2029/750}, {12, 3}}");
     assertEquals(result, points);
-    assertTrue(ExactTensorQ.of(points));
+    ExactTensorQ.require(points);
     assertEquals(deBoor.degree(), 3);
     assertEquals(deBoor.knots(), knots);
     assertEquals(deBoor.control(), control);
@@ -104,7 +104,7 @@ public class DeBoorTest extends TestCase {
     Tensor result = Tensors.fromString( //
         "{{11, 3}, {111/10, 35839/12000}, {56/5, 4429/1500}, {113/10, 11631/4000}, {57/5, 1073/375}, {23/2, 271/96}, {58/5, 1401/500}, {117/10, 33697/12000}, {59/5, 1069/375}, {119/10, 11757/4000}, {12, 37/12}}");
     assertEquals(result, points);
-    assertTrue(ExactTensorQ.of(points));
+    ExactTensorQ.require(points);
   }
 
   public void testWikiStyleConstant0() throws ClassNotFoundException, IOException {

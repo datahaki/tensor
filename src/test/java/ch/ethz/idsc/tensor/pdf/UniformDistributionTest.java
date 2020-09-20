@@ -25,7 +25,7 @@ public class UniformDistributionTest extends TestCase {
     assertEquals(cdf.p_lessThan(RealScalar.of(3)), RealScalar.ONE);
     assertEquals(cdf.p_lessThan(RealScalar.of(4)), RealScalar.ONE);
     Scalar prob = cdf.p_lessThan(RealScalar.of(2));
-    assertTrue(ExactScalarQ.of(prob));
+    ExactScalarQ.require(prob);
   }
 
   public void testPdf() {

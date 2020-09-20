@@ -64,6 +64,6 @@ public class NormalizeUnlessZeroTest extends TestCase {
     Tensor vector = Tensors.vector(-1, 3, -2);
     Tensor result = tensorUnaryOperator.apply(vector);
     assertEquals(vector, result);
-    assertTrue(ExactTensorQ.of(result));
+    ExactTensorQ.require(result);
   }
 }

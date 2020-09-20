@@ -18,13 +18,13 @@ public class SeriesTest extends TestCase {
   public void testEmptyReal() {
     Scalar scalar = Series.of(Tensors.empty()).apply(RealScalar.of(2));
     assertEquals(scalar, RealScalar.ZERO);
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testEmptyGaussian() {
     Scalar scalar = Series.of(Tensors.empty()).apply(GaussScalar.of(4, 7));
     assertEquals(scalar, GaussScalar.of(0, 7));
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testGauss() {

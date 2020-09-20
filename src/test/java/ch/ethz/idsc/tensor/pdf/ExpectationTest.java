@@ -61,10 +61,10 @@ public class ExpectationTest extends TestCase {
     Tensor pdf = unscaledPDF.divide(scale);
     Scalar result = pdf.dot(Range.of(0, upper).map(suo)).Get();
     assertEquals(expect, result);
-    assertTrue(ExactScalarQ.of(expect));
-    assertTrue(ExactScalarQ.of(result));
+    ExactScalarQ.require(expect);
+    ExactScalarQ.require(result);
     Scalar variance = Expectation.variance(distribution);
-    assertTrue(ExactScalarQ.of(variance));
+    ExactScalarQ.require(variance);
     double varDouble = variance.number().doubleValue();
     assertTrue(2500 < varDouble);
     assertTrue(varDouble < 4500);

@@ -55,14 +55,14 @@ public class NormalizeTest extends TestCase {
     Tensor vector = Tensors.vector(2, -3, 1);
     Tensor result = Normalize.with(Norm._1::ofVector).apply(vector);
     assertEquals(result, Tensors.fromString("{1/3, -1/2, 1/6}"));
-    assertTrue(ExactTensorQ.of(result));
+    ExactTensorQ.require(result);
   }
 
   public void testNormInfinityDocumentation() {
     Tensor vector = Tensors.vector(2, -3, 1);
     Tensor result = Normalize.with(Norm.INFINITY::ofVector).apply(vector);
     assertEquals(result, Tensors.fromString("{2/3, -1, 1/3}"));
-    assertTrue(ExactTensorQ.of(result));
+    ExactTensorQ.require(result);
   }
 
   public void testEps() {
@@ -90,7 +90,7 @@ public class NormalizeTest extends TestCase {
     Tensor d = Tensors.vector(1, 1, 1).multiply(RealScalar.of(2));
     Tensor n = Normalize.with(Norm.INFINITY::ofVector).apply(d);
     assertEquals(n, Tensors.vector(1, 1, 1));
-    assertTrue(ExactTensorQ.of(n));
+    ExactTensorQ.require(n);
     _checkNormalizeAllNorms(d);
     _checkNormalizeAllNorms(n);
   }

@@ -17,13 +17,13 @@ import junit.framework.TestCase;
 
 public class UnitSystemTest extends TestCase {
   public void testSize() {
-    assertTrue(90 <= UnitSystem.SI().map().size());
+    assertTrue(91 <= UnitSystem.SI().map().size());
   }
 
   public void testExact() {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(3, "Hz^-2*N*m^-1"));
     assertEquals(scalar, Quantity.of(3, "kg"));
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testScalar() {
@@ -98,11 +98,11 @@ public class UnitSystemTest extends TestCase {
     Scalar r1 = unitSystem.apply(Quantity.of(1, "knots"));
     Unit unit = QuantityUnit.of(r1);
     assertEquals(unit, Unit.of("m*s^-1"));
-    assertTrue(ExactScalarQ.of(r1));
+    ExactScalarQ.require(r1);
     Scalar r2 = UnitConvert.SI().to(Unit.of("km*h^-1")).apply(r1);
-    assertTrue(ExactScalarQ.of(r2));
+    ExactScalarQ.require(r2);
     Scalar r3 = Quantity.of(RationalScalar.of(463, 250), "km*h^-1");
-    assertTrue(ExactScalarQ.of(r3));
+    ExactScalarQ.require(r3);
     assertEquals(r2, r3);
   }
 

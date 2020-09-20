@@ -36,7 +36,7 @@ public class QuantityMagnitudeTest extends TestCase {
     Chop._12.requireClose(scalarUnaryOperator.apply(Quantity.of(360, "deg")), RealScalar.of(Math.PI * 2));
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(2));
     assertEquals(scalar, RealScalar.of(2));
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testSingleton() {
@@ -65,7 +65,7 @@ public class QuantityMagnitudeTest extends TestCase {
     ScalarUnaryOperator suo = quantityMagnitude.in("Pa");
     Scalar result = suo.apply(scalar);
     assertEquals(result, RealScalar.ONE);
-    assertTrue(ExactScalarQ.of(result));
+    ExactScalarQ.require(result);
   }
 
   public void testConversionN() {
@@ -74,7 +74,7 @@ public class QuantityMagnitudeTest extends TestCase {
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in("N");
     Scalar result = scalarUnaryOperator.apply(scalar);
     assertEquals(result, RealScalar.ONE);
-    assertTrue(ExactScalarQ.of(result));
+    ExactScalarQ.require(result);
   }
 
   public void testConversionMoWk() {

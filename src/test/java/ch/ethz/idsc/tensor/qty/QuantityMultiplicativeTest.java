@@ -85,9 +85,9 @@ public class QuantityMultiplicativeTest extends TestCase {
     Scalar s2 = Quantity.of(3, "m");
     assertEquals(s1.divide(s2), s2.under(s1));
     assertEquals(s2.divide(s1), s1.under(s2));
-    assertTrue(ExactScalarQ.of(s1.divide(s2)));
-    assertTrue(ExactScalarQ.of(s2.divide(s1)));
-    assertTrue(ExactScalarQ.of(s1.under(s2)));
-    assertTrue(ExactScalarQ.of(s2.under(s1)));
+    ExactScalarQ.require(s1.divide(s2));
+    ExactScalarQ.require(s2.divide(s1));
+    ExactScalarQ.require(s1.under(s2));
+    ExactScalarQ.require(s2.under(s1));
   }
 }

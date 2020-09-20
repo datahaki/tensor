@@ -21,13 +21,13 @@ public class ParzenWindowTest extends TestCase {
   public void testSemiExact() {
     Scalar scalar = ParzenWindow.FUNCTION.apply(RealScalar.of(0.5));
     assertTrue(Scalars.isZero(scalar));
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testOutside() {
     Scalar scalar = ParzenWindow.FUNCTION.apply(RealScalar.of(-0.52));
     assertEquals(scalar, RealScalar.ZERO);
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testOf() {

@@ -122,7 +122,7 @@ public class BSplineFunctionStringTest extends TestCase {
       Tensor tensor = Subdivide.of(0, n, 10).map(bSplineFunction);
       VectorQ.require(tensor);
       Tensor nounit = tensor.map(QuantityMagnitude.SI().in("m"));
-      assertTrue(ExactTensorQ.of(nounit));
+      ExactTensorQ.require(nounit);
       nounit.map(clip::requireInside);
     }
   }
@@ -143,7 +143,7 @@ public class BSplineFunctionStringTest extends TestCase {
           Tensor tensor = bSplineFunction.apply(_x.Get());
           assertTrue(tensor.stream().map(Scalar.class::cast).allMatch(Clips.unit()::isInside));
           assertEquals(Total.of(tensor), RealScalar.ONE);
-          assertTrue(ExactTensorQ.of(tensor));
+          ExactTensorQ.require(tensor);
         }
       }
   }
@@ -167,36 +167,36 @@ public class BSplineFunctionStringTest extends TestCase {
       ScalarTensorFunction mapReverse = BSplineFunction.string(degree, Reverse.of(control));
       Tensor reverse = Reverse.of(domain.map(mapReverse));
       assertEquals(forward, reverse);
-      assertTrue(ExactTensorQ.of(forward));
-      assertTrue(ExactTensorQ.of(reverse));
+      ExactTensorQ.require(forward);
+      ExactTensorQ.require(reverse);
     }
   }
 
   public void testBasisWeights1a() {
     ScalarTensorFunction bSplineFunction = BSplineFunction.string(1, UnitVector.of(3, 1));
     Tensor limitMask = Range.of(1, 2).map(bSplineFunction);
-    assertTrue(ExactTensorQ.of(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1}"));
   }
 
   public void testBasisWeights2() {
     ScalarTensorFunction bSplineFunction = BSplineFunction.string(2, UnitVector.of(5, 2));
     Tensor limitMask = Range.of(1, 4).map(bSplineFunction);
-    assertTrue(ExactTensorQ.of(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/8, 3/4, 1/8}"));
   }
 
   public void testBasisWeights3a() {
     ScalarTensorFunction bSplineFunction = BSplineFunction.string(3, UnitVector.of(7, 3));
     Tensor limitMask = Range.of(2, 5).map(bSplineFunction);
-    assertTrue(ExactTensorQ.of(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/6, 2/3, 1/6}"));
   }
 
   public void testBasisWeights3b() {
     ScalarTensorFunction bSplineFunction = BSplineFunction.string(3, UnitVector.of(5, 2));
     Tensor limitMask = Range.of(1, 4).map(bSplineFunction);
-    assertTrue(ExactTensorQ.of(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/6, 2/3, 1/6}"));
   }
 
@@ -204,7 +204,7 @@ public class BSplineFunctionStringTest extends TestCase {
     ScalarTensorFunction bSplineFunction = BSplineFunction.string(4, UnitVector.of(9, 4));
     Tensor limitMask = Range.of(2, 7).map(bSplineFunction);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
-    assertTrue(ExactTensorQ.of(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/384, 19/96, 115/192, 19/96, 1/384}"));
   }
 
@@ -212,7 +212,7 @@ public class BSplineFunctionStringTest extends TestCase {
     ScalarTensorFunction bSplineFunction = BSplineFunction.string(5, UnitVector.of(11, 5));
     Tensor limitMask = Range.of(3, 8).map(bSplineFunction);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
-    assertTrue(ExactTensorQ.of(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/120, 13/60, 11/20, 13/60, 1/120}"));
   }
 
@@ -220,7 +220,7 @@ public class BSplineFunctionStringTest extends TestCase {
     ScalarTensorFunction bSplineFunction = BSplineFunction.string(5, UnitVector.of(9, 4));
     Tensor limitMask = Range.of(2, 7).map(bSplineFunction);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
-    assertTrue(ExactTensorQ.of(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/120, 13/60, 11/20, 13/60, 1/120}"));
   }
 
@@ -228,7 +228,7 @@ public class BSplineFunctionStringTest extends TestCase {
     ScalarTensorFunction bSplineFunction = BSplineFunction.string(5, UnitVector.of(7, 3));
     Tensor limitMask = Range.of(1, 6).map(bSplineFunction);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
-    assertTrue(ExactTensorQ.of(limitMask));
+    ExactTensorQ.require(limitMask);
     assertEquals(limitMask, Tensors.fromString("{1/120, 13/60, 11/20, 13/60, 1/120}"));
   }
 

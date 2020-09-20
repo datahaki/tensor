@@ -91,15 +91,16 @@ public class HungarianAlgorithmTest extends TestCase {
     _check2(matrix, bipartiteMatching.minimum(), Tensors.vectorInt(bipartiteMatching.matching()));
     HungarianAlgorithm hungarianAlgorithm = (HungarianAlgorithm) bipartiteMatching;
     List<Integer> list = Dimensions.of(matrix);
+    assertEquals(bipartiteMatching.matching().length, matrix.length());
     assertTrue(hungarianAlgorithm.iterations() <= Math.min(list.get(0), list.get(1)));
   }
 
-  private static final Random random = new Random();
+  private static final Random RANDOM = new Random();
 
   public void testRandom() throws ClassNotFoundException, IOException {
     Distribution distribution = UniformDistribution.unit();
     for (int count = 0; count < 10; ++count) {
-      int row = 1 + random.nextInt(100);
+      int row = 1 + RANDOM.nextInt(100);
       _check3(RandomVariate.of(distribution, row, 53));
       _check3(RandomVariate.of(distribution, 53, row));
     }
@@ -108,7 +109,7 @@ public class HungarianAlgorithmTest extends TestCase {
   public void testDiscreteRandom() throws ClassNotFoundException, IOException {
     Distribution distribution = DiscreteUniformDistribution.of(2, 100);
     for (int count = 0; count < 10; ++count) {
-      int row = 1 + random.nextInt(100);
+      int row = 1 + RANDOM.nextInt(100);
       _check3(RandomVariate.of(distribution, row, 53));
       _check3(RandomVariate.of(distribution, 53, row));
     }

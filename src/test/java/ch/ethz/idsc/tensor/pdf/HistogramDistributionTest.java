@@ -156,22 +156,22 @@ public class HistogramDistributionTest extends TestCase {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     {
       Scalar x = inverseCDF.quantile(RealScalar.ZERO);
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, RealScalar.ZERO);
     }
     {
       Scalar x = inverseCDF.quantile(RationalScalar.of(1, 2));
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, RationalScalar.of(3, 2));
     }
     {
       Scalar x = inverseCDF.quantile(RationalScalar.of(1, 4));
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, RationalScalar.of(1, 1));
     }
     {
       Scalar x = inverseCDF.quantile(RationalScalar.of(3, 4));
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, RationalScalar.of(2, 1));
     }
   }
@@ -182,17 +182,17 @@ public class HistogramDistributionTest extends TestCase {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     {
       Scalar x = inverseCDF.quantile(RealScalar.ZERO);
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, Quantity.of(0, "m"));
     }
     {
       Scalar x = inverseCDF.quantile(RationalScalar.of(2, 3));
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, Quantity.of(RationalScalar.of(3, 1), "m"));
     }
     {
       Scalar x = inverseCDF.quantile(RationalScalar.of(1, 2));
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, Quantity.of(RationalScalar.of(5, 2), "m"));
     }
   }

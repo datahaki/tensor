@@ -45,7 +45,7 @@ public class NTest extends TestCase {
 
   public void testComplexContext() {
     Scalar scalar = ComplexScalar.of(3, 7).reciprocal();
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
     Scalar d = N.DECIMAL128.of(scalar);
     // mathematica gives ...... 0.05172413793103448275862068965517241...-0.12068965517241379310344827586206897 I
     assertEquals(d.toString(), "0.05172413793103448275862068965517241`34-0.1206896551724137931034482758620690`34*I");

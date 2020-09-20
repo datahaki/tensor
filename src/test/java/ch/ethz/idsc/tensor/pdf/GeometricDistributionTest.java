@@ -42,7 +42,7 @@ public class GeometricDistributionTest extends TestCase {
     assertEquals(cdf.p_lessEquals(RealScalar.ONE), plt2);
     assertEquals(cdf.p_lessEquals(RealScalar.of(1.1)), plt2);
     Scalar large = cdf.p_lessEquals(RealScalar.of(100.1));
-    assertTrue(ExactScalarQ.of(large));
+    ExactScalarQ.require(large);
   }
 
   public void testFailP() {

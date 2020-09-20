@@ -44,7 +44,7 @@ public class HannWindowTest extends TestCase {
   public void testSemiExact() {
     Scalar scalar = HannWindow.FUNCTION.apply(RealScalar.of(0.5));
     assertTrue(Scalars.isZero(scalar));
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testOf() {

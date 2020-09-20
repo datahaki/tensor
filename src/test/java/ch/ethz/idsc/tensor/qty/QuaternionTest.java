@@ -141,7 +141,7 @@ public class QuaternionTest extends TestCase {
   }
 
   private static Scalar _createQ(Tensor vec) {
-    assertTrue(VectorQ.ofLength(vec, 4));
+    VectorQ.requireLength(vec, 4);
     return Quaternion.of(vec.Get(0), vec.Get(1), vec.Get(2), vec.Get(3));
   }
 
@@ -158,14 +158,14 @@ public class QuaternionTest extends TestCase {
 
   public void testExactScalarQ() {
     Scalar q1 = Quaternion.of(1, 3, -2, 2);
-    assertTrue(ExactScalarQ.of(q1));
+    ExactScalarQ.require(q1);
     Scalar q2 = Quaternion.of(1, 3, -2., 2);
     assertFalse(ExactScalarQ.of(q2));
   }
 
   public void testN() {
     Scalar q1 = Quaternion.of(1, 3, -2, 2);
-    assertTrue(ExactScalarQ.of(q1));
+    ExactScalarQ.require(q1);
     Scalar n1 = N.DOUBLE.apply(q1);
     assertFalse(ExactScalarQ.of(n1));
     assertEquals(n1.toString(), "{\"w\": 1.0, \"xyz\": {3.0, -2.0, 2.0}}");
@@ -173,7 +173,7 @@ public class QuaternionTest extends TestCase {
 
   public void testN2() {
     Scalar q1 = Quaternion.of(1, 3, -2, 2);
-    assertTrue(ExactScalarQ.of(q1));
+    ExactScalarQ.require(q1);
     Scalar n1 = N.DECIMAL64.apply(q1);
     assertFalse(ExactScalarQ.of(n1));
     assertEquals(n1.toString(), "{\"w\": 1, \"xyz\": {3, -2, 2}}");

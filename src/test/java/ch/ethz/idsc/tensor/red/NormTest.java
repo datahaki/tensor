@@ -34,8 +34,8 @@ public class NormTest extends TestCase {
   }
 
   private static void _checkExactZero(Scalar norm) {
+    ExactScalarQ.require(norm);
     assertEquals(norm, RealScalar.ZERO);
-    assertTrue(ExactScalarQ.of(norm));
   }
 
   public void testZero() {
