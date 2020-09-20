@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
 import ch.ethz.idsc.tensor.sca.Imag;
 
 /** Not entirely consistent with Mathematica for the case
@@ -34,6 +35,7 @@ public enum Roots {
     Tensor roots = unsorted(coeffs);
     boolean isReal = roots.stream() //
         .map(Scalar.class::cast) //
+        .filter(ComplexEmbedding.class::isInstance) //
         .map(Imag.FUNCTION) //
         .allMatch(Scalars::isZero);
     return isReal //

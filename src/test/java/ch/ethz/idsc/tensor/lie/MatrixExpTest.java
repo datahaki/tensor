@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.MathematicaFormat;
 import ch.ethz.idsc.tensor.mat.HermitianMatrixQ;
@@ -147,6 +148,30 @@ public class MatrixExpTest extends TestCase {
       Tensor exp1 = MatrixExp.of(matrix);
       Tensor exp2 = MatrixExp.series(matrix);
       Chop._01.requireClose(exp1, exp2);
+    }
+  }
+
+  public void testComplex1() {
+    Tensor matrix = ConstantArray.of(Scalars.fromString("-10-1*I"), 3, 3);
+    Tensor tensor1 = MatrixExp.of(matrix);
+    Tensor tensor2 = MatrixExp.series(matrix);
+    Chop._03.requireClose(tensor1, tensor2);
+  }
+
+  public void testComplex2() {
+    Tensor matrix = ConstantArray.of(Scalars.fromString("-10.0-1.0*I"), 3, 3);
+    Tensor tensor1 = MatrixExp.of(matrix);
+    Tensor tensor2 = MatrixExp.series(matrix);
+    Chop._03.requireClose(tensor1, tensor2);
+  }
+
+  public void testNaNFail() {
+    Tensor matrix = ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3);
+    try {
+      MatrixExp.series(matrix);
+      fail();
+    } catch (Exception exception) {
+      // ---
     }
   }
 

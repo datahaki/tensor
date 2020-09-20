@@ -1,7 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -35,6 +37,16 @@ public class MatrixLogTest extends TestCase {
     Tensor matrix = RandomVariate.of(distribution, 4, 5);
     try {
       MatrixLog.of(matrix);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNaNFail() {
+    Tensor matrix = ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3);
+    try {
+      MatrixLog.series(matrix);
       fail();
     } catch (Exception exception) {
       // ---

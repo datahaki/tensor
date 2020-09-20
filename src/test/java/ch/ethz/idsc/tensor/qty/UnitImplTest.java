@@ -1,7 +1,12 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import junit.framework.TestCase;
 
 public class UnitImplTest extends TestCase {
@@ -28,5 +33,13 @@ public class UnitImplTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
+  }
+
+  public void testMergeCollision() {
+    Map<String, Scalar> m1 = new HashMap<>();
+    m1.put("m", RealScalar.ONE);
+    Map<String, Scalar> m2 = new HashMap<>();
+    m2.put("m", RealScalar.of(2));
+    Stream.concat(m1.entrySet().stream(), m2.entrySet().stream()).collect(UnitImpl.COLLECTOR);
   }
 }

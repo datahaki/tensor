@@ -4,12 +4,14 @@ package ch.ethz.idsc.tensor.qty;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -90,6 +92,18 @@ public class QuaternionImplTest extends TestCase {
     Scalar scalar = Power.of(Quaternion.of(-2, 1, 2, 3), RealScalar.of(4));
     assertEquals(scalar, Quaternion.of(-124, 80, 160, 240));
     ExactScalarQ.require(scalar);
+  }
+
+  public void testPowerExactNumeric() {
+    Scalar scalar = Power.of(Quaternion.of(-2, 1, 2, 3), Pi.VALUE);
+    assertFalse(ExactScalarQ.of(scalar));
+  }
+
+  public void testPowerXYZ0() {
+    Scalar scalar = Power.of(Quaternion.of(2.0, 0, 0, 0), RealScalar.of(3));
+    assertEquals(scalar, Quaternion.of(8, 0, 0, 0));
+    Quaternion quaternion = (Quaternion) scalar;
+    ExactTensorQ.require(quaternion.xyz());
   }
 
   public void testUnaffected() {

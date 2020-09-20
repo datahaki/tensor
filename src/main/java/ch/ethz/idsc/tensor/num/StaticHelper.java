@@ -13,4 +13,6 @@ import ch.ethz.idsc.tensor.sca.Abs;
       return Abs.FUNCTION.apply(scalar);
     return scalar;
   }
+
+  public static final BinaryPower<Cycles> CYCLES_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
 }

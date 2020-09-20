@@ -2,11 +2,8 @@
 package ch.ethz.idsc.tensor.num;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -37,14 +34,14 @@ public class CyclesTest extends TestCase {
 
   private static String _combo(String a, String b) {
     Cycles ca = Cycles.of(a);
-    assertTrue(1 < ca.map().size());
+    assertTrue(1 < ca.navigableMap().size());
     Cycles ci = ca.inverse();
-    assertEquals(ca.map().size(), ci.map().size());
+    assertEquals(ca.navigableMap().size(), ci.navigableMap().size());
     assertEquals(ca.toTensor().length(), ci.toTensor().length());
     assertEquals(ca.combine(ci), Cycles.identity());
     assertEquals(ci.combine(ca), Cycles.identity());
     Cycles cb = Cycles.of(b);
-    assertTrue(1 < cb.map().size());
+    assertTrue(1 < cb.navigableMap().size());
     assertEquals(cb.combine(cb.inverse()), Cycles.identity());
     assertEquals(cb.inverse().combine(cb), Cycles.identity());
     return ca.combine(cb).toString();
@@ -71,34 +68,11 @@ public class CyclesTest extends TestCase {
     assertFalse(cycles.equals(Pi.VALUE));
   }
 
-  private static Set<Cycles> _group(Set<Cycles> gen) {
-    Set<Cycles> all = new HashSet<>();
-    Set<Cycles> ite = new HashSet<>(gen);
-    while (all.addAll(ite))
-      ite = ite.stream().flatMap(cycles -> gen.stream().map(cycles::combine)).collect(Collectors.toSet());
-    for (Cycles cycles : all)
-      for (Entry<Integer, Integer> entry : cycles.map().entrySet())
-        assertFalse(entry.getKey().equals(entry.getValue()));
-    return all;
-  }
-
-  public void testGroupEx0() {
-    assertEquals(_group(Collections.singleton(Cycles.identity())).size(), 1);
-  }
-
-  public void testGroupEx1() {
-    Set<Cycles> gen = new HashSet<>();
-    gen.add(Cycles.of("{{2, 10}, {4, 11}, {5, 7}}"));
-    gen.add(Cycles.of("{{1, 4, 3}, {2, 5, 6}}"));
-    // ---
-    assertEquals(_group(gen).size(), 1440);
-  }
-
-  public void testGroupEx2() {
-    Cycles cycles = Cycles.of( //
-        "{{1, 18, 25, 8, 11, 33, 45, 34, 19, 39, 4, 35, 46, 37, 10, 48, 7, 31, 6, 42, 36, 15, 29}, {2, 21, 14, 38, 26, 24, 41, 22, 12, 49}, {3, 28,  20, 50, 43, 23, 9, 5, 16, 44, 30, 27, 17}, {13, 40, 32, 47}}");
-    Set<Cycles> set = _group(Collections.singleton(cycles));
-    assertEquals(set.size(), 5980);
+  public void testKeyCollision() {
+    Map<Integer, Integer> map = new IdentityHashMap<>();
+    map.put(3, 5);
+    map.put(4, 5);
+    map.entrySet().stream().collect(Cycles.COLLECTOR);
   }
 
   public void testScalarFail() {

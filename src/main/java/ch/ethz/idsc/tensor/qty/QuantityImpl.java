@@ -160,7 +160,7 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
       if (unit.equals(quantity.unit()))
         return ArcTan.of(quantity.value(), value);
     }
-    return ArcTan.FUNCTION.apply(divide(x)); // ArcTan[x, y] == ArcTan[ y / x ]
+    throw TensorRuntimeException.of(this, x);
   }
 
   @Override // from ArgInterface

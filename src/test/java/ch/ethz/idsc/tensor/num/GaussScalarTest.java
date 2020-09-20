@@ -9,6 +9,7 @@ import java.util.Set;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -192,6 +193,7 @@ public class GaussScalarTest extends TestCase {
 
   public void testHash() {
     Scalar g = GaussScalar.of(4, 7);
+    ExactScalarQ.require(g);
     Scalar d = DoubleScalar.of(4.33);
     Scalar z = RealScalar.ZERO;
     Scalar c = ComplexScalar.of(RealScalar.of(2.), RealScalar.of(3.4));

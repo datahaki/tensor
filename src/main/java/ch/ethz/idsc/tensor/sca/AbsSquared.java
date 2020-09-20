@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * Since {@link ComplexScalar}::abs involves a square root the square of the absolute value
  * is better computed using <code>z * conjugate(z)</code>.
  * 
- * <p>If a {@link Scalar} does not implement {@link ComplexEmbedding}, then
+ * <p>If a {@link Scalar} does not implement {@link ConjugateInterface}, then
  * the function AbsSquared is computed simply as
  * <code>abs(x) ^ 2</code> */
 public enum AbsSquared implements ScalarUnaryOperator {

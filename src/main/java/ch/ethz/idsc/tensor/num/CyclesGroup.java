@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor.num;
 
-/** Hint: implementation is not most efficient! */
 /* package */ enum CyclesGroup implements GroupInterface<Cycles> {
   INSTANCE;
 

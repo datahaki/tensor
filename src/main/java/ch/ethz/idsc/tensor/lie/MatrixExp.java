@@ -25,7 +25,7 @@ public enum MatrixExp {
   ;
   private static final ScalarUnaryOperator LOG2 = Log.base(2);
   /** with scaling the series typically converges in few steps */
-  private static final int MAX_ITERATIONS = 500;
+  private static final int MAX_ITERATIONS = 128;
 
   /** @param matrix square
    * @return exponential of given matrix exp(m) = I + m + m^2/2 + m^3/6 + ...
