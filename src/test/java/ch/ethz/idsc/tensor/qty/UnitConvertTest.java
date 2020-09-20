@@ -4,9 +4,11 @@ package ch.ethz.idsc.tensor.qty;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class UnitConvertTest extends TestCase {
@@ -76,6 +78,13 @@ public class UnitConvertTest extends TestCase {
     Scalar one_ohm = UnitSystem.SI().apply(Quantity.of(1, "Ohm"));
     assertEquals(UnitSystem.SI().apply(Quantity.of(1e-3, "kOhm")), one_ohm);
     assertEquals(UnitSystem.SI().apply(Quantity.of(1e-6, "MOhm")), one_ohm);
+  }
+
+  public void testKilowattHours() {
+    Unit unit = Unit.of("kW*h");
+    ScalarUnaryOperator suo = UnitConvert.SI().to(unit);
+    Scalar scalar = suo.apply(Quantity.of(180, "W*s"));
+    assertEquals(scalar, Quantity.of(RationalScalar.of(1, 20000), unit));
   }
 
   public void testFail() {

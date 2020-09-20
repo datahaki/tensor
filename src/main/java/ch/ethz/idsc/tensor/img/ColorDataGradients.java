@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor.img;
 
-import java.util.Objects;
-
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.ResourceData;
@@ -99,13 +97,8 @@ public enum ColorDataGradients implements ColorDataGradient {
   }
 
   private ColorDataGradients() {
-    Tensor tensor = ResourceData.of("/colorscheme/" + name().toLowerCase() + ".csv");
-    boolean success = Objects.nonNull(tensor);
-    colorDataGradient = success //
-        ? new LinearColorDataGradient(tensor)
-        : FallbackColorDataGradient.INSTANCE;
-    if (!success)
-      System.err.println("fail to load " + name());
+    colorDataGradient = //
+        new LinearColorDataGradient(ResourceData.of("/colorscheme/" + name().toLowerCase() + ".csv"));
   }
 
   @Override // from ColorDataGradient

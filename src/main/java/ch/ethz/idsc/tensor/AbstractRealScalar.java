@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.AbsInterface;
-import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.ArcTanInterface;
 import ch.ethz.idsc.tensor.sca.ArgInterface;
 import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
@@ -59,7 +58,8 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
       return DoubleScalar.of(Math.atan2( //
           number().doubleValue(), // y
           x.number().doubleValue())); // x
-    return ArcTan.FUNCTION.apply(divide(x)); // ArcTan[x, y] == ArcTan[ y / x ]
+    // return ArcTan.FUNCTION.apply(divide(x)); // ArcTan[x, y] == ArcTan[ y / x ]
+    throw TensorRuntimeException.of(this, x);
   }
 
   @Override // from ArgInterface

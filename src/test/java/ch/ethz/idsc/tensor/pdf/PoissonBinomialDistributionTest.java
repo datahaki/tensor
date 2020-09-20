@@ -48,6 +48,24 @@ public class PoissonBinomialDistributionTest extends TestCase {
     assertEquals(discreteDistribution.lowerBound(), 2);
   }
 
+  public void testProbFail() {
+    Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1));
+    PDF pdf = PDF.of(distribution);
+    try {
+      pdf.at(RealScalar.of(2));
+      fail();
+    } catch (Exception exception) {
+      assertTrue(UnsupportedOperationException.class.isInstance(exception));
+    }
+    DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
+    try {
+      discreteDistribution.p_equals(3);
+      fail();
+    } catch (Exception exception) {
+      assertTrue(UnsupportedOperationException.class.isInstance(exception));
+    }
+  }
+
   public void testFail() {
     try {
       PoissonBinomialDistribution.of(RealScalar.ZERO);

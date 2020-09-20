@@ -1,24 +1,32 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt.hun;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class HungarianAlgorithmTest extends TestCase {
   private static void _verify(Tensor matrix, Scalar minimum, Tensor expected) {
-    HungarianAlgorithm hungarianAlgorithm = HungarianAlgorithm.of(matrix);
-    Chop._12.requireClose(hungarianAlgorithm.minimum(), minimum);
-    assertEquals(Tensors.vectorInt(hungarianAlgorithm.matching()), expected);
+    BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
+    Tolerance.CHOP.requireClose(bipartiteMatching.minimum(), minimum);
+    if (!ExactScalarQ.of(bipartiteMatching.minimum()))
+      assertEquals(Tensors.vectorInt(bipartiteMatching.matching()), expected);
   }
 
   private static void _check1(Tensor matrix, Scalar minimum, Tensor expected) {
@@ -29,7 +37,7 @@ public class HungarianAlgorithmTest extends TestCase {
   private static void _check2(Tensor matrix, Scalar minimum, Tensor expected) {
     Tensor cost = Transpose.of(matrix);
     int[] perm = new int[cost.length()];
-    Arrays.fill(perm, HungarianAlgorithm.UNASSIGNED);
+    Arrays.fill(perm, BipartiteMatching.UNASSIGNED);
     for (int index = 0; index < expected.length(); ++index) {
       int ordinal = expected.Get(index).number().intValue();
       if (0 <= ordinal)
@@ -78,12 +86,31 @@ public class HungarianAlgorithmTest extends TestCase {
     _check1(matrix, RealScalar.of(9), Tensors.vector(4, 1, 0, 3, 2));
   }
 
-  public void testRandom() {
+  private static void _check3(Tensor matrix) throws ClassNotFoundException, IOException {
+    BipartiteMatching bipartiteMatching = Serialization.copy(BipartiteMatching.of(matrix));
+    _check2(matrix, bipartiteMatching.minimum(), Tensors.vectorInt(bipartiteMatching.matching()));
+    HungarianAlgorithm hungarianAlgorithm = (HungarianAlgorithm) bipartiteMatching;
+    List<Integer> list = Dimensions.of(matrix);
+    assertTrue(hungarianAlgorithm.iterations() <= Math.min(list.get(0), list.get(1)));
+  }
+
+  private static final Random random = new Random();
+
+  public void testRandom() throws ClassNotFoundException, IOException {
     Distribution distribution = UniformDistribution.unit();
-    for (int row = 1; row < 200; row += 83) {
-      Tensor matrix = RandomVariate.of(distribution, row, 199);
-      HungarianAlgorithm hungarianAlgorithm = HungarianAlgorithm.of(matrix);
-      _check2(matrix, hungarianAlgorithm.minimum(), Tensors.vectorInt(hungarianAlgorithm.matching()));
+    for (int count = 0; count < 10; ++count) {
+      int row = 1 + random.nextInt(100);
+      _check3(RandomVariate.of(distribution, row, 53));
+      _check3(RandomVariate.of(distribution, 53, row));
+    }
+  }
+
+  public void testDiscreteRandom() throws ClassNotFoundException, IOException {
+    Distribution distribution = DiscreteUniformDistribution.of(2, 100);
+    for (int count = 0; count < 10; ++count) {
+      int row = 1 + random.nextInt(100);
+      _check3(RandomVariate.of(distribution, row, 53));
+      _check3(RandomVariate.of(distribution, 53, row));
     }
   }
 }

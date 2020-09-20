@@ -17,10 +17,10 @@ public enum AbsSquared implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof ConjugateInterface)
-      return scalar.multiply(Conjugate.FUNCTION.apply(scalar));
-    Scalar abs = Abs.FUNCTION.apply(scalar);
-    return abs.multiply(abs);
+    // if (scalar instanceof ConjugateInterface)
+    return scalar.multiply(Conjugate.FUNCTION.apply(scalar));
+    // Scalar abs = Abs.FUNCTION.apply(scalar);
+    // return abs.multiply(abs);
   }
 
   /** @param tensor

@@ -102,7 +102,6 @@ public class Gaussian extends AbstractScalar implements //
     return of(n.apply(mean), n.apply(variance));
   }
 
-  /***************************************************/
   @Override // from MeanInterface
   public Scalar mean() {
     return mean;
@@ -117,6 +116,7 @@ public class Gaussian extends AbstractScalar implements //
     return NormalDistribution.of(mean, Sqrt.FUNCTION.apply(variance));
   }
 
+  /***************************************************/
   @Override
   public int hashCode() {
     return Objects.hash(mean, variance);

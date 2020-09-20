@@ -11,7 +11,8 @@ public interface Unit {
   static final String JOIN_DELIMITER = "*";
   /** Example: A*kg^-2 */
   static final char POWER_DELIMITER = '^';
-  /** holds the dimension-less unit ONE */
+  /** holds the dimension-less unit ONE
+   * Mathematica: "DimensionlessUnit" */
   static final Unit ONE = of("");
 
   /** @param string, for instance "m*s^-2"

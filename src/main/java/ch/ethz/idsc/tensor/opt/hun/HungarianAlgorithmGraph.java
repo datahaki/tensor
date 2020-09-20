@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.ScalarArray;
 
-/* package */ abstract class HungarianAlgorithmGraph implements HungarianAlgorithm, Serializable {
+/* package */ abstract class HungarianAlgorithmGraph implements BipartiteMatching, Serializable {
   private final int rows;
   private final int cols;
   protected final Scalar[][] matrix;
@@ -40,7 +40,7 @@ import ch.ethz.idsc.tensor.io.ScalarArray;
     ++matchCount;
   }
 
-  @Override // from HungarianAlgorithm
+  @Override
   public final int[] matching() {
     int[] result = new int[rows];
     int[] resvec = rows <= cols ? xMatch : yMatch;
@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.io.ScalarArray;
     return result;
   }
 
-  @Override // from HungarianAlgorithm
+  @Override
   public final Scalar minimum() {
     Stream<Scalar> stream = rows <= cols //
         ? IntStream.range(0, rows).mapToObj(i -> matrix[i][xMatch[i]]) //

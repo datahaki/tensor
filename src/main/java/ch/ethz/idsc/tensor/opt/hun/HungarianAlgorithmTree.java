@@ -2,7 +2,6 @@
 // adapted by jph
 package ch.ethz.idsc.tensor.opt.hun;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +12,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.ScalarArray;
 import ch.ethz.idsc.tensor.red.Min;
 
-/* package */ class HungarianAlgorithmTree implements Serializable {
+/* package */ class HungarianAlgorithmTree {
   private final Bipartition bipartition;
   private final Set<Integer> S = new HashSet<>();
   private final Set<Integer> nlsMinusT = new HashSet<>();
@@ -67,7 +66,7 @@ import ch.ethz.idsc.tensor.red.Min;
     }
     // ---
     for (int y : nlsMinusT)
-      if (yMatch[y] == HungarianAlgorithm.UNASSIGNED) {
+      if (yMatch[y] == BipartiteMatching.UNASSIGNED) {
         nlsMinusT.remove(y);
         return y;
       }
@@ -96,7 +95,7 @@ import ch.ethz.idsc.tensor.red.Min;
   int addS(int x) {
     while (true) {
       int y = pickNlsMinusT(x);
-      if (yMatch[y] == HungarianAlgorithm.UNASSIGNED)
+      if (yMatch[y] == BipartiteMatching.UNASSIGNED)
         return y;
       x = addT(x, y);
       _addS(x);
@@ -123,7 +122,7 @@ import ch.ethz.idsc.tensor.red.Min;
   }
 
   private void resetEscape() {
-    Arrays.fill(escapeFromX, HungarianAlgorithm.UNASSIGNED);
-    Arrays.fill(escapeFromY, HungarianAlgorithm.UNASSIGNED);
+    Arrays.fill(escapeFromX, BipartiteMatching.UNASSIGNED);
+    Arrays.fill(escapeFromY, BipartiteMatching.UNASSIGNED);
   }
 }

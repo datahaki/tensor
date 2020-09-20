@@ -37,6 +37,10 @@ public class AbsSquaredTest extends TestCase {
     Scalar scalar = b.subtract(a);
     assertEquals(scalar.multiply(scalar), GaussScalar.of(3959 * 3959, 12347));
   }
+  // public void testCoverage() {
+  // Scalar scalar = AbsSquared.FUNCTION.apply(Gaussian.of(2, 3));
+  // System.out.println(scalar);
+  // }
 
   public void testInfinity() {
     assertEquals(AbsSquared.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY), DoubleScalar.POSITIVE_INFINITY);

@@ -6,6 +6,8 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -151,11 +153,21 @@ public class ArcTanTest extends TestCase {
   }
 
   public void testGaussScalarFail() {
-    try {
-      ArcTan.of(RealScalar.of(5), GaussScalar.of(1, 7));
-      fail();
-    } catch (Exception exception) {
-      // ---
+    Tensor tensor = Tensors.fromString("{0.3, 1/3, 3+4*I, 1.2+3.4*I}");
+    for (Tensor _x : tensor) {
+      Scalar x = _x.Get();
+      try {
+        ArcTan.of(x, GaussScalar.of(1, 7));
+        fail();
+      } catch (Exception exception) {
+        // ---
+      }
+      try {
+        ArcTan.of(GaussScalar.of(1, 7), x);
+        fail();
+      } catch (Exception exception) {
+        // ---
+      }
     }
   }
 }
