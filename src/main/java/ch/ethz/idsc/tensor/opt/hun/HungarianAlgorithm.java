@@ -37,6 +37,7 @@ import ch.ethz.idsc.tensor.red.Min;
     // ---
     setInitialMatching(xLabel);
     initializeFreeNodes();
+    // ---
     while (!isSolved()) {
       int x = pickFreeX();
       int y = hungarianAlgorithmTree.addS(x);

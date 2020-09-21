@@ -2,27 +2,13 @@
 package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.opt.Pi;
-import ch.ethz.idsc.tensor.sca.AbsInterface;
-import ch.ethz.idsc.tensor.sca.ArcTanInterface;
-import ch.ethz.idsc.tensor.sca.ArgInterface;
 import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
-import ch.ethz.idsc.tensor.sca.ConjugateInterface;
 import ch.ethz.idsc.tensor.sca.Exp;
-import ch.ethz.idsc.tensor.sca.ExpInterface;
 import ch.ethz.idsc.tensor.sca.Log;
-import ch.ethz.idsc.tensor.sca.LogInterface;
-import ch.ethz.idsc.tensor.sca.PowerInterface;
-import ch.ethz.idsc.tensor.sca.RoundingInterface;
 import ch.ethz.idsc.tensor.sca.Sign;
-import ch.ethz.idsc.tensor.sca.SignInterface;
-import ch.ethz.idsc.tensor.sca.SqrtInterface;
-import ch.ethz.idsc.tensor.sca.TrigonometryInterface;
 
 /** suggested base class for implementations of {@link RealScalar} */
-public abstract class AbstractRealScalar extends AbstractScalar implements RealScalar, //
-    AbsInterface, ArcTanInterface, ArgInterface, Comparable<Scalar>, ComplexEmbedding, //
-    ConjugateInterface, ExpInterface, LogInterface, PowerInterface, RoundingInterface, //
-    SignInterface, SqrtInterface, TrigonometryInterface {
+public abstract class AbstractRealScalar extends AbstractScalar implements RealScalar {
   static final double LOG_LO = 0.75;
   static final double LOG_HI = 1.3;
 
@@ -30,6 +16,11 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   @Override // from AbsInterface
   public final Scalar abs() {
     return isNonNegative() ? this : negate();
+  }
+
+  @Override // from AbsSquaredInterface
+  public Scalar absSquared() {
+    return multiply(this);
   }
 
   /***************************************************/

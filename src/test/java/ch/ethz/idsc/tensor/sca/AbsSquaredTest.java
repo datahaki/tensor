@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.Gaussian;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -37,14 +38,28 @@ public class AbsSquaredTest extends TestCase {
     Scalar scalar = b.subtract(a);
     assertEquals(scalar.multiply(scalar), GaussScalar.of(3959 * 3959, 12347));
   }
-  // public void testCoverage() {
-  // Scalar scalar = AbsSquared.FUNCTION.apply(Gaussian.of(2, 3));
-  // System.out.println(scalar);
-  // }
 
   public void testInfinity() {
     assertEquals(AbsSquared.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY), DoubleScalar.POSITIVE_INFINITY);
     assertEquals(AbsSquared.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), DoubleScalar.POSITIVE_INFINITY);
+  }
+
+  public void testGaussScalarFail() {
+    try {
+      AbsSquared.FUNCTION.apply(GaussScalar.of(2, 3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testGaussianFail() {
+    try {
+      AbsSquared.FUNCTION.apply(Gaussian.of(2, 3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 
   public void testFail() {

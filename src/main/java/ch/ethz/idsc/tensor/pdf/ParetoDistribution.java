@@ -15,8 +15,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/ParetoDistribution.html">ParetoDistribution</a> */
 public class ParetoDistribution extends AbstractContinuousDistribution implements //
     MeanInterface, VarianceInterface, Serializable {
-  private static final Scalar TWO = RealScalar.of(2);
-
   /** @param k strictly positive real number
    * @param alpha strictly positive real number
    * @return */
@@ -65,9 +63,9 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    if (Scalars.lessThan(TWO, alpha)) {
+    if (Scalars.lessThan(RealScalar.TWO, alpha)) {
       Scalar amo = alpha.subtract(RealScalar.ONE);
-      return k.multiply(k).multiply(alpha).divide(alpha.subtract(TWO).multiply(amo).multiply(amo));
+      return k.multiply(k).multiply(alpha).divide(alpha.subtract(RealScalar.TWO).multiply(amo).multiply(amo));
     }
     return DoubleScalar.INDETERMINATE;
   }

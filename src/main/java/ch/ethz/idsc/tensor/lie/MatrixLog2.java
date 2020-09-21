@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 /* package */ enum MatrixLog2 {
   ;
   private static final Scalar FOUR = RealScalar.of(4);
-  private static final Scalar TWO = RealScalar.of(2);
+  private static final Scalar TWO = RealScalar.TWO;
 
   public static Tensor of(Tensor matrix) {
     Scalar a = matrix.Get(0, 0);

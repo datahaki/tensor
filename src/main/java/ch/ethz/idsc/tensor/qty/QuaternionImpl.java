@@ -105,6 +105,11 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     return Norm._2.ofVector(xyz.copy().append(w));
   }
 
+  @Override // from AbsInterface
+  public Scalar absSquared() {
+    return multiply(conjugate()).w();
+  }
+
   @Override // from ChopInterface
   public Quaternion chop(Chop chop) {
     return new QuaternionImpl(chop.apply(w), xyz.map(chop));

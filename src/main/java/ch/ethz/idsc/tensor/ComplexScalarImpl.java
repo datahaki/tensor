@@ -125,6 +125,11 @@ import ch.ethz.idsc.tensor.sca.Sinh;
     return Hypot.of(re, im);
   }
 
+  @Override
+  public Scalar absSquared() {
+    return multiply(conjugate());
+  }
+
   @Override // from ArcTanInterface
   public Scalar arcTan(Scalar x) {
     return StaticHelper.arcTan(x, this);

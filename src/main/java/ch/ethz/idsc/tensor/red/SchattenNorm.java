@@ -14,15 +14,13 @@ import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
  * 
  * p = 1 yields the nuclear norm (also known as the trace norm, or the Ky Fan 'n'-norm). */
 public class SchattenNorm extends VectorNorm implements NormInterface {
-  private static final Scalar TWO = RealScalar.of(2);
-
   /** Hint: for enhanced precision, use p as instance of {@link RationalScalar} if possible
    * 
    * @param p exponent greater or equals 1
    * @return
    * @throws Exception if p is less than 1 */
   public static NormInterface with(Scalar p) {
-    return p.equals(TWO) //
+    return p.equals(RealScalar.TWO) //
         ? Frobenius.NORM
         : new SchattenNorm(p);
   }

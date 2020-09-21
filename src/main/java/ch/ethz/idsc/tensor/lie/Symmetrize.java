@@ -3,8 +3,7 @@ package ch.ethz.idsc.tensor.lie;
 
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
@@ -22,8 +21,6 @@ import ch.ethz.idsc.tensor.sca.Factorial;
  * @see Transpose */
 public enum Symmetrize {
   ;
-  private static final Scalar TWO = RealScalar.of(2);
-
   /** @param tensor of any rank with dimensions [n, n, ..., n]
    * @return symmetric tensor, i.e. invariant under transpose
    * @throws Exception if given tensor does not have regular dimensions */
@@ -37,7 +34,7 @@ public enum Symmetrize {
       case 1: // vector
         return tensor.copy();
       case 2: // matrix
-        return Tensors.vector(i -> tensor.get(Tensor.ALL, i).add(tensor.get(i)).divide(TWO), tensor.length());
+        return Tensors.vector(i -> tensor.get(Tensor.ALL, i).add(tensor.get(i)).multiply(RationalScalar.HALF), tensor.length());
       default:
         return Permutations.stream(Range.of(0, rank)) //
             .map(permutation -> Transpose.of(tensor, IntStream.range(0, rank) //

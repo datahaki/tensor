@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
@@ -149,10 +150,14 @@ public class QuaternionImplTest extends TestCase {
     }
   }
 
+  public void testAbs() {
+    Scalar scalar = Abs.FUNCTION.apply(Quaternion.of(2, 2, 4, 5));
+    assertEquals(ExactScalarQ.require(scalar), RealScalar.of(7));
+  }
+
   public void testAbsSquared() {
     Scalar scalar = AbsSquared.FUNCTION.apply(Quaternion.of(1, 2, 3, 4));
-    assertTrue(scalar instanceof Quaternion);
-    ExactScalarQ.require(scalar);
+    assertEquals(ExactScalarQ.require(scalar), RealScalar.of(30));
   }
 
   public void testNumberFail() {
