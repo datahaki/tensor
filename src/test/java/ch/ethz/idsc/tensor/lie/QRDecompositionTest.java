@@ -37,22 +37,25 @@ public class QRDecompositionTest extends TestCase {
   }
 
   private static QRDecomposition specialOpsRegular(Tensor A) {
-    QRDecomposition qrDecomposition = QRDecomposition.of(A);
-    Tensor Q = qrDecomposition.getQ();
-    Tensor Qi = qrDecomposition.getInverseQ();
-    Tensor R = qrDecomposition.getR();
-    Chop._10.requireClose(Q.dot(R), A);
-    Chop._10.requireClose(Q.dot(Qi), IdentityMatrix.of(A.length()));
-    Scalar qrDet = Det.of(Q).multiply(Det.of(R));
-    Chop._10.requireClose(qrDet, Det.of(A));
-    Tensor lower = LowerTriangularize.of(R, -1);
-    Chop.NONE.requireAllZero(lower);
-    Chop._10.requireClose(qrDet, qrDecomposition.det());
+    QRDecomposition qrDecomposition = null;
+    for (QRSignOperator qrSignOperator : QRSignOperators.values()) {
+      qrDecomposition = QRDecomposition.of(A, qrSignOperator);
+      Tensor Q = qrDecomposition.getQ();
+      Tensor Qi = qrDecomposition.getInverseQ();
+      Tensor R = qrDecomposition.getR();
+      Chop._10.requireClose(Q.dot(R), A);
+      Chop._10.requireClose(Q.dot(Qi), IdentityMatrix.of(A.length()));
+      Scalar qrDet = Det.of(Q).multiply(Det.of(R));
+      Chop._10.requireClose(qrDet, Det.of(A));
+      Tensor lower = LowerTriangularize.of(R, -1);
+      Chop.NONE.requireAllZero(lower);
+      assertTrue(Chop._10.isClose(qrDet, qrDecomposition.det()) || Chop._10.isClose(qrDet, qrDecomposition.det().negate()));
+    }
     return qrDecomposition;
   }
 
   private static QRDecomposition specialOpsPres(Tensor A) {
-    QRDecomposition qrDecomposition = QRDecomposition.preserveOrientation(A);
+    QRDecomposition qrDecomposition = QRDecomposition.of(A, QRSignOperators.ORIENTATION);
     Tensor Q = qrDecomposition.getQ();
     Tensor Qi = qrDecomposition.getInverseQ();
     Tensor R = qrDecomposition.getR();
@@ -164,7 +167,7 @@ public class QRDecompositionTest extends TestCase {
   public void testMathematica1() {
     Tensor matrix = Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}}");
     specialOps(matrix);
-    QRDecomposition qr = QRDecomposition.preserveOrientation(matrix);
+    QRDecomposition qr = QRDecomposition.of(matrix, QRSignOperators.ORIENTATION);
     Tensor reference = Tensors.fromString("{5.916079783099616`, 0.828078671210825`}");
     Chop._10.requireClose(reference, Diagonal.of(qr.getR()));
   }
@@ -236,7 +239,7 @@ public class QRDecompositionTest extends TestCase {
     for (int d = 2; d < 5; ++d)
       for (int count = 0; count < 10; ++count) {
         Tensor matrix = RandomVariate.of(distribution, d, d);
-        QRDecomposition qrDecomposition = QRDecomposition.preserveOrientation(matrix);
+        QRDecomposition qrDecomposition = QRDecomposition.of(matrix, QRSignOperators.ORIENTATION);
         assertEquals(Sign.FUNCTION.apply(Det.of(matrix)), Sign.FUNCTION.apply(Det.of(qrDecomposition.getQ())));
       }
   }

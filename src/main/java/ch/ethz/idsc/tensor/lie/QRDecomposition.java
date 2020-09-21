@@ -19,24 +19,14 @@ public interface QRDecomposition {
    * @param matrix
    * @return qr-decomposition of given matrix */
   static QRDecomposition of(Tensor matrix) {
-    return new QRDecompositionImpl(matrix, QRSignOperator.STABILITY);
+    return new QRDecompositionImpl(matrix, QRSignOperators.STABILITY);
   }
 
-  /** householder reflections that aim to preserve orientation:
-   * Sign[Det[matrix]] == Sign[Det[Q]]
-   * 
-   * <p>Attention: Function fails on general matrices!
-   * Use function to correct small deviations in an "almost"-orthogonal matrix
-   * 
-   * <p>Careful: when using "preserveOrientation" {@link #det()} of the returned
-   * instance of {@link QRDecomposition} gives the determinant of the matrix
-   * only up to sign!
-   * 
-   * @param matrix
+  /** @param matrix
    * @return qr-decomposition of matrix
    * @throws Exception for input that is not "almost"-orthogonal */
-  static QRDecomposition preserveOrientation(Tensor matrix) {
-    return new QRDecompositionImpl(matrix, QRSignOperator.ORIENTATION);
+  static QRDecomposition of(Tensor matrix, QRSignOperator qrSignOperator) {
+    return new QRDecompositionImpl(matrix, qrSignOperator);
   }
 
   /** @return orthogonal matrix */

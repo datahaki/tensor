@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
     Scalar xn = Norm._2.ofVector(x);
     if (Scalars.isZero(xn))
       return eye; // reflection reduces to identity, hopefully => det == 0
-    Scalar sign = qrSignOperator.of(R.Get(k, k));
+    Scalar sign = qrSignOperator.sign(R.Get(k, k));
     x.set(value -> value.subtract(sign.multiply(xn)), k);
     final Tensor m;
     if (ExactTensorQ.of(x)) {

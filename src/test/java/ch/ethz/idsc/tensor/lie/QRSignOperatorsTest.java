@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.lie;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
@@ -7,14 +7,13 @@ import java.lang.reflect.Modifier;
 import ch.ethz.idsc.tensor.io.Serialization;
 import junit.framework.TestCase;
 
-public class PivotsTest extends TestCase {
+public class QRSignOperatorsTest extends TestCase {
   public void testSerializable() throws ClassNotFoundException, IOException {
-    for (Pivot pivot : Pivots.values())
-      Serialization.copy(pivot);
+    for (QRSignOperator qrSignOperator : QRSignOperators.values())
+      Serialization.copy(qrSignOperator);
   }
 
   public void testPackageVisibility() {
-    assertTrue(Modifier.isPublic(Pivot.class.getModifiers()));
-    assertTrue(Modifier.isPublic(Pivots.class.getModifiers()));
+    assertTrue(Modifier.isPublic(QRSignOperators.class.getModifiers()));
   }
 }
