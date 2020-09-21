@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.alg.TensorComparator;
 import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -37,22 +39,13 @@ import ch.ethz.idsc.tensor.sca.Sin;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class QuaternionImpl extends AbstractScalar implements Quaternion, //
-    ChopInterface, ExactScalarQInterface, NInterface, Serializable {
+    ChopInterface, Comparable<Scalar>, ExactScalarQInterface, NInterface, Serializable {
   private final Scalar w;
   private final Tensor xyz;
 
   public QuaternionImpl(Scalar w, Tensor xyz) {
     this.w = w;
     this.xyz = xyz;
-  }
-
-  @Override // from AbstractScalar
-  protected Quaternion plus(Scalar scalar) {
-    if (scalar instanceof Quaternion) {
-      Quaternion quaternion = (Quaternion) scalar;
-      return new QuaternionImpl(w.add(quaternion.w()), xyz.add(quaternion.xyz()));
-    }
-    throw TensorRuntimeException.of(this, scalar);
   }
 
   @Override // from Quaternion
@@ -88,9 +81,25 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override // from Quaternion
+  public Quaternion under(Scalar scalar) {
+    return reciprocal().multiply(scalar);
+  }
+
+  @Override // from Quaternion
   public Quaternion reciprocal() {
     Quaternion conjugate = conjugate();
     return conjugate.divide(multiply(conjugate).w());
+  }
+
+  @Override // from AbstractScalar
+  protected Quaternion plus(Scalar scalar) {
+    if (scalar instanceof Quaternion) {
+      Quaternion quaternion = (Quaternion) scalar;
+      return new QuaternionImpl(w.add(quaternion.w()), xyz.add(quaternion.xyz()));
+    }
+    if (scalar instanceof RealScalar)
+      return new QuaternionImpl(w.add(scalar), xyz);
+    throw TensorRuntimeException.of(this, scalar);
   }
 
   @Override // from Scalar
@@ -99,8 +108,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override // from Scalar
-  public Scalar zero() {
-    return Quaternion.ZERO;
+  public Quaternion zero() {
+    return new QuaternionImpl(w.zero(), xyz.map(Scalar::zero));
   }
 
   /***************************************************/
@@ -233,6 +242,17 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   /***************************************************/
+  @Override // from Comparable
+  public int compareTo(Scalar scalar) {
+    if (scalar instanceof Quaternion) {
+      Quaternion quaternion = (Quaternion) scalar;
+      return TensorComparator.INSTANCE.compare( //
+          Join.of(Tensors.of(w), xyz), //
+          Join.of(Tensors.of(quaternion.w()), quaternion.xyz()));
+    }
+    throw TensorRuntimeException.of(this, scalar);
+  }
+
   @Override // from AbstractScalar
   public int hashCode() {
     return Objects.hash(w, xyz);
@@ -244,6 +264,11 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       Quaternion quaternion = (Quaternion) object;
       return w.equals(quaternion.w()) //
           && xyz.equals(quaternion.xyz());
+    }
+    if (object instanceof RealScalar) {
+      Scalar scalar = (RealScalar) object;
+      return w.equals(scalar) //
+          && xyz.stream().map(Scalar.class::cast).allMatch(Scalars::isZero);
     }
     return false;
   }

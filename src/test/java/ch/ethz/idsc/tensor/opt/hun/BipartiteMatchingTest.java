@@ -24,152 +24,65 @@ import junit.framework.TestCase;
 public class BipartiteMatchingTest extends TestCase {
   private static final int MAX = 7;
 
-  public void testSquare() {
+  public void testExactPrecision() {
     Distribution distribution = DiscreteUniformDistribution.of(2, 50);
-    for (int n = 1; n < MAX; ++n) {
-      Tensor matrix = RandomVariate.of(distribution, n, n);
-      for (int index = 0; index < n; ++index)
-        matrix.set(RealScalar.ONE, index, index);
-      {
-        BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
-        assertEquals(Tensors.vectorInt(bipartiteMatching.matching()), Range.of(0, n));
+    for (int rows = 4; rows < MAX; ++rows)
+      for (int cols = rows - 3; cols <= rows + 3; ++cols) {
+        Tensor matrix = RandomVariate.of(distribution, rows, cols);
+        for (int index = 0; index < Math.min(rows, cols); ++index)
+          matrix.set(RealScalar.ONE, index, index);
+        Tensor range = Join.of( //
+            Range.of(0, cols), //
+            ConstantArray.of(RealScalar.of(BipartiteMatching.UNASSIGNED), Math.max(0, rows - cols)));
+        {
+          BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
+          if (cols <= rows)
+            assertEquals(Tensors.vectorInt(bipartiteMatching.matching()), range);
+        }
+        for (int count = 0; count < 3; ++count) {
+          List<Integer> list = IntStream.range(0, rows).boxed().collect(Collectors.toList());
+          Collections.shuffle(list);
+          Tensor shuffle = Tensor.of(list.stream().map(matrix::get));
+          BipartiteMatching bipartiteMatching = BipartiteMatching.of(shuffle);
+          assertEquals(Tensor.of(list.stream().map(range::get)), Tensors.vectorInt(bipartiteMatching.matching()));
+          assertEquals(ExactScalarQ.require(bipartiteMatching.minimum()), RealScalar.of(Math.min(rows, cols)));
+        }
       }
-      for (int count = 0; count < n; ++count) {
-        List<Integer> list = IntStream.range(0, n).boxed().collect(Collectors.toList());
-        Collections.shuffle(list);
-        Tensor mtx = Tensor.of(list.stream().map(matrix::get));
-        BipartiteMatching bipartiteMatching = BipartiteMatching.of(mtx);
-        assertEquals(Tensors.vector(list), Tensors.vectorInt(bipartiteMatching.matching()));
-        assertEquals(ExactScalarQ.require(bipartiteMatching.minimum()), RealScalar.of(n));
-      }
-    }
   }
 
-  public void testSquareNumeric() {
+  public void testNumericPrecision() {
     Distribution distribution = UniformDistribution.of(2, 3);
-    for (int n = 1; n < MAX; ++n) {
-      Tensor matrix = RandomVariate.of(distribution, n, n);
-      for (int index = 0; index < n; ++index)
-        matrix.set(RealScalar.ONE, index, index);
-      {
-        BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
-        assertEquals(Tensors.vectorInt(bipartiteMatching.matching()), Range.of(0, n));
+    for (int rows = 4; rows < MAX; ++rows)
+      for (int cols = rows - 3; cols <= rows + 3; ++cols) {
+        Tensor matrix = RandomVariate.of(distribution, rows, cols);
+        for (int index = 0; index < Math.min(rows, cols); ++index)
+          matrix.set(RealScalar.ONE, index, index);
+        Tensor range = Join.of( //
+            Range.of(0, cols), //
+            ConstantArray.of(RealScalar.of(BipartiteMatching.UNASSIGNED), Math.max(0, rows - cols)));
+        {
+          BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
+          if (cols <= rows)
+            assertEquals(Tensors.vectorInt(bipartiteMatching.matching()), range);
+        }
+        for (int count = 0; count < 3; ++count) {
+          List<Integer> list = IntStream.range(0, rows).boxed().collect(Collectors.toList());
+          Collections.shuffle(list);
+          Tensor shuffle = Tensor.of(list.stream().map(matrix::get));
+          BipartiteMatching bipartiteMatching = BipartiteMatching.of(shuffle);
+          assertEquals(Tensor.of(list.stream().map(range::get)), Tensors.vectorInt(bipartiteMatching.matching()));
+          Tolerance.CHOP.requireClose(bipartiteMatching.minimum(), RealScalar.of(Math.min(rows, cols)));
+        }
       }
-      for (int count = 0; count < n; ++count) {
-        List<Integer> list = IntStream.range(0, n).boxed().collect(Collectors.toList());
-        Collections.shuffle(list);
-        Tensor mtx = Tensor.of(list.stream().map(matrix::get));
-        BipartiteMatching bipartiteMatching = BipartiteMatching.of(mtx);
-        assertEquals(Tensors.vector(list), Tensors.vectorInt(bipartiteMatching.matching()));
-        Tolerance.CHOP.requireClose(bipartiteMatching.minimum(), RealScalar.of(n));
-      }
-    }
-  }
-
-  public void testRectangle1() {
-    Distribution distribution = DiscreteUniformDistribution.of(2, 50);
-    for (int n = 4; n < MAX; ++n) {
-      int m = n - 3;
-      Tensor matrix = RandomVariate.of(distribution, m, n);
-      for (int index = 0; index < m; ++index)
-        matrix.set(RealScalar.ONE, index, index);
-      {
-        BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
-        assertEquals(Tensors.vectorInt(bipartiteMatching.matching()), Range.of(0, m));
-      }
-      for (int count = 0; count < m; ++count) {
-        List<Integer> list = IntStream.range(0, m).boxed().collect(Collectors.toList());
-        Collections.shuffle(list);
-        Tensor shuffle = Tensor.of(list.stream().map(matrix::get));
-        BipartiteMatching bipartiteMatching = BipartiteMatching.of(shuffle);
-        assertEquals(Tensors.vector(list), Tensors.vectorInt(bipartiteMatching.matching()));
-        assertEquals(ExactScalarQ.require(bipartiteMatching.minimum()), RealScalar.of(m));
-      }
-    }
-  }
-
-  public void testRectangle1Numeric() {
-    Distribution distribution = UniformDistribution.of(2, 3);
-    for (int n = 4; n < MAX; ++n) {
-      int m = n - 3;
-      Tensor matrix = RandomVariate.of(distribution, m, n);
-      for (int index = 0; index < m; ++index)
-        matrix.set(RealScalar.of(1.0), index, index);
-      {
-        BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
-        assertEquals(Tensors.vectorInt(bipartiteMatching.matching()), Range.of(0, m));
-      }
-      for (int count = 0; count < m; ++count) {
-        List<Integer> list = IntStream.range(0, m).boxed().collect(Collectors.toList());
-        Collections.shuffle(list);
-        Tensor shuffle = Tensor.of(list.stream().map(matrix::get));
-        BipartiteMatching bipartiteMatching = BipartiteMatching.of(shuffle);
-        assertEquals(Tensors.vector(list), Tensors.vectorInt(bipartiteMatching.matching()));
-        Tolerance.CHOP.requireClose(bipartiteMatching.minimum(), RealScalar.of(m));
-      }
-    }
-  }
-
-  public void testRactangle2() {
-    Distribution distribution = DiscreteUniformDistribution.of(2, 50);
-    for (int n = 4; n < MAX; ++n) {
-      int m = n - 3;
-      Tensor matrix = RandomVariate.of(distribution, n, m);
-      for (int index = 0; index < m; ++index)
-        matrix.set(RealScalar.ONE, index, index);
-      Tensor range = Join.of(Range.of(0, m), ConstantArray.of(RealScalar.of(BipartiteMatching.UNASSIGNED), n - m));
-      {
-        BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
-        assertEquals(Tensors.vectorInt(bipartiteMatching.matching()), range);
-      }
-      for (int count = 0; count < n; ++count) {
-        List<Integer> list = IntStream.range(0, n).boxed().collect(Collectors.toList());
-        Collections.shuffle(list);
-        Tensor shuffle = Tensor.of(list.stream().map(matrix::get));
-        BipartiteMatching bipartiteMatching = BipartiteMatching.of(shuffle);
-        assertEquals(Tensor.of(list.stream().map(range::get)), Tensors.vectorInt(bipartiteMatching.matching()));
-        assertEquals(ExactScalarQ.require(bipartiteMatching.minimum()), RealScalar.of(m));
-      }
-    }
-  }
-
-  public void testRactangle2Numeric() {
-    Distribution distribution = UniformDistribution.of(2, 3);
-    for (int n = 4; n < MAX; ++n) {
-      int m = n - 3;
-      Tensor matrix = RandomVariate.of(distribution, n, m);
-      for (int index = 0; index < m; ++index)
-        matrix.set(RealScalar.of(1.0), index, index);
-      Tensor range = Join.of(Range.of(0, m), ConstantArray.of(RealScalar.of(BipartiteMatching.UNASSIGNED), n - m));
-      {
-        BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
-        assertEquals(Tensors.vectorInt(bipartiteMatching.matching()), range);
-      }
-      for (int count = 0; count < n; ++count) {
-        List<Integer> list = IntStream.range(0, n).boxed().collect(Collectors.toList());
-        Collections.shuffle(list);
-        Tensor shuffle = Tensor.of(list.stream().map(matrix::get));
-        BipartiteMatching bipartiteMatching = BipartiteMatching.of(shuffle);
-        assertEquals(Tensor.of(list.stream().map(range::get)), Tensors.vectorInt(bipartiteMatching.matching()));
-        Tolerance.CHOP.requireClose(bipartiteMatching.minimum(), RealScalar.of(m));
-      }
-    }
   }
 
   public void testNegative() {
     Distribution distribution = DiscreteUniformDistribution.of(-50, 50);
-    for (int n = 1; n < MAX; ++n) {
-      BipartiteMatching bipartiteMatching = BipartiteMatching.of(RandomVariate.of(distribution, n, n));
-      ExactScalarQ.require(bipartiteMatching.minimum());
-    }
-    for (int n = 1; n < MAX; ++n) {
-      BipartiteMatching bipartiteMatching = BipartiteMatching.of(RandomVariate.of(distribution, n + 2, n));
-      ExactScalarQ.require(bipartiteMatching.minimum());
-    }
-    for (int n = 1; n < MAX; ++n) {
-      BipartiteMatching bipartiteMatching = BipartiteMatching.of(RandomVariate.of(distribution, n, n + 2));
-      ExactScalarQ.require(bipartiteMatching.minimum());
-    }
+    for (int rows = 1; rows < MAX; ++rows)
+      for (int cols = 1; cols < MAX; ++cols) {
+        BipartiteMatching bipartiteMatching = BipartiteMatching.of(RandomVariate.of(distribution, rows, cols));
+        ExactScalarQ.require(bipartiteMatching.minimum());
+      }
   }
 
   public void testScalarFail() {

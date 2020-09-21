@@ -13,7 +13,7 @@ public enum Series {
    * <pre>
    * Series.of({a, b, c, d}).apply(x)
    * == a + b*x + c*x^2 + d*x^3
-   * == a + x*(b + x*(c + x*(d)))
+   * == a + (b + (c + d ** x) ** x ) ** x
    * </pre>
    * 
    * Given an empty list of coefficients the operator evaluates to zero for any parameter x

@@ -206,6 +206,18 @@ public class QuaternionTest extends TestCase {
     }
   }
 
+  public void testDivideUnder() {
+    Quaternion q1 = RandomQuaternion.get();
+    Quaternion q2 = RandomQuaternion.get();
+    if (RandomQuaternion.nonCommute(q1, q2)) {
+      Quaternion q12 = q1.multiply(q2);
+      assertEquals(q12.divide(q2), q1);
+      assertEquals(q1.under(q12), q2);
+      assertFalse(q12.divide(q1).equals(q2));
+      assertFalse(q2.under(q12).equals(q1));
+    }
+  }
+
   public void testMatrixFail() {
     try {
       Quaternion.of(RealScalar.ONE, HilbertMatrix.of(3, 3));

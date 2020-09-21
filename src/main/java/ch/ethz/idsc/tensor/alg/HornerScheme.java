@@ -26,7 +26,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   public Scalar apply(Scalar scalar) {
     Scalar total = scalar.zero();
     for (Tensor entry : coeffs)
-      total = total.multiply(scalar).add(entry);
+      total = total.multiply(scalar).add(entry); // a + b ** x + c ** x ** x
+    // total = scalar.multiply(total).add(entry); // a + x ** b + x ** x ** c
     return total;
   }
 }

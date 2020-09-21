@@ -70,6 +70,9 @@ public interface Quaternion extends Scalar, //
   Quaternion divide(Scalar scalar);
 
   @Override // from Scalar
+  Quaternion under(Scalar scalar);
+
+  @Override // from Scalar
   Quaternion reciprocal();
 
   @Override // from ConjugateInterface
