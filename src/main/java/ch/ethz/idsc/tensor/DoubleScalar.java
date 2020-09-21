@@ -55,7 +55,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
 
   /** @param value
    * @return new instance of {@link DoubleScalar} */
-  public static RealScalar of(double value) {
+  public static Scalar of(double value) {
     return new DoubleScalar(value);
   }
 

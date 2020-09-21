@@ -12,6 +12,13 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   static final double LOG_LO = 0.75;
   static final double LOG_HI = 1.3;
 
+  /***************************************************/
+  // methods in this section are final
+  /** @return true if this scalar is zero, or strictly greater zero, false otherwise */
+  protected final boolean isNonNegative() {
+    return 0 <= signInt();
+  }
+
   /** @return this or this.negate() depending on whichever is non-negative */
   @Override // from AbsInterface
   public final Scalar abs() {
@@ -23,7 +30,6 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
     return multiply(this);
   }
 
-  /***************************************************/
   @Override // from ComplexEmbedding
   public final Scalar conjugate() {
     return this;
@@ -37,6 +43,11 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   @Override // from ComplexEmbedding
   public final Scalar real() {
     return this;
+  }
+
+  @Override // from SignInterface
+  public final Scalar sign() {
+    return StaticHelper.LOOKUP[1 + signInt()];
   }
 
   /***************************************************/
@@ -123,16 +134,5 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   @Override // from TrigonometryInterface
   public Scalar sinh() {
     return DoubleScalar.of(Math.sinh(number().doubleValue()));
-  }
-
-  /***************************************************/
-  @Override
-  public final Scalar sign() {
-    return StaticHelper.LOOKUP[1 + signInt()];
-  }
-
-  /** @return true if this scalar is zero, or strictly greater zero, false otherwise */
-  protected final boolean isNonNegative() {
-    return 0 <= signInt();
   }
 }

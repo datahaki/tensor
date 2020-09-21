@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.qty;
 
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.ExactTensorQ;
@@ -208,5 +209,9 @@ public class QuaternionImplTest extends TestCase {
     Quaternion quaternion = Quaternion.of(1, 2, 3, 4);
     String string = quaternion.toString();
     assertEquals(string, "{\"w\": 1, \"xyz\": {2, 3, 4}}");
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(QuaternionImpl.class.getModifiers()));
   }
 }

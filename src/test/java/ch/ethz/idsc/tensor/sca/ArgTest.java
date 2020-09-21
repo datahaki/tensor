@@ -12,6 +12,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.Quaternion;
+import ch.ethz.idsc.tensor.qty.Unit;
 import junit.framework.TestCase;
 
 public class ArgTest extends TestCase {
@@ -30,16 +32,35 @@ public class ArgTest extends TestCase {
   }
 
   public void testQuantity() {
-    Scalar s = Quantity.of(ComplexScalar.of(3, 4), "s*m^3");
+    Unit unit = Unit.of("s*m^3");
+    Scalar s = Quantity.of(ComplexScalar.of(3, 4), unit);
     Scalar a = Arg.of(s);
     Scalar b = ArcTan.of(RealScalar.of(3), RealScalar.of(4));
-    assertEquals(a, b);
+    assertEquals(a, Quantity.of(b, unit));
   }
 
-  public void testFail() {
+  public void testQuaternionFail() {
+    try {
+      Arg.FUNCTION.apply(Quaternion.of(1, 2, 3, 4));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testGaussScalarFail() {
     Scalar scalar = GaussScalar.of(1, 7);
     try {
       Arg.of(scalar);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNullFail() {
+    try {
+      Arg.FUNCTION.apply(null);
       fail();
     } catch (Exception exception) {
       // ---

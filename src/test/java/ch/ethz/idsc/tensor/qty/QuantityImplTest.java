@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.lang.reflect.Modifier;
+
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -86,5 +88,9 @@ public class QuantityImplTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(QuantityImpl.class.getModifiers()));
   }
 }

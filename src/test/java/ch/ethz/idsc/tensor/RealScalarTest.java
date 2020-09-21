@@ -56,8 +56,8 @@ public class RealScalarTest extends TestCase {
     Scalar r1 = RationalScalar.of(1927365481254298736L, 1927365481254298737L);
     Scalar r2 = RationalScalar.of(1927365481254298741L, 1927365481254298739L);
     assertEquals(Scalars.compare(r1, r2), -1);
-    RealScalar d1 = DoubleScalar.of(r1.number().doubleValue());
-    RealScalar d2 = DoubleScalar.of(r2.number().doubleValue());
+    Scalar d1 = DoubleScalar.of(r1.number().doubleValue());
+    Scalar d2 = DoubleScalar.of(r2.number().doubleValue());
     assertEquals(Scalars.compare(d1, d2), 0);
   }
 

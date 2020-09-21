@@ -81,7 +81,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     return ArcTan.FUNCTION.apply(y.divide(x));
   }
 
-  static final Scalar[] LOOKUP = { //
+  public static final Scalar[] LOOKUP = { //
       RealScalar.ONE.negate(), // -1
       RealScalar.ZERO, // 0
       RealScalar.ONE }; // +1

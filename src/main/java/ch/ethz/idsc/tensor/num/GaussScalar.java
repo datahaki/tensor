@@ -18,8 +18,8 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
 /** scalars from finite field with prime number of elements and values
  * 0, 1, 2, ..., prime - 1 */
 public class GaussScalar extends AbstractScalar implements //
-    Comparable<Scalar>, ExactScalarQInterface, PowerInterface, //
-    RoundingInterface, SignInterface, SqrtInterface, Serializable {
+    ExactScalarQInterface, PowerInterface, RoundingInterface, SignInterface, //
+    SqrtInterface, Comparable<Scalar>, Serializable {
   /** @param value
    * @param prime number
    * @return value in finite field with prime number of elements

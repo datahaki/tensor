@@ -1,11 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
-import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.sca.Arg;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -33,6 +31,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
   Scalar of(Scalar xk) {
     return Scalars.isZero(Imag.FUNCTION.apply(xk)) //
         ? apply(xk)
-        : ComplexScalar.unit(Arg.of(xk)).negate();
+        : Sign.FUNCTION.apply(xk).negate();
   }
 }

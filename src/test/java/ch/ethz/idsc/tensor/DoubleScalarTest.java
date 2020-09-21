@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Sqrt;
 import junit.framework.TestCase;
 
 public class DoubleScalarTest extends TestCase {
@@ -146,5 +147,14 @@ public class DoubleScalarTest extends TestCase {
     assertFalse(DoubleScalar.of(3.14).equals(null));
     assertFalse(DoubleScalar.of(3.14).equals("hello"));
     assertFalse(DoubleScalar.of(3.14).equals(ComplexScalar.of(1, 2)));
+  }
+
+  public void testSqrtNegZero() {
+    Scalar scalar = DoubleScalar.of(-0.0);
+    assertEquals(scalar.toString(), "-0.0");
+    AbstractRealScalar ars = (AbstractRealScalar) scalar;
+    boolean nonNegative = ars.isNonNegative();
+    assertTrue(nonNegative);
+    assertEquals(Sqrt.FUNCTION.apply(scalar), RealScalar.ZERO);
   }
 }

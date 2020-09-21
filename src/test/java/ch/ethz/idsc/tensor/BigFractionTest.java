@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import java.lang.reflect.Modifier;
+
 import junit.framework.TestCase;
 
 public class BigFractionTest extends TestCase {
@@ -44,7 +46,6 @@ public class BigFractionTest extends TestCase {
   }
 
   public void testPackageVisibility() {
-    int modifiers = BigFraction.class.getModifiers();
-    assertEquals(modifiers & 0x1, 0x0); // non public but package
+    assertFalse(Modifier.isPublic(BigFraction.class.getModifiers()));
   }
 }

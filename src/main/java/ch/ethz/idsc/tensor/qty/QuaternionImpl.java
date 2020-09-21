@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   private final Scalar w;
   private final Tensor xyz;
 
-  /* package */ QuaternionImpl(Scalar w, Tensor xyz) {
+  public QuaternionImpl(Scalar w, Tensor xyz) {
     this.w = w;
     this.xyz = xyz;
   }

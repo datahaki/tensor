@@ -14,40 +14,30 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Abs;
-import ch.ethz.idsc.tensor.sca.AbsInterface;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.ArcTan;
-import ch.ethz.idsc.tensor.sca.ArcTanInterface;
 import ch.ethz.idsc.tensor.sca.Arg;
-import ch.ethz.idsc.tensor.sca.ArgInterface;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ChopInterface;
-import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
 import ch.ethz.idsc.tensor.sca.Conjugate;
-import ch.ethz.idsc.tensor.sca.ConjugateInterface;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.NInterface;
 import ch.ethz.idsc.tensor.sca.Power;
-import ch.ethz.idsc.tensor.sca.PowerInterface;
 import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.Round;
-import ch.ethz.idsc.tensor.sca.RoundingInterface;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.SignInterface;
 import ch.ethz.idsc.tensor.sca.Sqrt;
-import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
 /* package */ class QuantityImpl extends AbstractScalar implements Quantity, //
-    AbsInterface, ArcTanInterface, ArgInterface, ChopInterface, ComplexEmbedding, //
-    ConjugateInterface, ExactScalarQInterface, NInterface, PowerInterface, RoundingInterface, //
-    SignInterface, SqrtInterface, Comparable<Scalar>, Serializable {
+    ChopInterface, ExactScalarQInterface, NInterface, Serializable {
   /** @param value is assumed to be not instance of {@link Quantity}
    * @param unit
    * @return */
-  /* package */ static Scalar of(Scalar value, Unit unit) {
+  public static Scalar of(Scalar value, Unit unit) {
     return UnitQ.isOne(unit) //
         ? value
         : new QuantityImpl(value, unit);
@@ -163,7 +153,7 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
   @Override // from ArgInterface
   public Scalar arg() {
-    return Arg.FUNCTION.apply(value);
+    return ofUnit(Arg.FUNCTION.apply(value));
   }
 
   @Override // from ChopInterface
