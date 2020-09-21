@@ -9,4 +9,7 @@ public interface QRSignOperator {
    * @return
    * @see Sign */
   Scalar sign(Scalar xk);
+
+  /** @return if {@link QRDecomposition#det()} is exact, and false if det is only valid up to sign */
+  boolean isDetExact();
 }

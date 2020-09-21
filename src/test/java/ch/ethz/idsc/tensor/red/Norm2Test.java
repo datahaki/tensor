@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.red;
 
+import java.lang.reflect.Modifier;
+
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -81,5 +83,9 @@ public class Norm2Test extends TestCase {
     } catch (Exception exception) {
       // ---
     }
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(Norm2.class.getModifiers()));
   }
 }

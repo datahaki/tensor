@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.red;
 
+import java.lang.reflect.Modifier;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.RealScalar;
@@ -45,5 +46,9 @@ public class Norm1Test extends TestCase {
     } catch (Exception exception) {
       // ---
     }
+  }
+
+  public void testVisibility() {
+    assertTrue(Modifier.isPublic(Norm1.class.getModifiers()));
   }
 }

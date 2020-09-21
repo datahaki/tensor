@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
+import java.lang.reflect.Modifier;
+
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -112,5 +114,9 @@ public class MatrixLog2Test extends TestCase {
     } catch (Exception exception) {
       // ---
     }
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(MatrixLog2.class.getModifiers()));
   }
 }

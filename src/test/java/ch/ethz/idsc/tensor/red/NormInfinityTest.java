@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.red;
 
+import java.lang.reflect.Modifier;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -33,5 +35,9 @@ public class NormInfinityTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(NormInfinity.class.getModifiers()));
   }
 }

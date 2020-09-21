@@ -14,7 +14,6 @@ public class PivotsTest extends TestCase {
   }
 
   public void testPackageVisibility() {
-    assertTrue(Modifier.isPublic(Pivot.class.getModifiers()));
     assertTrue(Modifier.isPublic(Pivots.class.getModifiers()));
   }
 }

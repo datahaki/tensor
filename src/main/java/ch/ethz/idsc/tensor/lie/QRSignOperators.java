@@ -5,17 +5,21 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.Imag;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-public enum QRSignOperators implements QRSignOperator, ScalarUnaryOperator {
+public enum QRSignOperators implements QRSignOperator {
   /** householder reflections with highest numerical stability */
   STABILITY() {
-    @Override
-    public Scalar apply(Scalar xk) {
-      return Sign.isPositive(xk) //
-          ? ONE_NEGATE
-          : RealScalar.ONE;
+    @Override // from QRSignOperator
+    public Scalar sign(Scalar xk) {
+      return Scalars.isZero(xk) //
+          ? RealScalar.ONE
+          : Sign.FUNCTION.apply(xk).negate();
+    }
+
+    @Override // from QRSignOperator
+    public boolean isDetExact() {
+      return true;
     }
   }, //
   /** householder reflections that aim to preserve orientation:
@@ -28,18 +32,18 @@ public enum QRSignOperators implements QRSignOperator, ScalarUnaryOperator {
    * instance of {@link QRDecomposition} gives the determinant of the matrix
    * only up to sign! */
   ORIENTATION() {
-    @Override
-    public Scalar apply(Scalar xk) {
-      return ONE_NEGATE;
+    @Override // from QRSignOperator
+    public Scalar sign(Scalar xk) {
+      return Scalars.isZero(Imag.FUNCTION.apply(xk)) //
+          ? ONE_NEGATE
+          : STABILITY.sign(xk);
+    }
+
+    @Override // from QRSignOperator
+    public boolean isDetExact() {
+      return false;
     }
   };
 
   private static final Scalar ONE_NEGATE = RealScalar.ONE.negate();
-
-  @Override // from QRSignOperator
-  public Scalar sign(Scalar xk) {
-    return Scalars.isZero(Imag.FUNCTION.apply(xk)) //
-        ? apply(xk)
-        : Sign.FUNCTION.apply(xk).negate();
-  }
 }
