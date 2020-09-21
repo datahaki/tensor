@@ -114,13 +114,17 @@ public class SignTest extends TestCase {
     }
   }
 
-  private static void _checkFail(Scalar value) {
+  private static void _checkFailAll(Scalar value) {
     try {
       Sign.of(value);
       fail();
     } catch (Exception exception) {
       // ---
     }
+    _checkSignIntFail(value);
+  }
+
+  private static void _checkSignIntFail(Scalar value) {
     try {
       Sign.isPositive(value);
       fail();
@@ -136,9 +140,9 @@ public class SignTest extends TestCase {
   }
 
   public void testFail() {
-    _checkFail(DoubleScalar.INDETERMINATE);
-    _checkFail(ComplexScalar.of(2, 3));
-    _checkFail(StringScalar.of("string"));
-    _checkFail(Quaternion.of(RealScalar.of(-4), Tensors.vector(1, 2, 3)));
+    _checkSignIntFail(ComplexScalar.of(2, 3));
+    _checkSignIntFail(Quaternion.of(RealScalar.of(-4), Tensors.vector(1, 2, 3)));
+    _checkFailAll(DoubleScalar.INDETERMINATE);
+    _checkFailAll(StringScalar.of("string"));
   }
 }

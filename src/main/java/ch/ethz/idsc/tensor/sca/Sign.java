@@ -3,15 +3,21 @@ package ch.ethz.idsc.tensor.sca;
 
 import java.util.Objects;
 
+import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.Quaternion;
 
-/** Sign gives the signum of a scalar provided by the implementation of {@link SignInterface}.
- * If the scalar type does not implement {@link SignInterface}, then an exception is thrown.
+/** Sign is consistent with Mathematica for {@link RealScalar}, {@link ComplexScalar},
+ * {@link Quaternion}, and {@link Quantity}.
+ *
+ * <p>Sign gives the signum of a scalar provided by the implementation of {@link SignInterface}.
+ *
+ * <p>If the scalar type does not implement {@link SignInterface}, then an exception is thrown.
  * 
  * <p>Sign offers predicates to check positive, non-negative, negative, and non-positive scalars.
  * As checks for zero, and non-zero use {@link Scalars#isZero(Scalar)}, and {@link Scalars#nonZero(Scalar)}.
@@ -21,16 +27,11 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 public enum Sign implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar[] LOOKUP = { //
-      RealScalar.ONE.negate(), // -1
-      RealScalar.ZERO, // 0
-      RealScalar.ONE }; // +1
-
   @Override // from ScalarUnaryOperator
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof SignInterface) {
       SignInterface signInterface = (SignInterface) scalar;
-      return LOOKUP[1 + signInterface.signInt()];
+      return signInterface.sign();
     }
     throw TensorRuntimeException.of(scalar);
   }

@@ -7,8 +7,11 @@ import java.math.MathContext;
 import java.util.Objects;
 import java.util.Optional;
 
+import ch.ethz.idsc.tensor.num.BinaryPower;
+import ch.ethz.idsc.tensor.num.ScalarProduct;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Hypot;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -26,8 +29,11 @@ import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sin;
 import ch.ethz.idsc.tensor.sca.Sinh;
 
-/* package */ final class ComplexScalarImpl extends AbstractScalar implements ComplexScalar, //
+/* package */ class ComplexScalarImpl extends AbstractScalar implements ComplexScalar, //
     ChopInterface, ExactScalarQInterface, MachineNumberQInterface, NInterface, Serializable {
+  private static final BinaryPower<Scalar> BINARY_POWER = //
+      new BinaryPower<>(new ScalarProduct(RealScalar.ONE));
+
   /** creator with package visibility
    * 
    * @param re neither a {@link ComplexScalar}, or {@link Quantity}
@@ -125,9 +131,9 @@ import ch.ethz.idsc.tensor.sca.Sinh;
     return Hypot.of(re, im);
   }
 
-  @Override
+  @Override // from AbsInterface
   public Scalar absSquared() {
-    return multiply(conjugate());
+    return re.multiply(re).add(im.multiply(im));
   }
 
   @Override // from ArcTanInterface
@@ -204,7 +210,7 @@ import ch.ethz.idsc.tensor.sca.Sinh;
     if (isExactScalar()) {
       Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
       if (optional.isPresent())
-        return StaticHelper.REAL_POWER.raise(this, optional.get());
+        return ComplexScalarImpl.BINARY_POWER.raise(this, optional.get());
     }
     return Exp.FUNCTION.apply(exponent.multiply(Log.FUNCTION.apply(this)));
   }
@@ -217,6 +223,17 @@ import ch.ethz.idsc.tensor.sca.Sinh;
   @Override // from RoundingInterface
   public Scalar round() {
     return of(Round.FUNCTION.apply(re), Round.FUNCTION.apply(im));
+  }
+
+  @Override // from SignInterface
+  public Scalar sign() {
+    Scalar scalar = divide(abs());
+    return scalar.divide(Abs.FUNCTION.apply(scalar));
+  }
+
+  @Override // from SignInterface
+  public int signInt() {
+    throw TensorRuntimeException.of(this);
   }
 
   @Override // from SqrtInterface

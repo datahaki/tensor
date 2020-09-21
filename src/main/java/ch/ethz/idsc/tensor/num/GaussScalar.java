@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
  * 0, 1, 2, ..., prime - 1 */
 public class GaussScalar extends AbstractScalar implements //
     Comparable<Scalar>, ExactScalarQInterface, PowerInterface, //
-    RoundingInterface, Serializable, SignInterface, SqrtInterface {
+    RoundingInterface, SignInterface, SqrtInterface, Serializable {
   /** @param value
    * @param prime number
    * @return value in finite field with prime number of elements
@@ -143,6 +143,11 @@ public class GaussScalar extends AbstractScalar implements //
   @Override // from RoundingInterface
   public Scalar round() {
     return this;
+  }
+
+  @Override // from SignInterface
+  public Scalar sign() {
+    return new GaussScalar(BigInteger.valueOf(value.signum()), prime);
   }
 
   @Override // from SignInterface

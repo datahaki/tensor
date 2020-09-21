@@ -22,9 +22,11 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import junit.framework.TestCase;
 
 public class BipartiteMatchingTest extends TestCase {
+  private static final int MAX = 7;
+
   public void testSquare() {
     Distribution distribution = DiscreteUniformDistribution.of(2, 50);
-    for (int n = 1; n < 10; ++n) {
+    for (int n = 1; n < MAX; ++n) {
       Tensor matrix = RandomVariate.of(distribution, n, n);
       for (int index = 0; index < n; ++index)
         matrix.set(RealScalar.ONE, index, index);
@@ -45,7 +47,7 @@ public class BipartiteMatchingTest extends TestCase {
 
   public void testSquareNumeric() {
     Distribution distribution = UniformDistribution.of(2, 3);
-    for (int n = 1; n < 10; ++n) {
+    for (int n = 1; n < MAX; ++n) {
       Tensor matrix = RandomVariate.of(distribution, n, n);
       for (int index = 0; index < n; ++index)
         matrix.set(RealScalar.ONE, index, index);
@@ -66,7 +68,7 @@ public class BipartiteMatchingTest extends TestCase {
 
   public void testRectangle1() {
     Distribution distribution = DiscreteUniformDistribution.of(2, 50);
-    for (int n = 4; n < 10; ++n) {
+    for (int n = 4; n < MAX; ++n) {
       int m = n - 3;
       Tensor matrix = RandomVariate.of(distribution, m, n);
       for (int index = 0; index < m; ++index)
@@ -88,7 +90,7 @@ public class BipartiteMatchingTest extends TestCase {
 
   public void testRectangle1Numeric() {
     Distribution distribution = UniformDistribution.of(2, 3);
-    for (int n = 4; n < 10; ++n) {
+    for (int n = 4; n < MAX; ++n) {
       int m = n - 3;
       Tensor matrix = RandomVariate.of(distribution, m, n);
       for (int index = 0; index < m; ++index)
@@ -110,7 +112,7 @@ public class BipartiteMatchingTest extends TestCase {
 
   public void testRactangle2() {
     Distribution distribution = DiscreteUniformDistribution.of(2, 50);
-    for (int n = 4; n < 10; ++n) {
+    for (int n = 4; n < MAX; ++n) {
       int m = n - 3;
       Tensor matrix = RandomVariate.of(distribution, n, m);
       for (int index = 0; index < m; ++index)
@@ -133,7 +135,7 @@ public class BipartiteMatchingTest extends TestCase {
 
   public void testRactangle2Numeric() {
     Distribution distribution = UniformDistribution.of(2, 3);
-    for (int n = 4; n < 10; ++n) {
+    for (int n = 4; n < MAX; ++n) {
       int m = n - 3;
       Tensor matrix = RandomVariate.of(distribution, n, m);
       for (int index = 0; index < m; ++index)
@@ -156,15 +158,15 @@ public class BipartiteMatchingTest extends TestCase {
 
   public void testNegative() {
     Distribution distribution = DiscreteUniformDistribution.of(-50, 50);
-    for (int n = 1; n < 10; ++n) {
+    for (int n = 1; n < MAX; ++n) {
       BipartiteMatching bipartiteMatching = BipartiteMatching.of(RandomVariate.of(distribution, n, n));
       ExactScalarQ.require(bipartiteMatching.minimum());
     }
-    for (int n = 1; n < 10; ++n) {
+    for (int n = 1; n < MAX; ++n) {
       BipartiteMatching bipartiteMatching = BipartiteMatching.of(RandomVariate.of(distribution, n + 2, n));
       ExactScalarQ.require(bipartiteMatching.minimum());
     }
-    for (int n = 1; n < 10; ++n) {
+    for (int n = 1; n < MAX; ++n) {
       BipartiteMatching bipartiteMatching = BipartiteMatching.of(RandomVariate.of(distribution, n, n + 2));
       ExactScalarQ.require(bipartiteMatching.minimum());
     }

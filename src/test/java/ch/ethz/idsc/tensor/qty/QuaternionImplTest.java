@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -19,6 +20,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class QuaternionImplTest extends TestCase {
@@ -168,6 +170,14 @@ public class QuaternionImplTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
+  }
+
+  public void testSign() {
+    Scalar q1 = Quaternion.of(Double.MIN_VALUE, 0, Double.MIN_VALUE, 0);
+    Scalar abs = Abs.FUNCTION.apply(q1);
+    assertEquals(abs, RealScalar.of(Double.MIN_VALUE));
+    Scalar scalar = Sign.FUNCTION.apply(q1);
+    Tolerance.CHOP.requireClose(scalar, Quaternion.of(0.7071067811865475, 0, 0.7071067811865475, 0));
   }
 
   public void testEquals() {

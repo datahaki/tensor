@@ -20,7 +20,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.Cross;
+import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ChopInterface;
@@ -80,6 +82,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from Quaternion
   public Quaternion divide(Scalar scalar) {
+    if (scalar instanceof RealScalar)
+      return new QuaternionImpl(w.divide(scalar), xyz.divide(scalar));
     return multiply(scalar.reciprocal());
   }
 
@@ -102,12 +106,12 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   /***************************************************/
   @Override // from AbsInterface
   public Scalar abs() {
-    return Norm._2.ofVector(xyz.copy().append(w));
+    return Hypot.ofVector(xyz.copy().append(w));
   }
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    return multiply(conjugate()).w();
+    return w.multiply(w).add(xyz.dot(xyz));
   }
 
   @Override // from ChopInterface
@@ -174,9 +178,20 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     if (isExactScalar()) {
       Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
       if (optional.isPresent())
-        return (Quaternion) StaticHelper.QUATERNION_POWER.raise(this, optional.get());
+        return (Quaternion) StaticHelper.BINARY_POWER.raise(this, optional.get());
     }
     return _power(exponent);
+  }
+
+  @Override // from SignInterface
+  public Quaternion sign() {
+    Quaternion scalar = divide(abs());
+    return scalar.divide(Abs.FUNCTION.apply(scalar));
+  }
+
+  @Override // from SignInterface
+  public int signInt() {
+    throw TensorRuntimeException.of(this);
   }
 
   @Override // from SqrtInterface
@@ -184,6 +199,26 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     Scalar w_abs = w.add(abs());
     Scalar nre = Sqrt.FUNCTION.apply(w_abs.add(w_abs));
     return new QuaternionImpl(nre.multiply(RationalScalar.HALF), xyz.divide(nre));
+  }
+
+  @Override // from TrigonometryInterface
+  public Quaternion cos() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override // from TrigonometryInterface
+  public Quaternion cosh() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override // from TrigonometryInterface
+  public Quaternion sin() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override // from TrigonometryInterface
+  public Quaternion sinh() {
+    throw new UnsupportedOperationException();
   }
 
   /***************************************************/

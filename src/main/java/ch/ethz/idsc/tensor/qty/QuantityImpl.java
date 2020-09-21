@@ -35,6 +35,7 @@ import ch.ethz.idsc.tensor.sca.PowerInterface;
 import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.RoundingInterface;
+import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.SignInterface;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 import ch.ethz.idsc.tensor.sca.SqrtInterface;
@@ -150,13 +151,6 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
     return of(AbsSquared.FUNCTION.apply(value), unit.multiply(RealScalar.TWO));
   }
 
-  @Override // from PowerInterface
-  public Scalar power(Scalar exponent) {
-    // exponent has to be RealScalar, otherwise an Exception is thrown
-    // Mathematica allows 2[m]^3[s], but the tensor library does not:
-    return of(Power.of(value, exponent), unit.multiply(exponent));
-  }
-
   @Override // from ArcTanInterface
   public Scalar arcTan(Scalar x) {
     if (x instanceof Quantity) {
@@ -172,31 +166,19 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
     return Arg.FUNCTION.apply(value);
   }
 
-  @Override // from SqrtInterface
-  public Scalar sqrt() {
-    return new QuantityImpl( //
-        Sqrt.FUNCTION.apply(value), //
-        unit.multiply(RationalScalar.HALF));
-  }
-
-  @Override // from RoundingInterface
-  public Scalar ceiling() {
-    return ofUnit(Ceiling.FUNCTION.apply(value));
-  }
-
   @Override // from ChopInterface
   public Scalar chop(Chop chop) {
     return ofUnit(chop.apply(value));
   }
 
-  @Override // from ComplexEmbedding
+  @Override // from ConjugateInterface
   public Scalar conjugate() {
     return ofUnit(Conjugate.FUNCTION.apply(value));
   }
 
-  @Override // from RoundingInterface
-  public Scalar floor() {
-    return ofUnit(Floor.FUNCTION.apply(value));
+  @Override // from ComplexEmbedding
+  public Scalar real() {
+    return ofUnit(Real.FUNCTION.apply(value));
   }
 
   @Override // from ComplexEmbedding
@@ -219,20 +201,44 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
     return ofUnit(N.in(mathContext.getPrecision()).apply(value));
   }
 
+  @Override // from PowerInterface
+  public Scalar power(Scalar exponent) {
+    // exponent has to be RealScalar, otherwise an Exception is thrown
+    // Mathematica allows 2[m]^3[s], but the tensor library does not:
+    return of(Power.of(value, exponent), unit.multiply(exponent));
+  }
+
+  @Override // from RoundingInterface
+  public Scalar ceiling() {
+    return ofUnit(Ceiling.FUNCTION.apply(value));
+  }
+
+  @Override // from RoundingInterface
+  public Scalar floor() {
+    return ofUnit(Floor.FUNCTION.apply(value));
+  }
+
+  @Override // from RoundingInterface
+  public Scalar round() {
+    return ofUnit(Round.FUNCTION.apply(value));
+  }
+
+  @Override // from SignInterface
+  public Scalar sign() {
+    return Sign.FUNCTION.apply(value);
+  }
+
   @Override // from SignInterface
   public int signInt() {
     SignInterface signInterface = (SignInterface) value;
     return signInterface.signInt();
   }
 
-  @Override // from ComplexEmbedding
-  public Scalar real() {
-    return ofUnit(Real.FUNCTION.apply(value));
-  }
-
-  @Override // from RoundingInterface
-  public Scalar round() {
-    return ofUnit(Round.FUNCTION.apply(value));
+  @Override // from SqrtInterface
+  public Scalar sqrt() {
+    return new QuantityImpl( //
+        Sqrt.FUNCTION.apply(value), //
+        unit.multiply(RationalScalar.HALF));
   }
 
   @Override // from Comparable<Scalar>

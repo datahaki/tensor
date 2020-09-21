@@ -18,8 +18,8 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
     return isNonNegative() ? this : negate();
   }
 
-  @Override // from AbsSquaredInterface
-  public Scalar absSquared() {
+  @Override // from AbsInterface
+  public final Scalar absSquared() {
     return multiply(this);
   }
 
@@ -126,6 +126,11 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   }
 
   /***************************************************/
+  @Override
+  public final Scalar sign() {
+    return StaticHelper.LOOKUP[1 + signInt()];
+  }
+
   /** @return true if this scalar is zero, or strictly greater zero, false otherwise */
   protected final boolean isNonNegative() {
     return 0 <= signInt();

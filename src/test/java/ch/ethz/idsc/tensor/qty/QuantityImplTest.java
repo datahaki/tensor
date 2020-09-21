@@ -1,13 +1,16 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.sca.Sign;
 import junit.framework.TestCase;
 
 public class QuantityImplTest extends TestCase {
@@ -15,6 +18,12 @@ public class QuantityImplTest extends TestCase {
     Quantity quantity = (Quantity) Scalars.fromString("-7+3*I[kg^-2*m*s]");
     Quantity copy = Serialization.copy(quantity);
     assertEquals(quantity, copy);
+  }
+
+  public void testSign() {
+    Scalar value = ComplexScalar.of(1, 2);
+    Scalar result = Sign.FUNCTION.apply(Quantity.of(value, "m*s^-2"));
+    Tolerance.CHOP.requireClose(Sign.FUNCTION.apply(value), result);
   }
 
   public void testExactIntFail() {

@@ -174,8 +174,8 @@ public class GaussScalarTest extends TestCase {
   }
 
   public void testSign() {
-    assertEquals(Sign.FUNCTION.apply(GaussScalar.of(0, 677)), RealScalar.ZERO);
-    assertEquals(Sign.FUNCTION.apply(GaussScalar.of(-432, 677)), RealScalar.ONE);
+    assertEquals(Sign.FUNCTION.apply(GaussScalar.of(0, 677)), GaussScalar.of(0, 677));
+    assertEquals(Sign.FUNCTION.apply(GaussScalar.of(-432, 677)), GaussScalar.of(1, 677));
   }
 
   public void testRounding() {

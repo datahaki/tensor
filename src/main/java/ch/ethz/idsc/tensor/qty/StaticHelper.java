@@ -22,6 +22,6 @@ import ch.ethz.idsc.tensor.num.ScalarProduct;
     return key;
   }
 
-  public static final BinaryPower<Scalar> QUATERNION_POWER = //
+  public static final BinaryPower<Scalar> BINARY_POWER = //
       new BinaryPower<>(new ScalarProduct(Quaternion.ONE));
 }

@@ -13,7 +13,9 @@ import ch.ethz.idsc.tensor.sca.ConjugateInterface;
 import ch.ethz.idsc.tensor.sca.ExpInterface;
 import ch.ethz.idsc.tensor.sca.LogInterface;
 import ch.ethz.idsc.tensor.sca.PowerInterface;
+import ch.ethz.idsc.tensor.sca.SignInterface;
 import ch.ethz.idsc.tensor.sca.SqrtInterface;
+import ch.ethz.idsc.tensor.sca.TrigonometryInterface;
 
 /** Important: not all algorithms are tested for {@link Quaternion} input.
  * The consistent handling of the non-commutativity of the multiplication
@@ -27,7 +29,8 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Quaternion.html">Quaternion</a> */
 public interface Quaternion extends Scalar, //
-    AbsInterface, ConjugateInterface, ExpInterface, LogInterface, PowerInterface, SqrtInterface {
+    AbsInterface, ConjugateInterface, ExpInterface, LogInterface, PowerInterface, //
+    SignInterface, SqrtInterface, TrigonometryInterface {
   static final Quaternion ZERO = of(0, 0, 0, 0);
   static final Quaternion ONE = of(1, 0, 0, 0);
 
@@ -81,8 +84,23 @@ public interface Quaternion extends Scalar, //
   @Override // from PowerInterface
   Quaternion power(Scalar exponent);
 
+  @Override // from SignInterface
+  Quaternion sign();
+
   @Override // from SqrtInterface
   Quaternion sqrt();
+
+  @Override // from TrigonometryInterface
+  Quaternion cos();
+
+  @Override // from TrigonometryInterface
+  Quaternion cosh();
+
+  @Override // from TrigonometryInterface
+  Quaternion sin();
+
+  @Override // from TrigonometryInterface
+  Quaternion sinh();
 
   /** @return real part */
   Scalar w();
