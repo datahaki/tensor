@@ -47,7 +47,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
 
   @Override // from SignInterface
   public final Scalar sign() {
-    return StaticHelper.LOOKUP[1 + signInt()];
+    return StaticHelper.SIGN[1 + signInt()];
   }
 
   /***************************************************/

@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Gaussian;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
@@ -24,6 +25,13 @@ public class RampTest extends TestCase {
     Scalar qs2 = Quantity.of(-2, "m");
     assertEquals(Ramp.of(qs1), qs1);
     assertEquals(Ramp.of(qs2), qs1.zero());
+  }
+
+  public void testGaussScalar() {
+    for (int index = -10; index < 15; ++index) {
+      Scalar qs1 = GaussScalar.of(index, 13);
+      assertEquals(Ramp.of(qs1), qs1);
+    }
   }
 
   public void testFail() {

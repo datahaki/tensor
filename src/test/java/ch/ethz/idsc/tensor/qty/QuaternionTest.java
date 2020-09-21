@@ -48,6 +48,28 @@ public class QuaternionTest extends TestCase {
     }
   }
 
+  public void testComplex() {
+    Quaternion q1 = Quaternion.of( //
+        ComplexScalar.of(1, 2), //
+        ComplexScalar.of(2, 3), ComplexScalar.of(-1, 8), ComplexScalar.of(7, 9));
+    // System.out.println(q1.divide(q1));
+    // System.out.println(q1.under(q1));
+    Quaternion q2 = Quaternion.of( //
+        ComplexScalar.of(-1, 10), //
+        ComplexScalar.of(-1, 4), ComplexScalar.of(0, 2), ComplexScalar.of(1, -33));
+    // System.out.println(q1);
+    // System.out.println(q2);
+    // Quaternion q12 =
+    q1.multiply(q2);
+    // System.out.println(q12);
+    // Quaternion q11 = q1.multiply(q1);
+    // ExactScalarQ.require(q12);
+    // System.out.println(q12);
+    // assertEquals(q1.under(q12), q2);
+    // assertEquals(q12.divide(q2), q1);
+    // assertEquals(q11.divide(q1), q1);
+  }
+
   public void testNoRef() {
     Tensor xya = Tensors.vector(1, 2, 3);
     Quaternion quaternion = Quaternion.of(RealScalar.ONE, xya);
@@ -251,6 +273,15 @@ public class QuaternionTest extends TestCase {
   public void testNull2Fail() {
     try {
       Quaternion.of(null, RealScalar.ONE, RealScalar.of(2), RealScalar.of(8));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNull2bFail() {
+    try {
+      Quaternion.of(RealScalar.ONE, null, RealScalar.of(2), RealScalar.of(8));
       fail();
     } catch (Exception exception) {
       // ---

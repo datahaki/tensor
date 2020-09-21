@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.io;
 
+import java.lang.reflect.Modifier;
+
 import junit.framework.TestCase;
 
 public class ExtensionTest extends TestCase {
@@ -28,5 +30,9 @@ public class ExtensionTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
+  }
+
+  public void testVisibility() {
+    assertFalse(Modifier.isPublic(Extension.class.getModifiers()));
   }
 }

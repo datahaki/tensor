@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.io;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -52,5 +53,9 @@ public class StaticHelperTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(StaticHelper.class.getModifiers()));
   }
 }

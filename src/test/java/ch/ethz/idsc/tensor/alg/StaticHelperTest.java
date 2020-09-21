@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
+import java.lang.reflect.Modifier;
+
 import junit.framework.TestCase;
 
 public class StaticHelperTest extends TestCase {
@@ -16,5 +18,9 @@ public class StaticHelperTest extends TestCase {
     assertEquals(permute[0], 3);
     assertEquals(permute[1], 4);
     assertEquals(permute[2], 2);
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(StaticHelper.class.getModifiers()));
   }
 }

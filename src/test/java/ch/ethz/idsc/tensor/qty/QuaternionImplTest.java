@@ -196,6 +196,13 @@ public class QuaternionImplTest extends TestCase {
     assertTrue(q1.equals(q0));
   }
 
+  public void testEqualsQRFalse() {
+    Quaternion q0 = Quaternion.of(3, 0, 1, 0);
+    Scalar q1 = RealScalar.of(3);
+    assertFalse(q0.equals(q1));
+    assertFalse(q1.equals(q0));
+  }
+
   public void testHashcode() {
     Tensor tensor = Tensors.of( //
         Quaternion.of(1, 3, -2, 2), //
