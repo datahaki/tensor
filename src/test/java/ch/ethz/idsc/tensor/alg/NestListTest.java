@@ -4,6 +4,11 @@ package ch.ethz.idsc.tensor.alg;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.mat.MatrixPower;
+import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Cos;
 import junit.framework.TestCase;
 
@@ -45,6 +50,14 @@ public class NestListTest extends TestCase {
 
   public void testNullOperator() {
     assertEquals(NestList.of(null, RealScalar.ONE, 0), Tensors.vector(1));
+  }
+
+  public void testMatrixPower() {
+    Distribution distribution = DiscreteUniformDistribution.of(-3, 4);
+    Tensor matrix = RandomVariate.of(distribution, 3, 3);
+    Tensor list = NestList.of(matrix::dot, IdentityMatrix.of(3), 5);
+    for (int index = 0; index < list.length(); ++index)
+      assertEquals(list.get(index), MatrixPower.of(matrix, index));
   }
 
   public void testFailNull() {

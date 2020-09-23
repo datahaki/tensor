@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -113,12 +114,12 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   /***************************************************/
   @Override // from AbsInterface
   public Scalar abs() {
-    return Hypot.ofVector(xyz.copy().append(w));
+    return Hypot.ofVector(Append.of(xyz, w));
   }
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    return Norm2Squared.ofVector(xyz.copy().append(w));
+    return Norm2Squared.ofVector(Append.of(xyz, w));
     // return w.multiply(w).add(xyz.dot(xyz));
   }
 

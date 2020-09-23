@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Tuples;
 
@@ -73,7 +74,7 @@ public class Permutations {
             post.stream().limit(index), //
             post.stream().skip(index + 1)));
         if (set.add(Sort.of(key)))
-          recur(ante.copy().append(post.get(index)), key);
+          recur(Append.of(ante, post.get(index)), key);
       }
     }
   }

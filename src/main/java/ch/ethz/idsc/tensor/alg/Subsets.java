@@ -55,7 +55,7 @@ public class Subsets {
       --k;
       int limit = tensor.length() - k;
       for (int index = 0; index < limit;)
-        recur(ante.copy().append(tensor.get(index)), Tensor.of(tensor.stream().skip(++index)), k);
+        recur(Append.of(ante, tensor.get(index)), Tensor.of(tensor.stream().skip(++index)), k);
     }
   }
 }

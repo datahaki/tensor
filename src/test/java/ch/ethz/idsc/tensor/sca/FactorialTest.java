@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.red.Times;
 import junit.framework.TestCase;
 
 public class FactorialTest extends TestCase {
@@ -35,6 +36,14 @@ public class FactorialTest extends TestCase {
 
   public void testLarge() {
     Factorial.of(RealScalar.of(1000));
+  }
+
+  public void testSimple() {
+    Scalar result = Tensors.vector(2, 3, 4, 3).stream() //
+        .map(Scalar.class::cast) //
+        .map(Factorial.FUNCTION) //
+        .reduce(Times::of).get();
+    assertEquals(result, RealScalar.of(1728));
   }
 
   public void testNegativeOneFail() {
