@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.alg;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.Pi;
 import junit.framework.TestCase;
 
 public class AppendTest extends TestCase {
@@ -23,5 +24,19 @@ public class AppendTest extends TestCase {
     Tensor tensor = Append.of(x, y);
     y.set(RealScalar.ZERO, 1);
     assertEquals(tensor, Tensors.fromString("{1, 2, 3, {4, 5, 6}}"));
+  }
+
+  public void testEmpty() {
+    Tensor tensor = Append.of(Tensors.empty().unmodifiable(), RealScalar.ONE);
+    assertEquals(tensor, Tensors.vector(1));
+  }
+
+  public void testScalarFail() {
+    try {
+      Append.of(RealScalar.ONE, Pi.TWO);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

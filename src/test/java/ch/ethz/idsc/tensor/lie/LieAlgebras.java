@@ -43,10 +43,10 @@ public enum LieAlgebras {
   /** @return ad tensor of 3-dimensional se(2) */
   public static Tensor se2() {
     Tensor ad = Array.zeros(3, 3, 3);
-    ad.set(P1, 1, 0, 2);
     ad.set(N1, 1, 2, 0);
-    ad.set(N1, 0, 2, 1);
-    ad.set(P1, 0, 1, 2);
+    ad.set(P1, 1, 0, 2);
+    ad.set(N1, 0, 1, 2);
+    ad.set(P1, 0, 2, 1);
     return ad;
   }
 }

@@ -24,13 +24,13 @@ public class JacobiIdentityTest extends TestCase {
     assertEquals(JacobiIdentity.of(so3), Array.zeros(3, 3, 3, 3));
   }
 
-  public void testSl3() {
+  public void testSl2() {
     Tensor ad = LieAlgebras.sl2();
     assertEquals(JacobiIdentity.of(ad), Array.zeros(3, 3, 3, 3));
   }
 
   public void testSe3() {
-    Tensor ad = LieAlgebras.se2();
+    Tensor ad = JacobiIdentity.require(LieAlgebras.se2());
     assertEquals(JacobiIdentity.of(ad), Array.zeros(3, 3, 3, 3));
   }
 }

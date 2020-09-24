@@ -12,11 +12,12 @@ import junit.framework.TestCase;
 public class KillingFormTest extends TestCase {
   public void testSe2() {
     Tensor ad = LieAlgebras.se2().unmodifiable();
+    JacobiIdentity.require(ad);
     assertEquals(JacobiIdentity.of(ad), Array.zeros(3, 3, 3, 3));
     assertEquals(ad.dot(UnitVector.of(3, 0)).dot(UnitVector.of(3, 1)), Array.zeros(3));
     assertEquals(ad.dot(UnitVector.of(3, 0)).dot(UnitVector.of(3, 2)), UnitVector.of(3, 1).negate());
-    assertEquals(ad.dot(UnitVector.of(3, 1)).dot(UnitVector.of(3, 2)), UnitVector.of(3, 0).negate());
-    assertEquals(KillingForm.of(ad), DiagonalMatrix.of(0, 0, 2));
+    assertEquals(ad.dot(UnitVector.of(3, 1)).dot(UnitVector.of(3, 2)), UnitVector.of(3, 0));
+    assertEquals(KillingForm.of(ad), DiagonalMatrix.of(0, 0, -2));
   }
 
   public void testSo3() {
@@ -26,7 +27,7 @@ public class KillingFormTest extends TestCase {
     assertEquals(kil, DiagonalMatrix.of(-2, -2, -2));
   }
 
-  public void testSl3() {
+  public void testSl2() {
     Tensor ad = LieAlgebras.sl2();
     assertEquals(JacobiIdentity.of(ad), Array.zeros(3, 3, 3, 3));
     Tensor kil = KillingForm.of(ad);
