@@ -7,7 +7,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import ch.ethz.idsc.tensor.opt.Pi;
 import junit.framework.TestCase;
 
@@ -35,7 +34,7 @@ public class DifferencesTest extends TestCase {
   }
 
   public void testAd() {
-    Tensor dif = Differences.of(LieAlgebras.so3());
+    Tensor dif = Differences.of(Array.zeros(3, 3, 3));
     assertEquals(Dimensions.of(dif), Arrays.asList(2, 3, 3));
   }
 

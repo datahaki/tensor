@@ -36,7 +36,7 @@ public class TensorWedgeTest extends TestCase {
   }
 
   public void testAlternating() {
-    Tensor alt = LieAlgebras.so3();
+    Tensor alt = LeviCivitaTensor.of(3);
     assertEquals(alt, TensorWedge.of(alt));
   }
 

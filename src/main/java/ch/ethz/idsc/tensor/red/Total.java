@@ -9,16 +9,18 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 
 /** implementation is consistent with Mathematica.
  * 
- * Mathematica allows
+ * <p>Mathematica allows
  * Normalize[{-1, 2, 3}, Total] == {-1/4, 1/2, 3/4}
  * 
- * The function {@link #ofVector(Tensor)} is provided for use in
+ * <p>The function {@link #ofVector(Tensor)} is provided for use in
  * <pre>
  * Normalize.with(Total::ofVector)
  * </pre>
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/Total.html">Total</a> */
+ * <a href="https://reference.wolfram.com/language/ref/Total.html">Total</a>
+ * 
+ * @see Times#pmul(Tensor) */
 public enum Total {
   ;
   /** The return value has {@link Dimensions} of input tensor reduced by 1.

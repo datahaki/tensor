@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
@@ -46,7 +46,7 @@ public class MatlabExportTest extends TestCase {
   }
 
   public void testLieAlgebras() {
-    Tensor m = LieAlgebras.so3();
+    Tensor m = LeviCivitaTensor.of(3);
     Stream<String> stream = MatlabExport.of(m);
     List<String> list = stream.collect(Collectors.toList());
     assertTrue(list.contains("a=zeros([3, 3, 3]);"));

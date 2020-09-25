@@ -24,7 +24,7 @@ public class QRDecompositionImplTest extends TestCase {
       // ---
     }
     try {
-      QRDecomposition.of(LieAlgebras.sl2());
+      QRDecomposition.of(LeviCivitaTensor.of(3));
       fail();
     } catch (Exception exception) {
       // ---

@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import junit.framework.TestCase;
 
 public class SquareMatrixQTest extends TestCase {
@@ -20,7 +20,7 @@ public class SquareMatrixQTest extends TestCase {
 
   public void testOthers() {
     assertFalse(SquareMatrixQ.of(UnitVector.of(10, 3)));
-    assertFalse(SquareMatrixQ.of(LieAlgebras.so3()));
+    assertFalse(SquareMatrixQ.of(LeviCivitaTensor.of(3)));
     assertFalse(SquareMatrixQ.of(RealScalar.ONE));
   }
 
@@ -72,9 +72,9 @@ public class SquareMatrixQTest extends TestCase {
   }
 
   public void testRequireRank3() {
-    assertFalse(SquareMatrixQ.of(LieAlgebras.he1()));
+    assertFalse(SquareMatrixQ.of(LeviCivitaTensor.of(3)));
     try {
-      SquareMatrixQ.require(LieAlgebras.he1());
+      SquareMatrixQ.require(LeviCivitaTensor.of(3));
       fail();
     } catch (Exception exception) {
       // ---

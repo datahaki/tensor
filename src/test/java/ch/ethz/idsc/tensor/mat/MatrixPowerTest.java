@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -172,9 +172,8 @@ public class MatrixPowerTest extends TestCase {
   }
 
   public void testFailAd() {
-    Tensor tensor = LieAlgebras.he1();
     try {
-      MatrixPower.of(tensor, 1);
+      MatrixPower.of(LeviCivitaTensor.of(3), 1);
       fail();
     } catch (Exception exception) {
       // ---

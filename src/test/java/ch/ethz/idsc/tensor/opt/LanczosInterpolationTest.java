@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.io.ResourceData;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -33,7 +33,7 @@ public class LanczosInterpolationTest extends TestCase {
   }
 
   public void testGetEmpty() {
-    Interpolation interpolation = LanczosInterpolation.of(LieAlgebras.so3().unmodifiable());
+    Interpolation interpolation = LanczosInterpolation.of(LeviCivitaTensor.of(3).unmodifiable());
     Tensor tensor = interpolation.get(Tensors.empty());
     tensor.set(t -> t.append(RealScalar.ONE), Tensor.ALL);
   }

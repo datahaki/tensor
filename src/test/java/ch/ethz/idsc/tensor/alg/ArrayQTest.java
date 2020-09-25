@@ -6,7 +6,6 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import junit.framework.TestCase;
@@ -34,7 +33,7 @@ public class ArrayQTest extends TestCase {
       assertEquals(rank == 0, ArrayQ.ofRank(RealScalar.ONE, rank));
       assertEquals(rank == 1, ArrayQ.ofRank(Tensors.vector(1, 2, 3), rank));
       assertEquals(rank == 2, ArrayQ.ofRank(HilbertMatrix.of(2, 3), rank));
-      assertEquals(rank == 3, ArrayQ.ofRank(LieAlgebras.he1(), rank));
+      assertEquals(rank == 3, ArrayQ.ofRank(Array.zeros(3, 4, 5), rank));
     }
   }
 

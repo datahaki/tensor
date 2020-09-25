@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import junit.framework.TestCase;
@@ -78,14 +78,14 @@ public class BSplineInterpolationTest extends TestCase {
   }
 
   public void testAd() {
-    Tensor tensor = LieAlgebras.se2();
+    Tensor tensor = LeviCivitaTensor.of(3);
     for (int degree = 0; degree < 4; ++degree) {
       Interpolation interpolation = BSplineInterpolation.of(degree, tensor);
       for (int index = 0; index < tensor.length(); ++index) {
         Tensor result = interpolation.at(RealScalar.of(index));
         assertEquals(result, tensor.get(index));
         Tensor svalue = interpolation.get(Tensors.vector(1, 2));
-        assertEquals(svalue, UnitVector.of(3, 0).negate());
+        assertEquals(svalue, UnitVector.of(3, 0));
         ExactTensorQ.require(svalue);
       }
     }

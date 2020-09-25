@@ -13,8 +13,10 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import junit.framework.TestCase;
 
 public class CrossTest extends TestCase {
+  private static final Tensor SO3 = LeviCivitaTensor.of(3).negate();
+
   public static Tensor alt_skew3(Tensor a) {
-    return LieAlgebras.so3().dot(a);
+    return SO3.dot(a);
   }
 
   static void checkAB(Tensor a, Tensor b) {

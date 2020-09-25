@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor.alg;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import junit.framework.TestCase;
 
 public class TransposeFailTest extends TestCase {
@@ -45,15 +44,15 @@ public class TransposeFailTest extends TestCase {
   }
 
   public void testRankFail() {
-    Transpose.of(LieAlgebras.so3(), 1, 2, 0);
+    Transpose.of(Array.zeros(1, 3, 2), 1, 2, 0);
     try {
-      Transpose.of(LieAlgebras.so3(), 1, 0);
+      Transpose.of(Array.zeros(3, 3, 3), 1, 0);
       fail();
     } catch (Exception exception) {
       // ---
     }
     try {
-      Transpose.of(LieAlgebras.so3(), 3, 2, 1, 0);
+      Transpose.of(Array.zeros(3, 3, 2), 3, 2, 1, 0);
       fail();
     } catch (Exception exception) {
       // ---

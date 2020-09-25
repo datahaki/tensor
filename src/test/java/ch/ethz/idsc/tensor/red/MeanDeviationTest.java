@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -62,7 +62,7 @@ public class MeanDeviationTest extends TestCase {
 
   public void testTensorFail() {
     try {
-      MeanDeviation.ofVector(LieAlgebras.sl2());
+      MeanDeviation.ofVector(LeviCivitaTensor.of(3));
       fail();
     } catch (Exception exception) {
       // ---

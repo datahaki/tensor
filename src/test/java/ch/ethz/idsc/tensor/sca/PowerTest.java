@@ -55,6 +55,13 @@ public class PowerTest extends TestCase {
     }
   }
 
+  public void testNegativeOne() {
+    assertEquals(Power.of(-1, 0), RealScalar.ONE);
+    assertEquals(Power.of(-1, 1), RealScalar.ONE.negate());
+    assertEquals(Power.of(-1, 2), RealScalar.ONE);
+    assertEquals(Power.of(-1, 3), RealScalar.ONE.negate());
+  }
+
   public void testZeroComplex() {
     assertEquals(Power.of(RealScalar.ZERO, Scalars.fromString("0.1+3*I")), RealScalar.ZERO);
     assertEquals(Power.of(RealScalar.ZERO, Scalars.fromString("0.1-3*I/2")), RealScalar.ZERO);

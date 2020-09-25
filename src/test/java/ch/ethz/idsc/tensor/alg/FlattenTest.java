@@ -6,7 +6,6 @@ import java.util.Arrays;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import junit.framework.TestCase;
 
@@ -22,7 +21,7 @@ public class FlattenTest extends TestCase {
   }
 
   public void testLevels() {
-    Tensor ad = LieAlgebras.he1();
+    Tensor ad = Array.zeros(3, 3, 3);
     assertEquals(Flatten.of(ad, 0), ad);
     assertEquals(Dimensions.of(Flatten.of(ad, 1)), Arrays.asList(9, 3));
     assertEquals(Dimensions.of(Flatten.of(ad, 2)), Arrays.asList(27));
@@ -40,7 +39,7 @@ public class FlattenTest extends TestCase {
   }
 
   public void testExcess() {
-    Tensor ad = LieAlgebras.he1();
+    Tensor ad = Array.zeros(3, 4, 5);
     Tensor tensor = Flatten.of(ad, 10);
     assertEquals(tensor.length(), Numel.of(ad));
   }

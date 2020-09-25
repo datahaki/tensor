@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.lie.MatrixExp;
 import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
@@ -97,7 +97,7 @@ public class TraceTest extends TestCase {
       // ---
     }
     try {
-      Trace.of(LieAlgebras.sl2());
+      Trace.of(LeviCivitaTensor.of(3));
       fail();
     } catch (Exception exception) {
       // ---

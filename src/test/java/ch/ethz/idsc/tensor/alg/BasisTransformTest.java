@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
@@ -61,15 +61,16 @@ public class BasisTransformTest extends TestCase {
 
   public void testAd() {
     Tensor v = HilbertMatrix.of(3);
-    Tensor ad = BasisTransform.of(LieAlgebras.sl2(), 1, v);
+    Tensor _a = LeviCivitaTensor.of(3).negate();
+    Tensor ad = BasisTransform.of(_a, 1, v);
     Tensor he = BasisTransform.of(ad, 1, Inverse.of(v));
-    assertEquals(he, LieAlgebras.sl2());
+    assertEquals(he, _a);
   }
 
   public void testAdTypeFail() {
     Tensor v = HilbertMatrix.of(3);
     try {
-      BasisTransform.of(LieAlgebras.sl2(), -1, v);
+      BasisTransform.of(Array.zeros(3, 3, 3), -1, v);
       fail();
     } catch (Exception exception) {
       // ---
@@ -79,7 +80,7 @@ public class BasisTransformTest extends TestCase {
   public void testAdInverseFail() {
     Tensor v = Array.zeros(3);
     try {
-      BasisTransform.of(LieAlgebras.sl2(), 1, v);
+      BasisTransform.of(Array.zeros(3, 3, 3), 1, v);
       fail();
     } catch (Exception exception) {
       // ---

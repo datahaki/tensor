@@ -141,7 +141,7 @@ public class OrthogonalizeTest extends TestCase {
 
   public void testFailAd() {
     try {
-      Orthogonalize.of(LieAlgebras.so3());
+      Orthogonalize.of(LeviCivitaTensor.of(3));
       fail();
     } catch (Exception exception) {
       // ---

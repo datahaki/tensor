@@ -13,7 +13,7 @@ import junit.framework.TestCase;
 
 public class TensorContractTest extends TestCase {
   public void testRank3() {
-    Tensor vector = TensorContract.of(LieAlgebras.so3(), 0, 2);
+    Tensor vector = TensorContract.of(LeviCivitaTensor.of(3), 0, 2);
     assertTrue(VectorQ.ofLength(vector, 3));
     assertEquals(vector, Array.zeros(3));
     ExactTensorQ.require(vector);
@@ -21,7 +21,7 @@ public class TensorContractTest extends TestCase {
 
   public void testFail() {
     try {
-      TensorContract.of(LieAlgebras.so3(), 0, 3);
+      TensorContract.of(LeviCivitaTensor.of(3), 0, 3);
       fail();
     } catch (Exception exception) {
       // ---

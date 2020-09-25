@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -264,7 +264,7 @@ public class NullSpaceTest extends TestCase {
 
   public void testFailRank3() {
     try {
-      NullSpace.of(LieAlgebras.sl2());
+      NullSpace.of(LeviCivitaTensor.of(3));
       fail();
     } catch (Exception exception) {
       // ---

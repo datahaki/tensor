@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -26,7 +26,7 @@ public class OrthogonalMatrixQTest extends TestCase {
     assertFalse(OrthogonalMatrixQ.of(RealScalar.of(1)));
     assertFalse(OrthogonalMatrixQ.of(Tensors.vector(1, 0, 0)));
     assertFalse(OrthogonalMatrixQ.of(Tensors.vector(1, 0, 2)));
-    assertFalse(OrthogonalMatrixQ.of(LieAlgebras.so3()));
+    assertFalse(OrthogonalMatrixQ.of(LeviCivitaTensor.of(3)));
   }
 
   public void testRequireChop() {

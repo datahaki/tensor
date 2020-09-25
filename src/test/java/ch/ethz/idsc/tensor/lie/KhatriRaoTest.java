@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import junit.framework.TestCase;
 
@@ -18,7 +19,7 @@ public class KhatriRaoTest extends TestCase {
   }
 
   public void testRank3() {
-    Tensor tensor = KhatriRao.of(LieAlgebras.so3(), LieAlgebras.so3());
+    Tensor tensor = KhatriRao.of(Array.zeros(3, 3, 3), Array.zeros(3, 3, 3));
     assertEquals(Dimensions.of(tensor), Arrays.asList(9, 3, 3));
   }
 }

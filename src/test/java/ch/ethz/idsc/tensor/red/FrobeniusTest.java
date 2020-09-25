@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.FourierMatrix;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
@@ -40,7 +40,7 @@ public class FrobeniusTest extends TestCase {
 
   public void testRank3() {
     Scalar expected = RealScalar.of(2.449489742783178);
-    Scalar norm = Frobenius.of(LieAlgebras.so3());
+    Scalar norm = Frobenius.of(LeviCivitaTensor.of(3));
     Chop._14.requireClose(norm, expected);
     Scalar scalar = Frobenius.of(Array.of(i -> RealScalar.ONE, 6));
     Chop._14.requireClose(scalar, expected);

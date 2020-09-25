@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -128,7 +128,7 @@ public class SingularValueDecompositionTest extends TestCase {
   }
 
   public void testSo3() {
-    Tensor ad = LieAlgebras.so3();
+    Tensor ad = LeviCivitaTensor.of(3);
     Tensor sk = ad.dot(Tensors.vector(1, 1, 1));
     SingularValueDecomposition svd = specialOps(sk);
     assertEquals(MatrixRank.of(svd), 2);

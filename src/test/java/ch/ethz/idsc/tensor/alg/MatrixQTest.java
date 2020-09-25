@@ -5,7 +5,6 @@ import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import junit.framework.TestCase;
@@ -52,7 +51,7 @@ public class MatrixQTest extends TestCase {
   }
 
   public void testAd() {
-    assertFalse(MatrixQ.of(LieAlgebras.so3()));
+    assertFalse(MatrixQ.of(Array.zeros(3, 3, 3)));
   }
 
   public void testElseThrow() {

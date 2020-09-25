@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import junit.framework.TestCase;
 
 public class DeterminantTest extends TestCase {
@@ -31,7 +31,7 @@ public class DeterminantTest extends TestCase {
 
   public void testFailRank3() {
     try {
-      Det.of(LieAlgebras.sl2());
+      Det.of(LeviCivitaTensor.of(3));
       fail();
     } catch (Exception exception) {
       // ---

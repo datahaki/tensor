@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.io.Pretty;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.NullSpace;
 import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
@@ -62,7 +62,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   static void demoCross() {
-    Tensor ad = LieAlgebras.so3();
+    Tensor ad = LeviCivitaTensor.of(3);
     Tensor x = Tensors.vector(7, 2, -4);
     Tensor y = Tensors.vector(-3, 5, 2);
     System.out.println(ad);

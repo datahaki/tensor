@@ -6,7 +6,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import junit.framework.TestCase;
@@ -37,7 +36,7 @@ public class VectorQTest extends TestCase {
   }
 
   public void testAd() {
-    assertFalse(VectorQ.of(LieAlgebras.so3()));
+    assertFalse(VectorQ.of(Array.zeros(2, 3, 1)));
   }
 
   public void testRequire() {

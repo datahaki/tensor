@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Serialization;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -45,7 +45,7 @@ public class SchattenNormTest extends TestCase {
     Scalar scalar = normInterface.ofMatrix(matrix);
     Sign.requirePositive(scalar);
     try {
-      normInterface.ofMatrix(LieAlgebras.so3());
+      normInterface.ofMatrix(LeviCivitaTensor.of(3));
       fail();
     } catch (Exception exception) {
       // ---

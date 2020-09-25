@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor;
 import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -80,7 +79,7 @@ public class TensorGetTest extends TestCase {
   }
 
   public void testGetAllFail() {
-    Tensor matrix = LieAlgebras.so3();
+    Tensor matrix = Array.zeros(3, 4, 5);
     try {
       matrix.Get(Tensor.ALL);
       fail();

@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.lie.Cross;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import junit.framework.TestCase;
 
 public class AntisymmetricMatrixQTest extends TestCase {
@@ -26,7 +26,7 @@ public class AntisymmetricMatrixQTest extends TestCase {
 
   public void testNonMatrix() {
     assertFalse(AntisymmetricMatrixQ.of(RealScalar.ONE));
-    assertFalse(AntisymmetricMatrixQ.of(LieAlgebras.sl2()));
+    assertFalse(AntisymmetricMatrixQ.of(LeviCivitaTensor.of(3)));
   }
 
   public void testRequire() {
