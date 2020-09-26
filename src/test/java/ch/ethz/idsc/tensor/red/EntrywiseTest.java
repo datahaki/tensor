@@ -1,10 +1,13 @@
 // code by jph
 package ch.ethz.idsc.tensor.red;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -38,15 +41,15 @@ public class EntrywiseTest extends TestCase {
     assertEquals(result, Tensors.vector(3, 2, 4));
   }
 
-  public void testMinSimple() {
-    Entrywise entrywise = Entrywise.min();
+  public void testMinSimple() throws ClassNotFoundException, IOException {
+    Entrywise entrywise = Serialization.copy(Entrywise.min());
     Tensor result = entrywise.apply( //
         Tensors.vector(3, 2, 3), Tensors.vector(-2, 1, 4));
     assertEquals(result, Tensors.vector(-2, 1, 3));
   }
 
-  public void testMaxScalar() {
-    Entrywise entrywise = Entrywise.max();
+  public void testMaxScalar() throws ClassNotFoundException, IOException {
+    Entrywise entrywise = Serialization.copy(Entrywise.max());
     Tensor result = entrywise.apply( //
         RealScalar.of(3), RealScalar.of(5));
     assertEquals(result, RealScalar.of(5));

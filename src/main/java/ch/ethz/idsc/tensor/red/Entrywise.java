@@ -36,8 +36,10 @@ public class Entrywise implements BinaryOperator<Tensor>, Serializable {
     return new Entrywise(Objects.requireNonNull(binaryOperator));
   }
 
-  private static final Entrywise MIN = with(Min::of);
-  private static final Entrywise MAX = with(Max::of);
+  @SuppressWarnings("unchecked")
+  private static final Entrywise MIN = with((BinaryOperator<Scalar> & Serializable) (x, y) -> Min.of(x, y));
+  @SuppressWarnings("unchecked")
+  private static final Entrywise MAX = with((BinaryOperator<Scalar> & Serializable) (x, y) -> Max.of(x, y));
 
   /** @return entrywise minimum operator */
   public static Entrywise min() {
