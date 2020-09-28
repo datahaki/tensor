@@ -18,6 +18,19 @@ public class PivotsTest extends TestCase {
       assertEquals(Enum.valueOf(Pivots.class, pivots.name()), pivots);
   }
 
+  public void testClassEnumConstants() {
+    Class<?> cls = Pivots.class;
+    assertTrue(Enum.class.isAssignableFrom(cls));
+    Object[] enumConstants = cls.getEnumConstants();
+    Object result = null;
+    for (Object obj : enumConstants) {
+      if (obj.toString().equals("ARGMAX_ABS")) {
+        result = obj;
+      }
+    }
+    assertEquals(result, Pivots.ARGMAX_ABS);
+  }
+
   public void testPackageVisibility() {
     assertTrue(Modifier.isPublic(Pivots.class.getModifiers()));
   }

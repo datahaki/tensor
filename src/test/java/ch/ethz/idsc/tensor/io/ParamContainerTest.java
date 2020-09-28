@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.Pivots;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.TestFile;
 import junit.framework.TestCase;
@@ -43,9 +44,38 @@ public class ParamContainerTest extends TestCase {
     storage.delete();
   }
 
-  public void testEnum() {
-    ParamContainerEnum paramContainerEnum = new ParamContainerEnum();
-    TensorProperties tensorProperties = TensorProperties.wrap(paramContainerEnum);
-    tensorProperties.fields().forEach(System.out::println);
+  public void testEnumPropagate() {
+    Properties properties;
+    {
+      ParamContainerEnum paramContainerEnum = new ParamContainerEnum();
+      paramContainerEnum.pivots = Pivots.FIRST_NON_ZERO;
+      paramContainerEnum.nameString = NameString.SECOND;
+      TensorProperties tensorProperties = TensorProperties.wrap(paramContainerEnum);
+      properties = tensorProperties.get();
+    }
+    {
+      ParamContainerEnum paramContainerEnum = new ParamContainerEnum();
+      TensorProperties tensorProperties = TensorProperties.wrap(paramContainerEnum);
+      tensorProperties.set(properties);
+      assertEquals(paramContainerEnum.pivots, Pivots.FIRST_NON_ZERO);
+      assertEquals(paramContainerEnum.nameString, NameString.SECOND);
+    }
+  }
+
+  public void testEnumNull() {
+    Properties properties;
+    {
+      ParamContainerEnum paramContainerEnum = new ParamContainerEnum();
+      TensorProperties tensorProperties = TensorProperties.wrap(paramContainerEnum);
+      properties = tensorProperties.get();
+    }
+    properties.setProperty("nameString", NameString.THIRD.name());
+    {
+      ParamContainerEnum paramContainerEnum = new ParamContainerEnum();
+      TensorProperties tensorProperties = TensorProperties.wrap(paramContainerEnum);
+      tensorProperties.set(properties);
+      assertNull(paramContainerEnum.pivots);
+      assertEquals(paramContainerEnum.nameString, NameString.THIRD);
+    }
   }
 }

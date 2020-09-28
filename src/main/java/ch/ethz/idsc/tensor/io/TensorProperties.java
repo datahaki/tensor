@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -22,7 +23,8 @@ import ch.ethz.idsc.tensor.Tensors;
 /** manages configurable parameters by introspection of a given instance
  * 
  * values of non-final, non-static, non-transient but public members of type
- * {@link Tensor}, {@link Scalar}, {@link String}, {@link File}, {@link Boolean}
+ * {@link Tensor}, {@link Scalar}, {@link String}, {@link File}, {@link Boolean},
+ * {@link Enum}
  * are stored in, and retrieved from files in the {@link Properties} format */
 public class TensorProperties {
   private static final int MASK_FILTER = Modifier.PUBLIC;
@@ -48,16 +50,9 @@ public class TensorProperties {
    * @return new instance of class that was constructed from given string
    * @throws Exception if given class is not supported */
   /* package */ static Object parse(Class<?> cls, String string) {
-    if (cls.equals(Tensor.class))
-      return Tensors.fromString(string);
-    if (cls.equals(Scalar.class))
-      return Scalars.fromString(string);
-    if (cls.equals(String.class))
-      return string;
-    if (cls.equals(File.class))
-      return new File(string);
-    if (cls.equals(Boolean.class))
-      return BooleanParser.orNull(string);
+    for (Type type : Type.values())
+      if (type.isTracking(cls))
+        return type.toObject(cls, string);
     throw new UnsupportedOperationException(cls + " " + string);
   }
 
@@ -65,14 +60,70 @@ public class TensorProperties {
    * @return if field is managed by {@link TensorProperties} */
   /* package */ static boolean isTracked(Field field) {
     if ((field.getModifiers() & MASK_TESTED) == MASK_FILTER) {
-      Class<?> type = field.getType();
-      return type.equals(Tensor.class) //
-          || type.equals(Scalar.class) //
-          || type.equals(String.class) //
-          || type.equals(File.class) //
-          || type.equals(Boolean.class);
+      Class<?> cls = field.getType();
+      return Stream.of(Type.values()).anyMatch(type -> type.isTracking(cls));
     }
     return false;
+  }
+
+  private static enum Type {
+    TENSOR(Tensor.class::equals) {
+      @Override
+      public Object toObject(Class<?> cls, String string) {
+        return Tensors.fromString(string);
+      }
+    },
+    SCALAR(Scalar.class::equals) {
+      @Override
+      public Object toObject(Class<?> cls, String string) {
+        return Scalars.fromString(string);
+      }
+    },
+    STRING(String.class::equals) {
+      @Override
+      public Object toObject(Class<?> cls, String string) {
+        return string;
+      }
+    },
+    FILE(File.class::equals) {
+      @Override
+      public Object toObject(Class<?> cls, String string) {
+        return new File(string);
+      }
+    },
+    BOOLEAN(Boolean.class::equals) {
+      @Override
+      public Object toObject(Class<?> cls, String string) {
+        return BooleanParser.orNull(string);
+      }
+    },
+    ENUM(Enum.class::isAssignableFrom) {
+      @Override
+      public Object toObject(Class<?> cls, String string) {
+        return Stream.of(cls.getEnumConstants()) //
+            .filter(object -> ((Enum<?>) object).name().equals(string)) //
+            .findFirst() //
+            .orElse(null);
+      }
+    };
+
+    private final Predicate<Class<?>> predicate;
+
+    private Type(Predicate<Class<?>> predicate) {
+      this.predicate = predicate;
+    }
+
+    public final boolean isTracking(Class<?> cls) {
+      return predicate.test(cls);
+    }
+
+    public abstract Object toObject(Class<?> cls, String string);
+
+    public static String toString(Class<?> cls, Object object) {
+      return Enum.class.isAssignableFrom(cls) //
+          ? ((Enum<?>) object).name()
+          : object.toString();
+    }
   }
 
   /***************************************************/
@@ -171,7 +222,7 @@ public class TensorProperties {
       try {
         Object value = field.get(object); // may throw Exception
         if (Objects.nonNull(value))
-          biConsumer.accept(field.getName(), value.toString());
+          biConsumer.accept(field.getName(), Type.toString(field.getType(), value));
       } catch (Exception exception) {
         exception.printStackTrace();
       }
