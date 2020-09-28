@@ -13,6 +13,11 @@ public class PivotsTest extends TestCase {
       Serialization.copy(pivot);
   }
 
+  public void testValueOf() {
+    for (Pivots pivots : Pivots.values())
+      assertEquals(Enum.valueOf(Pivots.class, pivots.name()), pivots);
+  }
+
   public void testPackageVisibility() {
     assertTrue(Modifier.isPublic(Pivots.class.getModifiers()));
   }

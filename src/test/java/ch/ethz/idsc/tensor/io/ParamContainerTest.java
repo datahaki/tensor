@@ -42,4 +42,10 @@ public class ParamContainerTest extends TestCase {
     assertEquals(loaded.text, paramContainerFile.text);
     storage.delete();
   }
+
+  public void testEnum() {
+    ParamContainerEnum paramContainerEnum = new ParamContainerEnum();
+    TensorProperties tensorProperties = TensorProperties.wrap(paramContainerEnum);
+    tensorProperties.fields().forEach(System.out::println);
+  }
 }

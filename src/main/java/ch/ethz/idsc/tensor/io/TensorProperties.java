@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,14 +15,20 @@ import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 
 /** manages configurable parameters by introspection of a given instance
  * 
  * values of non-final, non-static, non-transient but public members of type
- * {@link Tensor}, {@link Scalar}, {@link String}, {@link Boolean}
+ * {@link Tensor}, {@link Scalar}, {@link String}, {@link File}, {@link Boolean}
  * are stored in, and retrieved from files in the {@link Properties} format */
 public class TensorProperties {
+  private static final int MASK_FILTER = Modifier.PUBLIC;
+  private static final int MASK_TESTED = //
+      Modifier.FINAL | Modifier.STATIC | Modifier.TRANSIENT | MASK_FILTER;
+
   /** @param object non-null
    * @return
    * @throws Exception if given object is null */
@@ -33,7 +40,39 @@ public class TensorProperties {
    * @param string
    * @return object with content parsed from given string */
   public static Object parse(Field field, String string) {
-    return StaticHelper.parse(field.getType(), string);
+    return parse(field.getType(), string);
+  }
+
+  /** @param cls class
+   * @param string to parse to an instance of given class
+   * @return new instance of class that was constructed from given string
+   * @throws Exception if given class is not supported */
+  /* package */ static Object parse(Class<?> cls, String string) {
+    if (cls.equals(Tensor.class))
+      return Tensors.fromString(string);
+    if (cls.equals(Scalar.class))
+      return Scalars.fromString(string);
+    if (cls.equals(String.class))
+      return string;
+    if (cls.equals(File.class))
+      return new File(string);
+    if (cls.equals(Boolean.class))
+      return BooleanParser.orNull(string);
+    throw new UnsupportedOperationException(cls + " " + string);
+  }
+
+  /** @param field
+   * @return if field is managed by {@link TensorProperties} */
+  /* package */ static boolean isTracked(Field field) {
+    if ((field.getModifiers() & MASK_TESTED) == MASK_FILTER) {
+      Class<?> type = field.getType();
+      return type.equals(Tensor.class) //
+          || type.equals(Scalar.class) //
+          || type.equals(String.class) //
+          || type.equals(File.class) //
+          || type.equals(Boolean.class);
+    }
+    return false;
   }
 
   /***************************************************/
@@ -46,8 +85,7 @@ public class TensorProperties {
   /** @return stream of tracked fields of given object
    * in the order in which they appear top to bottom in the class */
   public Stream<Field> fields() {
-    return Stream.of(object.getClass().getFields()) //
-        .filter(StaticHelper::isTracked);
+    return Stream.of(object.getClass().getFields()).filter(TensorProperties::isTracked);
   }
 
   /** @param properties

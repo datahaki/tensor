@@ -10,6 +10,8 @@ import java.util.Objects;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -20,6 +22,54 @@ import ch.ethz.idsc.tensor.usr.TestFile;
 import junit.framework.TestCase;
 
 public class TensorPropertiesTest extends TestCase {
+  public void testParseString() {
+    Object object = TensorProperties.parse(String.class, "ethz idsc ");
+    assertEquals(object, "ethz idsc ");
+  }
+
+  public void testParseScalar() {
+    Object object = TensorProperties.parse(Scalar.class, " 3/4+8*I[m*s^-2]");
+    Scalar scalar = Quantity.of(ComplexScalar.of(RationalScalar.of(3, 4), RealScalar.of(8)), "m*s^-2");
+    assertEquals(object, scalar);
+  }
+
+  public void testParseFile() {
+    Object object = TensorProperties.parse(File.class, "/home/datahaki/file.txt");
+    assertEquals(object, new File("/home/datahaki/file.txt"));
+  }
+
+  public void testParseBoolean() {
+    Object object = TensorProperties.parse(Boolean.class, "true");
+    assertEquals(object, Boolean.TRUE);
+  }
+
+  public void testIsTracked() {
+    Field[] fields = ParamContainer.class.getFields();
+    int count = 0;
+    for (Field field : fields)
+      count += TensorProperties.isTracked(field) ? 1 : 0;
+    ParamContainer paramContainer = new ParamContainer();
+    TensorProperties tensorProperties = TensorProperties.wrap(paramContainer);
+    int count2 = (int) tensorProperties.fields().count();
+    assertEquals(count, count2);
+    assertEquals(count, 5);
+  }
+
+  public void testScalarClass() {
+    Class<?> cls = RealScalar.ONE.getClass();
+    assertFalse(cls.equals(Scalar.class));
+    assertTrue(cls.equals(RationalScalar.class));
+  }
+
+  public void testParseFail() {
+    try {
+      TensorProperties.parse(Integer.class, "123");
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
   public void testListSize1() throws Exception {
     ParamContainer paramContainer = new ParamContainer();
     TensorProperties tensorProperties = TensorProperties.wrap(paramContainer);
