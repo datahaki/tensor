@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import ch.ethz.idsc.tensor.alg.UnitVector;
@@ -86,5 +88,11 @@ public class TensorImplTest extends TestCase {
   public void testExtract() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     eye.extract(2, 4).set(RealScalar.of(4), 1);
+  }
+
+  public void testArrayList() {
+    Tensor tensor = Tensor.of(Arrays.asList(RealScalar.of(2), RealScalar.of(3)).stream());
+    TensorImpl tensorImpl = (TensorImpl) tensor;
+    assertTrue(tensorImpl.list instanceof ArrayList); // used in TensorParser
   }
 }

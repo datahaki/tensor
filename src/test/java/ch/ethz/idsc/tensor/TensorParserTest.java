@@ -9,16 +9,20 @@ public class TensorParserTest extends TestCase {
   public void testFromString() {
     assertEquals(Tensors.fromString("{   }"), Tensors.empty());
     assertEquals(Tensors.fromString("{ 2 ,-3   , 4}"), Tensors.vector(2, -3, 4));
-    assertEquals(Tensors.fromString("{   {2, -3, 4  }, {2.3,-.2   }, {  }   }"), //
+    assertEquals(Tensors.fromString("  {   {2, -3, 4  }, {2.3,-.2   }, { \t }  }  \t "), //
         Tensors.of(Tensors.vector(2, -3, 4), Tensors.vector(2.3, -.2), Tensors.empty()));
   }
 
+  private static void _checkString(String string) {
+    assertEquals(Tensors.fromString(string), StringScalar.of(string));
+  }
+
   public void testFailBug() {
-    assertTrue(Tensors.fromString("{2.5") instanceof StringScalar);
-    assertTrue(Tensors.fromString("{2.5}}") instanceof StringScalar);
-    assertTrue(Tensors.fromString("{2.5,") instanceof StringScalar);
-    assertTrue(Tensors.fromString("{2.5,}}") instanceof StringScalar);
-    assertTrue(Tensors.fromString("{2.5,},}") instanceof StringScalar);
+    _checkString("{2.5");
+    _checkString("{2.5,");
+    _checkString("{2.5,}}");
+    _checkString("{2.5,},}");
+    _checkString("{2.5}}");
   }
 
   public void testComma() {
@@ -43,6 +47,25 @@ public class TensorParserTest extends TestCase {
     assertEquals(vector.length(), 4);
     assertTrue(vector.Get(1) instanceof StringScalar);
     assertTrue(vector.Get(2) instanceof StringScalar);
+  }
+
+  public void testExcessChars() {
+    assertTrue(Tensors.fromString("{1, 2}a") instanceof StringScalar);
+    assertTrue(Tensors.fromString("a{1, 2}") instanceof StringScalar);
+    assertTrue(StringScalarQ.any(Tensors.fromString("{2, {1, 2}a}")));
+  }
+
+  public void testStrangeBrackets() {
+    _checkString("{ } { }");
+    _checkString("{{}");
+    _checkString(" } { ");
+    _checkString(" } { } { ");
+  }
+
+  public void testEmptyString() {
+    assertEquals(Tensors.fromString(""), StringScalar.of(""));
+    assertEquals(Tensors.fromString("   "), StringScalar.of("   "));
+    assertEquals(Tensors.fromString(" \t  "), StringScalar.of(" \t  "));
   }
 
   public void testFromStringFunction() {

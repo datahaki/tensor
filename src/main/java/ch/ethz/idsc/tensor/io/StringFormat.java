@@ -28,27 +28,27 @@ import ch.ethz.idsc.tensor.Tensors;
   }
 
   /***************************************************/
-  private final JoiningInverse<T> inverseJoining;
+  private final JoiningInverse<T> joiningInverse;
   private final String string;
   private int head = 0;
   private int index = 0;
 
-  private StringFormat(JoiningInverse<T> inverseJoining, String string) {
-    this.inverseJoining = inverseJoining;
+  private StringFormat(JoiningInverse<T> joiningInverse, String string) {
+    this.joiningInverse = joiningInverse;
     this.string = string;
   }
 
   private void handle(int chr) {
     if (chr == Tensor.OPENING_BRACKET) {
-      inverseJoining.prefix();
+      joiningInverse.prefix();
       head = index + 1;
     } else //
     if (chr == ',') {
-      inverseJoining.delimiter(string.substring(head, index));
+      joiningInverse.delimiter(string.substring(head, index));
       head = index + 1;
     } else //
     if (chr == Tensor.CLOSING_BRACKET) {
-      inverseJoining.suffix(string.substring(head, index));
+      joiningInverse.suffix(string.substring(head, index));
       head = index + 1;
     }
     ++index;
@@ -58,12 +58,12 @@ import ch.ethz.idsc.tensor.Tensors;
     try {
       string.chars().forEach(this::handle);
       if (head != index)
-        inverseJoining.delimiter(string.substring(head, index));
-      return inverseJoining.emit();
+        joiningInverse.delimiter(string.substring(head, index));
+      return joiningInverse.emit();
     } catch (Exception exception) {
       // ---
     }
-    return inverseJoining.fallback(string);
+    return joiningInverse.fallback(string);
   }
 }
 
