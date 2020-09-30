@@ -26,11 +26,6 @@ public class MachineNumberQTest extends TestCase {
     assertFalse(MachineNumberQ.of(GaussScalar.of(0, 7)));
   }
 
-  public void testTensor() {
-    assertFalse(MachineNumberQ.of(Tensors.vector(1.)));
-    assertFalse(MachineNumberQ.of(Tensors.empty()));
-  }
-
   public void testCorner() {
     assertFalse(MachineNumberQ.of(DoubleScalar.POSITIVE_INFINITY));
     assertFalse(MachineNumberQ.of(DoubleScalar.NEGATIVE_INFINITY));

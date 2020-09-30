@@ -16,11 +16,6 @@ public class IntegerQTest extends TestCase {
     assertFalse(IntegerQ.of(Scalars.fromString("abc")));
   }
 
-  public void testTensor() {
-    assertFalse(IntegerQ.of(Tensors.empty()));
-    assertFalse(IntegerQ.of(Tensors.vector(1)));
-  }
-
   public void testRequire() {
     Scalar scalar = RealScalar.of(2);
     assertTrue(IntegerQ.require(scalar) == scalar);
@@ -29,6 +24,15 @@ public class IntegerQTest extends TestCase {
   public void testRequireFail() {
     try {
       IntegerQ.require(RealScalar.of(0.2));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testNullFail() {
+    try {
+      IntegerQ.of(null);
       fail();
     } catch (Exception exception) {
       // ---

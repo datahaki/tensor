@@ -6,6 +6,7 @@ import java.util.Random;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -147,8 +148,10 @@ public class QRDecompositionTest extends TestCase {
     Tensor getR = Tensors.matrixInt( //
         new int[][] { { 14, 21, -14 }, { 0, 175, -70 }, { 0, 0, -35 } });
     assertEquals(getR, qr.getR());
-    assertTrue(Flatten.of(qr.getR()).stream().allMatch(ExactScalarQ::of));
-    assertTrue(Flatten.of(qr.getQ()).stream().allMatch(ExactScalarQ::of));
+    ExactTensorQ.require(qr.getR());
+    ExactTensorQ.require(qr.getQ());
+    assertTrue(Flatten.of(qr.getR()).stream().map(Scalar.class::cast).allMatch(ExactScalarQ::of));
+    assertTrue(Flatten.of(qr.getQ()).stream().map(Scalar.class::cast).allMatch(ExactScalarQ::of));
   }
 
   public void testMathematica1() {

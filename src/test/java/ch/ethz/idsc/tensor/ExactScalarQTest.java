@@ -31,12 +31,6 @@ public class ExactScalarQTest extends TestCase {
     assertFalse(ExactScalarQ.of(ComplexScalar.of(3, 4.)));
   }
 
-  public void testTensor() {
-    assertFalse(ExactScalarQ.of(Tensors.empty()));
-    assertFalse(ExactScalarQ.of(Tensors.vector(1)));
-    assertFalse(ExactScalarQ.of(Tensors.vector(1, 2, 3)));
-  }
-
   public void testQuantity() {
     assertTrue(ExactScalarQ.of(Quantity.of(3, "m")));
     assertFalse(ExactScalarQ.of(Quantity.of(2.71, "kg*s")));

@@ -26,10 +26,6 @@ public class NumberQTest extends TestCase {
     assertTrue(NumberQ.of(GaussScalar.of(0, 7)));
   }
 
-  public void testTensor() {
-    assertFalse(NumberQ.of(Tensors.vector(1.)));
-  }
-
   public void testCorner() {
     assertFalse(NumberQ.of(DoubleScalar.POSITIVE_INFINITY));
     assertFalse(NumberQ.of(DoubleScalar.NEGATIVE_INFINITY));
@@ -46,10 +42,6 @@ public class NumberQTest extends TestCase {
   public void testQuantity() {
     assertFalse(NumberQ.of(Quantity.of(3, "m")));
     assertFalse(NumberQ.of(Quantity.of(3.14, "m")));
-  }
-
-  public void testVector() {
-    assertFalse(NumberQ.of(Tensors.vector(1, 2, 3)));
   }
 
   public void testAll() {

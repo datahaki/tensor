@@ -50,9 +50,11 @@ public class TensorParserTest extends TestCase {
   }
 
   public void testExcessChars() {
-    assertTrue(Tensors.fromString("{1, 2}a") instanceof StringScalar);
-    assertTrue(Tensors.fromString("a{1, 2}") instanceof StringScalar);
-    assertTrue(StringScalarQ.any(Tensors.fromString("{2, {1, 2}a}")));
+    _checkString("{1, 2}a");
+    _checkString("a{1, 2}");
+    Tensor tensor = Tensors.fromString("{2, {1, 2}a}");
+    assertEquals(tensor.Get(0), RealScalar.of(2));
+    assertTrue(StringScalarQ.of(tensor.Get(1)));
   }
 
   public void testStrangeBrackets() {

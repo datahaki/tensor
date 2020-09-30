@@ -24,17 +24,17 @@ import ch.ethz.idsc.tensor.sca.MachineNumberQInterface;
  * @see ExactScalarQ */
 public enum MachineNumberQ {
   ;
-  /** @param tensor
-   * @return true, if tensor is instance of {@link MachineNumberQInterface} which evaluates to true,
+  /** @param scalar
+   * @return true, if scalar is instance of {@link MachineNumberQInterface} which evaluates to true,
    * otherwise false */
-  public static boolean of(Tensor tensor) {
-    return Objects.requireNonNull(tensor) instanceof MachineNumberQInterface //
-        && ((MachineNumberQInterface) tensor).isMachineNumber();
+  public static boolean of(Scalar scalar) {
+    return Objects.requireNonNull(scalar) instanceof MachineNumberQInterface //
+        && ((MachineNumberQInterface) scalar).isMachineNumber();
   }
 
   /** @param tensor
    * @return true, if any scalar entry in given tensor satisfies {@link #of(Tensor)} predicate */
   public static boolean any(Tensor tensor) {
-    return tensor.flatten(-1).anyMatch(MachineNumberQ::of);
+    return tensor.flatten(-1).map(Scalar.class::cast).anyMatch(MachineNumberQ::of);
   }
 }
