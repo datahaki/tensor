@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -10,7 +11,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.qty.Quaternion;
 import junit.framework.TestCase;
 
 public class AbsInterfaceTest extends TestCase {

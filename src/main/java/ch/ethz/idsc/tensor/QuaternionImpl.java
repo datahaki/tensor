@@ -1,6 +1,6 @@
 // code by jph
 // https://en.wikipedia.org/wiki/Quaternion
-package ch.ethz.idsc.tensor.qty;
+package ch.ethz.idsc.tensor;
 
 import java.io.Serializable;
 import java.math.BigInteger;
@@ -8,17 +8,6 @@ import java.math.MathContext;
 import java.util.Objects;
 import java.util.Optional;
 
-import ch.ethz.idsc.tensor.AbstractScalar;
-import ch.ethz.idsc.tensor.ExactScalarQ;
-import ch.ethz.idsc.tensor.ExactScalarQInterface;
-import ch.ethz.idsc.tensor.ExactTensorQ;
-import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.red.Hypot;
@@ -211,23 +200,23 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override // from TrigonometryInterface
-  public Quaternion cos() {
-    throw new UnsupportedOperationException();
+  public Scalar cos() {
+    return TrigonometrySeries.DEFAULT.cos(isExactScalar() ? n() : this);
   }
 
   @Override // from TrigonometryInterface
-  public Quaternion cosh() {
-    throw new UnsupportedOperationException();
+  public Scalar cosh() {
+    return TrigonometrySeries.DEFAULT.cosh(isExactScalar() ? n() : this);
   }
 
   @Override // from TrigonometryInterface
-  public Quaternion sin() {
-    throw new UnsupportedOperationException();
+  public Scalar sin() {
+    return TrigonometrySeries.DEFAULT.sin(isExactScalar() ? n() : this);
   }
 
   @Override // from TrigonometryInterface
-  public Quaternion sinh() {
-    throw new UnsupportedOperationException();
+  public Scalar sinh() {
+    return TrigonometrySeries.DEFAULT.sinh(isExactScalar() ? n() : this);
   }
 
   /***************************************************/

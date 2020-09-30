@@ -2,12 +2,12 @@
 package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.qty.Quaternion;
 import junit.framework.TestCase;
 
 public class UnitizeTest extends TestCase {

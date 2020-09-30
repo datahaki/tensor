@@ -1,12 +1,8 @@
 // code by jph
-package ch.ethz.idsc.tensor.qty;
+package ch.ethz.idsc.tensor;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.sca.AbsInterface;
 import ch.ethz.idsc.tensor.sca.ConjugateInterface;
@@ -94,18 +90,6 @@ public interface Quaternion extends Scalar, //
 
   @Override // from SqrtInterface
   Quaternion sqrt();
-
-  @Override // from TrigonometryInterface
-  Quaternion cos();
-
-  @Override // from TrigonometryInterface
-  Quaternion cosh();
-
-  @Override // from TrigonometryInterface
-  Quaternion sin();
-
-  @Override // from TrigonometryInterface
-  Quaternion sinh();
 
   /** @return real part */
   Scalar w();

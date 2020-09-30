@@ -2,11 +2,11 @@
 package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.io.StringScalar;
-import ch.ethz.idsc.tensor.qty.Quaternion;
 
 /** The absolute value of {@link RealScalar}, {@link ComplexScalar}, or {@link Quaternion} is always
  * an instance of {@link RealScalar}. */

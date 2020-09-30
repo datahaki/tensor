@@ -4,13 +4,13 @@ package ch.ethz.idsc.tensor.sca;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.qty.Quaternion;
 
 /** Sign is consistent with Mathematica for {@link RealScalar}, {@link ComplexScalar},
  * {@link Quaternion}, and {@link Quantity}.

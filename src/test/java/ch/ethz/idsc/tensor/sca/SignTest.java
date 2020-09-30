@@ -3,12 +3,12 @@ package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.qty.Quaternion;
 import ch.ethz.idsc.tensor.qty.Unit;
 import junit.framework.TestCase;
 

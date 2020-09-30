@@ -3,10 +3,6 @@ package ch.ethz.idsc.tensor.qty;
 
 import java.util.regex.Pattern;
 
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.num.BinaryPower;
-import ch.ethz.idsc.tensor.num.ScalarProduct;
-
 /* package */ enum StaticHelper {
   ;
   /** atomic unit may consist of roman letters in lower case a-z,
@@ -21,7 +17,4 @@ import ch.ethz.idsc.tensor.num.ScalarProduct;
       throw new IllegalArgumentException(key);
     return key;
   }
-
-  public static final BinaryPower<Scalar> BINARY_POWER = //
-      new BinaryPower<>(new ScalarProduct(Quaternion.ONE));
 }

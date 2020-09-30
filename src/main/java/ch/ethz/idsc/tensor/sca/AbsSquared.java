@@ -2,10 +2,10 @@
 package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.qty.Quaternion;
 
 /** the purpose of AbsSquared is to preserve the precision when working with complex numbers.
  * Since {@link ComplexScalar}::abs involves a square root the square of the absolute value

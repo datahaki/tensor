@@ -2,12 +2,12 @@
 package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.qty.Quaternion;
 
 /** Abs is consistent with Mathematica for {@link RealScalar}, {@link ComplexScalar},
  * {@link Quaternion}, and {@link Quantity}.

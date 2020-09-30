@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;

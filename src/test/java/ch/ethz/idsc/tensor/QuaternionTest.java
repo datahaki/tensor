@@ -1,19 +1,14 @@
 // code by jph
-package ch.ethz.idsc.tensor.qty;
+package ch.ethz.idsc.tensor;
 
-import ch.ethz.idsc.tensor.ComplexScalar;
-import ch.ethz.idsc.tensor.ExactScalarQ;
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.RandomQuaternion;
 import ch.ethz.idsc.tensor.red.KroneckerDelta;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Abs;
