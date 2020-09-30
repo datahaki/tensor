@@ -5,7 +5,6 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
-import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/LeastSquares.html">LeastSquares</a>
@@ -50,7 +49,7 @@ public enum LeastSquares {
    * @return pseudo inverse of given matrix dot b */
   public static Tensor of(SingularValueDecomposition svd, Tensor b) {
     if (VectorQ.of(b)) { // when b is vector then bypass construction of pseudo inverse matrix
-      Tensor wi = svd.values().map(Tolerance.CHOP).map(InvertUnlessZero.FUNCTION);
+      Tensor wi = SingularValueList.inverted(svd, Tolerance.CHOP);
       return svd.getV().dot(wi.pmul(b.dot(svd.getU()))); // U^t . b == b . U
     }
     return PseudoInverse.of(svd).dot(b);
