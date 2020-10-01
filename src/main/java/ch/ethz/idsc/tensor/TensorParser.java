@@ -22,8 +22,8 @@ import ch.ethz.idsc.tensor.io.StringScalar;
   }
 
   public Tensor parse(String string) {
-    int opening = string.indexOf(Tensor.OPENING_BRACKET);
-    if (0 <= opening && string.substring(0, opening).trim().isEmpty()) { // first character is "{"
+    int opening = string.indexOf(Tensor.OPENING_BRACKET); // first non-whitespace character should be "{"
+    if (0 <= opening && string.substring(0, opening).trim().isEmpty()) {
       int closing = string.lastIndexOf(Tensor.CLOSING_BRACKET);
       if (opening < closing && string.substring(closing + 1).trim().isEmpty()) {
         List<Tensor> list = new ArrayList<>();

@@ -1,9 +1,11 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.lie;
 
 import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.num.GroupInterface;
 
 /** Implementation is consistent with Mathematica.

@@ -7,10 +7,10 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
-import ch.ethz.idsc.tensor.mat.MatrixPower;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
@@ -67,5 +67,13 @@ public enum MatrixExp {
         return sum;
     }
     throw TensorRuntimeException.of(matrix); // insufficient convergence
+  }
+
+  /** Hint: use {@link Symmetrize} on result for extra precision
+   * 
+   * @param matrix
+   * @return symmetric matrix */
+  public static Tensor ofSymmetric(Tensor matrix) {
+    return StaticHelper.ofSymmetric(matrix, Exp.FUNCTION);
   }
 }

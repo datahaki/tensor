@@ -30,6 +30,7 @@ public interface Eigensystem {
   Tensor values();
 
   /** @return matrix with rows as eigenvectors of given matrix
-   * The eigenvectors are not necessarily scaled to unit length. */
+   * The eigenvectors are not necessarily scaled to unit length.
+   * @see OrthogonalMatrixQ */
   Tensor vectors();
 }

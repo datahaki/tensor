@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import java.util.regex.Pattern;
+
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.io.StringScalarQ;
 import junit.framework.TestCase;
@@ -83,6 +85,13 @@ public class TensorParserTest extends TestCase {
   public void testEMatlab() {
     Tensor tensor = Tensors.fromString("3e-2");
     assertTrue(StringScalarQ.any(tensor));
+  }
+
+  public void testWhitespace() {
+    Pattern pattern = Pattern.compile("\\s*");
+    assertFalse(pattern.matcher("   a").matches());
+    assertFalse(pattern.matcher("   {").matches());
+    assertTrue(pattern.matcher("  \t \n ").matches());
   }
 
   public void testFailStringNull() {

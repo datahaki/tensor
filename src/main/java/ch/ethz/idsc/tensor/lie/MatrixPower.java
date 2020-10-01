@@ -1,11 +1,11 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.lie;
 
 import java.math.BigInteger;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 import ch.ethz.idsc.tensor.num.BinaryPower;
 import ch.ethz.idsc.tensor.sca.Power;
 
@@ -42,8 +42,6 @@ public enum MatrixPower {
    * @param exponent
    * @return */
   public static Tensor ofSymmetric(Tensor matrix, Scalar exponent) {
-    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-    Tensor vectors = eigensystem.vectors(); // OrthogonalMatrixQ
-    return Transpose.of(vectors).dot(eigensystem.values().map(Power.function(exponent)).pmul(vectors));
+    return StaticHelper.ofSymmetric(matrix, Power.function(exponent));
   }
 }
