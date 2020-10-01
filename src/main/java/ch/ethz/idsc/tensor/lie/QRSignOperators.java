@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 public enum QRSignOperators implements QRSignOperator {
   /** householder reflections with highest numerical stability */
-  STABILITY() {
+  STABILITY {
     @Override // from QRSignOperator
     public Scalar sign(Scalar xk) {
       return Scalars.isZero(xk) //
@@ -31,7 +31,7 @@ public enum QRSignOperators implements QRSignOperator {
    * <p>Careful: when using "preserveOrientation" {@link #det()} of the returned
    * instance of {@link QRDecomposition} gives the determinant of the matrix
    * only up to sign! */
-  ORIENTATION() {
+  ORIENTATION {
     @Override // from QRSignOperator
     public Scalar sign(Scalar xk) {
       return Scalars.isZero(Imag.FUNCTION.apply(xk)) //
