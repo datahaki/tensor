@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -91,7 +93,7 @@ public class Chop implements ScalarUnaryOperator {
       ChopInterface chopInterface = (ChopInterface) scalar;
       return chopInterface.chop(this);
     }
-    return scalar;
+    return Objects.requireNonNull(scalar);
   }
 
   /***************************************************/

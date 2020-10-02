@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.sca;
 
 import java.math.MathContext;
+import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Scalar;
 
@@ -18,6 +19,6 @@ import ch.ethz.idsc.tensor.Scalar;
       NInterface nInterface = (NInterface) scalar;
       return nInterface.n(mathContext);
     }
-    return scalar;
+    return Objects.requireNonNull(scalar);
   }
 }

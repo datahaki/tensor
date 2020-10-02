@@ -53,11 +53,7 @@ public class AbsSquaredTest extends TestCase {
     AssertFail.of(() -> AbsSquared.FUNCTION.apply(Gaussian.of(2, 3)));
   }
 
-  public void testFail() {
+  public void testStringFail() {
     AssertFail.of(() -> AbsSquared.FUNCTION.apply(StringScalar.of("idsc")));
-  }
-
-  public void testFailNull() {
-    AssertFail.of(() -> AbsSquared.FUNCTION.apply(null));
   }
 }

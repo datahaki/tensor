@@ -48,13 +48,15 @@ import ch.ethz.idsc.tensor.Scalars;
       final String unit;
       final Scalar exponent;
       if (0 <= index) {
-        unit = token.substring(0, index);
+        unit = token.substring(0, index).trim();
         exponent = Scalars.fromString(token.substring(index + 1));
       } else {
-        unit = token;
+        unit = token.trim();
+        if (unit.isEmpty())
+          continue;
         exponent = RealScalar.ONE;
       }
-      String key = StaticHelper.requireAtomic(unit.trim());
+      String key = StaticHelper.requireAtomic(unit);
       if (map.containsKey(key)) { // exponent exists
         Scalar sum = map.get(key).add(exponent);
         if (Scalars.isZero(sum))

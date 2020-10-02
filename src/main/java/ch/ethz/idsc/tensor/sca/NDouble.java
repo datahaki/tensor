@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.tensor.Scalar;
 
 /* package */ class NDouble extends N {
@@ -16,6 +18,6 @@ import ch.ethz.idsc.tensor.Scalar;
       NInterface nInterface = (NInterface) scalar;
       return nInterface.n();
     }
-    return scalar;
+    return Objects.requireNonNull(scalar);
   }
 }

@@ -37,13 +37,8 @@ public class TrigonometryInterfaceTest extends TestCase {
     Chop._13.requireClose(Cos.of(scalar), RealScalar.ONE.negate());
   }
 
-  public void testQuantityFail() {
-    Scalar scalar = Quantity.of(1.2, "m");
-    AssertFail.of(() -> Sin.of(scalar));
-  }
-
-  public void testGaussScalarFail() {
-    Scalar scalar = GaussScalar.of(2, 7);
-    AssertFail.of(() -> Sin.of(scalar));
+  public void testFails() {
+    AssertFail.of(() -> Sin.of(Quantity.of(1.2, "m")));
+    AssertFail.of(() -> Sin.of(GaussScalar.of(2, 7)));
   }
 }

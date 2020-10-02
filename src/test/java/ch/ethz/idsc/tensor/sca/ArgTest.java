@@ -48,8 +48,4 @@ public class ArgTest extends TestCase {
     Scalar scalar = GaussScalar.of(1, 7);
     AssertFail.of(() -> Arg.of(scalar));
   }
-
-  public void testNullFail() {
-    AssertFail.of(() -> Arg.FUNCTION.apply(null));
-  }
 }

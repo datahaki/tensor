@@ -109,7 +109,6 @@ public class ClipsTest extends TestCase {
   public void testQuantityFail() {
     AssertFail.of(() -> Clips.unit().apply(Quantity.of(-5, "m")));
     AssertFail.of(() -> Clips.absoluteOne().apply(Quantity.of(-5, "m")));
-    // AssertFail.of(() -> null);
   }
 
   public void testQuantityMixedZero() {

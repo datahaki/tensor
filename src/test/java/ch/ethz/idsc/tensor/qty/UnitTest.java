@@ -17,6 +17,17 @@ public class UnitTest extends TestCase {
     assertEquals(Unit.of(" m ").toString(), "m");
     assertEquals(Unit.of(" m ^ 3 ").toString(), "m^3");
     assertEquals(Unit.of(" m ^ 3 * rad ").toString(), "m^3*rad");
+    assertEquals(Unit.of(""), Unit.ONE);
+    assertEquals(Unit.of(" "), Unit.ONE);
+    assertEquals(Unit.of("  "), Unit.ONE);
+  }
+
+  public void testSeparators() {
+    assertEquals(Unit.of("*"), Unit.ONE);
+    assertEquals(Unit.of(" * "), Unit.ONE);
+    assertEquals(Unit.of("**"), Unit.ONE);
+    assertEquals(Unit.of("* * "), Unit.ONE);
+    assertEquals(Unit.of("  **  * "), Unit.ONE);
   }
 
   public void testEqualsHash() {
@@ -48,11 +59,10 @@ public class UnitTest extends TestCase {
   }
 
   public void testFail() {
-    Unit.of("*"); // gives unit ONE, not necessarily an error
     AssertFail.of(() -> Unit.of(" m >"));
     AssertFail.of(() -> Unit.of("| m "));
+    AssertFail.of(() -> Unit.of("|"));
     AssertFail.of(() -> Unit.of("^"));
-    AssertFail.of(() -> Unit.of(" ")); // FIXME
   }
 
   public void testNullFail() {
