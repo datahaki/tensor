@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class Normalize2DTest extends TestCase {
@@ -45,12 +46,7 @@ public class Normalize2DTest extends TestCase {
     Tensor vector = Tensors.vectorDouble(0.0, 0.0);
     NormalizeUnlessZero.with(Norm._2::ofVector).apply(vector);
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Norm._2);
-    try {
-      tensorUnaryOperator.apply(vector);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tensorUnaryOperator.apply(vector));
   }
 
   public void testNumberQFail1() {

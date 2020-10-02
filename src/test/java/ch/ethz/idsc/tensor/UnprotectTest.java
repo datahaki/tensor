@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnprotectTest extends TestCase {
@@ -36,20 +37,11 @@ public class UnprotectTest extends TestCase {
   public void testUsingNCopies() {
     Tensor tensor = Unprotect.using(Collections.nCopies(5, RealScalar.of(2)));
     assertEquals(tensor, Tensors.vector(2, 2, 2, 2, 2));
-    try {
-      tensor.append(RealScalar.ONE);
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tensor.append(RealScalar.ONE));
   }
 
   public void testEmptyLinkedListUnmodifiable() {
-    try {
-      Unprotect.using(new LinkedList<>()).unmodifiable().append(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Unprotect.using(new LinkedList<>()).unmodifiable().append(RealScalar.ZERO));
   }
 
   public void testByref() {
@@ -65,18 +57,8 @@ public class UnprotectTest extends TestCase {
     Tensor byref = Unprotect.byRef(beg, null, beg);
     byref.get(0);
     byref.get(2);
-    try {
-      byref.get(1); // invokes copy() on the entry
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      byref.extract(0, 3); // invokes copy() on the entries
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> byref.get(1)); // invokes copy() on the entry
+    AssertFail.of(() -> byref.extract(0, 3)); // invokes copy() on the entries
   }
 
   public void testDimension1() {
@@ -86,49 +68,24 @@ public class UnprotectTest extends TestCase {
   }
 
   public void testFailEmpty() {
-    try {
-      Unprotect.dimension1(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Unprotect.dimension1(Tensors.empty()));
   }
 
   public void testFail1() {
     Tensor unstruct = Tensors.fromString("{{-1, 0, 1, 2}, {3, 4, 5}}");
     assertEquals(unstruct.length(), 2);
-    try {
-      Unprotect.dimension1(unstruct);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Unprotect.dimension1(unstruct));
   }
 
   public void testFail2() {
-    try {
-      Unprotect.dimension1(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Unprotect.dimension1(RealScalar.ONE));
   }
 
   public void testReferencesScalar() {
-    try {
-      Unprotect.references(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Unprotect.references(RealScalar.ONE));
   }
 
   public void testReferencesNull() {
-    try {
-      Unprotect.references(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Unprotect.references(null));
   }
 }

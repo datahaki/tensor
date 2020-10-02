@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RampTest extends TestCase {
@@ -36,11 +37,6 @@ public class RampTest extends TestCase {
 
   public void testFail() {
     Scalar scalar = Gaussian.of(2, 3);
-    try {
-      Ramp.FUNCTION.apply(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Ramp.FUNCTION.apply(scalar));
   }
 }

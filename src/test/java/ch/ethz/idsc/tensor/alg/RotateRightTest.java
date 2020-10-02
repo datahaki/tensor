@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RotateRightTest extends TestCase {
@@ -34,20 +35,10 @@ public class RotateRightTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      RotateRight.of(RealScalar.ONE, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RotateRight.of(RealScalar.ONE, 0));
   }
 
   public void testFailNull() {
-    try {
-      RotateRight.of(null, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RotateRight.of(null, 0));
   }
 }

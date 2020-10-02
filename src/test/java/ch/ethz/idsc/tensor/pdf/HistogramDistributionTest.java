@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HistogramDistributionTest extends TestCase {
@@ -48,12 +49,7 @@ public class HistogramDistributionTest extends TestCase {
 
   public void testFreedmanMin() {
     HistogramDistribution.of(Tensors.vector(3, 4));
-    try {
-      HistogramDistribution.of(Tensors.vector(3, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(3, 3)));
   }
 
   public void testScott() {
@@ -205,26 +201,11 @@ public class HistogramDistributionTest extends TestCase {
   }
 
   public void testFailEmpty() {
-    try {
-      HistogramDistribution.of(Tensors.empty(), RealScalar.of(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HistogramDistribution.of(Tensors.empty(), RealScalar.of(2)));
   }
 
   public void testFailWidth() {
-    try {
-      HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.of(-2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.ZERO));
+    AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.of(-2)));
   }
 }

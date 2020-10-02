@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TriangularDistributionTest extends TestCase {
@@ -48,35 +49,15 @@ public class TriangularDistributionTest extends TestCase {
   public void testExactFail() {
     TriangularDistribution.of(RealScalar.of(3), RealScalar.of(3), RealScalar.of(5));
     TriangularDistribution.of(RealScalar.of(3), RealScalar.of(5), RealScalar.of(5));
-    try {
-      TriangularDistribution.of(RealScalar.of(3), RealScalar.of(3), RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      TriangularDistribution.of(RealScalar.of(3), RealScalar.of(4), RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TriangularDistribution.of(RealScalar.of(3), RealScalar.of(3), RealScalar.of(3)));
+    AssertFail.of(() -> TriangularDistribution.of(RealScalar.of(3), RealScalar.of(4), RealScalar.of(3)));
   }
 
   public void testNumericFail() {
     TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(3.), RealScalar.of(5.));
     TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(5.), RealScalar.of(5.));
-    try {
-      TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(3.), RealScalar.of(3.));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(4.), RealScalar.of(3.));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(3.), RealScalar.of(3.)));
+    AssertFail.of(() -> TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(4.), RealScalar.of(3.)));
   }
 
   public void testPdfLo() {

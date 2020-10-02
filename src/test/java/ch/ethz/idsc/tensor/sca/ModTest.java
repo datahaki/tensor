@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ModTest extends TestCase {
@@ -162,47 +163,22 @@ public class ModTest extends TestCase {
   public void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(5, "m");
     Scalar qs2 = Quantity.of(3, "s");
-    try {
-      Mod.function(qs2).apply(qs1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Mod.function(qs2).apply(qs1));
   }
 
   public void testNull1Fail() {
-    try {
-      Mod.function(RealScalar.ONE, null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Mod.function(RealScalar.ONE, null));
   }
 
   public void testNull2Fail() {
-    try {
-      Mod.function(null, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Mod.function(null, RealScalar.ONE));
   }
 
   public void testZeroAFail() {
-    try {
-      Mod.function(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Mod.function(RealScalar.ZERO));
   }
 
   public void testZeroBFail() {
-    try {
-      Mod.function(RealScalar.ZERO, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Mod.function(RealScalar.ZERO, RealScalar.ONE));
   }
 }

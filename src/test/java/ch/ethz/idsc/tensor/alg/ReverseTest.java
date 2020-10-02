@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ReverseTest extends TestCase {
@@ -36,12 +37,7 @@ public class ReverseTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Reverse.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Reverse.of(RealScalar.ONE));
   }
 
   private static Tensor nestRank(Tensor tensor, UnaryOperator<Tensor> operator) {

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.alg.TensorMap;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorPmulTest extends TestCase {
@@ -48,11 +49,6 @@ public class TensorPmulTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Tensors.vector(1, 2, 3).pmul(Tensors.vector(1, 2, 3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Tensors.vector(1, 2, 3).pmul(Tensors.vector(1, 2, 3, 4)));
   }
 }

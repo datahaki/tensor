@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GaborMatrixTest extends TestCase {
@@ -22,20 +23,10 @@ public class GaborMatrixTest extends TestCase {
   }
 
   public void testFailVector() {
-    try {
-      GaborMatrix.of(3, RealScalar.ONE, RealScalar.of(0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GaborMatrix.of(3, RealScalar.ONE, RealScalar.of(0)));
   }
 
   public void testFailMatrix() {
-    try {
-      GaborMatrix.of(3, HilbertMatrix.of(3), RealScalar.of(0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GaborMatrix.of(3, HilbertMatrix.of(3), RealScalar.of(0)));
   }
 }

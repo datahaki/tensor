@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorsTest extends TestCase {
@@ -24,12 +25,7 @@ public class TensorsTest extends TestCase {
 
   public void testReserveFail() {
     Tensors.reserve(0);
-    try {
-      Tensors.reserve(-1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Tensors.reserve(-1));
   }
 
   public void testNorm() {

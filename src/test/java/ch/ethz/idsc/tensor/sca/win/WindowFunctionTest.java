@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class WindowFunctionTest extends TestCase {
@@ -30,21 +31,11 @@ public class WindowFunctionTest extends TestCase {
 
   public void testInsideFail() {
     for (WindowFunction windowFunction : WindowFunction.values())
-      try {
-        windowFunction.apply(Quantity.of(0.1, "s"));
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> windowFunction.apply(Quantity.of(0.1, "s")));
   }
 
   public void testOustideFail() {
     for (WindowFunction windowFunction : WindowFunction.values())
-      try {
-        windowFunction.apply(Quantity.of(1, "s"));
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> windowFunction.apply(Quantity.of(1, "s")));
   }
 }

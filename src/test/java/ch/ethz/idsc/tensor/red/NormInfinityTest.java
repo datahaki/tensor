@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NormInfinityTest extends TestCase {
@@ -29,12 +30,7 @@ public class NormInfinityTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Norm.INFINITY.ofVector(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Norm.INFINITY.ofVector(RealScalar.ONE));
   }
 
   public void testPackageVisibility() {

@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BinCountsTest extends TestCase {
@@ -41,47 +42,17 @@ public class BinCountsTest extends TestCase {
   }
 
   public void testNegativeFail() {
-    try {
-      BinCounts.of(Tensors.vector(-1e-10), RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      BinCounts.of(Tensors.vector(-1e-10, -10), RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      BinCounts.of(Tensors.vector(1, 2, 3, 4, 0, -3, 12, 32), RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BinCounts.of(Tensors.vector(-1e-10), RealScalar.ONE));
+    AssertFail.of(() -> BinCounts.of(Tensors.vector(-1e-10, -10), RealScalar.ONE));
+    AssertFail.of(() -> BinCounts.of(Tensors.vector(1, 2, 3, 4, 0, -3, 12, 32), RealScalar.ONE));
   }
 
   public void testDomainFail() {
-    try {
-      BinCounts.of(Tensors.vector(-1e-10), RealScalar.of(1.0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BinCounts.of(Tensors.vector(-1e-10), RealScalar.of(1.0)));
   }
 
   public void testWidthFail() {
-    try {
-      BinCounts.of(Tensors.vector(1, 2), RealScalar.of(0.0)); // zero
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      BinCounts.of(Tensors.vector(1, 2), RealScalar.of(-0.2)); // negative
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BinCounts.of(Tensors.vector(1, 2), RealScalar.of(0.0))); // zero
+    AssertFail.of(() -> BinCounts.of(Tensors.vector(1, 2), RealScalar.of(-0.2))); // negative
   }
 }

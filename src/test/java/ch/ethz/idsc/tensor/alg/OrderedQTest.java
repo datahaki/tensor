@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.lie.Permutations;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Factorial;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class OrderedQTest extends TestCase {
@@ -40,40 +41,20 @@ public class OrderedQTest extends TestCase {
 
   public void testRequire() {
     OrderedQ.require(Tensors.vector(1, 1, 2, 4, 4, 4));
-    try {
-      OrderedQ.require(Tensors.vector(0, 3, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> OrderedQ.require(Tensors.vector(0, 3, 1)));
   }
 
   public void testScalarFail() {
-    try {
-      OrderedQ.of(Pi.VALUE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> OrderedQ.of(Pi.VALUE));
   }
 
   public void testUncomparable1Fail() {
     Tensor tensor = Tensors.fromString("{3[s], 4[s], 2[m]}");
-    try {
-      OrderedQ.of(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> OrderedQ.of(tensor));
   }
 
   public void testUncomparable2Fail() {
     Tensor tensor = Tensors.fromString("{3[s], 1[s], 2[m]}");
-    try {
-      OrderedQ.of(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> OrderedQ.of(tensor));
   }
 }

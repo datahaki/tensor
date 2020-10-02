@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Times;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FactorialTest extends TestCase {
@@ -47,20 +48,10 @@ public class FactorialTest extends TestCase {
   }
 
   public void testNegativeOneFail() {
-    try {
-      Factorial.of(RealScalar.of(-1));
-      fail();
-    } catch (Exception exception) {
-      assertEquals(exception.getMessage(), "-1");
-    }
+    AssertFail.of(() -> Factorial.of(RealScalar.of(-1)));
   }
 
   public void testNumericFail() {
-    try {
-      Factorial.of(RealScalar.of(1.2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Factorial.of(RealScalar.of(1.2)));
   }
 }

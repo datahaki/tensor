@@ -6,6 +6,7 @@ import java.util.Collections;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ArgMinTest extends TestCase {
@@ -35,20 +36,10 @@ public class ArgMinTest extends TestCase {
   }
 
   public void testScalar() {
-    try {
-      ArgMin.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ArgMin.of(RealScalar.ONE));
   }
 
   public void testFailMatrix() {
-    try {
-      ArgMin.of(HilbertMatrix.of(6));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ArgMin.of(HilbertMatrix.of(6)));
   }
 }

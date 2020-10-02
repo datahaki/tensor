@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class InterpolatingPolynomialTest extends TestCase {
@@ -59,12 +60,7 @@ public class InterpolatingPolynomialTest extends TestCase {
     Tolerance.CHOP.requireClose( //
         domain.map(suo1), //
         domain.multiply(RealScalar.of(3)).map(RealScalar.ONE::subtract).map(suo2));
-    try {
-      InterpolatingPolynomial.of(suppor).scalarTensorFunction(Tensors.vector(2, 3, 4, 5));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> InterpolatingPolynomial.of(suppor).scalarTensorFunction(Tensors.vector(2, 3, 4, 5)));
   }
 
   public void testQuantity() {
@@ -79,43 +75,18 @@ public class InterpolatingPolynomialTest extends TestCase {
   public void testScalarLengthFail() throws ClassNotFoundException, IOException {
     InterpolatingPolynomial interpolatingPolynomial = //
         Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
-    try {
-      interpolatingPolynomial.scalarUnaryOperator(Tensors.vector(1, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      interpolatingPolynomial.scalarUnaryOperator(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> interpolatingPolynomial.scalarUnaryOperator(Tensors.vector(1, 2)));
+    AssertFail.of(() -> interpolatingPolynomial.scalarUnaryOperator(HilbertMatrix.of(3)));
   }
 
   public void testTensorLengthFail() throws ClassNotFoundException, IOException {
     InterpolatingPolynomial interpolatingPolynomial = //
         Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
-    try {
-      interpolatingPolynomial.scalarTensorFunction(Tensors.vector(1, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      interpolatingPolynomial.scalarTensorFunction(HilbertMatrix.of(2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> interpolatingPolynomial.scalarTensorFunction(Tensors.vector(1, 2)));
+    AssertFail.of(() -> interpolatingPolynomial.scalarTensorFunction(HilbertMatrix.of(2, 3)));
   }
 
   public void testKnotsNonVectorFail() {
-    try {
-      InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, IdentityMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, IdentityMatrix.of(3)));
   }
 }

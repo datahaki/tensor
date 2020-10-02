@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class InverseErfTest extends TestCase {
@@ -24,17 +25,7 @@ public class InverseErfTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      InverseErf.FUNCTION.apply(RealScalar.of(+1.3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      InverseErf.FUNCTION.apply(RealScalar.of(-1.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> InverseErf.FUNCTION.apply(RealScalar.of(+1.3)));
+    AssertFail.of(() -> InverseErf.FUNCTION.apply(RealScalar.of(-1.1)));
   }
 }

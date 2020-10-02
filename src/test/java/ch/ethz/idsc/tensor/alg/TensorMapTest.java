@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.opt.TensorScalarFunction;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Increment;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorMapTest extends TestCase {
@@ -84,11 +85,6 @@ public class TensorMapTest extends TestCase {
 
   public void testNegativeFail() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}");
-    try {
-      TensorMap.of(Total::of, tensor, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TensorMap.of(Total::of, tensor, -1));
   }
 }

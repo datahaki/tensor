@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MaxTest extends TestCase {
@@ -68,17 +69,7 @@ public class MaxTest extends TestCase {
   public void testFail() {
     Scalar string = StringScalar.of("string");
     Scalar gauss = GaussScalar.of(1, 3);
-    try {
-      Max.of(string, gauss);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Max.of(gauss, string);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Max.of(string, gauss));
+    AssertFail.of(() -> Max.of(gauss, string));
   }
 }

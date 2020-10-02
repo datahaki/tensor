@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Increment;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LinearInterpolationTest extends TestCase {
@@ -145,22 +146,12 @@ public class LinearInterpolationTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      LinearInterpolation.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LinearInterpolation.of(RealScalar.ONE));
   }
 
   public void test0D() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.empty());
-    try {
-      interpolation.get(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> interpolation.get(RealScalar.ZERO));
   }
 
   public void test1D() {
@@ -179,11 +170,6 @@ public class LinearInterpolationTest extends TestCase {
   }
 
   public void testFailNull() {
-    try {
-      LinearInterpolation.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LinearInterpolation.of(null));
   }
 }

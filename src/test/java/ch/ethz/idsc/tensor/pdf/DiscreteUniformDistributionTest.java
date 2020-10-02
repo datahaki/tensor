@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DiscreteUniformDistributionTest extends TestCase {
@@ -70,48 +71,18 @@ public class DiscreteUniformDistributionTest extends TestCase {
   public void testFailQuantile() {
     Distribution distribution = DiscreteUniformDistribution.of(3, 10);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    try {
-      inverseCDF.quantile(RealScalar.of(-0.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      inverseCDF.quantile(RealScalar.of(1.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   public void testFailsOrder() {
-    try {
-      DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DiscreteUniformDistribution.of(3, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DiscreteUniformDistribution.of(3, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(2)));
+    AssertFail.of(() -> DiscreteUniformDistribution.of(3, 2));
+    AssertFail.of(() -> DiscreteUniformDistribution.of(3, 3));
   }
 
   public void testFailsInt() {
-    try {
-      DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(4.5));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(4.5)));
   }
 
   public void testRandomVariate() {

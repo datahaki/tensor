@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ClipPointTest extends TestCase {
@@ -48,23 +49,13 @@ public class ClipPointTest extends TestCase {
     Scalar value = Quantity.of(2, "m*s^-1");
     Clip clip = Clips.interval(value, value);
     assertEquals(clip.rescale(Quantity.of(4, "m*s^-1")), RealScalar.ZERO);
-    try {
-      clip.requireInside(Quantity.of(3, "m*s^-1"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> clip.requireInside(Quantity.of(3, "m*s^-1")));
   }
 
   public void testRescaleFail() {
     Scalar value = Quantity.of(2, "m*s^-1");
     Clip clip = Clips.interval(value, value);
     assertEquals(clip.requireInside(value), value);
-    try {
-      clip.rescale(Quantity.of(2, "kg"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> clip.rescale(Quantity.of(2, "kg")));
   }
 }

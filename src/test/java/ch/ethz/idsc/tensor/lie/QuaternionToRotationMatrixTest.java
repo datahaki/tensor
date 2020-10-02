@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.qty;
+package ch.ethz.idsc.tensor.lie;
 
 import java.security.SecureRandom;
 import java.util.Random;
@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuaternionToRotationMatrixTest extends TestCase {
@@ -62,17 +63,7 @@ public class QuaternionToRotationMatrixTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      QuaternionToRotationMatrix.of(Quaternion.of(0, 0, 0, 0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      QuaternionToRotationMatrix.of(Quaternion.of(0.0, 0.0, 0.0, 0.0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> QuaternionToRotationMatrix.of(Quaternion.of(0, 0, 0, 0)));
+    AssertFail.of(() -> QuaternionToRotationMatrix.of(Quaternion.of(0.0, 0.0, 0.0, 0.0)));
   }
 }

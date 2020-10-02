@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Cos;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NestListTest extends TestCase {
@@ -61,26 +62,11 @@ public class NestListTest extends TestCase {
   }
 
   public void testFailNull() {
-    try {
-      NestList.of(Cos::of, null, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NestList.of(Cos::of, null, 0));
   }
 
   public void testFailNegative() {
-    try {
-      NestList.of(Cos::of, RealScalar.ONE, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      NestList.of(Cos::of, RealScalar.ONE, -2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NestList.of(Cos::of, RealScalar.ONE, -1));
+    AssertFail.of(() -> NestList.of(Cos::of, RealScalar.ONE, -2));
   }
 }

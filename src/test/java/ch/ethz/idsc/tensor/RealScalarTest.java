@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.SignInterface;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RealScalarTest extends TestCase {
@@ -122,20 +123,10 @@ public class RealScalarTest extends TestCase {
     Number number = new AtomicInteger(123);
     Scalar scalar = RealScalar.of(number.intValue());
     assertEquals(scalar, RealScalar.of(123));
-    try {
-      RealScalar.of(number);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RealScalar.of(number));
   }
 
   public void testNullFail() {
-    try {
-      RealScalar.of((Number) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RealScalar.of((Number) null));
   }
 }

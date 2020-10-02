@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.red.Tally;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class EmpiricalDistributionTest extends TestCase {
@@ -115,73 +116,33 @@ public class EmpiricalDistributionTest extends TestCase {
 
   public void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(0, 3, 1)));
-    try {
-      inverseCDF.quantile(RealScalar.of(-0.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      inverseCDF.quantile(RealScalar.of(1.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   public void testWrongReference() {
-    try {
-      AbstractDiscreteDistribution distribution = (AbstractDiscreteDistribution) //
-      EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
-      distribution.quantile(RealScalar.of(Math.nextDown(0.0)));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AbstractDiscreteDistribution distribution = (AbstractDiscreteDistribution) //
+    EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
+    AssertFail.of(() -> distribution.quantile(RealScalar.of(Math.nextDown(0.0))));
   }
 
   public void testNegativeFail() {
-    try {
-      EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
   }
 
   public void testZeroFail() {
-    try {
-      EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 0)));
   }
 
   public void testEmptyFail() {
-    try {
-      EmpiricalDistribution.fromUnscaledPDF(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> EmpiricalDistribution.fromUnscaledPDF(Tensors.empty()));
   }
 
   public void testScalarFail() {
-    try {
-      EmpiricalDistribution.fromUnscaledPDF(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> EmpiricalDistribution.fromUnscaledPDF(RealScalar.ONE));
   }
 
   public void testMatrixFail() {
-    try {
-      EmpiricalDistribution.fromUnscaledPDF(HilbertMatrix.of(10));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> EmpiricalDistribution.fromUnscaledPDF(HilbertMatrix.of(10)));
   }
 }

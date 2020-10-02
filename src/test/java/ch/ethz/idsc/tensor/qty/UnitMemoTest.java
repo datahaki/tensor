@@ -4,16 +4,12 @@ package ch.ethz.idsc.tensor.qty;
 import java.lang.reflect.Modifier;
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitMemoTest extends TestCase {
   private static void _confirmFail(String string) {
-    try {
-      UnitMemo.INSTANCE.lookup(string);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnitMemo.INSTANCE.lookup(string));
   }
 
   public void testLookup() {

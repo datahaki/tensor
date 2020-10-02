@@ -58,7 +58,7 @@ public class WeiszfeldMethod implements SpatialMedian, Serializable {
       Tensor dist = Tensor.of(sequence.stream().map(prev::subtract).map(Norm._2::ofVector));
       int index = ArgMin.of(dist);
       if (Scalars.isZero(dist.Get(index)))
-        return Optional.of(point.copy());
+        return Optional.of(point);
       Tensor invdist = dist.map(Scalar::reciprocal);
       point = NORMALIZE.apply(weights.pmul(invdist)).dot(sequence);
       if (chop.isClose(point, prev))

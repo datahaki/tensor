@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PowerIterationTest extends TestCase {
@@ -37,35 +38,15 @@ public class PowerIterationTest extends TestCase {
   }
 
   public void testZerosFail() {
-    try {
-      PowerIteration.of(Array.zeros(3, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PowerIteration.of(Array.zeros(3, 3)));
   }
 
   public void testVectorFail() {
-    try {
-      PowerIteration.of(Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PowerIteration.of(Tensors.vector(1, 2, 3)));
   }
 
   public void testMatrixFail() {
-    try {
-      PowerIteration.of(HilbertMatrix.of(4, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      PowerIteration.of(HilbertMatrix.of(3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PowerIteration.of(HilbertMatrix.of(4, 3)));
+    AssertFail.of(() -> PowerIteration.of(HilbertMatrix.of(3, 4)));
   }
 }

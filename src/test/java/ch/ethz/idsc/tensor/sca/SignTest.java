@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.Unit;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SignTest extends TestCase {
@@ -77,66 +78,26 @@ public class SignTest extends TestCase {
     Sign.requirePositiveOrZero(RealScalar.ZERO);
     Sign.requirePositiveOrZero(RealScalar.ONE);
     Sign.requirePositiveOrZero(Quantity.of(2, "m*s^-2"));
-    try {
-      Sign.requirePositiveOrZero(RealScalar.ONE.negate());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Sign.requirePositiveOrZero(DoubleScalar.INDETERMINATE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Sign.requirePositiveOrZero(RealScalar.ONE.negate()));
+    AssertFail.of(() -> Sign.requirePositiveOrZero(DoubleScalar.INDETERMINATE));
   }
 
   public void testRequirePositive() {
     Sign.requirePositive(RealScalar.ONE);
     Sign.requirePositive(Quantity.of(2, "m*s^-2"));
-    try {
-      Sign.requirePositive(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Sign.requirePositive(RealScalar.ONE.negate());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Sign.requirePositive(DoubleScalar.INDETERMINATE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Sign.requirePositive(RealScalar.ZERO));
+    AssertFail.of(() -> Sign.requirePositive(RealScalar.ONE.negate()));
+    AssertFail.of(() -> Sign.requirePositive(DoubleScalar.INDETERMINATE));
   }
 
   private static void _checkFailAll(Scalar value) {
-    try {
-      Sign.of(value);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Sign.of(value));
     _checkSignIntFail(value);
   }
 
   private static void _checkSignIntFail(Scalar value) {
-    try {
-      Sign.isPositive(value);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Sign.isNegative(value);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Sign.isPositive(value));
+    AssertFail.of(() -> Sign.isNegative(value));
   }
 
   public void testFail() {

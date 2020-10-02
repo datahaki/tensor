@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantityComparatorTest extends TestCase {
@@ -41,20 +42,10 @@ public class QuantityComparatorTest extends TestCase {
   public void testIncompatibleFail() {
     Comparator<Scalar> comparator = QuantityComparator.SI();
     Tensor vector = Tensors.fromString("{4[h], 300[s], 2[km], 180[s]}");
-    try {
-      Sort.of(vector, comparator);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Sort.of(vector, comparator));
   }
 
   public void testNullFail() {
-    try {
-      QuantityComparator.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> QuantityComparator.of(null));
   }
 }

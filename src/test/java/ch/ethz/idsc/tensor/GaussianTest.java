@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GaussianTest extends TestCase {
@@ -79,11 +80,6 @@ public class GaussianTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Gaussian.of(2, -3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Gaussian.of(2, -3));
   }
 }

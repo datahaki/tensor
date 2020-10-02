@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.alg;
 
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DropTest extends TestCase {
@@ -20,35 +21,15 @@ public class DropTest extends TestCase {
     Drop.head(Tensors.vector(1, 2), 0);
     Drop.head(Tensors.vector(1, 2), 1);
     Drop.head(Tensors.vector(1, 2), 2);
-    try {
-      Drop.head(Tensors.vector(1, 2), 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Drop.head(Tensors.vector(1, 2), -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Drop.head(Tensors.vector(1, 2), 3));
+    AssertFail.of(() -> Drop.head(Tensors.vector(1, 2), -1));
   }
 
   public void testTailFail() {
     Drop.tail(Tensors.vector(1, 2), 0);
     Drop.tail(Tensors.vector(1, 2), 1);
     Drop.tail(Tensors.vector(1, 2), 2);
-    try {
-      Drop.tail(Tensors.vector(1, 2), 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Drop.tail(Tensors.vector(1, 2), -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Drop.tail(Tensors.vector(1, 2), 3));
+    AssertFail.of(() -> Drop.tail(Tensors.vector(1, 2), -1));
   }
 }

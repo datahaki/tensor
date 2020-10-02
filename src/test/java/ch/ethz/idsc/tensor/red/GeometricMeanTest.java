@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GeometricMeanTest extends TestCase {
@@ -25,21 +26,11 @@ public class GeometricMeanTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      GeometricMean.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GeometricMean.of(RealScalar.ONE));
   }
 
   public void testFailEmpty() {
-    try {
-      GeometricMean.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GeometricMean.of(Tensors.empty()));
   }
 
   public void testFailMatrix() {

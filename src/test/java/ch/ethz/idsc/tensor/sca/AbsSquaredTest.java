@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class AbsSquaredTest extends TestCase {
@@ -45,38 +46,18 @@ public class AbsSquaredTest extends TestCase {
   }
 
   public void testGaussScalarFail() {
-    try {
-      AbsSquared.FUNCTION.apply(GaussScalar.of(2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> AbsSquared.FUNCTION.apply(GaussScalar.of(2, 3)));
   }
 
   public void testGaussianFail() {
-    try {
-      AbsSquared.FUNCTION.apply(Gaussian.of(2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> AbsSquared.FUNCTION.apply(Gaussian.of(2, 3)));
   }
 
   public void testFail() {
-    try {
-      AbsSquared.FUNCTION.apply(StringScalar.of("idsc"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> AbsSquared.FUNCTION.apply(StringScalar.of("idsc")));
   }
 
   public void testFailNull() {
-    try {
-      AbsSquared.FUNCTION.apply(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> AbsSquared.FUNCTION.apply(null));
   }
 }

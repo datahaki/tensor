@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuaternionTest extends TestCase {
@@ -29,18 +30,8 @@ public class QuaternionTest extends TestCase {
     Quaternion actual = quaternion.reciprocal();
     Quaternion expect = Quaternion.of(Scalars.fromString("3/38[m^-1]"), Tensors.fromString("{-1/19[m^-1], -3/38[m^-1], -2/19[m^-1]}"));
     assertEquals(expect, actual);
-    try {
-      quaternion.exp();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      quaternion.log();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> quaternion.exp());
+    AssertFail.of(() -> quaternion.log());
   }
 
   public void testComplex() {
@@ -236,68 +227,28 @@ public class QuaternionTest extends TestCase {
   }
 
   public void testMatrixFail() {
-    try {
-      Quaternion.of(RealScalar.ONE, HilbertMatrix.of(3, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quaternion.of(RealScalar.ONE, RealScalar.of(4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quaternion.of(RealScalar.ONE, HilbertMatrix.of(3, 3)));
+    AssertFail.of(() -> Quaternion.of(RealScalar.ONE, RealScalar.of(4)));
   }
 
   public void testNull1Fail() {
-    try {
-      Quaternion.of(null, Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quaternion.of(RealScalar.ONE, null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quaternion.of(null, Tensors.vector(1, 2, 3)));
+    AssertFail.of(() -> Quaternion.of(RealScalar.ONE, null));
   }
 
   public void testNull2Fail() {
-    try {
-      Quaternion.of(null, RealScalar.ONE, RealScalar.of(2), RealScalar.of(8));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quaternion.of(null, RealScalar.ONE, RealScalar.of(2), RealScalar.of(8)));
   }
 
   public void testNull2bFail() {
-    try {
-      Quaternion.of(RealScalar.ONE, null, RealScalar.of(2), RealScalar.of(8));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quaternion.of(RealScalar.ONE, null, RealScalar.of(2), RealScalar.of(8)));
   }
 
   public void testNull3Fail() {
-    try {
-      Quaternion.of(1, null, 2, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quaternion.of(1, null, 2, 3));
   }
 
   public void testFormatFail() {
-    try {
-      Quaternion.of(RealScalar.ONE, Tensors.vector(1, 2, 3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quaternion.of(RealScalar.ONE, Tensors.vector(1, 2, 3, 4)));
   }
 }

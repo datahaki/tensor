@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HannWindowTest extends TestCase {
@@ -53,11 +54,6 @@ public class HannWindowTest extends TestCase {
   }
 
   public void testQuantityFail() {
-    try {
-      HannWindow.FUNCTION.apply(Quantity.of(2, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HannWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 }

@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DiscreteCDFTest extends TestCase {
@@ -77,11 +78,6 @@ public class DiscreteCDFTest extends TestCase {
   }
 
   public void testFailPoisson() {
-    try {
-      PoissonDistribution.of(RealScalar.of(800));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PoissonDistribution.of(RealScalar.of(800)));
   }
 }

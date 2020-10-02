@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class Log10Test extends TestCase {
@@ -35,11 +36,6 @@ public class Log10Test extends TestCase {
 
   public void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
-    try {
-      Log10.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Log10.of(scalar));
   }
 }

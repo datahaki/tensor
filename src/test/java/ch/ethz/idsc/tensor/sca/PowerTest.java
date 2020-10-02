@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PowerTest extends TestCase {
@@ -47,12 +48,7 @@ public class PowerTest extends TestCase {
   }
 
   public void testZeroFail() {
-    try {
-      Power.of(0, -2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.of(0, -2));
   }
 
   public void testNegativeOne() {
@@ -68,21 +64,11 @@ public class PowerTest extends TestCase {
   }
 
   public void testZeroComplex1Fail() {
-    try {
-      Power.of(RealScalar.ZERO, ComplexScalar.I);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.of(RealScalar.ZERO, ComplexScalar.I));
   }
 
   public void testZeroComplex2Fail() {
-    try {
-      Power.of(RealScalar.ZERO, Scalars.fromString("-0.1+3*I"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.of(RealScalar.ZERO, Scalars.fromString("-0.1+3*I")));
   }
 
   public void testNegative() {
@@ -117,12 +103,7 @@ public class PowerTest extends TestCase {
 
   public void testTypeFail() {
     Scalar scalar = StringScalar.of("some");
-    try {
-      Power.of(scalar, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.of(scalar, 0));
   }
 
   public void testDecimal() {
@@ -132,12 +113,7 @@ public class PowerTest extends TestCase {
 
   public void testGaussScalar() {
     Scalar scalar = GaussScalar.of(6, 31);
-    try {
-      Power.of(scalar, 3.13);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.of(scalar, 3.13));
   }
 
   public void testQuantity1() {
@@ -157,29 +133,14 @@ public class PowerTest extends TestCase {
   public void testQuantityFail() {
     Scalar qs1 = Quantity.of(2, "cd");
     Scalar qs2 = Quantity.of(4, "cd");
-    try {
-      Power.of(qs1, qs2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.of(qs1, qs2));
   }
 
   public void testFailNullNumber() {
-    try {
-      Power.function((Number) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.function((Number) null));
   }
 
   public void testFailNullScalar() {
-    try {
-      Power.function((Scalar) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.function((Scalar) null));
   }
 }

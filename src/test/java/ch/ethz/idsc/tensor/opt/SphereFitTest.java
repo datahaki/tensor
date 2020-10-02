@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SphereFitTest extends TestCase {
@@ -94,47 +95,22 @@ public class SphereFitTest extends TestCase {
   }
 
   public void testFailEmpty() {
-    try {
-      SphereFit.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SphereFit.of(Tensors.empty()));
   }
 
   public void testFailScalar() {
-    try {
-      SphereFit.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SphereFit.of(RealScalar.ONE));
   }
 
   public void testFailRank3() {
-    try {
-      SphereFit.of(LeviCivitaTensor.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SphereFit.of(LeviCivitaTensor.of(3)));
   }
 
   public void testFailUnstructured1() {
-    try {
-      SphereFit.of(Tensors.fromString("{{1, 2, 3}, {4, -5}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SphereFit.of(Tensors.fromString("{{1, 2, 3}, {4, -5}}")));
   }
 
   public void testFailUnstructured2() {
-    try {
-      SphereFit.of(Tensors.fromString("{{1, 2, 3}, {4, -5}, {6, 7, 8}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SphereFit.of(Tensors.fromString("{{1, 2, 3}, {4, -5}, {6, 7, 8}}")));
   }
 }

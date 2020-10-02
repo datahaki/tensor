@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ErfcTest extends TestCase {
@@ -39,11 +40,6 @@ public class ErfcTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      ErfcRestricted.FUNCTION.apply(GaussScalar.of(6, 7));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ErfcRestricted.FUNCTION.apply(GaussScalar.of(6, 7)));
   }
 }

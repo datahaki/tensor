@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Increment;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LanczosInterpolationTest extends TestCase {
@@ -90,27 +91,12 @@ public class LanczosInterpolationTest extends TestCase {
   }
 
   public void testFailNull() {
-    try {
-      LanczosInterpolation.of(null, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LanczosInterpolation.of(null, 3));
   }
 
   public void testFailSemi() {
     Tensor vector = Tensors.vector(-1, 0, 3, 2, 0, -4, 2);
-    try {
-      LanczosInterpolation.of(vector, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      LanczosInterpolation.of(vector, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LanczosInterpolation.of(vector, 0));
+    AssertFail.of(() -> LanczosInterpolation.of(vector, -1));
   }
 }

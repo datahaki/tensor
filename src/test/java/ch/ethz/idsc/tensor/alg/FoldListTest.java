@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FoldListTest extends TestCase {
@@ -26,12 +27,7 @@ public class FoldListTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      FoldList.of(Tensor::add, RealScalar.of(31));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> FoldList.of(Tensor::add, RealScalar.of(31)));
   }
 
   public void testAddUpPrependZero() {
@@ -57,11 +53,6 @@ public class FoldListTest extends TestCase {
   }
 
   public void testFailSecond() {
-    try {
-      FoldList.of(Tensor::add, RealScalar.of(31), RealScalar.of(31));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> FoldList.of(Tensor::add, RealScalar.of(31), RealScalar.of(31)));
   }
 }

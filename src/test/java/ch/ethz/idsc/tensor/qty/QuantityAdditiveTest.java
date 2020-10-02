@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantityAdditiveTest extends TestCase {
@@ -90,23 +91,13 @@ public class QuantityAdditiveTest extends TestCase {
   public void testPlusMixFail() {
     Scalar s1 = Quantity.of(1.0, "m"); //
     Scalar s2 = GaussScalar.of(0, 7);
-    try {
-      s1.add(s2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> s1.add(s2));
   }
 
   public void testPlusMixZeroFail() {
     Scalar s1 = Quantity.of(0.0, "m"); //
     Scalar s2 = GaussScalar.of(0, 7);
-    try {
-      s1.add(s2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> s1.add(s2));
   }
 
   public void testComplex() {
@@ -123,12 +114,7 @@ public class QuantityAdditiveTest extends TestCase {
   }
 
   public void testPlusFail() {
-    try {
-      Quantity.of(2, "m").add(Quantity.of(2, "kg"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantity.of(2, "m").add(Quantity.of(2, "kg")));
     try {
       _checkPlusSymmetry( //
           Quantity.of(ComplexScalar.of(1, 2), "m"), //

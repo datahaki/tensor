@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RoundTest extends TestCase {
@@ -150,11 +151,6 @@ public class RoundTest extends TestCase {
   }
 
   public void testTypeFail() {
-    try {
-      Round.of(StringScalar.of("some"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Round.of(StringScalar.of("some")));
   }
 }

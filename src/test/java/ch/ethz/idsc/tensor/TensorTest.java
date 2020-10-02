@@ -7,6 +7,7 @@ import java.util.List;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Numel;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorTest extends TestCase {
@@ -59,12 +60,7 @@ public class TensorTest extends TestCase {
   }
 
   public void testAddFail() {
-    try {
-      Tensors.vector(1, 2, 3).add(Tensors.vector(1, 2, 3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Tensors.vector(1, 2, 3).add(Tensors.vector(1, 2, 3, 4)));
   }
 
   public void testExtractAsCopy() {
@@ -112,29 +108,14 @@ public class TensorTest extends TestCase {
   public void testExtractFail() {
     Tensors.vector(1, 2, 3, 4, 5, 6).extract(3, 6);
     Tensors.vector(1, 2, 3, 4, 5, 6).extract(6, 6);
-    try {
-      Tensors.vector(1, 2, 3, 4, 5, 6).extract(3, 7);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Tensors.vector(1, 2, 3, 4, 5, 6).extract(7, 6);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Tensors.vector(1, 2, 3, 4, 5, 6).extract(3, 7));
+    AssertFail.of(() -> Tensors.vector(1, 2, 3, 4, 5, 6).extract(7, 6));
   }
 
   public void testBlock() {
     Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);
     assertEquals(a.block(Arrays.asList(2), Arrays.asList(2)), Tensors.vector(3, 4));
-    try {
-      a.block(Arrays.asList(1), Arrays.asList(2, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> a.block(Arrays.asList(1), Arrays.asList(2, 1)));
   }
 
   public void testScalarStream() {
@@ -156,11 +137,6 @@ public class TensorTest extends TestCase {
   }
 
   public void testMapNullFail() {
-    try {
-      Tensors.vector(1, 2, 3).map(s -> null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Tensors.vector(1, 2, 3).map(s -> null));
   }
 }

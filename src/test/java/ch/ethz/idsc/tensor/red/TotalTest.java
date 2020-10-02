@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TotalTest extends TestCase {
@@ -56,26 +57,11 @@ public class TotalTest extends TestCase {
   }
 
   public void testOfVectorFail() {
-    try {
-      Total.ofVector(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Total.ofVector(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Total.ofVector(RealScalar.ONE));
+    AssertFail.of(() -> Total.ofVector(HilbertMatrix.of(3)));
   }
 
   public void testTotalScalarFail() {
-    try {
-      Total.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Total.of(RealScalar.ONE));
   }
 }

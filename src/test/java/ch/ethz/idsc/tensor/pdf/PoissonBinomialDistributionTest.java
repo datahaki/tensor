@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PoissonBinomialDistributionTest extends TestCase {
@@ -67,32 +68,12 @@ public class PoissonBinomialDistributionTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      PoissonBinomialDistribution.of(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      PoissonBinomialDistribution.of(IdentityMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PoissonBinomialDistribution.of(RealScalar.ZERO));
+    AssertFail.of(() -> PoissonBinomialDistribution.of(IdentityMatrix.of(3)));
   }
 
   public void testFailInvalid() {
-    try {
-      PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, 2, 0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, -1, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, 2, 0)));
+    AssertFail.of(() -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, -1, 1)));
   }
 }

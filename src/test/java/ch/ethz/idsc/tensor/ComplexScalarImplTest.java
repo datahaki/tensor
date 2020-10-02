@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ComplexScalarImplTest extends TestCase {
@@ -43,12 +44,10 @@ public class ComplexScalarImplTest extends TestCase {
   public void testFalseConstruct() {
     Scalar c1 = ComplexScalar.of(3, -4);
     Scalar c2 = ComplexScalar.of(-2, 9);
-    try {
-      ComplexScalar.of(c1, c2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ComplexScalar.of(c1, c2));
+    Scalar r1 = RealScalar.of(7);
+    AssertFail.of(() -> ComplexScalar.of(r1, c2));
+    AssertFail.of(() -> ComplexScalar.of(c1, r1));
   }
 
   public void testMultiply() {

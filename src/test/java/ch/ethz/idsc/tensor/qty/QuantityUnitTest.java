@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantityUnitTest extends TestCase {
@@ -30,11 +31,6 @@ public class QuantityUnitTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      QuantityUnit.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> QuantityUnit.of(null));
   }
 }

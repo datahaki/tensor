@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LogTest extends TestCase {
@@ -76,31 +77,16 @@ public class LogTest extends TestCase {
   }
 
   public void testBaseOneFail() {
-    try {
-      Log.base(1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Log.base(1));
   }
 
   public void testFailQuantity() {
     Scalar scalar = Quantity.of(2, "m");
-    try {
-      Log.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Log.of(scalar));
   }
 
   public void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
-    try {
-      Log.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Log.of(scalar));
   }
 }

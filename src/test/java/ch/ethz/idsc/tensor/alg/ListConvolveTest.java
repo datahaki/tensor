@@ -8,6 +8,7 @@ import java.util.function.UnaryOperator;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ListConvolveTest extends TestCase {
@@ -65,11 +66,6 @@ public class ListConvolveTest extends TestCase {
     Tensor matrix = Tensors.matrixInt(new int[][] { //
         { 2, 1, 3, 0, 1 }, //
         { 0, 1, -1, 3, 3 } });
-    try {
-      ListConvolve.of(kernel, matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ListConvolve.of(kernel, matrix));
   }
 }

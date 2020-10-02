@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.StringScalar;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ImagTest extends TestCase {
@@ -26,11 +27,6 @@ public class ImagTest extends TestCase {
 
   public void testFail() {
     Scalar scalar = StringScalar.of("string");
-    try {
-      Imag.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Imag.of(scalar));
   }
 }

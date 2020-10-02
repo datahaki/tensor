@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FirstPositionTest extends TestCase {
@@ -33,29 +34,14 @@ public class FirstPositionTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      FirstPosition.of(RealScalar.of(7), RealScalar.of(7));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> FirstPosition.of(RealScalar.of(7), RealScalar.of(7)));
   }
 
   public void testFailTensorNull() {
-    try {
-      FirstPosition.of(null, RealScalar.of(7));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> FirstPosition.of(null, RealScalar.of(7)));
   }
 
   public void testFailElementNull() {
-    try {
-      FirstPosition.of(Tensors.vector(5, 6, 7, 8, 9), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> FirstPosition.of(Tensors.vector(5, 6, 7, 8, 9), null));
   }
 }

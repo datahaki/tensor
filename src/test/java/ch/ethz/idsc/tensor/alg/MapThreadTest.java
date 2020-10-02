@@ -9,18 +9,14 @@ import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MapThreadTest extends TestCase {
   public void testEmptyPositive() {
     assertEquals(MapThread.of(l -> l.get(0), Collections.emptyList(), 1), Tensors.empty());
     assertEquals(MapThread.of(l -> l.get(0), Collections.emptyList(), 2), Tensors.empty());
-    try {
-      MapThread.of(l -> l.get(0), Collections.emptyList(), 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MapThread.of(l -> l.get(0), Collections.emptyList(), 0));
   }
 
   public void testEmptyZero() {
@@ -31,11 +27,6 @@ public class MapThreadTest extends TestCase {
   public void testFail() {
     List<Tensor> list = Arrays.asList(HilbertMatrix.of(2, 3), HilbertMatrix.of(3, 3));
     MapThread.of(l -> ComplexScalar.I, list, 0);
-    try {
-      MapThread.of(l -> ComplexScalar.I, list, 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MapThread.of(l -> ComplexScalar.I, list, 1));
   }
 }

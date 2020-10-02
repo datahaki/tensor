@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LastTest extends TestCase {
@@ -29,20 +30,10 @@ public class LastTest extends TestCase {
   }
 
   public void testFailEmpty() {
-    try {
-      Last.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Last.of(Tensors.empty()));
   }
 
   public void testFailScalar() {
-    try {
-      Last.of(RealScalar.of(99));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Last.of(RealScalar.of(99)));
   }
 }

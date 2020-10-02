@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ConstantArrayTest extends TestCase {
@@ -55,12 +56,7 @@ public class ConstantArrayTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
-    try {
-      tensor.append(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tensor.append(RealScalar.ONE));
   }
 
   public void testNCopiesScalar() {
@@ -84,23 +80,13 @@ public class ConstantArrayTest extends TestCase {
   }
 
   public void testFailNull() {
-    try {
-      ConstantArray.of(null, 6, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ConstantArray.of(null, 6, 3));
   }
 
   public void testFailNegative() {
     Tensor repmat = ConstantArray.of(RealScalar.ONE, 6, 0, 3);
     assertEquals(Dimensions.of(repmat), Arrays.asList(6, 0));
     assertEquals(repmat, Tensors.fromString("{{}, {}, {}, {}, {}, {}}"));
-    try {
-      ConstantArray.of(RealScalar.ONE, 6, -1, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ConstantArray.of(RealScalar.ONE, 6, -1, 3));
   }
 }

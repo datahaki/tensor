@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CoefficientListTest extends TestCase {
@@ -47,11 +48,6 @@ public class CoefficientListTest extends TestCase {
   }
 
   public void testEmptyFail() {
-    try {
-      CoefficientList.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CoefficientList.of(Tensors.empty()));
   }
 }

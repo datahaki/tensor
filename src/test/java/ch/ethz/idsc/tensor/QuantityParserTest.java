@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantityParserTest extends TestCase {
@@ -11,11 +12,6 @@ public class QuantityParserTest extends TestCase {
   }
 
   public void testBug() {
-    try {
-      QuantityParser.of("1[m2]");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> QuantityParser.of("1[m2]"));
   }
 }

@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
     return new NewtonDemo(coeffs);
   }
 
-  // ---
+  /***************************************************/
   private final ScalarUnaryOperator scalarUnaryOperator;
 
   private NewtonDemo(Tensor coeffs) {

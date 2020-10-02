@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.qty.UnitConvert;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GumbelDistributionTest extends TestCase {
@@ -77,17 +78,7 @@ public class GumbelDistributionTest extends TestCase {
   }
 
   public void testBetaNonPositiveFail() {
-    try {
-      GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      GumbelDistribution.of(RealScalar.of(3), RealScalar.of(-1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0)));
+    AssertFail.of(() -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(-1)));
   }
 }

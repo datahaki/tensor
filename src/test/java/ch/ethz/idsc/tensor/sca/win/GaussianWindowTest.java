@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GaussianWindowTest extends TestCase {
@@ -38,11 +39,6 @@ public class GaussianWindowTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      new GaussianWindow(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new GaussianWindow(null));
   }
 }

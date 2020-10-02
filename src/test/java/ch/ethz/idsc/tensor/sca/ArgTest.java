@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.Unit;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ArgTest extends TestCase {
@@ -40,30 +41,15 @@ public class ArgTest extends TestCase {
   }
 
   public void testQuaternionFail() {
-    try {
-      Arg.FUNCTION.apply(Quaternion.of(1, 2, 3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Arg.FUNCTION.apply(Quaternion.of(1, 2, 3, 4)));
   }
 
   public void testGaussScalarFail() {
     Scalar scalar = GaussScalar.of(1, 7);
-    try {
-      Arg.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Arg.of(scalar));
   }
 
   public void testNullFail() {
-    try {
-      Arg.FUNCTION.apply(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Arg.FUNCTION.apply(null));
   }
 }

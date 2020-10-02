@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DirichletWindowTest extends TestCase {
@@ -33,17 +34,7 @@ public class DirichletWindowTest extends TestCase {
   }
 
   public void testQuantityFail() {
-    try {
-      DirichletWindow.FUNCTION.apply(Quantity.of(0, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DirichletWindow.FUNCTION.apply(Quantity.of(2, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DirichletWindow.FUNCTION.apply(Quantity.of(0, "s")));
+    AssertFail.of(() -> DirichletWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 }

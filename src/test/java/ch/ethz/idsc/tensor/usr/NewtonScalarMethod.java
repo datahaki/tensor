@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
         Series.of(Derive.of(coeffs)));
   }
 
-  // ---
+  /***************************************************/
   private final ScalarUnaryOperator function;
   public final ScalarUnaryOperator iteration;
 

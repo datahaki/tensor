@@ -23,6 +23,7 @@ import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 // cubic basis functions over unit interval [0, 1]
@@ -233,44 +234,21 @@ public class BSplineFunctionStringTest extends TestCase {
   }
 
   public void testEmptyFail() {
-    for (int degree = -2; degree <= 4; ++degree)
-      try {
-        BSplineFunction.string(degree, Tensors.empty());
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+    for (int degree = -2; degree <= 4; ++degree) {
+      int fd = degree;
+      AssertFail.of(() -> BSplineFunction.string(fd, Tensors.empty()));
+    }
   }
 
   public void testNegativeFail() {
-    try {
-      BSplineFunction.string(-1, Tensors.vector(1, 2, 3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BSplineFunction.string(-1, Tensors.vector(1, 2, 3, 4)));
   }
 
   public void testOutsideFail() {
     ScalarTensorFunction bSplineFunction = BSplineFunction.string(3, Tensors.vector(2, 1, 0, -1, -2));
     bSplineFunction.apply(RealScalar.of(4));
-    try {
-      bSplineFunction.apply(RealScalar.of(-0.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      bSplineFunction.apply(RealScalar.of(5.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      bSplineFunction.apply(RealScalar.of(4.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> bSplineFunction.apply(RealScalar.of(-0.1)));
+    AssertFail.of(() -> bSplineFunction.apply(RealScalar.of(5.1)));
+    AssertFail.of(() -> bSplineFunction.apply(RealScalar.of(4.1)));
   }
 }

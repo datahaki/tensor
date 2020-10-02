@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitImplTest extends TestCase {
@@ -27,12 +28,7 @@ public class UnitImplTest extends TestCase {
 
   public void testMultiplyFail() {
     Unit unit = Unit.of("kg^2*m^-1");
-    try {
-      unit.multiply(Quantity.of(3, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> unit.multiply(Quantity.of(3, "s")));
   }
 
   public void testUnmodifiableMap() {

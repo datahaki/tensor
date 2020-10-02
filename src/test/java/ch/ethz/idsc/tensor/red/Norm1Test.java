@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class Norm1Test extends TestCase {
@@ -31,21 +32,11 @@ public class Norm1Test extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      Norm._1.ofVector(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Norm._1.ofVector(RealScalar.ONE));
   }
 
   public void testEmptyStreamFail() {
-    try {
-      Norm1.ofVector(Stream.of());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Norm1.ofVector(Stream.of()));
   }
 
   public void testVisibility() {

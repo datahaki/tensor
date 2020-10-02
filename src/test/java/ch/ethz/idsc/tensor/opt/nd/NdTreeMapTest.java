@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Tally;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NdTreeMapTest extends TestCase {
@@ -134,12 +135,7 @@ public class NdTreeMapTest extends TestCase {
   }
 
   public void testFail0() {
-    try {
-      new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9, 3), 2, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9, 3), 2, 2));
   }
 
   public void testFail1() {
@@ -155,11 +151,6 @@ public class NdTreeMapTest extends TestCase {
   }
 
   public void testFail2() {
-    try {
-      new NdTreeMap<>(Tensors.vector(-2, 10), Tensors.vector(8, 9), 10, 10);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new NdTreeMap<>(Tensors.vector(-2, 10), Tensors.vector(8, 9), 10, 10));
   }
 }

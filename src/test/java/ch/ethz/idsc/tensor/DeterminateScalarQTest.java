@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DeterminateScalarQTest extends TestCase {
@@ -41,20 +42,10 @@ public class DeterminateScalarQTest extends TestCase {
 
   public void testRequireThrow() {
     DeterminateScalarQ.require(Pi.VALUE);
-    try {
-      DeterminateScalarQ.require(DoubleScalar.POSITIVE_INFINITY);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DeterminateScalarQ.require(DoubleScalar.POSITIVE_INFINITY));
   }
 
   public void testNullFail() {
-    try {
-      DeterminateScalarQ.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DeterminateScalarQ.of(null));
   }
 }

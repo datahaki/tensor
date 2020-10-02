@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.alg;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TuplesTest extends TestCase {
@@ -33,20 +34,10 @@ public class TuplesTest extends TestCase {
   }
 
   public void testFailNegative() {
-    try {
-      Tuples.of(Tensors.vector(1, 2, 3), -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Tuples.of(Tensors.vector(1, 2, 3), -1));
   }
 
   public void testFailScalar() {
-    try {
-      Tuples.of(Pi.VALUE, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Tuples.of(Pi.VALUE, 2));
   }
 }

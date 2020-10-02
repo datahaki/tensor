@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantityMagnitudeTest extends TestCase {
@@ -139,29 +140,14 @@ public class QuantityMagnitudeTest extends TestCase {
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     Scalar quantity = Quantity.of(360, "kg");
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in("m");
-    try {
-      scalarUnaryOperator.apply(quantity);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> scalarUnaryOperator.apply(quantity));
   }
 
   public void testFailInNull() {
-    try {
-      QuantityMagnitude.SI().in((Unit) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> QuantityMagnitude.SI().in((Unit) null));
   }
 
   public void testFailNull() {
-    try {
-      new QuantityMagnitude(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new QuantityMagnitude(null));
   }
 }

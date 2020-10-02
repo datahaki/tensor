@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BinomialTest extends TestCase {
@@ -61,27 +62,12 @@ public class BinomialTest extends TestCase {
   }
 
   public void testFailNK() {
-    try {
-      Binomial.of(-3, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Binomial.of(-3, 0));
   }
 
   public void testFailN() {
-    try {
-      Binomial.of(RealScalar.of(10.21));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Binomial.of(-1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Binomial.of(RealScalar.of(10.21)));
+    AssertFail.of(() -> Binomial.of(-1));
   }
 
   public void testLarge() {
@@ -93,11 +79,6 @@ public class BinomialTest extends TestCase {
 
   public void testLargeFail() {
     assertFalse(DeterminateScalarQ.of(Binomial.of(RealScalar.of(123412341234324L), RealScalar.ZERO)));
-    try {
-      Binomial.of(RealScalar.of(-123412341234324L), RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Binomial.of(RealScalar.of(-123412341234324L), RealScalar.ZERO));
   }
 }

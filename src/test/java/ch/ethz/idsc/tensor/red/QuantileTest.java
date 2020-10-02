@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantileTest extends TestCase {
@@ -48,28 +49,13 @@ public class QuantileTest extends TestCase {
 
   public void testBounds() {
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(Tensors.vector(0, 2, 1, 4, 3));
-    try {
-      scalarUnaryOperator.apply(RealScalar.of(1.01));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      scalarUnaryOperator.apply(RealScalar.of(-0.01));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> scalarUnaryOperator.apply(RealScalar.of(1.01)));
+    AssertFail.of(() -> scalarUnaryOperator.apply(RealScalar.of(-0.01)));
   }
 
   public void testFailSorted() {
     Tensor vector = Tensors.vector(0, 2, 1, 4, 3);
-    try {
-      Quantile.ofSorted(vector);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantile.ofSorted(vector));
   }
 
   public void testQuantity() {
@@ -81,12 +67,7 @@ public class QuantileTest extends TestCase {
     assertEquals(scalarUnaryOperator.apply(RealScalar.ZERO), qs1);
     assertEquals(scalarUnaryOperator.apply(RealScalar.ONE), qs2);
     Scalar qs4 = Quantity.of(2, "s");
-    try {
-      Sort.of(Tensors.of(qs1, qs4)); // comparison fails
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Sort.of(Tensors.of(qs1, qs4))); // comparison fails
   }
 
   public void testLimitTheorem() {
@@ -100,90 +81,40 @@ public class QuantileTest extends TestCase {
   }
 
   public void testEmptyFail() {
-    try {
-      Quantile.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantile.of(Tensors.empty()));
   }
 
   public void testFailComplex() {
     Tensor tensor = Tensors.vector(-3, 2, 1, 100);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
     Tensor weight = Tensors.of(RealScalar.ONE, ComplexScalar.of(1, 2));
-    try {
-      weight.map(scalarUnaryOperator);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> weight.map(scalarUnaryOperator));
   }
 
   public void testFailQuantity() {
     Tensor tensor = Tensors.vector(-3, 2, 1, 100);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
-    try {
-      scalarUnaryOperator.apply(Quantity.of(0, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      scalarUnaryOperator.apply(Quantity.of(0.2, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> scalarUnaryOperator.apply(Quantity.of(0, "m")));
+    AssertFail.of(() -> scalarUnaryOperator.apply(Quantity.of(0.2, "m")));
   }
 
   public void testFailScalar() {
-    try {
-      Quantile.of(Pi.VALUE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantile.of(Pi.VALUE));
   }
 
   public void testMatrixFail() {
     Tensor matrix = Reverse.of(IdentityMatrix.of(7));
     OrderedQ.require(matrix);
-    try {
-      Quantile.of(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quantile.ofSorted(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantile.of(matrix));
+    AssertFail.of(() -> Quantile.ofSorted(matrix));
   }
 
   public void testEmptyVectorFail() {
-    try {
-      Quantile.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quantile.ofSorted(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantile.of(Tensors.empty()));
+    AssertFail.of(() -> Quantile.ofSorted(Tensors.empty()));
   }
 
   public void testFailNull() {
-    try {
-      Quantile.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantile.of(null));
   }
 }

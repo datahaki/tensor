@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class VectorNormTest extends TestCase {
@@ -62,31 +63,16 @@ public class VectorNormTest extends TestCase {
   }
 
   public void testNormPFail() {
-    try {
-      VectorNorm.with(0.99);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VectorNorm.with(0.99));
   }
 
   public void testMatrixFail() {
     VectorNormInterface vectorNormInterface = VectorNorm.with(2.6);
-    try {
-      vectorNormInterface.ofVector(IdentityMatrix.of(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> vectorNormInterface.ofVector(IdentityMatrix.of(2)));
   }
 
   public void testScalarFail() {
     VectorNormInterface vectorNormInterface = VectorNorm.with(2.6);
-    try {
-      vectorNormInterface.ofVector(RealScalar.of(12));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> vectorNormInterface.ofVector(RealScalar.of(12)));
   }
 }

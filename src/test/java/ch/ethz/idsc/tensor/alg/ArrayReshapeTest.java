@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.alg;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ArrayReshapeTest extends TestCase {
@@ -15,11 +16,6 @@ public class ArrayReshapeTest extends TestCase {
   public void testFail() {
     Tensor s = Tensors.vector(1, 2, 3, 4, 5, 6);
     ArrayReshape.of(s, 2, 3);
-    try {
-      ArrayReshape.of(s, 3, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ArrayReshape.of(s, 3, 3));
   }
 }

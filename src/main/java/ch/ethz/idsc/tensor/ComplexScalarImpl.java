@@ -52,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.Sinh;
         && !(scalar instanceof Quantity);
   }
 
-  // ---
+  /***************************************************/
   private final Scalar re;
   private final Scalar im;
 
@@ -61,7 +61,6 @@ import ch.ethz.idsc.tensor.sca.Sinh;
     this.im = im;
   }
 
-  /***************************************************/
   @Override // from Scalar
   public Scalar negate() {
     return new ComplexScalarImpl(re.negate(), im.negate());

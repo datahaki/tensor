@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BSplineInterpolationTest extends TestCase {
@@ -43,26 +44,11 @@ public class BSplineInterpolationTest extends TestCase {
         Tensor vvalue = interpolation.get(Tensors.vector(3));
         assertEquals(vvalue, tensor.get(3));
       }
-      try {
-        interpolation.at(RealScalar.of(-0.1));
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
-      try {
-        interpolation.at(RealScalar.of(9.1));
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> interpolation.at(RealScalar.of(-0.1)));
+      AssertFail.of(() -> interpolation.at(RealScalar.of(9.1)));
       interpolation.get(Tensors.vector(1));
       interpolation.get(Tensors.vector(1, 2));
-      try {
-        interpolation.get(Tensors.vector(1, 1.8));
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> interpolation.get(Tensors.vector(1, 1.8)));
     }
   }
 

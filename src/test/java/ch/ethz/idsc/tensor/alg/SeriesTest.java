@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Mod;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SeriesTest extends TestCase {
@@ -109,20 +110,10 @@ public class SeriesTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      Series.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Series.of(null));
   }
 
   public void testMatrixFail() {
-    try {
-      Series.of(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Series.of(HilbertMatrix.of(3)));
   }
 }

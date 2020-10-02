@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PadLeftTest extends TestCase {
@@ -68,21 +69,11 @@ public class PadLeftTest extends TestCase {
 
   public void testFail() {
     TensorUnaryOperator tuo = PadLeft.zeros(2, 2, 6);
-    try {
-      tuo.apply(Tensors.fromString("{{1}, {2}, {4, 5}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tuo.apply(Tensors.fromString("{{1}, {2}, {4, 5}}")));
   }
 
   public void testFail2() {
     TensorUnaryOperator tuo = PadLeft.zeros(-2);
-    try {
-      tuo.apply(Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tuo.apply(Tensors.vector(1, 2, 3)));
   }
 }

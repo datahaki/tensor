@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DegreeTest extends TestCase {
@@ -34,11 +35,6 @@ public class DegreeTest extends TestCase {
   }
 
   public void testStringScalarFail() {
-    try {
-      Degree.of(StringScalar.of("abc"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Degree.of(StringScalar.of("abc")));
   }
 }

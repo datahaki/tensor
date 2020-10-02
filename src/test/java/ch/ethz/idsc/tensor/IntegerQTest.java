@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class IntegerQTest extends TestCase {
@@ -22,20 +23,10 @@ public class IntegerQTest extends TestCase {
   }
 
   public void testRequireFail() {
-    try {
-      IntegerQ.require(RealScalar.of(0.2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> IntegerQ.require(RealScalar.of(0.2)));
   }
 
   public void testNullFail() {
-    try {
-      IntegerQ.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> IntegerQ.of(null));
   }
 }

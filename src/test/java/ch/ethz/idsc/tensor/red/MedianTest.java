@@ -5,8 +5,10 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MedianTest extends TestCase {
@@ -33,11 +35,7 @@ public class MedianTest extends TestCase {
   }
 
   public void testEmpty() {
-    try {
-      Median.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Median.of(Tensors.empty()));
+    AssertFail.of(() -> Median.of(Pi.VALUE));
   }
 }

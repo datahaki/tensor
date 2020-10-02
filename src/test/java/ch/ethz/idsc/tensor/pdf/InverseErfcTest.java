@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class InverseErfcTest extends TestCase {
@@ -33,11 +34,6 @@ public class InverseErfcTest extends TestCase {
 
   public void testFail() {
     InverseCDF inverseCDF = (InverseCDF) NormalDistribution.of(2, 8);
-    try {
-      inverseCDF.quantile(RealScalar.of(1.5));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.5)));
   }
 }

@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorImplTest extends TestCase {
@@ -58,12 +59,7 @@ public class TensorImplTest extends TestCase {
   public void testIteratorUnmod3() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     for (Tensor unit : eye)
-      try {
-        unit.append(RealScalar.ZERO);
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> unit.append(RealScalar.ZERO));
   }
 
   public void testIteratorRemove() {

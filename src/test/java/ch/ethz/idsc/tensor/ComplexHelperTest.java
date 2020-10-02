@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ComplexHelperTest extends TestCase {
@@ -141,26 +142,11 @@ public class ComplexHelperTest extends TestCase {
   public void testPlusQuantityFail() {
     Scalar c = ComplexScalar.of(2, 3);
     Scalar q = Quantity.of(1, "V");
-    try {
-      c.add(q);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> c.add(q));
   }
 
   public void testQuantityFail() {
-    try {
-      ComplexScalar.of(Quantity.of(3, "m"), RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ComplexScalar.of(RealScalar.ONE, Quantity.of(3, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ComplexScalar.of(Quantity.of(3, "m"), RealScalar.ONE));
+    AssertFail.of(() -> ComplexScalar.of(RealScalar.ONE, Quantity.of(3, "m")));
   }
 }

@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DoubleScalarTest extends TestCase {
@@ -107,35 +108,15 @@ public class DoubleScalarTest extends TestCase {
 
   public void testNaN() {
     DoubleScalar nan = (DoubleScalar) DoubleScalar.INDETERMINATE;
-    try {
-      nan.isNonNegative();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      nan.signInt();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> nan.isNonNegative());
+    AssertFail.of(() -> nan.signInt());
   }
 
   public void testCompareFail() {
     Scalar a = RealScalar.of(7.2);
     Scalar b = GaussScalar.of(3, 5);
-    try {
-      Max.of(a, b);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Max.of(b, a);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Max.of(a, b));
+    AssertFail.of(() -> Max.of(b, a));
   }
 
   public void testValue() {

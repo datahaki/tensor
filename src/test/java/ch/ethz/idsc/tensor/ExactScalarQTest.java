@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ExactScalarQTest extends TestCase {
@@ -47,20 +48,10 @@ public class ExactScalarQTest extends TestCase {
   }
 
   public void testRequireFail() {
-    try {
-      ExactScalarQ.require(DoubleScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ExactScalarQ.require(DoubleScalar.of(3)));
   }
 
   public void testNullFail() {
-    try {
-      ExactScalarQ.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ExactScalarQ.of(null));
   }
 }

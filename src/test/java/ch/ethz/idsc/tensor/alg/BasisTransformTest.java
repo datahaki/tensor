@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BasisTransformTest extends TestCase {
@@ -69,40 +70,20 @@ public class BasisTransformTest extends TestCase {
 
   public void testAdTypeFail() {
     Tensor v = HilbertMatrix.of(3);
-    try {
-      BasisTransform.of(Array.zeros(3, 3, 3), -1, v);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BasisTransform.of(Array.zeros(3, 3, 3), -1, v));
   }
 
   public void testAdInverseFail() {
     Tensor v = Array.zeros(3);
-    try {
-      BasisTransform.of(Array.zeros(3, 3, 3), 1, v);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BasisTransform.of(Array.zeros(3, 3, 3), 1, v));
   }
 
   public void testFormVectorFail() {
     int n = 3;
-    try {
-      BasisTransform.ofForm(Array.zeros(n, n, n), Array.zeros(n));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BasisTransform.ofForm(Array.zeros(n, n, n), Array.zeros(n)));
   }
 
   public void testMatrixFail() {
-    try {
-      BasisTransform.ofMatrix(IdentityMatrix.of(3), DiagonalMatrix.of(1, 1, 0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BasisTransform.ofMatrix(IdentityMatrix.of(3), DiagonalMatrix.of(1, 1, 0)));
   }
 }

@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SincTest extends TestCase {
@@ -96,20 +97,10 @@ public class SincTest extends TestCase {
   }
 
   public void testQuantity() {
-    try {
-      Sinc.FUNCTION.apply(Quantity.of(0, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Sinc.FUNCTION.apply(Quantity.of(0, "m")));
   }
 
   public void testTypeFail() {
-    try {
-      Sinc.of(StringScalar.of("some"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Sinc.of(StringScalar.of("some")));
   }
 }

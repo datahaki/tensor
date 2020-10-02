@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorGetTest extends TestCase {
@@ -80,11 +81,6 @@ public class TensorGetTest extends TestCase {
 
   public void testGetAllFail() {
     Tensor matrix = Array.zeros(3, 4, 5);
-    try {
-      matrix.Get(Tensor.ALL);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> matrix.Get(Tensor.ALL));
   }
 }

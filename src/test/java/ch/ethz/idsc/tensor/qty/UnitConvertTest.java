@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitConvertTest extends TestCase {
@@ -91,29 +92,14 @@ public class UnitConvertTest extends TestCase {
     Scalar mass = Quantity.of(200, "g"); // gram
     Scalar a = Quantity.of(981, "cm*s^-2");
     Scalar force = mass.multiply(a);
-    try {
-      UnitConvert.SI().to(Unit.of("m")).apply(force);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnitConvert.SI().to(Unit.of("m")).apply(force));
   }
 
   public void testFailInNull() {
-    try {
-      UnitConvert.SI().to((Unit) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnitConvert.SI().to((Unit) null));
   }
 
   public void testFailNull() {
-    try {
-      UnitConvert.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnitConvert.of(null));
   }
 }

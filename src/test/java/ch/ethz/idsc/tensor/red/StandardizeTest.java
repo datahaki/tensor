@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class StandardizeTest extends TestCase {
@@ -30,35 +31,15 @@ public class StandardizeTest extends TestCase {
   }
 
   public void testLengthShort() {
-    try {
-      Standardize.ofVector(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Standardize.ofVector(Tensors.vector(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Standardize.ofVector(Tensors.empty()));
+    AssertFail.of(() -> Standardize.ofVector(Tensors.vector(2)));
   }
 
   public void testScalarFail() {
-    try {
-      Standardize.ofVector(RealScalar.of(84.312));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Standardize.ofVector(RealScalar.of(84.312)));
   }
 
   public void testMatrixFail() {
-    try {
-      Standardize.ofVector(HilbertMatrix.of(5));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Standardize.ofVector(HilbertMatrix.of(5)));
   }
 }

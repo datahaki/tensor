@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor;
 
 import java.lang.reflect.Modifier;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BigFractionTest extends TestCase {
@@ -16,12 +17,7 @@ public class BigFractionTest extends TestCase {
   public void testDivide() {
     BigFraction num = BigFraction.of(1, 1);
     BigFraction den = BigFraction.of(0, 1);
-    try {
-      num.divide(den);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> num.divide(den));
   }
 
   public void testHash() {
@@ -37,12 +33,7 @@ public class BigFractionTest extends TestCase {
   }
 
   public void testDenZero() {
-    try {
-      BigFraction.of(3, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BigFraction.of(3, 0));
   }
 
   public void testPackageVisibility() {

@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GammaDistributionTest extends TestCase {
@@ -40,17 +41,7 @@ public class GammaDistributionTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      GammaDistribution.of(RealScalar.of(-1.0), RealScalar.of(2.3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      GammaDistribution.of(RealScalar.of(0.1), RealScalar.of(-2.3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GammaDistribution.of(RealScalar.of(-1.0), RealScalar.of(2.3)));
+    AssertFail.of(() -> GammaDistribution.of(RealScalar.of(0.1), RealScalar.of(-2.3)));
   }
 }

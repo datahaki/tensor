@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Gamma;
 import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NestTest extends TestCase {
@@ -45,11 +46,6 @@ public class NestTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Nest.of(Cos.FUNCTION, RealScalar.of(0.3), -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Nest.of(Cos.FUNCTION, RealScalar.of(0.3), -1));
   }
 }

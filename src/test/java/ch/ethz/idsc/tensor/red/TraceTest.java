@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TraceTest extends TestCase {
@@ -69,56 +70,21 @@ public class TraceTest extends TestCase {
   }
 
   public void testEmpty() {
-    try {
-      Trace.of(Tensors.empty()); // mathematica gives 0 == Tr[{}]
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Trace.of(Tensors.fromString("{{}}")); // mathematica gives 0 == Tr[{{}}]
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Trace.of(Tensors.empty())); // mathematica gives 0 == Tr[{}]
+    AssertFail.of(() -> Trace.of(Tensors.fromString("{{}}"))); // mathematica gives 0 == Tr[{{}}]
   }
 
   public void testDimensionsFail() {
-    try {
-      Trace.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Trace.of(Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Trace.of(LeviCivitaTensor.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Trace.of(RealScalar.ONE));
+    AssertFail.of(() -> Trace.of(Tensors.vector(1, 2, 3)));
+    AssertFail.of(() -> Trace.of(LeviCivitaTensor.of(3)));
   }
 
   public void testParamFail() {
-    try {
-      Trace.of(HilbertMatrix.of(3, 3), 0, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Trace.of(HilbertMatrix.of(3, 3), 0, 0));
   }
 
   public void testFormatFail() {
-    try {
-      Trace.of(HilbertMatrix.of(3, 4), 0, 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Trace.of(HilbertMatrix.of(3, 4), 0, 1));
   }
 }

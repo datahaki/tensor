@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.qty;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitTest extends TestCase {
@@ -43,48 +44,18 @@ public class UnitTest extends TestCase {
   public void testMultiplyFail() {
     Unit kg1 = Unit.of("kg");
     Scalar q = Quantity.of(3, "m");
-    try {
-      kg1.multiply(q);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> kg1.multiply(q));
   }
 
   public void testFail() {
     Unit.of("*"); // gives unit ONE, not necessarily an error
-    try {
-      Unit.of(" m >");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Unit.of("| m ");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Unit.of("^");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Unit.of(" ");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Unit.of(" m >"));
+    AssertFail.of(() -> Unit.of("| m "));
+    AssertFail.of(() -> Unit.of("^"));
+    AssertFail.of(() -> Unit.of(" ")); // FIXME
   }
 
   public void testNullFail() {
-    try {
-      Unit.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Unit.of(null));
   }
 }

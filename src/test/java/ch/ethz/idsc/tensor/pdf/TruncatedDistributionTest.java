@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TruncatedDistributionTest extends TestCase {
@@ -32,26 +33,11 @@ public class TruncatedDistributionTest extends TestCase {
   public void testFail() {
     Clip clip = Clips.interval(10, 11);
     Distribution distribution = TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), clip);
-    try {
-      RandomVariate.of(distribution);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RandomVariate.of(distribution));
   }
 
   public void testNullFail() {
-    try {
-      TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      TruncatedDistribution.of(null, Clips.interval(10, 11));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), null));
+    AssertFail.of(() -> TruncatedDistribution.of(null, Clips.interval(10, 11)));
   }
 }

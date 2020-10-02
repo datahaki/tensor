@@ -8,6 +8,7 @@ import java.util.Set;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SimpleUnitSystemTest extends TestCase {
@@ -38,45 +39,25 @@ public class SimpleUnitSystemTest extends TestCase {
   public void testFailKey1() {
     Properties properties = new Properties();
     properties.setProperty("cent123", "1/100[FRA]");
-    try {
-      SimpleUnitSystem.from(properties);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
   }
 
   public void testFailKey2() {
     Properties properties = new Properties();
     properties.setProperty(" cent", "1/100[FRA]");
-    try {
-      SimpleUnitSystem.from(properties);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
   }
 
   public void testFailValue1() {
     Properties properties = new Properties();
     properties.setProperty("cent", "1/100a[FRA]");
-    try {
-      SimpleUnitSystem.from(properties);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
   }
 
   public void testFailValue2() {
     Properties properties = new Properties();
     properties.setProperty("cent", "b/100a");
-    try {
-      SimpleUnitSystem.from(properties);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
   }
 
   public void testDerive() throws ClassNotFoundException, IOException {
@@ -90,20 +71,10 @@ public class SimpleUnitSystemTest extends TestCase {
   }
 
   public void testFailNullProperties() {
-    try {
-      SimpleUnitSystem.from((Properties) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SimpleUnitSystem.from((Properties) null));
   }
 
   public void testFailNullMap() {
-    try {
-      SimpleUnitSystem.from((Map<String, Scalar>) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SimpleUnitSystem.from((Map<String, Scalar>) null));
   }
 }

@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TimesTest extends TestCase {
@@ -53,20 +54,10 @@ public class TimesTest extends TestCase {
   }
 
   public void testTotalProdFail() {
-    try {
-      Times.pmul(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Times.pmul(RealScalar.ONE));
   }
 
   public void testNullFail() {
-    try {
-      Times.of(RealScalar.of(3), null, RealScalar.of(8));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Times.of(RealScalar.of(3), null, RealScalar.of(8)));
   }
 }

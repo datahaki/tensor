@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Times;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SurdTest extends TestCase {
@@ -50,12 +51,7 @@ public class SurdTest extends TestCase {
   }
 
   public void testZeroExpFail() {
-    try {
-      Surd.of(0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Surd.of(0));
   }
 
   public void testOf() {
@@ -65,11 +61,6 @@ public class SurdTest extends TestCase {
 
   public void testComplexFail() {
     Scalar scalar = ComplexScalar.of(12, 23);
-    try {
-      Surd.of(3).apply(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Surd.of(3).apply(scalar));
   }
 }

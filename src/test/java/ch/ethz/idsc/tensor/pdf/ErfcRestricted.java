@@ -17,7 +17,6 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 /* package */ enum ErfcRestricted implements ScalarUnaryOperator {
   FUNCTION;
 
-  // ---
   private static final ScalarUnaryOperator SERIES = Series.of(Tensors.vector( //
       1, //
       -1.1283791670955126, 0, // x

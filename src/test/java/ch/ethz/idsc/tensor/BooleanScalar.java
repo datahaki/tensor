@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
         : FALSE;
   }
 
-  // ---
+  /***************************************************/
   private final boolean value;
 
   /** constructor initializes the static members

@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.Permutations;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SubsetsTest extends TestCase {
@@ -65,29 +66,14 @@ public class SubsetsTest extends TestCase {
   }
 
   public void testNegativeFail() {
-    try {
-      Subsets.of(Tensors.vector(2, 3, 4), -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Subsets.of(Tensors.vector(2, 3, 4), -1));
   }
 
   public void testNegative2Fail() {
-    try {
-      Subsets.of(Tensors.empty(), -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Subsets.of(Tensors.empty(), -1));
   }
 
   public void testScalarFail() {
-    try {
-      Subsets.of(Pi.HALF, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Subsets.of(Pi.HALF, 2));
   }
 }

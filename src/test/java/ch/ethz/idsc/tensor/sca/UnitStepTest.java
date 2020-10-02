@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitStepTest extends TestCase {
@@ -30,21 +31,11 @@ public class UnitStepTest extends TestCase {
 
   public void testQuaternionFail() {
     Scalar scalar = Quaternion.of(RealScalar.of(-4), Tensors.vector(1, 2, 3));
-    try {
-      UnitStep.FUNCTION.apply(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnitStep.FUNCTION.apply(scalar));
   }
 
   public void testStringFail() {
     Scalar scalar = StringScalar.of("abc");
-    try {
-      UnitStep.FUNCTION.apply(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnitStep.FUNCTION.apply(scalar));
   }
 }

@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuaternionImplTest extends TestCase {
@@ -115,18 +116,8 @@ public class QuaternionImplTest extends TestCase {
   public void testPlusFail() {
     Scalar quaternion = Quaternion.of(1, 3, -2, 2);
     Scalar quantity = Quantity.of(1, "m");
-    try {
-      quaternion.add(quantity);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      quantity.add(quaternion);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> quaternion.add(quantity));
+    AssertFail.of(() -> quantity.add(quaternion));
   }
 
   public void testMultiplyFail() {
@@ -134,18 +125,8 @@ public class QuaternionImplTest extends TestCase {
     GaussScalar gaussScalar = GaussScalar.of(3, 11);
     assertFalse(quaternion.equals(gaussScalar));
     assertFalse(gaussScalar.equals(quaternion));
-    try {
-      quaternion.multiply(gaussScalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      gaussScalar.multiply(quaternion);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> quaternion.multiply(gaussScalar));
+    AssertFail.of(() -> gaussScalar.multiply(quaternion));
   }
 
   public void testAbs() {
@@ -160,12 +141,7 @@ public class QuaternionImplTest extends TestCase {
 
   public void testNumberFail() {
     Quaternion quaternion = Quaternion.of(1, 3, -2, 2);
-    try {
-      quaternion.number();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> quaternion.number());
   }
 
   public void testSign() {

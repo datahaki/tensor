@@ -57,7 +57,8 @@ public class InterpolatingPolynomial implements Serializable {
    * @throws Exception if given vector is not a tensor of rank 1
    * @throws Exception if length of vector is different from number of knots */
   public ScalarUnaryOperator scalarUnaryOperator(Tensor vector) {
-    return new TensorScalarFunctionCast(new Neville(VectorQ.requireLength(vector, knots.length)));
+    Neville neville = new Neville(VectorQ.requireLength(vector, knots.length));
+    return scalar -> (Scalar) neville.apply(scalar);
   }
 
   /** Neville's algorithm for polynomial interpolation by Eric Harold Neville

@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NumberQTest extends TestCase {
@@ -55,20 +56,10 @@ public class NumberQTest extends TestCase {
   }
 
   public void testRequireFail() {
-    try {
-      NumberQ.require(Quantity.of(6, "apples"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NumberQ.require(Quantity.of(6, "apples")));
   }
 
   public void testNullFail() {
-    try {
-      NumberQ.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NumberQ.of(null));
   }
 }

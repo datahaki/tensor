@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class Norm2SquaredTest extends TestCase {
@@ -29,11 +30,6 @@ public class Norm2SquaredTest extends TestCase {
   }
 
   public void testEmpty() {
-    try {
-      Norm2Squared.ofVector(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Norm2Squared.ofVector(Tensors.empty()));
   }
 }

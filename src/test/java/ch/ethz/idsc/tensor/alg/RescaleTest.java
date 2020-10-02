@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
 import ch.ethz.idsc.tensor.red.Tally;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RescaleTest extends TestCase {
@@ -98,41 +99,21 @@ public class RescaleTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      Rescale.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Rescale.of(RealScalar.ONE));
   }
 
   public void testQuantityMixedFail() {
     Tensor vector = Tensors.of(Quantity.of(1, "s"), Quantity.of(2, "m"));
-    try {
-      Rescale.of(vector);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Rescale.of(vector));
   }
 
   public void testQuantityZeroFail() {
     Tensor vector = Tensors.of(Quantity.of(0, ""), Quantity.of(0, "m"));
-    try {
-      Rescale.of(vector);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Rescale.of(vector));
   }
 
   public void testComplexFail() {
     Tensor vector = Tensors.fromString("{2+I, 1+2*I}");
-    try {
-      Rescale.of(vector);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Rescale.of(vector));
   }
 }

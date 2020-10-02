@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.alg.Series;
 import ch.ethz.idsc.tensor.qty.RandomQuaternion;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FitTest extends TestCase {
@@ -43,11 +44,6 @@ public class FitTest extends TestCase {
   }
 
   public void testNegativeFail() {
-    try {
-      Fit.Polynomial.of(-1, Tensors.vector(10, 11), Tensors.vector(5, -2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Fit.Polynomial.of(-1, Tensors.vector(10, 11), Tensors.vector(5, -2)));
   }
 }

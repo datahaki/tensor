@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.num.Rationalize;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SqrtTest extends TestCase {
@@ -93,11 +94,6 @@ public class SqrtTest extends TestCase {
 
   public void testFail() {
     Scalar scalar = StringScalar.of("string");
-    try {
-      Sqrt.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Sqrt.of(scalar));
   }
 }

@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.io.CsvFormat;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantityTest extends TestCase {
@@ -78,55 +79,20 @@ public class QuantityTest extends TestCase {
   }
 
   public void testParseFail() {
-    try {
-      Quantity.of(3.14, "^2");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quantity.of(3.14, "m^2a");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quantity.of(3.14, "m^");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quantity.of(3.14, "m[^2");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quantity.of(3.14, "m]^2");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantity.of(3.14, "^2"));
+    AssertFail.of(() -> Quantity.of(3.14, "m^2a"));
+    AssertFail.of(() -> Quantity.of(3.14, "m^"));
+    AssertFail.of(() -> Quantity.of(3.14, "m[^2"));
+    AssertFail.of(() -> Quantity.of(3.14, "m]^2"));
   }
 
   public void testNestFail() {
     Scalar q1 = Quantity.of(3.14, "m");
-    try {
-      Quantity.of(q1, "s");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantity.of(q1, "s"));
   }
 
   public void testNestEmptyFail() {
-    try {
-      Quantity.of(Quantity.of(2, "s"), "");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantity.of(Quantity.of(2, "s"), ""));
   }
 
   public void testValue() {

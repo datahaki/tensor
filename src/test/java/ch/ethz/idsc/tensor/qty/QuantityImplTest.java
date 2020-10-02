@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantityImplTest extends TestCase {
@@ -29,13 +30,8 @@ public class QuantityImplTest extends TestCase {
   }
 
   public void testExactIntFail() {
-    try {
-      Scalar scalar = Quantity.of(10, "m");
-      Scalars.intValueExact(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    Scalar scalar = Quantity.of(10, "m");
+    AssertFail.of(() -> Scalars.intValueExact(scalar));
   }
 
   public void testEquals() {
@@ -64,30 +60,15 @@ public class QuantityImplTest extends TestCase {
 
   public void testPowerQuantityQuantityFail() {
     Scalar scalar = Scalars.fromString("-7+3*I[kg^-2*m*s]");
-    try {
-      Power.of(scalar, Quantity.of(3, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.of(scalar, Quantity.of(3, "s")));
   }
 
   public void testPowerRealQuantityFail() {
-    try {
-      Power.of(RealScalar.ONE, Quantity.of(3, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.of(RealScalar.ONE, Quantity.of(3, "s")));
   }
 
   public void testPowerDoubleQuantityFail() {
-    try {
-      Power.of(Pi.VALUE, Quantity.of(3, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.of(Pi.VALUE, Quantity.of(3, "s")));
   }
 
   public void testPackageVisibility() {

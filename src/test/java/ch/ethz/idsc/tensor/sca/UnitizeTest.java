@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitizeTest extends TestCase {
@@ -33,11 +34,6 @@ public class UnitizeTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      Unitize.FUNCTION.apply(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Unitize.FUNCTION.apply(null));
   }
 }

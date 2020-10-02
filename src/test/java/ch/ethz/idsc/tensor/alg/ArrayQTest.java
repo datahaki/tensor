@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ArrayQTest extends TestCase {
@@ -39,20 +40,10 @@ public class ArrayQTest extends TestCase {
 
   public void testRequire() {
     Tensor tensor = Tensors.fromString("{{1, 2}, 3}");
-    try {
-      ArrayQ.require(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ArrayQ.require(tensor));
   }
 
   public void testNullFail() {
-    try {
-      ArrayQ.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ArrayQ.of(null));
   }
 }

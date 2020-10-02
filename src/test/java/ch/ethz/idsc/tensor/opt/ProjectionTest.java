@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ProjectionTest extends TestCase {
@@ -26,12 +27,7 @@ public class ProjectionTest extends TestCase {
     Tensor p2 = tensorUnaryOperator.apply(Tensors.fromString("{5, I, 7}"));
     assertEquals(Tensors.fromString("{4 + I/3, 4 + I/3, 4 + I/3}"), p2);
     ExactTensorQ.require(p2);
-    try {
-      tensorUnaryOperator.apply(HilbertMatrix.of(3, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tensorUnaryOperator.apply(HilbertMatrix.of(3, 3)));
   }
 
   public void testUV() {
@@ -59,41 +55,16 @@ public class ProjectionTest extends TestCase {
   }
 
   public void testZeroFail() {
-    try {
-      Projection.on(Tensors.vector(0, 0, 0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Projection.on(Tensors.vector(0.0, 0, 0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Projection.on(Tensors.vector(0, 0, 0)));
+    AssertFail.of(() -> Projection.on(Tensors.vector(0.0, 0, 0)));
   }
 
   public void testScalarFail() {
-    try {
-      Projection.on(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Projection.on(RealScalar.ONE));
   }
 
   public void testMatrixFail() {
-    try {
-      Projection.on(HilbertMatrix.of(2, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Projection.on(HilbertMatrix.of(3, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Projection.on(HilbertMatrix.of(2, 2)));
+    AssertFail.of(() -> Projection.on(HilbertMatrix.of(3, 2)));
   }
 }

@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PoissonDistributionTest extends TestCase {
@@ -90,27 +91,12 @@ public class PoissonDistributionTest extends TestCase {
   }
 
   public void testQuantityFail() {
-    try {
-      PoissonDistribution.of(Quantity.of(3, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PoissonDistribution.of(Quantity.of(3, "m")));
   }
 
   public void testFailLambda() {
-    try {
-      PoissonDistribution.of(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      PoissonDistribution.of(RealScalar.of(-0.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PoissonDistribution.of(RealScalar.ZERO));
+    AssertFail.of(() -> PoissonDistribution.of(RealScalar.of(-0.1)));
   }
 
   public void testLarge() {

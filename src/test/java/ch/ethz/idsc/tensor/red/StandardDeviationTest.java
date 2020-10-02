@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class StandardDeviationTest extends TestCase {
@@ -27,20 +28,10 @@ public class StandardDeviationTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      StandardDeviation.ofVector(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> StandardDeviation.ofVector(RealScalar.ONE));
   }
 
   public void testMatrixFail() {
-    try {
-      StandardDeviation.ofVector(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> StandardDeviation.ofVector(HilbertMatrix.of(3)));
   }
 }

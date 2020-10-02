@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.alg;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class InsertTest extends TestCase {
@@ -33,36 +34,16 @@ public class InsertTest extends TestCase {
 
   public void testAFailSmall() {
     Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, 0);
-    try {
-      Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, -1));
   }
 
   public void testAFailLarge() {
     Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, 3);
-    try {
-      Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, 4);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, 4));
   }
 
   public void testNullFail() {
-    try {
-      Insert.of(null, RealScalar.ZERO, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Insert.of(Tensors.vector(1, 2, 3), null, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Insert.of(null, RealScalar.ZERO, 0));
+    AssertFail.of(() -> Insert.of(Tensors.vector(1, 2, 3), null, 0));
   }
 }

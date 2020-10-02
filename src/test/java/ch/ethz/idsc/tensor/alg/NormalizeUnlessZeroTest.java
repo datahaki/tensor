@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Frobenius;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NormalizeUnlessZeroTest extends TestCase {
@@ -24,37 +25,18 @@ public class NormalizeUnlessZeroTest extends TestCase {
     for (Norm norm : Norm.values()) {
       TensorUnaryOperator tensorUnaryOperator = NormalizeUnlessZero.with(norm);
       Tensor tensor = Tensors.empty();
-      try {
-        tensorUnaryOperator.apply(tensor);
-        fail();
-        // System.out.println(norm);
-        // assertEquals(normal, Tensors.empty());
-        // normal.append(Pi.VALUE);
-        // assertEquals(tensor, Tensors.empty());
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> tensorUnaryOperator.apply(tensor));
     }
   }
 
   public void testNormalizeNaN() {
     Tensor vector = Tensors.of(RealScalar.ONE, DoubleScalar.INDETERMINATE, RealScalar.ONE);
-    try {
-      NormalizeUnlessZero.with(Norm._2::ofVector).apply(vector);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NormalizeUnlessZero.with(Norm._2::ofVector).apply(vector));
   }
 
   public void testMatrixFail2() {
     TensorUnaryOperator normalize = NormalizeUnlessZero.with(Frobenius.NORM::ofVector);
-    try {
-      normalize.apply(Array.zeros(3, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> normalize.apply(Array.zeros(3, 3)));
   }
 
   public void testNormalizeTotal() {

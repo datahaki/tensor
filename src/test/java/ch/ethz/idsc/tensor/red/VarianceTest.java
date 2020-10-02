@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.TensorMap;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class VarianceTest extends TestCase {
@@ -39,35 +40,15 @@ public class VarianceTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      Variance.ofVector(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Variance.ofVector(RealScalar.ONE));
   }
 
   public void testFailLength() {
-    try {
-      Variance.ofVector(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Variance.ofVector(Tensors.vector(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Variance.ofVector(Tensors.empty()));
+    AssertFail.of(() -> Variance.ofVector(Tensors.vector(3)));
   }
 
   public void testFailMatrix() {
-    try {
-      Variance.ofVector(HilbertMatrix.of(5));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Variance.ofVector(HilbertMatrix.of(5)));
   }
 }

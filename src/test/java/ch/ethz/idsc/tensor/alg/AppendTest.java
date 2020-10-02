@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class AppendTest extends TestCase {
@@ -32,11 +33,6 @@ public class AppendTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      Append.of(RealScalar.ONE, Pi.TWO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Append.of(RealScalar.ONE, Pi.TWO));
   }
 }

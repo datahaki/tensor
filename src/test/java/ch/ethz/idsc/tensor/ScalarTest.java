@@ -5,6 +5,7 @@ import java.util.Collections;
 
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ScalarTest extends TestCase {
@@ -45,12 +46,7 @@ public class ScalarTest extends TestCase {
   public void testFails() {
     Scalar a = DoubleScalar.of(3);
     Scalar b = DoubleScalar.of(5);
-    try {
-      a.dot(b);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> a.dot(b));
   }
 
   public void testNumber2() {

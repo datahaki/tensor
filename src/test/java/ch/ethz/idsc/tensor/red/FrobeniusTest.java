@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.mat.FourierMatrix;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FrobeniusTest extends TestCase {
@@ -47,32 +48,12 @@ public class FrobeniusTest extends TestCase {
   }
 
   public void testVectorFail() {
-    try {
-      Frobenius.NORM.ofVector(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Frobenius.NORM.ofVector(HilbertMatrix.of(3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Frobenius.NORM.ofVector(RealScalar.ONE));
+    AssertFail.of(() -> Frobenius.NORM.ofVector(HilbertMatrix.of(3, 4)));
   }
 
   public void testMatrixFail() {
-    try {
-      Frobenius.NORM.ofMatrix(ComplexScalar.of(2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Frobenius.NORM.ofMatrix(Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Frobenius.NORM.ofMatrix(ComplexScalar.of(2, 3)));
+    AssertFail.of(() -> Frobenius.NORM.ofMatrix(Tensors.vector(1, 2, 3)));
   }
 }

@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityUnit;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ErlangDistributionTest extends TestCase {
@@ -55,11 +56,6 @@ public class ErlangDistributionTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      ErlangDistribution.of(0, RealScalar.of(1.8));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ErlangDistribution.of(0, RealScalar.of(1.8)));
   }
 }

@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.qty.UnitConvert;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FrechetDistributionTest extends TestCase {
@@ -101,42 +102,17 @@ public class FrechetDistributionTest extends TestCase {
 
   public void testInverseCDF_1() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
-    try {
-      inverseCDF.quantile(RealScalar.of(1.0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.0)));
   }
 
   public void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
-    try {
-      inverseCDF.quantile(RealScalar.of(1.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   public void testFail() {
-    try {
-      FrechetDistribution.of(RealScalar.of(3), RealScalar.of(0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      FrechetDistribution.of(RealScalar.of(0), RealScalar.of(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      FrechetDistribution.of(Quantity.of(2.3, "s"), Quantity.of(1.5, "m^-1"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> FrechetDistribution.of(RealScalar.of(3), RealScalar.of(0)));
+    AssertFail.of(() -> FrechetDistribution.of(RealScalar.of(0), RealScalar.of(2)));
+    AssertFail.of(() -> FrechetDistribution.of(Quantity.of(2.3, "s"), Quantity.of(1.5, "m^-1")));
   }
 }

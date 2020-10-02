@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.io.StringScalarQ;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorParserTest extends TestCase {
@@ -95,20 +96,10 @@ public class TensorParserTest extends TestCase {
   }
 
   public void testFailStringNull() {
-    try {
-      Tensors.fromString(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Tensors.fromString(null));
   }
 
   public void testFailFunctionNull() {
-    try {
-      new TensorParser(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new TensorParser(null));
   }
 }

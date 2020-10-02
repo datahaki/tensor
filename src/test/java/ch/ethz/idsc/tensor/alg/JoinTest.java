@@ -6,6 +6,7 @@ import java.util.Arrays;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class JoinTest extends TestCase {
@@ -98,29 +99,14 @@ public class JoinTest extends TestCase {
 
   public void testFailScalar() {
     // in Mathematica Join that involves scalars is not defined!
-    try {
-      Join.of(RealScalar.of(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Join.of(RealScalar.of(2)));
   }
 
   public void testFailScalarTwo() {
-    try {
-      Join.of(RealScalar.of(2), RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Join.of(RealScalar.of(2), RealScalar.of(3)));
   }
 
   public void testFailVectorScalar() {
-    try {
-      Join.of(Tensors.vector(0, 1, 2), RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Join.of(Tensors.vector(0, 1, 2), RealScalar.of(3)));
   }
 }

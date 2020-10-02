@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MinTest extends TestCase {
@@ -68,17 +69,7 @@ public class MinTest extends TestCase {
   public void testFail() {
     Scalar string = StringScalar.of("string");
     Scalar gauss = GaussScalar.of(1, 3);
-    try {
-      Min.of(string, gauss);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Min.of(gauss, string);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Min.of(string, gauss));
+    AssertFail.of(() -> Min.of(gauss, string));
   }
 }

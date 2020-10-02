@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 /** [
@@ -29,17 +30,7 @@ public class GaussianMatrixTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      GaussianMatrix.of(0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      GaussianMatrix.of(-1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GaussianMatrix.of(0));
+    AssertFail.of(() -> GaussianMatrix.of(-1));
   }
 }
