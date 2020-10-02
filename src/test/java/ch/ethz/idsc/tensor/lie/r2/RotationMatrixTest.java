@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.opt.PowerIteration;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RotationMatrixTest extends TestCase {
@@ -41,11 +42,6 @@ public class RotationMatrixTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      RotationMatrix.of(GaussScalar.of(2, 7));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RotationMatrix.of(GaussScalar.of(2, 7)));
   }
 }

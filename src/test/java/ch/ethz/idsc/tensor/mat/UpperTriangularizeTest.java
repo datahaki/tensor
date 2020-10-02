@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UpperTriangularizeTest extends TestCase {
@@ -82,20 +83,10 @@ public class UpperTriangularizeTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      UpperTriangularize.of(RealScalar.ONE, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UpperTriangularize.of(RealScalar.ONE, 0));
   }
 
   public void testRank3Fail() {
-    try {
-      UpperTriangularize.of(LeviCivitaTensor.of(3), 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UpperTriangularize.of(LeviCivitaTensor.of(3), 0));
   }
 }

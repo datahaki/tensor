@@ -6,6 +6,7 @@ import java.awt.Color;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CyclicColorDataIndexedTest extends TestCase {
@@ -38,30 +39,15 @@ public class CyclicColorDataIndexedTest extends TestCase {
   }
 
   public void testFailEmpty() {
-    try {
-      CyclicColorDataIndexed.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CyclicColorDataIndexed.of(Tensors.empty()));
   }
 
   public void testFailScalar() {
-    try {
-      CyclicColorDataIndexed.of(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CyclicColorDataIndexed.of(RealScalar.ZERO));
   }
 
   public void testFailRGB() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}}");
-    try {
-      CyclicColorDataIndexed.of(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CyclicColorDataIndexed.of(tensor));
   }
 }

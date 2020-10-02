@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MatlabExportTest extends TestCase {
@@ -74,11 +75,6 @@ public class MatlabExportTest extends TestCase {
 
   public void testFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
-    try {
-      MatlabExport.of(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatlabExport.of(tensor));
   }
 }

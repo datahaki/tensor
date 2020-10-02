@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.SpectrogramArray;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SpectrogramTest extends TestCase {
@@ -37,29 +38,14 @@ public class SpectrogramTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      Spectrogram.array(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Spectrogram.array(null));
   }
 
   public void testScalarFail() {
-    try {
-      Spectrogram.of(RealScalar.ONE, ColorDataGradients.VISIBLESPECTRUM);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Spectrogram.of(RealScalar.ONE, ColorDataGradients.VISIBLESPECTRUM));
   }
 
   public void testMatrixFail() {
-    try {
-      Spectrogram.of(HilbertMatrix.of(32), ColorDataGradients.VISIBLESPECTRUM);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Spectrogram.of(HilbertMatrix.of(32), ColorDataGradients.VISIBLESPECTRUM));
   }
 }

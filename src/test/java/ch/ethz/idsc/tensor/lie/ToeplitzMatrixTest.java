@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.mat.NullSpace;
 import ch.ethz.idsc.tensor.mat.RowReduce;
 import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ToeplitzMatrixTest extends TestCase {
@@ -45,38 +46,18 @@ public class ToeplitzMatrixTest extends TestCase {
   }
 
   public void testFailEven() {
-    try {
-      ToeplitzMatrix.of(Tensors.vector(1, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ToeplitzMatrix.of(Tensors.vector(1, 2)));
   }
 
   public void testFailEmpty() {
-    try {
-      ToeplitzMatrix.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ToeplitzMatrix.of(Tensors.empty()));
   }
 
   public void testFailScalar() {
-    try {
-      ToeplitzMatrix.of(RealScalar.of(5));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ToeplitzMatrix.of(RealScalar.of(5)));
   }
 
   public void testFailMatrix() {
-    try {
-      ToeplitzMatrix.of(HilbertMatrix.of(5));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ToeplitzMatrix.of(HilbertMatrix.of(5)));
   }
 }

@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorContractTest extends TestCase {
@@ -20,22 +21,12 @@ public class TensorContractTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      TensorContract.of(LeviCivitaTensor.of(3), 0, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TensorContract.of(LeviCivitaTensor.of(3), 0, 3));
   }
 
   public void testContraction() {
     Tensor array = Array.of(Tensors::vector, 2, 3, 2, 4);
-    try {
-      TensorContract.of(array, 0, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TensorContract.of(array, 0, 3));
     Tensor tensor = TensorContract.of(array, 0, 2);
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 4, 4));
   }

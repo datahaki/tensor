@@ -29,6 +29,7 @@ import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QRDecompositionTest extends TestCase {
@@ -238,11 +239,6 @@ public class QRDecompositionTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      QRDecomposition.of(IdentityMatrix.of(3), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> QRDecomposition.of(IdentityMatrix.of(3), null));
   }
 }

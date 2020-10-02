@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class OrthogonalMatrixQTest extends TestCase {
@@ -31,21 +32,11 @@ public class OrthogonalMatrixQTest extends TestCase {
 
   public void testRequireChop() {
     OrthogonalMatrixQ.require(IdentityMatrix.of(4), Chop.NONE);
-    try {
-      OrthogonalMatrixQ.require(HilbertMatrix.of(3), Chop.NONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> OrthogonalMatrixQ.require(HilbertMatrix.of(3), Chop.NONE));
   }
 
   public void testRequire() {
     OrthogonalMatrixQ.require(IdentityMatrix.of(4));
-    try {
-      OrthogonalMatrixQ.require(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> OrthogonalMatrixQ.require(HilbertMatrix.of(3)));
   }
 }

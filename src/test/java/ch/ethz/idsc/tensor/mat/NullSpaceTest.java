@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NullSpaceTest extends TestCase {
@@ -245,29 +246,14 @@ public class NullSpaceTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      NullSpace.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NullSpace.of(RealScalar.ONE));
   }
 
   public void testFailVector() {
-    try {
-      NullSpace.of(Tensors.vector(1, 2, 3, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NullSpace.of(Tensors.vector(1, 2, 3, 1)));
   }
 
   public void testFailRank3() {
-    try {
-      NullSpace.of(LeviCivitaTensor.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NullSpace.of(LeviCivitaTensor.of(3)));
   }
 }

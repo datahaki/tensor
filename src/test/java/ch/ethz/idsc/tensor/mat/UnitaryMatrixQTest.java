@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitaryMatrixQTest extends TestCase {
@@ -33,11 +34,6 @@ public class UnitaryMatrixQTest extends TestCase {
   public void testRequire() {
     UnitaryMatrixQ.require(FourierMatrix.of(7), Chop._12);
     UnitaryMatrixQ.require(FourierMatrix.of(8));
-    try {
-      UnitaryMatrixQ.require(Tensors.fromString("{{1, 2}, {I, I}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnitaryMatrixQ.require(Tensors.fromString("{{1, 2}, {I, I}}")));
   }
 }

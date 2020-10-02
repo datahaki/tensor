@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Frobenius;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FourierMatrixTest extends TestCase {
@@ -49,17 +50,7 @@ public class FourierMatrixTest extends TestCase {
   }
 
   public void testNegativeFail() {
-    try {
-      FourierMatrix.of(0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      FourierMatrix.of(-1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> FourierMatrix.of(0));
+    AssertFail.of(() -> FourierMatrix.of(-1));
   }
 }

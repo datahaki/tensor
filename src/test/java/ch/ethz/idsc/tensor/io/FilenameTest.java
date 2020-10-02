@@ -1,46 +1,27 @@
 // code by jph
 package ch.ethz.idsc.tensor.io;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FilenameTest extends TestCase {
   public void testFailSpacing() {
     Filename filename = new Filename("dir/title.bmp ");
-    try {
-      filename.extension();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> filename.extension());
   }
 
   public void testFailExtension() {
     Filename filename = new Filename("dir/title.ext");
-    try {
-      filename.extension();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> filename.extension());
   }
 
   public void testFailNoExt() {
     Filename filename = new Filename("dir/mybmp");
-    try {
-      filename.extension();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> filename.extension());
   }
 
   public void testFailTruncate() {
     Filename filename = new Filename("dir/mybmp");
-    try {
-      filename.truncate();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> filename.truncate());
   }
 }

@@ -21,7 +21,6 @@ public class ShermanMorrisonTest extends TestCase {
         Tensor u = RandomVariate.of(distribution, n);
         Tensor v = RandomVariate.of(distribution, n);
         Tensor compar = Inverse.of(matrix.add(TensorProduct.of(u, v)));
-        // ---
         Tensor invers = Inverse.of(matrix);
         Tensor z = invers.dot(u);
         Scalar lambda = (Scalar) v.dot(z);

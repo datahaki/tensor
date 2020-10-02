@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CyclesTest extends TestCase {
@@ -76,45 +77,20 @@ public class CyclesTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      Cycles.of(Tensors.fromString("{3}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cycles.of(Tensors.fromString("{3}")));
   }
 
   public void testDuplicateFail() {
-    try {
-      Cycles.of(Tensors.fromString("{{5, 5}, {3}, {2, 2, 2}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cycles.of(Tensors.fromString("{{5, 5}, {3}, {2, 2, 2}}")));
   }
 
   public void testNegativeFail() {
-    try {
-      Cycles.of(Tensors.fromString("{{-3}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Cycles.of(Tensors.fromString("{{3, -0.1}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cycles.of(Tensors.fromString("{{-3}}")));
+    AssertFail.of(() -> Cycles.of(Tensors.fromString("{{3, -0.1}}")));
   }
 
   public void testPowerFail() {
     Cycles cycles = Cycles.of(Tensors.fromString("{{1, 20}, {4, 10, 19, 6, 18}, {5, 9}, {7, 14, 13}}"));
-    try {
-      cycles.power(Pi.HALF);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> cycles.power(Pi.HALF));
   }
 }

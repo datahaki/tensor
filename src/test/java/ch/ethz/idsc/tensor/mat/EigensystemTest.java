@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class EigensystemTest extends TestCase {
@@ -42,29 +43,14 @@ public class EigensystemTest extends TestCase {
   public void testQuantityMixed() {
     Tensor matrix = Tensors.fromString("{{10[m^2], 2[m*kg]}, {2[m*kg], 4[kg^2]}}");
     SymmetricMatrixQ.require(matrix);
-    try {
-      Eigensystem.ofSymmetric(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Eigensystem.ofSymmetric(matrix));
   }
 
   public void testEmptyFail() {
-    try {
-      Eigensystem.ofSymmetric(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Eigensystem.ofSymmetric(Tensors.empty()));
   }
 
   public void testNonSymmetricFail() {
-    try {
-      Eigensystem.ofSymmetric(Tensors.fromString("{{1, 2}, {3, 4}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Eigensystem.ofSymmetric(Tensors.fromString("{{1, 2}, {3, 4}}")));
   }
 }

@@ -5,45 +5,26 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DeterminantTest extends TestCase {
   public void testFailMatrixQ() {
     Tensor table = Tensors.fromString("{{1, 2, 3}, {4, 5}}");
-    try {
-      Det.of(table);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Det.of(table));
   }
 
   public void testFailNonArray() {
     Tensor matrix = HilbertMatrix.of(4);
     matrix.set(Tensors.vector(1, 2, 3), 1, 2);
-    try {
-      Det.of(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Det.of(matrix));
   }
 
   public void testFailRank3() {
-    try {
-      Det.of(LeviCivitaTensor.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Det.of(LeviCivitaTensor.of(3)));
   }
 
   public void testFailRank3b() {
-    try {
-      Det.of(Array.zeros(2, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Det.of(Array.zeros(2, 2, 3)));
   }
 }

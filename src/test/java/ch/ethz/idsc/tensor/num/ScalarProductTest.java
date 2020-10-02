@@ -7,6 +7,7 @@ import java.math.BigInteger;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ScalarProductTest extends TestCase {
@@ -29,11 +30,6 @@ public class ScalarProductTest extends TestCase {
   }
 
   public void testSimple() {
-    try {
-      new ScalarProduct(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new ScalarProduct(null));
   }
 }

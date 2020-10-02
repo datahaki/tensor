@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FourierTest extends TestCase {
@@ -51,29 +52,14 @@ public class FourierTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      Fourier.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Fourier.of(RealScalar.ONE));
   }
 
   public void testFailEmpty() {
-    try {
-      Fourier.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Fourier.of(Tensors.empty()));
   }
 
   public void testFailMatrix() {
-    try {
-      Fourier.of(HilbertMatrix.of(4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Fourier.of(HilbertMatrix.of(4)));
   }
 }

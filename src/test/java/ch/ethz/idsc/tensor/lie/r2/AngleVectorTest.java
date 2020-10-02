@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class AngleVectorTest extends TestCase {
@@ -71,11 +72,6 @@ public class AngleVectorTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      AngleVector.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> AngleVector.of(null));
   }
 }

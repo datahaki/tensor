@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class VectorQTest extends TestCase {
@@ -45,43 +46,18 @@ public class VectorQTest extends TestCase {
   }
 
   public void testRequireFail() {
-    try {
-      VectorQ.requireLength(Tensors.vector(1, 2, 3), 4);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      VectorQ.requireLength(Tensors.vector(1, 2, 3), -3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      VectorQ.requireLength(RealScalar.ZERO, Scalar.LENGTH);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VectorQ.requireLength(Tensors.vector(1, 2, 3), 4));
+    AssertFail.of(() -> VectorQ.requireLength(Tensors.vector(1, 2, 3), -3));
+    AssertFail.of(() -> VectorQ.requireLength(RealScalar.ZERO, Scalar.LENGTH));
   }
 
   public void testEnsure() {
     Tensor empty = VectorQ.require(Tensors.empty());
     assertTrue(Tensors.isEmpty(empty));
-    try {
-      VectorQ.require(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VectorQ.require(HilbertMatrix.of(3)));
   }
 
   public void testFail() {
-    try {
-      VectorQ.ofLength(Tensors.empty(), Scalar.LENGTH);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VectorQ.ofLength(Tensors.empty(), Scalar.LENGTH));
   }
 }

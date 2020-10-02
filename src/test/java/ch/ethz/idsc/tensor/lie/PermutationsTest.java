@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.StringTensor;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PermutationsTest extends TestCase {
@@ -67,20 +68,10 @@ public class PermutationsTest extends TestCase {
   }
 
   public void testTensorScalarFail() {
-    try {
-      Permutations.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Permutations.of(RealScalar.ONE));
   }
 
   public void testStreamScalarFail() {
-    try {
-      Permutations.stream(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Permutations.stream(RealScalar.ONE));
   }
 }

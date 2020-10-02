@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SpectrogramArrayTest extends TestCase {
@@ -49,18 +50,8 @@ public class SpectrogramArrayTest extends TestCase {
   }
 
   public void testStaticOpsFail() {
-    try {
-      SpectrogramArray.of(Quantity.of(0, "s"), Quantity.of(100, "s^-1"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SpectrogramArray.of(Quantity.of(0, "s"), Quantity.of(100, "s^-1")));
+    AssertFail.of(() -> SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1")));
   }
 
   public void testPreallocate() {
@@ -85,63 +76,28 @@ public class SpectrogramArrayTest extends TestCase {
   }
 
   public void testFailWindowLength() {
-    try {
-      SpectrogramArray.of(0, 8);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SpectrogramArray.of(0, 8));
   }
 
   public void testFailWindowLengthOffset() {
-    try {
-      SpectrogramArray.of(4, 8);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SpectrogramArray.of(4, 8));
   }
 
   public void testFailOffset() {
-    try {
-      SpectrogramArray.of(4, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SpectrogramArray.of(4, 0));
   }
 
   public void testDimensionsFail() {
     TensorUnaryOperator tensorUnaryOperator = SpectrogramArray.of(32, 8);
-    try {
-      tensorUnaryOperator.apply(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      tensorUnaryOperator.apply(HilbertMatrix.of(32));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tensorUnaryOperator.apply(RealScalar.ONE));
+    AssertFail.of(() -> tensorUnaryOperator.apply(HilbertMatrix.of(32)));
   }
 
   public void testScalarFail() {
-    try {
-      SpectrogramArray.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SpectrogramArray.of(RealScalar.ONE));
   }
 
   public void testMatrixFail() {
-    try {
-      SpectrogramArray.of(HilbertMatrix.of(32));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SpectrogramArray.of(HilbertMatrix.of(32)));
   }
 }

@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class InverseTest extends TestCase {
@@ -60,58 +61,23 @@ public class InverseTest extends TestCase {
   public void testDet0() {
     Tensor matrix = ResourceData.of("/mat/det0-matlab.csv"); // det(matrix) == 0
     assertNotNull(matrix);
-    try {
-      Inverse.of(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Inverse.of(N.DOUBLE.of(matrix));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Inverse.of(matrix));
+    AssertFail.of(() -> Inverse.of(N.DOUBLE.of(matrix)));
   }
 
   public void testZeroFail() {
     Tensor matrix = DiagonalMatrix.of(1, 2, 0, 3);
-    try {
-      Inverse.of(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Inverse.of(matrix, Pivots.FIRST_NON_ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Inverse.of(matrix));
+    AssertFail.of(() -> Inverse.of(matrix, Pivots.FIRST_NON_ZERO));
   }
 
   public void testFailNonSquare() {
-    try {
-      Inverse.of(HilbertMatrix.of(3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Inverse.of(HilbertMatrix.of(4, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Inverse.of(HilbertMatrix.of(3, 4)));
+    AssertFail.of(() -> Inverse.of(HilbertMatrix.of(4, 3)));
   }
 
   public void testFailRank3() {
-    try {
-      Inverse.of(LeviCivitaTensor.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Inverse.of(LeviCivitaTensor.of(3)));
   }
 
   public void testQuantity1() {

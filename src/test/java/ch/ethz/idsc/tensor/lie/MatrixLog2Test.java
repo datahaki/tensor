@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Trace;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MatrixLog2Test extends TestCase {
@@ -108,12 +109,7 @@ public class MatrixLog2Test extends TestCase {
   public void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 2, 3);
-    try {
-      MatrixLog.of(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixLog.of(matrix));
   }
 
   public void testPackageVisibility() {

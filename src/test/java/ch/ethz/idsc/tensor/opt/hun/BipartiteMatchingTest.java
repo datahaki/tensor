@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BipartiteMatchingTest extends TestCase {
@@ -86,20 +87,10 @@ public class BipartiteMatchingTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      BipartiteMatching.of(Pi.VALUE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BipartiteMatching.of(Pi.VALUE));
   }
 
   public void testEmptyFail() {
-    try {
-      BipartiteMatching.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BipartiteMatching.of(Tensors.empty()));
   }
 }

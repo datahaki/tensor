@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.red.Tally;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SignatureTest extends TestCase {
@@ -68,11 +69,6 @@ public class SignatureTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      Signature.of(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Signature.of(RealScalar.ZERO));
   }
 }

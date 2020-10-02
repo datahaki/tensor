@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class OrthogonalizeTest extends TestCase {
@@ -112,39 +113,22 @@ public class OrthogonalizeTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      Orthogonalize.of(Pi.VALUE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Orthogonalize.of(Pi.VALUE));
   }
 
   public void testFailVector() {
-    try {
-      Orthogonalize.of(Tensors.vector(1, 2, 3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Orthogonalize.of(Tensors.vector(1, 2, 3, 4)));
   }
 
   public void testFailMatrix() {
-    try {
-      Tensor matrix = Transpose.of(Tensors.fromString("{{1, 0, 1}, {1, 1, 1}}"));
-      Orthogonalize.of(matrix);
-      // fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    Tensor matrix = Transpose.of(Tensors.fromString("{{1, 0, 1}, {1, 1, 1}}"));
+    Tensor result = Orthogonalize.of(matrix);
+    Tensor expect = Tensors.fromString( // consistent with Mathematica
+        "{{0.7071067811865475, 0.7071067811865477}, {-0.7071067811865477, 0.7071067811865475}, {0, 0}}");
+    Chop._12.requireClose(result, expect);
   }
 
   public void testFailAd() {
-    try {
-      Orthogonalize.of(LeviCivitaTensor.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Orthogonalize.of(LeviCivitaTensor.of(3)));
   }
 }

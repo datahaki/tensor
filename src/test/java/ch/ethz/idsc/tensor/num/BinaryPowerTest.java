@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.num;
 
 import java.math.BigInteger;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BinaryPowerTest extends TestCase {
@@ -36,11 +37,6 @@ public class BinaryPowerTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      new BinaryPower<>(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new BinaryPower<>(null));
   }
 }

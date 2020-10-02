@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HistogramTransformTest extends TestCase {
@@ -36,20 +37,10 @@ public class HistogramTransformTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      HistogramTransform.of(Pi.VALUE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HistogramTransform.of(Pi.VALUE));
   }
 
   public void testVectorFail() {
-    try {
-      HistogramTransform.of(Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HistogramTransform.of(Tensors.vector(1, 2, 3)));
   }
 }

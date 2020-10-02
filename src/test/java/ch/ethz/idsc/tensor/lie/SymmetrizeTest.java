@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SymmetrizeTest extends TestCase {
@@ -55,27 +56,12 @@ public class SymmetrizeTest extends TestCase {
 
   public void testRectangularFail() {
     Distribution distribution = UniformDistribution.unit();
-    try {
-      Symmetrize.of(RandomVariate.of(distribution, 3, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Symmetrize.of(RandomVariate.of(distribution, 3, 3, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Symmetrize.of(RandomVariate.of(distribution, 3, 2)));
+    AssertFail.of(() -> Symmetrize.of(RandomVariate.of(distribution, 3, 3, 2)));
   }
 
   public void testNonArrayFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
-    try {
-      Symmetrize.of(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Symmetrize.of(tensor));
   }
 }

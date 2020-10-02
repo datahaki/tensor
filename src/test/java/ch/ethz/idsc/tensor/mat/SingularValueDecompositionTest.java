@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SingularValueDecompositionTest extends TestCase {
@@ -182,29 +183,9 @@ public class SingularValueDecompositionTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      SingularValueDecomposition.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      SingularValueDecomposition.of(Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      SingularValueDecomposition.of(Tensors.fromString("{{1, 2}, {2, {3}}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      SingularValueDecomposition.of(Array.zeros(2, 3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SingularValueDecomposition.of(RealScalar.ONE));
+    AssertFail.of(() -> SingularValueDecomposition.of(Tensors.vector(1, 2, 3)));
+    AssertFail.of(() -> SingularValueDecomposition.of(Tensors.fromString("{{1, 2}, {2, {3}}}")));
+    AssertFail.of(() -> SingularValueDecomposition.of(Array.zeros(2, 3, 4)));
   }
 }

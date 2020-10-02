@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CrossTest extends TestCase {
@@ -75,45 +76,20 @@ public class CrossTest extends TestCase {
   }
 
   public void testSkew3LengthFail() {
-    try {
-      Cross.skew3(Tensors.vector(1, 2, 3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cross.skew3(Tensors.vector(1, 2, 3, 4)));
   }
 
   public void testFailLength2() {
     Tensor v1 = UnitVector.of(3, 0);
     Tensor v2 = UnitVector.of(2, 1);
-    try {
-      Cross.of(v1, v2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Cross.of(v2, v1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cross.of(v1, v2));
+    AssertFail.of(() -> Cross.of(v2, v1));
   }
 
   public void testFailLength4() {
     Tensor v1 = UnitVector.of(4, 0);
     Tensor v2 = UnitVector.of(3, 1);
-    try {
-      Cross.of(v1, v2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Cross.of(v2, v1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cross.of(v1, v2));
+    AssertFail.of(() -> Cross.of(v2, v1));
   }
 }

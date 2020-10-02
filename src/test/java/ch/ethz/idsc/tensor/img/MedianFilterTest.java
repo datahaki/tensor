@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.img;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MedianFilterTest extends TestCase {
@@ -72,20 +73,10 @@ public class MedianFilterTest extends TestCase {
   // }
   // }
   public void testScalarFail() {
-    try {
-      MedianFilter.of(RealScalar.of(3), 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MedianFilter.of(RealScalar.of(3), 1));
   }
 
   public void testRadiusFail() {
-    try {
-      MedianFilter.of(Tensors.vector(1, 2, 3, 4), -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MedianFilter.of(Tensors.vector(1, 2, 3, 4), -1));
   }
 }

@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.io;
 
 import java.io.File;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HomeDirectoryTest extends TestCase {
@@ -40,11 +41,6 @@ public class HomeDirectoryTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      HomeDirectory.file("Doc", null, "some.txt");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HomeDirectory.file("Doc", null, "some.txt"));
   }
 }

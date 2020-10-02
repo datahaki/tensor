@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.alg;
 
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitVectorTest extends TestCase {
@@ -10,35 +11,10 @@ public class UnitVectorTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      UnitVector.of(0, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      UnitVector.of(-1, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      UnitVector.of(3, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      UnitVector.of(3, 4);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      UnitVector.of(10, 10);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnitVector.of(0, 0));
+    AssertFail.of(() -> UnitVector.of(-1, 0));
+    AssertFail.of(() -> UnitVector.of(3, -1));
+    AssertFail.of(() -> UnitVector.of(3, 4));
+    AssertFail.of(() -> UnitVector.of(10, 10));
   }
 }

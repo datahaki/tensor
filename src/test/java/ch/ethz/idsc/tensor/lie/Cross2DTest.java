@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class Cross2DTest extends TestCase {
@@ -28,29 +29,14 @@ public class Cross2DTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Cross.of(HilbertMatrix.of(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cross.of(HilbertMatrix.of(2)));
   }
 
   public void testFail2() {
-    try {
-      Cross.of(Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cross.of(Tensors.vector(1, 2, 3)));
   }
 
   public void testFailNull() {
-    try {
-      Cross.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cross.of(null));
   }
 }

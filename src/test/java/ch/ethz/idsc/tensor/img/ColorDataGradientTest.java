@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ColorDataGradientTest extends TestCase {
@@ -47,11 +48,6 @@ public class ColorDataGradientTest extends TestCase {
 
   public void testGaussScalar() {
     Scalar scalar = GaussScalar.of(123, 251);
-    try {
-      ColorDataGradients.ALPINE.apply(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ColorDataGradients.ALPINE.apply(scalar));
   }
 }

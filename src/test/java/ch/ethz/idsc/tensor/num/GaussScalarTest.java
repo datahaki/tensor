@@ -27,6 +27,7 @@ import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GaussScalarTest extends TestCase {
@@ -165,12 +166,7 @@ public class GaussScalarTest extends TestCase {
 
   public void testPowerFail() {
     GaussScalar gaussScalar = GaussScalar.of(3, 107);
-    try {
-      Power.of(gaussScalar, Pi.HALF);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.of(gaussScalar, Pi.HALF));
   }
 
   public void testSign() {

@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.mat.AntisymmetricMatrixQ;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorWedgeTest extends TestCase {
@@ -55,39 +56,19 @@ public class TensorWedgeTest extends TestCase {
 
   public void testFailIrrectangular() {
     Tensor matrix = Tensors.fromString("{{1, 2}, {0, 4, 3}}");
-    try {
-      TensorWedge.of(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TensorWedge.of(matrix));
   }
 
   public void testFailRectangularMatrix() {
-    try {
-      TensorWedge.of(HilbertMatrix.of(3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TensorWedge.of(HilbertMatrix.of(3, 4)));
   }
 
   public void testFailRectangularArray() {
-    try {
-      TensorWedge.of(Array.zeros(2, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TensorWedge.of(Array.zeros(2, 2, 3)));
   }
 
   public void testFailLength() {
     TensorWedge.of(Array.zeros(3), Array.zeros(3));
-    try {
-      TensorWedge.of(Array.zeros(3), Array.zeros(4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TensorWedge.of(Array.zeros(3), Array.zeros(4)));
   }
 }

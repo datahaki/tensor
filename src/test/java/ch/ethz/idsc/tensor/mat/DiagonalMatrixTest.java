@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DiagonalMatrixTest extends TestCase {
@@ -35,13 +36,8 @@ public class DiagonalMatrixTest extends TestCase {
   }
 
   public void testMisc3() {
-    try {
-      Tensor tensor = RealScalar.of(-2);
-      DiagonalMatrix.with(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    Tensor tensor = RealScalar.of(-2);
+    AssertFail.of(() -> DiagonalMatrix.with(tensor));
   }
 
   public void testQuantity() {
@@ -56,47 +52,22 @@ public class DiagonalMatrixTest extends TestCase {
   public void testFailScalar() {
     Tensor matrix = DiagonalMatrix.of(RealScalar.ONE);
     assertEquals(matrix.toString(), "{{1}}");
-    try {
-      DiagonalMatrix.with(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiagonalMatrix.with(RealScalar.ONE));
   }
 
   public void testFailNonVector() {
-    try {
-      DiagonalMatrix.with(Tensors.fromString("{1, 2, {3}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiagonalMatrix.with(Tensors.fromString("{1, 2, {3}}")));
   }
 
   public void testFailEmpty() {
-    try {
-      DiagonalMatrix.with(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiagonalMatrix.with(Tensors.empty()));
   }
 
   public void testFailScalarEmpty() {
-    try {
-      DiagonalMatrix.of(new Scalar[] {});
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiagonalMatrix.of(new Scalar[] {}));
   }
 
   public void testFailNumberEmpty() {
-    try {
-      DiagonalMatrix.of(new Number[] {});
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiagonalMatrix.of(new Number[] {}));
   }
 }

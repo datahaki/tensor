@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Factorial;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HodgeDualTest extends TestCase {
@@ -74,12 +75,7 @@ public class HodgeDualTest extends TestCase {
   }
 
   public void testScalar1() {
-    try {
-      HodgeDual.of(Tensors.vector(1, 2, 3), 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HodgeDual.of(Tensors.vector(1, 2, 3), 0));
   }
 
   public void testNonAlternating() {
@@ -94,68 +90,28 @@ public class HodgeDualTest extends TestCase {
 
   public void testEmpty() {
     assertTrue(new Dimensions(Tensors.empty()).isArray());
-    try {
-      HodgeDual.of(Tensors.empty(), 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HodgeDual.of(Tensors.empty(), 0));
   }
 
   public void testMismatchFail() {
     Tensor vector = Tensors.vector(1, 2, 3);
-    try {
-      HodgeDual.of(vector, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HodgeDual.of(vector, 2));
   }
 
   public void testNonArrayFail() {
     Tensor vector = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
-    try {
-      HodgeDual.of(vector, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      HodgeDual.of(vector, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HodgeDual.of(vector, 2));
+    AssertFail.of(() -> HodgeDual.of(vector, 3));
   }
 
   public void testNonRegularFail() {
     Tensor vector = Array.zeros(2, 3);
-    try {
-      HodgeDual.of(vector, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      HodgeDual.of(vector, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HodgeDual.of(vector, 2));
+    AssertFail.of(() -> HodgeDual.of(vector, 3));
   }
 
   public void testNegativeDimFail() {
-    try {
-      HodgeDual.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      HodgeDual.of(RealScalar.ONE, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HodgeDual.of(RealScalar.ONE));
+    AssertFail.of(() -> HodgeDual.of(RealScalar.ONE, -1));
   }
 }

@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PseudoInverseTest extends TestCase {
@@ -59,29 +60,14 @@ public class PseudoInverseTest extends TestCase {
   }
 
   public void testEmptyMatrixFail() {
-    try {
-      PseudoInverse.of(Tensors.of(Tensors.empty()));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PseudoInverse.of(Tensors.of(Tensors.empty())));
   }
 
   public void testEmptyFail() {
-    try {
-      PseudoInverse.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PseudoInverse.of(Tensors.empty()));
   }
 
   public void testScalarFail() {
-    try {
-      PseudoInverse.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PseudoInverse.of(RealScalar.ONE));
   }
 }

@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Decrement;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CirclePointsTest extends TestCase {
@@ -78,11 +79,6 @@ public class CirclePointsTest extends TestCase {
   }
 
   public void testFailNegative() {
-    try {
-      CirclePoints.of(-1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CirclePoints.of(-1));
   }
 }

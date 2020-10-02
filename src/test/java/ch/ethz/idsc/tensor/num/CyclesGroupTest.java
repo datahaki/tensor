@@ -78,7 +78,6 @@ public class CyclesGroupTest extends TestCase {
     Set<Cycles> gen = new HashSet<>();
     gen.add(Cycles.of("{{2, 10}, {4, 11}, {5, 7}}"));
     gen.add(Cycles.of("{{1, 4, 3}, {2, 5, 6}}"));
-    // ---
     assertEquals(_group(gen).size(), 1440);
   }
 

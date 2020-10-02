@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SymmetricMatrixQTest extends TestCase {
@@ -22,12 +23,7 @@ public class SymmetricMatrixQTest extends TestCase {
     Tensor matrix = Tensors.fromString("{{1, 2.000000000000001}, {2, 1}}");
     SymmetricMatrixQ.require(matrix);
     assertFalse(SymmetricMatrixQ.of(matrix, Chop.NONE));
-    try {
-      SymmetricMatrixQ.require(matrix, Chop.NONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SymmetricMatrixQ.require(matrix, Chop.NONE));
   }
 
   public void testVector() {
@@ -43,36 +39,16 @@ public class SymmetricMatrixQTest extends TestCase {
   }
 
   public void testFailNull() {
-    try {
-      SymmetricMatrixQ.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SymmetricMatrixQ.of(null));
   }
 
   public void testRequire() {
     SymmetricMatrixQ.require(IdentityMatrix.of(3));
-    try {
-      SymmetricMatrixQ.require(Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      SymmetricMatrixQ.require(Cross.skew3(Tensors.vector(1, 2, 3)));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SymmetricMatrixQ.require(Tensors.vector(1, 2, 3)));
+    AssertFail.of(() -> SymmetricMatrixQ.require(Cross.skew3(Tensors.vector(1, 2, 3))));
   }
 
   public void testRequireEmptyFail() {
-    try {
-      SymmetricMatrixQ.require(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SymmetricMatrixQ.require(Tensors.empty()));
   }
 }

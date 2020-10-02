@@ -22,6 +22,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MatrixPowerTest extends TestCase {
@@ -139,49 +140,24 @@ public class MatrixPowerTest extends TestCase {
   }
 
   public void testNonSymmetricFail() {
-    try {
-      MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), RationalScalar.HALF);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), RationalScalar.HALF));
   }
 
   public void testNullFail() {
-    try {
-      MatrixPower.ofSymmetric(null, RationalScalar.HALF);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixPower.ofSymmetric(null, RationalScalar.HALF));
   }
 
   public void testFailZero() {
     Tensor matrix = Array.zeros(2, 3);
-    try {
-      MatrixPower.of(matrix, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixPower.of(matrix, 0));
   }
 
   public void testFailOne() {
     Tensor matrix = HilbertMatrix.of(3, 2);
-    try {
-      MatrixPower.of(matrix, 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixPower.of(matrix, 1));
   }
 
   public void testFailAd() {
-    try {
-      MatrixPower.of(LeviCivitaTensor.of(3), 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixPower.of(LeviCivitaTensor.of(3), 1));
   }
 }

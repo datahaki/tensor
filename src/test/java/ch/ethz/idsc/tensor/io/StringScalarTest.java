@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class StringScalarTest extends TestCase {
@@ -36,53 +37,18 @@ public class StringScalarTest extends TestCase {
   }
 
   public void testFailOp() {
-    try {
-      StringScalar.of("asd").reciprocal();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      StringScalar.of("asd").negate();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      StringScalar.of("asd").number();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      StringScalar.of("asd").multiply(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      StringScalar.of("asd").add(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> StringScalar.of("asd").reciprocal());
+    AssertFail.of(() -> StringScalar.of("asd").negate());
+    AssertFail.of(() -> StringScalar.of("asd").number());
+    AssertFail.of(() -> StringScalar.of("asd").multiply(RealScalar.ONE));
+    AssertFail.of(() -> StringScalar.of("asd").add(RealScalar.ONE));
   }
 
   public void testMultiplyFail() {
-    try {
-      ComplexScalar.I.multiply(StringScalar.of("asd"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ComplexScalar.I.multiply(StringScalar.of("asd")));
   }
 
   public void testFail() {
-    try {
-      StringScalar.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> StringScalar.of(null));
   }
 }

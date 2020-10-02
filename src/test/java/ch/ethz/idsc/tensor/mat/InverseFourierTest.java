@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class InverseFourierTest extends TestCase {
@@ -24,29 +25,14 @@ public class InverseFourierTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      InverseFourier.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> InverseFourier.of(RealScalar.ONE));
   }
 
   public void testFailEmpty() {
-    try {
-      InverseFourier.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> InverseFourier.of(Tensors.empty()));
   }
 
   public void testFailMatrix() {
-    try {
-      InverseFourier.of(HilbertMatrix.of(4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> InverseFourier.of(HilbertMatrix.of(4)));
   }
 }

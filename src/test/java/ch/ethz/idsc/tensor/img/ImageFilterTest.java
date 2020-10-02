@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ImageFilterTest extends TestCase {
@@ -38,29 +39,14 @@ public class ImageFilterTest extends TestCase {
   }
 
   public void testRadiusFail() {
-    try {
-      ImageFilter.of(Tensors.empty(), -1, MAX);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ImageFilter.of(Tensors.empty(), -1, MAX));
   }
 
   public void testScalarFail() {
-    try {
-      ImageFilter.of(RealScalar.ONE, 1, MAX);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ImageFilter.of(RealScalar.ONE, 1, MAX));
   }
 
   public void testFunctionNullFail() {
-    try {
-      ImageFilter.of(Tensors.empty(), 3, null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ImageFilter.of(Tensors.empty(), 3, null));
   }
 }

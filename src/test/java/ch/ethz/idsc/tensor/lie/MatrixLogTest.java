@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MatrixLogTest extends TestCase {
@@ -44,22 +45,12 @@ public class MatrixLogTest extends TestCase {
   public void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 4, 5);
-    try {
-      MatrixLog.of(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixLog.of(matrix));
   }
 
   public void testNaNFail() {
     Tensor matrix = ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3);
-    try {
-      series(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> series(matrix));
   }
 
   private static final int MAX_ITERATIONS = 500;

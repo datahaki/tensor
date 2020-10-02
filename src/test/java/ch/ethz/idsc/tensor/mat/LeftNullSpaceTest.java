@@ -23,6 +23,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LeftNullSpaceTest extends TestCase {
@@ -127,23 +128,13 @@ public class LeftNullSpaceTest extends TestCase {
   public void testRectangle3x2GVectorFail() {
     ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
-    try {
-      NullSpace.usingRowReduce(matrix, DiagonalMatrix.of(2, GaussScalar.of(1, 7)).get(0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NullSpace.usingRowReduce(matrix, DiagonalMatrix.of(2, GaussScalar.of(1, 7)).get(0)));
   }
 
   public void testRectangle3x2GRectFail() {
     ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
     Tensor identity = DiagonalMatrix.of(3, GaussScalar.of(1, 7)).extract(0, 2);
-    try {
-      NullSpace.usingRowReduce(matrix, identity);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NullSpace.usingRowReduce(matrix, identity));
   }
 }

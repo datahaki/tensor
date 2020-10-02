@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class AntisymmetricMatrixQTest extends TestCase {
@@ -31,11 +32,6 @@ public class AntisymmetricMatrixQTest extends TestCase {
 
   public void testRequire() {
     AntisymmetricMatrixQ.require(Tensors.fromString("{{0, 2}, {-2, 0}}"));
-    try {
-      AntisymmetricMatrixQ.require(Tensors.fromString("{{0, 2}, {-1, 0}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> AntisymmetricMatrixQ.require(Tensors.fromString("{{0, 2}, {-1, 0}}")));
   }
 }

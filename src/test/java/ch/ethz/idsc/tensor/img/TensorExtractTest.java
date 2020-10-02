@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.img;
 
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorExtractTest extends TestCase {
@@ -10,20 +11,10 @@ public class TensorExtractTest extends TestCase {
   }
 
   public void testRadiusFail() {
-    try {
-      TensorExtract.of(Tensors.empty(), -1, t -> t);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TensorExtract.of(Tensors.empty(), -1, t -> t));
   }
 
   public void testFunctionNullFail() {
-    try {
-      TensorExtract.of(Tensors.empty(), 2, null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TensorExtract.of(Tensors.empty(), 2, null));
   }
 }

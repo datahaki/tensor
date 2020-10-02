@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TransposedImageFormatTest extends TestCase {
@@ -100,12 +101,7 @@ public class TransposedImageFormatTest extends TestCase {
     Tensor tensor = TransposedImageFormat.from(bufferedImage);
     Tensor kernel = Array.of(l -> RationalScalar.of(1, 1), 3, 5, 1);
     Tensor array = ListConvolve.of(kernel, tensor);
-    try {
-      TransposedImageFormat.of(array);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TransposedImageFormat.of(array));
   }
 
   private static Tensor _gradients() {

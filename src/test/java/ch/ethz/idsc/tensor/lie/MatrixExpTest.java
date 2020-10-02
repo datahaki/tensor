@@ -27,6 +27,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Trace;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MatrixExpTest extends TestCase {
@@ -167,44 +168,19 @@ public class MatrixExpTest extends TestCase {
 
   public void testNaNFail() {
     Tensor matrix = ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3);
-    try {
-      MatrixExp.series(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixExp.series(matrix));
   }
 
   public void testFail() {
-    try {
-      MatrixExp.of(Array.zeros(4, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      MatrixExp.of(Array.zeros(3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixExp.of(Array.zeros(4, 3)));
+    AssertFail.of(() -> MatrixExp.of(Array.zeros(3, 4)));
   }
 
   public void testScalarFail() {
-    try {
-      MatrixExp.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixExp.of(RealScalar.ONE));
   }
 
   public void testEmptyFail() {
-    try {
-      MatrixExp.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixExp.of(Tensors.empty()));
   }
 }

@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LinearSolveTest extends TestCase {
@@ -96,14 +97,9 @@ public class LinearSolveTest extends TestCase {
   }
 
   public void testEmpty() {
-    try {
-      Tensor m = Tensors.matrix(new Number[][] { {} });
-      Tensor b = Tensors.vector(new Number[] {});
-      LinearSolve.of(m, b);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    Tensor m = Tensors.matrix(new Number[][] { {} });
+    Tensor b = Tensors.vector(new Number[] {});
+    AssertFail.of(() -> LinearSolve.of(m, b));
   }
 
   public void testEps() {
