@@ -40,7 +40,6 @@ public class DeleteDirectory {
 
   private DeleteDirectory(File root, int max_depth, long max_count) throws IOException {
     this.max_depth = max_depth;
-    // ---
     int count = visitRecursively(root, 0, false);
     if (count <= max_count) // abort criteria 2)
       visitRecursively(root, 0, true);
@@ -51,7 +50,6 @@ public class DeleteDirectory {
   private int visitRecursively(File file, int depth, boolean delete) throws IOException {
     if (max_depth < depth) // enforce depth limit, abort criteria 1)
       throw new IOException("directory tree exceeds permitted depth");
-    // ---
     int count = 0;
     if (file.isDirectory()) // if file is a directory, recur
       for (File entry : file.listFiles())

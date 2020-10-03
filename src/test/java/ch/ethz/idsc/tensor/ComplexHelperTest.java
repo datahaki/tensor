@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -140,13 +141,15 @@ public class ComplexHelperTest extends TestCase {
   }
 
   public void testPlusQuantityFail() {
-    Scalar c = ComplexScalar.of(2, 3);
-    Scalar q = Quantity.of(1, "V");
+    Scalar c = DeterminateScalarQ.require(ComplexScalar.of(2, 3));
+    Scalar q = DeterminateScalarQ.require(Quantity.of(1, "V"));
     AssertFail.of(() -> c.add(q));
   }
 
   public void testQuantityFail() {
-    AssertFail.of(() -> ComplexScalar.of(Quantity.of(3, "m"), RealScalar.ONE));
-    AssertFail.of(() -> ComplexScalar.of(RealScalar.ONE, Quantity.of(3, "m")));
+    Scalar c = DeterminateScalarQ.require(Quantity.of(3, "m"));
+    Scalar r = DeterminateScalarQ.require(Pi.VALUE);
+    AssertFail.of(() -> ComplexScalar.of(c, r));
+    AssertFail.of(() -> ComplexScalar.of(r, c));
   }
 }

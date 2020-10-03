@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.io;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -50,5 +51,9 @@ public class StringScalarTest extends TestCase {
 
   public void testFail() {
     AssertFail.of(() -> StringScalar.of(null));
+  }
+
+  public void testNonExact() {
+    assertFalse(ExactScalarQ.of(StringScalar.of("abc")));
   }
 }

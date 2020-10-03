@@ -50,32 +50,12 @@ public class Normalize2DTest extends TestCase {
   }
 
   public void testNumberQFail1() {
-    try {
-      unlessZero(DoubleScalar.POSITIVE_INFINITY, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      unlessZero(DoubleScalar.INDETERMINATE, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> unlessZero(DoubleScalar.POSITIVE_INFINITY, RealScalar.ZERO));
+    AssertFail.of(() -> unlessZero(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
   }
 
   public void testNumberQFail2() {
-    try {
-      unlessZero(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      unlessZero(RealScalar.ZERO, DoubleScalar.INDETERMINATE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> unlessZero(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));
+    AssertFail.of(() -> unlessZero(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
   }
 }

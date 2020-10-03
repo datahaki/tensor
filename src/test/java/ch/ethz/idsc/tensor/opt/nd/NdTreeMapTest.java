@@ -23,7 +23,9 @@ public class NdTreeMapTest extends TestCase {
   public void testSome() {
     NdMap<String> ndTreeMap = //
         new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 10);
+    assertTrue(ndTreeMap.isEmpty());
     ndTreeMap.add(Tensors.vector(1, 1), "d1");
+    assertFalse(ndTreeMap.isEmpty());
     ndTreeMap.add(Tensors.vector(1, 0), "d2");
     ndTreeMap.add(Tensors.vector(0, 1), "d3");
     ndTreeMap.add(Tensors.vector(1, 1), "d4");

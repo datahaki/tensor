@@ -23,7 +23,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     Scalar d = matrix.Get(1, 1);
     if (Scalars.isZero(b) && Scalars.isZero(c)) // diagonal matrix
       return DiagonalMatrix.of(Log.of(a), Log.of(d));
-    // ---
     Scalar ad = a.subtract(d);
     Scalar A = Sqrt.FUNCTION.apply(ad.multiply(ad).add(Times.of(b, c, FOUR)));
     Scalar s = a.add(A).add(d);

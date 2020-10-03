@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -52,16 +51,14 @@ public class SingularValueDecompositionTest extends TestCase {
     return svd;
   }
 
-  final Random random = new Random();
-
   public void testSvd1() {
-    Tensor mat = Tensors.matrix((r, c) -> DoubleScalar.of(random.nextGaussian()), 8, 5);
+    Tensor mat = RandomVariate.of(NormalDistribution.standard(), 8, 5);
     SingularValueDecomposition svd = specialOps(mat);
     assertEquals(MatrixRank.of(svd), 5);
   }
 
   public void testSvd2() {
-    Tensor mat = Tensors.matrix((r, c) -> DoubleScalar.of(random.nextGaussian()), 10, 3);
+    Tensor mat = RandomVariate.of(NormalDistribution.standard(), 10, 3);
     Tensor B = Tensors.matrixLong(new long[][] { //
         { 1, 2, 3 }, { 0, 0, 4 }, { 0, 0, 0 } });
     SingularValueDecomposition svd = specialOps(mat.dot(B));
@@ -73,7 +70,7 @@ public class SingularValueDecompositionTest extends TestCase {
   }
 
   public void testSvd3() {
-    Tensor mat = Tensors.matrix((r, c) -> DoubleScalar.of(random.nextGaussian()), 20, 4);
+    Tensor mat = RandomVariate.of(NormalDistribution.standard(), 20, 4);
     Tensor B = Tensors.matrixLong(new long[][] { //
         { 1, 2, 3, -1 }, { 0, 0, 4, 2 }, { 0, 0, 0, 1 }, { 0, 0, 0, 0 } });
     Tensor A = mat.dot(B);
@@ -87,7 +84,7 @@ public class SingularValueDecompositionTest extends TestCase {
 
   public void testSvdNull() {
     int n = 20;
-    Tensor mat = Tensors.matrix((r, c) -> DoubleScalar.of(random.nextGaussian()), n, 4);
+    Tensor mat = RandomVariate.of(NormalDistribution.standard(), n, 4);
     Tensor B = Tensors.matrixLong(new long[][] { //
         { 1, 2, 3, -1 }, { 0, 0, 4, 2 }, { 0, 0, 0, 1 }, { 0, 0, 0, 0 } });
     Tensor A = mat.dot(B);
@@ -110,14 +107,16 @@ public class SingularValueDecompositionTest extends TestCase {
     assertEquals(res, Array.zeros(n, n));
   }
 
+  private static final Random RANDOM = new Random();
+
   public void testSvdR1() {
-    Tensor matrix = Tensors.matrix((r, c) -> RationalScalar.of(random.nextInt(1000) - 500, random.nextInt(1000) + 1), 15, 15);
+    Tensor matrix = Tensors.matrix((r, c) -> RationalScalar.of(RANDOM.nextInt(1000) - 500, RANDOM.nextInt(1000) + 1), 15, 15);
     SingularValueDecomposition svd = specialOps(matrix);
     Chop._05.requireClose(PseudoInverse.of(svd), Inverse.of(matrix));
   }
 
   public void testSvdR2() {
-    Tensor mat = Tensors.matrix((r, c) -> RationalScalar.of(random.nextInt(100) - 50, random.nextInt(100) + 1), 20, 4);
+    Tensor mat = Tensors.matrix((r, c) -> RationalScalar.of(RANDOM.nextInt(100) - 50, RANDOM.nextInt(100) + 1), 20, 4);
     Tensor B = Tensors.matrix(new Scalar[][] { //
         // "{1, 2, 3, -1}"
         { RationalScalar.of(1, 1), RationalScalar.of(2, 1), RationalScalar.of(3, 1), RationalScalar.of(-1, 1) }, //

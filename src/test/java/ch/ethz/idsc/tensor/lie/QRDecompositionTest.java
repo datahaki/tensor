@@ -2,7 +2,6 @@
 package ch.ethz.idsc.tensor.lie;
 
 import java.io.IOException;
-import java.util.Random;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
@@ -24,6 +23,7 @@ import ch.ethz.idsc.tensor.pdf.ComplexNormalDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -33,8 +33,6 @@ import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QRDecompositionTest extends TestCase {
-  private static final Random random = new Random();
-
   private static QRDecomposition _specialOps(Tensor A) {
     QRDecomposition qrDecomposition = null;
     for (QRSignOperator qrSignOperator : QRSignOperators.values()) {
@@ -72,12 +70,12 @@ public class QRDecompositionTest extends TestCase {
   }
 
   public void testRandomReal() {
-    Tensor A = Tensors.matrix((i, j) -> RealScalar.of(random.nextDouble()), 5, 3);
+    Tensor A = RandomVariate.of(UniformDistribution.unit(), 5, 3);
     _specialOps(A);
   }
 
   public void testRandomReal2() throws ClassNotFoundException, IOException {
-    Tensor A = Tensors.matrix((i, j) -> RealScalar.of(random.nextDouble()), 3, 5);
+    Tensor A = RandomVariate.of(UniformDistribution.unit(), 3, 5);
     QRDecomposition qrDecomposition = Serialization.copy(_specialOps(A));
     Chop.NONE.requireZero(qrDecomposition.det());
     ExactScalarQ.require(qrDecomposition.det());
@@ -105,14 +103,14 @@ public class QRDecompositionTest extends TestCase {
   }
 
   public void testRandomComplex1() {
-    _specialOps(Tensors.matrix((i, j) -> ComplexScalar.of(random.nextGaussian(), random.nextGaussian()), 5, 3));
-    _specialOps(Tensors.matrix((i, j) -> ComplexScalar.of(random.nextGaussian(), random.nextGaussian()), 3, 5));
+    _specialOps(RandomVariate.of(ComplexNormalDistribution.STANDARD, 5, 3));
+    _specialOps(RandomVariate.of(ComplexNormalDistribution.STANDARD, 3, 5));
   }
 
   public void testRandomComplex2() {
-    _specialOps(Tensors.matrix((i, j) -> ComplexScalar.of(random.nextGaussian(), random.nextGaussian()), 4, 4));
-    _specialOps(Tensors.matrix((i, j) -> ComplexScalar.of(random.nextGaussian(), random.nextGaussian()), 5, 5));
-    _specialOps(Tensors.matrix((i, j) -> ComplexScalar.of(random.nextGaussian(), random.nextGaussian()), 6, 6));
+    _specialOps(RandomVariate.of(ComplexNormalDistribution.STANDARD, 4, 4));
+    _specialOps(RandomVariate.of(ComplexNormalDistribution.STANDARD, 5, 5));
+    _specialOps(RandomVariate.of(ComplexNormalDistribution.STANDARD, 6, 6));
   }
 
   public void testComplexDiagonal() {

@@ -2,7 +2,6 @@
 package ch.ethz.idsc.tensor.pdf;
 
 import java.io.IOException;
-import java.util.Random;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -46,8 +45,7 @@ public class LogNormalDistributionTest extends TestCase {
     }
     Scalar quantile = distribution.quantile(RealScalar.of(0.4));
     Chop._03.requireClose(quantile, RealScalar.of(1.392501724505789));
-    Random random = new Random();
-    Scalar variate = distribution.randomVariate(random);
+    Scalar variate = RandomVariate.of(distribution);
     Sign.requirePositive(variate);
     assertEquals(distribution.toString(), distribution.getClass().getSimpleName() + "[1/2, 2/3]");
   }

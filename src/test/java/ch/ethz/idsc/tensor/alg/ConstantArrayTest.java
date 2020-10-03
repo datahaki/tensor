@@ -71,12 +71,7 @@ public class ConstantArrayTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
-    try {
-      tensor.append(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tensor.append(RealScalar.ONE));
   }
 
   public void testFailNull() {

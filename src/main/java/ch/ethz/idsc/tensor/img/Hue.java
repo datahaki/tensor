@@ -24,7 +24,6 @@ public enum Hue {
   public static Color of(double hue, double sat, double val, double alpha) {
     if (!Double.isFinite(hue))
       throw new IllegalArgumentException("hue=" + hue);
-    // ---
     final double r;
     final double g;
     final double b;

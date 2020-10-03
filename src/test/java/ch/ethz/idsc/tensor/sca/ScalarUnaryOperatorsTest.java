@@ -57,10 +57,10 @@ public class ScalarUnaryOperatorsTest extends TestCase {
   };
 
   public void testFailNull() {
-    for (ScalarUnaryOperator suo : ARRAY) {
+    for (ScalarUnaryOperator scalarUnaryOperator : ARRAY) {
       try {
-        suo.apply(null);
-        System.out.println(suo.getClass());
+        scalarUnaryOperator.apply(null);
+        System.out.println(scalarUnaryOperator.getClass());
         fail();
       } catch (Exception exception) {
         // ---

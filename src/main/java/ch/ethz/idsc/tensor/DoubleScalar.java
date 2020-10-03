@@ -49,7 +49,6 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   /** real scalar that encodes NaN. value is backed by Double.NaN == 0.0d / 0.0
    * field name inspired by Mathematica::Indeterminate */
   public static final Scalar INDETERMINATE = of(Double.NaN);
-  // ---
   /** positive numeric zero */
   private static final Scalar DOUBLE_ZERO = of(0.0);
 

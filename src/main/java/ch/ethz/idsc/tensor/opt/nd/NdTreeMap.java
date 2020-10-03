@@ -191,7 +191,6 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       if (left) {
         if (Objects.isNull(lChild))
           return;
-        // ---
         Scalar copy = ndBounds.uBounds.Get(dimension);
         ndBounds.uBounds.set(median, dimension);
         if (cluster.isViable(ndBounds))
@@ -200,7 +199,6 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       } else {
         if (Objects.isNull(rChild))
           return;
-        // ---
         Scalar copy = ndBounds.lBounds.Get(dimension);
         ndBounds.lBounds.set(median, dimension);
         if (cluster.isViable(ndBounds))

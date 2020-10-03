@@ -75,7 +75,6 @@ public class Rationalize implements ScalarUnaryOperator {
     Scalar m01 = RealScalar.ZERO;
     Scalar m10 = RealScalar.ZERO;
     Scalar m11 = RealScalar.ONE;
-    // ---
     Scalar x = scalar;
     Scalar ain = Floor.FUNCTION.apply(x);
     // loop finding terms until denominator gets too big
@@ -91,7 +90,6 @@ public class Rationalize implements ScalarUnaryOperator {
       x = x.subtract(ain).reciprocal();
       ain = Floor.FUNCTION.apply(x);
     }
-    // ---
     // now remaining x is between 0 and 1/ai (?)
     // approx as either 0 or 1/m where m is max that will fit in maxden
     Scalar sol0 = m00.divide(m10); // first try zero

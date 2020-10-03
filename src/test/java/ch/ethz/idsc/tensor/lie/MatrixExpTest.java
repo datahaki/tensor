@@ -58,7 +58,8 @@ public class MatrixExpTest extends TestCase {
 
   public void testExp2() {
     int n = 10;
-    Tensor A = Tensors.matrix((i, j) -> DoubleScalar.of(RANDOM.nextGaussian()), n, n);
+    Distribution distribution = NormalDistribution.standard();
+    Tensor A = RandomVariate.of(distribution, n, n);
     Tensor S = TensorWedge.of(A);
     Tensor o = MatrixExp.of(S);
     Chop._10.requireAllZero(o.dot(Transpose.of(o)).subtract(IdentityMatrix.of(o.length())));

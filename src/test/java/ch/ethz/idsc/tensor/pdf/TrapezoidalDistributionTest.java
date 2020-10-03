@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
@@ -64,17 +63,14 @@ public class TrapezoidalDistributionTest extends TestCase {
   }
 
   public void testMean() {
-    Scalar a = RationalScalar.of(random.nextInt(100), 1);
-    Scalar b = a.add(RealScalar.of(random.nextDouble() * 10));
-    Scalar c = b.add(RealScalar.of(random.nextDouble() * 10));
-    Scalar d = c.add(RealScalar.of(random.nextDouble() * 10));
-    TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of(a, b, c, d);
-    Tensor all = Tensors.empty();
-    for (int i = 0; i < 3000; ++i) {
-      Scalar s = RandomVariate.of(distribution);
-      all.append(s);
-    }
-    Scalar meanCalc = distribution.mean();
+    Scalar a = RandomVariate.of(DiscreteUniformDistribution.of(0, 100));
+    Distribution paramDist = UniformDistribution.of(0, 10);
+    Scalar b = a.add(RandomVariate.of(paramDist));
+    Scalar c = b.add(RandomVariate.of(paramDist));
+    Scalar d = c.add(RandomVariate.of(paramDist));
+    Distribution distribution = TrapezoidalDistribution.of(a, b, c, d);
+    Tensor all = RandomVariate.of(distribution, 3000);
+    Scalar meanCalc = Mean.of(distribution);
     Scalar meanSamples = (Scalar) Mean.of(all);
     Scalar diff = Abs.between(meanCalc, meanSamples);
     assertTrue(Scalars.lessEquals(diff, RealScalar.of(0.5)));

@@ -119,9 +119,7 @@ public abstract class AbstractScalar implements Scalar {
   }
 
   /***************************************************/
-  // non-final default implementations
-  // override for precision or speed
-  // ---
+  // non-final default implementations; override for precision or speed
   @Override // from Scalar
   public Scalar divide(Scalar scalar) {
     return multiply(scalar.reciprocal());

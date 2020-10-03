@@ -64,7 +64,6 @@ import ch.ethz.idsc.tensor.red.Min;
       if (Scalars.nonZero(min)) // use of eps
         updateLabels(min);
     }
-    // ---
     for (int y : nlsMinusT)
       if (yMatch[y] == BipartiteMatching.UNASSIGNED) {
         nlsMinusT.remove(y);

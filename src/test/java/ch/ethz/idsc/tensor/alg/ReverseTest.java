@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
-import java.util.Random;
 import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
 
@@ -9,6 +8,9 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -21,9 +23,9 @@ public class ReverseTest extends TestCase {
   }
 
   public void testReverse() {
-    Random random = new Random();
+    Distribution distribution = DiscreteUniformDistribution.of(0, 100);
     int n = 5;
-    Tensor m = Array.of(index -> RealScalar.of(random.nextInt(100)), n, n, n, n);
+    Tensor m = RandomVariate.of(distribution, n, n, n, n);
     Tensor v = Reverse.of(IdentityMatrix.of(n));
     Tensor t1 = BasisTransform.ofForm(m, v);
     Tensor t2 = nestRank(m, Reverse::of);

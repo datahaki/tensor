@@ -1,6 +1,8 @@
 // code by gjoel and jph
 package ch.ethz.idsc.tensor.img;
 
+import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -61,17 +63,20 @@ public class MedianFilterTest extends TestCase {
     assertEquals(result, Tensors.fromString("{0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3/2}"));
   }
 
-  // public void testNonArray() {
-  // Tensor matrix = Tensors.fromString("{{1, 2, 3, 3, {3, 2, 3}}, {3}, {0, 0, 0}}");
-  // matrix.flatten(-1).forEach(RationalScalar.class::cast); // test if parsing went ok
-  // // MedianFilter.of(matrix, 0);
-  // try {
-  // MedianFilter.of(matrix, 1);
-  // fail();
-  // } catch (Exception exception) {
-  // // ---
-  // }
-  // }
+  public void testNonArray() {
+    Tensor matrix = Tensors.fromString("{{1, 2, 3, 3, {3, 2, 3}}, {3}, {0, 0, 0}}");
+    ExactTensorQ.require(matrix);
+    matrix.flatten(-1).forEach(RationalScalar.class::cast); // test if parsing went ok
+    // Tensor res0 =
+    // MedianFilter.of(matrix, 0);
+    // try {
+    // MedianFilter.of(matrix, 1);
+    // fail();
+    // } catch (Exception exception) {
+    // // ---
+    // }
+  }
+
   public void testScalarFail() {
     AssertFail.of(() -> MedianFilter.of(RealScalar.of(3), 1));
   }

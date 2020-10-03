@@ -29,15 +29,12 @@ import ch.ethz.idsc.tensor.red.Min;
 
   public HungarianAlgorithm(Tensor _matrix) {
     super(_matrix);
-    // ---
     Scalar[] xLabel = Stream.of(matrix) //
         .map(vector -> Stream.of(vector).reduce(Min::of).get()) //
         .toArray(Scalar[]::new);
     hungarianAlgorithmTree = new HungarianAlgorithmTree(xLabel, yMatch, matrix);
-    // ---
     setInitialMatching(xLabel);
     initializeFreeNodes();
-    // ---
     while (!isSolved()) {
       int x = pickFreeX();
       int y = hungarianAlgorithmTree.addS(x);

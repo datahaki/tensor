@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -37,8 +38,8 @@ public class AbstractScalarTest extends TestCase {
   }
 
   public void testGetFail() {
-    RealScalar.ONE.get();
-    RealScalar.ONE.Get();
+    assertEquals(Pi.VALUE.get(), Pi.VALUE);
+    assertEquals(Pi.VALUE.Get(), Pi.VALUE);
     AssertFail.of(() -> RealScalar.ONE.Get(1));
     AssertFail.of(() -> RealScalar.ONE.get(Arrays.asList(1)));
   }

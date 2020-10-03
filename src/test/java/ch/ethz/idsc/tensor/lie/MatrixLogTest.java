@@ -20,25 +20,19 @@ import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MatrixLogTest extends TestCase {
-  // TODO
-  // public void testSeries() {
-  // for (int n = 2; n < 10; ++n) {
-  // Distribution distribution = NormalDistribution.of(0, 0.2);
-  // Tensor matrix = IdentityMatrix.of(n).add(RandomVariate.of(distribution, n, n));
-  // Tensor log = MatrixLog.series(matrix);
-  // Tensor exp = MatrixExp.of(log);
-  // Chop._08.requireClose(matrix, exp);
-  // }
-  // }
   public void testSymmetric() {
-    for (int n = 2; n < 10; ++n) {
+    for (int n = 2; n < 8; ++n) {
       Distribution distribution = NormalDistribution.of(0, 0.4 / n);
       Tensor matrix = Symmetrize.of(IdentityMatrix.of(n).add(RandomVariate.of(distribution, n, n)));
       Tensor log = ofSymmetric(matrix);
       Tensor loq = MatrixLog.ofSymmetric(matrix);
+      Tensor los = MatrixLog.of(matrix);
       Chop._08.requireClose(log, loq);
+      Chop._08.requireClose(log, los);
       Tensor exp = MatrixExp.of(log);
+      Tensor exs = MatrixExp.ofSymmetric(log);
       Chop._08.requireClose(matrix, exp);
+      Chop._08.requireClose(matrix, exs);
     }
   }
 

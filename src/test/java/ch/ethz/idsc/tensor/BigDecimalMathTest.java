@@ -62,10 +62,8 @@ public class BigDecimalMathTest extends TestCase {
   }
 
   public void testExp() {
-    // mathematica N[Exp[1], 34]
-    String m = "2.718281828459045235360287471352662";
     BigDecimal bd1 = BigDecimalMath.exp(BigDecimal.ONE, MathContext.DECIMAL128);
-    assertEquals(bd1.toString(), m);
+    assertEquals(bd1.toString(), "2.718281828459045235360287471352662"); // mathematica N[Exp[1], 34]
   }
 
   public void testSin() {

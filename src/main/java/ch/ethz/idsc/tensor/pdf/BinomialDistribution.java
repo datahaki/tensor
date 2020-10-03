@@ -35,7 +35,6 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
   public static Distribution of(int n, Scalar p) {
     Integers.requirePositiveOrZero(n);
     Clips.unit().requireInside(p);
-    // ---
     boolean revert = Scalars.lessThan(RationalScalar.HALF, p);
     Scalar q = revert //
         ? RealScalar.ONE.subtract(p)
