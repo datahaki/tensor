@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
 
 /* package */ class ExtendedGCDWrap implements Serializable {
   private static final long serialVersionUID = -7696537372627961269L;
+  // ---
   private final Scalar one;
 
   public ExtendedGCDWrap(Scalar one) {
@@ -24,6 +25,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
 
   private class ExtendedGCDImpl implements ExtendedGCD, Serializable {
     private static final long serialVersionUID = 6682732963438067712L;
+    // ---
     private final Scalar a;
     private final Scalar b;
     private final Scalar x;

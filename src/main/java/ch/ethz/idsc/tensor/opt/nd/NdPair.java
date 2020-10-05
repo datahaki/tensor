@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class NdPair<V> implements Serializable {
   private static final long serialVersionUID = 3313486682947296262L;
+  // ---
   final Tensor location; // <- key
   private final V value;
 

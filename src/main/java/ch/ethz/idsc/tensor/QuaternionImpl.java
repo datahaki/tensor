@@ -30,6 +30,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 /* package */ class QuaternionImpl extends AbstractScalar implements Quaternion, //
     ChopInterface, ExactScalarQInterface, NInterface, Serializable {
   private static final long serialVersionUID = 5384670613322108553L;
+  // ---
   private final Scalar w;
   private final Tensor xyz;
 

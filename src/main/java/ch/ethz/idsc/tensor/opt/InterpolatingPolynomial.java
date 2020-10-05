@@ -68,6 +68,7 @@ public class InterpolatingPolynomial implements Serializable {
    * https://en.wikipedia.org/wiki/Neville%27s_algorithm */
   private class Neville implements ScalarTensorFunction {
     private static final long serialVersionUID = 5871543416439774702L;
+    // ---
     private final Tensor tensor;
 
     public Neville(Tensor tensor) {

@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <p>https://en.wikipedia.org/wiki/Horner%27s_method */
 /* package */ class HornerScheme implements ScalarUnaryOperator {
   private static final long serialVersionUID = 1673979439783080494L;
+  // ---
   private final Tensor coeffs;
 
   // careful: the coeffs are in reversed order in comparison to Series

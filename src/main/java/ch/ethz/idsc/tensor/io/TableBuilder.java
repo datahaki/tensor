@@ -43,6 +43,7 @@ import ch.ethz.idsc.tensor.alg.Flatten;
  * a matrix. The rows may differ in length. */
 public final class TableBuilder implements Serializable {
   private static final long serialVersionUID = 2059009465890003964L;
+  // ---
   /** The type LinkedList was found to be the faster than ArrayDeque */
   private final Tensor tensor = Unprotect.using(new LinkedList<>());
 

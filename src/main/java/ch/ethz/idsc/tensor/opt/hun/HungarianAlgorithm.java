@@ -23,6 +23,7 @@ import ch.ethz.idsc.tensor.red.Min;
  * https://en.wikipedia.org/wiki/Hungarian_algorithm */
 /* package */ class HungarianAlgorithm extends HungarianAlgorithmGraph {
   private static final long serialVersionUID = 8504190411000676810L;
+  // ---
   private transient final HungarianAlgorithmTree hungarianAlgorithmTree;
   private transient final Set<Integer> freeX = new HashSet<>();
   private transient final Set<Integer> freeY = new HashSet<>();

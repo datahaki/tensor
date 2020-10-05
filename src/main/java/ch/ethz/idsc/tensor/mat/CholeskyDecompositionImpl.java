@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 
 /* package */ class CholeskyDecompositionImpl implements CholeskyDecomposition, Serializable {
   private static final long serialVersionUID = -4233167504993659845L;
+  // ---
   private final Tensor l;
   private final Tensor d;
 

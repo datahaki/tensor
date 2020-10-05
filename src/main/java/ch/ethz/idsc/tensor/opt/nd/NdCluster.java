@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.Tensors;
 
 public class NdCluster<V> implements Serializable {
   private static final long serialVersionUID = -149158193788468840L;
+  // ---
   private final NdCenterInterface ndCenterInterface;
   /* package */ final Tensor center;
   private final int limit;

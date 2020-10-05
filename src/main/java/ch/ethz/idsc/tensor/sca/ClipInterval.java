@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 /** clip to an interval of non-zero width */
 /* package */ class ClipInterval implements Clip {
   private static final long serialVersionUID = -1281109938758856513L;
+  // ---
   private final Scalar min;
   private final Scalar max;
   private final Scalar width;

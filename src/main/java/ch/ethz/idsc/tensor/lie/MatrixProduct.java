@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.num.GroupInterface;
  * <a href="https://reference.wolfram.com/language/ref/MatrixPower.html">MatrixPower</a> */
 /* package */ class MatrixProduct implements GroupInterface<Tensor>, Serializable {
   private static final long serialVersionUID = -6435838935271759299L;
+  // ---
   private final int n;
 
   public MatrixProduct(int n) {

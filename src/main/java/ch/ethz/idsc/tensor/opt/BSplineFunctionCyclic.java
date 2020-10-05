@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
 /** function defined for all real scalars */
 /* package */ class BSplineFunctionCyclic extends BSplineFunction {
   private static final long serialVersionUID = 5371209930692829905L;
+  // ---
   private final int length;
   /** periodic */
   private final Mod mod;
