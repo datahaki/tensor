@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class StrictColorDataIndexedTest extends TestCase {
@@ -54,31 +55,16 @@ public class StrictColorDataIndexedTest extends TestCase {
 
   public void testFailCreate() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}}");
-    try {
-      StrictColorDataIndexed.of(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> StrictColorDataIndexed.of(tensor));
   }
 
   public void testFailCreateScalar() {
-    try {
-      StrictColorDataIndexed.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> StrictColorDataIndexed.of(RealScalar.ONE));
   }
 
   public void testFailExtract() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(tensor);
-    try {
-      colorDataIndexed.getColor(-1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> colorDataIndexed.getColor(-1));
   }
 }

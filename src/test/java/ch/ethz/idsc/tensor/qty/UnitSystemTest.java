@@ -13,17 +13,18 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitSystemTest extends TestCase {
   public void testSize() {
-    assertTrue(75 <= UnitSystem.SI().map().size());
+    assertTrue(91 <= UnitSystem.SI().map().size());
   }
 
   public void testExact() {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(3, "Hz^-2*N*m^-1"));
     assertEquals(scalar, Quantity.of(3, "kg"));
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testScalar() {
@@ -45,12 +46,7 @@ public class UnitSystemTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      UnitSystem.SI().apply(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnitSystem.SI().apply(null));
   }
 
   public void testMore() {
@@ -81,12 +77,7 @@ public class UnitSystemTest extends TestCase {
     UnitSystem prices = SimpleUnitSystem.from(properties);
     assertEquals(prices.apply(Quantity.of(3, "Apples")), Quantity.of(6, "CHF"));
     Tensor cart = Tensors.of(Quantity.of(2, "Apples"), Quantity.of(3, "Chocolates"), Quantity.of(3, "Oranges"));
-    try {
-      Total.of(cart);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Total.of(cart));
     Scalar total = Total.of(cart.map(prices)).Get();
     assertEquals(total, Quantity.of(16, "CHF"));
     Scalar euro = UnitConvert.of(prices).to(Unit.of("EUR")).apply(total);
@@ -98,11 +89,11 @@ public class UnitSystemTest extends TestCase {
     Scalar r1 = unitSystem.apply(Quantity.of(1, "knots"));
     Unit unit = QuantityUnit.of(r1);
     assertEquals(unit, Unit.of("m*s^-1"));
-    assertTrue(ExactScalarQ.of(r1));
+    ExactScalarQ.require(r1);
     Scalar r2 = UnitConvert.SI().to(Unit.of("km*h^-1")).apply(r1);
-    assertTrue(ExactScalarQ.of(r2));
+    ExactScalarQ.require(r2);
     Scalar r3 = Quantity.of(RationalScalar.of(463, 250), "km*h^-1");
-    assertTrue(ExactScalarQ.of(r3));
+    ExactScalarQ.require(r3);
     assertEquals(r2, r3);
   }
 

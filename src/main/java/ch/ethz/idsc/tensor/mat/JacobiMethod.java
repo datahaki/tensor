@@ -34,6 +34,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * entries of D are the eigenvalues of A and the columns of V are the
  * eigenvectors of A. */
 /* package */ class JacobiMethod implements Eigensystem, Serializable {
+  private static final long serialVersionUID = 6886081920723349745L;
   private static final int MAX_ITERATIONS = 50;
   private static final Scalar HUNDRED = RealScalar.of(100);
   private static final Scalar EPS = DoubleScalar.of(Math.ulp(1));

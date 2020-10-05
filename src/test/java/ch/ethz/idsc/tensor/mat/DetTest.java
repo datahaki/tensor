@@ -14,28 +14,19 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DetTest extends TestCase {
   public void testEmpty() {
-    try {
-      Det.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Det.of(Tensors.empty()));
   }
 
   public void testEmptyMatrix() {
     Tensor m = Tensors.matrix(new Number[][] { {} });
     // this is consistent with Mathematica
     // Mathematica throws an exception
-    try {
-      Det.of(m);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Det.of(m));
   }
 
   public void testDet1() {
@@ -160,18 +151,8 @@ public class DetTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      Det.of(Array.zeros(5, 2), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Det.of(Array.zeros(2, 5), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Det.of(Array.zeros(5, 2), null));
+    AssertFail.of(() -> Det.of(Array.zeros(2, 5), null));
   }
 
   // https://ch.mathworks.com/help/matlab/ref/det.html
@@ -179,7 +160,6 @@ public class DetTest extends TestCase {
     Tensor matrix = ResourceData.of("/mat/det0-matlab.csv");
     Scalar det = Det.of(matrix);
     assertEquals(det, RealScalar.ZERO);
-    // ---
     // Matlab gives num == 1.0597e+05 !
     // Mathematica gives num == 44934.8 !
     Scalar num1 = Det.of(N.DOUBLE.of(matrix)); // indeed, our algo is no different:

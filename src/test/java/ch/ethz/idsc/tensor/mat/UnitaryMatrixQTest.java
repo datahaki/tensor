@@ -4,8 +4,9 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitaryMatrixQTest extends TestCase {
@@ -27,17 +28,12 @@ public class UnitaryMatrixQTest extends TestCase {
     assertFalse(UnitaryMatrixQ.of(Tensors.fromString("{{1, 2}, {I, I}}")));
     assertFalse(UnitaryMatrixQ.of(RealScalar.of(3)));
     assertFalse(UnitaryMatrixQ.of(Tensors.vector(1, 2, 3)));
-    assertFalse(UnitaryMatrixQ.of(LieAlgebras.so3()));
+    assertFalse(UnitaryMatrixQ.of(LeviCivitaTensor.of(3)));
   }
 
   public void testRequire() {
     UnitaryMatrixQ.require(FourierMatrix.of(7), Chop._12);
     UnitaryMatrixQ.require(FourierMatrix.of(8));
-    try {
-      UnitaryMatrixQ.require(Tensors.fromString("{{1, 2}, {I, I}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnitaryMatrixQ.require(Tensors.fromString("{{1, 2}, {I, I}}")));
   }
 }

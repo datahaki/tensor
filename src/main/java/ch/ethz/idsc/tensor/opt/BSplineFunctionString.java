@@ -8,6 +8,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
 /** function defined over the interval [0, control.length() - 1] */
 /* package */ class BSplineFunctionString extends BSplineFunction {
+  private static final long serialVersionUID = 8216102343756902620L;
+  // ---
   /** index of last control point */
   private final int last;
   /** domain of this function */

@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class KurtosisTest extends TestCase {
@@ -17,20 +18,10 @@ public class KurtosisTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      Kurtosis.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Kurtosis.of(RealScalar.ONE));
   }
 
   public void testFailMatrix() {
-    try {
-      Kurtosis.of(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Kurtosis.of(HilbertMatrix.of(3)));
   }
 }

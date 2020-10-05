@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DeriveTest extends TestCase {
@@ -22,29 +23,14 @@ public class DeriveTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      Derive.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Derive.of(RealScalar.ONE));
   }
 
   public void testMatrixFail() {
-    try {
-      Derive.of(HilbertMatrix.of(4, 5));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Derive.of(HilbertMatrix.of(4, 5)));
   }
 
   public void testUnstructuredFail() {
-    try {
-      Derive.of(Tensors.fromString("{2, {1}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Derive.of(Tensors.fromString("{2, {1}}")));
   }
 }

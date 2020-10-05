@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SortTest extends TestCase {
@@ -74,12 +75,7 @@ public class SortTest extends TestCase {
     Tensor vector = Tensors.of( //
         Quantity.of(0, "m"), Quantity.of(9, "m"), //
         Quantity.of(-3, "m"), Quantity.of(0, "s"), RealScalar.ZERO);
-    try {
-      Sort.of(vector);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Sort.of(vector));
   }
 
   public void testReference() {
@@ -112,20 +108,10 @@ public class SortTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      Sort.of(RealScalar.of(3.12));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Sort.of(RealScalar.of(3.12)));
   }
 
   public void testScalarVectorFail() {
-    try {
-      Sort.of(Tensors.vector(1, 2, 3), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Sort.of(Tensors.vector(1, 2, 3), null));
   }
 }

@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PoissonBinomialDistributionTest extends TestCase {
@@ -48,33 +49,31 @@ public class PoissonBinomialDistributionTest extends TestCase {
     assertEquals(discreteDistribution.lowerBound(), 2);
   }
 
-  public void testFail() {
+  public void testProbFail() {
+    Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1));
+    PDF pdf = PDF.of(distribution);
     try {
-      PoissonBinomialDistribution.of(RealScalar.ZERO);
+      pdf.at(RealScalar.of(2));
       fail();
     } catch (Exception exception) {
-      // ---
+      assertTrue(UnsupportedOperationException.class.isInstance(exception));
     }
+    DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
     try {
-      PoissonBinomialDistribution.of(IdentityMatrix.of(3));
+      discreteDistribution.p_equals(3);
       fail();
     } catch (Exception exception) {
-      // ---
+      assertTrue(UnsupportedOperationException.class.isInstance(exception));
     }
   }
 
+  public void testFail() {
+    AssertFail.of(() -> PoissonBinomialDistribution.of(RealScalar.ZERO));
+    AssertFail.of(() -> PoissonBinomialDistribution.of(IdentityMatrix.of(3)));
+  }
+
   public void testFailInvalid() {
-    try {
-      PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, 2, 0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, -1, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, 2, 0)));
+    AssertFail.of(() -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, -1, 1)));
   }
 }

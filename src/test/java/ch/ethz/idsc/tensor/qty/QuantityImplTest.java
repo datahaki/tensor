@@ -1,11 +1,19 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.lang.reflect.Modifier;
+
+import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantityImplTest extends TestCase {
@@ -15,14 +23,15 @@ public class QuantityImplTest extends TestCase {
     assertEquals(quantity, copy);
   }
 
+  public void testSign() {
+    Scalar value = ComplexScalar.of(1, 2);
+    Scalar result = Sign.FUNCTION.apply(Quantity.of(value, "m*s^-2"));
+    Tolerance.CHOP.requireClose(Sign.FUNCTION.apply(value), result);
+  }
+
   public void testExactIntFail() {
-    try {
-      Scalar scalar = Quantity.of(10, "m");
-      Scalars.intValueExact(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    Scalar scalar = Quantity.of(10, "m");
+    AssertFail.of(() -> Scalars.intValueExact(scalar));
   }
 
   public void testEquals() {
@@ -47,5 +56,22 @@ public class QuantityImplTest extends TestCase {
     Scalar s3 = q1.divide(q2);
     assertTrue(s3 instanceof RationalScalar);
     assertTrue(q1.under(q2) instanceof RationalScalar);
+  }
+
+  public void testPowerQuantityQuantityFail() {
+    Scalar scalar = Scalars.fromString("-7+3*I[kg^-2*m*s]");
+    AssertFail.of(() -> Power.of(scalar, Quantity.of(3, "s")));
+  }
+
+  public void testPowerRealQuantityFail() {
+    AssertFail.of(() -> Power.of(RealScalar.ONE, Quantity.of(3, "s")));
+  }
+
+  public void testPowerDoubleQuantityFail() {
+    AssertFail.of(() -> Power.of(Pi.VALUE, Quantity.of(3, "s")));
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(QuantityImpl.class.getModifiers()));
   }
 }

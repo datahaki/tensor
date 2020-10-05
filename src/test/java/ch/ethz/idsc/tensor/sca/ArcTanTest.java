@@ -6,6 +6,8 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -13,6 +15,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ArcTanTest extends TestCase {
@@ -121,41 +124,21 @@ public class ArcTanTest extends TestCase {
   }
 
   public void testDoubleNaNFail() {
-    try {
-      ArcTan.FUNCTION.apply(ComplexScalar.of(Double.NaN, Double.NaN));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ArcTan.FUNCTION.apply(ComplexScalar.of(Double.NaN, Double.NaN)));
   }
 
   public void testQuantityFail() {
-    try {
-      ArcTan.of(Quantity.of(12, "m"), Quantity.of(4, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ArcTan.of(Quantity.of(12, "m"), RealScalar.of(4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ArcTan.of(RealScalar.of(12), Quantity.of(4, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ArcTan.of(Quantity.of(12, "m"), Quantity.of(4, "s")));
+    AssertFail.of(() -> ArcTan.of(Quantity.of(12, "m"), RealScalar.of(4)));
+    AssertFail.of(() -> ArcTan.of(RealScalar.of(12), Quantity.of(4, "s")));
   }
 
   public void testGaussScalarFail() {
-    try {
-      ArcTan.of(RealScalar.of(5), GaussScalar.of(1, 7));
-      fail();
-    } catch (Exception exception) {
-      // ---
+    Tensor tensor = Tensors.fromString("{0.3, 1/3, 3+4*I, 1.2+3.4*I}");
+    for (Tensor _x : tensor) {
+      Scalar x = _x.Get();
+      AssertFail.of(() -> ArcTan.of(x, GaussScalar.of(1, 7)));
+      AssertFail.of(() -> ArcTan.of(GaussScalar.of(1, 7), x));
     }
   }
 }

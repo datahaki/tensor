@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnmodifiableTensorTest extends TestCase {
@@ -26,12 +27,7 @@ public class UnmodifiableTensorTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
-    try {
-      unmodi.append(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> unmodi.append(Tensors.empty()));
     try {
       unmodi.set(t -> t.append(RealScalar.ZERO));
       fail();

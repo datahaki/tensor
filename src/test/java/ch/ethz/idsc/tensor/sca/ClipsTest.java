@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ClipsTest extends TestCase {
@@ -94,45 +95,20 @@ public class ClipsTest extends TestCase {
   }
 
   public void testPositiveFail() {
-    try {
-      Clips.positive(Quantity.of(-1, "kg"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Clips.positive(Quantity.of(-1, "kg")));
   }
 
   public void testAbsoluteFail() {
-    try {
-      Clips.absolute(Quantity.of(-1, "kg"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Clips.absolute(Quantity.of(-1, "kg")));
   }
 
   public void testInsideFail() {
-    try {
-      Clips.unit().isInside(Quantity.of(0.5, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Clips.unit().isInside(Quantity.of(0.5, "m")));
   }
 
   public void testQuantityFail() {
-    try {
-      Clips.unit().apply(Quantity.of(-5, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Clips.absoluteOne().apply(Quantity.of(-5, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Clips.unit().apply(Quantity.of(-5, "m")));
+    AssertFail.of(() -> Clips.absoluteOne().apply(Quantity.of(-5, "m")));
   }
 
   public void testQuantityMixedZero() {
@@ -141,20 +117,10 @@ public class ClipsTest extends TestCase {
   }
 
   public void testQuantityMixedUnitsFail() {
-    try {
-      Clips.interval(Quantity.of(2, "m"), Quantity.of(3, "kg"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Clips.interval(Quantity.of(2, "m"), Quantity.of(3, "kg")));
   }
 
   public void testComplexFail() {
-    try {
-      Clips.absolute(ComplexScalar.I);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Clips.absolute(ComplexScalar.I));
   }
 }

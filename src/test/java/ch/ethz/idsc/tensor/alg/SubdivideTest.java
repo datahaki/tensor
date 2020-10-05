@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SubdivideTest extends TestCase {
@@ -103,44 +104,19 @@ public class SubdivideTest extends TestCase {
   }
 
   public void testZeroFail() {
-    try {
-      Subdivide.of(RealScalar.of(-2), RealScalar.of(2), 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Subdivide.of(RealScalar.of(-2), RealScalar.of(2), 0));
   }
 
   public void testNegativeFail() {
-    try {
-      Subdivide.of(RealScalar.of(-2), RealScalar.of(2), -10);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Subdivide.of(RealScalar.of(-2), RealScalar.of(2), -10));
   }
 
   public void testNullFail() {
-    try {
-      Subdivide.of(RealScalar.of(2), null, 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Subdivide.of(null, RealScalar.of(2), 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Subdivide.of(RealScalar.of(2), null, 1));
+    AssertFail.of(() -> Subdivide.of(null, RealScalar.of(2), 1));
   }
 
   public void testGaussScalarFail() {
-    try {
-      Subdivide.of(GaussScalar.of(2, 7), GaussScalar.of(1, 7), 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Subdivide.of(GaussScalar.of(2, 7), GaussScalar.of(1, 7), 2));
   }
 }

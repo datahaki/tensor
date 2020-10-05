@@ -10,12 +10,13 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BinningMethodTest extends TestCase {
   public void testRice() {
     Scalar width = BinningMethod.RICE.apply(Tensors.vector(2, 4, 3, 6));
-    assertTrue(ExactScalarQ.of(width));
+    ExactScalarQ.require(width);
     assertEquals(width, RealScalar.ONE);
   }
 
@@ -36,11 +37,6 @@ public class BinningMethodTest extends TestCase {
 
   public void testFail() {
     for (BinningMethod binningMethod : BinningMethod.values())
-      try {
-        binningMethod.apply(Tensors.empty());
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> binningMethod.apply(Tensors.empty()));
   }
 }

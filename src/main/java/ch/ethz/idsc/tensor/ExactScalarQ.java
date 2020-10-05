@@ -35,11 +35,11 @@ import ch.ethz.idsc.tensor.qty.Quantity;
  * @see MachineNumberQ */
 public enum ExactScalarQ {
   ;
-  /** @param tensor
-   * @return true, if tensor is instance of {@link ExactScalarQInterface} which evaluates to true */
-  public static boolean of(Tensor tensor) {
-    return Objects.requireNonNull(tensor) instanceof ExactScalarQInterface //
-        && ((ExactScalarQInterface) tensor).isExactScalar();
+  /** @param scalar
+   * @return true, if scalar is instance of {@link ExactScalarQInterface} which evaluates to true */
+  public static boolean of(Scalar scalar) {
+    return Objects.requireNonNull(scalar) instanceof ExactScalarQInterface //
+        && ((ExactScalarQInterface) scalar).isExactScalar();
   }
 
   /** @param scalar
@@ -54,6 +54,6 @@ public enum ExactScalarQ {
   /** @param tensor
    * @return true if any scalar entry in given tensor satisfies the predicate {@link #of(Tensor)} */
   public static boolean any(Tensor tensor) {
-    return tensor.flatten(-1).anyMatch(ExactScalarQ::of);
+    return tensor.flatten(-1).map(Scalar.class::cast).anyMatch(ExactScalarQ::of);
   }
 }

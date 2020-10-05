@@ -29,21 +29,22 @@ import ch.ethz.idsc.tensor.qty.Quantity;
  * <a href="https://reference.wolfram.com/language/ref/NumberQ.html">NumberQ</a>
  * 
  * @see ExactScalarQ
- * @see IntegerQ */
+ * @see IntegerQ
+ * @see DeterminateScalarQ */
 public enum NumberQ {
   ;
-  /** @param tensor
+  /** @param scalar
    * @return */
-  public static boolean of(Tensor tensor) {
-    if (tensor instanceof ComplexScalar) {
-      ComplexScalar complexScalar = (ComplexScalar) tensor;
+  public static boolean of(Scalar scalar) {
+    if (scalar instanceof ComplexScalar) {
+      ComplexScalar complexScalar = (ComplexScalar) scalar;
       return of(complexScalar.real()) //
           && of(complexScalar.imag());
     }
-    if (tensor instanceof Quantity)
+    if (scalar instanceof Quantity)
       return false;
-    return MachineNumberQ.of(tensor) //
-        || ExactScalarQ.of(tensor);
+    return MachineNumberQ.of(scalar) //
+        || ExactScalarQ.of(scalar);
   }
 
   /** @param scalar
@@ -58,6 +59,6 @@ public enum NumberQ {
   /** @param tensor
    * @return true if all scalar entries in given tensor satisfy the predicate {@link NumberQ#of(Tensor)} */
   public static boolean all(Tensor tensor) {
-    return tensor.flatten(-1).allMatch(NumberQ::of);
+    return tensor.flatten(-1).map(Scalar.class::cast).allMatch(NumberQ::of);
   }
 }

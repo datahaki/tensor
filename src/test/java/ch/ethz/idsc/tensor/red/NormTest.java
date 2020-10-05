@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NormTest extends TestCase {
@@ -34,8 +35,8 @@ public class NormTest extends TestCase {
   }
 
   private static void _checkExactZero(Scalar norm) {
+    ExactScalarQ.require(norm);
     assertEquals(norm, RealScalar.ZERO);
-    assertTrue(ExactScalarQ.of(norm));
   }
 
   public void testZero() {
@@ -46,29 +47,14 @@ public class NormTest extends TestCase {
   }
 
   public void testEmptyFail() {
-    try {
-      Norm._1.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Norm._1.of(Tensors.empty()));
   }
 
   public void testScalarFail() {
-    try {
-      Norm._1.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Norm._1.of(RealScalar.ONE));
   }
 
   public void testUnstructuredFail() {
-    try {
-      Norm._1.of(Tensors.fromString("{{1, 2}, {3}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Norm._1.of(Tensors.fromString("{{1, 2}, {3}}")));
   }
 }

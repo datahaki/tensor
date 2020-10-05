@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.Range;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import junit.framework.TestCase;
@@ -31,7 +31,7 @@ public class DiagonalTest extends TestCase {
   }
 
   public void testLieAlgebra() {
-    assertTrue(MatrixQ.of(Diagonal.of(LieAlgebras.sl2())));
+    assertTrue(MatrixQ.of(Diagonal.of(LeviCivitaTensor.of(3))));
   }
 
   public void testFailScalar() {

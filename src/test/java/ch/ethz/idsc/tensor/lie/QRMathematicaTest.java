@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QRMathematicaTest extends TestCase {
@@ -38,11 +39,6 @@ public class QRMathematicaTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      QRMathematica.wrap(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> QRMathematica.wrap(null));
   }
 }

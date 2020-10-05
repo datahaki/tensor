@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ClipTest extends TestCase {
@@ -39,12 +40,7 @@ public class ClipTest extends TestCase {
 
   public void testFail() {
     Clips.interval(5, 5);
-    try {
-      Clips.interval(2, -3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Clips.interval(2, -3));
   }
 
   public void testQuantity() {
@@ -64,18 +60,8 @@ public class ClipTest extends TestCase {
     assertTrue(clip.isInside(Quantity.of(1, "m")));
     assertTrue(clip.isInside(Quantity.of(2, "m")));
     assertFalse(clip.isInside(Quantity.of(3, "m")));
-    try {
-      clip.isInside(Quantity.of(0, "V"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      clip.isInside(Quantity.of(3, "V"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> clip.isInside(Quantity.of(0, "V")));
+    AssertFail.of(() -> clip.isInside(Quantity.of(3, "V")));
   }
 
   public void testRescaleQuantity() {
@@ -111,12 +97,7 @@ public class ClipTest extends TestCase {
   public void testClipOutside() {
     Clip clip = Clips.interval(3, 5);
     assertEquals(clip.requireInside(RealScalar.of(3.9)), RealScalar.of(3.9));
-    try {
-      clip.requireInside(RealScalar.of(2.9));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> clip.requireInside(RealScalar.of(2.9)));
   }
 
   public void testClipInfty() {
@@ -138,11 +119,6 @@ public class ClipTest extends TestCase {
     assertFalse(clip.isOutside(Quantity.of(1, "m")));
     assertFalse(clip.isOutside(Quantity.of(2, "m")));
     assertTrue(clip.isOutside(Quantity.of(3, "m")));
-    try {
-      clip.isOutside(Quantity.of(3, "V"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> clip.isOutside(Quantity.of(3, "V")));
   }
 }

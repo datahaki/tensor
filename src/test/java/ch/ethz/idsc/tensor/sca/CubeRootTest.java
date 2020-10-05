@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Times;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CubeRootTest extends TestCase {
@@ -38,17 +39,12 @@ public class CubeRootTest extends TestCase {
   }
 
   public void testOf() {
-    Tensor tensor = CubeRoot.of(Tensors.vector(-27, -8, -1, 0, 1, 8, 27));
+    Tensor tensor = Tensors.vector(-27, -8, -1, 0, 1, 8, 27).map(CubeRoot.FUNCTION);
     assertEquals(tensor, Range.of(-3, 4));
   }
 
   public void testComplexFail() {
     Scalar scalar = ComplexScalar.of(12, 23);
-    try {
-      CubeRoot.FUNCTION.apply(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CubeRoot.FUNCTION.apply(scalar));
   }
 }

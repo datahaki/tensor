@@ -21,6 +21,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * "Least-Squares Rigid Motion Using SVD"
  * Olga Sorkine-Hornung and Michael Rabinovich, 2016 */
 public class RigidMotionFit implements TensorUnaryOperator {
+  private static final long serialVersionUID = -6537642160227232444L;
+
   /** @param origin matrix of dimension n x d
    * @param target matrix of dimension n x d
    * @param weights vector of length n with entries that sum up to 1

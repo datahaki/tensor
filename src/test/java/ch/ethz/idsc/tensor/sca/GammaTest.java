@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Nest;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GammaTest extends TestCase {
@@ -55,21 +56,11 @@ public class GammaTest extends TestCase {
   }
 
   public void testLargeNegativeInteger() {
-    try {
-      Gamma.of(RealScalar.of(-100000000000L));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Gamma.of(RealScalar.of(-100000000000L)));
   }
 
   public void testLargeNegativeIntegerDouble() {
-    try {
-      Gamma.of(DecimalScalar.of("-100000000000.0"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Gamma.of(DecimalScalar.of("-100000000000.0")));
   }
 
   public void testLargeNegative() {
@@ -118,59 +109,24 @@ public class GammaTest extends TestCase {
   }
 
   public void testInt0Fail() {
-    try {
-      Gamma.of(RealScalar.of(0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Gamma.of(RealScalar.of(0)));
   }
 
   public void testIntN1Fail() {
-    try {
-      Gamma.of(RealScalar.of(-1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Gamma.of(RealScalar.of(-1)));
   }
 
   public void testDouble0Fail() {
-    try {
-      Gamma.of(RealScalar.of(0.0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Gamma.of(RealScalar.of(0.0)));
   }
 
   public void testDoubleN1Fail() {
-    try {
-      Gamma.of(RealScalar.of(-1.0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Gamma.of(RealScalar.of(-1.0)));
   }
 
   public void testQuantityFail() {
-    try {
-      Gamma.of(Quantity.of(3, "m*s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Gamma.of(Quantity.of(-2, "m")); // <- fails for the wrong reason
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Gamma.of(Quantity.of(-2.12, "m^2"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Gamma.of(Quantity.of(3, "m*s")));
+    AssertFail.of(() -> Gamma.of(Quantity.of(-2, "m"))); // <- fails for the wrong reason
+    AssertFail.of(() -> Gamma.of(Quantity.of(-2.12, "m^2")));
   }
 }

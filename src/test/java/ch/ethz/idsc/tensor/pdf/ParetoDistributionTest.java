@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ParetoDistributionTest extends TestCase {
@@ -46,35 +47,15 @@ public class ParetoDistributionTest extends TestCase {
   }
 
   public void testNegativeFail() {
-    try {
-      ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ParetoDistribution.of(RealScalar.of(0), RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(0)));
+    AssertFail.of(() -> ParetoDistribution.of(RealScalar.of(0), RealScalar.of(3)));
   }
 
   public void testQuantityFail() {
-    try {
-      ParetoDistribution.of(RealScalar.of(3.3), Quantity.of(2.3, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ParetoDistribution.of(RealScalar.of(3.3), Quantity.of(2.3, "m")));
   }
 
   public void testKQuantityFail() {
-    try {
-      ParetoDistribution.of(Quantity.of(2.3, "m"), RealScalar.of(3.3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ParetoDistribution.of(Quantity.of(2.3, "m"), RealScalar.of(3.3)));
   }
 }

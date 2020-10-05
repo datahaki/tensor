@@ -15,6 +15,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * 
  * <p>https://en.wikipedia.org/wiki/Horner%27s_method */
 /* package */ class HornerScheme implements ScalarUnaryOperator {
+  private static final long serialVersionUID = 1673979439783080494L;
+  // ---
   private final Tensor coeffs;
 
   // careful: the coeffs are in reversed order in comparison to Series
@@ -26,7 +28,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
   public Scalar apply(Scalar scalar) {
     Scalar total = scalar.zero();
     for (Tensor entry : coeffs)
-      total = total.multiply(scalar).add(entry);
+      total = total.multiply(scalar).add(entry); // a + b ** x + c ** x ** x
+    // total = scalar.multiply(total).add(entry); // a + x ** b + x ** x ** c
     return total;
   }
 }

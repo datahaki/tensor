@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.img;
 import java.awt.Color;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ColorDataIndexedTest extends TestCase {
@@ -14,26 +15,11 @@ public class ColorDataIndexedTest extends TestCase {
 
   public void testFailComplex() {
     ColorDataIndexed colorDataIndexed = ColorDataLists._058.cyclic();
-    try {
-      colorDataIndexed.apply(ComplexScalar.of(3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> colorDataIndexed.apply(ComplexScalar.of(3, 4)));
   }
 
   public void testDeriveFail() {
-    try {
-      ColorDataLists._250.cyclic().deriveWithAlpha(256);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ColorDataLists._250.cyclic().deriveWithAlpha(-1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ColorDataLists._250.cyclic().deriveWithAlpha(256));
+    AssertFail.of(() -> ColorDataLists._250.cyclic().deriveWithAlpha(-1));
   }
 }

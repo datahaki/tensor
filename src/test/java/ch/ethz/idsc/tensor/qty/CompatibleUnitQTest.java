@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CompatibleUnitQTest extends TestCase {
@@ -26,20 +27,10 @@ public class CompatibleUnitQTest extends TestCase {
   }
 
   public void testWithFail() {
-    try {
-      CompatibleUnitQ.SI().with(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CompatibleUnitQ.SI().with(null));
   }
 
   public void testInNullFail() {
-    try {
-      CompatibleUnitQ.in(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CompatibleUnitQ.in(null));
   }
 }

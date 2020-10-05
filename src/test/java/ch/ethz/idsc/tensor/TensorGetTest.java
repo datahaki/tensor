@@ -4,10 +4,10 @@ package ch.ethz.idsc.tensor;
 import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorGetTest extends TestCase {
@@ -80,12 +80,7 @@ public class TensorGetTest extends TestCase {
   }
 
   public void testGetAllFail() {
-    Tensor matrix = LieAlgebras.so3();
-    try {
-      matrix.Get(Tensor.ALL);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    Tensor matrix = Array.zeros(3, 4, 5);
+    AssertFail.of(() -> matrix.Get(Tensor.ALL));
   }
 }

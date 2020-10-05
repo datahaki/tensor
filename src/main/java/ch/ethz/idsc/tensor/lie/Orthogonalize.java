@@ -26,7 +26,9 @@ public enum Orthogonalize {
    * with the same span as the rows of the input matrix
    * @throws Exception if given matrix is not a tensor of rank 2 */
   public static Tensor of(Tensor matrix) {
-    Tensor tensor = QRMathematica.wrap(QRDecomposition.preserveOrientation(ConjugateTranspose.of(matrix))).getInverseQ();
+    QRDecomposition qrDecomposition = //
+        QRDecomposition.of(ConjugateTranspose.of(matrix), QRSignOperators.ORIENTATION);
+    Tensor tensor = QRMathematica.wrap(qrDecomposition).getInverseQ();
     return PadRight.zeros(Dimensions.of(matrix)).apply(tensor);
   }
 }

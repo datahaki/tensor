@@ -25,6 +25,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
  * householder with even number of reflections
  * reproduces example on wikipedia */
 /* package */ class QRDecompositionImpl implements QRDecomposition, Serializable {
+  private static final long serialVersionUID = -1537168318056827415L;
   private static final TensorUnaryOperator NORMALIZE_UNLESS_ZERO = NormalizeUnlessZero.with(Norm._2);
   // ---
   private final int n;
@@ -62,7 +63,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
     Scalar xn = Norm._2.ofVector(x);
     if (Scalars.isZero(xn))
       return eye; // reflection reduces to identity, hopefully => det == 0
-    Scalar sign = qrSignOperator.of(R.Get(k, k));
+    Scalar sign = qrSignOperator.sign(R.Get(k, k));
     x.set(value -> value.subtract(sign.multiply(xn)), k);
     final Tensor m;
     if (ExactTensorQ.of(x)) {

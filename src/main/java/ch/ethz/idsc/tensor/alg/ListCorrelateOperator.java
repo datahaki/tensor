@@ -12,6 +12,8 @@ import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
 
 /* package */ class ListCorrelateOperator implements TensorUnaryOperator {
+  private static final long serialVersionUID = 6048027894405429271L;
+  // ---
   private final Tensor kernel;
   private final List<Integer> mask;
 

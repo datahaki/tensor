@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DiagonalMatrixTest extends TestCase {
@@ -18,7 +19,7 @@ public class DiagonalMatrixTest extends TestCase {
   public void testMisc1() {
     Tensor matrix = DiagonalMatrix.of(-2, 3, -4);
     assertEquals(Det.of(matrix).number(), 2 * 3 * 4);
-    assertTrue(ExactTensorQ.of(matrix));
+    ExactTensorQ.require(matrix);
   }
 
   public void testDiagonalMatrix() {
@@ -30,18 +31,13 @@ public class DiagonalMatrixTest extends TestCase {
   public void testMisc2() {
     Tensor matrix = DiagonalMatrix.of( //
         RealScalar.of(-2), RealScalar.of(3), RealScalar.of(-4));
-    assertTrue(ExactTensorQ.of(matrix));
+    ExactTensorQ.require(matrix);
     assertEquals(Det.of(matrix).number(), 2 * 3 * 4);
   }
 
   public void testMisc3() {
-    try {
-      Tensor tensor = RealScalar.of(-2);
-      DiagonalMatrix.with(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    Tensor tensor = RealScalar.of(-2);
+    AssertFail.of(() -> DiagonalMatrix.with(tensor));
   }
 
   public void testQuantity() {
@@ -49,54 +45,29 @@ public class DiagonalMatrixTest extends TestCase {
     Scalar qs2 = Quantity.of(2, "s");
     Tensor vec = Tensors.of(qs1, qs2);
     Tensor matrix = DiagonalMatrix.with(vec);
-    assertTrue(ExactTensorQ.of(matrix));
+    ExactTensorQ.require(matrix);
     assertEquals(matrix.toString(), "{{1[m], 0[m]}, {0[s], 2[s]}}");
   }
 
   public void testFailScalar() {
     Tensor matrix = DiagonalMatrix.of(RealScalar.ONE);
     assertEquals(matrix.toString(), "{{1}}");
-    try {
-      DiagonalMatrix.with(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiagonalMatrix.with(RealScalar.ONE));
   }
 
   public void testFailNonVector() {
-    try {
-      DiagonalMatrix.with(Tensors.fromString("{1, 2, {3}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiagonalMatrix.with(Tensors.fromString("{1, 2, {3}}")));
   }
 
   public void testFailEmpty() {
-    try {
-      DiagonalMatrix.with(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiagonalMatrix.with(Tensors.empty()));
   }
 
   public void testFailScalarEmpty() {
-    try {
-      DiagonalMatrix.of(new Scalar[] {});
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiagonalMatrix.of(new Scalar[] {}));
   }
 
   public void testFailNumberEmpty() {
-    try {
-      DiagonalMatrix.of(new Number[] {});
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiagonalMatrix.of(new Number[] {}));
   }
 }

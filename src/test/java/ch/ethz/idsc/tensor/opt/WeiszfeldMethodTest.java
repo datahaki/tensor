@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class WeiszfeldMethodTest extends TestCase {
@@ -91,11 +92,6 @@ public class WeiszfeldMethodTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      WeiszfeldMethod.with(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> WeiszfeldMethod.with(null));
   }
 }

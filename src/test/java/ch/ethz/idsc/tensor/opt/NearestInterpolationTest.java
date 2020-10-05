@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NearestInterpolationTest extends TestCase {
@@ -43,11 +44,6 @@ public class NearestInterpolationTest extends TestCase {
   }
 
   public void testFailNull() {
-    try {
-      NearestInterpolation.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NearestInterpolation.of(null));
   }
 }

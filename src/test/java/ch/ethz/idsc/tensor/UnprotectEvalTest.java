@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor;
 
 import java.util.List;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnprotectEvalTest extends TestCase {
@@ -43,12 +44,7 @@ public class UnprotectEvalTest extends TestCase {
 
   public void testListFail() {
     Tensor tensor = Tensors.vector(3, 2, 0, 1.234).unmodifiable();
-    try {
-      UnprotectEval.list(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnprotectEval.list(tensor));
   }
 
   public void testUnmodifiableFail() {

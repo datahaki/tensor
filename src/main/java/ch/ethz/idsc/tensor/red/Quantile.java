@@ -32,6 +32,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Quantile.html">Quantile</a> */
 public class Quantile implements ScalarUnaryOperator {
+  private static final long serialVersionUID = -3227861622998583604L;
+
   /** @param vector non-empty
    * @return
    * @throws Exception if input is a scalar */

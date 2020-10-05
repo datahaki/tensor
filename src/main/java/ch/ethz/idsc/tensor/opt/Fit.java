@@ -13,9 +13,10 @@ public enum Fit {
   ;
   public static enum Polynomial {
     ;
-    /** @param degree non-negative
-     * @param xdata vector
+    /** @param degree
+     * @param xdata
      * @param ydata
+     * @param one
      * @return */
     public static Tensor of(int degree, Tensor xdata, Tensor ydata) {
       return LeastSquares.of( //

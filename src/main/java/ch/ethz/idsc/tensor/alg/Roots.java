@@ -1,12 +1,10 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.sca.Imag;
 
 /** Not entirely consistent with Mathematica for the case
  * Mathematica::Roots[a == 0, x] == false
@@ -32,13 +30,12 @@ public enum Roots {
    * @throws Exception if roots cannot be determined */
   public static Tensor of(Tensor coeffs) {
     Tensor roots = unsorted(coeffs);
-    boolean isReal = roots.stream() //
-        .map(Scalar.class::cast) //
-        .map(Imag.FUNCTION) //
-        .allMatch(Scalars::isZero);
-    return isReal //
-        ? Sort.of(roots)
-        : roots;
+    try {
+      return Sort.of(roots);
+    } catch (Exception exception) {
+      // ---
+    }
+    return roots;
   }
 
   /** @param coeffs of polynomial
@@ -50,7 +47,7 @@ public enum Roots {
     switch (degree) {
     case 0:
       return Tensors.empty();
-    case 1: // a + b*x == 0
+    case 1: // a + b ** x == 0
       return RootsDegree1.of(coeffs);
     }
     if (Scalars.isZero(coeffs.Get(0))) {

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DeterminateScalarQTest extends TestCase {
@@ -19,14 +20,32 @@ public class DeterminateScalarQTest extends TestCase {
     assertFalse(DeterminateScalarQ.of(Scalars.fromString("abc")));
     assertFalse(DeterminateScalarQ.of(Scalars.fromString("8.2+NaN*I[m^2]")));
     assertFalse(DeterminateScalarQ.of(Scalars.fromString("NaN+2*I[m*s]")));
+    assertFalse(DeterminateScalarQ.of(Scalars.fromString("NaN+NaN*I[m*s]")));
+  }
+
+  public void testComplexBranching() {
+    Scalar scalar = ComplexScalar.of(Double.NaN, Double.NaN);
+    assertTrue(scalar instanceof ComplexScalar);
+    assertFalse(DeterminateScalarQ.of(scalar));
+    assertTrue(DeterminateScalarQ.of(ComplexScalar.of(1, 2)));
+    assertFalse(DeterminateScalarQ.of(ComplexScalar.of(3, Double.NaN)));
+    assertFalse(DeterminateScalarQ.of(ComplexScalar.of(Double.NaN, 4)));
+    assertFalse(DeterminateScalarQ.of(ComplexScalar.of(Double.NaN, Double.NaN)));
+  }
+
+  public void testSome() {
+    assertEquals(Scalars.fromString("NaN+2*I[m*s]").toString(), "NaN+2*I[m*s]");
+    // Scalar scalar = Scalars.fromString("8.2+NaN*I[m^2]");
+    // System.out.println(scalar);
+    // assertEquals(Scalars.fromString("8.2+NaN*I[m^2]").toString(), "8.2+NaN*I[m^2]");
+  }
+
+  public void testRequireThrow() {
+    DeterminateScalarQ.require(Pi.VALUE);
+    AssertFail.of(() -> DeterminateScalarQ.require(DoubleScalar.POSITIVE_INFINITY));
   }
 
   public void testNullFail() {
-    try {
-      DeterminateScalarQ.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DeterminateScalarQ.of(null));
   }
 }

@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MachineNumberQTest extends TestCase {
@@ -26,11 +27,6 @@ public class MachineNumberQTest extends TestCase {
     assertFalse(MachineNumberQ.of(GaussScalar.of(0, 7)));
   }
 
-  public void testTensor() {
-    assertFalse(MachineNumberQ.of(Tensors.vector(1.)));
-    assertFalse(MachineNumberQ.of(Tensors.empty()));
-  }
-
   public void testCorner() {
     assertFalse(MachineNumberQ.of(DoubleScalar.POSITIVE_INFINITY));
     assertFalse(MachineNumberQ.of(DoubleScalar.NEGATIVE_INFINITY));
@@ -48,11 +44,6 @@ public class MachineNumberQTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      MachineNumberQ.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MachineNumberQ.of(null));
   }
 }

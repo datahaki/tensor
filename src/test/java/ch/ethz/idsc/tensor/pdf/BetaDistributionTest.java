@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BetaDistributionTest extends TestCase {
@@ -26,17 +27,7 @@ public class BetaDistributionTest extends TestCase {
   }
 
   public void testFailNonPositive() {
-    try {
-      BetaDistribution.of(0, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      BetaDistribution.of(2, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BetaDistribution.of(0, 3));
+    AssertFail.of(() -> BetaDistribution.of(2, 0));
   }
 }

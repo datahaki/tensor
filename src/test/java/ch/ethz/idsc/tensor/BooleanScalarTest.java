@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Tally;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BooleanScalarTest extends TestCase {
@@ -36,12 +37,7 @@ public class BooleanScalarTest extends TestCase {
 
   public void testReciprocal() {
     assertEquals(BooleanScalar.TRUE.reciprocal(), BooleanScalar.TRUE);
-    try {
-      BooleanScalar.FALSE.reciprocal();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BooleanScalar.FALSE.reciprocal());
   }
 
   public void testZero() {
@@ -99,8 +95,8 @@ public class BooleanScalarTest extends TestCase {
   }
 
   public void testExactNumberQ() {
-    assertTrue(ExactScalarQ.of(BooleanScalar.FALSE));
-    assertTrue(ExactScalarQ.of(BooleanScalar.TRUE));
+    ExactScalarQ.require(BooleanScalar.FALSE);
+    ExactScalarQ.require(BooleanScalar.TRUE);
   }
 
   public void testSqrt() {

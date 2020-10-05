@@ -14,7 +14,7 @@ import java.util.stream.Stream;
     return new BipartitionImpl(IntStream.range(0, dim).boxed());
   }
 
-  // ---
+  /***************************************************/
   private final List<Integer> nodes = new ArrayList<>();
   private final Set<Integer> notNodes;
 

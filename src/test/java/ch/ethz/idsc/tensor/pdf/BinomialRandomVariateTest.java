@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.DeleteDuplicates;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BinomialRandomVariateTest extends TestCase {
@@ -52,20 +53,10 @@ public class BinomialRandomVariateTest extends TestCase {
   }
 
   public void testPDFFail() {
-    try {
-      PDF.of(BinomialDistribution.of(1200, DoubleScalar.of(0.5)));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PDF.of(BinomialDistribution.of(1200, DoubleScalar.of(0.5))));
   }
 
   public void testCDFFail() {
-    try {
-      CDF.of(BinomialDistribution.of(1200, DoubleScalar.of(0.5)));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CDF.of(BinomialDistribution.of(1200, DoubleScalar.of(0.5))));
   }
 }

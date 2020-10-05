@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.StringScalar;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TanTest extends TestCase {
@@ -26,11 +27,6 @@ public class TanTest extends TestCase {
 
   public void testTypeFail() {
     Scalar scalar = StringScalar.of("some");
-    try {
-      Tan.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Tan.of(scalar));
   }
 }

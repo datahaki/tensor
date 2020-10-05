@@ -21,13 +21,24 @@ import ch.ethz.idsc.tensor.alg.Array;
  * </pre>
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/LeviCivitaTensor.html">LeviCivitaTensor</a> */
+ * <a href="https://reference.wolfram.com/language/ref/LeviCivitaTensor.html">LeviCivitaTensor</a>
+ * 
+ * @see HodgeDual */
 public enum LeviCivitaTensor {
   ;
+  private static final Tensor[] CACHE = { build(0), build(1), build(2), build(3), build(4) };
+
   /** @param d non-negative
    * @return tensor of rank d and dimensions d x ... x d
    * @throws Exception if d is negative */
   public static Tensor of(int d) {
+    return d < CACHE.length //
+        ? CACHE[d].copy()
+        : build(d);
+  }
+
+  // helper function
+  private static Tensor build(int d) {
     return Array.of(list -> Signature.of(Tensors.vector(list)), Collections.nCopies(d, d));
   }
 }

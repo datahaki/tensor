@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RowReduceTest extends TestCase {
@@ -76,11 +77,6 @@ public class RowReduceTest extends TestCase {
 
   public void testUnstructuredFail() {
     Tensor matrix = Tensors.fromString("{{}, {2, 3}}");
-    try {
-      RowReduce.of(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RowReduce.of(matrix));
   }
 }

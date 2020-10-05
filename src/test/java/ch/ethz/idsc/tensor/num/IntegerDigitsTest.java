@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class IntegerDigitsTest extends TestCase {
@@ -29,24 +30,9 @@ public class IntegerDigitsTest extends TestCase {
   }
 
   public void testBaseFail() {
-    try {
-      IntegerDigits.base(1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      IntegerDigits.base(0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      IntegerDigits.base(-1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> IntegerDigits.base(1));
+    AssertFail.of(() -> IntegerDigits.base(0));
+    AssertFail.of(() -> IntegerDigits.base(-1));
   }
 
   public void testZero() {
@@ -54,20 +40,10 @@ public class IntegerDigitsTest extends TestCase {
   }
 
   public void testPrecisionFail() {
-    try {
-      IntegerDigits.of(RealScalar.of(1.0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> IntegerDigits.of(RealScalar.of(1.0)));
   }
 
   public void testRationalFail() {
-    try {
-      IntegerDigits.of(RationalScalar.of(10, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> IntegerDigits.of(RationalScalar.of(10, 3)));
   }
 }

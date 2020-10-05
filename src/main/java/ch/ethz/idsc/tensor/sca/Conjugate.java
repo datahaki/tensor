@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
 
 /** Conjugate maps a given scalar to its complex conjugate.
- * The scalar type is required to implement {@link ComplexEmbedding}
+ * The scalar type is required to implement {@link ConjugateInterface}
  * in order for the operation to succeed.
  * 
  * <p>inspired by

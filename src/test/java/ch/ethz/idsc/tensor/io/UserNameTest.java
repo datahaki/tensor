@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.io;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UserNameTest extends TestCase {
@@ -21,11 +22,6 @@ public class UserNameTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      assertFalse(UserName.is(null));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UserName.is(null));
   }
 }

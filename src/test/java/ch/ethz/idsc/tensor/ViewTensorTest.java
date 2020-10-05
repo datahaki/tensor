@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.sca.Increment;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ViewTensorTest extends TestCase {
@@ -25,30 +26,15 @@ public class ViewTensorTest extends TestCase {
   }
 
   public void testUnmodifiableFail() {
-    try {
-      Unprotect.references(Tensors.vector(1, 2, 3).unmodifiable());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Unprotect.references(Tensors.vector(1, 2, 3).unmodifiable()));
   }
 
   public void testUnmodifiableIterateFail() {
-    try {
-      Unprotect.references(Tensors.matrixInt(new int[][] { { 1, 2, 3 } }).unmodifiable().iterator().next());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Unprotect.references(Tensors.matrixInt(new int[][] { { 1, 2, 3 } }).unmodifiable().iterator().next()));
   }
 
   public void testUnmodifiableLoopFail() {
     for (Tensor tensor : Tensors.matrixInt(new int[][] { { 1, 2 }, { 3, 4, 5 } }).unmodifiable())
-      try {
-        Unprotect.references(tensor);
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> Unprotect.references(tensor));
   }
 }

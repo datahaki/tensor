@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ConjugateTransposeTest extends TestCase {
@@ -30,20 +31,10 @@ public class ConjugateTransposeTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      ConjugateTranspose.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ConjugateTranspose.of(RealScalar.ONE));
   }
 
   public void testVectorFail() {
-    try {
-      ConjugateTranspose.of(Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ConjugateTranspose.of(Tensors.vector(1, 2, 3)));
   }
 }

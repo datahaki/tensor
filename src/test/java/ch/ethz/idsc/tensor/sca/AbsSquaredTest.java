@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.Gaussian;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -10,6 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class AbsSquaredTest extends TestCase {
@@ -43,21 +45,15 @@ public class AbsSquaredTest extends TestCase {
     assertEquals(AbsSquared.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), DoubleScalar.POSITIVE_INFINITY);
   }
 
-  public void testFail() {
-    try {
-      AbsSquared.FUNCTION.apply(StringScalar.of("idsc"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+  public void testGaussScalarFail() {
+    AssertFail.of(() -> AbsSquared.FUNCTION.apply(GaussScalar.of(2, 3)));
   }
 
-  public void testFailNull() {
-    try {
-      AbsSquared.FUNCTION.apply(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+  public void testGaussianFail() {
+    AssertFail.of(() -> AbsSquared.FUNCTION.apply(Gaussian.of(2, 3)));
+  }
+
+  public void testStringFail() {
+    AssertFail.of(() -> AbsSquared.FUNCTION.apply(StringScalar.of("idsc")));
   }
 }

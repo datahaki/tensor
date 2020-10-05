@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CsvHelperTest extends TestCase {
@@ -59,51 +60,21 @@ public class CsvHelperTest extends TestCase {
   }
 
   public void testComplexFail() {
-    try {
-      CsvHelper.FUNCTION.apply(ComplexScalar.of(3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CsvHelper.FUNCTION.apply(ComplexScalar.of(3, 4)));
   }
 
   public void testQuantityFail() {
-    try {
-      CsvHelper.FUNCTION.apply(Quantity.of(3, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CsvHelper.FUNCTION.apply(Quantity.of(3, "s")));
   }
 
   public void testFailSingleQuote() {
     CsvHelper.requireQuotesFree("");
-    try {
-      CsvHelper.wrap(StringScalar.of("\""));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CsvHelper.wrap(StringScalar.of("\"")));
   }
 
   public void testFail() {
-    try {
-      CsvHelper.wrap(StringScalar.of("\"abc\"\""));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      CsvHelper.wrap(StringScalar.of("abc\""));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      CsvHelper.wrap(StringScalar.of("\"abc"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CsvHelper.wrap(StringScalar.of("\"abc\"\"")));
+    AssertFail.of(() -> CsvHelper.wrap(StringScalar.of("abc\"")));
+    AssertFail.of(() -> CsvHelper.wrap(StringScalar.of("\"abc")));
   }
 }

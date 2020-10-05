@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CosTest extends TestCase {
@@ -25,21 +26,11 @@ public class CosTest extends TestCase {
   }
 
   public void testQuantityFail() {
-    try {
-      Cos.of(Quantity.of(1, "deg"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cos.of(Quantity.of(1, "deg")));
   }
 
   public void testStringFail() {
     Scalar scalar = StringScalar.of("string");
-    try {
-      Cos.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cos.of(scalar));
   }
 }

@@ -2,30 +2,22 @@
 package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.opt.Pi;
-import ch.ethz.idsc.tensor.sca.AbsInterface;
-import ch.ethz.idsc.tensor.sca.ArcTan;
-import ch.ethz.idsc.tensor.sca.ArcTanInterface;
-import ch.ethz.idsc.tensor.sca.ArgInterface;
 import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
-import ch.ethz.idsc.tensor.sca.ConjugateInterface;
 import ch.ethz.idsc.tensor.sca.Exp;
-import ch.ethz.idsc.tensor.sca.ExpInterface;
 import ch.ethz.idsc.tensor.sca.Log;
-import ch.ethz.idsc.tensor.sca.LogInterface;
-import ch.ethz.idsc.tensor.sca.PowerInterface;
-import ch.ethz.idsc.tensor.sca.RoundingInterface;
 import ch.ethz.idsc.tensor.sca.Sign;
-import ch.ethz.idsc.tensor.sca.SignInterface;
-import ch.ethz.idsc.tensor.sca.SqrtInterface;
-import ch.ethz.idsc.tensor.sca.TrigonometryInterface;
 
 /** suggested base class for implementations of {@link RealScalar} */
-public abstract class AbstractRealScalar extends AbstractScalar implements RealScalar, //
-    AbsInterface, ArcTanInterface, ArgInterface, Comparable<Scalar>, ComplexEmbedding, //
-    ConjugateInterface, ExpInterface, LogInterface, PowerInterface, RoundingInterface, //
-    SignInterface, SqrtInterface, TrigonometryInterface {
+public abstract class AbstractRealScalar extends AbstractScalar implements RealScalar {
   static final double LOG_LO = 0.75;
   static final double LOG_HI = 1.3;
+
+  /***************************************************/
+  // methods in this section are final
+  /** @return true if this scalar is zero, or strictly greater zero, false otherwise */
+  protected final boolean isNonNegative() {
+    return 0 <= signInt();
+  }
 
   /** @return this or this.negate() depending on whichever is non-negative */
   @Override // from AbsInterface
@@ -33,7 +25,11 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
     return isNonNegative() ? this : negate();
   }
 
-  /***************************************************/
+  @Override // from AbsInterface
+  public final Scalar absSquared() {
+    return multiply(this);
+  }
+
   @Override // from ComplexEmbedding
   public final Scalar conjugate() {
     return this;
@@ -49,6 +45,11 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
     return this;
   }
 
+  @Override // from SignInterface
+  public final Scalar sign() {
+    return StaticHelper.SIGN[1 + signInt()];
+  }
+
   /***************************************************/
   // methods are non-final because overriding classes may support better precision
   @Override // from ArcTanInterface
@@ -59,7 +60,8 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
       return DoubleScalar.of(Math.atan2( //
           number().doubleValue(), // y
           x.number().doubleValue())); // x
-    return ArcTan.FUNCTION.apply(divide(x)); // ArcTan[x, y] == ArcTan[ y / x ]
+    // return ArcTan.FUNCTION.apply(divide(x)); // ArcTan[x, y] == ArcTan[ y / x ]
+    throw TensorRuntimeException.of(this, x);
   }
 
   @Override // from ArgInterface
@@ -132,11 +134,5 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   @Override // from TrigonometryInterface
   public Scalar sinh() {
     return DoubleScalar.of(Math.sinh(number().doubleValue()));
-  }
-
-  /***************************************************/
-  /** @return true if this scalar is zero, or strictly greater zero, false otherwise */
-  protected final boolean isNonNegative() {
-    return 0 <= signInt();
   }
 }

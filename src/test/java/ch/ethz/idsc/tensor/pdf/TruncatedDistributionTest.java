@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TruncatedDistributionTest extends TestCase {
@@ -23,7 +24,7 @@ public class TruncatedDistributionTest extends TestCase {
     Clip clip = Clips.interval(10, 11);
     Distribution distribution = TruncatedDistribution.of(BinomialDistribution.of(20, DoubleScalar.of(0.5)), clip);
     Scalar scalar = RandomVariate.of(distribution);
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
     assertTrue(clip.isInside(scalar));
     Serialization.copy(distribution);
     Serialization.copy(TruncatedDistribution.of(NormalDistribution.of(10, 2), clip));
@@ -32,26 +33,11 @@ public class TruncatedDistributionTest extends TestCase {
   public void testFail() {
     Clip clip = Clips.interval(10, 11);
     Distribution distribution = TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), clip);
-    try {
-      RandomVariate.of(distribution);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RandomVariate.of(distribution));
   }
 
   public void testNullFail() {
-    try {
-      TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      TruncatedDistribution.of(null, Clips.interval(10, 11));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), null));
+    AssertFail.of(() -> TruncatedDistribution.of(null, Clips.interval(10, 11)));
   }
 }

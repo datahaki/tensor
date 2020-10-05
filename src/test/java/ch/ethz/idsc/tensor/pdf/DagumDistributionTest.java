@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DagumDistributionTest extends TestCase {
@@ -45,44 +46,14 @@ public class DagumDistributionTest extends TestCase {
   }
 
   public void testFailNonPositive() {
-    try {
-      DagumDistribution.of(0, 2, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DagumDistribution.of(1, 0, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DagumDistribution.of(1, 2, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DagumDistribution.of(0, 2, 3));
+    AssertFail.of(() -> DagumDistribution.of(1, 0, 3));
+    AssertFail.of(() -> DagumDistribution.of(1, 2, 0));
   }
 
   public void testFailNegative() {
-    try {
-      DagumDistribution.of(-1, 2, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DagumDistribution.of(1, -1, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DagumDistribution.of(1, 2, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DagumDistribution.of(-1, 2, 3));
+    AssertFail.of(() -> DagumDistribution.of(1, -1, 3));
+    AssertFail.of(() -> DagumDistribution.of(1, 2, -1));
   }
 }

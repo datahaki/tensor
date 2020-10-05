@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.sca.N;
  * "Weiszfeld’s Method: Old and New Results"
  * by Amir Beck, Shoham Sabach */
 public class WeiszfeldMethod implements SpatialMedian, Serializable {
+  private static final long serialVersionUID = -555862284852117669L;
   private static final int MAX_ITERATIONS = 512;
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
 
@@ -58,7 +59,7 @@ public class WeiszfeldMethod implements SpatialMedian, Serializable {
       Tensor dist = Tensor.of(sequence.stream().map(prev::subtract).map(Norm._2::ofVector));
       int index = ArgMin.of(dist);
       if (Scalars.isZero(dist.Get(index)))
-        return Optional.of(point.copy());
+        return Optional.of(point);
       Tensor invdist = dist.map(Scalar::reciprocal);
       point = NORMALIZE.apply(weights.pmul(invdist)).dot(sequence);
       if (chop.isClose(point, prev))

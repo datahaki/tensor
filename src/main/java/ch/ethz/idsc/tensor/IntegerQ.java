@@ -1,7 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
-/** implementation consistent with Mathematica
+import java.util.Objects;
+
+/** implementation consistent with Mathematica but requires scalar type as input
  * 
  * <p>Examples:
  * <pre>
@@ -16,11 +18,11 @@ package ch.ethz.idsc.tensor;
  * @see ExactScalarQ */
 public enum IntegerQ {
   ;
-  /** @param tensor
-   * @return true, if tensor is instance of {@link RationalScalar} with denominator == 1 */
-  public static boolean of(Tensor tensor) {
-    return tensor instanceof RationalScalar //
-        && ((RationalScalar) tensor).isInteger();
+  /** @param scalar
+   * @return true, if given scalar is instance of {@link RationalScalar} with denominator == 1 */
+  public static boolean of(Scalar scalar) {
+    return Objects.requireNonNull(scalar) instanceof RationalScalar //
+        && ((RationalScalar) scalar).isInteger();
   }
 
   /** @param scalar

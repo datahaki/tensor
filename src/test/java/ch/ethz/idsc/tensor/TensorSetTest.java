@@ -9,7 +9,6 @@ import ch.ethz.idsc.tensor.alg.ArrayQ;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.TensorRank;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.sca.Increment;
@@ -87,7 +86,7 @@ public class TensorSetTest extends TestCase {
   }
 
   public void testSet333() {
-    Tensor ad = LieAlgebras.sl2();
+    Tensor ad = Array.zeros(3, 3, 3);
     Tensor mat = HilbertMatrix.of(3);
     ad.set(mat, Tensor.ALL, 2);
     assertEquals(Dimensions.of(ad), Arrays.asList(3, 3, 3));

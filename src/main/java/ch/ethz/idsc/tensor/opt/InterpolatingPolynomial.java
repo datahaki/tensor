@@ -17,6 +17,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/InterpolatingPolynomial.html">InterpolatingPolynomial</a> */
 public class InterpolatingPolynomial implements Serializable {
+  private static final long serialVersionUID = -3507853230017899224L;
+
   /** @param binaryAverage
    * @param knots vector not necessarily ordered
    * @return
@@ -57,13 +59,16 @@ public class InterpolatingPolynomial implements Serializable {
    * @throws Exception if given vector is not a tensor of rank 1
    * @throws Exception if length of vector is different from number of knots */
   public ScalarUnaryOperator scalarUnaryOperator(Tensor vector) {
-    return new TensorScalarFunctionCast(new Neville(VectorQ.requireLength(vector, knots.length)));
+    Neville neville = new Neville(VectorQ.requireLength(vector, knots.length));
+    return scalar -> (Scalar) neville.apply(scalar);
   }
 
   /** Neville's algorithm for polynomial interpolation by Eric Harold Neville
    * 
    * https://en.wikipedia.org/wiki/Neville%27s_algorithm */
   private class Neville implements ScalarTensorFunction {
+    private static final long serialVersionUID = 5871543416439774702L;
+    // ---
     private final Tensor tensor;
 
     public Neville(Tensor tensor) {

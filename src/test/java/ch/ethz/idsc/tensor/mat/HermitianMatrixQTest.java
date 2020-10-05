@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HermitianMatrixQTest extends TestCase {
@@ -30,20 +31,10 @@ public class HermitianMatrixQTest extends TestCase {
 
   public void testRequire() {
     HermitianMatrixQ.require(HilbertMatrix.of(10));
-    try {
-      HermitianMatrixQ.require(Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HermitianMatrixQ.require(Tensors.vector(1, 2, 3)));
   }
 
   public void testRequireChop() {
-    try {
-      HermitianMatrixQ.require(Tensors.vector(1, 2, 3), Chop._02);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HermitianMatrixQ.require(Tensors.vector(1, 2, 3), Chop._02));
   }
 }

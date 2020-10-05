@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.Import;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ImageResizeTest extends TestCase {
@@ -61,29 +62,9 @@ public class ImageResizeTest extends TestCase {
   public void testFail() {
     Tensor image = Array.zeros(10, 10, 4);
     ImageResize.nearest(image, 2);
-    try {
-      ImageResize.nearest(image, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ImageResize.nearest(image, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ImageResize.nearest(image, -1, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ImageResize.nearest(image, 2, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ImageResize.nearest(image, 0));
+    AssertFail.of(() -> ImageResize.nearest(image, -1));
+    AssertFail.of(() -> ImageResize.nearest(image, -1, 2));
+    AssertFail.of(() -> ImageResize.nearest(image, 2, -1));
   }
 }

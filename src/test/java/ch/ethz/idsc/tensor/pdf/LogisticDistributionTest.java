@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LogisticDistributionTest extends TestCase {
@@ -35,35 +36,15 @@ public class LogisticDistributionTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      LogisticDistribution.of(null, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      LogisticDistribution.of(RealScalar.ONE, null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LogisticDistribution.of(null, RealScalar.ONE));
+    AssertFail.of(() -> LogisticDistribution.of(RealScalar.ONE, null));
   }
 
   public void testZeroFail() {
-    try {
-      LogisticDistribution.of(RealScalar.ONE, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LogisticDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 
   public void testNegativeFail() {
-    try {
-      LogisticDistribution.of(RealScalar.ONE, RealScalar.of(-1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LogisticDistribution.of(RealScalar.ONE, RealScalar.of(-1)));
   }
 }

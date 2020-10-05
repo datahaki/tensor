@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RationalizeTest extends TestCase {
@@ -129,20 +130,10 @@ public class RationalizeTest extends TestCase {
   }
 
   public void testFailPositive() {
-    try {
-      Rationalize.withDenominatorLessEquals(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Rationalize.withDenominatorLessEquals(RealScalar.ZERO));
   }
 
   public void testFailIntegerQ() {
-    try {
-      Rationalize.withDenominatorLessEquals(RealScalar.of(1.23));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Rationalize.withDenominatorLessEquals(RealScalar.of(1.23)));
   }
 }

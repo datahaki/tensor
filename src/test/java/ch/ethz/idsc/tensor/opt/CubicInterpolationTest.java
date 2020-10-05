@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Subdivide;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CubicInterpolationTest extends TestCase {
@@ -31,11 +32,7 @@ public class CubicInterpolationTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      CubicInterpolation.of(Tensors.vector());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CubicInterpolation.of(null));
+    AssertFail.of(() -> CubicInterpolation.of(Tensors.vector()));
   }
 }

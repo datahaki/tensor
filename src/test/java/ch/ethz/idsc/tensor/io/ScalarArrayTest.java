@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ScalarArrayTest extends TestCase {
@@ -27,29 +28,14 @@ public class ScalarArrayTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      ScalarArray.ofVector(Pi.HALF);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ScalarArray.ofVector(Pi.HALF));
   }
 
   public void testVectorFail() {
-    try {
-      ScalarArray.ofVector(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ScalarArray.ofVector(HilbertMatrix.of(3)));
   }
 
   public void testMatrixFail() {
-    try {
-      ScalarArray.ofMatrix(Array.zeros(2, 2, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ScalarArray.ofMatrix(Array.zeros(2, 2, 2)));
   }
 }

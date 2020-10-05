@@ -7,7 +7,6 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/PseudoInverse.html">PseudoInverse</a>
@@ -30,7 +29,7 @@ public enum PseudoInverse {
    * @param chop
    * @return pseudoinverse of matrix determined by given svd */
   public static Tensor of(SingularValueDecomposition svd, Chop chop) {
-    Tensor wi = svd.values().map(chop).map(InvertUnlessZero.FUNCTION);
+    Tensor wi = SingularValueList.inverted(svd, chop);
     return Tensor.of(svd.getV().stream().map(wi::pmul)).dot(Transpose.of(svd.getU()));
   }
 

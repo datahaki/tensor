@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HilbertMatrixTest extends TestCase {
@@ -21,17 +22,7 @@ public class HilbertMatrixTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      HilbertMatrix.of(0, 4);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      HilbertMatrix.of(4, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HilbertMatrix.of(0, 4));
+    AssertFail.of(() -> HilbertMatrix.of(4, 0));
   }
 }

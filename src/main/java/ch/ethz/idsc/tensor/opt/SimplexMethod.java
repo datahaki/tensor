@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Partition;
@@ -47,15 +48,15 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Tensor tab = Join.of(1, //
         TensorMap.of(row -> row.extract(0, n), simplexImpl.tab.extract(0, m), 1), //
         Partition.of(simplexImpl.tab.get(Tensor.ALL, n + m).extract(0, m), 1));
-    tab.append(Join.of(c, Tensors.of(RealScalar.ZERO))); // set bottom corner to 0
+    tab.append(Append.of(c, RealScalar.ZERO)); // set bottom corner to 0
     return new SimplexMethod(tab, simplexImpl.ind, simplexPivot).getX(); // phase 2
   }
 
   /***************************************************/
-  final Tensor tab; // (m+1) x (n+1)
-  final Tensor ind; // vector of length m
-  final int m;
-  final int n;
+  private final Tensor tab; // (m+1) x (n+1)
+  private final Tensor ind; // vector of length m
+  private final int m;
+  private final int n;
 
   private SimplexMethod(Tensor tab, Tensor ind, SimplexPivot simplexPivot) {
     this.tab = tab;

@@ -22,6 +22,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RigidMotionFitTest extends TestCase {
@@ -105,36 +106,16 @@ public class RigidMotionFitTest extends TestCase {
     Distribution distribution = NormalDistribution.standard();
     Tensor points = RandomVariate.of(distribution, 6, 3);
     Tensor target = RandomVariate.of(distribution, 7, 3);
-    try {
-      RigidMotionFit.of(points, target, Tensors.vector(1, 2, 3, 4, 5, 6));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      RigidMotionFit.of(points, target, Tensors.vector(1, 2, 3, 4, 5, 6, 7));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RigidMotionFit.of(points, target, Tensors.vector(1, 2, 3, 4, 5, 6)));
+    AssertFail.of(() -> RigidMotionFit.of(points, target, Tensors.vector(1, 2, 3, 4, 5, 6, 7)));
   }
 
   public void testZeroFail() {
     Distribution distribution = NormalDistribution.standard();
     Tensor points = RandomVariate.of(distribution, 6, 3);
     Tensor target = RandomVariate.of(distribution, 6, 3);
-    try {
-      RigidMotionFit.of(points, target, Array.zeros(6));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      RigidMotionFit.of(points, target, Array.zeros(6).map(N.DOUBLE));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RigidMotionFit.of(points, target, Array.zeros(6)));
+    AssertFail.of(() -> RigidMotionFit.of(points, target, Array.zeros(6).map(N.DOUBLE)));
   }
 
   public void testNegativeOk() {

@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.red;
 
+import java.lang.reflect.Modifier;
+
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -11,6 +13,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class Norm2Test extends TestCase {
@@ -66,20 +69,14 @@ public class Norm2Test extends TestCase {
 
   public void testMatrix2() {
     Tensor matrix = Tensors.fromString("{{}}");
-    try {
-      Norm._2.of(matrix);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Norm._2.of(matrix));
   }
 
   public void testEmpty() {
-    try {
-      Norm._2.ofVector(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Norm._2.ofVector(Tensors.empty()));
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(Norm2.class.getModifiers()));
   }
 }

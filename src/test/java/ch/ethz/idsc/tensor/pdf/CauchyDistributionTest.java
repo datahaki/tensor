@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.red.Median;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CauchyDistributionTest extends TestCase {
@@ -34,35 +35,15 @@ public class CauchyDistributionTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      CauchyDistribution.of(null, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      CauchyDistribution.of(RealScalar.ONE, null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CauchyDistribution.of(null, RealScalar.ONE));
+    AssertFail.of(() -> CauchyDistribution.of(RealScalar.ONE, null));
   }
 
   public void testZeroFail() {
-    try {
-      CauchyDistribution.of(RealScalar.ONE, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CauchyDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 
   public void testNegativeFail() {
-    try {
-      CauchyDistribution.of(RealScalar.ONE, RealScalar.of(-1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CauchyDistribution.of(RealScalar.ONE, RealScalar.of(-1)));
   }
 }

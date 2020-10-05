@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.StringTensor;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PermutationsTest extends TestCase {
@@ -45,10 +46,20 @@ public class PermutationsTest extends TestCase {
     assertEquals(res.length(), 6);
   }
 
+  public void testStreamOf() {
+    assertEquals(Permutations.of(Tensors.vector(2, -1, 2, -1)), //
+        Tensor.of(Permutations.stream(Tensors.vector(2, -1, 2, -1))));
+  }
+
   public void testStrings() {
     Tensor vector = StringTensor.vector("a", "b", "a");
     Tensor tensor = Permutations.of(vector);
     assertEquals(tensor, Tensors.fromString("{{a, b, a}, {a, a, b}, {b, a, a}}"));
+  }
+
+  public void testStream() {
+    Tensor vector = StringTensor.vector("a", "b", "a");
+    assertEquals(Permutations.stream(vector).count(), 3);
   }
 
   public void testMatrix() {
@@ -56,12 +67,11 @@ public class PermutationsTest extends TestCase {
     assertEquals(Dimensions.of(Permutations.of(IdentityMatrix.of(3).extract(0, 2))), Arrays.asList(2, 2, 3));
   }
 
-  public void testFail() {
-    try {
-      Permutations.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+  public void testTensorScalarFail() {
+    AssertFail.of(() -> Permutations.of(RealScalar.ONE));
+  }
+
+  public void testStreamScalarFail() {
+    AssertFail.of(() -> Permutations.stream(RealScalar.ONE));
   }
 }

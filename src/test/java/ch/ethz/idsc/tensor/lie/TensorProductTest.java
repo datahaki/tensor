@@ -14,7 +14,7 @@ import junit.framework.TestCase;
 
 public class TensorProductTest extends TestCase {
   public void testEmpty() {
-    assertEquals(TensorProduct.of(Tensors.empty(), LieAlgebras.sl2()), Tensors.reserve(123));
+    assertEquals(TensorProduct.of(Tensors.empty(), LeviCivitaTensor.of(3)), Tensors.reserve(123));
     assertEquals(TensorProduct.of(Tensors.empty(), Quantity.of(2, "s")), Tensors.reserve(4));
   }
 
@@ -29,12 +29,12 @@ public class TensorProductTest extends TestCase {
   }
 
   public void testFour1() {
-    Tensor tensor = TensorProduct.of(Tensors.vector(1, 2), LieAlgebras.sl2());
+    Tensor tensor = TensorProduct.of(Tensors.vector(1, 2), LeviCivitaTensor.of(3));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 3, 3, 3));
   }
 
   public void testFour2() {
-    Tensor tensor = TensorProduct.of(LieAlgebras.sl2(), Tensors.vector(1, 2));
+    Tensor tensor = TensorProduct.of(LeviCivitaTensor.of(3), Tensors.vector(1, 2));
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3, 3, 2));
   }
 

@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.Gaussian;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ArcTanhTest extends TestCase {
@@ -21,11 +22,6 @@ public class ArcTanhTest extends TestCase {
 
   public void testFail() {
     Scalar scalar = Gaussian.of(2, 3);
-    try {
-      ArcTanh.FUNCTION.apply(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ArcTanh.FUNCTION.apply(scalar));
   }
 }

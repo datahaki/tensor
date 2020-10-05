@@ -16,6 +16,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GompertzMakehamDistribution.html">GompertzMakehamDistribution</a> */
 public class GompertzMakehamDistribution extends AbstractContinuousDistribution implements Serializable {
+  private static final long serialVersionUID = -7315280128961314486L;
+
   /** @param lambda positive scale parameter, may be instance of {@link Quantity}
    * @param xi positive frailty parameter
    * @return */

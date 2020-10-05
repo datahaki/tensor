@@ -14,19 +14,20 @@ import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Gamma;
 import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NestTest extends TestCase {
   public void testPolynomial() {
     Tensor actual = Nest.of( //
         scalar -> Power.of(scalar.add(RealScalar.ONE), RealScalar.of(2)), RealScalar.of(1), 3);
-    assertTrue(ExactScalarQ.of(actual));
+    ExactScalarQ.require(actual.Get());
     assertEquals(RealScalar.of(676), actual);
   }
 
   public void testSeries() {
     Tensor actual = Nest.of(Series.of(Tensors.vector(1, 2, 1)), RealScalar.ONE, 3);
-    assertTrue(ExactScalarQ.of(actual));
+    ExactScalarQ.require(actual.Get());
     assertEquals(RealScalar.of(676), actual);
   }
 
@@ -45,11 +46,6 @@ public class NestTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Nest.of(Cos.FUNCTION, RealScalar.of(0.3), -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Nest.of(Cos.FUNCTION, RealScalar.of(0.3), -1));
   }
 }

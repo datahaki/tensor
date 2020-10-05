@@ -7,12 +7,13 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.io.Serialization;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SchattenNormTest extends TestCase {
@@ -30,12 +31,7 @@ public class SchattenNormTest extends TestCase {
   }
 
   public void testPFail() {
-    try {
-      SchattenNorm.with(0.999);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SchattenNorm.with(0.999));
   }
 
   public void testFail() throws ClassNotFoundException, IOException {
@@ -44,11 +40,6 @@ public class SchattenNormTest extends TestCase {
     Tensor matrix = RandomVariate.of(distribution, 10, 5);
     Scalar scalar = normInterface.ofMatrix(matrix);
     Sign.requirePositive(scalar);
-    try {
-      normInterface.ofMatrix(LieAlgebras.so3());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> normInterface.ofMatrix(LeviCivitaTensor.of(3)));
   }
 }

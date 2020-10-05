@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class IdentityMatrixTest extends TestCase {
@@ -13,38 +14,18 @@ public class IdentityMatrixTest extends TestCase {
   }
 
   public void testFailZero() {
-    try {
-      IdentityMatrix.of(0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> IdentityMatrix.of(0));
   }
 
   public void testFailNegative() {
-    try {
-      IdentityMatrix.of(-3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> IdentityMatrix.of(-3));
   }
 
   public void testFailOneZero() {
-    try {
-      DiagonalMatrix.of(0, Quantity.of(1, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiagonalMatrix.of(0, Quantity.of(1, "s")));
   }
 
   public void testFailOneNegative() {
-    try {
-      DiagonalMatrix.of(-3, Quantity.of(1, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DiagonalMatrix.of(-3, Quantity.of(1, "s")));
   }
 }

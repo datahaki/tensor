@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantityMagnitudeTest extends TestCase {
@@ -36,7 +37,7 @@ public class QuantityMagnitudeTest extends TestCase {
     Chop._12.requireClose(scalarUnaryOperator.apply(Quantity.of(360, "deg")), RealScalar.of(Math.PI * 2));
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(2));
     assertEquals(scalar, RealScalar.of(2));
-    assertTrue(ExactScalarQ.of(scalar));
+    ExactScalarQ.require(scalar);
   }
 
   public void testSingleton() {
@@ -65,7 +66,7 @@ public class QuantityMagnitudeTest extends TestCase {
     ScalarUnaryOperator suo = quantityMagnitude.in("Pa");
     Scalar result = suo.apply(scalar);
     assertEquals(result, RealScalar.ONE);
-    assertTrue(ExactScalarQ.of(result));
+    ExactScalarQ.require(result);
   }
 
   public void testConversionN() {
@@ -74,7 +75,7 @@ public class QuantityMagnitudeTest extends TestCase {
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in("N");
     Scalar result = scalarUnaryOperator.apply(scalar);
     assertEquals(result, RealScalar.ONE);
-    assertTrue(ExactScalarQ.of(result));
+    ExactScalarQ.require(result);
   }
 
   public void testConversionMoWk() {
@@ -115,7 +116,7 @@ public class QuantityMagnitudeTest extends TestCase {
   }
 
   public void testPercent() {
-    ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("pct");
+    ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("%");
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(2));
     assertEquals(scalar, RealScalar.of(200));
   }
@@ -139,29 +140,14 @@ public class QuantityMagnitudeTest extends TestCase {
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     Scalar quantity = Quantity.of(360, "kg");
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in("m");
-    try {
-      scalarUnaryOperator.apply(quantity);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> scalarUnaryOperator.apply(quantity));
   }
 
   public void testFailInNull() {
-    try {
-      QuantityMagnitude.SI().in((Unit) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> QuantityMagnitude.SI().in((Unit) null));
   }
 
   public void testFailNull() {
-    try {
-      new QuantityMagnitude(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> new QuantityMagnitude(null));
   }
 }

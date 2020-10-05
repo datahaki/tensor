@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.pdf.BinomialDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class OrderingTest extends TestCase {
@@ -83,11 +84,6 @@ public class OrderingTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      Ordering.INCREASING.of(Pi.HALF);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Ordering.INCREASING.of(Pi.HALF));
   }
 }

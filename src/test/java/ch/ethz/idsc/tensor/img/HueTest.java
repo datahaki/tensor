@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.img;
 
 import java.awt.Color;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HueTest extends TestCase {
@@ -24,17 +25,7 @@ public class HueTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Hue.of(0, 0, 1.01, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Hue.of(Double.POSITIVE_INFINITY, 1, 1, 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Hue.of(0, 0, 1.01, 0));
+    AssertFail.of(() -> Hue.of(Double.POSITIVE_INFINITY, 1, 1, 1));
   }
 }

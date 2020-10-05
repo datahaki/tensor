@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DecimalScalarImplTest extends TestCase {
@@ -186,23 +187,8 @@ public class DecimalScalarImplTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      DecimalScalar.of((BigDecimal) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DecimalScalar.of((String) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DecimalScalar.of((String) null, 10);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DecimalScalar.of((BigDecimal) null));
+    AssertFail.of(() -> DecimalScalar.of((String) null));
+    AssertFail.of(() -> DecimalScalar.of((String) null, 10));
   }
 }

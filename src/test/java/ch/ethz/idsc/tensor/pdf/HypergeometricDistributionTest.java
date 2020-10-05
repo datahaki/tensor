@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HypergeometricDistributionTest extends TestCase {
@@ -20,30 +21,10 @@ public class HypergeometricDistributionTest extends TestCase {
   public void testFail() {
     // int N, int n, int m_n
     // 0 < N && N <= m_n && 0 <= n && n <= m_n
-    try {
-      HypergeometricDistribution.of(0, 50, 100); // violates 0 < N
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      HypergeometricDistribution.of(5, -1, 100); // violates 0 <= n
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      HypergeometricDistribution.of(11, 10, 10); // violates N <= m_n
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      HypergeometricDistribution.of(10, 11, 10); // violates n <= m_n
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HypergeometricDistribution.of(0, 50, 100)); // violates 0 < N
+    AssertFail.of(() -> HypergeometricDistribution.of(5, -1, 100)); // violates 0 <= n
+    AssertFail.of(() -> HypergeometricDistribution.of(11, 10, 10)); // violates N <= m_n
+    AssertFail.of(() -> HypergeometricDistribution.of(10, 11, 10)); // violates n <= m_n
   }
 
   public void testSpecialCase() {

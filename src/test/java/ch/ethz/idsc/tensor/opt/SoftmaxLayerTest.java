@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SoftmaxLayerTest extends TestCase {
@@ -27,20 +28,10 @@ public class SoftmaxLayerTest extends TestCase {
   }
 
   public void testEmptyFail() {
-    try {
-      SoftmaxLayer.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SoftmaxLayer.of(Tensors.empty()));
   }
 
   public void testScalarFail() {
-    try {
-      SoftmaxLayer.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SoftmaxLayer.of(RealScalar.ONE));
   }
 }

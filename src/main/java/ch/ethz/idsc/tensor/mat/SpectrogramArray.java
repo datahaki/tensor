@@ -22,6 +22,7 @@ import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/SpectrogramArray.html">SpectrogramArray</a> */
 public class SpectrogramArray implements TensorUnaryOperator {
+  private static final long serialVersionUID = -1963162893110366773L;
   private static final ScalarUnaryOperator LOG2 = Log.base(2);
 
   /** Mathematica default

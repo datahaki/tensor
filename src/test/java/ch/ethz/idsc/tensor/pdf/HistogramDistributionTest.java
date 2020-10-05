@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HistogramDistributionTest extends TestCase {
@@ -48,12 +49,7 @@ public class HistogramDistributionTest extends TestCase {
 
   public void testFreedmanMin() {
     HistogramDistribution.of(Tensors.vector(3, 4));
-    try {
-      HistogramDistribution.of(Tensors.vector(3, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(3, 3)));
   }
 
   public void testScott() {
@@ -156,22 +152,22 @@ public class HistogramDistributionTest extends TestCase {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     {
       Scalar x = inverseCDF.quantile(RealScalar.ZERO);
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, RealScalar.ZERO);
     }
     {
       Scalar x = inverseCDF.quantile(RationalScalar.of(1, 2));
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, RationalScalar.of(3, 2));
     }
     {
       Scalar x = inverseCDF.quantile(RationalScalar.of(1, 4));
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, RationalScalar.of(1, 1));
     }
     {
       Scalar x = inverseCDF.quantile(RationalScalar.of(3, 4));
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, RationalScalar.of(2, 1));
     }
   }
@@ -182,17 +178,17 @@ public class HistogramDistributionTest extends TestCase {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     {
       Scalar x = inverseCDF.quantile(RealScalar.ZERO);
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, Quantity.of(0, "m"));
     }
     {
       Scalar x = inverseCDF.quantile(RationalScalar.of(2, 3));
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, Quantity.of(RationalScalar.of(3, 1), "m"));
     }
     {
       Scalar x = inverseCDF.quantile(RationalScalar.of(1, 2));
-      assertTrue(ExactScalarQ.of(x));
+      ExactScalarQ.require(x);
       assertEquals(x, Quantity.of(RationalScalar.of(5, 2), "m"));
     }
   }
@@ -205,26 +201,11 @@ public class HistogramDistributionTest extends TestCase {
   }
 
   public void testFailEmpty() {
-    try {
-      HistogramDistribution.of(Tensors.empty(), RealScalar.of(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HistogramDistribution.of(Tensors.empty(), RealScalar.of(2)));
   }
 
   public void testFailWidth() {
-    try {
-      HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.of(-2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.ZERO));
+    AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.of(-2)));
   }
 }

@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HankelTensorTest extends TestCase {
@@ -32,26 +33,11 @@ public class HankelTensorTest extends TestCase {
   }
 
   public void testFailVector() {
-    try {
-      HankelTensor.of(RealScalar.ONE, 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      HankelTensor.of(Tensors.fromString("{{1, 2}}"), 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HankelTensor.of(RealScalar.ONE, 1));
+    AssertFail.of(() -> HankelTensor.of(Tensors.fromString("{{1, 2}}"), 1));
   }
 
   public void testFailRank() {
-    try {
-      HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5, 6), 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5, 6), 2));
   }
 }

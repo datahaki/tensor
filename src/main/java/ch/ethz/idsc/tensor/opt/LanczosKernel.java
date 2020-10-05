@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.sca.Sinc;
  * 
  * The implementation only evaluates the kernel in [-semi, semi] */
 /* package */ class LanczosKernel implements ScalarUnaryOperator {
+  private static final long serialVersionUID = 9150133511504665734L;
   public static final LanczosKernel _3 = new LanczosKernel(3);
   // ---
   /* package */ final int semi;

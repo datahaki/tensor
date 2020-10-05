@@ -2,11 +2,13 @@
 package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ComplexHelperTest extends TestCase {
@@ -139,28 +141,15 @@ public class ComplexHelperTest extends TestCase {
   }
 
   public void testPlusQuantityFail() {
-    Scalar c = ComplexScalar.of(2, 3);
-    Scalar q = Quantity.of(1, "V");
-    try {
-      c.add(q);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    Scalar c = DeterminateScalarQ.require(ComplexScalar.of(2, 3));
+    Scalar q = DeterminateScalarQ.require(Quantity.of(1, "V"));
+    AssertFail.of(() -> c.add(q));
   }
 
   public void testQuantityFail() {
-    try {
-      ComplexScalar.of(Quantity.of(3, "m"), RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ComplexScalar.of(RealScalar.ONE, Quantity.of(3, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    Scalar c = DeterminateScalarQ.require(Quantity.of(3, "m"));
+    Scalar r = DeterminateScalarQ.require(Pi.VALUE);
+    AssertFail.of(() -> ComplexScalar.of(c, r));
+    AssertFail.of(() -> ComplexScalar.of(r, c));
   }
 }

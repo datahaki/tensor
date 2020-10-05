@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NormalDistributionTest extends TestCase {
@@ -68,21 +69,11 @@ public class NormalDistributionTest extends TestCase {
   }
 
   public void testQuantityFail() {
-    try {
-      NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
   }
 
   public void testFail() {
     NormalDistribution.of(5, 1);
-    try {
-      NormalDistribution.of(5, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NormalDistribution.of(5, -1));
   }
 }

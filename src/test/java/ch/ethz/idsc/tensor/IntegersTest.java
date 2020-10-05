@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class IntegersTest extends TestCase {
@@ -16,21 +17,11 @@ public class IntegersTest extends TestCase {
 
   public void testPositiveFail() {
     for (int value : new int[] { Integer.MIN_VALUE, -3, -1, 0 })
-      try {
-        Integers.requirePositive(value);
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> Integers.requirePositive(value));
   }
 
   public void testPositiveOrZeroFail() {
     for (int value : new int[] { Integer.MIN_VALUE, -3, -1 })
-      try {
-        Integers.requirePositiveOrZero(value);
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> Integers.requirePositiveOrZero(value));
   }
 }

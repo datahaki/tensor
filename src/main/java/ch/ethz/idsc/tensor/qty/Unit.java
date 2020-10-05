@@ -10,14 +10,15 @@ public interface Unit {
   /** Example: cd*m*s */
   static final String JOIN_DELIMITER = "*";
   /** Example: A*kg^-2 */
-  static final String POWER_DELIMITER = "^";
-  /** holds the dimension-less unit ONE */
+  static final char POWER_DELIMITER = '^';
+  /** holds the dimension-less unit ONE
+   * Mathematica: "DimensionlessUnit" */
   static final Unit ONE = of("");
 
   /** @param string, for instance "m*s^-2"
    * @return */
   static Unit of(String string) {
-    return UnitHelper.MEMO.lookup(string);
+    return UnitMemo.INSTANCE.lookup(string);
   }
 
   /***************************************************/
@@ -40,10 +41,13 @@ public interface Unit {
    * @return */
   Unit add(Unit unit);
 
-  /** [kg*m^2] * 3 -> [kg^3*m^6]
+  /** Hint: used in power, and sqrt
+   * 
+   * [kg*m^2] * 3 -> [kg^3*m^6]
    * 
    * @param factor
-   * @return */
+   * @return
+   * @throws Exception if factor is not instance of RealScalar */
   Unit multiply(Scalar factor);
 
   /** Example: Unit.of("kg^2*m^-1*s") returns an unmodifiable map with the entry set

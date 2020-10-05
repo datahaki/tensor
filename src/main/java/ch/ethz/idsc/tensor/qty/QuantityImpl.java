@@ -9,42 +9,37 @@ import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Abs;
-import ch.ethz.idsc.tensor.sca.AbsInterface;
+import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.ArcTan;
-import ch.ethz.idsc.tensor.sca.ArcTanInterface;
 import ch.ethz.idsc.tensor.sca.Arg;
-import ch.ethz.idsc.tensor.sca.ArgInterface;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.ChopInterface;
-import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
 import ch.ethz.idsc.tensor.sca.Conjugate;
-import ch.ethz.idsc.tensor.sca.ConjugateInterface;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.NInterface;
 import ch.ethz.idsc.tensor.sca.Power;
-import ch.ethz.idsc.tensor.sca.PowerInterface;
 import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.sca.Round;
-import ch.ethz.idsc.tensor.sca.RoundingInterface;
+import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.SignInterface;
 import ch.ethz.idsc.tensor.sca.Sqrt;
-import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
 /* package */ class QuantityImpl extends AbstractScalar implements Quantity, //
-    AbsInterface, ArcTanInterface, ArgInterface, ChopInterface, ComplexEmbedding, //
-    ConjugateInterface, ExactScalarQInterface, NInterface, PowerInterface, RoundingInterface, //
-    SignInterface, SqrtInterface, Comparable<Scalar>, Serializable {
+    ChopInterface, ExactScalarQInterface, NInterface, Serializable {
+  private static final long serialVersionUID = 7640951892765373434L;
+
   /** @param value is assumed to be not instance of {@link Quantity}
    * @param unit
    * @return */
-  /* package */ static Scalar of(Scalar value, Unit unit) {
+  public static Scalar of(Scalar value, Unit unit) {
     return UnitQ.isOne(unit) //
         ? value
         : new QuantityImpl(value, unit);
@@ -109,9 +104,7 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
   @Override // from Scalar
   public Scalar reciprocal() {
-    return new QuantityImpl( //
-        value.reciprocal(), //
-        unit.negate());
+    return new QuantityImpl(value.reciprocal(), unit.negate());
   }
 
   @Override // from Scalar
@@ -145,12 +138,9 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
     return ofUnit(Abs.FUNCTION.apply(value));
   }
 
-  @Override // from PowerInterface
-  public Scalar power(Scalar exponent) {
-    // Mathematica allows 2[m]^3[s], but the tensor library does not:
-    if (exponent instanceof Quantity)
-      throw TensorRuntimeException.of(this, exponent);
-    return of(Power.of(value, exponent), unit.multiply(exponent));
+  @Override // from AbsInterface
+  public Scalar absSquared() {
+    return of(AbsSquared.FUNCTION.apply(value), unit.multiply(RealScalar.TWO));
   }
 
   @Override // from ArcTanInterface
@@ -160,24 +150,12 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
       if (unit.equals(quantity.unit()))
         return ArcTan.of(quantity.value(), value);
     }
-    return ArcTan.FUNCTION.apply(divide(x)); // ArcTan[x, y] == ArcTan[ y / x ]
+    throw TensorRuntimeException.of(this, x);
   }
 
   @Override // from ArgInterface
   public Scalar arg() {
-    return Arg.FUNCTION.apply(value);
-  }
-
-  @Override // from SqrtInterface
-  public Scalar sqrt() {
-    return new QuantityImpl( //
-        Sqrt.FUNCTION.apply(value), //
-        unit.multiply(RationalScalar.HALF));
-  }
-
-  @Override // from RoundingInterface
-  public Scalar ceiling() {
-    return ofUnit(Ceiling.FUNCTION.apply(value));
+    return ofUnit(Arg.FUNCTION.apply(value));
   }
 
   @Override // from ChopInterface
@@ -185,14 +163,14 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
     return ofUnit(chop.apply(value));
   }
 
-  @Override // from ComplexEmbedding
+  @Override // from ConjugateInterface
   public Scalar conjugate() {
     return ofUnit(Conjugate.FUNCTION.apply(value));
   }
 
-  @Override // from RoundingInterface
-  public Scalar floor() {
-    return ofUnit(Floor.FUNCTION.apply(value));
+  @Override // from ComplexEmbedding
+  public Scalar real() {
+    return ofUnit(Real.FUNCTION.apply(value));
   }
 
   @Override // from ComplexEmbedding
@@ -212,8 +190,34 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
   @Override // from NInterface
   public Scalar n(MathContext mathContext) {
-    N n = N.in(mathContext.getPrecision());
-    return ofUnit(n.apply(value));
+    return ofUnit(N.in(mathContext.getPrecision()).apply(value));
+  }
+
+  @Override // from PowerInterface
+  public Scalar power(Scalar exponent) {
+    // exponent has to be RealScalar, otherwise an Exception is thrown
+    // Mathematica allows 2[m]^3[s], but the tensor library does not:
+    return of(Power.of(value, exponent), unit.multiply(exponent));
+  }
+
+  @Override // from RoundingInterface
+  public Scalar ceiling() {
+    return ofUnit(Ceiling.FUNCTION.apply(value));
+  }
+
+  @Override // from RoundingInterface
+  public Scalar floor() {
+    return ofUnit(Floor.FUNCTION.apply(value));
+  }
+
+  @Override // from RoundingInterface
+  public Scalar round() {
+    return ofUnit(Round.FUNCTION.apply(value));
+  }
+
+  @Override // from SignInterface
+  public Scalar sign() {
+    return Sign.FUNCTION.apply(value);
   }
 
   @Override // from SignInterface
@@ -222,14 +226,11 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
     return signInterface.signInt();
   }
 
-  @Override // from ComplexEmbedding
-  public Scalar real() {
-    return ofUnit(Real.FUNCTION.apply(value));
-  }
-
-  @Override // from RoundingInterface
-  public Scalar round() {
-    return ofUnit(Round.FUNCTION.apply(value));
+  @Override // from SqrtInterface
+  public Scalar sqrt() {
+    return new QuantityImpl( //
+        Sqrt.FUNCTION.apply(value), //
+        unit.multiply(RationalScalar.HALF));
   }
 
   @Override // from Comparable<Scalar>

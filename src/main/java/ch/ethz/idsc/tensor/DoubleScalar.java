@@ -42,6 +42,7 @@ import ch.ethz.idsc.tensor.sca.MachineNumberQInterface;
  * Scalars.fromString("-0.0") gives DoubleScalar.of(0.0) */
 public final class DoubleScalar extends AbstractRealScalar implements //
     ChopInterface, MachineNumberQInterface, Serializable {
+  private static final long serialVersionUID = 7953191282174582457L;
   /** real scalar that encodes +Infinity. value is backed by Double.POSITIVE_INFINITY */
   public static final Scalar POSITIVE_INFINITY = of(Double.POSITIVE_INFINITY);
   /** real scalar that encodes -Infinity. value is backed by Double.NEGATIVE_INFINITY */
@@ -49,13 +50,12 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   /** real scalar that encodes NaN. value is backed by Double.NaN == 0.0d / 0.0
    * field name inspired by Mathematica::Indeterminate */
   public static final Scalar INDETERMINATE = of(Double.NaN);
-  // ---
   /** positive numeric zero */
   private static final Scalar DOUBLE_ZERO = of(0.0);
 
   /** @param value
    * @return new instance of {@link DoubleScalar} */
-  public static RealScalar of(double value) {
+  public static Scalar of(double value) {
     return new DoubleScalar(value);
   }
 

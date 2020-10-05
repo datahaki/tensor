@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantityCompareTest extends TestCase {
@@ -40,18 +41,8 @@ public class QuantityCompareTest extends TestCase {
     Scalar q1 = Quantity.of(0, "s");
     Scalar q2 = Quantity.of(0, "rad");
     assertFalse(q1.equals(q2));
-    try {
-      Scalars.compare(q1, q2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Scalars.compare(RealScalar.ZERO, q2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Scalars.compare(q1, q2));
+    AssertFail.of(() -> Scalars.compare(RealScalar.ZERO, q2));
   }
 
   public void testIsZero() {
@@ -93,12 +84,7 @@ public class QuantityCompareTest extends TestCase {
   }
 
   public void testCompareFail2() {
-    try {
-      Scalars.compare(DoubleScalar.of(3.14), Quantity.of(0, "m*s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Scalars.compare(DoubleScalar.of(3.14), Quantity.of(0, "m*s")));
   }
 
   public void testDistinct() {

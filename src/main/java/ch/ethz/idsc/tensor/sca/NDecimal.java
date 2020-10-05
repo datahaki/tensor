@@ -2,10 +2,13 @@
 package ch.ethz.idsc.tensor.sca;
 
 import java.math.MathContext;
+import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Scalar;
 
 /* package */ class NDecimal extends N {
+  private static final long serialVersionUID = -9144500095628716632L;
+  // ---
   private final MathContext mathContext;
 
   public NDecimal(MathContext mathContext) {
@@ -18,6 +21,6 @@ import ch.ethz.idsc.tensor.Scalar;
       NInterface nInterface = (NInterface) scalar;
       return nInterface.n(mathContext);
     }
-    return scalar;
+    return Objects.requireNonNull(scalar);
   }
 }

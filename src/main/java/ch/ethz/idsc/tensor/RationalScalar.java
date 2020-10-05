@@ -8,6 +8,7 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.OptionalInt;
 
 import ch.ethz.idsc.tensor.sca.NInterface;
 
@@ -18,6 +19,7 @@ import ch.ethz.idsc.tensor.sca.NInterface;
  * zero().reciprocal() throws a {@link ArithmeticException}. */
 public final class RationalScalar extends AbstractRealScalar implements //
     ExactScalarQInterface, NInterface, Serializable {
+  private static final long serialVersionUID = 3378367439547596689L;
   /** rational number {@code 1/2} with decimal value {@code 0.5} */
   public static final Scalar HALF = of(1, 2);
 
@@ -98,7 +100,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
 
   @Override // from Scalar
   public Number number() {
-    if (bigFraction.isInteger()) { // IntegerQ.of(this)
+    if (bigFraction.isInteger()) {
       BigInteger bigInteger = numerator();
       try {
         return bigInteger.intValueExact();
@@ -123,8 +125,10 @@ public final class RationalScalar extends AbstractRealScalar implements //
   /***************************************************/
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof RationalScalar)
-      return new RationalScalar(bigFraction.add(((RationalScalar) scalar).bigFraction));
+    if (scalar instanceof RationalScalar) {
+      RationalScalar rationalScalar = (RationalScalar) scalar;
+      return new RationalScalar(bigFraction.add(rationalScalar.bigFraction));
+    }
     return scalar.add(this);
   }
 
@@ -138,9 +142,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
   public int compareTo(Scalar scalar) {
     if (scalar instanceof RationalScalar) {
       RationalScalar rationalScalar = (RationalScalar) scalar;
-      BigInteger lhs = numerator().multiply(rationalScalar.denominator());
-      BigInteger rhs = rationalScalar.numerator().multiply(denominator());
-      return lhs.compareTo(rhs);
+      return bigFraction.compareTo(rationalScalar.bigFraction);
     }
     @SuppressWarnings("unchecked")
     Comparable<Scalar> comparable = (Comparable<Scalar>) scalar;
@@ -169,21 +171,12 @@ public final class RationalScalar extends AbstractRealScalar implements //
 
   @Override // from AbstractRealScalar
   public Scalar power(Scalar exponent) {
-    if (IntegerQ.of(exponent)) {
-      RationalScalar exp = (RationalScalar) exponent;
-      try {
-        // intValueExact throws an exception when exp > Integer.MAX_VALUE
-        int expInt = Scalars.intValueExact(exp);
-        if (0 <= expInt)
-          return of( //
-              numerator().pow(expInt), //
-              denominator().pow(expInt));
-        return of( //
-            denominator().pow(-expInt), //
-            numerator().pow(-expInt));
-      } catch (Exception exception) {
-        return ScalarBinaryPower.REAL.apply(this, exp.numerator());
-      }
+    OptionalInt optionalInt = Scalars.optionalInt(exponent);
+    if (optionalInt.isPresent()) {
+      int expInt = optionalInt.getAsInt();
+      return 0 <= expInt //
+          ? of(numerator().pow(expInt), denominator().pow(expInt))
+          : of(denominator().pow(-expInt), numerator().pow(-expInt));
     }
     return super.power(exponent);
   }

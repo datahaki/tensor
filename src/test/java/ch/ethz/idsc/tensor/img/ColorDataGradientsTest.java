@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Increment;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ColorDataGradientsTest extends TestCase {
@@ -73,24 +74,9 @@ public class ColorDataGradientsTest extends TestCase {
       if (colorDataGradient.equals(ColorDataGradients.HUE)) {
         // hue is implemented periodically [0, 1) == [1, 2) == ...
       } else {
-        try {
-          colorDataGradient.apply(RealScalar.of(-0.1));
-          fail();
-        } catch (Exception exception) {
-          // ---
-        }
-        try {
-          colorDataGradient.apply(RealScalar.of(1.1));
-          fail();
-        } catch (Exception exception) {
-          // ---
-        }
-      }
-      try {
-        colorDataGradient.apply(ComplexScalar.of(0.5, 0.5));
-        fail();
-      } catch (Exception exception) {
-        // ---
+        AssertFail.of(() -> colorDataGradient.apply(RealScalar.of(-0.1)));
+        AssertFail.of(() -> colorDataGradient.apply(RealScalar.of(1.1)));
+        AssertFail.of(() -> colorDataGradient.apply(ComplexScalar.of(0.5, 0.5)));
       }
     }
   }

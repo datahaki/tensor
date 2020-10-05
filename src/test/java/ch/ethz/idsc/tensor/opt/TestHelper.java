@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.Assert;
 
 /* package */ enum TestHelper {
@@ -33,17 +34,7 @@ import junit.framework.Assert;
   }
 
   static void getScalarFail(Interpolation interpolation) {
-    try {
-      interpolation.get(RealScalar.of(1.4));
-      Assert.fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      interpolation.get(RealScalar.ONE);
-      Assert.fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> interpolation.get(RealScalar.of(1.4)));
+    AssertFail.of(() -> interpolation.get(RealScalar.ONE));
   }
 }

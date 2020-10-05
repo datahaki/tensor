@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.UnitSystem;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TrigonometryInterfaceTest extends TestCase {
@@ -36,23 +37,8 @@ public class TrigonometryInterfaceTest extends TestCase {
     Chop._13.requireClose(Cos.of(scalar), RealScalar.ONE.negate());
   }
 
-  public void testQuantityFail() {
-    Scalar scalar = Quantity.of(1.2, "m");
-    try {
-      Sin.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testGaussScalarFail() {
-    Scalar scalar = GaussScalar.of(2, 7);
-    try {
-      Sin.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+  public void testFails() {
+    AssertFail.of(() -> Sin.of(Quantity.of(1.2, "m")));
+    AssertFail.of(() -> Sin.of(GaussScalar.of(2, 7)));
   }
 }

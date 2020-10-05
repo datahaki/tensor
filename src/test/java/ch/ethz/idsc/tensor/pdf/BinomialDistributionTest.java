@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Median;
 import ch.ethz.idsc.tensor.red.Tally;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BinomialDistributionTest extends TestCase {
@@ -202,40 +203,15 @@ public class BinomialDistributionTest extends TestCase {
   }
 
   public void testFailN() {
-    try {
-      BinomialDistribution.of(-1, RationalScalar.of(1, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      BinomialDistribution.of(RealScalar.of(0.3), RationalScalar.of(1, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BinomialDistribution.of(-1, RationalScalar.of(1, 3)));
+    AssertFail.of(() -> BinomialDistribution.of(RealScalar.of(0.3), RationalScalar.of(1, 3)));
   }
 
   public void testFailP() {
     BinomialDistribution.of(3, RealScalar.ZERO);
-    try {
-      BinomialDistribution.of(10, RationalScalar.of(-1, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BinomialDistribution.of(10, RationalScalar.of(-1, 3)));
     BinomialDistribution.of(3, RealScalar.ONE);
-    try {
-      BinomialDistribution.of(10, RationalScalar.of(4, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      BinomialDistribution.of(10, Quantity.of(0.2, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BinomialDistribution.of(10, RationalScalar.of(4, 3)));
+    AssertFail.of(() -> BinomialDistribution.of(10, Quantity.of(0.2, "s")));
   }
 }

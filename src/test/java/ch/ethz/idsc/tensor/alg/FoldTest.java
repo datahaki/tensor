@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FoldTest extends TestCase {
@@ -26,20 +27,10 @@ public class FoldTest extends TestCase {
   }
 
   public void testNullFail() {
-    try {
-      Fold.of(null, Pi.HALF, Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Fold.of(null, Pi.HALF, Tensors.empty()));
   }
 
   public void testScalarFail() {
-    try {
-      Fold.of(Tensor::dot, Pi.HALF, Pi.HALF);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Fold.of(Tensor::dot, Pi.HALF, Pi.HALF));
   }
 }

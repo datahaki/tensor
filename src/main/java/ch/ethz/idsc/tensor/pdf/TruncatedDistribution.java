@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.sca.Clip;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/TruncatedDistribution.html">TruncatedDistribution</a> */
 public class TruncatedDistribution implements Distribution, RandomVariateInterface, Serializable {
+  private static final long serialVersionUID = -1297487928527646695L;
   /** maximum number of attempts to produce a random variate before an exception is thrown */
   private static final int MAX_ITERATIONS = 100;
 

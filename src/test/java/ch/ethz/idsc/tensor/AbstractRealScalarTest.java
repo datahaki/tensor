@@ -4,22 +4,13 @@ package ch.ethz.idsc.tensor;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class AbstractRealScalarTest extends TestCase {
   public void testArcTan() {
-    try {
-      ArcTan.of(RealScalar.of(2.3), GaussScalar.of(3, 7));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ArcTan.of(GaussScalar.of(3, 7), RealScalar.of(2.3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ArcTan.of(RealScalar.of(2.3), GaussScalar.of(3, 7)));
+    AssertFail.of(() -> ArcTan.of(GaussScalar.of(3, 7), RealScalar.of(2.3)));
   }
 
   public void testRange() {
@@ -35,22 +26,11 @@ public class AbstractRealScalarTest extends TestCase {
 
   public void testPower00Numeric() {
     Scalar one = Power.of(0.0, 0.0);
-    assertTrue(ExactScalarQ.of(one));
+    ExactScalarQ.require(one);
     assertEquals(one, RealScalar.ONE);
   }
 
   public void testPowerFail() {
-    // try {
-    // Scalar scalar = Power.of(0, GaussScalar.of(2, 7));
-    // fail();
-    // } catch (Exception exception) {
-    // // ---
-    // }
-    try {
-      Power.of(1, GaussScalar.of(2, 7));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Power.of(1, GaussScalar.of(2, 7)));
   }
 }

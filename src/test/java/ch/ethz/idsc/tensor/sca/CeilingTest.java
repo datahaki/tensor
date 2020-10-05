@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CeilingTest extends TestCase {
@@ -100,11 +101,6 @@ public class CeilingTest extends TestCase {
 
   public void testTypeFail() {
     Scalar scalar = StringScalar.of("string");
-    try {
-      Ceiling.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Ceiling.of(scalar));
   }
 }

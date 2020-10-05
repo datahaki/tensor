@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BetaTest extends TestCase {
@@ -21,11 +22,6 @@ public class BetaTest extends TestCase {
   }
 
   public void testVectorFail() {
-    try {
-      Beta.of(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Beta.of(HilbertMatrix.of(3)));
   }
 }

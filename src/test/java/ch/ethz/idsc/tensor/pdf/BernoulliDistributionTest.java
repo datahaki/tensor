@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Tally;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BernoulliDistributionTest extends TestCase {
@@ -69,47 +70,17 @@ public class BernoulliDistributionTest extends TestCase {
     double half = 0.5;
     assertEquals(inverseCDF.quantile(RealScalar.of(half)), RealScalar.ONE);
     assertEquals(inverseCDF.quantile(RealScalar.of(Math.nextDown(half))), RealScalar.ZERO);
-    try {
-      inverseCDF.quantile(RealScalar.of(-0.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      inverseCDF.quantile(RealScalar.of(1.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   public void testFailP() {
-    try {
-      BernoulliDistribution.of(RationalScalar.of(-1, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      BernoulliDistribution.of(RationalScalar.of(4, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BernoulliDistribution.of(RationalScalar.of(-1, 3)));
+    AssertFail.of(() -> BernoulliDistribution.of(RationalScalar.of(4, 3)));
   }
 
   public void testFailPNumber() {
-    try {
-      BernoulliDistribution.of(-1e-10);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      BernoulliDistribution.of(1.0001);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BernoulliDistribution.of(-1e-10));
+    AssertFail.of(() -> BernoulliDistribution.of(1.0001));
   }
 }

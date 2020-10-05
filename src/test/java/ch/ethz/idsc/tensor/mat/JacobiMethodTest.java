@@ -32,7 +32,6 @@ public class JacobiMethodTest extends TestCase {
     Tensor res = Vi.dot(DiagonalMatrix.with(eigensystem.values())).dot(eigensystem.vectors());
     Chop._08.requireClose(res, matrix);
     assertEquals(res.subtract(matrix).map(Chop._08), matrix.multiply(RealScalar.ZERO));
-    // ---
     // testing determinant
     Scalar det = Det.of(matrix);
     Tensor prd = Times.pmul(eigensystem.values());

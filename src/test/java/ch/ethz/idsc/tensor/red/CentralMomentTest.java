@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CentralMomentTest extends TestCase {
@@ -35,20 +36,10 @@ public class CentralMomentTest extends TestCase {
   }
 
   public void testEmptyFail() {
-    try {
-      CentralMoment.of(Tensors.empty(), 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CentralMoment.of(Tensors.empty(), 2));
   }
 
   public void testMatrixFail() {
-    try {
-      CentralMoment.of(HilbertMatrix.of(2, 3), RealScalar.of(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CentralMoment.of(HilbertMatrix.of(2, 3), RealScalar.of(2)));
   }
 }

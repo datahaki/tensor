@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GCDTest extends TestCase {
@@ -54,17 +55,7 @@ public class GCDTest extends TestCase {
   }
 
   public void testNumericFail() {
-    try {
-      GCD.of(RealScalar.of(0.3), RealScalar.of(+60));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      GCD.of(RealScalar.of(123), RealScalar.of(0.2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GCD.of(RealScalar.of(0.3), RealScalar.of(+60)));
+    AssertFail.of(() -> GCD.of(RealScalar.of(123), RealScalar.of(0.2)));
   }
 }

@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NormalizeTest extends TestCase {
@@ -55,14 +56,14 @@ public class NormalizeTest extends TestCase {
     Tensor vector = Tensors.vector(2, -3, 1);
     Tensor result = Normalize.with(Norm._1::ofVector).apply(vector);
     assertEquals(result, Tensors.fromString("{1/3, -1/2, 1/6}"));
-    assertTrue(ExactTensorQ.of(result));
+    ExactTensorQ.require(result);
   }
 
   public void testNormInfinityDocumentation() {
     Tensor vector = Tensors.vector(2, -3, 1);
     Tensor result = Normalize.with(Norm.INFINITY::ofVector).apply(vector);
     assertEquals(result, Tensors.fromString("{2/3, -1, 1/3}"));
-    assertTrue(ExactTensorQ.of(result));
+    ExactTensorQ.require(result);
   }
 
   public void testEps() {
@@ -90,7 +91,7 @@ public class NormalizeTest extends TestCase {
     Tensor d = Tensors.vector(1, 1, 1).multiply(RealScalar.of(2));
     Tensor n = Normalize.with(Norm.INFINITY::ofVector).apply(d);
     assertEquals(n, Tensors.vector(1, 1, 1));
-    assertTrue(ExactTensorQ.of(n));
+    ExactTensorQ.require(n);
     _checkNormalizeAllNorms(d);
     _checkNormalizeAllNorms(n);
   }
@@ -131,42 +132,22 @@ public class NormalizeTest extends TestCase {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);
     Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2));
     assertEquals(tensor, Tensors.fromString("{-1/4, 3/4, 1/2}"));
-    try {
-      tensorUnaryOperator.apply(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.empty()));
   }
 
   public void testInconsistentFail() {
     Distribution distribution = UniformDistribution.of(3, 5);
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(v -> RandomVariate.of(distribution));
-    try {
-      tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2)));
   }
 
   public void testNormalizeTotalFail() {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(v -> Total.of(v).Get());
-    try {
-      tensorUnaryOperator.apply(Tensors.vector(-1, 3, -2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, -2)));
   }
 
   public void testNormalizeNullFail() {
     TensorScalarFunction tensorScalarFunction = null;
-    try {
-      Normalize.with(tensorScalarFunction);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Normalize.with(tensorScalarFunction));
   }
 }

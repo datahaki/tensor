@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 // tests should be improved over time
@@ -118,12 +119,7 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.vector(-3, 2);
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 1 }, { -2, -2 } });
     Tensor b = Tensors.vector(2, -10);
-    try {
-      LinearProgramming.minLessEquals(c, m, b);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LinearProgramming.minLessEquals(c, m, b));
   }
 
   // unbounded
@@ -131,12 +127,7 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.vector(-1, 1);
     Tensor m = Tensors.matrixInt(new int[][] { { -2, 1 }, { -1, -2 } });
     Tensor b = Tensors.vector(-1, -2);
-    try {
-      LinearProgramming.minLessEquals(c, m, b);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LinearProgramming.minLessEquals(c, m, b));
   }
 
   public void testClrsP879_5() {
@@ -171,26 +162,22 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.vector(1, 1, 1);
     Tensor m = Tensors.fromString("{{-2, -7.5, -3}, {-20, -5, -10}}");
     Tensor b = Tensors.vector(-10000, -30000);
-    try {
-      LinearProgramming.minLessEquals(c, m, b);
-      fail();
-    } catch (Exception exception) {
-      // MATLAB
-      // A=[[-2, -7.5, -3];[-20, -5, -10]];
-      // b=[-10000;-30000]
-      // c=[1,1,1];
-      // linprog(c,A,b)
-      // ...
-      // Exiting: One or more of the residuals, duality gap, or total relative error
-      // has grown 100000 times greater than its minimum value so far:
-      // the dual appears to be infeasible (and the primal unbounded).
-      // (The primal residual < OptimalityTolerance=1.00e-08.)
-      // ans =
-      // 1.0e+32 *
-      // 2.0744
-      // 1.3829
-      // -4.8403
-    }
+    AssertFail.of(() -> LinearProgramming.minLessEquals(c, m, b));
+    // MATLAB
+    // A=[[-2, -7.5, -3];[-20, -5, -10]];
+    // b=[-10000;-30000]
+    // c=[1,1,1];
+    // linprog(c,A,b)
+    // ...
+    // Exiting: One or more of the residuals, duality gap, or total relative error
+    // has grown 100000 times greater than its minimum value so far:
+    // the dual appears to be infeasible (and the primal unbounded).
+    // (The primal residual < OptimalityTolerance=1.00e-08.)
+    // ans =
+    // 1.0e+32 *
+    // 2.0744
+    // 1.3829
+    // -4.8403
   }
 
   public void callKlee(int n) {

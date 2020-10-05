@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ExpectationTest extends TestCase {
@@ -61,10 +62,10 @@ public class ExpectationTest extends TestCase {
     Tensor pdf = unscaledPDF.divide(scale);
     Scalar result = pdf.dot(Range.of(0, upper).map(suo)).Get();
     assertEquals(expect, result);
-    assertTrue(ExactScalarQ.of(expect));
-    assertTrue(ExactScalarQ.of(result));
+    ExactScalarQ.require(expect);
+    ExactScalarQ.require(result);
     Scalar variance = Expectation.variance(distribution);
-    assertTrue(ExactScalarQ.of(variance));
+    ExactScalarQ.require(variance);
     double varDouble = variance.number().doubleValue();
     assertTrue(2500 < varDouble);
     assertTrue(varDouble < 4500);
@@ -83,21 +84,11 @@ public class ExpectationTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Expectation.of(s -> s, NormalDistribution.standard());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Expectation.of(s -> s, NormalDistribution.standard()));
   }
 
   public void testFail2() {
     Distribution distribution = GompertzMakehamDistribution.of(RealScalar.of(1), RealScalar.of(2));
-    try {
-      Expectation.mean(distribution);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Expectation.mean(distribution));
   }
 }

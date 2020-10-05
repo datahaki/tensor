@@ -8,7 +8,7 @@ public enum ExactTensorQ {
   /** @param tensor
    * @return true if all scalar entries in given tensor satisfy the predicate {@link ExactScalarQ#of(Tensor)} */
   public static boolean of(Tensor tensor) {
-    return tensor.flatten(-1).allMatch(ExactScalarQ::of);
+    return tensor.flatten(-1).map(Scalar.class::cast).allMatch(ExactScalarQ::of);
   }
 
   /** @param tensor

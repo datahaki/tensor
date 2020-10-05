@@ -1,6 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor.io;
 
+import java.lang.reflect.Modifier;
+
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ExtensionTest extends TestCase {
@@ -22,11 +25,10 @@ public class ExtensionTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      Extension.of("unknown");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Extension.of("unknown"));
+  }
+
+  public void testVisibility() {
+    assertFalse(Modifier.isPublic(Extension.class.getModifiers()));
   }
 }

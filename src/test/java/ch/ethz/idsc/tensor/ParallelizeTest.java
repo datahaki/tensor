@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ParallelizeTest extends TestCase {
@@ -34,17 +35,7 @@ public class ParallelizeTest extends TestCase {
   }
 
   public void testDotFail() {
-    try {
-      Parallelize.dot(RealScalar.ONE, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Parallelize.dot(Tensors.vector(1, 2, 3), HilbertMatrix.of(4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Parallelize.dot(RealScalar.ONE, RealScalar.ZERO));
+    AssertFail.of(() -> Parallelize.dot(Tensors.vector(1, 2, 3), HilbertMatrix.of(4)));
   }
 }

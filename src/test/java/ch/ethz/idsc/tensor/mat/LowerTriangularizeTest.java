@@ -4,7 +4,8 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LowerTriangularizeTest extends TestCase {
@@ -27,20 +28,10 @@ public class LowerTriangularizeTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      LowerTriangularize.of(RealScalar.ONE, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LowerTriangularize.of(RealScalar.ONE, 0));
   }
 
   public void testRank3Fail() {
-    try {
-      LowerTriangularize.of(LieAlgebras.he1(), 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LowerTriangularize.of(LeviCivitaTensor.of(3), 0));
   }
 }

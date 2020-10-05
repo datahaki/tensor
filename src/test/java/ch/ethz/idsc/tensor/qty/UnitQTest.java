@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitQTest extends TestCase {
@@ -21,11 +22,6 @@ public class UnitQTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      UnitQ.isOne(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnitQ.isOne(null));
   }
 }

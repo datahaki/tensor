@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SoftplusTest extends TestCase {
@@ -27,11 +28,6 @@ public class SoftplusTest extends TestCase {
   }
 
   public void testQuantityFail() {
-    try {
-      Softplus.FUNCTION.apply(Quantity.of(1, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Softplus.FUNCTION.apply(Quantity.of(1, "s")));
   }
 }

@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GeometricDistributionTest extends TestCase {
@@ -42,22 +43,12 @@ public class GeometricDistributionTest extends TestCase {
     assertEquals(cdf.p_lessEquals(RealScalar.ONE), plt2);
     assertEquals(cdf.p_lessEquals(RealScalar.of(1.1)), plt2);
     Scalar large = cdf.p_lessEquals(RealScalar.of(100.1));
-    assertTrue(ExactScalarQ.of(large));
+    ExactScalarQ.require(large);
   }
 
   public void testFailP() {
-    try {
-      GeometricDistribution.of(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      GeometricDistribution.of(RealScalar.of(1.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GeometricDistribution.of(RealScalar.ZERO));
+    AssertFail.of(() -> GeometricDistribution.of(RealScalar.of(1.1)));
   }
 
   public void testOne() {
@@ -114,18 +105,8 @@ public class GeometricDistributionTest extends TestCase {
   public void testFailQuantile() {
     Distribution distribution = GeometricDistribution.of(RealScalar.of(0.2));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    try {
-      inverseCDF.quantile(RealScalar.of(-0.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      inverseCDF.quantile(RealScalar.of(1.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   public void testNextDownOne() {
@@ -139,12 +120,7 @@ public class GeometricDistributionTest extends TestCase {
   }
 
   public void testQuantity() {
-    try {
-      GeometricDistribution.of(Quantity.of(2, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GeometricDistribution.of(Quantity.of(2, "s")));
     final Scalar p = RationalScalar.of(1, 19);
     GeometricDistribution distribution = (GeometricDistribution) GeometricDistribution.of(p);
     try {
@@ -153,11 +129,6 @@ public class GeometricDistributionTest extends TestCase {
     } catch (Exception exception) {
       // ---
     }
-    try {
-      CDF.of(distribution).p_lessEquals(Quantity.of(-2, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CDF.of(distribution).p_lessEquals(Quantity.of(-2, "s")));
   }
 }

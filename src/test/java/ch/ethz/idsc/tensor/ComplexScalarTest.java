@@ -1,74 +1,56 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ComplexScalarTest extends TestCase {
+  public void testSign() {
+    Scalar scalar = ComplexScalar.of(4, 3);
+    Scalar result = Sign.FUNCTION.apply(scalar);
+    Tolerance.CHOP.requireClose(scalar, result.multiply(RealScalar.of(5)));
+  }
+
+  public void testSignEps() {
+    Scalar scalar = ComplexScalar.of(0, Double.MIN_VALUE);
+    Scalar result = Sign.FUNCTION.apply(scalar);
+    Tolerance.CHOP.requireClose(result, ComplexScalar.I);
+  }
+
+  public void testSignEpsReIm() {
+    Scalar scalar = ComplexScalar.of(Double.MIN_VALUE, Double.MIN_VALUE);
+    Scalar result = Sign.FUNCTION.apply(scalar);
+    Tolerance.CHOP.requireClose(result, ComplexScalar.of(0.7071067811865475, 0.7071067811865475));
+  }
+
+  public void testSignEpsReImNeg() {
+    Scalar scalar = ComplexScalar.of(Double.MIN_VALUE, -Double.MIN_VALUE);
+    Scalar result = Sign.FUNCTION.apply(scalar);
+    Tolerance.CHOP.requireClose(result, ComplexScalar.of(0.7071067811865475, -0.7071067811865475));
+  }
+
   public void testConstructFail() {
-    try {
-      ComplexScalar.of(RealScalar.ONE, ComplexScalar.I);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ComplexScalar.of(ComplexScalar.I, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
+    AssertFail.of(() -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));
   }
 
   public void testNullFail() {
-    try {
-      ComplexScalar.of(RealScalar.ONE, null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ComplexScalar.of(null, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ComplexScalar.of(null, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ComplexScalar.of(RealScalar.ONE, null));
+    AssertFail.of(() -> ComplexScalar.of(null, RealScalar.ONE));
+    AssertFail.of(() -> ComplexScalar.of(null, RealScalar.ZERO));
   }
 
   public void testPolarFail() {
-    try {
-      ComplexScalar.fromPolar(RealScalar.ONE, ComplexScalar.I);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ComplexScalar.fromPolar(ComplexScalar.I, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ComplexScalar.fromPolar(ComplexScalar.I, ComplexScalar.I);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ComplexScalar.fromPolar(RealScalar.ONE, ComplexScalar.I));
+    AssertFail.of(() -> ComplexScalar.fromPolar(ComplexScalar.I, RealScalar.ONE));
+    AssertFail.of(() -> ComplexScalar.fromPolar(ComplexScalar.I, ComplexScalar.I));
   }
 
   public void testPolarQuantityFail() {
-    try {
-      ComplexScalar.fromPolar(RealScalar.ONE, Quantity.of(1.3, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ComplexScalar.fromPolar(RealScalar.ONE, Quantity.of(1.3, "m")));
   }
 
   public void testPolar() {
@@ -77,26 +59,11 @@ public class ComplexScalarTest extends TestCase {
   }
 
   public void testPolarNumberFail() {
-    try {
-      ComplexScalar.fromPolar(-1, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ComplexScalar.fromPolar(-1, 3));
   }
 
   public void testUnitFail() {
-    try {
-      ComplexScalar.unit(ComplexScalar.of(-1, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ComplexScalar.unit(Quantity.of(3, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ComplexScalar.unit(ComplexScalar.of(-1, 3)));
+    AssertFail.of(() -> ComplexScalar.unit(Quantity.of(3, "s")));
   }
 }

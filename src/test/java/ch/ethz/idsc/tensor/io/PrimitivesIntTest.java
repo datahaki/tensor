@@ -8,6 +8,7 @@ import java.util.List;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PrimitivesIntTest extends TestCase {
@@ -67,11 +68,6 @@ public class PrimitivesIntTest extends TestCase {
   }
 
   public void testToIntArray2Dscalar() {
-    try {
-      Primitives.toIntArray2D(RealScalar.of(123.456));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Primitives.toIntArray2D(RealScalar.of(123.456)));
   }
 }

@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HarmonicMeanTest extends TestCase {
@@ -17,38 +18,18 @@ public class HarmonicMeanTest extends TestCase {
   }
 
   public void testEmpty() {
-    try {
-      HarmonicMean.ofVector(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HarmonicMean.ofVector(Tensors.empty()));
   }
 
   public void testZero() {
-    try {
-      HarmonicMean.ofVector(Tensors.vector(3, 0, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HarmonicMean.ofVector(Tensors.vector(3, 0, 2)));
   }
 
   public void testScalarFail() {
-    try {
-      HarmonicMean.ofVector(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HarmonicMean.ofVector(RealScalar.ONE));
   }
 
   public void testMatrixFail() {
-    try {
-      HarmonicMean.ofVector(HilbertMatrix.of(4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> HarmonicMean.ofVector(HilbertMatrix.of(4)));
   }
 }

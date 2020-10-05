@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Log;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class InterquartileRangeTest extends TestCase {
@@ -49,20 +50,10 @@ public class InterquartileRangeTest extends TestCase {
   }
 
   public void testEmptyFail() {
-    try {
-      InterquartileRange.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> InterquartileRange.of(Tensors.empty()));
   }
 
   public void testMatrixFail() {
-    try {
-      InterquartileRange.of(IdentityMatrix.of(5));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> InterquartileRange.of(IdentityMatrix.of(5)));
   }
 }

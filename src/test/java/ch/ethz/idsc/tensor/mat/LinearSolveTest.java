@@ -15,17 +15,18 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LinearSolveTest extends TestCase {
-  final Random random = new Random();
+  private static final Random RANDOM = new Random();
 
   public void testSolveCR() {
     int n = 5;
     Tensor A = Tensors.matrix((i, j) -> //
     ComplexScalar.of( //
-        RealScalar.of(random.nextInt(15)), //
-        RealScalar.of(random.nextInt(15))), n, n);
+        RealScalar.of(RANDOM.nextInt(15)), //
+        RealScalar.of(RANDOM.nextInt(15))), n, n);
     Tensor b = Tensors.matrix((i, j) -> RationalScalar.of(i.equals(j) ? 1 : 0, 1), n, n + 3);
     Tensor X = LinearSolve.of(A, b);
     Tensor err = A.dot(X).subtract(b);
@@ -37,10 +38,10 @@ public class LinearSolveTest extends TestCase {
   public void testSolveRC() {
     int n = 10;
     Tensor A = Tensors.matrix((i, j) -> //
-    RationalScalar.of(random.nextInt(100), random.nextInt(100) + 1), n, n);
+    RationalScalar.of(RANDOM.nextInt(100), RANDOM.nextInt(100) + 1), n, n);
     Tensor b = Tensors.matrix((i, j) -> ComplexScalar.of(//
-        RealScalar.of(random.nextInt(15)), //
-        RealScalar.of(random.nextInt(15))), n, n + 3);
+        RealScalar.of(RANDOM.nextInt(15)), //
+        RealScalar.of(RANDOM.nextInt(15))), n, n + 3);
     Tensor X = LinearSolve.of(A, b);
     Tensor err = A.dot(X).subtract(b);
     assertEquals(err, b.multiply(RealScalar.ZERO));
@@ -50,10 +51,10 @@ public class LinearSolveTest extends TestCase {
 
   public void testSolveDC() {
     int n = 15;
-    Tensor A = Tensors.matrix((i, j) -> DoubleScalar.of(4 * random.nextGaussian() - 2), n, n);
+    Tensor A = Tensors.matrix((i, j) -> DoubleScalar.of(4 * RANDOM.nextGaussian() - 2), n, n);
     Tensor b = Tensors.matrix((i, j) -> ComplexScalar.of( //
-        RealScalar.of(random.nextDouble()), //
-        RealScalar.of(random.nextDouble())), n, n + 3);
+        RealScalar.of(RANDOM.nextDouble()), //
+        RealScalar.of(RANDOM.nextDouble())), n, n + 3);
     Tensor X = LinearSolve.of(A, b);
     Tensor err = A.dot(X).add(b.negate()).map(Chop._10);
     assertEquals(err, b.multiply(RealScalar.ZERO));
@@ -87,7 +88,7 @@ public class LinearSolveTest extends TestCase {
   public void testIdentity() {
     int n = 5;
     Tensor A = Tensors.matrix((i, j) -> //
-    RationalScalar.of(random.nextInt(100) - 50, random.nextInt(100) + 1), n, n);
+    RationalScalar.of(RANDOM.nextInt(100) - 50, RANDOM.nextInt(100) + 1), n, n);
     Tensor b = IdentityMatrix.of(n);
     Tensor X = LinearSolve.of(A, b);
     assertEquals(X.dot(A), b);
@@ -96,14 +97,9 @@ public class LinearSolveTest extends TestCase {
   }
 
   public void testEmpty() {
-    try {
-      Tensor m = Tensors.matrix(new Number[][] { {} });
-      Tensor b = Tensors.vector(new Number[] {});
-      LinearSolve.of(m, b);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    Tensor m = Tensors.matrix(new Number[][] { {} });
+    Tensor b = Tensors.vector(new Number[] {});
+    AssertFail.of(() -> LinearSolve.of(m, b));
   }
 
   public void testEps() {

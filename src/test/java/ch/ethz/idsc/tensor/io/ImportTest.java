@@ -2,14 +2,18 @@
 package ch.ethz.idsc.tensor.io;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.zip.DataFormatException;
 
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.TestFile;
 import junit.framework.TestCase;
 
@@ -169,5 +173,11 @@ public class ImportTest extends TestCase {
     Tensor vector = Import.object(file);
     assertEquals(vector, Tensors.vector(1, 2, 3, 4));
     assertTrue(file.delete());
+  }
+
+  public void testProperties() throws FileNotFoundException, IOException {
+    File file = new File(getClass().getResource("/io/simple.properties").getFile());
+    Properties properties = Import.properties(file);
+    assertEquals(Scalars.fromString(properties.get("maxTor").toString()), Quantity.of(3, "m*s"));
   }
 }

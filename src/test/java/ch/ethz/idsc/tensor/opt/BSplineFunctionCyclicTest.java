@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BSplineFunctionCyclicTest extends TestCase {
@@ -27,7 +28,6 @@ public class BSplineFunctionCyclicTest extends TestCase {
     assertEquals(scalarTensorFunction.apply(RealScalar.of(1.6)), RealScalar.of(3));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(2.0)), RealScalar.of(3));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(2.3)), RealScalar.of(3));
-    // ---
     assertEquals(scalarTensorFunction.apply(RealScalar.of(3.0)), RealScalar.of(1));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(3.1)), RealScalar.of(1));
   }
@@ -41,7 +41,6 @@ public class BSplineFunctionCyclicTest extends TestCase {
     assertEquals(scalarTensorFunction.apply(RealScalar.of(1.5)), RealScalar.of(4.5));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(2.0)), RealScalar.of(5));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(2.5)), RealScalar.of(4));
-    // ---
     assertEquals(scalarTensorFunction.apply(RealScalar.of(3.0)), RealScalar.of(3));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(3.5)), RealScalar.of(3.5));
   }
@@ -59,21 +58,13 @@ public class BSplineFunctionCyclicTest extends TestCase {
   }
 
   public void testEmptyFail() {
-    for (int degree = -2; degree <= 4; ++degree)
-      try {
-        BSplineFunction.cyclic(degree, Tensors.empty());
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+    for (int degree = -2; degree <= 4; ++degree) {
+      int fd = degree;
+      AssertFail.of(() -> BSplineFunction.cyclic(fd, Tensors.empty()));
+    }
   }
 
   public void testNegativeFail() {
-    try {
-      BSplineFunction.string(-1, Tensors.vector(1, 2, 3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BSplineFunction.string(-1, Tensors.vector(1, 2, 3, 4)));
   }
 }

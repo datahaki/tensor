@@ -15,7 +15,7 @@ public enum Pivots implements Pivot {
    * in order to compute the inverse of matrices with mixed unit, for instance:
    * {{1[m^2], 6[m*rad]}, {6[m*rad], 16[rad^2]}}
    * the pivot is computer over the absolute numeric value of the columns */
-  ARGMAX_ABS() {
+  ARGMAX_ABS {
     @Override // from Pivot
     public int get(int row, int col, int[] ind, Tensor[] lhs) {
       Scalar max = value(Abs.FUNCTION.apply(lhs[ind[row]].Get(col)));
@@ -33,7 +33,7 @@ public enum Pivots implements Pivot {
   /** picks the first non-zero element in the column as pivot
    * the return value is c0 in the case when the element at (ind[c0], j)
    * is non-zero, but also if none of the candidates is non-zero */
-  FIRST_NON_ZERO() {
+  FIRST_NON_ZERO {
     @Override // from Pivot
     public int get(int row, int col, int[] ind, Tensor[] lhs) {
       return IntStream.range(row, ind.length) //

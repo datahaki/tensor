@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.ArrayQ;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CauchyTensorTest extends TestCase {
@@ -27,17 +28,7 @@ public class CauchyTensorTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      CauchyTensor.of(RealScalar.ONE, 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      CauchyTensor.of(Tensors.fromString("{{1, 2}}"), 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> CauchyTensor.of(RealScalar.ONE, 1));
+    AssertFail.of(() -> CauchyTensor.of(Tensors.fromString("{{1, 2}}"), 1));
   }
 }

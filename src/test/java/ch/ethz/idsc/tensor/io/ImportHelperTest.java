@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.io;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.RealScalar;
@@ -54,5 +55,9 @@ public class ImportHelperTest extends TestCase {
     } catch (NullPointerException exception) {
       // ---
     }
+  }
+
+  public void testVisibility() {
+    assertFalse(Modifier.isPublic(ImportHelper.class.getModifiers()));
   }
 }

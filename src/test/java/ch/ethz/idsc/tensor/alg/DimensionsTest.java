@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DimensionsTest extends TestCase {
@@ -77,24 +78,9 @@ public class DimensionsTest extends TestCase {
   public void testLengthsFail() {
     Tensor tensor = Tensors.fromString("{{{2, 3}, {{}}}, {4, 5, 7}, 3}");
     Dimensions dimensions = new Dimensions(tensor);
-    try {
-      dimensions.lengths(-1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> dimensions.lengths(-1));
     dimensions.lengths(dimensions.maxDepth());
-    try {
-      dimensions.lengths(dimensions.maxDepth() + 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      dimensions.lengths(0).add(1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> dimensions.lengths(dimensions.maxDepth() + 1));
+    AssertFail.of(() -> dimensions.lengths(0).add(1));
   }
 }

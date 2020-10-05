@@ -7,6 +7,9 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DecimalScalar;
+import ch.ethz.idsc.tensor.DeterminateScalarQ;
+import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -16,6 +19,8 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.io.CsvFormat;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantityTest extends TestCase {
@@ -50,6 +55,18 @@ public class QuantityTest extends TestCase {
     _check("1abc[]");
   }
 
+  public void testPercent() {
+    Scalar of = Quantity.of(50, "%");
+    DeterminateScalarQ.require(of);
+    Scalar pr = Scalars.fromString("50[%]");
+    assertEquals(of, pr);
+    Scalar n1 = UnitSystem.SI().apply(pr);
+    ExactScalarQ.require(n1);
+    assertEquals(n1, RationalScalar.HALF);
+    Scalar n2 = QuantityMagnitude.SI().in(Unit.ONE).apply(pr);
+    assertEquals(n2, RationalScalar.HALF);
+  }
+
   public void testFromStringComplex() {
     Quantity quantity = (Quantity) Scalars.fromString("(-7+3*I)[kg^-2*m*s]");
     Scalar scalar = quantity.value();
@@ -62,55 +79,20 @@ public class QuantityTest extends TestCase {
   }
 
   public void testParseFail() {
-    try {
-      Quantity.of(3.14, "^2");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quantity.of(3.14, "m^2a");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quantity.of(3.14, "m^");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quantity.of(3.14, "m[^2");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Quantity.of(3.14, "m]^2");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantity.of(3.14, "^2"));
+    AssertFail.of(() -> Quantity.of(3.14, "m^2a"));
+    AssertFail.of(() -> Quantity.of(3.14, "m^"));
+    AssertFail.of(() -> Quantity.of(3.14, "m[^2"));
+    AssertFail.of(() -> Quantity.of(3.14, "m]^2"));
   }
 
   public void testNestFail() {
     Scalar q1 = Quantity.of(3.14, "m");
-    try {
-      Quantity.of(q1, "s");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantity.of(q1, "s"));
   }
 
   public void testNestEmptyFail() {
-    try {
-      Quantity.of(Quantity.of(2, "s"), "");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Quantity.of(Quantity.of(2, "s"), ""));
   }
 
   public void testValue() {
@@ -141,89 +123,14 @@ public class QuantityTest extends TestCase {
     assertTrue(tensor.Get(1, 1) instanceof RealScalar);
   }
 
-  public void testStringScalarFail() {
-    Unit unit = Unit.of("a");
-    try {
-      Quantity.of(StringScalar.of("123"), unit);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+  public void testPowerZeroExact() {
+    Scalar scalar = Power.of(Quantity.of(3, "s^3*m^-1"), 0);
+    ExactScalarQ.require(scalar);
+    assertEquals(scalar, RealScalar.ONE);
   }
 
-  /***************************************************/
-  public void testScalarUnit01Fail() {
-    try {
-      Quantity.of((Scalar) null, Unit.of("s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testScalarUnit10Fail() {
-    try {
-      Quantity.of(Pi.VALUE, (Unit) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  /***************************************************/
-  public void testScalarString01Fail() {
-    try {
-      Quantity.of((Scalar) null, "s");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testScalarString10Fail() {
-    try {
-      Quantity.of(RealScalar.ONE, (String) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  /***************************************************/
-  public void testNumberUnit01Fail() {
-    try {
-      Quantity.of((Number) null, Unit.of("s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testNumberUnit10Fail() {
-    try {
-      Quantity.of(123, (Unit) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  /***************************************************/
-  public void testNumberString01Fail() {
-    try {
-      Quantity.of((Number) null, "s");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testNumberString10Fail() {
-    try {
-      Quantity.of(123, (String) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+  public void testPowerZeroNumeric() {
+    Scalar scalar = Power.of(Quantity.of(Pi.HALF.negate(), "s^3*m^-1"), 0);
+    assertEquals(scalar, RealScalar.ONE);
   }
 }

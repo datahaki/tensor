@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.pdf;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class StandardNormalDistributionTest extends TestCase {
@@ -36,17 +37,7 @@ public class StandardNormalDistributionTest extends TestCase {
   public void testInverseCDF() {
     Distribution distribution = StandardNormalDistribution.INSTANCE;
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    try {
-      inverseCDF.quantile(RealScalar.of(1.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      inverseCDF.quantile(RealScalar.of(-0.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
   }
 }

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.RealScalar;
@@ -14,19 +15,22 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 /* package */ class UnitImpl implements Unit, Serializable {
+  private static final long serialVersionUID = -2807221907647012658L;
+  /* package */ static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> COLLECTOR = //
+      Collectors.toMap(Entry::getKey, entry -> entry.getValue().negate(), (e1, e2) -> null, TreeMap::new);
+  // ---
   /** Example:
    * map from {"kg"=1, "m"=1, "s"=-2}
    * scalar value is never zero */
   private final NavigableMap<String, Scalar> navigableMap;
 
   public UnitImpl(NavigableMap<String, Scalar> navigableMap) {
-    this.navigableMap = Collections.unmodifiableNavigableMap(navigableMap);
+    this.navigableMap = navigableMap;
   }
 
   @Override // from Unit
   public Unit negate() {
-    return new UnitImpl(navigableMap.entrySet().stream().collect(Collectors.toMap( //
-        Entry::getKey, entry -> entry.getValue().negate(), (e1, e2) -> null, TreeMap::new)));
+    return new UnitImpl(navigableMap.entrySet().stream().collect(COLLECTOR));
   }
 
   @Override // from Unit
@@ -63,7 +67,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 
   @Override // from Unit
   public NavigableMap<String, Scalar> map() {
-    return navigableMap;
+    return Collections.unmodifiableNavigableMap(navigableMap);
   }
 
   /***************************************************/

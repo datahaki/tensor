@@ -9,17 +9,17 @@ import java.util.Set;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.BinaryPower;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.mat.Pivots;
+import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.red.ArgMax;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Floor;
@@ -27,6 +27,7 @@ import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GaussScalarTest extends TestCase {
@@ -141,14 +142,14 @@ public class GaussScalarTest extends TestCase {
 
   public void testPower2() {
     long prime = 59;
-    BinaryPower<GaussScalar> binaryPower = Scalars.binaryPower(GaussScalar.of(1, prime));
+    BinaryPower<Scalar> binaryPower = new BinaryPower<>(new ScalarProduct(GaussScalar.of(1, prime)));
     Random random = new SecureRandom();
     for (int index = 0; index < prime; ++index) {
       GaussScalar gaussScalar = GaussScalar.of(random.nextInt(), prime);
       if (!gaussScalar.number().equals(BigInteger.ZERO))
         for (int exponent = -10; exponent <= 10; ++exponent) {
           Scalar p1 = Power.of(gaussScalar, exponent);
-          Scalar p2 = binaryPower.apply(gaussScalar, exponent);
+          Scalar p2 = binaryPower.raise(gaussScalar, BigInteger.valueOf(exponent));
           assertEquals(p1, p2);
         }
     }
@@ -163,9 +164,14 @@ public class GaussScalarTest extends TestCase {
     }
   }
 
+  public void testPowerFail() {
+    GaussScalar gaussScalar = GaussScalar.of(3, 107);
+    AssertFail.of(() -> Power.of(gaussScalar, Pi.HALF));
+  }
+
   public void testSign() {
-    assertEquals(Sign.FUNCTION.apply(GaussScalar.of(0, 677)), RealScalar.ZERO);
-    assertEquals(Sign.FUNCTION.apply(GaussScalar.of(-432, 677)), RealScalar.ONE);
+    assertEquals(Sign.FUNCTION.apply(GaussScalar.of(0, 677)), GaussScalar.of(0, 677));
+    assertEquals(Sign.FUNCTION.apply(GaussScalar.of(-432, 677)), GaussScalar.of(1, 677));
   }
 
   public void testRounding() {
@@ -183,6 +189,7 @@ public class GaussScalarTest extends TestCase {
 
   public void testHash() {
     Scalar g = GaussScalar.of(4, 7);
+    ExactScalarQ.require(g);
     Scalar d = DoubleScalar.of(4.33);
     Scalar z = RealScalar.ZERO;
     Scalar c = ComplexScalar.of(RealScalar.of(2.), RealScalar.of(3.4));

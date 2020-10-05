@@ -7,12 +7,14 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
+import java.util.OptionalInt;
 
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ class DecimalScalarImpl extends AbstractRealScalar implements DecimalScalar, Serializable {
+  private static final long serialVersionUID = -8505786185052895466L;
   private static final int DEFAULT_CONTEXT = 34;
   private static final Scalar DECIMAL_ZERO = DecimalScalar.of(BigDecimal.ZERO);
   /** BigDecimal precision of a double */
@@ -165,14 +167,10 @@ import ch.ethz.idsc.tensor.sca.N;
 
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
-    if (IntegerQ.of(exponent))
-      try {
-        int expInt = Scalars.intValueExact(exponent);
-        return of(value.pow(expInt, mathContext()));
-      } catch (Exception exception) {
-        // ---
-      }
-    return super.power(exponent);
+    OptionalInt optionalInt = Scalars.optionalInt(exponent);
+    return optionalInt.isPresent() //
+        ? of(value.pow(optionalInt.getAsInt(), mathContext()))
+        : super.power(exponent);
   }
 
   @Override // from RoundingInterface

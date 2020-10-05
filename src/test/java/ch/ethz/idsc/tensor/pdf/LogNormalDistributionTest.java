@@ -2,7 +2,6 @@
 package ch.ethz.idsc.tensor.pdf;
 
 import java.io.IOException;
-import java.util.Random;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -15,6 +14,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LogNormalDistributionTest extends TestCase {
@@ -45,8 +45,7 @@ public class LogNormalDistributionTest extends TestCase {
     }
     Scalar quantile = distribution.quantile(RealScalar.of(0.4));
     Chop._03.requireClose(quantile, RealScalar.of(1.392501724505789));
-    Random random = new Random();
-    Scalar variate = distribution.randomVariate(random);
+    Scalar variate = RandomVariate.of(distribution);
     Sign.requirePositive(variate);
     assertEquals(distribution.toString(), distribution.getClass().getSimpleName() + "[1/2, 2/3]");
   }
@@ -60,32 +59,12 @@ public class LogNormalDistributionTest extends TestCase {
   }
 
   public void testSigmaNonPositiveFail() {
-    try {
-      LogNormalDistribution.of(RationalScalar.HALF, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(-2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LogNormalDistribution.of(RationalScalar.HALF, RealScalar.ZERO));
+    AssertFail.of(() -> LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(-2, 3)));
   }
 
   public void testQuantityFail() {
-    try {
-      LogNormalDistribution.of(Quantity.of(RationalScalar.HALF, "m"), RationalScalar.of(2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      LogNormalDistribution.of(RationalScalar.of(2, 3), Quantity.of(RationalScalar.HALF, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LogNormalDistribution.of(Quantity.of(RationalScalar.HALF, "m"), RationalScalar.of(2, 3)));
+    AssertFail.of(() -> LogNormalDistribution.of(RationalScalar.of(2, 3), Quantity.of(RationalScalar.HALF, "m")));
   }
 }

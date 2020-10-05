@@ -19,6 +19,8 @@ import java.util.stream.Stream;
  * 
  * <p>The copy {@link UnmodifiableTensor#copy()} is modifiable. */
 /* package */ class UnmodifiableTensor extends TensorImpl {
+  private static final long serialVersionUID = 1235605565231261608L;
+
   UnmodifiableTensor(List<Tensor> list) {
     super(list);
   }

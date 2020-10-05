@@ -28,7 +28,7 @@ public enum BinningMethod implements TensorScalarFunction {
    * Outliers have more influence on result than with Freedman-Diaconis.
    * The method typically yields a width larger than that determined by
    * IQR or SQRT. */
-  VARIANCE() {
+  VARIANCE {
     @Override
     public Scalar apply(Tensor tensor) {
       return RationalScalar.of(7, 2).multiply(StandardDeviation.ofVector(tensor)).divide(crt_length(tensor));
@@ -36,7 +36,7 @@ public enum BinningMethod implements TensorScalarFunction {
   },
   /** Freedman-Diaconis' choice:
    * chooses width based on {@link InterquartileRange} */
-  IQR() {
+  IQR {
     @Override
     public Scalar apply(Tensor tensor) {
       Scalar iqr = InterquartileRange.of(tensor).Get();
@@ -44,7 +44,7 @@ public enum BinningMethod implements TensorScalarFunction {
     }
   },
   /** Rice Rule */
-  RICE() {
+  RICE {
     @Override
     public Scalar apply(Tensor tensor) {
       Scalar crl = crt_length(tensor);
@@ -56,7 +56,7 @@ public enum BinningMethod implements TensorScalarFunction {
    * method is used by Excel histograms and many others.
    * The method typically yields a width smaller than determined by Scott's,
    * or Freedman-Diaconis formula */
-  SQRT() {
+  SQRT {
     @Override
     public Scalar apply(Tensor tensor) {
       return division(tensor, Sqrt.FUNCTION.apply(RealScalar.of(tensor.length())));

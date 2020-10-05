@@ -5,6 +5,7 @@ import java.lang.reflect.Modifier;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FallbackColorDataGradientTest extends TestCase {
@@ -17,21 +18,11 @@ public class FallbackColorDataGradientTest extends TestCase {
   }
 
   public void testFailNullApply() {
-    try {
-      FallbackColorDataGradient.INSTANCE.apply(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> FallbackColorDataGradient.INSTANCE.apply(null));
   }
 
   public void testFailNullDerive() {
-    try {
-      FallbackColorDataGradient.INSTANCE.deriveWithOpacity(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> FallbackColorDataGradient.INSTANCE.deriveWithOpacity(null));
   }
 
   public void testPackageVisibility() {

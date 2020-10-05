@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * <a href="https://reference.wolfram.com/language/ref/StudentTDistribution.html">StudentTDistribution</a> */
 public class StudentTDistribution implements Distribution, //
     MeanInterface, PDF, VarianceInterface, Serializable {
-  private static final Scalar TWO = RealScalar.of(2);
+  private static final long serialVersionUID = 2229923119726057327L;
 
   /** @param mu
    * @param sigma positive
@@ -50,7 +50,7 @@ public class StudentTDistribution implements Distribution, //
     this.mu = mu;
     this.sigma = sigma;
     this.v = v;
-    power = Power.function(RealScalar.ONE.add(v).divide(TWO));
+    power = Power.function(RealScalar.ONE.add(v).divide(RealScalar.TWO));
     factor = Sqrt.FUNCTION.apply(v).multiply(sigma).multiply(Beta.of(v.multiply(RationalScalar.HALF), RationalScalar.HALF));
   }
 
@@ -69,8 +69,8 @@ public class StudentTDistribution implements Distribution, //
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    return Scalars.lessThan(TWO, v) //
-        ? v.multiply(sigma).multiply(sigma).divide(v.subtract(TWO))
+    return Scalars.lessThan(RealScalar.TWO, v) //
+        ? v.multiply(sigma).multiply(sigma).divide(v.subtract(RealScalar.TWO))
         : DoubleScalar.INDETERMINATE;
   }
 

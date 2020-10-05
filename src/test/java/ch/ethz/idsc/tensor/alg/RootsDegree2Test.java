@@ -18,28 +18,28 @@ public class RootsDegree2Test extends TestCase {
     Tensor coeffs = Tensors.fromString("{21, - 10 [s^-1], +1 [s^-2], 0, 0, 0}");
     Tensor roots = Roots.of(coeffs);
     assertEquals(roots, Tensors.fromString("{3[s], 7[s]}"));
-    assertTrue(ExactTensorQ.of(roots));
+    ExactTensorQ.require(roots);
   }
 
   public void testQuadraticComplexQuantity() {
     Tensor coeffs = Tensors.fromString("{1, 0 [s^-1], 1 [s^-2]}");
     Tensor roots = Roots.of(coeffs);
     assertEquals(roots, Tensors.fromString("{-I[s], I[s]}"));
-    assertTrue(ExactTensorQ.of(roots));
+    ExactTensorQ.require(roots);
   }
 
   public void testPseudoCubicQuantity() {
     Tensor coeffs = Tensors.fromString("{0, 21, - 10 [s^-1], +1 [s^-2], 0, 0, 0}");
     Tensor roots = Roots.of(coeffs);
     assertEquals(Sort.of(roots), Tensors.fromString("{0[s], 3[s], 7[s]}"));
-    assertTrue(ExactTensorQ.of(roots));
+    ExactTensorQ.require(roots);
   }
 
   public void testPseudoQuarticQuantity() {
     Tensor coeffs = Tensors.fromString("{0, 0, 21, - 10 [s^-1], +1 [s^-2], 0, 0, 0}");
     Tensor roots = Roots.of(coeffs);
     assertEquals(Sort.of(roots), Tensors.fromString("{0[s], 0[s], 3[s], 7[s]}"));
-    assertTrue(ExactTensorQ.of(roots));
+    ExactTensorQ.require(roots);
   }
 
   public void testChallenge() {

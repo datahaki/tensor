@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NullSpaceTest extends TestCase {
@@ -49,7 +50,7 @@ public class NullSpaceTest extends TestCase {
       assertEquals(m.dot(v), Array.zeros(4));
     assertEquals(Dimensions.of(r), Arrays.asList(2, 4));
     assertFalse(MachineNumberQ.any(r));
-    assertTrue(ExactTensorQ.of(r));
+    ExactTensorQ.require(r);
   }
 
   public void testZeros2() {
@@ -57,7 +58,7 @@ public class NullSpaceTest extends TestCase {
     Tensor r = NullSpace.of(m);
     assertEquals(r, IdentityMatrix.of(5));
     assertFalse(MachineNumberQ.any(r));
-    assertTrue(ExactTensorQ.of(r));
+    ExactTensorQ.require(r);
   }
 
   public void testIdentity() {
@@ -65,7 +66,7 @@ public class NullSpaceTest extends TestCase {
     Tensor r = NullSpace.of(m);
     assertEquals(r, Tensors.empty());
     assertFalse(MachineNumberQ.any(r));
-    assertTrue(ExactTensorQ.of(r));
+    ExactTensorQ.require(r);
   }
 
   public void testIdentityReversed() {
@@ -73,7 +74,7 @@ public class NullSpaceTest extends TestCase {
     Tensor r = NullSpace.of(m);
     assertEquals(r, Tensors.empty());
     assertFalse(MachineNumberQ.any(r));
-    assertTrue(ExactTensorQ.of(r));
+    ExactTensorQ.require(r);
   }
 
   public void testWikipediaKernel() {
@@ -88,7 +89,7 @@ public class NullSpaceTest extends TestCase {
       assertEquals(A.dot(v), Array.zeros(4));
     assertEquals(Dimensions.of(nul), Arrays.asList(3, 6));
     assertFalse(MachineNumberQ.any(nul));
-    assertTrue(ExactTensorQ.of(nul));
+    ExactTensorQ.require(nul);
   }
 
   public void testSome1() {
@@ -103,7 +104,7 @@ public class NullSpaceTest extends TestCase {
       assertEquals(A.dot(v), Array.zeros(4));
     assertEquals(Dimensions.of(nul), Arrays.asList(1, 3));
     assertFalse(MachineNumberQ.any(nul));
-    assertTrue(ExactTensorQ.of(nul));
+    ExactTensorQ.require(nul);
     Tensor nrr = NullSpace.usingRowReduce(A, IdentityMatrix.of(3));
     assertEquals(nul, nrr);
   }
@@ -120,7 +121,7 @@ public class NullSpaceTest extends TestCase {
       assertEquals(A.dot(v), Array.zeros(4));
     assertEquals(Dimensions.of(nul), Arrays.asList(3, 6));
     assertFalse(MachineNumberQ.any(nul));
-    assertTrue(ExactTensorQ.of(nul));
+    ExactTensorQ.require(nul);
   }
 
   public void testSome3() {
@@ -135,7 +136,7 @@ public class NullSpaceTest extends TestCase {
       assertEquals(A.dot(v), Array.zeros(4));
     assertEquals(Dimensions.of(nul), Arrays.asList(3, 6));
     assertFalse(MachineNumberQ.any(nul));
-    assertTrue(ExactTensorQ.of(nul));
+    ExactTensorQ.require(nul);
   }
 
   public void testSingleVector() {
@@ -154,7 +155,7 @@ public class NullSpaceTest extends TestCase {
     for (Tensor v : nul)
       assertEquals(m.dot(v), Array.zeros(2));
     assertFalse(MachineNumberQ.any(nul));
-    assertTrue(ExactTensorQ.of(nul));
+    ExactTensorQ.require(nul);
   }
 
   public void testMatsim() {
@@ -173,7 +174,7 @@ public class NullSpaceTest extends TestCase {
     Tensor nul = NullSpace.of(mat);
     assertEquals(nul, Tensors.fromString("{{1, -1/2}}"));
     assertFalse(MachineNumberQ.any(nul));
-    assertTrue(ExactTensorQ.of(nul));
+    ExactTensorQ.require(nul);
   }
 
   public void testQuantityMixed() {
@@ -245,29 +246,14 @@ public class NullSpaceTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      NullSpace.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NullSpace.of(RealScalar.ONE));
   }
 
   public void testFailVector() {
-    try {
-      NullSpace.of(Tensors.vector(1, 2, 3, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NullSpace.of(Tensors.vector(1, 2, 3, 1)));
   }
 
   public void testFailRank3() {
-    try {
-      NullSpace.of(LieAlgebras.sl2());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NullSpace.of(LeviCivitaTensor.of(3)));
   }
 }

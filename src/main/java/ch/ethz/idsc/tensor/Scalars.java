@@ -3,8 +3,9 @@ package ch.ethz.idsc.tensor;
 
 import java.math.BigInteger;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.OptionalInt;
 
-import ch.ethz.idsc.tensor.alg.BinaryPower;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.num.Divisible;
 import ch.ethz.idsc.tensor.num.GaussScalar;
@@ -87,16 +88,6 @@ public enum Scalars {
   }
 
   /***************************************************/
-  /** utility to compute the power of a scalar type to an integer exponent
-   * 
-   * @param one non-null
-   * @return
-   * @throws Exception if given parameter one is null */
-  public static <T extends Scalar> BinaryPower<T> binaryPower(T one) {
-    return new ScalarBinaryPower<>(Objects.requireNonNull(one));
-  }
-
-  /***************************************************/
   /** exact conversion to primitive type {@code int}
    * 
    * <p>function succeeds if given scalar is
@@ -114,6 +105,22 @@ public enum Scalars {
     return bigIntegerValueExact(scalar).intValueExact();
   }
 
+  /** exact conversion to primitive type {@code int}
+   * 
+   * @param scalar non null
+   * @return
+   * @throws Exception if given scalar is null */
+  public static OptionalInt optionalInt(Scalar scalar) {
+    try {
+      return OptionalInt.of(intValueExact(scalar));
+    } catch (Exception exception) {
+      // ---
+    }
+    Objects.requireNonNull(scalar);
+    return OptionalInt.empty();
+  }
+
+  /***************************************************/
   /** exact conversion to primitive type {@code long}
    * 
    * <p>function succeeds if given scalar is
@@ -131,6 +138,7 @@ public enum Scalars {
     return bigIntegerValueExact(scalar).longValueExact();
   }
 
+  /***************************************************/
   /** exact conversion to type {@code BigInteger}
    * 
    * <p>function succeeds if given scalar is instance of
@@ -145,5 +153,21 @@ public enum Scalars {
     if (rationalScalar.isInteger())
       return rationalScalar.numerator();
     throw TensorRuntimeException.of(scalar);
+  }
+
+  /** exact conversion to type {@code BigInteger}
+   * 
+   * @param scalar non null
+   * @return BigInteger that equals given scalar
+   * or empty if given scalar does not represent an integer
+   * @throws Exception if given scalar is null */
+  public static Optional<BigInteger> optionalBigInteger(Scalar scalar) {
+    if (scalar instanceof RationalScalar) {
+      RationalScalar rationalScalar = (RationalScalar) scalar;
+      if (rationalScalar.isInteger())
+        return Optional.of(rationalScalar.numerator());
+    }
+    Objects.requireNonNull(scalar);
+    return Optional.empty();
   }
 }

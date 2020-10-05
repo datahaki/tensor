@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HypotTest extends TestCase {
@@ -106,12 +107,7 @@ public class HypotTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      Hypot.ofVector(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Hypot.ofVector(RealScalar.ONE));
   }
 
   public void testQuantity() {
@@ -128,11 +124,6 @@ public class HypotTest extends TestCase {
   }
 
   public void testQuantityZeroFail() {
-    try {
-      Hypot.of(Quantity.of(1, "m"), Quantity.of(0, "s"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Hypot.of(Quantity.of(1, "m"), Quantity.of(0, "s")));
   }
 }

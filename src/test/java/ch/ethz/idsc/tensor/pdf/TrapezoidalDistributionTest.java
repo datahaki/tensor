@@ -10,12 +10,12 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TrapezoidalDistributionTest extends TestCase {
@@ -63,17 +63,14 @@ public class TrapezoidalDistributionTest extends TestCase {
   }
 
   public void testMean() {
-    Scalar a = RationalScalar.of(random.nextInt(100), 1);
-    Scalar b = a.add(RealScalar.of(random.nextDouble() * 10));
-    Scalar c = b.add(RealScalar.of(random.nextDouble() * 10));
-    Scalar d = c.add(RealScalar.of(random.nextDouble() * 10));
-    TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of(a, b, c, d);
-    Tensor all = Tensors.empty();
-    for (int i = 0; i < 3000; ++i) {
-      Scalar s = RandomVariate.of(distribution);
-      all.append(s);
-    }
-    Scalar meanCalc = distribution.mean();
+    Scalar a = RandomVariate.of(DiscreteUniformDistribution.of(0, 100));
+    Distribution paramDist = UniformDistribution.of(0, 10);
+    Scalar b = a.add(RandomVariate.of(paramDist));
+    Scalar c = b.add(RandomVariate.of(paramDist));
+    Scalar d = c.add(RandomVariate.of(paramDist));
+    Distribution distribution = TrapezoidalDistribution.of(a, b, c, d);
+    Tensor all = RandomVariate.of(distribution, 3000);
+    Scalar meanCalc = Mean.of(distribution);
     Scalar meanSamples = (Scalar) Mean.of(all);
     Scalar diff = Abs.between(meanCalc, meanSamples);
     assertTrue(Scalars.lessEquals(diff, RealScalar.of(0.5)));
@@ -84,7 +81,7 @@ public class TrapezoidalDistributionTest extends TestCase {
         TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(5, "m"));
     Scalar mean = Mean.of(distribution);
     assertEquals(mean, Scalars.fromString("14/5[m]"));
-    assertTrue(ExactScalarQ.of(mean));
+    ExactScalarQ.require(mean);
     PDF pdf = PDF.of(distribution);
     {
       Scalar density = pdf.at(Quantity.of(3, "m"));
@@ -147,55 +144,22 @@ public class TrapezoidalDistributionTest extends TestCase {
   public void testExactFail() {
     TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
     TrapezoidalDistribution.of(Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
-    try {
-      TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(1, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(5, "m"));
-      // fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m")));
+    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(1, "m")));
+    // AssertFail.of(() ->
+    TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(5, "m"));
   }
 
   public void testNumericFail() {
     TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
     TrapezoidalDistribution.of(Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
-    try {
-      TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(1., "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(5., "m"));
-      // fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m")));
+    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(1., "m")));
+    // AssertFail.of(() ->
+    TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(5., "m"));
   }
 
   public void testCenterFail() {
-    try {
-      TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(3., "m"), Quantity.of(2., "m"), Quantity.of(9., "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(3., "m"), Quantity.of(2., "m"), Quantity.of(9., "m")));
   }
 }

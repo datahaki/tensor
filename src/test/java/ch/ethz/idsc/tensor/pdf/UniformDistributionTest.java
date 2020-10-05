@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UniformDistributionTest extends TestCase {
@@ -25,7 +26,7 @@ public class UniformDistributionTest extends TestCase {
     assertEquals(cdf.p_lessThan(RealScalar.of(3)), RealScalar.ONE);
     assertEquals(cdf.p_lessThan(RealScalar.of(4)), RealScalar.ONE);
     Scalar prob = cdf.p_lessThan(RealScalar.of(2));
-    assertTrue(ExactScalarQ.of(prob));
+    ExactScalarQ.require(prob);
   }
 
   public void testPdf() {
@@ -83,61 +84,26 @@ public class UniformDistributionTest extends TestCase {
 
   public void testClipPointFail() {
     UniformDistribution.of(Clips.interval(3, 5));
-    try {
-      UniformDistribution.of(Clips.interval(3, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UniformDistribution.of(Clips.interval(3, 3)));
   }
 
   public void testClipNullFail() {
-    try {
-      UniformDistribution.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UniformDistribution.of(null));
   }
 
   public void testQuantileFail() {
     Distribution distribution = UniformDistribution.of(Quantity.of(3, "g"), Quantity.of(6, "g"));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    try {
-      inverseCDF.quantile(RealScalar.of(-0.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      inverseCDF.quantile(RealScalar.of(1.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   public void testQuantityFail() {
-    try {
-      UniformDistribution.of(Quantity.of(3, "m"), Quantity.of(5, "km"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UniformDistribution.of(Quantity.of(3, "m"), Quantity.of(5, "km")));
   }
 
   public void testFail() {
-    try {
-      UniformDistribution.of(RealScalar.ONE, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      UniformDistribution.of(RealScalar.ONE, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UniformDistribution.of(RealScalar.ONE, RealScalar.ONE));
+    AssertFail.of(() -> UniformDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 }

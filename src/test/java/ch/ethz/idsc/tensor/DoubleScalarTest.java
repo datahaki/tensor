@@ -7,6 +7,8 @@ import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DoubleScalarTest extends TestCase {
@@ -106,35 +108,15 @@ public class DoubleScalarTest extends TestCase {
 
   public void testNaN() {
     DoubleScalar nan = (DoubleScalar) DoubleScalar.INDETERMINATE;
-    try {
-      nan.isNonNegative();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      nan.signInt();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> nan.isNonNegative());
+    AssertFail.of(() -> nan.signInt());
   }
 
   public void testCompareFail() {
     Scalar a = RealScalar.of(7.2);
     Scalar b = GaussScalar.of(3, 5);
-    try {
-      Max.of(a, b);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Max.of(b, a);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Max.of(a, b));
+    AssertFail.of(() -> Max.of(b, a));
   }
 
   public void testValue() {
@@ -146,5 +128,14 @@ public class DoubleScalarTest extends TestCase {
     assertFalse(DoubleScalar.of(3.14).equals(null));
     assertFalse(DoubleScalar.of(3.14).equals("hello"));
     assertFalse(DoubleScalar.of(3.14).equals(ComplexScalar.of(1, 2)));
+  }
+
+  public void testSqrtNegZero() {
+    Scalar scalar = DoubleScalar.of(-0.0);
+    assertEquals(scalar.toString(), "-0.0");
+    AbstractRealScalar ars = (AbstractRealScalar) scalar;
+    boolean nonNegative = ars.isNonNegative();
+    assertTrue(nonNegative);
+    assertEquals(Sqrt.FUNCTION.apply(scalar), RealScalar.ZERO);
   }
 }

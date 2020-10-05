@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class VandermondeSolveTest extends TestCase {
@@ -39,20 +40,10 @@ public class VandermondeSolveTest extends TestCase {
   public void testSingular() {
     Tensor x = Tensors.vector(2, 3, 2);
     Tensor q = Tensors.vector(4, 7, 6);
-    try {
-      VandermondeSolve.of(x, q);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VandermondeSolve.of(x, q));
   }
 
   public void testEmptyFail() {
-    try {
-      VandermondeSolve.of(Tensors.empty(), Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VandermondeSolve.of(Tensors.empty(), Tensors.empty()));
   }
 }

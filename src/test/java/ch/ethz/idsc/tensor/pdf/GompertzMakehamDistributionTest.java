@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.qty.UnitConvert;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GompertzMakehamDistributionTest extends TestCase {
@@ -82,18 +83,8 @@ public class GompertzMakehamDistributionTest extends TestCase {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(Quantity.of(0.0, "m")), Quantity.of(0.03, "m^-1"));
-    try {
-      pdf.at(Quantity.of(-1, "m^2"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      pdf.at(Quantity.of(+1, "m^2"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> pdf.at(Quantity.of(-1, "m^2")));
+    AssertFail.of(() -> pdf.at(Quantity.of(+1, "m^2")));
   }
 
   public void testCdfUnitFail() {
@@ -102,38 +93,13 @@ public class GompertzMakehamDistributionTest extends TestCase {
     Chop._10.requireClose(cdf.p_lessEquals(Quantity.of(+0.1, "m")), RealScalar.of(0.003040820706232905));
     assertEquals(cdf.p_lessEquals(Quantity.of(+0.0, "m")), RealScalar.ZERO);
     assertEquals(cdf.p_lessEquals(Quantity.of(-0.1, "m")), RealScalar.ZERO);
-    try {
-      cdf.p_lessEquals(Quantity.of(-1, "m^2"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      cdf.p_lessEquals(Quantity.of(+1, "m^2"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> cdf.p_lessEquals(Quantity.of(-1, "m^2")));
+    AssertFail.of(() -> cdf.p_lessEquals(Quantity.of(+1, "m^2")));
   }
 
   public void testFail() {
-    try {
-      GompertzMakehamDistribution.of(RealScalar.of(0), RealScalar.of(0.2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      GompertzMakehamDistribution.of(RealScalar.of(1e-300), RealScalar.of(1e-300));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> GompertzMakehamDistribution.of(RealScalar.of(0), RealScalar.of(0.2)));
+    AssertFail.of(() -> GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0)));
+    AssertFail.of(() -> GompertzMakehamDistribution.of(RealScalar.of(1e-300), RealScalar.of(1e-300)));
   }
 }

@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor.alg;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import junit.framework.TestCase;
 
 public class TensorRankTest extends TestCase {
@@ -46,7 +45,7 @@ public class TensorRankTest extends TestCase {
   }
 
   public void testRank3() {
-    assertEquals(TensorRank.of(LieAlgebras.so3()), 3);
+    assertEquals(TensorRank.of(Array.zeros(5, 4, 3)), 3);
   }
 
   public void testOfArray() {

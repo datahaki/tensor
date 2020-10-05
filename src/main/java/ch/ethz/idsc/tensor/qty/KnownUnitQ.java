@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.Scalar;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/KnownUnitQ.html">KnownUnitQ</a> */
 public class KnownUnitQ implements Serializable {
+  private static final long serialVersionUID = -8972610227652847081L;
   private static final KnownUnitQ SI = in(UnitSystem.SI());
 
   /** @param unitSystem non-null

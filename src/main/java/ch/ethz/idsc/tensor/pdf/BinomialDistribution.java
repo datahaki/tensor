@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.sca.Power;
  * 
  * @see BinomialRandomVariate */
 public class BinomialDistribution extends EvaluatedDiscreteDistribution implements VarianceInterface {
+  private static final long serialVersionUID = -1987644165670884763L;
+
   /** Example:
    * PDF[BinomialDistribution[10, 1/3], 1] == 5120/59049
    * 
@@ -35,7 +37,6 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
   public static Distribution of(int n, Scalar p) {
     Integers.requirePositiveOrZero(n);
     Clips.unit().requireInside(p);
-    // ---
     boolean revert = Scalars.lessThan(RationalScalar.HALF, p);
     Scalar q = revert //
         ? RealScalar.ONE.subtract(p)

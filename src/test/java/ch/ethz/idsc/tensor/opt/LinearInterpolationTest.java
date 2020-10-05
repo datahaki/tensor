@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Increment;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LinearInterpolationTest extends TestCase {
@@ -111,10 +112,10 @@ public class LinearInterpolationTest extends TestCase {
     Scalar r2 = Quantity.of((9 + 6) * 0.5, "s");
     Tensor vec = interpolation.get(Tensors.of(RationalScalar.HALF));
     assertEquals(vec, Tensors.of(r1, r2));
-    assertTrue(ExactTensorQ.of(vec));
+    ExactTensorQ.require(vec);
     Tensor at = interpolation.at(RationalScalar.HALF);
     assertEquals(at, Tensors.of(r1, r2));
-    assertTrue(ExactTensorQ.of(at));
+    ExactTensorQ.require(at);
   }
 
   public void testExact() {
@@ -125,8 +126,8 @@ public class LinearInterpolationTest extends TestCase {
     Tensor res1 = interpolation.at(index);
     Tensor res2 = interpolation.get(Tensors.of(index));
     VectorQ.requireLength(res1, 5);
-    assertTrue(ExactTensorQ.of(res1));
-    assertTrue(ExactTensorQ.of(res2));
+    ExactTensorQ.require(res1);
+    ExactTensorQ.require(res2);
     assertEquals(res1, res2);
   }
 
@@ -137,7 +138,7 @@ public class LinearInterpolationTest extends TestCase {
     for (int count = 0; count < 30; ++count) {
       Scalar index = RandomVariate.of(distribution).divide(RealScalar.of(3));
       Scalar scalar = interpolation.At(index);
-      assertTrue(ExactScalarQ.of(scalar));
+      ExactScalarQ.require(scalar);
       assertEquals(Increment.ONE.apply(index), scalar);
       assertEquals(scalar, interpolation.get(Tensors.of(index)));
       assertEquals(scalar, interpolation.at(index));
@@ -145,22 +146,12 @@ public class LinearInterpolationTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      LinearInterpolation.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LinearInterpolation.of(RealScalar.ONE));
   }
 
   public void test0D() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.empty());
-    try {
-      interpolation.get(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> interpolation.get(RealScalar.ZERO));
   }
 
   public void test1D() {
@@ -179,11 +170,6 @@ public class LinearInterpolationTest extends TestCase {
   }
 
   public void testFailNull() {
-    try {
-      LinearInterpolation.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LinearInterpolation.of(null));
   }
 }

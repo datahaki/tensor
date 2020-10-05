@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PascalDistributionTest extends TestCase {
@@ -75,32 +76,12 @@ public class PascalDistributionTest extends TestCase {
   }
 
   public void testFailN() {
-    try {
-      PascalDistribution.of(0, RealScalar.of(0.2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      PascalDistribution.of(-3, RealScalar.of(0.2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PascalDistribution.of(0, RealScalar.of(0.2)));
+    AssertFail.of(() -> PascalDistribution.of(-3, RealScalar.of(0.2)));
   }
 
   public void testFailP() {
-    try {
-      PascalDistribution.of(3, RealScalar.of(-0.2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      PascalDistribution.of(3, RealScalar.of(1.2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PascalDistribution.of(3, RealScalar.of(-0.2)));
+    AssertFail.of(() -> PascalDistribution.of(3, RealScalar.of(1.2)));
   }
 }

@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.io;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MatrixFormTest extends TestCase {
@@ -37,11 +38,6 @@ public class MatrixFormTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      MatrixForm.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixForm.of(RealScalar.ONE));
   }
 }

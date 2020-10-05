@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MeanDeviationTest extends TestCase {
@@ -34,38 +35,18 @@ public class MeanDeviationTest extends TestCase {
   }
 
   public void testVectorFail() {
-    try {
-      MeanDeviation.ofVector(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MeanDeviation.ofVector(RealScalar.ONE));
   }
 
   public void testEmptyFail() {
-    try {
-      MeanDeviation.ofVector(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MeanDeviation.ofVector(Tensors.empty()));
   }
 
   public void testMatrixFail() {
-    try {
-      MeanDeviation.ofVector(HilbertMatrix.of(3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MeanDeviation.ofVector(HilbertMatrix.of(3, 4)));
   }
 
   public void testTensorFail() {
-    try {
-      MeanDeviation.ofVector(LieAlgebras.sl2());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MeanDeviation.ofVector(LeviCivitaTensor.of(3)));
   }
 }

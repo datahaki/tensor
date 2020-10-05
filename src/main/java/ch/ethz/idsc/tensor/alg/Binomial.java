@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.OptionalInt;
 
-import ch.ethz.idsc.tensor.IntegerQ;
 import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -24,6 +24,8 @@ import ch.ethz.idsc.tensor.sca.Gamma;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Binomial.html">Binomial</a> */
 public class Binomial implements Serializable {
+  private static final long serialVersionUID = 3281652794516766951L;
+
   /** @param n non-negative integer
    * @return binomial function that computes n choose k */
   public static Binomial of(Scalar n) {
@@ -33,7 +35,7 @@ public class Binomial implements Serializable {
   /** @param n non-negative integer
    * @return binomial function that computes n choose k */
   public static Binomial of(int n) {
-    return binomial(Integers.requirePositiveOrZero(n));
+    return BinomialMemo.INSTANCE.lookup(Integers.requirePositiveOrZero(n));
   }
 
   /** <code>Mathematica::Binomial[n, m]</code>
@@ -42,8 +44,10 @@ public class Binomial implements Serializable {
    * @param m, and m <= n
    * @return binomial coefficient defined by n and m */
   public static Scalar of(Scalar n, Scalar m) {
-    if (IntegerQ.of(n) && IntegerQ.of(m))
-      return of(Scalars.intValueExact(n), Scalars.intValueExact(m));
+    OptionalInt _n = Scalars.optionalInt(n);
+    OptionalInt _m = Scalars.optionalInt(m);
+    if (_n.isPresent() && _m.isPresent())
+      return of(_n.getAsInt(), _m.getAsInt());
     Scalar np1 = n.add(RealScalar.ONE);
     return Gamma.FUNCTION.apply(np1).divide( //
         Gamma.FUNCTION.apply(m.add(RealScalar.ONE)).multiply(Gamma.FUNCTION.apply(np1.subtract(m))));
@@ -61,29 +65,33 @@ public class Binomial implements Serializable {
       // LONGTERM this case is defined in Mathematica
       throw new IllegalArgumentException(String.format("Binomial[%d,%d]", n, m));
     }
-    return binomial(n).over(m);
+    return BinomialMemo.INSTANCE.lookup(n).over(m);
   }
 
   /***************************************************/
-  private static final int MEMO_SIZE = 100;
-  private static final Map<Integer, Binomial> MEMO = new LinkedHashMap<Integer, Binomial>(MEMO_SIZE * 4 / 3, 0.75f, true) {
-    @Override
-    protected boolean removeEldestEntry(Map.Entry<Integer, Binomial> eldest) {
-      return MEMO_SIZE < size();
-    }
-  };
+  private static enum BinomialMemo {
+    INSTANCE;
 
-  // function does not require synchronized
-  private static Binomial binomial(int n) {
-    Binomial binomial = MEMO.get(n);
-    if (Objects.isNull(binomial)) {
-      binomial = new Binomial(n);
-      MEMO.put(n, binomial);
+    private static final int MAX_SIZE = 384;
+    private final Map<Integer, Binomial> map = //
+        new LinkedHashMap<Integer, Binomial>(MAX_SIZE * 4 / 3, 0.75f, true) {
+          private static final long serialVersionUID = 9104259948493924689L;
+
+          @Override
+          protected boolean removeEldestEntry(Map.Entry<Integer, Binomial> eldest) {
+            return MAX_SIZE < size();
+          }
+        };
+
+    public synchronized Binomial lookup(int n) {
+      Binomial binomial = map.get(n);
+      if (Objects.isNull(binomial))
+        map.put(n, binomial = new Binomial(n));
+      return binomial;
     }
-    return binomial;
   }
 
-  // ---
+  /***************************************************/
   private final int n;
   private final Tensor row;
 

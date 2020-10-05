@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subsets;
 import ch.ethz.idsc.tensor.lie.Permutations;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QuantityTensorTest extends TestCase {
@@ -100,17 +101,7 @@ public class QuantityTensorTest extends TestCase {
 
   public void testFail() {
     Scalar q = Quantity.of(1, "s");
-    try {
-      QuantityTensor.of(q, Unit.of("m*kg^2"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      QuantityTensor.of(Tensors.of(q, q), Unit.of("m*kg^2"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> QuantityTensor.of(q, Unit.of("m*kg^2")));
+    AssertFail.of(() -> QuantityTensor.of(Tensors.of(q, q), Unit.of("m*kg^2")));
   }
 }

@@ -6,7 +6,7 @@ import java.util.Arrays;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class JoinTest extends TestCase {
@@ -26,31 +26,6 @@ public class JoinTest extends TestCase {
     Tensor v1 = Join.of(Tensors.vector(2, 3, 4), Tensors.vector(9, 8));
     Tensor re = Tensors.vector(2, 3, 4, 9, 8);
     assertEquals(v1, re);
-  }
-
-  public void testFailScalar() {
-    // in Mathematica Join of two or more scalars is not defined!
-    try {
-      Join.of(RealScalar.of(2), RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Join.of(RealScalar.of(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-  }
-
-  public void testFailVectorScalar() {
-    try {
-      Join.of(Tensors.vector(0, 1, 2), RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
   }
 
   public void testMatrices() {
@@ -93,19 +68,19 @@ public class JoinTest extends TestCase {
   }
 
   public void testRank3d0() {
-    Tensor tensor = Join.of(LieAlgebras.se2().unmodifiable(), LieAlgebras.so3().unmodifiable());
+    Tensor tensor = Join.of(Array.zeros(3, 3, 3).unmodifiable(), Array.zeros(3, 3, 3).unmodifiable());
     assertEquals(Dimensions.of(tensor), Arrays.asList(6, 3, 3));
     tensor.set(t -> t.append(RealScalar.ONE), Tensor.ALL);
   }
 
   public void testRank3d1() {
-    Tensor tensor = Join.of(1, LieAlgebras.se2().unmodifiable(), LieAlgebras.so3().unmodifiable());
+    Tensor tensor = Join.of(1, Array.zeros(3, 3, 3).unmodifiable(), Array.zeros(3, 3, 3).unmodifiable());
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 6, 3));
     tensor.set(t -> t.append(RealScalar.ONE), Tensor.ALL);
   }
 
   public void testRank3d2() {
-    Tensor tensor = Join.of(2, LieAlgebras.se2().unmodifiable(), LieAlgebras.so3().unmodifiable());
+    Tensor tensor = Join.of(2, Array.zeros(3, 3, 3).unmodifiable(), Array.zeros(3, 3, 3).unmodifiable());
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3, 6));
     tensor.set(t -> t.append(RealScalar.ONE), Tensor.ALL);
   }
@@ -120,5 +95,18 @@ public class JoinTest extends TestCase {
     Tensor v1 = Tensors.vector(2, 3, 4);
     Tensor ap = Join.of(v1);
     assertEquals(ap, v1);
+  }
+
+  public void testFailScalar() {
+    // in Mathematica Join that involves scalars is not defined!
+    AssertFail.of(() -> Join.of(RealScalar.of(2)));
+  }
+
+  public void testFailScalarTwo() {
+    AssertFail.of(() -> Join.of(RealScalar.of(2), RealScalar.of(3)));
+  }
+
+  public void testFailVectorScalar() {
+    AssertFail.of(() -> Join.of(Tensors.vector(0, 1, 2), RealScalar.of(3)));
   }
 }

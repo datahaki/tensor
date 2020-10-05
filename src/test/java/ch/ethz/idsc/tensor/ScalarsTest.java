@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.io.StringScalarQ;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ScalarsTest extends TestCase {
@@ -136,21 +137,11 @@ public class ScalarsTest extends TestCase {
   }
 
   public void testIntValueExactFail() {
-    try {
-      Scalars.intValueExact(RealScalar.of(Long.MAX_VALUE));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Scalars.intValueExact(RealScalar.of(Long.MAX_VALUE)));
   }
 
   public void testIntValueExactFractionFail() {
-    try {
-      Scalars.intValueExact(RationalScalar.of(2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Scalars.intValueExact(RationalScalar.of(2, 3)));
   }
 
   public void testLongValueExact() {
@@ -206,11 +197,14 @@ public class ScalarsTest extends TestCase {
   public void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(6, "m");
     Scalar qs2 = Quantity.of(3, "s");
-    try {
-      Scalars.divides(qs1, qs2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Scalars.divides(qs1, qs2));
+  }
+
+  public void testBigIntegerExactNullFail() {
+    AssertFail.of(() -> Scalars.bigIntegerValueExact(null));
+  }
+
+  public void testOptionalBigIntegerNullFail() {
+    AssertFail.of(() -> Scalars.optionalBigInteger(null));
   }
 }

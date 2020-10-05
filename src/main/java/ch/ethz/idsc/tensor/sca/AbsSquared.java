@@ -2,25 +2,27 @@
 package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 /** the purpose of AbsSquared is to preserve the precision when working with complex numbers.
  * Since {@link ComplexScalar}::abs involves a square root the square of the absolute value
- * is better computed using <code>z * conjugate(z)</code>.
+ * is better computed using <code>z * conjugate(z)</code>. Analogous for {@link Quaternion}s.
  * 
- * <p>If a {@link Scalar} does not implement {@link ComplexEmbedding}, then
- * the function AbsSquared is computed simply as
- * <code>abs(x) ^ 2</code> */
+ * <p>If a {@link Scalar} does not implement {@link AbsInterface}, then the function
+ * AbsSquared throws an Exception. */
 public enum AbsSquared implements ScalarUnaryOperator {
   FUNCTION;
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof ConjugateInterface)
-      return scalar.multiply(Conjugate.FUNCTION.apply(scalar));
-    Scalar abs = Abs.FUNCTION.apply(scalar);
-    return abs.multiply(abs);
+    if (scalar instanceof AbsInterface) {
+      AbsInterface absInterface = (AbsInterface) scalar;
+      return absInterface.absSquared();
+    }
+    throw TensorRuntimeException.of(scalar);
   }
 
   /** @param tensor

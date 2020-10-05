@@ -24,8 +24,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/FrechetDistribution.html">FrechetDistribution</a> */
 public class FrechetDistribution extends AbstractContinuousDistribution implements //
     InverseCDF, MeanInterface, VarianceInterface, Serializable {
+  private static final long serialVersionUID = 2354335647070308513L;
   private static final double NEXT_DOWN_ONE = Math.nextDown(1.0);
-  private static final Scalar TWO = RealScalar.of(2);
 
   /** @param alpha positive
    * @param beta positive, may be instance of {@link Quantity}
@@ -79,9 +79,9 @@ public class FrechetDistribution extends AbstractContinuousDistribution implemen
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    if (Scalars.lessEquals(alpha, TWO))
+    if (Scalars.lessEquals(alpha, RealScalar.TWO))
       return beta.multiply(beta).multiply(DoubleScalar.POSITIVE_INFINITY);
-    Scalar term = Gamma.FUNCTION.apply(RealScalar.ONE.subtract(TWO.divide(alpha)));
+    Scalar term = Gamma.FUNCTION.apply(RealScalar.ONE.subtract(RealScalar.TWO.divide(alpha)));
     return beta.multiply(beta).multiply(term).subtract(AbsSquared.FUNCTION.apply(mean()));
   }
 

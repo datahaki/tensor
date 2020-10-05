@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class VectorAngleTest extends TestCase {
@@ -57,12 +58,7 @@ public class VectorAngleTest extends TestCase {
   }
 
   public void testFail() {
-    try {
-      VectorAngle.of(HilbertMatrix.of(3), HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VectorAngle.of(HilbertMatrix.of(3), HilbertMatrix.of(3)));
   }
 
   public void testSingle() {

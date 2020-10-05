@@ -34,11 +34,9 @@ import java.math.MathContext;
     return xn1;
   }
 
-  /** computation of exponential value using Taylor series
-   * 
-   * @param x
+  /** @param x
    * @param mathContext
-   * @return */
+   * @return exponential of x */
   public static BigDecimal exp(BigDecimal x, MathContext mathContext) {
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = BigDecimal.ONE;
@@ -52,11 +50,9 @@ import java.math.MathContext;
     return xn1;
   }
 
-  /** computation of sine value using Taylor series
-   * 
-   * @param x
+  /** @param x
    * @param mathContext
-   * @return */
+   * @return sine of x */
   public static BigDecimal sin(BigDecimal x, MathContext mathContext) {
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = x;
@@ -74,11 +70,9 @@ import java.math.MathContext;
     return xn1;
   }
 
-  /** computation of sine value using Taylor series
-   * 
-   * @param x
+  /** @param x
    * @param mathContext
-   * @return */
+   * @return hyperbolic sine of x */
   public static BigDecimal sinh(BigDecimal x, MathContext mathContext) {
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = x;
@@ -93,11 +87,9 @@ import java.math.MathContext;
     return xn1;
   }
 
-  /** computation of cosine value using Taylor series
-   * 
-   * @param x
+  /** @param x
    * @param mathContext
-   * @return */
+   * @return cosine of x */
   public static BigDecimal cos(BigDecimal x, MathContext mathContext) {
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = BigDecimal.ONE;
@@ -115,11 +107,9 @@ import java.math.MathContext;
     return xn1;
   }
 
-  /** computation of cosine value using Taylor series
-   * 
-   * @param x
+  /** @param x
    * @param mathContext
-   * @return */
+   * @return hyperbolic cosine of x */
   public static BigDecimal cosh(BigDecimal x, MathContext mathContext) {
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = BigDecimal.ONE;

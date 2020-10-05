@@ -34,7 +34,8 @@ public enum TensorWedge {
     int rank = TensorRank.of(tensor);
     for (Tensor permutation : Permutations.of(Range.of(0, rank))) {
       Integer[] sigma = IntStream.range(0, rank) //
-          .mapToObj(index -> permutation.Get(index).number()) //
+          .mapToObj(permutation::Get) //
+          .map(Scalar::number) //
           .toArray(Integer[]::new);
       Tensor transpose = Transpose.of(tensor, sigma);
       sum = Signature.of(sigma).equals(RealScalar.ONE) //

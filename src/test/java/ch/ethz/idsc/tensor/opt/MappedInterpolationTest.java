@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.sca.Floor;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MappedInterpolationTest extends TestCase {
@@ -18,20 +19,10 @@ public class MappedInterpolationTest extends TestCase {
   }
 
   public void testFailNull() {
-    try {
-      MappedInterpolation.of(null, Floor.FUNCTION);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MappedInterpolation.of(null, Floor.FUNCTION));
   }
 
   public void testFailFunctionNull() {
-    try {
-      MappedInterpolation.of(Tensors.vector(3, 4, 5), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MappedInterpolation.of(Tensors.vector(3, 4, 5), null));
   }
 }

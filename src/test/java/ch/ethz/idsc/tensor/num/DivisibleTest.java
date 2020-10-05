@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DivisibleTest extends TestCase {
@@ -44,56 +45,21 @@ public class DivisibleTest extends TestCase {
   public void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(6, "m");
     Scalar qs2 = Quantity.of(3, "s");
-    try {
-      Divisible.of(qs1, qs2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Divisible.of(qs1, qs2));
   }
 
   public void testNumericFail() {
-    try {
-      Divisible.of(RealScalar.of(9.), RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Divisible.of(Quantity.of(9., "m"), Quantity.of(3, "m"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Divisible.of(RealScalar.of(9.), RealScalar.of(3)));
+    AssertFail.of(() -> Divisible.of(Quantity.of(9., "m"), Quantity.of(3, "m")));
   }
 
   public void testNullFail() {
-    try {
-      Divisible.of(null, RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Divisible.of(Quantity.of(9, "m"), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Divisible.of(null, RealScalar.of(3)));
+    AssertFail.of(() -> Divisible.of(Quantity.of(9, "m"), null));
   }
 
   public void testZeroFail() {
-    try {
-      Divisible.of(RealScalar.ONE, RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Scalars.divides(RealScalar.ZERO, RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Divisible.of(RealScalar.ONE, RealScalar.ZERO));
+    AssertFail.of(() -> Scalars.divides(RealScalar.ZERO, RealScalar.ONE));
   }
 }

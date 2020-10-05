@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FloorTest extends TestCase {
@@ -97,11 +98,6 @@ public class FloorTest extends TestCase {
   }
 
   public void testTypeFail() {
-    try {
-      Floor.of(StringScalar.of("some"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Floor.of(StringScalar.of("some")));
   }
 }

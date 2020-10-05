@@ -6,7 +6,7 @@ import java.util.Arrays;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class AccumulateTest extends TestCase {
@@ -37,43 +37,23 @@ public class AccumulateTest extends TestCase {
   }
 
   public void testProdAd() {
-    Tensor tensor = Accumulate.prod(LieAlgebras.se2());
+    Tensor tensor = Accumulate.prod(Array.zeros(3, 3, 3));
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3, 3));
   }
 
   public void testScalarFail() {
-    try {
-      Accumulate.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Accumulate.of(RealScalar.ONE));
   }
 
   public void testScalarProdFail() {
-    try {
-      Accumulate.prod(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Accumulate.prod(RealScalar.ONE));
   }
 
   public void testNullFail() {
-    try {
-      Accumulate.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Accumulate.of(null));
   }
 
   public void testNullProdFail() {
-    try {
-      Accumulate.prod(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Accumulate.prod(null));
   }
 }

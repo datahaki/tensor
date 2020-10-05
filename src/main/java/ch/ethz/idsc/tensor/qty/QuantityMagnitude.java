@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/QuantityMagnitude.html">QuantityMagnitude</a> */
 public class QuantityMagnitude implements Serializable {
+  private static final long serialVersionUID = 5270849044236108069L;
   private static final QuantityMagnitude SI = new QuantityMagnitude(UnitSystem.SI());
   private static final QuantityMagnitude EMPTY = new QuantityMagnitude(SimpleUnitSystem.from(new Properties()));
 
@@ -60,6 +61,8 @@ public class QuantityMagnitude implements Serializable {
   public ScalarUnaryOperator in(Unit unit) {
     Scalar base = unitSystem.apply(QuantityImpl.of(RealScalar.ONE, unit));
     return new ScalarUnaryOperator() {
+      private static final long serialVersionUID = 5762934797521017887L;
+
       @Override
       public Scalar apply(Scalar scalar) {
         Scalar result = unitSystem.apply(scalar).divide(base);

@@ -5,44 +5,25 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RootsFailTest extends TestCase {
   public void testScalarFail() {
-    try {
-      Roots.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Roots.of(RealScalar.ONE));
   }
 
   public void testEmptyFail() {
-    try {
-      Roots.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Roots.of(Tensors.empty()));
   }
 
   public void testOnes() {
     Tensor coeffs = Tensors.vector(0);
-    try {
-      Roots.of(coeffs);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Roots.of(coeffs));
   }
 
   public void testConstantZeroFail() {
-    try {
-      Roots.of(Tensors.vector(0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Roots.of(Tensors.vector(0)));
   }
 
   public void testZerosFail() {
@@ -56,20 +37,10 @@ public class RootsFailTest extends TestCase {
   }
 
   public void testMatrixFail() {
-    try {
-      Roots.of(HilbertMatrix.of(2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Roots.of(HilbertMatrix.of(2, 3)));
   }
 
   public void testNotImplemented() {
-    try {
-      Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6)));
   }
 }

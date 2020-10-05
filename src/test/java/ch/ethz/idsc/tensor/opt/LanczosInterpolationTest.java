@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.io.ResourceData;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Increment;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LanczosInterpolationTest extends TestCase {
@@ -33,7 +34,7 @@ public class LanczosInterpolationTest extends TestCase {
   }
 
   public void testGetEmpty() {
-    Interpolation interpolation = LanczosInterpolation.of(LieAlgebras.so3().unmodifiable());
+    Interpolation interpolation = LanczosInterpolation.of(LeviCivitaTensor.of(3).unmodifiable());
     Tensor tensor = interpolation.get(Tensors.empty());
     tensor.set(t -> t.append(RealScalar.ONE), Tensor.ALL);
   }
@@ -90,27 +91,12 @@ public class LanczosInterpolationTest extends TestCase {
   }
 
   public void testFailNull() {
-    try {
-      LanczosInterpolation.of(null, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LanczosInterpolation.of(null, 3));
   }
 
   public void testFailSemi() {
     Tensor vector = Tensors.vector(-1, 0, 3, 2, 0, -4, 2);
-    try {
-      LanczosInterpolation.of(vector, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      LanczosInterpolation.of(vector, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> LanczosInterpolation.of(vector, 0));
+    AssertFail.of(() -> LanczosInterpolation.of(vector, -1));
   }
 }

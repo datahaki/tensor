@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MinFilterTest extends TestCase {
@@ -50,32 +51,17 @@ public class MinFilterTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      MinFilter.of(RealScalar.of(3), 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MinFilter.of(RealScalar.of(3), 1));
   }
 
   public void testNonArray() {
     Tensor matrix = Tensors.fromString("{{1, 2, 3, 3, {3, 2, 3}}, {3}, {0, 0, 0}}");
     matrix.flatten(-1).forEach(RationalScalar.class::cast); // test if parsing went ok
     MinFilter.of(matrix, 0);
-    try {
-      MinFilter.of(matrix, 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MinFilter.of(matrix, 1));
   }
 
   public void testRadiusFail() {
-    try {
-      MinFilter.of(Tensors.vector(1, 2, 3, 4), -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MinFilter.of(Tensors.vector(1, 2, 3, 4), -1));
   }
 }

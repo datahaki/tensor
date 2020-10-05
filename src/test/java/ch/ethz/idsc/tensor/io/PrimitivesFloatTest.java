@@ -7,6 +7,7 @@ import java.util.List;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PrimitivesFloatTest extends TestCase {
@@ -58,11 +59,6 @@ public class PrimitivesFloatTest extends TestCase {
   }
 
   public void testToFloatArray2Dscalar() {
-    try {
-      Primitives.toFloatArray2D(RealScalar.of(123.456));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Primitives.toFloatArray2D(RealScalar.of(123.456)));
   }
 }

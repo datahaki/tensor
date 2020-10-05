@@ -11,16 +11,12 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.opt.Interpolation;
 import ch.ethz.idsc.tensor.opt.LinearInterpolation;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ResourceDataTest extends TestCase {
   private static void _checkColorscheme(Interpolation interpolation) {
-    try {
-      interpolation.get(Tensors.vector(256));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> interpolation.get(Tensors.vector(256)));
   }
 
   public void testColorschemeClassic() {

@@ -5,6 +5,7 @@ import java.math.BigInteger;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RangeTest extends TestCase {
@@ -38,17 +39,7 @@ public class RangeTest extends TestCase {
   }
 
   public void testBigIntegerNullFail() {
-    try {
-      Range.of(new BigInteger("123"), null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Range.of(null, new BigInteger("123"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Range.of(new BigInteger("123"), null));
+    AssertFail.of(() -> Range.of(null, new BigInteger("123")));
   }
 }

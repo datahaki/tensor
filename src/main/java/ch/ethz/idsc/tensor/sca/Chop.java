@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -33,6 +35,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Chop.html">Chop</a> */
 public class Chop implements ScalarUnaryOperator {
+  private static final long serialVersionUID = -7292234171542729722L;
   public static final Chop _01 = below(1e-01);
   public static final Chop _02 = below(1e-02);
   public static final Chop _03 = below(1e-03);
@@ -72,7 +75,7 @@ public class Chop implements ScalarUnaryOperator {
     throw new IllegalArgumentException(Double.toString(threshold));
   }
 
-  // ---
+  /***************************************************/
   private final double threshold;
 
   private Chop(double threshold) {
@@ -91,7 +94,7 @@ public class Chop implements ScalarUnaryOperator {
       ChopInterface chopInterface = (ChopInterface) scalar;
       return chopInterface.chop(this);
     }
-    return scalar;
+    return Objects.requireNonNull(scalar);
   }
 
   /***************************************************/

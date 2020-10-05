@@ -1,13 +1,17 @@
 // code by jph
 package ch.ethz.idsc.tensor.red;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class EntrywiseTest extends TestCase {
@@ -38,15 +42,15 @@ public class EntrywiseTest extends TestCase {
     assertEquals(result, Tensors.vector(3, 2, 4));
   }
 
-  public void testMinSimple() {
-    Entrywise entrywise = Entrywise.min();
+  public void testMinSimple() throws ClassNotFoundException, IOException {
+    Entrywise entrywise = Serialization.copy(Entrywise.min());
     Tensor result = entrywise.apply( //
         Tensors.vector(3, 2, 3), Tensors.vector(-2, 1, 4));
     assertEquals(result, Tensors.vector(-2, 1, 3));
   }
 
-  public void testMaxScalar() {
-    Entrywise entrywise = Entrywise.max();
+  public void testMaxScalar() throws ClassNotFoundException, IOException {
+    Entrywise entrywise = Serialization.copy(Entrywise.max());
     Tensor result = entrywise.apply( //
         RealScalar.of(3), RealScalar.of(5));
     assertEquals(result, RealScalar.of(5));
@@ -86,46 +90,21 @@ public class EntrywiseTest extends TestCase {
 
   public void testEmpty() {
     Entrywise entrywise = Entrywise.with(Max::of);
-    try {
-      entrywise.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> entrywise.of(Tensors.empty()));
   }
 
   public void testFail() {
     Entrywise entrywise = Entrywise.max();
-    try {
-      entrywise.apply(Tensors.vector(3, 2, 3), Tensors.vector(-2, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> entrywise.apply(Tensors.vector(3, 2, 3), Tensors.vector(-2, 1)));
   }
 
   public void testScalarTensorFail() {
     Entrywise entrywise = Entrywise.max();
-    try {
-      entrywise.apply(Tensors.vector(3, 2, 3), RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      entrywise.apply(RealScalar.ONE, Tensors.vector(3, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> entrywise.apply(Tensors.vector(3, 2, 3), RealScalar.ONE));
+    AssertFail.of(() -> entrywise.apply(RealScalar.ONE, Tensors.vector(3, 2, 3)));
   }
 
   public void testNullFail() {
-    try {
-      Entrywise.with(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Entrywise.with(null));
   }
 }

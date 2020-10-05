@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Cosh;
 import ch.ethz.idsc.tensor.sca.Sin;
 import ch.ethz.idsc.tensor.sca.Sinh;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BigDecimalMathTest extends TestCase {
@@ -52,12 +53,7 @@ public class BigDecimalMathTest extends TestCase {
   }
 
   public void testSqrtNegative() {
-    try {
-      BigDecimalMath.sqrt(new BigDecimal("-2340"), MathContext.DECIMAL64);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BigDecimalMath.sqrt(new BigDecimal("-2340"), MathContext.DECIMAL64));
   }
 
   public void testExpZero() {
@@ -66,10 +62,8 @@ public class BigDecimalMathTest extends TestCase {
   }
 
   public void testExp() {
-    // mathematica N[Exp[1], 34]
-    String m = "2.718281828459045235360287471352662";
     BigDecimal bd1 = BigDecimalMath.exp(BigDecimal.ONE, MathContext.DECIMAL128);
-    assertEquals(bd1.toString(), m);
+    assertEquals(bd1.toString(), "2.718281828459045235360287471352662"); // mathematica N[Exp[1], 34]
   }
 
   public void testSin() {

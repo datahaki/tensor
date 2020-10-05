@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NumberQTest extends TestCase {
@@ -26,10 +27,6 @@ public class NumberQTest extends TestCase {
     assertTrue(NumberQ.of(GaussScalar.of(0, 7)));
   }
 
-  public void testTensor() {
-    assertFalse(NumberQ.of(Tensors.vector(1.)));
-  }
-
   public void testCorner() {
     assertFalse(NumberQ.of(DoubleScalar.POSITIVE_INFINITY));
     assertFalse(NumberQ.of(DoubleScalar.NEGATIVE_INFINITY));
@@ -48,10 +45,6 @@ public class NumberQTest extends TestCase {
     assertFalse(NumberQ.of(Quantity.of(3.14, "m")));
   }
 
-  public void testVector() {
-    assertFalse(NumberQ.of(Tensors.vector(1, 2, 3)));
-  }
-
   public void testAll() {
     assertTrue(NumberQ.all(Tensors.fromString("{1, 3}")));
     assertFalse(NumberQ.all(Tensors.fromString("{1, 3[m]}")));
@@ -63,20 +56,10 @@ public class NumberQTest extends TestCase {
   }
 
   public void testRequireFail() {
-    try {
-      NumberQ.require(Quantity.of(6, "apples"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NumberQ.require(Quantity.of(6, "apples")));
   }
 
   public void testNullFail() {
-    try {
-      NumberQ.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> NumberQ.of(null));
   }
 }

@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.MathematicaFormat;
 import ch.ethz.idsc.tensor.mat.HermitianMatrixQ;
@@ -26,6 +27,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Trace;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MatrixExpTest extends TestCase {
@@ -35,7 +37,7 @@ public class MatrixExpTest extends TestCase {
     Tensor zeros = Array.zeros(7, 7);
     Tensor eye = MatrixExp.of(zeros);
     assertEquals(eye, IdentityMatrix.of(7));
-    assertTrue(ExactTensorQ.of(eye));
+    ExactTensorQ.require(eye);
   }
 
   public void testExp() {
@@ -56,7 +58,8 @@ public class MatrixExpTest extends TestCase {
 
   public void testExp2() {
     int n = 10;
-    Tensor A = Tensors.matrix((i, j) -> DoubleScalar.of(RANDOM.nextGaussian()), n, n);
+    Distribution distribution = NormalDistribution.standard();
+    Tensor A = RandomVariate.of(distribution, n, n);
     Tensor S = TensorWedge.of(A);
     Tensor o = MatrixExp.of(S);
     Chop._10.requireAllZero(o.dot(Transpose.of(o)).subtract(IdentityMatrix.of(o.length())));
@@ -76,7 +79,7 @@ public class MatrixExpTest extends TestCase {
   public void testExact() {
     Tensor mat = Tensors.matrixInt(new int[][] { { 0, 2, 3 }, { 0, 0, -1 }, { 0, 0, 0 } });
     Tensor result = MatrixExp.of(mat);
-    assertTrue(ExactTensorQ.of(result));
+    ExactTensorQ.require(result);
     Tensor actual = Tensors.matrixInt(new int[][] { { 1, 2, 2 }, { 0, 1, -1 }, { 0, 0, 1 } });
     assertEquals(result, actual);
     assertEquals(result.toString(), actual.toString());
@@ -150,36 +153,35 @@ public class MatrixExpTest extends TestCase {
     }
   }
 
+  public void testComplex1() {
+    Tensor matrix = ConstantArray.of(Scalars.fromString("-10-1*I"), 3, 3);
+    Tensor tensor1 = MatrixExp.of(matrix);
+    Tensor tensor2 = MatrixExp.series(matrix);
+    Chop._03.requireClose(tensor1, tensor2);
+  }
+
+  public void testComplex2() {
+    Tensor matrix = ConstantArray.of(Scalars.fromString("-10.0-1.0*I"), 3, 3);
+    Tensor tensor1 = MatrixExp.of(matrix);
+    Tensor tensor2 = MatrixExp.series(matrix);
+    Chop._03.requireClose(tensor1, tensor2);
+  }
+
+  public void testNaNFail() {
+    Tensor matrix = ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3);
+    AssertFail.of(() -> MatrixExp.series(matrix));
+  }
+
   public void testFail() {
-    try {
-      MatrixExp.of(Array.zeros(4, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      MatrixExp.of(Array.zeros(3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixExp.of(Array.zeros(4, 3)));
+    AssertFail.of(() -> MatrixExp.of(Array.zeros(3, 4)));
   }
 
   public void testScalarFail() {
-    try {
-      MatrixExp.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixExp.of(RealScalar.ONE));
   }
 
   public void testEmptyFail() {
-    try {
-      MatrixExp.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixExp.of(Tensors.empty()));
   }
 }

@@ -18,6 +18,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/PadLeft.html">PadLeft</a> */
 public class PadLeft implements TensorUnaryOperator {
+  private static final long serialVersionUID = -1613142246733749272L;
+
   /** @param element
    * @param dimensions non-empty
    * @return */
@@ -44,7 +46,7 @@ public class PadLeft implements TensorUnaryOperator {
     return zeros(Arrays.asList(dimensions));
   }
 
-  // ---
+  /***************************************************/
   private final Tensor element;
   private final List<Integer> dimensions;
 

@@ -10,11 +10,14 @@ import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CrossTest extends TestCase {
+  private static final Tensor SO3 = LeviCivitaTensor.of(3).negate();
+
   public static Tensor alt_skew3(Tensor a) {
-    return LieAlgebras.so3().dot(a);
+    return SO3.dot(a);
   }
 
   static void checkAB(Tensor a, Tensor b) {
@@ -29,11 +32,11 @@ public class CrossTest extends TestCase {
     Tensor v1 = UnitVector.of(3, 0);
     Tensor v2 = UnitVector.of(3, 1);
     Tensor v3 = UnitVector.of(3, 2);
-    assertTrue(ExactTensorQ.of(Cross.of(v1, v2)));
+    ExactTensorQ.require(Cross.of(v1, v2));
     assertEquals(Cross.of(v1, v2), v3);
-    assertTrue(ExactTensorQ.of(Cross.of(v2, v3)));
+    ExactTensorQ.require(Cross.of(v2, v3));
     assertEquals(Cross.of(v2, v3), v1);
-    assertTrue(ExactTensorQ.of(Cross.of(v3, v1)));
+    ExactTensorQ.require(Cross.of(v3, v1));
     assertEquals(Cross.of(v3, v1), v2);
   }
 
@@ -73,45 +76,20 @@ public class CrossTest extends TestCase {
   }
 
   public void testSkew3LengthFail() {
-    try {
-      Cross.skew3(Tensors.vector(1, 2, 3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cross.skew3(Tensors.vector(1, 2, 3, 4)));
   }
 
   public void testFailLength2() {
     Tensor v1 = UnitVector.of(3, 0);
     Tensor v2 = UnitVector.of(2, 1);
-    try {
-      Cross.of(v1, v2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Cross.of(v2, v1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cross.of(v1, v2));
+    AssertFail.of(() -> Cross.of(v2, v1));
   }
 
   public void testFailLength4() {
     Tensor v1 = UnitVector.of(4, 0);
     Tensor v2 = UnitVector.of(3, 1);
-    try {
-      Cross.of(v1, v2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Cross.of(v2, v1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cross.of(v1, v2));
+    AssertFail.of(() -> Cross.of(v2, v1));
   }
 }

@@ -24,6 +24,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Rationalize.html">Rationalize</a> */
 public class Rationalize implements ScalarUnaryOperator {
+  private static final long serialVersionUID = -5395386531214466407L;
+
   /** @param max positive integer
    * @return {@link ScalarUnaryOperator} that returns the closest {@link RationalScalar} to the
    * given argument, with denominator less or equals to max, and ties rounding to positive infinity.
@@ -75,7 +77,6 @@ public class Rationalize implements ScalarUnaryOperator {
     Scalar m01 = RealScalar.ZERO;
     Scalar m10 = RealScalar.ZERO;
     Scalar m11 = RealScalar.ONE;
-    // ---
     Scalar x = scalar;
     Scalar ain = Floor.FUNCTION.apply(x);
     // loop finding terms until denominator gets too big
@@ -91,7 +92,6 @@ public class Rationalize implements ScalarUnaryOperator {
       x = x.subtract(ain).reciprocal();
       ain = Floor.FUNCTION.apply(x);
     }
-    // ---
     // now remaining x is between 0 and 1/ai (?)
     // approx as either 0 or 1/m where m is max that will fit in maxden
     Scalar sol0 = m00.divide(m10); // first try zero

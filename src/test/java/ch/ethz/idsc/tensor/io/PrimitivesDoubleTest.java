@@ -7,6 +7,7 @@ import java.util.List;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PrimitivesDoubleTest extends TestCase {
@@ -56,11 +57,6 @@ public class PrimitivesDoubleTest extends TestCase {
   }
 
   public void testToDoubleArray2Dscalar() {
-    try {
-      Primitives.toDoubleArray2D(RealScalar.of(123.456));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Primitives.toDoubleArray2D(RealScalar.of(123.456)));
   }
 }

@@ -16,5 +16,6 @@ public class StringScalarQTest extends TestCase {
     assertTrue(StringScalarQ.any(Tensors.of(RealScalar.ONE, StringScalar.of("world"))));
     assertFalse(StringScalarQ.any(Tensors.vector(1, 2, 3, 4)));
     assertFalse(StringScalarQ.any(Tensors.empty()));
+    assertTrue(StringScalarQ.any(StringScalar.of("world")));
   }
 }

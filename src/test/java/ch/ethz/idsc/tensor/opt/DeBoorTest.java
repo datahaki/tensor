@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DeBoorTest extends TestCase {
@@ -60,7 +61,7 @@ public class DeBoorTest extends TestCase {
     Tensor result = Tensors.fromString( //
         "{{10, 1}, {51/5, 17/10}, {52/5, 11/5}, {53/5, 5/2}, {54/5, 13/5}, {11, 5/2}}");
     assertEquals(result, points);
-    assertTrue(ExactTensorQ.of(points));
+    ExactTensorQ.require(points);
   }
 
   public void testQuadratic2() {
@@ -73,7 +74,7 @@ public class DeBoorTest extends TestCase {
     Tensor result = Tensors.fromString( //
         "{{10, 1}, {51/5, 17/10}, {52/5, 11/5}, {53/5, 5/2}, {54/5, 13/5}, {11, 5/2}}");
     assertEquals(result, points);
-    assertTrue(ExactTensorQ.of(points));
+    ExactTensorQ.require(points);
     assertEquals(deBoor.degree(), 2);
     assertEquals(deBoor.knots(), knots);
     assertEquals(deBoor.control(), control);
@@ -89,7 +90,7 @@ public class DeBoorTest extends TestCase {
     Tensor result = Tensors.fromString( //
         "{{11, 13/6}, {56/5, 893/375}, {57/5, 621/250}, {58/5, 961/375}, {59/5, 2029/750}, {12, 3}}");
     assertEquals(result, points);
-    assertTrue(ExactTensorQ.of(points));
+    ExactTensorQ.require(points);
     assertEquals(deBoor.degree(), 3);
     assertEquals(deBoor.knots(), knots);
     assertEquals(deBoor.control(), control);
@@ -104,7 +105,7 @@ public class DeBoorTest extends TestCase {
     Tensor result = Tensors.fromString( //
         "{{11, 3}, {111/10, 35839/12000}, {56/5, 4429/1500}, {113/10, 11631/4000}, {57/5, 1073/375}, {23/2, 271/96}, {58/5, 1401/500}, {117/10, 33697/12000}, {59/5, 1069/375}, {119/10, 11757/4000}, {12, 37/12}}");
     assertEquals(result, points);
-    assertTrue(ExactTensorQ.of(points));
+    ExactTensorQ.require(points);
   }
 
   public void testWikiStyleConstant0() throws ClassNotFoundException, IOException {
@@ -212,51 +213,28 @@ public class DeBoorTest extends TestCase {
     Tensor knots = Tensors.vector(-1, 0, 1, 2, 2, 2).unmodifiable();
     Tensor control = Tensors.vector(6, 0, 0, 0).unmodifiable();
     DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
-    try {
-      DeBoor.of(null, knots, control);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DeBoor.of(null, knots, control));
   }
 
   public void testKnotsScalarFail() {
-    try {
-      DeBoor.of(LinearBinaryAverage.INSTANCE, RealScalar.ONE, Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DeBoor.of(LinearBinaryAverage.INSTANCE, RealScalar.ONE, Tensors.empty()));
   }
 
   public void testKnotsMatrixFail() {
-    try {
-      DeBoor.of(LinearBinaryAverage.INSTANCE, HilbertMatrix.of(2), Tensors.vector(1, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DeBoor.of(LinearBinaryAverage.INSTANCE, HilbertMatrix.of(2), Tensors.vector(1, 2)));
   }
 
   public void testKnotsLengthOdd() {
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2), Range.of(0, 2));
     assertEquals(deBoor.degree(), 1);
-    try {
-      DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3), Range.of(0, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3), Range.of(0, 2)));
   }
 
   public void testControlFail() {
     for (int length = 0; length < 10; ++length)
-      if (length != 2)
-        try {
-          DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2), Range.of(0, length));
-          fail();
-        } catch (Exception exception) {
-          // ---
-        }
+      if (length != 2) {
+        int fl = length;
+        AssertFail.of(() -> DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2), Range.of(0, fl)));
+      }
   }
 }

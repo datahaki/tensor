@@ -29,6 +29,8 @@ import ch.ethz.idsc.tensor.Unprotect;
  * Entrywise.with(Scalar::multiply).of(Tensors.of(a, b, c)) == a.pmul(b).pmul(c)
  * </pre> */
 public class Entrywise implements BinaryOperator<Tensor>, Serializable {
+  private static final long serialVersionUID = -4067859737114270675L;
+
   /** @param binaryOperator non-null
    * @return
    * @throws Exception if given binaryOperator is null */
@@ -36,8 +38,10 @@ public class Entrywise implements BinaryOperator<Tensor>, Serializable {
     return new Entrywise(Objects.requireNonNull(binaryOperator));
   }
 
-  private static final Entrywise MIN = with(Min::of);
-  private static final Entrywise MAX = with(Max::of);
+  @SuppressWarnings("unchecked")
+  private static final Entrywise MIN = with((BinaryOperator<Scalar> & Serializable) (x, y) -> Min.of(x, y));
+  @SuppressWarnings("unchecked")
+  private static final Entrywise MAX = with((BinaryOperator<Scalar> & Serializable) (x, y) -> Max.of(x, y));
 
   /** @return entrywise minimum operator */
   public static Entrywise min() {
@@ -60,7 +64,6 @@ public class Entrywise implements BinaryOperator<Tensor>, Serializable {
   public Tensor apply(Tensor a, Tensor b) {
     if (a instanceof Scalar)
       return binaryOperator.apply(a.Get(), b.Get());
-    // ---
     if (a.length() != b.length())
       throw TensorRuntimeException.of(a, b);
     Iterator<Tensor> ia = a.iterator();

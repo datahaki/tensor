@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.sca.Floor;
  * 
  * https://en.wikipedia.org/wiki/Lanczos_resampling */
 public class LanczosInterpolation extends AbstractInterpolation implements Serializable {
+  private static final long serialVersionUID = -3350765964616917095L;
+
   /** @param tensor non-null
    * @param semi positive, typically greater than 1
    * @return

@@ -1,10 +1,13 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorImplTest extends TestCase {
@@ -56,12 +59,7 @@ public class TensorImplTest extends TestCase {
   public void testIteratorUnmod3() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     for (Tensor unit : eye)
-      try {
-        unit.append(RealScalar.ZERO);
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> unit.append(RealScalar.ZERO));
   }
 
   public void testIteratorRemove() {
@@ -86,5 +84,11 @@ public class TensorImplTest extends TestCase {
   public void testExtract() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     eye.extract(2, 4).set(RealScalar.of(4), 1);
+  }
+
+  public void testArrayList() {
+    Tensor tensor = Tensor.of(Arrays.asList(RealScalar.of(2), RealScalar.of(3)).stream());
+    TensorImpl tensorImpl = (TensorImpl) tensor;
+    assertTrue(tensorImpl.list instanceof ArrayList); // used in TensorParser
   }
 }

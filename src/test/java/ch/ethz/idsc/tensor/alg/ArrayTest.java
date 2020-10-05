@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.red.Tally;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ArrayTest extends TestCase {
@@ -90,20 +91,10 @@ public class ArrayTest extends TestCase {
   }
 
   public void testInvalid() {
-    try {
-      Array.zeros(-1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Array.zeros(-1));
   }
 
   public void testInvalid2() {
-    try {
-      Array.of(l -> Tensors.vector(l.get(0), l.get(1), l.get(2)), 3, -2, 4);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Array.of(l -> Tensors.vector(l.get(0), l.get(1), l.get(2)), 3, -2, 4));
   }
 }

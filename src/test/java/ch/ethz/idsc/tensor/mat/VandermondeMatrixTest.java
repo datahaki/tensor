@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class VandermondeMatrixTest extends TestCase {
@@ -27,20 +28,10 @@ public class VandermondeMatrixTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      VandermondeMatrix.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VandermondeMatrix.of(RealScalar.ONE));
   }
 
   public void testMatrixFail() {
-    try {
-      VandermondeMatrix.of(HilbertMatrix.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> VandermondeMatrix.of(HilbertMatrix.of(3)));
   }
 }

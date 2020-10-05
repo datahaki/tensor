@@ -1,6 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import java.lang.reflect.Modifier;
+
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BigFractionTest extends TestCase {
@@ -14,12 +17,7 @@ public class BigFractionTest extends TestCase {
   public void testDivide() {
     BigFraction num = BigFraction.of(1, 1);
     BigFraction den = BigFraction.of(0, 1);
-    try {
-      num.divide(den);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> num.divide(den));
   }
 
   public void testHash() {
@@ -30,19 +28,15 @@ public class BigFractionTest extends TestCase {
   public void testEquals() {
     assertFalse(BigFraction.of(7, 3).equals(null));
     assertFalse(BigFraction.of(7, 3).equals("abc"));
+    assertTrue(BigFraction.of(7, 3).equals(BigFraction.of(14, 6)));
+    assertTrue(BigFraction.of(-1, 3).equals(BigFraction.of(1, -3)));
   }
 
   public void testDenZero() {
-    try {
-      BigFraction.of(3, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BigFraction.of(3, 0));
   }
 
   public void testPackageVisibility() {
-    int modifiers = BigFraction.class.getModifiers();
-    assertEquals(modifiers & 0x1, 0x0); // non public but package
+    assertFalse(Modifier.isPublic(BigFraction.class.getModifiers()));
   }
 }

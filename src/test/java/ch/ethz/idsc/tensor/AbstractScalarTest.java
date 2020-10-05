@@ -5,6 +5,8 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
+import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class AbstractScalarTest extends TestCase {
@@ -36,20 +38,10 @@ public class AbstractScalarTest extends TestCase {
   }
 
   public void testGetFail() {
-    RealScalar.ONE.get();
-    RealScalar.ONE.Get();
-    try {
-      RealScalar.ONE.Get(1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      RealScalar.ONE.get(Arrays.asList(1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertEquals(Pi.VALUE.get(), Pi.VALUE);
+    assertEquals(Pi.VALUE.Get(), Pi.VALUE);
+    AssertFail.of(() -> RealScalar.ONE.Get(1));
+    AssertFail.of(() -> RealScalar.ONE.get(Arrays.asList(1)));
   }
 
   public void testSetFail() {
@@ -68,29 +60,14 @@ public class AbstractScalarTest extends TestCase {
   }
 
   public void testAppendFail() {
-    try {
-      RealScalar.ONE.append(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RealScalar.ONE.append(RealScalar.ZERO));
   }
 
   public void testExtractFail() {
-    try {
-      RealScalar.ONE.extract(1, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RealScalar.ONE.extract(1, 2));
   }
 
   public void testBlockFail() {
-    try {
-      RealScalar.ONE.block(Arrays.asList(1), Arrays.asList(1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RealScalar.ONE.block(Arrays.asList(1), Arrays.asList(1)));
   }
 }

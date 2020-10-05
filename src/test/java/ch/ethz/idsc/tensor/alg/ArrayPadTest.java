@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ArrayPadTest extends TestCase {
@@ -38,17 +39,7 @@ public class ArrayPadTest extends TestCase {
 
   public void testFail() {
     Tensor vector = Tensors.vector(2, 3, -3, 1);
-    try {
-      ArrayPad.of(vector, Arrays.asList(1), Arrays.asList(-2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ArrayPad.of(vector, Arrays.asList(-1), Arrays.asList(2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ArrayPad.of(vector, Arrays.asList(1), Arrays.asList(-2)));
+    AssertFail.of(() -> ArrayPad.of(vector, Arrays.asList(-1), Arrays.asList(2)));
   }
 }

@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.StringScalar;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RealTest extends TestCase {
@@ -26,11 +27,6 @@ public class RealTest extends TestCase {
 
   public void testFail() {
     Scalar scalar = StringScalar.of("string");
-    try {
-      Real.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Real.of(scalar));
   }
 }

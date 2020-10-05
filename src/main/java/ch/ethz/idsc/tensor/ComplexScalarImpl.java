@@ -2,11 +2,16 @@
 package ch.ethz.idsc.tensor;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.Objects;
+import java.util.Optional;
 
+import ch.ethz.idsc.tensor.num.BinaryPower;
+import ch.ethz.idsc.tensor.num.ScalarProduct;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Hypot;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -24,8 +29,12 @@ import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sin;
 import ch.ethz.idsc.tensor.sca.Sinh;
 
-/* package */ final class ComplexScalarImpl extends AbstractScalar implements ComplexScalar, //
+/* package */ class ComplexScalarImpl extends AbstractScalar implements ComplexScalar, //
     ChopInterface, ExactScalarQInterface, MachineNumberQInterface, NInterface, Serializable {
+  private static final long serialVersionUID = 3023231904329254618L;
+  private static final BinaryPower<Scalar> BINARY_POWER = //
+      new BinaryPower<>(new ScalarProduct(RealScalar.ONE));
+
   /** creator with package visibility
    * 
    * @param re neither a {@link ComplexScalar}, or {@link Quantity}
@@ -44,7 +53,7 @@ import ch.ethz.idsc.tensor.sca.Sinh;
         && !(scalar instanceof Quantity);
   }
 
-  // ---
+  /***************************************************/
   private final Scalar re;
   private final Scalar im;
 
@@ -53,7 +62,6 @@ import ch.ethz.idsc.tensor.sca.Sinh;
     this.im = im;
   }
 
-  /***************************************************/
   @Override // from Scalar
   public Scalar negate() {
     return new ComplexScalarImpl(re.negate(), im.negate());
@@ -121,6 +129,11 @@ import ch.ethz.idsc.tensor.sca.Sinh;
   @Override // from AbsInterface
   public Scalar abs() { // "complex modulus"
     return Hypot.of(re, im);
+  }
+
+  @Override // from AbsInterface
+  public Scalar absSquared() {
+    return re.multiply(re).add(im.multiply(im));
   }
 
   @Override // from ArcTanInterface
@@ -194,9 +207,10 @@ import ch.ethz.idsc.tensor.sca.Sinh;
 
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
-    if (IntegerQ.of(exponent)) {
-      RationalScalar rationalScalar = (RationalScalar) exponent;
-      return ScalarBinaryPower.REAL.apply(this, rationalScalar.numerator());
+    if (isExactScalar()) {
+      Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
+      if (optional.isPresent())
+        return ComplexScalarImpl.BINARY_POWER.raise(this, optional.get());
     }
     return Exp.FUNCTION.apply(exponent.multiply(Log.FUNCTION.apply(this)));
   }
@@ -209,6 +223,17 @@ import ch.ethz.idsc.tensor.sca.Sinh;
   @Override // from RoundingInterface
   public Scalar round() {
     return of(Round.FUNCTION.apply(re), Round.FUNCTION.apply(im));
+  }
+
+  @Override // from SignInterface
+  public Scalar sign() {
+    Scalar scalar = divide(abs());
+    return scalar.divide(Abs.FUNCTION.apply(scalar));
+  }
+
+  @Override // from SignInterface
+  public int signInt() {
+    throw TensorRuntimeException.of(this);
   }
 
   @Override // from SqrtInterface

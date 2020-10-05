@@ -22,6 +22,8 @@ import ch.ethz.idsc.tensor.sca.Power;
  * <a href="https://reference.wolfram.com/language/ref/GammaDistribution.html">GammaDistribution</a> */
 public class GammaDistribution implements Distribution, //
     MeanInterface, PDF, VarianceInterface, Serializable {
+  private static final long serialVersionUID = 6612584475244019738L;
+
   /** @param alpha positive
    * @param beta positive
    * @return */

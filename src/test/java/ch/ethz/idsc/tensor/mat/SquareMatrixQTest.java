@@ -8,7 +8,8 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SquareMatrixQTest extends TestCase {
@@ -20,7 +21,7 @@ public class SquareMatrixQTest extends TestCase {
 
   public void testOthers() {
     assertFalse(SquareMatrixQ.of(UnitVector.of(10, 3)));
-    assertFalse(SquareMatrixQ.of(LieAlgebras.so3()));
+    assertFalse(SquareMatrixQ.of(LeviCivitaTensor.of(3)));
     assertFalse(SquareMatrixQ.of(RealScalar.ONE));
   }
 
@@ -44,40 +45,20 @@ public class SquareMatrixQTest extends TestCase {
   }
 
   public void testRequireScalar() {
-    try {
-      SquareMatrixQ.require(RealScalar.of(3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SquareMatrixQ.require(RealScalar.of(3)));
   }
 
   public void testRequireVector() {
-    try {
-      SquareMatrixQ.require(Range.of(3, 10));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SquareMatrixQ.require(Range.of(3, 10)));
   }
 
   public void testRequireMatrixNonSquare() {
     assertFalse(SquareMatrixQ.of(HilbertMatrix.of(3, 4)));
-    try {
-      SquareMatrixQ.require(HilbertMatrix.of(3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> SquareMatrixQ.require(HilbertMatrix.of(3, 4)));
   }
 
   public void testRequireRank3() {
-    assertFalse(SquareMatrixQ.of(LieAlgebras.he1()));
-    try {
-      SquareMatrixQ.require(LieAlgebras.he1());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertFalse(SquareMatrixQ.of(LeviCivitaTensor.of(3)));
+    AssertFail.of(() -> SquareMatrixQ.require(LeviCivitaTensor.of(3)));
   }
 }

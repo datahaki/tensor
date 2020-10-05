@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CoshTest extends TestCase {
@@ -37,20 +38,10 @@ public class CoshTest extends TestCase {
   }
 
   public void testQuantityFail() {
-    try {
-      Cosh.of(Quantity.of(1, "deg"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cosh.of(Quantity.of(1, "deg")));
   }
 
   public void testGaussScalarFail() {
-    try {
-      Cosh.of(GaussScalar.of(6, 7));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Cosh.of(GaussScalar.of(6, 7)));
   }
 }

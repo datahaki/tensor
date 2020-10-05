@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PeriodogramArrayTest extends TestCase {
@@ -26,11 +27,6 @@ public class PeriodogramArrayTest extends TestCase {
   }
 
   public void testZeroFail() {
-    try {
-      PeriodogramArray.of(Tensors.vector(0, 1, 0, -1, 0, 1, 0, -1), 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> PeriodogramArray.of(Tensors.vector(0, 1, 0, -1, 0, 1, 0, -1), 0));
   }
 }

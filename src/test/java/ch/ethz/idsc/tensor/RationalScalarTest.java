@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RationalScalarTest extends TestCase {
@@ -139,6 +140,9 @@ public class RationalScalarTest extends TestCase {
     assertFalse(Scalars.lessThan(RationalScalar.of(3, 2), RealScalar.ZERO));
     assertTrue(!Scalars.lessThan(RealScalar.ZERO, RationalScalar.of(-3, 2)));
     assertFalse(!Scalars.lessThan(RealScalar.ZERO, RationalScalar.of(3, 2)));
+    assertTrue(Scalars.lessThan(RationalScalar.of(-3, 2), RationalScalar.of(-3, 3)));
+    assertTrue(Scalars.lessThan(RationalScalar.of(3, 20), RationalScalar.of(4, 2)));
+    assertTrue(Scalars.lessThan(RationalScalar.of(-13, 20), RationalScalar.of(17, 2)));
   }
 
   public void testEquals() {
@@ -177,35 +181,15 @@ public class RationalScalarTest extends TestCase {
   }
 
   public void testDivideZeroFail() {
-    try {
-      RealScalar.ONE.divide(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RealScalar.ONE.divide(RealScalar.ZERO));
   }
 
   public void testZeroUnderFail() {
-    try {
-      RealScalar.ZERO.under(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RealScalar.ZERO.under(RealScalar.ONE));
   }
 
   public void testNullFail() {
-    try {
-      RationalScalar.of(null, BigInteger.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      RationalScalar.of(BigInteger.ONE, null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RationalScalar.of(null, BigInteger.ONE));
+    AssertFail.of(() -> RationalScalar.of(BigInteger.ONE, null));
   }
 }

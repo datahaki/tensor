@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ChopTest extends TestCase {
@@ -92,21 +93,11 @@ public class ChopTest extends TestCase {
 
   public void testCloseNaNFail() {
     Chop.below(Double.POSITIVE_INFINITY);
-    try {
-      Chop.below(Double.NaN);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Chop.below(Double.NaN));
   }
 
   public void testCloseFail() {
-    try {
-      Chop._05.isClose(Tensors.vector(1), Tensors.vector(1, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Chop._05.isClose(Tensors.vector(1), Tensors.vector(1, 1)));
   }
 
   public void testRequireCloseScalar() {

@@ -5,9 +5,9 @@ import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MatrixQTest extends TestCase {
@@ -52,43 +52,23 @@ public class MatrixQTest extends TestCase {
   }
 
   public void testAd() {
-    assertFalse(MatrixQ.of(LieAlgebras.so3()));
+    assertFalse(MatrixQ.of(Array.zeros(3, 3, 3)));
   }
 
   public void testElseThrow() {
-    try {
-      MatrixQ.require(Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixQ.require(Tensors.vector(1, 2, 3)));
   }
 
   public void testRequireNullThrow() {
-    try {
-      MatrixQ.require(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixQ.require(null));
   }
 
   public void testOfNullThrow() {
-    try {
-      MatrixQ.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixQ.of(null));
   }
 
   public void testRequireSize() {
     MatrixQ.requireSize(IdentityMatrix.of(3), 3, 3);
-    try {
-      MatrixQ.requireSize(IdentityMatrix.of(3), 3, 4);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatrixQ.requireSize(IdentityMatrix.of(3), 3, 4));
   }
 }

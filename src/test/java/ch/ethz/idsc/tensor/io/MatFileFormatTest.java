@@ -2,24 +2,15 @@
 package ch.ethz.idsc.tensor.io;
 
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MatFileFormatTest extends TestCase {
   public void testGet() {
-    try {
-      MatFileFormat.parse(new byte[] { 1, 2, 3 });
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatFileFormat.parse(new byte[] { 1, 2, 3 }));
   }
 
   public void testPut() {
-    try {
-      MatFileFormat.of(Tensors.vector(2, 3, 4));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> MatFileFormat.of(Tensors.vector(2, 3, 4)));
   }
 }

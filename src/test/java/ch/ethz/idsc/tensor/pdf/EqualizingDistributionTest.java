@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Tally;
 import ch.ethz.idsc.tensor.red.Variance;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class EqualizingDistributionTest extends TestCase {
@@ -52,47 +53,22 @@ public class EqualizingDistributionTest extends TestCase {
   }
 
   public void testNegativeFail() {
-    try {
-      EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
   }
 
   public void testZeroFail() {
-    try {
-      EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 0)));
   }
 
   public void testEmptyFail() {
-    try {
-      EqualizingDistribution.fromUnscaledPDF(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(Tensors.empty()));
   }
 
   public void testScalarFail() {
-    try {
-      EqualizingDistribution.fromUnscaledPDF(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(RealScalar.ONE));
   }
 
   public void testMatrixFail() {
-    try {
-      EqualizingDistribution.fromUnscaledPDF(HilbertMatrix.of(10));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(HilbertMatrix.of(10)));
   }
 }

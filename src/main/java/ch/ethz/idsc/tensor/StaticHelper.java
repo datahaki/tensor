@@ -7,6 +7,8 @@ import java.math.BigInteger;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.tensor.num.BinaryPower;
+import ch.ethz.idsc.tensor.num.ScalarProduct;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
@@ -14,8 +16,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ enum StaticHelper {
   ;
-  static final String OPENING_BRACKET_STRING = Character.toString(Tensor.OPENING_BRACKET);
-  static final String CLOSING_BRACKET_STRING = Character.toString(Tensor.CLOSING_BRACKET);
+  private static final String OPENING_BRACKET_STRING = Character.toString(Tensor.OPENING_BRACKET);
+  private static final String CLOSING_BRACKET_STRING = Character.toString(Tensor.CLOSING_BRACKET);
   static final Collector<CharSequence, ?, String> EMBRACE = //
       Collectors.joining(", ", OPENING_BRACKET_STRING, CLOSING_BRACKET_STRING);
   // ---
@@ -80,4 +82,12 @@ import ch.ethz.idsc.tensor.sca.Sign;
     }
     return ArcTan.FUNCTION.apply(y.divide(x));
   }
+
+  public static final Scalar[] SIGN = { //
+      RealScalar.ONE.negate(), // -1
+      RealScalar.ZERO, // 0
+      RealScalar.ONE }; // +1
+  /***************************************************/
+  static final BinaryPower<Scalar> BINARY_POWER = //
+      new BinaryPower<>(new ScalarProduct(Quaternion.ONE));
 }

@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PartitionTest extends TestCase {
@@ -49,22 +50,12 @@ public class PartitionTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      Partition.of(RealScalar.ONE, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Partition.of(RealScalar.ONE, 2));
   }
 
   public void testFailOffsetZero() {
     Tensor tensor = Tensors.vector(1, 2, 3, 4);
-    try {
-      Partition.of(tensor, 2, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Partition.of(tensor, 2, 0));
   }
 
   public void testFailOffsetNegative() {
@@ -81,17 +72,7 @@ public class PartitionTest extends TestCase {
   }
 
   public void testStreamFail() {
-    try {
-      Partition.stream(Pi.VALUE, 3, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Partition.stream(Pi.VALUE, 2, 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Partition.stream(Pi.VALUE, 3, 2));
+    AssertFail.of(() -> Partition.stream(Pi.VALUE, 2, 3));
   }
 }

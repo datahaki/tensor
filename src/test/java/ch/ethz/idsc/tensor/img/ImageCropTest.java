@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.io.Serialization;
 import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ImageCropTest extends TestCase {
@@ -49,11 +50,6 @@ public class ImageCropTest extends TestCase {
 
   public void testVectorFail() {
     TensorUnaryOperator tensorUnaryOperator = ImageCrop.color(RealScalar.ONE);
-    try {
-      tensorUnaryOperator.apply(Tensors.vector(1, 2, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.vector(1, 2, 3)));
   }
 }

@@ -4,13 +4,14 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Total;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UpperTriangularizeTest extends TestCase {
@@ -82,20 +83,10 @@ public class UpperTriangularizeTest extends TestCase {
   }
 
   public void testScalarFail() {
-    try {
-      UpperTriangularize.of(RealScalar.ONE, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UpperTriangularize.of(RealScalar.ONE, 0));
   }
 
   public void testRank3Fail() {
-    try {
-      UpperTriangularize.of(LieAlgebras.he1(), 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UpperTriangularize.of(LeviCivitaTensor.of(3), 0));
   }
 }

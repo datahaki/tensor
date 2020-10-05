@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.lie.LieAlgebras;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BasisTransformTest extends TestCase {
@@ -61,47 +62,28 @@ public class BasisTransformTest extends TestCase {
 
   public void testAd() {
     Tensor v = HilbertMatrix.of(3);
-    Tensor ad = BasisTransform.of(LieAlgebras.sl2(), 1, v);
+    Tensor _a = LeviCivitaTensor.of(3).negate();
+    Tensor ad = BasisTransform.of(_a, 1, v);
     Tensor he = BasisTransform.of(ad, 1, Inverse.of(v));
-    assertEquals(he, LieAlgebras.sl2());
+    assertEquals(he, _a);
   }
 
   public void testAdTypeFail() {
     Tensor v = HilbertMatrix.of(3);
-    try {
-      BasisTransform.of(LieAlgebras.sl2(), -1, v);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BasisTransform.of(Array.zeros(3, 3, 3), -1, v));
   }
 
   public void testAdInverseFail() {
     Tensor v = Array.zeros(3);
-    try {
-      BasisTransform.of(LieAlgebras.sl2(), 1, v);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BasisTransform.of(Array.zeros(3, 3, 3), 1, v));
   }
 
   public void testFormVectorFail() {
     int n = 3;
-    try {
-      BasisTransform.ofForm(Array.zeros(n, n, n), Array.zeros(n));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BasisTransform.ofForm(Array.zeros(n, n, n), Array.zeros(n)));
   }
 
   public void testMatrixFail() {
-    try {
-      BasisTransform.ofMatrix(IdentityMatrix.of(3), DiagonalMatrix.of(1, 1, 0));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> BasisTransform.ofMatrix(IdentityMatrix.of(3), DiagonalMatrix.of(1, 1, 0)));
   }
 }

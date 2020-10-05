@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ExponentialDistributionTest extends TestCase {
@@ -78,18 +79,8 @@ public class ExponentialDistributionTest extends TestCase {
   }
 
   public void testFailL() {
-    try {
-      ExponentialDistribution.of(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      ExponentialDistribution.of(RealScalar.of(-0.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ExponentialDistribution.of(RealScalar.ZERO));
+    AssertFail.of(() -> ExponentialDistribution.of(RealScalar.of(-0.1)));
   }
 
   public void testNextUp() {
@@ -151,12 +142,7 @@ public class ExponentialDistributionTest extends TestCase {
 
   public void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(ExponentialDistribution.of(Quantity.of(3, "")));
-    try {
-      inverseCDF.quantile(RealScalar.of(1.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   public void testQuantityPDF() {

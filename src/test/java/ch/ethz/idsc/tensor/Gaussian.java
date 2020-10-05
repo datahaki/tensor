@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * implementation for demonstration purpose */
 public class Gaussian extends AbstractScalar implements //
     MeanInterface, NInterface, VarianceInterface, Serializable {
+  private static final long serialVersionUID = -8325455686115837300L;
   /** additive zero */
   private static final Scalar ZERO = of(RealScalar.ZERO, RealScalar.ZERO);
 
@@ -45,7 +46,7 @@ public class Gaussian extends AbstractScalar implements //
     return of(RealScalar.of(mean), RealScalar.of(variance));
   }
 
-  // ---
+  /***************************************************/
   private final Scalar mean;
   private final Scalar variance; // sigma ^ 2
 
@@ -102,7 +103,6 @@ public class Gaussian extends AbstractScalar implements //
     return of(n.apply(mean), n.apply(variance));
   }
 
-  /***************************************************/
   @Override // from MeanInterface
   public Scalar mean() {
     return mean;
@@ -117,6 +117,7 @@ public class Gaussian extends AbstractScalar implements //
     return NormalDistribution.of(mean, Sqrt.FUNCTION.apply(variance));
   }
 
+  /***************************************************/
   @Override
   public int hashCode() {
     return Objects.hash(mean, variance);

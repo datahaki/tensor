@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** reference: "Circle fitting by linear and non-linear least squares", by J. D. Coope */
 public class SphereFit implements Serializable {
-  private static final Scalar TWO = RealScalar.of(2);
+  private static final long serialVersionUID = -6118287393445509581L;
 
   /** @param points encoded as matrix
    * @return optional with instance of SphereFit containing the center and radius
@@ -25,7 +25,7 @@ public class SphereFit implements Serializable {
    * @throws Exception if points is empty, or not a matrix */
   public static Optional<SphereFit> of(Tensor points) {
     Tensor A = Tensor.of(points.stream() //
-        .map(point -> point.multiply(TWO).append(RealScalar.ONE)));
+        .map(point -> point.multiply(RealScalar.TWO).append(RealScalar.ONE)));
     Tensor b = Tensor.of(points.stream().map(Norm2Squared::ofVector));
     int rows = A.length();
     int cols = Unprotect.dimension1(A);

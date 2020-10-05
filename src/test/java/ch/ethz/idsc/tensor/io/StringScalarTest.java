@@ -3,9 +3,11 @@ package ch.ethz.idsc.tensor.io;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class StringScalarTest extends TestCase {
@@ -24,7 +26,7 @@ public class StringScalarTest extends TestCase {
   }
 
   public void testEquals() {
-    assertTrue(StringScalar.of("3.14").equals(StringScalar.of("3.14")));
+    assertEquals(StringScalar.of("3.14"), StringScalar.of("3.14"));
     assertFalse(StringScalar.of("3.14").equals(null));
     assertFalse(StringScalar.of("3.14").equals(StringScalar.of("3.141")));
     assertFalse(StringScalar.of("3.14").equals(DoubleScalar.of(3.14)));
@@ -36,53 +38,22 @@ public class StringScalarTest extends TestCase {
   }
 
   public void testFailOp() {
-    try {
-      StringScalar.of("asd").reciprocal();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      StringScalar.of("asd").negate();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      StringScalar.of("asd").number();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      StringScalar.of("asd").multiply(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      StringScalar.of("asd").add(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> StringScalar.of("asd").reciprocal());
+    AssertFail.of(() -> StringScalar.of("asd").negate());
+    AssertFail.of(() -> StringScalar.of("asd").number());
+    AssertFail.of(() -> StringScalar.of("asd").multiply(RealScalar.ONE));
+    AssertFail.of(() -> StringScalar.of("asd").add(RealScalar.ONE));
   }
 
   public void testMultiplyFail() {
-    try {
-      ComplexScalar.I.multiply(StringScalar.of("asd"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ComplexScalar.I.multiply(StringScalar.of("asd")));
   }
 
   public void testFail() {
-    try {
-      StringScalar.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> StringScalar.of(null));
+  }
+
+  public void testNonExact() {
+    assertFalse(ExactScalarQ.of(StringScalar.of("abc")));
   }
 }

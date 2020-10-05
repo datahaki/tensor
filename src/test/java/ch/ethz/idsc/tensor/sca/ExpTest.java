@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.opt.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ExpTest extends TestCase {
@@ -44,21 +45,11 @@ public class ExpTest extends TestCase {
 
   public void testFailQuantity() {
     Scalar scalar = Quantity.of(2, "m");
-    try {
-      Log.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Exp.of(scalar));
   }
 
   public void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
-    try {
-      Exp.of(scalar);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Exp.of(scalar));
   }
 }
