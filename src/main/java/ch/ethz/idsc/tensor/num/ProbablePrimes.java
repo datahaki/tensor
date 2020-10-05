@@ -19,6 +19,8 @@ import java.util.Map;
   // ---
   private final Map<BigInteger, BigInteger> map = //
       new LinkedHashMap<BigInteger, BigInteger>(MAX_SIZE * 4 / 3, 0.75f, true) {
+        private static final long serialVersionUID = 485826539213596939L;
+
         @Override
         protected boolean removeEldestEntry(Map.Entry<BigInteger, BigInteger> eldest) {
           return MAX_SIZE < size();

@@ -24,6 +24,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Rationalize.html">Rationalize</a> */
 public class Rationalize implements ScalarUnaryOperator {
+  private static final long serialVersionUID = -5395386531214466407L;
+
   /** @param max positive integer
    * @return {@link ScalarUnaryOperator} that returns the closest {@link RationalScalar} to the
    * given argument, with denominator less or equals to max, and ties rounding to positive infinity.

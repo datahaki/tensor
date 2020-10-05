@@ -7,6 +7,7 @@ import java.util.Objects;
 
 /** immutable integer fraction in normal form, i.e. denominator is strictly positive */
 /* package */ final class BigFraction implements Comparable<BigFraction>, Serializable {
+  private static final long serialVersionUID = 8490275462897833358L;
   private static final String DIVIDE = "/";
 
   /** @param value

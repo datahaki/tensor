@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/LogNormalDistribution.html">LogNormalDistribution</a> */
 public class LogNormalDistribution implements ContinuousDistribution, //
     InverseCDF, MeanInterface, VarianceInterface, Serializable {
+  private static final long serialVersionUID = 6543947763516933160L;
+
   /** @param mu any real number
    * @param sigma any positive real number
    * @return instance of LogNormalDistribution

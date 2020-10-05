@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.sca.Power;
 
 /** reference implementation of {@link UnitSystem} with emphasis on simplicity */
 public class SimpleUnitSystem implements UnitSystem {
+  private static final long serialVersionUID = -3424626514767014894L;
+
   /** given properties map a unit expression to a {@link Quantity}
    * 
    * <p>Example from the built-in file "/unit/si.properties":

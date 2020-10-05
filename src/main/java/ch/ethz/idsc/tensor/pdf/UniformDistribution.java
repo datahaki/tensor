@@ -21,8 +21,11 @@ import ch.ethz.idsc.tensor.sca.Clips;
  * <a href="https://reference.wolfram.com/language/ref/UniformDistribution.html">UniformDistribution</a> */
 public class UniformDistribution extends AbstractContinuousDistribution implements //
     InverseCDF, MeanInterface, VarianceInterface, Serializable {
+  private static final long serialVersionUID = -5002466446960913352L;
   private static final Scalar _12 = RealScalar.of(12);
   private static final Distribution UNIT = new UniformDistribution(Clips.unit()) {
+    private static final long serialVersionUID = 4231423258009851607L;
+
     @Override // from AbstractContinuousDistribution
     public Scalar randomVariate(double reference) {
       return DoubleScalar.of(reference);

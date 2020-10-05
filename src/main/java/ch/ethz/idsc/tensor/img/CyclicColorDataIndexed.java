@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.sca.Mod;
 
 /** reference implementation of a {@link ColorDataIndexed} with cyclic indexing */
 public class CyclicColorDataIndexed extends BaseColorDataIndexed {
+  private static final long serialVersionUID = -4996006158646373805L;
+
   /** @param tensor with dimensions N x 4 where each row encodes {R, G, B, A}
    * @return
    * @throws Exception if tensor is empty

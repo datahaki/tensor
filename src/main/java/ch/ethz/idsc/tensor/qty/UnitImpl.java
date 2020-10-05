@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 /* package */ class UnitImpl implements Unit, Serializable {
+  private static final long serialVersionUID = -2807221907647012658L;
   /* package */ static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> COLLECTOR = //
       Collectors.toMap(Entry::getKey, entry -> entry.getValue().negate(), (e1, e2) -> null, TreeMap::new);
   // ---

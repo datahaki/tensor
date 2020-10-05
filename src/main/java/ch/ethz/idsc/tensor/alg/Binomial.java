@@ -24,6 +24,8 @@ import ch.ethz.idsc.tensor.sca.Gamma;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Binomial.html">Binomial</a> */
 public class Binomial implements Serializable {
+  private static final long serialVersionUID = 3281652794516766951L;
+
   /** @param n non-negative integer
    * @return binomial function that computes n choose k */
   public static Binomial of(Scalar n) {
@@ -73,6 +75,8 @@ public class Binomial implements Serializable {
     private static final int MAX_SIZE = 384;
     private final Map<Integer, Binomial> map = //
         new LinkedHashMap<Integer, Binomial>(MAX_SIZE * 4 / 3, 0.75f, true) {
+          private static final long serialVersionUID = 9104259948493924689L;
+
           @Override
           protected boolean removeEldestEntry(Map.Entry<Integer, Binomial> eldest) {
             return MAX_SIZE < size();

@@ -26,6 +26,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * implementation for demonstration purpose */
 public class Gaussian extends AbstractScalar implements //
     MeanInterface, NInterface, VarianceInterface, Serializable {
+  private static final long serialVersionUID = -8325455686115837300L;
   /** additive zero */
   private static final Scalar ZERO = of(RealScalar.ZERO, RealScalar.ZERO);
 

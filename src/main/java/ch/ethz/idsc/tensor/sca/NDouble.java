@@ -6,6 +6,7 @@ import java.util.Objects;
 import ch.ethz.idsc.tensor.Scalar;
 
 /* package */ class NDouble extends N {
+  private static final long serialVersionUID = 41595046549508496L;
   static final N INSTANCE = new NDouble();
 
   private NDouble() {

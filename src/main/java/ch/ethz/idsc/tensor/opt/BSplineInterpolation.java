@@ -16,6 +16,8 @@ import ch.ethz.idsc.tensor.mat.LinearSolve;
 /** BSplineInterpolation defines a parametric curve that interpolates
  * the given control points at integer values. */
 public class BSplineInterpolation extends AbstractInterpolation implements Serializable {
+  private static final long serialVersionUID = -5285476231580435365L;
+
   /** @param degree of b-spline basis functions: 1 for linear, 2 for quadratic, etc.
    * @param control points with at least one element
    * @return */

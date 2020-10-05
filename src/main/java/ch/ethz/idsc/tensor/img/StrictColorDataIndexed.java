@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * color indices are required to be in the range 0, 1, ..., tensor.length() - 1 */
 public class StrictColorDataIndexed extends BaseColorDataIndexed {
+  private static final long serialVersionUID = 6938746143828993729L;
+
   /** Hint: tensor may be empty
    * 
    * @param tensor with dimensions N x 4 where each row encodes {R, G, B, A}

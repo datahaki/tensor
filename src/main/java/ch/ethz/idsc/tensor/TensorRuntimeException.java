@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.alg.Numel;
 /** Exception thrown when a problem is encountered related to the types
  * {@link Tensor}, and {@link Scalar}. */
 public class TensorRuntimeException extends RuntimeException {
+  private static final long serialVersionUID = 8612741557842317758L;
   private static final int MAX_NUMEL = 10;
   private static final int MAX_LENGTH = 32;
 

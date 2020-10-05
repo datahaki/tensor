@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class NdEntry<V> implements Serializable {
+  private static final long serialVersionUID = 3001483384360358712L;
   private final NdPair<V> ndPair;
   private final Scalar distance;
 

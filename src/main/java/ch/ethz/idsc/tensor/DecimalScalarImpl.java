@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 
 /* package */ class DecimalScalarImpl extends AbstractRealScalar implements DecimalScalar, Serializable {
+  private static final long serialVersionUID = -8505786185052895466L;
   private static final int DEFAULT_CONTEXT = 34;
   private static final Scalar DECIMAL_ZERO = DecimalScalar.of(BigDecimal.ZERO);
   /** BigDecimal precision of a double */

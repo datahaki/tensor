@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalars;
 
 /** instantiated by {@link Scalars#binaryPower(Scalar)} */
 public class ScalarProduct implements GroupInterface<Scalar>, Serializable {
+  private static final long serialVersionUID = 2474105585311096988L;
   private final Scalar one;
 
   /** @param one assumed to be non-null */

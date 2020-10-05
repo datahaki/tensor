@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.ScalarArray;
 
 /* package */ abstract class HungarianAlgorithmGraph implements BipartiteMatching, Serializable {
+  private static final long serialVersionUID = -2433658719393533745L;
   private final int rows;
   private final int cols;
   protected final Scalar[][] matrix;

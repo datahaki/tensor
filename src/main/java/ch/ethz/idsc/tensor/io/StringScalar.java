@@ -27,6 +27,8 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * Whether this convention will adopted in the tensor library at some point
  * in the future is open for discussion. */
 public class StringScalar extends AbstractScalar implements Comparable<Scalar>, Serializable {
+  private static final long serialVersionUID = 7523012181787746760L;
+
   /** @param string
    * @return new instance of {@link StringScalar} representing string
    * @throws Exception if argument is null */

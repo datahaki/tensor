@@ -11,6 +11,8 @@ import ch.ethz.idsc.tensor.red.Norm;
 /** @throws Exception if input is not a vector, or is empty
  * @throws Exception if vector contains Infinity, or NaN */
 public class NormalizeUnlessZero extends Normalize {
+  private static final long serialVersionUID = 9048517279475763855L;
+
   /** @param norm
    * @return operator that normalizes vectors using given norm unless given vector has length 0 */
   public static TensorUnaryOperator with(Norm norm) {

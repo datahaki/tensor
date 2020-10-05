@@ -19,6 +19,8 @@ import ch.ethz.idsc.tensor.sca.Power;
  * 
  * @see BinomialRandomVariate */
 public class BinomialDistribution extends EvaluatedDiscreteDistribution implements VarianceInterface {
+  private static final long serialVersionUID = -1987644165670884763L;
+
   /** Example:
    * PDF[BinomialDistribution[10, 1/3], 1] == 5120/59049
    * 

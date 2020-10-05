@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class HueColorData implements ColorDataGradient {
+  private static final long serialVersionUID = 2355765520922880294L;
   public static final ColorDataGradient DEFAULT = new HueColorData(1.0);
   /***************************************************/
   private final double opacity;

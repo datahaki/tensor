@@ -7,6 +7,7 @@ import java.util.Objects;
 import ch.ethz.idsc.tensor.Scalar;
 
 /* package */ class NDecimal extends N {
+  private static final long serialVersionUID = -9144500095628716632L;
   private final MathContext mathContext;
 
   public NDecimal(MathContext mathContext) {

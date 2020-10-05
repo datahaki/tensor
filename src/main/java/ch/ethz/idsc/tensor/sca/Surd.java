@@ -7,6 +7,8 @@ import ch.ethz.idsc.tensor.Scalar;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Surd.html">Surd</a> */
 public class Surd implements ScalarUnaryOperator {
+  private static final long serialVersionUID = 1788229470140366836L;
+
   /** @param exponent non-zero
    * @return
    * @throws Exception if given exponent is zero */

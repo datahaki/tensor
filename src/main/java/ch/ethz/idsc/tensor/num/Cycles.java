@@ -35,6 +35,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Cycles.html">Cycles</a> */
 public class Cycles implements Serializable {
+  private static final long serialVersionUID = 4308121452267187557L;
   private static final Cycles IDENTITY = new Cycles(Collections.emptyNavigableMap());
 
   /** Example:

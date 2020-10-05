@@ -16,6 +16,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * 
  * @see DirichletDistribution */
 public class BetaDistribution implements Distribution, MeanInterface, PDF, VarianceInterface, Serializable {
+  private static final long serialVersionUID = -80998858552842800L;
+
   /** @param a1 positive
    * @param a2 positive
    * @return */

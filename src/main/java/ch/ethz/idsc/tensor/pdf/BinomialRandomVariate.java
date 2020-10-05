@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.Scalar;
 // implementation by Claudio Ruch
 /* package */ class BinomialRandomVariate implements Distribution, //
     MeanInterface, RandomVariateInterface, VarianceInterface, Serializable {
+  private static final long serialVersionUID = 2932890474442286352L;
   private final int n;
   private final Scalar p;
 

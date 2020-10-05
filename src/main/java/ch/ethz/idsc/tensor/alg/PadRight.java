@@ -18,6 +18,8 @@ import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/PadRight.html">PadRight</a> */
 public class PadRight implements TensorUnaryOperator {
+  private static final long serialVersionUID = 3282960236425766840L;
+
   /** @param element
    * @param dimensions non-empty
    * @return */

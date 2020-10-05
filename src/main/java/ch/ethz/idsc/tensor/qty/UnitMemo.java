@@ -18,6 +18,8 @@ import ch.ethz.idsc.tensor.Scalars;
 
   /* package for testing */ static final int MAX_SIZE = 768;
   private final Map<String, Unit> map = new LinkedHashMap<String, Unit>(MAX_SIZE * 4 / 3, 0.75f, true) {
+    private static final long serialVersionUID = 1215071882604314833L;
+
     @Override
     protected boolean removeEldestEntry(Map.Entry<String, Unit> eldest) {
       return MAX_SIZE < size();

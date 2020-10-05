@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.sca.NInterface;
  * zero().reciprocal() throws a {@link ArithmeticException}. */
 public final class RationalScalar extends AbstractRealScalar implements //
     ExactScalarQInterface, NInterface, Serializable {
+  private static final long serialVersionUID = 3378367439547596689L;
   /** rational number {@code 1/2} with decimal value {@code 0.5} */
   public static final Scalar HALF = of(1, 2);
 

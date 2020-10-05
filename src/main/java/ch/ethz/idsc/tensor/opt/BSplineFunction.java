@@ -30,6 +30,8 @@ import ch.ethz.idsc.tensor.sca.Floor;
  * of x where the pieces of polynomial meet are known as knots, denoted ..., t0, t1, t2, ...
  * and sorted into non-decreasing order. */
 public abstract class BSplineFunction implements ScalarTensorFunction {
+  private static final long serialVersionUID = -7132034498606709722L;
+
   /** the control point are stored by reference, i.e. modifications to
    * given tensor alter the behavior of this BSplineFunction instance.
    * 

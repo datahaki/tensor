@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /* package */ class SpecialContent implements Serializable {
+  private static final long serialVersionUID = 481724790156221060L;
   Tensor handled = Tensors.vector(99, 100);
   Tensor value;
 

@@ -17,8 +17,9 @@ import ch.ethz.idsc.tensor.sca.Floor;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/DiscreteUniformDistribution.html">DiscreteUniformDistribution</a> */
-public class DiscreteUniformDistribution extends AbstractDiscreteDistribution implements //
-    CDF, VarianceInterface, Serializable {
+public class DiscreteUniformDistribution extends AbstractDiscreteDistribution implements CDF, //
+    VarianceInterface, Serializable {
+  private static final long serialVersionUID = -5573944194426986023L;
   private static final Scalar _12 = RealScalar.of(12);
 
   /** Example:

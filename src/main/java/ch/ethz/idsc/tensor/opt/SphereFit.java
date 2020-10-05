@@ -17,6 +17,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** reference: "Circle fitting by linear and non-linear least squares", by J. D. Coope */
 public class SphereFit implements Serializable {
+  private static final long serialVersionUID = -6118287393445509581L;
+
   /** @param points encoded as matrix
    * @return optional with instance of SphereFit containing the center and radius
    * of the fitted sphere, or empty if points are numerically co-linear

@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Projection.html">Projection</a> */
 public class Projection implements TensorUnaryOperator {
+  private static final long serialVersionUID = 750482198290554076L;
+
   /** @param vector
    * @return projection operator to given vector
    * @throws Exception if given vector is not a tensor of rank 1 */

@@ -25,6 +25,8 @@ import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
  * </ul>
  * rather use {@link Norm} */
 public class VectorNorm implements VectorNormInterface, Serializable {
+  private static final long serialVersionUID = -2668949364257998603L;
+
   /** Hint: for enhanced precision, use p as instance of {@link RationalScalar} if possible
    * 
    * @param p exponent greater or equals 1
