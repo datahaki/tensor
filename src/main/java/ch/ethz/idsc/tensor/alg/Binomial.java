@@ -2,7 +2,6 @@
 package ch.ethz.idsc.tensor.alg;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.OptionalInt;
@@ -14,6 +13,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.qty.LruCache;
 import ch.ethz.idsc.tensor.sca.Gamma;
 
 /** binomial coefficient implemented for integer input
@@ -73,15 +73,7 @@ public class Binomial implements Serializable {
     INSTANCE;
 
     private static final int MAX_SIZE = 384;
-    private final Map<Integer, Binomial> map = //
-        new LinkedHashMap<Integer, Binomial>(MAX_SIZE * 4 / 3, 0.75f, true) {
-          private static final long serialVersionUID = 9104259948493924689L;
-
-          @Override
-          protected boolean removeEldestEntry(Map.Entry<Integer, Binomial> eldest) {
-            return MAX_SIZE < size();
-          }
-        };
+    private final Map<Integer, Binomial> map = new LruCache<>(MAX_SIZE);
 
     public synchronized Binomial lookup(int n) {
       Binomial binomial = map.get(n);

@@ -26,7 +26,13 @@ import ch.ethz.idsc.tensor.alg.Array;
  * @see HodgeDual */
 public enum LeviCivitaTensor {
   ;
-  private static final Tensor[] CACHE = { build(0), build(1), build(2), build(3), build(4) };
+  // number of elements are indicated
+  private static final Tensor[] CACHE = { //
+      build(0), // 1
+      build(1), // 1
+      build(2), // 4
+      build(3), // 27
+      build(4) }; // 256
 
   /** @param d non-negative
    * @return tensor of rank d and dimensions d x ... x d

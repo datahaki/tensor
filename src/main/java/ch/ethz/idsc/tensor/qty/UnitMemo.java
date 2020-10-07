@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.Objects;
@@ -17,14 +16,7 @@ import ch.ethz.idsc.tensor.Scalars;
   INSTANCE;
 
   /* package for testing */ static final int MAX_SIZE = 768;
-  private final Map<String, Unit> map = new LinkedHashMap<String, Unit>(MAX_SIZE * 4 / 3, 0.75f, true) {
-    private static final long serialVersionUID = 1215071882604314833L;
-
-    @Override
-    protected boolean removeEldestEntry(Map.Entry<String, Unit> eldest) {
-      return MAX_SIZE < size();
-    }
-  };
+  private final Map<String, Unit> map = new LruCache<>(MAX_SIZE);
 
   /** @param string, for instance "A*kg^-1*s^2"
    * @return unit

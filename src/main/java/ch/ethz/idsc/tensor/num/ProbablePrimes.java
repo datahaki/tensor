@@ -2,8 +2,9 @@
 package ch.ethz.idsc.tensor.num;
 
 import java.math.BigInteger;
-import java.util.LinkedHashMap;
 import java.util.Map;
+
+import ch.ethz.idsc.tensor.qty.LruCache;
 
 /* package */ enum ProbablePrimes {
   INSTANCE;
@@ -17,15 +18,7 @@ import java.util.Map;
   private static final int CERTAINTY = 20;
   private static final int MAX_SIZE = 768;
   // ---
-  private final Map<BigInteger, BigInteger> map = //
-      new LinkedHashMap<BigInteger, BigInteger>(MAX_SIZE * 4 / 3, 0.75f, true) {
-        private static final long serialVersionUID = 485826539213596939L;
-
-        @Override
-        protected boolean removeEldestEntry(Map.Entry<BigInteger, BigInteger> eldest) {
-          return MAX_SIZE < size();
-        }
-      };
+  private final Map<BigInteger, BigInteger> map = new LruCache<>(MAX_SIZE);
 
   /** @param bigInteger
    * @return bigInteger

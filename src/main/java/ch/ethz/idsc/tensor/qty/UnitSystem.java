@@ -28,9 +28,14 @@ public interface UnitSystem extends ScalarUnaryOperator {
   }
 
   /***************************************************/
-  /** @return unmodifiable view on map that defines the unit system */
+  /** @return unmodifiable view on map that defines conversions in the unit system, keys are atomic */
   Map<String, Scalar> map();
 
-  /** @return unmodifiable view on the set of all units */
+  /** Example: in the SI unit system defined by the tensor library the units
+   * A, cd, kg, m, mod, s
+   * are included in the set provided by units(), but are not keys in {@link #map()}
+   * 
+   * @return unmodifiable view on the set of all atomic units known by the unit system
+   * including those that are not further convertible */
   Set<String> units();
 }
