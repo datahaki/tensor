@@ -9,15 +9,15 @@ import junit.framework.TestCase;
 
 public class UnitMemoTest extends TestCase {
   private static void _confirmFail(String string) {
-    AssertFail.of(() -> UnitMemo.INSTANCE.lookup(string));
+    AssertFail.of(() -> UnitMemo.CACHE.retrieve(string));
   }
 
   public void testLookup() {
-    UnitMemo.INSTANCE.lookup("A*kg^-1*s^2");
-    UnitMemo.INSTANCE.lookup("HaqiuytasdMAM");
-    UnitMemo.INSTANCE.lookup("HaqiuytasdMAM*ASsdlfkjhKJG");
-    UnitMemo.INSTANCE.lookup("HaqiuytasdMAM*ASsdlfkjhKJG^3");
-    assertEquals(UnitMemo.INSTANCE.lookup(""), Unit.ONE);
+    UnitMemo.CACHE.retrieve("A*kg^-1*s^2");
+    UnitMemo.CACHE.retrieve("HaqiuytasdMAM");
+    UnitMemo.CACHE.retrieve("HaqiuytasdMAM*ASsdlfkjhKJG");
+    UnitMemo.CACHE.retrieve("HaqiuytasdMAM*ASsdlfkjhKJG^3");
+    assertEquals(UnitMemo.CACHE.retrieve(""), Unit.ONE);
   }
 
   public void testFail() {
@@ -33,17 +33,17 @@ public class UnitMemoTest extends TestCase {
   }
 
   public void testDubious() {
-    assertEquals(UnitMemo.INSTANCE.lookup("*a"), UnitMemo.INSTANCE.lookup("a"));
-    assertEquals(UnitMemo.INSTANCE.lookup("a*"), UnitMemo.INSTANCE.lookup("a"));
-    assertEquals(UnitMemo.INSTANCE.lookup("a***"), UnitMemo.INSTANCE.lookup("a"));
-    assertEquals(UnitMemo.INSTANCE.lookup("**a***b**"), UnitMemo.INSTANCE.lookup("a*b"));
+    assertEquals(UnitMemo.CACHE.retrieve("*a"), UnitMemo.CACHE.retrieve("a"));
+    assertEquals(UnitMemo.CACHE.retrieve("a*"), UnitMemo.CACHE.retrieve("a"));
+    assertEquals(UnitMemo.CACHE.retrieve("a***"), UnitMemo.CACHE.retrieve("a"));
+    assertEquals(UnitMemo.CACHE.retrieve("**a***b**"), UnitMemo.CACHE.retrieve("a*b"));
   }
 
   public void testUnderscore() {
-    Unit unit = UnitMemo.INSTANCE.lookup("V_AC");
-    assertTrue(unit == UnitMemo.INSTANCE.lookup("V_AC"));
-    assertTrue(UnitMemo.INSTANCE.lookup("____").equals(UnitMemo.INSTANCE.lookup("____")));
-    assertFalse(UnitMemo.INSTANCE.lookup("___").equals(UnitMemo.INSTANCE.lookup("____")));
+    Unit unit = UnitMemo.CACHE.retrieve("V_AC");
+    assertTrue(unit == UnitMemo.CACHE.retrieve("V_AC"));
+    assertTrue(UnitMemo.CACHE.retrieve("____").equals(UnitMemo.CACHE.retrieve("____")));
+    assertFalse(UnitMemo.CACHE.retrieve("___").equals(UnitMemo.CACHE.retrieve("____")));
   }
 
   public void testMap() {
@@ -57,7 +57,7 @@ public class UnitMemoTest extends TestCase {
         }
       }
     });
-    int map_size = UnitMemo.INSTANCE.map_size();
+    int map_size = UnitMemo.CACHE.size();
     assertTrue(map_size <= UnitMemo.MAX_SIZE);
   }
 

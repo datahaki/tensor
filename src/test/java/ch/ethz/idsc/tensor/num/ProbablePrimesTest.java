@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 
 public class ProbablePrimesTest extends TestCase {
   public void testPrimeFail() {
-    AssertFail.of(() -> ProbablePrimes.INSTANCE.require(BigInteger.TEN));
+    AssertFail.of(() -> ProbablePrimes.CACHE.retrieve(BigInteger.TEN));
   }
 
   public void testPackageVisibility() {

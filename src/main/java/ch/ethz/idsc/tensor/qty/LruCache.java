@@ -8,7 +8,7 @@ import java.util.Map;
  * 
  * Remark: implementation is not thread safe!
  * For multi-threaded access wrap lru cache into synchronized structure */
-public class LruCache<K, V> extends LinkedHashMap<K, V> {
+/* package */ class LruCache<K, V> extends LinkedHashMap<K, V> {
   private final int maxSize;
 
   /** @param maxSize

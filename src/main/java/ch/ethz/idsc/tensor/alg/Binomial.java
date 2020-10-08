@@ -2,8 +2,6 @@
 package ch.ethz.idsc.tensor.alg;
 
 import java.io.Serializable;
-import java.util.Map;
-import java.util.Objects;
 import java.util.OptionalInt;
 
 import ch.ethz.idsc.tensor.Integers;
@@ -13,7 +11,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.qty.LruCache;
+import ch.ethz.idsc.tensor.qty.Cache;
 import ch.ethz.idsc.tensor.sca.Gamma;
 
 /** binomial coefficient implemented for integer input
@@ -25,6 +23,8 @@ import ch.ethz.idsc.tensor.sca.Gamma;
  * <a href="https://reference.wolfram.com/language/ref/Binomial.html">Binomial</a> */
 public class Binomial implements Serializable {
   private static final long serialVersionUID = 3281652794516766951L;
+  private static final int MAX_SIZE = 384;
+  private static final Cache<Integer, Binomial> CACHE = new Cache<>(Binomial::new, MAX_SIZE);
 
   /** @param n non-negative integer
    * @return binomial function that computes n choose k */
@@ -35,7 +35,7 @@ public class Binomial implements Serializable {
   /** @param n non-negative integer
    * @return binomial function that computes n choose k */
   public static Binomial of(int n) {
-    return BinomialMemo.INSTANCE.lookup(Integers.requirePositiveOrZero(n));
+    return CACHE.retrieve(Integers.requirePositiveOrZero(n));
   }
 
   /** <code>Mathematica::Binomial[n, m]</code>
@@ -65,22 +65,7 @@ public class Binomial implements Serializable {
       // LONGTERM this case is defined in Mathematica
       throw new IllegalArgumentException(String.format("Binomial[%d,%d]", n, m));
     }
-    return BinomialMemo.INSTANCE.lookup(n).over(m);
-  }
-
-  /***************************************************/
-  private static enum BinomialMemo {
-    INSTANCE;
-
-    private static final int MAX_SIZE = 384;
-    private final Map<Integer, Binomial> map = new LruCache<>(MAX_SIZE);
-
-    public synchronized Binomial lookup(int n) {
-      Binomial binomial = map.get(n);
-      if (Objects.isNull(binomial))
-        map.put(n, binomial = new Binomial(n));
-      return binomial;
-    }
+    return CACHE.retrieve(n).over(m);
   }
 
   /***************************************************/

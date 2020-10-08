@@ -1,9 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
-import java.util.Map;
 import java.util.NavigableMap;
-import java.util.Objects;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
@@ -13,26 +11,13 @@ import ch.ethz.idsc.tensor.Scalars;
 
 /** associates strings with instances of unit */
 /* package */ enum UnitMemo {
-  INSTANCE;
-
+  ;
   /* package for testing */ static final int MAX_SIZE = 768;
-  private final Map<String, Unit> map = new LruCache<>(MAX_SIZE);
+  public static final Cache<String, Unit> CACHE = new Cache<>(UnitMemo::create, MAX_SIZE);
 
   /** @param string, for instance "A*kg^-1*s^2"
    * @return unit
    * @throws Exception if string is not a valid expression for a unit */
-  public Unit lookup(String string) {
-    Unit unit = map.get(string);
-    if (Objects.isNull(unit)) {
-      unit = create(string);
-      synchronized (map) {
-        map.put(string, unit);
-      }
-    }
-    return unit;
-  }
-
-  // helper function
   private static Unit create(String string) {
     NavigableMap<String, Scalar> map = new TreeMap<>();
     StringTokenizer stringTokenizer = new StringTokenizer(string, Unit.JOIN_DELIMITER);
@@ -62,9 +47,5 @@ import ch.ethz.idsc.tensor.Scalars;
         map.put(key, exponent);
     }
     return new UnitImpl(map);
-  }
-
-  /* package for testing */ int map_size() {
-    return map.size();
   }
 }
