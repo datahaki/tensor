@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.opt.Pi;

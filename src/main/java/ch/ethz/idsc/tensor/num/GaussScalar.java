@@ -27,7 +27,7 @@ public class GaussScalar extends AbstractScalar implements //
    * @return value in finite field with prime number of elements
    * @throws Exception if given prime is not a prime number */
   public static GaussScalar of(BigInteger value, BigInteger prime) {
-    return in(value, ProbablePrimes.CACHE.retrieve(prime));
+    return in(value, ProbablePrimes.of(prime));
   }
 
   /** @param value

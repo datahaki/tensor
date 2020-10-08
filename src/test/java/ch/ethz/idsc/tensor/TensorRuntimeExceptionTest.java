@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.opt.Pi;
 import junit.framework.TestCase;
 

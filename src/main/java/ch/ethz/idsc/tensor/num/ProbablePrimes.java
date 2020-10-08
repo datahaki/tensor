@@ -2,8 +2,9 @@
 package ch.ethz.idsc.tensor.num;
 
 import java.math.BigInteger;
+import java.util.function.Function;
 
-import ch.ethz.idsc.tensor.qty.Cache;
+import ch.ethz.idsc.tensor.ext.Cache;
 
 /* package */ enum ProbablePrimes {
   ;
@@ -15,7 +16,11 @@ import ch.ethz.idsc.tensor.qty.Cache;
    * this method is proportional to the value of this parameter." */
   private static final int CERTAINTY = 20;
   private static final int MAX_SIZE = 768;
-  public static final Cache<BigInteger, BigInteger> CACHE = new Cache<>(ProbablePrimes::require, MAX_SIZE);
+  private static final Function<BigInteger, BigInteger> CACHE = Cache.of(ProbablePrimes::require, MAX_SIZE);
+
+  public static BigInteger of(BigInteger bigInteger) {
+    return CACHE.apply(bigInteger);
+  }
 
   /** @param bigInteger
    * @return bigInteger

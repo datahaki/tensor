@@ -4,16 +4,22 @@ package ch.ethz.idsc.tensor.qty;
 import java.util.NavigableMap;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.ext.Cache;
 
 /** associates strings with instances of unit */
 /* package */ enum UnitMemo {
   ;
   /* package for testing */ static final int MAX_SIZE = 768;
-  public static final Cache<String, Unit> CACHE = new Cache<>(UnitMemo::create, MAX_SIZE);
+  /* package for testing */ static final Function<String, Unit> CACHE = Cache.of(UnitMemo::create, MAX_SIZE);
+
+  public static Unit of(String string) {
+    return CACHE.apply(string);
+  }
 
   /** @param string, for instance "A*kg^-1*s^2"
    * @return unit

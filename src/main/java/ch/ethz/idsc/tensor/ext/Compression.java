@@ -1,6 +1,6 @@
 // code adapted from 
 // http://qupera.blogspot.ch/2013/02/howto-compress-and-uncompress-java-byte.html
-package ch.ethz.idsc.tensor.io;
+package ch.ethz.idsc.tensor.ext;
 
 import java.io.ByteArrayOutputStream;
 import java.util.zip.DataFormatException;

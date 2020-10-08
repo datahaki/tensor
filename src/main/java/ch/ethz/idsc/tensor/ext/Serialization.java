@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.io;
+package ch.ethz.idsc.tensor.ext;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -8,9 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-/** @see ObjectFormat
- * @see Export
- * @see Import */
+/** Used in: Export, Import, ObjectFormat */
 public enum Serialization {
   ;
   /** encodes {@link Serializable} input {@link Object} as array of bytes.

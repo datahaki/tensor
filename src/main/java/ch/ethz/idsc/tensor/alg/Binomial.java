@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.alg;
 
 import java.io.Serializable;
 import java.util.OptionalInt;
+import java.util.function.Function;
 
 import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -11,7 +12,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.qty.Cache;
+import ch.ethz.idsc.tensor.ext.Cache;
 import ch.ethz.idsc.tensor.sca.Gamma;
 
 /** binomial coefficient implemented for integer input
@@ -24,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Gamma;
 public class Binomial implements Serializable {
   private static final long serialVersionUID = 3281652794516766951L;
   private static final int MAX_SIZE = 384;
-  private static final Cache<Integer, Binomial> CACHE = new Cache<>(Binomial::new, MAX_SIZE);
+  private static final Function<Integer, Binomial> CACHE = Cache.of(Binomial::new, MAX_SIZE);
 
   /** @param n non-negative integer
    * @return binomial function that computes n choose k */
@@ -35,7 +36,7 @@ public class Binomial implements Serializable {
   /** @param n non-negative integer
    * @return binomial function that computes n choose k */
   public static Binomial of(int n) {
-    return CACHE.retrieve(Integers.requirePositiveOrZero(n));
+    return CACHE.apply(Integers.requirePositiveOrZero(n));
   }
 
   /** <code>Mathematica::Binomial[n, m]</code>
@@ -65,7 +66,7 @@ public class Binomial implements Serializable {
       // LONGTERM this case is defined in Mathematica
       throw new IllegalArgumentException(String.format("Binomial[%d,%d]", n, m));
     }
-    return CACHE.retrieve(n).over(m);
+    return CACHE.apply(n).over(m);
   }
 
   /***************************************************/

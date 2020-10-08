@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.zip.DataFormatException;
 
+import ch.ethz.idsc.tensor.ext.Compression;
+import ch.ethz.idsc.tensor.ext.Serialization;
+
 /** ObjectFormat is the serialization of objects in deflated form.
  * 
  * <p>The motivation to compress the byte arrays stems from the fact that

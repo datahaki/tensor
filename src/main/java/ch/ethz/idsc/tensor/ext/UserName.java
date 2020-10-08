@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.io;
+package ch.ethz.idsc.tensor.ext;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/$UserName.html">$UserName</a> */

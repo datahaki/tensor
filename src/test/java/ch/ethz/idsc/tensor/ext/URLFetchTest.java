@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.io;
+package ch.ethz.idsc.tensor.ext;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

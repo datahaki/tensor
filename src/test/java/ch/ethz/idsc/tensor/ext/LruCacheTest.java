@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.qty;
+package ch.ethz.idsc.tensor.ext;
 
 import java.util.Arrays;
 import java.util.Map;

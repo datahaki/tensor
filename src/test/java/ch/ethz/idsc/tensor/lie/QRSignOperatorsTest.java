@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor.lie;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import junit.framework.TestCase;
 
 public class QRSignOperatorsTest extends TestCase {
