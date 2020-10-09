@@ -1,10 +1,9 @@
 // code by jph
-package ch.ethz.idsc.tensor.io;
+package ch.ethz.idsc.tensor.ext;
 
 import java.io.File;
 import java.io.IOException;
 
-import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import junit.framework.TestCase;
 
 public class DeleteDirectoryTest extends TestCase {

@@ -12,18 +12,18 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.ext.Cache;
 
 /** associates strings with instances of unit */
-/* package */ enum UnitMemo {
+/* package */ enum UnitParser {
   ;
-  /* package for testing */ static final int MAX_SIZE = 768;
-  /* package for testing */ static final Function<String, Unit> CACHE = Cache.of(UnitMemo::create, MAX_SIZE);
-
-  public static Unit of(String string) {
-    return CACHE.apply(string);
-  }
+  private static final int MAX_SIZE = 768;
+  private static final Function<String, Unit> CACHE = Cache.of(UnitParser::create, MAX_SIZE);
 
   /** @param string, for instance "A*kg^-1*s^2"
    * @return unit
    * @throws Exception if string is not a valid expression for a unit */
+  public static Unit of(String string) {
+    return CACHE.apply(string);
+  }
+
   private static Unit create(String string) {
     NavigableMap<String, Scalar> map = new TreeMap<>();
     StringTokenizer stringTokenizer = new StringTokenizer(string, Unit.JOIN_DELIMITER);

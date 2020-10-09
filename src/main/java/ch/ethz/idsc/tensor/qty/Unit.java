@@ -18,7 +18,7 @@ public interface Unit {
   /** @param string, for instance "m*s^-2"
    * @return */
   static Unit of(String string) {
-    return UnitMemo.of(string);
+    return UnitParser.of(string);
   }
 
   /***************************************************/
