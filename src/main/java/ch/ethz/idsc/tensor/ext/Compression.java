@@ -11,7 +11,7 @@ import java.util.zip.Inflater;
  * {@link Deflater} and {@link Inflater} */
 public enum Compression {
   ;
-  private static final int SIZE = 4096;
+  private static final int BUFFER_SIZE = 8192;
 
   /** compression
    * 
@@ -22,7 +22,7 @@ public enum Compression {
     deflater.setInput(data);
     deflater.finish();
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    byte[] buffer = new byte[SIZE];
+    byte[] buffer = new byte[BUFFER_SIZE];
     while (!deflater.finished()) {
       int length = deflater.deflate(buffer);
       byteArrayOutputStream.write(buffer, 0, length);
@@ -45,7 +45,7 @@ public enum Compression {
     Inflater inflater = new Inflater();
     inflater.setInput(data, off, len);
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    byte[] buffer = new byte[SIZE];
+    byte[] buffer = new byte[BUFFER_SIZE];
     while (true) {
       int length = inflater.inflate(buffer);
       byteArrayOutputStream.write(buffer, 0, length);

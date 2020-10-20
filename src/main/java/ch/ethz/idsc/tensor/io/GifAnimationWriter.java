@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.AnimatedGifWriter;
 
 /** Example:
  * <pre>

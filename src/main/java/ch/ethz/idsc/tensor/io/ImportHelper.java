@@ -10,6 +10,8 @@ import java.util.zip.GZIPInputStream;
 import javax.imageio.ImageIO;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.ObjectFormat;
+import ch.ethz.idsc.tensor.ext.ReadLine;
 
 /** functionality used in {@link Import} and {@link ResourceData} */
 /* package */ enum ImportHelper {

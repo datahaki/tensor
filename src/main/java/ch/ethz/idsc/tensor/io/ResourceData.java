@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.ReadLine;
 
 /** access to resource data in jar files, for instance,
  * the content included in the tensor library.

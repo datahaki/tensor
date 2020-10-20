@@ -19,6 +19,8 @@ import java.net.URL;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/URLFetch.html">URLFetch</a> */
 public class URLFetch implements AutoCloseable {
+  private static final int BUFFER_SIZE = 8192;
+  // ---
   private final HttpURLConnection httpURLConnection;
   private final String contentType;
   private final int length;
@@ -62,7 +64,7 @@ public class URLFetch implements AutoCloseable {
   public void download(File file) throws IOException {
     try (InputStream inputStream = httpURLConnection.getInputStream()) {
       try (OutputStream outputStream = new FileOutputStream(file)) {
-        byte[] buffer = new byte[4096]; // buffer size
+        byte[] buffer = new byte[BUFFER_SIZE];
         int bytesRead;
         while ((bytesRead = inputStream.read(buffer)) != -1)
           outputStream.write(buffer, 0, bytesRead);

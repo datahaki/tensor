@@ -26,7 +26,7 @@ public class Cache<K, V> implements Function<K, V>, Serializable {
   public static <K, V> Function<K, V> of(Function<K, V> function, int maxSize) {
     if (function instanceof Cache)
       throw new IllegalArgumentException();
-    return new Cache<>(function, maxSize);
+    return new Cache<>(Objects.requireNonNull(function), maxSize);
   }
 
   /***************************************************/
@@ -34,7 +34,7 @@ public class Cache<K, V> implements Function<K, V>, Serializable {
   private final Map<K, V> map;
 
   private Cache(Function<K, V> function, int maxSize) {
-    this.function = Objects.requireNonNull(function);
+    this.function = function;
     map = new LruCache<>(maxSize);
   }
 

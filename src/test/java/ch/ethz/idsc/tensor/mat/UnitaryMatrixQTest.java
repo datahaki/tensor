@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.fft.FourierMatrix;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;

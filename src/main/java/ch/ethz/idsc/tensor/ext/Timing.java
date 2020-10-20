@@ -49,15 +49,15 @@ public class Timing {
     tic = System.nanoTime();
   }
 
-  /** stop timing
+  /** stop timing.
+   * 
+   * <p>function does not return anything.
+   * use {@link #seconds()} or {@link #nanoSeconds()} to obtain absolute time.
    * 
    * @throws Exception if timing is not started */
   public void stop() {
     frozen += current();
     tic = null;
-    // intended: function does not return anything !
-    // use seconds() or nanoSeconds() to obtain absolute time
-    // DO NOT MODIFY
   }
 
   /** @return what is on the display of the timing in nano-seconds:

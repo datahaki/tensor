@@ -10,6 +10,8 @@ public class DeterminateScalarQTest extends TestCase {
     assertTrue(DeterminateScalarQ.of(Pi.HALF));
     assertTrue(DeterminateScalarQ.of(RationalScalar.HALF));
     assertTrue(DeterminateScalarQ.of(Scalars.fromString("2+3*I")));
+    assertTrue(DeterminateScalarQ.of(Scalars.fromString("2+3.4*I")));
+    assertTrue(DeterminateScalarQ.of(Scalars.fromString("2+3.4*I[s^3]")));
     assertTrue(DeterminateScalarQ.of(Scalars.fromString("8.2+3.3*I[m^2]")));
   }
 

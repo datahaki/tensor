@@ -112,12 +112,6 @@ public class TensorTest extends TestCase {
     AssertFail.of(() -> Tensors.vector(1, 2, 3, 4, 5, 6).extract(7, 6));
   }
 
-  public void testBlock() {
-    Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);
-    assertEquals(a.block(Arrays.asList(2), Arrays.asList(2)), Tensors.vector(3, 4));
-    AssertFail.of(() -> a.block(Arrays.asList(1), Arrays.asList(2, 1)));
-  }
-
   public void testScalarStream() {
     List<Tensor> asd = Arrays.asList(RealScalar.ZERO, RealScalar.of(3));
     Tensor a = Tensor.of(asd.stream());

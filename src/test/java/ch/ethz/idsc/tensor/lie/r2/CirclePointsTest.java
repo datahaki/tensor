@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.opt.BSplineFunction;
+import ch.ethz.idsc.tensor.itp.BSplineFunction;
 import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Chop;
