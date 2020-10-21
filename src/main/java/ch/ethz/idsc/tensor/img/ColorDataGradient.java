@@ -2,7 +2,7 @@
 package ch.ethz.idsc.tensor.img;
 
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 
 /** ColorDataGradient maps a {@link Scalar} from the interval [0, 1] to a 4-vector
  * {r, g, b, a} with rgba entries using linear interpolation on a given table of rgba values.

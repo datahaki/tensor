@@ -5,7 +5,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.UnaryOperator;
 
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** Example use:
  * <pre>

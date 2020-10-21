@@ -3,8 +3,8 @@ package ch.ethz.idsc.tensor.red;
 
 import java.util.function.UnaryOperator;
 
-import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Nest.html">Nest</a> */

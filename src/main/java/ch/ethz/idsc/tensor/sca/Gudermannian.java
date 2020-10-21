@@ -3,7 +3,8 @@ package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.num.Pi;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Gudermannian.html">Gudermannian</a> */

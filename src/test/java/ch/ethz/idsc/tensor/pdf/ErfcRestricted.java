@@ -7,8 +7,8 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Series;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Abs;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** IMPLEMENTATION IS BASED ON THE TAYLOR SERIES
  * RESTRICTED TO A BOUNDED INTERVAL AROUND ZERO

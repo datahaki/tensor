@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.num;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.opt.Pi;
 import junit.framework.TestCase;
 
 public class NumeratorTest extends TestCase {

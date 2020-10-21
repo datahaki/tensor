@@ -2,7 +2,7 @@
 package ch.ethz.idsc.tensor.alg;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /** One application of {@link ListConvolve} is the computation of the coefficients
  * of the product of two polynomials.

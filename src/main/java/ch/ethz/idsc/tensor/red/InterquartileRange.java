@@ -5,9 +5,9 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.InverseCDF;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** InterquartileRange of the tensor library only operates on vectors.
  * 

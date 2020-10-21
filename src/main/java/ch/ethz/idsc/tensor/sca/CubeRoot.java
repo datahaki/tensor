@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+
 /** gives the real-valued cube root of a given scalar.
  * the input scalar has to be an instance of the {@link SignInterface}.
  * 

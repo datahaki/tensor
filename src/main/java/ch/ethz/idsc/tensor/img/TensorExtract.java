@@ -5,11 +5,11 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.TensorMap;
 import ch.ethz.idsc.tensor.alg.TensorRank;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /* package */ class TensorExtract {
   /** @param tensor not a scalar

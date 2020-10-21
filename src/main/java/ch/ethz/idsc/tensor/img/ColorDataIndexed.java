@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor.img;
 import java.awt.Color;
 
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.opt.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 
 /** function maps {@link Scalar}s to vectors of the form {R, G, B, A} with entries in the interval [0, 255].
  * implementations are immutable.

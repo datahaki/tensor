@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** UnitSystem is an operator that maps a given {@link Quantity} to a {@link Quantity}
  * that makes use only of standard units defined by the unit system.

@@ -4,8 +4,8 @@ package ch.ethz.idsc.tensor.red;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.qty.Boole;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.num.Boole;
 
 /** not consistent with Mathematica for singleton collection
  * <pre>

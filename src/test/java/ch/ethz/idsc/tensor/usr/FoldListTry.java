@@ -6,7 +6,7 @@ import java.util.function.BinaryOperator;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/FoldList.html">FoldList</a> */

@@ -3,10 +3,10 @@ package ch.ethz.idsc.tensor.img;
 
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.itp.MappedInterpolation;
 
 /** inspired by
