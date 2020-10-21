@@ -20,6 +20,8 @@ import java.util.function.Function;
  * 
  * Used in: Unit, CirclePoints, Binomial */
 public class Cache<K, V> implements Function<K, V>, Serializable {
+  private static final long serialVersionUID = -2414569340981942360L;
+
   /** @param function
    * @param maxSize
    * @return */

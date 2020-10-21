@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.ext;
+package ch.ethz.idsc.tensor;
 
 import java.lang.reflect.Modifier;
 
@@ -37,6 +37,6 @@ public class BigFractionTest extends TestCase {
   }
 
   public void testPackageVisibility() {
-    assertTrue(Modifier.isPublic(BigFraction.class.getModifiers()));
+    assertFalse(Modifier.isPublic(BigFraction.class.getModifiers()));
   }
 }
