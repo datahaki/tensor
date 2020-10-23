@@ -21,19 +21,21 @@ public class CacheTest extends TestCase {
   }
 
   public void testMap() {
-    Function<String, Integer> cache = Cache.of(k -> 1, 768);
+    Function<String, Integer> function = Cache.of(k -> 1, 768);
     IntStream.range(0, 26).parallel().forEach(c1 -> {
       char chr1 = (char) (65 + c1);
       for (int c2 = 0; c2 < 26; ++c2) {
         char chr2 = (char) (65 + c2);
         for (int c3 = 0; c3 < 13; ++c3) {
           char chr3 = (char) (65 + c3);
-          cache.apply(chr1 + "" + chr2 + "" + chr3);
+          function.apply(chr1 + "" + chr2 + "" + chr3);
         }
       }
     });
-    int map_size = ((Cache<String, Integer>) cache).size();
-    assertTrue(map_size == 768);
+    Cache<String, Integer> cache = (Cache<String, Integer>) function;
+    assertEquals(cache.size(), 768);
+    cache.clear();
+    assertEquals(cache.size(), 0);
   }
 
   public void testFailNull() {

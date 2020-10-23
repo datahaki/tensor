@@ -72,4 +72,10 @@ public class VectorAngleTest extends TestCase {
     assertFalse(VectorAngle.of(Tensors.vector(1.0, 1.0), Tensors.vector(0.0, 0.0)).isPresent());
     assertFalse(VectorAngle.of(Tensors.vector(0, 0), Tensors.vector(0, 0)).isPresent());
   }
+
+  public void testLengthFail() {
+    AssertFail.of(() -> VectorAngle.of(Tensors.vector(1, 0, 0), Tensors.vector(1, 0)));
+    AssertFail.of(() -> VectorAngle.of(Tensors.vector(0, 0, 0), Tensors.vector(1, 0)));
+    AssertFail.of(() -> VectorAngle.of(Tensors.vector(1, 0, 0), Tensors.vector(0, 0)));
+  }
 }

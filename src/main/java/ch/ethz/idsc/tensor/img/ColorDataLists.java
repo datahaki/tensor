@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.io.ResourceData;
  * 
  * @see ColorDataGradients */
 public enum ColorDataLists {
+  /** 2 colors: black and white */
+  _000,
   /** 16 colors */
   _001,
   /** 10 colors */
@@ -51,9 +53,10 @@ public enum ColorDataLists {
    * tensor library default */
   _250, // luma
   /** hue palette with 13 colors */
-  _251;
+  _251, //
+  ;
 
-  private final Tensor tensor = ResourceData.of("/colorlist/" + name().substring(1, 4) + ".csv");
+  private final Tensor tensor = ResourceData.of("/colorlist/" + name().substring(1) + ".csv");
   private final ColorDataIndexed cyclic = new CyclicColorDataIndexed(tensor);
   private final ColorDataIndexed strict = new StrictColorDataIndexed(tensor);
 

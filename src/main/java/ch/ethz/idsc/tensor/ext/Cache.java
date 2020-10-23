@@ -20,12 +20,12 @@ import java.util.function.Function;
  * 
  * Used in: Unit, CirclePoints, Binomial */
 public class Cache<K, V> implements Function<K, V>, Serializable {
-  private static final long serialVersionUID = -2414569340981942360L;
+  private static final long serialVersionUID = -8606807894733066278L;
 
   /** @param function
    * @param maxSize
    * @return */
-  public static <K, V> Function<K, V> of(Function<K, V> function, int maxSize) {
+  public static <K, V> Cache<K, V> of(Function<K, V> function, int maxSize) {
     if (function instanceof Cache)
       throw new IllegalArgumentException();
     return new Cache<>(Objects.requireNonNull(function), maxSize);
@@ -57,5 +57,10 @@ public class Cache<K, V> implements Function<K, V>, Serializable {
   /** @return number of elements currently stored in cache */
   public int size() {
     return map.size();
+  }
+
+  /** removes all of the mappings from this cache */
+  public void clear() {
+    map.clear();
   }
 }
