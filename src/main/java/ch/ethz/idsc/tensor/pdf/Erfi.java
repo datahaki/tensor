@@ -4,9 +4,9 @@ package ch.ethz.idsc.tensor.pdf;
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** <pre>
  * Erfi[z] == -I * Erf[I z]

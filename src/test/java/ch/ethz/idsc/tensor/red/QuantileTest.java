@@ -15,11 +15,11 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.OrderedQ;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Sort;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
-import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

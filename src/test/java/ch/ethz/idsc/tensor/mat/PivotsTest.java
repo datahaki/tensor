@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import junit.framework.TestCase;
 
 public class PivotsTest extends TestCase {

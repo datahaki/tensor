@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.zip.DataFormatException;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.ObjectFormat;
 
 /** supported file formats are: CSV, GIF, JPG, PNG, etc.
  * 

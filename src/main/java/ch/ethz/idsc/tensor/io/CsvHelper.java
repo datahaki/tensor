@@ -7,9 +7,9 @@ import ch.ethz.idsc.tensor.IntegerQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.N;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /* package */ enum CsvHelper implements ScalarUnaryOperator {
   FUNCTION;

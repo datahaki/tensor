@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
 import ch.ethz.idsc.tensor.num.GaussScalar;
-import ch.ethz.idsc.tensor.opt.PowerIteration;
+import ch.ethz.idsc.tensor.opt.rn.PowerIteration;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;

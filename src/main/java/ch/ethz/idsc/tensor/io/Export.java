@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.ObjectFormat;
 
 /** supported file formats are: BMP, CSV, CSV.GZ, JPG, M, PNG
  * 

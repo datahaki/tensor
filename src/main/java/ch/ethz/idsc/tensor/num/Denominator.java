@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor.num;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** Remark: implementation is not consistent with Mathematica
  * for complex numbers.

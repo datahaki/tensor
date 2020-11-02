@@ -9,7 +9,7 @@ import java.math.RoundingMode;
 import java.util.Objects;
 import java.util.OptionalInt;
 
-import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 

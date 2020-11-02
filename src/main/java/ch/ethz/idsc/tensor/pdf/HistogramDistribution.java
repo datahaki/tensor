@@ -8,14 +8,14 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.opt.LinearInterpolation;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.itp.LinearInterpolation;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Increment;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** A histogram distribution approximates an unknown continuous distribution using
  * a collection of observed samples from the distribution.

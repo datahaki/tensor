@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** BlackmanHarrisWindow[1/2]=6.0000000000001025E-5
  * 

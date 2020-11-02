@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
-import ch.ethz.idsc.tensor.mat.SpectrogramArray;
+import ch.ethz.idsc.tensor.fft.SpectrogramArray;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
 

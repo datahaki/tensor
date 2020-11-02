@@ -8,8 +8,9 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Normalize;
-import ch.ethz.idsc.tensor.opt.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Conjugate;
@@ -20,14 +21,18 @@ public enum VectorAngle {
   ;
   private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
 
-  /** @param u
-   * @param v
-   * @return angle between the vectors u and v, or empty if either norm of u or v is zero */
+  /** @param u vector
+   * @param v vector of same length as u
+   * @return angle between the vectors u and v, or empty if either norm of u or v is zero
+   * @throws Exception if u and v are not vectors of the same length */
   public static Optional<Scalar> of(Tensor u, Tensor v) {
     Scalar nu = Norm._2.ofVector(u);
     Scalar nv = Norm._2.ofVector(v);
-    if (Scalars.isZero(nu) || Scalars.isZero(nv))
+    if (Scalars.isZero(nu) || Scalars.isZero(nv)) {
+      if (u.length() != v.length())
+        throw TensorRuntimeException.of(u, v);
       return Optional.empty();
+    }
     Scalar ratio = ExactTensorQ.of(u) || ExactTensorQ.of(v) //
         ? u.dot(Conjugate.of(v)).divide(nu).divide(nv).Get()
         : NORMALIZE.apply(u).dot(NORMALIZE.apply(Conjugate.of(v))).Get();

@@ -27,17 +27,17 @@ import ch.ethz.idsc.tensor.num.GroupInterface;
     this.n = n;
   }
 
-  @Override // from BinaryPower
+  @Override // from GroupInterface
   public Tensor identity() {
     return IdentityMatrix.of(n);
   }
 
-  @Override // from BinaryPower
+  @Override // from GroupInterface
   public Tensor invert(Tensor matrix) {
     return Inverse.of(matrix);
   }
 
-  @Override // from BinaryPower
+  @Override // from GroupInterface
   public Tensor combine(Tensor matrix1, Tensor matrix2) {
     return matrix1.dot(matrix2);
   }

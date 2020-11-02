@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor.red;
 
-import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -9,8 +8,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.OrderedQ;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.sca.Ceiling;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** Quantile of the tensor library only operates on vectors. The return type of
  * the quantile function is {@link Scalar}.

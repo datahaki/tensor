@@ -2,18 +2,17 @@
 package ch.ethz.idsc.tensor.alg;
 
 import java.io.Serializable;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
 import java.util.OptionalInt;
+import java.util.function.Function;
 
-import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.ext.Cache;
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.sca.Gamma;
 
 /** binomial coefficient implemented for integer input
@@ -25,6 +24,8 @@ import ch.ethz.idsc.tensor.sca.Gamma;
  * <a href="https://reference.wolfram.com/language/ref/Binomial.html">Binomial</a> */
 public class Binomial implements Serializable {
   private static final long serialVersionUID = 3281652794516766951L;
+  private static final int MAX_SIZE = 384;
+  private static final Function<Integer, Binomial> CACHE = Cache.of(Binomial::new, MAX_SIZE);
 
   /** @param n non-negative integer
    * @return binomial function that computes n choose k */
@@ -35,7 +36,7 @@ public class Binomial implements Serializable {
   /** @param n non-negative integer
    * @return binomial function that computes n choose k */
   public static Binomial of(int n) {
-    return BinomialMemo.INSTANCE.lookup(Integers.requirePositiveOrZero(n));
+    return CACHE.apply(Integers.requirePositiveOrZero(n));
   }
 
   /** <code>Mathematica::Binomial[n, m]</code>
@@ -65,30 +66,7 @@ public class Binomial implements Serializable {
       // LONGTERM this case is defined in Mathematica
       throw new IllegalArgumentException(String.format("Binomial[%d,%d]", n, m));
     }
-    return BinomialMemo.INSTANCE.lookup(n).over(m);
-  }
-
-  /***************************************************/
-  private static enum BinomialMemo {
-    INSTANCE;
-
-    private static final int MAX_SIZE = 384;
-    private final Map<Integer, Binomial> map = //
-        new LinkedHashMap<Integer, Binomial>(MAX_SIZE * 4 / 3, 0.75f, true) {
-          private static final long serialVersionUID = 9104259948493924689L;
-
-          @Override
-          protected boolean removeEldestEntry(Map.Entry<Integer, Binomial> eldest) {
-            return MAX_SIZE < size();
-          }
-        };
-
-    public synchronized Binomial lookup(int n) {
-      Binomial binomial = map.get(n);
-      if (Objects.isNull(binomial))
-        map.put(n, binomial = new Binomial(n));
-      return binomial;
-    }
+    return CACHE.apply(n).over(m);
   }
 
   /***************************************************/

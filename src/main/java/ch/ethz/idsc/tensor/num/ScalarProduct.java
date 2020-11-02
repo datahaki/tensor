@@ -18,17 +18,17 @@ public class ScalarProduct implements GroupInterface<Scalar>, Serializable {
     this.one = Objects.requireNonNull(one);
   }
 
-  @Override // from BinaryPower
+  @Override // from GroupInterface
   public Scalar identity() {
     return one;
   }
 
-  @Override // from BinaryPower
+  @Override // from GroupInterface
   public Scalar invert(Scalar scalar) {
     return scalar.reciprocal();
   }
 
-  @Override // from BinaryPower
+  @Override // from GroupInterface
   public Scalar combine(Scalar s1, Scalar s2) {
     return s1.multiply(s2);
   }

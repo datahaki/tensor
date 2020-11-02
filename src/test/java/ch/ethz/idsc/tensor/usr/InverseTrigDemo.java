@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.sca.ArcCosh;
 import ch.ethz.idsc.tensor.sca.ArcSinh;
@@ -12,7 +13,6 @@ import ch.ethz.idsc.tensor.sca.ArcTanh;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Power;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** inspired by Mathematica's documentation of DensityPlot */
 /* package */ class InverseTrigDemo extends BivariateEvaluation {

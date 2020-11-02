@@ -1,10 +1,13 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie.r2;
 
-import ch.ethz.idsc.tensor.Integers;
+import java.util.function.Function;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.ext.Cache;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /** implementation is only consistent with Mathematica up to rotation around coordinate (0, 0)
  * 
@@ -22,6 +25,9 @@ import ch.ethz.idsc.tensor.alg.Range;
  * <a href="https://reference.wolfram.com/language/ref/CirclePoints.html">CirclePoints</a> */
 public enum CirclePoints {
   ;
+  private static final int MAX_SIZE = 64;
+  private static final Function<Integer, Tensor> CACHE = Cache.of(CirclePoints::function, MAX_SIZE);
+
   /** the first coordinate is always {1, 0}.
    * the orientation of the points is counter-clockwise.
    * 
@@ -31,6 +37,11 @@ public enum CirclePoints {
    * @return n x 2 matrix with evenly spaced points on the unit-circle
    * @throws Exception if n is negative */
   public static Tensor of(int n) {
-    return Range.of(0, Integers.requirePositiveOrZero(n)).divide(RealScalar.of(n)).map(AngleVector::turns);
+    return CACHE.apply(Integers.requirePositiveOrZero(n)).copy();
+  }
+
+  // helper function
+  private static Tensor function(int n) {
+    return Range.of(0, n).divide(RealScalar.of(n)).map(AngleVector::turns);
   }
 }

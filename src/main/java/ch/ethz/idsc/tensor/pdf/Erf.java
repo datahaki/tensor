@@ -5,7 +5,7 @@ package ch.ethz.idsc.tensor.pdf;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** <pre>
  * Erf[z] == 1 - Erfc[z]

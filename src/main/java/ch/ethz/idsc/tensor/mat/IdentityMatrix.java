@@ -1,9 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
-import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.red.KroneckerDelta;
 
 /** implementation is consistent with Mathematica.

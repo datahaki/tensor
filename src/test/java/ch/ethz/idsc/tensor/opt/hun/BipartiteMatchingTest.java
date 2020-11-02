@@ -14,7 +14,7 @@ import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.mat.Tolerance;
-import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;

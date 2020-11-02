@@ -3,7 +3,7 @@ package ch.ethz.idsc.tensor;
 
 import java.math.BigDecimal;
 
-import ch.ethz.idsc.tensor.opt.Pi;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.ChopInterface;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.NInterface;

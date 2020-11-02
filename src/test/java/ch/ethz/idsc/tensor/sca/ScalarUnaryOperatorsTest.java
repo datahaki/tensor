@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
 public class ScalarUnaryOperatorsTest extends TestCase {

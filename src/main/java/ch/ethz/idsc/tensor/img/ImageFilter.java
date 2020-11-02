@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /** Hint: the implementation also operates on unstructured tensors.
  * This feature is in contrast to the Mathematica standard.

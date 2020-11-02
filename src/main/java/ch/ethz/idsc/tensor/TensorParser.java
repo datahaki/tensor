@@ -21,6 +21,8 @@ import ch.ethz.idsc.tensor.io.StringScalar;
     this.function = Objects.requireNonNull(function);
   }
 
+  /** @param string for instance "{1, 2[m], {3+4*I, 5.67}}"
+   * @return */
   public Tensor parse(String string) {
     int opening = string.indexOf(Tensor.OPENING_BRACKET); // first non-whitespace character should be "{"
     if (0 <= opening && string.substring(0, opening).trim().isEmpty()) {

@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Decrement.html">Decrement</a> */

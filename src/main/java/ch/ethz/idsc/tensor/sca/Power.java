@@ -6,6 +6,7 @@ import java.util.Objects;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** Power exponentiates a given scalar by an exponent.
  * The scalar type is required to implement {@link PowerInterface}

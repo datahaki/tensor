@@ -3,9 +3,9 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.tensor.Integers;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Factorial;

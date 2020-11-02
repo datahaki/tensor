@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.mat.SpectrogramArray;
+import ch.ethz.idsc.tensor.fft.SpectrogramArray;
 
 /** The tensor library implementation is consistent with Mathematica,
  * also when there are insufficient elements:

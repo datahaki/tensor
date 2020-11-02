@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.ReadLine;
 
 /** import tensor expression that was created by {@link Put}.
  * The format is similar to Object::toString and readable in any text editor.

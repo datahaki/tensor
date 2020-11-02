@@ -4,10 +4,10 @@ package ch.ethz.idsc.tensor.usr;
 import java.io.File;
 import java.io.IOException;
 
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.img.ArrayPlot;
 import ch.ethz.idsc.tensor.img.ColorDataGradient;
 import ch.ethz.idsc.tensor.io.Export;
-import ch.ethz.idsc.tensor.io.HomeDirectory;
 
 /* package */ enum StaticHelper {
   ;

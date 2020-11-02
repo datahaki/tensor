@@ -7,9 +7,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.ScalarSummaryStatistics;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
 
 /** Rescale so that all the list elements run from 0 to 1
  * 

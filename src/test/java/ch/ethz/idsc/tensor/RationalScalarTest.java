@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor;
 import java.math.BigInteger;
 
 import ch.ethz.idsc.tensor.alg.Sort;
-import ch.ethz.idsc.tensor.io.Serialization;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;

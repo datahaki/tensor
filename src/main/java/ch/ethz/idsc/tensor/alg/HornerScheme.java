@@ -3,7 +3,7 @@ package ch.ethz.idsc.tensor.alg;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** Horner's scheme improves speed and stability for the numeric evaluation of large polynomials
  * 

@@ -14,7 +14,7 @@ public enum LeastSquares {
   ;
   /** @param matrix
    * @param b
-   * @return */
+   * @return x with matrix.dot(x) ~ b */
   public static Tensor of(Tensor matrix, Tensor b) {
     if (ExactTensorQ.of(matrix))
       try {

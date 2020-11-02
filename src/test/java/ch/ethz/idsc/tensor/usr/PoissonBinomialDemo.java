@@ -2,7 +2,7 @@
 package ch.ethz.idsc.tensor.usr;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.io.Timing;
+import ch.ethz.idsc.tensor.ext.Timing;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.HistogramDistribution;
 import ch.ethz.idsc.tensor.pdf.PoissonBinomialDistribution;

@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** our implementation is <em>not</em> consistent with Mathematica for negative, and complex n.
  * 

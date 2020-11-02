@@ -2,7 +2,7 @@
 package ch.ethz.idsc.tensor.sca.win;
 
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.sca.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /* package */ enum WindowFunction implements ScalarUnaryOperator {
   Bartlett(BartlettWindow.FUNCTION), //
