@@ -71,7 +71,7 @@ public class SiUnitSystemTest extends TestCase {
   }
 
   public void testKilo() {
-    int checked = _check(Arrays.asList("kp"), "k", RealScalar.of(1000));
+    int checked = _check(Arrays.asList("kat", "kp"), "k", RealScalar.of(1000));
     assertTrue(5 <= checked);
   }
 

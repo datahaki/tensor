@@ -46,6 +46,6 @@ public class UnitImplTest extends TestCase {
     m1.put("m", RealScalar.ONE);
     Map<String, Scalar> m2 = new HashMap<>();
     m2.put("m", RealScalar.of(2));
-    Stream.concat(m1.entrySet().stream(), m2.entrySet().stream()).collect(UnitImpl.COLLECTOR);
+    Stream.concat(m1.entrySet().stream(), m2.entrySet().stream()).collect(UnitImpl.NEGATION);
   }
 }

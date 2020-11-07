@@ -2,6 +2,10 @@
 package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.alg.TensorMap;
+import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -46,6 +50,13 @@ public class TensorPmulTest extends TestCase {
         Tensors.vectorLong(-9, -2, -2));
     Tensor r = Tensors.fromString("{{3, 8, 18}, {-27, 2, 2}}");
     assertEquals(a.pmul(c), r);
+  }
+
+  public void testDiagonalMatrix() {
+    Distribution distribution = UniformDistribution.of(-10, 10);
+    Tensor v = RandomVariate.of(distribution, 3);
+    Tensor m = RandomVariate.of(distribution, 3, 4, 2);
+    assertEquals(DiagonalMatrix.with(v).dot(m), v.pmul(m));
   }
 
   public void testFail() {

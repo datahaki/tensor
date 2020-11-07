@@ -63,6 +63,9 @@ public class UnitTest extends TestCase {
     AssertFail.of(() -> Unit.of("| m "));
     AssertFail.of(() -> Unit.of("|"));
     AssertFail.of(() -> Unit.of("^"));
+    AssertFail.of(() -> Unit.of("unknown-seeManual"));
+    AssertFail.of(() -> Unit.of("a+b"));
+    AssertFail.of(() -> Unit.of("b=c"));
   }
 
   public void testNullFail() {
