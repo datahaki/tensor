@@ -18,7 +18,11 @@ import junit.framework.TestCase;
 
 public class UnitSystemTest extends TestCase {
   public void testSize() {
-    assertTrue(91 <= UnitSystem.SI().map().size());
+    int size = UnitSystem.SI().map().size();
+    if (size < 103) {
+      System.err.println("unit count: " + size);
+      fail();
+    }
   }
 
   public void testExact() {

@@ -58,6 +58,10 @@ public class UnitTest extends TestCase {
     AssertFail.of(() -> kg1.multiply(q));
   }
 
+  public void testOneString() {
+    assertEquals(Unit.ONE.toString(), "");
+  }
+
   public void testFail() {
     AssertFail.of(() -> Unit.of(" m >"));
     AssertFail.of(() -> Unit.of("| m "));

@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.ext.Integers;
  * <a href="https://reference.wolfram.com/language/ref/CirclePoints.html">CirclePoints</a> */
 public enum CirclePoints {
   ;
-  private static final int MAX_SIZE = 64;
+  private static final int MAX_SIZE = 16;
   private static final Function<Integer, Tensor> CACHE = Cache.of(CirclePoints::function, MAX_SIZE);
 
   /** the first coordinate is always {1, 0}.
