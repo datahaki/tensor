@@ -13,8 +13,8 @@ public enum PrincipalComponents {
   /** @param matrix
    * @return */
   public static Tensor of(Tensor matrix) {
-    Tensor center = Mean.of(matrix).negate();
-    return of(SingularValueDecomposition.of(Tensor.of(matrix.stream().map(center::add))));
+    Tensor nmean = Mean.of(matrix).negate();
+    return of(SingularValueDecomposition.of(Tensor.of(matrix.stream().map(nmean::add))));
   }
 
   /** @param svd

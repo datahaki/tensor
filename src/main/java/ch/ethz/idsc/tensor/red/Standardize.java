@@ -11,9 +11,8 @@ public enum Standardize {
    * @return result with Mean[result] == 0 and Variance[result] == 1
    * @throws Exception if input does not have sufficient elements, or is not a vector */
   public static Tensor ofVector(Tensor vector) {
-    final Tensor mean = Mean.of(vector);
-    Tensor center = Tensor.of(vector.stream().map(entry -> entry.subtract(mean)));
-    // StandardDeviation subtracts the mean internally
-    return center.divide(StandardDeviation.ofVector(vector));
+    Tensor nmean = Mean.of(vector).negate();
+    return Tensor.of(vector.stream().map(nmean::add)) //
+        .divide(StandardDeviation.ofVector(vector)); // StandardDeviation subtracts the mean internally
   }
 }

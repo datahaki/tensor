@@ -12,11 +12,14 @@ import java.io.IOException;
  * 2) checking the number of files to be deleted #F
  * against a permitted upper bound "max_delete"
  * 3) all files are checked for write permission using {@link File#canWrite()}
- * 4) if deletion of a file or directory fails, the process aborts
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/DeleteDirectory.html">DeleteDirectory</a> */
 public class DeleteDirectory {
+  /** use the mask bit DELETE_FAIL_ABORTS for an additional abort criteria:
+   * 4) if deletion of a file or directory fails, the process aborts */
+  public static final int DELETE_FAIL_ABORTS = 1;
+
   /** Example: The command
    * DeleteDirectory.of(new File("/user/name/myapp/recordings/log20171024"), 2, 1000);
    * deletes given directory with sub directories of depth of at most 2,
@@ -31,15 +34,28 @@ public class DeleteDirectory {
    * @return
    * @throws Exception if given directory does not exist, or criteria are not met */
   public static DeleteDirectory of(File directory, int max_nested, long max_delete) throws IOException {
-    return new DeleteDirectory(directory, max_nested, max_delete);
+    return of(directory, max_nested, max_delete, 0);
+  }
+
+  /** @param directory
+   * @param max_nested
+   * @param max_delete
+   * @param mask
+   * @return
+   * @throws IOException */
+  public static DeleteDirectory of(File directory, int max_nested, long max_delete, int mask) throws IOException {
+    return new DeleteDirectory(directory, max_nested, max_delete, mask);
   }
 
   /***************************************************/
   private final int max_depth;
+  private final boolean delete_fail_aborts;
+  // ---
   private long deleted = 0;
 
-  private DeleteDirectory(File root, int max_depth, long max_count) throws IOException {
+  private DeleteDirectory(File root, int max_depth, long max_count, int mask) throws IOException {
     this.max_depth = max_depth;
+    this.delete_fail_aborts = (mask & DELETE_FAIL_ABORTS) == DELETE_FAIL_ABORTS;
     int count = visitRecursively(root, 0, false);
     if (count <= max_count) // abort criteria 2)
       visitRecursively(root, 0, true);
@@ -57,7 +73,7 @@ public class DeleteDirectory {
     ++count; // count file as visited
     if (delete) {
       boolean file_delete = file.delete();
-      if (!file_delete) // abort criteria 4)
+      if (!file_delete && delete_fail_aborts) // abort criteria 4)
         throw new IOException("cannot delete " + file.getAbsolutePath());
       ++deleted;
     } else //

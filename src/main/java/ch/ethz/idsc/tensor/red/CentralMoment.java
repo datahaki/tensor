@@ -10,14 +10,14 @@ import ch.ethz.idsc.tensor.sca.Power;
  * <a href="https://reference.wolfram.com/language/ref/CentralMoment.html">CentralMoment</a> */
 public enum CentralMoment {
   ;
-  /** @param vector
+  /** @param vector with at least one element
    * @param order of moment
-   * @return */
+   * @return
+   * @throws Exception if given vector is empty */
   public static Scalar of(Tensor vector, Scalar order) {
-    Scalar mean = Mean.of(vector).Get();
+    Scalar nmean = Mean.of(vector).Get().negate();
     return vector.stream() //
-        .map(Scalar.class::cast) //
-        .map(scalar -> scalar.subtract(mean)) //
+        .map(nmean::add) //
         .map(Power.function(order)) //
         .reduce(Scalar::add) //
         .get() //

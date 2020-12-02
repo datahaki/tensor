@@ -30,8 +30,8 @@ public enum HistogramTransform {
 
   private static Tensor rescale(Tensor tensor) {
     int[] values = new int[256];
-    tensor.flatten(1).map(Scalar.class::cast) //
-        .forEach(scalar -> ++values[scalar.number().intValue()]);
+    tensor.flatten(1).map(Scalar.class::cast).map(Scalar::number) //
+        .forEach(number -> ++values[number.intValue()]);
     CDF cdf = CDF.of(EmpiricalDistribution.fromUnscaledPDF(Tensors.vectorInt(values)));
     return Rescale.of(tensor.map(cdf::p_lessThan));
   }
