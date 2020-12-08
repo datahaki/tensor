@@ -20,6 +20,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * <a href="https://reference.wolfram.com/language/ref/CholeskyDecomposition.html">CholeskyDecomposition</a>
  * 
  * @see HermitianMatrixQ */
+// LONGTERM use CholeskyDecomposition to linear solve symmetric systems
 public interface CholeskyDecomposition {
   /** @param matrix hermitian and positive semi-definite matrix
    * @return Cholesky decomposition of matrix
