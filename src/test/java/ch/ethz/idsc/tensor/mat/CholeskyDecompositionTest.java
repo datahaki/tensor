@@ -132,33 +132,33 @@ public class CholeskyDecompositionTest extends TestCase {
   }
 
   public void testQuantity2() {
-    Tensor mat = Tensors.fromString( //
+    Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
     {
       Tensor eye = IdentityMatrix.of(3);
-      Tensor inv = LinearSolve.of(mat, eye);
-      Tensor res = mat.dot(inv);
+      Tensor inv = LinearSolve.of(matrix, eye);
+      Tensor res = matrix.dot(inv);
       Chop.NONE.requireClose(eye, res);
     }
     {
-      Tensor inv = Inverse.of(mat);
-      Chop.NONE.requireClose(mat.dot(inv), inv.dot(mat));
-      Chop.NONE.requireClose(mat.dot(inv), IdentityMatrix.of(3));
+      Tensor inv = Inverse.of(matrix);
+      Chop.NONE.requireClose(matrix.dot(inv), inv.dot(matrix));
+      Chop.NONE.requireClose(matrix.dot(inv), IdentityMatrix.of(3));
     }
     {
-      CholeskyDecomposition cd = CholeskyDecomposition.of(mat);
-      assertEquals(Det.of(mat), cd.det()); // 100[kg^2, m^2, rad^2]
+      CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
+      assertEquals(Det.of(matrix), cd.det()); // 100[kg^2, m^2, rad^2]
       Tensor lower = rows_pmul_v(cd.getL(), Sqrt.of(cd.diagonal()));
       Tensor upper = Sqrt.of(cd.diagonal()).pmul(ConjugateTranspose.of(cd.getL()));
       Tensor res = lower.dot(upper);
-      Chop._10.requireClose(mat, res);
+      Chop._10.requireClose(matrix, res);
     }
-    SymmetricMatrixQ.require(mat);
-    assertTrue(HermitianMatrixQ.of(mat));
-    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(mat));
-    assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(mat));
-    assertFalse(NegativeDefiniteMatrixQ.ofHermitian(mat));
-    assertFalse(NegativeSemidefiniteMatrixQ.ofHermitian(mat));
+    SymmetricMatrixQ.require(matrix);
+    assertTrue(HermitianMatrixQ.of(matrix));
+    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
+    assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(matrix));
+    assertFalse(NegativeDefiniteMatrixQ.ofHermitian(matrix));
+    assertFalse(NegativeSemidefiniteMatrixQ.ofHermitian(matrix));
   }
 
   private static Tensor rows_pmul_v(Tensor L, Tensor diag) {
@@ -166,20 +166,20 @@ public class CholeskyDecompositionTest extends TestCase {
   }
 
   public void testQuantityComplex() {
-    Tensor mat = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
-    CholeskyDecomposition cd = CholeskyDecomposition.of(mat);
+    Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
+    CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
     Tensor sdiag = Sqrt.of(cd.diagonal());
     Tensor upper = sdiag.pmul(ConjugateTranspose.of(cd.getL()));
     {
       Tensor res = ConjugateTranspose.of(upper).dot(upper);
-      Chop._10.requireClose(mat, res);
+      Chop._10.requireClose(matrix, res);
     }
     {
       // the construction of the lower triangular matrix L . L* is not so convenient
       // Tensor lower = Transpose.of(sdiag.pmul(Transpose.of(cd.getL())));
       Tensor lower = rows_pmul_v(cd.getL(), sdiag);
       Tensor res = lower.dot(upper);
-      Chop._10.requireClose(mat, res);
+      Chop._10.requireClose(matrix, res);
     }
   }
 }

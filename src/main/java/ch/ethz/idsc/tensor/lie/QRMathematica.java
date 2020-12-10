@@ -46,4 +46,9 @@ import ch.ethz.idsc.tensor.Unprotect;
   public Scalar det() {
     return qrDecomposition.det();
   }
+
+  @Override // from QRDecomposition
+  public Tensor solve(Tensor b) {
+    return qrDecomposition.solve(b);
+  }
 }

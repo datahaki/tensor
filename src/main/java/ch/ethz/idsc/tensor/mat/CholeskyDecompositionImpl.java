@@ -66,7 +66,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
       x[i] = x[i].divide(d.Get(i));
     for (int i = n - 1; 0 <= i; --i)
       for (int k = i + 1; k < n; ++k)
-        x[i] = x[i].subtract(x[k].multiply(l.Get(k, i)));
+        x[i] = x[i].subtract(x[k].multiply(Conjugate.FUNCTION.apply(l.Get(k, i))));
     return Unprotect.byRef(x);
   }
 }

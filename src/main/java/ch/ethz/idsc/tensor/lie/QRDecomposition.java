@@ -40,4 +40,6 @@ public interface QRDecomposition {
 
   /** @return determinant of matrix */
   Scalar det();
+
+  Tensor solve(Tensor b);
 }

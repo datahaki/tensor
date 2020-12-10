@@ -3,12 +3,15 @@ package ch.ethz.idsc.tensor.lie;
 
 import java.util.Arrays;
 
+import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
 import ch.ethz.idsc.tensor.mat.Det;
+import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -35,6 +38,19 @@ public class QRMathematicaTest extends TestCase {
       Tensor matrix = RandomVariate.of(distribution, n, n);
       QRDecomposition qrDecomposition = QRMathematica.wrap(QRDecomposition.of(matrix));
       Chop._10.requireClose(qrDecomposition.det(), Det.of(matrix));
+    }
+  }
+
+  public void testSolveComplex() {
+    for (int n = 3; n < 6; ++n) {
+      Tensor mr = RandomVariate.of(NormalDistribution.standard(), n, n);
+      Tensor mi = RandomVariate.of(NormalDistribution.standard(), n, n);
+      Tensor matrix = mr.add(mi.multiply(ComplexScalar.I));
+      QRDecomposition qrDecomposition = QRMathematica.wrap(QRDecomposition.of(matrix));
+      Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 3);
+      Tensor sol1 = qrDecomposition.solve(b);
+      Tensor sol2 = LinearSolve.of(matrix, b);
+      Chop._10.requireClose(sol1, sol2);
     }
   }
 
