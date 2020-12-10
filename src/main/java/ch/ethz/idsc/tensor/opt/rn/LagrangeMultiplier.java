@@ -9,8 +9,8 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.mat.CholeskyDecomposition;
 import ch.ethz.idsc.tensor.mat.LeastSquares;
-import ch.ethz.idsc.tensor.mat.LinearSolve;
 
 /** Solves the following linear system
  * matrix=
@@ -24,11 +24,10 @@ public class LagrangeMultiplier implements Serializable {
   private final Tensor matrix;
   private final Tensor b;
 
-  /** @param eye matrix of dimensions n x n
+  /** @param eye symmetric matrix of dimensions n x n
    * @param target vector of length n
    * @param eqs matrix of dimensions d x n
-   * @param rhs vector of length d
-   * @return vector of length n */
+   * @param rhs vector of length d */
   public LagrangeMultiplier(Tensor eye, Tensor target, Tensor eqs, Tensor rhs) {
     n = eye.length();
     if (target.length() != n)
@@ -44,6 +43,16 @@ public class LagrangeMultiplier implements Serializable {
         rhs.stream()));
   }
 
+  /** @return */
+  public Tensor matrix() {
+    return matrix;
+  }
+
+  /** @return */
+  public Tensor b() {
+    return b;
+  }
+
   /** robust solver in case rank of eye or eqs is not maximal
    * 
    * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target */
@@ -55,6 +64,6 @@ public class LagrangeMultiplier implements Serializable {
    * 
    * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target */
   public Tensor linearSolve() {
-    return LinearSolve.of(matrix, b).extract(0, n);
+    return CholeskyDecomposition.of(matrix).solve(b).extract(0, n);
   }
 }
