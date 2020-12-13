@@ -28,7 +28,9 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
       for (int j = 0; j < i; ++j) {
         Tensor lik = l.get(i).extract(0, j);
         Tensor ljk = l.get(j).extract(0, j).map(Conjugate.FUNCTION);
-        Scalar value = A.Get(i, j).subtract(lik.dot(d.extract(0, j).pmul(ljk)));
+        Scalar aij = A.Get(i, j);
+        Tolerance.CHOP.requireClose(Conjugate.FUNCTION.apply(aij), A.Get(j, i));
+        Scalar value = aij.subtract(lik.dot(d.extract(0, j).pmul(ljk)));
         if (Scalars.nonZero(value))
           l.set(value.divide(d.Get(j)), i, j);
       }

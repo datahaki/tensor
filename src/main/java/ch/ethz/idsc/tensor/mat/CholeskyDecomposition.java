@@ -23,15 +23,12 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * <a href="https://reference.wolfram.com/language/ref/CholeskyDecomposition.html">CholeskyDecomposition</a>
  * 
  * @see HermitianMatrixQ */
-// LONGTERM use CholeskyDecomposition to linear solve symmetric systems
 public interface CholeskyDecomposition {
   /** @param matrix hermitian and positive semi-definite matrix
    * @return Cholesky decomposition of matrix
    * @throws TensorRuntimeException if matrix is not hermitian, or decomposition failed */
   static CholeskyDecomposition of(Tensor matrix) {
-    if (HermitianMatrixQ.of(matrix))
-      return new CholeskyDecompositionImpl(matrix);
-    throw TensorRuntimeException.of(matrix);
+    return new CholeskyDecompositionImpl(matrix);
   }
 
   /** @return lower triangular matrix L */
