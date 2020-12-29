@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.io.ScalarArray;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** The Jacobi transformations of a real symmetric matrix establishes the
@@ -44,14 +45,14 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private Tensor d;
 
   /** @param matrix symmetric, non-empty, and real valued */
-  public JacobiMethod(Tensor matrix) {
+  public JacobiMethod(Tensor matrix, Chop chop) {
     Scalar[][] A = ScalarArray.ofMatrix(matrix);
     n = A.length;
     for (int ip = 0; ip < n; ++ip) {
       if (A[ip].length != n)
         throw TensorRuntimeException.of(matrix);
       for (int iq = ip + 1; iq < n; ++iq)
-        Tolerance.CHOP.requireClose(A[ip][iq], A[iq][ip]);
+        chop.requireClose(A[ip][iq], A[iq][ip]);
     }
     V = IdentityMatrix.of(n);
     Tensor z = Array.zeros(n);

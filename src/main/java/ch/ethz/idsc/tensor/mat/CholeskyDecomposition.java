@@ -41,6 +41,6 @@ public interface CholeskyDecomposition {
   Scalar det();
 
   /** @param b
-   * @return Inverse.of(matrix).dot(b) */
+   * @return Inverse.of(matrix).dot(b) == LinearSolve.of(matrix, b) */
   Tensor solve(Tensor b);
 }

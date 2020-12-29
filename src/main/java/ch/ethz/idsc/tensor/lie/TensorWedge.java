@@ -11,7 +11,9 @@ import ch.ethz.idsc.tensor.alg.TensorRank;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.sca.Factorial;
 
-/** inspired by
+/** represents the antisymmetrized tensor product of the
+ * 
+ * inspired by
  * <a href="https://reference.wolfram.com/language/ref/TensorWedge.html">TensorWedge</a>
  * 
  * @see Permutations
