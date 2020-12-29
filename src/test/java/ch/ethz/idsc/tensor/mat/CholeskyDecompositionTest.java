@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CholeskyDecompositionTest extends TestCase {
@@ -30,11 +31,28 @@ public class CholeskyDecompositionTest extends TestCase {
     // +3 3 0
     // -1 1 3
     // {{5, 3, -1}, {0, 3, 1}, {0, 0, 3}}
-    checkDecomp(Tensors.matrix(new Number[][] { //
+    Tensor matrix = Tensors.matrix(new Number[][] { //
         { 25, 15, -5 }, //
         { 15, 18, 0 }, //
         { -5, 0, 11 } //
-    }));
+    });
+    CholeskyDecomposition choleskyDecomposition = checkDecomp(matrix);
+    {
+      Tensor b = Tensors.vector(1, 2, 3);
+      Tensor actual = choleskyDecomposition.solve(b);
+      Tensor expect = Inverse.of(matrix).dot(b);
+      assertEquals(actual, expect);
+    }
+    {
+      Tensor b = Tensors.fromString("{{1, 2}, {3, 3}, {4, -1}}");
+      Tensor expect = Inverse.of(matrix).dot(b);
+      Tensor actual = choleskyDecomposition.solve(b);
+      assertEquals(actual, expect);
+    }
+    AssertFail.of(() -> choleskyDecomposition.solve(Tensors.vector(1, 2, 3, 4)));
+    AssertFail.of(() -> choleskyDecomposition.solve(Tensors.vector(1, 2)));
+    AssertFail.of(() -> choleskyDecomposition.solve(RealScalar.ONE));
+
   }
 
   public void testWikiEn() throws Exception {
@@ -180,6 +198,12 @@ public class CholeskyDecompositionTest extends TestCase {
       Tensor lower = rows_pmul_v(cd.getL(), sdiag);
       Tensor res = lower.dot(upper);
       Chop._10.requireClose(matrix, res);
+    }
+    {
+      assertEquals( //
+          cd.solve(IdentityMatrix.of(2)), //
+          Inverse.of(matrix));
+
     }
   }
 }

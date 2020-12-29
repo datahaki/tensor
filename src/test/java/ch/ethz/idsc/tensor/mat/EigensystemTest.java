@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -52,5 +53,21 @@ public class EigensystemTest extends TestCase {
 
   public void testNonSymmetricFail() {
     AssertFail.of(() -> Eigensystem.ofSymmetric(Tensors.fromString("{{1, 2}, {3, 4}}")));
+  }
+
+  public void testComplexFail() {
+    Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
+    SymmetricMatrixQ.require(matrix);
+    AssertFail.of(() -> Eigensystem.ofSymmetric(matrix));
+  }
+
+  public void testComplex2Fail() {
+    Tensor matrix = Tensors.fromString("{{0, I}, {I, 0}}");
+    SymmetricMatrixQ.require(matrix);
+    AssertFail.of(() -> Eigensystem.ofSymmetric(matrix));
+  }
+
+  public void testNonSymmetric2Fail() {
+    AssertFail.of(() -> Eigensystem.ofSymmetric(Array.zeros(2, 3)));
   }
 }

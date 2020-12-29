@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Times;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 
 /* package */ class CholeskyDecompositionImpl implements CholeskyDecomposition, Serializable {
@@ -19,8 +20,9 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
   private final Tensor l;
   private final Tensor d;
 
-  /** @param A hermitian matrix */
-  public CholeskyDecompositionImpl(Tensor A) {
+  /** @param A hermitian matrix
+   * @param chop */
+  public CholeskyDecompositionImpl(Tensor A, Chop chop) {
     int n = A.length();
     l = IdentityMatrix.of(n);
     d = Array.zeros(n);
@@ -29,7 +31,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
         Tensor lik = l.get(i).extract(0, j);
         Tensor ljk = l.get(j).extract(0, j).map(Conjugate.FUNCTION);
         Scalar aij = A.Get(i, j);
-        Tolerance.CHOP.requireClose(Conjugate.FUNCTION.apply(aij), A.Get(j, i));
+        chop.requireClose(Conjugate.FUNCTION.apply(aij), A.Get(j, i));
         Scalar value = aij.subtract(lik.dot(d.extract(0, j).pmul(ljk)));
         if (Scalars.nonZero(value))
           l.set(value.divide(d.Get(j)), i, j);

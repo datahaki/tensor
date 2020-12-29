@@ -8,8 +8,8 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.CholeskyDecomposition;
+import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
 import ch.ethz.idsc.tensor.mat.LeastSquares;
 
 /** Solves the following linear system
@@ -36,7 +36,7 @@ public class LagrangeMultiplier implements Serializable {
     if (rhs.length() != d)
       throw TensorRuntimeException.of(eqs, rhs);
     matrix = Tensor.of(Stream.concat( //
-        Join.of(1, eye, Transpose.of(eqs)).stream(), //
+        Join.of(1, eye, ConjugateTranspose.of(eqs)).stream(), //
         Join.of(1, eqs, Array.zeros(d, d)).stream()));
     b = Tensor.of(Stream.concat( //
         target.stream(), //

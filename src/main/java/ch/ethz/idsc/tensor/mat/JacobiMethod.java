@@ -15,9 +15,9 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Ordering;
+import ch.ethz.idsc.tensor.io.ScalarArray;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Hypot;
-import ch.ethz.idsc.tensor.red.Norm1;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -45,15 +45,24 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   /** @param matrix symmetric, non-empty, and real valued */
   public JacobiMethod(Tensor matrix) {
-    Tensor A = matrix.copy();
-    n = A.length();
+    Scalar[][] A = ScalarArray.ofMatrix(matrix);
+    n = A.length;
+    for (int ip = 0; ip < n; ++ip) {
+      if (A[ip].length != n)
+        throw TensorRuntimeException.of(matrix);
+      for (int iq = ip + 1; iq < n; ++iq)
+        Tolerance.CHOP.requireClose(A[ip][iq], A[iq][ip]);
+    }
     V = IdentityMatrix.of(n);
     Tensor z = Array.zeros(n);
     Tensor b = Diagonal.of(matrix);
     d = b.copy();
     Scalar factor = DoubleScalar.of(0.2 / (n * n));
     for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
-      Scalar sum = Norm1.ofVector(UpperTriangularize.of(A, 1).flatten(1).map(Scalar.class::cast));
+      Scalar sum = A[0][0].zero();
+      for (int ip = 0; ip < n - 1; ++ip)
+        for (int iq = ip + 1; iq < n; ++iq)
+          sum = sum.add(A[ip][iq]);
       if (Scalars.isZero(sum)) {
         Integer[] ordering = Ordering.DECREASING.of(d);
         d = Tensor.of(Stream.of(ordering).map(d::get)).unmodifiable();
@@ -63,21 +72,23 @@ import ch.ethz.idsc.tensor.sca.Sign;
       Scalar tresh = iteration < 4 //
           ? sum.multiply(factor)
           : RealScalar.ZERO;
-      for (int ip = 0; ip < n - 1; ++ip) {
+      for (int ip = 0; ip < n - 1; ++ip)
         for (int iq = ip + 1; iq < n; ++iq) {
-          Scalar g = HUNDRED.multiply(Abs.FUNCTION.apply(A.Get(ip, iq)));
+          Scalar aipiq = A[ip][iq];
+          Scalar Aipiq = Abs.FUNCTION.apply(aipiq);
+          Scalar g = HUNDRED.multiply(Aipiq);
           if (4 < iteration && //
               Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(d.Get(ip)))) && //
               Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(d.Get(iq))))) {
-            A.set(Scalar::zero, ip, iq);
+            A[ip][iq] = A[ip][iq].zero();
           } else //
-          if (Scalars.lessThan(tresh, Abs.FUNCTION.apply(A.Get(ip, iq)))) {
+          if (Scalars.lessThan(tresh, Aipiq)) {
             Scalar h = d.Get(iq).subtract(d.Get(ip));
             Scalar t;
             if (Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(h)))) {
-              t = A.Get(ip, iq).divide(h);
+              t = aipiq.divide(h);
             } else {
-              Scalar theta = RationalScalar.HALF.multiply(h).divide(A.Get(ip, iq));
+              Scalar theta = RationalScalar.HALF.multiply(h).divide(aipiq);
               t = Abs.FUNCTION.apply(theta).add(Hypot.of(theta, RealScalar.ONE)).reciprocal();
               if (Sign.isNegative(theta))
                 t = t.negate();
@@ -85,12 +96,12 @@ import ch.ethz.idsc.tensor.sca.Sign;
             Scalar c = Hypot.of(t, RealScalar.ONE).reciprocal();
             Scalar s = t.multiply(c);
             Scalar tau = s.divide(c.add(RealScalar.ONE));
-            final Scalar fh = t.multiply(A.Get(ip, iq));
+            final Scalar fh = t.multiply(aipiq);
             z.set(v -> v.subtract(fh), ip);
             z.set(v -> v.add(fh), iq);
             d.set(v -> v.subtract(fh), ip);
             d.set(v -> v.add(fh), iq);
-            A.set(Scalar::zero, ip, iq);
+            A[ip][iq] = A[ip][iq].zero();
             int fip = ip;
             int fiq = iq;
             IntStream.range(0, ip).forEach(j -> rotate(A, s, tau, j, fip, j, fiq));
@@ -99,12 +110,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
             IntStream.range(0, n).forEach(j -> rotate(V, s, tau, fip, j, fiq, j));
           }
         }
-      }
       b = b.add(z);
       z = Array.zeros(n);
       d = b.copy();
     }
-    throw TensorRuntimeException.of(A);
+    throw TensorRuntimeException.of(matrix);
   }
 
   @Override // from Eigensystem
@@ -115,6 +125,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
   @Override // from Eigensystem
   public Tensor values() {
     return d;
+  }
+
+  private static void rotate(Scalar[][] A, Scalar s, Scalar tau, int i, int j, int k, int l) {
+    Scalar g = A[i][j];
+    Scalar h = A[k][l];
+    A[i][j] = g.subtract(s.multiply(h.add(g.multiply(tau))));
+    A[k][l] = h.add(s.multiply(g.subtract(h.multiply(tau))));
   }
 
   private static void rotate(Tensor A, Scalar s, Scalar tau, int i, int j, int k, int l) {

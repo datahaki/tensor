@@ -5,6 +5,9 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Increment;
 import junit.framework.TestCase;
 
@@ -39,5 +42,49 @@ public class DotTest extends TestCase {
     Tensor m = IdentityMatrix.of(7);
     Tensor d = Dot.of(m, m, m, m);
     assertEquals(m, d);
+  }
+
+  public void testSimple1() {
+    Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
+    Tensor x = RandomVariate.of(distribution, 5);
+    Tensor y = RandomVariate.of(distribution, 5);
+    assertEquals(Dot.of(x), Dot.minimal(x));
+    assertEquals(Dot.of(x, y), Dot.minimal(x, y));
+  }
+
+  public void testSimple2() {
+    Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
+    Tensor x = RandomVariate.of(distribution, 3);
+    Tensor y = RandomVariate.of(distribution, 4);
+    Tensor m = RandomVariate.of(distribution, 4, 3);
+    assertEquals(Dot.of(m), Dot.minimal(m));
+    assertEquals(Dot.of(m, x), Dot.minimal(m, x));
+    assertEquals(Dot.of(m, x, y), Dot.minimal(m, x, y));
+    assertEquals(Dot.of(y, m, x), Dot.minimal(y, m, x));
+  }
+
+  public void testSimple3() {
+    Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
+    Tensor x = RandomVariate.of(distribution, 3);
+    Tensor y = RandomVariate.of(distribution, 4);
+    Tensor z = RandomVariate.of(distribution, 5);
+    Tensor m = RandomVariate.of(distribution, 3, 4, 5);
+    assertEquals(Dot.of(m, z, y), Dot.minimal(m, z, y));
+    assertEquals(Dot.of(m, z, y, x), Dot.minimal(m, z, y, x));
+    assertEquals(Dot.of(x, m, z), Dot.minimal(x, m, z));
+    assertEquals(Dot.of(x, m, z, y), Dot.minimal(x, m, z, y));
+  }
+
+  public void testExample() {
+    Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
+    Tensor m1 = RandomVariate.of(distribution, 6, 12);
+    Tensor m2 = RandomVariate.of(distribution, 12, 20);
+    Tensor m3 = RandomVariate.of(distribution, 20, 3);
+    Tensor m4 = RandomVariate.of(distribution, 3, 10);
+    Tensor m5 = RandomVariate.of(distribution, 10, 5);
+    Tensor m6 = RandomVariate.of(distribution, 5, 18);
+    Tensor res1 = Dot.minimal(m1, m2, m3, m4, m5, m6);
+    Tensor res2 = Dot.of(m1, m2, m3, m4, m5, m6);
+    assertEquals(res1, res2);
   }
 }
