@@ -3,6 +3,8 @@ package ch.ethz.idsc.tensor.alg;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -12,8 +14,7 @@ import ch.ethz.idsc.tensor.Tensor;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Dot.html">Dot</a> */
-public enum Dot {
-  ;
+public class Dot {
   /** @param tensor
    * @param v's
    * @return ( ... ( ( m . v[0] ) . v[1] ). ... ) . v[end-1] */
@@ -31,6 +32,14 @@ public enum Dot {
   public static Tensor minimal(Tensor... tensors) {
     if (tensors.length == 1)
       return tensors[0].copy();
+    return new Dot(tensors).product();
+  }
+
+  /***************************************************/
+  private final Tensor product;
+  private final Entry[][] entry;
+
+  /* package */ Dot(Tensor... tensors) {
     List<Node> list = new ArrayList<>();
     for (Tensor tensor : tensors)
       list.add(new Node(tensor, Dimensions.of(tensor)));
@@ -59,34 +68,41 @@ public enum Dot {
         ++index;
     }
     int n = list.size();
-    int[][] m = new int[n][n];
-    int[][] K = new int[n][n];
-    for (int l = 1; l <= n - 1; ++l) {
+    entry = new Entry[n][n];
+    for (int i = 0; i < n; ++i)
+      entry[i][i] = new Entry(list.get(i).dimensions, 0, -1);
+    for (int l = 1; l <= n - 1; ++l)
       for (int i = 0; i < n - l; ++i) {
         int j = i + l;
-        m[i][j] = Integer.MAX_VALUE;
         for (int k = i; k <= j - 1; ++k) {
-          int pi = list.get(i).dimensions.get(0);
-          int pk = list.get(k).dimensions.get(1);
-          int pj = list.get(j).dimensions.get(1);
-          int cmp = m[i][k] + m[k + 1][j] + pi * pk * pj;
-          if (cmp < m[i][j]) {
-            m[i][j] = cmp;
-            K[i][j] = k;
-          }
+          int cmp = entry[i][k].product(entry[k + 1][j]);
+          if (Objects.isNull(entry[i][j]) || cmp < entry[i][j].m)
+            entry[i][j] = new Entry(combine(entry[i][k], entry[k + 1][j]), cmp, k);
         }
       }
-    }
-    return recur(list, K, 0, n - 1);
+    product = recur(list, 0, n - 1);
   }
 
-  private static Tensor recur(List<Node> list, int[][] K, int i, int j) {
+  private Tensor recur(List<Node> list, int i, int j) {
     if (i == j)
       return list.get(i).tensor;
-    int m = K[i][j];
-    return recur(list, K, i, m).dot(recur(list, K, m + 1, j));
+    int k = entry[i][j].k;
+    return recur(list, i, k).dot(recur(list, k + 1, j));
   }
 
+  public Tensor product() {
+    return product;
+  }
+
+  public int multiplications() {
+    return entry[0][entry.length - 1].m;
+  }
+
+  public List<Integer> dimensions() {
+    return entry[0][entry.length - 1].dimensions;
+  }
+
+  /***************************************************/
   private static class Node {
     private final Tensor tensor;
     private final List<Integer> dimensions;
@@ -94,6 +110,31 @@ public enum Dot {
     public Node(Tensor tensor, List<Integer> dimensions) {
       this.tensor = tensor;
       this.dimensions = dimensions;
+    }
+  }
+
+  /* package */ static List<Integer> combine(Entry entry1, Entry entry2) {
+    List<Integer> list = new ArrayList<>();
+    list.addAll(entry1.dimensions.subList(0, entry1.dimensions.size() - 1));
+    list.addAll(entry2.dimensions.subList(1, entry2.dimensions.size()));
+    return list;
+  }
+
+  /***************************************************/
+  private static class Entry {
+    private final List<Integer> dimensions;
+    private final int m;
+    private final int k;
+
+    public Entry(List<Integer> dimensions, int m, int k) {
+      this.dimensions = dimensions;
+      this.m = m;
+      this.k = k;
+    }
+
+    public int product(Entry entry) {
+      return m + entry.m + Stream.concat(dimensions.stream(), entry.dimensions.stream().skip(1)) //
+          .reduce(Math::multiplyExact).get();
     }
   }
 }

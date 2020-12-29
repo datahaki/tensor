@@ -52,7 +52,6 @@ public class CholeskyDecompositionTest extends TestCase {
     AssertFail.of(() -> choleskyDecomposition.solve(Tensors.vector(1, 2, 3, 4)));
     AssertFail.of(() -> choleskyDecomposition.solve(Tensors.vector(1, 2)));
     AssertFail.of(() -> choleskyDecomposition.solve(RealScalar.ONE));
-
   }
 
   public void testWikiEn() throws Exception {
@@ -203,7 +202,6 @@ public class CholeskyDecompositionTest extends TestCase {
       assertEquals( //
           cd.solve(IdentityMatrix.of(2)), //
           Inverse.of(matrix));
-
     }
   }
 }

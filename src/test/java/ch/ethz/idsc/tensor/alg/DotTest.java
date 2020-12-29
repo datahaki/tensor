@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
+import java.util.Arrays;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -75,7 +77,17 @@ public class DotTest extends TestCase {
     assertEquals(Dot.of(x, m, z, y), Dot.minimal(x, m, z, y));
   }
 
-  public void testExample() {
+  public void testExampleP156() {
+    Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
+    Tensor m1 = RandomVariate.of(distribution, 50, 10);
+    Tensor m2 = RandomVariate.of(distribution, 10, 20);
+    Tensor m3 = RandomVariate.of(distribution, 20, 5);
+    Dot dot = new Dot(m1, m2, m3);
+    assertEquals(dot.multiplications(), 3500);
+    assertEquals(dot.dimensions(), Arrays.asList(50, 5));
+  }
+
+  public void testExampleP159() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor m1 = RandomVariate.of(distribution, 6, 12);
     Tensor m2 = RandomVariate.of(distribution, 12, 20);
@@ -83,8 +95,30 @@ public class DotTest extends TestCase {
     Tensor m4 = RandomVariate.of(distribution, 3, 10);
     Tensor m5 = RandomVariate.of(distribution, 10, 5);
     Tensor m6 = RandomVariate.of(distribution, 5, 18);
-    Tensor res1 = Dot.minimal(m1, m2, m3, m4, m5, m6);
+    Dot dot = new Dot(m1, m2, m3, m4, m5, m6);
+    assertEquals(dot.multiplications(), 1680);
     Tensor res2 = Dot.of(m1, m2, m3, m4, m5, m6);
-    assertEquals(res1, res2);
+    assertEquals(dot.product(), res2);
+  }
+
+  public void testExample1() {
+    Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
+    Tensor m1 = RandomVariate.of(distribution, 5, 5, 3);
+    Tensor m2 = RandomVariate.of(distribution, 3, 2, 4);
+    Tensor m3 = RandomVariate.of(distribution, 4, 3, 5);
+    Dot dot = new Dot(m1, m2, m3);
+    assertEquals(dot.multiplications(), 2610); // otherwise 3600
+    assertEquals(dot.dimensions(), Arrays.asList(5, 5, 2, 3, 5));
+  }
+
+  public void testExample2() {
+    Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
+    Tensor m1 = RandomVariate.of(distribution, 5, 5, 3, 7);
+    Tensor mx = RandomVariate.of(distribution, 7);
+    Tensor m2 = RandomVariate.of(distribution, 3, 2, 4);
+    Tensor m3 = RandomVariate.of(distribution, 4, 3, 5);
+    Dot dot = new Dot(m1, mx, m2, m3);
+    assertEquals(dot.multiplications(), 2610); // otherwise 3600
+    assertEquals(dot.dimensions(), Arrays.asList(5, 5, 2, 3, 5));
   }
 }
