@@ -13,6 +13,29 @@ import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorWedgeTest extends TestCase {
+  public void testLength0() {
+    assertEquals(TensorWedge.of(), RealScalar.ONE);
+  }
+
+  public void testVectors() {
+    Tensor x = Tensors.vector(5, 7, 6);
+    Tensor y = Tensors.vector(1, 2, -4);
+    Tensor xy = TensorWedge.of(x, y);
+    Tensor expected = Tensors.fromString("{{0, 3, -26}, {-3, 0, -40}, {26, 40, 0}}"); // mathematica
+    assertEquals(xy, expected);
+  }
+
+  public void testVectorSequence() {
+    Tensor x = Tensors.vector(6, 2, -1);
+    Tensor y = Tensors.vector(3, 4, 5);
+    Tensor z = Tensors.vector(1, 2, 3);
+    Tensor xy = TensorWedge.of(x, y);
+    Tensor xy_z = TensorWedge.of(xy, z);
+    Tensor xyz = TensorWedge.of(x, y, z);
+    assertEquals(xy_z, xyz);
+    assertEquals(xyz.get(2, 0), Tensors.vector(0, 2, 0));
+  }
+
   public void testAntisymmetric() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 4);
     Tensor skewsy = TensorWedge.of(matrix);
@@ -42,9 +65,12 @@ public class TensorWedgeTest extends TestCase {
   }
 
   public void testSome() {
-    Tensor vector = Tensors.vector(2, 3, 4);
-    Tensor skewsy = TensorWedge.of(vector, Tensors.vector(1, 1, 1));
-    assertTrue(AntisymmetricMatrixQ.of(skewsy));
+    Tensor x = Tensors.vector(2, 3, 4);
+    Tensor y = Tensors.vector(1, 1, 1);
+    Tensor xy = TensorWedge.of(x, y);
+    Tensor expected = Tensors.fromString("{{0, -1, -2}, {1, 0, -1}, {2, 1, 0}}"); // mathematica
+    assertEquals(xy, expected);
+    assertTrue(AntisymmetricMatrixQ.of(xy));
   }
 
   public void testCross() {

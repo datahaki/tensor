@@ -2,18 +2,23 @@
 package ch.ethz.idsc.tensor.lie;
 
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Multinomial;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.TensorRank;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.sca.Factorial;
 
-/** represents the antisymmetrized tensor product of the
+/** Implementation is consistent with Mathematica, in particular
+ * <pre>
+ * TensorWedge[] == 1
+ * </pre>
  * 
- * inspired by
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/TensorWedge.html">TensorWedge</a>
  * 
  * @see Permutations
@@ -21,14 +26,9 @@ import ch.ethz.idsc.tensor.sca.Factorial;
  * @see Signature */
 public enum TensorWedge {
   ;
-  /** @param a of any rank with dimensions [n, n, ..., n]
-   * @param b of any rank with dimensions [n, n, ..., n]
-   * @return alternating tensor product of a and b */
-  public static Tensor of(Tensor a, Tensor b) {
-    return of(TensorProduct.of(a, b));
-  }
-
-  /** @param tensor of any rank with dimensions [n, n, ..., n]
+  /** the antisymmetrized tensor product
+   * 
+   * @param tensor of any rank with dimensions [n, n, ..., n]
    * @return alternating tensor
    * @throws Exception if given tensor does not have regular dimensions */
   public static Tensor of(Tensor tensor) {
@@ -45,5 +45,12 @@ public enum TensorWedge {
           : sum.subtract(transpose);
     }
     return sum.divide(Factorial.of(rank));
+  }
+
+  /** @param tensors of any rank with dimensions [n, n, ..., n]
+   * @return alternating tensor product of a and b */
+  public static Tensor of(Tensor... tensors) {
+    Scalar scalar = Multinomial.of(Stream.of(tensors).mapToInt(TensorRank::of).toArray());
+    return of(TensorProduct.of(tensors)).multiply(scalar);
   }
 }
