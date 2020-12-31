@@ -6,9 +6,11 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
 import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -38,6 +40,14 @@ public class EigensystemTest extends TestCase {
       Eigensystem eigensystem = Eigensystem.ofSymmetric(N.DOUBLE.of(matrix));
       assertTrue(eigensystem.values().Get(0) instanceof Quantity);
       assertTrue(eigensystem.values().Get(1) instanceof Quantity);
+    }
+  }
+
+  public void testQuantityLarge() {
+    for (int n = 8; n < 10; ++n) {
+      Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), n, n)).map(s -> Quantity.of(s, "m"));
+      Eigensystem eigensystem = Eigensystem.ofSymmetric(x);
+      eigensystem.values().map(QuantityMagnitude.singleton("m"));
     }
   }
 

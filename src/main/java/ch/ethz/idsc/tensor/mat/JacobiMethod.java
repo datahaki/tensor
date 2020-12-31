@@ -33,7 +33,10 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * is the product of the successive Jacobi rotation matrices Pi. The diagonal
  * entries of D are the eigenvalues of A and the columns of V are the
- * eigenvectors of A. */
+ * eigenvectors of A.
+ * 
+ * Implementation also works for matrices with entries of type Quantity of
+ * the same unit. */
 /* package */ class JacobiMethod implements Eigensystem, Serializable {
   private static final long serialVersionUID = 6886081920723349745L;
   private static final int MAX_ITERATIONS = 50;
@@ -44,7 +47,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private Tensor V;
   private Tensor d;
 
-  /** @param matrix symmetric, non-empty, and real valued */
+  /** @param matrix symmetric, non-empty, and real valued
+   * @param chop for symmetry check */
   public JacobiMethod(Tensor matrix, Chop chop) {
     Scalar[][] A = ScalarArray.ofMatrix(matrix);
     n = A.length;
@@ -70,9 +74,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
         V = Tensor.of(Stream.of(ordering).map(V::get)).unmodifiable();
         return;
       }
-      Scalar tresh = iteration < 4 //
-          ? sum.multiply(factor)
-          : RealScalar.ZERO;
+      Scalar tresh = sum.multiply(factor);
+      if (4 <= iteration)
+        tresh = tresh.zero(); // preserve unit
       for (int ip = 0; ip < n - 1; ++ip)
         for (int iq = ip + 1; iq < n; ++iq) {
           Scalar aipiq = A[ip][iq];
