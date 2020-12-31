@@ -4,6 +4,8 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -47,6 +49,20 @@ public class EigensystemTest extends TestCase {
     for (int n = 8; n < 10; ++n) {
       Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), n, n)).map(s -> Quantity.of(s, "m"));
       Eigensystem eigensystem = Eigensystem.ofSymmetric(x);
+      eigensystem.values().map(QuantityMagnitude.singleton("m"));
+    }
+  }
+
+  public void testQuantityDegenerate() {
+    int r = 4;
+    for (int n = 8; n < 10; ++n) {
+      Tensor v = Join.of( //
+          RandomVariate.of(NormalDistribution.standard(), r), //
+          Array.zeros(n - 4)).map(s -> Quantity.of(s, "m"));
+      Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
+      Tensor matrix = Transpose.of(x).dot(v.pmul(x));
+      assertEquals(MatrixRank.of(matrix), r);
+      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
       eigensystem.values().map(QuantityMagnitude.singleton("m"));
     }
   }

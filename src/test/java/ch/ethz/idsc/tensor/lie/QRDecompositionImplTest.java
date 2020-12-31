@@ -21,7 +21,7 @@ public class QRDecompositionImplTest extends TestCase {
       Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
       Tensor sol1 = qrDecomposition.solve(b);
       Tensor sol2 = LinearSolve.of(matrix, b);
-      Chop._10.requireClose(sol1, sol2);
+      Chop._06.requireClose(sol1, sol2);
     }
   }
 

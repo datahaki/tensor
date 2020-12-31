@@ -6,6 +6,12 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.mat.Eigensystem;
 
+/** Hint: implementation makes use of eigenvalue decomposition of
+ * real-valued symmetric matrices for various applications.
+ * 
+ * @see MatrixExp
+ * @see MatrixLog
+ * @see MatrixPower */
 /* package */ enum StaticHelper {
   ;
   /** @param matrix

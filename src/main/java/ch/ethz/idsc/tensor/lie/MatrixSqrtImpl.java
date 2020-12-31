@@ -38,8 +38,9 @@ import ch.ethz.idsc.tensor.sca.Chop;
       Tensor mki4 = mki1.multiply(_1_4);
       Tensor mki2 = mki4.add(mki4);
       Tensor fc = id2.add(mki2);
-      Tensor yn = yk.dot(fc);
+      Tensor yn = yk.dot(fc); // original
       Tensor zn = zk.dot(fc);
+      // Tensor yn = matrix.dot(zn); // alternative
       boolean isClose = chop.isClose(yk, yn) && chop.isClose(zk, zn);
       yk = yn;
       zk = zn;

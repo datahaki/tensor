@@ -8,6 +8,9 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -32,6 +35,17 @@ public class NormTest extends TestCase {
     Tensor c = Tensors.of(a, b);
     assertEquals(Norm._1.ofMatrix(c), Scalars.fromString("10"));
     assertEquals(Norm.INFINITY.ofMatrix(c), Scalars.fromString("11"));
+  }
+
+  public void testQuantity() {
+    for (int count = 0; count < 5; ++count)
+      for (int n = 1; n < 6; ++n) {
+        Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n).map(s -> Quantity.of(s, "m"));
+        Scalar n1 = Norm._1.ofMatrix(x);
+        Scalar n2 = Norm._2.ofMatrix(x);
+        Scalar ni = Norm.INFINITY.ofMatrix(x);
+        assertTrue(Scalars.lessEquals(n2, Max.of(n1, ni)));
+      }
   }
 
   private static void _checkExactZero(Scalar norm) {
