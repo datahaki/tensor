@@ -10,8 +10,6 @@ import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
-import ch.ethz.idsc.tensor.red.Max;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Power;
@@ -52,14 +50,15 @@ public enum MatrixLog {
     int n = matrix.length();
     Tensor id = IdentityMatrix.of(n);
     int roots = 0;
+    Tensor rem = matrix.subtract(id);
     for (; roots < MAX_EXPONENT; ++roots) {
-      Tensor rem = matrix.subtract(id);
-      Scalar rho = Max.of(Norm._1.ofMatrix(rem), Norm.INFINITY.ofMatrix(rem)); // no less than 2-norm
-      if (Scalars.lessThan(rho, RHO_MAX))
-        break;
+      Scalar rho_max = Norm2Bound.ofMatrix(rem);
+      if (Scalars.lessThan(rho_max, RHO_MAX))
+        return series1(rem).multiply(Power.of(2, roots));
       matrix = new MatrixSqrtImpl(matrix, Tolerance.CHOP).sqrt();
+      rem = matrix.subtract(id);
     }
-    return series(matrix).multiply(Power.of(2, roots));
+    throw TensorRuntimeException.of(matrix);
   }
 
   /** Hint: use {@link Symmetrize} on result for extra precision
@@ -76,11 +75,10 @@ public enum MatrixLog {
     return Log.FUNCTION.apply(Sign.requirePositive(scalar));
   }
 
-  /** @param matrix square with spectral radius below 1
-   * @return
+  /** @param x square matrix with spectral radius below 1
+   * @return log[ I + x ]
    * @throws Exception if given matrix is non-square */
-  /* package */ static Tensor series(Tensor matrix) {
-    Tensor x = matrix.subtract(IdentityMatrix.of(matrix.length()));
+  /* package */ static Tensor series1(Tensor x) {
     Tensor nxt = x;
     Tensor sum = nxt;
     for (int k = 2; k < MAX_ITERATIONS; ++k) {
@@ -90,6 +88,6 @@ public enum MatrixLog {
       if (Chop.NONE.isClose(sum, prv))
         return sum;
     }
-    throw TensorRuntimeException.of(matrix); // insufficient convergence
+    throw TensorRuntimeException.of(x); // insufficient convergence
   }
 }
