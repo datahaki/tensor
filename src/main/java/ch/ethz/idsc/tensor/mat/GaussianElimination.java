@@ -26,7 +26,9 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * a result of confusion over the history of the subject.
  * 
  * GaussianElimination is public for the rare case when the solution to a linear system
- * together with the determinant of the matrix are required. */
+ * together with the determinant of the matrix are required.
+ * 
+ * @see LinearSolve */
 public class GaussianElimination extends AbstractReduce {
   /** @param matrix square and invertible
    * @param b tensor with first dimension identical to size of matrix

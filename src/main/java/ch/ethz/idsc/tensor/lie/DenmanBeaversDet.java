@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.mat.GaussianElimination;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.Pivots;
 import ch.ethz.idsc.tensor.sca.Abs;
@@ -24,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.Power;
  * "Approximating the Logarithm of a Matrix to Specified Accuracy"
  * by Sheung Hun Cheng, Nicholas J. Higham, Charles S. Kenny, Alan J. Laub, 2001 */
 /* package */ class DenmanBeaversDet implements MatrixSqrt, Serializable {
-  private static final long serialVersionUID = -6184106264596206745L;
+  private static final long serialVersionUID = 4950881448068901474L;
   private static final int MAX_ITERATIONS = 100;
   private static final Scalar HALF = RealScalar.of(0.5);
   private static final Scalar _1_4 = RealScalar.of(0.25);
@@ -39,9 +38,9 @@ import ch.ethz.idsc.tensor.sca.Power;
     int n = matrix.length();
     mk = matrix;
     yk = matrix;
-    Tensor id = IdentityMatrix.of(n);
+    Tensor id = StaticHelper.IDENTITY_MATRIX.apply(n);
     Tensor id2 = id.multiply(HALF);
-    ScalarUnaryOperator power = Power.function(RationalScalar.of(-1, 2 * n));
+    ScalarUnaryOperator power = Power.function(RationalScalar.of(-1, n << 1));
     for (; count < MAX_ITERATIONS; ++count) {
       /** the publication suggests to use |Det(mk)^(-1/2n)|
        * which would just take a detour via complex numbers!? */

@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -36,7 +35,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 public enum MatrixLog {
   ;
   private static final int MAX_EXPONENT = 20;
-  private static final Scalar RHO_MAX = RealScalar.of(0.99);
+  private static final Scalar RHO_MAX = RealScalar.of(0.7);
   private static final int MAX_ITERATIONS = 100;
 
   /** Hint: currently only matrices of dimensions 2 x 2 are supported
@@ -52,11 +51,10 @@ public enum MatrixLog {
         return MatrixLog2.of(matrix);
     // ---
     int n = matrix.length();
-    Tensor id = IdentityMatrix.of(n);
-    int roots = 0;
+    Tensor id = StaticHelper.IDENTITY_MATRIX.apply(n);
     Tensor rem = matrix.subtract(id);
     Deque<DenmanBeaversDet> deque = new ArrayDeque<>();
-    for (; roots < MAX_EXPONENT; ++roots) {
+    for (int count = 0; count < MAX_EXPONENT; ++count) {
       Scalar rho_max = Norm2Bound.ofMatrix(rem);
       if (Scalars.lessThan(rho_max, RHO_MAX)) {
         Tensor sum = Array.zeros(n, n);
@@ -66,8 +64,6 @@ public enum MatrixLog {
           sum = sum.add(iterator.next().mk().subtract(id).multiply(factor));
           factor = factor.add(factor);
         }
-        // System.out.println(factor);
-        // System.out.println(Pretty.of(sum));
         return sum.add(series1(rem).multiply(factor));
       }
       DenmanBeaversDet denmanBeaversDet = new DenmanBeaversDet(matrix, Tolerance.CHOP);

@@ -11,17 +11,15 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class DenmanBeaversDetTest extends TestCase {
+public class MatrixSqrtSymmetricTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     for (int n = 1; n < 15; ++n) {
-      Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
+      Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), n, n));
       Tensor x2 = x.dot(x);
       DenmanBeaversDet denmanBeaversDet = Serialization.copy(new DenmanBeaversDet(x2, Tolerance.CHOP)); // <- should converge faster
-      DenmanBeaversPfm denmanBeaversPfm = Serialization.copy(new DenmanBeaversPfm(x2, Tolerance.CHOP));
-      Chop._06.requireClose(denmanBeaversPfm.sqrt(), denmanBeaversDet.sqrt());
-      // System.out.println(denmanBeaversDet.count() + " <= " + denmanBeaversPfm.count());
-      assertTrue(denmanBeaversDet.count() <= denmanBeaversPfm.count());
-      Tensor pfm2 = MatrixPower.of(denmanBeaversPfm.sqrt(), 2);
+      MatrixSqrtSymmetric matrixSqrtSymmetric = Serialization.copy(new MatrixSqrtSymmetric(x2));
+      Chop._06.requireClose(matrixSqrtSymmetric.sqrt(), denmanBeaversDet.sqrt());
+      Tensor pfm2 = MatrixPower.of(matrixSqrtSymmetric.sqrt(), 2);
       Tensor det2 = MatrixPower.of(denmanBeaversDet.sqrt(), 2);
       Chop._03.requireClose(pfm2, det2);
       Chop._03.requireClose(det2, x2);

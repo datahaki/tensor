@@ -23,10 +23,16 @@ import ch.ethz.idsc.tensor.ext.Cache;
   }
 
   /** @param bigInteger
+   * @return */
+  public static boolean isMember(BigInteger bigInteger) {
+    return bigInteger.isProbablePrime(CERTAINTY);
+  }
+
+  /** @param bigInteger
    * @return bigInteger
    * @throws Exception if given bigInteger is not a prime */
   private static BigInteger require(BigInteger bigInteger) {
-    if (!bigInteger.isProbablePrime(CERTAINTY))
+    if (!isMember(bigInteger))
       throw new IllegalArgumentException("not prime: " + bigInteger);
     return bigInteger;
   }

@@ -7,7 +7,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -49,7 +48,7 @@ public enum MatrixExp {
   /* package */ static Tensor series(Tensor matrix) {
     int n = matrix.length();
     Tensor nxt = matrix;
-    Tensor sum = IdentityMatrix.of(n).add(nxt);
+    Tensor sum = StaticHelper.IDENTITY_MATRIX.apply(n).add(nxt);
     if (Chop.NONE.allZero(nxt))
       return sum;
     for (int k = 2; k <= n; ++k) {

@@ -6,6 +6,7 @@ import java.util.Deque;
 import java.util.Iterator;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -15,6 +16,14 @@ import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MatrixLogTest extends TestCase {
+  public void testIdentityMatrix() {
+    for (int n = 1; n < 6; ++n) {
+      Tensor matrix = IdentityMatrix.of(n);
+      assertEquals(MatrixLog.of(matrix), Array.zeros(n, n));
+      assertEquals(MatrixLog.ofSymmetric(matrix), Array.zeros(n, n));
+    }
+  }
+
   public void testSymmetric() {
     for (int n = 2; n < 8; ++n) {
       Distribution distribution = NormalDistribution.of(0, 0.4 / n);
@@ -30,7 +39,7 @@ public class MatrixLogTest extends TestCase {
   }
 
   public void testExp() {
-    for (int n = 2; n < 6; ++n) {
+    for (int n = 2; n < 7; ++n) {
       Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
       Tensor exp = MatrixExp.of(x);
       Tensor log = MatrixLog.of(exp);
