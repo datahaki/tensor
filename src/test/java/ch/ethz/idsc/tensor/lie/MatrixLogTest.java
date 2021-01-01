@@ -1,6 +1,10 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Iterator;
+
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -26,13 +30,22 @@ public class MatrixLogTest extends TestCase {
   }
 
   public void testExp() {
-    for (int n = 2; n < 4; ++n) {
+    for (int n = 2; n < 6; ++n) {
       Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
       Tensor exp = MatrixExp.of(x);
       Tensor log = MatrixLog.of(exp);
       Tensor cmp = MatrixExp.of(log);
       Chop._04.requireClose(exp, cmp);
     }
+  }
+
+  public void testDeque() {
+    Deque<Integer> deque = new ArrayDeque<>();
+    deque.add(3);
+    deque.add(5);
+    Iterator<Integer> iterator = deque.iterator();
+    assertEquals(iterator.next(), (Integer) 3);
+    assertEquals(iterator.next(), (Integer) 5);
   }
 
   public void testFail() {

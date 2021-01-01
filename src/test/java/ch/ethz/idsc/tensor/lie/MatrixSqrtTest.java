@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -18,8 +19,8 @@ import junit.framework.TestCase;
 public class MatrixSqrtTest extends TestCase {
   private static void _check(Tensor g, MatrixSqrt matrixSqrt) {
     Chop._08.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt_inverse()), IdentityMatrix.of(g.length()));
-    Chop._08.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt()), g);
-    Chop._08.requireClose(matrixSqrt.sqrt_inverse().dot(matrixSqrt.sqrt_inverse()), Inverse.of(g));
+    Chop._05.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt()), g);
+    Chop._05.requireClose(matrixSqrt.sqrt_inverse().dot(matrixSqrt.sqrt_inverse()), Inverse.of(g));
   }
 
   public void testSimple() {
@@ -53,9 +54,17 @@ public class MatrixSqrtTest extends TestCase {
     }
   }
 
-  public void testRandom() {
-    for (int n = 1; n < 5; ++n) {
+  public void testRandomNormal() {
+    for (int n = 1; n < 10; ++n) {
       Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
+      Tensor x2 = x.dot(x);
+      _check(x2, MatrixSqrt.of(x2));
+    }
+  }
+
+  public void testRandomDiscreteUniform() {
+    for (int n = 1; n < 10; ++n) {
+      Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-2, 100), n, n);
       Tensor x2 = x.dot(x);
       _check(x2, MatrixSqrt.of(x2));
     }

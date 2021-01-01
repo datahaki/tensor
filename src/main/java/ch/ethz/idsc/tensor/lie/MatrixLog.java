@@ -1,18 +1,22 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Iterator;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Log;
-import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** Hint: implementation uses inverse of the scaling and squaring procedure that
@@ -51,11 +55,24 @@ public enum MatrixLog {
     Tensor id = IdentityMatrix.of(n);
     int roots = 0;
     Tensor rem = matrix.subtract(id);
+    Deque<DenmanBeaversDet> deque = new ArrayDeque<>();
     for (; roots < MAX_EXPONENT; ++roots) {
       Scalar rho_max = Norm2Bound.ofMatrix(rem);
-      if (Scalars.lessThan(rho_max, RHO_MAX))
-        return series1(rem).multiply(Power.of(2, roots));
-      matrix = new MatrixSqrtImpl(matrix, Tolerance.CHOP).sqrt();
+      if (Scalars.lessThan(rho_max, RHO_MAX)) {
+        Tensor sum = Array.zeros(n, n);
+        Iterator<DenmanBeaversDet> iterator = deque.iterator();
+        Scalar factor = RealScalar.ONE;
+        while (iterator.hasNext()) {
+          sum = sum.add(iterator.next().mk().subtract(id).multiply(factor));
+          factor = factor.add(factor);
+        }
+        // System.out.println(factor);
+        // System.out.println(Pretty.of(sum));
+        return sum.add(series1(rem).multiply(factor));
+      }
+      DenmanBeaversDet denmanBeaversDet = new DenmanBeaversDet(matrix, Tolerance.CHOP);
+      deque.add(denmanBeaversDet);
+      matrix = denmanBeaversDet.sqrt();
       rem = matrix.subtract(id);
     }
     throw TensorRuntimeException.of(matrix);

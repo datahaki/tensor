@@ -11,42 +11,38 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.sca.Chop;
 
-/** iteration to converge to sqrt of matrix
+/** product form of DenmanBeavers iteration to converge to sqrt of matrix
  * 
  * Reference:
  * "Approximating the Logarithm of a Matrix to Specified Accuracy"
  * by Sheung Hun Cheng, Nicholas J. Higham, Charles S. Kenny, Alan J. Laub, 2001 */
-/* package */ class MatrixSqrtImpl implements MatrixSqrt, Serializable {
-  private static final long serialVersionUID = -3045996054583437102L;
+/* package */ class DenmanBeaversPfm implements MatrixSqrt, Serializable {
+  private static final long serialVersionUID = -2546650079630430088L;
   private static final int MAX_ITERATIONS = 100;
   private static final Scalar HALF = RealScalar.of(0.5);
   private static final Scalar _1_4 = RealScalar.of(0.25);
   // ---
+  private int count = 0;
   private Tensor mk;
   private Tensor yk;
-  private Tensor zk;
 
   /** @param matrix square with no negative eigenvalues
    * @param chop */
-  public MatrixSqrtImpl(Tensor matrix, Chop chop) {
+  public DenmanBeaversPfm(Tensor matrix, Chop chop) {
     mk = matrix;
     yk = matrix;
-    zk = IdentityMatrix.of(matrix.length());
-    Tensor id2 = zk.multiply(HALF);
-    for (int count = 0; count < MAX_ITERATIONS; ++count) {
+    Tensor id = IdentityMatrix.of(matrix.length());
+    Tensor id2 = id.multiply(HALF);
+    for (; count < MAX_ITERATIONS; ++count) {
       Tensor mki1 = Inverse.of(mk);
       Tensor mki4 = mki1.multiply(_1_4);
       Tensor mki2 = mki4.add(mki4);
-      Tensor fc = id2.add(mki2);
-      Tensor yn = yk.dot(fc); // original
-      Tensor zn = zk.dot(fc);
-      // Tensor yn = matrix.dot(zn); // alternative
-      boolean isClose = chop.isClose(yk, yn) && chop.isClose(zk, zn);
+      Tensor yn = yk.dot(id2.add(mki2)); // original
+      boolean isClose = chop.isClose(yk, yn);
+      mk = id2.add(mki4).add(mk.multiply(_1_4));
       yk = yn;
-      zk = zn;
       if (isClose)
         return;
-      mk = id2.add(mki4).add(mk.multiply(_1_4));
     }
     throw TensorRuntimeException.of(matrix);
   }
@@ -58,6 +54,14 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
   @Override // from MatrixSqrt
   public Tensor sqrt_inverse() {
-    return zk;
+    return Inverse.of(yk);
+  }
+
+  public int count() {
+    return count;
+  }
+
+  public Tensor mk() {
+    return mk;
   }
 }

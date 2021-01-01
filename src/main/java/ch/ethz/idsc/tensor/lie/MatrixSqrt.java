@@ -14,7 +14,7 @@ public interface MatrixSqrt {
    * @return sqrt of given matrix */
   static MatrixSqrt of(Tensor matrix) {
     try {
-      return new MatrixSqrtImpl(matrix, Tolerance.CHOP);
+      return new DenmanBeaversDet(matrix, Tolerance.CHOP);
     } catch (Exception exception) {
       // ---
     }

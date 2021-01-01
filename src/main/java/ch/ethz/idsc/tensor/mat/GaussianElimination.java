@@ -23,8 +23,11 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * devised a notation for symmetric elimination that was adopted in the 19th century by
  * professional hand computers to solve the normal equations of least-squares problems.
  * The algorithm that is taught in high school was named for Gauss only in the 1950s as
- * a result of confusion over the history of the subject. */
-/* package */ class GaussianElimination extends AbstractReduce {
+ * a result of confusion over the history of the subject.
+ * 
+ * GaussianElimination is public for the rare case when the solution to a linear system
+ * together with the determinant of the matrix are required. */
+public class GaussianElimination extends AbstractReduce {
   /** @param matrix square and invertible
    * @param b tensor with first dimension identical to size of matrix
    * @param pivot
@@ -36,7 +39,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
   /***************************************************/
   private final Tensor rhs;
 
-  private GaussianElimination(Tensor matrix, Tensor b, Pivot pivot) {
+  public GaussianElimination(Tensor matrix, Tensor b, Pivot pivot) {
     super(matrix, pivot);
     rhs = b.copy();
     for (int c0 = 0; c0 < lhs.length; ++c0) {
@@ -59,7 +62,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
   }
 
   /** @return x with m.dot(x) == b */
-  private Tensor solve() {
+  public Tensor solve() {
     Tensor sol = rhs.map(Scalar::zero); // all-zeros copy of rhs
     for (int c0 = ind.length - 1; 0 <= c0; --c0) {
       int ic0 = ind[c0];

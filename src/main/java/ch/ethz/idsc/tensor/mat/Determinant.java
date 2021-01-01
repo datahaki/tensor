@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
-import java.util.stream.IntStream;
-
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -29,13 +27,7 @@ import ch.ethz.idsc.tensor.Tensor;
         return piv;
       eliminate(c0, piv);
     }
-    Scalar scalar = IntStream.range(0, lhs.length) //
-        .mapToObj(c0 -> lhs[ind[c0]].Get(c0)) //
-        .reduce(Scalar::multiply) //
-        .get();
-    return transpositions() % 2 == 0 //
-        ? scalar
-        : scalar.negate();
+    return det();
   }
 
   private void eliminate(int c0, Scalar piv) {
