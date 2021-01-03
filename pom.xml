@@ -5,7 +5,7 @@
 
 	<groupId>ch.ethz.idsc</groupId>
 	<artifactId>tensor</artifactId>
-	<version>0.8.8</version>
+	<version>0.8.9</version>
 	<packaging>jar</packaging>
 
 	<name>tensor</name>

@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   /** @param matrix square
    * @return upper bound to 2-norm of given matrix */
   public static Scalar ofMatrix(Tensor matrix) {
-    Scalar nf = Frobenius.NORM.ofMatrix(matrix);
+    Scalar nf = Frobenius.of(matrix);
     Scalar n1 = Norm._1.ofMatrix(matrix);
     Scalar ni = Norm.INFINITY.ofMatrix(matrix);
     Scalar nh = Sqrt.FUNCTION.apply(n1.multiply(ni)); // Hoelder's inequality

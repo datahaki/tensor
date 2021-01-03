@@ -104,7 +104,8 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 
   @Override // from QRDecomposition
   public Tensor solve(Tensor b) {
-    Tensor[] x = getInverseQ().dot(b).stream().toArray(Tensor[]::new);
+    Tensor skinnyQinv = Tensor.of(getInverseQ().stream().limit(m));
+    Tensor[] x = skinnyQinv.dot(b).stream().toArray(Tensor[]::new);
     for (int i = m - 1; i >= 0; --i) {
       for (int j = i + 1; j < m; ++j)
         x[i] = x[i].subtract(x[j].multiply(R.Get(i, j)));

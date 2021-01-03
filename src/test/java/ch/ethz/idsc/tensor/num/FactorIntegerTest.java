@@ -11,6 +11,14 @@ import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class FactorIntegerTest extends TestCase {
+  private static void _check(BigInteger n) {
+    Map<BigInteger, Integer> map = FactorInteger.of(n);
+    BigInteger p = BigInteger.ONE;
+    for (Entry<BigInteger, Integer> entry : map.entrySet())
+      p = p.multiply(entry.getKey().pow(entry.getValue()));
+    assertEquals(p, n);
+  }
+
   public void testZero() {
     Map<BigInteger, Integer> map = FactorInteger.of(BigInteger.valueOf(0));
     // System.out.println(map);
@@ -40,12 +48,14 @@ public class FactorIntegerTest extends TestCase {
     Random random = new Random();
     for (int count = 0; count < 10; ++count) {
       BigInteger n = new BigInteger(32 + count, random);
-      // System.out.println(n);
-      Map<BigInteger, Integer> map = FactorInteger.of(n);
-      BigInteger p = BigInteger.ONE;
-      for (Entry<BigInteger, Integer> entry : map.entrySet())
-        p = p.multiply(entry.getKey().pow(entry.getValue()));
-      assertEquals(p, n);
+      _check(n);
+    }
+  }
+
+  public void testSmall() {
+    for (int count = 0; count < 100; ++count) {
+      BigInteger n = BigInteger.valueOf(count);
+      _check(n);
     }
   }
 

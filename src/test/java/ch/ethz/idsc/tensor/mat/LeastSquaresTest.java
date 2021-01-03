@@ -27,7 +27,9 @@ public class LeastSquaresTest extends TestCase {
     Tensor x1 = LeastSquares.usingLinearSolve(m, b);
     assertEquals(x1, Tensors.vector(1, 1, 1));
     Tensor x2 = LeastSquares.usingSvd(m, b);
+    Tensor x3 = LeastSquares.usingQR(m, b);
     Tolerance.CHOP.requireClose(x1, x2);
+    Tolerance.CHOP.requireClose(x3, x2);
   }
 
   public void testEasyNumeric() {
@@ -38,7 +40,9 @@ public class LeastSquaresTest extends TestCase {
     Tensor x1 = LeastSquares.usingLinearSolve(m, b);
     assertEquals(x1, Tensors.vector(1, 1, 1));
     Tensor x2 = LeastSquares.of(m, b);
+    Tensor x3 = LeastSquares.usingQR(m, b);
     Tolerance.CHOP.requireClose(x1, x2);
+    Tolerance.CHOP.requireClose(x3, x2);
   }
 
   public void testFullRank() {
@@ -47,8 +51,10 @@ public class LeastSquaresTest extends TestCase {
     Tensor b = Tensors.vector(1, 1, 1, 1);
     Tensor x1 = LeastSquares.usingLinearSolve(m, b);
     Tensor x2 = LeastSquares.usingSvd(m, b);
+    Tensor x3 = LeastSquares.usingQR(m, b);
     assertEquals(Dimensions.of(x1), Arrays.asList(3));
     Chop._10.requireClose(x1, x2);
+    Chop._10.requireClose(x3, x2);
   }
 
   public void testLowRank() {

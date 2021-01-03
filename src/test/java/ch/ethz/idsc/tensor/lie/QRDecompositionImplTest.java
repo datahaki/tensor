@@ -6,10 +6,11 @@ import java.lang.reflect.Modifier;
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.LeastSquares;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -21,7 +22,7 @@ public class QRDecompositionImplTest extends TestCase {
       Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
       Tensor sol1 = qrDecomposition.solve(b);
       Tensor sol2 = LinearSolve.of(matrix, b);
-      Chop._06.requireClose(sol1, sol2);
+      Tolerance.CHOP.requireClose(sol1, sol2);
     }
   }
 
@@ -34,7 +35,31 @@ public class QRDecompositionImplTest extends TestCase {
       Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 3);
       Tensor sol1 = qrDecomposition.solve(b);
       Tensor sol2 = LinearSolve.of(matrix, b);
-      Chop._10.requireClose(sol1, sol2);
+      Tolerance.CHOP.requireClose(sol1, sol2);
+    }
+  }
+
+  public void testSolveLeastSquares() {
+    for (int n = 3; n < 6; ++n) {
+      int m = n + 3;
+      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), m, n);
+      QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
+      Tensor b = RandomVariate.of(NormalDistribution.standard(), m, 2);
+      Tensor sol1 = qrDecomposition.solve(b);
+      Tensor sol2 = LeastSquares.usingSvd(matrix, b);
+      Tolerance.CHOP.requireClose(sol1, sol2);
+    }
+  }
+
+  public void testSolveLeastSquaresVector() {
+    for (int n = 3; n < 6; ++n) {
+      int m = n + 3;
+      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), m, n);
+      QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
+      Tensor b = RandomVariate.of(NormalDistribution.standard(), m);
+      Tensor sol1 = qrDecomposition.solve(b);
+      Tensor sol2 = LeastSquares.usingSvd(matrix, b);
+      Tolerance.CHOP.requireClose(sol1, sol2);
     }
   }
 

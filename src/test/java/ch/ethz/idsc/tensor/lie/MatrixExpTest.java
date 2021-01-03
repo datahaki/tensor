@@ -46,14 +46,20 @@ public class MatrixExpTest extends TestCase {
     double va3 = RANDOM.nextGaussian();
     double[][] mat = new double[][] { { 0, val, va2 }, { -val, 0, va3 }, { -va2, -va3, 0 } };
     Tensor bu = Tensors.matrixDouble(mat);
-    Tensor o = MatrixExp.of(bu);
-    Chop._12.requireAllZero(o.dot(Transpose.of(o)).subtract(IdentityMatrix.of(o.length())));
+    Tensor ort = MatrixExp.of(bu);
+    Chop._12.requireAllZero(ort.dot(Transpose.of(ort)).subtract(IdentityMatrix.of(ort.length())));
+    Tensor log = MatrixLog.of(ort);
+    Chop._12.requireClose(bu, log);
   }
 
   public void testExp1() {
-    Scalar exp1 = MatrixExp.of(Tensors.fromString("{{1}}")).Get(0, 0);
+    Tensor mat = Tensors.fromString("{{1}}");
+    Tensor exp = MatrixExp.of(mat);
+    Scalar exp1 = exp.Get(0, 0);
     assertFalse(ExactScalarQ.of(exp1));
     Chop._13.requireClose(exp1, RealScalar.of(Math.exp(1)));
+    Tensor log = MatrixLog.of(exp);
+    Chop._13.requireClose(log, mat);
   }
 
   public void testExp2() {

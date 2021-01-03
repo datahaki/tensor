@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 public enum MatrixLog {
   ;
   private static final int MAX_EXPONENT = 20;
-  private static final Scalar RHO_MAX = RealScalar.of(0.7);
+  private static final Scalar RHO_MAX = RealScalar.of(0.6);
   private static final int MAX_ITERATIONS = 100;
 
   /** Hint: currently only matrices of dimensions 2 x 2 are supported
@@ -64,7 +64,7 @@ public enum MatrixLog {
           sum = sum.add(iterator.next().mk().subtract(id).multiply(factor));
           factor = factor.add(factor);
         }
-        return sum.add(series1(rem).multiply(factor));
+        return sum.add(series1p(rem).multiply(factor));
       }
       DenmanBeaversDet denmanBeaversDet = new DenmanBeaversDet(matrix, Tolerance.CHOP);
       deque.add(denmanBeaversDet);
@@ -90,8 +90,9 @@ public enum MatrixLog {
 
   /** @param x square matrix with spectral radius below 1
    * @return log[ I + x ]
-   * @throws Exception if given matrix is non-square */
-  /* package */ static Tensor series1(Tensor x) {
+   * @throws Exception if given matrix is non-square
+   * @see Math#log1p(double) */
+  /* package */ static Tensor series1p(Tensor x) {
     Tensor nxt = x;
     Tensor sum = nxt;
     for (int k = 2; k < MAX_ITERATIONS; ++k) {

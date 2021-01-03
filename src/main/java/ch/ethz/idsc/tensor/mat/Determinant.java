@@ -6,11 +6,11 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class Determinant extends AbstractReduce {
-  /** @param matrix square
+  /** @param matrix square possibly non-invertible
    * @param pivot
    * @return determinant of given matrix */
   public static Scalar of(Tensor matrix, Pivot pivot) {
-    return new Determinant(matrix, pivot).solve();
+    return new Determinant(matrix, pivot).override_det();
   }
 
   /***************************************************/
@@ -18,8 +18,11 @@ import ch.ethz.idsc.tensor.Tensor;
     super(matrix, pivot);
   }
 
-  /** @return determinant of given matrix */
-  private Scalar solve() {
+  /** eliminates rows using given pivot and aborts if matrix is degenerate,
+   * in which case the zero pivot element is returned.
+   * 
+   * @return determinant of given matrix */
+  private Scalar override_det() {
     for (int c0 = 0; c0 < lhs.length; ++c0) {
       swap(pivot.get(c0, c0, ind, lhs), c0);
       Scalar piv = lhs[ind[c0]].Get(c0);
