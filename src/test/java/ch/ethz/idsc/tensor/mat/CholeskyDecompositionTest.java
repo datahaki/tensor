@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CholeskyDecompositionTest extends TestCase {
@@ -30,11 +31,27 @@ public class CholeskyDecompositionTest extends TestCase {
     // +3 3 0
     // -1 1 3
     // {{5, 3, -1}, {0, 3, 1}, {0, 0, 3}}
-    checkDecomp(Tensors.matrix(new Number[][] { //
+    Tensor matrix = Tensors.matrix(new Number[][] { //
         { 25, 15, -5 }, //
         { 15, 18, 0 }, //
         { -5, 0, 11 } //
-    }));
+    });
+    CholeskyDecomposition choleskyDecomposition = checkDecomp(matrix);
+    {
+      Tensor b = Tensors.vector(1, 2, 3);
+      Tensor actual = choleskyDecomposition.solve(b);
+      Tensor expect = Inverse.of(matrix).dot(b);
+      assertEquals(actual, expect);
+    }
+    {
+      Tensor b = Tensors.fromString("{{1, 2}, {3, 3}, {4, -1}}");
+      Tensor expect = Inverse.of(matrix).dot(b);
+      Tensor actual = choleskyDecomposition.solve(b);
+      assertEquals(actual, expect);
+    }
+    AssertFail.of(() -> choleskyDecomposition.solve(Tensors.vector(1, 2, 3, 4)));
+    AssertFail.of(() -> choleskyDecomposition.solve(Tensors.vector(1, 2)));
+    AssertFail.of(() -> choleskyDecomposition.solve(RealScalar.ONE));
   }
 
   public void testWikiEn() throws Exception {
@@ -132,33 +149,33 @@ public class CholeskyDecompositionTest extends TestCase {
   }
 
   public void testQuantity2() {
-    Tensor mat = Tensors.fromString( //
+    Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
     {
       Tensor eye = IdentityMatrix.of(3);
-      Tensor inv = LinearSolve.of(mat, eye);
-      Tensor res = mat.dot(inv);
+      Tensor inv = LinearSolve.of(matrix, eye);
+      Tensor res = matrix.dot(inv);
       Chop.NONE.requireClose(eye, res);
     }
     {
-      Tensor inv = Inverse.of(mat);
-      Chop.NONE.requireClose(mat.dot(inv), inv.dot(mat));
-      Chop.NONE.requireClose(mat.dot(inv), IdentityMatrix.of(3));
+      Tensor inv = Inverse.of(matrix);
+      Chop.NONE.requireClose(matrix.dot(inv), inv.dot(matrix));
+      Chop.NONE.requireClose(matrix.dot(inv), IdentityMatrix.of(3));
     }
     {
-      CholeskyDecomposition cd = CholeskyDecomposition.of(mat);
-      assertEquals(Det.of(mat), cd.det()); // 100[kg^2, m^2, rad^2]
+      CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
+      assertEquals(Det.of(matrix), cd.det()); // 100[kg^2, m^2, rad^2]
       Tensor lower = rows_pmul_v(cd.getL(), Sqrt.of(cd.diagonal()));
       Tensor upper = Sqrt.of(cd.diagonal()).pmul(ConjugateTranspose.of(cd.getL()));
       Tensor res = lower.dot(upper);
-      Chop._10.requireClose(mat, res);
+      Chop._10.requireClose(matrix, res);
     }
-    SymmetricMatrixQ.require(mat);
-    assertTrue(HermitianMatrixQ.of(mat));
-    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(mat));
-    assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(mat));
-    assertFalse(NegativeDefiniteMatrixQ.ofHermitian(mat));
-    assertFalse(NegativeSemidefiniteMatrixQ.ofHermitian(mat));
+    SymmetricMatrixQ.require(matrix);
+    assertTrue(HermitianMatrixQ.of(matrix));
+    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
+    assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(matrix));
+    assertFalse(NegativeDefiniteMatrixQ.ofHermitian(matrix));
+    assertFalse(NegativeSemidefiniteMatrixQ.ofHermitian(matrix));
   }
 
   private static Tensor rows_pmul_v(Tensor L, Tensor diag) {
@@ -166,20 +183,25 @@ public class CholeskyDecompositionTest extends TestCase {
   }
 
   public void testQuantityComplex() {
-    Tensor mat = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
-    CholeskyDecomposition cd = CholeskyDecomposition.of(mat);
+    Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
+    CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
     Tensor sdiag = Sqrt.of(cd.diagonal());
     Tensor upper = sdiag.pmul(ConjugateTranspose.of(cd.getL()));
     {
       Tensor res = ConjugateTranspose.of(upper).dot(upper);
-      Chop._10.requireClose(mat, res);
+      Chop._10.requireClose(matrix, res);
     }
     {
       // the construction of the lower triangular matrix L . L* is not so convenient
       // Tensor lower = Transpose.of(sdiag.pmul(Transpose.of(cd.getL())));
       Tensor lower = rows_pmul_v(cd.getL(), sdiag);
       Tensor res = lower.dot(upper);
-      Chop._10.requireClose(mat, res);
+      Chop._10.requireClose(matrix, res);
+    }
+    {
+      assertEquals( //
+          cd.solve(IdentityMatrix.of(2)), //
+          Inverse.of(matrix));
     }
   }
 }

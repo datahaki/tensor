@@ -1,18 +1,16 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
-import java.util.stream.IntStream;
-
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class Determinant extends AbstractReduce {
-  /** @param matrix square
+  /** @param matrix square possibly non-invertible
    * @param pivot
    * @return determinant of given matrix */
   public static Scalar of(Tensor matrix, Pivot pivot) {
-    return new Determinant(matrix, pivot).solve();
+    return new Determinant(matrix, pivot).override_det();
   }
 
   /***************************************************/
@@ -20,8 +18,11 @@ import ch.ethz.idsc.tensor.Tensor;
     super(matrix, pivot);
   }
 
-  /** @return determinant of given matrix */
-  private Scalar solve() {
+  /** eliminates rows using given pivot and aborts if matrix is degenerate,
+   * in which case the zero pivot element is returned.
+   * 
+   * @return determinant of given matrix */
+  private Scalar override_det() {
     for (int c0 = 0; c0 < lhs.length; ++c0) {
       swap(pivot.get(c0, c0, ind, lhs), c0);
       Scalar piv = lhs[ind[c0]].Get(c0);
@@ -29,13 +30,7 @@ import ch.ethz.idsc.tensor.Tensor;
         return piv;
       eliminate(c0, piv);
     }
-    Scalar scalar = IntStream.range(0, lhs.length) //
-        .mapToObj(c0 -> lhs[ind[c0]].Get(c0)) //
-        .reduce(Scalar::multiply) //
-        .get();
-    return transpositions() % 2 == 0 //
-        ? scalar
-        : scalar.negate();
+    return det();
   }
 
   private void eliminate(int c0, Scalar piv) {

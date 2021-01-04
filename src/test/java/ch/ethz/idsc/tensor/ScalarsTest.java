@@ -35,6 +35,11 @@ public class ScalarsTest extends TestCase {
     checkInvariant("123-1A23*I", StringScalar.class);
   }
 
+  public void testParseSpecific() {
+    assertEquals(Scalars.fromString("+002.5"), DoubleScalar.of(+2.5));
+    assertEquals(Scalars.fromString("-002.5"), DoubleScalar.of(-2.5));
+  }
+
   public void testSpacing() {
     checkInvariant("-1.0348772853950305  +  0.042973906265653894 * I", ComplexScalarImpl.class);
     checkInvariant("-1.0348772853950305  -  0.042973906265653894 * I", ComplexScalarImpl.class);

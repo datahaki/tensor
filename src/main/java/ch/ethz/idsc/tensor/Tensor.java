@@ -242,6 +242,17 @@ public interface Tensor extends Iterable<Tensor> {
    * Dimensions[Array[1 &, {2, 3}] Array[1 &, {2, 3, 4}]] == {2, 3, 4}
    * </pre>
    * 
+   * <p>If this is a vector, then pmul is the faster equivalent to the dot product
+   * with a diagonal matrix
+   * <pre>
+   * vector.pmul(tensor) == DiagonalMatrix[vector].tensor
+   * </pre>
+   * 
+   * <p>If this is a scalar, then pmul is equivalent to scalar multiplication
+   * <pre>
+   * scalar.pmul(tensor) == tensor.multiply(scalar)
+   * </pre>
+   * 
    * @param tensor
    * @return this element-wise multiply input tensor. */
   Tensor pmul(Tensor tensor);

@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 
 /* package */ class UnitImpl implements Unit, Serializable {
   private static final long serialVersionUID = -2807221907647012658L;
-  /* package */ static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> COLLECTOR = //
+  /* package */ static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> NEGATION = //
       Collectors.toMap(Entry::getKey, entry -> entry.getValue().negate(), (e1, e2) -> null, TreeMap::new);
   // ---
   /** Example:
@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 
   @Override // from Unit
   public Unit negate() {
-    return new UnitImpl(navigableMap.entrySet().stream().collect(COLLECTOR));
+    return new UnitImpl(navigableMap.entrySet().stream().collect(NEGATION));
   }
 
   @Override // from Unit
@@ -86,13 +86,13 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
     String string = exponent.toString();
     return string.equals("1") //
         ? ""
-        : Unit.POWER_DELIMITER + string;
+        : POWER_DELIMITER + string;
   }
 
   @Override // from Object
   public String toString() {
     return navigableMap.entrySet().stream() //
         .map(entry -> entry.getKey() + exponentString(entry.getValue())) //
-        .collect(Collectors.joining(Unit.JOIN_DELIMITER));
+        .collect(Collectors.joining(JOIN_DELIMITER));
   }
 }

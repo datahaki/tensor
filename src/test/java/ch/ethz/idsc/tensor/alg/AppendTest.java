@@ -35,4 +35,9 @@ public class AppendTest extends TestCase {
   public void testScalarFail() {
     AssertFail.of(() -> Append.of(RealScalar.ONE, Pi.TWO));
   }
+
+  public void testNullFail() {
+    AssertFail.of(() -> Append.of(null, Tensors.vector(1)));
+    AssertFail.of(() -> Append.of(Tensors.vector(1), null));
+  }
 }

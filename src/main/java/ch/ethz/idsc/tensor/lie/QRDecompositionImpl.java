@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
  * householder with even number of reflections
  * reproduces example on wikipedia */
 /* package */ class QRDecompositionImpl implements QRDecomposition, Serializable {
-  private static final long serialVersionUID = -1537168318056827415L;
+  private static final long serialVersionUID = 7012892004652730892L;
   private static final TensorUnaryOperator NORMALIZE_UNLESS_ZERO = NormalizeUnlessZero.with(Norm._2);
   // ---
   private final int n;
@@ -48,6 +48,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
     // the m-th reflection is necessary in the case where A is non-square
     for (int k = 0; k < m; ++k) {
       Tensor H = reflect(k);
+      // LONGTERM can reflections be applied more efficiently than by dot product
       Qinv = H.dot(Qinv);
       R = H.dot(R);
     }
@@ -92,7 +93,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 
   @Override // from QRDecomposition
   public Tensor getQ() {
-    return ConjugateTranspose.of(Qinv);
+    return ConjugateTranspose.of(getInverseQ());
   }
 
   @Override // from QRDecomposition
@@ -100,5 +101,17 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
     return n == m //
         ? Times.pmul(Diagonal.of(R)).Get()
         : RealScalar.ZERO;
+  }
+
+  @Override // from QRDecomposition
+  public Tensor solve(Tensor b) {
+    Tensor skinnyQinv = Tensor.of(Qinv.stream().limit(m));
+    Tensor[] x = skinnyQinv.dot(b).stream().toArray(Tensor[]::new);
+    for (int i = m - 1; i >= 0; --i) {
+      for (int j = i + 1; j < m; ++j)
+        x[i] = x[i].subtract(x[j].multiply(R.Get(i, j)));
+      x[i] = x[i].divide(R.Get(i, i));
+    }
+    return Unprotect.byRef(x);
   }
 }

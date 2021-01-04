@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 
-/** the Cholesky decomposition of a hermitian matrix establishes matrices L and D with
+/** The Cholesky decomposition of a hermitian matrix establishes matrices L and D with
  * 
  * <code>matrix == L . D . L*</code>
  * 
@@ -16,6 +16,9 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
  * <p>For some hermitian matrices the decomposition cannot be established.
  * An example that fails (also in Mathematica) is <code>{{0, 1}, {1, 0}}</code>.
  * 
+ * <p>Remark: Our implementation follows the convention of Wikipedia, as well as
+ * Numerical Recipes instead of Mathematica, which returns the upper triangular matrix.
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/CholeskyDecomposition.html">CholeskyDecomposition</a>
  * 
@@ -25,9 +28,7 @@ public interface CholeskyDecomposition {
    * @return Cholesky decomposition of matrix
    * @throws TensorRuntimeException if matrix is not hermitian, or decomposition failed */
   static CholeskyDecomposition of(Tensor matrix) {
-    if (HermitianMatrixQ.of(matrix))
-      return new CholeskyDecompositionImpl(matrix);
-    throw TensorRuntimeException.of(matrix);
+    return new CholeskyDecompositionImpl(matrix, Tolerance.CHOP);
   }
 
   /** @return lower triangular matrix L */
@@ -38,4 +39,8 @@ public interface CholeskyDecomposition {
 
   /** @return determinant of matrix */
   Scalar det();
+
+  /** @param b
+   * @return Inverse.of(matrix).dot(b) == LinearSolve.of(matrix, b) */
+  Tensor solve(Tensor b);
 }

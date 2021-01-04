@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** base class of {@link Determinant}, {@link GaussianElimination} and {@link RowReduce} */
@@ -18,7 +19,7 @@ import ch.ethz.idsc.tensor.Tensor;
     ind = IntStream.range(0, lhs.length).toArray();
   }
 
-  final void swap(int k, int c0) {
+  public final void swap(int k, int c0) {
     if (k != c0) {
       ++transpositions;
       int swap = ind[k];
@@ -27,7 +28,14 @@ import ch.ethz.idsc.tensor.Tensor;
     }
   }
 
-  final int transpositions() {
-    return transpositions;
+  /** @return determinant of matrix */
+  public final Scalar det() {
+    Scalar scalar = IntStream.range(0, lhs.length) //
+        .mapToObj(c0 -> lhs[ind[c0]].Get(c0)) //
+        .reduce(Scalar::multiply) //
+        .get();
+    return transpositions % 2 == 0 //
+        ? scalar
+        : scalar.negate();
   }
 }

@@ -42,7 +42,7 @@ public enum BasisTransform {
 
   /** @param matrix is (1, 1)-tensor
    * @param v square matrix with full rank
-   * @return */
+   * @return Inverse[v] . matrix . v */
   public static Tensor ofMatrix(Tensor matrix, Tensor v) {
     return LinearSolve.of(v, matrix.dot(v));
   }

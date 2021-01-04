@@ -16,11 +16,11 @@ public interface Eigensystem {
    * 2) It is possible to find a complete set of n eigenvectors for an order-n real
    * symmetric matrix and these can be made mutually orthogonal.
    * 
-   * @param matrix symmetric, non-empty, and real valued
+   * @param matrix real symmetric, non-empty, and real valued
    * @return eigensystem with vectors scaled to unit length
-   * @throws Exception if input is not a symmetric matrix */
+   * @throws Exception if input is not a real symmetric matrix */
   static Eigensystem ofSymmetric(Tensor matrix) {
-    return new JacobiMethod(SymmetricMatrixQ.require(matrix));
+    return new JacobiMethod(matrix, Tolerance.CHOP);
   }
 
   /** Careful: Mathematica orders the eigenvalues according to absolute value.

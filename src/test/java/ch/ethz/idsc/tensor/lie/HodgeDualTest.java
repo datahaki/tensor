@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
-import java.util.List;
-
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -21,8 +19,7 @@ public class HodgeDualTest extends TestCase {
   static Tensor hodgeDual_of(Tensor tensor, int d) {
     Dimensions dimensions = new Dimensions(tensor);
     if (dimensions.isArray()) {
-      List<Integer> list = dimensions.list();
-      int rank = list.size();
+      int rank = dimensions.list().size();
       // implementation is not efficient
       Tensor product = TensorProduct.of(tensor, LeviCivitaTensor.of(d));
       for (int index = 0; index < rank; ++index)

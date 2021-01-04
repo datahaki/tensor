@@ -13,8 +13,8 @@ public enum MeanDeviation {
    * @return mean deviation of entries in given vector
    * @throws Exception if input is not a vector, or is empty */
   public static Scalar ofVector(Tensor vector) {
-    Scalar mean = Mean.of(vector).Get();
-    return Norm1.ofVector(vector.stream().map(scalar -> mean.subtract(scalar))) //
+    Scalar nmean = Mean.of(vector).Get().negate();
+    return Norm1.ofVector(vector.stream().map(nmean::add)) //
         .divide(RealScalar.of(vector.length()));
   }
 }

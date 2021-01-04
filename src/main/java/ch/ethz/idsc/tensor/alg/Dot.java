@@ -1,21 +1,128 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import ch.ethz.idsc.tensor.Tensor;
 
-/** inspired by
+/** Implementation is based on the dynamic programming solution in the reference
+ * "Algorithmik", Section 4.2 "Matrizen-Kettenmultiplikation"
+ * by Uwe Schoening, 2001
+ * 
+ * <p>The implementation was extended to work for tensors of arbitrary rank.
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Dot.html">Dot</a> */
-public enum Dot {
-  ;
-  /** @param tensor
-   * @param v's
-   * @return ( ... ( ( m . v[0] ) . v[1] ). ... ) . v[end-1] */
-  // LONGTERM choose association of dot with minimal multiplications
-  public static Tensor of(Tensor tensor, Tensor... v) {
-    if (v.length == 0)
-      return tensor.copy();
-    for (int index = 0; index < v.length; ++index)
-      tensor = tensor.dot(v[index]);
-    return tensor;
+public class Dot {
+  /** @param tensors non-empty array
+   * @return (...((tensors[0].tensors[1]).tensors[2]) ... ).tensors[n-1]
+   * with the guarantee that minimal number of multiplications is used
+   * @throws Exception if tensors is empty array */
+  public static Tensor of(Tensor... tensors) {
+    if (tensors.length == 1)
+      return tensors[0].copy();
+    return new Dot(tensors).product();
+  }
+
+  /***************************************************/
+  private final Tensor product;
+  private final Entry[][] entry;
+
+  /* package */ Dot(Tensor... tensors) {
+    List<Node> list = Stream.of(tensors) //
+        .map(tensor -> new Node(tensor, Dimensions.of(tensor))) //
+        .collect(Collectors.toList());
+    int index = 0;
+    while (index < list.size() && 1 < list.size()) {
+      Node node = list.get(index);
+      if (node.dimensions.size() == 1) // handle rank 1 tensors
+        if (index == 0) {
+          list.set(index, node.dot(list.get(index + 1)));
+          list.remove(index + 1);
+        } else {
+          list.remove(index);
+          --index; // can decrement index since 0 < index
+          list.set(index, list.get(index).dot(node));
+        }
+      else
+        ++index;
+    }
+    int n = list.size();
+    entry = new Entry[n][];
+    for (int i = 0; i < n; ++i) {
+      entry[i] = new Entry[n - i];
+      entry[i][0] = new Entry(list.get(i).dimensions, 0, -1);
+    }
+    for (int l = 1; l < n; ++l)
+      for (int i = 0; i < n - l; ++i)
+        for (int k = 0; k < l; ++k) {
+          int kp1 = k + 1;
+          int cmp = entry[i][k].product(entry[i + kp1][l - kp1]);
+          if (Objects.isNull(entry[i][l]) || cmp < entry[i][l].m)
+            entry[i][l] = new Entry(combine(entry[i][k].dimensions, entry[i + kp1][l - kp1].dimensions), cmp, k + i);
+        }
+    product = recur(list, 0, n - 1);
+  }
+
+  private Tensor recur(List<Node> list, int i, int j) {
+    if (i == j)
+      return list.get(i).tensor;
+    int k = entry[i][j - i].k;
+    return recur(list, i, k).dot(recur(list, k + 1, j));
+  }
+
+  public Tensor product() {
+    return product;
+  }
+
+  // count of multiplications excluding dots with vectors
+  /* package */ int multiplications() {
+    return entry[0][entry.length - 1].m;
+  }
+
+  /* package */ List<Integer> dimensions() {
+    return entry[0][entry.length - 1].dimensions;
+  }
+
+  /***************************************************/
+  /* package */ static List<Integer> combine(List<Integer> dimensions1, List<Integer> dimensions2) {
+    return Stream.concat( //
+        dimensions1.stream().limit(dimensions1.size() - 1), //
+        dimensions2.stream().skip(1)).collect(Collectors.toList());
+  }
+
+  private static class Node {
+    private final Tensor tensor;
+    private final List<Integer> dimensions;
+
+    public Node(Tensor tensor, List<Integer> dimensions) {
+      this.tensor = tensor;
+      this.dimensions = dimensions;
+    }
+
+    public Node dot(Node node) {
+      return new Node(tensor.dot(node.tensor), combine(dimensions, node.dimensions));
+    }
+  }
+
+  /***************************************************/
+  private static class Entry {
+    private final List<Integer> dimensions;
+    private final int m;
+    private final int k;
+
+    public Entry(List<Integer> dimensions, int m, int k) {
+      this.dimensions = dimensions;
+      this.m = m;
+      this.k = k;
+    }
+
+    public int product(Entry entry) {
+      return m + entry.m + Stream.concat(dimensions.stream(), entry.dimensions.stream().skip(1)) //
+          .reduce(Math::multiplyExact).get();
+    }
   }
 }

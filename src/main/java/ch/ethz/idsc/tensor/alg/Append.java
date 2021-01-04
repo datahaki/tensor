@@ -25,7 +25,7 @@ public enum Append {
    * @param tensor not a scalar
    * @param last
    * @return tensor with one additional last element
-   * @throws Exception if given tensor is a scalar */
+   * @throws Exception if given tensor is a scalar, or either input parameter is null */
   public static Tensor of(Tensor tensor, Tensor last) {
     Tensor result = Tensors.reserve(tensor.length() + 1);
     tensor.stream().forEach(result::append);

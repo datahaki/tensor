@@ -1,6 +1,6 @@
 # ch.ethz.idsc.tensor <a href="https://travis-ci.org/idsc-frazzoli/tensor"><img src="https://travis-ci.org/idsc-frazzoli/tensor.svg?branch=master" alt="Build Status"></a>
 
-Library for tensor computations in Java, version `0.8.8`
+Library for tensor computations in Java, version `0.8.9`
 
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions
@@ -46,7 +46,9 @@ Autonomous Gokart
 * scalars are real-, or complex numbers, from finite fields, or quantities with physical units
 * values are encoded as exact integer fractions, in double precision, and as `java.math.BigDecimal`
 * probability distributions for random variate generation: Binomial-, Poisson-, Exponential-distribution, etc.
-* matrix functions `LinearSolve`, `SingularValueDecomposition`, `QRDecomposition`, etc.
+* linear solvers `GaussianElimination`, `CholeskyDecomposition`, `QRDecomposition`, `SingularValueDecomposition`
+* matrix functions `MatrixExp`, `MatrixLog`, etc.
+* tensor functions `TensorProduct`, `TensorWedge`, `Trace`, `HodgeDual`, etc.
 * parametric functions `LinearInterpolation`, `BSplineFunction`, etc.
 * window functions: Gaussian, Hamming, Hann, Blackman, etc.
 * spectral analysis: `Fourier`, `SpectrogramArray`, etc.
@@ -298,7 +300,7 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
   <dependency>
     <groupId>ch.ethz.idsc</groupId>
     <artifactId>tensor</artifactId>
-    <version>0.8.8</version>
+    <version>0.8.9</version>
   </dependency>
 </dependencies>
 ```

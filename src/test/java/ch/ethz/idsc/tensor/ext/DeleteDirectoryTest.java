@@ -10,7 +10,7 @@ public class DeleteDirectoryTest extends TestCase {
   public void testLayer0() throws IOException {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "0");
     folder.mkdir();
-    DeleteDirectory deleteDirectory = DeleteDirectory.of(folder, 0, 1);
+    DeleteDirectory deleteDirectory = DeleteDirectory.of(folder, 0, 1, DeleteDirectory.DELETE_FAIL_ABORTS);
     assertEquals(deleteDirectory.deletedCount(), 1);
   }
 
