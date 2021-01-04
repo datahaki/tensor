@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -27,14 +26,15 @@ import ch.ethz.idsc.tensor.red.Times;
   private Tensor Qinv;
   private Tensor R;
 
-  /** @param A
+  /** @param matrix n x m
+   * @param b is rhs, for instance IdentityMatrix[n]
    * @param qrSignOperator
    * @throws Exception if input is not a matrix */
-  public QRDecompositionImpl(Tensor A, QRSignOperator qrSignOperator) {
-    n = A.length();
-    m = Unprotect.dimension1(A);
-    Qinv = IdentityMatrix.of(n);
-    R = A;
+  public QRDecompositionImpl(Tensor matrix, Tensor b, QRSignOperator qrSignOperator) {
+    n = matrix.length();
+    m = Unprotect.dimension1(matrix);
+    Qinv = b;
+    R = matrix;
     // the m-th reflection is necessary in the case where A is non-square
     for (int k = 0; k < m; ++k) {
       final int fk = k;
@@ -76,12 +76,8 @@ import ch.ethz.idsc.tensor.red.Times;
         : RealScalar.ZERO;
   }
 
-  @Override // from QRDecomposition
-  public Tensor solve(Tensor b) {
-    Tensor[] x = Qinv.stream() //
-        .limit(m) //
-        .map(row -> row.dot(b)) //
-        .toArray(Tensor[]::new);
+  public Tensor eliminate() {
+    Tensor[] x = Qinv.stream().limit(m).toArray(Tensor[]::new);
     for (int i = m - 1; i >= 0; --i) {
       for (int j = i + 1; j < m; ++j)
         x[i] = x[i].subtract(x[j].multiply(R.Get(i, j)));

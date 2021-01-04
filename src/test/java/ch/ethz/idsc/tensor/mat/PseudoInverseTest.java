@@ -55,7 +55,18 @@ public class PseudoInverseTest extends TestCase {
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(1, "m"));
     for (int n = 1; n < 7; ++n) {
       Tensor matrix = RandomVariate.of(distribution, n, n);
-      Chop._09.requireClose(Inverse.of(matrix), PseudoInverse.of(matrix));
+      Tensor invers = Inverse.of(matrix);
+      Chop._09.requireClose(invers, PseudoInverse.of(matrix));
+      Chop._09.requireClose(invers, PseudoInverse.usingQR(matrix));
+    }
+  }
+
+  public void testRectangular() {
+    Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(1, "m"));
+    for (int m = 1; m < 7; ++m) {
+      int n = m + 3;
+      Tensor matrix = RandomVariate.of(distribution, n, m);
+      Chop._09.requireClose(PseudoInverse.of(matrix), PseudoInverse.usingQR(matrix));
     }
   }
 

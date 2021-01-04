@@ -48,7 +48,6 @@ public class QRMathematicaTest extends TestCase {
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
       Tensor matrix = RandomVariate.of(distribution, n, m);
-      Tensor b = RandomVariate.of(distribution, n);
       QRDecomposition qrDecomposition = QRMathematica.wrap(QRDecomposition.of(matrix));
       assertEquals(Dimensions.of(qrDecomposition.getInverseQ()), Arrays.asList(Math.min(n, m), n));
       assertEquals(Dimensions.of(qrDecomposition.getQ()), Arrays.asList(n, Math.min(n, m)));
@@ -56,7 +55,6 @@ public class QRMathematicaTest extends TestCase {
       SquareMatrixQ.require(qrDecomposition.getR());
       Chop._07.requireClose(qrDecomposition.getQ().dot(qrDecomposition.getR()), matrix);
       assertTrue(OrthogonalMatrixQ.of(qrDecomposition.getInverseQ()));
-      qrDecomposition.solve(b);
     }
   }
 
@@ -80,9 +78,8 @@ public class QRMathematicaTest extends TestCase {
       Tensor mr = RandomVariate.of(NormalDistribution.standard(), n, n);
       Tensor mi = RandomVariate.of(NormalDistribution.standard(), n, n);
       Tensor matrix = mr.add(mi.multiply(ComplexScalar.I));
-      QRDecomposition qrDecomposition = QRMathematica.wrap(QRDecomposition.of(matrix));
       Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 3);
-      Tensor sol1 = qrDecomposition.solve(b);
+      Tensor sol1 = QRDecomposition.solve(matrix, b, QRSignOperators.STABILITY);
       Tensor sol2 = LinearSolve.of(matrix, b);
       Chop._10.requireClose(sol1, sol2);
     }

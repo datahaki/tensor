@@ -8,9 +8,11 @@ import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.LeastSquares;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
+import ch.ethz.idsc.tensor.mat.PseudoInverse;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -22,11 +24,11 @@ public class QRDecompositionImplTest extends TestCase {
   public void testSolve() {
     for (int n = 3; n < 6; ++n) {
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n);
-      QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
       Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
-      Tensor sol1 = qrDecomposition.solve(b);
       Tensor sol2 = LinearSolve.of(matrix, b);
-      Chop._08.requireClose(sol1, sol2);
+      QRDecompositionImpl qrDecompositionImpl = new QRDecompositionImpl(matrix, b, QRSignOperators.STABILITY);
+      Tensor sol3 = qrDecompositionImpl.eliminate();
+      Chop._09.requireClose(sol2, sol3);
     }
   }
 
@@ -35,11 +37,11 @@ public class QRDecompositionImplTest extends TestCase {
       Tensor mr = RandomVariate.of(NormalDistribution.standard(), n, n);
       Tensor mi = RandomVariate.of(NormalDistribution.standard(), n, n);
       Tensor matrix = mr.add(mi.multiply(ComplexScalar.I));
-      QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
       Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 3);
-      Tensor sol1 = qrDecomposition.solve(b);
       Tensor sol2 = LinearSolve.of(matrix, b);
-      Tolerance.CHOP.requireClose(sol1, sol2);
+      QRDecompositionImpl qrDecompositionImpl = new QRDecompositionImpl(matrix, b, QRSignOperators.STABILITY);
+      Tensor sol3 = qrDecompositionImpl.eliminate();
+      Tolerance.CHOP.requireClose(sol2, sol3);
     }
   }
 
@@ -47,11 +49,11 @@ public class QRDecompositionImplTest extends TestCase {
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
-      QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
       Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
-      Tensor sol1 = qrDecomposition.solve(b);
       Tensor sol2 = LeastSquares.usingSvd(matrix, b);
-      Tolerance.CHOP.requireClose(sol1, sol2);
+      QRDecompositionImpl qrDecompositionImpl = new QRDecompositionImpl(matrix, b, QRSignOperators.STABILITY);
+      Tensor sol3 = qrDecompositionImpl.eliminate();
+      Tolerance.CHOP.requireClose(sol2, sol3);
     }
   }
 
@@ -61,12 +63,27 @@ public class QRDecompositionImplTest extends TestCase {
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
       QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
       Tensor b = RandomVariate.of(NormalDistribution.standard(), n);
-      Tensor sol1 = qrDecomposition.solve(b);
       Tensor sol2 = LeastSquares.usingSvd(matrix, b);
-      Tolerance.CHOP.requireClose(sol1, sol2);
       assertEquals(Dimensions.of(qrDecomposition.getInverseQ()), Arrays.asList(n, n));
       assertEquals(Dimensions.of(qrDecomposition.getQ()), Arrays.asList(n, n));
       assertEquals(Dimensions.of(qrDecomposition.getR()), Arrays.asList(n, m));
+      QRDecompositionImpl qrDecompositionImpl = new QRDecompositionImpl(matrix, b, QRSignOperators.STABILITY);
+      Tensor sol3 = qrDecompositionImpl.eliminate();
+      Tolerance.CHOP.requireClose(sol2, sol3);
+    }
+  }
+
+  public void testPseudoInverseBigSmall() {
+    for (int m = 3; m < 6; ++m) {
+      int n = m + 3;
+      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
+      QRDecompositionImpl qrDecompositionImpl = //
+          new QRDecompositionImpl(matrix, IdentityMatrix.of(n), QRSignOperators.STABILITY);
+      Tensor sol1 = qrDecompositionImpl.eliminate();
+      Tensor sol2 = qrDecompositionImpl.eliminate(); // idempotent
+      Chop._05.requireClose(sol1, sol2);
+      assertEquals(Dimensions.of(sol1), Arrays.asList(m, n));
+      Chop._05.requireClose(PseudoInverse.of(matrix), sol1);
     }
   }
 

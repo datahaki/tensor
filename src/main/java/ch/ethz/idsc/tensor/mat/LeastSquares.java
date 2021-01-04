@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.lie.QRDecomposition;
+import ch.ethz.idsc.tensor.lie.QRSignOperators;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/LeastSquares.html">LeastSquares</a>
@@ -34,14 +35,15 @@ public enum LeastSquares {
    * @throws Exception if matrix does not have maximum rank */
   public static Tensor usingLinearSolve(Tensor matrix, Tensor b) {
     Tensor mt = ConjugateTranspose.of(matrix);
-    return LinearSolve.of(mt.dot(matrix), mt.dot(b));
+    return CholeskyDecomposition.of(mt.dot(matrix)).solve(mt.dot(b));
+    // return LinearSolve.of(mt.dot(matrix), mt.dot(b));
   }
 
   /** @param matrix
    * @param b
    * @return x with matrix.dot(x) ~ b */
   public static Tensor usingQR(Tensor matrix, Tensor b) {
-    return QRDecomposition.of(matrix).solve(b);
+    return QRDecomposition.solve(matrix, b, QRSignOperators.STABILITY);
   }
 
   /** when m does not have full rank, and for numerical stability

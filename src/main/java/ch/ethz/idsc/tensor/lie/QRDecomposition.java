@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.lie;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 
 /** QRDecomposition is not consistent with Mathematica.
  * 
@@ -19,14 +20,22 @@ public interface QRDecomposition {
    * @param matrix of dimensions n x m
    * @return qr-decomposition of given matrix */
   static QRDecomposition of(Tensor matrix) {
-    return new QRDecompositionImpl(matrix, QRSignOperators.STABILITY);
+    return of(matrix, QRSignOperators.STABILITY);
   }
 
   /** @param matrix not necessarily square
    * @return qr-decomposition of matrix
    * @throws Exception for input that is not "almost"-orthogonal */
   static QRDecomposition of(Tensor matrix, QRSignOperator qrSignOperator) {
-    return new QRDecompositionImpl(matrix, qrSignOperator);
+    return new QRDecompositionImpl(matrix, IdentityMatrix.of(matrix.length()), qrSignOperator);
+  }
+
+  /** @param matrix
+   * @param b
+   * @param qrSignOperator
+   * @return least squares solution x that approximates matrix . x ~ b */
+  static Tensor solve(Tensor matrix, Tensor b, QRSignOperator qrSignOperator) {
+    return new QRDecompositionImpl(matrix, b, qrSignOperator).eliminate();
   }
 
   /** @return orthogonal matrix */
@@ -40,8 +49,4 @@ public interface QRDecomposition {
 
   /** @return determinant of matrix */
   Scalar det();
-
-  /** @param b
-   * @return least squares solution x with approx. matrix . x ~ b */
-  Tensor solve(Tensor b);
 }

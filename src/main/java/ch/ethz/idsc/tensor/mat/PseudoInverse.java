@@ -25,6 +25,14 @@ public enum PseudoInverse {
         : Transpose.of(of(Transpose.of(matrix)));
   }
 
+  /** @param matrix with maximal rank
+   * @return pseudoinverse of given matrix */
+  public static Tensor usingQR(Tensor matrix) {
+    return Unprotect.dimension1(matrix) <= matrix.length() //
+        ? LeastSquares.usingQR(matrix, IdentityMatrix.of(matrix.length())) //
+        : Transpose.of(usingQR(Transpose.of(matrix)));
+  }
+
   /** @param svd
    * @param chop
    * @return pseudoinverse of matrix determined by given svd */
