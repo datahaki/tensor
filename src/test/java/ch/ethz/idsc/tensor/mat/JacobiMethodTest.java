@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.BasisTransform;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
@@ -29,8 +30,11 @@ public class JacobiMethodTest extends TestCase {
       Chop._10.requireClose(sol, matrix);
     }
     Tensor Vi = Inverse.of(eigensystem.vectors());
-    Tensor res = Vi.dot(DiagonalMatrix.with(eigensystem.values())).dot(eigensystem.vectors());
-    Chop._08.requireClose(res, matrix);
+    Tensor diagonalMatrix = DiagonalMatrix.with(eigensystem.values());
+    Tensor res = Vi.dot(diagonalMatrix).dot(eigensystem.vectors());
+    Tensor btr = BasisTransform.ofMatrix(diagonalMatrix, eigensystem.vectors());
+    Chop._10.requireClose(res, matrix);
+    Chop._10.requireClose(btr, matrix);
     assertEquals(res.subtract(matrix).map(Chop._08), matrix.multiply(RealScalar.ZERO));
     // testing determinant
     Scalar det = Det.of(matrix);

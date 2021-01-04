@@ -48,6 +48,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
     // the m-th reflection is necessary in the case where A is non-square
     for (int k = 0; k < m; ++k) {
       Tensor H = reflect(k);
+      // LONGTERM can reflections be applied more efficiently than by dot product
       Qinv = H.dot(Qinv);
       R = H.dot(R);
     }
@@ -104,7 +105,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 
   @Override // from QRDecomposition
   public Tensor solve(Tensor b) {
-    Tensor skinnyQinv = Tensor.of(getInverseQ().stream().limit(m));
+    Tensor skinnyQinv = Tensor.of(Qinv.stream().limit(m));
     Tensor[] x = skinnyQinv.dot(b).stream().toArray(Tensor[]::new);
     for (int i = m - 1; i >= 0; --i) {
       for (int j = i + 1; j < m; ++j)
