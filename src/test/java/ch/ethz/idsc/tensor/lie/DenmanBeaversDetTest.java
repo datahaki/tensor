@@ -20,7 +20,7 @@ public class DenmanBeaversDetTest extends TestCase {
       DenmanBeaversPfm denmanBeaversPfm = Serialization.copy(new DenmanBeaversPfm(x2, Tolerance.CHOP));
       Chop._06.requireClose(denmanBeaversPfm.sqrt(), denmanBeaversDet.sqrt());
       // System.out.println(denmanBeaversDet.count() + " <= " + denmanBeaversPfm.count());
-      assertTrue(denmanBeaversDet.count() <= denmanBeaversPfm.count());
+      assertTrue(denmanBeaversDet.count() <= denmanBeaversPfm.count() + 2);
       Tensor pfm2 = MatrixPower.of(denmanBeaversPfm.sqrt(), 2);
       Tensor det2 = MatrixPower.of(denmanBeaversDet.sqrt(), 2);
       Chop._03.requireClose(pfm2, det2);

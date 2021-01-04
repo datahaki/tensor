@@ -13,8 +13,8 @@ public enum QRSignOperators implements QRSignOperator {
     @Override // from QRSignOperator
     public Scalar sign(Scalar xk) {
       return Scalars.isZero(xk) //
-          ? RealScalar.ONE
-          : Sign.FUNCTION.apply(xk).negate();
+          ? ONE_NEGATE
+          : Sign.FUNCTION.apply(xk);
     }
 
     @Override // from QRSignOperator
@@ -35,8 +35,8 @@ public enum QRSignOperators implements QRSignOperator {
     @Override // from QRSignOperator
     public Scalar sign(Scalar xk) {
       return Scalars.isZero(Imag.FUNCTION.apply(xk)) //
-          ? ONE_NEGATE
-          : STABILITY.sign(xk);
+          ? RealScalar.ONE
+          : STABILITY.sign(xk).negate();
     }
 
     @Override // from QRSignOperator

@@ -19,7 +19,8 @@ import ch.ethz.idsc.tensor.mat.UnitaryMatrixQ;
  * @see UnitaryMatrixQ */
 public enum Orthogonalize {
   ;
-  /** the matrix returned satisfies the predicate {@link OrthogonalMatrixQ}
+  /** If all of the input vectors are linearly independent, the matrix returned
+   * satisfies the predicate {@link OrthogonalMatrixQ}.
    * 
    * @param matrix of dimensions n x m
    * @return matrix of dimensions n x m with pairwise orthogonal row vectors
@@ -28,7 +29,6 @@ public enum Orthogonalize {
   public static Tensor of(Tensor matrix) {
     QRDecomposition qrDecomposition = //
         QRDecomposition.of(ConjugateTranspose.of(matrix), QRSignOperators.ORIENTATION);
-    Tensor tensor = QRMathematica.wrap(qrDecomposition).getInverseQ();
-    return PadRight.zeros(Dimensions.of(matrix)).apply(tensor);
+    return PadRight.zeros(Dimensions.of(matrix)).apply(QRMathematica.wrap(qrDecomposition).getInverseQ());
   }
 }

@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Unprotect;
 /* package */ class QRMathematica implements QRDecomposition, Serializable {
   private static final long serialVersionUID = 1117960065957628905L;
 
-  /** @param qrDecomposition
+  /** @param qrDecomposition of matrix with dimensions n x m
    * @return */
   public static QRDecomposition wrap(QRDecomposition qrDecomposition) {
     return new QRMathematica(qrDecomposition);
@@ -29,17 +29,17 @@ import ch.ethz.idsc.tensor.Unprotect;
 
   @Override // from QRDecomposition
   public Tensor getInverseQ() {
-    return qrDecomposition.getInverseQ().extract(0, length);
+    return Tensor.of(qrDecomposition.getInverseQ().stream().limit(length)); // min(n, m) x n
   }
 
   @Override // from QRDecomposition
   public Tensor getR() {
-    return qrDecomposition.getR().extract(0, length);
+    return Tensor.of(qrDecomposition.getR().stream().limit(length)); // n x min(n, m)
   }
 
   @Override // from QRDecomposition
   public Tensor getQ() {
-    return Tensor.of(qrDecomposition.getQ().stream().map(row -> row.extract(0, length)));
+    return Tensor.of(qrDecomposition.getQ().stream().map(row -> row.extract(0, length))); // min(n, m) x m
   }
 
   @Override // from QRDecomposition
