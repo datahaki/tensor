@@ -17,7 +17,7 @@ public enum PseudoInverse {
   ;
   /** Remark: Entries of given matrix may be of type {@link Quantity} with identical {@link Unit}.
    * 
-   * @param matrix
+   * @param matrix of arbitrary dimension and rank
    * @return pseudoinverse of given matrix */
   public static Tensor of(Tensor matrix) {
     return Unprotect.dimension1(matrix) <= matrix.length() //
@@ -25,7 +25,10 @@ public enum PseudoInverse {
         : Transpose.of(of(Transpose.of(matrix)));
   }
 
-  /** @param matrix with maximal rank
+  /** Hint: computing the pseudo-inverse using the QR decomposition is generally faster
+   * than when using the singular value decomposition.
+   * 
+   * @param matrix with maximal rank
    * @return pseudoinverse of given matrix */
   public static Tensor usingQR(Tensor matrix) {
     return Unprotect.dimension1(matrix) <= matrix.length() //

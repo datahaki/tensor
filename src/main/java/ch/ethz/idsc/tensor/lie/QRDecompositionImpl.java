@@ -23,8 +23,8 @@ import ch.ethz.idsc.tensor.red.Times;
   // ---
   private final int n;
   private final int m;
-  private Tensor Qinv;
   private Tensor R;
+  private Tensor Qinv;
 
   /** @param matrix n x m
    * @param b is rhs, for instance IdentityMatrix[n]
@@ -33,8 +33,8 @@ import ch.ethz.idsc.tensor.red.Times;
   public QRDecompositionImpl(Tensor matrix, Tensor b, QRSignOperator qrSignOperator) {
     n = matrix.length();
     m = Unprotect.dimension1(matrix);
-    Qinv = b;
     R = matrix;
+    Qinv = b;
     // the m-th reflection is necessary in the case where A is non-square
     for (int k = 0; k < m; ++k) {
       final int fk = k;
@@ -55,13 +55,13 @@ import ch.ethz.idsc.tensor.red.Times;
   }
 
   @Override // from QRDecomposition
-  public Tensor getInverseQ() {
-    return Qinv; // n x n
+  public Tensor getR() {
+    return R; // n x m
   }
 
   @Override // from QRDecomposition
-  public Tensor getR() {
-    return R; // n x m
+  public Tensor getInverseQ() {
+    return Qinv; // n x n
   }
 
   @Override // from QRDecomposition
@@ -76,7 +76,8 @@ import ch.ethz.idsc.tensor.red.Times;
         : RealScalar.ZERO;
   }
 
-  public Tensor eliminate() {
+  @Override
+  public Tensor pseudoInverse() {
     Tensor[] x = Qinv.stream().limit(m).toArray(Tensor[]::new);
     for (int i = m - 1; i >= 0; --i) {
       for (int j = i + 1; j < m; ++j)

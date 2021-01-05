@@ -2,8 +2,6 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.lie.QRDecomposition;
-import ch.ethz.idsc.tensor.lie.QRSignOperators;
 
 /** Example: in some cases, it is known a priori whether the data passed to
  * an algorithm produces symmetric, or rank deficient linear systems. Then,
@@ -15,7 +13,7 @@ public enum LinearSolvers implements LinearSolver {
   GAUSSIAN {
     @Override
     public Tensor solve(Tensor matrix, Tensor b) {
-      return GaussianElimination.of(matrix, b, Pivots.ARGMAX_ABS);
+      return LinearSolve.of(matrix, b);
     }
   },
   /** matrix square with full rank, and symmetric */
@@ -29,7 +27,7 @@ public enum LinearSolvers implements LinearSolver {
   QR {
     @Override
     public Tensor solve(Tensor matrix, Tensor b) {
-      return QRDecomposition.solve(matrix, b, QRSignOperators.STABILITY);
+      return LeastSquares.usingQR(matrix, b);
     }
   },
   /** matrix possibly rank deficient */

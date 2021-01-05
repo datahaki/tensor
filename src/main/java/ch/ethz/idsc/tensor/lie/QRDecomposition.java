@@ -35,18 +35,22 @@ public interface QRDecomposition {
    * @param qrSignOperator
    * @return least squares solution x that approximates matrix . x ~ b */
   static Tensor solve(Tensor matrix, Tensor b, QRSignOperator qrSignOperator) {
-    return new QRDecompositionImpl(matrix, b, qrSignOperator).eliminate();
+    return new QRDecompositionImpl(matrix, b, qrSignOperator).pseudoInverse();
   }
-
-  /** @return orthogonal matrix */
-  Tensor getInverseQ();
 
   /** @return upper triangular matrix */
   Tensor getR();
+
+  /** @return orthogonal matrix */
+  Tensor getInverseQ();
 
   /** @return orthogonal matrix */
   Tensor getQ();
 
   /** @return determinant of matrix */
   Scalar det();
+
+  /** @return pseudo Inverse of given matrix
+   * @throws Exception if given matrix has more cols than rows, or does not have maximal rank */
+  Tensor pseudoInverse();
 }

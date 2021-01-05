@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.ext.Timing;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -63,11 +64,20 @@ public class PseudoInverseTest extends TestCase {
 
   public void testRectangular() {
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(1, "m"));
-    for (int m = 1; m < 7; ++m) {
+    Timing tsvd = Timing.stopped();
+    Timing t_qr = Timing.stopped();
+    for (int m = 5; m < 12; ++m) {
       int n = m + 3;
       Tensor matrix = RandomVariate.of(distribution, n, m);
-      Chop._09.requireClose(PseudoInverse.of(matrix), PseudoInverse.usingQR(matrix));
+      tsvd.start();
+      Tensor pinv = PseudoInverse.of(matrix);
+      tsvd.stop();
+      t_qr.start();
+      Tensor piqr = PseudoInverse.usingQR(matrix);
+      t_qr.stop();
+      Chop._09.requireClose(pinv, piqr);
     }
+    assertTrue(t_qr.nanoSeconds() < tsvd.nanoSeconds());
   }
 
   public void testEmptyMatrixFail() {
