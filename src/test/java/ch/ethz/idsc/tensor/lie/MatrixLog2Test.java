@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.red.Trace;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -85,9 +86,9 @@ public class MatrixLog2Test extends TestCase {
   public void testComplex() {
     Distribution distribution = NormalDistribution.standard();
     for (int index = 0; index < 10; ++index) {
-      Tensor re = RandomVariate.of(distribution, 2, 2);
-      Tensor im = RandomVariate.of(distribution, 2, 2);
-      Tensor alg = re.add(im.multiply(ComplexScalar.I));
+      Tensor alg = Entrywise.with(ComplexScalar::of).apply( //
+          RandomVariate.of(distribution, 2, 2), //
+          RandomVariate.of(distribution, 2, 2));
       _checkExpLog(alg);
       _checkLogExp(alg);
     }
@@ -96,9 +97,9 @@ public class MatrixLog2Test extends TestCase {
   public void testComplexTraceZero() {
     Distribution distribution = NormalDistribution.standard();
     for (int index = 0; index < 10; ++index) {
-      Tensor re = RandomVariate.of(distribution, 2, 2);
-      Tensor im = RandomVariate.of(distribution, 2, 2);
-      Tensor alg = re.add(im.multiply(ComplexScalar.I));
+      Tensor alg = Entrywise.with(ComplexScalar::of).apply( //
+          RandomVariate.of(distribution, 2, 2), //
+          RandomVariate.of(distribution, 2, 2));
       alg.set(alg.Get(0, 0).negate(), 1, 1);
       assertEquals(Trace.of(alg), RealScalar.ZERO);
       _checkExpLog(alg);

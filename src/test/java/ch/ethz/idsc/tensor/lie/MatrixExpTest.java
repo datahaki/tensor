@@ -25,6 +25,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.red.Trace;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -150,9 +151,9 @@ public class MatrixExpTest extends TestCase {
   public void testNoScaleComplex() {
     Distribution distribution = NormalDistribution.of(0, 5);
     for (int count = 0; count < 10; ++count) {
-      Tensor mr = RandomVariate.of(distribution, 2, 2);
-      Tensor mi = RandomVariate.of(distribution, 2, 2);
-      Tensor matrix = mi.multiply(ComplexScalar.I).add(mr);
+      Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
+          RandomVariate.of(distribution, 2, 2), //
+          RandomVariate.of(distribution, 2, 2));
       Tensor exp1 = MatrixExp.of(matrix);
       Tensor exp2 = MatrixExp.series(matrix);
       Chop._01.requireClose(exp1, exp2);

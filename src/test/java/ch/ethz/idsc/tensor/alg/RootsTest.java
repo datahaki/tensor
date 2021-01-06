@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -128,9 +129,9 @@ public class RootsTest extends TestCase {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 4; ++length)
       for (int index = 0; index < LIMIT; ++index) {
-        Tensor coeffs_re = RandomVariate.of(distribution, length);
-        Tensor coeffs_im = RandomVariate.of(distribution, length);
-        Tensor coeffs = coeffs_re.add(coeffs_im.multiply(ComplexScalar.I));
+        Tensor coeffs = Entrywise.with(ComplexScalar::of).apply( //
+            RandomVariate.of(distribution, length), //
+            RandomVariate.of(distribution, length));
         Tensor roots = Roots.of(coeffs);
         ScalarUnaryOperator scalarUnaryOperator = Series.of(coeffs);
         Tensor tensor = roots.map(scalarUnaryOperator);

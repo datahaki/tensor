@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -108,8 +109,8 @@ public class DetTest extends TestCase {
         { -1, 9, 0 }, //
         { 8, 0, 1 } //
     });
-    Tensor m = re.add(im.multiply(ComplexScalar.I));
-    assertEquals(Det.of(m), ComplexScalar.of(270, -63));
+    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
+    assertEquals(Det.of(matrix), ComplexScalar.of(270, -63));
   }
 
   public void testComplex2() {
@@ -123,8 +124,8 @@ public class DetTest extends TestCase {
         { -1, 9, 0 }, //
         { 8, 0, 1 } //
     });
-    Tensor m = re.add(im.multiply(ComplexScalar.I));
-    assertEquals(Det.of(m), ComplexScalar.of(387, 108));
+    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
+    assertEquals(Det.of(matrix), ComplexScalar.of(387, 108));
   }
 
   public void testComplex3() {
@@ -138,8 +139,8 @@ public class DetTest extends TestCase {
         { -1, 9, 0 }, //
         { 8, -2, 1 } //
     });
-    Tensor m = re.add(im.multiply(ComplexScalar.I));
-    assertEquals(Det.of(m), ComplexScalar.of(421, 120));
+    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
+    assertEquals(Det.of(matrix), ComplexScalar.of(421, 120));
   }
 
   public void testSingular() {

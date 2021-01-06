@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -41,7 +42,8 @@ public class MatlabExportTest extends TestCase {
 
   public void testMatrix() {
     Tensor m = HilbertMatrix.of(3, 4);
-    Stream<String> stream = MatlabExport.of(m.add(m.multiply(ComplexScalar.I)));
+    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(m, m);
+    Stream<String> stream = MatlabExport.of(matrix);
     List<String> list = stream.collect(Collectors.toList());
     assertTrue(list.contains("a=zeros([3, 4]);"));
   }

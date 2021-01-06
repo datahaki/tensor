@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -18,9 +19,9 @@ public class InverseFourierTest extends TestCase {
     Distribution distribution = NormalDistribution.standard();
     for (int n = 0; n < 7; ++n)
       for (int count = 0; count < 10; ++count) {
-        Tensor real = RandomVariate.of(distribution, 1 << n);
-        Tensor imag = RandomVariate.of(distribution, 1 << n);
-        Tensor vector = real.add(imag.multiply(ComplexScalar.I));
+        Tensor vector = Entrywise.with(ComplexScalar::of).apply( //
+            RandomVariate.of(distribution, 1 << n), //
+            RandomVariate.of(distribution, 1 << n));
         Chop._10.requireClose(InverseFourier.of(Fourier.of(vector)), vector);
       }
   }

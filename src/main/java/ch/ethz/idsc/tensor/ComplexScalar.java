@@ -31,7 +31,14 @@ public interface ComplexScalar extends Scalar, //
   /** complex number I == 0+1*I */
   static final Scalar I = of(0, 1);
 
-  /** @param re
+  /** Hint: the function {@link #of(Scalar, Scalar)} can be used to combine two
+   * tensors, one as real and the other as imaginary part into a single tensor
+   * with complex scalars as entries.
+   * <pre>
+   * Entrywise.with(ComplexScalar::of).apply(r, i);
+   * </pre>
+   * 
+   * @param re
    * @param im
    * @return scalar with re as real part and im as imaginary part
    * @throws Exception if re or im are {@link ComplexScalar} */

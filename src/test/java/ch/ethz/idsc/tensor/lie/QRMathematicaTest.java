@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -75,9 +76,9 @@ public class QRMathematicaTest extends TestCase {
 
   public void testSolveComplex() {
     for (int n = 3; n < 6; ++n) {
-      Tensor mr = RandomVariate.of(NormalDistribution.standard(), n, n);
-      Tensor mi = RandomVariate.of(NormalDistribution.standard(), n, n);
-      Tensor matrix = mr.add(mi.multiply(ComplexScalar.I));
+      Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
+          RandomVariate.of(NormalDistribution.standard(), n, n), //
+          RandomVariate.of(NormalDistribution.standard(), n, n));
       Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 3);
       Tensor sol1 = QRDecomposition.solve(matrix, b, QRSignOperators.STABILITY);
       Tensor sol2 = LinearSolve.of(matrix, b);
