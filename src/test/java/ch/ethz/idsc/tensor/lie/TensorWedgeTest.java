@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.AntisymmetricMatrixQ;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.mat.MatrixRank;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -40,6 +41,7 @@ public class TensorWedgeTest extends TestCase {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 4);
     Tensor skewsy = TensorWedge.of(matrix);
     assertTrue(AntisymmetricMatrixQ.of(skewsy));
+    assertEquals(MatrixRank.of(matrix), 4);
   }
 
   public void testCreate() {

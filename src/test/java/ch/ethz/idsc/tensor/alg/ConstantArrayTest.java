@@ -50,12 +50,7 @@ public class ConstantArrayTest extends TestCase {
     assertEquals(tensor.length(), 6);
     assertEquals(tensor.get(1), Tensors.vector(1, 2, 3));
     assertEquals(tensor.Get(1, 2), RealScalar.of(3));
-    try {
-      tensor.set(s -> s, 0, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tensor.set(s -> s, 0, 0));
     AssertFail.of(() -> tensor.append(RealScalar.ONE));
   }
 
@@ -65,12 +60,7 @@ public class ConstantArrayTest extends TestCase {
     assertEquals(tensor.length(), 6);
     assertEquals(tensor.get(1), RealScalar.of(3));
     assertEquals(tensor.extract(2, 5), Tensors.vector(3, 3, 3));
-    try {
-      tensor.set(s -> s, 0);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tensor.set(s -> s, 0));
     AssertFail.of(() -> tensor.append(RealScalar.ONE));
   }
 

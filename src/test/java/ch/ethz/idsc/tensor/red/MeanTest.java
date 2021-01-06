@@ -38,8 +38,8 @@ public class MeanTest extends TestCase {
   }
 
   public void testEmpty3() {
-    Tensor s = Tensors.of(Tensors.empty());
-    assertEquals(Mean.of(s), Tensors.empty());
+    Tensor nestedEmpty = Tensors.of(Tensors.empty());
+    assertEquals(Mean.of(nestedEmpty), Tensors.empty());
   }
 
   public void testDistribution() {

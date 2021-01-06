@@ -16,6 +16,7 @@ public class TensorDotTest extends TestCase {
   public void testDot2() {
     Tensor tensor = Tensors.of(Tensors.empty());
     Tensor sca = tensor.dot(Tensors.empty());
+    ExactTensorQ.require(sca);
     assertEquals(sca, Tensors.vectorDouble(0));
   }
 

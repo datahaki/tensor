@@ -102,12 +102,7 @@ public class ChopTest extends TestCase {
 
   public void testRequireCloseScalar() {
     Chop._06.requireClose(RealScalar.of(2), RealScalar.of(2.000000001));
-    try {
-      Chop._06.requireClose(RealScalar.of(2), RealScalar.of(2.1));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Chop._06.requireClose(RealScalar.of(2), RealScalar.of(2.1)));
   }
 
   public void testRequireCloseTensor() {
@@ -123,28 +118,13 @@ public class ChopTest extends TestCase {
   public void testRequireZero() {
     Chop._04.requireZero(RealScalar.of(1e-8));
     Chop._04.requireAllZero(RealScalar.of(1e-8));
-    try {
-      Chop._04.requireZero(RealScalar.of(1e-2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      Chop._04.requireAllZero(RealScalar.of(1e-2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Chop._04.requireZero(RealScalar.of(1e-2)));
+    AssertFail.of(() -> Chop._04.requireAllZero(RealScalar.of(1e-2)));
   }
 
   public void testRequireAllZero() {
     Tensor tensor = Tensors.vector(0, 0, 0, 1e-5);
     Chop._04.requireAllZero(tensor);
-    try {
-      Chop._06.requireAllZero(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> Chop._06.requireAllZero(tensor));
   }
 }

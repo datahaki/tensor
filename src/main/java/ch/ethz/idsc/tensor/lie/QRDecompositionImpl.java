@@ -76,7 +76,7 @@ import ch.ethz.idsc.tensor.red.Times;
         : RealScalar.ZERO;
   }
 
-  @Override
+  @Override // from QRDecomposition
   public Tensor pseudoInverse() {
     Tensor[] x = Qinv.stream().limit(m).toArray(Tensor[]::new);
     for (int i = m - 1; i >= 0; --i) {

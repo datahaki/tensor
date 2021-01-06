@@ -20,11 +20,18 @@ public enum LeastSquares {
    * @param b
    * @return x with matrix.dot(x) ~ b */
   public static Tensor of(Tensor matrix, Tensor b) {
+    boolean isRankDeficient = false;
     if (ExactTensorQ.of(matrix))
       try {
         return usingLinearSolve(matrix, b);
       } catch (Exception exception) {
-        // rank deficient
+        isRankDeficient = true;
+      }
+    if (!isRankDeficient)
+      try {
+        return usingQR(matrix, b);
+      } catch (Exception exception) {
+        isRankDeficient = true;
       }
     return usingSvd(matrix, b);
   }

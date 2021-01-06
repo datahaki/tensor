@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ScalarQTest extends TestCase {
@@ -19,11 +20,6 @@ public class ScalarQTest extends TestCase {
 
   public void testThenThrow() {
     ScalarQ.thenThrow(Tensors.vector(1, 2, 3));
-    try {
-      ScalarQ.thenThrow(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ScalarQ.thenThrow(RealScalar.ONE));
   }
 }

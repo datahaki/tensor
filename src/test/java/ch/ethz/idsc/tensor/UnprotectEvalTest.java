@@ -51,33 +51,18 @@ public class UnprotectEvalTest extends TestCase {
     Tensor vector = Tensors.vector(1, 2, 3, 4);
     assertEquals(vector.length(), 4);
     UnprotectEval.insert(vector, RealScalar.ZERO, 2);
-    try {
-      UnprotectEval.insert(vector.unmodifiable(), RealScalar.ZERO, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnprotectEval.insert(vector.unmodifiable(), RealScalar.ZERO, 2));
     assertEquals(vector.length(), 5);
     assertEquals(vector, Tensors.vector(1, 2, 0, 3, 4));
   }
 
   public void testFailSmall() {
     UnprotectEval.insert(Tensors.vector(1, 2, 3), RealScalar.ZERO, 0);
-    try {
-      UnprotectEval.insert(Tensors.vector(1, 2, 3), RealScalar.ZERO, -1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnprotectEval.insert(Tensors.vector(1, 2, 3), RealScalar.ZERO, -1));
   }
 
   public void testFailLarge() {
     UnprotectEval.insert(Tensors.vector(1, 2, 3), RealScalar.ZERO, 3);
-    try {
-      UnprotectEval.insert(Tensors.vector(1, 2, 3), RealScalar.ZERO, 4);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> UnprotectEval.insert(Tensors.vector(1, 2, 3), RealScalar.ZERO, 4));
   }
 }

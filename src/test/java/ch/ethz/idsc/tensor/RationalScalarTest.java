@@ -31,12 +31,7 @@ public class RationalScalarTest extends TestCase {
   }
 
   public void testInvertFail() {
-    try {
-      RationalScalar.of(0, 1).reciprocal();
-      fail();
-    } catch (Exception exception) {
-      assertTrue(exception instanceof ArithmeticException);
-    }
+    AssertFail.of(() -> RationalScalar.of(0, 1).reciprocal());
   }
 
   public void testNegate() {

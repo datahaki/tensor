@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -23,26 +22,21 @@ import junit.framework.TestCase;
 public class QuaternionImplTest extends TestCase {
   public void testImmutable() {
     Quaternion quaternion = Quaternion.of(1, 3, -2, 2);
-    try {
-      quaternion.xyz().set(RealScalar.ONE, 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> quaternion.xyz().set(RealScalar.ONE, 1));
   }
 
   public void testPower2() {
     Scalar quaternion = Quaternion.of(1, 3, -2, 2);
     Scalar q2 = Power.of(quaternion, RealScalar.of(2));
     Scalar qm = quaternion.multiply(quaternion);
-    Chop._12.requireClose(q2, qm);
+    Tolerance.CHOP.requireClose(q2, qm);
   }
 
   public void testPower3() {
     Scalar quaternion = Quaternion.of(1, 3, -2, 2);
     Scalar q3 = Power.of(quaternion, RealScalar.of(3));
     Scalar qm = quaternion.multiply(quaternion).multiply(quaternion);
-    Chop._12.requireClose(q3, qm);
+    Tolerance.CHOP.requireClose(q3, qm);
   }
 
   public void testPower3Random() {
@@ -51,7 +45,7 @@ public class QuaternionImplTest extends TestCase {
       Scalar quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
       Scalar q3 = Power.of(quaternion, RealScalar.of(3));
       Scalar qm = quaternion.multiply(quaternion).multiply(quaternion);
-      Chop._12.requireClose(q3, qm);
+      Tolerance.CHOP.requireClose(q3, qm);
     }
   }
 
@@ -61,7 +55,7 @@ public class QuaternionImplTest extends TestCase {
       Scalar quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
       Scalar qr = Power.of(quaternion, RealScalar.of(-1));
       Scalar qm = quaternion.reciprocal();
-      Chop._12.requireClose(qr, qm);
+      Tolerance.CHOP.requireClose(qr, qm);
     }
   }
 
@@ -71,7 +65,7 @@ public class QuaternionImplTest extends TestCase {
       Scalar quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
       Scalar q2r = Power.of(quaternion, RealScalar.of(-2));
       Scalar qm = quaternion.multiply(quaternion).reciprocal();
-      Chop._12.requireClose(q2r, qm);
+      Tolerance.CHOP.requireClose(q2r, qm);
     }
   }
 
@@ -79,7 +73,7 @@ public class QuaternionImplTest extends TestCase {
     Scalar quaternion = Quaternion.of(3, 0, 0, 0);
     Scalar qm = quaternion.multiply(quaternion);
     Scalar q2 = Power.of(quaternion, RealScalar.of(2));
-    Chop._12.requireClose(q2, qm);
+    Tolerance.CHOP.requireClose(q2, qm);
   }
 
   public void testPower0() {

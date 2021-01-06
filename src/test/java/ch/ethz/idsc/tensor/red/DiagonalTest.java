@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DiagonalTest extends TestCase {
@@ -35,11 +36,6 @@ public class DiagonalTest extends TestCase {
   }
 
   public void testFailScalar() {
-    try {
-      Diagonal.of(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      //
-    }
+    AssertFail.of(() -> Diagonal.of(RealScalar.ONE));
   }
 }

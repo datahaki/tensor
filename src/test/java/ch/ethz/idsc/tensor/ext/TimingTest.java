@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.ext;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TimingTest extends TestCase {
@@ -10,12 +11,7 @@ public class TimingTest extends TestCase {
     Timing timing = Timing.stopped();
     assertEquals(timing.nanoSeconds(), 0);
     assertEquals(timing.seconds(), 0.0);
-    try {
-      timing.stop();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> timing.stop());
     timing.start();
     Math.sin(1);
     assertTrue(0 < timing.nanoSeconds());
@@ -31,12 +27,7 @@ public class TimingTest extends TestCase {
 
   public void testStartedFail() {
     Timing timing = Timing.started();
-    try {
-      timing.start();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> timing.start());
     assertTrue(0 < timing.nanoSeconds());
   }
 
@@ -45,11 +36,6 @@ public class TimingTest extends TestCase {
     Math.sin(1);
     assertTrue(0 < timing.nanoSeconds());
     timing.stop();
-    try {
-      timing.stop();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> timing.stop());
   }
 }

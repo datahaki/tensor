@@ -120,12 +120,7 @@ public class NormalizeTest extends TestCase {
 
   public void testEmpty() {
     for (Norm norm : Norm.values())
-      try {
-        Normalize.with(norm).apply(Tensors.empty());
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> Normalize.with(norm).apply(Tensors.empty()));
   }
 
   public void testNormalizeTotal() {

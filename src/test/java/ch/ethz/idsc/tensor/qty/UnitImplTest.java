@@ -33,12 +33,7 @@ public class UnitImplTest extends TestCase {
 
   public void testUnmodifiableMap() {
     Unit unit = Unit.of("kg^2*m^-1");
-    try {
-      unit.map().clear();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> unit.map().clear());
   }
 
   public void testMergeCollision() {

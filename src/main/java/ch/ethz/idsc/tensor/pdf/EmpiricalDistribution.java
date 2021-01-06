@@ -60,7 +60,7 @@ public class EmpiricalDistribution extends EvaluatedDiscreteDistribution impleme
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return pdf.dot(Range.of(0, pdf.length())).Get();
+    return (Scalar) pdf.dot(Range.of(0, pdf.length()));
   }
 
   @Override // from DiscreteDistribution

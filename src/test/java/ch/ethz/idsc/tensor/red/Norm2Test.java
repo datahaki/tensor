@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -36,7 +37,7 @@ public class Norm2Test extends TestCase {
         RealScalar.ONE, RealScalar.of(2)), DoubleScalar.of(1.5));
     assertEquals(Norm._2.of(A), Scalars.fromString("2.6925824035672523"));
     Tensor a = Tensors.vector(2, 3, 4);
-    assertEquals(Norm2Squared.ofVector(a), a.dot(a));
+    assertEquals(Norm2Squared.ofVector(a), Dot.of(a, a));
   }
 
   public void testVector3() {

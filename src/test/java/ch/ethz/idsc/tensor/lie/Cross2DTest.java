@@ -7,7 +7,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -20,7 +19,7 @@ public class Cross2DTest extends TestCase {
   public void testRotation() {
     Tensor x = Tensors.vector(1, 2);
     Tensor mat = Tensors.fromString("{{0, -1}, {1, 0}}");
-    Chop._10.requireClose(Cross.of(x), mat.dot(x));
+    assertEquals(Cross.of(x), mat.dot(x));
   }
 
   public void testApply() {

@@ -45,18 +45,8 @@ public class AbstractScalarTest extends TestCase {
   }
 
   public void testSetFail() {
-    try {
-      RealScalar.ONE.set(RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      RealScalar.ONE.set(s -> RealScalar.ZERO);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> RealScalar.ONE.set(RealScalar.ZERO));
+    AssertFail.of(() -> RealScalar.ONE.set(s -> RealScalar.ZERO));
   }
 
   public void testAppendFail() {

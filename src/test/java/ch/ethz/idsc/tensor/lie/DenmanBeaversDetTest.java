@@ -15,7 +15,7 @@ public class DenmanBeaversDetTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     for (int n = 1; n < 15; ++n) {
       Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
-      Tensor x2 = x.dot(x);
+      Tensor x2 = MatrixPower.of(x, 2);
       DenmanBeaversDet denmanBeaversDet = Serialization.copy(new DenmanBeaversDet(x2, Tolerance.CHOP)); // <- should converge faster
       DenmanBeaversPfm denmanBeaversPfm = Serialization.copy(new DenmanBeaversPfm(x2, Tolerance.CHOP));
       Chop._06.requireClose(denmanBeaversPfm.sqrt(), denmanBeaversDet.sqrt());

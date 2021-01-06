@@ -2,7 +2,6 @@
 package ch.ethz.idsc.tensor.opt.lp;
 
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
@@ -14,6 +13,8 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.alg.Subsets;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
@@ -34,36 +35,35 @@ import ch.ethz.idsc.tensor.mat.LinearSolve;
     if (!list.equals(Arrays.asList(m, n)))
       throw TensorRuntimeException.of(c, A, b);
     NavigableMap<Scalar, Tensor> map = new TreeMap<>();
-    long power2 = 1L << n; // n < 64
     Tensor At = Transpose.of(A);
-    for (long bitmask = 0; bitmask < power2; ++bitmask) {
-      BitSet bitSet = BitSet.valueOf(new long[] { bitmask });
-      if (m == bitSet.cardinality()) {
-        Tensor matrix = Tensors.empty();
-        Tensor cost = Tensors.empty();
-        for (int col = 0; col < n; ++col)
-          if (bitSet.get(col)) {
-            matrix.append(At.get(col));
-            cost.append(c.get(col));
+    for (Tensor subset : Subsets.of(Range.of(0, n), m)) {
+      int[] cols = subset.stream() //
+          .map(Scalar.class::cast) //
+          .map(Scalar::number) //
+          .mapToInt(Number::intValue) //
+          .toArray();
+      Tensor matrix = Tensors.reserve(m);
+      Tensor cost = Tensors.reserve(m);
+      for (int col : cols) {
+        matrix.append(At.get(col));
+        cost.append(c.get(col));
+      }
+      try {
+        Tensor X = LinearSolve.of(Transpose.of(matrix), b);
+        if (!isNonNegative || LinearProgramming.isNonNegative(X)) {
+          Scalar key = cost.dot(X).Get();
+          if (!map.containsKey(key))
+            map.put(key, Tensors.empty());
+          Tensor x = Array.zeros(n);
+          int index = 0;
+          for (int col : cols) {
+            x.set(X.get(index), col);
+            ++index;
           }
-        try {
-          Tensor X = LinearSolve.of(Transpose.of(matrix), b);
-          if (!isNonNegative || LinearProgramming.isNonNegative(X)) {
-            Scalar key = cost.dot(X).Get();
-            if (!map.containsKey(key))
-              map.put(key, Tensors.empty());
-            Tensor x = Array.zeros(n);
-            int index = 0;
-            for (int col = 0; col < n; ++col)
-              if (bitSet.get(col)) {
-                x.set(X.get(index), col);
-                ++index;
-              }
-            map.get(key).append(x);
-          }
-        } catch (Exception exception) {
-          // ---
+          map.get(key).append(x);
         }
+      } catch (Exception exception) {
+        // ---
       }
     }
     return map;

@@ -17,13 +17,13 @@ import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CholeskyDecompositionTest extends TestCase {
-  static CholeskyDecomposition checkDecomp(Tensor A) {
-    int n = A.length();
-    CholeskyDecomposition cd = CholeskyDecomposition.of(A);
-    Tensor res = cd.getL().dot(cd.diagonal().pmul(ConjugateTranspose.of(cd.getL())));
-    assertEquals(Chop._12.of(A.subtract(res)), Array.zeros(n, n));
-    assertEquals(Chop._12.of(cd.det().subtract(Det.of(A))), RealScalar.ZERO);
-    return cd;
+  static CholeskyDecomposition checkDecomp(Tensor matrix) {
+    int n = matrix.length();
+    CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix);
+    Tensor res = choleskyDecomposition.getL().dot(choleskyDecomposition.diagonal().pmul(ConjugateTranspose.of(choleskyDecomposition.getL())));
+    Tolerance.CHOP.requireClose(matrix.subtract(res), Array.zeros(n, n));
+    Tolerance.CHOP.requireClose(choleskyDecomposition.det(), Det.of(matrix));
+    return choleskyDecomposition;
   }
 
   public void testRosetta1() {
@@ -86,21 +86,11 @@ public class CholeskyDecompositionTest extends TestCase {
   }
 
   public void testFail1() {
-    try {
-      checkDecomp(Tensors.fromString("{{4, 2}, {1, 4}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> checkDecomp(Tensors.fromString("{{4, 2}, {1, 4}}")));
   }
 
   public void testFail2() {
-    try {
-      checkDecomp(Tensors.fromString("{{4, I}, {I, 4}}"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> checkDecomp(Tensors.fromString("{{4, I}, {I, 4}}")));
   }
 
   public void testHilbert1() {

@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TableBuilderTest extends TestCase {
@@ -34,12 +35,7 @@ public class TableBuilderTest extends TestCase {
     TableBuilder tableBuilder = new TableBuilder();
     tableBuilder.appendRow(Tensors.vector(1, 2, 3, 4));
     Tensor table = tableBuilder.getTable();
-    try {
-      table.set(RealScalar.of(99), 0, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> table.set(RealScalar.of(99), 0, 2));
     assertEquals(table.get(0), Range.of(1, 5));
   }
 
@@ -57,12 +53,7 @@ public class TableBuilderTest extends TestCase {
   public void testFail() {
     TableBuilder tableBuilder = new TableBuilder();
     assertEquals(tableBuilder.getRowCount(), 0);
-    try {
-      tableBuilder.appendRow((Tensor[]) null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> tableBuilder.appendRow((Tensor[]) null));
     assertEquals(tableBuilder.getRowCount(), 0);
   }
 }

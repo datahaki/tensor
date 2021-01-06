@@ -83,12 +83,7 @@ public class BoundedLinkedListTest extends TestCase {
 
   public void testAddFirstFail() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(7);
-    try {
-      boundedLinkedList.addFirst(4);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> boundedLinkedList.addFirst(4));
   }
 
   public void testFailNegativeSize() {

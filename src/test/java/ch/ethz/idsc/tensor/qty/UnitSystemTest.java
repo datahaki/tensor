@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 public class UnitSystemTest extends TestCase {
   public void testSize() {
     int size = UnitSystem.SI().map().size();
-    if (size < 103) {
+    if (size < 104) {
       System.err.println("unit count: " + size);
       fail();
     }

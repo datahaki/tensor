@@ -144,12 +144,7 @@ public class NdTreeMapTest extends TestCase {
     NdMap<String> ndTreeMap = new NdTreeMap<>( //
         Tensors.vector(-2, -3), Tensors.vector(8, 9), 2, 2);
     Tensor location = Array.zeros(3);
-    try {
-      ndTreeMap.add(location, "string");
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> ndTreeMap.add(location, "string"));
   }
 
   public void testFail2() {

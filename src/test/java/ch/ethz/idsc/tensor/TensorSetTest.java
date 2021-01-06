@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.alg.TensorRank;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.sca.Increment;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorSetTest extends TestCase {
@@ -69,19 +70,9 @@ public class TensorSetTest extends TestCase {
   public void testSetAllFail() {
     Tensor a = Tensors.vector(0, 1, 3, 4);
     Tensor c = a.copy();
-    try {
-      a.set(Tensors.vector(5, 6, 7, 8, 9), Tensor.ALL);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> a.set(Tensors.vector(5, 6, 7, 8, 9), Tensor.ALL));
     assertEquals(a, c);
-    try {
-      a.set(Tensors.vector(5, 6, 7), Tensor.ALL);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> a.set(Tensors.vector(5, 6, 7), Tensor.ALL));
     assertEquals(a, c);
   }
 
@@ -154,21 +145,11 @@ public class TensorSetTest extends TestCase {
 
   public void testSetTensorLevel0() {
     Tensor vector = Tensors.vector(2, 3, 4);
-    try {
-      vector.set(RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> vector.set(RealScalar.ONE));
   }
 
   public void testSetFunctionLevel0() {
     Tensor vector = Tensors.vector(2, 3, 4);
-    try {
-      vector.set(t -> RealScalar.ONE);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> vector.set(t -> RealScalar.ONE));
   }
 }

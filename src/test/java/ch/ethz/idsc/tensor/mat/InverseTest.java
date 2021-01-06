@@ -6,6 +6,7 @@ import java.util.Random;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
@@ -36,6 +37,11 @@ public class InverseTest extends TestCase {
     int p = 20357;
     Random random = new SecureRandom();
     Tensor A = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(p), p), n, n);
+    int iter = 0;
+    while (Scalars.isZero(Det.of(A, Pivots.FIRST_NON_ZERO)) && iter < 5) {
+      A = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(p), p), n, n);
+      ++iter;
+    }
     Tensor b = Tensors.vector(i -> GaussScalar.of(random.nextInt(p), p), n);
     Tensor x = LinearSolve.of(A, b, Pivots.FIRST_NON_ZERO);
     assertEquals(A.dot(x), b);

@@ -21,20 +21,11 @@ public class UnmodifiableTensorTest extends TestCase {
     tensor.set(DoubleScalar.of(0.3), 2);
     Tensor unmodi = tensor.unmodifiable();
     assertEquals(tensor, unmodi);
-    try {
-      unmodi.set(DoubleScalar.of(0.3), 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> unmodi.set(DoubleScalar.of(0.3), 2));
     AssertFail.of(() -> unmodi.append(Tensors.empty()));
-    try {
-      unmodi.set(t -> t.append(RealScalar.ZERO));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> unmodi.set(t -> t.append(RealScalar.ZERO)));
     Tensor dot = unmodi.dot(unmodi);
+    assertFalse(Tensors.isUnmodifiable(dot));
     assertEquals(dot, DoubleScalar.of(65.09));
     assertEquals(DoubleScalar.of(65.09), dot);
   }
@@ -73,12 +64,7 @@ public class UnmodifiableTensorTest extends TestCase {
 
   public void testUnmodifiableSet() {
     Tensor eye = IdentityMatrix.of(3).unmodifiable();
-    try {
-      eye.set(RealScalar.ZERO, 2, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> eye.set(RealScalar.ZERO, 2, 2));
   }
 
   public void testUnmodifiableIterator() {
@@ -86,30 +72,15 @@ public class UnmodifiableTensorTest extends TestCase {
     Iterator<Tensor> iterator = eye.iterator();
     Tensor next = iterator.next();
     assertEquals(next, UnitVector.of(3, 0));
-    try {
-      next.set(RealScalar.ONE, 1);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      iterator.remove();
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> next.set(RealScalar.ONE, 1));
+    AssertFail.of(() -> iterator.remove());
   }
 
   public void testIteratorRemove() {
     Tensor tensor = IdentityMatrix.of(4).unmodifiable();
     for (Iterator<Tensor> iterator = tensor.iterator(); iterator.hasNext();) {
       iterator.next();
-      try {
-        iterator.remove();
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> iterator.remove());
     }
     assertEquals(tensor, IdentityMatrix.of(4));
   }

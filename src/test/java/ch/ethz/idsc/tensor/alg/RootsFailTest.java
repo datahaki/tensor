@@ -27,13 +27,10 @@ public class RootsFailTest extends TestCase {
   }
 
   public void testZerosFail() {
-    for (int length = 0; length < 10; ++length)
-      try {
-        Roots.of(Array.zeros(length));
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+    for (int n = 0; n < 10; ++n) {
+      int fn = n;
+      AssertFail.of(() -> Roots.of(Array.zeros(fn)));
+    }
   }
 
   public void testMatrixFail() {

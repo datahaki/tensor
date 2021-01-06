@@ -13,12 +13,7 @@ import junit.framework.TestCase;
 public class TensorImplTest extends TestCase {
   public void testUnmodifiable() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
-    try {
-      eye.flatten(0).forEach(e -> e.set(RealScalar.of(4), 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    AssertFail.of(() -> eye.flatten(0).forEach(e -> e.set(RealScalar.of(4), 2)));
   }
 
   public void testIteratorSize() {
@@ -39,12 +34,7 @@ public class TensorImplTest extends TestCase {
   public void testIteratorUnmod() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     for (Tensor unit : eye)
-      try {
-        unit.set(RealScalar.of(4), 2);
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      AssertFail.of(() -> unit.set(RealScalar.of(4), 2));
     assertEquals(eye.get(Tensor.ALL, 2), Tensors.vector(0, 0, 1, 0));
   }
 

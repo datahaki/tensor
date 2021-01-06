@@ -12,8 +12,10 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 import junit.framework.TestCase;
@@ -116,5 +118,46 @@ public class LeastSquaresTest extends TestCase {
     Tensor x = LeastSquares.usingSvd(matrix, b);
     assertEquals(Dimensions.of(x), Arrays.asList(3, 2));
     assertEquals(Dimensions.of(matrix.dot(x)), Dimensions.of(b));
+  }
+
+  public void testLeastSquaresReal() {
+    for (int n = 3; n < 6; ++n) {
+      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n);
+      Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
+      Chop._09.requireClose( //
+          LinearSolve.of(matrix, b), //
+          LeastSquares.usingQR(matrix, b));
+    }
+  }
+
+  public void testLeastSquaresComplexSquare() {
+    for (int n = 3; n < 6; ++n) {
+      Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
+          RandomVariate.of(NormalDistribution.standard(), n, n), //
+          RandomVariate.of(NormalDistribution.standard(), n, n));
+      Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 3);
+      Tolerance.CHOP.requireClose( //
+          LinearSolve.of(matrix, b), //
+          LeastSquares.usingQR(matrix, b));
+    }
+  }
+
+  public void testLeastSquaresRect() {
+    for (int m = 3; m < 6; ++m) {
+      int n = m + 3;
+      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
+      {
+        Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
+        Tolerance.CHOP.requireClose( //
+            LeastSquares.usingSvd(matrix, b), //
+            LeastSquares.usingQR(matrix, b));
+      }
+      {
+        Tensor b = RandomVariate.of(NormalDistribution.standard(), n);
+        Tolerance.CHOP.requireClose( //
+            LeastSquares.usingSvd(matrix, b), //
+            LeastSquares.usingQR(matrix, b));
+      }
+    }
   }
 }
