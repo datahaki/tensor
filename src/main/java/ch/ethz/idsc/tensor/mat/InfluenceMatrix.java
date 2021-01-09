@@ -27,7 +27,7 @@ public class InfluenceMatrix implements Serializable {
   /** @param design matrix
    * @return */
   public static InfluenceMatrix of(Tensor design) {
-    return new InfluenceMatrix(design);
+    return new InfluenceMatrix(Objects.requireNonNull(design));
   }
 
   /***************************************************/

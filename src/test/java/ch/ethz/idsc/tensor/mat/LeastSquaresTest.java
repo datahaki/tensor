@@ -12,7 +12,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.lie.Permutations;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -31,9 +34,7 @@ public class LeastSquaresTest extends TestCase {
     ExactTensorQ.require(pinv);
   }
 
-  public void testEasy() {
-    Tensor m = Tensors.matrix( //
-        (i, j) -> i.equals(j) ? RationalScalar.of(1, 1) : RealScalar.ZERO, 4, 3);
+  private static void _checkSpecialExact(Tensor m) {
     assertEquals(MatrixRank.of(m), 3);
     Tensor b = Tensors.vector(1, 1, 1, 1);
     Tensor x0 = LeastSquares.of(m, b);
@@ -42,10 +43,33 @@ public class LeastSquaresTest extends TestCase {
     ExactTensorQ.require(x1);
     assertEquals(x1, Tensors.vector(1, 1, 1));
     Tensor x2 = LeastSquares.usingQR(m, b);
+    ExactTensorQ.require(x2);
     Tensor x3 = LeastSquares.usingSvd(m, b);
     Tolerance.CHOP.requireClose(x0, x1);
     Tolerance.CHOP.requireClose(x1, x3);
     Tolerance.CHOP.requireClose(x2, x3);
+  }
+
+  private static void _checkSpecialNumer(Tensor m) {
+    assertEquals(MatrixRank.of(m), 3);
+    Tensor b = Tensors.vector(1, 1, 1, 1);
+    Tensor x0 = LeastSquares.of(m, b);
+    Tensor x1 = LeastSquares.usingCholesky(m, b);
+    assertEquals(x1, Tensors.vector(1, 1, 1));
+    Tensor x2 = LeastSquares.usingQR(m, b);
+    Tensor x3 = LeastSquares.usingSvd(m, b);
+    Tolerance.CHOP.requireClose(x0, x1);
+    Tolerance.CHOP.requireClose(x1, x2);
+    Tolerance.CHOP.requireClose(x3, x2);
+  }
+
+  public void testEasy() {
+    Tensor m = Transpose.of(IdentityMatrix.of(4).extract(0, 3));
+    for (Tensor perm : Permutations.of(Range.of(0, 4))) {
+      Tensor matrix = Tensor.of(perm.stream().map(s -> m.get(s.Get().number().intValue())));
+      _checkSpecialExact(matrix);
+      _checkSpecialNumer(matrix.map(N.DOUBLE));
+    }
   }
 
   public void testMathematica() {
@@ -64,21 +88,6 @@ public class LeastSquaresTest extends TestCase {
     Tensor b = Tensors.fromString("{{2, 3, 4, 6}, {8, -2, 3, 4}}");
     Tensor cholesky2 = LeastSquares.usingCholesky(matrix, b);
     assertEquals(cholesky2, expect);
-  }
-
-  public void testEasyNumeric() {
-    Tensor m = N.DOUBLE.of(Tensors.matrix( //
-        (i, j) -> i.equals(j) ? RationalScalar.of(1, 1) : RealScalar.ZERO, 4, 3));
-    assertEquals(MatrixRank.of(m), 3);
-    Tensor b = Tensors.vector(1, 1, 1, 1);
-    Tensor x0 = LeastSquares.of(m, b);
-    Tensor x1 = LeastSquares.usingCholesky(m, b);
-    assertEquals(x1, Tensors.vector(1, 1, 1));
-    Tensor x2 = LeastSquares.usingQR(m, b);
-    Tensor x3 = LeastSquares.usingSvd(m, b);
-    Tolerance.CHOP.requireClose(x0, x1);
-    Tolerance.CHOP.requireClose(x1, x2);
-    Tolerance.CHOP.requireClose(x3, x2);
   }
 
   public void testFullRank() {

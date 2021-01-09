@@ -30,7 +30,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
 public enum LeastSquares {
   ;
   private static final Chop CHOP = Tolerance.CHOP;
-  private static final QRSignOperator QR_SIGN_OPERATOR = new QRSignNonZero(QRSignOperators.STABILITY, CHOP);
 
   /** If given matrix and b are in exact precision and the matrix has rank m
    * the CholeskyDecomposition produces x in exact precision.
@@ -93,7 +92,7 @@ public enum LeastSquares {
   }
 
   private static Tensor _usingQR(Tensor matrix, Tensor b) {
-    return new QRDecompositionImpl(matrix, b, QR_SIGN_OPERATOR).pseudoInverse(CHOP);
+    return new QRDecompositionImpl(matrix, b, QRSignOperators.STABILITY).pseudoInverse(CHOP);
   }
 
   /***************************************************/

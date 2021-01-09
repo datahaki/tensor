@@ -6,6 +6,7 @@ import java.util.Arrays;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -15,6 +16,16 @@ import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QRMathematicaTest extends TestCase {
+  public void testSkinny() {
+    Tensor b = Transpose.of(IdentityMatrix.of(9).extract(0, 4));
+    assertEquals(Dimensions.of(b), Arrays.asList(9, 4));
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 9, 4);
+    QRDecompositionImpl qrDecompositionImpl = new QRDecompositionImpl(matrix, b, QRSignOperators.STABILITY);
+    qrDecompositionImpl.getInverseQ();
+    QRMathematica.wrap(QRDecomposition.of(matrix));
+    // Chop._05.requireClose(qinv, wrap.getQ());
+  }
+
   public void testSimple() {
     Tensor a = Tensors.fromString("{{1, 2, 3}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}}");
     assertEquals(Dimensions.of(a), Arrays.asList(4, 3));

@@ -76,7 +76,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   }
 
   /** @param chop
-   * @return
+   * @return PseudoInverse[matrix] . b
    * @throws Exception if division by zero occurs */
   public Tensor pseudoInverse(Chop chop) {
     Tensor[] x = Qinv.stream().limit(m).toArray(Tensor[]::new);

@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class InfluenceMatrixTest extends TestCase {
@@ -62,5 +63,9 @@ public class InfluenceMatrixTest extends TestCase {
       Tensor p2 = Dot.of(nullsp, vector, nullsp);
       Tolerance.CHOP.requireClose(p1, p2);
     }
+  }
+
+  public void testNullFail() {
+    AssertFail.of(() -> InfluenceMatrix.of(null));
   }
 }
