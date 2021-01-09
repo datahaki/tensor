@@ -114,7 +114,7 @@ System.out.println(x);
 {4/3, 13/3}
 ```
 
-Pseudoinverse, i.e. Moore-Penrose inverse
+Pseudoinverse, Moore-Penrose inverse
 
 ```java
 Tensor matrix = Tensors.fromString("{{-1 + I, 0}, {-I, 2}, {2 - I, 2 * I}}");

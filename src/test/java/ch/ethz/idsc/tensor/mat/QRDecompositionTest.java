@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Flatten;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.pdf.ComplexNormalDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -62,6 +63,33 @@ public class QRDecompositionTest extends TestCase {
   public void testOnesMinusEye() {
     Tensor matrix = ConstantArray.of(RealScalar.ONE, 3, 3).subtract(IdentityMatrix.of(3));
     _specialOps(matrix);
+  }
+
+  public void testRankDeficient() {
+    Distribution distribution = NormalDistribution.standard();
+    Tensor m1 = RandomVariate.of(distribution, 7, 3);
+    Tensor m2 = RandomVariate.of(distribution, 3, 4);
+    Tensor br = RandomVariate.of(distribution, 7);
+    LeastSquares.usingQR(m1, br);
+    Tensor matrix = m1.dot(m2);
+    assertEquals(MatrixRank.of(matrix), 3);
+    _specialOps(matrix);
+    {
+      AssertFail.of(() -> PseudoInverse.usingQR(matrix));
+      AssertFail.of(() -> LeastSquares.usingQR(matrix, br));
+      Tensor ls1 = LeastSquares.of(matrix, br);
+      Tensor ls2 = PseudoInverse.of(matrix).dot(br);
+      Tolerance.CHOP.requireClose(ls1, ls2);
+    }
+    {
+      Tensor m = Transpose.of(matrix);
+      Tensor b = RandomVariate.of(distribution, 4);
+      AssertFail.of(() -> PseudoInverse.usingQR(m));
+      AssertFail.of(() -> LeastSquares.usingQR(m, b));
+      Tensor ls1 = LeastSquares.of(m, b);
+      Tensor ls2 = PseudoInverse.of(m).dot(b);
+      Tolerance.CHOP.requireClose(ls1, ls2);
+    }
   }
 
   public void testRandomReal() {

@@ -38,8 +38,7 @@ public enum LeastSquares {
     int n = matrix.length();
     int m = Unprotect.dimension1(matrix);
     boolean assumeRankM = true;
-    if (ExactTensorQ.of(matrix) && //
-        ExactTensorQ.of(b))
+    if (ExactTensorQ.of(matrix))
       try {
         return usingCholesky(matrix, b, n, m);
       } catch (Exception exception) {
@@ -77,7 +76,8 @@ public enum LeastSquares {
   /***************************************************/
   /** @param matrix
    * @param b
-   * @return x with matrix.dot(x) ~ b */
+   * @return x with matrix.dot(x) ~ b
+   * @throws Exception if matrix does not have maximal rank */
   public static Tensor usingQR(Tensor matrix, Tensor b) {
     return usingQR(matrix, b, matrix.length(), Unprotect.dimension1(matrix));
   }
@@ -89,7 +89,7 @@ public enum LeastSquares {
   }
 
   private static Tensor _usingQR(Tensor matrix, Tensor b) {
-    return new QRDecompositionImpl(matrix, b, QRSignOperators.STABILITY).pseudoInverse();
+    return new QRDecompositionImpl(matrix, b, QRSignNonZero.LEAST_SQUARES).pseudoInverse();
   }
 
   /***************************************************/

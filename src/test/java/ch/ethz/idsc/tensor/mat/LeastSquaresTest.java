@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -16,6 +17,7 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
+import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
@@ -223,6 +225,27 @@ public class LeastSquaresTest extends TestCase {
     Tolerance.CHOP.requireClose(r1, r4);
   }
 
+  public void testComplexExactQuantity() {
+    Tensor m = Tensors.fromString("{{1, 1/2 - I}, {1/2 + I, 1/3 + 3*I}, {1/3, 1/4}}").map(Scalars.attach(Unit.of("A")));
+    Tensor b = Tensors.fromString("{{2, 8 + I}, {3*I, -2}, {4 - I, 3}}").map(Scalars.attach(Unit.of("s")));
+    Tensor pinv = PseudoInverse.of(m);
+    ExactTensorQ.require(pinv);
+    Tensor r1 = pinv.dot(b);
+    Tensor r2 = LeastSquares.of(m, b);
+    ExactTensorQ.require(r2);
+    assertEquals(r1, r2);
+    Tensor row0 = Tensors.fromString("{130764/54541 + (78*I)/54541, 384876/54541 - (122436*I)/54541}") //
+        .map(Scalars.attach(Unit.of("s*A^-1")));
+    assertEquals(r1.get(0), row0);
+    Tensor row1 = Tensors.fromString("{10512/54541 + (16452*I)/54541, -(120372/54541) + (126072*I)/54541}") //
+        .map(Scalars.attach(Unit.of("s*A^-1")));
+    assertEquals(r1.get(1), row1);
+    Tensor r3 = LeastSquares.usingQR(m, b);
+    Tolerance.CHOP.requireClose(r1, r3);
+    Tensor r4 = PseudoInverse.usingQR(m).dot(b);
+    Tolerance.CHOP.requireClose(r1, r4);
+  }
+
   public void testComplexSmallBig() {
     Tensor m = Tensors.fromString("{{1, 1/2 + I, 1/3}, {1/2 - I, 1/3 + 3*I, 1/4}}");
     Tensor b = Tensors.fromString("{{2, 3*I, 4 - I}, {8 + I, -2, 3}}");
@@ -238,6 +261,27 @@ public class LeastSquaresTest extends TestCase {
     assertEquals(r1.get(1), row1);
     Tensor row2 = Tensors.fromString("{-(1344/54541) - (1548*I)/54541, 7488/54541 + (38880*I)/54541, 42132/54541 - (13152*I)/54541}");
     assertEquals(r1.get(2), row2);
+    Tensor r3 = LeastSquares.usingQR(m, b);
+    Tolerance.CHOP.requireClose(r1, r3);
+    Tensor r4 = PseudoInverse.usingQR(m).dot(b);
+    Tolerance.CHOP.requireClose(r1, r4);
+  }
+
+  public void testComplexSmallBigQuantity() {
+    Tensor m = Tensors.fromString("{{1, 1/2 + I, 1/3}, {1/2 - I, 1/3 + 3*I, 1/4}}").map(Scalars.attach(Unit.of("kg^-1")));
+    Tensor b = Tensors.fromString("{{2, 3*I, 4 - I}, {8 + I, -2, 3}}").map(Scalars.attach(Unit.of("m")));
+    Tensor pinv = PseudoInverse.of(m);
+    ExactTensorQ.require(pinv);
+    Tensor r1 = pinv.dot(b);
+    Tensor r2 = LeastSquares.of(m, b);
+    ExactTensorQ.require(r2);
+    assertEquals(r1, r2);
+    Tensor row0 = Tensors.fromString("{-(29304/54541) + (51768*I)/54541, 86256/54541 + (109332*I)/54541, 120888/54541 - (85356*I)/54541}");
+    assertEquals(r1.get(0), row0.map(Scalars.attach(Unit.of("kg*m"))));
+    Tensor row1 = Tensors.fromString("{14532/54541 - (131568*I)/54541, -(2436/54541) + (87534*I)/54541, 61452/54541 - (52506*I)/54541}");
+    assertEquals(r1.get(1), row1.map(Scalars.attach(Unit.of("kg*m"))));
+    Tensor row2 = Tensors.fromString("{-(1344/54541) - (1548*I)/54541, 7488/54541 + (38880*I)/54541, 42132/54541 - (13152*I)/54541}");
+    assertEquals(r1.get(2), row2.map(Scalars.attach(Unit.of("kg*m"))));
     Tensor r3 = LeastSquares.usingQR(m, b);
     Tolerance.CHOP.requireClose(r1, r3);
     Tensor r4 = PseudoInverse.usingQR(m).dot(b);

@@ -21,7 +21,7 @@ public enum QRSignOperators implements QRSignOperator {
     public boolean isDetExact() {
       return true;
     }
-  }, //
+  },
   /** householder reflections that aim to preserve orientation:
    * Sign[Det[matrix]] == Sign[Det[Q]]
    * 

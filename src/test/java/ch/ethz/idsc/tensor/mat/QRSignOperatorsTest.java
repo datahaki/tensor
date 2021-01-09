@@ -14,8 +14,8 @@ public class QRSignOperatorsTest extends TestCase {
   }
 
   public void testIsDetExact() {
-    assertFalse(QRSignOperators.ORIENTATION.isDetExact());
     assertTrue(QRSignOperators.STABILITY.isDetExact());
+    assertFalse(QRSignOperators.ORIENTATION.isDetExact());
   }
 
   public void testPackageVisibility() {

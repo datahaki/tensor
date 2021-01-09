@@ -6,9 +6,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.num.Divisible;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.Unit;
 
 /** collection of useful static functions related to {@link Scalar} */
 public enum Scalars {
@@ -85,6 +88,15 @@ public enum Scalars {
    * @see Divisible */
   public static boolean divides(Scalar m, Scalar n) {
     return Divisible.of(n, m);
+  }
+
+  /** @param unit non-null
+   * @return operator that maps a scalar to the quantity with value
+   * of given scalar and given unit
+   * @throws Exception if given unit is null */
+  public static ScalarUnaryOperator attach(Unit unit) {
+    Objects.requireNonNull(unit);
+    return scalar -> Quantity.of(scalar, unit);
   }
 
   /***************************************************/

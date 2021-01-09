@@ -57,7 +57,8 @@ public enum PseudoInverse {
    * than when using the singular value decomposition.
    * 
    * @param matrix with maximal rank
-   * @return pseudoinverse of given matrix */
+   * @return pseudoinverse of given matrix
+   * @throws Exception if matrix does not have maximal rank */
   public static Tensor usingQR(Tensor matrix) {
     return usingQR(matrix, matrix.length(), Unprotect.dimension1(matrix));
   }
