@@ -8,7 +8,11 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.TensorMap;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
@@ -192,6 +196,37 @@ public class CholeskyDecompositionTest extends TestCase {
       assertEquals( //
           cd.solve(IdentityMatrix.of(2)), //
           Inverse.of(matrix));
+    }
+  }
+
+  public void testRankDeficient() {
+    Distribution distribution = NormalDistribution.standard();
+    Tensor m1 = RandomVariate.of(distribution, 7, 3);
+    Tensor m2 = RandomVariate.of(distribution, 3, 4);
+    Tensor br = RandomVariate.of(distribution, 7);
+    assertEquals(MatrixRank.of(m1), 3);
+    {
+      Tensor lsqr = LeastSquares.usingCholesky(m1, br);
+      Tensor pinv = PseudoInverse.usingCholesky(m1).dot(br);
+      Chop._10.requireClose(lsqr, pinv);
+    }
+    Tensor matrix = m1.dot(m2);
+    assertEquals(MatrixRank.of(matrix), 3);
+    {
+      AssertFail.of(() -> PseudoInverse.usingCholesky(matrix));
+      AssertFail.of(() -> LeastSquares.usingCholesky(matrix, br));
+      Tensor ls1 = LeastSquares.of(matrix, br);
+      Tensor ls2 = PseudoInverse.of(matrix).dot(br);
+      Tolerance.CHOP.requireClose(ls1, ls2);
+    }
+    {
+      Tensor m = Transpose.of(matrix);
+      Tensor b = RandomVariate.of(distribution, 4);
+      AssertFail.of(() -> PseudoInverse.usingCholesky(m));
+      AssertFail.of(() -> LeastSquares.usingCholesky(m, b));
+      Tensor ls1 = LeastSquares.of(m, b);
+      Tensor ls2 = PseudoInverse.of(m).dot(b);
+      Tolerance.CHOP.requireClose(ls1, ls2);
     }
   }
 }
