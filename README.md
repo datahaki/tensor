@@ -114,7 +114,20 @@ System.out.println(x);
 {4/3, 13/3}
 ```
 
-Null-space
+Pseudoinverse, i.e. Moore-Penrose inverse
+
+```java
+Tensor matrix = Tensors.fromString("{{-1 + I, 0}, {-I, 2}, {2 - I, 2 * I}}");
+System.out.println(Pretty.of(PseudoInverse.of(matrix)));
+
+[
+ [   -1/3-I/3     1/6-I/6     1/6+I/6 ]
+ [    1/6-I/3   5/12+I/12  -1/12-I/12 ]
+]
+```
+
+
+Nullspace
 
 ```java
 Tensor matrix = Tensors.fromString("{{-1/3, 0, I}}");

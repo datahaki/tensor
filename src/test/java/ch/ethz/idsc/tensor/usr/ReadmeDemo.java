@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.NullSpace;
+import ch.ethz.idsc.tensor.mat.PseudoInverse;
 import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgramming;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -31,8 +32,13 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     System.out.println(Pretty.of(Inverse.of(matrix)));
   }
 
+  static void demoPseudoInverse() {
+    Tensor matrix = Tensors.fromString("{{-1 + I, 0}, {-I, 2}, {2 - I, 2 * I}}");
+    System.out.println(Pretty.of(PseudoInverse.of(matrix)));
+  }
+
   static void demoNullspace() {
-    System.out.println(Pretty.of(NullSpace.usingRowReduce(Tensors.fromString("{{-1/3, 0, I}}"))));
+    System.out.println(Pretty.of(NullSpace.of(Tensors.fromString("{{-1/3, 0, I}}"))));
   }
 
   static void demoSVD() {
@@ -85,6 +91,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   public static void main(String[] args) {
+    demoPseudoInverse();
     // demoSqrt();
     // demoInverse();
     // demoPDF();

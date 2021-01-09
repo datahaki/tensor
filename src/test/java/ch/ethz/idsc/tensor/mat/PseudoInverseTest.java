@@ -121,6 +121,12 @@ public class PseudoInverseTest extends TestCase {
     }
   }
 
+  public void testComplexExact() {
+    Tensor expect = Tensors.fromString("{{-(1/3) - I/3, 1/6 - I/6, 1/6 + I/6}, {1/6 - I/3, 5/12 + I/12, -(1/12) - I/12}}");
+    Tensor matrix = Tensors.fromString("{{-1 + I, 0}, {-I, 2}, {2 - I, 2 * I}}");
+    assertEquals(PseudoInverse.of(matrix), expect);
+  }
+
   public void testEmptyMatrixFail() {
     AssertFail.of(() -> PseudoInverse.usingSvd(Tensors.of(Tensors.empty())));
   }
