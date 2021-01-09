@@ -75,13 +75,20 @@ public enum PseudoInverse {
    * @param matrix of arbitrary dimension and rank
    * @return pseudoinverse of given matrix */
   public static Tensor usingSvd(Tensor matrix) {
-    return usingSvd(matrix, matrix.length(), Unprotect.dimension1(matrix));
+    return usingSvd(matrix, Tolerance.CHOP);
   }
 
-  private static Tensor usingSvd(Tensor matrix, int n, int m) {
+  /** @param matrix
+   * @param chop
+   * @return */
+  public static Tensor usingSvd(Tensor matrix, Chop chop) {
+    return usingSvd(matrix, chop, matrix.length(), Unprotect.dimension1(matrix));
+  }
+
+  /* package */ static Tensor usingSvd(Tensor matrix, Chop chop, int n, int m) {
     return m <= n //
-        ? of(SingularValueDecomposition.of(matrix)) //
-        : Transpose.of(of(SingularValueDecomposition.of(Transpose.of(matrix))));
+        ? of(SingularValueDecomposition.of(matrix), chop) //
+        : Transpose.of(of(SingularValueDecomposition.of(Transpose.of(matrix)), chop));
   }
 
   /** @param svd

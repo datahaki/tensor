@@ -21,6 +21,7 @@ public interface SingularValueDecomposition {
     return new SingularValueDecompositionImpl(matrix);
   }
 
+  /***************************************************/
   /** @return matrix of dimensions rows x cols */
   Tensor getU();
 

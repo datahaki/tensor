@@ -121,6 +121,15 @@ public class Chop implements ScalarUnaryOperator {
       throw TensorRuntimeException.of(scalar);
   }
 
+  /** @param scalar
+   * @return
+   * @throws Exception if given scalar is zero based on chop */
+  public Scalar requireNonZero(Scalar scalar) {
+    if (isZero(scalar))
+      throw TensorRuntimeException.of(scalar);
+    return scalar;
+  }
+
   /** @param tensor
    * @throws Exception if {@link #allZero(Tensor)} evaluates to false */
   public void requireAllZero(Tensor tensor) {

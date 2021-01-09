@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** requires matrix to have maximal rank, as used in least square
@@ -15,9 +14,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
 /* package */ class QRSignNonZero implements QRSignOperator, Serializable {
   private static final long serialVersionUID = 2430310662230955277L;
   // ---
-  public static final QRSignOperator LEAST_SQUARES = //
-      new QRSignNonZero(QRSignOperators.STABILITY, Tolerance.CHOP);
-  /***************************************************/
   private final QRSignOperator qrSignOperator;
   private final Chop chop;
 
@@ -30,9 +26,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
 
   @Override // from QRSignOperator
   public Scalar sign(Scalar xk) {
-    if (chop.isZero(xk))
-      throw TensorRuntimeException.of(xk);
-    return qrSignOperator.sign(xk);
+    return qrSignOperator.sign(chop.requireNonZero(xk));
   }
 
   @Override // from QRSignOperator

@@ -3,7 +3,7 @@ package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 /** The Cholesky decomposition of a hermitian matrix establishes matrices L and D with
  * 
@@ -26,11 +26,20 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 public interface CholeskyDecomposition {
   /** @param matrix hermitian and positive semi-definite matrix
    * @return Cholesky decomposition of matrix
-   * @throws TensorRuntimeException if matrix is not hermitian, or decomposition failed */
+   * @throws Exception if matrix is not hermitian, or decomposition failed */
   static CholeskyDecomposition of(Tensor matrix) {
-    return new CholeskyDecompositionImpl(matrix, Tolerance.CHOP);
+    return of(matrix, Tolerance.CHOP);
   }
 
+  /** @param matrix hermitian and positive semi-definite matrix
+   * @param chop
+   * @return Cholesky decomposition of matrix
+   * @throws Exception if matrix is not hermitian, or decomposition failed */
+  static CholeskyDecomposition of(Tensor matrix, Chop chop) {
+    return new CholeskyDecompositionImpl(matrix, chop);
+  }
+
+  /***************************************************/
   /** @return lower triangular matrix L */
   Tensor getL();
 
@@ -41,6 +50,7 @@ public interface CholeskyDecomposition {
   Scalar det();
 
   /** @param b
-   * @return Inverse.of(matrix).dot(b) == LinearSolve.of(matrix, b) */
+   * @return Inverse.of(matrix).dot(b) == LinearSolve.of(matrix, b)
+   * @throws Exception if any entry of diagonal is zero according to chop */
   Tensor solve(Tensor b);
 }

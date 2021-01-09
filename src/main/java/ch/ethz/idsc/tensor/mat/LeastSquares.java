@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 /** least squares solution x that approximates
  * <pre>
@@ -28,6 +29,9 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
  * @see PseudoInverse */
 public enum LeastSquares {
   ;
+  private static final Chop CHOP = Tolerance.CHOP;
+  private static final QRSignOperator QR_SIGN_OPERATOR = new QRSignNonZero(QRSignOperators.STABILITY, CHOP);
+
   /** If given matrix and b are in exact precision and the matrix has rank m
    * the CholeskyDecomposition produces x in exact precision.
    * 
@@ -40,7 +44,7 @@ public enum LeastSquares {
     boolean assumeRankM = true;
     if (ExactTensorQ.of(matrix))
       try {
-        return usingCholesky(matrix, b, n, m);
+        return usingCholesky(matrix, b, CHOP, n, m);
       } catch (Exception exception) {
         assumeRankM = false; // rank is not maximal
       }
@@ -52,7 +56,7 @@ public enum LeastSquares {
       }
     if (m <= n)
       return usingSvd(matrix, b);
-    return PseudoInverse.usingSvd(matrix).dot(b);
+    return PseudoInverse.usingSvd(matrix, CHOP, n, m).dot(b);
   }
 
   /***************************************************/
@@ -63,14 +67,14 @@ public enum LeastSquares {
    * @return x with matrix.dot(x) ~ b
    * @throws Exception if matrix does not have maximum rank */
   public static Tensor usingCholesky(Tensor matrix, Tensor b) {
-    return usingCholesky(matrix, b, matrix.length(), Unprotect.dimension1(matrix));
+    return usingCholesky(matrix, b, CHOP, matrix.length(), Unprotect.dimension1(matrix));
   }
 
-  private static Tensor usingCholesky(Tensor matrix, Tensor b, int n, int m) {
+  private static Tensor usingCholesky(Tensor matrix, Tensor b, Chop chop, int n, int m) {
     Tensor mt = ConjugateTranspose.of(matrix);
     return m <= n //
-        ? CholeskyDecomposition.of(mt.dot(matrix)).solve(mt.dot(b))
-        : ConjugateTranspose.of(CholeskyDecomposition.of(matrix.dot(mt)).solve(matrix)).dot(b);
+        ? CholeskyDecomposition.of(mt.dot(matrix), CHOP).solve(mt.dot(b))
+        : ConjugateTranspose.of(CholeskyDecomposition.of(matrix.dot(mt), CHOP).solve(matrix)).dot(b);
   }
 
   /***************************************************/
@@ -89,7 +93,7 @@ public enum LeastSquares {
   }
 
   private static Tensor _usingQR(Tensor matrix, Tensor b) {
-    return new QRDecompositionImpl(matrix, b, QRSignNonZero.LEAST_SQUARES).pseudoInverse();
+    return new QRDecompositionImpl(matrix, b, QR_SIGN_OPERATOR).pseudoInverse(CHOP);
   }
 
   /***************************************************/
@@ -108,9 +112,9 @@ public enum LeastSquares {
    * @return pseudo inverse of given matrix dot b */
   public static Tensor of(SingularValueDecomposition svd, Tensor b) {
     if (VectorQ.of(b)) { // when b is vector then bypass construction of pseudo inverse matrix
-      Tensor wi = SingularValueList.inverted(svd, Tolerance.CHOP);
+      Tensor wi = SingularValueList.inverted(svd, CHOP);
       return svd.getV().dot(wi.pmul(b.dot(svd.getU()))); // U^t . b == b . U
     }
-    return PseudoInverse.of(svd).dot(b);
+    return PseudoInverse.of(svd, CHOP).dot(b);
   }
 }

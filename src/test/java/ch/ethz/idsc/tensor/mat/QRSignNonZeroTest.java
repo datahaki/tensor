@@ -5,12 +5,13 @@ import java.io.IOException;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class QRSignNonZeroTest extends TestCase {
   public void testZeroFail() throws ClassNotFoundException, IOException {
-    QRSignOperator qrSignOperator = Serialization.copy(QRSignNonZero.LEAST_SQUARES);
+    QRSignOperator qrSignOperator = Serialization.copy(new QRSignNonZero(QRSignOperators.STABILITY, Chop._10));
     qrSignOperator.sign(RealScalar.of(1));
     AssertFail.of(() -> qrSignOperator.sign(RealScalar.of(1e-20)));
   }

@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -47,6 +48,11 @@ public class ChopTest extends TestCase {
     } catch (Exception exception) {
       assertEquals(exception.getMessage(), "-1.0E-9");
     }
+  }
+
+  public void testRequireNonZero() {
+    assertEquals(Chop._06.requireNonZero(Pi.TWO), Pi.TWO);
+    AssertFail.of(() -> Chop._06.requireNonZero(RealScalar.of(1e-10)));
   }
 
   public void testComplex() {

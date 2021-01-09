@@ -29,6 +29,7 @@ public interface QRDecomposition {
     return new QRDecompositionImpl(matrix, IdentityMatrix.of(matrix.length()), qrSignOperator);
   }
 
+  /***************************************************/
   /** @return upper triangular matrix */
   Tensor getR();
 

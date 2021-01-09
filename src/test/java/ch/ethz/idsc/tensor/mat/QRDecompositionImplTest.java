@@ -87,7 +87,7 @@ public class QRDecompositionImplTest extends TestCase {
       Tensor matrix = Dot.of(base, mult);
       QRDecompositionImpl qrDecompositionImpl = //
           new QRDecompositionImpl(matrix, IdentityMatrix.of(n), QRSignOperators.STABILITY);
-      qrDecompositionImpl.pseudoInverse(); // numerically this equals infty
+      AssertFail.of(() -> qrDecompositionImpl.pseudoInverse(Tolerance.CHOP));
     }
   }
 

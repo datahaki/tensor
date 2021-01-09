@@ -17,12 +17,14 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 /* package */ class CholeskyDecompositionImpl implements CholeskyDecomposition, Serializable {
   private static final long serialVersionUID = 4983293972273259086L;
   // ---
+  private final Chop chop;
   private final Tensor l;
   private final Tensor d;
 
   /** @param A hermitian matrix
    * @param chop */
   public CholeskyDecompositionImpl(Tensor A, Chop chop) {
+    this.chop = chop;
     int n = A.length();
     l = IdentityMatrix.of(n);
     d = Array.zeros(n);
@@ -59,6 +61,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 
   @Override // from CholeskyDecomposition
   public Tensor solve(Tensor b) {
+    d.stream().map(Scalar.class::cast).forEach(chop::requireNonZero);
     int n = l.length();
     if (b.length() != n)
       throw TensorRuntimeException.of(l, b);
