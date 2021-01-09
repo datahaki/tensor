@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.lie;
+package ch.ethz.idsc.tensor.mat;
 
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
@@ -10,11 +10,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
-import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
-import ch.ethz.idsc.tensor.mat.PseudoInverse;
-import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -77,13 +73,9 @@ public class QRDecompositionImplTest extends TestCase {
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
-      QRDecompositionImpl qrDecompositionImpl = //
-          new QRDecompositionImpl(matrix, IdentityMatrix.of(n), QRSignOperators.STABILITY);
-      Tensor sol1 = qrDecompositionImpl.pseudoInverse();
-      Tensor sol2 = qrDecompositionImpl.pseudoInverse(); // checks that idempotent
-      Tolerance.CHOP.requireClose(sol1, sol2);
-      assertEquals(Dimensions.of(sol1), Arrays.asList(m, n));
-      Chop._10.requireClose(PseudoInverse.of(matrix), sol1);
+      Tensor sol = LeastSquares.usingQR(matrix, IdentityMatrix.of(n));
+      assertEquals(Dimensions.of(sol), Arrays.asList(m, n));
+      Chop._10.requireClose(PseudoInverse.usingSvd(matrix), sol);
     }
   }
 

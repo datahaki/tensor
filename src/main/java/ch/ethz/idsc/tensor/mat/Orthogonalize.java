@@ -1,12 +1,9 @@
 // code by jph
-package ch.ethz.idsc.tensor.lie;
+package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.PadRight;
-import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
-import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
-import ch.ethz.idsc.tensor.mat.UnitaryMatrixQ;
 
 /** Implementation is consistent with Mathematica:
  * "If some of the input vectors are not linearly independent, the output will contain zero vectors."

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.lie;
+package ch.ethz.idsc.tensor.mat;
 
 import java.io.Serializable;
 
@@ -45,10 +45,5 @@ import ch.ethz.idsc.tensor.Unprotect;
   @Override // from QRDecomposition
   public Scalar det() {
     return qrDecomposition.det();
-  }
-
-  @Override
-  public Tensor pseudoInverse() {
-    return qrDecomposition.pseudoInverse();
   }
 }

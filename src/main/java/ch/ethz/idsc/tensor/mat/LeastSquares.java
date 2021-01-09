@@ -4,55 +4,85 @@ package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.VectorQ;
-import ch.ethz.idsc.tensor.lie.QRDecomposition;
-import ch.ethz.idsc.tensor.lie.QRSignOperators;
 
-/** inspired by
+/** least squares solution x that approximates
+ * <pre>
+ * matrix . x ~ b
+ * </pre>
+ * 
+ * The general solution is given by
+ * <pre>
+ * x == PseudoInverse[m] . b
+ * </pre>
+ * 
+ * However, the computation of the pseudo-inverse can often be avoided.
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/LeastSquares.html">LeastSquares</a>
  * 
+ * @see CholeskyDecomposition
  * @see QRDecomposition
  * @see SingularValueDecomposition
  * @see PseudoInverse */
 public enum LeastSquares {
   ;
-  /** @param matrix
+  /** If given matrix and b are in exact precision and the matrix has rank m
+   * the CholeskyDecomposition produces x in exact precision.
+   * 
+   * @param matrix of size n x m
    * @param b
    * @return x with matrix.dot(x) ~ b */
   public static Tensor of(Tensor matrix, Tensor b) {
-    boolean isRankDeficient = false;
-    if (ExactTensorQ.of(matrix))
+    int n = matrix.length();
+    int m = Unprotect.dimension1(matrix);
+    boolean assumeRankM = true;
+    if (ExactTensorQ.of(matrix) && //
+        ExactTensorQ.of(b))
       try {
-        return usingLinearSolve(matrix, b);
+        return usingCholesky(matrix, b, n, m);
       } catch (Exception exception) {
-        isRankDeficient = true;
+        assumeRankM = false; // rank is not maximal
       }
-    if (!isRankDeficient)
+    if (m <= n && assumeRankM) {
       try {
         return usingQR(matrix, b);
       } catch (Exception exception) {
-        isRankDeficient = true;
+        assumeRankM = false; // rank is not maximal
       }
-    return usingSvd(matrix, b);
+      return usingSvd(matrix, b);
+    }
+    return PseudoInverse.usingSvd(matrix).dot(b);
   }
 
-  /** @param matrix with rows >= cols, and maximum rank
+  /***************************************************/
+  /** Remark: The CholeskyDecomposition is used instead of LinearSolve
+   * 
+   * @param matrix with maximum rank
    * @param b
    * @return x with matrix.dot(x) ~ b
    * @throws Exception if matrix does not have maximum rank */
-  public static Tensor usingLinearSolve(Tensor matrix, Tensor b) {
-    Tensor mt = ConjugateTranspose.of(matrix);
-    return CholeskyDecomposition.of(mt.dot(matrix)).solve(mt.dot(b));
-    // return LinearSolve.of(mt.dot(matrix), mt.dot(b));
+  public static Tensor usingCholesky(Tensor matrix, Tensor b) {
+    return usingCholesky(matrix, b, matrix.length(), Unprotect.dimension1(matrix));
   }
 
+  private static Tensor usingCholesky(Tensor matrix, Tensor b, int n, int m) {
+    Tensor mt = ConjugateTranspose.of(matrix);
+    return m <= n //
+        ? CholeskyDecomposition.of(mt.dot(matrix)).solve(mt.dot(b))
+        : ConjugateTranspose.of(CholeskyDecomposition.of(matrix.dot(mt)).solve(matrix)).dot(b);
+  }
+
+  /***************************************************/
   /** @param matrix
    * @param b
    * @return x with matrix.dot(x) ~ b */
   public static Tensor usingQR(Tensor matrix, Tensor b) {
-    return QRDecomposition.solve(matrix, b, QRSignOperators.STABILITY);
+    return new QRDecompositionImpl(matrix, b, QRSignOperators.STABILITY).pseudoInverse();
   }
 
+  /***************************************************/
   /** when m does not have full rank, and for numerical stability
    * the function usingSvd(...) is preferred over the function usingLinearSolve(...)
    * 

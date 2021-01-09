@@ -1,22 +1,15 @@
 // code by jph
-package ch.ethz.idsc.tensor.lie;
+package ch.ethz.idsc.tensor.mat;
 
 import java.util.Arrays;
 
-import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
-import ch.ethz.idsc.tensor.mat.Det;
-import ch.ethz.idsc.tensor.mat.LinearSolve;
-import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
-import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -71,18 +64,6 @@ public class QRMathematicaTest extends TestCase {
       assertEquals(Dimensions.of(qrDecomposition.getInverseQ()), Arrays.asList(Math.min(n, m), n));
       assertEquals(Dimensions.of(qrDecomposition.getQ()), Arrays.asList(n, Math.min(n, m)));
       assertEquals(Dimensions.of(qrDecomposition.getR()), Arrays.asList(Math.min(n, m), m));
-    }
-  }
-
-  public void testSolveComplex() {
-    for (int n = 3; n < 6; ++n) {
-      Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
-          RandomVariate.of(NormalDistribution.standard(), n, n), //
-          RandomVariate.of(NormalDistribution.standard(), n, n));
-      Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 3);
-      Tensor sol1 = QRDecomposition.solve(matrix, b, QRSignOperators.STABILITY);
-      Tensor sol2 = LinearSolve.of(matrix, b);
-      Chop._10.requireClose(sol1, sol2);
     }
   }
 

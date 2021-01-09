@@ -36,7 +36,7 @@ public class SphereFit implements Serializable {
     if (MatrixRank.of(svd) < cols)
       return Optional.empty();
     Tensor x = ExactTensorQ.of(b) // implies that A is in exact precision
-        ? LeastSquares.usingLinearSolve(A, b)
+        ? LeastSquares.usingCholesky(A, b)
         : LeastSquares.of(svd, b);
     Tensor center = x.extract(0, cols - 1);
     return Optional.of(new SphereFit( //
