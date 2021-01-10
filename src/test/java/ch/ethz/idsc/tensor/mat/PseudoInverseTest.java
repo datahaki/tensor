@@ -127,15 +127,26 @@ public class PseudoInverseTest extends TestCase {
     assertEquals(PseudoInverse.of(matrix), expect);
   }
 
-  public void testEmptyMatrixFail() {
-    AssertFail.of(() -> PseudoInverse.usingSvd(Tensors.of(Tensors.empty())));
+  public void testEmptyFail() {
+    Tensor tensor = Tensors.empty();
+    AssertFail.of(() -> PseudoInverse.of(tensor));
+    AssertFail.of(() -> PseudoInverse.usingSvd(tensor));
   }
 
-  public void testEmptyFail() {
-    AssertFail.of(() -> PseudoInverse.usingSvd(Tensors.empty()));
+  public void testVectorFail() {
+    Tensor tensor = Tensors.vector(1, 2, 3, 4);
+    AssertFail.of(() -> PseudoInverse.of(tensor));
+    AssertFail.of(() -> PseudoInverse.usingSvd(tensor));
   }
 
   public void testScalarFail() {
+    AssertFail.of(() -> PseudoInverse.of(RealScalar.ONE));
     AssertFail.of(() -> PseudoInverse.usingSvd(RealScalar.ONE));
+  }
+
+  public void testEmptyMatrixFail() {
+    Tensor tensor = Tensors.of(Tensors.empty());
+    AssertFail.of(() -> PseudoInverse.of(tensor));
+    AssertFail.of(() -> PseudoInverse.usingSvd(tensor));
   }
 }

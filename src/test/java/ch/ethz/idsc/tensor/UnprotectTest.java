@@ -67,6 +67,12 @@ public class UnprotectTest extends TestCase {
     assertTrue(Unprotect.dimension1(Array.zeros(2, 3, 4)) == 3);
   }
 
+  public void testDimension1Hint() {
+    Tensor tensor = Tensors.fromString("{{0, 2, 3}, {0, 2, 3, 5}, {{}}}");
+    assertEquals(Unprotect.dimension1Hint(tensor), 3);
+    AssertFail.of(() -> Unprotect.dimension1(tensor));
+  }
+
   public void testFailEmpty() {
     AssertFail.of(() -> Unprotect.dimension1(Tensors.empty()));
   }
@@ -79,6 +85,7 @@ public class UnprotectTest extends TestCase {
 
   public void testFail2() {
     AssertFail.of(() -> Unprotect.dimension1(RealScalar.ONE));
+    AssertFail.of(() -> Unprotect.dimension1Hint(RealScalar.ONE));
   }
 
   public void testReferencesScalar() {

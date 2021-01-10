@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -60,6 +61,24 @@ public class MatrixLogTest extends TestCase {
   public void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 4, 5);
+    AssertFail.of(() -> MatrixLog.of(matrix));
+  }
+
+  public void test2x3Fail() {
+    Tensor matrix = IdentityMatrix.of(3).extract(0, 2);
+    assertEquals(matrix.length(), 2);
+    AssertFail.of(() -> MatrixLog.of(matrix));
+  }
+
+  public void test3x4Fail() {
+    Tensor matrix = IdentityMatrix.of(4).extract(0, 3);
+    assertEquals(matrix.length(), 3);
+    AssertFail.of(() -> MatrixLog.of(matrix));
+  }
+
+  public void test3x2Fail() {
+    Tensor matrix = Transpose.of(IdentityMatrix.of(3).extract(0, 2));
+    assertEquals(matrix.length(), 3);
     AssertFail.of(() -> MatrixLog.of(matrix));
   }
 }

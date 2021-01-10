@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class MatrixRankTest extends TestCase {
@@ -54,5 +55,9 @@ public class MatrixRankTest extends TestCase {
     SingularValueDecomposition singularValueDecomposition = SingularValueDecomposition.of(matrix);
     int rank = MatrixRank.of(singularValueDecomposition);
     assertEquals(rank, 0);
+  }
+
+  public void testVectorFail() {
+    AssertFail.of(() -> MatrixRank.of(Tensors.vector(1, 2, 3)));
   }
 }

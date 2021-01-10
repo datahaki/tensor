@@ -17,7 +17,8 @@ public interface QRDecomposition {
   /** householder reflections with highest numerical stability
    * 
    * @param matrix of dimensions n x m
-   * @return qr-decomposition of given matrix */
+   * @return qr-decomposition of given matrix
+   * @throws Exception if input is not a non-empty rectangular matrix */
   static QRDecomposition of(Tensor matrix) {
     return of(matrix, QRSignOperators.STABILITY);
   }

@@ -45,12 +45,10 @@ public enum MatrixLog {
    * @return
    * @throws Exception if computation is not supported for given matrix */
   public static Tensor of(Tensor matrix) {
-    int dim1 = Unprotect.dimension1(matrix);
-    if (matrix.length() == 2)
-      if (dim1 == 2)
-        return MatrixLog2.of(matrix);
-    // ---
     int n = matrix.length();
+    if (n == 2 && Unprotect.dimension1(matrix) == 2)
+      return MatrixLog2.of(matrix);
+    // ---
     Tensor id = StaticHelper.IDENTITY_MATRIX.apply(n);
     Tensor rem = matrix.subtract(id);
     Deque<DenmanBeaversDet> deque = new ArrayDeque<>();

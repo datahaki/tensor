@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sqrt;
@@ -27,7 +28,7 @@ public class InfluenceMatrix implements Serializable {
   /** @param design matrix
    * @return */
   public static InfluenceMatrix of(Tensor design) {
-    return new InfluenceMatrix(Objects.requireNonNull(design));
+    return new InfluenceMatrix(MatrixQ.require(design));
   }
 
   /***************************************************/

@@ -38,5 +38,6 @@ public class TransposeFailTest extends TestCase {
 
   public void testFail2() {
     AssertFail.of(() -> Transpose.of(Tensors.fromString("{{1, 2}, {3, 4, 5}}")));
+    AssertFail.of(() -> Transpose.of(Tensors.fromString("{{1, 2, 3}, {4, 5}}")));
   }
 }

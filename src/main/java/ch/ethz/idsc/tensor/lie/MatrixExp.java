@@ -7,7 +7,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
-import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Exp;
@@ -30,16 +29,14 @@ public enum MatrixExp {
    * @return exponential of given matrix exp(m) = I + m + m^2/2 + m^3/6 + ...
    * @throws Exception if given matrix is not a square matrix */
   public static Tensor of(Tensor matrix) {
-    // LONGTERM the infinity norm is recommended
-    Scalar max = RealScalar.of(matrix.flatten(1) //
-        .map(Scalar.class::cast) //
-        .map(Abs.FUNCTION) //
-        .map(Scalar::number) //
-        .mapToDouble(Number::doubleValue) //
-        .reduce(Math::max) //
-        .getAsDouble() + 1);
-    long exponent = 1 << Ceiling.FUNCTION.apply(LOG2.apply(max)).number().longValue();
+    long exponent = exponent(Norm2Bound.ofMatrix(matrix));
     return MatrixPower.of(series(matrix.multiply(RationalScalar.of(1, exponent))), exponent);
+  }
+
+  /** @param norm
+   * @return power of 2 */
+  /* package */ static long exponent(Scalar norm) {
+    return 1 << Ceiling.FUNCTION.apply(LOG2.apply(norm.add(RealScalar.ONE))).number().longValue();
   }
 
   /** @param matrix square
@@ -49,8 +46,6 @@ public enum MatrixExp {
     int n = matrix.length();
     Tensor nxt = matrix;
     Tensor sum = StaticHelper.IDENTITY_MATRIX.apply(n).add(nxt);
-    if (Chop.NONE.allZero(nxt))
-      return sum;
     for (int k = 2; k <= n; ++k) {
       nxt = nxt.dot(matrix).divide(RealScalar.of(k));
       sum = sum.add(nxt);

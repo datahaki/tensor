@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.ExactTensorQ;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -24,7 +23,6 @@ import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.red.Trace;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -33,6 +31,13 @@ import junit.framework.TestCase;
 
 public class MatrixExpTest extends TestCase {
   private static final Random RANDOM = new Random();
+
+  public void testExponents() {
+    assertEquals(MatrixExp.exponent(RealScalar.of(0)), 1);
+    assertEquals(MatrixExp.exponent(RealScalar.of(0.99)), 2);
+    assertEquals(MatrixExp.exponent(RealScalar.of(1)), 2);
+    assertEquals(MatrixExp.exponent(RealScalar.of(1.01)), 4);
+  }
 
   public void testZeros() {
     Tensor zeros = Array.zeros(7, 7);
@@ -104,31 +109,30 @@ public class MatrixExpTest extends TestCase {
     Tensor altexp = A.dot(diaexp).dot(Inverse.of(A));
     Chop._08.requireClose(altexp, result);
   }
-
-  public void testQuantity1() {
-    // Mathematica can't do this :-)
-    Scalar qs1 = Quantity.of(3, "m");
-    Tensor mat = Tensors.of( //
-        Tensors.of(RealScalar.ZERO, qs1), //
-        Tensors.vector(0, 0));
-    Tensor sol = MatrixExp.of(mat);
-    Chop.NONE.requireClose(sol, mat.add(IdentityMatrix.of(2)));
-  }
-
-  public void testQuantity2() {
-    Scalar qs1 = Quantity.of(2, "m");
-    Scalar qs2 = Quantity.of(3, "s");
-    Scalar qs3 = Quantity.of(4, "m");
-    Scalar qs4 = Quantity.of(5, "s");
-    Tensor mat = Tensors.of( //
-        Tensors.of(RealScalar.ZERO, qs1, qs3.multiply(qs4)), //
-        Tensors.of(RealScalar.ZERO, RealScalar.ZERO, qs2), //
-        Tensors.of(RealScalar.ZERO, RealScalar.ZERO, RealScalar.ZERO) //
-    );
-    Tensor actual = IdentityMatrix.of(3).add(mat).add(mat.dot(mat).multiply(RationalScalar.of(1, 2)));
-    // assertEquals(MatrixExp.of(mat), actual);
-    Chop.NONE.requireClose(MatrixExp.of(mat), actual);
-  }
+  // public void testQuantity1() {
+  // // Mathematica can't do this :-)
+  // Scalar qs1 = Quantity.of(3, "m");
+  // Tensor mat = Tensors.of( //
+  // Tensors.of(RealScalar.ZERO, qs1), //
+  // Tensors.vector(0, 0));
+  // Tensor sol = MatrixExp.of(mat);
+  // Chop.NONE.requireClose(sol, mat.add(IdentityMatrix.of(2)));
+  // }
+  //
+  // public void testQuantity2() {
+  // Scalar qs1 = Quantity.of(2, "m");
+  // Scalar qs2 = Quantity.of(3, "s");
+  // Scalar qs3 = Quantity.of(4, "m");
+  // Scalar qs4 = Quantity.of(5, "s");
+  // Tensor mat = Tensors.of( //
+  // Tensors.of(RealScalar.ZERO, qs1, qs3.multiply(qs4)), //
+  // Tensors.of(RealScalar.ZERO, RealScalar.ZERO, qs2), //
+  // Tensors.of(RealScalar.ZERO, RealScalar.ZERO, RealScalar.ZERO) //
+  // );
+  // Tensor actual = IdentityMatrix.of(3).add(mat).add(mat.dot(mat).multiply(RationalScalar.of(1, 2)));
+  // // assertEquals(MatrixExp.of(mat), actual);
+  // Chop.NONE.requireClose(MatrixExp.of(mat), actual);
+  // }
 
   public void testLarge() {
     // without scaling, the loop of the series requires ~300 steps

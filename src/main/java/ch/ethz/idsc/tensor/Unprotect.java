@@ -38,12 +38,19 @@ public enum Unprotect {
    * @return
    * @throws Exception if tensor is a scalar, or first level entries do not have regular length */
   public static int dimension1(Tensor tensor) {
+    int length = dimension1Hint(tensor);
+    if (tensor.stream().skip(1).allMatch(entry -> entry.length() == length))
+      return length;
+    throw TensorRuntimeException.of(tensor);
+  }
+
+  /** @param tensor
+   * @return
+   * @throws Exception if tensor is a scalar */
+  public static int dimension1Hint(Tensor tensor) {
     TensorImpl impl = (TensorImpl) tensor;
     List<Tensor> list = impl.list;
-    int length = list.get(0).length();
-    if (list.stream().skip(1).anyMatch(entry -> entry.length() != length))
-      throw TensorRuntimeException.of(tensor);
-    return length;
+    return list.get(0).length();
   }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !

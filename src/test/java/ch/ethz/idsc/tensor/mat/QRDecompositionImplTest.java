@@ -91,8 +91,12 @@ public class QRDecompositionImplTest extends TestCase {
     }
   }
 
-  public void testEmpty() {
+  public void testEmptyFail() {
     AssertFail.of(() -> QRDecomposition.of(Tensors.empty()));
+  }
+
+  public void testVectorFail() {
+    AssertFail.of(() -> QRDecomposition.of(Tensors.vector(1, 2, 3)));
   }
 
   public void testFail() {

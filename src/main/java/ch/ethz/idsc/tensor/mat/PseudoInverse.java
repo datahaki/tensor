@@ -43,7 +43,7 @@ public enum PseudoInverse {
    * 
    * @param matrix
    * @return */
-  public static Tensor usingCholesky(Tensor matrix) {
+  /* package */ static Tensor usingCholesky(Tensor matrix) {
     int n = matrix.length();
     Tensor mt = ConjugateTranspose.of(matrix);
     int m = mt.length();
@@ -53,13 +53,14 @@ public enum PseudoInverse {
   }
 
   /***************************************************/
-  /** Hint: computing the pseudo-inverse using the QR decomposition is generally faster
-   * than when using the singular value decomposition.
+  /** Hint: computing the pseudo-inverse using the QR decomposition is
+   * possible for matrices of maximal rank, and is generally faster than
+   * when using the singular value decomposition.
    * 
    * @param matrix with maximal rank
    * @return pseudoinverse of given matrix
    * @throws Exception if matrix does not have maximal rank */
-  public static Tensor usingQR(Tensor matrix) {
+  /* package */ static Tensor usingQR(Tensor matrix) {
     return usingQR(matrix, matrix.length(), Unprotect.dimension1(matrix));
   }
 
@@ -74,14 +75,14 @@ public enum PseudoInverse {
    * 
    * @param matrix of arbitrary dimension and rank
    * @return pseudoinverse of given matrix */
-  public static Tensor usingSvd(Tensor matrix) {
+  /* package */ static Tensor usingSvd(Tensor matrix) {
     return usingSvd(matrix, Tolerance.CHOP);
   }
 
   /** @param matrix
    * @param chop
    * @return */
-  public static Tensor usingSvd(Tensor matrix, Chop chop) {
+  /* package */ static Tensor usingSvd(Tensor matrix, Chop chop) {
     return usingSvd(matrix, chop, matrix.length(), Unprotect.dimension1(matrix));
   }
 

@@ -75,8 +75,17 @@ public class RowReduceTest extends TestCase {
     assertEquals(gf1, gf2);
   }
 
+  public void testEmpty() {
+    Tensor matrix = Tensors.fromString("{{}, {}}");
+    assertEquals(RowReduce.of(matrix), matrix);
+  }
+
   public void testUnstructuredFail() {
     Tensor matrix = Tensors.fromString("{{}, {2, 3}}");
     AssertFail.of(() -> RowReduce.of(matrix));
+  }
+
+  public void testVectorFail() {
+    AssertFail.of(() -> RowReduce.of(Tensors.vector(1, 2, 3)));
   }
 }

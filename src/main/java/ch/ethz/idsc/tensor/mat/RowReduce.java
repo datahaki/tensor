@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/RowReduce.html">RowReduce</a>
@@ -14,7 +15,8 @@ import ch.ethz.idsc.tensor.Tensor;
  * @see LinearSolve */
 public class RowReduce extends AbstractReduce {
   /** @param matrix
-   * @return reduced row echelon form (also called row canonical form) of matrix */
+   * @return reduced row echelon form (also called row canonical form) of matrix
+   * @throws Exception if input is not a non-empty rectangular matrix */
   public static Tensor of(Tensor matrix) {
     return of(matrix, Pivots.ARGMAX_ABS);
   }
@@ -31,7 +33,9 @@ public class RowReduce extends AbstractReduce {
   }
 
   private Tensor solve() {
-    int m = Stream.of(lhs).mapToInt(Tensor::length).max().getAsInt();
+    int m = Integers.requirePositiveOrZero(Stream.of(lhs) //
+        .mapToInt(Tensor::length) //
+        .max().getAsInt());
     int j = 0;
     for (int c0 = 0; c0 < lhs.length && j < m; ++j) {
       swap(pivot.get(c0, j, ind, lhs), c0);
