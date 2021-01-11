@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.num;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Objects;
 
 import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.ExactScalarQInterface;
@@ -175,7 +174,7 @@ public class GaussScalar extends AbstractScalar implements //
   /***************************************************/
   @Override // from AbstractScalar
   public int hashCode() {
-    return Objects.hash(value, prime);
+    return value.hashCode() + 31 * prime.hashCode();
   }
 
   @Override // from AbstractScalar

@@ -200,6 +200,12 @@ public class GaussScalarTest extends TestCase {
     assertEquals(set.size(), 4);
   }
 
+  public void testHash2() {
+    assertFalse(GaussScalar.of(3, 7).hashCode() == GaussScalar.of(7, 3).hashCode());
+    assertFalse(GaussScalar.of(1, 7).hashCode() == GaussScalar.of(2, 7).hashCode());
+    assertFalse(GaussScalar.of(1, 7).hashCode() == GaussScalar.of(1, 11).hashCode());
+  }
+
   public void testEquals() {
     assertFalse(GaussScalar.of(3, 7).equals(GaussScalar.of(4, 7)));
     assertFalse(GaussScalar.of(3, 7).equals(GaussScalar.of(3, 11)));

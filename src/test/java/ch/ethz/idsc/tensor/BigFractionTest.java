@@ -21,8 +21,9 @@ public class BigFractionTest extends TestCase {
   }
 
   public void testHash() {
-    assertEquals(BigFraction.of(7, 3).hashCode(), 1181);
-    assertEquals(BigFraction.of(3, 7).hashCode(), 1061);
+    assertFalse(BigFraction.of(7, 3).hashCode() == BigFraction.of(3, 7).hashCode());
+    assertFalse(BigFraction.of(1, 2).hashCode() == BigFraction.of(1, 3).hashCode());
+    assertFalse(BigFraction.of(3, 1).hashCode() == BigFraction.of(4, 1).hashCode());
   }
 
   public void testEquals() {

@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Objects;
 
 /** immutable integer fraction in normal form, i.e. denominator is strictly positive */
 /* package */ final class BigFraction implements Comparable<BigFraction>, Serializable {
@@ -150,14 +149,13 @@ import java.util.Objects;
 
   @Override // from Object
   public int hashCode() {
-    return Objects.hash(num, den);
+    return num.hashCode() + 31 * den.hashCode();
   }
 
   @Override // from Object
   public boolean equals(Object object) {
-    if (object instanceof BigFraction)
-      return _equals((BigFraction) object);
-    return false;
+    return object instanceof BigFraction //
+        && _equals((BigFraction) object);
   }
 
   @Override // from Object

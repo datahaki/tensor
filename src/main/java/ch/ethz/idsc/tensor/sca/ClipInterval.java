@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
-import java.util.Objects;
-
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -77,7 +75,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
   /***************************************************/
   @Override // from Object
   public final int hashCode() {
-    return Objects.hash(min, max);
+    return min.hashCode() + 31 * max.hashCode();
   }
 
   @Override // from Object

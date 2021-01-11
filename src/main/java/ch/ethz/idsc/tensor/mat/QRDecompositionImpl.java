@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -89,5 +90,10 @@ import ch.ethz.idsc.tensor.sca.Chop;
       x[i] = x[i].divide(chop.requireNonZero(R.Get(i, i)));
     }
     return Unprotect.byRef(x);
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[Q=%s, R=%s]", QRDecomposition.class.getSimpleName(), Dimensions.of(getQ()), Dimensions.of(getR()));
   }
 }
