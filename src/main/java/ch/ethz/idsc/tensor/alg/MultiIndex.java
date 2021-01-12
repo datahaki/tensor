@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensors;
   private final int[] size;
 
   private MultiIndex(int[] dims) {
-    size = dims;
+    this.size = dims;
   }
 
   public MultiIndex(List<Integer> list) {

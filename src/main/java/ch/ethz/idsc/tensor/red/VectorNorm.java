@@ -64,4 +64,9 @@ public class VectorNorm implements VectorNormInterface, Serializable {
         .reduce(Scalar::add).get(), //
         p_reciprocal);
   }
+
+  @Override
+  public String toString() {
+    return String.format("%s[1/p=%s]", getClass().getSimpleName(), p_reciprocal);
+  }
 }

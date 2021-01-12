@@ -84,4 +84,8 @@ public class SiUnitSystemTest extends TestCase {
     int checked = _check(Arrays.asList("Ga"), "G", RealScalar.of(1000000000));
     assertTrue(0 <= checked);
   }
+
+  public void testToString() {
+    assertTrue(SiUnitSystem.INSTANCE.unitSystem.toString().startsWith("SimpleUnitSystem["));
+  }
 }

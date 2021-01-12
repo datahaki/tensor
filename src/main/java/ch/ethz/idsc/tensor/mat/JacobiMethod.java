@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Ordering;
 import ch.ethz.idsc.tensor.io.ScalarArray;
 import ch.ethz.idsc.tensor.red.Diagonal;
@@ -144,5 +145,10 @@ import ch.ethz.idsc.tensor.sca.Sign;
     Scalar h = A.Get(k, l);
     A.set(g.subtract(s.multiply(h.add(g.multiply(tau)))), i, j);
     A.set(h.add(s.multiply(g.subtract(h.multiply(tau)))), k, l);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%s[V=%s]", Eigensystem.class.getSimpleName(), Dimensions.of(V));
   }
 }

@@ -108,4 +108,9 @@ public class SimpleUnitSystem implements UnitSystem {
     }
     return set;
   }
+
+  @Override
+  public String toString() {
+    return String.format("%s[size=%d]", getClass().getSimpleName(), units().size());
+  }
 }

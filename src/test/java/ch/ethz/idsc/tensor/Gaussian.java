@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor;
 
 import java.io.Serializable;
 import java.math.MathContext;
-import java.util.Objects;
 
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.MeanInterface;
@@ -120,7 +119,7 @@ public class Gaussian extends AbstractScalar implements //
   /***************************************************/
   @Override
   public int hashCode() {
-    return Objects.hash(mean, variance);
+    return mean.hashCode() + 31 * variance.hashCode();
   }
 
   @Override

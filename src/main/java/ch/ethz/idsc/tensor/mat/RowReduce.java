@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
-import java.util.stream.IntStream;
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -50,6 +50,6 @@ public class RowReduce extends AbstractReduce {
         ++c0;
       }
     }
-    return Tensor.of(IntStream.of(ind).mapToObj(i -> lhs[i]));
+    return Tensor.of(Arrays.stream(ind).mapToObj(i -> lhs[i]));
   }
 }
