@@ -100,9 +100,4 @@ public class MatrixSqrtTest extends TestCase {
   public void testNonSymmetricFail() {
     AssertFail.of(() -> MatrixSqrt.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4)));
   }
-
-  public void testNullFail() {
-    AssertFail.of(() -> MatrixSqrt.of(null));
-    AssertFail.of(() -> MatrixSqrt.ofSymmetric(null));
-  }
 }

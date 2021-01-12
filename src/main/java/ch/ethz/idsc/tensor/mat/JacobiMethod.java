@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.io.Serializable;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -70,9 +69,9 @@ import ch.ethz.idsc.tensor.sca.Sign;
         for (int iq = ip + 1; iq < n; ++iq)
           sum = sum.add(A[ip][iq]);
       if (Scalars.isZero(sum)) {
-        Integer[] ordering = Ordering.DECREASING.of(d);
-        d = Tensor.of(Stream.of(ordering).map(d::get)).unmodifiable();
-        V = Tensor.of(Stream.of(ordering).map(V::get)).unmodifiable();
+        int[] ordering = Ordering.DECREASING.of(d);
+        d = Tensor.of(IntStream.of(ordering).mapToObj(d::get));
+        V = Tensor.of(IntStream.of(ordering).mapToObj(V::get));
         return;
       }
       Scalar tresh = sum.multiply(factor);

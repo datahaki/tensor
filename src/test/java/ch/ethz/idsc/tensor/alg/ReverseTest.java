@@ -44,10 +44,9 @@ public class ReverseTest extends TestCase {
 
   private static Tensor nestRank(Tensor tensor, UnaryOperator<Tensor> operator) {
     int rank = TensorRank.of(tensor);
-    Integer[] sigma = IntStream.range(1, rank + 1) //
+    int[] sigma = IntStream.range(1, rank + 1) //
         .map(index -> index % rank) //
-        .boxed() //
-        .toArray(Integer[]::new);
+        .toArray();
     for (int index = 0; index < sigma.length; ++index)
       tensor = Transpose.of(operator.apply(tensor), sigma); // [1, 2, ..., r, 0]
     return tensor;

@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 public class OrderingTest extends TestCase {
   public void testVector() throws ClassNotFoundException, IOException {
     Tensor vector = Tensors.vector(4, 2, 3, 0, 1);
-    Integer[] array = Serialization.copy(Ordering.INCREASING).of(vector);
+    int[] array = Serialization.copy(Ordering.INCREASING).of(vector);
     Tensor ascending = Tensor.of( //
         IntStream.range(0, array.length).mapToObj(index -> vector.Get(array[index])));
     assertEquals(ascending, Sort.of(vector));
@@ -31,7 +31,7 @@ public class OrderingTest extends TestCase {
   public void testRandom() {
     Distribution d = BinomialDistribution.of(12, RationalScalar.of(1, 3));
     Tensor vector = RandomVariate.of(d, 1000);
-    Integer[] array = Ordering.INCREASING.of(vector);
+    int[] array = Ordering.INCREASING.of(vector);
     Tensor ascending = Tensor.of( //
         IntStream.range(0, array.length).mapToObj(index -> vector.Get(array[index])));
     assertEquals(ascending, Sort.of(vector));
@@ -40,7 +40,7 @@ public class OrderingTest extends TestCase {
   public void testNormal() {
     Distribution d = NormalDistribution.standard();
     Tensor vector = RandomVariate.of(d, 1000);
-    Integer[] array = Ordering.INCREASING.of(vector);
+    int[] array = Ordering.INCREASING.of(vector);
     Tensor ascending = Tensor.of( //
         IntStream.range(0, array.length).mapToObj(index -> vector.Get(array[index])));
     assertEquals(ascending, Sort.of(vector));
@@ -49,7 +49,7 @@ public class OrderingTest extends TestCase {
   public void testNormalDecreasing() {
     Distribution d = NormalDistribution.standard();
     Tensor vector = RandomVariate.of(d, 1000);
-    Integer[] array = Ordering.DECREASING.of(vector);
+    int[] array = Ordering.DECREASING.of(vector);
     Tensor decreasing = Tensor.of( //
         IntStream.range(0, array.length).mapToObj(index -> vector.Get(array[index])));
     assertEquals(Reverse.of(decreasing), Sort.of(vector));
@@ -68,9 +68,9 @@ public class OrderingTest extends TestCase {
 
   public void testSingleton() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}}");
-    Integer[] array = Ordering.DECREASING.of(tensor);
+    int[] array = Ordering.DECREASING.of(tensor);
     assertEquals(array.length, 1);
-    assertEquals(array[0].intValue(), 0);
+    assertEquals(array[0], 0);
   }
 
   public void testIntegerToTensor() {
@@ -79,8 +79,8 @@ public class OrderingTest extends TestCase {
   }
 
   public void testMatrix() {
-    assertEquals(Arrays.asList(Ordering.INCREASING.of(HilbertMatrix.of(4))), Arrays.asList(3, 2, 1, 0));
-    assertEquals(Arrays.asList(Ordering.DECREASING.of(HilbertMatrix.of(4))), Arrays.asList(0, 1, 2, 3));
+    assertTrue(Arrays.equals(Ordering.INCREASING.of(HilbertMatrix.of(4)), new int[] { 3, 2, 1, 0 }));
+    assertTrue(Arrays.equals(Ordering.DECREASING.of(HilbertMatrix.of(4)), new int[] { 0, 1, 2, 3 }));
   }
 
   public void testScalarFail() {

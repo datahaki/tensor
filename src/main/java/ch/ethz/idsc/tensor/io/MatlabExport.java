@@ -51,7 +51,7 @@ public enum MatlabExport {
       list.add("a=" + function.apply(tensor.Get()) + ";");
     else {
       List<Integer> dims = Dimensions.of(tensor);
-      Integer[] sigma = new Integer[dims.size()];
+      int[] sigma = new int[dims.size()];
       IntStream.range(0, dims.size()).forEach(index -> sigma[index] = dims.size() - index - 1);
       if (dims.size() == 1)
         dims.add(1); // [n, 1]

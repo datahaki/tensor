@@ -38,8 +38,8 @@ public enum Symmetrize {
       default:
         return Permutations.stream(Range.of(0, rank)) //
             .map(permutation -> Transpose.of(tensor, IntStream.range(0, rank) //
-                .mapToObj(index -> permutation.Get(index).number()) //
-                .toArray(Integer[]::new)))
+                .map(index -> permutation.Get(index).number().intValue()) //
+                .toArray()))
             .reduce(Tensor::add).get() //
             .divide(Factorial.of(rank));
       }

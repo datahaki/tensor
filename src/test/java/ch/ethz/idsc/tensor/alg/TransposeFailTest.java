@@ -11,7 +11,7 @@ public class TransposeFailTest extends TestCase {
   public void testScalarFail() {
     Tensor v = DoubleScalar.NEGATIVE_INFINITY;
     AssertFail.of(() -> Transpose.of(v));
-    AssertFail.of(() -> Transpose.of(v, new Integer[] { 2 }));
+    AssertFail.of(() -> Transpose.of(v, new int[] { 2 }));
   }
 
   public void testVectorFail() {

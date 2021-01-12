@@ -4,11 +4,10 @@ package ch.ethz.idsc.tensor.alg;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /** utility class for {@link Transpose} */
 /* package */ class OuterProductInteger implements Iterator<List<Integer>>, Iterable<List<Integer>> {
-  private final int[] index;
+  private final Integer[] index;
   private final int[] size;
   private final int[] direction;
   private int count = 0;
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
   /* package */ OuterProductInteger(int[] size, boolean forward) {
     this.size = size; // ;
     int total = 1;
-    index = new int[size.length];
+    index = new Integer[size.length];
     for (int c0 = 0; c0 < size.length; ++c0) {
       index[c0] = 0;
       total *= size[c0];
@@ -46,7 +45,7 @@ import java.util.stream.Collectors;
           break;
       }
     ++count;
-    return Arrays.stream(index).boxed().collect(Collectors.toList());
+    return Arrays.asList(index);
   }
 
   @Override // from Iterable
