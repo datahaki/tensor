@@ -11,6 +11,7 @@ public class KnownUnitQTest extends TestCase {
   public void testKnownUnitQ() {
     assertTrue(KnownUnitQ.SI().of(Unit.of("kgf^2*K*gal^-1")));
     assertTrue(KnownUnitQ.SI().of(Unit.ONE));
+    KnownUnitQ.SI().require(Unit.ONE);
   }
 
   public void testSimple() {

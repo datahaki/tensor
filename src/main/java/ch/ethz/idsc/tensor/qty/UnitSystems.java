@@ -4,47 +4,45 @@ package ch.ethz.idsc.tensor.qty;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
 public enum UnitSystems {
   ;
-  /** Example:
+  /** Examples:
+   * A unit system with "min" as the default time unit:
+   * <pre>
    * UnitSystems.rotate[UnitSystem.SI(), "s", "min"]
-   * makes
+   * </pre>
+   * 
+   * A unit system with "Hz" as the default time unit:
+   * <pre>
+   * UnitSystems.rotate[UnitSystem.SI(), "s", "Hz"]
+   * </pre>
+   * 
+   * A unit system with Newton "N" instead of "s":
+   * <pre>
+   * UnitSystems.rotate[UnitSystem.SI(), "s", "N"]
+   * </pre>
    * 
    * @param unitSystem
-   * @param string
+   * @param prev
+   * @param next
    * @return */
   public static UnitSystem rotate(UnitSystem unitSystem, String prev, String next) {
-    Unit unit_prev = Unit.of(prev);
-    Unit unit_next = Unit.of(next);
-    KnownUnitQ.in(unitSystem).require(unit_prev);
-    KnownUnitQ.in(unitSystem).require(unit_next);
+    Scalar value = StaticHelper.conversion(unitSystem, prev, next);
     if (prev.equals(next))
       return unitSystem;
-    Scalar factor = Quantity.of(RealScalar.ONE, unit_next);
-    Scalar value = unitSystem.apply(Quantity.of(RealScalar.ONE, unit_prev).divide(factor)).multiply(factor);
-    return focus(invalid(unitSystem, prev, next, value));
-  }
-
-  private static UnitSystem invalid(UnitSystem unitSystem, String prev, String next, Scalar value) {
     Map<String, Scalar> map = new HashMap<>(unitSystem.map()); // copy map
     map.remove(next);
     map.put(prev, value);
-    return SimpleUnitSystem._from(map); // non-strict
+    return focus(SimpleUnitSystem._from(map));
   }
 
   private static UnitSystem focus(UnitSystem unitSystem) {
-    Map<String, Scalar> map = new HashMap<>();
-    for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
-      Scalar prev = unitSystem.apply(entry.getValue());
-      if (!unitSystem.apply(prev).equals(prev)) // invariance
-        throw new IllegalArgumentException();
-      map.put(entry.getKey(), prev);
-    }
-    return SimpleUnitSystem.from(map); // strict
+    return SimpleUnitSystem.from(unitSystem.map().entrySet().stream() //
+        .collect(Collectors.toMap(Entry::getKey, entry -> unitSystem.apply(entry.getValue())))); // strict
   }
 
   /***************************************************/

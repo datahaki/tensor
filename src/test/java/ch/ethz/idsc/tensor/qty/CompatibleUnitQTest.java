@@ -20,6 +20,7 @@ public class CompatibleUnitQTest extends TestCase {
     assertTrue(compatibleUnitQ.with(Unit.of("m*s^-1")).test(Quantity.of(2, "km*ms^-1")));
     assertTrue(CompatibleUnitQ.SI().with(Unit.of("PS^2")).test(Quantity.of(2, "W^2")));
     assertFalse(CompatibleUnitQ.SI().with(Unit.of("m*s^-1")).test(Quantity.of(2, "m*s")));
+    assertFalse(CompatibleUnitQ.SI().with(Unit.of("s")).test(Quantity.of(1, "Hz")));
   }
 
   public void testAssignable() {

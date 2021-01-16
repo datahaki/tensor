@@ -19,8 +19,9 @@ import junit.framework.TestCase;
 
 public class UnitSystemTest extends TestCase {
   public void testSize() {
+    TestHelper.checkInvariant(UnitSystem.SI());
     int size = UnitSystem.SI().map().size();
-    if (size < 108) {
+    if (size < 111) {
       System.err.println("unit count: " + size);
       fail();
     }

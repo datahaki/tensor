@@ -101,7 +101,7 @@ public class SimpleUnitSystem implements UnitSystem {
   }
 
   // helper function
-  private static String format(Entry<String, Scalar> entry) {
+  /* package */ static String format(Entry<String, Scalar> entry) {
     return entry.getKey() + Unit.POWER_DELIMITER + entry.getValue();
   }
 
