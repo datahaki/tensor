@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.util.Map;
 
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -10,6 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.red.Tally;
+import ch.ethz.idsc.tensor.red.Variance;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -83,7 +85,9 @@ public class EmpiricalDistributionTest extends TestCase {
   public void testVariance() {
     Distribution distribution = //
         EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
-    assertEquals(Expectation.variance(distribution), RealScalar.ONE);
+    Scalar var = Variance.of(distribution);
+    ExactScalarQ.require(var);
+    assertEquals(var, RealScalar.ONE);
   }
 
   public void testInverseCDF() {

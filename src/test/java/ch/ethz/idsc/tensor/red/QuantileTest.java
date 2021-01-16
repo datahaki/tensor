@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.num.Pi;
+import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -115,6 +116,7 @@ public class QuantileTest extends TestCase {
   }
 
   public void testFailNull() {
-    AssertFail.of(() -> Quantile.of(null));
+    AssertFail.of(() -> Quantile.of((Tensor) null));
+    AssertFail.of(() -> Quantile.of((Distribution) null));
   }
 }

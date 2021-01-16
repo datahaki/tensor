@@ -2,7 +2,6 @@
 package ch.ethz.idsc.tensor.itp;
 
 import java.io.Serializable;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -15,7 +14,13 @@ import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 
 /** BSplineInterpolation defines a parametric curve that interpolates
- * the given control points at integer values. */
+ * the given control points at integer values.
+ * 
+ * <p>The input to {@link #get(Tensor)} is required to be of the form
+ * <pre>
+ * get({x_0, i_1, ..., i_n})
+ * </pre>
+ * where x_0 is a real number, and i_1, ..., i_n are integers. */
 public class BSplineInterpolation extends AbstractInterpolation implements Serializable {
   private static final long serialVersionUID = -5285476231580435365L;
 
@@ -55,7 +60,7 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
         .skip(1) //
         .map(Scalar.class::cast) //
         .map(Scalars::intValueExact) //
-        .collect(Collectors.toList()));
+        .toArray(Integer[]::new));
   }
 
   @Override // from Interpolation

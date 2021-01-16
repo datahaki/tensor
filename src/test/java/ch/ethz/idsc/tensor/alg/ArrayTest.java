@@ -30,7 +30,7 @@ public class ArrayTest extends TestCase {
 
   public void testCopy() {
     Tensor hilbert = HilbertMatrix.of(3, 5);
-    Tensor table = Array.of(l -> hilbert.get(l), Dimensions.of(hilbert));
+    Tensor table = Array.of(l -> hilbert.get(l.stream().toArray(Integer[]::new)), Dimensions.of(hilbert));
     assertEquals(hilbert, table);
   }
 

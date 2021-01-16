@@ -35,7 +35,8 @@ public interface Clip extends ScalarUnaryOperator {
   <T extends Tensor> T of(T tensor);
 
   /** @param scalar
-   * @return true if given scalar is invariant under this clip */
+   * @return true if given scalar is invariant under this clip, i.e. the evaluation
+   * of the condition min <= scalar <= max. */
   boolean isInside(Scalar scalar);
 
   /** Remark: Functionality inspired by {@link Objects#requireNonNull(Object)}
@@ -46,7 +47,8 @@ public interface Clip extends ScalarUnaryOperator {
   Scalar requireInside(Scalar scalar);
 
   /** @param scalar
-   * @return true if given scalar is not invariant under this clip */
+   * @return true if given scalar is not invariant under this clip, i.e. the evaluation
+   * of the condition scalar < min or max < scalar. */
   boolean isOutside(Scalar scalar);
 
   /** If max - min > 0, the given scalar is divided by width.

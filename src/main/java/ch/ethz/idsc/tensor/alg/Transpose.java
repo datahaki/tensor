@@ -105,11 +105,11 @@ public enum Transpose {
 
   // helper function
   private static List<Integer> inverse(List<Integer> list, Tensor sigma) {
-    return Ordering.INCREASING.stream(sigma).mapToObj(list::get).collect(Collectors.toList());
+    return Ordering.INCREASING.stream(sigma).map(list::get).collect(Collectors.toList());
   }
 
   // helper function
-  private static List<Integer> permute(List<Integer> list, int[] sigma) {
-    return Arrays.stream(sigma).mapToObj(list::get).collect(Collectors.toList());
+  private static Integer[] permute(List<Integer> list, int[] sigma) {
+    return Arrays.stream(sigma).mapToObj(list::get).toArray(Integer[]::new);
   }
 }

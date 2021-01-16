@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.itp;
 
 import java.io.Serializable;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -42,7 +41,7 @@ public class MappedInterpolation extends AbstractInterpolation implements Serial
         .map(Scalar.class::cast) //
         .map(function) //
         .map(Scalars::intValueExact) //
-        .collect(Collectors.toList()));
+        .toArray(Integer[]::new));
   }
 
   @Override // from Interpolation

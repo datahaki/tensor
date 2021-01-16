@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.itp;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RandomQuaternion;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -9,7 +10,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Roots;
 import ch.ethz.idsc.tensor.alg.Series;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
-import ch.ethz.idsc.tensor.qty.RandomQuaternion;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;

@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Integers;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.InverseCDF;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 
 /** Quantile of the tensor library only operates on vectors. The return type of
@@ -32,7 +34,7 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Quantile.html">Quantile</a> */
 public class Quantile implements ScalarUnaryOperator {
-  private static final long serialVersionUID = -3227861622998583604L;
+  private static final long serialVersionUID = -4076649064391350185L;
 
   /** @param vector non-empty
    * @return
@@ -47,6 +49,14 @@ public class Quantile implements ScalarUnaryOperator {
    * @see OrderedQ */
   public static ScalarUnaryOperator ofSorted(Tensor vector) {
     return new Quantile(OrderedQ.require(VectorQ.require(vector)));
+  }
+
+  /** @param distribution
+   * @return function p -> InverseCDF[distribution, p]
+   * @see InverseCDF */
+  public static ScalarUnaryOperator of(Distribution distribution) {
+    InverseCDF inverseCDF = (InverseCDF) distribution;
+    return inverseCDF::quantile;
   }
 
   /***************************************************/

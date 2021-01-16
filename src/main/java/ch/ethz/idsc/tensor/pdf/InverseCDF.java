@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.pdf;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.red.Median;
+import ch.ethz.idsc.tensor.red.Quantile;
 
 /** inverse of the cumulative distribution function of a given distribution
  * 
@@ -17,9 +18,15 @@ import ch.ethz.idsc.tensor.red.Median;
  * 
  * <p>Another application is to state confidence intervals to test hypotheses.
  * 
+ * <p>Remark: the command InverseCDF is identical to Quantile
+ * <pre>
+ * InverseCDF[distribution, p] == Quantile[distribution, p]
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/InverseCDF.html">InverseCDF</a>
  * 
+ * @see Quantile
  * @see Median */
 @FunctionalInterface
 public interface InverseCDF {
