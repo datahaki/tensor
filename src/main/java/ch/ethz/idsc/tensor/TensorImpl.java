@@ -162,7 +162,6 @@ import java.util.stream.Stream;
 
   @Override // from Tensor
   public Tensor subtract(Tensor tensor) {
-    // return add(tensor.negate());
     TensorImpl impl = (TensorImpl) tensor;
     return Tensor.of(_range(impl).mapToObj(index -> list.get(index).subtract(impl.list.get(index))));
   }

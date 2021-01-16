@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -19,7 +20,7 @@ import junit.framework.TestCase;
 public class UnitSystemTest extends TestCase {
   public void testSize() {
     int size = UnitSystem.SI().map().size();
-    if (size < 107) {
+    if (size < 108) {
       System.err.println("unit count: " + size);
       fail();
     }
@@ -110,5 +111,35 @@ public class UnitSystemTest extends TestCase {
     assertTrue(unitSystem.units().contains("psi"));
     assertFalse(unitSystem.units().contains("CHF"));
     assertFalse(unitSystem.units().contains("USD"));
+  }
+
+  public void testFail1() {
+    Properties properties = ResourceData.properties("/unit/fail1.properties");
+    assertFalse(properties.entrySet().isEmpty());
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+  }
+
+  public void testFail2() {
+    Properties properties = ResourceData.properties("/unit/fail2.properties");
+    assertFalse(properties.entrySet().isEmpty());
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+  }
+
+  public void testFail3() {
+    Properties properties = ResourceData.properties("/unit/fail3.properties");
+    assertFalse(properties.entrySet().isEmpty());
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+  }
+
+  public void testFail4() {
+    Properties properties = ResourceData.properties("/unit/fail4.properties");
+    assertFalse(properties.entrySet().isEmpty());
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+  }
+
+  public void testFail5() {
+    Properties properties = ResourceData.properties("/unit/fail5.properties");
+    assertFalse(properties.entrySet().isEmpty());
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
   }
 }

@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
-import java.util.Arrays;
-
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -13,9 +11,9 @@ import junit.framework.TestCase;
 public class TensorGetTest extends TestCase {
   public void testGetEmpty() {
     assertEquals(Tensors.empty().get(), Tensors.empty());
-    assertEquals(Tensors.empty().get(Arrays.asList()), Tensors.empty());
+    assertEquals(Tensors.empty().get(new Integer[0]), Tensors.empty());
     assertEquals(Array.zeros(2, 3).get(), Array.zeros(2, 3));
-    assertEquals(Array.zeros(2, 3).get(Arrays.asList()), Array.zeros(2, 3));
+    assertEquals(Array.zeros(2, 3).get(new Integer[0]), Array.zeros(2, 3));
   }
 
   public void testGetScalar() {

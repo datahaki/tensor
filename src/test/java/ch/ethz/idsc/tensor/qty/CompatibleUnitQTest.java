@@ -12,6 +12,7 @@ public class CompatibleUnitQTest extends TestCase {
   public void testCompatibleUnitQ() {
     assertTrue(CompatibleUnitQ.SI().with(Unit.of("kgf^2*L^-3")).test(Quantity.of(2, "N^2*m^-9")));
     assertTrue(CompatibleUnitQ.SI().with(Unit.of("cups")).test(Quantity.of(2, "L")));
+    assertTrue(CompatibleUnitQ.SI().with(Unit.of("m^2*kg*s^-3")).test(Quantity.of(3, "W")));
   }
 
   public void testSimple() throws ClassNotFoundException, IOException {

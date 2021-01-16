@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.RealScalar;
@@ -25,6 +26,7 @@ public class SimpleUnitSystem implements UnitSystem {
    * 
    * <p>Example from the built-in file "/unit/si.properties":
    * <pre>
+   * K=1[K]
    * rad=1
    * Hz=1[s^-1]
    * N=1[m*kg*s^-2]
@@ -36,15 +38,29 @@ public class SimpleUnitSystem implements UnitSystem {
    * @return
    * @throws Exception if keys do not define unit conversions */
   public static UnitSystem from(Properties properties) {
-    return new SimpleUnitSystem(properties.stringPropertyNames().stream().collect(Collectors.toMap( //
-        StaticHelper::requireAtomic, key -> requireNumeric(Scalars.fromString(properties.getProperty(key))))));
+    return from(properties.stringPropertyNames().stream().collect(Collectors.toMap( //
+        Function.identity(), // example: "kW"
+        key -> Scalars.fromString(properties.getProperty(key))))); // example: 1000[m^2*kg*s^-3]
   }
 
   /** @param map
    * @return unit system */
   public static UnitSystem from(Map<String, Scalar> map) {
+    return _from(requireTransitionFree(map));
+  }
+
+  /* package */ static UnitSystem _from(Map<String, Scalar> map) {
     return new SimpleUnitSystem(map.entrySet().stream().collect(Collectors.toMap( //
-        entry -> StaticHelper.requireAtomic(entry.getKey()), entry -> requireNumeric(entry.getValue()))));
+        entry -> StaticHelper.requireAtomic(entry.getKey()), // example: "kV"
+        entry -> requireNumeric(entry.getValue())))); // example: 1000[m^2*kg*s^-3*A^-1]
+  }
+
+  private static Map<String, Scalar> requireTransitionFree(Map<String, Scalar> map) {
+    for (Scalar scalar : map.values())
+      for (String atom : QuantityUnit.of(scalar).map().keySet()) // example: m, kg, s, A
+        if (map.containsKey(atom) && !scalar.equals(Quantity.of(RealScalar.ONE, atom)))
+          throw TensorRuntimeException.of(scalar);
+    return map;
   }
 
   /***************************************************/
