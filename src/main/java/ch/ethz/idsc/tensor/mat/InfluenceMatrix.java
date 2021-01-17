@@ -51,7 +51,7 @@ public class InfluenceMatrix implements Serializable {
    * @return design . design^+
    * symmetric projection matrix of size n x n with eigenvalues either 1 or 0.
    * The matrix is a point in the Grassmannian manifold Gr(n, k) where k denotes the matrix rank. */
-  public Tensor matrix() {
+  public synchronized Tensor matrix() {
     if (Objects.isNull(matrix))
       matrix = matrix(design);
     return matrix;
@@ -119,7 +119,7 @@ public class InfluenceMatrix implements Serializable {
    * 
    * @param vector
    * @return design . design^+ . vector */
-  public Tensor image(Tensor vector) {
+  public synchronized Tensor image(Tensor vector) {
     if (Objects.isNull(svd))
       svd = SingularValueDecomposition.of(design);
     Tensor u = svd.getU();

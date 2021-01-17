@@ -93,7 +93,7 @@ public interface Tensor extends Iterable<Tensor> {
    * @return copy of this[index[0], index[1], ..., All] */
   Tensor get(List<Integer> index);
 
-  /** function is identical to and shorthand for
+  /** function is identical to
    * <pre>
    * Get(i) == (Scalar) get(i)
    * </pre>
@@ -105,10 +105,11 @@ public interface Tensor extends Iterable<Tensor> {
    * 
    * @param i in the range 0, 1, ..., length() - 1
    * @return (Scalar) get(i)
-   * @throws Exception when invoked on a {@link Scalar} */
+   * @throws Exception when the parameter is out of range, in particular, when this
+   * instance is a {@link Scalar}. */
   Scalar Get(int i);
 
-  /** function is identical to and shorthand for
+  /** function is identical to
    * <pre>
    * Get(i, j) == (Scalar) get(i, j)
    * </pre>
@@ -121,7 +122,8 @@ public interface Tensor extends Iterable<Tensor> {
    * @param i in the range 0, 1, ..., length() - 1
    * @param j in the range 0, 1, ..., get(i).length() - 1
    * @return (Scalar) get(i, j)
-   * @throws Exception when invoked on a {@link Scalar} */
+   * @throws Exception when either parameter is out of range, in particular, when this
+   * instance is a {@link Scalar}. */
   Scalar Get(int i, int j);
 
   /** set copy of tensor as element at location this[index[0], index[1], ...].

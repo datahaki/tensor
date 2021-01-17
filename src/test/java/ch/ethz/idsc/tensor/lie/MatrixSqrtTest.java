@@ -19,8 +19,8 @@ import junit.framework.TestCase;
 public class MatrixSqrtTest extends TestCase {
   private static void _check(Tensor g, MatrixSqrt matrixSqrt) {
     Chop._08.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt_inverse()), IdentityMatrix.of(g.length()));
-    Chop._03.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt()), g);
-    Chop._03.requireClose(matrixSqrt.sqrt_inverse().dot(matrixSqrt.sqrt_inverse()), Inverse.of(g));
+    Chop._04.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt()), g);
+    Chop._04.requireClose(matrixSqrt.sqrt_inverse().dot(matrixSqrt.sqrt_inverse()), Inverse.of(g));
   }
 
   public void testSimple() {
@@ -72,7 +72,7 @@ public class MatrixSqrtTest extends TestCase {
 
   public void testRandomSymmetric() {
     for (int n = 1; n < 5; ++n) {
-      Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), n, n));
+      Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.of(0, 0.2), n, n));
       Tensor x2 = x.dot(x);
       _check(x2, MatrixSqrt.of(x2));
       _check(x2, MatrixSqrt.ofSymmetric(x2));
@@ -81,7 +81,7 @@ public class MatrixSqrtTest extends TestCase {
 
   public void testRandomSymmetricQuantity() {
     for (int n = 1; n < 5; ++n) {
-      Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), n, n)).map(s -> Quantity.of(s, "m"));
+      Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.of(0, 0.2), n, n)).map(s -> Quantity.of(s, "m"));
       Tensor x2 = x.dot(x);
       _check(x2, MatrixSqrt.ofSymmetric(x2));
     }
