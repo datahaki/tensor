@@ -89,16 +89,21 @@ public interface Tensor extends Iterable<Tensor> {
    * @return copy of this[index[0], index[1], ..., All] */
   Tensor get(Integer... index);
 
+  /** @param index
+   * @return copy of this[index[0], index[1], ..., All] */
+  Tensor get(List<Integer> index);
+
   /** same as function get(...) except that return type is cast to {@link Scalar}.
    * An exception is thrown, if there is no Scalar at the specified index location.
    * 
    * @param index
    * @return {@link Scalar} at this[index[0], index[1], ...] */
-  Scalar Get(Integer... index);
+  Scalar Get(int index);
 
-  /** @param index
-   * @return copy of this[index[0], index[1], ..., All] */
-  Tensor get(List<Integer> index);
+  /** @param i
+   * @param j
+   * @return */
+  Scalar Get(int i, int j);
 
   /** set copy of tensor as element at location this[index[0], index[1], ...].
    * The operation is invalid if this tensor has been cast as unmodifiable.

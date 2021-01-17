@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -66,7 +67,7 @@ public class LeastSquaresTest extends TestCase {
   public void testEasy() {
     Tensor m = Transpose.of(IdentityMatrix.of(4).extract(0, 3));
     for (Tensor perm : Permutations.of(Range.of(0, 4))) {
-      Tensor matrix = Tensor.of(perm.stream().map(s -> m.get(s.Get().number().intValue())));
+      Tensor matrix = Tensor.of(perm.stream().map(Scalar.class::cast).map(s -> m.get(s.number().intValue())));
       _checkSpecialExact(matrix);
       _checkSpecialNumer(matrix.map(N.DOUBLE));
     }

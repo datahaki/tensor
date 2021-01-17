@@ -35,7 +35,7 @@ public class PoissonDistributionTest extends TestCase {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(2));
     PDF pdf = PDF.of(distribution);
     Tensor prob = values(pdf, 16);
-    Scalar scalar = Total.of(prob).Get();
+    Scalar scalar = Total.ofVector(prob);
     assertTrue(Scalars.lessThan(RealScalar.of(0.9999), scalar));
     assertTrue(Scalars.lessThan(scalar, RealScalar.ONE));
   }
@@ -45,7 +45,7 @@ public class PoissonDistributionTest extends TestCase {
     PDF pdf = PDF.of(distribution);
     pdf.at(RealScalar.of(30));
     Tensor prob = values(pdf, 30);
-    Scalar sum = Total.of(prob).Get();
+    Scalar sum = Total.ofVector(prob);
     assertEquals(sum, RealScalar.ONE);
   }
 

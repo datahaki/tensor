@@ -137,7 +137,7 @@ public class NormalizeTest extends TestCase {
   }
 
   public void testNormalizeTotalFail() {
-    TensorUnaryOperator tensorUnaryOperator = Normalize.with(v -> Total.of(v).Get());
+    TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);
     AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, -2)));
   }
 

@@ -19,7 +19,7 @@ public class ScalarTest extends TestCase {
 
   public void testGet() {
     Tensor t = RealScalar.of(3);
-    Scalar s = t.Get();
+    Scalar s = (Scalar) t;
     assertEquals(t, s);
   }
 

@@ -142,7 +142,7 @@ public class BSplineFunctionStringTest extends TestCase {
       for (int length = 2; length <= 6; ++length) {
         ScalarTensorFunction bSplineFunction = BSplineFunction.string(degree, IdentityMatrix.of(length));
         for (Tensor _x : Subdivide.of(0, length - 1, 13)) {
-          Tensor tensor = bSplineFunction.apply(_x.Get());
+          Tensor tensor = bSplineFunction.apply((Scalar) _x);
           assertTrue(tensor.stream().map(Scalar.class::cast).allMatch(Clips.unit()::isInside));
           assertEquals(Total.of(tensor), RealScalar.ONE);
           ExactTensorQ.require(tensor);

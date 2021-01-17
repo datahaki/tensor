@@ -48,7 +48,7 @@ public enum Hypot {
    * @throws Exception if vector is empty, or vector contains NaN */
   public static Scalar ofVector(Tensor vector) {
     Tensor abs = vector.map(Abs.FUNCTION);
-    Scalar max = abs.stream().reduce(Max::of).get().Get();
+    Scalar max = (Scalar) abs.stream().reduce(Max::of).get();
     if (Scalars.isZero(max))
       return max;
     abs = abs.divide(max);

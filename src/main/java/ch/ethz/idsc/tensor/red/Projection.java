@@ -36,7 +36,7 @@ public class Projection implements TensorUnaryOperator {
 
   private Projection(Tensor vector) {
     vc = Conjugate.of(vector);
-    Scalar scalar = vc.dot(vector).Get();
+    Scalar scalar = (Scalar) vc.dot(vector);
     if (Scalars.isZero(scalar))
       throw TensorRuntimeException.of(vector);
     vs = vector.divide(scalar);
@@ -44,6 +44,6 @@ public class Projection implements TensorUnaryOperator {
 
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor u) {
-    return vs.multiply(vc.dot(u).Get());
+    return vs.multiply((Scalar) vc.dot(u));
   }
 }

@@ -70,7 +70,7 @@ public class HistogramDistribution implements //
   private final Scalar width_half;
 
   private HistogramDistribution(Tensor samples, Scalar width) {
-    Scalar min = Floor.toMultipleOf(width).apply(samples.stream().reduce(Min::of).get().Get());
+    Scalar min = Floor.toMultipleOf(width).apply((Scalar) samples.stream().reduce(Min::of).get());
     discrete = scalar -> scalar.subtract(min).divide(width);
     original = scalar -> scalar.multiply(width).add(min);
     empiricalDistribution = //

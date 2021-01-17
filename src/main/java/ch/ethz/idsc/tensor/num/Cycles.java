@@ -78,9 +78,9 @@ public class Cycles implements Serializable {
   private static NavigableMap<Integer, Integer> map(Stream<Tensor> stream) {
     NavigableMap<Integer, Integer> navigableMap = new TreeMap<>();
     stream.forEach(cycle -> {
-      int prev = Scalars.intValueExact(Last.of(cycle).Get());
+      int prev = Scalars.intValueExact(Last.of(cycle));
       for (Tensor next : cycle)
-        navigableMap.put(prev, prev = Scalars.intValueExact(next.Get()));
+        navigableMap.put(prev, prev = Scalars.intValueExact((Scalar) next));
     });
     return navigableMap;
   }

@@ -57,7 +57,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 
   @Override // from CholeskyDecomposition
   public Scalar det() {
-    return Times.pmul(d).Get();
+    return (Scalar) Times.pmul(d);
   }
 
   @Override // from CholeskyDecomposition

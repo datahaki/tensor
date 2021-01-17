@@ -39,7 +39,7 @@ public enum BinningMethod implements TensorScalarFunction {
   IQR {
     @Override
     public Scalar apply(Tensor tensor) {
-      Scalar iqr = InterquartileRange.of(tensor).Get();
+      Scalar iqr = InterquartileRange.of(tensor);
       return iqr.add(iqr).divide(crt_length(tensor));
     }
   },
@@ -71,7 +71,7 @@ public enum BinningMethod implements TensorScalarFunction {
 
   private static Scalar division(Tensor tensor, Scalar k) {
     return Clips.interval( //
-        tensor.stream().reduce(Min::of).get().Get(), //
-        tensor.stream().reduce(Max::of).get().Get()).width().divide(k);
+        (Scalar) tensor.stream().reduce(Min::of).get(), //
+        (Scalar) tensor.stream().reduce(Max::of).get()).width().divide(k);
   }
 }

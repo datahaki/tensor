@@ -62,7 +62,7 @@ public class BinomialDistributionTest extends TestCase {
     PDF pdf = PDF.of(distribution);
     Tensor sum = RealScalar.ZERO;
     for (Tensor x : Range.of(0, 22))
-      sum = sum.add(x.multiply(pdf.at(x.Get())));
+      sum = sum.add(x.multiply(pdf.at((Scalar) x)));
     assertEquals(Expectation.mean(distribution), sum);
   }
 

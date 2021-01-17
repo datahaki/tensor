@@ -26,8 +26,8 @@ public enum BinCounts {
     if (Tensors.isEmpty(vector))
       return Tensors.empty();
     NavigableMap<Tensor, Long> navigableMap = Tally.sorted(Floor.of(vector));
-    Sign.requirePositiveOrZero(navigableMap.firstKey().Get());
-    int length = Scalars.intValueExact(navigableMap.lastKey().Get()) + 1;
+    Sign.requirePositiveOrZero((Scalar) navigableMap.firstKey());
+    int length = Scalars.intValueExact((Scalar) navigableMap.lastKey()) + 1;
     return Tensors.vector(index -> {
       Scalar key = RealScalar.of(index);
       return navigableMap.containsKey(key) //

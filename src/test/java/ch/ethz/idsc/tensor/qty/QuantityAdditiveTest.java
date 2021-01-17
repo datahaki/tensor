@@ -109,7 +109,7 @@ public class QuantityAdditiveTest extends TestCase {
   public void testAddDifferent() {
     Scalar s1 = Quantity.of(200, "g"); //
     Scalar s2 = Quantity.of(1, "kg");
-    Scalar sum = Total.of(Tensors.of(s1, s2).map(UnitSystem.SI())).Get();
+    Scalar sum = Total.ofVector(Tensors.of(s1, s2).map(UnitSystem.SI()));
     assertEquals(sum, Scalars.fromString("6/5[kg]"));
   }
 

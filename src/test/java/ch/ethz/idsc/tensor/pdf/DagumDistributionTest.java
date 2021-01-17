@@ -36,7 +36,7 @@ public class DagumDistributionTest extends TestCase {
 
   public void testRandom() {
     Distribution distribution = DagumDistribution.of(0.2, 0.3, 0.6);
-    Scalar mean = Mean.of(RandomVariate.of(distribution, 100)).Get();
+    Scalar mean = (Scalar) Mean.of(RandomVariate.of(distribution, 100));
     Sign.requirePositive(mean);
   }
 

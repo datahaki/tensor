@@ -227,8 +227,9 @@ public class GaussScalarTest extends TestCase {
     Tensor tensor = ResourceData.of("/number/primes.vector");
     tensor.extract(3, tensor.length()).stream() //
         .parallel() //
-        .forEach(_x -> { // skip 2 3 5
-          long prime = _x.Get().number().longValue();
+        .map(Scalar.class::cast) //
+        .forEach(x -> { // skip 2 3 5
+          long prime = x.number().longValue();
           GaussScalar gaussScalar = GaussScalar.of(10, prime);
           GaussScalar inverse = gaussScalar.reciprocal();
           assertEquals(gaussScalar.multiply(inverse).number(), BigInteger.ONE);

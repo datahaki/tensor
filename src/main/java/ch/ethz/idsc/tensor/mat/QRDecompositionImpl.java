@@ -75,7 +75,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
   @Override // from QRDecomposition
   public Scalar det() {
     return R.length() == m // check if R is square
-        ? Times.pmul(Diagonal.of(R)).Get()
+        ? (Scalar) Times.pmul(Diagonal.of(R))
         : RealScalar.ZERO;
   }
 

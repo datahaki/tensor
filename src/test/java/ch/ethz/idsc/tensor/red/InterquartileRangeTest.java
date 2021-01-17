@@ -45,7 +45,7 @@ public class InterquartileRangeTest extends TestCase {
     Scalar iqr = InterquartileRange.of(distribution);
     assertEquals(iqr, RealScalar.of(5));
     Tensor random = RandomVariate.of(distribution, 1100);
-    Scalar test = InterquartileRange.of(random).Get();
+    Scalar test = InterquartileRange.of(random);
     assertTrue(Clips.interval(4, 6).isInside(test));
   }
 

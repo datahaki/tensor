@@ -24,7 +24,7 @@ public class TrigonometryInterfaceTest extends TestCase {
 
   public void testQuantity() {
     for (Tensor _value : Tensors.vector(-2.323, -1, -0.3, 0, 0.2, 1.2, 3., 4.456)) {
-      Scalar value = _value.Get();
+      Scalar value = (Scalar) _value;
       _check(value, Sin::of, Math::sin);
       _check(value, Cos::of, Math::cos);
       _check(value, Sinh::of, Math::sinh);

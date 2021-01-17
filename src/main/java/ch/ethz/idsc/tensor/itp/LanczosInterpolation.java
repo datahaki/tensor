@@ -52,7 +52,7 @@ public class LanczosInterpolation extends AbstractInterpolation implements Seria
       return tensor.copy();
     Tensor sum = tensor;
     for (Tensor value : index)
-      sum = at(sum, value.Get());
+      sum = at(sum, (Scalar) value);
     return sum;
   }
 

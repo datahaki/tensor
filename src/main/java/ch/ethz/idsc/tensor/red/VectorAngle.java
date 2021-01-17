@@ -34,8 +34,8 @@ public enum VectorAngle {
       return Optional.empty();
     }
     Scalar ratio = ExactTensorQ.of(u) || ExactTensorQ.of(v) //
-        ? u.dot(Conjugate.of(v)).divide(nu).divide(nv).Get()
-        : NORMALIZE.apply(u).dot(NORMALIZE.apply(Conjugate.of(v))).Get();
+        ? (Scalar) u.dot(Conjugate.of(v)).divide(nu).divide(nv)
+        : (Scalar) NORMALIZE.apply(u).dot(NORMALIZE.apply(Conjugate.of(v)));
     if (ratio instanceof RealScalar)
       // due to numerical inaccuracy, for instance, ratio == 1.0000000000000002 may occur
       ratio = Clips.absoluteOne().apply(ratio); // clip to [-1, 1]

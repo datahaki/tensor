@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.img;
 
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
@@ -14,8 +15,8 @@ import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ImageFilterTest extends TestCase {
-  private static final TensorScalarFunction MIN = block -> block.flatten(-1).reduce(Min::of).get().Get();
-  private static final TensorScalarFunction MAX = block -> block.flatten(-1).reduce(Max::of).get().Get();
+  private static final TensorScalarFunction MIN = block -> (Scalar) block.flatten(-1).reduce(Min::of).get();
+  private static final TensorScalarFunction MAX = block -> (Scalar) block.flatten(-1).reduce(Max::of).get();
 
   public void testMin() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 256);
