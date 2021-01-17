@@ -29,7 +29,7 @@ public class CauchyDistributionTest extends TestCase {
 
   public void testMedian() {
     Distribution distribution = CauchyDistribution.of(2, 0.3);
-    Scalar median = Median.of(RandomVariate.of(distribution, 100)).Get();
+    Scalar median = (Scalar) Median.of(RandomVariate.of(distribution, 100));
     Clips.interval(-2, 4).requireInside(median);
     assertTrue(distribution.toString().startsWith("CauchyDistribution["));
   }

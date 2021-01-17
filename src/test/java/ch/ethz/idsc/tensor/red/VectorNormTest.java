@@ -62,6 +62,11 @@ public class VectorNormTest extends TestCase {
     Chop._13.requireClose(lhs, rhs);
   }
 
+  public void testToString() {
+    VectorNormInterface vectorNormInterface = VectorNorm.with(3);
+    System.out.println(vectorNormInterface.toString());
+  }
+
   public void testNormPFail() {
     AssertFail.of(() -> VectorNorm.with(0.99));
   }

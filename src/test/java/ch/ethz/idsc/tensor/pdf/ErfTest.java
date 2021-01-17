@@ -25,7 +25,7 @@ public class ErfTest extends TestCase {
         0.976348383344644, 0.9890905016357308, 0.9953222650189527 };
     int index = 0;
     for (Tensor x : xs) {
-      Scalar res = Erf.FUNCTION.apply(x.Get());
+      Scalar res = Erf.FUNCTION.apply((Scalar) x);
       Scalar erf = DoubleScalar.of(values[index]);
       Chop._07.requireClose(res, erf);
       ++index;

@@ -2,7 +2,11 @@
 package ch.ethz.idsc.tensor.qty;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import ch.ethz.idsc.tensor.Scalar;
 
@@ -16,14 +20,14 @@ import ch.ethz.idsc.tensor.Scalar;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/KnownUnitQ.html">KnownUnitQ</a> */
-public class KnownUnitQ implements Serializable {
-  private static final long serialVersionUID = -8972610227652847081L;
+public class KnownUnitQ implements Predicate<Unit>, Serializable {
+  private static final long serialVersionUID = 5835184585615654231L;
   private static final KnownUnitQ SI = in(UnitSystem.SI());
 
   /** @param unitSystem non-null
    * @return predicate according to given unit system */
   public static KnownUnitQ in(UnitSystem unitSystem) {
-    return new KnownUnitQ(unitSystem.units());
+    return new KnownUnitQ(all(unitSystem.map()));
   }
 
   /** Examples:
@@ -37,6 +41,22 @@ public class KnownUnitQ implements Serializable {
     return SI;
   }
 
+  /** Example: in the SI unit system defined by the tensor library the units
+   * "A", "cd", "s", "mol", "kg", "m"
+   * are included in the set provided by units(), but are not keys in {@link #map()}
+   * "K" is a key in the map with value 1[K]
+   * 
+   * @return set of all atomic units known by the unit system including those that
+   * are not further convertible */
+  private static Set<String> all(Map<String, Scalar> map) {
+    Set<String> set = new HashSet<>();
+    for (Entry<String, Scalar> entry : map.entrySet()) {
+      set.add(entry.getKey());
+      set.addAll(QuantityUnit.of(entry.getValue()).map().keySet());
+    }
+    return set;
+  }
+
   /***************************************************/
   private final Set<String> set;
 
@@ -46,7 +66,8 @@ public class KnownUnitQ implements Serializable {
 
   /** @param unit
    * @return true if all atomic units of given unit are defined in unit system */
-  public boolean of(Unit unit) {
+  @Override // from Predicate
+  public boolean test(Unit unit) {
     return set.containsAll(unit.map().keySet());
   }
 
@@ -54,7 +75,7 @@ public class KnownUnitQ implements Serializable {
    * @return unit
    * @throws Exception if given unit is not known to unit system */
   public Unit require(Unit unit) {
-    if (of(unit))
+    if (test(unit))
       return unit;
     throw new IllegalArgumentException("" + unit);
   }

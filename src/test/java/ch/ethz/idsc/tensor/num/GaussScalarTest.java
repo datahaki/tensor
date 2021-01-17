@@ -200,6 +200,12 @@ public class GaussScalarTest extends TestCase {
     assertEquals(set.size(), 4);
   }
 
+  public void testHash2() {
+    assertFalse(GaussScalar.of(3, 7).hashCode() == GaussScalar.of(7, 3).hashCode());
+    assertFalse(GaussScalar.of(1, 7).hashCode() == GaussScalar.of(2, 7).hashCode());
+    assertFalse(GaussScalar.of(1, 7).hashCode() == GaussScalar.of(1, 11).hashCode());
+  }
+
   public void testEquals() {
     assertFalse(GaussScalar.of(3, 7).equals(GaussScalar.of(4, 7)));
     assertFalse(GaussScalar.of(3, 7).equals(GaussScalar.of(3, 11)));
@@ -221,8 +227,9 @@ public class GaussScalarTest extends TestCase {
     Tensor tensor = ResourceData.of("/number/primes.vector");
     tensor.extract(3, tensor.length()).stream() //
         .parallel() //
-        .forEach(_x -> { // skip 2 3 5
-          long prime = _x.Get().number().longValue();
+        .map(Scalar.class::cast) //
+        .forEach(x -> { // skip 2 3 5
+          long prime = x.number().longValue();
           GaussScalar gaussScalar = GaussScalar.of(10, prime);
           GaussScalar inverse = gaussScalar.reciprocal();
           assertEquals(gaussScalar.multiply(inverse).number(), BigInteger.ONE);

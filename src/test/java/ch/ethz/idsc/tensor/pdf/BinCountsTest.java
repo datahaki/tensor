@@ -22,7 +22,7 @@ public class BinCountsTest extends TestCase {
     Tensor values = Tensors.vector(6, 7, 1, 2, 3, 4, 2);
     Tensor hist = BinCounts.of(values, RationalScalar.of(1, 2));
     assertEquals(hist, Tensors.fromString("{0, 0, 1, 0, 2, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1}"));
-    assertEquals(Total.of(hist).Get().number().intValue(), values.length());
+    assertEquals(Total.ofVector(hist).number().intValue(), values.length());
   }
 
   public void testEmpty() {

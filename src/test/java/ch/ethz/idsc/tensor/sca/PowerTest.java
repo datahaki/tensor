@@ -7,6 +7,7 @@ import java.math.MathContext;
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -21,6 +22,16 @@ public class PowerTest extends TestCase {
   public void testInteger() {
     assertEquals(Power.of(2, 4), RealScalar.of(16));
     assertEquals(Power.of(-4, 5), RealScalar.of(-1024));
+  }
+
+  public void testSqrtExactHalfPos() {
+    Scalar scalar = Power.function(RationalScalar.HALF).apply(RealScalar.of(4));
+    assertEquals(ExactScalarQ.require(scalar), RealScalar.of(2));
+  }
+
+  public void testSqrtExactHalfNeg() {
+    Scalar scalar = Power.function(RationalScalar.HALF.negate()).apply(RealScalar.of(9));
+    assertEquals(ExactScalarQ.require(scalar), RationalScalar.of(1, 3));
   }
 
   public void testExponentZero() {
@@ -121,6 +132,9 @@ public class PowerTest extends TestCase {
     Scalar res = Power.of(qs1, RealScalar.of(3));
     Scalar act = Quantity.of(729, "m^6");
     assertEquals(res, act);
+    Scalar sqr = Power.of(qs1, RationalScalar.HALF);
+    ExactScalarQ.require(sqr);
+    assertEquals(sqr, Quantity.of(3, "m"));
   }
 
   public void testQuantity2() {

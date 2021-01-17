@@ -58,7 +58,7 @@ public class WeiszfeldMethodTest extends TestCase {
     );
     SpatialMedian spatialMedian = Serialization.copy(WeiszfeldMethod.with(Chop._02));
     Tensor sol = spatialMedian.uniform(tensor).get();
-    assertTrue(Norm._2.between(sol, tensor.get(1)).Get().number().doubleValue() < 2e-2);
+    assertTrue(Norm._2.between(sol, tensor.get(1)).number().doubleValue() < 2e-2);
   }
 
   public void testWeighted() {
@@ -71,7 +71,7 @@ public class WeiszfeldMethodTest extends TestCase {
     SpatialMedian spatialMedian = WeiszfeldMethod.with(Chop._10);
     Tensor weights = Tensors.vector(10, 1, 1, 1);
     Tensor sol = spatialMedian.weighted(tensor, weights.divide(Total.ofVector(weights))).get();
-    assertTrue(Norm._2.between(sol, tensor.get(0)).Get().number().doubleValue() < 2e-2);
+    assertTrue(Norm._2.between(sol, tensor.get(0)).number().doubleValue() < 2e-2);
   }
 
   public void testQuantity() {

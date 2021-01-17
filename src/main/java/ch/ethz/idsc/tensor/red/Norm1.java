@@ -20,7 +20,7 @@ public enum Norm1 implements NormInterface {
 
   @Override // from NormInterface
   public Scalar ofMatrix(Tensor matrix) {
-    return Total.of(Abs.of(matrix)).stream().reduce(Max::of).get().Get();
+    return (Scalar) Total.of(Abs.of(matrix)).stream().reduce(Max::of).get();
   }
 
   /** @param stream of scalars

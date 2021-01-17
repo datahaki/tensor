@@ -89,7 +89,7 @@ public class ExportTest extends TestCase {
     image.set(Array.of(f -> RealScalar.of(255), 7, 11), Tensor.ALL, Tensor.ALL, 3);
     Export.of(file, image);
     Tensor diff = image.subtract(Import.of(file));
-    Scalar total = diff.map(Abs.FUNCTION).flatten(-1).reduce(Tensor::add).get().Get();
+    Scalar total = (Scalar) diff.map(Abs.FUNCTION).flatten(-1).reduce(Tensor::add).get();
     Scalar pixel = total.divide(RealScalar.of(4 * 77.0));
     assertTrue(Scalars.lessEquals(pixel, RealScalar.of(6)));
     assertTrue(file.delete());
@@ -100,7 +100,7 @@ public class ExportTest extends TestCase {
     Tensor image = MeanFilter.of(RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11), 4);
     Export.of(file, image);
     Tensor diff = image.subtract(Import.of(file));
-    Scalar total = diff.map(Abs.FUNCTION).flatten(-1).reduce(Tensor::add).get().Get();
+    Scalar total = (Scalar) diff.map(Abs.FUNCTION).flatten(-1).reduce(Tensor::add).get();
     Scalar pixel = total.divide(RealScalar.of(77.0));
     assertTrue(Scalars.lessEquals(pixel, RealScalar.of(5)));
     assertTrue(file.delete());

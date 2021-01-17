@@ -6,6 +6,7 @@ import java.io.IOException;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
@@ -57,7 +58,7 @@ public class DeBoorTest extends TestCase {
     Tensor control = Tensors.vector(-1, 3, 2).unmodifiable();
     Tensor points = Tensors.empty();
     for (Tensor x : Subdivide.of(10, 11, 5))
-      points.append(Tensors.of(x, DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control).apply(x.Get())));
+      points.append(Tensors.of(x, DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control).apply((Scalar) x)));
     Tensor result = Tensors.fromString( //
         "{{10, 1}, {51/5, 17/10}, {52/5, 11/5}, {53/5, 5/2}, {54/5, 13/5}, {11, 5/2}}");
     assertEquals(result, points);
@@ -70,7 +71,7 @@ public class DeBoorTest extends TestCase {
     Tensor points = Tensors.empty();
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
     for (Tensor x : Subdivide.of(10, 11, 5))
-      points.append(Tensors.of(x, deBoor.apply(x.Get())));
+      points.append(Tensors.of(x, deBoor.apply((Scalar) x)));
     Tensor result = Tensors.fromString( //
         "{{10, 1}, {51/5, 17/10}, {52/5, 11/5}, {53/5, 5/2}, {54/5, 13/5}, {11, 5/2}}");
     assertEquals(result, points);
@@ -86,7 +87,7 @@ public class DeBoorTest extends TestCase {
     Tensor points = Tensors.empty();
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
     for (Tensor x : Subdivide.of(11, 12, 5))
-      points.append(Tensors.of(x, deBoor.apply(x.Get())));
+      points.append(Tensors.of(x, deBoor.apply((Scalar) x)));
     Tensor result = Tensors.fromString( //
         "{{11, 13/6}, {56/5, 893/375}, {57/5, 621/250}, {58/5, 961/375}, {59/5, 2029/750}, {12, 3}}");
     assertEquals(result, points);
@@ -101,7 +102,7 @@ public class DeBoorTest extends TestCase {
     Tensor control = Tensors.vector(3, 3, 2, 7).unmodifiable();
     Tensor points = Tensors.empty();
     for (Tensor x : Subdivide.of(11, 12, 10))
-      points.append(Tensors.of(x, DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control).apply(x.Get())));
+      points.append(Tensors.of(x, DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control).apply((Scalar) x)));
     Tensor result = Tensors.fromString( //
         "{{11, 3}, {111/10, 35839/12000}, {56/5, 4429/1500}, {113/10, 11631/4000}, {57/5, 1073/375}, {23/2, 271/96}, {58/5, 1401/500}, {117/10, 33697/12000}, {59/5, 1069/375}, {119/10, 11757/4000}, {12, 37/12}}");
     assertEquals(result, points);

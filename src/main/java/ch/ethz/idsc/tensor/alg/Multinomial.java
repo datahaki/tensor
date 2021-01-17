@@ -1,7 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
-import java.util.stream.IntStream;
+import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.Factorial;
@@ -20,7 +20,7 @@ public enum Multinomial {
   /** @param values
    * @return multinomial coefficient */
   public static Scalar of(int... values) {
-    int sum = IntStream.of(values).reduce(Math::addExact).orElse(0);
+    int sum = Arrays.stream(values).reduce(Math::addExact).orElse(0);
     Scalar scalar = Factorial.of(sum);
     for (int value : values)
       scalar = scalar.divide(Factorial.of(value));

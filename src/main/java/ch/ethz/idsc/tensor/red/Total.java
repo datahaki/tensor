@@ -54,6 +54,6 @@ public enum Total {
    * @return total sum of vector entries
    * @throws TensorRuntimeException if input is not a vector */
   public static Scalar ofVector(Tensor vector) {
-    return of(vector).Get();
+    return (Scalar) of(vector);
   }
 }

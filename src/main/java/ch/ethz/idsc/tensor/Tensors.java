@@ -2,12 +2,11 @@
 package ch.ethz.idsc.tensor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 /** utility class that provides constructors of tensors for convenience.
@@ -68,13 +67,13 @@ public enum Tensors {
   /** @param values
    * @return tensor of {@link RationalScalar} with given values */
   public static Tensor vectorInt(int... values) {
-    return Tensor.of(IntStream.of(values).mapToObj(RealScalar::of));
+    return Tensor.of(Arrays.stream(values).mapToObj(RealScalar::of));
   }
 
   /** @param values
    * @return tensor of {@link RationalScalar} with given values */
   public static Tensor vectorLong(long... values) {
-    return Tensor.of(LongStream.of(values).mapToObj(RealScalar::of));
+    return Tensor.of(Arrays.stream(values).mapToObj(RealScalar::of));
   }
 
   /** @param values
@@ -86,7 +85,7 @@ public enum Tensors {
   /** @param values
    * @return tensor of {@link DoubleScalar} with given values */
   public static Tensor vectorDouble(double... values) {
-    return Tensor.of(DoubleStream.of(values).mapToObj(DoubleScalar::of));
+    return Tensor.of(Arrays.stream(values).mapToObj(DoubleScalar::of));
   }
 
   /** @param biFunction

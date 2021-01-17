@@ -63,7 +63,7 @@ public class Entrywise implements BinaryOperator<Tensor>, Serializable {
   @Override // from BinaryOperator
   public Tensor apply(Tensor a, Tensor b) {
     if (a instanceof Scalar)
-      return binaryOperator.apply(a.Get(), b.Get());
+      return binaryOperator.apply((Scalar) a, (Scalar) b);
     if (a.length() != b.length())
       throw TensorRuntimeException.of(a, b);
     Iterator<Tensor> ia = a.iterator();

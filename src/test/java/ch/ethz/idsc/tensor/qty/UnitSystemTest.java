@@ -12,14 +12,16 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitSystemTest extends TestCase {
   public void testSize() {
+    TestHelper.checkInvariant(UnitSystem.SI());
     int size = UnitSystem.SI().map().size();
-    if (size < 107) {
+    if (size < 113) {
       System.err.println("unit count: " + size);
       fail();
     }
@@ -82,7 +84,7 @@ public class UnitSystemTest extends TestCase {
     assertEquals(prices.apply(Quantity.of(3, "Apples")), Quantity.of(6, "CHF"));
     Tensor cart = Tensors.of(Quantity.of(2, "Apples"), Quantity.of(3, "Chocolates"), Quantity.of(3, "Oranges"));
     AssertFail.of(() -> Total.of(cart));
-    Scalar total = Total.of(cart.map(prices)).Get();
+    Scalar total = Total.ofVector(cart.map(prices));
     assertEquals(total, Quantity.of(16, "CHF"));
     Scalar euro = UnitConvert.of(prices).to(Unit.of("EUR")).apply(total);
     assertEquals(euro, Quantity.of(12.8, "EUR"));
@@ -101,14 +103,33 @@ public class UnitSystemTest extends TestCase {
     assertEquals(r2, r3);
   }
 
-  public void testUnits() {
-    UnitSystem unitSystem = UnitSystem.SI();
-    assertTrue(67 <= unitSystem.units().size());
-    assertTrue(unitSystem.units().contains("K"));
-    assertTrue(unitSystem.units().contains("A"));
-    assertTrue(unitSystem.units().contains("V"));
-    assertTrue(unitSystem.units().contains("psi"));
-    assertFalse(unitSystem.units().contains("CHF"));
-    assertFalse(unitSystem.units().contains("USD"));
+  public void testFail1() {
+    Properties properties = ResourceData.properties("/unit/fail1.properties");
+    assertFalse(properties.entrySet().isEmpty());
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+  }
+
+  public void testFail2() {
+    Properties properties = ResourceData.properties("/unit/fail2.properties");
+    assertFalse(properties.entrySet().isEmpty());
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+  }
+
+  public void testFail3() {
+    Properties properties = ResourceData.properties("/unit/fail3.properties");
+    assertFalse(properties.entrySet().isEmpty());
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+  }
+
+  public void testFail4() {
+    Properties properties = ResourceData.properties("/unit/fail4.properties");
+    assertFalse(properties.entrySet().isEmpty());
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+  }
+
+  public void testFail5() {
+    Properties properties = ResourceData.properties("/unit/fail5.properties");
+    assertFalse(properties.entrySet().isEmpty());
+    AssertFail.of(() -> SimpleUnitSystem.from(properties));
   }
 }

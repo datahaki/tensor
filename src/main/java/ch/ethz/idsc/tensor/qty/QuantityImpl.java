@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.qty;
 
 import java.io.Serializable;
 import java.math.MathContext;
-import java.util.Objects;
 
 import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
@@ -246,7 +245,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   /***************************************************/
   @Override // from AbstractScalar
   public int hashCode() {
-    return Objects.hash(value, unit);
+    return value.hashCode() + 31 * unit.hashCode();
   }
 
   @Override // from AbstractScalar

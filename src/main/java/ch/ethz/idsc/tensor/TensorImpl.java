@@ -36,11 +36,6 @@ import java.util.stream.Stream;
   }
 
   @Override // from Tensor
-  public Scalar Get(Integer... index) {
-    return (Scalar) get(Arrays.asList(index));
-  }
-
-  @Override // from Tensor
   public Tensor get(List<Integer> index) {
     return index.isEmpty() ? copy() : _get(index);
   }
@@ -51,6 +46,16 @@ import java.util.stream.Stream;
     if (head == ALL)
       return Tensor.of(list.stream().map(tensor -> tensor.get(sublist)));
     return list.get(head).get(sublist);
+  }
+
+  @Override // from Tensor
+  public Scalar Get(int i) {
+    return (Scalar) list.get(i);
+  }
+
+  @Override // from Tensor
+  public Scalar Get(int i, int j) {
+    return list.get(i).Get(j);
   }
 
   @Override // from Tensor
@@ -162,7 +167,6 @@ import java.util.stream.Stream;
 
   @Override // from Tensor
   public Tensor subtract(Tensor tensor) {
-    // return add(tensor.negate());
     TensorImpl impl = (TensorImpl) tensor;
     return Tensor.of(_range(impl).mapToObj(index -> list.get(index).subtract(impl.list.get(index))));
   }

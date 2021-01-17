@@ -1,9 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -51,15 +50,14 @@ public enum MatrixLog {
     // ---
     Tensor id = StaticHelper.IDENTITY_MATRIX.apply(n);
     Tensor rem = matrix.subtract(id);
-    Deque<DenmanBeaversDet> deque = new ArrayDeque<>();
+    List<DenmanBeaversDet> deque = new LinkedList<>();
     for (int count = 0; count < MAX_EXPONENT; ++count) {
       Scalar rho_max = Norm2Bound.ofMatrix(rem);
       if (Scalars.lessThan(rho_max, RHO_MAX)) {
         Tensor sum = Array.zeros(n, n);
-        Iterator<DenmanBeaversDet> iterator = deque.iterator();
         Scalar factor = RealScalar.ONE;
-        while (iterator.hasNext()) {
-          sum = sum.add(iterator.next().mk().subtract(id).multiply(factor));
+        for (DenmanBeaversDet denmanBeaversDet : deque) {
+          sum = sum.add(denmanBeaversDet.mk().subtract(id).multiply(factor));
           factor = factor.add(factor);
         }
         return sum.add(series1p(rem).multiply(factor));

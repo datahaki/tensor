@@ -34,7 +34,7 @@ public class GaussianTest extends TestCase {
 
   public void testMean() {
     Tensor vector = Tensors.of(Gaussian.of(2, 3), Gaussian.of(3, 1), Gaussian.of(-3, 1));
-    Scalar mean = Mean.of(vector).Get();
+    Scalar mean = (Scalar) Mean.of(vector);
     assertTrue(mean instanceof Gaussian);
     Scalar actual = Gaussian.of(Scalars.fromString("2/3"), Scalars.fromString("5/9"));
     assertEquals(mean, actual);
@@ -63,7 +63,7 @@ public class GaussianTest extends TestCase {
   public void testDistribution() {
     Gaussian gaussian = (Gaussian) Gaussian.of(-200, 10);
     Distribution distribution = gaussian.distribution();
-    Scalar mean = Mean.of(RandomVariate.of(distribution, 20)).Get();
+    Scalar mean = (Scalar) Mean.of(RandomVariate.of(distribution, 20));
     Chop.below(3).requireClose(mean, RealScalar.of(-200));
   }
 

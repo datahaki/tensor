@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 public class TransposeTest extends TestCase {
   public void testScalar() {
     Tensor scalar = DoubleScalar.NEGATIVE_INFINITY;
-    assertEquals(Transpose.of(scalar, new Integer[] {}), scalar);
+    assertEquals(Transpose.of(scalar, new int[] {}), scalar);
   }
 
   public void testVector() {
@@ -25,7 +25,7 @@ public class TransposeTest extends TestCase {
     assertEquals(v, r);
   }
 
-  private static Tensor _checkBoth(Tensor tensor, Integer... sigma) {
+  private static Tensor _checkBoth(Tensor tensor, int... sigma) {
     Tensor t1 = Transpose.of(tensor, sigma);
     Tensor t2 = Transpose.nonArray(tensor, sigma);
     assertEquals(t1, t2);

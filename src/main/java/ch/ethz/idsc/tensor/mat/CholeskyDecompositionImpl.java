@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
@@ -56,7 +57,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 
   @Override // from CholeskyDecomposition
   public Scalar det() {
-    return Times.pmul(d).Get();
+    return (Scalar) Times.pmul(d);
   }
 
   @Override // from CholeskyDecomposition
@@ -75,5 +76,10 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
       for (int k = i + 1; k < n; ++k)
         x[i] = x[i].subtract(x[k].multiply(Conjugate.FUNCTION.apply(l.Get(k, i))));
     return Unprotect.byRef(x);
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[L=%s, d=%s]", CholeskyDecomposition.class.getSimpleName(), Dimensions.of(getL()), Dimensions.of(diagonal()));
   }
 }

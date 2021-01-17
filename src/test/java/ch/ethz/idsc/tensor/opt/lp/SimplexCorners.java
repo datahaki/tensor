@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.mat.LinearSolve;
       try {
         Tensor X = LinearSolve.of(Transpose.of(matrix), b);
         if (!isNonNegative || LinearProgramming.isNonNegative(X)) {
-          Scalar key = cost.dot(X).Get();
+          Scalar key = (Scalar) cost.dot(X);
           if (!map.containsKey(key))
             map.put(key, Tensors.empty());
           Tensor x = Array.zeros(n);

@@ -1,11 +1,11 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
@@ -64,7 +64,7 @@ public enum Transpose {
    * @param tensor with array structure
    * @param sigma is a permutation with sigma.length == rank of tensor
    * @return */
-  public static Tensor of(Tensor tensor, Integer... sigma) {
+  public static Tensor of(Tensor tensor, int... sigma) {
     if (ScalarQ.of(tensor) && sigma.length == 0)
       return tensor;
     if (!ArrayQ.ofRank(tensor, sigma.length))
@@ -95,8 +95,8 @@ public enum Transpose {
    * @param sigma is a permutation
    * @return
    * @throws Exception */
-  public static Tensor nonArray(Tensor tensor, Integer... sigma) {
-    Tensor _sigma = Tensors.vector(sigma);
+  public static Tensor nonArray(Tensor tensor, int... sigma) {
+    Tensor _sigma = Tensors.vectorInt(sigma);
     if (!Sort.of(_sigma).equals(Range.of(0, sigma.length)))
       throw TensorRuntimeException.of(_sigma); // sigma does not encode a permutation
     return Array.of(list -> tensor.get(permute(list, sigma)), //
@@ -109,7 +109,7 @@ public enum Transpose {
   }
 
   // helper function
-  private static List<Integer> permute(List<Integer> list, Integer... sigma) {
-    return Stream.of(sigma).map(list::get).collect(Collectors.toList());
+  private static Integer[] permute(List<Integer> list, int[] sigma) {
+    return Arrays.stream(sigma).mapToObj(list::get).toArray(Integer[]::new);
   }
 }

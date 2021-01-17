@@ -23,10 +23,9 @@ public enum BasisTransform {
     Tensor inverse = 0 < Integers.requirePositiveOrZero(r) //
         ? Transpose.of(Inverse.of(v))
         : null;
-    Integer[] sigma = IntStream.range(rank - 1, 2 * rank - 1) //
+    int[] sigma = IntStream.range(rank - 1, 2 * rank - 1) //
         .map(index -> index % rank) //
-        .boxed() //
-        .toArray(Integer[]::new); // [r, 0, 1, ..., r - 1]
+        .toArray(); // [r, 0, 1, ..., r - 1]
     for (int index = 0; index < rank; ++index)
       tensor = Transpose.of(tensor, sigma).dot(index < r ? inverse : v);
     return tensor;

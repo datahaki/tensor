@@ -133,7 +133,7 @@ public class ModTest extends TestCase {
     Set<Scalar> set = new HashSet<>();
     for (Tensor re : Range.of(-7, 8)) {
       for (Tensor im : Range.of(-7, 8)) {
-        Scalar z = ComplexScalar.of(re.Get(), im.Get());
+        Scalar z = ComplexScalar.of((Scalar) re, (Scalar) im);
         set.add(mod.apply(z));
       }
     }

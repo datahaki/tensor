@@ -73,7 +73,7 @@ public class ExponentialDistributionTest extends TestCase {
     }
     Scalar mean = lambda.reciprocal();
     assertEquals(Expectation.mean(distribution), mean);
-    Scalar diff = Abs.between(Mean.of(all).Get(), mean);
+    Scalar diff = Abs.between((Scalar) Mean.of(all), mean);
     assertTrue(Scalars.lessThan(diff, RealScalar.of(0.05)));
     Tolerance.CHOP.requireClose(Median.of(distribution), Log.FUNCTION.apply(RealScalar.of(2)).divide(lambda));
   }

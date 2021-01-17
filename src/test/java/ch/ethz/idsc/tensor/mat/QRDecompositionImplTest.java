@@ -5,12 +5,10 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -91,17 +89,9 @@ public class QRDecompositionImplTest extends TestCase {
     }
   }
 
-  public void testEmptyFail() {
-    AssertFail.of(() -> QRDecomposition.of(Tensors.empty()));
-  }
-
-  public void testVectorFail() {
-    AssertFail.of(() -> QRDecomposition.of(Tensors.vector(1, 2, 3)));
-  }
-
-  public void testFail() {
-    AssertFail.of(() -> QRDecomposition.of(Tensors.fromString("{{1, 2}, {3, 4, 5}}")));
-    AssertFail.of(() -> QRDecomposition.of(LeviCivitaTensor.of(3)));
+  public void testoString() {
+    QRDecomposition qrDecomposition = QRDecomposition.of(HilbertMatrix.of(3, 2));
+    assertTrue(qrDecomposition.toString().startsWith("QRDecomposition"));
   }
 
   public void testPackageVisibility() {

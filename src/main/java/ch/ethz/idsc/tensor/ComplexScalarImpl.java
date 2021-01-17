@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.math.MathContext;
-import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.tensor.num.BinaryPower;
@@ -272,7 +271,7 @@ import ch.ethz.idsc.tensor.sca.Sinh;
   /***************************************************/
   @Override // from AbstractScalar
   public int hashCode() {
-    return Objects.hash(re, im);
+    return re.hashCode() + 31 * im.hashCode();
   }
 
   @Override // from AbstractScalar

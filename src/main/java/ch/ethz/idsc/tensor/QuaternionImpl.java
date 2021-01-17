@@ -5,7 +5,6 @@ package ch.ethz.idsc.tensor;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.math.MathContext;
-import java.util.Objects;
 import java.util.Optional;
 
 import ch.ethz.idsc.tensor.alg.Append;
@@ -245,7 +244,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   // }
   @Override // from AbstractScalar
   public int hashCode() {
-    return Objects.hash(w, xyz);
+    return w.hashCode() + 31 * xyz.hashCode();
   }
 
   @Override // from AbstractScalar

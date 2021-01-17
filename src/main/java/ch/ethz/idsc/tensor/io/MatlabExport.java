@@ -48,10 +48,10 @@ public enum MatlabExport {
     list.add("Infinity=Inf;");
     list.add("I=i;");
     if (ScalarQ.of(tensor))
-      list.add("a=" + function.apply(tensor.Get()) + ";");
+      list.add("a=" + function.apply((Scalar) tensor) + ";");
     else {
       List<Integer> dims = Dimensions.of(tensor);
-      Integer[] sigma = new Integer[dims.size()];
+      int[] sigma = new int[dims.size()];
       IntStream.range(0, dims.size()).forEach(index -> sigma[index] = dims.size() - index - 1);
       if (dims.size() == 1)
         dims.add(1); // [n, 1]
@@ -59,7 +59,7 @@ public enum MatlabExport {
       int count = 0;
       for (Tensor _scalar : Flatten.of(Transpose.of(tensor, sigma))) {
         ++count;
-        Scalar scalar = _scalar.Get();
+        Scalar scalar = (Scalar) _scalar;
         if (Scalars.nonZero(scalar))
           list.add("a(" + count + ")=" + function.apply(scalar) + ";");
       }

@@ -43,7 +43,7 @@ public enum Signature {
    * 
    * @param ordering
    * @return */
-  /* package */ static Scalar of(Integer[] ordering) {
+  /* package */ static Scalar of(int[] ordering) {
     int transpositions = 0;
     for (int index = 0; index < ordering.length; ++index)
       while (ordering[index] != index) {

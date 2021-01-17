@@ -5,10 +5,12 @@ import java.io.IOException;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -86,6 +88,11 @@ public class UnitConvertTest extends TestCase {
     ScalarUnaryOperator suo = UnitConvert.SI().to(unit);
     Scalar scalar = suo.apply(Quantity.of(180, "W*s"));
     assertEquals(scalar, Quantity.of(RationalScalar.of(1, 20000), unit));
+  }
+
+  public void testPercent() {
+    Scalar scalar = UnitConvert.SI().to("%").apply(RealScalar.of(0.5));
+    Chop._05.requireClose(scalar, Quantity.of(50, "%"));
   }
 
   public void testFail() {

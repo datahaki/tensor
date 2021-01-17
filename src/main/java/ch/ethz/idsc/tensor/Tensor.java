@@ -89,16 +89,42 @@ public interface Tensor extends Iterable<Tensor> {
    * @return copy of this[index[0], index[1], ..., All] */
   Tensor get(Integer... index);
 
-  /** same as function get(...) except that return type is cast to {@link Scalar}.
-   * An exception is thrown, if there is no Scalar at the specified index location.
-   * 
-   * @param index
-   * @return {@link Scalar} at this[index[0], index[1], ...] */
-  Scalar Get(Integer... index);
-
   /** @param index
    * @return copy of this[index[0], index[1], ..., All] */
   Tensor get(List<Integer> index);
+
+  /** function is identical to
+   * <pre>
+   * Get(i) == (Scalar) get(i)
+   * </pre>
+   * 
+   * Consequently, an exception is thrown, if there is no Scalar at the specified entry.
+   * 
+   * Remark: The function was introduced to facilitate the extraction of entries
+   * from vectors.
+   * 
+   * @param i in the range 0, 1, ..., length() - 1
+   * @return (Scalar) get(i)
+   * @throws Exception when the parameter is out of range, in particular, when this
+   * instance is a {@link Scalar}. */
+  Scalar Get(int i);
+
+  /** function is identical to
+   * <pre>
+   * Get(i, j) == (Scalar) get(i, j)
+   * </pre>
+   * 
+   * Consequently, an exception is thrown, if there is no Scalar at the specified entry.
+   * 
+   * Remark: The function was introduced to facilitate the extraction of entries
+   * from matrices.
+   * 
+   * @param i in the range 0, 1, ..., length() - 1
+   * @param j in the range 0, 1, ..., get(i).length() - 1
+   * @return (Scalar) get(i, j)
+   * @throws Exception when either parameter is out of range, in particular, when this
+   * instance is a {@link Scalar}. */
+  Scalar Get(int i, int j);
 
   /** set copy of tensor as element at location this[index[0], index[1], ...].
    * The operation is invalid if this tensor has been cast as unmodifiable.

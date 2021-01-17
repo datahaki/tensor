@@ -136,7 +136,7 @@ public class ArcTanTest extends TestCase {
   public void testGaussScalarFail() {
     Tensor tensor = Tensors.fromString("{0.3, 1/3, 3+4*I, 1.2+3.4*I}");
     for (Tensor _x : tensor) {
-      Scalar x = _x.Get();
+      Scalar x = (Scalar) _x;
       AssertFail.of(() -> ArcTan.of(x, GaussScalar.of(1, 7)));
       AssertFail.of(() -> ArcTan.of(GaussScalar.of(1, 7), x));
     }

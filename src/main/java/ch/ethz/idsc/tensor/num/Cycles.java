@@ -6,7 +6,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -79,10 +78,9 @@ public class Cycles implements Serializable {
   private static NavigableMap<Integer, Integer> map(Stream<Tensor> stream) {
     NavigableMap<Integer, Integer> navigableMap = new TreeMap<>();
     stream.forEach(cycle -> {
-      int prev = Scalars.intValueExact(Last.of(cycle).Get());
-      Iterator<Tensor> iterator = cycle.iterator();
-      while (iterator.hasNext())
-        navigableMap.put(prev, prev = Scalars.intValueExact(iterator.next().Get()));
+      int prev = Scalars.intValueExact(Last.of(cycle));
+      for (Tensor next : cycle)
+        navigableMap.put(prev, prev = Scalars.intValueExact((Scalar) next));
     });
     return navigableMap;
   }

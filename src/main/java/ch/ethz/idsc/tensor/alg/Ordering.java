@@ -18,10 +18,10 @@ import ch.ethz.idsc.tensor.mat.Eigensystem;
  * @see Sort
  * @see Signature */
 public enum Ordering {
-  INCREASING(tensor -> IntStream.range(0, tensor.length()) //
-      .boxed().sorted((i, j) -> TensorComparator.INSTANCE.compare(tensor.get(i), tensor.get(j)))), //
-  DECREASING(tensor -> IntStream.range(0, tensor.length()) //
-      .boxed().sorted((i, j) -> TensorComparator.INSTANCE.compare(tensor.get(j), tensor.get(i))));
+  INCREASING(tensor -> IntStream.range(0, tensor.length()).boxed() //
+      .sorted((i, j) -> TensorComparator.INSTANCE.compare(tensor.get(i), tensor.get(j)))), //
+  DECREASING(tensor -> IntStream.range(0, tensor.length()).boxed() //
+      .sorted((i, j) -> TensorComparator.INSTANCE.compare(tensor.get(j), tensor.get(i))));
 
   private static interface OrderingInterface {
     /** @param tensor
@@ -47,7 +47,7 @@ public enum Ordering {
   /** @param tensor
    * @return array of indices i[:] so that vector[i[0]], vector[i[1]], ... is ordered
    * @throws Exception if given tensor cannot be sorted */
-  public Integer[] of(Tensor tensor) {
-    return stream(tensor).toArray(Integer[]::new);
+  public int[] of(Tensor tensor) {
+    return stream(tensor).mapToInt(Integer::intValue).toArray();
   }
 }

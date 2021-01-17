@@ -27,7 +27,7 @@ public enum InterquartileRange {
    * @return interquartile range as scalar */
   public static Scalar of(Tensor samples) {
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(VectorQ.require(samples));
-    return scalarUnaryOperator.apply(HI).subtract(scalarUnaryOperator.apply(LO)).Get();
+    return scalarUnaryOperator.apply(HI).subtract(scalarUnaryOperator.apply(LO));
   }
 
   /** @param distribution

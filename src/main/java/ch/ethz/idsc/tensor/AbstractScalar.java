@@ -29,20 +29,22 @@ public abstract class AbstractScalar implements Scalar {
     return this;
   }
 
-  /** when using Get() on {@code AbstractScalar} the list of arguments has to be empty */
-  @Override // from Tensor
-  public final Scalar Get(Integer... index) {
-    if (0 < index.length)
-      throw new IllegalArgumentException();
-    return this;
-  }
-
   /** when using get() on {@code AbstractScalar} the list of arguments has to be empty */
   @Override // from Tensor
   public final Tensor get(List<Integer> index) {
     if (0 < index.size())
       throw new IllegalArgumentException();
     return this;
+  }
+
+  @Override // from Tensor
+  public final Scalar Get(int i) {
+    throw TensorRuntimeException.of(this);
+  }
+
+  @Override // from Tensor
+  public final Scalar Get(int i, int j) {
+    throw TensorRuntimeException.of(this);
   }
 
   @Override // from Tensor

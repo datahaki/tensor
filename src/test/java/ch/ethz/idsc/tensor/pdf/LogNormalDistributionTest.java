@@ -52,7 +52,7 @@ public class LogNormalDistributionTest extends TestCase {
 
   public void testMean() {
     Distribution distribution = LogNormalDistribution.of(RationalScalar.of(4, 5), RationalScalar.of(2, 3));
-    Scalar value = Mean.of(RandomVariate.of(distribution, 200)).Get();
+    Scalar value = (Scalar) Mean.of(RandomVariate.of(distribution, 200));
     Clips.interval(2.25, 3.5).requireInside(value);
     Chop._10.requireClose(Mean.of(distribution), Exp.FUNCTION.apply(RationalScalar.of(46, 45)));
     Chop._08.requireClose(Variance.of(distribution), RealScalar.of(4.323016391513655));

@@ -22,7 +22,7 @@ public class AbsInterfaceTest extends TestCase {
         RealScalar.of(-3), Pi.VALUE, Pi.HALF.negate(), //
         Quantity.of(2.3, "m*s^-3"), Quantity.of(ComplexScalar.of(2, 3), "m^2*s^-1"));
     for (Tensor _q : tensor) {
-      Scalar q = _q.Get();
+      Scalar q = (Scalar) _q;
       Scalar abs = Abs.FUNCTION.apply(q);
       Tolerance.CHOP.requireClose(AbsSquared.of(q), abs.multiply(abs));
     }

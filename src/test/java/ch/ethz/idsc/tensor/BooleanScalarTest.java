@@ -77,7 +77,7 @@ public class BooleanScalarTest extends TestCase {
         .map(Scalar.class::cast) //
         .map(s -> Scalars.lessThan(s, RealScalar.of(5))).map(BooleanScalar::of));
     Tensor zeroOne = Tensors.vector(Primitives.toStreamNumber(result).collect(Collectors.toList()));
-    assertTrue(10 < Total.of(zeroOne).Get().number().intValue());
+    assertTrue(10 < Total.ofVector(zeroOne).number().intValue());
   }
 
   public void testNumberType() {

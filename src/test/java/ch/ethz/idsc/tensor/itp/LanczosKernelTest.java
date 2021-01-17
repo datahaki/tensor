@@ -16,7 +16,7 @@ public class LanczosKernelTest extends TestCase {
     LanczosKernel lanczosKernel = LanczosKernel._3;
     assertEquals(lanczosKernel.semi, 3);
     for (Tensor _x : Range.of(-5, 5 + 1)) {
-      Scalar param = _x.Get();
+      Scalar param = (Scalar) _x;
       Scalar scalar = lanczosKernel.apply(param);
       scalar = Chop._12.apply(scalar);
       assertEquals(Boole.of(Scalars.isZero(param)), scalar);
