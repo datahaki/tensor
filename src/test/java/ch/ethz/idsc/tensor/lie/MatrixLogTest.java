@@ -26,7 +26,7 @@ public class MatrixLogTest extends TestCase {
   }
 
   public void testSymmetric() {
-    for (int n = 2; n < 8; ++n) {
+    for (int n = 1; n < 8; ++n) {
       Distribution distribution = NormalDistribution.of(0, 0.4 / n);
       Tensor matrix = Symmetrize.of(IdentityMatrix.of(n).add(RandomVariate.of(distribution, n, n)));
       Tensor loq = MatrixLog.ofSymmetric(matrix);
@@ -61,6 +61,12 @@ public class MatrixLogTest extends TestCase {
   public void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 4, 5);
+    AssertFail.of(() -> MatrixLog.of(matrix));
+  }
+
+  public void test1x2Fail() {
+    Tensor matrix = IdentityMatrix.of(2).extract(0, 1);
+    assertEquals(matrix.length(), 1);
     AssertFail.of(() -> MatrixLog.of(matrix));
   }
 

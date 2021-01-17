@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.alg;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.Tensors;
 
@@ -32,10 +31,6 @@ import ch.ethz.idsc.tensor.Tensors;
 
   public Size permute(int[] sigma) {
     return new Size(StaticHelper.permute(size, sigma));
-  }
-
-  public Size permute(Integer[] sigma) {
-    return permute(Stream.of(sigma).mapToInt(Integer::intValue).toArray());
   }
 
   public int indexOf(MultiIndex multiIndex) {

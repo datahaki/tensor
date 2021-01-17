@@ -37,10 +37,15 @@ public class AbstractScalarTest extends TestCase {
     SymmetricMatrixQ.require(matrix);
   }
 
-  public void testGetFail() {
+  public void testGet1Fail() {
     assertEquals(Pi.VALUE.get(), Pi.VALUE);
     AssertFail.of(() -> RealScalar.ONE.Get(1));
     AssertFail.of(() -> RealScalar.ONE.get(new Integer[] { 1 }));
+  }
+
+  public void testGet2Fail() {
+    AssertFail.of(() -> RationalScalar.HALF.Get(1, 4));
+    AssertFail.of(() -> Pi.TWO.get(new Integer[] { 1, 2 }));
   }
 
   public void testSetFail() {

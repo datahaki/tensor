@@ -10,10 +10,11 @@ import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Scalar;
 
+// LONGTERM EXPERIMENTAL
 public enum UnitSystems {
   ;
   /** Example: the base units of the SI unit system are
-   * "A", "cd", "s", "K", "mol", "kg", "m"
+   * "A", "cd", "K", "kg", "m", "mol", "s"
    * 
    * @param unitSystem
    * @return base units of the given unitSystem */
@@ -26,6 +27,7 @@ public enum UnitSystems {
         .collect(Collectors.toSet());
   }
 
+  /***************************************************/
   /** Examples:
    * A unit system with "min" as the default time unit:
    * <pre>

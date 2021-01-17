@@ -42,7 +42,7 @@ public class KnownUnitQ implements Predicate<Unit>, Serializable {
   }
 
   /** Example: in the SI unit system defined by the tensor library the units
-   * "A", "cd", "s", "mol", "kg", "m"
+   * "A", "cd", "kg", "m", "mol", "s"
    * are included in the set provided by units(), but are not keys in {@link #map()}
    * "K" is a key in the map with value 1[K]
    * 

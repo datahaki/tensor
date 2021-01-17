@@ -131,5 +131,6 @@ public class UnitSystemsTest extends TestCase {
     UnitSystem unitSystem = requireInvariant(baseSystem, "CHF", "CHF");
     assertTrue(unitSystem == baseSystem);
     assertFalse(unitSystem.map().containsKey("CHF"));
+    UnitSystems.join(baseSystem, UnitSystem.SI());
   }
 }

@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
@@ -20,6 +21,7 @@ import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
@@ -123,6 +125,22 @@ public class LeftNullSpaceTest extends TestCase {
     assertEquals(tensor.get(0), UnitVector.of(3, 1).map(suo));
     assertEquals(tensor.get(1), UnitVector.of(3, 2).map(suo));
     assertTrue(Scalars.isZero(Det.of(matrix)));
+  }
+
+  private static Tensor deprec(Tensor vector, Tensor nullsp) {
+    return vector.dot(PseudoInverse.usingSvd(nullsp)).dot(nullsp);
+  }
+
+  public void testQR() {
+    Distribution distribution = UniformDistribution.unit();
+    for (int count = 0; count < 10; ++count) {
+      Tensor vector = RandomVariate.of(distribution, 10);
+      Tensor design = RandomVariate.of(distribution, 10, 3);
+      Tensor nullsp = LeftNullSpace.usingQR(design);
+      Tensor p1 = deprec(vector, nullsp);
+      Tensor p2 = Dot.of(nullsp, vector, nullsp);
+      Tolerance.CHOP.requireClose(p1, p2);
+    }
   }
 
   public void testRectangle3x2GVectorFail() {
