@@ -2,12 +2,10 @@
 package ch.ethz.idsc.tensor.qty;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -20,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Power;
 
 /** reference implementation of {@link UnitSystem} with emphasis on simplicity */
 public class SimpleUnitSystem implements UnitSystem {
-  private static final long serialVersionUID = -3424626514767014894L;
+  private static final long serialVersionUID = 3736511423557524434L;
 
   /** given properties map a unit expression to a {@link Quantity}
    * 
@@ -65,23 +63,22 @@ public class SimpleUnitSystem implements UnitSystem {
 
   /***************************************************/
   private final Map<String, Scalar> map;
-  private final Set<String> set;
 
   private SimpleUnitSystem(Map<String, Scalar> map) {
     this.map = map;
-    set = Collections.unmodifiableSet(all(map));
   }
 
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof Quantity) {
-      final Quantity quantity = (Quantity) scalar;
+      Quantity quantity = (Quantity) scalar;
       Scalar value = quantity.value();
       for (Entry<String, Scalar> entry : quantity.unit().map().entrySet()) {
         Scalar lookup = map.get(entry.getKey());
-        value = value.multiply(Objects.isNull(lookup) //
-            ? QuantityImpl.of(RealScalar.ONE, Unit.of(format(entry))) //
-            : Power.of(lookup, entry.getValue()));
+        Scalar factor = Objects.isNull(lookup) //
+            ? QuantityImpl.of(RealScalar.ONE, format(entry)) //
+            : Power.of(lookup, entry.getValue());
+        value = value.multiply(factor);
       }
       return value;
     }
@@ -101,32 +98,12 @@ public class SimpleUnitSystem implements UnitSystem {
   }
 
   // helper function
-  /* package */ static String format(Entry<String, Scalar> entry) {
-    return entry.getKey() + Unit.POWER_DELIMITER + entry.getValue();
-  }
-
-  @Override // from UnitSystem
-  public Set<String> units() {
-    return set;
-  }
-
-  /** @param map
-   * @return */
-  private static Set<String> all(Map<String, Scalar> map) {
-    Set<String> set = new HashSet<>();
-    for (Entry<String, Scalar> entry : map.entrySet()) {
-      set.add(entry.getKey());
-      Scalar value = entry.getValue();
-      if (value instanceof Quantity) {
-        Quantity quantity = (Quantity) value;
-        set.addAll(quantity.unit().map().keySet());
-      }
-    }
-    return set;
+  /* package */ static Unit format(Entry<String, Scalar> entry) {
+    return Unit.of(entry.getKey() + Unit.POWER_DELIMITER + entry.getValue());
   }
 
   @Override
   public String toString() {
-    return String.format("%s[size=%d]", getClass().getSimpleName(), units().size());
+    return String.format("%s[size=%d]", getClass().getSimpleName(), map().size());
   }
 }

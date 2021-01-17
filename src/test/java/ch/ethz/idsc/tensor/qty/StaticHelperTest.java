@@ -49,6 +49,12 @@ public class StaticHelperTest extends TestCase {
     assertEquals(scalar, Quantity.of(RationalScalar.of(1, 60), "min"));
   }
 
+  public void testConversion3b() {
+    Scalar scalar = StaticHelper.conversion(UnitSystem.SI(), "m", "km");
+    ExactScalarQ.require(scalar);
+    assertEquals(scalar, Quantity.of(RationalScalar.of(1, 1000), "km"));
+  }
+
   public void testConversion4() {
     Scalar scalar = StaticHelper.conversion(UnitSystem.SI(), "s", "N");
     ExactScalarQ.require(scalar);

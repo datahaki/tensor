@@ -27,21 +27,15 @@ import ch.ethz.idsc.tensor.sca.Power;
     return key;
   }
 
-  public static Set<Unit> atoms(Unit unit) {
-    return unit.map().entrySet().stream() //
-        .map(SimpleUnitSystem::format) //
-        .map(Unit::of) //
-        .collect(Collectors.toSet());
-  }
-
   /** @param unitSystem
-   * @param prev
-   * @param next
+   * @param prev a base unit of the given unitSystem
+   * @param next not a base unit of the given unitSystem, unless next equals prev
    * @return */
   public static Scalar conversion(UnitSystem unitSystem, String prev, String next) {
     Scalar factor = unitSystem.map().get(next);
     Unit unit = Unit.of(next);
     if (Objects.isNull(factor) && //
+    // LONGTERM KnownUnitQ.in(unitSystem) rebuilds a map every time: avoid?
         KnownUnitQ.in(unitSystem).require(unit).equals(Unit.of(prev)))
       return RealScalar.ONE;
     Unit rhs = QuantityUnit.of(factor);
@@ -52,5 +46,12 @@ import ch.ethz.idsc.tensor.sca.Power;
         QuantityMagnitude.singleton(rhs).apply(factor).reciprocal(), //
         unit), //
         rhs.map().get(prev).reciprocal());
+  }
+
+  // only used in tests
+  /* package */ static Set<Unit> atoms(Unit unit) {
+    return unit.map().entrySet().stream() //
+        .map(SimpleUnitSystem::format) //
+        .collect(Collectors.toSet());
   }
 }

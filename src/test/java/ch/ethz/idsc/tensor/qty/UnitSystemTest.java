@@ -21,7 +21,7 @@ public class UnitSystemTest extends TestCase {
   public void testSize() {
     TestHelper.checkInvariant(UnitSystem.SI());
     int size = UnitSystem.SI().map().size();
-    if (size < 111) {
+    if (size < 113) {
       System.err.println("unit count: " + size);
       fail();
     }
@@ -101,17 +101,6 @@ public class UnitSystemTest extends TestCase {
     Scalar r3 = Quantity.of(RationalScalar.of(463, 250), "km*h^-1");
     ExactScalarQ.require(r3);
     assertEquals(r2, r3);
-  }
-
-  public void testUnits() {
-    UnitSystem unitSystem = UnitSystem.SI();
-    assertTrue(67 <= unitSystem.units().size());
-    assertTrue(unitSystem.units().contains("K"));
-    assertTrue(unitSystem.units().contains("A"));
-    assertTrue(unitSystem.units().contains("V"));
-    assertTrue(unitSystem.units().contains("psi"));
-    assertFalse(unitSystem.units().contains("CHF"));
-    assertFalse(unitSystem.units().contains("USD"));
   }
 
   public void testFail1() {

@@ -19,8 +19,8 @@ import junit.framework.TestCase;
 public class MatrixSqrtTest extends TestCase {
   private static void _check(Tensor g, MatrixSqrt matrixSqrt) {
     Chop._08.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt_inverse()), IdentityMatrix.of(g.length()));
-    Chop._05.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt()), g);
-    Chop._05.requireClose(matrixSqrt.sqrt_inverse().dot(matrixSqrt.sqrt_inverse()), Inverse.of(g));
+    Chop._03.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt()), g);
+    Chop._03.requireClose(matrixSqrt.sqrt_inverse().dot(matrixSqrt.sqrt_inverse()), Inverse.of(g));
   }
 
   public void testSimple() {

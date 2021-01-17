@@ -23,6 +23,23 @@ public class UnitSystemsTest extends TestCase {
     AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "kW", "W"));
   }
 
+  private static UnitSystem requireInvariant(UnitSystem unitSystem, String prev, String next) {
+    UnitSystem u1 = UnitSystems.rotate(unitSystem, prev, next);
+    assertEquals(u1.map().size(), unitSystem.map().size());
+    UnitSystem u2 = UnitSystems.rotate(u1, next, prev);
+    for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
+      Scalar scalar = u2.map().get(entry.getKey());
+      // if (!entry.getValue().equals(scalar)) {
+      if (!Chop._10.isClose(entry.getValue(), scalar)) {
+        // System.err.println(entry.getKey());
+      }
+      Chop._10.requireClose(entry.getValue(), scalar);
+    }
+    TestHelper.checkInvariant(u1);
+    TestHelper.checkInvariant(u2);
+    return u1;
+  }
+
   public void testTrival() {
     UnitSystem unitSystem = UnitSystems.rotate(UnitSystem.SI(), "K", "K");
     TestHelper.checkInvariant(unitSystem);
@@ -36,7 +53,7 @@ public class UnitSystemsTest extends TestCase {
   }
 
   public void testEquivalentMinutes() {
-    UnitSystem unitSystem = UnitSystems.rotate(UnitSystem.SI(), "s", "min");
+    UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "s", "min");
     assertEquals(unitSystem.apply(Quantity.of(1, "h")), Quantity.of(60, "min"));
     assertEquals(unitSystem.map().get("s"), Quantity.of(RationalScalar.of(1, 60), "min"));
     assertFalse(unitSystem.map().containsKey("min"));
@@ -45,14 +62,19 @@ public class UnitSystemsTest extends TestCase {
   }
 
   public void testEquivalentHours() {
-    UnitSystem unitSystem = UnitSystems.rotate(UnitSystem.SI(), "s", "h");
+    UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "s", "h");
     Scalar scalar = Quantity.of(1, "uW*wk"); // W = m^2*kg*s^-3
     assertEquals(unitSystem.apply(scalar), Quantity.of(7838208, "h^-2*kg*m^2"));
   }
 
+  public void testEquivalentKilometers() {
+    UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "m", "km");
+    Scalar scalar = Quantity.of(1, "N"); // W = m^2*kg*s^-3
+    assertEquals(unitSystem.apply(scalar), Quantity.of(RationalScalar.of(1, 1000), "kg*km*s^-2"));
+  }
+
   public void testEquivalentHertz() {
-    UnitSystem unitSystem = UnitSystems.rotate(UnitSystem.SI(), "s", "Hz");
-    TestHelper.checkInvariant(unitSystem);
+    UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "s", "Hz");
     // Scalar scalar = ; // W = m^2*kg*s^-3
     // System.out.println(unitSystem.apply(scalar));
     assertEquals(unitSystem.apply(Quantity.of(1, "h")), Quantity.of(3600, "Hz^-1"));
@@ -61,8 +83,7 @@ public class UnitSystemsTest extends TestCase {
   }
 
   public void testSubstituteKgN() {
-    UnitSystem unitSystem = UnitSystems.rotate(UnitSystem.SI(), "kg", "N");
-    TestHelper.checkInvariant(unitSystem);
+    UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "kg", "N");
     assertEquals(unitSystem.apply(Quantity.of(3, "kg*m*s^-1")), Quantity.of(3, "N*s"));
     assertFalse(unitSystem.map().containsKey("N"));
     for (Entry<String, Scalar> entry : unitSystem.map().entrySet())
@@ -71,8 +92,7 @@ public class UnitSystemsTest extends TestCase {
   }
 
   public void testSubstituteSecondsN() {
-    UnitSystem unitSystem = UnitSystems.rotate(UnitSystem.SI(), "s", "N");
-    TestHelper.checkInvariant(unitSystem);
+    UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "s", "N");
     assertFalse(unitSystem.map().containsKey("N"));
     for (Entry<String, Scalar> entry : unitSystem.map().entrySet())
       assertFalse(QuantityUnit.of(entry.getValue()).map().containsKey("s"));
@@ -83,16 +103,14 @@ public class UnitSystemsTest extends TestCase {
   }
 
   public void testSubstituteM_W() {
-    UnitSystem unitSystem = UnitSystems.rotate(UnitSystem.SI(), "m", "W"); // W = m^2*kg*s^-3
-    TestHelper.checkInvariant(unitSystem);
+    UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "m", "W"); // W = m^2*kg*s^-3
     Scalar scalar = unitSystem.apply(Quantity.of(1, "km"));
     assertEquals(scalar, Scalars.fromString("1000[W^1/2*kg^-1/2*s^3/2]"));
     assertEquals(UnitSystem.SI().apply(scalar), Quantity.of(1000, "m"));
   }
 
   public void testSubstituteM_kW() {
-    UnitSystem unitSystem = UnitSystems.rotate(UnitSystem.SI(), "m", "kW"); // W = m^2*kg*s^-3
-    TestHelper.checkInvariant(unitSystem);
+    UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "m", "kW"); // W = m^2*kg*s^-3
     Scalar scalar = unitSystem.apply(Quantity.of(1, "km"));
     Chop._10.requireClose(scalar, Scalars.fromString("31.622776601683793[kW^1/2*kg^-1/2*s^3/2]"));
     Chop._09.requireClose(UnitSystem.SI().apply(scalar), Quantity.of(1000, "m"));
@@ -101,8 +119,7 @@ public class UnitSystemsTest extends TestCase {
   public void testCurrency() {
     UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("/unit/chf.properties"));
     assertTrue(baseSystem.map().containsKey("EUR"));
-    UnitSystem unitSystem = UnitSystems.rotate(baseSystem, "CHF", "EUR");
-    TestHelper.checkInvariant(unitSystem);
+    UnitSystem unitSystem = requireInvariant(baseSystem, "CHF", "EUR");
     assertFalse(unitSystem.map().containsKey("EUR"));
     Chop._06.requireClose(unitSystem.apply(Quantity.of(1, "USD")), Quantity.of(0.82784466, "EUR"));
     assertEquals(unitSystem.apply(Quantity.of(2, "m*s^-1")), Quantity.of(2, "m*s^-1"));
@@ -111,7 +128,7 @@ public class UnitSystemsTest extends TestCase {
 
   public void testIdentity() {
     UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("/unit/chf.properties"));
-    UnitSystem unitSystem = UnitSystems.rotate(baseSystem, "CHF", "CHF");
+    UnitSystem unitSystem = requireInvariant(baseSystem, "CHF", "CHF");
     assertTrue(unitSystem == baseSystem);
     assertFalse(unitSystem.map().containsKey("CHF"));
   }

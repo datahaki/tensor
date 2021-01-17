@@ -38,7 +38,7 @@ public abstract class AbstractScalar implements Scalar {
   }
 
   @Override // from Tensor
-  public final Scalar Get(int index) {
+  public final Scalar Get(int i) {
     throw TensorRuntimeException.of(this);
   }
 

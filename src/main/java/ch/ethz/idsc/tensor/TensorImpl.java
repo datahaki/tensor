@@ -49,8 +49,8 @@ import java.util.stream.Stream;
   }
 
   @Override // from Tensor
-  public Scalar Get(int index) {
-    return (Scalar) list.get(index);
+  public Scalar Get(int i) {
+    return (Scalar) list.get(i);
   }
 
   @Override // from Tensor

@@ -93,16 +93,35 @@ public interface Tensor extends Iterable<Tensor> {
    * @return copy of this[index[0], index[1], ..., All] */
   Tensor get(List<Integer> index);
 
-  /** same as function get(...) except that return type is cast to {@link Scalar}.
-   * An exception is thrown, if there is no Scalar at the specified index location.
+  /** function is identical to and shorthand for
+   * <pre>
+   * Get(i) == (Scalar) get(i)
+   * </pre>
    * 
-   * @param index
-   * @return {@link Scalar} at this[index[0], index[1], ...] */
-  Scalar Get(int index);
+   * Consequently, an exception is thrown, if there is no Scalar at the specified entry.
+   * 
+   * Remark: The function was introduced to facilitate the extraction of entries
+   * from vectors.
+   * 
+   * @param i in the range 0, 1, ..., length() - 1
+   * @return (Scalar) get(i)
+   * @throws Exception when invoked on a {@link Scalar} */
+  Scalar Get(int i);
 
-  /** @param i
-   * @param j
-   * @return */
+  /** function is identical to and shorthand for
+   * <pre>
+   * Get(i, j) == (Scalar) get(i, j)
+   * </pre>
+   * 
+   * Consequently, an exception is thrown, if there is no Scalar at the specified entry.
+   * 
+   * Remark: The function was introduced to facilitate the extraction of entries
+   * from matrices.
+   * 
+   * @param i in the range 0, 1, ..., length() - 1
+   * @param j in the range 0, 1, ..., get(i).length() - 1
+   * @return (Scalar) get(i, j)
+   * @throws Exception when invoked on a {@link Scalar} */
   Scalar Get(int i, int j);
 
   /** set copy of tensor as element at location this[index[0], index[1], ...].

@@ -63,10 +63,10 @@ public enum Power {
     if (exponent instanceof RationalScalar) {
       RationalScalar rationalScalar = (RationalScalar) exponent;
       if (rationalScalar.denominator().equals(BigInteger.valueOf(2)))
-        return scalar -> _of(Sqrt.FUNCTION.apply(scalar), RealScalar.of(rationalScalar.numerator()));
+        return scalar -> evaluate(Sqrt.FUNCTION.apply(scalar), RealScalar.of(rationalScalar.numerator()));
     }
     Objects.requireNonNull(exponent);
-    return scalar -> _of(scalar, exponent);
+    return scalar -> evaluate(scalar, exponent);
   }
 
   /** @param exponent
@@ -76,7 +76,7 @@ public enum Power {
   }
 
   /***************************************************/
-  private static Scalar _of(Scalar scalar, Scalar exponent) {
+  private static Scalar evaluate(Scalar scalar, Scalar exponent) {
     if (scalar instanceof PowerInterface) {
       PowerInterface powerInterface = (PowerInterface) scalar;
       return powerInterface.power(exponent);

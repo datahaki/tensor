@@ -1,15 +1,31 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Scalar;
 
 public enum UnitSystems {
   ;
+  /** Example: the base units of the SI unit system are
+   * "A", "cd", "s", "K", "mol", "kg", "m"
+   * 
+   * @param unitSystem
+   * @return base units of the given unitSystem */
+  public static Set<String> base(UnitSystem unitSystem) {
+    return unitSystem.map().values().stream() //
+        .map(QuantityUnit::of) //
+        .map(Unit::map) //
+        .map(Map::keySet) //
+        .flatMap(Collection::stream) //
+        .collect(Collectors.toSet());
+  }
+
   /** Examples:
    * A unit system with "min" as the default time unit:
    * <pre>
@@ -27,8 +43,8 @@ public enum UnitSystems {
    * </pre>
    * 
    * @param unitSystem
-   * @param prev
-   * @param next
+   * @param prev a base unit of the given unitSystem
+   * @param next not a base unit of the given unitSystem, unless next equals prev
    * @return */
   public static UnitSystem rotate(UnitSystem unitSystem, String prev, String next) {
     Scalar value = StaticHelper.conversion(unitSystem, prev, next);
@@ -50,8 +66,6 @@ public enum UnitSystems {
     Map<String, Scalar> map = new HashMap<>(u1.map());
     u2.map().entrySet().stream() //
         .forEach(entry -> map.put(entry.getKey(), entry.getValue()));
-    if (map.size() != u1.map().size() + u2.map().size())
-      throw new IllegalArgumentException();
     return SimpleUnitSystem.from(map);
   }
 }

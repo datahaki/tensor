@@ -2,7 +2,6 @@
 package ch.ethz.idsc.tensor.qty;
 
 import java.util.Map;
-import java.util.Set;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
@@ -22,20 +21,23 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/UnitSystem.html">UnitSystem</a> */
 public interface UnitSystem extends ScalarUnaryOperator {
-  /** @return international system of units, metric system */
+  /** @return international system of units, metric system with the base units:
+   * "A", "cd", "s", "K", "mol", "kg", "m" */
   static UnitSystem SI() {
     return SiUnitSystem.INSTANCE.unitSystem;
   }
 
   /***************************************************/
-  /** @return unmodifiable view on map that defines conversions in the unit system, keys are atomic */
-  Map<String, Scalar> map();
-
-  /** Example: in the SI unit system defined by the tensor library the units
-   * A, cd, kg, m, mod, s
-   * are included in the set provided by units(), but are not keys in {@link #map()}
+  /** Example: for the SI unit system the map includes the entries
+   * <pre>
+   * "K" -> 1[K]
+   * "rad" -> 1
+   * "Hz" -> 1[s^-1]
+   * "W" -> 1[m^2*kg*s^-3]
+   * "km" -> 1000[m]
+   * ...
+   * </pre>
    * 
-   * @return unmodifiable view on the set of all atomic units known by the unit system
-   * including those that are not further convertible */
-  Set<String> units();
+   * @return unmodifiable view on map that defines conversions in the unit system, keys are atomic */
+  Map<String, Scalar> map();
 }

@@ -118,7 +118,9 @@ public interface Quantity extends Scalar, //
     return QuantityImpl.of(RealScalar.of(number), Unit.of(string));
   }
 
-  /** Quote from Mathematica::QuantityMagnitude
+  /** Hint: Typically, the function is not called in the application layer.
+   * 
+   * Quote from Mathematica::QuantityMagnitude
    * "gives the amount of the specified quantity"
    * "gives the magnitude value of a Quantity"
    * 
@@ -126,7 +128,10 @@ public interface Quantity extends Scalar, //
    * @see QuantityMagnitude */
   Scalar value();
 
-  /** @return unit of quantity without value
+  /** Hint: Typically, the function is not called in the application layer.
+   * Instead, the unit should be retrieved by {@link QuantityUnit#of(Scalar)}.
+   * 
+   * @return unit of quantity
    * @see QuantityUnit */
   Unit unit();
 }
