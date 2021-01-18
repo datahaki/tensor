@@ -34,11 +34,11 @@ import ch.ethz.idsc.tensor.ext.Cache;
         String key = StaticHelper.requireAtomic(token.substring(0, index).trim());
         Scalar exponent = Scalars.fromString(token.substring(index + 1));
         if (Scalars.nonZero(exponent))
-          UnitImpl.merge(map, key, exponent);
+          StaticHelper.merge(map, key, exponent);
       } else {
         String unit = token.trim();
         if (!unit.isEmpty())
-          UnitImpl.merge(map, StaticHelper.requireAtomic(unit), RealScalar.ONE);
+          StaticHelper.merge(map, StaticHelper.requireAtomic(unit), RealScalar.ONE);
       }
     }
     return new UnitImpl(map);

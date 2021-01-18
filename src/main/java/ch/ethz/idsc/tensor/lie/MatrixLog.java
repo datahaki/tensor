@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.lie;
 import java.util.LinkedList;
 import java.util.List;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -33,7 +34,7 @@ public enum MatrixLog {
   ;
   private static final int MAX_EXPONENT = 20;
   private static final Scalar RHO_MAX = RealScalar.of(0.6);
-  private static final int MAX_ITERATIONS = 100;
+  private static final int MAX_ITERATIONS = 96;
 
   /** Hint: currently only matrices of dimensions 2 x 2 are supported
    * as well as symmetric positive definite matrices
@@ -98,7 +99,7 @@ public enum MatrixLog {
     for (int k = 2; k < MAX_ITERATIONS; ++k) {
       nxt = nxt.dot(x);
       Tensor prv = sum;
-      sum = sum.add(nxt.divide(RealScalar.of(k % 2 == 0 ? -k : k)));
+      sum = sum.add(nxt.divide(DoubleScalar.of(k % 2 == 0 ? -k : k)));
       if (Chop.NONE.isClose(sum, prv))
         return sum;
     }

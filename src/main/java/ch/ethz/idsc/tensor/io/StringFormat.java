@@ -115,9 +115,9 @@ import ch.ethz.idsc.tensor.Tensors;
   @Override
   public Tensor emit() {
     Tensor tensor = deque.pop();
-    if (!deque.isEmpty() || 1 < tensor.length())
-      throw new IllegalStateException();
-    return tensor.get(0);
+    if (deque.isEmpty() && tensor.length() <= 1)
+      return tensor.get(0);
+    throw new IllegalStateException();
   }
 
   @Override

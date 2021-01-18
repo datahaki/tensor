@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.qty;
 
 import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.Power;
 
 /* package */ enum StaticHelper {
@@ -22,9 +24,23 @@ import ch.ethz.idsc.tensor.sca.Power;
    * @return given key
    * @throws Exception if given key is not an atomic unit expression */
   public static String requireAtomic(String key) {
-    if (!PATTERN.matcher(key).matches())
-      throw new IllegalArgumentException(key);
-    return key;
+    if (PATTERN.matcher(key).matches())
+      return key;
+    throw new IllegalArgumentException(key);
+  }
+
+  /** @param map
+   * @param key
+   * @param exponent non-zero */
+  /* package */ static void merge(NavigableMap<String, Scalar> map, String key, Scalar exponent) {
+    if (map.containsKey(key)) {
+      Scalar sum = map.get(key).add(exponent);
+      if (Scalars.isZero(sum))
+        map.remove(key); // exponents cancel out
+      else
+        map.put(key, sum); // exponent is updated
+    } else
+      map.put(key, exponent); // unit is introduced
   }
 
   /** @param unitSystem

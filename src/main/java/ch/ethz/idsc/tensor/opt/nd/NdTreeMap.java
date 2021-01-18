@@ -103,20 +103,11 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
    * 
    * @return */
   public Tensor binSize() {
-    return binSize(root);
-  }
-
-  private Tensor binSize(Node node) {
-    if (Objects.isNull(node.queue))
-      return Tensors.of( //
-          Objects.isNull(node.lChild) ? RealScalar.ZERO : binSize(node.lChild), //
-          Objects.isNull(node.rChild) ? RealScalar.ZERO : binSize(node.rChild) //
-      );
-    return RealScalar.of(node.queue.size());
+    return root.binSize();
   }
 
   private class Node implements Serializable {
-    private static final long serialVersionUID = 117599167189053278L;
+    private static final long serialVersionUID = 4715375989998529775L;
     // ---
     private final int depth;
     private Node lChild;
@@ -130,6 +121,14 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
 
     private boolean isInternal() {
       return Objects.isNull(queue);
+    }
+
+    private Tensor binSize() {
+      return isInternal() //
+          ? Tensors.of( //
+              Objects.isNull(lChild) ? RealScalar.ZERO : lChild.binSize(), //
+              Objects.isNull(rChild) ? RealScalar.ZERO : rChild.binSize())
+          : RealScalar.of(queue.size());
     }
 
     private int dimension() {

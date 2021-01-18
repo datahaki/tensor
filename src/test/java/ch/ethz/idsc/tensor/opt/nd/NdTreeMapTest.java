@@ -21,16 +21,22 @@ import junit.framework.TestCase;
 
 public class NdTreeMapTest extends TestCase {
   public void testSome() {
-    NdMap<String> ndTreeMap = //
+    NdTreeMap<String> ndTreeMap = //
         new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 10);
     assertTrue(ndTreeMap.isEmpty());
     ndTreeMap.add(Tensors.vector(1, 1), "d1");
+    ndTreeMap.binSize();
     assertFalse(ndTreeMap.isEmpty());
     ndTreeMap.add(Tensors.vector(1, 0), "d2");
+    ndTreeMap.binSize();
     ndTreeMap.add(Tensors.vector(0, 1), "d3");
+    ndTreeMap.binSize();
     ndTreeMap.add(Tensors.vector(1, 1), "d4");
+    ndTreeMap.binSize();
     ndTreeMap.add(Tensors.vector(0.1, 0.1), "d5");
+    ndTreeMap.binSize();
     ndTreeMap.add(Tensors.vector(6, 7), "d6");
+    ndTreeMap.binSize();
     {
       Tensor center = Tensors.vector(0, 0);
       NdCenterInterface distancer = EuclideanNdCenter.of(center);
@@ -55,10 +61,11 @@ public class NdTreeMapTest extends TestCase {
   }
 
   public void testParallel() throws InterruptedException {
-    NdMap<Void> ndTreeMap = new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), 13, 10);
+    NdTreeMap<Void> ndTreeMap = new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), 2, 6);
     Distribution distribution = UniformDistribution.unit();
     for (int count = 0; count < 1000; ++count) {
       ndTreeMap.add(RandomVariate.of(distribution, 2), null);
+      ndTreeMap.binSize();
     }
     for (int count = 0; count < 20; ++count) {
       // final int ficount = count;
@@ -118,6 +125,7 @@ public class NdTreeMapTest extends TestCase {
     final int n = 10;
     NdTreeMap<String> ndTreeMap = //
         new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), n, 26);
+    ndTreeMap.binSize();
     for (int c = 0; c < 800; ++c)
       ndTreeMap.add(RandomVariate.of(UniformDistribution.unit(), 2), "s" + c);
     Tensor flatten = Flatten.of(ndTreeMap.binSize());

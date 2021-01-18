@@ -32,8 +32,8 @@ import ch.ethz.idsc.tensor.ext.Cache;
    * @return bigInteger
    * @throws Exception if given bigInteger is not a prime */
   private static BigInteger require(BigInteger bigInteger) {
-    if (!isMember(bigInteger))
-      throw new IllegalArgumentException("not prime: " + bigInteger);
-    return bigInteger;
+    if (isMember(bigInteger))
+      return bigInteger;
+    throw new IllegalArgumentException("not prime: " + bigInteger);
   }
 }
