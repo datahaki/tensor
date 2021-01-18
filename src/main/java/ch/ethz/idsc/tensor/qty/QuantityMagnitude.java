@@ -59,6 +59,7 @@ public class QuantityMagnitude implements Serializable {
    * @param unit
    * @return operator that maps a quantity to the equivalent scalar of given unit */
   public ScalarUnaryOperator in(Unit unit) {
+    // FIXME URGENT the implementation is horrendous
     Scalar base = unitSystem.apply(QuantityImpl.of(RealScalar.ONE, unit));
     return new ScalarUnaryOperator() {
       private static final long serialVersionUID = 5762934797521017887L;

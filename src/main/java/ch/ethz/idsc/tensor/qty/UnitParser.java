@@ -30,27 +30,16 @@ import ch.ethz.idsc.tensor.ext.Cache;
     while (stringTokenizer.hasMoreTokens()) {
       String token = stringTokenizer.nextToken();
       int index = token.indexOf(Unit.POWER_DELIMITER);
-      final String unit;
-      final Scalar exponent;
       if (0 <= index) {
-        unit = token.substring(0, index).trim();
-        exponent = Scalars.fromString(token.substring(index + 1));
+        String key = StaticHelper.requireAtomic(token.substring(0, index).trim());
+        Scalar exponent = Scalars.fromString(token.substring(index + 1));
+        if (Scalars.nonZero(exponent))
+          UnitImpl.merge(map, key, exponent);
       } else {
-        unit = token.trim();
-        if (unit.isEmpty())
-          continue;
-        exponent = RealScalar.ONE;
+        String unit = token.trim();
+        if (!unit.isEmpty())
+          UnitImpl.merge(map, StaticHelper.requireAtomic(unit), RealScalar.ONE);
       }
-      String key = StaticHelper.requireAtomic(unit);
-      if (map.containsKey(key)) { // exponent exists
-        Scalar sum = map.get(key).add(exponent);
-        if (Scalars.isZero(sum))
-          map.remove(key); // exponents cancel
-        else
-          map.put(key, sum); // update total exponent
-      } else //
-      if (Scalars.nonZero(exponent)) // introduce exponent
-        map.put(key, exponent);
     }
     return new UnitImpl(map);
   }

@@ -223,7 +223,7 @@ Weiszfeld’s method
 Tensors of rank 3
 
 ```java
-Tensor ad = LieAlgebras.so3();
+Tensor ad = LeviCivitaTensor.of(3).negate();
 Tensor x = Tensors.vector(7, 2, -4);
 Tensor y = Tensors.vector(-3, 5, 2);
 System.out.println(ad);

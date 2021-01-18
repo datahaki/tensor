@@ -36,19 +36,20 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
   @Override // from Unit
   public Unit add(Unit unit) {
     NavigableMap<String, Scalar> map = new TreeMap<>(navigableMap);
-    for (Entry<String, Scalar> entry : unit.map().entrySet()) {
-      String key = entry.getKey();
-      Scalar value = entry.getValue();
-      if (map.containsKey(key)) {
-        Scalar sum = map.get(key).add(value);
-        if (Scalars.isZero(sum))
-          map.remove(key); // exponents cancel out
-        else
-          map.put(key, sum); // exponent is updated
-      } else
-        map.put(key, value); // unit is introduced
-    }
+    for (Entry<String, Scalar> entry : unit.map().entrySet())
+      merge(map, entry.getKey(), entry.getValue()); // exponent is guaranteed to be non-zero
     return new UnitImpl(map);
+  }
+
+  /* package */ static void merge(NavigableMap<String, Scalar> map, String key, Scalar exponent) {
+    if (map.containsKey(key)) {
+      Scalar sum = map.get(key).add(exponent);
+      if (Scalars.isZero(sum))
+        map.remove(key); // exponents cancel out
+      else
+        map.put(key, sum); // exponent is updated
+    } else
+      map.put(key, exponent); // unit is introduced
   }
 
   @Override // from Unit

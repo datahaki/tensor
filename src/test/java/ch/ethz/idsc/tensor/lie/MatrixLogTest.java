@@ -27,7 +27,7 @@ public class MatrixLogTest extends TestCase {
 
   public void testSymmetric() {
     for (int n = 1; n < 8; ++n) {
-      Distribution distribution = NormalDistribution.of(0, 0.4 / n);
+      Distribution distribution = NormalDistribution.of(0, 0.1 / n);
       Tensor matrix = Symmetrize.of(IdentityMatrix.of(n).add(RandomVariate.of(distribution, n, n)));
       Tensor loq = MatrixLog.ofSymmetric(matrix);
       Tensor los = MatrixLog.of(matrix);
