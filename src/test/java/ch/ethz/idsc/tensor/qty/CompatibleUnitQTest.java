@@ -2,9 +2,13 @@
 package ch.ethz.idsc.tensor.qty;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.TreeMap;
 
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -26,6 +30,17 @@ public class CompatibleUnitQTest extends TestCase {
   public void testAssignable() {
     assertFalse(Quantity.class.isAssignableFrom(RealScalar.ONE.getClass()));
     assertTrue(Quantity.class.isAssignableFrom(Quantity.of(1, "s").getClass()));
+  }
+
+  public void testNonReal() {
+    GaussScalar s = GaussScalar.of(2, 13);
+    Scalar q1 = Quantity.of(s, "fiction");
+    Map<String, Scalar> map = new TreeMap<>();
+    map.put("fiction", Quantity.of(GaussScalar.of(3, 13), "end^2"));
+    UnitSystem unitSystem = SimpleUnitSystem.from(map);
+    assertTrue(CompatibleUnitQ.in(unitSystem).with(Unit.of("fiction")).test(q1));
+    Scalar scalar = new QuantityMagnitude(unitSystem).in("end^2").apply(q1);
+    assertEquals(scalar, GaussScalar.of(6, 13));
   }
 
   public void testWithFail() {

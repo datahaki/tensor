@@ -2,10 +2,9 @@
 package ch.ethz.idsc.tensor.qty;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.Objects;
-import java.util.Properties;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
@@ -19,7 +18,8 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 public class QuantityMagnitude implements Serializable {
   private static final long serialVersionUID = 5270849044236108069L;
   private static final QuantityMagnitude SI = new QuantityMagnitude(UnitSystem.SI());
-  private static final QuantityMagnitude EMPTY = new QuantityMagnitude(SimpleUnitSystem.from(new Properties()));
+  private static final QuantityMagnitude EMPTY = //
+      new QuantityMagnitude(SimpleUnitSystem.from(Collections.emptyMap()));
 
   /** @return instance of QuantityMagnitude that uses the built-in SI convention */
   public static QuantityMagnitude SI() {
@@ -59,14 +59,13 @@ public class QuantityMagnitude implements Serializable {
    * @param unit
    * @return operator that maps a quantity to the equivalent scalar of given unit */
   public ScalarUnaryOperator in(Unit unit) {
-    // FIXME URGENT the implementation is horrendous
-    Scalar base = unitSystem.apply(QuantityImpl.of(RealScalar.ONE, unit));
+    Unit base = unit.negate();
     return new ScalarUnaryOperator() {
       private static final long serialVersionUID = 5762934797521017887L;
 
       @Override
       public Scalar apply(Scalar scalar) {
-        Scalar result = unitSystem.apply(scalar).divide(base);
+        Scalar result = unitSystem.apply(StaticHelper.multiply(scalar, base));
         if (result instanceof Quantity)
           throw TensorRuntimeException.of(result);
         return result;

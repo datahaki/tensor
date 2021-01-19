@@ -94,20 +94,32 @@ public class ClipsTest extends TestCase {
     assertTrue(clip.isOutside(Quantity.of(Math.nextUp(10.0), "")));
   }
 
-  public void testSimple() {
+  public void testIntersectionSimple() {
     Clip clip = Clips.intersection(Clips.interval(2, 6), Clips.interval(3, 10));
     assertEquals(clip.min(), RealScalar.of(3));
     assertEquals(clip.max(), RealScalar.of(6));
   }
 
-  public void testPoint() {
+  public void testIntersectionPoint() {
     Clip clip = Clips.intersection(Clips.interval(2, 6), Clips.interval(-3, 2));
     assertEquals(clip.min(), RealScalar.of(2));
     assertEquals(clip.max(), RealScalar.of(2));
   }
 
-  public void testFail() {
+  public void testIntersectionFail() {
     AssertFail.of(() -> Clips.intersection(Clips.interval(2, 3), Clips.interval(5, 10)));
+  }
+
+  public void testCoverSimple() {
+    Clip clip = Clips.cover(Clips.interval(2, 6), Clips.interval(3, 10));
+    assertEquals(clip.min(), RealScalar.of(2));
+    assertEquals(clip.max(), RealScalar.of(10));
+  }
+
+  public void testCoverPoint() {
+    Clip clip = Clips.cover(Clips.interval(2, 6), Clips.interval(-3, 2));
+    assertEquals(clip.min(), RealScalar.of(-3));
+    assertEquals(clip.max(), RealScalar.of(6));
   }
 
   public void testPositiveFail() {

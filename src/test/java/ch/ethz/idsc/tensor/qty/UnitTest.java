@@ -60,6 +60,7 @@ public class UnitTest extends TestCase {
 
   public void testOneString() {
     assertEquals(Unit.ONE.toString(), "");
+    assertTrue(Unit.ONE.map().isEmpty());
   }
 
   public void testFail() {

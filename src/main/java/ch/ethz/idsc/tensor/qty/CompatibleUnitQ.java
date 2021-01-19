@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 
 /** inspired by
@@ -41,7 +40,7 @@ public class CompatibleUnitQ implements Serializable {
   /** @param unit
    * @return */
   public Predicate<Scalar> with(Unit unit) {
-    Scalar base = unitSystem.apply(QuantityImpl.of(RealScalar.ONE, unit));
-    return scalar -> !(unitSystem.apply(scalar).divide(base) instanceof Quantity);
+    Unit base = unit.negate();
+    return scalar -> !(unitSystem.apply(StaticHelper.multiply(scalar, base)) instanceof Quantity);
   }
 }

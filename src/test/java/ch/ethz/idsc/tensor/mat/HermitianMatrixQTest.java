@@ -1,9 +1,11 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -22,6 +24,10 @@ public class HermitianMatrixQTest extends TestCase {
   public void testRectangular() {
     assertFalse(HermitianMatrixQ.of(Array.zeros(2, 3, 3)));
     assertFalse(HermitianMatrixQ.of(HilbertMatrix.of(3, 4)));
+  }
+
+  public void testNaN() {
+    assertFalse(HermitianMatrixQ.of(ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3)));
   }
 
   public void testNonMatrix() {

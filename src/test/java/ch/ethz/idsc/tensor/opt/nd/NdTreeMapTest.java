@@ -60,13 +60,20 @@ public class NdTreeMapTest extends TestCase {
     }
   }
 
-  public void testParallel() throws InterruptedException {
+  public void testBinCount() {
     NdTreeMap<Void> ndTreeMap = new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), 2, 6);
     Distribution distribution = UniformDistribution.unit();
-    for (int count = 0; count < 1000; ++count) {
+    for (int count = 0; count < 100; ++count) {
       ndTreeMap.add(RandomVariate.of(distribution, 2), null);
       ndTreeMap.binSize();
     }
+  }
+
+  public void testParallel() throws InterruptedException {
+    NdTreeMap<Void> ndTreeMap = new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), 2, 6);
+    Distribution distribution = UniformDistribution.unit();
+    for (int count = 0; count < 1000; ++count)
+      ndTreeMap.add(RandomVariate.of(distribution, 2), null);
     for (int count = 0; count < 20; ++count) {
       // final int ficount = count;
       new Thread(new Runnable() {

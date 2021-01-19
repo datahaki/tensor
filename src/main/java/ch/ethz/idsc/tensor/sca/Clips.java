@@ -94,4 +94,10 @@ public enum Clips {
         Max.of(clip1.min(), clip2.min()), //
         Min.of(clip1.max(), clip2.max()));
   }
+
+  public static Clip cover(Clip clip1, Clip clip2) {
+    return Clips.interval( //
+        Min.of(clip1.min(), clip2.min()), //
+        Max.of(clip1.max(), clip2.max()));
+  }
 }

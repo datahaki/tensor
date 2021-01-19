@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
    * scalar value is never zero */
   private final NavigableMap<String, Scalar> navigableMap;
 
+  /** @param navigableMap */
   public UnitImpl(NavigableMap<String, Scalar> navigableMap) {
     this.navigableMap = navigableMap;
   }

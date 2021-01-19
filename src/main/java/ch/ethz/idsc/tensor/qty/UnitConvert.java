@@ -4,8 +4,6 @@ package ch.ethz.idsc.tensor.qty;
 import java.io.Serializable;
 import java.util.Objects;
 
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** inspired by
@@ -43,8 +41,8 @@ public class UnitConvert implements Serializable {
    * @param unit
    * @return operator that maps a quantity to the quantity of given unit */
   public ScalarUnaryOperator to(Unit unit) {
-    Scalar base = unitSystem.apply(QuantityImpl.of(RealScalar.ONE, unit));
-    return scalar -> Quantity.of(unitSystem.apply(scalar).divide(base), unit);
+    Unit base = unit.negate();
+    return scalar -> Quantity.of(unitSystem.apply(StaticHelper.multiply(scalar, base)), unit);
   }
 
   /** Example:

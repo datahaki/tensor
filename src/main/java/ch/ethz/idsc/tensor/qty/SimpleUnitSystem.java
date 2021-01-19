@@ -4,8 +4,10 @@ package ch.ethz.idsc.tensor.qty;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -56,6 +58,7 @@ public class SimpleUnitSystem implements UnitSystem {
   private static Map<String, Scalar> requireTransitionFree(Map<String, Scalar> map) {
     for (Scalar scalar : map.values())
       for (String atom : QuantityUnit.of(scalar).map().keySet()) // example: m, kg, s, A
+        // TODO can be checked by multiplication x*x == x but x!=0 and unit ^2
         if (map.containsKey(atom) && !scalar.equals(Quantity.of(RealScalar.ONE, atom)))
           throw TensorRuntimeException.of(scalar);
     return map;
@@ -72,15 +75,23 @@ public class SimpleUnitSystem implements UnitSystem {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof Quantity) {
       Quantity quantity = (Quantity) scalar;
-      Scalar value = quantity.value();
+      NavigableMap<String, Scalar> navigableMap = new TreeMap<>();
+      Scalar product = null; // avoids to introduce a multiplicative 1
       for (Entry<String, Scalar> entry : quantity.unit().map().entrySet()) {
         Scalar lookup = map.get(entry.getKey());
-        Scalar factor = Objects.isNull(lookup) //
-            ? QuantityImpl.of(RealScalar.ONE, format(entry)) //
-            : Power.of(lookup, entry.getValue());
-        value = value.multiply(factor);
+        if (Objects.isNull(lookup)) // in case of base units, e.g. "m" for SI
+          // entry key and entry value are added to unit of value
+          StaticHelper.merge(navigableMap, entry.getKey(), entry.getValue());
+        else { // in case of unit definitions, e.g. "Pa" for SI
+          Scalar factor = Power.of(lookup, entry.getValue());
+          product = Objects.isNull(product) //
+              ? factor
+              : product.multiply(factor);
+        }
       }
-      return value;
+      return StaticHelper.multiply(Objects.isNull(product) //
+          ? quantity.value()
+          : product.multiply(quantity.value()), new UnitImpl(navigableMap));
     }
     return Objects.requireNonNull(scalar);
   }

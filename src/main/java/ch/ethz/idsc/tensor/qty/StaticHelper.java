@@ -1,8 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -30,9 +30,9 @@ import ch.ethz.idsc.tensor.sca.Power;
   }
 
   /** @param map
-   * @param key
+   * @param key satisfies {@link #requireAtomic(String)}
    * @param exponent non-zero */
-  /* package */ static void merge(NavigableMap<String, Scalar> map, String key, Scalar exponent) {
+  public static void merge(Map<String, Scalar> map, String key, Scalar exponent) {
     if (map.containsKey(key)) {
       Scalar sum = map.get(key).add(exponent);
       if (Scalars.isZero(sum))
@@ -41,6 +41,14 @@ import ch.ethz.idsc.tensor.sca.Power;
         map.put(key, sum); // exponent is updated
     } else
       map.put(key, exponent); // unit is introduced
+  }
+
+  public static Scalar multiply(Scalar scalar, Unit base) {
+    if (scalar instanceof Quantity) {
+      Quantity quantity = (Quantity) scalar;
+      return Quantity.of(quantity.value(), quantity.unit().add(base));
+    }
+    return Quantity.of(scalar, base);
   }
 
   /** @param unitSystem

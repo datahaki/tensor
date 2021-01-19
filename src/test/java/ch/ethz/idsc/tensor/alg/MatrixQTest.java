@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.alg;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -29,6 +30,7 @@ public class MatrixQTest extends TestCase {
   public void testMatrix() {
     assertTrue(MatrixQ.of(Tensors.fromString("{{1}}")));
     assertTrue(MatrixQ.of(Tensors.fromString("{{1, 1, 3}, {7, 2, 9}}")));
+    assertTrue(MatrixQ.of(ConstantArray.of(DoubleScalar.INDETERMINATE, 4, 3)));
     assertFalse(MatrixQ.of(Tensors.fromString("{{1, 1}, {7, 2, 9}}")));
   }
 
