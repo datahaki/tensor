@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -69,5 +70,15 @@ public enum UnitSystems {
     u2.map().entrySet().stream() //
         .forEach(entry -> map.put(entry.getKey(), entry.getValue()));
     return SimpleUnitSystem.from(map);
+  }
+
+  /***************************************************/
+  /** @param map
+   * @return */
+  public static Unit unit(Map<String, Scalar> map) {
+    return new UnitImpl(map.entrySet().stream().collect(Collectors.toMap( //
+        entry -> StaticHelper.requireAtomic(entry.getKey()), //
+        entry -> StaticHelper.requireNonZero(entry.getValue()), //
+        (u, v) -> null, TreeMap::new)));
   }
 }

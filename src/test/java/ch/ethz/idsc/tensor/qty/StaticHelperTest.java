@@ -74,6 +74,11 @@ public class StaticHelperTest extends TestCase {
     Chop._10.requireClose(scalar, Scalars.fromString("0.03162277660168379[kW^1/2*kg^-1/2*s^3/2]"));
   }
 
+  public void testMultiplyNullFail() {
+    AssertFail.of(() -> StaticHelper.multiply(Quantity.of(1, "s"), null));
+    AssertFail.of(() -> StaticHelper.multiply(null, Unit.of("s")));
+  }
+
   public void testConversionFail0() {
     AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "rad", ""));
     AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "", "rad"));

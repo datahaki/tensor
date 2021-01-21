@@ -9,7 +9,6 @@ import java.util.TreeMap;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -44,16 +43,15 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 
   @Override // from Unit
   public Unit multiply(Scalar factor) {
-    if (factor instanceof RealScalar) {
-      NavigableMap<String, Scalar> map = new TreeMap<>();
-      for (Entry<String, Scalar> entry : navigableMap.entrySet()) {
-        Scalar value = entry.getValue().multiply(factor);
-        if (Scalars.nonZero(value))
-          map.put(entry.getKey(), value);
-      }
-      return new UnitImpl(map);
+    if (factor instanceof Quantity)
+      throw TensorRuntimeException.of(factor);
+    NavigableMap<String, Scalar> map = new TreeMap<>();
+    for (Entry<String, Scalar> entry : navigableMap.entrySet()) {
+      Scalar value = entry.getValue().multiply(factor);
+      if (Scalars.nonZero(value))
+        map.put(entry.getKey(), value);
     }
-    throw TensorRuntimeException.of(factor);
+    return new UnitImpl(map);
   }
 
   @Override // from Unit

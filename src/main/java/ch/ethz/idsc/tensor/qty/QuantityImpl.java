@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -139,7 +138,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    return of(AbsSquared.FUNCTION.apply(value), unit.multiply(RealScalar.TWO));
+    return of(AbsSquared.FUNCTION.apply(value), unit.add(unit));
   }
 
   @Override // from ArcTanInterface

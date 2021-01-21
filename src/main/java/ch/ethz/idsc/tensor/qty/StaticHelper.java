@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Power;
 
 /* package */ enum StaticHelper {
@@ -29,6 +30,13 @@ import ch.ethz.idsc.tensor.sca.Power;
     throw new IllegalArgumentException(key);
   }
 
+  public static Scalar requireNonZero(Scalar scalar) {
+    if (scalar instanceof Quantity || //
+        Scalars.isZero(scalar))
+      throw TensorRuntimeException.of(scalar);
+    return scalar;
+  }
+
   /** @param map
    * @param key satisfies {@link #requireAtomic(String)}
    * @param exponent non-zero */
@@ -43,6 +51,9 @@ import ch.ethz.idsc.tensor.sca.Power;
       map.put(key, exponent); // unit is introduced
   }
 
+  /** @param scalar
+   * @param base
+   * @return product of scalar and 1[base] where the multiplicative 1 is not used explicitly */
   public static Scalar multiply(Scalar scalar, Unit base) {
     if (scalar instanceof Quantity) {
       Quantity quantity = (Quantity) scalar;
@@ -75,7 +86,12 @@ import ch.ethz.idsc.tensor.sca.Power;
   // only used in tests
   /* package */ static Set<Unit> atoms(Unit unit) {
     return unit.map().entrySet().stream() //
-        .map(SimpleUnitSystem::format) //
+        .map(StaticHelper::format) //
         .collect(Collectors.toSet());
+  }
+
+  // helper function
+  private static Unit format(Entry<String, Scalar> entry) {
+    return Unit.of(entry.getKey() + Unit.POWER_DELIMITER + entry.getValue());
   }
 }

@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -104,6 +105,15 @@ public class ClipsTest extends TestCase {
     Clip clip = Clips.intersection(Clips.interval(2, 6), Clips.interval(-3, 2));
     assertEquals(clip.min(), RealScalar.of(2));
     assertEquals(clip.max(), RealScalar.of(2));
+  }
+
+  public void testGaussScalar() {
+    Clip clip = Clips.positive(GaussScalar.of(3, 13));
+    clip.requireInside(GaussScalar.of(0, 13));
+    clip.requireInside(GaussScalar.of(1, 13));
+    clip.requireInside(GaussScalar.of(2, 13));
+    clip.requireInside(GaussScalar.of(3, 13));
+    assertFalse(clip.isInside(GaussScalar.of(4, 13)));
   }
 
   public void testIntersectionFail() {

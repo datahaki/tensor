@@ -1,8 +1,12 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -63,6 +67,14 @@ public class UnitTest extends TestCase {
     assertTrue(Unit.ONE.map().isEmpty());
   }
 
+  public void testGaussScalar() {
+    Map<String, Scalar> map = new HashMap<>();
+    map.put("some", GaussScalar.of(1, 7));
+    UnitSystems.unit(map);
+    map.put("some", GaussScalar.of(0, 7));
+    AssertFail.of(() -> UnitSystems.unit(map));
+  }
+
   public void testFail() {
     AssertFail.of(() -> Unit.of(" m >"));
     AssertFail.of(() -> Unit.of("| m "));
@@ -74,6 +86,7 @@ public class UnitTest extends TestCase {
   }
 
   public void testNullFail() {
-    AssertFail.of(() -> Unit.of(null));
+    AssertFail.of(() -> Unit.of((String) null));
+    AssertFail.of(() -> UnitSystems.unit((Map<String, Scalar>) null));
   }
 }

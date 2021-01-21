@@ -11,7 +11,6 @@ import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -59,8 +58,16 @@ public class SimpleUnitSystem implements UnitSystem {
     for (Scalar scalar : map.values())
       for (String atom : QuantityUnit.of(scalar).map().keySet()) // example: m, kg, s, A
         // TODO can be checked by multiplication x*x == x but x!=0 and unit ^2
-        if (map.containsKey(atom) && !scalar.equals(Quantity.of(RealScalar.ONE, atom)))
-          throw TensorRuntimeException.of(scalar);
+        if (map.containsKey(atom)) {
+          Scalar value = ((Quantity) scalar).value();
+          if (Scalars.isZero(value) || !value.multiply(value).equals(value))
+            // Scalar sq = ;
+            //
+            // System.out.println(scalar);
+            // System.out.println(sq);
+            // System.out.println(QuantityUnit.of(sq));
+            throw TensorRuntimeException.of(scalar);
+        }
     return map;
   }
 
@@ -79,19 +86,19 @@ public class SimpleUnitSystem implements UnitSystem {
       Scalar product = null; // avoids to introduce a multiplicative 1
       for (Entry<String, Scalar> entry : quantity.unit().map().entrySet()) {
         Scalar lookup = map.get(entry.getKey());
-        if (Objects.isNull(lookup)) // in case of base units, e.g. "m" for SI
-          // entry key and entry value are added to unit of value
-          StaticHelper.merge(navigableMap, entry.getKey(), entry.getValue());
+        if (Objects.isNull(lookup)) // in case of base unit, e.g. "m" for SI
+          navigableMap.put(entry.getKey(), entry.getValue());
         else { // in case of unit definitions, e.g. "Pa" for SI
+          navigableMap.remove(entry.getKey());
           Scalar factor = Power.of(lookup, entry.getValue());
           product = Objects.isNull(product) //
               ? factor
               : product.multiply(factor);
         }
       }
-      return StaticHelper.multiply(Objects.isNull(product) //
-          ? quantity.value()
-          : product.multiply(quantity.value()), new UnitImpl(navigableMap));
+      return Objects.isNull(product) //
+          ? scalar
+          : StaticHelper.multiply(product.multiply(quantity.value()), new UnitImpl(navigableMap));
     }
     return Objects.requireNonNull(scalar);
   }
@@ -106,11 +113,6 @@ public class SimpleUnitSystem implements UnitSystem {
     if (scalar instanceof StringScalar)
       throw TensorRuntimeException.of(scalar);
     return scalar;
-  }
-
-  // helper function
-  /* package */ static Unit format(Entry<String, Scalar> entry) {
-    return Unit.of(entry.getKey() + Unit.POWER_DELIMITER + entry.getValue());
   }
 
   @Override
