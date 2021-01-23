@@ -56,10 +56,22 @@ public class SimpleUnitSystemTest extends TestCase {
     assertEquals(unitSystem.map(), UnitSystem.SI().map());
   }
 
-  public void testXFree() {
+  public void testXFree0Fail() {
+    Map<String, Scalar> map = new HashMap<>();
+    map.put("m", Quantity.of(GaussScalar.of(0, 17), "m"));
+    AssertFail.of(() -> SimpleUnitSystem.from(map));
+  }
+
+  public void testXFree1() {
     Map<String, Scalar> map = new HashMap<>();
     map.put("m", Quantity.of(GaussScalar.of(1, 17), "m"));
     SimpleUnitSystem.from(map);
+  }
+
+  public void testXFree2Fail() {
+    Map<String, Scalar> map = new HashMap<>();
+    map.put("m", Quantity.of(GaussScalar.of(2, 17), "m"));
+    AssertFail.of(() -> SimpleUnitSystem.from(map));
   }
 
   public void testEmpty() {

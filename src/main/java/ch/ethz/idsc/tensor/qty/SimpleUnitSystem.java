@@ -57,15 +57,13 @@ public class SimpleUnitSystem implements UnitSystem {
   private static Map<String, Scalar> requireTransitionFree(Map<String, Scalar> map) {
     for (Scalar scalar : map.values())
       for (String atom : QuantityUnit.of(scalar).map().keySet()) // example: m, kg, s, A
-        // TODO can be checked by multiplication x*x == x but x!=0 and unit ^2
         if (map.containsKey(atom)) {
           Scalar value = ((Quantity) scalar).value();
-          if (Scalars.isZero(value) || !value.multiply(value).equals(value))
-            // Scalar sq = ;
-            //
-            // System.out.println(scalar);
-            // System.out.println(sq);
-            // System.out.println(QuantityUnit.of(sq));
+          Unit alt = QuantityUnit.of(map.get(atom));
+          // LONGTERM this is not sufficiently elegant
+          if (Scalars.isZero(value) || // non-zero
+              !value.multiply(value).equals(value) || // multiplicative 1
+              !alt.toString().equals(atom))
             throw TensorRuntimeException.of(scalar);
         }
     return map;

@@ -42,7 +42,8 @@ public enum PseudoInverse {
   /** Hint: function exists to avoid dot product with the identity matrix
    * 
    * @param matrix
-   * @return */
+   * @return
+   * @throws Exception if given matrix does not have maximal rank */
   /* package */ static Tensor usingCholesky(Tensor matrix) {
     int n = matrix.length();
     Tensor mt = ConjugateTranspose.of(matrix);

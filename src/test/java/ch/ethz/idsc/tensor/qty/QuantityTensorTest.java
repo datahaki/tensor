@@ -21,6 +21,13 @@ public class QuantityTensorTest extends TestCase {
     assertEquals(tensor, Quantity.of(1, "N"));
   }
 
+  public void testVectorString() {
+    Tensor tensor = QuantityTensor.of(Tensors.vector(7, 2, 3), "N");
+    assertEquals(tensor.Get(0), Quantity.of(7, "N"));
+    assertEquals(tensor.Get(1), Quantity.of(2, "N"));
+    assertEquals(tensor.Get(2), Quantity.of(3, "N"));
+  }
+
   public void testVector() {
     Tensor vector = Tensors.vector(1, 2, 3);
     Tensor nuvec = QuantityTensor.of(vector, Unit.of("m*kg^2"));

@@ -107,6 +107,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from Scalar
   public Number number() {
+    // throw TensorRuntimeException.of(this);
     return value.number();
   }
 

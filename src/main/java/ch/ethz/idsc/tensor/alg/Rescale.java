@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.alg;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.DeterminateScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ScalarQ;
@@ -25,7 +26,7 @@ public class Rescale {
   /** RealScalar.ZERO is used instead of {@link Scalar#zero()}
    * to eliminate unit of {@link Quantity}. */
   private static final ScalarUnaryOperator FINITE_NUMBER_ZERO = //
-      scalar -> isFiniteNumber(scalar) ? RealScalar.ZERO : scalar;
+      scalar -> DeterminateScalarQ.of(scalar) ? RealScalar.ZERO : scalar;
 
   /** The scalar entries of the given tensor may also be instance of
    * {@link Quantity} with identical unit.
@@ -41,11 +42,6 @@ public class Rescale {
    * @throws Exception if any entry is a {@link ComplexScalar} */
   public static Tensor of(Tensor tensor) {
     return new Rescale(tensor).result();
-  }
-
-  // helper function
-  private static boolean isFiniteNumber(Scalar scalar) {
-    return Double.isFinite(scalar.number().doubleValue());
   }
 
   // helper function
@@ -70,7 +66,7 @@ public class Rescale {
     ScalarQ.thenThrow(tensor);
     scalarSummaryStatistics = tensor.flatten(-1) //
         .map(Scalar.class::cast) //
-        .filter(Rescale::isFiniteNumber) //
+        .filter(DeterminateScalarQ::of) //
         .collect(ScalarSummaryStatistics.collector());
     result = _result(tensor, scalarSummaryStatistics);
   }

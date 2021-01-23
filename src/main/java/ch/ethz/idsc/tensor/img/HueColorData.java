@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.img;
 
+import ch.ethz.idsc.tensor.DeterminateScalarQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -17,9 +18,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
   @Override // from ScalarTensorFunction
   public Tensor apply(Scalar scalar) {
-    double value = scalar.number().doubleValue();
-    return Double.isFinite(value) //
-        ? ColorFormat.toVector(Hue.of(value, 1, 1, opacity))
+    return DeterminateScalarQ.of(scalar) //
+        ? ColorFormat.toVector(Hue.of(scalar.number().doubleValue(), 1, 1, opacity))
         : Transparent.rgba();
   }
 

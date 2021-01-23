@@ -71,7 +71,13 @@ public class UnitTest extends TestCase {
     Map<String, Scalar> map = new HashMap<>();
     map.put("some", GaussScalar.of(1, 7));
     UnitSystems.unit(map);
-    map.put("some", GaussScalar.of(0, 7));
+    map.put("zero", GaussScalar.of(0, 7));
+    AssertFail.of(() -> UnitSystems.unit(map));
+  }
+
+  public void testQuantityExponentFail() {
+    Map<String, Scalar> map = new HashMap<>();
+    map.put("some", Quantity.of(1, "r"));
     AssertFail.of(() -> UnitSystems.unit(map));
   }
 
