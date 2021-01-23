@@ -69,6 +69,13 @@ public class SimpleUnitSystem implements UnitSystem {
     return map;
   }
 
+  // helper function
+  private static Scalar requireNumeric(Scalar scalar) {
+    if (scalar instanceof StringScalar)
+      throw TensorRuntimeException.of(scalar);
+    return scalar;
+  }
+
   /***************************************************/
   private final Map<String, Scalar> map;
 
@@ -80,9 +87,11 @@ public class SimpleUnitSystem implements UnitSystem {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof Quantity) {
       Quantity quantity = (Quantity) scalar;
+      Unit unit = quantity.unit();
+      // LONGTERM code is redundant to UnitDimensions
       NavigableMap<String, Scalar> navigableMap = new TreeMap<>();
       Scalar product = null; // avoids to introduce a multiplicative 1
-      for (Entry<String, Scalar> entry : quantity.unit().map().entrySet()) {
+      for (Entry<String, Scalar> entry : unit.map().entrySet()) {
         Scalar lookup = map.get(entry.getKey());
         if (Objects.isNull(lookup)) // in case of base unit, e.g. "m" for SI
           navigableMap.put(entry.getKey(), entry.getValue());
@@ -104,13 +113,6 @@ public class SimpleUnitSystem implements UnitSystem {
   @Override // from UnitSystem
   public Map<String, Scalar> map() {
     return Collections.unmodifiableMap(map);
-  }
-
-  // helper function
-  private static Scalar requireNumeric(Scalar scalar) {
-    if (scalar instanceof StringScalar)
-      throw TensorRuntimeException.of(scalar);
-    return scalar;
   }
 
   @Override

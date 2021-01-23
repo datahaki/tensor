@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.qty;
 import java.io.Serializable;
 import java.util.Objects;
 
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** inspired by
@@ -41,8 +42,7 @@ public class UnitConvert implements Serializable {
    * @param unit
    * @return operator that maps a quantity to the quantity of given unit */
   public ScalarUnaryOperator to(Unit unit) {
-    Unit base = unit.negate();
-    return scalar -> Quantity.of(unitSystem.apply(StaticHelper.multiply(scalar, base)), unit);
+    return new Inner(unit);
   }
 
   /** Example:
@@ -55,5 +55,26 @@ public class UnitConvert implements Serializable {
    * @return operator that maps a quantity to the quantity of given unit */
   public ScalarUnaryOperator to(String string) {
     return to(Unit.of(string));
+  }
+
+  private class Inner implements ScalarUnaryOperator {
+    private static final long serialVersionUID = -6790037071964306179L;
+    private final Unit unit;
+    private final Unit base;
+
+    public Inner(Unit unit) {
+      this.unit = unit;
+      this.base = unit.negate();
+    }
+
+    @Override
+    public Scalar apply(Scalar scalar) {
+      return Quantity.of(unitSystem.apply(StaticHelper.multiply(scalar, base)), unit);
+    }
+
+    @Override
+    public String toString() {
+      return String.format("%s[%s, %s]", UnitConvert.class.getSimpleName(), unitSystem, unit);
+    }
   }
 }

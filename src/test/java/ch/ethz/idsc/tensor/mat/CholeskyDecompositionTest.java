@@ -200,33 +200,37 @@ public class CholeskyDecompositionTest extends TestCase {
   }
 
   public void testRankDeficient() {
+    int n = 7;
+    int _m = 4;
     Distribution distribution = NormalDistribution.standard();
-    Tensor m1 = RandomVariate.of(distribution, 7, 3);
-    Tensor m2 = RandomVariate.of(distribution, 3, 4);
-    Tensor br = RandomVariate.of(distribution, 7);
-    assertEquals(MatrixRank.of(m1), 3);
-    {
-      Tensor lsqr = LeastSquares.usingCholesky(m1, br);
-      Tensor pinv = PseudoInverse.usingCholesky(m1).dot(br);
-      Chop._10.requireClose(lsqr, pinv);
-    }
-    Tensor matrix = m1.dot(m2);
-    assertEquals(MatrixRank.of(matrix), 3);
-    {
-      AssertFail.of(() -> PseudoInverse.usingCholesky(matrix));
-      AssertFail.of(() -> LeastSquares.usingCholesky(matrix, br));
-      Tensor ls1 = LeastSquares.of(matrix, br);
-      Tensor ls2 = PseudoInverse.of(matrix).dot(br);
-      Tolerance.CHOP.requireClose(ls1, ls2);
-    }
-    {
-      Tensor m = Transpose.of(matrix);
-      Tensor b = RandomVariate.of(distribution, 4);
-      AssertFail.of(() -> PseudoInverse.usingCholesky(m));
-      AssertFail.of(() -> LeastSquares.usingCholesky(m, b));
-      Tensor ls1 = LeastSquares.of(m, b);
-      Tensor ls2 = PseudoInverse.of(m).dot(b);
-      Tolerance.CHOP.requireClose(ls1, ls2);
+    for (int r = 1; r < _m; ++r) {
+      Tensor m1 = RandomVariate.of(distribution, n, r);
+      Tensor m2 = RandomVariate.of(distribution, r, _m);
+      Tensor br = RandomVariate.of(distribution, n);
+      assertEquals(MatrixRank.of(m1), r);
+      {
+        Tensor lsqr = LeastSquares.usingCholesky(m1, br);
+        Tensor pinv = PseudoInverse.usingCholesky(m1).dot(br);
+        Chop._10.requireClose(lsqr, pinv);
+      }
+      Tensor matrix = m1.dot(m2);
+      assertEquals(MatrixRank.of(matrix), r);
+      {
+        AssertFail.of(() -> PseudoInverse.usingCholesky(matrix));
+        AssertFail.of(() -> LeastSquares.usingCholesky(matrix, br));
+        Tensor ls1 = LeastSquares.of(matrix, br);
+        Tensor ls2 = PseudoInverse.of(matrix).dot(br);
+        Tolerance.CHOP.requireClose(ls1, ls2);
+      }
+      {
+        Tensor m = Transpose.of(matrix);
+        Tensor b = RandomVariate.of(distribution, _m);
+        AssertFail.of(() -> PseudoInverse.usingCholesky(m));
+        AssertFail.of(() -> LeastSquares.usingCholesky(m, b));
+        Tensor ls1 = LeastSquares.of(m, b);
+        Tensor ls2 = PseudoInverse.of(m).dot(b);
+        Tolerance.CHOP.requireClose(ls1, ls2);
+      }
     }
   }
 }

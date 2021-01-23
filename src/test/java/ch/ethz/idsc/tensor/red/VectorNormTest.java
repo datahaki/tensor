@@ -64,7 +64,8 @@ public class VectorNormTest extends TestCase {
 
   public void testToString() {
     VectorNormInterface vectorNormInterface = VectorNorm.with(3);
-    System.out.println(vectorNormInterface.toString());
+    String string = vectorNormInterface.toString();
+    assertTrue(string.startsWith("VectorNorm["));
   }
 
   public void testNormPFail() {
