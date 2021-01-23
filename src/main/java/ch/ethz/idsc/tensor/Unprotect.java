@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.io.TableBuilder;
+import ch.ethz.idsc.tensor.qty.Quantity;
 
 /** Notice:
  * 
@@ -32,6 +33,7 @@ public enum Unprotect {
     return Tensor.of(Stream.of(tensors));
   }
 
+  /***************************************************/
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param tensor
@@ -53,6 +55,7 @@ public enum Unprotect {
     return list.get(0).length();
   }
 
+  /***************************************************/
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param tensor
@@ -65,5 +68,12 @@ public enum Unprotect {
     if (tensor instanceof UnmodifiableTensor)
       throw TensorRuntimeException.of(tensor);
     return ViewTensor.wrap(tensor);
+  }
+
+  /***************************************************/
+  public static Scalar withoutUnit(Scalar scalar) {
+    return scalar instanceof Quantity //
+        ? ((Quantity) scalar).value()
+        : scalar;
   }
 }

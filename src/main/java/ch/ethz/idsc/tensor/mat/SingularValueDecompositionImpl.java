@@ -50,7 +50,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       initU1(i);
       initU2(i);
     }
-    Chop chop = Chop.below(Norm._1.ofMatrix(Tensors.of(w, r)).multiply(DBL_EPSILON).number().doubleValue());
+    Chop chop = Chop.below(Unprotect.withoutUnit(Norm._1.ofMatrix(Tensors.of(w, r))) //
+        .multiply(DBL_EPSILON) //
+        .number().doubleValue());
     // ---
     v = Array.zeros(cols, cols);
     v.set(_1, cols - 1, cols - 1);
