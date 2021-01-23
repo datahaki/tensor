@@ -61,9 +61,9 @@ public class NdTreeMapTest extends TestCase {
   }
 
   public void testBinCount() {
-    NdTreeMap<Void> ndTreeMap = new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), 2, 6);
+    NdTreeMap<Void> ndTreeMap = new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), 2, 10);
     Distribution distribution = UniformDistribution.unit();
-    for (int count = 0; count < 100; ++count) {
+    for (int count = 0; count < 50; ++count) {
       ndTreeMap.add(RandomVariate.of(distribution, 2), null);
       ndTreeMap.binSize();
     }

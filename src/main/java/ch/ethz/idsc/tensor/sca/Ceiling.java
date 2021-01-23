@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
@@ -32,6 +33,12 @@ public enum Ceiling implements ScalarUnaryOperator {
       return roundingInterface.ceiling();
     }
     throw TensorRuntimeException.of(scalar);
+  }
+
+  /** @param scalar
+   * @return */
+  public static int intValueExact(Scalar scalar) {
+    return Scalars.intValueExact(FUNCTION.apply(scalar));
   }
 
   /** @param tensor

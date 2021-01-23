@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -47,6 +48,7 @@ public class ScalarSummaryStatisticsTest extends TestCase {
     assertEquals(stats.getAverage(), Quantity.of(6, "s"));
     assertEquals(stats.getCount(), 4);
     assertEquals(stats.toString(), "ScalarSummaryStatistics{count=4, sum=24[s], min=3[s], average=6[s], max=11[s]}");
+    assertEquals(stats.getClip(), Clips.interval(Quantity.of(3, "s"), Quantity.of(11, "s")));
   }
 
   public void testCollector() {
@@ -69,6 +71,7 @@ public class ScalarSummaryStatisticsTest extends TestCase {
     assertEquals(stats.getAverage(), null);
     assertEquals(stats.getCount(), 0);
     stats.toString();
+    AssertFail.of(() -> stats.getClip());
   }
 
   public void testEmptyCombine() {

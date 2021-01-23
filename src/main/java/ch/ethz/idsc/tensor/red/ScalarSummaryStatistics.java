@@ -8,6 +8,8 @@ import java.util.stream.Collector;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.sca.Clip;
+import ch.ethz.idsc.tensor.sca.Clips;
 
 /** ScalarSummaryStatistics tracks the sum, minimum, and maximum in a single pass
  * over a stream of {@link Scalar}s. The stream may be processed in parallel.
@@ -100,6 +102,12 @@ public class ScalarSummaryStatistics implements Consumer<Scalar> {
   /** @return number of scalars in stream */
   public long getCount() {
     return count;
+  }
+
+  /** @return clip[min, max]
+   * @throws Exception if stream is empty */
+  public Clip getClip() {
+    return Clips.interval(getMin(), getMax());
   }
 
   @Override // from Object
