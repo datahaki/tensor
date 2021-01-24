@@ -45,6 +45,7 @@ public class VectorNorm implements VectorNormInterface, Serializable {
 
   /***************************************************/
   private final ScalarUnaryOperator p_power;
+  private final Scalar p;
   private final Scalar p_reciprocal;
 
   // constructor also called from SchattenNorm
@@ -52,6 +53,7 @@ public class VectorNorm implements VectorNormInterface, Serializable {
     if (Scalars.lessThan(p, RealScalar.ONE))
       throw TensorRuntimeException.of(p);
     p_power = Power.function(p);
+    this.p = p;
     p_reciprocal = p.reciprocal();
   }
 
@@ -67,6 +69,6 @@ public class VectorNorm implements VectorNormInterface, Serializable {
 
   @Override
   public String toString() {
-    return String.format("%s[1/p=%s]", getClass().getSimpleName(), p_reciprocal);
+    return String.format("%s[p=%s]", getClass().getSimpleName(), p);
   }
 }

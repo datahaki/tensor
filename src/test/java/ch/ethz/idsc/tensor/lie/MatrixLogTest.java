@@ -5,8 +5,11 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -26,8 +29,8 @@ public class MatrixLogTest extends TestCase {
   }
 
   public void testSymmetric() {
-    for (int n = 2; n < 8; ++n) {
-      Distribution distribution = NormalDistribution.of(0, 0.4 / n);
+    for (int n = 1; n < 8; ++n) {
+      Distribution distribution = NormalDistribution.of(0, 0.1 / n);
       Tensor matrix = Symmetrize.of(IdentityMatrix.of(n).add(RandomVariate.of(distribution, n, n)));
       Tensor loq = MatrixLog.ofSymmetric(matrix);
       Tensor los = MatrixLog.of(matrix);
@@ -64,21 +67,32 @@ public class MatrixLogTest extends TestCase {
     AssertFail.of(() -> MatrixLog.of(matrix));
   }
 
-  public void test2x3Fail() {
-    Tensor matrix = IdentityMatrix.of(3).extract(0, 2);
-    assertEquals(matrix.length(), 2);
-    AssertFail.of(() -> MatrixLog.of(matrix));
-  }
-
-  public void test3x4Fail() {
-    Tensor matrix = IdentityMatrix.of(4).extract(0, 3);
-    assertEquals(matrix.length(), 3);
-    AssertFail.of(() -> MatrixLog.of(matrix));
+  public void test1x2Fail() {
+    for (int d = 1; d < 4; ++d) {
+      Tensor matrix = IdentityMatrix.of(d + 1).extract(0, d);
+      assertEquals(matrix.length(), d);
+      AssertFail.of(() -> MatrixLog.of(matrix));
+    }
   }
 
   public void test3x2Fail() {
     Tensor matrix = Transpose.of(IdentityMatrix.of(3).extract(0, 2));
     assertEquals(matrix.length(), 3);
     AssertFail.of(() -> MatrixLog.of(matrix));
+  }
+
+  public void testSeries1p() {
+    MatrixLog.series1p(Array.zeros(3, 3));
+    MatrixLog.series1p(ConstantArray.of(RealScalar.ZERO, 3, 3));
+    AssertFail.of(() -> MatrixLog.series1p(ConstantArray.of(RealScalar.ONE, 3, 3)));
+    AssertFail.of(() -> MatrixLog.series1p(ConstantArray.of(RealScalar.of(1.0), 3, 3)));
+  }
+
+  public void test_of() {
+    AssertFail.of(() -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e20), 3, 3)));
+    AssertFail.of(() -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e100), 3, 3)));
+    AssertFail.of(() -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e200), 3, 3)));
+    AssertFail.of(() -> MatrixLog.of(ConstantArray.of(DoubleScalar.POSITIVE_INFINITY, 3, 3)));
+    AssertFail.of(() -> MatrixLog.of(ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3)));
   }
 }

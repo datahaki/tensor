@@ -97,10 +97,10 @@ public enum Transpose {
    * @throws Exception */
   public static Tensor nonArray(Tensor tensor, int... sigma) {
     Tensor _sigma = Tensors.vectorInt(sigma);
-    if (!Sort.of(_sigma).equals(Range.of(0, sigma.length)))
-      throw TensorRuntimeException.of(_sigma); // sigma does not encode a permutation
-    return Array.of(list -> tensor.get(permute(list, sigma)), //
-        inverse(Dimensions.of(tensor), _sigma));
+    if (Sort.of(_sigma).equals(Range.of(0, sigma.length)))
+      return Array.of(list -> tensor.get(permute(list, sigma)), //
+          inverse(Dimensions.of(tensor), _sigma));
+    throw TensorRuntimeException.of(_sigma); // sigma does not encode a permutation
   }
 
   // helper function

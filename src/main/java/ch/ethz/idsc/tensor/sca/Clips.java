@@ -4,6 +4,8 @@ package ch.ethz.idsc.tensor.sca;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.red.Max;
+import ch.ethz.idsc.tensor.red.Min;
 
 /** factory for the creation of {@link Clip} */
 public enum Clips {
@@ -80,5 +82,27 @@ public enum Clips {
   /** @return function that clips a scalar to the interval [-1, 1] */
   public static Clip absoluteOne() {
     return ABSOLUTE_ONE;
+  }
+
+  /***************************************************/
+  /** @param clip1
+   * @param clip2
+   * @return [max(clip1.min, clip2.min), min(clip1.max, clip2.max)], i.e.
+   * the largest interval that is covered by both input intervals
+   * @throws Exception if resulting intersection is empty */
+  public static Clip intersection(Clip clip1, Clip clip2) {
+    return Clips.interval( //
+        Max.of(clip1.min(), clip2.min()), //
+        Min.of(clip1.max(), clip2.max()));
+  }
+
+  /** @param clip1
+   * @param clip2
+   * @return [min(clip1.min, clip2.min), max(clip1.max, clip2.max)], i.e.
+   * the smallest interval that covers both input intervals */
+  public static Clip cover(Clip clip1, Clip clip2) {
+    return Clips.interval( //
+        Min.of(clip1.min(), clip2.min()), //
+        Max.of(clip1.max(), clip2.max()));
   }
 }

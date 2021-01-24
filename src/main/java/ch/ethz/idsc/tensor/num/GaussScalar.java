@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.PowerInterface;
 import ch.ethz.idsc.tensor.sca.RoundingInterface;
 import ch.ethz.idsc.tensor.sca.SignInterface;
@@ -65,11 +66,13 @@ public class GaussScalar extends AbstractScalar implements //
   }
 
   @Override // from Scalar
-  public GaussScalar multiply(Scalar scalar) {
+  public Scalar multiply(Scalar scalar) {
     if (scalar instanceof GaussScalar) {
       GaussScalar gaussScalar = (GaussScalar) scalar;
       return in(value.multiply(gaussScalar.value), prime);
     }
+    if (scalar instanceof Quantity)
+      return scalar.multiply(this);
     throw TensorRuntimeException.of(this, scalar);
   }
 

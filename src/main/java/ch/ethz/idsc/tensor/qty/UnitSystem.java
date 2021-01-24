@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/UnitSystem.html">UnitSystem</a> */
 public interface UnitSystem extends ScalarUnaryOperator {
   /** @return international system of units, metric system with the base units:
-   * "A", "cd", "s", "K", "mol", "kg", "m" */
+   * "A", "cd", "K", "kg", "m", "mol", "s" */
   static UnitSystem SI() {
     return SiUnitSystem.INSTANCE.unitSystem;
   }

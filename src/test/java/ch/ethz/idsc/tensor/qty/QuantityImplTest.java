@@ -34,6 +34,11 @@ public class QuantityImplTest extends TestCase {
     AssertFail.of(() -> Scalars.intValueExact(scalar));
   }
 
+  public void testNumberFail() {
+    Scalar scalar = Quantity.of(11, "m*s");
+    AssertFail.of(() -> scalar.number());
+  }
+
   public void testEquals() {
     assertFalse(Quantity.of(10, "m").equals("s"));
     assertFalse(Quantity.of(10, "m").equals(Quantity.of(2, "m")));

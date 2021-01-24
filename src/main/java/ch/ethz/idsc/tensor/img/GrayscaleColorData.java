@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.img;
 
+import ch.ethz.idsc.tensor.DeterminateScalarQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -19,9 +20,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
   @Override // from ScalarTensorFunction
   public Tensor apply(Scalar scalar) {
-    double value = scalar.number().doubleValue();
-    return Double.isFinite(value) //
-        ? tensors[toInt(value)].copy()
+    return DeterminateScalarQ.of(scalar) //
+        ? tensors[toInt(scalar.number().doubleValue())].copy()
         : Transparent.rgba();
   }
 

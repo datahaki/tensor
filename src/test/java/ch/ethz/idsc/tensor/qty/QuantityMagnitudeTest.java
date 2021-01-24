@@ -119,6 +119,9 @@ public class QuantityMagnitudeTest extends TestCase {
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("%");
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(2));
     assertEquals(scalar, RealScalar.of(200));
+    String string = scalarUnaryOperator.toString();
+    assertTrue(string.startsWith("QuantityMagnitude"));
+    assertTrue(string.contains("%"));
   }
 
   public void testVolume() {

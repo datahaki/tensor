@@ -17,16 +17,18 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /** the query {@link NdTreeMap#buildCluster(NdCenterInterface, int)}
  * can be used in parallel. */
+// LONGTERM consider to unsynchronize this implementation
 public class NdTreeMap<V> implements NdMap<V>, Serializable {
   private static final long serialVersionUID = -7670997204728764256L;
   // ---
-  private final int maxDensity;
-  private final int maxDepth;
   private final Tensor global_lBounds;
   private final Tensor global_uBounds;
+  private final int maxDensity;
+  private final int maxDepth;
   // ---
   // reused during adding as well as searching:
   private int size;
@@ -41,9 +43,10 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
    * 
    * @param lbounds smallest coordinates of points to be added
    * @param ubounds greatest coordinates of points to be added
-   * @param maxDensity is the maximum queue size of leaf nodes, except
+   * @param maxDensity positive is the maximum queue size of leaf nodes, except
    * for leaf nodes with maxDepth, which have unlimited queue size.
-   * @param maxDepth 16 is reasonable for most applications */
+   * @param maxDepth 16 is reasonable for most applications
+   * @throws Exception if maxDensity is not strictly positive */
   public NdTreeMap(Tensor lbounds, Tensor ubounds, int maxDensity, int maxDepth) {
     VectorQ.require(lbounds);
     VectorQ.require(ubounds);
@@ -53,17 +56,17 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       throw TensorRuntimeException.of(lbounds, ubounds);
     global_lBounds = lbounds.unmodifiable();
     global_uBounds = ubounds.unmodifiable();
-    this.maxDensity = maxDensity;
-    this.maxDepth = maxDepth;
+    this.maxDensity = Integers.requirePositiveOrZero(maxDensity);
+    this.maxDepth = Integers.requirePositive(maxDepth);
     clear();
   }
 
   /** @param location vector with same length as lbounds and ubounds
-   * @param value */
+   * @param value
+   * @throws Exception if given location is not a vector of required length */
   @Override // from NdMap
   public void add(Tensor location, V value) {
-    VectorQ.requireLength(location, global_lBounds.length());
-    add(new NdPair<>(location, value));
+    add(new NdPair<>(VectorQ.requireLength(location, global_lBounds.length()), value));
   }
 
   private synchronized void add(NdPair<V> ndPair) {
@@ -103,20 +106,11 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
    * 
    * @return */
   public Tensor binSize() {
-    return binSize(root);
-  }
-
-  private Tensor binSize(Node node) {
-    if (Objects.isNull(node.queue))
-      return Tensors.of( //
-          Objects.isNull(node.lChild) ? RealScalar.ZERO : binSize(node.lChild), //
-          Objects.isNull(node.rChild) ? RealScalar.ZERO : binSize(node.rChild) //
-      );
-    return RealScalar.of(node.queue.size());
+    return root.binSize();
   }
 
   private class Node implements Serializable {
-    private static final long serialVersionUID = 117599167189053278L;
+    private static final long serialVersionUID = 4715375989998529775L;
     // ---
     private final int depth;
     private Node lChild;
@@ -125,11 +119,24 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     private Queue<NdPair<V>> queue = new ArrayDeque<>();
 
     private Node(int depth) {
-      this.depth = depth;
+      // check is for validation of implementation
+      this.depth = Integers.requirePositive(depth);
+    }
+
+    private Node createChild() {
+      return new Node(depth - 1);
     }
 
     private boolean isInternal() {
       return Objects.isNull(queue);
+    }
+
+    private Tensor binSize() {
+      return isInternal() //
+          ? Tensors.of( //
+              Objects.isNull(lChild) ? RealScalar.ZERO : lChild.binSize(), //
+              Objects.isNull(rChild) ? RealScalar.ZERO : rChild.binSize())
+          : RealScalar.of(queue.size());
     }
 
     private int dimension() {
@@ -144,13 +151,13 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
         if (Scalars.lessThan(location.Get(dimension), median)) {
           ndBounds.uBounds.set(median, dimension);
           if (Objects.isNull(lChild))
-            lChild = new Node(depth - 1);
+            lChild = createChild();
           lChild.add(ndPair, ndBounds);
           return;
         }
         ndBounds.lBounds.set(median, dimension);
         if (Objects.isNull(rChild))
-          rChild = new Node(depth - 1);
+          rChild = createChild();
         rChild.add(ndPair, ndBounds);
       } else //
       if (queue.size() < maxDensity)
@@ -167,11 +174,11 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
         for (NdPair<V> entry : queue)
           if (Scalars.lessThan(entry.location.Get(dimension), median)) {
             if (Objects.isNull(lChild))
-              lChild = new Node(depth - 1);
+              lChild = createChild();
             lChild.queue.add(entry);
           } else {
             if (Objects.isNull(rChild))
-              rChild = new Node(depth - 1);
+              rChild = createChild();
             rChild.queue.add(entry);
           }
         queue = null;

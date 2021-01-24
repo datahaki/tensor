@@ -19,6 +19,7 @@ import junit.framework.TestCase;
 
 public class JacobiMethodTest extends TestCase {
   private static void checkEquation(Tensor matrix, Eigensystem eigensystem) {
+    assertTrue(eigensystem.toString().startsWith("Eigensystem["));
     Tensor vectors = eigensystem.vectors();
     Tensor values = eigensystem.values();
     {

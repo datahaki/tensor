@@ -43,4 +43,15 @@ public class UnitImplTest extends TestCase {
     m2.put("m", RealScalar.of(2));
     Stream.concat(m1.entrySet().stream(), m2.entrySet().stream()).collect(UnitImpl.NEGATION);
   }
+
+  public void testEqualsMerged() {
+    Unit unit = Unit.of("m^2*m^-1*kg*m^1");
+    assertEquals(unit, Unit.of("kg****m ** m*  "));
+    assertEquals(unit.toString(), "kg*m^2");
+  }
+
+  public void testEqualsNull() {
+    assertFalse(Unit.ONE.equals(null));
+    assertFalse(Unit.of("m").equals(null));
+  }
 }

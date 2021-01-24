@@ -2,9 +2,11 @@
 package ch.ethz.idsc.tensor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.io.TableBuilder;
+import ch.ethz.idsc.tensor.qty.Quantity;
 
 /** Notice:
  * 
@@ -32,6 +34,7 @@ public enum Unprotect {
     return Tensor.of(Stream.of(tensors));
   }
 
+  /***************************************************/
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param tensor
@@ -53,6 +56,7 @@ public enum Unprotect {
     return list.get(0).length();
   }
 
+  /***************************************************/
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param tensor
@@ -65,5 +69,21 @@ public enum Unprotect {
     if (tensor instanceof UnmodifiableTensor)
       throw TensorRuntimeException.of(tensor);
     return ViewTensor.wrap(tensor);
+  }
+
+  /***************************************************/
+  /** Examples:
+   * <pre>
+   * Unprotect.withoutUnit(3.1415926) == 3.1415926
+   * Unprotect.withoutUnit(1 + 2 * I) == 1 + 2 * I
+   * Unprotect.withoutUnit(Quantity[3 / 4, "km*h^-1"]) == 3 / 4
+   * </pre>
+   * 
+   * @param scalar non-null
+   * @return */
+  public static Scalar withoutUnit(Scalar scalar) {
+    return scalar instanceof Quantity //
+        ? ((Quantity) scalar).value()
+        : Objects.requireNonNull(scalar);
   }
 }

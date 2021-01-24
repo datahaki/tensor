@@ -38,9 +38,16 @@ public class RoundTest extends TestCase {
 
   public void testRational1() {
     Scalar s = RationalScalar.of(234534584545L, 13423656767L); // 17.4717
+    assertEquals(Round.intValueExact(s), 17);
+    assertEquals(Round.longValueExact(s), 17);
     Scalar r = Round.of(s);
     assertEquals(r, RealScalar.of(17));
     assertTrue(r instanceof RationalScalar);
+  }
+
+  public void testIntExactValueFail() {
+    AssertFail.of(() -> Round.intValueExact(Quantity.of(1.2, "h")));
+    AssertFail.of(() -> Round.longValueExact(Quantity.of(2.3, "h*s")));
   }
 
   public void testRational2() {

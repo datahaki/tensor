@@ -21,45 +21,59 @@ import junit.framework.TestCase;
 
 public class NdTreeMapTest extends TestCase {
   public void testSome() {
-    NdMap<String> ndTreeMap = //
-        new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 10);
-    assertTrue(ndTreeMap.isEmpty());
-    ndTreeMap.add(Tensors.vector(1, 1), "d1");
-    assertFalse(ndTreeMap.isEmpty());
-    ndTreeMap.add(Tensors.vector(1, 0), "d2");
-    ndTreeMap.add(Tensors.vector(0, 1), "d3");
-    ndTreeMap.add(Tensors.vector(1, 1), "d4");
-    ndTreeMap.add(Tensors.vector(0.1, 0.1), "d5");
-    ndTreeMap.add(Tensors.vector(6, 7), "d6");
-    {
-      Tensor center = Tensors.vector(0, 0);
-      NdCenterInterface distancer = EuclideanNdCenter.of(center);
-      NdCluster<String> cluster = ndTreeMap.buildCluster(distancer, 1);
-      assertTrue(cluster.collection().iterator().next().value().equals("d5"));
-    }
-    {
-      Tensor center = Tensors.vector(5, 5);
-      NdCenterInterface distancer = EuclideanNdCenter.of(center);
-      NdCluster<String> cluster = ndTreeMap.buildCluster(distancer, 1);
-      assertTrue(cluster.collection().iterator().next().value().equals("d6"));
-    }
-    {
-      Tensor center = Tensors.vector(1.1, 0.9);
-      NdCenterInterface distancer = EuclideanNdCenter.of(center);
-      NdCluster<String> cluster = ndTreeMap.buildCluster(distancer, 2);
-      assertEquals(cluster.size(), 2);
-      List<String> list = Arrays.asList("d1", "d4");
-      for (NdEntry<String> point : cluster.collection())
-        assertTrue(list.contains(point.value()));
+    for (int n = 0; n < 10; ++n)
+      for (int d = 1; d < 4; ++d) {
+        NdTreeMap<String> ndTreeMap = //
+            new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), n, d);
+        assertTrue(ndTreeMap.isEmpty());
+        ndTreeMap.binSize();
+        ndTreeMap.add(Tensors.vector(1, 1), "d1");
+        assertFalse(ndTreeMap.isEmpty());
+        ndTreeMap.add(Tensors.vector(1, 0), "d2");
+        ndTreeMap.add(Tensors.vector(0, 1), "d3");
+        ndTreeMap.binSize();
+        ndTreeMap.add(Tensors.vector(1, 1), "d4");
+        ndTreeMap.add(Tensors.vector(0.1, 0.1), "d5");
+        ndTreeMap.add(Tensors.vector(6, 7), "d6");
+        ndTreeMap.binSize();
+        {
+          Tensor center = Tensors.vector(0, 0);
+          NdCenterInterface distancer = EuclideanNdCenter.of(center);
+          NdCluster<String> cluster = ndTreeMap.buildCluster(distancer, 1);
+          assertTrue(cluster.collection().iterator().next().value().equals("d5"));
+        }
+        {
+          Tensor center = Tensors.vector(5, 5);
+          NdCenterInterface distancer = EuclideanNdCenter.of(center);
+          NdCluster<String> cluster = ndTreeMap.buildCluster(distancer, 1);
+          assertTrue(cluster.collection().iterator().next().value().equals("d6"));
+        }
+        {
+          Tensor center = Tensors.vector(1.1, 0.9);
+          NdCenterInterface distancer = EuclideanNdCenter.of(center);
+          NdCluster<String> cluster = ndTreeMap.buildCluster(distancer, 2);
+          assertEquals(cluster.size(), 2);
+          List<String> list = Arrays.asList("d1", "d4");
+          for (NdEntry<String> point : cluster.collection())
+            assertTrue(list.contains(point.value()));
+        }
+      }
+  }
+
+  public void testBinCount() {
+    NdTreeMap<Void> ndTreeMap = new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), 2, 10);
+    Distribution distribution = UniformDistribution.unit();
+    for (int count = 0; count < 50; ++count) {
+      ndTreeMap.add(RandomVariate.of(distribution, 2), null);
+      ndTreeMap.binSize();
     }
   }
 
   public void testParallel() throws InterruptedException {
-    NdMap<Void> ndTreeMap = new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), 13, 10);
+    NdTreeMap<Void> ndTreeMap = new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), 2, 6);
     Distribution distribution = UniformDistribution.unit();
-    for (int count = 0; count < 1000; ++count) {
+    for (int count = 0; count < 1000; ++count)
       ndTreeMap.add(RandomVariate.of(distribution, 2), null);
-    }
     for (int count = 0; count < 20; ++count) {
       // final int ficount = count;
       new Thread(new Runnable() {
@@ -108,9 +122,9 @@ public class NdTreeMapTest extends TestCase {
 
   public void testCornerCase() {
     NdMap<String> ndTreeMap = //
-        new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 2);
+        new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 3, 2);
     Tensor location = Array.zeros(2);
-    for (int c = 0; c < 400; ++c)
+    for (int c = 0; c < 100; ++c)
       ndTreeMap.add(location, "s" + c);
   }
 
@@ -118,6 +132,7 @@ public class NdTreeMapTest extends TestCase {
     final int n = 10;
     NdTreeMap<String> ndTreeMap = //
         new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), n, 26);
+    ndTreeMap.binSize();
     for (int c = 0; c < 800; ++c)
       ndTreeMap.add(RandomVariate.of(UniformDistribution.unit(), 2), "s" + c);
     Tensor flatten = Flatten.of(ndTreeMap.binSize());
@@ -134,6 +149,10 @@ public class NdTreeMapTest extends TestCase {
       Tensor location = RandomVariate.of(UniformDistribution.unit(), 2);
       ndTreeMap.add(location, "s" + c);
     }
+  }
+
+  public void testDensityFail() {
+    AssertFail.of(() -> new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), -1, 26));
   }
 
   public void testFail0() {

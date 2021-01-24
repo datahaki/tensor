@@ -4,13 +4,12 @@ package ch.ethz.idsc.tensor.lie;
 import java.util.LinkedList;
 import java.util.List;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.Unprotect;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -35,7 +34,7 @@ public enum MatrixLog {
   ;
   private static final int MAX_EXPONENT = 20;
   private static final Scalar RHO_MAX = RealScalar.of(0.6);
-  private static final int MAX_ITERATIONS = 100;
+  private static final int MAX_ITERATIONS = 96;
 
   /** Hint: currently only matrices of dimensions 2 x 2 are supported
    * as well as symmetric positive definite matrices
@@ -44,17 +43,23 @@ public enum MatrixLog {
    * @return
    * @throws Exception if computation is not supported for given matrix */
   public static Tensor of(Tensor matrix) {
-    int n = matrix.length();
-    if (n == 2 && Unprotect.dimension1(matrix) == 2)
+    switch (matrix.length()) {
+    case 1:
+      return MatrixLog1.of(matrix);
+    case 2:
       return MatrixLog2.of(matrix);
-    // ---
-    Tensor id = StaticHelper.IDENTITY_MATRIX.apply(n);
+    }
+    return _of(matrix);
+  }
+
+  /* package */ static Tensor _of(Tensor matrix) {
+    Tensor id = StaticHelper.IDENTITY_MATRIX.apply(matrix.length());
     Tensor rem = matrix.subtract(id);
     List<DenmanBeaversDet> deque = new LinkedList<>();
     for (int count = 0; count < MAX_EXPONENT; ++count) {
       Scalar rho_max = Norm2Bound.ofMatrix(rem);
       if (Scalars.lessThan(rho_max, RHO_MAX)) {
-        Tensor sum = Array.zeros(n, n);
+        Tensor sum = matrix.map(Scalar::zero);
         Scalar factor = RealScalar.ONE;
         for (DenmanBeaversDet denmanBeaversDet : deque) {
           sum = sum.add(denmanBeaversDet.mk().subtract(id).multiply(factor));
@@ -94,7 +99,7 @@ public enum MatrixLog {
     for (int k = 2; k < MAX_ITERATIONS; ++k) {
       nxt = nxt.dot(x);
       Tensor prv = sum;
-      sum = sum.add(nxt.divide(RealScalar.of(k % 2 == 0 ? -k : k)));
+      sum = sum.add(nxt.divide(DoubleScalar.of(k % 2 == 0 ? -k : k)));
       if (Chop.NONE.isClose(sum, prv))
         return sum;
     }

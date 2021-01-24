@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.red;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.OrderedQ;
 import ch.ethz.idsc.tensor.alg.Sort;
@@ -72,6 +71,6 @@ public class Quantile implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     return tensor.Get(scalar.equals(RealScalar.ZERO) //
         ? 0
-        : Scalars.intValueExact(Ceiling.FUNCTION.apply(scalar.multiply(length))) - 1);
+        : Ceiling.intValueExact(scalar.multiply(length)) - 1);
   }
 }

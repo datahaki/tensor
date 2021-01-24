@@ -3,9 +3,11 @@ package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.qty.Quantity;
 
 /** Examples:
  * <pre>
@@ -32,6 +34,31 @@ public enum Floor implements ScalarUnaryOperator {
       return roundingInterface.floor();
     }
     throw TensorRuntimeException.of(scalar);
+  }
+
+  /** Examples:
+   * <pre>
+   * Floor[+4.0] == +4
+   * Floor[+4.2] == +4
+   * Floor[+4.9] == +4
+   * Floor[-7.2] == -8
+   * </pre>
+   * 
+   * @param scalar
+   * @return
+   * @throws Exception if output is outside encodable range
+   * {@link Integer#MIN_VALUE} and {@link Integer#MAX_VALUE}
+   * @throws Exception if input scalar is instance of {@link Quantity} */
+  public static int intValueExact(Scalar scalar) {
+    return Scalars.intValueExact(FUNCTION.apply(scalar));
+  }
+
+  /** see documentation {@link #intValueExact(Scalar)}
+   * 
+   * @param scalar
+   * @return */
+  public static long longValueExact(Scalar scalar) {
+    return Scalars.longValueExact(FUNCTION.apply(scalar));
   }
 
   /** @param tensor

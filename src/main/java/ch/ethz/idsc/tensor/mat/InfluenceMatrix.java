@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * https://en.wikipedia.org/wiki/Projection_matrix
  * https://en.wikipedia.org/wiki/Proofs_involving_the_Moore%E2%80%93Penrose_inverse */
 public class InfluenceMatrix implements Serializable {
-  private static final long serialVersionUID = 6217090276147479246L;
+  private static final long serialVersionUID = 9022334408840932027L;
 
   /** @param design matrix
    * @return */

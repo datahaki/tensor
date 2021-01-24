@@ -5,7 +5,9 @@ import java.util.Map;
 
 import ch.ethz.idsc.tensor.Scalar;
 
-/** implementations are immutable */
+/** An instance of {@link Unit} is immutable.
+ * 
+ * Two instances of {@link Unit} are equal if their map()s are equal. */
 public interface Unit {
   /** Example: cd*m*s */
   static final String JOIN_DELIMITER = "*";

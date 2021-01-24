@@ -27,9 +27,9 @@ public enum LinearProgramming {
    * @return x >= 0 that minimizes c.x subject to m.x == b */
   public static Tensor minEquals(Tensor c, Tensor m, Tensor b, SimplexPivot simplexPivot) {
     Tensor x = SimplexMethod.of(c.unmodifiable(), m.unmodifiable(), b.unmodifiable(), simplexPivot);
-    if (!isFeasible(m, x, b))
-      throw TensorRuntimeException.of(c, m, x, b);
-    return x;
+    if (isFeasible(m, x, b))
+      return x;
+    throw TensorRuntimeException.of(c, m, x, b);
   }
 
   /** @param c
@@ -61,9 +61,9 @@ public enum LinearProgramming {
     Tensor meq = Join.of(1, m, IdentityMatrix.of(m.length()));
     Tensor xeq = minEquals(ceq, meq, b);
     Tensor x = xeq.extract(0, c.length());
-    if (!isFeasible(m, x, b))
-      throw TensorRuntimeException.of(c, m, x, b);
-    return x;
+    if (isFeasible(m, x, b))
+      return x;
+    throw TensorRuntimeException.of(c, m, x, b);
   }
 
   /** @param c

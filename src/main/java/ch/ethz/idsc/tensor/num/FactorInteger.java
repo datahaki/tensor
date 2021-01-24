@@ -40,7 +40,7 @@ public class FactorInteger {
 
   private void recur(BigInteger n) {
     if (ProbablePrimes.isMember(n))
-      map.put(n, map.containsKey(n) ? map.get(n) + 1 : 1);
+      map.merge(n, 1, Math::addExact);
     else {
       BigInteger d = divisor(n);
       recur(d);

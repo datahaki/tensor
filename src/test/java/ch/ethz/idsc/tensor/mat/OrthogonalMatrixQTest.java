@@ -1,10 +1,12 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -28,6 +30,7 @@ public class OrthogonalMatrixQTest extends TestCase {
     assertFalse(OrthogonalMatrixQ.of(Tensors.vector(1, 0, 0)));
     assertFalse(OrthogonalMatrixQ.of(Tensors.vector(1, 0, 2)));
     assertFalse(OrthogonalMatrixQ.of(LeviCivitaTensor.of(3)));
+    assertFalse(OrthogonalMatrixQ.of(ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3)));
   }
 
   public void testRequireChop() {

@@ -9,7 +9,6 @@ import java.util.TreeMap;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -24,6 +23,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
    * scalar value is never zero */
   private final NavigableMap<String, Scalar> navigableMap;
 
+  /** @param navigableMap */
   public UnitImpl(NavigableMap<String, Scalar> navigableMap) {
     this.navigableMap = navigableMap;
   }
@@ -36,33 +36,22 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
   @Override // from Unit
   public Unit add(Unit unit) {
     NavigableMap<String, Scalar> map = new TreeMap<>(navigableMap);
-    for (Entry<String, Scalar> entry : unit.map().entrySet()) {
-      String key = entry.getKey();
-      Scalar value = entry.getValue();
-      if (map.containsKey(key)) {
-        Scalar sum = map.get(key).add(value);
-        if (Scalars.isZero(sum))
-          map.remove(key); // exponents cancel out
-        else
-          map.put(key, sum); // exponent is updated
-      } else
-        map.put(key, value); // unit is introduced
-    }
+    for (Entry<String, Scalar> entry : unit.map().entrySet())
+      StaticHelper.merge(map, entry.getKey(), entry.getValue()); // exponent is guaranteed to be non-zero
     return new UnitImpl(map);
   }
 
   @Override // from Unit
   public Unit multiply(Scalar factor) {
-    if (factor instanceof RealScalar) {
-      NavigableMap<String, Scalar> map = new TreeMap<>();
-      for (Entry<String, Scalar> entry : navigableMap.entrySet()) {
-        Scalar value = entry.getValue().multiply(factor);
-        if (Scalars.nonZero(value))
-          map.put(entry.getKey(), value);
-      }
-      return new UnitImpl(map);
+    if (factor instanceof Quantity)
+      throw TensorRuntimeException.of(factor);
+    NavigableMap<String, Scalar> map = new TreeMap<>();
+    for (Entry<String, Scalar> entry : navigableMap.entrySet()) {
+      Scalar value = entry.getValue().multiply(factor);
+      if (Scalars.nonZero(value))
+        map.put(entry.getKey(), value);
     }
-    throw TensorRuntimeException.of(factor);
+    return new UnitImpl(map);
   }
 
   @Override // from Unit

@@ -2,20 +2,22 @@
 package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.num.Pi;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DeterminateScalarQTest extends TestCase {
-  public void testSimple() {
+  public void testTrue() {
     assertTrue(DeterminateScalarQ.of(Pi.HALF));
     assertTrue(DeterminateScalarQ.of(RationalScalar.HALF));
     assertTrue(DeterminateScalarQ.of(Scalars.fromString("2+3*I")));
     assertTrue(DeterminateScalarQ.of(Scalars.fromString("2+3.4*I")));
     assertTrue(DeterminateScalarQ.of(Scalars.fromString("2+3.4*I[s^3]")));
     assertTrue(DeterminateScalarQ.of(Scalars.fromString("8.2+3.3*I[m^2]")));
+    assertTrue(DeterminateScalarQ.of(Quantity.of(Pi.VALUE, "kg")));
   }
 
-  public void testNope() {
+  public void testFalse() {
     assertFalse(DeterminateScalarQ.of(DoubleScalar.POSITIVE_INFINITY));
     assertFalse(DeterminateScalarQ.of(DoubleScalar.NEGATIVE_INFINITY));
     assertFalse(DeterminateScalarQ.of(DoubleScalar.INDETERMINATE));
@@ -23,6 +25,9 @@ public class DeterminateScalarQTest extends TestCase {
     assertFalse(DeterminateScalarQ.of(Scalars.fromString("8.2+NaN*I[m^2]")));
     assertFalse(DeterminateScalarQ.of(Scalars.fromString("NaN+2*I[m*s]")));
     assertFalse(DeterminateScalarQ.of(Scalars.fromString("NaN+NaN*I[m*s]")));
+    assertFalse(DeterminateScalarQ.of(Quantity.of(DoubleScalar.POSITIVE_INFINITY, "s")));
+    assertFalse(DeterminateScalarQ.of(Quantity.of(DoubleScalar.NEGATIVE_INFINITY, "N")));
+    assertFalse(DeterminateScalarQ.of(Quantity.of(DoubleScalar.INDETERMINATE, "m")));
   }
 
   public void testComplexBranching() {
@@ -35,11 +40,11 @@ public class DeterminateScalarQTest extends TestCase {
     assertFalse(DeterminateScalarQ.of(ComplexScalar.of(Double.NaN, Double.NaN)));
   }
 
-  public void testSome() {
-    assertEquals(Scalars.fromString("NaN+2*I[m*s]").toString(), "NaN+2*I[m*s]");
-    // Scalar scalar = Scalars.fromString("8.2+NaN*I[m^2]");
-    // System.out.println(scalar);
-    // assertEquals(Scalars.fromString("8.2+NaN*I[m^2]").toString(), "8.2+NaN*I[m^2]");
+  public void testInvariance() {
+    Scalar scalar = Scalars.fromString("NaN+2*I[m*s]");
+    assertEquals(scalar.toString(), "NaN+2*I[m*s]");
+    assertTrue(scalar instanceof Quantity);
+    AssertFail.of(() -> DeterminateScalarQ.require(scalar));
   }
 
   public void testRequireThrow() {

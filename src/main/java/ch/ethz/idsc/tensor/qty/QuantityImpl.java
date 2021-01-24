@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.AbstractScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -108,7 +107,13 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from Scalar
   public Number number() {
-    return value.number();
+    /* extracting the value of a Quantity to a primitive goes against the
+     * spirit of using units in the first place.
+     * 
+     * instead, use
+     * scalar -> QuantityMagnitude.SI().in(unit).apply(scalar).number()
+     * where unit is the desired reference for instance "kW*h^-1" */
+    throw TensorRuntimeException.of(this);
   }
 
   @Override // from Scalar
@@ -139,7 +144,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    return of(AbsSquared.FUNCTION.apply(value), unit.multiply(RealScalar.TWO));
+    return of(AbsSquared.FUNCTION.apply(value), unit.add(unit));
   }
 
   @Override // from ArcTanInterface

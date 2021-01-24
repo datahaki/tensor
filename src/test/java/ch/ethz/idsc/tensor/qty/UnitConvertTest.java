@@ -95,6 +95,12 @@ public class UnitConvertTest extends TestCase {
     Chop._05.requireClose(scalar, Quantity.of(50, "%"));
   }
 
+  public void testToString() {
+    String string = UnitConvert.SI().to("abc*h^-3").toString();
+    assertTrue(string.startsWith("UnitConvert"));
+    assertTrue(string.contains("abc*h^-3"));
+  }
+
   public void testFail() {
     Scalar mass = Quantity.of(200, "g"); // gram
     Scalar a = Quantity.of(981, "cm*s^-2");

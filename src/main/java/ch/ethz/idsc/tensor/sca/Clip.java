@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.qty.Quantity;
 
-/** Clip encodes a closed interval in the ordered set of real numbers.
+/** Clip encodes a non-empty, closed interval in an ordered set of scalars.
  * 
  * <p>Example:
  * <pre>

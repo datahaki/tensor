@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.sca.Abs;
 
 public enum Pivots implements Pivot {
@@ -18,10 +18,10 @@ public enum Pivots implements Pivot {
   ARGMAX_ABS {
     @Override // from Pivot
     public int get(int row, int col, int[] ind, Tensor[] lhs) {
-      Scalar max = value(Abs.FUNCTION.apply(lhs[ind[row]].Get(col)));
+      Scalar max = Unprotect.withoutUnit(Abs.FUNCTION.apply(lhs[ind[row]].Get(col)));
       int arg = row;
       for (int i = row + 1; i < ind.length; ++i) {
-        Scalar cmp = Abs.FUNCTION.apply(value(lhs[ind[i]].Get(col)));
+        Scalar cmp = Abs.FUNCTION.apply(Unprotect.withoutUnit(lhs[ind[i]].Get(col)));
         if (Scalars.lessThan(max, cmp)) {
           max = cmp;
           arg = i;
@@ -41,10 +41,4 @@ public enum Pivots implements Pivot {
           .findFirst().orElse(row);
     }
   };
-
-  private static Scalar value(Scalar scalar) {
-    return scalar instanceof Quantity //
-        ? ((Quantity) scalar).value()
-        : scalar;
-  }
 }

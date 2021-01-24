@@ -6,6 +6,7 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -20,6 +21,7 @@ import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -79,6 +81,16 @@ public class QuantileTest extends TestCase {
     Tensor quantile = weight.map(scalarUnaryOperator);
     Scalar maxError = Norm.INFINITY.between(quantile, weight);
     assertTrue(Scalars.lessThan(maxError, RealScalar.of(0.125)));
+  }
+
+  public void testDistribution() {
+    ScalarUnaryOperator suo = Quantile.of(UniformDistribution.of(5, 10));
+    AssertFail.of(() -> suo.apply(RationalScalar.of(-1, 5)));
+    assertEquals(suo.apply(RationalScalar.of(0, 5)), RealScalar.of(5));
+    assertEquals(suo.apply(RationalScalar.of(1, 5)), RealScalar.of(6));
+    assertEquals(suo.apply(RationalScalar.of(2, 5)), RealScalar.of(7));
+    assertEquals(suo.apply(RationalScalar.of(5, 5)), RealScalar.of(10));
+    AssertFail.of(() -> suo.apply(RationalScalar.of(+6, 5)));
   }
 
   public void testEmptyFail() {

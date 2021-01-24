@@ -19,6 +19,7 @@ import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.mat.Pivots;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.ArgMax;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Floor;
@@ -72,6 +73,14 @@ public class GaussScalarTest extends TestCase {
     Scalar a = GaussScalar.of(2, 7);
     Scalar b = GaussScalar.of(3, 7);
     assertEquals(GaussScalar.of(-2, 7), a.add(b));
+  }
+
+  public void testMultiplyQuantity() {
+    Scalar a = GaussScalar.of(4, 13);
+    Scalar b = Quantity.of(GaussScalar.of(7, 13), "some");
+    Scalar ab = a.multiply(b);
+    Scalar ba = b.multiply(a);
+    assertEquals(ab, ba);
   }
 
   public void testSqrt() {

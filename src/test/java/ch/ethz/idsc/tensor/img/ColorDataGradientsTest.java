@@ -30,8 +30,9 @@ public class ColorDataGradientsTest extends TestCase {
 
   public void testQuantity() {
     Scalar scalar = Quantity.of(Double.POSITIVE_INFINITY, "s");
-    for (ColorDataGradient colorDataGradient : ColorDataGradients.values())
+    for (ColorDataGradient colorDataGradient : ColorDataGradients.values()) {
       Chop.NONE.requireAllZero(colorDataGradient.apply(scalar));
+    }
   }
 
   public void testUnmodified() {

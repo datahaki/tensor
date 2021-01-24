@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Log;
@@ -16,7 +17,10 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   private static final Scalar FOUR = RealScalar.of(4);
   private static final Scalar TWO = RealScalar.TWO;
 
+  /** @param matrix of size 2 x 2
+   * @return */
   public static Tensor of(Tensor matrix) {
+    MatrixQ.requireSize(matrix, 2, 2);
     Scalar a = matrix.Get(0, 0);
     Scalar b = matrix.Get(0, 1);
     Scalar c = matrix.Get(1, 0);

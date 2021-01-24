@@ -68,10 +68,10 @@ import ch.ethz.idsc.tensor.sca.Sign;
     while (true) {
       // System.out.println(Pretty.of(tab));
       Tensor c = tab.get(m).extract(0, n);
-      final int j = ArgMin.of(numbers(c));
+      final int j = ArgMin.of(withoutUnits(c));
       if (Sign.isNegative(c.Get(j))) {
         { // check if unbounded
-          int argmax = ArgMax.of(numbers(tab.get(Tensor.ALL, j).extract(0, m)));
+          int argmax = ArgMax.of(withoutUnits(tab.get(Tensor.ALL, j).extract(0, m)));
           Sign.requirePositive(tab.Get(argmax, j)); // otherwise problem unbounded
         }
         int p = simplexPivot.get(tab, j, n);
@@ -101,11 +101,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
         .anyMatch(i -> n <= i);
   }
 
-  // helper function to determine pivot in case entries of vector are of type Quantity
-  private static Tensor numbers(Tensor vector) {
-    return Tensor.of(vector.stream() //
-        .map(Scalar.class::cast) //
-        .map(Scalar::number) //
-        .map(RealScalar::of));
+  // helper function
+  private static Tensor withoutUnits(Tensor vector) {
+    return vector.map(Unprotect::withoutUnit);
   }
 }

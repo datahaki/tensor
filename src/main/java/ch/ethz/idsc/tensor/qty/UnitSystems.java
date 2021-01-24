@@ -6,14 +6,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Scalar;
 
+// LONGTERM EXPERIMENTAL
 public enum UnitSystems {
   ;
   /** Example: the base units of the SI unit system are
-   * "A", "cd", "s", "K", "mol", "kg", "m"
+   * "A", "cd", "K", "kg", "m", "mol", "s"
    * 
    * @param unitSystem
    * @return base units of the given unitSystem */
@@ -26,6 +28,7 @@ public enum UnitSystems {
         .collect(Collectors.toSet());
   }
 
+  /***************************************************/
   /** Examples:
    * A unit system with "min" as the default time unit:
    * <pre>
@@ -67,5 +70,15 @@ public enum UnitSystems {
     u2.map().entrySet().stream() //
         .forEach(entry -> map.put(entry.getKey(), entry.getValue()));
     return SimpleUnitSystem.from(map);
+  }
+
+  /***************************************************/
+  /** @param map
+   * @return */
+  public static Unit unit(Map<String, Scalar> map) {
+    return new UnitImpl(map.entrySet().stream().collect(Collectors.toMap( //
+        entry -> StaticHelper.requireAtomic(entry.getKey()), //
+        entry -> StaticHelper.requireNonZero(entry.getValue()), //
+        (u, v) -> null, TreeMap::new)));
   }
 }

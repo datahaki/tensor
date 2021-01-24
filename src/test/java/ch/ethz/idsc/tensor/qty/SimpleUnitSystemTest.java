@@ -2,11 +2,13 @@
 package ch.ethz.idsc.tensor.qty;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -52,6 +54,24 @@ public class SimpleUnitSystemTest extends TestCase {
   public void testDerive() throws ClassNotFoundException, IOException {
     UnitSystem unitSystem = Serialization.copy(SimpleUnitSystem.from(UnitSystem.SI().map()));
     assertEquals(unitSystem.map(), UnitSystem.SI().map());
+  }
+
+  public void testXFree0Fail() {
+    Map<String, Scalar> map = new HashMap<>();
+    map.put("m", Quantity.of(GaussScalar.of(0, 17), "m"));
+    AssertFail.of(() -> SimpleUnitSystem.from(map));
+  }
+
+  public void testXFree1() {
+    Map<String, Scalar> map = new HashMap<>();
+    map.put("m", Quantity.of(GaussScalar.of(1, 17), "m"));
+    SimpleUnitSystem.from(map);
+  }
+
+  public void testXFree2Fail() {
+    Map<String, Scalar> map = new HashMap<>();
+    map.put("m", Quantity.of(GaussScalar.of(2, 17), "m"));
+    AssertFail.of(() -> SimpleUnitSystem.from(map));
   }
 
   public void testEmpty() {
