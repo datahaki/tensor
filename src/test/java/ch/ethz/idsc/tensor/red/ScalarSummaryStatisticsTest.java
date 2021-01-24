@@ -71,7 +71,7 @@ public class ScalarSummaryStatisticsTest extends TestCase {
     assertEquals(stats.getAverage(), null);
     assertEquals(stats.getCount(), 0);
     stats.toString();
-    AssertFail.of(() -> stats.getClip());
+    assertEquals(stats.getClip(), null);
   }
 
   public void testEmptyCombine() {

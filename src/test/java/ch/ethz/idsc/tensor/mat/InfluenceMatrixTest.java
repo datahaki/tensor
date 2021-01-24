@@ -44,7 +44,6 @@ public class InfluenceMatrixTest extends TestCase {
     Chop._08.requireClose(PseudoInverse.usingSvd(nullsp), Transpose.of(nullsp));
   }
 
-  // TODO use in tests as comparison
   private static Tensor imageQR(Tensor design, Tensor vector) {
     return design.dot(LeastSquares.of(design, vector));
   }

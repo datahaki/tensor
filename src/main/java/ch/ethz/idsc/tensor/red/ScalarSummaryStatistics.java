@@ -104,10 +104,11 @@ public class ScalarSummaryStatistics implements Consumer<Scalar> {
     return count;
   }
 
-  /** @return clip[min, max]
-   * @throws Exception if stream is empty */
+  /** @return clip[min, max], or null if stream is empty */
   public Clip getClip() {
-    return Clips.interval(getMin(), getMax());
+    return 0 < count //
+        ? Clips.interval(getMin(), getMax())
+        : null;
   }
 
   @Override // from Object
