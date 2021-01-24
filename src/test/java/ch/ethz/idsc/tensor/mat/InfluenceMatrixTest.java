@@ -7,8 +7,12 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
+import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -58,17 +62,48 @@ public class InfluenceMatrixTest extends TestCase {
 
   public void testLeftImage() throws ClassNotFoundException, IOException {
     Tensor design = RandomVariate.of(NormalDistribution.standard(), 10, 3);
-    Tensor vector = RandomVariate.of(NormalDistribution.standard(), 10);
+    Tensor v0 = RandomVariate.of(NormalDistribution.standard(), 10);
+    Tensor v1 = RandomVariate.of(NormalDistribution.standard(), 10);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     _check(influenceMatrix);
-    Tensor vim1 = influenceMatrix.image(vector);
-    Tensor vim2 = influenceMatrix.matrix().dot(vector);
+    influenceMatrix.image(v0);
+    Tensor vim1 = influenceMatrix.image(v1);
+    Tensor vim2 = influenceMatrix.matrix().dot(v1);
     Tolerance.CHOP.requireClose(vim1, vim2);
     Tolerance.CHOP.requireClose( //
-        vector.dot(design), //
+        v1.dot(design), //
         vim1.dot(design));
-    Tensor vim3 = imageQR(design, vector);
+    Tensor vim3 = imageQR(design, v1);
     Tolerance.CHOP.requireClose(vim1, vim3);
+  }
+
+  public void testRankDeficient() {
+    int n = 7;
+    int _m = 5;
+    Distribution distribution = NormalDistribution.standard();
+    for (int r = 1; r < _m - 1; ++r) {
+      Tensor m1 = RandomVariate.of(distribution, n, r);
+      Tensor m2 = RandomVariate.of(distribution, r, _m);
+      Tensor design = m1.dot(m2);
+      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+      influenceMatrix.image(RandomVariate.of(distribution, n));
+    }
+  }
+
+  public void testRankDeficientQuantity() {
+    int n = 7;
+    int _m = 5;
+    Distribution distribution = NormalDistribution.standard();
+    for (int r = 1; r < _m - 1; ++r) {
+      Tensor m1 = RandomVariate.of(distribution, n, r).map(s -> Quantity.of(s, "m"));
+      Tensor m2 = RandomVariate.of(distribution, r, _m);
+      Tensor design = m1.dot(m2);
+      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+      influenceMatrix.image(RandomVariate.of(distribution, n));
+      influenceMatrix.leverages();
+      influenceMatrix.leverages_sqrt();
+      influenceMatrix.matrix().map(QuantityMagnitude.singleton(Unit.ONE));
+    }
   }
 
   public void testNullFail() {

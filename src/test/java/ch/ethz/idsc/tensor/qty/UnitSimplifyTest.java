@@ -28,8 +28,14 @@ public class UnitSimplifyTest extends TestCase {
   }
 
   public void testProperties() {
-    UnitSimplify.from(UnitSystem.SI(), //
-        ResourceData.properties("/unit/canon1.properties").stringPropertyNames());
+    Set<String> set = ResourceData.properties("/unit/simplify1.properties").stringPropertyNames();
+    UnitSimplify.from(UnitSystem.SI(), set);
+    assertEquals(set.size(), 4);
+  }
+
+  public void testNonUnitFail() {
+    Set<String> set = ResourceData.properties("/unit/simplify2.properties").stringPropertyNames();
+    AssertFail.of(() -> UnitSimplify.from(UnitSystem.SI(), set));
   }
 
   public void testDuplicateFail() {
