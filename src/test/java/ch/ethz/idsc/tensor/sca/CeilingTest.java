@@ -52,9 +52,15 @@ public class CeilingTest extends TestCase {
   public void testRational1() {
     Scalar s = RationalScalar.of(234534584545L, 13423656767L); // 17.4717
     assertEquals(Ceiling.intValueExact(s), 18);
+    assertEquals(Ceiling.longValueExact(s), 18);
     Scalar r = Ceiling.of(s);
     assertEquals(r, RealScalar.of(18));
     assertTrue(r instanceof RationalScalar);
+  }
+
+  public void testIntExactValueFail() {
+    AssertFail.of(() -> Ceiling.intValueExact(Quantity.of(1.2, "h")));
+    AssertFail.of(() -> Ceiling.longValueExact(Quantity.of(2.3, "h*s")));
   }
 
   public void testRational2() {

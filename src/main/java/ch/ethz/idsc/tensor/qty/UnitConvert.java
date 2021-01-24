@@ -59,6 +59,7 @@ public class UnitConvert implements Serializable {
 
   private class Inner implements ScalarUnaryOperator {
     private static final long serialVersionUID = -6790037071964306179L;
+    // ---
     private final Unit unit;
     private final Unit base;
 

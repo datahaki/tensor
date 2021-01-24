@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/QuantityMagnitude.html">QuantityMagnitude</a> */
 public class QuantityMagnitude implements Serializable {
-  private static final long serialVersionUID = 5270849044236108069L;
+  private static final long serialVersionUID = 9007436061989625050L;
   private static final QuantityMagnitude SI = new QuantityMagnitude(UnitSystem.SI());
   private static final QuantityMagnitude EMPTY = //
       new QuantityMagnitude(SimpleUnitSystem.from(Collections.emptyMap()));
@@ -59,18 +59,7 @@ public class QuantityMagnitude implements Serializable {
    * @param unit
    * @return operator that maps a quantity to the equivalent scalar of given unit */
   public ScalarUnaryOperator in(Unit unit) {
-    Unit base = unit.negate();
-    return new ScalarUnaryOperator() {
-      private static final long serialVersionUID = 5762934797521017887L;
-
-      @Override
-      public Scalar apply(Scalar scalar) {
-        Scalar result = unitSystem.apply(StaticHelper.multiply(scalar, base));
-        if (result instanceof Quantity)
-          throw TensorRuntimeException.of(result);
-        return result;
-      }
-    };
+    return new Inner(unit);
   }
 
   /** @param string
@@ -78,5 +67,30 @@ public class QuantityMagnitude implements Serializable {
    * @see #in(Unit) */
   public ScalarUnaryOperator in(String string) {
     return in(Unit.of(string));
+  }
+
+  private class Inner implements ScalarUnaryOperator {
+    private static final long serialVersionUID = 3037771151210993172L;
+    // ---
+    private final Unit unit;
+    private final Unit base;
+
+    public Inner(Unit unit) {
+      this.unit = unit;
+      this.base = unit.negate();
+    }
+
+    @Override
+    public Scalar apply(Scalar scalar) {
+      Scalar result = unitSystem.apply(StaticHelper.multiply(scalar, base));
+      if (result instanceof Quantity)
+        throw TensorRuntimeException.of(result);
+      return result;
+    }
+
+    @Override
+    public String toString() {
+      return String.format("%s[%s, %s]", QuantityMagnitude.class.getSimpleName(), unitSystem, unit);
+    }
   }
 }

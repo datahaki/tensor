@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.num.Pi;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -71,6 +74,14 @@ public class UnprotectTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{0, 2, 3}, {0, 2, 3, 5}, {{}}}");
     assertEquals(Unprotect.dimension1Hint(tensor), 3);
     AssertFail.of(() -> Unprotect.dimension1(tensor));
+  }
+
+  public void testWithoutUnit() {
+    assertEquals(Unprotect.withoutUnit(Pi.VALUE), Pi.VALUE);
+    assertEquals(Unprotect.withoutUnit(Quantity.of(3, "h*km")), RealScalar.of(3));
+    assertEquals(Unprotect.withoutUnit(Quantity.of(ComplexScalar.I, "h*km")), ComplexScalar.I);
+    assertEquals(Unprotect.withoutUnit(StringScalar.of("abd123")), StringScalar.of("abd123"));
+    AssertFail.of(() -> Unprotect.withoutUnit(null));
   }
 
   public void testFailEmpty() {

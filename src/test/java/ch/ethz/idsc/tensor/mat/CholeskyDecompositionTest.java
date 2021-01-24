@@ -201,9 +201,9 @@ public class CholeskyDecompositionTest extends TestCase {
 
   public void testRankDeficient() {
     int n = 7;
-    int _m = 4;
+    int _m = 5;
     Distribution distribution = NormalDistribution.standard();
-    for (int r = 1; r < _m; ++r) {
+    for (int r = 1; r < _m - 1; ++r) {
       Tensor m1 = RandomVariate.of(distribution, n, r);
       Tensor m2 = RandomVariate.of(distribution, r, _m);
       Tensor br = RandomVariate.of(distribution, n);

@@ -40,7 +40,35 @@ public class CompatibleUnitQ implements Serializable {
   /** @param unit
    * @return */
   public Predicate<Scalar> with(Unit unit) {
-    Unit base = unit.negate();
-    return scalar -> !(unitSystem.apply(StaticHelper.multiply(scalar, base)) instanceof Quantity);
+    return new Inner(unit);
+  }
+
+  /** @param string
+   * @return */
+  public Predicate<Scalar> with(String string) {
+    return with(Unit.of(string));
+  }
+
+  private class Inner implements Predicate<Scalar>, Serializable {
+    private static final long serialVersionUID = 3755197923097596074L;
+    // ---
+    private final Unit unit;
+    private final Unit base;
+
+    public Inner(Unit unit) {
+      this.unit = unit;
+      this.base = unit.negate();
+    }
+
+    @Override // from Predicate
+    public boolean test(Scalar scalar) {
+      // LONGTERM the check also tracks the value part, which is not needed
+      return !(unitSystem.apply(StaticHelper.multiply(scalar, base)) instanceof Quantity);
+    }
+
+    @Override
+    public String toString() {
+      return String.format("%s[%s, %s]", CompatibleUnitQ.class.getSimpleName(), unitSystem, unit);
+    }
   }
 }

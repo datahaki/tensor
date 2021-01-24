@@ -5,9 +5,11 @@ import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.qty.Quantity;
 
 /** consistent with Mathematica:
  * <pre>
@@ -43,6 +45,34 @@ public enum Round implements ScalarUnaryOperator {
       return roundingInterface.round();
     }
     throw TensorRuntimeException.of(scalar);
+  }
+
+  /** Examples:
+   * <pre>
+   * Round[+4.0] == +4
+   * Round[+4.2] == +4
+   * Round[+4.9] == +5
+   * Round[-7.2] == -7
+   * </pre>
+   * 
+   * @param scalar
+   * @return
+   * @throws Exception if output is outside encodable range
+   * {@link Integer#MIN_VALUE} and {@link Integer#MAX_VALUE}
+   * @throws Exception if input scalar is instance of {@link Quantity} */
+  public static int intValueExact(Scalar scalar) {
+    return Scalars.intValueExact(FUNCTION.apply(scalar));
+  }
+
+  /** see documentation {@link #intValueExact(Scalar)}
+   * 
+   * @param scalar
+   * @return
+   * @throws Exception if output is outside encodable range
+   * {@link Long#MIN_VALUE} and {@link Long#MAX_VALUE}
+   * @throws Exception if input scalar is instance of {@link Quantity} */
+  public static long longValueExact(Scalar scalar) {
+    return Scalars.longValueExact(FUNCTION.apply(scalar));
   }
 
   /** rounds all entries of tensor to nearest integers, with

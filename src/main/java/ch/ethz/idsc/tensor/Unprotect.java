@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.io.TableBuilder;
@@ -71,9 +72,18 @@ public enum Unprotect {
   }
 
   /***************************************************/
+  /** Examples:
+   * <pre>
+   * Unprotect.withoutUnit(3.1415926) == 3.1415926
+   * Unprotect.withoutUnit(1 + 2 * I) == 1 + 2 * I
+   * Unprotect.withoutUnit(Quantity[3 / 4, "km*h^-1"]) == 3 / 4
+   * </pre>
+   * 
+   * @param scalar non-null
+   * @return */
   public static Scalar withoutUnit(Scalar scalar) {
     return scalar instanceof Quantity //
         ? ((Quantity) scalar).value()
-        : scalar;
+        : Objects.requireNonNull(scalar);
   }
 }

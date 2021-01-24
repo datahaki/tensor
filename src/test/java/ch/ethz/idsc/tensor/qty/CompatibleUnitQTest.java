@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.qty;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -19,17 +20,30 @@ public class CompatibleUnitQTest extends TestCase {
     assertTrue(CompatibleUnitQ.SI().with(Unit.of("m^2*kg*s^-3")).test(Quantity.of(3, "W")));
   }
 
+  public void testSerializable() throws ClassNotFoundException, IOException {
+    Predicate<Scalar> predicate = Serialization.copy(CompatibleUnitQ.SI().with(Unit.of("N*s")));
+    String string = predicate.toString();
+    assertTrue(string.startsWith("CompatibleUnitQ"));
+    assertTrue(string.contains("N*s"));
+  }
+
   public void testSimple() throws ClassNotFoundException, IOException {
     CompatibleUnitQ compatibleUnitQ = Serialization.copy(CompatibleUnitQ.SI());
     assertTrue(compatibleUnitQ.with(Unit.of("m*s^-1")).test(Quantity.of(2, "km*ms^-1")));
     assertTrue(CompatibleUnitQ.SI().with(Unit.of("PS^2")).test(Quantity.of(2, "W^2")));
-    assertFalse(CompatibleUnitQ.SI().with(Unit.of("m*s^-1")).test(Quantity.of(2, "m*s")));
-    assertFalse(CompatibleUnitQ.SI().with(Unit.of("s")).test(Quantity.of(1, "Hz")));
+    assertFalse(CompatibleUnitQ.SI().with("m*s^-1").test(Quantity.of(2, "m*s")));
+    assertFalse(CompatibleUnitQ.SI().with("s").test(Quantity.of(1, "Hz")));
   }
 
   public void testAssignable() {
     assertFalse(Quantity.class.isAssignableFrom(RealScalar.ONE.getClass()));
     assertTrue(Quantity.class.isAssignableFrom(Quantity.of(1, "s").getClass()));
+  }
+
+  public void testOne() {
+    GaussScalar s = GaussScalar.of(2, 13);
+    assertTrue(CompatibleUnitQ.SI().with(Unit.ONE).test(s));
+    assertTrue(CompatibleUnitQ.SI().with("").test(s));
   }
 
   public void testNonReal() {
@@ -54,7 +68,8 @@ public class CompatibleUnitQTest extends TestCase {
   }
 
   public void testWithFail() {
-    AssertFail.of(() -> CompatibleUnitQ.SI().with(null));
+    AssertFail.of(() -> CompatibleUnitQ.SI().with((Unit) null));
+    AssertFail.of(() -> CompatibleUnitQ.SI().with((String) null));
   }
 
   public void testInNullFail() {

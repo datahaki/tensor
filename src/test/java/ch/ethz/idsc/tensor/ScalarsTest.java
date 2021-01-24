@@ -139,9 +139,12 @@ public class ScalarsTest extends TestCase {
 
   public void testIntValueExact() {
     assertEquals(Scalars.intValueExact(RealScalar.of(123)), 123);
+    assertEquals(Scalars.intValueExact(RealScalar.of(Integer.MIN_VALUE)), Integer.MIN_VALUE);
+    assertEquals(Scalars.intValueExact(RealScalar.of(Integer.MAX_VALUE)), Integer.MAX_VALUE);
   }
 
   public void testIntValueExactFail() {
+    AssertFail.of(() -> Scalars.intValueExact(RealScalar.of(Long.MIN_VALUE)));
     AssertFail.of(() -> Scalars.intValueExact(RealScalar.of(Long.MAX_VALUE)));
   }
 
@@ -150,6 +153,9 @@ public class ScalarsTest extends TestCase {
   }
 
   public void testLongValueExact() {
+    assertEquals(Scalars.longValueExact(RealScalar.of(123)), 123);
+    assertEquals(Scalars.longValueExact(RealScalar.of(123)), 123L);
+    assertEquals(Scalars.longValueExact(RealScalar.of(Long.MIN_VALUE)), Long.MIN_VALUE);
     assertEquals(Scalars.longValueExact(RealScalar.of(Long.MAX_VALUE)), Long.MAX_VALUE);
   }
 

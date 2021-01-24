@@ -51,9 +51,15 @@ public class FloorTest extends TestCase {
   public void testRational1() {
     Scalar s = RationalScalar.of(234534584545L, 13423656767L); // 17.4717
     assertEquals(Floor.intValueExact(s), 17);
+    assertEquals(Floor.longValueExact(s), 17);
     Scalar r = Floor.of(s);
     assertEquals(r, RealScalar.of(17));
     assertTrue(r instanceof RationalScalar);
+  }
+
+  public void testIntExactValueFail() {
+    AssertFail.of(() -> Floor.intValueExact(Quantity.of(1.2, "h")));
+    AssertFail.of(() -> Floor.longValueExact(Quantity.of(4.5, "km*h^-1")));
   }
 
   public void testRational2() {
