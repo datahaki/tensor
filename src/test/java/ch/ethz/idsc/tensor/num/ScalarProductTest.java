@@ -16,11 +16,14 @@ public class ScalarProductTest extends TestCase {
     GaussScalar gaussScalar = GaussScalar.of(432, prime);
     GaussScalar power = gaussScalar.power(RealScalar.of(-123));
     Scalar now = GaussScalar.of(1, prime);
-    BinaryPower<Scalar> binaryPower = new BinaryPower<>(new ScalarProduct(now));
+    ScalarProduct scalarProduct = new ScalarProduct(now);
+    BinaryPower<Scalar> binaryPower = new BinaryPower<>(scalarProduct);
     for (int index = 0; index < 123; ++index)
       now = now.divide(gaussScalar);
     assertEquals(power, now);
     assertEquals(power, binaryPower.raise(gaussScalar, BigInteger.valueOf(-123)));
+    String string = scalarProduct.toString();
+    assertTrue(string.startsWith("ScalarProduct"));
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

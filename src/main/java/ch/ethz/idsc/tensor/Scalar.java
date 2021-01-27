@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
+import ch.ethz.idsc.tensor.qty.Quantity;
 
 /** on top of the capabilities of a {@link Tensor} a scalar can be inverted
  * 
@@ -55,6 +56,7 @@ public interface Scalar extends Tensor {
   Scalar divide(Scalar scalar);
 
   /***************************************************/
+  // functions introduced by the interface:
   /** a.under(b) == b / a
    * 
    * <p>The default implementation is b / a == (a ^ -1) * b as
@@ -93,10 +95,24 @@ public interface Scalar extends Tensor {
    * @throws ArithmeticException if scalar equals to 0, or cannot be inverted */
   Scalar reciprocal();
 
-  /** classes should override this method only if consistency is possible
-   * for instance, a {@link ComplexScalar} would require two numbers:
-   * the real and imaginary part, therefore a complex scalar does not
-   * return a single number, but throws an exception.
+  /** classes should override this method only if consistency is guaranteed,
+   * as is the case for instances of RealScalar:
+   * {@link RationalScalar}, {@link DoubleScalar}, {@link DecimalScalar}.
+   * 
+   * <p>{@link ComplexScalar} and {@link Quaternion} are represented by more
+   * than a single number namely the real and imaginary part, Therefore
+   * calling the function throws an exception.
+   * 
+   * <p>Extracting the value part of a {@link Quantity} to a primitive goes
+   * against the spirit of using units in the first place. For instance,
+   * 3[s] and 3[h] are from the same scale, but are not identical, despite
+   * their value part being identical.
+   * 
+   * <p>Hint: for scalar instances of {@link Quantity} use
+   * <pre>
+   * scalar -> QuantityMagnitude.SI().in(unit).apply(scalar).number();
+   * </pre>
+   * where unit is the desired reference for instance "kW*h^-1"
    * 
    * <p>Two scalars that are equal should return two number()s that are
    * equal numerically, for instance (double)2.0 == (int)2.

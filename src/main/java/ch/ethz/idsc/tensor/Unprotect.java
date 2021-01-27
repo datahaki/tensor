@@ -47,7 +47,9 @@ public enum Unprotect {
     throw TensorRuntimeException.of(tensor);
   }
 
-  /** @param tensor
+  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
+   * 
+   * @param tensor
    * @return
    * @throws Exception if tensor is a scalar */
   public static int dimension1Hint(Tensor tensor) {
@@ -72,7 +74,9 @@ public enum Unprotect {
   }
 
   /***************************************************/
-  /** Examples:
+  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
+   * 
+   * Examples:
    * <pre>
    * Unprotect.withoutUnit(3.1415926) == 3.1415926
    * Unprotect.withoutUnit(1 + 2 * I) == 1 + 2 * I

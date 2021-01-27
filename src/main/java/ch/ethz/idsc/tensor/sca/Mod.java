@@ -66,4 +66,9 @@ public class Mod implements ScalarUnaryOperator {
   public <T extends Tensor> T of(T tensor) {
     return (T) tensor.map(this);
   }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%s, %s]", getClass().getSimpleName(), n, d);
+  }
 }

@@ -16,7 +16,10 @@ import ch.ethz.idsc.tensor.sca.SignInterface;
 import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
 /** scalars from finite field with prime number of elements and values
- * 0, 1, 2, ..., prime - 1 */
+ * 0, 1, 2, ..., prime - 1
+ * 
+ * an instance stores two non-negative integers: the value and the prime
+ * which can be accessed via {@link #number()} and {@link #prime()}. */
 public class GaussScalar extends AbstractScalar implements //
     ExactScalarQInterface, PowerInterface, RoundingInterface, SignInterface, //
     SqrtInterface, Comparable<Scalar>, Serializable {
@@ -87,8 +90,13 @@ public class GaussScalar extends AbstractScalar implements //
   }
 
   @Override // from Scalar
-  public Number number() {
+  public BigInteger number() {
     return value;
+  }
+
+  /** @return prime order of finite field */
+  public BigInteger prime() {
+    return prime;
   }
 
   @Override // from Scalar
@@ -166,12 +174,6 @@ public class GaussScalar extends AbstractScalar implements //
       if (equals(in(index.multiply(index), prime)))
         return in(index, prime);
     throw TensorRuntimeException.of(this); // sqrt of this does not exist
-  }
-
-  /***************************************************/
-  /** @return prime order of finite field */
-  public BigInteger prime() {
-    return prime;
   }
 
   /***************************************************/

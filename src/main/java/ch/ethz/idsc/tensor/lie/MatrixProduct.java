@@ -41,4 +41,9 @@ import ch.ethz.idsc.tensor.num.GroupInterface;
   public Tensor combine(Tensor matrix1, Tensor matrix2) {
     return matrix1.dot(matrix2);
   }
+
+  @Override
+  public String toString() {
+    return String.format("%s[%d]", getClass().getSimpleName(), n);
+  }
 }

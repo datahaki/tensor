@@ -166,6 +166,11 @@ public class ModTest extends TestCase {
     AssertFail.of(() -> Mod.function(qs2).apply(qs1));
   }
 
+  public void testToString() {
+    String string = Mod.function(3, 0).toString();
+    assertTrue(string.startsWith("Mod"));
+  }
+
   public void testNull1Fail() {
     AssertFail.of(() -> Mod.function(RealScalar.ONE, null));
   }

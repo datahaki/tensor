@@ -14,7 +14,7 @@ import java.util.Objects;
  * 
  * @param <T> may also be Integer etc. */
 public final class BinaryPower<T> implements Serializable {
-  private static final long serialVersionUID = -1557915168292102268L;
+  private static final long serialVersionUID = 1031917119785847552L;
   // ---
   private final GroupInterface<T> groupInterface;
 
@@ -45,5 +45,10 @@ public final class BinaryPower<T> implements Serializable {
         return result;
       x = groupInterface.combine(x, x);
     }
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%s]", getClass().getSimpleName(), groupInterface);
   }
 }

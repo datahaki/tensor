@@ -34,6 +34,8 @@ public class BinaryPowerTest extends TestCase {
     assertEquals(binaryPower.raise(5, BigInteger.valueOf(4)), (Integer) 625);
     assertEquals(binaryPower.raise(5, BigInteger.valueOf(5)), (Integer) 3125);
     assertEquals(binaryPower.raise(1, BigInteger.valueOf(-3)), (Integer) 1);
+    String string = binaryPower.toString();
+    assertTrue(string.startsWith("BinaryPower"));
   }
 
   public void testNullFail() {

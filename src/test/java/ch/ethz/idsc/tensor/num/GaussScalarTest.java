@@ -174,6 +174,8 @@ public class GaussScalarTest extends TestCase {
 
   public void testPowerFail() {
     GaussScalar gaussScalar = GaussScalar.of(3, 107);
+    assertEquals(gaussScalar.number(), BigInteger.valueOf(3));
+    assertEquals(gaussScalar.prime(), BigInteger.valueOf(107));
     AssertFail.of(() -> Power.of(gaussScalar, Pi.HALF));
   }
 

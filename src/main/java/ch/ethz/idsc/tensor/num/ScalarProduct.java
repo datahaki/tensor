@@ -32,4 +32,9 @@ public class ScalarProduct implements GroupInterface<Scalar>, Serializable {
   public Scalar combine(Scalar s1, Scalar s2) {
     return s1.multiply(s2);
   }
+
+  @Override
+  public String toString() {
+    return String.format("%s[%s]", getClass().getSimpleName(), one);
+  }
 }
