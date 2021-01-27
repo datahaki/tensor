@@ -87,4 +87,8 @@ public class CyclesGroupTest extends TestCase {
     Set<Cycles> set = _group(Collections.singleton(cycles));
     assertEquals(set.size(), 5980);
   }
+
+  public void testToString() {
+    assertEquals(CyclesGroup.INSTANCE.toString(), "CyclesGroup");
+  }
 }

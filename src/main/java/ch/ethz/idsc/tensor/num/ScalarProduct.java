@@ -33,7 +33,7 @@ public class ScalarProduct implements GroupInterface<Scalar>, Serializable {
     return s1.multiply(s2);
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return String.format("%s[%s]", getClass().getSimpleName(), one);
   }

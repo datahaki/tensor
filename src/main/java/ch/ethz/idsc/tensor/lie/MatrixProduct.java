@@ -3,8 +3,9 @@ package ch.ethz.idsc.tensor.lie;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.num.GroupInterface;
 
@@ -19,17 +20,19 @@ import ch.ethz.idsc.tensor.num.GroupInterface;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/MatrixPower.html">MatrixPower</a> */
 /* package */ class MatrixProduct implements GroupInterface<Tensor>, Serializable {
-  private static final long serialVersionUID = -6435838935271759299L;
+  private static final long serialVersionUID = 6229466057550753919L;
   // ---
   private final int n;
+  private final Scalar one;
 
-  public MatrixProduct(int n) {
+  public MatrixProduct(int n, Scalar one) {
     this.n = n;
+    this.one = one;
   }
 
   @Override // from GroupInterface
   public Tensor identity() {
-    return IdentityMatrix.of(n);
+    return DiagonalMatrix.of(n, one);
   }
 
   @Override // from GroupInterface
@@ -42,8 +45,8 @@ import ch.ethz.idsc.tensor.num.GroupInterface;
     return matrix1.dot(matrix2);
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
-    return String.format("%s[%d]", getClass().getSimpleName(), n);
+    return String.format("%s[n=%d, %s]", getClass().getSimpleName(), n, one);
   }
 }

@@ -1,7 +1,14 @@
 // code by jph
 package ch.ethz.idsc.tensor.num;
 
-/** @see BinaryPower */
+import ch.ethz.idsc.tensor.lie.MatrixPower;
+
+/** the tensor library uses the group properties to efficiently compute
+ * powers of scalars and matrices where the exponent is an integer. The
+ * algorithm for exponentiation is implemented in {@link BinaryPower}.
+ * 
+ * @see BinaryPower
+ * @see MatrixPower */
 public interface GroupInterface<T> {
   /** @return value when exponent equals zero */
   T identity();

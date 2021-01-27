@@ -68,6 +68,6 @@ public enum MatrixExp {
    * @param matrix
    * @return symmetric matrix */
   public static Tensor ofSymmetric(Tensor matrix) {
-    return StaticHelper.ofSymmetric(matrix, Exp.FUNCTION);
+    return Eigenvalues.ofSymmetric_map(matrix, Exp.FUNCTION);
   }
 }

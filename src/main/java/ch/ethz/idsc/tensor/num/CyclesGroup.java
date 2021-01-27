@@ -18,4 +18,9 @@ package ch.ethz.idsc.tensor.num;
   public Cycles combine(Cycles cycles1, Cycles cycles2) {
     return cycles1.combine(cycles2);
   }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s", getClass().getSimpleName());
+  }
 }
