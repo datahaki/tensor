@@ -70,10 +70,8 @@ public class GaussScalar extends AbstractScalar implements //
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    if (scalar instanceof GaussScalar) {
-      GaussScalar gaussScalar = (GaussScalar) scalar;
-      return in(value.multiply(gaussScalar.value), prime);
-    }
+    if (scalar instanceof GaussScalar)
+      return in(value.multiply(requireCommonPrime((GaussScalar) scalar)), prime);
     if (scalar instanceof Quantity)
       return scalar.multiply(this);
     throw TensorRuntimeException.of(this, scalar);
@@ -107,28 +105,23 @@ public class GaussScalar extends AbstractScalar implements //
   /***************************************************/
   @Override // from AbstractScalar
   protected GaussScalar plus(Scalar scalar) {
-    if (scalar instanceof GaussScalar) {
-      GaussScalar gaussScalar = (GaussScalar) scalar;
-      assertCommonBase(gaussScalar);
-      return in(value.add(gaussScalar.value), prime);
-    }
+    if (scalar instanceof GaussScalar)
+      return in(value.add(requireCommonPrime((GaussScalar) scalar)), prime);
     throw TensorRuntimeException.of(this, scalar);
   }
 
   /***************************************************/
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof GaussScalar) {
-      GaussScalar gaussScalar = (GaussScalar) scalar;
-      assertCommonBase(gaussScalar);
-      return value.compareTo(gaussScalar.value);
-    }
+    if (scalar instanceof GaussScalar)
+      return value.compareTo(requireCommonPrime((GaussScalar) scalar));
     throw TensorRuntimeException.of(this, scalar);
   }
 
-  private void assertCommonBase(GaussScalar gaussScalar) {
-    if (!prime.equals(gaussScalar.prime))
-      throw TensorRuntimeException.of(this, gaussScalar);
+  private BigInteger requireCommonPrime(GaussScalar gaussScalar) {
+    if (prime.equals(gaussScalar.prime))
+      return gaussScalar.value;
+    throw TensorRuntimeException.of(this, gaussScalar);
   }
 
   @Override // from ExactScalarQInterface
@@ -169,7 +162,7 @@ public class GaussScalar extends AbstractScalar implements //
 
   @Override // from SqrtInterface
   public GaussScalar sqrt() {
-    // implementation is slow, could use memo function
+    // LONGTERM implementation is slow, could use memo function
     for (BigInteger index = BigInteger.ZERO; index.compareTo(prime) < 0; index = index.add(BigInteger.ONE))
       if (equals(in(index.multiply(index), prime)))
         return in(index, prime);

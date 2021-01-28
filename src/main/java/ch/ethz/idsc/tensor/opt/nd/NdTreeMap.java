@@ -43,8 +43,9 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
    * 
    * @param lbounds smallest coordinates of points to be added
    * @param ubounds greatest coordinates of points to be added
-   * @param maxDensity positive is the maximum queue size of leaf nodes, except
-   * for leaf nodes with maxDepth, which have unlimited queue size.
+   * @param maxDensity non-negative is the maximum queue size of leaf nodes, except
+   * for leaf nodes with maxDepth, which have unlimited queue size. The special case
+   * maxDensity == 0 implies that values will only be stored at nodes of max depth
    * @param maxDepth 16 is reasonable for most applications
    * @throws Exception if maxDensity is not strictly positive */
   public NdTreeMap(Tensor lbounds, Tensor ubounds, int maxDensity, int maxDepth) {
@@ -147,15 +148,15 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       if (isInternal()) {
         Tensor location = ndPair.location;
         int dimension = dimension();
-        Scalar median = ndBounds.median(dimension);
-        if (Scalars.lessThan(location.Get(dimension), median)) {
-          ndBounds.uBounds.set(median, dimension);
+        Scalar mean = ndBounds.mean(dimension);
+        if (Scalars.lessThan(location.Get(dimension), mean)) {
+          ndBounds.uBounds.set(mean, dimension);
           if (Objects.isNull(lChild))
             lChild = createChild();
           lChild.add(ndPair, ndBounds);
           return;
         }
-        ndBounds.lBounds.set(median, dimension);
+        ndBounds.lBounds.set(mean, dimension);
         if (Objects.isNull(rChild))
           rChild = createChild();
         rChild.add(ndPair, ndBounds);
@@ -170,9 +171,9 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       // at the lowest depth we grow the queue indefinitely, instead.
       else {
         int dimension = dimension();
-        Scalar median = ndBounds.median(dimension);
+        Scalar mean = ndBounds.mean(dimension);
         for (NdPair<V> entry : queue)
-          if (Scalars.lessThan(entry.location.Get(dimension), median)) {
+          if (Scalars.lessThan(entry.location.Get(dimension), mean)) {
             if (Objects.isNull(lChild))
               lChild = createChild();
             lChild.queue.add(entry);
@@ -189,10 +190,10 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     private void addToCluster(NdCluster<V> ndCluster, NdBounds ndBounds) {
       if (isInternal()) {
         final int dimension = dimension();
-        Scalar median = ndBounds.median(dimension);
-        boolean lFirst = Scalars.lessThan(ndCluster.center.Get(dimension), median);
-        addChildToCluster(ndCluster, ndBounds, median, lFirst);
-        addChildToCluster(ndCluster, ndBounds, median, !lFirst);
+        Scalar mean = ndBounds.mean(dimension);
+        boolean lFirst = Scalars.lessThan(ndCluster.center.Get(dimension), mean);
+        addChildToCluster(ndCluster, ndBounds, mean, lFirst);
+        addChildToCluster(ndCluster, ndBounds, mean, !lFirst);
       } else
         queue.forEach(ndCluster::consider);
     }
