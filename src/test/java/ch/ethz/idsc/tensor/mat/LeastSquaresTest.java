@@ -166,7 +166,7 @@ public class LeastSquaresTest extends TestCase {
 
   public void testLeastSquaresReal() {
     for (int n = 3; n < 6; ++n) {
-      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, n);
+      Tensor matrix = IdentityMatrix.of(n).add(RandomVariate.of(NormalDistribution.standard(), n, n));
       Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
       Chop._09.requireClose( //
           LinearSolve.of(matrix, b), //

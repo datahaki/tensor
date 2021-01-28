@@ -5,15 +5,20 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dot;
+import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.fft.FourierMatrix;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
+import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -60,9 +65,21 @@ public class InverseTest extends TestCase {
   }
 
   public void testFourier() {
-    Tensor inv1 = Inverse.of(FourierMatrix.of(5), Pivots.FIRST_NON_ZERO);
-    Tensor inv2 = Inverse.of(FourierMatrix.of(5), Pivots.ARGMAX_ABS);
+    Tensor inv1 = Inverse.of(FourierMatrix.of(5), RealScalar.ONE, Pivots.FIRST_NON_ZERO);
+    Tensor inv2 = Inverse.of(FourierMatrix.of(5), RealScalar.ONE, Pivots.ARGMAX_ABS);
     Chop._10.requireClose(inv1, inv2);
+  }
+
+  public void testGaussian() {
+    int prime = 3121;
+    Distribution distribution = DiscreteUniformDistribution.of(0, prime);
+    Scalar one = GaussScalar.of(1, prime);
+    for (int n = 3; n < 6; ++n) {
+      Tensor matrix = RandomVariate.of(distribution, n, n).map(s -> GaussScalar.of(s.number().intValue(), prime));
+      Tensor revers = Inverse.of(matrix, one, Pivots.FIRST_NON_ZERO);
+      MatrixQ.requireSize(revers, n, n);
+      assertEquals(DiagonalMatrix.of(n, one), Dot.of(matrix, revers));
+    }
   }
 
   public void testDet0() {
@@ -75,7 +92,7 @@ public class InverseTest extends TestCase {
   public void testZeroFail() {
     Tensor matrix = DiagonalMatrix.of(1, 2, 0, 3);
     AssertFail.of(() -> Inverse.of(matrix));
-    AssertFail.of(() -> Inverse.of(matrix, Pivots.FIRST_NON_ZERO));
+    AssertFail.of(() -> Inverse.of(matrix, RealScalar.ONE, Pivots.FIRST_NON_ZERO));
   }
 
   public void testFailNonSquare() {

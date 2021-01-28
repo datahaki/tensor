@@ -5,15 +5,18 @@ import java.util.BitSet;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.fft.FourierMatrix;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
+import ch.ethz.idsc.tensor.mat.Pivots;
 import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.GaussScalar;
@@ -143,12 +146,15 @@ public class MatrixPowerTest extends TestCase {
   }
 
   public void testGaussian() {
-    int prime = 7;
+    int prime = 563;
     Distribution distribution = DiscreteUniformDistribution.of(0, prime);
+    Scalar one = GaussScalar.of(1, prime);
     for (int n = 3; n < 6; ++n) {
       Tensor matrix = RandomVariate.of(distribution, n, n).map(s -> GaussScalar.of(s.number().intValue(), prime));
-      Tensor result = MatrixPower.of(matrix, 343386231231234L, GaussScalar.of(1, prime));
+      Tensor result = MatrixPower.of(matrix, +343386231231234L, one, Pivots.FIRST_NON_ZERO);
+      Tensor revers = MatrixPower.of(matrix, -343386231231234L, one, Pivots.FIRST_NON_ZERO);
       MatrixQ.requireSize(result, n, n);
+      assertEquals(DiagonalMatrix.of(n, one), Dot.of(result, revers));
     }
   }
 

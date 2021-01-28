@@ -6,6 +6,8 @@ import java.math.BigInteger;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.mat.Pivot;
+import ch.ethz.idsc.tensor.mat.Pivots;
 import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 import ch.ethz.idsc.tensor.num.BinaryPower;
 import ch.ethz.idsc.tensor.num.GaussScalar;
@@ -32,7 +34,7 @@ public enum MatrixPower {
    * @return matrix ^ exponent
    * @throws Exception if matrix is not square */
   public static Tensor of(Tensor matrix, BigInteger exponent) {
-    return of(matrix, exponent, RealScalar.ONE);
+    return of(matrix, exponent, RealScalar.ONE, Pivots.ARGMAX_ABS);
   }
 
   /** @param matrix square
@@ -40,16 +42,17 @@ public enum MatrixPower {
    * @return matrix ^ exponent
    * @throws Exception if matrix is not square */
   public static Tensor of(Tensor matrix, long exponent) {
-    return of(matrix, BigInteger.valueOf(exponent), RealScalar.ONE);
+    return of(matrix, BigInteger.valueOf(exponent), RealScalar.ONE, Pivots.ARGMAX_ABS);
   }
 
   /***************************************************/
   /** @param matrix
    * @param exponent
    * @param one
+   * @param pivot
    * @return */
-  public static Tensor of(Tensor matrix, BigInteger exponent, Scalar one) {
-    BinaryPower<Tensor> binaryPower = new BinaryPower<>(new MatrixProduct(matrix.length(), one));
+  public static Tensor of(Tensor matrix, BigInteger exponent, Scalar one, Pivot pivot) {
+    BinaryPower<Tensor> binaryPower = new BinaryPower<>(new MatrixProduct(matrix.length(), one, pivot));
     // check for square matrix is required when exponent in {0, 1}
     return binaryPower.raise(SquareMatrixQ.require(matrix), exponent);
   }
@@ -58,8 +61,8 @@ public enum MatrixPower {
    * @param exponent
    * @param one
    * @return */
-  public static Tensor of(Tensor matrix, long exponent, Scalar one) {
-    return of(matrix, BigInteger.valueOf(exponent), one);
+  public static Tensor of(Tensor matrix, long exponent, Scalar one, Pivot pivot) {
+    return of(matrix, BigInteger.valueOf(exponent), one, pivot);
   }
 
   /***************************************************/
