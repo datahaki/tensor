@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.ConjugateInterface;
 import ch.ethz.idsc.tensor.sca.PowerInterface;
 import ch.ethz.idsc.tensor.sca.RoundingInterface;
 import ch.ethz.idsc.tensor.sca.SignInterface;
@@ -21,8 +22,8 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
  * an instance stores two non-negative integers: the value and the prime
  * which can be accessed via {@link #number()} and {@link #prime()}. */
 public class GaussScalar extends AbstractScalar implements //
-    ExactScalarQInterface, PowerInterface, RoundingInterface, SignInterface, //
-    SqrtInterface, Comparable<Scalar>, Serializable {
+    ConjugateInterface, ExactScalarQInterface, PowerInterface, RoundingInterface, //
+    SignInterface, SqrtInterface, Comparable<Scalar>, Serializable {
   private static final long serialVersionUID = -4408349912290491124L;
 
   /** @param value
@@ -99,7 +100,7 @@ public class GaussScalar extends AbstractScalar implements //
 
   @Override // from Scalar
   public Scalar zero() {
-    return in(BigInteger.ZERO, prime);
+    return new GaussScalar(BigInteger.ZERO, prime);
   }
 
   /***************************************************/
@@ -122,6 +123,11 @@ public class GaussScalar extends AbstractScalar implements //
     if (prime.equals(gaussScalar.prime))
       return gaussScalar.value;
     throw TensorRuntimeException.of(this, gaussScalar);
+  }
+
+  @Override // from ConjugateInterface
+  public Scalar conjugate() {
+    return this;
   }
 
   @Override // from ExactScalarQInterface

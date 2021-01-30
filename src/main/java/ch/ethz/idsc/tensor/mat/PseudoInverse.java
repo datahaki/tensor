@@ -2,6 +2,8 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Transpose;
@@ -39,18 +41,20 @@ public enum PseudoInverse {
   }
 
   /***************************************************/
-  /** Hint: function exists to avoid dot product with the identity matrix
-   * 
-   * @param matrix
+  /* package */ static Tensor usingCholesky(Tensor matrix) {
+    return usingCholesky(matrix, RealScalar.ONE);
+  }
+
+  /** @param matrix with maximal rank
    * @return
    * @throws Exception if given matrix does not have maximal rank */
-  /* package */ static Tensor usingCholesky(Tensor matrix) {
+  /* package */ static Tensor usingCholesky(Tensor matrix, Scalar one) {
     int n = matrix.length();
     Tensor mt = ConjugateTranspose.of(matrix);
     int m = mt.length();
     return m <= n //
-        ? CholeskyDecomposition.of(mt.dot(matrix)).solve(mt)
-        : ConjugateTranspose.of(CholeskyDecomposition.of(matrix.dot(mt)).solve(matrix));
+        ? CholeskyDecomposition.of(mt.dot(matrix), one).solve(mt)
+        : ConjugateTranspose.of(CholeskyDecomposition.of(matrix.dot(mt), one).solve(matrix));
   }
 
   /***************************************************/

@@ -2,31 +2,40 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.MatrixQ;
 
 /** References:
- * "Biinvariant Generalized Barycentric Coordinates on Lie Groups"
- * by Jan Hakenberg, 2020
- * 
  * "Projection Matrix" and
  * "Proofs involving the Moore-Penrose inverse"
  * on Wikipedia, 2020
  * https://en.wikipedia.org/wiki/Projection_matrix
- * https://en.wikipedia.org/wiki/Proofs_involving_the_Moore%E2%80%93Penrose_inverse */
+ * https://en.wikipedia.org/wiki/Proofs_involving_the_Moore%E2%80%93Penrose_inverse
+ * 
+ * "Biinvariant Generalized Barycentric Coordinates on Lie Groups"
+ * by Jan Hakenberg, 2020 */
 public interface InfluenceMatrix {
-  // TODO R2Averaging with NdTreeMap
   /** @param design matrix
-   * @return */
+   * @return if the given matrix is in exact precision and has maximal rank,
+   * then the implementation of influence matrix is also in exact precision */
   static InfluenceMatrix of(Tensor design) {
     if (ExactTensorQ.of(design))
       try {
-        Tensor matrix = PseudoInverse.usingCholesky(design);
-        return new InfluenceMatrixExact(design, matrix);
+        Tensor pinv = PseudoInverse.usingCholesky(design, RealScalar.ONE);
+        return new InfluenceMatrixExact(design.dot(pinv), RealScalar.ONE);
       } catch (Exception exception) {
         // ---
       }
-    return new InfluenceMatrixSvd(MatrixQ.require(design));
+    return new InfluenceMatrixSvd(design);
+  }
+
+  /** @param design
+   * @param one
+   * @return */
+  static InfluenceMatrix of(Tensor design, Scalar one) {
+    Tensor pinv = PseudoInverse.usingCholesky(design, one);
+    return new InfluenceMatrixExact(design.dot(pinv), one);
   }
 
   /** projection matrix defines a projection of a tangent vector at given point to a vector in
@@ -42,10 +51,13 @@ public interface InfluenceMatrix {
    * The matrix is a point in the Grassmannian manifold Gr(n, k) where k denotes the matrix rank. */
   Tensor matrix();
 
-  /** @return diagonal entries of influence matrix guaranteed to be in the unit interval [0, 1] */
+  /** Remark: The trace of the influence matrix equals the rank of the design matrix
+   * 
+   * @return diagonal entries of influence matrix guaranteed to be in the unit interval [0, 1] */
   Tensor leverages();
 
-  /** @return sqrt of leverages identical to Mahalanobis distance */
+  /** @return sqrt of leverages identical to Mahalanobis distance guaranteed to be in the unit
+   * interval [0, 1] */
   Tensor leverages_sqrt();
 
   /** projection matrix defines a projection of a tangent vector at given point to a vector in

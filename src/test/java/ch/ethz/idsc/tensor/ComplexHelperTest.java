@@ -126,6 +126,7 @@ public class ComplexHelperTest extends TestCase {
     assertTrue(lessThan);
   }
 
+  @SuppressWarnings("unused")
   public void testEpsilon01() {
     Scalar re = RealScalar.of(0);
     Scalar im = RealScalar.of(4.9E-324);

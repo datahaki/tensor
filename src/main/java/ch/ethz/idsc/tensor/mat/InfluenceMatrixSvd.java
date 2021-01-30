@@ -1,27 +1,36 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
-import java.io.Serializable;
+import java.util.Objects;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-public class InfluenceMatrixSvd extends InfluenceMatrixBase implements Serializable {
-  private static final long serialVersionUID = -4003784062992146410L;
-  // TODO R2Averaging with NdTreeMap
+/* package */ class InfluenceMatrixSvd extends InfluenceMatrixBase {
+  private static final long serialVersionUID = 9031954398495308641L;
+  private static final Scalar _0 = RealScalar.of(0.0);
+  private static final Scalar _1 = RealScalar.of(1.0);
   // ---
   private final Tensor design;
   private final SingularValueDecomposition svd;
+  private Tensor matrix;
 
-  InfluenceMatrixSvd(Tensor design) {
+  public InfluenceMatrixSvd(Tensor design) {
+    super(RealScalar.ONE);
     this.design = design;
     svd = SingularValueDecomposition.of(design);
   }
 
-  @Override
-  public Tensor matrix() {
+  @Override // from InfluenceMatrix
+  public synchronized Tensor matrix() {
+    if (Objects.isNull(matrix))
+      matrix = _matrix();
+    return matrix;
+  }
+
+  private Tensor _matrix() {
     Tensor matrix = design.dot(PseudoInverse.of(svd));
     // theory guarantees that entries of diagonal are in interval [0, 1]
     // but the numerics don't always reflect that.
@@ -39,8 +48,9 @@ public class InfluenceMatrixSvd extends InfluenceMatrixBase implements Serializa
     return result;
   }
 
-  @Override
-  public synchronized Tensor image(Tensor vector) {
+  /***************************************************/
+  @Override // from InfluenceMatrix
+  public Tensor image(Tensor vector) {
     Tensor u = svd.getU();
     Tensor kron = Tensor.of(svd.values().stream() //
         .map(Scalar.class::cast) //
@@ -51,10 +61,13 @@ public class InfluenceMatrixSvd extends InfluenceMatrixBase implements Serializa
     return u.dot(kron.pmul(vector.dot(u)));
   }
 
-  private static final Scalar _0 = RealScalar.of(0.0);
-  private static final Scalar _1 = RealScalar.of(1.0);
-
   private static Scalar unitize_chop(Scalar scalar) {
     return Tolerance.CHOP.isZero(scalar) ? _0 : _1;
+  }
+
+  /***************************************************/
+  @Override // from InfluenceMatrixBase
+  protected int length() {
+    return design.length();
   }
 }

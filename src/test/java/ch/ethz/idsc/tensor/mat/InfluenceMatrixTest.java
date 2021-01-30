@@ -3,12 +3,10 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.Serialization;
-import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -74,19 +72,6 @@ public class InfluenceMatrixTest extends TestCase {
     Tolerance.CHOP.requireClose(vim1, vim3);
   }
 
-  public void testRankDeficient() {
-    int n = 7;
-    int _m = 5;
-    Distribution distribution = NormalDistribution.standard();
-    for (int r = 1; r < _m - 1; ++r) {
-      Tensor m1 = RandomVariate.of(distribution, n, r);
-      Tensor m2 = RandomVariate.of(distribution, r, _m);
-      Tensor design = m1.dot(m2);
-      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-      influenceMatrix.image(RandomVariate.of(distribution, n));
-    }
-  }
-
   public void testRankDeficientQuantity() {
     int n = 7;
     int _m = 5;
@@ -96,23 +81,12 @@ public class InfluenceMatrixTest extends TestCase {
       Tensor m2 = RandomVariate.of(distribution, r, _m);
       Tensor design = m1.dot(m2);
       InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+      SymmetricMatrixQ.require(influenceMatrix.matrix());
       influenceMatrix.image(RandomVariate.of(distribution, n));
       influenceMatrix.leverages();
       influenceMatrix.leverages_sqrt();
       influenceMatrix.matrix().map(QuantityMagnitude.singleton(Unit.ONE));
     }
-  }
-
-  public void testExact() {
-    int n = 7;
-    int _m = 3;
-    Distribution distribution = DiscreteUniformDistribution.of(-20, 20);
-    Tensor design = RandomVariate.of(distribution, n, _m);
-    InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    ExactTensorQ.require(influenceMatrix.matrix());
-    Tensor vector = RandomVariate.of(distribution, n);
-    Tensor image = influenceMatrix.image(vector);
-    ExactTensorQ.require(image);
   }
 
   public void testNullFail() {

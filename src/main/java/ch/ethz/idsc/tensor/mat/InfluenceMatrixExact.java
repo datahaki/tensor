@@ -1,28 +1,33 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
-import java.io.Serializable;
-
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class InfluenceMatrixExact extends InfluenceMatrixBase implements Serializable {
-  private static final long serialVersionUID = 174847716560122416L;
+/* package */ class InfluenceMatrixExact extends InfluenceMatrixBase {
+  private static final long serialVersionUID = -592326580204883709L;
   // ---
-  private final Tensor design;
   private final Tensor matrix;
 
-  public InfluenceMatrixExact(Tensor design, Tensor matrix) {
-    this.design = design;
+  /** @param matrix == design . design^+ */
+  public InfluenceMatrixExact(Tensor matrix, Scalar one) {
+    super(one);
     this.matrix = matrix;
   }
 
-  @Override
+  @Override // from InfluenceMatrixBase
   public Tensor matrix() {
     return matrix;
   }
 
-  @Override
-  public synchronized Tensor image(Tensor vector) {
+  @Override // from InfluenceMatrixBase
+  public Tensor image(Tensor vector) {
+    // LONGTERM is vector . matrix is better / more consistent !?
     return matrix.dot(vector);
+  }
+
+  @Override // from InfluenceMatrixBase
+  protected int length() {
+    return matrix.length();
   }
 }

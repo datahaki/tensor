@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -23,25 +24,36 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
   private final Tensor d;
 
   /** @param A hermitian matrix
-   * @param chop */
-  public CholeskyDecompositionImpl(Tensor A, Chop chop) {
+   * @param chop
+   * @param one for instance {@link RealScalar#ONE}, or GaussScalar[1, 17] */
+  public CholeskyDecompositionImpl(Tensor A, Chop chop, Scalar one) {
     this.chop = chop;
     int n = A.length();
-    l = IdentityMatrix.of(n);
-    d = Array.zeros(n);
+    l = DiagonalMatrix.of(n, one);
+    Scalar zero = one.zero();
+    d = Array.fill(() -> zero, n);
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < i; ++j) {
-        Tensor lik = l.get(i).extract(0, j);
-        Tensor ljk = l.get(j).extract(0, j).map(Conjugate.FUNCTION);
         Scalar aij = A.Get(i, j);
         chop.requireClose(Conjugate.FUNCTION.apply(aij), A.Get(j, i));
-        Scalar value = aij.subtract(lik.dot(d.extract(0, j).pmul(ljk)));
+        final Scalar value;
+        if (0 == j)
+          value = aij;
+        else {
+          Tensor lik = l.get(i).extract(0, j);
+          Tensor ljk = l.get(j).extract(0, j).map(Conjugate.FUNCTION);
+          value = aij.subtract(lik.dot(d.extract(0, j).pmul(ljk)));
+        }
         if (Scalars.nonZero(value))
           l.set(value.divide(d.Get(j)), i, j);
       }
-      Tensor lik = l.get(i).extract(0, i);
-      Tensor ljk = lik.map(Conjugate.FUNCTION); // variable name is deliberate
-      d.set(A.get(i, i).subtract(lik.dot(d.extract(0, i).pmul(ljk))), i);
+      if (0 == i)
+        d.set(A.get(i, i), i);
+      else {
+        Tensor lik = l.get(i).extract(0, i);
+        Tensor ljk = lik.map(Conjugate.FUNCTION); // variable name is deliberate
+        d.set(A.get(i, i).subtract(lik.dot(d.extract(0, i).pmul(ljk))), i);
+      }
     }
   }
 
