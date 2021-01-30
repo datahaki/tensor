@@ -151,8 +151,8 @@ public class MatrixPowerTest extends TestCase {
     Scalar one = GaussScalar.of(1, prime);
     for (int n = 3; n < 6; ++n) {
       Tensor matrix = RandomVariate.of(distribution, n, n).map(s -> GaussScalar.of(s.number().intValue(), prime));
-      Tensor result = MatrixPower.of(matrix, +343386231231234L, one, Pivots.FIRST_NON_ZERO);
-      Tensor revers = MatrixPower.of(matrix, -343386231231234L, one, Pivots.FIRST_NON_ZERO);
+      Tensor result = MatrixPower.of(matrix, +343386231231234L, Pivots.FIRST_NON_ZERO);
+      Tensor revers = MatrixPower.of(matrix, -343386231231234L, Pivots.FIRST_NON_ZERO);
       MatrixQ.requireSize(result, n, n);
       assertEquals(DiagonalMatrix.of(n, one), Dot.of(result, revers));
     }

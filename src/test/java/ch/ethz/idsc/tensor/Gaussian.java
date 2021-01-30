@@ -72,13 +72,18 @@ public class Gaussian extends AbstractScalar implements //
   }
 
   @Override
-  public Number number() {
-    throw TensorRuntimeException.of(this);
+  public Scalar zero() {
+    return ZERO;
   }
 
   @Override
-  public Scalar zero() {
-    return ZERO;
+  public Scalar one() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Number number() {
+    throw TensorRuntimeException.of(this);
   }
 
   @Override

@@ -52,6 +52,8 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   public static final Scalar INDETERMINATE = of(Double.NaN);
   /** positive numeric zero */
   private static final Scalar DOUBLE_ZERO = of(0.0);
+  /** positive numeric zero */
+  private static final Scalar DOUBLE_ONE = of(1.0);
 
   /** @param value
    * @return new instance of {@link DoubleScalar} */
@@ -105,13 +107,18 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   }
 
   @Override // from Scalar
-  public Number number() {
-    return value;
+  public Scalar zero() {
+    return DOUBLE_ZERO;
   }
 
   @Override // from Scalar
-  public Scalar zero() {
-    return DOUBLE_ZERO;
+  public Scalar one() {
+    return DOUBLE_ONE;
+  }
+
+  @Override // from Scalar
+  public Number number() {
+    return value;
   }
 
   /***************************************************/

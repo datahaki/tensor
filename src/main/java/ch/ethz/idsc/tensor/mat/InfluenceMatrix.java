@@ -2,8 +2,6 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
-import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** References:
@@ -22,20 +20,12 @@ public interface InfluenceMatrix {
   static InfluenceMatrix of(Tensor design) {
     if (ExactTensorQ.of(design))
       try {
-        Tensor pinv = PseudoInverse.usingCholesky(design, RealScalar.ONE);
-        return new InfluenceMatrixExact(design.dot(pinv), RealScalar.ONE);
+        Tensor pinv = PseudoInverse.usingCholesky(design);
+        return new InfluenceMatrixExact(design.dot(pinv));
       } catch (Exception exception) {
         // ---
       }
     return new InfluenceMatrixSvd(design);
-  }
-
-  /** @param design
-   * @param one
-   * @return */
-  static InfluenceMatrix of(Tensor design, Scalar one) {
-    Tensor pinv = PseudoInverse.usingCholesky(design, one);
-    return new InfluenceMatrixExact(design.dot(pinv), one);
   }
 
   /** projection matrix defines a projection of a tangent vector at given point to a vector in

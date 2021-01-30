@@ -47,9 +47,9 @@ public class MatrixExpTest extends TestCase {
   }
 
   public void testExp() {
-    double val = RANDOM.nextGaussian();
-    double va2 = RANDOM.nextGaussian();
-    double va3 = RANDOM.nextGaussian();
+    double val = RANDOM.nextGaussian() * 0.1;
+    double va2 = RANDOM.nextGaussian() * 0.1;
+    double va3 = RANDOM.nextGaussian() * 0.1;
     double[][] mat = new double[][] { { 0, val, va2 }, { -val, 0, va3 }, { -va2, -va3, 0 } };
     Tensor bu = Tensors.matrixDouble(mat);
     Tensor ort = MatrixExp.of(bu);

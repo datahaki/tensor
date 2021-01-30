@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.lie;
 
 import java.math.BigInteger;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.Pivot;
@@ -34,7 +33,7 @@ public enum MatrixPower {
    * @return matrix ^ exponent
    * @throws Exception if matrix is not square */
   public static Tensor of(Tensor matrix, BigInteger exponent) {
-    return of(matrix, exponent, RealScalar.ONE, Pivots.ARGMAX_ABS);
+    return of(matrix, exponent, Pivots.ARGMAX_ABS);
   }
 
   /** @param matrix square
@@ -42,27 +41,26 @@ public enum MatrixPower {
    * @return matrix ^ exponent
    * @throws Exception if matrix is not square */
   public static Tensor of(Tensor matrix, long exponent) {
-    return of(matrix, BigInteger.valueOf(exponent), RealScalar.ONE, Pivots.ARGMAX_ABS);
+    return of(matrix, BigInteger.valueOf(exponent));
   }
 
   /***************************************************/
   /** @param matrix
    * @param exponent
-   * @param one
    * @param pivot
    * @return */
-  public static Tensor of(Tensor matrix, BigInteger exponent, Scalar one, Pivot pivot) {
-    BinaryPower<Tensor> binaryPower = new BinaryPower<>(new MatrixProduct(matrix.length(), one, pivot));
+  public static Tensor of(Tensor matrix, BigInteger exponent, Pivot pivot) {
+    BinaryPower<Tensor> binaryPower = new BinaryPower<>(new MatrixProduct(matrix.length(), pivot));
     // check for square matrix is required when exponent in {0, 1}
     return binaryPower.raise(SquareMatrixQ.require(matrix), exponent);
   }
 
   /** @param matrix
    * @param exponent
-   * @param one
+   * @param pivot
    * @return */
-  public static Tensor of(Tensor matrix, long exponent, Scalar one, Pivot pivot) {
-    return of(matrix, BigInteger.valueOf(exponent), one, pivot);
+  public static Tensor of(Tensor matrix, long exponent, Pivot pivot) {
+    return of(matrix, BigInteger.valueOf(exponent), pivot);
   }
 
   /***************************************************/

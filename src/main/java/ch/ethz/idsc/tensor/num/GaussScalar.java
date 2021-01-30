@@ -103,6 +103,11 @@ public class GaussScalar extends AbstractScalar implements //
     return new GaussScalar(BigInteger.ZERO, prime);
   }
 
+  @Override // from Scalar
+  public Scalar one() {
+    return new GaussScalar(BigInteger.ONE, prime);
+  }
+
   /***************************************************/
   @Override // from AbstractScalar
   protected GaussScalar plus(Scalar scalar) {

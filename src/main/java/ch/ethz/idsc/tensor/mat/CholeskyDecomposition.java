@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -37,14 +36,7 @@ public interface CholeskyDecomposition {
    * @return Cholesky decomposition of matrix
    * @throws Exception if matrix is not hermitian, or decomposition failed */
   static CholeskyDecomposition of(Tensor matrix, Chop chop) {
-    return new CholeskyDecompositionImpl(matrix, chop, RealScalar.ONE);
-  }
-
-  /** @param matrix hermitian and positive semi-definite matrix
-   * @param one multiplicative, for instance GaussScalar[1, 13]
-   * @return Cholesky decomposition of matrix */
-  static CholeskyDecomposition of(Tensor matrix, Scalar one) {
-    return new CholeskyDecompositionImpl(matrix, Tolerance.CHOP, one);
+    return new CholeskyDecompositionImpl(matrix, chop);
   }
 
   /***************************************************/

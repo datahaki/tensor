@@ -92,13 +92,18 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override // from Scalar
-  public Number number() {
-    throw TensorRuntimeException.of(this);
+  public Quaternion zero() {
+    return new QuaternionImpl(w.zero(), xyz.map(Scalar::zero));
   }
 
   @Override // from Scalar
-  public Quaternion zero() {
-    return new QuaternionImpl(w.zero(), xyz.map(Scalar::zero));
+  public Scalar one() {
+    return new QuaternionImpl(w.one(), xyz.map(Scalar::zero));
+  }
+
+  @Override // from Scalar
+  public Number number() {
+    throw TensorRuntimeException.of(this);
   }
 
   /***************************************************/

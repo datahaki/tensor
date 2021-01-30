@@ -106,6 +106,16 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   @Override // from Scalar
+  public Scalar zero() {
+    return ofUnit(value.zero());
+  }
+
+  @Override // from Scalar
+  public Scalar one() {
+    return value.one();
+  }
+
+  @Override // from Scalar
   public Number number() {
     /* extracting the value of a Quantity to a primitive goes against the spirit
      * of using units in the first place. For instance, 3[s] and 3[h] are from the
@@ -117,11 +127,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
      * scalar -> QuantityMagnitude.SI().in(unit).apply(scalar).number();
      * where unit is the desired reference for instance "kW*h^-1" */
     throw TensorRuntimeException.of(this);
-  }
-
-  @Override // from Scalar
-  public Scalar zero() {
-    return ofUnit(value.zero());
   }
 
   /***************************************************/

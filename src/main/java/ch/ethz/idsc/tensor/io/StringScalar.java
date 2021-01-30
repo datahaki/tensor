@@ -59,12 +59,17 @@ public class StringScalar extends AbstractScalar implements Comparable<Scalar>, 
   }
 
   @Override // from Scalar
-  public Number number() {
+  public Scalar zero() {
     throw TensorRuntimeException.of(this);
   }
 
   @Override // from Scalar
-  public Scalar zero() {
+  public Scalar one() {
+    throw TensorRuntimeException.of(this);
+  }
+
+  @Override // from Scalar
+  public Number number() {
     throw TensorRuntimeException.of(this);
   }
 

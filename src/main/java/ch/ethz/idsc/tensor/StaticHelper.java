@@ -88,6 +88,5 @@ import ch.ethz.idsc.tensor.sca.Sign;
       RealScalar.ZERO, // 0
       RealScalar.ONE }; // +1
   /***************************************************/
-  static final BinaryPower<Scalar> BINARY_POWER = //
-      new BinaryPower<>(new ScalarProduct(Quaternion.ONE));
+  public static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
 }

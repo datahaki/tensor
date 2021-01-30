@@ -35,7 +35,7 @@ public class CholeskyDecompositionImplTest extends TestCase {
     SymmetricMatrixQ.require(matrix);
     HermitianMatrixQ.require(matrix);
     CholeskyDecomposition choleskyDecomposition = //
-        Serialization.copy(CholeskyDecomposition.of(matrix, GaussScalar.of(1, prime)));
+        Serialization.copy(CholeskyDecomposition.of(matrix));
     Tensor result = Dot.of( //
         choleskyDecomposition.getL(), //
         DiagonalMatrix.with(choleskyDecomposition.diagonal()), //
@@ -44,7 +44,7 @@ public class CholeskyDecompositionImplTest extends TestCase {
     Scalar one = GaussScalar.of(1, prime);
     Tensor id = DiagonalMatrix.of(n, one);
     Tensor res1 = choleskyDecomposition.solve(id);
-    Tensor res2 = Inverse.of(matrix, one, Pivots.FIRST_NON_ZERO);
+    Tensor res2 = Inverse.of(matrix, Pivots.FIRST_NON_ZERO);
     assertEquals(res1, res2);
   }
 

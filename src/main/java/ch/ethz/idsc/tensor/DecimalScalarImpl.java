@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.sca.N;
   private static final long serialVersionUID = -8505786185052895466L;
   private static final int DEFAULT_CONTEXT = 34;
   private static final Scalar DECIMAL_ZERO = DecimalScalar.of(BigDecimal.ZERO);
+  private static final Scalar DECIMAL_ONE = DecimalScalar.of(BigDecimal.ONE);
   /** BigDecimal precision of a double */
   private static final int DOUBLE_PRECISION = 17;
 
@@ -97,6 +98,11 @@ import ch.ethz.idsc.tensor.sca.N;
   @Override // from Scalar
   public Scalar zero() {
     return DECIMAL_ZERO;
+  }
+
+  @Override // from Scalar
+  public Scalar one() {
+    return DECIMAL_ONE;
   }
 
   private static MathContext hint(int precision1, int precision2) {

@@ -99,6 +99,16 @@ public final class RationalScalar extends AbstractRealScalar implements //
   }
 
   @Override // from Scalar
+  public Scalar zero() {
+    return ZERO;
+  }
+
+  @Override // from Scalar
+  public Scalar one() {
+    return ONE;
+  }
+
+  @Override // from Scalar
   public Number number() {
     if (bigFraction.isInteger()) {
       BigInteger bigInteger = numerator();
@@ -115,11 +125,6 @@ public final class RationalScalar extends AbstractRealScalar implements //
       return bigInteger;
     }
     return toBigDecimal(MathContext.DECIMAL64).doubleValue();
-  }
-
-  @Override // from Scalar
-  public Scalar zero() {
-    return ZERO;
   }
 
   /***************************************************/

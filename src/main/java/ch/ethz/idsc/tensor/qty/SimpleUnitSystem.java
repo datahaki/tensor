@@ -60,9 +60,8 @@ public class SimpleUnitSystem implements UnitSystem {
         if (map.containsKey(atom)) {
           Scalar value = ((Quantity) scalar).value();
           Unit alt = QuantityUnit.of(map.get(atom));
-          // LONGTERM this is not sufficiently elegant
           if (Scalars.isZero(value) || // non-zero
-              !value.multiply(value).equals(value) || // multiplicative 1
+              !value.one().equals(value) || // not multiplicative 1
               !alt.toString().equals(atom))
             throw TensorRuntimeException.of(scalar);
         }

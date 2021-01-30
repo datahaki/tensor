@@ -1,17 +1,17 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
-import ch.ethz.idsc.tensor.Scalar;
+import java.io.Serializable;
+
 import ch.ethz.idsc.tensor.Tensor;
 
-/* package */ class InfluenceMatrixExact extends InfluenceMatrixBase {
-  private static final long serialVersionUID = -592326580204883709L;
+/* package */ class InfluenceMatrixExact extends InfluenceMatrixBase implements Serializable {
+  private static final long serialVersionUID = -5637844310417226371L;
   // ---
   private final Tensor matrix;
 
   /** @param matrix == design . design^+ */
-  public InfluenceMatrixExact(Tensor matrix, Scalar one) {
-    super(one);
+  public InfluenceMatrixExact(Tensor matrix) {
     this.matrix = matrix;
   }
 

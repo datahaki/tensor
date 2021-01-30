@@ -12,13 +12,7 @@ import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /* package */ class ExtendedGCDWrap implements Serializable {
-  private static final long serialVersionUID = -7696537372627961269L;
-  // ---
-  private final Scalar one;
-
-  public ExtendedGCDWrap(Scalar one) {
-    this.one = one;
-  }
+  private static final long serialVersionUID = 2769162051800901176L;
 
   public ExtendedGCD function(Tensor vector) {
     return new ExtendedGCDImpl(vector);
@@ -39,7 +33,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
       this.b = vector.Get(1);
       if (Scalars.isZero(a)) {
         x = a;
-        y = one;
+        y = a.one();
         gcd = b;
       } else {
         ExtendedGCDImpl result = new ExtendedGCDImpl(Tensors.of(Mod.function(a).apply(b), a));

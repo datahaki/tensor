@@ -16,7 +16,7 @@ public class ScalarProductTest extends TestCase {
     GaussScalar gaussScalar = GaussScalar.of(432, prime);
     GaussScalar power = gaussScalar.power(RealScalar.of(-123));
     Scalar now = GaussScalar.of(1, prime);
-    ScalarProduct scalarProduct = new ScalarProduct(now);
+    ScalarProduct scalarProduct = ScalarProduct.INSTANCE;
     BinaryPower<Scalar> binaryPower = new BinaryPower<>(scalarProduct);
     for (int index = 0; index < 123; ++index)
       now = now.divide(gaussScalar);
@@ -27,12 +27,12 @@ public class ScalarProductTest extends TestCase {
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {
-    BinaryPower<Scalar> binaryPower = new BinaryPower<>(new ScalarProduct(RealScalar.ONE));
+    BinaryPower<Scalar> binaryPower = new BinaryPower<>(ScalarProduct.INSTANCE);
     BinaryPower<Scalar> copy = Serialization.copy(binaryPower);
     assertEquals(copy.raise(RealScalar.of(2), BigInteger.valueOf(3)), RealScalar.of(8));
   }
 
   public void testSimple() {
-    AssertFail.of(() -> new ScalarProduct(null));
+    AssertFail.of(() -> ScalarProduct.INSTANCE.identity(null));
   }
 }

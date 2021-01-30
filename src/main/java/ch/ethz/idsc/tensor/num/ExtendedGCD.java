@@ -13,8 +13,8 @@ import ch.ethz.idsc.tensor.Tensor;
 public interface ExtendedGCD {
   /** @param one
    * @return */
-  static Function<Tensor, ExtendedGCD> function(Scalar one) {
-    return new ExtendedGCDWrap(one)::function;
+  static Function<Tensor, ExtendedGCD> function() {
+    return new ExtendedGCDWrap()::function;
   }
 
   /** @return greatest common divider */

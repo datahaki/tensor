@@ -150,7 +150,7 @@ public class GaussScalarTest extends TestCase {
 
   public void testPower2() {
     long prime = 59;
-    BinaryPower<Scalar> binaryPower = new BinaryPower<>(new ScalarProduct(GaussScalar.of(1, prime)));
+    BinaryPower<Scalar> binaryPower = new BinaryPower<>(ScalarProduct.INSTANCE);
     Random random = new SecureRandom();
     for (int index = 0; index < prime; ++index) {
       GaussScalar gaussScalar = GaussScalar.of(random.nextInt(), prime);

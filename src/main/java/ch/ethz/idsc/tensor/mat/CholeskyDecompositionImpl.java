@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -17,20 +16,20 @@ import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 
 /* package */ class CholeskyDecompositionImpl implements CholeskyDecomposition, Serializable {
-  private static final long serialVersionUID = 4983293972273259086L;
+  private static final long serialVersionUID = 7823195931193369647L;
   // ---
   private final Chop chop;
   private final Tensor l;
   private final Tensor d;
 
   /** @param A hermitian matrix
-   * @param chop
-   * @param one for instance {@link RealScalar#ONE}, or GaussScalar[1, 17] */
-  public CholeskyDecompositionImpl(Tensor A, Chop chop, Scalar one) {
+   * @param chop */
+  public CholeskyDecompositionImpl(Tensor A, Chop chop) {
     this.chop = chop;
     int n = A.length();
-    l = DiagonalMatrix.of(n, one);
-    Scalar zero = one.zero();
+    Scalar a00 = A.Get(0, 0);
+    l = DiagonalMatrix.of(n, a00.one());
+    Scalar zero = a00.zero();
     d = Array.fill(() -> zero, n);
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < i; ++j) {

@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -49,8 +50,14 @@ public class StringScalarTest extends TestCase {
     AssertFail.of(() -> ComplexScalar.I.multiply(StringScalar.of("asd")));
   }
 
-  public void testFail() {
+  public void testNullFail() {
     AssertFail.of(() -> StringScalar.of(null));
+  }
+
+  public void testOneFail() {
+    Scalar scalar = StringScalar.of("abc");
+    AssertFail.of(() -> scalar.zero());
+    AssertFail.of(() -> scalar.one());
   }
 
   public void testNonExact() {

@@ -7,7 +7,6 @@ import java.math.MathContext;
 import java.util.Optional;
 
 import ch.ethz.idsc.tensor.num.BinaryPower;
-import ch.ethz.idsc.tensor.num.ScalarProduct;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.sca.Abs;
@@ -31,8 +30,7 @@ import ch.ethz.idsc.tensor.sca.Sinh;
 /* package */ class ComplexScalarImpl extends AbstractScalar implements ComplexScalar, //
     ChopInterface, ExactScalarQInterface, MachineNumberQInterface, NInterface, Serializable {
   private static final long serialVersionUID = 3023231904329254618L;
-  private static final BinaryPower<Scalar> BINARY_POWER = //
-      new BinaryPower<>(new ScalarProduct(RealScalar.ONE));
+  private static final BinaryPower<Scalar> BINARY_POWER = StaticHelper.BINARY_POWER;
 
   /** creator with package visibility
    * 
@@ -105,13 +103,18 @@ import ch.ethz.idsc.tensor.sca.Sinh;
   }
 
   @Override // from Scalar
-  public Number number() {
-    throw TensorRuntimeException.of(this);
+  public Scalar zero() {
+    return re.zero().add(im.zero());
   }
 
   @Override // from Scalar
-  public Scalar zero() {
-    return re.zero().add(im.zero());
+  public Scalar one() {
+    return re.one();
+  }
+
+  @Override // from Scalar
+  public Number number() {
+    throw TensorRuntimeException.of(this);
   }
 
   /***************************************************/

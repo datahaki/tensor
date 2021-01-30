@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.RealScalar;
@@ -8,8 +9,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Clips;
 
-/* package */ class InfluenceMatrixSvd extends InfluenceMatrixBase {
-  private static final long serialVersionUID = 9031954398495308641L;
+/* package */ class InfluenceMatrixSvd extends InfluenceMatrixBase implements Serializable {
+  private static final long serialVersionUID = -726284537635969599L;
   private static final Scalar _0 = RealScalar.of(0.0);
   private static final Scalar _1 = RealScalar.of(1.0);
   // ---
@@ -18,7 +19,6 @@ import ch.ethz.idsc.tensor.sca.Clips;
   private Tensor matrix;
 
   public InfluenceMatrixSvd(Tensor design) {
-    super(RealScalar.ONE);
     this.design = design;
     svd = SingularValueDecomposition.of(design);
   }

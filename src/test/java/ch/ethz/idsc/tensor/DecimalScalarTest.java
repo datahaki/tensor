@@ -37,6 +37,7 @@ public class DecimalScalarTest extends TestCase {
     Scalar d = s.under(Pi.TWO);
     assertTrue(d instanceof DoubleScalar);
     assertEquals(d, RealScalar.of(2));
+    assertEquals(s.multiply(s.one()), s);
   }
 
   public void testUnderRational() {

@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.lie.MatrixPower;
  * @see MatrixPower */
 public interface GroupInterface<T> {
   /** @return value when exponent equals zero */
-  T identity();
+  T identity(T object);
 
   /** @param object to invert when the given exponent is negative
    * @return */

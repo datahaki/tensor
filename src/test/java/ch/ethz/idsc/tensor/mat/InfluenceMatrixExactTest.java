@@ -7,7 +7,6 @@ import java.util.Random;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dot;
@@ -33,16 +32,17 @@ public class InfluenceMatrixExactTest extends TestCase {
     ExactTensorQ.require(image);
     SymmetricMatrixQ.require(influenceMatrix.matrix());
     assertEquals(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(3));
+    String string = influenceMatrix.toString();
+    assertTrue(string.startsWith("InfluenceMatrix"));
   }
 
   public void testGaussScalar() throws ClassNotFoundException, IOException {
     int n = 7;
     int m = 3;
     int prime = 7919;
-    Scalar one = GaussScalar.of(1, prime);
     Random random = new Random();
     Tensor design = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, m);
-    InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design, one));
+    InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
     Tensor matrix = influenceMatrix.matrix();
     SymmetricMatrixQ.require(matrix);
     assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));

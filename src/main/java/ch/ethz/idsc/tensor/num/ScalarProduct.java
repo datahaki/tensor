@@ -1,26 +1,16 @@
 // code by jph
 package ch.ethz.idsc.tensor.num;
 
-import java.io.Serializable;
-import java.util.Objects;
-
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 
 /** instantiated by {@link Scalars#binaryPower(Scalar)} */
-public class ScalarProduct implements GroupInterface<Scalar>, Serializable {
-  private static final long serialVersionUID = 2474105585311096988L;
-  // ---
-  private final Scalar one;
-
-  /** @param one assumed to be non-null */
-  public ScalarProduct(Scalar one) {
-    this.one = Objects.requireNonNull(one);
-  }
+public enum ScalarProduct implements GroupInterface<Scalar> {
+  INSTANCE;
 
   @Override // from GroupInterface
-  public Scalar identity() {
-    return one;
+  public Scalar identity(Scalar scalar) {
+    return scalar.one();
   }
 
   @Override // from GroupInterface
@@ -33,8 +23,8 @@ public class ScalarProduct implements GroupInterface<Scalar>, Serializable {
     return s1.multiply(s2);
   }
 
-  @Override // from Object
+  @Override
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), one);
+    return String.format("%s", getClass().getSimpleName());
   }
 }

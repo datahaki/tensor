@@ -47,16 +47,21 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
   }
 
   @Override // from Scalar
+  public Scalar zero() {
+    return FALSE;
+  }
+
+  @Override // from Scalar
+  public Scalar one() {
+    return TRUE;
+  }
+
+  @Override // from Scalar
   public Number number() {
     // since Boolean is not an instance of Number, we return type Integer
     return value //
         ? 1
         : 0;
-  }
-
-  @Override // from Scalar
-  public Scalar zero() {
-    return FALSE;
   }
 
   @Override // from Scalar

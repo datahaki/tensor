@@ -20,6 +20,6 @@ public enum Denominator implements ScalarUnaryOperator {
       RationalScalar rationalScalar = (RationalScalar) scalar;
       return RealScalar.of(rationalScalar.denominator());
     }
-    return RealScalar.ONE;
+    return scalar.one();
   }
 }

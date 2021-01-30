@@ -2,8 +2,13 @@
 package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.lie.MatrixPower;
+import ch.ethz.idsc.tensor.mat.CholeskyDecomposition;
+import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
+import ch.ethz.idsc.tensor.mat.PseudoInverse;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.SimpleUnitSystem;
 
 /** on top of the capabilities of a {@link Tensor} a scalar can be inverted
  * 
@@ -95,6 +100,36 @@ public interface Scalar extends Tensor {
    * @throws ArithmeticException if scalar equals to 0, or cannot be inverted */
   Scalar reciprocal();
 
+  /** additive neutral element of this scalar
+   * 
+   * <p>For any scalar s, the scalar s.zero() shall satisfy the equation
+   * <pre>
+   * s.add(zero()) equals s
+   * </pre>
+   * 
+   * <p>zero() is provided for the implementation of generic functions and algorithms,
+   * and used, for instance, in {@link LinearSolve}.
+   * 
+   * @return additive neutral element of field of this scalar
+   * @see Scalars#isZero(Scalar)
+   * @see Scalars#nonZero(Scalar) */
+  Scalar zero();
+
+  /** multiplicative one of this scalar
+   * 
+   * <p>For any scalar s, the scalar s.one() shall satisfy the equation
+   * <pre>
+   * s.multiply(one()) equals s
+   * </pre>
+   * 
+   * <p>one() is provided for the implementation of generic functions and algorithms.
+   * In the tensor library, the functions {@link MatrixPower}, {@link Inverse},
+   * {@link CholeskyDecomposition}, {@link PseudoInverse}, and {@link SimpleUnitSystem}
+   * rely on the function.
+   * 
+   * @return multiplicative neutral element of this scalar */
+  Scalar one();
+
   /** classes should override this method only if consistency is guaranteed,
    * as is the case for instances of RealScalar:
    * {@link RationalScalar}, {@link DoubleScalar}, {@link DecimalScalar}.
@@ -120,15 +155,4 @@ public interface Scalar extends Tensor {
    * @return this representation as {@link Number}
    * @throws TensorRuntimeException if scalar type does not support method */
   Number number();
-
-  /** zero() is provided for the implementation of generic functions and algorithms,
-   * and used, for instance, in {@link LinearSolve}.
-   * 
-   * <p>zero() is not intended to provide the zero scalar in the application layer.
-   * There, use for instance {@link RealScalar#ZERO}.
-   * 
-   * @return additive neutral element of field of this scalar
-   * @see Scalars#isZero(Scalar)
-   * @see Scalars#nonZero(Scalar) */
-  Scalar zero();
 }

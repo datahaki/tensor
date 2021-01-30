@@ -22,7 +22,7 @@ public class ExtendedGCDTest extends TestCase {
   }
 
   public void testSimple() throws ClassNotFoundException, IOException {
-    Function<Tensor, ExtendedGCD> function = ExtendedGCD.function(RealScalar.ONE);
+    Function<Tensor, ExtendedGCD> function = ExtendedGCD.function();
     Tensor vector = Tensors.vector(12334 * 5, 32332 * 5);
     ExtendedGCD extendedGCD = Serialization.copy(function.apply(vector));
     assertTrue(isConsistent(vector, extendedGCD));
@@ -35,7 +35,7 @@ public class ExtendedGCDTest extends TestCase {
       Scalar a = RandomVariate.of(distribution);
       Scalar b = RandomVariate.of(distribution);
       Scalar gcd1 = GCD.of(a, b);
-      Scalar gcd2 = ExtendedGCD.function(RealScalar.ONE).apply(Tensors.of(a, b)).gcd();
+      Scalar gcd2 = ExtendedGCD.function().apply(Tensors.of(a, b)).gcd();
       assertEquals(gcd1, Abs.FUNCTION.apply(gcd2));
     }
   }
@@ -44,8 +44,9 @@ public class ExtendedGCDTest extends TestCase {
     int prime = 379;
     Scalar a = GaussScalar.of(4 * 3, prime);
     Scalar b = GaussScalar.of(16 * 3, prime);
-    Function<Tensor, ExtendedGCD> function = ExtendedGCD.function(GaussScalar.of(1, prime));
+    Function<Tensor, ExtendedGCD> function = ExtendedGCD.function();
     ExtendedGCD result = function.apply(Tensors.of(a, b));
     VectorQ.requireLength(result.factors(), 2);
+    result.toString();
   }
 }
