@@ -233,4 +233,9 @@ public class CholeskyDecompositionTest extends TestCase {
       }
     }
   }
+
+  public void testRectFail() {
+    Tensor matrix = Tensors.fromString("{{10, I}}");
+    AssertFail.of(() -> CholeskyDecomposition.of(matrix));
+  }
 }

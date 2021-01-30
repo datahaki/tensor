@@ -7,7 +7,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.Pivot;
 import ch.ethz.idsc.tensor.mat.Pivots;
-import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 import ch.ethz.idsc.tensor.num.BinaryPower;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.sca.Power;
@@ -50,9 +49,9 @@ public enum MatrixPower {
    * @param pivot
    * @return */
   public static Tensor of(Tensor matrix, BigInteger exponent, Pivot pivot) {
-    BinaryPower<Tensor> binaryPower = new BinaryPower<>(new MatrixProduct(matrix.length(), pivot));
+    BinaryPower<Tensor> binaryPower = new BinaryPower<>(new MatrixProduct(pivot));
     // check for square matrix is required when exponent in {0, 1}
-    return binaryPower.raise(SquareMatrixQ.require(matrix), exponent);
+    return binaryPower.raise(matrix, exponent);
   }
 
   /** @param matrix

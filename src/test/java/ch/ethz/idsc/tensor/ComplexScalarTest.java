@@ -32,6 +32,12 @@ public class ComplexScalarTest extends TestCase {
     Tolerance.CHOP.requireClose(result, ComplexScalar.of(0.7071067811865475, -0.7071067811865475));
   }
 
+  public void testOne() {
+    Scalar scalar = ComplexScalar.of(56, 217);
+    assertEquals(scalar.one().multiply(scalar), scalar);
+    assertEquals(scalar.multiply(scalar.one()), scalar);
+  }
+
   public void testConstructFail() {
     AssertFail.of(() -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
     AssertFail.of(() -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));

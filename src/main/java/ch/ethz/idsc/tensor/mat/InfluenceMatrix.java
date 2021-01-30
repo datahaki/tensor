@@ -20,8 +20,7 @@ public interface InfluenceMatrix {
   static InfluenceMatrix of(Tensor design) {
     if (ExactTensorQ.of(design))
       try {
-        Tensor pinv = PseudoInverse.usingCholesky(design);
-        return new InfluenceMatrixExact(design.dot(pinv));
+        return new InfluenceMatrixExact(design.dot(PseudoInverse.usingCholesky(design)));
       } catch (Exception exception) {
         // ---
       }
@@ -41,9 +40,11 @@ public interface InfluenceMatrix {
    * The matrix is a point in the Grassmannian manifold Gr(n, k) where k denotes the matrix rank. */
   Tensor matrix();
 
-  /** Remark: The trace of the influence matrix equals the rank of the design matrix
+  /** Remark: The trace of the influence matrix, i.e. the sum of the leverages, equals
+   * the rank of the design matrix.
    * 
-   * @return diagonal entries of influence matrix guaranteed to be in the unit interval [0, 1] */
+   * @return diagonal entries of influence matrix each of which are guaranteed to be in the
+   * unit interval [0, 1] */
   Tensor leverages();
 
   /** @return sqrt of leverages identical to Mahalanobis distance guaranteed to be in the unit

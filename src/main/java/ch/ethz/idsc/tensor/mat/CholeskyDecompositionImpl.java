@@ -27,9 +27,8 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
   public CholeskyDecompositionImpl(Tensor A, Chop chop) {
     this.chop = chop;
     int n = A.length();
-    Scalar a00 = A.Get(0, 0);
-    l = DiagonalMatrix.of(n, a00.one());
-    Scalar zero = a00.zero();
+    l = IdentityMatrix.of(A);
+    Scalar zero = A.Get(0, 0).zero();
     d = Array.fill(() -> zero, n);
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < i; ++j) {

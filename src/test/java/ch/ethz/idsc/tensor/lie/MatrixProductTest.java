@@ -9,7 +9,7 @@ import junit.framework.TestCase;
 
 public class MatrixProductTest extends TestCase {
   public void testToString() throws ClassNotFoundException, IOException {
-    MatrixProduct matrixProduct = Serialization.copy(new MatrixProduct(3, Pivots.FIRST_NON_ZERO));
+    MatrixProduct matrixProduct = Serialization.copy(new MatrixProduct(Pivots.FIRST_NON_ZERO));
     String string = matrixProduct.toString();
     assertTrue(string.startsWith("MatrixProduct"));
   }

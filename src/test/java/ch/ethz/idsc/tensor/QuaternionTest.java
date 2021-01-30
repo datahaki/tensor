@@ -170,6 +170,12 @@ public class QuaternionTest extends TestCase {
     assertFalse(ExactScalarQ.of(q2));
   }
 
+  public void testOne() {
+    Scalar scalar = Quaternion.of(11, 33, -28, 29);
+    assertEquals(scalar.one().multiply(scalar), scalar);
+    assertEquals(scalar.multiply(scalar.one()), scalar);
+  }
+
   public void testN() {
     Scalar q1 = Quaternion.of(1, 3, -2, 2);
     ExactScalarQ.require(q1);

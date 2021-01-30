@@ -23,6 +23,6 @@ public enum Inverse {
    * @return inverse of given matrix
    * @throws Exception if given matrix is not invertible */
   public static Tensor of(Tensor matrix, Pivot pivot) {
-    return LinearSolve.of(matrix, DiagonalMatrix.of(matrix.length(), matrix.Get(0, 0).one()), pivot);
+    return LinearSolve.of(matrix, IdentityMatrix.of(matrix), pivot);
   }
 }

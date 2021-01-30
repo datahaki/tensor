@@ -28,4 +28,9 @@ public class IdentityMatrixTest extends TestCase {
   public void testFailOneNegative() {
     AssertFail.of(() -> DiagonalMatrix.of(-3, Quantity.of(1, "s")));
   }
+
+  public void testEmptyFail() {
+    AssertFail.of(() -> IdentityMatrix.of(Tensors.empty()));
+    AssertFail.of(() -> IdentityMatrix.of(Tensors.fromString("{{}}")));
+  }
 }
