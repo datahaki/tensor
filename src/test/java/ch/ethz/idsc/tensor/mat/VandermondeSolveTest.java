@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -15,7 +16,7 @@ public class VandermondeSolveTest extends TestCase {
   public void testSimple() {
     Tensor x = Tensors.vector(2, 3);
     Tensor q = Tensors.vector(4, 7);
-    Tensor ref = LinearSolve.of(VandermondeMatrix.of(x), q);
+    Tensor ref = LinearSolve.of(Transpose.of(VandermondeMatrix.of(x)), q);
     Tensor cmp = VandermondeSolve.of(x, q);
     ExactTensorQ.require(cmp);
     assertEquals(ref, cmp);
@@ -28,7 +29,7 @@ public class VandermondeSolveTest extends TestCase {
       try {
         Tensor x = RandomVariate.of(distribution, n);
         Tensor q = RandomVariate.of(distribution, n);
-        Tensor ref = LinearSolve.of(VandermondeMatrix.of(x), q);
+        Tensor ref = LinearSolve.of(Transpose.of(VandermondeMatrix.of(x)), q);
         Tensor cmp = VandermondeSolve.of(x, q);
         Chop._04.requireClose(ref, cmp);
       } catch (Exception exception) {

@@ -1,27 +1,32 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
-import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.ConstantArray;
-import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.alg.NestList;
+import ch.ethz.idsc.tensor.ext.Integers;
+import ch.ethz.idsc.tensor.itp.Fit;
 
+/** Reference:
+ * https://en.wikipedia.org/wiki/Vandermonde_matrix
+ * 
+ * @see Fit */
 public enum VandermondeMatrix {
   ;
   /** @param vector
+   * @param degree non negative
    * @return */
+  public static Tensor of(Tensor vector, int degree) {
+    Integers.requirePositiveOrZero(degree);
+    return Tensor.of(vector.stream() //
+        .map(Scalar.class::cast) //
+        .map(scalar -> NestList.of(scalar::multiply, scalar.one(), degree))); //
+  }
+
+  /** @param vector non-empty
+   * @return
+   * @throws Exception if vector is empty */
   public static Tensor of(Tensor vector) {
-    int n = vector.length();
-    Tensor matrix = Tensors.reserve(n);
-    VectorQ.require(vector);
-    matrix.append(ConstantArray.of(RealScalar.ONE, n));
-    if (1 < n) {
-      matrix.append(vector);
-      Tensor p = vector;
-      for (int index = 2; index < n; ++index)
-        matrix.append(p = p.pmul(vector));
-    }
-    return matrix;
+    return of(vector, vector.length() - 1);
   }
 }

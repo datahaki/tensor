@@ -15,7 +15,7 @@ public enum VandermondeSolve {
   ;
   /** @param x vector with non-duplicate entries
    * @param q vector
-   * @return LinearSolve.of(VandermondeMatrix.of(x), q)
+   * @return LinearSolve.of(Transpose.of(VandermondeMatrix.of(x)), q)
    * @throws Exception if entries in x are not unique */
   public static Tensor of(Tensor x, Tensor q) {
     int n = q.length();
