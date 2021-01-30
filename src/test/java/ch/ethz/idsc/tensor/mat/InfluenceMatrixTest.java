@@ -3,10 +3,12 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -21,18 +23,14 @@ import junit.framework.TestCase;
 public class InfluenceMatrixTest extends TestCase {
   private static void _check(InfluenceMatrix influenceMatrix) throws ClassNotFoundException, IOException {
     InfluenceMatrix _influenceMatrix = Serialization.copy(influenceMatrix);
-    {
-      Tensor leverages = _influenceMatrix.leverages();
-      leverages.stream() //
-          .map(Scalar.class::cast) //
-          .forEach(Clips.unit()::requireInside);
-    }
-    {
-      Tensor leverages_sqrt = _influenceMatrix.leverages_sqrt();
-      leverages_sqrt.stream() //
-          .map(Scalar.class::cast) //
-          .forEach(Clips.unit()::requireInside);
-    }
+    Tensor leverages = _influenceMatrix.leverages();
+    leverages.stream() //
+        .map(Scalar.class::cast) //
+        .forEach(Clips.unit()::requireInside);
+    Tensor leverages_sqrt = _influenceMatrix.leverages_sqrt();
+    leverages_sqrt.stream() //
+        .map(Scalar.class::cast) //
+        .forEach(Clips.unit()::requireInside);
   }
 
   public void testSimple() {
@@ -103,6 +101,18 @@ public class InfluenceMatrixTest extends TestCase {
       influenceMatrix.leverages_sqrt();
       influenceMatrix.matrix().map(QuantityMagnitude.singleton(Unit.ONE));
     }
+  }
+
+  public void testExact() {
+    int n = 7;
+    int _m = 3;
+    Distribution distribution = DiscreteUniformDistribution.of(-20, 20);
+    Tensor design = RandomVariate.of(distribution, n, _m);
+    InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+    ExactTensorQ.require(influenceMatrix.matrix());
+    Tensor vector = RandomVariate.of(distribution, n);
+    Tensor image = influenceMatrix.image(vector);
+    ExactTensorQ.require(image);
   }
 
   public void testNullFail() {

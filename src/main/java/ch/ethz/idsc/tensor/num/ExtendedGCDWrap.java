@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Mod;
 
@@ -33,6 +34,7 @@ import ch.ethz.idsc.tensor.sca.Mod;
     private final Scalar gcd;
 
     public ExtendedGCDImpl(Tensor vector) {
+      VectorQ.requireLength(vector, 2);
       this.a = vector.Get(0);
       this.b = vector.Get(1);
       if (Scalars.isZero(a)) {
@@ -55,6 +57,11 @@ import ch.ethz.idsc.tensor.sca.Mod;
     @Override // from ExtendedGCD
     public Tensor factors() {
       return Tensors.of(x, y);
+    }
+
+    @Override
+    public String toString() {
+      return String.format("%s[%s*%s+%s*%s==%s]", ExtendedGCD.class.getSimpleName(), a, x, b, y, gcd);
     }
   }
 }

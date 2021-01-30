@@ -45,6 +45,12 @@ public class ResourceDataTest extends TestCase {
     assertEquals(primes.Get(5), Scalars.fromString("13"));
   }
 
+  public void testPrimesLines() {
+    Tensor linesp = Tensor.of(ResourceData.lines("/number/primes.vector").stream().map(Scalars::fromString));
+    Tensor vector = ResourceData.of("/number/primes.vector");
+    assertEquals(linesp, vector);
+  }
+
   public void testCsvGz() {
     Tensor actual = ResourceData.of("/io/mathematica23.csv.gz");
     Tensor expected = Tensors.fromString("{{123/875+I, 9.3}, {-9, 5/8123123123123123, 1010101}}");

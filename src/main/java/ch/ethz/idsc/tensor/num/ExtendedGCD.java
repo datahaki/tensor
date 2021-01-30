@@ -6,7 +6,9 @@ import java.util.function.Function;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** inspired by
+/** ExtendedGCD is not used inside the tensor library
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ExtendedGCD.html">ExtendedGCD</a> */
 public interface ExtendedGCD {
   /** @param one

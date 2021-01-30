@@ -212,12 +212,13 @@ public class GaussScalarTest extends TestCase {
   }
 
   public void testBinaryOpFail() {
-    Scalar gs1 = GaussScalar.of(432, 677);
-    Scalar gs2 = GaussScalar.of(4, 13);
+    GaussScalar gs1 = GaussScalar.of(432, 677);
+    GaussScalar gs2 = GaussScalar.of(4, 13);
     AssertFail.of(() -> gs1.multiply(gs2));
     AssertFail.of(() -> gs1.add(gs2));
     AssertFail.of(() -> gs1.divide(gs2));
     AssertFail.of(() -> gs1.under(gs2));
+    AssertFail.of(() -> gs1.compareTo(gs2));
   }
 
   public void testHash2() {

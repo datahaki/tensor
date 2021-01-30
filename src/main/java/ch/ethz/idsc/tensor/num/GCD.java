@@ -6,7 +6,12 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.Mod;
 
-/** inspired by
+/** Mathematica always returns non-negative divisor, for example
+ * <pre>
+ * GCD[5, 10] == GCD[5, -10] == GCD[-5, 10] == GCD[-5, -10] == 5
+ * </pre>
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/GCD.html">GCD</a> */
 public enum GCD {
   ;

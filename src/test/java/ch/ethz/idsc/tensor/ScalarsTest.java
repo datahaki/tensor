@@ -103,7 +103,16 @@ public class ScalarsTest extends TestCase {
   }
 
   private static void checkCmp(double d1, double d2) {
-    assertEquals(Double.compare(d1, d2), Scalars.compare(RealScalar.of(d1), RealScalar.of(d2)));
+    int result = Scalars.compare(RealScalar.of(d1), RealScalar.of(d2));
+    assertEquals(Double.compare(d1, d2), result);
+    int swpped = Scalars.compare(RealScalar.of(d2), RealScalar.of(d1));
+    assertEquals(swpped, -result);
+  }
+
+  public void testStatic() {
+    assertTrue(Scalars.compare(RealScalar.of(2), RealScalar.of(3)) < 0);
+    assertTrue(Scalars.compare(RealScalar.of(5), RealScalar.of(1)) > 0);
+    assertTrue(Scalars.compare(RealScalar.of(8), RealScalar.of(8)) == 0);
   }
 
   public void testExtreme() {
