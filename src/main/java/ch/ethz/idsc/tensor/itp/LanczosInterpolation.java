@@ -62,7 +62,7 @@ public class LanczosInterpolation extends AbstractInterpolation implements Seria
   }
 
   private Tensor at(Tensor tensor, Scalar index) {
-    int center = Floor.FUNCTION.apply(index).number().intValue();
+    int center = Floor.intValueExact(index);
     return IntStream.range(center - lanczosKernel.semi + 1, center + lanczosKernel.semi) //
         .mapToObj(count -> flow(tensor, count, index)) //
         .reduce(Tensor::add).get();

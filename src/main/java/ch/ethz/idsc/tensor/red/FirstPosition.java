@@ -14,13 +14,13 @@ public enum FirstPosition {
    * @param element non-null
    * @return smallest index with tensor.get(index).equals(element) or OptionalInt.empty() */
   public static OptionalInt of(Tensor tensor, Tensor element) {
-    Objects.requireNonNull(element);
     int index = 0;
     for (Tensor row : tensor) {
       if (element.equals(row))
         return OptionalInt.of(index);
       ++index;
     }
+    Objects.requireNonNull(element);
     return OptionalInt.empty();
   }
 }

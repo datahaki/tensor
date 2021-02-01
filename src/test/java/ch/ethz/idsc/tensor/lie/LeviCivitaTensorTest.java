@@ -4,12 +4,7 @@ package ch.ethz.idsc.tensor.lie;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Fold;
 import ch.ethz.idsc.tensor.alg.Numel;
-import ch.ethz.idsc.tensor.mat.Det;
-import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
-import ch.ethz.idsc.tensor.pdf.Distribution;
-import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -33,14 +28,6 @@ public class LeviCivitaTensorTest extends TestCase {
   public void testRank3() {
     Tensor tensor = LeviCivitaTensor.of(3);
     assertEquals(tensor, Tensors.fromString("{{{0, 0, 0}, {0, 0, 1}, {0, -1, 0}}, {{0, 0, -1}, {0, 0, 0}, {1, 0, 0}}, {{0, 1, 0}, {-1, 0, 0}, {0, 0, 0}}}"));
-  }
-
-  public void testDet() {
-    Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
-    for (int n = 1; n < 6; ++n) {
-      Tensor matrix = RandomVariate.of(distribution, n, n);
-      assertEquals(Fold.of((t, v) -> v.dot(t), LeviCivitaTensor.of(n), matrix), Det.of(matrix));
-    }
   }
 
   public void testAlternating() {

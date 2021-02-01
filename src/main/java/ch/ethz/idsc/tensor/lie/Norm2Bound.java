@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * Wikipedia:
  * https://en.wikipedia.org/wiki/Matrix_norm
  * 
+ * @see MatrixExp
  * @see MatrixLog */
 /* package */ enum Norm2Bound {
   ;

@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
@@ -91,6 +90,6 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[L=%s, d=%s]", CholeskyDecomposition.class.getSimpleName(), Dimensions.of(getL()), Dimensions.of(diagonal()));
+    return String.format("%s[%s]", CholeskyDecomposition.class.getSimpleName(), diagonal());
   }
 }

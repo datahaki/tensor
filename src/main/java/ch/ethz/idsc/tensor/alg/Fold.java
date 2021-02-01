@@ -9,10 +9,11 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
 /** Fold is identical to
- * tensor.stream().reduce(binaryOperator);
- *
+ * <pre>
+ * [x, tensor.stream()].reduce(binaryOperator).get();
+ * </pre>
  * 
- * inspired by
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Fold.html">Fold</a> */
 public enum Fold {
   ;

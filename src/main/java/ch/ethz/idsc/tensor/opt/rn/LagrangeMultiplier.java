@@ -17,8 +17,8 @@ import ch.ethz.idsc.tensor.mat.LeastSquares;
  * [eye eqs^t]
  * [eqs 0]
  * b=[target;rhs] */
-public class LagrangeMultiplier implements Serializable {
-  private static final long serialVersionUID = 7812090787080389056L;
+public final class LagrangeMultiplier implements Serializable {
+  private static final long serialVersionUID = -991221659292154963L;
   // ---
   private final int n;
   private final Tensor matrix;

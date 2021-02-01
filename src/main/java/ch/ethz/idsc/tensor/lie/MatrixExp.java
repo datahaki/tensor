@@ -36,7 +36,7 @@ public enum MatrixExp {
   /** @param norm
    * @return power of 2 */
   /* package */ static long exponent(Scalar norm) {
-    return 1 << Ceiling.FUNCTION.apply(LOG2.apply(norm.add(RealScalar.ONE))).number().longValue();
+    return 1 << Ceiling.longValueExact(LOG2.apply(norm.add(RealScalar.ONE)));
   }
 
   /** @param matrix square

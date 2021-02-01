@@ -64,7 +64,7 @@ public class MatrixSqrtTest extends TestCase {
 
   public void testRandomDiscreteUniform() {
     for (int n = 1; n < 10; ++n) {
-      Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-2, 100), n, n);
+      Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-200, 200), n, n);
       Tensor x2 = x.dot(x);
       _check(x2, MatrixSqrt.of(x2));
     }
