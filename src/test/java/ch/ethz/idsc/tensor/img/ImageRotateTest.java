@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -45,6 +46,10 @@ public class ImageRotateTest extends TestCase {
       assertEquals(tensor, ImageRotate.cw(next));
       tensor = next;
     }
+  }
+
+  public void testRank3() {
+    ImageRotate.cw(LeviCivitaTensor.of(3));
   }
 
   public void testScalarFail() {

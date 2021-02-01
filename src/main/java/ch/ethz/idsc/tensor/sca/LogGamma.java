@@ -56,7 +56,7 @@ public enum LogGamma implements ScalarUnaryOperator {
     Scalar sum = SEED;
     for (int index = 0; index < 14; ++index) {
       y = y.add(RealScalar.ONE);
-      sum = sum.add(COEFFS.get(index).divide(y));
+      sum = sum.add(COEFFS.Get(index).divide(y));
     }
     return tmp.add(Log.FUNCTION.apply(FACTOR.multiply(sum).divide(z)));
   }

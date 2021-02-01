@@ -70,7 +70,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
           sum = sum.add(A[ip][iq]);
       if (Scalars.isZero(sum)) {
         int[] ordering = Ordering.DECREASING.of(d);
-        d = Tensor.of(IntStream.of(ordering).mapToObj(d::get));
+        d = Tensor.of(IntStream.of(ordering).mapToObj(d::Get));
         V = Tensor.of(IntStream.of(ordering).mapToObj(V::get));
         return;
       }

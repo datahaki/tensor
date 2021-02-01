@@ -1,10 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor.red;
 
+import java.util.Objects;
 import java.util.OptionalInt;
-import java.util.stream.IntStream;
 
-import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** inspired by
@@ -15,9 +14,13 @@ public enum FirstPosition {
    * @param element non-null
    * @return smallest index with tensor.get(index).equals(element) or OptionalInt.empty() */
   public static OptionalInt of(Tensor tensor, Tensor element) {
-    ScalarQ.thenThrow(tensor);
-    return IntStream.range(0, tensor.length()) //
-        .filter(index -> element.equals(tensor.get(index))) //
-        .findFirst();
+    Objects.requireNonNull(element);
+    int index = 0;
+    for (Tensor row : tensor) {
+      if (element.equals(row))
+        return OptionalInt.of(index);
+      ++index;
+    }
+    return OptionalInt.empty();
   }
 }

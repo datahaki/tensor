@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
+import java.util.stream.Stream;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -24,6 +26,10 @@ public class FoldTest extends TestCase {
     x.set(Scalar::zero, Tensor.ALL, Tensor.ALL);
     assertEquals(x, Array.zeros(3, 3));
     assertEquals(fold, HilbertMatrix.of(3));
+  }
+
+  public void testSingletonStream() {
+    assertEquals(Stream.of(Pi.VALUE).reduce(Scalar::add).get(), Pi.VALUE);
   }
 
   public void testNullFail() {

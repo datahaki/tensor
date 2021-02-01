@@ -148,7 +148,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       for (int j = ip1; j < cols; ++j) {
         final int fj = j;
         addScaled(ip1, cols, v, i, j, //
-            (Scalar) uiEx.dot(Tensor.of(v.stream().skip(ip1).map(row -> row.get(fj)))));
+            (Scalar) uiEx.dot(Tensor.of(v.stream().skip(ip1).map(row -> row.Get(fj)))));
       }
     }
     IntStream.range(ip1, cols).forEach(j -> v.set(_0, i, j));

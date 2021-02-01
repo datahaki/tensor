@@ -44,4 +44,8 @@ public class FirstPositionTest extends TestCase {
   public void testFailElementNull() {
     AssertFail.of(() -> FirstPosition.of(Tensors.vector(5, 6, 7, 8, 9), null));
   }
+
+  public void testFailEmptyNull() {
+    AssertFail.of(() -> FirstPosition.of(Tensors.empty(), null));
+  }
 }

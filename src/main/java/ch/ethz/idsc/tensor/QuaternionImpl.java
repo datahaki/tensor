@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -46,8 +45,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
           w.multiply(quaternion.w()).subtract(xyz.dot(quaternion.xyz())), //
           xyz.multiply(quaternion.w()).add(quaternion.xyz().multiply(w())).add(Cross.of(xyz, quaternion.xyz())));
     }
-    if (scalar instanceof RealScalar)
-      return new QuaternionImpl(w.multiply(scalar), xyz.multiply(scalar));
     if (scalar instanceof ComplexEmbedding) {
       ComplexEmbedding complexEmbedding = (ComplexEmbedding) scalar;
       Scalar imag = complexEmbedding.imag();
@@ -55,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
           complexEmbedding.real(), //
           Tensors.of(imag, imag.zero(), imag.zero())));
     }
-    throw TensorRuntimeException.of(scalar);
+    return new QuaternionImpl(w.multiply(scalar), xyz.multiply(scalar));
   }
 
   @Override // from Quaternion
@@ -114,8 +111,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    return Norm2Squared.ofVector(Append.of(xyz, w));
-    // return w.multiply(w).add(xyz.dot(xyz));
+    // return Norm2Squared.ofVector(Append.of(xyz, w));
+    return w.multiply(w).add(xyz.dot(xyz));
   }
 
   @Override // from ChopInterface
@@ -237,16 +234,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   /***************************************************/
-  // @Override // from Comparable
-  // public int compareTo(Scalar scalar) {
-  // if (scalar instanceof Quaternion) {
-  // Quaternion quaternion = (Quaternion) scalar;
-  // return TensorComparator.INSTANCE.compare( //
-  // Join.of(Tensors.of(w), xyz), //
-  // Join.of(Tensors.of(quaternion.w()), quaternion.xyz()));
-  // }
-  // throw TensorRuntimeException.of(this, scalar);
-  // }
   @Override // from AbstractScalar
   public int hashCode() {
     return w.hashCode() + 31 * xyz.hashCode();

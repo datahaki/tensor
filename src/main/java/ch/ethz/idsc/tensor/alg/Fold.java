@@ -3,11 +3,16 @@ package ch.ethz.idsc.tensor.alg;
 
 import java.util.Objects;
 import java.util.function.BinaryOperator;
+import java.util.stream.Stream;
 
-import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 
-/** inspired by
+/** Fold is identical to
+ * tensor.stream().reduce(binaryOperator);
+ *
+ * 
+ * inspired by
  * <a href="https://reference.wolfram.com/language/ref/Fold.html">Fold</a> */
 public enum Fold {
   ;
@@ -21,14 +26,10 @@ public enum Fold {
    * @param tensor {a, b, ...}
    * @return */
   public static Tensor of(BinaryOperator<Tensor> binaryOperator, Tensor x, Tensor tensor) {
-    int length = tensor.length();
-    if (length == 0) {
+    if (Tensors.isEmpty(tensor)) {
       Objects.requireNonNull(binaryOperator);
       return x.copy();
     }
-    ScalarQ.thenThrow(tensor);
-    for (int index = 0; index < length; ++index)
-      x = binaryOperator.apply(x, tensor.get(index));
-    return x;
+    return Stream.concat(Stream.of(x), tensor.stream()).reduce(binaryOperator).get();
   }
 }

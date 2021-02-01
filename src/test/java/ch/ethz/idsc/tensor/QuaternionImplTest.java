@@ -184,6 +184,18 @@ public class QuaternionImplTest extends TestCase {
     assertEquals(q1, q2);
   }
 
+  public void testGaussScalar() {
+    Scalar q1 = Quaternion.of( //
+        GaussScalar.of(11, 23), //
+        GaussScalar.of(3, 23), //
+        GaussScalar.of(8, 23), //
+        GaussScalar.of(20, 23));
+    Scalar q2 = q1.reciprocal();
+    Scalar res = q1.multiply(q2);
+    assertEquals(res, q1.one());
+    ExactScalarQ.require(q2);
+  }
+
   public void testToString() {
     Quaternion quaternion = Quaternion.of(1, 2, 3, 4);
     String string = quaternion.toString();

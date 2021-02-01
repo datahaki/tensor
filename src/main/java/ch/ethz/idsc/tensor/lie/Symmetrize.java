@@ -3,7 +3,7 @@ package ch.ethz.idsc.tensor.lie;
 
 import java.util.stream.IntStream;
 
-import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
@@ -33,8 +33,11 @@ public enum Symmetrize {
         return tensor;
       case 1: // vector
         return tensor.copy();
-      case 2: // matrix
-        return Tensors.vector(i -> tensor.get(Tensor.ALL, i).add(tensor.get(i)).multiply(RationalScalar.HALF), tensor.length());
+      case 2: { // matrix
+        Scalar one = tensor.Get(0, 0).one();
+        Scalar half = one.add(one).reciprocal();
+        return Tensors.vector(i -> tensor.get(Tensor.ALL, i).add(tensor.get(i)).multiply(half), tensor.length());
+      }
       default:
         return Permutations.stream(Range.of(0, rank)) //
             .map(permutation -> Transpose.of(tensor, IntStream.range(0, rank) //
