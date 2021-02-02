@@ -16,7 +16,6 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
-import ch.ethz.idsc.tensor.mat.Pivots;
 import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.GaussScalar;
@@ -151,8 +150,8 @@ public class MatrixPowerTest extends TestCase {
     Scalar one = GaussScalar.of(1, prime);
     for (int n = 3; n < 6; ++n) {
       Tensor matrix = RandomVariate.of(distribution, n, n).map(s -> GaussScalar.of(s.number().intValue(), prime));
-      Tensor result = MatrixPower.of(matrix, +343386231231234L, Pivots.FIRST_NON_ZERO);
-      Tensor revers = MatrixPower.of(matrix, -343386231231234L, Pivots.FIRST_NON_ZERO);
+      Tensor result = MatrixPower.of(matrix, +343386231231234L);
+      Tensor revers = MatrixPower.of(matrix, -343386231231234L);
       MatrixQ.requireSize(result, n, n);
       assertEquals(DiagonalMatrix.of(n, one), Dot.of(result, revers));
     }
@@ -168,11 +167,15 @@ public class MatrixPowerTest extends TestCase {
 
   public void testFailZero() {
     Tensor matrix = Array.zeros(2, 3);
+    AssertFail.of(() -> MatrixPower.of(matrix, -1));
     AssertFail.of(() -> MatrixPower.of(matrix, 0));
+    AssertFail.of(() -> MatrixPower.of(matrix, 1));
   }
 
   public void testFailOne() {
     Tensor matrix = HilbertMatrix.of(3, 2);
+    AssertFail.of(() -> MatrixPower.of(matrix, -1));
+    AssertFail.of(() -> MatrixPower.of(matrix, 0));
     AssertFail.of(() -> MatrixPower.of(matrix, 1));
   }
 

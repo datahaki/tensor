@@ -9,7 +9,7 @@ public enum ScalarProduct implements GroupInterface<Scalar> {
   INSTANCE;
 
   @Override // from GroupInterface
-  public Scalar identity(Scalar scalar) {
+  public Scalar neutral(Scalar scalar) {
     return scalar.one();
   }
 
@@ -19,11 +19,11 @@ public enum ScalarProduct implements GroupInterface<Scalar> {
   }
 
   @Override // from GroupInterface
-  public Scalar combine(Scalar s1, Scalar s2) {
-    return s1.multiply(s2);
+  public Scalar combine(Scalar scalar1, Scalar scalar2) {
+    return scalar1.multiply(scalar2);
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return String.format("%s", getClass().getSimpleName());
   }

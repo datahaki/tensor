@@ -10,7 +10,7 @@ public class BinaryPowerTest extends TestCase {
   public void testInteger() {
     GroupInterface<Integer> groupInterface = new GroupInterface<Integer>() {
       @Override // from BinaryPower
-      public Integer identity(Integer integer) {
+      public Integer neutral(Integer integer) {
         return 1;
       }
 

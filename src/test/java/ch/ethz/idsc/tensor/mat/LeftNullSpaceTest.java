@@ -25,7 +25,6 @@ import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
-import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LeftNullSpaceTest extends TestCase {
@@ -104,7 +103,7 @@ public class LeftNullSpaceTest extends TestCase {
     Tensor identi = DiagonalMatrix.of(Unprotect.dimension1(matrix), GaussScalar.of(1, prime));
     List<Integer> list = Dimensions.of(identi);
     assertEquals(list, Arrays.asList(dim1, dim1));
-    Tensor nullsp = NullSpace.usingRowReduce(matrix, identi, Pivots.FIRST_NON_ZERO);
+    Tensor nullsp = NullSpace.usingRowReduce(matrix);
     Scalar det = Det.of(matrix);
     assertEquals(det, GaussScalar.of(0, prime));
     assertEquals(Dimensions.of(nullsp), Arrays.asList(2, 6));
@@ -113,7 +112,7 @@ public class LeftNullSpaceTest extends TestCase {
   public void testRectangle3x2G() {
     ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
-    Tensor tensor = NullSpace.usingRowReduce(matrix, DiagonalMatrix.of(2, GaussScalar.of(1, 7)), Pivots.FIRST_NON_ZERO);
+    Tensor tensor = NullSpace.usingRowReduce(matrix);
     assertEquals(tensor.get(0), UnitVector.of(2, 1).map(suo));
     assertTrue(Scalars.isZero(Det.of(matrix)));
   }
@@ -121,7 +120,7 @@ public class LeftNullSpaceTest extends TestCase {
   public void testRectangle2x3G() {
     ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
     Tensor matrix = Tensors.fromString("{{1, 0, 0}, {0, 0, 0}}").map(suo);
-    Tensor tensor = NullSpace.usingRowReduce(matrix, DiagonalMatrix.of(3, GaussScalar.of(1, 7)), Pivots.FIRST_NON_ZERO);
+    Tensor tensor = NullSpace.usingRowReduce(matrix);
     assertEquals(tensor.get(0), UnitVector.of(3, 1).map(suo));
     assertEquals(tensor.get(1), UnitVector.of(3, 2).map(suo));
     assertTrue(Scalars.isZero(Det.of(matrix)));
@@ -141,18 +140,5 @@ public class LeftNullSpaceTest extends TestCase {
       Tensor p2 = Dot.of(nullsp, vector, nullsp);
       Tolerance.CHOP.requireClose(p1, p2);
     }
-  }
-
-  public void testRectangle3x2GVectorFail() {
-    ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
-    Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
-    AssertFail.of(() -> NullSpace.usingRowReduce(matrix, DiagonalMatrix.of(2, GaussScalar.of(1, 7)).get(0)));
-  }
-
-  public void testRectangle3x2GRectFail() {
-    ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
-    Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
-    Tensor identity = DiagonalMatrix.of(3, GaussScalar.of(1, 7)).extract(0, 2);
-    AssertFail.of(() -> NullSpace.usingRowReduce(matrix, identity));
   }
 }

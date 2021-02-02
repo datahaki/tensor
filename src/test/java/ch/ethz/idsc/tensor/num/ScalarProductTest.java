@@ -33,6 +33,6 @@ public class ScalarProductTest extends TestCase {
   }
 
   public void testSimple() {
-    AssertFail.of(() -> ScalarProduct.INSTANCE.identity(null));
+    AssertFail.of(() -> ScalarProduct.INSTANCE.neutral(null));
   }
 }

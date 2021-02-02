@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -18,7 +19,9 @@ public class RowReduce extends AbstractReduce {
    * @return reduced row echelon form (also called row canonical form) of matrix
    * @throws Exception if input is not a non-empty rectangular matrix */
   public static Tensor of(Tensor matrix) {
-    return of(matrix, Pivots.ARGMAX_ABS);
+    return of(matrix, ExactTensorQ.of(matrix) //
+        ? Pivots.FIRST_NON_ZERO
+        : Pivots.ARGMAX_ABS);
   }
 
   /** @param matrix

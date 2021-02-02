@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -44,4 +45,12 @@ public enum Pivots implements Pivot {
           .findFirst().orElse(row);
     }
   };
+
+  /** @param matrix
+   * @return */
+  public static Pivot selection(Tensor matrix) {
+    return ExactTensorQ.of(matrix) //
+        ? FIRST_NON_ZERO
+        : ARGMAX_ABS;
+  }
 }

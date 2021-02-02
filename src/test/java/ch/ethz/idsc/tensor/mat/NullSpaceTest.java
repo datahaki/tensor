@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.mat;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.MachineNumberQ;
@@ -16,6 +17,7 @@ import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
+import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -105,7 +107,7 @@ public class NullSpaceTest extends TestCase {
     assertEquals(Dimensions.of(nul), Arrays.asList(1, 3));
     assertFalse(MachineNumberQ.any(nul));
     ExactTensorQ.require(nul);
-    Tensor nrr = NullSpace.usingRowReduce(A, IdentityMatrix.of(3));
+    Tensor nrr = NullSpace.usingRowReduce(A);
     assertEquals(nul, nrr);
   }
 
@@ -243,6 +245,13 @@ public class NullSpaceTest extends TestCase {
         Chop._10.requireAllZero(mt.dot(Transpose.of(nullspace)));
       }
     }
+  }
+
+  public void testGaussScalar() {
+    int prime = 7879;
+    Random random = new Random();
+    Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), 3, 7);
+    NullSpace.usingRowReduce(matrix);
   }
 
   public void testFailScalar() {

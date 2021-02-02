@@ -5,8 +5,6 @@ import java.math.BigInteger;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.mat.Pivot;
-import ch.ethz.idsc.tensor.mat.Pivots;
 import ch.ethz.idsc.tensor.num.BinaryPower;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.sca.Power;
@@ -27,12 +25,14 @@ import ch.ethz.idsc.tensor.sca.Power;
  * <a href="https://reference.wolfram.com/language/ref/MatrixPower.html">MatrixPower</a> */
 public enum MatrixPower {
   ;
+  private static final BinaryPower<Tensor> BINARY_POWER = new BinaryPower<>(MatrixProduct.INSTANCE);
+
   /** @param matrix square
    * @param exponent
    * @return matrix ^ exponent
    * @throws Exception if matrix is not square */
   public static Tensor of(Tensor matrix, BigInteger exponent) {
-    return of(matrix, exponent, Pivots.ARGMAX_ABS);
+    return BINARY_POWER.raise(matrix, exponent);
   }
 
   /** @param matrix square
@@ -41,25 +41,6 @@ public enum MatrixPower {
    * @throws Exception if matrix is not square */
   public static Tensor of(Tensor matrix, long exponent) {
     return of(matrix, BigInteger.valueOf(exponent));
-  }
-
-  /***************************************************/
-  /** @param matrix
-   * @param exponent
-   * @param pivot
-   * @return */
-  public static Tensor of(Tensor matrix, BigInteger exponent, Pivot pivot) {
-    BinaryPower<Tensor> binaryPower = new BinaryPower<>(new MatrixProduct(pivot));
-    // check for square matrix is required when exponent in {0, 1}
-    return binaryPower.raise(matrix, exponent);
-  }
-
-  /** @param matrix
-   * @param exponent
-   * @param pivot
-   * @return */
-  public static Tensor of(Tensor matrix, long exponent, Pivot pivot) {
-    return of(matrix, BigInteger.valueOf(exponent), pivot);
   }
 
   /***************************************************/

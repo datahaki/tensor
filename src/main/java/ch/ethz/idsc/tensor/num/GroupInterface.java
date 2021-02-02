@@ -10,12 +10,12 @@ import ch.ethz.idsc.tensor.lie.MatrixPower;
  * @see BinaryPower
  * @see MatrixPower */
 public interface GroupInterface<T> {
-  /** @return value when exponent equals zero */
-  T identity(T object);
+  /** @return neutral element */
+  T neutral(T element);
 
-  /** @param object to invert when the given exponent is negative
-   * @return */
-  T invert(T object);
+  /** @param element to invert when the given exponent is negative
+   * @return inverse of given group element */
+  T invert(T element);
 
   /** @param factor1
    * @param factor2

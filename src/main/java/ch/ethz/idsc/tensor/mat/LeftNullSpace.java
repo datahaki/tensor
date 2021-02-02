@@ -27,31 +27,26 @@ public enum LeftNullSpace {
    * @return list of vectors that span the left nullspace of given matrix */
   public static Tensor of(Tensor matrix) {
     return ExactTensorQ.of(matrix) //
-        ? usingRowReduce(matrix)
+        ? usingRowReduce(matrix, Pivots.FIRST_NON_ZERO)
         : usingQR(matrix);
   }
 
   /** @param matrix
-   * @return list of vectors that span the left nullspace of given matrix */
-  public static Tensor usingRowReduce(Tensor matrix) {
-    return usingRowReduce(matrix, IdentityMatrix.of(matrix.length()));
-  }
-
-  /** @param matrix
-   * @param identity
    * @return */
-  public static Tensor usingRowReduce(Tensor matrix, Tensor identity) {
-    return usingRowReduce(matrix, identity, Pivots.ARGMAX_ABS);
+  public static Tensor usingRowReduce(Tensor matrix) {
+    return usingRowReduce(matrix, ExactTensorQ.of(matrix) //
+        ? Pivots.FIRST_NON_ZERO
+        : Pivots.ARGMAX_ABS);
   }
 
   /** @param matrix
-   * @param identity
    * @param pivot
    * @return list of vectors that span the left nullspace of given matrix */
-  public static Tensor usingRowReduce(Tensor matrix, Tensor identity, Pivot pivot) {
+  private static Tensor usingRowReduce(Tensor matrix, Pivot pivot) {
+    Tensor eye = DiagonalMatrix.of(matrix.length(), matrix.Get(0, 0).one());
     int rows = matrix.length(); // == identity.length()
     int cols = Unprotect.dimension1(matrix);
-    Tensor lhs = RowReduce.of(Join.of(1, matrix, identity), pivot);
+    Tensor lhs = RowReduce.of(Join.of(1, matrix, eye), pivot);
     int j = 0;
     int c0 = 0;
     while (c0 < cols && j < rows)
