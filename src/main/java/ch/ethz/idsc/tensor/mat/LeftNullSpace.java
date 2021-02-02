@@ -34,19 +34,16 @@ public enum LeftNullSpace {
   /** @param matrix
    * @return */
   public static Tensor usingRowReduce(Tensor matrix) {
-    return usingRowReduce(matrix, ExactTensorQ.of(matrix) //
-        ? Pivots.FIRST_NON_ZERO
-        : Pivots.ARGMAX_ABS);
+    return usingRowReduce(matrix, Pivots.selection(matrix));
   }
 
   /** @param matrix
    * @param pivot
    * @return list of vectors that span the left nullspace of given matrix */
   private static Tensor usingRowReduce(Tensor matrix, Pivot pivot) {
-    Tensor eye = DiagonalMatrix.of(matrix.length(), matrix.Get(0, 0).one());
-    int rows = matrix.length(); // == identity.length()
-    int cols = Unprotect.dimension1(matrix);
-    Tensor lhs = RowReduce.of(Join.of(1, matrix, eye), pivot);
+    int rows = matrix.length();
+    Tensor lhs = RowReduce.of(Join.of(1, matrix, DiagonalMatrix.of(rows, matrix.Get(0, 0).one())), pivot);
+    int cols = Unprotect.dimension1Hint(matrix);
     int j = 0;
     int c0 = 0;
     while (c0 < cols && j < rows)

@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor.mat;
 import java.util.List;
 import java.util.Objects;
 
-import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
@@ -23,9 +22,7 @@ public enum Det {
   /** @param matrix
    * @return determinant of matrix */
   public static Scalar of(Tensor matrix) {
-    return of(matrix, ExactTensorQ.of(matrix) //
-        ? Pivots.FIRST_NON_ZERO
-        : Pivots.ARGMAX_ABS);
+    return of(matrix, Pivots.selection(matrix));
   }
 
   /** @param matrix

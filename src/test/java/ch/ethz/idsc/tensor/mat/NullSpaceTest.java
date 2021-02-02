@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Transpose;
@@ -251,7 +252,10 @@ public class NullSpaceTest extends TestCase {
     int prime = 7879;
     Random random = new Random();
     Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), 3, 7);
-    NullSpace.usingRowReduce(matrix);
+    Tensor nullsp = NullSpace.of(matrix);
+    assertEquals(nullsp.length(), 4);
+    for (Tensor vector : nullsp)
+      Chop.NONE.requireAllZero(Dot.of(matrix, vector));
   }
 
   public void testFailScalar() {

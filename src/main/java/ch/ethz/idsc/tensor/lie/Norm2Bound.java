@@ -19,13 +19,13 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * @see MatrixLog */
 /* package */ enum Norm2Bound {
   ;
-  /** @param matrix square
-   * @return upper bound to 2-norm of given matrix */
+  /** @param matrix
+   * @return upper bound to 2-norm of given matrix up to numerical precision */
   public static Scalar ofMatrix(Tensor matrix) {
-    Scalar nf = Frobenius.of(matrix);
     Scalar n1 = Norm._1.ofMatrix(matrix);
     Scalar ni = Norm.INFINITY.ofMatrix(matrix);
-    Scalar nh = Sqrt.FUNCTION.apply(n1.multiply(ni)); // Hoelder's inequality
-    return Min.of(nf, nh);
+    return Min.of( //
+        Sqrt.FUNCTION.apply(n1.multiply(ni)), // Hoelder's inequality
+        Frobenius.of(matrix));
   }
 }

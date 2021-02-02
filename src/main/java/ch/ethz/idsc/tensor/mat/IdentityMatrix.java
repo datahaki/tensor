@@ -1,6 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
@@ -41,9 +44,18 @@ public enum IdentityMatrix {
    * @return
    * @throws Exception if given matrix is not a square matrix */
   public static Tensor of(Tensor matrix) {
-    int m = Unprotect.dimension1(matrix);
-    if (matrix.length() == m)
-      return DiagonalMatrix.of(m, matrix.Get(0, 0).one());
+    if (matrix.length() == Unprotect.dimension1(matrix)) {
+      AtomicInteger i = new AtomicInteger();
+      return Tensor.of(matrix.stream().map(row -> {
+        int index = i.getAndIncrement();
+        AtomicInteger j = new AtomicInteger();
+        return Tensor.of(row.stream() //
+            .map(Scalar.class::cast) //
+            .map(scalar -> j.getAndIncrement() == index //
+                ? scalar.one()
+                : scalar.zero()));
+      }));
+    }
     throw TensorRuntimeException.of(matrix);
   }
 }

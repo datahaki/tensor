@@ -141,4 +141,14 @@ public class LeftNullSpaceTest extends TestCase {
       Tolerance.CHOP.requireClose(p1, p2);
     }
   }
+
+  public void testLeftGaussScalar() {
+    int prime = 7879;
+    Random random = new Random();
+    Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), 7, 4);
+    Tensor nullsp = LeftNullSpace.of(matrix);
+    assertEquals(nullsp.length(), 3);
+    for (Tensor vector : nullsp)
+      Chop.NONE.requireAllZero(Dot.of(vector, matrix));
+  }
 }

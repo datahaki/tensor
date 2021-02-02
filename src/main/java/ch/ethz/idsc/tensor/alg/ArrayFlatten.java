@@ -12,7 +12,18 @@ import ch.ethz.idsc.tensor.opt.rn.LagrangeMultiplier;
  * @see Join */
 public enum ArrayFlatten {
   ;
-  /** @param tensors
+  /** Example:
+   * For matrices A, B, C, D with appropriate dimensions
+   * <pre>
+   * ArrayFlatten[{{A, B}, {C, D}}]
+   * </pre>
+   * gives the matrix consisting of the blocks
+   * <pre>
+   * A B
+   * C D
+   * </pre>
+   * 
+   * @param tensors
    * @return
    * @see LagrangeMultiplier */
   public static Tensor of(Tensor[][] tensors) {
