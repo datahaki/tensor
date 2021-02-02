@@ -15,8 +15,7 @@ import ch.ethz.idsc.tensor.Tensors;
   private final NdCenterInterface ndCenterInterface;
   private final Tensor center;
   private final int limit;
-  private final Queue<NdEntry<V>> queue;
-  private int considered = 0;
+  private final Queue<NdMatch<V>> queue;
 
   /** @param ndCenterInterface
    * @param limit positive */
@@ -24,12 +23,11 @@ import ch.ethz.idsc.tensor.Tensors;
     this.ndCenterInterface = ndCenterInterface;
     this.center = ndCenterInterface.center();
     this.limit = limit;
-    queue = new PriorityQueue<>(NdEntryComparators.DECREASING);
+    queue = new PriorityQueue<>(NdMatchComparators.DECREASING);
   }
 
   public void consider(NdPair<V> ndPair) {
-    ++considered;
-    NdEntry<V> ndEntry = new NdEntry<>( //
+    NdMatch<V> ndEntry = new NdMatch<>( //
         ndPair.location(), //
         ndPair.value(), //
         ndCenterInterface.ofVector(ndPair.location()));
@@ -49,12 +47,7 @@ import ch.ethz.idsc.tensor.Tensors;
     return Scalars.lessThan(ndCenterInterface.ofVector(test), queue.peek().distance());
   }
 
-  /** @return number of points visited in order to build the cluster */
-  public int considered() {
-    return considered;
-  }
-
-  public Collection<NdEntry<V>> collection() {
+  public Collection<NdMatch<V>> collection() {
     return queue;
   }
 

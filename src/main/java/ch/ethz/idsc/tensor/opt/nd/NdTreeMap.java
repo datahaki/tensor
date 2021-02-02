@@ -7,9 +7,7 @@ import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Queue;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -19,20 +17,19 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.ext.Integers;
+import ch.ethz.idsc.tensor.ext.StringRepeat;
 
 /** the query {@link NdTreeMap#cluster(NdCenterInterface, int)}
  * can be used in parallel. */
 public class NdTreeMap<V> implements NdMap<V>, Serializable {
-  private static final long serialVersionUID = -7714371340061489556L;
+  private static final long serialVersionUID = -4501971561107313164L;
   // ---
   private final Tensor global_lBounds;
   private final Tensor global_uBounds;
   private final int maxDensity;
-  private final int maxDepth;
   // ---
-  // reused during adding as well as searching:
+  private final Node root;
   private int size;
-  private Node root; // non final because of clear()
 
   /** lbounds and ubounds are vectors of identical length
    * for instance if the points to be added are in the unit square then
@@ -58,8 +55,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     global_lBounds = lbounds.unmodifiable();
     global_uBounds = ubounds.unmodifiable();
     this.maxDensity = Integers.requirePositiveOrZero(maxDensity);
-    this.maxDepth = Integers.requirePositive(maxDepth);
-    clear();
+    root = new Node(Integers.requirePositive(maxDepth));
   }
 
   /** @param location vector with same length as lbounds and ubounds
@@ -86,15 +82,8 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
   }
 
   @Override // from NdMap
-  public void clear() {
-    root = null;
-    size = 0;
-    root = new Node(maxDepth);
-  }
-
-  @Override // from NdMap
-  public Collection<NdEntry<V>> cluster(NdCenterInterface ndCenter, int limit) {
-    NdCluster<V> ndCluster = new NdCluster<>(ndCenter, limit);
+  public Collection<NdMatch<V>> cluster(NdCenterInterface ndCenterInterface, int limit) {
+    NdCluster<V> ndCluster = new NdCluster<>(ndCenterInterface, limit);
     root.addToCluster(ndCluster, new NdBounds(global_lBounds, global_uBounds));
     return ndCluster.collection();
   }
@@ -103,7 +92,9 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
    * use the function to determine if the tree is well balanced.
    * 
    * <p>Example use:
+   * <pre>
    * Tally.sorted(Flatten.of(ndTreeMap.binSize()))
+   * </pre>
    * 
    * @return */
   public Tensor binSize() {
@@ -195,7 +186,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
         addChildToCluster(ndCluster, ndBounds, mean, lFirst);
         addChildToCluster(ndCluster, ndBounds, mean, !lFirst);
       } else
-        queue.forEach(ndCluster::consider);
+        queue.forEach(ndCluster::consider); // number of function calls to #consider
     }
 
     private void addChildToCluster(NdCluster<V> ndCluster, NdBounds ndBounds, Scalar median, boolean left) {
@@ -221,28 +212,25 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
   }
 
   /***************************************************/
-  // functions for testing
-  /* package */ void print() {
-    print(root);
+  @Override // from Object
+  public String toString() {
+    StringBuilder stringBuilder = new StringBuilder();
+    print(stringBuilder, root);
+    return stringBuilder.toString();
   }
 
-  private void print(Node node) {
-    String v = spaces(root.depth - node.depth);
+  private void print(StringBuilder stringBuilder, Node node) {
+    String v = StringRepeat.of(" ", root.depth - node.depth);
     if (Objects.isNull(node.queue)) {
-      System.out.println(v + "<empty>");
+      stringBuilder.append(v + "<empty>\n");
       if (Objects.nonNull(node.lChild))
-        print(node.lChild);
+        print(stringBuilder, node.lChild);
       if (Objects.nonNull(node.rChild))
-        print(node.rChild);
+        print(stringBuilder, node.rChild);
     } else {
-      System.out.println(v + Integer.toString(node.queue.size()));
+      stringBuilder.append(v + Integer.toString(node.queue.size()) + "\n");
       for (NdPair<V> entry : node.queue)
-        System.out.println(v + entry.location().toString() + " " + entry.value());
+        stringBuilder.append(v + entry.location().toString() + " " + entry.value() + "\n");
     }
-  }
-
-  // helper function
-  private static String spaces(int level) {
-    return Stream.generate(() -> " ").limit(level).collect(Collectors.joining());
   }
 }

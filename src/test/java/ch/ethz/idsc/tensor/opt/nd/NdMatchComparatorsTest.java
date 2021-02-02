@@ -5,8 +5,8 @@ import java.lang.reflect.Modifier;
 
 import junit.framework.TestCase;
 
-public class NdEntryComparatorsTest extends TestCase {
+public class NdMatchComparatorsTest extends TestCase {
   public void testPackageVisibility() {
-    assertFalse(Modifier.isPublic(NdEntryComparators.class.getModifiers()));
+    assertFalse(Modifier.isPublic(NdMatchComparators.class.getModifiers()));
   }
 }

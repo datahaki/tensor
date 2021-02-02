@@ -6,11 +6,13 @@ import java.util.Collection;
 import ch.ethz.idsc.tensor.Tensor;
 
 /** NdMap contains (coordinate, value)-pairs.
- * multiple values can be associated to the same coordinate.
- * 
- * @param <V> */
+ * multiple values can be associated to the same coordinate. */
 public interface NdMap<V> {
-  /** @param location
+  /** function adds pair (location, value) to map.
+   * The size of the map is incremented by one.
+   * No element that already exists in the map will be removed.
+   * 
+   * @param location
    * @param value */
   void add(Tensor location, V value);
 
@@ -20,12 +22,9 @@ public interface NdMap<V> {
   /** @return true if size() == 0 */
   boolean isEmpty();
 
-  /** clears all entries from map */
-  void clear();
-
-  /** @param ndCenter
+  /** @param ndCenterInterface
    * @param limit strictly positive
    * @return cluster of at most limit closest points to given ndCenter. The application
    * layer should not make assumptions on the ordering of the points in the cluster. */
-  Collection<NdEntry<V>> cluster(NdCenterInterface ndCenter, int limit);
+  Collection<NdMatch<V>> cluster(NdCenterInterface ndCenterInterface, int limit);
 }

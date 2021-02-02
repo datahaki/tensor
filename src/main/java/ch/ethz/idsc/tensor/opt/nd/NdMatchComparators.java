@@ -5,16 +5,16 @@ import java.util.Comparator;
 
 import ch.ethz.idsc.tensor.Scalars;
 
-/* package */ enum NdEntryComparators implements Comparator<NdEntry<?>> {
+/* package */ enum NdMatchComparators implements Comparator<NdMatch<?>> {
   INCREASING {
     @Override
-    public int compare(NdEntry<?> o1, NdEntry<?> o2) {
+    public int compare(NdMatch<?> o1, NdMatch<?> o2) {
       return Scalars.compare(o1.distance(), o2.distance());
     }
   },
   DECREASING {
     @Override
-    public int compare(NdEntry<?> o1, NdEntry<?> o2) {
+    public int compare(NdMatch<?> o1, NdMatch<?> o2) {
       return Scalars.compare(o2.distance(), o1.distance());
     }
   };

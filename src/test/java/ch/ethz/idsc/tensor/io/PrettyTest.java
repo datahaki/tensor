@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.ext.StringRepeat;
 import junit.framework.TestCase;
 
 public class PrettyTest extends TestCase {
@@ -46,7 +47,9 @@ public class PrettyTest extends TestCase {
   }
 
   public void testSpaces() {
-    for (int level = 0; level < 10; ++level)
+    for (int level = 0; level < 10; ++level) {
       assertEquals(Pretty.spaces(level).length(), level);
+      assertEquals(Pretty.spaces(level), StringRepeat.of(" ", level));
+    }
   }
 }

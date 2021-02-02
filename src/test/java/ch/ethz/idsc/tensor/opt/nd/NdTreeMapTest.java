@@ -26,6 +26,7 @@ public class NdTreeMapTest extends TestCase {
       for (int d = 1; d < 4; ++d) {
         NdTreeMap<String> ndTreeMap = //
             new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), n, d);
+        ndTreeMap.toString();
         assertTrue(ndTreeMap.isEmpty());
         ndTreeMap.binSize();
         ndTreeMap.add(Tensors.vector(1, 1), "d1");
@@ -36,32 +37,33 @@ public class NdTreeMapTest extends TestCase {
         ndTreeMap.add(Tensors.vector(1, 1), "d4");
         ndTreeMap.add(Tensors.vector(0.1, 0.1), "d5");
         ndTreeMap.add(Tensors.vector(6, 7), "d6");
+        ndTreeMap.toString();
         ndTreeMap.binSize();
         {
           Tensor center = Tensors.vector(0, 0);
           NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          Collection<NdEntry<String>> cluster = ndTreeMap.cluster(distancer, 1);
+          Collection<NdMatch<String>> cluster = ndTreeMap.cluster(distancer, 1);
           assertTrue(cluster.iterator().next().value().equals("d5"));
         }
         {
           Tensor center = Tensors.vector(5, 5);
           NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          Collection<NdEntry<String>> cluster = ndTreeMap.cluster(distancer, 1);
+          Collection<NdMatch<String>> cluster = ndTreeMap.cluster(distancer, 1);
           assertTrue(cluster.iterator().next().value().equals("d6"));
         }
         {
           Tensor center = Tensors.vector(1.1, 0.9);
           NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          Collection<NdEntry<String>> cluster = ndTreeMap.cluster(distancer, 2);
+          Collection<NdMatch<String>> cluster = ndTreeMap.cluster(distancer, 2);
           assertEquals(cluster.size(), 2);
           List<String> list = Arrays.asList("d1", "d4");
-          for (NdEntry<String> point : cluster)
+          for (NdMatch<String> point : cluster)
             assertTrue(list.contains(point.value()));
         }
       }
   }
 
-  public void testBinCount() {
+  public void testBinSize() {
     NdTreeMap<Void> ndTreeMap = new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), 2, 10);
     Distribution distribution = UniformDistribution.unit();
     for (int count = 0; count < 50; ++count) {
@@ -70,23 +72,21 @@ public class NdTreeMapTest extends TestCase {
     }
   }
 
-  public void testParallel() throws InterruptedException {
+  public void testParallel() {
     NdTreeMap<Void> ndTreeMap = new NdTreeMap<>(Tensors.vector(0, 0), Tensors.vector(1, 1), 2, 6);
     Distribution distribution = UniformDistribution.unit();
     for (int count = 0; count < 1000; ++count)
       ndTreeMap.add(RandomVariate.of(distribution, 2), null);
     for (int count = 0; count < 20; ++count) {
-      // final int ficount = count;
       new Thread(new Runnable() {
         @Override
         public void run() {
           Tensor center = RandomVariate.of(distribution, 2);
           NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          Collection<NdEntry<Void>> cluster = ndTreeMap.cluster(distancer, 100);
+          Collection<NdMatch<Void>> cluster = ndTreeMap.cluster(distancer, 100);
           assertEquals(cluster.size(), 100);
         }
       }).start();
-      Thread.sleep(3);
     }
   }
 
@@ -94,7 +94,7 @@ public class NdTreeMapTest extends TestCase {
     NdMap<String> ndMap = new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 10);
     assertTrue(ndMap.isEmpty());
     NdCenterInterface distancer = EuclideanNdCenter.of(Tensors.vector(0, 0));
-    Collection<NdEntry<String>> cluster = ndMap.cluster(distancer, 2);
+    Collection<NdMatch<String>> cluster = ndMap.cluster(distancer, 2);
     assertEquals(cluster.size(), 0);
   }
 
@@ -105,18 +105,18 @@ public class NdTreeMapTest extends TestCase {
     ndMap.add(Tensors.vector(0, 1), "d3");
     NdCenterInterface ndCenter = EuclideanNdCenter.of(Tensors.vector(0, 0));
     {
-      Collection<NdEntry<String>> cluster = ndMap.cluster(ndCenter, 5);
+      Collection<NdMatch<String>> cluster = ndMap.cluster(ndCenter, 5);
       assertEquals(cluster.size(), 3);
     }
     NdMap<String> ndMap2 = Serialization.copy(ndMap);
     {
-      ndMap.clear();
-      Collection<NdEntry<String>> cluster = ndMap.cluster(ndCenter, 5);
+      ndMap = new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 10);
+      Collection<NdMatch<String>> cluster = ndMap.cluster(ndCenter, 5);
       assertEquals(cluster.size(), 0);
     }
-    ndMap.clear();
+    ndMap = new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 10);
     {
-      Collection<NdEntry<String>> cluster = ndMap2.cluster(ndCenter, 5);
+      Collection<NdMatch<String>> cluster = ndMap2.cluster(ndCenter, 5);
       assertEquals(cluster.size(), 3);
     }
   }

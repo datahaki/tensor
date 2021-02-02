@@ -24,20 +24,15 @@ public class NdListMap<V> implements NdMap<V> {
   }
 
   @Override // from NdMap
-  public void clear() {
-    list.clear();
-  }
-
-  @Override // from NdMap
   public boolean isEmpty() {
-    return size() == 0;
+    return list.isEmpty();
   }
 
   @Override // from NdMap
-  public Collection<NdEntry<V>> cluster(NdCenterInterface ndCenterInterface, int limit) {
+  public Collection<NdMatch<V>> cluster(NdCenterInterface ndCenterInterface, int limit) {
     return list.stream() //
-        .map(ndPair -> new NdEntry<>(ndPair.location(), ndPair.value(), ndCenterInterface.ofVector(ndPair.location()))) //
-        .sorted(NdEntryComparators.INCREASING) //
+        .map(ndPair -> new NdMatch<>(ndPair.location(), ndPair.value(), ndCenterInterface.ofVector(ndPair.location()))) //
+        .sorted(NdMatchComparators.INCREASING) //
         .limit(limit) //
         .collect(Collectors.toCollection(LinkedList::new));
   }
