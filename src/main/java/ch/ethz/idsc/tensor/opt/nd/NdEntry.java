@@ -8,24 +8,26 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class NdEntry<V> implements Serializable {
-  private static final long serialVersionUID = 3001483384360358712L;
+  private static final long serialVersionUID = -4046189014254206016L;
   // ---
-  private final NdPair<V> ndPair;
+  private final Tensor location;
+  private final V value;
   private final Scalar distance;
 
-  /* package */ NdEntry(NdPair<V> ndPair, Scalar distance) {
-    this.ndPair = ndPair;
+  /* package */ NdEntry(Tensor location, V value, Scalar distance) {
+    this.location = location;
+    this.value = value;
     this.distance = distance;
   }
 
   /** @return location of pair in map */
   public Tensor location() {
-    return ndPair.location;
+    return location;
   }
 
   /** @return value of pair in map */
   public V value() {
-    return ndPair.value();
+    return value;
   }
 
   /** @return distance of pair to center */

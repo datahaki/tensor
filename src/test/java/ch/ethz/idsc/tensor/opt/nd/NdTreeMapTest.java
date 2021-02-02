@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.opt.nd;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.NavigableMap;
 
@@ -39,22 +40,22 @@ public class NdTreeMapTest extends TestCase {
         {
           Tensor center = Tensors.vector(0, 0);
           NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          NdCluster<String> cluster = ndTreeMap.buildCluster(distancer, 1);
-          assertTrue(cluster.collection().iterator().next().value().equals("d5"));
+          Collection<NdEntry<String>> cluster = ndTreeMap.cluster(distancer, 1);
+          assertTrue(cluster.iterator().next().value().equals("d5"));
         }
         {
           Tensor center = Tensors.vector(5, 5);
           NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          NdCluster<String> cluster = ndTreeMap.buildCluster(distancer, 1);
-          assertTrue(cluster.collection().iterator().next().value().equals("d6"));
+          Collection<NdEntry<String>> cluster = ndTreeMap.cluster(distancer, 1);
+          assertTrue(cluster.iterator().next().value().equals("d6"));
         }
         {
           Tensor center = Tensors.vector(1.1, 0.9);
           NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          NdCluster<String> cluster = ndTreeMap.buildCluster(distancer, 2);
+          Collection<NdEntry<String>> cluster = ndTreeMap.cluster(distancer, 2);
           assertEquals(cluster.size(), 2);
           List<String> list = Arrays.asList("d1", "d4");
-          for (NdEntry<String> point : cluster.collection())
+          for (NdEntry<String> point : cluster)
             assertTrue(list.contains(point.value()));
         }
       }
@@ -81,7 +82,7 @@ public class NdTreeMapTest extends TestCase {
         public void run() {
           Tensor center = RandomVariate.of(distribution, 2);
           NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          NdCluster<Void> cluster = ndTreeMap.buildCluster(distancer, 100);
+          Collection<NdEntry<Void>> cluster = ndTreeMap.cluster(distancer, 100);
           assertEquals(cluster.size(), 100);
         }
       }).start();
@@ -93,7 +94,7 @@ public class NdTreeMapTest extends TestCase {
     NdMap<String> ndMap = new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 10);
     assertTrue(ndMap.isEmpty());
     NdCenterInterface distancer = EuclideanNdCenter.of(Tensors.vector(0, 0));
-    NdCluster<String> cluster = ndMap.buildCluster(distancer, 2);
+    Collection<NdEntry<String>> cluster = ndMap.cluster(distancer, 2);
     assertEquals(cluster.size(), 0);
   }
 
@@ -104,18 +105,18 @@ public class NdTreeMapTest extends TestCase {
     ndMap.add(Tensors.vector(0, 1), "d3");
     NdCenterInterface ndCenter = EuclideanNdCenter.of(Tensors.vector(0, 0));
     {
-      NdCluster<String> cluster = ndMap.buildCluster(ndCenter, 5);
+      Collection<NdEntry<String>> cluster = ndMap.cluster(ndCenter, 5);
       assertEquals(cluster.size(), 3);
     }
     NdMap<String> ndMap2 = Serialization.copy(ndMap);
     {
       ndMap.clear();
-      NdCluster<String> cluster = ndMap.buildCluster(ndCenter, 5);
+      Collection<NdEntry<String>> cluster = ndMap.cluster(ndCenter, 5);
       assertEquals(cluster.size(), 0);
     }
     ndMap.clear();
     {
-      NdCluster<String> cluster = ndMap2.buildCluster(ndCenter, 5);
+      Collection<NdEntry<String>> cluster = ndMap2.cluster(ndCenter, 5);
       assertEquals(cluster.size(), 3);
     }
   }

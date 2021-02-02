@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt.nd;
 
+import java.util.Collection;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -26,9 +28,9 @@ public class NdDualMap<V> implements NdMap<V> {
   }
 
   @Override // from NdMap
-  public NdCluster<V> buildCluster(NdCenterInterface ndCenter, int limit) {
-    NdCluster<V> c1 = ndTreeMap.buildCluster(ndCenter, limit);
-    NdCluster<V> c2 = ndListMap.buildCluster(ndCenter, limit);
+  public Collection<NdEntry<V>> cluster(NdCenterInterface ndCenter, int limit) {
+    Collection<NdEntry<V>> c1 = ndTreeMap.cluster(ndCenter, limit);
+    Collection<NdEntry<V>> c2 = ndListMap.cluster(ndCenter, limit);
     {
       Scalar s1 = c1.stream().sorted(NdEntryComparators.INCREASING).map(NdEntry::distance).reduce(Scalar::add).get();
       Scalar s2 = c2.stream().sorted(NdEntryComparators.INCREASING).map(NdEntry::distance).reduce(Scalar::add).get();
