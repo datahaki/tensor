@@ -2,11 +2,11 @@
 package ch.ethz.idsc.tensor.opt.rn;
 
 import java.io.Serializable;
-import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.ArrayFlatten;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.mat.CholeskyDecomposition;
 import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
@@ -16,7 +16,9 @@ import ch.ethz.idsc.tensor.mat.LeastSquares;
  * matrix=
  * [eye eqs^t]
  * [eqs 0]
- * b=[target;rhs] */
+ * b=[target;rhs]
+ * 
+ * @see ArrayFlatten */
 public final class LagrangeMultiplier implements Serializable {
   private static final long serialVersionUID = -991221659292154963L;
   // ---
@@ -24,10 +26,11 @@ public final class LagrangeMultiplier implements Serializable {
   private final Tensor matrix;
   private final Tensor b;
 
-  /** @param eye symmetric matrix of dimensions n x n
+  /** @param eye hermite matrix of dimensions n x n
    * @param target vector of length n
    * @param eqs matrix of dimensions d x n
-   * @param rhs vector of length d */
+   * @param rhs vector of length d
+   * @throws Exception if dimensions of input parameters do not match */
   public LagrangeMultiplier(Tensor eye, Tensor target, Tensor eqs, Tensor rhs) {
     n = eye.length();
     if (target.length() != n)
@@ -35,12 +38,10 @@ public final class LagrangeMultiplier implements Serializable {
     int d = eqs.length();
     if (rhs.length() != d)
       throw TensorRuntimeException.of(eqs, rhs);
-    matrix = Tensor.of(Stream.concat( //
-        Join.of(1, eye, ConjugateTranspose.of(eqs)).stream(), //
-        Join.of(1, eqs, Array.zeros(d, d)).stream()));
-    b = Tensor.of(Stream.concat( //
-        target.stream(), //
-        rhs.stream()));
+    matrix = ArrayFlatten.of(new Tensor[][] { //
+        { eye, ConjugateTranspose.of(eqs) }, //
+        { eqs, Array.zeros(d, d) } });
+    b = Join.of(target, rhs);
   }
 
   /** @return */
