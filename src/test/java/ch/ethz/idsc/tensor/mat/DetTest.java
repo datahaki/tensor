@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.mat;
 
 import java.math.BigInteger;
+import java.util.Random;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -13,6 +14,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -180,5 +182,13 @@ public class DetTest extends TestCase {
   public void testHilbert2() {
     Scalar det = Det.of(HilbertMatrix.of(8), Pivots.FIRST_NON_ZERO);
     assertEquals(det, Scalars.fromString("1/365356847125734485878112256000000"));
+  }
+
+  public void testGaussScalar() {
+    int n = 7;
+    int prime = 7879;
+    Random random = new Random();
+    Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, n);
+    assertTrue(Det.of(matrix) instanceof GaussScalar);
   }
 }

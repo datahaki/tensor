@@ -244,6 +244,13 @@ public class GaussScalarTest extends TestCase {
     // assertEquals(string, "{\"value\": 3, \"prime\": 7}");
   }
 
+  public void testDivideZeroFail() {
+    Scalar a = GaussScalar.of(3, 13);
+    Scalar b = GaussScalar.of(0, 13);
+    AssertFail.of(() -> a.divide(b));
+    AssertFail.of(() -> b.under(a));
+  }
+
   public void testPrimes() {
     Tensor tensor = ResourceData.of("/number/primes.vector");
     tensor.extract(3, tensor.length()).stream() //

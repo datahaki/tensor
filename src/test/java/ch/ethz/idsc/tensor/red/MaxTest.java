@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -64,6 +65,13 @@ public class MaxTest extends TestCase {
     UnaryOperator<String> function = Max.function("math");
     assertEquals(function.apply("library"), "math");
     assertEquals(function.apply("tensor"), "tensor");
+  }
+
+  public void testMaxNaN() {
+    AssertFail.of(() -> Max.of(DoubleScalar.of(1), DoubleScalar.INDETERMINATE));
+    AssertFail.of(() -> Max.of(DoubleScalar.INDETERMINATE, DoubleScalar.of(1)));
+    AssertFail.of(() -> Max.of(RealScalar.of(1), DoubleScalar.INDETERMINATE));
+    AssertFail.of(() -> Max.of(DoubleScalar.INDETERMINATE, RealScalar.of(1)));
   }
 
   public void testFail() {

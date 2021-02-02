@@ -32,7 +32,10 @@ public enum Pivots implements Pivot {
   },
   /** picks the first non-zero element in the column as pivot
    * the return value is c0 in the case when the element at (ind[c0], j)
-   * is non-zero, but also if none of the candidates is non-zero */
+   * is non-zero, but also if none of the candidates is non-zero
+   * 
+   * @see Det
+   * @see MatrixRank */
   FIRST_NON_ZERO {
     @Override // from Pivot
     public int get(int row, int col, int[] ind, Tensor[] lhs) {
