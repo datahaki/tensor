@@ -15,7 +15,9 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.ext.Cache;
 
-/** immutable */
+/** immutable
+ * 
+ * all instances of UnitImpl are managed in a LRU cache */
 /* package */ class UnitImpl implements Unit, Serializable {
   private static final long serialVersionUID = -2807221907647012658L;
   /* package */ static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> NEGATION = //
@@ -23,11 +25,8 @@ import ch.ethz.idsc.tensor.ext.Cache;
   private static final int MAX_SIZE = 1536;
   private static final Function<Unit, Unit> CACHE = Cache.of(Function.identity(), MAX_SIZE);
 
-  /** Example:
-   * map from {"kg"=1, "m"=1, "s"=-2}
-   * scalar value is never zero
-   * 
-   * @param navigableMap */
+  /** @param navigableMap for example {"kg"=1, "m"=1, "s"=-2}, the scalar value shall not be zero
+   * @return */
   public static Unit create(NavigableMap<String, Scalar> navigableMap) {
     return CACHE.apply(new UnitImpl(navigableMap));
   }

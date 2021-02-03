@@ -252,7 +252,7 @@ import ch.ethz.idsc.tensor.sca.N;
   public String toString() {
     int precision = value.precision();
     // return value.toString() + "`" + precision; // <- changes the appearance of Round._3 etc.
-    // LONGTERM solution not elegant because result will be parsed as DoubleScalar
+    // solution not elegant because result will be parsed as DoubleScalar
     return value.toString() + (precision <= DOUBLE_PRECISION ? "" : "`" + precision);
   }
 }

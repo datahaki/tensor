@@ -4,6 +4,11 @@ package ch.ethz.idsc.tensor.ext;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -38,7 +43,116 @@ public class CacheTest extends TestCase {
     assertEquals(cache.size(), 0);
   }
 
+  private static class ScalarStringFunc implements Function<Scalar, String> {
+    public int count = 0;
+
+    @Override
+    public String apply(Scalar t) {
+      ++count;
+      return t.toString();
+    }
+  }
+
+  public void testSingle() {
+    ScalarStringFunc scalarStringFunc = new ScalarStringFunc();
+    Cache<Scalar, String> cache = Cache.of(scalarStringFunc, 1);
+    assertEquals(cache.size(), 0);
+    assertEquals(scalarStringFunc.count, 0);
+    cache.apply(Pi.VALUE);
+    assertEquals(cache.size(), 1);
+    assertEquals(scalarStringFunc.count, 1);
+    cache.apply(Pi.VALUE);
+    assertEquals(cache.size(), 1);
+    assertEquals(scalarStringFunc.count, 1);
+    cache.apply(RealScalar.ONE);
+    assertEquals(cache.size(), 1);
+    assertEquals(scalarStringFunc.count, 2);
+    cache.apply(RealScalar.ONE);
+    assertEquals(cache.size(), 1);
+    assertEquals(scalarStringFunc.count, 2);
+  }
+
+  private static class TensorStringFunc implements Function<Tensor, String> {
+    public int count = 0;
+
+    @Override
+    public String apply(Tensor t) {
+      ++count;
+      return t.toString();
+    }
+  }
+
+  public void testTensor() {
+    TensorStringFunc tensorStringFunc = new TensorStringFunc();
+    Tensor tensor = Tensors.fromString( //
+        "{{-0.32499999999999907, 0.4708333333333343, 0.7853981633974483}, {1, 0, 1}, {-1, 1, 0}, {-0.5, -1, 0}, {0.4, 1, 0}}");
+    Cache<Tensor, String> cache = Cache.of(tensorStringFunc, 2);
+    assertEquals(cache.size(), 0);
+    assertEquals(tensorStringFunc.count, 0);
+    cache.apply(tensor.copy());
+    assertEquals(cache.size(), 1);
+    assertEquals(tensorStringFunc.count, 1);
+    cache.apply(tensor.copy());
+    assertEquals(cache.size(), 1);
+    assertEquals(tensorStringFunc.count, 1);
+  }
+
+  public void testTensor2() {
+    TensorStringFunc tensorStringFunc = new TensorStringFunc();
+    Tensor tensor = Tensors.fromString( //
+        "{{-0.32499999999999907, 0.4708333333333343, 0.7853981633974483}, {+Infinity}, {-Infinity, abc, 1[m*K^1/2]}, {-0.5, -1, 0}}");
+    Cache<Tensor, String> cache = Cache.of(tensorStringFunc, 2);
+    assertEquals(cache.size(), 0);
+    assertEquals(tensorStringFunc.count, 0);
+    cache.apply(tensor.copy().unmodifiable());
+    assertEquals(cache.size(), 1);
+    assertEquals(tensorStringFunc.count, 1);
+    cache.apply(tensor.unmodifiable());
+    assertEquals(cache.size(), 1);
+    assertEquals(tensorStringFunc.count, 1);
+    cache.apply(tensor.unmodifiable().copy());
+    assertEquals(cache.size(), 1);
+    assertEquals(tensorStringFunc.count, 1);
+    cache.apply(tensor.unmodifiable());
+    assertEquals(cache.size(), 1);
+    assertEquals(tensorStringFunc.count, 1);
+    IntStream.range(0, 26).parallel().forEach(c1 -> cache.apply(tensor));
+    assertEquals(tensorStringFunc.count, 1);
+  }
+
+  private static class DelayedStringFunc implements Function<Tensor, String> {
+    public int count = 0;
+
+    @Override
+    public String apply(Tensor t) {
+      try {
+        Thread.sleep(1);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      ++count;
+      return t.toString();
+    }
+  }
+
+  public void testDelayed() {
+    DelayedStringFunc tensorStringFunc = new DelayedStringFunc();
+    Tensor tensor = Tensors.fromString( //
+        "{{-0.32499999999999907, 0.4708333333333343, 0.7853981633974483}, {+Infinity, 0, 1/3}, {-Infinity, abc, 1[m*K^1/2]}}");
+    Cache<Tensor, String> cache = Cache.of(tensorStringFunc, 2);
+    assertEquals(cache.size(), 0);
+    IntStream.range(0, 26).parallel().forEach(c1 -> cache.apply(tensor));
+    assertEquals(cache.size(), 1);
+    // the function is typically called more than once
+    new StringBuilder(tensorStringFunc.count);
+    // System.out.println(tensorStringFunc.count);
+  }
+
   public void testFailNull() {
     AssertFail.of(() -> Cache.of(null, 32));
+  }
+
+  public void testFailNegative() {
+    AssertFail.of(() -> Cache.of(Function.identity(), -1));
   }
 }

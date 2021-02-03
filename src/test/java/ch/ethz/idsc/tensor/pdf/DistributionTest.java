@@ -21,9 +21,10 @@ public class DistributionTest extends TestCase {
     Scalar tmean = Expectation.mean(distribution); // theoretical mean
     Scalar tvar = Expectation.variance(distribution); // theoretical variance
     Scalar dmean = Abs.of(mean.subtract(tmean).divide(tmean));
-    // LONGTERM https://en.wikipedia.org/wiki/Central_limit_theorem
-    @SuppressWarnings("unused")
-    Scalar limmean = Sqrt.of(RealScalar.of(n)).multiply(mean.subtract(tmean)).divide(Sqrt.of(tvar));
+    // https://en.wikipedia.org/wiki/Central_limit_theorem
+    // @SuppressWarnings("unused")
+    // Scalar limmean =
+    Sqrt.of(RealScalar.of(n)).multiply(mean.subtract(tmean)).divide(Sqrt.of(tvar));
     Scalar dvar = Abs.of(var.subtract(tvar).divide(tvar));
     assertTrue(Scalars.lessThan(dmean, RealScalar.of(0.2)));
     assertTrue(Scalars.lessThan(dvar, RealScalar.of(0.22)));

@@ -63,7 +63,7 @@ public class Binomial implements Serializable {
     if (n < m) {
       if (0 <= n)
         return RealScalar.ZERO;
-      // LONGTERM this case is defined in Mathematica
+      // this case is defined in Mathematica
       throw new IllegalArgumentException(String.format("Binomial[%d,%d]", n, m));
     }
     return CACHE.apply(n).over(m);

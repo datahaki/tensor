@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -46,7 +47,7 @@ public class UnitImplTest extends TestCase {
     Stream.concat(m1.entrySet().stream(), m2.entrySet().stream()).collect(UnitImpl.NEGATION);
   }
 
-  public void testReference() {
+  public void testReference1() {
     NavigableMap<String, Scalar> m1 = new TreeMap<>();
     m1.put("some", RealScalar.ONE);
     m1.put("kgt", RealScalar.TWO.negate());
@@ -54,6 +55,11 @@ public class UnitImplTest extends TestCase {
     m2.put("kgt", RealScalar.of(2).negate());
     m2.put("some", RealScalar.of(1));
     assertTrue(UnitImpl.create(m1) == UnitImpl.create(m2));
+  }
+
+  public void testReference2() {
+    assertTrue(UnitImpl.create(Collections.emptyNavigableMap()) == //
+        UnitImpl.create(Collections.emptyNavigableMap()));
   }
 
   public void testEqualsMerged() {

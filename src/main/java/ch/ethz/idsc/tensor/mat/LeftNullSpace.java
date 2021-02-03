@@ -26,6 +26,7 @@ public enum LeftNullSpace {
   /** @param matrix
    * @return list of vectors that span the left nullspace of given matrix */
   public static Tensor of(Tensor matrix) {
+    // TODO should be same design as LeastSquares#of
     return ExactTensorQ.of(matrix) //
         ? usingRowReduce(matrix, Pivots.FIRST_NON_ZERO)
         : usingQR(matrix);
@@ -63,19 +64,16 @@ public enum LeftNullSpace {
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
     Tensor r = qrDecomposition.getR();
     Tensor qinv = qrDecomposition.getInverseQ();
-    // return Tensor.of(IntStream.range(0, qinv.length()) //
-    // .filter(i->cols<=i || Tolerance.CHOP.allZero(r.Get(i, i))) //
-    // .mapToObj(qinv::get));
-    if (IntStream.range(0, cols).mapToObj(i -> r.Get(i, i)).map(Tolerance.CHOP).anyMatch(Scalars::isZero)) {
-      // LONGTERM implementation is not satisfactory
-      // System.out.println("LNS USING SVD");
+    boolean nonRankMax = IntStream.range(0, cols) //
+        .mapToObj(i -> r.Get(i, i)) //
+        .anyMatch(Tolerance.CHOP::isZero);
+    if (nonRankMax) {
       Tensor nspace = NullSpace.usingSvd(Transpose.of(qrDecomposition.getR().extract(0, cols)));
-      // System.out.println(Pretty.of(nspace.map(Round._4)));
       Tensor upper = Tensor.of(qinv.stream().limit(cols));
       return Tensor.of(Stream.concat( //
           nspace.stream().map(row -> row.dot(upper)), //
           qinv.stream().skip(cols)));
     }
-    return Tensor.of(qinv.stream().skip(cols));
+    return Tensor.of(qinv.stream().skip(cols)); // matrix has maximal rank
   }
 }
