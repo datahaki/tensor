@@ -104,7 +104,7 @@ public class SimpleUnitSystem implements UnitSystem {
       }
       return Objects.isNull(product) //
           ? scalar
-          : StaticHelper.multiply(product.multiply(quantity.value()), new UnitImpl(navigableMap));
+          : StaticHelper.multiply(product.multiply(quantity.value()), UnitImpl.create(navigableMap));
     }
     return Objects.requireNonNull(scalar);
   }
@@ -114,7 +114,7 @@ public class SimpleUnitSystem implements UnitSystem {
     return Collections.unmodifiableMap(map);
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return String.format("%s[size=%d]", getClass().getSimpleName(), map().size());
   }

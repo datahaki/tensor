@@ -201,7 +201,7 @@ public class QuaternionTest extends TestCase {
 
   public void testExpLogRandom() {
     Distribution distribution = NormalDistribution.of(0, 0.3);
-    for (int count = 0; count < 30; ++count) {
+    for (int count = 0; count < 10; ++count) {
       Quaternion quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
       Quaternion exp = quaternion.exp();
       Quaternion log = exp.log();
@@ -211,7 +211,7 @@ public class QuaternionTest extends TestCase {
 
   public void testLogExpRandom() {
     Distribution distribution = NormalDistribution.of(0, 2.3);
-    for (int count = 0; count < 30; ++count) {
+    for (int count = 0; count < 10; ++count) {
       Quaternion quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
       Quaternion log = quaternion.log();
       Quaternion exp = log.exp();

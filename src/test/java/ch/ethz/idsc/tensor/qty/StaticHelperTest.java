@@ -1,7 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -19,8 +21,20 @@ public class StaticHelperTest extends TestCase {
     AssertFail.of(() -> StaticHelper.requireAtomic("m^2"));
   }
 
+  // only used in tests
+  /* package */ static Set<Unit> atoms(Unit unit) {
+    return unit.map().entrySet().stream() //
+        .map(StaticHelperTest::format) //
+        .collect(Collectors.toSet());
+  }
+
+  // helper function
+  private static Unit format(Entry<String, Scalar> entry) {
+    return Unit.of(entry.getKey() + Unit.POWER_DELIMITER + entry.getValue());
+  }
+
   public void testAtoms() {
-    Set<Unit> set = StaticHelper.atoms(Unit.of("m^3*kg^-2*s^1"));
+    Set<Unit> set = atoms(Unit.of("m^3*kg^-2*s^1"));
     set.contains(Unit.of("m^3"));
     set.contains(Unit.of("kg^-2"));
     set.contains(Unit.of("s"));

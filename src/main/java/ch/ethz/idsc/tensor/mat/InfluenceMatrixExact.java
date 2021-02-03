@@ -15,12 +15,12 @@ import ch.ethz.idsc.tensor.Tensor;
     this.matrix = matrix;
   }
 
-  @Override // from InfluenceMatrixBase
+  @Override // from InfluenceMatrix
   public Tensor matrix() {
     return matrix;
   }
 
-  @Override // from InfluenceMatrixBase
+  @Override // from InfluenceMatrix
   public Tensor image(Tensor vector) {
     // LONGTERM is vector . matrix is better / more consistent !?
     return matrix.dot(vector);

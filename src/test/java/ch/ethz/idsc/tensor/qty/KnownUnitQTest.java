@@ -53,6 +53,10 @@ public class KnownUnitQTest extends TestCase {
     assertFalse(knownUnitQ.test(Unit.of("m")));
   }
 
+  public void testToString() {
+    assertTrue(KnownUnitQ.SI().toString().startsWith("KnownUnitQ["));
+  }
+
   public void testRequire() {
     KnownUnitQ.SI().require(Unit.of("PS^3"));
     AssertFail.of(() -> KnownUnitQ.SI().require(Unit.of("CHF")));

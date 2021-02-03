@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 public class LogGammaTest extends TestCase {
   public void testSimple() {
     Distribution distribution = UniformDistribution.of(0.2, 4.5);
-    for (int count = 0; count < 100; ++count) {
+    for (int count = 0; count < 10; ++count) {
       Scalar x = RandomVariate.of(distribution);
       Scalar logGamma1 = LogGamma.FUNCTION.apply(x);
       Scalar logGamma2 = Log.FUNCTION.apply(Gamma.FUNCTION.apply(x));
@@ -53,7 +53,7 @@ public class LogGammaTest extends TestCase {
 
   public void testComplex() {
     Distribution distribution = UniformDistribution.of(0.2, 3.5);
-    for (int count = 0; count < 100; ++count) {
+    for (int count = 0; count < 10; ++count) {
       Scalar re = RandomVariate.of(distribution);
       Scalar im = RandomVariate.of(distribution);
       Scalar x = ComplexScalar.of(re, im);

@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.qty;
 
 import java.util.Map.Entry;
+import java.util.Set;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -12,6 +13,15 @@ import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitSystemsTest extends TestCase {
+  public void testKnownAtoms() {
+    Set<String> set = UnitSystems.known(UnitSystem.SI());
+    assertTrue(set.contains("K"));
+    assertTrue(set.contains("m"));
+    assertTrue(set.contains("kW"));
+    Set<String> base = UnitSystems.base(UnitSystem.SI());
+    assertTrue(set.containsAll(base));
+  }
+
   public void testNoEffect() {
     AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "unknownUnit", "unknownUnit"));
     AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "s", "kg"));

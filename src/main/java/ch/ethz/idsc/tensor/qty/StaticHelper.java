@@ -4,9 +4,7 @@ package ch.ethz.idsc.tensor.qty;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -81,17 +79,5 @@ import ch.ethz.idsc.tensor.sca.Power;
         QuantityMagnitude.singleton(rhs).apply(factor).reciprocal(), //
         unit), //
         rhs.map().get(prev).reciprocal());
-  }
-
-  // only used in tests
-  /* package */ static Set<Unit> atoms(Unit unit) {
-    return unit.map().entrySet().stream() //
-        .map(StaticHelper::format) //
-        .collect(Collectors.toSet());
-  }
-
-  // helper function
-  private static Unit format(Entry<String, Scalar> entry) {
-    return Unit.of(entry.getKey() + Unit.POWER_DELIMITER + entry.getValue());
   }
 }

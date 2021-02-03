@@ -90,6 +90,10 @@ public class UnitTest extends TestCase {
     assertEquals(uExact, uBrack);
   }
 
+  public void testReference() {
+    assertTrue(Unit.of("m*s") == Unit.of("s*m"));
+  }
+
   public void testFail() {
     AssertFail.of(() -> Unit.of(" m >"));
     AssertFail.of(() -> Unit.of("| m "));

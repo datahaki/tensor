@@ -145,7 +145,7 @@ public class MatrixPowerTest extends TestCase {
   }
 
   public void testGaussian() {
-    int prime = 563;
+    int prime = 7879;
     Distribution distribution = DiscreteUniformDistribution.of(0, prime);
     Scalar one = GaussScalar.of(1, prime);
     for (int n = 3; n < 6; ++n) {

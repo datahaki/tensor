@@ -3,6 +3,8 @@ package ch.ethz.idsc.tensor.qty;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.RealScalar;
@@ -42,6 +44,16 @@ public class UnitImplTest extends TestCase {
     Map<String, Scalar> m2 = new HashMap<>();
     m2.put("m", RealScalar.of(2));
     Stream.concat(m1.entrySet().stream(), m2.entrySet().stream()).collect(UnitImpl.NEGATION);
+  }
+
+  public void testReference() {
+    NavigableMap<String, Scalar> m1 = new TreeMap<>();
+    m1.put("some", RealScalar.ONE);
+    m1.put("kgt", RealScalar.TWO.negate());
+    NavigableMap<String, Scalar> m2 = new TreeMap<>();
+    m2.put("kgt", RealScalar.of(2).negate());
+    m2.put("some", RealScalar.of(1));
+    assertTrue(UnitImpl.create(m1) == UnitImpl.create(m2));
   }
 
   public void testEqualsMerged() {

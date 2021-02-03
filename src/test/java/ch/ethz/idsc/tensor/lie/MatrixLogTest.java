@@ -15,7 +15,6 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -50,16 +49,6 @@ public class MatrixLogTest extends TestCase {
       Tensor log = MatrixLog.of(exp);
       Tensor cmp = MatrixExp.of(log);
       Chop._04.requireClose(exp, cmp);
-    }
-  }
-
-  public void test2x2() {
-    for (int count = 0; count < 10; ++count) {
-      Tensor x = RandomVariate.of(UniformDistribution.of(-1, 1), 2, 2);
-      Tensor exp = MatrixExp.of(x);
-      Tensor log = MatrixLog._of(exp);
-      Tensor cmp = MatrixLog2.of(exp);
-      Chop._04.requireClose(log, cmp);
     }
   }
 

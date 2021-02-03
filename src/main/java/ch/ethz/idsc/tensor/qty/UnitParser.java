@@ -41,6 +41,6 @@ import ch.ethz.idsc.tensor.ext.Cache;
           StaticHelper.merge(map, StaticHelper.requireAtomic(unit), RealScalar.ONE);
       }
     }
-    return new UnitImpl(map);
+    return UnitImpl.create(map);
   }
 }

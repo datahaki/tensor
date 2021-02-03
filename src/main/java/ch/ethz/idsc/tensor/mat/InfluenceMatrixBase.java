@@ -3,10 +3,12 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
+/** base for a class that implements the {@link InfluenceMatrix} interface */
 /* package */ abstract class InfluenceMatrixBase implements InfluenceMatrix {
   @Override // from InfluenceMatrix
   public final Tensor leverages() {
@@ -25,7 +27,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     return Tensor.of(matrix().stream() //
         .map(Tensor::negate) // copy
         .map(row -> {
-          row.set(row.Get(0).one()::add, atomicInteger.getAndIncrement());
+          int index = atomicInteger.getAndIncrement();
+          row.set(scalar -> scalar.add(((Scalar) scalar).one()), index);
           return row; // by ref
         }));
   }
@@ -35,11 +38,11 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     return vector.subtract(image(vector));
   }
 
-  /** @return Length[design] */
-  protected abstract int length();
-
   @Override // from Object
   public final String toString() {
     return String.format("%s[%d]", InfluenceMatrix.class.getSimpleName(), length());
   }
+
+  /** @return Length[design] */
+  protected abstract int length();
 }

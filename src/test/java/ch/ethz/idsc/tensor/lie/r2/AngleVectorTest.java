@@ -57,7 +57,7 @@ public class AngleVectorTest extends TestCase {
 
   public void testRotationOfEquivalence() {
     Distribution distribution = NormalDistribution.standard();
-    for (int count = 0; count < 50; ++count) {
+    for (int count = 0; count < 10; ++count) {
       Scalar fraction = RandomVariate.of(distribution);
       Chop._12.requireClose(AngleVector.turns(fraction), AngleVector.of(fraction.multiply(Pi.TWO)));
     }

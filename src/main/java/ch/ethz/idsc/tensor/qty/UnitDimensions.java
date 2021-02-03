@@ -17,9 +17,10 @@ import ch.ethz.idsc.tensor.sca.Power;
  * <a href="https://reference.wolfram.com/language/ref/UnitDimensions.html">UnitDimensions</a> */
 public class UnitDimensions implements Serializable {
   private static final long serialVersionUID = 4465341212796035153L;
+  private static final int MAX_SIZE = 768;
   @SuppressWarnings("unchecked")
   private final Cache<Unit, Unit> cache = //
-      Cache.of((Function<Unit, Unit> & Serializable) this::base, 256 * 3);
+      Cache.of((Function<Unit, Unit> & Serializable) this::base, MAX_SIZE);
   private final Map<String, Scalar> map;
 
   public UnitDimensions(UnitSystem unitSystem) {
@@ -51,6 +52,6 @@ public class UnitDimensions implements Serializable {
     }
     return Objects.isNull(product) //
         ? unit
-        : QuantityUnit.of(StaticHelper.multiply(product, new UnitImpl(navigableMap)));
+        : QuantityUnit.of(StaticHelper.multiply(product, UnitImpl.create(navigableMap)));
   }
 }

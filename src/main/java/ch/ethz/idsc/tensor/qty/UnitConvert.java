@@ -73,7 +73,7 @@ public class UnitConvert implements Serializable {
       return Quantity.of(unitSystem.apply(StaticHelper.multiply(scalar, base)), unit);
     }
 
-    @Override
+    @Override // from Object
     public String toString() {
       return String.format("%s[%s, %s]", UnitConvert.class.getSimpleName(), unitSystem, unit);
     }

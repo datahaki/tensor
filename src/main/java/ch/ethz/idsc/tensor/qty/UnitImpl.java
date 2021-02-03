@@ -6,31 +6,44 @@ import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.ext.Cache;
 
+/** immutable */
 /* package */ class UnitImpl implements Unit, Serializable {
   private static final long serialVersionUID = -2807221907647012658L;
   /* package */ static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> NEGATION = //
       Collectors.toMap(Entry::getKey, entry -> entry.getValue().negate(), (e1, e2) -> null, TreeMap::new);
-  // ---
+  private static final int MAX_SIZE = 1536;
+  private static final Function<Unit, Unit> CACHE = Cache.of(Function.identity(), MAX_SIZE);
+
   /** Example:
    * map from {"kg"=1, "m"=1, "s"=-2}
-   * scalar value is never zero */
-  private final NavigableMap<String, Scalar> navigableMap;
+   * scalar value is never zero
+   * 
+   * @param navigableMap */
+  public static Unit create(NavigableMap<String, Scalar> navigableMap) {
+    return CACHE.apply(new UnitImpl(navigableMap));
+  }
 
-  /** @param navigableMap */
-  public UnitImpl(NavigableMap<String, Scalar> navigableMap) {
+  /***************************************************/
+  private final NavigableMap<String, Scalar> navigableMap;
+  private final int hashCode;
+
+  private UnitImpl(NavigableMap<String, Scalar> navigableMap) {
     this.navigableMap = navigableMap;
+    hashCode = navigableMap.hashCode();
   }
 
   @Override // from Unit
   public Unit negate() {
-    return new UnitImpl(navigableMap.entrySet().stream().collect(NEGATION));
+    return create(navigableMap.entrySet().stream().collect(NEGATION));
   }
 
   @Override // from Unit
@@ -38,7 +51,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
     NavigableMap<String, Scalar> map = new TreeMap<>(navigableMap);
     for (Entry<String, Scalar> entry : unit.map().entrySet())
       StaticHelper.merge(map, entry.getKey(), entry.getValue()); // exponent is guaranteed to be non-zero
-    return new UnitImpl(map);
+    return create(map);
   }
 
   @Override // from Unit
@@ -51,7 +64,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
       if (Scalars.nonZero(value))
         map.put(entry.getKey(), value);
     }
-    return new UnitImpl(map);
+    return create(map);
   }
 
   @Override // from Unit
@@ -62,7 +75,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
   /***************************************************/
   @Override // from Object
   public int hashCode() {
-    return navigableMap.hashCode();
+    return hashCode;
   }
 
   @Override // from Object
