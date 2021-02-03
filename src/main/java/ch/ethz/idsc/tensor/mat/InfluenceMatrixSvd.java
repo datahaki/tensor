@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
   // ---
   private final Tensor design;
   private final SingularValueDecomposition svd;
+  /* matrix is computed on demand */
   private Tensor matrix;
 
   public InfluenceMatrixSvd(Tensor design) {

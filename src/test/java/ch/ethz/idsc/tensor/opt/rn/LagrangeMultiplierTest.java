@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.HermitianMatrixQ;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -13,16 +14,36 @@ import junit.framework.TestCase;
 
 public class LagrangeMultiplierTest extends TestCase {
   public void testLagrange() {
-    Tensor eqs = RandomVariate.of(NormalDistribution.standard(), 3, 10);
-    Tensor target = RandomVariate.of(NormalDistribution.standard(), 10);
+    int n = 7;
+    Tensor eqs = RandomVariate.of(NormalDistribution.standard(), 3, n);
+    Tensor target = RandomVariate.of(NormalDistribution.standard(), n);
     Tensor rhs = RandomVariate.of(NormalDistribution.standard(), 3);
-    LagrangeMultiplier lagrangeMultiplier = new LagrangeMultiplier(IdentityMatrix.of(10), target, eqs, rhs);
+    LagrangeMultiplier lagrangeMultiplier = new LagrangeMultiplier(IdentityMatrix.of(n), target, eqs, rhs);
     HermitianMatrixQ.require(lagrangeMultiplier.matrix());
     VectorQ.require(lagrangeMultiplier.b());
-    Tensor sol1 = lagrangeMultiplier.linearSolve();
+    Tensor sol1 = lagrangeMultiplier.usingCholesky();
     Tensor sol2 = lagrangeMultiplier.usingSvd();
-    assertEquals(sol1.length(), 10);
+    Tensor sol3 = lagrangeMultiplier.solve();
+    assertEquals(sol1.length(), n);
     Chop._08.requireClose(sol1, sol2);
+    Tolerance.CHOP.requireClose(sol1, sol3);
+  }
+
+  public void testLagrangeCholeskyFail() {
+    int n = 8;
+    Tensor eqsPre = RandomVariate.of(NormalDistribution.standard(), 2, n);
+    Tensor eqsMul = RandomVariate.of(NormalDistribution.standard(), 3, 2);
+    Tensor eqs = eqsMul.dot(eqsPre);
+    Tensor target = RandomVariate.of(NormalDistribution.standard(), n);
+    Tensor rhs = RandomVariate.of(NormalDistribution.standard(), 3);
+    LagrangeMultiplier lagrangeMultiplier = new LagrangeMultiplier(IdentityMatrix.of(n), target, eqs, rhs);
+    HermitianMatrixQ.require(lagrangeMultiplier.matrix());
+    VectorQ.require(lagrangeMultiplier.b());
+    AssertFail.of(() -> lagrangeMultiplier.usingCholesky());
+    Tensor sol2 = lagrangeMultiplier.usingSvd();
+    Tensor sol3 = lagrangeMultiplier.solve();
+    Tolerance.CHOP.requireClose(sol2, sol3);
+    assertEquals(sol2.length(), n);
   }
 
   public void testLagrange1Fail() {

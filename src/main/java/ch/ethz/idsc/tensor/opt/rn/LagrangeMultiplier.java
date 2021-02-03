@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.mat.LeastSquares;
  * 
  * @see ArrayFlatten */
 public final class LagrangeMultiplier implements Serializable {
-  private static final long serialVersionUID = -991221659292154963L;
+  private static final long serialVersionUID = -867790329410465764L;
   // ---
   private final int n;
   private final Tensor matrix;
@@ -54,17 +54,29 @@ public final class LagrangeMultiplier implements Serializable {
     return b;
   }
 
-  /** robust solver in case rank of eye or eqs is not maximal
-   * 
-   * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target */
-  public Tensor usingSvd() {
-    return LeastSquares.usingSvd(matrix, b).extract(0, n);
+  /** @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target */
+  public Tensor solve() {
+    try {
+      return usingCholesky(); // typically faster than usingSvd
+    } catch (Exception exception) {
+      // matrix does not have full rank
+    }
+    return usingSvd();
   }
 
   /** Hint: only use function if rank of eye and eqs is maximal
    * 
-   * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target */
-  public Tensor linearSolve() {
+   * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target
+   * @throws Exception if rank of matrix is not maximal */
+  public Tensor usingCholesky() {
     return CholeskyDecomposition.of(matrix).solve(b).extract(0, n);
+  }
+
+  /** robust solver in case rank of eye or eqs is not maximal
+   * but slower than {@link #usingCholesky()}.
+   * 
+   * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target */
+  public Tensor usingSvd() {
+    return LeastSquares.usingSvd(matrix, b).extract(0, n);
   }
 }

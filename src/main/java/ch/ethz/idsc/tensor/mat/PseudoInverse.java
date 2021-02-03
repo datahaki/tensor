@@ -33,7 +33,7 @@ public enum PseudoInverse {
       try {
         usingCholesky(matrix);
       } catch (Exception exception) {
-        // ---
+        // matrix does not have maximal rank
       }
     return LeastSquares.of(matrix, IdentityMatrix.of(matrix.length()));
   }

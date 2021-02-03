@@ -37,7 +37,9 @@ import java.util.stream.Stream;
 
   @Override // from Tensor
   public Tensor get(List<Integer> index) {
-    return index.isEmpty() ? copy() : _get(index);
+    return index.isEmpty() //
+        ? copy()
+        : _get(index);
   }
 
   private Tensor _get(List<Integer> index) {
@@ -138,7 +140,9 @@ import java.util.stream.Stream;
   public Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
     if (fromIndex.size() != dimensions.size())
       throw new IllegalArgumentException(fromIndex + " " + dimensions);
-    return fromIndex.isEmpty() ? copy() : _block(fromIndex, dimensions);
+    return fromIndex.isEmpty() //
+        ? copy()
+        : _block(fromIndex, dimensions);
   }
 
   /** @param fromIndex non-empty

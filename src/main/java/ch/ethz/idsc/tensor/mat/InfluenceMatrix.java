@@ -22,7 +22,7 @@ public interface InfluenceMatrix {
       try {
         return new InfluenceMatrixExact(design.dot(PseudoInverse.usingCholesky(design)));
       } catch (Exception exception) {
-        // ---
+        // design matrix does not have maximal rank
       }
     return new InfluenceMatrixSvd(design);
   }

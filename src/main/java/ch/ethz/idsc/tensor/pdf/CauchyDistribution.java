@@ -15,7 +15,8 @@ import ch.ethz.idsc.tensor.sca.Tan;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CauchyDistribution.html">CauchyDistribution</a> */
-public class CauchyDistribution extends AbstractContinuousDistribution implements InverseCDF, Serializable {
+public class CauchyDistribution extends AbstractContinuousDistribution implements //
+    InverseCDF, Serializable {
   private static final long serialVersionUID = -7860035228725423560L;
 
   /** @param a
