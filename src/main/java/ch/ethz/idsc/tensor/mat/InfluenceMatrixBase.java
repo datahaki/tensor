@@ -10,12 +10,12 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** base for a class that implements the {@link InfluenceMatrix} interface */
 /* package */ abstract class InfluenceMatrixBase implements InfluenceMatrix {
-  @Override // from InfluenceMatrix
+  @Override // from LeveragesInterface
   public final Tensor leverages() {
     return Diagonal.of(matrix());
   }
 
-  @Override // from InfluenceMatrix
+  @Override // from LeveragesInterface
   public final Tensor leverages_sqrt() {
     return leverages().map(Sqrt.FUNCTION);
   }

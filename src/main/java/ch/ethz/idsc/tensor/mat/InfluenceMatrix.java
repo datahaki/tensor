@@ -12,8 +12,10 @@ import ch.ethz.idsc.tensor.Tensor;
  * https://en.wikipedia.org/wiki/Proofs_involving_the_Moore%E2%80%93Penrose_inverse
  * 
  * "Biinvariant Generalized Barycentric Coordinates on Lie Groups"
- * by Jan Hakenberg, 2020 */
-public interface InfluenceMatrix {
+ * by Jan Hakenberg, 2020
+ * 
+ * @see Mahalanobis */
+public interface InfluenceMatrix extends LeveragesInterface {
   /** @param design matrix
    * @return if the given matrix is in exact precision and has maximal rank,
    * then the implementation of influence matrix is also in exact precision */
@@ -39,17 +41,6 @@ public interface InfluenceMatrix {
    * symmetric projection matrix of size n x n with eigenvalues either 1 or 0.
    * The matrix is a point in the Grassmannian manifold Gr(n, k) where k denotes the matrix rank. */
   Tensor matrix();
-
-  /** Remark: The trace of the influence matrix, i.e. the sum of the leverages, equals
-   * the rank of the design matrix.
-   * 
-   * @return diagonal entries of influence matrix each of which are guaranteed to be in the
-   * unit interval [0, 1] */
-  Tensor leverages();
-
-  /** @return sqrt of leverages identical to Mahalanobis distance guaranteed to be in the unit
-   * interval [0, 1] */
-  Tensor leverages_sqrt();
 
   /** projection matrix defines a projection of a tangent vector at given point to a vector in
    * the subspace of the tangent space at given point. The subspace depends on the given sequence.

@@ -22,8 +22,7 @@ import ch.ethz.idsc.tensor.Tensor;
 
   @Override // from InfluenceMatrix
   public Tensor image(Tensor vector) {
-    // LONGTERM is vector . matrix is better / more consistent !?
-    return matrix.dot(vector);
+    return vector.dot(matrix);
   }
 
   @Override // from InfluenceMatrixBase

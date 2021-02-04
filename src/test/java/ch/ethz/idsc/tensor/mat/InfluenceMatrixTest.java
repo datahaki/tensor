@@ -7,12 +7,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.Serialization;
-import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
-import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -70,23 +66,6 @@ public class InfluenceMatrixTest extends TestCase {
         vim1.dot(design));
     Tensor vim3 = imageQR(design, v1);
     Tolerance.CHOP.requireClose(vim1, vim3);
-  }
-
-  public void testRankDeficientQuantity() {
-    int n = 7;
-    int _m = 5;
-    Distribution distribution = NormalDistribution.standard();
-    for (int r = 1; r < _m - 1; ++r) {
-      Tensor m1 = RandomVariate.of(distribution, n, r).map(s -> Quantity.of(s, "m"));
-      Tensor m2 = RandomVariate.of(distribution, r, _m);
-      Tensor design = m1.dot(m2);
-      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-      SymmetricMatrixQ.require(influenceMatrix.matrix());
-      influenceMatrix.image(RandomVariate.of(distribution, n));
-      influenceMatrix.leverages();
-      influenceMatrix.leverages_sqrt();
-      influenceMatrix.matrix().map(QuantityMagnitude.singleton(Unit.ONE));
-    }
   }
 
   public void testNullFail() {
