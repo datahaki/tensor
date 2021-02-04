@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.sca.win;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class WelchWindowTest extends TestCase {
@@ -15,5 +16,9 @@ public class WelchWindowTest extends TestCase {
     Tolerance.CHOP.requireClose( //
         suo.apply(RealScalar.of(0.5)), //
         RealScalar.of(0.6093750000000001));
+  }
+
+  public void testNullFail() {
+    AssertFail.of(() -> WelchWindow.of(null));
   }
 }

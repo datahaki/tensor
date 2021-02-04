@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.sca.win;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class CauchyWindowTest extends TestCase {
@@ -15,5 +16,9 @@ public class CauchyWindowTest extends TestCase {
     Tolerance.CHOP.requireClose( //
         suo.apply(RealScalar.of(0.5)), //
         RealScalar.of(0.28089887640449435));
+  }
+
+  public void testNullFail() {
+    AssertFail.of(() -> CauchyWindow.of(null));
   }
 }

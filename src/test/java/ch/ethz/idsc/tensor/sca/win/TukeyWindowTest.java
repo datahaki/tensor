@@ -58,4 +58,8 @@ public class TukeyWindowTest extends TestCase {
     AssertFail.of(() -> TukeyWindow.FUNCTION.apply(Quantity.of(0, "s")));
     AssertFail.of(() -> TukeyWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
+
+  public void testNullFail() {
+    AssertFail.of(() -> TukeyWindow.of(null));
+  }
 }

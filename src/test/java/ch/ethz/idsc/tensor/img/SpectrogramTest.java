@@ -13,7 +13,11 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.sca.win.BlackmanWindow;
 import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
+import ch.ethz.idsc.tensor.sca.win.GaussianWindow;
+import ch.ethz.idsc.tensor.sca.win.HammingWindow;
+import ch.ethz.idsc.tensor.sca.win.ParzenWindow;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -33,20 +37,20 @@ public class SpectrogramTest extends TestCase {
   public void testQuantity() {
     Tensor signal = Tensors.vector(1, 2, 1, 4, 3, 2, 3, 4, 3, 4);
     Tensor vector = signal.map(s -> Quantity.of(s, "m"));
-    Tensor array1 = Spectrogram.of(signal, DirichletWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM);
-    Tensor array2 = Spectrogram.of(vector, DirichletWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM);
+    Tensor array1 = Spectrogram.of(signal, GaussianWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM);
+    Tensor array2 = Spectrogram.of(vector, GaussianWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM);
     assertEquals(array1, array2);
   }
 
   public void testNullFail() {
-    AssertFail.of(() -> Spectrogram.array(null, DirichletWindow.FUNCTION));
+    AssertFail.of(() -> Spectrogram.array(null, HammingWindow.FUNCTION));
   }
 
   public void testScalarFail() {
-    AssertFail.of(() -> Spectrogram.of(RealScalar.ONE, DirichletWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM));
+    AssertFail.of(() -> Spectrogram.of(RealScalar.ONE, ParzenWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM));
   }
 
   public void testMatrixFail() {
-    AssertFail.of(() -> Spectrogram.of(HilbertMatrix.of(32), DirichletWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM));
+    AssertFail.of(() -> Spectrogram.of(HilbertMatrix.of(32), BlackmanWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM));
   }
 }

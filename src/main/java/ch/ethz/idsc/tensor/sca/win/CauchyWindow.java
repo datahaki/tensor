@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca.win;
 
+import java.util.Objects;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
@@ -15,7 +17,7 @@ public class CauchyWindow extends ParameterizedWindow {
   /** @param alpha
    * @return */
   public static ScalarUnaryOperator of(Scalar alpha) {
-    return new CauchyWindow(alpha);
+    return new CauchyWindow(Objects.requireNonNull(alpha));
   }
 
   /***************************************************/

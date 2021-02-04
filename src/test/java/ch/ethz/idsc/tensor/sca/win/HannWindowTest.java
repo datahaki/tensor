@@ -57,4 +57,8 @@ public class HannWindowTest extends TestCase {
   public void testQuantityFail() {
     AssertFail.of(() -> HannWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
+
+  public void testNullFail() {
+    AssertFail.of(() -> HannWindow.of(null));
+  }
 }

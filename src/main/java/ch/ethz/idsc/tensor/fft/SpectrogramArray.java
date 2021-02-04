@@ -17,13 +17,12 @@ import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
-import ch.ethz.idsc.tensor.sca.win.HammingWindow;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/SpectrogramArray.html">SpectrogramArray</a>
  * 
- * @see DirichletWindow
- * @see HammingWindow */
+ * @see WindowFunctions */
 public class SpectrogramArray implements TensorUnaryOperator {
   private static final long serialVersionUID = 8157393220559911565L;
   private static final ScalarUnaryOperator LOG2 = Log.base(2);

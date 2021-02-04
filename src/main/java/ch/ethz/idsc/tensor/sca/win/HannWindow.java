@@ -26,7 +26,7 @@ public class HannWindow extends ParameterizedWindow {
     a1 = RealScalar.ONE.subtract(alpha);
   }
 
-  @Override
+  @Override // from ParameterizedWindow
   protected Scalar evaluate(Scalar x) {
     return StaticHelper.deg1(alpha, a1, x);
   }

@@ -21,6 +21,7 @@ import ch.ethz.idsc.tensor.sca.win.BlackmanHarrisWindow;
 import ch.ethz.idsc.tensor.sca.win.HannWindow;
 import ch.ethz.idsc.tensor.sca.win.NuttallWindow;
 import ch.ethz.idsc.tensor.sca.win.TukeyWindow;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -33,11 +34,13 @@ public class SpectrogramArrayTest extends TestCase {
   }
 
   public void testMathematicaDefault() {
-    Tensor tensor = Tensor.of(IntStream.range(0, 2000) //
+    Tensor tensor = Tensor.of(IntStream.range(0, 500) //
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(RealScalar::of));
-    int windowLength = Unprotect.dimension1(SpectrogramArray.of(tensor));
-    assertEquals(windowLength, 64);
+    for (WindowFunctions windowFunctions : WindowFunctions.values()) {
+      int windowLength = Unprotect.dimension1(SpectrogramArray.of(tensor, windowFunctions.get()));
+      assertEquals(windowLength, 32);
+    }
   }
 
   public void testQuantity() {
