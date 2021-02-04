@@ -25,6 +25,6 @@ public enum ScalarProduct implements GroupInterface<Scalar> {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s", getClass().getSimpleName());
+    return getClass().getSimpleName();
   }
 }

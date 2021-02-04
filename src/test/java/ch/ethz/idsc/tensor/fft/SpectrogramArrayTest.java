@@ -17,6 +17,10 @@ import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
+import ch.ethz.idsc.tensor.sca.win.BlackmanHarrisWindow;
+import ch.ethz.idsc.tensor.sca.win.HannWindow;
+import ch.ethz.idsc.tensor.sca.win.NuttallWindow;
+import ch.ethz.idsc.tensor.sca.win.TukeyWindow;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -25,6 +29,7 @@ public class SpectrogramArrayTest extends TestCase {
     TensorUnaryOperator tensorUnaryOperator = Serialization.copy(SpectrogramArray.of(8, 8));
     Tensor tensor = tensorUnaryOperator.apply(Range.of(0, 128));
     assertEquals(Dimensions.of(tensor), Arrays.asList(16, 8));
+    assertTrue(tensorUnaryOperator.toString().startsWith("SpectrogramArray["));
   }
 
   public void testMathematicaDefault() {
@@ -46,13 +51,13 @@ public class SpectrogramArrayTest extends TestCase {
   }
 
   public void testStaticOps() {
-    SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"));
-    SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), 10);
+    SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), HannWindow.FUNCTION);
+    SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), 10, TukeyWindow.FUNCTION);
   }
 
   public void testStaticOpsFail() {
-    AssertFail.of(() -> SpectrogramArray.of(Quantity.of(0, "s"), Quantity.of(100, "s^-1")));
-    AssertFail.of(() -> SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1")));
+    AssertFail.of(() -> SpectrogramArray.of(Quantity.of(0, "s"), Quantity.of(100, "s^-1"), NuttallWindow.FUNCTION));
+    AssertFail.of(() -> SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1"), BlackmanHarrisWindow.FUNCTION));
   }
 
   public void testPreallocate() {

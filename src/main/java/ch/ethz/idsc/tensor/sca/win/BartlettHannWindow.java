@@ -8,26 +8,24 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Abs;
-import ch.ethz.idsc.tensor.sca.Cos;
 
-/** TukeyWindow[1/2]=0
+/** BartlettHannWindow[1/2]=0
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/TukeyWindow.html">TukeyWindow</a> */
-public enum TukeyWindow implements ScalarUnaryOperator {
+ * <a href="https://reference.wolfram.com/language/ref/BartlettHannWindow.html">BartlettHannWindow</a> */
+public enum BartlettHannWindow implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar _1_6 = RationalScalar.of(1, 6);
-  private static final Scalar PI3 = RealScalar.of(Math.PI * 3);
+  private static final Scalar A0 = RationalScalar.of(31, 50);
+  private static final Scalar A1 = RationalScalar.of(19, 50);
+  private static final Scalar L1 = RationalScalar.of(-12, 25);
 
   @Override
   public Scalar apply(Scalar x) {
     x = Abs.FUNCTION.apply(x);
-    if (Scalars.lessEquals(x, _1_6))
-      return RealScalar.ONE;
-    if (Scalars.lessThan(x, RationalScalar.HALF))
-      return RationalScalar.HALF.add(RationalScalar.HALF.multiply(Cos.FUNCTION.apply(x.subtract(_1_6).multiply(PI3))));
-    return RealScalar.ZERO;
+    return Scalars.lessThan(x, RationalScalar.HALF) //
+        ? StaticHelper.deg1(A0, A1, x).add(x.pmul(L1))
+        : RealScalar.ZERO;
   }
 
   @Override // from Object

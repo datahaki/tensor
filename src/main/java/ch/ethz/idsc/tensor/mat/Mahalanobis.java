@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
+import ch.ethz.idsc.tensor.red.VectorNormInterface;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** The reference suggests to use the inverse and the biinvariant mean m as reference point.
@@ -19,8 +20,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * by Xavier Pennec, Vincent Arsigny, 2012, p. 39
  * 
  * @see InfluenceMatrix */
-public class Mahalanobis implements LeveragesInterface, Serializable {
-  private static final long serialVersionUID = 602414880432891230L;
+public class Mahalanobis implements LeveragesInterface, VectorNormInterface, Serializable {
+  private static final long serialVersionUID = -3017427827342318097L;
   // ---
   private final Tensor design;
   private final Tensor sigma;
@@ -61,11 +62,11 @@ public class Mahalanobis implements LeveragesInterface, Serializable {
 
   @Override // from LeveragesInterface
   public Tensor leverages_sqrt() {
-    return Tensor.of(design.stream().map(this::norm));
+    return Tensor.of(design.stream().map(this::ofVector));
   }
 
   /** @param vector
-   * @return sqrt of sigma_inverse . vector . vector */
+   * @return sigma_inverse . vector . vector */
   public Scalar norm_squared(Tensor vector) {
     // theory guarantees that leverage is in interval [0, 1]
     // so far the numerics did not result in values below 0 here
@@ -74,7 +75,8 @@ public class Mahalanobis implements LeveragesInterface, Serializable {
 
   /** @param vector
    * @return sqrt of sigma_inverse . vector . vector */
-  public Scalar norm(Tensor vector) {
+  @Override // from VectorNormInterface
+  public Scalar ofVector(Tensor vector) {
     return Sqrt.FUNCTION.apply(norm_squared(vector));
   }
 

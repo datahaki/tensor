@@ -17,11 +17,12 @@ public class WindowFunctionTest extends TestCase {
       assertEquals(windowFunction.apply(RealScalar.of(-0.500001)), RealScalar.ZERO);
       assertEquals(windowFunction.apply(RealScalar.of(+0.500001)), RealScalar.ZERO);
       Chop._15.requireClose(windowFunction.apply(RealScalar.ZERO), RealScalar.ONE);
+      assertTrue(windowFunction.get().toString().startsWith(windowFunction.get().getClass().getSimpleName()));
     }
   }
 
   public void testSymmetry() {
-    Distribution distribution = UniformDistribution.of(-0.5, 0.5);
+    Distribution distribution = UniformDistribution.of(-0.6, 0.6);
     for (WindowFunction windowFunction : WindowFunction.values())
       for (int count = 0; count < 10; ++count) {
         Scalar x = RandomVariate.of(distribution);

@@ -6,24 +6,36 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Partition;
+import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Log;
+import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
+import ch.ethz.idsc.tensor.sca.win.HammingWindow;
 
-/** Mathematica::SpectrogramArray has the option to multiply the data segments with a window function,
- * with {@link DirichletWindow} as the default. The implementation in the tensor library uses the fixed
- * choice of {@link DirichletWindow}.
+/** inspired by
+ * <a href="https://reference.wolfram.com/language/ref/SpectrogramArray.html">SpectrogramArray</a>
  * 
- * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/SpectrogramArray.html">SpectrogramArray</a> */
+ * @see DirichletWindow
+ * @see HammingWindow */
 public class SpectrogramArray implements TensorUnaryOperator {
-  private static final long serialVersionUID = -1963162893110366773L;
+  private static final long serialVersionUID = 8157393220559911565L;
   private static final ScalarUnaryOperator LOG2 = Log.base(2);
+
+  /** @param vector
+   * @param window for instance {@link DirichletWindow#FUNCTION}
+   * @return */
+  public static Tensor of(Tensor vector, ScalarUnaryOperator window) {
+    int num = Scalars.intValueExact(Round.FUNCTION.apply(LOG2.apply(Sqrt.FUNCTION.apply(RealScalar.of(vector.length())))));
+    int windowLength = 1 << ++num;
+    return of(windowLength, default_offset(windowLength), window).apply(vector);
+  }
 
   /** Mathematica default
    * 
@@ -31,9 +43,7 @@ public class SpectrogramArray implements TensorUnaryOperator {
    * @return
    * @throws Exception if input is not a vector */
   public static Tensor of(Tensor vector) {
-    int num = Scalars.intValueExact(Round.FUNCTION.apply(LOG2.apply(Sqrt.FUNCTION.apply(RealScalar.of(vector.length())))));
-    int windowLength = 1 << ++num;
-    return of(windowLength, default_offset(windowLength)).apply(vector);
+    return of(vector, DirichletWindow.FUNCTION);
   }
 
   // helper function
@@ -43,28 +53,38 @@ public class SpectrogramArray implements TensorUnaryOperator {
 
   /***************************************************/
   /** @param windowLength
+   * @param offset
+   * @param window for instance {@link DirichletWindow#FUNCTION}
+   * @return */
+  public static TensorUnaryOperator of(int windowLength, int offset, ScalarUnaryOperator window) {
+    if (offset <= 0 || windowLength < offset)
+      throw new IllegalArgumentException("windowLength=" + windowLength + " offset=" + offset);
+    return new SpectrogramArray(windowLength, offset, window);
+  }
+
+  /** @param windowLength
    * @param offset positive and not greater than windowLength
    * @return */
   public static TensorUnaryOperator of(int windowLength, int offset) {
-    if (offset <= 0 || windowLength < offset)
-      throw new IllegalArgumentException("windowLength=" + windowLength + " offset=" + offset);
-    return new SpectrogramArray(windowLength, offset);
+    return of(windowLength, offset, DirichletWindow.FUNCTION);
   }
 
   /** @param windowDuration
    * @param samplingFrequency
    * @param offset positive
+   * @param window for instance {@link DirichletWindow#FUNCTION}
    * @return */
-  public static TensorUnaryOperator of(Scalar windowDuration, Scalar samplingFrequency, int offset) {
-    return of(windowLength(windowDuration, samplingFrequency), offset);
+  public static TensorUnaryOperator of(Scalar windowDuration, Scalar samplingFrequency, int offset, ScalarUnaryOperator window) {
+    return of(windowLength(windowDuration, samplingFrequency), offset, window);
   }
 
   /** @param windowDuration
    * @param samplingFrequency
+   * @param window for instance {@link DirichletWindow#FUNCTION}
    * @return spectrogram operator with default offset */
-  public static TensorUnaryOperator of(Scalar windowDuration, Scalar samplingFrequency) {
+  public static TensorUnaryOperator of(Scalar windowDuration, Scalar samplingFrequency, ScalarUnaryOperator window) {
     int windowLength = windowLength(windowDuration, samplingFrequency);
-    return of(windowLength, default_offset(windowLength));
+    return of(windowLength, default_offset(windowLength), window);
   }
 
   // helper function
@@ -76,11 +96,15 @@ public class SpectrogramArray implements TensorUnaryOperator {
   private final int windowLength;
   private final int offset;
   private final TensorUnaryOperator tensorUnaryOperator;
+  private final Tensor weights;
 
-  private SpectrogramArray(int windowLength, int offset) {
+  private SpectrogramArray(int windowLength, int offset, ScalarUnaryOperator window) {
     this.windowLength = windowLength;
     this.offset = offset;
     int highestOneBit = Integer.highestOneBit(windowLength);
+    weights = 1 < windowLength //
+        ? Subdivide.of(-0.5, 0.5, windowLength - 1).map(window).map(N.DOUBLE)
+        : Tensors.vector(1.0);
     tensorUnaryOperator = windowLength == highestOneBit //
         ? t -> t //
         : PadRight.zeros(highestOneBit * 2);
@@ -89,7 +113,13 @@ public class SpectrogramArray implements TensorUnaryOperator {
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor vector) {
     return Tensor.of(Partition.stream(vector, windowLength, offset) //
+        .map(weights::pmul) //
         .map(tensorUnaryOperator) //
         .map(Fourier::of));
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%d, %d]", getClass().getSimpleName(), windowLength, offset);
   }
 }

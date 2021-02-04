@@ -24,6 +24,11 @@ public enum BlackmanWindow implements ScalarUnaryOperator {
         : RealScalar.ZERO;
   }
 
+  @Override // from Object
+  public String toString() {
+    return getClass().getSimpleName();
+  }
+
   /** @param tensor
    * @return tensor with all scalars replaced with their function value */
   @SuppressWarnings("unchecked")

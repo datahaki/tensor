@@ -7,26 +7,27 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Cos;
+import ch.ethz.idsc.tensor.sca.Sin;
 
-/** TukeyWindow[1/2]=0
+/** BohmanWindow[1/2]=0
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/TukeyWindow.html">TukeyWindow</a> */
-public enum TukeyWindow implements ScalarUnaryOperator {
+ * <a href="https://reference.wolfram.com/language/ref/BohmanWindow.html">BohmanWindow</a> */
+public enum BohmanWindow implements ScalarUnaryOperator {
   FUNCTION;
-
-  private static final Scalar _1_6 = RationalScalar.of(1, 6);
-  private static final Scalar PI3 = RealScalar.of(Math.PI * 3);
 
   @Override
   public Scalar apply(Scalar x) {
     x = Abs.FUNCTION.apply(x);
-    if (Scalars.lessEquals(x, _1_6))
-      return RealScalar.ONE;
-    if (Scalars.lessThan(x, RationalScalar.HALF))
-      return RationalScalar.HALF.add(RationalScalar.HALF.multiply(Cos.FUNCTION.apply(x.subtract(_1_6).multiply(PI3))));
+    if (Scalars.lessThan(x, RationalScalar.HALF)) {
+      Scalar x2pi = Pi.TWO.multiply(x);
+      Scalar a = RealScalar.ONE.subtract(x.add(x)).multiply(Cos.FUNCTION.apply(x2pi));
+      Scalar b = Sin.FUNCTION.apply(x2pi).divide(Pi.VALUE);
+      return a.add(b);
+    }
     return RealScalar.ZERO;
   }
 

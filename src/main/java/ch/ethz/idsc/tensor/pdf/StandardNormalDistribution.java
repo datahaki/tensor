@@ -56,6 +56,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s", getClass().getSimpleName());
+    return getClass().getSimpleName();
   }
 }

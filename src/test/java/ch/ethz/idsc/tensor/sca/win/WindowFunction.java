@@ -6,10 +6,13 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /* package */ enum WindowFunction implements ScalarUnaryOperator {
   Bartlett(BartlettWindow.FUNCTION), //
+  BartlettHann(BartlettHannWindow.FUNCTION), //
   BlackmanHarris(BlackmanHarrisWindow.FUNCTION), //
   BlackmanNuttall(BlackmanNuttallWindow.FUNCTION), //
   Blackman(BlackmanWindow.FUNCTION), //
+  Bohman(BohmanWindow.FUNCTION), //
   Dirichlet(DirichletWindow.FUNCTION), //
+  ExactBlackman(ExactBlackmanWindow.FUNCTION), //
   FlatTop(FlatTopWindow.FUNCTION), //
   Gaussian(GaussianWindow.FUNCTION), //
   Hamming(HammingWindow.FUNCTION), //
@@ -29,5 +32,9 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
   @Override
   public Scalar apply(Scalar tensor) {
     return scalarUnaryOperator.apply(tensor);
+  }
+
+  public ScalarUnaryOperator get() {
+    return scalarUnaryOperator;
   }
 }

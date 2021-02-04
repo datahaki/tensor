@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -21,10 +22,10 @@ public class SpectrogramTest extends TestCase {
     Tensor vector = Tensor.of(IntStream.range(0, 2000) //
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(RealScalar::of));
-    Tensor image = Spectrogram.of(vector, ColorDataGradients.VISIBLESPECTRUM);
+    Tensor image = Spectrogram.of(vector, DirichletWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM);
     ImageFormat.of(image);
     assertEquals(Dimensions.of(image), Arrays.asList(32, 93, 4));
-    assertEquals(Dimensions.of(Spectrogram.array(vector)), Arrays.asList(32, 93));
+    assertEquals(Dimensions.of(Spectrogram.array(vector, DirichletWindow.FUNCTION)), Arrays.asList(32, 93));
     Tensor tensor = SpectrogramArray.of(vector).map(Abs.FUNCTION);
     assertEquals(Dimensions.of(tensor), Arrays.asList(93, 64));
   }
@@ -32,20 +33,20 @@ public class SpectrogramTest extends TestCase {
   public void testQuantity() {
     Tensor signal = Tensors.vector(1, 2, 1, 4, 3, 2, 3, 4, 3, 4);
     Tensor vector = signal.map(s -> Quantity.of(s, "m"));
-    Tensor array1 = Spectrogram.of(signal, ColorDataGradients.VISIBLESPECTRUM);
-    Tensor array2 = Spectrogram.of(vector, ColorDataGradients.VISIBLESPECTRUM);
+    Tensor array1 = Spectrogram.of(signal, DirichletWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM);
+    Tensor array2 = Spectrogram.of(vector, DirichletWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM);
     assertEquals(array1, array2);
   }
 
   public void testNullFail() {
-    AssertFail.of(() -> Spectrogram.array(null));
+    AssertFail.of(() -> Spectrogram.array(null, DirichletWindow.FUNCTION));
   }
 
   public void testScalarFail() {
-    AssertFail.of(() -> Spectrogram.of(RealScalar.ONE, ColorDataGradients.VISIBLESPECTRUM));
+    AssertFail.of(() -> Spectrogram.of(RealScalar.ONE, DirichletWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM));
   }
 
   public void testMatrixFail() {
-    AssertFail.of(() -> Spectrogram.of(HilbertMatrix.of(32), ColorDataGradients.VISIBLESPECTRUM));
+    AssertFail.of(() -> Spectrogram.of(HilbertMatrix.of(32), DirichletWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM));
   }
 }

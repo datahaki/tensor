@@ -24,6 +24,7 @@ public class GaussianWindowTest extends TestCase {
   public void testOutside() throws ClassNotFoundException, IOException {
     Scalar scalar = Serialization.copy(GaussianWindow.FUNCTION).apply(RealScalar.of(-0.52));
     assertEquals(scalar, RealScalar.ZERO);
+    assertEquals(GaussianWindow.FUNCTION.toString(), "GaussianWindow[3/10]");
   }
 
   public void testOf() {

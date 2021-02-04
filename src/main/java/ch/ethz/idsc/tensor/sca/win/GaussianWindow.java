@@ -44,4 +44,9 @@ public class GaussianWindow implements ScalarUnaryOperator {
     }
     return RealScalar.ZERO;
   }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%s]", getClass().getSimpleName(), sigma);
+  }
 }

@@ -33,6 +33,12 @@ public class DirichletWindowTest extends TestCase {
     assertEquals(DirichletWindow.of(tensor), tensor.map(DirichletWindow.FUNCTION));
   }
 
+  public void testWindow() {
+    ScalarUnaryOperator suo = DirichletWindow.FUNCTION;
+    assertTrue(suo.equals(DirichletWindow.FUNCTION));
+    assertEquals(suo, DirichletWindow.FUNCTION);
+  }
+
   public void testQuantityFail() {
     AssertFail.of(() -> DirichletWindow.FUNCTION.apply(Quantity.of(0, "s")));
     AssertFail.of(() -> DirichletWindow.FUNCTION.apply(Quantity.of(2, "s")));

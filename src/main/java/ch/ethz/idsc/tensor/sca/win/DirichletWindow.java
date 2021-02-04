@@ -18,6 +18,11 @@ public enum DirichletWindow implements ScalarUnaryOperator {
     return Boole.of(StaticHelper.SEMI.isInside(x));
   }
 
+  @Override // from Object
+  public String toString() {
+    return getClass().getSimpleName();
+  }
+
   /** @param tensor
    * @return tensor with all scalars replaced with their function value */
   @SuppressWarnings("unchecked")
