@@ -20,7 +20,7 @@ public class ParzenWindowTest extends TestCase {
   }
 
   public void testSemiExact() {
-    Scalar scalar = ParzenWindow.FUNCTION.apply(RealScalar.of(0.5));
+    Scalar scalar = ParzenWindow.FUNCTION.apply(RationalScalar.HALF);
     assertTrue(Scalars.isZero(scalar));
     ExactScalarQ.require(scalar);
   }

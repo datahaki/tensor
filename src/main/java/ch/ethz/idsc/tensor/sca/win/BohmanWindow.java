@@ -1,10 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca.win;
 
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.num.Pi;
@@ -21,8 +19,8 @@ public enum BohmanWindow implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar x) {
-    x = Abs.FUNCTION.apply(x);
-    if (Scalars.lessThan(x, RationalScalar.HALF)) {
+    if (StaticHelper.SEMI.isInside(x)) {
+      x = Abs.FUNCTION.apply(x);
       Scalar x2pi = Pi.TWO.multiply(x);
       Scalar a = RealScalar.ONE.subtract(x.add(x)).multiply(Cos.FUNCTION.apply(x2pi));
       Scalar b = Sin.FUNCTION.apply(x2pi).divide(Pi.VALUE);

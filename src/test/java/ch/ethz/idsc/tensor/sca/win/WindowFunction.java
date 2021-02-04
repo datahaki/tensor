@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
   BlackmanNuttall(BlackmanNuttallWindow.FUNCTION), //
   Blackman(BlackmanWindow.FUNCTION), //
   Bohman(BohmanWindow.FUNCTION), //
+  Connes(ConnesWindow.FUNCTION), //
   Dirichlet(DirichletWindow.FUNCTION), //
   ExactBlackman(ExactBlackmanWindow.FUNCTION), //
   FlatTop(FlatTopWindow.FUNCTION), //
@@ -21,6 +22,7 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
   Nuttall(NuttallWindow.FUNCTION), //
   Parzen(ParzenWindow.FUNCTION), //
   Tukey(TukeyWindow.FUNCTION), //
+  Welch(WelchWindow.FUNCTION), //
   ;
 
   private final ScalarUnaryOperator scalarUnaryOperator;

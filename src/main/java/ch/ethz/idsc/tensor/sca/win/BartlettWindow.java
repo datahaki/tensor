@@ -1,10 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca.win;
 
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Abs;
@@ -20,10 +18,11 @@ public enum BartlettWindow implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar x) {
-    x = Abs.FUNCTION.apply(x);
-    return Scalars.lessThan(x, RationalScalar.HALF) //
-        ? RealScalar.ONE.subtract(x.add(x))
-        : RealScalar.ZERO;
+    if (StaticHelper.SEMI.isInside(x)) {
+      x = Abs.FUNCTION.apply(x);
+      return RealScalar.ONE.subtract(x.add(x));
+    }
+    return RealScalar.ZERO;
   }
 
   @Override // from Object

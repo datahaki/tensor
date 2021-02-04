@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca.win;
 
+import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -38,5 +39,17 @@ public class WindowFunctionTest extends TestCase {
   public void testOustideFail() {
     for (WindowFunction windowFunction : WindowFunction.values())
       AssertFail.of(() -> windowFunction.apply(Quantity.of(1, "s")));
+  }
+
+  public void testComplexFail() {
+    Scalar x = ComplexScalar.of(0.1, 0.2);
+    for (WindowFunction windowFunction : WindowFunction.values())
+      try {
+        windowFunction.apply(x);
+        System.out.println(windowFunction);
+        fail();
+      } catch (Exception e) {
+        // ---
+      }
   }
 }

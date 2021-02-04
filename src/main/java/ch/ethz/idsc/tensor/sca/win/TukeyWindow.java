@@ -22,11 +22,13 @@ public enum TukeyWindow implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar x) {
-    x = Abs.FUNCTION.apply(x);
-    if (Scalars.lessEquals(x, _1_6))
-      return RealScalar.ONE;
-    if (Scalars.lessThan(x, RationalScalar.HALF))
-      return RationalScalar.HALF.add(RationalScalar.HALF.multiply(Cos.FUNCTION.apply(x.subtract(_1_6).multiply(PI3))));
+    if (StaticHelper.SEMI.isInside(x)) {
+      x = Abs.FUNCTION.apply(x);
+      if (Scalars.lessEquals(x, _1_6))
+        return RealScalar.ONE;
+      if (Scalars.lessThan(x, RationalScalar.HALF))
+        return RationalScalar.HALF.add(RationalScalar.HALF.multiply(Cos.FUNCTION.apply(x.subtract(_1_6).multiply(PI3))));
+    }
     return RealScalar.ZERO;
   }
 

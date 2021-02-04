@@ -24,11 +24,12 @@ public enum ParzenWindow implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar x) {
-    x = Abs.FUNCTION.apply(x);
-    if (Scalars.lessThan(x, RationalScalar.HALF))
+    if (StaticHelper.SEMI.isInside(x)) {
+      x = Abs.FUNCTION.apply(x);
       return Scalars.lessEquals(x, _1_4) //
           ? S1.apply(x)
           : S2.apply(x);
+    }
     return RealScalar.ZERO;
   }
 

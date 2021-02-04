@@ -5,7 +5,6 @@ import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Abs;
@@ -24,17 +23,19 @@ public enum HannWindow implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar x) {
-    x = Abs.FUNCTION.apply(x);
-    if (Scalars.lessThan(x, RationalScalar.HALF)) {
+    if (StaticHelper.SEMI.isInside(x)) {
+      x = Abs.FUNCTION.apply(x);
       if (ExactScalarQ.of(x)) {
         if (x.equals(RealScalar.ZERO))
           return RealScalar.ONE;
-        if (x.equals(_1_3))
-          return _1_4;
-        if (x.equals(_1_4))
-          return RationalScalar.HALF;
         if (x.equals(_1_6))
           return _3_4;
+        if (x.equals(_1_4))
+          return RationalScalar.HALF;
+        if (x.equals(_1_3))
+          return _1_4;
+        if (x.equals(RationalScalar.HALF))
+          return RealScalar.ZERO;
       }
       return StaticHelper.deg1(RationalScalar.HALF, RationalScalar.HALF, x);
     }

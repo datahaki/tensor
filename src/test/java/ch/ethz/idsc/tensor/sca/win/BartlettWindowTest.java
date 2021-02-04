@@ -30,7 +30,7 @@ public class BartlettWindowTest extends TestCase {
   }
 
   public void testSemiExact() {
-    Scalar scalar = BartlettWindow.FUNCTION.apply(RealScalar.of(0.5));
+    Scalar scalar = BartlettWindow.FUNCTION.apply(RationalScalar.HALF);
     assertTrue(Scalars.isZero(scalar));
     ExactScalarQ.require(scalar);
   }
