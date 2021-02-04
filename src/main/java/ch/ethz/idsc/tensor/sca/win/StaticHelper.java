@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Cos;
   private static final Scalar _6_PI = RealScalar.of(6 * Math.PI);
   private static final Scalar _8_PI = RealScalar.of(8 * Math.PI);
 
-  /** function is used in {@link HammingWindow}, and {@link HannWindow}
+  /** function is used in {@link HammingWindow}, and {@link HannWindowHalf}
    * 
    * @param a0
    * @param a1

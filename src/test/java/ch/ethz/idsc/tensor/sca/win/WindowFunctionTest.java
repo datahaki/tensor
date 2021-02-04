@@ -1,9 +1,12 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca.win;
 
+import java.io.IOException;
+
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -20,6 +23,11 @@ public class WindowFunctionTest extends TestCase {
       Chop._15.requireClose(windowFunction.apply(RealScalar.ZERO), RealScalar.ONE);
       assertTrue(windowFunction.get().toString().startsWith(windowFunction.get().getClass().getSimpleName()));
     }
+  }
+
+  public void testSerializable() throws ClassNotFoundException, IOException {
+    for (WindowFunction windowFunction : WindowFunction.values())
+      Serialization.copy(windowFunction.get());
   }
 
   public void testSymmetry() {

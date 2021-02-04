@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor.sca.win;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** BlackmanNuttallWindow[1/2]=3.628000000000381E-4
@@ -29,12 +28,5 @@ public enum BlackmanNuttallWindow implements ScalarUnaryOperator {
   @Override // from Object
   public String toString() {
     return getClass().getSimpleName();
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their function value */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

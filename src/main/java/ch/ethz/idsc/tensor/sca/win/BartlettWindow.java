@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.sca.win;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Abs;
 
@@ -28,12 +27,5 @@ public enum BartlettWindow implements ScalarUnaryOperator {
   @Override // from Object
   public String toString() {
     return getClass().getSimpleName();
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their function value */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 }

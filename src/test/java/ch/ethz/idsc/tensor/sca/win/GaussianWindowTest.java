@@ -6,10 +6,8 @@ import java.io.IOException;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Serialization;
-import ch.ethz.idsc.tensor.pdf.NormalDistribution;
-import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -27,19 +25,14 @@ public class GaussianWindowTest extends TestCase {
     assertEquals(GaussianWindow.FUNCTION.toString(), "GaussianWindow[3/10]");
   }
 
-  public void testOf() {
-    Tensor tensor = RandomVariate.of(NormalDistribution.standard(), 2, 3);
-    assertEquals(GaussianWindow.of(tensor), tensor.map(GaussianWindow.FUNCTION));
-  }
-
   public void testCustom() throws ClassNotFoundException, IOException {
-    GaussianWindow copy = Serialization.copy(new GaussianWindow(RationalScalar.of(2, 10)));
+    ScalarUnaryOperator copy = Serialization.copy(GaussianWindow.of(RationalScalar.of(2, 10)));
     Scalar apply = copy.apply(RealScalar.of(0.4));
     Scalar exact = RealScalar.of(0.13533528323661262);
     Chop._10.requireClose(apply, exact);
   }
 
   public void testNullFail() {
-    AssertFail.of(() -> new GaussianWindow(null));
+    AssertFail.of(() -> GaussianWindow.of(null));
   }
 }

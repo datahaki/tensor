@@ -1,56 +1,33 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca.win;
 
-import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
-import ch.ethz.idsc.tensor.sca.Abs;
 
-/** HannWindow[1/2]=0
- * 
- * <p>inspired by
+/** inspired by
  * <a href="https://reference.wolfram.com/language/ref/HannWindow.html">HannWindow</a> */
-public enum HannWindow implements ScalarUnaryOperator {
-  FUNCTION;
+public class HannWindow extends ParameterizedWindow {
+  private static final long serialVersionUID = 7913793267394141590L;
+  public static final ScalarUnaryOperator FUNCTION = of(RationalScalar.HALF);
 
-  private static final Scalar _1_3 = RationalScalar.of(1, 3);
-  private static final Scalar _1_4 = RationalScalar.of(1, 4);
-  private static final Scalar _1_6 = RationalScalar.of(1, 6);
-  private static final Scalar _3_4 = RationalScalar.of(3, 4);
+  /** @param alpha
+   * @return */
+  public static ScalarUnaryOperator of(Scalar alpha) {
+    return new HannWindow(alpha);
+  }
+
+  /***************************************************/
+  private final Scalar a1;
+
+  private HannWindow(Scalar alpha) {
+    super(alpha);
+    a1 = RealScalar.ONE.subtract(alpha);
+  }
 
   @Override
-  public Scalar apply(Scalar x) {
-    if (StaticHelper.SEMI.isInside(x)) {
-      x = Abs.FUNCTION.apply(x);
-      if (ExactScalarQ.of(x)) {
-        if (x.equals(RealScalar.ZERO))
-          return RealScalar.ONE;
-        if (x.equals(_1_6))
-          return _3_4;
-        if (x.equals(_1_4))
-          return RationalScalar.HALF;
-        if (x.equals(_1_3))
-          return _1_4;
-        if (x.equals(RationalScalar.HALF))
-          return RealScalar.ZERO;
-      }
-      return StaticHelper.deg1(RationalScalar.HALF, RationalScalar.HALF, x);
-    }
-    return RealScalar.ZERO;
-  }
-
-  @Override // from Object
-  public String toString() {
-    return getClass().getSimpleName();
-  }
-
-  /** @param tensor
-   * @return tensor with all scalars replaced with their function value */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
+  protected Scalar evaluate(Scalar x) {
+    return StaticHelper.deg1(alpha, a1, x);
   }
 }

@@ -5,42 +5,38 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.Abs;
-import ch.ethz.idsc.tensor.sca.Cos;
+import ch.ethz.idsc.tensor.sca.Sin;
 
-/** TukeyWindow[1/2]=0
- * 
- * <p>inspired by
+/** inspired by
  * <a href="https://reference.wolfram.com/language/ref/TukeyWindow.html">TukeyWindow</a> */
-public enum TukeyWindow implements ScalarUnaryOperator {
-  FUNCTION;
+public class TukeyWindow extends ParameterizedWindow {
+  private static final long serialVersionUID = 5432885331481060986L;
+  public static final ScalarUnaryOperator FUNCTION = of(RationalScalar.of(1, 3));
 
-  private static final Scalar _1_6 = RationalScalar.of(1, 6);
-  private static final Scalar PI3 = RealScalar.of(Math.PI * 3);
-
-  @Override
-  public Scalar apply(Scalar x) {
-    if (StaticHelper.SEMI.isInside(x)) {
-      x = Abs.FUNCTION.apply(x);
-      if (Scalars.lessEquals(x, _1_6))
-        return RealScalar.ONE;
-      if (Scalars.lessThan(x, RationalScalar.HALF))
-        return RationalScalar.HALF.add(RationalScalar.HALF.multiply(Cos.FUNCTION.apply(x.subtract(_1_6).multiply(PI3))));
-    }
-    return RealScalar.ZERO;
+  /** @param alpha
+   * @return */
+  public static ScalarUnaryOperator of(Scalar alpha) {
+    return new TukeyWindow(alpha);
   }
 
-  @Override // from Object
-  public String toString() {
-    return getClass().getSimpleName();
+  /***************************************************/
+  private final Scalar a2;
+  private final Scalar pi_a;
+
+  private TukeyWindow(Scalar alpha) {
+    super(alpha);
+    a2 = alpha.multiply(RationalScalar.HALF);
+    pi_a = Pi.VALUE.divide(alpha);
   }
 
-  /** @param tensor
-   * @return tensor with all scalars replaced with their function value */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
+  @Override // from ParameterizedWindow
+  protected Scalar evaluate(Scalar x) {
+    x = Abs.FUNCTION.apply(x);
+    return Scalars.lessEquals(x, a2) //
+        ? RealScalar.ONE
+        : RationalScalar.HALF.add(RationalScalar.HALF.multiply(Sin.FUNCTION.apply(x.multiply(pi_a))));
   }
 }
