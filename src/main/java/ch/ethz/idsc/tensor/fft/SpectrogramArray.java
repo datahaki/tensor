@@ -4,16 +4,12 @@ package ch.ethz.idsc.tensor.fft;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Partition;
-import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Log;
-import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 import ch.ethz.idsc.tensor.sca.win.DirichletWindow;
@@ -24,15 +20,15 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
  * 
  * @see WindowFunctions */
 public class SpectrogramArray implements TensorUnaryOperator {
-  private static final long serialVersionUID = 8157393220559911565L;
+  private static final long serialVersionUID = -5926698047669690913L;
   private static final ScalarUnaryOperator LOG2 = Log.base(2);
 
   /** @param vector
    * @param window for instance {@link DirichletWindow#FUNCTION}
    * @return */
   public static Tensor of(Tensor vector, ScalarUnaryOperator window) {
-    int num = Scalars.intValueExact(Round.FUNCTION.apply(LOG2.apply(Sqrt.FUNCTION.apply(RealScalar.of(vector.length())))));
-    int windowLength = 1 << ++num;
+    int num = Round.intValueExact(LOG2.apply(Sqrt.FUNCTION.apply(RealScalar.of(vector.length()))));
+    int windowLength = 1 << (num + 1);
     return of(windowLength, default_offset(windowLength), window).apply(vector);
   }
 
@@ -47,7 +43,7 @@ public class SpectrogramArray implements TensorUnaryOperator {
 
   // helper function
   private static int default_offset(int windowLength) {
-    return Scalars.intValueExact(Round.FUNCTION.apply(RationalScalar.of(windowLength, 3)));
+    return Round.intValueExact(RationalScalar.of(windowLength, 3));
   }
 
   /***************************************************/
@@ -73,7 +69,8 @@ public class SpectrogramArray implements TensorUnaryOperator {
    * @param offset positive
    * @param window for instance {@link DirichletWindow#FUNCTION}
    * @return */
-  public static TensorUnaryOperator of(Scalar windowDuration, Scalar samplingFrequency, int offset, ScalarUnaryOperator window) {
+  public static TensorUnaryOperator of( //
+      Scalar windowDuration, Scalar samplingFrequency, int offset, ScalarUnaryOperator window) {
     return of(windowLength(windowDuration, samplingFrequency), offset, window);
   }
 
@@ -81,14 +78,15 @@ public class SpectrogramArray implements TensorUnaryOperator {
    * @param samplingFrequency
    * @param window for instance {@link DirichletWindow#FUNCTION}
    * @return spectrogram operator with default offset */
-  public static TensorUnaryOperator of(Scalar windowDuration, Scalar samplingFrequency, ScalarUnaryOperator window) {
+  public static TensorUnaryOperator of( //
+      Scalar windowDuration, Scalar samplingFrequency, ScalarUnaryOperator window) {
     int windowLength = windowLength(windowDuration, samplingFrequency);
     return of(windowLength, default_offset(windowLength), window);
   }
 
   // helper function
   private static int windowLength(Scalar windowDuration, Scalar samplingFrequency) {
-    return Scalars.intValueExact(Round.FUNCTION.apply(windowDuration.multiply(samplingFrequency)));
+    return Round.intValueExact(windowDuration.multiply(samplingFrequency));
   }
 
   /***************************************************/
@@ -101,9 +99,7 @@ public class SpectrogramArray implements TensorUnaryOperator {
     this.windowLength = windowLength;
     this.offset = offset;
     int highestOneBit = Integer.highestOneBit(windowLength);
-    weights = 1 < windowLength //
-        ? Subdivide.of(-0.5, 0.5, windowLength - 1).map(window).map(N.DOUBLE)
-        : Tensors.vector(1.0);
+    weights = StaticHelper.weights(windowLength, window);
     tensorUnaryOperator = windowLength == highestOneBit //
         ? t -> t //
         : PadRight.zeros(highestOneBit * 2);

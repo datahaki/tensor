@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.itp.LinearInterpolation;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Min;
-import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Increment;
@@ -119,6 +118,7 @@ public class HistogramDistribution implements //
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    return Expectation.variance(empiricalDistribution).add(RationalScalar.of(1, 12)).multiply(AbsSquared.of(width));
+    return Expectation.variance(empiricalDistribution).add(RationalScalar.of(1, 12)) //
+        .multiply(width).multiply(width);
   }
 }
