@@ -24,30 +24,30 @@ public enum WindowFunctions implements Supplier<ScalarUnaryOperator> {
   BLACKMAN_HARRIS(BlackmanHarrisWindow.FUNCTION), //
   BLACKMAN_NUTTALL(BlackmanNuttallWindow.FUNCTION), //
   BOHMAN(BohmanWindow.FUNCTION),
-  /** default */
+  /** default alpha == 3 */
   CAUCHY(CauchyWindow.FUNCTION),
-  /** default */
+  /** default alpha == 1 */
   CONNES(ConnesWindow.FUNCTION),
-  /** default */
+  /** default alpha == 1 */
   COSINE(CosineWindow.FUNCTION), //
   DIRICHLET(DirichletWindow.FUNCTION), //
   EXACT_BLACKMAN(ExactBlackmanWindow.FUNCTION), //
   FLAT_TOP(FlatTopWindow.FUNCTION), //
-  /** default */
+  /** default sigma == 3/10 */
   GAUSSIAN(GaussianWindow.FUNCTION), //
   HAMMING(HammingWindow.FUNCTION),
-  /** default */
+  /** default alpha == 1/2 */
   HANN(HannWindow.FUNCTION),
-  /** default */
+  /** default alpha == 1 */
   HANN_POISSON(HannPoissonWindow.FUNCTION), //
   LANCZOS(LanczosWindow.FUNCTION), //
   NUTTALL(NuttallWindow.FUNCTION), //
   PARZEN(ParzenWindow.FUNCTION), //
-  /** default */
+  /** default alpha == 3 */
   POISSON(PoissonWindow.FUNCTION), //
-  /** default */
+  /** default alpha == 1/3 */
   TUKEY(TukeyWindow.FUNCTION),
-  /** default */
+  /** default alpha == 1 */
   WELCH(WelchWindow.FUNCTION), //
   ;
 

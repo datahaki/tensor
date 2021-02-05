@@ -32,6 +32,10 @@ public class GaussianWindowTest extends TestCase {
     Chop._10.requireClose(apply, exact);
   }
 
+  public void testToString() {
+    assertEquals(GaussianWindow.FUNCTION.toString(), "GaussianWindow[3/10]");
+  }
+
   public void testNullFail() {
     AssertFail.of(() -> GaussianWindow.of(null));
   }

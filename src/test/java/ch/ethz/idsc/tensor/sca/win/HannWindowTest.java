@@ -54,6 +54,10 @@ public class HannWindowTest extends TestCase {
     assertTrue(Scalars.isZero(scalar));
   }
 
+  public void testToString() {
+    assertEquals(HannWindow.FUNCTION.toString(), "HannWindow[1/2]");
+  }
+
   public void testQuantityFail() {
     AssertFail.of(() -> HannWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }

@@ -28,6 +28,12 @@ public class ParzenWindowTest extends TestCase {
     ExactScalarQ.require(scalar);
   }
 
+  public void testExact() {
+    Scalar scalar = ParzenWindow.FUNCTION.apply(RationalScalar.of(2, 5));
+    ExactScalarQ.require(scalar);
+    assertFalse(Scalars.isZero(scalar));
+  }
+
   public void testQuantityFail() {
     AssertFail.of(() -> ParzenWindow.FUNCTION.apply(Quantity.of(0, "s")));
     AssertFail.of(() -> ParzenWindow.FUNCTION.apply(Quantity.of(2, "s")));

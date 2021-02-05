@@ -1,10 +1,14 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.ResourceData;
@@ -31,6 +35,15 @@ public class UnitSystemsTest extends TestCase {
     AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "N", "s"));
     AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "W", "kW"));
     AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "kW", "W"));
+  }
+
+  public void testKeyCollision() {
+    Map<String, Scalar> map1 = new HashMap<>();
+    map1.put("a", RealScalar.ONE);
+    map1.put("b", RealScalar.ONE.negate());
+    Map<String, Scalar> map2 = new HashMap<>();
+    map2.put("a", RealScalar.TWO);
+    Stream.concat(map1.entrySet().stream(), map2.entrySet().stream()).collect(UnitSystems.COLLECTOR);
   }
 
   private static UnitSystem requireInvariant(UnitSystem unitSystem, String prev, String next) {

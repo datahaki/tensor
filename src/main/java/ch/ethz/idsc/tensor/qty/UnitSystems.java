@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -88,12 +90,15 @@ public enum UnitSystems {
   }
 
   /***************************************************/
+  /* package */ static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> COLLECTOR = //
+      Collectors.toMap( //
+          entry -> StaticHelper.requireAtomic(entry.getKey()), //
+          entry -> StaticHelper.requireNonZero(entry.getValue()), //
+          (u, v) -> null, TreeMap::new);
+
   /** @param map
    * @return */
   public static Unit unit(Map<String, Scalar> map) {
-    return UnitImpl.create(map.entrySet().stream().collect(Collectors.toMap( //
-        entry -> StaticHelper.requireAtomic(entry.getKey()), //
-        entry -> StaticHelper.requireNonZero(entry.getValue()), //
-        (u, v) -> null, TreeMap::new)));
+    return UnitImpl.create(map.entrySet().stream().collect(COLLECTOR));
   }
 }

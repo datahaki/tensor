@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.fft;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.red.Total;
@@ -24,6 +25,10 @@ public class StaticHelperTest extends TestCase {
   public void testDirichlet() {
     Tensor weights = StaticHelper.weights(13, DirichletWindow.FUNCTION);
     Tolerance.CHOP.requireClose(weights, ConstantArray.of(RealScalar.ONE, 13));
+  }
+
+  public void testSamples() {
+    assertEquals(StaticHelper.samples(4), Tensors.fromString("{-3/8, -1/8, 1/8, 3/8}"));
   }
 
   public void testZeroFail() {
