@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
 import ch.ethz.idsc.tensor.red.VectorNormInterface;
 import ch.ethz.idsc.tensor.sca.Sqrt;
@@ -92,7 +91,7 @@ public final class Mahalanobis implements InfluenceMatrix, VectorNormInterface, 
   @Override // from InfluenceMatrix
   public Tensor image(Tensor vector) {
     return Objects.isNull(matrix) //
-        ? Dot.of(vector, design, sigma_inverse, design_t)
+        ? vector.dot(design).dot(sigma_inverse).dot(design_t)
         : vector.dot(matrix);
   }
 

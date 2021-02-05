@@ -4,7 +4,23 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** References:
+/** Remark:
+ * {@link Mahalanobis} is significantly faster than {@link InfluenceMatrix#of(Tensor)}
+ * for computations such as
+ * <pre>
+ * influenceMatrix.kernel(influenceMatrix.leverages_sqrt());
+ * </pre>
+ * 
+ * {@link Mahalanobis} is faster by a tiny amount than {@link InfluenceMatrix#of(Tensor)}
+ * for computations such as
+ * <pre>
+ * influenceMatrix.kernel(vector); // where vector is independent of influence matrix
+ * </pre>
+ * 
+ * {@link InfluenceMatrix#of(Tensor)} is faster than {@link Mahalanobis} when computing
+ * {@link InfluenceMatrix#matrix()}
+ * 
+ * References:
  * "Projection Matrix" and
  * "Proofs involving the Moore-Penrose inverse"
  * on Wikipedia, 2020
