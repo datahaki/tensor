@@ -15,14 +15,14 @@ import ch.ethz.idsc.tensor.Tensor;
  * by Jan Hakenberg, 2020
  * 
  * @see Mahalanobis */
-public interface InfluenceMatrix extends LeveragesInterface {
+public interface InfluenceMatrix {
   /** @param design matrix
    * @return if the given matrix is in exact precision and has maximal rank,
    * then the implementation of influence matrix is also in exact precision */
   static InfluenceMatrix of(Tensor design) {
     if (ExactTensorQ.of(design))
       try {
-        return new InfluenceMatrixExact(design.dot(PseudoInverse.usingCholesky(design)));
+        return new InfluenceMatrixExact(design);
       } catch (Exception exception) {
         // design matrix does not have maximal rank
       }
@@ -55,17 +55,27 @@ public interface InfluenceMatrix extends LeveragesInterface {
    * symmetric projection matrix of size n x n with eigenvalues either 1 or 0 */
   Tensor residualMaker();
 
-  /** function returns a vector vnull that satisfies
-   * vnull . design == 0
+  /** Remark: The sum of the leverages equals the rank of the design matrix.
    * 
-   * @param vector
-   * @return (IdentityMatrix - design . design^+) . vector */
-  Tensor kernel(Tensor vector);
+   * @return vector with diagonal entries of influence matrix each of which are guaranteed
+   * to be in the unit interval [0, 1] */
+  Tensor leverages();
+
+  /** @return sqrt of leverages identical to Mahalanobis distance guaranteed to be in the unit
+   * interval [0, 1] */
+  Tensor leverages_sqrt();
 
   /** function returns a vector vimage that satisfies
    * vimage . design == vector . design
    * 
    * @param vector
-   * @return design . design^+ . vector */
+   * @return vector . design . design^+ */
   Tensor image(Tensor vector);
+
+  /** function returns a vector vnull that satisfies
+   * vnull . design == 0
+   * 
+   * @param vector
+   * @return vector . (IdentityMatrix - design . design^+) */
+  Tensor kernel(Tensor vector);
 }

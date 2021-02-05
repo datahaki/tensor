@@ -19,6 +19,15 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * PseudoInverse[matrix] == LeastSquares[matrix, IdentityMatrix[matrix.length()]]
  * </pre>
  * 
+ * The pseudoinverse satisfies
+ * <pre>
+ * PseudoInverse[matrix] == PseudoInverse[ matrix^T . matrix ] . matrix^T
+ * </pre>
+ * or short
+ * <pre>
+ * matrix^+ == (matrix^T . matrix)^+ . matrix^T
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/PseudoInverse.html">PseudoInverse</a>
  *

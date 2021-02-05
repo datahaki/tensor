@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 import ch.ethz.idsc.tensor.RealScalar;
@@ -64,5 +65,18 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
   public static Scalar unitize_chop(Scalar scalar) {
     return Tolerance.CHOP.isZero(scalar) ? _0 : _1;
+  }
+
+  /***************************************************/
+  public static Tensor residualMaker(Tensor matrix) {
+    AtomicInteger atomicInteger = new AtomicInteger();
+    // I-X^+.X is projector on ker X
+    return Tensor.of(matrix.stream() //
+        .map(Tensor::negate) // copy
+        .map(row -> {
+          int index = atomicInteger.getAndIncrement();
+          row.set(scalar -> scalar.add(((Scalar) scalar).one()), index);
+          return row; // by ref
+        }));
   }
 }

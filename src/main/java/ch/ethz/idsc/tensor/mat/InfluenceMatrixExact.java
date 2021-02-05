@@ -8,11 +8,12 @@ import ch.ethz.idsc.tensor.Tensor;
 /* package */ class InfluenceMatrixExact extends InfluenceMatrixBase implements Serializable {
   private static final long serialVersionUID = -5637844310417226371L;
   // ---
-  private final Tensor matrix;
+  private final Tensor matrix; // design . design^+
 
-  /** @param matrix == design . design^+ */
-  public InfluenceMatrixExact(Tensor matrix) {
-    this.matrix = matrix;
+  /** @param design matrix
+   * @throws Exception if design matrix does not have maximal rank */
+  public InfluenceMatrixExact(Tensor design) {
+    this.matrix = design.dot(PseudoInverse.usingCholesky(design));
   }
 
   @Override // from InfluenceMatrix

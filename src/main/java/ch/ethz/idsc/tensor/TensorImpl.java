@@ -45,9 +45,9 @@ import java.util.stream.Stream;
   private Tensor _get(List<Integer> index) {
     List<Integer> sublist = index.subList(1, index.size());
     int head = index.get(0);
-    if (head == ALL)
-      return Tensor.of(list.stream().map(tensor -> tensor.get(sublist)));
-    return list.get(head).get(sublist);
+    return head == ALL //
+        ? Tensor.of(list.stream().map(tensor -> tensor.get(sublist)))
+        : list.get(head).get(sublist);
   }
 
   @Override // from Tensor

@@ -6,6 +6,7 @@ import java.io.IOException;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -33,18 +34,40 @@ public class MahalanobisTest extends TestCase {
       influenceMatrix.image(RandomVariate.of(distribution, n));
       Chop._07.requireClose(influenceMatrix.leverages(), mahalanobis.leverages());
       Chop._07.requireClose(influenceMatrix.leverages_sqrt(), mahalanobis.leverages_sqrt());
+      Chop._07.requireClose(influenceMatrix.matrix(), mahalanobis.matrix());
+      Chop._07.requireClose(influenceMatrix.residualMaker(), mahalanobis.residualMaker());
       influenceMatrix.matrix().map(QuantityMagnitude.singleton(Unit.ONE));
+      Tensor vector = RandomVariate.of(distribution, n);
+      Chop._07.requireClose(influenceMatrix.image(vector), mahalanobis.image(vector));
+      Chop._07.requireClose(influenceMatrix.kernel(vector), mahalanobis.kernel(vector));
     }
   }
 
   public void testExact() throws ClassNotFoundException, IOException {
-    Distribution distribution = DiscreteUniformDistribution.of(-1000, 1000);
-    Tensor design = RandomVariate.of(distribution, 8, 3);
-    Mahalanobis mahalanobis = Serialization.copy(new Mahalanobis(design));
-    assertEquals(ExactTensorQ.require(mahalanobis.design()), design);
-    ExactTensorQ.require(mahalanobis.sigma_inverse());
-    ExactTensorQ.require(mahalanobis.sigma_n());
-    assertTrue(mahalanobis.toString().startsWith("Mahalanobis"));
+    for (int n = 7; n < 9; ++n) {
+      Distribution distribution = DiscreteUniformDistribution.of(-1000, 1000);
+      Tensor design = RandomVariate.of(distribution, n, 3);
+      ExactTensorQ.require(design);
+      Mahalanobis mahalanobis = Serialization.copy(new Mahalanobis(design));
+      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+      Tensor vector = RandomVariate.of(distribution, n);
+      assertEquals(influenceMatrix.image(vector), mahalanobis.image(vector));
+      assertEquals(influenceMatrix.kernel(vector), mahalanobis.kernel(vector));
+      Tensor sigma_inverse = mahalanobis.sigma_inverse();
+      ExactTensorQ.require(sigma_inverse);
+      assertEquals(Inverse.of(Transpose.of(design).dot(design)), sigma_inverse);
+      assertEquals(PseudoInverse.of(Transpose.of(design).dot(design)), sigma_inverse);
+      ExactTensorQ.require(mahalanobis.sigma_n());
+      assertTrue(mahalanobis.toString().startsWith("Mahalanobis"));
+      ExactTensorQ.require(mahalanobis.leverages());
+      assertEquals(influenceMatrix.leverages(), mahalanobis.leverages());
+      Chop._07.requireClose(influenceMatrix.leverages_sqrt(), mahalanobis.leverages_sqrt());
+      ExactTensorQ.require(mahalanobis.matrix());
+      assertEquals(influenceMatrix.matrix(), mahalanobis.matrix());
+      assertEquals(influenceMatrix.residualMaker(), mahalanobis.residualMaker());
+      Tensor vectors = RandomVariate.of(distribution, 20, n);
+      ExactTensorQ.require(mahalanobis.image(vectors));
+    }
   }
 
   public void testEmptyFail() {
