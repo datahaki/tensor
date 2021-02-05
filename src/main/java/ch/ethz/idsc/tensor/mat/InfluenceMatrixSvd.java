@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.Tensor;
     Tensor u = svd.getU();
     Tensor kron = Tensor.of(svd.values().stream() //
         .map(Scalar.class::cast) //
-        .map(StaticHelper::unitize_chop));
+        .map(StaticHelper::unitize_chop)); // emulates v / v for v != 0
     // LONGTERM could still optimize further by extracting elements from rows in u
     // Tensor U = Tensor.of(u.stream().map(kron::pmul)); // extract instead of pmul!
     // return U.dot(vector.dot(U));

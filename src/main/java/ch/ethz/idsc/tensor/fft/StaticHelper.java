@@ -25,6 +25,8 @@ import ch.ethz.idsc.tensor.red.Total;
     return weights.multiply(RealScalar.of(length).divide(Total.ofVector(weights)));
   }
 
+  /** @param length
+   * @return vector of given length */
   public static Tensor samples(int length) {
     Scalar scalar = RationalScalar.HALF.add(RationalScalar.of(-1, 2 * length));
     return Subdivide.of(scalar.negate(), scalar, length - 1);

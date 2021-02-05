@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
  * <a href="https://reference.wolfram.com/language/ref/PeriodogramArray.html">PeriodogramArray</a>
  * 
  * @see WindowFunctions */
+// LONGTERM API so that domain of frequencies is also provided
 public class PeriodogramArray implements TensorUnaryOperator {
   private static final long serialVersionUID = 3155296618510267724L;
 

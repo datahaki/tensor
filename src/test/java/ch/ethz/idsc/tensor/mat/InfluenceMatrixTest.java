@@ -42,9 +42,9 @@ public class InfluenceMatrixTest extends TestCase {
 
   public void testLeftKernel() throws ClassNotFoundException, IOException {
     Tensor design = RandomVariate.of(NormalDistribution.standard(), 10, 3);
-    Tensor vector = RandomVariate.of(NormalDistribution.standard(), 10);
     InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
     _check(influenceMatrix);
+    Tensor vector = RandomVariate.of(NormalDistribution.standard(), 10);
     Tensor ker1 = influenceMatrix.kernel(vector);
     Tolerance.CHOP.requireAllZero(ker1.dot(design));
     Tensor ker2 = influenceMatrix.residualMaker().dot(vector);

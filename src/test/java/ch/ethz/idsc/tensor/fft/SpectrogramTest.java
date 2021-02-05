@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.img;
+package ch.ethz.idsc.tensor.fft;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;
@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.fft.SpectrogramArray;
+import ch.ethz.idsc.tensor.img.ColorDataGradients;
 import ch.ethz.idsc.tensor.io.ImageFormat;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;

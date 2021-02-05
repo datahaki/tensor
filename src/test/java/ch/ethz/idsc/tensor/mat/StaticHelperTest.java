@@ -24,6 +24,7 @@ public class StaticHelperTest extends TestCase {
   public void testUnitizeChop() {
     assertEquals(StaticHelper.unitize_chop(RealScalar.of(1e-13)), RealScalar.ZERO);
     assertEquals(StaticHelper.unitize_chop(RealScalar.of(1e-11)), RealScalar.ONE);
+    assertEquals(StaticHelper.unitize_chop(RealScalar.of(123)), RealScalar.ONE);
   }
 
   public void testPackageVisibility() {
