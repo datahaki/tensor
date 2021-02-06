@@ -23,8 +23,8 @@ import ch.ethz.idsc.tensor.sca.Gamma;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Binomial.html">Binomial</a> */
 public class Binomial implements Serializable {
-  private static final long serialVersionUID = -5585199458219134643L;
-  private static final int MAX_SIZE = 96;
+  private static final long serialVersionUID = 8241550724943172855L;
+  private static final int MAX_SIZE = 384;
   private static final Function<Integer, Binomial> CACHE = Cache.of(Binomial::new, MAX_SIZE);
 
   /** @param n non-negative integer
@@ -70,7 +70,8 @@ public class Binomial implements Serializable {
   }
 
   /***************************************************/
-  private static final int THRESHOLD = 128;
+  // Binomial[32, 16] == 601080390
+  private static final int THRESHOLD = 32;
   private final int n;
   private final Tensor row;
 
@@ -88,16 +89,23 @@ public class Binomial implements Serializable {
 
   /** @param k
    * @return n choose k */
-  public synchronized Scalar over(int k) {
+  public Scalar over(int k) {
     k = Math.min(k, Math.subtractExact(n, k));
     if (0 <= k) {
       if (k < row.length())
         return row.Get(k);
-      Scalar x = Last.of(row);
-      for (int j = row.length(); j <= k; ++j)
-        row.append(x = x.multiply(RationalScalar.of(n - j + 1, j)));
-      return x;
+      synchronized (this) {
+        Scalar x = Last.of(row);
+        for (int j = row.length(); j <= k; ++j)
+          row.append(x = x.multiply(RationalScalar.of(n - j + 1, j)));
+        return x;
+      }
     }
     return RealScalar.ZERO;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%s[%d]", getClass().getSimpleName(), n);
   }
 }

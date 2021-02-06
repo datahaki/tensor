@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -48,6 +49,12 @@ public class InfluenceMatrixExactTest extends TestCase {
     assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));
     Tensor zeros = Dot.of(influenceMatrix.residualMaker(), matrix);
     Chop.NONE.requireAllZero(zeros);
+  }
+
+  public void testSvdWithUnits() {
+    Tensor design = ResourceData.of("/mat/svd1.csv");
+    SingularValueDecomposition.of(design);
+    InfluenceMatrix.of(design);
   }
 
   public void testPackageVisibility() {

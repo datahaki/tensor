@@ -94,4 +94,9 @@ public class BinomialTest extends TestCase {
     assertFalse(DeterminateScalarQ.of(Binomial.of(RealScalar.of(123412341234324L), RealScalar.ZERO)));
     AssertFail.of(() -> Binomial.of(RealScalar.of(-123412341234324L), RealScalar.ZERO));
   }
+
+  public void testToString() {
+    Binomial binomial = Binomial.of(13);
+    assertEquals(binomial.toString(), "Binomial[13]");
+  }
 }

@@ -53,7 +53,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       initU1(i);
       initU2(i);
     }
-    Chop chop = Chop.below(Unprotect.withoutUnit(Norm._1.ofMatrix(Tensors.of(w, r))) //
+    Chop chop = Chop.below(Norm._1.ofMatrix(Tensors.of(w, r).map(Unprotect::withoutUnit)) //
         .multiply(DBL_EPSILON) //
         .number().doubleValue());
     // ---
