@@ -34,6 +34,7 @@ public enum Symmetrize {
       case 1: // vector
         return tensor.copy();
       case 2: { // matrix
+        // Symmetrize works for matrices of arbitrary Scalar type, e.g. GaussScalar
         Scalar one = tensor.Get(0, 0).one();
         Scalar half = one.add(one).reciprocal();
         return Tensors.vector(i -> tensor.get(Tensor.ALL, i).add(tensor.get(i)).multiply(half), tensor.length());

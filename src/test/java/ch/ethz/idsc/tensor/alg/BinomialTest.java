@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.DeterminateScalarQ;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -16,7 +17,7 @@ import junit.framework.TestCase;
 
 public class BinomialTest extends TestCase {
   public void testBasic() {
-    assertEquals(Binomial.of(10, Integer.MIN_VALUE), RealScalar.ZERO);
+    // assertEquals(Binomial.of(10, Integer.MIN_VALUE), RealScalar.ZERO);
     assertEquals(Binomial.of(10, -13), RealScalar.ZERO);
     assertEquals(Binomial.of(10, -1), RealScalar.ZERO);
     assertEquals(Binomial.of(10, 0), RealScalar.ONE);
@@ -75,6 +76,18 @@ public class BinomialTest extends TestCase {
     BigInteger bi = new BigInteger(
         "270288240945436569515614693625975275496152008446548287007392875106625428705522193898612483924502370165362606085021546104802209750050679917549894219699518475423665484263751733356162464079737887344364574161119497604571044985756287880514600994219426752366915856603136862602484428109296905863799821216320");
     assertEquals(res, RealScalar.of(bi));
+  }
+
+  public void testPascal() {
+    assertEquals(Tensors.vector(Binomial.of(0)::over, 1), Tensors.vector(1));
+    assertEquals(Tensors.vector(Binomial.of(1)::over, 2), Tensors.vector(1, 1));
+    assertEquals(Tensors.vector(Binomial.of(2)::over, 3), Tensors.vector(1, 2, 1));
+    assertEquals(Tensors.vector(Binomial.of(3)::over, 4), Tensors.vector(1, 3, 3, 1));
+  }
+
+  public void testHuge() {
+    assertEquals(Binomial.of(1000000, 2), RealScalar.of(499999500000L));
+    assertEquals(Binomial.of(1000000, 1000000 - 2), RealScalar.of(499999500000L));
   }
 
   public void testLargeFail() {

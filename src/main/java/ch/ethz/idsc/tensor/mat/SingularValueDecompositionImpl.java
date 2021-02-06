@@ -167,16 +167,16 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     if (Scalars.isZero(p))
       u.stream().skip(i).forEach(uj -> uj.set(_0, i));
     else {
-      Scalar gi = p;
+      Scalar den = u.Get(i, i).multiply(p);
       for (int j = ip1; j < cols; ++j) {
         final int fj = j;
         Scalar s = u.stream() //
             .skip(ip1) // ip1 until rows
             .map(row -> row.Get(i).multiply(row.Get(fj))) //
             .reduce(Scalar::add).get();
-        addScaled(i, u, i, j, s.divide(u.Get(i, i)).divide(gi));
+        addScaled(i, u, i, j, s.divide(den));
       }
-      u.stream().skip(i).forEach(uj -> uj.set(gi::under, i));
+      u.stream().skip(i).forEach(uj -> uj.set(p::under, i));
     }
     u.set(_1::add, i, i);
   }

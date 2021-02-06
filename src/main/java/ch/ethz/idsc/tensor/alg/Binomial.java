@@ -23,8 +23,8 @@ import ch.ethz.idsc.tensor.sca.Gamma;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Binomial.html">Binomial</a> */
 public class Binomial implements Serializable {
-  private static final long serialVersionUID = 3281652794516766951L;
-  private static final int MAX_SIZE = 384;
+  private static final long serialVersionUID = -5585199458219134643L;
+  private static final int MAX_SIZE = 96;
   private static final Function<Integer, Binomial> CACHE = Cache.of(Binomial::new, MAX_SIZE);
 
   /** @param n non-negative integer
@@ -70,23 +70,34 @@ public class Binomial implements Serializable {
   }
 
   /***************************************************/
+  private static final int THRESHOLD = 128;
   private final int n;
   private final Tensor row;
 
   private Binomial(int n) {
     this.n = n;
-    int half = n / 2;
-    Scalar x = RealScalar.ONE;
-    row = Tensors.reserve(half + 1).append(x);
-    for (int k = 1; k <= half; ++k)
-      row.append(x = x.multiply(RationalScalar.of(n - k + 1, k)));
+    if (n < THRESHOLD) {
+      int half = n / 2;
+      Scalar x = RealScalar.ONE;
+      row = Tensors.reserve(half + 1).append(x);
+      for (int k = 1; k <= half; ++k)
+        row.append(x = x.multiply(RationalScalar.of(n - k + 1, k)));
+    } else
+      row = Tensors.of(RealScalar.ONE);
   }
 
   /** @param k
    * @return n choose k */
-  public Scalar over(int k) {
-    return 0 <= k //
-        ? row.Get(Math.min(k, n - k))
-        : RealScalar.ZERO;
+  public synchronized Scalar over(int k) {
+    k = Math.min(k, Math.subtractExact(n, k));
+    if (0 <= k) {
+      if (k < row.length())
+        return row.Get(k);
+      Scalar x = Last.of(row);
+      for (int j = row.length(); j <= k; ++j)
+        row.append(x = x.multiply(RationalScalar.of(n - j + 1, j)));
+      return x;
+    }
+    return RealScalar.ZERO;
   }
 }
