@@ -17,7 +17,7 @@ public class StaticHelperTest extends TestCase {
   }
 
   public void testRequireUnitFail() {
-    Scalar scalar = RealScalar.of(1.0 + 1e-11);
+    Scalar scalar = RealScalar.of(1.0 + 1e-5);
     AssertFail.of(() -> StaticHelper.requireUnit(scalar));
   }
 

@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
-import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
@@ -40,7 +39,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /* package */ class JacobiMethod implements Eigensystem, Serializable {
   private static final long serialVersionUID = 6886081920723349745L;
   private static final int MAX_ITERATIONS = 50;
-  private static final Scalar HUNDRED = RealScalar.of(100);
+  private static final Scalar HUNDRED = DoubleScalar.of(100);
   private static final Scalar EPS = DoubleScalar.of(Math.ulp(1));
   // ---
   private final int n;
@@ -93,7 +92,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
             if (Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(h)))) {
               t = aipiq.divide(h);
             } else {
-              Scalar theta = RationalScalar.HALF.multiply(h).divide(aipiq);
+              Scalar theta = h.divide(aipiq.add(aipiq));
               t = Abs.FUNCTION.apply(theta).add(Hypot.of(theta, RealScalar.ONE)).reciprocal();
               if (Sign.isNegative(theta))
                 t = t.negate();

@@ -26,8 +26,8 @@ public class EigensystemTest extends TestCase {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(tensor);
     Tensor a = eigensystem.vectors();
     Tensor values = eigensystem.values();
-    Chop._12.requireClose(tensor, Inverse.of(a).dot(values.pmul(a)));
-    Chop._12.requireClose(tensor, LinearSolve.of(a, values.pmul(a)));
+    Chop._10.requireClose(tensor, Inverse.of(a).dot(values.pmul(a)));
+    Chop._10.requireClose(tensor, LinearSolve.of(a, values.pmul(a)));
   }
 
   public void testQuantity() {

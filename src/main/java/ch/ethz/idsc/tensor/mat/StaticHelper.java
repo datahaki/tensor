@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
 /** helper functions used in {@link SingularValueDecompositionImpl} */
 /* package */ enum StaticHelper {
@@ -53,16 +54,19 @@ import ch.ethz.idsc.tensor.sca.Clips;
 
   /** @param scalar
    * @return clips given scalar to unit interval [0, 1]
-   * @throws Exception if given scalar was outside of unit interval */
+   * @throws Exception if given scalar is significantly outside of unit interval */
   public static Scalar requireUnit(Scalar scalar) {
     Scalar result = Clips.unit().apply(scalar);
-    Tolerance.CHOP.requireClose(result, scalar);
+    Chop._06.requireClose(result, scalar);
     return result;
   }
 
   private static final Scalar _0 = RealScalar.of(0.0);
   private static final Scalar _1 = RealScalar.of(1.0);
 
+  /** @param scalar
+   * @return
+   * @see InvertUnlessZero */
   public static Scalar unitize_chop(Scalar scalar) {
     return Tolerance.CHOP.isZero(scalar) ? _0 : _1;
   }

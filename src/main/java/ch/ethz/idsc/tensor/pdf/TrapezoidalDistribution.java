@@ -104,19 +104,14 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
   public Scalar quantile(Scalar p) {
     Scalar yB = p_lessThan(b);
     Scalar yC = p_lessThan(c);
-    if (Scalars.lessEquals(p, yB)) { // y <= yB
-      Scalar term1 = Sqrt.FUNCTION.apply(alpha_inv.multiply(b.subtract(a)).multiply(p));
-      return term1.add(a);
-    }
+    if (Scalars.lessEquals(p, yB)) // y <= yB
+      return Sqrt.FUNCTION.apply(alpha_inv.multiply(b.subtract(a)).multiply(p)).add(a);
     // yB < y <= yC
-    if (Scalars.lessEquals(p, yC)) {
-      Scalar term1 = p.multiply(alpha_inv).add(a).add(b);
-      return term1.multiply(RationalScalar.HALF);
-    }
+    if (Scalars.lessEquals(p, yC))
+      return p.multiply(alpha_inv).add(a).add(b).multiply(RationalScalar.HALF);
     // yC < y
-    Scalar term1 = RealScalar.ONE.subtract(p).multiply(alpha_inv).multiply(d.subtract(c));
-    Scalar term2 = Sqrt.FUNCTION.apply(term1);
-    return d.subtract(term2);
+    return d.subtract(Sqrt.FUNCTION.apply( //
+        RealScalar.ONE.subtract(p).multiply(alpha_inv).multiply(d.subtract(c))));
   }
 
   @Override // from MeanInterface

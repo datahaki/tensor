@@ -7,7 +7,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.pdf.Erf;
-import ch.ethz.idsc.tensor.red.Times;
 
 /** <pre>
  * Fresnel[z] = FresnelC[z] + FresnelS[z] * I
@@ -24,8 +23,8 @@ import ch.ethz.idsc.tensor.red.Times;
 public enum Fresnel implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final Scalar FACTOR = ComplexScalar.of(1, 1).multiply(RationalScalar.HALF);
-  private static final Scalar SCALE = Times.of(Sqrt.FUNCTION.apply(Pi.VALUE), RationalScalar.HALF, ComplexScalar.of(1, -1));
+  private static final Scalar FACTOR = ComplexScalar.of(RationalScalar.HALF, RationalScalar.HALF);
+  private static final Scalar SCALE = Conjugate.FUNCTION.apply(FACTOR).multiply(Sqrt.FUNCTION.apply(Pi.VALUE));
 
   @Override
   public Scalar apply(Scalar t) {
