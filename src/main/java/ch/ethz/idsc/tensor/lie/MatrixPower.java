@@ -44,7 +44,14 @@ public enum MatrixPower {
   }
 
   /***************************************************/
-  /** @param matrix symmetric
+  /** "More generally, we can define any power of an SPD matrix by taking
+   * the power of its eigenvalues or using the formula [...]"
+   * 
+   * Reference:
+   * "Riemannian Geometric Statistics in Medical Image Analysis", 2020
+   * Edited by Xavier Pennec, Sommer, P. Thomas Fletcher, p. 80
+   * 
+   * @param matrix symmetric
    * @param exponent
    * @return */
   public static Tensor ofSymmetric(Tensor matrix, Scalar exponent) {

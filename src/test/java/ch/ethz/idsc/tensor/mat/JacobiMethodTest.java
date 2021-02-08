@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.alg.BasisTransform;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -120,6 +121,18 @@ public class JacobiMethodTest extends TestCase {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor expected = Tensors.vector(1.4083189271236539575, 0.12232706585390584656, 0.0026873403557735292310);
     Chop._12.requireClose(expected.subtract(eigensystem.values()), Array.zeros(matrix.length()));
+  }
+
+  public void testChallenge1() {
+    Tensor matrix = ResourceData.of("/mat/jacobi1.csv");
+    Tolerance.CHOP.requireClose(matrix, IdentityMatrix.of(3));
+    checkEquation(matrix, Eigensystem.ofSymmetric(matrix));
+  }
+
+  public void testChallenge2() {
+    Tensor matrix = ResourceData.of("/mat/jacobi2.csv");
+    Tolerance.CHOP.requireClose(matrix, IdentityMatrix.of(3));
+    checkEquation(matrix, Eigensystem.ofSymmetric(matrix));
   }
 
   public void testPackageVisibility() {

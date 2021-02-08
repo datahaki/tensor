@@ -28,6 +28,15 @@ public class BasisTransformTest extends TestCase {
     assertEquals(Dimensions.of(s), Arrays.asList(5, 5, 5, 5));
   }
 
+  public void testFormRank2() {
+    int n = 4;
+    Distribution distribution = DiscreteUniformDistribution.of(-100, 100);
+    Tensor form = RandomVariate.of(distribution, n, n);
+    Tensor v = RandomVariate.of(distribution, n, n);
+    Tensor s = BasisTransform.ofForm(form, v);
+    assertEquals(s, Transpose.of(v).dot(form).dot(v));
+  }
+
   public void testForm() {
     int rows = 6;
     int cols = 8;

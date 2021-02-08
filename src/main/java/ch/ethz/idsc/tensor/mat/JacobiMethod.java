@@ -67,7 +67,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       Scalar sum = A[0][0].zero();
       for (int ip = 0; ip < n - 1; ++ip)
         for (int iq = ip + 1; iq < n; ++iq)
-          sum = sum.add(A[ip][iq]);
+          sum = sum.add(Abs.FUNCTION.apply(A[ip][iq]));
       if (Scalars.isZero(sum)) {
         int[] ordering = Ordering.DECREASING.of(d);
         d = Tensor.of(IntStream.of(ordering).mapToObj(d::Get));
@@ -75,17 +75,17 @@ import ch.ethz.idsc.tensor.sca.Sign;
         return;
       }
       Scalar tresh = sum.multiply(factor);
-      if (4 <= iteration)
+      if (2 < iteration)
         tresh = tresh.zero(); // preserve unit
       for (int ip = 0; ip < n - 1; ++ip)
         for (int iq = ip + 1; iq < n; ++iq) {
           Scalar aipiq = A[ip][iq];
           Scalar Aipiq = Abs.FUNCTION.apply(aipiq);
           Scalar g = HUNDRED.multiply(Aipiq);
-          if (4 < iteration && //
+          if (3 < iteration && //
               Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(d.Get(ip)))) && //
               Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(d.Get(iq))))) {
-            A[ip][iq] = A[ip][iq].zero();
+            A[ip][iq] = aipiq.zero();
           } else //
           if (Scalars.lessThan(tresh, Aipiq)) {
             Scalar h = d.Get(iq).subtract(d.Get(ip));
@@ -103,10 +103,10 @@ import ch.ethz.idsc.tensor.sca.Sign;
             Scalar tau = s.divide(c.add(RealScalar.ONE));
             final Scalar fh = t.multiply(aipiq);
             z.set(v -> v.subtract(fh), ip);
-            z.set(v -> v.add(fh), iq);
+            z.set(fh::add, iq);
             d.set(v -> v.subtract(fh), ip);
-            d.set(v -> v.add(fh), iq);
-            A[ip][iq] = A[ip][iq].zero();
+            d.set(fh::add, iq);
+            A[ip][iq] = aipiq.zero();
             int fip = ip;
             int fiq = iq;
             IntStream.range(0, ip).forEach(j -> rotate(A, s, tau, j, fip, j, fiq));
