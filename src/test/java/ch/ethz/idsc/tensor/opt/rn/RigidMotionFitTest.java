@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
 import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.ExponentialDistribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -72,11 +73,12 @@ public class RigidMotionFitTest extends TestCase {
 
   public void testRandom() {
     Distribution distribution = NormalDistribution.standard();
+    Distribution dist_weights = ExponentialDistribution.of(1);
     for (int d = 2; d < 6; ++d) {
       for (int n = d + 1; n < 11; ++n) {
         Tensor points = RandomVariate.of(distribution, n, d);
         Tensor target = RandomVariate.of(distribution, n, d);
-        Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.unit(), n));
+        Tensor weights = NORMALIZE.apply(RandomVariate.of(dist_weights, n));
         RigidMotionFit rigidMotionFit = RigidMotionFit.of(points, target, weights);
         Chop._08.requireClose(Det.of(rigidMotionFit.rotation()), RealScalar.ONE);
       }
@@ -84,11 +86,12 @@ public class RigidMotionFitTest extends TestCase {
   }
 
   public void testIdentityFail() {
+    Distribution dist_weights = ExponentialDistribution.of(2);
     for (int d = 2; d < 6; ++d) {
       for (int n = d + 1; n < 11; ++n) {
         Distribution distribution = NormalDistribution.standard();
         Tensor points = RandomVariate.of(distribution, n, d);
-        Tensor weights = NORMALIZE.apply(RandomVariate.of(UniformDistribution.unit(), n));
+        Tensor weights = NORMALIZE.apply(RandomVariate.of(dist_weights, n));
         RigidMotionFit rigidMotionFit = RigidMotionFit.of(points, points, weights);
         Chop._07.requireClose(rigidMotionFit.rotation(), IdentityMatrix.of(d));
         Chop._07.requireClose(rigidMotionFit.translation(), Array.zeros(d));

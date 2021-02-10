@@ -19,9 +19,9 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.pdf.CauchyDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
 import ch.ethz.idsc.tensor.red.Norm;
@@ -223,7 +223,7 @@ public class NullSpaceTest extends TestCase {
   }
 
   public void testExtended() {
-    Distribution distribution = UniformDistribution.unit();
+    Distribution distribution = CauchyDistribution.of(-1, 2);
     int n = 10;
     for (int d = 1; d < n; ++d) {
       Tensor matrix = RandomVariate.of(distribution, n, d);

@@ -38,6 +38,15 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     return new TrapezoidalDistribution(a, b, c, d);
   }
 
+  /** @param a
+   * @param b
+   * @param c
+   * @param d
+   * @return Exception unless a <= b <= c <= d and a < d */
+  public static Distribution of(Number a, Number b, Number c, Number d) {
+    return of(RealScalar.of(a), RealScalar.of(b), RealScalar.of(c), RealScalar.of(d));
+  }
+
   /***************************************************/
   private final Clip clip;
   private final Scalar a;
@@ -46,6 +55,8 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
   private final Scalar d;
   private final Scalar alpha_inv;
   private final Scalar alpha;
+  private final Scalar yB;
+  private final Scalar yC;
 
   private TrapezoidalDistribution(Scalar a, Scalar b, Scalar c, Scalar d) {
     clip = Clips.interval(a, d);
@@ -55,6 +66,8 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     this.d = d;
     alpha_inv = d.add(c).subtract(a).subtract(b);
     this.alpha = alpha_inv.reciprocal();
+    yB = p_lessThan(b);
+    yC = p_lessThan(c);
   }
 
   @Override // from CDF
@@ -102,8 +115,6 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
-    Scalar yB = p_lessThan(b);
-    Scalar yC = p_lessThan(c);
     if (Scalars.lessEquals(p, yB)) // y <= yB
       return Sqrt.FUNCTION.apply(alpha_inv.multiply(b.subtract(a)).multiply(p)).add(a);
     // yB < y <= yC

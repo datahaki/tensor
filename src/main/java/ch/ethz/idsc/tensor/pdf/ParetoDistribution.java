@@ -26,6 +26,13 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
     throw TensorRuntimeException.of(k);
   }
 
+  /** @param k strictly positive real number
+   * @param alpha strictly positive real number
+   * @return */
+  public static Distribution of(Number k, Number alpha) {
+    return of(RealScalar.of(k), RealScalar.of(alpha));
+  }
+
   /***************************************************/
   private final Scalar k;
   private final Scalar alpha;

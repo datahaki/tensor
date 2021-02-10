@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
-import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
+import ch.ethz.idsc.tensor.pdf.BinomialDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -30,7 +30,7 @@ public class BasisTransformTest extends TestCase {
 
   public void testFormRank2() {
     int n = 4;
-    Distribution distribution = DiscreteUniformDistribution.of(-100, 100);
+    Distribution distribution = BinomialDistribution.of(80, 0.3);
     Tensor form = RandomVariate.of(distribution, n, n);
     Tensor v = RandomVariate.of(distribution, n, n);
     Tensor s = BasisTransform.ofForm(form, v);
@@ -59,7 +59,7 @@ public class BasisTransformTest extends TestCase {
   }
 
   public void testMatrix() {
-    Distribution distribution = DiscreteUniformDistribution.of(-100, 100);
+    Distribution distribution = BinomialDistribution.of(20, 0.3);
     Tensor matrix = RandomVariate.of(distribution, 5, 5);
     Tensor v = RandomVariate.of(distribution, 5, 5);
     Tensor trafo1 = BasisTransform.ofMatrix(matrix, v);

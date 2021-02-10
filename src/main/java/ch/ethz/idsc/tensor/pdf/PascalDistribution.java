@@ -22,6 +22,13 @@ public class PascalDistribution extends EvaluatedDiscreteDistribution implements
     return new PascalDistribution(Integers.requirePositive(n), Clips.unit().requireInside(p));
   }
 
+  /** @param n positive number of successes
+   * @param p success probability in the unit interval [0, 1]
+   * @return distribution of the number of trials with success probability p before n successes occur */
+  public static Distribution of(int n, Number p) {
+    return of(n, RealScalar.of(p));
+  }
+
   /***************************************************/
   private final int n;
   private final Scalar p;

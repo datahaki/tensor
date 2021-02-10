@@ -6,8 +6,11 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.HermitianMatrixQ;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.ExponentialDistribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.TrapezoidalDistribution;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -15,9 +18,10 @@ import junit.framework.TestCase;
 public class LagrangeMultiplierTest extends TestCase {
   public void testLagrange() {
     int n = 7;
-    Tensor eqs = RandomVariate.of(NormalDistribution.standard(), 3, n);
+    Distribution distribution = TrapezoidalDistribution.of(-2, -1, 1, 2);
+    Tensor eqs = RandomVariate.of(distribution, 3, n);
     Tensor target = RandomVariate.of(NormalDistribution.standard(), n);
-    Tensor rhs = RandomVariate.of(NormalDistribution.standard(), 3);
+    Tensor rhs = RandomVariate.of(distribution, 3);
     LagrangeMultiplier lagrangeMultiplier = new LagrangeMultiplier(IdentityMatrix.of(n), target, eqs, rhs);
     HermitianMatrixQ.require(lagrangeMultiplier.matrix());
     VectorQ.require(lagrangeMultiplier.b());
@@ -31,11 +35,12 @@ public class LagrangeMultiplierTest extends TestCase {
 
   public void testLagrangeCholeskyFail() {
     int n = 8;
+    Distribution distribution = ExponentialDistribution.of(1);
     Tensor eqsPre = RandomVariate.of(NormalDistribution.standard(), 2, n);
-    Tensor eqsMul = RandomVariate.of(NormalDistribution.standard(), 3, 2);
+    Tensor eqsMul = RandomVariate.of(distribution, 3, 2);
     Tensor eqs = eqsMul.dot(eqsPre);
     Tensor target = RandomVariate.of(NormalDistribution.standard(), n);
-    Tensor rhs = RandomVariate.of(NormalDistribution.standard(), 3);
+    Tensor rhs = RandomVariate.of(distribution, 3);
     LagrangeMultiplier lagrangeMultiplier = new LagrangeMultiplier(IdentityMatrix.of(n), target, eqs, rhs);
     HermitianMatrixQ.require(lagrangeMultiplier.matrix());
     VectorQ.require(lagrangeMultiplier.b());

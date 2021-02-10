@@ -7,7 +7,9 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.pdf.Distribution;
-import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.ParetoDistribution;
+import ch.ethz.idsc.tensor.pdf.PascalDistribution;
+import ch.ethz.idsc.tensor.pdf.PoissonDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Total;
@@ -28,7 +30,7 @@ public class UpperTriangularizeTest extends TestCase {
   }
 
   public void testFull() {
-    Distribution distribution = NormalDistribution.standard();
+    Distribution distribution = PoissonDistribution.of(10);
     Tensor matrix = RandomVariate.of(distribution, 10, 10);
     Tensor result = Total.of(Tensors.of( //
         LowerTriangularize.of(matrix, -1), //
@@ -38,7 +40,7 @@ public class UpperTriangularizeTest extends TestCase {
   }
 
   public void testRectangular1() {
-    Distribution distribution = NormalDistribution.standard();
+    Distribution distribution = ParetoDistribution.of(0.3, 0.4);
     Tensor matrix = RandomVariate.of(distribution, 8, 12);
     for (int k = -12; k <= 12; ++k) {
       Tensor result = Total.of(Tensors.of( //
@@ -49,7 +51,7 @@ public class UpperTriangularizeTest extends TestCase {
   }
 
   public void testRectangular2() {
-    Distribution distribution = NormalDistribution.standard();
+    Distribution distribution = PascalDistribution.of(3, .2);
     Tensor matrix = RandomVariate.of(distribution, 12, 8);
     for (int k = -12; k <= 12; ++k) {
       Tensor result = Total.of(Tensors.of( //

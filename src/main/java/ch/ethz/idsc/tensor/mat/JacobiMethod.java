@@ -39,6 +39,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /* package */ class JacobiMethod implements Eigensystem, Serializable {
   private static final long serialVersionUID = 6886081920723349745L;
   private static final int MAX_ITERATIONS = 50;
+  // higher phase 1 count increases numerical precision
+  private static final int[] PHASE1 = { //
+      0, 0, 0, // n==0,1,2
+      4, // n==3
+      5, 5, // n==4,5
+      6, 6, 6, 6, // n==6,...,9
+      7 };
   private static final Scalar HUNDRED = DoubleScalar.of(100);
   private static final Scalar EPS = DoubleScalar.of(Math.ulp(1));
   // ---
@@ -47,10 +54,12 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private Tensor d;
 
   /** @param matrix symmetric, non-empty, and real valued
-   * @param chop for symmetry check */
+   * @param chop for symmetry check
+   * @throws Exception if input is not a real symmetric matrix */
   public JacobiMethod(Tensor matrix, Chop chop) {
     Scalar[][] A = ScalarArray.ofMatrix(matrix);
     n = A.length;
+    int phase1 = PHASE1[Math.min(n, PHASE1.length - 1)];
     for (int ip = 0; ip < n; ++ip) {
       if (A[ip].length != n)
         throw TensorRuntimeException.of(matrix);
@@ -74,14 +83,14 @@ import ch.ethz.idsc.tensor.sca.Sign;
         return;
       }
       Scalar tresh = sum.multiply(factor);
-      if (2 < iteration)
+      if (phase1 <= iteration)
         tresh = tresh.zero(); // preserve unit
       for (int ip = 0; ip < n - 1; ++ip)
         for (int iq = ip + 1; iq < n; ++iq) {
           Scalar aipiq = A[ip][iq];
           Scalar Aipiq = Abs.FUNCTION.apply(aipiq);
           Scalar g = HUNDRED.multiply(Aipiq);
-          if (3 < iteration && //
+          if (phase1 < iteration && //
               Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(d.Get(ip)))) && //
               Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(d.Get(iq))))) {
             A[ip][iq] = aipiq.zero();

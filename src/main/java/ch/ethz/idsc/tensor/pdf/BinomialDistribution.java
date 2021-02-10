@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.pdf;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.itp.BernsteinBasis;
 import ch.ethz.idsc.tensor.mat.Tolerance;
@@ -40,8 +39,8 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
   /** @param n non-negative integer
    * @param p in the interval [0, 1]
    * @return */
-  public static Distribution of(Scalar n, Scalar p) {
-    return of(Scalars.intValueExact(n), p);
+  public static Distribution of(int n, Number p) {
+    return of(n, RealScalar.of(p));
   }
 
   /***************************************************/
