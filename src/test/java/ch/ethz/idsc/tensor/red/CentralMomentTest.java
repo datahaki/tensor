@@ -7,8 +7,8 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -26,7 +26,7 @@ public class CentralMomentTest extends TestCase {
     Tensor tensor = Tensors.vector(10, 2, 3, 4, 1);
     Scalar result = CentralMoment.of(tensor, 1.3);
     Scalar gndtru = Scalars.fromString("1.1567572194352718 - 1.2351191805935866* I");
-    Chop._12.requireClose(result, gndtru);
+    Tolerance.CHOP.requireClose(result, gndtru);
   }
 
   public void testQuantity() {

@@ -27,22 +27,10 @@ public class Binomial implements Serializable {
   private static final int MAX_SIZE = 384;
   private static final Function<Integer, Binomial> CACHE = Cache.of(Binomial::new, MAX_SIZE);
 
-  /** @param n non-negative integer
-   * @return binomial function that computes n choose k */
-  public static Binomial of(Scalar n) {
-    return of(Scalars.intValueExact(n));
-  }
-
-  /** @param n non-negative integer
-   * @return binomial function that computes n choose k */
-  public static Binomial of(int n) {
-    return CACHE.apply(Integers.requirePositiveOrZero(n));
-  }
-
   /** <code>Mathematica::Binomial[n, m]</code>
    * 
    * @param n
-   * @param m, and m <= n
+   * @param m
    * @return binomial coefficient defined by n and m */
   public static Scalar of(Scalar n, Scalar m) {
     OptionalInt _n = Scalars.optionalInt(n);
@@ -57,16 +45,33 @@ public class Binomial implements Serializable {
   /** <code>Mathematica::Binomial[n, m]</code>
    * 
    * @param n
-   * @param m <= n
+   * @param m
    * @return binomial coefficient defined by n and m */
   public static Scalar of(int n, int m) {
-    if (n < m) {
-      if (0 <= n)
-        return RealScalar.ZERO;
-      // this case is defined in Mathematica
-      throw new IllegalArgumentException(String.format("Binomial[%d,%d]", n, m));
+    if (0 <= n) // 0 <= n
+      return CACHE.apply(n).over(m); // n non-negative is guaranteed
+    if (0 <= m) { // n < 0 && 0 <= m
+      // Binomial[n, k], (-1)^k Binomial[-n + k - 1, k]
+      Scalar scalar = CACHE.apply(-n + m - 1).over(m); // (-n + m - 1) non-negative is guaranteed
+      return (m & 1) == 0 ? scalar : scalar.negate();
     }
-    return CACHE.apply(n).over(m);
+    // n < 0 && m < 0
+    // Binomial[n, k] == (-1)^(k + n) Binomial[-k - 1, -n - 1]
+    Scalar scalar = CACHE.apply(-m - 1).over(-n - 1);
+    return ((m ^ n) & 1) == 0 ? scalar : scalar.negate();
+  }
+
+  /***************************************************/
+  /** @param n non-negative integer
+   * @return binomial function that computes n choose k */
+  public static Binomial of(Scalar n) {
+    return of(Scalars.intValueExact(n));
+  }
+
+  /** @param n non-negative
+   * @return binomial function that computes n choose k */
+  public static Binomial of(int n) {
+    return CACHE.apply(Integers.requirePositiveOrZero(n));
   }
 
   /***************************************************/
@@ -75,6 +80,7 @@ public class Binomial implements Serializable {
   private final int n;
   private final Tensor row;
 
+  /** @param n non-negative */
   private Binomial(int n) {
     this.n = n;
     if (n < THRESHOLD) {
@@ -104,7 +110,7 @@ public class Binomial implements Serializable {
     return RealScalar.ZERO;
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return String.format("%s[%d]", getClass().getSimpleName(), n);
   }

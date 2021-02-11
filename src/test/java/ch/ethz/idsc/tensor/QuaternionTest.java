@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -22,7 +23,7 @@ public class QuaternionTest extends TestCase {
   public void testContructQuantity() {
     Quaternion quaternion = Quaternion.of(Quantity.of(3, "m"), Tensors.fromString("{2[m],3[m],4[m]}"));
     Scalar abs = quaternion.abs();
-    Chop._12.requireClose(abs, Scalars.fromString("6.164414002968976[m]"));
+    Tolerance.CHOP.requireClose(abs, Scalars.fromString("6.164414002968976[m]"));
     ExactScalarQ.require(quaternion);
     assertEquals(quaternion.conjugate(), Quaternion.of(Quantity.of(3, "m"), Tensors.fromString("{-2[m],-3[m],-4[m]}")));
     assertTrue(quaternion.sqrt() instanceof QuaternionImpl);
@@ -122,7 +123,7 @@ public class QuaternionTest extends TestCase {
       Scalar q = Quaternion.of(arg.Get(0), arg.extract(1, 4));
       Scalar r = Sqrt.of(q);
       Scalar r2 = r.multiply(r);
-      Chop._11.requireClose(r2, q);
+      Tolerance.CHOP.requireClose(r2, q);
     }
   }
 
@@ -132,7 +133,7 @@ public class QuaternionTest extends TestCase {
       Scalar q = Quaternion.of(RealScalar.ZERO, arg.extract(1, 4));
       Scalar r = Sqrt.of(q);
       Scalar r2 = r.multiply(r);
-      Chop._11.requireClose(r2, q);
+      Tolerance.CHOP.requireClose(r2, q);
     }
   }
 
@@ -159,7 +160,7 @@ public class QuaternionTest extends TestCase {
       Scalar q1 = _createQ(vec);
       Scalar nrm = Norm._2.ofVector(vec);
       Scalar abs = Abs.of(q1);
-      Chop._12.requireClose(nrm, abs);
+      Tolerance.CHOP.requireClose(nrm, abs);
     }
   }
 
@@ -205,7 +206,7 @@ public class QuaternionTest extends TestCase {
       Quaternion quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
       Quaternion exp = quaternion.exp();
       Quaternion log = exp.log();
-      Chop._12.requireClose(quaternion, log);
+      Tolerance.CHOP.requireClose(quaternion, log);
     }
   }
 
@@ -215,7 +216,7 @@ public class QuaternionTest extends TestCase {
       Quaternion quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
       Quaternion log = quaternion.log();
       Quaternion exp = log.exp();
-      Chop._12.requireClose(quaternion, exp);
+      Tolerance.CHOP.requireClose(quaternion, exp);
     }
   }
 

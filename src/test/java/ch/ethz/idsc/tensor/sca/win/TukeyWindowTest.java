@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Tally;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -40,7 +39,7 @@ public class TukeyWindowTest extends TestCase {
     ScalarUnaryOperator scalarUnaryOperator = TukeyWindow.FUNCTION;
     assertEquals(scalarUnaryOperator.apply(RealScalar.of(0.12)), RealScalar.ONE);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(0.22));
-    Chop._12.requireClose(scalar, RealScalar.of(0.9381533400219317)); // mathematica
+    Tolerance.CHOP.requireClose(scalar, RealScalar.of(0.9381533400219317)); // mathematica
   }
 
   public void testSemiExact() {

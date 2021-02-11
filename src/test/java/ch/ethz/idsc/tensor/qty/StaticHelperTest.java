@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -85,7 +85,7 @@ public class StaticHelperTest extends TestCase {
 
   public void testM_kW() {
     Scalar scalar = StaticHelper.conversion(UnitSystem.SI(), "m", "kW"); // W = 1[m^2*kg*s^-3]
-    Chop._10.requireClose(scalar, Scalars.fromString("0.03162277660168379[kW^1/2*kg^-1/2*s^3/2]"));
+    Tolerance.CHOP.requireClose(scalar, Scalars.fromString("0.03162277660168379[kW^1/2*kg^-1/2*s^3/2]"));
   }
 
   public void testMultiplyNullFail() {

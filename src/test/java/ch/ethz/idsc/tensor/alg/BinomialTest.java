@@ -9,9 +9,13 @@ import ch.ethz.idsc.tensor.DeterminateScalarQ;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.num.Boole;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -62,13 +66,50 @@ public class BinomialTest extends TestCase {
     assertEquals(binomial.over(2), RealScalar.of(3));
   }
 
-  public void testFailNK() {
-    AssertFail.of(() -> Binomial.of(-3, 0));
+  public void testGeneralNK() {
+    for (int n = 0; n < 5; ++n)
+      for (int k = -5; k <= 5; ++k) {
+        Scalar bpos = Binomial.of(n, k);
+        Scalar bneg = Power.of(-1, n + k).multiply(Binomial.of(-k - 1, -n - 1));
+        assertEquals(bpos, bneg);
+      }
+  }
+
+  public void testKZero() {
+    for (int n = -5; n <= 5; ++n)
+      assertEquals(Binomial.of(n, 0), RealScalar.ONE);
+  }
+
+  public void testKNeg1() {
+    for (int n = -5; n <= 5; ++n)
+      assertEquals(Binomial.of(n, -1), Boole.of(n == -1));
+  }
+
+  public void testKNeg2() {
+    for (int n = 0; n <= 5; ++n)
+      assertEquals(Binomial.of(n, -2), RealScalar.ZERO);
+  }
+
+  public void testSpecial() {
+    assertEquals(Binomial.of(-4, 0), RealScalar.ONE);
+    assertEquals(Binomial.of(-4, -1), RealScalar.ZERO);
+    assertEquals(Binomial.of(-4, -2), RealScalar.ZERO);
+    assertEquals(Binomial.of(-4, -3), RealScalar.ZERO);
+    assertEquals(Binomial.of(-4, -4), RealScalar.ONE);
+    assertEquals(Binomial.of(-4, -5), RealScalar.of(-4));
+    assertEquals(Binomial.of(-4, -10), RealScalar.of(84));
   }
 
   public void testFailN() {
     AssertFail.of(() -> Binomial.of(RealScalar.of(10.21)));
     AssertFail.of(() -> Binomial.of(-1));
+  }
+
+  public void testKOutside() {
+    assertEquals(Binomial.of(10, -10), RealScalar.ZERO);
+    assertEquals(Binomial.of(10, -1), RealScalar.ZERO);
+    assertEquals(Binomial.of(10, 11), RealScalar.ZERO);
+    assertEquals(Binomial.of(10, 20), RealScalar.ZERO);
   }
 
   public void testLarge() {
@@ -93,6 +134,29 @@ public class BinomialTest extends TestCase {
   public void testLargeFail() {
     assertFalse(DeterminateScalarQ.of(Binomial.of(RealScalar.of(123412341234324L), RealScalar.ZERO)));
     AssertFail.of(() -> Binomial.of(RealScalar.of(-123412341234324L), RealScalar.ZERO));
+  }
+
+  public void testNegOne() {
+    for (int n = -10; n < 10; ++n)
+      assertEquals(Binomial.of(n, -1), Boole.of(n == -1));
+  }
+
+  public void testAltSym() {
+    assertEquals(Tensors.vector(k -> Binomial.of(k - 5, 1), 11), Tensors.vector(-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5));
+    assertEquals(Tensors.vector(k -> Binomial.of(k - 5, 2), 11), Tensors.vector(15, 10, 6, 3, 1, 0, 0, 1, 3, 6, 10));
+    assertEquals(Tensors.vector(k -> Binomial.of(k - 5, 3), 11), Tensors.vector(-35, -20, -10, -4, -1, 0, 0, 0, 1, 4, 10));
+  }
+
+  public void testVectors() {
+    assertEquals(Tensors.vector(k -> Binomial.of(3, k - 5), 11), Tensors.vector(0, 0, 0, 0, 0, 1, 3, 3, 1, 0, 0));
+    assertEquals(Tensors.vector(k -> Binomial.of(k - 5, -3), 11), Tensors.vector(0, 0, 1, -2, 1, 0, 0, 0, 0, 0, 0));
+    assertEquals(Tensors.vector(k -> Binomial.of(k - 5, -4), 11), Tensors.vector(0, 1, -3, 3, -1, 0, 0, 0, 0, 0, 0));
+  }
+
+  public void testBinomialTable() {
+    Tensor tableb = Tensors.matrix((i, j) -> Binomial.of(i - 5, j - 5), 11, 11);
+    Tensor tensor = ResourceData.of("/alg/binomial11.csv");
+    assertEquals(tableb, tensor);
   }
 
   public void testToString() {

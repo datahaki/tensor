@@ -7,16 +7,17 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Reverse;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import junit.framework.TestCase;
 
 public class GudermannianTest extends TestCase {
   public void testSimple() {
     Scalar scalar = Gudermannian.FUNCTION.apply(RationalScalar.HALF);
-    Chop._12.requireClose(scalar, RealScalar.of(0.48038107913372944860)); // mathematica
+    Tolerance.CHOP.requireClose(scalar, RealScalar.of(0.48038107913372944860)); // mathematica
   }
 
   public void testListable() {
     Tensor tensor = Gudermannian.of(Range.of(-3, 4));
-    Chop._12.requireClose(tensor, Reverse.of(tensor).negate());
+    Tolerance.CHOP.requireClose(tensor, Reverse.of(tensor).negate());
   }
 }

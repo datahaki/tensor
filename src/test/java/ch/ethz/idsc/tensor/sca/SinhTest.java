@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -34,7 +35,7 @@ public class SinhTest extends TestCase {
   public void testDecimal() {
     Scalar scalar = Sinh.of(DecimalScalar.of(new BigDecimal("1.2356", MathContext.DECIMAL128)));
     assertTrue(scalar instanceof DecimalScalar);
-    Chop._11.requireClose(scalar, DoubleScalar.of(Math.sinh(1.2356)));
+    Tolerance.CHOP.requireClose(scalar, DoubleScalar.of(Math.sinh(1.2356)));
   }
 
   public void testQuantityFail() {

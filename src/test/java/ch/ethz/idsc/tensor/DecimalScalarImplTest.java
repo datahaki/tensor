@@ -4,9 +4,9 @@ package ch.ethz.idsc.tensor;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.sca.Ceiling;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
@@ -68,10 +68,10 @@ public class DecimalScalarImplTest extends TestCase {
     Scalar s23 = sc2.divide(sc3);
     Scalar r23 = RationalScalar.of(2, 3);
     Scalar d23 = DoubleScalar.of(Math.nextUp(2. / 3));
-    assertEquals(Chop._12.of(r23.subtract(s23)), RealScalar.ZERO);
-    assertEquals(Chop._12.of(s23.subtract(r23)), RealScalar.ZERO);
-    assertEquals(Chop._12.of(d23.subtract(s23)), RealScalar.ZERO);
-    assertEquals(Chop._12.of(s23.subtract(d23)), RealScalar.ZERO);
+    Tolerance.CHOP.requireClose(r23, s23);
+    Tolerance.CHOP.requireClose(s23, r23);
+    Tolerance.CHOP.requireClose(d23, s23);
+    Tolerance.CHOP.requireClose(s23, d23);
   }
 
   public void testDivide2() {

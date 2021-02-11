@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Arg;
@@ -64,7 +65,7 @@ public class DecimalScalarTest extends TestCase {
   public void testTrig() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL32));
     Chop._06.requireZero(Sin.of(s));
-    Chop._06.requireClose(Cos.of(s), RealScalar.ONE.negate());
+    Tolerance.CHOP.requireClose(Cos.of(s), RealScalar.ONE.negate());
   }
 
   public void testPower() {

@@ -82,8 +82,8 @@ public class MatrixExpTest extends TestCase {
     Tensor b = Tensors.fromString("{{2, 1-I}, {1+I, 2}}");
     assertTrue(HermitianMatrixQ.of(a));
     assertTrue(HermitianMatrixQ.of(b));
-    Scalar tra = Trace.of(MatrixExp.of(a.add(b)));
-    Scalar trb = Trace.of(MatrixExp.of(a).dot(MatrixExp.of(b)));
+    Tensor tra = Trace.of(MatrixExp.of(a.add(b)));
+    Tensor trb = Trace.of(MatrixExp.of(a).dot(MatrixExp.of(b)));
     Chop._05.requireClose(tra, RealScalar.of(168.49869602)); // mathematica
     Chop._05.requireClose(trb, RealScalar.of(191.43054831)); // mathematica
   }

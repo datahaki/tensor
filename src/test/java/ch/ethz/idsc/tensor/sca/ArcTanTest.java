@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -89,7 +90,7 @@ public class ArcTanTest extends TestCase {
       assertFalse(qs1 instanceof RealScalar);
       Scalar res = ArcTan.of(qs1, qs2);
       assertTrue(res instanceof RealScalar);
-      Chop._10.requireClose(res, RealScalar.of(0.32175055439664219340));
+      Tolerance.CHOP.requireClose(res, RealScalar.of(0.32175055439664219340));
     }
   }
 
@@ -99,12 +100,12 @@ public class ArcTanTest extends TestCase {
     {
       Scalar res = ArcTan.of(qs0, qs1);
       assertTrue(res instanceof RealScalar);
-      Chop._10.requireClose(res, RealScalar.of(Math.PI / 2));
+      Tolerance.CHOP.requireClose(res, RealScalar.of(Math.PI / 2));
     }
     {
       Scalar res = ArcTan.of(qs1, qs0);
       assertTrue(res instanceof RealScalar);
-      Chop._10.requireZero(res);
+      Tolerance.CHOP.requireZero(res);
     }
   }
 
@@ -119,7 +120,7 @@ public class ArcTanTest extends TestCase {
       Scalar v2 = ArcTan.of(x, y.negate());
       Scalar v3 = ArcTan.of(x.multiply(lambda), y.multiply(lambda));
       assertEquals(v1, v2.negate());
-      Chop._10.requireClose(v1, v3);
+      Tolerance.CHOP.requireClose(v1, v3);
     }
   }
 
