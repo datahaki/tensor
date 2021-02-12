@@ -5,6 +5,7 @@ import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /** base class of {@link Determinant}, {@link GaussianElimination} and {@link RowReduce} */
 /* package */ class AbstractReduce {
@@ -34,7 +35,7 @@ import ch.ethz.idsc.tensor.Tensor;
         .mapToObj(c0 -> lhs[ind[c0]].Get(c0)) //
         .reduce(Scalar::multiply) //
         .get();
-    return transpositions % 2 == 0 //
+    return Integers.isEven(transpositions) //
         ? scalar
         : scalar.negate();
   }

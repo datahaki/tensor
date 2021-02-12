@@ -8,8 +8,10 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
+import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.TrapezoidalDistribution;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -29,22 +31,6 @@ public class MatrixSqrtTest extends TestCase {
     _check(a, matrixSqrt);
     Tolerance.CHOP.requireClose(matrixSqrt.sqrt(), Tensors.fromString("{{2, 2}, {0, 3}}"));
   }
-  // public void testQuantity() {
-  // Tensor x = Tensors.fromString("{{2[m], 2[m]}, {0[m], 3[m]}}");
-  // Tensor a = x.dot(x);
-  // System.out.println(a);
-  // new MatrixSqrtImpl(a, Tolerance.CHOP);
-  // System.out.println(matrixSqrt.sqrt());
-  // _check(a, matrixSqrt);
-  // Tolerance.CHOP.requireClose(matrixSqrt.sqrt(), Tensors.fromString("{{2, 2}, {0, 3}}"));
-  // }
-  // public void testZeros() {
-  // for (int n = 1; n < 5; ++n) {
-  // Tensor x = Array.zeros(n, n);
-  // _check(x, MatrixSqrt.of(x));
-  // _check(x, MatrixSqrt.ofSymmetric(x));
-  // }
-  // }
 
   public void testIdentity() {
     for (int n = 1; n <= 5; ++n) {
@@ -55,8 +41,9 @@ public class MatrixSqrtTest extends TestCase {
   }
 
   public void testRandomNormal() {
+    Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
     for (int n = 1; n < 10; ++n) {
-      Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
+      Tensor x = RandomVariate.of(distribution, n, n);
       Tensor x2 = x.dot(x);
       _check(x2, MatrixSqrt.of(x2));
     }

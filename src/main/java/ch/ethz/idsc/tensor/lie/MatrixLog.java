@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -99,7 +100,7 @@ public enum MatrixLog {
     for (int k = 2; k < MAX_ITERATIONS; ++k) {
       nxt = nxt.dot(x);
       Tensor prv = sum;
-      sum = sum.add(nxt.divide(DoubleScalar.of(k % 2 == 0 ? -k : k)));
+      sum = sum.add(nxt.divide(DoubleScalar.of(Integers.isEven(k) ? -k : k)));
       if (Chop.NONE.isClose(sum, prv))
         return sum;
     }

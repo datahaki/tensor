@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Chop;
 
@@ -26,7 +27,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     while (!chop.isClose(xn0, xn1)) {
       xn0 = xn1;
       add = add.multiply(x2).divide(RealScalar.of(++index * ++index));
-      xn1 = ++count % 2 == 0 //
+      xn1 = Integers.isEven(++count) //
           ? xn1.add(add)
           : xn1.subtract(add);
       if (MAX_ITERATIONS < index)
@@ -65,7 +66,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
     while (!chop.isClose(xn0, xn1)) {
       xn0 = xn1;
       add = add.multiply(x2).divide(RealScalar.of(++index * ++index));
-      xn1 = ++count % 2 == 0 //
+      xn1 = Integers.isEven(++count) //
           ? xn1.add(add)
           : xn1.subtract(add);
       if (MAX_ITERATIONS < index)

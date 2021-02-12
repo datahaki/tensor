@@ -66,7 +66,7 @@ public abstract class BSplineFunction implements ScalarTensorFunction {
     this.degree = degree;
     this.control = control;
     half = degree / 2;
-    shift = degree % 2 == 0 //
+    shift = Integers.isEven(degree) //
         ? RationalScalar.HALF
         : RealScalar.ZERO;
   }

@@ -66,13 +66,14 @@ public class QRDecompositionTest extends TestCase {
   }
 
   public void testRankDeficient() {
+    int r = 2;
     Distribution distribution = NormalDistribution.standard();
-    Tensor m1 = RandomVariate.of(distribution, 7, 3);
-    Tensor m2 = RandomVariate.of(distribution, 3, 4);
+    Tensor m1 = RandomVariate.of(distribution, 7, r);
+    Tensor m2 = RandomVariate.of(distribution, r, 4);
     Tensor br = RandomVariate.of(distribution, 7);
     LeastSquares.usingQR(m1, br);
     Tensor matrix = m1.dot(m2);
-    assertEquals(MatrixRank.of(matrix), 3);
+    assertEquals(MatrixRank.of(matrix), r);
     _specialOps(matrix);
     {
       AssertFail.of(() -> PseudoInverse.usingQR(matrix));

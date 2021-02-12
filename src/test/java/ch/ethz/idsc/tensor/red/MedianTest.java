@@ -38,4 +38,9 @@ public class MedianTest extends TestCase {
     AssertFail.of(() -> Median.of(Tensors.empty()));
     AssertFail.of(() -> Median.of(Pi.VALUE));
   }
+
+  public void testUnorderedFail() {
+    AssertFail.of(() -> Median.ofSorted(Tensors.vector(3, 2, 1)));
+    AssertFail.of(() -> Median.ofSorted(Tensors.vector(1, 2, 1)));
+  }
 }

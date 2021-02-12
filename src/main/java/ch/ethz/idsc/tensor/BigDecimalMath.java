@@ -4,6 +4,8 @@ package ch.ethz.idsc.tensor;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+import ch.ethz.idsc.tensor.ext.Integers;
+
 /** implementation is standalone */
 /* package */ enum BigDecimalMath {
   ;
@@ -63,7 +65,7 @@ import java.math.MathContext;
     while (xn0.compareTo(xn1) != 0) {
       xn0 = xn1;
       add = add.multiply(x2).divide(BigDecimal.valueOf(++index * ++index), mathContext);
-      xn1 = ++count % 2 == 0 //
+      xn1 = Integers.isEven(++count) //
           ? xn1.add(add, mathContext)
           : xn1.subtract(add, mathContext);
     }
@@ -100,7 +102,7 @@ import java.math.MathContext;
     while (xn0.compareTo(xn1) != 0) {
       xn0 = xn1;
       add = add.multiply(x2).divide(BigDecimal.valueOf(++index * ++index), mathContext);
-      xn1 = ++count % 2 == 0 //
+      xn1 = Integers.isEven(++count) //
           ? xn1.add(add, mathContext)
           : xn1.subtract(add, mathContext);
     }

@@ -50,8 +50,8 @@ public enum Signature {
         int value = ordering[index];
         ordering[index] = ordering[value];
         ordering[value] = value;
-        ++transpositions;
+        transpositions ^= 1;
       }
-    return SIGN[transpositions % 2];
+    return SIGN[transpositions];
   }
 }

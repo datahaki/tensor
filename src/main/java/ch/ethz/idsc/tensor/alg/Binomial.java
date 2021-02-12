@@ -53,12 +53,12 @@ public class Binomial implements Serializable {
     if (0 <= m) { // n < 0 && 0 <= m
       // Binomial[n, k], (-1)^k Binomial[-n + k - 1, k]
       Scalar scalar = CACHE.apply(-n + m - 1).over(m); // (-n + m - 1) non-negative is guaranteed
-      return (m & 1) == 0 ? scalar : scalar.negate();
+      return Integers.isEven(m) ? scalar : scalar.negate();
     }
     // n < 0 && m < 0
     // Binomial[n, k] == (-1)^(k + n) Binomial[-k - 1, -n - 1]
     Scalar scalar = CACHE.apply(-m - 1).over(-n - 1);
-    return ((m ^ n) & 1) == 0 ? scalar : scalar.negate();
+    return Integers.isEven(m + n) ? scalar : scalar.negate();
   }
 
   /***************************************************/

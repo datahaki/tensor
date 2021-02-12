@@ -165,7 +165,7 @@ public enum Primitives {
   public static ByteBuffer toByteBuffer(Tensor tensor) {
     ByteBuffer byteBuffer = ByteBuffer.allocate(Numel.of(tensor));
     toStreamNumber(tensor).forEach(number -> byteBuffer.put(number.byteValue()));
-    byteBuffer.flip();
+    ((java.nio.Buffer) byteBuffer).flip();
     return byteBuffer;
   }
 }

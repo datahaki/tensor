@@ -35,14 +35,14 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
         Scalar mij = matrix.Get(i, j);
         chop.requireClose(Conjugate.FUNCTION.apply(mij), matrix.Get(j, i));
         for (int k = 0; k < j; ++k)
-          mij = mij.subtract(l.Get(i, k).multiply(Conjugate.FUNCTION.apply(l.Get(j, k))).multiply(d.Get(k)));
+          mij = mij.subtract(l.Get(i, k).multiply(d.Get(k)).multiply(Conjugate.FUNCTION.apply(l.Get(j, k))));
         if (Scalars.nonZero(mij))
           l.set(mij.divide(d.Get(j)), i, j);
       }
       Scalar mii = matrix.Get(i, i);
       for (int k = 0; k < i; ++k) {
         Scalar lik = l.Get(i, k);
-        mii = mii.subtract(lik.multiply(Conjugate.FUNCTION.apply(lik)).multiply(d.Get(k)));
+        mii = mii.subtract(lik.multiply(d.Get(k)).multiply(Conjugate.FUNCTION.apply(lik)));
       }
       d.set(mii, i);
     }
