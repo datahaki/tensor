@@ -69,7 +69,7 @@ public final class LagrangeMultiplier implements Serializable {
    * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target
    * @throws Exception if rank of matrix is not maximal */
   public Tensor usingCholesky() {
-    return CholeskyDecomposition.of(matrix).solve(b).extract(0, n);
+    return Tensor.of(CholeskyDecomposition.of(matrix).solve(b).stream().limit(n));
   }
 
   /** robust solver in case rank of eye or eqs is not maximal
@@ -77,6 +77,6 @@ public final class LagrangeMultiplier implements Serializable {
    * 
    * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target */
   public Tensor usingSvd() {
-    return LeastSquares.usingSvd(matrix, b).extract(0, n);
+    return Tensor.of(LeastSquares.usingSvd(matrix, b).stream().limit(n));
   }
 }

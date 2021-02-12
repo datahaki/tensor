@@ -31,7 +31,7 @@ public class SphereFit implements Serializable {
         MatrixRank.of(A) < cols)
       return Optional.empty();
     Tensor x = LeastSquares.of(A, b);
-    Tensor center = x.extract(0, cols - 1);
+    Tensor center = Tensor.of(x.stream().limit(cols - 1));
     return Optional.of(new SphereFit( //
         center, //
         Sqrt.FUNCTION.apply(x.Get(cols - 1).add(Norm2Squared.ofVector(center)))));

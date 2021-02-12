@@ -60,7 +60,7 @@ public enum LinearProgramming {
     // IdentityMatrix.of(m.length())
     Tensor meq = Join.of(1, m, IdentityMatrix.of(m.length()));
     Tensor xeq = minEquals(ceq, meq, b);
-    Tensor x = xeq.extract(0, c.length());
+    Tensor x = Tensor.of(xeq.stream().limit(c.length()));
     if (isFeasible(m, x, b))
       return x;
     throw TensorRuntimeException.of(c, m, x, b);

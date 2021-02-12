@@ -32,26 +32,19 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
     d = Array.fill(() -> zero, n);
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < i; ++j) {
-        Scalar aij = matrix.Get(i, j);
-        chop.requireClose(Conjugate.FUNCTION.apply(aij), matrix.Get(j, i));
-        final Scalar value;
-        if (0 == j)
-          value = aij;
-        else {
-          Tensor lik = l.get(i).extract(0, j);
-          Tensor ljk = l.get(j).extract(0, j).map(Conjugate.FUNCTION);
-          value = aij.subtract(lik.dot(d.extract(0, j).pmul(ljk)));
-        }
-        if (Scalars.nonZero(value))
-          l.set(value.divide(d.Get(j)), i, j);
+        Scalar mij = matrix.Get(i, j);
+        chop.requireClose(Conjugate.FUNCTION.apply(mij), matrix.Get(j, i));
+        for (int k = 0; k < j; ++k)
+          mij = mij.subtract(l.Get(i, k).multiply(Conjugate.FUNCTION.apply(l.Get(j, k))).multiply(d.Get(k)));
+        if (Scalars.nonZero(mij))
+          l.set(mij.divide(d.Get(j)), i, j);
       }
-      if (0 == i)
-        d.set(matrix.Get(i, i), i);
-      else {
-        Tensor lik = l.get(i).extract(0, i);
-        Tensor ljk = lik.map(Conjugate.FUNCTION); // variable name is deliberate
-        d.set(matrix.Get(i, i).subtract(lik.dot(d.extract(0, i).pmul(ljk))), i);
+      Scalar mii = matrix.Get(i, i);
+      for (int k = 0; k < i; ++k) {
+        Scalar lik = l.Get(i, k);
+        mii = mii.subtract(lik.multiply(Conjugate.FUNCTION.apply(lik)).multiply(d.Get(k)));
       }
+      d.set(mii, i);
     }
   }
 

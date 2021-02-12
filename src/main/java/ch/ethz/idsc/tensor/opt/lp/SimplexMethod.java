@@ -67,7 +67,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       throw TensorRuntimeException.of(ind);
     while (true) {
       // System.out.println(Pretty.of(tab));
-      Tensor c = tab.get(m).extract(0, n);
+      Tensor c = Tensor.of(tab.get(m).stream().limit(n));
       final int j = ArgMin.of(withoutUnits(c));
       if (Sign.isNegative(c.Get(j))) {
         { // check if unbounded

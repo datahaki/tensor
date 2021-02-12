@@ -35,9 +35,10 @@ public class LagrangeMultiplierTest extends TestCase {
 
   public void testLagrangeCholeskyFail() {
     int n = 8;
+    int r = 1;
     Distribution distribution = ExponentialDistribution.of(1);
-    Tensor eqsPre = RandomVariate.of(NormalDistribution.standard(), 2, n);
-    Tensor eqsMul = RandomVariate.of(distribution, 3, 2);
+    Tensor eqsPre = RandomVariate.of(NormalDistribution.standard(), r, n);
+    Tensor eqsMul = RandomVariate.of(distribution, 3, r);
     Tensor eqs = eqsMul.dot(eqsPre);
     Tensor target = RandomVariate.of(NormalDistribution.standard(), n);
     Tensor rhs = RandomVariate.of(distribution, 3);
