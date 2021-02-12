@@ -35,6 +35,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/Cycles.html">Cycles</a> */
 public class Cycles implements Serializable {
   private static final long serialVersionUID = 4308121452267187557L;
+  private static final BinaryPower<Cycles> BINARY_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
   private static final Cycles IDENTITY = new Cycles(Collections.emptyNavigableMap());
 
   /** Example:
@@ -156,7 +157,7 @@ public class Cycles implements Serializable {
    * @return */
   public Cycles power(BigInteger bigInteger) {
     Builder<Tensor> builder = Stream.builder();
-    cycleInterate(cycle -> StaticHelper.CYCLES_POWER.raise(new Cycles(map(Stream.of(cycle))), //
+    cycleInterate(cycle -> BINARY_POWER.raise(new Cycles(map(Stream.of(cycle))), //
         bigInteger.mod(BigInteger.valueOf(cycle.length()))).cycleInterate(builder));
     return new Cycles(map(builder.build())); // most efficient?
   }

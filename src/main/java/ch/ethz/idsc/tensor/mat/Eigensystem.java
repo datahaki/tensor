@@ -6,7 +6,6 @@ import ch.ethz.idsc.tensor.Tensor;
 /** <pre>
  * LinearSolve.of(vectors, values.pmul(vectors)) == matrix
  * Transpose.of(vectors).dot(values.pmul(vectors)) == matrix
- * LinearSolve.of(vectors, values.pmul(vectors)) == matrix
  * </pre>
  * 
  * <p>inspired by

@@ -1,8 +1,10 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -22,7 +24,10 @@ public class CoefficientListTest extends TestCase {
   public void testQuantityD1() {
     Tensor zeros = Tensors.fromString("{3[m]}");
     Tensor coeffs = CoefficientList.of(zeros);
-    Chop.NONE.requireZero(Series.of(coeffs).apply(Quantity.of(3, "m")));
+    // System.out.println(Series.of(coeffs).apply(Quantity.of(3, "m")));
+    Scalar result = Series.of(coeffs).apply(Quantity.of(3, "m"));
+    ExactScalarQ.require(result);
+    assertEquals(result, Quantity.of(0, "m"));
     Tensor roots = Roots.of(coeffs);
     assertEquals(roots, zeros);
   }
@@ -40,7 +45,7 @@ public class CoefficientListTest extends TestCase {
   public void testQuantityD3() {
     Tensor zeros = Tensors.fromString("{3[m], 4[m], 6[m]}");
     Tensor coeffs = CoefficientList.of(zeros);
-    Chop._14.requireZero(Series.of(coeffs).apply(Quantity.of(3, "m")));
+    assertEquals(Series.of(coeffs).apply(Quantity.of(3, "m")), Quantity.of(0, "m^3"));
     Chop._14.requireZero(Series.of(coeffs).apply(Quantity.of(4, "m")));
     Chop._14.requireZero(Series.of(coeffs).apply(Quantity.of(6, "m")));
     Tensor roots = Roots.of(coeffs);

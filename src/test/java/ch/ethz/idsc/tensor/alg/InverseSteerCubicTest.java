@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.alg;
 
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -19,7 +20,7 @@ public class InverseSteerCubicTest extends TestCase {
     for (Tensor t : Subdivide.of(-0.75, 0.75, 1230)) {
       Scalar d = cubic.apply((Scalar) t);
       Tensor roots = Roots.of(Tensors.of(d.negate(), c, RealScalar.ZERO, a));
-      Chop.NONE.requireAllZero(Imag.of(roots));
+      assertEquals(ExactTensorQ.require(Imag.of(roots)), Array.zeros(3));
       Chop._13.requireClose(roots.Get(1), t);
     }
   }
