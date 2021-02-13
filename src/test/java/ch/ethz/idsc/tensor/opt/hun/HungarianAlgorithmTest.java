@@ -99,19 +99,15 @@ public class HungarianAlgorithmTest extends TestCase {
 
   public void testRandom() throws ClassNotFoundException, IOException {
     Distribution distribution = UniformDistribution.unit();
-    for (int count = 0; count < 10; ++count) {
-      int row = 1 + RANDOM.nextInt(100);
-      _check3(RandomVariate.of(distribution, row, 53));
-      _check3(RandomVariate.of(distribution, 53, row));
-    }
+    int row = 40 + RANDOM.nextInt(25);
+    _check3(RandomVariate.of(distribution, row, 53));
+    _check3(RandomVariate.of(distribution, 53, row));
   }
 
   public void testDiscreteRandom() throws ClassNotFoundException, IOException {
-    Distribution distribution = DiscreteUniformDistribution.of(2, 100);
-    for (int count = 0; count < 10; ++count) {
-      int row = 1 + RANDOM.nextInt(100);
-      _check3(RandomVariate.of(distribution, row, 53));
-      _check3(RandomVariate.of(distribution, 53, row));
-    }
+    Distribution distribution = DiscreteUniformDistribution.of(-20, 100);
+    int row = 40 + RANDOM.nextInt(25);
+    _check3(RandomVariate.of(distribution, row, 53));
+    _check3(RandomVariate.of(distribution, 53, row));
   }
 }

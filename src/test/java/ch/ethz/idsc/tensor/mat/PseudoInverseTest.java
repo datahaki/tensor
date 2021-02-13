@@ -44,6 +44,7 @@ public class PseudoInverseTest extends TestCase {
       int n = m + 2;
       Tensor matrix = HilbertMatrix.of(n, m);
       assertEquals(MatrixRank.of(matrix), m);
+      ExactTensorQ.require(matrix);
       Tensor sol1 = PseudoInverse.of(matrix);
       ExactTensorQ.require(sol1);
       Tensor sol2 = PseudoInverse.usingQR(matrix);
@@ -111,13 +112,15 @@ public class PseudoInverseTest extends TestCase {
 
   public void testComplexRectangular() {
     Distribution distribution = NormalDistribution.standard(); // of(Quantity.of(0, "m"), Quantity.of(1, "m"));
-    for (int m = 5; m < 12; ++m) {
+    for (int m = 3; m < 9; ++m) {
       int n = m + 3;
       Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
           RandomVariate.of(distribution, n, m), //
           RandomVariate.of(distribution, n, m));
       Tensor piqr = PseudoInverse.usingQR(matrix);
       Tolerance.CHOP.requireClose(Dot.of(piqr, matrix), IdentityMatrix.of(m));
+      Tensor pbic = PseudoInverse.of(matrix);
+      Chop._08.requireClose(piqr, pbic);
     }
   }
 

@@ -27,18 +27,21 @@ public class BenIsraelCohenTest extends TestCase {
       Tensor pinv = benIsraelCohen.of(Chop._08, 100);
       InfluenceMatrix influenceMatrix = new InfluenceMatrixExact(design.dot(pinv));
       Tensor leverages = influenceMatrix.leverages();
-      Tolerance.CHOP.requireClose(Total.ofVector(leverages), RealScalar.of(r));
+      Chop._09.requireClose(Total.ofVector(leverages), RealScalar.of(r));
     }
   }
 
   public void testMathematica() {
-    // for the matrix in this example the algorithm PseudoInverse gives
-    // a result that deviates from Mathematica's solution significantly
     Tensor matrix = ResourceData.of("/mat/bic1.csv");
     Tensor mathem = ResourceData.of("/mat/bic1pinv.csv");
     BenIsraelCohen benIsraelCohen = new BenIsraelCohen(matrix);
     Tensor pinv = benIsraelCohen.of(Chop._08, 100);
     Tolerance.CHOP.requireClose(pinv, mathem);
+    SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
+    Chop._08.requireClose(pinv, PseudoInverse.of(svd));
+    // for the matrix in this example the algorithm PseudoInverse gives
+    // a result that deviates from Mathematica's solution significantly
+    // TODO investigate why QR decomp does not work well here!?
   }
 
   public void testReal() {

@@ -13,7 +13,7 @@ import junit.framework.TestCase;
 
 public class DenmanBeaversDetTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
-    for (int n = 1; n < 15; ++n) {
+    for (int n = 1; n < 10; ++n) {
       Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
       Tensor x2 = MatrixPower.of(x, 2);
       DenmanBeaversDet denmanBeaversDet = Serialization.copy(new DenmanBeaversDet(x2, Tolerance.CHOP)); // <- should converge faster

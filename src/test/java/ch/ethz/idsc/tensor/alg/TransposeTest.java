@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.NegativeBinomialDistribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import junit.framework.TestCase;
@@ -130,5 +132,12 @@ public class TransposeTest extends TestCase {
     Tensor result = Transpose.nonArray(tensor, 1, 0);
     Tensor correct = Tensors.fromString("{{0, 5}, {1, 6}, {{2, 3, 4}, 7}}");
     assertEquals(result, correct);
+  }
+
+  public void testDotT() {
+    Distribution distribution = NegativeBinomialDistribution.of(3, 0.7);
+    Tensor a = RandomVariate.of(distribution, 2, 4);
+    Tensor b = RandomVariate.of(distribution, 4, 3);
+    assertEquals(Transpose.of(a.dot(b)), Transpose.of(b).dot(Transpose.of(a)));
   }
 }

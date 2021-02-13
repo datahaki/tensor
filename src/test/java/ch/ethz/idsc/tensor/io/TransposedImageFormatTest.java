@@ -105,7 +105,7 @@ public class TransposedImageFormatTest extends TestCase {
   }
 
   private static Tensor _gradients() {
-    Tensor arr = Array.of(list -> RealScalar.of(list.get(1)), 2, 128);
+    Tensor arr = Array.of(list -> RealScalar.of(list.get(1)), 3, 11);
     Tensor image = Tensors.empty();
     for (ScalarTensorFunction cdf : ColorDataGradients.values())
       image.append(ArrayPlot.of(arr, cdf));

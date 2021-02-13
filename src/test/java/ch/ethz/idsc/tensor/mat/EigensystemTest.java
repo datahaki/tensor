@@ -26,24 +26,23 @@ import junit.framework.TestCase;
 public class EigensystemTest extends TestCase {
   public void testPhase1Tuning() throws IOException {
     Distribution distribution = UniformDistribution.of(-2, 2);
-    for (int n = 1; n < 13; ++n)
-      for (int count = 0; count < 10; ++count) {
-        Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
-        Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-        Tensor vectors = eigensystem.vectors();
-        Tensor values = eigensystem.values();
-        OrthogonalMatrixQ.require(vectors);
-        Tensor recons = Transpose.of(vectors).dot(values.pmul(vectors));
-        Scalar err = MatrixNormInfinity.of(matrix.subtract(recons));
-        if (!Tolerance.CHOP.isClose(matrix, recons)) {
-          System.err.println(err);
-          // System.err.println("error");
-          System.out.println("n=" + n);
-          System.out.println(matrix);
-          Export.of(HomeDirectory.file("eigensystem.csv"), matrix);
-          fail();
-        }
+    for (int n = 1; n < 13; ++n) {
+      Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
+      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+      Tensor vectors = eigensystem.vectors();
+      Tensor values = eigensystem.values();
+      OrthogonalMatrixQ.require(vectors);
+      Tensor recons = Transpose.of(vectors).dot(values.pmul(vectors));
+      Scalar err = MatrixNormInfinity.of(matrix.subtract(recons));
+      if (!Tolerance.CHOP.isClose(matrix, recons)) {
+        System.err.println(err);
+        // System.err.println("error");
+        System.out.println("n=" + n);
+        System.out.println(matrix);
+        Export.of(HomeDirectory.file("eigensystem.csv"), matrix);
+        fail();
       }
+    }
   }
 
   public void testQuantity() {

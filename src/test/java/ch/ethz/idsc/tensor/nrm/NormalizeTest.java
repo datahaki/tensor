@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.nrm;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -12,7 +13,8 @@ import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.pdf.Distribution;
-import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.LogisticDistribution;
+import ch.ethz.idsc.tensor.pdf.NegativeBinomialDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
@@ -45,10 +47,14 @@ public class NormalizeTest extends TestCase {
     _checkNormalizeAllNorms(Tensors.vector(3, 2, 1));
   }
 
-  public void testVector2() {
-    Distribution distribution = NormalDistribution.standard();
+  public void testVectorNumeric() {
+    Distribution distribution = LogisticDistribution.of(1, 100);
     _checkNormalizeAllNorms(RandomVariate.of(distribution, 1000));
-    _checkNormalizeAllNorms(RandomVariate.of(distribution, 50000));
+  }
+
+  public void testVectorExact() {
+    Distribution distribution = NegativeBinomialDistribution.of(3, RationalScalar.of(2, 3));
+    _checkNormalizeAllNorms(RandomVariate.of(distribution, 1000));
   }
 
   public void testNorm1Documentation() {

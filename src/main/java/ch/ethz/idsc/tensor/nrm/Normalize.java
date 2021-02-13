@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Normalize.html">Normalize</a> */
 public class Normalize implements TensorUnaryOperator {
-  private static final long serialVersionUID = -9019309289622999084L;
+  private static final long serialVersionUID = 1092317967870256569L;
 
   /** Examples:
    * <pre>
@@ -64,21 +64,21 @@ public class Normalize implements TensorUnaryOperator {
   }
 
   /***************************************************/
-  /* package */ final TensorScalarFunction tensorScalarFunction;
+  private final TensorScalarFunction tensorScalarFunction;
 
-  /* package */ Normalize(TensorScalarFunction tensorScalarFunction) {
+  private Normalize(TensorScalarFunction tensorScalarFunction) {
     this.tensorScalarFunction = tensorScalarFunction;
   }
 
   @Override
-  public Tensor apply(Tensor vector) { /* non-final */
+  public Tensor apply(Tensor vector) {
     return normalize(vector, tensorScalarFunction.apply(vector));
   }
 
   /** @param vector
    * @param scalar equals to tensorScalarFunction.apply(vector)
    * @return */
-  /* package */ final Tensor normalize(Tensor vector, Scalar scalar) {
+  /* package */ Tensor normalize(Tensor vector, Scalar scalar) {
     vector = vector.divide(scalar); // eliminate common Unit if present
     scalar = tensorScalarFunction.apply(vector); // for verification
     Scalar error_next = Abs.between(scalar, RealScalar.ONE); // error
@@ -92,5 +92,10 @@ public class Normalize implements TensorUnaryOperator {
       }
     Tolerance.CHOP.requireZero(error_next);
     return vector;
+  }
+
+  @Override // from Object
+  public String toString() {
+    return getClass().getSimpleName();
   }
 }

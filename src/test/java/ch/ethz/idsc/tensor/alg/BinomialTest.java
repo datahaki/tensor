@@ -43,11 +43,10 @@ public class BinomialTest extends TestCase {
   }
 
   public void testOrder() {
-    assertEquals(Binomial.of(0, 0), RealScalar.ONE);
-    assertEquals(Binomial.of(0, 7), RealScalar.ZERO);
-    assertEquals(Binomial.of(3, 7), RealScalar.ZERO);
-    // case defined in Mathematica
-    // System.out.println(Binomial.of(-3, 7));
+    assertEquals(Binomial.of(+0, 0), RealScalar.ONE);
+    assertEquals(Binomial.of(+0, 7), RealScalar.ZERO);
+    assertEquals(Binomial.of(+3, 7), RealScalar.ZERO);
+    assertEquals(Binomial.of(-3, 7), RealScalar.of(-36));
   }
 
   public void testDecimal() {

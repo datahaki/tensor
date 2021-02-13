@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
 public enum VectorNorm1 {
   ;
+  public static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorNorm1::of);
+
   /** @param vector
    * @return 1-norm of given vector, i.e. |a_1| + ... + |a_n| also known as ManhattanDistance */
   public static Scalar of(Tensor vector) {
@@ -29,6 +31,4 @@ public enum VectorNorm1 {
   public static Scalar between(Tensor v1, Tensor v2) {
     return of(v1.subtract(v2));
   }
-
-  public static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorNorm1::of);
 }

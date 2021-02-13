@@ -2,12 +2,15 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Imag;
 
 /** The pseudo inverse is the least squares solution x to
  * <pre>
@@ -40,11 +43,17 @@ public enum PseudoInverse {
   public static Tensor of(Tensor matrix) {
     if (ExactTensorQ.of(matrix))
       try {
-        usingCholesky(matrix);
+        return usingCholesky(matrix);
       } catch (Exception exception) {
         // matrix does not have maximal rank
       }
-    return LeastSquares.of(matrix, IdentityMatrix.of(matrix.length()));
+    boolean complex = matrix.flatten(-1).map(Scalar.class::cast).map(Imag.FUNCTION).anyMatch(Scalars::nonZero);
+    if (complex) {
+      return usingBic(matrix);
+      // return LeastSquares.of(matrix, IdentityMatrix.of(matrix.length()));
+      // LONGTERM BenIsrealCohen
+    }
+    return usingSvd(matrix, Tolerance.CHOP);
   }
 
   /***************************************************/
@@ -58,6 +67,17 @@ public enum PseudoInverse {
     return m <= n //
         ? CholeskyDecomposition.of(mt.dot(matrix)).solve(mt)
         : ConjugateTranspose.of(CholeskyDecomposition.of(matrix.dot(mt)).solve(matrix));
+  }
+
+  /***************************************************/
+  private static final int MAX_ITERATIONS = 100;
+
+  /* package */ static Tensor usingBic(Tensor matrix) {
+    int n = matrix.length();
+    int m = Unprotect.dimension1(matrix);
+    if (m <= n)
+      return new BenIsraelCohen(matrix).of(Chop._08, MAX_ITERATIONS);
+    return Transpose.of(new BenIsraelCohen(Transpose.of(matrix)).of(Chop._08, MAX_ITERATIONS));
   }
 
   /***************************************************/

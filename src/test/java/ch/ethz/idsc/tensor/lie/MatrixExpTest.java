@@ -165,16 +165,16 @@ public class MatrixExpTest extends TestCase {
   }
 
   public void testComplex1() {
-    Tensor matrix = ConstantArray.of(Scalars.fromString("-10-1*I"), 3, 3);
-    Tensor tensor1 = MatrixExp.of(matrix);
-    Tensor tensor2 = MatrixExp.series(matrix);
+    Tensor matrix = ConstantArray.of(Scalars.fromString("-10-1*I"), 2, 2);
+    Tensor tensor1 = MatrixExp.of(matrix); // 19
+    Tensor tensor2 = MatrixExp.series(matrix); // 94
     Chop._03.requireClose(tensor1, tensor2);
   }
 
   public void testComplex2() {
     Tensor matrix = ConstantArray.of(Scalars.fromString("-10.0-1.0*I"), 3, 3);
-    Tensor tensor1 = MatrixExp.of(matrix);
-    Tensor tensor2 = MatrixExp.series(matrix);
+    Tensor tensor1 = MatrixExp.of(matrix); // 19
+    Tensor tensor2 = MatrixExp.series(matrix); // 119
     Chop._03.requireClose(tensor1, tensor2);
   }
 
