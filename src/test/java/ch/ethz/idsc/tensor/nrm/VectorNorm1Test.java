@@ -43,6 +43,6 @@ public class VectorNorm1Test extends TestCase {
   }
 
   public void testEmptyStreamFail() {
-    AssertFail.of(() -> VectorNorm1.ofVector(Stream.of()));
+    AssertFail.of(() -> VectorNorm1.of(Stream.of()));
   }
 }

@@ -1,8 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor.nrm;
 
-import java.io.Serializable;
-
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -10,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Power;
 
@@ -23,23 +22,23 @@ import ch.ethz.idsc.tensor.sca.Power;
  * <li>p==2, or
  * <li>p==Infinity
  * </ul> */
-public class VectorNorm implements Serializable {
-  private static final long serialVersionUID = -2668949364257998603L;
+public class VectorNorm implements TensorScalarFunction {
+  private static final long serialVersionUID = -913697110648849886L;
 
   /** Hint: for enhanced precision, use p as instance of {@link RationalScalar} if possible
    * 
    * @param p exponent greater or equals 1
    * @return
    * @throws Exception if p is less than 1 */
-  public static VectorNorm with(Scalar p) {
+  public static TensorScalarFunction of(Scalar p) {
     return new VectorNorm(p);
   }
 
   /** @param p exponent greater or equals 1
    * @return
    * @throws Exception if p is less than 1 */
-  public static VectorNorm with(Number p) {
-    return with(RealScalar.of(p));
+  public static TensorScalarFunction of(Number p) {
+    return of(RealScalar.of(p));
   }
 
   /***************************************************/
@@ -48,7 +47,7 @@ public class VectorNorm implements Serializable {
   private final Scalar p_reciprocal;
 
   // constructor also called from SchattenNorm
-  /* package */ VectorNorm(Scalar p) {
+  private VectorNorm(Scalar p) {
     if (Scalars.lessThan(p, RealScalar.ONE))
       throw TensorRuntimeException.of(p);
     p_power = Power.function(p);
@@ -56,7 +55,8 @@ public class VectorNorm implements Serializable {
     p_reciprocal = p.reciprocal();
   }
 
-  public Scalar of(Tensor vector) {
+  @Override
+  public Scalar apply(Tensor vector) {
     return Power.of(vector.stream() //
         .map(Scalar.class::cast) //
         .map(Abs.FUNCTION) //
@@ -65,8 +65,8 @@ public class VectorNorm implements Serializable {
         p_reciprocal);
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
-    return String.format("%s[p=%s]", getClass().getSimpleName(), p);
+    return String.format("%s[%s]", getClass().getSimpleName(), p);
   }
 }

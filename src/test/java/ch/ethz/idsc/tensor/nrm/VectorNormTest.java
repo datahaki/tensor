@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -18,28 +19,28 @@ import junit.framework.TestCase;
 public class VectorNormTest extends TestCase {
   public void testOdd() {
     Tensor tensor = Tensors.vector(2.3, 1.0, 3.2);
-    Scalar n = VectorNorm.with(1.5).of(tensor);
+    Scalar n = VectorNorm.of(1.5).apply(tensor);
     // 4.7071
     assertEquals(n, RealScalar.of(4.707100665786122));
   }
 
   public void testNormP() {
-    Scalar n = VectorNorm.with(1.23).of(Tensors.vector(1, 2, 3));
+    Scalar n = VectorNorm.of(1.23).apply(Tensors.vector(1, 2, 3));
     assertEquals(n, RealScalar.of(4.982125211204371));
   }
 
   public void testNormalize() {
-    VectorNorm vni = VectorNorm.with(2.6);
-    Tensor nrm = Normalize.with(vni::of).apply(Tensors.vector(1, 2, 3));
-    Chop._15.requireClose(vni.of(nrm), RealScalar.ONE);
+    TensorScalarFunction vni = VectorNorm.of(2.6);
+    Tensor nrm = Normalize.with(vni).apply(Tensors.vector(1, 2, 3));
+    Chop._15.requireClose(vni.apply(nrm), RealScalar.ONE);
   }
 
   public void testNormalize2() {
     Distribution distribution = NormalDistribution.standard();
-    VectorNorm vni = VectorNorm.with(3.4);
+    TensorScalarFunction vni = VectorNorm.of(3.4);
     Tensor vector = RandomVariate.of(distribution, 1000);
-    Tensor result = Normalize.with(vni::of).apply(vector);
-    Scalar norm = vni.of(result);
+    Tensor result = Normalize.with(vni).apply(vector);
+    Scalar norm = vni.apply(result);
     Chop._15.requireClose(norm, RealScalar.ONE);
   }
 
@@ -47,7 +48,7 @@ public class VectorNormTest extends TestCase {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(4, "m");
     Tensor vec = Tensors.of(qs1, RealScalar.ZERO, qs2);
-    Scalar lhs = VectorNorm.with(RationalScalar.of(7, 3)).of(vec);
+    Scalar lhs = VectorNorm.of(RationalScalar.of(7, 3)).apply(vec);
     Scalar rhs = Quantity.of(4.774145448367236, "m");
     Chop._13.requireClose(lhs, rhs);
   }
@@ -56,28 +57,28 @@ public class VectorNormTest extends TestCase {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(4, "m");
     Tensor vec = Tensors.of(qs1, RealScalar.ZERO, qs2);
-    Scalar lhs = VectorNorm.with(Math.PI).of(vec); // the result has unit [m^1.0]
+    Scalar lhs = VectorNorm.of(Math.PI).apply(vec); // the result has unit [m^1.0]
     Scalar rhs = Quantity.of(4.457284396597481, "m");
     Chop._13.requireClose(lhs, rhs);
   }
 
   public void testToString() {
-    VectorNorm vectorNormInterface = VectorNorm.with(3);
+    TensorScalarFunction vectorNormInterface = VectorNorm.of(3);
     String string = vectorNormInterface.toString();
     assertTrue(string.startsWith("VectorNorm["));
   }
 
   public void testNormPFail() {
-    AssertFail.of(() -> VectorNorm.with(0.99));
+    AssertFail.of(() -> VectorNorm.of(0.99));
   }
 
   public void testMatrixFail() {
-    VectorNorm vectorNormInterface = VectorNorm.with(2.6);
-    AssertFail.of(() -> vectorNormInterface.of(IdentityMatrix.of(2)));
+    TensorScalarFunction vectorNormInterface = VectorNorm.of(2.6);
+    AssertFail.of(() -> vectorNormInterface.apply(IdentityMatrix.of(2)));
   }
 
   public void testScalarFail() {
-    VectorNorm vectorNormInterface = VectorNorm.with(2.6);
-    AssertFail.of(() -> vectorNormInterface.of(RealScalar.of(12)));
+    TensorScalarFunction vectorNormInterface = VectorNorm.of(2.6);
+    AssertFail.of(() -> vectorNormInterface.apply(RealScalar.of(12)));
   }
 }

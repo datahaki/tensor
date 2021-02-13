@@ -12,8 +12,8 @@ import ch.ethz.idsc.tensor.Tensor;
 
   /** @param design matrix
    * @throws Exception if design matrix does not have maximal rank */
-  public InfluenceMatrixExact(Tensor design) {
-    this.matrix = design.dot(PseudoInverse.usingCholesky(design));
+  public InfluenceMatrixExact(Tensor matrix) {
+    this.matrix = matrix;
   }
 
   @Override // from InfluenceMatrix

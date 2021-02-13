@@ -13,13 +13,13 @@ public enum VectorNorm1 {
   /** @param vector
    * @return 1-norm of given vector, i.e. |a_1| + ... + |a_n| also known as ManhattanDistance */
   public static Scalar of(Tensor vector) {
-    return ofVector(vector.stream().map(Scalar.class::cast));
+    return of(vector.stream().map(Scalar.class::cast));
   }
 
   /** @param stream of scalars
    * @return sum of absolute values of scalars in given stream
    * @throws Exception if stream is empty */
-  public static Scalar ofVector(Stream<Scalar> stream) {
+  public static Scalar of(Stream<Scalar> stream) {
     return stream.map(Abs.FUNCTION).reduce(Scalar::add).get();
   }
 

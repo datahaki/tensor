@@ -53,7 +53,7 @@ public enum Primitives {
   public static DoubleBuffer toDoubleBuffer(Tensor tensor) {
     DoubleBuffer doubleBuffer = DoubleBuffer.allocate(Numel.of(tensor));
     toStreamNumber(tensor).mapToDouble(Number::doubleValue).forEach(doubleBuffer::put);
-    doubleBuffer.flip();
+    ((java.nio.Buffer) doubleBuffer).flip();
     return doubleBuffer;
   }
 
@@ -85,7 +85,7 @@ public enum Primitives {
   public static FloatBuffer toFloatBuffer(Tensor tensor) {
     FloatBuffer floatBuffer = FloatBuffer.allocate(Numel.of(tensor));
     toStreamNumber(tensor).map(Number::floatValue).forEach(floatBuffer::put);
-    floatBuffer.flip();
+    ((java.nio.Buffer) floatBuffer).flip();
     return floatBuffer;
   }
 
@@ -111,7 +111,7 @@ public enum Primitives {
   public static LongBuffer toLongBuffer(Tensor tensor) {
     LongBuffer longBuffer = LongBuffer.allocate(Numel.of(tensor));
     toStreamNumber(tensor).mapToLong(Number::longValue).forEach(longBuffer::put);
-    longBuffer.flip();
+    ((java.nio.Buffer) longBuffer).flip();
     return longBuffer;
   }
 
@@ -149,7 +149,7 @@ public enum Primitives {
   public static IntBuffer toIntBuffer(Tensor tensor) {
     IntBuffer intBuffer = IntBuffer.allocate(Numel.of(tensor));
     toStreamNumber(tensor).mapToInt(Number::intValue).forEach(intBuffer::put);
-    intBuffer.flip();
+    ((java.nio.Buffer) intBuffer).flip();
     return intBuffer;
   }
 

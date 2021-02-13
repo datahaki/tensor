@@ -93,10 +93,10 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   private void initU1(int i) {
     Scalar p = _0;
-    Scalar scale = VectorNorm1.ofVector(u.stream().skip(i).map(row -> row.Get(i)));
+    Scalar scale = VectorNorm1.of(u.stream().skip(i).map(row -> row.Get(i)));
     if (Scalars.nonZero(scale)) {
       u.stream().skip(i).forEach(uk -> uk.set(scale::under, i));
-      Scalar s = VectorNorm2Squared.ofVector(u.stream().skip(i).map(row -> row.Get(i)));
+      Scalar s = VectorNorm2Squared.of(u.stream().skip(i).map(row -> row.Get(i)));
       Scalar f = u.Get(i, i);
       p = CopySign.of(Sqrt.FUNCTION.apply(s), f).negate();
       Scalar h = f.multiply(p).subtract(s);
