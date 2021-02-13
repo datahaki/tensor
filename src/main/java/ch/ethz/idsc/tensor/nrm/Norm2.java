@@ -1,11 +1,12 @@
 // code by jph
-package ch.ethz.idsc.tensor.red;
+package ch.ethz.idsc.tensor.nrm;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
+import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** 2-norm, uses SVD for matrices */

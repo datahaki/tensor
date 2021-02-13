@@ -4,15 +4,15 @@ package ch.ethz.idsc.tensor.usr;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.nrm.Norm;
+import ch.ethz.idsc.tensor.nrm.Normalize;
+import ch.ethz.idsc.tensor.nrm.VectorNorm;
+import ch.ethz.idsc.tensor.nrm.VectorNormInterface;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
-import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.red.VectorNorm;
-import ch.ethz.idsc.tensor.red.VectorNormInterface;
 
 /* package */ enum NormalizeDemo {
   ;

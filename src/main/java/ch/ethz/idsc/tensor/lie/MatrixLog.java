@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
-import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.nrm.Norm2Bound;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -99,9 +99,8 @@ public enum MatrixLog {
     Tensor sum = nxt;
     for (int k = 2; k < MAX_ITERATIONS; ++k) {
       nxt = nxt.dot(x);
-      Tensor prv = sum;
-      sum = sum.add(nxt.divide(DoubleScalar.of(Integers.isEven(k) ? -k : k)));
-      if (Chop.NONE.isClose(sum, prv))
+      Scalar den = DoubleScalar.of(Integers.isEven(k) ? -k : k);
+      if (sum.equals(sum = sum.add(nxt.divide(den))))
         return sum;
     }
     throw TensorRuntimeException.of(x); // insufficient convergence

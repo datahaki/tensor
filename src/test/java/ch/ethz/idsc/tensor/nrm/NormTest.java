@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.red;
+package ch.ethz.idsc.tensor.nrm;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -14,16 +14,16 @@ import junit.framework.TestCase;
 public class NormTest extends TestCase {
   public void testOneInfNorm1() {
     Tensor a = Tensors.vector(3, -4);
-    assertEquals(Norm._1.of(a), Scalars.fromString("7"));
-    assertEquals(Norm.INFINITY.of(a), Scalars.fromString("4"));
+    assertEquals(Norm._1.ofVector(a), Scalars.fromString("7"));
+    assertEquals(Norm.INFINITY.ofVector(a), Scalars.fromString("4"));
   }
 
   public void testOneInfNorm2() {
     Tensor a = Tensors.vector(1, 2);
     Tensor b = Tensors.vector(3, 4);
     Tensor c = Tensors.of(a, b);
-    assertEquals(Norm._1.of(c), Scalars.fromString("6"));
-    assertEquals(Norm.INFINITY.of(c), Scalars.fromString("7"));
+    assertEquals(Norm._1.ofMatrix(c), Scalars.fromString("6"));
+    assertEquals(Norm.INFINITY.ofMatrix(c), Scalars.fromString("7"));
   }
 
   public void testOneInfNorm3() {
@@ -47,14 +47,17 @@ public class NormTest extends TestCase {
   }
 
   public void testEmptyFail() {
-    AssertFail.of(() -> Norm._1.of(Tensors.empty()));
+    AssertFail.of(() -> Norm._1.ofVector(Tensors.empty()));
+    AssertFail.of(() -> Norm._1.ofMatrix(Tensors.empty()));
   }
 
   public void testScalarFail() {
-    AssertFail.of(() -> Norm._1.of(RealScalar.ONE));
+    AssertFail.of(() -> Norm._1.ofVector(RealScalar.ONE));
+    AssertFail.of(() -> Norm._1.ofMatrix(RealScalar.ONE));
   }
 
   public void testUnstructuredFail() {
-    AssertFail.of(() -> Norm._1.of(Tensors.fromString("{{1, 2}, {3}}")));
+    AssertFail.of(() -> Norm._1.ofVector(Tensors.fromString("{{1, 2}, {3}}")));
+    AssertFail.of(() -> Norm._1.ofMatrix(Tensors.fromString("{{1, 2}, {3}}")));
   }
 }

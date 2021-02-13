@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.alg;
+package ch.ethz.idsc.tensor.nrm;
 
 import java.io.IOException;
 
@@ -16,7 +16,6 @@ import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Projection;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -27,9 +26,9 @@ import junit.framework.TestCase;
 public class NormalizeTest extends TestCase {
   // function requires that vector != 0
   private static void _checkNormalize(Tensor vector, Norm norm) {
-    Scalar value = norm.of(Normalize.with(norm).apply(vector));
+    Scalar value = norm.ofVector(Normalize.with(norm).apply(vector));
     Chop._13.requireClose(value, RealScalar.ONE);
-    Chop._13.requireClose(norm.of(NormalizeUnlessZero.with(norm).apply(vector)), RealScalar.ONE);
+    Chop._13.requireClose(norm.ofVector(NormalizeUnlessZero.with(norm).apply(vector)), RealScalar.ONE);
   }
 
   private static void _checkNormalizeAllNorms(Tensor vector) {

@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
-import ch.ethz.idsc.tensor.red.VectorNormInterface;
+import ch.ethz.idsc.tensor.nrm.VectorNormInterface;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** Mahalanobis is an alternative to {@link InfluenceMatrix} for the computation of

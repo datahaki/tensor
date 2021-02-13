@@ -5,11 +5,11 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.NormalizeUnlessZero;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
-import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.nrm.Norm;
+import ch.ethz.idsc.tensor.nrm.Norm2Squared;
+import ch.ethz.idsc.tensor.nrm.NormalizeUnlessZero;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 
 /** computes dot product {I - TensorProduct[vc, vr]) . tensor

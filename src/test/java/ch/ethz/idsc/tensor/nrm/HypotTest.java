@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.red;
+package ch.ethz.idsc.tensor.nrm;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -48,7 +48,7 @@ public class HypotTest extends TestCase {
   private static void checkVectorExact(Tensor vec) {
     Scalar hyp = Hypot.ofVector(vec);
     assertTrue(hyp instanceof RationalScalar);
-    Scalar nrm = Norm._2.of(vec);
+    Scalar nrm = Norm._2.ofVector(vec);
     assertTrue(nrm instanceof RationalScalar);
     assertEquals(hyp, nrm);
   }

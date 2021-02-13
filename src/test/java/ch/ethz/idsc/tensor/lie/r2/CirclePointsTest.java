@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.itp.BSplineFunction;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.nrm.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Decrement;
 import ch.ethz.idsc.tensor.usr.AssertFail;

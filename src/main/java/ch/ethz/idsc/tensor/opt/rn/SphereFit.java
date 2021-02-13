@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.mat.LeastSquares;
 import ch.ethz.idsc.tensor.mat.MatrixRank;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.nrm.Norm2Squared;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** reference: "Circle fitting by linear and non-linear least squares", by J. D. Coope */

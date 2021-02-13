@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.red.Frobenius;
+import ch.ethz.idsc.tensor.nrm.Frobenius;
 import ch.ethz.idsc.tensor.usr.TestFile;
 import junit.framework.TestCase;
 

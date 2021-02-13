@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
-import ch.ethz.idsc.tensor.red.Hypot;
+import ch.ethz.idsc.tensor.nrm.Hypot;
 import junit.framework.TestCase;
 
 public class OuterTest extends TestCase {

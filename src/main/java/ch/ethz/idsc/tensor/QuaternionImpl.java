@@ -9,8 +9,8 @@ import java.util.Optional;
 
 import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.lie.Cross;
-import ch.ethz.idsc.tensor.red.Hypot;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.Hypot;
+import ch.ethz.idsc.tensor.nrm.Norm;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 import ch.ethz.idsc.tensor.sca.Chop;

@@ -1,13 +1,9 @@
 // code by jph
-package ch.ethz.idsc.tensor.red;
-
-import java.util.Optional;
+package ch.ethz.idsc.tensor.nrm;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.alg.TensorRank;
 
 /** The enumeration defines the 1-, 2-, and Infinity-norm for vectors, and matrices.
  * The return value is of type {@link RealScalar}.
@@ -52,31 +48,5 @@ public enum Norm implements NormInterface {
   @Override // from NormInterface
   public Scalar ofMatrix(Tensor matrix) {
     return normInterface.ofMatrix(matrix);
-  }
-
-  /** Hint: Whenever the application layer is aware of the rank of the given tensor,
-   * we recommend to invoke the norm computation directly via
-   * <ul>
-   * <li>Norm.X::ofVector
-   * <li>Norm.X::ofMatrix
-   * </ul>
-   * 
-   * <p>universal entry point to compute the norm of a tensor of rank 1 or 2
-   * 
-   * @param tensor is a vector or matrix
-   * @return norm of given tensor */
-  public Scalar of(Tensor tensor) {
-    Optional<Integer> rank = TensorRank.ofArray(tensor);
-    if (rank.isPresent())
-      switch (rank.get()) {
-      // Norm::of(Scalar) is not supported to prevent mistakes.
-      // For scalars use Scalar::abs instead
-      case 1:
-        return normInterface.ofVector(tensor);
-      case 2:
-        return normInterface.ofMatrix(tensor);
-      default:
-      }
-    throw TensorRuntimeException.of(tensor);
   }
 }

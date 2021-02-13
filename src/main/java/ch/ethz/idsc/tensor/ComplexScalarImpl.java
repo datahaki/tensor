@@ -6,9 +6,9 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.Optional;
 
+import ch.ethz.idsc.tensor.nrm.Hypot;
 import ch.ethz.idsc.tensor.num.BinaryPower;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.red.Hypot;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Ceiling;

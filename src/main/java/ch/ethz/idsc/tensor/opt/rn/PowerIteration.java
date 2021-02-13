@@ -4,11 +4,11 @@ package ch.ethz.idsc.tensor.opt.rn;
 import java.util.Optional;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.nrm.Norm;
+import ch.ethz.idsc.tensor.nrm.Normalize;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** The algorithm is also known as the <em>Von Mises iteration</em>.

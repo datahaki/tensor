@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.Norm;
 
 public class EuclideanNdCenter implements NdCenterInterface, Serializable {
   private static final long serialVersionUID = 4287308934962123171L;

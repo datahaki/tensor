@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.red;
+package ch.ethz.idsc.tensor.nrm;
 
 import java.lang.reflect.Modifier;
 
@@ -17,14 +17,14 @@ public class NormInfinityTest extends TestCase {
     Scalar qs2 = Quantity.of(-4, "m");
     Scalar qs3 = Quantity.of(4, "m");
     Tensor vec = Tensors.of(qs1, qs2);
-    assertEquals(Norm.INFINITY.of(vec), qs3);
+    assertEquals(Norm.INFINITY.ofVector(vec), qs3);
   }
 
   public void testQuantityMixed() {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(2, "m");
     Tensor vec = Tensors.of(qs1, qs2);
-    Scalar nin = Norm.INFINITY.of(vec);
+    Scalar nin = Norm.INFINITY.ofVector(vec);
     Scalar act = Quantity.of(3, "m");
     assertEquals(nin, act);
   }

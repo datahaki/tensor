@@ -2,9 +2,9 @@
 package ch.ethz.idsc.tensor.num;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Normalize;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.nrm.Norm;
+import ch.ethz.idsc.tensor.nrm.Normalize;
 import ch.ethz.idsc.tensor.sca.Exp;
 
 /** inspired by

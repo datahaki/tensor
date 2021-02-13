@@ -1,11 +1,11 @@
 // code by jph
-package ch.ethz.idsc.tensor.lie;
+package ch.ethz.idsc.tensor.nrm;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.red.Frobenius;
+import ch.ethz.idsc.tensor.lie.MatrixExp;
+import ch.ethz.idsc.tensor.lie.MatrixLog;
 import ch.ethz.idsc.tensor.red.Min;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** References:
@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * 
  * @see MatrixExp
  * @see MatrixLog */
-/* package */ enum Norm2Bound {
+public enum Norm2Bound {
   ;
   /** @param matrix
    * @return upper bound to 2-norm of given matrix up to numerical precision */

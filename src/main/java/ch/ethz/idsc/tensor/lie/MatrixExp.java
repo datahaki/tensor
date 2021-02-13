@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.nrm.Norm2Bound;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Exp;
@@ -55,9 +56,7 @@ public enum MatrixExp {
     sum = N.DOUBLE.of(sum); // switch to numeric precision
     for (int k = n + 1; k < MAX_ITERATIONS; ++k) {
       nxt = nxt.dot(matrix).divide(RealScalar.of(k));
-      Tensor prv = sum;
-      sum = sum.add(nxt);
-      if (Chop.NONE.isClose(sum, prv))
+      if (sum.equals(sum = sum.add(nxt)))
         return sum;
     }
     throw TensorRuntimeException.of(matrix); // insufficient convergence

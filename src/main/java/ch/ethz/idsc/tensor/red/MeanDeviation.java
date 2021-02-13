@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.red;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.nrm.Norm1;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/MeanDeviation.html">MeanDeviation</a> */
