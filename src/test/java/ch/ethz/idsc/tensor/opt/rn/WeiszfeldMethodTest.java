@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.Tolerance;
-import ch.ethz.idsc.tensor.nrm.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -58,7 +58,7 @@ public class WeiszfeldMethodTest extends TestCase {
     );
     SpatialMedian spatialMedian = Serialization.copy(WeiszfeldMethod.with(Chop._02));
     Tensor sol = spatialMedian.uniform(tensor).get();
-    assertTrue(Norm._2.between(sol, tensor.get(1)).number().doubleValue() < 2e-2);
+    assertTrue(VectorNorm2.between(sol, tensor.get(1)).number().doubleValue() < 2e-2);
   }
 
   public void testWeighted() {
@@ -71,7 +71,7 @@ public class WeiszfeldMethodTest extends TestCase {
     SpatialMedian spatialMedian = WeiszfeldMethod.with(Chop._10);
     Tensor weights = Tensors.vector(10, 1, 1, 1);
     Tensor sol = spatialMedian.weighted(tensor, weights.divide(Total.ofVector(weights))).get();
-    assertTrue(Norm._2.between(sol, tensor.get(0)).number().doubleValue() < 2e-2);
+    assertTrue(VectorNorm2.between(sol, tensor.get(0)).number().doubleValue() < 2e-2);
   }
 
   public void testQuantity() {

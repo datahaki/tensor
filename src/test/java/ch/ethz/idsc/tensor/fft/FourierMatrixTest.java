@@ -8,8 +8,9 @@ import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
-import ch.ethz.idsc.tensor.nrm.Frobenius;
-import ch.ethz.idsc.tensor.nrm.Norm;
+import ch.ethz.idsc.tensor.nrm.FrobeniusNorm;
+import ch.ethz.idsc.tensor.nrm.MatrixNorm1;
+import ch.ethz.idsc.tensor.nrm.MatrixNormInfinity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -35,9 +36,9 @@ public class FourierMatrixTest extends TestCase {
 
   public void testNorm4() {
     Tensor m = FourierMatrix.of(4);
-    assertEquals(Norm._1.ofMatrix(m), RealScalar.of(2));
-    assertEquals(Norm._1.ofMatrix(m), Norm.INFINITY.ofMatrix(m));
-    assertEquals(Norm._1.ofMatrix(m), Frobenius.of(m));
+    assertEquals(MatrixNorm1.of(m), RealScalar.of(2));
+    assertEquals(MatrixNorm1.of(m), MatrixNormInfinity.of(m));
+    assertEquals(MatrixNorm1.of(m), FrobeniusNorm.of(m));
     // Norm._2.of m == 1 is confirmed with Mathematica
   }
 

@@ -3,27 +3,15 @@ package ch.ethz.idsc.tensor.nrm;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.MatrixQ;
 
 /** implementation consistent with Mathematica
  * Norm[{3, 4}, "Frobenius"] == 5 */
-public enum Frobenius implements NormInterface {
-  NORM;
-
-  @Override // from VectorNormInterface
-  public Scalar ofVector(Tensor vector) {
-    return Norm._2.ofVector(vector);
-  }
-
-  @Override // from NormInterface
-  public Scalar ofMatrix(Tensor matrix) {
-    return of(MatrixQ.require(matrix));
-  }
-
+public enum FrobeniusNorm {
+  ;
   /** @param tensor of arbitrary rank
    * @return Frobenius norm of given tensor */
   public static Scalar of(Tensor tensor) {
-    return Norm._2.ofVector(Tensor.of(tensor.flatten(-1)));
+    return VectorNorm2.of(Tensor.of(tensor.flatten(-1)));
   }
 
   /** @param t1

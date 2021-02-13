@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.mat.Tolerance;
-import ch.ethz.idsc.tensor.nrm.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Conjugate;
@@ -54,7 +54,7 @@ public class ComplexScalarImplTest extends TestCase {
     Scalar c = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
     assertEquals(Real.of(c), RealScalar.of(2));
     assertEquals(Imag.of(c), RationalScalar.of(5, 8));
-    assertEquals(Abs.of(c), Norm._2.ofVector(Tensors.of(RealScalar.of(2), RationalScalar.of(5, 8))));
+    assertEquals(Abs.of(c), VectorNorm2.of(Tensors.of(RealScalar.of(2), RationalScalar.of(5, 8))));
     Scalar r = RealScalar.of(-6);
     assertEquals(Real.of(r), r);
     assertEquals(Imag.of(r), RealScalar.ZERO);

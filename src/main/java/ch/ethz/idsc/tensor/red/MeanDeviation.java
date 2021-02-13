@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor.red;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.nrm.Norm1;
+import ch.ethz.idsc.tensor.nrm.VectorNorm1;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/MeanDeviation.html">MeanDeviation</a> */
@@ -15,7 +15,7 @@ public enum MeanDeviation {
    * @throws Exception if input is not a vector, or is empty */
   public static Scalar ofVector(Tensor vector) {
     Scalar nmean = (Scalar) Mean.of(vector).negate();
-    return Norm1.ofVector(vector.stream().map(nmean::add)) //
+    return VectorNorm1.ofVector(vector.stream().map(nmean::add)) //
         .divide(RealScalar.of(vector.length()));
   }
 }

@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.mat.LeastSquares;
 import ch.ethz.idsc.tensor.mat.MatrixRank;
-import ch.ethz.idsc.tensor.nrm.Norm2Squared;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** reference: "Circle fitting by linear and non-linear least squares", by J. D. Coope */
@@ -25,7 +25,7 @@ public class SphereFit implements Serializable {
     Tensor A = Tensor.of(points.stream() //
         .map(point -> point.add(point)) //
         .map(point -> point.append(RealScalar.ONE)));
-    Tensor b = Tensor.of(points.stream().map(Norm2Squared::ofVector));
+    Tensor b = Tensor.of(points.stream().map(VectorNorm2Squared::of));
     int cols = Unprotect.dimension1(A);
     if (A.length() < cols || //
         MatrixRank.of(A) < cols)
@@ -34,7 +34,7 @@ public class SphereFit implements Serializable {
     Tensor center = Tensor.of(x.stream().limit(cols - 1));
     return Optional.of(new SphereFit( //
         center, //
-        Sqrt.FUNCTION.apply(x.Get(cols - 1).add(Norm2Squared.ofVector(center)))));
+        Sqrt.FUNCTION.apply(x.Get(cols - 1).add(VectorNorm2Squared.of(center)))));
   }
 
   /***************************************************/

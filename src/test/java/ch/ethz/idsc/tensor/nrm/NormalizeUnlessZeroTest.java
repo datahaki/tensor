@@ -6,36 +6,15 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NormalizeUnlessZeroTest extends TestCase {
-  public void testOk1() {
-    Tensor v = Tensors.vector(0, 0, 0, 0);
-    assertEquals(v, NormalizeUnlessZero.with(Norm._2::ofVector).apply(v));
-    for (Norm n : Norm.values())
-      assertEquals(v, NormalizeUnlessZero.with(n::ofVector).apply(v));
-  }
-
-  public void testEmpty() {
-    for (Norm norm : Norm.values()) {
-      TensorUnaryOperator tensorUnaryOperator = NormalizeUnlessZero.with(norm);
-      Tensor tensor = Tensors.empty();
-      AssertFail.of(() -> tensorUnaryOperator.apply(tensor));
-    }
-  }
-
   public void testNormalizeNaN() {
     Tensor vector = Tensors.of(RealScalar.ONE, DoubleScalar.INDETERMINATE, RealScalar.ONE);
-    AssertFail.of(() -> NormalizeUnlessZero.with(Norm._2::ofVector).apply(vector));
-  }
-
-  public void testMatrixFail2() {
-    TensorUnaryOperator normalize = NormalizeUnlessZero.with(Frobenius.NORM::ofVector);
-    AssertFail.of(() -> normalize.apply(Array.zeros(3, 3)));
+    AssertFail.of(() -> NormalizeUnlessZero.with(VectorNorm2::of).apply(vector));
   }
 
   public void testNormalizeTotal() {

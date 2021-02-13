@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.nrm.Frobenius;
+import ch.ethz.idsc.tensor.nrm.FrobeniusNorm;
 import ch.ethz.idsc.tensor.usr.TestFile;
 import junit.framework.TestCase;
 
@@ -41,7 +41,7 @@ public class ExportHelperTest extends TestCase {
     byte[] array = byteArrayOutputStream.toByteArray(); // 56 bytes used
     BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(array));
     Tensor tensor = ImageFormat.from(bufferedImage);
-    Scalar diff = Frobenius.between(image, tensor);
+    Scalar diff = FrobeniusNorm.between(image, tensor);
     diff.copy();
     // unfortunately there seems to be a problem with the java gif parser
   }

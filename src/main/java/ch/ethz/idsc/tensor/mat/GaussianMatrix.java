@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.nrm.Norm2Squared;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Exp;
 
@@ -24,7 +24,7 @@ public enum GaussianMatrix {
     Scalar factor = sigmas.add(sigmas).negate();
     int m = 2 * r + 1;
     Tensor offset = Tensors.vector(-r, -r);
-    Tensor matrix = Array.of(list -> Norm2Squared.ofVector(Tensors.vector(list).add(offset)), m, m) //
+    Tensor matrix = Array.of(list -> VectorNorm2Squared.of(Tensors.vector(list).add(offset)), m, m) //
         .divide(factor).map(Exp.FUNCTION);
     return matrix.divide((Scalar) matrix.flatten(2).reduce(Tensor::add).get());
   }

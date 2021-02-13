@@ -22,9 +22,8 @@ import ch.ethz.idsc.tensor.sca.Power;
  * <li>p==1,
  * <li>p==2, or
  * <li>p==Infinity
- * </ul>
- * rather use {@link Norm} */
-public class VectorNorm implements VectorNormInterface, Serializable {
+ * </ul> */
+public class VectorNorm implements Serializable {
   private static final long serialVersionUID = -2668949364257998603L;
 
   /** Hint: for enhanced precision, use p as instance of {@link RationalScalar} if possible
@@ -32,14 +31,14 @@ public class VectorNorm implements VectorNormInterface, Serializable {
    * @param p exponent greater or equals 1
    * @return
    * @throws Exception if p is less than 1 */
-  public static VectorNormInterface with(Scalar p) {
+  public static VectorNorm with(Scalar p) {
     return new VectorNorm(p);
   }
 
   /** @param p exponent greater or equals 1
    * @return
    * @throws Exception if p is less than 1 */
-  public static VectorNormInterface with(Number p) {
+  public static VectorNorm with(Number p) {
     return with(RealScalar.of(p));
   }
 
@@ -57,8 +56,7 @@ public class VectorNorm implements VectorNormInterface, Serializable {
     p_reciprocal = p.reciprocal();
   }
 
-  @Override // from VectorNormInterface
-  public Scalar ofVector(Tensor vector) {
+  public Scalar of(Tensor vector) {
     return Power.of(vector.stream() //
         .map(Scalar.class::cast) //
         .map(Abs.FUNCTION) //

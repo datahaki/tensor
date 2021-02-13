@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
-import ch.ethz.idsc.tensor.nrm.Norm;
+import ch.ethz.idsc.tensor.nrm.MatrixNormInfinity;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -34,7 +34,7 @@ public class EigensystemTest extends TestCase {
         Tensor values = eigensystem.values();
         OrthogonalMatrixQ.require(vectors);
         Tensor recons = Transpose.of(vectors).dot(values.pmul(vectors));
-        Scalar err = Norm.INFINITY.ofMatrix(matrix.subtract(recons));
+        Scalar err = MatrixNormInfinity.of(matrix.subtract(recons));
         if (!Tolerance.CHOP.isClose(matrix, recons)) {
           System.err.println(err);
           // System.err.println("error");

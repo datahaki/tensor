@@ -4,9 +4,7 @@ package ch.ethz.idsc.tensor.opt.rn;
 import java.util.Optional;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
-import ch.ethz.idsc.tensor.nrm.Norm;
-import ch.ethz.idsc.tensor.nrm.Normalize;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -18,7 +16,6 @@ public enum PowerIteration {
   ;
   /** max iterations for each dimension */
   private static final int FACTOR = 15;
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Norm._2);
   private static final Chop CHOP = Chop._15;
 
   /** @param matrix square
@@ -34,7 +31,7 @@ public enum PowerIteration {
     int max = matrix.length() * FACTOR;
     for (int iteration = 0; iteration < max; ++iteration) {
       final Tensor prev = vector;
-      vector = NORMALIZE.apply(matrix.dot(vector));
+      vector = VectorNorm2.NORMALIZE.apply(matrix.dot(vector));
       if (CHOP.allZero(prev.subtract(vector)) || //
           CHOP.allZero(prev.add(vector)))
         return Optional.of(vector);

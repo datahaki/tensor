@@ -1,39 +1,27 @@
 // code by jph
 package ch.ethz.idsc.tensor.nrm;
 
-import java.lang.reflect.Modifier;
-
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
-public class NormInfinityTest extends TestCase {
+public class VectorNormInfinityTest extends TestCase {
   public void testQuantity() {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(-4, "m");
     Scalar qs3 = Quantity.of(4, "m");
     Tensor vec = Tensors.of(qs1, qs2);
-    assertEquals(Norm.INFINITY.ofVector(vec), qs3);
+    assertEquals(VectorNormInfinity.of(vec), qs3);
   }
 
   public void testQuantityMixed() {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(2, "m");
     Tensor vec = Tensors.of(qs1, qs2);
-    Scalar nin = Norm.INFINITY.ofVector(vec);
+    Scalar nin = VectorNormInfinity.of(vec);
     Scalar act = Quantity.of(3, "m");
     assertEquals(nin, act);
-  }
-
-  public void testFail() {
-    AssertFail.of(() -> Norm.INFINITY.ofVector(RealScalar.ONE));
-  }
-
-  public void testPackageVisibility() {
-    assertFalse(Modifier.isPublic(NormInfinity.class.getModifiers()));
   }
 }

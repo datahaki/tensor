@@ -10,7 +10,7 @@ import java.util.Optional;
 import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.nrm.Hypot;
-import ch.ethz.idsc.tensor.nrm.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -127,7 +127,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from ExpInterface
   public Quaternion exp() {
-    Scalar vn = Norm._2.ofVector(xyz);
+    Scalar vn = VectorNorm2.of(xyz);
     return new QuaternionImpl( //
         Cos.FUNCTION.apply(vn), //
         xyz.multiply(Sin.FUNCTION.apply(vn).divide(vn))) //
@@ -143,7 +143,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   @Override // from LogInterface
   public Quaternion log() {
     Scalar abs = abs();
-    Scalar vn = Norm._2.ofVector(xyz);
+    Scalar vn = VectorNorm2.of(xyz);
     return new QuaternionImpl( //
         Log.FUNCTION.apply(abs), //
         xyz.multiply(ArcCos.FUNCTION.apply(w.divide(abs))).divide(vn));
@@ -166,7 +166,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     Scalar abs = abs();
     Scalar et = exponent.multiply(ArcCos.FUNCTION.apply(w.divide(abs)));
     Scalar qa = Power.of(abs, exponent);
-    Scalar vn = Norm._2.ofVector(xyz);
+    Scalar vn = VectorNorm2.of(xyz);
     return new QuaternionImpl( //
         Cos.FUNCTION.apply(et).multiply(qa), //
         Scalars.isZero(vn) //

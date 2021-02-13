@@ -11,10 +11,9 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.ConstantArray;
-import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.mat.Tolerance;
-import ch.ethz.idsc.tensor.nrm.Norm;
-import ch.ethz.idsc.tensor.nrm.Normalize;
+import ch.ethz.idsc.tensor.nrm.NormalizeTotal;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.red.ArgMin;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -29,7 +28,6 @@ import ch.ethz.idsc.tensor.sca.N;
 public class WeiszfeldMethod implements SpatialMedian, Serializable {
   private static final long serialVersionUID = -555862284852117669L;
   private static final int MAX_ITERATIONS = 512;
-  private static final TensorUnaryOperator NORMALIZE = Normalize.with(Total::ofVector);
 
   /** @param chop non null
    * @return */
@@ -57,12 +55,12 @@ public class WeiszfeldMethod implements SpatialMedian, Serializable {
     int iteration = 0;
     while (++iteration < MAX_ITERATIONS) {
       Tensor prev = point;
-      Tensor dist = Tensor.of(sequence.stream().map(prev::subtract).map(Norm._2::ofVector));
+      Tensor dist = Tensor.of(sequence.stream().map(prev::subtract).map(VectorNorm2::of));
       int index = ArgMin.of(dist);
       if (Scalars.isZero(dist.Get(index)))
         return Optional.of(point);
       Tensor invdist = dist.map(Scalar::reciprocal);
-      point = NORMALIZE.apply(weights.pmul(invdist)).dot(sequence);
+      point = NormalizeTotal.FUNCTION.apply(weights.pmul(invdist)).dot(sequence);
       if (chop.isClose(point, prev))
         return Optional.of(point);
     }

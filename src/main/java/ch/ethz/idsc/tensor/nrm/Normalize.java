@@ -17,14 +17,14 @@ import ch.ethz.idsc.tensor.sca.Abs;
  * The computation is consistent with Mathematica:
  * Normalize[{Quantity[3, "Meters"], Quantity[4, "Meters"]}] == {3/5, 4/5}
  * 
- * <p>For {@link Norm#INFINITY} the norm of the normalized vector evaluates
+ * <p>For {@link VectorNormInfinity} the norm of the normalized vector evaluates
  * to the exact value 1.0.
  * In general, the norms of resulting vectors may deviate from 1.0 numerically.
  * The deviations depend on the type of norm.
  * Tests for vectors with 1000 normal distributed random entries exhibit
  * <pre>
- * {@link Norm#_1} min = 0.9999999999999987; max = 1.0000000000000018
- * {@link Norm#_2} min = 0.9999999999999996; max = 1.0000000000000004
+ * {@link VectorNorm1} min = 0.9999999999999987; max = 1.0000000000000018
+ * {@link VectorNorm2} min = 0.9999999999999996; max = 1.0000000000000004
  * </pre>
  * 
  * <p>The implementation divides a given vector by the norm until the
@@ -38,7 +38,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Normalize.html">Normalize</a> */
 public class Normalize implements TensorUnaryOperator {
-  private static final long serialVersionUID = -3282758550104625948L;
+  private static final long serialVersionUID = -9019309289622999084L;
 
   /** Examples:
    * <pre>
@@ -48,10 +48,6 @@ public class Normalize implements TensorUnaryOperator {
    * 
    * @param norm
    * @return operator that normalizes a vector using the given norm */
-  public static TensorUnaryOperator with(Norm norm) {
-    return new Normalize(norm::ofVector);
-  }
-
   /** Hint: Mathematica requires that the function maps any tensor to
    * a non-negative scalar, whereas the tensor library does not make this
    * requirement.

@@ -48,7 +48,7 @@ public class HypotTest extends TestCase {
   private static void checkVectorExact(Tensor vec) {
     Scalar hyp = Hypot.ofVector(vec);
     assertTrue(hyp instanceof RationalScalar);
-    Scalar nrm = Norm._2.ofVector(vec);
+    Scalar nrm = VectorNorm2.of(vec);
     assertTrue(nrm instanceof RationalScalar);
     assertEquals(hyp, nrm);
   }
@@ -78,7 +78,7 @@ public class HypotTest extends TestCase {
     assertEquals(Sqrt.of(RealScalar.of(46)), pair);
     Scalar value = Hypot.ofVector(Tensors.of(c1, c2));
     assertEquals(value, pair);
-    Scalar norm = Norm._2.ofVector(Tensors.of(c1, c2));
+    Scalar norm = VectorNorm2.of(Tensors.of(c1, c2));
     assertEquals(norm, pair);
   }
 

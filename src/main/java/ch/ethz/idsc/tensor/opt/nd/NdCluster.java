@@ -30,7 +30,7 @@ import ch.ethz.idsc.tensor.Tensors;
     NdMatch<V> ndEntry = new NdMatch<>( //
         ndPair.location(), //
         ndPair.value(), //
-        ndCenterInterface.ofVector(ndPair.location()));
+        ndCenterInterface.distance(ndPair.location()));
     if (queue.size() < limit)
       queue.add(ndEntry);
     else //
@@ -44,7 +44,7 @@ import ch.ethz.idsc.tensor.Tensors;
     if (queue.size() < limit)
       return true;
     Tensor test = Tensors.vector(i -> ndBounds.clip(i).apply(center.Get(i)), center.length());
-    return Scalars.lessThan(ndCenterInterface.ofVector(test), queue.peek().distance());
+    return Scalars.lessThan(ndCenterInterface.distance(test), queue.peek().distance());
   }
 
   public Collection<NdMatch<V>> collection() {

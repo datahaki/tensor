@@ -9,7 +9,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
-import ch.ethz.idsc.tensor.nrm.VectorNormInterface;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** Mahalanobis is an alternative to {@link InfluenceMatrix} for the computation of
@@ -31,7 +30,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * by Xavier Pennec, Vincent Arsigny, 2012, p. 39
  * 
  * @see InfluenceMatrix */
-public final class Mahalanobis implements InfluenceMatrix, VectorNormInterface, Serializable {
+public final class Mahalanobis implements InfluenceMatrix, Serializable {
   private static final long serialVersionUID = -5381451862439751058L;
   // ---
   private final Tensor design;
@@ -85,7 +84,7 @@ public final class Mahalanobis implements InfluenceMatrix, VectorNormInterface, 
 
   @Override // from InfluenceMatrix
   public Tensor leverages_sqrt() {
-    return Tensor.of(design.stream().map(this::ofVector));
+    return Tensor.of(design.stream().map(this::norm));
   }
 
   @Override // from InfluenceMatrix
@@ -111,8 +110,7 @@ public final class Mahalanobis implements InfluenceMatrix, VectorNormInterface, 
 
   /** @param vector
    * @return sqrt of sigma_inverse . vector . vector */
-  @Override // from VectorNormInterface
-  public Scalar ofVector(Tensor vector) {
+  public Scalar norm(Tensor vector) {
     return Sqrt.FUNCTION.apply(norm_squared(vector));
   }
 

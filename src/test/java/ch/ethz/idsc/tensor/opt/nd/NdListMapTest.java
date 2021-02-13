@@ -40,7 +40,7 @@ public class NdListMapTest extends TestCase {
   private static Scalar addDistances(Collection<NdMatch<String>> cluster, Tensor center, NdCenterInterface d) {
     Scalar sum = RealScalar.ZERO;
     for (NdMatch<String> entry : cluster) {
-      Scalar dist = d.ofVector(entry.location());
+      Scalar dist = d.distance(entry.location());
       assertEquals(entry.distance(), dist);
       sum = sum.add(dist);
     }

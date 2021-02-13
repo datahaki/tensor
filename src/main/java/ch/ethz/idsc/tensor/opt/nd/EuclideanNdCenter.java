@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.nrm.Norm;
+import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 
 public class EuclideanNdCenter implements NdCenterInterface, Serializable {
   private static final long serialVersionUID = 4287308934962123171L;
@@ -24,8 +24,8 @@ public class EuclideanNdCenter implements NdCenterInterface, Serializable {
   }
 
   @Override // from VectorNormInterface
-  public Scalar ofVector(Tensor vector) {
-    return Norm._2.between(vector, center);
+  public Scalar distance(Tensor vector) {
+    return VectorNorm2.between(vector, center);
   }
 
   @Override // from NdCenterInterface

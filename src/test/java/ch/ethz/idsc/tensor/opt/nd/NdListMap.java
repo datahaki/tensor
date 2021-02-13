@@ -31,7 +31,7 @@ public class NdListMap<V> implements NdMap<V> {
   @Override // from NdMap
   public Collection<NdMatch<V>> cluster(NdCenterInterface ndCenterInterface, int limit) {
     return list.stream() //
-        .map(ndPair -> new NdMatch<>(ndPair.location(), ndPair.value(), ndCenterInterface.ofVector(ndPair.location()))) //
+        .map(ndPair -> new NdMatch<>(ndPair.location(), ndPair.value(), ndCenterInterface.distance(ndPair.location()))) //
         .sorted(NdMatchComparators.INCREASING) //
         .limit(limit) //
         .collect(Collectors.toCollection(LinkedList::new));
