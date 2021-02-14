@@ -49,11 +49,10 @@ public enum PseudoInverse {
       }
     boolean complex = matrix.flatten(-1).map(Scalar.class::cast).map(Imag.FUNCTION).anyMatch(Scalars::nonZero);
     if (complex) {
-      return usingBic(matrix);
+      return BenIsraelCohen.of(matrix);
       // return LeastSquares.of(matrix, IdentityMatrix.of(matrix.length()));
-      // LONGTERM BenIsrealCohen
     }
-    return usingSvd(matrix, Tolerance.CHOP);
+    return usingSvd(matrix);
   }
 
   /***************************************************/
@@ -67,17 +66,6 @@ public enum PseudoInverse {
     return m <= n //
         ? CholeskyDecomposition.of(mt.dot(matrix)).solve(mt)
         : ConjugateTranspose.of(CholeskyDecomposition.of(matrix.dot(mt)).solve(matrix));
-  }
-
-  /***************************************************/
-  private static final int MAX_ITERATIONS = 100;
-
-  /* package */ static Tensor usingBic(Tensor matrix) {
-    int n = matrix.length();
-    int m = Unprotect.dimension1(matrix);
-    if (m <= n)
-      return new BenIsraelCohen(matrix).of(Chop._08, MAX_ITERATIONS);
-    return Transpose.of(new BenIsraelCohen(Transpose.of(matrix)).of(Chop._08, MAX_ITERATIONS));
   }
 
   /***************************************************/
@@ -99,12 +87,18 @@ public enum PseudoInverse {
   }
 
   /***************************************************/
+  /** Quote from Mathematica: "With the default setting Tolerance->Automatic,
+   * singular values are dropped when they are less than 100 times 10^-p,
+   * where p is Precision[m]."
+   * In Mathematica the tolerance is 1.1102230246251578*^-14. */
+  private static final Chop TOLERANCE = Tolerance.CHOP; // 10^-12
+
   /** Remark: Entries of given matrix may be of type {@link Quantity} with identical {@link Unit}.
    * 
    * @param matrix of arbitrary dimension and rank
    * @return pseudoinverse of given matrix */
   /* package */ static Tensor usingSvd(Tensor matrix) {
-    return usingSvd(matrix, Tolerance.CHOP);
+    return usingSvd(matrix, TOLERANCE);
   }
 
   /** @param matrix
@@ -123,7 +117,7 @@ public enum PseudoInverse {
   /** @param svd
    * @return pseudoinverse of matrix determined by given svd */
   public static Tensor of(SingularValueDecomposition svd) {
-    return of(svd, Tolerance.CHOP);
+    return of(svd, TOLERANCE);
   }
 
   /** @param svd

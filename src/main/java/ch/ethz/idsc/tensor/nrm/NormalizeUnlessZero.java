@@ -37,6 +37,6 @@ public class NormalizeUnlessZero implements TensorUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return getClass().getSimpleName();
+    return String.format("%s[%s]", getClass().getSimpleName(), tensorScalarFunction);
   }
 }

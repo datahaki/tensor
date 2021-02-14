@@ -5,40 +5,43 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.nrm.MatrixNorm2;
-import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.N;
 
 /** Reference: Pseudo Inverse Wikipedia
  * 
  * our experiments suggest that the iterative method works well for matrices
- * with non-zero imaginary part.
- * 
- * our experiments suggest that the method does not help to refine the pseudo
- * inverse obtained via svd since the threshold of when to truncate a singular
- * value to zero (or to invert) leads to significant numerical deviation of
- * order 1E13. */
+ * with non-zero imaginary part. */
 /* package */ class BenIsraelCohen {
+  private static final int MAX_ITERATIONS = 128;
+
+  /** @param matrix
+   * @return pseudo inverse of given matrix */
+  public static Tensor of(Tensor matrix) {
+    return new BenIsraelCohen(matrix).pseudoInverse();
+  }
+
+  /***************************************************/
   private final Tensor matrix;
 
-  /** @param matrix with rows => cols */
-  public BenIsraelCohen(Tensor matrix) {
+  private BenIsraelCohen(Tensor matrix) {
     this.matrix = matrix;
   }
 
-  /** @param chop
-   * @param max
-   * @return pseudoinverse of given matrix */
-  public Tensor of(Chop chop, int max) {
-    Scalar sigma = MatrixNorm2.bound(matrix);
+  public Tensor pseudoInverse() {
+    Scalar sigma = N.DOUBLE.apply(MatrixNorm2.bound(matrix));
     Tensor ai = ConjugateTranspose.of(matrix.divide(sigma.multiply(sigma)));
-    for (int count = 0; count < max; ++count)
-      if (chop.isClose(ai, ai = refine(ai)))
+    for (int count = 0; count < MAX_ITERATIONS; ++count)
+      if (Tolerance.CHOP.isClose(ai, ai = refine(ai)))
         return ai;
     throw TensorRuntimeException.of(matrix);
   }
 
   /** @param ai matrix that approximates the pseudo inverse of given matrix
-   * @return */
+   * @return refined approximate to the pseudo inverse of given matrix */
   private Tensor refine(Tensor ai) {
-    return ai.subtract(ai.dot(matrix).dot(ai)).add(ai);
+    Tensor dots = ai.length() <= matrix.length() //
+        ? ai.dot(matrix).dot(ai)
+        : ai.dot(matrix.dot(ai));
+    return ai.subtract(dots).add(ai);
   }
 }

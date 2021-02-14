@@ -129,6 +129,7 @@ public class NormalizeTest extends TestCase {
 
   public void testNormalizeTotal() {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);
+    assertTrue(tensorUnaryOperator.toString().startsWith("Normalize"));
     Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2));
     assertEquals(tensor, Tensors.fromString("{-1/4, 3/4, 1/2}"));
     AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.empty()));

@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.Serialization;
-import ch.ethz.idsc.tensor.lie.Symmetrize;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import junit.framework.TestCase;
 
@@ -32,7 +31,8 @@ public class CholeskyDecompositionImplTest extends TestCase {
     int prime = 7879;
     Random random = new Random();
     Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, n);
-    matrix = Symmetrize.of(matrix);
+    // Symmetrize
+    matrix = Transpose.of(matrix).add(matrix).divide(GaussScalar.of(2, prime));
     SymmetricMatrixQ.require(matrix);
     HermitianMatrixQ.require(matrix);
     CholeskyDecomposition choleskyDecomposition = //

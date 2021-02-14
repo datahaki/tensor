@@ -6,6 +6,8 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
@@ -82,5 +84,15 @@ public class SymmetrizeTest extends TestCase {
   public void testNonArrayFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
     AssertFail.of(() -> Symmetrize.of(tensor));
+  }
+
+  public void test01() {
+    Tensor tensor = Array.of(Tensors::vector, 3, 3); // results in dimensions [3 x 3 x 2]
+    assertFalse(SymmetricMatrixQ.of(tensor.get(Tensor.ALL, Tensor.ALL, 0)));
+    Tensor symmetrize01 = Symmetrize._01(tensor);
+    assertEquals(Dimensions.of(tensor), Dimensions.of(symmetrize01));
+    assertFalse(Chop._06.allZero(symmetrize01));
+    assertTrue(SymmetricMatrixQ.of(symmetrize01.get(Tensor.ALL, Tensor.ALL, 0)));
+    assertTrue(SymmetricMatrixQ.of(symmetrize01.get(Tensor.ALL, Tensor.ALL, 1)));
   }
 }

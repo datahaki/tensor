@@ -107,7 +107,7 @@ public class PseudoInverseTest extends TestCase {
       Chop._09.requireClose(pinv, piqr);
       Tolerance.CHOP.requireClose(Dot.of(piqr, matrix), IdentityMatrix.of(m));
     }
-    assertTrue(t_qr.nanoSeconds() < tsvd.nanoSeconds());
+    // assertTrue(t_qr.nanoSeconds() < tsvd.nanoSeconds());
   }
 
   public void testComplexRectangular() {

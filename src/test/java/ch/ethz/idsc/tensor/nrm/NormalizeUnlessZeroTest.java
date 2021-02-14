@@ -19,6 +19,7 @@ public class NormalizeUnlessZeroTest extends TestCase {
 
   public void testNormalizeTotal() {
     TensorUnaryOperator tensorUnaryOperator = NormalizeUnlessZero.with(Total::ofVector);
+    assertTrue(tensorUnaryOperator.toString().startsWith("NormalizeUnlessZero"));
     Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2));
     assertEquals(tensor, Tensors.fromString("{-1/4, 3/4, 1/2}"));
     Tensor vector = Tensors.vector(-1, 3, -2);
