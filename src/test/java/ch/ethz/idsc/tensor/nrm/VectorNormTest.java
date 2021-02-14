@@ -63,8 +63,8 @@ public class VectorNormTest extends TestCase {
   }
 
   public void testToString() {
-    TensorScalarFunction vectorNormInterface = VectorNorm.of(3);
-    String string = vectorNormInterface.toString();
+    TensorScalarFunction tensorScalarFunction = VectorNorm.of(3);
+    String string = tensorScalarFunction.toString();
     assertTrue(string.startsWith("VectorNorm["));
   }
 
@@ -73,12 +73,17 @@ public class VectorNormTest extends TestCase {
   }
 
   public void testMatrixFail() {
-    TensorScalarFunction vectorNormInterface = VectorNorm.of(2.6);
-    AssertFail.of(() -> vectorNormInterface.apply(IdentityMatrix.of(2)));
+    TensorScalarFunction tensorScalarFunction = VectorNorm.of(2.6);
+    AssertFail.of(() -> tensorScalarFunction.apply(IdentityMatrix.of(2)));
   }
 
   public void testScalarFail() {
-    TensorScalarFunction vectorNormInterface = VectorNorm.of(2.6);
-    AssertFail.of(() -> vectorNormInterface.apply(RealScalar.of(12)));
+    TensorScalarFunction tensorScalarFunction = VectorNorm.of(2.6);
+    AssertFail.of(() -> tensorScalarFunction.apply(RealScalar.of(12)));
+  }
+
+  public void testPNullFail() {
+    AssertFail.of(() -> VectorNorm.of((Number) null));
+    AssertFail.of(() -> VectorNorm.of((Scalar) null));
   }
 }

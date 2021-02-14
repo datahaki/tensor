@@ -22,9 +22,7 @@ public class SphereFit implements Serializable {
    * of the fitted sphere, or empty if points are numerically co-linear
    * @throws Exception if points is empty, or not a matrix */
   public static Optional<SphereFit> of(Tensor points) {
-    Tensor A = Tensor.of(points.stream() //
-        .map(point -> point.add(point)) //
-        .map(point -> point.append(RealScalar.ONE)));
+    Tensor A = Tensor.of(points.stream().map(point -> point.add(point).append(RealScalar.ONE)));
     Tensor b = Tensor.of(points.stream().map(VectorNorm2Squared::of));
     int cols = Unprotect.dimension1(A);
     if (A.length() < cols || //

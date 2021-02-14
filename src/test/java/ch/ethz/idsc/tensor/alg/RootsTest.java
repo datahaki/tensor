@@ -199,7 +199,7 @@ public class RootsTest extends TestCase {
             RandomVariate.of(distribution)), length);
         Tensor roots = Roots.of(CoefficientList.of(zeros));
         for (int count = 0; count < length; ++count) {
-          boolean anyZero = roots.map(zeros.Get(count)::subtract).stream() //
+          boolean anyZero = roots.map(zeros.Get(count).negate()::add).stream() //
               .anyMatch(Chop._01::allZero);
           if (!anyZero) {
             System.err.println(zeros);

@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Power;
 
-/** p-Norm for vectors as well as schatten norm
+/** p-Norm for vectors
  * 
  * implementation consistent with Mathematica
  * 
@@ -21,7 +21,9 @@ import ch.ethz.idsc.tensor.sca.Power;
  * <li>p==1,
  * <li>p==2, or
  * <li>p==Infinity
- * </ul> */
+ * </ul>
+ * 
+ * @see SchattenNorm */
 public class VectorNorm implements TensorScalarFunction {
   private static final long serialVersionUID = -913697110648849886L;
 
@@ -46,7 +48,6 @@ public class VectorNorm implements TensorScalarFunction {
   private final Scalar p;
   private final Scalar p_reciprocal;
 
-  // constructor also called from SchattenNorm
   private VectorNorm(Scalar p) {
     if (Scalars.lessThan(p, RealScalar.ONE))
       throw TensorRuntimeException.of(p);

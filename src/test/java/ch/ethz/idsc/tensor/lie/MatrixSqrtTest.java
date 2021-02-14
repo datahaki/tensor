@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
+import java.util.Random;
+
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
@@ -58,8 +60,9 @@ public class MatrixSqrtTest extends TestCase {
   }
 
   public void testRandomSymmetric() {
+    Random random = new Random(1);
     for (int n = 1; n < 5; ++n) {
-      Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.of(0, 0.2), n, n));
+      Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.of(0, 0.2), random, n, n));
       Tensor x2 = x.dot(x);
       _check(x2, MatrixSqrt.of(x2));
       _check(x2, MatrixSqrt.ofSymmetric(x2));

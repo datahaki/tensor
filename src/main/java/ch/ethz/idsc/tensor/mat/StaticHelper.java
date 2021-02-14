@@ -3,15 +3,16 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
-import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Max;
+import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -89,10 +90,16 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   }
 
   /***************************************************/
-  public static Chop chop(Tensor R, int m) {
-    Scalar max = IntStream.range(0, m) //
-        .mapToObj(i -> Abs.FUNCTION.apply(R.Get(i, i))) //
-        .reduce(Max::of).get();
-    return Chop.below(Math.max(Unprotect.withoutUnit(max).number().doubleValue(), 1) * 1e-12);
+  /** @param R
+   * @param m
+   * @throws Exception if any diagonal element is below 1E-12, or the ratio
+   * between min and max is below that threshold */
+  public static void failFast(Tensor R, int m) {
+    Tensor diag = Tensors.vector(i -> Abs.FUNCTION.apply(R.Get(i, i)), m);
+    Scalar max = (Scalar) diag.stream().reduce(Max::of).get();
+    Scalar min = (Scalar) diag.stream().reduce(Min::of).get();
+    if (Tolerance.CHOP.isZero(min) || //
+        Tolerance.CHOP.isZero(min.divide(max)))
+      throw TensorRuntimeException.of(max, min);
   }
 }

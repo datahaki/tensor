@@ -3,11 +3,14 @@ package ch.ethz.idsc.tensor.nrm;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.sca.Abs;
 
 public enum VectorNormInfinity {
   ;
+  public static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorNormInfinity::of);
+
   /** @param vector
    * @return infinity-norm of given vector, i.e. max_i |a_i| */
   public static Scalar of(Tensor vector) {

@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Times;
-import ch.ethz.idsc.tensor.sca.Chop;
 
 /** decomposition Q.R = A with Det[Q] == +1
  * householder with even number of reflections
@@ -82,12 +81,12 @@ import ch.ethz.idsc.tensor.sca.Chop;
   /** @return PseudoInverse[matrix] . b
    * @throws Exception if division by zero occurs */
   public Tensor pseudoInverse() {
-    Chop chop = StaticHelper.chop(R, m);
+    StaticHelper.failFast(R, m);
     Tensor[] x = Qinv.stream().limit(m).toArray(Tensor[]::new);
     for (int i = m - 1; i >= 0; --i) {
       for (int j = i + 1; j < m; ++j)
         x[i] = x[i].subtract(x[j].multiply(R.Get(i, j)));
-      x[i] = x[i].divide(chop.requireNonZero(R.Get(i, i)));
+      x[i] = x[i].divide(R.Get(i, i));
     }
     return Unprotect.byRef(x);
   }

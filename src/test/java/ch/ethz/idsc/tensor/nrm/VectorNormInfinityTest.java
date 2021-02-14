@@ -14,6 +14,7 @@ public class VectorNormInfinityTest extends TestCase {
     Scalar qs3 = Quantity.of(4, "m");
     Tensor vec = Tensors.of(qs1, qs2);
     assertEquals(VectorNormInfinity.of(vec), qs3);
+    assertEquals(VectorNormInfinity.NORMALIZE.apply(vec), Tensors.fromString("{-3/4, -1}"));
   }
 
   public void testQuantityMixed() {

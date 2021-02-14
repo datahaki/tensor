@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.nrm.VectorNorm2;
 
 public class EuclideanNdCenter implements NdCenterInterface, Serializable {
-  private static final long serialVersionUID = 4287308934962123171L;
+  private static final long serialVersionUID = -8327079294807945414L;
 
   /** @param center vector
    * @return */
@@ -23,7 +23,7 @@ public class EuclideanNdCenter implements NdCenterInterface, Serializable {
     this.center = center;
   }
 
-  @Override // from VectorNormInterface
+  @Override // from NdCenterInterface
   public Scalar distance(Tensor vector) {
     return VectorNorm2.between(vector, center);
   }

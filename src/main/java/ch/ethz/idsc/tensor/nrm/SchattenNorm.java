@@ -12,9 +12,12 @@ import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
 
 /** Quote from Wikipedia: "The Schatten p-norms arise when applying the p-norm to the
  * vector of singular values of a matrix.
- * p == 1 yields the nuclear norm (also known as the trace norm, or the Ky Fan'n'-norm)." */
+ * p == 1 yields the nuclear norm (also known as the trace norm, or the Ky Fan'n'-norm)."
+ * p == 2 yields the {@link FrobeniusNorm}
+ * 
+ * @see VectorNorm */
 public class SchattenNorm implements TensorScalarFunction {
-  private static final long serialVersionUID = 7474903862950425107L;
+  private static final long serialVersionUID = -3237076807560620127L;
 
   /** Hint: for enhanced precision, use p as instance of {@link RationalScalar} if possible
    *
@@ -34,18 +37,20 @@ public class SchattenNorm implements TensorScalarFunction {
 
   /***************************************************/
   private final Scalar p;
-  private final TensorScalarFunction vectorNorm;
+  private final TensorScalarFunction tensorScalarFunction;
 
   private SchattenNorm(Scalar p) {
     this.p = p;
-    vectorNorm = VectorNorm.of(p);
+    tensorScalarFunction = VectorNorm.of(p);
   }
 
   @Override
   public Scalar apply(Tensor matrix) {
-    return vectorNorm.apply(SingularValueDecomposition.of(Unprotect.dimension1(matrix) <= matrix.length() //
-        ? matrix
-        : Transpose.of(matrix)).values());
+    int n = matrix.length();
+    int m = Unprotect.dimension1(matrix);
+    SingularValueDecomposition svd = //
+        SingularValueDecomposition.of(m <= n ? matrix : Transpose.of(matrix));
+    return tensorScalarFunction.apply(svd.values());
   }
 
   @Override // from Object
