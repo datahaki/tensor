@@ -191,7 +191,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         for (int i = l; i < k + 1; ++i) {
           Scalar f = s.multiply(r.Get(i));
           r.set(c.multiply(r.Get(i)), i);
-          if (chop.isZero(f)) // only sometimes covered in tests
+          if (chop.isZero(f))
             break;
           Scalar g = w.Get(i);
           Scalar h = Hypot.of(f, g);
@@ -237,7 +237,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       y = y.multiply(c);
       z = Hypot.of(f, h);
       w.set(z, j);
-      if (Scalars.nonZero(z)) { // <- never false in tests?
+      if (Scalars.nonZero(z)) {
         c = f.divide(z);
         s = h.divide(z);
       }

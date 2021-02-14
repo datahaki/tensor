@@ -53,9 +53,9 @@ public enum LeastSquares {
       } catch (Exception exception) {
         assumeRankM = false; // rank is not maximal
       }
-    if (m <= n)
-      return usingSvd(matrix, b);
-    return PseudoInverse.usingSvd(matrix, CHOP, n, m).dot(b);
+    return m <= n //
+        ? usingSvd(matrix, b)
+        : PseudoInverse.usingSvd(matrix, CHOP, n, m).dot(b);
   }
 
   /***************************************************/
@@ -86,13 +86,13 @@ public enum LeastSquares {
   }
 
   private static Tensor usingQR(Tensor matrix, Tensor b, int n, int m) {
-    if (m <= n)
-      return _usingQR(matrix, b);
-    return ConjugateTranspose.of(_usingQR(matrix.dot(ConjugateTranspose.of(matrix)), matrix)).dot(b);
+    return m <= n //
+        ? _usingQR(matrix, b)
+        : ConjugateTranspose.of(_usingQR(matrix.dot(ConjugateTranspose.of(matrix)), matrix)).dot(b);
   }
 
   private static Tensor _usingQR(Tensor matrix, Tensor b) {
-    return new QRDecompositionImpl(matrix, b, QRSignOperators.STABILITY).pseudoInverse(CHOP);
+    return new QRDecompositionImpl(matrix, b, QRSignOperators.STABILITY).pseudoInverse();
   }
 
   /***************************************************/

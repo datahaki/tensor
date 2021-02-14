@@ -3,12 +3,16 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.red.Max;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
@@ -82,5 +86,13 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
           row.set(scalar -> scalar.add(((Scalar) scalar).one()), index);
           return row; // by ref
         }));
+  }
+
+  /***************************************************/
+  public static Chop chop(Tensor R, int m) {
+    Scalar max = IntStream.range(0, m) //
+        .mapToObj(i -> Abs.FUNCTION.apply(R.Get(i, i))) //
+        .reduce(Max::of).get();
+    return Chop.below(Math.max(Unprotect.withoutUnit(max).number().doubleValue(), 1) * 1e-12);
   }
 }

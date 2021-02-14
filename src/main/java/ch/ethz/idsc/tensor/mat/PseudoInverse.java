@@ -47,11 +47,10 @@ public enum PseudoInverse {
       } catch (Exception exception) {
         // matrix does not have maximal rank
       }
+    // return LeastSquares.of(matrix, IdentityMatrix.of(matrix.length()));
     boolean complex = matrix.flatten(-1).map(Scalar.class::cast).map(Imag.FUNCTION).anyMatch(Scalars::nonZero);
-    if (complex) {
+    if (complex)
       return BenIsraelCohen.of(matrix);
-      // return LeastSquares.of(matrix, IdentityMatrix.of(matrix.length()));
-    }
     return usingSvd(matrix);
   }
 
@@ -104,7 +103,7 @@ public enum PseudoInverse {
   /** @param matrix
    * @param chop
    * @return */
-  /* package */ static Tensor usingSvd(Tensor matrix, Chop chop) {
+  private static Tensor usingSvd(Tensor matrix, Chop chop) {
     return usingSvd(matrix, chop, matrix.length(), Unprotect.dimension1(matrix));
   }
 

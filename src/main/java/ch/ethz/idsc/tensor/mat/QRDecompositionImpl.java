@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * householder with even number of reflections
  * reproduces example on wikipedia */
 /* package */ class QRDecompositionImpl implements QRDecomposition, Serializable {
-  private static final long serialVersionUID = -4880290968594939778L;
+  private static final long serialVersionUID = -7441079810601672527L;
   // ---
   private final int m;
   private final Tensor R;
@@ -79,10 +79,10 @@ import ch.ethz.idsc.tensor.sca.Chop;
         : RealScalar.ZERO;
   }
 
-  /** @param chop
-   * @return PseudoInverse[matrix] . b
+  /** @return PseudoInverse[matrix] . b
    * @throws Exception if division by zero occurs */
-  public Tensor pseudoInverse(Chop chop) {
+  public Tensor pseudoInverse() {
+    Chop chop = StaticHelper.chop(R, m);
     Tensor[] x = Qinv.stream().limit(m).toArray(Tensor[]::new);
     for (int i = m - 1; i >= 0; --i) {
       for (int j = i + 1; j < m; ++j)
