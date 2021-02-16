@@ -36,7 +36,7 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Chop.html">Chop</a> */
 public class Chop implements ScalarUnaryOperator {
-  private static final long serialVersionUID = -7292234171542729722L;
+  private static final long serialVersionUID = -1453514005932060987L;
   public static final Chop _01 = below(1e-01);
   public static final Chop _02 = below(1e-02);
   public static final Chop _03 = below(1e-03);
@@ -184,5 +184,10 @@ public class Chop implements ScalarUnaryOperator {
   @SuppressWarnings("unchecked")
   public <T extends Tensor> T of(T tensor) {
     return (T) tensor.map(this);
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%e]", getClass().getSimpleName(), threshold);
   }
 }

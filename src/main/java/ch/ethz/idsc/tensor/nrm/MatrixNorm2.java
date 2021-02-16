@@ -33,12 +33,11 @@ public enum MatrixNorm2 {
    * Wikipedia:
    * https://en.wikipedia.org/wiki/Matrix_norm
    * 
-   * Also used in the Ben Israel Cohen iteration
+   * Used in {@link MatrixExp}, {@link MatrixLog}, and the Ben Israel Cohen
+   * iteration
    * 
    * @param matrix
-   * @return upper bound to 2-norm of given matrix up to numerical precision
-   * @see MatrixExp
-   * @see MatrixLog */
+   * @return upper bound to 2-norm of given matrix up to numerical precision */
   public static Scalar bound(Tensor matrix) {
     Scalar n1 = MatrixNorm1.of(matrix);
     Scalar ni = MatrixNormInfinity.of(matrix);

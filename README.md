@@ -193,31 +193,6 @@ System.out.println(force_N);
 
 The arithmetic for the scalar type `Quantity` was developed in collaboration with the project `SwissTrolley+`.
 
-### Geometry
-
-<table>
-<tr>
-<td>
-
-![spherefitimage](https://user-images.githubusercontent.com/4012178/45925049-24a46100-bf0e-11e8-84a7-ebd6d1d7b01a.png)
-
-Sphere fit
-
-<td>
-
-![bipartitionimage](https://user-images.githubusercontent.com/4012178/45924997-2a4d7700-bf0d-11e8-8655-449d4b248d3a.png)
-
-Hungarian algorithm
-
-<td>
-
-![spatialmedianimage](https://user-images.githubusercontent.com/4012178/46254643-7874f400-c492-11e8-97dc-673f9ecf2dcd.png)
-
-Weiszfeld’s method
-
-</tr>
-</table>
-
 ### Miscellaneous
 
 Tensors of rank 3

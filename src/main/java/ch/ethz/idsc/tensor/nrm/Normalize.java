@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.sca.Chop;
 
 /** Normalize also works for tensors with entries of type Quantity.
  * The computation is consistent with Mathematica:
@@ -60,14 +61,23 @@ public class Normalize implements TensorUnaryOperator {
    * @param tensorScalarFunction
    * @return operator that normalizes a vector using the given tensorScalarFunction */
   public static TensorUnaryOperator with(TensorScalarFunction tensorScalarFunction) {
-    return new Normalize(Objects.requireNonNull(tensorScalarFunction));
+    return with(tensorScalarFunction, Tolerance.CHOP);
+  }
+
+  /** @param tensorScalarFunction
+   * @param chop
+   * @return */
+  public static TensorUnaryOperator with(TensorScalarFunction tensorScalarFunction, Chop chop) {
+    return new Normalize(Objects.requireNonNull(tensorScalarFunction), Objects.requireNonNull(chop));
   }
 
   /***************************************************/
   private final TensorScalarFunction tensorScalarFunction;
+  private final Chop chop;
 
-  private Normalize(TensorScalarFunction tensorScalarFunction) {
+  private Normalize(TensorScalarFunction tensorScalarFunction, Chop chop) {
     this.tensorScalarFunction = tensorScalarFunction;
+    this.chop = chop;
   }
 
   @Override
@@ -90,7 +100,7 @@ public class Normalize implements TensorUnaryOperator {
         error_prev = error_next;
         error_next = Abs.between(scalar, RealScalar.ONE);
       }
-    Tolerance.CHOP.requireZero(error_next);
+    chop.requireZero(error_next);
     return vector;
   }
 

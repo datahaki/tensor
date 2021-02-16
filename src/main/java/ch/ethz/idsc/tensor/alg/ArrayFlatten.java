@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor.alg;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.opt.rn.LagrangeMultiplier;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ArrayFlatten.html">ArrayFlatten</a>
@@ -24,8 +23,7 @@ public enum ArrayFlatten {
    * </pre>
    * 
    * @param tensors
-   * @return
-   * @see LagrangeMultiplier */
+   * @return */
   public static Tensor of(Tensor[][] tensors) {
     return Tensor.of(Stream.of(tensors) //
         .map(tensor -> Join.of(1, tensor)) //

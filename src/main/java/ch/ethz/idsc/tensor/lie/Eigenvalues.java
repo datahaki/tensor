@@ -10,7 +10,8 @@ import ch.ethz.idsc.tensor.mat.Eigensystem;
   ;
   /** @param matrix symmetric
    * @param scalarUnaryOperator applied to eigenvalues
-   * @return resulting matrix is basis of given matrix */
+   * @return resulting matrix is basis of given matrix
+   * @throws Exception if input is not a real symmetric matrix */
   public static Tensor ofSymmetric_map(Tensor matrix, ScalarUnaryOperator scalarUnaryOperator) {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor values = eigensystem.values().map(scalarUnaryOperator);

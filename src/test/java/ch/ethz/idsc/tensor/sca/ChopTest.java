@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -132,5 +133,9 @@ public class ChopTest extends TestCase {
     Tensor tensor = Tensors.vector(0, 0, 0, 1e-5);
     Chop._04.requireAllZero(tensor);
     AssertFail.of(() -> Chop._06.requireAllZero(tensor));
+  }
+
+  public void testToString() {
+    assertTrue(Tolerance.CHOP.toString().startsWith("Chop["));
   }
 }

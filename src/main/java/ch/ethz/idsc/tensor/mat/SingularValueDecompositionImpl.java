@@ -72,7 +72,10 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
           throw new RuntimeException("no convergence");
         rotateUV(l, i);
       }
-      positiveW(i);
+      if (Sign.isNegative(w.Get(i))) { // ensure w[i] is positive
+        w.set(Scalar::negate, i);
+        v.set(Scalar::negate, Tensor.ALL, i);
+      }
     }
   }
 
@@ -248,14 +251,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     r.set(_0, l);
     r.set(f, i);
     w.set(x, i);
-  }
-
-  private void positiveW(int i) {
-    Scalar z = w.Get(i);
-    if (Sign.isNegative(z)) {
-      w.set(z.negate(), i);
-      v.set(Scalar::negate, Tensor.ALL, i);
-    }
   }
 
   private static void addScaled(int l, Tensor v, int i, int j, Scalar s) {
