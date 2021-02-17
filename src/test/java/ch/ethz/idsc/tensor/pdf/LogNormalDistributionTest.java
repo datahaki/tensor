@@ -56,6 +56,9 @@ public class LogNormalDistributionTest extends TestCase {
     Clips.interval(2.25, 3.5).requireInside(value);
     Chop._10.requireClose(Mean.of(distribution), Exp.FUNCTION.apply(RationalScalar.of(46, 45)));
     Chop._08.requireClose(Variance.of(distribution), RealScalar.of(4.323016391513655));
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
   public void testSigmaNonPositiveFail() {

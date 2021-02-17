@@ -5,15 +5,18 @@ import java.io.IOException;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.NumberQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.qty.UnitConvert;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -36,13 +39,17 @@ public class GompertzMakehamDistributionTest extends TestCase {
     assertEquals(cdf.p_lessEquals(RealScalar.of(4.35)), RealScalar.ONE);
     assertEquals(CDF.of(distribution).p_lessThan(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.ZERO), RealScalar.ZERO);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Tolerance.CHOP.requireClose(inverseCDF.quantile(RealScalar.of(0.75)), RealScalar.of(0.6902795393741822));
   }
 
   public void testRandomVariate() {
     GompertzMakehamDistribution gmd = (GompertzMakehamDistribution) //
     GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
+    assertTrue(Scalars.isZero(gmd.randomVariate(0)));
     assertTrue(Scalars.lessThan(gmd.randomVariate(0), RealScalar.of(3)));
-    assertTrue(Scalars.isZero(gmd.randomVariate(Math.nextDown(1.0))));
+    Scalar scalar = gmd.randomVariate(Math.nextDown(1.0));
+    Clips.interval(1.7, 2).requireInside(scalar);
   }
 
   public void testQuantity() {
@@ -95,6 +102,17 @@ public class GompertzMakehamDistributionTest extends TestCase {
     assertEquals(cdf.p_lessEquals(Quantity.of(-0.1, "m")), RealScalar.ZERO);
     AssertFail.of(() -> cdf.p_lessEquals(Quantity.of(-1, "m^2")));
     AssertFail.of(() -> cdf.p_lessEquals(Quantity.of(+1, "m^2")));
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Scalar quantile = inverseCDF.quantile(RationalScalar.of(1, 8));
+    Tolerance.CHOP.requireClose(quantile, Scalars.fromString("2.8271544195740326[m]"));
+  }
+
+  public void testInverseCDFFail() {
+    Distribution distribution = //
+        GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
   public void testFail() {

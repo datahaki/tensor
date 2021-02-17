@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Gamma;
 import ch.ethz.idsc.tensor.sca.Log;
@@ -15,9 +16,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GumbelDistribution.html">GumbelDistribution</a> */
 public class GumbelDistribution extends AbstractContinuousDistribution implements //
-    MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = -6689061594642724207L;
-  private static final double NEXT_DOWN_ONE = Math.nextDown(1.0);
+    MeanInterface, VarianceInterface, InverseCDF, Serializable {
+  private static final long serialVersionUID = -7161332919836950573L;
   private static final Scalar PISQUARED_6 = DoubleScalar.of(1.644934066848226436472415166646);
 
   /** parameters may be instance of {@link Quantity} with identical units
@@ -36,15 +36,6 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
   private GumbelDistribution(Scalar alpha, Scalar beta) {
     this.alpha = alpha;
     this.beta = beta;
-  }
-
-  @Override
-  protected Scalar randomVariate(double reference) {
-    // avoid result -Infinity when reference is close to 1.0
-    double uniform = reference == NEXT_DOWN_ONE //
-        ? reference
-        : Math.nextUp(reference);
-    return alpha.add(beta.multiply(Log.FUNCTION.apply(Log.FUNCTION.apply(DoubleScalar.of(uniform)).negate())));
   }
 
   @Override // from MeanInterface
@@ -67,6 +58,21 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
   public Scalar p_lessThan(Scalar x) {
     return RealScalar.ONE.subtract(Exp.FUNCTION.apply( //
         Exp.FUNCTION.apply(x.subtract(alpha).divide(beta)).negate()));
+  }
+
+  @Override // from InverseCDF
+  public Scalar quantile(Scalar p) {
+    return _quantile(Clips.unit().requireInside(p));
+  }
+
+  private Scalar _quantile(Scalar p) {
+    return alpha.add(beta.multiply(Log.FUNCTION.apply(Log.FUNCTION.apply(RealScalar.ONE.subtract(p)).negate())));
+  }
+
+  @Override // from AbstractContinuousDistribution
+  protected Scalar randomVariate(double reference) {
+    // returns -Infinity as reference approaches 0.0
+    return _quantile(DoubleScalar.of(reference));
   }
 
   @Override // from Object

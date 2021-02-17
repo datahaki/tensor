@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.num.Pi;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -55,12 +56,16 @@ public class LogisticDistribution extends AbstractContinuousDistribution impleme
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
+    return _quantile(Clips.unit().requireInside(p));
+  }
+
+  private Scalar _quantile(Scalar p) {
     return a.subtract(Log.FUNCTION.apply(p.reciprocal().subtract(RealScalar.ONE)).multiply(b));
   }
 
   @Override // from AbstractContinuousDistribution
   protected Scalar randomVariate(double reference) {
-    return quantile(DoubleScalar.of(reference));
+    return _quantile(DoubleScalar.of(reference));
   }
 
   @Override // from MeanInterface

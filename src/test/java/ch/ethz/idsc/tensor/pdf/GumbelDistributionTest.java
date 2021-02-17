@@ -1,11 +1,13 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import ch.ethz.idsc.tensor.DeterminateScalarQ;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.qty.Unit;
@@ -38,6 +40,14 @@ public class GumbelDistributionTest extends TestCase {
     GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     assertTrue(Scalars.lessThan(gmd.randomVariate(0), RealScalar.of(4.5)));
     assertTrue(Scalars.lessThan(RealScalar.of(-4.5), gmd.randomVariate(Math.nextDown(1.0))));
+    InverseCDF inverseCDF = InverseCDF.of(gmd);
+    Tolerance.CHOP.requireClose( //
+        inverseCDF.quantile(RealScalar.of(0.123)), //
+        RealScalar.of(2.5938671136008074));
+    assertEquals(inverseCDF.quantile(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
+    assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
+    // System.out.println(gmd.randomVariate(0.0));
+    DeterminateScalarQ.require(gmd.randomVariate(Math.nextDown(1.0)));
   }
 
   public void testQuantity() {

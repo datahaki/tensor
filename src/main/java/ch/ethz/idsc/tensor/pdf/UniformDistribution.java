@@ -70,18 +70,18 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
       throw TensorRuntimeException.of(clip.min(), clip.max());
   }
 
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    return quantile_unit(DoubleScalar.of(reference));
-  }
-
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
-    return quantile_unit(Clips.unit().requireInside(p));
+    return _quantile(Clips.unit().requireInside(p));
   }
 
-  private Scalar quantile_unit(Scalar p) {
+  private Scalar _quantile(Scalar p) {
     return p.multiply(width).add(clip.min());
+  }
+
+  @Override // from AbstractContinuousDistribution
+  protected Scalar randomVariate(double reference) {
+    return _quantile(DoubleScalar.of(reference));
   }
 
   @Override // from MeanInterface

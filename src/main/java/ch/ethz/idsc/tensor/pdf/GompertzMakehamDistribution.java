@@ -9,14 +9,16 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GompertzMakehamDistribution.html">GompertzMakehamDistribution</a> */
-public class GompertzMakehamDistribution extends AbstractContinuousDistribution implements Serializable {
-  private static final long serialVersionUID = -7315280128961314486L;
+public class GompertzMakehamDistribution extends AbstractContinuousDistribution implements //
+    InverseCDF, Serializable {
+  private static final long serialVersionUID = 8707504233761083314L;
 
   /** @param lambda positive scale parameter, may be instance of {@link Quantity}
    * @param xi positive frailty parameter
@@ -40,13 +42,6 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
       throw TensorRuntimeException.of(lambda, xi);
   }
 
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    double uniform = Math.nextUp(reference);
-    return Log.FUNCTION.apply( //
-        xi.subtract(Log.FUNCTION.apply(DoubleScalar.of(uniform))).divide(xi)).divide(lambda);
-  }
-
   @Override // from PDF
   public Scalar at(Scalar x) {
     Scalar x_lambda = x.multiply(lambda);
@@ -63,6 +58,21 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
     return Sign.isPositive(x) //
         ? RealScalar.ONE.subtract(Exp.FUNCTION.apply(RealScalar.ONE.subtract(exp).multiply(xi)))
         : RealScalar.ZERO;
+  }
+
+  @Override // from InverseCDF
+  public Scalar quantile(Scalar p) {
+    return _quantile(Clips.unit().requireInside(p));
+  }
+
+  private Scalar _quantile(Scalar p) {
+    return Log.FUNCTION.apply(RealScalar.ONE.subtract( //
+        Log.FUNCTION.apply(RealScalar.ONE.subtract(p)).divide(xi))).divide(lambda);
+  }
+
+  @Override // from AbstractContinuousDistribution
+  protected Scalar randomVariate(double reference) {
+    return _quantile(DoubleScalar.of(reference));
   }
 
   @Override // from Object

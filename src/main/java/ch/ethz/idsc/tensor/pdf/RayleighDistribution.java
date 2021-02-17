@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.num.Pi;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sqrt;
@@ -69,6 +70,10 @@ public class RayleighDistribution extends AbstractContinuousDistribution impleme
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
+    return _quantile(Clips.unit().requireInside(p));
+  }
+
+  private Scalar _quantile(Scalar p) {
     Scalar _1_p = RealScalar.ONE.subtract(p);
     return Sqrt.FUNCTION.apply(Log.FUNCTION.apply(_1_p.multiply(_1_p)).negate()).multiply(sigma);
   }
@@ -76,7 +81,7 @@ public class RayleighDistribution extends AbstractContinuousDistribution impleme
   @Override // from AbstractContinuousDistribution
   protected Scalar randomVariate(double reference) {
     // {@link Random#nextDouble()} samples uniformly from the range 0.0 (inclusive) to 1.0d (exclusive)
-    return quantile(RealScalar.of(reference));
+    return _quantile(RealScalar.of(reference));
   }
 
   @Override // from Object

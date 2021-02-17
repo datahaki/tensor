@@ -139,6 +139,10 @@ public class TrapezoidalDistributionTest extends TestCase {
     Scalar random = RandomVariate.of(distribution);
     Scalar apply = QuantityMagnitude.SI().in("km").apply(random);
     assertTrue(apply instanceof RealScalar);
+    assertTrue(distribution.toString().startsWith("TrapezoidalDistribution["));
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
   public void testExactFail() {

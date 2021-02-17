@@ -25,6 +25,8 @@ public class LogisticDistributionTest extends TestCase {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar quantile = inverseCDF.quantile(p_lessEquals);
     Tolerance.CHOP.requireClose(quantile, x);
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
   public void testRandomMeanVar() {

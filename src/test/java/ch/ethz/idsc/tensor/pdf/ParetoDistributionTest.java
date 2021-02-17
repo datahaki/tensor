@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -39,6 +40,11 @@ public class ParetoDistributionTest extends TestCase {
     Chop chop = Chop.below(0.3);
     chop.requireClose(mean, empiricalMean);
     chop.requireClose(varc, empiricalVarc);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Tolerance.CHOP.requireClose(inverseCDF.quantile(RealScalar.of(0.2)), RealScalar.of(2.366748969310483));
+    assertEquals(inverseCDF.quantile(RealScalar.ZERO), RealScalar.of(2.3));
+    assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
+    assertTrue(distribution.toString().startsWith("ParetoDistribution["));
   }
 
   public void testMeanVarianceIndeterminate() {
