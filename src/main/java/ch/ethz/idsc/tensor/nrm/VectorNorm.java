@@ -18,12 +18,10 @@ import ch.ethz.idsc.tensor.sca.Power;
  * 
  * Important: For the special cases
  * <ul>
- * <li>p==1,
- * <li>p==2, or
- * <li>p==Infinity
- * </ul>
- * 
- * @see SchattenNorm */
+ * <li>p==1 identical to {@link Vector1Norm}
+ * <li>p==2 identical to {@link Vector2Norm}
+ * <li>p==Infinity identical to {@link VectorInfinityNorm}
+ * </ul> */
 public class VectorNorm implements TensorScalarFunction {
   private static final long serialVersionUID = -913697110648849886L;
 

@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
-import ch.ethz.idsc.tensor.nrm.VectorNormInfinity;
+import ch.ethz.idsc.tensor.nrm.VectorInfinityNorm;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -80,7 +80,7 @@ public class QuantileTest extends TestCase {
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
     Tensor weight = Tensors.vector(0.76, 0.1, 0.25, 0.5, 0.05, 0.95, 0, 0.5, 0.99, 1);
     Tensor quantile = weight.map(scalarUnaryOperator);
-    Scalar maxError = VectorNormInfinity.between(quantile, weight);
+    Scalar maxError = VectorInfinityNorm.between(quantile, weight);
     assertTrue(Scalars.lessThan(maxError, RealScalar.of(0.125)));
   }
 

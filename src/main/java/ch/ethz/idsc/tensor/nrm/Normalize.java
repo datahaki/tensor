@@ -18,14 +18,14 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * The computation is consistent with Mathematica:
  * Normalize[{Quantity[3, "Meters"], Quantity[4, "Meters"]}] == {3/5, 4/5}
  * 
- * <p>For {@link VectorNormInfinity} the norm of the normalized vector evaluates
+ * <p>For {@link VectorInfinityNorm} the norm of the normalized vector evaluates
  * to the exact value 1.0.
  * In general, the norms of resulting vectors may deviate from 1.0 numerically.
  * The deviations depend on the type of norm.
  * Tests for vectors with 1000 normal distributed random entries exhibit
  * <pre>
- * {@link VectorNorm1} min = 0.9999999999999987; max = 1.0000000000000018
- * {@link VectorNorm2} min = 0.9999999999999996; max = 1.0000000000000004
+ * {@link Vector1Norm} min = 0.9999999999999987; max = 1.0000000000000018
+ * {@link Vector2Norm} min = 0.9999999999999996; max = 1.0000000000000004
  * </pre>
  * 
  * <p>The implementation divides a given vector by the norm until the

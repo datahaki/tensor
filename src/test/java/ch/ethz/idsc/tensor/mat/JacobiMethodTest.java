@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.ResourceData;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
@@ -42,7 +42,7 @@ public class JacobiMethodTest extends TestCase {
     Scalar det = Det.of(matrix);
     Tensor prd = Times.pmul(eigensystem.values());
     Chop._12.requireClose(det, prd);
-    Tensor norm = Tensor.of(eigensystem.vectors().stream().map(VectorNorm2::of));
+    Tensor norm = Tensor.of(eigensystem.vectors().stream().map(Vector2Norm::of));
     Chop._12.requireClose(norm, Tensors.vector(i -> RealScalar.ONE, norm.length()));
     // testing orthogonality
     final Tensor Vt = Transpose.of(eigensystem.vectors());

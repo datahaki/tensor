@@ -52,10 +52,12 @@ public class MatrixSqrtTest extends TestCase {
   }
 
   public void testRandomDiscreteUniform() {
+    Random random = new Random(1);
     for (int n = 1; n < 10; ++n) {
-      Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-200, 200), n, n);
+      Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-200, 200), random, n, n);
       Tensor x2 = x.dot(x);
-      _check(x2, MatrixSqrt.of(x2));
+      MatrixSqrt sqrt = new DenmanBeaversDet(x2, Tolerance.CHOP);
+      _check(x2, sqrt);
     }
   }
 

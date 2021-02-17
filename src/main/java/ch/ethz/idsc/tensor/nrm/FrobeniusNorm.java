@@ -11,7 +11,7 @@ public enum FrobeniusNorm {
   /** @param tensor of arbitrary rank
    * @return Frobenius norm of given tensor */
   public static Scalar of(Tensor tensor) {
-    return VectorNorm2.of(Tensor.of(tensor.flatten(-1)));
+    return Vector2Norm.of(Tensor.of(tensor.flatten(-1)));
   }
 
   /** @param t1

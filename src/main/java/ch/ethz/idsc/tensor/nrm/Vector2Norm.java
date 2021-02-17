@@ -6,9 +6,12 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-public enum VectorNorm2 {
+/** Euclidean norm
+ * 
+ * ||{a, b, c}||_2 = Sqrt[a^2 + b^2 + c^2] */
+public enum Vector2Norm {
   ;
-  public static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorNorm2::of);
+  public static final TensorUnaryOperator NORMALIZE = Normalize.with(Vector2Norm::of);
 
   /** @param vector
    * @return 2-norm of given vector */
@@ -20,7 +23,7 @@ public enum VectorNorm2 {
       // <- when vector is a scalar
       // <- when vector is empty, or contains NaN
     }
-    return Sqrt.FUNCTION.apply(VectorNorm2Squared.of(vector));
+    return Sqrt.FUNCTION.apply(Vector2NormSquared.of(vector));
   }
 
   /** @param v1 vector

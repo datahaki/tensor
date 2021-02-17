@@ -7,9 +7,12 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.sca.Abs;
 
-public enum VectorNormInfinity {
+/** vector Infinity-norm
+ * 
+ * ||{a, b, c}||_inf = Max[|a|, |b|, |c|] */
+public enum VectorInfinityNorm {
   ;
-  public static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorNormInfinity::of);
+  public static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorInfinityNorm::of);
 
   /** @param vector
    * @return infinity-norm of given vector, i.e. max_i |a_i| */

@@ -7,8 +7,12 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 
-/** @see AbsSquared */
-public enum VectorNorm2Squared {
+/** Euclidean norm squared
+ * 
+ * ||{a, b, c}||_2^2 = a^2 + b^2 + c^2
+ * 
+ * @see AbsSquared */
+public enum Vector2NormSquared {
   ;
   /** @param vector
    * @return squared Euclidean norm of given vector, i.e. || v1 || ^ 2

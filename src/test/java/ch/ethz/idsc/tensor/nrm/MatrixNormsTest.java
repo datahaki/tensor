@@ -11,9 +11,9 @@ import junit.framework.TestCase;
 
 public class MatrixNormsTest extends TestCase {
   public static final TensorScalarFunction[] VALUES = { //
-      MatrixNorm1::of, //
-      MatrixNorm2::of, //
-      MatrixNormInfinity::of, //
+      Matrix1Norm::of, //
+      Matrix2Norm::of, //
+      MatrixInfinityNorm::of, //
   };
 
   public void testZero() {

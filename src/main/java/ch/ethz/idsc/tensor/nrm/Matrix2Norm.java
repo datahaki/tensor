@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-public enum MatrixNorm2 {
+public enum Matrix2Norm {
   ;
   /** uses SVD for matrices
    * 
@@ -39,8 +39,8 @@ public enum MatrixNorm2 {
    * @param matrix
    * @return upper bound to 2-norm of given matrix up to numerical precision */
   public static Scalar bound(Tensor matrix) {
-    Scalar n1 = MatrixNorm1.of(matrix);
-    Scalar ni = MatrixNormInfinity.of(matrix);
+    Scalar n1 = Matrix1Norm.of(matrix);
+    Scalar ni = MatrixInfinityNorm.of(matrix);
     return Min.of( //
         Sqrt.FUNCTION.apply(n1.multiply(ni)), // Hoelder's inequality
         FrobeniusNorm.of(matrix));

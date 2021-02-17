@@ -5,7 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.TensorMap;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.Expectation;
 
@@ -30,7 +30,7 @@ public enum Variance {
   // in Mathematica Variance[{1}] of a list of length 1 is not defined
   public static Scalar ofVector(Tensor vector) {
     Tensor nmean = Mean.of(vector).negate();
-    return VectorNorm2Squared.of(TensorMap.of(nmean::add, vector, 1)) //
+    return Vector2NormSquared.of(TensorMap.of(nmean::add, vector, 1)) //
         .divide(RealScalar.of(vector.length() - 1));
   }
 

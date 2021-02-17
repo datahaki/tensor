@@ -22,7 +22,7 @@ public class FrobeniusNormTest extends TestCase {
     Tensor t1 = Tensors.fromString("{0, {1, 2}, 3}");
     Tensor t2 = Tensors.fromString("{2, {-1, 0}, 8}");
     Scalar d1 = FrobeniusNorm.between(t1, t2);
-    Scalar d2 = VectorNorm2.between(Tensor.of(t1.flatten(-1)), Tensor.of(t2.flatten(-1)));
+    Scalar d2 = Vector2Norm.between(Tensor.of(t1.flatten(-1)), Tensor.of(t2.flatten(-1)));
     assertEquals(d1, d2);
   }
 

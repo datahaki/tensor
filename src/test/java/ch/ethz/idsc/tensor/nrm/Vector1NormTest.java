@@ -14,13 +14,13 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
-public class VectorNorm1Test extends TestCase {
+public class Vector1NormTest extends TestCase {
   public void testQuantity1() {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(-4, "m");
     Scalar qs3 = Quantity.of(7, "m");
     Tensor vec = Tensors.of(qs1, qs2);
-    assertEquals(VectorNorm1.of(vec), qs3);
+    assertEquals(Vector1Norm.of(vec), qs3);
   }
 
   public void testQuantity2() {
@@ -30,19 +30,19 @@ public class VectorNorm1Test extends TestCase {
         RealScalar.ZERO, //
         Quantity.of(-4, "m") //
     );
-    assertEquals(VectorNorm1.of(vec), Quantity.of(7, "m"));
+    assertEquals(Vector1Norm.of(vec), Quantity.of(7, "m"));
   }
 
   public void testBetween() {
     Distribution distribution = NegativeBinomialDistribution.of(3, 0.8);
     Tensor a = RandomVariate.of(distribution, 7);
     Tensor b = RandomVariate.of(distribution, 7);
-    Scalar vab = VectorNorm1.of(a.subtract(b));
-    assertEquals(vab, VectorNorm1.of(b.subtract(a)));
-    assertEquals(vab, VectorNorm1.between(a, b));
+    Scalar vab = Vector1Norm.of(a.subtract(b));
+    assertEquals(vab, Vector1Norm.of(b.subtract(a)));
+    assertEquals(vab, Vector1Norm.between(a, b));
   }
 
   public void testEmptyStreamFail() {
-    AssertFail.of(() -> VectorNorm1.of(Stream.of()));
+    AssertFail.of(() -> Vector1Norm.of(Stream.of()));
   }
 }

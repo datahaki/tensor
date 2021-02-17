@@ -14,7 +14,7 @@ import junit.framework.TestCase;
 public class NormalizeUnlessZeroTest extends TestCase {
   public void testNormalizeNaN() {
     Tensor vector = Tensors.of(RealScalar.ONE, DoubleScalar.INDETERMINATE, RealScalar.ONE);
-    AssertFail.of(() -> NormalizeUnlessZero.with(VectorNorm2::of).apply(vector));
+    AssertFail.of(() -> NormalizeUnlessZero.with(Vector2Norm::of).apply(vector));
   }
 
   public void testNormalizeTotal() {

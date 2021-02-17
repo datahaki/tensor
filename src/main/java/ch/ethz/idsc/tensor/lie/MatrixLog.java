@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
-import ch.ethz.idsc.tensor.nrm.MatrixNorm2;
+import ch.ethz.idsc.tensor.nrm.Matrix2Norm;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -58,7 +58,7 @@ public enum MatrixLog {
     Tensor rem = matrix.subtract(id);
     List<DenmanBeaversDet> deque = new LinkedList<>();
     for (int count = 0; count < MAX_EXPONENT; ++count) {
-      Scalar rho_max = MatrixNorm2.bound(rem);
+      Scalar rho_max = Matrix2Norm.bound(rem);
       if (Scalars.lessThan(rho_max, RHO_MAX)) {
         Tensor sum = matrix.map(Scalar::zero);
         Scalar factor = RealScalar.ONE;

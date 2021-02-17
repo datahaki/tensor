@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.nrm.MatrixNorm2;
+import ch.ethz.idsc.tensor.nrm.Matrix2Norm;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** Reference: Pseudo Inverse Wikipedia
@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.sca.N;
   }
 
   public Tensor pseudoInverse() {
-    Scalar sigma = N.DOUBLE.apply(MatrixNorm2.bound(matrix));
+    Scalar sigma = N.DOUBLE.apply(Matrix2Norm.bound(matrix));
     Tensor ai = ConjugateTranspose.of(matrix.divide(sigma.multiply(sigma)));
     for (int count = 0; count < MAX_ITERATIONS; ++count)
       if (Tolerance.CHOP.isClose(ai, ai = refine(ai)))

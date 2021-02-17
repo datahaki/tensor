@@ -26,23 +26,23 @@ import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
-public class MatrixNorm2Test extends TestCase {
+public class Matrix2NormTest extends TestCase {
   public void testMatrix1() {
     Tensor matrix = Tensors.matrix(new Number[][] { { 1, 2, 3 }, { 9, -3, 0 } });
-    Scalar nrm = MatrixNorm2.of(matrix);
-    assertEquals(nrm, MatrixNorm2.of(Transpose.of(matrix)));
+    Scalar nrm = Matrix2Norm.of(matrix);
+    assertEquals(nrm, Matrix2Norm.of(Transpose.of(matrix)));
     // Mathematica: 9.493062577750756
     Chop._14.requireClose(nrm, DoubleScalar.of(9.493062577750756));
   }
 
   public void testMatrix2() {
     Tensor matrix = Tensors.fromString("{{}}");
-    AssertFail.of(() -> MatrixNorm2.of(matrix));
+    AssertFail.of(() -> Matrix2Norm.of(matrix));
   }
 
   private static void _check(Tensor x) {
-    Scalar n2 = MatrixNorm2.of(x);
-    Scalar nb = MatrixNorm2.bound(x);
+    Scalar n2 = Matrix2Norm.of(x);
+    Scalar nb = Matrix2Norm.bound(x);
     if (Scalars.lessThan(nb, n2) && !Tolerance.CHOP.isClose(n2, nb)) {
       System.err.println("n2=" + n2);
       System.err.println("nb=" + nb);
@@ -81,22 +81,22 @@ public class MatrixNorm2Test extends TestCase {
     Tensor re = RandomVariate.of(distribution, 5, 3);
     Tensor im = RandomVariate.of(distribution, 5, 3);
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
-    Scalar norm2bound = MatrixNorm2.bound(matrix);
+    Scalar norm2bound = Matrix2Norm.bound(matrix);
     assertEquals(Imag.FUNCTION.apply(norm2bound), RealScalar.ZERO);
   }
 
   public void testZero() {
-    assertEquals(MatrixNorm2.bound(Array.zeros(2, 3)), RealScalar.ZERO);
-    assertEquals(MatrixNorm2.bound(Array.zeros(3, 2)), RealScalar.ZERO);
+    assertEquals(Matrix2Norm.bound(Array.zeros(2, 3)), RealScalar.ZERO);
+    assertEquals(Matrix2Norm.bound(Array.zeros(3, 2)), RealScalar.ZERO);
   }
 
   public void testNonMatrixFail() {
-    AssertFail.of(() -> MatrixNorm2.bound(RealScalar.of(2)));
-    AssertFail.of(() -> MatrixNorm2.bound(Tensors.vector(1, 2, 3)));
-    AssertFail.of(() -> MatrixNorm2.bound(LehmerTensor.of(3)));
+    AssertFail.of(() -> Matrix2Norm.bound(RealScalar.of(2)));
+    AssertFail.of(() -> Matrix2Norm.bound(Tensors.vector(1, 2, 3)));
+    AssertFail.of(() -> Matrix2Norm.bound(LehmerTensor.of(3)));
   }
 
   public void testNonArray() {
-    AssertFail.of(() -> MatrixNorm2.bound(Tensors.fromString("{{1, 2, 3}, {4, 5}}")));
+    AssertFail.of(() -> Matrix2Norm.bound(Tensors.fromString("{{1, 2, 3}, {4, 5}}")));
   }
 }

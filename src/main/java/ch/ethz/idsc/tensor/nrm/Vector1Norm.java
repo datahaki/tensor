@@ -8,9 +8,12 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Abs;
 
-public enum VectorNorm1 {
+/** vector 1-norm
+ * 
+ * ||{a, b, c}||_1 = |a| + |b| + |c| */
+public enum Vector1Norm {
   ;
-  public static final TensorUnaryOperator NORMALIZE = Normalize.with(VectorNorm1::of);
+  public static final TensorUnaryOperator NORMALIZE = Normalize.with(Vector1Norm::of);
 
   /** @param vector
    * @return 1-norm of given vector, i.e. |a_1| + ... + |a_n| also known as ManhattanDistance */

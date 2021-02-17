@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.ext.Integers;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Times;
 
@@ -39,7 +39,7 @@ import ch.ethz.idsc.tensor.red.Times;
       Tensor x = Tensor.of(R.get(Tensor.ALL, k).stream() // k-th column of R
           .map(Scalar.class::cast) //
           .map(scalar -> atomicInteger.getAndIncrement() < 0 ? scalar.zero() : scalar));
-      Scalar xn = VectorNorm2.of(x);
+      Scalar xn = Vector2Norm.of(x);
       if (Scalars.nonZero(xn)) { // else reflection reduces to identity, hopefully => det == 0
         Tensor signed = qrSignOperator.sign(x.Get(k)).multiply(xn);
         x.set(signed::add, k);

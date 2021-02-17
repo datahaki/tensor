@@ -15,7 +15,9 @@ import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
  * p == 1 yields the nuclear norm (also known as the trace norm, or the Ky Fan'n'-norm)."
  * p == 2 yields the {@link FrobeniusNorm}
  * 
- * @see VectorNorm */
+ * @see Matrix1Norm
+ * @see Matrix2Norm
+ * @see MatrixInfinityNorm */
 public class SchattenNorm implements TensorScalarFunction {
   private static final long serialVersionUID = -3237076807560620127L;
 
@@ -48,8 +50,9 @@ public class SchattenNorm implements TensorScalarFunction {
   public Scalar apply(Tensor matrix) {
     int n = matrix.length();
     int m = Unprotect.dimension1(matrix);
-    SingularValueDecomposition svd = //
-        SingularValueDecomposition.of(m <= n ? matrix : Transpose.of(matrix));
+    SingularValueDecomposition svd = SingularValueDecomposition.of(m <= n //
+        ? matrix
+        : Transpose.of(matrix));
     return tensorScalarFunction.apply(svd.values());
   }
 

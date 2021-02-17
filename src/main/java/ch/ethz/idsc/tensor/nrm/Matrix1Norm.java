@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Abs;
 
 /** 1-norm */
-public enum MatrixNorm1 {
+public enum Matrix1Norm {
   ;
   /** @param matrix
    * @return 1-norm of given matrix */

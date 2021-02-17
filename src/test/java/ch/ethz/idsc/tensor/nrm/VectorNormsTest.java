@@ -11,9 +11,9 @@ import junit.framework.TestCase;
 
 public class VectorNormsTest extends TestCase {
   public static final TensorScalarFunction[] VALUES = { //
-      VectorNorm1::of, //
-      VectorNorm2::of, //
-      VectorNormInfinity::of, //
+      Vector1Norm::of, //
+      Vector2Norm::of, //
+      VectorInfinityNorm::of, //
   };
 
   public void testEmptyFail() {

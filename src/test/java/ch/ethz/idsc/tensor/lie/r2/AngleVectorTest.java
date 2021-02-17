@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -34,7 +34,7 @@ public class AngleVectorTest extends TestCase {
     for (int index = 0; index < 10; ++index) {
       Scalar angle = RandomVariate.of(distribution).negate(); // prevent angle == -pi
       Tensor vector = AngleVector.of(angle);
-      Chop._14.requireClose(VectorNorm2.of(vector), RealScalar.ONE);
+      Chop._14.requireClose(Vector2Norm.of(vector), RealScalar.ONE);
       Scalar check = ArcTan.of(vector.Get(0), vector.Get(1));
       Chop._14.requireClose(angle, check);
     }

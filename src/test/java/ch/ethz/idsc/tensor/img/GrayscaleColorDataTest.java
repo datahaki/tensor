@@ -13,7 +13,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.ext.Serialization;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import junit.framework.TestCase;
 
 public class GrayscaleColorDataTest extends TestCase {
@@ -33,7 +33,7 @@ public class GrayscaleColorDataTest extends TestCase {
 
   public void testTransparent() {
     Tensor vector = GrayscaleColorData.DEFAULT.apply(DoubleScalar.POSITIVE_INFINITY);
-    assertTrue(Scalars.isZero(VectorNorm2.of(vector)));
+    assertTrue(Scalars.isZero(Vector2Norm.of(vector)));
     assertEquals(vector, Array.zeros(4));
   }
 

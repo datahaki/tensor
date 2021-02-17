@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.itp.BSplineFunction;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Decrement;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -55,8 +55,8 @@ public class CirclePointsTest extends TestCase {
     int n = 5;
     Tensor tensor = CirclePoints.of(n);
     assertEquals(Dimensions.of(tensor), Arrays.asList(n, 2));
-    Chop._14.requireClose(Tensor.of(tensor.stream().map(VectorNorm2Squared::of)), Array.of(l -> RealScalar.ONE, n));
-    Chop._14.requireAllZero(Tensor.of(tensor.stream().map(VectorNorm2Squared::of).map(Decrement.ONE)));
+    Chop._14.requireClose(Tensor.of(tensor.stream().map(Vector2NormSquared::of)), Array.of(l -> RealScalar.ONE, n));
+    Chop._14.requireAllZero(Tensor.of(tensor.stream().map(Vector2NormSquared::of).map(Decrement.ONE)));
   }
 
   public void testFirst() {

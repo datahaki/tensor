@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
-import ch.ethz.idsc.tensor.nrm.VectorNorm2;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.pdf.CauchyDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -167,8 +167,8 @@ public class NullSpaceTest extends TestCase {
         { -0.2, -0.8, 1.0 } });
     Tensor nullspace = NullSpace.of(matrix);
     assertEquals(Dimensions.of(nullspace), Arrays.asList(1, 3));
-    assertTrue(Chop._14.isClose(nullspace.get(0), VectorNorm2.NORMALIZE.apply(Tensors.vector(1, 1, 1))) //
-        || Chop._14.isClose(nullspace.get(0), VectorNorm2.NORMALIZE.apply(Tensors.vector(-1, -1, -1))));
+    assertTrue(Chop._14.isClose(nullspace.get(0), Vector2Norm.NORMALIZE.apply(Tensors.vector(1, 1, 1))) //
+        || Chop._14.isClose(nullspace.get(0), Vector2Norm.NORMALIZE.apply(Tensors.vector(-1, -1, -1))));
   }
 
   public void testQuantity() {
