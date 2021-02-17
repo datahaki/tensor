@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/LogNormalDistribution.html">LogNormalDistribution</a> */
 public class LogNormalDistribution implements ContinuousDistribution, //
     InverseCDF, MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = 6543947763516933160L;
+  private static final long serialVersionUID = 8969278698460534719L;
 
   /** @param mu any real number
    * @param sigma any positive real number
@@ -31,6 +31,14 @@ public class LogNormalDistribution implements ContinuousDistribution, //
         sigma instanceof RealScalar)
       return new LogNormalDistribution(mu, sigma);
     throw TensorRuntimeException.of(mu, sigma);
+  }
+
+  /** @param mu any real number
+   * @param sigma any positive real number
+   * @return
+   * @throws Exception if sigma is zero or negative */
+  public static Distribution of(Number mu, Number sigma) {
+    return new LogNormalDistribution(RealScalar.of(mu), RealScalar.of(sigma));
   }
 
   /***************************************************/

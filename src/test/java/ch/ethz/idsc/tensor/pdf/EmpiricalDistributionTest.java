@@ -109,7 +109,7 @@ public class EmpiricalDistributionTest extends TestCase {
 
   public void testToString() {
     Distribution distribution = EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1));
-    assertEquals(distribution.toString(), "EmpiricalDistribution[{0, 9/10, 1/10}]");
+    assertTrue(distribution.toString().startsWith("EmpiricalDistribution["));
   }
 
   public void testQuantity() {

@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.ArcTan;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Tan;
 
@@ -55,12 +56,16 @@ public class CauchyDistribution extends AbstractContinuousDistribution implement
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
+    return _quantile(Clips.unit().requireInside(p));
+  }
+
+  private Scalar _quantile(Scalar p) {
     return Tan.FUNCTION.apply(p.add(p).subtract(RealScalar.ONE).multiply(Pi.HALF)).multiply(b).add(a);
   }
 
   @Override // from AbstractContinuousDistribution
   protected Scalar randomVariate(double reference) {
-    return quantile(DoubleScalar.of(reference));
+    return _quantile(DoubleScalar.of(reference));
   }
 
   @Override // from Object

@@ -3,11 +3,14 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -35,6 +38,14 @@ public class LogisticDistributionTest extends TestCase {
     Tolerance.CHOP.requireClose(ExactScalarQ.require(Mean.of(distribution)), RealScalar.of(3));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(13.15947253478581));
     assertEquals(distribution.toString(), "LogisticDistribution[3, 2]");
+  }
+
+  public void testQuantity() {
+    Distribution distribution = LogisticDistribution.of(Quantity.of(2, "m"), Quantity.of(3, "m"));
+    Scalar scalar = Variance.of(distribution);
+    QuantityMagnitude.singleton("m^2").apply(scalar);
+    Scalar lo = InverseCDF.of(distribution).quantile(RealScalar.ZERO);
+    assertEquals(lo, Quantity.of(DoubleScalar.NEGATIVE_INFINITY, "m"));
   }
 
   public void testNullFail() {

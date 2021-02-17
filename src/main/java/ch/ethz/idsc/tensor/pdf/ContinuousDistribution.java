@@ -5,6 +5,7 @@ package ch.ethz.idsc.tensor.pdf;
  * 
  * CauchyDistribution
  * DagumDistribution
+ * EqualizingDistribution
  * ExponentialDistribution
  * FrechetDistribution
  * GompertzMakehamDistribution

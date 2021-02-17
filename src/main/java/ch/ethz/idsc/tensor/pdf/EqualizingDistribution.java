@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.sca.Increment;
 /** EqualizingDistribution is a continuous {@link EmpiricalDistribution} */
 public class EqualizingDistribution implements //
     ContinuousDistribution, InverseCDF, MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = -258509927143918709L;
+  private static final long serialVersionUID = 2537947720872103159L;
 
   /** Hint: distribution can be used for arc-length parameterization
    * 
@@ -75,5 +75,10 @@ public class EqualizingDistribution implements //
   @Override // from VarianceInterface
   public Scalar variance() {
     return Expectation.variance(empiricalDistribution).add(RationalScalar.of(1, 12));
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%s]", getClass().getSimpleName(), empiricalDistribution);
   }
 }

@@ -7,7 +7,10 @@ import java.util.Objects;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.num.Pi;
+import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.qty.QuantityUnit;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
@@ -60,7 +63,9 @@ public class LogisticDistribution extends AbstractContinuousDistribution impleme
   }
 
   private Scalar _quantile(Scalar p) {
-    return a.subtract(Log.FUNCTION.apply(p.reciprocal().subtract(RealScalar.ONE)).multiply(b));
+    return Scalars.isZero(p) //
+        ? Quantity.of(DoubleScalar.NEGATIVE_INFINITY, QuantityUnit.of(a))
+        : a.subtract(Log.FUNCTION.apply(p.reciprocal().subtract(RealScalar.ONE)).multiply(b));
   }
 
   @Override // from AbstractContinuousDistribution

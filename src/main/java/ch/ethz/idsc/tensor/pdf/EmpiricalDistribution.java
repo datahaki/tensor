@@ -97,6 +97,6 @@ public class EmpiricalDistribution extends EvaluatedDiscreteDistribution impleme
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), pdf);
+    return String.format("%s[#=%d]", getClass().getSimpleName(), pdf.length());
   }
 }

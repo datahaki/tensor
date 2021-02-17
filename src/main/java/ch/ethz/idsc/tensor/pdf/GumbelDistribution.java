@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/GumbelDistribution.html">GumbelDistribution</a> */
 public class GumbelDistribution extends AbstractContinuousDistribution implements //
     MeanInterface, VarianceInterface, InverseCDF, Serializable {
-  private static final long serialVersionUID = -7161332919836950573L;
+  private static final long serialVersionUID = -4418179160357873494L;
   private static final Scalar PISQUARED_6 = DoubleScalar.of(1.644934066848226436472415166646);
 
   /** parameters may be instance of {@link Quantity} with identical units
@@ -27,6 +27,13 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
    * @return */
   public static Distribution of(Scalar alpha, Scalar beta) {
     return new GumbelDistribution(alpha, Sign.requirePositive(beta));
+  }
+
+  /** @param alpha any real number
+   * @param beta positive
+   * @return */
+  public static Distribution of(Number alpha, Number beta) {
+    return of(RealScalar.of(alpha), RealScalar.of(beta));
   }
 
   /***************************************************/

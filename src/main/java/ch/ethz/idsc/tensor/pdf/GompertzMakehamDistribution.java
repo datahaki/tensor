@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/GompertzMakehamDistribution.html">GompertzMakehamDistribution</a> */
 public class GompertzMakehamDistribution extends AbstractContinuousDistribution implements //
     InverseCDF, Serializable {
-  private static final long serialVersionUID = 8707504233761083314L;
+  private static final long serialVersionUID = -7823838650305121533L;
 
   /** @param lambda positive scale parameter, may be instance of {@link Quantity}
    * @param xi positive frailty parameter
@@ -27,6 +27,13 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
     if (Scalars.lessEquals(xi, RealScalar.ZERO))
       throw TensorRuntimeException.of(xi);
     return new GompertzMakehamDistribution(Sign.requirePositive(lambda), xi);
+  }
+
+  /** @param lambda positive scale parameter
+   * @param xi positive frailty parameter
+   * @return */
+  public static Distribution of(Number lambda, Number xi) {
+    return of(RealScalar.of(lambda), RealScalar.of(xi));
   }
 
   /***************************************************/

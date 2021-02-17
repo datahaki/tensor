@@ -19,7 +19,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
  * @see BinomialRandomVariate */
 public class PoissonBinomialDistribution implements DiscreteDistribution, //
     MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = 3695995726944667524L;
+  private static final long serialVersionUID = -3518381216999546714L;
 
   /** Hint:
    * if p_vector consists of identical entries, the {@link BinomialDistribution}
@@ -88,5 +88,10 @@ public class PoissonBinomialDistribution implements DiscreteDistribution, //
   @Override // from DiscreteDistribution
   public Scalar p_equals(int n) {
     throw new UnsupportedOperationException();
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%s]", getClass().getSimpleName(), p_vector);
   }
 }
