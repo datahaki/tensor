@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.alg;
+package ch.ethz.idsc.tensor.fft;
 
 import java.io.IOException;
 import java.util.function.UnaryOperator;

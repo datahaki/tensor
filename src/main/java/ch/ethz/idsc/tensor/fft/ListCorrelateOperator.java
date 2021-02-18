@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.alg;
+package ch.ethz.idsc.tensor.fft;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -8,11 +8,13 @@ import java.util.stream.IntStream;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Integers;
 
 /* package */ class ListCorrelateOperator implements TensorUnaryOperator {
-  private static final long serialVersionUID = 6048027894405429271L;
+  private static final long serialVersionUID = 5649389581423571244L;
   // ---
   private final Tensor kernel;
   private final List<Integer> mask;

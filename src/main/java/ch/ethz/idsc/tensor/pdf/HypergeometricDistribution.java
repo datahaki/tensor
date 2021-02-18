@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor.pdf;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.alg.Binomial;
+import ch.ethz.idsc.tensor.num.Binomial;
 
 /** Quote from Mathematica:
  * "A hypergeometric distribution gives the distribution of the number of successes

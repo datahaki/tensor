@@ -1,7 +1,8 @@
 // code by jph
-package ch.ethz.idsc.tensor.alg;
+package ch.ethz.idsc.tensor.fft;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /** One application of {@link ListConvolve} is the computation of the coefficients

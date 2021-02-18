@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.alg;
+package ch.ethz.idsc.tensor.fft;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -7,6 +7,10 @@ import java.util.function.UnaryOperator;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.ArrayPad;
+import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.TensorMap;
+import ch.ethz.idsc.tensor.alg.TensorRank;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -67,5 +71,9 @@ public class ListConvolveTest extends TestCase {
         { 2, 1, 3, 0, 1 }, //
         { 0, 1, -1, 3, 3 } });
     AssertFail.of(() -> ListConvolve.of(kernel, matrix));
+  }
+
+  public void testConvolveNullFail() {
+    AssertFail.of(() -> ListConvolve.with(null));
   }
 }

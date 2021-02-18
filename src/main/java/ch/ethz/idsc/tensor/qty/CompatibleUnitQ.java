@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Scalar;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CompatibleUnitQ.html">CompatibleUnitQ</a> */
 public class CompatibleUnitQ implements Serializable {
-  private static final long serialVersionUID = 3067446056713733961L;
+  private static final long serialVersionUID = 8210243825315852665L;
   private static final CompatibleUnitQ SI = in(UnitSystem.SI());
 
   /** @param unitSystem non-null
@@ -31,10 +31,10 @@ public class CompatibleUnitQ implements Serializable {
   }
 
   /***************************************************/
-  private final UnitSystem unitSystem;
+  private final UnitDimensions unitDimensions;
 
   private CompatibleUnitQ(UnitSystem unitSystem) {
-    this.unitSystem = unitSystem;
+    unitDimensions = new UnitDimensions(unitSystem);
   }
 
   /** @param unit
@@ -43,32 +43,29 @@ public class CompatibleUnitQ implements Serializable {
     return new Inner(unit);
   }
 
-  /** @param string
+  /** @param string for instance "kW*h^-1"
    * @return */
   public Predicate<Scalar> with(String string) {
     return with(Unit.of(string));
   }
 
   private class Inner implements Predicate<Scalar>, Serializable {
-    private static final long serialVersionUID = 3755197923097596074L;
+    private static final long serialVersionUID = -3687831956654446614L;
     // ---
-    private final Unit unit;
     private final Unit base;
 
     public Inner(Unit unit) {
-      this.unit = unit;
-      this.base = unit.negate();
+      this.base = unitDimensions.toBase(unit);
     }
 
     @Override // from Predicate
     public boolean test(Scalar scalar) {
-      // LONGTERM the check also tracks the value part, which is not needed
-      return !(unitSystem.apply(StaticHelper.multiply(scalar, base)) instanceof Quantity);
+      return unitDimensions.toBase(QuantityUnit.of(scalar)).equals(base);
     }
 
-    @Override
+    @Override // from Object
     public String toString() {
-      return String.format("%s[%s, %s]", CompatibleUnitQ.class.getSimpleName(), unitSystem, unit);
+      return String.format("%s[%s]", CompatibleUnitQ.class.getSimpleName(), base);
     }
   }
 }

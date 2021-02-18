@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.alg;
+package ch.ethz.idsc.tensor.fft;
 
 import java.lang.reflect.Modifier;
 
@@ -44,11 +44,6 @@ public class ListCorrelateOperatorTest extends TestCase {
 
   public void testNullFail() {
     AssertFail.of(() -> ListCorrelate.with(null));
-  }
-
-  /***************************************************/
-  public void testConvolveNullFail() {
-    AssertFail.of(() -> ListConvolve.with(null));
   }
 
   public void testPackageVisibility() {
