@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
+import ch.ethz.idsc.tensor.pdf.CauchyDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -154,7 +155,7 @@ public class QuaternionTest extends TestCase {
   }
 
   public void testNormVsAbs() {
-    Distribution distribution = NormalDistribution.standard();
+    Distribution distribution = CauchyDistribution.standard();
     for (int index = 0; index < 10; ++index) {
       Tensor vec = RandomVariate.of(distribution, 4);
       Scalar q1 = _createQ(vec);

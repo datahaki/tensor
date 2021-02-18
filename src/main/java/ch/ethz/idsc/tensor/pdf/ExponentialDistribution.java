@@ -26,7 +26,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/ExponentialDistribution.html">ExponentialDistribution</a> */
 public class ExponentialDistribution extends AbstractContinuousDistribution implements //
     InverseCDF, MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = -7758178594998636922L;
+  private static final long serialVersionUID = 6309492569908508553L;
+  private static final Distribution STANDARD = ExponentialDistribution.of(RealScalar.ONE);
 
   /** @param lambda positive, may be instance of {@link Quantity}
    * @return exponential distribution with scale inversely proportional to parameter lambda */
@@ -38,6 +39,11 @@ public class ExponentialDistribution extends AbstractContinuousDistribution impl
    * @return exponential distribution with scale inversely proportional to parameter lambda */
   public static Distribution of(Number lambda) {
     return of(RealScalar.of(lambda));
+  }
+
+  /** @return exponential distribution with mean and variance equal to 1 */
+  public static Distribution standard() {
+    return STANDARD;
   }
 
   /***************************************************/

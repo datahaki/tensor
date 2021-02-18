@@ -50,6 +50,7 @@ public class EqualizingDistributionTest extends TestCase {
     Tensor uniform = Differences.of(linear);
     ExactTensorQ.require(uniform);
     assertEquals(Tally.of(uniform), Collections.singletonMap(RationalScalar.of(33, 10), 10L));
+    assertTrue(distribution.toString().startsWith("EqualizingDistribution"));
   }
 
   public void testNegativeFail() {

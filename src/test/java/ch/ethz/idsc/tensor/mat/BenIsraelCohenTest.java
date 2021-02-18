@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.io.ResourceData;
@@ -48,6 +49,15 @@ public class BenIsraelCohenTest extends TestCase {
     // for the matrix in this example the algorithm PseudoInverse gives
     // a result that deviates from Mathematica's solution significantly
     // TODO investigate why QR decomp does not work well here!?
+  }
+
+  public void testZeros() {
+    Tensor refine = BenIsraelCohen.of(Array.zeros(4, 3));
+    assertEquals(refine, Array.zeros(3, 4));
+  }
+
+  public void testEpsilonNonFail() {
+    BenIsraelCohen.of(Tensors.fromString("{{1E-300}}"));
   }
 
   public void testReal() {

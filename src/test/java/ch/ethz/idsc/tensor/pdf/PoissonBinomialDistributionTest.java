@@ -51,6 +51,7 @@ public class PoissonBinomialDistributionTest extends TestCase {
 
   public void testProbFail() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1));
+    assertTrue(distribution.toString().startsWith("PoissonBinomialDistribution["));
     PDF pdf = PDF.of(distribution);
     try {
       pdf.at(RealScalar.of(2));

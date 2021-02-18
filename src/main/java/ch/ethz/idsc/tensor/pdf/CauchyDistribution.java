@@ -17,8 +17,9 @@ import ch.ethz.idsc.tensor.sca.Tan;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CauchyDistribution.html">CauchyDistribution</a> */
 public class CauchyDistribution extends AbstractContinuousDistribution implements //
-    InverseCDF, Serializable {
-  private static final long serialVersionUID = -7860035228725423560L;
+    MeanInterface, VarianceInterface, InverseCDF, Serializable {
+  private static final long serialVersionUID = 3801325633984199538L;
+  private static final Distribution STANDARD = CauchyDistribution.of(RealScalar.ZERO, RealScalar.ONE);
 
   /** @param a
    * @param b positive
@@ -32,6 +33,11 @@ public class CauchyDistribution extends AbstractContinuousDistribution implement
    * @return */
   public static Distribution of(Number a, Number b) {
     return of(RealScalar.of(a), RealScalar.of(b));
+  }
+
+  /** @return CauchyDistribution[0, 1] */
+  public static Distribution standard() {
+    return STANDARD;
   }
 
   /***************************************************/
@@ -52,6 +58,16 @@ public class CauchyDistribution extends AbstractContinuousDistribution implement
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     return ArcTan.of(b, x.subtract(a)).divide(Pi.VALUE).add(RationalScalar.HALF);
+  }
+
+  @Override // from MeanInterface
+  public Scalar mean() {
+    return DoubleScalar.INDETERMINATE;
+  }
+
+  @Override // from VarianceInterface
+  public Scalar variance() {
+    return DoubleScalar.INDETERMINATE;
   }
 
   @Override // from InverseCDF

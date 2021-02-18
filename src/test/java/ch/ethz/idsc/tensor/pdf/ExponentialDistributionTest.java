@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.qty.UnitConvert;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Median;
+import ch.ethz.idsc.tensor.red.Variance;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
@@ -138,6 +139,11 @@ public class ExponentialDistributionTest extends TestCase {
     Distribution distribution = ExponentialDistribution.of(Quantity.of(3, "m"));
     String string = distribution.toString();
     assertEquals(string, "ExponentialDistribution[3[m]]");
+  }
+
+  public void testStandard() {
+    assertEquals(Mean.of(ExponentialDistribution.standard()), RealScalar.ONE);
+    assertEquals(Variance.of(ExponentialDistribution.standard()), RealScalar.ONE);
   }
 
   public void testFailInverseCDF() {

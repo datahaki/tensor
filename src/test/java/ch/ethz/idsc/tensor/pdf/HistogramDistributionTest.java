@@ -48,7 +48,8 @@ public class HistogramDistributionTest extends TestCase {
   }
 
   public void testFreedmanMin() {
-    HistogramDistribution.of(Tensors.vector(3, 4));
+    Distribution distribution = HistogramDistribution.of(Tensors.vector(3, 4));
+    assertTrue(distribution.toString().startsWith("HistogramDistribution"));
     AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(3, 3)));
   }
 

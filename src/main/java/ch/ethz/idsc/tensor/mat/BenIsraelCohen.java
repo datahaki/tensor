@@ -1,7 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
+import ch.ethz.idsc.tensor.DeterminateScalarQ;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.nrm.Matrix2Norm;
@@ -29,7 +31,12 @@ import ch.ethz.idsc.tensor.sca.N;
 
   public Tensor pseudoInverse() {
     Scalar sigma = N.DOUBLE.apply(Matrix2Norm.bound(matrix));
-    Tensor ai = ConjugateTranspose.of(matrix.divide(sigma.multiply(sigma)));
+    DeterminateScalarQ.require(sigma); // fail fast
+    Scalar sigma2 = sigma.multiply(sigma);
+    Tensor ai = ConjugateTranspose.of(matrix);
+    if (Scalars.isZero(sigma2))
+      return ai;
+    ai = ai.divide(sigma2);
     for (int count = 0; count < MAX_ITERATIONS; ++count)
       if (Tolerance.CHOP.isClose(ai, ai = refine(ai)))
         return ai;

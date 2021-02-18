@@ -3,11 +3,14 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.tensor.DeterminateScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Median;
+import ch.ethz.idsc.tensor.red.Variance;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -32,6 +35,8 @@ public class CauchyDistributionTest extends TestCase {
     Scalar median = (Scalar) Median.of(RandomVariate.of(distribution, 100));
     Clips.interval(-2, 4).requireInside(median);
     assertTrue(distribution.toString().startsWith("CauchyDistribution["));
+    assertFalse(DeterminateScalarQ.of(Mean.of(distribution)));
+    assertFalse(DeterminateScalarQ.of(Variance.of(distribution)));
   }
 
   public void testNullFail() {

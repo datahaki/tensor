@@ -2,10 +2,14 @@
 package ch.ethz.idsc.tensor.pdf;
 
 import ch.ethz.idsc.tensor.DeterminateScalarQ;
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.red.InterquartileRange;
 import ch.ethz.idsc.tensor.red.Median;
+import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -39,6 +43,16 @@ public class ContinuousDistributionTest extends TestCase {
       inverseCDF.quantile(RealScalar.ZERO);
       inverseCDF.quantile(RealScalar.of(Math.nextUp(0)));
       DeterminateScalarQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));
+    }
+  }
+
+  public void testInverseCDFIncreasing() {
+    for (Distribution distribution : DISTRIBUTIONS) {
+      InverseCDF inverseCDF = InverseCDF.of(distribution);
+      Sign.requirePositiveOrZero(InterquartileRange.of(distribution));
+      Scalar lo = inverseCDF.quantile(RationalScalar.of(1, 8));
+      Scalar hi = inverseCDF.quantile(RationalScalar.of(3, 8));
+      assertTrue(Scalars.lessEquals(lo, hi));
     }
   }
 }
