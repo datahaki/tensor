@@ -1,10 +1,12 @@
 // code by jph
-package ch.ethz.idsc.tensor.alg;
+package ch.ethz.idsc.tensor.num;
 
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Last;
+import ch.ethz.idsc.tensor.alg.Sort;
 
 /** Not entirely consistent with Mathematica for the case
  * Mathematica::Roots[a == 0, x] == false

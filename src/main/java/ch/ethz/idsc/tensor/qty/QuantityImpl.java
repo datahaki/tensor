@@ -120,7 +120,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     /* extracting the value of a Quantity to a primitive goes against the spirit
      * of using units in the first place. For instance, 3[s] and 3[h] are from the
      * same scale, but are not identical, despite their value part being identical.
-     * The function number is available for instances of real scalars, which can
+     * The function #number() is available for instances of RealScalar`s, which can
      * be obtained from a Quantity via QuantityMagnitude.
      * 
      * Hint: use

@@ -17,14 +17,6 @@ public class Vector2NormSquaredTest extends TestCase {
     Scalar n2 = Vector2Norm.between(v1, v2);
     Chop._13.requireClose(n1, AbsSquared.FUNCTION.apply(n2));
   }
-  // public void testMatrix() {
-  // Tensor matrix = Tensors.matrix(new Number[][] { { 1, 2, 3 }, { 9, -3, 0 } });
-  // Scalar nrm = VectorNorm2Squared.ofMatrix(matrix);
-  // assertEquals(nrm, VectorNorm2Squared.ofMatrix(Transpose.of(matrix)));
-  // // Mathematica: 9.493062577750756
-  // Scalar s = DoubleScalar.of(9.493062577750756);
-  // Chop._14.requireClose(nrm, s.multiply(s));
-  // }
 
   public void testEmpty() {
     AssertFail.of(() -> Vector2NormSquared.of(Tensors.empty()));

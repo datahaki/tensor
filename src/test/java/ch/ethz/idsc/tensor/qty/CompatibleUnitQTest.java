@@ -67,6 +67,17 @@ public class CompatibleUnitQTest extends TestCase {
     assertEquals(s1, q3);
   }
 
+  public void testTime() {
+    Predicate<Scalar> predicate = CompatibleUnitQ.SI().with(Unit.of("h"));
+    assertTrue(predicate.test(Quantity.of(1, "F*S^-1")));
+    assertTrue(predicate.test(Quantity.of(2, "H*Ohm^-1")));
+    assertTrue(predicate.test(Quantity.of(3, "Wb*V^-1")));
+    assertTrue(predicate.test(Quantity.of(4, "mol*kat^-1")));
+    assertTrue(predicate.test(Quantity.of(5, "C*A^-1")));
+    assertTrue(predicate.test(Quantity.of(6, "J*W^-1")));
+    assertTrue(predicate.test(Quantity.of(7, "T*cd*V^-1*lux^-1")));
+  }
+
   public void testWithFail() {
     AssertFail.of(() -> CompatibleUnitQ.SI().with((Unit) null));
     AssertFail.of(() -> CompatibleUnitQ.SI().with((String) null));

@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.lie.Permutations;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -73,6 +74,16 @@ public class InterpolatingPolynomialTest extends TestCase {
     Distribution distribution = UniformDistribution.of(2, 4);
     Tensor domain = QuantityTensor.of(RandomVariate.of(distribution, 20), "m");
     domain.map(suo1).map(QuantityMagnitude.singleton("s"));
+  }
+
+  public void testGaussScalar() {
+    int prime = 7211;
+    Tensor suppor = Tensors.of(GaussScalar.of(53, prime), GaussScalar.of(519, prime), GaussScalar.of(6322, prime));
+    Tensor values = Tensors.of(GaussScalar.of(2233, prime), GaussScalar.of(719, prime), GaussScalar.of(32, prime));
+    ScalarUnaryOperator suo1 = InterpolatingPolynomial.of(suppor).scalarUnaryOperator(values);
+    for (int index = 0; index < suppor.length(); ++index)
+      assertEquals(suo1.apply(suppor.Get(index)), values.Get(index));
+    assertEquals(suo1.apply(GaussScalar.of(54, prime)), GaussScalar.of(4527, prime));
   }
 
   public void testScalarLengthFail() throws ClassNotFoundException, IOException {

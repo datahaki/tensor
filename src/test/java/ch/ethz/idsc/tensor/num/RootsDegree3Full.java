@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.alg;
+package ch.ethz.idsc.tensor.num;
 
 import java.util.stream.Stream;
 

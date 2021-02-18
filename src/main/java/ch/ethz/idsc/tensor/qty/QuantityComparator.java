@@ -37,6 +37,8 @@ public class QuantityComparator implements Comparator<Scalar>, Serializable {
 
   @Override // from Comparator<Scalar>
   public int compare(Scalar scalar1, Scalar scalar2) {
-    return Scalars.compare(unitSystem.apply(scalar1), unitSystem.apply(scalar2));
+    return Scalars.compare( //
+        unitSystem.apply(scalar1), //
+        unitSystem.apply(scalar2));
   }
 }

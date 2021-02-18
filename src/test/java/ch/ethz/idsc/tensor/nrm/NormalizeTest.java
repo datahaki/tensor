@@ -122,10 +122,6 @@ public class NormalizeTest extends TestCase {
     Tensor vector = QuantityTensor.of(Tensors.vector(2, 3, 4), "m*s^-1");
     _checkNormalizeAllNorms(vector);
   }
-  // public void testEmpty() {
-  // for (Norm norm : Norm.values())
-  // AssertFail.of(() -> Normalize.with(norm).apply(Tensors.empty()));
-  // }
 
   public void testNormalizeTotal() {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);

@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -38,10 +39,33 @@ public class VandermondeSolveTest extends TestCase {
     assertTrue(fails <= 2);
   }
 
-  public void testSingular() {
+  public void testSingularFail() {
     Tensor x = Tensors.vector(2, 3, 2);
     Tensor q = Tensors.vector(4, 7, 6);
     AssertFail.of(() -> VandermondeSolve.of(x, q));
+  }
+
+  public void testLengthFail() {
+    Tensor x = Tensors.vector(2, 3);
+    Tensor q = Tensors.vector(4, 7, 6);
+    AssertFail.of(() -> VandermondeSolve.of(x, q));
+  }
+
+  public void testGaussScalar() {
+    int prime = 7817;
+    Tensor x = Tensors.of( //
+        GaussScalar.of(1210, prime), //
+        GaussScalar.of(1343, prime), //
+        GaussScalar.of(3318, prime));
+    Tensor q = Tensors.of( //
+        GaussScalar.of(1, prime), //
+        GaussScalar.of(3, prime), //
+        GaussScalar.of(7, prime));
+    Tensor matrix = VandermondeMatrix.of(x);
+    assertEquals(Det.of(matrix), GaussScalar.of(1705, prime));
+    Tensor ref = LinearSolve.of(Transpose.of(matrix), q, Pivots.FIRST_NON_ZERO);
+    Tensor cmp = VandermondeSolve.of(x, q);
+    assertEquals(ref, cmp);
   }
 
   public void testEmptyFail() {

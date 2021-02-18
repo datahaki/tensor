@@ -43,20 +43,13 @@ public class Normalize implements TensorUnaryOperator {
 
   /** Examples:
    * <pre>
-   * Normalize.with(Norm._1).apply({2, -3, 1}) == {1/3, -1/2, 1/6}
-   * Normalize.with(Norm.INFINITY).apply({2, -3, 1}) == {2/3, -1, 1/3}
+   * Normalize.with(Vector1Norm::of).apply({2, -3, 1}) == {1/3, -1/2, 1/6}
+   * Normalize.with(VectorInfinityNorm::of).apply({2, -3, 1}) == {2/3, -1, 1/3}
    * </pre>
    * 
-   * @param norm
-   * @return operator that normalizes a vector using the given norm */
-  /** Hint: Mathematica requires that the function maps any tensor to
+   * Hint: Mathematica requires that the function maps any tensor to
    * a non-negative scalar, whereas the tensor library does not make this
    * requirement.
-   * 
-   * Examples:
-   * <pre>
-   * Normalize.with(Total::ofVector)
-   * </pre>
    * 
    * @param tensorScalarFunction
    * @return operator that normalizes a vector using the given tensorScalarFunction */
