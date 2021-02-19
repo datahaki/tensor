@@ -1,7 +1,8 @@
 // code by jph
-package ch.ethz.idsc.tensor.sca;
+package ch.ethz.idsc.tensor.api;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.sca.ArcTan;
 
 /** when the computation cannot be carried out, the implementation should return
  * <pre>

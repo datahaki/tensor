@@ -1,5 +1,9 @@
 // code by jph
-package ch.ethz.idsc.tensor;
+package ch.ethz.idsc.tensor.api;
+
+import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.Scalar;
 
 /** a {@link Scalar} may implement the interface to signal that the value is in exact precision.
  * For example, a {@link RationalScalar} implements the function isExactNumber() to return true.

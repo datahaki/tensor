@@ -5,16 +5,16 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 import ch.ethz.idsc.tensor.AbstractScalar;
-import ch.ethz.idsc.tensor.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.api.ConjugateInterface;
+import ch.ethz.idsc.tensor.api.ExactScalarQInterface;
+import ch.ethz.idsc.tensor.api.PowerInterface;
+import ch.ethz.idsc.tensor.api.RoundingInterface;
+import ch.ethz.idsc.tensor.api.SignInterface;
+import ch.ethz.idsc.tensor.api.SqrtInterface;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.sca.ConjugateInterface;
-import ch.ethz.idsc.tensor.sca.PowerInterface;
-import ch.ethz.idsc.tensor.sca.RoundingInterface;
-import ch.ethz.idsc.tensor.sca.SignInterface;
-import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
 /** scalars from finite field with prime number of elements and values
  * 0, 1, 2, ..., prime - 1

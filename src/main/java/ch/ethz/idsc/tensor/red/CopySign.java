@@ -2,8 +2,8 @@
 package ch.ethz.idsc.tensor.red;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.api.SignInterface;
 import ch.ethz.idsc.tensor.sca.Sign;
-import ch.ethz.idsc.tensor.sca.SignInterface;
 
 /** Composes a Scalar with the magnitude of a and the sign of b.
  * Function returns a or a.negate() depending on sign of a and b.

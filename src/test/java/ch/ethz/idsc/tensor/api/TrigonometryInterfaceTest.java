@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.sca;
+package ch.ethz.idsc.tensor.api;
 
 import java.util.function.Function;
 
@@ -7,10 +7,14 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.UnitSystem;
+import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Cos;
+import ch.ethz.idsc.tensor.sca.Cosh;
+import ch.ethz.idsc.tensor.sca.Sin;
+import ch.ethz.idsc.tensor.sca.Sinh;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

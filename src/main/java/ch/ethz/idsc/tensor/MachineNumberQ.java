@@ -3,7 +3,7 @@ package ch.ethz.idsc.tensor;
 
 import java.util.Objects;
 
-import ch.ethz.idsc.tensor.sca.MachineNumberQInterface;
+import ch.ethz.idsc.tensor.api.MachineNumberQInterface;
 
 /** implementation consistent with Mathematica
  * <pre>

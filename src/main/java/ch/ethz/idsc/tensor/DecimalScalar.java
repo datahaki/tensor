@@ -3,10 +3,10 @@ package ch.ethz.idsc.tensor;
 
 import java.math.BigDecimal;
 
+import ch.ethz.idsc.tensor.api.ChopInterface;
+import ch.ethz.idsc.tensor.api.NInterface;
 import ch.ethz.idsc.tensor.num.Pi;
-import ch.ethz.idsc.tensor.sca.ChopInterface;
 import ch.ethz.idsc.tensor.sca.N;
-import ch.ethz.idsc.tensor.sca.NInterface;
 
 /** a decimal scalar encodes a number as {@link BigDecimal}.
  * Unless the precision is explicitly specified, MathContext.DECIMAL128 is used.

@@ -1,10 +1,11 @@
 // code by jph
-package ch.ethz.idsc.tensor.sca;
+package ch.ethz.idsc.tensor.api;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /** a {@link Scalar} implements SignInterface if the signum of the scalar type
  * is a meaningful operation. The interface is used in {@link Sign}. */

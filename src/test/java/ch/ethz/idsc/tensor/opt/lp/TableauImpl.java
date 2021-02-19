@@ -16,10 +16,10 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Partition;
 import ch.ethz.idsc.tensor.alg.TensorMap;
+import ch.ethz.idsc.tensor.api.SignInterface;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.red.ArgMax;
 import ch.ethz.idsc.tensor.red.ArgMin;
-import ch.ethz.idsc.tensor.sca.SignInterface;
 
 /* package */ class TableauImpl {
   public static Tensor of(Tensor c, Tensor A, Tensor b) {

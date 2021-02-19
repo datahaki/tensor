@@ -4,14 +4,14 @@ package ch.ethz.idsc.tensor;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.alg.VectorQ;
-import ch.ethz.idsc.tensor.sca.AbsInterface;
-import ch.ethz.idsc.tensor.sca.ConjugateInterface;
-import ch.ethz.idsc.tensor.sca.ExpInterface;
-import ch.ethz.idsc.tensor.sca.LogInterface;
-import ch.ethz.idsc.tensor.sca.PowerInterface;
-import ch.ethz.idsc.tensor.sca.SignInterface;
-import ch.ethz.idsc.tensor.sca.SqrtInterface;
-import ch.ethz.idsc.tensor.sca.TrigonometryInterface;
+import ch.ethz.idsc.tensor.api.AbsInterface;
+import ch.ethz.idsc.tensor.api.ConjugateInterface;
+import ch.ethz.idsc.tensor.api.ExpInterface;
+import ch.ethz.idsc.tensor.api.LogInterface;
+import ch.ethz.idsc.tensor.api.PowerInterface;
+import ch.ethz.idsc.tensor.api.SignInterface;
+import ch.ethz.idsc.tensor.api.SqrtInterface;
+import ch.ethz.idsc.tensor.api.TrigonometryInterface;
 
 /** Important: not all algorithms are tested for {@link Quaternion} input.
  * The consistent handling of the non-commutativity of the multiplication

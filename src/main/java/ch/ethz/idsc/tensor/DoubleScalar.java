@@ -6,9 +6,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
+import ch.ethz.idsc.tensor.api.ChopInterface;
+import ch.ethz.idsc.tensor.api.MachineNumberQInterface;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.ChopInterface;
-import ch.ethz.idsc.tensor.sca.MachineNumberQInterface;
 
 /** scalar with double precision, 64-bit, MATLAB style
  * 

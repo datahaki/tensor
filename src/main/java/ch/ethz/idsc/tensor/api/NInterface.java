@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.sca;
+package ch.ethz.idsc.tensor.api;
 
 import java.math.MathContext;
 

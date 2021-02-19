@@ -10,7 +10,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-import ch.ethz.idsc.tensor.sca.NInterface;
+import ch.ethz.idsc.tensor.api.ExactScalarQInterface;
+import ch.ethz.idsc.tensor.api.NInterface;
 
 /** a RationalScalar corresponds to an element from the field of rational numbers.
  * 

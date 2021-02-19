@@ -1,7 +1,9 @@
 // code by jph
-package ch.ethz.idsc.tensor.sca;
+package ch.ethz.idsc.tensor.api;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.sca.Imag;
+import ch.ethz.idsc.tensor.sca.Real;
 
 /** interface defines the embedding of a {@link Scalar} in the complex plane
  * 
