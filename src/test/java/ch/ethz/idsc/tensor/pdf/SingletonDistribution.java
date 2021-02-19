@@ -6,7 +6,7 @@ import java.util.Random;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.num.Boole;
+import ch.ethz.idsc.tensor.red.KroneckerDelta;
 
 /* package */ class SingletonDistribution implements DiscreteDistribution, Serializable {
   private static final long serialVersionUID = -3837826783641722888L;
@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.num.Boole;
 
   @Override
   public Scalar at(Scalar x) {
-    return Boole.of(x.equals(scalar));
+    return KroneckerDelta.of(x, scalar);
   }
 
   @Override // from RandomVariateInterface
@@ -35,6 +35,6 @@ import ch.ethz.idsc.tensor.num.Boole;
 
   @Override // from DiscreteDistribution
   public Scalar p_equals(int n) {
-    return Boole.of(n == value);
+    return KroneckerDelta.of(n, value);
   }
 }

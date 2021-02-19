@@ -3,8 +3,10 @@ package ch.ethz.idsc.tensor.qty;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -35,6 +37,23 @@ import ch.ethz.idsc.tensor.sca.Power;
     return scalar;
   }
 
+  /***************************************************/
+  private static String exponentString(Scalar exponent) {
+    String string = exponent.toString();
+    return string.equals("1") //
+        ? ""
+        : Unit.POWER_DELIMITER + string; // delimited by '^'
+  }
+
+  /** @param navigableMap
+   * @return for instance "m*s^-2" */
+  public static String toString(NavigableMap<String, Scalar> navigableMap) {
+    return navigableMap.entrySet().stream() //
+        .map(entry -> entry.getKey() + exponentString(entry.getValue())) //
+        .collect(Collectors.joining(Unit.JOIN_DELIMITER)); // delimited by '*'
+  }
+
+  /***************************************************/
   /** @param map
    * @param key satisfies {@link #requireAtomic(String)}
    * @param exponent non-zero */

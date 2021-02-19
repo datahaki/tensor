@@ -23,21 +23,24 @@ import ch.ethz.idsc.tensor.ext.Cache;
   /* package */ static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> NEGATION = //
       Collectors.toMap(Entry::getKey, entry -> entry.getValue().negate(), (e1, e2) -> null, TreeMap::new);
   private static final int MAX_SIZE = 1536;
-  private static final Function<Unit, Unit> CACHE = Cache.of(Function.identity(), MAX_SIZE);
+  private static final Function<NavigableMap<String, Scalar>, Unit> CACHE = //
+      Cache.of(UnitImpl::new, MAX_SIZE);
 
   /** @param navigableMap for example {"kg"=1, "m"=1, "s"=-2}, the scalar value shall not be zero
    * @return */
   public static Unit create(NavigableMap<String, Scalar> navigableMap) {
-    return CACHE.apply(new UnitImpl(navigableMap));
+    return CACHE.apply(navigableMap);
   }
 
   /***************************************************/
   private final NavigableMap<String, Scalar> navigableMap;
   private final int hashCode;
+  private final String string;
 
   private UnitImpl(NavigableMap<String, Scalar> navigableMap) {
     this.navigableMap = navigableMap;
     hashCode = navigableMap.hashCode();
+    string = StaticHelper.toString(navigableMap);
   }
 
   @Override // from Unit
@@ -83,17 +86,8 @@ import ch.ethz.idsc.tensor.ext.Cache;
         && navigableMap.equals(((Unit) object).map());
   }
 
-  private static String exponentString(Scalar exponent) {
-    String string = exponent.toString();
-    return string.equals("1") //
-        ? ""
-        : POWER_DELIMITER + string;
-  }
-
   @Override // from Object
   public String toString() {
-    return navigableMap.entrySet().stream() //
-        .map(entry -> entry.getKey() + exponentString(entry.getValue())) //
-        .collect(Collectors.joining(JOIN_DELIMITER));
+    return string;
   }
 }

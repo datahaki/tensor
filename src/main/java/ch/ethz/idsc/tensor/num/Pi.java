@@ -9,6 +9,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
+/** inspired by
+ * <a href="https://reference.wolfram.com/language/ref/Pi.html">Pi</a> */
 public enum Pi {
   ;
   /** 3.14159265358979323846 */
