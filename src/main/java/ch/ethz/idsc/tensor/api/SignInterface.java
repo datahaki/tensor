@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** a {@link Scalar} implements SignInterface if the signum of the scalar type
  * is a meaningful operation. The interface is used in {@link Sign}. */
+@FunctionalInterface
 public interface SignInterface {
   /** @return the "direction" of the scalar, or zero if scalar is zero */
   Scalar sign();

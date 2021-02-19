@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.sca;
+package ch.ethz.idsc.tensor.api;
 
 import java.io.IOException;
 
@@ -8,8 +8,35 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.sca.Abs;
+import ch.ethz.idsc.tensor.sca.ArcCos;
+import ch.ethz.idsc.tensor.sca.ArcSin;
+import ch.ethz.idsc.tensor.sca.ArcTan;
+import ch.ethz.idsc.tensor.sca.ArcTanh;
+import ch.ethz.idsc.tensor.sca.Arg;
+import ch.ethz.idsc.tensor.sca.Ceiling;
+import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.sca.Cos;
+import ch.ethz.idsc.tensor.sca.Decrement;
+import ch.ethz.idsc.tensor.sca.Exp;
+import ch.ethz.idsc.tensor.sca.Floor;
+import ch.ethz.idsc.tensor.sca.Increment;
+import ch.ethz.idsc.tensor.sca.Log;
+import ch.ethz.idsc.tensor.sca.LogisticSigmoid;
+import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.sca.Ramp;
+import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.sca.Sin;
+import ch.ethz.idsc.tensor.sca.Sinc;
+import ch.ethz.idsc.tensor.sca.Sinh;
+import ch.ethz.idsc.tensor.sca.Sqrt;
+import ch.ethz.idsc.tensor.sca.Tan;
+import ch.ethz.idsc.tensor.sca.Tanh;
+import ch.ethz.idsc.tensor.sca.UnitStep;
 import junit.framework.TestCase;
 
 /** the purpose of the test is to demonstrate that
@@ -21,100 +48,100 @@ public class ScalarUnaryOperatorTest extends TestCase {
     assertNotNull(ScalarUnaryOperator.class.getAnnotation(FunctionalInterface.class));
   }
 
-  static void _checkOps(Scalar tensor) {
+  static void _checkOps(Scalar scalar) {
     try {
-      Abs.of(tensor);
+      Abs.of(scalar);
     } catch (Exception exception) {
       // ---
     }
     try {
-      Arg.of(tensor);
+      Arg.of(scalar);
     } catch (Exception exception) {
       // ---
     }
     try {
-      ArcCos.of(tensor);
+      ArcCos.of(scalar);
     } catch (Exception exception) {
       // ---
     }
     try {
-      ArcSin.of(tensor);
+      ArcSin.of(scalar);
     } catch (Exception exception) {
       // ---
     }
-    ArcTan.of(tensor);
+    ArcTan.of(scalar);
     try {
-      ArcTanh.of(tensor);
+      ArcTanh.of(scalar);
     } catch (Exception exception) {
       // ---
     }
-    Ceiling.of(tensor);
-    Chop._12.of(tensor);
+    Ceiling.of(scalar);
+    Chop._12.of(scalar);
     try {
-      Clips.unit().apply(tensor);
+      Clips.unit().apply(scalar);
     } catch (Exception exception) {
       // ---
     }
-    Cos.of(tensor);
-    Exp.of(tensor);
-    Floor.of(tensor);
+    Cos.of(scalar);
+    Exp.of(scalar);
+    Floor.of(scalar);
     try {
-      Log.of(tensor);
+      Log.of(scalar);
     } catch (Exception exception) {
       // ---
     }
-    LogisticSigmoid.of(tensor);
-    N.DOUBLE.of(tensor);
+    LogisticSigmoid.of(scalar);
+    N.DOUBLE.of(scalar);
     try {
-      Power.of(tensor, RealScalar.of(0.3));
+      Power.of(scalar, RealScalar.of(0.3));
     } catch (Exception exception) {
       // ---
     }
     try {
-      Power.of(tensor, RealScalar.of(-0.3));
+      Power.of(scalar, RealScalar.of(-0.3));
     } catch (Exception exception) {
       // ---
     }
-    Power.of(tensor, RealScalar.ZERO);
+    Power.of(scalar, RealScalar.ZERO);
     try {
-      Ramp.of(tensor);
+      Ramp.of(scalar);
     } catch (Exception exception) {
       // ---
     }
-    Round.of(tensor);
+    Round.of(scalar);
     try {
-      Sign.of(tensor);
+      Sign.FUNCTION.apply(scalar);
     } catch (Exception exception) {
       // ---
     }
-    Sin.of(tensor);
+    Sin.of(scalar);
     try {
-      Sinc.of(tensor);
+      Sinc.of(scalar);
     } catch (Exception exception) {
       // ---
     }
-    Sinh.of(tensor);
+    Sinh.of(scalar);
     try {
-      Sqrt.of(tensor);
+      Sqrt.of(scalar);
     } catch (Exception exception) {
       // ---
     }
-    Tan.of(tensor);
-    Tanh.of(tensor);
+    Tan.of(scalar);
+    Tanh.of(scalar);
     try {
-      UnitStep.of(tensor);
-    } catch (Exception exception) {
-      // ---
-    }
-    // ---
-    try {
-      Scalars.compare(tensor, RealScalar.ONE);
+      UnitStep.of(scalar);
     } catch (Exception exception) {
       // ---
     }
     // ---
-    tensor.map(Decrement.ONE);
-    tensor.map(Increment.ONE);
+    try {
+      Scalars.compare(scalar, RealScalar.ONE);
+    } catch (Exception exception) {
+      // ---
+    }
+    // ---
+    scalar.map(Decrement.ONE);
+    scalar.map(Increment.ONE);
   }
 
   public void testTrinity() {

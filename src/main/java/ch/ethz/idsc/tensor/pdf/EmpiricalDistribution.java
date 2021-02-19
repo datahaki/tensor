@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.pdf;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Accumulate;
 import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Range;
@@ -95,6 +96,6 @@ public class EmpiricalDistribution extends EvaluatedDiscreteDistribution impleme
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[#=%d]", getClass().getSimpleName(), pdf.length());
+    return String.format("%s[%s]", getClass().getSimpleName(), Tensors.message(pdf));
   }
 }

@@ -11,8 +11,8 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Ordering;
 import ch.ethz.idsc.tensor.io.ScalarArray;
 import ch.ethz.idsc.tensor.nrm.Hypot;
@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * Implementation also works for matrices with entries of type Quantity of
  * the same unit. */
 /* package */ class JacobiMethod implements Eigensystem, Serializable {
-  private static final long serialVersionUID = 6886081920723349745L;
+  private static final long serialVersionUID = 2799414918075169266L;
   private static final int MAX_ITERATIONS = 50;
   // higher phase 1 count increases numerical precision
   private static final int[] PHASE1 = { //
@@ -131,13 +131,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
   }
 
   @Override // from Eigensystem
-  public Tensor vectors() {
-    return V;
+  public Tensor values() {
+    return d;
   }
 
   @Override // from Eigensystem
-  public Tensor values() {
-    return d;
+  public Tensor vectors() {
+    return V;
   }
 
   private static void rotate(Scalar[][] A, Scalar s, Scalar tau, int i, int j, int k, int l) {
@@ -154,8 +154,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
     A.set(h.add(s.multiply(g.subtract(h.multiply(tau)))), k, l);
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
-    return String.format("%s[V=%s]", Eigensystem.class.getSimpleName(), Dimensions.of(V));
+    return String.format("%s[%s]", Eigensystem.class.getSimpleName(), Tensors.message(values(), vectors()));
   }
 }

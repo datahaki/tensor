@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.api.SignInterface;
@@ -36,13 +35,6 @@ public enum Sign implements ScalarUnaryOperator {
       return signInterface.sign();
     }
     throw TensorRuntimeException.of(scalar);
-  }
-
-  /** @param tensor with {@link RealScalar} entries
-   * @return tensor with all scalars replaced with their sign */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
   }
 
   /** function is equivalent to
@@ -87,9 +79,9 @@ public enum Sign implements ScalarUnaryOperator {
    * @return scalar
    * @throws Exception if given scalar is not positive, i.e. has negative or zero sign */
   public static Scalar requirePositive(Scalar scalar) {
-    if (isNegativeOrZero(scalar))
-      throw TensorRuntimeException.of(scalar);
-    return scalar;
+    if (isPositive(scalar))
+      return scalar;
+    throw TensorRuntimeException.of(scalar);
   }
 
   /** Remark: Functionality inspired by {@link Objects#requireNonNull(Object)}
@@ -98,8 +90,8 @@ public enum Sign implements ScalarUnaryOperator {
    * @return scalar
    * @throws Exception if given scalar is negative, i.e. has negative sign */
   public static Scalar requirePositiveOrZero(Scalar scalar) {
-    if (isNegative(scalar))
-      throw TensorRuntimeException.of(scalar);
-    return scalar;
+    if (isPositiveOrZero(scalar))
+      return scalar;
+    throw TensorRuntimeException.of(scalar);
   }
 }

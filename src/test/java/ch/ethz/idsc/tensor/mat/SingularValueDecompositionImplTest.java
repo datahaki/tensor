@@ -42,6 +42,7 @@ public class SingularValueDecompositionImplTest extends TestCase {
     SingularValueDecomposition svd = SingularValueDecomposition.of(A);
     assertEquals(NullSpace.of(svd).length(), 1);
     assertEquals(NullSpace.of(svd, Chop._20), Tensors.empty());
+    assertTrue(svd.toString().startsWith("SingularValueDecomposition["));
   }
 
   public void testPackageVisibility() {

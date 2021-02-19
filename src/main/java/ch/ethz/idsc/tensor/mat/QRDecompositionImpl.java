@@ -8,8 +8,8 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
-import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.red.Diagonal;
@@ -93,6 +93,6 @@ import ch.ethz.idsc.tensor.red.Times;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[Q=%s, R=%s]", QRDecomposition.class.getSimpleName(), Dimensions.of(getQ()), Dimensions.of(getR()));
+    return String.format("%s[%s]", QRDecomposition.class.getSimpleName(), Tensors.message(getQ(), getR()));
   }
 }

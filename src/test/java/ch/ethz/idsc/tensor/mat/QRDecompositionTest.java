@@ -183,6 +183,7 @@ public class QRDecompositionTest extends TestCase {
     QRDecomposition qr = QRDecomposition.of(matrix, QRSignOperators.ORIENTATION);
     Tensor reference = Tensors.fromString("{5.916079783099616`, 0.828078671210825`}");
     Chop._10.requireClose(reference, Diagonal.of(qr.getR()));
+    assertTrue(qr.toString().startsWith("QRDecomposition["));
   }
 
   public void testMathematica2() {

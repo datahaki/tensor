@@ -50,13 +50,14 @@ public class EmpiricalDistributionTest extends TestCase {
 
   public void testRandomVariate() {
     Distribution distribution = EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(0, 2, 1, 0, 3, 0));
-    Map<Tensor, Long> map = Tally.of(RandomVariate.of(distribution, 1000));
+    Map<Tensor, Long> map = Tally.of(RandomVariate.of(distribution, 100));
     assertFalse(map.containsKey(RealScalar.ZERO));
     assertTrue(map.containsKey(RealScalar.of(1)));
     assertTrue(map.containsKey(RealScalar.of(2)));
     assertFalse(map.containsKey(RealScalar.of(3)));
     assertTrue(map.containsKey(RealScalar.of(4)));
     assertFalse(map.containsKey(RealScalar.of(5)));
+    assertEquals(distribution.toString(), "EmpiricalDistribution[{0, 1/3, 1/6, 0, 1/2, 0}]");
   }
 
   public void testNextDown() {
