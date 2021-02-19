@@ -4,7 +4,7 @@ package ch.ethz.idsc.tensor.nrm;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
-/** implementation consistent with Mathematica
+/** implementation is consistent with Mathematica
  * Norm[{3, 4}, "Frobenius"] == 5 */
 public enum FrobeniusNorm {
   ;

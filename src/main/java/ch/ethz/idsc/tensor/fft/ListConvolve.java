@@ -32,6 +32,6 @@ public enum ListConvolve {
   /** @param kernel
    * @return operator that performs convolution with given kernel on tensor input */
   public static TensorUnaryOperator with(Tensor kernel) {
-    return new ListCorrelateOperator(Reverse.all(kernel));
+    return ListCorrelate.with(Reverse.all(kernel));
   }
 }

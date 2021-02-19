@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.pdf;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Accumulate;
 import ch.ethz.idsc.tensor.alg.Last;
@@ -77,20 +76,19 @@ public class EmpiricalDistribution extends EvaluatedDiscreteDistribution impleme
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
-    return cdf_get(Ceiling.FUNCTION.apply(x.subtract(RealScalar.ONE)));
+    return cdf_get(Ceiling.intValueExact(x) - 1);
   }
 
   @Override // from CDF
   public Scalar p_lessEquals(Scalar x) {
-    return cdf_get(Floor.FUNCTION.apply(x));
+    return cdf_get(Floor.intValueExact(x));
   }
 
   // helper function
-  private Scalar cdf_get(Scalar scalar) {
-    int index = Scalars.intValueExact(scalar);
-    if (0 <= index)
-      return index < cdf.length() //
-          ? cdf.Get(index)
+  private Scalar cdf_get(int n) {
+    if (0 <= n)
+      return n < cdf.length() //
+          ? cdf.Get(n)
           : RealScalar.ONE;
     return RealScalar.ZERO;
   }

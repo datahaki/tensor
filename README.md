@@ -294,7 +294,3 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
 ```
 
 The source code is attached to every release.
-
----
-
-![ethz300](https://user-images.githubusercontent.com/4012178/45925071-bf9d3b00-bf0e-11e8-9d92-e30650fd6bf6.png)

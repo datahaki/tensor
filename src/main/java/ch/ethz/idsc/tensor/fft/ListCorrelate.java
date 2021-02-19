@@ -1,9 +1,18 @@
 // code by jph
 package ch.ethz.idsc.tensor.fft;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /** The tensor library permits correlation with a kernel of lower rank than tensor.
  * This is unlike in Mathematica.
@@ -12,8 +21,9 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/ListCorrelate.html">ListCorrelate</a>
  * 
  * @see ListConvolve */
-public enum ListCorrelate {
-  ;
+public class ListCorrelate implements TensorUnaryOperator {
+  private static final long serialVersionUID = -8238452403206311829L;
+
   /** <pre>
    * ListCorrelate[{x, y}, {a, b, c, d, e, f}] ==
    * {a x + b y, b x + c y, c x + d y, d x + e y, e x + f y}
@@ -31,6 +41,36 @@ public enum ListCorrelate {
   /** @param kernel
    * @return operator that performs correlation with given kernel on tensor input */
   public static TensorUnaryOperator with(Tensor kernel) {
-    return new ListCorrelateOperator(kernel);
+    return new ListCorrelate(kernel);
+  }
+
+  /***************************************************/
+  private final Tensor kernel;
+  private final List<Integer> mask;
+  private final int level;
+
+  private ListCorrelate(Tensor kernel) {
+    this.kernel = kernel;
+    mask = Dimensions.of(kernel);
+    level = mask.size() - 1;
+  }
+
+  @Override // from TensorUnaryOperator
+  public Tensor apply(Tensor tensor) {
+    List<Integer> size = Dimensions.of(tensor);
+    if (size.size() <= level)
+      throw TensorRuntimeException.of(kernel, tensor);
+    List<Integer> dimensions = IntStream.range(0, mask.size()) //
+        .map(index -> size.get(index) - mask.get(index) + 1) //
+        .mapToObj(Integers::requirePositive) //
+        .collect(Collectors.toList());
+    Tensor refs = Unprotect.references(tensor);
+    return Array.of(index -> kernel.pmul(refs.block(index, mask)).flatten(level) //
+        .reduce(Tensor::add).get(), dimensions);
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%s]", getClass().getSimpleName(), mask);
   }
 }
