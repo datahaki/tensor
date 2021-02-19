@@ -191,11 +191,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     return scalar.divide(Abs.FUNCTION.apply(scalar));
   }
 
-  @Override // from SignInterface
-  public int signInt() {
-    throw TensorRuntimeException.of(this);
-  }
-
   @Override // from SqrtInterface
   public Quaternion sqrt() {
     Scalar w_abs = w.add(abs());

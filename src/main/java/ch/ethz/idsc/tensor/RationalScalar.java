@@ -193,7 +193,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
   }
 
   @Override // from SignInterface
-  public int signInt() {
+  protected int signInt() {
     return bigFraction.signum();
   }
 

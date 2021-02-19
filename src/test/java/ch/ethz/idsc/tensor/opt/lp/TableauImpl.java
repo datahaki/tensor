@@ -16,10 +16,10 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Partition;
 import ch.ethz.idsc.tensor.alg.TensorMap;
-import ch.ethz.idsc.tensor.api.SignInterface;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.red.ArgMax;
 import ch.ethz.idsc.tensor.red.ArgMin;
+import ch.ethz.idsc.tensor.sca.Sign;
 
 /* package */ class TableauImpl {
   public static Tensor of(Tensor c, Tensor A, Tensor b) {
@@ -54,14 +54,14 @@ import ch.ethz.idsc.tensor.red.ArgMin;
       // System.out.println(Pretty.of(tab));
       Tensor c = tab.get(m).extract(0, n);
       int j = ArgMin.of(c);
-      if (((SignInterface) c.Get(j)).signInt() == -1) {
+      if (Sign.isNegative(c.Get(j))) {
         int argmax = ArgMax.of(tab.get(Tensor.ALL, j).extract(0, m));
-        if (((SignInterface) tab.Get(argmax, j)).signInt() != 1)
+        if (!Sign.isPositive(tab.Get(argmax, j)))
           throw TensorRuntimeException.of(tab); // problem unbounded
         Integer pivot = null;
         Scalar min = null;
         for (int i = 0; i < m; ++i)
-          if (((SignInterface) tab.Get(i, j)).signInt() == 1) {
+          if (Sign.isPositive(tab.Get(i, j))) {
             Scalar value = tab.Get(i, n).divide(tab.Get(i, j));
             if (Objects.isNull(min) || 0 < Scalars.compare(min, value)) {
               min = value;

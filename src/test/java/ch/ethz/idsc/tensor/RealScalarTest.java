@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ch.ethz.idsc.tensor.api.SignInterface;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -19,13 +19,13 @@ public class RealScalarTest extends TestCase {
   }
 
   public void testSign() {
-    assertEquals(((SignInterface) RealScalar.ZERO).signInt(), 0);
-    assertEquals(((SignInterface) RealScalar.of(+5)).signInt(), 1);
-    assertEquals(((SignInterface) RealScalar.of(-5)).signInt(), -1);
+    assertEquals(Sign.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);
+    assertEquals(Sign.FUNCTION.apply(RealScalar.of(+5)), RealScalar.ONE);
+    assertEquals(Sign.FUNCTION.apply(RealScalar.of(-5)), RealScalar.ONE.negate());
     RealScalar r1 = (RealScalar) RationalScalar.of(1927365481254298736L, 1927365481254298737L);
     RealScalar r2 = (RealScalar) RationalScalar.of(1927365481254298741L, -1927365481254298739L);
-    assertEquals(((SignInterface) r1).signInt(), 1);
-    assertEquals(((SignInterface) r2).signInt(), -1);
+    assertEquals(Sign.FUNCTION.apply(r1), RealScalar.ONE);
+    assertEquals(Sign.FUNCTION.apply(r2), RealScalar.ONE.negate());
   }
 
   public void testCompare() {

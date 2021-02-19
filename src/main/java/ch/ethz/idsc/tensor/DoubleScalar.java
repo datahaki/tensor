@@ -179,7 +179,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   }
 
   @Override // from SignInterface
-  public int signInt() {
+  protected int signInt() {
     if (Double.isNaN(value))
       throw TensorRuntimeException.of(this);
     return value < 0 ? -1 : (0 == value ? 0 : 1);

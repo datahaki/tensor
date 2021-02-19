@@ -234,11 +234,6 @@ import ch.ethz.idsc.tensor.sca.Sinh;
     return scalar.divide(Abs.FUNCTION.apply(scalar));
   }
 
-  @Override // from SignInterface
-  public int signInt() {
-    throw TensorRuntimeException.of(this);
-  }
-
   @Override // from SqrtInterface
   public Scalar sqrt() {
     return ComplexHelper.sqrt(re, im);

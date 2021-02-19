@@ -1,6 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import ch.ethz.idsc.tensor.api.ComplexEmbedding;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.Exp;
@@ -49,6 +52,11 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   public final Scalar sign() {
     return StaticHelper.SIGN[1 + signInt()];
   }
+
+  /** @return gives -1, 0, or 1 depending on whether this is negative, zero, or positive.
+   * @see BigInteger#signum()
+   * @see BigDecimal#signum() */
+  protected abstract int signInt();
 
   /***************************************************/
   // methods are non-final because overriding classes may support better precision

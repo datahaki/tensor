@@ -150,8 +150,7 @@ public class ClipsTest extends TestCase {
   }
 
   public void testQuantityMixedZero() {
-    Clip clip = Clips.interval(Quantity.of(0, "m"), Quantity.of(0, ""));
-    clip.apply(Quantity.of(2, "m"));
+    AssertFail.of(() -> Clips.interval(Quantity.of(0, "m"), Quantity.of(0, "")));
   }
 
   public void testQuantityMixedUnitsFail() {

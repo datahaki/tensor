@@ -51,8 +51,7 @@ public enum Sign implements ScalarUnaryOperator {
    * @param scalar may be instance of {@link Quantity}
    * @return true if sign of given scalar evaluates to +1 */
   public static boolean isPositive(Scalar scalar) {
-    SignInterface signInterface = (SignInterface) scalar;
-    return signInterface.signInt() == +1;
+    return Scalars.lessThan(scalar.zero(), scalar);
   }
 
   /** function is equivalent to
@@ -61,8 +60,7 @@ public enum Sign implements ScalarUnaryOperator {
    * @param scalar may be instance of {@link Quantity}
    * @return true if sign of given scalar evaluates to -1 */
   public static boolean isNegative(Scalar scalar) {
-    SignInterface signInterface = (SignInterface) scalar;
-    return signInterface.signInt() == -1;
+    return Scalars.lessThan(scalar, scalar.zero());
   }
 
   /** function is equivalent to
@@ -71,8 +69,7 @@ public enum Sign implements ScalarUnaryOperator {
    * @param scalar may be instance of {@link Quantity}
    * @return true if sign of given scalar evaluates to +1, or 0 */
   public static boolean isPositiveOrZero(Scalar scalar) {
-    SignInterface signInterface = (SignInterface) scalar;
-    return signInterface.signInt() != -1;
+    return Scalars.lessEquals(scalar.zero(), scalar);
   }
 
   /** function is equivalent to
@@ -81,8 +78,7 @@ public enum Sign implements ScalarUnaryOperator {
    * @param scalar may be instance of {@link Quantity}
    * @return true if sign of given scalar evaluates to -1, or 0 */
   public static boolean isNegativeOrZero(Scalar scalar) {
-    SignInterface signInterface = (SignInterface) scalar;
-    return signInterface.signInt() != +1;
+    return Scalars.lessEquals(scalar, scalar.zero());
   }
 
   /** Remark: Functionality inspired by {@link Objects#requireNonNull(Object)}

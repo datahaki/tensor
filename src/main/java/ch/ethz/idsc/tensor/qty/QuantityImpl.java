@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ChopInterface;
 import ch.ethz.idsc.tensor.api.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.api.NInterface;
-import ch.ethz.idsc.tensor.api.SignInterface;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.ArcTan;
@@ -231,12 +230,11 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   public Scalar sign() {
     return Sign.FUNCTION.apply(value);
   }
-
-  @Override // from SignInterface
-  public int signInt() {
-    SignInterface signInterface = (SignInterface) value;
-    return signInterface.signInt();
-  }
+  // @Override // from SignInterface
+  // public abstract int signInt();
+  // SignInterface signInterface = (SignInterface) value;
+  // return signInterface.signInt();
+  // }
 
   @Override // from SqrtInterface
   public Scalar sqrt() {

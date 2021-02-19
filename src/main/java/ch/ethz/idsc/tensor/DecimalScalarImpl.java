@@ -185,7 +185,7 @@ import ch.ethz.idsc.tensor.sca.N;
   }
 
   @Override // from SignInterface
-  public int signInt() {
+  protected int signInt() {
     return value.signum();
   }
 

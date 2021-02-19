@@ -166,11 +166,6 @@ public class GaussScalar extends AbstractScalar implements //
     return new GaussScalar(BigInteger.valueOf(value.signum()), prime);
   }
 
-  @Override // from SignInterface
-  public int signInt() {
-    return value.signum();
-  }
-
   @Override // from SqrtInterface
   public GaussScalar sqrt() {
     // LONGTERM implementation is slow, could use memo function
