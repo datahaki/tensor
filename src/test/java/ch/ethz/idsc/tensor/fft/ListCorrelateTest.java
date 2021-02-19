@@ -7,6 +7,7 @@ import java.util.function.UnaryOperator;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import junit.framework.TestCase;
 
 public class ListCorrelateTest extends TestCase {
@@ -53,5 +54,12 @@ public class ListCorrelateTest extends TestCase {
     Tensor result2 = cp.apply(matrix);
     assertEquals(result1, Tensors.matrixInt(new int[][] { { 1, -2, 3, -1 }, { -1, 2, -4, 0 } }));
     assertEquals(result1, result2);
+  }
+
+  public void testSameSame() {
+    Tensor kernel = HilbertMatrix.of(3);
+    Tensor matrix = ListCorrelate.of(kernel, kernel);
+    // confirmed with Mathematica ListCorrelate[HilbertMatrix[3], HilbertMatrix[3]]
+    assertEquals(matrix, Tensors.fromString("{{1199/600}}"));
   }
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.UnaryOperator;
 
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.ArrayPad;
@@ -12,6 +13,7 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.TensorMap;
 import ch.ethz.idsc.tensor.alg.TensorRank;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -65,12 +67,32 @@ public class ListConvolveTest extends TestCase {
     assertEquals(result1, result2);
   }
 
-  public void testRankFail() {
+  public void testSameSame() {
+    Tensor kernel = HilbertMatrix.of(3);
+    Tensor matrix = ListConvolve.of(kernel, kernel);
+    // confirmed with Mathematica ListConvolve[HilbertMatrix[3], HilbertMatrix[3]]
+    assertEquals(matrix, Tensors.fromString("{{37/30}}"));
+  }
+
+  public void testOutsideMathematica() {
     Tensor kernel = Tensors.vector(1, -1);
     Tensor matrix = Tensors.matrixInt(new int[][] { //
         { 2, 1, 3, 0, 1 }, //
+        { 0, 1, -1, 3, 3 }, //
         { 0, 1, -1, 3, 3 } });
-    AssertFail.of(() -> ListConvolve.of(kernel, matrix));
+    Tensor tensor = ListConvolve.of(kernel, matrix);
+    assertEquals(tensor, Tensors.fromString("{{-2, 0, -4, 3, 2}, {0, 0, 0, 0, 0}}"));
+    ExactTensorQ.require(tensor);
+  }
+
+  public void testRankFail() {
+    Tensor kernel = HilbertMatrix.of(2);
+    Tensor matrix = Tensors.matrixInt(new int[][] { //
+        { 2, 1, 3, 0, 1 }, //
+        { 0, 1, -1, 3, 3 }, //
+        { 0, 1, -1, 3, 3 } });
+    ListConvolve.of(kernel, matrix);
+    AssertFail.of(() -> ListConvolve.of(kernel, matrix.get(0)));
   }
 
   public void testConvolveNullFail() {

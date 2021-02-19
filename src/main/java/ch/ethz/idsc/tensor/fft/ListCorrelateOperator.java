@@ -18,23 +18,25 @@ import ch.ethz.idsc.tensor.ext.Integers;
   // ---
   private final Tensor kernel;
   private final List<Integer> mask;
+  private final int flat;
 
   public ListCorrelateOperator(Tensor kernel) {
     this.kernel = kernel;
     mask = Dimensions.of(kernel);
+    flat = mask.size() - 1;
   }
 
   @Override // from TensorUnaryOperator
   public Tensor apply(Tensor tensor) {
     List<Integer> size = Dimensions.of(tensor);
-    if (mask.size() != size.size())
+    if (size.size() <= flat)
       throw TensorRuntimeException.of(kernel, tensor);
     List<Integer> dimensions = IntStream.range(0, mask.size()) //
         .map(index -> size.get(index) - mask.get(index) + 1) //
         .mapToObj(Integers::requirePositive) //
         .collect(Collectors.toList());
     Tensor refs = Unprotect.references(tensor);
-    return Array.of(index -> kernel.pmul(refs.block(index, mask)).flatten(-1) //
+    return Array.of(index -> kernel.pmul(refs.block(index, mask)).flatten(flat) //
         .reduce(Tensor::add).get(), dimensions);
   }
 }

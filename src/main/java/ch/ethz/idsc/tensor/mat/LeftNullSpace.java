@@ -26,7 +26,6 @@ public enum LeftNullSpace {
   /** @param matrix
    * @return list of vectors that span the left nullspace of given matrix */
   public static Tensor of(Tensor matrix) {
-    // TODO should be same design as LeastSquares#of
     return ExactTensorQ.of(matrix) //
         ? usingRowReduce(matrix, Pivots.FIRST_NON_ZERO)
         : usingQR(matrix);

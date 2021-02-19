@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.fft;
 
 import java.lang.reflect.Modifier;
 
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -38,8 +39,11 @@ public class ListCorrelateOperatorTest extends TestCase {
     Tensor kernel = Tensors.vector(1, -1);
     Tensor matrix = Tensors.matrixInt(new int[][] { //
         { 2, 1, 3, 0, 1 }, //
+        { 0, 1, -1, 3, 3 }, //
         { 0, 1, -1, 3, 3 } });
-    AssertFail.of(() -> ListCorrelate.of(kernel, matrix));
+    Tensor result = ListCorrelate.of(kernel, matrix);
+    ExactTensorQ.require(result);
+    assertEquals(result, Tensors.fromString("{{2, 0, 4, -3, -2}, {0, 0, 0, 0, 0}}"));
   }
 
   public void testNullFail() {

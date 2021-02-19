@@ -5,7 +5,10 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
-/** One application of {@link ListConvolve} is the computation of the coefficients
+/** The tensor library permits convolution with a kernel of lower rank than tensor.
+ * This is unlike in Mathematica.
+ * 
+ * <p>One application of {@link ListConvolve} is the computation of the coefficients
  * of the product of two polynomials.
  * 
  * <p>inspired by

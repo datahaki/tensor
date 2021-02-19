@@ -46,9 +46,6 @@ public class BenIsraelCohenTest extends TestCase {
     Tolerance.CHOP.requireClose(pinv, mathem);
     SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
     Chop._08.requireClose(pinv, PseudoInverse.of(svd));
-    // for the matrix in this example the algorithm PseudoInverse gives
-    // a result that deviates from Mathematica's solution significantly
-    // TODO investigate why QR decomp does not work well here!?
   }
 
   public void testZeros() {
