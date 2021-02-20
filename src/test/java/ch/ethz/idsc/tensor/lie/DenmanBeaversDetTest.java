@@ -4,7 +4,11 @@ package ch.ethz.idsc.tensor.lie;
 import java.io.IOException;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.mat.HermitianMatrixQ;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -26,5 +30,15 @@ public class DenmanBeaversDetTest extends TestCase {
       Chop._03.requireClose(pfm2, det2);
       Chop._03.requireClose(det2, x2);
     }
+  }
+
+  public void testComplex() {
+    Tensor x2 = Tensors.fromString("{{6, 1+5*I}, {1-5*I, 11}}");
+    HermitianMatrixQ.require(x2);
+    DenmanBeaversDet denmanBeaversDet = new DenmanBeaversDet(x2, Tolerance.CHOP);
+    Tolerance.CHOP.requireClose( //
+        Dot.of(denmanBeaversDet.sqrt(), denmanBeaversDet.sqrt_inverse()), IdentityMatrix.of(2));
+    Tolerance.CHOP.requireClose( //
+        Dot.of(denmanBeaversDet.sqrt(), denmanBeaversDet.sqrt()), x2);
   }
 }

@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Conjugate;
 import ch.ethz.idsc.tensor.sca.Imag;
 
 /** The pseudo inverse is the least squares solution x to
@@ -48,7 +49,6 @@ public enum PseudoInverse {
       } catch (Exception exception) {
         // matrix does not have maximal rank
       }
-    // return LeastSquares.of(matrix, IdentityMatrix.of(matrix.length()));
     boolean complex = matrix.flatten(2).map(Scalar.class::cast).map(Imag.FUNCTION).anyMatch(Scalars::nonZero);
     if (complex)
       return BenIsraelCohen.of(matrix);
@@ -61,11 +61,13 @@ public enum PseudoInverse {
    * @throws Exception if given matrix does not have maximal rank */
   /* package */ static Tensor usingCholesky(Tensor matrix) {
     int n = matrix.length();
-    Tensor mt = ConjugateTranspose.of(matrix);
-    int m = mt.length();
-    return m <= n //
-        ? CholeskyDecomposition.of(mt.dot(matrix)).solve(mt)
-        : ConjugateTranspose.of(CholeskyDecomposition.of(matrix.dot(mt)).solve(matrix));
+    int m = Unprotect.dimension1Hint(matrix);
+    if (m <= n) {
+      Tensor mt = ConjugateTranspose.of(matrix);
+      return CholeskyDecomposition.of(mt.dot(matrix)).solve(mt);
+    }
+    return ConjugateTranspose.of(CholeskyDecomposition.of( //
+        MatrixDotTranspose.of(matrix, Conjugate.of(matrix))).solve(matrix));
   }
 
   /***************************************************/

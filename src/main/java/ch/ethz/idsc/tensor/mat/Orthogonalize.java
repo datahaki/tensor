@@ -2,6 +2,8 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.alg.PadRight;
@@ -33,6 +35,31 @@ public enum Orthogonalize {
     return PadRight.zeros(Dimensions.of(matrix)).apply(QRMathematica.wrap(qrDecomposition).getInverseQ());
   }
 
+  /** for input of square matrix, the function returns a matrix with determinant +1
+   * 
+   * Reference:
+   * "Least-Squares Rigid Motion Using SVD"
+   * Olga Sorkine-Hornung and Michael Rabinovich, 2016
+   * 
+   * @param matrix of size k x n with k <= n
+   * @return matrix of size k x n that satisfies {@link OrthogonalMatrixQ} */
+  public static Tensor usingSvd(Tensor matrix) {
+    int k = matrix.length();
+    int n = Unprotect.dimension1Hint(matrix);
+    if (k < n) {
+      SingularValueDecomposition svd = SingularValueDecomposition.of(Transpose.of(matrix));
+      return MatrixDotTranspose.of(svd.getV(), svd.getU());
+    }
+    if (n < k) // case is forbidden to avoid confusion (despite functionally permissive)
+      throw TensorRuntimeException.of(matrix);
+    SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
+    Tensor rotation = MatrixDotTranspose.of(svd.getU(), svd.getV());
+    if (Sign.isPositiveOrZero(Det.of(rotation)))
+      return rotation;
+    Tensor ve = svd.getV().get(Tensor.ALL, k - 1).negate();
+    return rotation.add(TensorProduct.of(svd.getU().get(Tensor.ALL, k - 1), ve.add(ve)));
+  }
+
   /** expression appears in geomstats - stiefel.py for the creation of uniform distributed
    * random samples of orthogonal frames in the stiefel manifold St(n, k).
    * Subsequently, the function was used to reproject affine combinations of orthogonal matrices
@@ -42,29 +69,5 @@ public enum Orthogonalize {
    * @return matrix of size k x n that satisfies {@link OrthogonalMatrixQ} */
   public static Tensor usingPD(Tensor matrix) {
     return PolarDecomposition.of(matrix).getR();
-    // PolarDecomposition polarDecomposition = PolarDecomposition.of(matrix);
-    // Tensor rotation = polarDecomposition.getR();
-    // if (Integers.isEven(rotation.length()) && //
-    // SquareMatrixQ.of(rotation) && //
-    // Sign.isNegative(Det.of(rotation))) {
-    // System.out.println("FLIP PD because EVEN");
-    // rotation.set(Tensor::negate, rotation.length() - 1);
-    // }
-    // return rotation;
-  }
-
-  /** for input of square matrix, the function returns a matrix with determinant +1
-   * 
-   * @param matrix of size k x n with k <= n
-   * @return matrix of size k x n that satisfies {@link OrthogonalMatrixQ} */
-  public static Tensor usingSvd(Tensor matrix) {
-    SingularValueDecomposition svd = SingularValueDecomposition.of(Transpose.of(matrix));
-    Tensor rotation = MatrixDotTranspose.of(svd.getV(), svd.getU());
-    if (Sign.isNegative(Det.of(rotation))) {
-      int last = matrix.length() - 1;
-      Tensor ue = svd.getU().get(Tensor.ALL, last).negate();
-      return rotation.add(TensorProduct.of(svd.getV().get(Tensor.ALL, last), ue.add(ue)));
-    }
-    return rotation;
   }
 }

@@ -4,9 +4,12 @@ package ch.ethz.idsc.tensor.mat;
 import java.util.Arrays;
 import java.util.List;
 
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Dot;
+import ch.ethz.idsc.tensor.lie.MatrixExp;
+import ch.ethz.idsc.tensor.lie.TensorWedge;
 import ch.ethz.idsc.tensor.pdf.CauchyDistribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -51,13 +54,27 @@ public class PolarDecompositionTest extends TestCase {
       Tensor r2 = Orthogonalize.usingSvd(matrix);
       if (Sign.isPositive(Det.of(matrix)) && Sign.isPositive(Det.of(r1))) {
         Chop._06.requireClose(r1, r2);
+      } else {
+        // System.out.println("---");
+        // System.out.println(Det.of(matrix));
+        // System.out.println(Det.of(r1));
+        // System.out.println(Pretty.of(r1.map(Round._4)));
+        // System.out.println(Pretty.of(r2.map(Round._4)));
       }
-      // else {
-      // System.out.println(Det.of(matrix));
-      // System.out.println(Det.of(r1));
-      // System.out.println(Pretty.of(r1.map(Round._7)));
-      // System.out.println(Pretty.of(r2.map(Round._7)));
-      // }
+    }
+  }
+
+  public void testDet1Invariance() {
+    int d = 7;
+    for (int k = 1; k < d; ++k) {
+      Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(NormalDistribution.of(0, 0.1), k, k)));
+      Tolerance.CHOP.requireClose(Det.of(matrix), RealScalar.ONE);
+      PolarDecomposition polarDecomposition = PolarDecomposition.of(matrix);
+      _check(matrix, polarDecomposition);
+      Tensor r1 = polarDecomposition.getR();
+      Tolerance.CHOP.requireClose(Det.of(r1), RealScalar.ONE);
+      Tensor result = Orthogonalize.usingSvd(matrix);
+      Tolerance.CHOP.requireClose(result, matrix);
     }
   }
 

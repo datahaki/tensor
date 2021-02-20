@@ -40,7 +40,7 @@ public class LeastSquaresTest extends TestCase {
     Tensor b = Tensors.vector(1, 1, 1, 1);
     Tensor x0 = LeastSquares.of(m, b);
     ExactTensorQ.require(x0);
-    Tensor x1 = LeastSquares.usingCholesky(m, b);
+    Tensor x1 = PseudoInverse.usingCholesky(m).dot(b);
     ExactTensorQ.require(x1);
     assertEquals(x1, Tensors.vector(1, 1, 1));
     Tensor x2 = LeastSquares.usingQR(m, b);
@@ -55,7 +55,7 @@ public class LeastSquaresTest extends TestCase {
     assertEquals(MatrixRank.of(m), 3);
     Tensor b = Tensors.vector(1, 1, 1, 1);
     Tensor x0 = LeastSquares.of(m, b);
-    Tensor x1 = LeastSquares.usingCholesky(m, b);
+    Tensor x1 = PseudoInverse.usingCholesky(m).dot(b);
     assertEquals(x1, Tensors.vector(1, 1, 1));
     Tensor x2 = LeastSquares.usingQR(m, b);
     Tensor x3 = LeastSquares.usingSvd(m, b);
@@ -77,7 +77,7 @@ public class LeastSquaresTest extends TestCase {
     Tensor matrix = HilbertMatrix.of(2, 3);
     assertEquals(matrix, Tensors.fromString("{{1, 1/2, 1/3}, {1/2, 1/3, 1/4}}"));
     Tensor expect = Tensors.fromString("{{252/73, -(360/73)}, {-(198/73), 408/73}, {-(240/73), 468/73}}");
-    Tensor cholesky2 = LeastSquares.usingCholesky(matrix, IdentityMatrix.of(2));
+    Tensor cholesky2 = PseudoInverse.usingCholesky(matrix);
     assertEquals(cholesky2, expect);
   }
 
@@ -87,7 +87,7 @@ public class LeastSquaresTest extends TestCase {
     Tensor expect = Tensors.fromString( //
         "{{-(2376/73), 1476/73, -(72/73), 72/73}, {2868/73, -(1410/73), 432/73, 444/73}, {3264/73, -(1656/73), 444/73, 432/73}}");
     Tensor b = Tensors.fromString("{{2, 3, 4, 6}, {8, -2, 3, 4}}");
-    Tensor cholesky2 = LeastSquares.usingCholesky(matrix, b);
+    Tensor cholesky2 = PseudoInverse.usingCholesky(matrix).dot(b);
     assertEquals(cholesky2, expect);
   }
 
@@ -95,7 +95,7 @@ public class LeastSquaresTest extends TestCase {
     Tensor m = Tensors.matrix( //
         (i, j) -> RationalScalar.of(2 * i + 2 + j, 1 + 9 * i + j), 4, 3);
     Tensor b = Tensors.vector(1, 1, 1, 1);
-    Tensor x1 = LeastSquares.usingCholesky(m, b);
+    Tensor x1 = PseudoInverse.usingCholesky(m).dot(b);
     Tensor x2 = LeastSquares.usingSvd(m, b);
     Tensor x3 = LeastSquares.usingQR(m, b);
     assertEquals(Dimensions.of(x1), Arrays.asList(3));
@@ -119,7 +119,7 @@ public class LeastSquaresTest extends TestCase {
         4, 3);
     assertEquals(MatrixRank.of(m), 3);
     Tensor b = Tensors.vector(1, 1, 1, 1);
-    Tensor x1 = LeastSquares.usingCholesky(m, b);
+    Tensor x1 = PseudoInverse.usingCholesky(m).dot(b);
     Tensor d1 = m.dot(x1).subtract(b);
     Tensor s1 = Tensors.fromString(
         "{726086997/5793115330933+44069346/5793115330933*I, 67991764500/5793115330933+4521379500/5793115330933*I,-22367102670/827587904419-1672185060/827587904419*I, 11662258824/827587904419+1019978082/827587904419*I}");
@@ -138,7 +138,7 @@ public class LeastSquaresTest extends TestCase {
             RealScalar.of(18 * i + j * 100), RationalScalar.of(2 * i + 2 + j, 1 + 9 * i + j)),
         4, 3);
     Tensor b = Tensors.fromString("{2+3*I, 1-8*I, 99-100*I, 2/5}");
-    Tensor x1 = LeastSquares.usingCholesky(m, b);
+    Tensor x1 = PseudoInverse.usingCholesky(m).dot(b);
     @SuppressWarnings("unused")
     Tensor d1 = m.dot(x1).subtract(b);
     // 112.45647858810342

@@ -2,11 +2,10 @@
 package ch.ethz.idsc.tensor.mat;
 
 import java.io.Serializable;
-import java.util.List;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.lie.MatrixSqrt;
 import ch.ethz.idsc.tensor.sca.Conjugate;
@@ -20,11 +19,12 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 public class PolarDecomposition implements Serializable {
   private static final long serialVersionUID = 6692615139679469889L;
 
-  /** @param matrix of dimensions k x n with k <= n
+  /** also works for complex input
+   * 
+   * @param matrix of dimensions k x n with k <= n
    * @return */
   public static PolarDecomposition of(Tensor matrix) {
-    List<Integer> list = Dimensions.of(matrix);
-    if (list.get(0) <= list.get(1))
+    if (matrix.length() <= Unprotect.dimension1Hint(matrix))
       return new PolarDecomposition(matrix);
     throw TensorRuntimeException.of(matrix);
   }
@@ -35,10 +35,12 @@ public class PolarDecomposition implements Serializable {
 
   private PolarDecomposition(Tensor matrix) {
     this.matrix = matrix;
-    matrixSqrt = MatrixSqrt.ofSymmetric(MatrixDotTranspose.of(matrix, Conjugate.of(matrix)));
+    matrixSqrt = MatrixSqrt.of(MatrixDotTranspose.of(matrix, Conjugate.of(matrix)));
   }
 
-  /** @return orthogonal matrix of dimensions k x n with determinant either +1 or -1 */
+  /** @return orthogonal matrix of dimensions k x n with determinant either +1 or -1
+   * @see OrthogonalMatrixQ
+   * @see UnitaryMatrixQ */
   public Tensor getR() {
     return matrixSqrt.sqrt_inverse().dot(matrix);
   }

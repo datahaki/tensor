@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.mat.GaussianElimination;
+import ch.ethz.idsc.tensor.mat.HermitianMatrixQ;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.Pivots;
 import ch.ethz.idsc.tensor.sca.Abs;
@@ -32,7 +33,9 @@ import ch.ethz.idsc.tensor.sca.Power;
   private Tensor mk;
   private Tensor yk;
 
-  /** @param matrix square with no negative eigenvalues
+  /** also tested for {@link HermitianMatrixQ}
+   * 
+   * @param matrix square with no negative eigenvalues
    * @param chop */
   public DenmanBeaversDet(Tensor matrix, Chop chop) {
     int n = matrix.length();

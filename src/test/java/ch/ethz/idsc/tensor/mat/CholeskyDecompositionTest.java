@@ -208,16 +208,10 @@ public class CholeskyDecompositionTest extends TestCase {
       Tensor m2 = RandomVariate.of(distribution, r, _m);
       Tensor br = RandomVariate.of(distribution, n);
       assertEquals(MatrixRank.of(m1), r);
-      {
-        Tensor lsqr = LeastSquares.usingCholesky(m1, br);
-        Tensor pinv = PseudoInverse.usingCholesky(m1).dot(br);
-        Chop._10.requireClose(lsqr, pinv);
-      }
       Tensor matrix = m1.dot(m2);
       assertEquals(MatrixRank.of(matrix), r);
       {
         AssertFail.of(() -> PseudoInverse.usingCholesky(matrix));
-        AssertFail.of(() -> LeastSquares.usingCholesky(matrix, br));
         Tensor ls1 = LeastSquares.of(matrix, br);
         Tensor ls2 = PseudoInverse.of(matrix).dot(br);
         Tolerance.CHOP.requireClose(ls1, ls2);
@@ -226,7 +220,6 @@ public class CholeskyDecompositionTest extends TestCase {
         Tensor m = Transpose.of(matrix);
         Tensor b = RandomVariate.of(distribution, _m);
         AssertFail.of(() -> PseudoInverse.usingCholesky(m));
-        AssertFail.of(() -> LeastSquares.usingCholesky(m, b));
         Tensor ls1 = LeastSquares.of(m, b);
         Tensor ls2 = PseudoInverse.of(m).dot(b);
         Tolerance.CHOP.requireClose(ls1, ls2);

@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.num.Pi;
-import ch.ethz.idsc.tensor.pdf.CauchyDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -56,11 +55,15 @@ public class OrthogonalizeTest extends TestCase {
     Tensor matrix = Tensors.of(v0, v1);
     assertFalse(OrthogonalMatrixQ.of(matrix));
     _check(matrix);
-    Tensor q = Orthogonalize.of(matrix);
-    Scalar angle1 = VectorAngle.of(q.get(0), v0).get();
-    Scalar angle2 = VectorAngle.of(q.get(1), v1).get();
+    Tensor q1 = Orthogonalize.of(matrix);
+    Scalar angle1 = VectorAngle.of(q1.get(0), v0).get();
+    Scalar angle2 = VectorAngle.of(q1.get(1), v1).get();
     Chop._07.requireAllZero(angle1);
     assertTrue(Scalars.isZero(angle2));
+    Tensor q2 = Orthogonalize.usingSvd(matrix);
+    Tensor q3 = Orthogonalize.usingPD(matrix);
+    Tolerance.CHOP.requireClose(q1, q2);
+    Tolerance.CHOP.requireClose(q2, q3);
   }
 
   public void testRandom() {
@@ -80,15 +83,26 @@ public class OrthogonalizeTest extends TestCase {
     Tensor v0 = Tensors.vector(1, 1, 1);
     Tensor matrix = Tensors.of(v0);
     _check(matrix);
-    Tensor q = Orthogonalize.of(matrix);
-    Scalar a1 = VectorAngle.of(q.get(0), v0).get();
+    Tensor q1 = Orthogonalize.of(matrix);
+    Scalar a1 = VectorAngle.of(q1.get(0), v0).get();
     assertTrue(Scalars.isZero(a1));
+    Tensor q2 = Orthogonalize.usingSvd(matrix);
+    Tensor q3 = Orthogonalize.usingPD(matrix);
+    Tolerance.CHOP.requireClose(q1, q2);
+    Tolerance.CHOP.requireClose(q2, q3);
   }
 
   public void testComplex() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
-    Tensor orth = Orthogonalize.of(matrix);
-    assertTrue(UnitaryMatrixQ.of(orth));
+    Tensor q1 = Orthogonalize.of(matrix);
+    // System.out.println(q1);
+    assertTrue(UnitaryMatrixQ.of(q1));
+    // Tensor q2 = Orthogonalize.usingSvd(matrix);
+    Tensor q3 = Orthogonalize.usingPD(matrix);
+    assertTrue(UnitaryMatrixQ.of(q3));
+    // System.out.println(q3);
+    // Tolerance.CHOP.requireClose(q1, q2);
+    // Tolerance.CHOP.requireClose(q1, q3);
   }
 
   public void test3x4() {
@@ -97,7 +111,7 @@ public class OrthogonalizeTest extends TestCase {
     Tensor m = Orthogonalize.of(a);
     assertEquals(Dimensions.of(m), Dimensions.of(a));
     Tensor m_mt = m.dot(Transpose.of(m));
-    Chop._12.requireClose(m_mt, DiagonalMatrix.of(1, 1, 1));
+    Tolerance.CHOP.requireClose(m_mt, DiagonalMatrix.of(1, 1, 1));
   }
 
   public void test4x3() {
@@ -107,15 +121,26 @@ public class OrthogonalizeTest extends TestCase {
     assertEquals(Dimensions.of(m), Dimensions.of(a));
     Tensor m_mt = m.dot(Transpose.of(m));
     Tensor mt_m = Transpose.of(m).dot(m);
-    Chop._12.requireClose(m_mt, DiagonalMatrix.of(1, 1, 1, 0));
-    Chop._12.requireClose(mt_m, DiagonalMatrix.of(1, 1, 1));
+    Tolerance.CHOP.requireClose(m_mt, DiagonalMatrix.of(1, 1, 1, 0));
+    Tolerance.CHOP.requireClose(mt_m, DiagonalMatrix.of(1, 1, 1));
   }
 
-  public void testInvariant() {
-    Tensor matrix = RandomVariate.of(CauchyDistribution.standard(), 3, 5);
-    Tensor result = Orthogonalize.usingPD(matrix);
-    OrthogonalMatrixQ.require(result);
-    Chop.NONE.requireAllZero(Imag.of(result));
+  public void testInvariantPD() {
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 3, 5);
+    Tensor s1 = Orthogonalize.usingSvd(matrix);
+    Tensor r1 = Orthogonalize.usingPD(matrix);
+    Tolerance.CHOP.requireClose(r1, s1);
+    OrthogonalMatrixQ.require(r1);
+    Chop.NONE.requireAllZero(Imag.of(r1));
+    Tensor s2 = Orthogonalize.usingSvd(s1);
+    Tensor r2 = Orthogonalize.usingPD(r1);
+    Tolerance.CHOP.requireClose(r1, r2);
+    Tolerance.CHOP.requireClose(s1, s2);
+  }
+
+  public void testUsingSvd() {
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 3);
+    AssertFail.of(() -> Orthogonalize.usingSvd(matrix));
   }
 
   public void testFailScalar() {
@@ -131,7 +156,7 @@ public class OrthogonalizeTest extends TestCase {
     Tensor result = Orthogonalize.of(matrix);
     Tensor expect = Tensors.fromString( // consistent with Mathematica
         "{{0.7071067811865475, 0.7071067811865477}, {-0.7071067811865477, 0.7071067811865475}, {0, 0}}");
-    Chop._12.requireClose(result, expect);
+    Tolerance.CHOP.requireClose(result, expect);
   }
 
   public void testFailAd() {
