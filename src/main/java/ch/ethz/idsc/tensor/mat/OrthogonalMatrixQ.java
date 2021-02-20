@@ -3,7 +3,8 @@ package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
+import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** Mathematica definition:
@@ -25,7 +26,8 @@ public enum OrthogonalMatrixQ {
    * @param chop
    * @return true, if given tensor is a matrix and tensor.Transpose[tensor] is the identity matrix */
   public static boolean of(Tensor tensor, Chop chop) {
-    return StaticHelper.dotId(tensor, chop, Transpose::of);
+    return MatrixQ.of(tensor) //
+        && chop.isClose(MatrixDotTranspose.of(tensor, tensor), IdentityMatrix.of(tensor.length()));
   }
 
   /** @param tensor

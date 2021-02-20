@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.Unit;
@@ -124,6 +125,6 @@ public enum PseudoInverse {
    * @return pseudoinverse of matrix determined by given svd */
   public static Tensor of(SingularValueDecomposition svd, Chop chop) {
     Tensor wi = SingularValueList.inverted(svd, chop);
-    return Tensor.of(svd.getV().stream().map(wi::pmul)).dot(Transpose.of(svd.getU()));
+    return MatrixDotTranspose.of(Tensor.of(svd.getV().stream().map(wi::pmul)), svd.getU());
   }
 }

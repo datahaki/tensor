@@ -9,7 +9,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
@@ -32,17 +31,6 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
   public static boolean addId(Tensor tensor, Chop chop, TensorUnaryOperator tensorUnaryOperator) {
     return SquareMatrixQ.of(tensor) //
         && chop.isClose(tensor, tensorUnaryOperator.apply(tensor));
-  }
-
-  /** predicate checks a matrix A for A . f(A) == Id
-   * 
-   * @param tensor
-   * @param chop
-   * @param tensorUnaryOperator
-   * @return */
-  public static boolean dotId(Tensor tensor, Chop chop, TensorUnaryOperator tensorUnaryOperator) {
-    return MatrixQ.of(tensor) //
-        && chop.isClose(tensor.dot(tensorUnaryOperator.apply(tensor)), IdentityMatrix.of(tensor.length()));
   }
 
   /** @param tensor

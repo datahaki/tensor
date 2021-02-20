@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
@@ -34,7 +35,7 @@ public class SingularValueDecompositionTest extends TestCase {
     Tensor W = DiagonalMatrix.with(w);
     Tensor UtU = Chop._12.of(Transpose.of(U).dot(U).subtract(IdentityMatrix.of(N)));
     assertEquals(UtU, Array.zeros(N, N));
-    Tensor VVt = Chop._12.of(V.dot(Transpose.of(V)).subtract(IdentityMatrix.of(N)));
+    Tensor VVt = Chop._12.of(MatrixDotTranspose.of(V, V).subtract(IdentityMatrix.of(N)));
     assertEquals(VVt, Array.zeros(N, N));
     Tensor VtV = Chop._12.of(Transpose.of(V).dot(V).subtract(IdentityMatrix.of(N)));
     assertEquals(VtV, Array.zeros(N, N));

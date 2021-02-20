@@ -12,12 +12,14 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.num.Pi;
+import ch.ethz.idsc.tensor.pdf.CauchyDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -107,6 +109,13 @@ public class OrthogonalizeTest extends TestCase {
     Tensor mt_m = Transpose.of(m).dot(m);
     Chop._12.requireClose(m_mt, DiagonalMatrix.of(1, 1, 1, 0));
     Chop._12.requireClose(mt_m, DiagonalMatrix.of(1, 1, 1));
+  }
+
+  public void testInvariant() {
+    Tensor matrix = RandomVariate.of(CauchyDistribution.standard(), 3, 5);
+    Tensor result = Orthogonalize.usingPD(matrix);
+    OrthogonalMatrixQ.require(result);
+    Chop.NONE.requireAllZero(Imag.of(result));
   }
 
   public void testFailScalar() {
