@@ -192,8 +192,8 @@ public final class RationalScalar extends AbstractRealScalar implements //
     return of(toBigDecimal(0, RoundingMode.HALF_UP).toBigIntegerExact(), BigInteger.ONE);
   }
 
-  @Override // from SignInterface
-  protected int signInt() {
+  @Override // from AbstractRealScalar
+  protected int signum() {
     return bigFraction.signum();
   }
 

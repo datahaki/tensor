@@ -2,14 +2,20 @@
 package ch.ethz.idsc.tensor.api;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
-import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.io.StringScalar;
+import ch.ethz.idsc.tensor.lie.Quaternion;
 
-/** The absolute value of {@link RealScalar}, {@link ComplexScalar}, or {@link Quaternion} is always
- * an instance of {@link RealScalar}. */
+/** classes that implement {@link AbsInterface} should also implement
+ * {@link SignInterface} and achieve the identity
+ * <pre>
+ * scalar == Sign[scalar] * Abs[scalar]
+ * </pre>
+ * 
+ * The absolute value of {@link RealScalar}, {@link ComplexScalar}, or {@link Quaternion}
+ * is a non-negative instance of {@link RealScalar}. */
 public interface AbsInterface {
   /** absolute value
    * 

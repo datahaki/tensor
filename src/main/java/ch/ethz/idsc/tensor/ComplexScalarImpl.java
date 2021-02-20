@@ -13,6 +13,7 @@ import ch.ethz.idsc.tensor.api.MachineNumberQInterface;
 import ch.ethz.idsc.tensor.api.NInterface;
 import ch.ethz.idsc.tensor.nrm.Hypot;
 import ch.ethz.idsc.tensor.num.BinaryPower;
+import ch.ethz.idsc.tensor.num.ScalarProduct;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcTan;
@@ -31,7 +32,7 @@ import ch.ethz.idsc.tensor.sca.Sinh;
 /* package */ class ComplexScalarImpl extends AbstractScalar implements ComplexScalar, //
     ChopInterface, ExactScalarQInterface, MachineNumberQInterface, NInterface, Serializable {
   private static final long serialVersionUID = 3023231904329254618L;
-  private static final BinaryPower<Scalar> BINARY_POWER = StaticHelper.BINARY_POWER;
+  private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
 
   /** creator with package visibility
    * 

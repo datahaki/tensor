@@ -19,8 +19,10 @@ import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.mat.Pivots;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.ArgMax;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Power;
@@ -164,12 +166,20 @@ public class GaussScalarTest extends TestCase {
   }
 
   public void testPowerZero() {
-    long prime = 107;
+    long prime = 43;
     Scalar scalar = GaussScalar.of(1, prime);
     for (int index = 0; index < prime; ++index) {
       GaussScalar gaussScalar = GaussScalar.of(index, prime);
       assertEquals(Power.of(gaussScalar, 0), scalar);
+      assertEquals(gaussScalar, //
+          Sign.of(gaussScalar).multiply(Abs.of(gaussScalar)));
     }
+  }
+
+  public void testVector2NormSquared() {
+    int prime = 107;
+    Scalar normSquared = Vector2NormSquared.of(Tensors.of(GaussScalar.of(99, prime)));
+    assertEquals(normSquared, GaussScalar.of(64, prime));
   }
 
   public void testPowerFail() {

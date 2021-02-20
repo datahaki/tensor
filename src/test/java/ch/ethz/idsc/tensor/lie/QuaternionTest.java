@@ -1,6 +1,14 @@
 // code by jph
-package ch.ethz.idsc.tensor;
+package ch.ethz.idsc.tensor.lie;
 
+import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.RandomQuaternion;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
@@ -8,6 +16,7 @@ import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.pdf.CauchyDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
+import ch.ethz.idsc.tensor.pdf.LogNormalDistribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -16,6 +25,7 @@ import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -119,23 +129,19 @@ public class QuaternionTest extends TestCase {
   }
 
   public void testSqrt() {
-    for (int index = 0; index < 10; ++index) {
-      Tensor arg = RandomVariate.of(NormalDistribution.standard(), 4);
-      Scalar q = Quaternion.of(arg.Get(0), arg.extract(1, 4));
-      Scalar r = Sqrt.of(q);
-      Scalar r2 = r.multiply(r);
-      Tolerance.CHOP.requireClose(r2, q);
-    }
+    Tensor arg = RandomVariate.of(NormalDistribution.standard(), 4);
+    Scalar q = Quaternion.of(arg.Get(0), arg.extract(1, 4));
+    Scalar r = Sqrt.of(q);
+    Scalar r2 = r.multiply(r);
+    Tolerance.CHOP.requireClose(r2, q);
   }
 
   public void testSqrt0() {
-    for (int index = 0; index < 10; ++index) {
-      Tensor arg = RandomVariate.of(NormalDistribution.standard(), 4);
-      Scalar q = Quaternion.of(RealScalar.ZERO, arg.extract(1, 4));
-      Scalar r = Sqrt.of(q);
-      Scalar r2 = r.multiply(r);
-      Tolerance.CHOP.requireClose(r2, q);
-    }
+    Tensor arg = RandomVariate.of(NormalDistribution.standard(), 4);
+    Scalar q = Quaternion.of(RealScalar.ZERO, arg.extract(1, 4));
+    Scalar r = Sqrt.of(q);
+    Scalar r2 = r.multiply(r);
+    Tolerance.CHOP.requireClose(r2, q);
   }
 
   public void testSome() {
@@ -156,13 +162,11 @@ public class QuaternionTest extends TestCase {
 
   public void testNormVsAbs() {
     Distribution distribution = CauchyDistribution.standard();
-    for (int index = 0; index < 10; ++index) {
-      Tensor vec = RandomVariate.of(distribution, 4);
-      Scalar q1 = _createQ(vec);
-      Scalar nrm = Vector2Norm.of(vec);
-      Scalar abs = Abs.of(q1);
-      Tolerance.CHOP.requireClose(nrm, abs);
-    }
+    Tensor vec = RandomVariate.of(distribution, 4);
+    Scalar q1 = _createQ(vec);
+    Scalar nrm = Vector2Norm.of(vec);
+    Scalar abs = Abs.of(q1);
+    Tolerance.CHOP.requireClose(nrm, abs);
   }
 
   public void testExactScalarQ() {
@@ -203,22 +207,26 @@ public class QuaternionTest extends TestCase {
 
   public void testExpLogRandom() {
     Distribution distribution = NormalDistribution.of(0, 0.3);
-    for (int count = 0; count < 10; ++count) {
-      Quaternion quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
-      Quaternion exp = quaternion.exp();
-      Quaternion log = exp.log();
-      Tolerance.CHOP.requireClose(quaternion, log);
-    }
+    Quaternion quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
+    Quaternion exp = quaternion.exp();
+    Quaternion log = exp.log();
+    Tolerance.CHOP.requireClose(quaternion, log);
   }
 
   public void testLogExpRandom() {
     Distribution distribution = NormalDistribution.of(0, 2.3);
-    for (int count = 0; count < 10; ++count) {
-      Quaternion quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
-      Quaternion log = quaternion.log();
-      Quaternion exp = log.exp();
-      Tolerance.CHOP.requireClose(quaternion, exp);
-    }
+    Quaternion quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
+    Quaternion log = quaternion.log();
+    Quaternion exp = log.exp();
+    Tolerance.CHOP.requireClose(quaternion, exp);
+  }
+
+  public void testSignAbsRandom() {
+    Distribution distribution = LogNormalDistribution.standard();
+    Quaternion quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
+    Scalar sign = Sign.FUNCTION.apply(quaternion);
+    Scalar abs = Abs.FUNCTION.apply(quaternion);
+    Tolerance.CHOP.requireClose(sign.multiply(abs), quaternion);
   }
 
   public void testDivideUnder() {

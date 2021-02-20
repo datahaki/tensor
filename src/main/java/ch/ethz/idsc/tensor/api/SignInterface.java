@@ -2,10 +2,12 @@
 package ch.ethz.idsc.tensor.api;
 
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.sca.Sign;
 
-/** a {@link Scalar} implements SignInterface if the signum of the scalar type
- * is a meaningful operation. The interface is used in {@link Sign}. */
+/** classes that implement {@link SignInterface} should also implement
+ * {@link AbsInterface} and achieve the identity
+ * <pre>
+ * scalar == Sign[scalar] * Abs[scalar]
+ * </pre> */
 @FunctionalInterface
 public interface SignInterface {
   /** @return the "direction" of the scalar, or zero if scalar is zero */

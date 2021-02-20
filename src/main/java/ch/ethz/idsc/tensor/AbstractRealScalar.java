@@ -19,7 +19,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   // methods in this section are final
   /** @return true if this scalar is zero, or strictly greater zero, false otherwise */
   protected final boolean isNonNegative() {
-    return 0 <= signInt();
+    return 0 <= signum();
   }
 
   /** @return this or this.negate() depending on whichever is non-negative */
@@ -50,13 +50,13 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
 
   @Override // from SignInterface
   public final Scalar sign() {
-    return StaticHelper.SIGN[1 + signInt()];
+    return StaticHelper.SIGN[1 + signum()];
   }
 
   /** @return gives -1, 0, or 1 depending on whether this is negative, zero, or positive.
    * @see BigInteger#signum()
    * @see BigDecimal#signum() */
-  protected abstract int signInt();
+  protected abstract int signum();
 
   /***************************************************/
   // methods are non-final because overriding classes may support better precision

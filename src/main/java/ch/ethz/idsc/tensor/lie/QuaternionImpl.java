@@ -1,20 +1,31 @@
 // code by jph
 // https://en.wikipedia.org/wiki/Quaternion
-package ch.ethz.idsc.tensor;
+package ch.ethz.idsc.tensor.lie;
 
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.util.Optional;
 
+import ch.ethz.idsc.tensor.AbstractScalar;
+import ch.ethz.idsc.tensor.ExactScalarQ;
+import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
+import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.api.ChopInterface;
 import ch.ethz.idsc.tensor.api.ComplexEmbedding;
 import ch.ethz.idsc.tensor.api.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.api.NInterface;
-import ch.ethz.idsc.tensor.lie.Cross;
 import ch.ethz.idsc.tensor.nrm.Hypot;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
+import ch.ethz.idsc.tensor.num.BinaryPower;
+import ch.ethz.idsc.tensor.num.ScalarProduct;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -29,10 +40,12 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 /* package */ class QuaternionImpl extends AbstractScalar implements Quaternion, //
     ChopInterface, ExactScalarQInterface, NInterface, Serializable {
   private static final long serialVersionUID = 5384670613322108553L;
+  private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
   // ---
   private final Scalar w;
   private final Tensor xyz;
 
+  /***************************************************/
   public QuaternionImpl(Scalar w, Tensor xyz) {
     this.w = w;
     this.xyz = xyz;
@@ -180,7 +193,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     if (isExactScalar()) {
       Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
       if (optional.isPresent())
-        return (Quaternion) StaticHelper.BINARY_POWER.raise(this, optional.get());
+        return (Quaternion) BINARY_POWER.raise(this, optional.get());
     }
     return _power(exponent);
   }

@@ -184,8 +184,8 @@ import ch.ethz.idsc.tensor.sca.N;
     return RationalScalar.of(value.setScale(0, RoundingMode.HALF_UP).toBigIntegerExact(), BigInteger.ONE);
   }
 
-  @Override // from SignInterface
-  protected int signInt() {
+  @Override // from AbstractRealScalar
+  protected int signum() {
     return value.signum();
   }
 

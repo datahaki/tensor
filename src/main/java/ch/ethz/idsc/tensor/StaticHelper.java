@@ -8,9 +8,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.api.ComplexEmbedding;
-import ch.ethz.idsc.tensor.num.BinaryPower;
 import ch.ethz.idsc.tensor.num.Pi;
-import ch.ethz.idsc.tensor.num.ScalarProduct;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -87,6 +85,4 @@ import ch.ethz.idsc.tensor.sca.Sign;
       RealScalar.ONE.negate(), // -1
       RealScalar.ZERO, // 0
       RealScalar.ONE }; // +1
-  /***************************************************/
-  public static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
 }
