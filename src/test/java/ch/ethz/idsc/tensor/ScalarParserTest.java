@@ -47,8 +47,8 @@ public class ScalarParserTest extends TestCase {
   }
 
   public void testDecimal() {
-    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of(1)).toString(), "I");
-    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of(-1)).toString(), "-I");
+    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of("1")).toString(), "I");
+    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of("-1")).toString(), "-I");
   }
 
   public void testDoubleImag() {

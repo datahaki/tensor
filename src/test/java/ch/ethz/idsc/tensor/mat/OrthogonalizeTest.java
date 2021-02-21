@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.num.Pi;
@@ -43,6 +44,16 @@ public class OrthogonalizeTest extends TestCase {
     _check(matrix);
   }
 
+  public void testZeroPad() {
+    Tensor v1 = Tensors.vector(1, 2, 3);
+    Tensor v0 = v1.map(Scalar::zero);
+    Tensor matrix = Tensors.of(v1, v0, v0);
+    Tensor q1 = Orthogonalize.of(matrix);
+    Tolerance.CHOP.requireClose(Det.of(q1), RealScalar.ONE);
+    Tensor q2 = Orthogonalize.usingSvd(matrix);
+    Tolerance.CHOP.requireClose(Det.of(q2), RealScalar.ONE);
+  }
+
   public void testMatrix2X3() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1}, {1, 1, 1}}");
     assertFalse(OrthogonalMatrixQ.of(matrix));
@@ -64,6 +75,16 @@ public class OrthogonalizeTest extends TestCase {
     Tensor q3 = Orthogonalize.usingPD(matrix);
     Tolerance.CHOP.requireClose(q1, q2);
     Tolerance.CHOP.requireClose(q2, q3);
+  }
+
+  public void testMatrix2X3bDeficient() {
+    Tensor v0 = Tensors.fromString("{1, 0, 1}");
+    Tensor v1 = Tensors.fromString("{0, 0, 0}");
+    Tensor matrix = Tensors.of(v0, v1);
+    Tensor q1 = Orthogonalize.of(matrix);
+    Tensor q2 = Orthogonalize.usingSvd(matrix);
+    Tolerance.CHOP.requireClose(q1, q2);
+    AssertFail.of(() -> Orthogonalize.usingPD(matrix));
   }
 
   public void testRandom() {
@@ -110,7 +131,7 @@ public class OrthogonalizeTest extends TestCase {
     _check(a);
     Tensor m = Orthogonalize.of(a);
     assertEquals(Dimensions.of(m), Dimensions.of(a));
-    Tensor m_mt = m.dot(Transpose.of(m));
+    Tensor m_mt = MatrixDotTranspose.of(m, m);
     Tolerance.CHOP.requireClose(m_mt, DiagonalMatrix.of(1, 1, 1));
   }
 
@@ -119,7 +140,7 @@ public class OrthogonalizeTest extends TestCase {
     assertEquals(Dimensions.of(a), Arrays.asList(4, 3));
     Tensor m = Orthogonalize.of(a);
     assertEquals(Dimensions.of(m), Dimensions.of(a));
-    Tensor m_mt = m.dot(Transpose.of(m));
+    Tensor m_mt = MatrixDotTranspose.of(m, m);
     Tensor mt_m = Transpose.of(m).dot(m);
     Tolerance.CHOP.requireClose(m_mt, DiagonalMatrix.of(1, 1, 1, 0));
     Tolerance.CHOP.requireClose(mt_m, DiagonalMatrix.of(1, 1, 1));

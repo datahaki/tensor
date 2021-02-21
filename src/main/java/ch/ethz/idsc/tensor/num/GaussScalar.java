@@ -60,15 +60,14 @@ public class GaussScalar extends AbstractScalar implements //
     this.prime = prime;
   }
 
-  /***************************************************/
-  @Override // from Scalar
-  public GaussScalar reciprocal() {
-    return new GaussScalar(value.modInverse(prime), prime);
-  }
-
   @Override // from Scalar
   public GaussScalar negate() {
     return in(value.negate(), prime);
+  }
+
+  @Override // from Scalar
+  public GaussScalar reciprocal() {
+    return new GaussScalar(value.modInverse(prime), prime);
   }
 
   @Override // from Scalar

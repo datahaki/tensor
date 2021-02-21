@@ -39,14 +39,14 @@ public class SingularValueDecompositionTest extends TestCase {
     assertEquals(VVt, Array.zeros(N, N));
     Tensor VtV = Chop._12.of(Transpose.of(V).dot(V).subtract(IdentityMatrix.of(N)));
     assertEquals(VtV, Array.zeros(N, N));
-    Tensor UWVt = Chop._12.of(U.dot(W).dot(Transpose.of(V)).subtract(A));
+    Tensor UWVt = Chop._12.of(MatrixDotTranspose.of(U.dot(W), V).subtract(A));
     assertEquals(UWVt, Array.zeros(Dimensions.of(UWVt)));
     Tensor UW_AV = Chop._12.of(U.dot(W).subtract(A.dot(V)));
     assertEquals(UW_AV, Array.zeros(Dimensions.of(UW_AV)));
     assertTrue(w.stream().map(Scalar.class::cast).noneMatch(Sign::isNegative));
     if (MatrixRank.of(svd) < N) {
       Tensor nul = NullSpace.of(svd);
-      Tensor res = A.dot(Transpose.of(nul));
+      Tensor res = MatrixDotTranspose.of(A, nul);
       assertEquals(Chop._12.of(res), Array.zeros(Dimensions.of(res)));
     }
     return svd;

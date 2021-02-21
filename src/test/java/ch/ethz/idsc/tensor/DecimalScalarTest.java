@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Random;
 
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.Pi;
@@ -123,8 +124,9 @@ public class DecimalScalarTest extends TestCase {
   }
 
   public void testPrecision() {
-    for (int value = 0; value < 10000; value += 31) {
-      DecimalScalar decimalScalar = (DecimalScalar) DecimalScalar.of(Math.sqrt(value));
+    Random random = new Random();
+    for (int value = random.nextInt(83); value < 10000; value += 83) {
+      DecimalScalar decimalScalar = (DecimalScalar) DecimalScalar.of("" + Math.sqrt(value));
       String string = decimalScalar.toString();
       Scalar dbl_s = Scalars.fromString(string);
       assertEquals(decimalScalar, dbl_s);

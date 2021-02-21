@@ -30,6 +30,7 @@ public class PolarDecompositionTest extends TestCase {
     Tensor sym = polarDecomposition.getS();
     assertEquals(Dimensions.of(sym), Arrays.asList(k, k));
     SymmetricMatrixQ.require(sym);
+    assertTrue(polarDecomposition.toString().startsWith("PolarDecomposition["));
   }
 
   public void testRectangle() {

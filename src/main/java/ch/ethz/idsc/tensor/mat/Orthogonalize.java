@@ -11,23 +11,15 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** Implementation is consistent with Mathematica:
- * "If some of the input vectors are not linearly independent, the output will contain zero vectors."
- * "All nonzero vectors in the output are normalized to unit length."
- * 
- * <p>inspired by
+/** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Orthogonalize.html">Orthogonalize</a>
  * 
  * @see OrthogonalMatrixQ
  * @see UnitaryMatrixQ */
 public enum Orthogonalize {
   ;
-  /** If all of the input vectors are linearly independent, the matrix returned
-   * satisfies the predicate {@link OrthogonalMatrixQ}.
-   * 
-   * @param matrix of dimensions n x m
+  /** @param matrix of dimensions n x m
    * @return matrix of dimensions n x m with pairwise orthogonal row vectors
-   * with the same span as the rows of the input matrix
    * @throws Exception if given matrix is not a tensor of rank 2 */
   public static Tensor of(Tensor matrix) {
     QRDecomposition qrDecomposition = //
@@ -56,8 +48,8 @@ public enum Orthogonalize {
     Tensor rotation = MatrixDotTranspose.of(svd.getU(), svd.getV());
     if (Sign.isPositiveOrZero(Det.of(rotation)))
       return rotation;
-    Tensor ve = svd.getV().get(Tensor.ALL, k - 1).negate();
-    return rotation.add(TensorProduct.of(svd.getU().get(Tensor.ALL, k - 1), ve.add(ve)));
+    Tensor ve = svd.getV().get(Tensor.ALL, n - 1).negate();
+    return rotation.add(TensorProduct.of(svd.getU().get(Tensor.ALL, n - 1), ve.add(ve)));
   }
 
   /** expression appears in geomstats - stiefel.py for the creation of uniform distributed
@@ -66,7 +58,8 @@ public enum Orthogonalize {
    * back to the Lie group o(n), and so(n)
    * 
    * @param matrix of size k x n with k <= n
-   * @return matrix of size k x n that satisfies {@link OrthogonalMatrixQ} */
+   * @return matrix of size k x n that satisfies {@link OrthogonalMatrixQ}
+   * @throws Exception if given matrix does not have maximal rank k */
   public static Tensor usingPD(Tensor matrix) {
     return PolarDecomposition.of(matrix).getR();
   }

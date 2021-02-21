@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.lie.MatrixSqrt;
@@ -17,7 +18,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
  * "Meshless Deformations Based on Shape Matching"
  * by M. Mueller, B. Heidelberger, M. Teschner, M. Gross, 2005 */
 public class PolarDecomposition implements Serializable {
-  private static final long serialVersionUID = 6692615139679469889L;
+  private static final long serialVersionUID = -5255733199870287118L;
 
   /** also works for complex input
    * 
@@ -48,5 +49,10 @@ public class PolarDecomposition implements Serializable {
   /** @return symmetric matrix k x k */
   public Tensor getS() {
     return matrixSqrt.sqrt();
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%s]", getClass().getSimpleName(), Tensors.message(getS(), getR()));
   }
 }

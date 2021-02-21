@@ -28,7 +28,7 @@ public class QuantityCompareTest extends TestCase {
   public void testEquals2() {
     _checkEquals(RationalScalar.of(0, 1), Quantity.of(0, "m"), false);
     _checkEquals(DoubleScalar.of(0.0), Quantity.of(0, "m"), false);
-    _checkEquals(DecimalScalar.of(0.0), Quantity.of(0, "m"), false);
+    _checkEquals(DecimalScalar.of("0.0"), Quantity.of(0, "m"), false);
   }
 
   public void testEquals3() {
