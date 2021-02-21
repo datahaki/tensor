@@ -156,6 +156,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", Eigensystem.class.getSimpleName(), Tensors.message(values(), vectors()));
+    return String.format("%s[%s]", //
+        Eigensystem.class.getSimpleName(), //
+        Tensors.message(values(), vectors()));
   }
 }

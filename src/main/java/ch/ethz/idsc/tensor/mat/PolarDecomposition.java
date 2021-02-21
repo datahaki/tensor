@@ -12,7 +12,7 @@ import ch.ethz.idsc.tensor.lie.MatrixSqrt;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 
 /** decomposition of A = S.R
- * where R is orthogonal, and S is symmetric
+ * where S is symmetric, and R is orthogonal
  * 
  * Reference:
  * "Meshless Deformations Based on Shape Matching"
@@ -39,16 +39,16 @@ public class PolarDecomposition implements Serializable {
     matrixSqrt = MatrixSqrt.of(MatrixDotTranspose.of(matrix, Conjugate.of(matrix)));
   }
 
+  /** @return symmetric matrix k x k */
+  public Tensor getS() {
+    return matrixSqrt.sqrt();
+  }
+
   /** @return orthogonal matrix of dimensions k x n with determinant either +1 or -1
    * @see OrthogonalMatrixQ
    * @see UnitaryMatrixQ */
   public Tensor getR() {
     return matrixSqrt.sqrt_inverse().dot(matrix);
-  }
-
-  /** @return symmetric matrix k x k */
-  public Tensor getS() {
-    return matrixSqrt.sqrt();
   }
 
   @Override // from Object

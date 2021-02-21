@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
@@ -29,7 +30,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   @Override // from Object
   public final String toString() {
-    return String.format("%s[%d]", InfluenceMatrix.class.getSimpleName(), length());
+    return String.format("%s[%s]", InfluenceMatrix.class.getSimpleName(), Tensors.message(matrix()));
   }
 
   /** @return Length[design] */

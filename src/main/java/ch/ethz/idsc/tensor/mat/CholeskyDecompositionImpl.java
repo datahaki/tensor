@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.red.Times;
@@ -83,6 +84,8 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", CholeskyDecomposition.class.getSimpleName(), diagonal());
+    return String.format("%s[%s]", //
+        CholeskyDecomposition.class.getSimpleName(), //
+        Tensors.message(diagonal(), getL()));
   }
 }

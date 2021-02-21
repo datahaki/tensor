@@ -23,7 +23,7 @@ public class CholeskyDecompositionImplTest extends TestCase {
     assertEquals( //
         choleskyDecomposition.solve(IdentityMatrix.of(3)), //
         Inverse.of(matrix));
-    assertTrue(choleskyDecomposition.toString().startsWith("CholeskyDecomposition"));
+    assertTrue(choleskyDecomposition.toString().startsWith("CholeskyDecomposition["));
   }
 
   public void testGaussScalar() throws ClassNotFoundException, IOException {

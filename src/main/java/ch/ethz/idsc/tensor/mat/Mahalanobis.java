@@ -7,7 +7,7 @@ import java.util.Objects;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
@@ -116,6 +116,6 @@ public final class Mahalanobis implements InfluenceMatrix, Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), Dimensions.of(design));
+    return String.format("%s[%s]", getClass().getSimpleName(), Tensors.message(design));
   }
 }
