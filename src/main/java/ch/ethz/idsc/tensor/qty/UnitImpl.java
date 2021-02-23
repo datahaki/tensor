@@ -57,12 +57,12 @@ import ch.ethz.idsc.tensor.ext.Cache;
   }
 
   @Override // from Unit
-  public Unit multiply(Scalar factor) {
-    if (factor instanceof Quantity)
-      throw TensorRuntimeException.of(factor);
+  public Unit multiply(Scalar scalar) {
+    if (scalar instanceof Quantity)
+      throw TensorRuntimeException.of(scalar);
     NavigableMap<String, Scalar> map = new TreeMap<>();
     for (Entry<String, Scalar> entry : navigableMap.entrySet()) {
-      Scalar value = entry.getValue().multiply(factor);
+      Scalar value = entry.getValue().multiply(scalar);
       if (Scalars.nonZero(value))
         map.put(entry.getKey(), value);
     }

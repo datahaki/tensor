@@ -12,14 +12,20 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
+import ch.ethz.idsc.tensor.lie.MatrixExp;
+import ch.ethz.idsc.tensor.lie.TensorWedge;
+import ch.ethz.idsc.tensor.lie.r2.AngleVector;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.VectorAngle;
+import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Imag;
+import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -89,8 +95,8 @@ public class OrthogonalizeTest extends TestCase {
 
   public void testRandom() {
     Distribution distribution = NormalDistribution.standard();
-    for (int rows = 1; rows < 10; ++rows)
-      for (int cols = 1; cols < 10; ++cols)
+    for (int rows = 1; rows < 7; ++rows)
+      for (int cols = 1; cols < 7; ++cols)
         _check(RandomVariate.of(distribution, rows, cols));
   }
 
@@ -159,7 +165,88 @@ public class OrthogonalizeTest extends TestCase {
     Tolerance.CHOP.requireClose(s1, s2);
   }
 
-  public void testUsingSvd() {
+  private static Scalar ArcTan2D_of(Tensor vector) {
+    return ArcTan.of(vector.Get(0), vector.Get(1));
+  }
+
+  public void testAngles2D() {
+    Scalar i0 = RealScalar.of(1.2);
+    Scalar i1 = i0.add(RealScalar.of(0.2));
+    Tensor d0 = AngleVector.of(i0);
+    Tensor d1 = AngleVector.of(i1);
+    Tensor vectors = Tensors.of(d0, d1);
+    Sign.requirePositive(Det.of(vectors));
+    Tolerance.CHOP.requireClose(ArcTan2D_of(d0), i0);
+    Tolerance.CHOP.requireClose(ArcTan2D_of(d1), i1);
+    // ---
+    {
+      Tensor tensor = Orthogonalize.usingSvd(vectors);
+      Tolerance.CHOP.requireClose(Det.of(tensor), RealScalar.ONE);
+      Scalar a0 = ArcTan2D_of(tensor.get(0));
+      Scalar a1 = ArcTan2D_of(tensor.get(1));
+      Tolerance.CHOP.requireClose(i0.subtract(a0), a1.subtract(i1));
+    }
+    {
+      Tensor tensor = Orthogonalize.usingPD(vectors);
+      Tolerance.CHOP.requireClose(Det.of(tensor), RealScalar.ONE);
+      Scalar a0 = ArcTan2D_of(tensor.get(0));
+      Scalar a1 = ArcTan2D_of(tensor.get(1));
+      Tolerance.CHOP.requireClose(i0.subtract(a0), a1.subtract(i1));
+    }
+  }
+
+  public void testAngles3D() {
+    Scalar i0 = RealScalar.of(-1.5);
+    Scalar i1 = i0.add(RealScalar.of(0.2));
+    Tensor d0 = AngleVector.of(i0).append(RealScalar.ZERO);
+    Tensor d1 = AngleVector.of(i1).append(RealScalar.ZERO);
+    Tensor vectors = Tensors.of(d0, d1);
+    Tolerance.CHOP.requireClose(ArcTan2D_of(d0), i0);
+    Tolerance.CHOP.requireClose(ArcTan2D_of(d1), i1);
+    // ---
+    {
+      Tensor tensor = Orthogonalize.usingSvd(vectors);
+      Scalar a0 = ArcTan2D_of(tensor.get(0));
+      Scalar a1 = ArcTan2D_of(tensor.get(1));
+      Tolerance.CHOP.requireClose(i0.subtract(a0), a1.subtract(i1));
+    }
+    {
+      Tensor tensor = Orthogonalize.usingPD(vectors);
+      Scalar a0 = ArcTan2D_of(tensor.get(0));
+      Scalar a1 = ArcTan2D_of(tensor.get(1));
+      Tolerance.CHOP.requireClose(i0.subtract(a0), a1.subtract(i1));
+    }
+  }
+
+  public void testMatrixExp() {
+    for (int d = 2; d < 5; ++d) {
+      Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
+      OrthogonalMatrixQ.require(matrix);
+      Tolerance.CHOP.requireClose(matrix, Orthogonalize.of(matrix));
+      Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingSvd(matrix));
+      Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingPD(matrix));
+      Tolerance.CHOP.requireClose(matrix, Orthogonalize.unprotected(matrix));
+    }
+  }
+
+  public void testDiag() {
+    Tensor matrix = DiagonalMatrix.of(2, -2);
+    Tensor rdetp1 = DiagonalMatrix.of(1, +1);
+    Tensor rdetn1 = DiagonalMatrix.of(1, -1);
+    assertEquals(rdetn1, Orthogonalize.of(matrix));
+    assertEquals(rdetp1, Orthogonalize.usingSvd(matrix));
+    assertEquals(rdetn1, Orthogonalize.usingPD(matrix));
+    assertEquals(rdetp1, Orthogonalize.unprotected(matrix));
+  }
+
+  public void testTransposeUsingSvd() {
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 3);
+    Tensor result = Orthogonalize.unprotected(matrix);
+    OrthogonalMatrixQ.require(Transpose.of(result));
+    assertEquals(Dimensions.of(result), Dimensions.of(matrix));
+  }
+
+  public void testUsingSvdFail() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 3);
     AssertFail.of(() -> Orthogonalize.usingSvd(matrix));
   }

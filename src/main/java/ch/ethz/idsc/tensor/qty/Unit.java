@@ -52,10 +52,10 @@ public interface Unit {
    * 
    * [kg*m^2] * 3 -> [kg^3*m^6]
    * 
-   * @param factor
+   * @param scalar
    * @return
-   * @throws Exception if factor is not instance of RealScalar */
-  Unit multiply(Scalar factor);
+   * @throws Exception if scalar is not instance of RealScalar */
+  Unit multiply(Scalar scalar);
 
   /** Example: Unit.of("kg^2*m^-1*s") returns an unmodifiable map with the entry set
    * {"kg" -> 2, "m" -> -1, "s" -> 1}

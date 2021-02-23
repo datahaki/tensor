@@ -6,12 +6,11 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class InfluenceMatrixExact extends InfluenceMatrixBase implements Serializable {
-  private static final long serialVersionUID = -5637844310417226371L;
+  private static final long serialVersionUID = 8871352443406867104L;
   // ---
-  private final Tensor matrix; // design . design^+
+  private final Tensor matrix;
 
-  /** @param design matrix
-   * @throws Exception if design matrix does not have maximal rank */
+  /** @param influence matrix == design . design^+ */
   public InfluenceMatrixExact(Tensor matrix) {
     this.matrix = matrix;
   }
@@ -24,10 +23,5 @@ import ch.ethz.idsc.tensor.Tensor;
   @Override // from InfluenceMatrix
   public Tensor image(Tensor vector) {
     return vector.dot(matrix);
-  }
-
-  @Override // from InfluenceMatrixBase
-  protected int length() {
-    return matrix.length();
   }
 }

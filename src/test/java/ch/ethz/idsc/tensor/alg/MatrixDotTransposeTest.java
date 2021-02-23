@@ -51,6 +51,8 @@ public class MatrixDotTransposeTest extends TestCase {
   public void testThreeFail() {
     Tensor a = RandomVariate.of(NormalDistribution.standard(), 3, 5, 4);
     Tensor b = RandomVariate.of(NormalDistribution.standard(), 2, 4);
+    // Tolerance.CHOP.requireClose(a.dot(Transpose.of(b)), MatrixDotTranspose.of(a, b));
+    // Tolerance.CHOP.requireClose(Dot.of(a, Transpose.of(b)), MatrixDotTranspose.of(a, b));
     AssertFail.of(() -> MatrixDotTranspose.of(a, b));
   }
 }

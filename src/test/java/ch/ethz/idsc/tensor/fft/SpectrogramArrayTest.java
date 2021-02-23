@@ -34,7 +34,7 @@ public class SpectrogramArrayTest extends TestCase {
   }
 
   public void testMathematicaDefault() {
-    Tensor tensor = Tensor.of(IntStream.range(0, 500) //
+    Tensor tensor = Tensor.of(IntStream.range(0, 200) //
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(RealScalar::of));
     for (WindowFunctions windowFunctions : WindowFunctions.values()) {
@@ -44,13 +44,13 @@ public class SpectrogramArrayTest extends TestCase {
   }
 
   public void testQuantity() {
-    Tensor tensor = Tensor.of(IntStream.range(0, 2000) //
+    Tensor tensor = Tensor.of(IntStream.range(0, 500) //
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(d -> Quantity.of(d, "m")));
     Tensor array = SpectrogramArray.of(tensor);
     Tensor array2 = array.map(QuantityMagnitude.SI().in("km"));
     int windowLength = Unprotect.dimension1(array2);
-    assertEquals(windowLength, 64);
+    assertEquals(windowLength, 32);
   }
 
   public void testStaticOps() {

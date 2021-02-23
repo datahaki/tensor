@@ -23,7 +23,7 @@ public class LinearSolveTest extends TestCase {
   private static final Random RANDOM = new Random();
 
   public void testSolveCR() {
-    int n = 5;
+    int n = 5 + RANDOM.nextInt(6);
     Tensor A = Tensors.matrix((i, j) -> //
     ComplexScalar.of( //
         RealScalar.of(RANDOM.nextInt(15)), //
@@ -32,14 +32,14 @@ public class LinearSolveTest extends TestCase {
       Tensor b = Tensors.matrix((i, j) -> RationalScalar.of(i.equals(j) ? 1 : 0, 1), n, n + 3);
       Tensor X = LinearSolve.of(A, b);
       Tensor err = A.dot(X).subtract(b);
-      assertEquals(err, b.multiply(RealScalar.ZERO));
+      assertEquals(err, b.map(Scalar::zero));
       assertEquals(err, Array.zeros(Dimensions.of(b)));
       ExactTensorQ.require(X);
     }
   }
 
   public void testSolveRC() {
-    int n = 10;
+    int n = 5 + RANDOM.nextInt(6);
     Tensor A = Tensors.matrix((i, j) -> //
     RationalScalar.of(RANDOM.nextInt(100), RANDOM.nextInt(100) + 1), n, n);
     if (Scalars.nonZero(Det.of(A))) {
@@ -48,7 +48,7 @@ public class LinearSolveTest extends TestCase {
           RealScalar.of(RANDOM.nextInt(15))), n, n + 3);
       Tensor X = LinearSolve.of(A, b);
       Tensor err = A.dot(X).subtract(b);
-      assertEquals(err, b.multiply(RealScalar.ZERO));
+      assertEquals(err, b.map(Scalar::zero));
       assertEquals(err, Array.zeros(Dimensions.of(b)));
       ExactTensorQ.require(X);
     }

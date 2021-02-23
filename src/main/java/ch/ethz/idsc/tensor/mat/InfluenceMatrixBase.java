@@ -32,7 +32,4 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   public final String toString() {
     return String.format("%s[%s]", InfluenceMatrix.class.getSimpleName(), Tensors.message(matrix()));
   }
-
-  /** @return Length[design] */
-  protected abstract int length();
 }

@@ -95,7 +95,8 @@ public class BinomialDistributionTest extends TestCase {
   }
 
   public void testBug3() {
-    int size = Tally.of(RandomVariate.of(BinomialDistribution.of(1207, RationalScalar.of(2, 3)), 1000)).size();
+    Distribution distribution = BinomialDistribution.of(1207, RationalScalar.of(2, 3));
+    int size = Tally.of(RandomVariate.of(distribution, 1000)).size();
     assertTrue(50 < size);
   }
 
