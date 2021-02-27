@@ -13,8 +13,9 @@ import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.pdf.BinomialDistribution;
+import ch.ethz.idsc.tensor.pdf.CauchyDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
-import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.LogNormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -28,27 +29,27 @@ public class OrderingTest extends TestCase {
     assertEquals(ascending, Sort.of(vector));
   }
 
-  public void testRandom() {
+  public void testRandomExact() {
     Distribution d = BinomialDistribution.of(12, RationalScalar.of(1, 3));
-    Tensor vector = RandomVariate.of(d, 1000);
+    Tensor vector = RandomVariate.of(d, 100);
     int[] array = Ordering.INCREASING.of(vector);
     Tensor ascending = Tensor.of( //
         IntStream.range(0, array.length).mapToObj(index -> vector.Get(array[index])));
     assertEquals(ascending, Sort.of(vector));
   }
 
-  public void testNormal() {
-    Distribution d = NormalDistribution.standard();
-    Tensor vector = RandomVariate.of(d, 1000);
+  public void testRandomNumeric() {
+    Distribution d = LogNormalDistribution.standard();
+    Tensor vector = RandomVariate.of(d, 100);
     int[] array = Ordering.INCREASING.of(vector);
     Tensor ascending = Tensor.of( //
         IntStream.range(0, array.length).mapToObj(index -> vector.Get(array[index])));
     assertEquals(ascending, Sort.of(vector));
   }
 
-  public void testNormalDecreasing() {
-    Distribution d = NormalDistribution.standard();
-    Tensor vector = RandomVariate.of(d, 1000);
+  public void testRandomNumericDecreasing() {
+    Distribution d = CauchyDistribution.standard();
+    Tensor vector = RandomVariate.of(d, 100);
     int[] array = Ordering.DECREASING.of(vector);
     Tensor decreasing = Tensor.of( //
         IntStream.range(0, array.length).mapToObj(index -> vector.Get(array[index])));

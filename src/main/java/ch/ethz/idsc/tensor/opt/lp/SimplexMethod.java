@@ -33,7 +33,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     int m = b.length();
     int n = c.length();
     // System.out.println(m + " x " + n);
-    SimplexMethod simplexImpl;
+    SimplexMethod simplexMethod;
     {
       // Tensor D = DiagonalMatrix.of(b.map(UnitStep.function));
       // IdentityMatrix.of(m)
@@ -43,13 +43,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
         row = row.subtract(tab.get(index));
       row.set(RealScalar.ZERO, n + m); // set bottom corner to 0
       tab.append(row);
-      simplexImpl = new SimplexMethod(tab, Range.of(n, n + m), simplexPivot); // phase 1
+      simplexMethod = new SimplexMethod(tab, Range.of(n, n + m), simplexPivot); // phase 1
     }
     Tensor tab = Join.of(1, //
-        TensorMap.of(row -> row.extract(0, n), simplexImpl.tab.extract(0, m), 1), //
-        Partition.of(simplexImpl.tab.get(Tensor.ALL, n + m).extract(0, m), 1));
+        TensorMap.of(row -> row.extract(0, n), simplexMethod.tab.extract(0, m), 1), //
+        Partition.of(simplexMethod.tab.get(Tensor.ALL, n + m).extract(0, m), 1));
     tab.append(Append.of(c, RealScalar.ZERO)); // set bottom corner to 0
-    return new SimplexMethod(tab, simplexImpl.ind, simplexPivot).getX(); // phase 2
+    return new SimplexMethod(tab, simplexMethod.ind, simplexPivot).getX(); // phase 2
   }
 
   /***************************************************/
@@ -67,7 +67,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
       throw TensorRuntimeException.of(ind);
     while (true) {
       // System.out.println(Pretty.of(tab));
-      Tensor c = tab.get(m).extract(0, n);
+      Tensor c = Tensor.of(tab.get(m).stream().limit(n));
       final int j = ArgMin.of(withoutUnits(c));
       if (Sign.isNegative(c.Get(j))) {
         { // check if unbounded

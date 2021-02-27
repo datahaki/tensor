@@ -10,8 +10,7 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 
-/** LONGTERM
- * StringFormat should be the replacement of TensorParser
+/** LONGTERM StringFormat should be the replacement of TensorParser
  * that is used in {@link Tensors#fromString(String)} */
 /* package */ class StringFormat<T> {
   /** @param string

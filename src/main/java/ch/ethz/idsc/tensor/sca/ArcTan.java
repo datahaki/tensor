@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.api.ArcTanInterface;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** For real input, the returned angle is in the range -pi/2 through pi/2.

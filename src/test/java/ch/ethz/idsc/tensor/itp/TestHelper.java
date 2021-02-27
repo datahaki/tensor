@@ -15,7 +15,7 @@ import junit.framework.Assert;
   ;
   static void checkMatch(Interpolation interpolation) {
     Distribution distribution = UniformDistribution.of(0, 2);
-    for (int count = 0; count < 20; ++count) {
+    for (int count = 0; count < 10; ++count) {
       Scalar scalar = RandomVariate.of(distribution);
       Assert.assertEquals( //
           interpolation.get(Tensors.of(scalar)), //
@@ -25,7 +25,7 @@ import junit.framework.Assert;
 
   static void checkMatchExact(Interpolation interpolation) {
     Distribution distribution = DiscreteUniformDistribution.of(0, 3);
-    for (int count = 0; count < 20; ++count) {
+    for (int count = 0; count < 10; ++count) {
       Scalar scalar = RandomVariate.of(distribution);
       Assert.assertEquals( //
           interpolation.get(Tensors.of(scalar)), //

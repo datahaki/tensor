@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt.nd;
 
+import java.util.Collection;
+
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -26,21 +28,15 @@ public class NdDualMap<V> implements NdMap<V> {
   }
 
   @Override // from NdMap
-  public NdCluster<V> buildCluster(NdCenterInterface ndCenter, int limit) {
-    NdCluster<V> c1 = ndTreeMap.buildCluster(ndCenter, limit);
-    NdCluster<V> c2 = ndListMap.buildCluster(ndCenter, limit);
+  public Collection<NdMatch<V>> cluster(NdCenterInterface ndCenterInterface, int limit) {
+    Collection<NdMatch<V>> c1 = ndTreeMap.cluster(ndCenterInterface, limit);
+    Collection<NdMatch<V>> c2 = ndListMap.cluster(ndCenterInterface, limit);
     {
-      Scalar s1 = c1.stream().sorted(NdEntryComparators.INCREASING).map(NdEntry::distance).reduce(Scalar::add).get();
-      Scalar s2 = c2.stream().sorted(NdEntryComparators.INCREASING).map(NdEntry::distance).reduce(Scalar::add).get();
+      Scalar s1 = c1.stream().sorted(NdMatchComparators.INCREASING).map(NdMatch::distance).reduce(Scalar::add).get();
+      Scalar s2 = c2.stream().sorted(NdMatchComparators.INCREASING).map(NdMatch::distance).reduce(Scalar::add).get();
       Chop.NONE.requireClose(s1, s2);
     }
     return c1;
-  }
-
-  @Override // from NdMap
-  public void clear() {
-    ndTreeMap.clear();
-    ndListMap.clear();
   }
 
   @Override // from NdMap

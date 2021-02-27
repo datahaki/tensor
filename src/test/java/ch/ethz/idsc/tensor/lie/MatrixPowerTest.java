@@ -5,9 +5,12 @@ import java.util.BitSet;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
+import ch.ethz.idsc.tensor.alg.Dot;
+import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.fft.FourierMatrix;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
@@ -15,6 +18,8 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -139,6 +144,19 @@ public class MatrixPowerTest extends TestCase {
     Tolerance.CHOP.requireClose(Imag.of(tensor), im);
   }
 
+  public void testGaussian() {
+    int prime = 7879;
+    Distribution distribution = DiscreteUniformDistribution.of(0, prime);
+    Scalar one = GaussScalar.of(1, prime);
+    for (int n = 3; n < 6; ++n) {
+      Tensor matrix = RandomVariate.of(distribution, n, n).map(s -> GaussScalar.of(s.number().intValue(), prime));
+      Tensor result = MatrixPower.of(matrix, +343386231231234L);
+      Tensor revers = MatrixPower.of(matrix, -343386231231234L);
+      MatrixQ.requireSize(result, n, n);
+      assertEquals(DiagonalMatrix.of(n, one), Dot.of(result, revers));
+    }
+  }
+
   public void testNonSymmetricFail() {
     AssertFail.of(() -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), RationalScalar.HALF));
   }
@@ -149,11 +167,15 @@ public class MatrixPowerTest extends TestCase {
 
   public void testFailZero() {
     Tensor matrix = Array.zeros(2, 3);
+    AssertFail.of(() -> MatrixPower.of(matrix, -1));
     AssertFail.of(() -> MatrixPower.of(matrix, 0));
+    AssertFail.of(() -> MatrixPower.of(matrix, 1));
   }
 
   public void testFailOne() {
     Tensor matrix = HilbertMatrix.of(3, 2);
+    AssertFail.of(() -> MatrixPower.of(matrix, -1));
+    AssertFail.of(() -> MatrixPower.of(matrix, 0));
     AssertFail.of(() -> MatrixPower.of(matrix, 1));
   }
 

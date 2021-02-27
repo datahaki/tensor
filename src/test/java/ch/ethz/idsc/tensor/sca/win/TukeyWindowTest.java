@@ -11,15 +11,23 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
-import ch.ethz.idsc.tensor.pdf.NormalDistribution;
-import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Tally;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TukeyWindowTest extends TestCase {
+  public void testSimple() {
+    ScalarUnaryOperator suo = TukeyWindow.of(RealScalar.of(0.45));
+    Tolerance.CHOP.requireClose( //
+        suo.apply(RealScalar.of(0.4)), //
+        RealScalar.of(0.6710100716628344));
+    Tolerance.CHOP.requireClose( //
+        suo.apply(RealScalar.of(0.5)), //
+        RealScalar.of(0.32898992833716567));
+  }
+
   public void testSmall() {
     Tensor tensor = Tensors.of(RationalScalar.of(-1, 6), RealScalar.ZERO, RealScalar.of(0.01), RationalScalar.of(1, 6));
     Tensor mapped = tensor.map(TukeyWindow.FUNCTION);
@@ -31,13 +39,12 @@ public class TukeyWindowTest extends TestCase {
     ScalarUnaryOperator scalarUnaryOperator = TukeyWindow.FUNCTION;
     assertEquals(scalarUnaryOperator.apply(RealScalar.of(0.12)), RealScalar.ONE);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(0.22));
-    Chop._12.requireClose(scalar, RealScalar.of(0.9381533400219317)); // mathematica
+    Tolerance.CHOP.requireClose(scalar, RealScalar.of(0.9381533400219317)); // mathematica
   }
 
   public void testSemiExact() {
     Scalar scalar = TukeyWindow.FUNCTION.apply(RealScalar.of(0.5));
     assertTrue(Scalars.isZero(scalar));
-    ExactScalarQ.require(scalar);
   }
 
   public void testOutside() {
@@ -46,13 +53,12 @@ public class TukeyWindowTest extends TestCase {
     ExactScalarQ.require(scalar);
   }
 
-  public void testOf() {
-    Tensor tensor = RandomVariate.of(NormalDistribution.standard(), 2, 3);
-    assertEquals(TukeyWindow.of(tensor), tensor.map(TukeyWindow.FUNCTION));
-  }
-
   public void testQuantityFail() {
     AssertFail.of(() -> TukeyWindow.FUNCTION.apply(Quantity.of(0, "s")));
     AssertFail.of(() -> TukeyWindow.FUNCTION.apply(Quantity.of(2, "s")));
+  }
+
+  public void testNullFail() {
+    AssertFail.of(() -> TukeyWindow.of(null));
   }
 }

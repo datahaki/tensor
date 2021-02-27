@@ -2,14 +2,12 @@
 package ch.ethz.idsc.tensor.lie.r2;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
 import ch.ethz.idsc.tensor.num.GaussScalar;
-import ch.ethz.idsc.tensor.opt.rn.PowerIteration;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -35,10 +33,6 @@ public class RotationMatrixTest extends TestCase {
     Tensor matrix = RotationMatrix.of(0.2);
     assertFalse(Chop._12.isClose(matrix, IdentityMatrix.of(2)));
     Chop._12.requireClose(matrix.dot(RotationMatrix.of(-0.2)), IdentityMatrix.of(2));
-  }
-
-  public void testRotationFail() {
-    assertFalse(PowerIteration.of(RotationMatrix.of(DoubleScalar.of(0.3))).isPresent());
   }
 
   public void testFail() {

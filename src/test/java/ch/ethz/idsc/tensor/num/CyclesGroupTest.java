@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -84,7 +85,14 @@ public class CyclesGroupTest extends TestCase {
   public void testGroupEx2() {
     Cycles cycles = Cycles.of( //
         "{{1, 18, 25, 8, 11, 33, 45, 34, 19, 39, 4, 35, 46, 37, 10, 48, 7, 31, 6, 42, 36, 15, 29}, {2, 21, 14, 38, 26, 24, 41, 22, 12, 49}, {3, 28,  20, 50, 43, 23, 9, 5, 16, 44, 30, 27, 17}, {13, 40, 32, 47}}");
+    int[] array = cycles.toTensor().stream().mapToInt(Tensor::length).toArray();
+    Scalar scalar = Tensors.vectorInt(array).stream().map(Scalar.class::cast).reduce(LCM::of).get();
+    assertEquals(scalar, RealScalar.of(5980));
     Set<Cycles> set = _group(Collections.singleton(cycles));
     assertEquals(set.size(), 5980);
+  }
+
+  public void testToString() {
+    assertEquals(CyclesGroup.INSTANCE.toString(), "CyclesGroup");
   }
 }

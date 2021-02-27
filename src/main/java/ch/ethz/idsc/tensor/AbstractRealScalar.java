@@ -1,8 +1,11 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
+import ch.ethz.idsc.tensor.api.ComplexEmbedding;
 import ch.ethz.idsc.tensor.num.Pi;
-import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -16,7 +19,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   // methods in this section are final
   /** @return true if this scalar is zero, or strictly greater zero, false otherwise */
   protected final boolean isNonNegative() {
-    return 0 <= signInt();
+    return 0 <= signum();
   }
 
   /** @return this or this.negate() depending on whichever is non-negative */
@@ -47,8 +50,13 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
 
   @Override // from SignInterface
   public final Scalar sign() {
-    return StaticHelper.SIGN[1 + signInt()];
+    return StaticHelper.SIGN[1 + signum()];
   }
+
+  /** @return gives -1, 0, or 1 depending on whether this is negative, zero, or positive.
+   * @see BigInteger#signum()
+   * @see BigDecimal#signum() */
+  protected abstract int signum();
 
   /***************************************************/
   // methods are non-final because overriding classes may support better precision

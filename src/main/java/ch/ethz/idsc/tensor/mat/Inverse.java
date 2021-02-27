@@ -13,7 +13,7 @@ public enum Inverse {
    * @return inverse of given matrix
    * @throws Exception if given matrix is not invertible */
   public static Tensor of(Tensor matrix) {
-    return LinearSolve.of(matrix, IdentityMatrix.of(matrix.length()));
+    return of(matrix, Pivots.selection(matrix));
   }
 
   /** function doesn't invoke Scalar::abs but pivots at the first non-zero column entry
@@ -23,6 +23,6 @@ public enum Inverse {
    * @return inverse of given matrix
    * @throws Exception if given matrix is not invertible */
   public static Tensor of(Tensor matrix, Pivot pivot) {
-    return LinearSolve.of(matrix, IdentityMatrix.of(matrix.length()), pivot);
+    return LinearSolve.of(matrix, IdentityMatrix.of(matrix), pivot);
   }
 }

@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.nrm.Matrix2Norm;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Exp;
@@ -29,14 +30,14 @@ public enum MatrixExp {
    * @return exponential of given matrix exp(m) = I + m + m^2/2 + m^3/6 + ...
    * @throws Exception if given matrix is not a square matrix */
   public static Tensor of(Tensor matrix) {
-    long exponent = exponent(Norm2Bound.ofMatrix(matrix));
+    long exponent = exponent(Matrix2Norm.bound(matrix));
     return MatrixPower.of(series(matrix.multiply(RationalScalar.of(1, exponent))), exponent);
   }
 
   /** @param norm
    * @return power of 2 */
   /* package */ static long exponent(Scalar norm) {
-    return 1 << Ceiling.FUNCTION.apply(LOG2.apply(norm.add(RealScalar.ONE))).number().longValue();
+    return 1 << Ceiling.longValueExact(LOG2.apply(norm.add(RealScalar.ONE)));
   }
 
   /** @param matrix square
@@ -55,9 +56,7 @@ public enum MatrixExp {
     sum = N.DOUBLE.of(sum); // switch to numeric precision
     for (int k = n + 1; k < MAX_ITERATIONS; ++k) {
       nxt = nxt.dot(matrix).divide(RealScalar.of(k));
-      Tensor prv = sum;
-      sum = sum.add(nxt);
-      if (Chop.NONE.isClose(sum, prv))
+      if (sum.equals(sum = sum.add(nxt)))
         return sum;
     }
     throw TensorRuntimeException.of(matrix); // insufficient convergence
@@ -68,6 +67,6 @@ public enum MatrixExp {
    * @param matrix
    * @return symmetric matrix */
   public static Tensor ofSymmetric(Tensor matrix) {
-    return StaticHelper.ofSymmetric(matrix, Exp.FUNCTION);
+    return Eigenvalues.ofSymmetric_map(matrix, Exp.FUNCTION);
   }
 }

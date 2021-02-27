@@ -6,9 +6,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
+import ch.ethz.idsc.tensor.api.ChopInterface;
+import ch.ethz.idsc.tensor.api.MachineNumberQInterface;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.ChopInterface;
-import ch.ethz.idsc.tensor.sca.MachineNumberQInterface;
 
 /** scalar with double precision, 64-bit, MATLAB style
  * 
@@ -52,6 +52,8 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   public static final Scalar INDETERMINATE = of(Double.NaN);
   /** positive numeric zero */
   private static final Scalar DOUBLE_ZERO = of(0.0);
+  /** positive numeric zero */
+  private static final Scalar DOUBLE_ONE = of(1.0);
 
   /** @param value
    * @return new instance of {@link DoubleScalar} */
@@ -105,13 +107,18 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   }
 
   @Override // from Scalar
-  public Number number() {
-    return value;
+  public Scalar zero() {
+    return DOUBLE_ZERO;
   }
 
   @Override // from Scalar
-  public Scalar zero() {
-    return DOUBLE_ZERO;
+  public Scalar one() {
+    return DOUBLE_ONE;
+  }
+
+  @Override // from Scalar
+  public Number number() {
+    return value;
   }
 
   /***************************************************/
@@ -171,8 +178,8 @@ public final class DoubleScalar extends AbstractRealScalar implements //
         : this;
   }
 
-  @Override // from SignInterface
-  public int signInt() {
+  @Override // from AbstractRealScalar
+  protected int signum() {
     if (Double.isNaN(value))
       throw TensorRuntimeException.of(this);
     return value < 0 ? -1 : (0 == value ? 0 : 1);

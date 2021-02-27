@@ -23,8 +23,8 @@ public class CompatibleUnitQTest extends TestCase {
   public void testSerializable() throws ClassNotFoundException, IOException {
     Predicate<Scalar> predicate = Serialization.copy(CompatibleUnitQ.SI().with(Unit.of("N*s")));
     String string = predicate.toString();
-    assertTrue(string.startsWith("CompatibleUnitQ"));
-    assertTrue(string.contains("N*s"));
+    assertTrue(string.startsWith("CompatibleUnitQ["));
+    assertTrue(string.contains("*s"));
   }
 
   public void testSimple() throws ClassNotFoundException, IOException {
@@ -65,6 +65,18 @@ public class CompatibleUnitQTest extends TestCase {
     assertEquals(new QuantityMagnitude(unitSystem).in("fiction^2").apply(q3), g1);
     Scalar s1 = unitSystem.apply(Quantity.of(g1, "fiction^2"));
     assertEquals(s1, q3);
+  }
+
+  public void testTime() {
+    Predicate<Scalar> predicate = CompatibleUnitQ.SI().with(Unit.of("h"));
+    assertTrue(predicate.test(Quantity.of(0, "K^0*Hz^-1")));
+    assertTrue(predicate.test(Quantity.of(1, "F*S^-1")));
+    assertTrue(predicate.test(Quantity.of(2, "H*Ohm^-1")));
+    assertTrue(predicate.test(Quantity.of(3, "Wb*V^-1")));
+    assertTrue(predicate.test(Quantity.of(4, "mol*kat^-1")));
+    assertTrue(predicate.test(Quantity.of(5, "C*A^-1")));
+    assertTrue(predicate.test(Quantity.of(6, "J*W^-1")));
+    assertTrue(predicate.test(Quantity.of(7, "T*cd*V^-1*lux^-1")));
   }
 
   public void testWithFail() {

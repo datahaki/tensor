@@ -6,15 +6,18 @@ import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
+/** inspired by
+ * <a href="https://reference.wolfram.com/language/ref/Pi.html">Pi</a> */
 public enum Pi {
   ;
   /** 3.14159265358979323846 */
   public static final Scalar VALUE = DoubleScalar.of(Math.PI);
   public static final Scalar HALF = DoubleScalar.of(Math.PI / 2);
-  public static final Scalar TWO = DoubleScalar.of(Math.PI * 2);
+  public static final Scalar TWO = DoubleScalar.of(Math.PI + Math.PI);
   /***************************************************/
   private static final Scalar _6 = RealScalar.of(6);
   private static final Scalar _13591409 = RealScalar.of(13591409);
@@ -23,6 +26,7 @@ public enum Pi {
   private static final Scalar _12 = RealScalar.of(12);
   private static final Scalar _426880 = RealScalar.of(426880);
   private static final Scalar _16 = RealScalar.of(16);
+  private static final ScalarUnaryOperator CUBE = Power.function(3);
 
   /** @param precision is approximately the number of correct digits in the decimal encoding
    * @return */
@@ -37,7 +41,9 @@ public enum Pi {
     Scalar prev = RealScalar.ZERO;
     while (true) {
       ++k;
-      M = Power.of(K, 3).subtract(_16.multiply(K)).multiply(M).divide(Power.of(k, 3));
+      M = CUBE.apply(K).subtract(_16.multiply(K)) //
+          .multiply(M) //
+          .divide(CUBE.apply(RealScalar.of(k)));
       L = L.add(_545140134);
       X = X.multiply(_262537412640768000);
       S = S.add(M.multiply(L).divide(X));

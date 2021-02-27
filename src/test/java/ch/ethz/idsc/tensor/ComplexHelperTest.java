@@ -126,17 +126,18 @@ public class ComplexHelperTest extends TestCase {
     assertTrue(lessThan);
   }
 
+  @SuppressWarnings("unused")
   public void testEpsilon01() {
     Scalar re = RealScalar.of(0);
     Scalar im = RealScalar.of(4.9E-324);
     Scalar scalar = ComplexScalar.of(re, im);
     Scalar ref = ComplexHelper.sqrtPolar(scalar);
     Scalar cmp = ComplexHelper.sqrt(re, im);
-    // TODO result not satisfactory!
-    System.out.println(ref);
-    System.out.println(cmp);
-    System.out.println(ref.multiply(ref));
-    System.out.println(cmp.multiply(cmp));
+    // LONGTERM result not satisfactory!
+    // System.out.println(ref);
+    // System.out.println(cmp);
+    // System.out.println(ref.multiply(ref));
+    // System.out.println(cmp.multiply(cmp));
     // 2.432040959320809*10^-162 + 1.007384349597552*10^-162 I
   }
 

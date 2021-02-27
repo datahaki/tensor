@@ -8,19 +8,18 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
-import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.ext.Integers;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.red.Diagonal;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.red.Times;
-import ch.ethz.idsc.tensor.sca.Chop;
 
 /** decomposition Q.R = A with Det[Q] == +1
  * householder with even number of reflections
  * reproduces example on wikipedia */
 /* package */ class QRDecompositionImpl implements QRDecomposition, Serializable {
-  private static final long serialVersionUID = -4880290968594939778L;
+  private static final long serialVersionUID = -7441079810601672527L;
   // ---
   private final int m;
   private final Tensor R;
@@ -40,7 +39,7 @@ import ch.ethz.idsc.tensor.sca.Chop;
       Tensor x = Tensor.of(R.get(Tensor.ALL, k).stream() // k-th column of R
           .map(Scalar.class::cast) //
           .map(scalar -> atomicInteger.getAndIncrement() < 0 ? scalar.zero() : scalar));
-      Scalar xn = Norm._2.ofVector(x);
+      Scalar xn = Vector2Norm.of(x);
       if (Scalars.nonZero(xn)) { // else reflection reduces to identity, hopefully => det == 0
         Tensor signed = qrSignOperator.sign(x.Get(k)).multiply(xn);
         x.set(signed::add, k);
@@ -79,21 +78,21 @@ import ch.ethz.idsc.tensor.sca.Chop;
         : RealScalar.ZERO;
   }
 
-  /** @param chop
-   * @return PseudoInverse[matrix] . b
+  /** @return PseudoInverse[matrix] . b
    * @throws Exception if division by zero occurs */
-  public Tensor pseudoInverse(Chop chop) {
+  public Tensor pseudoInverse() {
+    StaticHelper.failFast(R, m);
     Tensor[] x = Qinv.stream().limit(m).toArray(Tensor[]::new);
     for (int i = m - 1; i >= 0; --i) {
       for (int j = i + 1; j < m; ++j)
         x[i] = x[i].subtract(x[j].multiply(R.Get(i, j)));
-      x[i] = x[i].divide(chop.requireNonZero(R.Get(i, i)));
+      x[i] = x[i].divide(R.Get(i, i));
     }
     return Unprotect.byRef(x);
   }
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[Q=%s, R=%s]", QRDecomposition.class.getSimpleName(), Dimensions.of(getQ()), Dimensions.of(getR()));
+    return String.format("%s[%s]", QRDecomposition.class.getSimpleName(), Tensors.message(getQ(), getR()));
   }
 }

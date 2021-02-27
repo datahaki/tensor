@@ -29,6 +29,8 @@ public enum Tuples {
   public static Tensor of(Tensor tensor, int n) {
     Integer[] dimensions = IntStream.generate(() -> tensor.length()).limit(n).boxed().toArray(Integer[]::new);
     Tensor array = Array.of(list -> Tensor.of(list.stream().map(tensor::get)), dimensions);
-    return n <= 1 ? array : Tensor.of(array.flatten(n - 1));
+    return n <= 1 //
+        ? array
+        : Tensor.of(array.flatten(n - 1));
   }
 }

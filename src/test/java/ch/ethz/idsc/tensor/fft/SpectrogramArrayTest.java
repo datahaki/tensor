@@ -17,6 +17,11 @@ import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
+import ch.ethz.idsc.tensor.sca.win.BlackmanHarrisWindow;
+import ch.ethz.idsc.tensor.sca.win.HannWindow;
+import ch.ethz.idsc.tensor.sca.win.NuttallWindow;
+import ch.ethz.idsc.tensor.sca.win.TukeyWindow;
+import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -25,34 +30,37 @@ public class SpectrogramArrayTest extends TestCase {
     TensorUnaryOperator tensorUnaryOperator = Serialization.copy(SpectrogramArray.of(8, 8));
     Tensor tensor = tensorUnaryOperator.apply(Range.of(0, 128));
     assertEquals(Dimensions.of(tensor), Arrays.asList(16, 8));
+    assertTrue(tensorUnaryOperator.toString().startsWith("SpectrogramArray["));
   }
 
   public void testMathematicaDefault() {
-    Tensor tensor = Tensor.of(IntStream.range(0, 2000) //
+    Tensor tensor = Tensor.of(IntStream.range(0, 200) //
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(RealScalar::of));
-    int windowLength = Unprotect.dimension1(SpectrogramArray.of(tensor));
-    assertEquals(windowLength, 64);
+    for (WindowFunctions windowFunctions : WindowFunctions.values()) {
+      int windowLength = Unprotect.dimension1(SpectrogramArray.of(tensor, windowFunctions.get()));
+      assertEquals(windowLength, 32);
+    }
   }
 
   public void testQuantity() {
-    Tensor tensor = Tensor.of(IntStream.range(0, 2000) //
+    Tensor tensor = Tensor.of(IntStream.range(0, 500) //
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(d -> Quantity.of(d, "m")));
     Tensor array = SpectrogramArray.of(tensor);
     Tensor array2 = array.map(QuantityMagnitude.SI().in("km"));
     int windowLength = Unprotect.dimension1(array2);
-    assertEquals(windowLength, 64);
+    assertEquals(windowLength, 32);
   }
 
   public void testStaticOps() {
-    SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"));
-    SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), 10);
+    SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), HannWindow.FUNCTION);
+    SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), 10, TukeyWindow.FUNCTION);
   }
 
   public void testStaticOpsFail() {
-    AssertFail.of(() -> SpectrogramArray.of(Quantity.of(0, "s"), Quantity.of(100, "s^-1")));
-    AssertFail.of(() -> SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1")));
+    AssertFail.of(() -> SpectrogramArray.of(Quantity.of(0, "s"), Quantity.of(100, "s^-1"), NuttallWindow.FUNCTION));
+    AssertFail.of(() -> SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1"), BlackmanHarrisWindow.FUNCTION));
   }
 
   public void testPreallocate() {

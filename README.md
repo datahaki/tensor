@@ -1,6 +1,6 @@
 # ch.ethz.idsc.tensor <a href="https://travis-ci.org/idsc-frazzoli/tensor"><img src="https://travis-ci.org/idsc-frazzoli/tensor.svg?branch=master" alt="Build Status"></a>
 
-Library for tensor computations in Java, version `0.9.1`
+Library for tensor computations in Java, version `0.9.2`
 
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions
@@ -47,7 +47,7 @@ Autonomous Gokart
 * values are encoded as exact integer fractions, in double precision, and as `java.math.BigDecimal`
 * probability distributions for random variate generation: Binomial-, Poisson-, Exponential-distribution, etc.
 * linear solvers `GaussianElimination`, `CholeskyDecomposition`, `QRDecomposition`, `SingularValueDecomposition`
-* matrix functions `MatrixExp`, `MatrixLog`, etc.
+* matrix functions `MatrixExp`, `MatrixLog`, `MatrixSqrt`, etc.
 * tensor functions `TensorProduct`, `TensorWedge`, `Trace`, `HodgeDual`, etc.
 * parametric functions `LinearInterpolation`, `BSplineFunction`, etc.
 * window functions: Gaussian, Hamming, Hann, Blackman, etc.
@@ -193,31 +193,6 @@ System.out.println(force_N);
 
 The arithmetic for the scalar type `Quantity` was developed in collaboration with the project `SwissTrolley+`.
 
-### Geometry
-
-<table>
-<tr>
-<td>
-
-![spherefitimage](https://user-images.githubusercontent.com/4012178/45925049-24a46100-bf0e-11e8-84a7-ebd6d1d7b01a.png)
-
-Sphere fit
-
-<td>
-
-![bipartitionimage](https://user-images.githubusercontent.com/4012178/45924997-2a4d7700-bf0d-11e8-8655-449d4b248d3a.png)
-
-Hungarian algorithm
-
-<td>
-
-![spatialmedianimage](https://user-images.githubusercontent.com/4012178/46254643-7874f400-c492-11e8-97dc-673f9ecf2dcd.png)
-
-Weiszfeld’s method
-
-</tr>
-</table>
-
 ### Miscellaneous
 
 Tensors of rank 3
@@ -313,13 +288,9 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
   <dependency>
     <groupId>ch.ethz.idsc</groupId>
     <artifactId>tensor</artifactId>
-    <version>0.9.1</version>
+    <version>0.9.2</version>
   </dependency>
 </dependencies>
 ```
 
 The source code is attached to every release.
-
----
-
-![ethz300](https://user-images.githubusercontent.com/4012178/45925071-bf9d3b00-bf0e-11e8-9d92-e30650fd6bf6.png)

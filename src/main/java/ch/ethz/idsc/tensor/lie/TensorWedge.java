@@ -7,10 +7,10 @@ import java.util.stream.Stream;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.Multinomial;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.TensorRank;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.num.Multinomial;
 import ch.ethz.idsc.tensor.sca.Factorial;
 
 /** Implementation is consistent with Mathematica, in particular

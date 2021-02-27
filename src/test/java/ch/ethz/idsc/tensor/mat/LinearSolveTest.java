@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
@@ -22,43 +23,47 @@ public class LinearSolveTest extends TestCase {
   private static final Random RANDOM = new Random();
 
   public void testSolveCR() {
-    int n = 5;
+    int n = 5 + RANDOM.nextInt(6);
     Tensor A = Tensors.matrix((i, j) -> //
     ComplexScalar.of( //
         RealScalar.of(RANDOM.nextInt(15)), //
         RealScalar.of(RANDOM.nextInt(15))), n, n);
-    Tensor b = Tensors.matrix((i, j) -> RationalScalar.of(i.equals(j) ? 1 : 0, 1), n, n + 3);
-    Tensor X = LinearSolve.of(A, b);
-    Tensor err = A.dot(X).subtract(b);
-    assertEquals(err, b.multiply(RealScalar.ZERO));
-    assertEquals(err, Array.zeros(Dimensions.of(b)));
-    ExactTensorQ.require(X);
+    if (Scalars.nonZero(Det.of(A))) {
+      Tensor b = Tensors.matrix((i, j) -> RationalScalar.of(i.equals(j) ? 1 : 0, 1), n, n + 3);
+      Tensor X = LinearSolve.of(A, b);
+      Tensor err = A.dot(X).subtract(b);
+      assertEquals(err, b.map(Scalar::zero));
+      assertEquals(err, Array.zeros(Dimensions.of(b)));
+      ExactTensorQ.require(X);
+    }
   }
 
   public void testSolveRC() {
-    int n = 10;
+    int n = 5 + RANDOM.nextInt(6);
     Tensor A = Tensors.matrix((i, j) -> //
     RationalScalar.of(RANDOM.nextInt(100), RANDOM.nextInt(100) + 1), n, n);
-    Tensor b = Tensors.matrix((i, j) -> ComplexScalar.of(//
-        RealScalar.of(RANDOM.nextInt(15)), //
-        RealScalar.of(RANDOM.nextInt(15))), n, n + 3);
-    Tensor X = LinearSolve.of(A, b);
-    Tensor err = A.dot(X).subtract(b);
-    assertEquals(err, b.multiply(RealScalar.ZERO));
-    assertEquals(err, Array.zeros(Dimensions.of(b)));
-    ExactTensorQ.require(X);
+    if (Scalars.nonZero(Det.of(A))) {
+      Tensor b = Tensors.matrix((i, j) -> ComplexScalar.of(//
+          RealScalar.of(RANDOM.nextInt(15)), //
+          RealScalar.of(RANDOM.nextInt(15))), n, n + 3);
+      Tensor X = LinearSolve.of(A, b);
+      Tensor err = A.dot(X).subtract(b);
+      assertEquals(err, b.map(Scalar::zero));
+      assertEquals(err, Array.zeros(Dimensions.of(b)));
+      ExactTensorQ.require(X);
+    }
   }
 
   public void testSolveDC() {
-    int n = 15;
+    int n = 7;
     Tensor A = Tensors.matrix((i, j) -> DoubleScalar.of(4 * RANDOM.nextGaussian() - 2), n, n);
     Tensor b = Tensors.matrix((i, j) -> ComplexScalar.of( //
         RealScalar.of(RANDOM.nextDouble()), //
-        RealScalar.of(RANDOM.nextDouble())), n, n + 3);
+        RealScalar.of(RANDOM.nextDouble())), n, n - 2);
     Tensor X = LinearSolve.of(A, b);
-    Tensor err = A.dot(X).add(b.negate()).map(Chop._10);
-    assertEquals(err, b.multiply(RealScalar.ZERO));
-    assertEquals(err, Array.zeros(Dimensions.of(b)));
+    Tensor err = A.dot(X).add(b.negate());
+    Chop._12.requireClose(err, b.multiply(RealScalar.ZERO));
+    Chop._12.requireClose(err, Array.zeros(Dimensions.of(b)));
   }
 
   public void testGauss() {
@@ -89,11 +94,13 @@ public class LinearSolveTest extends TestCase {
     int n = 5;
     Tensor A = Tensors.matrix((i, j) -> //
     RationalScalar.of(RANDOM.nextInt(100) - 50, RANDOM.nextInt(100) + 1), n, n);
-    Tensor b = IdentityMatrix.of(n);
-    Tensor X = LinearSolve.of(A, b);
-    assertEquals(X.dot(A), b);
-    assertEquals(A.dot(X), b);
-    ExactTensorQ.require(X);
+    if (Scalars.nonZero(Det.of(A))) {
+      Tensor b = IdentityMatrix.of(n);
+      Tensor X = LinearSolve.of(A, b);
+      assertEquals(X.dot(A), b);
+      assertEquals(A.dot(X), b);
+      ExactTensorQ.require(X);
+    }
   }
 
   public void testEmpty() {

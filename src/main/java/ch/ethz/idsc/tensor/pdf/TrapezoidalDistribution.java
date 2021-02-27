@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * <a href="https://en.wikipedia.org/wiki/Trapezoidal_distribution">TrapezoidalDistribution</a> */
 public class TrapezoidalDistribution extends AbstractContinuousDistribution implements //
     InverseCDF, MeanInterface, Serializable {
-  private static final long serialVersionUID = 2387747476496797622L;
+  private static final long serialVersionUID = -5515848086212190510L;
   private static final Scalar _1_3 = RationalScalar.of(1, 3);
 
   /** @param a
@@ -38,6 +38,15 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     return new TrapezoidalDistribution(a, b, c, d);
   }
 
+  /** @param a
+   * @param b
+   * @param c
+   * @param d
+   * @return Exception unless a <= b <= c <= d and a < d */
+  public static Distribution of(Number a, Number b, Number c, Number d) {
+    return of(RealScalar.of(a), RealScalar.of(b), RealScalar.of(c), RealScalar.of(d));
+  }
+
   /***************************************************/
   private final Clip clip;
   private final Scalar a;
@@ -46,6 +55,8 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
   private final Scalar d;
   private final Scalar alpha_inv;
   private final Scalar alpha;
+  private final Scalar yB;
+  private final Scalar yC;
 
   private TrapezoidalDistribution(Scalar a, Scalar b, Scalar c, Scalar d) {
     clip = Clips.interval(a, d);
@@ -55,6 +66,8 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     this.d = d;
     alpha_inv = d.add(c).subtract(a).subtract(b);
     this.alpha = alpha_inv.reciprocal();
+    yB = p_lessThan(b);
+    yC = p_lessThan(c);
   }
 
   @Override // from CDF
@@ -95,34 +108,36 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     return RealScalar.ZERO;
   }
 
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    return quantile(RealScalar.of(reference));
-  }
-
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    Scalar yB = p_lessThan(b);
-    Scalar yC = p_lessThan(c);
-    if (Scalars.lessEquals(p, yB)) { // y <= yB
-      Scalar term1 = Sqrt.FUNCTION.apply(alpha_inv.multiply(b.subtract(a)).multiply(p));
-      return term1.add(a);
-    }
-    // yB < y <= yC
-    if (Scalars.lessEquals(p, yC)) {
-      Scalar term1 = p.multiply(alpha_inv).add(a).add(b);
-      return term1.multiply(RationalScalar.HALF);
-    }
-    // yC < y
-    Scalar term1 = RealScalar.ONE.subtract(p).multiply(alpha_inv).multiply(d.subtract(c));
-    Scalar term2 = Sqrt.FUNCTION.apply(term1);
-    return d.subtract(term2);
-  }
-
   @Override // from MeanInterface
   public Scalar mean() {
     Scalar cd = c.multiply(c).add(c.multiply(d)).add(d.multiply(d));
     Scalar ab = a.multiply(a).add(a.multiply(b)).add(b.multiply(b));
     return alpha.multiply(cd.subtract(ab)).multiply(_1_3);
+  }
+
+  @Override // from InverseCDF
+  public Scalar quantile(Scalar p) {
+    return _quantile(Clips.unit().requireInside(p));
+  }
+
+  private Scalar _quantile(Scalar p) {
+    if (Scalars.lessEquals(p, yB)) // y <= yB
+      return Sqrt.FUNCTION.apply(alpha_inv.multiply(b.subtract(a)).multiply(p)).add(a);
+    // yB < y <= yC
+    if (Scalars.lessEquals(p, yC))
+      return p.multiply(alpha_inv).add(a).add(b).multiply(RationalScalar.HALF);
+    // yC < y
+    return d.subtract(Sqrt.FUNCTION.apply( //
+        RealScalar.ONE.subtract(p).multiply(alpha_inv).multiply(d.subtract(c))));
+  }
+
+  @Override // from AbstractContinuousDistribution
+  protected Scalar randomVariate(double reference) {
+    return _quantile(RealScalar.of(reference));
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%s, %s, %s, %s]", getClass().getSimpleName(), a, b, c, d);
   }
 }

@@ -7,10 +7,10 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
-import ch.ethz.idsc.tensor.red.Norm;
+import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Imag;
@@ -29,7 +29,7 @@ public class ComplexScalarImplTest extends TestCase {
     Scalar c = RationalScalar.of(1609, 3600); // 0.6685390373377192
     Tensor r = Sqrt.of(c);
     double d = Math.sqrt(c.number().doubleValue());
-    assertEquals(Chop._12.apply(a.subtract(r)), RealScalar.ZERO);
+    Tolerance.CHOP.requireClose(a, r);
     String prefix = "0.668539037337719";
     assertTrue(a.toString().startsWith(prefix));
     assertTrue(r.toString().startsWith(prefix));
@@ -54,7 +54,7 @@ public class ComplexScalarImplTest extends TestCase {
     Scalar c = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
     assertEquals(Real.of(c), RealScalar.of(2));
     assertEquals(Imag.of(c), RationalScalar.of(5, 8));
-    assertEquals(Abs.of(c), Norm._2.ofVector(Tensors.of(RealScalar.of(2), RationalScalar.of(5, 8))));
+    assertEquals(Abs.of(c), Vector2Norm.of(Tensors.of(RealScalar.of(2), RationalScalar.of(5, 8))));
     Scalar r = RealScalar.of(-6);
     assertEquals(Real.of(r), r);
     assertEquals(Imag.of(r), RealScalar.ZERO);

@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
     this.uBounds = uBounds.copy();
   }
 
-  public Scalar median(int index) {
+  public Scalar mean(int index) {
     return lBounds.Get(index).add(uBounds.Get(index)).multiply(RationalScalar.HALF);
   }
 

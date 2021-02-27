@@ -20,8 +20,6 @@ public interface MatrixSqrt {
     }
     if (SymmetricMatrixQ.of(matrix))
       return ofSymmetric(matrix);
-    // if (Tolerance.CHOP.allZero(matrix))
-    // return new MatrixSqrtContainer(...);
     throw TensorRuntimeException.of(matrix);
   }
 

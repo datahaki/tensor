@@ -60,9 +60,8 @@ public class SimpleUnitSystem implements UnitSystem {
         if (map.containsKey(atom)) {
           Scalar value = ((Quantity) scalar).value();
           Unit alt = QuantityUnit.of(map.get(atom));
-          // LONGTERM this is not sufficiently elegant
           if (Scalars.isZero(value) || // non-zero
-              !value.multiply(value).equals(value) || // multiplicative 1
+              !value.one().equals(value) || // not multiplicative 1
               !alt.toString().equals(atom))
             throw TensorRuntimeException.of(scalar);
         }
@@ -105,7 +104,7 @@ public class SimpleUnitSystem implements UnitSystem {
       }
       return Objects.isNull(product) //
           ? scalar
-          : StaticHelper.multiply(product.multiply(quantity.value()), new UnitImpl(navigableMap));
+          : StaticHelper.multiply(product.multiply(quantity.value()), UnitImpl.create(navigableMap));
     }
     return Objects.requireNonNull(scalar);
   }
@@ -115,7 +114,7 @@ public class SimpleUnitSystem implements UnitSystem {
     return Collections.unmodifiableMap(map);
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return String.format("%s[size=%d]", getClass().getSimpleName(), map().size());
   }

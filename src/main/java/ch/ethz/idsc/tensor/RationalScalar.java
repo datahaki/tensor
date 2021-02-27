@@ -10,7 +10,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-import ch.ethz.idsc.tensor.sca.NInterface;
+import ch.ethz.idsc.tensor.api.ExactScalarQInterface;
+import ch.ethz.idsc.tensor.api.NInterface;
 
 /** a RationalScalar corresponds to an element from the field of rational numbers.
  * 
@@ -99,6 +100,16 @@ public final class RationalScalar extends AbstractRealScalar implements //
   }
 
   @Override // from Scalar
+  public Scalar zero() {
+    return ZERO;
+  }
+
+  @Override // from Scalar
+  public Scalar one() {
+    return ONE;
+  }
+
+  @Override // from Scalar
   public Number number() {
     if (bigFraction.isInteger()) {
       BigInteger bigInteger = numerator();
@@ -115,11 +126,6 @@ public final class RationalScalar extends AbstractRealScalar implements //
       return bigInteger;
     }
     return toBigDecimal(MathContext.DECIMAL64).doubleValue();
-  }
-
-  @Override // from Scalar
-  public Scalar zero() {
-    return ZERO;
   }
 
   /***************************************************/
@@ -186,8 +192,8 @@ public final class RationalScalar extends AbstractRealScalar implements //
     return of(toBigDecimal(0, RoundingMode.HALF_UP).toBigIntegerExact(), BigInteger.ONE);
   }
 
-  @Override // from SignInterface
-  public int signInt() {
+  @Override // from AbstractRealScalar
+  protected int signum() {
     return bigFraction.signum();
   }
 

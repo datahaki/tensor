@@ -15,7 +15,7 @@ public class ExactScalarQTest extends TestCase {
 
   public void testNegative() {
     assertFalse(ExactScalarQ.of(DoubleScalar.of(0)));
-    assertFalse(ExactScalarQ.of(DecimalScalar.of(0)));
+    assertFalse(ExactScalarQ.of(DecimalScalar.of("0")));
     assertFalse(ExactScalarQ.of(DoubleScalar.of(3.14)));
     assertFalse(ExactScalarQ.of(DoubleScalar.POSITIVE_INFINITY));
     assertFalse(ExactScalarQ.of(DoubleScalar.INDETERMINATE));

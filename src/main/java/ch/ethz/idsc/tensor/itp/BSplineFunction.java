@@ -66,7 +66,7 @@ public abstract class BSplineFunction implements ScalarTensorFunction {
     this.degree = degree;
     this.control = control;
     half = degree / 2;
-    shift = degree % 2 == 0 //
+    shift = Integers.isEven(degree) //
         ? RationalScalar.HALF
         : RealScalar.ZERO;
   }
@@ -74,7 +74,7 @@ public abstract class BSplineFunction implements ScalarTensorFunction {
   @Override // from ScalarTensorFunction
   public final Tensor apply(Scalar scalar) {
     scalar = domain(scalar).add(shift);
-    return deBoor(Floor.FUNCTION.apply(scalar).number().intValue()).apply(scalar);
+    return deBoor(Floor.intValueExact(scalar)).apply(scalar);
   }
 
   /** @param k

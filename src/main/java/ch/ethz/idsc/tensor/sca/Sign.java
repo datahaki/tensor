@@ -4,13 +4,14 @@ package ch.ethz.idsc.tensor.sca;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
-import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
+import ch.ethz.idsc.tensor.api.SignInterface;
+import ch.ethz.idsc.tensor.lie.Quaternion;
 import ch.ethz.idsc.tensor.qty.Quantity;
 
 /** Sign is consistent with Mathematica for {@link RealScalar}, {@link ComplexScalar},
@@ -37,31 +38,21 @@ public enum Sign implements ScalarUnaryOperator {
     throw TensorRuntimeException.of(scalar);
   }
 
-  /** @param tensor with {@link RealScalar} entries
-   * @return tensor with all scalars replaced with their sign */
+  /** @param tensor
+   * @return tensor with all scalars replaced with their sign value */
   @SuppressWarnings("unchecked")
   public static <T extends Tensor> T of(T tensor) {
     return (T) tensor.map(FUNCTION);
   }
 
+  /***************************************************/
   /** function is equivalent to
    * <code>Scalars.lessThan(scalar.zero(), scalar)</code>
    * 
    * @param scalar may be instance of {@link Quantity}
    * @return true if sign of given scalar evaluates to +1 */
   public static boolean isPositive(Scalar scalar) {
-    SignInterface signInterface = (SignInterface) scalar;
-    return signInterface.signInt() == +1;
-  }
-
-  /** function is equivalent to
-   * <code>Scalars.lessThan(scalar, scalar.zero())</code>
-   * 
-   * @param scalar may be instance of {@link Quantity}
-   * @return true if sign of given scalar evaluates to -1 */
-  public static boolean isNegative(Scalar scalar) {
-    SignInterface signInterface = (SignInterface) scalar;
-    return signInterface.signInt() == -1;
+    return Scalars.lessThan(scalar.zero(), scalar);
   }
 
   /** function is equivalent to
@@ -70,8 +61,16 @@ public enum Sign implements ScalarUnaryOperator {
    * @param scalar may be instance of {@link Quantity}
    * @return true if sign of given scalar evaluates to +1, or 0 */
   public static boolean isPositiveOrZero(Scalar scalar) {
-    SignInterface signInterface = (SignInterface) scalar;
-    return signInterface.signInt() != -1;
+    return Scalars.lessEquals(scalar.zero(), scalar);
+  }
+
+  /** function is equivalent to
+   * <code>Scalars.lessThan(scalar, scalar.zero())</code>
+   * 
+   * @param scalar may be instance of {@link Quantity}
+   * @return true if sign of given scalar evaluates to -1 */
+  public static boolean isNegative(Scalar scalar) {
+    return Scalars.lessThan(scalar, scalar.zero());
   }
 
   /** function is equivalent to
@@ -80,19 +79,19 @@ public enum Sign implements ScalarUnaryOperator {
    * @param scalar may be instance of {@link Quantity}
    * @return true if sign of given scalar evaluates to -1, or 0 */
   public static boolean isNegativeOrZero(Scalar scalar) {
-    SignInterface signInterface = (SignInterface) scalar;
-    return signInterface.signInt() != +1;
+    return Scalars.lessEquals(scalar, scalar.zero());
   }
 
+  /***************************************************/
   /** Remark: Functionality inspired by {@link Objects#requireNonNull(Object)}
    * 
    * @param scalar
    * @return scalar
    * @throws Exception if given scalar is not positive, i.e. has negative or zero sign */
   public static Scalar requirePositive(Scalar scalar) {
-    if (isNegativeOrZero(scalar))
-      throw TensorRuntimeException.of(scalar);
-    return scalar;
+    if (isPositive(scalar))
+      return scalar;
+    throw TensorRuntimeException.of(scalar);
   }
 
   /** Remark: Functionality inspired by {@link Objects#requireNonNull(Object)}
@@ -101,8 +100,8 @@ public enum Sign implements ScalarUnaryOperator {
    * @return scalar
    * @throws Exception if given scalar is negative, i.e. has negative sign */
   public static Scalar requirePositiveOrZero(Scalar scalar) {
-    if (isNegative(scalar))
-      throw TensorRuntimeException.of(scalar);
-    return scalar;
+    if (isPositiveOrZero(scalar))
+      return scalar;
+    throw TensorRuntimeException.of(scalar);
   }
 }

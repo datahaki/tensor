@@ -7,18 +7,18 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.api.AbsInterface;
+import ch.ethz.idsc.tensor.api.ArcTanInterface;
+import ch.ethz.idsc.tensor.api.ArgInterface;
+import ch.ethz.idsc.tensor.api.ComplexEmbedding;
+import ch.ethz.idsc.tensor.api.ConjugateInterface;
+import ch.ethz.idsc.tensor.api.PowerInterface;
+import ch.ethz.idsc.tensor.api.RoundingInterface;
+import ch.ethz.idsc.tensor.api.SignInterface;
+import ch.ethz.idsc.tensor.api.SqrtInterface;
 import ch.ethz.idsc.tensor.ext.ObjectFormat;
 import ch.ethz.idsc.tensor.io.CsvFormat;
 import ch.ethz.idsc.tensor.io.StringScalar;
-import ch.ethz.idsc.tensor.sca.AbsInterface;
-import ch.ethz.idsc.tensor.sca.ArcTanInterface;
-import ch.ethz.idsc.tensor.sca.ArgInterface;
-import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
-import ch.ethz.idsc.tensor.sca.ConjugateInterface;
-import ch.ethz.idsc.tensor.sca.PowerInterface;
-import ch.ethz.idsc.tensor.sca.RoundingInterface;
-import ch.ethz.idsc.tensor.sca.SignInterface;
-import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
 /** {@link Quantity} represents a magnitude and unit.
  * <pre>

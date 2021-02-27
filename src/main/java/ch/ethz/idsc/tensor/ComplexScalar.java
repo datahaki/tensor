@@ -3,22 +3,22 @@ package ch.ethz.idsc.tensor;
 
 import java.util.Objects;
 
+import ch.ethz.idsc.tensor.api.AbsInterface;
+import ch.ethz.idsc.tensor.api.ArcTanInterface;
+import ch.ethz.idsc.tensor.api.ArgInterface;
+import ch.ethz.idsc.tensor.api.ComplexEmbedding;
+import ch.ethz.idsc.tensor.api.ConjugateInterface;
+import ch.ethz.idsc.tensor.api.ExpInterface;
+import ch.ethz.idsc.tensor.api.LogInterface;
+import ch.ethz.idsc.tensor.api.PowerInterface;
+import ch.ethz.idsc.tensor.api.RoundingInterface;
+import ch.ethz.idsc.tensor.api.SignInterface;
+import ch.ethz.idsc.tensor.api.SqrtInterface;
+import ch.ethz.idsc.tensor.api.TrigonometryInterface;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.sca.AbsInterface;
-import ch.ethz.idsc.tensor.sca.ArcTanInterface;
-import ch.ethz.idsc.tensor.sca.ArgInterface;
-import ch.ethz.idsc.tensor.sca.ComplexEmbedding;
-import ch.ethz.idsc.tensor.sca.ConjugateInterface;
 import ch.ethz.idsc.tensor.sca.Cos;
-import ch.ethz.idsc.tensor.sca.ExpInterface;
-import ch.ethz.idsc.tensor.sca.LogInterface;
-import ch.ethz.idsc.tensor.sca.PowerInterface;
-import ch.ethz.idsc.tensor.sca.RoundingInterface;
 import ch.ethz.idsc.tensor.sca.Sign;
-import ch.ethz.idsc.tensor.sca.SignInterface;
 import ch.ethz.idsc.tensor.sca.Sin;
-import ch.ethz.idsc.tensor.sca.SqrtInterface;
-import ch.ethz.idsc.tensor.sca.TrigonometryInterface;
 
 /** complex number
  * 

@@ -6,15 +6,18 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.red.Times;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/DagumDistribution.html">DagumDistribution</a> */
-public class DagumDistribution extends AbstractContinuousDistribution implements InverseCDF, Serializable {
-  private static final long serialVersionUID = -1011125287948834776L;
+public class DagumDistribution extends AbstractContinuousDistribution implements //
+    InverseCDF, Serializable {
+  private static final long serialVersionUID = -3974668493015286288L;
 
   /** @param p positive
    * @param a positive
@@ -81,13 +84,19 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
   }
 
   @Override // from InverseCDF
-  public Scalar quantile(Scalar x) {
-    return power_arn.apply(power_prn.apply(x).subtract(RealScalar.ONE)).multiply(b);
+  public Scalar quantile(Scalar p) {
+    return _quantile(Clips.unit().requireInside(p));
+  }
+
+  private Scalar _quantile(Scalar p) {
+    return Scalars.isZero(p) //
+        ? b.zero()
+        : power_arn.apply(power_prn.apply(p).subtract(RealScalar.ONE)).multiply(b);
   }
 
   @Override // from AbstractContinuousDistribution
   protected Scalar randomVariate(double reference) {
-    return quantile(DoubleScalar.of(reference));
+    return _quantile(DoubleScalar.of(reference));
   }
 
   @Override // from Object

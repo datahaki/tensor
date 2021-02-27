@@ -47,9 +47,9 @@ public class MatrixExpTest extends TestCase {
   }
 
   public void testExp() {
-    double val = RANDOM.nextGaussian();
-    double va2 = RANDOM.nextGaussian();
-    double va3 = RANDOM.nextGaussian();
+    double val = RANDOM.nextGaussian() * 0.1;
+    double va2 = RANDOM.nextGaussian() * 0.1;
+    double va3 = RANDOM.nextGaussian() * 0.1;
     double[][] mat = new double[][] { { 0, val, va2 }, { -val, 0, va3 }, { -va2, -va3, 0 } };
     Tensor bu = Tensors.matrixDouble(mat);
     Tensor ort = MatrixExp.of(bu);
@@ -82,8 +82,8 @@ public class MatrixExpTest extends TestCase {
     Tensor b = Tensors.fromString("{{2, 1-I}, {1+I, 2}}");
     assertTrue(HermitianMatrixQ.of(a));
     assertTrue(HermitianMatrixQ.of(b));
-    Scalar tra = Trace.of(MatrixExp.of(a.add(b)));
-    Scalar trb = Trace.of(MatrixExp.of(a).dot(MatrixExp.of(b)));
+    Tensor tra = Trace.of(MatrixExp.of(a.add(b)));
+    Tensor trb = Trace.of(MatrixExp.of(a).dot(MatrixExp.of(b)));
     Chop._05.requireClose(tra, RealScalar.of(168.49869602)); // mathematica
     Chop._05.requireClose(trb, RealScalar.of(191.43054831)); // mathematica
   }
@@ -165,16 +165,16 @@ public class MatrixExpTest extends TestCase {
   }
 
   public void testComplex1() {
-    Tensor matrix = ConstantArray.of(Scalars.fromString("-10-1*I"), 3, 3);
-    Tensor tensor1 = MatrixExp.of(matrix);
-    Tensor tensor2 = MatrixExp.series(matrix);
+    Tensor matrix = ConstantArray.of(Scalars.fromString("-10-1*I"), 2, 2);
+    Tensor tensor1 = MatrixExp.of(matrix); // 19
+    Tensor tensor2 = MatrixExp.series(matrix); // 94
     Chop._03.requireClose(tensor1, tensor2);
   }
 
   public void testComplex2() {
     Tensor matrix = ConstantArray.of(Scalars.fromString("-10.0-1.0*I"), 3, 3);
-    Tensor tensor1 = MatrixExp.of(matrix);
-    Tensor tensor2 = MatrixExp.series(matrix);
+    Tensor tensor1 = MatrixExp.of(matrix); // 19
+    Tensor tensor2 = MatrixExp.series(matrix); // 119
     Chop._03.requireClose(tensor1, tensor2);
   }
 

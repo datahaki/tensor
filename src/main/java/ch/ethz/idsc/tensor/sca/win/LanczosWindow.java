@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.sca.win;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.Sinc;
@@ -20,10 +19,8 @@ public enum LanczosWindow implements ScalarUnaryOperator {
         : RealScalar.ZERO;
   }
 
-  /** @param tensor
-   * @return tensor with all scalars replaced with their function value */
-  @SuppressWarnings("unchecked")
-  public static <T extends Tensor> T of(T tensor) {
-    return (T) tensor.map(FUNCTION);
+  @Override // from Object
+  public String toString() {
+    return getClass().getSimpleName();
   }
 }

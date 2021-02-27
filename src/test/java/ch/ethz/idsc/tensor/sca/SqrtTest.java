@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.io.StringScalar;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.Rationalize;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -44,7 +45,7 @@ public class SqrtTest extends TestCase {
     Scalar scalar = ComplexScalar.of(0, 2);
     Scalar root = Sqrt.FUNCTION.apply(scalar);
     Scalar res = ComplexScalar.of(1, 1);
-    assertEquals(Chop._12.of(root.subtract(res)), RealScalar.ZERO);
+    Tolerance.CHOP.requireClose(root, res);
   }
 
   public void testZero() {

@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -57,7 +58,7 @@ public class LogTest extends TestCase {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(0.1);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(3));
     // Mathematica ............................ -0.47712125471966243730
-    Chop._12.requireClose(scalar, RealScalar.of(-0.47712125471966255));
+    Tolerance.CHOP.requireClose(scalar, RealScalar.of(-0.47712125471966255));
   }
 
   public void testNegativeBase() {
@@ -65,7 +66,7 @@ public class LogTest extends TestCase {
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(3));
     // Mathematica ................. -0.1667368328837891, -0.22749179210112070I
     Scalar result = ComplexScalar.of(-0.1667368328837892, -0.22749179210112075);
-    Chop._12.requireClose(scalar, result);
+    Tolerance.CHOP.requireClose(scalar, result);
   }
 
   public void testBaseZero() {

@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
 
-/** definition of Hankel tensor taken from [qi, luo 2017] p.230 */
+/** definition of Hankel tensor taken from [Qi, Luo 2017] p.230 */
 public enum HankelTensor {
   ;
   /** @param vector

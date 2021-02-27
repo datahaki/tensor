@@ -3,7 +3,8 @@ package ch.ethz.idsc.tensor;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.tensor.sca.SqrtInterface;
+import ch.ethz.idsc.tensor.api.ExactScalarQInterface;
+import ch.ethz.idsc.tensor.api.SqrtInterface;
 
 /** arithmetic of BooleanScalar is as for an element of the finite field F with cardinality |F|=2
  * multiplication is logical AND
@@ -47,16 +48,21 @@ import ch.ethz.idsc.tensor.sca.SqrtInterface;
   }
 
   @Override // from Scalar
+  public Scalar zero() {
+    return FALSE;
+  }
+
+  @Override // from Scalar
+  public Scalar one() {
+    return TRUE;
+  }
+
+  @Override // from Scalar
   public Number number() {
     // since Boolean is not an instance of Number, we return type Integer
     return value //
         ? 1
         : 0;
-  }
-
-  @Override // from Scalar
-  public Scalar zero() {
-    return FALSE;
   }
 
   @Override // from Scalar

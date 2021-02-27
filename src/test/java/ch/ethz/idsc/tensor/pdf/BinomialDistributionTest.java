@@ -40,7 +40,7 @@ public class BinomialDistributionTest extends TestCase {
   }
 
   public void testValue2() {
-    Distribution distribution = BinomialDistribution.of(RealScalar.of(10), RationalScalar.of(1, 3));
+    Distribution distribution = BinomialDistribution.of(10, RationalScalar.of(1, 3));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(RealScalar.of(0)), RationalScalar.of(1024, 59049));
     // PDF[BinomialDistribution[10, 1/3], 1] == 5120/59049
@@ -95,7 +95,8 @@ public class BinomialDistributionTest extends TestCase {
   }
 
   public void testBug3() {
-    int size = Tally.of(RandomVariate.of(BinomialDistribution.of(1207, RationalScalar.of(2, 3)), 1000)).size();
+    Distribution distribution = BinomialDistribution.of(1207, RationalScalar.of(2, 3));
+    int size = Tally.of(RandomVariate.of(distribution, 1000)).size();
     assertTrue(50 < size);
   }
 
@@ -204,7 +205,6 @@ public class BinomialDistributionTest extends TestCase {
 
   public void testFailN() {
     AssertFail.of(() -> BinomialDistribution.of(-1, RationalScalar.of(1, 3)));
-    AssertFail.of(() -> BinomialDistribution.of(RealScalar.of(0.3), RationalScalar.of(1, 3)));
   }
 
   public void testFailP() {

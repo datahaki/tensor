@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.api.PowerInterface;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** Power exponentiates a given scalar by an exponent.
@@ -57,12 +58,14 @@ public enum Power {
   }
 
   /***************************************************/
+  private static final BigInteger TWO = BigInteger.valueOf(2);
+
   /** @param exponent
    * @return function that maps a scalar to scalar ^ exponent */
   public static ScalarUnaryOperator function(Scalar exponent) {
     if (exponent instanceof RationalScalar) {
       RationalScalar rationalScalar = (RationalScalar) exponent;
-      if (rationalScalar.denominator().equals(BigInteger.valueOf(2)))
+      if (rationalScalar.denominator().equals(TWO))
         return scalar -> evaluate(Sqrt.FUNCTION.apply(scalar), RealScalar.of(rationalScalar.numerator()));
     }
     Objects.requireNonNull(exponent);
@@ -76,6 +79,9 @@ public enum Power {
   }
 
   /***************************************************/
+  /** @param scalar
+   * @param exponent
+   * @return scalar ^ exponent */
   private static Scalar evaluate(Scalar scalar, Scalar exponent) {
     if (scalar instanceof PowerInterface) {
       PowerInterface powerInterface = (PowerInterface) scalar;

@@ -5,10 +5,7 @@ import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
-import ch.ethz.idsc.tensor.pdf.NormalDistribution;
-import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -28,9 +25,10 @@ public class DirichletWindowTest extends TestCase {
     ExactScalarQ.require(scalar);
   }
 
-  public void testOf() {
-    Tensor tensor = RandomVariate.of(NormalDistribution.standard(), 2, 3);
-    assertEquals(DirichletWindow.of(tensor), tensor.map(DirichletWindow.FUNCTION));
+  public void testWindow() {
+    ScalarUnaryOperator suo = DirichletWindow.FUNCTION;
+    assertTrue(suo.equals(DirichletWindow.FUNCTION));
+    assertEquals(suo, DirichletWindow.FUNCTION);
   }
 
   public void testQuantityFail() {

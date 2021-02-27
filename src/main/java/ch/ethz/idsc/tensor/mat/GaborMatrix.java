@@ -10,7 +10,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Exp;
@@ -32,7 +32,7 @@ public enum GaborMatrix {
     Scalar center = RealScalar.of(-r);
     Tensor offset = k.map(scalar -> center);
     List<Integer> dimensions = Collections.nCopies(k.length(), m);
-    Tensor matrix = Array.of(list -> Norm2Squared.ofVector(Tensors.vector(list).add(offset)), dimensions) //
+    Tensor matrix = Array.of(list -> Vector2NormSquared.of(Tensors.vector(list).add(offset)), dimensions) //
         .divide(factor).map(Exp.FUNCTION);
     Tensor weight = Array.of(list -> k.dot(Tensors.vector(list).add(offset)).subtract(phi), dimensions) //
         .map(Cos.FUNCTION);

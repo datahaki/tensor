@@ -10,6 +10,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /** DeBoor denotes the function that is defined by control points over a sequence of knots. */
 public class DeBoor implements ScalarTensorFunction {
@@ -23,7 +24,7 @@ public class DeBoor implements ScalarTensorFunction {
   public static DeBoor of(BinaryAverage binaryAverage, Tensor knots, Tensor control) {
     int length = knots.length();
     int degree = length / 2;
-    if (length % 2 == 0 && //
+    if (Integers.isEven(length) && //
         control.length() == degree + 1)
       return new DeBoor(Objects.requireNonNull(binaryAverage), degree, VectorQ.require(knots), control);
     throw TensorRuntimeException.of(knots, control);

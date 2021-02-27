@@ -22,4 +22,10 @@ public enum Integers {
       throw new IllegalArgumentException(Integer.toString(value));
     return value;
   }
+
+  /** @param value
+   * @return whether given value is an even number */
+  public static boolean isEven(int value) {
+    return (value & 1) == 0;
+  }
 }

@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -16,20 +17,20 @@ import junit.framework.TestCase;
 public class CubeRootTest extends TestCase {
   public void testSimple() {
     Scalar scalar = CubeRoot.FUNCTION.apply(RealScalar.of(27));
-    Chop._12.requireClose(scalar, RealScalar.of(3));
+    Tolerance.CHOP.requireClose(scalar, RealScalar.of(3));
   }
 
   public void testQuantity() {
     Scalar input = Quantity.of(2, "m^3");
     Scalar scalar = CubeRoot.FUNCTION.apply(input);
-    Chop._12.requireClose(scalar, Quantity.of(1.2599210498948732, "m"));
-    Chop._12.requireClose(Times.of(scalar, scalar, scalar), input);
+    Tolerance.CHOP.requireClose(scalar, Quantity.of(1.2599210498948732, "m"));
+    Tolerance.CHOP.requireClose(Times.of(scalar, scalar, scalar), input);
   }
 
   public void testNegative() {
     Scalar input = Quantity.of(-2, "m^3");
     Scalar scalar = CubeRoot.FUNCTION.apply(input);
-    Chop._12.requireClose(scalar, Quantity.of(-1.2599210498948731648, "m"));
+    Tolerance.CHOP.requireClose(scalar, Quantity.of(-1.2599210498948731648, "m"));
   }
 
   public void testZero() {

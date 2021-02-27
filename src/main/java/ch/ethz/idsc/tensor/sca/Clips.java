@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.sca;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
 
@@ -18,14 +17,9 @@ public enum Clips {
    * @throws Exception if min is greater than max */
   public static Clip interval(Scalar min, Scalar max) {
     Scalar width = max.subtract(min);
-    SignInterface signInterface = (SignInterface) width;
-    switch (signInterface.signInt()) {
-    case 0:
-      return new ClipPoint(min, width);
-    case 1:
-      return new ClipInterval(min, max, width);
-    }
-    throw TensorRuntimeException.of(min, max);
+    return min.equals(max) //
+        ? new ClipPoint(min, width)
+        : new ClipInterval(min, max, Sign.requirePositive(width));
   }
 
   /** @param min

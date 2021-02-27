@@ -21,16 +21,21 @@ public enum MatrixRank {
    * @return rank of matrix */
   public static int of(Tensor matrix) {
     return ExactTensorQ.of(matrix) //
-        ? usingRowReduce(matrix)
+        ? usingRowReduce(matrix, Pivots.FIRST_NON_ZERO)
         : usingSvd(matrix);
   }
 
-  /** @param matrix with exact precision entries
-   * @return rank of matrix */
   public static int usingRowReduce(Tensor matrix) {
+    return usingRowReduce(matrix, Pivots.ARGMAX_ABS);
+  }
+
+  /** @param matrix with exact precision entries
+   * @param pivot
+   * @return rank of matrix */
+  public static int usingRowReduce(Tensor matrix, Pivot pivot) {
     int n = matrix.length();
     int m = Unprotect.dimension1(matrix);
-    Tensor lhs = RowReduce.of(matrix);
+    Tensor lhs = RowReduce.of(matrix, pivot);
     int j = 0;
     int c0 = 0;
     while (j < n && c0 < m)

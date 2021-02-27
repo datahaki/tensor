@@ -9,11 +9,15 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Dot;
+import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.fft.FourierMatrix;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
+import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
@@ -63,6 +67,21 @@ public class InverseTest extends TestCase {
     Tensor inv1 = Inverse.of(FourierMatrix.of(5), Pivots.FIRST_NON_ZERO);
     Tensor inv2 = Inverse.of(FourierMatrix.of(5), Pivots.ARGMAX_ABS);
     Chop._10.requireClose(inv1, inv2);
+  }
+
+  public void testGaussian() {
+    int prime = 3121;
+    Distribution distribution = DiscreteUniformDistribution.of(0, prime);
+    Scalar one = GaussScalar.of(1, prime);
+    for (int n = 3; n < 6; ++n) {
+      Tensor matrix = RandomVariate.of(distribution, n, n).map(s -> GaussScalar.of(s.number().intValue(), prime));
+      if (Scalars.nonZero(Det.of(matrix)))
+        for (Pivot pivot : Pivots.values()) {
+          Tensor revers = Inverse.of(matrix, pivot);
+          MatrixQ.requireSize(revers, n, n);
+          assertEquals(DiagonalMatrix.of(n, one), Dot.of(matrix, revers));
+        }
+    }
   }
 
   public void testDet0() {

@@ -4,7 +4,9 @@ package ch.ethz.idsc.tensor;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.util.Random;
 
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.red.Nest;
 import ch.ethz.idsc.tensor.sca.Arg;
@@ -37,6 +39,7 @@ public class DecimalScalarTest extends TestCase {
     Scalar d = s.under(Pi.TWO);
     assertTrue(d instanceof DoubleScalar);
     assertEquals(d, RealScalar.of(2));
+    assertEquals(s.multiply(s.one()), s);
   }
 
   public void testUnderRational() {
@@ -63,7 +66,7 @@ public class DecimalScalarTest extends TestCase {
   public void testTrig() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL32));
     Chop._06.requireZero(Sin.of(s));
-    Chop._06.requireClose(Cos.of(s), RealScalar.ONE.negate());
+    Tolerance.CHOP.requireClose(Cos.of(s), RealScalar.ONE.negate());
   }
 
   public void testPower() {
@@ -121,8 +124,9 @@ public class DecimalScalarTest extends TestCase {
   }
 
   public void testPrecision() {
-    for (int value = 0; value < 10000; value += 31) {
-      DecimalScalar decimalScalar = (DecimalScalar) DecimalScalar.of(Math.sqrt(value));
+    Random random = new Random();
+    for (int value = random.nextInt(83); value < 10000; value += 83) {
+      DecimalScalar decimalScalar = (DecimalScalar) DecimalScalar.of("" + Math.sqrt(value));
       String string = decimalScalar.toString();
       Scalar dbl_s = Scalars.fromString(string);
       assertEquals(decimalScalar, dbl_s);

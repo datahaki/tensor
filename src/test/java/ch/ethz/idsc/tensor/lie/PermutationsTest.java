@@ -57,6 +57,13 @@ public class PermutationsTest extends TestCase {
     assertEquals(tensor, Tensors.fromString("{{a, b, a}, {a, a, b}, {b, a, a}}"));
   }
 
+  public void testRank2() {
+    Tensor tensor = Tensors.fromString("{{a, b, a}}");
+    Tensor perms = Permutations.of(tensor);
+    Tensor expect = Tensors.fromString("{{{a, b, a}}}");
+    assertEquals(perms, expect);
+  }
+
   public void testStream() {
     Tensor vector = StringTensor.vector("a", "b", "a");
     assertEquals(Permutations.stream(vector).count(), 3);

@@ -10,9 +10,10 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
-import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.nrm.Matrix2Norm;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -57,7 +58,7 @@ public enum MatrixLog {
     Tensor rem = matrix.subtract(id);
     List<DenmanBeaversDet> deque = new LinkedList<>();
     for (int count = 0; count < MAX_EXPONENT; ++count) {
-      Scalar rho_max = Norm2Bound.ofMatrix(rem);
+      Scalar rho_max = Matrix2Norm.bound(rem);
       if (Scalars.lessThan(rho_max, RHO_MAX)) {
         Tensor sum = matrix.map(Scalar::zero);
         Scalar factor = RealScalar.ONE;
@@ -81,7 +82,7 @@ public enum MatrixLog {
    * @return
    * @see PositiveDefiniteMatrixQ */
   public static Tensor ofSymmetric(Tensor matrix) {
-    return StaticHelper.ofSymmetric(matrix, MatrixLog::logPositive);
+    return Eigenvalues.ofSymmetric_map(matrix, MatrixLog::logPositive);
   }
 
   // helper function
@@ -98,9 +99,8 @@ public enum MatrixLog {
     Tensor sum = nxt;
     for (int k = 2; k < MAX_ITERATIONS; ++k) {
       nxt = nxt.dot(x);
-      Tensor prv = sum;
-      sum = sum.add(nxt.divide(DoubleScalar.of(k % 2 == 0 ? -k : k)));
-      if (Chop.NONE.isClose(sum, prv))
+      Scalar den = DoubleScalar.of(Integers.isEven(k) ? -k : k);
+      if (sum.equals(sum = sum.add(nxt.divide(den))))
         return sum;
     }
     throw TensorRuntimeException.of(x); // insufficient convergence

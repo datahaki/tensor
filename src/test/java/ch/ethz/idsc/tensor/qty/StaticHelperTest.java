@@ -1,14 +1,16 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -19,8 +21,20 @@ public class StaticHelperTest extends TestCase {
     AssertFail.of(() -> StaticHelper.requireAtomic("m^2"));
   }
 
+  // only used in tests
+  /* package */ static Set<Unit> atoms(Unit unit) {
+    return unit.map().entrySet().stream() //
+        .map(StaticHelperTest::format) //
+        .collect(Collectors.toSet());
+  }
+
+  // helper function
+  private static Unit format(Entry<String, Scalar> entry) {
+    return Unit.of(entry.getKey() + Unit.POWER_DELIMITER + entry.getValue());
+  }
+
   public void testAtoms() {
-    Set<Unit> set = StaticHelper.atoms(Unit.of("m^3*kg^-2*s^1"));
+    Set<Unit> set = atoms(Unit.of("m^3*kg^-2*s^1"));
     set.contains(Unit.of("m^3"));
     set.contains(Unit.of("kg^-2"));
     set.contains(Unit.of("s"));
@@ -71,7 +85,7 @@ public class StaticHelperTest extends TestCase {
 
   public void testM_kW() {
     Scalar scalar = StaticHelper.conversion(UnitSystem.SI(), "m", "kW"); // W = 1[m^2*kg*s^-3]
-    Chop._10.requireClose(scalar, Scalars.fromString("0.03162277660168379[kW^1/2*kg^-1/2*s^3/2]"));
+    Tolerance.CHOP.requireClose(scalar, Scalars.fromString("0.03162277660168379[kW^1/2*kg^-1/2*s^3/2]"));
   }
 
   public void testMultiplyNullFail() {

@@ -16,6 +16,7 @@ import ch.ethz.idsc.tensor.lie.Permutations;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
@@ -25,16 +26,18 @@ import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class InterpolatingPolynomialTest extends TestCase {
+  private static final ScalarUnaryOperator MINUS_ONE = RealScalar.ONE.negate()::add;
+
   public void testScaleInvariant() {
     Tensor suppor = Tensors.vector(2, 2.3, 4);
     Tensor values = Tensors.vector(6, -7, 20);
     ScalarUnaryOperator suo1 = InterpolatingPolynomial.of(suppor).scalarUnaryOperator(values);
-    ScalarUnaryOperator suo2 = InterpolatingPolynomial.of(suppor.multiply(RealScalar.of(3)).map(RealScalar.ONE::subtract)).scalarUnaryOperator(values);
+    ScalarUnaryOperator suo2 = InterpolatingPolynomial.of(suppor.multiply(RealScalar.of(3)).map(MINUS_ONE)).scalarUnaryOperator(values);
     Distribution distribution = UniformDistribution.of(2, 4);
     Tensor domain = RandomVariate.of(distribution, 20);
     Tolerance.CHOP.requireClose( //
         domain.map(suo1), //
-        domain.multiply(RealScalar.of(3)).map(RealScalar.ONE::subtract).map(suo2));
+        domain.multiply(RealScalar.of(3)).map(MINUS_ONE).map(suo2));
   }
 
   public void testPermutationInvariant() {
@@ -55,12 +58,12 @@ public class InterpolatingPolynomialTest extends TestCase {
     Tensor suppor = Tensors.vector(2, 2.3, 4);
     Tensor values = Tensors.fromString("{{2,-3}, {-7, 5}, {5, 9}}");
     ScalarTensorFunction suo1 = InterpolatingPolynomial.of(suppor).scalarTensorFunction(values);
-    ScalarTensorFunction suo2 = InterpolatingPolynomial.of(suppor.multiply(RealScalar.of(3)).map(RealScalar.ONE::subtract)).scalarTensorFunction(values);
+    ScalarTensorFunction suo2 = InterpolatingPolynomial.of(suppor.multiply(RealScalar.of(3)).map(MINUS_ONE)).scalarTensorFunction(values);
     Distribution distribution = UniformDistribution.of(2, 4);
     Tensor domain = RandomVariate.of(distribution, 20);
     Tolerance.CHOP.requireClose( //
         domain.map(suo1), //
-        domain.multiply(RealScalar.of(3)).map(RealScalar.ONE::subtract).map(suo2));
+        domain.multiply(RealScalar.of(3)).map(MINUS_ONE).map(suo2));
     AssertFail.of(() -> InterpolatingPolynomial.of(suppor).scalarTensorFunction(Tensors.vector(2, 3, 4, 5)));
   }
 
@@ -71,6 +74,16 @@ public class InterpolatingPolynomialTest extends TestCase {
     Distribution distribution = UniformDistribution.of(2, 4);
     Tensor domain = QuantityTensor.of(RandomVariate.of(distribution, 20), "m");
     domain.map(suo1).map(QuantityMagnitude.singleton("s"));
+  }
+
+  public void testGaussScalar() {
+    int prime = 7211;
+    Tensor suppor = Tensors.of(GaussScalar.of(53, prime), GaussScalar.of(519, prime), GaussScalar.of(6322, prime));
+    Tensor values = Tensors.of(GaussScalar.of(2233, prime), GaussScalar.of(719, prime), GaussScalar.of(32, prime));
+    ScalarUnaryOperator suo1 = InterpolatingPolynomial.of(suppor).scalarUnaryOperator(values);
+    for (int index = 0; index < suppor.length(); ++index)
+      assertEquals(suo1.apply(suppor.Get(index)), values.Get(index));
+    assertEquals(suo1.apply(GaussScalar.of(54, prime)), GaussScalar.of(4527, prime));
   }
 
   public void testScalarLengthFail() throws ClassNotFoundException, IOException {

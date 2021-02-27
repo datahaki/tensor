@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
@@ -34,18 +35,18 @@ public class SingularValueDecompositionTest extends TestCase {
     Tensor W = DiagonalMatrix.with(w);
     Tensor UtU = Chop._12.of(Transpose.of(U).dot(U).subtract(IdentityMatrix.of(N)));
     assertEquals(UtU, Array.zeros(N, N));
-    Tensor VVt = Chop._12.of(V.dot(Transpose.of(V)).subtract(IdentityMatrix.of(N)));
+    Tensor VVt = Chop._12.of(MatrixDotTranspose.of(V, V).subtract(IdentityMatrix.of(N)));
     assertEquals(VVt, Array.zeros(N, N));
     Tensor VtV = Chop._12.of(Transpose.of(V).dot(V).subtract(IdentityMatrix.of(N)));
     assertEquals(VtV, Array.zeros(N, N));
-    Tensor UWVt = Chop._12.of(U.dot(W).dot(Transpose.of(V)).subtract(A));
+    Tensor UWVt = Chop._12.of(MatrixDotTranspose.of(U.dot(W), V).subtract(A));
     assertEquals(UWVt, Array.zeros(Dimensions.of(UWVt)));
     Tensor UW_AV = Chop._12.of(U.dot(W).subtract(A.dot(V)));
     assertEquals(UW_AV, Array.zeros(Dimensions.of(UW_AV)));
     assertTrue(w.stream().map(Scalar.class::cast).noneMatch(Sign::isNegative));
     if (MatrixRank.of(svd) < N) {
       Tensor nul = NullSpace.of(svd);
-      Tensor res = A.dot(Transpose.of(nul));
+      Tensor res = MatrixDotTranspose.of(A, nul);
       assertEquals(Chop._12.of(res), Array.zeros(Dimensions.of(res)));
     }
     return svd;

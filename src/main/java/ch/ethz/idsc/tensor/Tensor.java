@@ -173,7 +173,9 @@ public interface Tensor extends Iterable<Tensor> {
    * 
    * @param tensor to be appended to this
    * @return this
-   * @throws Exception if given tensor is null */
+   * @throws Exception if given tensor is null
+   * @throws Exception if this tensor is an instance of {@link Scalar}
+   * @throws Exception if this tensor is {@link #unmodifiable()} */
   Tensor append(Tensor tensor);
 
   /** function is <em>not</em> Mathematica compliant:

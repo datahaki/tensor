@@ -31,7 +31,12 @@ public enum BasisTransform {
     return tensor;
   }
 
-  /** @param form is a (0, s)-tensor with all dimensions equal
+  /** In the special case, when the form has rank 2 ("bilinear form"), then
+   * <pre>
+   * BasisTransform.ofForm(form, v) == Transpose.of(v).dot(form).dot(v)
+   * </pre>
+   * 
+   * @param form is a (0, s)-tensor with all dimensions equal
    * @param v matrix not necessarily square
    * @return tensor of form with respect to basis v
    * @throws Exception if form is not a regular array, or v is not a matrix */

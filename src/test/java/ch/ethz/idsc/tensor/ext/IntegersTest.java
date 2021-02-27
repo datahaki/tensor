@@ -24,4 +24,24 @@ public class IntegersTest extends TestCase {
     for (int value : new int[] { Integer.MIN_VALUE, -3, -1 })
       AssertFail.of(() -> Integers.requirePositiveOrZero(value));
   }
+
+  public void testIsEven() {
+    assertTrue(Integers.isEven(-2));
+    assertTrue(Integers.isEven(0));
+    assertTrue(Integers.isEven(2));
+    assertTrue(Integers.isEven(Integer.MIN_VALUE));
+  }
+
+  public void testIsEvenFalse() {
+    assertFalse(Integers.isEven(-3));
+    assertFalse(Integers.isEven(-1));
+    assertFalse(Integers.isEven(1));
+    assertFalse(Integers.isEven(3));
+    assertFalse(Integers.isEven(Integer.MAX_VALUE));
+  }
+
+  public void testCuriosity() {
+    int value = -1;
+    assertEquals(value & 1, 1);
+  }
 }

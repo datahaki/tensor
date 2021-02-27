@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.qty;
 import java.util.Map;
 
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 
 /** An instance of {@link Unit} is immutable.
  * 
@@ -17,7 +18,11 @@ public interface Unit {
    * Mathematica: "DimensionlessUnit" */
   static final Unit ONE = of("");
 
-  /** @param string, for instance "m*s^-2"
+  /** The precedence for parsing a string expression of unit is first '*', then '^'.
+   * That means, the brackets are obsolete "N*K^(1/2)" == "N*K^1/2".
+   * The exponent behind '^' is parsed using {@link Scalars#fromString(String)}.
+   * 
+   * @param string, for instance "m*s^-2", or "m^6*bar*mol^-2*K^1/2"
    * @return */
   static Unit of(String string) {
     return UnitParser.of(string);
@@ -47,10 +52,10 @@ public interface Unit {
    * 
    * [kg*m^2] * 3 -> [kg^3*m^6]
    * 
-   * @param factor
+   * @param scalar
    * @return
-   * @throws Exception if factor is not instance of RealScalar */
-  Unit multiply(Scalar factor);
+   * @throws Exception if scalar is not instance of RealScalar */
+  Unit multiply(Scalar scalar);
 
   /** Example: Unit.of("kg^2*m^-1*s") returns an unmodifiable map with the entry set
    * {"kg" -> 2, "m" -> -1, "s" -> 1}

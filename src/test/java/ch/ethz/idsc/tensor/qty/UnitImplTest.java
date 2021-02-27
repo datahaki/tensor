@@ -1,12 +1,17 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -31,6 +36,25 @@ public class UnitImplTest extends TestCase {
     AssertFail.of(() -> unit.multiply(Quantity.of(3, "s")));
   }
 
+  public void testSerializationEquals() throws ClassNotFoundException, IOException {
+    Unit unit1 = Unit.of("kg^2*m^-1*K*ABC");
+    Unit unit2 = Serialization.copy(unit1);
+    assertEquals(unit1, unit2);
+    assertFalse(unit1 == unit2);
+    Unit unit1_negate = unit1.negate();
+    Unit unit2_negate = unit2.negate();
+    assertTrue(unit1_negate == unit2_negate);
+  }
+
+  public void testCachedEquals() {
+    Unit unit1 = Unit.of("kg^2/3*m^-3*K");
+    Unit unit2 = Unit.of("kg^2/3*m^-3*K");
+    assertTrue(unit1 == unit2);
+    Unit unit1_negate = unit1.negate();
+    Unit unit2_negate = unit2.negate();
+    assertTrue(unit1_negate == unit2_negate);
+  }
+
   public void testUnmodifiableMap() {
     Unit unit = Unit.of("kg^2*m^-1");
     AssertFail.of(() -> unit.map().clear());
@@ -42,6 +66,21 @@ public class UnitImplTest extends TestCase {
     Map<String, Scalar> m2 = new HashMap<>();
     m2.put("m", RealScalar.of(2));
     Stream.concat(m1.entrySet().stream(), m2.entrySet().stream()).collect(UnitImpl.NEGATION);
+  }
+
+  public void testReference1() {
+    NavigableMap<String, Scalar> m1 = new TreeMap<>();
+    m1.put("some", RealScalar.ONE);
+    m1.put("kgt", RealScalar.TWO.negate());
+    NavigableMap<String, Scalar> m2 = new TreeMap<>();
+    m2.put("kgt", RealScalar.of(2).negate());
+    m2.put("some", RealScalar.of(1));
+    assertTrue(UnitImpl.create(m1) == UnitImpl.create(m2));
+  }
+
+  public void testReference2() {
+    assertTrue(UnitImpl.create(Collections.emptyNavigableMap()) == //
+        UnitImpl.create(Collections.emptyNavigableMap()));
   }
 
   public void testEqualsMerged() {

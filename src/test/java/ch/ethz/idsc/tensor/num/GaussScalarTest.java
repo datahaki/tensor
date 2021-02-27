@@ -19,8 +19,10 @@ import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.mat.Pivots;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.ArgMax;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Power;
@@ -150,7 +152,7 @@ public class GaussScalarTest extends TestCase {
 
   public void testPower2() {
     long prime = 59;
-    BinaryPower<Scalar> binaryPower = new BinaryPower<>(new ScalarProduct(GaussScalar.of(1, prime)));
+    BinaryPower<Scalar> binaryPower = new BinaryPower<>(ScalarProduct.INSTANCE);
     Random random = new SecureRandom();
     for (int index = 0; index < prime; ++index) {
       GaussScalar gaussScalar = GaussScalar.of(random.nextInt(), prime);
@@ -164,16 +166,26 @@ public class GaussScalarTest extends TestCase {
   }
 
   public void testPowerZero() {
-    long prime = 107;
+    long prime = 43;
     Scalar scalar = GaussScalar.of(1, prime);
     for (int index = 0; index < prime; ++index) {
       GaussScalar gaussScalar = GaussScalar.of(index, prime);
       assertEquals(Power.of(gaussScalar, 0), scalar);
+      assertEquals(gaussScalar, //
+          Sign.of(gaussScalar).multiply(Abs.of(gaussScalar)));
     }
+  }
+
+  public void testVector2NormSquared() {
+    int prime = 107;
+    Scalar normSquared = Vector2NormSquared.of(Tensors.of(GaussScalar.of(99, prime)));
+    assertEquals(normSquared, GaussScalar.of(64, prime));
   }
 
   public void testPowerFail() {
     GaussScalar gaussScalar = GaussScalar.of(3, 107);
+    assertEquals(gaussScalar.number(), BigInteger.valueOf(3));
+    assertEquals(gaussScalar.prime(), BigInteger.valueOf(107));
     AssertFail.of(() -> Power.of(gaussScalar, Pi.HALF));
   }
 
@@ -209,6 +221,16 @@ public class GaussScalarTest extends TestCase {
     assertEquals(set.size(), 4);
   }
 
+  public void testBinaryOpFail() {
+    GaussScalar gs1 = GaussScalar.of(432, 677);
+    GaussScalar gs2 = GaussScalar.of(4, 13);
+    AssertFail.of(() -> gs1.multiply(gs2));
+    AssertFail.of(() -> gs1.add(gs2));
+    AssertFail.of(() -> gs1.divide(gs2));
+    AssertFail.of(() -> gs1.under(gs2));
+    AssertFail.of(() -> gs1.compareTo(gs2));
+  }
+
   public void testHash2() {
     assertFalse(GaussScalar.of(3, 7).hashCode() == GaussScalar.of(7, 3).hashCode());
     assertFalse(GaussScalar.of(1, 7).hashCode() == GaussScalar.of(2, 7).hashCode());
@@ -230,6 +252,13 @@ public class GaussScalarTest extends TestCase {
     assertTrue(0 < string.indexOf('3'));
     assertTrue(0 < string.indexOf('7'));
     // assertEquals(string, "{\"value\": 3, \"prime\": 7}");
+  }
+
+  public void testDivideZeroFail() {
+    Scalar a = GaussScalar.of(3, 13);
+    Scalar b = GaussScalar.of(0, 13);
+    AssertFail.of(() -> a.divide(b));
+    AssertFail.of(() -> b.under(a));
   }
 
   public void testPrimes() {

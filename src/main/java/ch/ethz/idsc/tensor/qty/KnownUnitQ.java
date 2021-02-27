@@ -2,9 +2,6 @@
 package ch.ethz.idsc.tensor.qty;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -27,7 +24,7 @@ public class KnownUnitQ implements Predicate<Unit>, Serializable {
   /** @param unitSystem non-null
    * @return predicate according to given unit system */
   public static KnownUnitQ in(UnitSystem unitSystem) {
-    return new KnownUnitQ(all(unitSystem.map()));
+    return new KnownUnitQ(UnitSystems.known(unitSystem));
   }
 
   /** Examples:
@@ -39,22 +36,6 @@ public class KnownUnitQ implements Predicate<Unit>, Serializable {
    * @return predicate according to built-in unit system */
   public static KnownUnitQ SI() {
     return SI;
-  }
-
-  /** Example: in the SI unit system defined by the tensor library the units
-   * "A", "cd", "kg", "m", "mol", "s"
-   * are included in the set provided by units(), but are not keys in {@link #map()}
-   * "K" is a key in the map with value 1[K]
-   * 
-   * @return set of all atomic units known by the unit system including those that
-   * are not further convertible */
-  private static Set<String> all(Map<String, Scalar> map) {
-    Set<String> set = new HashSet<>();
-    for (Entry<String, Scalar> entry : map.entrySet()) {
-      set.add(entry.getKey());
-      set.addAll(QuantityUnit.of(entry.getValue()).map().keySet());
-    }
-    return set;
   }
 
   /***************************************************/
@@ -78,5 +59,10 @@ public class KnownUnitQ implements Predicate<Unit>, Serializable {
     if (test(unit))
       return unit;
     throw new IllegalArgumentException("" + unit);
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[size=%s]", getClass().getSimpleName(), set.size());
   }
 }

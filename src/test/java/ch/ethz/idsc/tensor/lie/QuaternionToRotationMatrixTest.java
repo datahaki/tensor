@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor.lie;
 import java.security.SecureRandom;
 import java.util.Random;
 
-import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;

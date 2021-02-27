@@ -7,17 +7,12 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /* package */ class ExtendedGCDWrap implements Serializable {
-  private static final long serialVersionUID = -7696537372627961269L;
-  // ---
-  private final Scalar one;
-
-  public ExtendedGCDWrap(Scalar one) {
-    this.one = one;
-  }
+  private static final long serialVersionUID = 2769162051800901176L;
 
   public ExtendedGCD function(Tensor vector) {
     return new ExtendedGCDImpl(vector);
@@ -33,11 +28,12 @@ import ch.ethz.idsc.tensor.sca.Mod;
     private final Scalar gcd;
 
     public ExtendedGCDImpl(Tensor vector) {
+      VectorQ.requireLength(vector, 2);
       this.a = vector.Get(0);
       this.b = vector.Get(1);
       if (Scalars.isZero(a)) {
         x = a;
-        y = one;
+        y = a.one();
         gcd = b;
       } else {
         ExtendedGCDImpl result = new ExtendedGCDImpl(Tensors.of(Mod.function(a).apply(b), a));
@@ -55,6 +51,11 @@ import ch.ethz.idsc.tensor.sca.Mod;
     @Override // from ExtendedGCD
     public Tensor factors() {
       return Tensors.of(x, y);
+    }
+
+    @Override
+    public String toString() {
+      return String.format("%s[%s*%s+%s*%s==%s]", ExtendedGCD.class.getSimpleName(), a, x, b, y, gcd);
     }
   }
 }

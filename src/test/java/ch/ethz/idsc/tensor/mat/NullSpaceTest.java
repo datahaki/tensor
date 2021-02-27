@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.mat;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.MachineNumberQ;
@@ -11,17 +12,18 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.alg.Normalize;
+import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
+import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.pdf.CauchyDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityTensor;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -105,7 +107,7 @@ public class NullSpaceTest extends TestCase {
     assertEquals(Dimensions.of(nul), Arrays.asList(1, 3));
     assertFalse(MachineNumberQ.any(nul));
     ExactTensorQ.require(nul);
-    Tensor nrr = NullSpace.usingRowReduce(A, IdentityMatrix.of(3));
+    Tensor nrr = NullSpace.usingRowReduce(A);
     assertEquals(nul, nrr);
   }
 
@@ -165,8 +167,8 @@ public class NullSpaceTest extends TestCase {
         { -0.2, -0.8, 1.0 } });
     Tensor nullspace = NullSpace.of(matrix);
     assertEquals(Dimensions.of(nullspace), Arrays.asList(1, 3));
-    assertTrue(Chop._14.isClose(nullspace.get(0), Normalize.with(Norm._2).apply(Tensors.vector(1, 1, 1))) //
-        || Chop._14.isClose(nullspace.get(0), Normalize.with(Norm._2::ofVector).apply(Tensors.vector(-1, -1, -1))));
+    assertTrue(Chop._14.isClose(nullspace.get(0), Vector2Norm.NORMALIZE.apply(Tensors.vector(1, 1, 1))) //
+        || Chop._14.isClose(nullspace.get(0), Vector2Norm.NORMALIZE.apply(Tensors.vector(-1, -1, -1))));
   }
 
   public void testQuantity() {
@@ -220,7 +222,7 @@ public class NullSpaceTest extends TestCase {
   }
 
   public void testExtended() {
-    Distribution distribution = UniformDistribution.unit();
+    Distribution distribution = CauchyDistribution.of(-1, 2);
     int n = 10;
     for (int d = 1; d < n; ++d) {
       Tensor matrix = RandomVariate.of(distribution, n, d);
@@ -243,6 +245,16 @@ public class NullSpaceTest extends TestCase {
         Chop._10.requireAllZero(mt.dot(Transpose.of(nullspace)));
       }
     }
+  }
+
+  public void testGaussScalar() {
+    int prime = 7879;
+    Random random = new Random();
+    Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), 3, 7);
+    Tensor nullsp = NullSpace.of(matrix);
+    assertEquals(nullsp.length(), 4);
+    for (Tensor vector : nullsp)
+      Chop.NONE.requireAllZero(Dot.of(matrix, vector));
   }
 
   public void testFailScalar() {

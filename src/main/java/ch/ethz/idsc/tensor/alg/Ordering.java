@@ -16,7 +16,8 @@ import ch.ethz.idsc.tensor.mat.Eigensystem;
  * <a href="https://reference.wolfram.com/language/ref/Ordering.html">Ordering</a>
  * 
  * @see Sort
- * @see Signature */
+ * @see Signature
+ * @see TensorComparator */
 public enum Ordering {
   INCREASING(tensor -> IntStream.range(0, tensor.length()).boxed() //
       .sorted((i, j) -> TensorComparator.INSTANCE.compare(tensor.get(i), tensor.get(j)))), //

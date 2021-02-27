@@ -81,6 +81,19 @@ public class UnitTest extends TestCase {
     AssertFail.of(() -> UnitSystems.unit(map));
   }
 
+  // https://tinyurl.com/y44sj2et
+  public void testRational() {
+    Unit uExact = Unit.of("m^6*bar*mol^-2*K^1/2");
+    Unit uNumer = Unit.of("m^6*bar*mol^-2*K^0.5");
+    assertEquals(uNumer, uExact);
+    Unit uBrack = Unit.of("m^6*bar*mol^-2*K^(1/2)");
+    assertEquals(uExact, uBrack);
+  }
+
+  public void testReference() {
+    assertTrue(Unit.of("m*s") == Unit.of("s*m"));
+  }
+
   public void testFail() {
     AssertFail.of(() -> Unit.of(" m >"));
     AssertFail.of(() -> Unit.of("| m "));

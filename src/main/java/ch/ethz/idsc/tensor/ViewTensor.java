@@ -3,7 +3,7 @@ package ch.ethz.idsc.tensor;
 
 import java.util.List;
 
-import ch.ethz.idsc.tensor.alg.ListCorrelate;
+import ch.ethz.idsc.tensor.fft.ListCorrelate;
 import ch.ethz.idsc.tensor.itp.LinearInterpolation;
 
 /** ViewTensor overrides the methods {@link #extract(int, int)} and {@link #block(List, List)}.

@@ -4,13 +4,19 @@ package ch.ethz.idsc.tensor.mat;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.red.Diagonal;
+import ch.ethz.idsc.tensor.red.Max;
+import ch.ethz.idsc.tensor.red.Min;
+import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -85,13 +91,24 @@ public class QRDecompositionImplTest extends TestCase {
       Tensor matrix = Dot.of(base, mult);
       QRDecompositionImpl qrDecompositionImpl = //
           new QRDecompositionImpl(matrix, IdentityMatrix.of(n), QRSignOperators.STABILITY);
-      AssertFail.of(() -> qrDecompositionImpl.pseudoInverse(Tolerance.CHOP));
+      AssertFail.of(() -> qrDecompositionImpl.pseudoInverse());
     }
   }
 
-  public void testoString() {
+  public void testToString() {
     QRDecomposition qrDecomposition = QRDecomposition.of(HilbertMatrix.of(3, 2));
     assertTrue(qrDecomposition.toString().startsWith("QRDecomposition"));
+  }
+
+  public void testBic() {
+    Tensor matrix = ResourceData.of("/mat/bic1.csv");
+    QRDecompositionImpl qrDecomposition = (QRDecompositionImpl) QRDecomposition.of(matrix);
+    Tensor rs = Abs.of(Diagonal.of(qrDecomposition.getR()));
+    Scalar max = (Scalar) rs.stream().reduce(Max::of).get();
+    double thres = max.number().doubleValue() * 1e-12;
+    Chop chop = Chop.below(thres);
+    chop.requireAllZero(rs.stream().reduce(Min::of).get());
+    AssertFail.of(() -> qrDecomposition.pseudoInverse());
   }
 
   public void testPackageVisibility() {

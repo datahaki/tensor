@@ -1,10 +1,11 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
+import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.ext.Integers;
 
 /** Quote from Wikipedia:
  * a Toeplitz matrix or diagonal-constant matrix, named after Otto Toeplitz,
@@ -26,11 +27,11 @@ public enum ToeplitzMatrix {
    * @return
    * @throws Exception if given vector has even length, or is not a vector */
   public static Tensor of(Tensor vector) {
-    VectorQ.require(vector);
-    if (vector.length() % 2 == 0)
+    ScalarQ.thenThrow(vector);
+    if (Integers.isEven(vector.length()))
       throw TensorRuntimeException.of(vector);
     int n = (vector.length() + 1) / 2;
     int semi = n - 1;
-    return Tensors.matrix((i, j) -> vector.get(semi - i + j), n, n);
+    return Tensors.matrix((i, j) -> vector.Get(semi - i + j), n, n);
   }
 }

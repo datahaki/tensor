@@ -8,40 +8,44 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 
 /* package */ class CholeskyDecompositionImpl implements CholeskyDecomposition, Serializable {
-  private static final long serialVersionUID = 4983293972273259086L;
+  private static final long serialVersionUID = 7823195931193369647L;
   // ---
   private final Chop chop;
   private final Tensor l;
   private final Tensor d;
 
-  /** @param A hermitian matrix
-   * @param chop */
-  public CholeskyDecompositionImpl(Tensor A, Chop chop) {
+  /** @param matrix hermitian and positive semi-definite matrix
+   * @param chop for check if given matrix is hermitian
+   * @throws Exception if given matrix is not hermitian */
+  public CholeskyDecompositionImpl(Tensor matrix, Chop chop) {
     this.chop = chop;
-    int n = A.length();
-    l = IdentityMatrix.of(n);
-    d = Array.zeros(n);
+    int n = matrix.length();
+    l = IdentityMatrix.of(matrix);
+    Scalar zero = matrix.Get(0, 0).zero();
+    d = Array.fill(() -> zero, n);
     for (int i = 0; i < n; ++i) {
       for (int j = 0; j < i; ++j) {
-        Tensor lik = l.get(i).extract(0, j);
-        Tensor ljk = l.get(j).extract(0, j).map(Conjugate.FUNCTION);
-        Scalar aij = A.Get(i, j);
-        chop.requireClose(Conjugate.FUNCTION.apply(aij), A.Get(j, i));
-        Scalar value = aij.subtract(lik.dot(d.extract(0, j).pmul(ljk)));
-        if (Scalars.nonZero(value))
-          l.set(value.divide(d.Get(j)), i, j);
+        Scalar mij = matrix.Get(i, j);
+        chop.requireClose(Conjugate.FUNCTION.apply(mij), matrix.Get(j, i));
+        for (int k = 0; k < j; ++k)
+          mij = mij.subtract(l.Get(i, k).multiply(d.Get(k)).multiply(Conjugate.FUNCTION.apply(l.Get(j, k))));
+        if (Scalars.nonZero(mij))
+          l.set(mij.divide(d.Get(j)), i, j);
       }
-      Tensor lik = l.get(i).extract(0, i);
-      Tensor ljk = lik.map(Conjugate.FUNCTION); // variable name is deliberate
-      d.set(A.get(i, i).subtract(lik.dot(d.extract(0, i).pmul(ljk))), i);
+      Scalar mii = matrix.Get(i, i);
+      for (int k = 0; k < i; ++k) {
+        Scalar lik = l.Get(i, k);
+        mii = mii.subtract(lik.multiply(d.Get(k)).multiply(Conjugate.FUNCTION.apply(lik)));
+      }
+      d.set(mii, i);
     }
   }
 
@@ -80,6 +84,8 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[L=%s, d=%s]", CholeskyDecomposition.class.getSimpleName(), Dimensions.of(getL()), Dimensions.of(diagonal()));
+    return String.format("%s[%s]", //
+        CholeskyDecomposition.class.getSimpleName(), //
+        Tensors.message(diagonal(), getL()));
   }
 }

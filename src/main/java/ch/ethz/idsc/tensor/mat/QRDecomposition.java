@@ -12,7 +12,9 @@ import ch.ethz.idsc.tensor.Tensor;
  * {q, r} = Mathematica::QRDecomposition[matrix] and then ConjugateTranspose[q].r == matrix.
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/QRDecomposition.html">QRDecomposition</a> */
+ * <a href="https://reference.wolfram.com/language/ref/QRDecomposition.html">QRDecomposition</a>
+ * 
+ * @see LeastSquares */
 public interface QRDecomposition {
   /** householder reflections with highest numerical stability
    * 

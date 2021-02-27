@@ -9,14 +9,16 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GompertzMakehamDistribution.html">GompertzMakehamDistribution</a> */
-public class GompertzMakehamDistribution extends AbstractContinuousDistribution implements Serializable {
-  private static final long serialVersionUID = -7315280128961314486L;
+public class GompertzMakehamDistribution extends AbstractContinuousDistribution implements //
+    InverseCDF, Serializable {
+  private static final long serialVersionUID = -7823838650305121533L;
 
   /** @param lambda positive scale parameter, may be instance of {@link Quantity}
    * @param xi positive frailty parameter
@@ -25,6 +27,13 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
     if (Scalars.lessEquals(xi, RealScalar.ZERO))
       throw TensorRuntimeException.of(xi);
     return new GompertzMakehamDistribution(Sign.requirePositive(lambda), xi);
+  }
+
+  /** @param lambda positive scale parameter
+   * @param xi positive frailty parameter
+   * @return */
+  public static Distribution of(Number lambda, Number xi) {
+    return of(RealScalar.of(lambda), RealScalar.of(xi));
   }
 
   /***************************************************/
@@ -38,13 +47,6 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
     lambda_xi = lambda.multiply(xi);
     if (Scalars.isZero(lambda_xi))
       throw TensorRuntimeException.of(lambda, xi);
-  }
-
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    double uniform = Math.nextUp(reference);
-    return Log.FUNCTION.apply( //
-        xi.subtract(Log.FUNCTION.apply(DoubleScalar.of(uniform))).divide(xi)).divide(lambda);
   }
 
   @Override // from PDF
@@ -63,6 +65,21 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
     return Sign.isPositive(x) //
         ? RealScalar.ONE.subtract(Exp.FUNCTION.apply(RealScalar.ONE.subtract(exp).multiply(xi)))
         : RealScalar.ZERO;
+  }
+
+  @Override // from InverseCDF
+  public Scalar quantile(Scalar p) {
+    return _quantile(Clips.unit().requireInside(p));
+  }
+
+  private Scalar _quantile(Scalar p) {
+    return Log.FUNCTION.apply(RealScalar.ONE.subtract( //
+        Log.FUNCTION.apply(RealScalar.ONE.subtract(p)).divide(xi))).divide(lambda);
+  }
+
+  @Override // from AbstractContinuousDistribution
+  protected Scalar randomVariate(double reference) {
+    return _quantile(DoubleScalar.of(reference));
   }
 
   @Override // from Object

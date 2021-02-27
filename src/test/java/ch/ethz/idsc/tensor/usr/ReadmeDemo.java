@@ -84,8 +84,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   static void demoDecimal() {
-    System.out.println(Exp.of(DecimalScalar.of(10)));
-    System.out.println(Sqrt.of(DecimalScalar.of(2)));
+    System.out.println(Exp.of(DecimalScalar.of("10")));
+    System.out.println(Sqrt.of(DecimalScalar.of("2")));
     Scalar a = N.in(100).of(RealScalar.of(2));
     System.out.println(Sqrt.of(a));
   }

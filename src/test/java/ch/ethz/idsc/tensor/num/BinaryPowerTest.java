@@ -10,7 +10,7 @@ public class BinaryPowerTest extends TestCase {
   public void testInteger() {
     GroupInterface<Integer> groupInterface = new GroupInterface<Integer>() {
       @Override // from BinaryPower
-      public Integer identity() {
+      public Integer neutral(Integer integer) {
         return 1;
       }
 
@@ -34,6 +34,8 @@ public class BinaryPowerTest extends TestCase {
     assertEquals(binaryPower.raise(5, BigInteger.valueOf(4)), (Integer) 625);
     assertEquals(binaryPower.raise(5, BigInteger.valueOf(5)), (Integer) 3125);
     assertEquals(binaryPower.raise(1, BigInteger.valueOf(-3)), (Integer) 1);
+    String string = binaryPower.toString();
+    assertTrue(string.startsWith("BinaryPower"));
   }
 
   public void testNullFail() {

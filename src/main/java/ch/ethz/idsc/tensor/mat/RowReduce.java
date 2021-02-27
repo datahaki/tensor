@@ -18,7 +18,7 @@ public class RowReduce extends AbstractReduce {
    * @return reduced row echelon form (also called row canonical form) of matrix
    * @throws Exception if input is not a non-empty rectangular matrix */
   public static Tensor of(Tensor matrix) {
-    return of(matrix, Pivots.ARGMAX_ABS);
+    return of(matrix, Pivots.selection(matrix));
   }
 
   /** @param matrix

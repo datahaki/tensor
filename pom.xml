@@ -5,11 +5,11 @@
 
 	<groupId>ch.ethz.idsc</groupId>
 	<artifactId>tensor</artifactId>
-	<version>0.9.1</version>
+	<version>0.9.2</version>
 	<packaging>jar</packaging>
 
 	<name>tensor</name>
-	<url>http://maven.apache.org</url>
+	<url>http://www.hakenberg.de</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

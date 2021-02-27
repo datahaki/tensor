@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
+import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.red.Trace;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -104,6 +105,16 @@ public class MatrixLog2Test extends TestCase {
       assertEquals(Trace.of(alg), RealScalar.ZERO);
       _checkExpLog(alg);
       _checkLogExp(alg);
+    }
+  }
+
+  public void test2x2() {
+    for (int count = 0; count < 10; ++count) {
+      Tensor x = RandomVariate.of(UniformDistribution.of(-1, 1), 2, 2);
+      Tensor exp = MatrixExp.of(x);
+      Tensor log = MatrixLog._of(exp);
+      Tensor cmp = MatrixLog2.of(exp);
+      Chop._04.requireClose(log, cmp);
     }
   }
 

@@ -10,14 +10,16 @@ import ch.ethz.idsc.tensor.qty.Unit;
    * "9.81[m*s^-2]" -> Quantity.of(9.81, "m*s^-2")
    * 
    * @param string
-   * @return */
+   * @return
+   * @throws Exception if given string cannot be parsed to a scalar of instance
+   * {@link RealScalar}, {@link ComplexScalar}, or {@link Quantity} */
   public static Scalar of(String string) {
     int index = string.indexOf(Quantity.UNIT_OPENING_BRACKET);
     if (0 < index) {
       int last = string.indexOf(Quantity.UNIT_CLOSING_BRACKET);
       if (index < last && string.substring(last + 1).trim().isEmpty())
         return Quantity.of( //
-            Scalars.fromString(string.substring(0, index)), //
+            ScalarParser.of(string.substring(0, index)), //
             Unit.of(string.substring(index + 1, last)));
       throw new IllegalArgumentException(string);
     }

@@ -14,6 +14,7 @@ import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -28,7 +29,7 @@ public class TraceTest extends TestCase {
   private static Scalar _tr2Formula(Tensor A) {
     assertTrue(SquareMatrixQ.of(A));
     Scalar trA1 = Power.of(Trace.of(A), 2);
-    Scalar trA2 = Trace.of(MatrixPower.of(A, 2));
+    Tensor trA2 = Trace.of(MatrixPower.of(A, 2));
     return trA1.subtract(trA2).divide(RealScalar.of(2));
   }
 
@@ -36,7 +37,7 @@ public class TraceTest extends TestCase {
   public void testViete() {
     Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}");
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-    Chop._10.requireClose(Trace.of(matrix), Total.of(eigensystem.values())); // 1. Viete
+    Tolerance.CHOP.requireClose(Trace.of(matrix), Total.of(eigensystem.values())); // 1. Viete
     Chop._10.requireClose(Det.of(matrix), Times.pmul(eigensystem.values())); // 3. Viete
     {
       Scalar l1 = eigensystem.values().Get(0);
@@ -45,7 +46,7 @@ public class TraceTest extends TestCase {
       Scalar res = _tr2Formula(matrix);
       Tensor vector = Tensors.of(l1.multiply(l2), l2.multiply(l3), l3.multiply(l1));
       Tensor cmp = Total.of(vector);
-      Chop._10.requireClose(cmp, res); // 2. Viete
+      Tolerance.CHOP.requireClose(cmp, res); // 2. Viete
     }
   }
 
@@ -56,7 +57,7 @@ public class TraceTest extends TestCase {
         Tensor matrix = RandomVariate.of(distribution, n, n);
         Scalar exp1 = Det.of(MatrixExp.of(matrix));
         Scalar exp2 = Exp.FUNCTION.apply(Trace.of(matrix));
-        Chop._10.requireClose(exp1, exp2);
+        Tolerance.CHOP.requireClose(exp1, exp2);
       }
   }
 

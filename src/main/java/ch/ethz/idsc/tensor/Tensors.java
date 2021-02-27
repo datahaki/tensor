@@ -4,10 +4,15 @@ package ch.ethz.idsc.tensor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.Numel;
 
 /** utility class that provides constructors of tensors for convenience.
  * 
@@ -175,10 +180,39 @@ public enum Tensors {
   /***************************************************/
   private static final Tensor UNMODIFIABLE_EMPTY = empty().unmodifiable();
 
-  /** Remark: efficient for memory management
-   * 
-   * @return singleton instance of unmodifiable empty tensor */
+  /** @return singleton instance of unmodifiable empty tensor */
   public static Tensor unmodifiableEmpty() {
     return UNMODIFIABLE_EMPTY;
+  }
+
+  /***************************************************/
+  private static final int MAX_NUMEL = 12;
+  private static final int MAX_LENGTH = 32;
+
+  /** @param tensors
+   * @return compact, possibly abbreviated expressions of given tensors */
+  public static String message(Tensor... tensors) {
+    return Stream.of(tensors).map(Tensors::format).collect(Collectors.joining("; "));
+  }
+
+  private static String format(Tensor tensor) {
+    if (Objects.isNull(tensor))
+      return "null";
+    return Numel.of(tensor) <= MAX_NUMEL //
+        ? formatContent(tensor)
+        : "T" + Dimensions.of(tensor);
+  }
+
+  /** function causes out of memory exception for large tensors
+   * and therefore should only be invoked for small tensors.
+   * 
+   * @param tensor
+   * @return */
+  private static String formatContent(Tensor tensor) {
+    String string = tensor.toString();
+    int length = string.length();
+    return MAX_LENGTH < length //
+        ? "T" + Dimensions.of(tensor) + "=" + string.substring(0, MAX_LENGTH) + " ..."
+        : string;
   }
 }

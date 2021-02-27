@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Transpose;
@@ -10,9 +11,6 @@ import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
-import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -21,18 +19,14 @@ import junit.framework.TestCase;
 public class InfluenceMatrixTest extends TestCase {
   private static void _check(InfluenceMatrix influenceMatrix) throws ClassNotFoundException, IOException {
     InfluenceMatrix _influenceMatrix = Serialization.copy(influenceMatrix);
-    {
-      Tensor leverages = _influenceMatrix.leverages();
-      leverages.stream() //
-          .map(Scalar.class::cast) //
-          .forEach(Clips.unit()::requireInside);
-    }
-    {
-      Tensor leverages_sqrt = _influenceMatrix.leverages_sqrt();
-      leverages_sqrt.stream() //
-          .map(Scalar.class::cast) //
-          .forEach(Clips.unit()::requireInside);
-    }
+    Tensor leverages = _influenceMatrix.leverages();
+    leverages.stream() //
+        .map(Scalar.class::cast) //
+        .forEach(Clips.unit()::requireInside);
+    Tensor leverages_sqrt = _influenceMatrix.leverages_sqrt();
+    leverages_sqrt.stream() //
+        .map(Scalar.class::cast) //
+        .forEach(Clips.unit()::requireInside);
   }
 
   public void testSimple() {
@@ -44,65 +38,66 @@ public class InfluenceMatrixTest extends TestCase {
     Chop._08.requireClose(PseudoInverse.usingSvd(nullsp), Transpose.of(nullsp));
   }
 
-  // TODO use in tests as comparison
   private static Tensor imageQR(Tensor design, Tensor vector) {
     return design.dot(LeastSquares.of(design, vector));
   }
 
   public void testLeftKernel() throws ClassNotFoundException, IOException {
     Tensor design = RandomVariate.of(NormalDistribution.standard(), 10, 3);
-    Tensor vector = RandomVariate.of(NormalDistribution.standard(), 10);
     InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
     _check(influenceMatrix);
+    Tensor vector = RandomVariate.of(NormalDistribution.standard(), 10);
     Tensor ker1 = influenceMatrix.kernel(vector);
     Tolerance.CHOP.requireAllZero(ker1.dot(design));
     Tensor ker2 = influenceMatrix.residualMaker().dot(vector);
     Tolerance.CHOP.requireClose(ker1, ker2);
   }
 
+  private static Tensor proj(InfluenceMatrix influenceMatrix, Tensor v) {
+    Tensor w1 = Transpose.of(Tensor.of(v.stream().map(influenceMatrix::image)));
+    Tensor w2 = Tensor.of(v.stream().map(influenceMatrix::image));
+    Tensor x = influenceMatrix.matrix();
+    Tolerance.CHOP.requireClose(x.dot(w1), w1);
+    Tolerance.CHOP.requireClose(w2.dot(x), w2);
+    Tensor w = w1.add(w2).multiply(RationalScalar.HALF);
+    SymmetricMatrixQ.require(w, Tolerance.CHOP);
+    return w;
+  }
+
   public void testLeftImage() throws ClassNotFoundException, IOException {
-    Tensor design = RandomVariate.of(NormalDistribution.standard(), 10, 3);
-    Tensor v0 = RandomVariate.of(NormalDistribution.standard(), 10);
-    Tensor v1 = RandomVariate.of(NormalDistribution.standard(), 10);
+    int n = 10;
+    Distribution distribution = NormalDistribution.standard();
+    Tensor design = RandomVariate.of(distribution, n, 3);
+    Tensor v0 = RandomVariate.of(distribution, n);
+    Tensor v1 = RandomVariate.of(distribution, n);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     _check(influenceMatrix);
     influenceMatrix.image(v0);
     Tensor vim1 = influenceMatrix.image(v1);
-    Tensor vim2 = influenceMatrix.matrix().dot(v1);
+    Tensor x = influenceMatrix.matrix();
+    Tensor vim2 = x.dot(v1);
     Tolerance.CHOP.requireClose(vim1, vim2);
     Tolerance.CHOP.requireClose( //
         v1.dot(design), //
         vim1.dot(design));
     Tensor vim3 = imageQR(design, v1);
     Tolerance.CHOP.requireClose(vim1, vim3);
-  }
-
-  public void testRankDeficient() {
-    int n = 7;
-    int _m = 5;
-    Distribution distribution = NormalDistribution.standard();
-    for (int r = 1; r < _m - 1; ++r) {
-      Tensor m1 = RandomVariate.of(distribution, n, r);
-      Tensor m2 = RandomVariate.of(distribution, r, _m);
-      Tensor design = m1.dot(m2);
-      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-      influenceMatrix.image(RandomVariate.of(distribution, n));
-    }
-  }
-
-  public void testRankDeficientQuantity() {
-    int n = 7;
-    int _m = 5;
-    Distribution distribution = NormalDistribution.standard();
-    for (int r = 1; r < _m - 1; ++r) {
-      Tensor m1 = RandomVariate.of(distribution, n, r).map(s -> Quantity.of(s, "m"));
-      Tensor m2 = RandomVariate.of(distribution, r, _m);
-      Tensor design = m1.dot(m2);
-      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-      influenceMatrix.image(RandomVariate.of(distribution, n));
-      influenceMatrix.leverages();
-      influenceMatrix.leverages_sqrt();
-      influenceMatrix.matrix().map(QuantityMagnitude.singleton(Unit.ONE));
+    {
+      Tensor v = RandomVariate.of(distribution, n, n);
+      // Tensor w1 = Transpose.of(Tensor.of(v.stream().map(influenceMatrix::image)));
+      // Tensor w2 = Tensor.of(v.stream().map(influenceMatrix::image));
+      // Tolerance.CHOP.requireClose(x.dot(w1), w1);
+      // Tolerance.CHOP.requireClose(w2.dot(x), w2);
+      Tensor w = proj(influenceMatrix, v);
+      // w1.add(w2).multiply(RationalScalar.HALF);
+      // System.out.println(MatrixNorm2.bound(w.subtract(v)));
+      // System.out.println(MatrixNorm2.bound(w.subtract(x.dot(w).add(w.dot(x)))));
+      w = proj(influenceMatrix, v);
+      w.length();
+      // System.out.println(MatrixNorm2.bound(w.subtract(x.dot(w).add(w.dot(x)))));
+      // Chop._08.requireClose(x.dot(w).add(w.dot(x)),w);
+      // Chop._08.requireClose(w2.dot(x),w2);
+      // Chop._08.requireClose(w, x.dot(w).add(w.dot(x)));
     }
   }
 

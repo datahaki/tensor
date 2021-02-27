@@ -6,7 +6,7 @@ import java.util.List;
 
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Numel;
-import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -126,7 +126,7 @@ public class TensorTest extends TestCase {
 
   public void testMap() {
     Tensor a = Tensors.of(DoubleScalar.of(1e-20), Tensors.of(DoubleScalar.of(3e-19)));
-    Tensor b = a.map(Chop._12);
+    Tensor b = a.map(Tolerance.CHOP);
     assertEquals(b, Tensors.of(RealScalar.ZERO, Tensors.of(RealScalar.ZERO)));
   }
 

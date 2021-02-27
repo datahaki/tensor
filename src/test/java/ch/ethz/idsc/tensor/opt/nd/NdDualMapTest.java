@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt.nd;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -22,8 +23,8 @@ public class NdDualMapTest extends TestCase {
     m1.add(Tensors.vector(0, 0), "p1");
     m1.add(Tensors.vector(1, 1), "p3");
     Tensor center = Tensors.vector(0, 0);
-    NdCluster<String> cl = m1.buildCluster(EuclideanNdCenter.of(center), 2);
-    Set<String> res = cl.stream().map(NdEntry::value).collect(Collectors.toSet());
+    Collection<NdMatch<String>> cl = m1.cluster(EuclideanNdCenter.of(center), 2);
+    Set<String> res = cl.stream().map(NdMatch::value).collect(Collectors.toSet());
     assertTrue(res.contains("p1"));
     assertTrue(res.contains("p2"));
     assertEquals(res.size(), 2);
@@ -46,8 +47,8 @@ public class NdDualMapTest extends TestCase {
       }
     }
     NdCenterInterface dinf = EuclideanNdCenter.of(center);
-    NdCluster<String> c2 = m2.buildCluster(dinf, n);
-    assertTrue(0 < c2.considered());
+    Collection<NdMatch<String>> c2 = m2.cluster(dinf, n);
+    // assertTrue(0 < c2.considered());
     assertTrue(c2.size() <= n);
   }
 

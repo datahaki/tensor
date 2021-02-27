@@ -44,14 +44,14 @@ public enum Signature {
    * @param ordering
    * @return */
   /* package */ static Scalar of(int[] ordering) {
-    int transpositions = 0;
+    int parity = 0;
     for (int index = 0; index < ordering.length; ++index)
       while (ordering[index] != index) {
         int value = ordering[index];
         ordering[index] = ordering[value];
         ordering[value] = value;
-        ++transpositions;
+        parity ^= 1;
       }
-    return SIGN[transpositions % 2];
+    return SIGN[parity];
   }
 }

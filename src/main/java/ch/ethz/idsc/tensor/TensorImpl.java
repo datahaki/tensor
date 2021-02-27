@@ -37,15 +37,17 @@ import java.util.stream.Stream;
 
   @Override // from Tensor
   public Tensor get(List<Integer> index) {
-    return index.isEmpty() ? copy() : _get(index);
+    return index.isEmpty() //
+        ? copy()
+        : _get(index);
   }
 
   private Tensor _get(List<Integer> index) {
     List<Integer> sublist = index.subList(1, index.size());
     int head = index.get(0);
-    if (head == ALL)
-      return Tensor.of(list.stream().map(tensor -> tensor.get(sublist)));
-    return list.get(head).get(sublist);
+    return head == ALL //
+        ? Tensor.of(list.stream().map(tensor -> tensor.get(sublist)))
+        : list.get(head).get(sublist);
   }
 
   @Override // from Tensor
@@ -138,7 +140,9 @@ import java.util.stream.Stream;
   public Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
     if (fromIndex.size() != dimensions.size())
       throw new IllegalArgumentException(fromIndex + " " + dimensions);
-    return fromIndex.isEmpty() ? copy() : _block(fromIndex, dimensions);
+    return fromIndex.isEmpty() //
+        ? copy()
+        : _block(fromIndex, dimensions);
   }
 
   /** @param fromIndex non-empty

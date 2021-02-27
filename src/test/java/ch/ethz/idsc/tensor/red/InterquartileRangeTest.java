@@ -6,12 +6,12 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.ExponentialDistribution;
 import ch.ethz.idsc.tensor.pdf.PoissonDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -30,12 +30,12 @@ public class InterquartileRangeTest extends TestCase {
   public void testDistributionExp() { // continuous
     Scalar lambda = RealScalar.of(5);
     Distribution distribution = ExponentialDistribution.of(lambda);
-    Chop._12.requireClose(InterquartileRange.of(distribution), Log.of(RealScalar.of(3)).divide(lambda));
+    Tolerance.CHOP.requireClose(InterquartileRange.of(distribution), Log.of(RealScalar.of(3)).divide(lambda));
   }
 
   public void testDistributionUniform() { // continuous
     Distribution distribution = UniformDistribution.of(22, 30);
-    Chop._12.requireClose(InterquartileRange.of(distribution), RealScalar.of(4));
+    Tolerance.CHOP.requireClose(InterquartileRange.of(distribution), RealScalar.of(4));
   }
 
   public void testDistributionPoisson() { // discrete

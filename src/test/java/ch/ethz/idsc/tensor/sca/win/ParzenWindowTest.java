@@ -6,9 +6,6 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.pdf.NormalDistribution;
-import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -20,7 +17,7 @@ public class ParzenWindowTest extends TestCase {
   }
 
   public void testSemiExact() {
-    Scalar scalar = ParzenWindow.FUNCTION.apply(RealScalar.of(0.5));
+    Scalar scalar = ParzenWindow.FUNCTION.apply(RationalScalar.HALF);
     assertTrue(Scalars.isZero(scalar));
     ExactScalarQ.require(scalar);
   }
@@ -31,9 +28,10 @@ public class ParzenWindowTest extends TestCase {
     ExactScalarQ.require(scalar);
   }
 
-  public void testOf() {
-    Tensor tensor = RandomVariate.of(NormalDistribution.standard(), 2, 3);
-    assertEquals(ParzenWindow.of(tensor), tensor.map(ParzenWindow.FUNCTION));
+  public void testExact() {
+    Scalar scalar = ParzenWindow.FUNCTION.apply(RationalScalar.of(2, 5));
+    ExactScalarQ.require(scalar);
+    assertFalse(Scalars.isZero(scalar));
   }
 
   public void testQuantityFail() {

@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ScalarParserTest extends TestCase {
@@ -46,12 +47,35 @@ public class ScalarParserTest extends TestCase {
   }
 
   public void testDecimal() {
-    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of(1)).toString(), "I");
-    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of(-1)).toString(), "-I");
+    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of("1")).toString(), "I");
+    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of("-1")).toString(), "-I");
   }
 
   public void testDoubleImag() {
     assertEquals(ComplexScalar.of(RealScalar.ZERO, DoubleScalar.of(1)).toString(), "1.0*I");
     assertEquals(ComplexScalar.of(RealScalar.ZERO, DoubleScalar.of(-1)).toString(), "-1.0*I");
+  }
+
+  public void testBrackets() {
+    Scalar s1 = ScalarParser.of("(1)+(2)");
+    Scalar s2 = ScalarParser.of("((3))+0");
+    assertEquals(s1, s2);
+    assertEquals(s1, RealScalar.of(3));
+  }
+
+  public void testAbcFail() {
+    AssertFail.of(() -> ScalarParser.of("(3"));
+    AssertFail.of(() -> ScalarParser.of("3)"));
+    AssertFail.of(() -> ScalarParser.of("314abc34"));
+    AssertFail.of(() -> ScalarParser.of("314abc"));
+    AssertFail.of(() -> ScalarParser.of("abc34"));
+    AssertFail.of(() -> ScalarParser.of("3e0.1"));
+    AssertFail.of(() -> ScalarParser.of("3e.1"));
+    AssertFail.of(() -> ScalarParser.of("3e-0.1"));
+    AssertFail.of(() -> ScalarParser.of("3e.-0.1"));
+  }
+
+  public void testQuantityFail() {
+    AssertFail.of(() -> ScalarParser.of("3.14[m]"));
   }
 }

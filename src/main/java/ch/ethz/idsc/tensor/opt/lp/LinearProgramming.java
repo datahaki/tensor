@@ -44,6 +44,14 @@ public enum LinearProgramming {
    * @param m
    * @param b
    * @return x >= 0 that maximizes c.x subject to m.x == b */
+  public static Tensor maxEquals(Tensor c, Tensor m, Tensor b, SimplexPivot simplexPivot) {
+    return minEquals(c.negate(), m, b, simplexPivot);
+  }
+
+  /** @param c
+   * @param m
+   * @param b
+   * @return x >= 0 that maximizes c.x subject to m.x == b */
   public static Tensor maxEquals(Tensor c, Tensor m, Tensor b) {
     return minEquals(c.negate(), m, b);
   }
@@ -54,16 +62,20 @@ public enum LinearProgramming {
    * @param m
    * @param b
    * @return x >= 0 that minimizes c.x subject to m.x <= b */
-  public static Tensor minLessEquals(Tensor c, Tensor m, Tensor b) {
+  public static Tensor minLessEquals(Tensor c, Tensor m, Tensor b, SimplexPivot simplexPivot) {
     Tensor ceq = Join.of(c, Array.zeros(m.length()));
     // Tensor D = DiagonalMatrix.of(b.map(UnitStep.function));
     // IdentityMatrix.of(m.length())
     Tensor meq = Join.of(1, m, IdentityMatrix.of(m.length()));
-    Tensor xeq = minEquals(ceq, meq, b);
-    Tensor x = xeq.extract(0, c.length());
+    Tensor xeq = minEquals(ceq, meq, b, simplexPivot);
+    Tensor x = Tensor.of(xeq.stream().limit(c.length()));
     if (isFeasible(m, x, b))
       return x;
     throw TensorRuntimeException.of(c, m, x, b);
+  }
+
+  public static Tensor minLessEquals(Tensor c, Tensor m, Tensor b) {
+    return minLessEquals(c, m, b, SimplexPivots.NONBASIC_GRADIENT);
   }
 
   /** @param c

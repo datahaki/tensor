@@ -2,12 +2,17 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Conjugate;
+import ch.ethz.idsc.tensor.sca.Imag;
 
 /** The pseudo inverse is the least squares solution x to
  * <pre>
@@ -17,6 +22,15 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * Therefore, the following relation holds
  * <pre>
  * PseudoInverse[matrix] == LeastSquares[matrix, IdentityMatrix[matrix.length()]]
+ * </pre>
+ * 
+ * The pseudoinverse satisfies
+ * <pre>
+ * PseudoInverse[matrix] == PseudoInverse[ matrix^T . matrix ] . matrix^T
+ * </pre>
+ * or short
+ * <pre>
+ * matrix^+ == (matrix^T . matrix)^+ . matrix^T
  * </pre>
  * 
  * <p>inspired by
@@ -31,26 +45,29 @@ public enum PseudoInverse {
   public static Tensor of(Tensor matrix) {
     if (ExactTensorQ.of(matrix))
       try {
-        usingCholesky(matrix);
+        return usingCholesky(matrix);
       } catch (Exception exception) {
-        // ---
+        // matrix does not have maximal rank
       }
-    return LeastSquares.of(matrix, IdentityMatrix.of(matrix.length()));
+    boolean complex = matrix.flatten(2).map(Scalar.class::cast).map(Imag.FUNCTION).anyMatch(Scalars::nonZero);
+    if (complex)
+      return BenIsraelCohen.of(matrix);
+    return usingSvd(matrix);
   }
 
   /***************************************************/
-  /** Hint: function exists to avoid dot product with the identity matrix
-   * 
-   * @param matrix
+  /** @param matrix with maximal rank
    * @return
    * @throws Exception if given matrix does not have maximal rank */
   /* package */ static Tensor usingCholesky(Tensor matrix) {
     int n = matrix.length();
-    Tensor mt = ConjugateTranspose.of(matrix);
-    int m = mt.length();
-    return m <= n //
-        ? CholeskyDecomposition.of(mt.dot(matrix)).solve(mt)
-        : ConjugateTranspose.of(CholeskyDecomposition.of(matrix.dot(mt)).solve(matrix));
+    int m = Unprotect.dimension1Hint(matrix);
+    if (m <= n) {
+      Tensor mt = ConjugateTranspose.of(matrix);
+      return CholeskyDecomposition.of(mt.dot(matrix)).solve(mt);
+    }
+    return ConjugateTranspose.of(CholeskyDecomposition.of( //
+        MatrixDotTranspose.of(matrix, Conjugate.of(matrix))).solve(matrix));
   }
 
   /***************************************************/
@@ -72,18 +89,24 @@ public enum PseudoInverse {
   }
 
   /***************************************************/
+  /** Quote from Mathematica: "With the default setting Tolerance->Automatic,
+   * singular values are dropped when they are less than 100 times 10^-p,
+   * where p is Precision[m]."
+   * In Mathematica the tolerance is 1.1102230246251578*^-14. */
+  private static final Chop TOLERANCE = Tolerance.CHOP; // 10^-12
+
   /** Remark: Entries of given matrix may be of type {@link Quantity} with identical {@link Unit}.
    * 
    * @param matrix of arbitrary dimension and rank
    * @return pseudoinverse of given matrix */
   /* package */ static Tensor usingSvd(Tensor matrix) {
-    return usingSvd(matrix, Tolerance.CHOP);
+    return usingSvd(matrix, TOLERANCE);
   }
 
   /** @param matrix
    * @param chop
    * @return */
-  /* package */ static Tensor usingSvd(Tensor matrix, Chop chop) {
+  private static Tensor usingSvd(Tensor matrix, Chop chop) {
     return usingSvd(matrix, chop, matrix.length(), Unprotect.dimension1(matrix));
   }
 
@@ -96,7 +119,7 @@ public enum PseudoInverse {
   /** @param svd
    * @return pseudoinverse of matrix determined by given svd */
   public static Tensor of(SingularValueDecomposition svd) {
-    return of(svd, Tolerance.CHOP);
+    return of(svd, TOLERANCE);
   }
 
   /** @param svd
@@ -104,6 +127,6 @@ public enum PseudoInverse {
    * @return pseudoinverse of matrix determined by given svd */
   public static Tensor of(SingularValueDecomposition svd, Chop chop) {
     Tensor wi = SingularValueList.inverted(svd, chop);
-    return Tensor.of(svd.getV().stream().map(wi::pmul)).dot(Transpose.of(svd.getU()));
+    return MatrixDotTranspose.of(Tensor.of(svd.getV().stream().map(wi::pmul)), svd.getU());
   }
 }

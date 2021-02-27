@@ -25,6 +25,10 @@ import java.util.regex.Pattern;
   /** suffix that is appended to imaginary part of {@link ComplexScalar} in function toString() */
   private static final String I_SYMBOL = "I";
 
+  /** @param _string
+   * @return
+   * @throws Exception if given string cannot be parsed to a scalar of instance
+   * {@link RealScalar} or {@link ComplexScalar} */
   public static Scalar of(final String _string) {
     final String string = _string.trim();
     final char[] chars = string.toCharArray();

@@ -39,6 +39,10 @@ public class AbstractScalarTest extends TestCase {
 
   public void testGet1Fail() {
     assertEquals(Pi.VALUE.get(), Pi.VALUE);
+    AssertFail.of(() -> Pi.VALUE.get(Arrays.asList(0)));
+    AssertFail.of(() -> Pi.VALUE.get(Arrays.asList(0, 0)));
+    AssertFail.of(() -> Pi.VALUE.get(Arrays.asList(-1)));
+    AssertFail.of(() -> Pi.VALUE.get(Arrays.asList(-1, 0)));
     AssertFail.of(() -> RealScalar.ONE.Get(1));
     AssertFail.of(() -> RealScalar.ONE.get(new Integer[] { 1 }));
   }

@@ -22,7 +22,7 @@ public enum Det {
   /** @param matrix
    * @return determinant of matrix */
   public static Scalar of(Tensor matrix) {
-    return of(matrix, Pivots.ARGMAX_ABS);
+    return of(matrix, Pivots.selection(matrix));
   }
 
   /** @param matrix

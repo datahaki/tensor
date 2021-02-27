@@ -40,10 +40,10 @@ public enum Erfc implements ScalarUnaryOperator {
     Scalar dd = RealScalar.ZERO;
     for (int j = COEFFS.length() - 1; j > 0; j--) {
       Scalar tmp = d;
-      d = ty.multiply(d).subtract(dd).add(COEFFS.get(j));
+      d = ty.multiply(d).subtract(dd).add(COEFFS.Get(j));
       dd = tmp;
     }
-    Scalar exponent = RationalScalar.HALF.multiply(ty.multiply(d).add(COEFFS.get(0))).subtract(dd).subtract(z.multiply(z));
+    Scalar exponent = RationalScalar.HALF.multiply(ty.multiply(d).add(COEFFS.Get(0))).subtract(dd).subtract(z.multiply(z));
     return t.multiply(Exp.FUNCTION.apply(exponent));
   }
 

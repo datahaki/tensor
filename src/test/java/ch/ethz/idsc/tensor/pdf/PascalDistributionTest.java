@@ -35,6 +35,7 @@ public class PascalDistributionTest extends TestCase {
 
   public void testMean() {
     Distribution distribution = PascalDistribution.of(5, RationalScalar.of(2, 3));
+    assertTrue(distribution.toString().startsWith("PascalDistribution["));
     Scalar mean = Mean.of(distribution);
     Scalar var = Variance.of(distribution);
     assertEquals(mean, RationalScalar.of(15, 2));

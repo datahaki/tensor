@@ -5,21 +5,27 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 import ch.ethz.idsc.tensor.AbstractScalar;
-import ch.ethz.idsc.tensor.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.api.AbsInterface;
+import ch.ethz.idsc.tensor.api.ConjugateInterface;
+import ch.ethz.idsc.tensor.api.ExactScalarQInterface;
+import ch.ethz.idsc.tensor.api.PowerInterface;
+import ch.ethz.idsc.tensor.api.RoundingInterface;
+import ch.ethz.idsc.tensor.api.SignInterface;
+import ch.ethz.idsc.tensor.api.SqrtInterface;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.sca.PowerInterface;
-import ch.ethz.idsc.tensor.sca.RoundingInterface;
-import ch.ethz.idsc.tensor.sca.SignInterface;
-import ch.ethz.idsc.tensor.sca.SqrtInterface;
 
 /** scalars from finite field with prime number of elements and values
- * 0, 1, 2, ..., prime - 1 */
+ * 0, 1, 2, ..., prime - 1
+ * 
+ * an instance stores two non-negative integers: the value and the prime
+ * which can be accessed via {@link #number()} and {@link #prime()}. */
 public class GaussScalar extends AbstractScalar implements //
-    ExactScalarQInterface, PowerInterface, RoundingInterface, SignInterface, //
-    SqrtInterface, Comparable<Scalar>, Serializable {
+    AbsInterface, ConjugateInterface, ExactScalarQInterface, PowerInterface, //
+    RoundingInterface, SignInterface, SqrtInterface, //
+    Comparable<Scalar>, Serializable {
   private static final long serialVersionUID = -4408349912290491124L;
 
   /** @param value
@@ -27,7 +33,7 @@ public class GaussScalar extends AbstractScalar implements //
    * @return value in finite field with prime number of elements
    * @throws Exception if given prime is not a prime number */
   public static GaussScalar of(BigInteger value, BigInteger prime) {
-    return in(value, ProbablePrimes.of(prime));
+    return in(value, PrimeQ.require(prime));
   }
 
   /** @param value
@@ -54,23 +60,20 @@ public class GaussScalar extends AbstractScalar implements //
     this.prime = prime;
   }
 
-  /***************************************************/
-  @Override // from Scalar
-  public GaussScalar reciprocal() {
-    return new GaussScalar(value.modInverse(prime), prime);
-  }
-
   @Override // from Scalar
   public GaussScalar negate() {
     return in(value.negate(), prime);
   }
 
   @Override // from Scalar
+  public GaussScalar reciprocal() {
+    return new GaussScalar(value.modInverse(prime), prime);
+  }
+
+  @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    if (scalar instanceof GaussScalar) {
-      GaussScalar gaussScalar = (GaussScalar) scalar;
-      return in(value.multiply(gaussScalar.value), prime);
-    }
+    if (scalar instanceof GaussScalar)
+      return in(value.multiply(requireCommonPrime((GaussScalar) scalar)), prime);
     if (scalar instanceof Quantity)
       return scalar.multiply(this);
     throw TensorRuntimeException.of(this, scalar);
@@ -87,40 +90,60 @@ public class GaussScalar extends AbstractScalar implements //
   }
 
   @Override // from Scalar
-  public Number number() {
+  public BigInteger number() {
     return value;
+  }
+
+  /** @return prime order of finite field */
+  public BigInteger prime() {
+    return prime;
   }
 
   @Override // from Scalar
   public Scalar zero() {
-    return in(BigInteger.ZERO, prime);
+    return new GaussScalar(BigInteger.ZERO, prime);
+  }
+
+  @Override // from Scalar
+  public Scalar one() {
+    return new GaussScalar(BigInteger.ONE, prime);
   }
 
   /***************************************************/
   @Override // from AbstractScalar
   protected GaussScalar plus(Scalar scalar) {
-    if (scalar instanceof GaussScalar) {
-      GaussScalar gaussScalar = (GaussScalar) scalar;
-      assertCommonBase(gaussScalar);
-      return in(value.add(gaussScalar.value), prime);
-    }
+    if (scalar instanceof GaussScalar)
+      return in(value.add(requireCommonPrime((GaussScalar) scalar)), prime);
     throw TensorRuntimeException.of(this, scalar);
   }
 
   /***************************************************/
+  @Override
+  public Scalar abs() {
+    return this;
+  }
+
+  @Override
+  public Scalar absSquared() {
+    return multiply(this);
+  }
+
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof GaussScalar) {
-      GaussScalar gaussScalar = (GaussScalar) scalar;
-      assertCommonBase(gaussScalar);
-      return value.compareTo(gaussScalar.value);
-    }
+    if (scalar instanceof GaussScalar)
+      return value.compareTo(requireCommonPrime((GaussScalar) scalar));
     throw TensorRuntimeException.of(this, scalar);
   }
 
-  private void assertCommonBase(GaussScalar gaussScalar) {
-    if (!prime.equals(gaussScalar.prime))
-      throw TensorRuntimeException.of(this, gaussScalar);
+  private BigInteger requireCommonPrime(GaussScalar gaussScalar) {
+    if (prime.equals(gaussScalar.prime))
+      return gaussScalar.value;
+    throw TensorRuntimeException.of(this, gaussScalar);
+  }
+
+  @Override // from ConjugateInterface
+  public Scalar conjugate() {
+    return this;
   }
 
   @Override // from ExactScalarQInterface
@@ -154,24 +177,13 @@ public class GaussScalar extends AbstractScalar implements //
     return new GaussScalar(BigInteger.valueOf(value.signum()), prime);
   }
 
-  @Override // from SignInterface
-  public int signInt() {
-    return value.signum();
-  }
-
   @Override // from SqrtInterface
   public GaussScalar sqrt() {
-    // implementation is slow, could use memo function
+    // LONGTERM implementation is slow, could use memo function
     for (BigInteger index = BigInteger.ZERO; index.compareTo(prime) < 0; index = index.add(BigInteger.ONE))
       if (equals(in(index.multiply(index), prime)))
         return in(index, prime);
     throw TensorRuntimeException.of(this); // sqrt of this does not exist
-  }
-
-  /***************************************************/
-  /** @return prime order of finite field */
-  public BigInteger prime() {
-    return prime;
   }
 
   /***************************************************/

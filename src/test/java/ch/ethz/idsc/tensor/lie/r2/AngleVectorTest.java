@@ -8,12 +8,12 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import ch.ethz.idsc.tensor.red.Norm;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
@@ -34,7 +34,7 @@ public class AngleVectorTest extends TestCase {
     for (int index = 0; index < 10; ++index) {
       Scalar angle = RandomVariate.of(distribution).negate(); // prevent angle == -pi
       Tensor vector = AngleVector.of(angle);
-      Chop._14.requireClose(Norm._2.ofVector(vector), RealScalar.ONE);
+      Chop._14.requireClose(Vector2Norm.of(vector), RealScalar.ONE);
       Scalar check = ArcTan.of(vector.Get(0), vector.Get(1));
       Chop._14.requireClose(angle, check);
     }
@@ -57,7 +57,7 @@ public class AngleVectorTest extends TestCase {
 
   public void testRotationOfEquivalence() {
     Distribution distribution = NormalDistribution.standard();
-    for (int count = 0; count < 50; ++count) {
+    for (int count = 0; count < 10; ++count) {
       Scalar fraction = RandomVariate.of(distribution);
       Chop._12.requireClose(AngleVector.turns(fraction), AngleVector.of(fraction.multiply(Pi.TWO)));
     }

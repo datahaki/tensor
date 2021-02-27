@@ -15,11 +15,14 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** Remark: the implementation of InverseCDF is not very accurate, expect errors of 1%.
  * 
+ * Quote: "LogNormalDistribution is also known as the Galton distribution."
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/LogNormalDistribution.html">LogNormalDistribution</a> */
 public class LogNormalDistribution implements ContinuousDistribution, //
     InverseCDF, MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = 6543947763516933160L;
+  private static final long serialVersionUID = 1073144464365832557L;
+  private static final Distribution STANDARD = LogNormalDistribution.of(RealScalar.ZERO, RealScalar.ONE);
 
   /** @param mu any real number
    * @param sigma any positive real number
@@ -31,6 +34,19 @@ public class LogNormalDistribution implements ContinuousDistribution, //
         sigma instanceof RealScalar)
       return new LogNormalDistribution(mu, sigma);
     throw TensorRuntimeException.of(mu, sigma);
+  }
+
+  /** @param mu any real number
+   * @param sigma any positive real number
+   * @return
+   * @throws Exception if sigma is zero or negative */
+  public static Distribution of(Number mu, Number sigma) {
+    return new LogNormalDistribution(RealScalar.of(mu), RealScalar.of(sigma));
+  }
+
+  /** @return LogNormalDistribution[0, 1] */
+  public static Distribution standard() {
+    return STANDARD;
   }
 
   /***************************************************/

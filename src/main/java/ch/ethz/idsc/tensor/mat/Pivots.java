@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.util.stream.IntStream;
 
+import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -32,7 +33,10 @@ public enum Pivots implements Pivot {
   },
   /** picks the first non-zero element in the column as pivot
    * the return value is c0 in the case when the element at (ind[c0], j)
-   * is non-zero, but also if none of the candidates is non-zero */
+   * is non-zero, but also if none of the candidates is non-zero
+   * 
+   * @see Det
+   * @see MatrixRank */
   FIRST_NON_ZERO {
     @Override // from Pivot
     public int get(int row, int col, int[] ind, Tensor[] lhs) {
@@ -41,4 +45,12 @@ public enum Pivots implements Pivot {
           .findFirst().orElse(row);
     }
   };
+
+  /** @param matrix
+   * @return */
+  public static Pivot selection(Tensor matrix) {
+    return ExactTensorQ.of(matrix) //
+        ? FIRST_NON_ZERO
+        : ARGMAX_ABS;
+  }
 }

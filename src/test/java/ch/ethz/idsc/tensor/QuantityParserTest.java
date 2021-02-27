@@ -14,4 +14,8 @@ public class QuantityParserTest extends TestCase {
   public void testBug() {
     AssertFail.of(() -> QuantityParser.of("1[m2]"));
   }
+
+  public void testNestedFail() {
+    AssertFail.of(() -> QuantityParser.of("1[s][m]"));
+  }
 }

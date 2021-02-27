@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import ch.ethz.idsc.tensor.api.ExactScalarQInterface;
+
 /** @see ExactScalarQInterface
  * @see ExactScalarQ */
 public enum ExactTensorQ {

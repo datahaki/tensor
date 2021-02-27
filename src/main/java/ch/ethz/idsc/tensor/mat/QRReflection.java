@@ -5,17 +5,17 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.alg.NormalizeUnlessZero;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
-import ch.ethz.idsc.tensor.red.Norm;
-import ch.ethz.idsc.tensor.red.Norm2Squared;
+import ch.ethz.idsc.tensor.nrm.NormalizeUnlessZero;
+import ch.ethz.idsc.tensor.nrm.Vector2Norm;
+import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 
 /** computes dot product {I - TensorProduct[vc, vr]) . tensor
  * followed by negating the k-th row */
 /* package */ class QRReflection {
-  private static final TensorUnaryOperator NORMALIZE_UNLESS_ZERO = NormalizeUnlessZero.with(Norm._2);
+  private static final TensorUnaryOperator NORMALIZE_UNLESS_ZERO = NormalizeUnlessZero.with(Vector2Norm::of);
   // ---
   private final int k;
   private final Tensor vc; // column vector
@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
   public QRReflection(int k, Tensor x) {
     this.k = k;
     if (ExactTensorQ.of(x)) {
-      Scalar norm2squared = Norm2Squared.ofVector(x);
+      Scalar norm2squared = Vector2NormSquared.of(x);
       if (Scalars.isZero(norm2squared)) {
         vc = x;
         vr = x;

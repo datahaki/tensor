@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.util.NavigableMap;
 
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -11,6 +10,8 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.qty.Quantity;
+import ch.ethz.idsc.tensor.red.Mean;
+import ch.ethz.idsc.tensor.red.Quantile;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
@@ -112,12 +113,12 @@ public class PoissonDistributionTest extends TestCase {
   }
 
   public void testNextDownOne() {
-    for (int c = 1; c < 700; c += 3) {
-      Scalar lambda = DoubleScalar.of(c * .5 + 300);
-      AbstractDiscreteDistribution distribution = //
-          (AbstractDiscreteDistribution) PoissonDistribution.of(lambda);
-      Scalar scalar = distribution.quantile(RealScalar.of(Math.nextDown(1.0)));
+    Scalar last = RealScalar.of(Math.nextDown(1.0));
+    for (int lambda = 1; lambda < 700; lambda += 30) {
+      Distribution distribution = PoissonDistribution.of(lambda);
+      Scalar scalar = Quantile.of(distribution).apply(last);
       ExactScalarQ.require(scalar);
+      assertTrue(Scalars.lessEquals(Mean.of(distribution), scalar));
     }
   }
 }

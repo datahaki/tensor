@@ -22,16 +22,9 @@ public class KleeMintyCubeTest extends TestCase {
   }
 
   public void testKleeMinty() {
-    for (int n = 1; n <= 10; ++n) {
+    for (int n = 1; n <= 7; ++n) {
       callKlee(n);
       callKleeN(n);
     }
-  }
-
-  public static void main(String[] args) {
-    KleeMintyCube kmc = new KleeMintyCube(3);
-    kmc.show();
-    Tensor x = LinearProgramming.maxLessEquals(kmc.c, kmc.m, kmc.b);
-    System.out.println("LP" + x + " <- solution");
   }
 }

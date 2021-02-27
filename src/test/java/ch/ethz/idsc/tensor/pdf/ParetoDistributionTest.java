@@ -3,11 +3,13 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.NumberQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Mean;
 import ch.ethz.idsc.tensor.red.Variance;
@@ -19,13 +21,13 @@ public class ParetoDistributionTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(1.8)));
     PDF pdf = PDF.of(distribution);
-    Chop._10.requireClose(pdf.at(RealScalar.of(4.0)), RealScalar.of(0.16619372965993448));
-    Chop._10.requireClose(pdf.at(RealScalar.of(2.3)), RealScalar.of(0.7826086956521743));
-    Chop._10.requireZero(pdf.at(RealScalar.of(2.2)));
+    Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(4.0)), RealScalar.of(0.16619372965993448));
+    Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(2.3)), RealScalar.of(0.7826086956521743));
+    Tolerance.CHOP.requireZero(pdf.at(RealScalar.of(2.2)));
     CDF cdf = CDF.of(distribution);
-    Chop._10.requireClose(cdf.p_lessEquals(RealScalar.of(4.0)), RealScalar.of(0.6306806007557013));
-    Chop._10.requireZero(cdf.p_lessEquals(RealScalar.of(2.3)));
-    Chop._10.requireZero(cdf.p_lessEquals(RealScalar.of(2.2)));
+    Tolerance.CHOP.requireClose(cdf.p_lessEquals(RealScalar.of(4.0)), RealScalar.of(0.6306806007557013));
+    Tolerance.CHOP.requireZero(cdf.p_lessEquals(RealScalar.of(2.3)));
+    Tolerance.CHOP.requireZero(cdf.p_lessEquals(RealScalar.of(2.2)));
   }
 
   public void testMeanVariance() {
@@ -38,6 +40,11 @@ public class ParetoDistributionTest extends TestCase {
     Chop chop = Chop.below(0.3);
     chop.requireClose(mean, empiricalMean);
     chop.requireClose(varc, empiricalVarc);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Tolerance.CHOP.requireClose(inverseCDF.quantile(RealScalar.of(0.2)), RealScalar.of(2.366748969310483));
+    assertEquals(inverseCDF.quantile(RealScalar.ZERO), RealScalar.of(2.3));
+    assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
+    assertTrue(distribution.toString().startsWith("ParetoDistribution["));
   }
 
   public void testMeanVarianceIndeterminate() {

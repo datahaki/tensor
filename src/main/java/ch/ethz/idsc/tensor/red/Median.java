@@ -4,7 +4,9 @@ package ch.ethz.idsc.tensor.red;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.alg.OrderedQ;
 import ch.ethz.idsc.tensor.alg.Sort;
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.InverseCDF;
 
@@ -21,14 +23,16 @@ public enum Median {
     return ofSorted(Sort.of(tensor));
   }
 
-  /** @param sorted vector either ascending or descending
-   * @return entry in the center if length is odd, otherwise the average of the two center entries */
-  public static Tensor ofSorted(Tensor sorted) {
-    int length = sorted.length();
+  /** @param tensor that satisfies {@link OrderedQ}
+   * @return entry in the center if length is odd, otherwise the average of the two center entries
+   * @throws Exception if given tensor is not {@link OrderedQ} */
+  public static Tensor ofSorted(Tensor tensor) {
+    OrderedQ.require(tensor);
+    int length = tensor.length();
     int index = length / 2;
-    return length % 2 == 0 //
-        ? Mean.of(sorted.extract(index - 1, index + 1))
-        : sorted.get(index);
+    return Integers.isEven(length) //
+        ? Mean.of(Tensor.of(tensor.stream().skip(index - 1).limit(2)))
+        : tensor.get(index);
   }
 
   /** @param distribution

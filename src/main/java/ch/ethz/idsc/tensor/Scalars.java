@@ -43,9 +43,20 @@ public enum Scalars {
     return StringScalar.of(string);
   }
 
-  /** @param s1
+  /** Examples:
+   * <pre>
+   * compare(2, 4) < 0
+   * compare(5, 1) > 0
+   * compare(8, 8) == 0
+   * </pre>
+   * 
+   * <p>when used for sorting, the function results in increasing ordering, i.e.
+   * from small to large.
+   * 
+   * @param s1
    * @param s2
    * @return canonic/native comparison of input scalars
+   * @throws Exception if given scalars are not comparable
    * @see Double#compare(double, double)
    * @see Integer#compare(int, int) */
   public static int compare(Scalar s1, Scalar s2) {

@@ -6,24 +6,22 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
-/** cache results of costly computations for fast lookup
- * the function apply is thread safe
- * the cache does not exceed given maxSize
+/** cache results of costly computations for fast lookup the function apply is thread
+ * safe in the sense that the cache will never exceed the given maxSize. However,
+ * in a multi-thread use of the cache, the given function may be called in parallel.
  * 
- * Remark: the function should map a key to the same value
- * if initially f[1] = "abc", and later f[1] = "def" then
- * the function is not suitable for caching!
+ * The function should map a key to the same value if initially f[1] = "abc", and
+ * later f[1] = "def" then the function is not suitable for caching!
  * 
- * Remark: the values should be immutable to ensure that the
- * receiver cannot modify the content that may be queried by
- * the next caller.
+ * The values should be immutable to ensure that the receiver cannot modify the content
+ * that may be queried by the next caller.
  * 
  * Used in: Unit, CirclePoints, Binomial */
 public class Cache<K, V> implements Function<K, V>, Serializable {
   private static final long serialVersionUID = -8606807894733066278L;
 
   /** @param function
-   * @param maxSize
+   * @param maxSize non-negative
    * @return */
   public static <K, V> Cache<K, V> of(Function<K, V> function, int maxSize) {
     if (function instanceof Cache)
@@ -44,14 +42,14 @@ public class Cache<K, V> implements Function<K, V>, Serializable {
    * @return the result of applying function to given key */
   @Override
   public V apply(K key) {
-    V unit = map.get(key);
-    if (Objects.isNull(unit)) {
-      unit = function.apply(key);
+    V value = map.get(key);
+    if (Objects.isNull(value)) {
+      value = function.apply(key);
       synchronized (map) {
-        map.put(key, unit);
+        map.put(key, value);
       }
     }
-    return unit;
+    return value;
   }
 
   /** @return number of elements currently stored in cache */

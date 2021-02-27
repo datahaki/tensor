@@ -1,7 +1,6 @@
 // adapted by jph
 package ch.ethz.idsc.tensor.lie;
 
-import ch.ethz.idsc.tensor.Quaternion;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;

@@ -1,12 +1,12 @@
 // code by jph
 package ch.ethz.idsc.tensor.lie;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.TensorRank;
@@ -34,7 +34,7 @@ public enum Symmetrize {
       case 1: // vector
         return tensor.copy();
       case 2: // matrix
-        return Tensors.vector(i -> tensor.get(Tensor.ALL, i).add(tensor.get(i)).multiply(RationalScalar.HALF), tensor.length());
+        return _01(tensor);
       default:
         return Permutations.stream(Range.of(0, rank)) //
             .map(permutation -> Transpose.of(tensor, IntStream.range(0, rank) //
@@ -45,5 +45,13 @@ public enum Symmetrize {
       }
     }
     throw TensorRuntimeException.of(tensor);
+  }
+
+  /** @param tensor
+   * @return given tensor symmetrized in first two dimensions */
+  /* package */ static Tensor _01(Tensor tensor) {
+    AtomicInteger atomicInteger = new AtomicInteger();
+    return Tensor.of(tensor.stream() //
+        .map(row -> row.add(tensor.get(Tensor.ALL, atomicInteger.getAndIncrement())).multiply(RationalScalar.HALF)));
   }
 }

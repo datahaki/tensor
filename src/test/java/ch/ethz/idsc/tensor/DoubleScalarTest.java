@@ -109,7 +109,7 @@ public class DoubleScalarTest extends TestCase {
   public void testNaN() {
     DoubleScalar nan = (DoubleScalar) DoubleScalar.INDETERMINATE;
     AssertFail.of(() -> nan.isNonNegative());
-    AssertFail.of(() -> nan.signInt());
+    AssertFail.of(() -> nan.signum());
   }
 
   public void testCompareFail() {

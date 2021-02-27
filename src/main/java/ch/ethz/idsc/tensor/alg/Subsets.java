@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.num.Binomial;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Subsets.html">Subsets</a>

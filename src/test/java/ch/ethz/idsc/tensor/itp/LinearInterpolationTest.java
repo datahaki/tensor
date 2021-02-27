@@ -135,7 +135,7 @@ public class LinearInterpolationTest extends TestCase {
     Tensor tensor = Range.of(1, 11);
     Interpolation interpolation = LinearInterpolation.of(tensor);
     Distribution distribution = DiscreteUniformDistribution.of(0, (tensor.length() - 1) * 3 + 1);
-    for (int count = 0; count < 30; ++count) {
+    for (int count = 0; count < 10; ++count) {
       Scalar index = RandomVariate.of(distribution).divide(RealScalar.of(3));
       Scalar scalar = interpolation.At(index);
       ExactScalarQ.require(scalar);

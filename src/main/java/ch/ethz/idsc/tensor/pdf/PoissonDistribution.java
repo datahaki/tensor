@@ -38,6 +38,12 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution implement
     return new PoissonDistribution(lambda);
   }
 
+  /** @param lambda strictly positive and <= 700
+   * @return */
+  public static Distribution of(Number lambda) {
+    return of(RealScalar.of(lambda));
+  }
+
   /***************************************************/
   private final Scalar lambda;
   private final Tensor values = Tensors.reserve(32);

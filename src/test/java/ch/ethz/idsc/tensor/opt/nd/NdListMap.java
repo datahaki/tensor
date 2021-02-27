@@ -2,7 +2,10 @@
 package ch.ethz.idsc.tensor.opt.nd;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Tensor;
 
@@ -21,17 +24,16 @@ public class NdListMap<V> implements NdMap<V> {
   }
 
   @Override // from NdMap
-  public NdCluster<V> buildCluster(NdCenterInterface ndCenterInterface, int limit) {
-    return new NdCluster<>(list, ndCenterInterface, limit);
+  public boolean isEmpty() {
+    return list.isEmpty();
   }
 
   @Override // from NdMap
-  public void clear() {
-    list.clear();
-  }
-
-  @Override
-  public boolean isEmpty() {
-    return size() == 0;
+  public Collection<NdMatch<V>> cluster(NdCenterInterface ndCenterInterface, int limit) {
+    return list.stream() //
+        .map(ndPair -> new NdMatch<>(ndPair.location(), ndPair.value(), ndCenterInterface.distance(ndPair.location()))) //
+        .sorted(NdMatchComparators.INCREASING) //
+        .limit(limit) //
+        .collect(Collectors.toCollection(LinkedList::new));
   }
 }

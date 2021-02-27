@@ -17,7 +17,7 @@ public enum HistogramTransform {
   ;
   private static final Scalar _255 = RealScalar.of(255);
 
-  /** @param tensor
+  /** @param tensor with entries in the interval [0, 1]
    * @return */
   public static Tensor of(Tensor tensor) {
     Dimensions dimensions = new Dimensions(tensor);
@@ -30,7 +30,9 @@ public enum HistogramTransform {
 
   private static Tensor rescale(Tensor tensor) {
     int[] values = new int[256];
-    tensor.flatten(1).map(Scalar.class::cast).map(Scalar::number) //
+    tensor.flatten(1) //
+        .map(Scalar.class::cast) //
+        .map(Scalar::number) //
         .forEach(number -> ++values[number.intValue()]);
     CDF cdf = CDF.of(EmpiricalDistribution.fromUnscaledPDF(Tensors.vectorInt(values)));
     return Rescale.of(tensor.map(cdf::p_lessThan));

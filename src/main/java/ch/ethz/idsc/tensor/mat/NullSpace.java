@@ -62,26 +62,10 @@ public enum NullSpace {
         : usingSvd(matrix);
   }
 
-  /** @param matrix with exact precision entries
+  /** @param matrix of dimensions n x m with exact precision entries
    * @return tensor of vectors that span the kernel of given matrix */
   public static Tensor usingRowReduce(Tensor matrix) {
     return LeftNullSpace.usingRowReduce(Transpose.of(matrix));
-  }
-
-  /** @param matrix of dimensions n x m with exact precision entries
-   * @param identity matrix of dimensions m x m that contains the unit vector
-   * for the scalar type of each column
-   * @return tensor of vectors that span the kernel of given matrix */
-  public static Tensor usingRowReduce(Tensor matrix, Tensor identity) {
-    return LeftNullSpace.usingRowReduce(Transpose.of(matrix), SquareMatrixQ.require(identity));
-  }
-
-  /** @param matrix
-   * @param identity
-   * @param pivot
-   * @return */
-  public static Tensor usingRowReduce(Tensor matrix, Tensor identity, Pivot pivot) {
-    return LeftNullSpace.usingRowReduce(Transpose.of(matrix), SquareMatrixQ.require(identity), pivot);
   }
 
   /** @param matrix of any dimensions
@@ -102,10 +86,9 @@ public enum NullSpace {
    * @param chop
    * @return tensor of vectors that span the kernel of given matrix */
   public static Tensor of(SingularValueDecomposition svd, Chop chop) {
-    Tensor vt = Transpose.of(svd.getV());
     return Tensor.of(IntStream.range(0, svd.values().length()) //
         .filter(index -> Scalars.isZero(chop.apply(svd.values().Get(index)))) //
-        .mapToObj(vt::get));
+        .mapToObj(index -> svd.getV().get(Tensor.ALL, index)));
   }
 
   /** @param svd

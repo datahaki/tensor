@@ -2,7 +2,7 @@
 package ch.ethz.idsc.tensor;
 
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
-import ch.ethz.idsc.tensor.pdf.NormalDistribution;
+import ch.ethz.idsc.tensor.pdf.ExponentialDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -21,7 +21,7 @@ public class ParallelizeTest extends TestCase {
   }
 
   public void testMatMat() {
-    Tensor a = RandomVariate.of(NormalDistribution.standard(), 3, 3);
+    Tensor a = RandomVariate.of(ExponentialDistribution.standard(), 3, 3);
     Tensor b = HilbertMatrix.of(3, 4);
     Tensor m1 = Parallelize.dot(a, b);
     Tensor m2 = a.dot(b);

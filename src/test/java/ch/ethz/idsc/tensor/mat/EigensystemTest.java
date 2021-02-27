@@ -1,33 +1,48 @@
 // code by jph
 package ch.ethz.idsc.tensor.mat;
 
+import java.io.IOException;
+
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.ext.HomeDirectory;
+import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
+import ch.ethz.idsc.tensor.nrm.MatrixInfinityNorm;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class EigensystemTest extends TestCase {
-  public void testDecomposition() {
+  public void testPhase1Tuning() throws IOException {
     Distribution distribution = UniformDistribution.of(-2, 2);
-    Tensor matrix = RandomVariate.of(distribution, 3, 3);
-    Tensor tensor = Symmetrize.of(matrix);
-    Eigensystem eigensystem = Eigensystem.ofSymmetric(tensor);
-    Tensor a = eigensystem.vectors();
-    Tensor values = eigensystem.values();
-    Chop._12.requireClose(tensor, Inverse.of(a).dot(values.pmul(a)));
-    Chop._12.requireClose(tensor, LinearSolve.of(a, values.pmul(a)));
+    for (int n = 1; n < 13; ++n) {
+      Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
+      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+      Tensor vectors = eigensystem.vectors();
+      Tensor values = eigensystem.values();
+      OrthogonalMatrixQ.require(vectors);
+      Tensor recons = Transpose.of(vectors).dot(values.pmul(vectors));
+      Scalar err = MatrixInfinityNorm.of(matrix.subtract(recons));
+      if (!Tolerance.CHOP.isClose(matrix, recons)) {
+        System.err.println(err);
+        // System.err.println("error");
+        System.out.println("n=" + n);
+        System.out.println(matrix);
+        Export.of(HomeDirectory.file("eigensystem.csv"), matrix);
+        fail();
+      }
+    }
   }
 
   public void testQuantity() {

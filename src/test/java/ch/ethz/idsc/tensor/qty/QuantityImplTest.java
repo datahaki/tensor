@@ -29,6 +29,12 @@ public class QuantityImplTest extends TestCase {
     Tolerance.CHOP.requireClose(Sign.FUNCTION.apply(value), result);
   }
 
+  public void testOneGuarantee() {
+    Scalar scalar = Quantity.of(123, "m*s^-2*K^1/2");
+    assertEquals(scalar.multiply(scalar.one()), scalar);
+    assertEquals(scalar.one().multiply(scalar), scalar);
+  }
+
   public void testExactIntFail() {
     Scalar scalar = Quantity.of(10, "m");
     AssertFail.of(() -> Scalars.intValueExact(scalar));

@@ -1,6 +1,9 @@
 // code by jph
 package ch.ethz.idsc.tensor.num;
 
+import java.util.Random;
+
+import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -34,13 +37,16 @@ public class PiTest extends TestCase {
 
   public void testString() {
     Scalar pi = Pi.in(110);
+    assertTrue(pi instanceof DecimalScalar);
     String PI99 = "3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706";
     assertTrue(pi.toString().startsWith(PI99));
   }
 
-  public void test1000() {
-    Scalar pi = Pi.in(1000);
-    double value = pi.multiply(RealScalar.of(2.0)).number().doubleValue();
+  public void test500() {
+    Random random = new Random();
+    Scalar pi = Pi.in(400 + random.nextInt(200));
+    assertTrue(pi instanceof DecimalScalar);
+    double value = pi.add(pi).number().doubleValue();
     assertEquals(value, 2 * Math.PI);
   }
 
@@ -48,5 +54,6 @@ public class PiTest extends TestCase {
     assertEquals(Pi.VALUE.number().doubleValue(), Math.PI);
     assertEquals(Pi.HALF.number().doubleValue(), Math.PI * 0.5);
     assertEquals(Pi.TWO.number().doubleValue(), Math.PI / 0.5);
+    assertEquals(Pi.TWO.number().doubleValue(), Math.PI + Math.PI);
   }
 }

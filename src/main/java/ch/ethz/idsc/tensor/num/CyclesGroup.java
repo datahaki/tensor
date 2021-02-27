@@ -5,7 +5,7 @@ package ch.ethz.idsc.tensor.num;
   INSTANCE;
 
   @Override // from GroupInterface
-  public Cycles identity() {
+  public Cycles neutral(Cycles cycles) {
     return Cycles.identity();
   }
 
@@ -17,5 +17,10 @@ package ch.ethz.idsc.tensor.num;
   @Override // from GroupInterface
   public Cycles combine(Cycles cycles1, Cycles cycles2) {
     return cycles1.combine(cycles2);
+  }
+
+  @Override // from Object
+  public String toString() {
+    return getClass().getSimpleName();
   }
 }

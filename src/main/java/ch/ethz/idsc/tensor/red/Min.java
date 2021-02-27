@@ -20,6 +20,11 @@ public enum Min {
   ;
   /** function is a {@link BinaryOperator} that can be used in reduce()
    * 
+   * Symmetry shall be guaranteed
+   * <pre>
+   * Min[a, b] == Min[b, a]
+   * </pre>
+   * 
    * @param a
    * @param b
    * @return the smaller one among a and b */
