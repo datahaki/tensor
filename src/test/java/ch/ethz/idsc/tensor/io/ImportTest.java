@@ -8,12 +8,16 @@ import java.util.Arrays;
 import java.util.Properties;
 import java.util.zip.DataFormatException;
 
+import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.ext.HomeDirectory;
+import ch.ethz.idsc.tensor.lie.Quaternion;
+import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.TestFile;
 import junit.framework.TestCase;
@@ -23,6 +27,14 @@ public class ImportTest extends TestCase {
   public static final File IO_OBJECT_TENSOR = new File(IO_OBJECT, "tensor.object");
   public static final File IO_OBJECT_UNMODIFIABLE = new File(IO_OBJECT, "unmodifiable.object");
   public static final File IO_OBJECT_VIEWTENSOR = new File(IO_OBJECT, "viewtensor.object");
+  public static final Tensor CONTENT = Tensors.of( //
+      RealScalar.ONE, //
+      RealScalar.of(3.15), //
+      Pi.in(30), //
+      ComplexScalar.of(2, 3), //
+      Quantity.of(3, "m"), //
+      GaussScalar.of(3, 17), //
+      Quaternion.of(3, 4, 5, 6));
 
   public void testCsv() throws Exception {
     String string = "/io/libreoffice_calc.csv";
@@ -134,17 +146,18 @@ public class ImportTest extends TestCase {
 
   public void testSerialization1() throws ClassNotFoundException, IOException, DataFormatException {
     Tensor tensor = Import.object(IO_OBJECT_TENSOR);
-    VectorQ.requireLength(tensor, 7);
+    assertEquals(tensor, CONTENT);
   }
 
   public void testSerialization2() throws ClassNotFoundException, IOException, DataFormatException {
     Tensor tensor = Import.object(IO_OBJECT_UNMODIFIABLE);
     assertTrue(Tensors.isUnmodifiable(tensor));
+    assertEquals(tensor, CONTENT);
   }
 
   public void testSerialization3() throws ClassNotFoundException, IOException, DataFormatException {
     Tensor tensor = Import.object(IO_OBJECT_VIEWTENSOR);
-    VectorQ.requireLength(tensor, 7);
+    assertEquals(tensor, CONTENT);
   }
 
   public void testUnknownFail() {

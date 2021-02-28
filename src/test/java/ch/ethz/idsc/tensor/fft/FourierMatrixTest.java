@@ -33,7 +33,7 @@ public class FourierMatrixTest extends TestCase {
 
   public void testSeveral() {
     Random random = new Random();
-    int n = random.nextInt(20);
+    int n = 1 + random.nextInt(20);
     checkFormat(n);
   }
 
