@@ -16,8 +16,6 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
  * @see WindowFunctions */
 // LONGTERM API so that domain of frequencies is also provided
 public class PeriodogramArray implements TensorUnaryOperator {
-  private static final long serialVersionUID = 3155296618510267724L;
-
   /** @param vector of length of power of 2
    * @return */
   public static Tensor of(Tensor vector) {

@@ -19,7 +19,6 @@ import ch.ethz.idsc.tensor.ext.Cache;
  * 
  * all instances of UnitImpl are managed in a LRU cache */
 /* package */ class UnitImpl implements Unit, Serializable {
-  private static final long serialVersionUID = -2807221907647012658L;
   /* package */ static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> NEGATION = //
       Collectors.toMap(Entry::getKey, entry -> entry.getValue().negate(), (e1, e2) -> null, TreeMap::new);
   private static final int MAX_SIZE = 1536;

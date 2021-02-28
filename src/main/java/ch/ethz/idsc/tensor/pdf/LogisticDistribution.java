@@ -20,8 +20,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/LogisticDistribution.html">LogisticDistribution</a> */
 public class LogisticDistribution extends AbstractContinuousDistribution implements //
     InverseCDF, MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = -8364118960441151907L;
-
   /** @param a
    * @param b positive
    * @return */

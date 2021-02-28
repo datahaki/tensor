@@ -22,7 +22,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class SingularValueDecompositionImpl implements SingularValueDecomposition, Serializable {
-  private static final long serialVersionUID = 8459661522219717576L;
   private static final Scalar _0 = DoubleScalar.of(0);
   private static final Scalar _1 = DoubleScalar.of(1);
   /** Difference between 1.0 and the minimum double greater than 1.0

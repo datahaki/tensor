@@ -37,7 +37,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * Implementation also works for matrices with entries of type Quantity of
  * the same unit. */
 /* package */ class JacobiMethod implements Eigensystem, Serializable {
-  private static final long serialVersionUID = 2799414918075169266L;
   private static final int MAX_ITERATIONS = 50;
   // higher phase 1 count increases numerical precision
   private static final int[] PHASE1 = { //

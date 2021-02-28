@@ -18,8 +18,6 @@ import ch.ethz.idsc.tensor.io.ScalarArray;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/InterpolatingPolynomial.html">InterpolatingPolynomial</a> */
 public class InterpolatingPolynomial implements Serializable {
-  private static final long serialVersionUID = -3507853230017899224L;
-
   /** @param binaryAverage
    * @param knots vector not necessarily ordered
    * @return
@@ -68,8 +66,6 @@ public class InterpolatingPolynomial implements Serializable {
    * 
    * https://en.wikipedia.org/wiki/Neville%27s_algorithm */
   private class Neville implements ScalarTensorFunction {
-    private static final long serialVersionUID = 5871543416439774702L;
-    // ---
     private final Tensor tensor;
 
     public Neville(Tensor tensor) {

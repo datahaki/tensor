@@ -10,8 +10,6 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 /** @throws Exception if input is not a vector, or is empty
  * @throws Exception if vector contains Infinity, or NaN */
 public class NormalizeUnlessZero implements TensorUnaryOperator {
-  private static final long serialVersionUID = 4106942121069992504L;
-
   /** @param tensorScalarFunction
    * @return operator that normalizes vectors using given tensorScalarFunction unless given vector has length 0 */
   public static TensorUnaryOperator with(TensorScalarFunction tensorScalarFunction) {

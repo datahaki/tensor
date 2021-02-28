@@ -33,8 +33,6 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Quantile.html">Quantile</a> */
 public class Quantile implements ScalarUnaryOperator {
-  private static final long serialVersionUID = -4076649064391350185L;
-
   /** @param vector non-empty
    * @return
    * @throws Exception if input is a scalar */

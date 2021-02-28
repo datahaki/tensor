@@ -29,8 +29,6 @@ import ch.ethz.idsc.tensor.Unprotect;
  * Entrywise.with(Scalar::multiply).of(Tensors.of(a, b, c)) == a.pmul(b).pmul(c)
  * </pre> */
 public class Entrywise implements BinaryOperator<Tensor>, Serializable {
-  private static final long serialVersionUID = -4067859737114270675L;
-
   /** @param binaryOperator non-null
    * @return
    * @throws Exception if given binaryOperator is null */

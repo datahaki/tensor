@@ -61,6 +61,11 @@ public class FourierTest extends TestCase {
     AssertFail.of(() -> Fourier.of(Tensors.empty()));
   }
 
+  public void test3Fail() {
+    Tensor vector = Tensors.vector(1, 2, 0);
+    AssertFail.of(() -> Fourier.of(vector));
+  }
+
   public void testFailMatrix() {
     AssertFail.of(() -> Fourier.of(HilbertMatrix.of(4)));
   }

@@ -8,8 +8,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 public class NdMatch<V> implements Serializable {
-  private static final long serialVersionUID = -1617952707165304933L;
-  // ---
   private final Tensor location;
   private final V value;
   private final Scalar distance;

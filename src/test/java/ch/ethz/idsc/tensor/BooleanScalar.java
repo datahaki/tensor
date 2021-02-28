@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.api.SqrtInterface;
  * addition is logical XOR */
 /* package */ final class BooleanScalar extends AbstractScalar implements //
     Comparable<Scalar>, ExactScalarQInterface, Serializable, SqrtInterface {
-  private static final long serialVersionUID = 2094663276744533333L;
   /** instance with value true, toString() == "true" */
   public static final Scalar TRUE = new BooleanScalar(true);
   /** instance with value false, toString() == "false" */

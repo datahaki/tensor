@@ -44,4 +44,20 @@ public class IntegersTest extends TestCase {
     int value = -1;
     assertEquals(value & 1, 1);
   }
+
+  public void testPowerOf2() {
+    assertTrue(Integers.isPowerOf2(1));
+    assertTrue(Integers.isPowerOf2(2));
+    assertFalse(Integers.isPowerOf2(3));
+    assertTrue(Integers.isPowerOf2(4));
+    assertFalse(Integers.isPowerOf2(5));
+    assertFalse(Integers.isPowerOf2(6));
+  }
+
+  public void testPowerOf2Fail() {
+    AssertFail.of(() -> Integers.isPowerOf2(-3));
+    AssertFail.of(() -> Integers.isPowerOf2(-2));
+    AssertFail.of(() -> Integers.isPowerOf2(-1));
+    AssertFail.of(() -> Integers.isPowerOf2(0));
+  }
 }

@@ -23,7 +23,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * <a href="https://en.wikipedia.org/wiki/Trapezoidal_distribution">TrapezoidalDistribution</a> */
 public class TrapezoidalDistribution extends AbstractContinuousDistribution implements //
     InverseCDF, MeanInterface, Serializable {
-  private static final long serialVersionUID = -5515848086212190510L;
   private static final Scalar _1_3 = RationalScalar.of(1, 3);
 
   /** @param a

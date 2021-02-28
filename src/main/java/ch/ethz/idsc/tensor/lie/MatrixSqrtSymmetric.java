@@ -20,7 +20,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * 
  * @see MatrixPower */
 /* package */ class MatrixSqrtSymmetric implements MatrixSqrt, Serializable {
-  private static final long serialVersionUID = 1292060157590312774L;
   private final Tensor avec;
   private final Tensor ainv;
   private final Tensor sqrt;

@@ -33,7 +33,6 @@ import ch.ethz.idsc.tensor.sca.N;
  * @see Pi */
 public class DecimalScalar extends AbstractRealScalar implements //
     ChopInterface, NInterface, Serializable {
-  private static final long serialVersionUID = -8505786185052895466L;
   private static final int DEFAULT_CONTEXT = 34;
   private static final Scalar DECIMAL_ZERO = of(BigDecimal.ZERO);
   private static final Scalar DECIMAL_ONE = of(BigDecimal.ONE);

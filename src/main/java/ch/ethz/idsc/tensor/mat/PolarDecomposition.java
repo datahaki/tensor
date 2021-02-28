@@ -18,8 +18,6 @@ import ch.ethz.idsc.tensor.sca.Conjugate;
  * "Meshless Deformations Based on Shape Matching"
  * by M. Mueller, B. Heidelberger, M. Teschner, M. Gross, 2005 */
 public class PolarDecomposition implements Serializable {
-  private static final long serialVersionUID = -5255733199870287118L;
-
   /** also works for complex input
    * 
    * @param matrix of dimensions k x n with k <= n
@@ -36,7 +34,7 @@ public class PolarDecomposition implements Serializable {
 
   private PolarDecomposition(Tensor matrix) {
     this.matrix = matrix;
-    matrixSqrt = MatrixSqrt.of(MatrixDotTranspose.of(matrix, Conjugate.of(matrix)));
+    matrixSqrt = MatrixSqrt.ofSymmetric(MatrixDotTranspose.of(matrix, Conjugate.of(matrix)));
   }
 
   /** @return symmetric matrix k x k */

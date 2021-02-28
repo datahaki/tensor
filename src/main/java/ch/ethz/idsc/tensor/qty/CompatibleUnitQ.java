@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.Scalar;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CompatibleUnitQ.html">CompatibleUnitQ</a> */
 public class CompatibleUnitQ implements Serializable {
-  private static final long serialVersionUID = 8210243825315852665L;
   private static final CompatibleUnitQ SI = in(UnitSystem.SI());
 
   /** @param unitSystem non-null
@@ -50,8 +49,6 @@ public class CompatibleUnitQ implements Serializable {
   }
 
   private class Inner implements Predicate<Scalar>, Serializable {
-    private static final long serialVersionUID = -3687831956654446614L;
-    // ---
     private final Unit base;
 
     public Inner(Unit unit) {

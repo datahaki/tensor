@@ -16,7 +16,6 @@ import ch.ethz.idsc.tensor.sca.Power;
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/UnitDimensions.html">UnitDimensions</a> */
 public class UnitDimensions implements Serializable {
-  private static final long serialVersionUID = 4465341212796035153L;
   private static final int MAX_SIZE = 768;
   @SuppressWarnings("unchecked")
   private final Cache<Unit, Unit> cache = //

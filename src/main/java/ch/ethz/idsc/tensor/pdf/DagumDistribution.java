@@ -17,8 +17,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/DagumDistribution.html">DagumDistribution</a> */
 public class DagumDistribution extends AbstractContinuousDistribution implements //
     InverseCDF, Serializable {
-  private static final long serialVersionUID = -3974668493015286288L;
-
   /** @param p positive
    * @param a positive
    * @param b positive

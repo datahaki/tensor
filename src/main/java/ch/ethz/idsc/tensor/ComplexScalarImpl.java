@@ -31,7 +31,6 @@ import ch.ethz.idsc.tensor.sca.Sinh;
 
 /* package */ class ComplexScalarImpl extends AbstractScalar implements ComplexScalar, //
     ChopInterface, ExactScalarQInterface, MachineNumberQInterface, NInterface, Serializable {
-  private static final long serialVersionUID = 3023231904329254618L;
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
 
   /** creator with package visibility

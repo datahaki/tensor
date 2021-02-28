@@ -23,8 +23,6 @@ import ch.ethz.idsc.tensor.sca.Power;
  * <li>p==Infinity identical to {@link VectorInfinityNorm}
  * </ul> */
 public class VectorNorm implements TensorScalarFunction {
-  private static final long serialVersionUID = -913697110648849886L;
-
   /** Hint: for enhanced precision, use p as instance of {@link RationalScalar} if possible
    * 
    * @param p exponent greater or equals 1

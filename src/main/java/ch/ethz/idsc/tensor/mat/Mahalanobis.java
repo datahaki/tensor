@@ -31,8 +31,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * 
  * @see InfluenceMatrix */
 public final class Mahalanobis implements InfluenceMatrix, Serializable {
-  private static final long serialVersionUID = -5381451862439751058L;
-  // ---
   private final Tensor design;
   private final Tensor design_t;
   private final Tensor sigma;

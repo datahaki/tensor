@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.sca.Exp;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/PoissonWindow.html">PoissonWindow</a> */
 public class PoissonWindow extends ParameterizedWindow {
-  private static final long serialVersionUID = -7104096892919833891L;
   public static final ScalarUnaryOperator FUNCTION = of(RealScalar.of(3));
 
   /** @param alpha

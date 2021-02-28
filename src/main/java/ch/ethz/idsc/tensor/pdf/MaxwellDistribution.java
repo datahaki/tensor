@@ -15,7 +15,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * <a href="https://reference.wolfram.com/language/ref/MaxwellDistribution.html">MaxwellDistribution</a> */
 public class MaxwellDistribution implements //
     Distribution, CDF, PDF, MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = -5299661119590682500L;
   private static final Scalar VAR = RealScalar.of(3).subtract(RealScalar.of(8).divide(Pi.VALUE));
   private static final Scalar SQRT_2 = Sqrt.FUNCTION.apply(RealScalar.TWO);
   private static final Scalar SQRT_PI_2 = Sqrt.FUNCTION.apply(Pi.HALF);

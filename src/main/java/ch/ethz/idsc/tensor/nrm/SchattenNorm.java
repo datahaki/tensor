@@ -19,8 +19,6 @@ import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
  * @see Matrix2Norm
  * @see MatrixInfinityNorm */
 public class SchattenNorm implements TensorScalarFunction {
-  private static final long serialVersionUID = -3237076807560620127L;
-
   /** Hint: for enhanced precision, use p as instance of {@link RationalScalar} if possible
    *
    * @param p exponent greater or equals 1

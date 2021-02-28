@@ -17,8 +17,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/LaplaceDistribution.html">LaplaceDistribution</a> */
 public class LaplaceDistribution extends AbstractContinuousDistribution implements //
     InverseCDF, MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = -4995302948587492778L;
-
   /** @param mean
    * @param beta positive
    * @return */

@@ -12,8 +12,6 @@ import ch.ethz.idsc.tensor.sca.Power;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/PascalDistribution.html">PascalDistribution</a> */
 public class PascalDistribution extends EvaluatedDiscreteDistribution implements VarianceInterface {
-  private static final long serialVersionUID = -5703569071551863938L;
-
   /** @param n positive number of successes
    * @param p success probability in the unit interval [0, 1]
    * @return distribution of the number of trials with success probability p before n successes occur

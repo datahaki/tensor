@@ -11,8 +11,6 @@ import ch.ethz.idsc.tensor.sca.Abs;
 
 /** https://en.wikipedia.org/wiki/Newton%27s_method */
 /* package */ class NewtonScalarMethod implements ScalarUnaryOperator {
-  private static final long serialVersionUID = 2762141067434938871L;
-
   public static NewtonScalarMethod polynomial(Tensor coeffs) {
     return new NewtonScalarMethod( //
         Series.of(coeffs), //

@@ -23,7 +23,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * @see PoissonDistribution
  * @see PascalDistribution */
 public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDistribution implements Serializable {
-  private static final long serialVersionUID = -7119882456879892887L;
   private static final Scalar _0 = DoubleScalar.of(0);
   private static final Scalar _1 = DoubleScalar.of(1);
   // ---

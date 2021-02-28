@@ -22,8 +22,6 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
  * @see UnitConvert
  * @see UnitDimensions */
 public class UnitSimplify implements ScalarUnaryOperator {
-  private static final long serialVersionUID = 6850802412643722064L;
-
   /** @param unitSystem
    * @param set of target units for example, consisting of the units "kW", "kW*h^-1", and "N*m", etc.
    * @return

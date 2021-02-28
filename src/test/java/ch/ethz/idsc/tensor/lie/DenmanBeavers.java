@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.mat.Tolerance;
 
 /** iteration to converge to sqrt of matrix */
 /* package */ class DenmanBeavers implements MatrixSqrt, Serializable {
-  private static final long serialVersionUID = -6255470234569408987L;
   private static final int MAX_ITERATIONS = 100;
   private static final Scalar HALF = RealScalar.of(0.5);
   /***************************************************/

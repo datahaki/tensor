@@ -8,8 +8,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 
 public class EuclideanNdCenter implements NdCenterInterface, Serializable {
-  private static final long serialVersionUID = -8327079294807945414L;
-
   /** @param center vector
    * @return */
   public static NdCenterInterface of(Tensor center) {

@@ -31,8 +31,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class QuantityImpl extends AbstractScalar implements Quantity, //
     ChopInterface, ExactScalarQInterface, NInterface, Serializable {
-  private static final long serialVersionUID = 7640951892765373434L;
-
   /** @param value is assumed to be not instance of {@link Quantity}
    * @param unit
    * @return */

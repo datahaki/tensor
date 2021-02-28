@@ -9,8 +9,6 @@ import ch.ethz.idsc.tensor.Unprotect;
 
 /** @see Orthogonalize */
 /* package */ class QRMathematica implements QRDecomposition, Serializable {
-  private static final long serialVersionUID = 1117960065957628905L;
-
   /** @param qrDecomposition of matrix with dimensions n x m
    * @return */
   public static QRDecomposition wrap(QRDecomposition qrDecomposition) {

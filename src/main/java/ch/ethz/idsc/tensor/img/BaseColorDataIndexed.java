@@ -10,8 +10,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 
 /* package */ abstract class BaseColorDataIndexed implements ColorDataIndexed {
-  private static final long serialVersionUID = 5773213987977907034L;
-  // ---
   private final Tensor tensor;
   protected final Color[] colors;
 

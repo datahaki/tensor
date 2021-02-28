@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * <a href="https://reference.wolfram.com/language/ref/NormalDistribution.html">NormalDistribution</a> */
 public class NormalDistribution implements //
     ContinuousDistribution, InverseCDF, MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = 5484360239742324457L;
-
   /** The parameters mean and sigma may be of type Quantity with identical Unit.
    * 
    * @param mean

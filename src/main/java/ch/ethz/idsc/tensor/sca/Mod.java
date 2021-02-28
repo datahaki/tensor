@@ -17,8 +17,6 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
  * <a href="https://reference.wolfram.com/language/ref/Mod.html">Mod</a> */
 // LONGTERM implement https://en.wikipedia.org/wiki/Modular_arithmetic
 public class Mod implements ScalarUnaryOperator {
-  private static final long serialVersionUID = 8055478228002130967L;
-
   /** @param n
    * @return remainder on division by n */
   public static Mod function(Scalar n) {

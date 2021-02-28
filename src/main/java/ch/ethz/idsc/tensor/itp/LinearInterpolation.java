@@ -24,8 +24,6 @@ import ch.ethz.idsc.tensor.sca.Increment;
  * 
  * <p>Remark: for scalar inverse linear interpolation use {@link Clip#rescale(Scalar)} */
 public class LinearInterpolation extends AbstractInterpolation implements Serializable {
-  private static final long serialVersionUID = -1073851838848178138L;
-
   /** @param tensor not instance of {@link Scalar}
    * @return
    * @throws Exception if tensor == null */

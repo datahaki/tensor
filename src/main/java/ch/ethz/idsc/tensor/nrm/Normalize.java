@@ -39,8 +39,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Normalize.html">Normalize</a> */
 public class Normalize implements TensorUnaryOperator {
-  private static final long serialVersionUID = 1092317967870256569L;
-
   /** Examples:
    * <pre>
    * Normalize.with(Vector1Norm::of).apply({2, -3, 1}) == {1/3, -1/2, 1/6}

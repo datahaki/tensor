@@ -6,8 +6,6 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class InfluenceMatrixExact extends InfluenceMatrixBase implements Serializable {
-  private static final long serialVersionUID = 8871352443406867104L;
-  // ---
   private final Tensor matrix;
 
   /** @param influence matrix == design . design^+ */

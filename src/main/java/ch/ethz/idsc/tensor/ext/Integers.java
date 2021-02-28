@@ -28,4 +28,13 @@ public enum Integers {
   public static boolean isEven(int value) {
     return (value & 1) == 0;
   }
+
+  /** @param value strictly positive
+   * @return true if value is a power of 2, e.g. 1, 2, 4, 8, 16, etc.
+   * @throws Exception if given value is negative or zero */
+  public static boolean isPowerOf2(int value) {
+    if (value <= 0)
+      throw new IllegalArgumentException(Integer.toString(value));
+    return 0 == (value & (value - 1));
+  }
 }

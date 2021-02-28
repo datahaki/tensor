@@ -19,8 +19,6 @@ import ch.ethz.idsc.tensor.red.Times;
  * householder with even number of reflections
  * reproduces example on wikipedia */
 /* package */ class QRDecompositionImpl implements QRDecomposition, Serializable {
-  private static final long serialVersionUID = -7441079810601672527L;
-  // ---
   private final int m;
   private final Tensor R;
   private final Tensor Qinv;

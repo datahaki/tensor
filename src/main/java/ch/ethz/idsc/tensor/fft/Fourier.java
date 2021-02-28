@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.ext.Integers;
 import ch.ethz.idsc.tensor.io.ScalarArray;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Sqrt;
@@ -37,8 +38,8 @@ public enum Fourier {
    * @param b is +1 for forward, and -1 for inverse transform
    * @return discrete Fourier transform of given vector */
   public static Tensor of(Tensor vector, int b) {
-    final int n = vector.length();
-    if (n == 0 || 0 != (n & (n - 1)))
+    int n = vector.length();
+    if (!Integers.isPowerOf2(n))
       throw TensorRuntimeException.of(vector); // vector length is not a power of two
     Scalar[] array = ScalarArray.ofVector(vector);
     {

@@ -9,8 +9,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 
 /* package */ class InfluenceMatrixSvd extends InfluenceMatrixBase implements Serializable {
-  private static final long serialVersionUID = 205144364159511828L;
-  // ---
   private final Tensor design;
   private final SingularValueDecomposition svd;
   /* matrix is computed on demand */

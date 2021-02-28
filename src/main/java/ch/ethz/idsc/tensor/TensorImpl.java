@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 
 /** reference implementation of the interface Tensor */
 /* package */ class TensorImpl implements Tensor, Serializable {
-  private static final long serialVersionUID = -642678320354697415L;
   /** list is accessed by UnmodifiableTensor, Parallelize, Unprotect, ViewTensor */
   /* package */ final List<Tensor> list;
 

@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /** safety critical code used for the gokart steering system */
 /* package */ class InverseSteerCubic implements ScalarUnaryOperator {
-  private static final long serialVersionUID = 2598194635059800857L;
   private final Scalar b;
   private final Scalar d;
 

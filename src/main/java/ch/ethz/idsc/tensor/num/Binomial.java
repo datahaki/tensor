@@ -24,7 +24,6 @@ import ch.ethz.idsc.tensor.sca.Gamma;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Binomial.html">Binomial</a> */
 public class Binomial implements Serializable {
-  private static final long serialVersionUID = 8241550724943172855L;
   private static final int MAX_SIZE = 384;
   private static final Function<Integer, Binomial> CACHE = Cache.of(Binomial::new, MAX_SIZE);
 

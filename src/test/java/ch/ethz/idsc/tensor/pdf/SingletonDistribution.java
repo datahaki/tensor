@@ -9,7 +9,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.red.KroneckerDelta;
 
 /* package */ class SingletonDistribution implements DiscreteDistribution, Serializable {
-  private static final long serialVersionUID = -3837826783641722888L;
   private final int value;
   private final Scalar scalar;
 

@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/WelchWindow.html">WelchWindow</a> */
 public class WelchWindow extends ParameterizedWindow {
-  private static final long serialVersionUID = 3862546958843635679L;
   private static final Scalar _4 = RealScalar.of(4);
   public static final ScalarUnaryOperator FUNCTION = of(RealScalar.ONE);
 

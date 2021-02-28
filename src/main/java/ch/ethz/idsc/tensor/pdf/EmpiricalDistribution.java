@@ -33,8 +33,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/EmpiricalDistribution.html">EmpiricalDistribution</a> */
 public class EmpiricalDistribution extends EvaluatedDiscreteDistribution implements CDF {
-  private static final long serialVersionUID = -5684276609397808083L;
-
   /** @param unscaledPDF vector of non-negative weights over the numbers
    * [0, 1, 2, ..., unscaledPDF.length() - 1]
    * @return

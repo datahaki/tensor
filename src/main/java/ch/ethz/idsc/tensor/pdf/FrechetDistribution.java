@@ -24,7 +24,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/FrechetDistribution.html">FrechetDistribution</a> */
 public class FrechetDistribution extends AbstractContinuousDistribution implements //
     InverseCDF, MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = 2354335647070308513L;
   private static final double NEXT_DOWN_ONE = Math.nextDown(1.0);
 
   /** @param alpha positive

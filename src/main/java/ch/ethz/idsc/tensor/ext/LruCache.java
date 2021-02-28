@@ -9,8 +9,6 @@ import java.util.Map;
  * Remark: implementation is not thread safe!
  * For multi-threaded access wrap lru cache into synchronized structure */
 public class LruCache<K, V> extends LinkedHashMap<K, V> {
-  private static final long serialVersionUID = -5483534524510898608L;
-  // ---
   private final int maxSize;
 
   /** @param maxSize

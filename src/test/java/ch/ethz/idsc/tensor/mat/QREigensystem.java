@@ -9,7 +9,6 @@ import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /* package */ class QREigensystem implements Eigensystem, Serializable {
-  private static final long serialVersionUID = -852069101623835341L;
   private static final int MAX_ITERATIONS = 20;
   // ---
   QRDecomposition qrDecomposition;

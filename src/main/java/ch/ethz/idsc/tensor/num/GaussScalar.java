@@ -26,8 +26,6 @@ public class GaussScalar extends AbstractScalar implements //
     AbsInterface, ConjugateInterface, ExactScalarQInterface, PowerInterface, //
     RoundingInterface, SignInterface, SqrtInterface, //
     Comparable<Scalar>, Serializable {
-  private static final long serialVersionUID = -4408349912290491124L;
-
   /** @param value
    * @param prime number
    * @return value in finite field with prime number of elements

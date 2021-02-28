@@ -21,8 +21,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ErlangDistribution.html">ErlangDistribution</a> */
 public class ErlangDistribution implements Distribution, MeanInterface, PDF, VarianceInterface, Serializable {
-  private static final long serialVersionUID = -2362167052497480668L;
-
   /** @param k positive integer
    * @param lambda, may be instance of {@link Quantity}
    * @return
