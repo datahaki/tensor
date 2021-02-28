@@ -34,15 +34,15 @@ public class PolarDecomposition implements Serializable {
 
   private PolarDecomposition(Tensor matrix) {
     this.matrix = matrix;
-    matrixSqrt = MatrixSqrt.ofSymmetric(MatrixDotTranspose.of(matrix, Conjugate.of(matrix)));
+    matrixSqrt = MatrixSqrt.of(MatrixDotTranspose.of(matrix, Conjugate.of(matrix)));
   }
 
-  /** @return symmetric matrix k x k */
+  /** @return symmetric (or Hermitian) matrix k x k */
   public Tensor getS() {
     return matrixSqrt.sqrt();
   }
 
-  /** @return orthogonal matrix of dimensions k x n with determinant either +1 or -1
+  /** @return orthogonal (or unitary) matrix of dimensions k x n with determinant either +1 or -1
    * @see OrthogonalMatrixQ
    * @see UnitaryMatrixQ */
   public Tensor getR() {

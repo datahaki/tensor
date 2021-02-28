@@ -134,7 +134,7 @@ public class ImportTest extends TestCase {
 
   public void testSerialization1() throws ClassNotFoundException, IOException, DataFormatException {
     Tensor tensor = Import.object(IO_OBJECT_TENSOR);
-    VectorQ.requireLength(tensor, 3);
+    VectorQ.requireLength(tensor, 7);
   }
 
   public void testSerialization2() throws ClassNotFoundException, IOException, DataFormatException {
@@ -144,7 +144,7 @@ public class ImportTest extends TestCase {
 
   public void testSerialization3() throws ClassNotFoundException, IOException, DataFormatException {
     Tensor tensor = Import.object(IO_OBJECT_VIEWTENSOR);
-    VectorQ.requireLength(tensor, 3);
+    VectorQ.requireLength(tensor, 7);
   }
 
   public void testUnknownFail() {

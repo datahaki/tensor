@@ -24,6 +24,7 @@ import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.VectorAngle;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.Conjugate;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -121,6 +122,9 @@ public class OrthogonalizeTest extends TestCase {
 
   public void testComplex() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
+    Tensor mmt = MatrixDotTranspose.of(matrix, Conjugate.of(matrix));
+    HermitianMatrixQ.require(mmt);
+    // System.out.println(Pretty.of(mmt));
     Tensor q1 = Orthogonalize.of(matrix);
     // System.out.println(q1);
     assertTrue(UnitaryMatrixQ.of(q1));
