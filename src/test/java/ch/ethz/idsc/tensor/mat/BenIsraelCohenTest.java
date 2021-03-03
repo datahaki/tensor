@@ -48,6 +48,31 @@ public class BenIsraelCohenTest extends TestCase {
     Chop._08.requireClose(pinv, PseudoInverse.of(svd));
   }
 
+  public void testMixedUnitsSquare() {
+    Tensor matrix = Tensors.fromString( //
+        "{{-4/5[m^-2], 3/10[m^-1*rad^-1]}, {3/10[m^-1*rad^-1], -1/20[rad^-2]}}");
+    Tensor inv1 = Inverse.of(matrix);
+    Tensor pinv = BenIsraelCohen.of(matrix);
+    Tolerance.CHOP.requireClose(inv1, pinv);
+  }
+
+  public void testMixedUnitsGeneral() {
+    Tensor matrix = Tensors.fromString( //
+        "{{-4/5[m], 3/10[m], 1/2[m]}, {3[s], -2[s], 1[s]}}");
+    Tensor pinv1 = BenIsraelCohen.of(matrix);
+    Tensor pinv2 = BenIsraelCohen.of(Transpose.of(matrix));
+    Tolerance.CHOP.requireClose(Transpose.of(pinv1), pinv2);
+    InfluenceMatrixExact influenceMatrixExact = new InfluenceMatrixExact(pinv1.dot(matrix));
+    influenceMatrixExact.leverages();
+    Tolerance.CHOP.requireClose(matrix.dot(pinv1), IdentityMatrix.of(2));
+  }
+
+  public void testMixedUnitsFail() {
+    Tensor matrix = Tensors.fromString( //
+        "{{-4/5[kg], 3/10[m], 1/2[m]}, {3[s], -2[s], 1[s]}}");
+    AssertFail.of(() -> BenIsraelCohen.of(matrix));
+  }
+
   public void testZeros() {
     Tensor refine = BenIsraelCohen.of(Array.zeros(4, 3));
     assertEquals(refine, Array.zeros(3, 4));
@@ -63,7 +88,7 @@ public class BenIsraelCohenTest extends TestCase {
     Tensor p2 = RandomVariate.of(distribution, 3, 4);
     Tensor matrix = p1.dot(p2);
     Tensor refine = BenIsraelCohen.of(matrix);
-    Tolerance.CHOP.requireClose(PseudoInverse.of(matrix), refine);
+    Chop._09.requireClose(PseudoInverse.of(matrix), refine);
     InfluenceMatrix influenceMatrix = new InfluenceMatrixExact(refine.dot(matrix));
     Chop._09.requireClose(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(3));
   }

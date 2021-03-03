@@ -13,6 +13,7 @@ public interface MatrixSqrt {
    * @param matrix square with no negative, or zero eigenvalues
    * @return sqrt of given matrix */
   static MatrixSqrt of(Tensor matrix) {
+    // TODO change logic: check real-symmetric first
     try {
       return new DenmanBeaversDet(matrix, Tolerance.CHOP);
     } catch (Exception exception) {
