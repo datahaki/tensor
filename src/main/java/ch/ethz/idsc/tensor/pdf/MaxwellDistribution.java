@@ -11,7 +11,9 @@ import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
-/** inspired by
+/** "MaxwellDistribution is also known as Maxwell-Boltzmann distribution."
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/MaxwellDistribution.html">MaxwellDistribution</a> */
 public class MaxwellDistribution implements //
     Distribution, CDF, PDF, MeanInterface, VarianceInterface, Serializable {

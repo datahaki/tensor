@@ -17,7 +17,7 @@ import ch.ethz.idsc.tensor.sca.Tan;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CauchyDistribution.html">CauchyDistribution</a> */
 public class CauchyDistribution extends AbstractContinuousDistribution implements //
-    MeanInterface, VarianceInterface, InverseCDF, Serializable {
+    MeanInterface, VarianceInterface, Serializable {
   private static final Distribution STANDARD = CauchyDistribution.of(RealScalar.ZERO, RealScalar.ONE);
 
   /** @param a

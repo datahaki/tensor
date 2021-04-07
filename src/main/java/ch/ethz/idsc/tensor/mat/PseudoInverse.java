@@ -49,7 +49,10 @@ public enum PseudoInverse {
       } catch (Exception exception) {
         // matrix does not have maximal rank
       }
-    boolean complex = matrix.flatten(2).map(Scalar.class::cast).map(Imag.FUNCTION).anyMatch(Scalars::nonZero);
+    boolean complex = matrix.flatten(2) //
+        .map(Scalar.class::cast) //
+        .map(Imag.FUNCTION) //
+        .anyMatch(Scalars::nonZero);
     if (complex)
       return BenIsraelCohen.of(matrix);
     return usingSvd(matrix);

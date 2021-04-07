@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.sca.Increment;
 
 /** EqualizingDistribution is a continuous {@link EmpiricalDistribution} */
 public class EqualizingDistribution implements //
-    ContinuousDistribution, InverseCDF, MeanInterface, VarianceInterface, Serializable {
+    ContinuousDistribution, MeanInterface, VarianceInterface, Serializable {
   /** Hint: distribution can be used for arc-length parameterization
    * 
    * @param unscaledPDF vector with non-negative weights over the numbers

@@ -8,7 +8,9 @@ import java.util.LinkedList;
 
 /** @param <E> the type of elements held in this collection
  * 
- * implements {@link Serializable} */
+ * implements {@link Serializable}
+ * 
+ * implementation is not thread safe */
 public class BoundedLinkedList<E> extends LinkedList<E> {
   private final int maxSize;
 

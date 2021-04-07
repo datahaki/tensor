@@ -20,6 +20,7 @@ package ch.ethz.idsc.tensor.pdf;
  * TrapezoidalDistribution
  * 
  * @see DiscreteDistribution */
-public interface ContinuousDistribution extends Distribution, CDF, PDF, RandomVariateInterface {
+public interface ContinuousDistribution extends Distribution, //
+    CDF, PDF, InverseCDF, RandomVariateInterface {
   // ---
 }

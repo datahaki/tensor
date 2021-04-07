@@ -23,7 +23,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FrechetDistribution.html">FrechetDistribution</a> */
 public class FrechetDistribution extends AbstractContinuousDistribution implements //
-    InverseCDF, MeanInterface, VarianceInterface, Serializable {
+    MeanInterface, VarianceInterface, Serializable {
   private static final double NEXT_DOWN_ONE = Math.nextDown(1.0);
 
   /** @param alpha positive
@@ -57,15 +57,15 @@ public class FrechetDistribution extends AbstractContinuousDistribution implemen
     double uniform = reference == NEXT_DOWN_ONE //
         ? reference
         : Math.nextUp(reference);
-    return quantile_unit(DoubleScalar.of(uniform));
+    return _quantile(DoubleScalar.of(uniform));
   }
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
-    return quantile_unit(Clips.unit().requireInside(p));
+    return _quantile(Clips.unit().requireInside(p));
   }
 
-  private Scalar quantile_unit(Scalar p) {
+  private Scalar _quantile(Scalar p) {
     return beta.multiply(Power.of(Log.FUNCTION.apply(p).negate(), alpha.reciprocal().negate()));
   }
 

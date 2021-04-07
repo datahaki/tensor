@@ -30,6 +30,16 @@ public class BoundedLinkedListTest extends TestCase {
     assertEquals(boundedLinkedList.size(), 0);
   }
 
+  public void testPoll() {
+    BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(3);
+    assertTrue(boundedLinkedList.add(0));
+    assertTrue(boundedLinkedList.add(1));
+    assertEquals(boundedLinkedList.poll(), Integer.valueOf(0));
+    assertEquals(boundedLinkedList.poll(), Integer.valueOf(1));
+    assertEquals(boundedLinkedList.size(), 0);
+    assertTrue(boundedLinkedList.isEmpty());
+  }
+
   public void testAddAll() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(2);
     assertTrue(boundedLinkedList.add(0));

@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/DagumDistribution.html">DagumDistribution</a> */
 public class DagumDistribution extends AbstractContinuousDistribution implements //
-    InverseCDF, Serializable {
+    Serializable {
   /** @param p positive
    * @param a positive
    * @param b positive

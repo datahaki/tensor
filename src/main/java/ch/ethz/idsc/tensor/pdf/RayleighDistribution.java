@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/RayleighDistribution.html">RayleighDistribution</a> */
 public class RayleighDistribution extends AbstractContinuousDistribution implements //
-    InverseCDF, MeanInterface, VarianceInterface, Serializable {
+    MeanInterface, VarianceInterface, Serializable {
   /** @param sigma positive
    * @return */
   public static Distribution of(Scalar sigma) {

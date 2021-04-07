@@ -25,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ExponentialDistribution.html">ExponentialDistribution</a> */
 public class ExponentialDistribution extends AbstractContinuousDistribution implements //
-    InverseCDF, MeanInterface, VarianceInterface, Serializable {
+    MeanInterface, VarianceInterface, Serializable {
   private static final Distribution STANDARD = ExponentialDistribution.of(RealScalar.ONE);
 
   /** @param lambda positive, may be instance of {@link Quantity}
@@ -57,15 +57,15 @@ public class ExponentialDistribution extends AbstractContinuousDistribution impl
   @Override // from AbstractContinuousDistribution
   protected Scalar randomVariate(double reference) {
     // {@link Random#nextDouble()} samples uniformly from the range 0.0 (inclusive) to 1.0d (exclusive)
-    return quantile_unit(DoubleScalar.of(Math.nextUp(reference)));
+    return _quantile(DoubleScalar.of(Math.nextUp(reference)));
   }
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
-    return quantile_unit(RealScalar.ONE.subtract(Clips.unit().requireInside(p)));
+    return _quantile(RealScalar.ONE.subtract(Clips.unit().requireInside(p)));
   }
 
-  private Scalar quantile_unit(Scalar p) {
+  private Scalar _quantile(Scalar p) {
     return Log.FUNCTION.apply(p).divide(lambda_negate);
   }
 

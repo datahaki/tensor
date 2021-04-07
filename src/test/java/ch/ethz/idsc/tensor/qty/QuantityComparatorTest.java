@@ -45,6 +45,11 @@ public class QuantityComparatorTest extends TestCase {
     AssertFail.of(() -> Sort.of(vector, comparator));
   }
 
+  public void testInequality() {
+    QuantityComparator quantityComparator = QuantityComparator.SI();
+    assertFalse(quantityComparator.lessThan(Quantity.of(5, "days"), Quantity.of(10, "h")));
+  }
+
   public void testNullFail() {
     AssertFail.of(() -> QuantityComparator.of(null));
   }
