@@ -22,7 +22,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * <p>inspired by
  * <a href="https://en.wikipedia.org/wiki/Trapezoidal_distribution">TrapezoidalDistribution</a> */
 public class TrapezoidalDistribution extends AbstractContinuousDistribution implements //
-    MeanInterface, Serializable {
+    Serializable {
   private static final Scalar _1_3 = RationalScalar.of(1, 3);
 
   /** @param a

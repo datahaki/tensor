@@ -3,11 +3,13 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.io.Serializable;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.red.Times;
+import ch.ethz.idsc.tensor.sca.Gamma;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -84,6 +86,16 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
     return Scalars.isZero(p) //
         ? b.zero()
         : power_arn.apply(power_prn.apply(p).subtract(RealScalar.ONE)).multiply(b);
+  }
+
+  @Override // from MeanInterface
+  public Scalar mean() {
+    // LONGTERM logGamma?
+    return Scalars.lessThan(RealScalar.ONE, a) //
+        ? Times.of(b, //
+            Gamma.FUNCTION.apply(a.subtract(RealScalar.ONE).divide(a)), //
+            Gamma.FUNCTION.apply(a.reciprocal().add(p))).divide(Gamma.FUNCTION.apply(p))
+        : DoubleScalar.INDETERMINATE;
   }
 
   @Override // from Object

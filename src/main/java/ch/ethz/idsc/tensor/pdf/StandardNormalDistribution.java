@@ -11,7 +11,7 @@ import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ enum StandardNormalDistribution implements ContinuousDistribution, //
-    MeanInterface, VarianceInterface {
+    VarianceInterface {
   INSTANCE;
 
   private static final Scalar DEN = Sqrt.FUNCTION.apply(Pi.TWO);

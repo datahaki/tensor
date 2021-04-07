@@ -69,6 +69,11 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
         Log.FUNCTION.apply(RealScalar.ONE.subtract(p)).divide(xi))).divide(lambda);
   }
 
+  @Override // from MeanInterface
+  public Scalar mean() {
+    throw new UnsupportedOperationException();
+  }
+
   @Override // from Object
   public String toString() {
     return String.format("%s[%s, %s]", getClass().getSimpleName(), lambda, xi);

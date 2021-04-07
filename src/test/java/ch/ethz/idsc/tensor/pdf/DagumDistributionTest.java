@@ -3,6 +3,8 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.tensor.DeterminateScalarQ;
+import ch.ethz.idsc.tensor.MachineNumberQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ext.Serialization;
@@ -32,6 +34,19 @@ public class DagumDistributionTest extends TestCase {
     InverseCDF cdf = InverseCDF.of(distribution);
     Scalar scalar = cdf.quantile(RealScalar.of(0.75));
     Chop._12.requireClose(scalar, RealScalar.of(0.012246219782933493));
+  }
+
+  public void testMean() {
+    Distribution distribution = DagumDistribution.of(2.3, 1.2, 0.7);
+    Scalar scalar = Mean.of(distribution);
+    Chop._12.requireClose(scalar, RealScalar.of(7.579940034748095));
+  }
+
+  public void testMeanIndeterminate() {
+    Distribution distribution = DagumDistribution.of(2.3, 1, 0.7);
+    Scalar scalar = Mean.of(distribution);
+    assertFalse(MachineNumberQ.of(scalar));
+    assertFalse(DeterminateScalarQ.of(scalar));
   }
 
   public void testRandom() {

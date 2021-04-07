@@ -21,6 +21,6 @@ package ch.ethz.idsc.tensor.pdf;
  * 
  * @see DiscreteDistribution */
 public interface ContinuousDistribution extends Distribution, //
-    CDF, PDF, InverseCDF, RandomVariateInterface {
+    CDF, PDF, InverseCDF, RandomVariateInterface, MeanInterface {
   // ---
 }
