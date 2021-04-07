@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -22,12 +21,8 @@ import ch.ethz.idsc.tensor.sca.Clips;
 public class UniformDistribution extends AbstractContinuousDistribution implements //
     MeanInterface, VarianceInterface, Serializable {
   private static final Scalar _12 = RealScalar.of(12);
-  private static final Distribution UNIT = new UniformDistribution(Clips.unit()) {
-    @Override // from AbstractContinuousDistribution
-    public Scalar randomVariate(double reference) {
-      return DoubleScalar.of(reference);
-    }
-  };
+  // LONGTERM unit uniform distribution could be implemented in a separate class
+  private static final Distribution UNIT = new UniformDistribution(Clips.unit());
 
   /** the input parameters may be instance of {@link Quantity} of identical unit
    * 
@@ -67,20 +62,6 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
       throw TensorRuntimeException.of(clip.min(), clip.max());
   }
 
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    return _quantile(Clips.unit().requireInside(p));
-  }
-
-  private Scalar _quantile(Scalar p) {
-    return p.multiply(width).add(clip.min());
-  }
-
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    return _quantile(DoubleScalar.of(reference));
-  }
-
   @Override // from MeanInterface
   public Scalar mean() {
     return clip.min().add(width.multiply(RationalScalar.HALF));
@@ -101,6 +82,11 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     return clip.rescale(x);
+  }
+
+  @Override // from AbstractContinuousDistribution
+  protected Scalar protected_quantile(Scalar p) {
+    return p.multiply(width).add(clip.min());
   }
 
   @Override // from Object

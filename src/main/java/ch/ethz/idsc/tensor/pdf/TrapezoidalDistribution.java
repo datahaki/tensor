@@ -114,12 +114,8 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     return alpha.multiply(cd.subtract(ab)).multiply(_1_3);
   }
 
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    return _quantile(Clips.unit().requireInside(p));
-  }
-
-  private Scalar _quantile(Scalar p) {
+  @Override // from AbstractContinuousDistribution
+  protected Scalar protected_quantile(Scalar p) {
     if (Scalars.lessEquals(p, yB)) // y <= yB
       return Sqrt.FUNCTION.apply(alpha_inv.multiply(b.subtract(a)).multiply(p)).add(a);
     // yB < y <= yC
@@ -128,11 +124,6 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     // yC < y
     return d.subtract(Sqrt.FUNCTION.apply( //
         RealScalar.ONE.subtract(p).multiply(alpha_inv).multiply(d.subtract(c))));
-  }
-
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    return _quantile(RealScalar.of(reference));
   }
 
   @Override // from Object

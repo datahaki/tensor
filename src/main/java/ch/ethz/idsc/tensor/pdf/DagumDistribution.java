@@ -3,13 +3,11 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.red.Times;
-import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -81,20 +79,11 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
     );
   }
 
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    return _quantile(Clips.unit().requireInside(p));
-  }
-
-  private Scalar _quantile(Scalar p) {
+  @Override
+  protected Scalar protected_quantile(Scalar p) {
     return Scalars.isZero(p) //
         ? b.zero()
         : power_arn.apply(power_prn.apply(p).subtract(RealScalar.ONE)).multiply(b);
-  }
-
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    return _quantile(DoubleScalar.of(reference));
   }
 
   @Override // from Object

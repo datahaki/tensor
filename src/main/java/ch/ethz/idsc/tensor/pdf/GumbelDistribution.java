@@ -7,13 +7,14 @@ import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Gamma;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** inspired by
+/** Quantile returns -Infinity as reference approaches 0.0
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/GumbelDistribution.html">GumbelDistribution</a> */
 public class GumbelDistribution extends AbstractContinuousDistribution implements //
     MeanInterface, VarianceInterface, Serializable {
@@ -66,19 +67,9 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
         Exp.FUNCTION.apply(x.subtract(alpha).divide(beta)).negate()));
   }
 
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    return _quantile(Clips.unit().requireInside(p));
-  }
-
-  private Scalar _quantile(Scalar p) {
+  @Override
+  protected Scalar protected_quantile(Scalar p) {
     return alpha.add(beta.multiply(Log.FUNCTION.apply(Log.FUNCTION.apply(RealScalar.ONE.subtract(p)).negate())));
-  }
-
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    // returns -Infinity as reference approaches 0.0
-    return _quantile(DoubleScalar.of(reference));
   }
 
   @Override // from Object

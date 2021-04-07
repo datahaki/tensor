@@ -46,9 +46,9 @@ public class GompertzMakehamDistributionTest extends TestCase {
   public void testRandomVariate() {
     GompertzMakehamDistribution gmd = (GompertzMakehamDistribution) //
     GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
-    assertTrue(Scalars.isZero(gmd.randomVariate(0)));
-    assertTrue(Scalars.lessThan(gmd.randomVariate(0), RealScalar.of(3)));
-    Scalar scalar = gmd.randomVariate(Math.nextDown(1.0));
+    assertTrue(Scalars.isZero(gmd.protected_quantile(RealScalar.ZERO)));
+    assertTrue(Scalars.lessThan(gmd.protected_quantile(RealScalar.ZERO), RealScalar.of(3)));
+    Scalar scalar = gmd.protected_quantile(RealScalar.of(Math.nextDown(1.0)));
     Clips.interval(1.7, 2).requireInside(scalar);
   }
 

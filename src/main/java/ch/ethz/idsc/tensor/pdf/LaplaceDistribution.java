@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.sca.Abs;
-import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -64,21 +63,12 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
     return b2.add(b2);
   }
 
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    return _quantile(Clips.unit().requireInside(p));
-  }
-
-  private Scalar _quantile(Scalar p) {
+  @Override
+  protected Scalar protected_quantile(Scalar p) {
     if (Scalars.lessEquals(p, RationalScalar.HALF))
       return mean.add(Log.FUNCTION.apply(p.add(p)).multiply(beta));
     Scalar c = RealScalar.ONE.subtract(p);
     return mean.subtract(Log.FUNCTION.apply(c.add(c)).multiply(beta));
-  }
-
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    return _quantile(RealScalar.of(reference));
   }
 
   @Override // from Object

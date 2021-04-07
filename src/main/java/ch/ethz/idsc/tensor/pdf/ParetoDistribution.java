@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
 
@@ -73,18 +72,9 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
     return DoubleScalar.INDETERMINATE;
   }
 
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    return _quantile(Clips.unit().requireInside(p));
-  }
-
-  private Scalar _quantile(Scalar p) {
+  @Override
+  protected Scalar protected_quantile(Scalar p) {
     return k.divide(Power.of(RealScalar.ONE.subtract(p), alpha.reciprocal()));
-  }
-
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    return _quantile(DoubleScalar.of(reference));
   }
 
   @Override // from Object

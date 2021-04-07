@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.pdf;
 import java.io.Serializable;
 import java.util.Random;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -26,7 +27,7 @@ import ch.ethz.idsc.tensor.sca.Increment;
  * </ul>
  * 
  * <p>The implementation combines
- * {@link EmpiricalDistribution}, {@link BinCounts}, and {@link UniformDistribution#unit()}.
+ * {@link EmpiricalDistribution}, {@link BinCounts}, and {@link UniformDistribution}.
  * 
  * <p>Other approximation methods may be implemented in the future.
  * 
@@ -111,7 +112,7 @@ public class HistogramDistribution implements //
   @Override // from RandomVariateInterface
   public Scalar randomVariate(Random random) {
     return original.apply(empiricalDistribution.randomVariate(random) //
-        .add(RandomVariate.of(UniformDistribution.unit(), random)));
+        .add(DoubleScalar.of(random.nextDouble())));
   }
 
   @Override // from VarianceInterface
