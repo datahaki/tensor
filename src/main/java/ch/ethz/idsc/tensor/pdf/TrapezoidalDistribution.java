@@ -21,8 +21,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * 
  * <p>inspired by
  * <a href="https://en.wikipedia.org/wiki/Trapezoidal_distribution">TrapezoidalDistribution</a> */
-public class TrapezoidalDistribution extends AbstractContinuousDistribution implements //
-    Serializable {
+public class TrapezoidalDistribution extends AbstractContinuousDistribution implements Serializable {
   private static final Scalar _1_3 = RationalScalar.of(1, 3);
 
   /** @param a
@@ -112,6 +111,12 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     Scalar cd = c.multiply(c).add(c.multiply(d)).add(d.multiply(d));
     Scalar ab = a.multiply(a).add(a.multiply(b)).add(b.multiply(b));
     return alpha.multiply(cd.subtract(ab)).multiply(_1_3);
+  }
+
+  @Override
+  public Scalar variance() {
+    // LONGTERM Auto-generated method stub
+    throw new UnsupportedOperationException();
   }
 
   @Override // from AbstractContinuousDistribution

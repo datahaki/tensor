@@ -9,14 +9,14 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.red.Times;
-import ch.ethz.idsc.tensor.sca.Gamma;
+import ch.ethz.idsc.tensor.sca.Exp;
+import ch.ethz.idsc.tensor.sca.LogGamma;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/DagumDistribution.html">DagumDistribution</a> */
-public class DagumDistribution extends AbstractContinuousDistribution implements //
-    Serializable {
+public class DagumDistribution extends AbstractContinuousDistribution implements Serializable {
   /** @param p positive
    * @param a positive
    * @param b positive
@@ -90,12 +90,19 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
 
   @Override // from MeanInterface
   public Scalar mean() {
-    // LONGTERM logGamma?
-    return Scalars.lessThan(RealScalar.ONE, a) //
-        ? Times.of(b, //
-            Gamma.FUNCTION.apply(a.subtract(RealScalar.ONE).divide(a)), //
-            Gamma.FUNCTION.apply(a.reciprocal().add(p))).divide(Gamma.FUNCTION.apply(p))
-        : DoubleScalar.INDETERMINATE;
+    if (Scalars.lessThan(RealScalar.ONE, a)) {
+      Scalar f1 = LogGamma.FUNCTION.apply(a.subtract(RealScalar.ONE).divide(a));
+      Scalar f2 = LogGamma.FUNCTION.apply(a.reciprocal().add(p));
+      Scalar f3 = LogGamma.FUNCTION.apply(p);
+      return Exp.FUNCTION.apply(f1.add(f2).subtract(f3)).multiply(b);
+    }
+    return DoubleScalar.INDETERMINATE;
+  }
+
+  @Override
+  public Scalar variance() {
+    // LONGTERM Auto-generated method stub
+    throw new UnsupportedOperationException();
   }
 
   @Override // from Object

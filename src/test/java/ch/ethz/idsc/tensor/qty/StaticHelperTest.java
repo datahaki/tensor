@@ -42,7 +42,7 @@ public class StaticHelperTest extends TestCase {
 
   public void testConversion0() {
     assertEquals(StaticHelper.conversion(UnitSystem.SI(), "kg", "kg"), RealScalar.ONE);
-    assertEquals(StaticHelper.conversion(UnitSystem.SI(), "K", "K"), Quantity.of(1, "K"));
+    assertEquals(StaticHelper.conversion(UnitSystem.SI(), "K", "K"), Quantity.of(1, ""));
   }
 
   public void testConversion1() {

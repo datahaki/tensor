@@ -11,8 +11,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/NormalDistribution.html">NormalDistribution</a> */
-public class NormalDistribution implements //
-    ContinuousDistribution, VarianceInterface, Serializable {
+public class NormalDistribution implements ContinuousDistribution, Serializable {
   /** The parameters mean and sigma may be of type Quantity with identical Unit.
    * 
    * @param mean

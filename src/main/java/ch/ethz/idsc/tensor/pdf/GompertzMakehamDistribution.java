@@ -14,8 +14,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GompertzMakehamDistribution.html">GompertzMakehamDistribution</a> */
-public class GompertzMakehamDistribution extends AbstractContinuousDistribution implements //
-    Serializable {
+public class GompertzMakehamDistribution extends AbstractContinuousDistribution implements Serializable {
   /** @param lambda positive scale parameter, may be instance of {@link Quantity}
    * @param xi positive frailty parameter
    * @return */
@@ -71,6 +70,11 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
 
   @Override // from MeanInterface
   public Scalar mean() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Scalar variance() {
     throw new UnsupportedOperationException();
   }
 

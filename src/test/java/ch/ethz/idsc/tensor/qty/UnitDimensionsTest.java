@@ -3,6 +3,9 @@ package ch.ethz.idsc.tensor.qty;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import junit.framework.TestCase;
 
@@ -16,5 +19,11 @@ public class UnitDimensionsTest extends TestCase {
     assertEquals(unitDimensions.toBase(Unit.of("xknown^3")), Unit.of("xknown^3"));
     assertEquals(unitDimensions.toBase(Unit.of("xkn*own^3")), Unit.of("xkn*own^3"));
     assertEquals(unitDimensions.toBase(Unit.of("g^-2*xkn*own^3")), Unit.of("kg^-2*xkn*own^3"));
+  }
+
+  public void testTogs() {
+    ScalarUnaryOperator suo = QuantityMagnitude.SI().in("m^2*K*W^-1");
+    Scalar scalar = suo.apply(Quantity.of(10, "togs"));
+    assertEquals(scalar, RealScalar.ONE);
   }
 }

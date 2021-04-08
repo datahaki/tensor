@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FrechetDistribution.html">FrechetDistribution</a> */
 public class FrechetDistribution implements //
-    ContinuousDistribution, VarianceInterface, Serializable {
+    ContinuousDistribution, Serializable {
   private static final double NEXT_DOWN_ONE = Math.nextDown(1.0);
 
   /** @param alpha positive

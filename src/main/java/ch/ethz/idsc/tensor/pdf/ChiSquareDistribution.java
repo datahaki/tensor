@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.pdf;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -8,14 +9,14 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Exp;
-import ch.ethz.idsc.tensor.sca.Gamma;
+import ch.ethz.idsc.tensor.sca.Log;
+import ch.ethz.idsc.tensor.sca.LogGamma;
 import ch.ethz.idsc.tensor.sca.Power;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ChiSquareDistribution.html">ChiSquareDistribution</a> */
-public class ChiSquareDistribution implements ContinuousDistribution, VarianceInterface {
+public class ChiSquareDistribution implements ContinuousDistribution, Serializable {
   /** @param nu positive real
    * @return
    * @throws Exception if nu is not positive or not an instance of {@link RealScalar} */
@@ -34,22 +35,20 @@ public class ChiSquareDistribution implements ContinuousDistribution, VarianceIn
   /***************************************************/
   private final Scalar nu;
   private final Scalar nu2;
-  private final Scalar factor;
+  private final Scalar log;
 
   private ChiSquareDistribution(Scalar nu) {
     this.nu = nu;
     nu2 = nu.multiply(RationalScalar.HALF);
-    factor = Power.of(2, nu2.negate()).divide(Gamma.FUNCTION.apply(nu2));
+    log = Log.FUNCTION.apply(RealScalar.TWO).multiply(nu2).add(LogGamma.FUNCTION.apply(nu2));
   }
 
   @Override
   public Scalar at(Scalar x) {
-    return Scalars.lessThan(RealScalar.ZERO, x) //
-        ? Times.of( //
-            factor, //
-            Exp.FUNCTION.apply(x.multiply(RationalScalar.HALF).negate()), //
-            Power.of(x, nu2.subtract(RealScalar.ONE)))
-        : RealScalar.ZERO;
+    if (Scalars.lessThan(RealScalar.ZERO, x))
+      return Exp.FUNCTION.apply(log.add(x.multiply(RationalScalar.HALF)).negate()) //
+          .multiply(Power.of(x, nu2.subtract(RealScalar.ONE)));
+    return RealScalar.ZERO;
   }
 
   @Override
@@ -80,5 +79,10 @@ public class ChiSquareDistribution implements ContinuousDistribution, VarianceIn
   @Override // from VarianceInterface
   public Scalar variance() {
     return nu.add(nu);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%s[%s]", getClass().getSimpleName(), nu);
   }
 }

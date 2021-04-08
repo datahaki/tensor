@@ -51,4 +51,8 @@ public class CauchyDistributionTest extends TestCase {
   public void testNegativeFail() {
     AssertFail.of(() -> CauchyDistribution.of(RealScalar.ONE, RealScalar.of(-1)));
   }
+
+  public void testStandardString() {
+    assertEquals(CauchyDistribution.standard().toString(), "CauchyDistribution[0, 1]");
+  }
 }

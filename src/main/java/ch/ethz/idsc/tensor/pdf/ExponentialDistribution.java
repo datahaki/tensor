@@ -26,7 +26,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ExponentialDistribution.html">ExponentialDistribution</a> */
 public class ExponentialDistribution implements //
-    ContinuousDistribution, VarianceInterface, Serializable {
+    ContinuousDistribution, Serializable {
   private static final Distribution STANDARD = ExponentialDistribution.of(RealScalar.ONE);
 
   /** @param lambda positive, may be instance of {@link Quantity}

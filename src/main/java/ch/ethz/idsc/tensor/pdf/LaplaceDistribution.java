@@ -14,8 +14,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/LaplaceDistribution.html">LaplaceDistribution</a> */
-public class LaplaceDistribution extends AbstractContinuousDistribution implements //
-    VarianceInterface, Serializable {
+public class LaplaceDistribution extends AbstractContinuousDistribution implements Serializable {
   /** @param mean
    * @param beta positive
    * @return */

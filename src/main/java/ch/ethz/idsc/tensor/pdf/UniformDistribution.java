@@ -18,8 +18,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/UniformDistribution.html">UniformDistribution</a> */
-public class UniformDistribution extends AbstractContinuousDistribution implements //
-    VarianceInterface, Serializable {
+public class UniformDistribution extends AbstractContinuousDistribution implements Serializable {
   private static final Scalar _12 = RealScalar.of(12);
   // LONGTERM unit uniform distribution could be implemented in a separate class
   private static final Distribution UNIT = new UniformDistribution(Clips.unit());
@@ -53,29 +52,27 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
 
   /***************************************************/
   private final Clip clip;
-  private final Scalar width;
 
   private UniformDistribution(Clip clip) {
     this.clip = clip;
-    width = clip.width();
-    if (Scalars.isZero(width))
+    if (Scalars.isZero(clip.width()))
       throw TensorRuntimeException.of(clip.min(), clip.max());
   }
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return clip.min().add(width.multiply(RationalScalar.HALF));
+    return protected_quantile(RationalScalar.HALF);
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    return width.multiply(width).divide(_12);
+    return clip.width().multiply(clip.width()).divide(_12);
   }
 
   @Override // from PDF
   public Scalar at(Scalar x) {
     return clip.isInside(x) //
-        ? width.reciprocal()
+        ? clip.width().reciprocal()
         : RealScalar.ZERO;
   }
 
@@ -86,7 +83,7 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
 
   @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
-    return p.multiply(width).add(clip.min());
+    return p.multiply(clip.width()).add(clip.min());
   }
 
   @Override // from Object

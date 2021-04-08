@@ -13,8 +13,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ParetoDistribution.html">ParetoDistribution</a> */
-public class ParetoDistribution extends AbstractContinuousDistribution implements //
-    VarianceInterface, Serializable {
+public class ParetoDistribution extends AbstractContinuousDistribution implements Serializable {
   /** @param k strictly positive real number
    * @param alpha strictly positive real number
    * @return */

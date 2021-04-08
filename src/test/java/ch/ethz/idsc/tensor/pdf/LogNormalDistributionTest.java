@@ -70,4 +70,8 @@ public class LogNormalDistributionTest extends TestCase {
     AssertFail.of(() -> LogNormalDistribution.of(Quantity.of(RationalScalar.HALF, "m"), RationalScalar.of(2, 3)));
     AssertFail.of(() -> LogNormalDistribution.of(RationalScalar.of(2, 3), Quantity.of(RationalScalar.HALF, "m")));
   }
+
+  public void testStandardString() {
+    assertEquals(LogNormalDistribution.standard().toString(), "LogNormalDistribution[0, 1]");
+  }
 }
