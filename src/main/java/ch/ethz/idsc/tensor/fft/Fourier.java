@@ -42,24 +42,20 @@ public enum Fourier {
     if (!Integers.isPowerOf2(n))
       throw TensorRuntimeException.of(vector); // vector length is not a power of two
     Scalar[] array = ScalarArray.ofVector(vector);
-    {
-      int j = 0;
-      for (int i = 0; i < n; ++i) {
-        if (j > i) {
-          Scalar val = array[i];
-          array[i] = array[j];
-          array[j] = val;
-        }
-        int m = n >> 1;
-        while (m > 0 && j >= m) {
-          j -= m;
-          m >>= 1;
-        }
-        j += m;
+    for (int j = 0, i = 0; i < n; ++i) {
+      if (j > i) {
+        Scalar val = array[i];
+        array[i] = array[j];
+        array[j] = val;
       }
+      int m = n >> 1;
+      while (m > 0 && j >= m) {
+        j -= m;
+        m >>= 1;
+      }
+      j += m;
     }
-    int mmax = 1;
-    while (n > mmax) {
+    for (int mmax = 1; mmax < n; mmax <<= 1) {
       int istep = mmax << 1;
       double thalf = b * Math.PI / istep;
       double wtemp = Math.sin(thalf);
@@ -74,7 +70,6 @@ public enum Fourier {
         }
         w = w.add(w.multiply(wp));
       }
-      mmax = istep;
     }
     return Tensors.of(array).divide(Sqrt.FUNCTION.apply(RealScalar.of(n)));
   }

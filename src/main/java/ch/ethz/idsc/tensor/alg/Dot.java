@@ -35,8 +35,7 @@ public class Dot {
     List<Node> list = Stream.of(tensors) //
         .map(tensor -> new Node(tensor, Dimensions.of(tensor))) //
         .collect(Collectors.toList());
-    int index = 0;
-    while (index < list.size() && 1 < list.size()) {
+    for (int index = 0; index < list.size() && 1 < list.size();) {
       Node node = list.get(index);
       if (node.dimensions.size() == 1) // handle rank 1 tensors
         if (index == 0) {
