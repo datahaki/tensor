@@ -7,9 +7,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
-import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.lie.MatrixSqrt;
-import ch.ethz.idsc.tensor.sca.Conjugate;
 
 /** decomposition of A = S.R
  * where S is symmetric, and R is orthogonal
@@ -34,7 +32,7 @@ public class PolarDecomposition implements Serializable {
 
   private PolarDecomposition(Tensor matrix) {
     this.matrix = matrix;
-    matrixSqrt = MatrixSqrt.of(MatrixDotTranspose.of(matrix, Conjugate.of(matrix)));
+    matrixSqrt = MatrixSqrt.of(StaticHelper.dotConjugate(matrix));
   }
 
   /** @return symmetric (or Hermitian) matrix k x k */

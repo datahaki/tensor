@@ -7,7 +7,10 @@ import java.util.Map;
 /** least recently used elements are given storage priority in the map of bounded size.
  * 
  * Remark: implementation is not thread safe!
- * For multi-threaded access wrap lru cache into synchronized structure */
+ * For multi-threaded access wrap lru cache into synchronized structure, for example
+ * <pre>
+ * Map<K, V> map = Collections.synchronizedMap(new LruCache<>(size));
+ * </pre> */
 public class LruCache<K, V> extends LinkedHashMap<K, V> {
   private final int maxSize;
 

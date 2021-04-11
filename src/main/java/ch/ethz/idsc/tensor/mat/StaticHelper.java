@@ -9,12 +9,14 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.sca.Conjugate;
 import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
 /** helper functions used in {@link SingularValueDecompositionImpl} */
@@ -89,5 +91,11 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
     if (Tolerance.CHOP.isZero(min) || //
         Tolerance.CHOP.isZero(min.divide(max)))
       throw TensorRuntimeException.of(max, min);
+  }
+
+  /** @param matrix
+   * @return matrix . ConjugateTranspose(matrix) */
+  public static Tensor dotConjugate(Tensor matrix) {
+    return MatrixDotTranspose.of(matrix, Conjugate.of(matrix));
   }
 }

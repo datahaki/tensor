@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.Conjugate;
 import ch.ethz.idsc.tensor.sca.Imag;
 
 /** The pseudo inverse is the least squares solution x to
@@ -70,7 +69,7 @@ public enum PseudoInverse {
       return CholeskyDecomposition.of(mt.dot(matrix)).solve(mt);
     }
     return ConjugateTranspose.of(CholeskyDecomposition.of( //
-        MatrixDotTranspose.of(matrix, Conjugate.of(matrix))).solve(matrix));
+        StaticHelper.dotConjugate(matrix)).solve(matrix));
   }
 
   /***************************************************/
