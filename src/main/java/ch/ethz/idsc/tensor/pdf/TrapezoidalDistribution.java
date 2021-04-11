@@ -115,7 +115,6 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
 
   @Override
   public Scalar variance() {
-    // LONGTERM Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 

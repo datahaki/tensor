@@ -110,6 +110,14 @@ public class GaussScalarTest extends TestCase {
       }
     }
     assertEquals(count, 6);
+    AssertFail.of(() -> Sqrt.of(GaussScalar.of(2, 11)));
+  }
+
+  public void testSqrt5() {
+    assertEquals(Sqrt.of(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
+    assertEquals(Sqrt.of(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
+    AssertFail.of(() -> Sqrt.of(GaussScalar.of(2, 5)));
+    AssertFail.of(() -> Sqrt.of(GaussScalar.of(3, 5)));
   }
 
   public void testNumber() {

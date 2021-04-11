@@ -101,7 +101,6 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
 
   @Override
   public Scalar variance() {
-    // LONGTERM Auto-generated method stub
     throw new UnsupportedOperationException();
   }
 

@@ -19,8 +19,7 @@ import ch.ethz.idsc.tensor.sca.Clips;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/UniformDistribution.html">UniformDistribution</a> */
 public class UniformDistribution extends AbstractContinuousDistribution implements Serializable {
-  private static final Scalar _12 = RealScalar.of(12);
-  // LONGTERM unit uniform distribution could be implemented in a separate class
+  private static final Scalar _1_12 = RationalScalar.of(1, 12);
   private static final Distribution UNIT = new UniformDistribution(Clips.unit());
 
   /** the input parameters may be instance of {@link Quantity} of identical unit
@@ -66,7 +65,7 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    return clip.width().multiply(clip.width()).divide(_12);
+    return clip.width().multiply(clip.width()).multiply(_1_12);
   }
 
   @Override // from PDF

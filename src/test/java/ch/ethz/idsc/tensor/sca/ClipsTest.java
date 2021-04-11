@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -29,6 +30,7 @@ public class ClipsTest extends TestCase {
   public void testInftyHalf() {
     Clip clip = Clips.interval(-0.0, Double.POSITIVE_INFINITY);
     assertTrue(clip instanceof ClipInterval);
+    assertTrue(clip.isInside(Pi.VALUE));
     assertEquals(clip.min(), RealScalar.ZERO);
     assertEquals(clip.max(), DoubleScalar.POSITIVE_INFINITY);
     assertEquals(clip.width(), DoubleScalar.POSITIVE_INFINITY);
@@ -39,6 +41,7 @@ public class ClipsTest extends TestCase {
   public void testRealNumbers() {
     Clip clip = Clips.interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
     assertTrue(clip instanceof ClipInterval);
+    assertTrue(clip.isInside(Pi.VALUE));
     assertEquals(clip.min(), DoubleScalar.NEGATIVE_INFINITY);
     assertEquals(clip.max(), DoubleScalar.POSITIVE_INFINITY);
     assertEquals(clip.width(), DoubleScalar.POSITIVE_INFINITY);
@@ -134,6 +137,12 @@ public class ClipsTest extends TestCase {
 
   public void testPositiveFail() {
     AssertFail.of(() -> Clips.positive(Quantity.of(-1, "kg")));
+  }
+
+  public void testNaNFail() {
+    AssertFail.of(() -> Clips.interval(DoubleScalar.INDETERMINATE, DoubleScalar.INDETERMINATE));
+    AssertFail.of(() -> Clips.interval(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
+    AssertFail.of(() -> Clips.interval(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
   }
 
   public void testAbsoluteFail() {
