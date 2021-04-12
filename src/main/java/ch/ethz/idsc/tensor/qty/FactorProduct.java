@@ -21,7 +21,7 @@ import ch.ethz.idsc.tensor.Scalar;
   }
 
   @Override
-  public Unit getUnit(Unit unit) {
+  public Unit dimensions(Unit unit) {
     return base;
   }
 }

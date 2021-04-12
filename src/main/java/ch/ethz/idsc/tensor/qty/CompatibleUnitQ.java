@@ -30,10 +30,10 @@ public class CompatibleUnitQ implements Serializable {
   }
 
   /***************************************************/
-  private final UnitDimensions unitDimensions;
+  private final UnitSystem unitSystem;
 
   private CompatibleUnitQ(UnitSystem unitSystem) {
-    unitDimensions = new UnitDimensions(unitSystem);
+    this.unitSystem = unitSystem;
   }
 
   /** @param unit
@@ -52,12 +52,12 @@ public class CompatibleUnitQ implements Serializable {
     private final Unit base;
 
     public Inner(Unit unit) {
-      this.base = unitDimensions.toBase(unit);
+      this.base = unitSystem.dimensions(unit);
     }
 
     @Override // from Predicate
     public boolean test(Scalar scalar) {
-      return unitDimensions.toBase(QuantityUnit.of(scalar)).equals(base);
+      return unitSystem.dimensions(QuantityUnit.of(scalar)).equals(base);
     }
 
     @Override // from Object

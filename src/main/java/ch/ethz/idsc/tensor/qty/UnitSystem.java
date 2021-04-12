@@ -40,4 +40,13 @@ public interface UnitSystem extends ScalarUnaryOperator {
    * 
    * @return unmodifiable view on map that defines conversions in the unit system, keys are atomic */
   Map<String, Scalar> map();
+
+  /** Example: "kW*h" -> "kg*m^2*s^-2"
+   * 
+   * <p>inspired by
+   * <a href="https://reference.wolfram.com/language/ref/UnitDimensions.html">UnitDimensions</a>
+   * 
+   * @param unit
+   * @return base unit without multiplicative factor */
+  Unit dimensions(Unit unit);
 }
