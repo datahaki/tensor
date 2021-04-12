@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.ext.Cache;
  * <a href="https://reference.wolfram.com/language/ref/UnitDimensions.html">UnitDimensions</a> */
 public class UnitDimensions implements Serializable {
   private static final int MAX_SIZE = 768;
+  // TODO obsolete, manage in unitSystem!
   @SuppressWarnings("unchecked")
   private final Cache<Unit, Unit> cache = //
       Cache.of((Function<Unit, Unit> & Serializable) this::base, MAX_SIZE);
@@ -30,6 +31,6 @@ public class UnitDimensions implements Serializable {
   }
 
   private Unit base(Unit unit) {
-    return new UnitFactor(map, unit).getUnit();
+    return Factor.of(map, unit).getUnit(unit);
   }
 }

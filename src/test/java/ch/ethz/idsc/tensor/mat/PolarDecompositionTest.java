@@ -30,7 +30,7 @@ public class PolarDecompositionTest extends TestCase {
     UnitaryMatrixQ.require(result, Chop._06);
     Tensor sym = polarDecomposition.getS();
     assertEquals(Dimensions.of(sym), Arrays.asList(k, k));
-    HermitianMatrixQ.require(sym);
+    HermitianMatrixQ.require(sym, Chop._06);
     assertTrue(polarDecomposition.toString().startsWith("PolarDecomposition["));
   }
 

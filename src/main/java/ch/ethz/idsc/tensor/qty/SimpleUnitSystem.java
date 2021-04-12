@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.ext.Cache;
 import ch.ethz.idsc.tensor.io.StringScalar;
 
 /** reference implementation of {@link UnitSystem} with emphasis on simplicity */
@@ -71,18 +73,25 @@ public class SimpleUnitSystem implements UnitSystem {
 
   /***************************************************/
   private final Map<String, Scalar> map;
+  private final Cache<Unit, Factor> cache;
 
+  @SuppressWarnings("unchecked")
   private SimpleUnitSystem(Map<String, Scalar> map) {
     this.map = map;
+    cache = Cache.of((Function<Unit, Factor> & Serializable) this::factor, 3 * map.size());
   }
 
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof Quantity) {
       Quantity quantity = (Quantity) scalar;
-      return new UnitFactor(map, quantity.unit()).getScalar(quantity);
+      return cache.apply(quantity.unit()).times(quantity);
     }
     return Objects.requireNonNull(scalar);
+  }
+
+  private Factor factor(Unit unit) {
+    return Factor.of(map, unit);
   }
 
   @Override // from UnitSystem

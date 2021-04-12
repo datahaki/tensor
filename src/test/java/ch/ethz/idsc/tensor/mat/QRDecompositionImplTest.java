@@ -55,7 +55,10 @@ public class QRDecompositionImplTest extends TestCase {
       QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
       assertEquals(Dimensions.of(qrDecomposition.getInverseQ()), Arrays.asList(n, n));
       assertEquals(Dimensions.of(qrDecomposition.getQ()), Arrays.asList(n, n));
-      assertEquals(Dimensions.of(qrDecomposition.getR()), Arrays.asList(n, m));
+      Tensor r = qrDecomposition.getR();
+      assertEquals(Dimensions.of(r), Arrays.asList(n, m));
+      Tensor rem = r.extract(m, n);
+      Chop.NONE.requireAllZero(rem);
     }
   }
 
@@ -64,7 +67,7 @@ public class QRDecompositionImplTest extends TestCase {
       int n = m - 2;
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
       QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
-      Chop._10.requireClose(qrDecomposition.getQ().dot(qrDecomposition.getR()), matrix);
+      Tolerance.CHOP.requireClose(qrDecomposition.getQ().dot(qrDecomposition.getR()), matrix);
       assertTrue(OrthogonalMatrixQ.of(qrDecomposition.getQ()));
       assertTrue(OrthogonalMatrixQ.of(qrDecomposition.getInverseQ()));
       assertEquals(Dimensions.of(qrDecomposition.getInverseQ()), Arrays.asList(n, n));
@@ -79,7 +82,7 @@ public class QRDecompositionImplTest extends TestCase {
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
       Tensor sol = LeastSquares.usingQR(matrix, IdentityMatrix.of(n));
       assertEquals(Dimensions.of(sol), Arrays.asList(m, n));
-      Chop._10.requireClose(PseudoInverse.usingSvd(matrix), sol);
+      Tolerance.CHOP.requireClose(PseudoInverse.usingSvd(matrix), sol);
     }
   }
 

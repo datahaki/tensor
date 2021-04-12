@@ -10,13 +10,10 @@ import java.util.TreeMap;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.sca.Power;
 
-/* package */ class UnitFactor {
-  private final NavigableMap<String, Scalar> navigableMap = new TreeMap<>();
-  private final Unit unit;
-  private Scalar product = null; // avoids to introduce a multiplicative 1
-
-  public UnitFactor(Map<String, Scalar> map, Unit unit) {
-    this.unit = unit;
+/* package */ interface Factor {
+  static Factor of(Map<String, Scalar> map, Unit unit) {
+    NavigableMap<String, Scalar> navigableMap = new TreeMap<>();
+    Scalar product = null; // avoids to introduce a multiplicative 1
     for (Entry<String, Scalar> entry : unit.map().entrySet()) {
       Scalar lookup = map.get(entry.getKey());
       if (Objects.isNull(lookup)) // in case of base unit, e.g. "m" for SI
@@ -29,17 +26,16 @@ import ch.ethz.idsc.tensor.sca.Power;
             : product.multiply(factor);
       }
     }
+    return Objects.isNull(product) //
+        ? FactorEmpty.INSTANCE
+        : new FactorProduct(StaticHelper.multiply(product, UnitImpl.create(navigableMap)));
   }
 
-  public Scalar getScalar(Quantity quantity) {
-    return Objects.isNull(product) //
-        ? quantity
-        : StaticHelper.multiply(product.multiply(quantity.value()), UnitImpl.create(navigableMap));
-  }
+  /** @param quantity
+   * @return */
+  Scalar times(Quantity quantity);
 
-  public Unit getUnit() {
-    return Objects.isNull(product) //
-        ? unit
-        : QuantityUnit.of(StaticHelper.multiply(product, UnitImpl.create(navigableMap)));
-  }
+  /** @param unit
+   * @return */
+  Unit getUnit(Unit unit);
 }
