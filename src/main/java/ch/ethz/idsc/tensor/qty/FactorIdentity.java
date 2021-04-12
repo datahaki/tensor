@@ -3,7 +3,7 @@ package ch.ethz.idsc.tensor.qty;
 
 import ch.ethz.idsc.tensor.Scalar;
 
-/* package */ enum FactorEmpty implements Factor {
+/* package */ enum FactorIdentity implements Factor {
   INSTANCE;
 
   @Override

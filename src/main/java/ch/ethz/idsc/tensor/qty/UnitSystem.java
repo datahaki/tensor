@@ -30,7 +30,6 @@ public interface UnitSystem extends ScalarUnaryOperator {
   /***************************************************/
   /** Example: for the SI unit system the map includes the entries
    * <pre>
-   * "K" -> 1[K]
    * "rad" -> 1
    * "Hz" -> 1[s^-1]
    * "W" -> 1[m^2*kg*s^-3]

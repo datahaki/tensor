@@ -101,7 +101,7 @@ public class SimpleUnitSystem implements UnitSystem {
       }
     }
     return Objects.isNull(product) //
-        ? FactorEmpty.INSTANCE
+        ? FactorIdentity.INSTANCE // when unit consist of known atomics: e.g. kg*m^2*s^-3
         : new FactorProduct(StaticHelper.multiply(product, UnitImpl.create(navigableMap)));
   }
 
