@@ -16,9 +16,9 @@ import junit.framework.TestCase;
 
 public class StaticHelperTest extends TestCase {
   public void testSimple() {
-    StaticHelper.requireAtomic("m");
-    AssertFail.of(() -> StaticHelper.requireAtomic("m2"));
-    AssertFail.of(() -> StaticHelper.requireAtomic("m^2"));
+    UnitParser.requireAtomic("m");
+    AssertFail.of(() -> UnitParser.requireAtomic("m2"));
+    AssertFail.of(() -> UnitParser.requireAtomic("m^2"));
   }
 
   // only used in tests

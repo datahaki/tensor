@@ -1,43 +1,17 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Objects;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Power;
 
 /* package */ enum StaticHelper {
   ;
-  /** atomic unit may consist of roman letters in lower case a-z,
-   * upper case A-Z, as well as the underscore character '_', and
-   * the percent character `%` */
-  private static final Pattern PATTERN = Pattern.compile("[%A-Z_a-z]+");
-
-  /** @param key atomic unit expression, for instance "kg"
-   * @return given key
-   * @throws Exception if given key is not an atomic unit expression */
-  public static String requireAtomic(String key) {
-    if (PATTERN.matcher(key).matches())
-      return key;
-    throw new IllegalArgumentException(key);
-  }
-
-  public static Scalar requireNonZero(Scalar scalar) {
-    if (scalar instanceof Quantity || //
-        Scalars.isZero(scalar))
-      throw TensorRuntimeException.of(scalar);
-    return scalar;
-  }
-
-  /***************************************************/
   private static String exponentString(Scalar exponent) {
     String string = exponent.toString();
     return string.equals("1") //
@@ -51,21 +25,6 @@ import ch.ethz.idsc.tensor.sca.Power;
     return navigableMap.entrySet().stream() //
         .map(entry -> entry.getKey() + exponentString(entry.getValue())) //
         .collect(Collectors.joining(Unit.JOIN_DELIMITER)); // delimited by '*'
-  }
-
-  /***************************************************/
-  /** @param map
-   * @param key satisfies {@link #requireAtomic(String)}
-   * @param exponent non-zero */
-  public static void merge(Map<String, Scalar> map, String key, Scalar exponent) {
-    if (map.containsKey(key)) {
-      Scalar sum = map.get(key).add(exponent);
-      if (Scalars.isZero(sum))
-        map.remove(key); // exponents cancel out
-      else
-        map.put(key, sum); // exponent is updated
-    } else
-      map.put(key, exponent); // unit is introduced
   }
 
   /** @param scalar

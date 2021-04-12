@@ -50,7 +50,7 @@ public class SimpleUnitSystem implements UnitSystem {
 
   /* package */ static UnitSystem _from(Map<String, Scalar> map) {
     return new SimpleUnitSystem(map.entrySet().stream().collect(Collectors.toMap( //
-        entry -> StaticHelper.requireAtomic(entry.getKey()), // example: "kV"
+        entry -> UnitParser.requireAtomic(entry.getKey()), // example: "kV"
         entry -> requireNumeric(entry.getValue())))); // example: 1000[m^2*kg*s^-3*A^-1]
   }
 

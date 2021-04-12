@@ -48,6 +48,9 @@ public class QuantityComparatorTest extends TestCase {
   public void testInequality() {
     QuantityComparator quantityComparator = QuantityComparator.SI();
     assertFalse(quantityComparator.lessThan(Quantity.of(5, "days"), Quantity.of(10, "h")));
+    assertFalse(quantityComparator.lessEquals(Quantity.of(5, "days"), Quantity.of(10, "h")));
+    assertTrue(quantityComparator.lessThan(Quantity.of(200, "min"), Quantity.of(10, "h")));
+    assertTrue(quantityComparator.lessEquals(Quantity.of(200, "min"), Quantity.of(10, "h")));
   }
 
   public void testNullFail() {

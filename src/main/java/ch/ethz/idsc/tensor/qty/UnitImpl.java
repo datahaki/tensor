@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.ext.Cache;
   public Unit add(Unit unit) {
     NavigableMap<String, Scalar> map = new TreeMap<>(navigableMap);
     for (Entry<String, Scalar> entry : unit.map().entrySet())
-      StaticHelper.merge(map, entry.getKey(), entry.getValue()); // exponent is guaranteed to be non-zero
+      UnitParser.merge(map, entry.getKey(), entry.getValue()); // exponent is guaranteed to be non-zero
     return create(map);
   }
 

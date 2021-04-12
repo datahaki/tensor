@@ -7,8 +7,10 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 
-/** @see Orthogonalize */
-/* package */ class QRMathematica implements QRDecomposition, Serializable {
+/** EXPERIMENTAL
+ * 
+ * @see Orthogonalize */
+public class QRMathematica implements QRDecomposition, Serializable {
   /** @param qrDecomposition of matrix with dimensions n x m
    * @return */
   public static QRDecomposition wrap(QRDecomposition qrDecomposition) {

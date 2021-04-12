@@ -33,21 +33,21 @@ public class SingularValueDecompositionTest extends TestCase {
     final Tensor w = svd.values();
     final Tensor V = svd.getV();
     Tensor W = DiagonalMatrix.with(w);
-    Tensor UtU = Chop._12.of(Transpose.of(U).dot(U).subtract(IdentityMatrix.of(N)));
+    Tensor UtU = Tolerance.CHOP.of(Transpose.of(U).dot(U).subtract(IdentityMatrix.of(N)));
     assertEquals(UtU, Array.zeros(N, N));
-    Tensor VVt = Chop._12.of(MatrixDotTranspose.of(V, V).subtract(IdentityMatrix.of(N)));
+    Tensor VVt = Tolerance.CHOP.of(MatrixDotTranspose.of(V, V).subtract(IdentityMatrix.of(N)));
     assertEquals(VVt, Array.zeros(N, N));
-    Tensor VtV = Chop._12.of(Transpose.of(V).dot(V).subtract(IdentityMatrix.of(N)));
+    Tensor VtV = Tolerance.CHOP.of(Transpose.of(V).dot(V).subtract(IdentityMatrix.of(N)));
     assertEquals(VtV, Array.zeros(N, N));
-    Tensor UWVt = Chop._12.of(MatrixDotTranspose.of(U.dot(W), V).subtract(A));
+    Tensor UWVt = Tolerance.CHOP.of(MatrixDotTranspose.of(U.dot(W), V).subtract(A));
     assertEquals(UWVt, Array.zeros(Dimensions.of(UWVt)));
-    Tensor UW_AV = Chop._12.of(U.dot(W).subtract(A.dot(V)));
+    Tensor UW_AV = Tolerance.CHOP.of(U.dot(W).subtract(A.dot(V)));
     assertEquals(UW_AV, Array.zeros(Dimensions.of(UW_AV)));
     assertTrue(w.stream().map(Scalar.class::cast).noneMatch(Sign::isNegative));
     if (MatrixRank.of(svd) < N) {
       Tensor nul = NullSpace.of(svd);
       Tensor res = MatrixDotTranspose.of(A, nul);
-      assertEquals(Chop._12.of(res), Array.zeros(Dimensions.of(res)));
+      assertEquals(Tolerance.CHOP.of(res), Array.zeros(Dimensions.of(res)));
     }
     return svd;
   }
@@ -93,7 +93,7 @@ public class SingularValueDecompositionTest extends TestCase {
     assertEquals(MatrixRank.of(svd), 3);
     Tensor nls = NullSpace.of(svd);
     Tensor nul = A.dot(nls.get(0));
-    assertEquals(Chop._12.of(nul), Array.zeros(n));
+    assertEquals(Tolerance.CHOP.of(nul), Array.zeros(n));
   }
 
   // test may occasionally fail, depends on the numerical precision using in Chop
