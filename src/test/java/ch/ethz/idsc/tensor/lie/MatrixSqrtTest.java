@@ -24,7 +24,7 @@ public class MatrixSqrtTest extends TestCase {
   private static void _check(Tensor g, MatrixSqrt matrixSqrt) {
     Chop._08.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt_inverse()), IdentityMatrix.of(g.length()));
     Chop._04.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt()), g);
-    Chop._04.requireClose(matrixSqrt.sqrt_inverse().dot(matrixSqrt.sqrt_inverse()), Inverse.of(g));
+    Chop._03.requireClose(matrixSqrt.sqrt_inverse().dot(matrixSqrt.sqrt_inverse()), Inverse.of(g));
   }
 
   public void testSimple() {
@@ -42,9 +42,9 @@ public class MatrixSqrtTest extends TestCase {
     }
   }
 
-  public void testRandomNormal() {
+  public void testTrapezoidalNormal() {
     Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
-    for (int n = 1; n < 10; ++n) {
+    for (int n = 1; n < 7; ++n) {
       Tensor x = RandomVariate.of(distribution, n, n);
       Tensor x2 = x.dot(x);
       _check(x2, MatrixSqrt.of(x2));

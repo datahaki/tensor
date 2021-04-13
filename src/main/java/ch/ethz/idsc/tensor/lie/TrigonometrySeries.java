@@ -26,17 +26,16 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Scalar add = x;
     final Scalar x2 = x.multiply(x);
     int count = 0;
-    int index = 1;
-    while (!chop.isClose(xn0, xn1)) {
+    for (int index = 1; index < MAX_ITERATIONS;) {
       xn0 = xn1;
       add = add.multiply(x2).divide(RealScalar.of(++index * ++index));
       xn1 = Integers.isEven(++count) //
           ? xn1.add(add)
           : xn1.subtract(add);
-      if (MAX_ITERATIONS < index)
-        throw TensorRuntimeException.of(x);
+      if (chop.isClose(xn0, xn1))
+        return xn1;
     }
-    return xn1;
+    throw TensorRuntimeException.of(x);
   }
 
   /** @param x
@@ -46,15 +45,14 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Scalar xn1 = x;
     Scalar add = x;
     final Scalar x2 = x.multiply(x);
-    int index = 1;
-    while (!chop.isClose(xn0, xn1)) {
+    for (int index = 1; index < MAX_ITERATIONS;) {
       xn0 = xn1;
       add = add.multiply(x2).divide(RealScalar.of(++index * ++index));
       xn1 = xn1.add(add);
-      if (MAX_ITERATIONS < index)
-        throw TensorRuntimeException.of(x);
+      if (chop.isClose(xn0, xn1))
+        return xn1;
     }
-    return xn1;
+    throw TensorRuntimeException.of(x);
   }
 
   /** @param x
@@ -65,17 +63,16 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Scalar add = RealScalar.ONE;
     final Scalar x2 = x.multiply(x);
     int count = 0;
-    int index = 0;
-    while (!chop.isClose(xn0, xn1)) {
+    for (int index = 0; index < MAX_ITERATIONS;) {
       xn0 = xn1;
       add = add.multiply(x2).divide(RealScalar.of(++index * ++index));
       xn1 = Integers.isEven(++count) //
           ? xn1.add(add)
           : xn1.subtract(add);
-      if (MAX_ITERATIONS < index)
-        throw TensorRuntimeException.of(x);
+      if (chop.isClose(xn0, xn1))
+        return xn1;
     }
-    return xn1;
+    throw TensorRuntimeException.of(x);
   }
 
   /** @param x
@@ -85,14 +82,13 @@ import ch.ethz.idsc.tensor.sca.Chop;
     Scalar xn1 = RealScalar.ONE;
     Scalar add = RealScalar.ONE;
     final Scalar x2 = x.multiply(x);
-    int index = 0;
-    while (!chop.isClose(xn0, xn1)) {
+    for (int index = 0; index < MAX_ITERATIONS;) {
       xn0 = xn1;
       add = add.multiply(x2).divide(RealScalar.of(++index * ++index));
       xn1 = xn1.add(add);
-      if (MAX_ITERATIONS < index)
-        throw TensorRuntimeException.of(x);
+      if (chop.isClose(xn0, xn1))
+        return xn1;
     }
-    return xn1;
+    throw TensorRuntimeException.of(x);
   }
 }

@@ -36,9 +36,8 @@ public class RowReduce extends AbstractReduce {
     int m = Integers.requirePositiveOrZero(Stream.of(lhs) //
         .mapToInt(Tensor::length) //
         .max().getAsInt());
-    int j = 0;
-    for (int c0 = 0; c0 < lhs.length && j < m; ++j) {
-      swap(pivot.get(c0, j, ind, lhs), c0);
+    for (int c0 = 0, j = 0; c0 < lhs.length && j < m; ++j) {
+      pivot(c0, j);
       Scalar piv = lhs[ind[c0]].Get(j);
       if (Scalars.nonZero(piv)) {
         for (int c1 = 0; c1 < lhs.length; ++c1)

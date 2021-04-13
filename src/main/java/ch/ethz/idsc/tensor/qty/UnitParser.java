@@ -29,9 +29,9 @@ import ch.ethz.idsc.tensor.Scalars;
         if (Scalars.nonZero(exponent))
           merge(navigableMap, key, exponent);
       } else {
-        String trim = token.trim();
-        if (!trim.isEmpty())
-          merge(navigableMap, requireAtomic(trim), RealScalar.ONE);
+        String key = token.trim();
+        if (!key.isEmpty())
+          merge(navigableMap, requireAtomic(key), RealScalar.ONE);
       }
     }
     return UnitImpl.create(navigableMap);
@@ -46,7 +46,7 @@ import ch.ethz.idsc.tensor.Scalars;
    * @return given key
    * @throws Exception if given key is not an atomic unit expression */
   public static String requireAtomic(String key) {
-    if (UnitParser.PATTERN.matcher(key).matches())
+    if (PATTERN.matcher(key).matches())
       return key;
     throw new IllegalArgumentException(key);
   }

@@ -24,7 +24,7 @@ import ch.ethz.idsc.tensor.Tensor;
    * @return determinant of given matrix */
   private Scalar override_det() {
     for (int c0 = 0; c0 < lhs.length; ++c0) {
-      swap(pivot.get(c0, c0, ind, lhs), c0);
+      pivot(c0, c0);
       Scalar piv = lhs[ind[c0]].Get(c0);
       if (Scalars.isZero(piv))
         return piv;

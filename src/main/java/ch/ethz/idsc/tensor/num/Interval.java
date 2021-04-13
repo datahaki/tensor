@@ -35,7 +35,7 @@ import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Round;
 import ch.ethz.idsc.tensor.sca.Sign;
 
-/** multiple clip */
+/** EXPERIMENTAL multiple clip */
 /* package */ class Interval extends AbstractScalar implements //
     AbsInterface, ExactScalarQInterface, ExpInterface, LogInterface, PowerInterface, RoundingInterface, SignInterface {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);

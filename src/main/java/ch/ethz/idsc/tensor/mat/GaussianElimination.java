@@ -45,7 +45,7 @@ public class GaussianElimination extends AbstractReduce {
     super(matrix, pivot);
     rhs = b.copy();
     for (int c0 = 0; c0 < lhs.length; ++c0) {
-      swap(pivot.get(c0, c0, ind, lhs), c0);
+      pivot(c0, c0);
       Scalar piv = lhs[ind[c0]].Get(c0);
       if (Scalars.isZero(piv))
         throw TensorRuntimeException.of(matrix, piv);

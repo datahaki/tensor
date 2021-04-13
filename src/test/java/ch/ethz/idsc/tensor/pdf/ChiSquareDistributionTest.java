@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.io.IOException;
 
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.ext.Serialization;
@@ -29,5 +30,10 @@ public class ChiSquareDistributionTest extends TestCase {
     AssertFail.of(() -> ChiSquareDistribution.of(0));
     AssertFail.of(() -> ChiSquareDistribution.of(-2.3));
     AssertFail.of(() -> ChiSquareDistribution.of(Quantity.of(2, "m")));
+  }
+
+  public void testToString() {
+    Distribution distribution = ChiSquareDistribution.of(RationalScalar.of(3, 2));
+    assertEquals(distribution.toString(), "ChiSquareDistribution[3/2]");
   }
 }
