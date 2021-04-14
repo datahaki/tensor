@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor.itp;
 import java.io.Serializable;
 import java.util.List;
 
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -63,7 +62,7 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
     int below = floor.number().intValue();
     if (Scalars.isZero(remain))
       return tensor.get(below);
-    return Tensors.of(RealScalar.ONE.subtract(remain), remain) //
+    return Tensors.of(remain.one().subtract(remain), remain) //
         .dot(tensor.extract(below, below + 2));
   }
 }

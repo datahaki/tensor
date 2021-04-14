@@ -24,6 +24,7 @@ public class InfluenceMatrixBaseTest extends TestCase {
       Tensor design = m1.dot(m2);
       ExactTensorQ.require(design);
       InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+      // FIXME 0.0[m] != 0
       SymmetricMatrixQ.require(influenceMatrix.matrix());
       influenceMatrix.residualMaker();
       Tensor vector = RandomVariate.of(distribution, n);

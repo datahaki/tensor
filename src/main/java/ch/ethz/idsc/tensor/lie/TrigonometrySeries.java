@@ -59,8 +59,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
    * @return cosine of x */
   public Scalar cos(Scalar x) {
     Scalar xn0 = x.zero();
-    Scalar xn1 = RealScalar.ONE;
-    Scalar add = RealScalar.ONE;
+    Scalar xn1 = x.one();
+    Scalar add = x.one();
     final Scalar x2 = x.multiply(x);
     int count = 0;
     for (int index = 0; index < MAX_ITERATIONS;) {
@@ -79,8 +79,8 @@ import ch.ethz.idsc.tensor.sca.Chop;
    * @return hyperbolic cosine of x */
   public Scalar cosh(Scalar x) {
     Scalar xn0 = x.zero();
-    Scalar xn1 = RealScalar.ONE;
-    Scalar add = RealScalar.ONE;
+    Scalar xn1 = x.one();
+    Scalar add = x.one();
     final Scalar x2 = x.multiply(x);
     for (int index = 0; index < MAX_ITERATIONS;) {
       xn0 = xn1;

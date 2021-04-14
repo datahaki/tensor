@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import ch.ethz.idsc.tensor.nrm.Hypot;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Arg;
 import ch.ethz.idsc.tensor.sca.Sign;
@@ -57,11 +58,11 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     final Scalar w;
     if (Scalars.lessEquals(ca, da)) {
       Scalar c_d = c.divide(d);
-      Scalar fraction = Abs.FUNCTION.apply(c_d).add(Sqrt.FUNCTION.apply(RealScalar.ONE.add(c_d.multiply(c_d)))).multiply(RationalScalar.HALF);
+      Scalar fraction = Abs.FUNCTION.apply(c_d).add(Hypot.withOne(c_d)).multiply(RationalScalar.HALF);
       w = Sqrt.FUNCTION.apply(da).multiply(Sqrt.FUNCTION.apply(fraction));
     } else {
       Scalar d_c = d.divide(c);
-      Scalar fraction = RealScalar.ONE.add(Sqrt.FUNCTION.apply(RealScalar.ONE.add(d_c.multiply(d_c)))).multiply(RationalScalar.HALF);
+      Scalar fraction = RealScalar.ONE.add(Hypot.withOne(d_c)).multiply(RationalScalar.HALF);
       w = Sqrt.FUNCTION.apply(ca).multiply(Sqrt.FUNCTION.apply(fraction));
     }
     if (Sign.isPositiveOrZero(c))

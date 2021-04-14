@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -101,13 +100,13 @@ import ch.ethz.idsc.tensor.sca.Sign;
               t = aipiq.divide(h);
             } else {
               Scalar theta = h.divide(aipiq.add(aipiq));
-              t = Abs.FUNCTION.apply(theta).add(Hypot.of(theta, RealScalar.ONE)).reciprocal();
+              t = Abs.FUNCTION.apply(theta).add(Hypot.withOne(theta)).reciprocal();
               if (Sign.isNegative(theta))
                 t = t.negate();
             }
-            Scalar c = Hypot.of(t, RealScalar.ONE).reciprocal();
-            Scalar s = t.multiply(c);
-            Scalar tau = s.divide(c.add(RealScalar.ONE));
+            Scalar c = Hypot.withOne(t);
+            Scalar s = t.divide(c);
+            Scalar tau = t.divide(c.add(c.one()));
             final Scalar fh = t.multiply(aipiq);
             z.set(v -> v.subtract(fh), ip);
             z.set(fh::add, iq);
@@ -142,15 +141,15 @@ import ch.ethz.idsc.tensor.sca.Sign;
   private static void rotate(Scalar[][] A, Scalar s, Scalar tau, int i, int j, int k, int l) {
     Scalar g = A[i][j];
     Scalar h = A[k][l];
-    A[i][j] = g.subtract(s.multiply(h.add(g.multiply(tau))));
-    A[k][l] = h.add(s.multiply(g.subtract(h.multiply(tau))));
+    A[i][j] = g.subtract(g.multiply(tau).add(h).multiply(s));
+    A[k][l] = g.subtract(h.multiply(tau)).multiply(s).add(h);
   }
 
   private static void rotate(Tensor A, Scalar s, Scalar tau, int i, int j, int k, int l) {
     Scalar g = A.Get(i, j);
     Scalar h = A.Get(k, l);
-    A.set(g.subtract(s.multiply(h.add(g.multiply(tau)))), i, j);
-    A.set(h.add(s.multiply(g.subtract(h.multiply(tau)))), k, l);
+    A.set(g.subtract(g.multiply(tau).add(h).multiply(s)), i, j);
+    A.set(g.subtract(h.multiply(tau)).multiply(s).add(h), k, l);
   }
 
   @Override // from Object

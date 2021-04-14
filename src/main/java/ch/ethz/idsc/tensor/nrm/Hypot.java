@@ -6,7 +6,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Max;
-import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
@@ -26,13 +25,40 @@ public enum Hypot {
   public static Scalar of(Scalar a, Scalar b) {
     Scalar ax = Abs.FUNCTION.apply(a);
     Scalar ay = Abs.FUNCTION.apply(b);
-    Scalar min = Min.of(ax, ay);
-    Scalar max = Max.of(ax, ay);
+    final Scalar min;
+    final Scalar max;
+    if (Scalars.lessThan(ax, ay)) {
+      min = ax;
+      max = ay;
+    } else {
+      min = ay;
+      max = ax;
+    }
     if (Scalars.isZero(min))
       return max; // if min == 0 return max
     // valid at this point: 0 < min <= max
-    Scalar ratio = min.divide(max);
-    return max.multiply(Sqrt.FUNCTION.apply(RealScalar.ONE.add(ratio.multiply(ratio))));
+    Scalar r1 = min.divide(max);
+    Scalar r2 = r1.multiply(r1);
+    return max.multiply(Sqrt.FUNCTION.apply(r2.one().add(r2)));
+  }
+
+  /** @param a
+   * @return Sqrt[a^2 + 1] */
+  public static Scalar withOne(Scalar a) {
+    Scalar ax = Abs.FUNCTION.apply(a);
+    Scalar ay = a.one();
+    final Scalar min;
+    final Scalar max;
+    if (Scalars.lessThan(ax, ay)) {
+      min = ax;
+      max = ay;
+    } else {
+      min = ay;
+      max = ax;
+    }
+    Scalar r1 = min.divide(max);
+    Scalar r2 = r1.multiply(r1);
+    return max.multiply(Sqrt.FUNCTION.apply(r2.one().add(r2)));
   }
 
   /** function computes the 2-Norm of a vector

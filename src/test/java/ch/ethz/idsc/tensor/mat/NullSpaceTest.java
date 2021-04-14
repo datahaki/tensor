@@ -231,7 +231,7 @@ public class NullSpaceTest extends TestCase {
       {
         Tensor nullspace = NullSpace.usingRowReduce(mt);
         assertEquals(Dimensions.of(nullspace), Arrays.asList(n - d, n));
-        Chop._10.requireAllZero(mt.dot(Transpose.of(nullspace)));
+        Chop._08.requireAllZero(mt.dot(Transpose.of(nullspace)));
       }
       {
         Tensor nullspace = NullSpace.usingQR(mt);

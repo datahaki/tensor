@@ -59,8 +59,8 @@ public enum Fourier {
       int istep = mmax << 1;
       double thalf = b * Math.PI / istep;
       double wtemp = Math.sin(thalf);
-      Scalar wp = ComplexScalar.of(-2 * wtemp * wtemp, Math.sin(thalf + thalf));
-      Scalar w = RealScalar.ONE;
+      Scalar wp = ComplexScalar.of(1.0 - 2.0 * wtemp * wtemp, Math.sin(thalf + thalf));
+      Scalar w = wp.one();
       for (int m = 0; m < mmax; ++m) {
         for (int i = m; i < n; i += istep) {
           int j = i + mmax;
@@ -68,7 +68,7 @@ public enum Fourier {
           array[j] = array[i].subtract(temp);
           array[i] = array[i].add(temp);
         }
-        w = w.add(w.multiply(wp));
+        w = w.multiply(wp);
       }
     }
     return Tensors.of(array).divide(Sqrt.FUNCTION.apply(RealScalar.of(n)));

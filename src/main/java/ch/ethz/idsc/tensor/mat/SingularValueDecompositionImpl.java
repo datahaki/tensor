@@ -93,13 +93,12 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   private void initU1(int i) {
-    Scalar p = RealScalar.ZERO;
     Scalar scale = Vector1Norm.of(u.stream().skip(i).map(row -> row.Get(i)));
     if (Scalars.nonZero(scale)) {
       u.stream().skip(i).forEach(uk -> uk.set(scale::under, i));
       Scalar s = Vector2NormSquared.of(u.stream().skip(i).map(row -> row.Get(i)));
       Scalar f = u.Get(i, i);
-      p = CopySign.of(Sqrt.FUNCTION.apply(s), f).negate();
+      Scalar p = CopySign.of(Sqrt.FUNCTION.apply(s), f).negate();
       Scalar h = f.multiply(p).subtract(s);
       u.set(f.subtract(p), i, i);
       for (int j = i + 1; j < cols; ++j) {
@@ -110,34 +109,33 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         addScaled(i, u, i, j, dot.divide(h));
       }
       u.stream().skip(i).forEach(uk -> uk.set(scale::multiply, i));
-    }
-    w.set(scale.multiply(p), i);
+      w.set(scale.multiply(p), i);
+    } else
+      w.set(Scalar::zero, i);
   }
 
   private void initU2(int i) {
     final int ip1 = i + 1;
     if (ip1 != cols) {
-      Scalar p = RealScalar.ZERO;
       Scalar scale = Vector1Norm.of(u.get(i).extract(ip1, cols));
       if (Scalars.nonZero(scale)) {
         IntStream.range(ip1, cols).forEach(k -> u.set(scale::under, i, k));
-        {
-          Scalar s = Vector2NormSquared.of(u.get(i).extract(ip1, cols));
-          Scalar f = u.Get(i, ip1);
-          p = CopySign.of(Sqrt.FUNCTION.apply(s), f).negate();
-          Scalar h = f.multiply(p).subtract(s);
-          u.set(f.subtract(p), i, ip1);
-          IntStream.range(ip1, cols).forEach(k -> r.set(u.Get(i, k).divide(h), k));
-        }
+        Scalar s = Vector2NormSquared.of(u.get(i).extract(ip1, cols));
+        Scalar f = u.Get(i, ip1);
+        Scalar p = CopySign.of(Sqrt.FUNCTION.apply(s), f).negate();
+        Scalar h = f.multiply(p).subtract(s);
+        u.set(f.subtract(p), i, ip1);
+        IntStream.range(ip1, cols).forEach(k -> r.set(u.Get(i, k).divide(h), k));
         Tensor ui = u.get(i).extract(ip1, cols);
         u.stream().skip(ip1).forEach(uj -> {
-          Scalar s = (Scalar) uj.extract(ip1, cols).dot(ui);
+          Scalar d = (Scalar) uj.extract(ip1, cols).dot(ui);
           for (int k = ip1; k < cols; ++k)
-            uj.set(s.multiply(r.Get(k))::add, k);
+            uj.set(d.multiply(r.Get(k))::add, k);
         });
         IntStream.range(ip1, cols).forEach(k -> u.set(scale::multiply, i, k));
-      }
-      r.set(scale.multiply(p), ip1);
+        r.set(scale.multiply(p), ip1);
+      } else
+        r.set(Scalar::zero, ip1);
     }
   }
 
@@ -156,17 +154,17 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
             (Scalar) uiEx.dot(Tensor.of(v.stream().skip(ip1).map(row -> row.Get(fj)))));
       }
     }
-    IntStream.range(ip1, cols).forEach(j -> v.set(RealScalar.ZERO, i, j));
-    v.stream().skip(ip1).forEach(vj -> vj.set(RealScalar.ZERO, i));
-    v.set(RealScalar.ONE, i, i);
+    IntStream.range(ip1, cols).forEach(j -> v.set(Scalar::zero, i, j));
+    v.stream().skip(ip1).forEach(vj -> vj.set(Scalar::zero, i));
+    v.set(Scalar::one, i, i);
   }
 
   private void initU3(int i) {
     final int ip1 = i + 1;
-    IntStream.range(ip1, cols).forEach(j -> u.set(RealScalar.ZERO, i, j));
+    IntStream.range(ip1, cols).forEach(j -> u.set(Scalar::zero, i, j));
     Scalar p = w.Get(i);
     if (Scalars.isZero(p))
-      u.stream().skip(i).forEach(uj -> uj.set(RealScalar.ZERO, i));
+      u.stream().skip(i).forEach(uj -> uj.set(Scalar::zero, i));
     else {
       Scalar den = u.Get(i, i).multiply(p);
       for (int j = ip1; j < cols; ++j) {
@@ -184,14 +182,15 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   private int levelW(int k, Chop chop) {
     for (int l = k; l > 0; --l) {
-      if (chop.isZero(r.Get(l)))
+      Scalar rl = r.Get(l);
+      if (chop.isZero(rl))
         return l;
       if (chop.isZero(w.Get(l - 1))) {
-        Scalar c = RealScalar.ZERO;
-        Scalar s = RealScalar.ONE;
+        Scalar c = rl.zero();
+        Scalar s = rl.one();
         for (int i = l; i < k + 1; ++i) {
           Scalar f = s.multiply(r.Get(i));
-          r.set(c.multiply(r.Get(i)), i);
+          r.set(c::multiply, i);
           if (chop.isZero(f))
             break;
           Scalar g = w.Get(i);
@@ -216,11 +215,13 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     Scalar p = r.Get(i - 1);
     Scalar h = r.Get(i);
     Scalar hy = h.multiply(y);
+    // ((y-z)(y+z)+(p-h)*(p+h))/(2hy)
     Scalar f = y.subtract(z).multiply(y.add(z)).add(p.subtract(h).multiply(p.add(h))).divide(hy.add(hy));
-    p = Hypot.of(f, RealScalar.ONE);
+    p = Hypot.withOne(f);
+    // ((x-z)(x+z)+(h*(y/(f+-p)-h)))/x
     f = x.subtract(z).multiply(x.add(z)).add(h.multiply(y.divide(f.add(CopySign.of(p, f))).subtract(h))).divide(x);
-    Scalar s = RealScalar.ONE;
-    Scalar c = RealScalar.ONE;
+    Scalar s = x.one();
+    Scalar c = x.one();
     for (int j = l; j < i; ++j) {
       int jp1 = j + 1;
       p = r.Get(jp1);
@@ -232,8 +233,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       c = f.divide(z);
       s = h.divide(z);
       rotate(v, c, s, jp1, j);
-      f = x.multiply(c).add(p.multiply(s));
-      p = p.multiply(c).subtract(x.multiply(s));
+      Rotate rotate = new Rotate(p, x, c, s);
+      p = rotate.re();
+      f = rotate.im();
       h = y.multiply(s);
       y = y.multiply(c);
       z = Hypot.of(f, h);
@@ -243,10 +245,11 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         s = h.divide(z);
       }
       rotate(u, c, s, jp1, j);
-      f = c.multiply(p).add(s.multiply(y));
-      x = c.multiply(y).subtract(s.multiply(p));
+      rotate = new Rotate(y, p, c, s);
+      x = rotate.re();
+      f = rotate.im();
     }
-    r.set(RealScalar.ZERO, l);
+    r.set(Scalar::zero, l);
     r.set(f, i);
     w.set(x, i);
   }
@@ -257,10 +260,9 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   private static void rotate(Tensor m, Scalar c, Scalar s, int i, int j) {
     m.stream().forEach(mk -> {
-      Scalar x = mk.Get(j);
-      Scalar z = mk.Get(i);
-      mk.set(x.multiply(c).add(z.multiply(s)), j);
-      mk.set(z.multiply(c).subtract(x.multiply(s)), i);
+      Rotate rotate = new Rotate(mk.Get(i), mk.Get(j), c, s);
+      mk.set(rotate.re(), i);
+      mk.set(rotate.im(), j);
     });
   }
 
