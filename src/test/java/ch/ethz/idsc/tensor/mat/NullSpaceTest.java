@@ -257,6 +257,12 @@ public class NullSpaceTest extends TestCase {
       Chop.NONE.requireAllZero(Dot.of(matrix, vector));
   }
 
+  public void testDecimalScalar() {
+    Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
+    Tensor ns = NullSpace.of(matrix);
+    Tolerance.CHOP.requireAllZero(matrix.dot(Transpose.of(ns)));
+  }
+
   public void testFailScalar() {
     AssertFail.of(() -> NullSpace.of(RealScalar.ONE));
   }

@@ -96,7 +96,7 @@ import java.util.regex.Pattern;
       int precision = Math.toIntExact(Math.round(Double.parseDouble(post)));
       MathContext mathContext = new MathContext(precision, RoundingMode.HALF_EVEN);
       BigDecimal bigDecimal = new BigDecimal(ante, mathContext);
-      return DecimalScalar.of(bigDecimal);
+      return DecimalScalar.of(bigDecimal, precision);
     }
     throw new IllegalArgumentException(_string);
   }

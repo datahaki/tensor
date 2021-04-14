@@ -60,4 +60,38 @@ public class IntegersTest extends TestCase {
     AssertFail.of(() -> Integers.isPowerOf2(-1));
     AssertFail.of(() -> Integers.isPowerOf2(0));
   }
+
+  public void testMisra3_3() {
+    int a = -5;
+    int b = 3;
+    int div = a / b;
+    int rem = a % b;
+    assertEquals(div, -1);
+    assertEquals(rem, -2);
+  }
+
+  public void testMisra6_10_3_int() {
+    int a = Integer.MAX_VALUE;
+    int b = Integer.MAX_VALUE;
+    long c1 = a + b;
+    long c2 = ((long) a) + b;
+    long c3 = a + ((long) b);
+    assertEquals(c1, -2);
+    assertEquals(c2, 4294967294L);
+    assertEquals(c3, 4294967294L);
+  }
+
+  public void testMisra6_10_3_short() {
+    short a = Short.MAX_VALUE;
+    short b = Short.MAX_VALUE;
+    int c1 = a + b;
+    assertEquals(c1, 65534);
+  }
+
+  public void testMisra6_10_3_byte() {
+    byte a = Byte.MAX_VALUE;
+    byte b = Byte.MAX_VALUE;
+    int c1 = a + b;
+    assertEquals(c1, 254);
+  }
 }

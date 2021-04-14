@@ -32,7 +32,8 @@ public class CoshTest extends TestCase {
   }
 
   public void testDecimal() {
-    Scalar scalar = Cosh.of(DecimalScalar.of(new BigDecimal("1.2356", MathContext.DECIMAL128)));
+    MathContext mc = MathContext.DECIMAL128;
+    Scalar scalar = Cosh.of(DecimalScalar.of(new BigDecimal("1.2356", mc), mc.getPrecision()));
     assertTrue(scalar instanceof DecimalScalar);
     assertEquals(scalar, DoubleScalar.of(Math.cosh(1.2356)));
   }

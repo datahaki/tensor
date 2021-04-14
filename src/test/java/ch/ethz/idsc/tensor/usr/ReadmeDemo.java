@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.usr;
 
+import java.math.BigDecimal;
+
 import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -84,8 +86,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   static void demoDecimal() {
-    System.out.println(Exp.of(DecimalScalar.of("10")));
-    System.out.println(Sqrt.of(DecimalScalar.of("2")));
+    System.out.println(Exp.of(DecimalScalar.of(new BigDecimal("10"))));
+    System.out.println(Sqrt.of(DecimalScalar.of(new BigDecimal("2"))));
     Scalar a = N.in(100).of(RealScalar.of(2));
     System.out.println(Sqrt.of(a));
   }

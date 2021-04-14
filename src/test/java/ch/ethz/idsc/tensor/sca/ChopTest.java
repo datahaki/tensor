@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
+import java.math.BigDecimal;
+
 import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -93,7 +95,7 @@ public class ChopTest extends TestCase {
   }
 
   public void testDecimal() {
-    Scalar scalar = DecimalScalar.of("0.0000001");
+    Scalar scalar = DecimalScalar.of(new BigDecimal("0.0000001"));
     assertTrue(Chop._05.allZero(scalar));
     assertFalse(Chop._10.allZero(scalar));
   }

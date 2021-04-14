@@ -4,7 +4,9 @@ package ch.ethz.idsc.tensor.mat;
 import java.security.SecureRandom;
 import java.util.Random;
 
+import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -141,5 +143,15 @@ public class InverseTest extends TestCase {
     }
     assertFalse(HermitianMatrixQ.of(matrix));
     assertFalse(SymmetricMatrixQ.of(matrix));
+  }
+
+  public void testDecimalScalarInverse() {
+    Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
+    Tensor invers = Inverse.of(matrix);
+    Scalar detmat = Det.of(matrix);
+    Scalar detinv = Det.of(invers);
+    Scalar one = detmat.multiply(detinv);
+    assertTrue(one instanceof DecimalScalar);
+    Tolerance.CHOP.requireClose(one, RealScalar.ONE);
   }
 }

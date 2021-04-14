@@ -33,7 +33,8 @@ public class SinhTest extends TestCase {
   }
 
   public void testDecimal() {
-    Scalar scalar = Sinh.of(DecimalScalar.of(new BigDecimal("1.2356", MathContext.DECIMAL128)));
+    MathContext mc = MathContext.DECIMAL128;
+    Scalar scalar = Sinh.of(DecimalScalar.of(new BigDecimal("1.2356", MathContext.DECIMAL128), mc.getPrecision()));
     assertTrue(scalar instanceof DecimalScalar);
     Tolerance.CHOP.requireClose(scalar, DoubleScalar.of(Math.sinh(1.2356)));
   }

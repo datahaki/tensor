@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.red.Max;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -117,5 +118,12 @@ public class QRDecompositionImplTest extends TestCase {
   public void testPackageVisibility() {
     assertTrue(Modifier.isPublic(QRDecomposition.class.getModifiers()));
     assertFalse(Modifier.isPublic(QRDecompositionImpl.class.getModifiers()));
+  }
+
+  public void testDecimalScalarQR() {
+    Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
+    QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
+    Tensor tensor = qrDecomposition.getQ().dot(qrDecomposition.getR());
+    Tolerance.CHOP.requireClose(matrix, tensor);
   }
 }

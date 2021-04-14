@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Serialization;
@@ -22,6 +23,7 @@ import ch.ethz.idsc.tensor.red.Projection;
 import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
+import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -121,6 +123,13 @@ public class NormalizeTest extends TestCase {
   public void testQuantityTensor() {
     Tensor vector = QuantityTensor.of(Tensors.vector(2, 3, 4), "m*s^-1");
     _checkNormalizeAllNorms(vector);
+  }
+
+  public void testDecimalScalar() {
+    Tensor vector = Range.of(3, 6).map(N.DECIMAL128);
+    Tensor tensor = Vector2Norm.NORMALIZE.apply(vector);
+    Scalar scalar = Vector2Norm.of(tensor);
+    assertTrue(scalar.toString().startsWith("1.0000000000000000000000000000000"));
   }
 
   public void testNormalizeTotal() {

@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
+import java.math.BigDecimal;
+
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -26,13 +28,15 @@ public class ExpTest extends TestCase {
   }
 
   public void testDecimal() {
-    Scalar scalar = Exp.of(DecimalScalar.of("1"));
+    Scalar scalar = Exp.of(DecimalScalar.of(new BigDecimal("1")));
     assertTrue(scalar instanceof DecimalScalar);
     assertTrue(scalar.toString().startsWith("2.71828182845904523536028747135266"));
   }
 
   public void testComplexDecimal() {
-    Scalar scalar = Exp.of(ComplexScalar.of(DecimalScalar.of("1"), DecimalScalar.of("2.12")));
+    Scalar scalar = Exp.of(ComplexScalar.of( //
+        DecimalScalar.of(new BigDecimal("1")), //
+        DecimalScalar.of(new BigDecimal("2.12"))));
     assertTrue(scalar instanceof ComplexScalar);
     // mathematica gives -1.4189653368301074` + 2.3185326117622904` I
     Scalar m = Scalars.fromString("-1.4189653368301074 + 2.3185326117622904 * I");

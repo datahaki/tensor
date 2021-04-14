@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Cosh;
 import ch.ethz.idsc.tensor.sca.Sin;
 import ch.ethz.idsc.tensor.sca.Sinh;
+import ch.ethz.idsc.tensor.sca.Sqrt;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -46,6 +47,15 @@ public class BigDecimalMathTest extends TestCase {
     assertEquals(rt1.toString(), m);
   }
 
+  public void testSqrtSome() {
+    BigDecimal bigDecimal = new BigDecimal("0.5138888888888888888888888888888885");
+    assertEquals(bigDecimal.precision(), 34);
+    // BigDecimalMath.sqrt(bigDecimal,
+    Scalar scalar = DecimalScalar.of(bigDecimal);
+    Sqrt.FUNCTION.apply(scalar);
+    // BigDecimalMath.sqrt(bigDecimal, new MathContext(34));
+  }
+
   public void testSqrtZero() {
     BigDecimal bd1 = new BigDecimal("0");
     BigDecimal rt1 = BigDecimalMath.sqrt(bd1, MathContext.DECIMAL64);
@@ -71,8 +81,7 @@ public class BigDecimalMathTest extends TestCase {
     // ............ 0.9092974268256816953960198659117451
     Scalar s0 = Sin.of(RealScalar.of(2));
     BigDecimal bd1 = BigDecimalMath.sin(BigDecimal.valueOf(2), MathContext.DECIMAL128);
-    Scalar s1 = DecimalScalar.of(bd1);
-    Chop._13.requireClose(s0, s1);
+    Chop._13.requireClose(s0, RealScalar.of(bd1.doubleValue()));
   }
 
   public void testSinh() {
@@ -80,21 +89,18 @@ public class BigDecimalMathTest extends TestCase {
     // ............ 0.9092974268256816953960198659117451
     Scalar s0 = Sinh.of(RealScalar.of(2));
     BigDecimal bd1 = BigDecimalMath.sinh(BigDecimal.valueOf(2), MathContext.DECIMAL128);
-    Scalar s1 = DecimalScalar.of(bd1);
-    Chop._13.requireClose(s0, s1);
+    Chop._13.requireClose(s0, RealScalar.of(bd1.doubleValue()));
   }
 
   public void testCos() {
     Scalar s0 = Cos.of(RealScalar.of(2));
     BigDecimal bd1 = BigDecimalMath.cos(BigDecimal.valueOf(2), MathContext.DECIMAL128);
-    Scalar s1 = DecimalScalar.of(bd1);
-    Chop._13.requireClose(s0, s1);
+    Chop._13.requireClose(s0, RealScalar.of(bd1.doubleValue()));
   }
 
   public void testCosh() {
     Scalar s0 = Cosh.of(RealScalar.of(2));
     BigDecimal bd1 = BigDecimalMath.cosh(BigDecimal.valueOf(2), MathContext.DECIMAL128);
-    Scalar s1 = DecimalScalar.of(bd1);
-    Chop._13.requireClose(s0, s1);
+    Chop._13.requireClose(s0, RealScalar.of(bd1.doubleValue()));
   }
 }

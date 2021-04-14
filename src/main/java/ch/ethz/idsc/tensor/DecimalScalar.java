@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Objects;
@@ -34,22 +33,14 @@ import ch.ethz.idsc.tensor.sca.N;
 public class DecimalScalar extends AbstractRealScalar implements //
     ChopInterface, NInterface, Serializable {
   private static final int DEFAULT_CONTEXT = 34;
-  private static final Scalar DECIMAL_ZERO = of(BigDecimal.ZERO);
-  private static final Scalar DECIMAL_ONE = of(BigDecimal.ONE);
   /** BigDecimal precision of a double */
   private static final int DOUBLE_PRECISION = 17;
 
   /** @param bigDecimal
+   * @param precision
    * @return */
-  public static Scalar of(BigDecimal bigDecimal) {
-    int precision = bigDecimal.precision();
-    return new DecimalScalar(bigDecimal, precision <= DEFAULT_CONTEXT ? DEFAULT_CONTEXT : precision);
-  }
-
-  /** @param string
-   * @return */
-  public static Scalar of(String string) {
-    return of(new BigDecimal(string));
+  public static Scalar of(BigDecimal bigDecimal, int precision) {
+    return new DecimalScalar(Objects.requireNonNull(bigDecimal), precision);
   }
 
   /** @param string
@@ -57,6 +48,13 @@ public class DecimalScalar extends AbstractRealScalar implements //
    * @return scalar with value encoded as {@link BigDecimal(string)} */
   public static Scalar of(String string, int precision) {
     return new DecimalScalar(new BigDecimal(string), precision);
+  }
+
+  /** @param bigDecimal
+   * @return */
+  public static Scalar of(BigDecimal bigDecimal) {
+    int precision = bigDecimal.precision();
+    return new DecimalScalar(bigDecimal, precision <= DEFAULT_CONTEXT ? DEFAULT_CONTEXT : precision);
   }
 
   /***************************************************/
@@ -69,25 +67,25 @@ public class DecimalScalar extends AbstractRealScalar implements //
   }
 
   @Override // from Scalar
-  public Scalar negate() {
-    return of(value.negate());
+  public DecimalScalar negate() {
+    return new DecimalScalar(value.negate(), precision);
   }
 
   @Override // from Scalar
-  public Scalar reciprocal() {
-    return of(BigDecimal.ONE.divide(value, mathContext()));
+  public DecimalScalar reciprocal() {
+    return new DecimalScalar(BigDecimal.ONE.divide(value, mathContext()), precision);
   }
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
     if (scalar instanceof DecimalScalar) {
       DecimalScalar decimalScalar = (DecimalScalar) scalar;
-      return of(value.multiply(decimalScalar.number()));
+      MathContext mathContext = hint(decimalScalar);
+      BigDecimal bigDecimal = value.multiply(decimalScalar.number(), mathContext);
+      return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
-    if (scalar instanceof RationalScalar) {
-      RationalScalar rationalScalar = (RationalScalar) scalar;
-      return of(value.multiply(rationalScalar.toBigDecimal(mathContext())));
-    }
+    if (scalar instanceof RationalScalar)
+      return times((RationalScalar) scalar);
     return scalar.multiply(this);
   }
 
@@ -95,12 +93,12 @@ public class DecimalScalar extends AbstractRealScalar implements //
   public Scalar divide(Scalar scalar) {
     if (scalar instanceof DecimalScalar) {
       DecimalScalar decimalScalar = (DecimalScalar) scalar;
-      return of(value.divide(decimalScalar.number(), hint(precision, decimalScalar.precision())));
+      MathContext mathContext = hint(decimalScalar);
+      BigDecimal bigDecimal = value.divide(decimalScalar.number(), mathContext);
+      return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
-    if (scalar instanceof RationalScalar) {
-      RationalScalar reciprocal = (RationalScalar) scalar.reciprocal();
-      return of(value.multiply(reciprocal.toBigDecimal(mathContext()), mathContext()));
-    }
+    if (scalar instanceof RationalScalar)
+      return times((RationalScalar) scalar.reciprocal());
     return scalar.under(this);
   }
 
@@ -108,16 +106,20 @@ public class DecimalScalar extends AbstractRealScalar implements //
   public Scalar under(Scalar scalar) {
     if (scalar instanceof DecimalScalar) {
       DecimalScalar decimalScalar = (DecimalScalar) scalar;
-      return of(decimalScalar.number().divide(value, hint(precision, decimalScalar.precision())));
+      MathContext mathContext = hint(decimalScalar);
+      BigDecimal bigDecimal = decimalScalar.number().divide(value, mathContext);
+      return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
     if (scalar instanceof RationalScalar) {
       RationalScalar rationalScalar = (RationalScalar) scalar;
-      return of(rationalScalar.toBigDecimal(mathContext()).divide(value, mathContext()));
+      MathContext mathContext = mathContext();
+      BigDecimal bigDecimal = rationalScalar.toBigDecimal(mathContext).divide(value, mathContext);
+      return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
     return scalar.divide(this);
   }
 
-  @Override // from DecimalScalar
+  @Override // from Scalar
   public BigDecimal number() {
     return value;
   }
@@ -128,16 +130,27 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from Scalar
   public Scalar zero() {
-    return DECIMAL_ZERO;
+    return StaticHelper.CACHE_0.apply(precision);
   }
 
   @Override // from Scalar
   public Scalar one() {
-    return DECIMAL_ONE;
+    return StaticHelper.CACHE_1.apply(precision);
   }
 
-  private static MathContext hint(int precision1, int precision2) {
-    return new MathContext(Math.max(precision1, precision2), RoundingMode.HALF_EVEN);
+  // helper function used in the implementation of TrigonometryInterface etc.
+  private MathContext mathContext() {
+    return new MathContext(precision, RoundingMode.HALF_EVEN);
+  }
+
+  private MathContext hint(DecimalScalar decimalScalar) {
+    return new MathContext(Math.min(precision, decimalScalar.precision), RoundingMode.HALF_EVEN);
+  }
+
+  private Scalar times(RationalScalar rationalScalar) {
+    MathContext mathContext = mathContext();
+    BigDecimal bigDecimal = value.multiply(rationalScalar.toBigDecimal(mathContext), mathContext);
+    return new DecimalScalar(bigDecimal, mathContext.getPrecision());
   }
 
   /***************************************************/
@@ -145,11 +158,15 @@ public class DecimalScalar extends AbstractRealScalar implements //
   protected Scalar plus(Scalar scalar) {
     if (scalar instanceof DecimalScalar) {
       DecimalScalar decimalScalar = (DecimalScalar) scalar;
-      return of(value.add(decimalScalar.number()));
+      MathContext mathContext = hint(decimalScalar);
+      BigDecimal bigDecimal = value.add(decimalScalar.number(), mathContext);
+      return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
     if (scalar instanceof RationalScalar) {
       RationalScalar rationalScalar = (RationalScalar) scalar;
-      return of(value.add(rationalScalar.toBigDecimal(mathContext())));
+      MathContext mathContext = mathContext();
+      BigDecimal bigDecimal = value.add(rationalScalar.toBigDecimal(mathContext));
+      return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
     return scalar.add(this);
   }
@@ -162,12 +179,12 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from ChopInterface
   public Scalar chop(Chop chop) {
-    return value.abs().doubleValue() < chop.threshold() ? ZERO : this;
+    return Math.abs(value.doubleValue()) < chop.threshold() ? ZERO : this;
   }
 
   @Override // from RoundingInterface
   public Scalar ceiling() {
-    return RationalScalar.of(StaticHelper.ceiling(value), BigInteger.ONE);
+    return RationalScalar.integer(StaticHelper.ceiling(value));
   }
 
   @Override // from Comparable<Scalar>
@@ -183,12 +200,14 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar floor() {
-    return RationalScalar.of(StaticHelper.floor(value), BigInteger.ONE);
+    return RationalScalar.integer(StaticHelper.floor(value));
   }
 
   @Override // from ExpInterface
   public Scalar exp() {
-    return of(BigDecimalMath.exp(value, mathContext()));
+    MathContext mathContext = mathContext();
+    BigDecimal bigDecimal = BigDecimalMath.exp(value, mathContext);
+    return new DecimalScalar(bigDecimal, mathContext.getPrecision());
   }
 
   @Override // from NInterface
@@ -205,14 +224,17 @@ public class DecimalScalar extends AbstractRealScalar implements //
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
     OptionalInt optionalInt = Scalars.optionalInt(exponent);
-    return optionalInt.isPresent() //
-        ? of(value.pow(optionalInt.getAsInt(), mathContext()))
-        : super.power(exponent);
+    if (optionalInt.isPresent()) {
+      MathContext mathContext = mathContext();
+      BigDecimal bigDecimal = value.pow(optionalInt.getAsInt(), mathContext);
+      return new DecimalScalar(bigDecimal, mathContext.getPrecision());
+    }
+    return super.power(exponent);
   }
 
   @Override // from RoundingInterface
   public Scalar round() {
-    return RationalScalar.of(value.setScale(0, RoundingMode.HALF_UP).toBigIntegerExact(), BigInteger.ONE);
+    return RationalScalar.integer(value.setScale(0, RoundingMode.HALF_UP).toBigIntegerExact());
   }
 
   @Override // from AbstractRealScalar
@@ -222,34 +244,40 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from SqrtInterface
   public Scalar sqrt() {
-    if (isNonNegative())
-      return of(BigDecimalMath.sqrt(value, mathContext()));
-    return ComplexScalarImpl.of(zero(), DecimalScalar.of(BigDecimalMath.sqrt(value.negate(), mathContext())));
+    if (isNonNegative()) {
+      MathContext mathContext = mathContext();
+      BigDecimal bigDecimal = BigDecimalMath.sqrt(value, mathContext);
+      return new DecimalScalar(bigDecimal, mathContext.getPrecision());
+    }
+    return ComplexScalarImpl.of(zero(), negate().sqrt());
   }
 
   @Override // from TrigonometryInterface
-  public Scalar cos() {
-    return of(BigDecimalMath.cos(value, mathContext()));
+  public DecimalScalar cos() {
+    MathContext mathContext = mathContext();
+    BigDecimal bigDecimal = BigDecimalMath.cos(value, mathContext);
+    return new DecimalScalar(bigDecimal, mathContext.getPrecision());
   }
 
   @Override // from TrigonometryInterface
-  public Scalar cosh() {
-    return of(BigDecimalMath.cosh(value, mathContext()));
+  public DecimalScalar cosh() {
+    MathContext mathContext = mathContext();
+    BigDecimal bigDecimal = BigDecimalMath.cosh(value, mathContext);
+    return new DecimalScalar(bigDecimal, mathContext.getPrecision());
   }
 
   @Override // from TrigonometryInterface
-  public Scalar sin() {
-    return of(BigDecimalMath.sin(value, mathContext()));
+  public DecimalScalar sin() {
+    MathContext mathContext = mathContext();
+    BigDecimal bigDecimal = BigDecimalMath.sin(value, mathContext);
+    return new DecimalScalar(bigDecimal, mathContext.getPrecision());
   }
 
   @Override // from TrigonometryInterface
-  public Scalar sinh() {
-    return of(BigDecimalMath.sinh(value, mathContext()));
-  }
-
-  // helper function used in the implementation of TrigonometryInterface etc.
-  private MathContext mathContext() {
-    return new MathContext(precision, RoundingMode.HALF_EVEN);
+  public DecimalScalar sinh() {
+    MathContext mathContext = mathContext();
+    BigDecimal bigDecimal = BigDecimalMath.sinh(value, mathContext);
+    return new DecimalScalar(bigDecimal, mathContext.getPrecision());
   }
 
   /***************************************************/

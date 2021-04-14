@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import java.math.BigDecimal;
+
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -47,8 +49,8 @@ public class ScalarParserTest extends TestCase {
   }
 
   public void testDecimal() {
-    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of("1")).toString(), "I");
-    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of("-1")).toString(), "-I");
+    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of(new BigDecimal("1"))).toString(), "I");
+    assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of(new BigDecimal("-1"))).toString(), "-I");
   }
 
   public void testDoubleImag() {

@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.Get;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.N;
 import junit.framework.TestCase;
 
 public class SingularValueDecompositionImplTest extends TestCase {
@@ -48,5 +49,10 @@ public class SingularValueDecompositionImplTest extends TestCase {
   public void testPackageVisibility() {
     assertTrue(Modifier.isPublic(SingularValueDecomposition.class.getModifiers()));
     assertFalse(Modifier.isPublic(SingularValueDecompositionImpl.class.getModifiers()));
+  }
+
+  public void testDecimalScalar() {
+    Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
+    SingularValueDecomposition.of(matrix);
   }
 }

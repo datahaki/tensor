@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
@@ -119,7 +120,7 @@ public class ModTest extends TestCase {
   }
 
   public void testDecimal1() {
-    Scalar pi = DecimalScalar.of("3.141592653589793238462643383279502884197169399375105820974944592");
+    Scalar pi = DecimalScalar.of(new BigDecimal("3.141592653589793238462643383279502884197169399375105820974944592"));
     Mod mod = Mod.function(pi);
     Scalar re = mod.apply(RealScalar.of(100));
     assertTrue(re instanceof DecimalScalar);

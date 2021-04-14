@@ -28,7 +28,7 @@ import ch.ethz.idsc.tensor.ext.Integers;
     BigDecimal xn1 = BigDecimal.ONE;
     while (xn0.compareTo(xn1) != 0) {
       xn0 = xn1;
-      BigDecimal fx = xn0.multiply(xn0, mathContext).subtract(square);
+      BigDecimal fx = xn0.multiply(xn0).subtract(square);
       BigDecimal fpx = xn0.multiply(TWO);
       xn1 = fx.divide(fpx, mathContext);
       xn1 = xn0.subtract(xn1, mathContext);
@@ -36,6 +36,7 @@ import ch.ethz.idsc.tensor.ext.Integers;
     return xn1;
   }
 
+  /***************************************************/
   /** @param x
    * @param mathContext
    * @return exponential of x */
@@ -58,7 +59,7 @@ import ch.ethz.idsc.tensor.ext.Integers;
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = x;
     BigDecimal add = x;
-    final BigDecimal x2 = x.multiply(x, mathContext);
+    BigDecimal x2 = x.multiply(x, mathContext);
     int count = 0;
     for (int index = 1; xn0.compareTo(xn1) != 0;) {
       xn0 = xn1;
@@ -77,7 +78,7 @@ import ch.ethz.idsc.tensor.ext.Integers;
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = x;
     BigDecimal add = x;
-    final BigDecimal x2 = x.multiply(x, mathContext);
+    BigDecimal x2 = x.multiply(x, mathContext);
     for (int index = 1; xn0.compareTo(xn1) != 0;) {
       xn0 = xn1;
       add = add.multiply(x2).divide(BigDecimal.valueOf(++index * ++index), mathContext);
@@ -93,7 +94,7 @@ import ch.ethz.idsc.tensor.ext.Integers;
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = BigDecimal.ONE;
     BigDecimal add = BigDecimal.ONE;
-    final BigDecimal x2 = x.multiply(x, mathContext);
+    BigDecimal x2 = x.multiply(x, mathContext);
     int count = 0;
     for (int index = 0; xn0.compareTo(xn1) != 0;) {
       xn0 = xn1;
@@ -112,7 +113,7 @@ import ch.ethz.idsc.tensor.ext.Integers;
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = BigDecimal.ONE;
     BigDecimal add = BigDecimal.ONE;
-    final BigDecimal x2 = x.multiply(x, mathContext);
+    BigDecimal x2 = x.multiply(x, mathContext);
     for (int index = 0; xn0.compareTo(xn1) != 0;) {
       xn0 = xn1;
       add = add.multiply(x2).divide(BigDecimal.valueOf(++index * ++index), mathContext);

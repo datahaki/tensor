@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
+import java.math.BigDecimal;
+
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -60,7 +62,7 @@ public class GammaTest extends TestCase {
   }
 
   public void testLargeNegativeIntegerDouble() {
-    AssertFail.of(() -> Gamma.of(DecimalScalar.of("-100000000000.0")));
+    AssertFail.of(() -> Gamma.of(DecimalScalar.of(new BigDecimal("-100000000000.0"))));
   }
 
   public void testLargeNegative() {
