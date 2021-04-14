@@ -43,13 +43,6 @@ public class DecimalScalar extends AbstractRealScalar implements //
     return new DecimalScalar(Objects.requireNonNull(bigDecimal), precision);
   }
 
-  /** @param string
-   * @param precision
-   * @return scalar with value encoded as {@link BigDecimal(string)} */
-  public static Scalar of(String string, int precision) {
-    return new DecimalScalar(new BigDecimal(string), precision);
-  }
-
   /** @param bigDecimal
    * @return */
   public static Scalar of(BigDecimal bigDecimal) {
@@ -184,7 +177,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar ceiling() {
-    return RationalScalar.integer(StaticHelper.ceiling(value));
+    return RationalScalar.integer(BigDecimalMath.ceiling(value));
   }
 
   @Override // from Comparable<Scalar>
@@ -200,7 +193,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar floor() {
-    return RationalScalar.integer(StaticHelper.floor(value));
+    return RationalScalar.integer(BigDecimalMath.floor(value));
   }
 
   @Override // from ExpInterface
@@ -234,7 +227,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar round() {
-    return RationalScalar.integer(value.setScale(0, RoundingMode.HALF_UP).toBigIntegerExact());
+    return RationalScalar.integer(BigDecimalMath.round(value));
   }
 
   @Override // from AbstractRealScalar

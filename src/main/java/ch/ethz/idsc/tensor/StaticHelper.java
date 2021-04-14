@@ -3,7 +3,6 @@
 package ch.ethz.idsc.tensor;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -50,26 +49,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
       // 0[xX] HexDigits_opt . HexDigits BinaryExponent FloatTypeSuffix_opt
       "(0[xX]" + HexDigits + "?(\\.)" + HexDigits + ")" + ")[pP][+-]?" + Digits + "))" + "[fFdD]?))" //
   );
-
-  // throws an exception if value is Infinity
-  public static BigInteger floor(BigDecimal bigDecimal) {
-    BigInteger bigInteger = bigDecimal.toBigInteger();
-    if (0 < new BigDecimal(bigInteger).compareTo(bigDecimal)) {
-      bigDecimal = bigDecimal.subtract(BigDecimal.ONE);
-      bigInteger = bigDecimal.toBigInteger();
-    }
-    return bigInteger;
-  }
-
-  // throws an exception if value is Infinity
-  public static BigInteger ceiling(BigDecimal bigDecimal) {
-    BigInteger bigInteger = bigDecimal.toBigInteger();
-    if (new BigDecimal(bigInteger).compareTo(bigDecimal) < 0) {
-      bigDecimal = bigDecimal.add(BigDecimal.ONE);
-      bigInteger = bigDecimal.toBigInteger();
-    }
-    return bigInteger;
-  }
 
   /** @param x complex scalar
    * @param y complex scalar

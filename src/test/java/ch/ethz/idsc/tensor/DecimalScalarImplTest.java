@@ -188,6 +188,5 @@ public class DecimalScalarImplTest extends TestCase {
 
   public void testNullFail() {
     AssertFail.of(() -> DecimalScalar.of((BigDecimal) null));
-    AssertFail.of(() -> DecimalScalar.of((String) null, 10));
   }
 }

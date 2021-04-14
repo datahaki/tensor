@@ -146,7 +146,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   @Override // from RoundingInterface
   public Scalar ceiling() {
     return isMachineNumber() //
-        ? RationalScalar.integer(StaticHelper.ceiling(bigDecimal()))
+        ? RationalScalar.integer(BigDecimalMath.ceiling(bigDecimal()))
         : this; // value non finite
   }
 
@@ -158,7 +158,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   @Override // from RoundingInterface
   public Scalar floor() {
     return isMachineNumber() //
-        ? RationalScalar.integer(StaticHelper.floor(bigDecimal()))
+        ? RationalScalar.integer(BigDecimalMath.floor(bigDecimal()))
         : this; // value non finite
   }
 

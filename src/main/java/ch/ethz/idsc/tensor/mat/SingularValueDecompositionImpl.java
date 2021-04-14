@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -22,8 +23,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class SingularValueDecompositionImpl implements SingularValueDecomposition, Serializable {
-  private static final Scalar _0 = DoubleScalar.of(0);
-  private static final Scalar _1 = DoubleScalar.of(1);
   /** Difference between 1.0 and the minimum double greater than 1.0
    * DBL_EPSILON == 2.220446049250313E-16 */
   private static final Scalar DBL_EPSILON = DoubleScalar.of(Math.nextUp(1.0) - 1.0);
@@ -57,7 +56,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         .number().doubleValue());
     // ---
     v = Array.zeros(cols, cols);
-    v.set(_1, cols - 1, cols - 1);
+    v.set(RealScalar.ONE, cols - 1, cols - 1);
     for (int i = cols - 2; 0 <= i; --i)
       initV(i);
     for (int i = cols - 1; 0 <= i; --i)
@@ -94,7 +93,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   private void initU1(int i) {
-    Scalar p = _0;
+    Scalar p = RealScalar.ZERO;
     Scalar scale = Vector1Norm.of(u.stream().skip(i).map(row -> row.Get(i)));
     if (Scalars.nonZero(scale)) {
       u.stream().skip(i).forEach(uk -> uk.set(scale::under, i));
@@ -118,7 +117,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   private void initU2(int i) {
     final int ip1 = i + 1;
     if (ip1 != cols) {
-      Scalar p = _0;
+      Scalar p = RealScalar.ZERO;
       Scalar scale = Vector1Norm.of(u.get(i).extract(ip1, cols));
       if (Scalars.nonZero(scale)) {
         IntStream.range(ip1, cols).forEach(k -> u.set(scale::under, i, k));
@@ -157,17 +156,17 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
             (Scalar) uiEx.dot(Tensor.of(v.stream().skip(ip1).map(row -> row.Get(fj)))));
       }
     }
-    IntStream.range(ip1, cols).forEach(j -> v.set(_0, i, j));
-    v.stream().skip(ip1).forEach(vj -> vj.set(_0, i));
-    v.set(_1, i, i);
+    IntStream.range(ip1, cols).forEach(j -> v.set(RealScalar.ZERO, i, j));
+    v.stream().skip(ip1).forEach(vj -> vj.set(RealScalar.ZERO, i));
+    v.set(RealScalar.ONE, i, i);
   }
 
   private void initU3(int i) {
     final int ip1 = i + 1;
-    IntStream.range(ip1, cols).forEach(j -> u.set(_0, i, j));
+    IntStream.range(ip1, cols).forEach(j -> u.set(RealScalar.ZERO, i, j));
     Scalar p = w.Get(i);
     if (Scalars.isZero(p))
-      u.stream().skip(i).forEach(uj -> uj.set(_0, i));
+      u.stream().skip(i).forEach(uj -> uj.set(RealScalar.ZERO, i));
     else {
       Scalar den = u.Get(i, i).multiply(p);
       for (int j = ip1; j < cols; ++j) {
@@ -180,7 +179,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       }
       u.stream().skip(i).forEach(uj -> uj.set(p::under, i));
     }
-    u.set(_1::add, i, i);
+    u.set(RealScalar.ONE::add, i, i);
   }
 
   private int levelW(int k, Chop chop) {
@@ -188,8 +187,8 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       if (chop.isZero(r.Get(l)))
         return l;
       if (chop.isZero(w.Get(l - 1))) {
-        Scalar c = _0;
-        Scalar s = _1;
+        Scalar c = RealScalar.ZERO;
+        Scalar s = RealScalar.ONE;
         for (int i = l; i < k + 1; ++i) {
           Scalar f = s.multiply(r.Get(i));
           r.set(c.multiply(r.Get(i)), i);
@@ -218,10 +217,10 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     Scalar h = r.Get(i);
     Scalar hy = h.multiply(y);
     Scalar f = y.subtract(z).multiply(y.add(z)).add(p.subtract(h).multiply(p.add(h))).divide(hy.add(hy));
-    p = Hypot.of(f, _1);
+    p = Hypot.of(f, RealScalar.ONE);
     f = x.subtract(z).multiply(x.add(z)).add(h.multiply(y.divide(f.add(CopySign.of(p, f))).subtract(h))).divide(x);
-    Scalar s = _1;
-    Scalar c = _1;
+    Scalar s = RealScalar.ONE;
+    Scalar c = RealScalar.ONE;
     for (int j = l; j < i; ++j) {
       int jp1 = j + 1;
       p = r.Get(jp1);
@@ -247,7 +246,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       f = c.multiply(p).add(s.multiply(y));
       x = c.multiply(y).subtract(s.multiply(p));
     }
-    r.set(_0, l);
+    r.set(RealScalar.ZERO, l);
     r.set(f, i);
     w.set(x, i);
   }

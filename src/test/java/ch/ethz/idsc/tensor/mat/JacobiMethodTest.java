@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.mat;
 
 import java.lang.reflect.Modifier;
 
+import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -16,6 +17,7 @@ import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.N;
 import junit.framework.TestCase;
 
 public class JacobiMethodTest extends TestCase {
@@ -133,6 +135,13 @@ public class JacobiMethodTest extends TestCase {
     Tensor matrix = ResourceData.of("/mat/jacobi2.csv");
     Tolerance.CHOP.requireClose(matrix, IdentityMatrix.of(3));
     checkEquation(matrix, Eigensystem.ofSymmetric(matrix));
+  }
+
+  public void testDecimalScalar() {
+    Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+    assertTrue(eigensystem.vectors().Get(3, 3) instanceof DecimalScalar);
+    assertTrue(eigensystem.values().Get(4) instanceof DecimalScalar);
   }
 
   public void testPackageVisibility() {

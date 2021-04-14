@@ -115,15 +115,15 @@ public class QRDecompositionImplTest extends TestCase {
     AssertFail.of(() -> qrDecomposition.pseudoInverse());
   }
 
-  public void testPackageVisibility() {
-    assertTrue(Modifier.isPublic(QRDecomposition.class.getModifiers()));
-    assertFalse(Modifier.isPublic(QRDecompositionImpl.class.getModifiers()));
-  }
-
-  public void testDecimalScalarQR() {
+  public void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
     Tensor tensor = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, tensor);
+  }
+
+  public void testPackageVisibility() {
+    assertTrue(Modifier.isPublic(QRDecomposition.class.getModifiers()));
+    assertFalse(Modifier.isPublic(QRDecompositionImpl.class.getModifiers()));
   }
 }

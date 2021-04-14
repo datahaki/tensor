@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -19,6 +20,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -128,6 +130,12 @@ public class PseudoInverseTest extends TestCase {
     Tensor expect = Tensors.fromString("{{-(1/3) - I/3, 1/6 - I/6, 1/6 + I/6}, {1/6 - I/3, 5/12 + I/12, -(1/12) - I/12}}");
     Tensor matrix = Tensors.fromString("{{-1 + I, 0}, {-I, 2}, {2 - I, 2 * I}}");
     assertEquals(PseudoInverse.of(matrix), expect);
+  }
+
+  public void testDecimalScalar() {
+    Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
+    Tensor pseudo = PseudoInverse.of(matrix);
+    assertTrue(pseudo.Get(1, 2) instanceof DecimalScalar);
   }
 
   public void testEmptyFail() {
