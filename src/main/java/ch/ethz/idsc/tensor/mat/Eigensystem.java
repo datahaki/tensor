@@ -20,7 +20,7 @@ public interface Eigensystem {
    * @return eigensystem with vectors scaled to unit length
    * @throws Exception if input is not a real symmetric matrix */
   static Eigensystem ofSymmetric(Tensor matrix) {
-    return new JacobiMethod(matrix, Tolerance.CHOP);
+    return new EigensystemImpl(matrix, Tolerance.CHOP);
   }
 
   /** Careful: Mathematica orders the eigenvalues according to absolute value.

@@ -51,7 +51,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
    * 
    * @param c
    * @param d non-zero
-   * @return */
+   * @return Sqrt[c + d*i] */
   public static Scalar sqrt(Scalar c, Scalar d) {
     Scalar ca = Abs.FUNCTION.apply(c);
     Scalar da = Abs.FUNCTION.apply(d);

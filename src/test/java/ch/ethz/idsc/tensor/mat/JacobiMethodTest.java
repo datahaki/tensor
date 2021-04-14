@@ -146,6 +146,6 @@ public class JacobiMethodTest extends TestCase {
 
   public void testPackageVisibility() {
     assertTrue(Modifier.isPublic(Eigensystem.class.getModifiers()));
-    assertFalse(Modifier.isPublic(JacobiMethod.class.getModifiers()));
+    assertFalse(Modifier.isPublic(EigensystemImpl.class.getModifiers()));
   }
 }

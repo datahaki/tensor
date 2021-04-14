@@ -21,7 +21,7 @@ public enum Hypot {
   ;
   /** @param a
    * @param b
-   * @return Sqrt[a * a + b * b] */
+   * @return Sqrt[ |a|^2 + |b|^2 ] */
   public static Scalar of(Scalar a, Scalar b) {
     Scalar ax = Abs.FUNCTION.apply(a);
     Scalar ay = Abs.FUNCTION.apply(b);
@@ -39,26 +39,18 @@ public enum Hypot {
     // valid at this point: 0 < min <= max
     Scalar r1 = min.divide(max);
     Scalar r2 = r1.multiply(r1);
-    return max.multiply(Sqrt.FUNCTION.apply(r2.one().add(r2)));
+    return Sqrt.FUNCTION.apply(r2.one().add(r2)).multiply(max);
   }
 
   /** @param a
-   * @return Sqrt[a^2 + 1] */
+   * @return Sqrt[ |a|^2 + 1 ] */
   public static Scalar withOne(Scalar a) {
     Scalar ax = Abs.FUNCTION.apply(a);
-    Scalar ay = a.one();
-    final Scalar min;
-    final Scalar max;
-    if (Scalars.lessThan(ax, ay)) {
-      min = ax;
-      max = ay;
-    } else {
-      min = ay;
-      max = ax;
-    }
-    Scalar r1 = min.divide(max);
-    Scalar r2 = r1.multiply(r1);
-    return max.multiply(Sqrt.FUNCTION.apply(r2.one().add(r2)));
+    Scalar one = ax.one();
+    if (Scalars.lessThan(ax, one))
+      return Sqrt.FUNCTION.apply(ax.multiply(ax).add(one));
+    Scalar r1 = ax.reciprocal(); // in the unit interval [0, 1]
+    return Sqrt.FUNCTION.apply(r1.multiply(r1).add(one)).multiply(ax);
   }
 
   /** function computes the 2-Norm of a vector
