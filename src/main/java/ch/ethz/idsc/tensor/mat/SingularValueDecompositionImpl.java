@@ -94,7 +94,11 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   private void initU1(int i) {
     Scalar scale = Vector1Norm.of(u.stream().skip(i).map(row -> row.Get(i)));
-    if (Scalars.nonZero(scale)) {
+    if (Scalars.isZero(scale)) {
+      Scalar zero_unitless = scale.one().zero();
+      u.stream().skip(i).forEach(uk -> uk.set(zero_unitless, i));
+      w.set(scale.zero(), i);
+    } else {
       u.stream().skip(i).forEach(uk -> uk.set(scale::under, i));
       Scalar s = Vector2NormSquared.of(u.stream().skip(i).map(row -> row.Get(i)));
       Scalar f = u.Get(i, i);
@@ -110,15 +114,18 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
       }
       u.stream().skip(i).forEach(uk -> uk.set(scale::multiply, i));
       w.set(scale.multiply(p), i);
-    } else
-      w.set(Scalar::zero, i);
+    }
   }
 
   private void initU2(int i) {
     final int ip1 = i + 1;
     if (ip1 != cols) {
       Scalar scale = Vector1Norm.of(u.get(i).extract(ip1, cols));
-      if (Scalars.nonZero(scale)) {
+      if (Scalars.isZero(scale)) {
+        Scalar zero_unitless = scale.one().zero();
+        IntStream.range(ip1, cols).forEach(k -> u.set(zero_unitless, i, k));
+        r.set(scale.zero(), ip1);
+      } else {
         IntStream.range(ip1, cols).forEach(k -> u.set(scale::under, i, k));
         Scalar s = Vector2NormSquared.of(u.get(i).extract(ip1, cols));
         Scalar f = u.Get(i, ip1);
@@ -134,8 +141,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
         });
         IntStream.range(ip1, cols).forEach(k -> u.set(scale::multiply, i, k));
         r.set(scale.multiply(p), ip1);
-      } else
-        r.set(Scalar::zero, ip1);
+      }
     }
   }
 
@@ -161,10 +167,11 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
   private void initU3(int i) {
     final int ip1 = i + 1;
-    IntStream.range(ip1, cols).forEach(j -> u.set(Scalar::zero, i, j));
     Scalar p = w.Get(i);
+    Scalar zero_unitless = p.one().zero();
+    IntStream.range(ip1, cols).forEach(j -> u.set(zero_unitless, i, j));
     if (Scalars.isZero(p))
-      u.stream().skip(i).forEach(uj -> uj.set(Scalar::zero, i));
+      u.stream().skip(i).forEach(uj -> uj.set(zero_unitless, i));
     else {
       Scalar den = u.Get(i, i).multiply(p);
       for (int j = ip1; j < cols; ++j) {

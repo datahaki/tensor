@@ -46,13 +46,13 @@ public class SingularValueDecompositionImplTest extends TestCase {
     assertTrue(svd.toString().startsWith("SingularValueDecomposition["));
   }
 
-  public void testPackageVisibility() {
-    assertTrue(Modifier.isPublic(SingularValueDecomposition.class.getModifiers()));
-    assertFalse(Modifier.isPublic(SingularValueDecompositionImpl.class.getModifiers()));
-  }
-
   public void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
     SingularValueDecomposition.of(matrix);
+  }
+
+  public void testPackageVisibility() {
+    assertTrue(Modifier.isPublic(SingularValueDecomposition.class.getModifiers()));
+    assertFalse(Modifier.isPublic(SingularValueDecompositionImpl.class.getModifiers()));
   }
 }

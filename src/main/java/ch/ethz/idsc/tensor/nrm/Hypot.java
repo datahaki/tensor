@@ -25,24 +25,18 @@ public enum Hypot {
   public static Scalar of(Scalar a, Scalar b) {
     Scalar ax = Abs.FUNCTION.apply(a);
     Scalar ay = Abs.FUNCTION.apply(b);
-    final Scalar min;
+    if (Scalars.isZero(ax) || Scalars.isZero(ay))
+      return ax.add(ay);
     final Scalar max;
-    if (Scalars.lessThan(ax, ay)) {
-      min = ax;
-      max = ay;
-    } else {
-      min = ay;
-      max = ax;
-    }
-    if (Scalars.isZero(min))
-      return max; // if min == 0 return max
-    // valid at this point: 0 < min <= max
-    Scalar r1 = min.divide(max);
+    Scalar r1 = Scalars.lessThan(ax, ay) //
+        ? ax.divide(max = ay)
+        : ay.divide(max = ax);
+    // valid at this point: 0 < max
     Scalar r2 = r1.multiply(r1);
     return Sqrt.FUNCTION.apply(r2.one().add(r2)).multiply(max);
   }
 
-  /** @param a
+  /** @param a without unit
    * @return Sqrt[ |a|^2 + 1 ] */
   public static Scalar withOne(Scalar a) {
     Scalar ax = Abs.FUNCTION.apply(a);
@@ -67,8 +61,12 @@ public enum Hypot {
    * @return 2-norm of vector
    * @throws Exception if vector is empty, or vector contains NaN */
   public static Scalar ofVector(Tensor vector) {
+    // same issue as in Pivots
     Tensor abs = vector.map(Abs.FUNCTION);
-    Scalar max = (Scalar) abs.stream().reduce(Max::of).get();
+    Scalar max = abs.stream() //
+        .map(Scalar.class::cast) //
+        // .filter(Scalars::nonZero) //
+        .reduce(Max::of).get();
     if (Scalars.isZero(max))
       return max;
     abs = abs.divide(max);

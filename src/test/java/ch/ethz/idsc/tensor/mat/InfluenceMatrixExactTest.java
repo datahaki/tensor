@@ -38,6 +38,8 @@ public class InfluenceMatrixExactTest extends TestCase {
       String string = influenceMatrix.toString();
       assertTrue(string.startsWith("InfluenceMatrix"));
     }
+    SingularValueDecomposition svd = SingularValueDecomposition.of(design);
+    TestHelper.requireNonQuantity(svd.getU());
   }
 
   public void testGaussScalar() throws ClassNotFoundException, IOException {

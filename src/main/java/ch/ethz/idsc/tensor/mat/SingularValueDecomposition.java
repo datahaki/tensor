@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 public interface SingularValueDecomposition {
   /** performs a singular value decomposition of a given matrix
    * <ul>
-   * <li>u.dot(DiagonalMatrix.of(values())).dot(Transpose.of(v)) == matrix
+   * <li>u.dot(DiagonalMatrix[values()]).dot(Transpose.of(v)) == matrix
    * <li>Transpose.of(U).dot(U) == IdentityMatrix
    * <li>V.dot(Transpose.of(V) == IdentityMatrix
    * <li>Transpose.of(V).dot(V) == IdentityMatrix

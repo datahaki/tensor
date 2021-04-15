@@ -54,9 +54,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
       for (int ip = 0; ip < n - 1; ++ip)
         for (int iq = ip + 1; iq < n; ++iq)
           sum = sum.add(Abs.FUNCTION.apply(A[ip][iq]));
-      if (Scalars.isZero(sum)) {
+      if (Scalars.isZero(sum))
         return;
-      }
       Scalar tresh = sum.multiply(factor);
       if (phase1 <= iteration)
         tresh = tresh.zero(); // preserve unit
