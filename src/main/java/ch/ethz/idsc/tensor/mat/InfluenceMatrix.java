@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Unprotect;
 
 /** Remark:
  * {@link Mahalanobis} is significantly faster than {@link InfluenceMatrix#of(Tensor)}
@@ -38,7 +39,12 @@ public interface InfluenceMatrix {
   static InfluenceMatrix of(Tensor design) {
     if (ExactTensorQ.of(design))
       try {
-        return new InfluenceMatrixExact(design.dot(PseudoInverse.usingCholesky(design)));
+        int n = design.length();
+        int m = Unprotect.dimension1Hint(design);
+        Tensor d_pinv = PseudoInverse.usingCholesky(design);
+        return n - m < m //
+            ? new InfluenceMatrixExact(design.dot(d_pinv))
+            : new InfluenceMatrixSplit(design, d_pinv);
       } catch (Exception exception) {
         // design matrix does not have maximal rank
       }

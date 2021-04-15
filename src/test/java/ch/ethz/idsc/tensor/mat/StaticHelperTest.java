@@ -7,7 +7,6 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.VectorQ;
@@ -57,12 +56,8 @@ public class StaticHelperTest extends TestCase {
         Tensor design = m1.dot(m2);
         ExactTensorQ.require(design);
         SingularValueDecomposition svd = SingularValueDecomposition.of(design);
-        // System.out.println("u=" + svd.getU());
-        boolean hasQuantity = svd.getU().flatten(-1).anyMatch(s -> s instanceof Quantity);
-        if (hasQuantity)
-          throw TensorRuntimeException.of(design);
+        TestHelper.requireNonQuantity(svd.getU());
         InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-        // FIXME 0.0[m] != 0
         SymmetricMatrixQ.require(influenceMatrix.matrix());
         influenceMatrix.residualMaker();
         Tensor vector = RandomVariate.of(distribution, n);

@@ -37,6 +37,7 @@ public class QRMathematicaTest extends TestCase {
     Tensor q = qrDecomposition.getQ();
     Tolerance.CHOP.requireClose(q.dot(r), a);
     Tolerance.CHOP.requireClose(ConjugateTranspose.of(q), qrDecomposition.getInverseQ());
+    assertTrue(qrDecomposition.toString().startsWith("QRDecomposition["));
   }
 
   public void testDet() {

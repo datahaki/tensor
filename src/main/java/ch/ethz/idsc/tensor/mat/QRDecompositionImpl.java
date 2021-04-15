@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.red.Times;
 /** decomposition Q.R = A with Det[Q] == +1
  * householder with even number of reflections
  * reproduces example on wikipedia */
-/* package */ class QRDecompositionImpl implements QRDecomposition, Serializable {
+/* package */ final class QRDecompositionImpl implements QRDecomposition, Serializable {
   private final int m;
   private final Tensor R;
   private final Tensor Qinv;
@@ -91,6 +91,8 @@ import ch.ethz.idsc.tensor.red.Times;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", QRDecomposition.class.getSimpleName(), Tensors.message(getQ(), getR()));
+    return String.format("%s[%s]", //
+        QRDecomposition.class.getSimpleName(), //
+        Tensors.message(getQ(), getR()));
   }
 }

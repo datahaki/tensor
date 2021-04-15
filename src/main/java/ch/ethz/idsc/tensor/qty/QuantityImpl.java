@@ -228,11 +228,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   public Scalar sign() {
     return Sign.FUNCTION.apply(value);
   }
-  // @Override // from SignInterface
-  // public abstract int signInt();
-  // SignInterface signInterface = (SignInterface) value;
-  // return signInterface.signInt();
-  // }
 
   @Override // from SqrtInterface
   public Scalar sqrt() {

@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 
 /** EXPERIMENTAL
@@ -23,8 +24,8 @@ public class QRMathematica implements QRDecomposition, Serializable {
 
   private QRMathematica(QRDecomposition qrDecomposition) {
     this.qrDecomposition = qrDecomposition;
-    Tensor r = qrDecomposition.getR();
-    length = Math.min(r.length(), Unprotect.dimension1(r));
+    Tensor R = qrDecomposition.getR();
+    length = Math.min(R.length(), Unprotect.dimension1(R));
   }
 
   @Override // from QRDecomposition
@@ -34,16 +35,23 @@ public class QRMathematica implements QRDecomposition, Serializable {
 
   @Override // from QRDecomposition
   public Tensor getR() {
-    return Tensor.of(qrDecomposition.getR().stream().limit(length)); // n x min(n, m)
+    return Tensor.of(qrDecomposition.getR().stream().limit(length)); // min(n, m) x m
   }
 
   @Override // from QRDecomposition
   public Tensor getQ() {
-    return Tensor.of(qrDecomposition.getQ().stream().map(row -> row.extract(0, length))); // min(n, m) x m
+    return ConjugateTranspose.of(getInverseQ()); // n x min(n, m)
   }
 
   @Override // from QRDecomposition
   public Scalar det() {
     return qrDecomposition.det();
+  }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%s]", //
+        QRDecomposition.class.getSimpleName(), //
+        Tensors.message(getQ(), getR()));
   }
 }
