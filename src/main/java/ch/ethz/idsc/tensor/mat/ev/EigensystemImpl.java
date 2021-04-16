@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.ev;
 
 import java.io.Serializable;
 import java.util.stream.IntStream;

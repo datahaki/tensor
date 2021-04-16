@@ -46,7 +46,7 @@ public class DecimalScalarTest extends TestCase {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL128));
     Scalar d = s.under(RationalScalar.of(1, 2));
     assertTrue(d instanceof DecimalScalar);
-    Chop._10.requireClose(d, DoubleScalar.of(0.5 / Math.PI));
+    Tolerance.CHOP.requireClose(d, DoubleScalar.of(0.5 / Math.PI));
   }
 
   public void testUnderDecimal() {
@@ -54,7 +54,7 @@ public class DecimalScalarTest extends TestCase {
     Scalar d2 = DecimalScalar.of(new BigDecimal("-11.233", MathContext.DECIMAL128));
     Scalar res = d1.under(d2);
     assertTrue(res instanceof DecimalScalar);
-    Chop._10.requireClose(res, DoubleScalar.of(-11.233 / 123.0123));
+    Tolerance.CHOP.requireClose(res, DoubleScalar.of(-11.233 / 123.0123));
   }
 
   public void testN() {

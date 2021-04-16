@@ -103,7 +103,7 @@ public class GompertzMakehamDistributionTest extends TestCase {
   public void testCdfUnitFail() {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     CDF cdf = CDF.of(distribution);
-    Chop._10.requireClose(cdf.p_lessEquals(Quantity.of(+0.1, "m")), RealScalar.of(0.003040820706232905));
+    Tolerance.CHOP.requireClose(cdf.p_lessEquals(Quantity.of(+0.1, "m")), RealScalar.of(0.003040820706232905));
     assertEquals(cdf.p_lessEquals(Quantity.of(+0.0, "m")), RealScalar.ZERO);
     assertEquals(cdf.p_lessEquals(Quantity.of(-0.1, "m")), RealScalar.ZERO);
     AssertFail.of(() -> cdf.p_lessEquals(Quantity.of(-1, "m^2")));

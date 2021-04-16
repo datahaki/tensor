@@ -7,7 +7,9 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.nrm.Matrix2Norm;
+import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.N;
 
 /** Reference: Pseudo Inverse Wikipedia
@@ -51,5 +53,18 @@ import ch.ethz.idsc.tensor.sca.N;
         ? ai.dot(matrix).dot(ai)
         : ai.dot(matrix.dot(ai));
     return ai.subtract(dots).add(ai);
+  }
+
+  private static enum UnitNegate implements ScalarUnaryOperator {
+    FUNCTION;
+
+    @Override
+    public Scalar apply(Scalar scalar) {
+      if (scalar instanceof Quantity) {
+        Quantity quantity = (Quantity) scalar;
+        return Quantity.of(quantity.value(), quantity.unit().negate());
+      }
+      return scalar;
+    }
   }
 }

@@ -1,7 +1,9 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.ev;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 
 /** <pre>
  * LinearSolve.of(vectors, values.pmul(vectors)) == matrix

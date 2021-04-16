@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.lang.reflect.Modifier;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -115,5 +116,9 @@ public class StaticHelperTest extends TestCase {
 
   public void testConversionTrivial() {
     assertEquals(StaticHelper.conversion(UnitSystem.SI(), "kg*m", "kg*m"), RealScalar.ONE);
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(StaticHelper.class.getModifiers()));
   }
 }

@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import ch.ethz.idsc.tensor.ScalarQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.lie.Signature;
-import ch.ethz.idsc.tensor.mat.Eigensystem;
+import ch.ethz.idsc.tensor.mat.ev.Eigensystem;
 
 /** an application of Ordering is to arrange the eigenvalues in {@link Eigensystem}
  * in descending order.

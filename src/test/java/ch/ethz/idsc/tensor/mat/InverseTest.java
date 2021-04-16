@@ -71,7 +71,7 @@ public class InverseTest extends TestCase {
   public void testFourier() {
     Tensor inv1 = Inverse.of(FourierMatrix.of(5), Pivots.FIRST_NON_ZERO);
     Tensor inv2 = Inverse.of(FourierMatrix.of(5), Pivots.ARGMAX_ABS);
-    Chop._10.requireClose(inv1, inv2);
+    Tolerance.CHOP.requireClose(inv1, inv2);
   }
 
   public void testGaussian() {

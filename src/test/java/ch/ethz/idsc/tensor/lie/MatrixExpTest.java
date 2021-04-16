@@ -20,6 +20,8 @@ import ch.ethz.idsc.tensor.io.MathematicaFormat;
 import ch.ethz.idsc.tensor.mat.HermitianMatrixQ;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.Inverse;
+import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -53,9 +55,9 @@ public class MatrixExpTest extends TestCase {
     double[][] mat = new double[][] { { 0, val, va2 }, { -val, 0, va3 }, { -va2, -va3, 0 } };
     Tensor bu = Tensors.matrixDouble(mat);
     Tensor ort = MatrixExp.of(bu);
-    Chop._12.requireAllZero(ort.dot(Transpose.of(ort)).subtract(IdentityMatrix.of(ort.length())));
+    Tolerance.CHOP.requireAllZero(ort.dot(Transpose.of(ort)).subtract(IdentityMatrix.of(ort.length())));
     Tensor log = MatrixLog.of(ort);
-    Chop._12.requireClose(bu, log);
+    Tolerance.CHOP.requireClose(bu, log);
   }
 
   public void testExp1() {
@@ -74,7 +76,7 @@ public class MatrixExpTest extends TestCase {
     Tensor A = RandomVariate.of(distribution, n, n);
     Tensor S = TensorWedge.of(A);
     Tensor o = MatrixExp.of(S);
-    Chop._10.requireAllZero(o.dot(Transpose.of(o)).subtract(IdentityMatrix.of(o.length())));
+    OrthogonalMatrixQ.require(o);
   }
 
   public void testGoldenThompsonInequality() {
@@ -84,8 +86,8 @@ public class MatrixExpTest extends TestCase {
     assertTrue(HermitianMatrixQ.of(b));
     Tensor tra = Trace.of(MatrixExp.of(a.add(b)));
     Tensor trb = Trace.of(MatrixExp.of(a).dot(MatrixExp.of(b)));
-    Chop._05.requireClose(tra, RealScalar.of(168.49869602)); // mathematica
-    Chop._05.requireClose(trb, RealScalar.of(191.43054831)); // mathematica
+    Chop._08.requireClose(tra, RealScalar.of(168.49869602)); // mathematica
+    Chop._08.requireClose(trb, RealScalar.of(191.43054831)); // mathematica
   }
 
   public void testExact() {
@@ -107,7 +109,7 @@ public class MatrixExpTest extends TestCase {
     Tensor result = MatrixExp.of(mat);
     Tensor diaexp = MatrixExp.of(diag);
     Tensor altexp = A.dot(diaexp).dot(Inverse.of(A));
-    Chop._08.requireClose(altexp, result);
+    Tolerance.CHOP.requireClose(altexp, result);
   }
   // public void testQuantity1() {
   // // Mathematica can't do this :-)
@@ -168,14 +170,14 @@ public class MatrixExpTest extends TestCase {
     Tensor matrix = ConstantArray.of(Scalars.fromString("-10-1*I"), 2, 2);
     Tensor tensor1 = MatrixExp.of(matrix); // 19
     Tensor tensor2 = MatrixExp.series(matrix); // 94
-    Chop._03.requireClose(tensor1, tensor2);
+    Chop._06.requireClose(tensor1, tensor2);
   }
 
   public void testComplex2() {
     Tensor matrix = ConstantArray.of(Scalars.fromString("-10.0-1.0*I"), 3, 3);
     Tensor tensor1 = MatrixExp.of(matrix); // 19
     Tensor tensor2 = MatrixExp.series(matrix); // 119
-    Chop._03.requireClose(tensor1, tensor2);
+    Chop._04.requireClose(tensor1, tensor2);
   }
 
   public void testNaNFail() {

@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.fft;
 
+import java.lang.reflect.Modifier;
+
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -46,5 +48,9 @@ public class StaticHelperTest extends TestCase {
 
   public void testZeroFail() {
     AssertFail.of(() -> StaticHelper.weights(0, s -> s));
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(StaticHelper.class.getModifiers()));
   }
 }

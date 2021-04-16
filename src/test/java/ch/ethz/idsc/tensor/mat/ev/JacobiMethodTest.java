@@ -1,5 +1,5 @@
 // code by guedelmi
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.ev;
 
 import java.lang.reflect.Modifier;
 
@@ -14,6 +14,13 @@ import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
+import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.mat.Inverse;
+import ch.ethz.idsc.tensor.mat.LinearSolve;
+import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.mat.re.Det;
 import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
@@ -29,31 +36,31 @@ public class JacobiMethodTest extends TestCase {
     Tensor values = eigensystem.values();
     {
       Tensor sol = LinearSolve.of(vectors, values.pmul(vectors));
-      Chop._10.requireClose(sol, matrix);
+      Tolerance.CHOP.requireClose(sol, matrix);
     }
     {
       Tensor sol = Transpose.of(vectors).dot(values.pmul(vectors));
-      Chop._10.requireClose(sol, matrix);
+      Tolerance.CHOP.requireClose(sol, matrix);
     }
     Tensor Vi = Inverse.of(eigensystem.vectors());
     Tensor diagonalMatrix = DiagonalMatrix.with(eigensystem.values());
     Tensor res = Vi.dot(diagonalMatrix).dot(eigensystem.vectors());
     Tensor btr = BasisTransform.ofMatrix(diagonalMatrix, eigensystem.vectors());
-    Chop._10.requireClose(res, matrix);
-    Chop._10.requireClose(btr, matrix);
+    Tolerance.CHOP.requireClose(res, matrix);
+    Tolerance.CHOP.requireClose(btr, matrix);
     assertEquals(res.subtract(matrix).map(Chop._08), matrix.multiply(RealScalar.ZERO));
     // testing determinant
     Scalar det = Det.of(matrix);
     Tensor prd = Times.pmul(eigensystem.values());
-    Chop._12.requireClose(det, prd);
+    Tolerance.CHOP.requireClose(det, prd);
     Tensor norm = Tensor.of(eigensystem.vectors().stream().map(Vector2Norm::of));
-    Chop._12.requireClose(norm, Tensors.vector(i -> RealScalar.ONE, norm.length()));
+    Tolerance.CHOP.requireClose(norm, Tensors.vector(i -> RealScalar.ONE, norm.length()));
     // testing orthogonality
     final Tensor Vt = Transpose.of(eigensystem.vectors());
     int n = eigensystem.values().length();
     Tensor id = IdentityMatrix.of(n);
-    Chop._12.requireClose(Vt.dot(eigensystem.vectors()), id);
-    Chop._12.requireClose(eigensystem.vectors().dot(Vt), id);
+    Tolerance.CHOP.requireClose(Vt.dot(eigensystem.vectors()), id);
+    Tolerance.CHOP.requireClose(eigensystem.vectors().dot(Vt), id);
     assertTrue(OrthogonalMatrixQ.of(eigensystem.vectors()));
     assertTrue(OrthogonalMatrixQ.of(Vt));
     // assert that values are sorted from max to min
@@ -66,8 +73,8 @@ public class JacobiMethodTest extends TestCase {
     Tensor expEigvl = Tensors.fromString("{ 23.853842147040694,  3.3039323944179757, 2.8422254585413294, -4}");
     Tensor expEigvc = Transpose.of(Tensors.fromString(
         "{{0.08008068980475883, -0.5948978891329353, 0.6877622539503787, -0.4082482904638631}, {0.35340348774478036, -0.45368409809391813, 0.05108862221538444, 0.8164965809277261}, {0.6267262856848018, -0.3124703070549013, -0.5855850095196097, -0.408248290463863}, {0.6898602907849903, 0.5853456652704466, 0.4259850130546227, -6.117111473932377E-17}}"));
-    Chop._12.requireClose(expEigvl.subtract(eigensystem.values()), Array.zeros(4));
-    Chop._12.requireClose(expEigvc.subtract(eigensystem.vectors()), Array.zeros(4, 4));
+    Tolerance.CHOP.requireClose(expEigvl.subtract(eigensystem.values()), Array.zeros(4));
+    Tolerance.CHOP.requireClose(expEigvc.subtract(eigensystem.vectors()), Array.zeros(4, 4));
     checkEquation(tensor, eigensystem);
   }
 
@@ -91,7 +98,7 @@ public class JacobiMethodTest extends TestCase {
       checkEquation(matrix, eigensystem);
       SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
       Tensor values = Reverse.of(Sort.of(svd.values()));
-      Chop._10.requireClose(eigensystem.values(), values);
+      Tolerance.CHOP.requireClose(eigensystem.values(), values);
     }
   }
 
@@ -102,7 +109,7 @@ public class JacobiMethodTest extends TestCase {
       checkEquation(matrix, eigensystem);
       SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
       Tensor values = Reverse.of(Sort.of(svd.values()));
-      Chop._10.requireClose(eigensystem.values(), values);
+      Tolerance.CHOP.requireClose(eigensystem.values(), values);
     }
   }
 
@@ -110,21 +117,21 @@ public class JacobiMethodTest extends TestCase {
     Tensor matrix = HilbertMatrix.of(1);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor expected = Tensors.vector(1);
-    Chop._12.requireClose(expected.subtract(eigensystem.values()), Array.zeros(matrix.length()));
+    Tolerance.CHOP.requireClose(expected.subtract(eigensystem.values()), Array.zeros(matrix.length()));
   }
 
   public void testHilbert2() {
     Tensor matrix = HilbertMatrix.of(2);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor expected = Tensors.vector(1.2675918792439982155, 0.065741454089335117813);
-    Chop._12.requireClose(expected.subtract(eigensystem.values()), Array.zeros(matrix.length()));
+    Tolerance.CHOP.requireClose(expected.subtract(eigensystem.values()), Array.zeros(matrix.length()));
   }
 
   public void testHilbert3() {
     Tensor matrix = HilbertMatrix.of(3);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor expected = Tensors.vector(1.4083189271236539575, 0.12232706585390584656, 0.0026873403557735292310);
-    Chop._12.requireClose(expected.subtract(eigensystem.values()), Array.zeros(matrix.length()));
+    Tolerance.CHOP.requireClose(expected.subtract(eigensystem.values()), Array.zeros(matrix.length()));
   }
 
   public void testChallenge1() {
