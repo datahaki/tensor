@@ -20,7 +20,7 @@ import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
-public class QRSignOperatorTest extends TestCase {
+public class MatrixTest extends TestCase {
   private static <T> void _checkFail(Function<Tensor, T> function) {
     AssertFail.of(() -> function.apply(null));
     AssertFail.of(() -> function.apply(RealScalar.ONE));

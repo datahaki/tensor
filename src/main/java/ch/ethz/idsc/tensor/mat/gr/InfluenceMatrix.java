@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.mat.gr;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.mat.PseudoInverse;
 
 /** Remark:
@@ -41,11 +40,11 @@ public interface InfluenceMatrix {
     if (ExactTensorQ.of(design))
       try {
         int n = design.length();
-        int m = Unprotect.dimension1Hint(design);
-        Tensor d_pinv = PseudoInverse.usingCholesky(design);
+        Tensor pinv = PseudoInverse.usingCholesky(design);
+        int m = pinv.length();
         return n - m < m //
-            ? new InfluenceMatrixExact(design.dot(d_pinv))
-            : new InfluenceMatrixSplit(design, d_pinv);
+            ? new InfluenceMatrixExact(design.dot(pinv))
+            : new InfluenceMatrixSplit(design, pinv);
       } catch (Exception exception) {
         // design matrix does not have maximal rank
       }

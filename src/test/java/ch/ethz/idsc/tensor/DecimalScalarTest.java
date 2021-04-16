@@ -133,6 +133,11 @@ public class DecimalScalarTest extends TestCase {
     }
   }
 
+  public void testPrecisionFunc() {
+    DecimalScalar scalar = (DecimalScalar) Scalars.fromString("123.123123123`50");
+    assertEquals(scalar.precision(), 50);
+  }
+
   public void testDecimalEmpty() {
     Scalar value = Scalars.fromString(" 1.1234` + 12");
     assertTrue(value instanceof DoubleScalar);

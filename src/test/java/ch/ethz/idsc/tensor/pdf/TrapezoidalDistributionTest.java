@@ -76,6 +76,11 @@ public class TrapezoidalDistributionTest extends TestCase {
     assertTrue(Scalars.lessEquals(diff, RealScalar.of(0.5)));
   }
 
+  public void testVarianceFail() {
+    TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of(1, 2, 3, 4);
+    AssertFail.of(() -> distribution.variance());
+  }
+
   public void testQuantity() {
     Distribution distribution = //
         TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(5, "m"));

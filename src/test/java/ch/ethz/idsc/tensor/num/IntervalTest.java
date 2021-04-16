@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.num;
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Pretty;
@@ -11,10 +12,15 @@ import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.re.Pivots;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
+import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Exp;
+import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Power;
+import ch.ethz.idsc.tensor.sca.Round;
+import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class IntervalTest extends TestCase {
@@ -53,6 +59,26 @@ public class IntervalTest extends TestCase {
     assertFalse(ExactScalarQ.of(Interval.of(-4.3, 1.4)));
     assertFalse(ExactScalarQ.of(Interval.of(-4, 1.3)));
     assertFalse(ExactScalarQ.of(Interval.of(-4.1, 1)));
+  }
+
+  public void testRound() {
+    Scalar scalar = Interval.of(2.3, 5.6);
+    Round.FUNCTION.apply(scalar);
+    Ceiling.FUNCTION.apply(scalar);
+    Floor.FUNCTION.apply(scalar);
+    Sign.FUNCTION.apply(scalar);
+  }
+
+  public void testReciprocalFail() {
+    AssertFail.of(() -> Interval.of(-2.3, 5.6).reciprocal());
+  }
+
+  public void testPowerFail() {
+    AssertFail.of(() -> Power.of(Interval.of(-2.3, 5.6), 2.3));
+  }
+
+  public void testNumberFail() {
+    AssertFail.of(() -> Interval.of(-2.3, 5.6).number());
   }
 
   public void testExp() {

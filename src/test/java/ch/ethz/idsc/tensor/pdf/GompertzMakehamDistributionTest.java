@@ -80,6 +80,12 @@ public class GompertzMakehamDistributionTest extends TestCase {
     assertEquals(CDF.of(distribution).p_lessThan(Quantity.of(-2, "m^1*s^0")), RealScalar.ZERO);
   }
 
+  public void testVarianceFail() {
+    GompertzMakehamDistribution distribution = //
+        (GompertzMakehamDistribution) GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
+    AssertFail.of(() -> distribution.variance());
+  }
+
   public void testToString() {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     String string = distribution.toString();

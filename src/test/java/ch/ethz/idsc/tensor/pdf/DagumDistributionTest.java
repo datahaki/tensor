@@ -42,6 +42,11 @@ public class DagumDistributionTest extends TestCase {
     Chop._12.requireClose(scalar, RealScalar.of(7.579940034748095));
   }
 
+  public void testVarianceFail() {
+    DagumDistribution distribution = (DagumDistribution) DagumDistribution.of(2.3, 1.2, 0.7);
+    AssertFail.of(() -> distribution.variance());
+  }
+
   public void testMeanIndeterminate() {
     Distribution distribution = DagumDistribution.of(2.3, 1, 0.7);
     Scalar scalar = Mean.of(distribution);
