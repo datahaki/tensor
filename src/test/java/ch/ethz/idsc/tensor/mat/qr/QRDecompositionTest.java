@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.qr;
 
 import java.io.IOException;
 
@@ -15,6 +15,15 @@ import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Flatten;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.mat.Det;
+import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
+import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.mat.LeastSquares;
+import ch.ethz.idsc.tensor.mat.LowerTriangularize;
+import ch.ethz.idsc.tensor.mat.MatrixRank;
+import ch.ethz.idsc.tensor.mat.PseudoInverse;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.ComplexNormalDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -76,7 +85,6 @@ public class QRDecompositionTest extends TestCase {
     assertEquals(MatrixRank.of(matrix), r);
     _specialOps(matrix);
     {
-      AssertFail.of(() -> PseudoInverse.usingQR(matrix));
       AssertFail.of(() -> LeastSquares.usingQR(matrix, br));
       Tensor ls1 = LeastSquares.of(matrix, br);
       Tensor ls2 = PseudoInverse.of(matrix).dot(br);
@@ -85,7 +93,6 @@ public class QRDecompositionTest extends TestCase {
     {
       Tensor m = Transpose.of(matrix);
       Tensor b = RandomVariate.of(distribution, 4);
-      AssertFail.of(() -> PseudoInverse.usingQR(m));
       AssertFail.of(() -> LeastSquares.usingQR(m, b));
       Tensor ls1 = LeastSquares.of(m, b);
       Tensor ls2 = PseudoInverse.of(m).dot(b);

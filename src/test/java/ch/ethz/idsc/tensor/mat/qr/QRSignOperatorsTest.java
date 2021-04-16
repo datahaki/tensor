@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.qr;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;

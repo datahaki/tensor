@@ -1,9 +1,10 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.gr;
 
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.mat.PseudoInverse;
 
 /** Remark:
  * {@link Mahalanobis} is significantly faster than {@link InfluenceMatrix#of(Tensor)}

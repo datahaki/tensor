@@ -1,10 +1,12 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.qr;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
+import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.sca.Chop;
 

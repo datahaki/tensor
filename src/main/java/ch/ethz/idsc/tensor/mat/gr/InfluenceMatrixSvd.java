@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.gr;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,6 +7,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.mat.PseudoInverse;
+import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
 
 /* package */ class InfluenceMatrixSvd extends InfluenceMatrixBase implements Serializable {
   private final Tensor design;

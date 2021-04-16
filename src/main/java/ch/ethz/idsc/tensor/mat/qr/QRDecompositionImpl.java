@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.qr;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -8,9 +8,9 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.ext.Integers;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.red.Diagonal;
 import ch.ethz.idsc.tensor.red.Times;
@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.red.Times;
 /** decomposition Q.R = A with Det[Q] == +1
  * householder with even number of reflections
  * reproduces example on wikipedia */
-/* package */ final class QRDecompositionImpl implements QRDecomposition, Serializable {
+/* package */ final class QRDecompositionImpl extends QRDecompositionBase implements Serializable {
   private final int m;
   private final Tensor R;
   private final Tensor Qinv;
@@ -65,34 +65,9 @@ import ch.ethz.idsc.tensor.red.Times;
   }
 
   @Override // from QRDecomposition
-  public Tensor getQ() {
-    return ConjugateTranspose.of(getInverseQ()); // n x n
-  }
-
-  @Override // from QRDecomposition
   public Scalar det() {
     return R.length() == m // check if R is square
         ? (Scalar) Times.pmul(Diagonal.of(R))
         : RealScalar.ZERO;
-  }
-
-  /** @return PseudoInverse[matrix] . b
-   * @throws Exception if division by zero occurs */
-  public Tensor pseudoInverse() {
-    StaticHelper.failFast(R, m);
-    Tensor[] x = Qinv.stream().limit(m).toArray(Tensor[]::new);
-    for (int i = m - 1; i >= 0; --i) {
-      for (int j = i + 1; j < m; ++j)
-        x[i] = x[i].subtract(x[j].multiply(R.Get(i, j)));
-      x[i] = x[i].divide(R.Get(i, i));
-    }
-    return Unprotect.byRef(x);
-  }
-
-  @Override // from Object
-  public String toString() {
-    return String.format("%s[%s]", //
-        QRDecomposition.class.getSimpleName(), //
-        Tensors.message(getQ(), getR()));
   }
 }

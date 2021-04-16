@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.gr;
 
 import java.io.IOException;
 
@@ -8,10 +8,12 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.mat.LeastSquares;
+import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -27,15 +29,6 @@ public class InfluenceMatrixTest extends TestCase {
     leverages_sqrt.stream() //
         .map(Scalar.class::cast) //
         .forEach(Clips.unit()::requireInside);
-  }
-
-  public void testSimple() {
-    Tensor sequence = RandomVariate.of(NormalDistribution.standard(), 10, 3);
-    Tensor point = RandomVariate.of(NormalDistribution.standard(), 3);
-    Tensor matrix = Tensor.of(sequence.stream().map(point.negate()::add));
-    Tensor nullsp = LeftNullSpace.of(matrix);
-    OrthogonalMatrixQ.require(nullsp);
-    Chop._08.requireClose(PseudoInverse.usingSvd(nullsp), Transpose.of(nullsp));
   }
 
   private static Tensor imageQR(Tensor design, Tensor vector) {

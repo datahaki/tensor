@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.gr;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,6 +9,10 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.Symmetrize;
+import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
+import ch.ethz.idsc.tensor.mat.PositiveDefiniteMatrixQ;
+import ch.ethz.idsc.tensor.mat.PositiveSemidefiniteMatrixQ;
+import ch.ethz.idsc.tensor.mat.PseudoInverse;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** Mahalanobis is an alternative to {@link InfluenceMatrix} for the computation of

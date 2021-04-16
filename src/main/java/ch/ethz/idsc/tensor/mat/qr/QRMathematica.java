@@ -1,17 +1,17 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.qr;
 
 import java.io.Serializable;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.mat.Orthogonalize;
 
 /** EXPERIMENTAL
  * 
  * @see Orthogonalize */
-public class QRMathematica implements QRDecomposition, Serializable {
+public class QRMathematica extends QRDecompositionBase implements Serializable {
   /** @param qrDecomposition of matrix with dimensions n x m
    * @return */
   public static QRDecomposition wrap(QRDecomposition qrDecomposition) {
@@ -39,19 +39,7 @@ public class QRMathematica implements QRDecomposition, Serializable {
   }
 
   @Override // from QRDecomposition
-  public Tensor getQ() {
-    return ConjugateTranspose.of(getInverseQ()); // n x min(n, m)
-  }
-
-  @Override // from QRDecomposition
   public Scalar det() {
     return qrDecomposition.det();
-  }
-
-  @Override // from Object
-  public String toString() {
-    return String.format("%s[%s]", //
-        QRDecomposition.class.getSimpleName(), //
-        Tensors.message(getQ(), getR()));
   }
 }

@@ -61,7 +61,7 @@ public enum PseudoInverse {
   /** @param matrix with maximal rank
    * @return
    * @throws Exception if given matrix does not have maximal rank */
-  /* package */ static Tensor usingCholesky(Tensor matrix) {
+  public static Tensor usingCholesky(Tensor matrix) {
     int n = matrix.length();
     int m = Unprotect.dimension1Hint(matrix);
     if (m <= n) {

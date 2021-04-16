@@ -6,6 +6,8 @@ import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.mat.qr.QRDecomposition;
+import ch.ethz.idsc.tensor.mat.qr.QRSignOperators;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** least squares solution x that approximates
@@ -74,7 +76,7 @@ public enum LeastSquares {
   }
 
   private static Tensor _usingQR(Tensor matrix, Tensor b) {
-    return new QRDecompositionImpl(matrix, b, QRSignOperators.STABILITY).pseudoInverse();
+    return QRDecomposition.of(matrix, b, QRSignOperators.STABILITY).pseudoInverse();
   }
 
   /***************************************************/

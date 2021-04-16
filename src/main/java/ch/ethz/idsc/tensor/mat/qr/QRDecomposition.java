@@ -1,8 +1,10 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.qr;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.mat.LeastSquares;
 
 /** QRDecomposition is not consistent with Mathematica.
  * 
@@ -29,7 +31,15 @@ public interface QRDecomposition {
    * @return qr-decomposition of matrix
    * @throws Exception for input that is not "almost"-orthogonal */
   static QRDecomposition of(Tensor matrix, QRSignOperator qrSignOperator) {
-    return new QRDecompositionImpl(matrix, IdentityMatrix.of(matrix.length()), qrSignOperator);
+    return of(matrix, IdentityMatrix.of(matrix.length()), qrSignOperator);
+  }
+
+  /** @param matrix
+   * @param b
+   * @param qrSignOperator
+   * @return */
+  static QRDecomposition of(Tensor matrix, Tensor b, QRSignOperator qrSignOperator) {
+    return new QRDecompositionImpl(matrix, b, qrSignOperator);
   }
 
   /***************************************************/
@@ -44,4 +54,6 @@ public interface QRDecomposition {
 
   /** @return determinant of matrix */
   Scalar det();
+
+  Tensor pseudoInverse();
 }
