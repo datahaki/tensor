@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.lie.TensorProduct;
 import ch.ethz.idsc.tensor.mat.qr.QRDecomposition;
 import ch.ethz.idsc.tensor.mat.qr.QRMathematica;
 import ch.ethz.idsc.tensor.mat.qr.QRSignOperators;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** API inspired by Mathematica convention:

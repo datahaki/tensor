@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.mat.PseudoInverse;
-import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
 
 /* package */ class InfluenceMatrixSvd extends InfluenceMatrixBase implements Serializable {
   private final Tensor design;

@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
-import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
 
 /** Quote from Wikipedia: "The Schatten p-norms arise when applying the p-norm to the
  * vector of singular values of a matrix.

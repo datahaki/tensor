@@ -8,6 +8,8 @@ import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.qr.QRDecomposition;
 import ch.ethz.idsc.tensor.mat.qr.QRSignOperators;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueList;
 import ch.ethz.idsc.tensor.sca.Chop;
 
 /** least squares solution x that approximates

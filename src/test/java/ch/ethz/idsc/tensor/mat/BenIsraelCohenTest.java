@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.mat.gr.InfluenceMatrixQ;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.LogisticDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -32,10 +34,7 @@ public class BenIsraelCohenTest extends TestCase {
       Tensor design = p1.dot(p2);
       Tensor pinv = BenIsraelCohen.of(design);
       suo.apply(pinv.Get(0, 0));
-      // TODO check if diagonal elements!
-      // InfluenceMatrix influenceMatrix = new InfluenceMatrixExact(design.dot(pinv));
-      // Tensor leverages = influenceMatrix.leverages();
-      // Chop._09.requireClose(Total.ofVector(leverages), RealScalar.of(r));
+      InfluenceMatrixQ.require(design.dot(pinv));
     }
   }
 
@@ -62,10 +61,7 @@ public class BenIsraelCohenTest extends TestCase {
     Tensor pinv1 = BenIsraelCohen.of(matrix);
     Tensor pinv2 = BenIsraelCohen.of(Transpose.of(matrix));
     Tolerance.CHOP.requireClose(Transpose.of(pinv1), pinv2);
-    // TODO check if diagonal elements!
-    // InfluenceMatrixExact influenceMatrixExact = new InfluenceMatrixExact(pinv1.dot(matrix));
-    // influenceMatrixExact.leverages();
-    // Tolerance.CHOP.requireClose(matrix.dot(pinv1), IdentityMatrix.of(2));
+    InfluenceMatrixQ.require(pinv1.dot(matrix));
   }
 
   public void testMixedUnitsFail() {
@@ -90,9 +86,7 @@ public class BenIsraelCohenTest extends TestCase {
     Tensor matrix = p1.dot(p2);
     Tensor refine = BenIsraelCohen.of(matrix);
     Chop._09.requireClose(PseudoInverse.of(matrix), refine);
-    // TODO check if diagonal elements!
-    // InfluenceMatrix influenceMatrix = new InfluenceMatrixExact(refine.dot(matrix));
-    // Chop._09.requireClose(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(3));
+    InfluenceMatrixQ.require(refine.dot(matrix));
   }
 
   public void testComplexFullRank() {

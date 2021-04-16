@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
 import ch.ethz.idsc.tensor.red.Mean;
 
 /** Careful: implementation is not consistent with Mathematica

@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.sv;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -7,7 +7,7 @@ import ch.ethz.idsc.tensor.sca.InvertUnlessZero;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/SingularValueList.html">SingularValueList</a> */
-/* package */ enum SingularValueList {
+public enum SingularValueList {
   ;
   /** @param svd
    * @param chop

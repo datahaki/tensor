@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Conjugate;
 
-/** helper functions used in {@link SingularValueDecompositionImpl} */
 /* package */ enum StaticHelper {
   ;
   /** predicate checks if tensor
