@@ -11,6 +11,10 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Partition;
 import ch.ethz.idsc.tensor.alg.TensorRank;
+import ch.ethz.idsc.tensor.mat.re.GaussianElimination;
+import ch.ethz.idsc.tensor.mat.re.Pivot;
+import ch.ethz.idsc.tensor.mat.re.Pivots;
+import ch.ethz.idsc.tensor.mat.re.RowReduce;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/LinearSolve.html">LinearSolve</a> */

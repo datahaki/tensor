@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
-import ch.ethz.idsc.tensor.mat.Pivots;
+import ch.ethz.idsc.tensor.mat.re.Pivots;
 import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.ArgMax;

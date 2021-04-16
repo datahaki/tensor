@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.lie.MatrixExp;
 import ch.ethz.idsc.tensor.lie.TensorWedge;
+import ch.ethz.idsc.tensor.mat.re.Det;
 import ch.ethz.idsc.tensor.pdf.CauchyDistribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;

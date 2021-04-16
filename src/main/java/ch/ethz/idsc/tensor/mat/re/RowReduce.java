@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.re;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.ext.Integers;
+import ch.ethz.idsc.tensor.mat.LinearSolve;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/RowReduce.html">RowReduce</a>

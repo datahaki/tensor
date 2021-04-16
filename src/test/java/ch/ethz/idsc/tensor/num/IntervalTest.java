@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.mat.Inverse;
-import ch.ethz.idsc.tensor.mat.Pivots;
+import ch.ethz.idsc.tensor.mat.re.Pivots;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.AbsSquared;
 import ch.ethz.idsc.tensor.sca.Clips;

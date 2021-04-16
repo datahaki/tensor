@@ -5,13 +5,13 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Range;
-import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.NullSpace;
-import ch.ethz.idsc.tensor.mat.RowReduce;
 import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 import ch.ethz.idsc.tensor.mat.SymmetricMatrixQ;
+import ch.ethz.idsc.tensor.mat.re.Det;
+import ch.ethz.idsc.tensor.mat.re.RowReduce;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

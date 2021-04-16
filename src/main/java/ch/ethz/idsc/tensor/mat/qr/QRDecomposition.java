@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.mat.qr;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.mat.ConjugateTranspose;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.LeastSquares;
 
@@ -35,19 +36,20 @@ public interface QRDecomposition {
   }
 
   /** @param matrix
-   * @param b
+   * @param qInv0 for initialization of "Q-Inverse"
    * @param qrSignOperator
    * @return */
-  static QRDecomposition of(Tensor matrix, Tensor b, QRSignOperator qrSignOperator) {
-    return new QRDecompositionImpl(matrix, b, qrSignOperator);
+  static QRDecomposition of(Tensor matrix, Tensor qInv0, QRSignOperator qrSignOperator) {
+    return new QRDecompositionImpl(matrix, qInv0, qrSignOperator);
   }
 
   /***************************************************/
   /** @return upper triangular matrix */
   Tensor getR();
 
-  /** @return orthogonal matrix */
-  Tensor getInverseQ();
+  /** @return orthogonal matrix
+   * @see ConjugateTranspose */
+  Tensor getQTranspose();
 
   /** @return orthogonal matrix */
   Tensor getQ();
@@ -55,5 +57,8 @@ public interface QRDecomposition {
   /** @return determinant of matrix */
   Scalar det();
 
+  /** @return least squares solution x with matrix.dot(x) ~ b
+   * @throws Exception if rank of matrix is not maximal
+   * @throws Exception if n < m */
   Tensor pseudoInverse();
 }

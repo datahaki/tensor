@@ -1,5 +1,5 @@
 // code by jph
-package ch.ethz.idsc.tensor.mat;
+package ch.ethz.idsc.tensor.mat.re;
 
 import java.util.stream.IntStream;
 
@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
+import ch.ethz.idsc.tensor.mat.MatrixRank;
 import ch.ethz.idsc.tensor.sca.Abs;
 
 public enum Pivots implements Pivot {

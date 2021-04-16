@@ -11,6 +11,9 @@ import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.qr.QRDecomposition;
+import ch.ethz.idsc.tensor.mat.re.Pivot;
+import ch.ethz.idsc.tensor.mat.re.Pivots;
+import ch.ethz.idsc.tensor.mat.re.RowReduce;
 
 /** Let N = NullSpace[A]. If N is non-empty, then N.A == 0.
  * 
@@ -63,7 +66,7 @@ public enum LeftNullSpace {
       return NullSpace.usingSvd(Transpose.of(matrix));
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
     Tensor r = qrDecomposition.getR();
-    Tensor qinv = qrDecomposition.getInverseQ();
+    Tensor qinv = qrDecomposition.getQTranspose();
     boolean nonRankMax = IntStream.range(0, cols) //
         .mapToObj(i -> r.Get(i, i)) //
         .anyMatch(Tolerance.CHOP::isZero);

@@ -13,6 +13,8 @@ import ch.ethz.idsc.tensor.lie.MatrixLog;
 import ch.ethz.idsc.tensor.lie.MatrixSqrt;
 import ch.ethz.idsc.tensor.mat.gr.InfluenceMatrix;
 import ch.ethz.idsc.tensor.mat.qr.QRDecomposition;
+import ch.ethz.idsc.tensor.mat.re.Det;
+import ch.ethz.idsc.tensor.mat.re.RowReduce;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.usr.AssertFail;

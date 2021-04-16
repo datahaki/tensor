@@ -2,6 +2,8 @@
 package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.mat.re.Pivot;
+import ch.ethz.idsc.tensor.mat.re.Pivots;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Inverse.html">Inverse</a>

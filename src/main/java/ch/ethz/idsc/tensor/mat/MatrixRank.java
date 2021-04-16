@@ -7,6 +7,9 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.mat.re.Pivot;
+import ch.ethz.idsc.tensor.mat.re.Pivots;
+import ch.ethz.idsc.tensor.mat.re.RowReduce;
 import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
 import ch.ethz.idsc.tensor.sca.Chop;
 

@@ -31,7 +31,7 @@ public class QRDecompositionImplTest extends TestCase {
   public void testDegenerate0Square() {
     for (int n = 1; n < 6; ++n) {
       QRDecomposition qrDecomposition = QRDecomposition.of(Array.zeros(n, n));
-      assertEquals(qrDecomposition.getInverseQ(), IdentityMatrix.of(n));
+      assertEquals(qrDecomposition.getQTranspose(), IdentityMatrix.of(n));
       assertEquals(qrDecomposition.getR(), Array.zeros(n, n));
     }
   }
@@ -40,7 +40,7 @@ public class QRDecompositionImplTest extends TestCase {
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = DiagonalMatrix.with(UnitVector.of(n, 0));
       QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
-      assertEquals(qrDecomposition.getInverseQ(), IdentityMatrix.of(n));
+      assertEquals(qrDecomposition.getQTranspose(), IdentityMatrix.of(n));
       assertEquals(qrDecomposition.getR(), matrix);
     }
   }
@@ -49,7 +49,7 @@ public class QRDecompositionImplTest extends TestCase {
     for (int m = 1; m < 6; ++m) {
       int n = m + 2;
       QRDecomposition qrDecomposition = QRDecomposition.of(Array.zeros(n, m));
-      assertEquals(qrDecomposition.getInverseQ(), IdentityMatrix.of(n));
+      assertEquals(qrDecomposition.getQTranspose(), IdentityMatrix.of(n));
       assertEquals(qrDecomposition.getR(), Array.zeros(n, m));
     }
   }
@@ -59,7 +59,7 @@ public class QRDecompositionImplTest extends TestCase {
       int n = m + 3;
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
       QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
-      assertEquals(Dimensions.of(qrDecomposition.getInverseQ()), Arrays.asList(n, n));
+      assertEquals(Dimensions.of(qrDecomposition.getQTranspose()), Arrays.asList(n, n));
       assertEquals(Dimensions.of(qrDecomposition.getQ()), Arrays.asList(n, n));
       Tensor r = qrDecomposition.getR();
       assertEquals(Dimensions.of(r), Arrays.asList(n, m));
@@ -75,8 +75,8 @@ public class QRDecompositionImplTest extends TestCase {
       QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
       Tolerance.CHOP.requireClose(qrDecomposition.getQ().dot(qrDecomposition.getR()), matrix);
       assertTrue(OrthogonalMatrixQ.of(qrDecomposition.getQ()));
-      assertTrue(OrthogonalMatrixQ.of(qrDecomposition.getInverseQ()));
-      assertEquals(Dimensions.of(qrDecomposition.getInverseQ()), Arrays.asList(n, n));
+      assertTrue(OrthogonalMatrixQ.of(qrDecomposition.getQTranspose()));
+      assertEquals(Dimensions.of(qrDecomposition.getQTranspose()), Arrays.asList(n, n));
       assertEquals(Dimensions.of(qrDecomposition.getQ()), Arrays.asList(n, n));
       assertEquals(Dimensions.of(qrDecomposition.getR()), Arrays.asList(n, m));
     }

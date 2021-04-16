@@ -15,7 +15,6 @@ import ch.ethz.idsc.tensor.alg.ConstantArray;
 import ch.ethz.idsc.tensor.alg.Flatten;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.Serialization;
-import ch.ethz.idsc.tensor.mat.Det;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
@@ -24,6 +23,7 @@ import ch.ethz.idsc.tensor.mat.LowerTriangularize;
 import ch.ethz.idsc.tensor.mat.MatrixRank;
 import ch.ethz.idsc.tensor.mat.PseudoInverse;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.mat.re.Det;
 import ch.ethz.idsc.tensor.pdf.ComplexNormalDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
@@ -43,7 +43,7 @@ public class QRDecompositionTest extends TestCase {
     for (QRSignOperator qrSignOperator : QRSignOperators.values()) {
       qrDecomposition = QRDecomposition.of(A, qrSignOperator);
       Tensor Q = qrDecomposition.getQ();
-      Tensor Qi = qrDecomposition.getInverseQ();
+      Tensor Qi = qrDecomposition.getQTranspose();
       Tensor R = qrDecomposition.getR();
       Chop._10.requireClose(Q.dot(R), A);
       Chop._10.requireClose(Q.dot(Qi), IdentityMatrix.of(A.length()));

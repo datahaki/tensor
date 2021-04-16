@@ -15,6 +15,7 @@ import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.lie.MatrixExp;
 import ch.ethz.idsc.tensor.lie.TensorWedge;
 import ch.ethz.idsc.tensor.lie.r2.AngleVector;
+import ch.ethz.idsc.tensor.mat.re.Det;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
