@@ -6,13 +6,13 @@ import java.util.Random;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.itp.LinearInterpolation;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Floor;
-import ch.ethz.idsc.tensor.sca.Increment;
 
 /** EqualizingDistribution is a continuous {@link EmpiricalDistribution} */
 public class EqualizingDistribution implements //
@@ -46,7 +46,7 @@ public class EqualizingDistribution implements //
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     Scalar xlo = Floor.FUNCTION.apply(x);
-    Scalar ofs = Clips.interval(xlo, Increment.ONE.apply(xlo)).rescale(x);
+    Scalar ofs = Clips.interval(xlo, RealScalar.ONE.add(xlo)).rescale(x);
     return LinearInterpolation.of(Tensors.of( //
         empiricalDistribution.p_lessThan(xlo), //
         empiricalDistribution.p_lessEquals(xlo))).At(ofs);

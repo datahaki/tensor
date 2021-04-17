@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.itp.Interpolation;
 import ch.ethz.idsc.tensor.itp.LinearInterpolation;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import ch.ethz.idsc.tensor.sca.Increment;
 
 /** demonstration that the function call
  * {@link Interpolation#at(Scalar)} is 2-3 times faster than
@@ -26,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Increment;
     {
       Tensor rep1 = linearInterpolation.at(RealScalar.of(3));
       System.out.println(rep1);
-      rep1.set(Increment.ONE, 1);
+      rep1.set(RealScalar.ONE::add, 1);
       Tensor rep2 = linearInterpolation.at(RealScalar.of(3));
       System.out.println(rep2);
       // System.exit(0);

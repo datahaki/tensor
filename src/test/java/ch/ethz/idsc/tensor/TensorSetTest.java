@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.TensorRank;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
-import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -124,7 +123,7 @@ public class TensorSetTest extends TestCase {
 
   public void testSetFunctionAllLast() {
     Tensor a = Tensors.vector(0, 1, 3, 4, 9);
-    a.set(Increment.ONE, Tensor.ALL);
+    a.set(RealScalar.ONE::add, Tensor.ALL);
     Tensor b = Tensors.vector(1, 2, 4, 5, 10);
     assertEquals(a, b);
   }

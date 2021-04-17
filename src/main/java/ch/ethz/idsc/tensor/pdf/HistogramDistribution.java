@@ -6,6 +6,7 @@ import java.util.Random;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -15,7 +16,6 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Floor;
-import ch.ethz.idsc.tensor.sca.Increment;
 
 /** A histogram distribution approximates an unknown continuous distribution using
  * a collection of observed samples from the distribution.
@@ -89,7 +89,7 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     Scalar xlo = discrete.apply(Floor.toMultipleOf(width).apply(x));
-    Scalar ofs = Clips.interval(xlo, Increment.ONE.apply(xlo)).rescale(discrete.apply(x));
+    Scalar ofs = Clips.interval(xlo, RealScalar.ONE.add(xlo)).rescale(discrete.apply(x));
     return LinearInterpolation.of(Tensors.of( //
         empiricalDistribution.p_lessThan(xlo), //
         empiricalDistribution.p_lessEquals(xlo))).At(ofs);

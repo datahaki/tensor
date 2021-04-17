@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -47,7 +46,7 @@ public class DotTest extends TestCase {
   public void testCopy() {
     Tensor in = Array.zeros(2);
     Tensor re = Dot.of(in);
-    re.set(Increment.ONE, Tensor.ALL);
+    re.set(RealScalar.ONE::add, Tensor.ALL);
     assertFalse(in.equals(re));
     assertEquals(in, Array.zeros(2));
   }

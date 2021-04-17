@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.num.Series;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Gamma;
-import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -40,7 +39,7 @@ public class NestTest extends TestCase {
   public void testCopy() {
     Tensor in = Array.zeros(2);
     Tensor re = Nest.of(null, in, 0);
-    re.set(Increment.ONE, Tensor.ALL);
+    re.set(RealScalar.ONE::add, Tensor.ALL);
     assertFalse(in.equals(re));
     assertEquals(in, Array.zeros(2));
   }

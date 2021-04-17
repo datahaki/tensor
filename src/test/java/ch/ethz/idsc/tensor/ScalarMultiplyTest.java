@@ -14,6 +14,7 @@ public class ScalarMultiplyTest extends TestCase {
       Scalar ba = b.multiply(a);
       assertEquals(ab, ba);
       assertEquals(ab.toString(), ba.toString());
+      assertEquals(ab.getClass(), ba.getClass());
     }
   }
 

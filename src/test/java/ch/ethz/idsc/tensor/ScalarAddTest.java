@@ -12,6 +12,7 @@ public class ScalarAddTest extends TestCase {
       Scalar ba = b.add(a);
       assertEquals(ab, ba);
       assertEquals(ab.toString(), ba.toString());
+      assertEquals(ab.getClass(), ba.getClass());
     }
     {
       Scalar ab = a.subtract(b);
@@ -19,6 +20,7 @@ public class ScalarAddTest extends TestCase {
       assertEquals(ab, ba);
       if (Scalars.nonZero(ab))
         assertEquals(ab.toString(), ba.toString());
+      assertEquals(ab.getClass(), ba.getClass());
     }
   }
 

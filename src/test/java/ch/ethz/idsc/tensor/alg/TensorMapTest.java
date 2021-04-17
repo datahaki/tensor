@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.api.TensorScalarFunction;
 import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.red.Total;
-import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -49,7 +48,7 @@ public class TensorMapTest extends TestCase {
       s.set(RealScalar.ONE, 0);
       return s;
     }, matrix, 1);
-    assertEquals(matrix, Array.zeros(3, 1).map(Increment.ONE));
+    assertEquals(matrix, ConstantArray.of(RealScalar.ONE, 3, 1));
     assertEquals(matrix, blub);
     assertFalse(matrix == blub);
   }

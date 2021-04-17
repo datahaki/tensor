@@ -23,7 +23,6 @@ import ch.ethz.idsc.tensor.sca.Cos;
 import ch.ethz.idsc.tensor.sca.Decrement;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Floor;
-import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.LogisticSigmoid;
 import ch.ethz.idsc.tensor.sca.N;
@@ -143,7 +142,7 @@ public class ScalarUnaryOperatorTest extends TestCase {
     }
     // ---
     scalar.map(Decrement.ONE);
-    scalar.map(Increment.ONE);
+    scalar.map(RealScalar.ONE::add);
   }
 
   public void testTrinity() {
