@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.io.ResourceData;
@@ -25,6 +26,13 @@ public class UnitSimplifyTest extends TestCase {
     assertEquals(scalarUnaryOperator.apply(Quantity.of(10, "s")), Quantity.of(10, "s"));
     assertEquals(scalarUnaryOperator.apply(Pi.VALUE), Pi.VALUE);
     assertEquals(scalarUnaryOperator.apply(Quantity.of(20, "unknown")), Quantity.of(20, "unknown"));
+  }
+
+  public void testPartsPer() {
+    assertEquals(QuantityMagnitude.SI().in("ppt").apply(Quantity.of(1, "ppb")), RealScalar.of(1000));
+    assertEquals(QuantityMagnitude.SI().in("ppb").apply(Quantity.of(1, "ppm")), RealScalar.of(1000));
+    assertEquals(QuantityMagnitude.SI().in("ppm").apply(Quantity.of(1, "%")), RealScalar.of(10000));
+    assertEquals(QuantityMagnitude.SI().in("").apply(Quantity.of(100, "%")), RealScalar.of(1));
   }
 
   public void testProperties() {

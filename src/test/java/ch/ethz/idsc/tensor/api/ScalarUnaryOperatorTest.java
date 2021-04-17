@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 import ch.ethz.idsc.tensor.sca.ArcSin;
@@ -76,7 +77,8 @@ public class ScalarUnaryOperatorTest extends TestCase {
       // ---
     }
     Ceiling.of(scalar);
-    Chop._12.of(scalar);
+    Tolerance.CHOP.of(scalar);
+    Chop._11.of(scalar);
     try {
       Clips.unit().apply(scalar);
     } catch (Exception exception) {

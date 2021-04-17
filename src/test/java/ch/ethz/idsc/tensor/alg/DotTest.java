@@ -26,10 +26,6 @@ public class DotTest extends TestCase {
     return tensor;
   }
 
-  public void testDot0() {
-    AssertFail.of(() -> Dot.of());
-  }
-
   public void testDot1() {
     Tensor m1 = Tensors.matrix((i, j) -> RealScalar.of(2 + i - 3 * j), 3, 4);
     Tensor m2 = Tensors.matrix((i, j) -> RealScalar.of(8 + 2 * i + 9 * j), 4, 2);
@@ -167,5 +163,9 @@ public class DotTest extends TestCase {
     assertEquals(Dot.combine(Arrays.asList(2), Arrays.asList(2, 3, 4, 5)), Arrays.asList(3, 4, 5));
     assertEquals(Dot.combine(Arrays.asList(3), Arrays.asList(3)), Arrays.asList());
     assertEquals(Dot.combine(Arrays.asList(1, 2, 3), Arrays.asList(3, 4, 5)), Arrays.asList(1, 2, 4, 5));
+  }
+
+  public void testDot0Fail() {
+    AssertFail.of(() -> Dot.of());
   }
 }

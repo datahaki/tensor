@@ -24,7 +24,6 @@ import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Imag;
 import ch.ethz.idsc.tensor.sca.Real;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -32,7 +31,7 @@ import junit.framework.TestCase;
 
 public class MatrixPowerTest extends TestCase {
   private static boolean trunc(Tensor m, Tensor r) {
-    return Chop._12.of(m.subtract(r)).equals(Array.zeros(m.length(), m.length()));
+    return Tolerance.CHOP.of(m.subtract(r)).equals(Array.zeros(m.length(), m.length()));
   }
 
   private static void checkLow(Tensor m) {
@@ -99,14 +98,14 @@ public class MatrixPowerTest extends TestCase {
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = IdentityMatrix.of(n);
       Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
-      Chop._08.requireClose(sqrt.dot(sqrt), matrix);
+      Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
     }
   }
 
   public void testNegativeDiagonal() {
     Tensor matrix = DiagonalMatrix.of(-1, -2, -3);
     Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
-    Chop._08.requireClose(sqrt.dot(sqrt), matrix);
+    Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
   }
 
   public void testSymmetric() {
@@ -116,17 +115,17 @@ public class MatrixPowerTest extends TestCase {
       {
         Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
         SymmetricMatrixQ.require(sqrt);
-        Chop._08.requireClose(sqrt.dot(sqrt), matrix);
+        Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
       }
       {
         Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.of(1, 3));
         SymmetricMatrixQ.require(sqrt);
-        Chop._08.requireClose(sqrt.dot(sqrt).dot(sqrt), matrix);
+        Tolerance.CHOP.requireClose(sqrt.dot(sqrt).dot(sqrt), matrix);
       }
       {
         Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.of(1, 4));
         SymmetricMatrixQ.require(sqrt);
-        Chop._08.requireClose(sqrt.dot(sqrt).dot(sqrt).dot(sqrt), matrix);
+        Tolerance.CHOP.requireClose(sqrt.dot(sqrt).dot(sqrt).dot(sqrt), matrix);
       }
     }
   }

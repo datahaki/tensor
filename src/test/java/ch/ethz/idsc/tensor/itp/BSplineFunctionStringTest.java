@@ -16,12 +16,12 @@ import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.red.Total;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -81,9 +81,9 @@ public class BSplineFunctionStringTest extends TestCase {
     Tensor r1 = bSplineFunction.apply(RealScalar.of(0.5));
     Tensor r2 = bSplineFunction.apply(RealScalar.of(1.5));
     Tensor r3 = bSplineFunction.apply(RealScalar.of(2.5)); // does not evaluate correctly
-    Chop._12.requireClose(r1, RealScalar.of(1 / 3.0));
+    Tolerance.CHOP.requireClose(r1, RealScalar.of(1 / 3.0));
     assertEquals(r2, RealScalar.of(1.5));
-    Chop._12.requireClose(r3, RealScalar.of(8 / 3.0));
+    Tolerance.CHOP.requireClose(r3, RealScalar.of(8 / 3.0));
   }
 
   public void testCubic() {
@@ -99,7 +99,7 @@ public class BSplineFunctionStringTest extends TestCase {
     assertEquals(bSplineFunction.apply(RealScalar.of(0)), RealScalar.of(2));
     assertEquals(bSplineFunction.apply(RealScalar.of(1)), RationalScalar.of(13, 12));
     assertEquals(bSplineFunction.apply(RealScalar.of(2)), RealScalar.of(0));
-    Chop._12.requireClose(bSplineFunction.apply(RealScalar.of(3.999999999999)), RealScalar.of(-2));
+    Tolerance.CHOP.requireClose(bSplineFunction.apply(RealScalar.of(3.999999999999)), RealScalar.of(-2));
     assertEquals(bSplineFunction.apply(RealScalar.of(4)), RealScalar.of(-2));
   }
 

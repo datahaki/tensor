@@ -40,10 +40,6 @@ public class UnitSystemsTest extends TestCase {
     UnitSystem u2 = UnitSystems.rotate(u1, next, prev);
     for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
       Scalar scalar = u2.map().get(entry.getKey());
-      // if (!entry.getValue().equals(scalar)) {
-      if (!Chop._10.isClose(entry.getValue(), scalar)) {
-        // System.err.println(entry.getKey());
-      }
       Chop._10.requireClose(entry.getValue(), scalar);
     }
     TestHelper.checkInvariant(u1);
@@ -80,14 +76,12 @@ public class UnitSystemsTest extends TestCase {
 
   public void testEquivalentKilometers() {
     UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "m", "km");
-    Scalar scalar = Quantity.of(1, "N"); // W = m^2*kg*s^-3
+    Scalar scalar = Quantity.of(1, "N");
     assertEquals(unitSystem.apply(scalar), Quantity.of(RationalScalar.of(1, 1000), "kg*km*s^-2"));
   }
 
   public void testEquivalentHertz() {
     UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "s", "Hz");
-    // Scalar scalar = ; // W = m^2*kg*s^-3
-    // System.out.println(unitSystem.apply(scalar));
     assertEquals(unitSystem.apply(Quantity.of(1, "h")), Quantity.of(3600, "Hz^-1"));
     for (Entry<String, Scalar> entry : unitSystem.map().entrySet())
       assertFalse(QuantityUnit.of(entry.getValue()).map().containsKey("s"));

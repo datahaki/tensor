@@ -99,8 +99,8 @@ public class LeastSquaresTest extends TestCase {
     Tensor x2 = LeastSquares.usingSvd(m, b);
     Tensor x3 = LeastSquares.usingQR(m, b);
     assertEquals(Dimensions.of(x1), Arrays.asList(3));
-    Chop._10.requireClose(x1, x2);
-    Chop._10.requireClose(x3, x2);
+    Chop._10.requireClose(x1, x2); // not below tolerance
+    Chop._10.requireClose(x3, x2); // not below tolerance
   }
 
   public void testLowRank() {
@@ -109,7 +109,7 @@ public class LeastSquaresTest extends TestCase {
     assertEquals(MatrixRank.of(m), 2);
     Tensor b = Tensors.vector(1, 1, 1, 1);
     Tensor x2 = LeastSquares.usingSvd(m, b);
-    assertEquals(Chop._12.of(m.dot(x2).subtract(b)), b.multiply(RealScalar.ZERO));
+    Tolerance.CHOP.requireClose(m.dot(x2), b);
   }
 
   public void testFullRankComplex() {
@@ -137,22 +137,16 @@ public class LeastSquaresTest extends TestCase {
         (i, j) -> ComplexScalar.of( //
             RealScalar.of(18 * i + j * 100), RationalScalar.of(2 * i + 2 + j, 1 + 9 * i + j)),
         4, 3);
+    assertEquals(MatrixRank.of(m), 3);
+    Tensor pinv1 = PseudoInverse.usingCholesky(m);
+    Tensor pinv2 = BenIsraelCohen.of(m);
+    Chop._08.requireClose(pinv1, pinv2);
     Tensor b = Tensors.fromString("{2+3*I, 1-8*I, 99-100*I, 2/5}");
-    Tensor x1 = PseudoInverse.usingCholesky(m).dot(b);
-    @SuppressWarnings("unused")
-    Tensor d1 = m.dot(x1).subtract(b);
-    // 112.45647858810342
-    // 112.45619362133209
-    // 114.01661102428717
-    // 114.00823633112584
-    // 81.36251932398088
-    // 81.3565431234251
-    // System.out.println(Norm._2.of(d1));
-    // System.out.println(d1);
-    // Tensor s1 = Tensors.fromString(
-    // "[726086997/5793115330933+44069346/5793115330933*I, 67991764500/5793115330933+4521379500/5793115330933*I,
-    // -22367102670/827587904419-1672185060/827587904419*I, 11662258824/827587904419+1019978082/827587904419*I]");
-    // assertEquals(d1, s1);
+    Tensor d0 = LeastSquares.of(m, b);
+    Tensor d1 = pinv1.dot(b);
+    Tensor d2 = pinv2.dot(b);
+    Chop._08.requireClose(d0, d1);
+    Chop._08.requireClose(d1, d2);
   }
 
   public void testRect() {

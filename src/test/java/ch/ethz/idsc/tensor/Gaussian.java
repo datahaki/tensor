@@ -5,6 +5,7 @@ package ch.ethz.idsc.tensor;
 import java.io.Serializable;
 import java.math.MathContext;
 
+import ch.ethz.idsc.tensor.api.ExactScalarQInterface;
 import ch.ethz.idsc.tensor.api.NInterface;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.MeanInterface;
@@ -24,7 +25,7 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * 
  * implementation for demonstration purpose */
 public class Gaussian extends AbstractScalar implements //
-    MeanInterface, NInterface, VarianceInterface, Serializable {
+    ExactScalarQInterface, MeanInterface, NInterface, VarianceInterface, Serializable {
   /** additive zero */
   private static final Scalar ZERO = of(RealScalar.ZERO, RealScalar.ZERO);
 
@@ -53,39 +54,39 @@ public class Gaussian extends AbstractScalar implements //
     this.variance = variance;
   }
 
-  @Override
+  @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
     if (scalar instanceof Gaussian)
       throw TensorRuntimeException.of(this, scalar);
     return of(mean.multiply(scalar), variance.multiply(AbsSquared.FUNCTION.apply(scalar)));
   }
 
-  @Override
+  @Override // from Scalar
   public Scalar negate() {
     return of(mean.negate(), variance);
   }
 
-  @Override
+  @Override // from Scalar
   public Scalar reciprocal() {
     throw TensorRuntimeException.of(this);
   }
 
-  @Override
+  @Override // from Scalar
   public Scalar zero() {
     return ZERO;
   }
 
-  @Override
+  @Override // from Scalar
   public Scalar one() {
-    throw new UnsupportedOperationException();
+    return mean.zero().one();
   }
 
-  @Override
+  @Override // from Scalar
   public Number number() {
     throw TensorRuntimeException.of(this);
   }
 
-  @Override
+  @Override // from Scalar
   protected Scalar plus(Scalar scalar) {
     if (scalar instanceof Gaussian) {
       Gaussian gaussian = (Gaussian) scalar;
@@ -95,6 +96,12 @@ public class Gaussian extends AbstractScalar implements //
   }
 
   /***************************************************/
+  @Override
+  public boolean isExactScalar() {
+    return ExactScalarQ.of(mean) //
+        && ExactScalarQ.of(variance);
+  }
+
   @Override
   public Scalar n() {
     return of(N.DOUBLE.apply(mean), N.DOUBLE.apply(variance));

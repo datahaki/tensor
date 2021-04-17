@@ -65,7 +65,7 @@ public class DecimalScalarTest extends TestCase {
 
   public void testTrig() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL32));
-    Chop._06.requireZero(Sin.of(s));
+    Chop._06.requireZero(Sin.of(s)); // decimal32 is similiar to float
     Tolerance.CHOP.requireClose(Cos.of(s), RealScalar.ONE.negate());
   }
 

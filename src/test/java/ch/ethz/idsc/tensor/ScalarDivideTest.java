@@ -26,7 +26,7 @@ public class ScalarDivideTest extends TestCase {
   public void testSimple() {
     Unit ua = Unit.of("m^2*s^-3");
     Unit ub = Unit.of("kg*CHF^-1");
-    List<Scalar> list = ScalarAddTest.SCALARS;
+    List<Scalar> list = TestHelper.SCALARS;
     for (int i = 0; i < list.size(); ++i)
       for (int j = i; j < list.size(); ++j) {
         Scalar a = list.get(i);

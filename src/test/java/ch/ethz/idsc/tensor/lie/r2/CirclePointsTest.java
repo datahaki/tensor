@@ -18,6 +18,7 @@ import ch.ethz.idsc.tensor.alg.Subdivide;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.api.ScalarTensorFunction;
 import ch.ethz.idsc.tensor.itp.BSplineFunction;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Decrement;
@@ -38,9 +39,9 @@ public class CirclePointsTest extends TestCase {
   public void testExact() {
     ExactTensorQ.require(CirclePoints.of(2));
     ExactTensorQ.require(CirclePoints.of(4));
-    Chop._12.requireClose(CirclePoints.of(4), numeric(4));
-    Chop._12.requireClose(CirclePoints.of(6), numeric(6));
-    Chop._12.requireClose(CirclePoints.of(12), numeric(12));
+    Tolerance.CHOP.requireClose(CirclePoints.of(4), numeric(4));
+    Tolerance.CHOP.requireClose(CirclePoints.of(6), numeric(6));
+    Tolerance.CHOP.requireClose(CirclePoints.of(12), numeric(12));
     assertEquals(CirclePoints.of(6).flatten(-1).map(Scalar.class::cast).filter(ExactScalarQ::of).count(), 8);
     assertEquals(CirclePoints.of(9).flatten(-1).map(Scalar.class::cast).filter(ExactScalarQ::of).count(), 4);
     assertEquals(CirclePoints.of(12).flatten(-1).map(Scalar.class::cast).filter(ExactScalarQ::of).count(), 16);
@@ -48,7 +49,7 @@ public class CirclePointsTest extends TestCase {
 
   public void testNumeric() {
     for (int count = 0; count <= 32; ++count)
-      Chop._12.requireClose(CirclePoints.of(count), numeric(count));
+      Tolerance.CHOP.requireClose(CirclePoints.of(count), numeric(count));
   }
 
   public void testNorm() {
