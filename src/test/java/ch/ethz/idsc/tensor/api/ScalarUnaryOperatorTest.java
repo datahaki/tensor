@@ -20,7 +20,6 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Cos;
-import ch.ethz.idsc.tensor.sca.Decrement;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Log;
@@ -141,7 +140,7 @@ public class ScalarUnaryOperatorTest extends TestCase {
       // ---
     }
     // ---
-    scalar.map(Decrement.ONE);
+    scalar.map(s -> s.subtract(RealScalar.ONE));
     scalar.map(RealScalar.ONE::add);
   }
 

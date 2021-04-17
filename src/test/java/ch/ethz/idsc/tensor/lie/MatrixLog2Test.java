@@ -27,14 +27,14 @@ public class MatrixLog2Test extends TestCase {
     Tensor exp = MatrixExp.of(matrix);
     Tensor log = MatrixLog.of(exp);
     Tensor elg = MatrixExp.of(log);
-    Chop._11.requireClose(elg, exp);
+    Tolerance.CHOP.requireClose(elg, exp);
     // Chop._10.close(log, matrix); // not generally true!
   }
 
   private static void _checkLogExp(Tensor matrix) {
     Tensor log = MatrixLog.of(matrix);
     Tensor exp = MatrixExp.of(log);
-    Chop._11.requireClose(exp, matrix);
+    Tolerance.CHOP.requireClose(exp, matrix);
   }
 
   public void testIdentity() {

@@ -34,6 +34,14 @@ public class ImagTest extends TestCase {
     assertEquals(result, check);
   }
 
+  public void testDecrement() {
+    Tensor matrix = Tensors.matrixInt(new int[][] { { -8, 3, -3 }, { 2, -2, 7 } });
+    matrix.set(s -> s.subtract(RealScalar.ONE), 0, 0);
+    Tensor result = matrix.map(s -> s.subtract(RealScalar.ONE));
+    Tensor check = Tensors.matrixInt(new int[][] { { -10, 2, -4 }, { 1, -3, 6 } });
+    assertEquals(result, check);
+  }
+
   public void testFail() {
     Scalar scalar = StringScalar.of("string");
     AssertFail.of(() -> Imag.of(scalar));

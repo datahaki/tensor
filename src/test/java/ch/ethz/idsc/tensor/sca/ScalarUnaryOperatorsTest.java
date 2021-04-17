@@ -25,7 +25,7 @@ public class ScalarUnaryOperatorsTest extends TestCase {
       Cosh.FUNCTION, //
       Cot.FUNCTION, //
       CubeRoot.FUNCTION, //
-      Decrement.ONE, //
+      s -> s.subtract(RealScalar.ONE), //
       Exp.FUNCTION, //
       Floor.FUNCTION, //
       Fresnel.FUNCTION, //
