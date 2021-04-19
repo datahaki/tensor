@@ -12,6 +12,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.BasisTransform;
 import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Sort;
+import ch.ethz.idsc.tensor.alg.TensorComparator;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
@@ -23,6 +24,7 @@ import ch.ethz.idsc.tensor.mat.OrthogonalMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.mat.re.Det;
 import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueList;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.red.Times;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -88,7 +90,7 @@ public class JacobiMethodTest extends TestCase {
     expEigvc.append(Tensors.vector(0.31354840524937794336, -0.75632770019948717296, 0.041096194862756938126, 0.57268395319262161336));
     expEigvc.append(Tensors.vector(-0.13313246690429592645, 0.30157797376766923332, -0.78307519514730625756, 0.52737056301918462298));
     checkEquation(tensor, eigensystem);
-    assertEquals(Chop._12.of(expEigvl.subtract(eigensystem.values())), Array.zeros(4));
+    assertEquals(Tolerance.CHOP.of(expEigvl.subtract(eigensystem.values())), Array.zeros(4));
   }
 
   public void testHilberts() {
@@ -96,9 +98,8 @@ public class JacobiMethodTest extends TestCase {
       Tensor matrix = HilbertMatrix.of(size);
       Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
       checkEquation(matrix, eigensystem);
-      SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
-      Tensor values = Reverse.of(Sort.of(svd.values()));
-      Tolerance.CHOP.requireClose(eigensystem.values(), values);
+      Tensor values1 = SingularValueList.of(matrix);
+      Tolerance.CHOP.requireClose(eigensystem.values(), values1);
     }
   }
 
@@ -108,8 +109,10 @@ public class JacobiMethodTest extends TestCase {
       Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
       checkEquation(matrix, eigensystem);
       SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
-      Tensor values = Reverse.of(Sort.of(svd.values()));
-      Tolerance.CHOP.requireClose(eigensystem.values(), values);
+      Tensor values1 = Reverse.of(Sort.of(svd.values()));
+      Tensor values2 = Sort.of(svd.values(), TensorComparator.INSTANCE.reversed());
+      Tolerance.CHOP.requireClose(eigensystem.values(), values1);
+      assertEquals(values1, values2);
     }
   }
 

@@ -16,33 +16,33 @@ import junit.framework.TestCase;
 public class QuantityComparatorTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.SI());
-    Tensor sorted = Sort.of(Tensors.fromString("{4[h], 300[s], 2[min], 180[s]}"), comparator);
+    Tensor sorted = Sort.ofVector(Tensors.fromString("{4[h], 300[s], 2[min], 180[s]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{2[min], 180[s], 300[s], 4[h]}"));
   }
 
   public void testUnitless() throws ClassNotFoundException, IOException {
     Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.SI());
-    Tensor sorted = Sort.of(Tensors.fromString("{4[rad], 300[deg], 2, 180[rad], -1[rad]}"), comparator);
+    Tensor sorted = Sort.ofVector(Tensors.fromString("{4[rad], 300[deg], 2, 180[rad], -1[rad]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{-1[rad], 2, 4[rad], 300[deg], 180[rad]}"));
   }
 
   public void testUnknown() throws ClassNotFoundException, IOException {
     Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.SI());
-    Tensor sorted = Sort.of(Tensors.fromString("{4[fun], 300[fun], 2[fun], 180[fun]}"), comparator);
+    Tensor sorted = Sort.ofVector(Tensors.fromString("{4[fun], 300[fun], 2[fun], 180[fun]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{2[fun], 4[fun], 180[fun], 300[fun]}"));
   }
 
   public void testEmpty() throws ClassNotFoundException, IOException {
     UnitSystem unitSystem = Serialization.copy(SimpleUnitSystem.from(new Properties()));
     Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.of(unitSystem));
-    Tensor sorted = Sort.of(Tensors.fromString("{4[fun], 300[fun], 2[fun], 180[fun]}"), comparator);
+    Tensor sorted = Sort.ofVector(Tensors.fromString("{4[fun], 300[fun], 2[fun], 180[fun]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{2[fun], 4[fun], 180[fun], 300[fun]}"));
   }
 
   public void testIncompatibleFail() {
     Comparator<Scalar> comparator = QuantityComparator.SI();
     Tensor vector = Tensors.fromString("{4[h], 300[s], 2[km], 180[s]}");
-    AssertFail.of(() -> Sort.of(vector, comparator));
+    AssertFail.of(() -> Sort.ofVector(vector, comparator));
   }
 
   public void testInequality() {
