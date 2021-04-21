@@ -37,8 +37,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
     {
       // Tensor D = DiagonalMatrix.of(b.map(UnitStep.function));
       // IdentityMatrix.of(m)
+      // System.out.println(Pretty.of(A));
       Tensor tab = Join.of(1, A, IdentityMatrix.of(m), Partition.of(b, 1));
+      // System.out.println(Pretty.of(tab));
       Tensor row = Tensors.vector(i -> Boole.of(n <= i && i < n + m), n + m + 1);
+      // System.out.println(row);
       for (int index = 0; index < m; ++index) // make all entries in bottom row zero
         row = row.subtract(tab.get(index));
       row.set(RealScalar.ZERO, n + m); // set bottom corner to 0
@@ -49,6 +52,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
         TensorMap.of(row -> row.extract(0, n), simplexMethod.tab.extract(0, m), 1), //
         Partition.of(simplexMethod.tab.get(Tensor.ALL, n + m).extract(0, m), 1));
     tab.append(Append.of(c, RealScalar.ZERO)); // set bottom corner to 0
+    // System.out.println(Pretty.of(tab));
     return new SimplexMethod(tab, simplexMethod.ind, simplexPivot).getX(); // phase 2
   }
 

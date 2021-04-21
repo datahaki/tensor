@@ -1,13 +1,11 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt.lp;
 
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
-import ch.ethz.idsc.tensor.sca.Sign;
 
 /** linear programming solution for small scale problems.
  * The implementation has only been tested on a few cases.
@@ -91,15 +89,7 @@ public enum LinearProgramming {
    * @param b
    * @return true if x >= 0 and m.x <= b */
   public static boolean isFeasible(Tensor m, Tensor x, Tensor b) {
-    return isNonNegative(x) //
-        && isNonNegative(b.subtract(m.dot(x)));
-  }
-
-  /** @param vector
-   * @return true if all entries in vector are non-negative */
-  /* package */ static boolean isNonNegative(Tensor vector) {
-    return vector.stream() // all vector_i >= 0
-        .map(Scalar.class::cast) //
-        .allMatch(Sign::isPositiveOrZero);
+    return StaticHelper.isNonNegative(x) //
+        && StaticHelper.isNonNegative(b.subtract(m.dot(x)));
   }
 }

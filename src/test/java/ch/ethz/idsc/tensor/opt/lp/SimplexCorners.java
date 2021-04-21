@@ -1,66 +1,77 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt.lp;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.TreeMap;
+import java.util.stream.IntStream;
 
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Dimensions;
+import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subsets;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.CostType;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
 
-/** algorithm visits all corners
- * the runtime is prohibitive
- * only for testing */
+/** .
+ * Algorithm visits all corners the runtime is prohibitive. Only for testing.
+ * 
+ * "Theorem 4.2 states that if there is a feasible solution, then there is
+ * a basic feasible solution. Theorem 4.5 states that if there is an optimum
+ * solution, then there is a basic optimum solution. So, to get an optimum
+ * solution, we can choose m columns at a time from the matrix A and solve
+ * the m simultaneous equations for the n sets of simultaneous m variables.
+ * However, this approach requires that n over m equations be solved, which
+ * is not practical unless n is small."
+ * Reference: Linear and Integer Programming made Easy, 2016 */
 /* package */ enum SimplexCorners {
   ;
-  /** @param c
-   * @param A
-   * @param b
-   * @return all non-negative solutions */
-  public static NavigableMap<Scalar, Tensor> minEquals(Tensor c, Tensor A, Tensor b, boolean isNonNegative) {
-    List<Integer> list = Dimensions.of(A);
-    int m = b.length();
+  public static Tensor of(LinearProgram linearProgram) {
+    NavigableMap<Scalar, Tensor> navigableMap = of( //
+        linearProgram.c, //
+        linearProgram.A, //
+        linearProgram.b, //
+        linearProgram.regionType.equals(RegionType.NON_NEGATIVE));
+    if (navigableMap.isEmpty())
+      return Tensors.empty();
+    Tensor sols = linearProgram.costType.equals(CostType.MIN) //
+        ? navigableMap.firstEntry().getValue()
+        : navigableMap.lastEntry().getValue();
+    return Tensor.of(sols.stream() //
+        .map(row -> row.extract(0, linearProgram.variables)) //
+        .distinct());
+  }
+
+  /** @param c cost vector
+   * @param A matrix
+   * @param b rhs
+   * @param isNonNegative whether to exclude solutions with any negative coordinates
+   * @return all solutions */
+  public static NavigableMap<Scalar, Tensor> of(Tensor c, Tensor A, Tensor b, boolean isNonNegative) {
     int n = c.length();
-    if (!list.equals(Arrays.asList(m, n)))
-      throw TensorRuntimeException.of(c, A, b);
+    int m = b.length();
     NavigableMap<Scalar, Tensor> map = new TreeMap<>();
-    Tensor At = Transpose.of(A);
+    Tensor mt = Transpose.of(A);
     for (Tensor subset : Subsets.of(Range.of(0, n), m)) {
       int[] cols = subset.stream() //
           .map(Scalar.class::cast) //
           .map(Scalar::number) //
           .mapToInt(Number::intValue) //
           .toArray();
-      Tensor matrix = Tensors.reserve(m);
-      Tensor cost = Tensors.reserve(m);
-      for (int col : cols) {
-        matrix.append(At.get(col));
-        cost.append(c.get(col));
-      }
+      Tensor matrix = Transpose.of(Tensor.of(IntStream.of(cols).mapToObj(mt::get)));
       try {
-        Tensor X = LinearSolve.of(Transpose.of(matrix), b);
-        if (!isNonNegative || LinearProgramming.isNonNegative(X)) {
-          Scalar key = (Scalar) cost.dot(X);
-          if (!map.containsKey(key))
-            map.put(key, Tensors.empty());
+        Tensor X = LinearSolve.of(matrix, b);
+        if (!isNonNegative || StaticHelper.isNonNegative(X)) {
           Tensor x = Array.zeros(n);
-          int index = 0;
-          for (int col : cols) {
-            x.set(X.get(index), col);
-            ++index;
-          }
-          map.get(key).append(x);
+          IntStream.range(0, m).forEach(index -> x.set(X.Get(index), cols[index]));
+          Tensor cost = Tensor.of(IntStream.of(cols).mapToObj(c::Get));
+          map.merge((Scalar) cost.dot(X), Tensors.of(x), Join::of);
         }
       } catch (Exception exception) {
         // ---
