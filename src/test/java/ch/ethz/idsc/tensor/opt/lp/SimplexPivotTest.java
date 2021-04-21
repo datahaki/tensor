@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
-import ch.ethz.idsc.tensor.opt.lp.LinearProgram.CostType;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -39,13 +39,14 @@ public class SimplexPivotTest extends TestCase {
     Tensor x = xs.get(0);
     Tensor mx = m.dot(x);
     assertEquals(mx, b);
-    LinearProgram lpp = LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    LinearProgram lpp = LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
     Tensor solp = SimplexCorners.of(lpp);
     assertEquals(xs, solp);
-    Tensor sold = SimplexCorners.of(lpp.dual());
+    LinearProgram lpd = lpp.dual();
+    Tensor sold = SimplexCorners.of(lpd);
     assertEquals(sold, Tensors.fromString("{{1/10[USD*Wood^-1], 7/15[Iron^-1*USD]}}"));
-    Tensor sole = SimplexCorners.of(lpp.dual());
-    assertEquals(sold, sole);
+    Tensor xd = LinearProgramming.of(lpd);
+    assertEquals(sold.get(0), xd);
   }
 
   public void testP18_2() {
@@ -55,21 +56,29 @@ public class SimplexPivotTest extends TestCase {
     NavigableMap<Scalar, Tensor> navigableMap = SimplexCorners.of(c, m, b, true);
     Tensor sol1 = navigableMap.get(Quantity.of(RationalScalar.of(240, 11), "USD"));
     assertEquals(sol1, Tensors.fromString("{{20/11, 0, 0}}"));
-    LinearProgram lp1 = LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor sol2 = SimplexCorners.of(lp1);
+    LinearProgram lpp = LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor sol2 = SimplexCorners.of(lpp);
     assertEquals(sol1, sol2);
+    Tensor xp = LinearProgramming.of(lpp);
+    assertEquals(sol1.get(0), xp);
+    LinearProgram lpd = lpp.dual();
+    Tensor xd = LinearProgramming.of(lpd);
+    assertEquals(xp.dot(lpp.c), xd.dot(lpd.c));
   }
 
   public void testP18_3() {
     Tensor c = Tensors.vector(1, 1, 1);
     Tensor m = Tensors.fromString("{{6,3,1},{4,5,6}}");
     Tensor b = Tensors.vector(15, 15);
-    LinearProgram lpp = LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    LinearProgram lpp = LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
     Tensor solp = SimplexCorners.of(lpp);
     assertEquals(solp.dot(lpp.c), Tensors.of(RationalScalar.of(10, 3)));
     LinearProgram lpd = lpp.dual();
     Tensor sold = SimplexCorners.of(lpd);
     assertEquals(sold.dot(lpd.c), Tensors.of(RationalScalar.of(10, 3)));
+    Tensor xp = LinearProgramming.of(lpp);
+    Tensor xd = LinearProgramming.of(lpd);
+    assertEquals(xp.dot(lpp.c), xd.dot(lpd.c));
   }
 
   public void testP21() {
@@ -79,7 +88,7 @@ public class SimplexPivotTest extends TestCase {
     NavigableMap<Scalar, Tensor> navigableMap = SimplexCorners.of(c, m, b, true);
     Map<Scalar, Tensor> map2 = Collections.singletonMap(Quantity.of(6, "USD"), Tensors.fromString("{{3, 3, 0}, {0, 3/2, 9/2}}"));
     assertEquals(navigableMap, map2);
-    LinearProgram lpp = LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    LinearProgram lpp = LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
     Tensor solp = SimplexCorners.of(lpp);
     assertEquals(solp, Tensors.fromString("{{3, 3, 0}, {0, 3/2, 9/2}}"));
     assertEquals(solp.dot(lpp.c), Tensors.fromString("{6[USD], 6[USD]}"));
@@ -87,6 +96,8 @@ public class SimplexPivotTest extends TestCase {
     Tensor sold = SimplexCorners.of(lpd);
     assertEquals(sold, Tensors.fromString("{{1/5[USD*ap^-1], 1/5[USD*or^-1]}}"));
     assertEquals(sold.dot(lpd.c), Tensors.fromString("{6[USD]}"));
+    Tensor xd = LinearProgramming.of(lpd);
+    assertEquals(sold.get(0), xd);
   }
 
   public void testP23() {
@@ -97,7 +108,7 @@ public class SimplexPivotTest extends TestCase {
     Scalar key = Quantity.of(29, "USD");
     Tensor tensor = navigableMap.get(key);
     assertEquals(tensor, Tensors.fromString("{{0, 3, 2, 0}}"));
-    LinearProgram lpp = LinearProgram.of(CostType.MIN, c, ConstraintType.GREATER_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    LinearProgram lpp = LinearProgram.of(Objective.MIN, c, ConstraintType.GREATER_EQUALS, m, b, RegionType.NON_NEGATIVE);
     Tensor solp = SimplexCorners.of(lpp);
     assertEquals(tensor, solp);
     assertEquals(solp.dot(lpp.c).Get(0), key);
@@ -127,7 +138,7 @@ public class SimplexPivotTest extends TestCase {
     assertEquals(navigableMap.size(), 4);
     Tensor tensor = navigableMap.get(RealScalar.of(5));
     assertEquals(tensor, Tensors.fromString("{{0,0,2,1}}"));
-    LinearProgram lpe = LinearProgram.of(CostType.MIN, c, ConstraintType.EQUALS, m, b, RegionType.NON_NEGATIVE);
+    LinearProgram lpe = LinearProgram.of(Objective.MIN, c, ConstraintType.EQUALS, m, b, RegionType.NON_NEGATIVE);
     Tensor sole = SimplexCorners.of(lpe);
     assertEquals(tensor, sole);
   }
@@ -148,7 +159,7 @@ public class SimplexPivotTest extends TestCase {
     Tensor c = Tensors.fromString("{1,2}");
     Tensor m = Tensors.fromString("{{-1,1},{0,1},{1,1},{4,1}}");
     Tensor b = Tensors.fromString("{6,8,12,36}");
-    LinearProgram lpp = LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    LinearProgram lpp = LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
     Tensor solp = SimplexCorners.of(lpp);
     assertEquals(solp, Tensors.fromString("{{4, 8}}"));
   }

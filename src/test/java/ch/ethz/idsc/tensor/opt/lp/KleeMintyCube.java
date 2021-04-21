@@ -6,7 +6,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
-import ch.ethz.idsc.tensor.opt.lp.LinearProgram.CostType;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
 import ch.ethz.idsc.tensor.sca.Power;
 
@@ -37,7 +37,7 @@ import ch.ethz.idsc.tensor.sca.Power;
   public final Tensor x; // solution
 
   public KleeMintyCube(int n) {
-    linearProgram = LinearProgram.of(CostType.MAX, Tensors.vector(i -> Power.of(2, n - i - 1), n), //
+    linearProgram = LinearProgram.of(Objective.MAX, Tensors.vector(i -> Power.of(2, n - i - 1), n), //
         ConstraintType.LESS_EQUALS, //
         Tensors.matrix(KleeMintyCube::coefficient, n, n), //
         Tensors.vector(i -> Power.of(5, i + 1), n), //

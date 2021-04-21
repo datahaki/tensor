@@ -16,7 +16,7 @@ import ch.ethz.idsc.tensor.alg.Subsets;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
-import ch.ethz.idsc.tensor.opt.lp.LinearProgram.CostType;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
 
 /** .
@@ -41,7 +41,7 @@ import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
         lp_equality.regionType.equals(RegionType.NON_NEGATIVE));
     if (navigableMap.isEmpty())
       return Tensors.empty();
-    Tensor sols = lp_equality.costType.equals(CostType.MIN) //
+    Tensor sols = lp_equality.objective.equals(Objective.MIN) //
         ? navigableMap.firstEntry().getValue()
         : navigableMap.lastEntry().getValue();
     return Tensor.of(sols.stream() //

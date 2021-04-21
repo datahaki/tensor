@@ -18,10 +18,9 @@ import ch.ethz.idsc.tensor.mat.PseudoInverse;
 import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
-import ch.ethz.idsc.tensor.opt.lp.LinearProgram.CostType;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgramming;
-import ch.ethz.idsc.tensor.opt.lp.SimplexPivots;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.HypergeometricDistribution;
 import ch.ethz.idsc.tensor.pdf.PDF;
@@ -54,10 +53,10 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   static void demoLP() {
-    LinearProgram linearProgram = LinearProgram.of(CostType.MAX, Tensors.vector(1, 1), ConstraintType.LESS_EQUALS, //
+    LinearProgram linearProgram = LinearProgram.of(Objective.MAX, Tensors.vector(1, 1), ConstraintType.LESS_EQUALS, //
         Tensors.fromString("{{4, -1},{2, 1},{-5, 2}}"), //
         Tensors.vector(8, 7, 2), RegionType.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
+    Tensor x = LinearProgramming.of(linearProgram);
     System.out.println(x);
   }
 

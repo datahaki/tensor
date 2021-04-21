@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
-import ch.ethz.idsc.tensor.opt.lp.LinearProgram.CostType;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -20,8 +20,8 @@ public class LinearProgrammingTest extends TestCase {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 5, 1, 0, 0 }, { 2, 1, 0, 1, 0 }, { 1, 1, 0, 0, 1 } });
     Tensor b = Tensors.vector(40, 20, 12);
     LinearProgram linearProgram = //
-        LinearProgram.of(CostType.MIN, c, ConstraintType.EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
+        LinearProgram.of(Objective.MIN, c, ConstraintType.EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram);
     // Mathematica {5, 7, 0, 3, 0}
     assertEquals(x, Tensors.vector(5, 7, 0, 3, 0));
     Tensor tensor = SimplexCorners.of(linearProgram);
@@ -29,12 +29,13 @@ public class LinearProgrammingTest extends TestCase {
   }
 
   public void testCase4max() {
-    Tensor c = Tensors.vector(3, 5);
-    Tensor m = Tensors.matrixInt(new int[][] { { 1, 5 }, { 2, 1 }, { 1, 1 } });
-    Tensor b = Tensors.vector(40, 20, 12);
     LinearProgram linearProgram = //
-        LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
+        LinearProgram.of( //
+            Objective.MAX, Tensors.vector(3, 5), //
+            ConstraintType.LESS_EQUALS, //
+            Tensors.matrixInt(new int[][] { { 1, 5 }, { 2, 1 }, { 1, 1 } }), //
+            Tensors.vector(40, 20, 12), RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram);
     assertEquals(x, Tensors.vector(5, 7));
     Tensor tensor = SimplexCorners.of(linearProgram);
     assertEquals(x, tensor.get(0));
@@ -46,8 +47,8 @@ public class LinearProgrammingTest extends TestCase {
     Tensor m = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");
     Tensor b = Tensors.vector(2, 1, 2, 1, -1, 2);
     LinearProgram linearProgram = //
-        LinearProgram.of(CostType.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
+        LinearProgram.of(Objective.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram);
     assertEquals(x, Tensors.fromString("{2/3, 4/3}"));
     Tensor tensor = SimplexCorners.of(linearProgram);
     assertEquals(x, tensor.get(0));
@@ -59,8 +60,8 @@ public class LinearProgrammingTest extends TestCase {
     Tensor m = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");
     Tensor b = Tensors.vector(2, 1, 2, 1, -1, 2);
     LinearProgram lpp = //
-        LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(lpp, SimplexPivots.NONBASIC_GRADIENT);
+        LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(lpp);
     assertEquals(x, Tensors.fromString("{2/3, 4/3}"));
     Tensor solp = SimplexCorners.of(lpp);
     assertEquals(solp.dot(lpp.c).Get(0), RationalScalar.of(10, 9));
@@ -75,9 +76,9 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.fromString("{-1,-1/3}");
     Tensor A = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}, {1, 1/4}}");
     Tensor b = Tensors.fromString("{2, 1, 2, 1, -1, 2, 1/2}");
-    LinearProgram linearProgram = LinearProgram.of(CostType.MIN, c, ConstraintType.LESS_EQUALS, A, b, RegionType.NON_NEGATIVE);
+    LinearProgram linearProgram = LinearProgram.of(Objective.MIN, c, ConstraintType.LESS_EQUALS, A, b, RegionType.NON_NEGATIVE);
     // Tensor solp = SimplexCorners.of(linearProgram);
-    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
+    Tensor x = LinearProgramming.of(linearProgram);
     assertEquals(x, Tensors.vector(0, 2));
     Tensor solp = SimplexCorners.of(linearProgram);
     assertEquals(x, solp.get(0));
@@ -88,14 +89,14 @@ public class LinearProgrammingTest extends TestCase {
     Tensor m = Tensors.matrixInt(new int[][] { { 4, -1 }, { 2, 1 }, { -5, 2 } });
     Tensor b = Tensors.vector(8, 10, 2);
     LinearProgram linearProgram = //
-        LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
+        LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram);
     assertEquals(x, Tensors.vector(2, 6)); // see page 847
-    assertTrue(LinearProgrammingTest.isFeasible(m, Array.zeros(2), b));
-    assertTrue(LinearProgrammingTest.isFeasible(m, Tensors.vector(3, 4), b));
-    assertTrue(LinearProgrammingTest.isFeasible(m, Tensors.vector(1, 3), b));
-    assertTrue(LinearProgrammingTest.isFeasible(m, Tensors.vector(2, 0), b));
-    assertFalse(LinearProgrammingTest.isFeasible(m, Tensors.vector(3, 3), b));
+    linearProgram.requireFeasible(Array.zeros(2));
+    linearProgram.requireFeasible(Tensors.vector(3, 4));
+    linearProgram.requireFeasible(Tensors.vector(1, 3));
+    linearProgram.requireFeasible(Tensors.vector(2, 0));
+    AssertFail.of(() -> linearProgram.requireFeasible(Tensors.vector(3, 3)));
   }
 
   public void testClrsP846Dual() {
@@ -113,15 +114,15 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.vector(-1, -1);
     Tensor m = Tensors.matrixInt(new int[][] { { 4, -1 }, { 2, 1 }, { -5, 2 }, { -1, -1 } });
     Tensor b = Tensors.vector(8, 10, 2, -1);
-    LinearProgram linearProgram = LinearProgram.of(CostType.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
+    LinearProgram linearProgram = LinearProgram.of(Objective.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram);
     // Mathematica {2, 6}
     assertEquals(x, Tensors.vector(2, 6)); // see page 847
-    assertFalse(LinearProgrammingTest.isFeasible(m, Array.zeros(2), b));
-    assertTrue(LinearProgrammingTest.isFeasible(m, Tensors.vector(3, 4), b));
-    assertTrue(LinearProgrammingTest.isFeasible(m, Tensors.vector(1, 3), b));
-    assertTrue(LinearProgrammingTest.isFeasible(m, Tensors.vector(2, 0), b));
-    assertFalse(LinearProgrammingTest.isFeasible(m, Tensors.vector(3, 3), b));
+    linearProgram.requireFeasible(Tensors.vector(3, 4));
+    linearProgram.requireFeasible(Tensors.vector(1, 3));
+    linearProgram.requireFeasible(Tensors.vector(2, 0));
+    AssertFail.of(() -> linearProgram.requireFeasible(Tensors.vector(0, 0)));
+    AssertFail.of(() -> linearProgram.requireFeasible(Tensors.vector(3, 3)));
   }
 
   // infeasible
@@ -129,10 +130,10 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.vector(-3, 2);
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 1 }, { -2, -2 } });
     Tensor b = Tensors.vector(2, -10);
-    LinearProgram linearProgram = LinearProgram.of(CostType.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    LinearProgram linearProgram = LinearProgram.of(Objective.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
     Tensor sols = SimplexCorners.of(linearProgram);
     assertEquals(sols, Tensors.empty());
-    AssertFail.of(() -> LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT));
+    AssertFail.of(() -> LinearProgramming.of(linearProgram));
   }
 
   // unbounded
@@ -141,39 +142,37 @@ public class LinearProgrammingTest extends TestCase {
     Tensor m = Tensors.matrixInt(new int[][] { { -2, 1 }, { -1, -2 } });
     Tensor b = Tensors.vector(-1, -2);
     LinearProgram linearProgram = //
-        LinearProgram.of(CostType.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    AssertFail.of(() -> LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT));
+        LinearProgram.of(Objective.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    AssertFail.of(() -> LinearProgramming.of(linearProgram));
   }
 
-  public void testClrsP879_5() {
+  public void testClrsP878_5() {
     Tensor c = Tensors.vector(18, 12.5);
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 1 }, { 1, 0 }, { 0, 1 } });
     Tensor b = Tensors.vector(20, 12, 16);
     LinearProgram linearProgram = //
-        LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
+        LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram);
     assertEquals(x, Tensors.vector(12, 8)); // confirmed with linprog
-  }
-
-  public void testClrsP879_5Dual() {
-    Tensor c = Tensors.vector(20, 12, 16);
-    Tensor m = Transpose.of(Tensors.matrixInt(new int[][] { { 1, 1 }, { 1, 0 }, { 0, 1 } })).negate();
-    Tensor b = Tensors.vector(18, 12.5).negate();
-    TensorRuntimeException.of(c, m, b);
-    // System.out.println(Pretty.of(m));
-    // System.out.println(Pretty.of(b));
-    // Tensor x = LinearProgramming.minLessEquals(c, m, b);
-    // assertEquals(x, Tensors.fromString("[12,8]")); // confirmed with linprog
-    // System.out.println(x);
+    Tensor cp = x.dot(linearProgram.c);
+    Tensor solp = SimplexCorners.of(linearProgram);
+    assertEquals(x, solp.get(0));
+    LinearProgram lpd = linearProgram.dual();
+    Tensor xd = LinearProgramming.of(lpd);
+    Tensor cd = xd.dot(lpd.c);
+    assertEquals(cp, cd);
   }
 
   public void testClrsP879_6() {
     Tensor c = Tensors.vector(5, -3);
     Tensor m = Tensors.matrixInt(new int[][] { { 1, -1 }, { 2, 1 } });
     Tensor b = Tensors.vector(1, 2);
-    LinearProgram linearProgram = LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
+    LinearProgram linearProgram = //
+        LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram);
     assertEquals(x, Tensors.vector(1, 0)); // confirmed with linprog
+    Tensor solp = SimplexCorners.of(linearProgram);
+    assertEquals(x, solp.get(0));
   }
 
   public void testClrsP879_7() {
@@ -181,8 +180,8 @@ public class LinearProgrammingTest extends TestCase {
     Tensor m = Tensors.fromString("{{-2, -7.5, -3}, {-20, -5, -10}}");
     Tensor b = Tensors.vector(-10000, -30000);
     LinearProgram linearProgram = //
-        LinearProgram.of(CostType.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    AssertFail.of(() -> LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT));
+        LinearProgram.of(Objective.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    AssertFail.of(() -> LinearProgramming.of(linearProgram));
     // MATLAB
     // A=[[-2, -7.5, -3];[-20, -5, -10]];
     // b=[-10000;-30000]
@@ -198,14 +197,5 @@ public class LinearProgrammingTest extends TestCase {
     // 2.0744
     // 1.3829
     // -4.8403
-  }
-
-  /** @param m
-   * @param x
-   * @param b
-   * @return true if x >= 0 and m.x <= b */
-  public static boolean isFeasible(Tensor m, Tensor x, Tensor b) {
-    return StaticHelper.isNonNegative(x) //
-        && StaticHelper.isNonNegative(b.subtract(m.dot(x)));
   }
 }

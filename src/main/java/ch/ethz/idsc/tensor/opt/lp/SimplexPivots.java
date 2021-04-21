@@ -24,7 +24,7 @@ public enum SimplexPivots implements SimplexPivot {
         Scalar tab_ij = tab.Get(i, j);
         if (Sign.isPositive(tab_ij)) {
           Scalar ratio = tab.Get(i, n).divide(tab_ij);
-          if (Objects.isNull(min) || 0 < Scalars.compare(min, ratio)) {
+          if (Objects.isNull(min) || Scalars.lessThan(ratio, min)) {
             min = ratio;
             pivot = i;
           }

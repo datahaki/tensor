@@ -14,12 +14,48 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 
+/** definition of a linear program
+ * 
+ * Example:
+ * <pre>
+ * LinearProgram.of( //
+ * Objective.MAX, Tensors.vector(3, 5), //
+ * ConstraintType.LESS_EQUALS, //
+ * Tensors.matrixInt(new int[][] { { 1, 5 }, { 2, 1 }, { 1, 1 } }), //
+ * Tensors.vector(40, 20, 12), RegionType.NON_NEGATIVE);
+ * </pre>
+ * 
+ * @see LinearProgramming */
 public class LinearProgram implements Serializable {
-  public static enum CostType {
+  /** @param objective
+   * @param c
+   * @param constraintType
+   * @param A
+   * @param b
+   * @param regionType
+   * @return */
+  public static LinearProgram of( //
+      Objective objective, //
+      Tensor c, //
+      ConstraintType constraintType, //
+      Tensor A, //
+      Tensor b, //
+      RegionType regionType) {
+    return new LinearProgram( //
+        Objects.requireNonNull(objective), //
+        VectorQ.requireLength(c, Unprotect.dimension1Hint(A)), //
+        Objects.requireNonNull(constraintType), //
+        MatrixQ.require(A), //
+        VectorQ.requireLength(b, A.length()), //
+        Objects.requireNonNull(regionType), //
+        c.length());
+  }
+
+  public static enum Objective {
     MIN, //
     MAX;
 
-    public CostType flip() {
+    public Objective flip() {
       return values()[1 - ordinal()];
     }
   }
@@ -46,25 +82,8 @@ public class LinearProgram implements Serializable {
     COMPLETE;
   }
 
-  public static LinearProgram of( //
-      CostType costType, //
-      Tensor c, //
-      ConstraintType constraintType, //
-      Tensor A, //
-      Tensor b, //
-      RegionType regionType) {
-    return new LinearProgram( //
-        Objects.requireNonNull(costType), //
-        VectorQ.requireLength(c, Unprotect.dimension1Hint(A)), //
-        Objects.requireNonNull(constraintType), //
-        MatrixQ.require(A), //
-        VectorQ.requireLength(b, A.length()), //
-        Objects.requireNonNull(regionType), //
-        c.length());
-  }
-
   /***************************************************/
-  public final CostType costType;
+  public final Objective objective;
   public final Tensor c;
   public final ConstraintType constraintType;
   public final Tensor A;
@@ -73,13 +92,13 @@ public class LinearProgram implements Serializable {
   public final int variables;
 
   private LinearProgram( //
-      CostType costType, //
+      Objective objective, //
       Tensor c, //
       ConstraintType constraintType, //
       Tensor A, //
       Tensor b, //
       RegionType regionType, int variables) {
-    this.costType = costType;
+    this.objective = objective;
     this.c = c;
     this.constraintType = constraintType;
     this.A = A;
@@ -92,7 +111,7 @@ public class LinearProgram implements Serializable {
     if (!regionType.equals(RegionType.NON_NEGATIVE))
       throw new RuntimeException();
     return new LinearProgram( //
-        costType.flip(), //
+        objective.flip(), //
         b, //
         constraintType.flipInequality(), //
         Transpose.of(A), c, //
@@ -108,15 +127,15 @@ public class LinearProgram implements Serializable {
     if (constraintType.equals(ConstraintType.GREATER_EQUALS))
       eye = eye.negate();
     return new LinearProgram( //
-        costType, //
+        objective, //
         Join.of(c, Array.zeros(m)), //
         ConstraintType.EQUALS, //
         Join.of(1, A, eye), b, //
         regionType, variables);
   }
 
-  public Tensor minCost() {
-    return costType.equals(CostType.MIN) //
+  public Tensor minObjective() {
+    return objective.equals(Objective.MIN) //
         ? c
         : c.negate();
   }
