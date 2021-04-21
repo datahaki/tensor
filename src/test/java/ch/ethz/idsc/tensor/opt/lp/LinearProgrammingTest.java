@@ -1,14 +1,15 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt.lp;
 
+import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
-import ch.ethz.idsc.tensor.sca.N;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.CostType;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -18,17 +19,25 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.vector(-3, -5, 0, 0, 0);
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 5, 1, 0, 0 }, { 2, 1, 0, 1, 0 }, { 1, 1, 0, 0, 1 } });
     Tensor b = Tensors.vector(40, 20, 12);
-    Tensor x = LinearProgramming.minEquals(c, m, b);
+    LinearProgram linearProgram = //
+        LinearProgram.of(CostType.MIN, c, ConstraintType.EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
     // Mathematica {5, 7, 0, 3, 0}
     assertEquals(x, Tensors.vector(5, 7, 0, 3, 0));
+    Tensor tensor = SimplexCorners.of(linearProgram);
+    assertEquals(x, tensor.get(0));
   }
 
   public void testCase4max() {
-    Tensor c = Tensors.vector(3, 5, 0, 0, 0);
-    Tensor m = Tensors.matrixInt(new int[][] { { 1, 5, 1, 0, 0 }, { 2, 1, 0, 1, 0 }, { 1, 1, 0, 0, 1 } });
+    Tensor c = Tensors.vector(3, 5);
+    Tensor m = Tensors.matrixInt(new int[][] { { 1, 5 }, { 2, 1 }, { 1, 1 } });
     Tensor b = Tensors.vector(40, 20, 12);
-    Tensor x = LinearProgramming.maxEquals(c, m, b);
-    assertEquals(x, Tensors.vector(5, 7, 0, 3, 0));
+    LinearProgram linearProgram = //
+        LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
+    assertEquals(x, Tensors.vector(5, 7));
+    Tensor tensor = SimplexCorners.of(linearProgram);
+    assertEquals(x, tensor.get(0));
   }
 
   // MATLAB linprog example
@@ -36,9 +45,12 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.fromString("{-1, -1/3}");
     Tensor m = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");
     Tensor b = Tensors.vector(2, 1, 2, 1, -1, 2);
-    Tensor x = LinearProgramming.minLessEquals(c, m, b);
+    LinearProgram linearProgram = //
+        LinearProgram.of(CostType.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
     assertEquals(x, Tensors.fromString("{2/3, 4/3}"));
-    // System.out.println(c.dot(x));
+    Tensor tensor = SimplexCorners.of(linearProgram);
+    assertEquals(x, tensor.get(0));
   }
 
   // MATLAB linprog example
@@ -46,47 +58,44 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.fromString("{1, 1/3}");
     Tensor m = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");
     Tensor b = Tensors.vector(2, 1, 2, 1, -1, 2);
-    Tensor x = LinearProgramming.maxLessEquals(c, m, b);
+    LinearProgram lpp = //
+        LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(lpp, SimplexPivots.NONBASIC_GRADIENT);
     assertEquals(x, Tensors.fromString("{2/3, 4/3}"));
-    // System.out.println(c.dot(x).negate());
-  }
-
-  // MATLAB linprog example dual
-  public void testMatlab1maxDual() {
-    Tensor c = Tensors.vector(2, 1, 2, 1, -1, 2);
-    Tensor m = Transpose.of(Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}"));
-    Tensor b = Tensors.fromString("{1, 1/3}");
-    TensorRuntimeException.of(c, m, b);
-    // Tensor y = LinearProgramming.minLessEquals(c, m.negate(), b.negate());
-    // System.out.println(y);
-    // System.out.println(c.dot(y));
-    // assertEquals(x, Tensors.fromString("[2/3,4/3]"));
-    // System.out.println(x);
-    // System.out.println(c.dot(x));
+    Tensor solp = SimplexCorners.of(lpp);
+    assertEquals(solp.dot(lpp.c).Get(0), RationalScalar.of(10, 9));
+    assertEquals(x, solp.get(0));
+    LinearProgram lpd = lpp.dual();
+    Tensor sold = SimplexCorners.of(lpd);
+    assertEquals(sold.dot(lpd.c).Get(0), RationalScalar.of(10, 9));
   }
 
   // MATLAB linprog example
   public void testMatlab2() {
-    Tensor c = Tensors.fromString("{-1,-1/3, 0, 0, 0, 0, 0, 0}");
-    Tensor Ap = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");
-    Tensor m = Join.of(1, Ap, IdentityMatrix.of(6));
-    m.append(Tensors.fromString("{1, 1/4, 0, 0, 0, 0, 0, 0}"));
+    Tensor c = Tensors.fromString("{-1,-1/3}");
+    Tensor A = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}, {1, 1/4}}");
     Tensor b = Tensors.fromString("{2, 1, 2, 1, -1, 2, 1/2}");
-    Tensor x = LinearProgramming.minEquals(c, m, b);
-    assertEquals(x.extract(0, 2), Tensors.vector(0, 2));
+    LinearProgram linearProgram = LinearProgram.of(CostType.MIN, c, ConstraintType.LESS_EQUALS, A, b, RegionType.NON_NEGATIVE);
+    // Tensor solp = SimplexCorners.of(linearProgram);
+    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
+    assertEquals(x, Tensors.vector(0, 2));
+    Tensor solp = SimplexCorners.of(linearProgram);
+    assertEquals(x, solp.get(0));
   }
 
   public void testClrsP846() { // max cost = 8
     Tensor c = Tensors.vector(1, 1);
     Tensor m = Tensors.matrixInt(new int[][] { { 4, -1 }, { 2, 1 }, { -5, 2 } });
     Tensor b = Tensors.vector(8, 10, 2);
-    Tensor x = LinearProgramming.maxLessEquals(c, m, b);
+    LinearProgram linearProgram = //
+        LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
     assertEquals(x, Tensors.vector(2, 6)); // see page 847
-    assertTrue(LinearProgramming.isFeasible(m, Array.zeros(2), b));
-    assertTrue(LinearProgramming.isFeasible(m, Tensors.vector(3, 4), b));
-    assertTrue(LinearProgramming.isFeasible(m, Tensors.vector(1, 3), b));
-    assertTrue(LinearProgramming.isFeasible(m, Tensors.vector(2, 0), b));
-    assertFalse(LinearProgramming.isFeasible(m, Tensors.vector(3, 3), b));
+    assertTrue(LinearProgrammingTest.isFeasible(m, Array.zeros(2), b));
+    assertTrue(LinearProgrammingTest.isFeasible(m, Tensors.vector(3, 4), b));
+    assertTrue(LinearProgrammingTest.isFeasible(m, Tensors.vector(1, 3), b));
+    assertTrue(LinearProgrammingTest.isFeasible(m, Tensors.vector(2, 0), b));
+    assertFalse(LinearProgrammingTest.isFeasible(m, Tensors.vector(3, 3), b));
   }
 
   public void testClrsP846Dual() {
@@ -104,14 +113,15 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.vector(-1, -1);
     Tensor m = Tensors.matrixInt(new int[][] { { 4, -1 }, { 2, 1 }, { -5, 2 }, { -1, -1 } });
     Tensor b = Tensors.vector(8, 10, 2, -1);
-    Tensor x = LinearProgramming.minLessEquals(c, m, b);
+    LinearProgram linearProgram = LinearProgram.of(CostType.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
     // Mathematica {2, 6}
     assertEquals(x, Tensors.vector(2, 6)); // see page 847
-    assertFalse(LinearProgramming.isFeasible(m, Array.zeros(2), b));
-    assertTrue(LinearProgramming.isFeasible(m, Tensors.vector(3, 4), b));
-    assertTrue(LinearProgramming.isFeasible(m, Tensors.vector(1, 3), b));
-    assertTrue(LinearProgramming.isFeasible(m, Tensors.vector(2, 0), b));
-    assertFalse(LinearProgramming.isFeasible(m, Tensors.vector(3, 3), b));
+    assertFalse(LinearProgrammingTest.isFeasible(m, Array.zeros(2), b));
+    assertTrue(LinearProgrammingTest.isFeasible(m, Tensors.vector(3, 4), b));
+    assertTrue(LinearProgrammingTest.isFeasible(m, Tensors.vector(1, 3), b));
+    assertTrue(LinearProgrammingTest.isFeasible(m, Tensors.vector(2, 0), b));
+    assertFalse(LinearProgrammingTest.isFeasible(m, Tensors.vector(3, 3), b));
   }
 
   // infeasible
@@ -119,7 +129,10 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.vector(-3, 2);
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 1 }, { -2, -2 } });
     Tensor b = Tensors.vector(2, -10);
-    AssertFail.of(() -> LinearProgramming.minLessEquals(c, m, b));
+    LinearProgram linearProgram = LinearProgram.of(CostType.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor sols = SimplexCorners.of(linearProgram);
+    assertEquals(sols, Tensors.empty());
+    AssertFail.of(() -> LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT));
   }
 
   // unbounded
@@ -127,14 +140,18 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.vector(-1, 1);
     Tensor m = Tensors.matrixInt(new int[][] { { -2, 1 }, { -1, -2 } });
     Tensor b = Tensors.vector(-1, -2);
-    AssertFail.of(() -> LinearProgramming.minLessEquals(c, m, b));
+    LinearProgram linearProgram = //
+        LinearProgram.of(CostType.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    AssertFail.of(() -> LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT));
   }
 
   public void testClrsP879_5() {
     Tensor c = Tensors.vector(18, 12.5);
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 1 }, { 1, 0 }, { 0, 1 } });
     Tensor b = Tensors.vector(20, 12, 16);
-    Tensor x = LinearProgramming.maxLessEquals(c, m, b);
+    LinearProgram linearProgram = //
+        LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
     assertEquals(x, Tensors.vector(12, 8)); // confirmed with linprog
   }
 
@@ -154,7 +171,8 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.vector(5, -3);
     Tensor m = Tensors.matrixInt(new int[][] { { 1, -1 }, { 2, 1 } });
     Tensor b = Tensors.vector(1, 2);
-    Tensor x = LinearProgramming.maxLessEquals(c, m, b);
+    LinearProgram linearProgram = LinearProgram.of(CostType.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
     assertEquals(x, Tensors.vector(1, 0)); // confirmed with linprog
   }
 
@@ -162,7 +180,9 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.vector(1, 1, 1);
     Tensor m = Tensors.fromString("{{-2, -7.5, -3}, {-20, -5, -10}}");
     Tensor b = Tensors.vector(-10000, -30000);
-    AssertFail.of(() -> LinearProgramming.minLessEquals(c, m, b));
+    LinearProgram linearProgram = //
+        LinearProgram.of(CostType.MIN, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    AssertFail.of(() -> LinearProgramming.of(linearProgram, SimplexPivots.NONBASIC_GRADIENT));
     // MATLAB
     // A=[[-2, -7.5, -3];[-20, -5, -10]];
     // b=[-10000;-30000]
@@ -180,23 +200,12 @@ public class LinearProgrammingTest extends TestCase {
     // -4.8403
   }
 
-  public void callKlee(int n) {
-    KleeMintyCube kmc = new KleeMintyCube(n);
-    Tensor x = LinearProgramming.maxLessEquals(kmc.c, kmc.m, kmc.b);
-    assertEquals(x, kmc.x);
-  }
-
-  // numeric test
-  public void callKleeN(int n) {
-    KleeMintyCube kmc = new KleeMintyCube(n);
-    Tensor x = LinearProgramming.maxLessEquals(N.DOUBLE.of(kmc.c), N.DOUBLE.of(kmc.m), N.DOUBLE.of(kmc.b));
-    assertEquals(x, kmc.x);
-  }
-
-  public void testKleeMinty() {
-    for (int n = 1; n <= 5; ++n) {
-      callKlee(n);
-      callKleeN(n);
-    }
+  /** @param m
+   * @param x
+   * @param b
+   * @return true if x >= 0 and m.x <= b */
+  public static boolean isFeasible(Tensor m, Tensor x, Tensor b) {
+    return StaticHelper.isNonNegative(x) //
+        && StaticHelper.isNonNegative(b.subtract(m.dot(x)));
   }
 }

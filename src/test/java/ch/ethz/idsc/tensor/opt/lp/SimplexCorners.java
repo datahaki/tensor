@@ -33,18 +33,19 @@ import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
 /* package */ enum SimplexCorners {
   ;
   public static Tensor of(LinearProgram linearProgram) {
+    LinearProgram lp_equality = linearProgram.equality();
     NavigableMap<Scalar, Tensor> navigableMap = of( //
-        linearProgram.c, //
-        linearProgram.A, //
-        linearProgram.b, //
-        linearProgram.regionType.equals(RegionType.NON_NEGATIVE));
+        lp_equality.c, //
+        lp_equality.A, //
+        lp_equality.b, //
+        lp_equality.regionType.equals(RegionType.NON_NEGATIVE));
     if (navigableMap.isEmpty())
       return Tensors.empty();
-    Tensor sols = linearProgram.costType.equals(CostType.MIN) //
+    Tensor sols = lp_equality.costType.equals(CostType.MIN) //
         ? navigableMap.firstEntry().getValue()
         : navigableMap.lastEntry().getValue();
     return Tensor.of(sols.stream() //
-        .map(row -> row.extract(0, linearProgram.variables)) //
+        .map(row -> row.extract(0, lp_equality.variables)) //
         .distinct());
   }
 
@@ -57,14 +58,14 @@ import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
     int n = c.length();
     int m = b.length();
     NavigableMap<Scalar, Tensor> map = new TreeMap<>();
-    Tensor mt = Transpose.of(A);
+    Tensor At = Transpose.of(A);
     for (Tensor subset : Subsets.of(Range.of(0, n), m)) {
       int[] cols = subset.stream() //
           .map(Scalar.class::cast) //
           .map(Scalar::number) //
           .mapToInt(Number::intValue) //
           .toArray();
-      Tensor matrix = Transpose.of(Tensor.of(IntStream.of(cols).mapToObj(mt::get)));
+      Tensor matrix = Transpose.of(Tensor.of(IntStream.of(cols).mapToObj(At::get)));
       try {
         Tensor X = LinearSolve.of(matrix, b);
         if (!isNonNegative || StaticHelper.isNonNegative(X)) {

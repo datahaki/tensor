@@ -9,7 +9,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
   ;
   /** @param vector
    * @return true if all entries in vector are non-negative */
-  /* package */ static boolean isNonNegative(Tensor vector) {
+  public static boolean isNonNegative(Tensor vector) {
     return vector.stream().map(Scalar.class::cast).allMatch(Sign::isPositiveOrZero);
   }
 }

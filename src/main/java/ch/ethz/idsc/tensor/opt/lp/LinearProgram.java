@@ -1,9 +1,12 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt.lp;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
@@ -11,12 +14,20 @@ import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.VectorQ;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 
-public class LinearProgram {
+public class LinearProgram implements Serializable {
+  public static enum CostType {
+    MIN, //
+    MAX;
+
+    public CostType flip() {
+      return values()[1 - ordinal()];
+    }
+  }
+
   public static enum ConstraintType {
     EQUALS, //
     LESS_EQUALS, //
-    GREATER_EQUALS, //
-    ;
+    GREATER_EQUALS;
 
     public ConstraintType flipInequality() {
       switch (this) {
@@ -30,20 +41,9 @@ public class LinearProgram {
     }
   }
 
-  public static enum CostType {
-    MIN, //
-    MAX, //
-    ;
-
-    public CostType flip() {
-      return values()[1 - ordinal()];
-    }
-  }
-
   public static enum RegionType {
     NON_NEGATIVE, //
-    COMPLETE, //
-    ;
+    COMPLETE;
   }
 
   public static LinearProgram of( //
@@ -55,10 +55,10 @@ public class LinearProgram {
       RegionType regionType) {
     return new LinearProgram( //
         Objects.requireNonNull(costType), //
-        VectorQ.require(c), //
+        VectorQ.requireLength(c, Unprotect.dimension1Hint(A)), //
         Objects.requireNonNull(constraintType), //
         MatrixQ.require(A), //
-        VectorQ.require(b), //
+        VectorQ.requireLength(b, A.length()), //
         Objects.requireNonNull(regionType), //
         c.length());
   }
@@ -96,7 +96,8 @@ public class LinearProgram {
         b, //
         constraintType.flipInequality(), //
         Transpose.of(A), c, //
-        regionType, b.length());
+        regionType, //
+        b.length());
   }
 
   public LinearProgram equality() {
@@ -112,5 +113,24 @@ public class LinearProgram {
         ConstraintType.EQUALS, //
         Join.of(1, A, eye), b, //
         regionType, variables);
+  }
+
+  public Tensor minCost() {
+    return costType.equals(CostType.MIN) //
+        ? c
+        : c.negate();
+  }
+
+  public Tensor requireFeasible(Tensor x) {
+    if (regionType.equals(RegionType.NON_NEGATIVE) && //
+        !StaticHelper.isNonNegative(x))
+      throw TensorRuntimeException.of(c, A, b, x);
+    if (constraintType.equals(ConstraintType.LESS_EQUALS) && //
+        !StaticHelper.isNonNegative(b.subtract(A.dot(x))))
+      throw TensorRuntimeException.of(c, A, b, x);
+    if (constraintType.equals(ConstraintType.GREATER_EQUALS) && //
+        !StaticHelper.isNonNegative(A.dot(x).subtract(b)))
+      throw TensorRuntimeException.of(c, A, b, x);
+    return x;
   }
 }

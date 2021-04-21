@@ -7,8 +7,9 @@ enum KleeMintyCubeDemo {
   ;
   public static void main(String[] args) {
     KleeMintyCube kmc = new KleeMintyCube(3);
-    kmc.show();
-    Tensor x = LinearProgramming.maxLessEquals(kmc.c, kmc.m, kmc.b);
+    // kmc.show();
+    Tensor x = // LinearProgramming.maxLessEquals(kmc.c, kmc.m, kmc.b);
+        LinearProgramming.of(kmc.linearProgram, SimplexPivots.NONBASIC_GRADIENT);
     System.out.println("LP" + x + " <- solution");
   }
 }
