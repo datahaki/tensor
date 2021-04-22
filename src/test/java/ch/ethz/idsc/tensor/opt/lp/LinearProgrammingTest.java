@@ -1,19 +1,19 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt.lp;
 
+import java.util.NavigableMap;
+
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
-// tests should be improved over time
 public class LinearProgrammingTest extends TestCase {
   public void testCase4() {
     Tensor c = Tensors.vector(-3, -5, 0, 0, 0);
@@ -35,6 +35,8 @@ public class LinearProgrammingTest extends TestCase {
             ConstraintType.LESS_EQUALS, //
             Tensors.matrixInt(new int[][] { { 1, 5 }, { 2, 1 }, { 1, 1 } }), //
             Tensors.vector(40, 20, 12), RegionType.NON_NEGATIVE);
+    // TODO primal vs dual
+    // TestHelper.check(linearProgram);
     Tensor x = LinearProgramming.of(linearProgram);
     assertEquals(x, Tensors.vector(5, 7));
     Tensor tensor = SimplexCorners.of(linearProgram);
@@ -52,6 +54,8 @@ public class LinearProgrammingTest extends TestCase {
     assertEquals(x, Tensors.fromString("{2/3, 4/3}"));
     Tensor tensor = SimplexCorners.of(linearProgram);
     assertEquals(x, tensor.get(0));
+    // TODO primal vs dual
+    // TestHelper.check(linearProgram);
   }
 
   // MATLAB linprog example
@@ -61,14 +65,18 @@ public class LinearProgrammingTest extends TestCase {
     Tensor b = Tensors.vector(2, 1, 2, 1, -1, 2);
     LinearProgram lpp = //
         LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(lpp);
-    assertEquals(x, Tensors.fromString("{2/3, 4/3}"));
+    Tensor xp = LinearProgramming.of(lpp);
+    assertEquals(xp, Tensors.fromString("{2/3, 4/3}"));
     Tensor solp = SimplexCorners.of(lpp);
     assertEquals(solp.dot(lpp.c).Get(0), RationalScalar.of(10, 9));
-    assertEquals(x, solp.get(0));
+    assertEquals(xp, solp.get(0));
     LinearProgram lpd = lpp.dual();
+    // LinearProgramming.of(lpd); // TODO throws exception due to "unbounded"
     Tensor sold = SimplexCorners.of(lpd);
     assertEquals(sold.dot(lpd.c).Get(0), RationalScalar.of(10, 9));
+    AssertFail.of(() -> lpd.requireFeasible(Tensors.vector(1, 1)));
+    // TODO primal vs dual
+    // TestHelper.check(lpp);
   }
 
   // MATLAB linprog example
@@ -76,37 +84,48 @@ public class LinearProgrammingTest extends TestCase {
     Tensor c = Tensors.fromString("{-1,-1/3}");
     Tensor A = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}, {1, 1/4}}");
     Tensor b = Tensors.fromString("{2, 1, 2, 1, -1, 2, 1/2}");
-    LinearProgram linearProgram = LinearProgram.of(Objective.MIN, c, ConstraintType.LESS_EQUALS, A, b, RegionType.NON_NEGATIVE);
-    // Tensor solp = SimplexCorners.of(linearProgram);
-    Tensor x = LinearProgramming.of(linearProgram);
+    LinearProgram lpp = LinearProgram.of(Objective.MIN, c, ConstraintType.LESS_EQUALS, A, b, RegionType.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(lpp);
     assertEquals(x, Tensors.vector(0, 2));
-    Tensor solp = SimplexCorners.of(linearProgram);
+    Tensor solp = SimplexCorners.of(lpp);
     assertEquals(x, solp.get(0));
+    // TODO primal vs dual
+    // TestHelper.check(lpp);
+  }
+
+  public void testClrsP845() {
+    Tensor c = Tensors.vector(1, 1, 1, 1);
+    Tensor m = Tensors.matrixInt(new int[][] { { -2, 8, 0, 10 }, { 5, 2, 0, 0 }, { 3, -5, 10, -2 } });
+    Tensor b = Tensors.vector(50, 100, 25);
+    LinearProgram lpp = LinearProgram.of(Objective.MIN, c, ConstraintType.GREATER_EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor xp = LinearProgramming.of(lpp);
+    // TODO lp solver does not find optimal solution of primal problem!
+    NavigableMap<Scalar, Tensor> map = SimplexCorners.of(lpp.c, lpp.A, lpp.b, true);
+    assertTrue(map.values().contains(Tensors.of(xp)));
+    LinearProgram lpd = lpp.dual();
+    Tensor xd = LinearProgramming.of(lpd);
+    Tensor xdc = SimplexCorners.of(lpd);
+    assertEquals(xd, xdc.get(0));
+    assertEquals(map.firstKey(), xd.dot(lpd.c));
   }
 
   public void testClrsP846() { // max cost = 8
     Tensor c = Tensors.vector(1, 1);
     Tensor m = Tensors.matrixInt(new int[][] { { 4, -1 }, { 2, 1 }, { -5, 2 } });
     Tensor b = Tensors.vector(8, 10, 2);
-    LinearProgram linearProgram = //
+    LinearProgram lpp = //
         LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor x = LinearProgramming.of(linearProgram);
-    assertEquals(x, Tensors.vector(2, 6)); // see page 847
-    linearProgram.requireFeasible(Array.zeros(2));
-    linearProgram.requireFeasible(Tensors.vector(3, 4));
-    linearProgram.requireFeasible(Tensors.vector(1, 3));
-    linearProgram.requireFeasible(Tensors.vector(2, 0));
-    AssertFail.of(() -> linearProgram.requireFeasible(Tensors.vector(3, 3)));
-  }
-
-  public void testClrsP846Dual() {
-    Tensor c = Tensors.vector(8, 10, 2);
-    Tensor m = Transpose.of(Tensors.matrixInt(new int[][] { { 4, -1 }, { 2, 1 }, { -5, 2 } })).negate();
-    Tensor b = Tensors.vector(1, 1).negate();
-    TensorRuntimeException.of(c, m, b);
-    // Tensor x = LinearProgramming.minLessEquals(c, m, b);
-    // System.out.println(x);
-    // System.out.println("cost "+c.dot(x));
+    Tensor xp = LinearProgramming.of(lpp);
+    assertEquals(xp, Tensors.vector(2, 6)); // see page 847
+    lpp.requireFeasible(Array.zeros(2));
+    lpp.requireFeasible(Tensors.vector(3, 4));
+    lpp.requireFeasible(Tensors.vector(1, 3));
+    lpp.requireFeasible(Tensors.vector(2, 0));
+    AssertFail.of(() -> lpp.requireFeasible(Tensors.vector(-3, 3)));
+    AssertFail.of(() -> lpp.requireFeasible(Tensors.vector(3, 3)));
+    LinearProgram lpd = lpp.dual();
+    Tensor xd = LinearProgramming.of(lpd);
+    assertEquals(xp.dot(lpp.c), xd.dot(lpd.c));
   }
 
   // same as p846 except that (0,0) is not feasible

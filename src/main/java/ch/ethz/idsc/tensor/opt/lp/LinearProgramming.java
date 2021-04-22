@@ -21,7 +21,6 @@ public enum LinearProgramming {
     LinearProgram lp_equality = linearProgram.equality();
     Tensor x = SimplexMethod.of(lp_equality.minObjective(), lp_equality.A, lp_equality.b, simplexPivot);
     Tensor x_extract = x.extract(0, lp_equality.variables);
-    // System.out.println(x_extract);
     return linearProgram.requireFeasible(x_extract);
   }
 

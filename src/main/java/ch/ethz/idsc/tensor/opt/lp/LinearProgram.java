@@ -52,8 +52,7 @@ public class LinearProgram implements Serializable {
   }
 
   public static enum Objective {
-    MIN, //
-    MAX;
+    MIN, MAX;
 
     public Objective flip() {
       return values()[1 - ordinal()];
@@ -61,9 +60,7 @@ public class LinearProgram implements Serializable {
   }
 
   public static enum ConstraintType {
-    EQUALS, //
-    LESS_EQUALS, //
-    GREATER_EQUALS;
+    EQUALS, LESS_EQUALS, GREATER_EQUALS;
 
     public ConstraintType flipInequality() {
       switch (this) {
@@ -78,8 +75,7 @@ public class LinearProgram implements Serializable {
   }
 
   public static enum RegionType {
-    NON_NEGATIVE, //
-    COMPLETE;
+    NON_NEGATIVE, COMPLETE;
   }
 
   /***************************************************/
@@ -107,6 +103,8 @@ public class LinearProgram implements Serializable {
     this.variables = variables;
   }
 
+  /** @return linear program dual to this
+   * @throws Exception if constraint type is equality */
   public LinearProgram dual() {
     if (!regionType.equals(RegionType.NON_NEGATIVE))
       throw new RuntimeException();
@@ -114,11 +112,13 @@ public class LinearProgram implements Serializable {
         objective.flip(), //
         b, //
         constraintType.flipInequality(), //
-        Transpose.of(A), c, //
+        Transpose.of(A), //
+        c, //
         regionType, //
         b.length());
   }
 
+  /** @return */
   public LinearProgram equality() {
     if (constraintType.equals(ConstraintType.EQUALS))
       return this;

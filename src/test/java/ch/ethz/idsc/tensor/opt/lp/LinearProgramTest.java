@@ -6,6 +6,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
+import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 /** Reference: "Linear and Integer Programming made Easy", 2016 */
@@ -37,6 +38,7 @@ public class LinearProgramTest extends TestCase {
         RegionType.COMPLETE);
     Tensor sol1 = SimplexCorners.of(linearProgram);
     assertEquals(sol1, Tensors.fromString("{{650/3, 0}}"));
+    AssertFail.of(() -> linearProgram.dual());
   }
 
   public void testP62() {
@@ -87,5 +89,11 @@ public class LinearProgramTest extends TestCase {
   public void testObjective() {
     assertEquals(Objective.MIN.flip(), Objective.MAX);
     assertEquals(Objective.MAX.flip(), Objective.MIN);
+  }
+
+  public void testConstraint() {
+    assertEquals(ConstraintType.LESS_EQUALS.flipInequality(), ConstraintType.GREATER_EQUALS);
+    assertEquals(ConstraintType.GREATER_EQUALS.flipInequality(), ConstraintType.LESS_EQUALS);
+    AssertFail.of(() -> ConstraintType.EQUALS.flipInequality());
   }
 }

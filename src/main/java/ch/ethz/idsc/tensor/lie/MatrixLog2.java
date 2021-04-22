@@ -26,17 +26,20 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
     Scalar c = matrix.Get(1, 0);
     Scalar d = matrix.Get(1, 1);
     if (Scalars.isZero(b) && Scalars.isZero(c)) // diagonal matrix
-      return DiagonalMatrix.of(Log.of(a), Log.of(d));
+      return DiagonalMatrix.of(Log.FUNCTION.apply(a), Log.FUNCTION.apply(d));
     Scalar ad = a.subtract(d);
     Scalar A = Sqrt.FUNCTION.apply(ad.multiply(ad).add(Times.of(b, c, FOUR)));
     Scalar s = a.add(A).add(d);
     Scalar p = a.subtract(A).add(d);
     Scalar q = A.add(d).subtract(a);
     Scalar t = a.add(A).subtract(d);
-    Scalar r11 = Log.of(p.divide(TWO)).multiply(q).add(Log.of(s.divide(TWO)).multiply(t)).divide(TWO);
-    Scalar r22 = Log.of(p.divide(TWO)).multiply(t).add(Log.of(s.divide(TWO)).multiply(q)).divide(TWO);
-    Scalar r12 = Log.of(s).subtract(Log.of(p)).multiply(b);
-    Scalar r21 = Log.of(s).subtract(Log.of(p)).multiply(c);
+    Scalar log_p2 = Log.FUNCTION.apply(p.divide(TWO));
+    Scalar log_s2 = Log.FUNCTION.apply(s.divide(TWO));
+    Scalar r11 = log_p2.multiply(q).add(log_s2.multiply(t)).divide(TWO);
+    Scalar r22 = log_p2.multiply(t).add(log_s2.multiply(q)).divide(TWO);
+    Scalar dsp = Log.FUNCTION.apply(s).subtract(Log.FUNCTION.apply(p));
+    Scalar r12 = dsp.multiply(b);
+    Scalar r21 = dsp.multiply(c);
     return Tensors.matrix(new Scalar[][] { { r11, r12 }, { r21, r22 } }).divide(A);
   }
 }

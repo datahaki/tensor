@@ -1,7 +1,6 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt.lp;
 
-import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 import java.util.stream.IntStream;
@@ -14,7 +13,6 @@ import ch.ethz.idsc.tensor.alg.Join;
 import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.Subsets;
 import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.io.Pretty;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
@@ -79,13 +77,5 @@ import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
       }
     }
     return map;
-  }
-
-  public static void show(NavigableMap<Scalar, Tensor> map) {
-    for (Entry<Scalar, Tensor> entry : map.entrySet()) {
-      System.out.println("--------------------------------------");
-      System.out.println("cost=" + entry.getKey());
-      System.out.println(Pretty.of(entry.getValue()));
-    }
   }
 }

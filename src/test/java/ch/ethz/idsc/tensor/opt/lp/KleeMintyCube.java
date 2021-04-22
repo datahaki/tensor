@@ -5,6 +5,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.ext.Cache;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
@@ -33,10 +34,16 @@ import ch.ethz.idsc.tensor.sca.Power;
     return i == j ? RealScalar.ONE : Power.of(2, i - j + 1);
   }
 
+  private static final Cache<Integer, KleeMintyCube> CACHE = Cache.of(KleeMintyCube::new, 7);
+
+  public static KleeMintyCube of(int n) {
+    return CACHE.apply(n);
+  }
+
   public final LinearProgram linearProgram;
   public final Tensor x; // solution
 
-  public KleeMintyCube(int n) {
+  private KleeMintyCube(int n) {
     linearProgram = LinearProgram.of(Objective.MAX, Tensors.vector(i -> Power.of(2, n - i - 1), n), //
         ConstraintType.LESS_EQUALS, //
         Tensors.matrix(KleeMintyCube::coefficient, n, n), //

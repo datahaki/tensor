@@ -15,13 +15,14 @@ import junit.framework.TestCase;
 
 public class SimplexCornersTest extends TestCase {
   public void testCase4() {
-    Tensor c = Tensors.vector(-3, -5, 0, 0, 0);
+    Tensor c = Tensors.vector(3, 5, 0, 0, 0);
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 5, 1, 0, 0 }, { 2, 1, 0, 1, 0 }, { 1, 1, 0, 0, 1 } });
     Tensor b = Tensors.vector(40, 20, 12);
     NavigableMap<Scalar, Tensor> map = SimplexCorners.of(c, m, b, true);
-    // System.out.println(map);
-    // System.out.println(map.get(RealScalar.of(-50)));
-    assertTrue(map.containsKey(RealScalar.of(-50)));
+    assertTrue(map.containsKey(RealScalar.of(0)));
+    assertTrue(map.containsKey(RealScalar.of(40)));
+    assertTrue(map.containsKey(RealScalar.of(40)));
+    assertTrue(map.containsKey(RealScalar.of(50)));
   }
 
   // MATLAB linprog example

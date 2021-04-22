@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Dimensions;
-import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
@@ -22,7 +20,9 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-/** Reference: Linear and Integer Programming made Easy, 2016 */
+/** Reference:
+ * "Linear and Integer Programming made Easy"
+ * by T.C. Hu, Andrew B. Kahng, 2016 */
 public class SimplexPivotTest extends TestCase {
   public void testP14() {
     // x >= 0 that minimizes c.x subject to m.x <= b
@@ -68,17 +68,11 @@ public class SimplexPivotTest extends TestCase {
 
   public void testP18_3() {
     Tensor c = Tensors.vector(1, 1, 1);
-    Tensor m = Tensors.fromString("{{6,3,1},{4,5,6}}");
+    Tensor m = Tensors.matrixInt(new int[][] { { 6, 3, 1 }, { 4, 5, 6 } });
     Tensor b = Tensors.vector(15, 15);
     LinearProgram lpp = LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor solp = SimplexCorners.of(lpp);
-    assertEquals(solp.dot(lpp.c), Tensors.of(RationalScalar.of(10, 3)));
-    LinearProgram lpd = lpp.dual();
-    Tensor sold = SimplexCorners.of(lpd);
-    assertEquals(sold.dot(lpd.c), Tensors.of(RationalScalar.of(10, 3)));
-    Tensor xp = LinearProgramming.of(lpp);
-    Tensor xd = LinearProgramming.of(lpd);
-    assertEquals(xp.dot(lpp.c), xd.dot(lpd.c));
+    Scalar scalar = TestHelper.check(lpp);
+    assertEquals(scalar, RationalScalar.of(10, 3));
   }
 
   public void testP21() {
@@ -122,45 +116,43 @@ public class SimplexPivotTest extends TestCase {
   }
 
   public void testP42() {
-    Tensor c = Tensors.fromString("{0,0,0,0}");
-    Tensor m = Tensors.fromString("{{4,1,0,0},{8,0,2,0},{10,0,1,3}}");
-    Tensor b = Tensors.fromString("{3,4,5}");
+    Tensor c = Array.zeros(4);
+    Tensor m = Tensors.matrixInt(new int[][] { { 4, 1, 0, 0 }, { 8, 0, 2, 0 }, { 10, 0, 1, 3 } });
+    Tensor b = Tensors.vector(3, 4, 5);
     NavigableMap<Scalar, Tensor> navigableMap = SimplexCorners.of(c, m, b, true);
     Tensor xs = navigableMap.get(RealScalar.ZERO);
     assertEquals(Dimensions.of(xs), Arrays.asList(3, 4));
   }
 
   public void testP44() {
-    Tensor c = Tensors.fromString("{1,1,2,1}");
-    Tensor m = Tensors.fromString("{{1,0,2,-2},{0,1,1,4}}");
-    Tensor b = Tensors.fromString("{2,6}");
+    Tensor c = Tensors.vector(1, 1, 2, 1);
+    Tensor m = Tensors.matrixInt(new int[][] { { 1, 0, 2, -2 }, { 0, 1, 1, 4 } });
+    Tensor b = Tensors.vector(2, 6);
     NavigableMap<Scalar, Tensor> navigableMap = SimplexCorners.of(c, m, b, true);
     assertEquals(navigableMap.size(), 4);
     Tensor tensor = navigableMap.get(RealScalar.of(5));
     assertEquals(tensor, Tensors.fromString("{{0,0,2,1}}"));
-    LinearProgram lpe = LinearProgram.of(Objective.MIN, c, ConstraintType.EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor sole = SimplexCorners.of(lpe);
-    assertEquals(tensor, sole);
+    LinearProgram lpp = LinearProgram.of(Objective.MIN, c, ConstraintType.EQUALS, m, b, RegionType.NON_NEGATIVE);
+    Tensor cp = SimplexCorners.of(lpp);
+    assertEquals(tensor, cp);
+    Tensor xp = LinearProgramming.of(lpp);
+    assertEquals(xp, Tensors.vector(0, 0, 2, 1)); // as stated on p.45
   }
 
-  public void testP45manual() {
-    Tensor c = Tensors.fromString("{1,2}");
-    c = Join.of(c, Array.zeros(4));
-    Tensor m = Tensors.fromString("{{-1,1},{0,1},{1,1},{4,1}}");
-    m = Join.of(1, m, IdentityMatrix.of(4));
-    Tensor b = Tensors.fromString("{6,8,12,36}");
-    NavigableMap<Scalar, Tensor> navigableMap = SimplexCorners.of(c, m, b, true);
+  public void testP45() {
+    Tensor c = Tensors.vector(1, 2);
+    Tensor A = Tensors.matrixInt(new int[][] { { -1, 1 }, { 0, 1 }, { 1, 1 }, { 4, 1 } });
+    Tensor b = Tensors.vector(6, 8, 12, 36);
+    LinearProgram lp1 = //
+        LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, A, b, RegionType.NON_NEGATIVE);
+    Tensor solp = SimplexCorners.of(lp1);
+    assertEquals(solp, Tensors.fromString("{{4, 8}}"));
+    // TODO primal and dual do not correspond
+    // TestHelper.check(lp1);
+    LinearProgram lpp = lp1.equality();
+    NavigableMap<Scalar, Tensor> navigableMap = SimplexCorners.of(lpp.c, lpp.A, lpp.b, true);
     assertEquals(navigableMap.size(), 6);
     Tensor tensor = navigableMap.get(RealScalar.of(20));
-    assertEquals(tensor, Tensors.fromString("{{4, 8, 2, 0, 0, 12}}"));
-  }
-
-  public void testP45auto() {
-    Tensor c = Tensors.fromString("{1,2}");
-    Tensor m = Tensors.fromString("{{-1,1},{0,1},{1,1},{4,1}}");
-    Tensor b = Tensors.fromString("{6,8,12,36}");
-    LinearProgram lpp = LinearProgram.of(Objective.MAX, c, ConstraintType.LESS_EQUALS, m, b, RegionType.NON_NEGATIVE);
-    Tensor solp = SimplexCorners.of(lpp);
-    assertEquals(solp, Tensors.fromString("{{4, 8}}"));
+    assertEquals(tensor, Tensors.fromString("{{4, 8, 2, 0, 0, 12}}")); // as stated on p.46
   }
 }

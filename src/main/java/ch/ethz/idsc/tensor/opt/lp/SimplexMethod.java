@@ -4,8 +4,6 @@
 package ch.ethz.idsc.tensor.opt.lp;
 
 import ch.ethz.idsc.tensor.RealScalar;
-import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
@@ -36,11 +34,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
         { A, IdentityMatrix.of(m), Partition.of(b, 1) }, //
         { Tensors.of(Total.of(A).negate()), Array.zeros(1, m), Tensors.of(Tensors.of(Total.ofVector(b).zero())) }, //
     }), Range.of(n, n + m), simplexPivot); // phase 1
-    Tensor tab = Tensor.of(simplexMethod.tab.stream().limit(m) //
-        .map(row -> row.extract(0, n).append(Last.of(row))));
     /* set bottom corner to 0, column generally does not have uniform unit */
-    tab.append(Append.of(c, RealScalar.ZERO));
-    return new SimplexMethod(tab, simplexMethod.ind, simplexPivot).getX(); // phase 2
+    return new SimplexMethod(Tensor.of(simplexMethod.tab.stream().limit(m) //
+        .map(row -> row.extract(0, n).append(Last.of(row)))) //
+        .append(Append.of(c, RealScalar.ZERO)), //
+        simplexMethod.ind, simplexPivot).getX(); // phase 2
   }
 
   /***************************************************/
@@ -54,7 +52,7 @@ import ch.ethz.idsc.tensor.sca.Sign;
     this.ind = ind;
     m = tab.length() - 1;
     n = Unprotect.dimension1Hint(tab) - 1;
-    if (isOutsideRange(ind, n))
+    if (!StaticHelper.isInsideRange(ind, n))
       throw TensorRuntimeException.of(ind);
     while (true) {
       /* the tests pass for "c = tab.get(m)" as well!? */
@@ -82,14 +80,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
     for (int index = 0; index < ind.length(); ++index)
       x.set(tab.Get(index, n), ind.Get(index).number().intValue());
     return x;
-  }
-
-  // helper function to check consistency
-  private static boolean isOutsideRange(Tensor ind, int n) {
-    return ind.stream() //
-        .map(Scalar.class::cast) //
-        .map(Scalars::intValueExact) //
-        .anyMatch(i -> n <= i);
   }
 
   // helper function
