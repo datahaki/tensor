@@ -15,7 +15,7 @@ import ch.ethz.idsc.tensor.alg.Subsets;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
-import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Variables;
 
 /** .
  * Algorithm visits all corners the runtime is prohibitive. Only for testing.
@@ -31,19 +31,19 @@ import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
 /* package */ enum SimplexCorners {
   ;
   public static Tensor of(LinearProgram linearProgram) {
-    LinearProgram lp_equality = linearProgram.equality();
+    LinearProgram lp_equality = linearProgram.standard();
     NavigableMap<Scalar, Tensor> navigableMap = of( //
         lp_equality.c, //
         lp_equality.A, //
         lp_equality.b, //
-        lp_equality.regionType.equals(RegionType.NON_NEGATIVE));
+        lp_equality.variables.equals(Variables.NON_NEGATIVE));
     if (navigableMap.isEmpty())
       return Tensors.empty();
     Tensor sols = lp_equality.objective.equals(Objective.MIN) //
         ? navigableMap.firstEntry().getValue()
         : navigableMap.lastEntry().getValue();
     return Tensor.of(sols.stream() //
-        .map(row -> row.extract(0, lp_equality.variables)) //
+        .map(row -> row.extract(0, lp_equality.var_count())) //
         .distinct());
   }
 

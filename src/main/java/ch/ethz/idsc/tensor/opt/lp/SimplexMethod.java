@@ -4,6 +4,7 @@
 package ch.ethz.idsc.tensor.opt.lp;
 
 import ch.ethz.idsc.tensor.RealScalar;
+import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
@@ -41,6 +42,18 @@ import ch.ethz.idsc.tensor.sca.Sign;
         simplexMethod.ind, simplexPivot).getX(); // phase 2
   }
 
+  /** @param linearProgram
+   * @param simplexPivot
+   * @return */
+  public static Tensor of(LinearProgram linearProgram, SimplexPivot simplexPivot) {
+    Scalar c_zero = Total.ofVector(linearProgram.c.map(Scalar::zero));
+    Tensor tab = ArrayFlatten.of(new Tensor[][] { //
+        { linearProgram.A, Partition.of(linearProgram.b, 1) }, //
+        { Tensors.of(linearProgram.minObjective()), Tensors.of(Tensors.of(c_zero)) } });
+    Tensor ind = Range.of(linearProgram.var_count(), linearProgram.c.length());
+    return new SimplexMethod(tab, ind, simplexPivot).getX();
+  }
+
   /***************************************************/
   private final Tensor tab; // (m+1) x (n+1)
   private final Tensor ind; // vector of length m
@@ -52,18 +65,18 @@ import ch.ethz.idsc.tensor.sca.Sign;
     this.ind = ind;
     m = tab.length() - 1;
     n = Unprotect.dimension1Hint(tab) - 1;
-    if (!StaticHelper.isInsideRange(ind, n))
+    if (!StaticHelper.isInsideRange(ind, n) || ind.length() != m)
       throw TensorRuntimeException.of(ind);
     while (true) {
       /* the tests pass for "c = tab.get(m)" as well!? */
       Tensor c = tab.get(m).extract(0, n);
-      int j = ArgMin.of(withoutUnits(c));
+      int j = ArgMin.of(withoutUnits(c)); // "entering variable"
       if (Sign.isNegative(c.Get(j))) {
         { // check if unbounded
           int argmax = ArgMax.of(withoutUnits(tab.get(Tensor.ALL, j).extract(0, m)));
           Sign.requirePositive(tab.Get(argmax, j)); // otherwise problem unbounded
         }
-        int p = simplexPivot.get(tab, j, n);
+        int p = simplexPivot.get(tab, j, n); // "leaving variable"
         ind.set(RealScalar.of(j), p);
         tab.set(row -> row.divide(row.Get(j)), p); // normalize
         Tensor tab_p = tab.get(p);
@@ -71,6 +84,11 @@ import ch.ethz.idsc.tensor.sca.Sign;
           if (i != p)
             tab.set(row -> row.subtract(tab_p.multiply(row.Get(j))), i);
       } else
+        /** "[...] if we have all c_j >= 0 in the tableau in the minimization
+         * problem, then the current value of z is optimum."
+         * Reference:
+         * "Linear and Integer Programming made Easy"
+         * by T.C. Hu, Andrew B. Kahng, 2016 */
         break;
     }
   }

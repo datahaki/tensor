@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.opt.lp;
 
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
 
 /** linear programming solution for small scale problems.
  * The implementation has only been tested on a few cases.
@@ -18,9 +19,12 @@ public enum LinearProgramming {
    * @param simplexPivot
    * @return */
   public static Tensor of(LinearProgram linearProgram, SimplexPivot simplexPivot) {
-    LinearProgram lp_equality = linearProgram.equality();
-    Tensor x = SimplexMethod.of(lp_equality.minObjective(), lp_equality.A, lp_equality.b, simplexPivot);
-    Tensor x_extract = x.extract(0, lp_equality.variables);
+    LinearProgram lp_standard = linearProgram.standard();
+    Tensor x = linearProgram.constraintType.equals(ConstraintType.LESS_EQUALS) && //
+        StaticHelper.isNonNegative(linearProgram.b) //
+            ? SimplexMethod.of(lp_standard, simplexPivot)
+            : SimplexMethod.of(lp_standard.minObjective(), lp_standard.A, lp_standard.b, simplexPivot);
+    Tensor x_extract = x.extract(0, lp_standard.var_count());
     return linearProgram.requireFeasible(x_extract);
   }
 

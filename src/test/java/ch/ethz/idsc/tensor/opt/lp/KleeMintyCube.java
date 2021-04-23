@@ -8,7 +8,7 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.ext.Cache;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
-import ch.ethz.idsc.tensor.opt.lp.LinearProgram.RegionType;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Variables;
 import ch.ethz.idsc.tensor.sca.Power;
 
 /** Quote from Wikipedia:
@@ -48,7 +48,7 @@ import ch.ethz.idsc.tensor.sca.Power;
         ConstraintType.LESS_EQUALS, //
         Tensors.matrix(KleeMintyCube::coefficient, n, n), //
         Tensors.vector(i -> Power.of(5, i + 1), n), //
-        RegionType.NON_NEGATIVE);
+        Variables.NON_NEGATIVE);
     x = Tensors.vector(i -> i < n - 1 ? RealScalar.ZERO : Power.of(5, n), n);
   }
 }

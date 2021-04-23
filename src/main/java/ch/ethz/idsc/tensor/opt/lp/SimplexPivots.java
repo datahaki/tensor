@@ -8,6 +8,8 @@ import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.sca.Sign;
 
+/** implementation is specific for
+ * objective == minimize */
 public enum SimplexPivots implements SimplexPivot {
   /** nonbasic gradient method, or "steepest decent policy"
    * 
