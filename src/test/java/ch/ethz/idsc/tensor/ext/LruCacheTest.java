@@ -68,8 +68,8 @@ public class LruCacheTest extends TestCase {
   }
 
   public void testThreadUnsafe() {
-    Map<Integer, Integer> map = new LruCache<>(12);
-    IntStream.range(0, 1024).boxed().parallel().forEach(index -> map.put(index % 32, index));
-    assertTrue(12 < map.size());
+    Map<Integer, Integer> map = new LruCache<>(3);
+    IntStream.range(0, 1024).boxed().parallel().forEach(index -> map.put(index, index));
+    assertTrue(3 < map.size());
   }
 }
