@@ -66,10 +66,10 @@ public class LruCacheTest extends TestCase {
     IntStream.range(0, 1024).boxed().parallel().forEach(index -> map.put(index % 32, index));
     assertEquals(map.size(), 12);
   }
-
-  public void testThreadUnsafe() {
-    Map<Integer, Integer> map = new LruCache<>(3);
-    IntStream.range(0, 1024).boxed().parallel().forEach(index -> map.put(index, index));
-    assertTrue(3 < map.size());
-  }
+  // ci does not support this test
+  // public void testThreadUnsafe() {
+  // Map<Integer, Integer> map = new LruCache<>(3);
+  // IntStream.range(0, 1024).boxed().parallel().forEach(index -> map.put(index, index));
+  // assertTrue(3 < map.size());
+  // }
 }
