@@ -4,7 +4,9 @@ package ch.ethz.idsc.tensor.pdf;
 import java.io.Serializable;
 import java.util.Random;
 
+import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
@@ -14,7 +16,6 @@ import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Floor;
-import ch.ethz.idsc.tensor.sca.Increment;
 
 /** A histogram distribution approximates an unknown continuous distribution using
  * a collection of observed samples from the distribution.
@@ -26,16 +27,13 @@ import ch.ethz.idsc.tensor.sca.Increment;
  * </ul>
  * 
  * <p>The implementation combines
- * {@link EmpiricalDistribution}, {@link BinCounts}, and {@link UniformDistribution#unit()}.
+ * {@link EmpiricalDistribution}, {@link BinCounts}, and {@link UniformDistribution}.
  * 
  * <p>Other approximation methods may be implemented in the future.
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/HistogramDistribution.html">HistogramDistribution</a> */
-public class HistogramDistribution implements //
-    ContinuousDistribution, InverseCDF, MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = -6573139339109117534L;
-
+public class HistogramDistribution implements ContinuousDistribution, Serializable {
   /** Example:
    * HistogramDistribution[{10.2, -1.6, 3.2, -0.4, 11.5, 7.3, 3.8, 9.8}, 2]
    * 
@@ -91,7 +89,7 @@ public class HistogramDistribution implements //
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     Scalar xlo = discrete.apply(Floor.toMultipleOf(width).apply(x));
-    Scalar ofs = Clips.interval(xlo, Increment.ONE.apply(xlo)).rescale(discrete.apply(x));
+    Scalar ofs = Clips.interval(xlo, RealScalar.ONE.add(xlo)).rescale(discrete.apply(x));
     return LinearInterpolation.of(Tensors.of( //
         empiricalDistribution.p_lessThan(xlo), //
         empiricalDistribution.p_lessEquals(xlo))).At(ofs);
@@ -113,7 +111,7 @@ public class HistogramDistribution implements //
   @Override // from RandomVariateInterface
   public Scalar randomVariate(Random random) {
     return original.apply(empiricalDistribution.randomVariate(random) //
-        .add(RandomVariate.of(UniformDistribution.unit(), random)));
+        .add(DoubleScalar.of(random.nextDouble())));
   }
 
   @Override // from VarianceInterface

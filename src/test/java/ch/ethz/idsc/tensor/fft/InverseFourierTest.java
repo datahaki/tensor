@@ -6,11 +6,11 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.red.Entrywise;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -22,7 +22,7 @@ public class InverseFourierTest extends TestCase {
         Tensor vector = Entrywise.with(ComplexScalar::of).apply( //
             RandomVariate.of(distribution, 1 << n), //
             RandomVariate.of(distribution, 1 << n));
-        Chop._10.requireClose(InverseFourier.of(Fourier.of(vector)), vector);
+        Tolerance.CHOP.requireClose(InverseFourier.of(Fourier.of(vector)), vector);
       }
   }
 

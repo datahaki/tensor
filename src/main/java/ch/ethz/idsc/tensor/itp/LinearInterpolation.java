@@ -15,7 +15,6 @@ import ch.ethz.idsc.tensor.io.Primitives;
 import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Clip;
 import ch.ethz.idsc.tensor.sca.Floor;
-import ch.ethz.idsc.tensor.sca.Increment;
 
 /** multi-linear interpolation
  * 
@@ -24,8 +23,6 @@ import ch.ethz.idsc.tensor.sca.Increment;
  * 
  * <p>Remark: for scalar inverse linear interpolation use {@link Clip#rescale(Scalar)} */
 public class LinearInterpolation extends AbstractInterpolation implements Serializable {
-  private static final long serialVersionUID = -1073851838848178138L;
-
   /** @param tensor not instance of {@link Scalar}
    * @return
    * @throws Exception if tensor == null */
@@ -44,7 +41,7 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
   public Tensor get(Tensor index) {
     Tensor floor = Floor.of(index);
     Tensor above = Ceiling.of(index);
-    Tensor width = above.subtract(floor).map(Increment.ONE);
+    Tensor width = above.subtract(floor).map(RealScalar.ONE::add);
     List<Integer> fromIndex = Primitives.toListInteger(floor);
     List<Integer> dimensions = Primitives.toListInteger(width);
     Tensor block = tensor.block(fromIndex, dimensions); // <- copy() for empty fromIndex and dimensions
@@ -65,7 +62,7 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
     int below = floor.number().intValue();
     if (Scalars.isZero(remain))
       return tensor.get(below);
-    return Tensors.of(RealScalar.ONE.subtract(remain), remain) //
+    return Tensors.of(remain.one().subtract(remain), remain) //
         .dot(tensor.extract(below, below + 2));
   }
 }

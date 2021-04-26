@@ -5,10 +5,12 @@ package ch.ethz.idsc.tensor.mat;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
-import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.alg.VectorQ;
+import ch.ethz.idsc.tensor.mat.qr.QRDecomposition;
+import ch.ethz.idsc.tensor.mat.qr.QRSignOperators;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueList;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.Conjugate;
 
 /** least squares solution x that approximates
  * <pre>
@@ -72,11 +74,11 @@ public enum LeastSquares {
   private static Tensor usingQR(Tensor matrix, Tensor b, int n, int m) {
     return m <= n //
         ? _usingQR(matrix, b)
-        : ConjugateTranspose.of(_usingQR(MatrixDotTranspose.of(matrix, Conjugate.of(matrix)), matrix)).dot(b);
+        : ConjugateTranspose.of(_usingQR(StaticHelper.dotConjugate(matrix), matrix)).dot(b);
   }
 
   private static Tensor _usingQR(Tensor matrix, Tensor b) {
-    return new QRDecompositionImpl(matrix, b, QRSignOperators.STABILITY).pseudoInverse();
+    return QRDecomposition.of(matrix, b, QRSignOperators.STABILITY).pseudoInverse();
   }
 
   /***************************************************/

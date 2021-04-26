@@ -10,15 +10,12 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.sca.ArcTan;
-import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.sca.Tan;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CauchyDistribution.html">CauchyDistribution</a> */
-public class CauchyDistribution extends AbstractContinuousDistribution implements //
-    MeanInterface, VarianceInterface, InverseCDF, Serializable {
-  private static final long serialVersionUID = 3801325633984199538L;
+public class CauchyDistribution extends AbstractContinuousDistribution implements Serializable {
   private static final Distribution STANDARD = CauchyDistribution.of(RealScalar.ZERO, RealScalar.ONE);
 
   /** @param a
@@ -70,18 +67,9 @@ public class CauchyDistribution extends AbstractContinuousDistribution implement
     return DoubleScalar.INDETERMINATE;
   }
 
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    return _quantile(Clips.unit().requireInside(p));
-  }
-
-  private Scalar _quantile(Scalar p) {
+  @Override
+  protected Scalar protected_quantile(Scalar p) {
     return Tan.FUNCTION.apply(p.add(p).subtract(RealScalar.ONE).multiply(Pi.HALF)).multiply(b).add(a);
-  }
-
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    return _quantile(DoubleScalar.of(reference));
   }
 
   @Override // from Object

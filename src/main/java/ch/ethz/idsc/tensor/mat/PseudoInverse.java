@@ -8,10 +8,11 @@ import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.alg.Transpose;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueList;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.Unit;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.Conjugate;
 import ch.ethz.idsc.tensor.sca.Imag;
 
 /** The pseudo inverse is the least squares solution x to
@@ -49,7 +50,10 @@ public enum PseudoInverse {
       } catch (Exception exception) {
         // matrix does not have maximal rank
       }
-    boolean complex = matrix.flatten(2).map(Scalar.class::cast).map(Imag.FUNCTION).anyMatch(Scalars::nonZero);
+    boolean complex = matrix.flatten(2) //
+        .map(Scalar.class::cast) //
+        .map(Imag.FUNCTION) //
+        .anyMatch(Scalars::nonZero);
     if (complex)
       return BenIsraelCohen.of(matrix);
     return usingSvd(matrix);
@@ -59,7 +63,7 @@ public enum PseudoInverse {
   /** @param matrix with maximal rank
    * @return
    * @throws Exception if given matrix does not have maximal rank */
-  /* package */ static Tensor usingCholesky(Tensor matrix) {
+  public static Tensor usingCholesky(Tensor matrix) {
     int n = matrix.length();
     int m = Unprotect.dimension1Hint(matrix);
     if (m <= n) {
@@ -67,7 +71,7 @@ public enum PseudoInverse {
       return CholeskyDecomposition.of(mt.dot(matrix)).solve(mt);
     }
     return ConjugateTranspose.of(CholeskyDecomposition.of( //
-        MatrixDotTranspose.of(matrix, Conjugate.of(matrix))).solve(matrix));
+        StaticHelper.dotConjugate(matrix)).solve(matrix));
   }
 
   /***************************************************/

@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
+import java.math.BigDecimal;
+
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
@@ -38,8 +40,8 @@ public class GammaTest extends TestCase {
     Chop._08.requireClose(Gamma.of(RealScalar.of(3.0)), RealScalar.of(2));
     Chop._08.requireClose(Gamma.of(RealScalar.of(4.0)), RealScalar.of(6));
     Chop._08.requireClose(Gamma.of(RealScalar.of(5.0)), RealScalar.of(24));
-    Chop._10.requireClose(Gamma.of(RealScalar.of(3.2)), RealScalar.of(2.4239654799353683));
-    Chop._10.requireClose(Gamma.of(RealScalar.of(7.9)), RealScalar.of(4122.709484285446));
+    Tolerance.CHOP.requireClose(Gamma.of(RealScalar.of(3.2)), RealScalar.of(2.4239654799353683));
+    Tolerance.CHOP.requireClose(Gamma.of(RealScalar.of(7.9)), RealScalar.of(4122.709484285446));
   }
 
   public void testGammaNum() {
@@ -47,7 +49,7 @@ public class GammaTest extends TestCase {
     Chop._08.requireClose(Gamma.of(RealScalar.of(1.0)), RealScalar.of(1));
     Chop._08.requireClose(Gamma.of(RealScalar.of(-1.2)), RealScalar.of(4.850957140522099));
     Chop._08.requireClose(Gamma.of(RealScalar.of(-3.8)), RealScalar.of(0.29963213450284565));
-    Chop._10.requireClose(Gamma.of(RealScalar.of(-2.1)), RealScalar.of(-4.626098277572807));
+    Tolerance.CHOP.requireClose(Gamma.of(RealScalar.of(-2.1)), RealScalar.of(-4.626098277572807));
   }
 
   public void testLargeInt() {
@@ -60,7 +62,7 @@ public class GammaTest extends TestCase {
   }
 
   public void testLargeNegativeIntegerDouble() {
-    AssertFail.of(() -> Gamma.of(DecimalScalar.of("-100000000000.0")));
+    AssertFail.of(() -> Gamma.of(DecimalScalar.of(new BigDecimal("-100000000000.0"))));
   }
 
   public void testLargeNegative() {
@@ -75,13 +77,13 @@ public class GammaTest extends TestCase {
   public void testComplex1() {
     Scalar result = Gamma.of(ComplexScalar.of(1.1, 0.3));
     Scalar actual = ComplexScalar.of(0.886904759534451, -0.10608824042449128);
-    Chop._10.requireClose(result, actual);
+    Tolerance.CHOP.requireClose(result, actual);
   }
 
   public void testComplex2() {
     Scalar result = Gamma.of(ComplexScalar.of(0, 1));
     Scalar actual = ComplexScalar.of(-0.15494982830181073, -0.4980156681183565);
-    Chop._09.requireClose(result, actual);
+    Tolerance.CHOP.requireClose(result, actual);
   }
 
   public void testNest1() {

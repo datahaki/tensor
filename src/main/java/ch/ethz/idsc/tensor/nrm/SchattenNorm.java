@@ -5,10 +5,8 @@ import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Unprotect;
-import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.api.TensorScalarFunction;
-import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueList;
 
 /** Quote from Wikipedia: "The Schatten p-norms arise when applying the p-norm to the
  * vector of singular values of a matrix.
@@ -19,8 +17,6 @@ import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
  * @see Matrix2Norm
  * @see MatrixInfinityNorm */
 public class SchattenNorm implements TensorScalarFunction {
-  private static final long serialVersionUID = -3237076807560620127L;
-
   /** Hint: for enhanced precision, use p as instance of {@link RationalScalar} if possible
    *
    * @param p exponent greater or equals 1
@@ -48,12 +44,7 @@ public class SchattenNorm implements TensorScalarFunction {
 
   @Override
   public Scalar apply(Tensor matrix) {
-    int n = matrix.length();
-    int m = Unprotect.dimension1(matrix);
-    SingularValueDecomposition svd = SingularValueDecomposition.of(m <= n //
-        ? matrix
-        : Transpose.of(matrix));
-    return tensorScalarFunction.apply(svd.values());
+    return tensorScalarFunction.apply(SingularValueList.of(matrix));
   }
 
   @Override // from Object

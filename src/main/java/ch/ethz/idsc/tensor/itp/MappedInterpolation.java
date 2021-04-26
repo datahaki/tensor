@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.img.ImageResize;
  * 
  * @see ImageResize */
 public class MappedInterpolation extends AbstractInterpolation implements Serializable {
-  private static final long serialVersionUID = 6130767569690218670L;
-
   /** @param tensor non-null
    * @param function non-null
    * @return

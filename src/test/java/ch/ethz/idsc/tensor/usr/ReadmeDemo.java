@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.usr;
 
+import java.math.BigDecimal;
+
 import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -13,7 +15,11 @@ import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.mat.Inverse;
 import ch.ethz.idsc.tensor.mat.NullSpace;
 import ch.ethz.idsc.tensor.mat.PseudoInverse;
-import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Variables;
 import ch.ethz.idsc.tensor.opt.lp.LinearProgramming;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.HypergeometricDistribution;
@@ -47,10 +53,10 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   static void demoLP() {
-    Tensor x = LinearProgramming.maxLessEquals( //
-        Tensors.fromString("[1, 1]"), //
-        Tensors.fromString("[[4, -1],[2, 1],[-5, 2]]"), //
-        Tensors.fromString("[8, 7, 2]"));
+    LinearProgram linearProgram = LinearProgram.of(Objective.MAX, Tensors.vector(1, 1), ConstraintType.LESS_EQUALS, //
+        Tensors.fromString("{{4, -1},{2, 1},{-5, 2}}"), //
+        Tensors.vector(8, 7, 2), Variables.NON_NEGATIVE);
+    Tensor x = LinearProgramming.of(linearProgram);
     System.out.println(x);
   }
 
@@ -84,14 +90,15 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
   }
 
   static void demoDecimal() {
-    System.out.println(Exp.of(DecimalScalar.of("10")));
-    System.out.println(Sqrt.of(DecimalScalar.of("2")));
+    System.out.println(Exp.of(DecimalScalar.of(new BigDecimal("10"))));
+    System.out.println(Sqrt.of(DecimalScalar.of(new BigDecimal("2"))));
     Scalar a = N.in(100).of(RealScalar.of(2));
     System.out.println(Sqrt.of(a));
   }
 
   public static void main(String[] args) {
-    demoPseudoInverse();
+    demoLP();
+    // demoPseudoInverse();
     // demoSqrt();
     // demoInverse();
     // demoPDF();

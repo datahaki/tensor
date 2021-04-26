@@ -14,7 +14,6 @@ import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.nrm.FrobeniusNorm;
 import ch.ethz.idsc.tensor.nrm.Matrix1Norm;
 import ch.ethz.idsc.tensor.nrm.MatrixInfinityNorm;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -33,7 +32,7 @@ public class FourierMatrixTest extends TestCase {
 
   public void testSeveral() {
     Random random = new Random();
-    int n = random.nextInt(20);
+    int n = 1 + random.nextInt(20);
     checkFormat(n);
   }
 
@@ -48,7 +47,7 @@ public class FourierMatrixTest extends TestCase {
   private static void _check(int n) {
     Tensor matrix = FourierMatrix.of(n);
     Tensor inverse = FourierMatrix.inverse(n);
-    Chop._10.requireClose(matrix.dot(inverse), IdentityMatrix.of(n));
+    Tolerance.CHOP.requireClose(matrix.dot(inverse), IdentityMatrix.of(n));
   }
 
   public void testInverse() {

@@ -8,6 +8,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.UnitVector;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.num.Pi;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -25,7 +26,7 @@ public class AngleVectorTest extends TestCase {
     for (int count = 0; count < 12; ++count) {
       Scalar scalar = N.DOUBLE.of(RationalScalar.of(count, 12));
       Tensor tensor = AngleVector.turns(scalar);
-      Chop._12.requireClose(tensor, AngleVector.of(scalar.multiply(Pi.TWO)));
+      Tolerance.CHOP.requireClose(tensor, AngleVector.of(scalar.multiply(Pi.TWO)));
     }
   }
 
@@ -59,7 +60,7 @@ public class AngleVectorTest extends TestCase {
     Distribution distribution = NormalDistribution.standard();
     for (int count = 0; count < 10; ++count) {
       Scalar fraction = RandomVariate.of(distribution);
-      Chop._12.requireClose(AngleVector.turns(fraction), AngleVector.of(fraction.multiply(Pi.TWO)));
+      Tolerance.CHOP.requireClose(AngleVector.turns(fraction), AngleVector.of(fraction.multiply(Pi.TWO)));
     }
   }
 

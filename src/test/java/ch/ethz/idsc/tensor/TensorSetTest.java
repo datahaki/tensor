@@ -11,18 +11,46 @@ import ch.ethz.idsc.tensor.alg.Range;
 import ch.ethz.idsc.tensor.alg.TensorRank;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
-import ch.ethz.idsc.tensor.sca.Increment;
+import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorSetTest extends TestCase {
-  public void testSet() {
+  public void testSetScalar() {
     Tensor eye = IdentityMatrix.of(5);
     Tensor cpy = eye.copy();
     assertEquals(eye, cpy);
     cpy.set(DoubleScalar.of(0.3), 1, 2);
     assertFalse(eye.equals(cpy));
-    cpy.set(s -> (Scalar) s.negate(), 2, 2);
+    cpy.set(s -> s.negate(), 2, 2);
+  }
+
+  public void testSetTensor0() {
+    Tensor eye = HilbertMatrix.of(3);
+    Tensor matrix = eye.copy();
+    assertEquals(eye, matrix);
+    matrix.set(Tensor::negate, 2);
+    assertFalse(eye.equals(matrix));
+    assertEquals(matrix, Tensors.fromString("{{1, 1/2, 1/3}, {1/2, 1/3, 1/4}, {-1/3, -1/4, -1/5}}"));
+  }
+
+  public void testSetTensor0Total() {
+    Tensor eye = HilbertMatrix.of(3);
+    Tensor matrix = eye.copy();
+    assertEquals(eye, matrix);
+    matrix.set(Total::ofVector, 2);
+    assertFalse(eye.equals(matrix));
+    assertEquals(matrix, Tensors.fromString("{{1, 1/2, 1/3}, {1/2, 1/3, 1/4}, 47/60}"));
+    AssertFail.of(() -> eye.set(Total::ofVector, Tensor.ALL, 2));
+  }
+
+  public void testSetTensor1() {
+    Tensor eye = HilbertMatrix.of(3);
+    Tensor cpy = eye.copy();
+    assertEquals(eye, cpy);
+    cpy.set(Tensor::negate, Tensor.ALL, 2);
+    assertFalse(eye.equals(cpy));
+    assertEquals(cpy, Tensors.fromString("{{1, 1/2, -1/3}, {1/2, 1/3, -1/4}, {1/3, 1/4, -1/5}}"));
   }
 
   public void testSetNotByRef() {
@@ -124,7 +152,7 @@ public class TensorSetTest extends TestCase {
 
   public void testSetFunctionAllLast() {
     Tensor a = Tensors.vector(0, 1, 3, 4, 9);
-    a.set(Increment.ONE, Tensor.ALL);
+    a.set(RealScalar.ONE::add, Tensor.ALL);
     Tensor b = Tensors.vector(1, 2, 4, 5, 10);
     assertEquals(a, b);
   }

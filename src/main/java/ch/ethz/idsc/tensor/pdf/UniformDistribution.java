@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
@@ -19,18 +18,9 @@ import ch.ethz.idsc.tensor.sca.Clips;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/UniformDistribution.html">UniformDistribution</a> */
-public class UniformDistribution extends AbstractContinuousDistribution implements //
-    InverseCDF, MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = -5002466446960913352L;
-  private static final Scalar _12 = RealScalar.of(12);
-  private static final Distribution UNIT = new UniformDistribution(Clips.unit()) {
-    private static final long serialVersionUID = 4231423258009851607L;
-
-    @Override // from AbstractContinuousDistribution
-    public Scalar randomVariate(double reference) {
-      return DoubleScalar.of(reference);
-    }
-  };
+public class UniformDistribution extends AbstractContinuousDistribution implements Serializable {
+  private static final Scalar _1_12 = RationalScalar.of(1, 12);
+  private static final Distribution UNIT = new UniformDistribution(Clips.unit());
 
   /** the input parameters may be instance of {@link Quantity} of identical unit
    * 
@@ -61,49 +51,38 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
 
   /***************************************************/
   private final Clip clip;
-  private final Scalar width;
 
   private UniformDistribution(Clip clip) {
     this.clip = clip;
-    width = clip.width();
-    if (Scalars.isZero(width))
+    if (Scalars.isZero(clip.width()))
       throw TensorRuntimeException.of(clip.min(), clip.max());
-  }
-
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    return _quantile(Clips.unit().requireInside(p));
-  }
-
-  private Scalar _quantile(Scalar p) {
-    return p.multiply(width).add(clip.min());
-  }
-
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    return _quantile(DoubleScalar.of(reference));
   }
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return clip.min().add(width.multiply(RationalScalar.HALF));
+    return protected_quantile(RationalScalar.HALF);
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    return width.multiply(width).divide(_12);
+    return clip.width().multiply(clip.width()).multiply(_1_12);
   }
 
   @Override // from PDF
   public Scalar at(Scalar x) {
     return clip.isInside(x) //
-        ? width.reciprocal()
+        ? clip.width().reciprocal()
         : RealScalar.ZERO;
   }
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     return clip.rescale(x);
+  }
+
+  @Override // from AbstractContinuousDistribution
+  protected Scalar protected_quantile(Scalar p) {
+    return p.multiply(clip.width()).add(clip.min());
   }
 
   @Override // from Object

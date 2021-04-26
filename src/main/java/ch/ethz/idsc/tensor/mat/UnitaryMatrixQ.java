@@ -3,10 +3,8 @@ package ch.ethz.idsc.tensor.mat;
 
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.alg.MatrixQ;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.Conjugate;
 
 /** Mathematica definition:
  * "A matrix m is unitary if m.ConjugateTranspose[m] is the identity matrix."
@@ -20,7 +18,7 @@ public enum UnitaryMatrixQ {
    * @return true, if tensor is a matrix and tensor.ConjugateTranspose[tensor] is the identity matrix */
   public static boolean of(Tensor tensor, Chop chop) {
     return MatrixQ.of(tensor) //
-        && chop.isClose(MatrixDotTranspose.of(tensor, Conjugate.of(tensor)), IdentityMatrix.of(tensor.length()));
+        && chop.isClose(StaticHelper.dotConjugate(tensor), IdentityMatrix.of(tensor.length()));
   }
 
   /** @param tensor

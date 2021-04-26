@@ -9,7 +9,6 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/HannWindow.html">HannWindow</a> */
 public class HannWindow extends ParameterizedWindow {
-  private static final long serialVersionUID = 7913793267394141590L;
   public static final ScalarUnaryOperator FUNCTION = of(RationalScalar.HALF);
 
   /** @param alpha

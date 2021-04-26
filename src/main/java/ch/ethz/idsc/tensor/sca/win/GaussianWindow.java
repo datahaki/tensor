@@ -11,7 +11,6 @@ import ch.ethz.idsc.tensor.sca.Exp;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GaussianWindow.html">GaussianWindow</a> */
 public class GaussianWindow extends ParameterizedWindow {
-  private static final long serialVersionUID = 2166723314990523230L;
   private static final Scalar HALF_NEGATE = RationalScalar.HALF.negate();
   /** gaussian window with standard deviation of sigma 3/10,
    * which is the default in Mathematica and results in

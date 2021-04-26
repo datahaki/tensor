@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ConnesWindow.html">ConnesWindow</a> */
 public class ConnesWindow extends ParameterizedWindow {
-  private static final long serialVersionUID = -641958409505589259L;
   private static final Scalar N8 = RealScalar.of(-8);
   private static final Scalar _16 = RealScalar.of(16);
   public static final ScalarUnaryOperator FUNCTION = of(RealScalar.ONE);

@@ -13,8 +13,6 @@ import ch.ethz.idsc.tensor.num.Binomial;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/HypergeometricDistribution.html">HypergeometricDistribution</a> */
 public class HypergeometricDistribution extends EvaluatedDiscreteDistribution implements VarianceInterface {
-  private static final long serialVersionUID = -7991777575569766289L;
-
   /** see the Mathematica documentation of HypergeometricDistribution
    * 
    * @param N number of draws

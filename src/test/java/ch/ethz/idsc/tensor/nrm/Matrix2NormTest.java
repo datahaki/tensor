@@ -81,8 +81,10 @@ public class Matrix2NormTest extends TestCase {
     Tensor re = RandomVariate.of(distribution, 5, 3);
     Tensor im = RandomVariate.of(distribution, 5, 3);
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
-    Scalar norm2bound = Matrix2Norm.bound(matrix);
-    assertEquals(Imag.FUNCTION.apply(norm2bound), RealScalar.ZERO);
+    Scalar norm2bound1 = Matrix2Norm.bound(matrix);
+    assertEquals(Imag.FUNCTION.apply(norm2bound1), RealScalar.ZERO);
+    Scalar norm2bound2 = Matrix2Norm.bound(Transpose.of(matrix));
+    Tolerance.CHOP.requireClose(norm2bound1, norm2bound2);
   }
 
   public void testZero() {

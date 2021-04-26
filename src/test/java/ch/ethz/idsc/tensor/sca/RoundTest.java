@@ -78,7 +78,7 @@ public class RoundTest extends TestCase {
 
   public void testToMultipleOf1() {
     Scalar s = DoubleScalar.of(3.37151617);
-    Scalar sr = Round.toMultipleOf(DecimalScalar.of("0.1")).apply(s);
+    Scalar sr = Round.toMultipleOf(DecimalScalar.of(new BigDecimal("0.1"))).apply(s);
     assertEquals(sr.toString(), "3.4");
   }
 
@@ -131,7 +131,7 @@ public class RoundTest extends TestCase {
   }
 
   public void testPrecision() {
-    Scalar pi = DecimalScalar.of("1234.10");
+    Scalar pi = DecimalScalar.of(new BigDecimal("1234.10"));
     DecimalScalar ds = (DecimalScalar) pi;
     BigDecimal bd = ds.number();
     assertEquals(bd.precision(), 4 + 2);

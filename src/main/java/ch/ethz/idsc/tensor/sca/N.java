@@ -30,7 +30,6 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/N.html">N</a> */
 public abstract class N implements ScalarUnaryOperator {
-  private static final long serialVersionUID = -8065248181086270814L;
   /** conversion to {@link DoubleScalar} */
   public static final N DOUBLE = NDouble.INSTANCE;
   /** conversion to {@link DecimalScalar} with higher than machine precision */

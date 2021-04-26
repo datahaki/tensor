@@ -10,6 +10,8 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.mat.gr.InfluenceMatrixQ;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.LogisticDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -17,7 +19,6 @@ import ch.ethz.idsc.tensor.pdf.TrapezoidalDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.qty.QuantityMagnitude;
 import ch.ethz.idsc.tensor.red.Entrywise;
-import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.red.Trace;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -33,9 +34,7 @@ public class BenIsraelCohenTest extends TestCase {
       Tensor design = p1.dot(p2);
       Tensor pinv = BenIsraelCohen.of(design);
       suo.apply(pinv.Get(0, 0));
-      InfluenceMatrix influenceMatrix = new InfluenceMatrixExact(design.dot(pinv));
-      Tensor leverages = influenceMatrix.leverages();
-      Chop._09.requireClose(Total.ofVector(leverages), RealScalar.of(r));
+      InfluenceMatrixQ.require(design.dot(pinv));
     }
   }
 
@@ -46,6 +45,29 @@ public class BenIsraelCohenTest extends TestCase {
     Tolerance.CHOP.requireClose(pinv, mathem);
     SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
     Chop._08.requireClose(pinv, PseudoInverse.of(svd));
+  }
+
+  public void testMixedUnitsSquare() {
+    Tensor matrix = Tensors.fromString( //
+        "{{-4/5[m^-2], 3/10[m^-1*rad^-1]}, {3/10[m^-1*rad^-1], -1/20[rad^-2]}}");
+    Tensor inv1 = Inverse.of(matrix);
+    Tensor pinv = BenIsraelCohen.of(matrix);
+    Tolerance.CHOP.requireClose(inv1, pinv);
+  }
+
+  public void testMixedUnitsGeneral() {
+    Tensor matrix = Tensors.fromString( //
+        "{{-4/5[m], 3/10[m], 1/2[m]}, {3[s], -2[s], 1[s]}}");
+    Tensor pinv1 = BenIsraelCohen.of(matrix);
+    Tensor pinv2 = BenIsraelCohen.of(Transpose.of(matrix));
+    Tolerance.CHOP.requireClose(Transpose.of(pinv1), pinv2);
+    InfluenceMatrixQ.require(pinv1.dot(matrix));
+  }
+
+  public void testMixedUnitsFail() {
+    Tensor matrix = Tensors.fromString( //
+        "{{-4/5[kg], 3/10[m], 1/2[m]}, {3[s], -2[s], 1[s]}}");
+    AssertFail.of(() -> BenIsraelCohen.of(matrix));
   }
 
   public void testZeros() {
@@ -63,9 +85,8 @@ public class BenIsraelCohenTest extends TestCase {
     Tensor p2 = RandomVariate.of(distribution, 3, 4);
     Tensor matrix = p1.dot(p2);
     Tensor refine = BenIsraelCohen.of(matrix);
-    Tolerance.CHOP.requireClose(PseudoInverse.of(matrix), refine);
-    InfluenceMatrix influenceMatrix = new InfluenceMatrixExact(refine.dot(matrix));
-    Chop._09.requireClose(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(3));
+    Chop._09.requireClose(PseudoInverse.of(matrix), refine);
+    InfluenceMatrixQ.require(refine.dot(matrix));
   }
 
   public void testComplexFullRank() {

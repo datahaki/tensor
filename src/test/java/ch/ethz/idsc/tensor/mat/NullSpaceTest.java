@@ -17,6 +17,7 @@ import ch.ethz.idsc.tensor.alg.Reverse;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
+import ch.ethz.idsc.tensor.mat.re.Det;
 import ch.ethz.idsc.tensor.nrm.Vector2Norm;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.pdf.CauchyDistribution;
@@ -231,7 +232,7 @@ public class NullSpaceTest extends TestCase {
       {
         Tensor nullspace = NullSpace.usingRowReduce(mt);
         assertEquals(Dimensions.of(nullspace), Arrays.asList(n - d, n));
-        Chop._10.requireAllZero(mt.dot(Transpose.of(nullspace)));
+        Chop._08.requireAllZero(mt.dot(Transpose.of(nullspace)));
       }
       {
         Tensor nullspace = NullSpace.usingQR(mt);
@@ -255,6 +256,12 @@ public class NullSpaceTest extends TestCase {
     assertEquals(nullsp.length(), 4);
     for (Tensor vector : nullsp)
       Chop.NONE.requireAllZero(Dot.of(matrix, vector));
+  }
+
+  public void testDecimalScalar() {
+    Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
+    Tensor ns = NullSpace.of(matrix);
+    Tolerance.CHOP.requireAllZero(matrix.dot(Transpose.of(ns)));
   }
 
   public void testFailScalar() {

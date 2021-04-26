@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.ext;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -59,4 +60,16 @@ public class LruCacheTest extends TestCase {
     map.keySet().containsAll(Arrays.asList(3, 5));
     assertFalse(map.containsKey(4));
   }
+
+  public void testThreadSafe() {
+    Map<Integer, Integer> map = Collections.synchronizedMap(new LruCache<>(12));
+    IntStream.range(0, 1024).boxed().parallel().forEach(index -> map.put(index % 32, index));
+    assertEquals(map.size(), 12);
+  }
+  // ci does not support this test
+  // public void testThreadUnsafe() {
+  // Map<Integer, Integer> map = new LruCache<>(3);
+  // IntStream.range(0, 1024).boxed().parallel().forEach(index -> map.put(index, index));
+  // assertTrue(3 < map.size());
+  // }
 }

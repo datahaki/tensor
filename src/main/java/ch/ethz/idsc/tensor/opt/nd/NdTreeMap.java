@@ -22,8 +22,6 @@ import ch.ethz.idsc.tensor.ext.StringRepeat;
 /** the query {@link NdTreeMap#cluster(NdCenterInterface, int)}
  * can be used in parallel. */
 public class NdTreeMap<V> implements NdMap<V>, Serializable {
-  private static final long serialVersionUID = -4501971561107313164L;
-  // ---
   private final Tensor global_lBounds;
   private final Tensor global_uBounds;
   private final int maxDensity;
@@ -102,8 +100,6 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
   }
 
   private class Node implements Serializable {
-    private static final long serialVersionUID = 4715375989998529775L;
-    // ---
     private final int depth;
     private Node lChild;
     private Node rChild;

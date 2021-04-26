@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor.nrm;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -39,8 +38,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Normalize.html">Normalize</a> */
 public class Normalize implements TensorUnaryOperator {
-  private static final long serialVersionUID = 1092317967870256569L;
-
   /** Examples:
    * <pre>
    * Normalize.with(Vector1Norm::of).apply({2, -3, 1}) == {1/3, -1/2, 1/6}
@@ -84,14 +81,14 @@ public class Normalize implements TensorUnaryOperator {
   /* package */ Tensor normalize(Tensor vector, Scalar scalar) {
     vector = vector.divide(scalar); // eliminate common Unit if present
     scalar = tensorScalarFunction.apply(vector); // for verification
-    Scalar error_next = Abs.between(scalar, RealScalar.ONE); // error
+    Scalar error_next = Abs.between(scalar, scalar.one()); // error
     Scalar error_prev = DoubleScalar.POSITIVE_INFINITY;
     if (Scalars.nonZero(error_next))
       while (Scalars.lessThan(error_next, error_prev)) { // iteration
         vector = vector.divide(scalar);
         scalar = tensorScalarFunction.apply(vector);
         error_prev = error_next;
-        error_next = Abs.between(scalar, RealScalar.ONE);
+        error_next = Abs.between(scalar, scalar.one());
       }
     chop.requireZero(error_next);
     return vector;

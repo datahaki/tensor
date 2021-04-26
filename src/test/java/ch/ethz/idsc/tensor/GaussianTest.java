@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.Expectation;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -40,6 +41,13 @@ public class GaussianTest extends TestCase {
     assertEquals(mean, actual);
   }
 
+  public void testNonExact() {
+    assertTrue(ExactScalarQ.of(Gaussian.of(1, 2)));
+    assertFalse(ExactScalarQ.of(Gaussian.of(1, 0.2)));
+    assertFalse(ExactScalarQ.of(Gaussian.of(0.3, 2)));
+    assertFalse(ExactScalarQ.of(Gaussian.of(0.3, 0.5)));
+  }
+
   public void testGaussianWithQuantity() {
     Scalar gq1 = Gaussian.of( //
         Quantity.of(3, "m"), //
@@ -71,11 +79,14 @@ public class GaussianTest extends TestCase {
     Gaussian gq1 = (Gaussian) Gaussian.of( //
         Quantity.of(3, "m"), //
         Quantity.of(2, "m^2"));
+    ExactScalarQ.require(gq1);
     Distribution distribution = gq1.distribution(); // operates on Quantity
     Scalar rand = RandomVariate.of(distribution); // produces quantity with [m]
     assertTrue(rand instanceof Quantity);
     assertEquals(Expectation.mean(distribution), Quantity.of(3, "m"));
-    Chop._12.requireClose( // exact would be nice
+    assertEquals(gq1.one(), RealScalar.ONE);
+    assertEquals(gq1.one().multiply(gq1), gq1);
+    Tolerance.CHOP.requireClose( // exact would be nice
         Expectation.variance(distribution), Quantity.of(2, "m^2"));
   }
 

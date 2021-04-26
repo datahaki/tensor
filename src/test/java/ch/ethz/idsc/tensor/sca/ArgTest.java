@@ -28,8 +28,9 @@ public class ArgTest extends TestCase {
   }
 
   public void testDecimal() {
-    assertEquals(Arg.of(DecimalScalar.of(new BigDecimal("3.14", MathContext.DECIMAL128))), RealScalar.ZERO);
-    assertEquals(Arg.of(DecimalScalar.of(new BigDecimal("-112.14", MathContext.DECIMAL128))), RealScalar.of(Math.PI));
+    MathContext mc = MathContext.DECIMAL128;
+    assertEquals(Arg.of(DecimalScalar.of(new BigDecimal("3.14", mc), mc.getPrecision())), RealScalar.ZERO);
+    assertEquals(Arg.of(DecimalScalar.of(new BigDecimal("-112.14", mc), mc.getPrecision())), RealScalar.of(Math.PI));
   }
 
   public void testQuantity() {

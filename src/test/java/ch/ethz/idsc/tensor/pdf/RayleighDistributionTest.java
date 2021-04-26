@@ -42,8 +42,8 @@ public class RayleighDistributionTest extends TestCase {
   public void testRandom() {
     RayleighDistribution distribution = (RayleighDistribution) RayleighDistribution.of(RealScalar.of(1.3));
     RandomVariate.of(distribution, 100);
-    Scalar q0 = distribution.randomVariate(0.0);
-    Scalar q1 = distribution.randomVariate(Math.nextDown(1.0));
+    Scalar q0 = distribution.protected_quantile(RealScalar.ZERO);
+    Scalar q1 = distribution.protected_quantile(RealScalar.of(Math.nextDown(1.0)));
     NumberQ.require(q0);
     NumberQ.require(q1);
   }

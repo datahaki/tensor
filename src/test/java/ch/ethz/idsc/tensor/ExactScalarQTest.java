@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor;
 
+import java.math.BigDecimal;
+
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -15,15 +17,15 @@ public class ExactScalarQTest extends TestCase {
 
   public void testNegative() {
     assertFalse(ExactScalarQ.of(DoubleScalar.of(0)));
-    assertFalse(ExactScalarQ.of(DecimalScalar.of("0")));
+    assertFalse(ExactScalarQ.of(DecimalScalar.of(new BigDecimal("0"))));
     assertFalse(ExactScalarQ.of(DoubleScalar.of(3.14)));
     assertFalse(ExactScalarQ.of(DoubleScalar.POSITIVE_INFINITY));
     assertFalse(ExactScalarQ.of(DoubleScalar.INDETERMINATE));
   }
 
   public void testDecimal() {
-    assertFalse(ExactScalarQ.of(DecimalScalar.of("3.14")));
-    assertFalse(ExactScalarQ.of(DecimalScalar.of("31234")));
+    assertFalse(ExactScalarQ.of(DecimalScalar.of(new BigDecimal("3.14"))));
+    assertFalse(ExactScalarQ.of(DecimalScalar.of(new BigDecimal("31234"))));
   }
 
   public void testComplex() {

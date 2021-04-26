@@ -1,6 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.math.BigDecimal;
+
 import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -28,7 +30,7 @@ public class QuantityCompareTest extends TestCase {
   public void testEquals2() {
     _checkEquals(RationalScalar.of(0, 1), Quantity.of(0, "m"), false);
     _checkEquals(DoubleScalar.of(0.0), Quantity.of(0, "m"), false);
-    _checkEquals(DecimalScalar.of("0.0"), Quantity.of(0, "m"), false);
+    _checkEquals(DecimalScalar.of(new BigDecimal("0.0")), Quantity.of(0, "m"), false);
   }
 
   public void testEquals3() {

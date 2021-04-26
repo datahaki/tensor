@@ -18,7 +18,7 @@ import ch.ethz.idsc.tensor.alg.Sort;
 import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.mat.LinearSolve;
-import ch.ethz.idsc.tensor.mat.Pivots;
+import ch.ethz.idsc.tensor.mat.re.Pivots;
 import ch.ethz.idsc.tensor.nrm.Vector2NormSquared;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.ArgMax;
@@ -110,6 +110,14 @@ public class GaussScalarTest extends TestCase {
       }
     }
     assertEquals(count, 6);
+    AssertFail.of(() -> Sqrt.of(GaussScalar.of(2, 11)));
+  }
+
+  public void testSqrt5() {
+    assertEquals(Sqrt.of(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
+    assertEquals(Sqrt.of(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
+    AssertFail.of(() -> Sqrt.of(GaussScalar.of(2, 5)));
+    AssertFail.of(() -> Sqrt.of(GaussScalar.of(3, 5)));
   }
 
   public void testNumber() {

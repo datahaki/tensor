@@ -8,7 +8,6 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.sca.Clips;
 
 /* package */ class GrayscaleColorData implements ColorDataGradient {
-  private static final long serialVersionUID = -4371124820475579246L;
   public static final ColorDataGradient DEFAULT = new GrayscaleColorData(255);
   /***************************************************/
   private final Tensor[] tensors = new Tensor[256];

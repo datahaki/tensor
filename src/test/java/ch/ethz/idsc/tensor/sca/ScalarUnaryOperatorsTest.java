@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.sca;
 
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import junit.framework.TestCase;
 
@@ -24,14 +25,14 @@ public class ScalarUnaryOperatorsTest extends TestCase {
       Cosh.FUNCTION, //
       Cot.FUNCTION, //
       CubeRoot.FUNCTION, //
-      Decrement.ONE, //
+      s -> s.subtract(RealScalar.ONE), //
       Exp.FUNCTION, //
       Floor.FUNCTION, //
       Fresnel.FUNCTION, //
       Gamma.FUNCTION, //
       Gudermannian.FUNCTION, //
       Imag.FUNCTION, //
-      Increment.ONE, //
+      RealScalar.ONE::add, //
       InvertUnlessZero.FUNCTION, //
       Log.FUNCTION, //
       Log10.FUNCTION, //

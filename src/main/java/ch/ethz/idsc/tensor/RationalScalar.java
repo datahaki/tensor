@@ -20,7 +20,6 @@ import ch.ethz.idsc.tensor.api.NInterface;
  * zero().reciprocal() throws a {@link ArithmeticException}. */
 public final class RationalScalar extends AbstractRealScalar implements //
     ExactScalarQInterface, NInterface, Serializable {
-  private static final long serialVersionUID = 3378367439547596689L;
   /** rational number {@code 1/2} with decimal value {@code 0.5} */
   public static final Scalar HALF = of(1, 2);
 
@@ -61,7 +60,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
   }
 
   @Override // from Scalar
-  public Scalar negate() {
+  public RationalScalar negate() {
     return new RationalScalar(bigFraction.negate());
   }
 
@@ -95,7 +94,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
   }
 
   @Override // from Scalar
-  public Scalar reciprocal() {
+  public RationalScalar reciprocal() {
     return new RationalScalar(bigFraction.reciprocal());
   }
 
@@ -141,7 +140,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
   /***************************************************/
   @Override // from RoundingInterface
   public Scalar ceiling() {
-    return of(toBigDecimal(0, RoundingMode.CEILING).toBigIntegerExact(), BigInteger.ONE);
+    return round(RoundingMode.CEILING);
   }
 
   @Override // from Comparable<Scalar>
@@ -157,7 +156,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar floor() {
-    return of(toBigDecimal(0, RoundingMode.FLOOR).toBigIntegerExact(), BigInteger.ONE);
+    return round(RoundingMode.FLOOR);
   }
 
   @Override // from ExactScalarQInterface
@@ -172,7 +171,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
 
   @Override // from NInterface
   public Scalar n(MathContext mathContext) {
-    return DecimalScalar.of(toBigDecimal(mathContext));
+    return DecimalScalar.of(toBigDecimal(mathContext), mathContext.getPrecision());
   }
 
   @Override // from AbstractRealScalar
@@ -189,7 +188,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar round() {
-    return of(toBigDecimal(0, RoundingMode.HALF_UP).toBigIntegerExact(), BigInteger.ONE);
+    return round(RoundingMode.HALF_UP);
   }
 
   @Override // from AbstractRealScalar
@@ -226,12 +225,17 @@ public final class RationalScalar extends AbstractRealScalar implements //
     return bigFraction.denominator();
   }
 
-  private BigDecimal toBigDecimal(int scale, RoundingMode roundingMode) {
-    return new BigDecimal(numerator()).divide(new BigDecimal(denominator()), scale, roundingMode);
+  /** @param roundingMode
+   * @return for instance HALF_UP[5/3] == 2, or FLOOR[5/3] == 1 */
+  private Scalar round(RoundingMode roundingMode) {
+    return integer(new BigDecimal(numerator()) //
+        .divide(new BigDecimal(denominator()), 0, roundingMode) //
+        .toBigIntegerExact());
   }
 
   /* package */ BigDecimal toBigDecimal(MathContext mathContext) {
-    return new BigDecimal(numerator()).divide(new BigDecimal(denominator()), mathContext);
+    return new BigDecimal(numerator()) //
+        .divide(new BigDecimal(denominator()), mathContext);
   }
 
   /* package */ boolean isInteger() {

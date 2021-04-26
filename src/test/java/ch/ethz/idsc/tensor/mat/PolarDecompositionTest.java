@@ -6,15 +6,18 @@ import java.util.List;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
+import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dimensions;
 import ch.ethz.idsc.tensor.alg.Dot;
+import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.lie.MatrixExp;
 import ch.ethz.idsc.tensor.lie.TensorWedge;
+import ch.ethz.idsc.tensor.mat.re.Det;
 import ch.ethz.idsc.tensor.pdf.CauchyDistribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.Imag;
+import ch.ethz.idsc.tensor.sca.Conjugate;
 import ch.ethz.idsc.tensor.sca.Sign;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -25,11 +28,10 @@ public class PolarDecompositionTest extends TestCase {
     int k = list.get(0);
     Tolerance.CHOP.requireClose(Dot.of(polarDecomposition.getS(), polarDecomposition.getR()), matrix);
     Tensor result = polarDecomposition.getR();
-    OrthogonalMatrixQ.require(result, Chop._06);
-    Chop.NONE.requireAllZero(Imag.of(result));
+    UnitaryMatrixQ.require(result, Chop._06);
     Tensor sym = polarDecomposition.getS();
     assertEquals(Dimensions.of(sym), Arrays.asList(k, k));
-    SymmetricMatrixQ.require(sym);
+    HermitianMatrixQ.require(sym, Chop._06);
     assertTrue(polarDecomposition.toString().startsWith("PolarDecomposition["));
   }
 
@@ -77,6 +79,19 @@ public class PolarDecompositionTest extends TestCase {
       Tensor result = Orthogonalize.usingSvd(matrix);
       Tolerance.CHOP.requireClose(result, matrix);
     }
+  }
+
+  public void testComplex() {
+    Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
+    Tensor mmt = MatrixDotTranspose.of(matrix, Conjugate.of(matrix));
+    HermitianMatrixQ.require(mmt);
+    PolarDecomposition polarDecomposition = PolarDecomposition.of(matrix);
+    Tensor herm = polarDecomposition.getS().map(Tolerance.CHOP);
+    HermitianMatrixQ.require(herm);
+    Tensor result = polarDecomposition.getR();
+    UnitaryMatrixQ.require(result, Chop._06);
+    _check(matrix, polarDecomposition);
+    // System.out.println(Pretty.of(herm));
   }
 
   public void testFail() {

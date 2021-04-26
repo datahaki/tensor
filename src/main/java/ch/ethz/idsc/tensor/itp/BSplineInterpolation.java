@@ -22,8 +22,6 @@ import ch.ethz.idsc.tensor.mat.LinearSolve;
  * </pre>
  * where x_0 is a real number, and i_1, ..., i_n are integers. */
 public class BSplineInterpolation extends AbstractInterpolation implements Serializable {
-  private static final long serialVersionUID = -5285476231580435365L;
-
   /** @param degree of b-spline basis functions: 1 for linear, 2 for quadratic, etc.
    * @param control points with at least one element
    * @return */

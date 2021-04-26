@@ -46,7 +46,7 @@ public class DecimalScalarTest extends TestCase {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL128));
     Scalar d = s.under(RationalScalar.of(1, 2));
     assertTrue(d instanceof DecimalScalar);
-    Chop._10.requireClose(d, DoubleScalar.of(0.5 / Math.PI));
+    Tolerance.CHOP.requireClose(d, DoubleScalar.of(0.5 / Math.PI));
   }
 
   public void testUnderDecimal() {
@@ -54,7 +54,7 @@ public class DecimalScalarTest extends TestCase {
     Scalar d2 = DecimalScalar.of(new BigDecimal("-11.233", MathContext.DECIMAL128));
     Scalar res = d1.under(d2);
     assertTrue(res instanceof DecimalScalar);
-    Chop._10.requireClose(res, DoubleScalar.of(-11.233 / 123.0123));
+    Tolerance.CHOP.requireClose(res, DoubleScalar.of(-11.233 / 123.0123));
   }
 
   public void testN() {
@@ -65,7 +65,7 @@ public class DecimalScalarTest extends TestCase {
 
   public void testTrig() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL32));
-    Chop._06.requireZero(Sin.of(s));
+    Chop._06.requireZero(Sin.of(s)); // decimal32 is similiar to float
     Tolerance.CHOP.requireClose(Cos.of(s), RealScalar.ONE.negate());
   }
 
@@ -126,11 +126,16 @@ public class DecimalScalarTest extends TestCase {
   public void testPrecision() {
     Random random = new Random();
     for (int value = random.nextInt(83); value < 10000; value += 83) {
-      DecimalScalar decimalScalar = (DecimalScalar) DecimalScalar.of("" + Math.sqrt(value));
+      DecimalScalar decimalScalar = (DecimalScalar) DecimalScalar.of(new BigDecimal("" + Math.sqrt(value)));
       String string = decimalScalar.toString();
       Scalar dbl_s = Scalars.fromString(string);
       assertEquals(decimalScalar, dbl_s);
     }
+  }
+
+  public void testPrecisionFunc() {
+    DecimalScalar scalar = (DecimalScalar) Scalars.fromString("123.123123123`50");
+    assertEquals(scalar.precision(), 50);
   }
 
   public void testDecimalEmpty() {

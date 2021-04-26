@@ -16,7 +16,6 @@ import ch.ethz.idsc.tensor.ext.Serialization;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.Chop;
-import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -39,7 +38,7 @@ public class ColorDataGradientsTest extends TestCase {
     Scalar nan = DoubleScalar.INDETERMINATE;
     for (ColorDataGradient colorDataGradient : ColorDataGradients.values()) {
       Tensor copy = colorDataGradient.apply(nan);
-      colorDataGradient.apply(nan).set(Increment.ONE, 1);
+      colorDataGradient.apply(nan).set(RealScalar.ONE::add, 1);
       assertEquals(copy, colorDataGradient.apply(nan));
       Chop.NONE.requireAllZero(colorDataGradient.apply(nan));
     }

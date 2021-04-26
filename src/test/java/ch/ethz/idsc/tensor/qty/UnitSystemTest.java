@@ -3,6 +3,7 @@ package ch.ethz.idsc.tensor.qty;
 
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Set;
 
 import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
@@ -21,7 +22,7 @@ public class UnitSystemTest extends TestCase {
   public void testSize() {
     TestHelper.checkInvariant(UnitSystem.SI());
     int size = UnitSystem.SI().map().size();
-    if (size < 113) {
+    if (size < 121) {
       System.err.println("unit count: " + size);
       fail();
     }
@@ -101,6 +102,26 @@ public class UnitSystemTest extends TestCase {
     Scalar r3 = Quantity.of(RationalScalar.of(463, 250), "km*h^-1");
     ExactScalarQ.require(r3);
     assertEquals(r2, r3);
+  }
+
+  public void testSmallSi() throws ClassNotFoundException, IOException {
+    Properties properties = ResourceData.properties("/unit/small.properties");
+    assertFalse(properties.entrySet().isEmpty());
+    UnitSystem unitSystem = Serialization.copy(SimpleUnitSystem.from(properties));
+    Set<String> set = UnitSystems.base(unitSystem);
+    assertEquals(set.size(), 7);
+    assertTrue(set.contains("K"));
+    assertTrue(set.contains("cd"));
+    assertTrue(set.contains("A"));
+    assertTrue(set.contains("m"));
+    assertTrue(set.contains("s"));
+    assertTrue(set.contains("kg"));
+    assertTrue(set.contains("mol"));
+    // unitSystem.apply(Quantity.of(1, "K"));
+    Set<String> set2 = KnownUnitQ.buildSet(unitSystem);
+    assertTrue(set2.contains("K"));
+    assertTrue(set2.contains("N"));
+    assertTrue(set2.contains("kg"));
   }
 
   public void testFail1() {

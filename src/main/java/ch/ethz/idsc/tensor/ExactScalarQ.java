@@ -4,8 +4,8 @@ package ch.ethz.idsc.tensor;
 import java.util.Objects;
 
 import ch.ethz.idsc.tensor.api.ExactScalarQInterface;
-import ch.ethz.idsc.tensor.mat.RowReduce;
-import ch.ethz.idsc.tensor.mat.SingularValueDecomposition;
+import ch.ethz.idsc.tensor.mat.re.RowReduce;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
 import ch.ethz.idsc.tensor.qty.Quantity;
 
 /** predicate to test if scalar is encoded in exact precision.

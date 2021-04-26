@@ -16,7 +16,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/NegativeBinomialDistribution.html">NegativeBinomialDistribution</a> */
 public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution implements VarianceInterface {
-  private static final long serialVersionUID = 2131261893426076929L;
   private static final Chop TOLERANCE = Chop._12;
 
   /** @param n non-negative

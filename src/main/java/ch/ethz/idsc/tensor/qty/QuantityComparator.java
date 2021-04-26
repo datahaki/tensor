@@ -13,17 +13,16 @@ import ch.ethz.idsc.tensor.Scalars;
  * {4[rad], 300[deg], 2, 180[rad], -1[rad]} to
  * {-1[rad], 2, 4[rad], 300[deg], 180[rad]} */
 public class QuantityComparator implements Comparator<Scalar>, Serializable {
-  private static final long serialVersionUID = 753401830498446375L;
-  private static final Comparator<Scalar> SI = of(UnitSystem.SI());
+  private static final QuantityComparator SI = of(UnitSystem.SI());
 
   /** @param unitSystem non-null
    * @return */
-  public static Comparator<Scalar> of(UnitSystem unitSystem) {
+  public static QuantityComparator of(UnitSystem unitSystem) {
     return new QuantityComparator(Objects.requireNonNull(unitSystem));
   }
 
   /** @return */
-  public static Comparator<Scalar> SI() {
+  public static QuantityComparator SI() {
     return SI;
   }
 
@@ -40,5 +39,21 @@ public class QuantityComparator implements Comparator<Scalar>, Serializable {
     return Scalars.compare( //
         unitSystem.apply(scalar1), //
         unitSystem.apply(scalar2));
+  }
+
+  /** @param s1
+   * @param s2
+   * @return true if s1 < s2
+   * @throws Exception if s1 and s2 do not have compatible units */
+  public boolean lessThan(Scalar s1, Scalar s2) {
+    return compare(s1, s2) < 0;
+  }
+
+  /** @param s1
+   * @param s2
+   * @return true if s1 <= s2
+   * @throws Exception if s1 and s2 do not have compatible units */
+  public boolean lessEquals(Scalar s1, Scalar s2) {
+    return compare(s1, s2) <= 0;
   }
 }

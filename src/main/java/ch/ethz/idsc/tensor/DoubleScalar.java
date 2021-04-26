@@ -3,7 +3,6 @@ package ch.ethz.idsc.tensor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.math.RoundingMode;
 
 import ch.ethz.idsc.tensor.api.ChopInterface;
@@ -42,7 +41,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * Scalars.fromString("-0.0") gives DoubleScalar.of(0.0) */
 public final class DoubleScalar extends AbstractRealScalar implements //
     ChopInterface, MachineNumberQInterface, Serializable {
-  private static final long serialVersionUID = 7953191282174582457L;
   /** real scalar that encodes +Infinity. value is backed by Double.POSITIVE_INFINITY */
   public static final Scalar POSITIVE_INFINITY = of(Double.POSITIVE_INFINITY);
   /** real scalar that encodes -Infinity. value is backed by Double.NEGATIVE_INFINITY */
@@ -148,8 +146,8 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   @Override // from RoundingInterface
   public Scalar ceiling() {
     return isMachineNumber() //
-        ? RationalScalar.of(StaticHelper.ceiling(bigDecimal()), BigInteger.ONE)
-        : this;
+        ? RationalScalar.integer(BigDecimalMath.ceiling(bigDecimal()))
+        : this; // value non finite
   }
 
   @Override // from ChopInterface
@@ -160,8 +158,8 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   @Override // from RoundingInterface
   public Scalar floor() {
     return isMachineNumber() //
-        ? RationalScalar.of(StaticHelper.floor(bigDecimal()), BigInteger.ONE)
-        : this;
+        ? RationalScalar.integer(BigDecimalMath.floor(bigDecimal()))
+        : this; // value non finite
   }
 
   /** @return true if the argument is a finite floating-point
@@ -174,8 +172,8 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   @Override // from RoundingInterface
   public Scalar round() {
     return isMachineNumber() //
-        ? RationalScalar.of(bigDecimal().setScale(0, RoundingMode.HALF_UP).toBigIntegerExact(), BigInteger.ONE)
-        : this;
+        ? RationalScalar.integer(bigDecimal().setScale(0, RoundingMode.HALF_UP).toBigIntegerExact())
+        : this; // value non finite
   }
 
   @Override // from AbstractRealScalar

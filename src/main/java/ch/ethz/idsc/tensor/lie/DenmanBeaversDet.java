@@ -9,10 +9,10 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
-import ch.ethz.idsc.tensor.mat.GaussianElimination;
 import ch.ethz.idsc.tensor.mat.HermitianMatrixQ;
 import ch.ethz.idsc.tensor.mat.Inverse;
-import ch.ethz.idsc.tensor.mat.Pivots;
+import ch.ethz.idsc.tensor.mat.re.GaussianElimination;
+import ch.ethz.idsc.tensor.mat.re.Pivots;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Power;
@@ -24,7 +24,6 @@ import ch.ethz.idsc.tensor.sca.Power;
  * "Approximating the Logarithm of a Matrix to Specified Accuracy"
  * by Sheung Hun Cheng, Nicholas J. Higham, Charles S. Kenny, Alan J. Laub, 2001 */
 /* package */ class DenmanBeaversDet implements MatrixSqrt, Serializable {
-  private static final long serialVersionUID = 4950881448068901474L;
   private static final int MAX_ITERATIONS = 100;
   private static final Scalar HALF = RealScalar.of(0.5);
   private static final Scalar _1_4 = RealScalar.of(0.25);

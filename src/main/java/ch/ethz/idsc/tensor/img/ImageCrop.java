@@ -18,8 +18,6 @@ import ch.ethz.idsc.tensor.red.Total;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ImageCrop.html">ImageCrop</a> */
 public class ImageCrop implements TensorUnaryOperator {
-  private static final long serialVersionUID = 483828557708350984L;
-
   /** for grayscale images given value should be a scalar
    * for RGBA images given value should be a vector of length 4
    * 

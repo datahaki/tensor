@@ -1,13 +1,8 @@
 // code by jph
 package ch.ethz.idsc.tensor.opt.lp;
 
-import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
-import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Join;
-import ch.ethz.idsc.tensor.mat.IdentityMatrix;
-import ch.ethz.idsc.tensor.sca.Sign;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
 
 /** linear programming solution for small scale problems.
  * The implementation has only been tested on a few cases.
@@ -20,86 +15,22 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * <a href="https://reference.wolfram.com/language/ref/LinearProgramming.html">LinearProgramming</a> */
 public enum LinearProgramming {
   ;
-  /** @param c
-   * @param m
-   * @param b
-   * @param simplexPivot used for decent
-   * @return x >= 0 that minimizes c.x subject to m.x == b */
-  public static Tensor minEquals(Tensor c, Tensor m, Tensor b, SimplexPivot simplexPivot) {
-    Tensor x = SimplexMethod.of(c.unmodifiable(), m.unmodifiable(), b.unmodifiable(), simplexPivot);
-    if (isFeasible(m, x, b))
-      return x;
-    throw TensorRuntimeException.of(c, m, x, b);
+  /** @param linearProgram
+   * @param simplexPivot
+   * @return */
+  public static Tensor of(LinearProgram linearProgram, SimplexPivot simplexPivot) {
+    LinearProgram lp_standard = linearProgram.standard();
+    Tensor x = linearProgram.constraintType.equals(ConstraintType.LESS_EQUALS) && //
+        StaticHelper.isNonNegative(linearProgram.b) //
+            ? SimplexMethod.of(lp_standard, simplexPivot)
+            : SimplexMethod.of(lp_standard.minObjective(), lp_standard.A, lp_standard.b, simplexPivot);
+    Tensor x_extract = x.extract(0, lp_standard.var_count());
+    return linearProgram.requireFeasible(x_extract);
   }
 
-  /** @param c
-   * @param m
-   * @param b
-   * @return x >= 0 that minimizes c.x subject to m.x == b */
-  public static Tensor minEquals(Tensor c, Tensor m, Tensor b) {
-    return minEquals(c, m, b, SimplexPivots.NONBASIC_GRADIENT);
-  }
-
-  /** @param c
-   * @param m
-   * @param b
-   * @return x >= 0 that maximizes c.x subject to m.x == b */
-  public static Tensor maxEquals(Tensor c, Tensor m, Tensor b, SimplexPivot simplexPivot) {
-    return minEquals(c.negate(), m, b, simplexPivot);
-  }
-
-  /** @param c
-   * @param m
-   * @param b
-   * @return x >= 0 that maximizes c.x subject to m.x == b */
-  public static Tensor maxEquals(Tensor c, Tensor m, Tensor b) {
-    return minEquals(c.negate(), m, b);
-  }
-
-  /** implementation transforms problem into slack form and invokes minEquals()
-   * 
-   * @param c
-   * @param m
-   * @param b
-   * @return x >= 0 that minimizes c.x subject to m.x <= b */
-  public static Tensor minLessEquals(Tensor c, Tensor m, Tensor b, SimplexPivot simplexPivot) {
-    Tensor ceq = Join.of(c, Array.zeros(m.length()));
-    // Tensor D = DiagonalMatrix.of(b.map(UnitStep.function));
-    // IdentityMatrix.of(m.length())
-    Tensor meq = Join.of(1, m, IdentityMatrix.of(m.length()));
-    Tensor xeq = minEquals(ceq, meq, b, simplexPivot);
-    Tensor x = Tensor.of(xeq.stream().limit(c.length()));
-    if (isFeasible(m, x, b))
-      return x;
-    throw TensorRuntimeException.of(c, m, x, b);
-  }
-
-  public static Tensor minLessEquals(Tensor c, Tensor m, Tensor b) {
-    return minLessEquals(c, m, b, SimplexPivots.NONBASIC_GRADIENT);
-  }
-
-  /** @param c
-   * @param m
-   * @param b
-   * @return x >= 0 that maximizes c.x subject to m.x <= b */
-  public static Tensor maxLessEquals(Tensor c, Tensor m, Tensor b) {
-    return minLessEquals(c.negate(), m, b);
-  }
-
-  /** @param m
-   * @param x
-   * @param b
-   * @return true if x >= 0 and m.x <= b */
-  public static boolean isFeasible(Tensor m, Tensor x, Tensor b) {
-    return isNonNegative(x) //
-        && isNonNegative(b.subtract(m.dot(x)));
-  }
-
-  /** @param vector
-   * @return true if all entries in vector are non-negative */
-  /* package */ static boolean isNonNegative(Tensor vector) {
-    return vector.stream() // all vector_i >= 0
-        .map(Scalar.class::cast) //
-        .allMatch(Sign::isPositiveOrZero);
+  /** @param linearProgram
+   * @return */
+  public static Tensor of(LinearProgram linearProgram) {
+    return of(linearProgram, SimplexPivots.NONBASIC_GRADIENT);
   }
 }

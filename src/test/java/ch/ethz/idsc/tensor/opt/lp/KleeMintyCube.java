@@ -5,7 +5,10 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
-import ch.ethz.idsc.tensor.io.Pretty;
+import ch.ethz.idsc.tensor.ext.Cache;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.ConstraintType;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Objective;
+import ch.ethz.idsc.tensor.opt.lp.LinearProgram.Variables;
 import ch.ethz.idsc.tensor.sca.Power;
 
 /** Quote from Wikipedia:
@@ -31,22 +34,21 @@ import ch.ethz.idsc.tensor.sca.Power;
     return i == j ? RealScalar.ONE : Power.of(2, i - j + 1);
   }
 
-  public final Tensor c; // cost
-  public final Tensor m; // matrix
-  public final Tensor b; // vector of rhs
-  public final Tensor x; // solution
+  private static final Cache<Integer, KleeMintyCube> CACHE = Cache.of(KleeMintyCube::new, 7);
 
-  public KleeMintyCube(int n) {
-    c = Tensors.vector(i -> Power.of(2, n - i - 1), n).unmodifiable();
-    m = Tensors.matrix(KleeMintyCube::coefficient, n, n).unmodifiable();
-    b = Tensors.vector(i -> Power.of(5, i + 1), n).unmodifiable();
-    x = Tensors.vector(i -> i < n - 1 ? RealScalar.ZERO : Power.of(5, n), n).unmodifiable();
+  public static KleeMintyCube of(int n) {
+    return CACHE.apply(n);
   }
 
-  public void show() {
-    System.out.println("c=" + c);
-    System.out.println("m=" + Pretty.of(m));
-    System.out.println("b=" + b);
-    System.out.println("x=" + x);
+  public final LinearProgram linearProgram;
+  public final Tensor x; // solution
+
+  private KleeMintyCube(int n) {
+    linearProgram = LinearProgram.of(Objective.MAX, Tensors.vector(i -> Power.of(2, n - i - 1), n), //
+        ConstraintType.LESS_EQUALS, //
+        Tensors.matrix(KleeMintyCube::coefficient, n, n), //
+        Tensors.vector(i -> Power.of(5, i + 1), n), //
+        Variables.NON_NEGATIVE);
+    x = Tensors.vector(i -> i < n - 1 ? RealScalar.ZERO : Power.of(5, n), n);
   }
 }

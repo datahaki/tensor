@@ -9,6 +9,7 @@ import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.ArcCos;
 import ch.ethz.idsc.tensor.sca.ArcSin;
@@ -19,10 +20,8 @@ import ch.ethz.idsc.tensor.sca.Ceiling;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Cos;
-import ch.ethz.idsc.tensor.sca.Decrement;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Floor;
-import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.LogisticSigmoid;
 import ch.ethz.idsc.tensor.sca.N;
@@ -76,7 +75,8 @@ public class ScalarUnaryOperatorTest extends TestCase {
       // ---
     }
     Ceiling.of(scalar);
-    Chop._12.of(scalar);
+    Tolerance.CHOP.of(scalar);
+    Chop._11.of(scalar);
     try {
       Clips.unit().apply(scalar);
     } catch (Exception exception) {
@@ -140,8 +140,8 @@ public class ScalarUnaryOperatorTest extends TestCase {
       // ---
     }
     // ---
-    scalar.map(Decrement.ONE);
-    scalar.map(Increment.ONE);
+    scalar.map(s -> s.subtract(RealScalar.ONE));
+    scalar.map(RealScalar.ONE::add);
   }
 
   public void testTrinity() {

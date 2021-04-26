@@ -6,7 +6,7 @@ import java.io.Serializable;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Transpose;
-import ch.ethz.idsc.tensor.mat.Eigensystem;
+import ch.ethz.idsc.tensor.mat.ev.Eigensystem;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /** Determines the square root of a symmetric positive definite matrix.
@@ -20,7 +20,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * 
  * @see MatrixPower */
 /* package */ class MatrixSqrtSymmetric implements MatrixSqrt, Serializable {
-  private static final long serialVersionUID = 1292060157590312774L;
   private final Tensor avec;
   private final Tensor ainv;
   private final Tensor sqrt;

@@ -87,7 +87,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
     if (isNonNegative()) {
       double value = number().doubleValue();
       if (LOG_LO < value && value < LOG_HI)
-        return DoubleScalar.of(Math.log1p(subtract(RealScalar.ONE).number().doubleValue()));
+        return DoubleScalar.of(Math.log1p(subtract(one()).number().doubleValue()));
       return DoubleScalar.of(Math.log(value));
     }
     return ComplexScalarImpl.of(Log.FUNCTION.apply(negate()), Pi.VALUE);
@@ -97,7 +97,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   public Scalar power(Scalar exponent) {
     if (Scalars.isZero(this)) {
       if (Scalars.isZero(exponent))
-        return ONE;
+        return ONE; // Mathematica evaluates 0^0 as Indeterminate
       if (exponent instanceof ComplexEmbedding) {
         ComplexEmbedding complexEmbedding = (ComplexEmbedding) exponent;
         if (Sign.isPositive(complexEmbedding.real()))

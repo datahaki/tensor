@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -35,8 +34,8 @@ public enum BernsteinBasis {
     Integers.requirePositiveOrZero(n);
     boolean reverse = Scalars.lessThan(RationalScalar.HALF, p);
     if (reverse)
-      p = RealScalar.ONE.subtract(p);
-    Scalar _1_p = RealScalar.ONE.subtract(p); // 1 - p
+      p = p.one().subtract(p);
+    Scalar _1_p = p.one().subtract(p); // 1 - p
     List<Tensor> list = new ArrayList<>(n + 1);
     Scalar last = Power.of(_1_p, n);
     list.add(last);

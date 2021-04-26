@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -24,10 +23,6 @@ public class DotTest extends TestCase {
     for (int index = 0; index < v.length; ++index)
       tensor = tensor.dot(v[index]);
     return tensor;
-  }
-
-  public void testDot0() {
-    AssertFail.of(() -> Dot.of());
   }
 
   public void testDot1() {
@@ -51,7 +46,7 @@ public class DotTest extends TestCase {
   public void testCopy() {
     Tensor in = Array.zeros(2);
     Tensor re = Dot.of(in);
-    re.set(Increment.ONE, Tensor.ALL);
+    re.set(RealScalar.ONE::add, Tensor.ALL);
     assertFalse(in.equals(re));
     assertEquals(in, Array.zeros(2));
   }
@@ -167,5 +162,9 @@ public class DotTest extends TestCase {
     assertEquals(Dot.combine(Arrays.asList(2), Arrays.asList(2, 3, 4, 5)), Arrays.asList(3, 4, 5));
     assertEquals(Dot.combine(Arrays.asList(3), Arrays.asList(3)), Arrays.asList());
     assertEquals(Dot.combine(Arrays.asList(1, 2, 3), Arrays.asList(3, 4, 5)), Arrays.asList(1, 2, 4, 5));
+  }
+
+  public void testDot0Fail() {
+    AssertFail.of(() -> Dot.of());
   }
 }

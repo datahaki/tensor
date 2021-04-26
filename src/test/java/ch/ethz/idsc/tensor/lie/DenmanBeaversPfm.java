@@ -17,7 +17,6 @@ import ch.ethz.idsc.tensor.sca.Chop;
  * "Approximating the Logarithm of a Matrix to Specified Accuracy"
  * by Sheung Hun Cheng, Nicholas J. Higham, Charles S. Kenny, Alan J. Laub, 2001 */
 /* package */ class DenmanBeaversPfm implements MatrixSqrt, Serializable {
-  private static final long serialVersionUID = -2546650079630430088L;
   private static final int MAX_ITERATIONS = 100;
   private static final Scalar HALF = RealScalar.of(0.5);
   private static final Scalar _1_4 = RealScalar.of(0.25);

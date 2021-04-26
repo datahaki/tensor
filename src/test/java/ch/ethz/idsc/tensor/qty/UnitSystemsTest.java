@@ -1,24 +1,21 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import ch.ethz.idsc.tensor.RationalScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.io.ResourceData;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnitSystemsTest extends TestCase {
   public void testKnownAtoms() {
-    Set<String> set = UnitSystems.known(UnitSystem.SI());
+    Set<String> set = KnownUnitQ.buildSet(UnitSystem.SI());
     assertTrue(set.contains("K"));
     assertTrue(set.contains("m"));
     assertTrue(set.contains("kW"));
@@ -37,25 +34,12 @@ public class UnitSystemsTest extends TestCase {
     AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "kW", "W"));
   }
 
-  public void testKeyCollision() {
-    Map<String, Scalar> map1 = new HashMap<>();
-    map1.put("a", RealScalar.ONE);
-    map1.put("b", RealScalar.ONE.negate());
-    Map<String, Scalar> map2 = new HashMap<>();
-    map2.put("a", RealScalar.TWO);
-    Stream.concat(map1.entrySet().stream(), map2.entrySet().stream()).collect(UnitSystems.COLLECTOR);
-  }
-
   private static UnitSystem requireInvariant(UnitSystem unitSystem, String prev, String next) {
     UnitSystem u1 = UnitSystems.rotate(unitSystem, prev, next);
     assertEquals(u1.map().size(), unitSystem.map().size());
     UnitSystem u2 = UnitSystems.rotate(u1, next, prev);
     for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
       Scalar scalar = u2.map().get(entry.getKey());
-      // if (!entry.getValue().equals(scalar)) {
-      if (!Chop._10.isClose(entry.getValue(), scalar)) {
-        // System.err.println(entry.getKey());
-      }
       Chop._10.requireClose(entry.getValue(), scalar);
     }
     TestHelper.checkInvariant(u1);
@@ -92,14 +76,12 @@ public class UnitSystemsTest extends TestCase {
 
   public void testEquivalentKilometers() {
     UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "m", "km");
-    Scalar scalar = Quantity.of(1, "N"); // W = m^2*kg*s^-3
+    Scalar scalar = Quantity.of(1, "N");
     assertEquals(unitSystem.apply(scalar), Quantity.of(RationalScalar.of(1, 1000), "kg*km*s^-2"));
   }
 
   public void testEquivalentHertz() {
     UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "s", "Hz");
-    // Scalar scalar = ; // W = m^2*kg*s^-3
-    // System.out.println(unitSystem.apply(scalar));
     assertEquals(unitSystem.apply(Quantity.of(1, "h")), Quantity.of(3600, "Hz^-1"));
     for (Entry<String, Scalar> entry : unitSystem.map().entrySet())
       assertFalse(QuantityUnit.of(entry.getValue()).map().containsKey("s"));
@@ -135,8 +117,8 @@ public class UnitSystemsTest extends TestCase {
   public void testSubstituteM_kW() {
     UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "m", "kW"); // W = m^2*kg*s^-3
     Scalar scalar = unitSystem.apply(Quantity.of(1, "km"));
-    Chop._10.requireClose(scalar, Scalars.fromString("31.622776601683793[kW^1/2*kg^-1/2*s^3/2]"));
-    Chop._09.requireClose(UnitSystem.SI().apply(scalar), Quantity.of(1000, "m"));
+    Tolerance.CHOP.requireClose(scalar, Scalars.fromString("31.622776601683793[kW^1/2*kg^-1/2*s^3/2]"));
+    Tolerance.CHOP.requireClose(UnitSystem.SI().apply(scalar), Quantity.of(1000, "m"));
   }
 
   public void testCurrency() {

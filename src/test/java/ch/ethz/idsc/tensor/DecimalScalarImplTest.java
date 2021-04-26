@@ -75,7 +75,7 @@ public class DecimalScalarImplTest extends TestCase {
   }
 
   public void testDivide2() {
-    Scalar s = DecimalScalar.of("123.345");
+    Scalar s = DecimalScalar.of(new BigDecimal("123.345"));
     Scalar d = s.divide(RationalScalar.of(2, 7));
     assertEquals(d.toString(), "431.7075");
   }
@@ -106,50 +106,50 @@ public class DecimalScalarImplTest extends TestCase {
   }
 
   public void testRound() {
-    assertEquals(Round.of(DecimalScalar.of("12.1")), RealScalar.of(12));
-    assertEquals(Round.of(DecimalScalar.of("12.99")), RealScalar.of(13));
-    assertEquals(Round.of(DecimalScalar.of("25")), RealScalar.of(25));
-    assertTrue(Round.of(DecimalScalar.of("12.99")) instanceof RationalScalar);
+    assertEquals(Round.of(DecimalScalar.of(new BigDecimal("12.1"))), RealScalar.of(12));
+    assertEquals(Round.of(DecimalScalar.of(new BigDecimal("12.99"))), RealScalar.of(13));
+    assertEquals(Round.of(DecimalScalar.of(new BigDecimal("25"))), RealScalar.of(25));
+    assertTrue(Round.of(DecimalScalar.of(new BigDecimal("12.99"))) instanceof RationalScalar);
   }
 
   public void testFloor() {
-    assertEquals(Floor.of(DecimalScalar.of("12.99")), RealScalar.of(12));
-    assertEquals(Floor.of(DecimalScalar.of("25")), RealScalar.of(25));
-    assertTrue(Floor.of(DecimalScalar.of("12.99")) instanceof RationalScalar);
+    assertEquals(Floor.of(DecimalScalar.of(new BigDecimal("12.99"))), RealScalar.of(12));
+    assertEquals(Floor.of(DecimalScalar.of(new BigDecimal("25"))), RealScalar.of(25));
+    assertTrue(Floor.of(DecimalScalar.of(new BigDecimal("12.99"))) instanceof RationalScalar);
   }
 
   public void testCeiling() {
-    assertEquals(Ceiling.of(DecimalScalar.of("12.1")), RealScalar.of(13));
-    assertEquals(Ceiling.of(DecimalScalar.of("25")), RealScalar.of(25));
-    assertTrue(Ceiling.of(DecimalScalar.of("12.99")) instanceof RationalScalar);
+    assertEquals(Ceiling.of(DecimalScalar.of(new BigDecimal("12.1"))), RealScalar.of(13));
+    assertEquals(Ceiling.of(DecimalScalar.of(new BigDecimal("25"))), RealScalar.of(25));
+    assertTrue(Ceiling.of(DecimalScalar.of(new BigDecimal("12.99"))) instanceof RationalScalar);
   }
 
   public void testCompare0() {
-    Scalar a = DecimalScalar.of("0.1");
-    Scalar b = DecimalScalar.of("0.2");
+    Scalar a = DecimalScalar.of(new BigDecimal("0.1"));
+    Scalar b = DecimalScalar.of(new BigDecimal("0.2"));
     assertTrue(Scalars.lessThan(a, b));
     assertFalse(Scalars.lessThan(b, a));
   }
 
   public void testCompare1() {
-    Scalar dec = DecimalScalar.of("0.1");
+    Scalar dec = DecimalScalar.of(new BigDecimal("0.1"));
     Scalar alt = DoubleScalar.of(0.01);
     assertTrue(Scalars.lessThan(alt, dec));
     assertFalse(Scalars.lessThan(dec, alt));
   }
 
   public void testCompare2() {
-    Scalar dec = DecimalScalar.of("0.1");
+    Scalar dec = DecimalScalar.of(new BigDecimal("0.1"));
     Scalar alt = RationalScalar.of(1, 100);
     assertTrue(Scalars.lessThan(alt, dec));
     assertFalse(Scalars.lessThan(dec, alt));
   }
 
   public void testCompare3() {
-    assertTrue(Scalars.lessThan(DecimalScalar.of("-3"), RealScalar.ZERO));
-    assertFalse(Scalars.lessThan(DecimalScalar.of("3"), RealScalar.ZERO));
-    assertFalse(Scalars.lessThan(RealScalar.ZERO, DecimalScalar.of("-3")));
-    assertTrue(Scalars.lessThan(RealScalar.ZERO, DecimalScalar.of("3")));
+    assertTrue(Scalars.lessThan(DecimalScalar.of(new BigDecimal("-3")), RealScalar.ZERO));
+    assertFalse(Scalars.lessThan(DecimalScalar.of(new BigDecimal("3")), RealScalar.ZERO));
+    assertFalse(Scalars.lessThan(RealScalar.ZERO, DecimalScalar.of(new BigDecimal("-3"))));
+    assertTrue(Scalars.lessThan(RealScalar.ZERO, DecimalScalar.of(new BigDecimal("3"))));
   }
 
   public void testEquals() {
@@ -188,7 +188,5 @@ public class DecimalScalarImplTest extends TestCase {
 
   public void testNullFail() {
     AssertFail.of(() -> DecimalScalar.of((BigDecimal) null));
-    AssertFail.of(() -> DecimalScalar.of((String) null));
-    AssertFail.of(() -> DecimalScalar.of((String) null, 10));
   }
 }

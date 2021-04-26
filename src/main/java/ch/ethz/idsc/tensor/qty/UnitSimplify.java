@@ -19,11 +19,8 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/UnitSimplify.html">UnitSimplify</a>
  * 
- * @see UnitConvert
- * @see UnitDimensions */
+ * @see UnitConvert */
 public class UnitSimplify implements ScalarUnaryOperator {
-  private static final long serialVersionUID = 6850802412643722064L;
-
   /** @param unitSystem
    * @param set of target units for example, consisting of the units "kW", "kW*h^-1", and "N*m", etc.
    * @return
@@ -44,14 +41,12 @@ public class UnitSimplify implements ScalarUnaryOperator {
   /***************************************************/
   private final UnitSystem unitSystem;
   private final Map<Unit, ScalarUnaryOperator> map = new HashMap<>();
-  private final UnitDimensions unitDimensions;
 
   private UnitSimplify(UnitSystem unitSystem, Set<Unit> set) {
     this.unitSystem = unitSystem;
-    unitDimensions = new UnitDimensions(unitSystem);
     UnitConvert unitConvert = UnitConvert.of(unitSystem);
     for (Unit target : set) { // N
-      Unit unit = unitDimensions.toBase(target); // kg*m*s^-2
+      Unit unit = unitSystem.dimensions(target); // kg*m*s^-2
       if (map.containsKey(unit))
         throw new IllegalArgumentException(map.get(unit) + " ~ " + target + " duplicate");
       map.put(unit, unitConvert.to(target));
@@ -60,7 +55,7 @@ public class UnitSimplify implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    Unit unit = unitDimensions.toBase(QuantityUnit.of(scalar));
+    Unit unit = unitSystem.dimensions(QuantityUnit.of(scalar));
     return map.containsKey(unit) //
         ? map.get(unit).apply(scalar)
         : unitSystem.apply(scalar);

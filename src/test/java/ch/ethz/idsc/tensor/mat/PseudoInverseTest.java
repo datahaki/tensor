@@ -4,6 +4,7 @@ package ch.ethz.idsc.tensor.mat;
 import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
+import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.ExactTensorQ;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
@@ -19,6 +20,7 @@ import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.red.Entrywise;
 import ch.ethz.idsc.tensor.sca.Chop;
+import ch.ethz.idsc.tensor.sca.N;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -128,6 +130,58 @@ public class PseudoInverseTest extends TestCase {
     Tensor expect = Tensors.fromString("{{-(1/3) - I/3, 1/6 - I/6, 1/6 + I/6}, {1/6 - I/3, 5/12 + I/12, -(1/12) - I/12}}");
     Tensor matrix = Tensors.fromString("{{-1 + I, 0}, {-I, 2}, {2 - I, 2 * I}}");
     assertEquals(PseudoInverse.of(matrix), expect);
+  }
+
+  public void testDecimalScalar() {
+    Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
+    Tensor pseudo = PseudoInverse.of(matrix);
+    assertTrue(pseudo.Get(1, 2) instanceof DecimalScalar);
+  }
+
+  public void testPseudoInverseIdempotent() {
+    for (int m = 3; m < 6; ++m) {
+      int n = m + 3;
+      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
+      Tensor sol = LeastSquares.usingQR(matrix, IdentityMatrix.of(n));
+      assertEquals(Dimensions.of(sol), Arrays.asList(m, n));
+      Tolerance.CHOP.requireClose(PseudoInverse.usingSvd(matrix), sol);
+    }
+  }
+
+  public void testRankDeficient() {
+    int r = 2;
+    Distribution distribution = NormalDistribution.standard();
+    Tensor m1 = RandomVariate.of(distribution, 7, r);
+    Tensor m2 = RandomVariate.of(distribution, r, 4);
+    Tensor br = RandomVariate.of(distribution, 7);
+    LeastSquares.usingQR(m1, br);
+    Tensor matrix = m1.dot(m2);
+    assertEquals(MatrixRank.of(matrix), r);
+    {
+      AssertFail.of(() -> PseudoInverse.usingQR(matrix));
+      AssertFail.of(() -> LeastSquares.usingQR(matrix, br));
+      Tensor ls1 = LeastSquares.of(matrix, br);
+      Tensor ls2 = PseudoInverse.of(matrix).dot(br);
+      Tolerance.CHOP.requireClose(ls1, ls2);
+    }
+    {
+      Tensor m = Transpose.of(matrix);
+      Tensor b = RandomVariate.of(distribution, 4);
+      AssertFail.of(() -> PseudoInverse.usingQR(m));
+      AssertFail.of(() -> LeastSquares.usingQR(m, b));
+      Tensor ls1 = LeastSquares.of(m, b);
+      Tensor ls2 = PseudoInverse.of(m).dot(b);
+      Tolerance.CHOP.requireClose(ls1, ls2);
+    }
+  }
+
+  public void testSimple() {
+    Tensor sequence = RandomVariate.of(NormalDistribution.standard(), 10, 3);
+    Tensor point = RandomVariate.of(NormalDistribution.standard(), 3);
+    Tensor matrix = Tensor.of(sequence.stream().map(point.negate()::add));
+    Tensor nullsp = LeftNullSpace.of(matrix);
+    OrthogonalMatrixQ.require(nullsp);
+    Chop._08.requireClose(PseudoInverse.usingSvd(nullsp), Transpose.of(nullsp));
   }
 
   public void testEmptyFail() {

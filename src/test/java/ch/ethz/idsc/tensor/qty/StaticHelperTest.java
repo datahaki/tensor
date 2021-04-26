@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.lang.reflect.Modifier;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,9 +17,9 @@ import junit.framework.TestCase;
 
 public class StaticHelperTest extends TestCase {
   public void testSimple() {
-    StaticHelper.requireAtomic("m");
-    AssertFail.of(() -> StaticHelper.requireAtomic("m2"));
-    AssertFail.of(() -> StaticHelper.requireAtomic("m^2"));
+    UnitParser.requireAtomic("m");
+    AssertFail.of(() -> UnitParser.requireAtomic("m2"));
+    AssertFail.of(() -> UnitParser.requireAtomic("m^2"));
   }
 
   // only used in tests
@@ -42,7 +43,7 @@ public class StaticHelperTest extends TestCase {
 
   public void testConversion0() {
     assertEquals(StaticHelper.conversion(UnitSystem.SI(), "kg", "kg"), RealScalar.ONE);
-    assertEquals(StaticHelper.conversion(UnitSystem.SI(), "K", "K"), Quantity.of(1, "K"));
+    assertEquals(StaticHelper.conversion(UnitSystem.SI(), "K", "K"), Quantity.of(1, ""));
   }
 
   public void testConversion1() {
@@ -115,5 +116,9 @@ public class StaticHelperTest extends TestCase {
 
   public void testConversionTrivial() {
     assertEquals(StaticHelper.conversion(UnitSystem.SI(), "kg*m", "kg*m"), RealScalar.ONE);
+  }
+
+  public void testPackageVisibility() {
+    assertFalse(Modifier.isPublic(StaticHelper.class.getModifiers()));
   }
 }

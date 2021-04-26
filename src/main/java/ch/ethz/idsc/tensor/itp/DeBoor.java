@@ -14,8 +14,6 @@ import ch.ethz.idsc.tensor.ext.Integers;
 
 /** DeBoor denotes the function that is defined by control points over a sequence of knots. */
 public class DeBoor implements ScalarTensorFunction {
-  private static final long serialVersionUID = 3963496805860547613L;
-
   /** @param binaryAverage non-null
    * @param knots vector of length degree * 2
    * @param control points of length degree + 1

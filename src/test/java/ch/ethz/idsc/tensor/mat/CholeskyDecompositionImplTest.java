@@ -5,13 +5,16 @@ import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.Random;
 
+import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.alg.Dot;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.ext.Serialization;
+import ch.ethz.idsc.tensor.mat.re.Pivots;
 import ch.ethz.idsc.tensor.num.GaussScalar;
+import ch.ethz.idsc.tensor.sca.N;
 import junit.framework.TestCase;
 
 public class CholeskyDecompositionImplTest extends TestCase {
@@ -47,6 +50,17 @@ public class CholeskyDecompositionImplTest extends TestCase {
     Tensor res1 = choleskyDecomposition.solve(id);
     Tensor res2 = Inverse.of(matrix, Pivots.FIRST_NON_ZERO);
     assertEquals(res1, res2);
+  }
+
+  public void testDecimalScalar() {
+    Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
+    CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix);
+    Tensor result = Dot.of( //
+        choleskyDecomposition.getL(), //
+        DiagonalMatrix.with(choleskyDecomposition.diagonal()), //
+        Transpose.of(choleskyDecomposition.getL()));
+    assertTrue(result.Get(3, 3) instanceof DecimalScalar);
+    Tolerance.CHOP.requireClose(matrix, result);
   }
 
   public void testPackageVisibility() {

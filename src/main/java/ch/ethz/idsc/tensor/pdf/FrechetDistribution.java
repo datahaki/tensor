@@ -2,6 +2,7 @@
 package ch.ethz.idsc.tensor.pdf;
 
 import java.io.Serializable;
+import java.util.Random;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -22,9 +23,8 @@ import ch.ethz.idsc.tensor.sca.Sign;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FrechetDistribution.html">FrechetDistribution</a> */
-public class FrechetDistribution extends AbstractContinuousDistribution implements //
-    InverseCDF, MeanInterface, VarianceInterface, Serializable {
-  private static final long serialVersionUID = 2354335647070308513L;
+public class FrechetDistribution implements //
+    ContinuousDistribution, Serializable {
   private static final double NEXT_DOWN_ONE = Math.nextDown(1.0);
 
   /** @param alpha positive
@@ -52,21 +52,25 @@ public class FrechetDistribution extends AbstractContinuousDistribution implemen
     this.beta = beta;
   }
 
-  @Override
-  protected Scalar randomVariate(double reference) {
+  @Override // from RandomVariateInterface
+  public Scalar randomVariate(Random random) {
+    return randomVariate(random.nextDouble());
+  }
+
+  /* package */ Scalar randomVariate(double reference) {
     // avoid result -Infinity when reference is close to 1.0
     double uniform = reference == NEXT_DOWN_ONE //
         ? reference
         : Math.nextUp(reference);
-    return quantile_unit(DoubleScalar.of(uniform));
+    return protected_quantile(DoubleScalar.of(uniform));
   }
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
-    return quantile_unit(Clips.unit().requireInside(p));
+    return protected_quantile(Clips.unit().requireInside(p));
   }
 
-  private Scalar quantile_unit(Scalar p) {
+  protected Scalar protected_quantile(Scalar p) {
     return beta.multiply(Power.of(Log.FUNCTION.apply(p).negate(), alpha.reciprocal().negate()));
   }
 
@@ -96,6 +100,11 @@ public class FrechetDistribution extends AbstractContinuousDistribution implemen
     return Sign.isPositive(x) //
         ? Exp.FUNCTION.apply(Power.of(x.divide(beta), alpha.negate()).negate())
         : RealScalar.ZERO;
+  }
+
+  @Override // from CDF
+  public Scalar p_lessEquals(Scalar x) {
+    return p_lessThan(x);
   }
 
   @Override // from Object

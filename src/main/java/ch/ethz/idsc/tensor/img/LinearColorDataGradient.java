@@ -24,7 +24,6 @@ import ch.ethz.idsc.tensor.sca.N;
  * <p>In case NumberQ.of(scalar) == false then a transparent color is assigned.
  * The result is {0, 0, 0, 0}, which corresponds to a transparent color. */
 public class LinearColorDataGradient implements ColorDataGradient {
-  private static final long serialVersionUID = -4365096873390009950L;
   private static final Clip CLIP = Clips.interval(0, 256);
 
   /** colors are generated using {@link LinearInterpolation} of given tensor

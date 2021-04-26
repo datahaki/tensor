@@ -22,8 +22,8 @@ public class SortTest extends TestCase {
     assertEquals(Sort.of(Tensors.vector(4, 5, 0, 2, -3)), Tensors.vector(-3, 0, 2, 4, 5));
     final Tensor m = Tensors.vectorDouble(0.4, 0, 0.5, 0.2, -0.3);
     assertEquals(Sort.of(m), Tensors.vectorDouble(-0.3, 0, 0.2, 0.4, 0.5));
-    assertEquals(Sort.of(m, Collections.reverseOrder()), Tensors.vectorDouble(0.5, 0.4, 0.2, 0, -0.3));
-    assertEquals(Sort.ofTensor(m.unmodifiable(), Collections.reverseOrder()), Tensors.vectorDouble(0.5, 0.4, 0.2, 0, -0.3));
+    assertEquals(Sort.ofVector(m, Collections.reverseOrder()), Tensors.vectorDouble(0.5, 0.4, 0.2, 0, -0.3));
+    assertEquals(Sort.of(m.unmodifiable(), Collections.reverseOrder()), Tensors.vectorDouble(0.5, 0.4, 0.2, 0, -0.3));
     assertEquals(Sort.of(m), Sort.of(m));
     assertEquals(Sort.of(m.unmodifiable()), Sort.of(m));
   }
@@ -36,7 +36,7 @@ public class SortTest extends TestCase {
       }
     };
     Tensor a = Tensors.fromString("{{4, 1}, {2, 8}, {9, 0}, {3, 5}}");
-    Tensor s = Sort.ofTensor(a, comparator);
+    Tensor s = Sort.of(a, comparator);
     assertEquals(s, Tensors.fromString("{{2, 8}, {3, 5}, {4, 1}, {9, 0}}"));
   }
 
@@ -59,8 +59,8 @@ public class SortTest extends TestCase {
     Scalar qs1 = GaussScalar.of(-3, 7);
     Scalar qs2 = GaussScalar.of(-3, 17);
     Tensor vec = Tensors.of(qs2, qs1);
-    assertEquals(Sort.of(vec, comparator), Tensors.of(qs1, qs2));
-    assertEquals(Sort.of(vec.unmodifiable(), comparator), Tensors.of(qs1, qs2));
+    assertEquals(Sort.ofVector(vec, comparator), Tensors.of(qs1, qs2));
+    assertEquals(Sort.ofVector(vec.unmodifiable(), comparator), Tensors.of(qs1, qs2));
   }
 
   public void testQuantity1() {
@@ -68,7 +68,7 @@ public class SortTest extends TestCase {
     Scalar qs2 = Quantity.of(2, "m");
     Tensor vec = Tensors.of(qs2, qs1);
     assertEquals(Sort.of(vec), Tensors.of(qs1, qs2));
-    assertEquals(Sort.of(vec, Collections.reverseOrder()), Tensors.of(qs2, qs1));
+    assertEquals(Sort.ofVector(vec, Collections.reverseOrder()), Tensors.of(qs2, qs1));
   }
 
   public void testQuantity2() {
@@ -90,8 +90,8 @@ public class SortTest extends TestCase {
 
   public void testSortEmpty() {
     assertEquals(Sort.of(Tensors.empty()), Tensors.empty());
+    assertEquals(Sort.ofVector(Tensors.empty(), Collections.reverseOrder()), Tensors.empty());
     assertEquals(Sort.of(Tensors.empty(), Collections.reverseOrder()), Tensors.empty());
-    assertEquals(Sort.ofTensor(Tensors.empty(), Collections.reverseOrder()), Tensors.empty());
   }
 
   public void testMatrix() {
@@ -112,6 +112,6 @@ public class SortTest extends TestCase {
   }
 
   public void testScalarVectorFail() {
-    AssertFail.of(() -> Sort.of(Tensors.vector(1, 2, 3), null));
+    AssertFail.of(() -> Sort.ofVector(Tensors.vector(1, 2, 3), null));
   }
 }

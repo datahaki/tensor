@@ -8,10 +8,10 @@ import java.util.LinkedList;
 
 /** @param <E> the type of elements held in this collection
  * 
- * implements {@link Serializable} */
+ * implements {@link Serializable}
+ * 
+ * implementation is not thread safe */
 public class BoundedLinkedList<E> extends LinkedList<E> {
-  private static final long serialVersionUID = 8415187747522283084L;
-  // ---
   private final int maxSize;
 
   /** @param maxSize non-negative

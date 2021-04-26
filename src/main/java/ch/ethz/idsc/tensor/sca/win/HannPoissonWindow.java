@@ -12,7 +12,6 @@ import ch.ethz.idsc.tensor.sca.Exp;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/HannPoissonWindow.html">HannPoissonWindow</a> */
 public class HannPoissonWindow extends ParameterizedWindow {
-  private static final long serialVersionUID = -5425874339649329404L;
   public static final ScalarUnaryOperator FUNCTION = of(RealScalar.ONE);
 
   /** @param alpha

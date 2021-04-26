@@ -10,7 +10,6 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/UnitConvert.html">UnitConvert</a> */
 public class UnitConvert implements Serializable {
-  private static final long serialVersionUID = 3007890962492122747L;
   private static final UnitConvert SI = of(UnitSystem.SI());
 
   /** @param unitSystem non-null
@@ -58,8 +57,6 @@ public class UnitConvert implements Serializable {
   }
 
   private class Inner implements ScalarUnaryOperator {
-    private static final long serialVersionUID = -6790037071964306179L;
-    // ---
     private final Unit unit;
     private final Unit base;
 

@@ -2,6 +2,8 @@
 // adapted by jph
 package ch.ethz.idsc.tensor.num;
 
+import java.math.BigDecimal;
+
 import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
@@ -27,6 +29,7 @@ public enum Pi {
   private static final Scalar _426880 = RealScalar.of(426880);
   private static final Scalar _16 = RealScalar.of(16);
   private static final ScalarUnaryOperator CUBE = Power.function(3);
+  private static final BigDecimal _10005 = new BigDecimal("10005");
 
   /** @param precision is approximately the number of correct digits in the decimal encoding
    * @return */
@@ -37,7 +40,7 @@ public enum Pi {
     Scalar X = RealScalar.ONE;
     Scalar S = _13591409;
     int k = 0;
-    Scalar root = Sqrt.FUNCTION.apply(DecimalScalar.of("10005", precision));
+    Scalar root = Sqrt.FUNCTION.apply(DecimalScalar.of(_10005, precision));
     Scalar prev = RealScalar.ZERO;
     while (true) {
       ++k;

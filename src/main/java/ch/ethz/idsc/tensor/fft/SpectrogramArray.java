@@ -21,7 +21,6 @@ import ch.ethz.idsc.tensor.sca.win.WindowFunctions;
  * @see WindowFunctions */
 // LONGTERM API so that domain of frequencies is also provided
 public class SpectrogramArray implements TensorUnaryOperator {
-  private static final long serialVersionUID = -5926698047669690913L;
   private static final ScalarUnaryOperator LOG2 = Log.base(2);
 
   /** @param vector

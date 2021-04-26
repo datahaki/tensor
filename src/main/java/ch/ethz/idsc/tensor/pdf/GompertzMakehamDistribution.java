@@ -3,23 +3,18 @@ package ch.ethz.idsc.tensor.pdf;
 
 import java.io.Serializable;
 
-import ch.ethz.idsc.tensor.DoubleScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.sca.Clips;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GompertzMakehamDistribution.html">GompertzMakehamDistribution</a> */
-public class GompertzMakehamDistribution extends AbstractContinuousDistribution implements //
-    InverseCDF, Serializable {
-  private static final long serialVersionUID = -7823838650305121533L;
-
+public class GompertzMakehamDistribution extends AbstractContinuousDistribution implements Serializable {
   /** @param lambda positive scale parameter, may be instance of {@link Quantity}
    * @param xi positive frailty parameter
    * @return */
@@ -67,19 +62,20 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
         : RealScalar.ZERO;
   }
 
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    return _quantile(Clips.unit().requireInside(p));
-  }
-
-  private Scalar _quantile(Scalar p) {
+  @Override
+  protected Scalar protected_quantile(Scalar p) {
     return Log.FUNCTION.apply(RealScalar.ONE.subtract( //
         Log.FUNCTION.apply(RealScalar.ONE.subtract(p)).divide(xi))).divide(lambda);
   }
 
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    return _quantile(DoubleScalar.of(reference));
+  @Override // from MeanInterface
+  public Scalar mean() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public Scalar variance() {
+    throw new UnsupportedOperationException();
   }
 
   @Override // from Object

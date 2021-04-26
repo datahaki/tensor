@@ -15,18 +15,20 @@ public class ScalarDivideTest extends TestCase {
       Scalar ba = b.under(a);
       assertEquals(ab, ba);
       assertEquals(ab.toString(), ba.toString());
+      assertEquals(ab.getClass(), ba.getClass());
     }
     if (Scalars.nonZero(a) && Scalars.nonZero(b)) {
       Scalar ab = a.divide(b);
       Scalar ba = a.under(b).reciprocal();
       Chop._13.requireClose(ab, ba);
+      assertEquals(ab.getClass(), ba.getClass());
     }
   }
 
   public void testSimple() {
     Unit ua = Unit.of("m^2*s^-3");
     Unit ub = Unit.of("kg*CHF^-1");
-    List<Scalar> list = ScalarAddTest.SCALARS;
+    List<Scalar> list = TestHelper.SCALARS;
     for (int i = 0; i < list.size(); ++i)
       for (int j = i; j < list.size(); ++j) {
         Scalar a = list.get(i);

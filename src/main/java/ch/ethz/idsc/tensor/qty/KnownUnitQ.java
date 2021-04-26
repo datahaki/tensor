@@ -2,6 +2,8 @@
 package ch.ethz.idsc.tensor.qty;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -18,13 +20,12 @@ import ch.ethz.idsc.tensor.Scalar;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/KnownUnitQ.html">KnownUnitQ</a> */
 public class KnownUnitQ implements Predicate<Unit>, Serializable {
-  private static final long serialVersionUID = 5835184585615654231L;
   private static final KnownUnitQ SI = in(UnitSystem.SI());
 
   /** @param unitSystem non-null
    * @return predicate according to given unit system */
   public static KnownUnitQ in(UnitSystem unitSystem) {
-    return new KnownUnitQ(UnitSystems.known(unitSystem));
+    return new KnownUnitQ(buildSet(unitSystem));
   }
 
   /** Examples:
@@ -36,6 +37,20 @@ public class KnownUnitQ implements Predicate<Unit>, Serializable {
    * @return predicate according to built-in unit system */
   public static KnownUnitQ SI() {
     return SI;
+  }
+
+  /** Example: for the SI unit system, the set of known atomic units contains
+   * "m", "K", "W", "kW", "s", "Hz", ...
+   * 
+   * @return set of all atomic units known by the unit system including those that
+   * are not further convertible */
+  /* package */ static Set<String> buildSet(UnitSystem unitSystem) {
+    Set<String> set = new HashSet<>();
+    for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
+      set.add(entry.getKey());
+      set.addAll(QuantityUnit.of(entry.getValue()).map().keySet());
+    }
+    return set;
   }
 
   /***************************************************/

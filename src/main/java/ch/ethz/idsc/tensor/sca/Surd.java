@@ -10,8 +10,6 @@ import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Surd.html">Surd</a> */
 public class Surd implements ScalarUnaryOperator {
-  private static final long serialVersionUID = 8809346622298464671L;
-
   /** @param n non-zero
    * @return operator that gives the real-valued n-th root of x
    * @throws Exception if given exponent is zero */

@@ -7,6 +7,7 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.alg.Range;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.num.Boole;
 import ch.ethz.idsc.tensor.sca.Chop;
 import junit.framework.TestCase;
@@ -18,7 +19,7 @@ public class LanczosKernelTest extends TestCase {
     for (Tensor _x : Range.of(-5, 5 + 1)) {
       Scalar param = (Scalar) _x;
       Scalar scalar = lanczosKernel.apply(param);
-      scalar = Chop._12.apply(scalar);
+      scalar = Tolerance.CHOP.apply(scalar);
       assertEquals(Boole.of(Scalars.isZero(param)), scalar);
     }
   }

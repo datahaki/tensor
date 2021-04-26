@@ -151,7 +151,11 @@ public interface Tensor extends Iterable<Tensor> {
    * 
    * <p>set(...) allows to implement in-place operations such as <code>a += 3;</code>
    * 
-   * <p>the operation may change the structure/dimensions/rank of the tensor.
+   * <p>the operation may change the structure/dimensions/rank of the tensor. The example
+   * below replaces the i-th row of given matrix with the sum of the vector entries.
+   * <pre>
+   * matrix.set(Total::ofVector, i);
+   * </pre>
    * 
    * @param function
    * @param index non-empty

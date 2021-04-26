@@ -2,12 +2,12 @@
 package ch.ethz.idsc.tensor.num;
 
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.sca.Exp;
-import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.sca.Log;
 import ch.ethz.idsc.tensor.sca.Ramp;
 
@@ -26,7 +26,7 @@ public enum Softplus implements ScalarUnaryOperator {
       return scalar;
     if (Scalars.lessThan(scalar, LO))
       return scalar.zero();
-    return Log.FUNCTION.apply(Increment.ONE.apply(Exp.FUNCTION.apply(scalar)));
+    return Log.FUNCTION.apply(Exp.FUNCTION.apply(scalar).add(RealScalar.ONE));
   }
 
   /** @param tensor

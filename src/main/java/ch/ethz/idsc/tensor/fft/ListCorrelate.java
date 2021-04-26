@@ -22,8 +22,6 @@ import ch.ethz.idsc.tensor.ext.Integers;
  * 
  * @see ListConvolve */
 public class ListCorrelate implements TensorUnaryOperator {
-  private static final long serialVersionUID = -8238452403206311829L;
-
   /** <pre>
    * ListCorrelate[{x, y}, {a, b, c, d, e, f}] ==
    * {a x + b y, b x + c y, c x + d y, d x + e y, e x + f y}

@@ -17,8 +17,6 @@ import ch.ethz.idsc.tensor.Tensor;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Dimensions.html">Dimensions</a> */
 public class Dimensions implements Serializable {
-  private static final long serialVersionUID = 5478027630166769369L;
-
   /** Examples:
    * <pre>
    * Dimensions.of[3.14] = {}

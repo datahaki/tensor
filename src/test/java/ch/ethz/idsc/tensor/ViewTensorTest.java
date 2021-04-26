@@ -4,7 +4,6 @@ package ch.ethz.idsc.tensor;
 import java.util.Arrays;
 
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -12,7 +11,7 @@ public class ViewTensorTest extends TestCase {
   public void testBlock() {
     Tensor array = Array.zeros(5, 5);
     Tensor refs = Unprotect.references(array);
-    refs.block(Arrays.asList(1, 2), Arrays.asList(2, 3)).set(Increment.ONE, Tensor.ALL, Tensor.ALL);
+    refs.block(Arrays.asList(1, 2), Arrays.asList(2, 3)).set(RealScalar.ONE::add, Tensor.ALL, Tensor.ALL);
     assertEquals(array, //
         Tensors.fromString("{{0, 0, 0, 0, 0}, {0, 0, 1, 1, 1}, {0, 0, 1, 1, 1}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}}"));
   }
@@ -21,7 +20,7 @@ public class ViewTensorTest extends TestCase {
     Tensor vector = Tensors.vector(1, 2, 3);
     Tensor access = Unprotect.references(vector);
     Tensor slevel = access.extract(1, 3);
-    slevel.set(Increment.ONE, 0);
+    slevel.set(RealScalar.ONE::add, 0);
     assertEquals(vector, Tensors.vector(1, 3, 3));
   }
 

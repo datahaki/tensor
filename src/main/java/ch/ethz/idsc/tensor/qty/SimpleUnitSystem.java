@@ -1,6 +1,7 @@
 // code by jph
 package ch.ethz.idsc.tensor.qty;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,13 +15,12 @@ import java.util.stream.Collectors;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
+import ch.ethz.idsc.tensor.ext.Cache;
 import ch.ethz.idsc.tensor.io.StringScalar;
 import ch.ethz.idsc.tensor.sca.Power;
 
 /** reference implementation of {@link UnitSystem} with emphasis on simplicity */
 public class SimpleUnitSystem implements UnitSystem {
-  private static final long serialVersionUID = 3736511423557524434L;
-
   /** given properties map a unit expression to a {@link Quantity}
    * 
    * <p>Example from the built-in file "/unit/si.properties":
@@ -50,7 +50,7 @@ public class SimpleUnitSystem implements UnitSystem {
 
   /* package */ static UnitSystem _from(Map<String, Scalar> map) {
     return new SimpleUnitSystem(map.entrySet().stream().collect(Collectors.toMap( //
-        entry -> StaticHelper.requireAtomic(entry.getKey()), // example: "kV"
+        entry -> UnitParser.requireAtomic(entry.getKey()), // example: "kV"
         entry -> requireNumeric(entry.getValue())))); // example: 1000[m^2*kg*s^-3*A^-1]
   }
 
@@ -77,34 +77,39 @@ public class SimpleUnitSystem implements UnitSystem {
 
   /***************************************************/
   private final Map<String, Scalar> map;
+  private final Cache<Unit, Factor> cache;
 
+  @SuppressWarnings("unchecked")
   private SimpleUnitSystem(Map<String, Scalar> map) {
     this.map = map;
+    cache = Cache.of((Function<Unit, Factor> & Serializable) this::factor, 3 * map.size());
+  }
+
+  private Factor factor(Unit unit) {
+    NavigableMap<String, Scalar> navigableMap = new TreeMap<>();
+    Scalar product = null; // avoids to introduce a multiplicative 1
+    for (Entry<String, Scalar> entry : unit.map().entrySet()) {
+      Scalar lookup = map.get(entry.getKey());
+      if (Objects.isNull(lookup)) // in case of base unit, e.g. "m" for SI
+        navigableMap.put(entry.getKey(), entry.getValue());
+      else { // in case of unit definitions, e.g. "Pa" for SI
+        navigableMap.remove(entry.getKey());
+        Scalar factor = Power.of(lookup, entry.getValue());
+        product = Objects.isNull(product) //
+            ? factor
+            : product.multiply(factor);
+      }
+    }
+    return Objects.isNull(product) //
+        ? FactorIdentity.INSTANCE // when unit consist of known atomics: e.g. kg*m^2*s^-3
+        : new FactorProduct(StaticHelper.multiply(product, UnitImpl.create(navigableMap)));
   }
 
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof Quantity) {
       Quantity quantity = (Quantity) scalar;
-      Unit unit = quantity.unit();
-      // LONGTERM code is redundant to UnitDimensions
-      NavigableMap<String, Scalar> navigableMap = new TreeMap<>();
-      Scalar product = null; // avoids to introduce a multiplicative 1
-      for (Entry<String, Scalar> entry : unit.map().entrySet()) {
-        Scalar lookup = map.get(entry.getKey());
-        if (Objects.isNull(lookup)) // in case of base unit, e.g. "m" for SI
-          navigableMap.put(entry.getKey(), entry.getValue());
-        else { // in case of unit definitions, e.g. "Pa" for SI
-          navigableMap.remove(entry.getKey());
-          Scalar factor = Power.of(lookup, entry.getValue());
-          product = Objects.isNull(product) //
-              ? factor
-              : product.multiply(factor);
-        }
-      }
-      return Objects.isNull(product) //
-          ? scalar
-          : StaticHelper.multiply(product.multiply(quantity.value()), UnitImpl.create(navigableMap));
+      return cache.apply(quantity.unit()).times(quantity);
     }
     return Objects.requireNonNull(scalar);
   }
@@ -112,6 +117,11 @@ public class SimpleUnitSystem implements UnitSystem {
   @Override // from UnitSystem
   public Map<String, Scalar> map() {
     return Collections.unmodifiableMap(map);
+  }
+
+  @Override // from UnitSystem
+  public Unit dimensions(Unit unit) {
+    return cache.apply(unit).dimensions(unit);
   }
 
   @Override // from Object

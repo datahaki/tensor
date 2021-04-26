@@ -6,7 +6,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.red.Max;
-import ch.ethz.idsc.tensor.red.Min;
 import ch.ethz.idsc.tensor.sca.Abs;
 import ch.ethz.idsc.tensor.sca.Sqrt;
 
@@ -22,17 +21,30 @@ public enum Hypot {
   ;
   /** @param a
    * @param b
-   * @return Sqrt[a * a + b * b] */
+   * @return Sqrt[ |a|^2 + |b|^2 ] */
   public static Scalar of(Scalar a, Scalar b) {
     Scalar ax = Abs.FUNCTION.apply(a);
     Scalar ay = Abs.FUNCTION.apply(b);
-    Scalar min = Min.of(ax, ay);
-    Scalar max = Max.of(ax, ay);
-    if (Scalars.isZero(min))
-      return max; // if min == 0 return max
-    // valid at this point: 0 < min <= max
-    Scalar ratio = min.divide(max);
-    return max.multiply(Sqrt.FUNCTION.apply(RealScalar.ONE.add(ratio.multiply(ratio))));
+    if (Scalars.isZero(ax) || Scalars.isZero(ay))
+      return ax.add(ay);
+    final Scalar max;
+    Scalar r1 = Scalars.lessThan(ax, ay) //
+        ? ax.divide(max = ay)
+        : ay.divide(max = ax);
+    // valid at this point: 0 < max
+    Scalar r2 = r1.multiply(r1);
+    return Sqrt.FUNCTION.apply(r2.one().add(r2)).multiply(max);
+  }
+
+  /** @param a without unit
+   * @return Sqrt[ |a|^2 + 1 ] */
+  public static Scalar withOne(Scalar a) {
+    Scalar ax = Abs.FUNCTION.apply(a);
+    Scalar one = ax.one();
+    if (Scalars.lessThan(ax, one))
+      return Sqrt.FUNCTION.apply(ax.multiply(ax).add(one));
+    Scalar r1 = ax.reciprocal(); // in the unit interval [0, 1]
+    return Sqrt.FUNCTION.apply(r1.multiply(r1).add(one)).multiply(ax);
   }
 
   /** function computes the 2-Norm of a vector
@@ -49,8 +61,12 @@ public enum Hypot {
    * @return 2-norm of vector
    * @throws Exception if vector is empty, or vector contains NaN */
   public static Scalar ofVector(Tensor vector) {
+    // same issue as in Pivots
     Tensor abs = vector.map(Abs.FUNCTION);
-    Scalar max = (Scalar) abs.stream().reduce(Max::of).get();
+    Scalar max = abs.stream() //
+        .map(Scalar.class::cast) //
+        // .filter(Scalars::nonZero) //
+        .reduce(Max::of).get();
     if (Scalars.isZero(max))
       return max;
     abs = abs.divide(max);

@@ -9,6 +9,11 @@ import ch.ethz.idsc.tensor.alg.MatrixDotTranspose;
 import ch.ethz.idsc.tensor.alg.PadRight;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.lie.TensorProduct;
+import ch.ethz.idsc.tensor.mat.qr.QRDecomposition;
+import ch.ethz.idsc.tensor.mat.qr.QRMathematica;
+import ch.ethz.idsc.tensor.mat.qr.QRSignOperators;
+import ch.ethz.idsc.tensor.mat.re.Det;
+import ch.ethz.idsc.tensor.mat.sv.SingularValueDecomposition;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** API inspired by Mathematica convention:
@@ -38,7 +43,7 @@ public enum Orthogonalize {
   public static Tensor of(Tensor matrix) {
     QRDecomposition qrDecomposition = //
         QRDecomposition.of(ConjugateTranspose.of(matrix), QRSignOperators.ORIENTATION);
-    return PadRight.zeros(Dimensions.of(matrix)).apply(QRMathematica.wrap(qrDecomposition).getInverseQ());
+    return PadRight.zeros(Dimensions.of(matrix)).apply(QRMathematica.wrap(qrDecomposition).getQTranspose());
   }
 
   /***************************************************/

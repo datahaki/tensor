@@ -46,9 +46,9 @@ public class GompertzMakehamDistributionTest extends TestCase {
   public void testRandomVariate() {
     GompertzMakehamDistribution gmd = (GompertzMakehamDistribution) //
     GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
-    assertTrue(Scalars.isZero(gmd.randomVariate(0)));
-    assertTrue(Scalars.lessThan(gmd.randomVariate(0), RealScalar.of(3)));
-    Scalar scalar = gmd.randomVariate(Math.nextDown(1.0));
+    assertTrue(Scalars.isZero(gmd.protected_quantile(RealScalar.ZERO)));
+    assertTrue(Scalars.lessThan(gmd.protected_quantile(RealScalar.ZERO), RealScalar.of(3)));
+    Scalar scalar = gmd.protected_quantile(RealScalar.of(Math.nextDown(1.0)));
     Clips.interval(1.7, 2).requireInside(scalar);
   }
 
@@ -80,6 +80,12 @@ public class GompertzMakehamDistributionTest extends TestCase {
     assertEquals(CDF.of(distribution).p_lessThan(Quantity.of(-2, "m^1*s^0")), RealScalar.ZERO);
   }
 
+  public void testVarianceFail() {
+    GompertzMakehamDistribution distribution = //
+        (GompertzMakehamDistribution) GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
+    AssertFail.of(() -> distribution.variance());
+  }
+
   public void testToString() {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     String string = distribution.toString();
@@ -97,7 +103,7 @@ public class GompertzMakehamDistributionTest extends TestCase {
   public void testCdfUnitFail() {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     CDF cdf = CDF.of(distribution);
-    Chop._10.requireClose(cdf.p_lessEquals(Quantity.of(+0.1, "m")), RealScalar.of(0.003040820706232905));
+    Tolerance.CHOP.requireClose(cdf.p_lessEquals(Quantity.of(+0.1, "m")), RealScalar.of(0.003040820706232905));
     assertEquals(cdf.p_lessEquals(Quantity.of(+0.0, "m")), RealScalar.ZERO);
     assertEquals(cdf.p_lessEquals(Quantity.of(-0.1, "m")), RealScalar.ZERO);
     AssertFail.of(() -> cdf.p_lessEquals(Quantity.of(-1, "m^2")));

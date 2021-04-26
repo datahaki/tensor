@@ -6,8 +6,6 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 
 /* package */ abstract class ParameterizedWindow implements ScalarUnaryOperator {
-  private static final long serialVersionUID = 6777460640385425055L;
-  // ---
   protected final Scalar alpha;
 
   protected ParameterizedWindow(Scalar alpha) {

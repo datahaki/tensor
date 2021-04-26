@@ -38,8 +38,8 @@ public class GumbelDistributionTest extends TestCase {
   public void testRandomVariate() {
     GumbelDistribution gmd = (GumbelDistribution) //
     GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
-    assertTrue(Scalars.lessThan(gmd.randomVariate(0), RealScalar.of(4.5)));
-    assertTrue(Scalars.lessThan(RealScalar.of(-4.5), gmd.randomVariate(Math.nextDown(1.0))));
+    assertTrue(Scalars.lessThan(gmd.protected_quantile(RealScalar.ZERO), RealScalar.of(4.5)));
+    assertTrue(Scalars.lessThan(RealScalar.of(-4.5), gmd.protected_quantile(RealScalar.of(Math.nextDown(1.0)))));
     InverseCDF inverseCDF = InverseCDF.of(gmd);
     Tolerance.CHOP.requireClose( //
         inverseCDF.quantile(RealScalar.of(0.123)), //
@@ -47,7 +47,7 @@ public class GumbelDistributionTest extends TestCase {
     assertEquals(inverseCDF.quantile(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
     assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
     // System.out.println(gmd.randomVariate(0.0));
-    DeterminateScalarQ.require(gmd.randomVariate(Math.nextDown(1.0)));
+    DeterminateScalarQ.require(gmd.protected_quantile(RealScalar.of(Math.nextDown(1.0))));
   }
 
   public void testQuantity() {

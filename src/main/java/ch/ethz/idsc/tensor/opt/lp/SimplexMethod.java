@@ -5,21 +5,20 @@ package ch.ethz.idsc.tensor.opt.lp;
 
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
-import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.alg.Append;
 import ch.ethz.idsc.tensor.alg.Array;
-import ch.ethz.idsc.tensor.alg.Join;
+import ch.ethz.idsc.tensor.alg.ArrayFlatten;
+import ch.ethz.idsc.tensor.alg.Last;
 import ch.ethz.idsc.tensor.alg.Partition;
 import ch.ethz.idsc.tensor.alg.Range;
-import ch.ethz.idsc.tensor.alg.TensorMap;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
-import ch.ethz.idsc.tensor.num.Boole;
 import ch.ethz.idsc.tensor.red.ArgMax;
 import ch.ethz.idsc.tensor.red.ArgMin;
+import ch.ethz.idsc.tensor.red.Total;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** traditional simplex algorithm that performs poorly on Klee-Minty cube */
@@ -28,28 +27,31 @@ import ch.ethz.idsc.tensor.sca.Sign;
    * @param A
    * @param b
    * @param simplexPivot
-   * @return */
+   * @return x with A.x == b so that c.x is minimal */
   public static Tensor of(Tensor c, Tensor A, Tensor b, SimplexPivot simplexPivot) {
     int m = b.length();
     int n = c.length();
-    // System.out.println(m + " x " + n);
-    SimplexMethod simplexMethod;
-    {
-      // Tensor D = DiagonalMatrix.of(b.map(UnitStep.function));
-      // IdentityMatrix.of(m)
-      Tensor tab = Join.of(1, A, IdentityMatrix.of(m), Partition.of(b, 1));
-      Tensor row = Tensors.vector(i -> Boole.of(n <= i && i < n + m), n + m + 1);
-      for (int index = 0; index < m; ++index) // make all entries in bottom row zero
-        row = row.subtract(tab.get(index));
-      row.set(RealScalar.ZERO, n + m); // set bottom corner to 0
-      tab.append(row);
-      simplexMethod = new SimplexMethod(tab, Range.of(n, n + m), simplexPivot); // phase 1
-    }
-    Tensor tab = Join.of(1, //
-        TensorMap.of(row -> row.extract(0, n), simplexMethod.tab.extract(0, m), 1), //
-        Partition.of(simplexMethod.tab.get(Tensor.ALL, n + m).extract(0, m), 1));
-    tab.append(Append.of(c, RealScalar.ZERO)); // set bottom corner to 0
-    return new SimplexMethod(tab, simplexMethod.ind, simplexPivot).getX(); // phase 2
+    SimplexMethod simplexMethod = new SimplexMethod(ArrayFlatten.of(new Tensor[][] { //
+        { A, IdentityMatrix.of(m), Partition.of(b, 1) }, //
+        { Tensors.of(Total.of(A).negate()), Array.zeros(1, m), Tensors.of(Tensors.of(Total.ofVector(b).zero())) }, //
+    }), Range.of(n, n + m), simplexPivot); // phase 1
+    /* set bottom corner to 0, column generally does not have uniform unit */
+    return new SimplexMethod(Tensor.of(simplexMethod.tab.stream().limit(m) //
+        .map(row -> row.extract(0, n).append(Last.of(row)))) //
+        .append(Append.of(c, RealScalar.ZERO)), //
+        simplexMethod.ind, simplexPivot).getX(); // phase 2
+  }
+
+  /** @param linearProgram
+   * @param simplexPivot
+   * @return */
+  public static Tensor of(LinearProgram linearProgram, SimplexPivot simplexPivot) {
+    Scalar c_zero = Total.ofVector(linearProgram.c.map(Scalar::zero));
+    Tensor tab = ArrayFlatten.of(new Tensor[][] { //
+        { linearProgram.A, Partition.of(linearProgram.b, 1) }, //
+        { Tensors.of(linearProgram.minObjective()), Tensors.of(Tensors.of(c_zero)) } });
+    Tensor ind = Range.of(linearProgram.var_count(), linearProgram.c.length());
+    return new SimplexMethod(tab, ind, simplexPivot).getX();
   }
 
   /***************************************************/
@@ -62,26 +64,31 @@ import ch.ethz.idsc.tensor.sca.Sign;
     this.tab = tab;
     this.ind = ind;
     m = tab.length() - 1;
-    n = Unprotect.dimension1(tab) - 1;
-    if (isOutsideRange(ind, n))
+    n = Unprotect.dimension1Hint(tab) - 1;
+    if (!StaticHelper.isInsideRange(ind, n) || ind.length() != m)
       throw TensorRuntimeException.of(ind);
     while (true) {
-      // System.out.println(Pretty.of(tab));
-      Tensor c = Tensor.of(tab.get(m).stream().limit(n));
-      final int j = ArgMin.of(withoutUnits(c));
+      /* the tests pass for "c = tab.get(m)" as well!? */
+      Tensor c = tab.get(m).extract(0, n);
+      int j = ArgMin.of(withoutUnits(c)); // "entering variable"
       if (Sign.isNegative(c.Get(j))) {
         { // check if unbounded
           int argmax = ArgMax.of(withoutUnits(tab.get(Tensor.ALL, j).extract(0, m)));
           Sign.requirePositive(tab.Get(argmax, j)); // otherwise problem unbounded
         }
-        int p = simplexPivot.get(tab, j, n);
+        int p = simplexPivot.get(tab, j, n); // "leaving variable"
         ind.set(RealScalar.of(j), p);
-        // System.out.println(ind);
-        tab.set(tab.get(p).divide(tab.Get(p, j)), p); // normalize
+        tab.set(row -> row.divide(row.Get(j)), p); // normalize
+        Tensor tab_p = tab.get(p);
         for (int i = 0; i < tab.length(); ++i)
           if (i != p)
-            tab.set(tab.get(i).subtract(tab.get(p).multiply(tab.Get(i, j))), i);
+            tab.set(row -> row.subtract(tab_p.multiply(row.Get(j))), i);
       } else
+        /** "[...] if we have all c_j >= 0 in the tableau in the minimization
+         * problem, then the current value of z is optimum."
+         * Reference:
+         * "Linear and Integer Programming made Easy"
+         * by T.C. Hu, Andrew B. Kahng, 2016 */
         break;
     }
   }
@@ -91,14 +98,6 @@ import ch.ethz.idsc.tensor.sca.Sign;
     for (int index = 0; index < ind.length(); ++index)
       x.set(tab.Get(index, n), ind.Get(index).number().intValue());
     return x;
-  }
-
-  // helper function to check consistency
-  private static boolean isOutsideRange(Tensor ind, int n) {
-    return ind.stream() //
-        .map(Scalar.class::cast) //
-        .map(Scalars::intValueExact) //
-        .anyMatch(i -> n <= i);
   }
 
   // helper function

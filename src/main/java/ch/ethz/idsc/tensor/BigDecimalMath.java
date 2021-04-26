@@ -2,15 +2,15 @@
 package ch.ethz.idsc.tensor;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
+import java.math.RoundingMode;
 
 import ch.ethz.idsc.tensor.ext.Integers;
 
 /** implementation is standalone */
 /* package */ enum BigDecimalMath {
   ;
-  private static final BigDecimal TWO = BigDecimal.valueOf(2);
-
   /** computation of square-root using Newton iteration
    * 
    * @param square
@@ -28,14 +28,15 @@ import ch.ethz.idsc.tensor.ext.Integers;
     BigDecimal xn1 = BigDecimal.ONE;
     while (xn0.compareTo(xn1) != 0) {
       xn0 = xn1;
-      BigDecimal fx = xn0.pow(2).subtract(square);
-      BigDecimal fpx = xn0.multiply(TWO);
+      BigDecimal fx = xn0.multiply(xn0).subtract(square);
+      BigDecimal fpx = xn0.add(xn0); // equals to 2 * xn0
       xn1 = fx.divide(fpx, mathContext);
       xn1 = xn0.subtract(xn1, mathContext);
     }
     return xn1;
   }
 
+  /***************************************************/
   /** @param x
    * @param mathContext
    * @return exponential of x */
@@ -43,8 +44,7 @@ import ch.ethz.idsc.tensor.ext.Integers;
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = BigDecimal.ONE;
     BigDecimal add = x;
-    int index = 0;
-    while (xn0.compareTo(xn1) != 0) {
+    for (int index = 0; xn0.compareTo(xn1) != 0;) {
       xn0 = xn1;
       add = add.multiply(x).divide(BigDecimal.valueOf(++index), mathContext);
       xn1 = xn1.add(add, mathContext);
@@ -59,10 +59,9 @@ import ch.ethz.idsc.tensor.ext.Integers;
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = x;
     BigDecimal add = x;
-    final BigDecimal x2 = x.multiply(x, mathContext);
+    BigDecimal x2 = x.multiply(x, mathContext);
     int count = 0;
-    int index = 1;
-    while (xn0.compareTo(xn1) != 0) {
+    for (int index = 1; xn0.compareTo(xn1) != 0;) {
       xn0 = xn1;
       add = add.multiply(x2).divide(BigDecimal.valueOf(++index * ++index), mathContext);
       xn1 = Integers.isEven(++count) //
@@ -79,9 +78,8 @@ import ch.ethz.idsc.tensor.ext.Integers;
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = x;
     BigDecimal add = x;
-    final BigDecimal x2 = x.multiply(x, mathContext);
-    int index = 1;
-    while (xn0.compareTo(xn1) != 0) {
+    BigDecimal x2 = x.multiply(x, mathContext);
+    for (int index = 1; xn0.compareTo(xn1) != 0;) {
       xn0 = xn1;
       add = add.multiply(x2).divide(BigDecimal.valueOf(++index * ++index), mathContext);
       xn1 = xn1.add(add, mathContext);
@@ -96,10 +94,9 @@ import ch.ethz.idsc.tensor.ext.Integers;
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = BigDecimal.ONE;
     BigDecimal add = BigDecimal.ONE;
-    final BigDecimal x2 = x.multiply(x, mathContext);
+    BigDecimal x2 = x.multiply(x, mathContext);
     int count = 0;
-    int index = 0;
-    while (xn0.compareTo(xn1) != 0) {
+    for (int index = 0; xn0.compareTo(xn1) != 0;) {
       xn0 = xn1;
       add = add.multiply(x2).divide(BigDecimal.valueOf(++index * ++index), mathContext);
       xn1 = Integers.isEven(++count) //
@@ -116,13 +113,41 @@ import ch.ethz.idsc.tensor.ext.Integers;
     BigDecimal xn0 = BigDecimal.ZERO;
     BigDecimal xn1 = BigDecimal.ONE;
     BigDecimal add = BigDecimal.ONE;
-    final BigDecimal x2 = x.multiply(x, mathContext);
-    int index = 0;
-    while (xn0.compareTo(xn1) != 0) {
+    BigDecimal x2 = x.multiply(x, mathContext);
+    for (int index = 0; xn0.compareTo(xn1) != 0;) {
       xn0 = xn1;
       add = add.multiply(x2).divide(BigDecimal.valueOf(++index * ++index), mathContext);
       xn1 = xn1.add(add, mathContext);
     }
     return xn1;
+  }
+
+  /***************************************************/
+  /** @param bigDecimal
+   * @return
+   * @throws Exception if value is Infinity */
+  public static BigInteger floor(BigDecimal bigDecimal) {
+    BigInteger bigInteger = bigDecimal.toBigInteger();
+    if (0 < new BigDecimal(bigInteger).compareTo(bigDecimal)) {
+      bigDecimal = bigDecimal.subtract(BigDecimal.ONE);
+      bigInteger = bigDecimal.toBigInteger();
+    }
+    return bigInteger;
+  }
+
+  /** @param bigDecimal
+   * @return
+   * @throws Exception if value is Infinity */
+  public static BigInteger ceiling(BigDecimal bigDecimal) {
+    BigInteger bigInteger = bigDecimal.toBigInteger();
+    if (new BigDecimal(bigInteger).compareTo(bigDecimal) < 0) {
+      bigDecimal = bigDecimal.add(BigDecimal.ONE);
+      bigInteger = bigDecimal.toBigInteger();
+    }
+    return bigInteger;
+  }
+
+  public static BigInteger round(BigDecimal bigDecimal) {
+    return bigDecimal.setScale(0, RoundingMode.HALF_UP).toBigIntegerExact();
   }
 }

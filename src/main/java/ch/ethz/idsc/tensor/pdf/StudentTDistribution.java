@@ -18,8 +18,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
  * <a href="https://reference.wolfram.com/language/ref/StudentTDistribution.html">StudentTDistribution</a> */
 public class StudentTDistribution implements Distribution, //
     MeanInterface, PDF, VarianceInterface, Serializable {
-  private static final long serialVersionUID = 2229923119726057327L;
-
   /** @param mu
    * @param sigma positive
    * @param v positive

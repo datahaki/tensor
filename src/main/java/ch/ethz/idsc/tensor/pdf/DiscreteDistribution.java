@@ -14,7 +14,9 @@ import ch.ethz.idsc.tensor.Scalar;
  * NegativeBinomialDistribution
  * PascalDistribution
  * PoissonBinomialDistribution
- * PoissonDistribution */
+ * PoissonDistribution
+ * 
+ * @see ContinuousDistribution */
 public interface DiscreteDistribution extends Distribution, PDF, RandomVariateInterface {
   /** @return lowest value a random variable from this distribution may attain */
   int lowerBound();

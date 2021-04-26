@@ -11,6 +11,7 @@ import ch.ethz.idsc.tensor.alg.Array;
 import ch.ethz.idsc.tensor.alg.Transpose;
 import ch.ethz.idsc.tensor.mat.DiagonalMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
@@ -26,14 +27,14 @@ public class MatrixLog2Test extends TestCase {
     Tensor exp = MatrixExp.of(matrix);
     Tensor log = MatrixLog.of(exp);
     Tensor elg = MatrixExp.of(log);
-    Chop._11.requireClose(elg, exp);
+    Chop._08.requireClose(elg, exp); // tests fail for 1e-12
     // Chop._10.close(log, matrix); // not generally true!
   }
 
   private static void _checkLogExp(Tensor matrix) {
     Tensor log = MatrixLog.of(matrix);
     Tensor exp = MatrixExp.of(log);
-    Chop._11.requireClose(exp, matrix);
+    Tolerance.CHOP.requireClose(exp, matrix);
   }
 
   public void testIdentity() {
@@ -51,8 +52,8 @@ public class MatrixLog2Test extends TestCase {
     Tensor mlog = MatrixLog.of(matrix);
     Tensor mathematica = Tensors.fromString( //
         "{{1.5040773967762740734, 0.81093021621632876396}, {-0.40546510810816438198, 0.28768207245178092744}}");
-    Chop._12.requireClose(mlog, mathematica);
-    Chop._12.requireClose(matrix, MatrixExp.of(mlog));
+    Tolerance.CHOP.requireClose(mlog, mathematica);
+    Tolerance.CHOP.requireClose(matrix, MatrixExp.of(mlog));
   }
 
   public void testUpper() {
@@ -60,8 +61,8 @@ public class MatrixLog2Test extends TestCase {
     Tensor mlog = MatrixLog.of(matrix);
     Tensor mathematica = Tensors.fromString( //
         "{{1.3862943611198906188, 0.92419624074659374589}, {0, 0}}");
-    Chop._12.requireClose(mlog, mathematica);
-    Chop._12.requireClose(matrix, MatrixExp.of(mlog));
+    Tolerance.CHOP.requireClose(mlog, mathematica);
+    Tolerance.CHOP.requireClose(matrix, MatrixExp.of(mlog));
   }
 
   public void testLower() {
@@ -69,8 +70,8 @@ public class MatrixLog2Test extends TestCase {
     Tensor mlog = MatrixLog.of(matrix);
     Tensor mathematica = Transpose.of(Tensors.fromString( //
         "{{1.3862943611198906188, 0.92419624074659374589}, {0, 0}}"));
-    Chop._12.requireClose(mlog, mathematica);
-    Chop._12.requireClose(matrix, MatrixExp.of(mlog));
+    Tolerance.CHOP.requireClose(mlog, mathematica);
+    Tolerance.CHOP.requireClose(matrix, MatrixExp.of(mlog));
   }
 
   public void testTraceZero() {

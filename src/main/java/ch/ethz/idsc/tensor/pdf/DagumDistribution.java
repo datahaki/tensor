@@ -9,16 +9,14 @@ import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.api.ScalarUnaryOperator;
 import ch.ethz.idsc.tensor.red.Times;
-import ch.ethz.idsc.tensor.sca.Clips;
+import ch.ethz.idsc.tensor.sca.Exp;
+import ch.ethz.idsc.tensor.sca.LogGamma;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.sca.Sign;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/DagumDistribution.html">DagumDistribution</a> */
-public class DagumDistribution extends AbstractContinuousDistribution implements //
-    InverseCDF, Serializable {
-  private static final long serialVersionUID = -3974668493015286288L;
-
+public class DagumDistribution extends AbstractContinuousDistribution implements Serializable {
   /** @param p positive
    * @param a positive
    * @param b positive
@@ -83,20 +81,27 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
     );
   }
 
-  @Override // from InverseCDF
-  public Scalar quantile(Scalar p) {
-    return _quantile(Clips.unit().requireInside(p));
-  }
-
-  private Scalar _quantile(Scalar p) {
+  @Override
+  protected Scalar protected_quantile(Scalar p) {
     return Scalars.isZero(p) //
         ? b.zero()
         : power_arn.apply(power_prn.apply(p).subtract(RealScalar.ONE)).multiply(b);
   }
 
-  @Override // from AbstractContinuousDistribution
-  protected Scalar randomVariate(double reference) {
-    return _quantile(DoubleScalar.of(reference));
+  @Override // from MeanInterface
+  public Scalar mean() {
+    if (Scalars.lessThan(RealScalar.ONE, a)) {
+      Scalar f1 = LogGamma.FUNCTION.apply(a.subtract(RealScalar.ONE).divide(a));
+      Scalar f2 = LogGamma.FUNCTION.apply(a.reciprocal().add(p));
+      Scalar f3 = LogGamma.FUNCTION.apply(p);
+      return Exp.FUNCTION.apply(f1.add(f2).subtract(f3)).multiply(b);
+    }
+    return DoubleScalar.INDETERMINATE;
+  }
+
+  @Override
+  public Scalar variance() {
+    throw new UnsupportedOperationException();
   }
 
   @Override // from Object

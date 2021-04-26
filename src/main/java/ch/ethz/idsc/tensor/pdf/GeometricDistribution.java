@@ -20,8 +20,6 @@ import ch.ethz.idsc.tensor.sca.Power;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/GeometricDistribution.html">GeometricDistribution</a> */
 public class GeometricDistribution extends AbstractDiscreteDistribution implements CDF, VarianceInterface, Serializable {
-  private static final long serialVersionUID = -8047227705673984507L;
-
   /** @param p with 0 < p <= 1 denotes probability P(X==0) == p
    * @return */
   public static Distribution of(Scalar p) {

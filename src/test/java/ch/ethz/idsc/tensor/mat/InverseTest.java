@@ -4,7 +4,9 @@ package ch.ethz.idsc.tensor.mat;
 import java.security.SecureRandom;
 import java.util.Random;
 
+import ch.ethz.idsc.tensor.DecimalScalar;
 import ch.ethz.idsc.tensor.ExactTensorQ;
+import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
@@ -15,6 +17,9 @@ import ch.ethz.idsc.tensor.alg.UnitVector;
 import ch.ethz.idsc.tensor.fft.FourierMatrix;
 import ch.ethz.idsc.tensor.io.ResourceData;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
+import ch.ethz.idsc.tensor.mat.re.Det;
+import ch.ethz.idsc.tensor.mat.re.Pivot;
+import ch.ethz.idsc.tensor.mat.re.Pivots;
 import ch.ethz.idsc.tensor.num.GaussScalar;
 import ch.ethz.idsc.tensor.pdf.DiscreteUniformDistribution;
 import ch.ethz.idsc.tensor.pdf.Distribution;
@@ -66,7 +71,7 @@ public class InverseTest extends TestCase {
   public void testFourier() {
     Tensor inv1 = Inverse.of(FourierMatrix.of(5), Pivots.FIRST_NON_ZERO);
     Tensor inv2 = Inverse.of(FourierMatrix.of(5), Pivots.ARGMAX_ABS);
-    Chop._10.requireClose(inv1, inv2);
+    Tolerance.CHOP.requireClose(inv1, inv2);
   }
 
   public void testGaussian() {
@@ -141,5 +146,15 @@ public class InverseTest extends TestCase {
     }
     assertFalse(HermitianMatrixQ.of(matrix));
     assertFalse(SymmetricMatrixQ.of(matrix));
+  }
+
+  public void testDecimalScalarInverse() {
+    Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
+    Tensor invers = Inverse.of(matrix);
+    Scalar detmat = Det.of(matrix);
+    Scalar detinv = Det.of(invers);
+    Scalar one = detmat.multiply(detinv);
+    assertTrue(one instanceof DecimalScalar);
+    Tolerance.CHOP.requireClose(one, RealScalar.ONE);
   }
 }

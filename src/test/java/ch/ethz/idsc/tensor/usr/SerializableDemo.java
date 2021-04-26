@@ -3,10 +3,7 @@ package ch.ethz.idsc.tensor.usr;
 
 import java.io.IOException;
 
-import ch.ethz.idsc.tensor.ComplexScalar;
-import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.Unprotect;
 import ch.ethz.idsc.tensor.io.Export;
 import ch.ethz.idsc.tensor.io.ImportTest;
@@ -15,7 +12,7 @@ import ch.ethz.idsc.tensor.io.ImportTest;
 /* package */ enum SerializableDemo {
   ;
   public static void main(String[] args) throws IOException {
-    Tensor tensor = Tensors.of(RealScalar.ONE, ComplexScalar.of(2, 3), RealScalar.of(3.15));
+    Tensor tensor = ImportTest.CONTENT;
     Export.object(ImportTest.IO_OBJECT_TENSOR, tensor);
     Export.object(ImportTest.IO_OBJECT_UNMODIFIABLE, tensor.unmodifiable());
     Tensor viewtensor = Unprotect.references(tensor);

@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.sca.Sin;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/TukeyWindow.html">TukeyWindow</a> */
 public class TukeyWindow extends ParameterizedWindow {
-  private static final long serialVersionUID = 5432885331481060986L;
   public static final ScalarUnaryOperator FUNCTION = of(RationalScalar.of(1, 3));
 
   /** @param alpha

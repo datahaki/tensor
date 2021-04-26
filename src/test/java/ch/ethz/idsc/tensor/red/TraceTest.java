@@ -9,16 +9,15 @@ import ch.ethz.idsc.tensor.Tensors;
 import ch.ethz.idsc.tensor.lie.LeviCivitaTensor;
 import ch.ethz.idsc.tensor.lie.MatrixExp;
 import ch.ethz.idsc.tensor.lie.MatrixPower;
-import ch.ethz.idsc.tensor.mat.Det;
-import ch.ethz.idsc.tensor.mat.Eigensystem;
 import ch.ethz.idsc.tensor.mat.HilbertMatrix;
 import ch.ethz.idsc.tensor.mat.IdentityMatrix;
 import ch.ethz.idsc.tensor.mat.SquareMatrixQ;
 import ch.ethz.idsc.tensor.mat.Tolerance;
+import ch.ethz.idsc.tensor.mat.ev.Eigensystem;
+import ch.ethz.idsc.tensor.mat.re.Det;
 import ch.ethz.idsc.tensor.pdf.Distribution;
 import ch.ethz.idsc.tensor.pdf.NormalDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
-import ch.ethz.idsc.tensor.sca.Chop;
 import ch.ethz.idsc.tensor.sca.Exp;
 import ch.ethz.idsc.tensor.sca.Power;
 import ch.ethz.idsc.tensor.usr.AssertFail;
@@ -38,7 +37,7 @@ public class TraceTest extends TestCase {
     Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}");
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tolerance.CHOP.requireClose(Trace.of(matrix), Total.of(eigensystem.values())); // 1. Viete
-    Chop._10.requireClose(Det.of(matrix), Times.pmul(eigensystem.values())); // 3. Viete
+    Tolerance.CHOP.requireClose(Det.of(matrix), Times.pmul(eigensystem.values())); // 3. Viete
     {
       Scalar l1 = eigensystem.values().Get(0);
       Scalar l2 = eigensystem.values().Get(1);

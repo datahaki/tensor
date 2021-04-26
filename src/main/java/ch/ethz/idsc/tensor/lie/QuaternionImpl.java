@@ -39,7 +39,6 @@ import ch.ethz.idsc.tensor.sca.Sqrt;
 
 /* package */ class QuaternionImpl extends AbstractScalar implements Quaternion, //
     ChopInterface, ExactScalarQInterface, NInterface, Serializable {
-  private static final long serialVersionUID = 5384670613322108553L;
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
   // ---
   private final Scalar w;

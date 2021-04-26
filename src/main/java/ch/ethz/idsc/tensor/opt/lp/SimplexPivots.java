@@ -6,9 +6,10 @@ import java.util.Objects;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
-import ch.ethz.idsc.tensor.TensorRuntimeException;
 import ch.ethz.idsc.tensor.sca.Sign;
 
+/** implementation is specific for
+ * objective == minimize */
 public enum SimplexPivots implements SimplexPivot {
   /** nonbasic gradient method, or "steepest decent policy"
    * 
@@ -24,7 +25,7 @@ public enum SimplexPivots implements SimplexPivot {
         Scalar tab_ij = tab.Get(i, j);
         if (Sign.isPositive(tab_ij)) {
           Scalar ratio = tab.Get(i, n).divide(tab_ij);
-          if (Objects.isNull(min) || 0 < Scalars.compare(min, ratio)) {
+          if (Objects.isNull(min) || Scalars.lessThan(ratio, min)) {
             min = ratio;
             pivot = i;
           }
@@ -33,18 +34,6 @@ public enum SimplexPivots implements SimplexPivot {
       return pivot;
     }
   },
-  /** first viable index
-   * for experimentation only, does not work on all problems yet */
-  FIRST {
-    @Override // from SimplexPivot
-    public int get(Tensor tab, int j, int n) {
-      int m = tab.length() - 1;
-      for (int i = 0; i < m; ++i)
-        if (Sign.isPositive(tab.Get(i, j)))
-          return i;
-      throw TensorRuntimeException.of(tab);
-    }
-  };
   /** p.50 greatest increment method NOT YET IMPLEMENTED */
   /** p.50 all variable gradient method NOT YET IMPLEMENTED */
 }

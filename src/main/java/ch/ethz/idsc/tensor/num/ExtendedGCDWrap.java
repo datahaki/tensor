@@ -12,15 +12,11 @@ import ch.ethz.idsc.tensor.sca.Floor;
 import ch.ethz.idsc.tensor.sca.Mod;
 
 /* package */ class ExtendedGCDWrap implements Serializable {
-  private static final long serialVersionUID = 2769162051800901176L;
-
   public ExtendedGCD function(Tensor vector) {
     return new ExtendedGCDImpl(vector);
   }
 
   private class ExtendedGCDImpl implements ExtendedGCD, Serializable {
-    private static final long serialVersionUID = 6682732963438067712L;
-    // ---
     private final Scalar a;
     private final Scalar b;
     private final Scalar x;

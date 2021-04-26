@@ -3,12 +3,14 @@ package ch.ethz.idsc.tensor.nrm;
 
 import ch.ethz.idsc.tensor.ComplexScalar;
 import ch.ethz.idsc.tensor.DoubleScalar;
+import ch.ethz.idsc.tensor.ExactScalarQ;
 import ch.ethz.idsc.tensor.RationalScalar;
 import ch.ethz.idsc.tensor.RealScalar;
 import ch.ethz.idsc.tensor.Scalar;
 import ch.ethz.idsc.tensor.Scalars;
 import ch.ethz.idsc.tensor.Tensor;
 import ch.ethz.idsc.tensor.Tensors;
+import ch.ethz.idsc.tensor.mat.Tolerance;
 import ch.ethz.idsc.tensor.qty.Quantity;
 import ch.ethz.idsc.tensor.sca.ArcTan;
 import ch.ethz.idsc.tensor.sca.Chop;
@@ -110,6 +112,24 @@ public class HypotTest extends TestCase {
     AssertFail.of(() -> Hypot.ofVector(RealScalar.ONE));
   }
 
+  public void testWithOne0() {
+    Scalar scalar = Hypot.withOne(RealScalar.ZERO);
+    assertEquals(scalar, RealScalar.ONE);
+    ExactScalarQ.require(scalar);
+  }
+
+  public void testWithOne1() {
+    Tolerance.CHOP.requireClose( //
+        Hypot.withOne(RealScalar.of(5)), //
+        Sqrt.FUNCTION.apply(RealScalar.of(5 * 5 + 1)));
+  }
+
+  public void testWithOne2() {
+    Tolerance.CHOP.requireClose( //
+        Hypot.withOne(RealScalar.of(0.5)), //
+        Sqrt.FUNCTION.apply(RealScalar.of(0.25 + 1)));
+  }
+
   public void testQuantity() {
     Scalar qs1 = Quantity.of(3, "m");
     Scalar qs2 = Quantity.of(4, "m");
@@ -123,7 +143,21 @@ public class HypotTest extends TestCase {
     assertEquals(Hypot.of(qs1, qs2), qs1);
   }
 
-  public void testQuantityZeroFail() {
-    AssertFail.of(() -> Hypot.of(Quantity.of(1, "m"), Quantity.of(0, "s")));
+  public void testMixedUnitZero() {
+    Scalar s1 = Quantity.of(-2, "m");
+    Scalar s2 = Quantity.of(0, "s");
+    Scalar sum = s1.add(s2);
+    assertEquals(sum, Quantity.of(-2, "m"));
+    Scalar result = Sqrt.FUNCTION.apply(s1.multiply(s1).add(s2.multiply(s2)));
+    assertEquals(result, Quantity.of(2, "m"));
+    ExactScalarQ.require(result);
+    Scalar hypot = Hypot.of(s1, s2);
+    assertEquals(result, hypot);
+    ExactScalarQ.require(hypot);
+    assertEquals(Hypot.of(s1, s2), Hypot.of(s2, s1));
+  }
+
+  public void testMixedUnitFail() {
+    AssertFail.of(() -> Hypot.of(Quantity.of(2, "m"), Quantity.of(3, "s")));
   }
 }

@@ -19,7 +19,6 @@ import ch.ethz.idsc.tensor.pdf.GeometricDistribution;
 import ch.ethz.idsc.tensor.pdf.RandomVariate;
 import ch.ethz.idsc.tensor.pdf.UniformDistribution;
 import ch.ethz.idsc.tensor.qty.Quantity;
-import ch.ethz.idsc.tensor.sca.Increment;
 import ch.ethz.idsc.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -41,7 +40,7 @@ public class LinearInterpolationTest extends TestCase {
     Tensor ori = tensor.copy();
     Interpolation interpolation = LinearInterpolation.of(tensor);
     Tensor res = interpolation.get(Tensors.empty());
-    res.set(Increment.ONE, Tensor.ALL);
+    res.set(RealScalar.ONE::add, Tensor.ALL);
     assertEquals(tensor, ori);
     assertFalse(tensor.equals(res));
     assertEquals(interpolation.get(Tensors.empty()), ori);
@@ -139,7 +138,7 @@ public class LinearInterpolationTest extends TestCase {
       Scalar index = RandomVariate.of(distribution).divide(RealScalar.of(3));
       Scalar scalar = interpolation.At(index);
       ExactScalarQ.require(scalar);
-      assertEquals(Increment.ONE.apply(index), scalar);
+      assertEquals(RealScalar.ONE.add(index), scalar);
       assertEquals(scalar, interpolation.get(Tensors.of(index)));
       assertEquals(scalar, interpolation.at(index));
     }

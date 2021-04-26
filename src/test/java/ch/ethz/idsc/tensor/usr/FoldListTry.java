@@ -13,7 +13,6 @@ import ch.ethz.idsc.tensor.api.TensorUnaryOperator;
 /* package */ enum FoldListTry {
   ;
   private static class FoldDigest implements TensorUnaryOperator {
-    private static final long serialVersionUID = 6038751468674830689L;
     private final BinaryOperator<Tensor> binaryOperator;
     private Tensor next;
 

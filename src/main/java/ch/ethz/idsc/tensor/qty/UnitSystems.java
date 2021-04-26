@@ -3,13 +3,9 @@ package ch.ethz.idsc.tensor.qty;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
 import java.util.Set;
-import java.util.TreeMap;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import ch.ethz.idsc.tensor.Scalar;
@@ -29,20 +25,6 @@ public enum UnitSystems {
         .map(Map::keySet) //
         .flatMap(Collection::stream) //
         .collect(Collectors.toSet());
-  }
-
-  /** Example: for the SI unit system, the set of known atomic units contains
-   * "m", "K", "W", "kW", "s", "Hz", ...
-   * 
-   * @return set of all atomic units known by the unit system including those that
-   * are not further convertible */
-  public static Set<String> known(UnitSystem unitSystem) {
-    Set<String> set = new HashSet<>();
-    for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
-      set.add(entry.getKey());
-      set.addAll(QuantityUnit.of(entry.getValue()).map().keySet());
-    }
-    return set;
   }
 
   /***************************************************/
@@ -87,18 +69,5 @@ public enum UnitSystems {
     u2.map().entrySet().stream() //
         .forEach(entry -> map.put(entry.getKey(), entry.getValue()));
     return SimpleUnitSystem.from(map);
-  }
-
-  /***************************************************/
-  /* package */ static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> COLLECTOR = //
-      Collectors.toMap( //
-          entry -> StaticHelper.requireAtomic(entry.getKey()), //
-          entry -> StaticHelper.requireNonZero(entry.getValue()), //
-          (u, v) -> null, TreeMap::new);
-
-  /** @param map
-   * @return */
-  public static Unit unit(Map<String, Scalar> map) {
-    return UnitImpl.create(map.entrySet().stream().collect(COLLECTOR));
   }
 }
