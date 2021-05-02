@@ -1,0 +1,43 @@
+// code by jph
+package ch.alpine.tensor.alg;
+
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.usr.AssertFail;
+import junit.framework.TestCase;
+
+public class TuplesTest extends TestCase {
+  public void testSimple0() {
+    Tensor tuples = Tuples.of(Tensors.vector(3, 4, 5), 0);
+    assertEquals(tuples, Tensors.empty());
+  }
+
+  public void testOne() {
+    Tensor tuples = Tuples.of(Tensors.vector(3, 4, 5), 1);
+    Tensor actual = Tensors.fromString("{{3}, {4}, {5}}");
+    assertEquals(tuples, actual);
+  }
+
+  public void testTwo() {
+    Tensor tuples = Tuples.of(Tensors.vector(3, 4, 5), 2);
+    Tensor actual = //
+        Tensors.fromString("{{3, 3}, {3, 4}, {3, 5}, {4, 3}, {4, 4}, {4, 5}, {5, 3}, {5, 4}, {5, 5}}");
+    assertEquals(tuples, actual);
+  }
+
+  public void testThree() {
+    Tensor tuples = Tuples.of(Tensors.vector(4, 5), 3);
+    Tensor actual = //
+        Tensors.fromString("{{4, 4, 4}, {4, 4, 5}, {4, 5, 4}, {4, 5, 5}, {5, 4, 4}, {5, 4, 5}, {5, 5, 4}, {5, 5, 5}}");
+    assertEquals(tuples, actual);
+  }
+
+  public void testFailNegative() {
+    AssertFail.of(() -> Tuples.of(Tensors.vector(1, 2, 3), -1));
+  }
+
+  public void testFailScalar() {
+    AssertFail.of(() -> Tuples.of(Pi.VALUE, 2));
+  }
+}

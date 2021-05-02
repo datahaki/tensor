@@ -1,0 +1,14 @@
+// code by jph
+package ch.alpine.tensor.pdf;
+
+import java.util.Random;
+
+import ch.alpine.tensor.Scalar;
+
+/** capability to produce random variate */
+@FunctionalInterface
+public interface RandomVariateInterface {
+  /** @param random
+   * @return sample generated using the given random generator */
+  Scalar randomVariate(Random random);
+}
