@@ -11,9 +11,11 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
+import ch.alpine.tensor.alg.MatrixDotTranspose;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.MatrixRank;
+import ch.alpine.tensor.mat.PseudoInverse;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.num.GaussScalar;
@@ -52,7 +54,10 @@ public class InfluenceMatrixExactTest extends TestCase {
     int prime = 7919;
     Random random = new Random();
     Tensor design = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, m);
-    if (MatrixRank.of(design) == m) {
+    Tensor d_dt = MatrixDotTranspose.of(design, design);
+    ExactTensorQ.require(d_dt);
+    if (MatrixRank.of(d_dt) == m) { // apparently rank(design) == m does not imply rank(d dt) == m !
+      PseudoInverse.usingCholesky(design);
       InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
       assertTrue(influenceMatrix instanceof InfluenceMatrixExact);
       Tensor matrix = influenceMatrix.matrix();
