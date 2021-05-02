@@ -34,7 +34,7 @@ public class BenIsraelCohenTest extends TestCase {
       Tensor design = p1.dot(p2);
       Tensor pinv = BenIsraelCohen.of(design);
       suo.apply(pinv.Get(0, 0));
-      InfluenceMatrixQ.require(design.dot(pinv));
+      InfluenceMatrixQ.require(design.dot(pinv), Chop._10); // 1e-12 does not always work
     }
   }
 
