@@ -108,9 +108,9 @@ public class SingularValueDecompositionTest extends TestCase {
     int n = 11;
     Tensor mat = RandomVariate.of(NormalDistribution.standard(), n, n);
     SingularValueDecomposition svd = specialOps(mat);
-    Tolerance.CHOP.requireClose(PseudoInverse.of(svd), Inverse.of(mat));
+    Chop._10.requireClose(PseudoInverse.of(svd), Inverse.of(mat)); // 1e-12 does not always work
     assertEquals(MatrixRank.of(svd), n);
-    Tolerance.CHOP.requireClose(PseudoInverse.of(svd).dot(mat), IdentityMatrix.of(n));
+    Chop._10.requireClose(PseudoInverse.of(svd).dot(mat), IdentityMatrix.of(n));
   }
 
   private static final Random RANDOM = new Random();
