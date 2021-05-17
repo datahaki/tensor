@@ -46,7 +46,7 @@ import ch.alpine.tensor.Tensors;
 
   @Override // from Iterable
   public Iterator<MultiIndex> iterator() {
-    return new Iterator<MultiIndex>() {
+    return new Iterator<>() {
       final OuterProductInteger outerProductInteger = new OuterProductInteger(size, true);
 
       @Override

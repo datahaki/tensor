@@ -61,7 +61,8 @@ public enum Roots {
       return RootsDegree2.of(coeffs);
     case 3: // a + b*x + c*x^2 + d*x^3 == 0
       return RootsDegree3.of(coeffs);
+    default:
+      throw TensorRuntimeException.of(coeffs);
     }
-    throw TensorRuntimeException.of(coeffs);
   }
 }

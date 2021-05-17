@@ -13,9 +13,11 @@ import junit.framework.TestCase;
 
 public class ReadLineTest extends TestCase {
   public void testParse() throws IOException {
-    try (Stream<String> stream = ReadLine.of(getClass().getResource("/io/libreoffice_calc.csv").openStream())) {
-      Tensor table = CsvFormat.parse(stream);
-      assertEquals(Dimensions.of(table), Arrays.asList(4, 2));
+    try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
+      try (Stream<String> stream = ReadLine.of(inputStream)) {
+        Tensor table = CsvFormat.parse(stream);
+        assertEquals(Dimensions.of(table), Arrays.asList(4, 2));
+      }
     }
   }
 
@@ -45,7 +47,7 @@ public class ReadLineTest extends TestCase {
   }
 
   public void testFail() {
-    try (Stream<String> stream = ReadLine.of(getClass().getResource("/io/doesnotexist.csv").openStream())) {
+    try (InputStream inputStream = getClass().getResource("/io/doesnotexist.csv").openStream()) {
       fail();
     } catch (Exception exception) {
       // ---

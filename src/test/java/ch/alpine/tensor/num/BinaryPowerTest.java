@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 
 public class BinaryPowerTest extends TestCase {
   public void testInteger() {
-    GroupInterface<Integer> groupInterface = new GroupInterface<Integer>() {
+    GroupInterface<Integer> groupInterface = new GroupInterface<>() {
       @Override // from BinaryPower
       public Integer neutral(Integer integer) {
         return 1;
