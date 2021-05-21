@@ -160,12 +160,16 @@ public class DecimalScalarImplTest extends TestCase {
   }
 
   public void testEqualsSpecial() {
-    final Scalar ds1 = DecimalScalar.of(new BigDecimal("1.0234", MathContext.DECIMAL128));
+    Scalar ds1 = DecimalScalar.of(new BigDecimal("1.0234", MathContext.DECIMAL128));
     assertTrue(ds1 instanceof DecimalScalar);
     assertFalse(ds1.equals(null));
     assertFalse(ds1.equals(ComplexScalar.of(1, 2)));
-    assertFalse(ds1.equals("hello"));
     assertFalse(ds1.equals(GaussScalar.of(6, 7)));
+  }
+
+  public void testEqualsObject() {
+    Object object = DecimalScalar.of(new BigDecimal("1.0234", MathContext.DECIMAL128));
+    assertFalse(object.equals("hello"));
   }
 
   private static final class ObjectExtension {

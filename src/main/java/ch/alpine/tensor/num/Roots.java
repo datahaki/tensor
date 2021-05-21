@@ -51,6 +51,7 @@ public enum Roots {
       return Tensors.empty();
     case 1: // a + b ** x == 0
       return RootsDegree1.of(coeffs);
+    default:
     }
     if (Scalars.isZero(coeffs.Get(0))) {
       Tensor roots = unsorted(coeffs.extract(1, coeffs.length()));

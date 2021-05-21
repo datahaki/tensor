@@ -250,9 +250,13 @@ public class GaussScalarTest extends TestCase {
     assertFalse(GaussScalar.of(3, 7).equals(GaussScalar.of(3, 11)));
   }
 
-  public void testEqualsMisc() {
+  public void testEqualsNull() {
     assertFalse(GaussScalar.of(3, 7).equals(null));
-    assertFalse(GaussScalar.of(3, 7).equals("hello"));
+  }
+
+  public void testEqualsMisc() {
+    Object object = GaussScalar.of(3, 7);
+    assertFalse(object.equals("hello"));
   }
 
   public void testToString() {

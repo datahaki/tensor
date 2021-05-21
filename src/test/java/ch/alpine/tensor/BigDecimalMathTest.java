@@ -34,8 +34,13 @@ public class BigDecimalMathTest extends TestCase {
 
   public void testSqrtExact() {
     BigDecimal bd1 = new BigDecimal(BigInteger.valueOf(25 * 25));
-    BigDecimal rt1 = BigDecimalMath.sqrt(bd1, MathContext.DECIMAL32);
-    rt1.equals(RationalScalar.of(25, 1)); // gives false
+    Object object = BigDecimalMath.sqrt(bd1, MathContext.DECIMAL32);
+    assertFalse(object.equals(RationalScalar.of(25, 1))); // gives false
+  }
+
+  public void testSqrtComparable() {
+    BigDecimal bd1 = new BigDecimal(BigInteger.valueOf(25 * 25));
+    Comparable<BigDecimal> rt1 = BigDecimalMath.sqrt(bd1, MathContext.DECIMAL32);
     assertEquals(rt1.compareTo(new BigDecimal("25")), 0);
   }
 

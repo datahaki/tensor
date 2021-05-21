@@ -1,8 +1,8 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -19,10 +19,10 @@ import ch.alpine.tensor.sca.Power;
         : Unit.POWER_DELIMITER + string; // delimited by '^'
   }
 
-  /** @param navigableMap
+  /** @param map
    * @return for instance "m*s^-2" */
-  public static String toString(NavigableMap<String, Scalar> navigableMap) {
-    return navigableMap.entrySet().stream() //
+  public static String toString(Map<String, Scalar> map) {
+    return map.entrySet().stream() //
         .map(entry -> entry.getKey() + exponentString(entry.getValue())) //
         .collect(Collectors.joining(Unit.JOIN_DELIMITER)); // delimited by '*'
   }

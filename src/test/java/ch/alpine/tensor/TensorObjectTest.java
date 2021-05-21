@@ -50,7 +50,7 @@ public class TensorObjectTest extends TestCase {
   }
 
   public void testEmptyEquals() {
-    Tensor empty = Tensors.empty();
+    Object empty = Tensors.empty();
     assertFalse(empty.equals(null));
     assertFalse(empty.equals(Integer.valueOf(123)));
     assertFalse(empty.equals(RealScalar.of(2)));
