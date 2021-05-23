@@ -46,9 +46,13 @@ public class QuantityImplTest extends TestCase {
   }
 
   public void testEquals() {
-    assertFalse(Quantity.of(10, "m").equals("s"));
     assertFalse(Quantity.of(10, "m").equals(Quantity.of(2, "m")));
     assertFalse(Quantity.of(10, "m").equals(Quantity.of(10, "kg")));
+  }
+
+  public void testEqualsObject() {
+    Object object = Quantity.of(10, "m");
+    assertFalse(object.equals("s"));
   }
 
   public void testEqualsZero() {

@@ -97,7 +97,6 @@ public class BoundedLinkedListTest extends TestCase {
   }
 
   public void testFailNegativeSize() {
-    new BoundedLinkedList<>(0);
     AssertFail.of(() -> new BoundedLinkedList<>(-1));
   }
 }

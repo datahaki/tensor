@@ -64,7 +64,7 @@ public class CyclesTest extends TestCase {
   }
 
   public void testNonEquals() throws ClassNotFoundException, IOException {
-    Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));
+    Object cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));
     assertFalse(cycles.equals(Pi.VALUE));
   }
 

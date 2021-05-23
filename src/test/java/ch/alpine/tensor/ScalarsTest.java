@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import ch.alpine.tensor.io.StringScalar;
@@ -51,6 +52,9 @@ public class ScalarsTest extends TestCase {
     Pattern pattern = Pattern.compile("-?\\d+");
     assertTrue(pattern.matcher(n1).matches());
     assertTrue(pattern.matcher(n2).matches());
+    Predicate<String> predicate = pattern.asMatchPredicate();
+    assertTrue(predicate.test(n1));
+    assertTrue(predicate.test(n2));
   }
 
   public void testRationalPattern() {
@@ -61,6 +65,10 @@ public class ScalarsTest extends TestCase {
     assertTrue(pattern.matcher(n1).matches());
     assertTrue(pattern.matcher(n2).matches());
     assertFalse(pattern.matcher(n3).matches());
+    Predicate<String> predicate = pattern.asMatchPredicate();
+    assertTrue(predicate.test(n1));
+    assertTrue(predicate.test(n2));
+    assertFalse(predicate.test(n3));
   }
 
   public void testParseComplex() {

@@ -49,8 +49,9 @@ public enum MatrixLog {
       return MatrixLog1.of(matrix);
     case 2:
       return MatrixLog2.of(matrix);
+    default:
+      return _of(matrix);
     }
-    return _of(matrix);
   }
 
   /* package */ static Tensor _of(Tensor matrix) {

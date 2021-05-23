@@ -24,8 +24,9 @@ public enum HistogramTransform {
     switch (dimensions.list().size()) {
     case 2:
       return rescale(tensor).multiply(_255);
+    default:
+      throw TensorRuntimeException.of(tensor);
     }
-    throw TensorRuntimeException.of(tensor);
   }
 
   private static Tensor rescale(Tensor tensor) {

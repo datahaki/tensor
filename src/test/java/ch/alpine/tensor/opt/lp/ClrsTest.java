@@ -111,7 +111,7 @@ public class ClrsTest extends TestCase {
     assertTrue(lpd.isCanonicDual());
     LinearProgram lpp = lpd.toggle();
     assertTrue(lpp.isCanonicPrimal());
-    // TODO
+    // TODO apparently non symmetric
     // TestHelper.check(lpp, lpd);
     Tensor sols = SimplexCorners.of(lpd);
     assertEquals(sols, Tensors.empty());

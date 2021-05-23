@@ -25,9 +25,9 @@ import ch.alpine.tensor.io.StringScalar;
    * @return */
   public Tensor parse(String string) {
     int opening = string.indexOf(Tensor.OPENING_BRACKET); // first non-whitespace character should be "{"
-    if (0 <= opening && string.substring(0, opening).trim().isEmpty()) {
+    if (0 <= opening && string.substring(0, opening).isBlank()) {
       int closing = string.lastIndexOf(Tensor.CLOSING_BRACKET);
-      if (opening < closing && string.substring(closing + 1).trim().isEmpty()) {
+      if (opening < closing && string.substring(closing + 1).isBlank()) {
         List<Tensor> list = new ArrayList<>();
         int level = 1; // track nesting with "{" and "}"
         int beg = opening + 1;
@@ -39,7 +39,7 @@ import ch.alpine.tensor.io.StringScalar;
           boolean isComma = chr == COMMA;
           boolean is_last = chr == Tensor.CLOSING_BRACKET;
           if (level == 1 && (isComma || is_last)) {
-            String entry = string.substring(beg, index).trim(); // trim is required
+            String entry = string.substring(beg, index).strip(); // trim is required
             if (!entry.isEmpty() || !is_last || 0 < list.size())
               list.add(parse(entry));
             beg = index + 1;

@@ -121,8 +121,8 @@ public class QuaternionImplTest extends TestCase {
   }
 
   public void testMultiplyFail() {
-    Quaternion quaternion = Quaternion.of(1, 3, -2, 2);
-    GaussScalar gaussScalar = GaussScalar.of(3, 11);
+    Scalar quaternion = Quaternion.of(1, 3, -2, 2);
+    Scalar gaussScalar = GaussScalar.of(3, 11);
     assertFalse(quaternion.equals(gaussScalar));
     assertFalse(gaussScalar.equals(quaternion));
     AssertFail.of(() -> quaternion.multiply(gaussScalar));

@@ -5,7 +5,6 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.ext.StringRepeat;
 import junit.framework.TestCase;
 
 public class PrettyTest extends TestCase {
@@ -44,12 +43,5 @@ public class PrettyTest extends TestCase {
     String string = Pretty.of(tensor);
     String pty051 = ResourceData.object("/io/pretty.string");
     assertEquals(string, pty051);
-  }
-
-  public void testSpaces() {
-    for (int level = 0; level < 10; ++level) {
-      assertEquals(Pretty.spaces(level).length(), level);
-      assertEquals(Pretty.spaces(level), StringRepeat.of(" ", level));
-    }
   }
 }

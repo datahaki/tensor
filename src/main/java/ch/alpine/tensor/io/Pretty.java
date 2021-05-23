@@ -2,7 +2,6 @@
 package ch.alpine.tensor.io;
 
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.ArrayQ;
@@ -17,7 +16,6 @@ import ch.alpine.tensor.alg.TensorRank;
 public class Pretty {
   private static final String OPENING = "[\n";
   private static final String CLOSING = "]\n";
-  private static final String[] SPACES = { "", " ", "  ", "   ", "    ", "     " };
 
   /** @param tensor
    * @return string expression of tensor for use in System.out.println
@@ -69,13 +67,11 @@ public class Pretty {
 
   @Override
   public String toString() {
-    return stringBuilder.toString().trim();
+    return stringBuilder.toString().strip();
   }
 
   // helper function
-  /* package */ static String spaces(int level) {
-    return level < SPACES.length //
-        ? SPACES[level]
-        : IntStream.range(0, level).mapToObj(i -> " ").collect(Collectors.joining());
+  private static String spaces(int level) {
+    return " ".repeat(level);
   }
 }

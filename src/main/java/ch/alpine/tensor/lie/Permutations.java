@@ -41,25 +41,28 @@ public class Permutations {
   public static Tensor of(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     List<Tensor> list = new LinkedList<>();
-    new Permutations(list::add, tensor);
+    new Permutations(list::add).init(tensor);
     return Unprotect.using(list);
   }
 
-  /** @param tensor
+  /** @param tensor that is not a {@link Scalar}
    * @return
    * @throws Exception if given tensor is a scalar */
   public static Stream<Tensor> stream(Tensor tensor) {
     ScalarQ.thenThrow(tensor);
     Builder<Tensor> builder = Stream.builder();
-    new Permutations(builder, tensor);
+    new Permutations(builder).init(tensor);
     return builder.build();
   }
 
   /***************************************************/
   private final Consumer<Tensor> consumer;
 
-  private Permutations(Consumer<Tensor> consumer, Tensor tensor) {
+  private Permutations(Consumer<Tensor> consumer) {
     this.consumer = consumer;
+  }
+
+  private void init(Tensor tensor) {
     recur(Tensors.empty(), tensor);
   }
 

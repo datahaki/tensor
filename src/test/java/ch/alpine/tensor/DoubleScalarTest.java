@@ -126,8 +126,12 @@ public class DoubleScalarTest extends TestCase {
 
   public void testEquals() {
     assertFalse(DoubleScalar.of(3.14).equals(null));
-    assertFalse(DoubleScalar.of(3.14).equals("hello"));
     assertFalse(DoubleScalar.of(3.14).equals(ComplexScalar.of(1, 2)));
+  }
+
+  public void testObject() {
+    Object object = DoubleScalar.of(3.14);
+    assertFalse(object.equals("hello"));
   }
 
   public void testSqrtNegZero() {

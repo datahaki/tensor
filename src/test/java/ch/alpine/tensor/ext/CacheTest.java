@@ -136,16 +136,15 @@ public class CacheTest extends TestCase {
   }
 
   public void testDelayed() {
-    DelayedStringFunc tensorStringFunc = new DelayedStringFunc();
+    DelayedStringFunc delayedStringFunc = new DelayedStringFunc();
     Tensor tensor = Tensors.fromString( //
         "{{-0.32499999999999907, 0.4708333333333343, 0.7853981633974483}, {+Infinity, 0, 1/3}, {-Infinity, abc, 1[m*K^1/2]}}");
-    Cache<Tensor, String> cache = Cache.of(tensorStringFunc, 2);
+    Cache<Tensor, String> cache = Cache.of(delayedStringFunc, 2);
     assertEquals(cache.size(), 0);
     IntStream.range(0, 26).parallel().forEach(c1 -> cache.apply(tensor));
     assertEquals(cache.size(), 1);
     // the function is typically called more than once
-    new StringBuilder(tensorStringFunc.count);
-    // System.out.println(tensorStringFunc.count);
+    assertTrue(0 <= delayedStringFunc.count);
   }
 
   public void testFailNull() {

@@ -29,7 +29,7 @@ public class SortTest extends TestCase {
   }
 
   public void testSortRows() {
-    Comparator<Tensor> comparator = new Comparator<Tensor>() {
+    Comparator<Tensor> comparator = new Comparator<>() {
       @Override
       public int compare(Tensor o1, Tensor o2) {
         return Scalars.compare(o1.Get(0), o2.Get(0));
@@ -50,7 +50,7 @@ public class SortTest extends TestCase {
   }
 
   public void testStringScalar() {
-    Comparator<GaussScalar> comparator = new Comparator<GaussScalar>() {
+    Comparator<GaussScalar> comparator = new Comparator<>() {
       @Override
       public int compare(GaussScalar o1, GaussScalar o2) {
         return o1.prime().compareTo(o2.prime());

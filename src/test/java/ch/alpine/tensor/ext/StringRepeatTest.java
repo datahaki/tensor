@@ -6,11 +6,11 @@ import junit.framework.TestCase;
 
 public class StringRepeatTest extends TestCase {
   public void testSimple() {
-    assertEquals(StringRepeat.of("ab", 3), "ababab");
+    assertEquals("ab".repeat(3), "ababab");
   }
 
   public void testFailNegative() {
-    assertEquals(StringRepeat.of("ab", 0), "");
-    AssertFail.of(() -> StringRepeat.of("ab", -1));
+    assertEquals("ab".repeat(0), "");
+    AssertFail.of(() -> "ab".repeat(-1));
   }
 }
