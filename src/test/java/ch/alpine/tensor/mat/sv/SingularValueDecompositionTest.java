@@ -61,7 +61,8 @@ public class SingularValueDecompositionTest extends TestCase {
   }
 
   public void testSvd1() {
-    Tensor mat = RandomVariate.of(NormalDistribution.standard(), 8, 5);
+    Random random = new Random(3);
+    Tensor mat = RandomVariate.of(NormalDistribution.standard(), random, 8, 5);
     SingularValueDecomposition svd = specialOps(mat);
     assertEquals(MatrixRank.of(svd), 5);
   }
