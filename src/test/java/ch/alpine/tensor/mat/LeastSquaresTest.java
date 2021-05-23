@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactTensorQ;
@@ -169,11 +170,12 @@ public class LeastSquaresTest extends TestCase {
   }
 
   public void testLeastSquaresComplexSquare() {
+    Random random = new Random(3);
     for (int n = 3; n < 6; ++n) {
       Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
-          RandomVariate.of(NormalDistribution.standard(), n, n), //
-          RandomVariate.of(NormalDistribution.standard(), n, n));
-      Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 3);
+          RandomVariate.of(NormalDistribution.standard(), random, n, n), //
+          RandomVariate.of(NormalDistribution.standard(), random, n, n));
+      Tensor b = RandomVariate.of(NormalDistribution.standard(), random, n, 3);
       Tensor sol = LinearSolve.of(matrix, b);
       Tolerance.CHOP.requireClose(sol, LeastSquares.of(matrix, b));
       Tolerance.CHOP.requireClose(sol, LeastSquares.usingQR(matrix, b));

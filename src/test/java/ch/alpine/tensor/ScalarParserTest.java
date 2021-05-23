@@ -65,6 +65,18 @@ public class ScalarParserTest extends TestCase {
     assertEquals(s1, RealScalar.of(3));
   }
 
+  public void testTrimVsStrip() {
+    String string = "    asdb  \u0000 ";
+    assertEquals(string.trim().length(), 4);
+    assertEquals(string.strip().length(), 7);
+  }
+
+  public void testIsBlank() {
+    String string = "    \u0000 ";
+    assertTrue(string.trim().isEmpty());
+    assertFalse(string.isBlank());
+  }
+
   public void testAbcFail() {
     AssertFail.of(() -> ScalarParser.of("(3"));
     AssertFail.of(() -> ScalarParser.of("3)"));

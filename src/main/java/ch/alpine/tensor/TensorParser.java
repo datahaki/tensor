@@ -39,7 +39,7 @@ import ch.alpine.tensor.io.StringScalar;
           boolean isComma = chr == COMMA;
           boolean is_last = chr == Tensor.CLOSING_BRACKET;
           if (level == 1 && (isComma || is_last)) {
-            String entry = string.substring(beg, index).trim(); // trim is required
+            String entry = string.substring(beg, index).strip(); // trim is required
             if (!entry.isEmpty() || !is_last || 0 < list.size())
               list.add(parse(entry));
             beg = index + 1;

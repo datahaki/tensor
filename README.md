@@ -2,7 +2,7 @@
 
 # ch.alpine.tensor <a href="https://travis-ci.com/datahaki/tensor"><img src="https://travis-ci.com/datahaki/tensor.svg?branch=master" alt="Build Status"></a>
 
-Library for tensor computations in Java, version `0.9.5`
+Library for tensor computations in Java 11, version `0.9.5`. (The last version that supports Java 8 is `0.9.4`.)
 
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions

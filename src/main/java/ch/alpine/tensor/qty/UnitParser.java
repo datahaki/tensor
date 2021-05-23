@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import ch.alpine.tensor.RealScalar;
@@ -24,12 +25,12 @@ import ch.alpine.tensor.Scalars;
       String token = stringTokenizer.nextToken();
       int index = token.indexOf(Unit.POWER_DELIMITER);
       if (0 <= index) {
-        String key = requireAtomic(token.substring(0, index).trim());
+        String key = requireAtomic(token.substring(0, index).strip());
         Scalar exponent = Scalars.fromString(token.substring(index + 1));
         if (Scalars.nonZero(exponent))
           merge(navigableMap, key, exponent);
       } else {
-        String key = token.trim();
+        String key = token.strip();
         if (!key.isEmpty())
           merge(navigableMap, requireAtomic(key), RealScalar.ONE);
       }
@@ -40,13 +41,14 @@ import ch.alpine.tensor.Scalars;
   /** atomic unit may consist of roman letters in lower case a-z,
    * upper case A-Z, as well as the underscore character '_', and
    * the percent character `%` */
-  private static final Pattern PATTERN = Pattern.compile("[%A-Z_a-z]+");
+  private static final Predicate<String> PREDICATE = //
+      Pattern.compile("[%A-Z_a-z]+").asMatchPredicate();
 
   /** @param key atomic unit expression, for instance "kg"
    * @return given key
    * @throws Exception if given key is not an atomic unit expression */
   public static String requireAtomic(String key) {
-    if (PATTERN.matcher(key).matches())
+    if (PREDICATE.test(key))
       return key;
     throw new IllegalArgumentException(key);
   }

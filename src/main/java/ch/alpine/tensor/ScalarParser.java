@@ -8,6 +8,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 /* package */ enum ScalarParser {
@@ -20,8 +21,10 @@ import java.util.regex.Pattern;
   private static final char DIVIDE = '/';
   private static final char DECIMAL_PRIME = '`';
   // ---
-  private static final Pattern PATTERN_INTEGER = Pattern.compile("\\d+"); // optional sign is obsolete
-  private static final Pattern PATTERN_DOUBLE = Pattern.compile(StaticHelper.fpRegex);
+  private static final Predicate<String> PREDICATE_INTEGER = //
+      Pattern.compile("\\d+").asMatchPredicate(); // optional sign is obsolete
+  private static final Predicate<String> PREDICATE_DOUBLE = //
+      Pattern.compile(StaticHelper.fpRegex).asMatchPredicate();
   /** suffix that is appended to imaginary part of {@link ComplexScalar} in function toString() */
   private static final String I_SYMBOL = "I";
 
@@ -30,7 +33,7 @@ import java.util.regex.Pattern;
    * @throws Exception if given string cannot be parsed to a scalar of instance
    * {@link RealScalar} or {@link ComplexScalar} */
   public static Scalar of(final String _string) {
-    final String string = _string.trim();
+    final String string = _string.strip();
     final char[] chars = string.toCharArray();
     final List<Integer> plusMinus = new ArrayList<>();
     Integer times = null;
@@ -83,9 +86,9 @@ import java.util.regex.Pattern;
       return of(string.substring(1, string.length() - 1));
     if (string.equals(I_SYMBOL))
       return ComplexScalar.I;
-    if (PATTERN_INTEGER.matcher(string).matches()) // check integer
-      return RationalScalar.of(new BigInteger(string), BigInteger.ONE);
-    if (PATTERN_DOUBLE.matcher(string).matches()) // check double
+    if (PREDICATE_INTEGER.test(string))
+      return RationalScalar.integer(new BigInteger(string));
+    if (PREDICATE_DOUBLE.test(string))
       return DoubleScalar.of(Double.parseDouble(string));
     int prime = string.indexOf(DECIMAL_PRIME); // check decimal
     if (0 < prime) {

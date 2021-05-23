@@ -89,7 +89,7 @@ import ch.alpine.tensor.Tensors;
   }
 
   private void handle(String _string) {
-    String string = _string.trim();
+    String string = _string.strip();
     if (!string.isEmpty())
       deque.peek().append(function.apply(string));
   }
