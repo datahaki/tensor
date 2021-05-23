@@ -24,13 +24,15 @@ public class AnimatedGifWriter implements AutoCloseable {
    * @param loop whether for animation to loop indefinitely
    * @return
    * @throws Exception */
+  @SuppressWarnings("resource")
   public static AnimatedGifWriter of(File file, int period, boolean loop) throws IOException {
     // deletion of existing file is mandatory:
     // if the gif output is smaller than the existing file
     // trailing bytes of the existing file are not removed
     if (file.isFile())
       file.delete();
-    return new AnimatedGifWriter(new FileImageOutputStream(file), period, loop);
+    ImageOutputStream imageOutputStream = new FileImageOutputStream(file);
+    return new AnimatedGifWriter(imageOutputStream, period, loop);
   }
 
   /***************************************************/

@@ -26,7 +26,7 @@ public class Subsets {
   public static Tensor of(Tensor tensor, int k) {
     ScalarQ.thenThrow(tensor);
     List<Tensor> list = new LinkedList<>();
-    new Subsets(list::add, tensor, k);
+    new Subsets(list::add).init(tensor, k);
     return Unprotect.using(list);
   }
 
@@ -37,15 +37,18 @@ public class Subsets {
   public static Stream<Tensor> stream(Tensor tensor, int k) {
     ScalarQ.thenThrow(tensor);
     Builder<Tensor> builder = Stream.builder();
-    new Subsets(builder, tensor, k);
+    new Subsets(builder).init(tensor, k);
     return builder.build();
   }
 
   /***************************************************/
   private final Consumer<Tensor> consumer;
 
-  private Subsets(Consumer<Tensor> consumer, Tensor tensor, int k) {
+  private Subsets(Consumer<Tensor> consumer) {
     this.consumer = consumer;
+  }
+
+  private void init(Tensor tensor, int k) {
     recur(Tensors.empty(), tensor, k);
   }
 

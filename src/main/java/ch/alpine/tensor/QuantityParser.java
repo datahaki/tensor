@@ -17,7 +17,7 @@ import ch.alpine.tensor.qty.Unit;
     int index = string.indexOf(Quantity.UNIT_OPENING_BRACKET);
     if (0 < index) {
       int last = string.indexOf(Quantity.UNIT_CLOSING_BRACKET);
-      if (index < last && string.substring(last + 1).trim().isEmpty())
+      if (index < last && string.substring(last + 1).isBlank())
         return Quantity.of( //
             ScalarParser.of(string.substring(0, index)), //
             Unit.of(string.substring(index + 1, last)));

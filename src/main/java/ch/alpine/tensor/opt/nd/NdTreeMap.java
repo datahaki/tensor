@@ -17,7 +17,6 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.ext.StringRepeat;
 
 /** the query {@link NdTreeMap#cluster(NdCenterInterface, int)}
  * can be used in parallel. */
@@ -216,7 +215,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
   }
 
   private void print(StringBuilder stringBuilder, Node node) {
-    String v = StringRepeat.of(" ", root.depth - node.depth);
+    String v = " ".repeat(root.depth - node.depth);
     if (Objects.isNull(node.queue)) {
       stringBuilder.append(v + "<empty>\n");
       if (Objects.nonNull(node.lChild))

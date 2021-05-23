@@ -7,15 +7,15 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.itp.MitchellNetravaliKernel;
 
-/** not interpolatory !? */
-public class MitchellNetravaliWindow extends ParameterizedWindow {
+/** not interpolatory */
+/* package */ class MitchellNetravaliFilter extends ParameterizedWindow {
   private static final Scalar _4 = RealScalar.of(4);
   public static final ScalarUnaryOperator FUNCTION = of(RationalScalar.of(1, 3));
 
   /** @param c
    * @return */
   public static ScalarUnaryOperator of(Scalar c) {
-    return new MitchellNetravaliWindow(c);
+    return new MitchellNetravaliFilter(c);
   }
 
   /** @param c
@@ -27,7 +27,7 @@ public class MitchellNetravaliWindow extends ParameterizedWindow {
   /***************************************************/
   private final ScalarUnaryOperator scalarUnaryOperator;
 
-  private MitchellNetravaliWindow(Scalar c) {
+  private MitchellNetravaliFilter(Scalar c) {
     super(c);
     scalarUnaryOperator = MitchellNetravaliKernel.of(RealScalar.ONE.subtract(c.add(c)), c);
   }
