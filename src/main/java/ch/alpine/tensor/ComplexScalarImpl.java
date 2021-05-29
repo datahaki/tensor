@@ -213,7 +213,7 @@ import ch.alpine.tensor.sca.Sinh;
     if (isExactScalar()) {
       Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
       if (optional.isPresent())
-        return BINARY_POWER.raise(this, optional.get());
+        return BINARY_POWER.raise(this, optional.orElseThrow());
     }
     return Exp.FUNCTION.apply(exponent.multiply(Log.FUNCTION.apply(this)));
   }

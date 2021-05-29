@@ -120,7 +120,7 @@ public class Dot {
 
     public int product(Entry entry) {
       return m + entry.m + Stream.concat(dimensions.stream(), entry.dimensions.stream().skip(1)) //
-          .reduce(Math::multiplyExact).get();
+          .reduce(Math::multiplyExact).orElseThrow();
     }
   }
 }

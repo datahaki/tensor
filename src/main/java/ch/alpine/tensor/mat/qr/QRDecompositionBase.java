@@ -45,8 +45,8 @@ import ch.alpine.tensor.sca.Abs;
    * between min and max is below that threshold */
   private static void failFast(Tensor r, int m) {
     Tensor diag = Tensors.vector(i -> Abs.FUNCTION.apply(r.Get(i, i)), m);
-    Scalar max = (Scalar) diag.stream().reduce(Max::of).get();
-    Scalar min = (Scalar) diag.stream().reduce(Min::of).get();
+    Scalar max = (Scalar) diag.stream().reduce(Max::of).orElseThrow();
+    Scalar min = (Scalar) diag.stream().reduce(Min::of).orElseThrow();
     if (Tolerance.CHOP.isZero(min) || //
         Tolerance.CHOP.isZero(min.divide(max)))
       throw TensorRuntimeException.of(max, min);

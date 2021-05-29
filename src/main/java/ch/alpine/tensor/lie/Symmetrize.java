@@ -40,7 +40,7 @@ public enum Symmetrize {
             .map(permutation -> Transpose.of(tensor, IntStream.range(0, rank) //
                 .map(index -> permutation.Get(index).number().intValue()) //
                 .toArray()))
-            .reduce(Tensor::add).get() //
+            .reduce(Tensor::add).orElseThrow() //
             .divide(Factorial.of(rank));
       }
     }

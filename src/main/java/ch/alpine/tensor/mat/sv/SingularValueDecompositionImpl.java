@@ -109,7 +109,7 @@ import ch.alpine.tensor.sca.Sqrt;
         final int fj = j;
         Scalar dot = u.stream().skip(i) //
             .map(row -> row.Get(i).multiply(row.Get(fj))) //
-            .reduce(Scalar::add).get();
+            .reduce(Scalar::add).orElseThrow();
         addScaled(i, u, i, j, dot.divide(h));
       }
       u.stream().skip(i).forEach(uk -> uk.set(scale::multiply, i));
@@ -179,7 +179,7 @@ import ch.alpine.tensor.sca.Sqrt;
         Scalar s = u.stream() //
             .skip(ip1) // ip1 until rows
             .map(row -> row.Get(i).multiply(row.Get(fj))) //
-            .reduce(Scalar::add).get();
+            .reduce(Scalar::add).orElseThrow();
         addScaled(i, u, i, j, s.divide(den));
       }
       u.stream().skip(i).forEach(uj -> uj.set(p::under, i));
