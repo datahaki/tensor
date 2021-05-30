@@ -39,6 +39,11 @@ public class NdDualMap<V> implements NdMap<V> {
     return c1;
   }
 
+  @Override
+  public Collection<NdMatch<V>> cluster(NdCluster<V> ndCluster) {
+    throw new UnsupportedOperationException();
+  }
+
   @Override // from NdMap
   public boolean isEmpty() {
     return size() == 0;

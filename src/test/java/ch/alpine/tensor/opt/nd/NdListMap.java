@@ -36,4 +36,9 @@ public class NdListMap<V> implements NdMap<V> {
         .limit(limit) //
         .collect(Collectors.toCollection(LinkedList::new));
   }
+
+  @Override
+  public Collection<NdMatch<V>> cluster(NdCluster<V> ndCluster) {
+    throw new UnsupportedOperationException();
+  }
 }
