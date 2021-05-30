@@ -206,7 +206,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
     if (sqrtnum.isPresent()) {
       Optional<BigInteger> sqrtden = BigIntegerMath.sqrt(denominator());
       if (sqrtden.isPresent()) {
-        Scalar sqrt = of(sqrtnum.get(), sqrtden.get());
+        Scalar sqrt = of(sqrtnum.orElseThrow(), sqrtden.orElseThrow());
         return isNonNegative ? sqrt : ComplexScalarImpl.of(ZERO, sqrt);
       }
     }

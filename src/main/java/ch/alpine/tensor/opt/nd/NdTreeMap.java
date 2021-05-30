@@ -80,7 +80,11 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
 
   @Override // from NdMap
   public Collection<NdMatch<V>> cluster(NdCenterInterface ndCenterInterface, int limit) {
-    NdCluster<V> ndCluster = new NdCluster<>(ndCenterInterface, limit);
+    return cluster(new BoundedNdCluster<>(ndCenterInterface, limit));
+  }
+
+  @Override // from NdMap
+  public Collection<NdMatch<V>> cluster(NdCluster<V> ndCluster) {
     root.addToCluster(ndCluster, new NdBounds(global_lBounds, global_uBounds));
     return ndCluster.collection();
   }

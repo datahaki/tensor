@@ -7,6 +7,6 @@ import junit.framework.TestCase;
 
 public class NdClusterTest extends TestCase {
   public void testPackageVisibility() {
-    assertFalse(Modifier.isPublic(NdCluster.class.getModifiers()));
+    assertFalse(Modifier.isPublic(BoundedNdCluster.class.getModifiers()));
   }
 }

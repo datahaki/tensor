@@ -64,7 +64,7 @@ public class ListCorrelate implements TensorUnaryOperator {
         .collect(Collectors.toList());
     Tensor refs = Unprotect.references(tensor);
     return Array.of(index -> kernel.pmul(refs.block(index, mask)).flatten(level) //
-        .reduce(Tensor::add).get(), dimensions);
+        .reduce(Tensor::add).orElseThrow(), dimensions);
   }
 
   @Override // from Object

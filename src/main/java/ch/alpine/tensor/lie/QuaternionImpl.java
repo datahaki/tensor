@@ -192,7 +192,7 @@ import ch.alpine.tensor.sca.Sqrt;
     if (isExactScalar()) {
       Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
       if (optional.isPresent())
-        return (Quaternion) BINARY_POWER.raise(this, optional.get());
+        return (Quaternion) BINARY_POWER.raise(this, optional.orElseThrow());
     }
     return _power(exponent);
   }

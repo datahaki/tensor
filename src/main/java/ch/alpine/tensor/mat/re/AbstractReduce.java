@@ -35,7 +35,7 @@ import ch.alpine.tensor.ext.Integers;
     Scalar scalar = IntStream.range(0, lhs.length) //
         .mapToObj(c0 -> lhs[ind[c0]].Get(c0)) //
         .reduce(Scalar::multiply) //
-        .get();
+        .orElseThrow();
     return Integers.isEven(swaps) //
         ? scalar
         : scalar.negate();

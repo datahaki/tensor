@@ -43,6 +43,6 @@ public enum Det {
     return Diagonal.of(matrix).stream() //
         .map(Scalar.class::cast) //
         .map(Scalar::zero) //
-        .reduce(Scalar::add).get();
+        .reduce(Scalar::add).orElseThrow();
   }
 }

@@ -31,6 +31,6 @@ public enum Fold {
       Objects.requireNonNull(binaryOperator);
       return x.copy();
     }
-    return Stream.concat(Stream.of(x), tensor.stream()).reduce(binaryOperator).get();
+    return Stream.concat(Stream.of(x), tensor.stream()).reduce(binaryOperator).orElseThrow();
   }
 }

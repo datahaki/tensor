@@ -16,8 +16,8 @@ public enum LehmerTensor {
    * @return tensor of rank d and dimensions d x d x ... x d */
   public static Tensor of(int d) {
     return Array.of(list -> RationalScalar.of( //
-        list.stream().reduce(Math::min).get() + 1, //
-        list.stream().reduce(Math::max).get() + 1), Collections.nCopies(d, d));
+        list.stream().reduce(Math::min).orElseThrow() + 1, //
+        list.stream().reduce(Math::max).orElseThrow() + 1), Collections.nCopies(d, d));
   }
 
   /** @param vector of length d with positive coefficients
@@ -25,7 +25,7 @@ public enum LehmerTensor {
   public static Tensor of(Tensor vector) {
     int n = vector.length();
     return Array.of(list -> //
-    list.stream().map(vector::Get).reduce(Min::of).get().divide( //
-        list.stream().map(vector::Get).reduce(Max::of).get()), Collections.nCopies(n, n));
+    list.stream().map(vector::Get).reduce(Min::of).orElseThrow().divide( //
+        list.stream().map(vector::Get).reduce(Max::of).orElseThrow()), Collections.nCopies(n, n));
   }
 }
