@@ -8,12 +8,12 @@ import ch.alpine.tensor.sca.Sqrt;
 
 /** base for a class that implements the {@link InfluenceMatrix} interface */
 /* package */ abstract class InfluenceMatrixBase implements InfluenceMatrix {
-  @Override // from LeveragesInterface
+  @Override // from InfluenceMatrix
   public final Tensor leverages() {
     return Diagonal.of(matrix());
   }
 
-  @Override // from LeveragesInterface
+  @Override // from InfluenceMatrix
   public final Tensor leverages_sqrt() {
     return leverages().map(Sqrt.FUNCTION);
   }

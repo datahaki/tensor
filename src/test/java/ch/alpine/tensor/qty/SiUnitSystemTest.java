@@ -74,7 +74,7 @@ public class SiUnitSystemTest extends TestCase {
   }
 
   public void testPico() {
-    int checked = _check(Arrays.asList("pt", "ppt"), "p", RationalScalar.of(1, 1000000000000L));
+    int checked = _check(Arrays.asList("pt", "ppt", "ppm"), "p", RationalScalar.of(1, 1000000000000L));
     assertTrue(1 <= checked);
   }
 
