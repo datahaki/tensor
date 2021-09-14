@@ -55,11 +55,4 @@ import ch.alpine.tensor.io.Primitives;
   public static List<Integer> reorder(List<Integer> list, int[] sigma) {
     return Arrays.stream(sigma).mapToObj(list::get).collect(Collectors.toList());
   }
-
-  public static int[] reorder(int[] size, int[] sigma) {
-    int[] dims = new int[sigma.length];
-    for (int index = 0; index < sigma.length; ++index)
-      dims[index] = size[sigma[index]];
-    return dims;
-  }
 }

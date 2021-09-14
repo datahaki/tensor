@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensors;
 
@@ -33,11 +34,10 @@ import ch.alpine.tensor.Tensors;
     return new Size(StaticHelper.inverse(size, sigma));
   }
 
-  public int indexOf(MultiIndex multiIndex) {
-    int pos = 0;
-    for (int index = 0; index < prod.length; ++index)
-      pos += prod[index] * multiIndex.at(index);
-    return pos;
+  public int indexOf(int[] _size, int[] sigma) {
+    return IntStream.range(0, prod.length) //
+        .map(index -> prod[index] * _size[sigma[index]]) //
+        .sum();
   }
 
   public int size(int index) {

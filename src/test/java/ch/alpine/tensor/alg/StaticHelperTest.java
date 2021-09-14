@@ -4,6 +4,8 @@ package ch.alpine.tensor.alg;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.RandomPermutation;
@@ -44,8 +46,8 @@ public class StaticHelperTest extends TestCase {
       int[] sigma = StaticHelper.inverse(src);
       int[] size = RandomPermutation.ofLength(n);
       int[] result = StaticHelper.inverse(size, sigma);
-      int[] value = StaticHelper.reorder(size, src);
-      assertEquals(Tensors.vectorInt(result), Tensors.vectorInt(value));
+      List<Integer> value = StaticHelper.reorder(IntStream.of(size).boxed().collect(Collectors.toList()), src);
+      assertEquals(Tensors.vectorInt(result), Tensors.vector(value));
     }
   }
 

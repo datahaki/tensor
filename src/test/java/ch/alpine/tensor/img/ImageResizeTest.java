@@ -1,7 +1,9 @@
 // code by jph
 package ch.alpine.tensor.img;
 
+import java.awt.Dimension;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 import ch.alpine.tensor.ExactTensorQ;
@@ -29,6 +31,13 @@ public class ImageResizeTest extends TestCase {
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     Tensor image = ImageResize.nearest(tensor, 2, 3);
     assertEquals(Dimensions.of(image), Arrays.asList(66, 45, 4));
+  }
+
+  public void testImage3() throws IOException {
+    File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());
+    Tensor tensor = Import.of(file);
+    Tensor resize = ImageResize.of(tensor, new Dimension(40, 60));
+    assertEquals(Dimensions.of(resize), Arrays.asList(60, 40, 4));
   }
 
   public void testBlub1() {
