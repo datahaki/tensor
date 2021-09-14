@@ -1,10 +1,8 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
@@ -66,7 +64,7 @@ public enum Transpose {
    * @return */
   public static Tensor of(Tensor tensor, int... sigma) {
     if (ScalarQ.of(tensor) && sigma.length == 0)
-      return tensor;
+      return tensor; // tensor is a scalar
     if (!ArrayQ.ofRank(tensor, sigma.length))
       throw TensorRuntimeException.of(tensor);
     List<Integer> dims = Dimensions.of(tensor);
@@ -75,11 +73,9 @@ public enum Transpose {
     Size mySize = Size.of(size);
     Size tensorSize = mySize.permute(sigma);
     Tensor data = Tensor.of(tensor.flatten(-1));
-    int[] inverse = new int[sigma.length];
-    IntStream.range(0, sigma.length).forEach(index -> inverse[sigma[index]] = index);
     List<Tensor> list = new LinkedList<>(); // could preallocate
     for (MultiIndex src : tensorSize)
-      list.add(data.get(mySize.indexOf(src.permute(inverse))));
+      list.add(data.get(mySize.indexOf(src.reorder(sigma))));
     Integer[] tsize = new Integer[sigma.length]; // int[] to Integer[]
     IntStream.range(0, sigma.length).forEach(index -> tsize[index] = tensorSize.size(index));
     return ArrayReshape.of(list.stream(), tsize);
@@ -97,20 +93,9 @@ public enum Transpose {
    * @throws Exception */
   public static Tensor nonArray(Tensor tensor, int... sigma) {
     Tensor _sigma = Tensors.vectorInt(sigma);
-    if (Sort.of(_sigma).equals(Range.of(0, sigma.length)))
-      return Array.of(list -> tensor.get(permute(list, sigma)), //
-          inverse(Dimensions.of(tensor), _sigma));
+    if (Sort.of(_sigma).equals(Range.of(0, sigma.length))) // assert that sigma is a permutation
+      return Array.of(list -> tensor.get(StaticHelper.reorder(list, sigma)), //
+          StaticHelper.inverse(Dimensions.of(tensor), _sigma));
     throw TensorRuntimeException.of(_sigma); // sigma does not encode a permutation
-  }
-
-  // helper function
-  private static List<Integer> inverse(List<Integer> list, Tensor sigma) {
-    // TODO can this be done simpler, see ImageMatcher
-    return Ordering.INCREASING.stream(sigma).map(list::get).collect(Collectors.toList());
-  }
-
-  // helper function
-  private static Integer[] permute(List<Integer> list, int[] sigma) {
-    return Arrays.stream(sigma).mapToObj(list::get).toArray(Integer[]::new);
   }
 }

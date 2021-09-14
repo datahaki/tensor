@@ -30,7 +30,7 @@ import ch.alpine.tensor.Tensors;
   }
 
   public Size permute(int[] sigma) {
-    return new Size(StaticHelper.permute(size, sigma));
+    return new Size(StaticHelper.inverse(size, sigma));
   }
 
   public int indexOf(MultiIndex multiIndex) {

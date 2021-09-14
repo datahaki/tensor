@@ -26,8 +26,8 @@ import ch.alpine.tensor.Tensors;
    * 
    * @param sigma
    * @return */
-  public MultiIndex permute(int... sigma) {
-    return new MultiIndex(StaticHelper.permute(size, sigma));
+  public MultiIndex reorder(int... sigma) {
+    return new MultiIndex(StaticHelper.reorder(size, sigma));
   }
 
   @Override // from Object
