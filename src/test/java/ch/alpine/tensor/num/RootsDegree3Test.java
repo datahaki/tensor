@@ -17,7 +17,7 @@ public class RootsDegree3Test extends TestCase {
     Scalar c = RealScalar.of(+0.8284521034333863);
     Scalar a = RealScalar.of(-0.33633373640449604);
     Tensor coeffs = Tensors.of(RealScalar.ZERO, c, RealScalar.ZERO, a);
-    ScalarUnaryOperator cubic = Series.of(coeffs);
+    ScalarUnaryOperator cubic = Polynomial.of(coeffs);
     Tensor roots = Roots.of(Tensors.of(RealScalar.ZERO, c, RealScalar.ZERO, a));
     Chop.NONE.requireAllZero(Imag.of(roots));
     Chop._13.requireAllZero(roots.get(1));
@@ -26,7 +26,7 @@ public class RootsDegree3Test extends TestCase {
 
   public void testCubicChallenge2() {
     Tensor coeffs = Tensors.vector(1.5583019232667707, 0.08338030361650195, 0.5438230916311243, 1.1822223716596811);
-    ScalarUnaryOperator polynomial = Series.of(coeffs);
+    ScalarUnaryOperator polynomial = Polynomial.of(coeffs);
     // roots obtained by Mathematica:
     Scalar cR = RealScalar.of(-1.2487729899770943);
     Chop._12.requireZero(polynomial.apply(cR));

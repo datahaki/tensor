@@ -7,7 +7,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.num.Series;
+import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Abs;
 
 /** IMPLEMENTATION IS BASED ON THE TAYLOR SERIES
@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Abs;
 /* package */ enum ErfcRestricted implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final ScalarUnaryOperator SERIES = Series.of(Tensors.vector( //
+  private static final ScalarUnaryOperator SERIES = Polynomial.of(Tensors.vector( //
       1, //
       -1.1283791670955126, 0, // x
       +0.3761263890318375, 0, // x^3

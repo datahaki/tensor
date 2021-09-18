@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.num.Series;
+import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Cos;
 import ch.alpine.tensor.sca.Gamma;
@@ -25,7 +25,7 @@ public class NestTest extends TestCase {
   }
 
   public void testSeries() {
-    Tensor actual = Nest.of(Series.of(Tensors.vector(1, 2, 1)), RealScalar.ONE, 3);
+    Tensor actual = Nest.of(Polynomial.of(Tensors.vector(1, 2, 1)), RealScalar.ONE, 3);
     ExactTensorQ.require(actual);
     assertEquals(RealScalar.of(676), actual);
   }

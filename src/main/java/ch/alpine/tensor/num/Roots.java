@@ -15,7 +15,7 @@ import ch.alpine.tensor.alg.Sort;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Roots.html">Roots</a>
  * 
- * @see Series */
+ * @see Polynomial */
 public enum Roots {
   ;
   /** attempts to find all roots of a polynomial

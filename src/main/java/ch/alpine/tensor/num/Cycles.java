@@ -25,6 +25,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Last;
+import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Sign;
@@ -33,7 +34,7 @@ import ch.alpine.tensor.sca.Sign;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Cycles.html">Cycles</a> */
-public class Cycles implements Serializable {
+public class Cycles implements Comparable<Cycles>, Serializable {
   private static final BinaryPower<Cycles> BINARY_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
   private static final Cycles IDENTITY = new Cycles(Collections.emptyNavigableMap());
 
@@ -88,7 +89,8 @@ public class Cycles implements Serializable {
   /***************************************************/
   private final NavigableMap<Integer, Integer> navigableMap;
 
-  private Cycles(NavigableMap<Integer, Integer> navigableMap) {
+  /** @param navigableMap without entries of the form i -> i */
+  /* package */ Cycles(NavigableMap<Integer, Integer> navigableMap) {
     this.navigableMap = navigableMap;
   }
 
@@ -171,6 +173,11 @@ public class Cycles implements Serializable {
     Builder<Tensor> builder = Stream.builder();
     cycleInterate(builder);
     return Tensor.of(builder.build());
+  }
+
+  @Override
+  public int compareTo(Cycles cycles) {
+    return TensorComparator.INSTANCE.compare(toTensor(), cycles.toTensor());
   }
 
   /***************************************************/

@@ -45,14 +45,14 @@ public class RootsDegree2Test extends TestCase {
   public void testChallenge() {
     Tensor coeffs = Tensors.vector(-0.45461391407082863, -0.44401256484994056, -0.43798541191338114);
     Tensor roots = Roots.of(coeffs);
-    Tensor zeros = roots.map(Series.of(coeffs));
+    Tensor zeros = roots.map(Polynomial.of(coeffs));
     Chop._12.requireAllZero(zeros);
   }
 
   public void testGaussScalar() {
     Tensor coeffs = Tensors.of(GaussScalar.of(3, 7), GaussScalar.of(2, 7), GaussScalar.of(2, 7));
     Tensor roots = Roots.of(coeffs);
-    Tensor zeros = roots.map(Series.of(coeffs));
+    Tensor zeros = roots.map(Polynomial.of(coeffs));
     Chop.NONE.requireAllZero(zeros);
     assertEquals(roots, Tensors.of(GaussScalar.of(1, 7), GaussScalar.of(5, 7)));
   }

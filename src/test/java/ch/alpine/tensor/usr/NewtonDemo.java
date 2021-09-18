@@ -7,7 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.img.ColorDataGradients;
-import ch.alpine.tensor.num.Series;
+import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Clips;
@@ -34,7 +34,7 @@ import ch.alpine.tensor.sca.Clips;
   }
 
   public static void main(String[] args) throws Exception {
-    StaticHelper.export(of(Tensors.vector(1, 5, 0, 1)), Series.class, ColorDataGradients.PARULA);
+    StaticHelper.export(of(Tensors.vector(1, 5, 0, 1)), Polynomial.class, ColorDataGradients.PARULA);
   }
 }
 // depth3
