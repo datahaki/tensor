@@ -26,7 +26,5 @@ public interface NdMap<V> {
    * @param limit strictly positive
    * @return cluster of at most limit closest points to given ndCenter. The application
    * layer should not make assumptions on the ordering of the points in the cluster. */
-  Collection<NdMatch<V>> cluster(NdCenterInterface ndCenterInterface, int limit);
-
   Collection<NdMatch<V>> cluster(NdCluster<V> ndCluster);
 }

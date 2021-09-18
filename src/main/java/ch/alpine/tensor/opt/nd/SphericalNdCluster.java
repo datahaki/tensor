@@ -3,50 +3,42 @@
 package ch.alpine.tensor.opt.nd;
 
 import java.util.Collection;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.LinkedList;
+import java.util.List;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-/* package */ class BoundedNdCluster<V> implements NdCluster<V> {
+public class SphericalNdCluster<V> implements NdCluster<V> {
   private final NdCenterInterface ndCenterInterface;
   private final Tensor center;
-  private final int limit;
-  private final Queue<NdMatch<V>> queue;
+  private final Scalar radius;
+  private final List<NdMatch<V>> list = new LinkedList<>();
 
   /** @param ndCenterInterface
    * @param limit positive */
-  public BoundedNdCluster(NdCenterInterface ndCenterInterface, int limit) {
+  public SphericalNdCluster(NdCenterInterface ndCenterInterface, Scalar radius) {
     this.ndCenterInterface = ndCenterInterface;
     this.center = ndCenterInterface.center();
-    this.limit = limit;
-    queue = new PriorityQueue<>(NdMatchComparators.DECREASING);
+    this.radius = radius;
   }
 
   @Override
   public void consider(NdPair<V> ndPair) {
-    NdMatch<V> ndMatch = new NdMatch<>( //
-        ndPair.location(), //
-        ndPair.value(), //
-        ndCenterInterface.distance(ndPair.location()));
-    if (queue.size() < limit)
-      queue.add(ndMatch);
-    else //
-    if (Scalars.lessThan(ndMatch.distance(), queue.peek().distance())) {
-      queue.poll();
-      queue.add(ndMatch);
-    }
+    Scalar distance = ndCenterInterface.distance(ndPair.location());
+    if (Scalars.lessThan(distance, radius))
+      list.add(new NdMatch<>( //
+          ndPair.location(), //
+          ndPair.value(), //
+          distance));
   }
 
   @Override
   public boolean isViable(NdBounds ndBounds) {
-    if (queue.size() < limit)
-      return true;
     Tensor test = Tensors.vector(i -> ndBounds.clip(i).apply(center.Get(i)), center.length());
-    return Scalars.lessThan(ndCenterInterface.distance(test), queue.peek().distance());
+    return Scalars.lessThan(ndCenterInterface.distance(test), radius);
   }
 
   @Override
@@ -56,6 +48,6 @@ import ch.alpine.tensor.Tensors;
 
   @Override
   public Collection<NdMatch<V>> collection() {
-    return queue;
+    return list;
   }
 }

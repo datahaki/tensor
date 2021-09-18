@@ -7,13 +7,11 @@ import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Queue;
-import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Integers;
@@ -29,10 +27,10 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
   private int size;
 
   /** lbounds and ubounds are vectors of identical length
-   * for instance if the points to be added are in the unit square then
+   * for instance if the points to be added are in the unit cube then
    * <pre>
-   * lbounds = {0, 0}
-   * ubounds = {1, 1}
+   * lbounds = {0, 0, 0}
+   * ubounds = {1, 1, 1}
    * </pre>
    * 
    * @param lbounds smallest coordinates of points to be added
@@ -43,12 +41,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
    * @param maxDepth 16 is reasonable for most applications
    * @throws Exception if maxDensity is not strictly positive */
   public NdTreeMap(Tensor lbounds, Tensor ubounds, int maxDensity, int maxDepth) {
-    VectorQ.require(lbounds);
-    VectorQ.require(ubounds);
-    if (lbounds.length() != ubounds.length())
-      throw TensorRuntimeException.of(lbounds, ubounds);
-    if (!IntStream.range(0, lbounds.length()).allMatch(index -> Scalars.lessEquals(lbounds.Get(index), ubounds.Get(index))))
-      throw TensorRuntimeException.of(lbounds, ubounds);
+    StaticHelper.require(lbounds, ubounds);
     global_lBounds = lbounds.unmodifiable();
     global_uBounds = ubounds.unmodifiable();
     this.maxDensity = Integers.requirePositiveOrZero(maxDensity);
@@ -76,11 +69,6 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
   @Override // from NdMap
   public boolean isEmpty() {
     return size() == 0;
-  }
-
-  @Override // from NdMap
-  public Collection<NdMatch<V>> cluster(NdCenterInterface ndCenterInterface, int limit) {
-    return cluster(new BoundedNdCluster<>(ndCenterInterface, limit));
   }
 
   @Override // from NdMap
@@ -172,6 +160,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
               rChild = createChild();
             rChild.queue.add(entry);
           }
+        queue.clear();
         queue = null;
         add(ndPair, ndBounds);
       }
@@ -218,6 +207,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     return stringBuilder.toString();
   }
 
+  // TODO possibly use cluster function with viable all -> consider all
   private void print(StringBuilder stringBuilder, Node node) {
     String v = " ".repeat(root.depth - node.depth);
     if (Objects.isNull(node.queue)) {

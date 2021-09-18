@@ -27,21 +27,16 @@ public class NdDualMap<V> implements NdMap<V> {
     return ndTreeMap.size();
   }
 
-  @Override // from NdMap
-  public Collection<NdMatch<V>> cluster(NdCenterInterface ndCenterInterface, int limit) {
-    Collection<NdMatch<V>> c1 = ndTreeMap.cluster(ndCenterInterface, limit);
-    Collection<NdMatch<V>> c2 = ndListMap.cluster(ndCenterInterface, limit);
+  @Override
+  public Collection<NdMatch<V>> cluster(NdCluster<V> ndCluster) {
+    Collection<NdMatch<V>> c1 = ndTreeMap.cluster(ndCluster); // FIXME
+    Collection<NdMatch<V>> c2 = ndListMap.cluster(ndCluster);
     {
       Scalar s1 = c1.stream().sorted(NdMatchComparators.INCREASING).map(NdMatch::distance).reduce(Scalar::add).get();
       Scalar s2 = c2.stream().sorted(NdMatchComparators.INCREASING).map(NdMatch::distance).reduce(Scalar::add).get();
       Chop.NONE.requireClose(s1, s2);
     }
     return c1;
-  }
-
-  @Override
-  public Collection<NdMatch<V>> cluster(NdCluster<V> ndCluster) {
-    throw new UnsupportedOperationException();
   }
 
   @Override // from NdMap
