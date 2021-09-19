@@ -7,7 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-/* package */ class NdBounds {
+public class NdBounds {
   public final Tensor lBounds;
   public final Tensor uBounds;
 
@@ -21,6 +21,8 @@ import ch.alpine.tensor.sca.Clips;
   }
 
   public Clip clip(int index) {
-    return Clips.interval(lBounds.Get(index), uBounds.Get(index));
+    return Clips.interval( //
+        lBounds.Get(index), //
+        uBounds.Get(index));
   }
 }

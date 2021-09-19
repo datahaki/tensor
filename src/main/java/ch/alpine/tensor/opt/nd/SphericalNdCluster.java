@@ -37,6 +37,23 @@ public class SphericalNdCluster<V> implements NdVisitor<V> {
   }
 
   @Override
+  public boolean push_leftFirst(NdBounds ndBounds, int dimension, Scalar mean) {
+    return true;
+  }
+
+  @Override
+  public void pop() {
+    // ---
+  }
+
+  @Override
+  public boolean isViable(NdBounds ndBounds) {
+    // TODO justify this computation!?
+    Tensor test = Tensors.vector(i -> ndBounds.clip(i).apply(center.Get(i)), center.length());
+    return Scalars.lessThan(ndCenterInterface.distance(test), radius);
+  }
+
+  @Override
   public void consider(NdPair<V> ndPair) {
     Scalar distance = ndCenterInterface.distance(ndPair.location());
     if (Scalars.lessThan(distance, radius))
@@ -44,16 +61,5 @@ public class SphericalNdCluster<V> implements NdVisitor<V> {
           ndPair.location(), //
           ndPair.value(), //
           distance));
-  }
-
-  @Override
-  public boolean isViable(NdBounds ndBounds) {
-    Tensor test = Tensors.vector(i -> ndBounds.clip(i).apply(center.Get(i)), center.length());
-    return Scalars.lessThan(ndCenterInterface.distance(test), radius);
-  }
-
-  @Override
-  public boolean leftFirst(NdBounds ndBounds, int dimension, Scalar mean) {
-    return true;
   }
 }

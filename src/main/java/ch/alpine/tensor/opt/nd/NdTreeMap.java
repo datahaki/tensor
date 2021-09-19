@@ -7,11 +7,9 @@ import java.util.ArrayDeque;
 import java.util.Objects;
 import java.util.Queue;
 
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Integers;
 
@@ -75,21 +73,6 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     root.visit(ndVisitor, new NdBounds(global_lBounds, global_uBounds));
   }
 
-  /** function returns the queue size of leaf nodes in the tree.
-   * use the function to determine if the tree is well balanced.
-   * 
-   * <p>Example use:
-   * <pre>
-   * Tally.sorted(Flatten.of(ndTreeMap.binSize()))
-   * </pre>
-   * 
-   * @return */
-  // TODO this should be obsolete when using visitor
-  @Deprecated
-  public Tensor binSize() {
-    return root.binSize();
-  }
-
   private class Node implements Serializable {
     private final int depth;
     private Node lChild;
@@ -108,15 +91,6 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
 
     private boolean isInternal() {
       return Objects.isNull(queue);
-    }
-
-    @Deprecated
-    private Tensor binSize() {
-      return isInternal() //
-          ? Tensors.of( //
-              Objects.isNull(lChild) ? RealScalar.ZERO : lChild.binSize(), //
-              Objects.isNull(rChild) ? RealScalar.ZERO : rChild.binSize())
-          : RealScalar.of(queue.size());
     }
 
     private int dimension() {
@@ -171,13 +145,15 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       if (isInternal()) {
         final int dimension = dimension();
         Scalar mean = ndBounds.mean(dimension);
-        if (ndVisitor.leftFirst(ndBounds, dimension, mean)) {
+        boolean leftFirst = ndVisitor.push_leftFirst(ndBounds, dimension, mean);
+        if (leftFirst) {
           visit_L(ndVisitor, ndBounds, mean);
           visit_R(ndVisitor, ndBounds, mean);
         } else {
           visit_R(ndVisitor, ndBounds, mean);
           visit_L(ndVisitor, ndBounds, mean);
         }
+        ndVisitor.pop();
       } else
         queue.forEach(ndVisitor::consider); // number of function calls to #consider
     }

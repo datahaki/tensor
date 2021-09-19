@@ -38,6 +38,24 @@ public class NearestNdCluster<V> implements NdVisitor<V> {
   }
 
   @Override
+  public boolean push_leftFirst(NdBounds ndBounds, int dimension, Scalar mean) {
+    return Scalars.lessThan(center.Get(dimension), mean);
+  }
+
+  @Override
+  public void pop() {
+    // ---
+  }
+
+  @Override
+  public boolean isViable(NdBounds ndBounds) {
+    if (queue.size() < limit)
+      return true;
+    Tensor test = Tensors.vector(i -> ndBounds.clip(i).apply(center.Get(i)), center.length());
+    return Scalars.lessThan(ndCenterInterface.distance(test), queue.peek().distance());
+  }
+
+  @Override
   public void consider(NdPair<V> ndPair) {
     NdMatch<V> ndMatch = new NdMatch<>( //
         ndPair.location(), //
@@ -52,16 +70,7 @@ public class NearestNdCluster<V> implements NdVisitor<V> {
     }
   }
 
-  @Override
-  public boolean isViable(NdBounds ndBounds) {
-    if (queue.size() < limit)
-      return true;
-    Tensor test = Tensors.vector(i -> ndBounds.clip(i).apply(center.Get(i)), center.length());
-    return Scalars.lessThan(ndCenterInterface.distance(test), queue.peek().distance());
-  }
-
-  @Override
-  public boolean leftFirst(NdBounds ndBounds, int dimension, Scalar mean) {
-    return Scalars.lessThan(center.Get(dimension), mean);
+  public Queue<NdMatch<V>> queue() {
+    return queue;
   }
 }

@@ -4,12 +4,18 @@ package ch.alpine.tensor.opt.nd;
 import ch.alpine.tensor.Scalar;
 
 public interface NdVisitor<V> {
-  /** @param ndPair */
-  void consider(NdPair<V> ndPair);
+  /** @param ndBounds
+   * @param dimension
+   * @param mean
+   * @return */
+  boolean push_leftFirst(NdBounds ndBounds, int dimension, Scalar mean);
+
+  void pop();
 
   /** @param ndBounds
    * @return */
   boolean isViable(NdBounds ndBounds);
 
-  boolean leftFirst(NdBounds ndBounds, int dimension, Scalar mean);
+  /** @param ndPair */
+  void consider(NdPair<V> ndPair);
 }
