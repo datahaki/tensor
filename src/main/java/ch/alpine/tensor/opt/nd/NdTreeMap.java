@@ -4,7 +4,6 @@ package ch.alpine.tensor.opt.nd;
 
 import java.io.Serializable;
 import java.util.ArrayDeque;
-import java.util.Collection;
 import java.util.Objects;
 import java.util.Queue;
 
@@ -72,9 +71,8 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
   }
 
   @Override // from NdMap
-  public Collection<NdMatch<V>> cluster(NdCluster<V> ndCluster) {
-    root.addToCluster(ndCluster, new NdBounds(global_lBounds, global_uBounds));
-    return ndCluster.collection();
+  public void visit(NdVisitor<V> ndVisitor) {
+    root.visit(ndVisitor, new NdBounds(global_lBounds, global_uBounds));
   }
 
   /** function returns the queue size of leaf nodes in the tree.
@@ -86,6 +84,8 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
    * </pre>
    * 
    * @return */
+  // TODO this should be obsolete when using visitor
+  @Deprecated
   public Tensor binSize() {
     return root.binSize();
   }
@@ -110,6 +110,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       return Objects.isNull(queue);
     }
 
+    @Deprecated
     private Tensor binSize() {
       return isInternal() //
           ? Tensors.of( //
@@ -166,34 +167,34 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       }
     }
 
-    private void addToCluster(NdCluster<V> ndCluster, NdBounds ndBounds) {
+    private void visit(NdVisitor<V> ndVisitor, NdBounds ndBounds) {
       if (isInternal()) {
         final int dimension = dimension();
         Scalar mean = ndBounds.mean(dimension);
-        boolean lFirst = Scalars.lessThan(ndCluster.center_Get(dimension), mean);
-        addChildToCluster(ndCluster, ndBounds, mean, lFirst);
-        addChildToCluster(ndCluster, ndBounds, mean, !lFirst);
+        boolean lFirst = ndVisitor.leftFirst(ndBounds, dimension, mean);
+        visit(ndVisitor, ndBounds, mean, lFirst);
+        visit(ndVisitor, ndBounds, mean, !lFirst);
       } else
-        queue.forEach(ndCluster::consider); // number of function calls to #consider
+        queue.forEach(ndVisitor::consider); // number of function calls to #consider
     }
 
-    private void addChildToCluster(NdCluster<V> ndCluster, NdBounds ndBounds, Scalar median, boolean left) {
+    private void visit(NdVisitor<V> ndVisitor, NdBounds ndBounds, Scalar median, boolean left) {
       final int dimension = dimension();
       if (left) {
         if (Objects.isNull(lChild))
           return;
         Scalar copy = ndBounds.uBounds.Get(dimension);
         ndBounds.uBounds.set(median, dimension);
-        if (ndCluster.isViable(ndBounds))
-          lChild.addToCluster(ndCluster, ndBounds);
+        if (ndVisitor.isViable(ndBounds))
+          lChild.visit(ndVisitor, ndBounds);
         ndBounds.uBounds.set(copy, dimension);
       } else {
         if (Objects.isNull(rChild))
           return;
         Scalar copy = ndBounds.lBounds.Get(dimension);
         ndBounds.lBounds.set(median, dimension);
-        if (ndCluster.isViable(ndBounds))
-          rChild.addToCluster(ndCluster, ndBounds);
+        if (ndVisitor.isViable(ndBounds))
+          rChild.visit(ndVisitor, ndBounds);
         ndBounds.lBounds.set(copy, dimension);
       }
     }
@@ -202,24 +203,8 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
   /***************************************************/
   @Override // from Object
   public String toString() {
-    StringBuilder stringBuilder = new StringBuilder();
-    print(stringBuilder, root);
-    return stringBuilder.toString();
-  }
-
-  // TODO possibly use cluster function with viable all -> consider all
-  private void print(StringBuilder stringBuilder, Node node) {
-    String v = " ".repeat(root.depth - node.depth);
-    if (Objects.isNull(node.queue)) {
-      stringBuilder.append(v + "<empty>\n");
-      if (Objects.nonNull(node.lChild))
-        print(stringBuilder, node.lChild);
-      if (Objects.nonNull(node.rChild))
-        print(stringBuilder, node.rChild);
-    } else {
-      stringBuilder.append(v + Integer.toString(node.queue.size()) + "\n");
-      for (NdPair<V> entry : node.queue)
-        stringBuilder.append(v + entry.location().toString() + " " + entry.value() + "\n");
-    }
+    NdPrint<V> ndPrint = new NdPrint<>();
+    visit(ndPrint);
+    return ndPrint.toString();
   }
 }

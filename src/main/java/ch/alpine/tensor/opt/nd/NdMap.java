@@ -1,8 +1,6 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
-import java.util.Collection;
-
 import ch.alpine.tensor.Tensor;
 
 /** NdMap contains (coordinate, value)-pairs.
@@ -22,9 +20,6 @@ public interface NdMap<V> {
   /** @return true if size() == 0 */
   boolean isEmpty();
 
-  /** @param ndCenterInterface
-   * @param limit strictly positive
-   * @return cluster of at most limit closest points to given ndCenter. The application
-   * layer should not make assumptions on the ordering of the points in the cluster. */
-  Collection<NdMatch<V>> cluster(NdCluster<V> ndCluster);
+  /** @param ndVisitor */
+  void visit(NdVisitor<V> ndVisitor);
 }

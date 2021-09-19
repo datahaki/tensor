@@ -2,7 +2,6 @@
 package ch.alpine.tensor.opt.nd;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import ch.alpine.tensor.Tensor;
@@ -25,19 +24,9 @@ public class NdListMap<V> implements NdMap<V> {
   public boolean isEmpty() {
     return list.isEmpty();
   }
-  // FIXME
-  // @Override // from NdMap
-  // public Collection<NdMatch<V>> cluster(NdCenterInterface ndCenterInterface, int limit) {
-  // return list.stream() //
-  // .map(ndPair -> new NdMatch<>(ndPair.location(), ndPair.value(), ndCenterInterface.distance(ndPair.location()))) //
-  // .sorted(NdMatchComparators.INCREASING) //
-  // .limit(limit) //
-  // .collect(Collectors.toCollection(LinkedList::new));
-  // }
 
   @Override
-  public Collection<NdMatch<V>> cluster(NdCluster<V> ndCluster) {
-    list.stream().forEach(ndCluster::consider);
-    return ndCluster.collection();
+  public void visit(NdVisitor<V> ndVisitor) {
+    list.stream().forEach(ndVisitor::consider);
   }
 }

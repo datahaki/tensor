@@ -2,6 +2,7 @@
 // adapted by jph and clruch
 package ch.alpine.tensor.opt.nd;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -11,8 +12,12 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class NearestNdCluster<V> implements NdCluster<V> {
-  public static <V> NdCluster<V> create(NdCenterInterface ndCenterInterface, int limit) {
+public class NearestNdCluster<V> implements NdCollector<V>, Serializable {
+  /** @param <V>
+   * @param ndCenterInterface
+   * @param limit
+   * @return */
+  public static <V> NdCollector<V> create(NdCenterInterface ndCenterInterface, int limit) {
     return new NearestNdCluster<>(ndCenterInterface, limit);
   }
 
@@ -55,8 +60,8 @@ public class NearestNdCluster<V> implements NdCluster<V> {
   }
 
   @Override
-  public Scalar center_Get(int dimension) {
-    return center.Get(dimension);
+  public boolean leftFirst(NdBounds ndBounds, int dimension, Scalar mean) {
+    return Scalars.lessThan(center.Get(dimension), mean);
   }
 
   @Override

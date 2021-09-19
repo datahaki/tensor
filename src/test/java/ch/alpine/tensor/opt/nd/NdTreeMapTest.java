@@ -42,19 +42,25 @@ public class NdTreeMapTest extends TestCase {
         {
           Tensor center = Tensors.vector(0, 0);
           NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          Collection<NdMatch<String>> cluster = ndTreeMap.cluster(NearestNdCluster.create(distancer, 1));
+          NdCollector<String> ndCluster = NearestNdCluster.create(distancer, 1);
+          ndTreeMap.visit(ndCluster);
+          Collection<NdMatch<String>> cluster = ndCluster.collection();
           assertTrue(cluster.iterator().next().value().equals("d5"));
         }
         {
           Tensor center = Tensors.vector(5, 5);
           NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          Collection<NdMatch<String>> cluster = ndTreeMap.cluster(NearestNdCluster.create(distancer, 1));
+          NdCollector<String> ndCluster = NearestNdCluster.create(distancer, 1);
+          ndTreeMap.visit(ndCluster);
+          Collection<NdMatch<String>> cluster = ndCluster.collection();
           assertTrue(cluster.iterator().next().value().equals("d6"));
         }
         {
           Tensor center = Tensors.vector(1.1, 0.9);
           NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          Collection<NdMatch<String>> cluster = ndTreeMap.cluster(NearestNdCluster.create(distancer, 2));
+          NdCollector<String> ndCluster = NearestNdCluster.create(distancer, 2);
+          ndTreeMap.visit(ndCluster);
+          Collection<NdMatch<String>> cluster = ndCluster.collection();
           assertEquals(cluster.size(), 2);
           List<String> list = Arrays.asList("d1", "d4");
           for (NdMatch<String> point : cluster)
@@ -83,7 +89,9 @@ public class NdTreeMapTest extends TestCase {
         public void run() {
           Tensor center = RandomVariate.of(distribution, 2);
           NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          Collection<NdMatch<Void>> cluster = ndTreeMap.cluster(NearestNdCluster.create(distancer, 100));
+          NdCollector<Void> ndCluster = NearestNdCluster.create(distancer, 100);
+          ndTreeMap.visit(ndCluster);
+          Collection<NdMatch<Void>> cluster = ndCluster.collection();
           assertEquals(cluster.size(), 100);
         }
       }).start();
@@ -94,7 +102,9 @@ public class NdTreeMapTest extends TestCase {
     NdMap<String> ndMap = new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 10);
     assertTrue(ndMap.isEmpty());
     NdCenterInterface distancer = EuclideanNdCenter.of(Tensors.vector(0, 0));
-    Collection<NdMatch<String>> cluster = ndMap.cluster(NearestNdCluster.create(distancer, 2));
+    NdCollector<String> ndCluster = NearestNdCluster.create(distancer, 2);
+    ndMap.visit(ndCluster);
+    Collection<NdMatch<String>> cluster = ndCluster.collection();
     assertEquals(cluster.size(), 0);
   }
 
@@ -105,18 +115,24 @@ public class NdTreeMapTest extends TestCase {
     ndMap.add(Tensors.vector(0, 1), "d3");
     NdCenterInterface ndCenter = EuclideanNdCenter.of(Tensors.vector(0, 0));
     {
-      Collection<NdMatch<String>> cluster = ndMap.cluster(NearestNdCluster.create(ndCenter, 5));
+      NdCollector<String> ndCluster = NearestNdCluster.create(ndCenter, 5);
+      ndMap.visit(ndCluster);
+      Collection<NdMatch<String>> cluster = ndCluster.collection();
       assertEquals(cluster.size(), 3);
     }
     NdMap<String> ndMap2 = Serialization.copy(ndMap);
     {
       ndMap = new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 10);
-      Collection<NdMatch<String>> cluster = ndMap.cluster(NearestNdCluster.create(ndCenter, 5));
+      NdCollector<String> ndCluster = NearestNdCluster.create(ndCenter, 5);
+      ndMap.visit(ndCluster);
+      Collection<NdMatch<String>> cluster = ndCluster.collection();
       assertEquals(cluster.size(), 0);
     }
     ndMap = new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10, 10);
     {
-      Collection<NdMatch<String>> cluster = ndMap2.cluster(NearestNdCluster.create(ndCenter, 5));
+      NdCollector<String> ndCluster = NearestNdCluster.create(ndCenter, 5);
+      ndMap2.visit(ndCluster);
+      Collection<NdMatch<String>> cluster = ndCluster.collection();
       assertEquals(cluster.size(), 3);
     }
   }

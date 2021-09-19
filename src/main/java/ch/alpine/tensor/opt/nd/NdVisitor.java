@@ -1,11 +1,9 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
-import java.util.Collection;
-
 import ch.alpine.tensor.Scalar;
 
-public interface NdCluster<V> {
+public interface NdVisitor<V> {
   /** @param ndPair */
   void consider(NdPair<V> ndPair);
 
@@ -13,10 +11,5 @@ public interface NdCluster<V> {
    * @return */
   boolean isViable(NdBounds ndBounds);
 
-  /** @param dimension
-   * @return */
-  Scalar center_Get(int dimension);
-
-  /** @return */
-  Collection<NdMatch<V>> collection();
+  boolean leftFirst(NdBounds ndBounds, int dimension, Scalar mean);
 }
