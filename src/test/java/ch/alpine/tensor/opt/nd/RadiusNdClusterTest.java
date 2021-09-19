@@ -38,9 +38,7 @@ public class RadiusNdClusterTest extends TestCase {
     assertEquals(m1.size(), m2.size());
     NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(Tensors.vector(0.2, 4.3));
     Scalar radius = RealScalar.of(4);
-    NdCollector<String> ndCluster = SphericalNdCluster.create(ndCenterInterface, radius);
-    m1.visit(ndCluster);
-    Collection<NdMatch<String>> c1 = ndCluster.collection();
+    Collection<NdMatch<String>> c1 = SphericalNdCluster.of(m1, ndCenterInterface, radius);
     // TODO
     // Collection<NdMatch<String>> c2 = m2.cluster(SphericalNdCluster.create(ndCenterInterface, radius));
     // assertEquals(c1.size(), c2.size());

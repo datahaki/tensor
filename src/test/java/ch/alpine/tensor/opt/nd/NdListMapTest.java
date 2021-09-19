@@ -24,9 +24,7 @@ public class NdListMapTest extends TestCase {
     m1.add(Tensors.vector(0, 0), "p1");
     m1.add(Tensors.vector(1, 1), "p3");
     Tensor center = Tensors.vector(0, 0);
-    NdCollector<String> ndCluster = NearestNdCluster.create(EuclideanNdCenter.of(center), 2);
-    m1.visit(ndCluster);
-    Collection<NdMatch<String>> cl = ndCluster.collection();
+    Collection<NdMatch<String>> cl = NearestNdCluster.of(m1, EuclideanNdCenter.of(center), 2);
     Set<String> res = cl.stream().map(NdMatch::value).collect(Collectors.toSet());
     assertTrue(res.contains("p1"));
     assertTrue(res.contains("p2"));

@@ -171,36 +171,40 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       if (isInternal()) {
         final int dimension = dimension();
         Scalar mean = ndBounds.mean(dimension);
-        boolean lFirst = ndVisitor.leftFirst(ndBounds, dimension, mean);
-        visit(ndVisitor, ndBounds, mean, lFirst);
-        visit(ndVisitor, ndBounds, mean, !lFirst);
+        if (ndVisitor.leftFirst(ndBounds, dimension, mean)) {
+          visit_L(ndVisitor, ndBounds, mean);
+          visit_R(ndVisitor, ndBounds, mean);
+        } else {
+          visit_R(ndVisitor, ndBounds, mean);
+          visit_L(ndVisitor, ndBounds, mean);
+        }
       } else
         queue.forEach(ndVisitor::consider); // number of function calls to #consider
     }
 
-    private void visit(NdVisitor<V> ndVisitor, NdBounds ndBounds, Scalar median, boolean left) {
-      final int dimension = dimension();
-      if (left) {
-        if (Objects.isNull(lChild))
-          return;
-        Scalar copy = ndBounds.uBounds.Get(dimension);
-        ndBounds.uBounds.set(median, dimension);
-        if (ndVisitor.isViable(ndBounds))
-          lChild.visit(ndVisitor, ndBounds);
-        ndBounds.uBounds.set(copy, dimension);
-      } else {
-        if (Objects.isNull(rChild))
-          return;
-        Scalar copy = ndBounds.lBounds.Get(dimension);
-        ndBounds.lBounds.set(median, dimension);
-        if (ndVisitor.isViable(ndBounds))
-          rChild.visit(ndVisitor, ndBounds);
-        ndBounds.lBounds.set(copy, dimension);
-      }
+    private void visit_L(NdVisitor<V> ndVisitor, NdBounds ndBounds, Scalar median) {
+      if (Objects.isNull(lChild))
+        return;
+      int dimension = dimension();
+      Scalar copy = ndBounds.uBounds.Get(dimension);
+      ndBounds.uBounds.set(median, dimension);
+      if (ndVisitor.isViable(ndBounds))
+        lChild.visit(ndVisitor, ndBounds);
+      ndBounds.uBounds.set(copy, dimension);
+    }
+
+    private void visit_R(NdVisitor<V> ndVisitor, NdBounds ndBounds, Scalar median) {
+      if (Objects.isNull(rChild))
+        return;
+      int dimension = dimension();
+      Scalar copy = ndBounds.lBounds.Get(dimension);
+      ndBounds.lBounds.set(median, dimension);
+      if (ndVisitor.isViable(ndBounds))
+        rChild.visit(ndVisitor, ndBounds);
+      ndBounds.lBounds.set(copy, dimension);
     }
   }
 
-  /***************************************************/
   @Override // from Object
   public String toString() {
     NdPrint<V> ndPrint = new NdPrint<>();

@@ -2,7 +2,6 @@
 // adapted by jph and clruch
 package ch.alpine.tensor.opt.nd;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,9 +11,15 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class SphericalNdCluster<V> implements NdCollector<V>, Serializable {
-  public static <V> NdCollector<V> create(NdCenterInterface ndCenterInterface, Scalar radius) {
-    return new SphericalNdCluster<>(ndCenterInterface, radius);
+public class SphericalNdCluster<V> implements NdVisitor<V> {
+  /** @param ndMap
+   * @param ndCenterInterface
+   * @param radius
+   * @return */
+  public static <V> Collection<NdMatch<V>> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface, Scalar radius) {
+    SphericalNdCluster<V> sphericalNdCluster = new SphericalNdCluster<>(ndCenterInterface, radius);
+    ndMap.visit(sphericalNdCluster);
+    return sphericalNdCluster.list;
   }
 
   // ---
@@ -25,7 +30,7 @@ public class SphericalNdCluster<V> implements NdCollector<V>, Serializable {
 
   /** @param ndCenterInterface
    * @param limit positive */
-  private SphericalNdCluster(NdCenterInterface ndCenterInterface, Scalar radius) {
+  protected SphericalNdCluster(NdCenterInterface ndCenterInterface, Scalar radius) {
     this.ndCenterInterface = ndCenterInterface;
     this.center = ndCenterInterface.center();
     this.radius = radius;
@@ -50,10 +55,5 @@ public class SphericalNdCluster<V> implements NdCollector<V>, Serializable {
   @Override
   public boolean leftFirst(NdBounds ndBounds, int dimension, Scalar mean) {
     return true;
-  }
-
-  @Override
-  public Collection<NdMatch<V>> collection() {
-    return list;
   }
 }

@@ -2,7 +2,6 @@
 // adapted by jph and clruch
 package ch.alpine.tensor.opt.nd;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -12,13 +11,15 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class NearestNdCluster<V> implements NdCollector<V>, Serializable {
+public class NearestNdCluster<V> implements NdVisitor<V> {
   /** @param <V>
    * @param ndCenterInterface
    * @param limit
    * @return */
-  public static <V> NdCollector<V> create(NdCenterInterface ndCenterInterface, int limit) {
-    return new NearestNdCluster<>(ndCenterInterface, limit);
+  public static <V> Collection<NdMatch<V>> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface, int limit) {
+    NearestNdCluster<V> nearestNdCluster = new NearestNdCluster<>(ndCenterInterface, limit);
+    ndMap.visit(nearestNdCluster);
+    return nearestNdCluster.queue;
   }
 
   // ---
@@ -29,7 +30,7 @@ public class NearestNdCluster<V> implements NdCollector<V>, Serializable {
 
   /** @param ndCenterInterface
    * @param limit positive */
-  private NearestNdCluster(NdCenterInterface ndCenterInterface, int limit) {
+  protected NearestNdCluster(NdCenterInterface ndCenterInterface, int limit) {
     this.ndCenterInterface = ndCenterInterface;
     this.center = ndCenterInterface.center();
     this.limit = limit;
@@ -62,10 +63,5 @@ public class NearestNdCluster<V> implements NdCollector<V>, Serializable {
   @Override
   public boolean leftFirst(NdBounds ndBounds, int dimension, Scalar mean) {
     return Scalars.lessThan(center.Get(dimension), mean);
-  }
-
-  @Override
-  public Collection<NdMatch<V>> collection() {
-    return queue;
   }
 }
