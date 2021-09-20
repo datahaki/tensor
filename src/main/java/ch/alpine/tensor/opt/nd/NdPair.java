@@ -10,7 +10,7 @@ import ch.alpine.tensor.Tensor;
   private final V value;
 
   /* package */ NdPair(Tensor location, V value) {
-    this.location = location.unmodifiable();
+    this.location = location;
     this.value = value;
   }
 

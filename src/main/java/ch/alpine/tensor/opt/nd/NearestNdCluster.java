@@ -29,11 +29,13 @@ public class NearestNdCluster<V> implements NdVisitor<V> {
   private final Queue<NdMatch<V>> queue;
 
   /** @param ndCenterInterface
-   * @param limit positive */
+   * @param limit strictly positive */
   protected NearestNdCluster(NdCenterInterface ndCenterInterface, int limit) {
     this.ndCenterInterface = ndCenterInterface;
     this.center = ndCenterInterface.center();
     this.limit = limit;
+    if (limit < 1)
+      throw new IllegalArgumentException("limit must be positive but is " + limit);
     queue = new PriorityQueue<>(NdMatchComparators.DECREASING);
   }
 

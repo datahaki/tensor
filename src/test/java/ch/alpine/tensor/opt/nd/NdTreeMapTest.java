@@ -1,9 +1,7 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.NavigableMap;
 
 import ch.alpine.tensor.RealScalar;
@@ -15,52 +13,31 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.UniformDistribution;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NdTreeMapTest extends TestCase {
-  public void testSome() {
-    for (int n = 0; n < 10; ++n)
-      for (int d = 1; d < 4; ++d) {
-        NdTreeMap<String> ndTreeMap = //
-            new NdTreeMap<>(Tensors.vector(-2, -3), Tensors.vector(8, 9), n, d);
-        ndTreeMap.toString();
-        assertTrue(ndTreeMap.isEmpty());
-        // ndTreeMap.binSize();
-        ndTreeMap.add(Tensors.vector(1, 1), "d1");
-        assertFalse(ndTreeMap.isEmpty());
-        ndTreeMap.add(Tensors.vector(1, 0), "d2");
-        ndTreeMap.add(Tensors.vector(0, 1), "d3");
-        // ndTreeMap.binSize();
-        ndTreeMap.add(Tensors.vector(1, 1), "d4");
-        ndTreeMap.add(Tensors.vector(0.1, 0.1), "d5");
-        ndTreeMap.add(Tensors.vector(6, 7), "d6");
-        ndTreeMap.toString();
-        // ndTreeMap.binSize();
-        {
-          Tensor center = Tensors.vector(0, 0);
-          NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          Collection<NdMatch<String>> cluster = NearestNdCluster.of(ndTreeMap, distancer, 1);
-          assertTrue(cluster.iterator().next().value().equals("d5"));
-        }
-        {
-          Tensor center = Tensors.vector(5, 5);
-          NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          Collection<NdMatch<String>> cluster = NearestNdCluster.of(ndTreeMap, distancer, 1);
-          assertTrue(cluster.iterator().next().value().equals("d6"));
-        }
-        {
-          Tensor center = Tensors.vector(1.1, 0.9);
-          NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          Collection<NdMatch<String>> cluster = NearestNdCluster.of(ndTreeMap, distancer, 2);
-          assertEquals(cluster.size(), 2);
-          List<String> list = Arrays.asList("d1", "d4");
-          for (NdMatch<String> point : cluster)
-            assertTrue(list.contains(point.value()));
-        }
-      }
+  public void testSimple() {
+    NdTreeMap<Void> ndTreeMap = new NdTreeMap<>( //
+        Tensors.fromString("{1[m], 2[m], 3[m]}"), //
+        Tensors.fromString("{2[m], 3[m], 4[m]}"), //
+        2, 10);
+    Distribution distribution = UniformDistribution.of(Quantity.of(1, "m"), Quantity.of(4, "m"));
+    for (int count = 0; count < 50; ++count)
+      ndTreeMap.add(RandomVariate.of(distribution, 3), null);
+    Tensor center = Tensors.fromString("{3/2[m], 5/2[m], 4[m]}");
+    NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(center);
+    {
+      Collection<NdMatch<Void>> collection = SphericalNdCluster.of(ndTreeMap, ndCenterInterface, Quantity.of(RealScalar.of(2), "m"));
+      assertFalse(collection.isEmpty());
+    }
+    {
+      Collection<NdMatch<Void>> collection = NearestNdCluster.of(ndTreeMap, ndCenterInterface, 4);
+      assertEquals(collection.size(), 4);
+    }
   }
 
   public void testBinSize() {

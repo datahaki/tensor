@@ -1,5 +1,4 @@
-// code by Eric Simonton
-// adapted by jph and clruch
+// code by jph
 package ch.alpine.tensor.opt.nd;
 
 import java.util.Collection;
@@ -10,6 +9,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.sca.Sign;
 
 public class SphericalNdCluster<V> implements NdVisitor<V> {
   /** @param ndMap
@@ -29,11 +29,11 @@ public class SphericalNdCluster<V> implements NdVisitor<V> {
   private final List<NdMatch<V>> list = new LinkedList<>();
 
   /** @param ndCenterInterface
-   * @param limit positive */
+   * @param radius non-negative */
   protected SphericalNdCluster(NdCenterInterface ndCenterInterface, Scalar radius) {
     this.ndCenterInterface = ndCenterInterface;
     this.center = ndCenterInterface.center();
-    this.radius = radius;
+    this.radius = Sign.requirePositiveOrZero(radius);
   }
 
   @Override
@@ -61,5 +61,9 @@ public class SphericalNdCluster<V> implements NdVisitor<V> {
           ndPair.location(), //
           ndPair.value(), //
           distance));
+  }
+
+  public List<NdMatch<V>> list() {
+    return list;
   }
 }

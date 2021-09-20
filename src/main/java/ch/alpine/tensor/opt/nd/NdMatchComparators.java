@@ -6,12 +6,12 @@ import java.util.Comparator;
 import ch.alpine.tensor.Scalars;
 
 /* package */ enum NdMatchComparators implements Comparator<NdMatch<?>> {
-  INCREASING {
-    @Override
-    public int compare(NdMatch<?> o1, NdMatch<?> o2) {
-      return Scalars.compare(o1.distance(), o2.distance());
-    }
-  },
+  // INCREASING {
+  // @Override
+  // public int compare(NdMatch<?> o1, NdMatch<?> o2) {
+  // return Scalars.compare(o1.distance(), o2.distance());
+  // }
+  // },
   DECREASING {
     @Override
     public int compare(NdMatch<?> o1, NdMatch<?> o2) {
