@@ -9,6 +9,6 @@ public interface NdCenterInterface {
   Tensor center();
 
   /** @param point
-   * @return distance from center to point */
+   * @return distance from center to given point */
   Scalar distance(Tensor point);
 }

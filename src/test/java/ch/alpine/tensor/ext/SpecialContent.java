@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.opt.nd;
+package ch.alpine.tensor.ext;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

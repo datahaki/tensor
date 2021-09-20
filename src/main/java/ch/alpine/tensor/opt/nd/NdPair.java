@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import ch.alpine.tensor.Tensor;
 
-/* package */ class NdPair<V> implements Serializable {
+public class NdPair<V> implements Serializable {
   private final Tensor location; // <- key
   private final V value;
 

@@ -1,10 +1,9 @@
 // code by jph
-package ch.alpine.tensor.opt.nd;
+package ch.alpine.tensor.ext;
 
 import java.io.IOException;
 
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.ext.Serialization;
 import junit.framework.TestCase;
 
 public class SpecialContentTest extends TestCase {
