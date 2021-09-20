@@ -4,16 +4,16 @@ package ch.alpine.tensor.opt.nd;
 import ch.alpine.tensor.Scalar;
 
 public interface NdVisitor<V> {
-  /** @param ndBounds
-   * @param dimension
+  /** @param dimension
    * @param mean
    * @return */
-  boolean push_leftFirst(NdBounds ndBounds, int dimension, Scalar mean);
+  boolean push_leftFirst(int dimension, Scalar mean);
 
+  /** there is a pop invoked for each call to {@link #push_leftFirst(int, Scalar)} */
   void pop();
 
   /** @param ndBounds
-   * @return */
+   * @return whether visiting should proceed within the given bounds */
   boolean isViable(NdBounds ndBounds);
 
   /** @param ndPair */

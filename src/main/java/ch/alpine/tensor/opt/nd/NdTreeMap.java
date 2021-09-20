@@ -97,7 +97,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       return depth % global_lBounds.length();
     }
 
-    private void add(final NdPair<V> ndPair, NdBounds ndBounds) {
+    private void add(NdPair<V> ndPair, NdBounds ndBounds) {
       if (isInternal()) {
         Tensor location = ndPair.location();
         int dimension = dimension();
@@ -145,7 +145,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       if (isInternal()) {
         final int dimension = dimension();
         Scalar mean = ndBounds.mean(dimension);
-        boolean leftFirst = ndVisitor.push_leftFirst(ndBounds, dimension, mean);
+        boolean leftFirst = ndVisitor.push_leftFirst(dimension, mean);
         if (leftFirst) {
           visit_L(ndVisitor, ndBounds, mean);
           visit_R(ndVisitor, ndBounds, mean);
@@ -183,7 +183,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
 
   @Override // from Object
   public String toString() {
-    NdPrint<V> ndPrint = new NdPrint<>();
+    NdStringBuilder<V> ndPrint = new NdStringBuilder<>();
     visit(ndPrint);
     return ndPrint.toString();
   }

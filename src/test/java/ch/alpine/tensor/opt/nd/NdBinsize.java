@@ -17,23 +17,23 @@ public class NdBinsize<V> implements NdVisitor<V> {
   private final Tensor bins = Tensors.empty();
   int count = 0;
 
-  @Override
-  public boolean push_leftFirst(NdBounds ndBounds, int dimension, Scalar mean) {
+  @Override // from NdVisitor
+  public boolean push_leftFirst(int dimension, Scalar mean) {
     return true;
   }
 
-  @Override
+  @Override // from NdVisitor
   public void pop() {
     bins.append(RealScalar.of(count));
     count = 0;
   }
 
-  @Override
+  @Override // from NdVisitor
   public boolean isViable(NdBounds ndBounds) {
     return true;
   }
 
-  @Override
+  @Override // from NdVisitor
   public void consider(NdPair<V> ndPair) {
     ++count;
   }

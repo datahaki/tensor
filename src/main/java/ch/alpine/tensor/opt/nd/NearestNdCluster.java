@@ -3,6 +3,7 @@
 package ch.alpine.tensor.opt.nd;
 
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -12,14 +13,16 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
 public class NearestNdCluster<V> implements NdVisitor<V> {
-  /** @param <V>
+  private static final Comparator<NdMatch<?>> COMPARATOR = (o1, o2) -> Scalars.compare(o2.distance(), o1.distance());
+
+  /** @param ndMap
    * @param ndCenterInterface
-   * @param limit
+   * @param limit strictly positive
    * @return */
   public static <V> Collection<NdMatch<V>> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface, int limit) {
     NearestNdCluster<V> nearestNdCluster = new NearestNdCluster<>(ndCenterInterface, limit);
     ndMap.visit(nearestNdCluster);
-    return nearestNdCluster.queue;
+    return nearestNdCluster.queue();
   }
 
   // ---
@@ -36,20 +39,20 @@ public class NearestNdCluster<V> implements NdVisitor<V> {
     this.limit = limit;
     if (limit < 1)
       throw new IllegalArgumentException("limit must be positive but is " + limit);
-    queue = new PriorityQueue<>(NdMatchComparators.DECREASING);
+    queue = new PriorityQueue<>(COMPARATOR);
   }
 
-  @Override
-  public boolean push_leftFirst(NdBounds ndBounds, int dimension, Scalar mean) {
+  @Override // from NdVisitor
+  public boolean push_leftFirst(int dimension, Scalar mean) {
     return Scalars.lessThan(center.Get(dimension), mean);
   }
 
-  @Override
+  @Override // from NdVisitor
   public void pop() {
     // ---
   }
 
-  @Override
+  @Override // from NdVisitor
   public boolean isViable(NdBounds ndBounds) {
     if (queue.size() < limit)
       return true;
@@ -57,7 +60,7 @@ public class NearestNdCluster<V> implements NdVisitor<V> {
     return Scalars.lessThan(ndCenterInterface.distance(test), queue.peek().distance());
   }
 
-  @Override
+  @Override // from NdVisitor
   public void consider(NdPair<V> ndPair) {
     NdMatch<V> ndMatch = new NdMatch<>( //
         ndPair.location(), //
@@ -72,6 +75,7 @@ public class NearestNdCluster<V> implements NdVisitor<V> {
     }
   }
 
+  /** @return priority queue */
   public Queue<NdMatch<V>> queue() {
     return queue;
   }

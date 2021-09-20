@@ -3,12 +3,12 @@ package ch.alpine.tensor.opt.nd;
 
 import ch.alpine.tensor.Scalar;
 
-public class NdPrint<V> implements NdVisitor<V> {
+/* package */ class NdStringBuilder<V> implements NdVisitor<V> {
   private final StringBuilder stringBuilder = new StringBuilder();
   private int depth;
 
   @Override
-  public boolean push_leftFirst(NdBounds ndBounds, int dimension, Scalar mean) {
+  public boolean push_leftFirst(int dimension, Scalar mean) {
     ++depth;
     return true;
   }

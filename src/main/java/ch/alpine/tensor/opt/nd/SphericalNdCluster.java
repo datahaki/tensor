@@ -14,12 +14,12 @@ import ch.alpine.tensor.sca.Sign;
 public class SphericalNdCluster<V> implements NdVisitor<V> {
   /** @param ndMap
    * @param ndCenterInterface
-   * @param radius
+   * @param radius non-negative
    * @return */
   public static <V> Collection<NdMatch<V>> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface, Scalar radius) {
     SphericalNdCluster<V> sphericalNdCluster = new SphericalNdCluster<>(ndCenterInterface, radius);
     ndMap.visit(sphericalNdCluster);
-    return sphericalNdCluster.list;
+    return sphericalNdCluster.list();
   }
 
   // ---
@@ -36,24 +36,23 @@ public class SphericalNdCluster<V> implements NdVisitor<V> {
     this.radius = Sign.requirePositiveOrZero(radius);
   }
 
-  @Override
-  public boolean push_leftFirst(NdBounds ndBounds, int dimension, Scalar mean) {
+  @Override // from NdVisitor
+  public boolean push_leftFirst(int dimension, Scalar mean) {
     return true;
   }
 
-  @Override
+  @Override // from NdVisitor
   public void pop() {
     // ---
   }
 
-  @Override
+  @Override // from NdVisitor
   public boolean isViable(NdBounds ndBounds) {
-    // TODO justify this computation!?
     Tensor test = Tensors.vector(i -> ndBounds.clip(i).apply(center.Get(i)), center.length());
     return Scalars.lessThan(ndCenterInterface.distance(test), radius);
   }
 
-  @Override
+  @Override // from NdVisitor
   public void consider(NdPair<V> ndPair) {
     Scalar distance = ndCenterInterface.distance(ndPair.location());
     if (Scalars.lessThan(distance, radius))
@@ -63,6 +62,7 @@ public class SphericalNdCluster<V> implements NdVisitor<V> {
           distance));
   }
 
+  /** @return all matches */
   public List<NdMatch<V>> list() {
     return list;
   }
