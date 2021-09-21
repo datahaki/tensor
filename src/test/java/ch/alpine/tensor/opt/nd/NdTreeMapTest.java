@@ -11,6 +11,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.pdf.BernoulliDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.UniformDistribution;
@@ -22,32 +23,31 @@ import junit.framework.TestCase;
 
 public class NdTreeMapTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
-    NdMap<Void> ndTreeMap = NdTreeMap.of( //
+    NdMap<Void> ndMap = NdTreeMap.of( //
         Tensors.fromString("{1[m], 2[m], 3[m]}"), //
-        Tensors.fromString("{2[m], 3[m], 4[m]}"), 2);
+        Tensors.fromString("{2[m], 3[m], 4[m]}"));
     Distribution distribution = UniformDistribution.of(Quantity.of(1, "m"), Quantity.of(4, "m"));
     for (int count = 0; count < 50; ++count)
-      ndTreeMap.add(RandomVariate.of(distribution, 3), null);
-    ndTreeMap = Serialization.copy(ndTreeMap);
+      ndMap.add(RandomVariate.of(distribution, 3), null);
+    ndMap = Serialization.copy(ndMap);
     Tensor center = Tensors.fromString("{3/2[m], 5/2[m], 4[m]}");
     NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(center);
     {
-      Collection<NdMatch<Void>> collection = SphericalNdCluster.of(ndTreeMap, ndCenterInterface, Quantity.of(RealScalar.of(2), "m"));
+      Collection<NdMatch<Void>> collection = SphericalNdCluster.of(ndMap, ndCenterInterface, Quantity.of(RealScalar.of(2), "m"));
       assertFalse(collection.isEmpty());
     }
     {
-      Collection<NdMatch<Void>> collection = NearestNdCluster.of(ndTreeMap, ndCenterInterface, 4);
+      Collection<NdMatch<Void>> collection = NearestNdCluster.of(ndMap, ndCenterInterface, 4);
       assertEquals(collection.size(), 4);
     }
   }
 
   public void testBinSize() {
-    NdMap<Void> ndMap = NdTreeMap.of(Tensors.vector(0, 0), Tensors.vector(1, 1), 2);
-    Distribution distribution = UniformDistribution.unit();
-    for (int count = 0; count < 50; ++count) {
-      ndMap.add(RandomVariate.of(distribution, 2), null);
-      // ndTreeMap.binSize();
-    }
+    NdMap<String> ndMap = NdTreeMap.of(Tensors.vector(0, 0), Tensors.vector(1, 1));
+    Distribution distribution = BernoulliDistribution.of(.3);
+    for (int count = 0; count < 50; ++count)
+      ndMap.add(RandomVariate.of(distribution, 2), "p" + count);
+    ndMap.toString();
   }
 
   public void testParallel() {
@@ -129,7 +129,8 @@ public class NdTreeMapTest extends TestCase {
     }
   }
 
-  public void testDensityFail() {
+  public void testLeafSizeFail() {
+    AssertFail.of(() -> NdTreeMap.of(Tensors.vector(0, 0), Tensors.vector(1, 1), +0));
     AssertFail.of(() -> NdTreeMap.of(Tensors.vector(0, 0), Tensors.vector(1, 1), -1));
   }
 

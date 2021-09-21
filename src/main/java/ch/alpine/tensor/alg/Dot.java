@@ -27,7 +27,7 @@ public class Dot {
     return new Dot(tensors).product();
   }
 
-  /***************************************************/
+  // ==================================================
   private final Tensor product;
   private final Entry[][] entry;
 
@@ -85,7 +85,7 @@ public class Dot {
     return entry[0][entry.length - 1].dimensions;
   }
 
-  /***************************************************/
+  // ==================================================
   /* package */ static List<Integer> combine(List<Integer> dimensions1, List<Integer> dimensions2) {
     return Stream.concat( //
         dimensions1.stream().limit(dimensions1.size() - 1), //
@@ -106,7 +106,7 @@ public class Dot {
     }
   }
 
-  /***************************************************/
+  // ==================================================
   private static class Entry {
     private final List<Integer> dimensions;
     private final int m;

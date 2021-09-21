@@ -2,6 +2,8 @@
 package ch.alpine.tensor.opt.nd;
 
 import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -18,9 +20,9 @@ import junit.framework.TestCase;
 
 public class SphericalNdClusterTest extends TestCase {
   public void testSimple() {
-    int dim = 2;
+    int maxDensity = 2;
     NdMap<String> m1 = new NdListMap<>();
-    NdMap<String> m2 = NdTreeMap.of(Tensors.vector(-2, -1), Tensors.vector(2, 10), dim);
+    NdMap<String> m2 = NdTreeMap.of(Tensors.vector(-2, -1), Tensors.vector(2, 10), maxDensity);
     int index = 0;
     Distribution b = BernoulliDistribution.of(RealScalar.of(0.25));
     Distribution ux = UniformDistribution.of(-2, 2);
@@ -38,9 +40,34 @@ public class SphericalNdClusterTest extends TestCase {
     }
     assertEquals(m1.size(), m2.size());
     NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(Tensors.vector(0.2, 4.3));
+    {
+      Scalar radius = RealScalar.of(4);
+      Collection<NdMatch<String>> c1 = SphericalNdCluster.of(m1, ndCenterInterface, radius);
+      Collection<NdMatch<String>> c2 = SphericalNdCluster.of(m2, ndCenterInterface, radius);
+      assertTrue(0 < c1.size());
+      assertTrue(0 < c2.size());
+      assertEquals(c1.size(), c2.size());
+      Set<String> s1 = c1.stream().map(NdMatch::value).collect(Collectors.toSet());
+      Set<String> s2 = c2.stream().map(NdMatch::value).collect(Collectors.toSet());
+      assertEquals(s1, s2);
+    }
+    {
+      int limit = 6;
+      Collection<NdMatch<String>> c1 = NearestNdCluster.of(m1, ndCenterInterface, limit);
+      Collection<NdMatch<String>> c2 = NearestNdCluster.of(m2, ndCenterInterface, limit);
+      assertTrue(0 < c1.size());
+      assertTrue(0 < c2.size());
+      assertEquals(c1.size(), c2.size());
+      assertEquals(c1.size(), limit);
+      Set<String> s1 = c1.stream().map(NdMatch::value).collect(Collectors.toSet());
+      Set<String> s2 = c2.stream().map(NdMatch::value).collect(Collectors.toSet());
+      assertEquals(s1, s2);
+    }
+  }
+
+  public void testEmpty() {
+    NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(Tensors.vector(0.2, 4.3));
     Scalar radius = RealScalar.of(4);
-    Collection<NdMatch<String>> collection = SphericalNdCluster.of(m2, ndCenterInterface, radius);
-    assertTrue(0 < collection.size());
     SphericalNdCluster<Object> sphericalNdCluster = new SphericalNdCluster<>(ndCenterInterface, radius);
     assertTrue(sphericalNdCluster.list().isEmpty());
   }

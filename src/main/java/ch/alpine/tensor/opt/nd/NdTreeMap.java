@@ -16,11 +16,27 @@ import ch.alpine.tensor.ext.Integers;
 /** the query {@link NdTreeMap#cluster(NdCenterInterface, int)}
  * can be used in parallel. */
 public class NdTreeMap<V> implements NdMap<V>, Serializable {
-  public static <V> NdMap<V> of(Tensor lbounds, Tensor ubounds, int maxDensity) {
-    return new NdTreeMap<>(lbounds, ubounds, maxDensity);
+  private static final int LEAF_SIZE_DEFAULT = 8;
+  /** parameter only relevant if more than maxDensity identical key locations
+   * 2^20 == 1048576 */
+  private static final int MAX_DEPTH = 20;
+
+  /** @param lbounds vector
+   * @param ubounds vector
+   * @param leafSizeMax strictly positive
+   * @return */
+  public static <V> NdMap<V> of(Tensor lbounds, Tensor ubounds, int leafSizeMax) {
+    return new NdTreeMap<>(lbounds, ubounds, leafSizeMax);
   }
 
-  // ---
+  /** @param lbounds
+   * @param ubounds
+   * @return */
+  public static <V> NdMap<V> of(Tensor lbounds, Tensor ubounds) {
+    return of(lbounds, ubounds, LEAF_SIZE_DEFAULT);
+  }
+
+  // ==================================================
   private final Tensor global_lBounds;
   private final Tensor global_uBounds;
   private final int maxDensity;
@@ -41,12 +57,12 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
    * for leaf nodes with maxDepth, which have unlimited queue size. The special case
    * maxDensity == 0 implies that values will only be stored at nodes of max depth
    * @param maxDepth 16 is reasonable for most applications
-   * @throws Exception if maxDensity is not strictly positive */
+   * @throws Exception if maxDensity is strictly positive */
   private NdTreeMap(Tensor lbounds, Tensor ubounds, int maxDensity) {
     StaticHelper.require(lbounds, ubounds);
     global_lBounds = lbounds.unmodifiable();
     global_uBounds = ubounds.unmodifiable();
-    this.maxDensity = Integers.requirePositiveOrZero(maxDensity);
+    this.maxDensity = Integers.requirePositive(maxDensity);
     root = new Node(0);
   }
 
@@ -93,7 +109,8 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       return new Node(depth + 1);
     }
 
-    private boolean isInternal() {
+    /** @return whether node is interior node */
+    private boolean isInterior() {
       return Objects.isNull(queue);
     }
 
@@ -102,46 +119,51 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     }
 
     private void add(NdPair<V> ndPair, NdBounds ndBounds) {
-      if (isInternal()) {
+      if (isInterior()) {
         Tensor location = ndPair.location();
         int dimension = dimension();
         Scalar mean = ndBounds.mean(dimension);
         if (Scalars.lessThan(location.Get(dimension), mean)) {
           ndBounds.uBounds.set(mean, dimension);
-          if (Objects.isNull(lChild))
+          if (Objects.isNull(lChild)) {
             lChild = createChild();
-          lChild.add(ndPair, ndBounds);
-          return;
+            lChild.queue.add(ndPair);
+          } else
+            lChild.add(ndPair, ndBounds);
+        } else {
+          ndBounds.lBounds.set(mean, dimension);
+          if (Objects.isNull(rChild)) {
+            rChild = createChild();
+            rChild.queue.add(ndPair);
+          } else
+            rChild.add(ndPair, ndBounds);
         }
-        ndBounds.lBounds.set(mean, dimension);
-        if (Objects.isNull(rChild))
-          rChild = createChild();
-        rChild.add(ndPair, ndBounds);
-      } else //
-      if (queue.size() < maxDensity)
-        queue.add(ndPair);
-      else {
-        int dimension = dimension();
-        Scalar mean = ndBounds.mean(dimension);
-        for (NdPair<V> entry : queue)
-          if (Scalars.lessThan(entry.location().Get(dimension), mean)) {
-            if (Objects.isNull(lChild))
-              lChild = createChild();
-            lChild.queue.add(entry);
-          } else {
-            if (Objects.isNull(rChild))
-              rChild = createChild();
-            rChild.queue.add(entry);
-          }
-        queue.clear();
-        queue = null;
-        add(ndPair, ndBounds);
+      } else { // queue != null
+        if (queue.size() < maxDensity || depth == MAX_DEPTH)
+          queue.add(ndPair);
+        else { // split queue into left and right
+          int dimension = dimension();
+          Scalar mean = ndBounds.mean(dimension);
+          for (NdPair<V> entry : queue)
+            if (Scalars.lessThan(entry.location().Get(dimension), mean)) {
+              if (Objects.isNull(lChild))
+                lChild = createChild();
+              lChild.queue.add(entry);
+            } else {
+              if (Objects.isNull(rChild))
+                rChild = createChild();
+              rChild.queue.add(entry);
+            }
+          queue.clear();
+          queue = null;
+          add(ndPair, ndBounds);
+        }
       }
     }
 
     private void visit(NdVisitor<V> ndVisitor, NdBounds ndBounds) {
-      if (isInternal()) {
-        final int dimension = dimension();
+      if (isInterior()) {
+        int dimension = dimension();
         Scalar mean = ndBounds.mean(dimension);
         boolean leftFirst = ndVisitor.push_leftFirst(dimension, mean);
         if (leftFirst) {
@@ -157,32 +179,32 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     }
 
     private void visit_L(NdVisitor<V> ndVisitor, NdBounds ndBounds, Scalar median) {
-      if (Objects.isNull(lChild))
-        return;
-      int dimension = dimension();
-      Scalar copy = ndBounds.uBounds.Get(dimension);
-      ndBounds.uBounds.set(median, dimension);
-      if (ndVisitor.isViable(ndBounds))
-        lChild.visit(ndVisitor, ndBounds);
-      ndBounds.uBounds.set(copy, dimension);
+      if (Objects.nonNull(lChild)) {
+        int dimension = dimension();
+        Scalar copy = ndBounds.uBounds.Get(dimension);
+        ndBounds.uBounds.set(median, dimension);
+        if (ndVisitor.isViable(ndBounds))
+          lChild.visit(ndVisitor, ndBounds);
+        ndBounds.uBounds.set(copy, dimension);
+      }
     }
 
     private void visit_R(NdVisitor<V> ndVisitor, NdBounds ndBounds, Scalar median) {
-      if (Objects.isNull(rChild))
-        return;
-      int dimension = dimension();
-      Scalar copy = ndBounds.lBounds.Get(dimension);
-      ndBounds.lBounds.set(median, dimension);
-      if (ndVisitor.isViable(ndBounds))
-        rChild.visit(ndVisitor, ndBounds);
-      ndBounds.lBounds.set(copy, dimension);
+      if (Objects.nonNull(rChild)) {
+        int dimension = dimension();
+        Scalar copy = ndBounds.lBounds.Get(dimension);
+        ndBounds.lBounds.set(median, dimension);
+        if (ndVisitor.isViable(ndBounds))
+          rChild.visit(ndVisitor, ndBounds);
+        ndBounds.lBounds.set(copy, dimension);
+      }
     }
   }
 
   @Override // from Object
   public String toString() {
-    NdStringBuilder<V> ndPrint = new NdStringBuilder<>();
-    visit(ndPrint);
-    return ndPrint.toString();
+    NdStringBuilder<V> ndStringBuilder = new NdStringBuilder<>();
+    visit(ndStringBuilder);
+    return ndStringBuilder.toString();
   }
 }

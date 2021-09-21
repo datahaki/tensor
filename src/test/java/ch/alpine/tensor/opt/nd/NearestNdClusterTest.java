@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 
 public class NearestNdClusterTest extends TestCase {
   public void testSimple() {
-    for (int n = 0; n < 10; ++n) {
+    for (int n = 1; n < 10; ++n) {
       NdMap<String> ndTreeMap = NdTreeMap.of(Tensors.vector(-2, -3), Tensors.vector(8, 9), n);
       ndTreeMap.toString();
       assertTrue(ndTreeMap.isEmpty());

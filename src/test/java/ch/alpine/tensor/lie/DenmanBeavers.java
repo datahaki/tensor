@@ -15,7 +15,7 @@ import ch.alpine.tensor.mat.Tolerance;
 /* package */ class DenmanBeavers implements MatrixSqrt, Serializable {
   private static final int MAX_ITERATIONS = 100;
   private static final Scalar HALF = RealScalar.of(0.5);
-  /***************************************************/
+  // ---
   private Tensor yk;
   private Tensor zk;
 

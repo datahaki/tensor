@@ -14,6 +14,8 @@ public class NdStringBuilderTest extends TestCase {
     ndMap.add(Tensors.vector(1, 1), "d4");
     ndMap.add(Tensors.vector(0.1, 0.1), "d5");
     ndMap.add(Tensors.vector(6, 7), "d6");
+    ndMap.add(Tensors.vector(1, 1), "d7");
+    ndMap.add(Tensors.vector(1, 1), "d8");
     ndMap.toString();
     NdBinsize<String> ndBinsize = new NdBinsize<>();
     ndMap.visit(ndBinsize);

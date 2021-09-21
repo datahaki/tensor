@@ -57,7 +57,7 @@ public enum Array {
         }));
   }
 
-  /***************************************************/
+  // ==================================================
   /** @param supplier
    * @param dimensions
    * @return */
@@ -84,7 +84,7 @@ public enum Array {
         : Tensor.of(IntStream.range(0, length).mapToObj(i -> fill(supplier, next, dimensions)));
   }
 
-  /***************************************************/
+  // ==================================================
   /** @param dimensions
    * @return tensor of {@link RealScalar#ZERO} with given dimensions
    * @throws Exception if any of the integer parameters is negative */
