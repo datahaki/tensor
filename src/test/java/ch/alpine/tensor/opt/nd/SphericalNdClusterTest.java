@@ -19,9 +19,8 @@ import junit.framework.TestCase;
 public class SphericalNdClusterTest extends TestCase {
   public void testSimple() {
     int dim = 2;
-    int dep = 3;
     NdMap<String> m1 = new NdListMap<>();
-    NdMap<String> m2 = new NdTreeMap<>(Tensors.vector(-2, -1), Tensors.vector(2, 10), dim, dep);
+    NdMap<String> m2 = NdTreeMap.of(Tensors.vector(-2, -1), Tensors.vector(2, 10), dim);
     int index = 0;
     Distribution b = BernoulliDistribution.of(RealScalar.of(0.25));
     Distribution ux = UniformDistribution.of(-2, 2);

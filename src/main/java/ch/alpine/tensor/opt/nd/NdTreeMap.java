@@ -16,6 +16,11 @@ import ch.alpine.tensor.ext.Integers;
 /** the query {@link NdTreeMap#cluster(NdCenterInterface, int)}
  * can be used in parallel. */
 public class NdTreeMap<V> implements NdMap<V>, Serializable {
+  public static <V> NdMap<V> of(Tensor lbounds, Tensor ubounds, int maxDensity) {
+    return new NdTreeMap<>(lbounds, ubounds, maxDensity);
+  }
+
+  // ---
   private final Tensor global_lBounds;
   private final Tensor global_uBounds;
   private final int maxDensity;
@@ -37,12 +42,12 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
    * maxDensity == 0 implies that values will only be stored at nodes of max depth
    * @param maxDepth 16 is reasonable for most applications
    * @throws Exception if maxDensity is not strictly positive */
-  public NdTreeMap(Tensor lbounds, Tensor ubounds, int maxDensity, int maxDepth) {
+  private NdTreeMap(Tensor lbounds, Tensor ubounds, int maxDensity) {
     StaticHelper.require(lbounds, ubounds);
     global_lBounds = lbounds.unmodifiable();
     global_uBounds = ubounds.unmodifiable();
     this.maxDensity = Integers.requirePositiveOrZero(maxDensity);
-    root = new Node(Integers.requirePositive(maxDepth));
+    root = new Node(0);
   }
 
   /** @param location vector with same length as lbounds and ubounds
@@ -81,12 +86,11 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     private Queue<NdPair<V>> queue = new ArrayDeque<>();
 
     private Node(int depth) {
-      // check is for validation of implementation
-      this.depth = Integers.requirePositive(depth);
+      this.depth = depth;
     }
 
     private Node createChild() {
-      return new Node(depth - 1);
+      return new Node(depth + 1);
     }
 
     private boolean isInternal() {
@@ -116,12 +120,6 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       } else //
       if (queue.size() < maxDensity)
         queue.add(ndPair);
-      else //
-      if (depth == 1)
-        queue.add(ndPair);
-      // the original code removed a node from the queue: return queue.poll();
-      // in our opinion this behavior is undesired.
-      // at the lowest depth we grow the queue indefinitely, instead.
       else {
         int dimension = dimension();
         Scalar mean = ndBounds.mean(dimension);
