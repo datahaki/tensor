@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.NavigableMap;
 
@@ -20,7 +21,7 @@ import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NdTreeMapTest extends TestCase {
-  public void testSimple() {
+  public void testSimple() throws ClassNotFoundException, IOException {
     NdTreeMap<Void> ndTreeMap = new NdTreeMap<>( //
         Tensors.fromString("{1[m], 2[m], 3[m]}"), //
         Tensors.fromString("{2[m], 3[m], 4[m]}"), //
@@ -28,6 +29,7 @@ public class NdTreeMapTest extends TestCase {
     Distribution distribution = UniformDistribution.of(Quantity.of(1, "m"), Quantity.of(4, "m"));
     for (int count = 0; count < 50; ++count)
       ndTreeMap.add(RandomVariate.of(distribution, 3), null);
+    ndTreeMap = Serialization.copy(ndTreeMap);
     Tensor center = Tensors.fromString("{3/2[m], 5/2[m], 4[m]}");
     NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(center);
     {
@@ -118,7 +120,7 @@ public class NdTreeMapTest extends TestCase {
     Tensor flatten = Flatten.of(ndBinsize.bins());
     assertEquals(Total.of(flatten), RealScalar.of(800));
     NavigableMap<Tensor, Long> map = Tally.sorted(flatten);
-    Tensor last = map.lastKey();
+    map.lastKey();
     // assertEquals(last, RealScalar.of(n));
   }
 

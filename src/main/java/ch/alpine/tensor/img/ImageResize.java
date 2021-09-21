@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.alg.MatrixQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.ImageFormat;
 import ch.alpine.tensor.itp.MappedInterpolation;
@@ -52,9 +53,11 @@ public enum ImageResize {
    * @param dim1 width of image
    * @return */
   public static Tensor of(Tensor tensor, int dim0, int dim1) {
-    BufferedImage bufferedImage = new BufferedImage(dim1, dim0, BufferedImage.TYPE_INT_ARGB);
+    boolean gray = MatrixQ.of(tensor);
+    BufferedImage bufferedImage = new BufferedImage(dim1, dim0, gray //
+        ? BufferedImage.TYPE_BYTE_GRAY
+        : BufferedImage.TYPE_INT_ARGB);
     Graphics2D graphics = bufferedImage.createGraphics();
-    // TODO experiment with different setting for highest quality
     graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
