@@ -36,7 +36,7 @@ public class NdClusterRadius<V> implements NdVisitor<V> {
   }
 
   @Override // from NdVisitor
-  public boolean push_leftFirst(int dimension, Scalar mean) {
+  public boolean push_leftFirst(int dimension, Scalar median) {
     return true;
   }
 
@@ -46,8 +46,8 @@ public class NdClusterRadius<V> implements NdVisitor<V> {
   }
 
   @Override // from NdVisitor
-  public boolean isViable(NdBounds ndBounds) {
-    return Scalars.lessThan(ndCenterInterface.distance(ndBounds.clip(center)), radius);
+  public boolean isViable(NdBox ndBox) {
+    return Scalars.lessThan(ndCenterInterface.distance(ndBox.clip(center)), radius);
   }
 
   @Override // from NdVisitor

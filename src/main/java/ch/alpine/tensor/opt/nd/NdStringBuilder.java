@@ -19,7 +19,7 @@ import ch.alpine.tensor.Scalar;
   }
 
   @Override
-  public boolean isViable(NdBounds ndBounds) {
+  public boolean isViable(NdBox ndBox) {
     return true;
   }
 

@@ -19,10 +19,10 @@ import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NdClusterRadiusTest extends TestCase {
-  public void testSimple() {
+  public void testClusterRadius() {
     int maxDensity = 2;
     NdMap<String> m1 = new NdListMap<>();
-    NdMap<String> m2 = NdTreeMap.of(Tensors.vector(-2, -1), Tensors.vector(2, 10), maxDensity);
+    NdMap<String> m2 = NdTreeMap.of(NdBox.of(Tensors.vector(-2, -1), Tensors.vector(2, 10)), maxDensity);
     int index = 0;
     Distribution b = BernoulliDistribution.of(RealScalar.of(0.25));
     Distribution ux = UniformDistribution.of(-2, 2);
@@ -47,18 +47,6 @@ public class NdClusterRadiusTest extends TestCase {
       assertTrue(0 < c1.size());
       assertTrue(0 < c2.size());
       assertEquals(c1.size(), c2.size());
-      Set<String> s1 = c1.stream().map(NdMatch::value).collect(Collectors.toSet());
-      Set<String> s2 = c2.stream().map(NdMatch::value).collect(Collectors.toSet());
-      assertEquals(s1, s2);
-    }
-    {
-      int limit = 6;
-      Collection<NdMatch<String>> c1 = NdClusterNearest.of(m1, ndCenterInterface, limit);
-      Collection<NdMatch<String>> c2 = NdClusterNearest.of(m2, ndCenterInterface, limit);
-      assertTrue(0 < c1.size());
-      assertTrue(0 < c2.size());
-      assertEquals(c1.size(), c2.size());
-      assertEquals(c1.size(), limit);
       Set<String> s1 = c1.stream().map(NdMatch::value).collect(Collectors.toSet());
       Set<String> s2 = c2.stream().map(NdMatch::value).collect(Collectors.toSet());
       assertEquals(s1, s2);

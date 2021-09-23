@@ -56,7 +56,7 @@ public class RandomPermutationTest extends TestCase {
         .limit(1000) //
         .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     Scalar scalar = StandardDeviation.ofVector(Tensor.of(map.values().stream().map(RealScalar::of)));
-    assertTrue(Scalars.lessThan(scalar, RealScalar.of(20)));
+    assertTrue(Scalars.lessThan(scalar, RealScalar.of(30)));
   }
 
   public void testSame() {

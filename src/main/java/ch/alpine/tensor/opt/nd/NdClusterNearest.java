@@ -42,8 +42,8 @@ public class NdClusterNearest<V> implements NdVisitor<V> {
   }
 
   @Override // from NdVisitor
-  public boolean push_leftFirst(int dimension, Scalar mean) {
-    return Scalars.lessThan(center.Get(dimension), mean);
+  public boolean push_leftFirst(int dimension, Scalar median) {
+    return Scalars.lessThan(center.Get(dimension), median);
   }
 
   @Override // from NdVisitor
@@ -52,9 +52,9 @@ public class NdClusterNearest<V> implements NdVisitor<V> {
   }
 
   @Override // from NdVisitor
-  public boolean isViable(NdBounds ndBounds) {
+  public boolean isViable(NdBox ndBox) {
     return queue.size() < limit //
-        || Scalars.lessThan(ndCenterInterface.distance(ndBounds.clip(center)), queue.peek().distance());
+        || Scalars.lessThan(ndCenterInterface.distance(ndBox.clip(center)), queue.peek().distance());
   }
 
   @Override // from NdVisitor

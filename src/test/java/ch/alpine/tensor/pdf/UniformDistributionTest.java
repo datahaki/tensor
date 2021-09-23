@@ -84,7 +84,9 @@ public class UniformDistributionTest extends TestCase {
 
   public void testClipPointFail() {
     UniformDistribution.of(Clips.interval(3, 5));
-    AssertFail.of(() -> UniformDistribution.of(Clips.interval(3, 3)));
+    Distribution distribution = UniformDistribution.of(Clips.interval(3, 3));
+    Scalar scalar = RandomVariate.of(distribution);
+    assertEquals(scalar, RealScalar.of(3));
   }
 
   public void testClipNullFail() {
@@ -103,7 +105,6 @@ public class UniformDistributionTest extends TestCase {
   }
 
   public void testFail() {
-    AssertFail.of(() -> UniformDistribution.of(RealScalar.ONE, RealScalar.ONE));
     AssertFail.of(() -> UniformDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 }

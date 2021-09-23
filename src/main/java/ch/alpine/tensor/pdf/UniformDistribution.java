@@ -7,7 +7,6 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -28,20 +27,22 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
    * @param max
    * @return uniform distribution over the half-open interval [min, max) */
   public static Distribution of(Scalar min, Scalar max) {
-    return new UniformDistribution(Clips.interval(min, max));
+    return of(Clips.interval(min, max));
   }
 
   /** @param min < max
    * @param max
    * @return uniform distribution over the half-open interval [min, max) */
   public static Distribution of(Number min, Number max) {
-    return new UniformDistribution(Clips.interval(min, max));
+    return of(Clips.interval(min, max));
   }
 
   /** @param clip
    * @return uniform distribution over the half-open interval [clip.min(), clip.max()) */
   public static Distribution of(Clip clip) {
-    return new UniformDistribution(clip);
+    return Scalars.isZero(clip.width()) //
+        ? new DiracDistribution(clip.min())
+        : new UniformDistribution(clip);
   }
 
   /** @return uniform distribution over the half-open unit interval [0, 1) */
@@ -49,13 +50,12 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
     return UNIT;
   }
 
-  /***************************************************/
+  // ==================================================
   private final Clip clip;
 
+  /** @param clip guaranteed to be non-null and to have non-zero width */
   private UniformDistribution(Clip clip) {
     this.clip = clip;
-    if (Scalars.isZero(clip.width()))
-      throw TensorRuntimeException.of(clip.min(), clip.max());
   }
 
   @Override // from MeanInterface

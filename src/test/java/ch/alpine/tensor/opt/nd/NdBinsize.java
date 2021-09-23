@@ -29,7 +29,7 @@ public class NdBinsize<V> implements NdVisitor<V> {
   }
 
   @Override // from NdVisitor
-  public boolean isViable(NdBounds ndBounds) {
+  public boolean isViable(NdBox ndBounds) {
     return true;
   }
 

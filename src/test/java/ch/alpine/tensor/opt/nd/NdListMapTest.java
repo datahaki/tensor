@@ -48,7 +48,7 @@ public class NdListMapTest extends TestCase {
 
   private static void _checkCenter(Tensor center, int n, int dim) {
     NdMap<String> m1 = new NdListMap<>();
-    NdMap<String> m2 = NdTreeMap.of(Tensors.vector(-2, -1), Tensors.vector(2, 10), dim);
+    NdMap<String> m2 = NdTreeMap.of(NdBox.of(Tensors.vector(-2, -1), Tensors.vector(2, 10)), dim);
     int index = 0;
     Distribution b = BernoulliDistribution.of(RealScalar.of(0.25));
     Distribution ux = UniformDistribution.of(-2, 2);
