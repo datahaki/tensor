@@ -11,13 +11,13 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.sca.Sign;
 
-public class SphericalNdCluster<V> implements NdVisitor<V> {
+public class NdClusterRadius<V> implements NdVisitor<V> {
   /** @param ndMap
    * @param ndCenterInterface
    * @param radius non-negative
    * @return */
   public static <V> Collection<NdMatch<V>> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface, Scalar radius) {
-    SphericalNdCluster<V> sphericalNdCluster = new SphericalNdCluster<>(ndCenterInterface, radius);
+    NdClusterRadius<V> sphericalNdCluster = new NdClusterRadius<>(ndCenterInterface, radius);
     ndMap.visit(sphericalNdCluster);
     return sphericalNdCluster.list();
   }
@@ -30,7 +30,7 @@ public class SphericalNdCluster<V> implements NdVisitor<V> {
 
   /** @param ndCenterInterface
    * @param radius non-negative */
-  protected SphericalNdCluster(NdCenterInterface ndCenterInterface, Scalar radius) {
+  protected NdClusterRadius(NdCenterInterface ndCenterInterface, Scalar radius) {
     this.ndCenterInterface = ndCenterInterface;
     this.center = ndCenterInterface.center();
     this.radius = Sign.requirePositiveOrZero(radius);

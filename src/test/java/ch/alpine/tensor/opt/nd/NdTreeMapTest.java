@@ -31,13 +31,13 @@ public class NdTreeMapTest extends TestCase {
       ndMap.add(RandomVariate.of(distribution, 3), null);
     ndMap = Serialization.copy(ndMap);
     Tensor center = Tensors.fromString("{3/2[m], 5/2[m], 4[m]}");
-    NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(center);
+    NdCenterInterface ndCenterInterface = NdCenterBase.of2Norm(center);
     {
-      Collection<NdMatch<Void>> collection = SphericalNdCluster.of(ndMap, ndCenterInterface, Quantity.of(RealScalar.of(2), "m"));
+      Collection<NdMatch<Void>> collection = NdClusterRadius.of(ndMap, ndCenterInterface, Quantity.of(RealScalar.of(2), "m"));
       assertFalse(collection.isEmpty());
     }
     {
-      Collection<NdMatch<Void>> collection = NearestNdCluster.of(ndMap, ndCenterInterface, 4);
+      Collection<NdMatch<Void>> collection = NdClusterNearest.of(ndMap, ndCenterInterface, 4);
       assertEquals(collection.size(), 4);
     }
   }
@@ -60,8 +60,8 @@ public class NdTreeMapTest extends TestCase {
         @Override
         public void run() {
           Tensor center = RandomVariate.of(distribution, 2);
-          NdCenterInterface distancer = EuclideanNdCenter.of(center);
-          Collection<NdMatch<Void>> cluster = NearestNdCluster.of(ndTreeMap, distancer, 100);
+          NdCenterInterface distancer = NdCenterBase.of2Norm(center);
+          Collection<NdMatch<Void>> cluster = NdClusterNearest.of(ndTreeMap, distancer, 100);
           assertEquals(cluster.size(), 100);
         }
       }).start();
@@ -71,8 +71,8 @@ public class NdTreeMapTest extends TestCase {
   public void testEmpty() throws Exception {
     NdMap<String> ndMap = NdTreeMap.of(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10);
     assertTrue(ndMap.isEmpty());
-    NdCenterInterface distancer = EuclideanNdCenter.of(Tensors.vector(0, 0));
-    Collection<NdMatch<String>> cluster = NearestNdCluster.of(ndMap, distancer, 2);
+    NdCenterInterface distancer = NdCenterBase.of2Norm(Tensors.vector(0, 0));
+    Collection<NdMatch<String>> cluster = NdClusterNearest.of(ndMap, distancer, 2);
     assertEquals(cluster.size(), 0);
   }
 
@@ -81,20 +81,20 @@ public class NdTreeMapTest extends TestCase {
     ndMap.add(Tensors.vector(1, 1), "d1");
     ndMap.add(Tensors.vector(1, 0), "d2");
     ndMap.add(Tensors.vector(0, 1), "d3");
-    NdCenterInterface ndCenter = EuclideanNdCenter.of(Tensors.vector(0, 0));
+    NdCenterInterface ndCenter = NdCenterBase.of2Norm(Tensors.vector(0, 0));
     {
-      Collection<NdMatch<String>> cluster = NearestNdCluster.of(ndMap, ndCenter, 5);
+      Collection<NdMatch<String>> cluster = NdClusterNearest.of(ndMap, ndCenter, 5);
       assertEquals(cluster.size(), 3);
     }
     NdMap<String> ndMap2 = Serialization.copy(ndMap);
     {
       ndMap = NdTreeMap.of(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10);
-      Collection<NdMatch<String>> cluster = NearestNdCluster.of(ndMap, ndCenter, 5);
+      Collection<NdMatch<String>> cluster = NdClusterNearest.of(ndMap, ndCenter, 5);
       assertEquals(cluster.size(), 0);
     }
     ndMap = NdTreeMap.of(Tensors.vector(-2, -3), Tensors.vector(8, 9), 10);
     {
-      Collection<NdMatch<String>> cluster = NearestNdCluster.of(ndMap2, ndCenter, 5);
+      Collection<NdMatch<String>> cluster = NdClusterNearest.of(ndMap2, ndCenter, 5);
       assertEquals(cluster.size(), 3);
     }
   }

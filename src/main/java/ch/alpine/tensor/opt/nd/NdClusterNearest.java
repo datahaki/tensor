@@ -12,15 +12,16 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class NearestNdCluster<V> implements NdVisitor<V> {
-  private static final Comparator<NdMatch<?>> COMPARATOR = (o1, o2) -> Scalars.compare(o2.distance(), o1.distance());
+public class NdClusterNearest<V> implements NdVisitor<V> {
+  private static final Comparator<NdMatch<?>> COMPARATOR = //
+      (o1, o2) -> Scalars.compare(o2.distance(), o1.distance());
 
   /** @param ndMap
    * @param ndCenterInterface
    * @param limit strictly positive
    * @return */
   public static <V> Collection<NdMatch<V>> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface, int limit) {
-    NearestNdCluster<V> nearestNdCluster = new NearestNdCluster<>(ndCenterInterface, limit);
+    NdClusterNearest<V> nearestNdCluster = new NdClusterNearest<>(ndCenterInterface, limit);
     ndMap.visit(nearestNdCluster);
     return nearestNdCluster.queue();
   }
@@ -33,7 +34,7 @@ public class NearestNdCluster<V> implements NdVisitor<V> {
 
   /** @param ndCenterInterface
    * @param limit strictly positive */
-  protected NearestNdCluster(NdCenterInterface ndCenterInterface, int limit) {
+  protected NdClusterNearest(NdCenterInterface ndCenterInterface, int limit) {
     this.ndCenterInterface = ndCenterInterface;
     this.center = ndCenterInterface.center();
     this.limit = limit;

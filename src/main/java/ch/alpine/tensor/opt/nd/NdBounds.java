@@ -8,12 +8,20 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
 public class NdBounds {
-  public final Tensor lBounds;
-  public final Tensor uBounds;
+  final Tensor lBounds;
+  final Tensor uBounds;
 
   public NdBounds(Tensor lBounds, Tensor uBounds) {
     this.lBounds = lBounds.copy();
     this.uBounds = uBounds.copy();
+  }
+
+  public Tensor lBounds() {
+    return lBounds.copy();
+  }
+
+  public Tensor uBounds() {
+    return uBounds.copy();
   }
 
   public Scalar mean(int index) {

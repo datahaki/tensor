@@ -10,7 +10,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
-public class NearestNdClusterTest extends TestCase {
+public class NdClusterNearestTest extends TestCase {
   public void testSimple() {
     for (int n = 1; n < 10; ++n) {
       NdMap<String> ndTreeMap = NdTreeMap.of(Tensors.vector(-2, -3), Tensors.vector(8, 9), n);
@@ -26,20 +26,20 @@ public class NearestNdClusterTest extends TestCase {
       ndTreeMap.toString();
       {
         Tensor center = Tensors.vector(0, 0);
-        NdCenterInterface distancer = EuclideanNdCenter.of(center);
-        Collection<NdMatch<String>> cluster = NearestNdCluster.of(ndTreeMap, distancer, 1);
+        NdCenterInterface distancer = NdCenterBase.of2Norm(center);
+        Collection<NdMatch<String>> cluster = NdClusterNearest.of(ndTreeMap, distancer, 1);
         assertTrue(cluster.iterator().next().value().equals("d5"));
       }
       {
         Tensor center = Tensors.vector(5, 5);
-        NdCenterInterface distancer = EuclideanNdCenter.of(center);
-        Collection<NdMatch<String>> cluster = NearestNdCluster.of(ndTreeMap, distancer, 1);
+        NdCenterInterface distancer = NdCenterBase.of2Norm(center);
+        Collection<NdMatch<String>> cluster = NdClusterNearest.of(ndTreeMap, distancer, 1);
         assertTrue(cluster.iterator().next().value().equals("d6"));
       }
       {
         Tensor center = Tensors.vector(1.1, 0.9);
-        NdCenterInterface distancer = EuclideanNdCenter.of(center);
-        Collection<NdMatch<String>> cluster = NearestNdCluster.of(ndTreeMap, distancer, 2);
+        NdCenterInterface distancer = NdCenterBase.of2Norm(center);
+        Collection<NdMatch<String>> cluster = NdClusterNearest.of(ndTreeMap, distancer, 2);
         assertEquals(cluster.size(), 2);
         List<String> list = Arrays.asList("d1", "d4");
         for (NdMatch<String> point : cluster)
@@ -50,17 +50,17 @@ public class NearestNdClusterTest extends TestCase {
 
   public void testProtected() {
     Tensor center = Tensors.vector(0, 0);
-    NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(center);
-    assertTrue(new NearestNdCluster<>(ndCenterInterface, 1).queue().isEmpty());
+    NdCenterInterface ndCenterInterface = NdCenterBase.of2Norm(center);
+    assertTrue(new NdClusterNearest<>(ndCenterInterface, 1).queue().isEmpty());
   }
 
   public void testNullFail() {
-    AssertFail.of(() -> new NearestNdCluster<>(null, 1));
+    AssertFail.of(() -> new NdClusterNearest<>(null, 1));
   }
 
   public void testNonPositiveFail() {
     Tensor center = Tensors.vector(0, 0);
-    NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(center);
-    AssertFail.of(() -> new NearestNdCluster<>(ndCenterInterface, 0));
+    NdCenterInterface ndCenterInterface = NdCenterBase.of2Norm(center);
+    AssertFail.of(() -> new NdClusterNearest<>(ndCenterInterface, 0));
   }
 }

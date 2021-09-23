@@ -18,7 +18,7 @@ import ch.alpine.tensor.pdf.UniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
-public class SphericalNdClusterTest extends TestCase {
+public class NdClusterRadiusTest extends TestCase {
   public void testSimple() {
     int maxDensity = 2;
     NdMap<String> m1 = new NdListMap<>();
@@ -39,11 +39,11 @@ public class SphericalNdClusterTest extends TestCase {
       }
     }
     assertEquals(m1.size(), m2.size());
-    NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(Tensors.vector(0.2, 4.3));
+    NdCenterInterface ndCenterInterface = NdCenterBase.of2Norm(Tensors.vector(0.2, 4.3));
     {
       Scalar radius = RealScalar.of(4);
-      Collection<NdMatch<String>> c1 = SphericalNdCluster.of(m1, ndCenterInterface, radius);
-      Collection<NdMatch<String>> c2 = SphericalNdCluster.of(m2, ndCenterInterface, radius);
+      Collection<NdMatch<String>> c1 = NdClusterRadius.of(m1, ndCenterInterface, radius);
+      Collection<NdMatch<String>> c2 = NdClusterRadius.of(m2, ndCenterInterface, radius);
       assertTrue(0 < c1.size());
       assertTrue(0 < c2.size());
       assertEquals(c1.size(), c2.size());
@@ -53,8 +53,8 @@ public class SphericalNdClusterTest extends TestCase {
     }
     {
       int limit = 6;
-      Collection<NdMatch<String>> c1 = NearestNdCluster.of(m1, ndCenterInterface, limit);
-      Collection<NdMatch<String>> c2 = NearestNdCluster.of(m2, ndCenterInterface, limit);
+      Collection<NdMatch<String>> c1 = NdClusterNearest.of(m1, ndCenterInterface, limit);
+      Collection<NdMatch<String>> c2 = NdClusterNearest.of(m2, ndCenterInterface, limit);
       assertTrue(0 < c1.size());
       assertTrue(0 < c2.size());
       assertEquals(c1.size(), c2.size());
@@ -66,19 +66,19 @@ public class SphericalNdClusterTest extends TestCase {
   }
 
   public void testEmpty() {
-    NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(Tensors.vector(0.2, 4.3));
+    NdCenterInterface ndCenterInterface = NdCenterBase.of2Norm(Tensors.vector(0.2, 4.3));
     Scalar radius = RealScalar.of(4);
-    SphericalNdCluster<Object> sphericalNdCluster = new SphericalNdCluster<>(ndCenterInterface, radius);
+    NdClusterRadius<Object> sphericalNdCluster = new NdClusterRadius<>(ndCenterInterface, radius);
     assertTrue(sphericalNdCluster.list().isEmpty());
   }
 
   public void testNullFail() {
-    AssertFail.of(() -> new SphericalNdCluster<>(null, Pi.VALUE));
+    AssertFail.of(() -> new NdClusterRadius<>(null, Pi.VALUE));
   }
 
   public void testNonPositiveFail() {
     Tensor center = Tensors.vector(0, 0);
-    NdCenterInterface ndCenterInterface = EuclideanNdCenter.of(center);
-    AssertFail.of(() -> new SphericalNdCluster<>(ndCenterInterface, RealScalar.ONE.negate()));
+    NdCenterInterface ndCenterInterface = NdCenterBase.of2Norm(center);
+    AssertFail.of(() -> new NdClusterRadius<>(ndCenterInterface, RealScalar.ONE.negate()));
   }
 }
