@@ -5,19 +5,22 @@ import java.io.Serializable;
 
 import ch.alpine.tensor.Tensor;
 
-public class NdPair<V> implements Serializable {
-  private final Tensor location; // <- key
+/** immutable */
+public class NdEntry<V> implements Serializable {
+  private final Tensor location;
   private final V value;
 
-  /* package */ NdPair(Tensor location, V value) {
+  /* package */ NdEntry(Tensor location, V value) {
     this.location = location;
     this.value = value;
   }
 
+  /** @return location as key */
   public Tensor location() {
     return location;
   }
 
+  /** @return value */
   public V value() {
     return value;
   }

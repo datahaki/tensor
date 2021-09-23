@@ -16,6 +16,6 @@ public interface NdVisitor<V> {
    * @return whether visiting should proceed within the given bounds */
   boolean isViable(NdBox ndBox);
 
-  /** @param ndPair */
-  void consider(NdPair<V> ndPair);
+  /** @param ndEntry */
+  void consider(NdEntry<V> ndEntry);
 }

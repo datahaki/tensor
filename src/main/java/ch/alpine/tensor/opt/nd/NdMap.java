@@ -6,12 +6,11 @@ import ch.alpine.tensor.Tensor;
 /** NdMap contains (coordinate, value)-pairs.
  * multiple values can be associated to the same coordinate. */
 public interface NdMap<V> {
-  /** function adds pair (location, value) to map.
-   * The size of the map is incremented by one.
-   * No element that already exists in the map will be removed.
+  /** function adds pair (location, value) to map
    * 
    * @param location
-   * @param value */
+   * @param value
+   * @throws Exception if given location is not inside permitted region */
   void add(Tensor location, V value);
 
   /** @return number of entries stored in map */

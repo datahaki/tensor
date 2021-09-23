@@ -24,8 +24,8 @@ import ch.alpine.tensor.Scalar;
   }
 
   @Override
-  public void consider(NdPair<V> ndPair) {
-    stringBuilder.append(String.format("%s(%s, %s)\n", " ".repeat(depth), ndPair.location(), ndPair.value()));
+  public void consider(NdEntry<V> ndEntry) {
+    stringBuilder.append(String.format("%s(%s, %s)\n", " ".repeat(depth), ndEntry.location(), ndEntry.value()));
   }
 
   @Override

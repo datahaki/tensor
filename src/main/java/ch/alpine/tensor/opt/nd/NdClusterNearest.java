@@ -58,11 +58,8 @@ public class NdClusterNearest<V> implements NdVisitor<V> {
   }
 
   @Override // from NdVisitor
-  public void consider(NdPair<V> ndPair) {
-    NdMatch<V> ndMatch = new NdMatch<>( //
-        ndPair.location(), //
-        ndPair.value(), //
-        ndCenterInterface.distance(ndPair.location()));
+  public void consider(NdEntry<V> ndEntry) {
+    NdMatch<V> ndMatch = new NdMatch<>(ndEntry, ndCenterInterface.distance(ndEntry.location()));
     if (queue.size() < limit)
       queue.add(ndMatch);
     else //

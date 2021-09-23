@@ -12,15 +12,10 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
 
-/** the query {@link NdTreeMap#cluster(NdCenterInterface, int)}
- * can be used in parallel.
+/** the permitted region for points to be added to a {@link NdTreeMap}
+ * is the axis align bounding box provided at time of instantiation.
  * 
- * lbounds and ubounds are vectors of identical length
- * for instance if the points to be added are in the unit cube then
- * <pre>
- * lbounds = {0, 0, 0}
- * ubounds = {1, 1, 1}
- * </pre> */
+ * {@link NdTreeMap#visit(NdVisitor)} can be used in parallel. */
 public class NdTreeMap<V> implements NdMap<V>, Serializable {
   private static final int LEAF_SIZE_DEFAULT = 8;
   /** parameter only relevant if more than maxDensity identical key locations
@@ -53,13 +48,9 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     root = new Node(0);
   }
 
-  /** @param location vector with same length as lbounds and ubounds
-   * @param value
-   * @throws Exception if given location is not inside given bounding box
-   * @throws Exception if given location is not a vector of required length */
   @Override // from NdMap
   public void add(Tensor location, V value) {
-    root.add(new NdPair<>(ndBoxGlobal.requireInside(location), value), ndBoxGlobal);
+    root.add(new NdEntry<>(ndBoxGlobal.requireInside(location), value), ndBoxGlobal);
     ++size;
   }
 
@@ -90,7 +81,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     private Node lChild;
     private Node rChild;
     /** queue is set to null when node transform from leaf node to interior node */
-    private Queue<NdPair<V>> queue = new ArrayDeque<>();
+    private Queue<NdEntry<V>> queue = new ArrayDeque<>();
 
     private Node(int depth) {
       this.depth = depth;
@@ -109,7 +100,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       return depth % ndBoxGlobal.dimensions();
     }
 
-    private void add(NdPair<V> ndPair, NdBox ndBox) {
+    private void add(NdEntry<V> ndPair, NdBox ndBox) {
       if (isInterior()) {
         Tensor location = ndPair.location();
         int dimension = dimension();
@@ -131,7 +122,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
           queue.add(ndPair);
         else { // split queue into left and right
           int dimension = dimension();
-          for (NdPair<V> entry : queue)
+          for (NdEntry<V> entry : queue)
             if (Scalars.lessThan(entry.location().Get(dimension), ndBox.median(dimension))) {
               if (Objects.isNull(lChild))
                 lChild = createChild();
@@ -173,9 +164,9 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       }
     }
 
-    private void visit_R(NdVisitor<V> ndVisitor, NdBox ndBounds) {
+    private void visit_R(NdVisitor<V> ndVisitor, NdBox ndBox) {
       if (Objects.nonNull(rChild)) {
-        NdBox deriveR = ndBounds.deriveR(dimension());
+        NdBox deriveR = ndBox.deriveR(dimension());
         if (ndVisitor.isViable(deriveR))
           rChild.visit(ndVisitor, deriveR);
       }

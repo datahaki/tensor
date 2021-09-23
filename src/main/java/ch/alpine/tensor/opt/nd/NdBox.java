@@ -18,25 +18,31 @@ import ch.alpine.tensor.sca.Clips;
 /** axis aligned bounding box
  * immutable */
 public class NdBox implements Serializable {
-  /** @param lBounds lower left corner of axis aligned bounding box
+  /** lbounds and ubounds are vectors of identical length
+   * for instance if the points to be added are in the unit cube then
+   * <pre>
+   * lbounds = {0, 0, 0}
+   * ubounds = {1, 1, 1}
+   * </pre>
+   * 
+   * @param lBounds lower left corner of axis aligned bounding box
    * @param uBounds upper right corner of axis aligned bounding box
    * @return
    * @throws Exception if either input parameter is not a vector, or
    * if vectors are different in length */
   public static NdBox of(Tensor lBounds, Tensor uBounds) {
-    StaticHelper.require(lBounds, uBounds);
-    return new NdBox(IntStream.range(0, lBounds.length()) //
-        .mapToObj(index -> Clips.interval( //
-            lBounds.Get(index), //
-            uBounds.Get(index)))
-        .collect(Collectors.toList()));
+    if (lBounds.length() == uBounds.length())
+      return new NdBox(IntStream.range(0, lBounds.length()) //
+          .mapToObj(index -> Clips.interval(lBounds.Get(index), uBounds.Get(index))) //
+          .collect(Collectors.toList()));
+    throw TensorRuntimeException.of(lBounds, uBounds);
   }
 
   // ---
   private final List<Clip> list;
 
-  private NdBox(List<Clip> clips) {
-    this.list = clips;
+  private NdBox(List<Clip> list) {
+    this.list = list;
   }
 
   public Clip clip(int index) {
@@ -47,7 +53,7 @@ public class NdBox implements Serializable {
    * @return left, i.e. lower half of this bounding box */
   public NdBox deriveL(int index) {
     List<Clip> copy = new ArrayList<>(list);
-    Clip clip = this.list.get(index);
+    Clip clip = list.get(index);
     copy.set(index, Clips.interval(clip.min(), median(clip)));
     return new NdBox(copy);
   }
@@ -56,7 +62,7 @@ public class NdBox implements Serializable {
    * @return right, i.e. upper half of this bounding box */
   public NdBox deriveR(int index) {
     List<Clip> copy = new ArrayList<>(list);
-    Clip clip = this.list.get(index);
+    Clip clip = list.get(index);
     copy.set(index, Clips.interval(median(clip), clip.max()));
     return new NdBox(copy);
   }

@@ -130,9 +130,9 @@ public class NdTreeMapTest extends TestCase {
   }
 
   public void testLeafSizeFail() {
-    NdBox ndBounds = NdBox.of(Tensors.vector(0, 0), Tensors.vector(1, 1));
-    AssertFail.of(() -> NdTreeMap.of(ndBounds, -1));
-    AssertFail.of(() -> NdTreeMap.of(ndBounds, +0));
+    NdBox ndBox = NdBox.of(Tensors.vector(0, 0), Tensors.vector(1, 1));
+    AssertFail.of(() -> NdTreeMap.of(ndBox, -1));
+    AssertFail.of(() -> NdTreeMap.of(ndBox, +0));
   }
 
   public void testFail0() {

@@ -17,9 +17,9 @@ import junit.framework.TestCase;
 
 public class NdClusterNearestTest extends TestCase {
   public void testSimple() {
-    NdBox ndBounds = NdBox.of(Tensors.vector(-2, -3), Tensors.vector(8, 9));
+    NdBox ndBox = NdBox.of(Tensors.vector(-2, -3), Tensors.vector(8, 9));
     for (int n = 1; n < 10; ++n) {
-      NdMap<String> ndTreeMap = NdTreeMap.of(ndBounds, n);
+      NdMap<String> ndTreeMap = NdTreeMap.of(ndBox, n);
       ndTreeMap.toString();
       assertTrue(ndTreeMap.isEmpty());
       ndTreeMap.add(Tensors.vector(1, 1), "d1");

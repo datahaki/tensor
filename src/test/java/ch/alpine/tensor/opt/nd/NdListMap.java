@@ -8,11 +8,11 @@ import ch.alpine.tensor.Tensor;
 
 /** class for verification of {@link NdTreeMap} */
 public class NdListMap<V> implements NdMap<V> {
-  private final List<NdPair<V>> list = new ArrayList<>();
+  private final List<NdEntry<V>> list = new ArrayList<>();
 
   @Override // from NdMap
   public void add(Tensor location, V value) {
-    list.add(new NdPair<>(location, value));
+    list.add(new NdEntry<>(location, value));
   }
 
   @Override // from NdMap

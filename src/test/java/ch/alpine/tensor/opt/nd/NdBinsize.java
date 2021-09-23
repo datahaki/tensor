@@ -29,12 +29,12 @@ public class NdBinsize<V> implements NdVisitor<V> {
   }
 
   @Override // from NdVisitor
-  public boolean isViable(NdBox ndBounds) {
+  public boolean isViable(NdBox ndBox) {
     return true;
   }
 
   @Override // from NdVisitor
-  public void consider(NdPair<V> ndPair) {
+  public void consider(NdEntry<V> ndEntry) {
     ++count;
   }
 

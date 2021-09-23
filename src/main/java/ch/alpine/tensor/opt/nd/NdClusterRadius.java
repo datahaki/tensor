@@ -51,13 +51,10 @@ public class NdClusterRadius<V> implements NdVisitor<V> {
   }
 
   @Override // from NdVisitor
-  public void consider(NdPair<V> ndPair) {
-    Scalar distance = ndCenterInterface.distance(ndPair.location());
+  public void consider(NdEntry<V> ndEntry) {
+    Scalar distance = ndCenterInterface.distance(ndEntry.location());
     if (Scalars.lessThan(distance, radius))
-      list.add(new NdMatch<>( //
-          ndPair.location(), //
-          ndPair.value(), //
-          distance));
+      list.add(new NdMatch<>(ndEntry, distance));
   }
 
   /** @return all matches */
