@@ -39,7 +39,7 @@ public class NdClusterRadiusTest extends TestCase {
       }
     }
     assertEquals(m1.size(), m2.size());
-    NdCenterInterface ndCenterInterface = NdCenterBase.of2Norm(Tensors.vector(0.2, 4.3));
+    NdCenterInterface ndCenterInterface = NdCenterBase.of1Norm(Tensors.vector(0.2, 4.3));
     {
       Scalar radius = RealScalar.of(4);
       Collection<NdMatch<String>> c1 = NdClusterRadius.of(m1, ndCenterInterface, radius);
@@ -78,7 +78,7 @@ public class NdClusterRadiusTest extends TestCase {
 
   public void testNonPositiveFail() {
     Tensor center = Tensors.vector(0, 0);
-    NdCenterInterface ndCenterInterface = NdCenterBase.of2Norm(center);
+    NdCenterInterface ndCenterInterface = NdCenterBase.ofInfinityNorm(center);
     AssertFail.of(() -> new NdClusterRadius<>(ndCenterInterface, RealScalar.ONE.negate()));
   }
 }

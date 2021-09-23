@@ -10,7 +10,7 @@ import java.util.Queue;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.ext.Integers;
 
 public class NdClusterNearest<V> implements NdVisitor<V> {
   private static final Comparator<NdMatch<?>> COMPARATOR = //
@@ -37,9 +37,7 @@ public class NdClusterNearest<V> implements NdVisitor<V> {
   protected NdClusterNearest(NdCenterInterface ndCenterInterface, int limit) {
     this.ndCenterInterface = ndCenterInterface;
     this.center = ndCenterInterface.center();
-    this.limit = limit;
-    if (limit < 1)
-      throw new IllegalArgumentException("limit must be positive but is " + limit);
+    this.limit = Integers.requirePositive(limit);
     queue = new PriorityQueue<>(COMPARATOR);
   }
 
@@ -55,10 +53,8 @@ public class NdClusterNearest<V> implements NdVisitor<V> {
 
   @Override // from NdVisitor
   public boolean isViable(NdBounds ndBounds) {
-    if (queue.size() < limit)
-      return true;
-    Tensor test = Tensors.vector(i -> ndBounds.clip(i).apply(center.Get(i)), center.length());
-    return Scalars.lessThan(ndCenterInterface.distance(test), queue.peek().distance());
+    return queue.size() < limit //
+        || Scalars.lessThan(ndCenterInterface.distance(ndBounds.clip(center)), queue.peek().distance());
   }
 
   @Override // from NdVisitor

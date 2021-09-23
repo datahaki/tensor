@@ -122,16 +122,16 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       if (isInterior()) {
         Tensor location = ndPair.location();
         int dimension = dimension();
-        Scalar mean = ndBounds.mean(dimension);
-        if (Scalars.lessThan(location.Get(dimension), mean)) {
-          ndBounds.uBounds.set(mean, dimension);
+        Scalar median = ndBounds.median(dimension);
+        if (Scalars.lessThan(location.Get(dimension), median)) {
+          ndBounds.uBounds.set(median, dimension);
           if (Objects.isNull(lChild)) {
             lChild = createChild();
             lChild.queue.add(ndPair);
           } else
             lChild.add(ndPair, ndBounds);
         } else {
-          ndBounds.lBounds.set(mean, dimension);
+          ndBounds.lBounds.set(median, dimension);
           if (Objects.isNull(rChild)) {
             rChild = createChild();
             rChild.queue.add(ndPair);
@@ -143,9 +143,9 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
           queue.add(ndPair);
         else { // split queue into left and right
           int dimension = dimension();
-          Scalar mean = ndBounds.mean(dimension);
+          Scalar median = ndBounds.median(dimension);
           for (NdPair<V> entry : queue)
-            if (Scalars.lessThan(entry.location().Get(dimension), mean)) {
+            if (Scalars.lessThan(entry.location().Get(dimension), median)) {
               if (Objects.isNull(lChild))
                 lChild = createChild();
               lChild.queue.add(entry);
@@ -164,14 +164,14 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     private void visit(NdVisitor<V> ndVisitor, NdBounds ndBounds) {
       if (isInterior()) {
         int dimension = dimension();
-        Scalar mean = ndBounds.mean(dimension);
-        boolean leftFirst = ndVisitor.push_leftFirst(dimension, mean);
+        Scalar median = ndBounds.median(dimension);
+        boolean leftFirst = ndVisitor.push_leftFirst(dimension, median);
         if (leftFirst) {
-          visit_L(ndVisitor, ndBounds, mean);
-          visit_R(ndVisitor, ndBounds, mean);
+          visit_L(ndVisitor, ndBounds, median);
+          visit_R(ndVisitor, ndBounds, median);
         } else {
-          visit_R(ndVisitor, ndBounds, mean);
-          visit_L(ndVisitor, ndBounds, mean);
+          visit_R(ndVisitor, ndBounds, median);
+          visit_L(ndVisitor, ndBounds, median);
         }
         ndVisitor.pop();
       } else

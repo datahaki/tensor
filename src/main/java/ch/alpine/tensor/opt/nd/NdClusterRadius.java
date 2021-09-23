@@ -8,7 +8,6 @@ import java.util.List;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.sca.Sign;
 
 public class NdClusterRadius<V> implements NdVisitor<V> {
@@ -48,8 +47,7 @@ public class NdClusterRadius<V> implements NdVisitor<V> {
 
   @Override // from NdVisitor
   public boolean isViable(NdBounds ndBounds) {
-    Tensor test = Tensors.vector(i -> ndBounds.clip(i).apply(center.Get(i)), center.length());
-    return Scalars.lessThan(ndCenterInterface.distance(test), radius);
+    return Scalars.lessThan(ndCenterInterface.distance(ndBounds.clip(center)), radius);
   }
 
   @Override // from NdVisitor
