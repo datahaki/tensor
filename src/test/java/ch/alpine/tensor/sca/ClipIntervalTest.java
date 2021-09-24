@@ -1,7 +1,9 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ClipIntervalTest extends TestCase {
@@ -35,5 +37,16 @@ public class ClipIntervalTest extends TestCase {
   public void testToString() {
     String string = Clips.interval(3, 7).toString();
     assertEquals(string, "Clip[3, 7]");
+  }
+
+  public void testUnits0() {
+    AssertFail.of(() -> Clips.interval(RealScalar.of(0), Quantity.of(0, "m")));
+    AssertFail.of(() -> Clips.interval(Quantity.of(0, "m"), RealScalar.of(0)));
+  }
+
+  public void testUnits1() {
+    AssertFail.of(() -> Clips.interval(RealScalar.of(0), Quantity.of(2, "m")));
+    AssertFail.of(() -> Clips.interval(Quantity.of(0, "m"), RealScalar.of(2)));
+    AssertFail.of(() -> Clips.interval(Quantity.of(-2, "m"), RealScalar.of(0)));
   }
 }

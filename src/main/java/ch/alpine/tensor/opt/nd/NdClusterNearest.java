@@ -4,12 +4,12 @@ package ch.alpine.tensor.opt.nd;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
 
 public class NdClusterNearest<V> implements NdVisitor<V> {
@@ -37,22 +37,20 @@ public class NdClusterNearest<V> implements NdVisitor<V> {
 
   // ---
   private final NdCenterInterface ndCenterInterface;
-  private final Tensor center;
   private final int limit;
   private final Queue<NdMatch<V>> queue;
 
   /** @param ndCenterInterface
    * @param limit strictly positive */
   protected NdClusterNearest(NdCenterInterface ndCenterInterface, int limit) {
-    this.ndCenterInterface = ndCenterInterface;
-    this.center = ndCenterInterface.center();
+    this.ndCenterInterface = Objects.requireNonNull(ndCenterInterface);
     this.limit = Integers.requirePositive(limit);
     queue = new PriorityQueue<>(COMPARATOR);
   }
 
   @Override // from NdVisitor
   public boolean push_leftFirst(int dimension, Scalar median) {
-    return Scalars.lessThan(center.Get(dimension), median);
+    return ndCenterInterface.lessThan(dimension, median);
   }
 
   @Override // from NdVisitor
@@ -63,7 +61,7 @@ public class NdClusterNearest<V> implements NdVisitor<V> {
   @Override // from NdVisitor
   public boolean isViable(NdBox ndBox) {
     return queue.size() < limit //
-        || Scalars.lessThan(ndCenterInterface.distance(ndBox.clip(center)), queue.peek().distance());
+        || Scalars.lessThan(ndCenterInterface.distance(ndBox), queue.peek().distance());
   }
 
   @Override // from NdVisitor

@@ -14,6 +14,7 @@ import ch.alpine.tensor.pdf.BernoulliDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.UniformDistribution;
+import ch.alpine.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class NdListMapTest extends TestCase {
@@ -66,14 +67,13 @@ public class NdListMapTest extends TestCase {
     }
     assertEquals(m1.size(), m2.size());
     NdCenterInterface dinf = NdCenterBase.of2Norm(center);
-    // FIXME
-    // Collection<NdMatch<String>> c1 = m1.cluster(NearestNdCluster.create(dinf, n));
-    // Collection<NdMatch<String>> c2 = m2.cluster(NearestNdCluster.create(dinf, n));
-    // assertEquals(c1.size(), c2.size());
-    // assertTrue(c1.size() <= n);
-    // Scalar s1 = addDistances(c1, center, dinf);
-    // Scalar s2 = addDistances(c2, center, dinf);
-    // Chop._10.requireClose(s1, s2);
+    Collection<NdMatch<String>> c1 = NdClusterNearest.of(m1, dinf, n);
+    Collection<NdMatch<String>> c2 = NdClusterNearest.of(m2, dinf, n);
+    assertEquals(c1.size(), c2.size());
+    assertTrue(c1.size() <= n);
+    Scalar s1 = addDistances(c1, center, dinf);
+    Scalar s2 = addDistances(c2, center, dinf);
+    Chop._10.requireClose(s1, s2);
   }
 
   public void testOne() {

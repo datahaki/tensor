@@ -30,7 +30,7 @@ public class NdClusterRadius<V> extends NdClusterBase<V> {
 
   @Override // from NdVisitor
   public boolean isViable(NdBox ndBox) {
-    return isWithin(ndBox.clip(center));
+    return Scalars.lessThan(ndCenterInterface.distance(ndBox), radius);
   }
 
   @Override // from NdVisitor

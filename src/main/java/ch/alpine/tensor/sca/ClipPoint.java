@@ -10,7 +10,7 @@ import ch.alpine.tensor.Scalar;
     super(value, value, width);
   }
 
-  @Override // from Clip
+  @Override // from ClipInterval
   public Scalar rescale(Scalar scalar) {
     apply(scalar);
     return RealScalar.ZERO;

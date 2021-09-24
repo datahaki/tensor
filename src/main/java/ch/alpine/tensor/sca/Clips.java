@@ -3,6 +3,8 @@ package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
 
@@ -14,12 +16,11 @@ public enum Clips {
    * @param min
    * @param max
    * @return function that clips the input to the closed interval [min, max]
-   * @throws Exception if min is greater than max */
+   * @throws Exception if min is greater than max
+   * @throws Exception if min and max give different {@link QuantityUnit} */
   public static Clip interval(Scalar min, Scalar max) {
-    Scalar width = max.subtract(min);
-    return min.equals(max) //
-        ? new ClipPoint(min, width)
-        : new ClipInterval(min, max, Sign.requirePositive(width));
+    Scalars.compare(min, max); // throws Exception if min and max have different units
+    return _interval(min, max);
   }
 
   /** @param min
@@ -27,17 +28,25 @@ public enum Clips {
    * @return function that clips the input to the closed interval [min, max]
    * @throws Exception if min is greater than max */
   public static Clip interval(Number min, Number max) {
-    return interval(RealScalar.of(min), RealScalar.of(max));
+    return _interval(RealScalar.of(min), RealScalar.of(max));
   }
 
-  /***************************************************/
+  // helper function
+  private static Clip _interval(Scalar min, Scalar max) {
+    Scalar width = max.subtract(min);
+    if (min.equals(max))
+      return new ClipPoint(min, width);
+    return new ClipInterval(min, max, Sign.requirePositive(width));
+  }
+
+  // ==================================================
   /** clips in the interval [0, ..., max]
    * 
    * @param max non-negative
    * @return function that clips the input to the closed interval [0, max]
    * @throws Exception if max is negative */
   public static Clip positive(Scalar max) {
-    return interval(max.zero(), max);
+    return _interval(max.zero(), max);
   }
 
   /** @param max non-negative
@@ -47,14 +56,14 @@ public enum Clips {
     return positive(RealScalar.of(max));
   }
 
-  /***************************************************/
+  // ==================================================
   /** clips in the interval [-max, ..., max]
    * 
    * @param max non-negative
    * @return function that clips the input to the closed interval [-max, max]
    * @throws Exception if max is negative */
   public static Clip absolute(Scalar max) {
-    return interval(max.negate(), max);
+    return _interval(max.negate(), max);
   }
 
   /** @param max non-negative
@@ -64,7 +73,7 @@ public enum Clips {
     return absolute(RealScalar.of(max));
   }
 
-  /***************************************************/
+  // ==================================================
   private static final Clip UNIT = positive(1);
   private static final Clip ABSOLUTE_ONE = absolute(1);
 
@@ -78,7 +87,7 @@ public enum Clips {
     return ABSOLUTE_ONE;
   }
 
-  /***************************************************/
+  // ==================================================
   /** @param clip1
    * @param clip2
    * @return [max(clip1.min, clip2.min), min(clip1.max, clip2.max)], i.e.

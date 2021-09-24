@@ -4,6 +4,7 @@ package ch.alpine.tensor.opt.nd;
 import java.io.Serializable;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.nrm.Vector2Norm;
@@ -51,7 +52,12 @@ public abstract class NdCenterBase implements NdCenterInterface, Serializable {
   }
 
   @Override // from NdCenterInterface
-  public Tensor center() {
-    return center;
+  public final Scalar distance(NdBox ndBox) {
+    return distance(ndBox.clip(center));
+  }
+
+  @Override // from NdCenterInterface
+  public final boolean lessThan(int dimension, Scalar median) {
+    return Scalars.lessThan(center.Get(dimension), median);
   }
 }

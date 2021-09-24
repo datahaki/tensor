@@ -51,6 +51,18 @@ public class NdBoxTest extends TestCase {
     Serialization.copy(NdBox.of(Tensors.vector(2, 3, 9), Tensors.vector(12, 23, 11)));
   }
 
+  public void testNulls() {
+    AssertFail.of(() -> NdBox.of(null, Tensors.vector(3)));
+    AssertFail.of(() -> NdBox.of(Tensors.vector(3), null));
+  }
+
+  public void testEmpty() {
+    NdBox ndBox = NdBox.of(Tensors.empty(), Tensors.empty());
+    assertEquals(ndBox.dimensions(), 0);
+    assertEquals(ndBox.min(), Tensors.empty());
+    assertEquals(ndBox.max(), Tensors.empty());
+  }
+
   public void testFail0() {
     AssertFail.of(() -> NdBox.of(Tensors.vector(-2, -3), Tensors.vector(8, 9, 3)));
   }
@@ -63,5 +75,10 @@ public class NdBoxTest extends TestCase {
 
   public void testFail2() {
     AssertFail.of(() -> NdBox.of(Tensors.vector(-2, 10), Tensors.vector(8, 9)));
+  }
+
+  public void testFail3() {
+    NdBox.of(Tensors.vector(0), Tensors.fromString("{2}"));
+    AssertFail.of(() -> NdBox.of(Tensors.vector(0), Tensors.fromString("{2[m]}")));
   }
 }

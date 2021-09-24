@@ -3,6 +3,7 @@ package ch.alpine.tensor.opt.nd;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class NdClusterInsideTest extends TestCase {
@@ -14,6 +15,10 @@ public class NdClusterInsideTest extends TestCase {
     assertTrue(NdClusterInside.anyMatch(ndMap, NdCenterBase.of1Norm(Tensors.vector(0.2)), RealScalar.of(0.3)));
     assertFalse(NdClusterInside.anyMatch(ndMap, NdCenterBase.of1Norm(Tensors.vector(0.5)), RealScalar.of(0.3)));
     assertTrue(NdClusterInside.anyMatch(ndMap, NdCenterBase.of1Norm(Tensors.vector(0.75)), RealScalar.of(0.3)));
+  }
+
+  public void testNullFail() {
+    AssertFail.of(() -> new NdClusterInside<>(null, RealScalar.ONE));
   }
 
   public static class CallCount {
