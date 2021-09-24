@@ -7,47 +7,30 @@ import java.util.List;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.sca.Sign;
 
-public class NdClusterRadius<V> implements NdVisitor<V> {
+public class NdClusterRadius<V> extends NdClusterBase<V> {
   /** @param ndMap
    * @param ndCenterInterface
    * @param radius non-negative
    * @return */
   public static <V> Collection<NdMatch<V>> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface, Scalar radius) {
-    NdClusterRadius<V> sphericalNdCluster = new NdClusterRadius<>(ndCenterInterface, radius);
-    ndMap.visit(sphericalNdCluster);
-    return sphericalNdCluster.list();
+    NdClusterRadius<V> ndClusterRadius = new NdClusterRadius<>(ndCenterInterface, radius);
+    ndMap.visit(ndClusterRadius);
+    return ndClusterRadius.list();
   }
 
   // ---
-  private final NdCenterInterface ndCenterInterface;
-  private final Tensor center;
-  private final Scalar radius;
   private final List<NdMatch<V>> list = new LinkedList<>();
 
   /** @param ndCenterInterface
    * @param radius non-negative */
   protected NdClusterRadius(NdCenterInterface ndCenterInterface, Scalar radius) {
-    this.ndCenterInterface = ndCenterInterface;
-    this.center = ndCenterInterface.center();
-    this.radius = Sign.requirePositiveOrZero(radius);
-  }
-
-  @Override // from NdVisitor
-  public boolean push_leftFirst(int dimension, Scalar median) {
-    return true;
-  }
-
-  @Override // from NdVisitor
-  public void pop() {
-    // ---
+    super(ndCenterInterface, radius);
   }
 
   @Override // from NdVisitor
   public boolean isViable(NdBox ndBox) {
-    return Scalars.lessThan(ndCenterInterface.distance(ndBox.clip(center)), radius);
+    return isWithin(ndBox.clip(center));
   }
 
   @Override // from NdVisitor

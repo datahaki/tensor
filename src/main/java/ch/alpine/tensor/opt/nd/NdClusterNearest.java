@@ -21,9 +21,18 @@ public class NdClusterNearest<V> implements NdVisitor<V> {
    * @param limit strictly positive
    * @return */
   public static <V> Collection<NdMatch<V>> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface, int limit) {
-    NdClusterNearest<V> nearestNdCluster = new NdClusterNearest<>(ndCenterInterface, limit);
-    ndMap.visit(nearestNdCluster);
-    return nearestNdCluster.queue();
+    NdClusterNearest<V> ndClusterNearest = new NdClusterNearest<>(ndCenterInterface, limit);
+    ndMap.visit(ndClusterNearest);
+    return ndClusterNearest.queue();
+  }
+
+  /** @param ndMap
+   * @param ndCenterInterface
+   * @return nearest match in map with respect to given center interface, or null if ndMap is empty */
+  public static <V> NdMatch<V> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface) {
+    NdClusterNearest<V> ndClusterNearest = new NdClusterNearest<>(ndCenterInterface, 1);
+    ndMap.visit(ndClusterNearest);
+    return ndClusterNearest.queue().poll();
   }
 
   // ---

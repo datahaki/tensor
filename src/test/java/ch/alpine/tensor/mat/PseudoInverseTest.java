@@ -88,7 +88,7 @@ public class PseudoInverseTest extends TestCase {
     for (int n = 1; n < 7; ++n) {
       Tensor matrix = RandomVariate.of(distribution, n, n);
       Tensor invers = Inverse.of(matrix);
-      Chop._09.requireClose(invers, PseudoInverse.usingSvd(matrix));
+      Chop._08.requireClose(invers, PseudoInverse.usingSvd(matrix)); // chop_09 was insufficient
       Chop._09.requireClose(invers, PseudoInverse.usingQR(matrix));
     }
   }

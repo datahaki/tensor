@@ -7,19 +7,17 @@ import java.util.Objects;
 import java.util.TreeMap;
 import java.util.function.Function;
 
-import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Chop;
 
 /** class performs the integration of probabilities to calculate the cumulative distribution function
  * whenever there is no closed form expression for the terms. */
 /* package */ class DiscreteCDF implements CDF {
   // 0.9999999999999999
   // .^....^....^....^.
-  /* package for testing */ static final Scalar CDF_NUMERIC_THRESHOLD = DoubleScalar.of(1e-14);
+  /* package for testing */ static final Chop CDF_CHOP = Chop._14;
   // ---
   private final DiscreteDistribution discreteDistribution;
   private final NavigableMap<Scalar, Scalar> cdf = new TreeMap<>();
@@ -61,19 +59,17 @@ import ch.alpine.tensor.sca.Abs;
       Scalar p_equals = discreteDistribution.p_equals(k);
       cumprob = cumprob.add(p_equals);
       cdf.put(RealScalar.of(k), cumprob);
-      cdf_finished |= isFinished(p_equals, cumprob);
+      cdf_finished = isFinished(p_equals, cumprob);
     }
     return p_function(x, function);
   }
 
   // also used in Expectation
   /* package */ static boolean isFinished(Scalar p_equals, Scalar cumprob) {
-    boolean finished = false;
-    finished |= cumprob.equals(RealScalar.ONE);
-    finished |= !ExactScalarQ.of(cumprob) && //
-        p_equals.equals(RealScalar.ZERO) && //
-        Scalars.lessThan(Abs.between(cumprob, RealScalar.ONE), CDF_NUMERIC_THRESHOLD);
-    return finished;
+    if (cumprob.equals(RealScalar.ONE))
+      return true;
+    return p_equals.equals(RealScalar.ZERO) //
+        && CDF_CHOP.isClose(cumprob, RealScalar.ONE);
   }
 
   /* package */ boolean cdf_finished() {

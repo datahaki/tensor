@@ -10,6 +10,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ChopInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.mat.Tolerance;
 
 /** Chop is consistent with Mathematica::Chop
  * 
@@ -33,9 +34,13 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * 
  * <p>The tensor library does not predefine a default threshold.
  * The application has to specify the threshold for each use of Chop.
+ * However, for certain matrix computations the default {@link Tolerance}
+ * or 1E-12 is used.
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/Chop.html">Chop</a> */
+ * <a href="https://reference.wolfram.com/language/ref/Chop.html">Chop</a>
+ * 
+ * @see Tolerance */
 public class Chop implements ScalarUnaryOperator {
   public static final Chop _01 = below(1e-01);
   public static final Chop _02 = below(1e-02);

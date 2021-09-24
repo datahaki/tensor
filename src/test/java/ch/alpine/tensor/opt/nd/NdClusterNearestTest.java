@@ -4,6 +4,7 @@ package ch.alpine.tensor.opt.nd;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -81,6 +82,13 @@ public class NdClusterNearestTest extends TestCase {
       Set<String> s2 = c2.stream().map(NdMatch::value).collect(Collectors.toSet());
       assertEquals(s1, s2);
     }
+  }
+
+  public void testEmpty() {
+    NdMap<Void> ndMap = NdTreeMap.of(NdBox.of(Tensors.vector(0), Tensors.vector(1)));
+    NdCenterInterface ndCenterInterface = NdCenterBase.of1Norm(Tensors.vector(0.2));
+    NdMatch<Void> ndMatch = NdClusterNearest.of(ndMap, ndCenterInterface);
+    assertTrue(Objects.isNull(ndMatch));
   }
 
   public void testProtected() {

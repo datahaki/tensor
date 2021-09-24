@@ -12,6 +12,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
@@ -21,21 +22,22 @@ public class NdBox implements Serializable {
   /** lbounds and ubounds are vectors of identical length
    * for instance if the points to be added are in the unit cube then
    * <pre>
-   * lbounds = {0, 0, 0}
-   * ubounds = {1, 1, 1}
+   * min = {0, 0, 0}
+   * max = {1, 1, 1}
    * </pre>
    * 
-   * @param lBounds lower left corner of axis aligned bounding box
-   * @param uBounds upper right corner of axis aligned bounding box
+   * @param min lower left corner of axis aligned bounding box
+   * @param max upper right corner of axis aligned bounding box
    * @return
    * @throws Exception if either input parameter is not a vector, or
-   * if vectors are different in length */
-  public static NdBox of(Tensor lBounds, Tensor uBounds) {
-    if (lBounds.length() == uBounds.length())
-      return new NdBox(IntStream.range(0, lBounds.length()) //
-          .mapToObj(index -> Clips.interval(lBounds.Get(index), uBounds.Get(index))) //
+   * if vectors are different in length
+   * @see Entrywise */
+  public static NdBox of(Tensor min, Tensor max) {
+    if (min.length() == max.length())
+      return new NdBox(IntStream.range(0, min.length()) //
+          .mapToObj(index -> Clips.interval(min.Get(index), max.Get(index))) //
           .collect(Collectors.toList()));
-    throw TensorRuntimeException.of(lBounds, uBounds);
+    throw TensorRuntimeException.of(min, max);
   }
 
   // ---
@@ -45,6 +47,8 @@ public class NdBox implements Serializable {
     this.list = list;
   }
 
+  /** @param index
+   * @return clip in given dimension */
   public Clip clip(int index) {
     return list.get(index);
   }
@@ -104,17 +108,18 @@ public class NdBox implements Serializable {
     return Tensor.of(list.stream().map(clip -> clip.apply(vector.Get(atomicInteger.getAndIncrement()))));
   }
 
+  /** @return dimensions of bounding box */
+  public int dimensions() {
+    return list.size();
+  }
+
   /** @return lower left corner of bounding box */
-  public Tensor lBounds() {
+  public Tensor min() {
     return Tensor.of(list.stream().map(Clip::min));
   }
 
   /** @return upper right corner of bounding box */
-  public Tensor uBounds() {
+  public Tensor max() {
     return Tensor.of(list.stream().map(Clip::max));
-  }
-
-  public int dimensions() {
-    return list.size();
   }
 }

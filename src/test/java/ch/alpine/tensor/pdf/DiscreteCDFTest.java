@@ -4,8 +4,6 @@ package ch.alpine.tensor.pdf;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -48,9 +46,7 @@ public class DiscreteCDFTest extends TestCase {
     assertEquals(cdf.p_lessEquals(RealScalar.of(-10)), RealScalar.ZERO);
     assertFalse(discreteCDF.cdf_finished());
     Scalar top = cdf.p_lessEquals(RealScalar.of(1000000));
-    assertTrue(Scalars.lessThan( //
-        Abs.between(top, RealScalar.ONE), //
-        DiscreteCDF.CDF_NUMERIC_THRESHOLD));
+    DiscreteCDF.CDF_CHOP.requireClose(top, RealScalar.ONE);
     assertTrue(discreteCDF.cdf_finished());
   }
 
@@ -65,9 +61,7 @@ public class DiscreteCDFTest extends TestCase {
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessEquals(RealScalar.of(-10)), RealScalar.ZERO);
     Scalar top = cdf.p_lessEquals(RealScalar.of(1000000));
-    assertTrue(Scalars.lessThan( //
-        Abs.between(top, RealScalar.ONE), //
-        DiscreteCDF.CDF_NUMERIC_THRESHOLD));
+    DiscreteCDF.CDF_CHOP.requireClose(top, RealScalar.ONE);
   }
 
   public void testNumericsGeometric() {

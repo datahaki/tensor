@@ -24,8 +24,8 @@ public class NdBoxTest extends TestCase {
 
   public void testSimple() {
     NdBox ndBox = NdBox.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
-    assertEquals(ndBox.lBounds(), Tensors.vector(2, 3));
-    assertEquals(ndBox.uBounds(), Tensors.vector(12, 23));
+    assertEquals(ndBox.min(), Tensors.vector(2, 3));
+    assertEquals(ndBox.max(), Tensors.vector(12, 23));
   }
 
   public void testUnits() {

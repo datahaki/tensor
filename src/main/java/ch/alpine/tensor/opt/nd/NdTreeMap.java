@@ -100,26 +100,26 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       return depth % ndBoxGlobal.dimensions();
     }
 
-    private void add(NdEntry<V> ndPair, NdBox ndBox) {
+    private void add(NdEntry<V> ndEntry, NdBox ndBox) {
       if (isInterior()) {
-        Tensor location = ndPair.location();
+        Tensor location = ndEntry.location();
         int dimension = dimension();
         if (Scalars.lessThan(location.Get(dimension), ndBox.median(dimension))) {
           if (Objects.isNull(lChild)) {
             lChild = createChild();
-            lChild.queue.add(ndPair);
+            lChild.queue.add(ndEntry);
           } else
-            lChild.add(ndPair, ndBox.deriveL(dimension));
+            lChild.add(ndEntry, ndBox.deriveL(dimension));
         } else {
           if (Objects.isNull(rChild)) {
             rChild = createChild();
-            rChild.queue.add(ndPair);
+            rChild.queue.add(ndEntry);
           } else
-            rChild.add(ndPair, ndBox.deriveR(dimension));
+            rChild.add(ndEntry, ndBox.deriveR(dimension));
         }
       } else { // queue != null
         if (queue.size() < maxDensity || depth == MAX_DEPTH)
-          queue.add(ndPair);
+          queue.add(ndEntry);
         else { // split queue into left and right
           int dimension = dimension();
           for (NdEntry<V> entry : queue)
@@ -134,7 +134,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
             }
           queue.clear();
           queue = null;
-          add(ndPair, ndBox);
+          add(ndEntry, ndBox);
         }
       }
     }
