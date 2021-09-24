@@ -19,7 +19,7 @@ import ch.alpine.tensor.sca.Clips;
 /** axis aligned bounding box
  * immutable */
 public class NdBox implements Serializable {
-  /** lbounds and ubounds are vectors of identical length
+  /** min and max are vectors of identical length
    * for instance if the points to be added are in the unit cube then
    * <pre>
    * min = {0, 0, 0}

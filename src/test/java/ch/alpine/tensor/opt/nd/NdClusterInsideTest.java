@@ -17,6 +17,20 @@ public class NdClusterInsideTest extends TestCase {
     assertTrue(NdClusterInside.anyMatch(ndMap, NdCenterBase.of1Norm(Tensors.vector(0.75)), RealScalar.of(0.3)));
   }
 
+  public void testExact() {
+    NdMap<Void> ndMap = NdTreeMap.of(NdBox.of(Tensors.vector(0), Tensors.vector(4)));
+    ndMap.add(Tensors.vector(0), null);
+    ndMap.add(Tensors.vector(4), null);
+    assertTrue(NdClusterInside.anyMatch(ndMap, NdCenterBase.of1Norm(Tensors.vector(0)), RealScalar.of(0)));
+    assertTrue(NdClusterInside.anyMatch(ndMap, NdCenterBase.of1Norm(Tensors.vector(4)), RealScalar.of(0)));
+    assertTrue(NdClusterInside.anyMatch(ndMap, NdCenterBase.of1Norm(Tensors.vector(1)), RealScalar.of(1)));
+    assertTrue(NdClusterInside.anyMatch(ndMap, NdCenterBase.of1Norm(Tensors.vector(2)), RealScalar.of(2)));
+    assertTrue(NdClusterInside.anyMatch(ndMap, NdCenterBase.of1Norm(Tensors.vector(3)), RealScalar.of(1)));
+    assertFalse(NdClusterInside.anyMatch(ndMap, NdCenterBase.of1Norm(Tensors.vector(1)), RealScalar.of(0.9)));
+    assertFalse(NdClusterInside.anyMatch(ndMap, NdCenterBase.of1Norm(Tensors.vector(2)), RealScalar.of(1.9)));
+    assertFalse(NdClusterInside.anyMatch(ndMap, NdCenterBase.of1Norm(Tensors.vector(3)), RealScalar.of(0.9)));
+  }
+
   public void testNullFail() {
     AssertFail.of(() -> new NdClusterInside<>(null, RealScalar.ONE));
   }

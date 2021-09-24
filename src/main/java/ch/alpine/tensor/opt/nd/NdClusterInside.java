@@ -5,8 +5,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 
 /** quickest proximity check to determine whether any point in given map
- * is within radius from given center. search immediately stops after first
- * match is found. */
+ * has distance less equals radius from given center.
+ * 
+ * The search immediately stops after first match is found. */
 public class NdClusterInside<V> extends NdClusterBase<V> {
   /** @param ndMap
    * @param ndCenterInterface
@@ -30,12 +31,12 @@ public class NdClusterInside<V> extends NdClusterBase<V> {
   @Override // from NdVisitor
   public boolean isViable(NdBox ndBox) {
     return !found //
-        && Scalars.lessThan(ndCenterInterface.distance(ndBox), radius);
+        && Scalars.lessEquals(ndCenterInterface.distance(ndBox), radius);
   }
 
   @Override // from NdVisitor
   public void consider(NdEntry<V> ndEntry) {
     if (!found)
-      found = Scalars.lessThan(ndCenterInterface.distance(ndEntry.location()), radius);
+      found = Scalars.lessEquals(ndCenterInterface.distance(ndEntry.location()), radius);
   }
 }

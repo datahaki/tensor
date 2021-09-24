@@ -8,11 +8,12 @@ import java.util.List;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 
+/** for collecting points that are up to radius away from given center. */
 public class NdClusterRadius<V> extends NdClusterBase<V> {
   /** @param ndMap
    * @param ndCenterInterface
    * @param radius non-negative
-   * @return */
+   * @return collection of matches in no particular order */
   public static <V> Collection<NdMatch<V>> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface, Scalar radius) {
     NdClusterRadius<V> ndClusterRadius = new NdClusterRadius<>(ndCenterInterface, radius);
     ndMap.visit(ndClusterRadius);
@@ -30,13 +31,13 @@ public class NdClusterRadius<V> extends NdClusterBase<V> {
 
   @Override // from NdVisitor
   public boolean isViable(NdBox ndBox) {
-    return Scalars.lessThan(ndCenterInterface.distance(ndBox), radius);
+    return Scalars.lessEquals(ndCenterInterface.distance(ndBox), radius);
   }
 
   @Override // from NdVisitor
   public void consider(NdEntry<V> ndEntry) {
     Scalar distance = ndCenterInterface.distance(ndEntry.location());
-    if (Scalars.lessThan(distance, radius))
+    if (Scalars.lessEquals(distance, radius))
       list.add(new NdMatch<>(ndEntry, distance));
   }
 
