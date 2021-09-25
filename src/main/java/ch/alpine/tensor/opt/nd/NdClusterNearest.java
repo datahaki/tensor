@@ -12,6 +12,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.Integers;
 
+/** to obtain k-nearest neighbors from given center
+ * 
+ * Applications: rrts motion planning */
 public class NdClusterNearest<V> implements NdVisitor<V> {
   private static final Comparator<NdMatch<?>> COMPARATOR = //
       (o1, o2) -> Scalars.compare(o2.distance(), o1.distance());

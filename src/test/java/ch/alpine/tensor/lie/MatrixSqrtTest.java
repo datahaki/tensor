@@ -5,9 +5,12 @@ import java.util.Random;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Inverse;
+import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
@@ -83,6 +86,27 @@ public class MatrixSqrtTest extends TestCase {
     Tensor matrix = DiagonalMatrix.of(-1, -2, -3);
     _check(matrix, MatrixSqrt.of(matrix));
     _check(matrix, MatrixSqrt.ofSymmetric(matrix));
+  }
+
+  public void testZeros() {
+    Tensor matrix = Array.zeros(2, 2);
+    MatrixSqrt matrixSqrt = MatrixSqrt.of(matrix);
+    assertEquals(matrixSqrt.sqrt(), Array.zeros(2, 2));
+    AssertFail.of(() -> matrixSqrt.sqrt_inverse());
+  }
+
+  public void testQuantity() {
+    Tensor matrix = Tensors.fromString("{{10[m^2], -2[m^2]}, {-2[m^2], 4[m^2]}}");
+    MatrixSqrt matrixSqrt = MatrixSqrt.of(matrix);
+    Tensor eye = Dot.of(matrixSqrt.sqrt(), matrixSqrt.sqrt_inverse());
+    Tolerance.CHOP.requireClose(eye, IdentityMatrix.of(2));
+  }
+
+  public void testComplexFail() {
+    Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
+    SymmetricMatrixQ.require(matrix);
+    MatrixSqrt.of(matrix);
+    AssertFail.of(() -> MatrixSqrt.ofSymmetric(matrix));
   }
 
   public void testNonSquareFail() {

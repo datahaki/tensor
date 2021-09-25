@@ -109,13 +109,13 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
             lChild = createChild();
             lChild.queue.add(ndEntry);
           } else
-            lChild.add(ndEntry, ndBox.deriveL(dimension));
+            lChild.add(ndEntry, ndBox.splitLo(dimension));
         } else {
           if (Objects.isNull(rChild)) {
             rChild = createChild();
             rChild.queue.add(ndEntry);
           } else
-            rChild.add(ndEntry, ndBox.deriveR(dimension));
+            rChild.add(ndEntry, ndBox.splitHi(dimension));
         }
       } else { // queue != null
         if (queue.size() < maxDensity || depth == MAX_DEPTH)
@@ -145,30 +145,30 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
         Scalar median = ndBox.median(dimension);
         boolean leftFirst = ndVisitor.push_leftFirst(dimension, median);
         if (leftFirst) {
-          visit_L(ndVisitor, ndBox);
-          visit_R(ndVisitor, ndBox);
+          visitLo(ndVisitor, ndBox);
+          visitHi(ndVisitor, ndBox);
         } else {
-          visit_R(ndVisitor, ndBox);
-          visit_L(ndVisitor, ndBox);
+          visitHi(ndVisitor, ndBox);
+          visitLo(ndVisitor, ndBox);
         }
         ndVisitor.pop();
       } else
-        queue.forEach(ndVisitor::consider); // number of function calls to #consider
+        queue.forEach(ndVisitor::consider);
     }
 
-    private void visit_L(NdVisitor<V> ndVisitor, NdBox ndBox) {
+    private void visitLo(NdVisitor<V> ndVisitor, NdBox ndBox) {
       if (Objects.nonNull(lChild)) {
-        NdBox deriveL = ndBox.deriveL(dimension());
-        if (ndVisitor.isViable(deriveL))
-          lChild.visit(ndVisitor, deriveL);
+        NdBox splitLo = ndBox.splitLo(dimension());
+        if (ndVisitor.isViable(splitLo))
+          lChild.visit(ndVisitor, splitLo);
       }
     }
 
-    private void visit_R(NdVisitor<V> ndVisitor, NdBox ndBox) {
+    private void visitHi(NdVisitor<V> ndVisitor, NdBox ndBox) {
       if (Objects.nonNull(rChild)) {
-        NdBox deriveR = ndBox.deriveR(dimension());
-        if (ndVisitor.isViable(deriveR))
-          rChild.visit(ndVisitor, deriveR);
+        NdBox splitHi = ndBox.splitHi(dimension());
+        if (ndVisitor.isViable(splitHi))
+          rChild.visit(ndVisitor, splitHi);
       }
     }
   }

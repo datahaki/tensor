@@ -15,7 +15,11 @@ public interface NdCenterInterface {
    * @return distance from center to given axis aligned bounding box */
   Scalar distance(NdBox ndBox);
 
-  /** @param dimension
+  /** <pre>
+   * center[dimension] < median
+   * </pre>
+   * 
+   * @param dimension
    * @param median
    * @return whether coordinate in center with given dimension is less than provided median */
   boolean lessThan(int dimension, Scalar median);

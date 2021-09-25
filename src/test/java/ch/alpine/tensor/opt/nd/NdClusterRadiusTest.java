@@ -51,6 +51,8 @@ public class NdClusterRadiusTest extends TestCase {
       Set<String> s2 = c2.stream().map(NdMatch::value).collect(Collectors.toSet());
       assertEquals(s1, s2);
     }
+    assertTrue(NdClusterInside.anyMatch(m2, NdCenterBase.of1Norm(Tensors.vector(0, 0)), RealScalar.of(10)));
+    assertFalse(NdClusterInside.anyMatch(m2, NdCenterBase.of1Norm(Tensors.vector(3, 0)), RealScalar.of(0.2)));
   }
 
   public void testEmpty() {
