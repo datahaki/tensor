@@ -8,15 +8,15 @@ import ch.alpine.tensor.Scalars;
  * has distance less equals radius from given center.
  * 
  * The search immediately stops after first match is found. */
-public class NdClusterInside<V> extends NdClusterBase<V> {
+public class NdInsideRadius<V> extends NdCollectBase<V> {
   /** @param ndMap
    * @param ndCenterInterface
    * @param radius non-negative
    * @return */
   public static <V> boolean anyMatch(NdMap<V> ndMap, NdCenterInterface ndCenterInterface, Scalar radius) {
-    NdClusterInside<V> ndClusterInside = new NdClusterInside<>(ndCenterInterface, radius);
-    ndMap.visit(ndClusterInside);
-    return ndClusterInside.found;
+    NdInsideRadius<V> ndInsideRadius = new NdInsideRadius<>(ndCenterInterface, radius);
+    ndMap.visit(ndInsideRadius);
+    return ndInsideRadius.found;
   }
 
   // ---
@@ -24,7 +24,7 @@ public class NdClusterInside<V> extends NdClusterBase<V> {
 
   /** @param ndCenterInterface
    * @param radius non-negative */
-  protected NdClusterInside(NdCenterInterface ndCenterInterface, Scalar radius) {
+  protected NdInsideRadius(NdCenterInterface ndCenterInterface, Scalar radius) {
     super(ndCenterInterface, radius);
   }
 

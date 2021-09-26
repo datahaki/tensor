@@ -18,7 +18,7 @@ public class NdBinsize<V> implements NdVisitor<V> {
   int count = 0;
 
   @Override // from NdVisitor
-  public boolean push_leftFirst(int dimension, Scalar mean) {
+  public boolean push_firstLo(int dimension, Scalar mean) {
     return true;
   }
 

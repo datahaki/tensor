@@ -11,7 +11,16 @@ public interface NdCenterInterface {
    * @return distance from center to given point */
   Scalar distance(Tensor point);
 
-  /** @param ndBox
+  /** The function provides a lower bound for the distances from the center to any point
+   * from the given ndBox, i.e. the following inequality has to hold
+   * <pre>
+   * distance(ndBox) <= distance(any point from ndBox)
+   * </pre>
+   * 
+   * In particular, if the center of this instance is located inside the given ndBox, then
+   * the function returns zero.
+   * 
+   * @param ndBox
    * @return distance from center to given axis aligned bounding box */
   Scalar distance(NdBox ndBox);
 

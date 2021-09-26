@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalar;
   private int depth;
 
   @Override
-  public boolean push_leftFirst(int dimension, Scalar mean) {
+  public boolean push_firstLo(int dimension, Scalar mean) {
     ++depth;
     return true;
   }

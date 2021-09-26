@@ -15,7 +15,7 @@ import ch.alpine.tensor.ext.Integers;
 /** to obtain k-nearest neighbors from given center
  * 
  * Applications: rrts motion planning */
-public class NdClusterNearest<V> implements NdVisitor<V> {
+public class NdCollectNearest<V> implements NdVisitor<V> {
   private static final Comparator<NdMatch<?>> COMPARATOR = //
       (o1, o2) -> Scalars.compare(o2.distance(), o1.distance());
 
@@ -24,18 +24,18 @@ public class NdClusterNearest<V> implements NdVisitor<V> {
    * @param limit strictly positive
    * @return */
   public static <V> Collection<NdMatch<V>> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface, int limit) {
-    NdClusterNearest<V> ndClusterNearest = new NdClusterNearest<>(ndCenterInterface, limit);
-    ndMap.visit(ndClusterNearest);
-    return ndClusterNearest.queue();
+    NdCollectNearest<V> ndCollectNearest = new NdCollectNearest<>(ndCenterInterface, limit);
+    ndMap.visit(ndCollectNearest);
+    return ndCollectNearest.queue();
   }
 
   /** @param ndMap
    * @param ndCenterInterface
    * @return nearest match in map with respect to given center interface, or null if ndMap is empty */
   public static <V> NdMatch<V> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface) {
-    NdClusterNearest<V> ndClusterNearest = new NdClusterNearest<>(ndCenterInterface, 1);
-    ndMap.visit(ndClusterNearest);
-    return ndClusterNearest.queue().poll();
+    NdCollectNearest<V> ndCollectNearest = new NdCollectNearest<>(ndCenterInterface, 1);
+    ndMap.visit(ndCollectNearest);
+    return ndCollectNearest.queue().poll();
   }
 
   // ---
@@ -45,14 +45,14 @@ public class NdClusterNearest<V> implements NdVisitor<V> {
 
   /** @param ndCenterInterface
    * @param limit strictly positive */
-  protected NdClusterNearest(NdCenterInterface ndCenterInterface, int limit) {
+  protected NdCollectNearest(NdCenterInterface ndCenterInterface, int limit) {
     this.ndCenterInterface = Objects.requireNonNull(ndCenterInterface);
     this.limit = Integers.requirePositive(limit);
     queue = new PriorityQueue<>(COMPARATOR);
   }
 
   @Override // from NdVisitor
-  public boolean push_leftFirst(int dimension, Scalar median) {
+  public boolean push_firstLo(int dimension, Scalar median) {
     return ndCenterInterface.lessThan(dimension, median);
   }
 

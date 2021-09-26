@@ -10,17 +10,19 @@ import ch.alpine.tensor.Scalars;
 
 /** for collecting points that are up to radius away from given center.
  * 
- * Applications: dbscan */
-public class NdClusterRadius<V> extends NdClusterBase<V> {
+ * Applications: dbscan
+ * 
+ * @see NdInsideRadius */
+public class NdCollectRadius<V> extends NdCollectBase<V> {
   /** @param ndMap
    * @param ndCenterInterface
    * @param radius non-negative
    * @return collection of matches in no particular order
    * @throws Exception if given radius is negative */
   public static <V> Collection<NdMatch<V>> of(NdMap<V> ndMap, NdCenterInterface ndCenterInterface, Scalar radius) {
-    NdClusterRadius<V> ndClusterRadius = new NdClusterRadius<>(ndCenterInterface, radius);
-    ndMap.visit(ndClusterRadius);
-    return ndClusterRadius.list();
+    NdCollectRadius<V> ndCollectRadius = new NdCollectRadius<>(ndCenterInterface, radius);
+    ndMap.visit(ndCollectRadius);
+    return ndCollectRadius.list();
   }
 
   // ---
@@ -28,7 +30,7 @@ public class NdClusterRadius<V> extends NdClusterBase<V> {
 
   /** @param ndCenterInterface
    * @param radius non-negative */
-  protected NdClusterRadius(NdCenterInterface ndCenterInterface, Scalar radius) {
+  protected NdCollectRadius(NdCenterInterface ndCenterInterface, Scalar radius) {
     super(ndCenterInterface, radius);
   }
 

@@ -25,7 +25,7 @@ public class NdListMapTest extends TestCase {
     m1.add(Tensors.vector(0, 0), "p1");
     m1.add(Tensors.vector(1, 1), "p3");
     Tensor center = Tensors.vector(0, 0);
-    Collection<NdMatch<String>> cl = NdClusterNearest.of(m1, NdCenterBase.of2Norm(center), 2);
+    Collection<NdMatch<String>> cl = NdCollectNearest.of(m1, NdCenters.VECTOR_2_NORM.apply(center), 2);
     Set<String> res = cl.stream().map(NdMatch::value).collect(Collectors.toSet());
     assertTrue(res.contains("p1"));
     assertTrue(res.contains("p2"));
@@ -66,9 +66,9 @@ public class NdListMapTest extends TestCase {
       }
     }
     assertEquals(m1.size(), m2.size());
-    NdCenterInterface dinf = NdCenterBase.of2Norm(center);
-    Collection<NdMatch<String>> c1 = NdClusterNearest.of(m1, dinf, n);
-    Collection<NdMatch<String>> c2 = NdClusterNearest.of(m2, dinf, n);
+    NdCenterInterface dinf = NdCenters.VECTOR_2_NORM.apply(center);
+    Collection<NdMatch<String>> c1 = NdCollectNearest.of(m1, dinf, n);
+    Collection<NdMatch<String>> c2 = NdCollectNearest.of(m2, dinf, n);
     assertEquals(c1.size(), c2.size());
     assertTrue(c1.size() <= n);
     Scalar s1 = addDistances(c1, center, dinf);

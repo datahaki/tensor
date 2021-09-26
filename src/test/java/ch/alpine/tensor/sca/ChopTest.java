@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 
 import ch.alpine.tensor.DecimalScalar;
@@ -11,6 +12,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
@@ -124,6 +126,10 @@ public class ChopTest extends TestCase {
     }
   }
 
+  public void testRequireCloseFormatFail() {
+    AssertFail.of(() -> Chop._03.requireClose(Tensors.vector(1, 2, 3), Tensors.vector(1, 2)));
+  }
+
   public void testRequireZero() {
     Chop._04.requireZero(RealScalar.of(1e-8));
     Chop._04.requireAllZero(RealScalar.of(1e-8));
@@ -135,6 +141,10 @@ public class ChopTest extends TestCase {
     Tensor tensor = Tensors.vector(0, 0, 0, 1e-5);
     Chop._04.requireAllZero(tensor);
     AssertFail.of(() -> Chop._06.requireAllZero(tensor));
+  }
+
+  public void testSerializable() throws ClassNotFoundException, IOException {
+    Serialization.copy(Tolerance.CHOP);
   }
 
   public void testToString() {

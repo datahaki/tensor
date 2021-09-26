@@ -6,22 +6,22 @@ import java.util.Objects;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Sign;
 
-public abstract class NdClusterBase<V> implements NdVisitor<V> {
+public abstract class NdCollectBase<V> implements NdVisitor<V> {
   protected final NdCenterInterface ndCenterInterface;
   protected final Scalar radius;
 
-  public NdClusterBase(NdCenterInterface ndCenterInterface, Scalar radius) {
+  public NdCollectBase(NdCenterInterface ndCenterInterface, Scalar radius) {
     this.ndCenterInterface = Objects.requireNonNull(ndCenterInterface);
     this.radius = Sign.requirePositiveOrZero(radius);
   }
 
   @Override // from NdVisitor
-  public final boolean push_leftFirst(int dimension, Scalar median) {
+  public boolean push_firstLo(int dimension, Scalar median) {
     return true;
   }
 
   @Override // from NdVisitor
-  public final void pop() {
+  public void pop() {
     // ---
   }
 }

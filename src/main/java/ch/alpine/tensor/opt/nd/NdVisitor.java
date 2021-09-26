@@ -6,10 +6,10 @@ import ch.alpine.tensor.Scalar;
 public interface NdVisitor<V> {
   /** @param dimension
    * @param median
-   * @return */
-  boolean push_leftFirst(int dimension, Scalar median);
+   * @return whether lo half should be visited before hi half */
+  boolean push_firstLo(int dimension, Scalar median);
 
-  /** there is a pop invoked for each call to {@link #push_leftFirst(int, Scalar)} */
+  /** a pop is invoked for each call to {@link #push_firstLo(int, Scalar)} */
   void pop();
 
   /** @param ndBox

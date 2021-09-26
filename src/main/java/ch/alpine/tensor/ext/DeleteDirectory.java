@@ -28,61 +28,70 @@ public class DeleteDirectory {
    * 
    * The abort criteria are described at top of class
    * 
-   * @param directory
+   * @param file
    * @param max_nested
    * @param max_delete
    * @return
    * @throws Exception if given directory does not exist, or criteria are not met */
-  public static DeleteDirectory of(File directory, int max_nested, long max_delete) throws IOException {
-    return of(directory, max_nested, max_delete, 0);
+  public static DeleteDirectory of(File file, int max_nested, long max_delete) throws IOException {
+    return of(file, max_nested, max_delete, 0);
   }
 
-  /** @param directory
+  /** @param file
    * @param max_nested
    * @param max_delete
    * @param mask
    * @return
    * @throws IOException */
-  public static DeleteDirectory of(File directory, int max_nested, long max_delete, int mask) throws IOException {
-    return new DeleteDirectory(directory, max_nested, max_delete, mask);
+  public static DeleteDirectory of(File file, int max_nested, long max_delete, int mask) throws IOException {
+    DeleteDirectory deleteDirectory = new DeleteDirectory(max_nested, mask);
+    deleteDirectory.visitRecursively(file, 0, false);
+    if (deleteDirectory.fileCount <= max_delete) { // else abort criteria 2)
+      deleteDirectory.fileCount = 0; // reset counter
+      deleteDirectory.visitRecursively(file, 0, true);
+      return deleteDirectory;
+    }
+    throw new IOException(String.format("more files to be deleted than allowed (%d <= %d) in %s", //
+        max_delete, //
+        deleteDirectory.fileCount(), file));
   }
 
-  /***************************************************/
-  private final int max_depth;
+  // ==================================================
+  private final int max_nested;
   private final boolean delete_fail_aborts;
   // ---
-  private long deleted = 0;
+  private long fileCount = 0;
+  private int reachedDepth = 0;
 
-  private DeleteDirectory(File root, int max_depth, long max_count, int mask) throws IOException {
-    this.max_depth = max_depth;
+  private DeleteDirectory(int max_nested, int mask) {
+    this.max_nested = max_nested;
     this.delete_fail_aborts = (mask & DELETE_FAIL_ABORTS) == DELETE_FAIL_ABORTS;
-    int count = visitRecursively(root, 0, false);
-    if (count <= max_count) // abort criteria 2)
-      visitRecursively(root, 0, true);
-    else
-      throw new IOException("more files to be deleted than allowed (" + max_count + "<=" + count + ") in " + root);
   }
 
-  private int visitRecursively(File file, int depth, boolean delete) throws IOException {
-    if (max_depth < depth) // enforce depth limit, abort criteria 1)
+  private void visitRecursively(File file, int depth, boolean delete) throws IOException {
+    if (max_nested < depth) // enforce depth limit, abort criteria 1)
       throw new IOException("directory tree exceeds permitted depth");
-    int count = 0;
+    ++fileCount;
+    reachedDepth = Math.max(reachedDepth, depth);
     if (file.isDirectory()) // if file is a directory, recur
       for (File entry : file.listFiles())
-        count += visitRecursively(entry, depth + 1, delete);
-    ++count; // count file as visited
+        visitRecursively(entry, depth + 1, delete);
     if (delete) {
       boolean file_delete = file.delete();
       if (!file_delete && delete_fail_aborts) // abort criteria 4)
         throw new IOException("cannot delete " + file.getAbsolutePath());
-      ++deleted;
     } else //
     if (!file.canWrite()) // abort criteria 3)
       throw new IOException("cannot write " + file.getAbsolutePath());
-    return count;
   }
 
-  public long deletedCount() {
-    return deleted;
+  /** @return number of deleted files including directories */
+  public long fileCount() {
+    return fileCount;
+  }
+
+  /** @return greatest directory depth of file that is not a directory */
+  public int reachedDepth() {
+    return reachedDepth;
   }
 }

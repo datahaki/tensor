@@ -11,6 +11,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ChopInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.red.Entrywise;
 
 /** Chop is consistent with Mathematica::Chop
  * 
@@ -81,7 +82,7 @@ public class Chop implements ScalarUnaryOperator {
     throw new IllegalArgumentException(Double.toString(threshold));
   }
 
-  /***************************************************/
+  // ==================================================
   private final double threshold;
 
   private Chop(double threshold) {
@@ -103,7 +104,6 @@ public class Chop implements ScalarUnaryOperator {
     return Objects.requireNonNull(scalar);
   }
 
-  /***************************************************/
   /** @param scalar
    * @return true, if chop(scalar) is zero */
   public boolean isZero(Scalar scalar) {
@@ -142,7 +142,6 @@ public class Chop implements ScalarUnaryOperator {
       throw TensorRuntimeException.of(tensor);
   }
 
-  /***************************************************/
   /** Careful:
    * if lhs and rhs are of exact precision, for instance instances of
    * {@link RationalScalar}, the chop difference is non-zero
@@ -170,20 +169,26 @@ public class Chop implements ScalarUnaryOperator {
    * @throws Exception if isClose(lhs, rhs) evaluates to false
    * @see #isClose(Tensor, Tensor) */
   public void requireClose(Tensor lhs, Tensor rhs) {
-    if (!isClose(lhs, rhs))
-      throw TensorRuntimeException.of(lhs, rhs);
+    Entrywise.with(this::_requireClose).apply(lhs, rhs);
   }
 
-  /** @param lhs
+  /** particular implementation of {@link #requireClose(Tensor, Tensor)}
+   * for faster evaluation
+   * 
+   * @param lhs
    * @param rhs
-   * @throws Exception if isClose(lhs, rhs) evaluates to false
-   * @see #isClose(Scalar, Scalar) */
+   * @throws Exception if isClose(lhs, rhs) evaluates to false */
   public void requireClose(Scalar lhs, Scalar rhs) {
-    if (!isClose(lhs, rhs))
-      throw TensorRuntimeException.of(lhs, rhs);
+    _requireClose(lhs, rhs);
   }
 
-  /***************************************************/
+  // helper function BinaryOperator<Scalar>
+  private Scalar _requireClose(Scalar lhs, Scalar rhs) {
+    if (isClose(lhs, rhs))
+      return null; // never to be used
+    throw TensorRuntimeException.of(lhs, rhs, lhs.subtract(rhs));
+  }
+
   /** @param tensor
    * @return */
   @SuppressWarnings("unchecked")

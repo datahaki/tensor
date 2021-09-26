@@ -143,7 +143,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       if (isInterior()) {
         int dimension = dimension();
         Scalar median = ndBox.median(dimension);
-        boolean leftFirst = ndVisitor.push_leftFirst(dimension, median);
+        boolean leftFirst = ndVisitor.push_firstLo(dimension, median);
         if (leftFirst) {
           visitLo(ndVisitor, ndBox);
           visitHi(ndVisitor, ndBox);
