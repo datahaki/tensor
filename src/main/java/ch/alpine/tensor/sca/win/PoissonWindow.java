@@ -18,7 +18,7 @@ public class PoissonWindow extends ParameterizedWindow {
     return new PoissonWindow(alpha);
   }
 
-  // --------------------------------------------------
+  // ---
   private final Scalar n2a;
 
   private PoissonWindow(Scalar alpha) {

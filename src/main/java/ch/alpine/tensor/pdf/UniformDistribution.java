@@ -50,7 +50,7 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
     return UNIT;
   }
 
-  // ==================================================
+  // ---
   private final Clip clip;
 
   /** @param clip guaranteed to be non-null and to have non-zero width */

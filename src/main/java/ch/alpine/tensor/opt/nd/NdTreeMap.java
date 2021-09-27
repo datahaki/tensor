@@ -36,7 +36,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     return of(ndBox, LEAF_SIZE_DEFAULT);
   }
 
-  // ==================================================
+  // ---
   private final NdBox ndBoxGlobal;
   private final int maxDensity;
   private final Node root;

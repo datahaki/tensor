@@ -26,7 +26,7 @@ import ch.alpine.tensor.itp.MitchellNetravaliKernel;
     return of(RealScalar.of(c));
   }
 
-  // --------------------------------------------------
+  // ---
   private final ScalarUnaryOperator scalarUnaryOperator;
 
   private MitchellNetravaliFilter(Scalar c) {

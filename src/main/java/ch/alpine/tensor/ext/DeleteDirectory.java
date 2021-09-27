@@ -56,7 +56,7 @@ public class DeleteDirectory {
         deleteDirectory.fileCount(), file));
   }
 
-  // ==================================================
+  // ---
   private final int max_nested;
   private final boolean delete_fail_aborts;
   // ---

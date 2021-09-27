@@ -39,7 +39,7 @@ public enum Clips {
     return new ClipInterval(min, max, Sign.requirePositive(width));
   }
 
-  // ==================================================
+  // ---
   /** clips in the interval [0, ..., max]
    * 
    * @param max non-negative
@@ -56,7 +56,7 @@ public enum Clips {
     return positive(RealScalar.of(max));
   }
 
-  // ==================================================
+  // ---
   /** clips in the interval [-max, ..., max]
    * 
    * @param max non-negative
@@ -73,7 +73,7 @@ public enum Clips {
     return absolute(RealScalar.of(max));
   }
 
-  // ==================================================
+  // ---
   private static final Clip UNIT = positive(1);
   private static final Clip ABSOLUTE_ONE = absolute(1);
 
@@ -87,7 +87,7 @@ public enum Clips {
     return ABSOLUTE_ONE;
   }
 
-  // ==================================================
+  // ---
   /** @param clip1
    * @param clip2
    * @return [max(clip1.min, clip2.min), min(clip1.max, clip2.max)], i.e.

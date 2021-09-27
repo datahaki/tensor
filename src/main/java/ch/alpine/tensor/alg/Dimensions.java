@@ -31,7 +31,7 @@ public class Dimensions implements Serializable {
     return new Dimensions(tensor).list();
   }
 
-  // ==================================================
+  // ---
   /** list of set of lengths on all levels also includes length of scalars as Scalar.LENGTH == -1 */
   private final List<Set<Integer>> lengths = new ArrayList<>();
 

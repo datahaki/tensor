@@ -58,7 +58,7 @@ public enum Array {
         }));
   }
 
-  // ==================================================
+  // ---
   /** @param supplier
    * @param dimensions
    * @return */
@@ -85,7 +85,7 @@ public enum Array {
         .limit(dimensions.get(level)));
   }
 
-  // ==================================================
+  // ---
   /** @param dimensions
    * @return tensor of {@link RealScalar#ZERO} with given dimensions
    * @throws Exception if any of the integer parameters is negative */
