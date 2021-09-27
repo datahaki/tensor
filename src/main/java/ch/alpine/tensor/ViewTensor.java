@@ -21,7 +21,7 @@ import ch.alpine.tensor.itp.LinearInterpolation;
     return new ViewTensor(((TensorImpl) tensor).list());
   }
 
-  /***************************************************/
+  // ---
   private ViewTensor(List<Tensor> list) {
     super(list);
   }

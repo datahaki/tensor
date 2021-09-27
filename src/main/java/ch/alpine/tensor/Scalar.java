@@ -61,7 +61,7 @@ public interface Scalar extends Tensor {
   @Override // from Tensor
   Scalar divide(Scalar scalar);
 
-  /***************************************************/
+  // ---
   // functions introduced by the interface:
   /** a.under(b) == b / a
    * 

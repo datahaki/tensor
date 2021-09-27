@@ -2,6 +2,7 @@
 package ch.alpine.tensor.lie;
 
 import java.lang.reflect.Modifier;
+import java.util.Random;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -75,9 +76,10 @@ public class MatrixLog2Test extends TestCase {
   }
 
   public void testTraceZero() {
+    Random random = new Random(3);
     Distribution distribution = NormalDistribution.of(0, 2);
     for (int index = 0; index < 10; ++index) {
-      Tensor alg = RandomVariate.of(distribution, 2, 2);
+      Tensor alg = RandomVariate.of(distribution, random, 2, 2);
       alg.set(alg.Get(0, 0).negate(), 1, 1);
       assertEquals(Trace.of(alg), RealScalar.ZERO);
       _checkExpLog(alg);

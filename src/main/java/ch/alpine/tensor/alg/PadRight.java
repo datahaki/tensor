@@ -44,7 +44,7 @@ public class PadRight implements TensorUnaryOperator {
     return zeros(Arrays.asList(dimensions));
   }
 
-  /***************************************************/
+  // ---
   private final Tensor element;
   private final List<Integer> dimensions;
 

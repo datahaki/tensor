@@ -17,7 +17,7 @@ public class HannWindow extends ParameterizedWindow {
     return new HannWindow(alpha);
   }
 
-  /***************************************************/
+  // ---
   private final Scalar a1;
 
   private HannWindow(Scalar alpha) {

@@ -25,7 +25,7 @@ public class FactorInteger {
     return new FactorInteger(n).map;
   }
 
-  /***************************************************/
+  // ---
   private final Map<BigInteger, Integer> map = new TreeMap<>();
 
   private FactorInteger(BigInteger n) {

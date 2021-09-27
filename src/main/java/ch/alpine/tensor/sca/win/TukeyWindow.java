@@ -21,7 +21,7 @@ public class TukeyWindow extends ParameterizedWindow {
     return new TukeyWindow(alpha);
   }
 
-  /***************************************************/
+  // ---
   private final Scalar a2;
   private final Scalar pi_a;
 

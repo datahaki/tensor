@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Abs;
         Polynomial.of(Derive.of(coeffs)));
   }
 
-  /***************************************************/
+  // ---
   private final ScalarUnaryOperator function;
   public final ScalarUnaryOperator iteration;
 

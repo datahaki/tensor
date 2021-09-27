@@ -32,7 +32,7 @@ import ch.alpine.tensor.ext.Integers;
     return Tensor.of(IntStream.range(0, tensor.length()).mapToObj(tensorExtract::extract).map(function));
   }
 
-  /***************************************************/
+  // ---
   private final Tensor tensor;
   private final int radius;
   private final int length;

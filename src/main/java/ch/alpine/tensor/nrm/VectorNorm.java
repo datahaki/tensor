@@ -39,7 +39,7 @@ public class VectorNorm implements TensorScalarFunction {
     return of(RealScalar.of(p));
   }
 
-  /***************************************************/
+  // ---
   private final ScalarUnaryOperator p_power;
   private final Scalar p;
   private final Scalar p_reciprocal;

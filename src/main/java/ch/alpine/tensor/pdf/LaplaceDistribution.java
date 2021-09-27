@@ -29,7 +29,7 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
     return of(RealScalar.of(mean), RealScalar.of(beta));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar mean;
   private final Scalar beta;
 

@@ -14,6 +14,7 @@ import java.util.stream.Stream;
 /* package */ class TensorImpl implements Tensor, Serializable {
   private final List<Tensor> list;
 
+  /** @param list to be guaranteed non-null */
   public TensorImpl(List<Tensor> list) {
     this.list = list;
   }
@@ -213,7 +214,7 @@ import java.util.stream.Stream;
     return Tensor.of(list.stream().map(tensor -> tensor.map(function)));
   }
 
-  /***************************************************/
+  // ---
   @Override // from Iterable
   public Iterator<Tensor> iterator() {
     return list.iterator();
@@ -235,7 +236,11 @@ import java.util.stream.Stream;
     return list.stream().map(Tensor::toString).collect(StaticHelper.EMBRACE);
   }
 
-  /** @return list accessed by UnmodifiableTensor, Parallelize, Unprotect, ViewTensor */
+  /** @return list
+   * @see UnmodifiableTensor
+   * @see Parallelize
+   * @see Unprotect
+   * @see ViewTensor */
   public List<Tensor> list() {
     return list;
   }

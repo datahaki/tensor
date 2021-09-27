@@ -13,7 +13,7 @@ import ch.alpine.tensor.Tensor;
     return new Determinant(matrix, pivot).override_det();
   }
 
-  /***************************************************/
+  // ---
   private Determinant(Tensor matrix, Pivot pivot) {
     super(matrix, pivot);
   }

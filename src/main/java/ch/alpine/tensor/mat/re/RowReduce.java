@@ -28,7 +28,7 @@ public class RowReduce extends AbstractReduce {
     return new RowReduce(matrix, pivot).solve();
   }
 
-  /***************************************************/
+  // ---
   private RowReduce(Tensor matrix, Pivot pivot) {
     super(matrix, pivot);
   }

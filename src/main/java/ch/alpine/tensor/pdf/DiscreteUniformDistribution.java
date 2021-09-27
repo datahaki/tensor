@@ -40,7 +40,7 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
     return new DiscreteUniformDistribution(min, max);
   }
 
-  /***************************************************/
+  // ---
   private final int min; // inclusive
   private final Scalar _min;
   private final int max; // exclusive

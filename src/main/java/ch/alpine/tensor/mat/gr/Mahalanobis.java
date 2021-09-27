@@ -64,7 +64,7 @@ public final class Mahalanobis implements InfluenceMatrix, Serializable {
     return sigma_inverse;
   }
 
-  /***************************************************/
+  // ---
   private Tensor matrix;
 
   @Override // from InfluenceMatrix
@@ -101,7 +101,7 @@ public final class Mahalanobis implements InfluenceMatrix, Serializable {
     return vector.subtract(image(vector));
   }
 
-  /***************************************************/
+  // ---
   /** @param vector
    * @return sigma_inverse . vector . vector */
   public Scalar norm_squared(Tensor vector) {

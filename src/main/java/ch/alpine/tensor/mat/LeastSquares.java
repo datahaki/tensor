@@ -62,7 +62,7 @@ public enum LeastSquares {
         : PseudoInverse.usingSvd(matrix, CHOP, n, m).dot(b);
   }
 
-  /***************************************************/
+  // ---
   /** @param matrix
    * @param b
    * @return x with matrix.dot(x) ~ b
@@ -81,7 +81,7 @@ public enum LeastSquares {
     return QRDecomposition.of(matrix, b, QRSignOperators.STABILITY).pseudoInverse();
   }
 
-  /***************************************************/
+  // ---
   /** when m does not have full rank, and for numerical stability
    * the function usingSvd(...) is preferred over the function usingLinearSolve(...)
    * 

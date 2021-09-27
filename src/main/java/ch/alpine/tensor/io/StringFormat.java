@@ -26,7 +26,7 @@ import ch.alpine.tensor.Tensors;
     return parse(string, Scalars::fromString);
   }
 
-  /***************************************************/
+  // ---
   private final JoiningInverse<T> joiningInverse;
   private final String string;
   private int head = 0;

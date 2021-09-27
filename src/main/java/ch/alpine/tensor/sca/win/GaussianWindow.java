@@ -23,7 +23,7 @@ public class GaussianWindow extends ParameterizedWindow {
     return new GaussianWindow(Objects.requireNonNull(alpha));
   }
 
-  /***************************************************/
+  // ---
   private GaussianWindow(Scalar sigma) {
     super(sigma);
   }

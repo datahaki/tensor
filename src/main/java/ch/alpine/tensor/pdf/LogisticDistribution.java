@@ -32,7 +32,7 @@ public class LogisticDistribution extends AbstractContinuousDistribution impleme
     return of(RealScalar.of(a), RealScalar.of(b));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar a;
   private final Scalar b;
 

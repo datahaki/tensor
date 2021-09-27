@@ -47,7 +47,7 @@ public enum Erfc implements ScalarUnaryOperator {
     return t.multiply(Exp.FUNCTION.apply(exponent));
   }
 
-  /***************************************************/
+  // ---
   @Override
   public Scalar apply(Scalar z) {
     Scalar re = Real.FUNCTION.apply(z);

@@ -31,7 +31,7 @@ import ch.alpine.tensor.ext.Cache;
     return CACHE.apply(navigableMap);
   }
 
-  /***************************************************/
+  // ---
   private final NavigableMap<String, Scalar> navigableMap;
   private final int hashCode;
   private final String string;
@@ -73,7 +73,7 @@ import ch.alpine.tensor.ext.Cache;
     return Collections.unmodifiableNavigableMap(navigableMap);
   }
 
-  /***************************************************/
+  // ---
   @Override // from Object
   public int hashCode() {
     return hashCode;

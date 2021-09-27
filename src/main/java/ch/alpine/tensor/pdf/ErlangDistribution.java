@@ -29,7 +29,7 @@ public class ErlangDistribution implements Distribution, MeanInterface, PDF, Var
     return new ErlangDistribution(Integers.requirePositive(k), lambda);
   }
 
-  /***************************************************/
+  // ---
   private final Scalar k;
   private final Scalar lambda;
   private final Scalar factor;

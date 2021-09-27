@@ -82,7 +82,7 @@ public class LinearProgram implements Serializable {
     NON_NEGATIVE, UNRESTRICTED;
   }
 
-  /***************************************************/
+  // ---
   public final Objective objective;
   public final Tensor c;
   public final ConstraintType constraintType;

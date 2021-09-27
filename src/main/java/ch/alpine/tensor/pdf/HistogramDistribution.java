@@ -59,7 +59,7 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
     return of(samples, BinningMethod.IQR);
   }
 
-  /***************************************************/
+  // ---
   private final ScalarUnaryOperator discrete;
   private final ScalarUnaryOperator original;
   private final EmpiricalDistribution empiricalDistribution;

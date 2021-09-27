@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.N;
     return new BenIsraelCohen(matrix).pseudoInverse();
   }
 
-  /***************************************************/
+  // ---
   private final Tensor matrix;
 
   private BenIsraelCohen(Tensor matrix) {

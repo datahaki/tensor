@@ -34,7 +34,7 @@ public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution 
     return of(n, RealScalar.of(p));
   }
 
-  /***************************************************/
+  // ---
   private final int n;
   private final Scalar p;
   private final Scalar _1_p;

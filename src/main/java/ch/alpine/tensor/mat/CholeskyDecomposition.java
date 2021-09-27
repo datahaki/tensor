@@ -39,7 +39,7 @@ public interface CholeskyDecomposition {
     return new CholeskyDecompositionImpl(matrix, chop);
   }
 
-  /***************************************************/
+  // ---
   /** @return lower triangular matrix L */
   Tensor getL();
 

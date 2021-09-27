@@ -55,7 +55,7 @@ import java.math.BigInteger;
         : new BigFraction(num.divide(gcd).negate(), res.negate());
   }
 
-  /***************************************************/
+  // ---
   /** numerator */
   private final BigInteger num;
   /** denominator (always greater than zero) */
@@ -140,7 +140,7 @@ import java.math.BigInteger;
         && den.equals(bigFraction.den); // sufficient since in normal form
   }
 
-  /***************************************************/
+  // ---
   @Override // from Comparable
   public int compareTo(BigFraction bigFraction) {
     return num.multiply(bigFraction.den).compareTo(bigFraction.num.multiply(den));

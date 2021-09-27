@@ -19,7 +19,7 @@ public class CosineWindow extends ParameterizedWindow {
     return new CosineWindow(alpha);
   }
 
-  /***************************************************/
+  // ---
   private final ScalarUnaryOperator power;
 
   private CosineWindow(Scalar alpha) {

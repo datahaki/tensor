@@ -37,7 +37,7 @@ import ch.alpine.tensor.sca.Conjugate;
             .allMatch(predicate);
   }
 
-  /***************************************************/
+  // ---
   /** @param matrix
    * @return matrix . ConjugateTranspose(matrix) */
   public static Tensor dotConjugate(Tensor matrix) {

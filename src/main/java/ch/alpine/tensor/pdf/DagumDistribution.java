@@ -39,7 +39,7 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
         RealScalar.of(b));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar p;
   private final Scalar a;
   private final Scalar b;

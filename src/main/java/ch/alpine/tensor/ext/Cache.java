@@ -27,7 +27,7 @@ public class Cache<K, V> implements Function<K, V>, Serializable {
     return new Cache<>(Objects.requireNonNull(function), maxSize);
   }
 
-  /***************************************************/
+  // ---
   private final Function<K, V> function;
   private final Map<K, V> map;
 

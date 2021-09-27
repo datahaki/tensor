@@ -46,7 +46,7 @@ public enum Orthogonalize {
     return PadRight.zeros(Dimensions.of(matrix)).apply(QRMathematica.wrap(qrDecomposition).getQTranspose());
   }
 
-  /***************************************************/
+  // ---
   /** Least square orthogonal fit to given matrix
    * 
    * for input of square matrix, the function returns a matrix with determinant +1
@@ -88,7 +88,7 @@ public enum Orthogonalize {
     return PolarDecomposition.of(matrix).getR();
   }
 
-  /***************************************************/
+  // ---
   /** EXPERIMENTAL
    * 
    * for input of square matrix, the function returns a matrix with determinant +1

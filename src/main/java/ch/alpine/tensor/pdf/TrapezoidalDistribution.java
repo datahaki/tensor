@@ -45,7 +45,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     return of(RealScalar.of(a), RealScalar.of(b), RealScalar.of(c), RealScalar.of(d));
   }
 
-  /***************************************************/
+  // ---
   private final Clip clip;
   private final Scalar a;
   private final Scalar b;

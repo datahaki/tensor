@@ -45,7 +45,7 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
     return LinearSolve.of(matrix(degree, control.length()), control);
   }
 
-  /***************************************************/
+  // ---
   private final ScalarTensorFunction scalarTensorFunction;
 
   private BSplineInterpolation(int degree, Tensor control) {

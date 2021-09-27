@@ -30,7 +30,7 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
     return new LinearInterpolation(tensor);
   }
 
-  /***************************************************/
+  // ---
   private final Tensor tensor;
 
   private LinearInterpolation(Tensor tensor) {

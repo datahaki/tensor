@@ -23,7 +23,7 @@ public class MitchellNetravaliKernel implements ScalarUnaryOperator {
     return of(RealScalar.of(b), RealScalar.of(c));
   }
 
-  /***************************************************/
+  // ---
   private final ScalarUnaryOperator y;
   private final ScalarUnaryOperator z;
 

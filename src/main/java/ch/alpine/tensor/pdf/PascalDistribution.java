@@ -27,7 +27,7 @@ public class PascalDistribution extends EvaluatedDiscreteDistribution implements
     return of(n, RealScalar.of(p));
   }
 
-  /***************************************************/
+  // ---
   private final int n;
   private final Scalar p;
   private final Scalar o_p;

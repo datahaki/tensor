@@ -16,6 +16,10 @@ import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnprotectTest extends TestCase {
+  public void testUsingNullFail() {
+    AssertFail.of(() -> Unprotect.using(null));
+  }
+
   public void testUsingEmpty() {
     assertEquals(Unprotect.using(new LinkedList<>()), Tensors.empty());
     assertEquals(Unprotect.using(new LinkedList<>()), Tensors.unmodifiableEmpty());

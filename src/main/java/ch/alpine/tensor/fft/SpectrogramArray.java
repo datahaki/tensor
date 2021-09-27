@@ -46,7 +46,7 @@ public class SpectrogramArray implements TensorUnaryOperator {
     return Round.intValueExact(RationalScalar.of(windowLength, 3));
   }
 
-  /***************************************************/
+  // ---
   /** @param windowLength
    * @param offset
    * @param window for instance {@link DirichletWindow#FUNCTION}
@@ -89,7 +89,7 @@ public class SpectrogramArray implements TensorUnaryOperator {
     return Round.intValueExact(windowDuration.multiply(samplingFrequency));
   }
 
-  /***************************************************/
+  // ---
   private final int windowLength;
   private final int offset;
   private final TensorUnaryOperator tensorUnaryOperator;

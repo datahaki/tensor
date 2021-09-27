@@ -56,7 +56,7 @@ public class Quantile implements ScalarUnaryOperator {
     return inverseCDF::quantile;
   }
 
-  /***************************************************/
+  // ---
   private final Tensor tensor;
   private final Scalar length;
 

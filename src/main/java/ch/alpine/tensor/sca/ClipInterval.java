@@ -70,7 +70,7 @@ import ch.alpine.tensor.TensorRuntimeException;
     return width;
   }
 
-  /***************************************************/
+  // ---
   @Override // from Object
   public final int hashCode() {
     return min.hashCode() + 31 * max.hashCode();

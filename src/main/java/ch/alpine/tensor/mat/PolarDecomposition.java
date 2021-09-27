@@ -26,7 +26,7 @@ public class PolarDecomposition implements Serializable {
     throw TensorRuntimeException.of(matrix);
   }
 
-  /***************************************************/
+  // ---
   private final Tensor matrix;
   private final MatrixSqrt matrixSqrt;
 

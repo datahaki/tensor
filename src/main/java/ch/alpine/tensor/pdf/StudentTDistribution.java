@@ -37,7 +37,7 @@ public class StudentTDistribution implements Distribution, //
     return of(RealScalar.of(mu), RealScalar.of(sigma), RealScalar.of(v));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar mu;
   private final Scalar sigma;
   private final Scalar v;

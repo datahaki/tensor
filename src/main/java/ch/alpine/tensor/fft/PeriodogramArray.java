@@ -29,7 +29,7 @@ public class PeriodogramArray implements TensorUnaryOperator {
     return of(windowLength, windowLength).apply(vector);
   }
 
-  /***************************************************/
+  // ---
   /** @param windowLength
    * @param offset
    * @param window for instance {@link HammingWindow#FUNCTION}
@@ -45,7 +45,7 @@ public class PeriodogramArray implements TensorUnaryOperator {
     return of(windowLength, offset, DirichletWindow.FUNCTION);
   }
 
-  /***************************************************/
+  // ---
   private final TensorUnaryOperator spectrogramArray;
 
   private PeriodogramArray(int windowLength, int offset, ScalarUnaryOperator window) {

@@ -51,7 +51,7 @@ public class Entrywise implements BinaryOperator<Tensor>, Serializable {
     return MAX;
   }
 
-  /***************************************************/
+  // ---
   private final BinaryOperator<Scalar> binaryOperator;
 
   private Entrywise(BinaryOperator<Scalar> binaryOperator) {

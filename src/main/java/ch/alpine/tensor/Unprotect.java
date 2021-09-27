@@ -18,11 +18,12 @@ public enum Unprotect {
   ;
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
-   * @param list
+   * @param list non-null
    * @return tensor backed by given list
+   * @throws Exception if given list is null
    * @see TableBuilder */
   public static Tensor using(List<Tensor> list) {
-    return new TensorImpl(list);
+    return new TensorImpl(Objects.requireNonNull(list));
   }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
@@ -34,7 +35,7 @@ public enum Unprotect {
     return Tensor.of(Stream.of(tensors));
   }
 
-  /***************************************************/
+  // ---
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param tensor
@@ -56,7 +57,7 @@ public enum Unprotect {
     return (((TensorImpl) tensor).list()).get(0).length();
   }
 
-  /***************************************************/
+  // ---
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param tensor
@@ -71,7 +72,7 @@ public enum Unprotect {
     return ViewTensor.wrap(tensor);
   }
 
-  /***************************************************/
+  // ---
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * Examples:
@@ -82,7 +83,8 @@ public enum Unprotect {
    * </pre>
    * 
    * @param scalar non-null
-   * @return */
+   * @return
+   * @throws Exception if given scalar is null */
   public static Scalar withoutUnit(Scalar scalar) {
     return scalar instanceof Quantity //
         ? ((Quantity) scalar).value()

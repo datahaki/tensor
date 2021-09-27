@@ -20,7 +20,7 @@ public class HannPoissonWindow extends ParameterizedWindow {
     return new HannPoissonWindow(alpha);
   }
 
-  /***************************************************/
+  // ---
   private final Scalar a2;
 
   private HannPoissonWindow(Scalar alpha) {

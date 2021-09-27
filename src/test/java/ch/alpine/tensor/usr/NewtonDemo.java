@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.Clips;
     return new NewtonDemo(coeffs);
   }
 
-  /***************************************************/
+  // ---
   private final ScalarUnaryOperator scalarUnaryOperator;
 
   private NewtonDemo(Tensor coeffs) {

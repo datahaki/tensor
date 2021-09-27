@@ -35,7 +35,7 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
     return of(RealScalar.of(alpha), RealScalar.of(beta));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar alpha;
   private final Scalar beta;
 

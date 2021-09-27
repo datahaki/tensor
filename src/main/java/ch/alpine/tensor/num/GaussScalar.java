@@ -48,7 +48,7 @@ public class GaussScalar extends AbstractScalar implements //
     return new GaussScalar(value.mod(prime), prime);
   }
 
-  /***************************************************/
+  // ---
   private final BigInteger value;
   private final BigInteger prime;
 
@@ -108,7 +108,7 @@ public class GaussScalar extends AbstractScalar implements //
     return new GaussScalar(BigInteger.ONE, prime);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   protected GaussScalar plus(Scalar scalar) {
     if (scalar instanceof GaussScalar)
@@ -116,7 +116,7 @@ public class GaussScalar extends AbstractScalar implements //
     throw TensorRuntimeException.of(this, scalar);
   }
 
-  /***************************************************/
+  // ---
   @Override
   public Scalar abs() {
     return this;
@@ -191,7 +191,7 @@ public class GaussScalar extends AbstractScalar implements //
     throw TensorRuntimeException.of(this); // sqrt of this does not exist
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   public int hashCode() {
     return value.hashCode() + 31 * prime.hashCode();

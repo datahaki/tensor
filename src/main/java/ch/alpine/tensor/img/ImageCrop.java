@@ -28,7 +28,7 @@ public class ImageCrop implements TensorUnaryOperator {
     return new ImageCrop((Predicate<Tensor> & Serializable) value::equals);
   }
 
-  /***************************************************/
+  // ---
   private final Predicate<Tensor> predicate;
 
   private ImageCrop(Predicate<Tensor> predicate) {

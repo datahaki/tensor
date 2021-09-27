@@ -51,7 +51,7 @@ import ch.alpine.tensor.sca.Sinh;
         && !(scalar instanceof Quantity);
   }
 
-  /***************************************************/
+  // ---
   private final Scalar re;
   private final Scalar im;
 
@@ -118,7 +118,7 @@ import ch.alpine.tensor.sca.Sinh;
     throw TensorRuntimeException.of(this);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
     if (isLocal(scalar)) {
@@ -128,7 +128,7 @@ import ch.alpine.tensor.sca.Sinh;
     return scalar.add(this);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbsInterface
   public Scalar abs() { // "complex modulus"
     return Hypot.of(re, im);
@@ -267,7 +267,7 @@ import ch.alpine.tensor.sca.Sinh;
         Cosh.of(re).multiply(Sin.of(im)));
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   public int hashCode() {
     return re.hashCode() + 31 * im.hashCode();

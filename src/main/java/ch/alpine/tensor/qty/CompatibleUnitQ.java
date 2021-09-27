@@ -29,7 +29,7 @@ public class CompatibleUnitQ implements Serializable {
     return SI;
   }
 
-  /***************************************************/
+  // ---
   private final UnitSystem unitSystem;
 
   private CompatibleUnitQ(UnitSystem unitSystem) {

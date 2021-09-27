@@ -42,7 +42,7 @@ public class NormalDistribution implements ContinuousDistribution, Serializable 
         Sqrt.FUNCTION.apply(Expectation.variance(distribution))); // standard deviation
   }
 
-  /***************************************************/
+  // ---
   private final Scalar mean;
   private final Scalar sigma;
 

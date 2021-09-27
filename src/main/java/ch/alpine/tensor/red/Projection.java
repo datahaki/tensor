@@ -28,7 +28,7 @@ public class Projection implements TensorUnaryOperator {
     return on(vector).apply(u);
   }
 
-  /***************************************************/
+  // ---
   private final Tensor vc;
   private final Tensor vs;
 

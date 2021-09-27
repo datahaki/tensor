@@ -12,7 +12,7 @@ import ch.alpine.tensor.io.StringScalar;
   private static final char COMMA = ',';
   // ---
   public static final TensorParser DEFAULT = new TensorParser(Scalars::fromString);
-  /***************************************************/
+  // ---
   private final Function<String, Scalar> function;
 
   /** @param function that parses a string to a scalar

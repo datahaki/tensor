@@ -43,7 +43,7 @@ public enum MatrixPower {
     return of(matrix, BigInteger.valueOf(exponent));
   }
 
-  /***************************************************/
+  // ---
   /** "More generally, we can define any power of an SPD matrix by taking
    * the power of its eigenvalues or using the formula [...]"
    * 

@@ -39,7 +39,7 @@ public interface MatrixSqrt {
     return new MatrixSqrtSymmetric(matrix);
   }
 
-  /***************************************************/
+  // ---
   /** @return square root of a given matrix */
   Tensor sqrt();
 

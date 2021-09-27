@@ -103,7 +103,7 @@ public abstract class AbstractScalar implements Scalar {
     throw TensorRuntimeException.of(this, tensor);
   }
 
-  /***************************************************/
+  // ---
   // final default implementations
   @Override // from Scalar
   public final Scalar add(Tensor tensor) {
@@ -120,7 +120,7 @@ public abstract class AbstractScalar implements Scalar {
     return function.apply(this).copy();
   }
 
-  /***************************************************/
+  // ---
   // non-final default implementations; override for precision or speed
   @Override // from Scalar
   public Scalar divide(Scalar scalar) {
@@ -132,12 +132,12 @@ public abstract class AbstractScalar implements Scalar {
     return reciprocal().multiply(scalar);
   }
 
-  /***************************************************/
+  // ---
   /** @param scalar
    * @return this plus given scalar */
   protected abstract Scalar plus(Scalar scalar);
 
-  /***************************************************/
+  // ---
   @Override // from Object
   public abstract int hashCode();
 

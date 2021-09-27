@@ -31,7 +31,7 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
     return of(RealScalar.of(lambda), RealScalar.of(xi));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar lambda;
   private final Scalar xi;
   private final Scalar lambda_xi;

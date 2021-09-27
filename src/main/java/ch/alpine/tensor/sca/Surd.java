@@ -17,7 +17,7 @@ public class Surd implements ScalarUnaryOperator {
     return new Surd(n);
   }
 
-  /***************************************************/
+  // ---
   private final long n;
   private final ScalarUnaryOperator power;
 

@@ -37,7 +37,7 @@ public class CauchyDistribution extends AbstractContinuousDistribution implement
     return STANDARD;
   }
 
-  /***************************************************/
+  // ---
   private final Scalar a;
   private final Scalar b;
 

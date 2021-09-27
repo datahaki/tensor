@@ -29,7 +29,7 @@ public class RayleighDistribution extends AbstractContinuousDistribution impleme
     return of(RealScalar.of(sigma));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar sigma;
   private final Scalar s2;
   private final Scalar s2_n2;

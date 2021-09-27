@@ -39,7 +39,7 @@ public class GaussianElimination extends AbstractReduce {
     return new GaussianElimination(matrix, b, pivot).solve();
   }
 
-  /***************************************************/
+  // ---
   private final Tensor rhs;
 
   public GaussianElimination(Tensor matrix, Tensor b, Pivot pivot) {

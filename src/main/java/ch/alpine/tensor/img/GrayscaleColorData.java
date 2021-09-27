@@ -9,7 +9,7 @@ import ch.alpine.tensor.sca.Clips;
 
 /* package */ class GrayscaleColorData implements ColorDataGradient {
   public static final ColorDataGradient DEFAULT = new GrayscaleColorData(255);
-  /***************************************************/
+  // ---
   private final Tensor[] tensors = new Tensor[256];
 
   private GrayscaleColorData(int alpha) {

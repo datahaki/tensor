@@ -38,7 +38,7 @@ public class UnitSimplify implements ScalarUnaryOperator {
     return new UnitSimplify(unitSystem, set.stream().map(Unit::of).collect(Collectors.toSet()));
   }
 
-  /***************************************************/
+  // ---
   private final UnitSystem unitSystem;
   private final Map<Unit, ScalarUnaryOperator> map = new HashMap<>();
 

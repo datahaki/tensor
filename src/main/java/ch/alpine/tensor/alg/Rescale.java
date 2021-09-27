@@ -56,7 +56,7 @@ public class Rescale {
     return tensor.map(FINITE_NUMBER_ZERO); // set all finite number entries to 0
   }
 
-  /***************************************************/
+  // ---
   private final ScalarSummaryStatistics scalarSummaryStatistics;
   private final Tensor result;
 

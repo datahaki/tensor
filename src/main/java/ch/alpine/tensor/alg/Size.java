@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensors;
     return new Size(Arrays.copyOf(dims, dims.length));
   }
 
-  /***************************************************/
+  // ---
   private final int[] size;
   private final int[] prod;
 

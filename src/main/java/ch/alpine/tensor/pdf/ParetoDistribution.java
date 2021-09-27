@@ -30,7 +30,7 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
     return of(RealScalar.of(k), RealScalar.of(alpha));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar k;
   private final Scalar alpha;
   private final Scalar k_alpha;

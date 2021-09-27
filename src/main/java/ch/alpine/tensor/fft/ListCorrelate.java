@@ -42,7 +42,7 @@ public class ListCorrelate implements TensorUnaryOperator {
     return new ListCorrelate(kernel);
   }
 
-  /***************************************************/
+  // ---
   private final Tensor kernel;
   private final List<Integer> mask;
   private final int level;

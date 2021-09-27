@@ -19,7 +19,7 @@ public class CauchyWindow extends ParameterizedWindow {
     return new CauchyWindow(Objects.requireNonNull(alpha));
   }
 
-  /***************************************************/
+  // ---
   private CauchyWindow(Scalar alpha) {
     super(alpha);
   }

@@ -34,7 +34,7 @@ public class GammaDistribution implements Distribution, //
     return new GammaDistribution(alpha, beta);
   }
 
-  /***************************************************/
+  // ---
   private final Scalar alpha;
   private final Scalar beta;
   private final Scalar factor;

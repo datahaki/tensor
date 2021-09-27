@@ -35,7 +35,7 @@ public class InterpolatingPolynomial implements Serializable {
     return new InterpolatingPolynomial(LinearBinaryAverage.INSTANCE, knots);
   }
 
-  /***************************************************/
+  // ---
   private final BinaryAverage binaryAverage;
   private final Scalar[] knots;
 

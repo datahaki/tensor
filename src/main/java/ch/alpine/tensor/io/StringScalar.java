@@ -34,7 +34,7 @@ public class StringScalar extends AbstractScalar implements Comparable<Scalar>, 
     return new StringScalar(Objects.requireNonNull(string));
   }
 
-  /***************************************************/
+  // ---
   private final String string;
 
   private StringScalar(String string) {
@@ -71,7 +71,7 @@ public class StringScalar extends AbstractScalar implements Comparable<Scalar>, 
     throw TensorRuntimeException.of(this);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
     throw TensorRuntimeException.of(this, scalar);
@@ -86,7 +86,7 @@ public class StringScalar extends AbstractScalar implements Comparable<Scalar>, 
     throw TensorRuntimeException.of(this, scalar);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   public int hashCode() {
     return string.hashCode();

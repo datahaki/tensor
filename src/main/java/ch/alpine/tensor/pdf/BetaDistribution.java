@@ -34,7 +34,7 @@ public class BetaDistribution implements Distribution, MeanInterface, PDF, Varia
     return of(RealScalar.of(a1), RealScalar.of(a2));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar a1;
   private final Scalar a2;
   private final Scalar factor;

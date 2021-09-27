@@ -65,7 +65,7 @@ import ch.alpine.tensor.sca.Sign;
       RealScalar.ONE.negate(), // -1
       RealScalar.ZERO, // 0
       RealScalar.ONE }; // +1
-  /***************************************************/
+  // ---
   static final Cache<Integer, DecimalScalar> CACHE_0 = //
       Cache.of(precision -> new DecimalScalar(BigDecimal.ZERO, precision), 32);
   static final Cache<Integer, DecimalScalar> CACHE_1 = //

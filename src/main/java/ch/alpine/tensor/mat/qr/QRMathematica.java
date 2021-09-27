@@ -18,7 +18,7 @@ public class QRMathematica extends QRDecompositionBase implements Serializable {
     return new QRMathematica(qrDecomposition);
   }
 
-  /***************************************************/
+  // ---
   private final QRDecomposition qrDecomposition;
   private final int length;
 

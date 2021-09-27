@@ -40,7 +40,7 @@ public class PoissonBinomialDistribution implements DiscreteDistribution, //
     return new PoissonBinomialDistribution(lowerBound, p_result);
   }
 
-  /***************************************************/
+  // ---
   private final int lowerBound;
   private final Tensor p_vector;
 
