@@ -65,8 +65,8 @@ public enum Hypot {
     Tensor abs = vector.map(Abs.FUNCTION);
     Scalar max = abs.stream() //
         .map(Scalar.class::cast) //
-        // .filter(Scalars::nonZero) //
-        .reduce(Max::of).get();
+        .reduce(Max::of) //
+        .orElseThrow();
     if (Scalars.isZero(max))
       return max;
     abs = abs.divide(max);

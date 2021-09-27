@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -77,11 +78,11 @@ public enum Array {
 
   // helper function
   private static Tensor fill(Supplier<? extends Scalar> supplier, int level, List<Integer> dimensions) {
-    int length = dimensions.get(level);
     int next = level + 1;
-    return dimensions.size() == next //
-        ? Tensor.of(IntStream.range(0, length).mapToObj(i -> supplier.get()))
-        : Tensor.of(IntStream.range(0, length).mapToObj(i -> fill(supplier, next, dimensions)));
+    return Tensor.of(Stream.generate(dimensions.size() == next //
+        ? supplier
+        : () -> fill(supplier, next, dimensions)) //
+        .limit(dimensions.get(level)));
   }
 
   // ==================================================

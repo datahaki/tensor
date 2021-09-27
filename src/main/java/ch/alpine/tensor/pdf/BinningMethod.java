@@ -71,7 +71,7 @@ public enum BinningMethod implements TensorScalarFunction {
 
   private static Scalar division(Tensor tensor, Scalar k) {
     return Clips.interval( //
-        (Scalar) tensor.stream().reduce(Min::of).get(), //
-        (Scalar) tensor.stream().reduce(Max::of).get()).width().divide(k);
+        (Scalar) tensor.stream().reduce(Min::of).orElseThrow(), //
+        (Scalar) tensor.stream().reduce(Max::of).orElseThrow()).width().divide(k);
   }
 }

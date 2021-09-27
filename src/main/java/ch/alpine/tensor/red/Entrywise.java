@@ -82,6 +82,6 @@ public class Entrywise implements BinaryOperator<Tensor>, Serializable {
    * @return
    * @throws Exception */
   public Tensor of(Tensor tensor) {
-    return tensor.stream().reduce(this).get();
+    return tensor.stream().reduce(this).orElseThrow();
   }
 }

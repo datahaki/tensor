@@ -41,6 +41,7 @@ public class TruncatedDistribution implements Distribution, RandomVariateInterfa
     return Stream.generate(() -> randomVariateInterface.randomVariate(random)) //
         .limit(MAX_ITERATIONS) //
         .filter(clip::isInside) //
-        .findFirst().get();
+        .findFirst() //
+        .orElseThrow();
   }
 }

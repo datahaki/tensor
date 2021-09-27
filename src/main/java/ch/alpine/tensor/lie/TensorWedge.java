@@ -38,7 +38,8 @@ public enum TensorWedge {
       int[] sigma = IntStream.range(0, rank) //
           .mapToObj(permutation::Get) //
           .map(Scalar::number) //
-          .mapToInt(Number::intValue).toArray();
+          .mapToInt(Number::intValue) //
+          .toArray();
       Tensor transpose = Transpose.of(tensor, sigma);
       sum = Signature.of(sigma).equals(RealScalar.ONE) //
           ? sum.add(transpose)

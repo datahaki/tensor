@@ -14,6 +14,7 @@ public enum MatrixInfinityNorm {
     MatrixQ.require(matrix);
     return matrix.stream() //
         .map(Vector1Norm::of) //
-        .reduce(Max::of).get();
+        .reduce(Max::of) //
+        .orElseThrow();
   }
 }
