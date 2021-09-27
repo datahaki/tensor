@@ -5,7 +5,6 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
@@ -33,13 +32,6 @@ import junit.framework.TestCase;
 
 public class MatrixExpTest extends TestCase {
   private static final Random RANDOM = new Random();
-
-  public void testExponents() {
-    assertEquals(MatrixExp.exponent(RealScalar.of(0)), 1);
-    assertEquals(MatrixExp.exponent(RealScalar.of(0.99)), 2);
-    assertEquals(MatrixExp.exponent(RealScalar.of(1)), 2);
-    assertEquals(MatrixExp.exponent(RealScalar.of(1.01)), 4);
-  }
 
   public void testZeros() {
     Tensor zeros = Array.zeros(7, 7);
@@ -149,7 +141,7 @@ public class MatrixExpTest extends TestCase {
     for (int count = 0; count < 10; ++count) {
       Tensor matrix = RandomVariate.of(distribution, 2, 2);
       Tensor exp1 = MatrixExp.of(matrix);
-      Tensor exp2 = MatrixExp.series(matrix);
+      Tensor exp2 = MatrixExpSeries.FUNCTION.apply(matrix);
       Chop._01.requireClose(exp1, exp2);
     }
   }
@@ -161,7 +153,7 @@ public class MatrixExpTest extends TestCase {
           RandomVariate.of(distribution, 2, 2), //
           RandomVariate.of(distribution, 2, 2));
       Tensor exp1 = MatrixExp.of(matrix);
-      Tensor exp2 = MatrixExp.series(matrix);
+      Tensor exp2 = MatrixExpSeries.FUNCTION.apply(matrix);
       Chop._01.requireClose(exp1, exp2);
     }
   }
@@ -169,20 +161,15 @@ public class MatrixExpTest extends TestCase {
   public void testComplex1() {
     Tensor matrix = ConstantArray.of(Scalars.fromString("-10-1*I"), 2, 2);
     Tensor tensor1 = MatrixExp.of(matrix); // 19
-    Tensor tensor2 = MatrixExp.series(matrix); // 94
+    Tensor tensor2 = MatrixExpSeries.FUNCTION.apply(matrix); // 94
     Chop._06.requireClose(tensor1, tensor2);
   }
 
   public void testComplex2() {
     Tensor matrix = ConstantArray.of(Scalars.fromString("-10.0-1.0*I"), 3, 3);
     Tensor tensor1 = MatrixExp.of(matrix); // 19
-    Tensor tensor2 = MatrixExp.series(matrix); // 119
+    Tensor tensor2 = MatrixExpSeries.FUNCTION.apply(matrix); // 119
     Chop._04.requireClose(tensor1, tensor2);
-  }
-
-  public void testNaNFail() {
-    Tensor matrix = ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3);
-    AssertFail.of(() -> MatrixExp.series(matrix));
   }
 
   public void testFail() {

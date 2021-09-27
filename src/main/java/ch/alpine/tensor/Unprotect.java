@@ -53,9 +53,7 @@ public enum Unprotect {
    * @return
    * @throws Exception if tensor is a scalar */
   public static int dimension1Hint(Tensor tensor) {
-    TensorImpl impl = (TensorImpl) tensor;
-    List<Tensor> list = impl.list;
-    return list.get(0).length();
+    return (((TensorImpl) tensor).list()).get(0).length();
   }
 
   /***************************************************/

@@ -134,8 +134,8 @@ import java.math.BigInteger;
   }
 
   /** @param bigFraction non-null
-   * @return */
-  /* package */ boolean _equals(BigFraction bigFraction) {
+   * @return whether this and given object represent the same rational number */
+  public boolean _equals(BigFraction bigFraction) {
     return num.equals(bigFraction.num) //
         && den.equals(bigFraction.den); // sufficient since in normal form
   }

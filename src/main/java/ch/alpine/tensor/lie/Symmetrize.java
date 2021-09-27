@@ -8,6 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.TensorRank;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.sca.Factorial;
 
@@ -42,7 +43,8 @@ public enum Symmetrize {
 
   /** @param tensor
    * @return given tensor symmetrized in first two dimensions */
-  /* package */ static Tensor _01(Tensor tensor) {
+  @PackageTestAccess
+  static Tensor _01(Tensor tensor) {
     AtomicInteger atomicInteger = new AtomicInteger();
     return Tensor.of(tensor.stream() //
         .map(row -> row.add(tensor.get(Tensor.ALL, atomicInteger.getAndIncrement())).multiply(RationalScalar.HALF)));

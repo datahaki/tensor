@@ -55,7 +55,7 @@ public class NdBox implements Serializable {
 
   /** @param index of dimension
    * @return left, i.e. lower half of this bounding box */
-  /* package */ NdBox splitLo(int index) {
+  public NdBox splitLo(int index) {
     List<Clip> copy = new ArrayList<>(list);
     Clip clip = list.get(index);
     copy.set(index, Clips.interval(clip.min(), median(clip)));
@@ -64,7 +64,7 @@ public class NdBox implements Serializable {
 
   /** @param index of dimension
    * @return right, i.e. upper half of this bounding box */
-  /* package */ NdBox splitHi(int index) {
+  public NdBox splitHi(int index) {
     List<Clip> copy = new ArrayList<>(list);
     Clip clip = list.get(index);
     copy.set(index, Clips.interval(median(clip), clip.max()));

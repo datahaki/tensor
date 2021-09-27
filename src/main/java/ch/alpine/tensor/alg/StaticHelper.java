@@ -38,9 +38,11 @@ import ch.alpine.tensor.io.Primitives;
    * inverse(inverse(x)) == x
    * </pre>
    * 
+   * function only used within static helper
+   * 
    * @param sigma
    * @return inverse({0,1,2,...}, sigma) */
-  /* package */ static int[] inverse(int[] sigma) { // function only used within static helper
+  public static int[] inverse(int[] sigma) {
     int[] dims = new int[sigma.length];
     for (int index = 0; index < sigma.length; ++index)
       dims[sigma[index]] = index;

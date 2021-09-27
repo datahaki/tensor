@@ -19,16 +19,14 @@ public class MappedInterpolation extends AbstractInterpolation implements Serial
    * @return
    * @throws Exception if given tensor is null */
   public static Interpolation of(Tensor tensor, ScalarUnaryOperator function) {
-    return new MappedInterpolation( //
-        tensor, //
-        Objects.requireNonNull(function));
+    return new MappedInterpolation(tensor, Objects.requireNonNull(function));
   }
 
-  /***************************************************/
+  // ---
   private final Tensor tensor;
   private final ScalarUnaryOperator function;
 
-  /* package */ MappedInterpolation(Tensor tensor, ScalarUnaryOperator function) {
+  private MappedInterpolation(Tensor tensor, ScalarUnaryOperator function) {
     this.tensor = Objects.requireNonNull(tensor);
     this.function = function;
   }

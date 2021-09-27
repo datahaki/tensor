@@ -8,7 +8,7 @@ import ch.alpine.tensor.Tensors;
 /** utility class for {@link Transpose} */
 /* package */ class MultiIndex {
   /** the content of size[] is not changed after construction */
-  /* package */ final int[] size;
+  private final int[] size;
 
   private MultiIndex(int[] dims) {
     this.size = dims;
@@ -16,6 +16,10 @@ import ch.alpine.tensor.Tensors;
 
   public MultiIndex(List<Integer> list) {
     this(list.stream().mapToInt(Integer::intValue).toArray());
+  }
+
+  public int[] size() {
+    return size;
   }
 
   @Override // from Object

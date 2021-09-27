@@ -12,10 +12,9 @@ import java.util.stream.Stream;
 
 /** reference implementation of the interface Tensor */
 /* package */ class TensorImpl implements Tensor, Serializable {
-  /** list is accessed by UnmodifiableTensor, Parallelize, Unprotect, ViewTensor */
-  /* package */ final List<Tensor> list;
+  private final List<Tensor> list;
 
-  /* package */ TensorImpl(List<Tensor> list) {
+  public TensorImpl(List<Tensor> list) {
     this.list = list;
   }
 
@@ -64,8 +63,8 @@ import java.util.stream.Stream;
     _set(tensor, Arrays.asList(index));
   }
 
-  // package visibility in order to override in UnmodifiableTensor
-  /* package */ void _set(Tensor tensor, List<Integer> index) {
+  // override in UnmodifiableTensor
+  public void _set(Tensor tensor, List<Integer> index) {
     int head = index.get(0);
     if (index.size() == 1)
       if (head == ALL) {
@@ -89,8 +88,7 @@ import java.util.stream.Stream;
   }
 
   @SuppressWarnings("unchecked")
-  // package visibility in order to override in UnmodifiableTensor
-  /* package */ <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
+  public <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
     int head = index.get(0);
     if (index.size() == 1)
       if (head == ALL)
@@ -147,7 +145,7 @@ import java.util.stream.Stream;
   /** @param fromIndex non-empty
    * @param dimensions of same size as fromIndex
    * @return */
-  /* package */ Tensor _block(List<Integer> fromIndex, List<Integer> dimensions) {
+  public Tensor _block(List<Integer> fromIndex, List<Integer> dimensions) {
     int toIndex = fromIndex.get(0) + dimensions.get(0);
     if (fromIndex.size() == 1)
       return extract(fromIndex.get(0), toIndex);
@@ -235,5 +233,10 @@ import java.util.stream.Stream;
   @Override // from Object
   public String toString() {
     return list.stream().map(Tensor::toString).collect(StaticHelper.EMBRACE);
+  }
+
+  /** @return list accessed by UnmodifiableTensor, Parallelize, Unprotect, ViewTensor */
+  public List<Tensor> list() {
+    return list;
   }
 }

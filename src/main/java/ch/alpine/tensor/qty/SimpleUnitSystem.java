@@ -75,7 +75,7 @@ public class SimpleUnitSystem implements UnitSystem {
     return scalar;
   }
 
-  /***************************************************/
+  // ---
   private final Map<String, Scalar> map;
   private final Cache<Unit, Factor> cache;
 

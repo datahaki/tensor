@@ -4,13 +4,12 @@ package ch.alpine.tensor.lie;
 import java.util.LinkedList;
 import java.util.List;
 
-import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Matrix2Norm;
@@ -35,7 +34,6 @@ public enum MatrixLog {
   ;
   private static final int MAX_EXPONENT = 20;
   private static final Scalar RHO_MAX = RealScalar.of(0.6);
-  private static final int MAX_ITERATIONS = 96;
 
   /** Hint: currently only matrices of dimensions 2 x 2 are supported
    * as well as symmetric positive definite matrices
@@ -54,7 +52,8 @@ public enum MatrixLog {
     }
   }
 
-  /* package */ static Tensor _of(Tensor matrix) {
+  @PackageTestAccess
+  static Tensor _of(Tensor matrix) {
     Tensor id = StaticHelper.IDENTITY_MATRIX.apply(matrix.length());
     Tensor rem = matrix.subtract(id);
     List<DenmanBeaversDet> deque = new LinkedList<>();
@@ -67,7 +66,7 @@ public enum MatrixLog {
           sum = sum.add(denmanBeaversDet.mk().subtract(id).multiply(factor));
           factor = factor.add(factor);
         }
-        return sum.add(series1p(rem).multiply(factor));
+        return sum.add(MatrixLogSeries1P.FUNCTION.apply(rem).multiply(factor));
       }
       DenmanBeaversDet denmanBeaversDet = new DenmanBeaversDet(matrix, Tolerance.CHOP);
       deque.add(denmanBeaversDet);
@@ -89,21 +88,5 @@ public enum MatrixLog {
   // helper function
   private static Scalar logPositive(Scalar scalar) {
     return Log.FUNCTION.apply(Sign.requirePositive(scalar));
-  }
-
-  /** @param x square matrix with spectral radius below 1
-   * @return log[ I + x ]
-   * @throws Exception if given matrix is non-square
-   * @see Math#log1p(double) */
-  /* package */ static Tensor series1p(Tensor x) {
-    Tensor nxt = x;
-    Tensor sum = nxt;
-    for (int k = 2; k < MAX_ITERATIONS; ++k) {
-      nxt = nxt.dot(x);
-      Scalar den = DoubleScalar.of(Integers.isEven(k) ? -k : k);
-      if (sum.equals(sum = sum.add(nxt.divide(den))))
-        return sum;
-    }
-    throw TensorRuntimeException.of(x); // insufficient convergence
   }
 }

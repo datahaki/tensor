@@ -9,6 +9,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Clips;
@@ -43,7 +44,7 @@ public class FrechetDistribution implements //
     return of(RealScalar.of(alpha), RealScalar.of(beta));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar alpha;
   private final Scalar beta;
 
@@ -57,7 +58,8 @@ public class FrechetDistribution implements //
     return randomVariate(random.nextDouble());
   }
 
-  /* package */ Scalar randomVariate(double reference) {
+  @PackageTestAccess
+  Scalar randomVariate(double reference) {
     // avoid result -Infinity when reference is close to 1.0
     double uniform = reference == NEXT_DOWN_ONE //
         ? reference

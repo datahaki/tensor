@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 public class LanczosKernelTest extends TestCase {
   public void testSimple() {
     LanczosKernel lanczosKernel = LanczosKernel._3;
-    assertEquals(lanczosKernel.semi, 3);
+    assertEquals(lanczosKernel.semi(), 3);
     for (Tensor _x : Range.of(-5, 5 + 1)) {
       Scalar param = (Scalar) _x;
       Scalar scalar = lanczosKernel.apply(param);

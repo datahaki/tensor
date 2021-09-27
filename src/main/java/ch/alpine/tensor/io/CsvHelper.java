@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.N;
     return scalar;
   }
 
-  /* package */ static Scalar wrap(Scalar scalar) {
+  public static Scalar wrap(Scalar scalar) {
     String string = scalar.toString();
     if (string.isEmpty())
       return EMPTY;
@@ -45,7 +45,7 @@ import ch.alpine.tensor.sca.N;
     return StringScalar.of("\"" + requireQuotesFree(string) + "\"");
   }
 
-  /* package */ static String requireQuotesFree(String string) {
+  public static String requireQuotesFree(String string) {
     int index = string.indexOf('\"');
     if (0 <= index)
       throw new IllegalArgumentException(string);

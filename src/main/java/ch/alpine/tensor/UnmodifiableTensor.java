@@ -29,12 +29,12 @@ import java.util.stream.Stream;
   }
 
   @Override // from TensorImpl
-  void _set(Tensor tensor, List<Integer> index) {
+  public void _set(Tensor tensor, List<Integer> index) {
     throw new UnsupportedOperationException("unmodifiable");
   }
 
   @Override // from TensorImpl
-  <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
+  public <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
     throw new UnsupportedOperationException("unmodifiable");
   }
 
@@ -45,7 +45,7 @@ import java.util.stream.Stream;
 
   @Override // from TensorImpl
   public Stream<Tensor> stream() {
-    return list.stream().map(Tensor::unmodifiable);
+    return list().stream().map(Tensor::unmodifiable);
   }
 
   @Override // from TensorImpl
@@ -56,12 +56,12 @@ import java.util.stream.Stream;
 
       @Override
       public boolean hasNext() {
-        return index < list.size();
+        return index < list().size();
       }
 
       @Override
       public Tensor next() {
-        return list.get(index++).unmodifiable();
+        return list().get(index++).unmodifiable();
       }
     };
   }

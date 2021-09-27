@@ -8,6 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.MatrixDotTranspose;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.mat.sv.SingularValueList;
 import ch.alpine.tensor.qty.Quantity;
@@ -59,7 +60,7 @@ public enum PseudoInverse {
     return usingSvd(matrix);
   }
 
-  /***************************************************/
+  // ---
   /** @param matrix with maximal rank
    * @return
    * @throws Exception if given matrix does not have maximal rank */
@@ -74,7 +75,7 @@ public enum PseudoInverse {
         StaticHelper.dotConjugate(matrix)).solve(matrix));
   }
 
-  /***************************************************/
+  // ---
   /** Hint: computing the pseudo-inverse using the QR decomposition is
    * possible for matrices of maximal rank, and is generally faster than
    * when using the singular value decomposition.
@@ -82,7 +83,8 @@ public enum PseudoInverse {
    * @param matrix with maximal rank
    * @return pseudoinverse of given matrix
    * @throws Exception if matrix does not have maximal rank */
-  /* package */ static Tensor usingQR(Tensor matrix) {
+  @PackageTestAccess
+  static Tensor usingQR(Tensor matrix) {
     return usingQR(matrix, matrix.length(), Unprotect.dimension1(matrix));
   }
 
@@ -92,7 +94,7 @@ public enum PseudoInverse {
         : Transpose.of(LeastSquares.usingQR(Transpose.of(matrix), IdentityMatrix.of(m)));
   }
 
-  /***************************************************/
+  // ---
   /** Quote from Mathematica: "With the default setting Tolerance->Automatic,
    * singular values are dropped when they are less than 100 times 10^-p,
    * where p is Precision[m]."
@@ -103,7 +105,8 @@ public enum PseudoInverse {
    * 
    * @param matrix of arbitrary dimension and rank
    * @return pseudoinverse of given matrix */
-  /* package */ static Tensor usingSvd(Tensor matrix) {
+  @PackageTestAccess
+  static Tensor usingSvd(Tensor matrix) {
     return usingSvd(matrix, TOLERANCE);
   }
 
@@ -114,7 +117,8 @@ public enum PseudoInverse {
     return usingSvd(matrix, chop, matrix.length(), Unprotect.dimension1(matrix));
   }
 
-  /* package */ static Tensor usingSvd(Tensor matrix, Chop chop, int n, int m) {
+  @PackageTestAccess
+  static Tensor usingSvd(Tensor matrix, Chop chop, int n, int m) {
     return m <= n //
         ? of(SingularValueDecomposition.of(matrix), chop) //
         : Transpose.of(of(SingularValueDecomposition.of(Transpose.of(matrix)), chop));

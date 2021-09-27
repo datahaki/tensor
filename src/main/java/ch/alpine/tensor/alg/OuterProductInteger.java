@@ -13,8 +13,11 @@ import java.util.List;
   private int count = 0;
   private final int total;
 
-  // constructor does not copy input size, therefore use only in package
-  /* package */ OuterProductInteger(int[] size, boolean forward) {
+  /** constructor does not copy input size, therefore use only in package
+   * 
+   * @param size
+   * @param forward */
+  public OuterProductInteger(int[] size, boolean forward) {
     this.size = size; // ;
     int total = 1;
     index = new Integer[size.length];

@@ -14,17 +14,16 @@ import java.util.List;
    * @param index
    * @throws Exception if tensor is unmodifiable
    * @throws Exception if index is not from the range {0, 1, ..., tensor.length()} */
-  /* package */ static void insert(Tensor tensor, Tensor element, int index) {
+  public static void insert(Tensor tensor, Tensor element, int index) {
     list(tensor).add(index, element.copy());
   }
 
   /** @param tensor
    * @return list that is member of given tensor
    * @throws Exception if tensor is unmodifiable */
-  /* package */ static List<Tensor> list(Tensor tensor) {
+  public static List<Tensor> list(Tensor tensor) {
     if (tensor instanceof UnmodifiableTensor)
       throw TensorRuntimeException.of(tensor);
-    TensorImpl impl = (TensorImpl) tensor;
-    return impl.list;
+    return ((TensorImpl) tensor).list();
   }
 }

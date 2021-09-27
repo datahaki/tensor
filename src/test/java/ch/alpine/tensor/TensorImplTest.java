@@ -79,6 +79,6 @@ public class TensorImplTest extends TestCase {
   public void testArrayList() {
     Tensor tensor = Tensor.of(Arrays.asList(RealScalar.of(2), RealScalar.of(3)).stream());
     TensorImpl tensorImpl = (TensorImpl) tensor;
-    assertTrue(tensorImpl.list instanceof ArrayList); // used in TensorParser
+    assertTrue(tensorImpl.list() instanceof ArrayList); // used in TensorParser
   }
 }

@@ -19,7 +19,7 @@ import ch.alpine.tensor.ext.Cache;
  * 
  * all instances of UnitImpl are managed in a LRU cache */
 /* package */ class UnitImpl implements Unit, Serializable {
-  /* package */ static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> NEGATION = //
+  public static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> NEGATION = //
       Collectors.toMap(Entry::getKey, entry -> entry.getValue().negate(), (e1, e2) -> null, TreeMap::new);
   private static final int MAX_SIZE = 1536;
   private static final Function<NavigableMap<String, Scalar>, Unit> CACHE = //

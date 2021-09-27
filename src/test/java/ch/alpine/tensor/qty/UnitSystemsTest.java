@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 
 public class UnitSystemsTest extends TestCase {
   public void testKnownAtoms() {
-    Set<String> set = KnownUnitQ.buildSet(UnitSystem.SI());
+    Set<String> set = StaticHelper.buildSet(UnitSystem.SI());
     assertTrue(set.contains("K"));
     assertTrue(set.contains("m"));
     assertTrue(set.contains("kW"));

@@ -18,8 +18,7 @@ import ch.alpine.tensor.itp.LinearInterpolation;
   /** @param tensor
    * @return */
   public static TensorImpl wrap(Tensor tensor) {
-    TensorImpl impl = (TensorImpl) tensor;
-    return new ViewTensor(impl.list);
+    return new ViewTensor(((TensorImpl) tensor).list());
   }
 
   /***************************************************/
@@ -29,13 +28,13 @@ import ch.alpine.tensor.itp.LinearInterpolation;
 
   @Override // from TensorImpl
   public Tensor extract(int fromIndex, int toIndex) {
-    return new ViewTensor(list.subList(fromIndex, toIndex));
+    return new ViewTensor(list().subList(fromIndex, toIndex));
   }
 
   @Override // from TensorImpl
-  Tensor _block(List<Integer> fromIndex, List<Integer> dimensions) {
+  public Tensor _block(List<Integer> fromIndex, List<Integer> dimensions) {
     int loIndex = fromIndex.get(0);
-    List<Tensor> subList = list.subList(loIndex, loIndex + dimensions.get(0));
+    List<Tensor> subList = list().subList(loIndex, loIndex + dimensions.get(0));
     int size = fromIndex.size();
     return size == 1 //
         ? new ViewTensor(subList)

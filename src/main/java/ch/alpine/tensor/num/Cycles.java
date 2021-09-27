@@ -27,6 +27,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Sign;
 
@@ -60,7 +61,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     return IDENTITY;
   }
 
-  /***************************************************/
+  // ---
   /** @param tensor {{}, {2, 1}, {3}}
    * @return {{2, 1}}
    * @throws Exception if an entry is negative, or not an integer, or appears more than once */
@@ -86,7 +87,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     return navigableMap;
   }
 
-  /***************************************************/
+  // ---
   private final NavigableMap<Integer, Integer> navigableMap;
 
   /** @param navigableMap without entries of the form i -> i */
@@ -111,7 +112,8 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     }
   }
 
-  /* package */ static final Collector<Entry<Integer, Integer>, ?, NavigableMap<Integer, Integer>> COLLECTOR = //
+  @PackageTestAccess
+  static final Collector<Entry<Integer, Integer>, ?, NavigableMap<Integer, Integer>> COLLECTOR = //
       Collectors.toMap(Entry::getValue, Entry::getKey, (v1, v2) -> null, TreeMap::new);
 
   /** Hint: InversePermutation in Mathematica
@@ -180,7 +182,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     return TensorComparator.INSTANCE.compare(toTensor(), cycles.toTensor());
   }
 
-  /***************************************************/
+  // ---
   @Override // from Object
   public boolean equals(Object object) {
     if (object instanceof Cycles) {

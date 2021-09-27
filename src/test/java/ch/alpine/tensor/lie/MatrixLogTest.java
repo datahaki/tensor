@@ -6,7 +6,6 @@ import java.util.Deque;
 import java.util.Iterator;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
@@ -79,13 +78,6 @@ public class MatrixLogTest extends TestCase {
     Tensor matrix = Transpose.of(IdentityMatrix.of(3).extract(0, 2));
     assertEquals(matrix.length(), 3);
     AssertFail.of(() -> MatrixLog.of(matrix));
-  }
-
-  public void testSeries1p() {
-    MatrixLog.series1p(Array.zeros(3, 3));
-    MatrixLog.series1p(ConstantArray.of(RealScalar.ZERO, 3, 3));
-    AssertFail.of(() -> MatrixLog.series1p(ConstantArray.of(RealScalar.ONE, 3, 3)));
-    AssertFail.of(() -> MatrixLog.series1p(ConstantArray.of(RealScalar.of(1.0), 3, 3)));
   }
 
   public void test_of() {

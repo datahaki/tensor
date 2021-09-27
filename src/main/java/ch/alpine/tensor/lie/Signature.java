@@ -5,6 +5,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Ordering;
+import ch.alpine.tensor.ext.PackageTestAccess;
 
 /** Examples:
  * <pre>
@@ -43,7 +44,8 @@ public enum Signature {
    * 
    * @param ordering
    * @return */
-  /* package */ static Scalar of(int[] ordering) {
+  @PackageTestAccess
+  static Scalar of(int[] ordering) {
     int parity = 0;
     for (int index = 0; index < ordering.length; ++index)
       while (ordering[index] != index) {

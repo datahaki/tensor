@@ -38,7 +38,7 @@ import ch.alpine.tensor.sca.Sinh;
    * @param re neither a {@link ComplexScalar}, or {@link Quantity}
    * @param im neither a {@link ComplexScalar}, or {@link Quantity}
    * @return */
-  /* package */ static Scalar of(Scalar re, Scalar im) {
+  public static Scalar of(Scalar re, Scalar im) {
     return Scalars.isZero(im) //
         ? re
         : new ComplexScalarImpl(re, im);
@@ -55,7 +55,7 @@ import ch.alpine.tensor.sca.Sinh;
   private final Scalar re;
   private final Scalar im;
 
-  /* package */ ComplexScalarImpl(Scalar re, Scalar im) {
+  private ComplexScalarImpl(Scalar re, Scalar im) {
     this.re = re;
     this.im = im;
   }

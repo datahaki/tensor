@@ -16,7 +16,7 @@ public class NormalizeUnlessZero implements TensorUnaryOperator {
     return new NormalizeUnlessZero(tensorScalarFunction);
   }
 
-  /***************************************************/
+  // ---
   private final TensorScalarFunction tensorScalarFunction;
   private final Normalize normalize;
 

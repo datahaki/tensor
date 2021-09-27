@@ -233,11 +233,14 @@ public final class RationalScalar extends AbstractRealScalar implements //
         .toBigIntegerExact());
   }
 
+  /** @param mathContext
+   * @return */
   /* package */ BigDecimal toBigDecimal(MathContext mathContext) {
-    return new BigDecimal(numerator()) //
-        .divide(new BigDecimal(denominator()), mathContext);
+    return new BigDecimal(numerator()).divide(new BigDecimal(denominator()), mathContext);
   }
 
+  /** @return
+   * @see IntegerQ */
   /* package */ boolean isInteger() {
     return bigFraction.isInteger();
   }
