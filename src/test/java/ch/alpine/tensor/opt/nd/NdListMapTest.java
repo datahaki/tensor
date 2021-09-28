@@ -20,10 +20,10 @@ import junit.framework.TestCase;
 public class NdListMapTest extends TestCase {
   public void testSimple() {
     NdMap<String> m1 = new NdListMap<>();
-    m1.add(Tensors.vector(1, 0), "p2");
-    m1.add(Tensors.vector(1, 5), "p4");
-    m1.add(Tensors.vector(0, 0), "p1");
-    m1.add(Tensors.vector(1, 1), "p3");
+    m1.insert(Tensors.vector(1, 0), "p2");
+    m1.insert(Tensors.vector(1, 5), "p4");
+    m1.insert(Tensors.vector(0, 0), "p1");
+    m1.insert(Tensors.vector(1, 1), "p3");
     Tensor center = Tensors.vector(0, 0);
     Collection<NdMatch<String>> cl = NdCollectNearest.of(m1, NdCenters.VECTOR_2_NORM.apply(center), 2);
     Set<String> res = cl.stream().map(NdMatch::value).collect(Collectors.toSet());
@@ -57,12 +57,12 @@ public class NdListMapTest extends TestCase {
     for (int c = 0; c < 20; ++c) {
       Tensor location = Tensors.of(RandomVariate.of(ux), RandomVariate.of(uy));
       String value = "p" + (++index);
-      m1.add(location, value);
-      m2.add(location, value);
+      m1.insert(location, value);
+      m2.insert(location, value);
       while (Scalars.isZero(RandomVariate.of(b))) {
         value = "p" + (++index);
-        m1.add(location, value);
-        m2.add(location, value);
+        m1.insert(location, value);
+        m2.insert(location, value);
       }
     }
     assertEquals(m1.size(), m2.size());

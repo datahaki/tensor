@@ -11,7 +11,7 @@ public class NdListMap<V> implements NdMap<V> {
   private final List<NdEntry<V>> list = new ArrayList<>();
 
   @Override // from NdMap
-  public void add(Tensor location, V value) {
+  public void insert(Tensor location, V value) {
     list.add(new NdEntry<>(location, value));
   }
 

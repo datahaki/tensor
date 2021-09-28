@@ -28,7 +28,7 @@ public class NdTreeMapTest extends TestCase {
         Tensors.fromString("{2[m], 3[m], 4[m]}"));
     NdMap<Void> ndMap = NdTreeMap.of(ndBox);
     for (int count = 0; count < 50; ++count)
-      ndMap.add(TestHelper.sample(ndBox), null);
+      ndMap.insert(TestHelper.sample(ndBox), null);
     ndMap = Serialization.copy(ndMap);
     Tensor center = Tensors.fromString("{3/2[m], 5/2[m], 4[m]}");
     NdCenterInterface ndCenterInterface = NdCenters.VECTOR_2_NORM.apply(center);
@@ -46,7 +46,7 @@ public class NdTreeMapTest extends TestCase {
     NdMap<String> ndMap = NdTreeMap.of(NdBox.of(Tensors.vector(0, 0), Tensors.vector(1, 1)));
     Distribution distribution = BernoulliDistribution.of(.3);
     for (int count = 0; count < 50; ++count)
-      ndMap.add(RandomVariate.of(distribution, 2), "p" + count);
+      ndMap.insert(RandomVariate.of(distribution, 2), "p" + count);
     ndMap.toString();
   }
 
@@ -54,7 +54,7 @@ public class NdTreeMapTest extends TestCase {
     NdMap<Void> ndTreeMap = NdTreeMap.of(NdBox.of(Tensors.vector(0, 0), Tensors.vector(1, 1)), 2);
     Distribution distribution = UniformDistribution.unit();
     for (int count = 0; count < 1000; ++count)
-      ndTreeMap.add(RandomVariate.of(distribution, 2), null);
+      ndTreeMap.insert(RandomVariate.of(distribution, 2), null);
     for (int count = 0; count < 20; ++count) {
       new Thread(new Runnable() {
         @Override
@@ -78,9 +78,9 @@ public class NdTreeMapTest extends TestCase {
 
   public void testClear() throws Exception {
     NdMap<String> ndMap = NdTreeMap.of(NdBox.of(Tensors.vector(-2, -3), Tensors.vector(8, 9)), 10);
-    ndMap.add(Tensors.vector(1, 1), "d1");
-    ndMap.add(Tensors.vector(1, 0), "d2");
-    ndMap.add(Tensors.vector(0, 1), "d3");
+    ndMap.insert(Tensors.vector(1, 1), "d1");
+    ndMap.insert(Tensors.vector(1, 0), "d2");
+    ndMap.insert(Tensors.vector(0, 1), "d3");
     NdCenterInterface ndCenter = NdCenters.VECTOR_2_NORM.apply(Tensors.vector(0, 0));
     {
       Collection<NdMatch<String>> cluster = NdCollectNearest.of(ndMap, ndCenter, 5);
@@ -103,7 +103,7 @@ public class NdTreeMapTest extends TestCase {
     NdMap<String> ndMap = NdTreeMap.of(NdBox.of(Tensors.vector(-2, -3), Tensors.vector(8, 9)), 3);
     Tensor location = Array.zeros(2);
     for (int c = 0; c < 100; ++c)
-      ndMap.add(location, "s" + c);
+      ndMap.insert(location, "s" + c);
   }
 
   public void testSimple1() {
@@ -111,7 +111,7 @@ public class NdTreeMapTest extends TestCase {
     NdMap<String> ndTreeMap = NdTreeMap.of(NdBox.of(Tensors.vector(0, 0), Tensors.vector(1, 1)), n);
     // ndTreeMap.binSize();
     for (int c = 0; c < 800; ++c)
-      ndTreeMap.add(RandomVariate.of(UniformDistribution.unit(), 2), "s" + c);
+      ndTreeMap.insert(RandomVariate.of(UniformDistribution.unit(), 2), "s" + c);
     NdBinsize<String> ndBinsize = new NdBinsize<>();
     ndTreeMap.visit(ndBinsize);
     Tensor flatten = Flatten.of(ndBinsize.bins());
@@ -125,7 +125,7 @@ public class NdTreeMapTest extends TestCase {
     NdMap<String> ndTreeMap = NdTreeMap.of(NdBox.of(Tensors.vector(0, 0), Tensors.vector(1, 1)), 3);
     for (int c = 0; c < 12; ++c) {
       Tensor location = RandomVariate.of(UniformDistribution.unit(), 2);
-      ndTreeMap.add(location, "s" + c);
+      ndTreeMap.insert(location, "s" + c);
     }
   }
 
@@ -143,6 +143,6 @@ public class NdTreeMapTest extends TestCase {
   public void testFail1() {
     NdMap<String> ndMap = NdTreeMap.of(NdBox.of(Tensors.vector(-2, -3), Tensors.vector(8, 9)), 2);
     Tensor location = Array.zeros(3);
-    AssertFail.of(() -> ndMap.add(location, "string"));
+    AssertFail.of(() -> ndMap.insert(location, "string"));
   }
 }

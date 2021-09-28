@@ -49,7 +49,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
   }
 
   @Override // from NdMap
-  public void add(Tensor location, V value) {
+  public void insert(Tensor location, V value) {
     root.add(new NdEntry<>(ndBoxGlobal.requireInside(location), value), ndBoxGlobal);
     ++size;
   }

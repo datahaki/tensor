@@ -214,6 +214,12 @@ import java.util.stream.Stream;
     return Tensor.of(list.stream().map(tensor -> tensor.map(function)));
   }
 
+  /** @return list
+   * @see ViewTensor */
+  public List<Tensor> list() {
+    return list;
+  }
+
   // ---
   @Override // from Iterable
   public Iterator<Tensor> iterator() {
@@ -234,11 +240,5 @@ import java.util.stream.Stream;
   @Override // from Object
   public String toString() {
     return list.stream().map(Tensor::toString).collect(StaticHelper.EMBRACE);
-  }
-
-  /** @return list
-   * @see ViewTensor */
-  public List<Tensor> list() {
-    return list;
   }
 }

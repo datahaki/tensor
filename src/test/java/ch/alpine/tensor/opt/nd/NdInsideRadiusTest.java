@@ -9,8 +9,8 @@ import junit.framework.TestCase;
 public class NdInsideRadiusTest extends TestCase {
   public void testSimple() {
     NdMap<Void> ndMap = NdTreeMap.of(NdBox.of(Tensors.vector(0), Tensors.vector(1)));
-    ndMap.add(Tensors.vector(0), null);
-    ndMap.add(Tensors.vector(0.9), null);
+    ndMap.insert(Tensors.vector(0), null);
+    ndMap.insert(Tensors.vector(0.9), null);
     for (NdCenters ndCenters : NdCenters.values()) {
       assertFalse(NdInsideRadius.anyMatch(ndMap, ndCenters.apply(Tensors.vector(0.2)), RealScalar.of(0.1)));
       assertTrue(NdInsideRadius.anyMatch(ndMap, ndCenters.apply(Tensors.vector(0.2)), RealScalar.of(0.3)));
@@ -21,8 +21,8 @@ public class NdInsideRadiusTest extends TestCase {
 
   public void testExact() {
     NdMap<Void> ndMap = NdTreeMap.of(NdBox.of(Tensors.vector(0), Tensors.vector(4)));
-    ndMap.add(Tensors.vector(0), null);
-    ndMap.add(Tensors.vector(4), null);
+    ndMap.insert(Tensors.vector(0), null);
+    ndMap.insert(Tensors.vector(4), null);
     for (NdCenters ndCenters : NdCenters.values()) {
       assertTrue(NdInsideRadius.anyMatch(ndMap, ndCenters.apply(Tensors.vector(0)), RealScalar.of(0)));
       assertTrue(NdInsideRadius.anyMatch(ndMap, ndCenters.apply(Tensors.vector(4)), RealScalar.of(0)));

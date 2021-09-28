@@ -24,13 +24,13 @@ public class NdCollectNearestTest extends TestCase {
       NdMap<String> ndTreeMap = NdTreeMap.of(ndBox, n);
       ndTreeMap.toString();
       assertTrue(ndTreeMap.isEmpty());
-      ndTreeMap.add(Tensors.vector(1, 1), "d1");
+      ndTreeMap.insert(Tensors.vector(1, 1), "d1");
       assertFalse(ndTreeMap.isEmpty());
-      ndTreeMap.add(Tensors.vector(1, 0), "d2");
-      ndTreeMap.add(Tensors.vector(0, 1), "d3");
-      ndTreeMap.add(Tensors.vector(1, 1), "d4");
-      ndTreeMap.add(Tensors.vector(0.1, 0.1), "d5");
-      ndTreeMap.add(Tensors.vector(6, 7), "d6");
+      ndTreeMap.insert(Tensors.vector(1, 0), "d2");
+      ndTreeMap.insert(Tensors.vector(0, 1), "d3");
+      ndTreeMap.insert(Tensors.vector(1, 1), "d4");
+      ndTreeMap.insert(Tensors.vector(0.1, 0.1), "d5");
+      ndTreeMap.insert(Tensors.vector(6, 7), "d6");
       ndTreeMap.toString();
       {
         Tensor center = Tensors.vector(0, 0);
@@ -66,8 +66,8 @@ public class NdCollectNearestTest extends TestCase {
     for (int c = 0; c < 20; ++c) {
       Tensor location = Tensors.of(RandomVariate.of(ux), RandomVariate.of(uy));
       String value = "p" + (++index);
-      m1.add(location, value);
-      m2.add(location, value);
+      m1.insert(location, value);
+      m2.insert(location, value);
     }
     assertEquals(m1.size(), m2.size());
     for (NdCenters ndCenters : NdCenters.values()) {
