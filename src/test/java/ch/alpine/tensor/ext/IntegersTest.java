@@ -94,4 +94,20 @@ public class IntegersTest extends TestCase {
     int c1 = a + b;
     assertEquals(c1, 254);
   }
+
+  public void testRequireEquals() {
+    assertEquals(3, Integers.requireEquals(3, 3));
+    assertEquals(7, Integers.requireEquals(7, 7));
+    AssertFail.of(() -> Integers.requireEquals(3, 4));
+    AssertFail.of(() -> Integers.requireEquals(3, -3));
+  }
+
+  public void testRequireEqualsMessage() {
+    try {
+      Integers.requireEquals(3, 4);
+      fail();
+    } catch (Exception exception) {
+      assertEquals(exception.getMessage(), "3 != 4");
+    }
+  }
 }

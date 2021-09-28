@@ -4,6 +4,8 @@ package ch.alpine.tensor;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
+import ch.alpine.tensor.ext.Integers;
+
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Parallelize.html">Parallelize</a> */
 public enum Parallelize {
@@ -22,11 +24,9 @@ public enum Parallelize {
    * @param rhs
    * @return lhs.dot(rhs) */
   public static Tensor dot(Tensor lhs, Tensor rhs) {
-    int length = lhs.length();
-    if (length == 0 || lhs.get(0) instanceof Scalar) { // quick hint whether lhs is a vector
-      if (length != rhs.length())
-        throw TensorRuntimeException.of(lhs, rhs);
-      return IntStream.range(0, length).parallel() //
+    if (lhs.length() == 0 || lhs.get(0) instanceof Scalar) { // quick hint whether lhs is a vector
+      return IntStream.range(0, Integers.requireEquals(lhs.length(), rhs.length())) //
+          .parallel() //
           .mapToObj(index -> rhs.get(index).multiply(lhs.Get(index))) //
           .reduce(Tensor::add) //
           .orElse(RealScalar.ZERO);

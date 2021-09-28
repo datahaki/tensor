@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.ext.Integers;
 
 /** Trace of a matrix or tensor along two dimensions with the same size.
  * 
@@ -32,16 +33,13 @@ public enum Trace {
    * @return stream of slices of tensor along dimensions d0 and d1 */
   public static Stream<Tensor> stream(Tensor tensor, int d0, int d1) {
     if (d0 == d1)
-      throw new IllegalArgumentException(d0 + "==" + d1);
+      throw new IllegalArgumentException(d0 + " == " + d1);
     List<Integer> dimensions = Dimensions.of(tensor);
-    int l0 = dimensions.get(d0);
-    int l1 = dimensions.get(d1);
-    if (l0 != l1)
-      throw new IllegalArgumentException(l0 + "!=" + l1);
+    int length = Integers.requireEquals(dimensions.get(d0), dimensions.get(d1));
     Integer[] index = Stream.generate(() -> Tensor.ALL) //
         .limit(Math.max(d0, d1) + 1) //
         .toArray(Integer[]::new);
-    return IntStream.range(0, l0) //
+    return IntStream.range(0, length) //
         .mapToObj(count -> {
           index[d0] = count;
           index[d1] = count;

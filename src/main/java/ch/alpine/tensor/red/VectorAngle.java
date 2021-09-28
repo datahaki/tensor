@@ -8,7 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.sca.ArcCos;
 import ch.alpine.tensor.sca.Clips;
@@ -26,8 +26,7 @@ public enum VectorAngle {
     Scalar nu = Vector2Norm.of(u);
     Scalar nv = Vector2Norm.of(v);
     if (Scalars.isZero(nu) || Scalars.isZero(nv)) {
-      if (u.length() != v.length())
-        throw TensorRuntimeException.of(u, v);
+      Integers.requireEquals(u.length(), v.length());
       return Optional.empty();
     }
     Scalar ratio = ExactTensorQ.of(u) || ExactTensorQ.of(v) //

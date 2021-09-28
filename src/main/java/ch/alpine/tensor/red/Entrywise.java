@@ -10,8 +10,8 @@ import java.util.function.BinaryOperator;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.ext.Integers;
 
 /** Entrywise applies a BinaryOperator<Scalar> across multiple tensors.
  * The tensors are required to have the same dimensions/structure.
@@ -62,8 +62,7 @@ public class Entrywise implements BinaryOperator<Tensor>, Serializable {
   public Tensor apply(Tensor a, Tensor b) {
     if (a instanceof Scalar)
       return binaryOperator.apply((Scalar) a, (Scalar) b);
-    if (a.length() != b.length())
-      throw TensorRuntimeException.of(a, b);
+    Integers.requireEquals(a.length(), b.length());
     Iterator<Tensor> ia = a.iterator();
     Iterator<Tensor> ib = b.iterator();
     List<Tensor> list = new ArrayList<>(a.length());

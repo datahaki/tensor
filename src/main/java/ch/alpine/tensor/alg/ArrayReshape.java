@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.ext.Integers;
 
 /** ArrayReshape is used in {@link Transpose}
  * 
@@ -30,14 +30,12 @@ public enum ArrayReshape {
   public static Tensor of(Stream<? extends Tensor> stream, Integer... size) {
     Tensor transpose = Tensor.of(stream);
     int length = transpose.length();
-    int numel = 1;
+    int numel = size[0];
     for (int index = size.length - 1; 0 < index; --index) {
       numel *= size[index];
       transpose = Partition.of(transpose, size[index]);
     }
-    numel *= size[0];
-    if (length != numel)
-      throw TensorRuntimeException.of(transpose);
+    Integers.requireEquals(length, numel);
     return transpose;
   }
 

@@ -10,6 +10,8 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import ch.alpine.tensor.ext.Integers;
+
 /** reference implementation of the interface Tensor */
 /* package */ class TensorImpl implements Tensor, Serializable {
   private final List<Tensor> list;
@@ -136,8 +138,7 @@ import java.util.stream.Stream;
 
   @Override // from Tensor
   public Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
-    if (fromIndex.size() != dimensions.size())
-      throw new IllegalArgumentException(fromIndex + " " + dimensions);
+    Integers.requireEquals(fromIndex.size(), dimensions.size());
     return fromIndex.isEmpty() //
         ? copy()
         : _block(fromIndex, dimensions);
@@ -192,8 +193,7 @@ import java.util.stream.Stream;
   @Override // from Tensor
   public Tensor dot(Tensor tensor) {
     if (list.isEmpty() || list.get(0) instanceof Scalar) { // quick hint whether this is a vector
-      if (length() != tensor.length()) // <- check is necessary otherwise error might be undetected
-        throw TensorRuntimeException.of(this, tensor); // dimensions mismatch
+      Integers.requireEquals(length(), tensor.length()); // <- check is necessary otherwise error might be undetected
       AtomicInteger atomicInteger = new AtomicInteger();
       return tensor.stream().map(rhs -> rhs.multiply((Scalar) list.get(atomicInteger.getAndIncrement()))) //
           .reduce(Tensor::add).orElse(RealScalar.ZERO);
@@ -203,10 +203,8 @@ import java.util.stream.Stream;
 
   // helper function
   private IntStream _range(TensorImpl impl) {
-    int length = list.size();
-    if (length != impl.list.size()) // <- check is necessary otherwise error might be undetected
-      throw TensorRuntimeException.of(this, impl); // dimensions mismatch
-    return IntStream.range(0, length);
+    // check is necessary otherwise error might be undetected
+    return IntStream.range(0, Integers.requireEquals(list.size(), impl.list.size()));
   }
 
   @Override // from Tensor
