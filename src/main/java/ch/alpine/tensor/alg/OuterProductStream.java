@@ -3,59 +3,59 @@ package ch.alpine.tensor.alg;
 
 import java.util.stream.IntStream;
 
+import ch.alpine.tensor.ext.Integers;
+
 /** utility class for {@link Transpose} */
 /* package */ class OuterProductStream {
   /** @param size
    * @param sigma
-   * @param forward
    * @return */
-  public static IntStream of(Size size, int[] sigma, boolean forward) {
-    return new OuterProductStream(size, sigma, forward).stream();
+  public static IntStream of(Size size, int[] sigma) {
+    return new OuterProductStream(size, sigma).stream();
   }
 
   // ---
-  private final int[] size;
-  private final Size _size;
-  private final int[] sigma;
+  private final int[] dims;
+  private final int[] prod;
   private final int[] index;
   private final int[] direction;
   private final int total;
   // ---
   private int count = 0;
 
-  private OuterProductStream(Size _size, int[] sigma, boolean forward) {
-    this.size = _size.permute(sigma).size();
-    this._size = _size;
-    this.sigma = sigma;
-    int total = 1;
-    index = new int[size.length];
-    for (int c0 = 0; c0 < size.length; ++c0) {
-      index[c0] = 0;
-      total *= size[c0];
-    }
-    this.total = total;
-    direction = IntStream.range(0, size.length) //
-        .map(c0 -> forward ? size.length - c0 - 1 : c0) //
+  private OuterProductStream(Size size, int[] sigma) {
+    dims = size.permute(sigma);
+    prod = new int[dims.length];
+    index = new int[dims.length];
+    for (int c0 = 0; c0 < dims.length; ++c0)
+      prod[sigma[c0]] = size.prod(c0);
+    total = size.total();
+    direction = IntStream.range(0, dims.length) //
+        .map(c0 -> dims.length - c0 - 1) //
         .toArray();
   }
 
   private int seed() {
-    return _size.indexOf(index, sigma);
+    return Integers.requireEquals(dot(index), 0);
   }
 
-  private boolean hasNext(int list) {
+  private boolean hasNext(int value) {
     return count < total;
   }
 
-  private int next(int list) {
+  private int next(int value) {
     for (int c0 : direction) {
       ++index[c0];
-      index[c0] %= size[c0];
+      index[c0] %= dims[c0];
       if (index[c0] != 0)
         break;
     }
     ++count;
-    return _size.indexOf(index, sigma);
+    return dot(index);
+  }
+
+  private int dot(int[] index) {
+    return IntStream.range(0, prod.length).map(i -> prod[i] * index[i]).sum();
   }
 
   private IntStream stream() {

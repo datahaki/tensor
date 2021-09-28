@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.ext.Integers;
 
 /** utility class for {@link Transpose} */
 /* package */ class Size {
@@ -29,36 +30,29 @@ import ch.alpine.tensor.Tensors;
       prod[dmo - (index + 1)] = prod[dmo - index] * size[dmo - index];
   }
 
+  public int total() {
+    return IntStream.of(size).reduce(Math::multiplyExact).getAsInt();
+  }
+
   /** Example:
    * { 2, 3, 4 }.Permute[{ 2, 0, 1 }] == {3, 4, 2}
    * 
    * @param sigma
    * @return */
-  public Size permute(int[] sigma) {
+  public int[] permute(int[] sigma) {
+    Integers.requireEquals(size.length, sigma.length);
     int[] dims = new int[sigma.length];
     for (int index = 0; index < sigma.length; ++index)
       dims[sigma[index]] = size[index];
-    return new Size(dims);
+    return dims;
   }
 
-  public int indexOf(int[] list, int[] sigma) {
-    return IntStream.range(0, prod.length) //
-        .map(index -> prod[index] * list[sigma[index]]) //
-        .sum();
-  }
-
-  public int indexOf(int[] list) {
-    return IntStream.range(0, prod.length) //
-        .map(index -> prod[index] * list[index]) //
-        .sum();
-  }
-
-  public int[] size() {
-    return size;
+  public int prod(int c0) {
+    return prod[c0];
   }
 
   public IntStream stream(int[] sigma) {
-    return OuterProductStream.of(this, sigma, true);
+    return OuterProductStream.of(this, sigma);
   }
 
   @Override // from Object

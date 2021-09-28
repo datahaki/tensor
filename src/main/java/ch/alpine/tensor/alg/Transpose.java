@@ -1,12 +1,17 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.sca.Conjugate;
 
@@ -65,8 +70,7 @@ public enum Transpose {
       return tensor;
     Scalar[] data = tensor.flatten(-1).map(Scalar.class::cast).toArray(Scalar[]::new);
     Size size = Size.of(Dimensions.of(tensor));
-    // indices 0,1,2,... are mapped to location of values in Flatten[tensor]
-    return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma).size());
+    return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma));
   }
 
   /** generalization of {@link #of(Tensor, Integer...)} as function
@@ -82,8 +86,41 @@ public enum Transpose {
   public static Tensor nonArray(Tensor tensor, int... sigma) {
     Tensor _sigma = Tensors.vectorInt(sigma);
     if (Sort.of(_sigma).equals(Range.of(0, sigma.length))) // assert that sigma is a permutation
-      return Array.of(list -> tensor.get(StaticHelper.reorder(list, sigma)), //
-          StaticHelper.inverse(Dimensions.of(tensor), _sigma));
+      return Array.of(list -> tensor.get(reorder(list, sigma)), inverse(Dimensions.of(tensor), sigma));
     throw TensorRuntimeException.of(_sigma); // sigma does not encode a permutation
+  }
+
+  /** @param list
+   * @param sigma
+   * @return */
+  @PackageTestAccess
+  static <T> List<T> reorder(List<T> list, int[] sigma) {
+    return Arrays.stream(sigma).mapToObj(list::get).collect(Collectors.toList());
+  }
+
+  /** same as function above but implemented for different input and output type
+   * 
+   * @param size
+   * @param sigma
+   * @return */
+  @PackageTestAccess
+  static <T> List<T> inverse(List<T> size, int[] sigma) {
+    return reorder(size, inverse(sigma)); //
+  }
+
+  /** Hint: function is a special case of permute with size==Range
+   * 
+   * <pre>
+   * inverse(inverse(x)) == x
+   * </pre>
+   * 
+   * @param sigma
+   * @return inverse({0,1,2,...}, sigma) */
+  @PackageTestAccess
+  static int[] inverse(int[] sigma) {
+    int[] dims = new int[sigma.length];
+    for (int index = 0; index < sigma.length; ++index)
+      dims[sigma[index]] = index;
+    return dims;
   }
 }
