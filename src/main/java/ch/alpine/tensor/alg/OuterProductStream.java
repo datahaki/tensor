@@ -1,31 +1,34 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 /** utility class for {@link Transpose} */
 /* package */ class OuterProductStream {
   /** @param size
-   * @param forward */
-  public static Stream<List<Integer>> of(int[] size, boolean forward) {
-    return new OuterProductStream(size, forward).stream();
+   * @param sigma
+   * @param forward
+   * @return */
+  public static IntStream of(Size size, int[] sigma, boolean forward) {
+    return new OuterProductStream(size, sigma, forward).stream();
   }
 
   // ---
-  private final Integer[] index;
   private final int[] size;
+  private final Size _size;
+  private final int[] sigma;
+  private final int[] index;
   private final int[] direction;
   private final int total;
   // ---
   private int count = 0;
 
-  private OuterProductStream(int[] size, boolean forward) {
-    this.size = size;
+  private OuterProductStream(Size _size, int[] sigma, boolean forward) {
+    this.size = _size.permute(sigma).size();
+    this._size = _size;
+    this.sigma = sigma;
     int total = 1;
-    index = new Integer[size.length];
+    index = new int[size.length];
     for (int c0 = 0; c0 < size.length; ++c0) {
       index[c0] = 0;
       total *= size[c0];
@@ -36,15 +39,15 @@ import java.util.stream.Stream;
         .toArray();
   }
 
-  private List<Integer> seed() {
-    return Arrays.asList(index);
+  private int seed() {
+    return _size.indexOf(index, sigma);
   }
 
-  private boolean hasNext(List<Integer> list) {
+  private boolean hasNext(int list) {
     return count < total;
   }
 
-  private List<Integer> next(List<Integer> list) {
+  private int next(int list) {
     for (int c0 : direction) {
       ++index[c0];
       index[c0] %= size[c0];
@@ -52,11 +55,10 @@ import java.util.stream.Stream;
         break;
     }
     ++count;
-    // careful: one mutable reference is used for all elements in stream
-    return Arrays.asList(index);
+    return _size.indexOf(index, sigma);
   }
 
-  private Stream<List<Integer>> stream() {
-    return Stream.iterate(seed(), this::hasNext, this::next);
+  private IntStream stream() {
+    return IntStream.iterate(seed(), this::hasNext, this::next);
   }
 }

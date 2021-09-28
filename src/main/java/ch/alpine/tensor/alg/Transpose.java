@@ -63,10 +63,10 @@ public enum Transpose {
       throw TensorRuntimeException.of(tensor);
     if (ScalarQ.of(tensor))
       return tensor;
-    Size size = Size.of(Dimensions.of(tensor));
-    Size perm = size.permute(sigma);
     Scalar[] data = tensor.flatten(-1).map(Scalar.class::cast).toArray(Scalar[]::new);
-    return ArrayReshape.of(perm.stream().map(list -> data[size.indexOf(list, sigma)]), perm.size());
+    Size size = Size.of(Dimensions.of(tensor));
+    // indices 0,1,2,... are mapped to location of values in Flatten[tensor]
+    return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma).size());
   }
 
   /** generalization of {@link #of(Tensor, Integer...)} as function

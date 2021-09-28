@@ -3,7 +3,6 @@ package ch.alpine.tensor.alg;
 
 import java.util.List;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensors;
 
@@ -12,7 +11,7 @@ import ch.alpine.tensor.Tensors;
   /** @param list for instance Dimensions[tensor]
    * @return */
   public static Size of(List<Integer> list) {
-    return new Size(list.stream().mapToInt(i -> i).toArray());
+    return new Size(list.stream().mapToInt(Integer::intValue).toArray());
   }
 
   // ---
@@ -42,9 +41,15 @@ import ch.alpine.tensor.Tensors;
     return new Size(dims);
   }
 
-  public int indexOf(List<Integer> list, int[] sigma) {
+  public int indexOf(int[] list, int[] sigma) {
     return IntStream.range(0, prod.length) //
-        .map(index -> prod[index] * list.get(sigma[index])) //
+        .map(index -> prod[index] * list[sigma[index]]) //
+        .sum();
+  }
+
+  public int indexOf(int[] list) {
+    return IntStream.range(0, prod.length) //
+        .map(index -> prod[index] * list[index]) //
         .sum();
   }
 
@@ -52,8 +57,8 @@ import ch.alpine.tensor.Tensors;
     return size;
   }
 
-  public Stream<List<Integer>> stream() {
-    return OuterProductStream.of(size, true);
+  public IntStream stream(int[] sigma) {
+    return OuterProductStream.of(this, sigma, true);
   }
 
   @Override // from Object
