@@ -110,4 +110,18 @@ public class IntegersTest extends TestCase {
       assertEquals(exception.getMessage(), "3 != 4");
     }
   }
+
+  public void testIsPermutation() {
+    assertTrue(Integers.isPermutation(new int[] {}));
+    assertTrue(Integers.isPermutation(new int[] { 2, 0, 1 }));
+    assertTrue(Integers.isPermutation(new int[] { 2, 3, 1, 0 }));
+    assertFalse(Integers.isPermutation(new int[] { 2, 3, 1 }));
+    assertFalse(Integers.isPermutation(new int[] { 0, 2 }));
+    assertFalse(Integers.isPermutation(new int[] { -1, 0 }));
+  }
+
+  public void testRequirePermutation() {
+    Integers.requirePermutation(new int[] { 0, 2, 1 });
+    AssertFail.of(() -> Integers.requirePermutation(new int[] { 2, 3 }));
+  }
 }

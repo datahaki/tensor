@@ -40,6 +40,7 @@ import ch.alpine.tensor.ext.Integers;
    * @param sigma
    * @return */
   public int[] permute(int[] sigma) {
+    Integers.requirePermutation(sigma);
     Integers.requireEquals(size.length, sigma.length);
     int[] dims = new int[sigma.length];
     for (int index = 0; index < sigma.length; ++index)

@@ -11,6 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.sca.Conjugate;
@@ -84,10 +85,7 @@ public enum Transpose {
    * @return
    * @throws Exception */
   public static Tensor nonArray(Tensor tensor, int... sigma) {
-    Tensor _sigma = Tensors.vectorInt(sigma);
-    if (Sort.of(_sigma).equals(Range.of(0, sigma.length))) // assert that sigma is a permutation
-      return Array.of(list -> tensor.get(reorder(list, sigma)), inverse(Dimensions.of(tensor), sigma));
-    throw TensorRuntimeException.of(_sigma); // sigma does not encode a permutation
+    return Array.of(list -> tensor.get(reorder(list, sigma)), inverse(Dimensions.of(tensor), sigma));
   }
 
   /** @param list
@@ -98,10 +96,8 @@ public enum Transpose {
     return Arrays.stream(sigma).mapToObj(list::get).collect(Collectors.toList());
   }
 
-  /** same as function above but implemented for different input and output type
-   * 
-   * @param size
-   * @param sigma
+  /** @param size
+   * @param sigma permutation
    * @return */
   @PackageTestAccess
   static <T> List<T> inverse(List<T> size, int[] sigma) {
@@ -114,10 +110,11 @@ public enum Transpose {
    * inverse(inverse(x)) == x
    * </pre>
    * 
-   * @param sigma
+   * @param sigma permutation
    * @return inverse({0,1,2,...}, sigma) */
   @PackageTestAccess
   static int[] inverse(int[] sigma) {
+    Integers.requirePermutation(sigma);
     int[] dims = new int[sigma.length];
     for (int index = 0; index < sigma.length; ++index)
       dims[sigma[index]] = index;

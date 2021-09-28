@@ -13,6 +13,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NegativeBinomialDistribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TransposeTest extends TestCase {
@@ -110,6 +111,26 @@ public class TransposeTest extends TestCase {
     assertEquals(trans, array);
   }
 
+  public void testNonPermFail1() {
+    Tensor matrix = Array.zeros(2, 3);
+    AssertFail.of(() -> Transpose.of(matrix, 0, 0));
+    AssertFail.of(() -> Transpose.of(matrix, 1, 1));
+  }
+
+  public void testNonPermFail2() {
+    Tensor matrix = Array.zeros(3, 2);
+    AssertFail.of(() -> Transpose.of(matrix, 0, 0));
+    AssertFail.of(() -> Transpose.of(matrix, 1, 1));
+  }
+
+  public void testNonPermFail3() {
+    Tensor matrix = Array.zeros(3, 2, 1);
+    AssertFail.of(() -> Transpose.of(matrix, 0, 1, 0));
+    AssertFail.of(() -> Transpose.of(matrix, 1, 0, 1));
+    AssertFail.of(() -> Transpose.of(matrix, 0, 1, 1));
+    AssertFail.of(() -> Transpose.of(matrix, 2, 2, 1));
+  }
+
   public void testIncomplete() {
     Tensor randn = RandomVariate.of(NormalDistribution.standard(), 2, 5, 4, 3);
     Tensor array = Transpose.nonArray(randn, 1, 2, 0);
@@ -121,7 +142,7 @@ public class TransposeTest extends TestCase {
     assertEquals(result, Tensors.empty());
   }
 
-  public void testSigle() {
+  public void testSingle() {
     Tensor randn = RandomVariate.of(NormalDistribution.standard(), 2, 5, 4, 3);
     Tensor array = Transpose.nonArray(randn, 0);
     assertEquals(Transpose.of(randn, 0, 1, 2, 3), array);

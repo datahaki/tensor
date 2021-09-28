@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import java.util.Arrays;
+
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Tensors;
+
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Integers.html">Integers</a> */
 public enum Integers {
@@ -49,5 +54,21 @@ public enum Integers {
    * @throws Exception if given value is negative or zero */
   public static boolean isPowerOf2(int value) {
     return 0 == (requirePositive(value) & (value - 1));
+  }
+
+  /** @param sigma
+   * @return whether sigma encodes a permutation for instance {2, 0, 1, 3} */
+  public static boolean isPermutation(int[] sigma) {
+    return sigma.length == Arrays.stream(sigma) //
+        .filter(index -> 0 <= index && index < sigma.length).distinct().count();
+  }
+
+  /** @param sigma
+   * @return
+   * @throws Exception if sigma does not encode a permutation */
+  public static int[] requirePermutation(int[] sigma) {
+    if (isPermutation(sigma))
+      return sigma;
+    throw TensorRuntimeException.of(Tensors.vectorInt(sigma));
   }
 }
