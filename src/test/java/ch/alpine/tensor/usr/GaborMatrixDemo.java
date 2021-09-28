@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.usr;
 
 import java.io.IOException;
 
@@ -10,6 +10,7 @@ import ch.alpine.tensor.ext.HomeDirectory;
 import ch.alpine.tensor.img.ArrayPlot;
 import ch.alpine.tensor.img.ColorDataGradients;
 import ch.alpine.tensor.io.Export;
+import ch.alpine.tensor.mat.GaborMatrix;
 
 /* package */ enum GaborMatrixDemo {
   ;

@@ -13,7 +13,7 @@ public enum TestFile {
    * from a method "testColor()" results in a return value of
    * new File("/home/username/AnimatedGifWriterTest_testColor.extension")
    * 
-   * @param extension
+   * @param extension for example "jpg"
    * @return file that does not exist
    * @throws Exception if file already exists */
   public static File withExtension(String extension) {

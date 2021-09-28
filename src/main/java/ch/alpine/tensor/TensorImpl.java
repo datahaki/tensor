@@ -38,14 +38,10 @@ import ch.alpine.tensor.ext.Integers;
 
   @Override // from Tensor
   public Tensor get(List<Integer> index) {
-    return index.isEmpty() //
-        ? copy()
-        : _get(index);
-  }
-
-  private Tensor _get(List<Integer> index) {
-    List<Integer> sublist = index.subList(1, index.size());
+    if (index.isEmpty())
+      return copy();
     int head = index.get(0);
+    List<Integer> sublist = index.subList(1, index.size());
     return head == ALL //
         ? Tensor.of(list.stream().map(tensor -> tensor.get(sublist)))
         : list.get(head).get(sublist);
@@ -66,8 +62,10 @@ import ch.alpine.tensor.ext.Integers;
     _set(tensor, Arrays.asList(index));
   }
 
-  // override in UnmodifiableTensor
-  public void _set(Tensor tensor, List<Integer> index) {
+  /** @param tensor
+   * @param index
+   * @see UnmodifiableTensor */
+  protected void _set(Tensor tensor, List<Integer> index) {
     int head = index.get(0);
     if (index.size() == 1)
       if (head == ALL) {
@@ -90,8 +88,11 @@ import ch.alpine.tensor.ext.Integers;
     _set(function, Arrays.asList(index));
   }
 
+  /** @param function
+   * @param index
+   * @see UnmodifiableTensor */
   @SuppressWarnings("unchecked")
-  public <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
+  protected <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
     int head = index.get(0);
     if (index.size() == 1)
       if (head == ALL)
@@ -146,13 +147,15 @@ import ch.alpine.tensor.ext.Integers;
 
   /** @param fromIndex non-empty
    * @param dimensions of same size as fromIndex
-   * @return */
-  public Tensor _block(List<Integer> fromIndex, List<Integer> dimensions) {
-    int toIndex = fromIndex.get(0) + dimensions.get(0);
+   * @return
+   * @see ViewTensor */
+  protected Tensor _block(List<Integer> fromIndex, List<Integer> dimensions) {
+    int beg = fromIndex.get(0);
+    int end = beg + dimensions.get(0);
     if (fromIndex.size() == 1)
-      return extract(fromIndex.get(0), toIndex);
+      return extract(beg, end);
     int size = fromIndex.size();
-    return Tensor.of(list.subList(fromIndex.get(0), toIndex).stream() //
+    return Tensor.of(list.subList(beg, end).stream() //
         .map(TensorImpl.class::cast) //
         .map(impl -> impl._block(fromIndex.subList(1, size), dimensions.subList(1, size))));
   }
@@ -214,7 +217,7 @@ import ch.alpine.tensor.ext.Integers;
 
   /** @return list
    * @see ViewTensor */
-  public List<Tensor> list() {
+  protected List<Tensor> list() {
     return list;
   }
 

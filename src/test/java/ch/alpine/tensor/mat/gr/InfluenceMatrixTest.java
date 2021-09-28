@@ -8,6 +8,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.LeastSquares;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -92,6 +93,12 @@ public class InfluenceMatrixTest extends TestCase {
       // Chop._08.requireClose(w2.dot(x),w2);
       // Chop._08.requireClose(w, x.dot(w).add(w.dot(x)));
     }
+  }
+
+  public void testBicChallenge() {
+    Tensor matrix = ResourceData.of("/mat/bic_fail.csv");
+    InfluenceMatrix influenceMatrix = InfluenceMatrix.of(matrix);
+    influenceMatrix.leverages();
   }
 
   public void testNullFail() {

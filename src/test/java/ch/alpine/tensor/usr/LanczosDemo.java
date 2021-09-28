@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.itp;
+package ch.alpine.tensor.usr;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,6 +11,8 @@ import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.ext.HomeDirectory;
 import ch.alpine.tensor.io.Export;
 import ch.alpine.tensor.io.Import;
+import ch.alpine.tensor.itp.Interpolation;
+import ch.alpine.tensor.itp.LanczosInterpolation;
 import ch.alpine.tensor.sca.Clips;
 
 /* package */ enum LanczosDemo {

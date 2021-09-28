@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
@@ -44,18 +43,16 @@ public enum IdentityMatrix {
    * @return
    * @throws Exception if given matrix is not a square matrix */
   public static Tensor of(Tensor matrix) {
-    if (matrix.length() == Unprotect.dimension1(matrix)) {
-      AtomicInteger i = new AtomicInteger();
-      return Tensor.of(matrix.stream().map(row -> {
-        int index = i.getAndIncrement();
-        AtomicInteger j = new AtomicInteger();
-        return Tensor.of(row.stream() //
-            .map(Scalar.class::cast) //
-            .map(scalar -> j.getAndIncrement() == index //
-                ? scalar.one()
-                : scalar.zero()));
-      }));
-    }
-    throw TensorRuntimeException.of(matrix);
+    Integers.requireEquals(matrix.length(), Unprotect.dimension1(matrix));
+    AtomicInteger atomic_i = new AtomicInteger();
+    return Tensor.of(matrix.stream().map(row -> {
+      int index = atomic_i.getAndIncrement();
+      AtomicInteger atomic_j = new AtomicInteger();
+      return Tensor.of(row.stream() //
+          .map(Scalar.class::cast) //
+          .map(scalar -> atomic_j.getAndIncrement() == index //
+              ? scalar.one()
+              : scalar.zero()));
+    }));
   }
 }

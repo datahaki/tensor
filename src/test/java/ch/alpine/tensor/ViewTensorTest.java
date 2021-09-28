@@ -41,4 +41,8 @@ public class ViewTensorTest extends TestCase {
     for (Tensor tensor : Tensors.matrixInt(new int[][] { { 1, 2 }, { 3, 4, 5 } }).unmodifiable())
       AssertFail.of(() -> Unprotect.references(tensor));
   }
+
+  public void testNonPublic() {
+    assertEquals(ViewTensor.class.getModifiers(), 0);
+  }
 }

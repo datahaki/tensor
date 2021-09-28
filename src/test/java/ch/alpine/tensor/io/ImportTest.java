@@ -14,7 +14,6 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.ext.HomeDirectory;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
@@ -99,19 +98,13 @@ public class ImportTest extends TestCase {
   }
 
   public void testFolderCsvClosed() throws IOException {
-    File dir = HomeDirectory.file("tensorTest" + System.currentTimeMillis());
-    assertFalse(dir.exists());
-    dir.mkdir();
-    assertTrue(dir.isDirectory());
-    File file = new File(dir, "tensorTest" + ImportTest.class.getSimpleName() + ".csv");
-    assertFalse(file.exists());
+    File file = TestFile.withExtension("csv");
     Export.of(file, Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}}"));
     assertTrue(file.isFile());
     assertTrue(12 <= file.length());
     Tensor table = Import.of(file);
     assertEquals(Dimensions.of(table), Arrays.asList(3, 2));
     assertTrue(file.delete());
-    assertTrue(dir.delete());
   }
 
   public void testPng() throws Exception {

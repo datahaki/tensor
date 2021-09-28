@@ -9,7 +9,7 @@ public enum Integers {
    * @return value
    * @throws Exception if given value is negative */
   public static int requirePositiveOrZero(int value) {
-    if (0 <= value)
+    if (0 <= value) // non-negative, greater or equals zero
       return value;
     throw new IllegalArgumentException(Integer.toString(value));
   }
@@ -18,7 +18,7 @@ public enum Integers {
    * @return value
    * @throws Exception if given value is negative or zero */
   public static int requirePositive(int value) {
-    if (0 < value)
+    if (0 < value) // strictly positive
       return value;
     throw new IllegalArgumentException(Integer.toString(value));
   }
@@ -48,8 +48,6 @@ public enum Integers {
    * @return true if value is a power of 2, e.g. 1, 2, 4, 8, 16, etc.
    * @throws Exception if given value is negative or zero */
   public static boolean isPowerOf2(int value) {
-    if (0 < value)
-      return 0 == (value & (value - 1));
-    throw new IllegalArgumentException(Integer.toString(value));
+    return 0 == (requirePositive(value) & (value - 1));
   }
 }

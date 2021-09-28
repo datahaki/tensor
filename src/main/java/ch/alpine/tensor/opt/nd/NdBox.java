@@ -12,6 +12,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -33,11 +34,9 @@ public class NdBox implements Serializable {
    * if vectors are different in length
    * @see Entrywise */
   public static NdBox of(Tensor min, Tensor max) {
-    if (min.length() == max.length())
-      return new NdBox(IntStream.range(0, min.length()) //
-          .mapToObj(index -> Clips.interval(min.Get(index), max.Get(index))) //
-          .collect(Collectors.toList()));
-    throw TensorRuntimeException.of(min, max);
+    return new NdBox(IntStream.range(0, Integers.requireEquals(min.length(), max.length())) //
+        .mapToObj(index -> Clips.interval(min.Get(index), max.Get(index))) //
+        .collect(Collectors.toList()));
   }
 
   // ---
@@ -84,12 +83,10 @@ public class NdBox implements Serializable {
   /** @param vector
    * @return whether given vector is inside this bounding box */
   public boolean isInside(Tensor vector) {
-    if (vector.length() == list.size()) {
-      AtomicInteger atomicInteger = new AtomicInteger();
-      return list.stream() //
-          .allMatch(clip -> clip.isInside(vector.Get(atomicInteger.getAndIncrement())));
-    }
-    throw TensorRuntimeException.of(vector);
+    Integers.requireEquals(vector.length(), list.size());
+    AtomicInteger atomicInteger = new AtomicInteger();
+    return list.stream() //
+        .allMatch(clip -> clip.isInside(vector.Get(atomicInteger.getAndIncrement())));
   }
 
   /** @param vector

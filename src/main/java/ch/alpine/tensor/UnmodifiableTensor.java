@@ -30,12 +30,12 @@ import java.util.stream.Stream;
   }
 
   @Override // from TensorImpl
-  public void _set(Tensor tensor, List<Integer> index) {
+  protected void _set(Tensor tensor, List<Integer> index) {
     throw new UnsupportedOperationException("unmodifiable");
   }
 
   @Override // from TensorImpl
-  public <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
+  protected <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
     throw new UnsupportedOperationException("unmodifiable");
   }
 
@@ -67,7 +67,7 @@ import java.util.stream.Stream;
   }
 
   @Override // from TensorImpl
-  public List<Tensor> list() {
+  protected List<Tensor> list() {
     throw new UnsupportedOperationException("unmodifiable");
   }
 }

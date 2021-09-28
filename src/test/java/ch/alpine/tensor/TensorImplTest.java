@@ -81,4 +81,8 @@ public class TensorImplTest extends TestCase {
     TensorImpl tensorImpl = (TensorImpl) tensor;
     assertTrue(tensorImpl.list() instanceof ArrayList); // used in TensorParser
   }
+
+  public void testNonPublic() {
+    assertEquals(TensorImpl.class.getModifiers(), 0);
+  }
 }

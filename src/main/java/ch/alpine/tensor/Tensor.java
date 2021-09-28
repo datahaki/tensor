@@ -90,7 +90,8 @@ public interface Tensor extends Iterable<Tensor> {
   Tensor get(Integer... index);
 
   /** @param index
-   * @return copy of this[index[0], index[1], ..., All] */
+   * @return copy of this[index[0], index[1], ..., All]
+   * @see #get(Integer...) */
   Tensor get(List<Integer> index);
 
   /** function is identical to

@@ -1,12 +1,15 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import java.util.Random;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.MatrixQ;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.ResourceData;
@@ -80,13 +83,20 @@ public class BenIsraelCohenTest extends TestCase {
   }
 
   public void testReal() {
+    Random random = new Random(3);
     Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
-    Tensor p1 = RandomVariate.of(distribution, 8, 3);
-    Tensor p2 = RandomVariate.of(distribution, 3, 4);
+    Tensor p1 = RandomVariate.of(distribution, random, 8, 3);
+    Tensor p2 = RandomVariate.of(distribution, random, 3, 4);
     Tensor matrix = p1.dot(p2);
     Tensor refine = BenIsraelCohen.of(matrix);
     Chop._09.requireClose(PseudoInverse.of(matrix), refine);
     InfluenceMatrixQ.require(refine.dot(matrix));
+  }
+
+  public void testExceedIters() {
+    Tensor matrix = ResourceData.of("/mat/bic_fail.csv");
+    MatrixQ.require(matrix);
+    AssertFail.of(() -> BenIsraelCohen.of(matrix));
   }
 
   public void testComplexFullRank() {

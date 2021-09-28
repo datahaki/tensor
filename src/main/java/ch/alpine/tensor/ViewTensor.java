@@ -33,9 +33,10 @@ import ch.alpine.tensor.itp.LinearInterpolation;
   }
 
   @Override // from TensorImpl
-  public Tensor _block(List<Integer> fromIndex, List<Integer> dimensions) {
-    int loIndex = fromIndex.get(0);
-    List<Tensor> subList = list().subList(loIndex, loIndex + dimensions.get(0));
+  protected Tensor _block(List<Integer> fromIndex, List<Integer> dimensions) {
+    int beg = fromIndex.get(0);
+    int end = beg + dimensions.get(0);
+    List<Tensor> subList = list().subList(beg, end);
     int size = fromIndex.size();
     return size == 1 //
         ? new ViewTensor(subList)
