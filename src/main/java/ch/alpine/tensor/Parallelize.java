@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor;
 
-import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
@@ -23,17 +22,16 @@ public enum Parallelize {
    * @param rhs
    * @return lhs.dot(rhs) */
   public static Tensor dot(Tensor lhs, Tensor rhs) {
-    List<Tensor> list = ((TensorImpl) lhs).list();
-    if (list.isEmpty() || list.get(0) instanceof Scalar) { // quick hint whether this is a vector
-      TensorImpl impl = (TensorImpl) rhs;
-      int length = lhs.length();
+    int length = lhs.length();
+    if (length == 0 || lhs.get(0) instanceof Scalar) { // quick hint whether lhs is a vector
       if (length != rhs.length())
         throw TensorRuntimeException.of(lhs, rhs);
       return IntStream.range(0, length).parallel() //
-          .mapToObj(index -> impl.list().get(index).multiply((Scalar) list.get(index))) //
-          .reduce(Tensor::add).orElse(RealScalar.ZERO);
+          .mapToObj(index -> rhs.get(index).multiply(lhs.Get(index))) //
+          .reduce(Tensor::add) //
+          .orElse(RealScalar.ZERO);
     }
-    return Tensor.of(list.stream().parallel().map(entry -> entry.dot(rhs)));
+    return Tensor.of(lhs.stream().parallel().map(entry -> entry.dot(rhs)));
   }
 
   /** parallel matrix construction, special case of

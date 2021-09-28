@@ -237,9 +237,6 @@ import java.util.stream.Stream;
   }
 
   /** @return list
-   * @see UnmodifiableTensor
-   * @see Parallelize
-   * @see Unprotect
    * @see ViewTensor */
   public List<Tensor> list() {
     return list;

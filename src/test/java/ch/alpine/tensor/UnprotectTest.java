@@ -80,16 +80,23 @@ public class UnprotectTest extends TestCase {
     AssertFail.of(() -> Unprotect.dimension1(tensor));
   }
 
+  public void testDimension1Vector() {
+    Tensor vector = Tensors.vector(1, 2, 3);
+    assertEquals(Unprotect.dimension1(vector), Unprotect.dimension1Hint(vector));
+  }
+
+  public void testDimension1Empty() {
+    int dim1 = Unprotect.dimension1(Tensors.empty());
+    assertEquals(dim1, Scalar.LENGTH);
+    assertEquals(dim1, Unprotect.dimension1Hint(Tensors.empty()));
+  }
+
   public void testWithoutUnit() {
     assertEquals(Unprotect.withoutUnit(Pi.VALUE), Pi.VALUE);
     assertEquals(Unprotect.withoutUnit(Quantity.of(3, "h*km")), RealScalar.of(3));
     assertEquals(Unprotect.withoutUnit(Quantity.of(ComplexScalar.I, "h*km")), ComplexScalar.I);
     assertEquals(Unprotect.withoutUnit(StringScalar.of("abd123")), StringScalar.of("abd123"));
     AssertFail.of(() -> Unprotect.withoutUnit(null));
-  }
-
-  public void testFailEmpty() {
-    AssertFail.of(() -> Unprotect.dimension1(Tensors.empty()));
   }
 
   public void testFail1() {

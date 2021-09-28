@@ -46,24 +46,28 @@ import java.util.stream.Stream;
 
   @Override // from TensorImpl
   public Stream<Tensor> stream() {
-    return list().stream().map(Tensor::unmodifiable);
+    return super.stream().map(Tensor::unmodifiable);
   }
 
   @Override // from TensorImpl
   public Iterator<Tensor> iterator() {
-    // remove() throws an UnsupportedOperationException
+    Iterator<Tensor> iterator = super.iterator();
     return new Iterator<>() {
-      int index = 0;
-
       @Override
       public boolean hasNext() {
-        return index < list().size();
+        return iterator.hasNext();
       }
 
       @Override
       public Tensor next() {
-        return list().get(index++).unmodifiable();
+        return iterator.next().unmodifiable();
       }
+      // default implementation of Iterator#remove() throws an UnsupportedOperationException
     };
+  }
+
+  @Override // from TensorImpl
+  public List<Tensor> list() {
+    throw new UnsupportedOperationException("unmodifiable");
   }
 }

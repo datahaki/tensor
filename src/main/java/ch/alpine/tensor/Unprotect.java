@@ -39,7 +39,7 @@ public enum Unprotect {
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param tensor
-   * @return
+   * @return Scalar.LENGTH if given tensor is a vector, or else Dimensions[tensor].get(1)
    * @throws Exception if tensor is a scalar, or first level entries do not have regular length */
   public static int dimension1(Tensor tensor) {
     int length = dimension1Hint(tensor);
@@ -51,10 +51,11 @@ public enum Unprotect {
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param tensor
-   * @return
+   * @return Scalar.LENGTH if given tensor is a vector, or else estimate of Dimensions[tensor].get(1)
+   * based on first entry of tensor
    * @throws Exception if tensor is a scalar */
   public static int dimension1Hint(Tensor tensor) {
-    return (((TensorImpl) tensor).list()).get(0).length();
+    return tensor.stream().findFirst().map(Tensor::length).orElse(Scalar.LENGTH);
   }
 
   // ---
@@ -67,8 +68,6 @@ public enum Unprotect {
    * for access by reference
    * @throws Exception if given tensor is unmodifiable, or an instance of {@link Scalar} */
   public static Tensor references(Tensor tensor) {
-    if (tensor instanceof UnmodifiableTensor)
-      throw TensorRuntimeException.of(tensor);
     return ViewTensor.wrap(tensor);
   }
 

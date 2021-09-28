@@ -15,7 +15,7 @@ import ch.alpine.tensor.itp.LinearInterpolation;
  * Within the tensor library, ViewTensor is used to speed up the computations in
  * {@link LinearInterpolation}, and {@link ListCorrelate}. */
 /* package */ class ViewTensor extends TensorImpl {
-  /** @param tensor
+  /** @param tensor guaranteed to not be in instance of UnmodifiableTensor
    * @return */
   public static TensorImpl wrap(Tensor tensor) {
     return new ViewTensor(((TensorImpl) tensor).list());
