@@ -13,7 +13,7 @@ import junit.framework.TestCase;
 
 public class StaticHelperTest extends TestCase {
   public void testIdentity() {
-    int[] permute = StaticHelper.inverse(new int[] { 2, 3, 4 }, new int[] { 0, 1, 2 });
+    int[] permute = Size.of(Arrays.asList(2, 3, 4)).permute(new int[] { 0, 1, 2 }).size();
     assertEquals(permute[0], 2);
     assertEquals(permute[1], 3);
     assertEquals(permute[2], 4);
@@ -30,7 +30,7 @@ public class StaticHelperTest extends TestCase {
     int[] src = new int[] { 2, 0, 3, 4, 1 };
     int[] sigma = StaticHelper.inverse(src);
     int[] size = new int[] { 4, 1, 0, 3, 2 };
-    int[] result = StaticHelper.inverse(size, sigma);
+    int[] result = Size.of(IntStream.of(size).boxed().collect(Collectors.toList())).permute(sigma).size();
     // System.out.println(Tensors.vectorInt(result));
     int[] value = new int[src.length];
     for (int index = 0; index < src.length; ++index)
@@ -45,14 +45,15 @@ public class StaticHelperTest extends TestCase {
       int[] src = RandomPermutation.ofLength(n);
       int[] sigma = StaticHelper.inverse(src);
       int[] size = RandomPermutation.ofLength(n);
-      int[] result = StaticHelper.inverse(size, sigma);
-      List<Integer> value = StaticHelper.reorder(IntStream.of(size).boxed().collect(Collectors.toList()), src);
+      List<Integer> list = IntStream.of(size).boxed().collect(Collectors.toList());
+      int[] result = Size.of(list).permute(sigma).size();
+      List<Integer> value = StaticHelper.reorder(list, src);
       assertEquals(Tensors.vectorInt(result), Tensors.vector(value));
     }
   }
 
   public void testRotate() {
-    int[] permute = StaticHelper.inverse(new int[] { 2, 3, 4 }, new int[] { 2, 0, 1 });
+    int[] permute = Size.of(Arrays.asList(2, 3, 4)).permute(new int[] { 2, 0, 1 }).size();
     assertEquals(permute[0], 3);
     assertEquals(permute[1], 4);
     assertEquals(permute[2], 2);

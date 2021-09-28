@@ -1,10 +1,6 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.IntStream;
-
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
@@ -63,22 +59,14 @@ public enum Transpose {
    * @param sigma is a permutation with sigma.length == rank of tensor
    * @return */
   public static Tensor of(Tensor tensor, int... sigma) {
-    if (ScalarQ.of(tensor) && sigma.length == 0)
-      return tensor; // tensor is a scalar
     if (!ArrayQ.ofRank(tensor, sigma.length))
       throw TensorRuntimeException.of(tensor);
-    List<Integer> dims = Dimensions.of(tensor);
-    int[] size = new int[dims.size()];
-    IntStream.range(0, size.length).forEach(index -> size[index] = dims.get(index));
-    Size mySize = Size.of(size);
-    Size tensorSize = mySize.permute(sigma);
-    Tensor data = Tensor.of(tensor.flatten(-1));
-    List<Tensor> list = new LinkedList<>(); // could preallocate
-    for (MultiIndex src : tensorSize)
-      list.add(data.get(mySize.indexOf(src.size(), sigma)));
-    Integer[] tsize = new Integer[sigma.length]; // int[] to Integer[]
-    IntStream.range(0, sigma.length).forEach(index -> tsize[index] = tensorSize.size(index));
-    return ArrayReshape.of(list.stream(), tsize);
+    if (ScalarQ.of(tensor))
+      return tensor;
+    Size size = Size.of(Dimensions.of(tensor));
+    Size perm = size.permute(sigma);
+    Scalar[] data = tensor.flatten(-1).map(Scalar.class::cast).toArray(Scalar[]::new);
+    return ArrayReshape.of(perm.stream().map(list -> data[size.indexOf(list, sigma)]), perm.size());
   }
 
   /** generalization of {@link #of(Tensor, Integer...)} as function

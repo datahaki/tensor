@@ -31,6 +31,13 @@ public class QuaternionImplTest extends TestCase {
     AssertFail.of(() -> quaternion.xyz().set(RealScalar.ONE, 1));
   }
 
+  public void testPlusReal() {
+    Quaternion quaternion = Quaternion.of(3, 1, 2, 5);
+    Scalar real = RealScalar.of(4);
+    assertEquals(quaternion.add(real), Quaternion.of(7, 1, 2, 5));
+    assertEquals(real.add(quaternion), Quaternion.of(7, 1, 2, 5));
+  }
+
   public void testPower2() {
     Scalar quaternion = Quaternion.of(1, 3, -2, 2);
     Scalar q2 = Power.of(quaternion, RealScalar.of(2));
