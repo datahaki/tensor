@@ -13,8 +13,9 @@ import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SizeTest extends TestCase {
-  public void testIndexOf() {
-    Size.of(Arrays.asList(4, 2, 3));
+  public void testTotal() {
+    assertEquals(Size.of(Arrays.asList(4, 2, 3)).total(), 24);
+    assertEquals(Size.of(Arrays.asList(3, 5, 7)).total(), 3 * 5 * 7);
   }
 
   public void testString() {

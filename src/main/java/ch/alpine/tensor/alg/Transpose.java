@@ -65,11 +65,9 @@ public enum Transpose {
    * @param sigma is a permutation with sigma.length == rank of tensor
    * @return */
   public static Tensor of(Tensor tensor, int... sigma) {
-    if (!ArrayQ.ofRank(tensor, sigma.length))
-      throw TensorRuntimeException.of(tensor);
-    if (ScalarQ.of(tensor))
+    if (ScalarQ.of(tensor) && sigma.length == 0)
       return tensor;
-    Scalar[] data = tensor.flatten(-1).map(Scalar.class::cast).toArray(Scalar[]::new);
+    Scalar[] data = tensor.flatten(sigma.length - 1).map(Scalar.class::cast).toArray(Scalar[]::new);
     Size size = Size.of(Dimensions.of(tensor));
     return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma));
   }

@@ -10,7 +10,7 @@ import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Partition;
-import ch.alpine.tensor.alg.TensorRank;
+import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.mat.re.GaussianElimination;
 import ch.alpine.tensor.mat.re.Pivot;
 import ch.alpine.tensor.mat.re.Pivots;
@@ -44,7 +44,9 @@ public enum LinearSolve {
     return GaussianElimination.of(matrix, b, pivot);
   }
 
-  /** function for matrix not necessarily invertible, or square
+  /** API EXPERIMENTAL
+   * 
+   * function for matrix not necessarily invertible, or square
    * 
    * Example:
    * <pre>
@@ -54,25 +56,18 @@ public enum LinearSolve {
    * </pre>
    * 
    * @param matrix with exact precision scalars
-   * @param b vector
+   * @param b vector with exact precision scalars
    * @return x with matrix.x == b
-   * @throws TensorRuntimeException if such an x does not exist */
+   * @throws TensorRuntimeException if such an x does not exist
+   * @see ExactTensorQ */
   public static Tensor any(Tensor matrix, Tensor b) {
-    if (!ExactTensorQ.of(matrix)) // LONGTERM explore options for machine scalars
-      throw TensorRuntimeException.of(matrix, b);
-    switch (TensorRank.of(b)) {
-    case 1:
-      return vector(matrix, b);
-    default:
-      break;
-    }
-    throw TensorRuntimeException.of(matrix, b);
+    return vector(matrix, VectorQ.require(b));
   }
 
   // helper function
   private static Tensor vector(Tensor matrix, Tensor b) {
     int cols = Unprotect.dimension1(matrix);
-    Tensor r = RowReduce.of(Join.of(1, matrix, Partition.of(b, 1)));
+    Tensor r = RowReduce.of(ExactTensorQ.require(Join.of(1, matrix, Partition.of(b, 1))));
     Tensor x = Array.zeros(cols);
     int j = 0;
     int c0 = 0;

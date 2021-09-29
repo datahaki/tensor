@@ -4,7 +4,6 @@ package ch.alpine.tensor.alg;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
 
 /** utility class for {@link Transpose} */
@@ -24,14 +23,14 @@ import ch.alpine.tensor.ext.Integers;
   private Size(int[] size) {
     this.size = size;
     prod = new int[size.length];
-    final int dmo = size.length - 1;
-    prod[dmo] = 1;
-    for (int index = 0; index < dmo; ++index)
-      prod[dmo - (index + 1)] = prod[dmo - index] * size[dmo - index];
+    int last = size.length - 1;
+    prod[last] = 1;
+    for (int index = last; 0 < index; --index)
+      prod[index - 1] = Math.multiplyExact(prod[index], size[index]);
   }
 
   public int total() {
-    return IntStream.of(size).reduce(Math::multiplyExact).getAsInt();
+    return Math.multiplyExact(prod[0], size[0]);
   }
 
   /** Example:
@@ -54,10 +53,5 @@ import ch.alpine.tensor.ext.Integers;
 
   public IntStream stream(int[] sigma) {
     return OuterProductStream.of(this, sigma);
-  }
-
-  @Override // from Object
-  public String toString() {
-    return Tensors.vectorInt(size) + ".." + Tensors.vectorInt(prod);
   }
 }

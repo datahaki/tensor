@@ -7,6 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
@@ -40,5 +41,15 @@ public class DenmanBeaversDetTest extends TestCase {
         Dot.of(denmanBeaversDet.sqrt(), denmanBeaversDet.sqrt_inverse()), IdentityMatrix.of(2));
     Tolerance.CHOP.requireClose( //
         Dot.of(denmanBeaversDet.sqrt(), denmanBeaversDet.sqrt()), x2);
+  }
+
+  @SuppressWarnings("unused")
+  public void testFail() throws IOException {
+    Tensor matrix = ResourceData.of("/mat/dbd_fail.csv");
+    try {
+      new DenmanBeaversDet(matrix, Tolerance.CHOP);
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }
