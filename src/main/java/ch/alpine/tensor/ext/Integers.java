@@ -2,9 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import java.util.Arrays;
-
-import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.Tensors;
+import java.util.stream.Collectors;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Integers.html">Integers</a> */
@@ -56,6 +54,7 @@ public enum Integers {
     return 0 == (requirePositive(value) & (value - 1));
   }
 
+  // ---
   /** @param sigma
    * @return whether sigma encodes a permutation for instance {2, 0, 1, 3} */
   public static boolean isPermutation(int[] sigma) {
@@ -69,6 +68,33 @@ public enum Integers {
   public static int[] requirePermutation(int[] sigma) {
     if (isPermutation(sigma))
       return sigma;
-    throw TensorRuntimeException.of(Tensors.vectorInt(sigma));
+    throw new IllegalArgumentException(sigma.length <= 16 //
+        ? Arrays.stream(sigma) //
+            .mapToObj(Integer::toString) //
+            .collect(Collectors.joining(" "))
+        : "");
+  }
+
+  /** Examples:
+   * <pre>
+   * parity[{0, 1}] == 0
+   * parity[{1, 0}] == 1
+   * parity[{2, 0, 1}] == 0
+   * </pre>
+   * 
+   * @param sigma a permutation of the list {0, 1, ..., sigma.length - 1}
+   * @return 0 if sigma is even permutation, or 1 if sigma is odd permutation
+   * @throws Exception if given sigma is not a permutation */
+  public static int parity(int[] sigma) {
+    requirePermutation(sigma);
+    int parity = 0;
+    for (int index = 0; index < sigma.length; ++index)
+      while (sigma[index] != index) {
+        int value = sigma[index];
+        sigma[index] = sigma[value];
+        sigma[value] = value;
+        parity ^= 1;
+      }
+    return parity;
   }
 }

@@ -124,4 +124,26 @@ public class IntegersTest extends TestCase {
     Integers.requirePermutation(new int[] { 0, 2, 1 });
     AssertFail.of(() -> Integers.requirePermutation(new int[] { 2, 3 }));
   }
+
+  public void testRequirePermutationMessage() {
+    try {
+      Integers.requirePermutation(new int[] { 0, 2 });
+      fail();
+    } catch (Exception exception) {
+      assertEquals(exception.getMessage(), "0 2");
+    }
+  }
+
+  public void testParity() {
+    assertEquals(Integers.parity(new int[] { 0, 1 }), 0);
+    assertEquals(Integers.parity(new int[] { 1, 0 }), 1);
+    assertEquals(Integers.parity(new int[] { 2, 0, 1 }), 0);
+    assertEquals(Integers.parity(new int[] { 2, 1, 0 }), 1);
+  }
+
+  public void testParityFail() {
+    AssertFail.of(() -> Integers.parity(new int[] { 0, 0 }));
+    AssertFail.of(() -> Integers.parity(new int[] { 1, 1 }));
+    AssertFail.of(() -> Integers.parity(new int[] { 2, 1 }));
+  }
 }

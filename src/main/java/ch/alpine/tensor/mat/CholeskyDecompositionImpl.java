@@ -7,10 +7,10 @@ import java.io.Serializable;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
@@ -65,9 +65,7 @@ import ch.alpine.tensor.sca.Conjugate;
   @Override // from CholeskyDecomposition
   public Tensor solve(Tensor b) {
     d.stream().map(Scalar.class::cast).forEach(chop::requireNonZero);
-    int n = l.length();
-    if (b.length() != n)
-      throw TensorRuntimeException.of(l, b);
+    int n = Integers.requireEquals(l.length(), b.length());
     Tensor[] x = b.stream().toArray(Tensor[]::new);
     for (int i = 0; i < n; ++i)
       for (int k = i - 1; 0 <= k; --k)

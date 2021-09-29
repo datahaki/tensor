@@ -5,7 +5,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Ordering;
-import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.ext.Integers;
 
 /** Examples:
  * <pre>
@@ -34,26 +34,7 @@ public enum Signature {
   public static Scalar of(Tensor tensor) {
     long count = tensor.stream().distinct().count();
     return tensor.length() == count //
-        ? of(Ordering.INCREASING.of(tensor))
+        ? SIGN[Integers.parity(Ordering.INCREASING.of(tensor))]
         : RealScalar.ZERO;
-  }
-
-  /** Careful:
-   * function assumes that given ordering is a permutation of range [0, 1, ..., n - 1].
-   * for other input an infinite loop might occur!
-   * 
-   * @param ordering
-   * @return */
-  @PackageTestAccess
-  static Scalar of(int[] ordering) {
-    int parity = 0;
-    for (int index = 0; index < ordering.length; ++index)
-      while (ordering[index] != index) {
-        int value = ordering[index];
-        ordering[index] = ordering[value];
-        ordering[value] = value;
-        parity ^= 1;
-      }
-    return SIGN[parity];
   }
 }

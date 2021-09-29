@@ -3,8 +3,6 @@ package ch.alpine.tensor.alg;
 
 import java.util.stream.IntStream;
 
-import ch.alpine.tensor.ext.Integers;
-
 /** utility class for {@link Transpose} */
 /* package */ class OuterProductStream {
   /** @param size
@@ -17,26 +15,26 @@ import ch.alpine.tensor.ext.Integers;
   // ---
   private final int[] dims;
   private final int[] prod;
-  private final int[] index;
-  private final int[] direction;
+  private final int[] cump;
   private final int total;
+  private final int[] multi;
   // ---
   private int count = 0;
+  private int index = 0;
 
   private OuterProductStream(Size size, int[] sigma) {
     dims = size.permute(sigma);
     prod = new int[dims.length];
-    index = new int[dims.length];
     for (int c0 = 0; c0 < dims.length; ++c0)
       prod[sigma[c0]] = size.prod(c0);
+    cump = IntStream.range(0, dims.length) //
+        .map(c0 -> prod[c0] * dims[c0]).toArray();
     total = size.total();
-    direction = IntStream.range(0, dims.length) //
-        .map(c0 -> dims.length - c0 - 1) //
-        .toArray();
+    multi = new int[dims.length];
   }
 
   private int seed() {
-    return Integers.requireEquals(dot(index), 0);
+    return index;
   }
 
   private boolean hasNext(int value) {
@@ -44,18 +42,16 @@ import ch.alpine.tensor.ext.Integers;
   }
 
   private int next(int value) {
-    for (int c0 : direction) {
-      ++index[c0];
-      index[c0] %= dims[c0];
-      if (index[c0] != 0)
+    for (int c0 = dims.length - 1; 0 <= c0; --c0) {
+      ++multi[c0];
+      multi[c0] %= dims[c0];
+      index += prod[c0];
+      if (multi[c0] != 0)
         break;
+      index -= cump[c0];
     }
     ++count;
-    return dot(index);
-  }
-
-  private int dot(int[] index) {
-    return IntStream.range(0, prod.length).map(i -> prod[i] * index[i]).sum();
+    return index;
   }
 
   private IntStream stream() {

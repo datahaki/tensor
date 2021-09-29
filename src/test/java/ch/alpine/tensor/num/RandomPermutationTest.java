@@ -13,6 +13,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -21,6 +22,7 @@ public class RandomPermutationTest extends TestCase {
   public void testSimple() {
     for (int count = 0; count < 10; ++count)
       assertEquals(RandomPermutation.ofLength(count).length, count);
+    Integers.requirePermutation(RandomPermutation.ofLength(13));
   }
 
   public void testCycles() {
