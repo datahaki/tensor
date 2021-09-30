@@ -29,6 +29,10 @@ import ch.alpine.tensor.ext.Integers;
       prod[index - 1] = Math.multiplyExact(prod[index], size[index]);
   }
 
+  public int rank() {
+    return size.length;
+  }
+
   public int total() {
     return Math.multiplyExact(prod[0], size[0]);
   }

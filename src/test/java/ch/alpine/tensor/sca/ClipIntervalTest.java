@@ -49,4 +49,8 @@ public class ClipIntervalTest extends TestCase {
     AssertFail.of(() -> Clips.interval(Quantity.of(0, "m"), RealScalar.of(2)));
     AssertFail.of(() -> Clips.interval(Quantity.of(-2, "m"), RealScalar.of(0)));
   }
+
+  public void testVisibility() {
+    assertEquals(ClipInterval.class.getModifiers(), 0);
+  }
 }

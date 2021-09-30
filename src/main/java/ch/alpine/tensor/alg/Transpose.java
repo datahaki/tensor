@@ -23,6 +23,10 @@ import ch.alpine.tensor.sca.Conjugate;
  * 
  * <p>related to MATLAB::permute
  * 
+ * <p>Careful:
+ * Transpose[tensor] is the special case of Transpose[tensor, new int[] {1, 0}].
+ * Transpose[tensor] is not the special case of Transpose[tensor, new int[] {}].
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Transpose.html">Transpose</a> */
 public enum Transpose {
@@ -61,28 +65,33 @@ public enum Transpose {
    * Mathematica::Transpose[scalar, {}] is undefined
    * </pre>
    * 
-   * @param tensor with array structure
-   * @param sigma is a permutation with sigma.length == rank of tensor
-   * @return */
+   * @param tensor with array structure up to sigma.length
+   * @param sigma is a permutation with sigma.length less or equals to rank of tensor
+   * @return
+   * @throws Exception if sigma is not a permutation */
   public static Tensor of(Tensor tensor, int... sigma) {
     if (ScalarQ.of(tensor) && sigma.length == 0)
       return tensor;
-    Scalar[] data = tensor.flatten(sigma.length - 1).map(Scalar.class::cast).toArray(Scalar[]::new);
-    Size size = Size.of(Dimensions.of(tensor));
-    return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma));
+    Dimensions dimensions = new Dimensions(tensor);
+    if (dimensions.isArray()) {
+      Size size = Size.of(dimensions.list());
+      if (size.rank() == sigma.length) {
+        Scalar[] data = tensor.flatten(sigma.length - 1).map(Scalar.class::cast).toArray(Scalar[]::new);
+        return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma));
+      }
+    }
+    return nonArray(tensor, sigma);
   }
 
   /** generalization of {@link #of(Tensor, Integer...)} as function
    * only requires that tensor has array structure up to sigma.length
    * 
-   * {@link #nonArray(Tensor, Integer...)} is typically a bit slower than
-   * {@link #of(Tensor, Integer...)}
-   * 
    * @param tensor with array structure up to sigma.length
    * @param sigma is a permutation
    * @return
-   * @throws Exception */
-  public static Tensor nonArray(Tensor tensor, int... sigma) {
+   * @throws Exception if sigma is not a permutation */
+  @PackageTestAccess
+  static Tensor nonArray(Tensor tensor, int... sigma) {
     return Array.of(list -> tensor.get(reorder(list, sigma)), inverse(Dimensions.of(tensor), sigma));
   }
 
@@ -94,12 +103,12 @@ public enum Transpose {
     return Arrays.stream(sigma).mapToObj(list::get).collect(Collectors.toList());
   }
 
-  /** @param size
+  /** @param list
    * @param sigma permutation
    * @return */
   @PackageTestAccess
-  static <T> List<T> inverse(List<T> size, int[] sigma) {
-    return reorder(size, inverse(sigma)); //
+  static <T> List<T> inverse(List<T> list, int[] sigma) {
+    return reorder(list, inverse(sigma)); //
   }
 
   /** Hint: function is a special case of permute with size==Range

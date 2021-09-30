@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.PackageTestAccess;
 
 /** Implementation is based on the dynamic programming solution in the reference
@@ -88,7 +89,13 @@ public class Dot {
     return entry[0][entry.length - 1].dimensions;
   }
 
-  public static List<Integer> combine(List<Integer> dimensions1, List<Integer> dimensions2) {
+  /** @param dimensions1 {..., tail}
+   * @param dimensions2 {head, ...}
+   * @return
+   * @throws Exception if tail and head are not equal */
+  @PackageTestAccess // Dot is public, the static helper function must not be public
+  static List<Integer> combine(List<Integer> dimensions1, List<Integer> dimensions2) {
+    Integers.requireEquals(dimensions1.get(dimensions1.size() - 1), dimensions2.get(0));
     return Stream.concat( //
         dimensions1.stream().limit(dimensions1.size() - 1), //
         dimensions2.stream().skip(1)).collect(Collectors.toList());

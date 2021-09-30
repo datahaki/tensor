@@ -83,15 +83,15 @@ import ch.alpine.tensor.red.Min;
     }
   }
 
-  int escapeFromX(int x) {
+  public int escapeFromX(int x) {
     return escapeFromX[x];
   }
 
-  int escapeFromY(int y) {
+  public int escapeFromY(int y) {
     return escapeFromY[y];
   }
 
-  int addS(int x) {
+  public int addS(int x) {
     while (true) {
       int y = pickNlsMinusT(x);
       if (yMatch[y] == BipartiteMatching.UNASSIGNED)
@@ -113,7 +113,7 @@ import ch.alpine.tensor.red.Min;
     S.add(x);
   }
 
-  void clear() {
+  public void clear() {
     resetEscape();
     S.clear();
     bipartition.clear();

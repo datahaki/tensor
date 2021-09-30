@@ -39,8 +39,8 @@ public enum ArrayQ {
    * @see MatrixQ */
   public static boolean ofRank(Tensor tensor, int rank) {
     Dimensions dimensions = new Dimensions(tensor);
-    return dimensions.list().size() == rank //
-        && dimensions.isArray();
+    return dimensions.isArray() //
+        && dimensions.list().size() == rank;
   }
 
   /** @param tensor

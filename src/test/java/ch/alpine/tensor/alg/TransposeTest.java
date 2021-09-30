@@ -10,10 +10,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.ExponentialDistribution;
 import ch.alpine.tensor.pdf.NegativeBinomialDistribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TransposeTest extends TestCase {
@@ -104,31 +104,16 @@ public class TransposeTest extends TestCase {
     assertEquals(trans, Transpose.of(randn));
   }
 
+  public void testIdentity() {
+    Tensor randn = RandomVariate.of(ExponentialDistribution.standard(), 3, 4, 2);
+    assertEquals(randn, Transpose.of(randn, new int[] {}));
+  }
+
   public void testComparison() {
-    Tensor randn = RandomVariate.of(NormalDistribution.standard(), 6, 5, 8);
+    Tensor randn = RandomVariate.of(NormalDistribution.standard(), 6, 5, 4);
     Tensor array = Transpose.nonArray(randn, 1, 2, 0);
     Tensor trans = Transpose.of(randn, 1, 2, 0);
     assertEquals(trans, array);
-  }
-
-  public void testNonPermFail1() {
-    Tensor matrix = Array.zeros(2, 3);
-    AssertFail.of(() -> Transpose.of(matrix, 0, 0));
-    AssertFail.of(() -> Transpose.of(matrix, 1, 1));
-  }
-
-  public void testNonPermFail2() {
-    Tensor matrix = Array.zeros(3, 2);
-    AssertFail.of(() -> Transpose.of(matrix, 0, 0));
-    AssertFail.of(() -> Transpose.of(matrix, 1, 1));
-  }
-
-  public void testNonPermFail3() {
-    Tensor matrix = Array.zeros(3, 2, 1);
-    AssertFail.of(() -> Transpose.of(matrix, 0, 1, 0));
-    AssertFail.of(() -> Transpose.of(matrix, 1, 0, 1));
-    AssertFail.of(() -> Transpose.of(matrix, 0, 1, 1));
-    AssertFail.of(() -> Transpose.of(matrix, 2, 2, 1));
   }
 
   public void testIncomplete() {

@@ -105,6 +105,51 @@ public class SimpleUnitSystem implements UnitSystem {
         : new FactorProduct(StaticHelper.multiply(product, UnitImpl.create(navigableMap)));
   }
 
+  private static interface Factor {
+    /** @param quantity
+     * @return */
+    Scalar times(Quantity quantity);
+
+    /** @param unit
+     * @return */
+    Unit dimensions(Unit unit);
+  }
+
+  private static enum FactorIdentity implements Factor {
+    INSTANCE;
+
+    @Override // from Factor
+    public Scalar times(Quantity quantity) {
+      return quantity;
+    }
+
+    @Override // from Factor
+    public Unit dimensions(Unit unit) {
+      return unit;
+    }
+  }
+
+  private static class FactorProduct implements Factor, Serializable {
+    private final Scalar scalar;
+    private final Unit base;
+
+    /** @param scalar may or may not be of instance {@link Quantity} */
+    public FactorProduct(Scalar scalar) {
+      this.scalar = scalar;
+      base = QuantityUnit.of(scalar);
+    }
+
+    @Override // from Factor
+    public Scalar times(Quantity quantity) {
+      return quantity.value().multiply(scalar);
+    }
+
+    @Override // from Factor
+    public Unit dimensions(Unit unit) {
+      return base;
+    }
+  }
+
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof Quantity) {

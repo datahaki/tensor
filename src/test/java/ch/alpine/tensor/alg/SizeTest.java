@@ -89,4 +89,8 @@ public class SizeTest extends TestCase {
     List<Integer> list = Transpose.inverse(Arrays.asList(2, 3, 4), new int[] { 2, 0, 1 });
     assertEquals(list, Arrays.asList(3, 4, 2));
   }
+
+  public void testVisibility() {
+    assertEquals(Size.class.getModifiers(), 0);
+  }
 }

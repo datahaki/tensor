@@ -164,6 +164,10 @@ public class DotTest extends TestCase {
     assertEquals(Dot.combine(Arrays.asList(1, 2, 3), Arrays.asList(3, 4, 5)), Arrays.asList(1, 2, 4, 5));
   }
 
+  public void testCombineFail() {
+    AssertFail.of(() -> Dot.combine(Arrays.asList(2, 2), Arrays.asList(3, 4, 5)));
+  }
+
   public void testDot0Fail() {
     AssertFail.of(() -> Dot.of());
   }

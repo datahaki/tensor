@@ -32,8 +32,8 @@ public enum TensorWedge {
    * @return alternating tensor
    * @throws Exception if given tensor does not have regular dimensions */
   public static Tensor of(Tensor tensor) {
-    int rank = TensorRank.of(tensor);
-    return Permutations.of(Range.of(0, rank)).stream() //
+    int rank = TensorRank.ofArray(tensor).orElseThrow();
+    return Permutations.stream(Range.of(0, rank)) //
         .map(permutation -> signed(tensor, Primitives.toIntArray(permutation))) //
         .reduce(Tensor::add) //
         .map(sum -> sum.divide(Factorial.of(rank))) //

@@ -15,12 +15,13 @@ import java.util.stream.IntStream;
   // ---
   private final int[] dims;
   private final int[] prod;
+  /** cummulative product */
   private final int[] cump;
+  /** multi-index */
+  private final int[] mind;
   private final int total;
-  private final int[] multi;
   // ---
   private int count = 0;
-  private int index = 0;
 
   private OuterProductStream(Size size, int[] sigma) {
     dims = size.permute(sigma);
@@ -29,24 +30,20 @@ import java.util.stream.IntStream;
       prod[sigma[c0]] = size.prod(c0);
     cump = IntStream.range(0, dims.length) //
         .map(c0 -> prod[c0] * dims[c0]).toArray();
+    mind = new int[dims.length];
     total = size.total();
-    multi = new int[dims.length];
   }
 
-  private int seed() {
-    return index;
-  }
-
-  private boolean hasNext(int value) {
+  private boolean hasNext(int index) {
     return count < total;
   }
 
-  private int next(int value) {
+  private int next(int index) {
     for (int c0 = dims.length - 1; 0 <= c0; --c0) {
-      ++multi[c0];
-      multi[c0] %= dims[c0];
+      ++mind[c0];
+      mind[c0] %= dims[c0];
       index += prod[c0];
-      if (multi[c0] != 0)
+      if (mind[c0] != 0)
         break;
       index -= cump[c0];
     }
@@ -55,6 +52,6 @@ import java.util.stream.IntStream;
   }
 
   private IntStream stream() {
-    return IntStream.iterate(seed(), this::hasNext, this::next);
+    return IntStream.iterate(0, this::hasNext, this::next);
   }
 }

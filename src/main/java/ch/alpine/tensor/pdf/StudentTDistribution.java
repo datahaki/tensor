@@ -30,8 +30,8 @@ public class StudentTDistribution implements Distribution, //
   }
 
   /** @param mu
-   * @param sigma
-   * @param v
+   * @param sigma positive
+   * @param v positive
    * @return */
   public static Distribution of(Number mu, Number sigma, Number v) {
     return of(RealScalar.of(mu), RealScalar.of(sigma), RealScalar.of(v));
