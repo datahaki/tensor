@@ -2,12 +2,12 @@
 package ch.alpine.tensor.alg;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.ext.Integers;
 
 /** Example:
  * <pre>
@@ -28,8 +28,8 @@ public class PadLeft implements TensorUnaryOperator {
   /** @param element
    * @param dimensions non-empty
    * @return */
-  public static TensorUnaryOperator with(Tensor element, Integer... dimensions) {
-    return with(element, Arrays.asList(dimensions));
+  public static TensorUnaryOperator with(Tensor element, int... dimensions) {
+    return with(element, Integers.asList(dimensions));
   }
 
   /** @param dimensions non-empty
@@ -40,8 +40,8 @@ public class PadLeft implements TensorUnaryOperator {
 
   /** @param dimensions non-empty
    * @return */
-  public static TensorUnaryOperator zeros(Integer... dimensions) {
-    return zeros(Arrays.asList(dimensions));
+  public static TensorUnaryOperator zeros(int... dimensions) {
+    return zeros(Integers.asList(dimensions));
   }
 
   // ---

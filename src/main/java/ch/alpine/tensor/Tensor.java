@@ -33,7 +33,7 @@ public interface Tensor extends Iterable<Tensor> {
   /** constant ALL is used in the function
    * <ul>
    * <li>{@link #get(int...)} to extract <em>all</em> elements from the respective dimension.
-   * <li>{@link #set(Function, Integer...)} to reassign <em>all</em> elements from the respective dimension.
+   * <li>{@link #set(Function, int...)} to reassign <em>all</em> elements from the respective dimension.
    * </ul>
    * 
    * <p>The value of ALL is deliberately <em>not</em> chosen to equal -1, since an index of -1
@@ -151,7 +151,7 @@ public interface Tensor extends Iterable<Tensor> {
    * @param index non-empty
    * @throws Exception if set() is invoked on an instance of {@link Scalar}, or index is empty
    * @throws Exception if this instance is unmodifiable */
-  void set(Tensor tensor, Integer... index);
+  void set(Tensor tensor, int... index);
 
   /** replaces element x at index with <code>function.apply(x)</code>
    * The operation is invalid if this tensor has been cast as unmodifiable.
@@ -169,15 +169,15 @@ public interface Tensor extends Iterable<Tensor> {
    * @param function
    * @param index non-empty
    * @throws Exception if set() is invoked on an instance of {@link Scalar}, or index is empty
-   * @see #set(Tensor, Integer...) */
-  <T extends Tensor> void set(Function<T, ? extends Tensor> function, Integer... index);
+   * @see #set(Tensor, int...) */
+  <T extends Tensor> void set(Function<T, ? extends Tensor> function, int... index);
 
   /** appends a copy of input tensor to this instance
    * 
    * <p>The length() is incremented by 1.
    * 
    * <p>{@link #append(Tensor)} can be used to append to a sub-tensor of this instance
-   * via {@link #set(Function, Integer...)}.
+   * via {@link #set(Function, int...)}.
    * For example:
    * <pre>matrix.set(row -> row.append(tensor), index);</pre>
    * 

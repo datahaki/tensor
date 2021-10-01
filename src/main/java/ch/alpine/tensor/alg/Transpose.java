@@ -52,7 +52,7 @@ public enum Transpose {
     int length = Unprotect.dimension1(tensor);
     if (length == Scalar.LENGTH)
       throw TensorRuntimeException.of(tensor);
-    return Tensors.vector(i -> tensor.get(Arrays.asList(Tensor.ALL, i)), length);
+    return Tensors.vector(i -> tensor.get(Tensor.ALL, i), length);
   }
 
   /** transpose according to permutation sigma.
@@ -77,13 +77,6 @@ public enum Transpose {
       Scalar[] data = tensor.flatten(sigma.length - 1).map(Scalar.class::cast).toArray(Scalar[]::new);
       return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma));
     }
-    /** generalization of {@link #of(Tensor, Integer...)} as function
-     * only requires that tensor has array structure up to sigma.length
-     * 
-     * @param tensor with array structure up to sigma.length
-     * @param sigma is a permutation
-     * @return
-     * @throws Exception if sigma is not a permutation */
     return Array.of( //
         list -> tensor.get(Arrays.stream(sigma).mapToObj(list::get).collect(Collectors.toList())), // extraction
         Size.of(dimensions_list.subList(0, sigma.length)).permute(sigma)); // dimensions

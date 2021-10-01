@@ -96,7 +96,7 @@ public enum Array {
   }
 
   /** Careful:
-   * {@link #zeros(Integer...)} is not consistent with MATLAB::zeros.
+   * {@link #zeros(int...)} is not consistent with MATLAB::zeros.
    * In the tensor library, the number of integer parameters equals the rank
    * of the returned tensor. In Matlab this is not the case.
    * 

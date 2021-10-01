@@ -2,7 +2,6 @@
 package ch.alpine.tensor;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -63,8 +62,8 @@ import ch.alpine.tensor.ext.Integers;
   }
 
   @Override // from Tensor
-  public void set(Tensor tensor, Integer... index) {
-    _set(tensor, Arrays.asList(index));
+  public void set(Tensor tensor, int... index) {
+    _set(tensor, Integers.asList(index));
   }
 
   /** @param tensor
@@ -89,8 +88,8 @@ import ch.alpine.tensor.ext.Integers;
   }
 
   @Override // from Tensor
-  public <T extends Tensor> void set(Function<T, ? extends Tensor> function, Integer... index) {
-    _set(function, Arrays.asList(index));
+  public <T extends Tensor> void set(Function<T, ? extends Tensor> function, int... index) {
+    _set(function, Integers.asList(index));
   }
 
   /** @param function

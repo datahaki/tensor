@@ -16,7 +16,7 @@ import ch.alpine.tensor.qty.SimpleUnitSystem;
  * <p>The scalar 0 in any field cannot be inverted.
  * Zero is supplied by {@link #zero()}.
  * 
- * <p>When invoking {@link #get(Integer...)}, {@link #get(java.util.List)},
+ * <p>When invoking {@link #get(int...)}, {@link #get(java.util.List)},
  * on {@link Scalar} the list of arguments has to be empty.
  * 
  * <p>Derived classes are immutable, i.e. contents of an instance of {@link Scalar}

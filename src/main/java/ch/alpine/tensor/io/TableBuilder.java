@@ -61,7 +61,7 @@ public final class TableBuilder implements Serializable {
   }
 
   /** Hint: Since the tensor is backed by a linked list, extractions
-   * with {@link Tensor#get(Integer...)} are inefficient!
+   * with {@link Tensor#get(int...)} are inefficient!
    * 
    * Hint: Although the return value is unmodifiable, subsequent changes
    * to the table builder affect the return value!

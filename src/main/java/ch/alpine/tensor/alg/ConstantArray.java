@@ -1,12 +1,12 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.ext.Integers;
 
 /** MATLAB::repmat
  * 
@@ -32,7 +32,7 @@ public enum ConstantArray {
   /** @param entry non-null
    * @param dimensions
    * @return unmodifiable tensor with given dimensions and entries as given entry */
-  public static Tensor of(Tensor entry, Integer... dimensions) {
-    return of(entry, Arrays.asList(dimensions));
+  public static Tensor of(Tensor entry, int... dimensions) {
+    return of(entry, Integers.asList(dimensions));
   }
 }
