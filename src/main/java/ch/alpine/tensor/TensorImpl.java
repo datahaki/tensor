@@ -32,8 +32,13 @@ import ch.alpine.tensor.ext.Integers;
   }
 
   @Override // from Tensor
-  public Tensor get(Integer... index) {
-    return get(Arrays.asList(index));
+  public Tensor get(int i) {
+    return list.get(i).copy();
+  }
+
+  @Override // from Tensor
+  public Tensor get(int... index) {
+    return get(Integers.asList(index));
   }
 
   @Override // from Tensor

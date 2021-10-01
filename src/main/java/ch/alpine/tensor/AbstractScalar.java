@@ -21,9 +21,14 @@ public abstract class AbstractScalar implements Scalar {
     return this; // instance of Scalar is immutable
   }
 
+  @Override // from Tensor
+  public final Tensor get(int i) {
+    throw TensorRuntimeException.of(this);
+  }
+
   /** when using get() on {@code AbstractScalar} the list of arguments has to be empty */
   @Override // from Tensor
-  public final Tensor get(Integer... index) {
+  public final Tensor get(int... index) {
     if (0 < index.length)
       throw new IllegalArgumentException();
     return this;

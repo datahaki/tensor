@@ -44,12 +44,12 @@ public class AbstractScalarTest extends TestCase {
     AssertFail.of(() -> Pi.VALUE.get(Arrays.asList(-1)));
     AssertFail.of(() -> Pi.VALUE.get(Arrays.asList(-1, 0)));
     AssertFail.of(() -> RealScalar.ONE.Get(1));
-    AssertFail.of(() -> RealScalar.ONE.get(new Integer[] { 1 }));
+    AssertFail.of(() -> RealScalar.ONE.get(new int[] { 1 }));
   }
 
   public void testGet2Fail() {
     AssertFail.of(() -> RationalScalar.HALF.Get(1, 4));
-    AssertFail.of(() -> Pi.TWO.get(new Integer[] { 1, 2 }));
+    AssertFail.of(() -> Pi.TWO.get(new int[] { 1, 2 }));
   }
 
   public void testSetFail() {

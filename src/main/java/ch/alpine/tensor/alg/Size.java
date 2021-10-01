@@ -29,10 +29,6 @@ import ch.alpine.tensor.ext.Integers;
       prod[index - 1] = Math.multiplyExact(prod[index], size[index]);
   }
 
-  public int rank() {
-    return size.length;
-  }
-
   public int total() {
     return Math.multiplyExact(prod[0], size[0]);
   }
@@ -40,8 +36,9 @@ import ch.alpine.tensor.ext.Integers;
   /** Example:
    * { 2, 3, 4 }.Permute[{ 2, 0, 1 }] == {3, 4, 2}
    * 
-   * @param sigma
-   * @return */
+   * @param sigma permutation
+   * @return
+   * @throws Exception if given sigma is not a permutation */
   public int[] permute(int[] sigma) {
     Integers.requirePermutation(sigma);
     Integers.requireEquals(size.length, sigma.length);

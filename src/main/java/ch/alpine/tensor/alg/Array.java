@@ -2,7 +2,6 @@
 package ch.alpine.tensor.alg;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -43,8 +42,8 @@ public enum Array {
    * @param dimensions with non-negative entries
    * @return tensor with given dimensions and entries as function(index)
    * @throws Exception if any dimension is negative */
-  public static Tensor of(Function<List<Integer>, ? extends Tensor> function, Integer... dimensions) {
-    return of(function, Arrays.asList(dimensions));
+  public static Tensor of(Function<List<Integer>, ? extends Tensor> function, int... dimensions) {
+    return of(function, Integers.asList(dimensions));
   }
 
   // helper function
@@ -72,8 +71,8 @@ public enum Array {
   /** @param supplier
    * @param dimensions
    * @return */
-  public static Tensor fill(Supplier<? extends Scalar> supplier, Integer... dimensions) {
-    return fill(supplier, 0, Arrays.asList(dimensions));
+  public static Tensor fill(Supplier<? extends Scalar> supplier, int... dimensions) {
+    return fill(supplier, 0, Integers.asList(dimensions));
   }
 
   // helper function
@@ -110,7 +109,7 @@ public enum Array {
    * @param dimensions
    * @return tensor of {@link RealScalar#ZERO} with given dimensions
    * @throws Exception if any of the integer parameters is negative */
-  public static Tensor zeros(Integer... dimensions) {
-    return zeros(Arrays.asList(dimensions));
+  public static Tensor zeros(int... dimensions) {
+    return zeros(Integers.asList(dimensions));
   }
 }

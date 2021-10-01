@@ -2,13 +2,13 @@
 package ch.alpine.tensor.pdf;
 
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.ext.Integers;
 
 /** RandomVariate generates single random variates, or arrays of random variates
  * from a given {@link Distribution}, or {@link RandomVariateInterface}.
@@ -61,15 +61,15 @@ public enum RandomVariate {
    * @param random
    * @param dimensions
    * @return array of random variates from given interface with given dimensions */
-  public static Tensor of(Distribution distribution, Random random, Integer... dimensions) {
-    return of(distribution, random, Arrays.asList(dimensions)); // of # interface, random, list
+  public static Tensor of(Distribution distribution, Random random, int... dimensions) {
+    return of(distribution, random, Integers.asList(dimensions)); // of # interface, random, list
   }
 
   /** @param randomVariateInterface
    * @param dimensions
    * @return array of random variates with given dimensions */
-  public static Tensor of(Distribution distribution, Integer... dimensions) {
-    return of(distribution, Arrays.asList(dimensions)); // of # interface, list
+  public static Tensor of(Distribution distribution, int... dimensions) {
+    return of(distribution, Integers.asList(dimensions)); // of # interface, list
   }
 
   // helper function

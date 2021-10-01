@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import java.io.Serializable;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
@@ -58,7 +59,7 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
         .skip(1) //
         .map(Scalar.class::cast) //
         .map(Scalars::intValueExact) //
-        .toArray(Integer[]::new));
+        .collect(Collectors.toList()));
   }
 
   @Override // from Interpolation

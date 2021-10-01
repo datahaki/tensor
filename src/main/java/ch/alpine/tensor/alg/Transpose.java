@@ -6,13 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.sca.Conjugate;
 
@@ -55,7 +52,7 @@ public enum Transpose {
     int length = Unprotect.dimension1(tensor);
     if (length == Scalar.LENGTH)
       throw TensorRuntimeException.of(tensor);
-    return Tensors.vector(i -> tensor.get(Tensor.ALL, i), length);
+    return Tensors.vector(i -> tensor.get(Arrays.asList(Tensor.ALL, i)), length);
   }
 
   /** transpose according to permutation sigma.
@@ -70,61 +67,25 @@ public enum Transpose {
    * @return
    * @throws Exception if sigma is not a permutation */
   public static Tensor of(Tensor tensor, int... sigma) {
-    if (ScalarQ.of(tensor) && sigma.length == 0)
-      return tensor;
+    if (sigma.length == 0)
+      return tensor.copy();
     Dimensions dimensions = new Dimensions(tensor);
-    if (dimensions.isArray()) {
-      Size size = Size.of(dimensions.list());
-      if (size.rank() == sigma.length) {
-        Scalar[] data = tensor.flatten(sigma.length - 1).map(Scalar.class::cast).toArray(Scalar[]::new);
-        return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma));
-      }
+    List<Integer> dimensions_list = dimensions.list();
+    if (dimensions.isArray() && //
+        dimensions_list.size() == sigma.length) {
+      Size size = Size.of(dimensions_list);
+      Scalar[] data = tensor.flatten(sigma.length - 1).map(Scalar.class::cast).toArray(Scalar[]::new);
+      return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma));
     }
-    return nonArray(tensor, sigma);
-  }
-
-  /** generalization of {@link #of(Tensor, Integer...)} as function
-   * only requires that tensor has array structure up to sigma.length
-   * 
-   * @param tensor with array structure up to sigma.length
-   * @param sigma is a permutation
-   * @return
-   * @throws Exception if sigma is not a permutation */
-  @PackageTestAccess
-  static Tensor nonArray(Tensor tensor, int... sigma) {
-    return Array.of(list -> tensor.get(reorder(list, sigma)), inverse(Dimensions.of(tensor), sigma));
-  }
-
-  /** @param list
-   * @param sigma
-   * @return */
-  @PackageTestAccess
-  static <T> List<T> reorder(List<T> list, int[] sigma) {
-    return Arrays.stream(sigma).mapToObj(list::get).collect(Collectors.toList());
-  }
-
-  /** @param list
-   * @param sigma permutation
-   * @return */
-  @PackageTestAccess
-  static <T> List<T> inverse(List<T> list, int[] sigma) {
-    return reorder(list, inverse(sigma)); //
-  }
-
-  /** Hint: function is a special case of permute with size==Range
-   * 
-   * <pre>
-   * inverse(inverse(x)) == x
-   * </pre>
-   * 
-   * @param sigma permutation
-   * @return inverse({0,1,2,...}, sigma) */
-  @PackageTestAccess
-  static int[] inverse(int[] sigma) {
-    Integers.requirePermutation(sigma);
-    int[] dims = new int[sigma.length];
-    for (int index = 0; index < sigma.length; ++index)
-      dims[sigma[index]] = index;
-    return dims;
+    /** generalization of {@link #of(Tensor, Integer...)} as function
+     * only requires that tensor has array structure up to sigma.length
+     * 
+     * @param tensor with array structure up to sigma.length
+     * @param sigma is a permutation
+     * @return
+     * @throws Exception if sigma is not a permutation */
+    return Array.of( //
+        list -> tensor.get(Arrays.stream(sigma).mapToObj(list::get).collect(Collectors.toList())), // extraction
+        Size.of(dimensions_list.subList(0, sigma.length)).permute(sigma)); // dimensions
   }
 }

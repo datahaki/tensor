@@ -32,7 +32,7 @@ import ch.alpine.tensor.alg.Dimensions;
 public interface Tensor extends Iterable<Tensor> {
   /** constant ALL is used in the function
    * <ul>
-   * <li>{@link #get(Integer...)} to extract <em>all</em> elements from the respective dimension.
+   * <li>{@link #get(int...)} to extract <em>all</em> elements from the respective dimension.
    * <li>{@link #set(Function, Integer...)} to reassign <em>all</em> elements from the respective dimension.
    * </ul>
    * 
@@ -80,6 +80,14 @@ public interface Tensor extends Iterable<Tensor> {
    * @return clone of this */
   Tensor copy();
 
+  /** Remark: the parameter i == Tensor.ALL is <b>not</b> permitted, because
+   * get(ALL) should be implemented as copy(). Therefore the function is <b>not</b>
+   * a special case of the more general function {@link #get(int...)}.
+   * 
+   * @param i in the range 0 and length() - 1
+   * @return copy of this[i], i.e. the i-th element of this tensor */
+  Tensor get(int i);
+
   /** non-negative index[...] refer to the position in the tensor
    * 
    * <p>Special value:
@@ -87,11 +95,11 @@ public interface Tensor extends Iterable<Tensor> {
    * 
    * @param index
    * @return copy of this[index[0], index[1], ..., All] */
-  Tensor get(Integer... index);
+  Tensor get(int... index);
 
   /** @param index
    * @return copy of this[index[0], index[1], ..., All]
-   * @see #get(Integer...) */
+   * @see #get(int...) */
   Tensor get(List<Integer> index);
 
   /** function is identical to

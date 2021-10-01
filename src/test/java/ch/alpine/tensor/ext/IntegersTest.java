@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import java.util.Arrays;
+
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -145,5 +147,9 @@ public class IntegersTest extends TestCase {
     AssertFail.of(() -> Integers.parity(new int[] { 0, 0 }));
     AssertFail.of(() -> Integers.parity(new int[] { 1, 1 }));
     AssertFail.of(() -> Integers.parity(new int[] { 2, 1 }));
+  }
+
+  public void testAsList() {
+    assertEquals(Integers.asList(new int[] { 3, 4, 556 }), Arrays.asList(3, 4, 556));
   }
 }

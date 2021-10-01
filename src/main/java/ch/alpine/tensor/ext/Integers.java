@@ -2,6 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /** inspired by
@@ -96,5 +97,14 @@ public enum Integers {
         parity ^= 1;
       }
     return parity;
+  }
+
+  /** Remark: for variable size input use {@link Arrays#asList(Object...)} for example
+   * Arrays.asList(18, 7, 79);
+   * 
+   * @param array
+   * @return list with elements {array[0], array[1], ...} */
+  public static List<Integer> asList(int[] array) {
+    return Arrays.stream(array).boxed().collect(Collectors.toList());
   }
 }

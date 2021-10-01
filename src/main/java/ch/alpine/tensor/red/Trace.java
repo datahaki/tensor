@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -29,20 +30,17 @@ public enum Trace {
   ;
   /** @param tensor
    * @param d0
-   * @param d1 != d0
+   * @param d1 not equals to d0
    * @return stream of slices of tensor along dimensions d0 and d1 */
   public static Stream<Tensor> stream(Tensor tensor, int d0, int d1) {
     if (d0 == d1)
       throw new IllegalArgumentException(d0 + " == " + d1);
-    List<Integer> dimensions = Dimensions.of(tensor);
-    int length = Integers.requireEquals(dimensions.get(d0), dimensions.get(d1));
-    Integer[] index = Stream.generate(() -> Tensor.ALL) //
-        .limit(Math.max(d0, d1) + 1) //
-        .toArray(Integer[]::new);
-    return IntStream.range(0, length) //
+    List<Integer> list = Dimensions.of(tensor);
+    List<Integer> index = Stream.generate(() -> Tensor.ALL).limit(Math.max(d0, d1) + 1).collect(Collectors.toList());
+    return IntStream.range(0, Integers.requireEquals(list.get(d0), list.get(d1))) //
         .mapToObj(count -> {
-          index[d0] = count;
-          index[d1] = count;
+          index.set(d0, count);
+          index.set(d1, count);
           return tensor.get(index);
         });
   }

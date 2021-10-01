@@ -11,9 +11,9 @@ import junit.framework.TestCase;
 public class TensorGetTest extends TestCase {
   public void testGetEmpty() {
     assertEquals(Tensors.empty().get(), Tensors.empty());
-    assertEquals(Tensors.empty().get(new Integer[0]), Tensors.empty());
+    assertEquals(Tensors.empty().get(new int[] {}), Tensors.empty());
     assertEquals(Array.zeros(2, 3).get(), Array.zeros(2, 3));
-    assertEquals(Array.zeros(2, 3).get(new Integer[0]), Array.zeros(2, 3));
+    assertEquals(Array.zeros(2, 3).get(new int[] {}), Array.zeros(2, 3));
   }
 
   public void testGetScalar() {
@@ -42,7 +42,7 @@ public class TensorGetTest extends TestCase {
   public void testGetAll() {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 2, 3, 4);
     assertEquals(matrix.get(), matrix);
-    assertEquals(matrix.get(Tensor.ALL), matrix);
+    assertEquals(matrix.get(new int[] { Tensor.ALL }), matrix);
     assertEquals(matrix.get(Tensor.ALL, Tensor.ALL), matrix);
     assertEquals(matrix.get(Tensor.ALL, Tensor.ALL, Tensor.ALL), matrix);
   }
@@ -51,7 +51,7 @@ public class TensorGetTest extends TestCase {
     Tensor a = Array.zeros(3).unmodifiable();
     a.get().set(RealScalar.ONE, 1);
     // a.get(1).set(RealScalar.ONE, 1); // scalar is immutable
-    Tensor b = a.get(Tensor.ALL);
+    Tensor b = a.get(new int[] { Tensor.ALL });
     b.set(Tensors.vector(1, 2, 3), Tensor.ALL);
     assertEquals(b, Tensors.vector(1, 2, 3));
     assertEquals(a, Array.zeros(3));
@@ -61,7 +61,7 @@ public class TensorGetTest extends TestCase {
     Tensor matrix = Array.zeros(3, 4).unmodifiable();
     matrix.get().set(RealScalar.ONE, 1);
     matrix.get(1).set(RealScalar.ONE, 1);
-    matrix.get(Tensor.ALL).set(Tensors.vector(1, 2, 3), Tensor.ALL);
+    matrix.get(new int[] { Tensor.ALL }).set(Tensors.vector(1, 2, 3), Tensor.ALL);
     matrix.get(Tensor.ALL, 2).set(RealScalar.ONE, 1);
     matrix.get(2, Tensor.ALL).set(Tensors.vector(1, 2, 3, 4), Tensor.ALL);
     matrix.get(Tensor.ALL, Tensor.ALL).set(Array.of(l -> RealScalar.ONE, 3, 4), Tensor.ALL, Tensor.ALL);
@@ -72,7 +72,7 @@ public class TensorGetTest extends TestCase {
     Tensor tensor = Array.zeros(3, 4, 3).unmodifiable();
     tensor.get().set(RealScalar.ONE, 1);
     tensor.get(1).set(RealScalar.ONE, 1);
-    tensor.get(Tensor.ALL).set(Tensors.vector(1, 2, 3), Tensor.ALL);
+    tensor.get(new int[] { Tensor.ALL }).set(Tensors.vector(1, 2, 3), Tensor.ALL);
     tensor.get(Tensor.ALL, 2).set(RealScalar.ONE, 1);
     tensor.get(2, Tensor.ALL).set(Tensors.vector(1, 2, 3, 4), Tensor.ALL);
   }

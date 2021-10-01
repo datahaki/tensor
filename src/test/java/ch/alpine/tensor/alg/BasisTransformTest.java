@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
@@ -15,6 +16,7 @@ import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Inverse;
+import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.pdf.BinomialDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -59,14 +61,17 @@ public class BasisTransformTest extends TestCase {
   }
 
   public void testMatrix() {
-    Distribution distribution = BinomialDistribution.of(20, 0.3);
-    Tensor matrix = RandomVariate.of(distribution, 5, 5);
-    Tensor v = RandomVariate.of(distribution, 5, 5);
-    Tensor trafo1 = BasisTransform.ofMatrix(matrix, v);
-    ExactTensorQ.require(trafo1);
-    Tensor trafo2 = BasisTransform.of(matrix, 1, v);
-    ExactTensorQ.require(trafo2);
-    assertEquals(trafo1, trafo2);
+    int n = 5;
+    Distribution distribution = BinomialDistribution.of(10, 0.3);
+    Tensor matrix = RandomVariate.of(distribution, n, n);
+    Tensor v = RandomVariate.of(distribution, n, n);
+    if (Scalars.nonZero(Det.of(v))) {
+      Tensor trafo1 = BasisTransform.ofMatrix(matrix, v);
+      ExactTensorQ.require(trafo1);
+      Tensor trafo2 = BasisTransform.of(matrix, 1, v);
+      ExactTensorQ.require(trafo2);
+      assertEquals(trafo1, trafo2);
+    }
   }
 
   public void testAd() {

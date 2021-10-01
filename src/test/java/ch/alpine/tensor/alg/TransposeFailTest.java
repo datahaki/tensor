@@ -14,6 +14,10 @@ public class TransposeFailTest extends TestCase {
     AssertFail.of(() -> Transpose.of(v, new int[] { 2 }));
   }
 
+  public void testEmptyFail() {
+    AssertFail.of(() -> Transpose.of(Tensors.empty()));
+  }
+
   public void testVectorFail() {
     AssertFail.of(() -> Transpose.of(Tensors.vector(2, 3, 4, 5)));
   }
@@ -40,9 +44,6 @@ public class TransposeFailTest extends TestCase {
     AssertFail.of(() -> Transpose.of(matrix, 1));
     AssertFail.of(() -> Transpose.of(matrix, 2, 0));
     AssertFail.of(() -> Transpose.of(matrix, 0, -1));
-    AssertFail.of(() -> Transpose.nonArray(matrix, 1));
-    AssertFail.of(() -> Transpose.nonArray(matrix, 2, 0));
-    AssertFail.of(() -> Transpose.nonArray(matrix, 0, -1));
   }
 
   public void testNonPermFail1() {
