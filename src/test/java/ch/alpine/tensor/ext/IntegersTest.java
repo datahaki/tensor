@@ -151,6 +151,7 @@ public class IntegersTest extends TestCase {
 
   public void testAsList() {
     assertEquals(Integers.asList(new int[] { 3, 4, 556 }), Arrays.asList(3, 4, 556));
+    // assertEquals(Integers.asList(3, 4, 556), Arrays.asList(3, 4, 556));
   }
 
   public void testAsListNullFail() {

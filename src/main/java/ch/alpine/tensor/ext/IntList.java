@@ -9,29 +9,38 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.RandomAccess;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-/** API EXPERIMENTAL */
-/* package */ class IntList implements List<Integer>, Serializable {
+/** API EXPERIMENTAL
+ * 
+ * implementation assumes that "list does not permit null elements".
+ * 
+ * In consequence, calls to certain functions with null as parameter
+ * throw an exception. For example contains(null) */
+/* package */ class IntList implements List<Integer>, RandomAccess, Serializable {
+  /** @param array non-null
+   * @return unmodifiable list */
+  public static List<Integer> wrap(int[] array) {
+    return new IntList(array, 0, array.length);
+  }
+
+  // ---
   private final int[] array;
   private final int ofs;
   private final int len;
 
-  public IntList(int[] array, int ofs, int len) {
-    Integers.requirePositiveOrZero(ofs);
-    Integers.requirePositiveOrZero(len);
-    if (array.length < ofs + len)
+  /** @param array non-null
+   * @param ofs guaranteed to be non-negative
+   * @param len non-negative */
+  private IntList(int[] array, int ofs, int len) {
+    if (len < 0)
       throw new IllegalArgumentException();
     this.array = array;
     this.ofs = ofs;
     this.len = len;
   }
-
-  public IntList(int[] array) {
-    this(array, 0, array.length);
-  }
-  // ---
 
   @Override
   public int size() {
@@ -45,19 +54,22 @@ import java.util.stream.Stream;
 
   @Override
   public Integer get(int index) {
-    if (Integers.requirePositiveOrZero(index) < len)
-      return array[ofs + index];
-    throw new IllegalArgumentException("" + index);
+    if (index < 0)
+      throw new IllegalArgumentException();
+    if (len <= index)
+      throw new IllegalArgumentException();
+    return array[ofs + index];
   }
 
   @Override
   public IntList subList(int fromIndex, int toIndex) {
-    Integers.requirePositiveOrZero(fromIndex);
-    if (ofs + len < toIndex)
+    if (fromIndex < 0)
       throw new IllegalArgumentException();
-    if (fromIndex <= toIndex)
-      return new IntList(array, ofs + fromIndex, toIndex - fromIndex);
-    throw new IllegalArgumentException();
+    if (len < fromIndex)
+      throw new IllegalArgumentException();
+    if (len < toIndex)
+      throw new IllegalArgumentException();
+    return new IntList(array, ofs + fromIndex, Math.subtractExact(toIndex, fromIndex));
   }
 
   @Override
@@ -82,7 +94,8 @@ import java.util.stream.Stream;
 
   @Override
   public ListIterator<Integer> listIterator(int index) {
-    Integers.requirePositiveOrZero(index);
+    if (index < 0)
+      throw new IllegalArgumentException();
     if (size() < index)
       throw new IllegalArgumentException();
     return new ListIterator<>() {
@@ -141,7 +154,7 @@ import java.util.stream.Stream;
 
   @Override
   public int indexOf(Object object) {
-    Objects.requireNonNull(object); // list does not permit null elements
+    Objects.requireNonNull(object);
     for (int index = 0; index < len; ++index)
       if (object.equals(array[ofs + index]))
         return index;
@@ -159,8 +172,8 @@ import java.util.stream.Stream;
 
   @Override
   public boolean contains(Object object) {
-    return Objects.nonNull(object) //
-        && stream().anyMatch(object::equals);
+    // throws exception if object == null even if stream is empty
+    return stream().anyMatch(object::equals);
   }
 
   @Override
@@ -182,7 +195,7 @@ import java.util.stream.Stream;
       List<?> list = (List<?>) object;
       if (list.size() == len) {
         AtomicInteger atomicInteger = new AtomicInteger(ofs);
-        return list.stream().allMatch(v -> v.equals(array[atomicInteger.getAndIncrement()]));
+        return list.stream().allMatch(value -> value.equals(array[atomicInteger.getAndIncrement()]));
       }
     }
     return false;

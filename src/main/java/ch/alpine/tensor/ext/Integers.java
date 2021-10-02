@@ -100,13 +100,10 @@ public enum Integers {
   }
 
   // ---
-  /** Remark: for variable size input use {@link Arrays#asList(Object...)} for example
-   * Arrays.asList(18, 7, 79);
-   * 
-   * @param array non-null
-   * @return list with elements {array[0], array[1], ...} and size of array.length
+  /** @param array non-null
+   * @return unmodifiable list with elements {array[0], array[1], ...} and size of array.length
    * @see Arrays#asList(Object...) */
   public static List<Integer> asList(int[] array) {
-    return new IntList(array);
+    return IntList.wrap(array);
   }
 }
