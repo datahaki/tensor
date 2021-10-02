@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -80,6 +82,11 @@ public class TensorImplTest extends TestCase {
     Tensor tensor = Tensor.of(Arrays.asList(RealScalar.of(2), RealScalar.of(3)).stream());
     TensorImpl tensorImpl = (TensorImpl) tensor;
     assertTrue(tensorImpl.list() instanceof ArrayList); // used in TensorParser
+  }
+
+  public void testSetFail() {
+    Tensor matrix = HilbertMatrix.of(3, 3);
+    AssertFail.of(() -> matrix.set(Array.zeros(2), Tensor.ALL, 1));
   }
 
   public void testNonPublic() {

@@ -30,7 +30,7 @@ import java.util.stream.Stream;
   }
 
   @Override // from TensorImpl
-  protected void _set(Tensor tensor, List<Integer> index) {
+  public void set(Tensor tensor, List<Integer> index) {
     throw new UnsupportedOperationException("unmodifiable");
   }
 

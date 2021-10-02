@@ -79,6 +79,11 @@ public abstract class AbstractScalar implements Scalar {
   }
 
   @Override // from Tensor
+  public void set(Tensor tensor, List<Integer> index) {
+    throw TensorRuntimeException.of(this, tensor);
+  }
+
+  @Override // from Tensor
   public final <T extends Tensor> void set(Function<T, ? extends Tensor> function, int... index) {
     throw TensorRuntimeException.of(this);
   }

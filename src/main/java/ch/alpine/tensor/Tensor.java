@@ -147,11 +147,20 @@ public interface Tensor extends Iterable<Tensor> {
    * <li><code>matrix.set(col, Tensor.ALL, 5)</code> represents the assignment <code>matrix[:, 5]=col</code>
    * </ul>
    * 
-   * @param tensor of which a copy replaces the existing element(s) of this instance
+   * @param tensor of which a copy replaces the existing element(s) at given index of this instance
    * @param index non-empty
    * @throws Exception if set() is invoked on an instance of {@link Scalar}, or index is empty
    * @throws Exception if this instance is unmodifiable */
   void set(Tensor tensor, int... index);
+
+  /** set copy of tensor as element at location this[index[0], index[1], ...].
+   * 
+   * @param tensor of which a copy replaces the existing element(s) at given index of this instance
+   * @param index non-empty list
+   * @throws Execption if index is empty
+   * @throws Exception if this instance is unmodifiable
+   * @see #set(Tensor, int...) */
+  void set(Tensor tensor, List<Integer> index);
 
   /** replaces element x at index with <code>function.apply(x)</code>
    * The operation is invalid if this tensor has been cast as unmodifiable.
