@@ -13,8 +13,8 @@ import junit.framework.TestCase;
 
 public class NdCentersTest extends TestCase {
   public void testSimple() {
-    NdBox outer = NdBox.of(Tensors.vector(0.1, 0.3), Tensors.vector(2.4, 3.5));
-    NdBox inner = NdBox.of(Tensors.vector(1, 1), Tensors.vector(2, 3));
+    Box outer = Box.of(Tensors.vector(0.1, 0.3), Tensors.vector(2.4, 3.5));
+    Box inner = Box.of(Tensors.vector(1, 1), Tensors.vector(2, 3));
     for (NdCenters ndCenters : NdCenters.values())
       for (int count = 0; count < 100; ++count) {
         NdCenterInterface ndCenterInterface = ndCenters.apply(TestHelper.sample(outer));
@@ -24,8 +24,8 @@ public class NdCentersTest extends TestCase {
   }
 
   public void testQuantity() {
-    NdBox outer = NdBox.of(Tensors.fromString("{0.1[m], 0.3[m]}"), Tensors.fromString("{2.4[m], 2.7[m]}"));
-    NdBox inner = NdBox.of(Tensors.fromString("{1[m], 1[m]}"), Tensors.fromString("{2[m], 3[m]}"));
+    Box outer = Box.of(Tensors.fromString("{0.1[m], 0.3[m]}"), Tensors.fromString("{2.4[m], 2.7[m]}"));
+    Box inner = Box.of(Tensors.fromString("{1[m], 1[m]}"), Tensors.fromString("{2[m], 3[m]}"));
     for (NdCenters ndCenters : NdCenters.values())
       for (int count = 0; count < 100; ++count) {
         NdCenterInterface ndCenterInterface = ndCenters.apply(TestHelper.sample(outer));
@@ -35,7 +35,7 @@ public class NdCentersTest extends TestCase {
   }
 
   public void testZero() {
-    NdBox inner = NdBox.of(Tensors.fromString("{1[m], 1[m]}"), Tensors.fromString("{2[m], 3[m]}"));
+    Box inner = Box.of(Tensors.fromString("{1[m], 1[m]}"), Tensors.fromString("{2[m], 3[m]}"));
     for (NdCenters ndCenters : NdCenters.values())
       for (int count = 0; count < 10; ++count) {
         NdCenterInterface ndCenterInterface = ndCenters.apply(TestHelper.sample(inner));

@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 
 public class NdInsideRadiusTest extends TestCase {
   public void testSimple() {
-    NdMap<Void> ndMap = NdTreeMap.of(NdBox.of(Tensors.vector(0), Tensors.vector(1)));
+    NdMap<Void> ndMap = NdTreeMap.of(Box.of(Tensors.vector(0), Tensors.vector(1)));
     ndMap.insert(Tensors.vector(0), null);
     ndMap.insert(Tensors.vector(0.9), null);
     for (NdCenters ndCenters : NdCenters.values()) {
@@ -20,7 +20,7 @@ public class NdInsideRadiusTest extends TestCase {
   }
 
   public void testExact() {
-    NdMap<Void> ndMap = NdTreeMap.of(NdBox.of(Tensors.vector(0), Tensors.vector(4)));
+    NdMap<Void> ndMap = NdTreeMap.of(Box.of(Tensors.vector(0), Tensors.vector(4)));
     ndMap.insert(Tensors.vector(0), null);
     ndMap.insert(Tensors.vector(4), null);
     for (NdCenters ndCenters : NdCenters.values()) {

@@ -62,9 +62,9 @@ public class NdCollectNearest<V> implements NdVisitor<V> {
   }
 
   @Override // from NdVisitor
-  public boolean isViable(NdBox ndBox) {
+  public boolean isViable(Box box) {
     return queue.size() < limit //
-        || Scalars.lessThan(ndCenterInterface.distance(ndBox), queue.peek().distance());
+        || Scalars.lessThan(ndCenterInterface.distance(box), queue.peek().distance());
   }
 
   @Override // from NdVisitor

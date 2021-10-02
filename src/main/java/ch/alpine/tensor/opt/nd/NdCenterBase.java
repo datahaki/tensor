@@ -16,8 +16,8 @@ public abstract class NdCenterBase implements NdCenterInterface, Serializable {
   }
 
   @Override // from NdCenterInterface
-  public final Scalar distance(NdBox ndBox) {
-    return distance(ndBox.clip(center));
+  public final Scalar distance(Box box) {
+    return distance(box.clip(center));
   }
 
   @Override // from NdCenterInterface

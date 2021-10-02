@@ -4,7 +4,6 @@ package ch.alpine.tensor.opt.nd;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -12,14 +11,16 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-/** axis aligned bounding box
- * immutable */
-public class NdBox implements Serializable {
+/** n-dimensional axis aligned bounding box
+ * 
+ * an instance of Box is immutable */
+public class Box implements Serializable {
   /** min and max are vectors of identical length
    * for instance if the points to be added are in the unit cube then
    * <pre>
@@ -33,8 +34,8 @@ public class NdBox implements Serializable {
    * @throws Exception if either input parameter is not a vector, or
    * if vectors are different in length
    * @see Entrywise */
-  public static NdBox of(Tensor min, Tensor max) {
-    return new NdBox(IntStream.range(0, Integers.requireEquals(min.length(), max.length())) //
+  public static Box of(Tensor min, Tensor max) {
+    return new Box(IntStream.range(0, Integers.requireEquals(min.length(), max.length())) //
         .mapToObj(index -> Clips.interval(min.Get(index), max.Get(index))) //
         .collect(Collectors.toList()));
   }
@@ -42,51 +43,33 @@ public class NdBox implements Serializable {
   // ---
   private final List<Clip> list;
 
-  private NdBox(List<Clip> list) {
+  private Box(List<Clip> list) {
     this.list = list;
   }
 
-  /** @param index
+  /** @return dimensions of bounding box */
+  public int dimensions() {
+    return list.size();
+  }
+
+  /** @param index in the range 0, 1, ... {@link #dimensions()} - 1
    * @return clip in given dimension */
-  public Clip clip(int index) {
+  public Clip getClip(int index) {
     return list.get(index);
   }
 
-  /** @param index of dimension
-   * @return left, i.e. lower half of this bounding box */
-  public NdBox splitLo(int index) {
-    List<Clip> copy = new ArrayList<>(list);
-    Clip clip = list.get(index);
-    copy.set(index, Clips.interval(clip.min(), median(clip)));
-    return new NdBox(copy);
-  }
-
-  /** @param index of dimension
-   * @return right, i.e. upper half of this bounding box */
-  public NdBox splitHi(int index) {
-    List<Clip> copy = new ArrayList<>(list);
-    Clip clip = list.get(index);
-    copy.set(index, Clips.interval(median(clip), clip.max()));
-    return new NdBox(copy);
-  }
-
-  /** @param index
-   * @return median of bounds in dimension of given index */
-  public Scalar median(int index) {
-    return median(list.get(index));
-  }
-
-  private static Scalar median(Clip clip) {
-    return clip.min().add(clip.max()).multiply(RationalScalar.HALF);
+  /** @param vector of length {@link #dimensions()}
+   * @return coordinates of vector clipped to bounds of this instance */
+  public Tensor clip(Tensor vector) {
+    return Tensors.vector(i -> getClip(i).apply(vector.Get(i)), //
+        Integers.requireEquals(dimensions(), vector.length()));
   }
 
   /** @param vector
    * @return whether given vector is inside this bounding box */
   public boolean isInside(Tensor vector) {
-    Integers.requireEquals(vector.length(), list.size());
-    AtomicInteger atomicInteger = new AtomicInteger();
-    return list.stream() //
-        .allMatch(clip -> clip.isInside(vector.Get(atomicInteger.getAndIncrement())));
+    return IntStream.range(0, Integers.requireEquals(dimensions(), vector.length())) //
+        .allMatch(i -> getClip(i).isInside(vector.Get(i)));
   }
 
   /** @param vector
@@ -98,18 +81,36 @@ public class NdBox implements Serializable {
     throw TensorRuntimeException.of(vector);
   }
 
-  /** @param vector
-   * @return coordinates of vector clipped to bounds of this instance */
-  public Tensor clip(Tensor vector) {
-    AtomicInteger atomicInteger = new AtomicInteger();
-    return Tensor.of(list.stream().map(clip -> clip.apply(vector.Get(atomicInteger.getAndIncrement()))));
+  // ---
+  /** @param index of dimension
+   * @return left, i.e. lower half of this bounding box */
+  public Box splitLo(int index) {
+    List<Clip> copy = new ArrayList<>(list);
+    Clip clip = getClip(index);
+    copy.set(index, Clips.interval(clip.min(), median(clip)));
+    return new Box(copy);
   }
 
-  /** @return dimensions of bounding box */
-  public int dimensions() {
-    return list.size();
+  /** @param index of dimension
+   * @return right, i.e. upper half of this bounding box */
+  public Box splitHi(int index) {
+    List<Clip> copy = new ArrayList<>(list);
+    Clip clip = getClip(index);
+    copy.set(index, Clips.interval(median(clip), clip.max()));
+    return new Box(copy);
   }
 
+  /** @param index
+   * @return median of bounds in dimension of given index */
+  public Scalar median(int index) {
+    return median(getClip(index));
+  }
+
+  private static Scalar median(Clip clip) {
+    return clip.min().add(clip.max()).multiply(RationalScalar.HALF);
+  }
+
+  // ---
   /** @return lower left corner of bounding box */
   public Tensor min() {
     return Tensor.of(list.stream().map(Clip::min));

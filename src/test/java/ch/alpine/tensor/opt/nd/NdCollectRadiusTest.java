@@ -23,7 +23,7 @@ public class NdCollectRadiusTest extends TestCase {
   public void testClusterRadius() {
     int maxDensity = 2;
     NdMap<String> m1 = new NdListMap<>();
-    NdMap<String> m2 = NdTreeMap.of(NdBox.of(Tensors.vector(-2, -1), Tensors.vector(2, 10)), maxDensity);
+    NdMap<String> m2 = NdTreeMap.of(Box.of(Tensors.vector(-2, -1), Tensors.vector(2, 10)), maxDensity);
     int index = 0;
     Distribution b = BernoulliDistribution.of(RealScalar.of(0.25));
     Distribution ux = UniformDistribution.of(-2, 2);

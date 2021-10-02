@@ -22,35 +22,35 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
    * 2^20 == 1048576 */
   private static final int MAX_DEPTH = 20;
 
-  /** @param ndBox axis aligned bounding box that contains the points to be added
+  /** @param box axis aligned bounding box that contains the points to be added
    * @param leafSizeMax non-negative is the maximum queue size of leaf nodes, except
    * for leaf nodes with maxDepth, which have unlimited queue size. The special case
    * maxDensity == 0 implies that values will only be stored at nodes of max depth */
-  public static <V> NdMap<V> of(NdBox ndBox, int leafSizeMax) {
-    return new NdTreeMap<>(ndBox, leafSizeMax);
+  public static <V> NdMap<V> of(Box box, int leafSizeMax) {
+    return new NdTreeMap<>(box, leafSizeMax);
   }
 
-  /** @param ndBox axis aligned bounding box that contains the points to be added
+  /** @param box axis aligned bounding box that contains the points to be added
    * @return */
-  public static <V> NdMap<V> of(NdBox ndBox) {
-    return of(ndBox, LEAF_SIZE_DEFAULT);
+  public static <V> NdMap<V> of(Box box) {
+    return of(box, LEAF_SIZE_DEFAULT);
   }
 
   // ---
-  private final NdBox ndBoxGlobal;
+  private final Box boxGlobal;
   private final int maxDensity;
   private final Node root;
   private int size;
 
-  private NdTreeMap(NdBox ndBox, int maxDensity) {
-    this.ndBoxGlobal = Objects.requireNonNull(ndBox);
+  private NdTreeMap(Box box, int maxDensity) {
+    this.boxGlobal = Objects.requireNonNull(box);
     this.maxDensity = Integers.requirePositive(maxDensity);
     root = new Node(0);
   }
 
   @Override // from NdMap
   public void insert(Tensor location, V value) {
-    root.add(new NdEntry<>(ndBoxGlobal.requireInside(location), value), ndBoxGlobal);
+    root.add(new NdEntry<>(boxGlobal.requireInside(location), value), boxGlobal);
     ++size;
   }
 
@@ -66,7 +66,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
 
   @Override // from NdMap
   public void visit(NdVisitor<V> ndVisitor) {
-    root.visit(ndVisitor, ndBoxGlobal);
+    root.visit(ndVisitor, boxGlobal);
   }
 
   @Override // from Object
@@ -97,25 +97,25 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
     }
 
     private int dimension() {
-      return depth % ndBoxGlobal.dimensions();
+      return depth % boxGlobal.dimensions();
     }
 
-    private void add(NdEntry<V> ndEntry, NdBox ndBox) {
+    private void add(NdEntry<V> ndEntry, Box box) {
       if (isInterior()) {
         Tensor location = ndEntry.location();
         int dimension = dimension();
-        if (Scalars.lessThan(location.Get(dimension), ndBox.median(dimension))) {
+        if (Scalars.lessThan(location.Get(dimension), box.median(dimension))) {
           if (Objects.isNull(lChild)) {
             lChild = createChild();
             lChild.queue.add(ndEntry);
           } else
-            lChild.add(ndEntry, ndBox.splitLo(dimension));
+            lChild.add(ndEntry, box.splitLo(dimension));
         } else {
           if (Objects.isNull(rChild)) {
             rChild = createChild();
             rChild.queue.add(ndEntry);
           } else
-            rChild.add(ndEntry, ndBox.splitHi(dimension));
+            rChild.add(ndEntry, box.splitHi(dimension));
         }
       } else { // queue != null
         if (queue.size() < maxDensity || depth == MAX_DEPTH)
@@ -123,7 +123,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
         else { // split queue into left and right
           int dimension = dimension();
           for (NdEntry<V> entry : queue)
-            if (Scalars.lessThan(entry.location().Get(dimension), ndBox.median(dimension))) {
+            if (Scalars.lessThan(entry.location().Get(dimension), box.median(dimension))) {
               if (Objects.isNull(lChild))
                 lChild = createChild();
               lChild.queue.add(entry);
@@ -134,39 +134,39 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
             }
           queue.clear();
           queue = null;
-          add(ndEntry, ndBox);
+          add(ndEntry, box);
         }
       }
     }
 
-    private void visit(NdVisitor<V> ndVisitor, NdBox ndBox) {
+    private void visit(NdVisitor<V> ndVisitor, Box box) {
       if (isInterior()) {
         int dimension = dimension();
-        Scalar median = ndBox.median(dimension);
+        Scalar median = box.median(dimension);
         boolean leftFirst = ndVisitor.push_firstLo(dimension, median);
         if (leftFirst) {
-          visitLo(ndVisitor, ndBox);
-          visitHi(ndVisitor, ndBox);
+          visitLo(ndVisitor, box);
+          visitHi(ndVisitor, box);
         } else {
-          visitHi(ndVisitor, ndBox);
-          visitLo(ndVisitor, ndBox);
+          visitHi(ndVisitor, box);
+          visitLo(ndVisitor, box);
         }
         ndVisitor.pop();
       } else
         queue.forEach(ndVisitor::consider);
     }
 
-    private void visitLo(NdVisitor<V> ndVisitor, NdBox ndBox) {
+    private void visitLo(NdVisitor<V> ndVisitor, Box box) {
       if (Objects.nonNull(lChild)) {
-        NdBox splitLo = ndBox.splitLo(dimension());
+        Box splitLo = box.splitLo(dimension());
         if (ndVisitor.isViable(splitLo))
           lChild.visit(ndVisitor, splitLo);
       }
     }
 
-    private void visitHi(NdVisitor<V> ndVisitor, NdBox ndBox) {
+    private void visitHi(NdVisitor<V> ndVisitor, Box box) {
       if (Objects.nonNull(rChild)) {
-        NdBox splitHi = ndBox.splitHi(dimension());
+        Box splitHi = box.splitHi(dimension());
         if (ndVisitor.isViable(splitHi))
           rChild.visit(ndVisitor, splitHi);
       }
