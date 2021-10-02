@@ -62,6 +62,7 @@ public class MatrixQTest extends TestCase {
   }
 
   public void testRequireNullThrow() {
+    MatrixQ.require(HilbertMatrix.of(2, 3));
     AssertFail.of(() -> MatrixQ.require(null));
   }
 

@@ -1,14 +1,7 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Unprotect;
 
 /** simplified version of Mathematica::Differences
  * 
@@ -36,19 +29,13 @@ public enum Differences {
    * @return the successive differences of elements in tensor
    * @throws Exception if given tensor is a scalar */
   public static Tensor of(Tensor tensor) {
-    int length = tensor.length();
-    if (length <= 1) {
-      ScalarQ.thenThrow(tensor);
-      return Tensors.empty();
-    }
-    List<Tensor> list = new ArrayList<>(length - 1);
-    Iterator<Tensor> iterator = tensor.iterator();
-    Tensor prev = iterator.next();
-    while (iterator.hasNext()) {
-      Tensor next = iterator.next();
-      list.add(next.subtract(prev));
-      prev = next;
-    }
-    return Unprotect.using(list);
+    return ADJACENT_REDUCE.apply(tensor);
   }
+
+  private static final AdjacentReduce ADJACENT_REDUCE = new AdjacentReduce() {
+    @Override
+    protected Tensor reduce(Tensor prev, Tensor next) {
+      return next.subtract(prev);
+    }
+  };
 }
