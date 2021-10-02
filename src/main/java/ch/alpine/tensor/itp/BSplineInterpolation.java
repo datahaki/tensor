@@ -36,7 +36,7 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
   public static Tensor matrix(int degree, int n) {
     Tensor domain = Range.of(0, n);
     return Transpose.of(Tensor.of(IntStream.range(0, n) //
-        .mapToObj(index -> domain.map(BSplineFunction.string(degree, UnitVector.of(n, index))))));
+        .mapToObj(index -> domain.map(BSplineFunctionString.of(degree, UnitVector.of(n, index))))));
   }
 
   /** @param degree
@@ -50,7 +50,7 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
   private final ScalarTensorFunction scalarTensorFunction;
 
   private BSplineInterpolation(int degree, Tensor control) {
-    scalarTensorFunction = BSplineFunction.string(degree, solve(degree, control));
+    scalarTensorFunction = BSplineFunctionString.of(degree, solve(degree, control));
   }
 
   @Override // from Interpolation

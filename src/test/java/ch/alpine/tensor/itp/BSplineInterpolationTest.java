@@ -83,7 +83,7 @@ public class BSplineInterpolationTest extends TestCase {
     for (int degree = 0; degree < 4; ++degree) {
       Tensor tensor = BSplineInterpolation.solve(degree, interp);
       ExactTensorQ.require(tensor);
-      ScalarTensorFunction bSplineFunction = BSplineFunction.string(degree, tensor);
+      ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(degree, tensor);
       for (int index = 0; index < interp.length(); ++index)
         assertEquals(bSplineFunction.apply(RealScalar.of(index)), interp.get(index));
     }

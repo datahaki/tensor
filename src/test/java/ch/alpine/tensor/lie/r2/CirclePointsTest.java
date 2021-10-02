@@ -17,7 +17,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarTensorFunction;
-import ch.alpine.tensor.itp.BSplineFunction;
+import ch.alpine.tensor.itp.BSplineFunctionString;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.sca.Chop;
@@ -73,7 +73,7 @@ public class CirclePointsTest extends TestCase {
   }
 
   public void testCirclePoints() {
-    ScalarTensorFunction bSplineFunction = BSplineFunction.string(3, CirclePoints.of(10));
+    ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, CirclePoints.of(10));
     Tensor polygon = Subdivide.of(0, 9, 20).map(bSplineFunction::apply);
     assertTrue(MatrixQ.of(polygon));
   }

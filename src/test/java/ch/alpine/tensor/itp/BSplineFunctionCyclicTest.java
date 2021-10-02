@@ -1,14 +1,19 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import java.util.Random;
+
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.RotateRight;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.UniformDistribution;
@@ -19,7 +24,7 @@ import junit.framework.TestCase;
 
 public class BSplineFunctionCyclicTest extends TestCase {
   public void testDegree0() {
-    ScalarTensorFunction scalarTensorFunction = BSplineFunction.cyclic(0, Tensors.vector(1, 2, 3));
+    ScalarTensorFunction scalarTensorFunction = BSplineFunctionCyclic.of(0, Tensors.vector(1, 2, 3));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(-0.1)), RealScalar.of(1));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(0.0)), RealScalar.of(1));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(0.1)), RealScalar.of(1));
@@ -34,7 +39,7 @@ public class BSplineFunctionCyclicTest extends TestCase {
   }
 
   public void testDegree1() {
-    ScalarTensorFunction scalarTensorFunction = BSplineFunction.cyclic(1, Tensors.vector(3, 4, 5));
+    ScalarTensorFunction scalarTensorFunction = BSplineFunctionCyclic.of(1, Tensors.vector(3, 4, 5));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(-0.5)), RealScalar.of(4.0));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(0.0)), RealScalar.of(3));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(0.5)), RealScalar.of(3.5));
@@ -46,11 +51,30 @@ public class BSplineFunctionCyclicTest extends TestCase {
     assertEquals(scalarTensorFunction.apply(RealScalar.of(3.5)), RealScalar.of(3.5));
   }
 
+  public void testCyclic() {
+    Random random = new Random();
+    Distribution distribution = DiscreteUniformDistribution.of(-50, 50);
+    for (int n = 1; n < 10; ++n)
+      for (int degree = 0; degree < 6; ++degree) {
+        Tensor control = RandomVariate.of(distribution, n, 3);
+        ScalarTensorFunction stf1 = BSplineFunctionCyclic.of(degree, control);
+        int shift = random.nextInt(20);
+        ScalarTensorFunction stf2 = BSplineFunctionCyclic.of(degree, RotateRight.of(control, shift));
+        Scalar x1 = RandomVariate.of(distribution).divide(RealScalar.of(7));
+        Scalar x2 = x1.add(RealScalar.of(shift));
+        Tensor y1 = stf1.apply(x1);
+        Tensor y2 = stf2.apply(x2);
+        assertEquals(y1, y2);
+        ExactTensorQ.require(y1);
+        ExactTensorQ.require(y2);
+      }
+  }
+
   public void testExact() {
     Distribution distribution = UniformDistribution.of(0, 3);
     ScalarUnaryOperator scalarUnaryOperator = Round.toMultipleOf(RationalScalar.of(1, 7));
     for (int degree = 0; degree < 5; ++degree) {
-      ScalarTensorFunction scalarTensorFunction = BSplineFunction.cyclic(degree, HilbertMatrix.of(3, 5));
+      ScalarTensorFunction scalarTensorFunction = BSplineFunctionCyclic.of(degree, HilbertMatrix.of(3, 5));
       RandomVariate.of(distribution, 20).map(scalarTensorFunction);
       Tensor tensor = RandomVariate.of(distribution, 20).map(scalarUnaryOperator);
       Tensor result = tensor.map(scalarTensorFunction);
@@ -61,11 +85,11 @@ public class BSplineFunctionCyclicTest extends TestCase {
   public void testEmptyFail() {
     for (int degree = -2; degree <= 4; ++degree) {
       int fd = degree;
-      AssertFail.of(() -> BSplineFunction.cyclic(fd, Tensors.empty()));
+      AssertFail.of(() -> BSplineFunctionCyclic.of(fd, Tensors.empty()));
     }
   }
 
   public void testNegativeFail() {
-    AssertFail.of(() -> BSplineFunction.string(-1, Tensors.vector(1, 2, 3, 4)));
+    AssertFail.of(() -> BSplineFunctionString.of(-1, Tensors.vector(1, 2, 3, 4)));
   }
 }

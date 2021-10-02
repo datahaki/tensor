@@ -1,16 +1,18 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.api.ScalarTensorFunction;
+import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.sca.Floor;
 
 /** The implementation of BSplineFunction in the tensor library is different from Mathematica.
  * 
@@ -31,73 +33,48 @@ import ch.alpine.tensor.sca.Floor;
  * of x where the pieces of polynomial meet are known as knots, denoted ..., t0, t1, t2, ...
  * and sorted into non-decreasing order. */
 public abstract class BSplineFunction implements ScalarTensorFunction {
-  /** the control point are stored by reference, i.e. modifications to
-   * given tensor alter the behavior of this BSplineFunction instance.
-   * 
-   * @param degree of polynomial basis function, non-negative integer
-   * @param control points with at least one element
-   * @return
-   * @throws Exception if degree is negative, or control does not have length at least one */
-  public static ScalarTensorFunction string(int degree, Tensor control) {
-    return new BSplineFunctionString(Integers.requirePositiveOrZero(degree), control);
-  }
-
-  /** function is periodic every interval [0, control.length())
-   * 
-   * @param degree non-negative
-   * @param control with at least one element
-   * @return function defined for all real scalars not constrained to a finite interval
-   * @throws Exception if degree is negative, or control does not have length at least one */
-  public static ScalarTensorFunction cyclic(int degree, Tensor control) {
-    return new BSplineFunctionCyclic(Integers.requirePositiveOrZero(degree), control);
-  }
-
+  private static final int CACHE_SIZE = 16;
   // ---
-  private final int degree;
-  private final Tensor control;
+  private final Cache<Integer, DeBoor> cache = Cache.of(new Inner(), CACHE_SIZE);
+  private final BinaryAverage binaryAverage;
+  protected final int degree;
+  private final Tensor sequence;
   /** half == degree / 2 */
   private final int half;
   /** shift is 0 for odd degree and 1/2 for even degree */
-  final Scalar shift;
+  protected final Scalar shift;
 
-  BSplineFunction(int degree, Tensor control) {
-    this.degree = degree;
-    this.control = control;
+  protected BSplineFunction(BinaryAverage binaryAverage, int degree, Tensor sequence) {
+    this.binaryAverage = Objects.requireNonNull(binaryAverage);
+    this.degree = Integers.requirePositiveOrZero(degree);
+    this.sequence = Objects.requireNonNull(sequence);
     half = degree / 2;
     shift = Integers.isEven(degree) //
         ? RationalScalar.HALF
         : RealScalar.ZERO;
   }
 
-  @Override // from ScalarTensorFunction
-  public final Tensor apply(Scalar scalar) {
-    scalar = domain(scalar).add(shift);
-    return deBoor(Floor.intValueExact(scalar)).apply(scalar);
-  }
-
   /** @param k
    * @return */
   public final DeBoor deBoor(int k) {
-    int hi = degree + 1 + k;
-    return new DeBoor( //
-        LinearBinaryAverage.INSTANCE, //
-        degree, //
-        knots(Range.of(-degree + 1 + k, hi)), //
-        Tensor.of(IntStream.range(k - half, hi - half) // control
-            .map(this::bound) //
-            .mapToObj(control::get)));
+    return cache.apply(k);
   }
 
-  /** @param scalar
-   * @return scalar in evaluation domain
-   * @throws Exception if scalar is outside defined domain */
-  abstract Scalar domain(Scalar scalar);
+  private class Inner implements Function<Integer, DeBoor>, Serializable {
+    @Override
+    public DeBoor apply(Integer k) {
+      return new DeBoor(binaryAverage, degree, knots(k), //
+          Tensor.of(IntStream.range(k - half, k + degree + 1 - half) // control
+              .map(BSplineFunction.this::bound) //
+              .mapToObj(sequence::get)));
+    }
+  }
 
-  /** @param knots
-   * @return */
-  abstract Tensor knots(Tensor knots);
+  /** @param k
+   * @return knot vector corresponding to interval k */
+  protected abstract Tensor knots(int k);
 
   /** @param index
-   * @return */
-  abstract int bound(int index);
+   * @return index mapped to position in control point sequence */
+  protected abstract int bound(int index);
 }
