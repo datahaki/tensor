@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -42,7 +41,7 @@ public class BasisTransformTest extends TestCase {
   public void testForm() {
     int rows = 6;
     int cols = 8;
-    Random random = new SecureRandom();
+    Random random = new Random(4);
     Tensor m = IdentityMatrix.of(rows);
     Tensor v = Tensors.matrix((i, j) -> RealScalar.of(random.nextInt(10)), rows, cols);
     Tensor t = BasisTransform.ofForm(m, v);
@@ -61,10 +60,11 @@ public class BasisTransformTest extends TestCase {
   }
 
   public void testMatrix() {
+    Random random = new Random(3);
     int n = 5;
     Distribution distribution = BinomialDistribution.of(10, 0.3);
-    Tensor matrix = RandomVariate.of(distribution, n, n);
-    Tensor v = RandomVariate.of(distribution, n, n);
+    Tensor matrix = RandomVariate.of(distribution, random, n, n);
+    Tensor v = RandomVariate.of(distribution, random, n, n);
     if (Scalars.nonZero(Det.of(v))) {
       Tensor trafo1 = BasisTransform.ofMatrix(matrix, v);
       ExactTensorQ.require(trafo1);

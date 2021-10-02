@@ -33,9 +33,6 @@ public class IntListTest extends TestCase {
   }
 
   public void testConstructFails() {
-    // AssertFail.of(() -> new IntList(new int[] { 0, 1, 2, 3, 4, 5 }, -1, 3));
-    // AssertFail.of(() -> new IntList(new int[] { 0, 1, 2, 3, 4, 5 }, 1, -1));
-    // AssertFail.of(() -> new IntList(new int[] { 0, 1, 2, 3, 4, 5 }, 3, 4));
     AssertFail.of(() -> IntList.wrap(null));
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(4, 6);
     assertEquals(intList.size(), 2);
@@ -213,5 +210,11 @@ public class IntListTest extends TestCase {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     List<Integer> copy = Serialization.copy(intList);
     assertEquals(copy, Arrays.asList(2, 3, 4));
+  }
+
+  public void testToString() {
+    String s1 = Arrays.asList(10, 2, 0, -4).toString();
+    String s2 = Integers.asList(new int[] { 10, 2, 0, -4 }).toString();
+    assertEquals(s1, s2);
   }
 }

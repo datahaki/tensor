@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.RandomAccess;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /** API EXPERIMENTAL
@@ -32,11 +33,9 @@ import java.util.stream.Stream;
   private final int len;
 
   /** @param array non-null
-   * @param ofs guaranteed to be non-negative
+   * @param ofs non-negative
    * @param len non-negative */
   private IntList(int[] array, int ofs, int len) {
-    if (len < 0)
-      throw new IllegalArgumentException();
     this.array = array;
     this.ofs = ofs;
     this.len = len;
@@ -54,22 +53,23 @@ import java.util.stream.Stream;
 
   @Override
   public Integer get(int index) {
-    if (index < 0)
-      throw new IllegalArgumentException();
-    if (len <= index)
-      throw new IllegalArgumentException();
+    if (index < 0 || len <= index)
+      throw new IllegalArgumentException(Integer.toString(index));
     return array[ofs + index];
   }
 
   @Override
   public IntList subList(int fromIndex, int toIndex) {
-    if (fromIndex < 0)
+    if (fromIndex < 0) // asserts that 0 <= fromIndex
       throw new IllegalArgumentException();
-    if (len < fromIndex)
+    if (len < toIndex) // asserts that toIndex <= len
       throw new IllegalArgumentException();
-    if (len < toIndex)
+    int dif = Math.subtractExact(toIndex, fromIndex);
+    if (dif < 0) // asserts that fromIndex <= toIndex
       throw new IllegalArgumentException();
-    return new IntList(array, ofs + fromIndex, Math.subtractExact(toIndex, fromIndex));
+    // implied: 0 <= fromIndex <= len
+    // implied: fromIndex + dif <= len because fromIndex + toIndex - fromIndex <= len is toIndex <= len
+    return new IntList(array, ofs + fromIndex, dif);
   }
 
   @Override
@@ -94,9 +94,8 @@ import java.util.stream.Stream;
 
   @Override
   public ListIterator<Integer> listIterator(int index) {
-    if (index < 0)
-      throw new IllegalArgumentException();
-    if (size() < index)
+    // "throws exception if the index is out of range index < 0 || index > size()"
+    if (index < 0 || size() < index)
       throw new IllegalArgumentException();
     return new ListIterator<>() {
       int count = index;
@@ -154,19 +153,19 @@ import java.util.stream.Stream;
 
   @Override
   public int indexOf(Object object) {
-    Objects.requireNonNull(object);
     for (int index = 0; index < len; ++index)
       if (object.equals(array[ofs + index]))
         return index;
+    Objects.requireNonNull(object);
     return -1;
   }
 
   @Override
   public int lastIndexOf(Object object) {
-    Objects.requireNonNull(object); // list does not permit null elements
     for (int index = len - 1; 0 <= index; --index)
       if (object.equals(array[ofs + index]))
         return index;
+    Objects.requireNonNull(object);
     return -1;
   }
 
@@ -199,6 +198,11 @@ import java.util.stream.Stream;
       }
     }
     return false;
+  }
+
+  @Override
+  public String toString() {
+    return stream().map(Object::toString).collect(Collectors.joining(", ", "[", "]"));
   }
 
   // ---

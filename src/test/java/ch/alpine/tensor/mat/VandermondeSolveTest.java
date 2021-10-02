@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import java.util.Random;
+
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -26,19 +28,15 @@ public class VandermondeSolveTest extends TestCase {
   }
 
   public void testNumeric() {
+    Random random = new Random(3);
     Distribution distribution = NormalDistribution.standard();
-    int fails = 0;
-    for (int n = 1; n < 10; ++n)
-      try {
-        Tensor x = RandomVariate.of(distribution, n);
-        Tensor q = RandomVariate.of(distribution, n);
-        Tensor ref = LinearSolve.of(Transpose.of(VandermondeMatrix.of(x)), q);
-        Tensor cmp = VandermondeSolve.of(x, q);
-        Chop._04.requireClose(ref, cmp);
-      } catch (Exception exception) {
-        ++fails;
-      }
-    assertTrue(fails <= 2);
+    for (int n = 1; n < 10; ++n) {
+      Tensor x = RandomVariate.of(distribution, random, n);
+      Tensor q = RandomVariate.of(distribution, random, n);
+      Tensor ref = LinearSolve.of(Transpose.of(VandermondeMatrix.of(x)), q);
+      Tensor cmp = VandermondeSolve.of(x, q);
+      Chop._04.requireClose(ref, cmp);
+    }
   }
 
   public void testSingularFail() {

@@ -43,13 +43,16 @@ public enum RandomPermutation {
    * @param n non-negative
    * @return array of length n
    * @throws Exception if n is negative */
+  // TODO function name bad
   public static int[] ofLength(int n) {
     return ofLength(n, RANDOM);
   }
 
   /** @param n non-negative
    * @param random
-   * @return */
+   * @return
+   * @throws Exception if n is negative */
+  // TODO function name bad
   public static int[] ofLength(int n, Random random) {
     return Ordering.INCREASING.of(RandomVariate.of(UniformDistribution.unit(), random, n));
   }
