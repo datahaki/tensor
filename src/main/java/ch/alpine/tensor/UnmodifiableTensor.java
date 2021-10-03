@@ -45,6 +45,11 @@ import java.util.stream.Stream;
   }
 
   @Override // from TensorImpl
+  public Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
+    return super.block(fromIndex, dimensions).unmodifiable();
+  }
+
+  @Override // from TensorImpl
   public Stream<Tensor> stream() {
     return super.stream().map(Tensor::unmodifiable);
   }
@@ -64,10 +69,5 @@ import java.util.stream.Stream;
       }
       // default implementation of Iterator#remove() throws an UnsupportedOperationException
     };
-  }
-
-  @Override // from TensorImpl
-  protected List<Tensor> list() {
-    throw new UnsupportedOperationException("unmodifiable");
   }
 }

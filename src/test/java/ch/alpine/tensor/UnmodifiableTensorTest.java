@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 import ch.alpine.tensor.alg.UnitVector;
@@ -75,6 +76,16 @@ public class UnmodifiableTensorTest extends TestCase {
     assertEquals(next, UnitVector.of(3, 0));
     AssertFail.of(() -> next.set(RealScalar.ONE, 1));
     AssertFail.of(() -> iterator.remove());
+  }
+
+  public void testBlockReferences() {
+    Tensor eye = IdentityMatrix.of(3);
+    Tensor unm = eye.unmodifiable();
+    Tensor blk = unm.block(Arrays.asList(1, 0), Arrays.asList(2, 2));
+    assertEquals(blk, Tensors.fromString("{{0, 1}, {0, 0}}"));
+    AssertFail.of(() -> blk.set(RealScalar.TWO, 1, 0));
+    eye.set(RealScalar.TWO, 1, 0);
+    assertEquals(blk, Tensors.fromString("{{2, 1}, {0, 0}}"));
   }
 
   public void testIteratorRemove() {

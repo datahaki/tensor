@@ -4,6 +4,8 @@ package ch.alpine.tensor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.UnitVector;
@@ -79,9 +81,8 @@ public class TensorImplTest extends TestCase {
   }
 
   public void testArrayList() {
-    Tensor tensor = Tensor.of(Arrays.asList(RealScalar.of(2), RealScalar.of(3)).stream());
-    TensorImpl tensorImpl = (TensorImpl) tensor;
-    assertTrue(tensorImpl.list() instanceof ArrayList); // used in TensorParser
+    List<Tensor> list = Arrays.asList(RealScalar.of(2), RealScalar.of(3)).stream().map(Tensor.class::cast).collect(Collectors.toList());
+    assertTrue(list instanceof ArrayList); // used in TensorParser
   }
 
   public void testSetFail() {

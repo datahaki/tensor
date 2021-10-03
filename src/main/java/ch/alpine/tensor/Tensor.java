@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.fft.ListCorrelate;
 
 /** A {@link Tensor} is a scalar, or a list of tensors.
  * 
@@ -217,47 +218,10 @@ public interface Tensor extends Iterable<Tensor> {
    * @return number of entries on the first level; {@link Scalar#LENGTH} for scalars */
   int length();
 
-  /** For instance, if this tensor is the vector {0, 8, 1}, the function
-   * stream() provides the three scalars 0, 8, 1 in a {@link Stream}.
-   * 
-   * <p>If this tensor is a matrix, the stream provides the references
-   * to the rows of the matrix.
-   * 
-   * <p>If this tensor has been marked as unmodifiable, the elements of
-   * the stream are unmodifiable as well.
-   * 
-   * @return stream over tensors contained in the list of this instance
-   * @throws Exception if invoked on a {@link Scalar} instance, because
-   * a scalar does not contain a list of tensors */
-  Stream<Tensor> stream();
-
-  /** stream access to the entries at given level of this tensor.
-   * entries at given level can be tensors or scalars.
-   * 
-   * <p>For the input <code>level == -1</code>, the return stream consists
-   * of all {@link Scalar}s in this tensor.
-   * 
-   * <p>If this tensor has been marked as unmodifiable, the elements of
-   * the stream are unmodifiable as well.
-   * 
-   * <p>Unlike {@link #stream()}, function {@link #flatten(int)} may be
-   * invoked on a {@link Scalar}. In that case the return value is the
-   * stream with the scalar as single element.
-   * 
-   * @param level
-   * @return non-parallel stream, the user may invoke .parallel() */
-  Stream<Tensor> flatten(int level);
-
   /** @param fromIndex
    * @param toIndex
    * @return copy of sub tensor fromIndex inclusive to toIndex exclusive */
   Tensor extract(int fromIndex, int toIndex);
-
-  /** @param fromIndex location of return tensor in this tensor
-   * @param dimensions of return tensor
-   * @return references to block located at fromIndex of this tensor with given dimensions
-   * @throws Exception if this tensor in unmodifiable and given dimensions are non-empty */
-  Tensor block(List<Integer> fromIndex, List<Integer> dimensions);
 
   /** negation of entries
    * 
@@ -344,6 +308,56 @@ public interface Tensor extends Iterable<Tensor> {
    * @return new tensor with {@link Scalar} entries replaced by
    * function evaluation of {@link Scalar} entries */
   Tensor map(Function<Scalar, ? extends Tensor> function);
+
+  /** the returned block consists of references to the elements in this tensor.
+   * The function {@link #block(List, List)} is useful for applications such as
+   * {@link ListCorrelate}. When block is called on unmodifiable tensor, then
+   * the returned block consists of the references but is also unmodifiable.
+   * 
+   * Example:
+   * <pre>
+   * Tensor a = {1, 2, 3, 4, 5, 6};
+   * Tensor b = a.block(Arrays.asList(2), Arrays.asList(3));
+   * b.set(Array.zeros(3), Tensor.ALL);
+   * </pre>
+   * Afterwards the tensor a == {1, 2, 0, 0, 0, 6}.
+   * 
+   * @param fromIndex location of return tensor in this tensor
+   * @param dimensions of return tensor
+   * @return references to entries in block located at fromIndex of this tensor with given dimensions
+   * @throws Exception if this tensor in unmodifiable and given dimensions are non-empty */
+  Tensor block(List<Integer> fromIndex, List<Integer> dimensions);
+
+  /** For instance, if this tensor is the vector {0, 8, 1}, the function
+   * stream() provides the three scalars 0, 8, 1 in a {@link Stream}.
+   * 
+   * <p>If this tensor is a matrix, the stream provides the references
+   * to the rows of the matrix.
+   * 
+   * <p>If this tensor has been marked as unmodifiable, the elements of
+   * the stream are unmodifiable as well.
+   * 
+   * @return stream over tensors contained in the list of this instance
+   * @throws Exception if invoked on a {@link Scalar} instance, because
+   * a scalar does not contain a list of tensors */
+  Stream<Tensor> stream();
+
+  /** stream access to the entries at given level of this tensor.
+   * entries at given level can be tensors or scalars.
+   * 
+   * <p>For the input <code>level == -1</code>, the return stream consists
+   * of all {@link Scalar}s in this tensor.
+   * 
+   * <p>If this tensor has been marked as unmodifiable, the elements of
+   * the stream are unmodifiable as well.
+   * 
+   * <p>Unlike {@link #stream()}, function {@link #flatten(int)} may be
+   * invoked on a {@link Scalar}. In that case the return value is the
+   * stream with the scalar as single element.
+   * 
+   * @param level
+   * @return non-parallel stream, the user may invoke .parallel() */
+  Stream<Tensor> flatten(int level);
 
   /** iterator of list of entries.
    * The operation remove() is supported.

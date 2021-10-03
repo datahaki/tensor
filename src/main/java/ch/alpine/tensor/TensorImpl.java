@@ -122,35 +122,8 @@ import ch.alpine.tensor.ext.Integers;
   }
 
   @Override // from Tensor
-  public Stream<Tensor> stream() {
-    return list.stream();
-  }
-
-  @Override // from Tensor
-  public Stream<Tensor> flatten(int level) {
-    if (level == 0)
-      return stream(); // UnmodifiableTensor overrides stream()
-    int ldecr = level - 1;
-    return list.stream().flatMap(tensor -> tensor.flatten(ldecr));
-  }
-
-  @Override // from Tensor
   public Tensor extract(int fromIndex, int toIndex) {
     return Tensor.of(list.subList(fromIndex, toIndex).stream().map(Tensor::copy));
-  }
-
-  @Override // from Tensor
-  public Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
-    int size = Integers.requireEquals(fromIndex.size(), dimensions.size());
-    if (size == 0)
-      return this;
-    int head = fromIndex.get(0);
-    List<Tensor> subList = list().subList(head, head + dimensions.get(0));
-    if (size == 1)
-      return new TensorImpl(subList);
-    List<Integer> subHead = fromIndex.subList(1, size);
-    List<Integer> subDims = dimensions.subList(1, size);
-    return Tensor.of(subList.stream().map(entry -> entry.block(subHead, subDims)));
   }
 
   @Override // from Tensor
@@ -205,13 +178,34 @@ import ch.alpine.tensor.ext.Integers;
     return Tensor.of(list.stream().map(tensor -> tensor.map(function)));
   }
 
-  /** @return list
-   * @see ViewTensor */
-  protected List<Tensor> list() {
-    return list;
+  // ---
+  @Override // from Tensor
+  public Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
+    int size = Integers.requireEquals(fromIndex.size(), dimensions.size());
+    if (size == 0)
+      return this;
+    int head = fromIndex.get(0);
+    List<Tensor> subList = list.subList(head, head + dimensions.get(0));
+    if (size == 1)
+      return new TensorImpl(subList);
+    List<Integer> subHead = fromIndex.subList(1, size);
+    List<Integer> subDims = dimensions.subList(1, size);
+    return Tensor.of(subList.stream().map(entry -> entry.block(subHead, subDims)));
   }
 
-  // ---
+  @Override // from Tensor
+  public Stream<Tensor> stream() {
+    return list.stream();
+  }
+
+  @Override // from Tensor
+  public Stream<Tensor> flatten(int level) {
+    if (level == 0)
+      return stream(); // UnmodifiableTensor overrides stream()
+    int ldecr = level - 1;
+    return list.stream().flatMap(tensor -> tensor.flatten(ldecr));
+  }
+
   @Override // from Iterable
   public Iterator<Tensor> iterator() {
     return list.iterator();
