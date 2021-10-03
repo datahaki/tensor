@@ -109,12 +109,4 @@ public class UnprotectTest extends TestCase {
     AssertFail.of(() -> Unprotect.dimension1(RealScalar.ONE));
     AssertFail.of(() -> Unprotect.dimension1Hint(RealScalar.ONE));
   }
-
-  public void testReferencesScalar() {
-    AssertFail.of(() -> Unprotect.references(RealScalar.ONE));
-  }
-
-  public void testReferencesNull() {
-    AssertFail.of(() -> Unprotect.references(null));
-  }
 }

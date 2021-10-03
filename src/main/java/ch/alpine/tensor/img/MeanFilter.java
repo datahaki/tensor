@@ -2,7 +2,6 @@
 package ch.alpine.tensor.img;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.red.Mean;
 
@@ -28,6 +27,6 @@ public enum MeanFilter {
    * @throws Exception if given tensor is a scalar, or not of array form
    * @throws Exception if given radius is negative */
   public static Tensor of(Tensor tensor, int radius) {
-    return TensorExtract.of(Unprotect.references(tensor), radius, Mean::of);
+    return TensorExtract.of(tensor, radius, Mean::of);
   }
 }

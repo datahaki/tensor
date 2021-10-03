@@ -19,18 +19,11 @@ public class TensorBlockTest extends TestCase {
     Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);
     Tensor b = a.block(Arrays.asList(2), Arrays.asList(3));
     b.set(Array.zeros(3), Tensor.ALL);
-    assertEquals(a, Tensors.vector(1, 2, 3, 4, 5, 6));
-  }
-
-  public void testRefs() {
-    Tensor a = Unprotect.references(Tensors.vector(1, 2, 3, 4, 5, 6));
-    Tensor b = a.block(Arrays.asList(2), Arrays.asList(3));
-    b.set(Array.zeros(3), Tensor.ALL);
     assertEquals(a, Tensors.vector(1, 2, 0, 0, 0, 6));
   }
 
   public void testRefs2d() {
-    Tensor a = Unprotect.references(HilbertMatrix.of(5, 6));
+    Tensor a = HilbertMatrix.of(5, 6);
     Tensor b = a.block(Arrays.asList(1, 2), Arrays.asList(3, 4));
     b.set(Array.zeros(3, 4), Tensor.ALL, Tensor.ALL);
     Tensor expect = Tensors.fromString( //

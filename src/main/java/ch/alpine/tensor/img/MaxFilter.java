@@ -2,7 +2,6 @@
 package ch.alpine.tensor.img;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.red.Entrywise;
 
 /** inspired by
@@ -13,6 +12,6 @@ public enum MaxFilter {
    * @param radius
    * @return */
   public static Tensor of(Tensor tensor, int radius) {
-    return TensorExtract.of(Unprotect.references(tensor), radius, Entrywise.max()::of);
+    return TensorExtract.of(tensor, radius, Entrywise.max()::of);
   }
 }

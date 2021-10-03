@@ -248,11 +248,9 @@ public interface Tensor extends Iterable<Tensor> {
    * @return copy of sub tensor fromIndex inclusive to toIndex exclusive */
   Tensor extract(int fromIndex, int toIndex);
 
-  /** extract block of this tensor located at offset with dimensions
-   * 
-   * @param fromIndex location of return tensor in this tensor
+  /** @param fromIndex location of return tensor in this tensor
    * @param dimensions of return tensor
-   * @return copy of block located at fromIndex of this tensor with given dimensions */
+   * @return references to block located at fromIndex of this tensor with given dimensions */
   Tensor block(List<Integer> fromIndex, List<Integer> dimensions);
 
   /** negation of entries

@@ -65,6 +65,10 @@ public class AbstractScalarTest extends TestCase {
     AssertFail.of(() -> RealScalar.ONE.extract(1, 2));
   }
 
+  public void testBlockEmpty() {
+    assertEquals(Pi.VALUE.block(Arrays.asList(), Arrays.asList()), Pi.VALUE);
+  }
+
   public void testBlockFail() {
     AssertFail.of(() -> RealScalar.ONE.block(Arrays.asList(1), Arrays.asList(1)));
   }

@@ -2,14 +2,15 @@
 package ch.alpine.tensor.itp;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.sca.Ceiling;
@@ -23,7 +24,7 @@ import ch.alpine.tensor.sca.Floor;
  * 
  * <p>Remark: for scalar inverse linear interpolation use {@link Clip#rescale(Scalar)} */
 public class LinearInterpolation extends AbstractInterpolation implements Serializable {
-  /** @param tensor not instance of {@link Scalar}
+  /** @param tensor
    * @return
    * @throws Exception if tensor == null */
   public static Interpolation of(Tensor tensor) {
@@ -34,17 +35,19 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
   private final Tensor tensor;
 
   private LinearInterpolation(Tensor tensor) {
-    this.tensor = Unprotect.references(tensor); // <- for fast block extraction
+    this.tensor = Objects.requireNonNull(tensor);
   }
 
   @Override // from Interpolation
   public Tensor get(Tensor index) {
+    if (Tensors.isEmpty(index))
+      return tensor.copy();
     Tensor floor = Floor.of(index);
     Tensor above = Ceiling.of(index);
     Tensor width = above.subtract(floor).map(RealScalar.ONE::add);
     List<Integer> fromIndex = Primitives.toListInteger(floor);
     List<Integer> dimensions = Primitives.toListInteger(width);
-    Tensor block = tensor.block(fromIndex, dimensions); // <- copy() for empty fromIndex and dimensions
+    Tensor block = tensor.block(fromIndex, dimensions);
     Tensor weights = Transpose.of(Tensors.of( //
         above.subtract(index), //
         index.subtract(floor)));
@@ -62,7 +65,8 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
     int below = floor.number().intValue();
     if (Scalars.isZero(remain))
       return tensor.get(below);
+    // TODO no need to use block here but could use stream skip limit etc.
     return Tensors.of(remain.one().subtract(remain), remain) //
-        .dot(tensor.extract(below, below + 2));
+        .dot(tensor.block(Arrays.asList(below), Arrays.asList(2)));
   }
 }

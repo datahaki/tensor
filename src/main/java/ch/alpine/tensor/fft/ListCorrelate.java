@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.TensorUnaryOperator;
@@ -48,6 +48,7 @@ public class ListCorrelate implements TensorUnaryOperator {
   private final int level;
 
   private ListCorrelate(Tensor kernel) {
+    ScalarQ.thenThrow(kernel);
     this.kernel = kernel;
     mask = Dimensions.of(kernel);
     level = mask.size() - 1;
@@ -62,8 +63,7 @@ public class ListCorrelate implements TensorUnaryOperator {
         .map(index -> size.get(index) - mask.get(index) + 1) //
         .mapToObj(Integers::requirePositive) //
         .collect(Collectors.toList());
-    Tensor refs = Unprotect.references(tensor);
-    return Array.of(index -> kernel.pmul(refs.block(index, mask)).flatten(level) //
+    return Array.of(index -> kernel.pmul(tensor.block(index, mask)).flatten(level) //
         .reduce(Tensor::add).orElseThrow(), dimensions);
   }
 

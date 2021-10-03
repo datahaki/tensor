@@ -143,25 +143,16 @@ import ch.alpine.tensor.ext.Integers;
 
   @Override // from Tensor
   public Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
-    Integers.requireEquals(fromIndex.size(), dimensions.size());
-    return fromIndex.isEmpty() //
-        ? copy()
-        : _block(fromIndex, dimensions);
-  }
-
-  /** @param fromIndex non-empty
-   * @param dimensions of same size as fromIndex
-   * @return
-   * @see ViewTensor */
-  protected Tensor _block(List<Integer> fromIndex, List<Integer> dimensions) {
-    int beg = fromIndex.get(0);
-    int end = beg + dimensions.get(0);
-    if (fromIndex.size() == 1)
-      return extract(beg, end);
-    int size = fromIndex.size();
-    return Tensor.of(list.subList(beg, end).stream() //
-        .map(TensorImpl.class::cast) //
-        .map(impl -> impl._block(fromIndex.subList(1, size), dimensions.subList(1, size))));
+    int size = Integers.requireEquals(fromIndex.size(), dimensions.size());
+    if (size == 0)
+      return this;
+    int head = fromIndex.get(0);
+    List<Tensor> subList = list().subList(head, head + dimensions.get(0));
+    if (size == 1)
+      return new TensorImpl(subList);
+    List<Integer> subHead = fromIndex.subList(1, size);
+    List<Integer> subDims = dimensions.subList(1, size);
+    return Tensor.of(subList.stream().map(entry -> entry.block(subHead, subDims)));
   }
 
   @Override // from Tensor

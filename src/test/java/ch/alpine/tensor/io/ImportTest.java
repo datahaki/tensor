@@ -25,7 +25,6 @@ public class ImportTest extends TestCase {
   private static final File IO_OBJECT = new File("src/test/resources/io/object");
   public static final File IO_OBJECT_TENSOR = new File(IO_OBJECT, "tensor.object");
   public static final File IO_OBJECT_UNMODIFIABLE = new File(IO_OBJECT, "unmodifiable.object");
-  public static final File IO_OBJECT_VIEWTENSOR = new File(IO_OBJECT, "viewtensor.object");
   public static final Tensor CONTENT = Tensors.of( //
       RealScalar.ONE, //
       RealScalar.of(3.15), //
@@ -147,11 +146,10 @@ public class ImportTest extends TestCase {
     assertTrue(Tensors.isUnmodifiable(tensor));
     assertEquals(tensor, CONTENT);
   }
-
-  public void testSerialization3() throws ClassNotFoundException, IOException, DataFormatException {
-    Tensor tensor = Import.object(IO_OBJECT_VIEWTENSOR);
-    assertEquals(tensor, CONTENT);
-  }
+  // public void testSerialization3() throws ClassNotFoundException, IOException, DataFormatException {
+  // Tensor tensor = Import.object(IO_OBJECT_VIEWTENSOR);
+  // assertEquals(tensor, CONTENT);
+  // }
 
   public void testUnknownFail() {
     File file = new File(getClass().getResource("/io/extension.unknown").getFile());

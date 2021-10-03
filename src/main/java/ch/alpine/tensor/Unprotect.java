@@ -61,19 +61,6 @@ public enum Unprotect {
   // ---
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
-   * @param tensor
-   * @return tensor that overrides functions
-   * {@link Tensor#block(List, List)}, and
-   * {@link Tensor#extract(int, int)}
-   * for access by reference
-   * @throws Exception if given tensor is unmodifiable, or an instance of {@link Scalar} */
-  public static Tensor references(Tensor tensor) {
-    return ViewTensor.wrap(tensor);
-  }
-
-  // ---
-  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
-   * 
    * Examples:
    * <pre>
    * Unprotect.withoutUnit(3.1415926) == 3.1415926
