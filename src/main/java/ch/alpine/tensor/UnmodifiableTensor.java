@@ -35,7 +35,7 @@ import java.util.stream.Stream;
   }
 
   @Override // from TensorImpl
-  protected <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
+  public <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index) {
     throw new UnsupportedOperationException("unmodifiable");
   }
 

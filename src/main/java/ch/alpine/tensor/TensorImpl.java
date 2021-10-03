@@ -89,16 +89,14 @@ import ch.alpine.tensor.ext.Integers;
 
   @Override // from Tensor
   public <T extends Tensor> void set(Function<T, ? extends Tensor> function, int... index) {
-    _set(function, Integers.asList(index));
+    set(function, Integers.asList(index));
   }
 
-  /** @param function
-   * @param index
-   * @see UnmodifiableTensor */
   @SuppressWarnings("unchecked")
-  protected <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
+  @Override // from Tensor
+  public <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index) {
     int head = index.get(0);
-    if (index.size() == 1)
+    if (index.size() == 1) // terminal case
       if (head == ALL)
         IntStream.range(0, list.size()).forEach(i -> list.set(i, function.apply((T) list.get(i)).copy()));
       else
@@ -106,9 +104,9 @@ import ch.alpine.tensor.ext.Integers;
     else {
       List<Integer> sublist = index.subList(1, index.size());
       if (head == ALL)
-        list.stream().map(TensorImpl.class::cast).forEach(impl -> impl._set(function, sublist));
+        stream().forEach(entry -> entry.set(function, sublist));
       else
-        ((TensorImpl) list.get(head))._set(function, sublist);
+        list.get(head).set(function, sublist);
     }
   }
 

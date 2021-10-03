@@ -65,7 +65,6 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
     int below = floor.number().intValue();
     if (Scalars.isZero(remain))
       return tensor.get(below);
-    // TODO no need to use block here but could use stream skip limit etc.
     return Tensors.of(remain.one().subtract(remain), remain) //
         .dot(tensor.block(Arrays.asList(below), Arrays.asList(2)));
   }

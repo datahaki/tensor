@@ -181,6 +181,11 @@ public interface Tensor extends Iterable<Tensor> {
    * @see #set(Tensor, int...) */
   <T extends Tensor> void set(Function<T, ? extends Tensor> function, int... index);
 
+  /** @param function
+   * @param index
+   * @see #set(Function, int...) */
+  <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index);
+
   /** appends a copy of input tensor to this instance
    * 
    * <p>The length() is incremented by 1.
@@ -250,7 +255,8 @@ public interface Tensor extends Iterable<Tensor> {
 
   /** @param fromIndex location of return tensor in this tensor
    * @param dimensions of return tensor
-   * @return references to block located at fromIndex of this tensor with given dimensions */
+   * @return references to block located at fromIndex of this tensor with given dimensions
+   * @throws Exception if this tensor in unmodifiable and given dimensions are non-empty */
   Tensor block(List<Integer> fromIndex, List<Integer> dimensions);
 
   /** negation of entries
