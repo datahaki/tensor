@@ -11,10 +11,11 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
-public class TensorImplTest extends TestCase {
+public class ListTensorTest extends TestCase {
   public void testUnmodifiable() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     AssertFail.of(() -> eye.flatten(0).forEach(e -> e.set(RealScalar.of(4), 2)));
@@ -65,6 +66,19 @@ public class TensorImplTest extends TestCase {
     assertEquals(tensor, Tensors.empty());
   }
 
+  public void testHashCode() {
+    List<Tensor> list = new ArrayList<>();
+    list.add(RealScalar.ONE);
+    list.add(Tensors.vector(2, 3, 4));
+    list.add(Pi.VALUE);
+    list.add(HilbertMatrix.of(2, 3));
+    int hashCode1 = list.hashCode();
+    int hashCode2 = Unprotect.using(list).hashCode();
+    int hashCode3 = Tensor.of(list.stream()).hashCode();
+    assertEquals(hashCode1, hashCode2);
+    assertEquals(hashCode2, hashCode3);
+  }
+
   public void testIteratorCopy() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable().copy();
     for (Tensor unit : eye)
@@ -91,6 +105,6 @@ public class TensorImplTest extends TestCase {
   }
 
   public void testNonPublic() {
-    assertEquals(TensorImpl.class.getModifiers(), 0);
+    assertEquals(ListTensor.class.getModifiers(), 0);
   }
 }

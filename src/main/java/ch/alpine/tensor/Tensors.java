@@ -25,7 +25,7 @@ public enum Tensors {
   /** @return new modifiable tensor instance with no entries, i.e. length() == 0
    * @see #isEmpty(Tensor) */
   public static Tensor empty() {
-    return new TensorImpl(new ArrayList<>());
+    return new ListTensor(new ArrayList<>());
   }
 
   /** @param initialCapacity non-negative
@@ -33,7 +33,7 @@ public enum Tensors {
    * operations are intended
    * @throws Exception if initialCapacity is negative */
   public static Tensor reserve(int initialCapacity) {
-    return new TensorImpl(new ArrayList<>(initialCapacity));
+    return new ListTensor(new ArrayList<>(initialCapacity));
   }
 
   /** @param tensors

@@ -12,11 +12,11 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.ext.Integers;
 
 /** reference implementation of the interface Tensor */
-/* package */ class TensorImpl implements Tensor, Serializable {
+/* package */ class ListTensor extends AbstractTensor implements Serializable {
   private final List<Tensor> list;
 
   /** @param list to be guaranteed non-null */
-  public TensorImpl(List<Tensor> list) {
+  public ListTensor(List<Tensor> list) {
     this.list = list;
   }
 
@@ -30,40 +30,9 @@ import ch.alpine.tensor.ext.Integers;
     return Tensor.of(list.stream().map(Tensor::copy));
   }
 
-  @Override // from Tensor
-  public Tensor get(int i) {
-    return list.get(i).copy();
-  }
-
-  @Override // from Tensor
-  public Tensor get(int... index) {
-    return get(Integers.asList(index));
-  }
-
-  @Override // from Tensor
-  public Tensor get(List<Integer> index) {
-    if (index.isEmpty())
-      return copy();
-    int head = index.get(0);
-    List<Integer> sublist = index.subList(1, index.size());
-    return head == ALL //
-        ? Tensor.of(list.stream().map(tensor -> tensor.get(sublist)))
-        : list.get(head).get(sublist);
-  }
-
-  @Override // from Tensor
-  public Scalar Get(int i) {
-    return (Scalar) list.get(i);
-  }
-
-  @Override // from Tensor
-  public Scalar Get(int i, int j) {
-    return list.get(i).Get(j);
-  }
-
-  @Override // from Tensor
-  public void set(Tensor tensor, int... index) {
-    set(tensor, Integers.asList(index));
+  @Override
+  protected Tensor byRef(int i) {
+    return list.get(i);
   }
 
   @Override // from Tensor
@@ -104,7 +73,7 @@ import ch.alpine.tensor.ext.Integers;
     else {
       List<Integer> sublist = index.subList(1, index.size());
       if (head == ALL)
-        stream().forEach(entry -> entry.set(function, sublist));
+        list.stream().forEach(entry -> entry.set(function, sublist));
       else
         list.get(head).set(function, sublist);
     }
@@ -163,17 +132,6 @@ import ch.alpine.tensor.ext.Integers;
   }
 
   @Override // from Tensor
-  public Tensor dot(Tensor tensor) {
-    if (list.isEmpty() || list.get(0) instanceof Scalar) { // quick hint whether this is a vector
-      Integers.requireEquals(length(), tensor.length());
-      AtomicInteger i = new AtomicInteger();
-      return tensor.stream().map(entry -> entry.multiply(Get(i.getAndIncrement()))) //
-          .reduce(Tensor::add).orElse(RealScalar.ZERO);
-    }
-    return Tensor.of(list.stream().map(entry -> entry.dot(tensor)));
-  }
-
-  @Override // from Tensor
   public Tensor map(Function<Scalar, ? extends Tensor> function) {
     return Tensor.of(list.stream().map(tensor -> tensor.map(function)));
   }
@@ -187,7 +145,7 @@ import ch.alpine.tensor.ext.Integers;
     int head = fromIndex.get(0);
     List<Tensor> subList = list.subList(head, head + dimensions.get(0));
     if (size == 1)
-      return new TensorImpl(subList);
+      return new ListTensor(subList);
     List<Integer> subHead = fromIndex.subList(1, size);
     List<Integer> subDims = dimensions.subList(1, size);
     return Tensor.of(subList.stream().map(entry -> entry.block(subHead, subDims)));
@@ -198,34 +156,9 @@ import ch.alpine.tensor.ext.Integers;
     return list.stream();
   }
 
-  @Override // from Tensor
-  public Stream<Tensor> flatten(int level) {
-    if (level == 0)
-      return stream(); // UnmodifiableTensor overrides stream()
-    int ldecr = level - 1;
-    return list.stream().flatMap(tensor -> tensor.flatten(ldecr));
-  }
-
   @Override // from Iterable
   public Iterator<Tensor> iterator() {
     return list.iterator();
-  }
-
-  @Override // from Object
-  public int hashCode() {
-    return list.hashCode();
-  }
-
-  @Override // from Object
-  public boolean equals(Object object) {
-    if (object instanceof Tensor) {
-      Tensor tensor = (Tensor) object;
-      if (length() == tensor.length()) {
-        AtomicInteger i = new AtomicInteger();
-        return tensor.stream().allMatch(entry -> entry.equals(list.get(i.getAndIncrement())));
-      }
-    }
-    return false;
   }
 
   @Override // from Object

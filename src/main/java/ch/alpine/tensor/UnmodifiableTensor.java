@@ -12,13 +12,13 @@ import java.util.stream.Stream;
  * <p>UnmodifiableTensor does not duplicate memory.
  * UnmodifiableTensor wraps the original content list.
  * 
- * <p>All methods in the default implementation {@link TensorImpl} that
+ * <p>All methods in the default implementation {@link ListTensor} that
  * 1) give references of sub-tensors, or that
  * 2) may result in the modification of the content
  * are overloaded.
  * 
  * <p>The copy {@link UnmodifiableTensor#copy()} is modifiable. */
-/* package */ class UnmodifiableTensor extends TensorImpl {
+/* package */ class UnmodifiableTensor extends ListTensor {
   /** @param list to be guaranteed non-null */
   public UnmodifiableTensor(List<Tensor> list) {
     super(list);
