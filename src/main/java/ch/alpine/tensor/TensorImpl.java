@@ -70,14 +70,16 @@ import ch.alpine.tensor.ext.Integers;
   public void set(Tensor tensor, List<Integer> index) {
     int head = index.get(0);
     if (index.size() == 1) // terminal case
-      if (head == ALL)
-        _range(tensor).forEach(i -> list.set(i, tensor.get(i))); // insert copies
-      else
+      if (head == ALL) {
+        Integers.requireEquals(length(), tensor.length());
+        AtomicInteger i = new AtomicInteger();
+        tensor.stream().map(Tensor::copy).forEach(entry -> list.set(i.getAndIncrement(), entry)); // insert copies
+      } else
         list.set(head, tensor.copy()); // insert copy
     else { // function set is called with tensor provided by reference
       List<Integer> sublist = index.subList(1, index.size());
       if (head == ALL) {
-        Integers.requireEquals(list.size(), tensor.length());
+        Integers.requireEquals(length(), tensor.length());
         AtomicInteger i = new AtomicInteger();
         tensor.stream().forEach(entry -> list.get(i.getAndIncrement()).set(entry, sublist));
       } else
@@ -207,12 +209,6 @@ import ch.alpine.tensor.ext.Integers;
           .reduce(Tensor::add).orElse(RealScalar.ZERO);
     }
     return Tensor.of(list.stream().map(entry -> entry.dot(tensor)));
-  }
-
-  // helper function
-  private IntStream _range(Tensor tensor) {
-    // check is necessary otherwise error might be undetected
-    return IntStream.range(0, Integers.requireEquals(length(), tensor.length()));
   }
 
   @Override // from Tensor
