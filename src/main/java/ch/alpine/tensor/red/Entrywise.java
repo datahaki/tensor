@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BinaryOperator;
 
+import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
@@ -21,6 +23,15 @@ import ch.alpine.tensor.ext.Integers;
  * Tensor box = {{0, 7}, {0, 8}, {1, 5}, {2, 7}};
  * Entrywise.max().of(box) == {2, 8}
  * Entrywise.min().of(box) == {0, 5}
+ * </pre>
+ * 
+ * <p>Example:
+ * Let real and imag be tensors of same dimensions with entries of type
+ * {@link RealScalar}. Then the following code gives a tensor with
+ * {@link ComplexScalar} consisting of corresponding real and imaginary
+ * values drawn from given tensors.
+ * <pre>
+ * Tensor tensor = Entrywise.with(ComplexScalar::of).apply(real, imag);
  * </pre>
  * 
  * <p>Entrywise reproduces existing functionality:

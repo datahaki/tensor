@@ -1,11 +1,15 @@
 // code by jph
 // https://stats.stackexchange.com/questions/66088/analysis-with-complex-data-anything-different
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.pi;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.mat.ConjugateTranspose;
+import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
 import ch.alpine.tensor.mat.qr.QRDecomposition;
 import ch.alpine.tensor.mat.qr.QRSignOperators;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
@@ -74,7 +78,7 @@ public enum LeastSquares {
   private static Tensor usingQR(Tensor matrix, Tensor b, int n, int m) {
     return m <= n //
         ? _usingQR(matrix, b)
-        : ConjugateTranspose.of(_usingQR(StaticHelper.dotConjugate(matrix), matrix)).dot(b);
+        : ConjugateTranspose.of(_usingQR(MatrixDotConjugateTranspose.of(matrix), matrix)).dot(b);
   }
 
   private static Tensor _usingQR(Tensor matrix, Tensor b) {

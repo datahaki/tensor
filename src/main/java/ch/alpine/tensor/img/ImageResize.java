@@ -10,10 +10,10 @@ import java.util.stream.IntStream;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.alg.MatrixQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.ImageFormat;
 import ch.alpine.tensor.itp.MappedInterpolation;
+import ch.alpine.tensor.mat.MatrixQ;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ImageResize.html">ImageResize</a>

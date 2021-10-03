@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.re;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalar;
@@ -11,10 +11,6 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Partition;
 import ch.alpine.tensor.alg.VectorQ;
-import ch.alpine.tensor.mat.re.GaussianElimination;
-import ch.alpine.tensor.mat.re.Pivot;
-import ch.alpine.tensor.mat.re.Pivots;
-import ch.alpine.tensor.mat.re.RowReduce;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/LinearSolve.html">LinearSolve</a> */

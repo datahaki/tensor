@@ -5,8 +5,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.mat.LinearSolve;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.re.LinearSolve;
 
 /* package */ enum MatrixSqrtNewton {
   ;

@@ -9,6 +9,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.lie.MatrixPower;
+import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.red.KroneckerDelta;
 
 /** implementation is consistent with Mathematica.

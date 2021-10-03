@@ -12,7 +12,7 @@ import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
-import ch.alpine.tensor.mat.PseudoInverse;
+import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.sca.Sqrt;
 
 /** Mahalanobis is an alternative to {@link InfluenceMatrix} for the computation of

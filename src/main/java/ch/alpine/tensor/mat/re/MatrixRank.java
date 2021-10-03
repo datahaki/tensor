@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.re;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalar;
@@ -7,9 +7,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Transpose;
-import ch.alpine.tensor.mat.re.Pivot;
-import ch.alpine.tensor.mat.re.Pivots;
-import ch.alpine.tensor.mat.re.RowReduce;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.sca.Chop;
 

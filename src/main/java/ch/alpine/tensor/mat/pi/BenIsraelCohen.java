@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.pi;
 
 import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.Scalar;
@@ -8,6 +8,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.mat.ConjugateTranspose;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Matrix2Norm;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.N;

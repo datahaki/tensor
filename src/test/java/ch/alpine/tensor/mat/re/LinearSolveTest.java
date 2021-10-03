@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.re;
 
 import java.util.Random;
 
@@ -14,7 +14,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.mat.re.Det;
+import ch.alpine.tensor.mat.DiagonalMatrix;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;

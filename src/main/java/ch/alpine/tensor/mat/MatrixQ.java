@@ -1,12 +1,12 @@
 // code by jph
-package ch.alpine.tensor.alg;
+package ch.alpine.tensor.mat;
 
 import java.util.Arrays;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.mat.HermitianMatrixQ;
-import ch.alpine.tensor.mat.PositiveDefiniteMatrixQ;
+import ch.alpine.tensor.alg.ArrayQ;
+import ch.alpine.tensor.alg.Dimensions;
 
 /** The implementation is consistent with Mathematica::MatrixQ, in particular
  * MatrixQ[ {} ] == false

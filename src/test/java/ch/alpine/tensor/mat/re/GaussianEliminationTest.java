@@ -6,7 +6,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.mat.Inverse;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import junit.framework.TestCase;

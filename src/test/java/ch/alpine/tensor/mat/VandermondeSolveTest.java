@@ -8,6 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.re.Det;
+import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;

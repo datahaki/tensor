@@ -2,7 +2,7 @@
 package ch.alpine.tensor.lie;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.alg.MatrixQ;
+import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.sca.Log;
 
 /* package */ enum MatrixLog1 {

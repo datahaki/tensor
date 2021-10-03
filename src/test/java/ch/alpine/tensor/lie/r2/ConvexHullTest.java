@@ -80,19 +80,19 @@ public class ConvexHullTest extends TestCase {
     double variance = 1e-10;
     Tensor cube = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}");
     Distribution distribution = NormalDistribution.of(0.5, variance);
-    Tensor join = Join.of(cube, RandomVariate.of(distribution, 300, 2));
+    Tensor join = Join.of(cube, RandomVariate.of(distribution, 100, 2));
     Tensor hull = ConvexHull.of(join);
     assertEquals(hull, cube);
   }
 
-  // this issue appeared first in owly
+  // this issue appeared first in owl
   // due to the introduction of chop._12 the issue of clustering in the
   // epsilon range seems to be resolved at least for interior points
   public void testChallenge2() {
     Tensor cube = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}");
     double variance = 1e-15;
     Distribution distribution = NormalDistribution.of(0.5, variance);
-    Tensor joined = Join.of(cube, RandomVariate.of(distribution, 300, 2));
+    Tensor joined = Join.of(cube, RandomVariate.of(distribution, 100, 2));
     Tensor hull = ConvexHull.of(joined);
     assertEquals(hull, cube);
   }

@@ -8,8 +8,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.mat.Inverse;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.re.Inverse;
 
 /** iteration to converge to sqrt of matrix */
 /* package */ class DenmanBeavers implements MatrixSqrt, Serializable {

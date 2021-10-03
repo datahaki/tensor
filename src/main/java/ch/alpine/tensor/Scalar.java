@@ -4,10 +4,10 @@ package ch.alpine.tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.lie.MatrixPower;
 import ch.alpine.tensor.lie.Quaternion;
-import ch.alpine.tensor.mat.CholeskyDecomposition;
-import ch.alpine.tensor.mat.Inverse;
-import ch.alpine.tensor.mat.LinearSolve;
-import ch.alpine.tensor.mat.PseudoInverse;
+import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
+import ch.alpine.tensor.mat.pi.PseudoInverse;
+import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.SimpleUnitSystem;
 

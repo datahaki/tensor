@@ -5,7 +5,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.Pretty;
-import ch.alpine.tensor.mat.CholeskyDecomposition;
+import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;

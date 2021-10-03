@@ -3,7 +3,7 @@ package ch.alpine.tensor.mat.gr;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.mat.PseudoInverse;
+import ch.alpine.tensor.mat.pi.PseudoInverse;
 
 /** Remark:
  * {@link Mahalanobis} is significantly faster than {@link InfluenceMatrix#of(Tensor)}

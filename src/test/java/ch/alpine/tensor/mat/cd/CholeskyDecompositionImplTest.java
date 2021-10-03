@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.cd;
 
 import java.io.IOException;
 import java.lang.reflect.Modifier;
@@ -12,6 +12,13 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.mat.DiagonalMatrix;
+import ch.alpine.tensor.mat.HermitianMatrixQ;
+import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.SymmetricMatrixQ;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.N;

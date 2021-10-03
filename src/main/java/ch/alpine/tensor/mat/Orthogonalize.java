@@ -5,7 +5,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.alg.MatrixDotTranspose;
 import ch.alpine.tensor.alg.PadRight;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.TensorProduct;

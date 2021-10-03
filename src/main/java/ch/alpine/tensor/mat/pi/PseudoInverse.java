@@ -1,14 +1,20 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.pi;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.alg.MatrixDotTranspose;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.mat.ConjugateTranspose;
+import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
+import ch.alpine.tensor.mat.MatrixDotTranspose;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
+import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.mat.sv.SingularValueList;
 import ch.alpine.tensor.qty.Quantity;
@@ -72,7 +78,7 @@ public enum PseudoInverse {
       return CholeskyDecomposition.of(mt.dot(matrix)).solve(mt);
     }
     return ConjugateTranspose.of(CholeskyDecomposition.of( //
-        StaticHelper.dotConjugate(matrix)).solve(matrix));
+        MatrixDotConjugateTranspose.of(matrix)).solve(matrix));
   }
 
   // ---

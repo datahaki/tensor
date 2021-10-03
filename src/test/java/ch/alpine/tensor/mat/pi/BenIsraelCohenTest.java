@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.pi;
 
 import java.util.Random;
 
@@ -9,11 +9,14 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.alg.MatrixQ;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.MatrixQ;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.gr.InfluenceMatrixQ;
+import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.LogisticDistribution;
@@ -130,5 +133,9 @@ public class BenIsraelCohenTest extends TestCase {
     AssertFail.of(() -> BenIsraelCohen.of(Tensors.fromString("{{NaN}}")));
     AssertFail.of(() -> BenIsraelCohen.of(Tensors.fromString("{{Infinity}}")));
     AssertFail.of(() -> BenIsraelCohen.of(Tensors.fromString("{{1.7976931348623157e+308}}")));
+  }
+
+  public void testVisibility() {
+    assertEquals(BenIsraelCohen.class.getModifiers() & 1, 0);
   }
 }

@@ -14,14 +14,11 @@ public class TensorStreamTest extends TestCase {
 
   public void testReduction() {
     Tensor a = Tensors.vectorDouble(2., 1.123, 0.3123);
-    boolean value = a.flatten(-1) //
+    assertTrue(a.flatten(-1) //
         .map(Scalar.class::cast) //
         .map(Scalar::number) //
         .map(Number::doubleValue) //
-        .map(d -> d > 0) //
-        .reduce(Boolean::logicalAnd) //
-        .get();
-    assertTrue(value);
+        .allMatch(d -> d > 0));
   }
 
   public void testNorm3() {
@@ -30,9 +27,9 @@ public class TensorStreamTest extends TestCase {
         .map(Scalar.class::cast) //
         .map(Abs.FUNCTION) //
         .map(Scalar::number) //
-        .map(Number::doubleValue) //
-        .reduce(Double::max) //
-        .get();
+        .mapToDouble(Number::doubleValue) //
+        .max() //
+        .getAsDouble();
     assertEquals(ods, 4.0);
   }
 
@@ -42,9 +39,8 @@ public class TensorStreamTest extends TestCase {
         .map(s -> (Scalar) s) //
         .map(Abs.FUNCTION) //
         .map(Scalar::number) //
-        .map(Number::doubleValue) //
-        .reduce(Double::sum) //
-        .get();
+        .mapToDouble(Number::doubleValue) //
+        .sum();
     assertEquals(ods, 10.0);
   }
 }

@@ -9,7 +9,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
-import ch.alpine.tensor.alg.MatrixDotTranspose;
 import ch.alpine.tensor.lie.MatrixExp;
 import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.mat.re.Det;

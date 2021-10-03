@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.pi;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -18,6 +18,13 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.lie.Permutations;
+import ch.alpine.tensor.mat.DiagonalMatrix;
+import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.mat.re.LinearSolve;
+import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;

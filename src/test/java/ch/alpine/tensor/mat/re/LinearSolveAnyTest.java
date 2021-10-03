@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.re;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -7,7 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
-import ch.alpine.tensor.mat.re.Det;
+import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;

@@ -4,6 +4,7 @@ package ch.alpine.tensor.alg;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.mat.MatrixQ;
 
 /** ArrayQ is <em>not</em> consistent with Mathematica for scalar input:
  * <pre>

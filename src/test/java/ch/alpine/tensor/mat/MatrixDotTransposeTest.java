@@ -1,12 +1,12 @@
 // code by jph
-package ch.alpine.tensor.alg;
+package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Dot;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
-import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.usr.AssertFail;

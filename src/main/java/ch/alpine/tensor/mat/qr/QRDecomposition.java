@@ -5,7 +5,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.mat.LeastSquares;
+import ch.alpine.tensor.mat.pi.LeastSquares;
 
 /** QRDecomposition is not consistent with Mathematica.
  * 

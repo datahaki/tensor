@@ -4,8 +4,8 @@ package ch.alpine.tensor.mat.qr;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dot;
-import ch.alpine.tensor.mat.Inverse;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
+import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.sca.Chop;
 import junit.framework.TestCase;
 

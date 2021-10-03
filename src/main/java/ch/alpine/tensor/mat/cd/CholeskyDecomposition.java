@@ -1,8 +1,10 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.cd;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.mat.HermitianMatrixQ;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 
 /** The Cholesky decomposition of a hermitian matrix establishes matrices L and D with

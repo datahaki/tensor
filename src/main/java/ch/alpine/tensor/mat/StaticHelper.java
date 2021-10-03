@@ -5,10 +5,9 @@ import java.util.function.Predicate;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.alg.MatrixDotTranspose;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Conjugate;
 
 /* package */ enum StaticHelper {
   ;
@@ -35,12 +34,5 @@ import ch.alpine.tensor.sca.Conjugate;
             .map(Scalar.class::cast) //
             .map(chop) //
             .allMatch(predicate);
-  }
-
-  // ---
-  /** @param matrix
-   * @return matrix . ConjugateTranspose(matrix) */
-  public static Tensor dotConjugate(Tensor matrix) {
-    return MatrixDotTranspose.of(matrix, Conjugate.of(matrix));
   }
 }

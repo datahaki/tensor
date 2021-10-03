@@ -22,7 +22,6 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
@@ -125,22 +124,6 @@ public class LeftNullSpaceTest extends TestCase {
     assertEquals(tensor.get(0), UnitVector.of(3, 1).map(suo));
     assertEquals(tensor.get(1), UnitVector.of(3, 2).map(suo));
     assertTrue(Scalars.isZero(Det.of(matrix)));
-  }
-
-  private static Tensor deprec(Tensor vector, Tensor nullsp) {
-    return vector.dot(PseudoInverse.usingSvd(nullsp)).dot(nullsp);
-  }
-
-  public void testQR() {
-    Distribution distribution = UniformDistribution.unit();
-    for (int count = 0; count < 10; ++count) {
-      Tensor vector = RandomVariate.of(distribution, 10);
-      Tensor design = RandomVariate.of(distribution, 10, 3);
-      Tensor nullsp = LeftNullSpace.usingQR(design);
-      Tensor p1 = deprec(vector, nullsp);
-      Tensor p2 = Dot.of(nullsp, vector, nullsp);
-      Tolerance.CHOP.requireClose(p1, p2);
-    }
   }
 
   public void testLeftGaussScalar() {

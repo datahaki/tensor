@@ -51,16 +51,16 @@ public class Dimensions implements Serializable {
   /** @return dimensions of given tensor
    * @see #of(Tensor) */
   public List<Integer> list() {
-    List<Integer> ret = new ArrayList<>();
+    List<Integer> list = new ArrayList<>();
     for (Set<Integer> set : lengths)
       if (set.size() == 1) {
         int val = set.iterator().next(); // get unique element from set
         if (val == Scalar.LENGTH) // has scalar
           break;
-        ret.add(val);
+        list.add(val);
       } else
         break;
-    return ret;
+    return list;
   }
 
   /** @return true if tensor structure is identical at all levels, else false.

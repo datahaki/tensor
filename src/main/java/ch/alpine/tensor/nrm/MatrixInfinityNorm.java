@@ -3,7 +3,7 @@ package ch.alpine.tensor.nrm;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.alg.MatrixQ;
+import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.red.Max;
 
 public enum MatrixInfinityNorm {

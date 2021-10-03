@@ -7,7 +7,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.AntisymmetricMatrixQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.mat.MatrixRank;
+import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.usr.AssertFail;

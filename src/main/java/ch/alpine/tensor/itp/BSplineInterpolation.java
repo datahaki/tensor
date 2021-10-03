@@ -12,7 +12,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarTensorFunction;
-import ch.alpine.tensor.mat.LinearSolve;
+import ch.alpine.tensor.mat.re.LinearSolve;
 
 /** BSplineInterpolation defines a parametric curve that interpolates
  * the given control points at integer values.

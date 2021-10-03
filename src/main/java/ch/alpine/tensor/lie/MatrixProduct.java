@@ -3,7 +3,7 @@ package ch.alpine.tensor.lie;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.mat.Inverse;
+import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.num.GroupInterface;
 
 /** for the group of invertible, square matrices */

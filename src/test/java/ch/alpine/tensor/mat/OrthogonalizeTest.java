@@ -9,7 +9,6 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.alg.MatrixDotTranspose;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.lie.MatrixExp;

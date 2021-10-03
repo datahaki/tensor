@@ -6,11 +6,11 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.alg.MatrixQ;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

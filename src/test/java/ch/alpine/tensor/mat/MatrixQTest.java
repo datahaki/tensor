@@ -1,13 +1,13 @@
 // code by jph
-package ch.alpine.tensor.alg;
+package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

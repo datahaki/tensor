@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.pi;
 
 import java.util.Arrays;
 
@@ -14,9 +14,17 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Timing;
+import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.LeftNullSpace;
+import ch.alpine.tensor.mat.OrthogonalMatrixQ;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
@@ -182,6 +190,22 @@ public class PseudoInverseTest extends TestCase {
     Tensor nullsp = LeftNullSpace.of(matrix);
     OrthogonalMatrixQ.require(nullsp);
     Chop._08.requireClose(PseudoInverse.usingSvd(nullsp), Transpose.of(nullsp));
+  }
+
+  private static Tensor deprec(Tensor vector, Tensor nullsp) {
+    return vector.dot(PseudoInverse.usingSvd(nullsp)).dot(nullsp);
+  }
+
+  public void testQR() {
+    Distribution distribution = UniformDistribution.unit();
+    for (int count = 0; count < 10; ++count) {
+      Tensor vector = RandomVariate.of(distribution, 10);
+      Tensor design = RandomVariate.of(distribution, 10, 3);
+      Tensor nullsp = LeftNullSpace.usingQR(design);
+      Tensor p1 = deprec(vector, nullsp);
+      Tensor p2 = Dot.of(nullsp, vector, nullsp);
+      Tolerance.CHOP.requireClose(p1, p2);
+    }
   }
 
   public void testEmptyFail() {

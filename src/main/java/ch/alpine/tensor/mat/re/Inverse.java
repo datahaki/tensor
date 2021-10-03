@@ -1,9 +1,9 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.re;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.mat.re.Pivot;
-import ch.alpine.tensor.mat.re.Pivots;
+import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.pi.PseudoInverse;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Inverse.html">Inverse</a>

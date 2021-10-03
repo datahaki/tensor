@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.Pretty;
-import ch.alpine.tensor.mat.Inverse;
+import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;

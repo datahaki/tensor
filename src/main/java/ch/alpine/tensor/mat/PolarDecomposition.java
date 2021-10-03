@@ -32,7 +32,7 @@ public class PolarDecomposition implements Serializable {
 
   private PolarDecomposition(Tensor matrix) {
     this.matrix = matrix;
-    matrixSqrt = MatrixSqrt.of(StaticHelper.dotConjugate(matrix));
+    matrixSqrt = MatrixSqrt.of(MatrixDotConjugateTranspose.of(matrix));
   }
 
   /** @return symmetric (or Hermitian) matrix k x k */

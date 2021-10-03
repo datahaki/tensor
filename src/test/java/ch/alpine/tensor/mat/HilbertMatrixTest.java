@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

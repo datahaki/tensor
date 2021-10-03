@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.mat.PseudoInverse;
+import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 
 /* package */ class InfluenceMatrixSvd extends InfluenceMatrixBase implements Serializable {

@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.re;
 
 import java.security.SecureRandom;
 import java.util.Random;
@@ -12,14 +12,17 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dot;
-import ch.alpine.tensor.alg.MatrixQ;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.fft.FourierMatrix;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
-import ch.alpine.tensor.mat.re.Det;
-import ch.alpine.tensor.mat.re.Pivot;
-import ch.alpine.tensor.mat.re.Pivots;
+import ch.alpine.tensor.mat.DiagonalMatrix;
+import ch.alpine.tensor.mat.HermitianMatrixQ;
+import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.MatrixQ;
+import ch.alpine.tensor.mat.SymmetricMatrixQ;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
