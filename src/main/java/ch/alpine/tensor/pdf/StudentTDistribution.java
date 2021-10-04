@@ -20,7 +20,7 @@ public class StudentTDistribution implements Distribution, //
     MeanInterface, PDF, VarianceInterface, Serializable {
   /** @param mu
    * @param sigma positive
-   * @param v positive
+   * @param v positive real
    * @return */
   public static Distribution of(Scalar mu, Scalar sigma, Scalar v) {
     return new StudentTDistribution( //
@@ -47,6 +47,7 @@ public class StudentTDistribution implements Distribution, //
   private StudentTDistribution(Scalar mu, Scalar sigma, Scalar v) {
     this.mu = mu;
     this.sigma = sigma;
+    Scalars.compare(mu, sigma); // assert that parameters have identical units
     this.v = v;
     power = Power.function(RealScalar.ONE.add(v).divide(RealScalar.TWO));
     factor = Sqrt.FUNCTION.apply(v).multiply(sigma).multiply(Beta.of(v.multiply(RationalScalar.HALF), RationalScalar.HALF));

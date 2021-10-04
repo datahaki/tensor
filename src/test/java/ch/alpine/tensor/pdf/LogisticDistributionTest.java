@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf;
 
 import java.io.IOException;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
@@ -57,7 +58,18 @@ public class LogisticDistributionTest extends TestCase {
     AssertFail.of(() -> LogisticDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 
-  public void testNegativeFail() {
-    AssertFail.of(() -> LogisticDistribution.of(RealScalar.ONE, RealScalar.of(-1)));
+  public void testComplexFail() {
+    AssertFail.of(() -> LogisticDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
+  }
+
+  public void testQuantityFail() {
+    AssertFail.of(() -> LogisticDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    AssertFail.of(() -> LogisticDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    AssertFail.of(() -> LogisticDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+  }
+
+  public void testNegativeSigmaFail() {
+    LogisticDistribution.of(5, 1);
+    AssertFail.of(() -> LogisticDistribution.of(5, -1));
   }
 }

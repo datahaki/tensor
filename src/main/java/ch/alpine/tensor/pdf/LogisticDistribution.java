@@ -39,6 +39,7 @@ public class LogisticDistribution extends AbstractContinuousDistribution impleme
   private LogisticDistribution(Scalar a, Scalar b) {
     this.a = a;
     this.b = b;
+    Scalars.compare(a, b); // assert that parameters have identical units
   }
 
   @Override // from PDF

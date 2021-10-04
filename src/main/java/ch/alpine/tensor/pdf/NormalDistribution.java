@@ -6,6 +6,7 @@ import java.util.Random;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.Sqrt;
 
@@ -13,6 +14,10 @@ import ch.alpine.tensor.sca.Sqrt;
  * <a href="https://reference.wolfram.com/language/ref/NormalDistribution.html">NormalDistribution</a> */
 public class NormalDistribution implements ContinuousDistribution, Serializable {
   /** The parameters mean and sigma may be of type Quantity with identical Unit.
+   * Example:
+   * <pre>
+   * NormalDistribution.of(Quantity.of(5, "m"), Quantity.of(2, "m"));
+   * </pre>
    * 
    * @param mean
    * @param sigma standard deviation
@@ -49,7 +54,7 @@ public class NormalDistribution implements ContinuousDistribution, Serializable 
   private NormalDistribution(Scalar mean, Scalar sigma) {
     this.mean = mean;
     this.sigma = Sign.requirePositive(sigma);
-    mean.add(sigma); // <- assert that parameters are compatible
+    Scalars.compare(mean, sigma); // assert that parameters have identical units
   }
 
   @Override // from CDF

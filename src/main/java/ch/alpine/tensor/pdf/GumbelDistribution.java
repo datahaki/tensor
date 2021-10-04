@@ -6,6 +6,7 @@ import java.io.Serializable;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Gamma;
@@ -42,6 +43,7 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
   private GumbelDistribution(Scalar alpha, Scalar beta) {
     this.alpha = alpha;
     this.beta = beta;
+    Scalars.compare(alpha, beta); // assert that parameters have identical unit
   }
 
   @Override // from MeanInterface

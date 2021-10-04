@@ -3,12 +3,15 @@ package ch.alpine.tensor.pdf;
 
 import java.io.IOException;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LaplaceDistributionTest extends TestCase {
@@ -31,5 +34,27 @@ public class LaplaceDistributionTest extends TestCase {
     RandomVariate.of(distribution, 100);
     assertEquals(ExactScalarQ.require(Mean.of(distribution)), RealScalar.of(3));
     assertEquals(ExactScalarQ.require(Variance.of(distribution)), RealScalar.of(8));
+  }
+
+  public void testQuantity() {
+    Distribution distribution = LaplaceDistribution.of(Quantity.of(3, "kg"), Quantity.of(2, "kg"));
+    RandomVariate.of(distribution, 100);
+    assertEquals(ExactScalarQ.require(Mean.of(distribution)), Quantity.of(3, "kg"));
+    assertEquals(ExactScalarQ.require(Variance.of(distribution)), Quantity.of(8, "kg^2"));
+  }
+
+  public void testComplexFail() {
+    AssertFail.of(() -> LaplaceDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
+  }
+
+  public void testQuantityFail() {
+    AssertFail.of(() -> LaplaceDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    AssertFail.of(() -> LaplaceDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    AssertFail.of(() -> LaplaceDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+  }
+
+  public void testNegativeSigmaFail() {
+    LaplaceDistribution.of(5, 1);
+    AssertFail.of(() -> LaplaceDistribution.of(5, -1));
   }
 }

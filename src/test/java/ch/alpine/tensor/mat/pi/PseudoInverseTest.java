@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.pi;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
@@ -92,12 +93,13 @@ public class PseudoInverseTest extends TestCase {
   }
 
   public void testQuantity() {
+    Random random = new Random(3);
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(1, "m"));
     for (int n = 1; n < 7; ++n) {
-      Tensor matrix = RandomVariate.of(distribution, n, n);
+      Tensor matrix = RandomVariate.of(distribution, random, n, n);
       Tensor invers = Inverse.of(matrix);
-      Chop._08.requireClose(invers, PseudoInverse.usingSvd(matrix)); // chop_09 was insufficient
-      Chop._09.requireClose(invers, PseudoInverse.usingQR(matrix));
+      Chop._12.requireClose(invers, PseudoInverse.usingSvd(matrix)); // chop_09 was insufficient
+      Chop._12.requireClose(invers, PseudoInverse.usingQR(matrix));
     }
   }
 
