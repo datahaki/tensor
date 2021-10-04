@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import java.util.Arrays;
 
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.num.Pi;
@@ -55,6 +56,13 @@ public class AbstractScalarTest extends TestCase {
   public void testSetFail() {
     AssertFail.of(() -> RealScalar.ONE.set(RealScalar.ZERO));
     AssertFail.of(() -> RealScalar.ONE.set(s -> RealScalar.ZERO));
+  }
+
+  public void testSetListFail() {
+    AssertFail.of(() -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] {})));
+    AssertFail.of(() -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] { 2 })));
+    AssertFail.of(() -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] {})));
+    AssertFail.of(() -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] { 2 })));
   }
 
   public void testAppendFail() {

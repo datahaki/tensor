@@ -1,18 +1,25 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.io.Pretty;
+import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SparseArrayTest extends TestCase {
-  public void testSimple() {
-    Tensor tensor = new SparseArray(Arrays.asList(5, 6, 8), RealScalar.ZERO);
+  public void testSimple() throws ClassNotFoundException, IOException {
+    Tensor tensor = Serialization.copy(new SparseArray(Arrays.asList(5, 6, 8), RealScalar.ZERO));
     Tensor value = tensor.get(1);
     assertEquals(value.length(), 6);
     Tensor copy = tensor.copy();
@@ -28,6 +35,7 @@ public class SparseArrayTest extends TestCase {
   public void testVector() {
     Tensor matrix = new SparseArray(Arrays.asList(100), RealScalar.ZERO);
     assertEquals(matrix.Get(99), RealScalar.ZERO);
+    AssertFail.of(() -> matrix.get(-1));
     AssertFail.of(() -> matrix.get(100));
     AssertFail.of(() -> matrix.Get(100));
   }
@@ -57,6 +65,11 @@ public class SparseArrayTest extends TestCase {
     assertEquals(sparse.hashCode(), matrix.hashCode());
   }
 
+  public void testArrayGet() {
+    Tensor array = new SparseArray(Arrays.asList(5, 10, 8), Quantity.of(0, "m"));
+    assertEquals(array.get(1, Tensor.ALL, 3), ConstantArray.of(Quantity.of(0, "m"), 10));
+  }
+
   public void testMatrix() {
     Tensor matrix = new SparseArray(Arrays.asList(5, 10), RealScalar.ZERO);
     assertEquals(matrix.Get(3, 2), RealScalar.ZERO);
@@ -77,5 +90,26 @@ public class SparseArrayTest extends TestCase {
     Tensor tensor = new SparseArray(Arrays.asList(5, 8, 7), RealScalar.ZERO);
     tensor.set(Pi.TWO, 2, 3, 4);
     assertEquals(Dimensions.of(tensor.extract(1, 3)), Arrays.asList(2, 8, 7));
+  }
+
+  public void testCreateScalar() {
+    assertEquals(SparseArray.of(Pi.VALUE, RealScalar.ZERO), Pi.VALUE);
+  }
+
+  public void testCreate() {
+    Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
+    Tensor sparse = SparseArray.of(tensor, RealScalar.ZERO);
+    assertEquals(Dimensions.of(sparse), Arrays.asList(3, 5));
+    assertEquals(Pretty.of(sparse), Pretty.of(tensor));
+    sparse.toString();
+    Tensor result = sparse.divide(RationalScalar.HALF);
+    assertEquals(result, tensor.multiply(RealScalar.TWO));
+    ExactTensorQ.require(sparse);
+    assertTrue(result instanceof SparseArray);
+  }
+
+  public void testCreateId() {
+    Tensor sparse = SparseArray.of(IdentityMatrix.of(10), RealScalar.ZERO);
+    SquareMatrixQ.require(sparse);
   }
 }

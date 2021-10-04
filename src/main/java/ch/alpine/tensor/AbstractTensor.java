@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.ext.Integers;
@@ -46,6 +47,11 @@ public abstract class AbstractTensor implements Tensor {
   @Override // from Tensor
   public final void set(Tensor tensor, int... index) {
     set(tensor, Integers.asList(index));
+  }
+
+  @Override // from Tensor
+  public final <T extends Tensor> void set(Function<T, ? extends Tensor> function, int... index) {
+    set(function, Integers.asList(index));
   }
 
   @Override // from Tensor

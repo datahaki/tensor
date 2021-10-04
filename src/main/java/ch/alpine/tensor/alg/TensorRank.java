@@ -28,6 +28,7 @@ public enum TensorRank {
 
   /** @param tensor
    * @return rank of tensor if tensor is an array, else Optional.empty() */
+  // TODO similar to ArrayQ#orRank
   public static Optional<Integer> ofArray(Tensor tensor) {
     Dimensions dimensions = new Dimensions(tensor);
     return dimensions.isArray() //

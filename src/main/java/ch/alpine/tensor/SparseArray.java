@@ -15,11 +15,36 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Integers;
 
-/** API EXPERIMENTAL */
+/** API EXPERIMENTAL
+ * 
+ * WIP */
 /* package */ class SparseArray extends AbstractTensor implements Serializable {
+  /** @param tensor
+   * @param fallback
+   * @return
+   * @throws Exception if given tensor does not have array structure */
+  public static Tensor of(Tensor tensor, Scalar fallback) {
+    Dimensions dimensions = new Dimensions(tensor);
+    if (dimensions.isArray()) {
+      List<Integer> size = dimensions.list();
+      if (0 == size.size())
+        return tensor;
+      SparseArray sparseArray = new SparseArray(size, fallback);
+      Array.forEach(list -> {
+        Tensor entry = tensor.get(list);
+        if (!fallback.equals(entry))
+          sparseArray.set(entry, list);
+      }, size);
+      return sparseArray;
+    }
+    throw TensorRuntimeException.of(tensor);
+  }
+
+  // ---
   private final List<Integer> size;
   private final Scalar fallback;
   private final NavigableMap<Integer, Tensor> navigableMap;
@@ -27,8 +52,8 @@ import ch.alpine.tensor.ext.Integers;
   public SparseArray(List<Integer> size, Scalar fallback, NavigableMap<Integer, Tensor> navigableMap) {
     Integers.requirePositive(size.size());
     this.size = size;
-    this.fallback = fallback;
-    this.navigableMap = navigableMap;
+    this.fallback = Objects.requireNonNull(fallback);
+    this.navigableMap = Objects.requireNonNull(navigableMap);
   }
 
   public SparseArray(List<Integer> size, Scalar fallback) {
@@ -79,11 +104,6 @@ import ch.alpine.tensor.ext.Integers;
   }
 
   @Override
-  public <T extends Tensor> void set(Function<T, ? extends Tensor> function, int... index) {
-    // TODO Auto-generated method stub
-  }
-
-  @Override
   public <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index) {
     // TODO Auto-generated method stub
   }
@@ -108,14 +128,16 @@ import ch.alpine.tensor.ext.Integers;
       return Tensors.empty();
     List<Integer> newl = new ArrayList<>(size);
     newl.set(0, len);
-    return new SparseArray(newl, fallback, navigableMap.entrySet().stream().collect(Collectors.toMap( //
-        entry -> entry.getKey() - fromIndex, entry -> entry.getValue().copy(), (e1, e2) -> null, TreeMap::new)));
+    return new SparseArray(newl, fallback, //
+        navigableMap.entrySet().stream().collect(Collectors.toMap( //
+            entry -> entry.getKey() - fromIndex, entry -> entry.getValue().copy(), (e1, e2) -> null, TreeMap::new)));
   }
 
   @Override
   public Tensor negate() {
-    return new SparseArray(size, fallback, navigableMap.entrySet().stream().collect(Collectors.toMap( //
-        Entry::getKey, entry -> entry.getValue().negate(), (e1, e2) -> null, TreeMap::new)));
+    return new SparseArray(size, fallback.negate(), //
+        navigableMap.entrySet().stream().collect(Collectors.toMap( //
+            Entry::getKey, entry -> entry.getValue().negate(), (e1, e2) -> null, TreeMap::new)));
   }
 
   @Override
@@ -148,20 +170,23 @@ import ch.alpine.tensor.ext.Integers;
 
   @Override
   public Tensor multiply(Scalar scalar) {
-    return new SparseArray(size, fallback, navigableMap.entrySet().stream().collect(Collectors.toMap( //
-        Entry::getKey, entry -> entry.getValue().multiply(scalar), (e1, e2) -> null, TreeMap::new)));
+    return new SparseArray(size, fallback.multiply(scalar), //
+        navigableMap.entrySet().stream().collect(Collectors.toMap( //
+            Entry::getKey, entry -> entry.getValue().multiply(scalar), (e1, e2) -> null, TreeMap::new)));
   }
 
   @Override
   public Tensor divide(Scalar scalar) {
-    return new SparseArray(size, fallback, navigableMap.entrySet().stream().collect(Collectors.toMap( //
-        Entry::getKey, entry -> entry.getValue().divide(scalar), (e1, e2) -> null, TreeMap::new)));
+    return new SparseArray(size, fallback.divide(scalar), //
+        navigableMap.entrySet().stream().collect(Collectors.toMap( //
+            Entry::getKey, entry -> entry.getValue().divide(scalar), (e1, e2) -> null, TreeMap::new)));
   }
 
   @Override
   public Tensor map(Function<Scalar, ? extends Tensor> function) {
-    return new SparseArray(size, (Scalar) function.apply(fallback), navigableMap.entrySet().stream().collect(Collectors.toMap( //
-        Entry::getKey, entry -> entry.getValue().map(function), (e1, e2) -> null, TreeMap::new)));
+    return new SparseArray(size, (Scalar) function.apply(fallback), //
+        navigableMap.entrySet().stream().collect(Collectors.toMap( //
+            Entry::getKey, entry -> entry.getValue().map(function), (e1, e2) -> null, TreeMap::new)));
   }
 
   @Override
@@ -190,5 +215,12 @@ import ch.alpine.tensor.ext.Integers;
         return byRef(count++);
       }
     };
+  }
+
+  @Override
+  public String toString() {
+    return size.toString() + " " + navigableMap.entrySet().stream() //
+        .map(entry -> String.format("%d -> %s", entry.getKey(), entry.getValue())) //
+        .collect(StaticHelper.EMBRACE);
   }
 }

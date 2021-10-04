@@ -12,11 +12,11 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.ext.Integers;
 
 /** reference implementation of the interface Tensor */
-/* package */ class ListTensor extends AbstractTensor implements Serializable {
+/* package */ class FullTensor extends AbstractTensor implements Serializable {
   private final List<Tensor> list;
 
   /** @param list to be guaranteed non-null */
-  public ListTensor(List<Tensor> list) {
+  public FullTensor(List<Tensor> list) {
     this.list = list;
   }
 
@@ -54,11 +54,6 @@ import ch.alpine.tensor.ext.Integers;
       } else
         list.get(head).set(tensor, sublist);
     }
-  }
-
-  @Override // from Tensor
-  public <T extends Tensor> void set(Function<T, ? extends Tensor> function, int... index) {
-    set(function, Integers.asList(index));
   }
 
   @SuppressWarnings("unchecked")
@@ -145,7 +140,7 @@ import ch.alpine.tensor.ext.Integers;
     int head = fromIndex.get(0);
     List<Tensor> subList = list.subList(head, head + dimensions.get(0));
     if (size == 1)
-      return new ListTensor(subList);
+      return new FullTensor(subList);
     List<Integer> subHead = fromIndex.subList(1, size);
     List<Integer> subDims = dimensions.subList(1, size);
     return Tensor.of(subList.stream().map(entry -> entry.block(subHead, subDims)));

@@ -23,7 +23,7 @@ public enum Unprotect {
    * @throws Exception if given list is null
    * @see TableBuilder */
   public static Tensor using(List<Tensor> list) {
-    return new ListTensor(Objects.requireNonNull(list));
+    return new FullTensor(Objects.requireNonNull(list));
   }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !

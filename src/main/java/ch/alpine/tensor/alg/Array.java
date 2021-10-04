@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -33,17 +34,17 @@ public enum Array {
    * @param dimensions with non-negative entries
    * @return tensor with given dimensions and entries as function(index)
    * @throws Exception if any dimension is negative */
-  public static Tensor of(Function<List<Integer>, ? extends Tensor> function, List<Integer> dimensions) {
-    dimensions.forEach(Integers::requirePositiveOrZero);
-    return of(function, 0, dimensions, new ArrayList<>(dimensions));
+  public static Tensor of(Function<List<Integer>, ? extends Tensor> function, int... dimensions) {
+    return of(function, Integers.asList(dimensions));
   }
 
   /** @param function maps given index to {@link Tensor}, or {@link Scalar}
    * @param dimensions with non-negative entries
    * @return tensor with given dimensions and entries as function(index)
    * @throws Exception if any dimension is negative */
-  public static Tensor of(Function<List<Integer>, ? extends Tensor> function, int... dimensions) {
-    return of(function, Integers.asList(dimensions));
+  public static Tensor of(Function<List<Integer>, ? extends Tensor> function, List<Integer> dimensions) {
+    dimensions.forEach(Integers::requirePositiveOrZero);
+    return of(function, 0, dimensions, new ArrayList<>(dimensions));
   }
 
   // helper function
@@ -61,18 +62,18 @@ public enum Array {
   /** @param supplier
    * @param dimensions
    * @return */
-  public static Tensor fill(Supplier<? extends Scalar> supplier, List<Integer> dimensions) {
-    if (dimensions.isEmpty())
-      return supplier.get();
-    dimensions.forEach(Integers::requirePositiveOrZero);
-    return fill(supplier, 0, dimensions);
+  public static Tensor fill(Supplier<? extends Scalar> supplier, int... dimensions) {
+    return fill(supplier, 0, Integers.asList(dimensions));
   }
 
   /** @param supplier
    * @param dimensions
    * @return */
-  public static Tensor fill(Supplier<? extends Scalar> supplier, int... dimensions) {
-    return fill(supplier, 0, Integers.asList(dimensions));
+  public static Tensor fill(Supplier<? extends Scalar> supplier, List<Integer> dimensions) {
+    if (dimensions.isEmpty())
+      return supplier.get();
+    dimensions.forEach(Integers::requirePositiveOrZero);
+    return fill(supplier, 0, dimensions);
   }
 
   // helper function
@@ -85,16 +86,6 @@ public enum Array {
   }
 
   // ---
-  /** @param dimensions
-   * @return tensor of {@link RealScalar#ZERO} with given dimensions
-   * @throws Exception if any of the integer parameters is negative */
-  public static Tensor zeros(List<Integer> dimensions) {
-    if (dimensions.isEmpty())
-      return RealScalar.ZERO;
-    dimensions.forEach(Integers::requirePositiveOrZero);
-    return fill(() -> RealScalar.ZERO, 0, dimensions);
-  }
-
   /** Careful:
    * {@link #zeros(int...)} is not consistent with MATLAB::zeros.
    * In the tensor library, the number of integer parameters equals the rank
@@ -111,5 +102,45 @@ public enum Array {
    * @throws Exception if any of the integer parameters is negative */
   public static Tensor zeros(int... dimensions) {
     return zeros(Integers.asList(dimensions));
+  }
+
+  /** @param dimensions
+   * @return tensor of {@link RealScalar#ZERO} with given dimensions
+   * @throws Exception if any of the integer parameters is negative */
+  public static Tensor zeros(List<Integer> dimensions) {
+    if (dimensions.isEmpty())
+      return RealScalar.ZERO;
+    dimensions.forEach(Integers::requirePositiveOrZero);
+    return fill(() -> RealScalar.ZERO, 0, dimensions);
+  }
+
+  // ---
+  /** traverses the indices of a hypothetical array of given dimensions and invokes
+   * the provided consumer with current index.
+   * 
+   * @param consumer maps given index to {@link Tensor}, or {@link Scalar}
+   * @param dimensions with non-negative entries
+   * @throws Exception if any dimension is negative */
+  public static void forEach(Consumer<List<Integer>> consumer, int... dimensions) {
+    forEach(consumer, Integers.asList(dimensions));
+  }
+
+  /** @param consumer maps given index to {@link Tensor}, or {@link Scalar}
+   * @param dimensions with non-negative entries
+   * @throws Exception if any dimension is negative */
+  public static void forEach(Consumer<List<Integer>> consumer, List<Integer> dimensions) {
+    dimensions.forEach(Integers::requirePositiveOrZero);
+    forEach(consumer, 0, dimensions, new ArrayList<>(dimensions));
+  }
+
+  // helper function
+  private static void forEach(Consumer<List<Integer>> consumer, int level, List<Integer> dimensions, List<Integer> index) {
+    if (level == dimensions.size())
+      consumer.accept(index);
+    else
+      IntStream.range(0, dimensions.get(level)).forEach(count -> {
+        index.set(level, count);
+        forEach(consumer, level + 1, dimensions, index);
+      });
   }
 }
