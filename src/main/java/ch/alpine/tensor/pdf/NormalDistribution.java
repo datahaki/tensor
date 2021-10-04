@@ -23,6 +23,7 @@ public class NormalDistribution implements ContinuousDistribution, Serializable 
    * @param sigma standard deviation
    * @return instance of NormalDistribution with given characteristics */
   public static Distribution of(Scalar mean, Scalar sigma) {
+    Scalars.compare(mean, sigma); // assert that parameters have identical units
     return new NormalDistribution(mean, sigma);
   }
 
@@ -54,7 +55,6 @@ public class NormalDistribution implements ContinuousDistribution, Serializable 
   private NormalDistribution(Scalar mean, Scalar sigma) {
     this.mean = mean;
     this.sigma = Sign.requirePositive(sigma);
-    Scalars.compare(mean, sigma); // assert that parameters have identical units
   }
 
   @Override // from CDF

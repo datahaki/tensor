@@ -23,6 +23,7 @@ public class StudentTDistribution implements Distribution, //
    * @param v positive real
    * @return */
   public static Distribution of(Scalar mu, Scalar sigma, Scalar v) {
+    Scalars.compare(mu, sigma); // assert that parameters have identical units
     return new StudentTDistribution( //
         mu, //
         Sign.requirePositive(sigma), //
@@ -47,7 +48,6 @@ public class StudentTDistribution implements Distribution, //
   private StudentTDistribution(Scalar mu, Scalar sigma, Scalar v) {
     this.mu = mu;
     this.sigma = sigma;
-    Scalars.compare(mu, sigma); // assert that parameters have identical units
     this.v = v;
     power = Power.function(RealScalar.ONE.add(v).divide(RealScalar.TWO));
     factor = Sqrt.FUNCTION.apply(v).multiply(sigma).multiply(Beta.of(v.multiply(RationalScalar.HALF), RationalScalar.HALF));

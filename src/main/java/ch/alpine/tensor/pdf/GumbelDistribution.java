@@ -26,6 +26,7 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
    * @param beta positive
    * @return */
   public static Distribution of(Scalar alpha, Scalar beta) {
+    Scalars.compare(alpha, beta); // assert that parameters have identical unit
     return new GumbelDistribution(alpha, Sign.requirePositive(beta));
   }
 
@@ -43,7 +44,6 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
   private GumbelDistribution(Scalar alpha, Scalar beta) {
     this.alpha = alpha;
     this.beta = beta;
-    Scalars.compare(alpha, beta); // assert that parameters have identical unit
   }
 
   @Override // from MeanInterface
