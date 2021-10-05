@@ -14,16 +14,22 @@ public class SparseArraysTest extends TestCase {
     {
       Tensor r_add = sa.add(sb);
       assertEquals(a.add(b), r_add);
+      assertEquals(a.add(sb), r_add);
+      assertEquals(sa.add(b), r_add);
       assertTrue(r_add instanceof SparseArray);
     }
     {
       Tensor r_sub = sa.subtract(sb);
       assertEquals(a.subtract(b), r_sub);
+      assertEquals(a.subtract(sb), r_sub);
+      assertEquals(sa.subtract(b), r_sub);
       assertTrue(r_sub instanceof SparseArray);
     }
     {
       Tensor r_pml = sa.pmul(sb);
       assertEquals(a.pmul(b), r_pml);
+      assertEquals(a.pmul(sb), r_pml);
+      assertEquals(sa.pmul(b), r_pml);
       assertTrue(r_pml instanceof SparseArray);
     }
   }

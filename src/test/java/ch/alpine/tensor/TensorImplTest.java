@@ -15,7 +15,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
-public class FullTensorTest extends TestCase {
+public class TensorImplTest extends TestCase {
   public void testUnmodifiable() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     AssertFail.of(() -> eye.flatten(0).forEach(e -> e.set(RealScalar.of(4), 2)));
@@ -105,6 +105,6 @@ public class FullTensorTest extends TestCase {
   }
 
   public void testNonPublic() {
-    assertEquals(FullTensor.class.getModifiers(), 0);
+    assertEquals(TensorImpl.class.getModifiers(), 0);
   }
 }

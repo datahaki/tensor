@@ -130,7 +130,7 @@ import ch.alpine.tensor.ext.Integers;
               .distinct().collect(Collectors.toMap( //
                   i -> i, i -> byRef(i).subtract(sparseArray.byRef(i)), (e1, e2) -> null, TreeMap::new)));
     }
-    return tensor.subtract(this);
+    return tensor.negate().add(this);
   }
 
   @Override // from Tensor
