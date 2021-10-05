@@ -17,7 +17,7 @@ public abstract class BSplineFunctionBase extends BSplineFunction {
     return deBoor(Floor.intValueExact(scalar)).apply(scalar);
   }
 
-  @Override
+  @Override // from BSplineFunction
   protected final Tensor knots(int k) {
     return project(Range.of(-degree + 1 + k, degree + 1 + k));
   }

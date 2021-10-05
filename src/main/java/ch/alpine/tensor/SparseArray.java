@@ -9,51 +9,22 @@ import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Integers;
 
-/** API EXPERIMENTAL
- * 
- * WIP */
 /* package */ class SparseArray extends AbstractTensor implements Serializable {
-  /** @param tensor
-   * @param fallback
-   * @return
-   * @throws Exception if given tensor does not have array structure */
-  public static Tensor of(Tensor tensor, Scalar fallback) {
-    Dimensions dimensions = new Dimensions(tensor);
-    if (dimensions.isArray()) {
-      List<Integer> size = dimensions.list();
-      if (0 == size.size())
-        return tensor;
-      SparseArray sparseArray = new SparseArray(size, fallback);
-      Array.forEach(list -> {
-        Tensor entry = tensor.get(list); // entry is scalar due to dimension check above
-        if (!fallback.equals(entry))
-          sparseArray.set(entry, list);
-      }, size);
-      return sparseArray;
-    }
-    throw TensorRuntimeException.of(tensor);
-  }
-
-  // ---
   private final List<Integer> size;
   private final Scalar fallback;
   private final NavigableMap<Integer, Tensor> navigableMap;
 
   public SparseArray(List<Integer> size, Scalar fallback, NavigableMap<Integer, Tensor> navigableMap) {
-    Integers.requirePositive(size.size());
     this.size = size;
-    this.fallback = Objects.requireNonNull(fallback);
-    this.navigableMap = Objects.requireNonNull(navigableMap);
+    this.fallback = fallback;
+    this.navigableMap = navigableMap;
   }
 
   public SparseArray(List<Integer> size, Scalar fallback) {
@@ -73,7 +44,7 @@ import ch.alpine.tensor.ext.Integers;
 
   @Override // from Tensor
   protected Tensor byRef(int i) {
-    assertInRange(i);
+    SparseArrays.requireInRange(i, length());
     Tensor tensor = navigableMap.get(i);
     if (Objects.isNull(tensor)) {
       if (size.size() == 1)
@@ -83,16 +54,11 @@ import ch.alpine.tensor.ext.Integers;
     return tensor;
   }
 
-  private void assertInRange(int i) {
-    if (i < 0 || length() <= i)
-      throw new IllegalArgumentException();
-  }
-
   @Override // from Tensor
   public void set(Tensor tensor, List<Integer> index) {
     Integers.requirePositive(index.size());
     int head = index.get(0);
-    assertInRange(head);
+    SparseArrays.requireInRange(head, length());
     if (index.size() == 1)
       navigableMap.put(head, tensor.copy());
     else {
@@ -106,12 +72,12 @@ import ch.alpine.tensor.ext.Integers;
   @Override // from Tensor
   public <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index) {
     // TODO Auto-generated method stub
+    throw new UnsupportedOperationException();
   }
 
   @Override // from Tensor
   public Tensor append(Tensor tensor) {
-    // TODO Auto-generated method stub
-    return null;
+    throw new UnsupportedOperationException();
   }
 
   @Override // from Tensor
@@ -121,8 +87,8 @@ import ch.alpine.tensor.ext.Integers;
 
   @Override // from Tensor
   public Tensor extract(int fromIndex, int toIndex) {
-    assertInRange(fromIndex);
-    assertInRange(toIndex);
+    SparseArrays.requireInRange(fromIndex, length());
+    SparseArrays.requireInRange(toIndex, length());
     int len = Integers.requirePositiveOrZero(toIndex - fromIndex);
     if (len == 0)
       return Tensors.empty();
@@ -143,30 +109,36 @@ import ch.alpine.tensor.ext.Integers;
 
   @Override // from Tensor
   public Tensor add(Tensor tensor) {
-    Integers.requireEquals(length(), tensor.length());
-    AtomicInteger i = new AtomicInteger();
-    List<Integer> subList = size.subList(1, size.size());
-    // TODO this produces full array :-(
-    return Tensor.of(tensor.stream().map(entry -> {
-      int index = i.getAndIncrement();
-      if (navigableMap.containsKey(index))
-        return navigableMap.get(index).add(entry);
-      if (Dimensions.of(entry).equals(subList))
-        return entry.map(fallback::add);
-      throw TensorRuntimeException.of(entry);
-    }));
+    if (tensor instanceof SparseArray) {
+      Integers.requireEquals(length(), tensor.length());
+      SparseArray sparseArray = (SparseArray) tensor;
+      return new SparseArray(size, fallback.add(sparseArray.fallback), //
+          Stream.concat(navigableMap.keySet().stream(), sparseArray.navigableMap.keySet().stream()) //
+              .distinct().collect(Collectors.toMap( //
+                  i -> i, i -> byRef(i).add(sparseArray.byRef(i)), (e1, e2) -> null, TreeMap::new)));
+    }
+    return tensor.add(this);
   }
 
   @Override // from Tensor
   public Tensor subtract(Tensor tensor) {
-    // TODO Auto-generated method stub
-    return null;
+    if (tensor instanceof SparseArray) {
+      Integers.requireEquals(length(), tensor.length());
+      SparseArray sparseArray = (SparseArray) tensor;
+      return new SparseArray(size, fallback.subtract(sparseArray.fallback), //
+          Stream.concat(navigableMap.keySet().stream(), sparseArray.navigableMap.keySet().stream()) //
+              .distinct().collect(Collectors.toMap( //
+                  i -> i, i -> byRef(i).subtract(sparseArray.byRef(i)), (e1, e2) -> null, TreeMap::new)));
+    }
+    return tensor.subtract(this);
   }
 
   @Override // from Tensor
   public Tensor pmul(Tensor tensor) {
-    // TODO Auto-generated method stub
-    return null;
+    Integers.requireEquals(length(), tensor.length());
+    return new SparseArray(size, fallback, //
+        navigableMap.entrySet().stream().collect(Collectors.toMap( //
+            Entry::getKey, entry -> entry.getValue().pmul(tensor.get(entry.getKey())), (e1, e2) -> null, TreeMap::new)));
   }
 
   @Override // from Tensor
@@ -193,7 +165,7 @@ import ch.alpine.tensor.ext.Integers;
   @Override // from Tensor
   public Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
     // TODO Auto-generated method stub
-    return null;
+    throw new UnsupportedOperationException();
   }
 
   @Override // from Tensor

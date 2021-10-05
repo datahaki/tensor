@@ -30,17 +30,17 @@ public class BSplineFunctionCyclic extends BSplineFunctionBase {
   }
 
   @Override // from BSplineFunction
+  protected int bound(int index) {
+    return Math.floorMod(index, length);
+  }
+
+  @Override // from BSplineFunctionBase
   protected Scalar requireValid(Scalar scalar) {
     return mod.apply(scalar);
   }
 
-  @Override // from BSplineFunction
+  @Override // from BSplineFunctionBase
   protected Tensor project(Tensor knots) {
     return knots;
-  }
-
-  @Override // from BSplineFunction
-  protected int bound(int index) {
-    return Math.floorMod(index, length);
   }
 }

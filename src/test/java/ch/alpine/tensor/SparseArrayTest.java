@@ -11,6 +11,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.Pretty;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.SquareMatrixQ;
+import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
@@ -93,12 +94,12 @@ public class SparseArrayTest extends TestCase {
   }
 
   public void testCreateScalar() {
-    assertEquals(SparseArray.of(Pi.VALUE, RealScalar.ZERO), Pi.VALUE);
+    assertEquals(SparseArrays.of(Pi.VALUE, RealScalar.ZERO), Pi.VALUE);
   }
 
   public void testCreate() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
-    Tensor sparse = SparseArray.of(tensor, RealScalar.ZERO);
+    Tensor sparse = SparseArrays.of(tensor, RealScalar.ZERO);
     assertEquals(Dimensions.of(sparse), Arrays.asList(3, 5));
     assertEquals(Pretty.of(sparse), Pretty.of(tensor));
     sparse.toString();
@@ -109,7 +110,8 @@ public class SparseArrayTest extends TestCase {
   }
 
   public void testCreateId() {
-    Tensor sparse = SparseArray.of(IdentityMatrix.of(10), RealScalar.ZERO);
+    Tensor sparse = SparseArrays.of(IdentityMatrix.of(5), RealScalar.ZERO);
     SquareMatrixQ.require(sparse);
+    assertEquals(Inverse.of(sparse), IdentityMatrix.of(5));
   }
 }

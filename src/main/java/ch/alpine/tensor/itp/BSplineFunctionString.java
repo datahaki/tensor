@@ -38,17 +38,17 @@ public class BSplineFunctionString extends BSplineFunctionBase {
   }
 
   @Override // from BSplineFunction
+  protected int bound(int index) {
+    return Math.min(Math.max(0, index), last);
+  }
+
+  @Override // from BSplineFunctionBase
   protected Scalar requireValid(Scalar scalar) {
     return domain.requireInside(scalar);
   }
 
-  @Override // from BSplineFunction
+  @Override // from BSplineFunctionBase
   protected Tensor project(Tensor knots) {
     return knots.map(clip);
-  }
-
-  @Override // from BSplineFunction
-  protected int bound(int index) {
-    return Math.min(Math.max(0, index), last);
   }
 }
