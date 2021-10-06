@@ -3,7 +3,6 @@ package ch.alpine.tensor.alg;
 
 import java.util.stream.Stream;
 
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
 
@@ -22,11 +21,11 @@ public enum ArrayReshape {
    * implementation requires
    * <code>stream.count() == prod(size)</code>
    * 
-   * @param stream of {@link Scalar}s
-   * @param size
-   * @return tensor with {@link Scalar} entries from stream and {@link Dimensions} size
-   * @throws Exception if the product of the elements in dimensions
-   * does not equal the number of tensors in the given stream */
+   * @param stream
+   * @param size the product of the entries have to equal the count of elements in the given stream
+   * @return tensor with entries from stream and first dimensions determined by size
+   * @throws Exception if the product of the elements in size does not equal the number of elements
+   * in the given stream */
   public static Tensor of(Stream<? extends Tensor> stream, int... size) {
     Tensor transpose = Tensor.of(stream);
     int length = transpose.length();
@@ -40,7 +39,7 @@ public enum ArrayReshape {
   }
 
   /** @param tensor
-   * @param dimensions
+   * @param dimensions non-empty
    * @return
    * @throws Exception if the product of the elements in dimensions
    * does not equal the number of scalars in given tensor */

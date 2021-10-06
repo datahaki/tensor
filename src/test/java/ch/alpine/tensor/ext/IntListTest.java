@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.RandomAccess;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.usr.AssertFail;
@@ -210,6 +211,7 @@ public class IntListTest extends TestCase {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     List<Integer> copy = Serialization.copy(intList);
     assertEquals(copy, Arrays.asList(2, 3, 4));
+    assertTrue(intList instanceof RandomAccess);
   }
 
   public void testToString() {

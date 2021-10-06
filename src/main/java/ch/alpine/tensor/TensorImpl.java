@@ -32,7 +32,7 @@ import ch.alpine.tensor.ext.Integers;
     return Tensor.of(list.stream().map(Tensor::copy));
   }
 
-  @Override
+  @Override // from AbstractTensor
   protected Tensor byRef(int i) {
     return list.get(i);
   }

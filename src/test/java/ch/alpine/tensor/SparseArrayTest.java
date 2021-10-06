@@ -10,6 +10,7 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.Pretty;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.num.Pi;
@@ -107,6 +108,37 @@ public class SparseArrayTest extends TestCase {
     assertEquals(result, tensor.multiply(RealScalar.TWO));
     ExactTensorQ.require(sparse);
     assertTrue(result instanceof SparseArray);
+  }
+
+  public void testBlock0() {
+    Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
+    Tensor sparse = SparseArrays.of(tensor, RealScalar.ZERO);
+    Tensor result = sparse.block(Arrays.asList(1, 0), Arrays.asList(2, 3));
+    Tensor expect = Tensors.fromString("{{5, 6, 8}, {0, 2, 9}}");
+    assertEquals(Dimensions.of(result), Arrays.asList(2, 3));
+    assertEquals(result, expect);
+    Tensor mapped = result.map(s -> s);
+    assertEquals(mapped, expect);
+    assertTrue(mapped instanceof SparseArray);
+    Tensor full = Array.of(result::get, Dimensions.of(result));
+    assertEquals(full, expect);
+  }
+
+  public void testBlock1() {
+    Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
+    Tensor sparse = SparseArrays.of(tensor, RealScalar.ZERO);
+    Tensor result = sparse.block(Arrays.asList(1, 0), Arrays.asList(0, 0));
+    assertEquals(result, Tensors.empty());
+    assertEquals(Dimensions.of(result), Arrays.asList(0));
+  }
+
+  public void testBlock2() {
+    Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
+    Tensor sparse = SparseArrays.of(tensor, RealScalar.ZERO);
+    Tensor result = sparse.block(Arrays.asList(2), Arrays.asList(1));
+    assertEquals(result, tensor.block(Arrays.asList(2), Arrays.asList(1)));
+    assertEquals(Dimensions.of(result), Arrays.asList(1, 5));
+    MatrixQ.require(result);
   }
 
   public void testCreateId() {

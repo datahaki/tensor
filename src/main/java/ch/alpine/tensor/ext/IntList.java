@@ -14,12 +14,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/** API EXPERIMENTAL
+/** unmodifiable list wrapped around an array of primitive ints.
+ * Any sublist is backed by a corresponding part of the same array.
+ * Outside modification of the array are reflected by the list.
  * 
- * implementation assumes that "list does not permit null elements".
- * 
- * In consequence, calls to certain functions with null as parameter
- * throw an exception. For example contains(null) */
+ * <p>The implementation of the {@link List} interface assumes that
+ * the "list does not permit null elements". That means, that calls
+ * to certain functions with parameter "null" result in a
+ * {@link NullPointerException}. Example: {@link #contains(Object)}. */
 /* package */ class IntList implements List<Integer>, RandomAccess, Serializable {
   /** @param array non-null
    * @return unmodifiable list */
@@ -41,24 +43,24 @@ import java.util.stream.Stream;
     this.len = len;
   }
 
-  @Override
+  @Override // from List
   public int size() {
     return len;
   }
 
-  @Override
+  @Override // from List
   public boolean isEmpty() {
     return size() == 0;
   }
 
-  @Override
+  @Override // from List
   public Integer get(int index) {
     if (index < 0 || len <= index)
       throw new IllegalArgumentException(Integer.toString(index));
     return array[ofs + index];
   }
 
-  @Override
+  @Override // from List
   public IntList subList(int fromIndex, int toIndex) {
     if (fromIndex < 0) // asserts that 0 <= fromIndex
       throw new IllegalArgumentException();
@@ -72,27 +74,27 @@ import java.util.stream.Stream;
     return new IntList(array, ofs + fromIndex, dif);
   }
 
-  @Override
+  @Override // from List
   public Stream<Integer> stream() {
     return Arrays.stream(array).skip(ofs).limit(len).boxed();
   }
 
-  @Override
+  @Override // from List
   public Object[] toArray() {
     return stream().toArray();
   }
 
-  @Override
+  @Override // from List
   public Iterator<Integer> iterator() {
     return listIterator();
   }
 
-  @Override
+  @Override // from List
   public ListIterator<Integer> listIterator() {
     return listIterator(0);
   }
 
-  @Override
+  @Override // from List
   public ListIterator<Integer> listIterator(int index) {
     // "throws exception if the index is out of range index < 0 || index > size()"
     if (index < 0 || size() < index)
@@ -151,7 +153,7 @@ import java.util.stream.Stream;
     };
   }
 
-  @Override
+  @Override // from List
   public int indexOf(Object object) {
     for (int index = 0; index < len; ++index)
       if (object.equals(array[ofs + index]))
@@ -160,7 +162,7 @@ import java.util.stream.Stream;
     return -1;
   }
 
-  @Override
+  @Override // from List
   public int lastIndexOf(Object object) {
     for (int index = len - 1; 0 <= index; --index)
       if (object.equals(array[ofs + index]))
@@ -169,18 +171,18 @@ import java.util.stream.Stream;
     return -1;
   }
 
-  @Override
+  @Override // from List
   public boolean contains(Object object) {
     // throws exception if object == null even if stream is empty
     return stream().anyMatch(object::equals);
   }
 
-  @Override
+  @Override // from List
   public boolean containsAll(Collection<?> collection) {
     return collection.stream().allMatch(this::contains);
   }
 
-  @Override
+  @Override // from List
   public int hashCode() {
     int hashCode = 1;
     for (int i = ofs; i < ofs + len; ++i)
@@ -188,7 +190,7 @@ import java.util.stream.Stream;
     return hashCode;
   }
 
-  @Override
+  @Override // from List
   public boolean equals(Object object) {
     if (object instanceof List) {
       List<?> list = (List<?>) object;
@@ -200,63 +202,63 @@ import java.util.stream.Stream;
     return false;
   }
 
-  @Override
+  @Override // from List
   public String toString() {
     return stream().map(Object::toString).collect(Collectors.joining(", ", "[", "]"));
   }
 
   // ---
-  @Override
+  @Override // from List
   public <T> T[] toArray(T[] a) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from List
   public boolean add(Integer e) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from List
   public boolean remove(Object o) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from List
   public boolean addAll(Collection<? extends Integer> c) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from List
   public boolean addAll(int index, Collection<? extends Integer> c) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from List
   public boolean removeAll(Collection<?> c) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from List
   public boolean retainAll(Collection<?> c) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from List
   public void clear() {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from List
   public Integer set(int index, Integer element) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from List
   public void add(int index, Integer element) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from List
   public Integer remove(int index) {
     throw new UnsupportedOperationException();
   }
