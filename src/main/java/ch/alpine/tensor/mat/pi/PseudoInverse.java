@@ -57,7 +57,7 @@ public enum PseudoInverse {
       } catch (Exception exception) {
         // matrix does not have maximal rank
       }
-    boolean complex = matrix.flatten(2) //
+    boolean complex = matrix.flatten(1) //
         .map(Scalar.class::cast) //
         .map(Imag.FUNCTION) //
         .anyMatch(Scalars::nonZero);

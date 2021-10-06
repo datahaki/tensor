@@ -57,8 +57,6 @@ public enum Flatten {
    * @param level
    * @return */
   public static Tensor of(Tensor tensor, int level) {
-    return level == 0 //
-        ? tensor.copy()
-        : Tensor.of(tensor.flatten(level).map(Tensor::copy));
+    return Tensor.of(tensor.flatten(level).map(Tensor::copy));
   }
 }

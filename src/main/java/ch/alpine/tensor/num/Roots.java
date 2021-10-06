@@ -35,7 +35,7 @@ public enum Roots {
     try {
       return Sort.of(roots);
     } catch (Exception exception) {
-      // LONGTERM create comparator that also handles complex roots
+      // TODO create comparator that also handles complex roots
     }
     return roots;
   }

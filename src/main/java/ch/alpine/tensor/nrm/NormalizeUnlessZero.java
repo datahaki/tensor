@@ -10,7 +10,12 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 /** @throws Exception if input is not a vector, or is empty
  * @throws Exception if vector contains Infinity, or NaN */
 public class NormalizeUnlessZero implements TensorUnaryOperator {
-  /** @param tensorScalarFunction
+  /** Example:
+   * <pre>
+   * NormalizeUnlessZero.with(Vector2Norm::of)
+   * </pre>
+   * 
+   * @param tensorScalarFunction
    * @return operator that normalizes vectors using given tensorScalarFunction unless given vector has length 0 */
   public static TensorUnaryOperator with(TensorScalarFunction tensorScalarFunction) {
     return new NormalizeUnlessZero(tensorScalarFunction);

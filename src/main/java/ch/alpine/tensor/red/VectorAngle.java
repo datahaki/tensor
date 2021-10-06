@@ -20,7 +20,8 @@ public enum VectorAngle {
   ;
   /** @param u vector
    * @param v vector of same length as u
-   * @return angle between the vectors u and v, or empty if either norm of u or v is zero
+   * @return angle between the vectors u and v in the range [0, pi],
+   * or empty if either norm of u or v is zero
    * @throws Exception if u and v are not vectors of the same length */
   public static Optional<Scalar> of(Tensor u, Tensor v) {
     Scalar nu = Vector2Norm.of(u);

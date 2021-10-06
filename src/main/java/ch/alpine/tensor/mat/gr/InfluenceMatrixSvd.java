@@ -44,7 +44,7 @@ import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
     Tensor kron = Tensor.of(svd.values().stream() //
         .map(Scalar.class::cast) //
         .map(StaticHelper::unitize_chop)); // emulates v / v for v != 0
-    // LONGTERM could still optimize further by extracting elements from rows in u
+    // TODO could still optimize further by extracting elements from rows in u
     // Tensor U = Tensor.of(u.stream().map(kron::pmul)); // extract instead of pmul!
     // return U.dot(vector.dot(U));
     return u.dot(kron.pmul(vector.dot(u)));

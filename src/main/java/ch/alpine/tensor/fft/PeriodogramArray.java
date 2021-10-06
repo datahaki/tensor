@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.win.WindowFunctions;
  * <a href="https://reference.wolfram.com/language/ref/PeriodogramArray.html">PeriodogramArray</a>
  * 
  * @see WindowFunctions */
-// LONGTERM API so that domain of frequencies is also provided
+// TODO API so that domain of frequencies is also provided
 public class PeriodogramArray implements TensorUnaryOperator {
   /** @param vector of length of power of 2
    * @return */

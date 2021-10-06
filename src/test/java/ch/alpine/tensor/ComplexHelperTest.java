@@ -133,7 +133,7 @@ public class ComplexHelperTest extends TestCase {
     Scalar scalar = ComplexScalar.of(re, im);
     Scalar ref = ComplexHelper.sqrtPolar(scalar);
     Scalar cmp = ComplexHelper.sqrt(re, im);
-    // LONGTERM result not satisfactory!
+    // TODO result not satisfactory!
     // System.out.println(ref);
     // System.out.println(cmp);
     // System.out.println(ref.multiply(ref));

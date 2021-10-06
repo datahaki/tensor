@@ -48,7 +48,7 @@ import ch.alpine.tensor.sca.Power;
     Scalar factor = unitSystem.map().get(next);
     Unit unit = Unit.of(next);
     if (Objects.isNull(factor) && //
-    // LONGTERM KnownUnitQ.in(unitSystem) rebuilds a map every time: avoid?
+    // TODO KnownUnitQ.in(unitSystem) rebuilds a map every time: avoid?
         KnownUnitQ.in(unitSystem).require(unit).equals(Unit.of(prev)))
       return RealScalar.ONE;
     Unit rhs = QuantityUnit.of(factor);

@@ -10,7 +10,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-/** LONGTERM StringFormat should be the replacement of TensorParser
+/** TODO StringFormat should be the replacement of TensorParser
  * that is used in {@link Tensors#fromString(String)} */
 /* package */ class StringFormat<T> {
   /** @param string
