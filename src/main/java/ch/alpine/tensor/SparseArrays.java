@@ -29,25 +29,22 @@ public enum SparseArrays {
     return new SparseArray(size, fallback, navigableMap);
   }
 
-  /** @param tensor
+  /** @param tensor with array structure
    * @param fallback
    * @return
    * @throws Exception if given tensor does not have array structure */
   public static Tensor of(Tensor tensor, Scalar fallback) {
     Dimensions dimensions = new Dimensions(tensor);
-    if (dimensions.isArray()) {
-      List<Integer> size = dimensions.list();
-      if (0 == size.size())
-        return tensor;
-      SparseArray sparseArray = new SparseArray(size, fallback);
-      Array.forEach(list -> {
-        Tensor entry = tensor.get(list); // entry is scalar due to dimension check above
-        if (!fallback.equals(entry))
-          sparseArray.set(entry, list);
-      }, size);
-      return sparseArray;
-    }
-    throw TensorRuntimeException.of(tensor);
+    List<Integer> size = dimensions.list();
+    if (0 == size.size())
+      return tensor;
+    SparseArray sparseArray = new SparseArray(size, fallback);
+    Array.forEach(list -> {
+      Scalar entry = (Scalar) tensor.get(list); // entry is scalar due to dimension check above
+      if (!fallback.equals(entry))
+        sparseArray.set(entry, list);
+    }, size);
+    return sparseArray;
   }
 
   /* package */ static void requireInRange(int i, int length) {

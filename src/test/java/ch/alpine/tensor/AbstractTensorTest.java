@@ -4,7 +4,7 @@ package ch.alpine.tensor;
 import ch.alpine.tensor.alg.Array;
 import junit.framework.TestCase;
 
-public class TensorObjectTest extends TestCase {
+public class AbstractTensorTest extends TestCase {
   public void testHash() {
     Tensor a = Tensors.vectorLong(7, 2);
     Tensor b = Tensors.vectorLong(7, 2);

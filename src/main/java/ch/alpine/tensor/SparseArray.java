@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import ch.alpine.tensor.alg.ConstantArray;
+import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Integers;
 
 /** Hint:
@@ -63,23 +65,60 @@ import ch.alpine.tensor.ext.Integers;
 
   @Override // from Tensor
   public void set(Tensor tensor, List<Integer> index) {
-    Integers.requirePositive(index.size());
+    List<Integer> subsize = size.subList(1, size.size());
     int head = index.get(0);
+    // TODO does not handle Tensor.ALL yet
     SparseArrays.requireInRange(head, length());
     if (index.size() == 1)
-      navigableMap.put(head, tensor.copy());
+      _set(head, tensor.copy(), subsize);
     else {
-      Tensor entry = navigableMap.get(head);
-      if (Objects.isNull(entry))
-        navigableMap.put(head, new SparseArray(size.subList(1, size.size()), fallback));
+      if (!navigableMap.containsKey(head))
+        navigableMap.put(head, new SparseArray(subsize, fallback));
       navigableMap.get(head).set(tensor, index.subList(1, index.size()));
     }
   }
 
+  @SuppressWarnings("unchecked")
   @Override // from Tensor
   public <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException();
+    List<Integer> subsize = size.subList(1, size.size());
+    int head = index.get(0);
+    if (index.size() == 1) // terminal case
+      if (head == ALL)
+        IntStream.range(0, length()).forEach(i -> _set(i, function.apply((T) byRef(i)).copy(), subsize));
+      else
+        _set(head, function.apply((T) byRef(head)).copy(), subsize);
+    else {
+      List<Integer> sublist = index.subList(1, index.size());
+      if (head == ALL)
+        IntStream.range(0, length()).forEach(i -> {
+          if (!navigableMap.containsKey(i))
+            navigableMap.put(i, new SparseArray(subsize, fallback));
+          navigableMap.get(i).set(function, sublist);
+        });
+      else {
+        if (!navigableMap.containsKey(head)) {
+          SparseArrays.requireInRange(head, length());
+          navigableMap.put(head, new SparseArray(subsize, fallback));
+        }
+        navigableMap.get(head).set(function, sublist);
+      }
+    }
+  }
+
+  /** @param index
+   * @param tensor with array structure and dimensions equals to given list
+   * @param list */
+  private void _set(int index, Tensor tensor, List<Integer> list) {
+    Dimensions dimensions = new Dimensions(tensor);
+    if (dimensions.isArray() && dimensions.list().equals(list)) {
+      // TODO not efficient implementation to check for fallback array equality
+      if (tensor.equals(ConstantArray.of(fallback, list)))
+        navigableMap.remove(index);
+      else
+        navigableMap.put(index, tensor);
+    } else
+      throw TensorRuntimeException.of(tensor);
   }
 
   @Override // from Tensor

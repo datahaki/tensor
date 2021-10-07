@@ -24,7 +24,7 @@ public interface MatrixSqrt {
    * @return sqrt of given matrix */
   static MatrixSqrt of(Tensor matrix) {
     if (SymmetricMatrixQ.of(matrix) && //
-        matrix.flatten(2) //
+        matrix.flatten(1) //
             .map(Scalar.class::cast) //
             .map(Imag.FUNCTION) //
             .allMatch(Scalars::isZero))

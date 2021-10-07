@@ -64,13 +64,13 @@ import ch.alpine.tensor.ext.Integers;
     int head = index.get(0);
     if (index.size() == 1) // terminal case
       if (head == ALL)
-        IntStream.range(0, list.size()).forEach(i -> list.set(i, function.apply((T) list.get(i)).copy()));
+        IntStream.range(0, length()).forEach(i -> list.set(i, function.apply((T) list.get(i)).copy()));
       else
         list.set(head, function.apply((T) list.get(head)).copy());
     else {
       List<Integer> sublist = index.subList(1, index.size());
       if (head == ALL)
-        list.stream().forEach(entry -> entry.set(function, sublist));
+        stream().forEach(entry -> entry.set(function, sublist));
       else
         list.get(head).set(function, sublist);
     }

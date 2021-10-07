@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
@@ -26,16 +27,25 @@ public enum ArrayReshape {
    * @return tensor with entries from stream and first dimensions determined by size
    * @throws Exception if the product of the elements in size does not equal the number of elements
    * in the given stream */
-  public static Tensor of(Stream<? extends Tensor> stream, int... size) {
-    Tensor transpose = Tensor.of(stream);
-    int length = transpose.length();
-    int numel = size[0];
-    for (int index = size.length - 1; 0 < index; --index) {
-      numel *= size[index];
-      transpose = Partition.of(transpose, size[index]);
+  public static Tensor of(Stream<? extends Tensor> stream, List<Integer> size) {
+    Tensor tensor = Tensor.of(stream);
+    int length = tensor.length();
+    int numel = size.get(0);
+    for (int index = size.size() - 1; 0 < index; --index) {
+      int count = size.get(index);
+      numel *= count;
+      tensor = Partition.of(tensor, count);
     }
     Integers.requireEquals(length, numel);
-    return transpose;
+    return tensor;
+  }
+
+  /** @param stream
+   * @param size
+   * @return
+   * @see #of(Stream, List) */
+  public static Tensor of(Stream<? extends Tensor> stream, int... size) {
+    return of(stream, Integers.asList(size));
   }
 
   /** @param tensor
@@ -43,7 +53,15 @@ public enum ArrayReshape {
    * @return
    * @throws Exception if the product of the elements in dimensions
    * does not equal the number of scalars in given tensor */
-  public static Tensor of(Tensor tensor, int... dimensions) {
+  public static Tensor of(Tensor tensor, List<Integer> dimensions) {
     return of(tensor.flatten(-1), dimensions);
+  }
+
+  /** @param tensor
+   * @param dimensions non-empty
+   * @return
+   * @see #of(Tensor, List) */
+  public static Tensor of(Tensor tensor, int... dimensions) {
+    return of(tensor, Integers.asList(dimensions));
   }
 }

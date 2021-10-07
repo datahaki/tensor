@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.TreeMap;
 
 import ch.alpine.tensor.alg.Ordering;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.UniformDistribution;
 
@@ -16,44 +17,47 @@ public enum RandomPermutation {
   ;
   private static final Random RANDOM = new SecureRandom();
 
+  /** @param n non-negative
+   * @param random
+   * @return
+   * @see Integers#isPermutation(int[])
+   * @throws Exception if n is negative */
+  public static int[] of(int n, Random random) {
+    return Ordering.INCREASING.of(RandomVariate.of(UniformDistribution.unit(), random, n));
+  }
+
   /** Example:
-   * RandomPermutation[12] == {{0, 2, 9, 1}, {3, 10, 5, 4}, {6, 7}}
+   * <pre>
+   * RandomPermutation[10] == {7, 6, 4, 5, 3, 2, 0, 1, 9, 8}
+   * </pre>
    * 
    * @param n non-negative
-   * @return random cycles from symmetric group S_n */
-  public static Cycles of(int n) {
+   * @return array of length n
+   * @throws Exception if n is negative */
+  public static int[] of(int n) {
     return of(n, RANDOM);
   }
 
   /** @param n non-negative
    * @param random
    * @return */
-  public static Cycles of(int n, Random random) {
+  public static Cycles cycles(int n, Random random) {
     NavigableMap<Integer, Integer> navigableMap = new TreeMap<>();
-    int[] perm = ofLength(n, random);
+    int[] sigma = of(n, random);
     for (int index = 0; index < n; ++index)
-      if (index != perm[index])
-        navigableMap.put(index, perm[index]);
+      if (index != sigma[index])
+        navigableMap.put(index, sigma[index]);
     return new Cycles(navigableMap);
   }
 
   /** Example:
-   * RandomPermutation.ofLength(10)) == {7, 6, 4, 5, 3, 2, 0, 1, 9, 8}
+   * <pre>
+   * RandomPermutation[12] == {{0, 2, 9, 1}, {3, 10, 5, 4}, {6, 7}}
+   * </pre>
    * 
    * @param n non-negative
-   * @return array of length n
-   * @throws Exception if n is negative */
-  // TODO function name bad
-  public static int[] ofLength(int n) {
-    return ofLength(n, RANDOM);
-  }
-
-  /** @param n non-negative
-   * @param random
-   * @return
-   * @throws Exception if n is negative */
-  // TODO function name bad
-  public static int[] ofLength(int n, Random random) {
-    return Ordering.INCREASING.of(RandomVariate.of(UniformDistribution.unit(), random, n));
+   * @return random cycles from symmetric group S_n */
+  public static Cycles cycles(int n) {
+    return cycles(n, RANDOM);
   }
 }
