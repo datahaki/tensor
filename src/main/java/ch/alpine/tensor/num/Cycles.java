@@ -36,6 +36,9 @@ import ch.alpine.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Cycles.html">Cycles</a> */
 public class Cycles implements Comparable<Cycles>, Serializable {
+  @PackageTestAccess
+  static final Collector<Entry<Integer, Integer>, ?, NavigableMap<Integer, Integer>> INVERSE = //
+      Collectors.toMap(Entry::getValue, Entry::getKey, (v1, v2) -> null, TreeMap::new);
   private static final BinaryPower<Cycles> BINARY_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
   private static final Cycles IDENTITY = new Cycles(Collections.emptyNavigableMap());
 
@@ -112,15 +115,11 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     }
   }
 
-  @PackageTestAccess
-  static final Collector<Entry<Integer, Integer>, ?, NavigableMap<Integer, Integer>> COLLECTOR = //
-      Collectors.toMap(Entry::getValue, Entry::getKey, (v1, v2) -> null, TreeMap::new);
-
   /** Hint: InversePermutation in Mathematica
    * 
    * @return */
   public Cycles inverse() {
-    return new Cycles(navigableMap.entrySet().stream().collect(COLLECTOR));
+    return new Cycles(navigableMap.entrySet().stream().collect(INVERSE));
   }
 
   /** Hint: PermutationProduct in Mathematica
@@ -168,7 +167,8 @@ public class Cycles implements Comparable<Cycles>, Serializable {
    * @param index
    * @return */
   public int replace(int index) {
-    return navigableMap.getOrDefault(Integers.requirePositiveOrZero(index), index);
+    Integers.requirePositiveOrZero(index);
+    return navigableMap.getOrDefault(index, index);
   }
 
   /** @return smallest n where the permutation group S(n) contains this cycle */
@@ -187,11 +187,6 @@ public class Cycles implements Comparable<Cycles>, Serializable {
         .sum() & 1;
   }
 
-  /** @return map without singletons, i.e. no trivial associations a -> a exist */
-  public NavigableMap<Integer, Integer> navigableMap() {
-    return Collections.unmodifiableNavigableMap(navigableMap);
-  }
-
   /** @return for instance {{1, 20}, {4, 10, 19, 6, 18}, {5, 9}, {7, 14, 13}} */
   public Tensor toTensor() {
     Builder<Tensor> builder = Stream.builder();
@@ -204,7 +199,6 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     return TensorComparator.INSTANCE.compare(toTensor(), cycles.toTensor());
   }
 
-  // ---
   @Override // from Object
   public boolean equals(Object object) {
     if (object instanceof Cycles) {
@@ -222,5 +216,11 @@ public class Cycles implements Comparable<Cycles>, Serializable {
   @Override // from Object
   public String toString() {
     return toTensor().toString();
+  }
+
+  /** @return map without singletons, i.e. no trivial associations a -> a exist */
+  @PackageTestAccess
+  NavigableMap<Integer, Integer> navigableMap() {
+    return Collections.unmodifiableNavigableMap(navigableMap);
   }
 }

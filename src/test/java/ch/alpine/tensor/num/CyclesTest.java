@@ -72,7 +72,7 @@ public class CyclesTest extends TestCase {
     Map<Integer, Integer> map = new IdentityHashMap<>();
     map.put(3, 5);
     map.put(4, 5);
-    map.entrySet().stream().collect(Cycles.COLLECTOR);
+    map.entrySet().stream().collect(Cycles.INVERSE);
   }
 
   public void testReplace() {

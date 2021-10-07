@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.PackageTestAccess;
 
 /** Hint:
  * Mathematica::Normal[sparse] is
@@ -243,8 +244,8 @@ import ch.alpine.tensor.ext.Integers;
         .collect(StaticHelper.EMBRACE);
   }
 
-  // helper function
-  private static <T> Collector<T, ?, NavigableMap<Integer, Tensor>> _map( //
+  @PackageTestAccess
+  static <T> Collector<T, ?, NavigableMap<Integer, Tensor>> _map( //
       Function<? super T, Integer> keyMapper, //
       Function<? super T, Tensor> valueMapper) {
     return Collectors.toMap(keyMapper, valueMapper, (e1, e2) -> null, TreeMap::new);

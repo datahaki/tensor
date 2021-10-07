@@ -85,17 +85,20 @@ public enum Integers {
    * parity[{2, 0, 1}] == 0
    * </pre>
    * 
+   * The provided array sigma is not modified during the function, instead
+   * the algorithm works with a copy of the array.
+   * 
    * @param sigma a permutation of the list {0, 1, ..., sigma.length - 1}
    * @return 0 if sigma is even permutation, or 1 if sigma is odd permutation
    * @throws Exception if given sigma is not a permutation */
   public static int parity(int[] sigma) {
-    requirePermutation(sigma);
+    int[] array = Arrays.copyOf(requirePermutation(sigma), sigma.length);
     int parity = 0;
-    for (int index = 0; index < sigma.length; ++index)
-      while (sigma[index] != index) {
-        int value = sigma[index];
-        sigma[index] = sigma[value];
-        sigma[value] = value;
+    for (int index = 0; index < array.length; ++index)
+      while (array[index] != index) {
+        int value = array[index];
+        array[index] = array[value];
+        array[value] = value;
         parity ^= 1;
       }
     return parity;

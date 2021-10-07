@@ -7,7 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.lie.MatrixSqrt;
+import ch.alpine.tensor.mat.ex.MatrixSqrt;
 
 /** decomposition of A = S.R
  * where S is symmetric, and R is orthogonal

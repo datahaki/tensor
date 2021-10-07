@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.num;
 
-import ch.alpine.tensor.lie.MatrixPower;
+import ch.alpine.tensor.mat.ex.MatrixPower;
 
 /** the tensor library uses the group properties to efficiently compute
  * powers of scalars and matrices where the exponent is an integer. The

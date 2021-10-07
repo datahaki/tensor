@@ -83,6 +83,7 @@ public class CyclesGroupTest extends TestCase {
     Cycles other = Cycles.of("{{2, 3}}");
     assertEquals(6, group.stream().map(other::combine).distinct().count());
     assertEquals(6, group.stream().map(e -> e.combine(other)).distinct().count());
+    assertEquals(6, group.stream().map(Cycles::inverse).distinct().count());
     Map<Integer, Long> map = group.stream() //
         .map(c -> PermutationList.of(c, 5)).map(Integers::parity) //
         .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));

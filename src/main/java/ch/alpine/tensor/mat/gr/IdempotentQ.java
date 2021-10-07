@@ -9,7 +9,15 @@ import ch.alpine.tensor.sca.Chop;
 /** determines whether matrix P is idempotent, i.e. P . P == P */
 public enum IdempotentQ {
   ;
-  /** @param matrix
+  /** Example: the following matrix is idempotent
+   * <pre>
+   * {
+   * {0, 1},
+   * {0, 1}
+   * }
+   * </pre>
+   * 
+   * @param matrix
    * @param chop
    * @return */
   public static boolean of(Tensor matrix, Chop chop) {

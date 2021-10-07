@@ -70,7 +70,7 @@ public class Dimensions implements Serializable {
     return lengths.stream().mapToInt(Set::size).allMatch(size -> size == 1);
   }
 
-  /** @return 0 for a scalar, 1 for a vector, etc. */
+  /** @return 0 for a scalar, 1 for a vector, 2 for a matrix, etc. */
   public int maxDepth() {
     return lengths.size() - 1;
   }

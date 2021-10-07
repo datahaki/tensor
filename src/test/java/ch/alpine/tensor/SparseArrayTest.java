@@ -3,6 +3,10 @@ package ch.alpine.tensor;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
@@ -220,6 +224,22 @@ public class SparseArrayTest extends TestCase {
     SparseArray sa = (SparseArray) sparse;
     assertTrue(sa.byRef(1) instanceof SparseArray);
     assertTrue(sa.byRef(2) instanceof TensorImpl);
+  }
+
+  public void testSetFail() {
+    Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4},{0,0,0,0,0}}");
+    Tensor sparse = SparseArrays.of(tensor, RealScalar.ZERO);
+    sparse.set(Tensors.vector(1, 2, 3, 4, 5), 2);
+    sparse.set(Array.zeros(5), 2);
+    AssertFail.of(() -> sparse.set(Array.zeros(5, 2), 2));
+    AssertFail.of(() -> sparse.set(Tensors.fromString("{1,2,{3},4,5}"), 2));
+  }
+
+  public void testKeyCollision() {
+    Map<Integer, Integer> map = new HashMap<>();
+    map.put(3, 5);
+    Stream.concat(map.entrySet().stream(), map.entrySet().stream()) //
+        .collect(SparseArray._map(Entry::getKey, i -> Tensors.empty()));
   }
 
   public void testFail() {
