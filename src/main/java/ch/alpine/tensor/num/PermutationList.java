@@ -1,17 +1,16 @@
 // code by jph
 package ch.alpine.tensor.num;
 
-import java.util.NavigableMap;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.ext.Integers;
 
-/** unlike in Mathematica, the tensor library does not make restrictions on the parameter length
- * except length to be positive.
+/** implementation consistent with Mathematica, except that in the tensor library
+ * the indices start at 0 instead of 1.
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/PermutationList.html">PermutationList</a> */
-/* package */ enum PermutationList {
+public enum PermutationList {
   ;
   /** Example:
    * <pre>
@@ -19,11 +18,10 @@ import ch.alpine.tensor.ext.Integers;
    * </pre>
    * 
    * @param cycles
-   * @param length non-negative
+   * @param length not less than cycles.minLength()
    * @return */
-  public static IntStream of(Cycles cycles, int length) {
-    NavigableMap<Integer, Integer> navigableMap = cycles.navigableMap();
-    return IntStream.range(0, Integers.requirePositiveOrZero(length)) //
-        .map(i -> navigableMap.getOrDefault(i, i));
+  public static int[] of(Cycles cycles, int length) {
+    Integers.requirePositiveOrZero(length - cycles.minLength());
+    return IntStream.range(0, length).map(cycles::replace).toArray();
   }
 }

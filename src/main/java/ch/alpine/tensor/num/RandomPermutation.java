@@ -2,9 +2,7 @@
 package ch.alpine.tensor.num;
 
 import java.security.SecureRandom;
-import java.util.NavigableMap;
 import java.util.Random;
-import java.util.TreeMap;
 
 import ch.alpine.tensor.alg.Ordering;
 import ch.alpine.tensor.ext.Integers;
@@ -40,14 +38,10 @@ public enum RandomPermutation {
 
   /** @param n non-negative
    * @param random
-   * @return */
+   * @return
+   * @throws Exception if n is negative */
   public static Cycles cycles(int n, Random random) {
-    NavigableMap<Integer, Integer> navigableMap = new TreeMap<>();
-    int[] sigma = of(n, random);
-    for (int index = 0; index < n; ++index)
-      if (index != sigma[index])
-        navigableMap.put(index, sigma[index]);
-    return new Cycles(navigableMap);
+    return PermutationCycles.unsafe(of(n, random));
   }
 
   /** Example:
@@ -56,7 +50,8 @@ public enum RandomPermutation {
    * </pre>
    * 
    * @param n non-negative
-   * @return random cycles from symmetric group S_n */
+   * @return random cycles from symmetric group S_n
+   * @throws Exception if n is negative */
   public static Cycles cycles(int n) {
     return cycles(n, RANDOM);
   }

@@ -80,6 +80,12 @@ public class CyclesTest extends TestCase {
     assertEquals(Cycles.of(Tensors.fromString("{{2, 3, 4, 6}}")).replace(1), 1);
   }
 
+  public void testReplaceFail() {
+    Cycles cycles = Cycles.of(Tensors.fromString("{{2, 3, 4, 6}}"));
+    assertEquals(cycles.replace(0), 0);
+    AssertFail.of(() -> cycles.replace(-1));
+  }
+
   public void testScalarFail() {
     AssertFail.of(() -> Cycles.of(Tensors.fromString("{3}")));
   }

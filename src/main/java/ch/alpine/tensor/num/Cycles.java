@@ -168,8 +168,23 @@ public class Cycles implements Comparable<Cycles>, Serializable {
    * @param index
    * @return */
   public int replace(int index) {
-    Integers.requirePositiveOrZero(index);
-    return navigableMap.getOrDefault(index, index);
+    return navigableMap.getOrDefault(Integers.requirePositiveOrZero(index), index);
+  }
+
+  /** @return smallest n where the permutation group S(n) contains this cycle */
+  public int minLength() {
+    return navigableMap.isEmpty() //
+        ? 0 // not sure is this is a good
+        : navigableMap.lastKey() + 1;
+  }
+
+  /** @return 0 if cycles define a permutation list with even parity, otherwise 1
+   * @see PermutationList */
+  public int parity() {
+    return toTensor().stream() //
+        .mapToInt(Tensor::length) //
+        .map(t -> t + 1) //
+        .sum() & 1;
   }
 
   /** @return map without singletons, i.e. no trivial associations a -> a exist */
@@ -184,7 +199,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     return Tensor.of(builder.build());
   }
 
-  @Override
+  @Override // from Comparable
   public int compareTo(Cycles cycles) {
     return TensorComparator.INSTANCE.compare(toTensor(), cycles.toTensor());
   }

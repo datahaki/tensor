@@ -56,7 +56,9 @@ public enum Integers {
   }
 
   // ---
-  /** @param sigma
+  /** Mathematica::PermutationListQ
+   * 
+   * @param sigma
    * @return whether sigma encodes a permutation for instance {2, 0, 1, 3} */
   public static boolean isPermutation(int[] sigma) {
     return sigma.length == Arrays.stream(sigma) //
