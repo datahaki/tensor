@@ -94,6 +94,13 @@ public class TensorImplTest extends TestCase {
     eye.extract(2, 4).set(RealScalar.of(4), 1);
   }
 
+  public void testExtract2() {
+    Tensor vector = Tensors.vector(1, 2, 3);
+    Tensor slevel = vector.extract(1, 3);
+    slevel.set(RealScalar.ONE::add, 0);
+    assertEquals(vector, Tensors.vector(1, 2, 3));
+  }
+
   public void testArrayList() {
     List<Tensor> list = Arrays.asList(RealScalar.of(2), RealScalar.of(3)).stream().map(Tensor.class::cast).collect(Collectors.toList());
     assertTrue(list instanceof ArrayList); // used in TensorParser

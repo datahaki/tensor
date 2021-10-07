@@ -55,6 +55,6 @@ public enum MatrixPower {
    * @param exponent
    * @return */
   public static Tensor ofSymmetric(Tensor matrix, Scalar exponent) {
-    return Eigenvalues.ofSymmetric_map(matrix, Power.function(exponent));
+    return StaticHelper.evMap_ofSymmetric(matrix, Power.function(exponent));
   }
 }

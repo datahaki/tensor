@@ -75,6 +75,11 @@ public class CyclesTest extends TestCase {
     map.entrySet().stream().collect(Cycles.COLLECTOR);
   }
 
+  public void testReplace() {
+    assertEquals(Cycles.of(Tensors.fromString("{{2, 3, 4, 6}}")).replace(4), 6);
+    assertEquals(Cycles.of(Tensors.fromString("{{2, 3, 4, 6}}")).replace(1), 1);
+  }
+
   public void testScalarFail() {
     AssertFail.of(() -> Cycles.of(Tensors.fromString("{3}")));
   }

@@ -1,8 +1,13 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.util.Arrays;
+import java.util.NavigableMap;
+import java.util.TreeMap;
+
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.TensorWedge;
+import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SparseArraysTest extends TestCase {
@@ -45,5 +50,19 @@ public class SparseArraysTest extends TestCase {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4},{0,0,0,0,0}}");
     Tensor s = SparseArrays.of(a, RealScalar.ZERO);
     assertEquals(Transpose.of(a), Transpose.of(s));
+  }
+
+  public void testGenerate() {
+    SparseArrays.of(Arrays.asList(2, 3), RealScalar.ZERO, new TreeMap<>());
+    NavigableMap<Integer, Tensor> navigableMap = new TreeMap<>();
+    navigableMap.put(1, Tensors.vector(1, 2, 3));
+    SparseArrays.of(Arrays.asList(2, 3), RealScalar.ZERO, navigableMap);
+    navigableMap.put(1, RealScalar.ONE);
+    AssertFail.of(() -> SparseArrays.of(Arrays.asList(2, 3), RealScalar.ZERO, navigableMap));
+  }
+
+  public void testGenerateFail() {
+    AssertFail.of(() -> SparseArrays.of(Arrays.asList(), RealScalar.ZERO, new TreeMap<>()));
+    AssertFail.of(() -> SparseArrays.of(Arrays.asList(2, 3), RealScalar.ONE, new TreeMap<>()));
   }
 }

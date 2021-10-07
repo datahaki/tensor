@@ -128,18 +128,16 @@ public class Cycles implements Comparable<Cycles>, Serializable {
    * @param cycles
    * @return */
   public Cycles combine(Cycles cycles) {
-    Map<Integer, Integer> b_map = cycles.navigableMap;
     NavigableMap<Integer, Integer> result = new TreeMap<>();
     Set<Integer> set = new HashSet<>();
     for (Entry<Integer, Integer> entry : navigableMap.entrySet()) {
       int seed = entry.getKey();
       set.add(seed);
-      int next = entry.getValue();
-      int dest = b_map.containsKey(next) ? b_map.get(next) : next;
+      int dest = cycles.replace(entry.getValue());
       if (seed != dest)
         result.put(seed, dest);
     }
-    for (Entry<Integer, Integer> entry : b_map.entrySet()) {
+    for (Entry<Integer, Integer> entry : cycles.navigableMap.entrySet()) {
       int seed = entry.getKey();
       if (set.add(seed))
         result.put(seed, entry.getValue());
@@ -163,6 +161,15 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     cycleInterate(cycle -> BINARY_POWER.raise(new Cycles(map(Stream.of(cycle))), //
         bigInteger.mod(BigInteger.valueOf(cycle.length()))).cycleInterate(builder));
     return new Cycles(map(builder.build())); // most efficient?
+  }
+
+  /** Mathematica::PermutationReplace[index, this]
+   * 
+   * @param index
+   * @return */
+  public int replace(int index) {
+    Integers.requirePositiveOrZero(index);
+    return navigableMap.getOrDefault(index, index);
   }
 
   /** @return map without singletons, i.e. no trivial associations a -> a exist */

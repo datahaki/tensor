@@ -4,7 +4,9 @@ package ch.alpine.tensor;
 import ch.alpine.tensor.alg.ArrayReshape;
 import ch.alpine.tensor.alg.Dimensions;
 
-/** <p>inspired by
+/** Mathematica::Normal[3] == 3
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Normal.html">Normal</a> */
 /* package */ enum Normal {
   ;

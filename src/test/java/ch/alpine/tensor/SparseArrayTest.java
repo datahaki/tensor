@@ -68,8 +68,15 @@ public class SparseArrayTest extends TestCase {
   }
 
   public void testArrayGet() {
-    Tensor array = new SparseArray(Arrays.asList(5, 10, 8), Quantity.of(0, "m"));
-    assertEquals(array.get(1, Tensor.ALL, 3), ConstantArray.of(Quantity.of(0, "m"), 10));
+    Tensor sparse = new SparseArray(Arrays.asList(5, 4, 8), Quantity.of(0, "m"));
+    assertEquals(sparse.get(1, Tensor.ALL, 3), ConstantArray.of(Quantity.of(0, "m"), 4));
+  }
+
+  public void testFails() {
+    Tensor sparse = new SparseArray(Arrays.asList(5, 4, 8), Quantity.of(0, "m"));
+    AssertFail.of(() -> sparse.unmodifiable());
+    AssertFail.of(() -> sparse.append(Array.zeros(4, 8)));
+    AssertFail.of(() -> sparse.map(RealScalar.ONE::add));
   }
 
   public void testMatrix() {

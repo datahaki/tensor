@@ -23,10 +23,15 @@ public enum SparseArrays {
     if (Scalars.nonZero(fallback))
       throw TensorRuntimeException.of(fallback);
     if (!navigableMap.isEmpty()) {
-      requireInRange(navigableMap.firstKey(), size.get(0));
-      requireInRange(navigableMap.lastKey(), size.get(0));
+      int length = size.get(0);
+      requireInRange(navigableMap.firstKey(), length);
+      requireInRange(navigableMap.lastKey(), length);
     }
-    return new SparseArray(size, fallback, navigableMap);
+    if (navigableMap.values().stream() //
+        .map(Dimensions::of) //
+        .allMatch(size.subList(1, size.size())::equals))
+      return new SparseArray(size, fallback, navigableMap);
+    throw TensorRuntimeException.of();
   }
 
   /** @param tensor with array structure

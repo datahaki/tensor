@@ -9,9 +9,9 @@ import ch.alpine.tensor.ext.Integers;
 
 /** base class of {@link Determinant}, {@link GaussianElimination} and {@link RowReduce} */
 /* package */ class AbstractReduce {
-  final Tensor[] lhs;
+  protected final Tensor[] lhs;
   private final Pivot pivot;
-  final int[] ind;
+  protected final int[] ind;
   private int swaps = 0;
 
   public AbstractReduce(Tensor matrix, Pivot pivot) {

@@ -71,11 +71,9 @@ import ch.alpine.tensor.ext.Integers;
     SparseArrays.requireInRange(head, length());
     if (index.size() == 1)
       _set(head, tensor.copy(), subsize);
-    else {
-      if (!navigableMap.containsKey(head))
-        navigableMap.put(head, new SparseArray(subsize, fallback));
-      navigableMap.get(head).set(tensor, index.subList(1, index.size()));
-    }
+    else
+      navigableMap.computeIfAbsent(head, i -> new SparseArray(subsize, fallback)) //
+          .set(tensor, index.subList(1, index.size()));
   }
 
   @SuppressWarnings("unchecked")
@@ -91,17 +89,13 @@ import ch.alpine.tensor.ext.Integers;
     else {
       List<Integer> sublist = index.subList(1, index.size());
       if (head == ALL)
-        IntStream.range(0, length()).forEach(i -> {
-          if (!navigableMap.containsKey(i))
-            navigableMap.put(i, new SparseArray(subsize, fallback));
-          navigableMap.get(i).set(function, sublist);
-        });
+        IntStream.range(0, length()) //
+            .forEach(i -> navigableMap.computeIfAbsent(i, j -> new SparseArray(subsize, fallback)).set(function, sublist));
       else {
-        if (!navigableMap.containsKey(head)) {
+        navigableMap.computeIfAbsent(head, j -> {
           SparseArrays.requireInRange(head, length());
-          navigableMap.put(head, new SparseArray(subsize, fallback));
-        }
-        navigableMap.get(head).set(function, sublist);
+          return new SparseArray(subsize, fallback);
+        }).set(function, sublist);
       }
     }
   }

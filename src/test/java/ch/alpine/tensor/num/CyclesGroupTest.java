@@ -71,6 +71,28 @@ public class CyclesGroupTest extends TestCase {
     return all;
   }
 
+  public void testOrbit3() {
+    Set<Cycles> set = new HashSet<>();
+    set.add(Cycles.of("{{0, 1}}"));
+    set.add(Cycles.of("{{0, 1, 2}}"));
+    Set<Cycles> group = _group(set);
+    assertEquals(group.size(), 6);
+    Cycles other = Cycles.of("{{2, 3}}");
+    assertEquals(6, group.stream().map(other::combine).distinct().count());
+    assertEquals(6, group.stream().map(e -> e.combine(other)).distinct().count());
+  }
+
+  public void testOrbit4() {
+    Set<Cycles> set = new HashSet<>();
+    set.add(Cycles.of("{{0, 1}}"));
+    set.add(Cycles.of("{{0, 1, 2, 3}}"));
+    Set<Cycles> group = _group(set);
+    assertEquals(group.size(), 24);
+    Cycles other = Cycles.of("{{2, 3}}");
+    assertEquals(24, group.stream().map(other::combine).distinct().count());
+    assertEquals(24, group.stream().map(e -> e.combine(other)).distinct().count());
+  }
+
   public void testGroupEx0() {
     assertEquals(_group(Collections.singleton(Cycles.identity())).size(), 1);
   }

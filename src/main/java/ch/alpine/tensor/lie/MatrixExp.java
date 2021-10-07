@@ -27,6 +27,6 @@ public enum MatrixExp {
    * @param matrix
    * @return symmetric matrix */
   public static Tensor ofSymmetric(Tensor matrix) {
-    return Eigenvalues.ofSymmetric_map(matrix, Exp.FUNCTION);
+    return StaticHelper.evMap_ofSymmetric(matrix, Exp.FUNCTION);
   }
 }
