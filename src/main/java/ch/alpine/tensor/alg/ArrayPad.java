@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.Lists;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ArrayPad.html">ArrayPad</a> */
@@ -31,7 +32,9 @@ public enum ArrayPad {
     Tensor b = Array.zeros(copy);
     if (1 == rank)
       return Join.of(0, a, tensor, b);
-    return Join.of(0, a, Tensor.of(tensor.stream() //
-        .map(entry -> of(entry, copy.subList(1, rank), ante.subList(1, rank), post.subList(1, rank)))), b);
+    List<Integer> _copy = Lists.withoutHead(copy);
+    List<Integer> _ante = Lists.withoutHead(ante);
+    List<Integer> _post = Lists.withoutHead(post);
+    return Join.of(0, a, Tensor.of(tensor.stream().map(entry -> of(entry, _copy, _ante, _post))), b);
   }
 }

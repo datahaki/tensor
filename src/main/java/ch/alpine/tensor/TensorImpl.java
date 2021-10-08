@@ -10,6 +10,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.Lists;
 
 /** reference implementation of the interface Tensor
  * 
@@ -48,13 +49,13 @@ import ch.alpine.tensor.ext.Integers;
       } else
         list.set(head, tensor.copy()); // insert copy
     else { // function set is called with tensor provided by reference
-      List<Integer> sublist = index.subList(1, index.size());
+      List<Integer> _index = Lists.withoutHead(index);
       if (head == ALL) {
         Integers.requireEquals(length(), tensor.length());
         AtomicInteger i = new AtomicInteger();
-        tensor.stream().forEach(entry -> list.get(i.getAndIncrement()).set(entry, sublist));
+        tensor.stream().forEach(entry -> list.get(i.getAndIncrement()).set(entry, _index));
       } else
-        list.get(head).set(tensor, sublist);
+        list.get(head).set(tensor, _index);
     }
   }
 
@@ -68,11 +69,11 @@ import ch.alpine.tensor.ext.Integers;
       else
         list.set(head, function.apply((T) list.get(head)).copy());
     else {
-      List<Integer> sublist = index.subList(1, index.size());
+      List<Integer> _index = Lists.withoutHead(index);
       if (head == ALL)
-        stream().forEach(entry -> entry.set(function, sublist));
+        stream().forEach(entry -> entry.set(function, _index));
       else
-        list.get(head).set(function, sublist);
+        list.get(head).set(function, _index);
     }
   }
 
@@ -135,17 +136,18 @@ import ch.alpine.tensor.ext.Integers;
 
   // ---
   @Override // from Tensor
-  public Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
-    int size = Integers.requireEquals(fromIndex.size(), dimensions.size());
+  public Tensor block(List<Integer> ofs, List<Integer> len) {
+    int size = Integers.requireEquals(ofs.size(), len.size());
     if (size == 0)
       return this;
-    int head = fromIndex.get(0);
-    List<Tensor> subList = list.subList(head, head + dimensions.get(0));
+    int head = ofs.get(0);
+    int len0 = len.get(0);
+    List<Tensor> subList = list.subList(head, head + len0);
     if (size == 1)
       return new TensorImpl(subList);
-    List<Integer> subHead = fromIndex.subList(1, size);
-    List<Integer> subDims = dimensions.subList(1, size);
-    return Tensor.of(subList.stream().map(entry -> entry.block(subHead, subDims)));
+    List<Integer> _ofs = Lists.withoutHead(ofs);
+    List<Integer> _len = Lists.withoutHead(len);
+    return Tensor.of(subList.stream().map(entry -> entry.block(_ofs, _len)));
   }
 
   @Override // from Tensor

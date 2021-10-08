@@ -8,7 +8,6 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RationalScalar;
@@ -23,21 +22,28 @@ import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.Subsets;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.re.LinearSolve;
-import ch.alpine.tensor.sca.Chop;
 
 /** geometric algebra
+ * 
+ * Remark:
+ * Cl(0, 1) is algebra-isomorphic to the complex scalars
+ * Cl(0, 2) is algebra-isomorphic to the quaternions
+ * 
+ * Careful:
+ * the memory use of the representation of Cl(p, q) in the implementation is in
+ * the order of (2 ^ (p+q)) ^ 3.
  * 
  * Reference:
  * https://en.wikipedia.org/wiki/Clifford_algebra */
 public class CliffordAlgebra {
   private static final Scalar[] SIGN = { RealScalar.ONE, RealScalar.ONE.negate() };
   private static final int MAX_SIZE = 12;
-  private static final Function<List<Integer>, CliffordAlgebra> CACHE = //
+  private static final Cache<List<Integer>, CliffordAlgebra> CACHE = //
       Cache.of(list -> new CliffordAlgebra(list.get(0), list.get(1)), MAX_SIZE);
 
   /** @param p non-negative
@@ -55,11 +61,7 @@ public class CliffordAlgebra {
     return of(p, 0);
   }
 
-  /** Remark:
-   * Cl(0, 1) is algebra-isomorphic to the complex scalars
-   * Cl(0, 2) is algebra-isomorphic to the quaternions
-   * 
-   * @param q non-negative
+  /** @param q non-negative
    * @return Cl(0, q) */
   public static CliffordAlgebra negative(int q) {
     return of(0, q);
@@ -68,7 +70,7 @@ public class CliffordAlgebra {
   // ---
   private final int signature_p;
   private final Tensor gp;
-  private final Tensor cp;
+  /** vector */
   private final Tensor reverse;
   private final int[] offset;
 
@@ -88,18 +90,31 @@ public class CliffordAlgebra {
         map.put(perm, map.size());
       }
     }
+    Integers.requireEquals(list.size(), m);
     gp = Array.zeros(m, m, m);
     for (int i = 0; i < m; ++i)
       for (int j = 0; j < m; ++j) {
         SignedSubset signedSubset = new SignedSubset(Join.of(list.get(i), list.get(j)));
-        gp.set(signedSubset.sign, map.get(signedSubset.normal), j, i);
+        gp.set(signedSubset.sign(), map.get(signedSubset.normal), j, i);
       }
-    cp = gp.subtract(Transpose.of(gp, 0, 2, 1)).multiply(RationalScalar.HALF);
     reverse = Tensor.of(list.stream() //
         .map(Reverse::of) //
         .map(SignedSubset::new) //
         .map(SignedSubset::sign));
-    Integers.requireEquals(list.size(), m);
+  }
+
+  /** @param x
+   * @param y
+   * @return geometric product of multivectors x and y */
+  public Tensor gp(Tensor x, Tensor y) {
+    return gp.dot(VectorQ.require(x)).dot(VectorQ.require(y));
+  }
+
+  /** @param x
+   * @param y
+   * @return commutator product of multivectors of x and y */
+  public Tensor cp(Tensor x, Tensor y) {
+    return gp(x, y).subtract(gp.dot(y).dot(x)).multiply(RationalScalar.HALF);
   }
 
   /** @return geometric product tensor of rank 3 */
@@ -107,19 +122,16 @@ public class CliffordAlgebra {
     return gp.unmodifiable();
   }
 
-  public Tensor gp(Tensor x, Tensor y) {
-    return gp.dot(x).dot(y);
-  }
-
-  /** @return commutator product tensor of rank 3 */
+  /** @return commutator product tensor of rank 3 satisfies {@link JacobiIdentity} */
   public Tensor cp() {
-    return cp.unmodifiable();
+    return gp.subtract(Transpose.of(gp, 0, 2, 1)).multiply(RationalScalar.HALF);
   }
 
   /** @param x multivector
-   * @return */
+   * @return
+   * @throws Exception if x is not a vector */
   public Tensor reverse(Tensor x) {
-    return x.pmul(reverse);
+    return VectorQ.require(x).pmul(reverse);
   }
 
   public Tensor grade(Tensor x, int grade) {
@@ -142,19 +154,6 @@ public class CliffordAlgebra {
     return MatrixExp.of(gp.dot(x)).get(Tensor.ALL, 0);
   }
 
-  @PackageTestAccess
-  Tensor _exp(Tensor a) {
-    Tensor sum = UnitVector.of(gp.length(), 0);
-    Tensor p = sum;
-    for (int k = 1; k < 40; ++k) {
-      p = gp.dot(p).dot(a).divide(RealScalar.of(k));
-      sum = sum.add(p);
-      if (Chop._40.allZero(p))
-        break;
-    }
-    return sum;
-  }
-
   private class SignedSubset {
     private final Scalar sign;
     private final Tensor normal;
@@ -166,7 +165,7 @@ public class CliffordAlgebra {
       Deque<Scalar> deque = new ArrayDeque<>();
       for (int index : ordering) {
         Scalar scalar = indices.Get(index);
-        if (!deque.isEmpty() && deque.peekLast().equals(scalar)) {
+        if (scalar.equals(deque.peekLast())) { // peekLast returns null if deque is empty
           Scalar duplicate = deque.pollLast(); // check for sign in scalar product 0, ..., n - 1
           if (signature_p <= duplicate.number().intValue())
             parity ^= 1;

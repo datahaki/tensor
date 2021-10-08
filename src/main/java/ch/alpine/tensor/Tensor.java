@@ -322,11 +322,11 @@ public interface Tensor extends Iterable<Tensor> {
    * </pre>
    * Afterwards the tensor a == {1, 2, 0, 0, 0, 6}.
    * 
-   * @param fromIndex location of return tensor in this tensor
-   * @param dimensions of return tensor
+   * @param ofs location of return tensor in this tensor
+   * @param len of return tensor
    * @return references to entries in block located at fromIndex of this tensor with given dimensions
    * @throws Exception if this tensor in unmodifiable and given dimensions are non-empty */
-  Tensor block(List<Integer> fromIndex, List<Integer> dimensions);
+  Tensor block(List<Integer> ofs, List<Integer> len);
 
   /** For instance, if this tensor is the vector {0, 8, 1}, the function
    * stream() provides the three scalars 0, 8, 1 in a {@link Stream}.

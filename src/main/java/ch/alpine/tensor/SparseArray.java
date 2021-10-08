@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.Lists;
 import ch.alpine.tensor.ext.PackageTestAccess;
 
 /** Hint:
@@ -56,47 +57,46 @@ import ch.alpine.tensor.ext.PackageTestAccess;
   protected Tensor byRef(int i) {
     SparseArrays.requireInRange(i, length());
     Tensor tensor = navigableMap.get(i);
-    if (Objects.isNull(tensor)) {
-      if (size.size() == 1)
-        return fallback;
-      return new SparseArray(size.subList(1, size.size()), fallback);
-    }
+    if (Objects.isNull(tensor))
+      return size.size() == 1 //
+          ? fallback
+          : new SparseArray(Lists.withoutHead(size), fallback);
     return tensor;
   }
 
   @Override // from Tensor
   public void set(Tensor tensor, List<Integer> index) {
-    List<Integer> subsize = size.subList(1, size.size());
+    List<Integer> _size = Lists.withoutHead(size);
     int head = index.get(0);
     // TODO does not handle Tensor.ALL yet
     SparseArrays.requireInRange(head, length());
     if (index.size() == 1)
-      _set(head, tensor.copy(), subsize);
+      _set(head, tensor.copy(), _size);
     else
-      navigableMap.computeIfAbsent(head, i -> new SparseArray(subsize, fallback)) //
-          .set(tensor, index.subList(1, index.size()));
+      navigableMap.computeIfAbsent(head, i -> new SparseArray(_size, fallback)) //
+          .set(tensor, Lists.withoutHead(index));
   }
 
   @SuppressWarnings("unchecked")
   @Override // from Tensor
   public <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index) {
-    List<Integer> subsize = size.subList(1, size.size());
+    List<Integer> _size = Lists.withoutHead(size);
     int head = index.get(0);
     if (index.size() == 1) // terminal case
       if (head == ALL)
-        IntStream.range(0, length()).forEach(i -> _set(i, function.apply((T) byRef(i)).copy(), subsize));
+        IntStream.range(0, length()).forEach(i -> _set(i, function.apply((T) byRef(i)).copy(), _size));
       else
-        _set(head, function.apply((T) byRef(head)).copy(), subsize);
+        _set(head, function.apply((T) byRef(head)).copy(), _size);
     else {
-      List<Integer> sublist = index.subList(1, index.size());
+      List<Integer> _index = Lists.withoutHead(index);
       if (head == ALL)
         IntStream.range(0, length()) //
-            .forEach(i -> navigableMap.computeIfAbsent(i, j -> new SparseArray(subsize, fallback)).set(function, sublist));
+            .forEach(i -> navigableMap.computeIfAbsent(i, j -> new SparseArray(_size, fallback)).set(function, _index));
       else {
         navigableMap.computeIfAbsent(head, j -> {
           SparseArrays.requireInRange(head, length());
-          return new SparseArray(subsize, fallback);
-        }).set(function, sublist);
+          return new SparseArray(_size, fallback);
+        }).set(function, _index);
       }
     }
   }
@@ -130,11 +130,11 @@ import ch.alpine.tensor.ext.PackageTestAccess;
   public Tensor extract(int fromIndex, int toIndex) {
     SparseArrays.requireInRange(fromIndex, length());
     SparseArrays.requireInRange(toIndex, length());
-    int len = Integers.requirePositiveOrZero(toIndex - fromIndex);
-    if (len == 0)
+    int len0 = Integers.requirePositiveOrZero(toIndex - fromIndex);
+    if (len0 == 0)
       return Tensors.empty();
     List<Integer> newl = new ArrayList<>(size);
-    newl.set(0, len);
+    newl.set(0, len0);
     return new SparseArray(newl, fallback, navigableMap.subMap(fromIndex, toIndex).entrySet().stream() //
         .collect(_map(entry -> entry.getKey() - fromIndex, entry -> entry.getValue().copy())));
   }
@@ -198,21 +198,21 @@ import ch.alpine.tensor.ext.PackageTestAccess;
   }
 
   @Override // from Tensor
-  public Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
-    int depth = Integers.requireEquals(fromIndex.size(), dimensions.size());
+  public Tensor block(List<Integer> ofs, List<Integer> len) {
+    int depth = Integers.requireEquals(ofs.size(), len.size());
     if (depth == 0)
       return this;
-    int head = fromIndex.get(0);
+    int head = ofs.get(0);
     SparseArrays.requireInRange(head, length());
-    int len = Integers.requirePositiveOrZero(dimensions.get(0));
-    if (len == 0)
+    int len0 = Integers.requirePositiveOrZero(len.get(0));
+    if (len0 == 0)
       return Tensors.empty();
-    List<Integer> _from = fromIndex.subList(1, depth);
-    List<Integer> _dims = dimensions.subList(1, depth);
+    List<Integer> _ofs = Lists.withoutHead(ofs);
+    List<Integer> _len = Lists.withoutHead(len);
     return new SparseArray( //
-        Stream.concat(dimensions.stream(), size.stream().skip(depth)).collect(Collectors.toList()), //
-        fallback, navigableMap.subMap(head, head + len).entrySet().stream() //
-            .collect(_map(entry -> entry.getKey() - head, entry -> entry.getValue().block(_from, _dims))));
+        Stream.concat(len.stream(), size.stream().skip(depth)).collect(Collectors.toList()), //
+        fallback, navigableMap.subMap(head, head + len0).entrySet().stream() //
+            .collect(_map(entry -> entry.getKey() - head, entry -> entry.getValue().block(_ofs, _len))));
   }
 
   @Override // from Tensor

@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.Lists;
 
 public abstract class AbstractTensor implements Tensor {
   /** @param i
@@ -38,10 +39,10 @@ public abstract class AbstractTensor implements Tensor {
     if (index.isEmpty())
       return copy();
     int head = index.get(0);
-    List<Integer> sublist = index.subList(1, index.size());
+    List<Integer> _index = Lists.withoutHead(index);
     return head == ALL //
-        ? Tensor.of(stream().map(tensor -> tensor.get(sublist)))
-        : byRef(head).get(sublist);
+        ? Tensor.of(stream().map(tensor -> tensor.get(_index)))
+        : byRef(head).get(_index);
   }
 
   @Override // from Tensor

@@ -3,16 +3,22 @@ package ch.alpine.tensor.lie.ad;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactTensorQ;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.lie.TensorWedge;
+import ch.alpine.tensor.mat.DiagonalMatrix;
+import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.LinearSolve;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.UniformDistribution;
@@ -82,6 +88,19 @@ public class CliffordAlgebraTest extends TestCase {
     assertEquals(res, Tensors.fromString("{{0, 1}, {-1, 0}}"));
   }
 
+  @PackageTestAccess
+  static Tensor _exp(Tensor gp, Tensor a) {
+    Tensor sum = UnitVector.of(gp.length(), 0);
+    Tensor p = sum;
+    for (int k = 1; k < 40; ++k) {
+      p = gp.dot(p).dot(a).divide(RealScalar.of(k));
+      sum = sum.add(p);
+      if (Chop._40.allZero(p))
+        break;
+    }
+    return sum;
+  }
+
   public void testD2Quaternions() {
     CliffordAlgebra cliffordAlgebra = CliffordAlgebra.negative(2);
     Tensor x = Tensors.vector(2, 5, -3, -4);
@@ -93,7 +112,7 @@ public class CliffordAlgebraTest extends TestCase {
     assertEquals(qm.xyz(), m.extract(1, 4));
     assertEquals(qm.w(), m.Get(0));
     Quaternion qe = q1.exp();
-    Tensor xe = cliffordAlgebra._exp(N.DOUBLE.of(x));
+    Tensor xe = _exp(cliffordAlgebra.gp(), N.DOUBLE.of(x));
     Tolerance.CHOP.requireClose(qe.xyz(), xe.extract(1, 1 + 3));
     Tolerance.CHOP.requireClose(qe.w(), xe.Get(0));
     Tensor xi = cliffordAlgebra.exp(x);
@@ -130,7 +149,7 @@ public class CliffordAlgebraTest extends TestCase {
     assertEquals(qm.xyz(), m.extract(1 + 3, 1 + 3 + 3));
     assertEquals(qm.w(), m.Get(0));
     Quaternion qe = q1.exp();
-    Tensor xe = cliffordAlgebra._exp(N.DOUBLE.of(x));
+    Tensor xe = _exp(cliffordAlgebra.gp(), N.DOUBLE.of(x));
     Tolerance.CHOP.requireClose(qe.xyz(), xe.extract(1 + 3, 1 + 3 + 3));
     Tolerance.CHOP.requireClose(qe.w(), xe.Get(0));
     Tensor xi = cliffordAlgebra.exp(x);
@@ -159,20 +178,37 @@ public class CliffordAlgebraTest extends TestCase {
     CliffordAlgebra cliffordAlgebra = CliffordAlgebra.positive(3);
     Tensor a = RandomVariate.of(UniformDistribution.unit(), 8);
     Tensor exp1 = cliffordAlgebra.exp(a);
-    Tensor exp2 = cliffordAlgebra._exp(a);
+    Tensor exp2 = _exp(cliffordAlgebra.gp(), a);
     Chop._08.requireClose(exp1, exp2);
   }
 
-  public void testCommutatorPositive() {
+  public void testReverse() {
+    CliffordAlgebra cliffordAlgebra = CliffordAlgebra.positive(2);
+    assertEquals(cliffordAlgebra.gp().length(), 4);
+    Tensor result = Tensor.of(IdentityMatrix.of(4).stream().map(cliffordAlgebra::reverse));
+    assertEquals(result, DiagonalMatrix.of(1, 1, 1, -1));
+  }
+
+  public void testReverseFail() {
+    CliffordAlgebra cliffordAlgebra = CliffordAlgebra.positive(2);
+    AssertFail.of(() -> cliffordAlgebra.reverse(Pi.VALUE));
+    AssertFail.of(() -> cliffordAlgebra.reverse(HilbertMatrix.of(4)));
+  }
+
+  public void testCommutator() {
     for (int p = 0; p <= 2; ++p)
       for (int q = 0; q < 2; ++q) {
         CliffordAlgebra cliffordAlgebra = CliffordAlgebra.of(p, q);
-        JacobiIdentity.require(cliffordAlgebra.cp());
+        Tensor cp = cliffordAlgebra.cp();
+        JacobiIdentity.require(cp);
+        Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-10, +10), cp.length());
+        Tensor y = RandomVariate.of(DiscreteUniformDistribution.of(-10, +10), cp.length());
+        assertEquals(cliffordAlgebra.cp(x, y), cp.dot(x).dot(y));
       }
   }
 
   public void testCommutatorNegative() {
-    for (int n = 0; n <= 3; ++n) {
+    for (int n = 1; n <= 3; ++n) {
       CliffordAlgebra cliffordAlgebra = CliffordAlgebra.negative(n);
       JacobiIdentity.require(cliffordAlgebra.cp());
     }

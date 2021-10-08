@@ -7,6 +7,7 @@ import java.util.NavigableMap;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.Lists;
 
 /** API EXPERIMENTAL
  * 
@@ -29,7 +30,7 @@ public enum SparseArrays {
     }
     if (navigableMap.values().stream() //
         .map(Dimensions::of) //
-        .allMatch(size.subList(1, size.size())::equals))
+        .allMatch(Lists.withoutHead(size)::equals))
       return new SparseArray(size, fallback, navigableMap);
     throw TensorRuntimeException.of();
   }

@@ -8,6 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.Lists;
 
 /** Example:
  * <pre>
@@ -58,7 +59,7 @@ public class PadLeft implements TensorUnaryOperator {
     int length = tensor.length();
     final int dim0 = dimensions.get(0);
     if (1 < dimensions.size()) { // recur
-      TensorUnaryOperator tensorUnaryOperator = with(element, dimensions.subList(1, dimensions.size()));
+      TensorUnaryOperator tensorUnaryOperator = with(element, Lists.withoutHead(dimensions));
       if (dim0 <= length)
         return Tensor.of(tensor.stream().skip(length - dim0).map(tensorUnaryOperator));
       List<Integer> copy = new ArrayList<>(dimensions);
