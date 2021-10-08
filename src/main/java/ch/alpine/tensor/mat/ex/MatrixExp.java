@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.ex;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.lie.Symmetrize;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Matrix2Norm;
 import ch.alpine.tensor.sca.Exp;
 
@@ -28,6 +29,6 @@ public enum MatrixExp {
    * @param matrix
    * @return symmetric matrix */
   public static Tensor ofSymmetric(Tensor matrix) {
-    return StaticHelper.evMap_ofSymmetric(matrix, Exp.FUNCTION);
+    return StaticHelper.mapEv_ofSymmetric(matrix, Tolerance.CHOP, Exp.FUNCTION);
   }
 }

@@ -21,7 +21,7 @@ public enum PermutationList {
    * @param length not less than cycles.minLength()
    * @return */
   public static int[] of(Cycles cycles, int length) {
-    Integers.requirePositiveOrZero(length - cycles.minLength());
+    Integers.requirePositiveOrZero(Math.subtractExact(length, cycles.minLength()));
     return IntStream.range(0, length).map(cycles::replace).toArray();
   }
 }

@@ -11,6 +11,7 @@ import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.sca.Ceiling;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Log;
 
 /** Hint: implementation makes use of eigenvalue decomposition of
@@ -35,8 +36,8 @@ import ch.alpine.tensor.sca.Log;
    * @param scalarUnaryOperator applied to eigenvalues
    * @return resulting matrix is basis of given matrix
    * @throws Exception if input is not a real symmetric matrix */
-  public static Tensor evMap_ofSymmetric(Tensor matrix, ScalarUnaryOperator scalarUnaryOperator) {
-    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+  public static Tensor mapEv_ofSymmetric(Tensor matrix, Chop chop, ScalarUnaryOperator scalarUnaryOperator) {
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix, chop);
     Tensor values = eigensystem.values().map(scalarUnaryOperator);
     Tensor vectors = eigensystem.vectors();
     return Transpose.of(vectors).dot(values.pmul(vectors));

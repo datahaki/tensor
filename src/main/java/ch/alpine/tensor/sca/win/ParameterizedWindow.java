@@ -19,7 +19,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
         : RealScalar.ZERO;
   }
 
-  /** @param x guaranteed in the interval [-1/2, 1/2]
+  /** @param x guaranteed to be in the interval [-1/2, 1/2]
    * @return */
   protected abstract Scalar evaluate(Scalar x);
 

@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.ex;
 
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -15,7 +16,7 @@ import ch.alpine.tensor.sca.Sqrt;
 /* package */ enum MatrixLog2 {
   ;
   private static final Scalar FOUR = RealScalar.of(4);
-  private static final Scalar TWO = RealScalar.TWO;
+  private static final Scalar HALF = RationalScalar.HALF;
 
   /** @param matrix of size 2 x 2
    * @return */
@@ -33,10 +34,10 @@ import ch.alpine.tensor.sca.Sqrt;
     Scalar p = a.subtract(A).add(d);
     Scalar q = A.add(d).subtract(a);
     Scalar t = a.add(A).subtract(d);
-    Scalar log_p2 = Log.FUNCTION.apply(p.divide(TWO));
-    Scalar log_s2 = Log.FUNCTION.apply(s.divide(TWO));
-    Scalar r11 = log_p2.multiply(q).add(log_s2.multiply(t)).divide(TWO);
-    Scalar r22 = log_p2.multiply(t).add(log_s2.multiply(q)).divide(TWO);
+    Scalar log_p2 = Log.FUNCTION.apply(p.multiply(HALF));
+    Scalar log_s2 = Log.FUNCTION.apply(s.multiply(HALF));
+    Scalar r11 = log_p2.multiply(q).add(log_s2.multiply(t)).multiply(HALF);
+    Scalar r22 = log_p2.multiply(t).add(log_s2.multiply(q)).multiply(HALF);
     Scalar dsp = Log.FUNCTION.apply(s).subtract(Log.FUNCTION.apply(p));
     Scalar r12 = dsp.multiply(b);
     Scalar r21 = dsp.multiply(c);

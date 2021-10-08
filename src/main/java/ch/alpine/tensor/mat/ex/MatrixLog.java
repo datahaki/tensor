@@ -83,7 +83,7 @@ public enum MatrixLog {
    * @return
    * @see PositiveDefiniteMatrixQ */
   public static Tensor ofSymmetric(Tensor matrix) {
-    return StaticHelper.evMap_ofSymmetric(matrix, MatrixLog::logPositive);
+    return StaticHelper.mapEv_ofSymmetric(matrix, Tolerance.CHOP, MatrixLog::logPositive);
   }
 
   // helper function

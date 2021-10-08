@@ -13,7 +13,8 @@ import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
-public class ClrsTest extends TestCase {
+/** with examples from CLRS */
+public class SimplexMethodTest extends TestCase {
   public void testP845() {
     Tensor m = Tensors.matrixInt(new int[][] { //
         { -2, 8, 0, 10 }, //
