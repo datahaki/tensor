@@ -54,7 +54,7 @@ public enum LeastSquares {
         assumeRankM = false; // rank is not maximal
       }
     int n = matrix.length();
-    int m = Unprotect.dimension1(matrix);
+    int m = Unprotect.dimension1Hint(matrix);
     if (assumeRankM)
       try {
         return usingQR(matrix, b, n, m);
@@ -72,7 +72,7 @@ public enum LeastSquares {
    * @return x with matrix.dot(x) ~ b
    * @throws Exception if matrix does not have maximal rank */
   public static Tensor usingQR(Tensor matrix, Tensor b) {
-    return usingQR(matrix, b, matrix.length(), Unprotect.dimension1(matrix));
+    return usingQR(matrix, b, matrix.length(), Unprotect.dimension1Hint(matrix));
   }
 
   private static Tensor usingQR(Tensor matrix, Tensor b, int n, int m) {

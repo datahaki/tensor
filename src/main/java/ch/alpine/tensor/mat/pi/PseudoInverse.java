@@ -91,7 +91,7 @@ public enum PseudoInverse {
    * @throws Exception if matrix does not have maximal rank */
   @PackageTestAccess
   static Tensor usingQR(Tensor matrix) {
-    return usingQR(matrix, matrix.length(), Unprotect.dimension1(matrix));
+    return usingQR(matrix, matrix.length(), Unprotect.dimension1Hint(matrix));
   }
 
   private static Tensor usingQR(Tensor matrix, int n, int m) {
@@ -120,7 +120,7 @@ public enum PseudoInverse {
    * @param chop
    * @return */
   private static Tensor usingSvd(Tensor matrix, Chop chop) {
-    return usingSvd(matrix, chop, matrix.length(), Unprotect.dimension1(matrix));
+    return usingSvd(matrix, chop, matrix.length(), Unprotect.dimension1Hint(matrix));
   }
 
   @PackageTestAccess

@@ -58,7 +58,7 @@ public enum NullSpace {
     if (ExactTensorQ.of(matrix))
       return usingRowReduce(matrix);
     int rows = matrix.length();
-    int cols = Unprotect.dimension1(matrix);
+    int cols = Unprotect.dimension1Hint(matrix);
     return rows < cols //
         ? usingQR(matrix)
         : usingSvd(matrix);

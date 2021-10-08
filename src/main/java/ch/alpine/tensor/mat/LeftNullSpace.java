@@ -61,7 +61,7 @@ public enum LeftNullSpace {
    * @see OrthogonalMatrixQ */
   public static Tensor usingQR(Tensor matrix) {
     int rows = matrix.length();
-    int cols = Unprotect.dimension1(matrix);
+    int cols = Unprotect.dimension1Hint(matrix);
     if (rows <= cols)
       return NullSpace.usingSvd(Transpose.of(matrix));
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);

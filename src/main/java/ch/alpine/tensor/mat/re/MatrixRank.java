@@ -36,7 +36,7 @@ public enum MatrixRank {
    * @return rank of matrix */
   public static int usingRowReduce(Tensor matrix, Pivot pivot) {
     int n = matrix.length();
-    int m = Unprotect.dimension1(matrix);
+    int m = Unprotect.dimension1Hint(matrix);
     Tensor lhs = RowReduce.of(matrix, pivot);
     int j = 0;
     int c0 = 0;
@@ -49,7 +49,7 @@ public enum MatrixRank {
   /** @param matrix with numeric precision entries
    * @return rank of matrix */
   public static int usingSvd(Tensor matrix) {
-    return of(SingularValueDecomposition.of(Unprotect.dimension1(matrix) <= matrix.length() //
+    return of(SingularValueDecomposition.of(Unprotect.dimension1Hint(matrix) <= matrix.length() //
         ? matrix
         : Transpose.of(matrix)));
   }

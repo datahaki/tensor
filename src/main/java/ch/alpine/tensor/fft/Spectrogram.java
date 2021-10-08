@@ -40,7 +40,7 @@ public enum Spectrogram {
    * @throws Exception if input is not a vector */
   public static Tensor array(Tensor vector, ScalarUnaryOperator window) {
     Tensor tensor = SpectrogramArray.of(vector, window);
-    int half = Unprotect.dimension1(tensor) / 2;
+    int half = Unprotect.dimension1Hint(tensor) / 2;
     return Tensors.vector(i -> tensor.get(Tensor.ALL, half - i - 1).map(Abs.FUNCTION), half);
   }
 }
