@@ -53,22 +53,22 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
 
   @Override
   public Tensor apply(Tensor x, Tensor y) {
-    return new Inner(x, y).sum();
+    return Total.of(series(x, y));
   }
 
   @PackageTestAccess
   Tensor series(Tensor x, Tensor y) {
-    return new Inner(x, y).sum;
+    return new Inner(x, y).series;
   }
 
   private class Inner {
     private final Tensor adX;
     private final Tensor adY;
-    private final Tensor sum;
+    private final Tensor series;
 
-    Inner(Tensor x, Tensor y) {
-      sum = Array.zeros(degree, x.length());
-      sum.set(x, 0);
+    public Inner(Tensor x, Tensor y) {
+      series = Array.zeros(degree, x.length());
+      series.set(x, 0);
       adX = ad.dot(x);
       adY = ad.dot(y);
       Tensor pwX = IdentityMatrix.of(x.length());
@@ -84,7 +84,7 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
         return;
       Scalar f = RealScalar.of(Math.multiplyExact(SIGN[k & 1] * (k + 1), total_q + 1)) //
           .multiply((Scalar) Times.pmul(Join.of(p, q).map(Factorial.FUNCTION)));
-      sum.set(v.divide(f)::add, d - 1);
+      series.set(v.divide(f)::add, d - 1);
       if (d < degree) {
         if (0 < k) {
           if (incrementQ) {
@@ -101,10 +101,6 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
         recur(adY.dot(v), d + 1, Append.of(p, _0), Append.of(q, _1), total_q + 1, true);
         recur(adX.dot(v), d + 1, Append.of(p, _1), Append.of(q, _0), total_q, false);
       }
-    }
-
-    private Tensor sum() {
-      return Total.of(sum);
     }
   }
 }

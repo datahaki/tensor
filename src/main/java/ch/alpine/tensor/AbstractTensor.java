@@ -39,7 +39,7 @@ public abstract class AbstractTensor implements Tensor {
     if (index.isEmpty())
       return copy();
     int head = index.get(0);
-    List<Integer> _index = Lists.withoutHead(index);
+    List<Integer> _index = Lists.rest(index);
     return head == ALL //
         ? Tensor.of(stream().map(tensor -> tensor.get(_index)))
         : byRef(head).get(_index);

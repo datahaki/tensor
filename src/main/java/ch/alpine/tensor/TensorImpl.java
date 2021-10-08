@@ -49,7 +49,7 @@ import ch.alpine.tensor.ext.Lists;
       } else
         list.set(head, tensor.copy()); // insert copy
     else { // function set is called with tensor provided by reference
-      List<Integer> _index = Lists.withoutHead(index);
+      List<Integer> _index = Lists.rest(index);
       if (head == ALL) {
         Integers.requireEquals(length(), tensor.length());
         AtomicInteger i = new AtomicInteger();
@@ -69,7 +69,7 @@ import ch.alpine.tensor.ext.Lists;
       else
         list.set(head, function.apply((T) list.get(head)).copy());
     else {
-      List<Integer> _index = Lists.withoutHead(index);
+      List<Integer> _index = Lists.rest(index);
       if (head == ALL)
         stream().forEach(entry -> entry.set(function, _index));
       else
@@ -145,8 +145,8 @@ import ch.alpine.tensor.ext.Lists;
     List<Tensor> subList = list.subList(head, head + len0);
     if (size == 1)
       return new TensorImpl(subList);
-    List<Integer> _ofs = Lists.withoutHead(ofs);
-    List<Integer> _len = Lists.withoutHead(len);
+    List<Integer> _ofs = Lists.rest(ofs);
+    List<Integer> _len = Lists.rest(len);
     return Tensor.of(subList.stream().map(entry -> entry.block(_ofs, _len)));
   }
 

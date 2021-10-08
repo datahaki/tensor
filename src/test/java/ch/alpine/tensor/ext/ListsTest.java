@@ -9,11 +9,11 @@ import junit.framework.TestCase;
 
 public class ListsTest extends TestCase {
   public void testWithoutHead() {
-    assertEquals(Lists.withoutHead(Arrays.asList(3, 2, 8)), Arrays.asList(2, 8));
+    assertEquals(Lists.rest(Arrays.asList(3, 2, 8)), Arrays.asList(2, 8));
   }
 
   public void testWithoutHeadFail() {
-    AssertFail.of(() -> Lists.withoutHead(new LinkedList<>()));
+    AssertFail.of(() -> Lists.rest(new LinkedList<>()));
   }
 
   public void testLast() {

@@ -1,9 +1,9 @@
 // code by jph
 package ch.alpine.tensor.lie.ad;
 
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
@@ -23,36 +23,30 @@ import ch.alpine.tensor.alg.Subsets;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
-import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.re.LinearSolve;
 
 /** geometric algebra
  * 
- * Remark:
+ * <p>Remark:
  * Cl(0, 1) is algebra-isomorphic to the complex scalars
  * Cl(0, 2) is algebra-isomorphic to the quaternions
  * 
- * Careful:
+ * <p>Careful:
  * the memory use of the representation of Cl(p, q) in the implementation is in
  * the order of (2 ^ (p+q)) ^ 3.
  * 
- * Reference:
+ * <p>Reference:
  * https://en.wikipedia.org/wiki/Clifford_algebra */
-public class CliffordAlgebra {
+public class CliffordAlgebra implements Serializable {
   private static final Scalar[] SIGN = { RealScalar.ONE, RealScalar.ONE.negate() };
-  private static final int MAX_SIZE = 12;
-  private static final Cache<List<Integer>, CliffordAlgebra> CACHE = //
-      Cache.of(list -> new CliffordAlgebra(list.get(0), list.get(1)), MAX_SIZE);
 
   /** @param p non-negative
    * @param q non-negative
    * @return Cl(p, q) */
   public static CliffordAlgebra of(int p, int q) {
-    return CACHE.apply(Arrays.asList( //
-        Integers.requirePositiveOrZero(p), //
-        Integers.requirePositiveOrZero(q)));
+    return new CliffordAlgebra(p, q);
   }
 
   /** @param p non-negative

@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.lie.ad;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import ch.alpine.tensor.ExactTensorQ;
@@ -9,6 +10,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.lie.MatrixBracket;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
@@ -106,8 +108,9 @@ public class BakerCampbellHausdorffTest extends TestCase {
     _check(LieAlgebras.so3());
   }
 
-  public void testJacobiFail() {
+  public void testJacobiFail() throws ClassNotFoundException, IOException {
     Tensor ad = LieAlgebras.sl2();
+    Serialization.copy(BakerCampbellHausdorff.of(ad, 2));
     ad.set(Scalar::zero, Tensor.ALL, 1, 2);
     AssertFail.of(() -> BakerCampbellHausdorff.of(ad, 2));
   }

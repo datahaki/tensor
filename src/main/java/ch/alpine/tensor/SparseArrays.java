@@ -30,7 +30,7 @@ public enum SparseArrays {
     }
     if (navigableMap.values().stream() //
         .map(Dimensions::of) //
-        .allMatch(Lists.withoutHead(size)::equals))
+        .allMatch(Lists.rest(size)::equals))
       return new SparseArray(size, fallback, navigableMap);
     throw TensorRuntimeException.of();
   }

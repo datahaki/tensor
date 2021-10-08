@@ -32,9 +32,9 @@ public enum ArrayPad {
     Tensor b = Array.zeros(copy);
     if (1 == rank)
       return Join.of(0, a, tensor, b);
-    List<Integer> _copy = Lists.withoutHead(copy);
-    List<Integer> _ante = Lists.withoutHead(ante);
-    List<Integer> _post = Lists.withoutHead(post);
+    List<Integer> _copy = Lists.rest(copy);
+    List<Integer> _ante = Lists.rest(ante);
+    List<Integer> _post = Lists.rest(post);
     return Join.of(0, a, Tensor.of(tensor.stream().map(entry -> of(entry, _copy, _ante, _post))), b);
   }
 }

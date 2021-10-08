@@ -59,7 +59,7 @@ public class PadRight implements TensorUnaryOperator {
     int length = tensor.length();
     final int dim0 = dimensions.get(0);
     if (1 < dimensions.size()) { // recur
-      TensorUnaryOperator tensorUnaryOperator = with(element, Lists.withoutHead(dimensions));
+      TensorUnaryOperator tensorUnaryOperator = with(element, Lists.rest(dimensions));
       if (dim0 <= length)
         return Tensor.of(tensor.stream().limit(dim0).map(tensorUnaryOperator));
       List<Integer> copy = new ArrayList<>(dimensions);

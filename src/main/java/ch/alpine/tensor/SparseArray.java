@@ -60,13 +60,13 @@ import ch.alpine.tensor.ext.PackageTestAccess;
     if (Objects.isNull(tensor))
       return size.size() == 1 //
           ? fallback
-          : new SparseArray(Lists.withoutHead(size), fallback);
+          : new SparseArray(Lists.rest(size), fallback);
     return tensor;
   }
 
   @Override // from Tensor
   public void set(Tensor tensor, List<Integer> index) {
-    List<Integer> _size = Lists.withoutHead(size);
+    List<Integer> _size = Lists.rest(size);
     int head = index.get(0);
     // TODO does not handle Tensor.ALL yet
     SparseArrays.requireInRange(head, length());
@@ -74,13 +74,13 @@ import ch.alpine.tensor.ext.PackageTestAccess;
       _set(head, tensor.copy(), _size);
     else
       navigableMap.computeIfAbsent(head, i -> new SparseArray(_size, fallback)) //
-          .set(tensor, Lists.withoutHead(index));
+          .set(tensor, Lists.rest(index));
   }
 
   @SuppressWarnings("unchecked")
   @Override // from Tensor
   public <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index) {
-    List<Integer> _size = Lists.withoutHead(size);
+    List<Integer> _size = Lists.rest(size);
     int head = index.get(0);
     if (index.size() == 1) // terminal case
       if (head == ALL)
@@ -88,7 +88,7 @@ import ch.alpine.tensor.ext.PackageTestAccess;
       else
         _set(head, function.apply((T) byRef(head)).copy(), _size);
     else {
-      List<Integer> _index = Lists.withoutHead(index);
+      List<Integer> _index = Lists.rest(index);
       if (head == ALL)
         IntStream.range(0, length()) //
             .forEach(i -> navigableMap.computeIfAbsent(i, j -> new SparseArray(_size, fallback)).set(function, _index));
@@ -207,8 +207,8 @@ import ch.alpine.tensor.ext.PackageTestAccess;
     int len0 = Integers.requirePositiveOrZero(len.get(0));
     if (len0 == 0)
       return Tensors.empty();
-    List<Integer> _ofs = Lists.withoutHead(ofs);
-    List<Integer> _len = Lists.withoutHead(len);
+    List<Integer> _ofs = Lists.rest(ofs);
+    List<Integer> _len = Lists.rest(len);
     return new SparseArray( //
         Stream.concat(len.stream(), size.stream().skip(depth)).collect(Collectors.toList()), //
         fallback, navigableMap.subMap(head, head + len0).entrySet().stream() //
