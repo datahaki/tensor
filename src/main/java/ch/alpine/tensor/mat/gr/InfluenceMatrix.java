@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.gr;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
+import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 
 /** Remark:
  * {@link Mahalanobis} is significantly faster than {@link InfluenceMatrix#of(Tensor)}
@@ -48,7 +49,7 @@ public interface InfluenceMatrix {
       } catch (Exception exception) {
         // design matrix does not have maximal rank
       }
-    return new InfluenceMatrixSvd(design);
+    return new InfluenceMatrixSvd(SingularValueDecomposition.of(design));
   }
 
   /** projection matrix defines a projection of a tangent vector at given point to a vector in

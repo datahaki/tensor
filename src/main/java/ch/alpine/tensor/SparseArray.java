@@ -76,8 +76,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from AbstractTensor
   protected Tensor byRef(int i) {
-    requireInRange(i, length());
-    Tensor tensor = navigableMap.get(i);
+    Tensor tensor = navigableMap.get(requireInRange(i));
     if (Objects.isNull(tensor))
       return size.size() == 1 //
           ? fallback
@@ -87,10 +86,9 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public void set(Tensor tensor, List<Integer> index) {
+    int head = requireInRange(index.get(0));
     List<Integer> _size = Lists.rest(size);
-    int head = index.get(0);
     // TODO does not handle Tensor.ALL yet
-    requireInRange(head, length());
     if (index.size() == 1)
       _set(head, tensor.copy(), _size);
     else
@@ -113,12 +111,8 @@ public class SparseArray extends AbstractTensor implements Serializable {
       if (head == ALL)
         IntStream.range(0, length()) //
             .forEach(i -> navigableMap.computeIfAbsent(i, j -> new SparseArray(fallback, _size)).set(function, _index));
-      else {
-        navigableMap.computeIfAbsent(head, j -> {
-          requireInRange(head, length());
-          return new SparseArray(fallback, _size);
-        }).set(function, _index);
-      }
+      else
+        navigableMap.computeIfAbsent(requireInRange(head), j -> new SparseArray(fallback, _size)).set(function, _index);
     }
   }
 
@@ -149,8 +143,9 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor extract(int fromIndex, int toIndex) {
-    requireInRange(fromIndex, length());
-    requireInRange(toIndex, length() + 1);
+    requireInRange(fromIndex);
+    if (length() < toIndex)
+      throw new IllegalArgumentException("" + toIndex);
     int len0 = Integers.requirePositiveOrZero(toIndex - fromIndex);
     if (len0 == 0)
       return Tensors.empty();
@@ -234,8 +229,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
     int depth = Integers.requireEquals(ofs.size(), len.size());
     if (depth == 0)
       return this;
-    int head = ofs.get(0);
-    requireInRange(head, length());
+    int head = requireInRange(ofs.get(0));
     int len0 = Integers.requirePositiveOrZero(len.get(0));
     if (len0 == 0)
       return Tensors.empty();
@@ -283,14 +277,18 @@ public class SparseArray extends AbstractTensor implements Serializable {
     return Collectors.toMap(keyMapper, valueMapper, (e1, e2) -> null, TreeMap::new);
   }
 
+  /** @param index
+   * @return index
+   * @throws Exception if given index is negative or greater equals to length() */
+  private int requireInRange(int index) {
+    if (0 <= index && index < length())
+      return index;
+    throw new IllegalArgumentException("" + index);
+  }
+
   private static Scalar checkFallback(Scalar fallback) {
     if (fallback.one().zero().equals(fallback))
       return fallback;
     throw TensorRuntimeException.of(fallback);
-  }
-
-  private static void requireInRange(int i, int length) {
-    if (i < 0 || length <= i)
-      throw new IllegalArgumentException();
   }
 }
