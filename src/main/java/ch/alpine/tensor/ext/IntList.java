@@ -2,6 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -21,7 +22,11 @@ import java.util.stream.Stream;
  * <p>The implementation of the {@link List} interface assumes that
  * the "list does not permit null elements". That means, that calls
  * to certain functions with parameter "null" result in a
- * {@link NullPointerException}. Example: {@link #contains(Object)}. */
+ * {@link NullPointerException}. Example: {@link #contains(Object)}.
+ * 
+ * <p>A sublist of an {@link IntList} is {@link Serializable}. This
+ * is in contrast to a sublist of {@link Arrays#asList(Object...)}
+ * or {@link ArrayList}, which are not serializable. */
 /* package */ class IntList implements List<Integer>, RandomAccess, Serializable {
   /** @param array non-null
    * @return unmodifiable list */

@@ -17,15 +17,15 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SparseArrayTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
-    Tensor tensor = Serialization.copy(new SparseArray(Arrays.asList(5, 6, 8), RealScalar.ZERO));
+    Tensor tensor = Serialization.copy(SparseArray.of(5, 6, 8));
     Tensor value = tensor.get(1);
     assertEquals(value.length(), 6);
     Tensor copy = tensor.copy();
@@ -34,12 +34,12 @@ public class SparseArrayTest extends TestCase {
     Tensor fullze = Array.zeros(5, 6, 8);
     assertEquals(tensor, fullze);
     assertEquals(fullze, tensor);
-    Tensor tinsor = new SparseArray(Arrays.asList(5, 6, 8), RealScalar.ZERO);
+    Tensor tinsor = SparseArray.of(5, 6, 8);
     assertEquals(tensor, tinsor);
   }
 
   public void testVector() {
-    Tensor matrix = new SparseArray(Arrays.asList(100), RealScalar.ZERO);
+    Tensor matrix = SparseArray.of(100);
     assertEquals(matrix.Get(99), RealScalar.ZERO);
     AssertFail.of(() -> matrix.get(-1));
     AssertFail.of(() -> matrix.get(100));
@@ -47,9 +47,9 @@ public class SparseArrayTest extends TestCase {
   }
 
   public void testDot() {
-    Tensor s_mat1 = new SparseArray(Arrays.asList(3, 4), RealScalar.ZERO);
+    Tensor s_mat1 = SparseArray.of(3, 4);
     Tensor f_mat1 = Array.zeros(3, 4);
-    Tensor s_mat2 = new SparseArray(Arrays.asList(4, 2), RealScalar.ZERO);
+    Tensor s_mat2 = SparseArray.of(4, 2);
     Tensor f_mat2 = Array.zeros(4, 2);
     s_mat1.dot(f_mat2);
     s_mat1.dot(s_mat2);
@@ -58,13 +58,13 @@ public class SparseArrayTest extends TestCase {
   }
 
   public void testHashCode() {
-    Tensor sparse = new SparseArray(Arrays.asList(5, 4), RealScalar.ZERO);
+    Tensor sparse = SparseArray.of(5, 4);
     Tensor matrix = Array.zeros(5, 4);
     assertEquals(sparse.hashCode(), matrix.hashCode());
   }
 
   public void testHashCode2() {
-    Tensor sparse = new SparseArray(Arrays.asList(5, 4), RealScalar.ZERO);
+    Tensor sparse = SparseArray.of(5, 4);
     sparse.set(RationalScalar.HALF, 1, 2);
     Tensor matrix = Array.zeros(5, 4);
     matrix.set(RationalScalar.HALF, 1, 2);
@@ -72,19 +72,19 @@ public class SparseArrayTest extends TestCase {
   }
 
   public void testArrayGet() {
-    Tensor sparse = new SparseArray(Arrays.asList(5, 4, 8), Quantity.of(0, "m"));
-    assertEquals(sparse.get(1, Tensor.ALL, 3), ConstantArray.of(Quantity.of(0, "m"), 4));
+    Tensor sparse = SparseArray.of(GaussScalar.of(0, 5), 5, 4, 8);
+    assertEquals(sparse.get(1, Tensor.ALL, 3), ConstantArray.of(GaussScalar.of(0, 5), 4));
   }
 
   public void testFails() {
-    Tensor sparse = new SparseArray(Arrays.asList(5, 4, 8), Quantity.of(0, "m"));
+    Tensor sparse = SparseArray.of(GaussScalar.of(0, 5), 5, 4, 8);
     AssertFail.of(() -> sparse.unmodifiable());
     AssertFail.of(() -> sparse.append(Array.zeros(4, 8)));
     AssertFail.of(() -> sparse.map(RealScalar.ONE::add));
   }
 
   public void testMatrix() {
-    Tensor matrix = new SparseArray(Arrays.asList(5, 10), RealScalar.ZERO);
+    Tensor matrix = SparseArray.of(5, 10);
     assertEquals(matrix.Get(3, 2), RealScalar.ZERO);
     matrix.set(Pi.VALUE, 2, 3);
     AssertFail.of(() -> matrix.set(RealScalar.ONE, 5, 3));
@@ -100,11 +100,20 @@ public class SparseArrayTest extends TestCase {
   }
 
   public void testExtract() {
-    Tensor tensor = new SparseArray(Arrays.asList(5, 8, 7), RealScalar.ZERO);
+    Tensor tensor = SparseArray.of(5, 8, 7);
     tensor.set(Pi.TWO, 2, 3, 4);
     assertEquals(Dimensions.of(tensor.extract(1, 3)), Arrays.asList(2, 8, 7));
     for (int count = 0; count < tensor.length(); ++count)
       assertEquals(tensor.extract(count, count), Tensors.empty());
+  }
+
+  public void testExtract2() {
+    Tensor tensor = SparseArray.of(5);
+    assertEquals(tensor.extract(0, 5), Array.zeros(5));
+    assertEquals(tensor.extract(3, 5), Array.zeros(2));
+    assertEquals(tensor.extract(3, 3), Array.zeros(0));
+    AssertFail.of(() -> tensor.extract(-1, 3));
+    AssertFail.of(() -> tensor.extract(1, 6));
   }
 
   public void testCreateScalar() {

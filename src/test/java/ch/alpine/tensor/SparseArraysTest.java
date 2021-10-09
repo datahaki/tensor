@@ -1,16 +1,20 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.NavigableMap;
+import java.util.List;
 import java.util.Random;
-import java.util.TreeMap;
 
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.EmpiricalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -56,24 +60,18 @@ public class SparseArraysTest extends TestCase {
     assertEquals(Transpose.of(a), Transpose.of(s));
   }
 
-  public void testGenerate() {
-    SparseArrays.of(Arrays.asList(2, 3), RealScalar.ZERO, new TreeMap<>());
-    NavigableMap<Integer, Tensor> navigableMap = new TreeMap<>();
-    navigableMap.put(1, Tensors.vector(1, 2, 3));
-    SparseArrays.of(Arrays.asList(2, 3), RealScalar.ZERO, navigableMap);
-    navigableMap.put(1, RealScalar.ONE);
-    AssertFail.of(() -> SparseArrays.of(Arrays.asList(2, 3), RealScalar.ZERO, navigableMap));
-  }
-
   public void testGenerateFail() {
-    AssertFail.of(() -> SparseArrays.of(Arrays.asList(), RealScalar.ZERO, new TreeMap<>()));
-    AssertFail.of(() -> SparseArrays.of(Arrays.asList(2, 3), RealScalar.ONE, new TreeMap<>()));
+    SparseArray.of(RealScalar.ZERO, 2, 3);
+    AssertFail.of(() -> SparseArray.of(RealScalar.ZERO));
+    AssertFail.of(() -> SparseArray.of(RealScalar.ZERO, 2, -3));
+    AssertFail.of(() -> SparseArray.of(RealScalar.ONE, 2, 3));
   }
 
-  private final Distribution distribution = EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(20, 1, 1, 1, 1));
+  private final Distribution distribution = EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(10, 1, 0, 1, 1));
+  private Random random = new Random(3);
 
   private Tensor _random(int... size) {
-    return RandomVariate.of(distribution, new Random(3), size);
+    return RandomVariate.of(distribution, random, size);
   }
 
   private static void _check(Tensor fa, Tensor fb) {
@@ -87,6 +85,7 @@ public class SparseArraysTest extends TestCase {
     Tensor fa_sb = fa.dot(sb);
     Tensor sa_fb = sa.dot(fb);
     Tensor sa_sb = sa.dot(sb);
+    assertTrue(sa_sb instanceof SparseArray || sa_sb instanceof Scalar);
     assertEquals(fa_fb, fa_sb);
     assertEquals(fa_sb, sa_fb);
     assertEquals(sa_fb, sa_sb);
@@ -97,5 +96,50 @@ public class SparseArraysTest extends TestCase {
     _check(_random(8), _random(8, 2));
     _check(_random(5, 6), _random(6));
     _check(_random(2, 3, 4), _random(4, 5));
+  }
+
+  public void testDotZeroX() {
+    _check(Array.zeros(7), _random(7));
+    _check(Array.zeros(8), _random(8, 2));
+    _check(Array.zeros(5, 6), _random(6));
+    _check(Array.zeros(2, 3, 4), _random(4, 5));
+  }
+
+  public void testDotXZero() {
+    _check(_random(7), Array.zeros(7));
+    _check(_random(8), Array.zeros(8, 2));
+    _check(_random(5, 6), Array.zeros(6));
+    _check(_random(2, 3, 4), Array.zeros(4, 5));
+  }
+
+  public void testFallbackFail() {
+    Tensor tensor = SparseArray.of(3);
+    AssertFail.of(() -> tensor.multiply(Quantity.of(7, "s*m")));
+    AssertFail.of(() -> tensor.divide(Quantity.of(7, "s*m")));
+  }
+
+  public void testArraysAsListSerialization() throws ClassNotFoundException, IOException {
+    Serialization.copy(Arrays.asList(3, 4, 5, 6));
+    try {
+      Serialization.copy(Arrays.asList(3, 4, 5, 6).subList(1, 3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
+  }
+
+  public void testArrayListSerialization() throws ClassNotFoundException, IOException {
+    List<Integer> list = new ArrayList<>();
+    list.add(3);
+    list.add(4);
+    list.add(5);
+    list.add(6);
+    Serialization.copy(list);
+    try {
+      Serialization.copy(list.subList(1, 3));
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 }

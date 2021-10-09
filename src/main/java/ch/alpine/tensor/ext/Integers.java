@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -105,7 +107,11 @@ public enum Integers {
   }
 
   // ---
-  /** @param array non-null
+  /** Remark: a sublist of the returned list is {@link Serializable}.
+   * This is in contrast to sublists of {@link Arrays#asList(Object...)}
+   * or {@link ArrayList}, which are not serializable.
+   * 
+   * @param array non-null
    * @return unmodifiable list with elements {array[0], array[1], ...} and size of array.length
    * @see Arrays#asList(Object...) */
   public static List<Integer> asList(int[] array) {
