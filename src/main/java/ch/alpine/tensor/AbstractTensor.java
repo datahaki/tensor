@@ -15,6 +15,11 @@ public abstract class AbstractTensor implements Tensor {
   protected abstract Tensor byRef(int i);
 
   @Override // from Tensor
+  public Tensor copy() {
+    return Tensor.of(stream().map(Tensor::copy));
+  }
+
+  @Override // from Tensor
   public final Scalar Get(int i) {
     return (Scalar) byRef(i);
   }
@@ -56,7 +61,22 @@ public abstract class AbstractTensor implements Tensor {
   }
 
   @Override // from Tensor
-  public final Tensor dot(Tensor tensor) {
+  public Tensor negate() {
+    return Tensor.of(stream().map(Tensor::negate));
+  }
+
+  @Override // from Tensor
+  public Tensor multiply(Scalar scalar) {
+    return Tensor.of(stream().map(tensor -> tensor.multiply(scalar)));
+  }
+
+  @Override // from Tensor
+  public Tensor divide(Scalar scalar) {
+    return Tensor.of(stream().map(tensor -> tensor.divide(scalar)));
+  }
+
+  @Override // from Tensor
+  public Tensor dot(Tensor tensor) {
     if (length() == 0 || byRef(0) instanceof Scalar) { // quick hint whether this is a vector
       Integers.requireEquals(length(), tensor.length());
       AtomicInteger i = new AtomicInteger();
@@ -64,6 +84,11 @@ public abstract class AbstractTensor implements Tensor {
           .reduce(Tensor::add).orElse(RealScalar.ZERO);
     }
     return Tensor.of(stream().map(entry -> entry.dot(tensor)));
+  }
+
+  @Override // from Tensor
+  public Tensor map(Function<Scalar, ? extends Tensor> function) {
+    return Tensor.of(stream().map(tensor -> tensor.map(function)));
   }
 
   @Override // from Tensor

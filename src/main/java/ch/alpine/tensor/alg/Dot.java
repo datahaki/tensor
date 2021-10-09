@@ -93,8 +93,7 @@ public class Dot {
    * @param dimensions2 {head, ...}
    * @return
    * @throws Exception if tail and head are not equal */
-  @PackageTestAccess // Dot is public, the static helper function must not be public
-  static List<Integer> combine(List<Integer> dimensions1, List<Integer> dimensions2) {
+  public static List<Integer> combine(List<Integer> dimensions1, List<Integer> dimensions2) {
     Integers.requireEquals(dimensions1.get(dimensions1.size() - 1), dimensions2.get(0));
     return Stream.concat( //
         dimensions1.stream().limit(dimensions1.size() - 1), //

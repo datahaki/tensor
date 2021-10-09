@@ -33,11 +33,11 @@ public enum TensorWedge {
    * @throws Exception if given tensor does not have regular dimensions */
   public static Tensor of(Tensor tensor) {
     int rank = TensorRank.ofArray(tensor).orElseThrow();
-    return Permutations.stream(Range.of(0, rank)) //
+    return Permutations.stream(Range.of(0, rank)) // stream contains at least 1 element
         .map(permutation -> signed(tensor, Primitives.toIntArray(permutation))) //
         .reduce(Tensor::add) //
         .map(sum -> sum.divide(Factorial.of(rank))) //
-        .orElse(tensor.map(Scalar::zero));
+        .get();
   }
 
   private static Tensor signed(Tensor tensor, int[] sigma) {

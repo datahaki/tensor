@@ -36,6 +36,6 @@ public enum AngleVector {
    * @return AngleVector.of(turns.multiply(Pi.TWO)) */
   public static Tensor turns(Scalar turns) {
     Scalar scalar = MOD.apply(turns);
-    return CirclePoint.INSTANCE.turns(scalar).orElse(of(scalar.multiply(Pi.TWO)));
+    return CirclePoint.INSTANCE.turns(scalar).orElseGet(() -> of(scalar.multiply(Pi.TWO)));
   }
 }

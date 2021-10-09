@@ -3,10 +3,14 @@ package ch.alpine.tensor;
 
 import java.util.Arrays;
 import java.util.NavigableMap;
+import java.util.Random;
 import java.util.TreeMap;
 
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.TensorWedge;
+import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.EmpiricalDistribution;
+import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -64,5 +68,34 @@ public class SparseArraysTest extends TestCase {
   public void testGenerateFail() {
     AssertFail.of(() -> SparseArrays.of(Arrays.asList(), RealScalar.ZERO, new TreeMap<>()));
     AssertFail.of(() -> SparseArrays.of(Arrays.asList(2, 3), RealScalar.ONE, new TreeMap<>()));
+  }
+
+  private final Distribution distribution = EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(20, 1, 1, 1, 1));
+
+  private Tensor _random(int... size) {
+    return RandomVariate.of(distribution, new Random(3), size);
+  }
+
+  private static void _check(Tensor fa, Tensor fb) {
+    assertTrue(fa instanceof TensorImpl);
+    assertTrue(fb instanceof TensorImpl);
+    Tensor sa = SparseArrays.of(fa, RealScalar.ZERO);
+    Tensor sb = SparseArrays.of(fb, RealScalar.ZERO);
+    assertTrue(sa instanceof SparseArray);
+    assertTrue(sb instanceof SparseArray);
+    Tensor fa_fb = fa.dot(fb);
+    Tensor fa_sb = fa.dot(sb);
+    Tensor sa_fb = sa.dot(fb);
+    Tensor sa_sb = sa.dot(sb);
+    assertEquals(fa_fb, fa_sb);
+    assertEquals(fa_sb, sa_fb);
+    assertEquals(sa_fb, sa_sb);
+  }
+
+  public void testDot() {
+    _check(_random(7), _random(7));
+    _check(_random(8), _random(8, 2));
+    _check(_random(5, 6), _random(6));
+    _check(_random(2, 3, 4), _random(4, 5));
   }
 }

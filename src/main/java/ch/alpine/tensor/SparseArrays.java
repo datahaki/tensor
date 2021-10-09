@@ -21,7 +21,7 @@ public enum SparseArrays {
    * @return */
   public static Tensor of(List<Integer> size, Scalar fallback, NavigableMap<Integer, Tensor> navigableMap) {
     Integers.requirePositive(size.size());
-    if (Scalars.nonZero(fallback))
+    if (!fallback.one().zero().equals(fallback))
       throw TensorRuntimeException.of(fallback);
     if (!navigableMap.isEmpty()) {
       int length = size.get(0);
@@ -42,7 +42,7 @@ public enum SparseArrays {
   public static Tensor of(Tensor tensor, Scalar fallback) {
     Dimensions dimensions = new Dimensions(tensor);
     List<Integer> size = dimensions.list();
-    if (0 == size.size())
+    if (0 == size.size()) // tensor is a scalar
       return tensor;
     SparseArray sparseArray = new SparseArray(size, fallback);
     Array.forEach(list -> {

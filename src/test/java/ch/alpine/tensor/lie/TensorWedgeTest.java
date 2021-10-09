@@ -18,6 +18,10 @@ public class TensorWedgeTest extends TestCase {
     assertEquals(TensorWedge.of(), RealScalar.ONE);
   }
 
+  public void testFailEmpty() {
+    assertEquals(TensorWedge.of(Tensors.empty()), Tensors.empty());
+  }
+
   public void testVectors() {
     Tensor x = Tensors.vector(5, 7, 6);
     Tensor y = Tensors.vector(1, 2, -4);

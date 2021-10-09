@@ -12,9 +12,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Lists;
 
-/** reference implementation of the interface Tensor
- * 
- * TODO "dense", or "list" - tensor !? */
+/** reference implementation of the interface Tensor */
 /* package */ class TensorImpl extends AbstractTensor implements Serializable {
   private final List<Tensor> list;
 
@@ -26,11 +24,6 @@ import ch.alpine.tensor.ext.Lists;
   @Override // from Tensor
   public Tensor unmodifiable() {
     return new UnmodifiableTensor(list);
-  }
-
-  @Override // from Tensor
-  public Tensor copy() {
-    return Tensor.of(list.stream().map(Tensor::copy));
   }
 
   @Override // from AbstractTensor
@@ -94,11 +87,6 @@ import ch.alpine.tensor.ext.Lists;
   }
 
   @Override // from Tensor
-  public Tensor negate() {
-    return Tensor.of(list.stream().map(Tensor::negate));
-  }
-
-  @Override // from Tensor
   public Tensor add(Tensor tensor) {
     Integers.requireEquals(length(), tensor.length());
     AtomicInteger i = new AtomicInteger();
@@ -117,21 +105,6 @@ import ch.alpine.tensor.ext.Lists;
     Integers.requireEquals(length(), tensor.length());
     AtomicInteger i = new AtomicInteger();
     return Tensor.of(tensor.stream().map(entry -> list.get(i.getAndIncrement()).pmul(entry)));
-  }
-
-  @Override // from Tensor
-  public Tensor multiply(Scalar scalar) {
-    return Tensor.of(list.stream().map(tensor -> tensor.multiply(scalar)));
-  }
-
-  @Override // from Tensor
-  public Tensor divide(Scalar scalar) {
-    return Tensor.of(list.stream().map(tensor -> tensor.divide(scalar)));
-  }
-
-  @Override // from Tensor
-  public Tensor map(Function<Scalar, ? extends Tensor> function) {
-    return Tensor.of(list.stream().map(tensor -> tensor.map(function)));
   }
 
   // ---

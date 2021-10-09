@@ -17,6 +17,7 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Lists;
 import ch.alpine.tensor.ext.PackageTestAccess;
@@ -189,9 +190,24 @@ import ch.alpine.tensor.ext.PackageTestAccess;
   }
 
   @Override // from Tensor
+  public Tensor dot(Tensor tensor) {
+    if (size.size() == 1)
+      return navigableMap.entrySet().stream() //
+          .map(entry -> tensor.get(entry.getKey()).multiply((Scalar) entry.getValue())) //
+          .reduce(Tensor::add) //
+          .orElseGet(() -> {
+            List<Integer> list = Dot.combine(size, Dimensions.of(tensor));
+            return list.isEmpty() ? fallback : new SparseArray(list, fallback);
+          });
+    List<Integer> list = Dot.combine(size, Dimensions.of(tensor));
+    return new SparseArray(list, fallback, navigableMap.entrySet().stream() //
+        .collect(_map(Entry::getKey, entry -> entry.getValue().dot(tensor))));
+  }
+
+  @Override // from Tensor
   public Tensor map(Function<Scalar, ? extends Tensor> function) {
     Scalar mappedfb = (Scalar) function.apply(fallback);
-    if (Scalars.nonZero(mappedfb))
+    if (!mappedfb.one().zero().equals(mappedfb))
       throw TensorRuntimeException.of(mappedfb);
     return new SparseArray(size, mappedfb, navigableMap.entrySet().stream() //
         .collect(_map(Entry::getKey, entry -> entry.getValue().map(function))));
