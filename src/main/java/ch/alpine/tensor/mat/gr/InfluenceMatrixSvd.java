@@ -2,19 +2,24 @@
 package ch.alpine.tensor.mat.gr;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 
 /* package */ class InfluenceMatrixSvd extends InfluenceMatrixBase implements Serializable {
   private final Tensor design;
   private final SingularValueDecomposition svd;
-  /* matrix is computed on demand */
+  /* matrix computed on demand */
   private Tensor matrix;
+  /* matrix u computed on demand, svd.getU() with columns associated to non-zero singular value */
+  private Tensor u_;
 
   public InfluenceMatrixSvd(Tensor design) {
     this.design = design;
@@ -39,14 +44,18 @@ import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
   }
 
   @Override // from InfluenceMatrix
-  public Tensor image(Tensor vector) {
-    Tensor u = svd.getU();
-    Tensor kron = Tensor.of(svd.values().stream() //
-        .map(Scalar.class::cast) //
-        .map(StaticHelper::unitize_chop)); // emulates v / v for v != 0
-    // TODO could still optimize further by extracting elements from rows in u
-    // Tensor U = Tensor.of(u.stream().map(kron::pmul)); // extract instead of pmul!
-    // return U.dot(vector.dot(U));
-    return u.dot(kron.pmul(vector.dot(u)));
+  public synchronized Tensor image(Tensor vector) {
+    return u_().dot(vector.dot(u_()));
+  }
+
+  private Tensor u_() {
+    if (Objects.isNull(u_)) {
+      Tensor values = svd.values();
+      List<Integer> list = IntStream.range(0, values.length()) //
+          .filter(index -> !Tolerance.CHOP.isZero(values.Get(index))) //
+          .boxed().collect(Collectors.toList());
+      u_ = Tensor.of(svd.getU().stream().map(row -> Tensor.of(list.stream().map(row::Get))));
+    }
+    return u_;
   }
 }
