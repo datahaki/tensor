@@ -41,7 +41,7 @@ public class Subsets {
     return builder.build();
   }
 
-  /***************************************************/
+  // ---
   private final Consumer<Tensor> consumer;
 
   private Subsets(Consumer<Tensor> consumer) {

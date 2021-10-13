@@ -12,6 +12,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -73,6 +74,12 @@ public class DimensionsTest extends TestCase {
     assertEquals(dimensions.lengths(1), new HashSet<>(Arrays.asList(Scalar.LENGTH, 2, 3)));
     assertEquals(dimensions.lengths(2), new HashSet<>(Arrays.asList(Scalar.LENGTH, 1, 2)));
     assertEquals(dimensions.lengths(3), new HashSet<>(Arrays.asList(Scalar.LENGTH, 0)));
+  }
+
+  public void testScalar2() {
+    Dimensions dimensions = new Dimensions(Pi.VALUE);
+    assertTrue(dimensions.isArray());
+    assertEquals(dimensions.list(), Arrays.asList());
   }
 
   public void testLengthsFail() {

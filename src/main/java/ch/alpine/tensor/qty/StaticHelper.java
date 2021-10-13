@@ -1,9 +1,11 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.RealScalar;
@@ -46,7 +48,7 @@ import ch.alpine.tensor.sca.Power;
     Scalar factor = unitSystem.map().get(next);
     Unit unit = Unit.of(next);
     if (Objects.isNull(factor) && //
-    // LONGTERM KnownUnitQ.in(unitSystem) rebuilds a map every time: avoid?
+    // TODO KnownUnitQ.in(unitSystem) rebuilds a map every time: avoid?
         KnownUnitQ.in(unitSystem).require(unit).equals(Unit.of(prev)))
       return RealScalar.ONE;
     Unit rhs = QuantityUnit.of(factor);
@@ -57,5 +59,19 @@ import ch.alpine.tensor.sca.Power;
         QuantityMagnitude.singleton(rhs).apply(factor).reciprocal(), //
         unit), //
         rhs.map().get(prev).reciprocal());
+  }
+
+  /** Example: for the SI unit system, the set of known atomic units contains
+   * "m", "K", "W", "kW", "s", "Hz", ...
+   * 
+   * @return set of all atomic units known by the unit system including those that
+   * are not further convertible */
+  public static Set<String> buildSet(UnitSystem unitSystem) {
+    Set<String> set = new HashSet<>();
+    for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
+      set.add(entry.getKey());
+      set.addAll(QuantityUnit.of(entry.getValue()).map().keySet());
+    }
+    return set;
   }
 }

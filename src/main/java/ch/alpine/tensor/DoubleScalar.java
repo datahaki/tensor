@@ -59,7 +59,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
     return new DoubleScalar(value);
   }
 
-  /***************************************************/
+  // ---
   private final double value;
 
   /** private constructor is only called from of(...)
@@ -119,7 +119,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
     return value;
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
     if (scalar instanceof RealScalar)
@@ -127,7 +127,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
     return scalar.add(this);
   }
 
-  /***************************************************/
+  // ---
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
     if (Double.isNaN(value))
@@ -188,7 +188,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
     return BigDecimal.valueOf(value);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   public int hashCode() {
     // ensure that +0.0 and -0.0 return same hash value

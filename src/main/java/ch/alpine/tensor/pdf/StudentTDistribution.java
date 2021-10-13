@@ -20,9 +20,10 @@ public class StudentTDistribution implements Distribution, //
     MeanInterface, PDF, VarianceInterface, Serializable {
   /** @param mu
    * @param sigma positive
-   * @param v positive
+   * @param v positive real
    * @return */
   public static Distribution of(Scalar mu, Scalar sigma, Scalar v) {
+    Scalars.compare(mu, sigma); // assert that parameters have identical units
     return new StudentTDistribution( //
         mu, //
         Sign.requirePositive(sigma), //
@@ -30,14 +31,14 @@ public class StudentTDistribution implements Distribution, //
   }
 
   /** @param mu
-   * @param sigma
-   * @param v
+   * @param sigma positive
+   * @param v positive
    * @return */
   public static Distribution of(Number mu, Number sigma, Number v) {
     return of(RealScalar.of(mu), RealScalar.of(sigma), RealScalar.of(v));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar mu;
   private final Scalar sigma;
   private final Scalar v;

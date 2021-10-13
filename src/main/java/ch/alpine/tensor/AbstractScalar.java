@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import ch.alpine.tensor.ext.Integers;
+
 /** suggested base class for implementations of {@link Scalar} */
 public abstract class AbstractScalar implements Scalar {
   /** the return type of Scalar#copy is deliberately not Scalar
@@ -21,20 +23,25 @@ public abstract class AbstractScalar implements Scalar {
     return this; // instance of Scalar is immutable
   }
 
+  @Override // from Tensor
+  public final Tensor get(int i) {
+    throw TensorRuntimeException.of(this);
+  }
+
   /** when using get() on {@code AbstractScalar} the list of arguments has to be empty */
   @Override // from Tensor
-  public final Tensor get(Integer... index) {
-    if (0 < index.length)
-      throw new IllegalArgumentException();
-    return this;
+  public final Tensor get(int... index) {
+    if (index.length == 0)
+      return this;
+    throw new IllegalArgumentException();
   }
 
   /** when using get() on {@code AbstractScalar} the list of arguments has to be empty */
   @Override // from Tensor
   public final Tensor get(List<Integer> index) {
-    if (0 < index.size())
-      throw new IllegalArgumentException();
-    return this;
+    if (index.size() == 0)
+      return this;
+    throw new IllegalArgumentException();
   }
 
   @Override // from Tensor
@@ -69,12 +76,22 @@ public abstract class AbstractScalar implements Scalar {
   }
 
   @Override // from Tensor
-  public final void set(Tensor tensor, Integer... index) {
+  public final void set(Tensor tensor, int... index) {
     throw TensorRuntimeException.of(this, tensor);
   }
 
   @Override // from Tensor
-  public final <T extends Tensor> void set(Function<T, ? extends Tensor> function, Integer... index) {
+  public void set(Tensor tensor, List<Integer> index) {
+    throw TensorRuntimeException.of(this, tensor);
+  }
+
+  @Override // from Tensor
+  public final <T extends Tensor> void set(Function<T, ? extends Tensor> function, int... index) {
+    throw TensorRuntimeException.of(this);
+  }
+
+  @Override // from Tensor
+  public <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index) {
     throw TensorRuntimeException.of(this);
   }
 
@@ -95,6 +112,8 @@ public abstract class AbstractScalar implements Scalar {
 
   @Override // from Tensor
   public final Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
+    if (Integers.requireEquals(fromIndex.size(), dimensions.size()) == 0)
+      return this;
     throw TensorRuntimeException.of(this);
   }
 
@@ -103,7 +122,7 @@ public abstract class AbstractScalar implements Scalar {
     throw TensorRuntimeException.of(this, tensor);
   }
 
-  /***************************************************/
+  // ---
   // final default implementations
   @Override // from Scalar
   public final Scalar add(Tensor tensor) {
@@ -120,7 +139,7 @@ public abstract class AbstractScalar implements Scalar {
     return function.apply(this).copy();
   }
 
-  /***************************************************/
+  // ---
   // non-final default implementations; override for precision or speed
   @Override // from Scalar
   public Scalar divide(Scalar scalar) {
@@ -132,12 +151,12 @@ public abstract class AbstractScalar implements Scalar {
     return reciprocal().multiply(scalar);
   }
 
-  /***************************************************/
+  // ---
   /** @param scalar
    * @return this plus given scalar */
   protected abstract Scalar plus(Scalar scalar);
 
-  /***************************************************/
+  // ---
   @Override // from Object
   public abstract int hashCode();
 

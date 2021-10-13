@@ -14,7 +14,6 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.ext.HomeDirectory;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
@@ -26,7 +25,6 @@ public class ImportTest extends TestCase {
   private static final File IO_OBJECT = new File("src/test/resources/io/object");
   public static final File IO_OBJECT_TENSOR = new File(IO_OBJECT, "tensor.object");
   public static final File IO_OBJECT_UNMODIFIABLE = new File(IO_OBJECT, "unmodifiable.object");
-  public static final File IO_OBJECT_VIEWTENSOR = new File(IO_OBJECT, "viewtensor.object");
   public static final Tensor CONTENT = Tensors.of( //
       RealScalar.ONE, //
       RealScalar.of(3.15), //
@@ -99,19 +97,13 @@ public class ImportTest extends TestCase {
   }
 
   public void testFolderCsvClosed() throws IOException {
-    File dir = HomeDirectory.file("tensorTest" + System.currentTimeMillis());
-    assertFalse(dir.exists());
-    dir.mkdir();
-    assertTrue(dir.isDirectory());
-    File file = new File(dir, "tensorTest" + ImportTest.class.getSimpleName() + ".csv");
-    assertFalse(file.exists());
+    File file = TestFile.withExtension("csv");
     Export.of(file, Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}}"));
     assertTrue(file.isFile());
     assertTrue(12 <= file.length());
     Tensor table = Import.of(file);
     assertEquals(Dimensions.of(table), Arrays.asList(3, 2));
     assertTrue(file.delete());
-    assertTrue(dir.delete());
   }
 
   public void testPng() throws Exception {
@@ -154,11 +146,10 @@ public class ImportTest extends TestCase {
     assertTrue(Tensors.isUnmodifiable(tensor));
     assertEquals(tensor, CONTENT);
   }
-
-  public void testSerialization3() throws ClassNotFoundException, IOException, DataFormatException {
-    Tensor tensor = Import.object(IO_OBJECT_VIEWTENSOR);
-    assertEquals(tensor, CONTENT);
-  }
+  // public void testSerialization3() throws ClassNotFoundException, IOException, DataFormatException {
+  // Tensor tensor = Import.object(IO_OBJECT_VIEWTENSOR);
+  // assertEquals(tensor, CONTENT);
+  // }
 
   public void testUnknownFail() {
     File file = new File(getClass().getResource("/io/extension.unknown").getFile());

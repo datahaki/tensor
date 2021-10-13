@@ -7,6 +7,7 @@ import java.util.Random;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Exp;
@@ -25,8 +26,7 @@ import ch.alpine.tensor.sca.Sign;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ExponentialDistribution.html">ExponentialDistribution</a> */
-public class ExponentialDistribution implements //
-    ContinuousDistribution, Serializable {
+public class ExponentialDistribution implements ContinuousDistribution, Serializable {
   private static final Distribution STANDARD = ExponentialDistribution.of(RealScalar.ONE);
 
   /** @param lambda positive, may be instance of {@link Quantity}
@@ -46,7 +46,7 @@ public class ExponentialDistribution implements //
     return STANDARD;
   }
 
-  /***************************************************/
+  // ---
   private final Scalar lambda;
   private final Scalar lambda_negate;
 
@@ -61,7 +61,8 @@ public class ExponentialDistribution implements //
     return randomVariate(random.nextDouble());
   }
 
-  /* package */ Scalar randomVariate(double reference) {
+  @PackageTestAccess
+  Scalar randomVariate(double reference) {
     Scalar p = DoubleScalar.of(Math.nextUp(reference));
     return Log.FUNCTION.apply(p).divide(lambda_negate);
   }

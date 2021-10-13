@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -12,6 +13,7 @@ import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -19,6 +21,7 @@ import ch.alpine.tensor.pdf.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RootsTest extends TestCase {
@@ -56,7 +59,7 @@ public class RootsTest extends TestCase {
         if (Scalars.nonZero(Last.of(coeffs))) {
           Tensor roots = Roots.of(coeffs);
           VectorQ.requireLength(roots, length - 1);
-          Tensor check = roots.map(Series.of(coeffs));
+          Tensor check = roots.map(Polynomial.of(coeffs));
           if (!Chop._03.allZero(check)) {
             System.err.println("uni5 " + coeffs);
             System.err.println(check);
@@ -75,7 +78,7 @@ public class RootsTest extends TestCase {
         if (Scalars.nonZero(Last.of(coeffs))) {
           Tensor roots = Roots.of(coeffs);
           VectorQ.requireLength(roots, length - 1);
-          Tensor check = roots.map(Series.of(coeffs));
+          Tensor check = roots.map(Polynomial.of(coeffs));
           if (!Chop._03.allZero(check)) {
             System.err.println("uniT " + coeffs);
             System.err.println(check);
@@ -92,7 +95,7 @@ public class RootsTest extends TestCase {
       for (int index = 0; index < LIMIT; ++index) {
         Tensor coeffs = RandomVariate.of(distribution, length);
         Tensor roots = Roots.of(coeffs);
-        Tensor check = roots.map(Series.of(coeffs));
+        Tensor check = roots.map(Polynomial.of(coeffs));
         Chop._04.requireAllZero(check);
       }
   }
@@ -103,7 +106,7 @@ public class RootsTest extends TestCase {
       for (int index = 0; index < LIMIT; ++index) {
         Tensor coeffs = RandomVariate.of(distribution, length);
         Tensor roots = Roots.of(coeffs);
-        ScalarUnaryOperator scalarUnaryOperator = Series.of(coeffs);
+        ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
         Tensor tensor = roots.map(scalarUnaryOperator);
         boolean allZero = Chop._04.allZero(tensor);
         if (!allZero) {
@@ -120,7 +123,7 @@ public class RootsTest extends TestCase {
       for (int index = 0; index < LIMIT; ++index) {
         Tensor coeffs = Array.of(list -> Quantity.of(RandomVariate.of(distribution), "m^-" + list.get(0)), length);
         Tensor roots = Roots.of(coeffs);
-        ScalarUnaryOperator scalarUnaryOperator = Series.of(coeffs);
+        ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
         Tensor tensor = roots.map(scalarUnaryOperator);
         boolean allZero = Chop._04.allZero(tensor);
         if (!allZero) {
@@ -139,7 +142,7 @@ public class RootsTest extends TestCase {
             RandomVariate.of(distribution, length), //
             RandomVariate.of(distribution, length));
         Tensor roots = Roots.of(coeffs);
-        ScalarUnaryOperator scalarUnaryOperator = Series.of(coeffs);
+        ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
         Tensor tensor = roots.map(scalarUnaryOperator);
         boolean allZero = Chop._04.allZero(tensor);
         if (!allZero) {
@@ -157,7 +160,7 @@ public class RootsTest extends TestCase {
         Tensor coeffs = Array.of(list -> Quantity.of(ComplexScalar.of( //
             RandomVariate.of(distribution), RandomVariate.of(distribution)), "m^-" + list.get(0)), length);
         Tensor roots = Roots.of(coeffs);
-        ScalarUnaryOperator scalarUnaryOperator = Series.of(coeffs);
+        ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
         Tensor tensor = roots.map(scalarUnaryOperator);
         boolean allZero = Chop._04.allZero(tensor);
         if (!allZero) {
@@ -214,5 +217,37 @@ public class RootsTest extends TestCase {
           }
         }
       }
+  }
+
+  public void testScalarFail() {
+    AssertFail.of(() -> Roots.of(RealScalar.ONE));
+  }
+
+  public void testEmptyFail() {
+    AssertFail.of(() -> Roots.of(Tensors.empty()));
+  }
+
+  public void testOnes() {
+    Tensor coeffs = Tensors.vector(0);
+    AssertFail.of(() -> Roots.of(coeffs));
+  }
+
+  public void testConstantZeroFail() {
+    AssertFail.of(() -> Roots.of(Tensors.vector(0)));
+  }
+
+  public void testZerosFail() {
+    for (int n = 0; n < 10; ++n) {
+      int fn = n;
+      AssertFail.of(() -> Roots.of(Array.zeros(fn)));
+    }
+  }
+
+  public void testMatrixFail() {
+    AssertFail.of(() -> Roots.of(HilbertMatrix.of(2, 3)));
+  }
+
+  public void testNotImplemented() {
+    AssertFail.of(() -> Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6)));
   }
 }

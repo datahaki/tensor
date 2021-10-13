@@ -30,7 +30,24 @@ public enum Flatten {
    * @param tensors one or more
    * @return */
   public static Tensor of(Tensor... tensors) {
+    // input and output share references to scalar instances only
+    // therefore Tensor::copy is not necessary
     return Tensor.of(Stream.of(tensors).flatMap(tensor -> tensor.flatten(-1)));
+  }
+
+  /** Special case of {@link Flatten#of(Tensor...)}
+   * 
+   * Implementation as in Mathematica::Flatten
+   * <pre>
+   * Flatten[{{a, b, c}, {{d}, e}}] == {a, b, c, d, e}
+   * </pre>
+   * 
+   * @param tensor
+   * @return */
+  public static Tensor of(Tensor tensor) {
+    // input and output share references to scalar instances only
+    // therefore Tensor::copy is not necessary
+    return Tensor.of(tensor.flatten(-1));
   }
 
   /** Remark: in the special case of level == 0, the

@@ -1,15 +1,13 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.lie.MatrixPower;
+import ch.alpine.tensor.mat.ex.MatrixPower;
+import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.red.KroneckerDelta;
 
 /** implementation is consistent with Mathematica.
@@ -40,22 +38,14 @@ public enum IdentityMatrix {
     return Tensors.matrix(KroneckerDelta::of, n, n);
   }
 
-  /** @param matrix square
+  /** function provides the neutral multiplicative element for a matrix
+   * with entries of type {@link GaussScalar}, etc.
+   * 
+   * @param matrix square
    * @return
    * @throws Exception if given matrix is not a square matrix */
   public static Tensor of(Tensor matrix) {
-    if (matrix.length() == Unprotect.dimension1(matrix)) {
-      AtomicInteger i = new AtomicInteger();
-      return Tensor.of(matrix.stream().map(row -> {
-        int index = i.getAndIncrement();
-        AtomicInteger j = new AtomicInteger();
-        return Tensor.of(row.stream() //
-            .map(Scalar.class::cast) //
-            .map(scalar -> j.getAndIncrement() == index //
-                ? scalar.one()
-                : scalar.zero()));
-      }));
-    }
-    throw TensorRuntimeException.of(matrix);
+    int n = Integers.requireEquals(matrix.length(), Unprotect.dimension1(matrix));
+    return Tensors.matrix((i, j) -> i.equals(j) ? matrix.Get(i, j).one() : matrix.Get(i, j).zero(), n, n);
   }
 }

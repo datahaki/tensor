@@ -7,6 +7,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
@@ -120,5 +121,13 @@ public class ClipTest extends TestCase {
     assertFalse(clip.isOutside(Quantity.of(2, "m")));
     assertTrue(clip.isOutside(Quantity.of(3, "m")));
     AssertFail.of(() -> clip.isOutside(Quantity.of(3, "V")));
+  }
+
+  public void testEps() {
+    Clip clip = Clips.interval(0, Double.MIN_VALUE);
+    assertEquals(clip.rescale(RealScalar.of(Double.MIN_VALUE)), RealScalar.ONE);
+    assertEquals(clip.rescale(Pi.VALUE), RealScalar.ONE);
+    assertEquals(clip.rescale(RealScalar.ZERO), RealScalar.ZERO);
+    assertEquals(clip.rescale(Pi.VALUE.negate()), RealScalar.ZERO);
   }
 }

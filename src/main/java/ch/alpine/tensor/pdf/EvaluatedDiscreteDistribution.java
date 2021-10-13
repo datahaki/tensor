@@ -10,6 +10,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
 
@@ -78,10 +79,9 @@ public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDist
     return inverse_cdf.higherEntry(p).getValue();
   }
 
-  /** function for testing
-   * 
-   * @return */
-  /* package */ final NavigableMap<Scalar, Scalar> inverse_cdf() {
+  /** @return */
+  @PackageTestAccess
+  final NavigableMap<Scalar, Scalar> inverse_cdf() {
     return Collections.unmodifiableNavigableMap(inverse_cdf);
   }
 }

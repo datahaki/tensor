@@ -15,8 +15,8 @@ import ch.alpine.tensor.Scalar;
  * <p>For large n, and p away from 0, or 1, the option to approximate the
  * distribution as a {@link NormalDistribution} should be considered.
  * 
- * @see BinomialDistribution */
-// implementation by Claudio Ruch
+ * @see BinomialDistribution
+ * @author Claudio Ruch */
 /* package */ class BinomialRandomVariate implements Distribution, //
     MeanInterface, RandomVariateInterface, VarianceInterface, Serializable {
   private final int n;

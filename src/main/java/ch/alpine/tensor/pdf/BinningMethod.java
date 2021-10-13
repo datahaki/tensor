@@ -8,11 +8,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.InterquartileRange;
-import ch.alpine.tensor.red.Max;
-import ch.alpine.tensor.red.Min;
+import ch.alpine.tensor.red.ScalarSummaryStatistics;
 import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.sca.Ceiling;
-import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.CubeRoot;
 import ch.alpine.tensor.sca.Sqrt;
 
@@ -48,7 +46,7 @@ public enum BinningMethod implements TensorScalarFunction {
     @Override
     public Scalar apply(Tensor tensor) {
       Scalar crl = crt_length(tensor);
-      return division(tensor, Ceiling.FUNCTION.apply(crl.add(crl)));
+      return width(tensor).divide(Ceiling.FUNCTION.apply(crl.add(crl)));
     }
   },
   /** Square-root choice:
@@ -59,7 +57,7 @@ public enum BinningMethod implements TensorScalarFunction {
   SQRT {
     @Override
     public Scalar apply(Tensor tensor) {
-      return division(tensor, Sqrt.FUNCTION.apply(RealScalar.of(tensor.length())));
+      return width(tensor).divide(Sqrt.FUNCTION.apply(RealScalar.of(tensor.length())));
     }
   };
 
@@ -69,9 +67,12 @@ public enum BinningMethod implements TensorScalarFunction {
     return CubeRoot.FUNCTION.apply(RealScalar.of(tensor.length()));
   }
 
-  private static Scalar division(Tensor tensor, Scalar k) {
-    return Clips.interval( //
-        (Scalar) tensor.stream().reduce(Min::of).get(), //
-        (Scalar) tensor.stream().reduce(Max::of).get()).width().divide(k);
+  // helper function
+  private static Scalar width(Tensor tensor) {
+    return tensor.stream() //
+        .map(Scalar.class::cast) //
+        .collect(ScalarSummaryStatistics.collector()) //
+        .getClip() //
+        .width();
   }
 }

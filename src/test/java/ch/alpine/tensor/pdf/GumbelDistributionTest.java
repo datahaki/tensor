@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.NumberQ;
@@ -90,5 +91,15 @@ public class GumbelDistributionTest extends TestCase {
   public void testBetaNonPositiveFail() {
     AssertFail.of(() -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0)));
     AssertFail.of(() -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(-1)));
+  }
+
+  public void testComplexFail() {
+    AssertFail.of(() -> GumbelDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
+  }
+
+  public void testQuantityFail() {
+    AssertFail.of(() -> GumbelDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    AssertFail.of(() -> GumbelDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    AssertFail.of(() -> GumbelDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 }

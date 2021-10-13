@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -95,6 +96,13 @@ public class CacheTest extends TestCase {
     cache.apply(tensor.copy());
     assertEquals(cache.size(), 1);
     assertEquals(tensorStringFunc.count, 1);
+  }
+
+  public void testValueNull() {
+    Cache<Tensor, String> cache = Cache.of(t -> t.equals(RealScalar.ZERO) ? null : t.toString(), 10);
+    assertEquals(cache.apply(RealScalar.ONE), "1");
+    assertTrue(Objects.isNull(cache.apply(RealScalar.ZERO)));
+    assertTrue(Objects.isNull(cache.apply(RealScalar.ZERO)));
   }
 
   public void testTensor2() {

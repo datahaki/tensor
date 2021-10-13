@@ -17,7 +17,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 /* package */ class HornerScheme implements ScalarUnaryOperator {
   private final Tensor coeffs;
 
-  // careful: the coeffs are in reversed order in comparison to Series
+  // careful: the coeffs are in reversed order in comparison to Polynomial
   public HornerScheme(Tensor coeffs) {
     this.coeffs = coeffs;
   }

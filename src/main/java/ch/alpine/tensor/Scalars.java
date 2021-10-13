@@ -110,7 +110,7 @@ public enum Scalars {
     return scalar -> Quantity.of(scalar, unit);
   }
 
-  /***************************************************/
+  // ---
   /** exact conversion to primitive type {@code int}
    * 
    * <p>function succeeds if given scalar is
@@ -143,7 +143,7 @@ public enum Scalars {
     return OptionalInt.empty();
   }
 
-  /***************************************************/
+  // ---
   /** exact conversion to primitive type {@code long}
    * 
    * <p>function succeeds if given scalar is
@@ -161,7 +161,7 @@ public enum Scalars {
     return bigIntegerValueExact(scalar).longValueExact();
   }
 
-  /***************************************************/
+  // ---
   /** exact conversion to type {@code BigInteger}
    * 
    * <p>function succeeds if given scalar is instance of

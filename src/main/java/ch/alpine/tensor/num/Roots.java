@@ -15,7 +15,7 @@ import ch.alpine.tensor.alg.Sort;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Roots.html">Roots</a>
  * 
- * @see Series */
+ * @see Polynomial */
 public enum Roots {
   ;
   /** attempts to find all roots of a polynomial
@@ -35,7 +35,7 @@ public enum Roots {
     try {
       return Sort.of(roots);
     } catch (Exception exception) {
-      // LONGTERM create comparator that also handles complex roots
+      // TODO create comparator that also handles complex roots
     }
     return roots;
   }

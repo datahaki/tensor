@@ -4,6 +4,8 @@ package ch.alpine.tensor.red;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.ext.Lists;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -45,6 +47,7 @@ public class TimesTest extends TestCase {
     Tensor a = Tensors.matrix(new Number[][] { { 1, 2 }, { 3, 4 }, { 5, 6 } });
     Tensor r = Times.pmul(a);
     assertEquals(r, Tensors.vector(15, 48));
+    assertEquals(Dimensions.of(r), Lists.rest(Dimensions.of(a)));
   }
 
   public void testPmul3() {

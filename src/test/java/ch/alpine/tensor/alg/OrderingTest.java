@@ -84,6 +84,16 @@ public class OrderingTest extends TestCase {
     assertTrue(Arrays.equals(Ordering.DECREASING.of(HilbertMatrix.of(4)), new int[] { 0, 1, 2, 3 }));
   }
 
+  public void testIndex() {
+    Tensor vector = Tensors.vector(2, 5, 4, 1, 0, 3);
+    int[] array = Ordering.INCREASING.of(vector);
+    assertEquals(Tensors.vectorInt(array), Tensors.vector(4, 3, 0, 5, 2, 1));
+    int[] inverse = new int[vector.length()];
+    for (int i = 0; i < vector.length(); ++i)
+      inverse[vector.Get(i).number().intValue()] = i;
+    assertEquals(Tensors.vectorInt(inverse), Tensors.vector(4, 3, 0, 5, 2, 1));
+  }
+
   public void testScalarFail() {
     AssertFail.of(() -> Ordering.INCREASING.of(Pi.HALF));
   }

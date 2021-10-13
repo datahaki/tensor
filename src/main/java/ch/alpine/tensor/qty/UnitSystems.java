@@ -27,7 +27,7 @@ public enum UnitSystems {
         .collect(Collectors.toSet());
   }
 
-  /***************************************************/
+  // ---
   /** Examples:
    * A unit system with "min" as the default time unit:
    * <pre>
@@ -63,7 +63,7 @@ public enum UnitSystems {
         .collect(Collectors.toMap(Entry::getKey, entry -> unitSystem.apply(entry.getValue())))); // strict
   }
 
-  /***************************************************/
+  // ---
   public static UnitSystem join(UnitSystem u1, UnitSystem u2) {
     Map<String, Scalar> map = new HashMap<>(u1.map());
     u2.map().entrySet().stream() //

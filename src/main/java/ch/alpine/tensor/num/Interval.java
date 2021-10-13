@@ -54,7 +54,7 @@ import ch.alpine.tensor.sca.Sign;
     return new Interval(Clips.interval(min, max));
   }
 
-  /***************************************************/
+  // ---
   private final Clip clip;
 
   private Interval(Clip clip) {
@@ -125,7 +125,7 @@ import ch.alpine.tensor.sca.Sign;
     throw TensorRuntimeException.of(this);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbsInterface
   public Scalar abs() {
     Scalar pa = Abs.FUNCTION.apply(clip.min());
@@ -170,7 +170,7 @@ import ch.alpine.tensor.sca.Sign;
   public Scalar power(Scalar exponent) {
     Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
     if (optional.isPresent())
-      return BINARY_POWER.raise(this, optional.get());
+      return BINARY_POWER.raise(this, optional.orElseThrow());
     throw TensorRuntimeException.of(this);
   }
 
@@ -202,7 +202,7 @@ import ch.alpine.tensor.sca.Sign;
         Sign.FUNCTION.apply(clip.max()));
   }
 
-  /***************************************************/
+  // ---
   @Override
   public int hashCode() {
     return clip.hashCode();

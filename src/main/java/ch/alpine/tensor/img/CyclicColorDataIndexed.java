@@ -17,7 +17,7 @@ public class CyclicColorDataIndexed extends BaseColorDataIndexed {
     return new CyclicColorDataIndexed(tensor.copy());
   }
 
-  /***************************************************/
+  // ---
   private final Mod mod;
 
   /** @param tensor with dimensions N x 4 where each row encodes {R, G, B, A} */

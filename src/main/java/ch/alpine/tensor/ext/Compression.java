@@ -39,8 +39,15 @@ public enum Compression {
     return inflate(data, 0, data.length);
   }
 
-  // helper function
-  /* package */ static byte[] inflate(byte[] data, int off, int len) throws DataFormatException {
+  /** decompression
+   * 
+   * @param data
+   * @param off
+   * @param len
+   * @return
+   * @throws DataFormatException */
+  @PackageTestAccess // to test failure on inconsistent input parameters
+  static byte[] inflate(byte[] data, int off, int len) throws DataFormatException {
     Inflater inflater = new Inflater();
     inflater.setInput(data, off, len);
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

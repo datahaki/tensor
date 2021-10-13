@@ -29,7 +29,7 @@ public class Timing {
     return new Timing();
   }
 
-  /***************************************************/
+  // ---
   /** last frozen display, initialized at 0:00:00 */
   private long frozen;
   /** last internal {@link System#nanoTime()} time when timing was started */

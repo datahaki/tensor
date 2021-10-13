@@ -3,8 +3,8 @@ package ch.alpine.tensor.nrm;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.lie.MatrixExp;
-import ch.alpine.tensor.lie.MatrixLog;
+import ch.alpine.tensor.mat.ex.MatrixExp;
+import ch.alpine.tensor.mat.ex.MatrixLog;
 import ch.alpine.tensor.mat.sv.SingularValueList;
 import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.sca.Sqrt;

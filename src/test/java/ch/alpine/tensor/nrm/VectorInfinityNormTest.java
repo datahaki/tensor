@@ -2,12 +2,19 @@
 package ch.alpine.tensor.nrm;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
 import junit.framework.TestCase;
 
 public class VectorInfinityNormTest extends TestCase {
+  public void testOneInfNorm1() {
+    Tensor a = Tensors.vector(3, -4);
+    assertEquals(Vector1Norm.of(a), Scalars.fromString("7"));
+    assertEquals(VectorInfinityNorm.of(a), Scalars.fromString("4"));
+  }
+
   public void testQuantity() {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(-4, "m");

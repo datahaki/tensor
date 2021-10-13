@@ -35,7 +35,7 @@ public class AnimatedGifWriter implements AutoCloseable {
     return new AnimatedGifWriter(imageOutputStream, period, loop);
   }
 
-  /***************************************************/
+  // ---
   private final ImageOutputStream imageOutputStream;
   private final int period;
   private final boolean loop;

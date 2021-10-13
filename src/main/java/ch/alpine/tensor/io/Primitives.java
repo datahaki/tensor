@@ -25,7 +25,7 @@ public enum Primitives {
     return tensor.flatten(-1).map(Scalar.class::cast).map(Scalar::number);
   }
 
-  /***************************************************/
+  // ---
   /** @param tensor
    * @return list of double values of all scalars in tensor */
   public static List<Double> toListDouble(Tensor tensor) {
@@ -57,7 +57,7 @@ public enum Primitives {
     return doubleBuffer;
   }
 
-  /***************************************************/
+  // ---
   /** @param tensor
    * @return list of double values of all scalars in tensor */
   public static List<Float> toListFloat(Tensor tensor) {
@@ -89,7 +89,7 @@ public enum Primitives {
     return floatBuffer;
   }
 
-  /***************************************************/
+  // ---
   /** does not perform rounding, but uses Scalar::number().longValue()
    * 
    * @param tensor
@@ -115,7 +115,7 @@ public enum Primitives {
     return longBuffer;
   }
 
-  /***************************************************/
+  // ---
   /** does not perform rounding, but uses Scalar::number().intValue()
    * 
    * @param tensor
@@ -153,7 +153,7 @@ public enum Primitives {
     return intBuffer;
   }
 
-  /***************************************************/
+  // ---
   /** @param tensor
    * @return array of byte values of all scalars in given tensor */
   public static byte[] toByteArray(Tensor tensor) {

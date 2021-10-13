@@ -15,7 +15,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Mod.html">Mod</a> */
-// LONGTERM implement https://en.wikipedia.org/wiki/Modular_arithmetic
+// TODO implement https://en.wikipedia.org/wiki/Modular_arithmetic
 public class Mod implements ScalarUnaryOperator {
   /** @param n
    * @return remainder on division by n */
@@ -45,7 +45,7 @@ public class Mod implements ScalarUnaryOperator {
     return function(RealScalar.of(n), RealScalar.of(d));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar n;
   private final Scalar d;
 

@@ -7,6 +7,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -35,7 +36,11 @@ public class ConstantArrayTest extends TestCase {
   public void testScalar() {
     Tensor repmat = ConstantArray.of(RealScalar.ZERO);
     assertTrue(repmat instanceof Scalar);
-    assertEquals(Dimensions.of(repmat), Arrays.asList());
+  }
+
+  public void testScalar1() {
+    Tensor repmat = ConstantArray.of(Pi.VALUE, Arrays.asList());
+    assertTrue(repmat instanceof Scalar);
   }
 
   public void testZeros() {

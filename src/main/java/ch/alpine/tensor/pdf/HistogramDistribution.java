@@ -59,7 +59,7 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
     return of(samples, BinningMethod.IQR);
   }
 
-  /***************************************************/
+  // ---
   private final ScalarUnaryOperator discrete;
   private final ScalarUnaryOperator original;
   private final EmpiricalDistribution empiricalDistribution;
@@ -67,7 +67,7 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
   private final Scalar width_half;
 
   private HistogramDistribution(Tensor samples, Scalar width) {
-    Scalar min = Floor.toMultipleOf(width).apply((Scalar) samples.stream().reduce(Min::of).get());
+    Scalar min = Floor.toMultipleOf(width).apply((Scalar) samples.stream().reduce(Min::of).orElseThrow());
     discrete = scalar -> scalar.subtract(min).divide(width);
     original = scalar -> scalar.multiply(width).add(min);
     empiricalDistribution = //

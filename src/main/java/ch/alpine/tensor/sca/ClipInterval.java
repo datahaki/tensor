@@ -12,7 +12,7 @@ import ch.alpine.tensor.TensorRuntimeException;
   private final Scalar max;
   private final Scalar width;
 
-  ClipInterval(Scalar min, Scalar max, Scalar width) {
+  public ClipInterval(Scalar min, Scalar max, Scalar width) {
     this.min = min;
     this.max = max;
     this.width = width;
@@ -70,7 +70,7 @@ import ch.alpine.tensor.TensorRuntimeException;
     return width;
   }
 
-  /***************************************************/
+  // ---
   @Override // from Object
   public final int hashCode() {
     return min.hashCode() + 31 * max.hashCode();

@@ -8,27 +8,24 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 
 public class NdMatch<V> implements Serializable {
-  private final Tensor location;
-  private final V value;
+  private final NdEntry<V> ndEntry;
   private final Scalar distance;
 
-  /** @param location
-   * @param value
+  /** @param ndEntry
    * @param distance */
-  /* package */ NdMatch(Tensor location, V value, Scalar distance) {
-    this.location = location;
-    this.value = value;
+  /* package */ NdMatch(NdEntry<V> ndEntry, Scalar distance) {
+    this.ndEntry = ndEntry;
     this.distance = distance;
   }
 
   /** @return location in map */
   public Tensor location() {
-    return location;
+    return ndEntry.location();
   }
 
   /** @return value associated to location in map */
   public V value() {
-    return value;
+    return ndEntry.value();
   }
 
   /** @return distance of location to center of cluster */

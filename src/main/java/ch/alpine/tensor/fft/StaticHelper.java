@@ -12,14 +12,12 @@ import ch.alpine.tensor.red.Total;
 
 /* package */ enum StaticHelper {
   ;
-  private static final Tensor SINGLE_ZERO = Tensors.vector(0);
-
   /** @param length
    * @param window
    * @return symmetric vector of given length of weights that sum up to length */
   public static Tensor weights(int length, ScalarUnaryOperator window) {
     Tensor samples = 1 == length //
-        ? SINGLE_ZERO
+        ? Tensors.vector(0)
         : samples(length);
     Tensor weights = samples.map(window);
     return weights.multiply(RealScalar.of(length).divide(Total.ofVector(weights)));

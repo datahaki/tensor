@@ -1,6 +1,8 @@
 // code by gjoel
 package ch.alpine.tensor.red;
 
+import java.util.Random;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -39,13 +41,14 @@ public class InterquartileRangeTest extends TestCase {
   }
 
   public void testDistributionPoisson() { // discrete
+    Random random = new Random(123);
     // Mathematica: InterquartileRange[PoissonDistribution[10.5]] == 5
     Scalar lambda = RealScalar.of(10.5);
     Distribution distribution = PoissonDistribution.of(lambda);
     Scalar iqr = InterquartileRange.of(distribution);
     assertEquals(iqr, RealScalar.of(5));
-    Tensor random = RandomVariate.of(distribution, 1100);
-    Scalar test = InterquartileRange.of(random);
+    Tensor vector = RandomVariate.of(distribution, random, 1000);
+    Scalar test = InterquartileRange.of(vector);
     assertTrue(Clips.interval(4, 6).isInside(test));
   }
 

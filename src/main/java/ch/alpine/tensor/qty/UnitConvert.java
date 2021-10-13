@@ -23,7 +23,7 @@ public class UnitConvert implements Serializable {
     return SI;
   }
 
-  /***************************************************/
+  // ---
   private final UnitSystem unitSystem;
 
   /** @param unitSystem non-null

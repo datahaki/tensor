@@ -19,7 +19,7 @@ import ch.alpine.tensor.sca.win.WindowFunctions;
  * <a href="https://reference.wolfram.com/language/ref/SpectrogramArray.html">SpectrogramArray</a>
  * 
  * @see WindowFunctions */
-// LONGTERM API so that domain of frequencies is also provided
+// TODO API so that domain of frequencies is also provided
 public class SpectrogramArray implements TensorUnaryOperator {
   private static final ScalarUnaryOperator LOG2 = Log.base(2);
 
@@ -46,7 +46,7 @@ public class SpectrogramArray implements TensorUnaryOperator {
     return Round.intValueExact(RationalScalar.of(windowLength, 3));
   }
 
-  /***************************************************/
+  // ---
   /** @param windowLength
    * @param offset
    * @param window for instance {@link DirichletWindow#FUNCTION}
@@ -89,7 +89,7 @@ public class SpectrogramArray implements TensorUnaryOperator {
     return Round.intValueExact(windowDuration.multiply(samplingFrequency));
   }
 
-  /***************************************************/
+  // ---
   private final int windowLength;
   private final int offset;
   private final TensorUnaryOperator tensorUnaryOperator;

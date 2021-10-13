@@ -19,7 +19,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
       Tensor coeffs = RandomVariate.of(distribution, 4);
       Tensor r0 = RootsDegree3Full.of(coeffs);
       Tensor r1 = RootsDegree3.of(coeffs);
-      ScalarUnaryOperator scalarUnaryOperator = Series.of(coeffs);
+      ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
       errors.append(Tensors.of( //
           VectorInfinityNorm.of(r0.map(scalarUnaryOperator)), //
           VectorInfinityNorm.of(r1.map(scalarUnaryOperator))));

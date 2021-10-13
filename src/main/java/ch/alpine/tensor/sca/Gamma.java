@@ -52,9 +52,10 @@ public enum Gamma implements ScalarUnaryOperator {
       return DoubleScalar.POSITIVE_INFINITY;
     }
     if (Sign.isPositive(re))
-      return Exp.FUNCTION.apply(LogGamma.positive(z));
+      return Exp.FUNCTION.apply(LogGammaRestricted.FUNCTION.apply(z));
     Scalar zp = RealScalar.ONE.subtract(z);
-    return Exp.FUNCTION.apply(LogGamma.positive(RealScalar.ONE.add(zp))).multiply(Sinc.FUNCTION.apply(Pi.VALUE.multiply(zp))).reciprocal();
+    return Exp.FUNCTION.apply(LogGammaRestricted.FUNCTION.apply(RealScalar.ONE.add(zp))) //
+        .multiply(Sinc.FUNCTION.apply(Pi.VALUE.multiply(zp))).reciprocal();
   }
 
   /** @param tensor

@@ -1,68 +1,58 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.List;
+import java.util.stream.IntStream;
 
-import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.ext.Integers;
 
 /** utility class for {@link Transpose} */
-/* package */ class Size implements Iterable<MultiIndex> {
-  /** @param dims
-   * @throws Exception if dims.length == 0 */
-  public static Size of(int[] dims) {
-    return new Size(Arrays.copyOf(dims, dims.length));
+/* package */ class Size {
+  /** @param list for instance Dimensions[tensor]
+   * @return */
+  public static Size of(List<Integer> list) {
+    return new Size(list.stream().mapToInt(Integer::intValue).toArray());
   }
 
-  /***************************************************/
+  // ---
   private final int[] size;
   private final int[] prod;
 
-  /** @param dims
-   * @throws Exception if dims.length == 0 */
-  private Size(int[] dims) {
-    size = dims;
-    prod = new int[dims.length];
-    final int dmo = dims.length - 1;
-    prod[dmo] = 1;
-    for (int index = 0; index < dmo; ++index)
-      prod[dmo - (index + 1)] = prod[dmo - index] * size[dmo - index];
+  /** @param size
+   * @throws Exception if size.length == 0 */
+  private Size(int[] size) {
+    this.size = size;
+    prod = new int[size.length];
+    int last = size.length - 1;
+    prod[last] = 1;
+    for (int index = last; 0 < index; --index)
+      prod[index - 1] = Math.multiplyExact(prod[index], size[index]);
   }
 
-  public Size permute(int[] sigma) {
-    return new Size(StaticHelper.permute(size, sigma));
+  public int total() {
+    return Math.multiplyExact(prod[0], size[0]);
   }
 
-  public int indexOf(MultiIndex multiIndex) {
-    int pos = 0;
-    for (int index = 0; index < prod.length; ++index)
-      pos += prod[index] * multiIndex.at(index);
-    return pos;
+  /** Example:
+   * { 2, 3, 4 }.Permute[{ 2, 0, 1 }] == {3, 4, 2}
+   * 
+   * @param sigma permutation
+   * @return
+   * @throws Exception if given sigma is not a permutation */
+  public int[] permute(int[] sigma) {
+    Integers.requirePermutation(sigma);
+    Integers.requireEquals(size.length, sigma.length);
+    int[] dims = new int[sigma.length];
+    for (int index = 0; index < sigma.length; ++index)
+      dims[sigma[index]] = size[index];
+    return dims;
   }
 
-  public int size(int index) {
-    return size[index];
+  public int prod(int c0) {
+    return prod[c0];
   }
 
-  @Override // from Iterable
-  public Iterator<MultiIndex> iterator() {
-    return new Iterator<>() {
-      final OuterProductInteger outerProductInteger = new OuterProductInteger(size, true);
-
-      @Override
-      public boolean hasNext() {
-        return outerProductInteger.hasNext();
-      }
-
-      @Override
-      public MultiIndex next() {
-        return new MultiIndex(outerProductInteger.next());
-      }
-    };
-  }
-
-  @Override // from Object
-  public String toString() {
-    return Tensors.vectorInt(size) + ".." + Tensors.vectorInt(prod);
+  public IntStream stream(int[] sigma) {
+    return OuterProductStream.of(this, sigma);
   }
 }

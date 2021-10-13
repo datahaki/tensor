@@ -18,11 +18,12 @@ public enum Unprotect {
   ;
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
-   * @param list
+   * @param list non-null
    * @return tensor backed by given list
+   * @throws Exception if given list is null
    * @see TableBuilder */
   public static Tensor using(List<Tensor> list) {
-    return new TensorImpl(list);
+    return new TensorImpl(Objects.requireNonNull(list));
   }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
@@ -34,11 +35,11 @@ public enum Unprotect {
     return Tensor.of(Stream.of(tensors));
   }
 
-  /***************************************************/
+  // ---
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param tensor
-   * @return
+   * @return Scalar.LENGTH if given tensor is a vector, or else Dimensions[tensor].get(1)
    * @throws Exception if tensor is a scalar, or first level entries do not have regular length */
   public static int dimension1(Tensor tensor) {
     int length = dimension1Hint(tensor);
@@ -50,30 +51,14 @@ public enum Unprotect {
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param tensor
-   * @return
+   * @return Scalar.LENGTH if given tensor is a vector, or else estimate of Dimensions[tensor].get(1)
+   * based on first entry of tensor
    * @throws Exception if tensor is a scalar */
   public static int dimension1Hint(Tensor tensor) {
-    TensorImpl impl = (TensorImpl) tensor;
-    List<Tensor> list = impl.list;
-    return list.get(0).length();
+    return tensor.stream().findFirst().map(Tensor::length).orElse(Scalar.LENGTH);
   }
 
-  /***************************************************/
-  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
-   * 
-   * @param tensor
-   * @return tensor that overrides functions
-   * {@link Tensor#block(List, List)}, and
-   * {@link Tensor#extract(int, int)}
-   * for access by reference
-   * @throws Exception if given tensor is unmodifiable, or an instance of {@link Scalar} */
-  public static Tensor references(Tensor tensor) {
-    if (tensor instanceof UnmodifiableTensor)
-      throw TensorRuntimeException.of(tensor);
-    return ViewTensor.wrap(tensor);
-  }
-
-  /***************************************************/
+  // ---
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * Examples:
@@ -84,7 +69,8 @@ public enum Unprotect {
    * </pre>
    * 
    * @param scalar non-null
-   * @return */
+   * @return
+   * @throws Exception if given scalar is null */
   public static Scalar withoutUnit(Scalar scalar) {
     return scalar instanceof Quantity //
         ? ((Quantity) scalar).value()

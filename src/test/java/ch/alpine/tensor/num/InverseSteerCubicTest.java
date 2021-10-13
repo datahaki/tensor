@@ -18,7 +18,7 @@ public class InverseSteerCubicTest extends TestCase {
     Scalar c = RealScalar.of(+0.8284521034333863);
     Scalar a = RealScalar.of(-0.33633373640449604);
     Tensor coeffs = Tensors.of(RealScalar.ZERO, c, RealScalar.ZERO, a);
-    ScalarUnaryOperator cubic = Series.of(coeffs);
+    ScalarUnaryOperator cubic = Polynomial.of(coeffs);
     for (Tensor t : Subdivide.of(-0.75, 0.75, 1230)) {
       Scalar d = cubic.apply((Scalar) t);
       Tensor roots = Roots.of(Tensors.of(d.negate(), c, RealScalar.ZERO, a));
@@ -32,7 +32,7 @@ public class InverseSteerCubicTest extends TestCase {
     Scalar d = RealScalar.of(-0.33633373640449604);
     InverseSteerCubic inverseSteerCubic = new InverseSteerCubic(b, d);
     Tensor coeffs = Tensors.of(RealScalar.ZERO, b, RealScalar.ZERO, d);
-    ScalarUnaryOperator cubic = Series.of(coeffs);
+    ScalarUnaryOperator cubic = Polynomial.of(coeffs);
     for (Tensor t : Subdivide.of(-0.75, 0.75, 1230)) {
       Scalar apply = cubic.apply((Scalar) t);
       Scalar root = inverseSteerCubic.apply(apply);

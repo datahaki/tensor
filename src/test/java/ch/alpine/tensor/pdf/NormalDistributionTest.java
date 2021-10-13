@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -68,11 +69,17 @@ public class NormalDistributionTest extends TestCase {
     assertEquals(string, "NormalDistribution[3[m], 2[m]]");
   }
 
-  public void testQuantityFail() {
-    AssertFail.of(() -> NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+  public void testComplexFail() {
+    AssertFail.of(() -> NormalDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
   }
 
-  public void testFail() {
+  public void testQuantityFail() {
+    AssertFail.of(() -> NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    AssertFail.of(() -> NormalDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    AssertFail.of(() -> NormalDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+  }
+
+  public void testNegativeSigmaFail() {
     NormalDistribution.of(5, 1);
     AssertFail.of(() -> NormalDistribution.of(5, -1));
   }

@@ -17,7 +17,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
-import ch.alpine.tensor.mat.LinearSolve;
+import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.qty.Quantity;

@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import java.util.Arrays;
+
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -93,5 +95,66 @@ public class IntegersTest extends TestCase {
     byte b = Byte.MAX_VALUE;
     int c1 = a + b;
     assertEquals(c1, 254);
+  }
+
+  public void testRequireEquals() {
+    assertEquals(3, Integers.requireEquals(3, 3));
+    assertEquals(7, Integers.requireEquals(7, 7));
+    AssertFail.of(() -> Integers.requireEquals(3, 4));
+    AssertFail.of(() -> Integers.requireEquals(3, -3));
+  }
+
+  public void testRequireEqualsMessage() {
+    try {
+      Integers.requireEquals(3, 4);
+      fail();
+    } catch (Exception exception) {
+      assertEquals(exception.getMessage(), "3 != 4");
+    }
+  }
+
+  public void testIsPermutation() {
+    assertTrue(Integers.isPermutation(new int[] {}));
+    assertTrue(Integers.isPermutation(new int[] { 2, 0, 1 }));
+    assertTrue(Integers.isPermutation(new int[] { 2, 3, 1, 0 }));
+    assertFalse(Integers.isPermutation(new int[] { 2, 3, 1 }));
+    assertFalse(Integers.isPermutation(new int[] { 0, 2 }));
+    assertFalse(Integers.isPermutation(new int[] { -1, 0 }));
+  }
+
+  public void testRequirePermutation() {
+    Integers.requirePermutation(new int[] { 0, 2, 1 });
+    AssertFail.of(() -> Integers.requirePermutation(new int[] { 2, 3 }));
+  }
+
+  public void testRequirePermutationMessage() {
+    try {
+      Integers.requirePermutation(new int[] { 0, 2 });
+      fail();
+    } catch (Exception exception) {
+      assertEquals(exception.getMessage(), "0 2");
+    }
+  }
+
+  public void testParity() {
+    assertEquals(Integers.parity(new int[] { 0, 1 }), 0);
+    assertEquals(Integers.parity(new int[] { 1, 0 }), 1);
+    assertEquals(Integers.parity(new int[] { 2, 0, 1 }), 0);
+    assertEquals(Integers.parity(new int[] { 2, 1, 0 }), 1);
+  }
+
+  public void testParityFail() {
+    AssertFail.of(() -> Integers.parity(new int[] { 0, 0 }));
+    AssertFail.of(() -> Integers.parity(new int[] { 1, 1 }));
+    AssertFail.of(() -> Integers.parity(new int[] { 2, 1 }));
+  }
+
+  public void testAsList() {
+    assertEquals(Integers.asList(new int[] { 3, 4, 556 }), Arrays.asList(3, 4, 556));
+    // assertEquals(Integers.asList(3, 4, 556), Arrays.asList(3, 4, 556));
+  }
+
+  public void testAsListNullFail() {
+    AssertFail.of(() -> Integers.asList(null));
   }
 }

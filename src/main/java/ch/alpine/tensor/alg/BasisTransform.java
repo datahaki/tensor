@@ -5,8 +5,8 @@ import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.mat.Inverse;
-import ch.alpine.tensor.mat.LinearSolve;
+import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.mat.re.LinearSolve;
 
 /** transform a (r, s)-tensor to a new basis */
 public enum BasisTransform {

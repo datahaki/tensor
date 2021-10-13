@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.nrm;
 
+import ch.alpine.tensor.ExactScalarQ;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -16,6 +18,11 @@ public class Vector2NormSquaredTest extends TestCase {
     Scalar n1 = Vector2NormSquared.between(v1, v2);
     Scalar n2 = Vector2Norm.between(v1, v2);
     Chop._13.requireClose(n1, AbsSquared.FUNCTION.apply(n2));
+  }
+
+  public void testExact() {
+    Scalar norm = Vector2NormSquared.of(Tensors.vector(3, 4));
+    assertEquals(ExactScalarQ.require(norm), RealScalar.of(9 + 16));
   }
 
   public void testEmpty() {

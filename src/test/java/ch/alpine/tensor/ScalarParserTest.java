@@ -92,4 +92,8 @@ public class ScalarParserTest extends TestCase {
   public void testQuantityFail() {
     AssertFail.of(() -> ScalarParser.of("3.14[m]"));
   }
+
+  public void testVisibility() {
+    assertEquals(ScalarParser.class.getModifiers() & 1, 0);
+  }
 }

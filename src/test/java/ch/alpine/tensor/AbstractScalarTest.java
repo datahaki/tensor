@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import java.util.Arrays;
 
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.num.Pi;
@@ -44,17 +45,24 @@ public class AbstractScalarTest extends TestCase {
     AssertFail.of(() -> Pi.VALUE.get(Arrays.asList(-1)));
     AssertFail.of(() -> Pi.VALUE.get(Arrays.asList(-1, 0)));
     AssertFail.of(() -> RealScalar.ONE.Get(1));
-    AssertFail.of(() -> RealScalar.ONE.get(new Integer[] { 1 }));
+    AssertFail.of(() -> RealScalar.ONE.get(new int[] { 1 }));
   }
 
   public void testGet2Fail() {
     AssertFail.of(() -> RationalScalar.HALF.Get(1, 4));
-    AssertFail.of(() -> Pi.TWO.get(new Integer[] { 1, 2 }));
+    AssertFail.of(() -> Pi.TWO.get(new int[] { 1, 2 }));
   }
 
   public void testSetFail() {
     AssertFail.of(() -> RealScalar.ONE.set(RealScalar.ZERO));
     AssertFail.of(() -> RealScalar.ONE.set(s -> RealScalar.ZERO));
+  }
+
+  public void testSetListFail() {
+    AssertFail.of(() -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] {})));
+    AssertFail.of(() -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] { 2 })));
+    AssertFail.of(() -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] {})));
+    AssertFail.of(() -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] { 2 })));
   }
 
   public void testAppendFail() {
@@ -63,6 +71,10 @@ public class AbstractScalarTest extends TestCase {
 
   public void testExtractFail() {
     AssertFail.of(() -> RealScalar.ONE.extract(1, 2));
+  }
+
+  public void testBlockEmpty() {
+    assertEquals(Pi.VALUE.block(Arrays.asList(), Arrays.asList()), Pi.VALUE);
   }
 
   public void testBlockFail() {

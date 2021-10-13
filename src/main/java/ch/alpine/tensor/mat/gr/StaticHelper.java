@@ -3,13 +3,10 @@ package ch.alpine.tensor.mat.gr;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.InvertUnlessZero;
 
 /* package */ enum StaticHelper {
   ;
@@ -32,15 +29,5 @@ import ch.alpine.tensor.sca.InvertUnlessZero;
     Scalar result = Clips.unit().apply(scalar);
     Chop._06.requireClose(result, scalar);
     return result;
-  }
-
-  private static final Scalar _0 = RealScalar.of(0.0);
-  private static final Scalar _1 = RealScalar.of(1.0);
-
-  /** @param scalar
-   * @return
-   * @see InvertUnlessZero */
-  public static Scalar unitize_chop(Scalar scalar) {
-    return Tolerance.CHOP.isZero(scalar) ? _0 : _1;
   }
 }

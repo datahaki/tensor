@@ -3,6 +3,7 @@ package ch.alpine.tensor.itp;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -19,16 +20,14 @@ public class MappedInterpolation extends AbstractInterpolation implements Serial
    * @return
    * @throws Exception if given tensor is null */
   public static Interpolation of(Tensor tensor, ScalarUnaryOperator function) {
-    return new MappedInterpolation( //
-        tensor, //
-        Objects.requireNonNull(function));
+    return new MappedInterpolation(tensor, Objects.requireNonNull(function));
   }
 
-  /***************************************************/
+  // ---
   private final Tensor tensor;
   private final ScalarUnaryOperator function;
 
-  /* package */ MappedInterpolation(Tensor tensor, ScalarUnaryOperator function) {
+  private MappedInterpolation(Tensor tensor, ScalarUnaryOperator function) {
     this.tensor = Objects.requireNonNull(tensor);
     this.function = function;
   }
@@ -39,7 +38,7 @@ public class MappedInterpolation extends AbstractInterpolation implements Serial
         .map(Scalar.class::cast) //
         .map(function) //
         .map(Scalars::intValueExact) //
-        .toArray(Integer[]::new));
+        .collect(Collectors.toList()));
   }
 
   @Override // from Interpolation

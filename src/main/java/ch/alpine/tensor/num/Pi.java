@@ -20,7 +20,7 @@ public enum Pi {
   public static final Scalar VALUE = DoubleScalar.of(Math.PI);
   public static final Scalar HALF = DoubleScalar.of(Math.PI / 2);
   public static final Scalar TWO = DoubleScalar.of(Math.PI + Math.PI);
-  /***************************************************/
+  // ---
   private static final Scalar _6 = RealScalar.of(6);
   private static final Scalar _13591409 = RealScalar.of(13591409);
   private static final Scalar _545140134 = RealScalar.of(545140134);

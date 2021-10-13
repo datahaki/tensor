@@ -33,7 +33,7 @@ public class SchattenNorm implements TensorScalarFunction {
     return of(RealScalar.of(p));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar p;
   private final TensorScalarFunction tensorScalarFunction;
 

@@ -2,8 +2,10 @@
 package ch.alpine.tensor.alg;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -30,7 +32,7 @@ public class ArrayTest extends TestCase {
 
   public void testCopy() {
     Tensor hilbert = HilbertMatrix.of(3, 5);
-    Tensor table = Array.of(l -> hilbert.get(l.stream().toArray(Integer[]::new)), Dimensions.of(hilbert));
+    Tensor table = Array.of(hilbert::get, Dimensions.of(hilbert));
     assertEquals(hilbert, table);
   }
 
@@ -96,5 +98,16 @@ public class ArrayTest extends TestCase {
 
   public void testInvalid2() {
     AssertFail.of(() -> Array.of(l -> Tensors.vector(l.get(0), l.get(1), l.get(2)), 3, -2, 4));
+  }
+
+  public void testForEach() {
+    Set<List<Integer>> set = new HashSet<>();
+    Array.forEach(set::add, 2, 3, 4);
+    assertEquals(set.size(), 2 * 3 * 4);
+  }
+
+  public void testForEachFail() {
+    Set<List<Integer>> set = new HashSet<>();
+    AssertFail.of(() -> Array.forEach(set::add, 2, -1, 4));
   }
 }

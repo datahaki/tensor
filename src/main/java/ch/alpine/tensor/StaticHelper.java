@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.Sign;
   ;
   private static final String OPENING_BRACKET_STRING = Character.toString(Tensor.OPENING_BRACKET);
   private static final String CLOSING_BRACKET_STRING = Character.toString(Tensor.CLOSING_BRACKET);
-  static final Collector<CharSequence, ?, String> EMBRACE = //
+  public static final Collector<CharSequence, ?, String> EMBRACE = //
       Collectors.joining(", ", OPENING_BRACKET_STRING, CLOSING_BRACKET_STRING);
   // ---
   /** code from java.lang.Double */
@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.Sign;
   // signed decimal integer.
   private static final String Exp = "[eE][+-]?" + Digits;
   // optional leading and trailing whitespace and sign is obsolete
-  static final String fpRegex = ("(" + //
+  public static final String fpRegex = ("(" + //
       "NaN|" + // "NaN" string
       "Infinity|" + // "Infinity" string
       // A decimal floating-point string representing a finite positive
@@ -50,6 +50,7 @@ import ch.alpine.tensor.sca.Sign;
       "(0[xX]" + HexDigits + "?(\\.)" + HexDigits + ")" + ")[pP][+-]?" + Digits + "))" + "[fFdD]?))" //
   );
 
+  // ---
   /** @param x complex scalar
    * @param y complex scalar
    * @return Mathematica::ArcTan[x, y] */
@@ -65,9 +66,9 @@ import ch.alpine.tensor.sca.Sign;
       RealScalar.ONE.negate(), // -1
       RealScalar.ZERO, // 0
       RealScalar.ONE }; // +1
-  /***************************************************/
-  static final Cache<Integer, DecimalScalar> CACHE_0 = //
+  // ---
+  public static final Cache<Integer, DecimalScalar> CACHE_0 = //
       Cache.of(precision -> new DecimalScalar(BigDecimal.ZERO, precision), 32);
-  static final Cache<Integer, DecimalScalar> CACHE_1 = //
+  public static final Cache<Integer, DecimalScalar> CACHE_1 = //
       Cache.of(precision -> new DecimalScalar(BigDecimal.ONE, precision), 32);
 }

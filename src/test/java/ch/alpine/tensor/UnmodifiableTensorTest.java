@@ -1,9 +1,11 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -76,6 +78,16 @@ public class UnmodifiableTensorTest extends TestCase {
     AssertFail.of(() -> iterator.remove());
   }
 
+  public void testBlockReferences() {
+    Tensor eye = IdentityMatrix.of(3);
+    Tensor unm = eye.unmodifiable();
+    Tensor blk = unm.block(Arrays.asList(1, 0), Arrays.asList(2, 2));
+    assertEquals(blk, Tensors.fromString("{{0, 1}, {0, 0}}"));
+    AssertFail.of(() -> blk.set(RealScalar.TWO, 1, 0));
+    eye.set(RealScalar.TWO, 1, 0);
+    assertEquals(blk, Tensors.fromString("{{2, 1}, {0, 0}}"));
+  }
+
   public void testIteratorRemove() {
     Tensor tensor = IdentityMatrix.of(4).unmodifiable();
     for (Iterator<Tensor> iterator = tensor.iterator(); iterator.hasNext();) {
@@ -83,5 +95,15 @@ public class UnmodifiableTensorTest extends TestCase {
       AssertFail.of(() -> iterator.remove());
     }
     assertEquals(tensor, IdentityMatrix.of(4));
+  }
+
+  public void testIteratorNestRemove() {
+    Tensor tensor = HilbertMatrix.of(4).unmodifiable();
+    Iterator<Tensor> iterator = tensor.iterator().next().iterator();
+    AssertFail.of(() -> iterator.remove());
+  }
+
+  public void testNonPublic() {
+    assertEquals(UnmodifiableTensor.class.getModifiers(), 0);
   }
 }

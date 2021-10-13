@@ -57,7 +57,7 @@ public enum Power {
     return of(RealScalar.of(number), RealScalar.of(exponent));
   }
 
-  /***************************************************/
+  // ---
   private static final BigInteger TWO = BigInteger.valueOf(2);
 
   /** @param exponent
@@ -78,7 +78,7 @@ public enum Power {
     return function(RealScalar.of(exponent));
   }
 
-  /***************************************************/
+  // ---
   /** @param scalar
    * @param exponent
    * @return scalar ^ exponent */

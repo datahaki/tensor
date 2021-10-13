@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.ev;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.sca.Chop;
 
 /** <pre>
  * LinearSolve.of(vectors, values.pmul(vectors)) == matrix
@@ -22,7 +23,14 @@ public interface Eigensystem {
    * @return eigensystem with vectors scaled to unit length
    * @throws Exception if input is not a real symmetric matrix */
   static Eigensystem ofSymmetric(Tensor matrix) {
-    return new EigensystemImpl(matrix, Tolerance.CHOP);
+    return ofSymmetric(matrix, Tolerance.CHOP);
+  }
+
+  /** @param matrix
+   * @param chop threshold to check symmetry of matrix
+   * @return */
+  static Eigensystem ofSymmetric(Tensor matrix, Chop chop) {
+    return new EigensystemImpl(matrix, chop);
   }
 
   /** Careful: Mathematica orders the eigenvalues according to absolute value.

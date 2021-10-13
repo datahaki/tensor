@@ -55,7 +55,7 @@ import java.math.BigInteger;
         : new BigFraction(num.divide(gcd).negate(), res.negate());
   }
 
-  /***************************************************/
+  // ---
   /** numerator */
   private final BigInteger num;
   /** denominator (always greater than zero) */
@@ -134,13 +134,13 @@ import java.math.BigInteger;
   }
 
   /** @param bigFraction non-null
-   * @return */
-  /* package */ boolean _equals(BigFraction bigFraction) {
+   * @return whether this and given object represent the same rational number */
+  public boolean _equals(BigFraction bigFraction) {
     return num.equals(bigFraction.num) //
         && den.equals(bigFraction.den); // sufficient since in normal form
   }
 
-  /***************************************************/
+  // ---
   @Override // from Comparable
   public int compareTo(BigFraction bigFraction) {
     return num.multiply(bigFraction.den).compareTo(bigFraction.num.multiply(den));

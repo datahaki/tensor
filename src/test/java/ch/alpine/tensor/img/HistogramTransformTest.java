@@ -3,6 +3,7 @@ package ch.alpine.tensor.img;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.io.ResourceData;
@@ -36,11 +37,25 @@ public class HistogramTransformTest extends TestCase {
     assertEquals(tensor1, result);
   }
 
+  public void testOutOfRankFail() {
+    Tensor tensor = Tensors.of(Tensors.vector(0, 256, 0, 3));
+    AssertFail.of(() -> HistogramTransform.of(tensor));
+  }
+
+  public void testNegativeFail() {
+    Tensor tensor = Tensors.of(Tensors.vector(0, -0.1, 3));
+    AssertFail.of(() -> HistogramTransform.of(tensor));
+  }
+
   public void testScalarFail() {
     AssertFail.of(() -> HistogramTransform.of(Pi.VALUE));
   }
 
   public void testVectorFail() {
     AssertFail.of(() -> HistogramTransform.of(Tensors.vector(1, 2, 3)));
+  }
+
+  public void testRank3Fail() {
+    AssertFail.of(() -> HistogramTransform.of(Array.zeros(2, 2, 2)));
   }
 }

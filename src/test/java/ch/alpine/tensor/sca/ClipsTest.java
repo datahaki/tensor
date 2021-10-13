@@ -129,6 +129,20 @@ public class ClipsTest extends TestCase {
     assertEquals(clip.max(), RealScalar.of(10));
   }
 
+  public void testCoverFail0() {
+    Clip c1 = Clips.positive(Quantity.of(0, "m"));
+    Clip c2 = Clips.positive(Quantity.of(0, "s"));
+    AssertFail.of(() -> Clips.cover(c1, c2));
+    AssertFail.of(() -> Clips.intersection(c1, c2));
+  }
+
+  public void testCoverFail1() {
+    Clip c1 = Clips.positive(Quantity.of(1, "m"));
+    Clip c2 = Clips.positive(Quantity.of(2, "s"));
+    AssertFail.of(() -> Clips.cover(c1, c2));
+    AssertFail.of(() -> Clips.intersection(c1, c2));
+  }
+
   public void testCoverPoint() {
     Clip clip = Clips.cover(Clips.interval(2, 6), Clips.interval(-3, 2));
     assertEquals(clip.min(), RealScalar.of(-3));

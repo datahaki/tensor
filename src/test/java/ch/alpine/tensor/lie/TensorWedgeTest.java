@@ -7,7 +7,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.AntisymmetricMatrixQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.mat.MatrixRank;
+import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.usr.AssertFail;
@@ -16,6 +16,10 @@ import junit.framework.TestCase;
 public class TensorWedgeTest extends TestCase {
   public void testLength0() {
     assertEquals(TensorWedge.of(), RealScalar.ONE);
+  }
+
+  public void testFailEmpty() {
+    assertEquals(TensorWedge.of(Tensors.empty()), Tensors.empty());
   }
 
   public void testVectors() {

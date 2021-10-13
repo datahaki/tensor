@@ -20,7 +20,8 @@ public enum VectorInfinityNorm {
     return vector.stream() //
         .map(Scalar.class::cast) //
         .map(Abs.FUNCTION) //
-        .reduce(Max::of).get();
+        .reduce(Max::of) //
+        .orElseThrow();
   }
 
   /** @param v1 vector

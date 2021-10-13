@@ -19,7 +19,8 @@ import java.util.stream.Stream;
  * 
  * <p>The copy {@link UnmodifiableTensor#copy()} is modifiable. */
 /* package */ class UnmodifiableTensor extends TensorImpl {
-  UnmodifiableTensor(List<Tensor> list) {
+  /** @param list to be guaranteed non-null */
+  public UnmodifiableTensor(List<Tensor> list) {
     super(list);
   }
 
@@ -29,12 +30,12 @@ import java.util.stream.Stream;
   }
 
   @Override // from TensorImpl
-  void _set(Tensor tensor, List<Integer> index) {
+  public void set(Tensor tensor, List<Integer> index) {
     throw new UnsupportedOperationException("unmodifiable");
   }
 
   @Override // from TensorImpl
-  <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
+  public <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index) {
     throw new UnsupportedOperationException("unmodifiable");
   }
 
@@ -44,25 +45,29 @@ import java.util.stream.Stream;
   }
 
   @Override // from TensorImpl
+  public Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
+    return super.block(fromIndex, dimensions).unmodifiable();
+  }
+
+  @Override // from TensorImpl
   public Stream<Tensor> stream() {
-    return list.stream().map(Tensor::unmodifiable);
+    return super.stream().map(Tensor::unmodifiable);
   }
 
   @Override // from TensorImpl
   public Iterator<Tensor> iterator() {
-    // remove() throws an UnsupportedOperationException
+    Iterator<Tensor> iterator = super.iterator();
     return new Iterator<>() {
-      int index = 0;
-
       @Override
       public boolean hasNext() {
-        return index < list.size();
+        return iterator.hasNext();
       }
 
       @Override
       public Tensor next() {
-        return list.get(index++).unmodifiable();
+        return iterator.next().unmodifiable();
       }
+      // default implementation of Iterator#remove() throws an UnsupportedOperationException
     };
   }
 }

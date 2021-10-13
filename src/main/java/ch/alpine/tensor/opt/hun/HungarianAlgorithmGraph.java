@@ -56,6 +56,6 @@ import ch.alpine.tensor.io.ScalarArray;
     Stream<Scalar> stream = rows <= cols //
         ? IntStream.range(0, rows).mapToObj(i -> matrix[i][xMatch[i]]) //
         : IntStream.range(0, rows).filter(i -> yMatch[i] < cols).mapToObj(i -> matrix[yMatch[i]][i]);
-    return stream.reduce(Scalar::add).get();
+    return stream.reduce(Scalar::add).orElseThrow();
   }
 }

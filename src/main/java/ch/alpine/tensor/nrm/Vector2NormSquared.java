@@ -24,7 +24,7 @@ public enum Vector2NormSquared {
   /** @param stream of scalars
    * @return sum of squares of scalars in given stream */
   public static Scalar of(Stream<Scalar> stream) {
-    return stream.map(AbsSquared.FUNCTION).reduce(Scalar::add).get();
+    return stream.map(AbsSquared.FUNCTION).reduce(Scalar::add).orElseThrow();
   }
 
   /** @param v1 vector

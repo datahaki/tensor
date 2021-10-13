@@ -31,7 +31,7 @@ public class Dimensions implements Serializable {
     return new Dimensions(tensor).list();
   }
 
-  /***************************************************/
+  // ---
   /** list of set of lengths on all levels also includes length of scalars as Scalar.LENGTH == -1 */
   private final List<Set<Integer>> lengths = new ArrayList<>();
 
@@ -51,16 +51,16 @@ public class Dimensions implements Serializable {
   /** @return dimensions of given tensor
    * @see #of(Tensor) */
   public List<Integer> list() {
-    List<Integer> ret = new ArrayList<>();
+    List<Integer> list = new ArrayList<>();
     for (Set<Integer> set : lengths)
       if (set.size() == 1) {
         int val = set.iterator().next(); // get unique element from set
         if (val == Scalar.LENGTH) // has scalar
           break;
-        ret.add(val);
+        list.add(val);
       } else
         break;
-    return ret;
+    return list;
   }
 
   /** @return true if tensor structure is identical at all levels, else false.
@@ -70,7 +70,7 @@ public class Dimensions implements Serializable {
     return lengths.stream().mapToInt(Set::size).allMatch(size -> size == 1);
   }
 
-  /** @return 0 for a scalar, 1 for a vector, etc. */
+  /** @return 0 for a scalar, 1 for a vector, 2 for a matrix, etc. */
   public int maxDepth() {
     return lengths.size() - 1;
   }

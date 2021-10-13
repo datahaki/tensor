@@ -6,8 +6,10 @@ import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.RealScalar;
@@ -16,6 +18,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.RotateLeft;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.red.ArgMin;
 import junit.framework.TestCase;
@@ -69,6 +72,43 @@ public class CyclesGroupTest extends TestCase {
       assertEquals(cycles.toTensor(), result);
     }
     return all;
+  }
+
+  public void testOrbit3() {
+    Set<Cycles> set = new HashSet<>();
+    set.add(Cycles.of("{{0, 1}}"));
+    set.add(Cycles.of("{{0, 1, 2}}"));
+    Set<Cycles> group = _group(set);
+    assertEquals(group.size(), 6);
+    Cycles other = Cycles.of("{{2, 3}}");
+    assertEquals(6, group.stream().map(other::combine).distinct().count());
+    assertEquals(6, group.stream().map(e -> e.combine(other)).distinct().count());
+    assertEquals(6, group.stream().map(Cycles::inverse).distinct().count());
+    Map<Integer, Long> map = group.stream() //
+        .map(c -> PermutationList.of(c, 5)).map(Integers::parity) //
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    assertEquals(map.get(0).intValue(), 3);
+    assertEquals(map.get(1).intValue(), 3);
+    for (Cycles cycles : group)
+      assertEquals(cycles.parity(), Integers.parity(PermutationList.of(cycles, 3)));
+  }
+
+  public void testOrbit4() {
+    Set<Cycles> set = new HashSet<>();
+    set.add(Cycles.of("{{0, 1}}"));
+    set.add(Cycles.of("{{0, 1, 2, 3}}"));
+    Set<Cycles> group = _group(set);
+    assertEquals(group.size(), 24);
+    Cycles other = Cycles.of("{{2, 3}}");
+    assertEquals(24, group.stream().map(other::combine).distinct().count());
+    assertEquals(24, group.stream().map(e -> e.combine(other)).distinct().count());
+    Map<Integer, Long> map = group.stream() //
+        .map(c -> PermutationList.of(c, 4)).map(Integers::parity) //
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    assertEquals(map.get(0).intValue(), 12);
+    assertEquals(map.get(1).intValue(), 12);
+    for (Cycles cycles : group)
+      assertEquals(cycles.parity(), Integers.parity(PermutationList.of(cycles, 4)));
   }
 
   public void testGroupEx0() {

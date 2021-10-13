@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.fft.ListCorrelate;
 
 /** A {@link Tensor} is a scalar, or a list of tensors.
  * 
@@ -32,8 +33,8 @@ import ch.alpine.tensor.alg.Dimensions;
 public interface Tensor extends Iterable<Tensor> {
   /** constant ALL is used in the function
    * <ul>
-   * <li>{@link #get(Integer...)} to extract <em>all</em> elements from the respective dimension.
-   * <li>{@link #set(Function, Integer...)} to reassign <em>all</em> elements from the respective dimension.
+   * <li>{@link #get(int...)} to extract <em>all</em> elements from the respective dimension.
+   * <li>{@link #set(Function, int...)} to reassign <em>all</em> elements from the respective dimension.
    * </ul>
    * 
    * <p>The value of ALL is deliberately <em>not</em> chosen to equal -1, since an index of -1
@@ -80,6 +81,14 @@ public interface Tensor extends Iterable<Tensor> {
    * @return clone of this */
   Tensor copy();
 
+  /** Remark: the parameter i == Tensor.ALL is <b>not</b> permitted, because
+   * get(ALL) should be implemented as copy(). Therefore the function is <b>not</b>
+   * a special case of the more general function {@link #get(int...)}.
+   * 
+   * @param i in the range 0 and length() - 1
+   * @return copy of this[i], i.e. the i-th element of this tensor */
+  Tensor get(int i);
+
   /** non-negative index[...] refer to the position in the tensor
    * 
    * <p>Special value:
@@ -87,10 +96,11 @@ public interface Tensor extends Iterable<Tensor> {
    * 
    * @param index
    * @return copy of this[index[0], index[1], ..., All] */
-  Tensor get(Integer... index);
+  Tensor get(int... index);
 
   /** @param index
-   * @return copy of this[index[0], index[1], ..., All] */
+   * @return copy of this[index[0], index[1], ..., All]
+   * @see #get(int...) */
   Tensor get(List<Integer> index);
 
   /** function is identical to
@@ -138,11 +148,20 @@ public interface Tensor extends Iterable<Tensor> {
    * <li><code>matrix.set(col, Tensor.ALL, 5)</code> represents the assignment <code>matrix[:, 5]=col</code>
    * </ul>
    * 
-   * @param tensor of which a copy replaces the existing element(s) of this instance
+   * @param tensor of which a copy replaces the existing element(s) at given index of this instance
    * @param index non-empty
    * @throws Exception if set() is invoked on an instance of {@link Scalar}, or index is empty
    * @throws Exception if this instance is unmodifiable */
-  void set(Tensor tensor, Integer... index);
+  void set(Tensor tensor, int... index);
+
+  /** set copy of tensor as element at location this[index[0], index[1], ...].
+   * 
+   * @param tensor of which a copy replaces the existing element(s) at given index of this instance
+   * @param index non-empty list
+   * @throws Execption if index is empty
+   * @throws Exception if this instance is unmodifiable
+   * @see #set(Tensor, int...) */
+  void set(Tensor tensor, List<Integer> index);
 
   /** replaces element x at index with <code>function.apply(x)</code>
    * The operation is invalid if this tensor has been cast as unmodifiable.
@@ -160,15 +179,20 @@ public interface Tensor extends Iterable<Tensor> {
    * @param function
    * @param index non-empty
    * @throws Exception if set() is invoked on an instance of {@link Scalar}, or index is empty
-   * @see #set(Tensor, Integer...) */
-  <T extends Tensor> void set(Function<T, ? extends Tensor> function, Integer... index);
+   * @see #set(Tensor, int...) */
+  <T extends Tensor> void set(Function<T, ? extends Tensor> function, int... index);
+
+  /** @param function
+   * @param index
+   * @see #set(Function, int...) */
+  <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index);
 
   /** appends a copy of input tensor to this instance
    * 
    * <p>The length() is incremented by 1.
    * 
    * <p>{@link #append(Tensor)} can be used to append to a sub-tensor of this instance
-   * via {@link #set(Function, Integer...)}.
+   * via {@link #set(Function, int...)}.
    * For example:
    * <pre>matrix.set(row -> row.append(tensor), index);</pre>
    * 
@@ -194,48 +218,10 @@ public interface Tensor extends Iterable<Tensor> {
    * @return number of entries on the first level; {@link Scalar#LENGTH} for scalars */
   int length();
 
-  /** For instance, if this tensor is the vector {0, 8, 1}, the function
-   * stream() provides the three scalars 0, 8, 1 in a {@link Stream}.
-   * 
-   * <p>If this tensor is a matrix, the stream provides the references
-   * to the rows of the matrix.
-   * 
-   * <p>If this tensor has been marked as unmodifiable, the elements of
-   * the stream are unmodifiable as well.
-   * 
-   * @return stream over tensors contained in the list of this instance
-   * @throws Exception if invoked on a {@link Scalar} instance, because
-   * a scalar does not contain a list of tensors */
-  Stream<Tensor> stream();
-
-  /** stream access to the entries at given level of this tensor.
-   * entries at given level can be tensors or scalars.
-   * 
-   * <p>For the input <code>level == -1</code>, the return stream consists
-   * of all {@link Scalar}s in this tensor.
-   * 
-   * <p>If this tensor has been marked as unmodifiable, the elements of
-   * the stream are unmodifiable as well.
-   * 
-   * <p>Unlike {@link #stream()}, function {@link #flatten(int)} may be
-   * invoked on a {@link Scalar}. In that case the return value is the
-   * stream with the scalar as single element.
-   * 
-   * @param level
-   * @return non-parallel stream, the user may invoke .parallel() */
-  Stream<Tensor> flatten(int level);
-
   /** @param fromIndex
    * @param toIndex
    * @return copy of sub tensor fromIndex inclusive to toIndex exclusive */
   Tensor extract(int fromIndex, int toIndex);
-
-  /** extract block of this tensor located at offset with dimensions
-   * 
-   * @param fromIndex location of return tensor in this tensor
-   * @param dimensions of return tensor
-   * @return copy of block located at fromIndex of this tensor with given dimensions */
-  Tensor block(List<Integer> fromIndex, List<Integer> dimensions);
 
   /** negation of entries
    * 
@@ -322,6 +308,56 @@ public interface Tensor extends Iterable<Tensor> {
    * @return new tensor with {@link Scalar} entries replaced by
    * function evaluation of {@link Scalar} entries */
   Tensor map(Function<Scalar, ? extends Tensor> function);
+
+  /** the returned block consists of references to the elements in this tensor.
+   * The function {@link #block(List, List)} is useful for applications such as
+   * {@link ListCorrelate}. When block is called on unmodifiable tensor, then
+   * the returned block consists of the references but is also unmodifiable.
+   * 
+   * Example:
+   * <pre>
+   * Tensor a = {1, 2, 3, 4, 5, 6};
+   * Tensor b = a.block(Arrays.asList(2), Arrays.asList(3));
+   * b.set(Array.zeros(3), Tensor.ALL);
+   * </pre>
+   * Afterwards the tensor a == {1, 2, 0, 0, 0, 6}.
+   * 
+   * @param ofs location of return tensor in this tensor
+   * @param len of return tensor
+   * @return references to entries in block located at fromIndex of this tensor with given dimensions
+   * @throws Exception if this tensor in unmodifiable and given dimensions are non-empty */
+  Tensor block(List<Integer> ofs, List<Integer> len);
+
+  /** For instance, if this tensor is the vector {0, 8, 1}, the function
+   * stream() provides the three scalars 0, 8, 1 in a {@link Stream}.
+   * 
+   * <p>If this tensor is a matrix, the stream provides the references
+   * to the rows of the matrix.
+   * 
+   * <p>If this tensor has been marked as unmodifiable, the elements of
+   * the stream are unmodifiable as well.
+   * 
+   * @return stream over tensors contained in the list of this instance
+   * @throws Exception if invoked on a {@link Scalar} instance, because
+   * a scalar does not contain a list of tensors */
+  Stream<Tensor> stream();
+
+  /** stream access to the entries at given level of this tensor.
+   * entries at given level can be tensors or scalars.
+   * 
+   * <p>For the input <code>level == -1</code>, the return stream consists
+   * of all {@link Scalar}s in this tensor.
+   * 
+   * <p>If this tensor has been marked as unmodifiable, the elements of
+   * the stream are unmodifiable as well.
+   * 
+   * <p>Unlike {@link #stream()}, function {@link #flatten(int)} may be
+   * invoked on a {@link Scalar}. In that case the return value is the
+   * stream with the scalar as single element.
+   * 
+   * @param level
+   * @return non-parallel stream, the user may invoke .parallel() */
+  Stream<Tensor> flatten(int level);
 
   /** iterator of list of entries.
    * The operation remove() is supported.

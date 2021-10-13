@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.stream.IntStream;
+import java.util.Collections;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.lie.Permutations;
@@ -27,8 +27,7 @@ public enum Tuples {
    * @return tensor with k ^ n elements
    * @throws Exception if n is negative */
   public static Tensor of(Tensor tensor, int n) {
-    Integer[] dimensions = IntStream.generate(() -> tensor.length()).limit(n).boxed().toArray(Integer[]::new);
-    Tensor array = Array.of(list -> Tensor.of(list.stream().map(tensor::get)), dimensions);
+    Tensor array = Array.of(list -> Tensor.of(list.stream().map(tensor::get)), Collections.nCopies(n, tensor.length()));
     return n <= 1 //
         ? array
         : Tensor.of(array.flatten(n - 1));

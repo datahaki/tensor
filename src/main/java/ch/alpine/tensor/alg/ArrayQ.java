@@ -4,6 +4,7 @@ package ch.alpine.tensor.alg;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.mat.MatrixQ;
 
 /** ArrayQ is <em>not</em> consistent with Mathematica for scalar input:
  * <pre>
@@ -39,8 +40,8 @@ public enum ArrayQ {
    * @see MatrixQ */
   public static boolean ofRank(Tensor tensor, int rank) {
     Dimensions dimensions = new Dimensions(tensor);
-    return dimensions.list().size() == rank //
-        && dimensions.isArray();
+    return dimensions.isArray() //
+        && dimensions.list().size() == rank;
   }
 
   /** @param tensor

@@ -57,7 +57,7 @@ public enum Expectation {
     Scalar p_equals = RealScalar.ZERO;
     Scalar cumprob = RealScalar.ZERO;
     int sample = discreteDistribution.lowerBound();
-    while (!DiscreteCDF.isFinished(p_equals, cumprob)) {
+    while (!StaticHelper.isFinished(p_equals, cumprob)) {
       Scalar x = RealScalar.of(sample);
       p_equals = discreteDistribution.p_equals(sample);
       cumprob = cumprob.add(p_equals);

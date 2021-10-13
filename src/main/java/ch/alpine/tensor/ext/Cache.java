@@ -14,11 +14,11 @@ import java.util.function.Function;
  * later f[1] = "def" then the function is not suitable for caching!
  * 
  * The values should be immutable to ensure that the receiver cannot modify the content
- * that may be queried by the next caller.
+ * that may be queried by the next caller. A value may also be null.
  * 
- * Used in: Unit, CirclePoints, Binomial */
+ * Used in: Unit, CirclePoints, Binomial, GaussScalar, ... */
 public class Cache<K, V> implements Function<K, V>, Serializable {
-  /** @param function
+  /** @param function non-null, may also return null
    * @param maxSize non-negative
    * @return */
   public static <K, V> Cache<K, V> of(Function<K, V> function, int maxSize) {
@@ -27,7 +27,7 @@ public class Cache<K, V> implements Function<K, V>, Serializable {
     return new Cache<>(Objects.requireNonNull(function), maxSize);
   }
 
-  /***************************************************/
+  // ---
   private final Function<K, V> function;
   private final Map<K, V> map;
 

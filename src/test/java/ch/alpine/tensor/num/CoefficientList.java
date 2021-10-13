@@ -27,7 +27,7 @@ import ch.alpine.tensor.lie.TensorProduct;
     Tensor _box = box;
     Tensor coeffs = Array.zeros(roots.length() + 1);
     Array.of(list -> {
-      Scalar scalar = (Scalar) _box.get(list.stream().toArray(Integer[]::new));
+      Scalar scalar = (Scalar) _box.get(list);
       coeffs.set(scalar::add, list.stream().mapToInt(i -> i).sum());
       return null;
     }, Dimensions.of(box));

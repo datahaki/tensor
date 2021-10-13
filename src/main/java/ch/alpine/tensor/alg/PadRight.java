@@ -2,12 +2,13 @@
 package ch.alpine.tensor.alg;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.Lists;
 
 /** Example:
  * <pre>
@@ -28,8 +29,8 @@ public class PadRight implements TensorUnaryOperator {
   /** @param element
    * @param dimensions non-empty
    * @return */
-  public static TensorUnaryOperator with(Tensor element, Integer... dimensions) {
-    return with(element, Arrays.asList(dimensions));
+  public static TensorUnaryOperator with(Tensor element, int... dimensions) {
+    return with(element, Integers.asList(dimensions));
   }
 
   /** @param dimensions non-empty
@@ -40,11 +41,11 @@ public class PadRight implements TensorUnaryOperator {
 
   /** @param dimensions non-empty
    * @return */
-  public static TensorUnaryOperator zeros(Integer... dimensions) {
-    return zeros(Arrays.asList(dimensions));
+  public static TensorUnaryOperator zeros(int... dimensions) {
+    return zeros(Integers.asList(dimensions));
   }
 
-  /***************************************************/
+  // ---
   private final Tensor element;
   private final List<Integer> dimensions;
 
@@ -58,7 +59,7 @@ public class PadRight implements TensorUnaryOperator {
     int length = tensor.length();
     final int dim0 = dimensions.get(0);
     if (1 < dimensions.size()) { // recur
-      TensorUnaryOperator tensorUnaryOperator = with(element, dimensions.subList(1, dimensions.size()));
+      TensorUnaryOperator tensorUnaryOperator = with(element, Lists.rest(dimensions));
       if (dim0 <= length)
         return Tensor.of(tensor.stream().limit(dim0).map(tensorUnaryOperator));
       List<Integer> copy = new ArrayList<>(dimensions);

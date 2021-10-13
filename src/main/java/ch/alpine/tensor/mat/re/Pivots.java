@@ -8,7 +8,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.mat.MatrixRank;
 import ch.alpine.tensor.sca.Abs;
 
 public enum Pivots implements Pivot {

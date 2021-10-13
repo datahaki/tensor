@@ -8,7 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.sca.ArcCos;
 import ch.alpine.tensor.sca.Clips;
@@ -20,14 +20,14 @@ public enum VectorAngle {
   ;
   /** @param u vector
    * @param v vector of same length as u
-   * @return angle between the vectors u and v, or empty if either norm of u or v is zero
+   * @return angle between the vectors u and v in the range [0, pi],
+   * or empty if either norm of u or v is zero
    * @throws Exception if u and v are not vectors of the same length */
   public static Optional<Scalar> of(Tensor u, Tensor v) {
     Scalar nu = Vector2Norm.of(u);
     Scalar nv = Vector2Norm.of(v);
     if (Scalars.isZero(nu) || Scalars.isZero(nv)) {
-      if (u.length() != v.length())
-        throw TensorRuntimeException.of(u, v);
+      Integers.requireEquals(u.length(), v.length());
       return Optional.empty();
     }
     Scalar ratio = ExactTensorQ.of(u) || ExactTensorQ.of(v) //

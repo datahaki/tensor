@@ -13,7 +13,7 @@ import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Subsets;
 import ch.alpine.tensor.alg.Transpose;
-import ch.alpine.tensor.mat.LinearSolve;
+import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 

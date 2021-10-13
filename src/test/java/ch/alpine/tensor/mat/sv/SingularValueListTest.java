@@ -3,9 +3,9 @@ package ch.alpine.tensor.mat.sv;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.alg.MatrixDotTranspose;
 import ch.alpine.tensor.alg.OrderedQ;
 import ch.alpine.tensor.alg.Reverse;
+import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;

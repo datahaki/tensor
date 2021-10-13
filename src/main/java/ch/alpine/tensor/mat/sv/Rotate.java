@@ -17,12 +17,12 @@ import ch.alpine.tensor.Scalar;
     im = y.multiply(c).add(x.multiply(s));
   }
 
-  /** @return y*c - x*s */
+  /** @return x*c + y*s */
   public Scalar re() {
     return re;
   }
 
-  /** @return x*c + y*s */
+  /** @return y*c - x*s */
   public Scalar im() {
     return im;
   }

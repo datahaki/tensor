@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat.ev;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.alg.MatrixDotTranspose;
+import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.sv.SingularValueList;
 import ch.alpine.tensor.pdf.Distribution;

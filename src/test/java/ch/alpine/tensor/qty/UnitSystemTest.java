@@ -118,7 +118,7 @@ public class UnitSystemTest extends TestCase {
     assertTrue(set.contains("kg"));
     assertTrue(set.contains("mol"));
     // unitSystem.apply(Quantity.of(1, "K"));
-    Set<String> set2 = KnownUnitQ.buildSet(unitSystem);
+    Set<String> set2 = StaticHelper.buildSet(unitSystem);
     assertTrue(set2.contains("K"));
     assertTrue(set2.contains("N"));
     assertTrue(set2.contains("kg"));

@@ -72,7 +72,18 @@ public class CyclesTest extends TestCase {
     Map<Integer, Integer> map = new IdentityHashMap<>();
     map.put(3, 5);
     map.put(4, 5);
-    map.entrySet().stream().collect(Cycles.COLLECTOR);
+    map.entrySet().stream().collect(Cycles.INVERSE);
+  }
+
+  public void testReplace() {
+    assertEquals(Cycles.of(Tensors.fromString("{{2, 3, 4, 6}}")).replace(4), 6);
+    assertEquals(Cycles.of(Tensors.fromString("{{2, 3, 4, 6}}")).replace(1), 1);
+  }
+
+  public void testReplaceFail() {
+    Cycles cycles = Cycles.of(Tensors.fromString("{{2, 3, 4, 6}}"));
+    assertEquals(cycles.replace(0), 0);
+    AssertFail.of(() -> cycles.replace(-1));
   }
 
   public void testScalarFail() {

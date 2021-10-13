@@ -47,7 +47,7 @@ public class LogNormalDistribution implements ContinuousDistribution, Serializab
     return STANDARD;
   }
 
-  /***************************************************/
+  // ---
   private final Scalar mu;
   private final NormalDistribution normalDistribution;
   private final Scalar variance;

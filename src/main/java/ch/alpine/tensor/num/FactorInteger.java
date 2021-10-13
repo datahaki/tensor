@@ -25,7 +25,7 @@ public class FactorInteger {
     return new FactorInteger(n).map;
   }
 
-  /***************************************************/
+  // ---
   private final Map<BigInteger, Integer> map = new TreeMap<>();
 
   private FactorInteger(BigInteger n) {
@@ -54,7 +54,7 @@ public class FactorInteger {
     return new BigInteger(bigInteger.bitLength(), RANDOM).mod(bigInteger.subtract(BigInteger.ONE));
   }
 
-  // LONGTERM improve cycle detection
+  // TODO improve cycle detection
   private static BigInteger divisor(BigInteger n) {
     int i = 1;
     BigInteger xi = random(n);

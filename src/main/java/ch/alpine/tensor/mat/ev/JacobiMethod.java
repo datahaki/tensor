@@ -18,6 +18,21 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
 
+/** The Jacobi transformations of a real symmetric matrix establishes the
+ * diagonal matrix D
+ * 
+ * D == V* . A . V,
+ * 
+ * where the matrix V,
+ * 
+ * V == P1 * P2 * P3 * ...,
+ * 
+ * is the product of the successive Jacobi rotation matrices Pi. The diagonal
+ * entries of D are the eigenvalues of A and the columns of V are the
+ * eigenvectors of A.
+ * 
+ * Implementation also works for matrices with entries of type Quantity of
+ * the same unit. */
 /* package */ class JacobiMethod implements Eigensystem {
   private static final int MAX_ITERATIONS = 50;
   // higher phase 1 count increases numerical precision

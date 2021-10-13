@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.Sinc;
 /* package */ class LanczosKernel implements ScalarUnaryOperator {
   public static final LanczosKernel _3 = new LanczosKernel(3);
   // ---
-  /* package */ final int semi;
+  private final int semi;
   private final Scalar bound;
 
   /** @param semi positive */
@@ -27,5 +27,9 @@ import ch.alpine.tensor.sca.Sinc;
   public Scalar apply(Scalar scalar) { // scalar is in the interval [-semi, semi]
     Scalar _scalar = scalar.multiply(Pi.VALUE);
     return Sinc.FUNCTION.apply(_scalar).multiply(Sinc.FUNCTION.apply(_scalar.divide(bound)));
+  }
+
+  public int semi() {
+    return semi;
   }
 }

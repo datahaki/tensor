@@ -38,7 +38,7 @@ import ch.alpine.tensor.sca.Sinh;
    * @param re neither a {@link ComplexScalar}, or {@link Quantity}
    * @param im neither a {@link ComplexScalar}, or {@link Quantity}
    * @return */
-  /* package */ static Scalar of(Scalar re, Scalar im) {
+  public static Scalar of(Scalar re, Scalar im) {
     return Scalars.isZero(im) //
         ? re
         : new ComplexScalarImpl(re, im);
@@ -51,11 +51,11 @@ import ch.alpine.tensor.sca.Sinh;
         && !(scalar instanceof Quantity);
   }
 
-  /***************************************************/
+  // ---
   private final Scalar re;
   private final Scalar im;
 
-  /* package */ ComplexScalarImpl(Scalar re, Scalar im) {
+  private ComplexScalarImpl(Scalar re, Scalar im) {
     this.re = re;
     this.im = im;
   }
@@ -118,7 +118,7 @@ import ch.alpine.tensor.sca.Sinh;
     throw TensorRuntimeException.of(this);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
     if (isLocal(scalar)) {
@@ -128,7 +128,7 @@ import ch.alpine.tensor.sca.Sinh;
     return scalar.add(this);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbsInterface
   public Scalar abs() { // "complex modulus"
     return Hypot.of(re, im);
@@ -213,7 +213,7 @@ import ch.alpine.tensor.sca.Sinh;
     if (isExactScalar()) {
       Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
       if (optional.isPresent())
-        return BINARY_POWER.raise(this, optional.get());
+        return BINARY_POWER.raise(this, optional.orElseThrow());
     }
     return Exp.FUNCTION.apply(exponent.multiply(Log.FUNCTION.apply(this)));
   }
@@ -267,7 +267,7 @@ import ch.alpine.tensor.sca.Sinh;
         Cosh.of(re).multiply(Sin.of(im)));
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   public int hashCode() {
     return re.hashCode() + 31 * im.hashCode();

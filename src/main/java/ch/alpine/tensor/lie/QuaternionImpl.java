@@ -44,7 +44,7 @@ import ch.alpine.tensor.sca.Sqrt;
   private final Scalar w;
   private final Tensor xyz;
 
-  /***************************************************/
+  // ---
   public QuaternionImpl(Scalar w, Tensor xyz) {
     this.w = w;
     this.xyz = xyz;
@@ -116,7 +116,7 @@ import ch.alpine.tensor.sca.Sqrt;
     throw TensorRuntimeException.of(this);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbsInterface
   public Scalar abs() {
     return Hypot.ofVector(Append.of(xyz, w));
@@ -192,7 +192,7 @@ import ch.alpine.tensor.sca.Sqrt;
     if (isExactScalar()) {
       Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
       if (optional.isPresent())
-        return (Quaternion) BINARY_POWER.raise(this, optional.get());
+        return (Quaternion) BINARY_POWER.raise(this, optional.orElseThrow());
     }
     return _power(exponent);
   }
@@ -230,7 +230,7 @@ import ch.alpine.tensor.sca.Sqrt;
     return TrigonometrySeries.DEFAULT.sinh(isExactScalar() ? n() : this);
   }
 
-  /***************************************************/
+  // ---
   @Override // from Quaternion
   public Scalar w() {
     return w;
@@ -241,7 +241,7 @@ import ch.alpine.tensor.sca.Sqrt;
     return xyz.unmodifiable();
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   public int hashCode() {
     return w.hashCode() + 31 * xyz.hashCode();

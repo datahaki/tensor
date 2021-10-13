@@ -41,7 +41,7 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
     return of(n, RealScalar.of(p));
   }
 
-  /***************************************************/
+  // ---
   private final int n;
   private final Scalar p;
   private final Tensor table;

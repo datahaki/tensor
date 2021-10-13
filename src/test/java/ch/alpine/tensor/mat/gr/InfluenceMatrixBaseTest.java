@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.gr;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.VectorQ;
@@ -53,6 +54,8 @@ public class InfluenceMatrixBaseTest extends TestCase {
     Tensor matrix = SymmetricMatrixQ.require(influenceMatrix.matrix());
     ExactTensorQ.require(matrix);
     assertEquals(matrix, Array.zeros(4, 4));
+    Tensor image = influenceMatrix.image(Tensors.vector(1, 2, 3, 4));
+    assertEquals(image, Array.zeros(4));
   }
 
   public void testNumericZeroQuantity() {

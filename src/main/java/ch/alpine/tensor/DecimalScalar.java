@@ -50,7 +50,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
     return new DecimalScalar(bigDecimal, precision <= DEFAULT_CONTEXT ? DEFAULT_CONTEXT : precision);
   }
 
-  /***************************************************/
+  // ---
   private final BigDecimal value;
   private final int precision;
 
@@ -146,7 +146,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
     return new DecimalScalar(bigDecimal, mathContext.getPrecision());
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
     if (scalar instanceof DecimalScalar) {
@@ -164,7 +164,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
     return scalar.add(this);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractRealScalar
   public Scalar arg() {
     return isNonNegative() ? ZERO : Pi.in(precision);
@@ -273,7 +273,7 @@ public class DecimalScalar extends AbstractRealScalar implements //
     return new DecimalScalar(bigDecimal, mathContext.getPrecision());
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   public int hashCode() {
     return value.hashCode();

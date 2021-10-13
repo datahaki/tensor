@@ -20,12 +20,12 @@ import junit.framework.TestCase;
 public class NdListMapTest extends TestCase {
   public void testSimple() {
     NdMap<String> m1 = new NdListMap<>();
-    m1.add(Tensors.vector(1, 0), "p2");
-    m1.add(Tensors.vector(1, 5), "p4");
-    m1.add(Tensors.vector(0, 0), "p1");
-    m1.add(Tensors.vector(1, 1), "p3");
+    m1.insert(Tensors.vector(1, 0), "p2");
+    m1.insert(Tensors.vector(1, 5), "p4");
+    m1.insert(Tensors.vector(0, 0), "p1");
+    m1.insert(Tensors.vector(1, 1), "p3");
     Tensor center = Tensors.vector(0, 0);
-    Collection<NdMatch<String>> cl = m1.cluster(EuclideanNdCenter.of(center), 2);
+    Collection<NdMatch<String>> cl = NdCollectNearest.of(m1, NdCenters.VECTOR_2_NORM.apply(center), 2);
     Set<String> res = cl.stream().map(NdMatch::value).collect(Collectors.toSet());
     assertTrue(res.contains("p1"));
     assertTrue(res.contains("p2"));
@@ -47,9 +47,9 @@ public class NdListMapTest extends TestCase {
     return sum;
   }
 
-  private static void _checkCenter(Tensor center, int n, int dim, int dep) {
+  private static void _checkCenter(Tensor center, int n, int dim) {
     NdMap<String> m1 = new NdListMap<>();
-    NdMap<String> m2 = new NdTreeMap<>(Tensors.vector(-2, -1), Tensors.vector(2, 10), dim, dep);
+    NdMap<String> m2 = NdTreeMap.of(Box.of(Tensors.vector(-2, -1), Tensors.vector(2, 10)), dim);
     int index = 0;
     Distribution b = BernoulliDistribution.of(RealScalar.of(0.25));
     Distribution ux = UniformDistribution.of(-2, 2);
@@ -57,18 +57,18 @@ public class NdListMapTest extends TestCase {
     for (int c = 0; c < 20; ++c) {
       Tensor location = Tensors.of(RandomVariate.of(ux), RandomVariate.of(uy));
       String value = "p" + (++index);
-      m1.add(location, value);
-      m2.add(location, value);
+      m1.insert(location, value);
+      m2.insert(location, value);
       while (Scalars.isZero(RandomVariate.of(b))) {
         value = "p" + (++index);
-        m1.add(location, value);
-        m2.add(location, value);
+        m1.insert(location, value);
+        m2.insert(location, value);
       }
     }
     assertEquals(m1.size(), m2.size());
-    NdCenterInterface dinf = EuclideanNdCenter.of(center);
-    Collection<NdMatch<String>> c1 = m1.cluster(dinf, n);
-    Collection<NdMatch<String>> c2 = m2.cluster(dinf, n);
+    NdCenterInterface dinf = NdCenters.VECTOR_2_NORM.apply(center);
+    Collection<NdMatch<String>> c1 = NdCollectNearest.of(m1, dinf, n);
+    Collection<NdMatch<String>> c2 = NdCollectNearest.of(m2, dinf, n);
     assertEquals(c1.size(), c2.size());
     assertTrue(c1.size() <= n);
     Scalar s1 = addDistances(c1, center, dinf);
@@ -78,46 +78,46 @@ public class NdListMapTest extends TestCase {
 
   public void testOne() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(0.3, .3), 1, dim, 6);
-      _checkCenter(Tensors.vector(0.1, .3), 1, dim, 6);
-      _checkCenter(Tensors.vector(5, 4.3), 1, dim, 10);
-      _checkCenter(Tensors.vector(5, -3.3), 1, dim, 10);
+      _checkCenter(Tensors.vector(0.3, .3), 1, dim);
+      _checkCenter(Tensors.vector(0.1, .3), 1, dim);
+      _checkCenter(Tensors.vector(5, 4.3), 1, dim);
+      _checkCenter(Tensors.vector(5, -3.3), 1, dim);
     }
   }
 
   public void testFew() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(0.3, .3), 3, dim, 7);
-      _checkCenter(Tensors.vector(0.1, .3), 3, dim, 7);
-      _checkCenter(Tensors.vector(5, 4.3), 3, dim, 11);
-      _checkCenter(Tensors.vector(5, -3.3), 3, dim, 11);
+      _checkCenter(Tensors.vector(0.3, .3), 3, dim);
+      _checkCenter(Tensors.vector(0.1, .3), 3, dim);
+      _checkCenter(Tensors.vector(5, 4.3), 3, dim);
+      _checkCenter(Tensors.vector(5, -3.3), 3, dim);
     }
   }
 
   public void testMany() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(0.3, .3), 20, dim, 8);
-      _checkCenter(Tensors.vector(0.1, .3), 20, dim, 8);
-      _checkCenter(Tensors.vector(5, 4.3), 20, dim, 12);
-      _checkCenter(Tensors.vector(5, -3.3), 20, dim, 12);
+      _checkCenter(Tensors.vector(0.3, .3), 20, dim);
+      _checkCenter(Tensors.vector(0.1, .3), 20, dim);
+      _checkCenter(Tensors.vector(5, 4.3), 20, dim);
+      _checkCenter(Tensors.vector(5, -3.3), 20, dim);
     }
   }
 
   public void testMost() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(0.3, .3), 60, dim, 9);
-      _checkCenter(Tensors.vector(0.1, .3), 60, dim, 9);
-      _checkCenter(Tensors.vector(5, 4.3), 60, dim, 13);
-      _checkCenter(Tensors.vector(5, -3.3), 60, dim, 13);
+      _checkCenter(Tensors.vector(0.3, .3), 60, dim);
+      _checkCenter(Tensors.vector(0.1, .3), 60, dim);
+      _checkCenter(Tensors.vector(5, 4.3), 60, dim);
+      _checkCenter(Tensors.vector(5, -3.3), 60, dim);
     }
   }
 
   public void testAll() {
     for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(0.3, .3), 160, dim, 10);
-      _checkCenter(Tensors.vector(0.1, .3), 160, dim, 10);
-      _checkCenter(Tensors.vector(5, 4.3), 160, dim, 14);
-      _checkCenter(Tensors.vector(5, -3.3), 160, dim, 14);
+      _checkCenter(Tensors.vector(0.3, .3), 160, dim);
+      _checkCenter(Tensors.vector(0.1, .3), 160, dim);
+      _checkCenter(Tensors.vector(5, 4.3), 160, dim);
+      _checkCenter(Tensors.vector(5, -3.3), 160, dim);
     }
   }
 }

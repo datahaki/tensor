@@ -7,10 +7,10 @@ import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.ScalarArray;
 
 /** evaluates polynomial at given point without solving for the coefficients
@@ -35,7 +35,7 @@ public class InterpolatingPolynomial implements Serializable {
     return new InterpolatingPolynomial(LinearBinaryAverage.INSTANCE, knots);
   }
 
-  /***************************************************/
+  // ---
   private final BinaryAverage binaryAverage;
   private final Scalar[] knots;
 
@@ -48,9 +48,8 @@ public class InterpolatingPolynomial implements Serializable {
    * @return
    * @throws Exception if length of tensor is different from number of knots */
   public ScalarTensorFunction scalarTensorFunction(Tensor tensor) {
-    if (knots.length == tensor.length())
-      return new Neville(tensor);
-    throw TensorRuntimeException.of(tensor);
+    Integers.requireEquals(knots.length, tensor.length());
+    return new Neville(tensor);
   }
 
   /** @param vector of values of polynomial evaluated at knots

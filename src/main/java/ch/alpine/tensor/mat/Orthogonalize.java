@@ -5,7 +5,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.alg.MatrixDotTranspose;
 import ch.alpine.tensor.alg.PadRight;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.TensorProduct;
@@ -46,7 +45,7 @@ public enum Orthogonalize {
     return PadRight.zeros(Dimensions.of(matrix)).apply(QRMathematica.wrap(qrDecomposition).getQTranspose());
   }
 
-  /***************************************************/
+  // ---
   /** Least square orthogonal fit to given matrix
    * 
    * for input of square matrix, the function returns a matrix with determinant +1
@@ -88,7 +87,7 @@ public enum Orthogonalize {
     return PolarDecomposition.of(matrix).getR();
   }
 
-  /***************************************************/
+  // ---
   /** EXPERIMENTAL
    * 
    * for input of square matrix, the function returns a matrix with determinant +1

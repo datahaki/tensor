@@ -32,7 +32,7 @@ public class ChiSquareDistribution implements ContinuousDistribution, Serializab
     return of(RealScalar.of(nu));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar nu;
   private final Scalar nu2;
   private final Scalar log;

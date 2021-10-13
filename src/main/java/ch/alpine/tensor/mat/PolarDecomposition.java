@@ -7,7 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.lie.MatrixSqrt;
+import ch.alpine.tensor.mat.ex.MatrixSqrt;
 
 /** decomposition of A = S.R
  * where S is symmetric, and R is orthogonal
@@ -26,13 +26,13 @@ public class PolarDecomposition implements Serializable {
     throw TensorRuntimeException.of(matrix);
   }
 
-  /***************************************************/
+  // ---
   private final Tensor matrix;
   private final MatrixSqrt matrixSqrt;
 
   private PolarDecomposition(Tensor matrix) {
     this.matrix = matrix;
-    matrixSqrt = MatrixSqrt.of(StaticHelper.dotConjugate(matrix));
+    matrixSqrt = MatrixSqrt.of(MatrixDotConjugateTranspose.of(matrix));
   }
 
   /** @return symmetric (or Hermitian) matrix k x k */

@@ -144,10 +144,6 @@ public class LinearInterpolationTest extends TestCase {
     }
   }
 
-  public void testFailScalar() {
-    AssertFail.of(() -> LinearInterpolation.of(RealScalar.ONE));
-  }
-
   public void test0D() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.empty());
     AssertFail.of(() -> interpolation.get(RealScalar.ZERO));
@@ -170,5 +166,11 @@ public class LinearInterpolationTest extends TestCase {
 
   public void testFailNull() {
     AssertFail.of(() -> LinearInterpolation.of(null));
+  }
+
+  public void testFailScalar() {
+    Interpolation interpolation = LinearInterpolation.of(RealScalar.ONE);
+    assertEquals(interpolation.get(Tensors.empty()), RealScalar.ONE);
+    AssertFail.of(() -> interpolation.get(Tensors.vector(0)));
   }
 }

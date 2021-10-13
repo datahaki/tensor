@@ -19,7 +19,7 @@ public class WelchWindow extends ParameterizedWindow {
     return new WelchWindow(Objects.requireNonNull(alpha));
   }
 
-  /***************************************************/
+  // ---
   private WelchWindow(Scalar alpha) {
     super(alpha);
   }

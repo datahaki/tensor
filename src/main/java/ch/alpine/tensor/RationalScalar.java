@@ -49,7 +49,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
     return new RationalScalar(BigFraction.integer(num));
   }
 
-  /***************************************************/
+  // ---
   private final BigFraction bigFraction;
 
   /** private constructor is only called from of(...)
@@ -127,7 +127,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
     return toBigDecimal(MathContext.DECIMAL64).doubleValue();
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
     if (scalar instanceof RationalScalar) {
@@ -137,7 +137,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
     return scalar.add(this);
   }
 
-  /***************************************************/
+  // ---
   @Override // from RoundingInterface
   public Scalar ceiling() {
     return round(RoundingMode.CEILING);
@@ -206,14 +206,14 @@ public final class RationalScalar extends AbstractRealScalar implements //
     if (sqrtnum.isPresent()) {
       Optional<BigInteger> sqrtden = BigIntegerMath.sqrt(denominator());
       if (sqrtden.isPresent()) {
-        Scalar sqrt = of(sqrtnum.get(), sqrtden.get());
+        Scalar sqrt = of(sqrtnum.orElseThrow(), sqrtden.orElseThrow());
         return isNonNegative ? sqrt : ComplexScalarImpl.of(ZERO, sqrt);
       }
     }
     return super.sqrt();
   }
 
-  /***************************************************/
+  // ---
   /** @return numerator as {@link BigInteger} */
   public BigInteger numerator() {
     return bigFraction.numerator();
@@ -233,16 +233,19 @@ public final class RationalScalar extends AbstractRealScalar implements //
         .toBigIntegerExact());
   }
 
+  /** @param mathContext
+   * @return */
   /* package */ BigDecimal toBigDecimal(MathContext mathContext) {
-    return new BigDecimal(numerator()) //
-        .divide(new BigDecimal(denominator()), mathContext);
+    return new BigDecimal(numerator()).divide(new BigDecimal(denominator()), mathContext);
   }
 
+  /** @return
+   * @see IntegerQ */
   /* package */ boolean isInteger() {
     return bigFraction.isInteger();
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   public int hashCode() {
     return bigFraction.hashCode();

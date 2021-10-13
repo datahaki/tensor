@@ -92,6 +92,11 @@ public class SimpleUnitSystemTest extends TestCase {
     assertEquals(unitSystem.dimensions(Unit.of("g^-2*xkn*own^3")), Unit.of("kg^-2*xkn*own^3"));
   }
 
+  public void testDimensionsFail() {
+    AssertFail.of(() -> UnitSystem.SI().apply(null));
+    AssertFail.of(() -> UnitSystem.SI().dimensions(null));
+  }
+
   public void testTogs() {
     ScalarUnaryOperator suo = QuantityMagnitude.SI().in("m^2*K*W^-1");
     Scalar scalar = suo.apply(Quantity.of(10, "togs"));

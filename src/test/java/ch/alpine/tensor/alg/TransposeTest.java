@@ -10,6 +10,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.ExponentialDistribution;
 import ch.alpine.tensor.pdf.NegativeBinomialDistribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -27,17 +28,10 @@ public class TransposeTest extends TestCase {
     assertEquals(v, r);
   }
 
-  private static Tensor _checkBoth(Tensor tensor, int... sigma) {
-    Tensor t1 = Transpose.of(tensor, sigma);
-    Tensor t2 = Transpose.nonArray(tensor, sigma);
-    assertEquals(t1, t2);
-    return t1;
-  }
-
   public void testMatrix() {
     // [[0, 1, 2, 3], [4, 5, 6, 7], [8, 9, 10, 11]]
     Tensor m = Tensors.matrix((i, j) -> RealScalar.of(i * 4 + j), 3, 4);
-    Tensor t = _checkBoth(m, 1, 0);
+    Tensor t = Transpose.of(m, 1, 0);
     assertEquals(t.toString(), "{{0, 4, 8}, {1, 5, 9}, {2, 6, 10}, {3, 7, 11}}");
     Tensor r = Transpose.of(m);
     assertEquals(r.toString(), "{{0, 4, 8}, {1, 5, 9}, {2, 6, 10}, {3, 7, 11}}");
@@ -52,7 +46,7 @@ public class TransposeTest extends TestCase {
   public void testTranspose2() {
     // [[[0, 1, 2], [3, 4, 5]], [[6, 7, 8], [9, 10, 11]]]
     Tensor m = Partition.of(Tensors.matrix((i, j) -> RealScalar.of(i * 3 + j), 4, 3), 2);
-    Tensor t = _checkBoth(m, 0, 1, 2);
+    Tensor t = Transpose.of(m, 0, 1, 2);
     assertEquals(t, Tensors.fromString("{{{0, 1, 2}, {3, 4, 5}}, {{6, 7, 8}, {9, 10, 11}}}"));
   }
 
@@ -65,13 +59,13 @@ public class TransposeTest extends TestCase {
         "{{{0, 1, 2, 3, 4}, {5, 6, 7, 8, 9}, {10, 11, 12, 13, 14}}, {{15, 16, 17, 18, 19}, {20, 21, 22, 23, 24}, {25, 26, 27, 28, 29}}}"));
     assertEquals(Dimensions.of(m), Arrays.asList(2, 3, 5));
     {
-      Tensor t = _checkBoth(m, 2, 1, 0);
+      Tensor t = Transpose.of(m, 2, 1, 0);
       assertEquals(Dimensions.of(t), Arrays.asList(5, 3, 2));
       assertEquals(t, Tensors.fromString( //
           "{{{0, 15}, {5, 20}, {10, 25}}, {{1, 16}, {6, 21}, {11, 26}}, {{2, 17}, {7, 22}, {12, 27}}, {{3, 18}, {8, 23}, {13, 28}}, {{4, 19}, {9, 24}, {14, 29}}}"));
     }
     {
-      Tensor t = _checkBoth(m, 1, 2, 0);
+      Tensor t = Transpose.of(m, 1, 2, 0);
       assertEquals(Dimensions.of(t), Arrays.asList(5, 2, 3));
       assertEquals(t, Tensors.fromString( //
           "{{{0, 5, 10}, {15, 20, 25}}, {{1, 6, 11}, {16, 21, 26}}, {{2, 7, 12}, {17, 22, 27}}, {{3, 8, 13}, {18, 23, 28}}, {{4, 9, 14}, {19, 24, 29}}}"));
@@ -98,40 +92,46 @@ public class TransposeTest extends TestCase {
 
   public void testFirstDimensions() {
     Tensor randn = RandomVariate.of(NormalDistribution.standard(), 3, 4, 5);
-    assertEquals(_checkBoth(randn, 0, 1, 2), randn);
-    Tensor trans = _checkBoth(randn, 1, 0, 2);
+    assertEquals(Transpose.of(randn, 0), randn);
+    assertEquals(Transpose.of(randn, 0, 1), randn);
+    assertEquals(Transpose.of(randn, 0, 1, 2), randn);
+    Tensor trans = Transpose.of(randn, 1, 0, 2);
     assertEquals(trans, Transpose.of(randn));
   }
 
+  public void testIdentity() {
+    Tensor randn = RandomVariate.of(ExponentialDistribution.standard(), 3, 4, 2);
+    assertEquals(randn, Transpose.of(randn, new int[] {}));
+    assertEquals(Tensors.empty(), Transpose.of(Tensors.empty(), new int[] {}));
+    assertEquals(Tensors.vector(1, 2, 3), Transpose.of(Tensors.vector(1, 2, 3), new int[] {}));
+  }
+
   public void testComparison() {
-    Tensor randn = RandomVariate.of(NormalDistribution.standard(), 6, 5, 8);
-    Tensor array = Transpose.nonArray(randn, 1, 2, 0);
+    Tensor randn = RandomVariate.of(NormalDistribution.standard(), 6, 5, 4);
+    ArrayQ.require(randn);
     Tensor trans = Transpose.of(randn, 1, 2, 0);
-    assertEquals(trans, array);
+    assertEquals(Dimensions.of(trans), Arrays.asList(4, 6, 5));
   }
 
   public void testIncomplete() {
     Tensor randn = RandomVariate.of(NormalDistribution.standard(), 2, 5, 4, 3);
-    Tensor array = Transpose.nonArray(randn, 1, 2, 0);
+    Tensor array = Transpose.of(randn, 1, 2, 0);
     assertEquals(Transpose.of(randn, 1, 2, 0, 3), array);
   }
 
-  public void testEmpty() {
-    Tensor result = Transpose.nonArray(Tensors.empty());
-    assertEquals(result, Tensors.empty());
-  }
-
-  public void testSigle() {
+  public void testSingle() {
     Tensor randn = RandomVariate.of(NormalDistribution.standard(), 2, 5, 4, 3);
-    Tensor array = Transpose.nonArray(randn, 0);
+    Tensor array = Transpose.of(randn, 0);
     assertEquals(Transpose.of(randn, 0, 1, 2, 3), array);
   }
 
   public void testNonArray() {
     Tensor tensor = Tensors.fromString("{{0, 1, {2, 3, 4}}, {5, 6, 7}}");
-    Tensor result = Transpose.nonArray(tensor, 1, 0);
+    // mathematica gives ............... {{0, 5}, {1, 6}, {{2, 3, 4}, 7}}
     Tensor correct = Tensors.fromString("{{0, 5}, {1, 6}, {{2, 3, 4}, 7}}");
-    assertEquals(result, correct);
+    assertTrue(2 <= TensorRank.of(tensor));
+    Tensor r0 = Transpose.of(tensor, 1, 0);
+    assertEquals(r0, correct);
   }
 
   public void testDotT() {

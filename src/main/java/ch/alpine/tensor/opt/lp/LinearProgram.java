@@ -9,10 +9,10 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
-import ch.alpine.tensor.alg.MatrixQ;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.MatrixQ;
 
 /** definition of a linear program
  * 
@@ -82,7 +82,7 @@ public class LinearProgram implements Serializable {
     NON_NEGATIVE, UNRESTRICTED;
   }
 
-  /***************************************************/
+  // ---
   public final Objective objective;
   public final Tensor c;
   public final ConstraintType constraintType;

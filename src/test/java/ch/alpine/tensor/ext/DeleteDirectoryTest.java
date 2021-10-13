@@ -11,7 +11,7 @@ public class DeleteDirectoryTest extends TestCase {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "0");
     folder.mkdir();
     DeleteDirectory deleteDirectory = DeleteDirectory.of(folder, 0, 1, DeleteDirectory.DELETE_FAIL_ABORTS);
-    assertEquals(deleteDirectory.deletedCount(), 1);
+    assertEquals(deleteDirectory.fileCount(), 1);
   }
 
   public void testLayer1a() throws IOException {
@@ -32,7 +32,9 @@ public class DeleteDirectoryTest extends TestCase {
       // ---
     }
     DeleteDirectory deleteDirectory = DeleteDirectory.of(folder, 1, 3);
-    assertEquals(deleteDirectory.deletedCount(), 3);
+    assertEquals(deleteDirectory.fileCount(), 3);
+    int reachedDepth = deleteDirectory.reachedDepth();
+    assertEquals(reachedDepth, 1);
   }
 
   public void testLayer1b() throws IOException {
@@ -43,7 +45,7 @@ public class DeleteDirectoryTest extends TestCase {
     File sub = new File(folder, "sub");
     sub.mkdir();
     DeleteDirectory deleteDirectory = DeleteDirectory.of(folder, 1, 5);
-    assertEquals(deleteDirectory.deletedCount(), 4);
+    assertEquals(deleteDirectory.fileCount(), 4);
   }
 
   public void testLayer2() throws IOException {
@@ -61,7 +63,7 @@ public class DeleteDirectoryTest extends TestCase {
       // ---
     }
     DeleteDirectory deleteDirectory = DeleteDirectory.of(folder, 2, 5);
-    assertEquals(deleteDirectory.deletedCount(), 5);
+    assertEquals(deleteDirectory.fileCount(), 5);
   }
 
   public void testNotFound() {

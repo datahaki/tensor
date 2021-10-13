@@ -23,7 +23,8 @@ public class PoissonBinomialDistribution implements DiscreteDistribution, //
    * if p_vector consists of identical entries, the {@link BinomialDistribution}
    * or {@link BinomialRandomVariate} should be used instead.
    * 
-   * @param p_vector with scalar entries in the interval [0, 1]
+   * @param p_vector with scalar entries in the interval [0, 1], the empty vector
+   * is also permitted
    * @return
    * @throws Exception if any entry in given p_vector is outside the unit interval */
   public static Distribution of(Tensor p_vector) {
@@ -40,7 +41,7 @@ public class PoissonBinomialDistribution implements DiscreteDistribution, //
     return new PoissonBinomialDistribution(lowerBound, p_result);
   }
 
-  /***************************************************/
+  // ---
   private final int lowerBound;
   private final Tensor p_vector;
 

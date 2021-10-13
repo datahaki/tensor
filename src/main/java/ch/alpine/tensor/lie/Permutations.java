@@ -55,7 +55,7 @@ public class Permutations {
     return builder.build();
   }
 
-  /***************************************************/
+  // ---
   private final Consumer<Tensor> consumer;
 
   private Permutations(Consumer<Tensor> consumer) {

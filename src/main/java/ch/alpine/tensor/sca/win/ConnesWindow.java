@@ -20,7 +20,7 @@ public class ConnesWindow extends ParameterizedWindow {
     return new ConnesWindow(Objects.requireNonNull(alpha));
   }
 
-  /***************************************************/
+  // ---
   private ConnesWindow(Scalar alpha) {
     super(alpha);
   }

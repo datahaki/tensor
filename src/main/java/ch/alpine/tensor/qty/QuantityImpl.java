@@ -40,7 +40,7 @@ import ch.alpine.tensor.sca.Sqrt;
         : new QuantityImpl(value, unit);
   }
 
-  /***************************************************/
+  // ---
   private Quantity ofUnit(Scalar scalar) {
     return new QuantityImpl(scalar, unit);
   }
@@ -64,7 +64,7 @@ import ch.alpine.tensor.sca.Sqrt;
     return unit;
   }
 
-  /***************************************************/
+  // ---
   @Override // from Scalar
   public Scalar negate() {
     return ofUnit(value.negate());
@@ -126,7 +126,7 @@ import ch.alpine.tensor.sca.Sqrt;
     throw TensorRuntimeException.of(this);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
     if (scalar instanceof Quantity) {
@@ -141,7 +141,7 @@ import ch.alpine.tensor.sca.Sqrt;
     throw TensorRuntimeException.of(this, scalar);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbsInterface
   public Scalar abs() {
     return ofUnit(Abs.FUNCTION.apply(value));
@@ -246,7 +246,7 @@ import ch.alpine.tensor.sca.Sqrt;
     throw TensorRuntimeException.of(this, scalar);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   public int hashCode() {
     return value.hashCode() + 31 * unit.hashCode();

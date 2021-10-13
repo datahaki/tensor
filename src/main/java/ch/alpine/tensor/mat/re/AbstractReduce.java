@@ -9,9 +9,9 @@ import ch.alpine.tensor.ext.Integers;
 
 /** base class of {@link Determinant}, {@link GaussianElimination} and {@link RowReduce} */
 /* package */ class AbstractReduce {
-  final Tensor[] lhs;
+  protected final Tensor[] lhs;
   private final Pivot pivot;
-  final int[] ind;
+  protected final int[] ind;
   private int swaps = 0;
 
   public AbstractReduce(Tensor matrix, Pivot pivot) {
@@ -35,7 +35,7 @@ import ch.alpine.tensor.ext.Integers;
     Scalar scalar = IntStream.range(0, lhs.length) //
         .mapToObj(c0 -> lhs[ind[c0]].Get(c0)) //
         .reduce(Scalar::multiply) //
-        .get();
+        .orElseThrow();
     return Integers.isEven(swaps) //
         ? scalar
         : scalar.negate();

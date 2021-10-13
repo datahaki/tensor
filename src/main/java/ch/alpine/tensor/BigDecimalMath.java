@@ -36,7 +36,7 @@ import ch.alpine.tensor.ext.Integers;
     return xn1;
   }
 
-  /***************************************************/
+  // ---
   /** @param x
    * @param mathContext
    * @return exponential of x */
@@ -122,7 +122,7 @@ import ch.alpine.tensor.ext.Integers;
     return xn1;
   }
 
-  /***************************************************/
+  // ---
   /** @param bigDecimal
    * @return
    * @throws Exception if value is Infinity */

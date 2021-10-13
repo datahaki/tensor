@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.PackageTestAccess;
 
 /** Implementation is based on the dynamic programming solution in the reference
  * "Algorithmik", Section 4.2 "Matrizen-Kettenmultiplikation"
@@ -27,11 +29,12 @@ public class Dot {
     return new Dot(tensors).product();
   }
 
-  /***************************************************/
+  // ---
   private final Tensor product;
   private final Entry[][] entry;
 
-  /* package */ Dot(Tensor... tensors) {
+  @PackageTestAccess
+  Dot(Tensor... tensors) {
     List<Node> list = Stream.of(tensors) //
         .map(tensor -> new Node(tensor, Dimensions.of(tensor))) //
         .collect(Collectors.toList());
@@ -76,17 +79,22 @@ public class Dot {
     return product;
   }
 
-  // count of multiplications excluding dots with vectors
-  /* package */ int multiplications() {
+  /** @return count of multiplications excluding dots with vectors */
+  public int multiplications() {
     return entry[0][entry.length - 1].m;
   }
 
-  /* package */ List<Integer> dimensions() {
+  /** @return dimensions of result of dot product */
+  public List<Integer> dimensions() {
     return entry[0][entry.length - 1].dimensions;
   }
 
-  /***************************************************/
-  /* package */ static List<Integer> combine(List<Integer> dimensions1, List<Integer> dimensions2) {
+  /** @param dimensions1 {..., tail}
+   * @param dimensions2 {head, ...}
+   * @return
+   * @throws Exception if tail and head are not equal */
+  public static List<Integer> combine(List<Integer> dimensions1, List<Integer> dimensions2) {
+    Integers.requireEquals(dimensions1.get(dimensions1.size() - 1), dimensions2.get(0));
     return Stream.concat( //
         dimensions1.stream().limit(dimensions1.size() - 1), //
         dimensions2.stream().skip(1)).collect(Collectors.toList());
@@ -106,7 +114,6 @@ public class Dot {
     }
   }
 
-  /***************************************************/
   private static class Entry {
     private final List<Integer> dimensions;
     private final int m;
@@ -120,7 +127,7 @@ public class Dot {
 
     public int product(Entry entry) {
       return m + entry.m + Stream.concat(dimensions.stream(), entry.dimensions.stream().skip(1)) //
-          .reduce(Math::multiplyExact).get();
+          .reduce(Math::multiplyExact).orElseThrow();
     }
   }
 }

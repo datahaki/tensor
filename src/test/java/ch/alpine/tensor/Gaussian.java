@@ -45,7 +45,7 @@ public class Gaussian extends AbstractScalar implements //
     return of(RealScalar.of(mean), RealScalar.of(variance));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar mean;
   private final Scalar variance; // sigma ^ 2
 
@@ -95,7 +95,7 @@ public class Gaussian extends AbstractScalar implements //
     return of(mean.add(scalar), variance);
   }
 
-  /***************************************************/
+  // ---
   @Override
   public boolean isExactScalar() {
     return ExactScalarQ.of(mean) //
@@ -127,7 +127,7 @@ public class Gaussian extends AbstractScalar implements //
     return NormalDistribution.of(mean, Sqrt.FUNCTION.apply(variance));
   }
 
-  /***************************************************/
+  // ---
   @Override
   public int hashCode() {
     return mean.hashCode() + 31 * variance.hashCode();

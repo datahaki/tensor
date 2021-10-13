@@ -156,7 +156,7 @@ public enum Tensors {
     return new TensorParser(function).parse(string);
   }
 
-  /***************************************************/
+  // ---
   /** @param tensor
    * @return true if tensor is a vector with zero entries, and
    * false if tensor contains entries or is a {@link Scalar} */
@@ -177,7 +177,7 @@ public enum Tensors {
     return tensor instanceof UnmodifiableTensor;
   }
 
-  /***************************************************/
+  // ---
   private static final Tensor UNMODIFIABLE_EMPTY = empty().unmodifiable();
 
   /** @return singleton instance of unmodifiable empty tensor */
@@ -185,7 +185,7 @@ public enum Tensors {
     return UNMODIFIABLE_EMPTY;
   }
 
-  /***************************************************/
+  // ---
   private static final int MAX_NUMEL = 12;
   private static final int MAX_LENGTH = 32;
 

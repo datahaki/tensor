@@ -30,7 +30,7 @@ import ch.alpine.tensor.red.Min;
   public HungarianAlgorithm(Tensor _matrix) {
     super(_matrix);
     Scalar[] xLabel = Stream.of(matrix) //
-        .map(vector -> Stream.of(vector).reduce(Min::of).get()) //
+        .map(vector -> Stream.of(vector).reduce(Min::of).orElseThrow()) //
         .toArray(Scalar[]::new);
     hungarianAlgorithmTree = new HungarianAlgorithmTree(xLabel, yMatch, matrix);
     setInitialMatching(xLabel);
@@ -78,7 +78,7 @@ import ch.alpine.tensor.red.Min;
   }
 
   private int pickFreeX() {
-    int x = freeX.stream().findFirst().get();
+    int x = freeX.stream().findFirst().orElseThrow();
     hungarianAlgorithmTree.setAlpha(x);
     return x;
   }

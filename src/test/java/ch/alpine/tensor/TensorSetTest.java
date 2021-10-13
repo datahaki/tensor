@@ -159,9 +159,18 @@ public class TensorSetTest extends TestCase {
 
   public void testSetAll() {
     Tensor matrix = HilbertMatrix.of(4, 6);
+    List<Integer> l1 = Dimensions.of(matrix);
     Tensor column = Tensors.vector(3, 2, 1, 0);
     matrix.set(column, Tensor.ALL, 2);
     assertEquals(matrix.get(Tensor.ALL, 2), column);
+    List<Integer> l2 = Dimensions.of(matrix);
+    assertEquals(l1, l2);
+  }
+
+  public void testSetAllBlob() {
+    Tensor vector = Tensors.vector(3, 4, 5, 6);
+    vector.set(HilbertMatrix.of(2), 2);
+    assertEquals(vector.toString(), "{3, 4, {{1, 1/2}, {1/2, 1/3}}, 6}");
   }
 
   public void testSetFunctionAll() {

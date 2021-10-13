@@ -22,13 +22,13 @@ public class DeBoor implements ScalarTensorFunction {
   public static DeBoor of(BinaryAverage binaryAverage, Tensor knots, Tensor control) {
     int length = knots.length();
     int degree = length / 2;
-    if (Integers.isEven(length) && //
-        control.length() == degree + 1)
+    Integers.requireEquals(control.length(), degree + 1);
+    if (Integers.isEven(length))
       return new DeBoor(Objects.requireNonNull(binaryAverage), degree, VectorQ.require(knots), control);
     throw TensorRuntimeException.of(knots, control);
   }
 
-  /***************************************************/
+  // ---
   private final BinaryAverage binaryAverage;
   private final int degree;
   private final Tensor knots;

@@ -25,7 +25,7 @@ public enum Vector1Norm {
    * @return sum of absolute values of scalars in given stream
    * @throws Exception if stream is empty */
   public static Scalar of(Stream<Scalar> stream) {
-    return stream.map(Abs.FUNCTION).reduce(Scalar::add).get();
+    return stream.map(Abs.FUNCTION).reduce(Scalar::add).orElseThrow();
   }
 
   /** @param v1 vector

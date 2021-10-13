@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import java.io.Serializable;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
@@ -11,7 +12,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarTensorFunction;
-import ch.alpine.tensor.mat.LinearSolve;
+import ch.alpine.tensor.mat.re.LinearSolve;
 
 /** BSplineInterpolation defines a parametric curve that interpolates
  * the given control points at integer values.
@@ -35,7 +36,7 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
   public static Tensor matrix(int degree, int n) {
     Tensor domain = Range.of(0, n);
     return Transpose.of(Tensor.of(IntStream.range(0, n) //
-        .mapToObj(index -> domain.map(BSplineFunction.string(degree, UnitVector.of(n, index))))));
+        .mapToObj(index -> domain.map(BSplineFunctionString.of(degree, UnitVector.of(n, index))))));
   }
 
   /** @param degree
@@ -45,11 +46,11 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
     return LinearSolve.of(matrix(degree, control.length()), control);
   }
 
-  /***************************************************/
+  // ---
   private final ScalarTensorFunction scalarTensorFunction;
 
   private BSplineInterpolation(int degree, Tensor control) {
-    scalarTensorFunction = BSplineFunction.string(degree, solve(degree, control));
+    scalarTensorFunction = BSplineFunctionString.of(degree, solve(degree, control));
   }
 
   @Override // from Interpolation
@@ -58,7 +59,7 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
         .skip(1) //
         .map(Scalar.class::cast) //
         .map(Scalars::intValueExact) //
-        .toArray(Integer[]::new));
+        .collect(Collectors.toList()));
   }
 
   @Override // from Interpolation

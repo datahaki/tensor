@@ -18,7 +18,7 @@ public enum CauchyTensor {
    * @return
    * @throws Exception if input is not a vector */
   public static Tensor of(Tensor vector, int rank) {
-    return Array.of(list -> list.stream().map(vector::Get).reduce(Scalar::add).get().reciprocal(), //
+    return Array.of(list -> list.stream().map(vector::Get).reduce(Scalar::add).orElseThrow().reciprocal(), //
         Collections.nCopies(rank, vector.length()));
   }
 }

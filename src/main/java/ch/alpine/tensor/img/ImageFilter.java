@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
+import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
@@ -24,12 +25,13 @@ public class ImageFilter {
    * @throws Exception if radius is negative
    * @see MedianFilter */
   public static Tensor of(Tensor tensor, int radius, Function<Tensor, ? extends Tensor> function) {
+    ScalarQ.thenThrow(tensor);
     Objects.requireNonNull(function);
     ImageFilter imageFilter = new ImageFilter(tensor, Integers.requirePositiveOrZero(radius));
     return Array.of(index -> function.apply(imageFilter.block(index)), Dimensions.of(tensor));
   }
 
-  /***************************************************/
+  // ---
   private final Tensor tensor;
   private final int radius;
   private final List<Integer> dimensions;

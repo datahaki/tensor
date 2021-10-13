@@ -2,12 +2,12 @@
 package ch.alpine.tensor;
 
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.lie.MatrixPower;
 import ch.alpine.tensor.lie.Quaternion;
-import ch.alpine.tensor.mat.CholeskyDecomposition;
-import ch.alpine.tensor.mat.Inverse;
-import ch.alpine.tensor.mat.LinearSolve;
-import ch.alpine.tensor.mat.PseudoInverse;
+import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
+import ch.alpine.tensor.mat.ex.MatrixPower;
+import ch.alpine.tensor.mat.pi.PseudoInverse;
+import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.SimpleUnitSystem;
 
@@ -16,7 +16,7 @@ import ch.alpine.tensor.qty.SimpleUnitSystem;
  * <p>The scalar 0 in any field cannot be inverted.
  * Zero is supplied by {@link #zero()}.
  * 
- * <p>When invoking {@link #get(Integer...)}, {@link #get(java.util.List)},
+ * <p>When invoking {@link #get(int...)}, {@link #get(java.util.List)},
  * on {@link Scalar} the list of arguments has to be empty.
  * 
  * <p>Derived classes are immutable, i.e. contents of an instance of {@link Scalar}
@@ -61,7 +61,7 @@ public interface Scalar extends Tensor {
   @Override // from Tensor
   Scalar divide(Scalar scalar);
 
-  /***************************************************/
+  // ---
   // functions introduced by the interface:
   /** a.under(b) == b / a
    * 

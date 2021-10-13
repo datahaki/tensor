@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.Chop;
       Tensor r = qrDecomposition.getR();
       Tensor q = qrDecomposition.getQ();
       qn = Objects.isNull(qn) ? q : qn.dot(q);
-      // LONGTERM rather check if difference converges to 0
+      // TODO rather check if difference converges to 0
       if (chop.isClose(r, DiagonalMatrix.with(Diagonal.of(r)))) {
         // System.out.println("finish at " + index);
         break;

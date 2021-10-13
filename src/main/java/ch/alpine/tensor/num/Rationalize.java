@@ -40,7 +40,7 @@ public class Rationalize implements ScalarUnaryOperator {
     return new Rationalize(RealScalar.of(max));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar max;
 
   private Rationalize(Scalar max) {

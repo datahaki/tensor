@@ -19,6 +19,7 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
    * @param beta positive
    * @return */
   public static Distribution of(Scalar mean, Scalar beta) {
+    Scalars.compare(mean, beta); // assert that parameters have identical units
     return new LaplaceDistribution(mean, Sign.requirePositive(beta));
   }
 
@@ -29,7 +30,7 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
     return of(RealScalar.of(mean), RealScalar.of(beta));
   }
 
-  /***************************************************/
+  // ---
   private final Scalar mean;
   private final Scalar beta;
 

@@ -1,15 +1,15 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.TensorRank;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.num.Multinomial;
 import ch.alpine.tensor.sca.Factorial;
 
@@ -32,19 +32,17 @@ public enum TensorWedge {
    * @return alternating tensor
    * @throws Exception if given tensor does not have regular dimensions */
   public static Tensor of(Tensor tensor) {
-    Tensor sum = tensor.map(Scalar::zero);
-    int rank = TensorRank.of(tensor);
-    for (Tensor permutation : Permutations.of(Range.of(0, rank))) {
-      int[] sigma = IntStream.range(0, rank) //
-          .mapToObj(permutation::Get) //
-          .map(Scalar::number) //
-          .mapToInt(Number::intValue).toArray();
-      Tensor transpose = Transpose.of(tensor, sigma);
-      sum = Signature.of(sigma).equals(RealScalar.ONE) //
-          ? sum.add(transpose)
-          : sum.subtract(transpose);
-    }
-    return sum.divide(Factorial.of(rank));
+    int rank = TensorRank.ofArray(tensor).orElseThrow();
+    return Permutations.stream(Range.of(0, rank)) // stream contains at least 1 element
+        .map(permutation -> signed(tensor, Primitives.toIntArray(permutation))) //
+        .reduce(Tensor::add) //
+        .map(sum -> sum.divide(Factorial.of(rank))) //
+        .get();
+  }
+
+  private static Tensor signed(Tensor tensor, int[] sigma) {
+    Tensor transpose = Transpose.of(tensor, sigma);
+    return Integers.isEven(Integers.parity(sigma)) ? transpose : transpose.negate();
   }
 
   /** @param tensors of any rank with dimensions [n, n, ..., n]

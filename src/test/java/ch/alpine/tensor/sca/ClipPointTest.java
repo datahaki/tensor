@@ -58,4 +58,8 @@ public class ClipPointTest extends TestCase {
     assertEquals(clip.requireInside(value), value);
     AssertFail.of(() -> clip.rescale(Quantity.of(2, "kg")));
   }
+
+  public void testVisibility() {
+    assertEquals(ClipPoint.class.getModifiers(), 0);
+  }
 }

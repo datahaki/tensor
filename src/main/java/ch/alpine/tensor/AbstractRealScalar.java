@@ -15,7 +15,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
   static final double LOG_LO = 0.75;
   static final double LOG_HI = 1.3;
 
-  /***************************************************/
+  // ---
   // methods in this section are final
   /** @return true if this scalar is zero, or strictly greater zero, false otherwise */
   protected final boolean isNonNegative() {
@@ -58,7 +58,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
    * @see BigDecimal#signum() */
   protected abstract int signum();
 
-  /***************************************************/
+  // ---
   // methods are non-final because overriding classes may support better precision
   @Override // from ArcTanInterface
   public Scalar arcTan(Scalar x) {

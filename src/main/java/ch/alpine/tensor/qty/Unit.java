@@ -28,7 +28,7 @@ public interface Unit {
     return UnitParser.of(string);
   }
 
-  /***************************************************/
+  // ---
   /** function negate is equivalent to {@link #multiply(Scalar)} with factor -1
    * 
    * Example: in order to compute the reciprocal of a quantity, the exponents

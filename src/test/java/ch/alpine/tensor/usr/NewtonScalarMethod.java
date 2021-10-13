@@ -6,18 +6,18 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Derive;
-import ch.alpine.tensor.num.Series;
+import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Abs;
 
 /** https://en.wikipedia.org/wiki/Newton%27s_method */
 /* package */ class NewtonScalarMethod implements ScalarUnaryOperator {
   public static NewtonScalarMethod polynomial(Tensor coeffs) {
     return new NewtonScalarMethod( //
-        Series.of(coeffs), //
-        Series.of(Derive.of(coeffs)));
+        Polynomial.of(coeffs), //
+        Polynomial.of(Derive.of(coeffs)));
   }
 
-  /***************************************************/
+  // ---
   private final ScalarUnaryOperator function;
   public final ScalarUnaryOperator iteration;
 

@@ -3,7 +3,6 @@ package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.alg.MatrixQ;
 import ch.alpine.tensor.sca.Chop;
 
 /** Mathematica definition:
@@ -18,7 +17,7 @@ public enum UnitaryMatrixQ {
    * @return true, if tensor is a matrix and tensor.ConjugateTranspose[tensor] is the identity matrix */
   public static boolean of(Tensor tensor, Chop chop) {
     return MatrixQ.of(tensor) //
-        && chop.isClose(StaticHelper.dotConjugate(tensor), IdentityMatrix.of(tensor.length()));
+        && chop.isClose(MatrixDotConjugateTranspose.of(tensor), IdentityMatrix.of(tensor.length()));
   }
 
   /** @param tensor

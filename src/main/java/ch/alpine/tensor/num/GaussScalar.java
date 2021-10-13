@@ -48,7 +48,7 @@ public class GaussScalar extends AbstractScalar implements //
     return new GaussScalar(value.mod(prime), prime);
   }
 
-  /***************************************************/
+  // ---
   private final BigInteger value;
   private final BigInteger prime;
 
@@ -108,7 +108,7 @@ public class GaussScalar extends AbstractScalar implements //
     return new GaussScalar(BigInteger.ONE, prime);
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   protected GaussScalar plus(Scalar scalar) {
     if (scalar instanceof GaussScalar)
@@ -116,7 +116,7 @@ public class GaussScalar extends AbstractScalar implements //
     throw TensorRuntimeException.of(this, scalar);
   }
 
-  /***************************************************/
+  // ---
   @Override
   public Scalar abs() {
     return this;
@@ -178,20 +178,14 @@ public class GaussScalar extends AbstractScalar implements //
 
   @Override // from SqrtInterface
   public GaussScalar sqrt() {
-    GaussScalar gaussScalar = StaticHelper.SQRT.get(this);
+    GaussScalar gaussScalar = StaticHelper.SQRT.apply(this);
     if (Objects.nonNull(gaussScalar))
       return gaussScalar;
-    for (BigInteger index = BigInteger.ZERO; index.compareTo(prime) < 0; index = index.add(BigInteger.ONE))
-      if (equals(in(index.multiply(index), prime))) {
-        gaussScalar = in(index, prime);
-        StaticHelper.SQRT.put(this, gaussScalar);
-        return gaussScalar;
-      }
     // examples of gauss scalars without sqrt: 2 mod 5, 3 mod 5, 6 mod 11, etc.
     throw TensorRuntimeException.of(this); // sqrt of this does not exist
   }
 
-  /***************************************************/
+  // ---
   @Override // from AbstractScalar
   public int hashCode() {
     return value.hashCode() + 31 * prime.hashCode();

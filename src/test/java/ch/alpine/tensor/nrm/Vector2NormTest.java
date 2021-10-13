@@ -3,6 +3,7 @@ package ch.alpine.tensor.nrm;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -38,6 +39,12 @@ public class Vector2NormTest extends TestCase {
   public void testVector3() {
     Tensor A = Tensors.of(ComplexScalar.of(1, 2), DoubleScalar.of(1.5));
     assertEquals(Vector2Norm.of(A), DoubleScalar.of(2.6925824035672523)); // 2.69258
+  }
+
+  public void testExact() {
+    Scalar two = Vector2Norm.of(Tensors.vector(1, 1, 1, 1));
+    ExactScalarQ.require(two);
+    assertEquals(two, RealScalar.of(2));
   }
 
   public void testQuantity() {

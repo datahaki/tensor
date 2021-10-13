@@ -24,7 +24,7 @@ import ch.alpine.tensor.api.SqrtInterface;
         : FALSE;
   }
 
-  /***************************************************/
+  // ---
   private final boolean value;
 
   /** constructor initializes the static members

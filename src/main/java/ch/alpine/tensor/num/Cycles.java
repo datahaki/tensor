@@ -25,7 +25,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Last;
+import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Sign;
 
@@ -33,7 +35,10 @@ import ch.alpine.tensor.sca.Sign;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Cycles.html">Cycles</a> */
-public class Cycles implements Serializable {
+public class Cycles implements Comparable<Cycles>, Serializable {
+  @PackageTestAccess
+  static final Collector<Entry<Integer, Integer>, ?, NavigableMap<Integer, Integer>> INVERSE = //
+      Collectors.toMap(Entry::getValue, Entry::getKey, (v1, v2) -> null, TreeMap::new);
   private static final BinaryPower<Cycles> BINARY_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
   private static final Cycles IDENTITY = new Cycles(Collections.emptyNavigableMap());
 
@@ -59,7 +64,7 @@ public class Cycles implements Serializable {
     return IDENTITY;
   }
 
-  /***************************************************/
+  // ---
   /** @param tensor {{}, {2, 1}, {3}}
    * @return {{2, 1}}
    * @throws Exception if an entry is negative, or not an integer, or appears more than once */
@@ -85,10 +90,11 @@ public class Cycles implements Serializable {
     return navigableMap;
   }
 
-  /***************************************************/
+  // ---
   private final NavigableMap<Integer, Integer> navigableMap;
 
-  private Cycles(NavigableMap<Integer, Integer> navigableMap) {
+  /** @param navigableMap without entries of the form i -> i */
+  /* package */ Cycles(NavigableMap<Integer, Integer> navigableMap) {
     this.navigableMap = navigableMap;
   }
 
@@ -109,14 +115,11 @@ public class Cycles implements Serializable {
     }
   }
 
-  /* package */ static final Collector<Entry<Integer, Integer>, ?, NavigableMap<Integer, Integer>> COLLECTOR = //
-      Collectors.toMap(Entry::getValue, Entry::getKey, (v1, v2) -> null, TreeMap::new);
-
   /** Hint: InversePermutation in Mathematica
    * 
    * @return */
   public Cycles inverse() {
-    return new Cycles(navigableMap.entrySet().stream().collect(COLLECTOR));
+    return new Cycles(navigableMap.entrySet().stream().collect(INVERSE));
   }
 
   /** Hint: PermutationProduct in Mathematica
@@ -124,18 +127,16 @@ public class Cycles implements Serializable {
    * @param cycles
    * @return */
   public Cycles combine(Cycles cycles) {
-    Map<Integer, Integer> b_map = cycles.navigableMap;
     NavigableMap<Integer, Integer> result = new TreeMap<>();
     Set<Integer> set = new HashSet<>();
     for (Entry<Integer, Integer> entry : navigableMap.entrySet()) {
       int seed = entry.getKey();
       set.add(seed);
-      int next = entry.getValue();
-      int dest = b_map.containsKey(next) ? b_map.get(next) : next;
+      int dest = cycles.replace(entry.getValue());
       if (seed != dest)
         result.put(seed, dest);
     }
-    for (Entry<Integer, Integer> entry : b_map.entrySet()) {
+    for (Entry<Integer, Integer> entry : cycles.navigableMap.entrySet()) {
       int seed = entry.getKey();
       if (set.add(seed))
         result.put(seed, entry.getValue());
@@ -161,9 +162,29 @@ public class Cycles implements Serializable {
     return new Cycles(map(builder.build())); // most efficient?
   }
 
-  /** @return map without singletons, i.e. no trivial associations a -> a exist */
-  public NavigableMap<Integer, Integer> navigableMap() {
-    return Collections.unmodifiableNavigableMap(navigableMap);
+  /** Mathematica::PermutationReplace[index, this]
+   * 
+   * @param index
+   * @return */
+  public int replace(int index) {
+    Integers.requirePositiveOrZero(index);
+    return navigableMap.getOrDefault(index, index);
+  }
+
+  /** @return smallest n where the permutation group S(n) contains this cycle */
+  public int minLength() {
+    return navigableMap.isEmpty() //
+        ? 0 // not sure is this is a good
+        : navigableMap.lastKey() + 1;
+  }
+
+  /** @return 0 if cycles define a permutation list with even parity, otherwise 1
+   * @see PermutationList */
+  public int parity() {
+    return toTensor().stream() //
+        .mapToInt(Tensor::length) //
+        .map(t -> t + 1) //
+        .sum() & 1;
   }
 
   /** @return for instance {{1, 20}, {4, 10, 19, 6, 18}, {5, 9}, {7, 14, 13}} */
@@ -173,7 +194,11 @@ public class Cycles implements Serializable {
     return Tensor.of(builder.build());
   }
 
-  /***************************************************/
+  @Override // from Comparable
+  public int compareTo(Cycles cycles) {
+    return TensorComparator.INSTANCE.compare(toTensor(), cycles.toTensor());
+  }
+
   @Override // from Object
   public boolean equals(Object object) {
     if (object instanceof Cycles) {
@@ -191,5 +216,11 @@ public class Cycles implements Serializable {
   @Override // from Object
   public String toString() {
     return toTensor().toString();
+  }
+
+  /** @return map without singletons, i.e. no trivial associations a -> a exist */
+  @PackageTestAccess
+  NavigableMap<Integer, Integer> navigableMap() {
+    return Collections.unmodifiableNavigableMap(navigableMap);
   }
 }

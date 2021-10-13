@@ -54,7 +54,7 @@ import ch.alpine.tensor.sca.Sign;
     return new SimplexMethod(tab, ind, simplexPivot).getX();
   }
 
-  /***************************************************/
+  // ---
   private final Tensor tab; // (m+1) x (n+1)
   private final Tensor ind; // vector of length m
   private final int m;

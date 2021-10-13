@@ -45,7 +45,7 @@ public enum Sign implements ScalarUnaryOperator {
     return (T) tensor.map(FUNCTION);
   }
 
-  /***************************************************/
+  // ---
   /** function is equivalent to
    * <code>Scalars.lessThan(scalar.zero(), scalar)</code>
    * 
@@ -82,7 +82,7 @@ public enum Sign implements ScalarUnaryOperator {
     return Scalars.lessEquals(scalar, scalar.zero());
   }
 
-  /***************************************************/
+  // ---
   /** Remark: Functionality inspired by {@link Objects#requireNonNull(Object)}
    * 
    * @param scalar

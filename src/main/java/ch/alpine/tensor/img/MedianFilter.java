@@ -2,8 +2,8 @@
 package ch.alpine.tensor.img;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.red.Median;
 
 /** inspired by
@@ -24,11 +24,11 @@ public enum MedianFilter {
    * @throws Exception if given tensor is a scalar
    * @throws Exception if given radius is negative */
   public static Tensor of(Tensor tensor, int radius) {
-    return ImageFilter.of(Unprotect.references(tensor), radius, MedianFilter::flatten);
+    return ImageFilter.of(tensor, radius, MedianFilter::flatten);
   }
 
   // helper function
   private static Tensor flatten(Tensor tensor) {
-    return Median.of(Tensor.of(tensor.flatten(-1)));
+    return Median.of(Flatten.of(tensor));
   }
 }

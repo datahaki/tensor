@@ -27,7 +27,7 @@ public interface UnitSystem extends ScalarUnaryOperator {
     return SiUnitSystem.INSTANCE.unitSystem;
   }
 
-  /***************************************************/
+  // ---
   /** Example: for the SI unit system the map includes the entries
    * <pre>
    * "rad" -> 1

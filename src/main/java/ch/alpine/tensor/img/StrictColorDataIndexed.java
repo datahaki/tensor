@@ -19,7 +19,7 @@ public class StrictColorDataIndexed extends BaseColorDataIndexed {
     return new StrictColorDataIndexed(tensor.copy());
   }
 
-  /***************************************************/
+  // ---
   /** @param tensor with dimensions N x 4 where each row encodes {R, G, B, A} */
   /* package */ StrictColorDataIndexed(Tensor tensor) {
     super(tensor);

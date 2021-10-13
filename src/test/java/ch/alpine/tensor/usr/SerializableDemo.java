@@ -4,7 +4,6 @@ package ch.alpine.tensor.usr;
 import java.io.IOException;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.io.Export;
 import ch.alpine.tensor.io.ImportTest;
 
@@ -15,7 +14,5 @@ import ch.alpine.tensor.io.ImportTest;
     Tensor tensor = ImportTest.CONTENT;
     Export.object(ImportTest.IO_OBJECT_TENSOR, tensor);
     Export.object(ImportTest.IO_OBJECT_UNMODIFIABLE, tensor.unmodifiable());
-    Tensor viewtensor = Unprotect.references(tensor);
-    Export.object(ImportTest.IO_OBJECT_VIEWTENSOR, viewtensor);
   }
 }

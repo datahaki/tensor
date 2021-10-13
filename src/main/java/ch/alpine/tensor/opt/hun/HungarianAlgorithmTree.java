@@ -60,7 +60,7 @@ import ch.alpine.tensor.red.Min;
   public int pickNlsMinusT(int x) {
     if (nlsMinusT.isEmpty()) {
       bipartition.notNodes().stream().filter(y -> Scalars.isZero(alpha[y])).forEach(nlsMinusT::add);
-      Scalar min = bipartition.notNodes().stream().map(y -> alpha[y]).reduce(Min::of).get();
+      Scalar min = bipartition.notNodes().stream().map(y -> alpha[y]).reduce(Min::of).orElseThrow();
       if (Scalars.nonZero(min)) // use of eps
         updateLabels(min);
     }
@@ -70,7 +70,7 @@ import ch.alpine.tensor.red.Min;
         return y;
       }
     return nlsMinusT.stream() //
-        .min((i, j) -> Scalars.compare(alpha[i], alpha[j])).get();
+        .min((i, j) -> Scalars.compare(alpha[i], alpha[j])).orElseThrow();
   }
 
   private void updateLabels(Scalar delta) { // slows down (n x n)-Problem
@@ -83,15 +83,15 @@ import ch.alpine.tensor.red.Min;
     }
   }
 
-  int escapeFromX(int x) {
+  public int escapeFromX(int x) {
     return escapeFromX[x];
   }
 
-  int escapeFromY(int y) {
+  public int escapeFromY(int y) {
     return escapeFromY[y];
   }
 
-  int addS(int x) {
+  public int addS(int x) {
     while (true) {
       int y = pickNlsMinusT(x);
       if (yMatch[y] == BipartiteMatching.UNASSIGNED)
@@ -113,7 +113,7 @@ import ch.alpine.tensor.red.Min;
     S.add(x);
   }
 
-  void clear() {
+  public void clear() {
     resetEscape();
     S.clear();
     bipartition.clear();

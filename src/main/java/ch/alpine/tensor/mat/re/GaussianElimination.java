@@ -5,7 +5,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.mat.LinearSolve;
 
 /** Gaussian elimination is the most important algorithm of all time.
  * 
@@ -39,7 +38,7 @@ public class GaussianElimination extends AbstractReduce {
     return new GaussianElimination(matrix, b, pivot).solve();
   }
 
-  /***************************************************/
+  // ---
   private final Tensor rhs;
 
   public GaussianElimination(Tensor matrix, Tensor b, Pivot pivot) {

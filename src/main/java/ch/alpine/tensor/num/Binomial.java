@@ -61,7 +61,7 @@ public class Binomial implements Serializable {
     return Integers.isEven(m + n) ? scalar : scalar.negate();
   }
 
-  /***************************************************/
+  // ---
   /** @param n non-negative integer
    * @return binomial function that computes n choose k */
   public static Binomial of(Scalar n) {
@@ -74,7 +74,7 @@ public class Binomial implements Serializable {
     return CACHE.apply(Integers.requirePositiveOrZero(n));
   }
 
-  /***************************************************/
+  // ---
   // Binomial[32, 16] == 601080390
   private static final int THRESHOLD = 32;
   private final int n;

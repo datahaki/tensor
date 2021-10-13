@@ -1,16 +1,19 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.util.List;
 import java.util.Random;
 
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.mat.LinearSolve;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Imag;
@@ -78,7 +81,10 @@ public class ComplexScalarImplTest extends TestCase {
     Tensor X = LinearSolve.of(A, b);
     Tensor err = A.dot(X).subtract(b);
     assertEquals(A.dot(X), b);
-    assertEquals(err, Array.zeros(Dimensions.of(b)));
+    List<Integer> list = Dimensions.of(b);
+    assertEquals(err, ConstantArray.of(RealScalar.ZERO, list));
+    assertEquals(err, Array.zeros(list));
+    Chop.NONE.requireAllZero(err);
   }
 
   public void testParsing() {

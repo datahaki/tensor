@@ -69,11 +69,11 @@ public enum ImageFormat {
    * 
    * @param tensor
    * @return image of type BufferedImage.TYPE_BYTE_GRAY or BufferedImage.TYPE_INT_BGR */
-  /* package */ static BufferedImage bgr(Tensor tensor) {
+  public static BufferedImage bgr(Tensor tensor) {
     return of(tensor, BufferedImage.TYPE_INT_BGR);
   }
 
-  /***************************************************/
+  // ---
   private static BufferedImage of(Tensor tensor, int imageType) {
     List<Integer> dims = Dimensions.of(tensor);
     int width = dims.get(1);

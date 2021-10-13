@@ -20,7 +20,7 @@ public enum CentralMoment {
         .map(nmean::add) //
         .map(Power.function(order)) //
         .reduce(Scalar::add) //
-        .get() //
+        .orElseThrow() //
         .divide(RealScalar.of(vector.length()));
   }
 

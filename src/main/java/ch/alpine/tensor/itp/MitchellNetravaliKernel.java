@@ -7,7 +7,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.num.Series;
+import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Abs;
 
 /** function has support over the interval [-2, 2] */
@@ -23,7 +23,7 @@ public class MitchellNetravaliKernel implements ScalarUnaryOperator {
     return of(RealScalar.of(b), RealScalar.of(c));
   }
 
-  /***************************************************/
+  // ---
   private final ScalarUnaryOperator y;
   private final ScalarUnaryOperator z;
 
@@ -36,7 +36,7 @@ public class MitchellNetravaliKernel implements ScalarUnaryOperator {
     Scalar y_3 = RealScalar.of(12) //
         .add(RealScalar.of(-9).multiply(b)) //
         .add(RealScalar.of(-6).multiply(c));
-    y = Series.of(Tensors.of(y_0, y_0.zero(), y_2, y_3).multiply(RationalScalar.of(1, 6)));
+    y = Polynomial.of(Tensors.of(y_0, y_0.zero(), y_2, y_3).multiply(RationalScalar.of(1, 6)));
     // ---
     Scalar z_0 = RealScalar.of(8).multiply(b) //
         .add(RealScalar.of(24).multiply(c));
@@ -46,7 +46,7 @@ public class MitchellNetravaliKernel implements ScalarUnaryOperator {
         .add(RealScalar.of(30).multiply(c));
     Scalar z_3 = b.negate() //
         .add(RealScalar.of(-6).multiply(c));
-    z = Series.of(Tensors.of(z_0, z_1, z_2, z_3).multiply(RationalScalar.of(1, 6)));
+    z = Polynomial.of(Tensors.of(z_0, z_1, z_2, z_3).multiply(RationalScalar.of(1, 6)));
   }
 
   @Override

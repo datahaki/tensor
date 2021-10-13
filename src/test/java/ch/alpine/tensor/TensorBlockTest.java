@@ -15,22 +15,23 @@ public class TensorBlockTest extends TestCase {
     AssertFail.of(() -> a.block(Arrays.asList(1), Arrays.asList(2, 1)));
   }
 
-  public void testNonRefs() {
-    Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);
-    Tensor b = a.block(Arrays.asList(2), Arrays.asList(3));
-    b.set(Array.zeros(3), Tensor.ALL);
-    assertEquals(a, Tensors.vector(1, 2, 3, 4, 5, 6));
+  public void testBlock2() {
+    Tensor array = Array.zeros(5, 5);
+    Tensor refs = array;
+    refs.block(Arrays.asList(1, 2), Arrays.asList(2, 3)).set(RealScalar.ONE::add, Tensor.ALL, Tensor.ALL);
+    assertEquals(array, //
+        Tensors.fromString("{{0, 0, 0, 0, 0}, {0, 0, 1, 1, 1}, {0, 0, 1, 1, 1}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}}"));
   }
 
-  public void testRefs() {
-    Tensor a = Unprotect.references(Tensors.vector(1, 2, 3, 4, 5, 6));
+  public void testNonRefs() {
+    Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);
     Tensor b = a.block(Arrays.asList(2), Arrays.asList(3));
     b.set(Array.zeros(3), Tensor.ALL);
     assertEquals(a, Tensors.vector(1, 2, 0, 0, 0, 6));
   }
 
   public void testRefs2d() {
-    Tensor a = Unprotect.references(HilbertMatrix.of(5, 6));
+    Tensor a = HilbertMatrix.of(5, 6);
     Tensor b = a.block(Arrays.asList(1, 2), Arrays.asList(3, 4));
     b.set(Array.zeros(3, 4), Tensor.ALL, Tensor.ALL);
     Tensor expect = Tensors.fromString( //

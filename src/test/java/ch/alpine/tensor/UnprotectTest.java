@@ -16,6 +16,10 @@ import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class UnprotectTest extends TestCase {
+  public void testUsingNullFail() {
+    AssertFail.of(() -> Unprotect.using(null));
+  }
+
   public void testUsingEmpty() {
     assertEquals(Unprotect.using(new LinkedList<>()), Tensors.empty());
     assertEquals(Unprotect.using(new LinkedList<>()), Tensors.unmodifiableEmpty());
@@ -76,16 +80,23 @@ public class UnprotectTest extends TestCase {
     AssertFail.of(() -> Unprotect.dimension1(tensor));
   }
 
+  public void testDimension1Vector() {
+    Tensor vector = Tensors.vector(1, 2, 3);
+    assertEquals(Unprotect.dimension1(vector), Unprotect.dimension1Hint(vector));
+  }
+
+  public void testDimension1Empty() {
+    int dim1 = Unprotect.dimension1(Tensors.empty());
+    assertEquals(dim1, Scalar.LENGTH);
+    assertEquals(dim1, Unprotect.dimension1Hint(Tensors.empty()));
+  }
+
   public void testWithoutUnit() {
     assertEquals(Unprotect.withoutUnit(Pi.VALUE), Pi.VALUE);
     assertEquals(Unprotect.withoutUnit(Quantity.of(3, "h*km")), RealScalar.of(3));
     assertEquals(Unprotect.withoutUnit(Quantity.of(ComplexScalar.I, "h*km")), ComplexScalar.I);
     assertEquals(Unprotect.withoutUnit(StringScalar.of("abd123")), StringScalar.of("abd123"));
     AssertFail.of(() -> Unprotect.withoutUnit(null));
-  }
-
-  public void testFailEmpty() {
-    AssertFail.of(() -> Unprotect.dimension1(Tensors.empty()));
   }
 
   public void testFail1() {
@@ -97,13 +108,5 @@ public class UnprotectTest extends TestCase {
   public void testFail2() {
     AssertFail.of(() -> Unprotect.dimension1(RealScalar.ONE));
     AssertFail.of(() -> Unprotect.dimension1Hint(RealScalar.ONE));
-  }
-
-  public void testReferencesScalar() {
-    AssertFail.of(() -> Unprotect.references(RealScalar.ONE));
-  }
-
-  public void testReferencesNull() {
-    AssertFail.of(() -> Unprotect.references(null));
   }
 }

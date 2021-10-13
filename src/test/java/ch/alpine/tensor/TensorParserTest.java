@@ -102,4 +102,8 @@ public class TensorParserTest extends TestCase {
   public void testFailFunctionNull() {
     AssertFail.of(() -> new TensorParser(null));
   }
+
+  public void testVisibility() {
+    assertEquals(TensorParser.class.getModifiers(), 0);
+  }
 }

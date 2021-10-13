@@ -3,8 +3,6 @@ package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.alg.MatrixDotTranspose;
-import ch.alpine.tensor.alg.MatrixQ;
 import ch.alpine.tensor.sca.Chop;
 
 /** Mathematica definition:

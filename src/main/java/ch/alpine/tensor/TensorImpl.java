@@ -2,7 +2,6 @@
 package ch.alpine.tensor;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -10,12 +9,15 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-/** reference implementation of the interface Tensor */
-/* package */ class TensorImpl implements Tensor, Serializable {
-  /** list is accessed by UnmodifiableTensor, Parallelize, Unprotect, ViewTensor */
-  /* package */ final List<Tensor> list;
+import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.Lists;
 
-  /* package */ TensorImpl(List<Tensor> list) {
+/** reference implementation of the interface Tensor */
+/* package */ class TensorImpl extends AbstractTensor implements Serializable {
+  private final List<Tensor> list;
+
+  /** @param list to be guaranteed non-null */
+  public TensorImpl(List<Tensor> list) {
     this.list = list;
   }
 
@@ -24,85 +26,47 @@ import java.util.stream.Stream;
     return new UnmodifiableTensor(list);
   }
 
-  @Override // from Tensor
-  public Tensor copy() {
-    return Tensor.of(list.stream().map(Tensor::copy));
+  @Override // from AbstractTensor
+  protected Tensor byRef(int i) {
+    return list.get(i);
   }
 
   @Override // from Tensor
-  public Tensor get(Integer... index) {
-    return get(Arrays.asList(index));
-  }
-
-  @Override // from Tensor
-  public Tensor get(List<Integer> index) {
-    return index.isEmpty() //
-        ? copy()
-        : _get(index);
-  }
-
-  private Tensor _get(List<Integer> index) {
-    List<Integer> sublist = index.subList(1, index.size());
+  public void set(Tensor tensor, List<Integer> index) {
     int head = index.get(0);
-    return head == ALL //
-        ? Tensor.of(list.stream().map(tensor -> tensor.get(sublist)))
-        : list.get(head).get(sublist);
-  }
-
-  @Override // from Tensor
-  public Scalar Get(int i) {
-    return (Scalar) list.get(i);
-  }
-
-  @Override // from Tensor
-  public Scalar Get(int i, int j) {
-    return list.get(i).Get(j);
-  }
-
-  @Override // from Tensor
-  public void set(Tensor tensor, Integer... index) {
-    _set(tensor, Arrays.asList(index));
-  }
-
-  // package visibility in order to override in UnmodifiableTensor
-  /* package */ void _set(Tensor tensor, List<Integer> index) {
-    int head = index.get(0);
-    if (index.size() == 1)
+    if (index.size() == 1) // terminal case
       if (head == ALL) {
-        TensorImpl impl = (TensorImpl) tensor;
-        _range(impl).forEach(pos -> list.set(pos, impl.list.get(pos).copy()));
+        Integers.requireEquals(length(), tensor.length());
+        AtomicInteger i = new AtomicInteger();
+        tensor.stream().map(Tensor::copy).forEach(entry -> list.set(i.getAndIncrement(), entry)); // insert copies
       } else
-        list.set(head, tensor.copy());
-    else {
-      List<Integer> sublist = index.subList(1, index.size());
+        list.set(head, tensor.copy()); // insert copy
+    else { // function set is called with tensor provided by reference
+      List<Integer> _index = Lists.rest(index);
       if (head == ALL) {
-        TensorImpl impl = (TensorImpl) tensor;
-        _range(impl).forEach(pos -> ((TensorImpl) list.get(pos))._set(impl.list.get(pos), sublist));
+        Integers.requireEquals(length(), tensor.length());
+        AtomicInteger i = new AtomicInteger();
+        tensor.stream().forEach(entry -> list.get(i.getAndIncrement()).set(entry, _index));
       } else
-        ((TensorImpl) list.get(head))._set(tensor, sublist);
+        list.get(head).set(tensor, _index);
     }
   }
 
-  @Override // from Tensor
-  public <T extends Tensor> void set(Function<T, ? extends Tensor> function, Integer... index) {
-    _set(function, Arrays.asList(index));
-  }
-
   @SuppressWarnings("unchecked")
-  // package visibility in order to override in UnmodifiableTensor
-  /* package */ <T extends Tensor> void _set(Function<T, ? extends Tensor> function, List<Integer> index) {
+  @Override // from Tensor
+  public <T extends Tensor> void set(Function<T, ? extends Tensor> function, List<Integer> index) {
     int head = index.get(0);
-    if (index.size() == 1)
+    if (index.size() == 1) // terminal case
       if (head == ALL)
-        IntStream.range(0, list.size()).forEach(pos -> list.set(pos, function.apply((T) list.get(pos)).copy()));
+        IntStream.range(0, length()).forEach(i -> list.set(i, function.apply((T) list.get(i)).copy()));
       else
         list.set(head, function.apply((T) list.get(head)).copy());
     else {
-      List<Integer> sublist = index.subList(1, index.size());
+      List<Integer> _index = Lists.rest(index);
       if (head == ALL)
-        list.stream().map(TensorImpl.class::cast).forEach(impl -> impl._set(function, sublist));
+        stream().forEach(entry -> entry.set(function, _index));
       else
-        ((TensorImpl) list.get(head))._set(function, sublist);
+        list.get(head).set(function, _index);
     }
   }
 
@@ -118,118 +82,55 @@ import java.util.stream.Stream;
   }
 
   @Override // from Tensor
-  public Stream<Tensor> stream() {
-    return list.stream();
-  }
-
-  @Override // from Tensor
-  public Stream<Tensor> flatten(int level) {
-    if (level == 0)
-      return stream(); // UnmodifiableTensor overrides stream()
-    int ldecr = level - 1;
-    return list.stream().flatMap(tensor -> tensor.flatten(ldecr));
-  }
-
-  @Override // from Tensor
   public Tensor extract(int fromIndex, int toIndex) {
     return Tensor.of(list.subList(fromIndex, toIndex).stream().map(Tensor::copy));
   }
 
   @Override // from Tensor
-  public Tensor block(List<Integer> fromIndex, List<Integer> dimensions) {
-    if (fromIndex.size() != dimensions.size())
-      throw new IllegalArgumentException(fromIndex + " " + dimensions);
-    return fromIndex.isEmpty() //
-        ? copy()
-        : _block(fromIndex, dimensions);
-  }
-
-  /** @param fromIndex non-empty
-   * @param dimensions of same size as fromIndex
-   * @return */
-  /* package */ Tensor _block(List<Integer> fromIndex, List<Integer> dimensions) {
-    int toIndex = fromIndex.get(0) + dimensions.get(0);
-    if (fromIndex.size() == 1)
-      return extract(fromIndex.get(0), toIndex);
-    int size = fromIndex.size();
-    return Tensor.of(list.subList(fromIndex.get(0), toIndex).stream() //
-        .map(TensorImpl.class::cast) //
-        .map(impl -> impl._block(fromIndex.subList(1, size), dimensions.subList(1, size))));
-  }
-
-  @Override // from Tensor
-  public Tensor negate() {
-    return Tensor.of(list.stream().map(Tensor::negate));
-  }
-
-  @Override // from Tensor
   public Tensor add(Tensor tensor) {
-    TensorImpl impl = (TensorImpl) tensor;
-    return Tensor.of(_range(impl).mapToObj(index -> list.get(index).add(impl.list.get(index))));
+    Integers.requireEquals(length(), tensor.length());
+    AtomicInteger i = new AtomicInteger();
+    return Tensor.of(tensor.stream().map(entry -> list.get(i.getAndIncrement()).add(entry)));
   }
 
   @Override // from Tensor
   public Tensor subtract(Tensor tensor) {
-    TensorImpl impl = (TensorImpl) tensor;
-    return Tensor.of(_range(impl).mapToObj(index -> list.get(index).subtract(impl.list.get(index))));
+    Integers.requireEquals(length(), tensor.length());
+    AtomicInteger i = new AtomicInteger();
+    return Tensor.of(tensor.stream().map(entry -> list.get(i.getAndIncrement()).subtract(entry)));
   }
 
   @Override // from Tensor
   public Tensor pmul(Tensor tensor) {
-    TensorImpl impl = (TensorImpl) tensor;
-    return Tensor.of(_range(impl).mapToObj(index -> list.get(index).pmul(impl.list.get(index))));
+    Integers.requireEquals(length(), tensor.length());
+    AtomicInteger i = new AtomicInteger();
+    return Tensor.of(tensor.stream().map(entry -> list.get(i.getAndIncrement()).pmul(entry)));
+  }
+
+  // ---
+  @Override // from Tensor
+  public Tensor block(List<Integer> ofs, List<Integer> len) {
+    int size = Integers.requireEquals(ofs.size(), len.size());
+    if (size == 0)
+      return this;
+    int head = ofs.get(0);
+    int len0 = len.get(0);
+    List<Tensor> subList = list.subList(head, head + len0);
+    if (size == 1)
+      return new TensorImpl(subList);
+    List<Integer> _ofs = Lists.rest(ofs);
+    List<Integer> _len = Lists.rest(len);
+    return Tensor.of(subList.stream().map(entry -> entry.block(_ofs, _len)));
   }
 
   @Override // from Tensor
-  public Tensor multiply(Scalar scalar) {
-    return Tensor.of(list.stream().map(tensor -> tensor.multiply(scalar)));
+  public Stream<Tensor> stream() {
+    return list.stream();
   }
 
-  @Override // from Tensor
-  public Tensor divide(Scalar scalar) {
-    return Tensor.of(list.stream().map(tensor -> tensor.divide(scalar)));
-  }
-
-  @Override // from Tensor
-  public Tensor dot(Tensor tensor) {
-    if (list.isEmpty() || list.get(0) instanceof Scalar) { // quick hint whether this is a vector
-      if (length() != tensor.length()) // <- check is necessary otherwise error might be undetected
-        throw TensorRuntimeException.of(this, tensor); // dimensions mismatch
-      AtomicInteger atomicInteger = new AtomicInteger();
-      return tensor.stream().map(rhs -> rhs.multiply((Scalar) list.get(atomicInteger.getAndIncrement()))) //
-          .reduce(Tensor::add).orElse(RealScalar.ZERO);
-    }
-    return Tensor.of(list.stream().map(entry -> entry.dot(tensor)));
-  }
-
-  // helper function
-  private IntStream _range(TensorImpl impl) {
-    int length = list.size();
-    if (length != impl.list.size()) // <- check is necessary otherwise error might be undetected
-      throw TensorRuntimeException.of(this, impl); // dimensions mismatch
-    return IntStream.range(0, length);
-  }
-
-  @Override // from Tensor
-  public Tensor map(Function<Scalar, ? extends Tensor> function) {
-    return Tensor.of(list.stream().map(tensor -> tensor.map(function)));
-  }
-
-  /***************************************************/
   @Override // from Iterable
   public Iterator<Tensor> iterator() {
     return list.iterator();
-  }
-
-  @Override // from Object
-  public int hashCode() {
-    return list.hashCode();
-  }
-
-  @Override // from Object
-  public boolean equals(Object object) {
-    return object instanceof TensorImpl //
-        && list.equals(((TensorImpl) object).list);
   }
 
   @Override // from Object

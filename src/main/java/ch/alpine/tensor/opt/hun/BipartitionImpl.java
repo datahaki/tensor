@@ -10,11 +10,11 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /* package */ class BipartitionImpl implements Bipartition {
-  static Bipartition empty(int dim) {
+  public static Bipartition empty(int dim) {
     return new BipartitionImpl(IntStream.range(0, dim).boxed());
   }
 
-  /***************************************************/
+  // ---
   private final List<Integer> nodes = new ArrayList<>();
   private final Set<Integer> notNodes;
 
