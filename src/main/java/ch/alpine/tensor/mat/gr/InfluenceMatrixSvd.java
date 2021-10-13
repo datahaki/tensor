@@ -28,9 +28,14 @@ import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 
   @Override // from InfluenceMatrix
   public Tensor matrix() {
-    return Unprotect.dimension1Hint(u) == 0 //
-        ? Array.zeros(u.length(), u.length())
-        : MatrixDotTranspose.of(u, u);
+    int n = u.length();
+    if (Unprotect.dimension1Hint(u) == 0)
+      return Array.zeros(n, n);
+    Tensor matrix = MatrixDotTranspose.of(u, u);
+    // theory guarantees that diagonal entries of matrix are in the unit interval [0, 1]
+    // but the numerics don't always reflect that.
+    IntStream.range(0, n).forEach(i -> matrix.set(StaticHelper::requireUnit, i, i));
+    return matrix;
   }
 
   @Override // from InfluenceMatrix

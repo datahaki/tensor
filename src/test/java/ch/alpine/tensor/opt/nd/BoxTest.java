@@ -39,6 +39,15 @@ public class BoxTest extends TestCase {
     box.requireInside(tensor);
   }
 
+  public void testMixedUnits() {
+    Box box = Box.of( //
+        Tensors.fromString("{1[m], 2[s], 3[A]}"), //
+        Tensors.fromString("{2[m], 3[s], 4[A]}"));
+    Tensor tensor = TestHelper.sample(box);
+    assertTrue(box.isInside(tensor));
+    box.requireInside(tensor);
+  }
+
   public void testDegenerate() {
     Box box = Box.of( //
         Tensors.fromString("{1[m], 2[m], 4[m]}"), //

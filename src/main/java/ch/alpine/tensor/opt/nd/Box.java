@@ -22,7 +22,7 @@ import ch.alpine.tensor.sca.Clips;
  * an instance of Box is immutable */
 public class Box implements Serializable {
   /** min and max are vectors of identical length
-   * for instance if the points to be added are in the unit cube then
+   * for instance to describe the 3-dimensional unit cube use
    * <pre>
    * min = {0, 0, 0}
    * max = {1, 1, 1}

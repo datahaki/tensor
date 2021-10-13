@@ -6,11 +6,14 @@ import java.util.Collection;
 import java.util.NavigableMap;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.nrm.VectorInfinityNorm;
 import ch.alpine.tensor.pdf.BernoulliDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -119,6 +122,33 @@ public class NdTreeMapTest extends TestCase {
     NavigableMap<Tensor, Long> map = Tally.sorted(flatten);
     map.lastKey();
     // assertEquals(last, RealScalar.of(n));
+  }
+
+  public void testMixedUnits() {
+    Box box = Box.of( //
+        Tensors.fromString("{1[m], 2[s], 3[A]}"), //
+        Tensors.fromString("{2[m], 3[s], 4[A]}"));
+    NdMap<String> ndMap = NdTreeMap.of(box);
+    for (int c = 0; c < 100; ++c) {
+      Tensor tensor = TestHelper.sample(box);
+      ndMap.insert(tensor, "" + c);
+    }
+    Tensor center = TestHelper.sample(box);
+    NdCenterBase ndCenterBase = new NdCenterBase(center) {
+      @Override
+      public Scalar distance(Tensor point) {
+        Tensor tensor = Tensor.of(center.subtract(point).stream().map(Scalar.class::cast).map(Unprotect::withoutUnit));
+        return VectorInfinityNorm.of(tensor);
+      }
+    };
+    {
+      Collection<NdMatch<String>> collection = NdCollectNearest.of(ndMap, ndCenterBase, 3);
+      assertEquals(collection.size(), 3);
+    }
+    {
+      Collection<NdMatch<String>> collection = NdCollectRadius.of(ndMap, ndCenterBase, RealScalar.of(1));
+      collection.isEmpty();
+    }
   }
 
   public void testPrint() {
