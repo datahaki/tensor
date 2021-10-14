@@ -4,7 +4,6 @@ package ch.alpine.tensor.red;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Boole;
 
 /** not consistent with Mathematica for singleton collection
@@ -23,12 +22,6 @@ import ch.alpine.tensor.num.Boole;
  * <a href="https://reference.wolfram.com/language/ref/KroneckerDelta.html">KroneckerDelta</a> */
 public enum KroneckerDelta {
   ;
-  /** @param scalar
-   * @return function that maps input to 1 if input matches scalar, otherwise gives 0 */
-  public static ScalarUnaryOperator function(Scalar scalar) {
-    return value -> of(scalar, value);
-  }
-
   /** @param objects
    * @return RealScalar.ONE if there are no two objects are distinct,
    * otherwise RealScalar.ZERO */
@@ -40,6 +33,6 @@ public enum KroneckerDelta {
    * @return RealScalar.ONE if there are no two objects in the stream that are distinct,
    * otherwise RealScalar.ZERO */
   public static Scalar of(Stream<?> stream) {
-    return Boole.of(stream.distinct().limit(2).count() <= 1);
+    return Boole.of(stream.distinct().skip(1).findAny().isEmpty());
   }
 }

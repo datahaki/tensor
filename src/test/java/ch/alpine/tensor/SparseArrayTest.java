@@ -202,6 +202,17 @@ public class SparseArrayTest extends TestCase {
     AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, 3, 4), Tensor.ALL, 4));
   }
 
+  public void testSetAll4Zeros() {
+    Tensor tensor = Array.zeros(3, 5);
+    Tensor sparse = SparseArray.of(3, 5);
+    tensor.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 4);
+    sparse.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 4);
+    assertEquals(tensor, sparse);
+    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 5));
+    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2), Tensor.ALL, 4));
+    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, 3, 4), Tensor.ALL, 4));
+  }
+
   public void testSetRemove() {
     Tensor tensor = Tensors.vector(1, 0, 3, 0, 0);
     Tensor sparse = SparseArrays.of(tensor, RealScalar.ZERO);
