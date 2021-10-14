@@ -82,8 +82,9 @@ import java.util.regex.Pattern;
       return of(string.substring(0, times)).multiply(of(string.substring(times + 1)));
     if (Objects.nonNull(divide))
       return of(string.substring(0, divide)).divide(of(string.substring(divide + 1)));
-    if (string.startsWith("(") && string.endsWith(")"))
-      return of(string.substring(1, string.length() - 1));
+    int last = string.length() - 1;
+    if (chars[0] == '(' && chars[last] == ')')
+      return of(string.substring(1, last));
     if (string.equals(I_SYMBOL))
       return ComplexScalar.I;
     if (PREDICATE_INTEGER.test(string))

@@ -59,10 +59,14 @@ public class ScalarParserTest extends TestCase {
   }
 
   public void testBrackets() {
-    Scalar s1 = ScalarParser.of("(1)+(2)");
-    Scalar s2 = ScalarParser.of("((3))+0");
-    assertEquals(s1, s2);
+    Scalar s1 = ScalarParser.of(" (1)+(2)");
+    Scalar s2 = ScalarParser.of(" ((3))+0");
+    Scalar s3 = ScalarParser.of(" (1+2) ");
+    Scalar s4 = ScalarParser.of(" 1+(2) ");
     assertEquals(s1, RealScalar.of(3));
+    assertEquals(s1, s2);
+    assertEquals(s2, s3);
+    assertEquals(s3, s4);
   }
 
   public void testTrimVsStrip() {

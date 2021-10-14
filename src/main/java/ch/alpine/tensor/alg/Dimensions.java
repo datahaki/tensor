@@ -51,7 +51,7 @@ public class Dimensions implements Serializable {
   /** @return dimensions of given tensor
    * @see #of(Tensor) */
   public List<Integer> list() {
-    List<Integer> list = new ArrayList<>();
+    List<Integer> list = new ArrayList<>(lengths.size());
     for (Set<Integer> set : lengths)
       if (set.size() == 1) {
         int val = set.iterator().next(); // get unique element from set
