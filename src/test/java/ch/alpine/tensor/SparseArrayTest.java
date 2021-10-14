@@ -181,6 +181,27 @@ public class SparseArrayTest extends TestCase {
     AssertFail.of(() -> sparse.set(Tensors.vector(3), 2));
   }
 
+  public void testSet1All() {
+    Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
+    Tensor sparse = SparseArrays.of(tensor, RealScalar.ZERO);
+    tensor.set(Tensors.vector(-1, -2, -3, -4, -5), 1, Tensor.ALL);
+    sparse.set(Tensors.vector(-1, -2, -3, -4, -5), 1, Tensor.ALL);
+    assertEquals(tensor, sparse);
+    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, -3, -4), 1, Tensor.ALL));
+    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, -3, -4, -5), 3, Tensor.ALL));
+  }
+
+  public void testSetAll4() {
+    Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
+    Tensor sparse = SparseArrays.of(tensor, RealScalar.ZERO);
+    tensor.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 4);
+    sparse.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 4);
+    assertEquals(tensor, sparse);
+    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 5));
+    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2), Tensor.ALL, 4));
+    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, 3, 4), Tensor.ALL, 4));
+  }
+
   public void testSetRemove() {
     Tensor tensor = Tensors.vector(1, 0, 3, 0, 0);
     Tensor sparse = SparseArrays.of(tensor, RealScalar.ZERO);

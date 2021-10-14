@@ -3,7 +3,6 @@
 package ch.alpine.tensor.mat.pi;
 
 import ch.alpine.tensor.ExactTensorQ;
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.VectorQ;
@@ -15,7 +14,6 @@ import ch.alpine.tensor.mat.qr.QRDecomposition;
 import ch.alpine.tensor.mat.qr.QRSignOperators;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.mat.sv.SingularValueList;
-import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Chop;
 
@@ -50,19 +48,15 @@ public enum LeastSquares {
    * of scalars with two or more different {@link Unit}s.
    * 
    * @param matrix of size n x m
-   * @param b
-   * @return x with matrix.dot(x) ~ b */
+   * @param b tensor of length n
+   * @return x == PseudoInverse[matrix] . b so that matrix.dot(x) is the least
+   * square error approximation to b */
   public static Tensor of(Tensor matrix, Tensor b) {
     boolean assumeRankM = true;
-    long unique = matrix.flatten(1) // count of distinct units
-        .map(Scalar.class::cast) //
-        .map(QuantityUnit::of) //
-        .distinct() //
-        .limit(2) //
-        .count();
-    if (ExactTensorQ.of(matrix) || 1 < unique)
+    if (ExactTensorQ.of(matrix) || //
+        StaticHelper.isMixedUnits(matrix))
       try {
-        return PseudoInverse.usingCholesky(matrix).dot(b);
+        return usingCholesky(matrix, b);
       } catch (Exception exception) {
         assumeRankM = false; // rank is not maximal
       }
@@ -77,6 +71,21 @@ public enum LeastSquares {
     return m <= n //
         ? usingSvd(matrix, b)
         : PseudoInverse.usingSvd(matrix, CHOP, n, m).dot(b);
+  }
+
+  // ---
+  /** @param matrix
+   * @param b
+   * @return PseudoInverse[matrix] . b
+   * @throws Exception if matrix does not have maximal rank */
+  public static Tensor usingCholesky(Tensor matrix, Tensor b) {
+    int n = matrix.length();
+    int m = Unprotect.dimension1Hint(matrix);
+    if (m <= n) {
+      Tensor mt = ConjugateTranspose.of(matrix);
+      return CholeskyDecomposition.of(mt.dot(matrix)).solve(mt.dot(b));
+    }
+    return PseudoInverse.usingCholesky(matrix).dot(b);
   }
 
   // ---

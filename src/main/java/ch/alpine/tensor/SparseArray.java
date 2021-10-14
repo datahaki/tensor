@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -86,14 +87,28 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public void set(Tensor tensor, List<Integer> index) {
-    int head = requireInRange(index.get(0));
+    int head = index.get(0);
     List<Integer> _size = Lists.rest(size);
-    // TODO does not handle Tensor.ALL yet
-    if (index.size() == 1)
-      _set(head, tensor.copy(), _size);
-    else
-      navigableMap.computeIfAbsent(head, i -> new SparseArray(fallback, _size)) //
-          .set(tensor, Lists.rest(index));
+    if (index.size() == 1) // terminal case
+      if (head == ALL) {
+        Integers.requireEquals(size.get(0), tensor.length());
+        AtomicInteger i = new AtomicInteger();
+        tensor.stream().map(Tensor::copy).forEach(entry -> _set(i.getAndIncrement(), entry, _size));
+      } else
+        _set(requireInRange(head), tensor.copy(), _size);
+    else {
+      List<Integer> _index = Lists.rest(index);
+      if (head == ALL) {
+        Integers.requireEquals(size.get(0), tensor.length());
+        AtomicInteger i = new AtomicInteger();
+        tensor.stream().forEach(entry -> //
+        navigableMap.computeIfAbsent(i.getAndIncrement(), j -> new SparseArray(fallback, _size)) //
+            .set(entry, _index));
+      } else {
+        requireInRange(head);
+        navigableMap.computeIfAbsent(head, j -> new SparseArray(fallback, _size)).set(tensor, _index);
+      }
+    }
   }
 
   @SuppressWarnings("unchecked")

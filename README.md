@@ -1,6 +1,6 @@
 ![alpine_877](https://user-images.githubusercontent.com/4012178/116814864-1b1a1580-ab5b-11eb-97e6-1441af4ececa.png)
 
-# ch.alpine.tensor <a href="https://travis-ci.com/datahaki/tensor"><img src="https://travis-ci.com/datahaki/tensor.svg?branch=master" alt="Build Status"></a>
+# ch.alpine.tensor
 
 Library for tensor computations in Java 11, version `0.9.7`. (The last version that supports Java 8 is `0.9.4`.)
 

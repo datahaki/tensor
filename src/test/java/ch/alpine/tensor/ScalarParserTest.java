@@ -91,6 +91,7 @@ public class ScalarParserTest extends TestCase {
     AssertFail.of(() -> ScalarParser.of("3e.1"));
     AssertFail.of(() -> ScalarParser.of("3e-0.1"));
     AssertFail.of(() -> ScalarParser.of("3e.-0.1"));
+    AssertFail.of(() -> ScalarParser.of("(3)(5)"));
   }
 
   public void testQuantityFail() {

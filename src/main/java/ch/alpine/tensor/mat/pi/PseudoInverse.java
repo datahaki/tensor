@@ -51,7 +51,8 @@ public enum PseudoInverse {
   /** @param matrix of dimensions n x m
    * @return pseudo inverse of dimensions m x n */
   public static Tensor of(Tensor matrix) {
-    if (ExactTensorQ.of(matrix))
+    if (ExactTensorQ.of(matrix) || //
+        StaticHelper.isMixedUnits(matrix))
       try {
         return usingCholesky(matrix);
       } catch (Exception exception) {
@@ -105,7 +106,7 @@ public enum PseudoInverse {
    * singular values are dropped when they are less than 100 times 10^-p,
    * where p is Precision[m]."
    * In Mathematica the tolerance is 1.1102230246251578*^-14. */
-  private static final Chop TOLERANCE = Tolerance.CHOP; // 10^-12
+  private static final Chop CHOP = Tolerance.CHOP; // 10^-12
 
   /** Remark: Entries of given matrix may be of type {@link Quantity} with identical {@link Unit}.
    * 
@@ -113,7 +114,7 @@ public enum PseudoInverse {
    * @return pseudoinverse of given matrix */
   @PackageTestAccess
   static Tensor usingSvd(Tensor matrix) {
-    return usingSvd(matrix, TOLERANCE);
+    return usingSvd(matrix, CHOP);
   }
 
   /** @param matrix
@@ -123,8 +124,7 @@ public enum PseudoInverse {
     return usingSvd(matrix, chop, matrix.length(), Unprotect.dimension1Hint(matrix));
   }
 
-  @PackageTestAccess
-  static Tensor usingSvd(Tensor matrix, Chop chop, int n, int m) {
+  /* package */ static Tensor usingSvd(Tensor matrix, Chop chop, int n, int m) {
     return m <= n //
         ? of(SingularValueDecomposition.of(matrix), chop) //
         : Transpose.of(of(SingularValueDecomposition.of(Transpose.of(matrix)), chop));
@@ -133,7 +133,7 @@ public enum PseudoInverse {
   /** @param svd
    * @return pseudoinverse of matrix determined by given svd */
   public static Tensor of(SingularValueDecomposition svd) {
-    return of(svd, TOLERANCE);
+    return of(svd, CHOP);
   }
 
   /** @param svd
