@@ -3,6 +3,7 @@
 package ch.alpine.tensor.mat.pi;
 
 import ch.alpine.tensor.ExactTensorQ;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.VectorQ;
@@ -14,6 +15,8 @@ import ch.alpine.tensor.mat.qr.QRDecomposition;
 import ch.alpine.tensor.mat.qr.QRSignOperators;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.mat.sv.SingularValueList;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Chop;
 
 /** least squares solution x that approximates
@@ -39,15 +42,25 @@ public enum LeastSquares {
   ;
   private static final Chop CHOP = Tolerance.CHOP;
 
-  /** If given matrix and b are in exact precision and the matrix has rank m
-   * the CholeskyDecomposition produces x in exact precision.
+  /** If given matrix and b are in exact precision {@link ExactTensorQ} and the
+   * matrix has rank m the {@link CholeskyDecomposition} produces the solution
+   * to the least squares fit x in exact precision.
+   * 
+   * The {@link CholeskyDecomposition} is also used, if given matrix consists
+   * of scalars with two or more different {@link Unit}s.
    * 
    * @param matrix of size n x m
    * @param b
    * @return x with matrix.dot(x) ~ b */
   public static Tensor of(Tensor matrix, Tensor b) {
     boolean assumeRankM = true;
-    if (ExactTensorQ.of(matrix))
+    long unique = matrix.flatten(1) // count of distinct units
+        .map(Scalar.class::cast) //
+        .map(QuantityUnit::of) //
+        .distinct() //
+        .limit(2) //
+        .count();
+    if (ExactTensorQ.of(matrix) || 1 < unique)
       try {
         return PseudoInverse.usingCholesky(matrix).dot(b);
       } catch (Exception exception) {

@@ -49,6 +49,7 @@ public interface QRDecomposition {
 
   /** @return orthogonal matrix
    * @see ConjugateTranspose */
+  // TODO rename to getQConjugateTranspose ?
   Tensor getQTranspose();
 
   /** @return orthogonal matrix */

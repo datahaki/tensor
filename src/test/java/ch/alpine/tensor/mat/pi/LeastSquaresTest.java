@@ -14,6 +14,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.NestList;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
@@ -41,6 +42,19 @@ public class LeastSquaresTest extends TestCase {
     Tensor pinv = PseudoInverse.of(matrix);
     assertEquals(pinv, Inverse.of(matrix));
     ExactTensorQ.require(pinv);
+  }
+
+  public void testMixedUnitsVantHoff() {
+    // inspired by code by gjoel
+    for (int deg = 0; deg <= 2; ++deg) {
+      int degree = deg;
+      Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}").map(Scalar::reciprocal);
+      Tensor y = Tensors.fromString("{10[bar], 20[bar], 22[bar], 23[bar]}");
+      assertEquals(x.Get(0).one(), RealScalar.ONE);
+      Tensor matrix = x.map(s -> NestList.of(s::multiply, s.one(), degree));
+      Tensor sol = LeastSquares.of(matrix, y);
+      matrix.dot(sol).subtract(y);
+    }
   }
 
   private static void _checkSpecialExact(Tensor m) {
