@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Abs;
 /* package */ enum ErfcRestricted implements ScalarUnaryOperator {
   FUNCTION;
 
-  private static final ScalarUnaryOperator SERIES = Polynomial.of(Tensors.vector( //
+  private static final ScalarUnaryOperator POLYNOMIAL = Polynomial.of(Tensors.vector( //
       1, //
       -1.1283791670955126, 0, // x
       +0.3761263890318375, 0, // x^3
@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.Abs;
   @Override
   public Scalar apply(Scalar scalar) {
     if (Scalars.lessThan(Abs.of(scalar), DoubleScalar.of(0.7))) // error < 10^-9
-      return SERIES.apply(scalar);
+      return POLYNOMIAL.apply(scalar);
     throw TensorRuntimeException.of(scalar);
   }
 }

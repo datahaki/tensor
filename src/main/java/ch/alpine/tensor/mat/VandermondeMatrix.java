@@ -10,6 +10,14 @@ import ch.alpine.tensor.itp.Fit;
 /** Reference:
  * https://en.wikipedia.org/wiki/Vandermonde_matrix
  * 
+ * <pre>
+ * 1 x0 x0^2 ... x0^d
+ * 1 x1 x1^2 ... x1^d
+ * 1 x2 x2^2 ... x2^d
+ * ...
+ * 1 xn xn^2 ... xn^d
+ * </pre>
+ * 
  * @see Fit */
 public enum VandermondeMatrix {
   ;

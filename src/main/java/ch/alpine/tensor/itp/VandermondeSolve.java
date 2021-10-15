@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.itp;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -8,7 +8,8 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
 
-/** Reference: G. B. Rybicki */
+/** Reference:
+ * G. B. Rybicki */
 public enum VandermondeSolve {
   ;
   /** @param x vector with non-duplicate entries

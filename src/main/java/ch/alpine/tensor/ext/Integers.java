@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Integers.html">Integers</a> */
@@ -73,11 +72,7 @@ public enum Integers {
   public static int[] requirePermutation(int[] sigma) {
     if (isPermutation(sigma))
       return sigma;
-    throw new IllegalArgumentException(sigma.length <= 16 //
-        ? Arrays.stream(sigma) //
-            .mapToObj(Integer::toString) //
-            .collect(Collectors.joining(" "))
-        : "");
+    throw new IllegalArgumentException(sigma.length <= 16 ? IntList.wrap(sigma).toString() : "");
   }
 
   /** Examples:

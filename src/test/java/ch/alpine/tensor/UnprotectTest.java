@@ -10,6 +10,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
@@ -96,6 +97,9 @@ public class UnprotectTest extends TestCase {
     assertEquals(Unprotect.withoutUnit(Quantity.of(3, "h*km")), RealScalar.of(3));
     assertEquals(Unprotect.withoutUnit(Quantity.of(ComplexScalar.I, "h*km")), ComplexScalar.I);
     assertEquals(Unprotect.withoutUnit(StringScalar.of("abd123")), StringScalar.of("abd123"));
+    assertEquals(Unprotect.withoutUnit(Quantity.of(3, "s")), RealScalar.of(3));
+    assertEquals(Unprotect.withoutUnit(RealScalar.of(5)), RealScalar.of(5));
+    assertEquals(Unprotect.withoutUnit(GaussScalar.of(3, 11)), GaussScalar.of(3, 11));
     AssertFail.of(() -> Unprotect.withoutUnit(null));
   }
 

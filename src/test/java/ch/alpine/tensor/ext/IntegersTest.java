@@ -132,7 +132,16 @@ public class IntegersTest extends TestCase {
       Integers.requirePermutation(new int[] { 0, 2 });
       fail();
     } catch (Exception exception) {
-      assertEquals(exception.getMessage(), "0 2");
+      assertEquals(exception.getMessage(), "[0, 2]");
+    }
+  }
+
+  public void testRequirePermutationLong() {
+    try {
+      Integers.requirePermutation(new int[20]);
+      fail();
+    } catch (Exception exception) {
+      assertEquals(exception.getMessage(), "");
     }
   }
 

@@ -21,7 +21,7 @@ public enum Roots {
   /** attempts to find all roots of a polynomial
    * 
    * <pre>
-   * Roots.of(coeffs).map(Series.of(coeffs)) == {0, 0, ...}
+   * Roots.of(coeffs).map(Polynomial.of(coeffs)) == {0, 0, ...}
    * </pre>
    * 
    * @param coeffs of polynomial, for instance {a, b, c, d} represents
