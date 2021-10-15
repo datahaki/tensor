@@ -4,6 +4,7 @@ package ch.alpine.tensor.opt.nd;
 import java.io.IOException;
 
 import ch.alpine.tensor.ExactScalarQ;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
@@ -56,6 +57,26 @@ public class BoxTest extends TestCase {
     assertEquals(ExactScalarQ.require(tensor.Get(2)), Quantity.of(4, "m"));
     assertTrue(box.isInside(tensor));
     box.requireInside(tensor);
+    assertEquals(box.toString(), "[Clip[1[m], 2[m]], Clip[2[m], 3[m]], Clip[4[m], 4[m]]]");
+  }
+
+  public void testHashAndEquals() {
+    Box box1 = Box.of( //
+        Tensors.fromString("{1[m], 2[m], 4[m]}"), //
+        Tensors.fromString("{2[m], 3[m], 4[m]}"));
+    Box box2 = Box.of( //
+        Tensors.fromString("{1[m], 2[m], 4[m]}"), //
+        Tensors.fromString("{2[m], 3[m], 4[m]}"));
+    assertEquals(box1, box2);
+    assertEquals(box1.hashCode(), box2.hashCode());
+    Box box3 = Box.of( //
+        Tensors.fromString("{1[m], 2[m], 4[m]}"), //
+        Tensors.fromString("{2[m], 3[m], 5[m]}"));
+    assertFalse(box1.equals(box3));
+    assertFalse(box1.hashCode() == box3.hashCode());
+    assertFalse(box1.toString().equals(box3.toString()));
+    assertFalse(((Object) box1).equals(RealScalar.ONE));
+    assertFalse(((Object) box1).equals("abc"));
   }
 
   public void testSerializable() throws ClassNotFoundException, IOException {

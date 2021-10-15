@@ -15,5 +15,6 @@ public class NdMatchTest extends TestCase {
     assertEquals(ndMatch.location(), Tensors.vector(1, 2, 3));
     assertEquals(ndMatch.value(), "abc");
     assertEquals(ndMatch.distance(), RealScalar.TWO);
+    assertEquals(ndMatch.toString(), "NdMatch[NdEntry[{1, 2, 3}, abc], 2]");
   }
 }

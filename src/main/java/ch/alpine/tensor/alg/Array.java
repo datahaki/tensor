@@ -17,9 +17,9 @@ import ch.alpine.tensor.ext.Integers;
 /** The implementation is consistent with Mathematica.
  * Special examples:
  * <pre>
- * Array[0 &, {0, 1}] == {}
+ * Array[0 &amp;, {0, 1}] == {}
  * Array.zeros(0, 1) == {}
- * Array[0 &, {1, 0, 1}] == {{}}
+ * Array[0 &amp;, {1, 0, 1}] == {{}}
  * Array.zeros(1, 0, 1) == {{}}
  * </pre>
  * 

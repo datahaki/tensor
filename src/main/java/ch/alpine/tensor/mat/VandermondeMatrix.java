@@ -7,9 +7,8 @@ import ch.alpine.tensor.alg.NestList;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.itp.Fit;
 
-/** Reference:
- * https://en.wikipedia.org/wiki/Vandermonde_matrix
- * 
+/** Given a vector with entries {x0, x1, ..., xn}, the Vandermonde matrix
+ * is the square matrix of the form
  * <pre>
  * 1 x0 x0^2 ... x0^d
  * 1 x1 x1^2 ... x1^d
@@ -17,6 +16,13 @@ import ch.alpine.tensor.itp.Fit;
  * ...
  * 1 xn xn^2 ... xn^d
  * </pre>
+ * 
+ * <p>Remark: the transpose of the matrix above is also referred to by the
+ * same name.
+ * 
+ * <p>References:
+ * https://en.wikipedia.org/wiki/Vandermonde_matrix
+ * NR 2007
  * 
  * @see Fit */
 public enum VandermondeMatrix {

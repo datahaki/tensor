@@ -120,4 +120,24 @@ public class Box implements Serializable {
   public Tensor max() {
     return Tensor.of(list.stream().map(Clip::max));
   }
+
+  // ---
+  @Override // from Object
+  public int hashCode() {
+    return list.hashCode();
+  }
+
+  @Override // from Object
+  public boolean equals(Object object) {
+    if (object instanceof Box) {
+      Box box = (Box) object;
+      return list.equals(box.list);
+    }
+    return false;
+  }
+
+  @Override // from Object
+  public String toString() {
+    return list.toString();
+  }
 }

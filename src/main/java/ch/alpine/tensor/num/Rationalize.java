@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 
-/** Rationalize is <em>not<em> a substitute for {@link Round}, or {@link Floor}.
+/** Rationalize is <em>not</em> a substitute for {@link Round}, or {@link Floor}.
  * 
  * <code>
  * Rationalize.of(+11.5, 1) == +12

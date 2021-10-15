@@ -1,9 +1,9 @@
 // code by jph
 package ch.alpine.tensor;
 
-/** not Infinity or NaN
+/** not Infinity or NaN.
  * 
- * check is useful after division by a numeric value equal or close to zero */
+ * <p>check is useful after division by a numeric value equal or close to zero */
 public enum DeterminateScalarQ {
   ;
   /** @param scalar
@@ -25,7 +25,7 @@ public enum DeterminateScalarQ {
   }
 
   /** @param scalar
-   * @return
+   * @return given scalar
    * @throws Exception if given scalar does not satisfy the predicate {@link DeterminateScalarQ} */
   public static Scalar require(Scalar scalar) {
     if (of(scalar))

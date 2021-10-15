@@ -32,4 +32,9 @@ public class NdMatch<V> implements Serializable {
   public Scalar distance() {
     return distance;
   }
+
+  @Override // from Object
+  public String toString() {
+    return String.format("%s[%s, %s]", NdMatch.class.getSimpleName(), ndEntry, distance);
+  }
 }

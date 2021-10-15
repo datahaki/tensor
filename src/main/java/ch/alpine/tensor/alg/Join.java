@@ -14,7 +14,7 @@ import ch.alpine.tensor.Tensor;
  * Join.of(1, A, B) is MATLAB::horzcat(A, B) == [A B]
  * </pre>
  * 
- * <code>Mathematica::Join[0, 1]<code> of one, two or more scalars is <em>not</em> defined.
+ * <code>Mathematica::Join[0, 1]</code> of one, two or more scalars is <em>not</em> defined.
  * The tensor library also does <em>not</em> permit joining scalars, but only tensors with rank 1 or higher.
  * 
  * <p>inspired by
