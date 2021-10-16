@@ -16,8 +16,8 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -57,15 +57,16 @@ public class LinearSolveTest extends TestCase {
   }
 
   public void testSolveDC() {
+    Random random = new Random(123);
     int n = 7;
-    Tensor A = Tensors.matrix((i, j) -> DoubleScalar.of(4 * RANDOM.nextGaussian() - 2), n, n);
+    Tensor A = Tensors.matrix((i, j) -> DoubleScalar.of(4 * random.nextGaussian() - 2), n, n);
     Tensor b = Tensors.matrix((i, j) -> ComplexScalar.of( //
-        RealScalar.of(RANDOM.nextDouble()), //
-        RealScalar.of(RANDOM.nextDouble())), n, n - 2);
+        RealScalar.of(random.nextDouble()), //
+        RealScalar.of(random.nextDouble())), n, n - 2);
     Tensor X = LinearSolve.of(A, b);
     Tensor err = A.dot(X).add(b.negate());
-    Chop._12.requireClose(err, b.multiply(RealScalar.ZERO));
-    Chop._12.requireClose(err, Array.zeros(Dimensions.of(b)));
+    Tolerance.CHOP.requireClose(err, b.multiply(RealScalar.ZERO));
+    Tolerance.CHOP.requireClose(err, Array.zeros(Dimensions.of(b)));
   }
 
   public void testGauss() {
@@ -77,8 +78,8 @@ public class LinearSolveTest extends TestCase {
     {
       Tensor x = LinearSolve.of(A, b);
       Tensor err = A.dot(x).add(b.negate());
-      Chop._12.requireClose(err, Tensors.vectorLong(0, 0, 0));
-      Chop._12.requireClose(err, Array.zeros(3));
+      Tolerance.CHOP.requireClose(err, Tensors.vectorLong(0, 0, 0));
+      Tolerance.CHOP.requireClose(err, Array.zeros(3));
     }
     Tensor eye2 = Tensors.of( //
         Tensors.vectorDouble(1.0, 0.0, 0.0, 3), //
@@ -87,8 +88,8 @@ public class LinearSolveTest extends TestCase {
     Tensor sol = LinearSolve.of(A, eye3);
     {
       Tensor err = A.dot(sol).add(eye3.negate());
-      Chop._12.requireClose(err, eye3.multiply(DoubleScalar.of(0)));
-      Chop._12.requireClose(err, Array.zeros(Dimensions.of(eye3)));
+      Tolerance.CHOP.requireClose(err, eye3.multiply(DoubleScalar.of(0)));
+      Tolerance.CHOP.requireClose(err, Array.zeros(Dimensions.of(eye3)));
     }
   }
 
