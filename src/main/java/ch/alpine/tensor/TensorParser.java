@@ -1,60 +1,87 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
 import ch.alpine.tensor.io.StringScalar;
 
-/* package */ class TensorParser {
+/* package */ enum TensorParser {
+  ;
   private static final char COMMA = ',';
-  // ---
-  public static final TensorParser DEFAULT = new TensorParser(Scalars::fromString);
-  // ---
-  private final Function<String, Scalar> function;
 
-  /** @param function that parses a string to a scalar
-   * @throws Exception if given function is null */
-  public TensorParser(Function<String, Scalar> function) {
-    this.function = Objects.requireNonNull(function);
+  public static Tensor of(String string) {
+    return of(string, Scalars::fromString);
   }
 
-  /** @param string for instance "{1, 2[m], {3+4*I, 5.67}}"
-   * @return */
-  public Tensor parse(String string) {
-    int opening = string.indexOf(Tensor.OPENING_BRACKET); // first non-whitespace character should be "{"
-    if (0 <= opening && string.substring(0, opening).isBlank()) {
-      int closing = string.lastIndexOf(Tensor.CLOSING_BRACKET);
-      if (opening < closing && string.substring(closing + 1).isBlank()) {
-        List<Tensor> list = new ArrayList<>();
-        int level = 1; // track nesting with "{" and "}"
-        int beg = opening + 1;
-        int index = opening + 1;
-        for (; index <= closing; ++index) {
-          final char chr = string.charAt(index);
-          if (chr == Tensor.OPENING_BRACKET)
-            ++level;
-          boolean isComma = chr == COMMA;
-          boolean is_last = chr == Tensor.CLOSING_BRACKET;
-          if (level == 1 && (isComma || is_last)) {
-            String entry = string.substring(beg, index).strip(); // trim is required
-            if (!entry.isEmpty() || !is_last || 0 < list.size())
-              list.add(parse(entry));
-            beg = index + 1;
+  public static Tensor of(String string, Function<String, Scalar> function) {
+    try {
+      Deque<List<Tensor>> deque = new ArrayDeque<>();
+      int head = 0;
+      int tail = 0;
+      List<Tensor> last = null;
+      boolean ignoreBlank = false;
+      boolean noEmptyClosure = false;
+      boolean noCommaClosure = false;
+      for (char chr : string.toCharArray()) {
+        if (chr == Tensor.OPENING_BRACKET) {
+          if (deque.isEmpty() && (Objects.nonNull(last) || !string.substring(head, tail).isBlank()))
+            // return StringScalar.of(string);
+            throw new IllegalStateException();
+          deque.push(new ArrayList<>());
+          head = tail + 1;
+          noEmptyClosure = false;
+          noCommaClosure = true;
+        } else //
+        if (chr == COMMA) {
+          String substring = string.substring(head, tail);
+          if (ignoreBlank) {
+            ignoreBlank = false;
+            if (!substring.isBlank())
+              // return StringScalar.of(string);
+              throw new IllegalArgumentException();
+          } else
+            deque.peek().add(function.apply(substring.strip())); // TODO only strip a single white space
+          head = tail + 1;
+          noEmptyClosure = true;
+          noCommaClosure = false;
+        } else //
+        if (chr == Tensor.CLOSING_BRACKET) {
+          if (deque.isEmpty())
+            return StringScalar.of(string);
+          String substring = string.substring(head, tail);
+          if (noEmptyClosure) {
+            deque.peek().add(function.apply(substring.strip()));
+            noEmptyClosure = false;
+          } else //
+          if (!substring.isBlank())
+            if (noCommaClosure)
+              deque.peek().add(function.apply(substring.strip()));
+            else
+              // return StringScalar.of(string);
+              throw new IllegalStateException();
+          last = deque.pop();
+          if (!deque.isEmpty()) {
+            deque.peek().add(Unprotect.using(last));
+            ignoreBlank = true;
           }
-          if (is_last) {
-            --level;
-            if (level < 1)
-              break;
-          }
+          head = tail + 1;
         }
-        return index == closing //
-            ? Unprotect.using(list)
-            : StringScalar.of(string);
+        ++tail;
       }
+      if (Objects.isNull(last))
+        return function.apply(string);
+      if (deque.isEmpty() && //
+          string.substring(head, tail).isBlank())
+        return Unprotect.using(last);
+      // throw exception
+    } catch (Exception exception) {
+      // ---
     }
-    return function.apply(string);
+    return StringScalar.of(string);
   }
 }

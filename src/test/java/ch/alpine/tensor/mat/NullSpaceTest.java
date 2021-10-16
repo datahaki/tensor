@@ -224,9 +224,10 @@ public class NullSpaceTest extends TestCase {
 
   public void testExtended() {
     Distribution distribution = CauchyDistribution.of(-1, 2);
+    Random random = new Random(1344343);
     int n = 10;
     for (int d = 1; d < n; ++d) {
-      Tensor matrix = RandomVariate.of(distribution, n, d);
+      Tensor matrix = RandomVariate.of(distribution, random, n, d);
       assertEquals(NullSpace.of(matrix), Tensors.empty());
       Tensor mt = Transpose.of(matrix);
       {
