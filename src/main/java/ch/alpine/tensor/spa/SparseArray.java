@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.spa;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -16,6 +16,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import ch.alpine.tensor.AbstractTensor;
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
@@ -280,11 +286,36 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return size.toString() + " " + navigableMap.entrySet().stream() //
-        .map(entry -> String.format("%d -> %s", entry.getKey(), entry.getValue())) //
-        .collect(StaticHelper.EMBRACE);
+    return visit(new SparseArrayToString());
   }
 
+  // ---
+  public <T> T visit(SparseEntryVisitor<T> sparseEntryVisitor) {
+    visit(sparseEntryVisitor, new int[size.size()], 0);
+    return sparseEntryVisitor.supply();
+  }
+
+  private void visit(SparseEntryVisitor<?> sparseEntryVisitor, int[] array, int depth) {
+    for (Entry<Integer, Tensor> entry : navigableMap.entrySet()) {
+      int index = entry.getKey();
+      array[depth] = index;
+      Tensor tensor = entry.getValue();
+      if (tensor instanceof Scalar) {
+        Scalar scalar = (Scalar) tensor;
+        if (scalar.equals(fallback))
+          navigableMap.remove(index);
+        else
+          sparseEntryVisitor.accept(Integers.asList(array), scalar);
+      } else //
+      if (tensor instanceof SparseArray) {
+        SparseArray sparseArray = (SparseArray) entry.getValue();
+        sparseArray.visit(sparseEntryVisitor, array, depth + 1);
+      } else //
+        throw TensorRuntimeException.of(tensor);
+    }
+  }
+
+  // ---
   @PackageTestAccess
   static <T> Collector<T, ?, NavigableMap<Integer, Tensor>> _map( //
       Function<? super T, Integer> keyMapper, //

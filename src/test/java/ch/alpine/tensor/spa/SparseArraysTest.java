@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.spa;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,6 +7,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
@@ -75,8 +79,8 @@ public class SparseArraysTest extends TestCase {
   }
 
   private static void _check(Tensor fa, Tensor fb) {
-    assertTrue(fa instanceof TensorImpl);
-    assertTrue(fb instanceof TensorImpl);
+    assertFalse(fa instanceof SparseArray);
+    assertFalse(fb instanceof SparseArray);
     Tensor sa = SparseArrays.of(fa, RealScalar.ZERO);
     Tensor sb = SparseArrays.of(fb, RealScalar.ZERO);
     assertTrue(sa instanceof SparseArray);

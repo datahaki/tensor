@@ -1,6 +1,8 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.spa;
 
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 import junit.framework.TestCase;
 

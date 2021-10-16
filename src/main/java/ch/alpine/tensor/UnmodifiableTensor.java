@@ -25,6 +25,11 @@ import java.util.stream.Stream;
   }
 
   @Override // from TensorImpl
+  protected Tensor byRef(int i) {
+    return super.byRef(i).unmodifiable();
+  }
+
+  @Override // from TensorImpl
   public Tensor unmodifiable() {
     return this;
   }

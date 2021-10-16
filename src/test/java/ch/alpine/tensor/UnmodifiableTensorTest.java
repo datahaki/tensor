@@ -103,6 +103,12 @@ public class UnmodifiableTensorTest extends TestCase {
     AssertFail.of(() -> iterator.remove());
   }
 
+  public void testByRefAccess() {
+    Tensor tensor = HilbertMatrix.of(4).unmodifiable();
+    AbstractTensor abstractTensor = (AbstractTensor) tensor;
+    AssertFail.of(() -> abstractTensor.byRef(2).set(RealScalar.ZERO, 0));
+  }
+
   public void testNonPublic() {
     assertEquals(UnmodifiableTensor.class.getModifiers(), 0);
   }

@@ -1,6 +1,8 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.spa;
 
+import ch.alpine.tensor.ScalarQ;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.ArrayReshape;
 import ch.alpine.tensor.alg.Dimensions;
 

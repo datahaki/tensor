@@ -1,8 +1,10 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.spa;
 
 import java.util.List;
 
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 

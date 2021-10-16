@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.spa;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -8,6 +8,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Stream;
 
+import ch.alpine.tensor.ExactTensorQ;
+import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
@@ -264,7 +269,7 @@ public class SparseArrayTest extends TestCase {
     assertEquals(sparse, expect);
     SparseArray sa = (SparseArray) sparse;
     assertTrue(sa.byRef(1) instanceof SparseArray);
-    assertTrue(sa.byRef(2) instanceof TensorImpl);
+    assertFalse(sa.byRef(2) instanceof SparseArray);
   }
 
   public void testSetFail() {

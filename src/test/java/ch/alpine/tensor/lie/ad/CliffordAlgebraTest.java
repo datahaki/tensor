@@ -34,6 +34,7 @@ import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.spa.SparseArray;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -236,6 +237,7 @@ public class CliffordAlgebraTest extends TestCase {
       for (int q = 0; q < 2; ++q) {
         CliffordAlgebra cliffordAlgebra = _of(p, q);
         Tensor cp = cliffordAlgebra.cp();
+        assertTrue(cp instanceof SparseArray);
         JacobiIdentity.require(cp);
         Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-10, +10), cp.length());
         Tensor y = RandomVariate.of(DiscreteUniformDistribution.of(-10, +10), cp.length());
