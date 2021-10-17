@@ -2,8 +2,6 @@
 package ch.alpine.tensor.num;
 
 import java.io.IOException;
-import java.util.IdentityHashMap;
-import java.util.Map;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -66,13 +64,6 @@ public class CyclesTest extends TestCase {
   public void testNonEquals() throws ClassNotFoundException, IOException {
     Object cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));
     assertFalse(cycles.equals(Pi.VALUE));
-  }
-
-  public void testKeyCollision() {
-    Map<Integer, Integer> map = new IdentityHashMap<>();
-    map.put(3, 5);
-    map.put(4, 5);
-    map.entrySet().stream().collect(Cycles.INVERSE);
   }
 
   public void testReplace() {

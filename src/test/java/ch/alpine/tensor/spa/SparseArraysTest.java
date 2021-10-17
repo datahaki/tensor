@@ -15,6 +15,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.lie.TensorWedge;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.EmpiricalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -66,7 +67,8 @@ public class SparseArraysTest extends TestCase {
 
   public void testGenerateFail() {
     SparseArray.of(RealScalar.ZERO, 2, 3);
-    AssertFail.of(() -> SparseArray.of(RealScalar.ZERO));
+    assertEquals(SparseArray.of(RealScalar.ZERO), RealScalar.ZERO);
+    assertEquals(SparseArray.of(GaussScalar.of(0, 7)), GaussScalar.of(0, 7));
     AssertFail.of(() -> SparseArray.of(RealScalar.ZERO, 2, -3));
     AssertFail.of(() -> SparseArray.of(RealScalar.ONE, 2, 3));
   }

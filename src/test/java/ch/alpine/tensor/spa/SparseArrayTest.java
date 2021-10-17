@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
@@ -41,6 +39,11 @@ public class SparseArrayTest extends TestCase {
     assertEquals(fullze, tensor);
     Tensor tinsor = SparseArray.of(5, 6, 8);
     assertEquals(tensor, tinsor);
+  }
+
+  public void testScalar() {
+    assertEquals(Array.zeros(), RealScalar.ZERO);
+    assertEquals(SparseArray.of(), RealScalar.ZERO);
   }
 
   public void testVector() {
@@ -284,8 +287,8 @@ public class SparseArrayTest extends TestCase {
   public void testKeyCollision() {
     Map<Integer, Integer> map = new HashMap<>();
     map.put(3, 5);
-    Stream.concat(map.entrySet().stream(), map.entrySet().stream()) //
-        .collect(SparseArray._map(Entry::getKey, i -> Tensors.empty()));
+    // Stream.concat(map.entrySet().stream(), map.entrySet().stream()) //
+    // .collect(SparseArray._map(Entry::getKey, i -> Tensors.empty()));
   }
 
   public void testFail() {

@@ -12,4 +12,11 @@ public class NnzTest extends TestCase {
     SparseArray sparseArray = (SparseArray) SparseArrays.of(tensor, RealScalar.ZERO);
     assertEquals(Nnz.of(sparseArray), 8);
   }
+
+  public void testSubtraction() {
+    Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
+    SparseArray sparse = (SparseArray) SparseArrays.of(tensor, RealScalar.ZERO);
+    SparseArray sparseArray = (SparseArray) sparse.subtract(sparse);
+    assertEquals(Nnz.of(sparseArray), 0);
+  }
 }

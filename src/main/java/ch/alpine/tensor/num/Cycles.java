@@ -27,6 +27,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.ext.MergeIllegal;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Sign;
@@ -36,9 +37,8 @@ import ch.alpine.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Cycles.html">Cycles</a> */
 public class Cycles implements Comparable<Cycles>, Serializable {
-  @PackageTestAccess
-  static final Collector<Entry<Integer, Integer>, ?, NavigableMap<Integer, Integer>> INVERSE = //
-      Collectors.toMap(Entry::getValue, Entry::getKey, (v1, v2) -> null, TreeMap::new);
+  private static final Collector<Entry<Integer, Integer>, ?, NavigableMap<Integer, Integer>> INVERSE = //
+      Collectors.toMap(Entry::getValue, Entry::getKey, MergeIllegal.operator(), TreeMap::new);
   private static final BinaryPower<Cycles> BINARY_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
   private static final Cycles IDENTITY = new Cycles(Collections.emptyNavigableMap());
 

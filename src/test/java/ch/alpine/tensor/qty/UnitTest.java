@@ -14,6 +14,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.ext.MergeIllegal;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -26,11 +27,11 @@ public class UnitTest extends TestCase {
     return scalar;
   }
 
-  /* package */ static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> COLLECTOR = //
+  private static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> COLLECTOR = //
       Collectors.toMap( //
           entry -> UnitParser.requireAtomic(entry.getKey()), //
           entry -> requireNonZero(entry.getValue()), //
-          (u, v) -> null, TreeMap::new);
+          MergeIllegal.operator(), TreeMap::new);
 
   /** @param map
    * @return */
@@ -127,7 +128,7 @@ public class UnitTest extends TestCase {
     map1.put("b", RealScalar.ONE.negate());
     Map<String, Scalar> map2 = new HashMap<>();
     map2.put("a", RealScalar.TWO);
-    Stream.concat(map1.entrySet().stream(), map2.entrySet().stream()).collect(COLLECTOR);
+    AssertFail.of(() -> Stream.concat(map1.entrySet().stream(), map2.entrySet().stream()).collect(COLLECTOR));
   }
 
   public void testFail() {

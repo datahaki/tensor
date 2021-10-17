@@ -22,14 +22,21 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Lists;
-import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.ext.MergeIllegal;
 
-/** Hint:
+/** The string expression is as in mathematica except that the tensor library starts indexing at 0.
+ * Example:
+ * <pre>
+ * SparseArray[{{0, 0}->1, {0, 2}->3, {1, 0}->5, {1, 1}->6, {1, 2}->8, {2, 1}->2, {2, 2}->9, {2, 4}->4}, {3, 5}]
+ * </pre>
+ * 
+ * Hint:
  * Mathematica::Normal[sparse] is
  * <pre>
  * Tensor normal = Array.of(sparse::get, Dimensions.of(sparse));
@@ -39,17 +46,19 @@ import ch.alpine.tensor.ext.PackageTestAccess;
  * <a href="https://reference.wolfram.com/language/ref/SparseArray.html">SparseArray</a> */
 public class SparseArray extends AbstractTensor implements Serializable {
   /** @param fallback zero element
-   * @param dimensions non-empty with non-negative values
+   * @param dimensions with non-negative values
    * @return empty sparse array with given dimensions
    * @throws Exception if fallback element is not zero */
   public static Tensor of(Scalar fallback, int... dimensions) {
-    Integers.requirePositive(dimensions.length);
-    return new SparseArray(checkFallback(fallback), //
-        Integers.asList(IntStream.of(dimensions).map(Integers::requirePositiveOrZero).toArray()));
+    return dimensions.length == 0 //
+        ? fallback
+        : new SparseArray(checkFallback(fallback), //
+            Integers.asList(IntStream.of(dimensions).map(Integers::requirePositiveOrZero).toArray()));
   }
 
   /** @param dimensions
-   * @return empty sparse array with given dimensions and {@link RealScalar#ZERO} as fallback */
+   * @return empty sparse array with given dimensions and {@link RealScalar#ZERO} as fallback
+   * @see Array#zeros(int...) */
   public static Tensor of(int... dimensions) {
     return of(RealScalar.ZERO, dimensions);
   }
@@ -286,41 +295,40 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return getClass().getSimpleName() + size.toString() + "=" + visit(new SparseArrayToString());
+    return getClass().getSimpleName() + "[" + visit(new SparseArrayToString()) + ", " + Tensors.vector(size) + ']';
   }
 
-  // ---
+  /** @param sparseEntryVisitor
+   * @return result provided by {@link SparseEntryVisitor#result()} */
   public <T> T visit(SparseEntryVisitor<T> sparseEntryVisitor) {
     visit(sparseEntryVisitor, new int[size.size()], 0);
     return sparseEntryVisitor.result();
   }
 
   private void visit(SparseEntryVisitor<?> sparseEntryVisitor, int[] array, int depth) {
-    for (Entry<Integer, Tensor> entry : navigableMap.entrySet()) {
-      int index = entry.getKey();
-      array[depth] = index;
-      Tensor tensor = entry.getValue();
-      if (tensor instanceof Scalar) {
-        Scalar scalar = (Scalar) tensor;
-        if (scalar.equals(fallback))
-          navigableMap.remove(index);
+    if (depth + 1 < array.length)
+      for (Entry<Integer, Tensor> entry : navigableMap.entrySet()) {
+        array[depth] = entry.getKey();
+        Tensor tensor = entry.getValue();
+        if (tensor instanceof SparseArray)
+          ((SparseArray) tensor).visit(sparseEntryVisitor, array, depth + 1);
         else
+          throw TensorRuntimeException.of(tensor);
+      }
+    else // terminal case
+      for (Entry<Integer, Tensor> entry : navigableMap.entrySet()) {
+        int index = entry.getKey();
+        array[depth] = index;
+        Scalar scalar = (Scalar) entry.getValue();
+        if (!scalar.equals(fallback))
           sparseEntryVisitor.accept(Integers.asList(array), scalar);
-      } else //
-      if (tensor instanceof SparseArray) {
-        SparseArray sparseArray = (SparseArray) entry.getValue();
-        sparseArray.visit(sparseEntryVisitor, array, depth + 1);
-      } else //
-        throw TensorRuntimeException.of(tensor);
-    }
+      }
   }
 
-  // ---
-  @PackageTestAccess
-  static <T> Collector<T, ?, NavigableMap<Integer, Tensor>> _map( //
+  private static <T> Collector<T, ?, NavigableMap<Integer, Tensor>> _map( //
       Function<? super T, Integer> keyMapper, //
       Function<? super T, Tensor> valueMapper) {
-    return Collectors.toMap(keyMapper, valueMapper, (e1, e2) -> null, TreeMap::new);
+    return Collectors.toMap(keyMapper, valueMapper, MergeIllegal.operator(), TreeMap::new);
   }
 
   /** @param index
