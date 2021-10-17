@@ -5,11 +5,12 @@ import java.io.Serializable;
 
 import ch.alpine.tensor.Tensor;
 
-/* package */ class InfluenceMatrixExact extends InfluenceMatrixBase implements Serializable {
+/** adapter */
+/* package */ class InfluenceMatrixImpl extends InfluenceMatrixBase implements Serializable {
   private final Tensor matrix;
 
   /** @param influence matrix == design . design^+ */
-  public InfluenceMatrixExact(Tensor matrix) {
+  public InfluenceMatrixImpl(Tensor matrix) {
     this.matrix = matrix;
   }
 

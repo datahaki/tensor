@@ -14,6 +14,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Ordering;
 import ch.alpine.tensor.alg.Range;
@@ -85,7 +86,7 @@ public class CliffordAlgebra implements Serializable {
       }
     }
     Integers.requireEquals(list.size(), m);
-    gp = SparseArray.of(m, m, m);
+    gp = Array.sparse(m, m, m);
     for (int i = 0; i < m; ++i)
       for (int j = 0; j < m; ++j) {
         SignedSubset signedSubset = new SignedSubset(Join.of(list.get(i), list.get(j)));

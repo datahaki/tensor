@@ -4,6 +4,9 @@ package ch.alpine.tensor.spa;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
+import ch.alpine.tensor.sca.Conjugate;
 import junit.framework.TestCase;
 
 public class NnzTest extends TestCase {
@@ -15,8 +18,16 @@ public class NnzTest extends TestCase {
 
   public void testSubtraction() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
-    SparseArray sparse = (SparseArray) SparseArrays.of(tensor, RealScalar.ZERO);
+    Tensor raw = SparseArrays.of(tensor, RealScalar.ZERO);
+    SparseArray sparse = (SparseArray) raw;
     SparseArray sparseArray = (SparseArray) sparse.subtract(sparse);
     assertEquals(Nnz.of(sparseArray), 0);
+    sparseArray.collapse();
+    assertTrue(MatrixDotConjugateTranspose.of(sparse) instanceof SparseArray);
+    Tensor dot = MatrixDotConjugateTranspose.of(Transpose.of(sparse));
+    dot.toString();
+    SparseArray s_dot = (SparseArray) dot;
+    s_dot.collapse();
+    assertTrue(Conjugate.of(raw) instanceof SparseArray);
   }
 }

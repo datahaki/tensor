@@ -80,7 +80,7 @@ public enum Transpose {
       Integers.requireLessEquals(sigma.length, dimensions_list.size());
       int[] sigma_ = IntStream.range(0, dimensions_list.size()).map(i -> i < sigma.length ? sigma[i] : i).toArray();
       return ((SparseArray) tensor) //
-          .visit(new SparseEntryTranspose(sigma_, SparseArray.of(Size.of(dimensions_list).permute(sigma_))));
+          .visit(new SparseEntryTranspose(sigma_, Array.sparse(Size.of(dimensions_list).permute(sigma_))));
     }
     if (dimensions.isArray() && //
         dimensions_list.size() == sigma.length) {

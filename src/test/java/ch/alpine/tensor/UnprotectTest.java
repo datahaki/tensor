@@ -8,11 +8,13 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -101,6 +103,22 @@ public class UnprotectTest extends TestCase {
     assertEquals(Unprotect.withoutUnit(RealScalar.of(5)), RealScalar.of(5));
     assertEquals(Unprotect.withoutUnit(GaussScalar.of(3, 11)), GaussScalar.of(3, 11));
     AssertFail.of(() -> Unprotect.withoutUnit(null));
+  }
+
+  public void testSimple() {
+    assertFalse(Unprotect.isMixedUnits(Tensors.fromString("{{1,2,3}}")));
+    assertFalse(Unprotect.isMixedUnits(Tensors.fromString("{{1[m],2[m],3[m]}}")));
+    assertTrue(Unprotect.isMixedUnits(Tensors.fromString("{{1[m],2,3[m]}}")));
+    assertTrue(Unprotect.isMixedUnits(Tensors.fromString("{{1[m],2[kg],3[m]}}")));
+  }
+
+  public void testUniqueUnit() {
+    assertEquals(Unprotect.uniqueUnit(Range.of(1, 10)), Unit.of(""));
+    assertEquals(Unprotect.uniqueUnit(Tensors.fromString("{{1[m],2[m],3[m]}}")), Unit.of("m"));
+  }
+
+  public void testUniqueUnitFail() {
+    AssertFail.of(() -> Unprotect.uniqueUnit(Tensors.fromString("{{1[m],2[s],3[m]}}")));
   }
 
   public void testFail1() {

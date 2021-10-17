@@ -22,13 +22,12 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Lists;
 import ch.alpine.tensor.ext.MergeIllegal;
+import ch.alpine.tensor.ext.PackageTestAccess;
 
 /** The string expression is as in mathematica except that the tensor library starts indexing at 0.
  * Example:
@@ -36,16 +35,10 @@ import ch.alpine.tensor.ext.MergeIllegal;
  * SparseArray[{{0, 0}->1, {0, 2}->3, {1, 0}->5, {1, 1}->6, {1, 2}->8, {2, 1}->2, {2, 2}->9, {2, 4}->4}, {3, 5}]
  * </pre>
  * 
- * Hint:
- * Mathematica::Normal[sparse] is
- * <pre>
- * Tensor normal = Array.of(sparse::get, Dimensions.of(sparse));
- * </pre>
- * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/SparseArray.html">SparseArray</a> */
 public class SparseArray extends AbstractTensor implements Serializable {
-  /** @param fallback zero element
+  /** @param fallback zero element, for instance {@link RealScalar#ZERO}
    * @param dimensions with non-negative values
    * @return empty sparse array with given dimensions
    * @throws Exception if fallback element is not zero */
@@ -54,13 +47,6 @@ public class SparseArray extends AbstractTensor implements Serializable {
         ? fallback
         : new SparseArray(checkFallback(fallback), //
             Integers.asList(IntStream.of(dimensions).map(Integers::requirePositiveOrZero).toArray()));
-  }
-
-  /** @param dimensions
-   * @return empty sparse array with given dimensions and {@link RealScalar#ZERO} as fallback
-   * @see Array#zeros(int...) */
-  public static Tensor of(int... dimensions) {
-    return of(RealScalar.ZERO, dimensions);
   }
 
   // ---
@@ -151,13 +137,9 @@ public class SparseArray extends AbstractTensor implements Serializable {
    * @param list */
   private void _set(int index, Tensor tensor, List<Integer> list) {
     Dimensions dimensions = new Dimensions(tensor);
-    if (dimensions.isArray() && dimensions.list().equals(list)) {
-      // TODO not efficient implementation to check for fallback array equality
-      if (tensor.equals(ConstantArray.of(fallback, list)))
-        navigableMap.remove(index);
-      else
-        navigableMap.put(index, tensor);
-    } else
+    if (dimensions.isArray() && dimensions.list().equals(list))
+      navigableMap.put(index, tensor);
+    else
       throw TensorRuntimeException.of(tensor);
   }
 
@@ -174,8 +156,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
   @Override // from Tensor
   public Tensor extract(int fromIndex, int toIndex) {
     requireInRange(fromIndex);
-    if (length() < toIndex)
-      throw new IllegalArgumentException("" + toIndex);
+    Integers.requireLessEquals(toIndex, length());
     int len0 = Integers.requirePositiveOrZero(toIndex - fromIndex);
     if (len0 == 0)
       return Tensors.empty();
@@ -198,7 +179,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
       SparseArray sparseArray = (SparseArray) tensor;
       return new SparseArray(fallback.add(sparseArray.fallback), size, //
           Stream.concat(navigableMap.keySet().stream(), sparseArray.navigableMap.keySet().stream()) //
-              .distinct().collect(_map(i -> i, i -> byRef(i).add(sparseArray.byRef(i)))));
+              .distinct().collect(_map(i -> i, i -> byRef(i).add(sparseArray.byRef(i))))).collapse();
     }
     return tensor.add(this);
   }
@@ -210,7 +191,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
       SparseArray sparseArray = (SparseArray) tensor;
       return new SparseArray(fallback.subtract(sparseArray.fallback), size, //
           Stream.concat(navigableMap.keySet().stream(), sparseArray.navigableMap.keySet().stream()) //
-              .distinct().collect(_map(i -> i, i -> byRef(i).subtract(sparseArray.byRef(i)))));
+              .distinct().collect(_map(i -> i, i -> byRef(i).subtract(sparseArray.byRef(i))))).collapse();
     }
     return tensor.negate().add(this);
   }
@@ -219,7 +200,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
   public Tensor pmul(Tensor tensor) {
     Integers.requireEquals(length(), tensor.length());
     return new SparseArray(fallback, size, navigableMap.entrySet().stream() //
-        .collect(_map(Entry::getKey, entry -> entry.getValue().pmul(tensor.get(entry.getKey())))));
+        .collect(_map(Entry::getKey, entry -> entry.getValue().pmul(tensor.get(entry.getKey()))))).collapse();
   }
 
   @Override // from Tensor
@@ -250,8 +231,8 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor map(Function<Scalar, ? extends Tensor> function) {
-    return new SparseArray(checkFallback((Scalar) function.apply(fallback)), size, //
-        navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().map(function))));
+    return new SparseArray(checkFallback((Scalar) function.apply(fallback)), size, navigableMap.entrySet() //
+        .stream().collect(_map(Entry::getKey, entry -> entry.getValue().map(function)))).collapse();
   }
 
   @Override // from Tensor
@@ -323,6 +304,21 @@ public class SparseArray extends AbstractTensor implements Serializable {
         if (!scalar.equals(fallback))
           sparseEntryVisitor.accept(Integers.asList(array), scalar);
       }
+  }
+
+  @PackageTestAccess
+  SparseArray collapse() {
+    collapse(0, size.size());
+    return this;
+  }
+
+  private void collapse(int depth, int limit) {
+    int incrd = depth + 1;
+    if (incrd < limit) {
+      navigableMap.values().stream().map(SparseArray.class::cast).forEach(sparseArray -> sparseArray.collapse(incrd, limit));
+      navigableMap.values().removeIf(tensor -> ((SparseArray) tensor).navigableMap.isEmpty());
+    } else
+      navigableMap.values().removeIf(fallback::equals);
   }
 
   private static <T> Collector<T, ?, NavigableMap<Integer, Tensor>> _map( //

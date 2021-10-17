@@ -3,10 +3,13 @@ package ch.alpine.tensor;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.io.TableBuilder;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.qty.Unit;
 
 /** Notice:
  * 
@@ -75,5 +78,35 @@ public enum Unprotect {
     return scalar instanceof Quantity //
         ? ((Quantity) scalar).value()
         : Objects.requireNonNull(scalar);
+  }
+
+  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
+   * 
+   * @param tensor
+   * @return whether scalar entries have mixed units */
+  public static boolean isMixedUnits(Tensor tensor) {
+    return tensor.flatten(-1) //
+        .map(Scalar.class::cast) //
+        .map(QuantityUnit::of) //
+        .distinct() //
+        .skip(1) //
+        .findAny() //
+        .isPresent();
+  }
+
+  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
+   * 
+   * @param tensor
+   * @return */
+  public static Unit uniqueUnit(Tensor tensor) {
+    List<Unit> list = tensor.flatten(-1) //
+        .map(Scalar.class::cast) //
+        .map(QuantityUnit::of) //
+        .distinct() //
+        .limit(2) //
+        .collect(Collectors.toList());
+    if (list.size() == 1)
+      return list.get(0);
+    throw new IllegalArgumentException(list.toString());
   }
 }

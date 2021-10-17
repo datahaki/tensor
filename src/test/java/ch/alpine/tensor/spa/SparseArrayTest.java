@@ -28,7 +28,7 @@ import junit.framework.TestCase;
 
 public class SparseArrayTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
-    Tensor tensor = Serialization.copy(SparseArray.of(5, 6, 8));
+    Tensor tensor = Serialization.copy(Array.sparse(5, 6, 8));
     Tensor value = tensor.get(1);
     assertEquals(value.length(), 6);
     Tensor copy = tensor.copy();
@@ -37,17 +37,17 @@ public class SparseArrayTest extends TestCase {
     Tensor fullze = Array.zeros(5, 6, 8);
     assertEquals(tensor, fullze);
     assertEquals(fullze, tensor);
-    Tensor tinsor = SparseArray.of(5, 6, 8);
+    Tensor tinsor = Array.sparse(5, 6, 8);
     assertEquals(tensor, tinsor);
   }
 
   public void testScalar() {
     assertEquals(Array.zeros(), RealScalar.ZERO);
-    assertEquals(SparseArray.of(), RealScalar.ZERO);
+    assertEquals(Array.sparse(), RealScalar.ZERO);
   }
 
   public void testVector() {
-    Tensor matrix = SparseArray.of(100);
+    Tensor matrix = Array.sparse(100);
     assertEquals(matrix.Get(99), RealScalar.ZERO);
     AssertFail.of(() -> matrix.get(-1));
     AssertFail.of(() -> matrix.get(100));
@@ -55,9 +55,9 @@ public class SparseArrayTest extends TestCase {
   }
 
   public void testDot() {
-    Tensor s_mat1 = SparseArray.of(3, 4);
+    Tensor s_mat1 = Array.sparse(3, 4);
     Tensor f_mat1 = Array.zeros(3, 4);
-    Tensor s_mat2 = SparseArray.of(4, 2);
+    Tensor s_mat2 = Array.sparse(4, 2);
     Tensor f_mat2 = Array.zeros(4, 2);
     s_mat1.dot(f_mat2);
     s_mat1.dot(s_mat2);
@@ -66,13 +66,13 @@ public class SparseArrayTest extends TestCase {
   }
 
   public void testHashCode() {
-    Tensor sparse = SparseArray.of(5, 4);
+    Tensor sparse = Array.sparse(5, 4);
     Tensor matrix = Array.zeros(5, 4);
     assertEquals(sparse.hashCode(), matrix.hashCode());
   }
 
   public void testHashCode2() {
-    Tensor sparse = SparseArray.of(5, 4);
+    Tensor sparse = Array.sparse(5, 4);
     sparse.set(RationalScalar.HALF, 1, 2);
     Tensor matrix = Array.zeros(5, 4);
     matrix.set(RationalScalar.HALF, 1, 2);
@@ -92,7 +92,7 @@ public class SparseArrayTest extends TestCase {
   }
 
   public void testMatrix() {
-    Tensor matrix = SparseArray.of(5, 10);
+    Tensor matrix = Array.sparse(5, 10);
     assertEquals(matrix.Get(3, 2), RealScalar.ZERO);
     matrix.set(Pi.VALUE, 2, 3);
     AssertFail.of(() -> matrix.set(RealScalar.ONE, 5, 3));
@@ -108,7 +108,7 @@ public class SparseArrayTest extends TestCase {
   }
 
   public void testExtract() {
-    Tensor tensor = SparseArray.of(5, 8, 7);
+    Tensor tensor = Array.sparse(5, 8, 7);
     tensor.set(Pi.TWO, 2, 3, 4);
     assertEquals(Dimensions.of(tensor.extract(1, 3)), Arrays.asList(2, 8, 7));
     for (int count = 0; count < tensor.length(); ++count)
@@ -116,7 +116,7 @@ public class SparseArrayTest extends TestCase {
   }
 
   public void testExtract2() {
-    Tensor tensor = SparseArray.of(5);
+    Tensor tensor = Array.sparse(5);
     assertEquals(tensor.extract(0, 5), Array.zeros(5));
     assertEquals(tensor.extract(3, 5), Array.zeros(2));
     assertEquals(tensor.extract(3, 3), Array.zeros(0));
@@ -212,7 +212,7 @@ public class SparseArrayTest extends TestCase {
 
   public void testSetAll4Zeros() {
     Tensor tensor = Array.zeros(3, 5);
-    Tensor sparse = SparseArray.of(3, 5);
+    Tensor sparse = Array.sparse(3, 5);
     tensor.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 4);
     sparse.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 4);
     assertEquals(tensor, sparse);

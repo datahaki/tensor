@@ -52,7 +52,7 @@ public enum PseudoInverse {
    * @return pseudo inverse of dimensions m x n */
   public static Tensor of(Tensor matrix) {
     if (ExactTensorQ.of(matrix) || //
-        StaticHelper.isMixedUnits(matrix))
+        Unprotect.isMixedUnits(matrix))
       try {
         return usingCholesky(matrix);
       } catch (Exception exception) {

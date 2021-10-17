@@ -55,7 +55,9 @@ public class SparseArraysTest extends TestCase {
   public void testSparseWedge() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4},{0,0,0,0,0},{0,0,0,0,0}}");
     Tensor s = SparseArrays.of(a, RealScalar.ZERO);
-    assertEquals(TensorWedge.of(a), TensorWedge.of(s));
+    Tensor tw_s = TensorWedge.of(s);
+    assertTrue(tw_s instanceof SparseArray);
+    assertEquals(TensorWedge.of(a), tw_s);
     assertEquals(Transpose.of(a), Transpose.of(s));
   }
 
@@ -92,6 +94,11 @@ public class SparseArraysTest extends TestCase {
     Tensor sa_fb = sa.dot(fb);
     Tensor sa_sb = sa.dot(sb);
     assertTrue(sa_sb instanceof SparseArray || sa_sb instanceof Scalar);
+    if (sa_sb instanceof SparseArray) {
+      SparseArray sparse = (SparseArray) sa_sb;
+      sparse.collapse();
+      Nnz.of(sparse);
+    }
     assertEquals(fa_fb, fa_sb);
     assertEquals(fa_sb, sa_fb);
     assertEquals(sa_fb, sa_sb);
@@ -119,7 +126,7 @@ public class SparseArraysTest extends TestCase {
   }
 
   public void testFallbackFail() {
-    Tensor tensor = SparseArray.of(3);
+    Tensor tensor = Array.sparse(3);
     AssertFail.of(() -> tensor.multiply(Quantity.of(7, "s*m")));
     AssertFail.of(() -> tensor.divide(Quantity.of(7, "s*m")));
   }
