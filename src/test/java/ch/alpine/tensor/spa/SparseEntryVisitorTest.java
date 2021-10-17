@@ -11,6 +11,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.lie.Permutations;
+import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class SparseEntryVisitorTest extends TestCase {
@@ -26,15 +27,17 @@ public class SparseEntryVisitorTest extends TestCase {
   public void testTransposeMatrix() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
     SparseArray sparseArray = (SparseArray) SparseArrays.of(tensor, RealScalar.ZERO);
-    Tensor transp = Transpose.of(sparseArray, 1, 0);
+    sparseArray.set(s -> RealScalar.ZERO, 2, 0);
+    Tensor transp = Transpose.of(sparseArray);
     assertTrue(transp instanceof SparseArray);
     assertEquals(transp, Transpose.of(tensor));
+    AssertFail.of(() -> Transpose.of(sparseArray, 1, 0, 2));
   }
 
   public void testTransposeAd() {
     Tensor tensor = Tensors.fromString("{{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}},{{0,1,0,0,6},{2,0,0,9,8},{2,1,0,5,3}}}");
     SparseArray sparseArray = (SparseArray) SparseArrays.of(tensor, RealScalar.ZERO);
-    Tensor transp = Transpose.of(sparseArray, 1, 0);
+    Tensor transp = Transpose.of(sparseArray);
     assertTrue(transp instanceof SparseArray);
     assertEquals(transp, Transpose.of(tensor));
   }

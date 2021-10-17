@@ -15,7 +15,6 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.spa.SparseArray;
-import ch.alpine.tensor.spa.SparseEntryVisitor;
 
 /** Transpose is consistent with Mathematica::Transpose
  * 
@@ -56,7 +55,9 @@ public enum Transpose {
     int length = Unprotect.dimension1(tensor);
     if (length == Scalar.LENGTH)
       throw TensorRuntimeException.of(tensor);
-    return Tensors.vector(i -> tensor.get(Tensor.ALL, i), length);
+    return tensor instanceof SparseArray //
+        ? of(tensor, 1, 0)
+        : Tensors.vector(i -> tensor.get(Tensor.ALL, i), length);
   }
 
   /** transpose according to permutation sigma.
@@ -76,6 +77,7 @@ public enum Transpose {
     Dimensions dimensions = new Dimensions(tensor);
     List<Integer> dimensions_list = dimensions.list();
     if (tensor instanceof SparseArray) {
+      Integers.requireLessEquals(sigma.length, dimensions_list.size());
       int[] sigma_ = IntStream.range(0, dimensions_list.size()).map(i -> i < sigma.length ? sigma[i] : i).toArray();
       return ((SparseArray) tensor) //
           .visit(new SparseEntryTranspose(sigma_, SparseArray.of(Size.of(dimensions_list).permute(sigma_))));
@@ -89,31 +91,5 @@ public enum Transpose {
     return Array.of( //
         list -> tensor.get(Arrays.stream(sigma).mapToObj(list::get).collect(Collectors.toList())), // extraction
         Size.of(dimensions_list.subList(0, sigma.length)).permute(sigma)); // dimensions
-  }
-
-  private static class SparseEntryTranspose implements SparseEntryVisitor<Tensor> {
-    private final int[] sigma;
-    private final int[] array;
-    private final List<Integer> index;
-    private final Tensor tensor;
-
-    public SparseEntryTranspose(int[] sigma, Tensor tensor) {
-      this.sigma = sigma;
-      array = new int[sigma.length];
-      index = Integers.asList(array);
-      this.tensor = tensor;
-    }
-
-    @Override
-    public void accept(List<Integer> list, Scalar scalar) {
-      for (int i = 0; i < list.size(); ++i)
-        array[sigma[i]] = list.get(i);
-      tensor.set(scalar, index);
-    }
-
-    @Override
-    public Tensor supply() {
-      return tensor;
-    }
   }
 }

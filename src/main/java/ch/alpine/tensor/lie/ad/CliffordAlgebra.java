@@ -111,12 +111,14 @@ public class CliffordAlgebra implements Serializable {
     return gp(x, y).subtract(gp.dot(y).dot(x)).multiply(RationalScalar.HALF);
   }
 
-  /** @return geometric product tensor of rank 3 */
+  /** @return geometric product as tensor of rank 3
+   * @see SparseArray */
   public Tensor gp() {
     return gp.copy();
   }
 
-  /** @return commutator product tensor of rank 3 satisfies {@link JacobiIdentity} */
+  /** @return commutator product tensor of rank 3 that satisfies {@link JacobiIdentity}
+   * @see SparseArray */
   public Tensor cp() {
     return gp.subtract(Transpose.of(gp, 0, 2, 1)).multiply(RationalScalar.HALF);
   }

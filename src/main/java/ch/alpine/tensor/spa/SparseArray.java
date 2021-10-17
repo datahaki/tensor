@@ -286,13 +286,13 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return visit(new SparseArrayToString());
+    return getClass().getSimpleName() + size.toString() + "=" + visit(new SparseArrayToString());
   }
 
   // ---
   public <T> T visit(SparseEntryVisitor<T> sparseEntryVisitor) {
     visit(sparseEntryVisitor, new int[size.size()], 0);
-    return sparseEntryVisitor.supply();
+    return sparseEntryVisitor.result();
   }
 
   private void visit(SparseEntryVisitor<?> sparseEntryVisitor, int[] array, int depth) {
@@ -329,7 +329,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
   private int requireInRange(int index) {
     if (0 <= index && index < length())
       return index;
-    throw new IllegalArgumentException("" + index);
+    throw new IllegalArgumentException("index=" + index + " length=" + length());
   }
 
   private static Scalar checkFallback(Scalar fallback) {

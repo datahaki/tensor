@@ -15,7 +15,7 @@ public interface SparseEntryVisitor<T> {
    * notified about all the entries in the sparse array
    * 
    * @return custom result of the visitor */
-  default T supply() {
+  default T result() {
     return null;
   }
 }

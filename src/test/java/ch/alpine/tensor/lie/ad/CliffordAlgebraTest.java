@@ -13,6 +13,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
+import ch.alpine.tensor.alg.Numel;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.ext.Integers;
@@ -34,6 +35,7 @@ import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.spa.Nnz;
 import ch.alpine.tensor.spa.SparseArray;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -110,6 +112,11 @@ public class CliffordAlgebraTest extends TestCase {
   public void testD2() {
     CliffordAlgebra cliffordAlgebra = _positive(2);
     Tensor gp = cliffordAlgebra.gp();
+    assertEquals(Nnz.of((SparseArray) gp), 16);
+    SparseArray cp = (SparseArray) cliffordAlgebra.cp();
+    assertEquals(Nnz.of(cp), 6);
+    assertEquals(Numel.of(cp), 64);
+    assertTrue(JacobiIdentity.of(cp) instanceof SparseArray);
     Tensor x = Tensors.vector(1, 2, 3, 4);
     Tensor m = gp.dot(x);
     LinearSolve.of(m, UnitVector.of(4, 0));
