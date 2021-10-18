@@ -42,7 +42,7 @@ public enum Orthogonalize {
   public static Tensor of(Tensor matrix) {
     QRDecomposition qrDecomposition = //
         QRDecomposition.of(ConjugateTranspose.of(matrix), QRSignOperators.ORIENTATION);
-    return PadRight.zeros(Dimensions.of(matrix)).apply(QRMathematica.wrap(qrDecomposition).getQTranspose());
+    return PadRight.zeros(Dimensions.of(matrix)).apply(QRMathematica.wrap(qrDecomposition).getQConjugateTranspose());
   }
 
   // ---

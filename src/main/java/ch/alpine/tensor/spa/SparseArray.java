@@ -28,10 +28,10 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Lists;
 import ch.alpine.tensor.ext.MergeIllegal;
 
-/** The string expression is as in mathematica except that the tensor library starts indexing at 0.
+/** The string expression is as in Mathematica except that the tensor library starts indexing at 0.
  * Example:
  * <pre>
- * SparseArray[{{0, 0}->1, {0, 2}->3, {1, 0}->5, {1, 1}->6, {1, 2}->8, {2, 1}->2, {2, 2}->9, {2, 4}->4}, {3, 5}]
+ * SparseArray[{{0, 2}->3, {1, 0}->5, {1, 1}->6, {1, 2}->8, {2, 1}->2, {2, 4}->4}, {3, 5}, 0]
  * </pre>
  * 
  * <p>inspired by
@@ -44,7 +44,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
   public static Tensor of(Scalar fallback, int... dimensions) {
     return dimensions.length == 0 //
         ? fallback
-        : new SparseArray(checkFallback(fallback), //
+        : new SparseArray(StaticHelper.checkFallback(fallback), //
             Integers.asList(IntStream.of(dimensions).map(Integers::requirePositiveOrZero).toArray()));
   }
 
@@ -93,9 +93,9 @@ public class SparseArray extends AbstractTensor implements Serializable {
       if (head == ALL) {
         Integers.requireEquals(size.get(0), tensor.length());
         AtomicInteger i = new AtomicInteger();
-        tensor.stream().map(Tensor::copy).forEach(entry -> _set(i.getAndIncrement(), entry, _size));
+        tensor.stream().forEach(entry -> _set(i.getAndIncrement(), entry, _size));
       } else
-        _set(requireInRange(head), tensor.copy(), _size);
+        _set(requireInRange(head), tensor, _size);
     else {
       List<Integer> _index = Lists.rest(index);
       if (head == ALL) {
@@ -118,9 +118,9 @@ public class SparseArray extends AbstractTensor implements Serializable {
     int head = index.get(0);
     if (index.size() == 1) // terminal case
       if (head == ALL)
-        IntStream.range(0, length()).forEach(i -> _set(i, function.apply((T) byRef(i)).copy(), _size));
+        IntStream.range(0, length()).forEach(i -> _set(i, function.apply((T) byRef(i)), _size));
       else
-        _set(head, function.apply((T) byRef(head)).copy(), _size);
+        _set(head, function.apply((T) byRef(head)), _size);
     else {
       List<Integer> _index = Lists.rest(index);
       if (head == ALL)
@@ -136,7 +136,9 @@ public class SparseArray extends AbstractTensor implements Serializable {
    * @param list */
   private void _set(int index, Tensor tensor, List<Integer> list) {
     if (new Dimensions(tensor).isArrayWith(list::equals))
-      navigableMap.put(index, tensor);
+      navigableMap.put(index, list.isEmpty() || tensor instanceof SparseArray //
+          ? tensor.copy()
+          : StaticHelper.of(fallback, list, tensor));
     else
       throw TensorRuntimeException.of(tensor);
   }
@@ -177,7 +179,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
       SparseArray sparseArray = (SparseArray) tensor;
       return new SparseArray(fallback.add(sparseArray.fallback), size, //
           Stream.concat(navigableMap.keySet().stream(), sparseArray.navigableMap.keySet().stream()) //
-              .distinct().collect(_map(i -> i, i -> byRef(i).add(sparseArray.byRef(i))))).collapse();
+              .distinct().collect(_map(i -> i, i -> byRef(i).add(sparseArray.byRef(i))))).trim();
     }
     return tensor.add(this);
   }
@@ -189,7 +191,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
       SparseArray sparseArray = (SparseArray) tensor;
       return new SparseArray(fallback.subtract(sparseArray.fallback), size, //
           Stream.concat(navigableMap.keySet().stream(), sparseArray.navigableMap.keySet().stream()) //
-              .distinct().collect(_map(i -> i, i -> byRef(i).subtract(sparseArray.byRef(i))))).collapse();
+              .distinct().collect(_map(i -> i, i -> byRef(i).subtract(sparseArray.byRef(i))))).trim();
     }
     return tensor.negate().add(this);
   }
@@ -198,18 +200,18 @@ public class SparseArray extends AbstractTensor implements Serializable {
   public Tensor pmul(Tensor tensor) {
     Integers.requireEquals(length(), tensor.length());
     return new SparseArray(fallback, size, navigableMap.entrySet().stream() //
-        .collect(_map(Entry::getKey, entry -> entry.getValue().pmul(tensor.get(entry.getKey()))))).collapse();
+        .collect(_map(Entry::getKey, entry -> entry.getValue().pmul(tensor.get(entry.getKey()))))).trim();
   }
 
   @Override // from Tensor
   public Tensor multiply(Scalar scalar) {
-    return new SparseArray(checkFallback(fallback.multiply(scalar)), size, //
+    return new SparseArray(StaticHelper.checkFallback(fallback.multiply(scalar)), size, //
         navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().multiply(scalar))));
   }
 
   @Override // from Tensor
   public Tensor divide(Scalar scalar) {
-    return new SparseArray(checkFallback(fallback.divide(scalar)), size, //
+    return new SparseArray(StaticHelper.checkFallback(fallback.divide(scalar)), size, //
         navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().divide(scalar))));
   }
 
@@ -224,13 +226,13 @@ public class SparseArray extends AbstractTensor implements Serializable {
             return list.isEmpty() ? fallback : new SparseArray(fallback, list);
           });
     return new SparseArray(fallback, Dot.combine(size, Dimensions.of(tensor)), //
-        navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().dot(tensor)))).collapse();
+        navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().dot(tensor)))).trim();
   }
 
   @Override // from Tensor
   public Tensor map(Function<Scalar, ? extends Tensor> function) {
-    return new SparseArray(checkFallback((Scalar) function.apply(fallback)), size, navigableMap.entrySet() //
-        .stream().collect(_map(Entry::getKey, entry -> entry.getValue().map(function)))).collapse();
+    return new SparseArray(StaticHelper.checkFallback((Scalar) function.apply(fallback)), size, navigableMap.entrySet() //
+        .stream().collect(_map(Entry::getKey, entry -> entry.getValue().map(function)))).trim();
   }
 
   @Override // from Tensor
@@ -288,23 +290,18 @@ public class SparseArray extends AbstractTensor implements Serializable {
     if (depth + 1 < array.length)
       for (Entry<Integer, Tensor> entry : navigableMap.entrySet()) {
         array[depth] = entry.getKey();
-        Tensor tensor = entry.getValue();
-        if (tensor instanceof SparseArray)
-          ((SparseArray) tensor).visit(sparseEntryVisitor, array, depth + 1);
-        else
-          throw TensorRuntimeException.of(tensor);
+        ((SparseArray) entry.getValue()).visit(sparseEntryVisitor, array, depth + 1);
       }
     else // terminal case
       for (Entry<Integer, Tensor> entry : navigableMap.entrySet()) {
-        int index = entry.getKey();
-        array[depth] = index;
+        array[depth] = entry.getKey();
         Scalar scalar = (Scalar) entry.getValue();
         if (!scalar.equals(fallback))
           sparseEntryVisitor.accept(Integers.asList(array), scalar);
       }
   }
 
-  private SparseArray collapse() {
+  private SparseArray trim() {
     navigableMap.values().removeIf(1 < size.size() //
         ? tensor -> (tensor instanceof SparseArray && ((SparseArray) tensor).navigableMap.isEmpty())
         : fallback::equals);
@@ -324,11 +321,5 @@ public class SparseArray extends AbstractTensor implements Serializable {
     if (0 <= index && index < length())
       return index;
     throw new IllegalArgumentException("index=" + index + " length=" + length());
-  }
-
-  private static Scalar checkFallback(Scalar fallback) {
-    if (fallback.one().zero().equals(fallback))
-      return fallback;
-    throw TensorRuntimeException.of(fallback);
   }
 }

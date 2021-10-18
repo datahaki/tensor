@@ -27,8 +27,8 @@ public class SparseArraysTest extends TestCase {
   public void testSparseBinary() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
     Tensor b = Tensors.fromString("{{3,0,0,7,0},{0,0,0,0,0},{0,4,0,3,0}}");
-    Tensor sa = SparseArrays.of(a, RealScalar.ZERO);
-    Tensor sb = SparseArrays.of(b, RealScalar.ZERO);
+    Tensor sa = SparseArrays.of(a);
+    Tensor sb = SparseArrays.of(b);
     {
       Tensor r_add = sa.add(sb);
       assertEquals(a.add(b), r_add);
@@ -54,7 +54,7 @@ public class SparseArraysTest extends TestCase {
 
   public void testSparseWedge() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4},{0,0,0,0,0},{0,0,0,0,0}}");
-    Tensor s = SparseArrays.of(a, RealScalar.ZERO);
+    Tensor s = SparseArrays.of(a);
     Tensor tw_s = TensorWedge.of(s);
     assertTrue(tw_s instanceof SparseArray);
     assertEquals(TensorWedge.of(a), tw_s);
@@ -63,7 +63,7 @@ public class SparseArraysTest extends TestCase {
 
   public void testSparseTranspose() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4},{0,0,0,0,0}}");
-    Tensor s = SparseArrays.of(a, RealScalar.ZERO);
+    Tensor s = SparseArrays.of(a);
     assertEquals(Transpose.of(a), Transpose.of(s));
   }
 
@@ -85,8 +85,8 @@ public class SparseArraysTest extends TestCase {
   private static void _check(Tensor fa, Tensor fb) {
     assertFalse(fa instanceof SparseArray);
     assertFalse(fb instanceof SparseArray);
-    Tensor sa = SparseArrays.of(fa, RealScalar.ZERO);
-    Tensor sb = SparseArrays.of(fb, RealScalar.ZERO);
+    Tensor sa = SparseArrays.of(fa);
+    Tensor sb = SparseArrays.of(fb);
     assertTrue(sa instanceof SparseArray);
     assertTrue(sb instanceof SparseArray);
     Tensor fa_fb = fa.dot(fb);

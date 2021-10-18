@@ -26,7 +26,7 @@ public enum HodgeDual {
    * @return
    * @throws Exception if tensor is empty, or is not a regular array */
   public static Tensor of(Tensor tensor, int d) {
-    int rank = TensorRank.ofArray(tensor).orElseThrow();
+    int rank = TensorRank.ofArray(tensor);
     return Nest.of(Total::of, tensor.pmul(LeviCivitaTensor.of(d)), rank).divide(Factorial.of(rank));
   }
 

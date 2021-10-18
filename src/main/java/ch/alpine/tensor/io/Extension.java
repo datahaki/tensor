@@ -21,7 +21,7 @@ package ch.alpine.tensor.io;
   /** MATLAB m file, export only */
   M,
   /** {@link Get} and {@link Put} operate on any file extension.
-   * In particular, mathematica is <em>not</em> the official extension.
+   * In particular, Mathematica is <em>not</em> the official extension.
    * However, we choose the extension for import/export because of
    * the characteristic {@link MathematicaFormat}. */
   MATHEMATICA,
