@@ -46,7 +46,7 @@ public interface InfluenceMatrix {
         Tensor pinv = PseudoInverse.usingCholesky(design);
         int m = pinv.length();
         return n - m < m //
-            ? new InfluenceMatrixImpl(design.dot(pinv))
+            ? new InfluenceMatrixAdapter(design.dot(pinv))
             : new InfluenceMatrixSplit(design, pinv);
       } catch (Exception exception) {
         // design matrix does not have maximal rank

@@ -2,7 +2,6 @@
 package ch.alpine.tensor.pdf;
 
 import java.util.Map;
-import java.util.NavigableMap;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -54,14 +53,6 @@ public class BernoulliDistributionTest extends TestCase {
     Scalar ratio = RationalScalar.of(v1, v0 + v1);
     Scalar dev = N.DOUBLE.of(Abs.between(ratio, p));
     assertTrue(Scalars.lessThan(dev, RealScalar.of(0.07)));
-  }
-
-  public void testInverseCdf() {
-    Scalar p = RationalScalar.of(1, 3);
-    EvaluatedDiscreteDistribution distribution = (EvaluatedDiscreteDistribution) BernoulliDistribution.of(p);
-    NavigableMap<Scalar, Scalar> map = distribution.inverse_cdf();
-    assertEquals(map.get(RationalScalar.of(2, 3)), RealScalar.ZERO);
-    assertEquals(map.get(RationalScalar.of(1, 1)), RealScalar.ONE);
   }
 
   public void testNumber() {

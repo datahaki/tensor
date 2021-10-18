@@ -7,6 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -53,8 +54,14 @@ public class InfluenceMatrixBaseTest extends TestCase {
     Tensor design = VandermondeMatrix.of(x, 2);
     Tensor influe = design.dot(PseudoInverse.of(design));
     assertTrue(IdempotentQ.of(influe));
-    InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    Tolerance.CHOP.requireClose(influe, influenceMatrix.matrix());
+    {
+      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+      Tolerance.CHOP.requireClose(influe, influenceMatrix.matrix());
+    }
+    {
+      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(Transpose.of(design));
+      assertTrue(IdempotentQ.of(influenceMatrix.matrix(), Chop._07));
+    }
   }
 
   public void testZeroQuantity() {

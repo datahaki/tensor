@@ -24,8 +24,7 @@ public class NnzTest extends TestCase {
     assertEquals(Nnz.of(sparseArray), 0);
     assertTrue(MatrixDotConjugateTranspose.of(sparse) instanceof SparseArray);
     Tensor dot = MatrixDotConjugateTranspose.of(Transpose.of(sparse));
-    dot.toString();
-    SparseArray s_dot = (SparseArray) dot;
+    assertTrue(dot instanceof SparseArray);
     assertTrue(Conjugate.of(raw) instanceof SparseArray);
   }
 }

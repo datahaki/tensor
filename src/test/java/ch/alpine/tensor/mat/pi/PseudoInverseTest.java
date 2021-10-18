@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.pi;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
@@ -16,14 +17,15 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.NestList;
 import ch.alpine.tensor.alg.Transpose;
-import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.LeftNullSpace;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.MatrixRank;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
@@ -56,6 +58,12 @@ public class PseudoInverseTest extends TestCase {
       Tensor matrix = x.map(s -> NestList.of(s::multiply, s.one(), degree));
       PseudoInverse.of(matrix);
     }
+  }
+
+  public void testGaussScalar() {
+    Tensor vector = Tensor.of(IntStream.range(100, 110).mapToObj(i -> GaussScalar.of(3 * i, 239873)));
+    Tensor design = VandermondeMatrix.of(vector, 3);
+    PseudoInverse.of(design);
   }
 
   public void testMathematica() {
@@ -119,21 +127,14 @@ public class PseudoInverseTest extends TestCase {
 
   public void testRectangular() {
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(1, "m"));
-    Timing tsvd = Timing.stopped();
-    Timing t_qr = Timing.stopped();
     for (int m = 5; m < 12; ++m) {
       int n = m + 3;
       Tensor matrix = RandomVariate.of(distribution, n, m);
-      tsvd.start();
       Tensor pinv = PseudoInverse.usingSvd(matrix);
-      tsvd.stop();
-      t_qr.start();
       Tensor piqr = PseudoInverse.usingQR(matrix);
-      t_qr.stop();
       Chop._09.requireClose(pinv, piqr);
       Tolerance.CHOP.requireClose(Dot.of(piqr, matrix), IdentityMatrix.of(m));
     }
-    // assertTrue(t_qr.nanoSeconds() < tsvd.nanoSeconds());
   }
 
   public void testCDecRhs() {
