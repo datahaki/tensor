@@ -40,7 +40,7 @@ public interface InfluenceMatrix {
    * then the implementation of influence matrix is also in exact precision */
   static InfluenceMatrix of(Tensor design) {
     if (ExactTensorQ.of(design) || //
-        Unprotect.isMixedUnits(design))
+        !Unprotect.isUnitUnique(design))
       try {
         int n = design.length();
         Tensor pinv = PseudoInverse.usingCholesky(design);

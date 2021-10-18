@@ -106,19 +106,19 @@ public class UnprotectTest extends TestCase {
   }
 
   public void testSimple() {
-    assertFalse(Unprotect.isMixedUnits(Tensors.fromString("{{1,2,3}}")));
-    assertFalse(Unprotect.isMixedUnits(Tensors.fromString("{{1[m],2[m],3[m]}}")));
-    assertTrue(Unprotect.isMixedUnits(Tensors.fromString("{{1[m],2,3[m]}}")));
-    assertTrue(Unprotect.isMixedUnits(Tensors.fromString("{{1[m],2[kg],3[m]}}")));
+    assertTrue(Unprotect.isUnitUnique(Tensors.fromString("{{1,2,3}}")));
+    assertTrue(Unprotect.isUnitUnique(Tensors.fromString("{{1[m],2[m],3[m]}}")));
+    assertFalse(Unprotect.isUnitUnique(Tensors.fromString("{{1[m],2,3[m]}}")));
+    assertFalse(Unprotect.isUnitUnique(Tensors.fromString("{{1[m],2[kg],3[m]}}")));
   }
 
   public void testUniqueUnit() {
-    assertEquals(Unprotect.uniqueUnit(Range.of(1, 10)), Unit.of(""));
-    assertEquals(Unprotect.uniqueUnit(Tensors.fromString("{{1[m],2[m],3[m]}}")), Unit.of("m"));
+    assertEquals(Unprotect.getUnitUnique(Range.of(1, 10)), Unit.of(""));
+    assertEquals(Unprotect.getUnitUnique(Tensors.fromString("{{1[m],2[m],3[m]}}")), Unit.of("m"));
   }
 
   public void testUniqueUnitFail() {
-    AssertFail.of(() -> Unprotect.uniqueUnit(Tensors.fromString("{{1[m],2[s],3[m]}}")));
+    AssertFail.of(() -> Unprotect.getUnitUnique(Tensors.fromString("{{1[m],2[s],3[m]}}")));
   }
 
   public void testFail1() {

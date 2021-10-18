@@ -29,9 +29,7 @@ public enum MatrixQ {
    * @param cols
    * @return true if tensor is a matrix with given number of rows and columns */
   public static boolean ofSize(Tensor tensor, int rows, int cols) {
-    Dimensions dimensions = new Dimensions(tensor);
-    return dimensions.list().equals(Arrays.asList(rows, cols)) //
-        && dimensions.isArray();
+    return new Dimensions(tensor).isArrayWith(Arrays.asList(rows, cols)::equals);
   }
 
   /** @param tensor

@@ -96,7 +96,6 @@ public class SparseArraysTest extends TestCase {
     assertTrue(sa_sb instanceof SparseArray || sa_sb instanceof Scalar);
     if (sa_sb instanceof SparseArray) {
       SparseArray sparse = (SparseArray) sa_sb;
-      sparse.collapse();
       Nnz.of(sparse);
     }
     assertEquals(fa_fb, fa_sb);

@@ -27,7 +27,6 @@ import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Lists;
 import ch.alpine.tensor.ext.MergeIllegal;
-import ch.alpine.tensor.ext.PackageTestAccess;
 
 /** The string expression is as in mathematica except that the tensor library starts indexing at 0.
  * Example:
@@ -136,8 +135,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
    * @param tensor with array structure and dimensions equals to given list
    * @param list */
   private void _set(int index, Tensor tensor, List<Integer> list) {
-    Dimensions dimensions = new Dimensions(tensor);
-    if (dimensions.isArray() && dimensions.list().equals(list))
+    if (new Dimensions(tensor).isArrayWith(list::equals))
       navigableMap.put(index, tensor);
     else
       throw TensorRuntimeException.of(tensor);
@@ -226,7 +224,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
             return list.isEmpty() ? fallback : new SparseArray(fallback, list);
           });
     return new SparseArray(fallback, Dot.combine(size, Dimensions.of(tensor)), //
-        navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().dot(tensor))));
+        navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().dot(tensor)))).collapse();
   }
 
   @Override // from Tensor
@@ -276,7 +274,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return getClass().getSimpleName() + "[" + visit(new SparseArrayToString()) + ", " + Tensors.vector(size) + ']';
+    return getClass().getSimpleName() + '[' + visit(new SparseArrayToString()) + ", " + Tensors.vector(size) + ", " + fallback + ']';
   }
 
   /** @param sparseEntryVisitor
@@ -306,19 +304,11 @@ public class SparseArray extends AbstractTensor implements Serializable {
       }
   }
 
-  @PackageTestAccess
-  SparseArray collapse() {
-    collapse(0, size.size());
+  private SparseArray collapse() {
+    navigableMap.values().removeIf(1 < size.size() //
+        ? tensor -> (tensor instanceof SparseArray && ((SparseArray) tensor).navigableMap.isEmpty())
+        : fallback::equals);
     return this;
-  }
-
-  private void collapse(int depth, int limit) {
-    int incrd = depth + 1;
-    if (incrd < limit) {
-      navigableMap.values().stream().map(SparseArray.class::cast).forEach(sparseArray -> sparseArray.collapse(incrd, limit));
-      navigableMap.values().removeIf(tensor -> ((SparseArray) tensor).navigableMap.isEmpty());
-    } else
-      navigableMap.values().removeIf(fallback::equals);
   }
 
   private static <T> Collector<T, ?, NavigableMap<Integer, Tensor>> _map( //

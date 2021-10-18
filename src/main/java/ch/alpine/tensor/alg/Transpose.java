@@ -82,8 +82,7 @@ public enum Transpose {
       return ((SparseArray) tensor) //
           .visit(new SparseEntryTranspose(sigma_, Array.sparse(Size.of(dimensions_list).permute(sigma_))));
     }
-    if (dimensions.isArray() && //
-        dimensions_list.size() == sigma.length) {
+    if (dimensions.isArrayWith(list -> list.size() == sigma.length)) {
       Size size = Size.of(dimensions_list);
       Scalar[] data = tensor.flatten(sigma.length - 1).map(Scalar.class::cast).toArray(Scalar[]::new);
       return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma));

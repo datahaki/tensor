@@ -18,6 +18,7 @@ import ch.alpine.tensor.spa.SparseArray;
 /** The implementation is consistent with Mathematica.
  * Special examples:
  * <pre>
+ * Array[3 &, {}] == 3
  * Array[0 &amp;, {0, 1}] == {}
  * Array.zeros(0, 1) == {}
  * Array[0 &amp;, {1, 0, 1}] == {{}}

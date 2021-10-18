@@ -83,22 +83,23 @@ public enum Unprotect {
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param tensor
-   * @return whether scalar entries have mixed units */
-  public static boolean isMixedUnits(Tensor tensor) {
+   * @return whether scalar entries are quantities of identical unit */
+  public static boolean isUnitUnique(Tensor tensor) {
     return tensor.flatten(-1) //
         .map(Scalar.class::cast) //
         .map(QuantityUnit::of) //
         .distinct() //
         .skip(1) //
         .findAny() //
-        .isPresent();
+        .isEmpty();
   }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
    * @param tensor
-   * @return */
-  public static Unit uniqueUnit(Tensor tensor) {
+   * @return unique unit of quantities in given tensor
+   * @throws Exception if quantities consist of mixed units */
+  public static Unit getUnitUnique(Tensor tensor) {
     List<Unit> list = tensor.flatten(-1) //
         .map(Scalar.class::cast) //
         .map(QuantityUnit::of) //

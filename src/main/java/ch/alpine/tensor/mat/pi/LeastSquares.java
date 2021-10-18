@@ -54,7 +54,7 @@ public enum LeastSquares {
   public static Tensor of(Tensor matrix, Tensor b) {
     boolean assumeRankM = true;
     if (ExactTensorQ.of(matrix) || //
-        Unprotect.isMixedUnits(matrix))
+        !Unprotect.isUnitUnique(matrix))
       try {
         return usingCholesky(matrix, b);
       } catch (Exception exception) {
