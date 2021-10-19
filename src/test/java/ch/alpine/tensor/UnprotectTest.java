@@ -10,11 +10,14 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.io.StringScalar;
+import ch.alpine.tensor.io.StringScalarQ;
+import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.qty.UnitQ;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -105,29 +108,42 @@ public class UnprotectTest extends TestCase {
     AssertFail.of(() -> Unprotect.withoutUnit(null));
   }
 
-  public void testSimple() {
+  public void testIsUnitUnique() {
     assertTrue(Unprotect.isUnitUnique(Tensors.fromString("{{1,2,3}}")));
     assertTrue(Unprotect.isUnitUnique(Tensors.fromString("{{1[m],2[m],3[m]}}")));
     assertFalse(Unprotect.isUnitUnique(Tensors.fromString("{{1[m],2,3[m]}}")));
     assertFalse(Unprotect.isUnitUnique(Tensors.fromString("{{1[m],2[kg],3[m]}}")));
   }
 
-  public void testUniqueUnit() {
+  public void testGetUnitUnique() {
     assertEquals(Unprotect.getUnitUnique(Range.of(1, 10)), Unit.of(""));
     assertEquals(Unprotect.getUnitUnique(Tensors.fromString("{{1[m],2[m],3[m]}}")), Unit.of("m"));
+    assertEquals(Unprotect.getUnitUnique(DiagonalMatrix.of(3, Quantity.of(1, "s^2*m^-1"))), Unit.of("s^2*m^-1"));
   }
 
-  public void testUniqueUnitFail() {
+  public void testOne() {
+    Tensor tensor = Tensors.vector(2, 3, 4);
+    Unit unit = Unprotect.getUnitUnique(tensor);
+    assertTrue(UnitQ.isOne(unit));
+  }
+
+  public void testGetUnitUniqueFail1() {
     AssertFail.of(() -> Unprotect.getUnitUnique(Tensors.fromString("{{1[m],2[s],3[m]}}")));
   }
 
-  public void testFail1() {
+  public void testGetUnitUniqueFail2() {
+    Tensor tensor = Tensors.fromString("{1[m], 2[s]}");
+    assertFalse(StringScalarQ.any(tensor));
+    AssertFail.of(() -> Unprotect.getUnitUnique(tensor));
+  }
+
+  public void testDimension1Fail() {
     Tensor unstruct = Tensors.fromString("{{-1, 0, 1, 2}, {3, 4, 5}}");
     assertEquals(unstruct.length(), 2);
     AssertFail.of(() -> Unprotect.dimension1(unstruct));
   }
 
-  public void testFail2() {
+  public void testDimension1HintFail() {
     AssertFail.of(() -> Unprotect.dimension1(RealScalar.ONE));
     AssertFail.of(() -> Unprotect.dimension1Hint(RealScalar.ONE));
   }
