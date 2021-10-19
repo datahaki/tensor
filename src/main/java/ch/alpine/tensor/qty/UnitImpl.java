@@ -14,13 +14,15 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Cache;
+import ch.alpine.tensor.ext.MergeIllegal;
 
 /** immutable
  * 
  * all instances of UnitImpl are managed in a LRU cache */
 /* package */ class UnitImpl implements Unit, Serializable {
+  // TODO make NEGATION private at next major release (breaks serialization!)
   public static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> NEGATION = //
-      Collectors.toMap(Entry::getKey, entry -> entry.getValue().negate(), (e1, e2) -> null, TreeMap::new);
+      Collectors.toMap(Entry::getKey, entry -> entry.getValue().negate(), MergeIllegal.operator(), TreeMap::new);
   private static final int MAX_SIZE = 1536;
   private static final Function<NavigableMap<String, Scalar>, Unit> CACHE = //
       Cache.of(UnitImpl::new, MAX_SIZE);

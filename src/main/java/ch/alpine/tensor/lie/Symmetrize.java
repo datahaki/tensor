@@ -24,7 +24,7 @@ public enum Symmetrize {
    * @return symmetric tensor, i.e. invariant under transpose
    * @throws Exception if given tensor does not have regular dimensions */
   public static Tensor of(Tensor tensor) {
-    int rank = TensorRank.ofArray(tensor).orElseThrow();
+    int rank = TensorRank.ofArray(tensor);
     switch (rank) {
     case 0: // scalar
       return tensor;

@@ -4,14 +4,17 @@ package ch.alpine.tensor.alg;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.sca.Conjugate;
+import ch.alpine.tensor.spa.SparseArray;
 
 /** Transpose is consistent with Mathematica::Transpose
  * 
@@ -52,7 +55,9 @@ public enum Transpose {
     int length = Unprotect.dimension1(tensor);
     if (length == Scalar.LENGTH)
       throw TensorRuntimeException.of(tensor);
-    return Tensors.vector(i -> tensor.get(Tensor.ALL, i), length);
+    return tensor instanceof SparseArray //
+        ? of(tensor, 1, 0)
+        : Tensors.vector(i -> tensor.get(Tensor.ALL, i), length);
   }
 
   /** transpose according to permutation sigma.
@@ -71,8 +76,13 @@ public enum Transpose {
       return tensor.copy();
     Dimensions dimensions = new Dimensions(tensor);
     List<Integer> dimensions_list = dimensions.list();
-    if (dimensions.isArray() && //
-        dimensions_list.size() == sigma.length) {
+    if (tensor instanceof SparseArray) {
+      Integers.requireLessEquals(sigma.length, dimensions_list.size());
+      int[] sigma_ = IntStream.range(0, dimensions_list.size()).map(i -> i < sigma.length ? sigma[i] : i).toArray();
+      return ((SparseArray) tensor) //
+          .visit(new SparseEntryTranspose(sigma_, Array.sparse(Size.of(dimensions_list).permute(sigma_))));
+    }
+    if (dimensions.isArrayWith(list -> list.size() == sigma.length)) {
       Size size = Size.of(dimensions_list);
       Scalar[] data = tensor.flatten(sigma.length - 1).map(Scalar.class::cast).toArray(Scalar[]::new);
       return ArrayReshape.of(size.stream(sigma).mapToObj(i -> data[i]), size.permute(sigma));

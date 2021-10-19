@@ -37,24 +37,27 @@ public class RandomPermutationTest extends TestCase {
   }
 
   public void testComplete2() {
+    Random random = new Random(345);
     Set<Cycles> set = new TreeSet<>();
     for (int count = 0; count < 8 && set.size() < 2; ++count)
-      set.add(RandomPermutation.cycles(2));
+      set.add(RandomPermutation.cycles(2, random));
     assertEquals(set.size(), 2);
     assertEquals(set.toString(), "[{}, {{0, 1}}]");
   }
 
   public void testComplete3() {
+    Random random = new Random(345);
     Set<Cycles> set = new HashSet<>();
     for (int count = 0; count < 120 && set.size() < 6; ++count)
-      set.add(RandomPermutation.cycles(3));
+      set.add(RandomPermutation.cycles(3, random));
     assertEquals(set.size(), 6);
   }
 
   public void testComplete4() {
+    Random random = new Random(345);
     Set<Cycles> set = new HashSet<>();
     for (int count = 0; count < 480 && set.size() < 24; ++count)
-      set.add(RandomPermutation.cycles(4));
+      set.add(RandomPermutation.cycles(4, random));
     assertEquals(set.size(), 24);
   }
 

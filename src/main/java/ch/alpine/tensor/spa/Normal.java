@@ -1,15 +1,22 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.spa;
 
+import ch.alpine.tensor.ScalarQ;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.ArrayReshape;
 import ch.alpine.tensor.alg.Dimensions;
 
-/** Mathematica::Normal[3] == 3
- * 
- * <p>inspired by
+/** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Normal.html">Normal</a> */
-/* package */ enum Normal {
+public enum Normal {
   ;
+  /** Converts {@link SparseArray} to full tensor
+   * 
+   * <p>Special case:
+   * Mathematica::Normal[3] == 3
+   * 
+   * @param tensor
+   * @return */
   public static Tensor of(Tensor tensor) {
     if (ScalarQ.of(tensor))
       return tensor;

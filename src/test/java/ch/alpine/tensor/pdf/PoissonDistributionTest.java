@@ -1,8 +1,6 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
-import java.util.NavigableMap;
-
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -14,7 +12,6 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Quantile;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -71,18 +68,6 @@ public class PoissonDistributionTest extends TestCase {
     Scalar x2 = inverseCDF.quantile(RealScalar.of(0.5));
     assertEquals(x0, RealScalar.ZERO);
     assertTrue(Scalars.lessThan(x1, x2));
-  }
-
-  public void testInverseCDFOne() {
-    Distribution distribution = PoissonDistribution.of(RealScalar.of(5.5));
-    EvaluatedDiscreteDistribution edd = (EvaluatedDiscreteDistribution) distribution;
-    NavigableMap<Scalar, Scalar> navigableMap = edd.inverse_cdf();
-    assertTrue(34 < navigableMap.size());
-    assertTrue(navigableMap.size() < 38);
-    InverseCDF inverseCDF = InverseCDF.of(distribution);
-    assertTrue(Clips.interval(24, 26).isInside(inverseCDF.quantile(RealScalar.of(0.9999999989237532))));
-    assertTrue(Clips.interval(32, 34).isInside(inverseCDF.quantile(RealScalar.of(0.9999999999999985))));
-    assertTrue(Clips.interval(1900, 2000).isInside(inverseCDF.quantile(RealScalar.ONE)));
   }
 
   public void testToString() {

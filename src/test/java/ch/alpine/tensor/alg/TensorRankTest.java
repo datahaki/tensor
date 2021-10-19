@@ -4,6 +4,7 @@ package ch.alpine.tensor.alg;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class TensorRankTest extends TestCase {
@@ -49,10 +50,13 @@ public class TensorRankTest extends TestCase {
   }
 
   public void testOfArray() {
-    assertFalse(TensorRank.ofArray(Tensors.fromString("{{1}, 2}")).isPresent());
-    assertEquals(TensorRank.ofArray(Tensors.fromString("{1, 2}")).get(), (Integer) 1);
-    assertEquals(TensorRank.ofArray(Tensors.fromString("123")).get(), (Integer) 0);
-    assertEquals(TensorRank.ofArray(Tensors.fromString("{{1, 2}}")).get(), (Integer) 2);
-    assertEquals(TensorRank.ofArray(Tensors.fromString("{{1, 2}, {2}}")).orElse(99), (Integer) 99);
+    assertEquals(TensorRank.ofArray(Tensors.fromString("{1, 2}")), 1);
+    assertEquals(TensorRank.ofArray(Tensors.fromString("123")), 0);
+    assertEquals(TensorRank.ofArray(Tensors.fromString("{{1, 2}}")), 2);
+  }
+
+  public void testOfArrayFail() {
+    AssertFail.of(() -> TensorRank.ofArray(Tensors.fromString("{{1}, 2}")));
+    AssertFail.of(() -> TensorRank.ofArray(Tensors.fromString("{{1, 2}, {2}}")));
   }
 }

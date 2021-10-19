@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -35,9 +36,10 @@ public class PolarDecompositionTest extends TestCase {
   }
 
   public void testRectangle() {
+    Random random = new Random(2);
     int n = 5;
     for (int k = 1; k < n; ++k) {
-      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), k, 5);
+      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, k, 5);
       PolarDecomposition polarDecomposition = PolarDecomposition.of(matrix);
       _check(matrix, polarDecomposition);
       Tensor r1 = polarDecomposition.getR();
@@ -47,15 +49,16 @@ public class PolarDecompositionTest extends TestCase {
   }
 
   public void testSquare() {
+    Random random = new Random(3);
     int d = 7;
     for (int k = 1; k < d; ++k) {
-      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), k, k);
+      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, k, k);
       PolarDecomposition polarDecomposition = PolarDecomposition.of(matrix);
       _check(matrix, polarDecomposition);
       Tensor r1 = polarDecomposition.getR();
       Tensor r2 = Orthogonalize.usingSvd(matrix);
       if (Sign.isPositive(Det.of(matrix)) && Sign.isPositive(Det.of(r1))) {
-        Chop._06.requireClose(r1, r2);
+        Tolerance.CHOP.requireClose(r1, r2);
       } else {
         // System.out.println("---");
         // System.out.println(Det.of(matrix));
@@ -67,9 +70,10 @@ public class PolarDecompositionTest extends TestCase {
   }
 
   public void testDet1Invariance() {
+    Random random = new Random(5);
     int d = 7;
     for (int k = 1; k < d; ++k) {
-      Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(NormalDistribution.of(0, 0.1), k, k)));
+      Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(NormalDistribution.of(0, 0.1), random, k, k)));
       Tolerance.CHOP.requireClose(Det.of(matrix), RealScalar.ONE);
       PolarDecomposition polarDecomposition = PolarDecomposition.of(matrix);
       _check(matrix, polarDecomposition);

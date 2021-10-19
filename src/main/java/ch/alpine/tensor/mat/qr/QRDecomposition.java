@@ -47,9 +47,9 @@ public interface QRDecomposition {
   /** @return upper triangular matrix */
   Tensor getR();
 
-  /** @return orthogonal matrix
+  /** @return ConjugateTranspose[getQ()]
    * @see ConjugateTranspose */
-  Tensor getQTranspose();
+  Tensor getQConjugateTranspose();
 
   /** @return orthogonal matrix */
   Tensor getQ();

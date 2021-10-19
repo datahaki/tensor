@@ -60,9 +60,9 @@ import java.util.stream.Stream;
 
   @Override // from List
   public Integer get(int index) {
-    if (index < 0 || len <= index)
-      throw new IllegalArgumentException(Integer.toString(index));
-    return array[ofs + index];
+    if (0 <= index && index < len)
+      return array[ofs + index];
+    throw new IllegalArgumentException("index=" + index + " size=" + len);
   }
 
   @Override // from List

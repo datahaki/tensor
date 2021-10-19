@@ -27,6 +27,16 @@ public class IntegersTest extends TestCase {
       AssertFail.of(() -> Integers.requirePositiveOrZero(value));
   }
 
+  public void testRequireLessThan() {
+    Integers.requireLessThan(2, 3);
+    AssertFail.of(() -> Integers.requireLessThan(3, 3));
+  }
+
+  public void testRequireLessEquals() {
+    Integers.requireLessEquals(3, 3);
+    AssertFail.of(() -> Integers.requireLessEquals(4, 3));
+  }
+
   public void testIsEven() {
     assertTrue(Integers.isEven(-2));
     assertTrue(Integers.isEven(0));
@@ -132,7 +142,16 @@ public class IntegersTest extends TestCase {
       Integers.requirePermutation(new int[] { 0, 2 });
       fail();
     } catch (Exception exception) {
-      assertEquals(exception.getMessage(), "0 2");
+      assertEquals(exception.getMessage(), "[0, 2]");
+    }
+  }
+
+  public void testRequirePermutationLong() {
+    try {
+      Integers.requirePermutation(new int[20]);
+      fail();
+    } catch (Exception exception) {
+      assertEquals(exception.getMessage(), "");
     }
   }
 

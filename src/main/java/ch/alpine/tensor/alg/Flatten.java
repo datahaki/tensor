@@ -5,8 +5,8 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
 
-/** {@link Flatten} is for convenience to wrap the Stream<Tensor>
- * returned by Tensor::flatten into a {@link Tensor}.
+/** {@link Flatten} is for convenience to collect the stream of tensors
+ * returned by {@link Tensor#flatten(int)} into a {@link Tensor}.
  * 
  * <p>{@link Flatten} undoes the work of {@link Partition}.
  * 

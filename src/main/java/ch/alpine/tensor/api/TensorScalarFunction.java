@@ -9,8 +9,8 @@ import ch.alpine.tensor.Tensor;
 
 /** serializable function that maps a {@link Tensor} to a {@link Scalar}
  * 
- * Examples:
- * 1) an implicit function that defines a region as {x | f(x) < 0}
+ * <p>Examples:
+ * 1) an implicit function that defines a region as {x | f(x) &lt; 0}
  * 2) a smooth noise function that maps a vector to a value in the interval [-1, 1] */
 @FunctionalInterface
 public interface TensorScalarFunction extends Function<Tensor, Scalar>, Serializable {

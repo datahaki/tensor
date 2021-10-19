@@ -38,7 +38,7 @@ public enum Erfc implements ScalarUnaryOperator {
     Scalar ty = t.multiply(FOUR).subtract(TWO);
     Scalar d = RealScalar.ZERO;
     Scalar dd = RealScalar.ZERO;
-    for (int j = COEFFS.length() - 1; j > 0; j--) {
+    for (int j = COEFFS.length() - 1; 0 < j; j--) {
       Scalar tmp = d;
       d = ty.multiply(d).subtract(dd).add(COEFFS.Get(j));
       dd = tmp;

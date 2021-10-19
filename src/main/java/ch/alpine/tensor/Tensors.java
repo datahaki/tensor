@@ -145,7 +145,7 @@ public enum Tensors {
    * @return
    * @throws Exception if given string is null */
   public static Tensor fromString(String string) {
-    return TensorParser.DEFAULT.parse(string);
+    return TensorParser.of(string, Scalars::fromString);
   }
 
   /** @param string
@@ -153,7 +153,7 @@ public enum Tensors {
    * @return
    * @throws Exception if given string is null */
   public static Tensor fromString(String string, Function<String, Scalar> function) {
-    return new TensorParser(function).parse(string);
+    return TensorParser.of(string, function);
   }
 
   // ---

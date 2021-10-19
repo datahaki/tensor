@@ -3,25 +3,30 @@ package ch.alpine.tensor.mat.pi;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
+import ch.alpine.tensor.alg.NestList;
 import ch.alpine.tensor.alg.Transpose;
-import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.LeftNullSpace;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.MatrixRank;
+import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -42,6 +47,23 @@ public class PseudoInverseTest extends TestCase {
       Chop._06.requireClose(result.dot(matrix), identy);
       Chop._06.requireClose(matrix.dot(result), identy);
     }
+  }
+
+  public void testMixedUnitsVantHoff() {
+    // inspired by code by gjoel
+    for (int deg = 0; deg <= 2; ++deg) {
+      int degree = deg;
+      Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}").map(Scalar::reciprocal);
+      assertEquals(x.Get(0).one(), RealScalar.ONE);
+      Tensor matrix = x.map(s -> NestList.of(s::multiply, s.one(), degree));
+      PseudoInverse.of(matrix);
+    }
+  }
+
+  public void testGaussScalar() {
+    Tensor vector = Tensor.of(IntStream.range(100, 110).mapToObj(i -> GaussScalar.of(3 * i, 239873)));
+    Tensor design = VandermondeMatrix.of(vector, 3);
+    PseudoInverse.of(design);
   }
 
   public void testMathematica() {
@@ -105,21 +127,36 @@ public class PseudoInverseTest extends TestCase {
 
   public void testRectangular() {
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(1, "m"));
-    Timing tsvd = Timing.stopped();
-    Timing t_qr = Timing.stopped();
     for (int m = 5; m < 12; ++m) {
       int n = m + 3;
       Tensor matrix = RandomVariate.of(distribution, n, m);
-      tsvd.start();
       Tensor pinv = PseudoInverse.usingSvd(matrix);
-      tsvd.stop();
-      t_qr.start();
       Tensor piqr = PseudoInverse.usingQR(matrix);
-      t_qr.stop();
       Chop._09.requireClose(pinv, piqr);
       Tolerance.CHOP.requireClose(Dot.of(piqr, matrix), IdentityMatrix.of(m));
     }
-    // assertTrue(t_qr.nanoSeconds() < tsvd.nanoSeconds());
+  }
+
+  public void testCDecRhs() {
+    Random random = new Random(1);
+    Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
+    Tensor matrix = RandomVariate.of(distribution, random, 5, 2);
+    assertEquals(MatrixRank.of(matrix), 2);
+    Tensor rhs = RandomVariate.of(distribution, random, 5);
+    Tensor sol0 = PseudoInverse.usingCholesky(matrix).dot(rhs);
+    Tensor sol1 = LeastSquares.usingCholesky(matrix, rhs);
+    assertEquals(sol0, sol1);
+  }
+
+  public void testCDecRhs2() {
+    Random random = new Random(2);
+    Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
+    Tensor matrix = RandomVariate.of(distribution, random, 2, 5);
+    assertEquals(MatrixRank.of(matrix), 2);
+    Tensor rhs = RandomVariate.of(distribution, random, 2);
+    Tensor sol0 = PseudoInverse.usingCholesky(matrix).dot(rhs);
+    Tensor sol1 = LeastSquares.usingCholesky(matrix, rhs);
+    assertEquals(sol0, sol1);
   }
 
   public void testComplexRectangular() {

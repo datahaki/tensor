@@ -37,9 +37,9 @@ import ch.alpine.tensor.sca.N;
     String string = scalar.toString();
     if (string.isEmpty())
       return EMPTY;
-    int e = string.length() - 1;
-    if (string.charAt(0) == '\"' && string.charAt(e) == '\"') {
-      requireQuotesFree(string.substring(1, e));
+    int last = string.length() - 1;
+    if (string.charAt(0) == '\"' && string.charAt(last) == '\"') {
+      requireQuotesFree(string.substring(1, last));
       return scalar;
     }
     return StringScalar.of("\"" + requireQuotesFree(string) + "\"");

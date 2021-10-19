@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
@@ -12,6 +13,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.ArrayQ;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Flatten;
@@ -41,8 +43,9 @@ public enum MatlabExport {
    * @return lines of MATLAB function that returns tensor
    * @throws Exception if given tensor does not satisfy {@link ArrayQ} */
   public static Stream<String> of(Tensor tensor, Function<Scalar, String> function) {
-    // TODO can simplify using dimensions
-    ArrayQ.require(tensor);
+    Dimensions dimensions = new Dimensions(tensor);
+    if (!dimensions.isArray())
+      throw TensorRuntimeException.of(tensor);
     List<String> list = new LinkedList<>();
     list.add("function a=anonymous");
     list.add("% auto-generated code. do not modify.");
@@ -51,7 +54,7 @@ public enum MatlabExport {
     if (ScalarQ.of(tensor))
       list.add("a=" + function.apply((Scalar) tensor) + ";");
     else {
-      List<Integer> dims = Dimensions.of(tensor);
+      List<Integer> dims = new ArrayList<>(dimensions.list());
       int[] sigma = new int[dims.size()];
       IntStream.range(0, dims.size()).forEach(index -> sigma[index] = dims.size() - index - 1);
       if (dims.size() == 1)

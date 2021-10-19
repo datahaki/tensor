@@ -13,8 +13,8 @@ import java.util.stream.IntStream;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.SparseArray;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Ordering;
 import ch.alpine.tensor.alg.Range;
@@ -26,6 +26,7 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.re.LinearSolve;
+import ch.alpine.tensor.spa.SparseArray;
 
 /** geometric algebra
  * 
@@ -85,7 +86,7 @@ public class CliffordAlgebra implements Serializable {
       }
     }
     Integers.requireEquals(list.size(), m);
-    gp = SparseArray.of(m, m, m);
+    gp = Array.sparse(m, m, m);
     for (int i = 0; i < m; ++i)
       for (int j = 0; j < m; ++j) {
         SignedSubset signedSubset = new SignedSubset(Join.of(list.get(i), list.get(j)));
@@ -111,12 +112,14 @@ public class CliffordAlgebra implements Serializable {
     return gp(x, y).subtract(gp.dot(y).dot(x)).multiply(RationalScalar.HALF);
   }
 
-  /** @return geometric product tensor of rank 3 */
+  /** @return geometric product as tensor of rank 3
+   * @see SparseArray */
   public Tensor gp() {
     return gp.copy();
   }
 
-  /** @return commutator product tensor of rank 3 satisfies {@link JacobiIdentity} */
+  /** @return commutator product tensor of rank 3 that satisfies {@link JacobiIdentity}
+   * @see SparseArray */
   public Tensor cp() {
     return gp.subtract(Transpose.of(gp, 0, 2, 1)).multiply(RationalScalar.HALF);
   }

@@ -13,13 +13,15 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.spa.SparseArray;
 
 /** The implementation is consistent with Mathematica.
  * Special examples:
  * <pre>
- * Array[0 &, {0, 1}] == {}
+ * Array[3 &, {}] == 3
+ * Array[0 &amp;, {0, 1}] == {}
  * Array.zeros(0, 1) == {}
- * Array[0 &, {1, 0, 1}] == {{}}
+ * Array[0 &amp;, {1, 0, 1}] == {{}}
  * Array.zeros(1, 0, 1) == {{}}
  * </pre>
  * 
@@ -112,6 +114,13 @@ public enum Array {
       return RealScalar.ZERO;
     dimensions.forEach(Integers::requirePositiveOrZero);
     return fill(() -> RealScalar.ZERO, 0, dimensions);
+  }
+
+  // ---
+  /** @param dimensions
+   * @return empty sparse array with given dimensions and {@link RealScalar#ZERO} as fallback */
+  public static Tensor sparse(int... dimensions) {
+    return SparseArray.of(RealScalar.ZERO, dimensions);
   }
 
   // ---

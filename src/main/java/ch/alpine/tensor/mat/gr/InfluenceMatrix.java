@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.gr;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 
@@ -38,13 +39,14 @@ public interface InfluenceMatrix {
    * @return if the given matrix is in exact precision and has maximal rank,
    * then the implementation of influence matrix is also in exact precision */
   static InfluenceMatrix of(Tensor design) {
-    if (ExactTensorQ.of(design))
+    if (ExactTensorQ.of(design) || //
+        !Unprotect.isUnitUnique(design))
       try {
         int n = design.length();
         Tensor pinv = PseudoInverse.usingCholesky(design);
         int m = pinv.length();
         return n - m < m //
-            ? new InfluenceMatrixExact(design.dot(pinv))
+            ? new InfluenceMatrixAdapter(design.dot(pinv))
             : new InfluenceMatrixSplit(design, pinv);
       } catch (Exception exception) {
         // design matrix does not have maximal rank

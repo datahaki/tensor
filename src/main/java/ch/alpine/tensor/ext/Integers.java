@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Integers.html">Integers</a> */
@@ -17,7 +16,7 @@ public enum Integers {
   public static int requirePositiveOrZero(int value) {
     if (0 <= value) // non-negative, greater or equals zero
       return value;
-    throw new IllegalArgumentException(Integer.toString(value));
+    throw new IllegalArgumentException(value + " < 0");
   }
 
   /** @param value strictly positive
@@ -26,7 +25,7 @@ public enum Integers {
   public static int requirePositive(int value) {
     if (0 < value) // strictly positive
       return value;
-    throw new IllegalArgumentException(Integer.toString(value));
+    throw new IllegalArgumentException(value + " <= 0");
   }
 
   /** intended for use in reductive algorithms, for instance in the addition of
@@ -41,7 +40,23 @@ public enum Integers {
   public static int requireEquals(int lhs, int rhs) {
     if (lhs == rhs)
       return lhs;
-    throw new IllegalArgumentException(Integer.toString(lhs) + " != " + Integer.toString(rhs));
+    throw new IllegalArgumentException(lhs + " != " + rhs);
+  }
+
+  /** @param lhs
+   * @param rhs
+   * @throws Exception if lhs is not less than rhs */
+  public static void requireLessThan(int lhs, int rhs) {
+    if (lhs >= rhs)
+      throw new IllegalArgumentException(lhs + " >= " + rhs);
+  }
+
+  /** @param lhs
+   * @param rhs
+   * @throws Exception if lhs is not less than or equals rhs */
+  public static void requireLessEquals(int lhs, int rhs) {
+    if (lhs > rhs)
+      throw new IllegalArgumentException(lhs + " > " + rhs);
   }
 
   /** @param value
@@ -73,11 +88,7 @@ public enum Integers {
   public static int[] requirePermutation(int[] sigma) {
     if (isPermutation(sigma))
       return sigma;
-    throw new IllegalArgumentException(sigma.length <= 16 //
-        ? Arrays.stream(sigma) //
-            .mapToObj(Integer::toString) //
-            .collect(Collectors.joining(" "))
-        : "");
+    throw new IllegalArgumentException(sigma.length <= 16 ? IntList.wrap(sigma).toString() : "");
   }
 
   /** Examples:

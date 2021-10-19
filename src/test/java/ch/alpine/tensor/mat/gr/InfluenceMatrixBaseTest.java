@@ -7,8 +7,12 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.VandermondeMatrix;
+import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
@@ -43,6 +47,21 @@ public class InfluenceMatrixBaseTest extends TestCase {
         TestHelper.requireNonQuantity(svd.getU());
         TestHelper.requireUnit(svd.values(), Unit.of("m"));
       }
+  }
+
+  public void testMixedQuantity() {
+    Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}");
+    Tensor design = VandermondeMatrix.of(x, 2);
+    Tensor influe = design.dot(PseudoInverse.of(design));
+    assertTrue(IdempotentQ.of(influe));
+    {
+      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+      Tolerance.CHOP.requireClose(influe, influenceMatrix.matrix());
+    }
+    {
+      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(Transpose.of(design));
+      assertTrue(IdempotentQ.of(influenceMatrix.matrix(), Chop._07));
+    }
   }
 
   public void testZeroQuantity() {

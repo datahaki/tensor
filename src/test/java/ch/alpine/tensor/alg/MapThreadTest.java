@@ -24,6 +24,10 @@ public class MapThreadTest extends TestCase {
     assertEquals(ComplexScalar.I, result);
   }
 
+  public void testNegFail() {
+    AssertFail.of(() -> MapThread.of(l -> ComplexScalar.I, Collections.emptyList(), -1));
+  }
+
   public void testFail() {
     List<Tensor> list = Arrays.asList(HilbertMatrix.of(2, 3), HilbertMatrix.of(3, 3));
     MapThread.of(l -> ComplexScalar.I, list, 0);

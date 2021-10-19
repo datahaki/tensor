@@ -1,9 +1,8 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.Optional;
-
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 
 /** implementation consistent with Mathematica
  * 
@@ -28,11 +27,10 @@ public enum TensorRank {
 
   /** @param tensor
    * @return rank of tensor if tensor is an array, else Optional.empty() */
-  // TODO similar to ArrayQ#orRank
-  public static Optional<Integer> ofArray(Tensor tensor) {
+  public static int ofArray(Tensor tensor) {
     Dimensions dimensions = new Dimensions(tensor);
-    return dimensions.isArray() //
-        ? Optional.of(dimensions.list().size())
-        : Optional.empty();
+    if (dimensions.isArray())
+      return dimensions.list().size();
+    throw TensorRuntimeException.of(tensor);
   }
 }

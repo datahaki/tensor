@@ -4,11 +4,10 @@ package ch.alpine.tensor;
 /** predicate that determines if a given tensor is instance of {@link Scalar} */
 public enum ScalarQ {
   ;
-  /** equivalent predicate is
-   * {@code tensor.length() == Scalar.LENGTH}
+  /** equivalent to the predicate {@code tensor.length() == Scalar.LENGTH}
    * 
    * @param tensor
-   * @return true if tensor is instance of {@link Scalar} */
+   * @return true if given tensor is instance of {@link Scalar} */
   public static boolean of(Tensor tensor) {
     return tensor instanceof Scalar;
   }

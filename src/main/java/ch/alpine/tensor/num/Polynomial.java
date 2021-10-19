@@ -19,14 +19,14 @@ public enum Polynomial {
   /** polynomial evaluation
    * 
    * <pre>
-   * Series.of({a, b, c, d}).apply(x)
+   * Polynomial.of({a, b, c, d}).apply(x)
    * == a + b*x + c*x^2 + d*x^3
    * == a + (b + (c + d ** x) ** x ) ** x
    * </pre>
    * 
-   * Given an empty list of coefficients the operator evaluates to zero for any parameter x
+   * Given an empty list of coefficients, the operator evaluates to zero for any parameter x
    * <pre>
-   * Polynomial.of({}).apply(x) == 0
+   * Polynomial.of({}).apply(x) == x.zero()
    * </pre>
    * 
    * @param coeffs of polynomial

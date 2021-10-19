@@ -22,6 +22,7 @@ public class IntListTest extends TestCase {
 
   public void testConstructEmpty() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(1, 1);
+    assertEquals(intList.size(), 0);
     assertTrue(intList.isEmpty());
   }
 
@@ -37,6 +38,7 @@ public class IntListTest extends TestCase {
     AssertFail.of(() -> IntList.wrap(null));
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(4, 6);
     assertEquals(intList.size(), 2);
+    assertFalse(intList.isEmpty());
   }
 
   public void testGetFail() {

@@ -32,7 +32,7 @@ public enum TensorWedge {
    * @return alternating tensor
    * @throws Exception if given tensor does not have regular dimensions */
   public static Tensor of(Tensor tensor) {
-    int rank = TensorRank.ofArray(tensor).orElseThrow();
+    int rank = TensorRank.ofArray(tensor);
     return Permutations.stream(Range.of(0, rank)) // stream contains at least 1 element
         .map(permutation -> signed(tensor, Primitives.toIntArray(permutation))) //
         .reduce(Tensor::add) //

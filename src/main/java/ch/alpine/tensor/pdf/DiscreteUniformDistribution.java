@@ -7,6 +7,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
@@ -35,8 +36,7 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
    * @param max exclusive and min < max
    * @return distribution */
   public static Distribution of(int min, int max) {
-    if (max <= min)
-      throw new IllegalArgumentException("min=" + min + " max=" + max);
+    Integers.requireLessThan(min, max);
     return new DiscreteUniformDistribution(min, max);
   }
 

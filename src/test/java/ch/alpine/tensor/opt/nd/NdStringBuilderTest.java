@@ -16,7 +16,8 @@ public class NdStringBuilderTest extends TestCase {
     ndMap.insert(Tensors.vector(6, 7), "d6");
     ndMap.insert(Tensors.vector(1, 1), "d7");
     ndMap.insert(Tensors.vector(1, 1), "d8");
-    ndMap.toString();
+    String string = ndMap.toString();
+    assertFalse(string.isEmpty());
     NdBinsize<String> ndBinsize = new NdBinsize<>();
     ndMap.visit(ndBinsize);
     VectorQ.require(ndBinsize.bins());

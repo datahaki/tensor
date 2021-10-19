@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.itp;
 
 import java.util.Random;
 
@@ -7,6 +7,7 @@ import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.re.Pivots;
@@ -26,6 +27,17 @@ public class VandermondeSolveTest extends TestCase {
     Tensor cmp = VandermondeSolve.of(x, q);
     ExactTensorQ.require(cmp);
     assertEquals(ref, cmp);
+    Fit.polynomial_coeffs(x, q, 1);
+  }
+
+  public void testMixedUnits() {
+    for (int degree = 0; degree <= 5; ++degree) {
+      Tensor x = Tensors.fromString("{100[K], 110.0[K], 120[K], 133[K], 140[K], 150[K]}").extract(0, degree + 1);
+      Tensor q = Tensors.fromString("{10[], 20[K], 22[K^2], 23[K^3], 25[K^4], 26.0[K^5]}").extract(0, degree + 1);
+      Tensor ref = LinearSolve.of(Transpose.of(VandermondeMatrix.of(x)), q);
+      Tensor cmp = VandermondeSolve.of(x, q);
+      Chop._04.requireClose(ref, cmp);
+    }
   }
 
   public void testNumeric() {
@@ -36,7 +48,7 @@ public class VandermondeSolveTest extends TestCase {
       Tensor q = RandomVariate.of(distribution, random, n);
       Tensor ref = LinearSolve.of(Transpose.of(VandermondeMatrix.of(x)), q);
       Tensor cmp = VandermondeSolve.of(x, q);
-      Chop._04.requireClose(ref, cmp);
+      Chop._08.requireClose(ref, cmp);
     }
   }
 

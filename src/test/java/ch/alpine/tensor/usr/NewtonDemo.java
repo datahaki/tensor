@@ -38,5 +38,5 @@ import ch.alpine.tensor.sca.Clips;
   }
 }
 // depth3
-// Series.of(Tensors.vector(1, 5, 0, 1)), //
-// Series.of(Tensors.vector(2, 1, 1))).iteration;
+// Polynomial.of(Tensors.vector(1, 5, 0, 1)), //
+// Polynomial.of(Tensors.vector(2, 1, 1))).iteration;

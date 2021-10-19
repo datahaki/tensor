@@ -20,6 +20,11 @@ public class PrimeQTest extends TestCase {
     }
   }
 
+  public void testMathematica() {
+    BigInteger bigInteger = BigInteger.valueOf(3371149052237L);
+    assertTrue(PrimeQ.of(bigInteger));
+  }
+
   public void testPrimeFail() {
     AssertFail.of(() -> PrimeQ.require(BigInteger.TEN));
     AssertFail.of(() -> PrimeQ.require(Pi.HALF));

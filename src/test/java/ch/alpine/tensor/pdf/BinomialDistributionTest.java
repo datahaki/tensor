@@ -2,8 +2,6 @@
 package ch.alpine.tensor.pdf;
 
 import java.util.Arrays;
-import java.util.Map.Entry;
-import java.util.NavigableMap;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.IntegerQ;
@@ -16,7 +14,6 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Tally;
-import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -98,19 +95,6 @@ public class BinomialDistributionTest extends TestCase {
     Distribution distribution = BinomialDistribution.of(1207, RationalScalar.of(2, 3));
     int size = Tally.of(RandomVariate.of(distribution, 1000)).size();
     assertTrue(50 < size);
-  }
-
-  public void testSome() {
-    for (int n = 10; n < 1200; n += 10) {
-      EvaluatedDiscreteDistribution distribution = //
-          (EvaluatedDiscreteDistribution) BinomialDistribution.of(n, RealScalar.of(0.333));
-      double extreme = Math.nextDown(1.0);
-      distribution.quantile(RealScalar.of(extreme));
-      NavigableMap<Scalar, Scalar> navigableMap = distribution.inverse_cdf();
-      Entry<Scalar, Scalar> entry = navigableMap.lastEntry();
-      Chop._12.requireClose(entry.getKey(), RealScalar.ONE);
-      IntegerQ.require(entry.getValue());
-    }
   }
 
   public void testBlub() {

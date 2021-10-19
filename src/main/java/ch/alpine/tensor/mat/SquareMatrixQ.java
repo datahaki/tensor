@@ -1,8 +1,6 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
-import java.util.List;
-
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Dimensions;
@@ -16,11 +14,7 @@ public enum SquareMatrixQ {
   /** @param tensor
    * @return true if tensor is a square matrix, otherwise false */
   public static boolean of(Tensor tensor) {
-    Dimensions dimensions = new Dimensions(tensor);
-    List<Integer> list = dimensions.list();
-    return list.size() == 2 //
-        && list.get(0).equals(list.get(1)) //
-        && dimensions.isArray();
+    return new Dimensions(tensor).isArrayWith(list -> list.size() == 2 && list.get(0).equals(list.get(1)));
   }
 
   /** @param tensor

@@ -26,7 +26,7 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class InfluenceMatrixExactTest extends TestCase {
+public class InfluenceMatrixAdapterTest extends TestCase {
   public void testExact() throws ClassNotFoundException, IOException {
     int n = 7;
     int m = 5;
@@ -34,7 +34,7 @@ public class InfluenceMatrixExactTest extends TestCase {
     Tensor design = RandomVariate.of(distribution, n, m);
     if (MatrixRank.of(design) == m) {
       InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
-      assertTrue(influenceMatrix instanceof InfluenceMatrixExact);
+      assertTrue(influenceMatrix instanceof InfluenceMatrixAdapter);
       ExactTensorQ.require(influenceMatrix.matrix());
       Tensor vector = RandomVariate.of(distribution, n);
       Tensor image = influenceMatrix.image(vector);
@@ -59,7 +59,7 @@ public class InfluenceMatrixExactTest extends TestCase {
     if (MatrixRank.of(d_dt) == m) { // apparently rank(design) == m does not imply rank(d dt) == m !
       PseudoInverse.usingCholesky(design);
       InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
-      assertTrue(influenceMatrix instanceof InfluenceMatrixExact);
+      assertTrue(influenceMatrix instanceof InfluenceMatrixAdapter);
       Tensor matrix = influenceMatrix.matrix();
       SymmetricMatrixQ.require(matrix);
       assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));
@@ -76,6 +76,6 @@ public class InfluenceMatrixExactTest extends TestCase {
   }
 
   public void testPackageVisibility() {
-    assertFalse(Modifier.isPublic(InfluenceMatrixExact.class.getModifiers()));
+    assertFalse(Modifier.isPublic(InfluenceMatrixAdapter.class.getModifiers()));
   }
 }

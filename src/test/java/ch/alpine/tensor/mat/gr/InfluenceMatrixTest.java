@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.gr;
 
 import java.io.IOException;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
@@ -11,10 +12,13 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.pi.LeastSquares;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -99,6 +103,24 @@ public class InfluenceMatrixTest extends TestCase {
     Tensor matrix = ResourceData.of("/mat/bic_fail.csv");
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(matrix);
     influenceMatrix.leverages();
+  }
+
+  public void testGaussScalar() {
+    int prime = 131797;
+    Tensor vector = Tensor.of(IntStream.range(100, 110).mapToObj(i -> GaussScalar.of(3 * i, prime)));
+    Tensor design = VandermondeMatrix.of(vector, 3);
+    {
+      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+      assertTrue(IdempotentQ.of(influenceMatrix.matrix()));
+      Scalar scalar = Total.ofVector(influenceMatrix.leverages());
+      assertEquals(scalar, GaussScalar.of(4, prime));
+    }
+    {
+      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(Transpose.of(design));
+      assertTrue(IdempotentQ.of(influenceMatrix.matrix()));
+      Scalar scalar = Total.ofVector(influenceMatrix.leverages());
+      assertEquals(scalar, GaussScalar.of(4, prime));
+    }
   }
 
   public void testNullFail() {

@@ -61,7 +61,7 @@ import ch.alpine.tensor.red.Times;
   }
 
   @Override // from QRDecomposition
-  public Tensor getQTranspose() {
+  public Tensor getQConjugateTranspose() {
     return qInv; // n x n
   }
 

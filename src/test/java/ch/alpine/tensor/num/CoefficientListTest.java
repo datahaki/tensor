@@ -24,7 +24,6 @@ public class CoefficientListTest extends TestCase {
   public void testQuantityD1() {
     Tensor zeros = Tensors.fromString("{3[m]}");
     Tensor coeffs = CoefficientList.of(zeros);
-    // System.out.println(Series.of(coeffs).apply(Quantity.of(3, "m")));
     Scalar result = Polynomial.of(coeffs).apply(Quantity.of(3, "m"));
     ExactScalarQ.require(result);
     assertEquals(result, Quantity.of(0, "m"));

@@ -3,11 +3,8 @@ package ch.alpine.tensor.qty;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -58,14 +55,6 @@ public class UnitImplTest extends TestCase {
   public void testUnmodifiableMap() {
     Unit unit = Unit.of("kg^2*m^-1");
     AssertFail.of(() -> unit.map().clear());
-  }
-
-  public void testMergeCollision() {
-    Map<String, Scalar> m1 = new HashMap<>();
-    m1.put("m", RealScalar.ONE);
-    Map<String, Scalar> m2 = new HashMap<>();
-    m2.put("m", RealScalar.of(2));
-    Stream.concat(m1.entrySet().stream(), m2.entrySet().stream()).collect(UnitImpl.NEGATION);
   }
 
   public void testReference1() {

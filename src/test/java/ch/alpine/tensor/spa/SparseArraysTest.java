@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.spa;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -7,10 +7,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.lie.TensorWedge;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.EmpiricalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -22,8 +27,8 @@ public class SparseArraysTest extends TestCase {
   public void testSparseBinary() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
     Tensor b = Tensors.fromString("{{3,0,0,7,0},{0,0,0,0,0},{0,4,0,3,0}}");
-    Tensor sa = SparseArrays.of(a, RealScalar.ZERO);
-    Tensor sb = SparseArrays.of(b, RealScalar.ZERO);
+    Tensor sa = SparseArrays.of(a);
+    Tensor sb = SparseArrays.of(b);
     {
       Tensor r_add = sa.add(sb);
       assertEquals(a.add(b), r_add);
@@ -49,20 +54,23 @@ public class SparseArraysTest extends TestCase {
 
   public void testSparseWedge() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4},{0,0,0,0,0},{0,0,0,0,0}}");
-    Tensor s = SparseArrays.of(a, RealScalar.ZERO);
-    assertEquals(TensorWedge.of(a), TensorWedge.of(s));
+    Tensor s = SparseArrays.of(a);
+    Tensor tw_s = TensorWedge.of(s);
+    assertTrue(tw_s instanceof SparseArray);
+    assertEquals(TensorWedge.of(a), tw_s);
     assertEquals(Transpose.of(a), Transpose.of(s));
   }
 
   public void testSparseTranspose() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4},{0,0,0,0,0}}");
-    Tensor s = SparseArrays.of(a, RealScalar.ZERO);
+    Tensor s = SparseArrays.of(a);
     assertEquals(Transpose.of(a), Transpose.of(s));
   }
 
   public void testGenerateFail() {
     SparseArray.of(RealScalar.ZERO, 2, 3);
-    AssertFail.of(() -> SparseArray.of(RealScalar.ZERO));
+    assertEquals(SparseArray.of(RealScalar.ZERO), RealScalar.ZERO);
+    assertEquals(SparseArray.of(GaussScalar.of(0, 7)), GaussScalar.of(0, 7));
     AssertFail.of(() -> SparseArray.of(RealScalar.ZERO, 2, -3));
     AssertFail.of(() -> SparseArray.of(RealScalar.ONE, 2, 3));
   }
@@ -75,10 +83,10 @@ public class SparseArraysTest extends TestCase {
   }
 
   private static void _check(Tensor fa, Tensor fb) {
-    assertTrue(fa instanceof TensorImpl);
-    assertTrue(fb instanceof TensorImpl);
-    Tensor sa = SparseArrays.of(fa, RealScalar.ZERO);
-    Tensor sb = SparseArrays.of(fb, RealScalar.ZERO);
+    assertFalse(fa instanceof SparseArray);
+    assertFalse(fb instanceof SparseArray);
+    Tensor sa = SparseArrays.of(fa);
+    Tensor sb = SparseArrays.of(fb);
     assertTrue(sa instanceof SparseArray);
     assertTrue(sb instanceof SparseArray);
     Tensor fa_fb = fa.dot(fb);
@@ -86,6 +94,10 @@ public class SparseArraysTest extends TestCase {
     Tensor sa_fb = sa.dot(fb);
     Tensor sa_sb = sa.dot(sb);
     assertTrue(sa_sb instanceof SparseArray || sa_sb instanceof Scalar);
+    if (sa_sb instanceof SparseArray) {
+      SparseArray sparse = (SparseArray) sa_sb;
+      Nnz.of(sparse);
+    }
     assertEquals(fa_fb, fa_sb);
     assertEquals(fa_sb, sa_fb);
     assertEquals(sa_fb, sa_sb);
@@ -113,7 +125,7 @@ public class SparseArraysTest extends TestCase {
   }
 
   public void testFallbackFail() {
-    Tensor tensor = SparseArray.of(3);
+    Tensor tensor = Array.sparse(3);
     AssertFail.of(() -> tensor.multiply(Quantity.of(7, "s*m")));
     AssertFail.of(() -> tensor.divide(Quantity.of(7, "s*m")));
   }

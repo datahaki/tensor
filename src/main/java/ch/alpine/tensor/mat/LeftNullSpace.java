@@ -66,7 +66,7 @@ public enum LeftNullSpace {
       return NullSpace.usingSvd(Transpose.of(matrix));
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
     Tensor r = qrDecomposition.getR();
-    Tensor qinv = qrDecomposition.getQTranspose();
+    Tensor qinv = qrDecomposition.getQConjugateTranspose();
     boolean nonRankMax = IntStream.range(0, cols) //
         .mapToObj(i -> r.Get(i, i)) //
         .anyMatch(Tolerance.CHOP::isZero);

@@ -33,7 +33,7 @@ public enum MachineNumberQ {
   }
 
   /** @param tensor
-   * @return true, if any scalar entry in given tensor satisfies {@link #of(Tensor)} predicate */
+   * @return true, if any scalar entry in given tensor satisfies {@link #of(Scalar)} predicate */
   public static boolean any(Tensor tensor) {
     return tensor.flatten(-1).map(Scalar.class::cast).anyMatch(MachineNumberQ::of);
   }
