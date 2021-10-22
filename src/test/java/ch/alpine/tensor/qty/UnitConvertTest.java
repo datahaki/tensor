@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import java.io.IOException;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -99,6 +100,13 @@ public class UnitConvertTest extends TestCase {
     String string = UnitConvert.SI().to("abc*h^-3").toString();
     assertTrue(string.startsWith("UnitConvert"));
     assertTrue(string.contains("abc*h^-3"));
+  }
+
+  public void testNaNToPerc() {
+    Scalar scalar = UnitConvert.SI().to("%").apply(DoubleScalar.INDETERMINATE);
+    assertEquals(scalar.toString(), Quantity.of(DoubleScalar.INDETERMINATE, "%").toString());
+    Scalar result = QuantityMagnitude.SI().in("%").apply(scalar);
+    assertEquals(result.toString(), DoubleScalar.INDETERMINATE.toString());
   }
 
   public void testFail() {

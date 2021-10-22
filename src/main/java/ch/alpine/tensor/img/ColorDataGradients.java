@@ -5,9 +5,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.io.ResourceData;
 
-/** the functions provided in the list below can be used in {@link ArrayPlot}.
- * 
- * <p>To obtain a single color value use
+/** To obtain a single color value use
  * <pre>
  * Color color = ColorFormat.toColor(ColorDataGradients.THERMOMETER.apply(RealScalar.of(0.78)));
  * </pre>

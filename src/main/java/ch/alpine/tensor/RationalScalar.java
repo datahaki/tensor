@@ -23,28 +23,28 @@ public final class RationalScalar extends AbstractRealScalar implements //
   /** rational number {@code 1/2} with decimal value {@code 0.5} */
   public static final Scalar HALF = of(1, 2);
 
-  /** @param num
-   * @param den
+  /** @param num numerator
+   * @param den denominator
    * @return scalar encoding the exact fraction num / den */
   public static Scalar of(BigInteger num, BigInteger den) {
     return new RationalScalar(BigFraction.of(num, den));
   }
 
-  /** @param num
-   * @param den
+  /** @param num numerator
+   * @param den denominator
    * @return scalar encoding the exact fraction num / den */
   public static Scalar of(long num, long den) {
     return new RationalScalar(BigFraction.of(num, den));
   }
 
-  /** @param num
-   * @return */
+  /** @param num numerator
+   * @return scalar encoding the exact fraction num / 1 */
   /* package */ static Scalar integer(long num) {
     return new RationalScalar(BigFraction.integer(num));
   }
 
-  /** @param num
-   * @return */
+  /** @param num numerator
+   * @return scalar encoding the exact fraction num / 1 */
   /* package */ static Scalar integer(BigInteger num) {
     return new RationalScalar(BigFraction.integer(num));
   }

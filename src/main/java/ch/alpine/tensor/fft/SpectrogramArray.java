@@ -5,21 +5,24 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.PadRight;
 import ch.alpine.tensor.alg.Partition;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sqrt;
 import ch.alpine.tensor.sca.win.DirichletWindow;
+import ch.alpine.tensor.sca.win.HannWindow;
 import ch.alpine.tensor.sca.win.WindowFunctions;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/SpectrogramArray.html">SpectrogramArray</a>
  * 
  * @see WindowFunctions */
-// TODO API so that domain of frequencies is also provided
 public class SpectrogramArray implements TensorUnaryOperator {
   private static final ScalarUnaryOperator LOG2 = Log.base(2);
 
@@ -82,6 +85,16 @@ public class SpectrogramArray implements TensorUnaryOperator {
       Scalar windowDuration, Scalar samplingFrequency, ScalarUnaryOperator window) {
     int windowLength = windowLength(windowDuration, samplingFrequency);
     return of(windowLength, default_offset(windowLength), window);
+  }
+
+  /** @param vector
+   * @param window for instance {@link HannWindow#FUNCTION}
+   * @return truncated and transposed {@link SpectrogramArray} for visualization
+   * @throws Exception if input is not a vector */
+  public static Tensor half_abs(Tensor vector, ScalarUnaryOperator window) {
+    Tensor tensor = of(vector, window);
+    int half = Unprotect.dimension1Hint(tensor) / 2;
+    return Tensors.vector(i -> tensor.get(Tensor.ALL, half - i - 1).map(Abs.FUNCTION), half);
   }
 
   // helper function

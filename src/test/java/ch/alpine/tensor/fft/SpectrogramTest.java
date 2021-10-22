@@ -29,7 +29,7 @@ public class SpectrogramTest extends TestCase {
     Tensor image = Spectrogram.of(vector, DirichletWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM);
     ImageFormat.of(image);
     assertEquals(Dimensions.of(image), Arrays.asList(32, 93, 4));
-    assertEquals(Dimensions.of(Spectrogram.array(vector, DirichletWindow.FUNCTION)), Arrays.asList(32, 93));
+    assertEquals(Dimensions.of(SpectrogramArray.half_abs(vector, DirichletWindow.FUNCTION)), Arrays.asList(32, 93));
     Tensor tensor = SpectrogramArray.of(vector).map(Abs.FUNCTION);
     assertEquals(Dimensions.of(tensor), Arrays.asList(93, 64));
   }
@@ -43,7 +43,7 @@ public class SpectrogramTest extends TestCase {
   }
 
   public void testNullFail() {
-    AssertFail.of(() -> Spectrogram.array(null, HammingWindow.FUNCTION));
+    AssertFail.of(() -> SpectrogramArray.half_abs(null, HammingWindow.FUNCTION));
   }
 
   public void testScalarFail() {
