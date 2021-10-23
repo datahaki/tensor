@@ -15,19 +15,19 @@ import junit.framework.TestCase;
 
 public class ColorDataGradientTest extends TestCase {
   public void testDimensions() {
-    Tensor tensor = ResourceData.of("/colorscheme/hue.csv");
+    Tensor tensor = ResourceData.of("/colorscheme/_hue.csv");
     assertEquals(Dimensions.of(tensor).get(1), Integer.valueOf(4));
     LinearColorDataGradient.of(tensor);
   }
 
   public void testSerializable() throws Exception {
-    Tensor tensor = ResourceData.of("/colorscheme/hue.csv");
+    Tensor tensor = ResourceData.of("/colorscheme/_hue.csv");
     ColorDataGradient cdg = LinearColorDataGradient.of(tensor);
     Serialization.copy(cdg);
   }
 
   public void testModifiable() {
-    Tensor tensor = ResourceData.of("/colorscheme/hue.csv");
+    Tensor tensor = ResourceData.of("/colorscheme/_hue.csv");
     ColorDataGradient cdg = LinearColorDataGradient.of(tensor);
     cdg.apply(RealScalar.ONE).set(RealScalar.ONE, 1);
     cdg.apply(RealScalar.ZERO).set(RealScalar.ONE, 1);

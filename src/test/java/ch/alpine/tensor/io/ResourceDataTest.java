@@ -29,7 +29,7 @@ public class ResourceDataTest extends TestCase {
   }
 
   public void testHue() {
-    Tensor tensor = ResourceData.of("/colorscheme/hue.csv");
+    Tensor tensor = ResourceData.of("/colorscheme/_hue.csv");
     assertNotNull(tensor);
     assertEquals(Dimensions.of(tensor), Arrays.asList(7, 4));
     Interpolation interpolation = LinearInterpolation.of(tensor);
