@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.IOException;
 
 import ch.alpine.tensor.ext.HomeDirectory;
-import ch.alpine.tensor.img.ArrayPlot;
 import ch.alpine.tensor.img.ColorDataGradient;
+import ch.alpine.tensor.img.TensorArrayPlot;
 import ch.alpine.tensor.io.Export;
 
 /* package */ enum StaticHelper {
@@ -22,6 +22,6 @@ import ch.alpine.tensor.io.Export;
   }
 
   public static void export(BivariateEvaluation bivariateEvaluation, Class<?> cls, ColorDataGradient colorDataGradient) throws IOException {
-    Export.of(image(cls), ArrayPlot.of(bivariateEvaluation.image(GALLERY_RES), colorDataGradient));
+    Export.of(image(cls), TensorArrayPlot.of(bivariateEvaluation.image(GALLERY_RES), colorDataGradient));
   }
 }

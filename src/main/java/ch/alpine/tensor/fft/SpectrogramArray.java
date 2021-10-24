@@ -44,6 +44,16 @@ public class SpectrogramArray implements TensorUnaryOperator {
     return of(vector, DirichletWindow.FUNCTION);
   }
 
+  /** @param vector
+   * @param window for instance {@link HannWindow#FUNCTION}
+   * @return truncated and transposed spectrogram array for visualization
+   * @throws Exception if input is not a vector */
+  public static Tensor half_abs(Tensor vector, ScalarUnaryOperator window) {
+    Tensor tensor = of(vector, window);
+    int half = Unprotect.dimension1Hint(tensor) / 2;
+    return Tensors.vector(i -> tensor.get(Tensor.ALL, half - i - 1).map(Abs.FUNCTION), half);
+  }
+
   // helper function
   private static int default_offset(int windowLength) {
     return Round.intValueExact(RationalScalar.of(windowLength, 3));
@@ -85,16 +95,6 @@ public class SpectrogramArray implements TensorUnaryOperator {
       Scalar windowDuration, Scalar samplingFrequency, ScalarUnaryOperator window) {
     int windowLength = windowLength(windowDuration, samplingFrequency);
     return of(windowLength, default_offset(windowLength), window);
-  }
-
-  /** @param vector
-   * @param window for instance {@link HannWindow#FUNCTION}
-   * @return truncated and transposed {@link SpectrogramArray} for visualization
-   * @throws Exception if input is not a vector */
-  public static Tensor half_abs(Tensor vector, ScalarUnaryOperator window) {
-    Tensor tensor = of(vector, window);
-    int half = Unprotect.dimension1Hint(tensor) / 2;
-    return Tensors.vector(i -> tensor.get(Tensor.ALL, half - i - 1).map(Abs.FUNCTION), half);
   }
 
   // helper function

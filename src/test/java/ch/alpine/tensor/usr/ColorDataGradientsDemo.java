@@ -16,8 +16,8 @@ import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.ext.HomeDirectory;
-import ch.alpine.tensor.img.ArrayPlot;
 import ch.alpine.tensor.img.ColorDataGradients;
+import ch.alpine.tensor.img.TensorArrayPlot;
 import ch.alpine.tensor.io.Export;
 import ch.alpine.tensor.io.ImageFormat;
 
@@ -34,7 +34,7 @@ import ch.alpine.tensor.io.ImageFormat;
     Tensor image = Tensors.empty();
     Tensor white = Array.of(l -> TFF, hei - spa, sep, 4);
     for (ScalarTensorFunction cdf : ColorDataGradients.values()) {
-      image.append(Join.of(1, ArrayPlot.of(array, cdf), white));
+      image.append(Join.of(1, TensorArrayPlot.of(array, cdf), white));
       image.append(Array.zeros(spa, 256 + sep, 4));
     }
     image = Flatten.of(image, 1);

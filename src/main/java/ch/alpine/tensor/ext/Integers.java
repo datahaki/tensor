@@ -98,8 +98,8 @@ public enum Integers {
    * parity[{2, 0, 1}] == 0
    * </pre>
    * 
-   * The provided array sigma is not modified during the function, instead
-   * the algorithm works with a copy of the array.
+   * The provided array sigma is not modified by the function.
+   * Instead, the algorithm works with a copy of the array.
    * 
    * @param sigma a permutation of the list {0, 1, ..., sigma.length - 1}
    * @return 0 if sigma is even permutation, or 1 if sigma is odd permutation
@@ -118,7 +118,10 @@ public enum Integers {
   }
 
   // ---
-  /** Remark: a sublist of the returned list is {@link Serializable}.
+  /** Careful: The elements of the returned list are backed by the given array.
+   * Any subsequent modification of the array is reflected by the list.
+   * 
+   * Remark: a sublist of the returned list is {@link Serializable}.
    * This is in contrast to sublists of {@link Arrays#asList(Object...)}
    * or {@link ArrayList}, which are not serializable.
    * 

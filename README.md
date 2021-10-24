@@ -249,19 +249,28 @@ System.out.println(matrix.get(Tensor.ALL, 3)); // extraction of the 4th column
 {0, 0, 5}
 ```
 
+### Optimization
+
+##### Distance-based queries for point sets in Euclidean space
+
+<table>
+<tr>
+<td>
+
+![image](https://user-images.githubusercontent.com/4012178/138601155-8324ff52-6de5-41ee-bd5e-726653404b6b.png)
+
+k-nearest neighbors
+
+<td>
+
+![image](https://user-images.githubusercontent.com/4012178/138601071-1ebde233-fea9-43a9-9c15-6d38438fc28e.png)
+
+radius search
+
+</tr>
+</table>
+
 ### Visualization
-
-Image functions: `ArrayPlot`, `Spectrogram`
-
-```java
-Tensor data = Cos.of(Subdivide.of(0, 100, 2000).map(Series.of(Tensors.vector(0, 5, 1))));
-Tensor image = Spectrogram.of(data, ColorDataGradients.VISIBLESPECTRUM);
-Export.of(HomeDirectory.file("spectrogram.png"), ImageResize.nearest(image, 4));
-```
-
-gives the image
-
-![spectrogram](https://user-images.githubusercontent.com/4012178/62372991-1d3fe200-b539-11e9-8d3c-490ddb835ab0.png)
 
 ##### Predefined color gradients
 

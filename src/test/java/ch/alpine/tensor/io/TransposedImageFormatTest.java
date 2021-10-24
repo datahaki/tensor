@@ -18,8 +18,8 @@ import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.fft.ListConvolve;
-import ch.alpine.tensor.img.ArrayPlot;
 import ch.alpine.tensor.img.ColorDataGradients;
+import ch.alpine.tensor.img.TensorArrayPlot;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -108,7 +108,7 @@ public class TransposedImageFormatTest extends TestCase {
     Tensor arr = Array.of(list -> RealScalar.of(list.get(1)), 3, 11);
     Tensor image = Tensors.empty();
     for (ScalarTensorFunction cdf : ColorDataGradients.values())
-      image.append(ArrayPlot.of(arr, cdf));
+      image.append(TensorArrayPlot.of(arr, cdf));
     image = Flatten.of(image, 1);
     image = Transpose.of(image, 1, 0, 2);
     return Round.of(image);
