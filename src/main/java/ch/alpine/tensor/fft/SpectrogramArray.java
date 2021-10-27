@@ -30,9 +30,15 @@ public class SpectrogramArray implements TensorUnaryOperator {
    * @param window for instance {@link DirichletWindow#FUNCTION}
    * @return */
   public static Tensor of(Tensor vector, ScalarUnaryOperator window) {
-    int num = Round.intValueExact(LOG2.apply(Sqrt.FUNCTION.apply(RealScalar.of(vector.length()))));
-    int windowLength = 1 << (num + 1);
+    int windowLength = default_windowLength(vector.length());
     return of(windowLength, default_offset(windowLength), window).apply(vector);
+  }
+
+  /** @param vector_length
+   * @return power of 2 */
+  private static int default_windowLength(int vector_length) {
+    int num = Round.intValueExact(LOG2.apply(Sqrt.FUNCTION.apply(RealScalar.of(vector_length))));
+    return 1 << (num + 1);
   }
 
   /** Mathematica default

@@ -1,5 +1,5 @@
 // code by Eric Simonton
-// adapted by jph and clruch
+// adapted by jph, clruch
 package ch.alpine.tensor.opt.nd;
 
 import java.util.Collection;

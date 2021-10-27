@@ -1,4 +1,4 @@
-// code by jph and gjoel
+// code by jph, gjoel
 package ch.alpine.tensor.pdf;
 
 import java.util.HashSet;
@@ -23,11 +23,11 @@ public class HistogramDistributionTest extends TestCase {
     Distribution distribution = //
         HistogramDistribution.of(Tensors.vector(-3, -3, -2, -2, 10), RealScalar.of(2));
     PDF pdf = PDF.of(distribution);
-    assertEquals(pdf.at(RealScalar.of(-3)), RationalScalar.of(2, 5));
-    assertEquals(pdf.at(RealScalar.of(-4)), RationalScalar.of(2, 5));
+    assertEquals(pdf.at(RealScalar.of(-3)), RationalScalar.of(1, 5));
+    assertEquals(pdf.at(RealScalar.of(-4)), RationalScalar.of(1, 5));
     assertEquals(pdf.at(RealScalar.of(-4.1)), RealScalar.ZERO);
     assertEquals(pdf.at(RealScalar.ZERO), RealScalar.ZERO);
-    assertEquals(pdf.at(RealScalar.of(11)), RationalScalar.of(1, 5));
+    assertEquals(pdf.at(RealScalar.of(11)), RationalScalar.of(1, 10));
     Clip c1 = Clips.interval(-4, 0);
     Clip c2 = Clips.interval(10, 12);
     Set<Scalar> set = new HashSet<>();
@@ -63,13 +63,14 @@ public class HistogramDistributionTest extends TestCase {
 
   public void testQuantity() {
     Tensor vector = QuantityTensor.of(Tensors.vector(1, 1.7, 2, 3, 3.9, 4, 4.1), "m");
+    Scalar width = Quantity.of(0.7, "m");
     Distribution distribution = //
-        HistogramDistribution.of(vector, Quantity.of(0.7, "m"));
+        HistogramDistribution.of(vector, width);
     assertTrue(RandomVariate.of(distribution) instanceof Quantity);
     PDF pdf = PDF.of(distribution);
-    assertEquals(pdf.at(Quantity.of(0, "m")), RealScalar.ZERO);
-    assertEquals(pdf.at(Quantity.of(1.2, "m")), RationalScalar.of(1, 7));
-    assertEquals(pdf.at(Quantity.of(4.15, "m")), RationalScalar.of(3, 7));
+    assertEquals(pdf.at(Quantity.of(0, "m")), RealScalar.ZERO.divide(width));
+    assertEquals(pdf.at(Quantity.of(1.2, "m")), RationalScalar.of(1, 7).divide(width));
+    assertEquals(pdf.at(Quantity.of(4.15, "m")), RationalScalar.of(3, 7).divide(width));
     Clip clip = Clips.interval(Quantity.of(0.7, "m"), Quantity.of(4.2, "m"));
     Set<Scalar> set = new HashSet<>();
     for (int count = 0; count < 100; ++count) {
