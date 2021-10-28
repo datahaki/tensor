@@ -4,6 +4,7 @@ package ch.alpine.tensor.qty;
 import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.sca.Clip;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/QuantityUnit.html">QuantityUnit</a> */
@@ -19,5 +20,11 @@ public enum QuantityUnit {
     }
     Objects.requireNonNull(scalar);
     return Unit.ONE;
+  }
+
+  /** @param clip
+   * @return shared unit of clip.min and clip.max */
+  public static Unit of(Clip clip) {
+    return of(clip.min());
   }
 }
