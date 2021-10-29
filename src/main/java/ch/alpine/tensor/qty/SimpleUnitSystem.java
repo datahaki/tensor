@@ -19,7 +19,10 @@ import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.sca.Power;
 
-/** reference implementation of {@link UnitSystem} with emphasis on simplicity */
+/** reference implementation of {@link UnitSystem} with emphasis on simplicity
+ * 
+ * @implSpec
+ * This class is immutable and thread-safe. */
 public class SimpleUnitSystem implements UnitSystem {
   /** given properties map a unit expression to a {@link Quantity}
    * 

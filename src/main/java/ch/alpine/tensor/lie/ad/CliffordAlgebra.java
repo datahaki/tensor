@@ -41,7 +41,9 @@ import ch.alpine.tensor.spa.SparseArray;
  * <p>Reference:
  * https://en.wikipedia.org/wiki/Clifford_algebra */
 public class CliffordAlgebra implements Serializable {
-  private static final Scalar[] SIGN = { RealScalar.ONE, RealScalar.ONE.negate() };
+  private static final Scalar[] SIGN = { //
+      RealScalar.ONE, //
+      RealScalar.ONE.negate() };
 
   /** @param p non-negative
    * @param q non-negative

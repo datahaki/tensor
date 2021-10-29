@@ -18,7 +18,10 @@ import ch.alpine.tensor.ext.MergeIllegal;
 
 /** immutable
  * 
- * all instances of UnitImpl are managed in a {@link Cache} */
+ * all instances of UnitImpl are managed in a {@link Cache}
+ * 
+ * @implSpec
+ * This class is immutable and thread-safe. */
 /* package */ class UnitImpl implements Unit, Serializable {
   private static final long serialVersionUID = -4163267919248734106L;
   private static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> NEGATION = //

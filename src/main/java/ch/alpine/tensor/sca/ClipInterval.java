@@ -6,7 +6,10 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 
-/** clip to an interval of non-zero width */
+/** clip to an interval of non-zero width
+ * 
+ * @implSpec
+ * This class is immutable and thread-safe. */
 /* package */ class ClipInterval implements Clip {
   private final Scalar min;
   private final Scalar max;

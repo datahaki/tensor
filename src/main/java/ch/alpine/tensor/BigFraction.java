@@ -4,7 +4,10 @@ package ch.alpine.tensor;
 import java.io.Serializable;
 import java.math.BigInteger;
 
-/** immutable integer fraction in normal form, i.e. denominator is strictly positive */
+/** immutable integer fraction in normal form, i.e. denominator is strictly positive
+ * 
+ * @implSpec
+ * This class is immutable and thread-safe. */
 /* package */ final class BigFraction implements Comparable<BigFraction>, Serializable {
   private static final String DIVIDE = "/";
 

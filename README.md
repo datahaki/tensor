@@ -251,7 +251,7 @@ System.out.println(matrix.get(Tensor.ALL, 3)); // extraction of the 4th column
 
 ### Optimization
 
-##### Distance-based queries for point sets in Euclidean space
+Distance-based queries for point sets in Euclidean space
 
 <table>
 <tr>
@@ -272,11 +272,11 @@ radius search
 
 ### Visualization
 
-##### Predefined color gradients
+Predefined color gradients
 
 ![colordatagradients](https://user-images.githubusercontent.com/4012178/42363743-fb28d35e-80f8-11e8-9b34-41652073304d.png)
 
-##### Predefined color lists
+Predefined color lists
 
 ![colordatalists](https://user-images.githubusercontent.com/4012178/42363765-095692fe-80f9-11e8-8376-3e1364937536.png)
 

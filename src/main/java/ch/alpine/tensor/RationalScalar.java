@@ -17,7 +17,10 @@ import ch.alpine.tensor.api.NInterface;
  * 
  * a RationalScalar represents an integer fraction, for instance 17/42, or -6/1.
  * 
- * zero().reciprocal() throws a {@link ArithmeticException}. */
+ * zero().reciprocal() throws a {@link ArithmeticException}.
+ * 
+ * @implSpec
+ * This class is immutable and thread-safe. */
 public final class RationalScalar extends AbstractRealScalar implements //
     ExactScalarQInterface, NInterface, Serializable {
   /** rational number {@code 1/2} with decimal value {@code 0.5} */

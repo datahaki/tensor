@@ -29,6 +29,8 @@ import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.Sqrt;
 
+/** @implSpec
+ * This class is immutable and thread-safe. */
 /* package */ class QuantityImpl extends AbstractScalar implements Quantity, //
     ChopInterface, ExactScalarQInterface, NInterface, Serializable {
   /** @param value is assumed to be not instance of {@link Quantity}
