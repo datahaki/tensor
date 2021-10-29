@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import java.io.Serializable;
 import java.time.Duration;
+import java.util.Objects;
 
 import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.IntegerQ;
@@ -11,6 +12,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
+import ch.alpine.tensor.api.SignInterface;
 
 /** EXPERIMENTAL
  * 
@@ -21,12 +23,15 @@ import ch.alpine.tensor.api.AbsInterface;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class DurationScalar extends AbstractScalar implements AbsInterface, //
-    Comparable<Scalar>, Serializable {
+public class DurationScalar extends AbstractScalar implements AbsInterface, //
+    Comparable<Scalar>, SignInterface, Serializable {
   public static final DurationScalar ZERO = new DurationScalar(Duration.ZERO);
 
+  /** @param duration
+   * @return
+   * @throws Exception if given duration is null */
   public static DurationScalar of(Duration duration) {
-    return new DurationScalar(duration);
+    return new DurationScalar(Objects.requireNonNull(duration));
   }
 
   // ---
@@ -34,20 +39,22 @@ import ch.alpine.tensor.api.AbsInterface;
    * "A duration of -1 nanosecond is stored as -1 seconds plus 999,999,999 nanoseconds." */
   private final Duration duration;
 
-  private DurationScalar(Duration duration) {
+  /* package */ DurationScalar(Duration duration) {
     this.duration = duration;
   }
 
+  /** @return duration */
   public Duration duration() {
     return duration;
   }
 
-  @Override
+  @Override // from Scalar
   public DurationScalar multiply(Scalar scalar) {
+    // TODO can to better
     return new DurationScalar(duration.multipliedBy(IntegerQ.require(scalar).number().longValue()));
   }
 
-  @Override
+  @Override // from AbstractScalar
   public Scalar divide(Scalar scalar) {
     if (scalar instanceof DurationScalar) {
       DurationScalar durationScalar = (DurationScalar) scalar;
@@ -57,7 +64,7 @@ import ch.alpine.tensor.api.AbsInterface;
     throw TensorRuntimeException.of(this, scalar);
   }
 
-  @Override
+  @Override // from AbstractScalar
   public Scalar under(Scalar scalar) {
     if (scalar instanceof DurationScalar) {
       DurationScalar durationScalar = (DurationScalar) scalar;
@@ -67,32 +74,32 @@ import ch.alpine.tensor.api.AbsInterface;
     throw TensorRuntimeException.of(this, scalar);
   }
 
-  @Override
+  @Override // from Scalar
   public DurationScalar negate() {
     return new DurationScalar(duration.negated());
   }
 
-  @Override
+  @Override // from Scalar
   public Scalar reciprocal() {
     throw TensorRuntimeException.of(this);
   }
 
-  @Override
+  @Override // from Scalar
   public Number number() {
     throw TensorRuntimeException.of(this);
   }
 
-  @Override
+  @Override // from Scalar
   public DurationScalar zero() {
     return ZERO;
   }
 
-  @Override
+  @Override // from Scalar
   public Scalar one() {
     return RealScalar.ONE;
   }
 
-  @Override
+  @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
     if (scalar instanceof DurationScalar) {
       DurationScalar durationScalar = (DurationScalar) scalar;
@@ -113,7 +120,7 @@ import ch.alpine.tensor.api.AbsInterface;
     throw TensorRuntimeException.of(this);
   }
 
-  @Override
+  @Override // from Comparable
   public int compareTo(Scalar scalar) {
     if (scalar instanceof DurationScalar) {
       DurationScalar durationScalar = (DurationScalar) scalar;
@@ -122,12 +129,21 @@ import ch.alpine.tensor.api.AbsInterface;
     throw TensorRuntimeException.of(this, scalar);
   }
 
-  @Override
+  @Override // from SignInterface
+  public Scalar sign() {
+    if (duration.isZero())
+      return RealScalar.ZERO;
+    if (duration.isNegative())
+      return RealScalar.ONE.negate();
+    return RealScalar.ONE;
+  }
+
+  @Override // from Object
   public int hashCode() {
     return duration.hashCode();
   }
 
-  @Override
+  @Override // from Object
   public boolean equals(Object object) {
     if (object instanceof DurationScalar) {
       DurationScalar durationScalar = (DurationScalar) object;
@@ -136,7 +152,7 @@ import ch.alpine.tensor.api.AbsInterface;
     return false;
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return duration.toString();
   }

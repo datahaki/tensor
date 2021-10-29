@@ -4,98 +4,88 @@ package ch.alpine.tensor.qty;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 
 /** EXPERIMENTAL
  * 
+ * Addition of two instances of {@link DateTimeScalar} results in an exception.
+ * Subtraction of two instances of {@link DateTimeScalar} results in a {@link DurationScalar}.
+ * Negation of a {@link DateTimeScalar} results in an exception.
+ * 
  * @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class DateTimeScalar extends AbstractScalar implements Comparable<Scalar>, Serializable {
-  public static Scalar fromString(String string) {
-    try {
-      return new DateTimeScalar(LocalDateTime.parse(string));
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      return DurationScalar.of(Duration.parse(string));
-    } catch (Exception exception) {
-      // ---
-    }
-    return Scalars.fromString(string);
+public class DateTimeScalar extends AbstractScalar implements Comparable<Scalar>, Serializable {
+  /** @param localDateTime
+   * @return
+   * @throws Exception if given localDateTime is null */
+  public static DateTimeScalar of(LocalDateTime localDateTime) {
+    return new DateTimeScalar(Objects.requireNonNull(localDateTime));
   }
 
+  // ---
   private final LocalDateTime localDateTime;
-  private final boolean negated;
 
-  public DateTimeScalar(LocalDateTime localDateTime) {
-    this(localDateTime, false);
-  }
-
-  private DateTimeScalar(LocalDateTime localDateTime, boolean negated) {
+  /* package */ DateTimeScalar(LocalDateTime localDateTime) {
     this.localDateTime = localDateTime;
-    this.negated = negated;
   }
 
-  @Override
+  @Override // from AbstractScalar
+  public Scalar subtract(Tensor tensor) {
+    if (tensor instanceof DateTimeScalar) {
+      DateTimeScalar dateTimeScalar = (DateTimeScalar) tensor;
+      return new DurationScalar(Duration.between(dateTimeScalar.localDateTime, localDateTime));
+    }
+    throw TensorRuntimeException.of(this, tensor);
+  }
+
+  @Override // from AbstractScalar
   public Scalar multiply(Scalar scalar) {
-    if (scalar.equals(RealScalar.ONE))
+    if (scalar.equals(one()))
       return this;
-    if (scalar.equals(RealScalar.ONE.negate()))
-      return negate();
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from Scalar
   public Scalar negate() {
-    return new DateTimeScalar(localDateTime, !negated);
+    throw TensorRuntimeException.of(this);
   }
 
-  @Override
+  @Override // from Scalar
   public Scalar reciprocal() {
     throw TensorRuntimeException.of(this);
   }
 
-  @Override
+  @Override // from Scalar
   public Number number() {
     throw TensorRuntimeException.of(this);
   }
 
-  @Override
+  @Override // from Scalar
   public Scalar zero() {
     return DurationScalar.ZERO;
   }
 
-  @Override
+  @Override // from Scalar
   public Scalar one() {
     return RealScalar.ONE;
   }
 
-  @Override
+  @Override // from Scalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof DateTimeScalar) {
-      DateTimeScalar dateTimeScalar = (DateTimeScalar) scalar;
-      if (!negated && dateTimeScalar.negated)
-        return DurationScalar.of(Duration.between(dateTimeScalar.localDateTime, localDateTime));
-      if (negated && !dateTimeScalar.negated)
-        return DurationScalar.of(Duration.between(localDateTime, dateTimeScalar.localDateTime));
-      throw TensorRuntimeException.of(this, scalar);
-    }
     if (scalar instanceof DurationScalar) {
-      if (negated)
-        throw TensorRuntimeException.of(this, scalar);
       DurationScalar durationScalar = (DurationScalar) scalar;
       return new DateTimeScalar(localDateTime.plus(durationScalar.duration()));
     }
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from Comparable
   public int compareTo(Scalar scalar) {
     if (scalar instanceof DateTimeScalar) {
       DateTimeScalar dateTimeScalar = (DateTimeScalar) scalar;
@@ -104,27 +94,22 @@ import ch.alpine.tensor.TensorRuntimeException;
     throw TensorRuntimeException.of(this, scalar);
   }
 
-  @Override
+  @Override // from Object
   public int hashCode() {
-    return negated //
-        ? -localDateTime.hashCode()
-        : +localDateTime.hashCode();
+    return localDateTime.hashCode();
   }
 
-  @Override
+  @Override // from Object
   public boolean equals(Object object) {
     if (object instanceof DateTimeScalar) {
       DateTimeScalar dateTimeScalar = (DateTimeScalar) object;
-      return localDateTime.equals(dateTimeScalar.localDateTime) //
-          && negated == dateTimeScalar.negated;
+      return localDateTime.equals(dateTimeScalar.localDateTime);
     }
     return false;
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
-    return negated //
-        ? "-" + localDateTime.toString()
-        : localDateTime.toString();
+    return localDateTime.toString();
   }
 }
