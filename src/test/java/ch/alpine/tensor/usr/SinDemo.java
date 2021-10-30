@@ -8,23 +8,32 @@ import ch.alpine.tensor.img.ColorDataGradients;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.sca.ArcTan;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Real;
 import ch.alpine.tensor.sca.Sin;
 
 /** inspired by mathematica's documentation of Gamma */
-/* package */ enum SinDemo {
-  ;
-  static final BivariateEvaluation BIVARIATE_EVALUATION = new BivariateEvaluation( //
-      Clips.absolute(Pi.VALUE), Clips.absolute(Pi.VALUE)) {
-    @Override
-    protected Scalar function(Scalar re, Scalar im) {
-      Scalar seed = ComplexScalar.of(re, im);
-      return Real.of(ArcTan.of(Nest.of(Sin.FUNCTION, seed, 2)));
-    }
-  };
+/* package */ enum SinDemo implements BivariateEvaluation {
+  INSTANCE;
+
+  @Override
+  public Scalar apply(Scalar re, Scalar im) {
+    Scalar seed = ComplexScalar.of(re, im);
+    return Real.of(ArcTan.of(Nest.of(Sin.FUNCTION, seed, 2)));
+  }
+
+  @Override
+  public Clip clipX() {
+    return Clips.absolute(Pi.VALUE);
+  }
+
+  @Override
+  public Clip clipY() {
+    return Clips.absolute(Pi.VALUE);
+  }
 
   public static void main(String[] args) throws Exception {
-    StaticHelper.export(BIVARIATE_EVALUATION, Sin.class, ColorDataGradients.SUNSET);
+    StaticHelper.export(INSTANCE, Sin.class, ColorDataGradients.SUNSET);
   }
 }

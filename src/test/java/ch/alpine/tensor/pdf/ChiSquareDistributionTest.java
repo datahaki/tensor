@@ -26,6 +26,22 @@ public class ChiSquareDistributionTest extends TestCase {
     AssertFail.of(() -> pdf.at(Quantity.of(2, "m")));
   }
 
+  public void testCdfFails() {
+    CDF cdf = CDF.of(ChiSquareDistribution.of(3));
+    AssertFail.of(() -> cdf.p_lessThan(RealScalar.TWO));
+    AssertFail.of(() -> cdf.p_lessEquals(RealScalar.TWO));
+  }
+
+  public void testInverseCdfFails() {
+    InverseCDF cdf = InverseCDF.of(ChiSquareDistribution.of(3));
+    AssertFail.of(() -> cdf.quantile(RationalScalar.HALF));
+  }
+
+  public void testRandomFails() {
+    Distribution distribution = ChiSquareDistribution.of(3);
+    AssertFail.of(() -> RandomVariate.of(distribution));
+  }
+
   public void testFails() {
     AssertFail.of(() -> ChiSquareDistribution.of(0));
     AssertFail.of(() -> ChiSquareDistribution.of(-2.3));

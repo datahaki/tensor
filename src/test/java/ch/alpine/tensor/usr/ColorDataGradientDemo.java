@@ -23,6 +23,6 @@ import ch.alpine.tensor.sca.Clips;
       result.append(ImageResize.nearest(Transpose.of(domain.map(colorDataGradients)), 8, 1));
     Tensor image = Flatten.of(result, 1);
     System.out.println(Dimensions.of(image));
-    Export.of(StaticHelper.image(ColorDataGradients.class), image);
+    Export.of(StaticHelper.file(ColorDataGradients.class), image);
   }
 }

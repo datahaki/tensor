@@ -10,31 +10,35 @@ import ch.alpine.tensor.img.ColorDataGradients;
 import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.sca.Arg;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
 /** inspired by Mathematica's documentation of Gamma */
-/* package */ class NewtonDemo extends BivariateEvaluation {
+/* package */ class NewtonDemo implements BivariateEvaluation {
   private static final int DEPTH = 2;
-
-  public static BivariateEvaluation of(Tensor coeffs) {
-    return new NewtonDemo(coeffs);
-  }
-
-  // ---
   private final ScalarUnaryOperator scalarUnaryOperator;
 
-  private NewtonDemo(Tensor coeffs) {
-    super(Clips.absolute(2.0), Clips.absolute(2.0));
+  public NewtonDemo(Tensor coeffs) {
     scalarUnaryOperator = NewtonScalarMethod.polynomial(coeffs).iteration;
   }
 
   @Override
-  protected Scalar function(Scalar re, Scalar im) {
+  public Scalar apply(Scalar re, Scalar im) {
     return Arg.of(Nest.of(scalarUnaryOperator, ComplexScalar.of(re, im), DEPTH));
   }
 
+  @Override
+  public Clip clipX() {
+    return Clips.absolute(2.0);
+  }
+
+  @Override
+  public Clip clipY() {
+    return Clips.absolute(2.0);
+  }
+
   public static void main(String[] args) throws Exception {
-    StaticHelper.export(of(Tensors.vector(1, 5, 0, 1)), Polynomial.class, ColorDataGradients.PARULA);
+    StaticHelper.export(new NewtonDemo(Tensors.vector(1, 5, 0, 1)), Polynomial.class, ColorDataGradients.PARULA);
   }
 }
 // depth3

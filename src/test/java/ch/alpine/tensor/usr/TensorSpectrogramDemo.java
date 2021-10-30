@@ -21,6 +21,6 @@ import ch.alpine.tensor.sca.win.DirichletWindow;
   public static void main(String[] args) throws IOException {
     Tensor data = Cos.of(Subdivide.of(0, 100, 2000).map(Polynomial.of(Tensors.vector(0, 5, 1))));
     Tensor image = TensorSpectrogram.of(data, DirichletWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM);
-    Export.of(StaticHelper.image(TensorSpectrogram.class), ImageResize.nearest(image, 1));
+    Export.of(StaticHelper.file(TensorSpectrogram.class), ImageResize.nearest(image, 1));
   }
 }

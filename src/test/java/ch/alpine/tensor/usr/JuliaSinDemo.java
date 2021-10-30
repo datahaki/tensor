@@ -11,26 +11,24 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.img.ColorDataGradients;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Arg;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Sin;
 
 /** inspired by document by Paul Bourke */
-/* package */ class JuliaSinDemo extends BivariateEvaluation {
+/* package */ class JuliaSinDemo implements BivariateEvaluation {
   private static final Scalar MAX = RealScalar.of(50);
   private static final int MAX_ITERATIONS = 10;
   // ---
   private final Scalar c;
 
   public JuliaSinDemo(Scalar c) {
-    super( //
-        Clips.interval(-2.3, +2.3), //
-        Clips.interval(-2.3, +2.3));
     this.c = c;
   }
 
   @Override
-  protected Scalar function(Scalar re, Scalar im) {
+  public Scalar apply(Scalar re, Scalar im) {
     Scalar z = ComplexScalar.of(re, im);
     for (int count = 0; count < MAX_ITERATIONS; ++count) {
       z = Sin.FUNCTION.apply(z).multiply(c);
@@ -38,6 +36,16 @@ import ch.alpine.tensor.sca.Sin;
         return DoubleScalar.INDETERMINATE;
     }
     return Arg.FUNCTION.apply(z);
+  }
+
+  @Override
+  public Clip clipX() {
+    return Clips.interval(-2.3, +2.3);
+  }
+
+  @Override
+  public Clip clipY() {
+    return Clips.interval(-2.3, +2.3);
   }
 
   public static void main(String[] args) throws IOException {
