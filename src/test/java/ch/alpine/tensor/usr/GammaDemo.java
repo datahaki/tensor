@@ -7,7 +7,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.HomeDirectory;
 import ch.alpine.tensor.img.ColorDataGradients;
-import ch.alpine.tensor.img.TensorArrayPlot;
+import ch.alpine.tensor.img.Raster;
 import ch.alpine.tensor.io.Export;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.sca.Arg;
@@ -45,6 +45,6 @@ import ch.alpine.tensor.sca.Gamma;
   public static void main(String[] args) throws Exception {
     Tensor matrix = StaticHelper.image(INSTANCE, 192);
     Export.of(HomeDirectory.Pictures(GammaDemo.class.getSimpleName() + ".png"), //
-        TensorArrayPlot.of(matrix, ColorDataGradients.HUE));
+        Raster.of(matrix, ColorDataGradients.HUE));
   }
 }

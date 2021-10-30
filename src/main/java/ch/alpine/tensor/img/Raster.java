@@ -8,8 +8,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Rescale;
 
 /** inspired by
- * <a href="https://reference.wolfram.com/language/ref/ArrayPlot.html">ArrayPlot</a> */
-public enum TensorArrayPlot {
+ * <a href="https://reference.wolfram.com/language/ref/Raster.html">Raster</a> */
+public enum Raster {
   ;
   /** the given function is required to map values from the interval [0, 1] to vectors
    * of the form {R, G, B, A} with entries in the interval [0, 255].

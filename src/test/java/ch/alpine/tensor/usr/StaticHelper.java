@@ -9,7 +9,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.ext.HomeDirectory;
 import ch.alpine.tensor.img.ColorDataGradient;
-import ch.alpine.tensor.img.TensorArrayPlot;
+import ch.alpine.tensor.img.Raster;
 import ch.alpine.tensor.io.Export;
 
 /* package */ enum StaticHelper {
@@ -22,7 +22,7 @@ import ch.alpine.tensor.io.Export;
   }
 
   public static void export(BivariateEvaluation bivariateEvaluation, Class<?> cls, ColorDataGradient colorDataGradient) throws IOException {
-    Export.of(file(cls), TensorArrayPlot.of(StaticHelper.image(bivariateEvaluation, GALLERY_RES), colorDataGradient));
+    Export.of(file(cls), Raster.of(StaticHelper.image(bivariateEvaluation, GALLERY_RES), colorDataGradient));
   }
 
   public static Tensor image(BivariateEvaluation bivariateEvaluation, int resolution) {

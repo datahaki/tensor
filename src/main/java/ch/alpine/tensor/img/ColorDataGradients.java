@@ -68,6 +68,8 @@ public enum ColorDataGradients implements ColorDataGradient {
   GRAYSCALE(GrayscaleColorData.DEFAULT),
   /** black, blue-gray, white */
   BONE,
+  /** purple, blue, white */
+  DEEPSEA, //
   /** black, brown, orange */
   COPPER,
   /** black, green, yellow */
