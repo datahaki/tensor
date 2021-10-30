@@ -12,6 +12,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
+import ch.alpine.tensor.api.ExactScalarQInterface;
 import ch.alpine.tensor.api.SignInterface;
 
 /** EXPERIMENTAL
@@ -24,7 +25,7 @@ import ch.alpine.tensor.api.SignInterface;
  * @implSpec
  * This class is immutable and thread-safe. */
 public class DurationScalar extends AbstractScalar implements AbsInterface, //
-    Comparable<Scalar>, SignInterface, Serializable {
+    ExactScalarQInterface, Comparable<Scalar>, SignInterface, Serializable {
   public static final DurationScalar ZERO = new DurationScalar(Duration.ZERO);
 
   /** @param duration
@@ -120,6 +121,11 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
     throw TensorRuntimeException.of(this);
   }
 
+  @Override // from ExactScalarQInterface
+  public boolean isExactScalar() {
+    return true;
+  }
+
   @Override // from Comparable
   public int compareTo(Scalar scalar) {
     if (scalar instanceof DurationScalar) {
@@ -133,9 +139,9 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
   public Scalar sign() {
     if (duration.isZero())
       return RealScalar.ZERO;
-    if (duration.isNegative())
-      return RealScalar.ONE.negate();
-    return RealScalar.ONE;
+    return duration.isNegative() //
+        ? RealScalar.ONE.negate()
+        : RealScalar.ONE;
   }
 
   @Override // from Object

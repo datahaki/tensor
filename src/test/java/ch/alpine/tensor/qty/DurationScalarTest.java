@@ -69,7 +69,7 @@ public class DurationScalarTest extends TestCase {
     DurationScalar ds = DurationScalar.of(Duration.ofSeconds(245234, 123_236_987));
     String string = ds.toString();
     assertEquals(string, "PT68H7M14.123236987S");
-    Scalar scalar = DateTimeScalars.fromString(string);
+    Scalar scalar = TemporalScalars.fromString(string);
     assertEquals(scalar, ds);
   }
 
@@ -77,7 +77,7 @@ public class DurationScalarTest extends TestCase {
     DurationScalar ds = DurationScalar.of(Duration.ofSeconds(245234, 123_236_987).negated());
     String string = ds.toString();
     assertEquals(string, "PT-68H-7M-14.123236987S");
-    Scalar scalar = DateTimeScalars.fromString(string);
+    Scalar scalar = TemporalScalars.fromString(string);
     assertEquals(scalar, ds);
   }
 

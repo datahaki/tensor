@@ -11,6 +11,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.api.ExactScalarQInterface;
 
 /** EXPERIMENTAL
  * 
@@ -20,7 +21,8 @@ import ch.alpine.tensor.TensorRuntimeException;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-public class DateTimeScalar extends AbstractScalar implements Comparable<Scalar>, Serializable {
+public class DateTimeScalar extends AbstractScalar implements ExactScalarQInterface, //
+    Comparable<Scalar>, Serializable {
   /** @param localDateTime
    * @return
    * @throws Exception if given localDateTime is null */
@@ -41,6 +43,11 @@ public class DateTimeScalar extends AbstractScalar implements Comparable<Scalar>
       DateTimeScalar dateTimeScalar = (DateTimeScalar) tensor;
       return new DurationScalar(Duration.between(dateTimeScalar.localDateTime, localDateTime));
     }
+    if (tensor instanceof DurationScalar) {
+      DurationScalar durationScalar = (DurationScalar) tensor;
+      // return durationScalar.negate().add(this); // <- alternative
+      return new DateTimeScalar(localDateTime.minus(durationScalar.duration()));
+    }
     throw TensorRuntimeException.of(this, tensor);
   }
 
@@ -48,7 +55,7 @@ public class DateTimeScalar extends AbstractScalar implements Comparable<Scalar>
   public Scalar multiply(Scalar scalar) {
     if (scalar.equals(one()))
       return this;
-    throw new UnsupportedOperationException();
+    throw TensorRuntimeException.of(this, scalar);
   }
 
   @Override // from Scalar
@@ -82,7 +89,12 @@ public class DateTimeScalar extends AbstractScalar implements Comparable<Scalar>
       DurationScalar durationScalar = (DurationScalar) scalar;
       return new DateTimeScalar(localDateTime.plus(durationScalar.duration()));
     }
-    throw new UnsupportedOperationException();
+    throw TensorRuntimeException.of(this, scalar);
+  }
+
+  @Override // from ExactScalarQInterface
+  public boolean isExactScalar() {
+    return true;
   }
 
   @Override // from Comparable

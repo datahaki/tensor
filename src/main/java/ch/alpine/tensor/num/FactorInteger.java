@@ -14,7 +14,7 @@ import java.util.TreeMap;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FactorInteger.html">FactorInteger</a> */
-public class FactorInteger {
+/* package */ class FactorInteger {
   private static final Random RANDOM = new SecureRandom();
 
   /** @param n non-negative

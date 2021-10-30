@@ -64,7 +64,7 @@ public class DateTimeScalarTest extends TestCase {
     DateTimeScalar dts = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30, 3, 125_239_876));
     String string = dts.toString();
     assertEquals(string, "2020-12-20T04:30:03.125239876");
-    Scalar scalar = DateTimeScalars.fromString(string);
+    Scalar scalar = TemporalScalars.fromString(string);
     assertEquals(scalar, dts);
   }
 

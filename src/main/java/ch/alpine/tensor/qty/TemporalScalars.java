@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 
-public enum DateTimeScalars {
+public enum TemporalScalars {
   ;
   public static Scalar fromString(String string) {
     try {
