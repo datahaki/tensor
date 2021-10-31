@@ -5,7 +5,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.num.Derive;
 import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Abs;
 
@@ -14,7 +13,7 @@ import ch.alpine.tensor.sca.Abs;
   public static NewtonScalarMethod polynomial(Tensor coeffs) {
     return new NewtonScalarMethod( //
         Polynomial.of(coeffs), //
-        Polynomial.of(Derive.of(coeffs)));
+        Polynomial.derivative(coeffs));
   }
 
   // ---

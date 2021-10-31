@@ -13,6 +13,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.api.ScalarBinaryOperator;
 import ch.alpine.tensor.ext.Integers;
 
 /** Entrywise applies a BinaryOperator<Scalar> across multiple tensors.
@@ -40,17 +41,16 @@ import ch.alpine.tensor.ext.Integers;
  * Entrywise.with(Scalar::multiply).of(Tensors.of(a, b, c)) == a.pmul(b).pmul(c)
  * </pre> */
 public class Entrywise implements BinaryOperator<Tensor>, Serializable {
-  /** @param binaryOperator non-null
+  /** @param scalarBinaryOperator non-null
    * @return
    * @throws Exception if given binaryOperator is null */
-  public static Entrywise with(BinaryOperator<Scalar> binaryOperator) {
-    return new Entrywise(Objects.requireNonNull(binaryOperator));
+  public static Entrywise with(ScalarBinaryOperator scalarBinaryOperator) {
+    return new Entrywise(Objects.requireNonNull(scalarBinaryOperator));
   }
 
-  @SuppressWarnings("unchecked")
-  private static final Entrywise MIN = with((BinaryOperator<Scalar> & Serializable) (x, y) -> Min.of(x, y));
-  @SuppressWarnings("unchecked")
-  private static final Entrywise MAX = with((BinaryOperator<Scalar> & Serializable) (x, y) -> Max.of(x, y));
+  // shorthand Min::of does not result in serializable operator, due to template arguments
+  private static final Entrywise MIN = with((a, b) -> Min.of(a, b));
+  private static final Entrywise MAX = with((a, b) -> Max.of(a, b));
 
   /** @return entrywise minimum operator */
   public static Entrywise min() {
@@ -63,16 +63,16 @@ public class Entrywise implements BinaryOperator<Tensor>, Serializable {
   }
 
   // ---
-  private final BinaryOperator<Scalar> binaryOperator;
+  private final ScalarBinaryOperator scalarBinaryOperator;
 
-  private Entrywise(BinaryOperator<Scalar> binaryOperator) {
-    this.binaryOperator = binaryOperator;
+  private Entrywise(ScalarBinaryOperator scalarBinaryOperator) {
+    this.scalarBinaryOperator = scalarBinaryOperator;
   }
 
   @Override // from BinaryOperator
   public Tensor apply(Tensor a, Tensor b) {
     if (a instanceof Scalar)
-      return binaryOperator.apply((Scalar) a, (Scalar) b);
+      return scalarBinaryOperator.apply((Scalar) a, (Scalar) b);
     Integers.requireEquals(a.length(), b.length());
     Iterator<Tensor> ia = a.iterator();
     Iterator<Tensor> ib = b.iterator();

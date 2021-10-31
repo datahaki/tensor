@@ -58,6 +58,6 @@ import ch.alpine.tensor.sca.Ceiling;
     large = ImageFormat.from(bufferedImage);
     int split = large.length() / 3;
     large = Join.of(1, large.extract(0, split), large.extract(split, 2 * split), large.extract(2 * split, 3 * split));
-    Export.of(HomeDirectory.Pictures(ColorDataLists.class.getSimpleName() + ".png"), large);
+    Export.of(HomeDirectory.Pictures(ColorDataLists.class.getSimpleName().toLowerCase() + ".png"), large);
   }
 }

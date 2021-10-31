@@ -61,7 +61,7 @@ import ch.alpine.tensor.io.ImageFormat;
     Tensor top = image.extract(0, half);
     Tensor bot = image.extract(half, image.length());
     Tensor res = Join.of(1, top, bot);
-    File file = HomeDirectory.Pictures(ColorDataGradients.class.getSimpleName() + ".png");
+    File file = HomeDirectory.Pictures(ColorDataGradients.class.getSimpleName().toLowerCase() + ".png");
     Export.of(file, res);
   }
 }

@@ -1,12 +1,10 @@
 // code by jph
 package ch.alpine.tensor.usr;
 
-import java.util.function.BinaryOperator;
-
-import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.api.ScalarBinaryOperator;
 import ch.alpine.tensor.sca.Clip;
 
-public interface BivariateEvaluation extends BinaryOperator<Scalar> {
+/* package */ interface BivariateEvaluation extends ScalarBinaryOperator {
   Clip clipX();
 
   Clip clipY();
