@@ -58,9 +58,8 @@ public class BernoulliDistributionTest extends TestCase {
   public void testNumber() {
     Distribution distribution = BernoulliDistribution.of(0.5);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    double half = 0.5;
-    assertEquals(inverseCDF.quantile(RealScalar.of(half)), RealScalar.ONE);
-    assertEquals(inverseCDF.quantile(RealScalar.of(Math.nextDown(half))), RealScalar.ZERO);
+    assertEquals(inverseCDF.quantile(RealScalar.of(0.50)), RealScalar.ZERO);
+    assertEquals(inverseCDF.quantile(RealScalar.of(0.51)), RealScalar.ONE);
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
   }

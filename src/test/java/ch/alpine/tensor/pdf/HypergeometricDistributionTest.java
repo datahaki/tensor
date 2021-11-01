@@ -1,9 +1,13 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.usr.AssertFail;
@@ -73,5 +77,35 @@ public class HypergeometricDistributionTest extends TestCase {
   public void testToString() {
     Distribution distribution = HypergeometricDistribution.of(10, 50, 100);
     assertEquals(distribution.toString(), "HypergeometricDistribution[10, 50, 100]");
+  }
+
+  public void testCDFMathematica() {
+    int n = 5;
+    Distribution distribution = HypergeometricDistribution.of(10, 50, 100);
+    CDF cdf = CDF.of(distribution);
+    Tensor actual = Range.of(0, n + 1).map(cdf::p_lessEquals);
+    Tensor expect = Tensors.fromString( //
+        "{1763/2970916, 23263/2970916, 68069/1485458, 236069/1485458, 6051259/16340038, 10288779/16340038}");
+    assertEquals(actual, expect);
+  }
+
+  public void testInverseCDFMathematica() {
+    Distribution distribution = HypergeometricDistribution.of(10, 50, 100);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Scalar actual = inverseCDF.quantile(RationalScalar.of(23263, 2970916));
+    Scalar expect = RealScalar.ONE;
+    assertEquals(actual, expect);
+  }
+
+  public void testCDFInverseCDF() {
+    int n = 10;
+    Distribution distribution = HypergeometricDistribution.of(10, 50, 100);
+    CDF cdf = CDF.of(distribution);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    for (Tensor _x : Range.of(0, n + 1)) {
+      Scalar x = (Scalar) _x;
+      Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
+      assertEquals(x, q);
+    }
   }
 }

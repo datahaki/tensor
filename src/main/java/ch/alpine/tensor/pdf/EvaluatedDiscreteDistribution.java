@@ -24,7 +24,6 @@ import ch.alpine.tensor.sca.Sign;
  * @see PoissonDistribution
  * @see PascalDistribution */
 public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDistribution implements Serializable {
-  private static final Scalar _0 = DoubleScalar.of(0);
   private static final Scalar _1 = DoubleScalar.of(1);
   // ---
   /** inverse cdf maps from probability to integers and is built during random sampling generation.
@@ -54,7 +53,7 @@ public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDist
    * @param chop */
   protected final void inverse_cdf_build(Chop chop) {
     int upperBound = lowerBound();
-    Scalar cumprob = _0;
+    Scalar cumprob = RealScalar.ZERO;
     while (true) {
       Scalar prob = p_equals(upperBound);
       if (Scalars.nonZero(prob)) {
@@ -69,9 +68,7 @@ public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDist
 
   @Override // from InverseCDF
   public final Scalar quantile(Scalar p) {
-    return Scalars.lessThan(Sign.requirePositiveOrZero(p), RealScalar.ONE) //
-        ? inverse_cdf.higherEntry(p).getValue() // strictly higher
-        : inverse_cdf.ceilingEntry(p).getValue();
+    return inverse_cdf.ceilingEntry(Sign.requirePositiveOrZero(p)).getValue();
   }
 
   @Override // from AbstractDiscreteDistribution

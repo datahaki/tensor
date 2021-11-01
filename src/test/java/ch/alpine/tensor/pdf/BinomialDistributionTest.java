@@ -9,6 +9,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
@@ -134,7 +135,37 @@ public class BinomialDistributionTest extends TestCase {
     assertEquals(x0, RealScalar.ZERO);
     assertEquals(x1, RealScalar.of(67));
     assertEquals(x2, RealScalar.of(71));
-    assertEquals(x3, RealScalar.of(99));
+    assertEquals(x3, RealScalar.of(98));
+  }
+
+  public void testCDFMathematica() {
+    int n = 5;
+    Distribution distribution = BinomialDistribution.of(n, RationalScalar.of(1, 4));
+    CDF cdf = CDF.of(distribution);
+    Tensor actual = Range.of(0, n + 1).map(cdf::p_lessEquals);
+    Tensor expect = Tensors.fromString("{243/1024, 81/128, 459/512, 63/64, 1023/1024, 1}");
+    assertEquals(actual, expect);
+  }
+
+  public void testInverseCDFMathematica() {
+    int n = 5;
+    Distribution distribution = BinomialDistribution.of(n, RationalScalar.of(1, 4));
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Scalar actual = inverseCDF.quantile(RationalScalar.of(81, 128));
+    Scalar expect = RealScalar.ONE;
+    assertEquals(actual, expect);
+  }
+
+  public void testCDFInverseCDF() {
+    int n = 20;
+    Distribution distribution = BinomialDistribution.of(n, RationalScalar.of(1, 4));
+    CDF cdf = CDF.of(distribution);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    for (Tensor _x : Range.of(0, n + 1)) {
+      Scalar x = (Scalar) _x;
+      Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
+      assertEquals(x, q);
+    }
   }
 
   public void testInverseCDF2() {

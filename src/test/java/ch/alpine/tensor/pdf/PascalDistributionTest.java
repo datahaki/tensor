@@ -7,6 +7,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
@@ -74,6 +76,37 @@ public class PascalDistributionTest extends TestCase {
     assertTrue(Scalars.isZero(distribution.p_equals(3)));
     assertTrue(Scalars.isZero(distribution.p_equals(4)));
     assertTrue(Scalars.nonZero(distribution.p_equals(5)));
+  }
+
+  public void testCDFMathematica() {
+    int n = 5;
+    PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
+    CDF cdf = CDF.of(distribution);
+    Tensor actual = Range.of(0, 10 + 1).map(cdf::p_lessEquals);
+    Tensor expect = Tensors.fromString("{0, 0, 0, 0, 0, 1/1024, 19/4096, 211/16384, 1789/65536, 6413/131072, 40961/524288}");
+    assertEquals(actual, expect);
+  }
+
+  public void testInverseCDFMathematica() {
+    int n = 5;
+    PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Scalar actual = inverseCDF.quantile(RationalScalar.of(19, 4096));
+    Scalar expect = RealScalar.of(6);
+    assertEquals(actual, expect);
+  }
+
+  public void testCDFInverseCDF() {
+    int n = 5;
+    PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
+    CDF cdf = CDF.of(distribution);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    for (Tensor _x : Range.of(n, n + 30)) {
+      Scalar x = (Scalar) _x;
+      Scalar p = cdf.p_lessEquals(x);
+      Scalar q = inverseCDF.quantile(p);
+      assertEquals(x, q);
+    }
   }
 
   public void testFailN() {
