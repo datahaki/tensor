@@ -16,14 +16,14 @@ import ch.alpine.tensor.sca.win.WindowFunctions;
  * @see WindowFunctions */
 public class PeriodogramArray implements TensorUnaryOperator {
   /** @param vector of length of power of 2
-   * @return */
+   * @return squared magnitude of the discrete Fourier transform (power spectrum) of given vector */
   public static Tensor of(Tensor vector) {
     return Fourier.of(vector).map(AbsSquared.FUNCTION);
   }
 
   /** @param vector of length of power of 2
    * @param windowLength positive
-   * @return */
+   * @return averages the power spectra of non-overlapping partitions of given windowLength */
   public static Tensor of(Tensor vector, int windowLength) {
     return of(windowLength, windowLength).apply(vector);
   }

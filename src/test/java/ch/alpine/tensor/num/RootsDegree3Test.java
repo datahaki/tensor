@@ -8,6 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
 import junit.framework.TestCase;
@@ -42,6 +43,27 @@ public class RootsDegree3Test extends TestCase {
     assertTrue(rootz.stream().anyMatch(root -> Chop._07.isClose(root, cR)));
     assertTrue(rootz.stream().anyMatch(root -> Chop._07.isClose(root, cP)));
     assertTrue(rootz.stream().anyMatch(root -> Chop._07.isClose(root, cN)));
+  }
+
+  public void testOrdering1() {
+    Tensor coeffs = Tensors.vector(4, 5, 0, 1);
+    Tensor actual = Roots.of(coeffs);
+    Tensor expect = Tensors.fromString("{-0.72407555138628, 0.36203777569313966-2.322329445424682*I, 0.36203777569314005+2.322329445424681*I}");
+    Tolerance.CHOP.requireClose(actual, expect);
+  }
+
+  public void testOrdering2() {
+    Tensor coeffs = Tensors.vector(-4, 5, 0, 1);
+    Tensor actual = Roots.of(coeffs);
+    Tensor expect = Tensors.fromString("{-0.3620377756931403-2.3223294454246814*I, -0.3620377756931403+2.3223294454246814*I, 0.7240755513862799}");
+    Tolerance.CHOP.requireClose(actual, expect);
+  }
+
+  public void testOrdering3() {
+    Tensor coeffs = Tensors.vector(-4, -5, 0, 1);
+    Tensor actual = Roots.of(coeffs);
+    Tensor expect = Tensors.fromString("{-1.5615528128088303, -1, 2.56155281280883}");
+    Tolerance.CHOP.requireClose(actual, expect);
   }
 
   public void testRoots3() {

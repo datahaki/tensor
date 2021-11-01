@@ -15,8 +15,7 @@ import ch.alpine.tensor.sca.Sqrt;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/MaxwellDistribution.html">MaxwellDistribution</a> */
-public class MaxwellDistribution implements //
-    Distribution, CDF, PDF, MeanInterface, VarianceInterface, Serializable {
+public class MaxwellDistribution implements Distribution, CDF, PDF, MeanInterface, VarianceInterface, Serializable {
   private static final Scalar VAR = RealScalar.of(3).subtract(RealScalar.of(8).divide(Pi.VALUE));
   private static final Scalar SQRT_2 = Sqrt.FUNCTION.apply(RealScalar.TWO);
   private static final Scalar SQRT_PI_2 = Sqrt.FUNCTION.apply(Pi.HALF);

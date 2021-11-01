@@ -1,12 +1,16 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import java.util.Comparator;
+
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Last;
-import ch.alpine.tensor.alg.Sort;
+import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Real;
 
 /** Not entirely consistent with Mathematica for the case
  * Mathematica::Roots[a == 0, x] == false
@@ -33,9 +37,9 @@ public enum Roots {
   public static Tensor of(Tensor coeffs) {
     Tensor roots = unsorted(coeffs);
     try {
-      return Sort.of(roots);
+      return Tensor.of(roots.stream().map(Scalar.class::cast).sorted(ComplexComparator.INSTANCE));
     } catch (Exception exception) {
-      // TODO create comparator that also handles complex roots
+      // ---
     }
     return roots;
   }
@@ -64,6 +68,18 @@ public enum Roots {
       return RootsDegree3.of(coeffs);
     default:
       throw TensorRuntimeException.of(coeffs);
+    }
+  }
+
+  /* package */ static enum ComplexComparator implements Comparator<Scalar> {
+    INSTANCE;
+
+    @Override // from Comparator
+    public int compare(Scalar scalar1, Scalar scalar2) {
+      int cmp = Scalars.compare(Real.of(scalar1), Real.of(scalar2));
+      return cmp == 0 //
+          ? Scalars.compare(Imag.of(scalar1), Imag.of(scalar2))
+          : cmp;
     }
   }
 }

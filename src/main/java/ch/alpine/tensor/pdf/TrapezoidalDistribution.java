@@ -28,7 +28,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
    * @param b
    * @param c
    * @param d
-   * @return
+   * @return distribution with support in the interval [a, d]
    * @throws Exception unless a <= b <= c <= d and a < d */
   public static Distribution of(Scalar a, Scalar b, Scalar c, Scalar d) {
     if (Scalars.lessThan(c, b) || Scalars.lessEquals(d, a))
@@ -40,7 +40,8 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
    * @param b
    * @param c
    * @param d
-   * @return Exception unless a <= b <= c <= d and a < d */
+   * @return distribution with support in the interval [a, d]
+   * @throws Exception unless a <= b <= c <= d and a < d */
   public static Distribution of(Number a, Number b, Number c, Number d) {
     return of(RealScalar.of(a), RealScalar.of(b), RealScalar.of(c), RealScalar.of(d));
   }
@@ -66,6 +67,11 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     this.alpha = alpha_inv.reciprocal();
     yB = p_lessThan(b);
     yC = p_lessThan(c);
+  }
+
+  /** @return support of distribution */
+  public Clip support() {
+    return Clips.interval(a, d);
   }
 
   @Override // from CDF

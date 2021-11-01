@@ -29,6 +29,8 @@ import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sin;
 import ch.alpine.tensor.sca.Sinh;
 
+/** @implSpec
+ * This class is immutable and thread-safe. */
 /* package */ class ComplexScalarImpl extends AbstractScalar implements ComplexScalar, //
     ChopInterface, ExactScalarQInterface, MachineNumberQInterface, NInterface, Serializable {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);

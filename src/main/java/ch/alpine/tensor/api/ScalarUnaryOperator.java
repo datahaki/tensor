@@ -6,7 +6,7 @@ import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.Scalar;
 
-/** serializable interface for functions that map a {@link Scalar} to another {@link Scalar} */
+/** interface for serializable functions that map a {@link Scalar} to another {@link Scalar} */
 @FunctionalInterface
 public interface ScalarUnaryOperator extends UnaryOperator<Scalar>, Serializable {
   // ---

@@ -53,6 +53,14 @@ public class StrictColorDataIndexedTest extends TestCase {
     Serialization.copy(colorDataIndexed.deriveWithAlpha(128));
   }
 
+  public void testColors() {
+    ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(Color.BLUE, Color.RED, Color.BLACK);
+    assertEquals(colorDataIndexed.getColor(0), Color.BLUE);
+    assertEquals(colorDataIndexed.getColor(1), Color.RED);
+    assertEquals(colorDataIndexed.getColor(2), Color.BLACK);
+    AssertFail.of(() -> colorDataIndexed.getColor(3));
+  }
+
   public void testFailCreate() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}}");
     AssertFail.of(() -> StrictColorDataIndexed.of(tensor));

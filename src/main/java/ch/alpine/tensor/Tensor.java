@@ -133,7 +133,7 @@ public interface Tensor extends Iterable<Tensor> {
    * @param j in the range 0, 1, ..., get(i).length() - 1
    * @return (Scalar) get(i, j)
    * @throws Exception when either parameter is out of range, in particular, when this
-   * instance is a {@link Scalar}. */
+   * instance is a {@link Scalar}, or a vector. */
   Scalar Get(int i, int j);
 
   /** set copy of tensor as element at location this[index[0], index[1], ...].

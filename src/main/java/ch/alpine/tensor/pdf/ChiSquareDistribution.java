@@ -43,7 +43,7 @@ public class ChiSquareDistribution implements ContinuousDistribution, Serializab
     log = Log.FUNCTION.apply(RealScalar.TWO).multiply(nu2).add(LogGamma.FUNCTION.apply(nu2));
   }
 
-  @Override
+  @Override // from PDF
   public Scalar at(Scalar x) {
     if (Scalars.lessThan(RealScalar.ZERO, x))
       return Exp.FUNCTION.apply(log.add(x.multiply(RationalScalar.HALF)).negate()) //
@@ -51,27 +51,27 @@ public class ChiSquareDistribution implements ContinuousDistribution, Serializab
     return RealScalar.ZERO;
   }
 
-  @Override
+  @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from CDF
   public Scalar p_lessEquals(Scalar x) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from RandomVariateInterface
   public Scalar randomVariate(Random random) {
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from MeanInterface
   public Scalar mean() {
     return nu;
   }
@@ -81,7 +81,7 @@ public class ChiSquareDistribution implements ContinuousDistribution, Serializab
     return nu.add(nu);
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return String.format("%s[%s]", getClass().getSimpleName(), nu);
   }

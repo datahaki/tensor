@@ -17,34 +17,37 @@ import ch.alpine.tensor.api.NInterface;
  * 
  * a RationalScalar represents an integer fraction, for instance 17/42, or -6/1.
  * 
- * zero().reciprocal() throws a {@link ArithmeticException}. */
+ * zero().reciprocal() throws a {@link ArithmeticException}.
+ * 
+ * @implSpec
+ * This class is immutable and thread-safe. */
 public final class RationalScalar extends AbstractRealScalar implements //
     ExactScalarQInterface, NInterface, Serializable {
   /** rational number {@code 1/2} with decimal value {@code 0.5} */
   public static final Scalar HALF = of(1, 2);
 
-  /** @param num
-   * @param den
+  /** @param num numerator
+   * @param den denominator
    * @return scalar encoding the exact fraction num / den */
   public static Scalar of(BigInteger num, BigInteger den) {
     return new RationalScalar(BigFraction.of(num, den));
   }
 
-  /** @param num
-   * @param den
+  /** @param num numerator
+   * @param den denominator
    * @return scalar encoding the exact fraction num / den */
   public static Scalar of(long num, long den) {
     return new RationalScalar(BigFraction.of(num, den));
   }
 
-  /** @param num
-   * @return */
+  /** @param num numerator
+   * @return scalar encoding the exact fraction num / 1 */
   /* package */ static Scalar integer(long num) {
     return new RationalScalar(BigFraction.integer(num));
   }
 
-  /** @param num
-   * @return */
+  /** @param num numerator
+   * @return scalar encoding the exact fraction num / 1 */
   /* package */ static Scalar integer(BigInteger num) {
     return new RationalScalar(BigFraction.integer(num));
   }

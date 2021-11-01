@@ -10,11 +10,18 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
 import junit.framework.TestCase;
 
 public class RootsDegree3FullTest extends TestCase {
+  private static void check(Tensor roots, Tensor depres) {
+    Integers.requireEquals(roots.length(), depres.length());
+    for (Tensor root : roots)
+      assertTrue(depres.stream().anyMatch(s -> Chop._10.isClose(root, s)));
+  }
+
   public void testCubic() {
     Tensor coeffs = Tensors.vector(2, 3, 4, 5);
     Tensor roots = Roots.of(coeffs);
@@ -22,7 +29,7 @@ public class RootsDegree3FullTest extends TestCase {
     Tensor tensor = roots.map(scalarUnaryOperator);
     Chop._13.requireAllZero(tensor);
     Tensor depres = RootsDegree3.of(coeffs);
-    Chop._10.requireClose(depres, roots);
+    check(roots, depres);
   }
 
   public void testMonomial() {
@@ -77,7 +84,7 @@ public class RootsDegree3FullTest extends TestCase {
     Tensor tensor = roots.map(scalarUnaryOperator);
     Chop._13.requireAllZero(tensor);
     Tensor depres = RootsDegree3.of(coeffs);
-    Chop._10.requireClose(depres, roots);
+    check(roots, depres);
   }
 
   public void testCubicNumerics() {
@@ -87,11 +94,7 @@ public class RootsDegree3FullTest extends TestCase {
     Tensor tensor = roots.map(scalarUnaryOperator);
     Chop._05.requireAllZero(tensor);
     Tensor depres = RootsDegree3.of(coeffs);
-    if (!Chop._10.isClose(depres, roots)) {
-      System.out.println(depres);
-      System.out.println(roots);
-      fail();
-    }
+    check(roots, depres);
   }
 
   public void testCubicChallenge() {

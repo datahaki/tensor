@@ -130,17 +130,17 @@ public abstract class AbstractScalar implements Scalar {
   }
 
   @Override // from Scalar
-  public final Scalar subtract(Tensor tensor) {
-    return add(tensor.negate());
-  }
-
-  @Override // from Scalar
   public final Tensor map(Function<Scalar, ? extends Tensor> function) {
     return function.apply(this).copy();
   }
 
   // ---
   // non-final default implementations; override for precision or speed
+  @Override // from Scalar
+  public Scalar subtract(Tensor tensor) {
+    return add(tensor.negate());
+  }
+
   @Override // from Scalar
   public Scalar divide(Scalar scalar) {
     return multiply(scalar.reciprocal());

@@ -30,7 +30,9 @@ public class UniformDistributionTest extends TestCase {
   }
 
   public void testPdf() {
-    PDF pdf = PDF.of(UniformDistribution.of(RealScalar.ONE, RealScalar.of(3)));
+    UniformDistribution distribution = (UniformDistribution) UniformDistribution.of(1, 3);
+    assertEquals(distribution.support(), Clips.interval(1, 3));
+    PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(pdf.at(RealScalar.of(1)), RationalScalar.HALF);
     assertEquals(pdf.at(RealScalar.of(2)), RationalScalar.HALF);

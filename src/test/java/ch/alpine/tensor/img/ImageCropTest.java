@@ -28,7 +28,7 @@ public class ImageCropTest extends TestCase {
 
   public void testColor() throws ClassNotFoundException, IOException {
     Tensor image = Tensors.fromString("{{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}");
-    image = ArrayPlot.of(image, ColorDataGradients.CLASSIC);
+    image = Raster.of(image, ColorDataGradients.CLASSIC);
     TensorUnaryOperator tensorUnaryOperator = Serialization.copy(ImageCrop.color(image.get(0, 0)));
     Tensor result = tensorUnaryOperator.apply(image);
     assertEquals(result, Tensors.fromString("{{{255, 237, 237, 255}}}"));

@@ -1,7 +1,8 @@
-// code by jph and gjoel
+// code by jph, gjoel
 package ch.alpine.tensor.pdf;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 import ch.alpine.tensor.ExactScalarQ;
@@ -11,6 +12,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Clip;
@@ -23,11 +25,11 @@ public class HistogramDistributionTest extends TestCase {
     Distribution distribution = //
         HistogramDistribution.of(Tensors.vector(-3, -3, -2, -2, 10), RealScalar.of(2));
     PDF pdf = PDF.of(distribution);
-    assertEquals(pdf.at(RealScalar.of(-3)), RationalScalar.of(2, 5));
-    assertEquals(pdf.at(RealScalar.of(-4)), RationalScalar.of(2, 5));
+    assertEquals(pdf.at(RealScalar.of(-3)), RationalScalar.of(1, 5));
+    assertEquals(pdf.at(RealScalar.of(-4)), RationalScalar.of(1, 5));
     assertEquals(pdf.at(RealScalar.of(-4.1)), RealScalar.ZERO);
     assertEquals(pdf.at(RealScalar.ZERO), RealScalar.ZERO);
-    assertEquals(pdf.at(RealScalar.of(11)), RationalScalar.of(1, 5));
+    assertEquals(pdf.at(RealScalar.of(11)), RationalScalar.of(1, 10));
     Clip c1 = Clips.interval(-4, 0);
     Clip c2 = Clips.interval(10, 12);
     Set<Scalar> set = new HashSet<>();
@@ -63,13 +65,14 @@ public class HistogramDistributionTest extends TestCase {
 
   public void testQuantity() {
     Tensor vector = QuantityTensor.of(Tensors.vector(1, 1.7, 2, 3, 3.9, 4, 4.1), "m");
+    Scalar width = Quantity.of(0.7, "m");
     Distribution distribution = //
-        HistogramDistribution.of(vector, Quantity.of(0.7, "m"));
+        HistogramDistribution.of(vector, width);
     assertTrue(RandomVariate.of(distribution) instanceof Quantity);
     PDF pdf = PDF.of(distribution);
-    assertEquals(pdf.at(Quantity.of(0, "m")), RealScalar.ZERO);
-    assertEquals(pdf.at(Quantity.of(1.2, "m")), RationalScalar.of(1, 7));
-    assertEquals(pdf.at(Quantity.of(4.15, "m")), RationalScalar.of(3, 7));
+    assertEquals(pdf.at(Quantity.of(0, "m")), RealScalar.ZERO.divide(width));
+    assertEquals(pdf.at(Quantity.of(1.2, "m")), RationalScalar.of(1, 7).divide(width));
+    assertEquals(pdf.at(Quantity.of(4.15, "m")), RationalScalar.of(3, 7).divide(width));
     Clip clip = Clips.interval(Quantity.of(0.7, "m"), Quantity.of(4.2, "m"));
     Set<Scalar> set = new HashSet<>();
     for (int count = 0; count < 100; ++count) {
@@ -141,11 +144,20 @@ public class HistogramDistributionTest extends TestCase {
   }
 
   public void testQuantityCDF() {
-    Tensor vector = QuantityTensor.of(Tensors.vector(1, 2, 3), "m");
-    Distribution distribution = HistogramDistribution.of(vector, Quantity.of(2, "m"));
+    Random random = new Random(3);
+    Tensor samples = QuantityTensor.of(RandomVariate.of(UniformDistribution.of(100, 120), random, 100), "kg");
+    HistogramDistribution distribution = (HistogramDistribution) HistogramDistribution.of(samples, Quantity.of(2, "kg"));
+    Clip clip = distribution.support();
+    assertEquals(clip, Clips.interval(Quantity.of(100, "kg"), Quantity.of(120, "kg")));
     CDF cdf = CDF.of(distribution);
-    assertEquals(cdf.p_lessEquals(Quantity.of(2, "m")), RationalScalar.of(1, 3));
-    assertEquals(cdf.p_lessEquals(Quantity.of(3, "m")), RationalScalar.of(2, 3));
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Distribution ud = UniformDistribution.of(clip);
+    for (int count = 0; count < 10; ++count) {
+      Scalar x = RandomVariate.of(ud);
+      Scalar p = cdf.p_lessEquals(x);
+      Scalar q = inverseCDF.quantile(p);
+      Tolerance.CHOP.requireClose(x, q);
+    }
   }
 
   public void testInverseCDF() {
@@ -199,6 +211,22 @@ public class HistogramDistributionTest extends TestCase {
     Distribution distribution = HistogramDistribution.of(vector, Quantity.of(2, "m"));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertEquals(inverseCDF.quantile(RealScalar.ONE), Quantity.of(4, "m"));
+  }
+
+  public void testCDFInverseCDF() {
+    Tensor samples = QuantityTensor.of(Tensors.vector(-6, -3.5, -1.3, 1, 2, 0, 3, 0, 3, 0), "m");
+    HistogramDistribution distribution = (HistogramDistribution) HistogramDistribution.of(samples, Quantity.of(2, "m"));
+    Clip clip = distribution.support();
+    assertEquals(distribution.support(), Clips.interval(Quantity.of(-6, "m"), Quantity.of(4, "m")));
+    CDF cdf = CDF.of(distribution);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Distribution ud = UniformDistribution.of(clip);
+    for (int count = 0; count < 10; ++count) {
+      Scalar x = RandomVariate.of(ud);
+      Scalar p = cdf.p_lessEquals(x);
+      Scalar q = inverseCDF.quantile(p);
+      Tolerance.CHOP.requireClose(x, q);
+    }
   }
 
   public void testFailEmpty() {

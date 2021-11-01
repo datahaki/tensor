@@ -11,10 +11,13 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -148,6 +151,34 @@ public class TrapezoidalDistributionTest extends TestCase {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
+  }
+
+  public void testCDFInverseCDF() {
+    TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of( //
+        Quantity.of(1, "m"), Quantity.of(5, "m"), Quantity.of(7, "m"), Quantity.of(11, "m"));
+    Clip clip = Clips.interval(Quantity.of(1, "m"), Quantity.of(11, "m"));
+    assertEquals(distribution.support(), clip);
+    CDF cdf = CDF.of(distribution);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    for (int count = 0; count < 10; ++count) {
+      Scalar x = RandomVariate.of(distribution);
+      Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
+      Tolerance.CHOP.requireClose(x, q);
+    }
+  }
+
+  public void testCDFInverseCDF2() {
+    TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of( //
+        Quantity.of(1, "m"), Quantity.of(5, "m"), Quantity.of(5, "m"), Quantity.of(11, "m"));
+    Clip clip = Clips.interval(Quantity.of(1, "m"), Quantity.of(11, "m"));
+    assertEquals(distribution.support(), clip);
+    CDF cdf = CDF.of(distribution);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    for (int count = 0; count < 10; ++count) {
+      Scalar x = RandomVariate.of(distribution);
+      Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
+      Tolerance.CHOP.requireClose(x, q);
+    }
   }
 
   public void testExactFail() {

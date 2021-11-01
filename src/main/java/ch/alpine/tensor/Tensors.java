@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Numel;
+import ch.alpine.tensor.io.StringScalar;
 
 /** utility class that provides constructors of tensors for convenience.
  * 
@@ -36,7 +37,7 @@ public enum Tensors {
     return new TensorImpl(new ArrayList<>(initialCapacity));
   }
 
-  /** @param tensors
+  /** @param tensors array
    * @return concatenation of copies of given {@link Tensor}s or {@link Scalar}s */
   public static Tensor of(Tensor... tensors) {
     return Tensor.of(Stream.of(tensors).map(Tensor::copy));
@@ -44,13 +45,18 @@ public enum Tensors {
 
   /** Hint: function does not check scalar arguments for null
    * 
-   * @param scalars
+   * @param scalars array
    * @return vector of references to given {@link Scalar}s */
   public static Tensor of(Scalar... scalars) {
     return Tensor.of(Stream.of(scalars));
   }
 
-  /** @param numbers
+  /** Example:
+   * <pre>
+   * Tensors.vector(24, 0, -5, 1.23, 9f)
+   * </pre>
+   * 
+   * @param numbers array
    * @return vector of numbers as {@link RealScalar}s */
   public static Tensor vector(Number... numbers) {
     return Tensor.of(Stream.of(numbers).map(RealScalar::of));
@@ -141,16 +147,21 @@ public enum Tensors {
   /** Example:
    * Tensors.fromString("{1+3/2*I, {3.7[m*s], 9/4[kg^-1]}}");
    * 
+   * Remark:
+   * If the string does not have consistent brackets,
+   * the returned tensor is instance of {@link StringScalar}.
+   * 
    * @param string
-   * @return
-   * @throws Exception if given string is null */
+   * @return tensor parsed from given string
+   * @throws Exception if given string is null
+   * @see StringScalar */
   public static Tensor fromString(String string) {
     return TensorParser.of(string, Scalars::fromString);
   }
 
   /** @param string
    * @param function that parses a string to a scalar
-   * @return
+   * @return tensor parsed from given string
    * @throws Exception if given string is null */
   public static Tensor fromString(String string, Function<String, Scalar> function) {
     return TensorParser.of(string, function);

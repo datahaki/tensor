@@ -79,7 +79,7 @@ public class EmpiricalDistributionTest extends TestCase {
     EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
     assertEquals(distribution.quantile(RealScalar.of(0)), RealScalar.of(2));
     assertEquals(distribution.quantile(RealScalar.of(Math.nextDown(0.5))), RealScalar.of(2));
-    assertEquals(distribution.quantile(RationalScalar.of(1, 2)), RealScalar.of(4));
+    assertEquals(distribution.quantile(RationalScalar.of(1, 2)), RealScalar.of(2));
     assertEquals(distribution.quantile(RealScalar.of(Math.nextDown(1.0))), RealScalar.of(4));
   }
 

@@ -37,6 +37,8 @@ import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sin;
 import ch.alpine.tensor.sca.Sqrt;
 
+/** @implSpec
+ * This class is immutable and thread-safe. */
 /* package */ class QuaternionImpl extends AbstractScalar implements Quaternion, //
     ChopInterface, ExactScalarQInterface, NInterface, Serializable {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);

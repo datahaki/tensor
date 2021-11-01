@@ -18,10 +18,13 @@ import ch.alpine.tensor.ext.MergeIllegal;
 
 /** immutable
  * 
- * all instances of UnitImpl are managed in a LRU cache */
+ * all instances of UnitImpl are managed in a {@link Cache}
+ * 
+ * @implSpec
+ * This class is immutable and thread-safe. */
 /* package */ class UnitImpl implements Unit, Serializable {
-  // TODO make NEGATION private at next major release (breaks serialization!)
-  public static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> NEGATION = //
+  private static final long serialVersionUID = -4163267919248734106L;
+  private static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> NEGATION = //
       Collectors.toMap(Entry::getKey, entry -> entry.getValue().negate(), MergeIllegal.operator(), TreeMap::new);
   private static final int MAX_SIZE = 1536;
   private static final Function<NavigableMap<String, Scalar>, Unit> CACHE = //

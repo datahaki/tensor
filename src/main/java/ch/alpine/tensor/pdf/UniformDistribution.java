@@ -58,6 +58,11 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
     this.clip = clip;
   }
 
+  /** @return support of distribution */
+  public Clip support() {
+    return clip;
+  }
+
   @Override // from MeanInterface
   public Scalar mean() {
     return protected_quantile(RationalScalar.HALF);

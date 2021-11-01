@@ -7,6 +7,7 @@ import java.util.Collections;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Differences;
@@ -15,6 +16,7 @@ import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
@@ -51,6 +53,17 @@ public class EqualizingDistributionTest extends TestCase {
     ExactTensorQ.require(uniform);
     assertEquals(Tally.of(uniform), Collections.singletonMap(RationalScalar.of(33, 10), 10L));
     assertTrue(distribution.toString().startsWith("EqualizingDistribution"));
+  }
+
+  public void testCDFInverseCDF() {
+    Distribution distribution = EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, 6, 10, 20, 0, 22, 30, 0));
+    CDF cdf = CDF.of(distribution);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    for (int count = 0; count < 10; ++count) {
+      Scalar x = RandomVariate.of(distribution);
+      Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
+      Tolerance.CHOP.requireClose(x, q);
+    }
   }
 
   public void testNegativeFail() {

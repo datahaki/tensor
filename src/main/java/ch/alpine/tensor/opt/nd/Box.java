@@ -3,6 +3,7 @@ package ch.alpine.tensor.opt.nd;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -38,6 +39,10 @@ public class Box implements Serializable {
     return new Box(IntStream.range(0, Integers.requireEquals(min.length(), max.length())) //
         .mapToObj(index -> Clips.interval(min.Get(index), max.Get(index))) //
         .collect(Collectors.toList()));
+  }
+
+  public static Box of(Clip... clips) {
+    return new Box(Arrays.stream(clips).collect(Collectors.toList()));
   }
 
   // ---

@@ -34,7 +34,7 @@ import ch.alpine.tensor.qty.Quantity;
 public enum NumberQ {
   ;
   /** @param scalar
-   * @return */
+   * @return whether scalar satisfies the NumberQ predicate */
   public static boolean of(Scalar scalar) {
     if (scalar instanceof ComplexScalar) {
       ComplexScalar complexScalar = (ComplexScalar) scalar;
@@ -57,7 +57,7 @@ public enum NumberQ {
   }
 
   /** @param tensor
-   * @return true if all scalar entries in given tensor satisfy the predicate {@link NumberQ#of(Tensor)} */
+   * @return whether all scalar entries in given tensor satisfy the predicate {@link NumberQ#of(Tensor)} */
   public static boolean all(Tensor tensor) {
     return tensor.flatten(-1).map(Scalar.class::cast).allMatch(NumberQ::of);
   }

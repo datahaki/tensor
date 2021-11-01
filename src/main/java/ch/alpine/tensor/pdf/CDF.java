@@ -13,6 +13,10 @@ import ch.alpine.tensor.Scalar;
  * is beneficial for computational efficiency and numerical robustness.
  * Examples: {@link DiscreteUniformDistribution}, and {@link GeometricDistribution}.
  * 
+ * Remark:
+ * For discrete distributions
+ * Mathematica::CDF[distribution, x] == distribution.p_lessEquals(x)
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/CDF.html">CDF</a> */
 public interface CDF {

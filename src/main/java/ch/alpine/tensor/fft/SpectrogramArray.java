@@ -5,21 +5,24 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.PadRight;
 import ch.alpine.tensor.alg.Partition;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sqrt;
 import ch.alpine.tensor.sca.win.DirichletWindow;
+import ch.alpine.tensor.sca.win.HannWindow;
 import ch.alpine.tensor.sca.win.WindowFunctions;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/SpectrogramArray.html">SpectrogramArray</a>
  * 
  * @see WindowFunctions */
-// TODO API so that domain of frequencies is also provided
 public class SpectrogramArray implements TensorUnaryOperator {
   private static final ScalarUnaryOperator LOG2 = Log.base(2);
 
@@ -27,9 +30,15 @@ public class SpectrogramArray implements TensorUnaryOperator {
    * @param window for instance {@link DirichletWindow#FUNCTION}
    * @return */
   public static Tensor of(Tensor vector, ScalarUnaryOperator window) {
-    int num = Round.intValueExact(LOG2.apply(Sqrt.FUNCTION.apply(RealScalar.of(vector.length()))));
-    int windowLength = 1 << (num + 1);
+    int windowLength = default_windowLength(vector.length());
     return of(windowLength, default_offset(windowLength), window).apply(vector);
+  }
+
+  /** @param vector_length
+   * @return power of 2 */
+  private static int default_windowLength(int vector_length) {
+    int num = Round.intValueExact(LOG2.apply(Sqrt.FUNCTION.apply(RealScalar.of(vector_length))));
+    return 1 << (num + 1);
   }
 
   /** Mathematica default
@@ -39,6 +48,16 @@ public class SpectrogramArray implements TensorUnaryOperator {
    * @throws Exception if input is not a vector */
   public static Tensor of(Tensor vector) {
     return of(vector, DirichletWindow.FUNCTION);
+  }
+
+  /** @param vector
+   * @param window for instance {@link HannWindow#FUNCTION}
+   * @return truncated and transposed spectrogram array for visualization
+   * @throws Exception if input is not a vector */
+  public static Tensor half_abs(Tensor vector, ScalarUnaryOperator window) {
+    Tensor tensor = of(vector, window);
+    int half = Unprotect.dimension1Hint(tensor) / 2;
+    return Tensors.vector(i -> tensor.get(Tensor.ALL, half - i - 1).map(Abs.FUNCTION), half);
   }
 
   // helper function

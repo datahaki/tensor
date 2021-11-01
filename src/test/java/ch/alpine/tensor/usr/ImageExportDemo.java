@@ -10,8 +10,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.HomeDirectory;
-import ch.alpine.tensor.img.ArrayPlot;
 import ch.alpine.tensor.img.ColorDataGradients;
+import ch.alpine.tensor.img.Raster;
 import ch.alpine.tensor.io.Export;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.num.GaussScalar;
@@ -35,7 +35,7 @@ import ch.alpine.tensor.num.GaussScalar;
     GaussScalar.of(i + 14 * j + i * i + i * j * 3, n), n, n);
     UnaryOperator<Scalar> asd = s -> RealScalar.of(s.number());
     matrix.map(asd);
-    Tensor image = ArrayPlot.of(matrix.map(asd), ColorDataGradients.AURORA);
+    Tensor image = Raster.of(matrix.map(asd), ColorDataGradients.AURORA);
     Export.of(HomeDirectory.Pictures("image3.png"), image);
   }
 

@@ -1,4 +1,4 @@
-// code by jph and gjoel
+// code by jph, gjoel
 package ch.alpine.tensor.pdf;
 
 import java.io.Serializable;
@@ -14,6 +14,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Min;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
@@ -41,12 +42,13 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
    * 
    * @param samples vector
    * @param width of bins over which to assume uniform distribution, i.e. constant PDF
-   * @return */
+   * @return
+   * @throws Exception if width is zero or negative */
   public static Distribution of(Tensor samples, Scalar width) {
     return new HistogramDistribution(samples, width);
   }
 
-  /** @param samples
+  /** @param samples vector
    * @param binningMethod
    * @return histogram distribution with bin width computed from given binning method */
   public static Distribution of(Tensor samples, BinningMethod binningMethod) {
@@ -54,7 +56,7 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
   }
 
   /** @param samples
-   * @return histogram distribution with bin width computed from freedman-diaconis rule */
+   * @return histogram distribution with bin width computed from Freedman-Diaconis rule */
   public static Distribution of(Tensor samples) {
     return of(samples, BinningMethod.IQR);
   }
@@ -65,20 +67,28 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
   private final EmpiricalDistribution empiricalDistribution;
   private final Scalar width;
   private final Scalar width_half;
+  private final Clip clip;
 
   private HistogramDistribution(Tensor samples, Scalar width) {
     Scalar min = Floor.toMultipleOf(width).apply((Scalar) samples.stream().reduce(Min::of).orElseThrow());
     discrete = scalar -> scalar.subtract(min).divide(width);
     original = scalar -> scalar.multiply(width).add(min);
+    Tensor unscaledPDF = BinCounts.of(samples.map(discrete));
     empiricalDistribution = //
-        (EmpiricalDistribution) EmpiricalDistribution.fromUnscaledPDF(BinCounts.of(samples.map(discrete)));
+        (EmpiricalDistribution) EmpiricalDistribution.fromUnscaledPDF(unscaledPDF);
     this.width = width;
     width_half = width.multiply(RationalScalar.HALF);
+    clip = Clips.interval(min, min.add(width.multiply(RealScalar.of(unscaledPDF.length()))));
+  }
+
+  /** @return support of distribution */
+  public Clip support() {
+    return clip;
   }
 
   @Override // from PDF
   public Scalar at(Scalar x) {
-    return empiricalDistribution.at(Floor.FUNCTION.apply(discrete.apply(x)));
+    return empiricalDistribution.at(Floor.FUNCTION.apply(discrete.apply(x))).divide(width);
   }
 
   @Override // from MeanInterface

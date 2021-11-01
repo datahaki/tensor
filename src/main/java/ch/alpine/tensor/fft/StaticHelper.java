@@ -3,12 +3,12 @@ package ch.alpine.tensor.fft;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.red.Total;
+import ch.alpine.tensor.sca.Clips;
 
 /* package */ enum StaticHelper {
   ;
@@ -26,7 +26,8 @@ import ch.alpine.tensor.red.Total;
   /** @param length
    * @return vector of given length */
   public static Tensor samples(int length) {
-    Scalar scalar = RationalScalar.HALF.add(RationalScalar.of(-1, 2 * length));
-    return Subdivide.of(scalar.negate(), scalar, length - 1);
+    return Subdivide.increasing( //
+        Clips.absolute(RationalScalar.HALF.add(RationalScalar.of(-1, 2 * length))), //
+        length - 1);
   }
 }

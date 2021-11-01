@@ -2,7 +2,7 @@
 
 # ch.alpine.tensor
 
-Library for tensor computations in Java 11, version `0.9.7`. (The last version that supports Java 8 is `0.9.4`.)
+Library for tensor computations in Java 11, version `0.9.8`. (The last version that supports Java 8 is `0.9.4`.)
 
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions
@@ -249,25 +249,34 @@ System.out.println(matrix.get(Tensor.ALL, 3)); // extraction of the 4th column
 {0, 0, 5}
 ```
 
+### Optimization
+
+Distance-based queries for point sets in Euclidean space
+
+<table>
+<tr>
+<td>
+
+![image](https://user-images.githubusercontent.com/4012178/138601155-8324ff52-6de5-41ee-bd5e-726653404b6b.png)
+
+k-nearest neighbors
+
+<td>
+
+![image](https://user-images.githubusercontent.com/4012178/138601071-1ebde233-fea9-43a9-9c15-6d38438fc28e.png)
+
+radius search
+
+</tr>
+</table>
+
 ### Visualization
 
-Image functions: `ArrayPlot`, `Spectrogram`
+Predefined color gradients
 
-```java
-Tensor data = Cos.of(Subdivide.of(0, 100, 2000).map(Series.of(Tensors.vector(0, 5, 1))));
-Tensor image = Spectrogram.of(data, ColorDataGradients.VISIBLESPECTRUM);
-Export.of(HomeDirectory.file("spectrogram.png"), ImageResize.nearest(image, 4));
-```
+![ColorDataGradients](https://user-images.githubusercontent.com/4012178/139557217-4465558d-8d42-4df1-a408-48347354012a.png)
 
-gives the image
-
-![spectrogram](https://user-images.githubusercontent.com/4012178/62372991-1d3fe200-b539-11e9-8d3c-490ddb835ab0.png)
-
-##### Predefined color gradients
-
-![colordatagradients](https://user-images.githubusercontent.com/4012178/42363743-fb28d35e-80f8-11e8-9b34-41652073304d.png)
-
-##### Predefined color lists
+Predefined color lists
 
 ![colordatalists](https://user-images.githubusercontent.com/4012178/42363765-095692fe-80f9-11e8-8376-3e1364937536.png)
 
@@ -291,7 +300,7 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
   <dependency>
     <groupId>ch.alpine</groupId>
     <artifactId>tensor</artifactId>
-    <version>0.9.7</version>
+    <version>0.9.8</version>
   </dependency>
 </dependencies>
 ```

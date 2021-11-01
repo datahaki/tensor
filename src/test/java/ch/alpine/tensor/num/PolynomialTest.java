@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import ch.alpine.tensor.ExactScalarQ;
+import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RandomQuaternion;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -115,5 +116,29 @@ public class PolynomialTest extends TestCase {
 
   public void testMatrixFail() {
     AssertFail.of(() -> Polynomial.of(HilbertMatrix.of(3)));
+  }
+
+  public void testDerivativeSimple() {
+    Tensor coeffs = Tensors.vector(-3, 4, -5, 8, 1);
+    Tensor result = Polynomial.derivative_coeffs(coeffs);
+    ExactTensorQ.require(result);
+    assertEquals(result, Tensors.vector(4, -5 * 2, 8 * 3, 1 * 4));
+  }
+
+  public void testDerivativeEmpty() {
+    assertEquals(Polynomial.derivative_coeffs(Tensors.vector()), Tensors.vector());
+    assertEquals(Polynomial.derivative_coeffs(Tensors.vector(3)), Tensors.empty());
+  }
+
+  public void testDerivativeScalarFail() {
+    AssertFail.of(() -> Polynomial.derivative_coeffs(RealScalar.ONE));
+  }
+
+  public void testDerivativeMatrixFail() {
+    AssertFail.of(() -> Polynomial.derivative_coeffs(HilbertMatrix.of(4, 5)));
+  }
+
+  public void testUnstructuredFail() {
+    AssertFail.of(() -> Polynomial.derivative_coeffs(Tensors.fromString("{2, {1}}")));
   }
 }

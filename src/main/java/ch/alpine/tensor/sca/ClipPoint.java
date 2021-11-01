@@ -4,7 +4,10 @@ package ch.alpine.tensor.sca;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 
-/** clip to a single point */
+/** clip to a single point
+ * 
+ * @implSpec
+ * This class is immutable and thread-safe. */
 /* package */ class ClipPoint extends ClipInterval {
   public ClipPoint(Scalar value, Scalar width) {
     super(value, value, width);

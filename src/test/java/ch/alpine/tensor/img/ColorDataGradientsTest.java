@@ -3,6 +3,7 @@ package ch.alpine.tensor.img;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
@@ -12,8 +13,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
@@ -60,10 +61,26 @@ public class ColorDataGradientsTest extends TestCase {
   }
 
   public void testStrict() {
+    int count = 0;
     for (ColorDataGradients colorDataGradients : ColorDataGradients.values()) {
-      Tensor tensor = ResourceData.of("/colorscheme/" + colorDataGradients.name().toLowerCase() + ".csv");
-      LinearColorDataGradient.of(tensor);
+      Tensor tableRgba = colorDataGradients.getTableRgba();
+      if (Objects.nonNull(tableRgba)) {
+        LinearColorDataGradient.of(tableRgba);
+        ++count;
+      }
     }
+    assertTrue(28 < count);
+  }
+
+  public void testSunset() {
+    Tensor t1 = Reverse.of(ColorDataGradients.SUNSET.getTableRgba());
+    Tensor t2 = ColorDataGradients.SUNSET_REVERSED.getTableRgba();
+    assertEquals(t1, t2);
+  }
+
+  public void testGrayscaleTable() {
+    assertTrue(Objects.isNull(ColorDataGradients.HUE.getTableRgba()));
+    assertTrue(Objects.isNull(ColorDataGradients.GRAYSCALE.getTableRgba()));
   }
 
   public void testFail() {

@@ -12,12 +12,15 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.sca.win.BlackmanHarrisWindow;
+import ch.alpine.tensor.sca.win.HammingWindow;
 import ch.alpine.tensor.sca.win.HannWindow;
 import ch.alpine.tensor.sca.win.NuttallWindow;
 import ch.alpine.tensor.sca.win.TukeyWindow;
@@ -48,9 +51,13 @@ public class SpectrogramArrayTest extends TestCase {
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(d -> Quantity.of(d, "m")));
     Tensor array = SpectrogramArray.of(tensor);
-    Tensor array2 = array.map(QuantityMagnitude.SI().in("km"));
+    ScalarUnaryOperator suo = QuantityMagnitude.SI().in("km");
+    Tensor array2 = array.map(suo);
     int windowLength = Unprotect.dimension1(array2);
     assertEquals(windowLength, 32);
+    Tensor matrix = SpectrogramArray.half_abs(tensor, HannWindow.FUNCTION);
+    MatrixQ.require(matrix);
+    matrix.map(suo);
   }
 
   public void testStaticOps() {
@@ -94,6 +101,10 @@ public class SpectrogramArrayTest extends TestCase {
 
   public void testFailOffset() {
     AssertFail.of(() -> SpectrogramArray.of(4, 0));
+  }
+
+  public void testNullFail() {
+    AssertFail.of(() -> SpectrogramArray.half_abs(null, HammingWindow.FUNCTION));
   }
 
   public void testDimensionsFail() {

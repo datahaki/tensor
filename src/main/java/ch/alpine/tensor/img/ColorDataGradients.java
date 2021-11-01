@@ -5,9 +5,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.io.ResourceData;
 
-/** the functions provided in the list below can be used in {@link ArrayPlot}.
- * 
- * <p>To obtain a single color value use
+/** To obtain a single color value use
  * <pre>
  * Color color = ColorFormat.toColor(ColorDataGradients.THERMOMETER.apply(RealScalar.of(0.78)));
  * </pre>
@@ -34,6 +32,9 @@ public enum ColorDataGradients implements ColorDataGradient {
   HSLUV,
   /** black, violet, red, orange, yellow, white */
   SUNSET,
+  /** approximate default color scheme for Spectrogram
+   * white , yellow, orange, red, violet, black, */
+  SUNSET_REVERSED,
   /** [0, 1] corresponds to wavelengths [380, 750] */
   VISIBLESPECTRUM,
   /** blue, cyan, yellow, red
@@ -67,6 +68,8 @@ public enum ColorDataGradients implements ColorDataGradient {
   GRAYSCALE(GrayscaleColorData.DEFAULT),
   /** black, blue-gray, white */
   BONE,
+  /** purple, blue, white */
+  DEEPSEA, //
   /** black, brown, orange */
   COPPER,
   /** black, green, yellow */
@@ -97,8 +100,7 @@ public enum ColorDataGradients implements ColorDataGradient {
   }
 
   private ColorDataGradients() {
-    colorDataGradient = //
-        new LinearColorDataGradient(ResourceData.of("/colorscheme/" + name().toLowerCase() + ".csv"));
+    colorDataGradient = new LinearColorDataGradient(getTableRgba());
   }
 
   @Override // from ColorDataGradient
@@ -109,5 +111,11 @@ public enum ColorDataGradients implements ColorDataGradient {
   @Override // from ColorDataGradient
   public ColorDataGradient deriveWithOpacity(Scalar opacity) {
     return colorDataGradient.deriveWithOpacity(opacity);
+  }
+
+  /** @return n x 4 table with entries between 0 and 255, or null
+   * if this color data gradient is not backed by such a table */
+  public Tensor getTableRgba() {
+    return ResourceData.of("/colorscheme/" + name().toLowerCase() + ".csv");
   }
 }

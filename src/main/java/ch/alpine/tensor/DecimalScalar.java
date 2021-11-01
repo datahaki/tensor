@@ -28,6 +28,9 @@ import ch.alpine.tensor.sca.N;
  * [precision] denotes how many digits from left to right are correct.
  * The pattern is consistent with Mathematica.
  * 
+ * @implSpec
+ * This class is immutable and thread-safe.
+ * 
  * @see N
  * @see Pi */
 public class DecimalScalar extends AbstractRealScalar implements //

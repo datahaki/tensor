@@ -2,11 +2,14 @@
 package ch.alpine.tensor.pdf;
 
 import ch.alpine.tensor.ExactScalarQ;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Quantile;
@@ -70,6 +73,37 @@ public class PoissonDistributionTest extends TestCase {
     assertTrue(Scalars.lessThan(x1, x2));
   }
 
+  public void testCDFMathematica() {
+    int n = 5;
+    Distribution distribution = PoissonDistribution.of(RationalScalar.of(1, 4));
+    CDF cdf = CDF.of(distribution);
+    Tensor actual = Range.of(0, n + 1).map(cdf::p_lessEquals);
+    Tensor expect = Tensors
+        .fromString("{0.7788007830714049`, 0.9735009788392561`, 0.9978385033102375`, 0.999866630349486`, 0.999993388289439`, 0.9999997261864366`}");
+    Tolerance.CHOP.requireClose(actual, expect);
+  }
+
+  public void testInverseCDFMathematica() {
+    Distribution distribution = PoissonDistribution.of(RationalScalar.of(1, 4));
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    Scalar actual = inverseCDF.quantile(RealScalar.of(0.9735009788392561));
+    Scalar expect = RealScalar.ONE;
+    assertEquals(actual, expect);
+  }
+
+  // public void testCDFInverseCDF() {
+  // int n = 20;
+  // Distribution distribution = BinomialDistribution.of(n, RationalScalar.of(1, 4));
+  // CDF cdf = CDF.of(distribution);
+  // InverseCDF inverseCDF = InverseCDF.of(distribution);
+  // Tensor r = Tensors.reserve(n + 1);
+  // for (Tensor _x : Range.of(0, n + 1)) {
+  // Scalar x = (Scalar) _x;
+  // Scalar p = cdf.p_lessThan(x);
+  // r.append(p);
+  // Scalar q = inverseCDF.quantile(p);
+  // }
+  // }
   public void testToString() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(5.5));
     String string = distribution.toString();

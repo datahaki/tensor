@@ -3,10 +3,18 @@ package ch.alpine.tensor.alg;
 
 import java.util.Comparator;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.lie.Quaternion;
 
-/** implementation is consistent with Mathematica::Sort
+/** on the level of tensors, the implementation is consistent with Mathematica::Sort.
+ * on the level of scalars, the implementation of the tensor library fails when the
+ * comparison of scalars is not canonic, for instance of {@link ComplexScalar}, or
+ * {@link Quaternion}.
+ * 
+ * Mathematica::Sort[{1, I}] == {I, 1}
+ * Tensor-lib.::Sort[{1, I}] -> throws an Exception
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Sort.html">Sort</a>

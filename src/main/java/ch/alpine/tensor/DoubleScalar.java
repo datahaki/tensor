@@ -38,7 +38,10 @@ import ch.alpine.tensor.sca.Chop;
  * </ul>
  * 
  * <p>Special case:
- * Scalars.fromString("-0.0") gives DoubleScalar.of(0.0) */
+ * Scalars.fromString("-0.0") gives DoubleScalar.of(0.0)
+ * 
+ * @implSpec
+ * This class is immutable and thread-safe. */
 public final class DoubleScalar extends AbstractRealScalar implements //
     ChopInterface, MachineNumberQInterface, Serializable {
   /** real scalar that encodes +Infinity. value is backed by Double.POSITIVE_INFINITY */
