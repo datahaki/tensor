@@ -24,8 +24,7 @@ import ch.alpine.tensor.sca.Sign;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FrechetDistribution.html">FrechetDistribution</a> */
-public class FrechetDistribution implements //
-    ContinuousDistribution, Serializable {
+public class FrechetDistribution implements ContinuousDistribution, Serializable {
   private static final double NEXT_DOWN_ONE = Math.nextDown(1.0);
 
   /** @param alpha positive

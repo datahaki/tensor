@@ -5,6 +5,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
@@ -67,6 +68,17 @@ public class NormalDistributionTest extends TestCase {
     Distribution distribution = NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "m"));
     String string = distribution.toString();
     assertEquals(string, "NormalDistribution[3[m], 2[m]]");
+  }
+
+  public void testCDFInverseCDF() {
+    Distribution distribution = NormalDistribution.of(3, 0.2);
+    CDF cdf = CDF.of(distribution);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    for (int count = 0; count < 10; ++count) {
+      Scalar x = RandomVariate.of(distribution);
+      Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
+      Tolerance.CHOP.requireClose(x, q);
+    }
   }
 
   public void testComplexFail() {

@@ -14,6 +14,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Min;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
@@ -66,15 +67,23 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
   private final EmpiricalDistribution empiricalDistribution;
   private final Scalar width;
   private final Scalar width_half;
+  private final Clip clip;
 
   private HistogramDistribution(Tensor samples, Scalar width) {
     Scalar min = Floor.toMultipleOf(width).apply((Scalar) samples.stream().reduce(Min::of).orElseThrow());
     discrete = scalar -> scalar.subtract(min).divide(width);
     original = scalar -> scalar.multiply(width).add(min);
+    Tensor unscaledPDF = BinCounts.of(samples.map(discrete));
     empiricalDistribution = //
-        (EmpiricalDistribution) EmpiricalDistribution.fromUnscaledPDF(BinCounts.of(samples.map(discrete)));
+        (EmpiricalDistribution) EmpiricalDistribution.fromUnscaledPDF(unscaledPDF);
     this.width = width;
     width_half = width.multiply(RationalScalar.HALF);
+    clip = Clips.interval(min, min.add(width.multiply(RealScalar.of(unscaledPDF.length()))));
+  }
+
+  /** @return support of distribution */
+  public Clip support() {
+    return clip;
   }
 
   @Override // from PDF

@@ -61,6 +61,17 @@ public class LogNormalDistributionTest extends TestCase {
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
+  public void testCDFInverseCDF() {
+    Distribution distribution = LogNormalDistribution.of(3, 0.2);
+    CDF cdf = CDF.of(distribution);
+    InverseCDF inverseCDF = InverseCDF.of(distribution);
+    for (int count = 0; count < 10; ++count) {
+      Scalar x = RandomVariate.of(distribution);
+      Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
+      Tolerance.CHOP.requireClose(x, q);
+    }
+  }
+
   public void testSigmaNonPositiveFail() {
     AssertFail.of(() -> LogNormalDistribution.of(RationalScalar.HALF, RealScalar.ZERO));
     AssertFail.of(() -> LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(-2, 3)));
