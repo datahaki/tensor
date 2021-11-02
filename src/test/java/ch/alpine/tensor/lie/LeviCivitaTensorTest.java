@@ -1,15 +1,23 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
+import java.util.Collections;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Numel;
 import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class LeviCivitaTensorTest extends TestCase {
+  // former non-sparse implementation
+  private static Tensor full(int d) {
+    return Array.of(list -> Signature.of(Tensors.vector(list)), Collections.nCopies(d, d));
+  }
+
   public void testRank0() {
     Tensor tensor = LeviCivitaTensor.of(0);
     assertEquals(tensor, RealScalar.ONE);
@@ -35,6 +43,8 @@ public class LeviCivitaTensorTest extends TestCase {
       Tensor tensor = LeviCivitaTensor.of(n);
       assertEquals(tensor, TensorWedge.of(tensor));
       assertEquals(Numel.of(tensor), Power.of(n, n).number().intValue());
+      Tensor sparse = full(n);
+      assertEquals(tensor, sparse);
     }
   }
 

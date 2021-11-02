@@ -76,7 +76,7 @@ public class Permutations {
         Tensor key = Tensor.of(Stream.concat( //
             post.stream().limit(index), //
             post.stream().skip(index + 1)));
-        if (set.add(Sort.of(key)))
+        if (set.add(Sort.of(key))) // TODO the use of sort here is unfortunate
           recur(Append.of(ante, post.get(index)), key);
       }
     }

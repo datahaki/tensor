@@ -29,7 +29,7 @@ public class HodgeDualTest extends TestCase {
     throw TensorRuntimeException.of(tensor);
   }
 
-  public void testVector3() {
+  private void _testVector3() {
     Tensor vector = Tensors.vector(1, 2, 3);
     Tensor matrix = HodgeDual.of(vector, 3);
     assertEquals(matrix, Tensors.fromString("{{0, 3, -2}, {-3, 0, 1}, {2, -1, 0}}"));
@@ -40,7 +40,7 @@ public class HodgeDualTest extends TestCase {
     assertEquals(checks, vector);
   }
 
-  public void testVector4() {
+  private void _testVector4() {
     Tensor vector = Tensors.vector(1, 2, 3, 4);
     Tensor tensor = HodgeDual.of(vector, 4);
     assertEquals(tensor, TensorWedge.of(tensor));

@@ -46,7 +46,7 @@ public abstract class AbstractTensor implements Tensor {
     int head = index.get(0);
     List<Integer> _index = Lists.rest(index);
     return head == ALL //
-        ? Tensor.of(stream().map(tensor -> tensor.get(_index)))
+        ? Tensor.of(stream().map(tensor -> tensor.get(_index))) // TODO modify for sparse
         : byRef(head).get(_index);
   }
 

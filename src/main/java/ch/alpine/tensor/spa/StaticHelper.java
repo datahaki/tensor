@@ -13,7 +13,7 @@ import ch.alpine.tensor.alg.Array;
   /** @param fallback
    * @param size
    * @param tensor
-   * @return instance of {@link SparseArray} equals to tensor */
+   * @return {@link SparseArray} of given fallback and size equals to tensor */
   public static Tensor of(Scalar fallback, List<Integer> size, Tensor tensor) {
     Tensor sparseArray = SparseArray.of(fallback, size.stream().mapToInt(i -> i).toArray());
     Array.forEach(list -> {

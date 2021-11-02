@@ -14,7 +14,10 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.lie.TensorWedge;
+import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.EmpiricalDistribution;
@@ -73,6 +76,16 @@ public class SparseArraysTest extends TestCase {
     assertEquals(SparseArray.of(GaussScalar.of(0, 7)), GaussScalar.of(0, 7));
     AssertFail.of(() -> SparseArray.of(RealScalar.ZERO, 2, -3));
     AssertFail.of(() -> SparseArray.of(RealScalar.ONE, 2, 3));
+  }
+
+  public void testPMulFullSparse() {
+    Tensor tensor = HilbertMatrix.of(3).pmul(LeviCivitaTensor.of(3));
+    tensor.toString();
+  }
+
+  public void testPMulSparseFull() {
+    Tensor tensor = IdentityMatrix.sparse(3).pmul(HilbertMatrix.of(3));
+    tensor.toString();
   }
 
   private final Distribution distribution = EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(10, 1, 0, 1, 1));

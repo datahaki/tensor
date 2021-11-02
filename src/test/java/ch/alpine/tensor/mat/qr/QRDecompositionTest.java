@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.qr;
 
 import java.io.IOException;
+import java.util.Random;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -113,9 +114,10 @@ public class QRDecompositionTest extends TestCase {
   }
 
   public void testRandomRealSquare() {
+    Random random = new Random(3);
     Distribution distribution = NormalDistribution.standard();
     for (int d = 1; d <= 10; ++d)
-      _specialOps(RandomVariate.of(distribution, d, d));
+      _specialOps(RandomVariate.of(distribution, random, d, d));
   }
 
   public void testDiag() {

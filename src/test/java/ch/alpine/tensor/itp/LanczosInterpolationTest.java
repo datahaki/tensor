@@ -33,9 +33,9 @@ public class LanczosInterpolationTest extends TestCase {
   }
 
   public void testGetEmpty() {
-    Interpolation interpolation = LanczosInterpolation.of(LeviCivitaTensor.of(3).unmodifiable());
+    Interpolation interpolation = LanczosInterpolation.of(LeviCivitaTensor.of(3));
     Tensor tensor = interpolation.get(Tensors.empty());
-    tensor.set(t -> t.append(RealScalar.ONE), Tensor.ALL);
+    AssertFail.of(() -> tensor.set(t -> t.append(RealScalar.ONE), Tensor.ALL));
   }
 
   public void testImage() {

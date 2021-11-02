@@ -9,11 +9,15 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.io.Primitives;
+import ch.alpine.tensor.lie.LeviCivitaTensor;
+import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.ExponentialDistribution;
 import ch.alpine.tensor.pdf.NegativeBinomialDistribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.spa.Normal;
 import junit.framework.TestCase;
 
 public class TransposeTest extends TestCase {
@@ -123,6 +127,17 @@ public class TransposeTest extends TestCase {
     Tensor randn = RandomVariate.of(NormalDistribution.standard(), 2, 5, 4, 3);
     Tensor array = Transpose.of(randn, 0);
     assertEquals(Transpose.of(randn, 0, 1, 2, 3), array);
+  }
+
+  public void testMix() {
+    Tensor b0 = Tensors.fromString("{{0, 0, 1}, {0, 0, 0}, {0, 0, 0}}");
+    Tensor b1 = Tensors.fromString("{{0, 0, 0}, {0, 0, 1}, {0, 0, 0}}");
+    Tensor b2 = LeviCivitaTensor.of(3).get(2).negate();
+    Tensor basis = Tensors.of(b0, b1, b2);
+    Tensor _full = Normal.of(basis);
+    Permutations.stream(Range.of(0, 3)) //
+        .map(Primitives::toIntArray) //
+        .forEach(p -> assertEquals(Transpose.of(basis, p), Transpose.of(_full, p)));
   }
 
   public void testNonArray() {

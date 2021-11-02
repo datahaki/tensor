@@ -16,6 +16,8 @@ import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.Pretty;
+import ch.alpine.tensor.lie.LeviCivitaTensor;
+import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.SquareMatrixQ;
@@ -283,6 +285,12 @@ public class SparseArrayTest extends TestCase {
     sparse.set(Array.zeros(5), 2);
     AssertFail.of(() -> sparse.set(Array.zeros(5, 2), 2));
     AssertFail.of(() -> sparse.set(Tensors.fromString("{1,2,{3},4,5}"), 2));
+  }
+
+  public void testDotFull() {
+    Tensor tensor = LeviCivitaTensor.of(3).dot(HilbertMatrix.of(3));
+    tensor.toString();
+    assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3, 3));
   }
 
   public void testKeyCollision() {

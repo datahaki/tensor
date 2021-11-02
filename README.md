@@ -2,7 +2,7 @@
 
 # ch.alpine.tensor
 
-Library for tensor computations in Java 11, version `0.9.8`. (The last version that supports Java 8 is `0.9.4`.)
+Library for tensor computations in Java 11, version `0.9.9`. (The last version that supports Java 8 is `0.9.4`.)
 
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions
@@ -300,7 +300,7 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
   <dependency>
     <groupId>ch.alpine</groupId>
     <artifactId>tensor</artifactId>
-    <version>0.9.8</version>
+    <version>0.9.9</version>
   </dependency>
 </dependencies>
 ```

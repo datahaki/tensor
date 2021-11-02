@@ -10,7 +10,7 @@ import ch.alpine.tensor.alg.Dimensions;
 public enum SparseArrays {
   ;
   /** @param tensor with array structure
-   * @return
+   * @return sparse array
    * @throws Exception if given tensor does not have array structure */
   public static Tensor of(Tensor tensor) {
     Dimensions dimensions = new Dimensions(tensor);
