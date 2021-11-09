@@ -5,7 +5,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -43,7 +42,7 @@ public class FactorialTest extends TestCase {
     Scalar result = Tensors.vector(2, 3, 4, 3).stream() //
         .map(Scalar.class::cast) //
         .map(Factorial.FUNCTION) //
-        .reduce(Times::of).get();
+        .reduce(Scalar::multiply).orElseThrow();
     assertEquals(result, RealScalar.of(1728));
   }
 

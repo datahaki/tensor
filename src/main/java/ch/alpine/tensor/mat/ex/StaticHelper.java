@@ -10,7 +10,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.ev.Eigensystem;
-import ch.alpine.tensor.red.Pmul;
+import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Log;
@@ -41,6 +41,6 @@ import ch.alpine.tensor.sca.Log;
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix, chop);
     Tensor values = eigensystem.values().map(scalarUnaryOperator);
     Tensor vectors = eigensystem.vectors();
-    return Transpose.of(vectors).dot(Pmul.of(values, vectors));
+    return Transpose.of(vectors).dot(Times.of(values, vectors));
   }
 }

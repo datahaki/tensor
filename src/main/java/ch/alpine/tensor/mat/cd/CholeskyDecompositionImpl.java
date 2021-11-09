@@ -12,7 +12,6 @@ import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 
@@ -60,7 +59,7 @@ import ch.alpine.tensor.sca.Conjugate;
 
   @Override // from CholeskyDecomposition
   public Scalar det() {
-    return (Scalar) Times.pmul(d);
+    return d.stream().map(Scalar.class::cast).reduce(Scalar::multiply).orElseThrow();
   }
 
   @Override // from CholeskyDecomposition

@@ -15,7 +15,7 @@ import ch.alpine.tensor.mat.qr.QRSignOperators;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.mat.sv.SingularValueList;
 import ch.alpine.tensor.qty.Unit;
-import ch.alpine.tensor.red.Pmul;
+import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 
 /** least squares solution x that approximates
@@ -125,7 +125,7 @@ public enum LeastSquares {
   public static Tensor of(SingularValueDecomposition svd, Tensor b) {
     if (VectorQ.of(b)) { // when b is vector then bypass construction of pseudo inverse matrix
       Tensor wi = SingularValueList.inverted(svd, CHOP);
-      return svd.getV().dot(Pmul.of(wi, b.dot(svd.getU()))); // U^t . b == b . U
+      return svd.getV().dot(Times.of(wi, b.dot(svd.getU()))); // U^t . b == b . U
     }
     return PseudoInverse.of(svd, CHOP).dot(b);
   }

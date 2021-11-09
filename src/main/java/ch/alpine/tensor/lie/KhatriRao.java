@@ -2,7 +2,7 @@
 package ch.alpine.tensor.lie;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.red.Pmul;
+import ch.alpine.tensor.red.Times;
 
 /** Khatri-Rao matrix product
  * 
@@ -13,6 +13,6 @@ public enum KhatriRao {
    * @param b
    * @return Khatri-Rao product */
   public static Tensor of(Tensor a, Tensor b) {
-    return Tensor.of(a.stream().flatMap(row -> b.stream().map(Pmul.operator(row))));
+    return Tensor.of(a.stream().flatMap(row -> b.stream().map(Times.operator(row))));
   }
 }

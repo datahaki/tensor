@@ -2,7 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.red.Pmul;
+import ch.alpine.tensor.red.Times;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Accumulate.html">Accumulate</a> */
@@ -30,6 +30,6 @@ public enum Accumulate {
    * @param tensor
    * @return */
   public static Tensor prod(Tensor tensor) {
-    return FoldList.of(Pmul::of, tensor);
+    return FoldList.of(Times::of, tensor);
   }
 }

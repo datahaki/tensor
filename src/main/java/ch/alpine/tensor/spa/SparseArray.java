@@ -89,15 +89,17 @@ public class SparseArray extends AbstractTensor implements Serializable {
   public Tensor get(List<Integer> index) {
     if (index.isEmpty())
       return copy();
-    List<Integer> list = IntStream.range(0, size.size()) //
-        .filter(i -> index.size() <= i || index.get(i) == ALL).map(size::get) //
-        .boxed().collect(Collectors.toList());
     int head = index.get(0);
     List<Integer> _index = Lists.rest(index);
-    return head == ALL //
-        ? new SparseArray(fallback, list, navigableMap.entrySet().stream() //
-            .collect(_map(Entry::getKey, entry -> entry.getValue().get(_index)))) //
-        : byRef(head).get(_index);
+    if (head == ALL) {
+      List<Integer> list = IntStream.range(0, size.size()) //
+          .filter(i -> index.size() <= i || index.get(i) == ALL) //
+          .map(size::get) //
+          .boxed().collect(Collectors.toList());
+      return new SparseArray(fallback, list, navigableMap.entrySet().stream() //
+          .collect(_map(Entry::getKey, entry -> entry.getValue().get(_index)))); //
+    }
+    return byRef(head).get(_index);
   }
 
   @Override // from Tensor

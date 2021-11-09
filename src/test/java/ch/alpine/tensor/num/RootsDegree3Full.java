@@ -51,7 +51,7 @@ import ch.alpine.tensor.sca.Sqrt;
     Scalar b_3a = b.divide(_3a).negate();
     //
     Scalar b2 = b.multiply(b);
-    Scalar D0 = Times.of(_3a, c).subtract(b2); // wikipedia up to sign
+    Scalar D0 = _3a.multiply(c).subtract(b2); // wikipedia up to sign
     //
     Scalar b3 = b2.multiply(b);
     if (Chop._11.isZero(D)) {
@@ -59,7 +59,7 @@ import ch.alpine.tensor.sca.Sqrt;
         return Tensors.of(b_3a, b_3a, b_3a);
       Scalar dr = Times.of(_9, a, d).subtract(b.multiply(c)).divide(D0.add(D0)).negate();
       Scalar srn = Times.of(_4, a, b, c).subtract(Times.of(_3a, _3a, d)).subtract(b3);
-      Scalar srd = Times.of(a, D0.negate());
+      Scalar srd = a.multiply(D0.negate());
       return Tensors.of(dr, dr, srn.divide(srd));
     }
     //
@@ -74,7 +74,7 @@ import ch.alpine.tensor.sca.Sqrt;
         Abs.FUNCTION.apply(cp)) ? cp : cn, _1_3);
     //
     Scalar s2 = D0.divide(_3a).divide(C);
-    Scalar s3 = C.divide(Times.of(P1_3, a));
+    Scalar s3 = C.divide(P1_3.multiply(a));
     Tensor roots = Tensors.of( //
         b_3a.add(R1_2.multiply(s2)).add(_1_3.multiply(s3)), //
         b_3a.add(R2_2.multiply(s2)).add(R2_3.multiply(s3)), //

@@ -1,44 +1,74 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.api.TensorUnaryOperator;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Times.html">Times</a> */
 public enum Times {
   ;
+  private static final BinaryOperator<Tensor> BINARY_OPERATOR = Inner.with((s, t) -> t.multiply(s));
+
+  /** point-wise multiplication of two tensors.
+   * 
+   * <p>{@link Dimensions} of tensor a have to match the <em>onset</em> of dimensions of tensor b.
+   * Tensor::multiply is used on remaining entries in dimensions of tensors exceeding
+   * dimensions of tensor a.
+   * 
+   * <p>For instance,
+   * <ul>
+   * <li><code>Dimensions.of(a) = [4, 3]</code>, and
+   * <li><code>Dimensions.of(b) = [4, 3, 5, 2]</code> is feasible.
+   * </ul>
+   * 
+   * <p>Times is consistent with Mathematica, for instance
+   * <pre>
+   * {x, y} {{1, 2, 3}, {4, 5, 6}} == {{x, 2 x, 3 x}, {4 y, 5 y, 6 y}}
+   * Dimensions[Array[1 &, {2, 3}] Array[1 &, {2, 3, 4}]] == {2, 3, 4}
+   * </pre>
+   * 
+   * <p>If this is a vector, then Times is the faster equivalent to the dot product
+   * with a diagonal matrix
+   * <pre>
+   * Times[vector, tensor] == DiagonalMatrix[vector].tensor
+   * </pre>
+   * 
+   * <p>If tensor a is a scalar, then Times is equivalent to scalar multiplication
+   * <pre>
+   * Times[scalar, tensor] == tensor.multiply(scalar)
+   * </pre>
+   * 
+   * @param a
+   * @param b
+   * @return element-wise multiply tensor a and tensor b. */
+  public static Tensor of(Tensor a, Tensor b) {
+    return BINARY_OPERATOR.apply(a, b);
+  }
+
+  /** @param tensors
+   * @return */
+  public static Tensor of(Tensor... tensors) {
+    return Stream.of(tensors).reduce(BINARY_OPERATOR).orElse(RealScalar.ONE);
+  }
+
+  /** @param a
+   * @return */
+  public static TensorUnaryOperator operator(Tensor a) {
+    return v -> of(a, v);
+  }
+
   /** function computes the product of a sequence of {@link Scalar}s
    * 
    * @param scalars
    * @return product of scalars, or {@link RealScalar#ONE} if no scalars are present */
   public static Scalar of(Scalar... scalars) {
     return Stream.of(scalars).reduce(Scalar::multiply).orElse(RealScalar.ONE);
-  }
-
-  /** The return value has {@link Dimensions} of input tensor reduced by 1.
-   * 
-   * <p>For instance
-   * <pre>
-   * pmul({ 3, 4, 2 }) == 3 * 4 * 2 == 24
-   * pmul({ { 1, 2, 3 }, { 4, 5, 6 } }) == { 4, 10, 18 }
-   * </pre>
-   * 
-   * <p>For an empty list, the result is RealScalar.ONE. This is consistent with
-   * Mathematica::Times @@ {} == 1
-   * 
-   * <p>implementation is consistent with MATLAB::prod
-   * pmul([]) == 1
-   * 
-   * @param tensor
-   * @return total pointwise product of tensor entries at first level, or 1 if tensor is empty
-   * @throws TensorRuntimeException if input tensor is a scalar */
-  public static Tensor pmul(Tensor tensor) {
-    return tensor.stream().reduce(Pmul::of).orElse(RealScalar.ONE);
   }
 }

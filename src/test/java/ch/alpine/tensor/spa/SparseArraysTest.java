@@ -23,7 +23,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.EmpiricalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.red.Pmul;
+import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -48,10 +48,10 @@ public class SparseArraysTest extends TestCase {
       assertTrue(r_sub instanceof SparseArray);
     }
     {
-      Tensor r_pml = Pmul.of(sa, sb);
-      assertEquals(Pmul.of(a, b), r_pml);
-      assertEquals(Pmul.of(a, sb), r_pml);
-      assertEquals(Pmul.of(sa, b), r_pml);
+      Tensor r_pml = Times.of(sa, sb);
+      assertEquals(Times.of(a, b), r_pml);
+      assertEquals(Times.of(a, sb), r_pml);
+      assertEquals(Times.of(sa, b), r_pml);
       // assertTrue(r_pml instanceof SparseArray); // TODO !?
     }
   }
@@ -80,12 +80,12 @@ public class SparseArraysTest extends TestCase {
   }
 
   public void testPMulFullSparse() {
-    Tensor tensor = Pmul.of(HilbertMatrix.of(3), LeviCivitaTensor.of(3));
+    Tensor tensor = Times.of(HilbertMatrix.of(3), LeviCivitaTensor.of(3));
     tensor.toString();
   }
 
   public void testPMulSparseFull() {
-    Tensor tensor = Pmul.of(IdentityMatrix.sparse(3), HilbertMatrix.of(3));
+    Tensor tensor = Times.of(IdentityMatrix.sparse(3), HilbertMatrix.of(3));
     tensor.toString();
   }
 

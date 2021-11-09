@@ -86,7 +86,9 @@ public class SparseArrayTest extends TestCase {
     sparse.set(GaussScalar.of(3, 5), 0, 1, 2);
     assertEquals(sparse.get(1, Tensor.ALL, 3), ConstantArray.of(GaussScalar.of(0, 5), 4));
     AssertFail.of(() -> sparse.get(Tensor.ALL));
-    assertEquals(sparse.get(Tensor.ALL, 2), Normal.of(sparse).get(Tensor.ALL, 2));
+    Tensor result = sparse.get(Tensor.ALL, 2);
+    assertTrue(result instanceof SparseArray);
+    assertEquals(result, Normal.of(sparse).get(Tensor.ALL, 2));
     assertEquals(sparse.get(Tensor.ALL, 2, Tensor.ALL), Normal.of(sparse).get(Tensor.ALL, 2));
   }
 

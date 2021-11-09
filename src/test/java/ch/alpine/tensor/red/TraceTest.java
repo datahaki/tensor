@@ -37,7 +37,8 @@ public class TraceTest extends TestCase {
     Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}");
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tolerance.CHOP.requireClose(Trace.of(matrix), Total.of(eigensystem.values())); // 1. Viete
-    Tolerance.CHOP.requireClose(Det.of(matrix), Times.pmul(eigensystem.values())); // 3. Viete
+    Tolerance.CHOP.requireClose(Det.of(matrix), //
+        eigensystem.values().stream().map(Scalar.class::cast).reduce(Scalar::multiply).orElseThrow()); // 3. Viete
     {
       Scalar l1 = eigensystem.values().Get(0);
       Scalar l2 = eigensystem.values().Get(1);

@@ -16,6 +16,13 @@ import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class HodgeDualTest extends TestCase {
+  /** @param tensor of rank at least 1
+   * @return
+   * @throws Exception if tensor is a scalar */
+  static Tensor of(Tensor tensor) {
+    return HodgeDual.of(tensor, tensor.length());
+  }
+
   static Tensor hodgeDual_of(Tensor tensor, int d) {
     Dimensions dimensions = new Dimensions(tensor);
     if (dimensions.isArray()) {
@@ -34,7 +41,7 @@ public class HodgeDualTest extends TestCase {
     Tensor matrix = HodgeDual.of(vector, 3);
     assertEquals(matrix, Tensors.fromString("{{0, 3, -2}, {-3, 0, 1}, {2, -1, 0}}"));
     assertEquals(matrix, Cross.skew3(vector).negate());
-    assertEquals(matrix, HodgeDual.of(vector));
+    assertEquals(matrix, of(vector));
     Tensor checks = HodgeDual.of(matrix, 3);
     assertEquals(matrix, TensorWedge.of(matrix));
     assertEquals(checks, vector);
@@ -80,7 +87,7 @@ public class HodgeDualTest extends TestCase {
     for (int count = 0; count < 5; ++count) {
       Tensor matrix = RandomVariate.of(distribution, 3, 3);
       assertEquals( //
-          HodgeDual.of(matrix), //
+          of(matrix), //
           hodgeDual_of(matrix, 3));
     }
   }
@@ -108,7 +115,7 @@ public class HodgeDualTest extends TestCase {
   }
 
   public void testNegativeDimFail() {
-    AssertFail.of(() -> HodgeDual.of(RealScalar.ONE));
+    AssertFail.of(() -> of(RealScalar.ONE));
     AssertFail.of(() -> HodgeDual.of(RealScalar.ONE, -1));
   }
 }
