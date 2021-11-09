@@ -26,6 +26,7 @@ import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.mat.sv.SingularValueList;
 import ch.alpine.tensor.nrm.Vector2Norm;
+import ch.alpine.tensor.red.Pmul;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
@@ -37,11 +38,11 @@ public class JacobiMethodTest extends TestCase {
     Tensor vectors = eigensystem.vectors();
     Tensor values = eigensystem.values();
     {
-      Tensor sol = LinearSolve.of(vectors, values.pmul(vectors));
+      Tensor sol = LinearSolve.of(vectors, Pmul.of(values, vectors));
       Tolerance.CHOP.requireClose(sol, matrix);
     }
     {
-      Tensor sol = Transpose.of(vectors).dot(values.pmul(vectors));
+      Tensor sol = Transpose.of(vectors).dot(Pmul.of(values, vectors));
       Tolerance.CHOP.requireClose(sol, matrix);
     }
     Tensor Vi = Inverse.of(eigensystem.vectors());

@@ -39,6 +39,6 @@ public enum Times {
    * @return total pointwise product of tensor entries at first level, or 1 if tensor is empty
    * @throws TensorRuntimeException if input tensor is a scalar */
   public static Tensor pmul(Tensor tensor) {
-    return tensor.stream().reduce(Tensor::pmul).orElse(RealScalar.ONE);
+    return tensor.stream().reduce(Pmul::of).orElse(RealScalar.ONE);
   }
 }

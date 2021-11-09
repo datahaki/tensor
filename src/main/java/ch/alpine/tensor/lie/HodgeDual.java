@@ -4,6 +4,7 @@ package ch.alpine.tensor.lie;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.TensorRank;
 import ch.alpine.tensor.red.Nest;
+import ch.alpine.tensor.red.Pmul;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Factorial;
 
@@ -27,7 +28,7 @@ public enum HodgeDual {
    * @throws Exception if tensor is empty, or is not a regular array */
   public static Tensor of(Tensor tensor, int d) {
     int rank = TensorRank.ofArray(tensor);
-    return Nest.of(Total::of, tensor.pmul(LeviCivitaTensor.of(d)), rank).divide(Factorial.of(rank));
+    return Nest.of(Total::of, Pmul.of(tensor, LeviCivitaTensor.of(d)), rank).divide(Factorial.of(rank));
   }
 
   /** @param tensor of rank at least 1

@@ -11,6 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
+import ch.alpine.tensor.red.Pmul;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Cos;
 import ch.alpine.tensor.sca.Exp;
@@ -36,6 +37,6 @@ public enum GaborMatrix {
         .divide(factor).map(Exp.FUNCTION);
     Tensor weight = Array.of(list -> k.dot(Tensors.vector(list).add(offset)).subtract(phi), dimensions) //
         .map(Cos.FUNCTION);
-    return weight.pmul(matrix);
+    return Pmul.of(weight, matrix);
   }
 }

@@ -19,6 +19,7 @@ import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.mat.sv.SingularValueList;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.red.Pmul;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
 
@@ -141,6 +142,6 @@ public enum PseudoInverse {
    * @return pseudoinverse of matrix determined by given svd */
   public static Tensor of(SingularValueDecomposition svd, Chop chop) {
     Tensor wi = SingularValueList.inverted(svd, chop);
-    return MatrixDotTranspose.of(Tensor.of(svd.getV().stream().map(wi::pmul)), svd.getU());
+    return MatrixDotTranspose.of(Tensor.of(svd.getV().stream().map(Pmul.operator(wi))), svd.getU());
   }
 }

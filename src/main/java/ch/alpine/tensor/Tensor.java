@@ -242,39 +242,6 @@ public interface Tensor extends Iterable<Tensor> {
    * @return this minus input tensor */
   Tensor subtract(Tensor tensor);
 
-  /** point-wise multiplication of this instance with given tensor.
-   * 
-   * <p>{@link Dimensions} of <em>this</em> have to match the <em>onset</em> of dimensions of tensor.
-   * Tensor::multiply is used on remaining entries in dimensions of tensors exceeding
-   * dimensions of this.
-   * 
-   * <p>For instance,
-   * <ul>
-   * <li><code>Dimensions.of(this) = [4, 3]</code>, and
-   * <li><code>Dimensions.of(tensor) = [4, 3, 5, 2]</code> is feasible.
-   * </ul>
-   * 
-   * <p>pmul is consistent with Mathematica, for instance
-   * <pre>
-   * {a, b} {{1, 2, 3}, {4, 5, 6}} == {{a, 2 a, 3 a}, {4 b, 5 b, 6 b}}
-   * Dimensions[Array[1 &, {2, 3}] Array[1 &, {2, 3, 4}]] == {2, 3, 4}
-   * </pre>
-   * 
-   * <p>If this is a vector, then pmul is the faster equivalent to the dot product
-   * with a diagonal matrix
-   * <pre>
-   * vector.pmul(tensor) == DiagonalMatrix[vector].tensor
-   * </pre>
-   * 
-   * <p>If this is a scalar, then pmul is equivalent to scalar multiplication
-   * <pre>
-   * scalar.pmul(tensor) == tensor.multiply(scalar)
-   * </pre>
-   * 
-   * @param tensor
-   * @return this element-wise multiply input tensor. */
-  Tensor pmul(Tensor tensor);
-
   /** scalar multiplication with given factor; scaling applies to all entries
    * 
    * @param scalar

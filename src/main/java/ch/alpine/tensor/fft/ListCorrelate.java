@@ -13,6 +13,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.red.Pmul;
 
 /** The tensor library permits correlation with a kernel of lower rank than tensor.
  * This is unlike in Mathematica.
@@ -63,7 +64,7 @@ public class ListCorrelate implements TensorUnaryOperator {
         .map(index -> size.get(index) - mask.get(index) + 1) //
         .mapToObj(Integers::requirePositive) //
         .collect(Collectors.toList());
-    return Array.of(index -> kernel.pmul(tensor.block(index, mask)).flatten(level) //
+    return Array.of(index -> Pmul.of(kernel, tensor.block(index, mask)).flatten(level) //
         .reduce(Tensor::add).orElseThrow(), dimensions);
   }
 

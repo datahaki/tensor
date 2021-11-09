@@ -70,12 +70,6 @@ public abstract class AbstractScalar implements Scalar {
   }
 
   @Override // from Tensor
-  public final Tensor pmul(Tensor tensor) {
-    // Tensor::pmul delegates pointwise multiplication to Scalar::pmul
-    return tensor.multiply(this);
-  }
-
-  @Override // from Tensor
   public final void set(Tensor tensor, int... index) {
     throw TensorRuntimeException.of(this, tensor);
   }

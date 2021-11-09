@@ -7,6 +7,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.ev.Eigensystem;
+import ch.alpine.tensor.red.Pmul;
 import ch.alpine.tensor.sca.Sqrt;
 
 /** Determines the square root of a symmetric positive definite matrix.
@@ -35,11 +36,11 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from MatrixSqrt
   public Tensor sqrt() {
-    return ainv.dot(sqrt.pmul(avec));
+    return ainv.dot(Pmul.of(sqrt, avec));
   }
 
   @Override // from MatrixSqrt
   public Tensor sqrt_inverse() {
-    return ainv.dot(sqrt.map(Scalar::reciprocal).pmul(avec));
+    return ainv.dot(Pmul.of(sqrt.map(Scalar::reciprocal), avec));
   }
 }

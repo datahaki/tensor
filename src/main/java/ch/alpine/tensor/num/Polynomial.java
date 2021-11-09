@@ -7,6 +7,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.red.Pmul;
 
 /** Evaluation of a polynomial using horner scheme.
  * 
@@ -67,6 +68,6 @@ public enum Polynomial {
     int length = coeffs.length();
     return length == 0 //
         ? Tensors.empty()
-        : coeffs.extract(1, length).pmul(Range.of(1, length));
+        : Pmul.of(coeffs.extract(1, length), Range.of(1, length));
   }
 }

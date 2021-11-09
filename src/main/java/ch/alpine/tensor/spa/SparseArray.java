@@ -86,6 +86,21 @@ public class SparseArray extends AbstractTensor implements Serializable {
   }
 
   @Override // from Tensor
+  public Tensor get(List<Integer> index) {
+    if (index.isEmpty())
+      return copy();
+    List<Integer> list = IntStream.range(0, size.size()) //
+        .filter(i -> index.size() <= i || index.get(i) == ALL).map(size::get) //
+        .boxed().collect(Collectors.toList());
+    int head = index.get(0);
+    List<Integer> _index = Lists.rest(index);
+    return head == ALL //
+        ? new SparseArray(fallback, list, navigableMap.entrySet().stream() //
+            .collect(_map(Entry::getKey, entry -> entry.getValue().get(_index)))) //
+        : byRef(head).get(_index);
+  }
+
+  @Override // from Tensor
   public void set(Tensor tensor, List<Integer> index) {
     int head = index.get(0);
     List<Integer> _size = Lists.rest(size);
@@ -194,13 +209,6 @@ public class SparseArray extends AbstractTensor implements Serializable {
               .distinct().collect(_map(i -> i, i -> byRef(i).subtract(sparseArray.byRef(i))))).trim();
     }
     return tensor.negate().add(this);
-  }
-
-  @Override // from Tensor
-  public Tensor pmul(Tensor tensor) {
-    Integers.requireEquals(length(), tensor.length());
-    return new SparseArray(fallback, size, navigableMap.entrySet().stream() //
-        .collect(_map(Entry::getKey, entry -> entry.getValue().pmul(tensor.get(entry.getKey()))))).trim();
   }
 
   @Override // from Tensor

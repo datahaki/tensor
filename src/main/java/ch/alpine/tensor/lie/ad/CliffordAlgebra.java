@@ -26,6 +26,7 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.re.LinearSolve;
+import ch.alpine.tensor.red.Pmul;
 import ch.alpine.tensor.spa.SparseArray;
 
 /** geometric algebra
@@ -130,7 +131,7 @@ public class CliffordAlgebra implements Serializable {
    * @return
    * @throws Exception if x is not a vector */
   public Tensor reverse(Tensor x) {
-    return VectorQ.require(x).pmul(reverse);
+    return Pmul.of(VectorQ.require(x), reverse);
   }
 
   public Tensor grade(Tensor x, int grade) {

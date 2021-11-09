@@ -1,6 +1,8 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.red;
 
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.pdf.Distribution;
@@ -9,12 +11,12 @@ import ch.alpine.tensor.pdf.UniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
-public class TensorPmulTest extends TestCase {
+public class PmulTest extends TestCase {
   public void testVectorMatrixEx1() {
     Tensor mat = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}");
-    Tensors.vector(-2, 2).pmul(mat);
+    Pmul.of(Tensors.vector(-2, 2), mat);
     Tensor factor = Tensors.vector(-2, 2, 2);
-    Tensor rep = TensorMap.of(row -> row.pmul(factor), mat, 1);
+    Tensor rep = TensorMap.of(row -> Pmul.of(row, factor), mat, 1);
     assertEquals(rep, Tensors.fromString("{{-2, 4, 6}, {-8, 10, 12}}"));
   }
 
@@ -26,7 +28,7 @@ public class TensorPmulTest extends TestCase {
     Tensor c = Tensors.of( //
         Tensors.vectorLong(3, 4, 6), //
         Tensors.vectorLong(9, -2, -2));
-    Tensor r = Tensor.of(a.flatten(0).map(row -> row.pmul(b)));
+    Tensor r = Tensor.of(a.flatten(0).map(row -> Pmul.of(row, b)));
     assertEquals(r, c);
   }
 
@@ -38,7 +40,7 @@ public class TensorPmulTest extends TestCase {
     Tensor c = Tensors.of( //
         Tensors.vectorLong(3, 6, 9), //
         Tensors.vectorLong(6, -2, -2));
-    assertEquals(b.pmul(a), c);
+    assertEquals(Pmul.of(b, a), c);
   }
 
   public void testMatrixMatrix() {
@@ -49,17 +51,17 @@ public class TensorPmulTest extends TestCase {
         Tensors.vectorLong(3, 4, 6), //
         Tensors.vectorLong(-9, -2, -2));
     Tensor r = Tensors.fromString("{{3, 8, 18}, {-27, 2, 2}}");
-    assertEquals(a.pmul(c), r);
+    assertEquals(Pmul.of(a, c), r);
   }
 
   public void testDiagonalMatrix() {
     Distribution distribution = UniformDistribution.of(-10, 10);
     Tensor v = RandomVariate.of(distribution, 3);
     Tensor m = RandomVariate.of(distribution, 3, 4, 2);
-    assertEquals(DiagonalMatrix.with(v).dot(m), v.pmul(m));
+    assertEquals(DiagonalMatrix.with(v).dot(m), Pmul.of(v, m));
   }
 
   public void testFail() {
-    AssertFail.of(() -> Tensors.vector(1, 2, 3).pmul(Tensors.vector(1, 2, 3, 4)));
+    AssertFail.of(() -> Pmul.of(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3, 4)));
   }
 }
