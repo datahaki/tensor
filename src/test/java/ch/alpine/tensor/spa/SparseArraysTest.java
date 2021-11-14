@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -140,8 +141,9 @@ public class SparseArraysTest extends TestCase {
 
   public void testFallbackFail() {
     Tensor tensor = Array.sparse(3);
-    AssertFail.of(() -> tensor.multiply(Quantity.of(7, "s*m")));
-    AssertFail.of(() -> tensor.divide(Quantity.of(7, "s*m")));
+    AssertFail.of(() -> tensor.divide(Quantity.of(0, "")));
+    AssertFail.of(() -> tensor.divide(Quantity.of(0, "s*m")));
+    AssertFail.of(() -> tensor.multiply(DoubleScalar.POSITIVE_INFINITY));
   }
 
   public void testArraysAsListSerialization() throws ClassNotFoundException, IOException {

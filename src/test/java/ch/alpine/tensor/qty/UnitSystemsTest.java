@@ -40,10 +40,7 @@ public class UnitSystemsTest extends TestCase {
     UnitSystem u2 = UnitSystems.rotate(u1, next, prev);
     for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
       Scalar scalar = u2.map().get(entry.getKey());
-      if (!Chop._09.isClose(entry.getValue(), scalar)) {
-        System.out.println(entry);
-        fail();
-      }
+      Chop._07.requireClose(entry.getValue(), scalar);
     }
     TestHelper.checkInvariant(u1);
     TestHelper.checkInvariant(u2);
