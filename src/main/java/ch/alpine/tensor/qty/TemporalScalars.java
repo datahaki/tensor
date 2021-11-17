@@ -9,6 +9,14 @@ import ch.alpine.tensor.Scalars;
 
 public enum TemporalScalars {
   ;
+  /** parsing function
+   * 
+   * Examples:
+   * 
+   * @param string
+   * @return
+   * @see LocalDateTime
+   * @see Duration */
   public static Scalar fromString(String string) {
     try {
       return new DateTimeScalar(LocalDateTime.parse(string));

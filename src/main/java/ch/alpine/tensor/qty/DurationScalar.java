@@ -6,7 +6,6 @@ import java.time.Duration;
 import java.util.Objects;
 
 import ch.alpine.tensor.AbstractScalar;
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -14,6 +13,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ExactScalarQInterface;
 import ch.alpine.tensor.api.SignInterface;
+import ch.alpine.tensor.sca.Floor;
 
 /** EXPERIMENTAL
  * 
@@ -51,8 +51,7 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from Scalar
   public DurationScalar multiply(Scalar scalar) {
-    // TODO can to better
-    return new DurationScalar(duration.multipliedBy(IntegerQ.require(scalar).number().longValue()));
+    return fromSeconds(toSeconds().multiply(scalar));
   }
 
   @Override // from AbstractScalar
@@ -61,8 +60,7 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
       DurationScalar durationScalar = (DurationScalar) scalar;
       return toSeconds().divide(durationScalar.toSeconds());
     }
-    // TODO can to better
-    throw TensorRuntimeException.of(this, scalar);
+    return fromSeconds(toSeconds().divide(scalar));
   }
 
   @Override // from AbstractScalar
@@ -71,7 +69,6 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
       DurationScalar durationScalar = (DurationScalar) scalar;
       return durationScalar.toSeconds().divide(toSeconds());
     }
-    // TODO can to better
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -163,7 +160,14 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
     return duration.toString();
   }
 
+  /** @return instance of rational scalar where fractional part corresponds to the nano seconds */
   private Scalar toSeconds() {
     return RealScalar.of(duration.getSeconds()).add(RationalScalar.of(duration.getNano(), 1_000_000_000));
+  }
+
+  private static DurationScalar fromSeconds(Scalar scalar) {
+    Scalar integral = Floor.FUNCTION.apply(scalar);
+    Scalar nanos = scalar.subtract(integral).multiply(RealScalar.of(1_000_000_000));
+    return new DurationScalar(Duration.ofSeconds(integral.number().longValue(), nanos.number().longValue()));
   }
 }

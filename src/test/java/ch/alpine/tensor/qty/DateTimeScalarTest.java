@@ -6,9 +6,11 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Clip;
@@ -48,6 +50,14 @@ public class DateTimeScalarTest extends TestCase {
     assertFalse(dt1.hashCode() == dt2.hashCode());
   }
 
+  public void testSubdivide() {
+    LocalDateTime ldt1 = LocalDateTime.of(2020, 12, 20, 4, 30);
+    LocalDateTime ldt2 = LocalDateTime.of(2020, 12, 21, 4, 30);
+    DateTimeScalar dt1 = DateTimeScalar.of(ldt1);
+    DateTimeScalar dt2 = DateTimeScalar.of(ldt2);
+    Subdivide.of(dt1, dt2, 73);
+  }
+
   public void test2() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2021, 1, 10, 6, 30));
@@ -76,6 +86,14 @@ public class DateTimeScalarTest extends TestCase {
     clip.requireInside(dt3);
     DateTimeScalar dt4 = DateTimeScalar.of(LocalDateTime.of(2021, 1, 21, 0, 0, 0));
     assertTrue(clip.isOutside(dt4));
+  }
+
+  public void testExact() {
+    DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2017, 12, 20, 4, 30));
+    ExactScalarQ.require(dt1);
+    DurationScalar ds = DurationScalar.of(Duration.ofSeconds(245234, 123_236_987).negated());
+    Scalar scalar = dt1.subtract(ds);
+    assertTrue(scalar instanceof DateTimeScalar);
   }
 
   public void testAddFail1() {
