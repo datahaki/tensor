@@ -13,9 +13,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ExactScalarQInterface;
 
-/** EXPERIMENTAL
- * 
- * Addition of two instances of {@link DateTimeScalar} results in an exception.
+/** Addition of two instances of {@link DateTimeScalar} results in an exception.
  * Subtraction of two instances of {@link DateTimeScalar} results in a {@link DurationScalar}.
  * Negation of a {@link DateTimeScalar} results in an exception.
  * 
@@ -45,7 +43,6 @@ public class DateTimeScalar extends AbstractScalar implements ExactScalarQInterf
     }
     if (tensor instanceof DurationScalar) {
       DurationScalar durationScalar = (DurationScalar) tensor;
-      // return durationScalar.negate().add(this); // <- alternative
       return new DateTimeScalar(localDateTime.minus(durationScalar.duration()));
     }
     throw TensorRuntimeException.of(this, tensor);

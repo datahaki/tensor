@@ -9,15 +9,14 @@ import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ExactScalarQInterface;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.sca.Floor;
 
-/** EXPERIMENTAL
- * 
- * The string expression of {@link DurationScalar} is identical to that of {@link Duration}.
+/** The string expression of {@link DurationScalar} is identical to that of {@link Duration}.
  * 
  * Example:
  * Duration.ofSeconds(245234, 123_236_987).toString() == "PT68H7M14.123236987S"
@@ -51,6 +50,8 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from Scalar
   public DurationScalar multiply(Scalar scalar) {
+    if (scalar instanceof DurationScalar) // condition inserted for clarity
+      throw TensorRuntimeException.of(this, scalar);
     return fromSeconds(toSeconds().multiply(scalar));
   }
 
@@ -160,14 +161,19 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
     return duration.toString();
   }
 
+  private static final long NANOS_LONG = 1_000_000_000;
+  private static final Scalar NANOS = RealScalar.of(NANOS_LONG);
+
   /** @return instance of rational scalar where fractional part corresponds to the nano seconds */
   private Scalar toSeconds() {
-    return RealScalar.of(duration.getSeconds()).add(RationalScalar.of(duration.getNano(), 1_000_000_000));
+    return RealScalar.of(duration.getSeconds()) //
+        .add(RationalScalar.of(duration.getNano(), NANOS_LONG));
   }
 
   private static DurationScalar fromSeconds(Scalar scalar) {
     Scalar integral = Floor.FUNCTION.apply(scalar);
-    Scalar nanos = scalar.subtract(integral).multiply(RealScalar.of(1_000_000_000));
-    return new DurationScalar(Duration.ofSeconds(integral.number().longValue(), nanos.number().longValue()));
+    return new DurationScalar(Duration.ofSeconds( //
+        Scalars.longValueExact(integral), //
+        scalar.subtract(integral).multiply(NANOS).number().longValue()));
   }
 }

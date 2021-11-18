@@ -4,14 +4,19 @@ package ch.alpine.tensor.qty;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.mat.re.Inverse;
+import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -78,6 +83,12 @@ public class DurationScalarTest extends TestCase {
     assertEquals(d2, d3);
   }
 
+  public void testDivideZero() {
+    AssertFail.of(() -> DurationScalar.ZERO.divide(DurationScalar.ZERO));
+    DurationScalar d1 = DurationScalar.of(Duration.ofSeconds(100).negated());
+    AssertFail.of(() -> d1.divide(DurationScalar.ZERO));
+  }
+
   public void testUnderP() {
     DurationScalar d1 = DurationScalar.of(Duration.ofSeconds(100));
     AssertFail.of(() -> d1.under(RealScalar.of(300)));
@@ -126,6 +137,18 @@ public class DurationScalarTest extends TestCase {
     clip.requireInside(dt3);
     DurationScalar dt4 = DurationScalar.of(Duration.ofDays(70));
     assertTrue(clip.isOutside(dt4));
+  }
+
+  public void testLinearSolve() {
+    Random random = new Random();
+    int n = 5;
+    Tensor matrix = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, n);
+    // TODO investigate how to find coefficients
+    AssertFail.of(() -> Inverse.of(matrix));
+    Tensor vector = Tensors.vector(i -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n);
+    AssertFail.of(() -> //
+    LinearSolve.of(matrix, vector) //
+    );
   }
 
   public void testNEquals() {
