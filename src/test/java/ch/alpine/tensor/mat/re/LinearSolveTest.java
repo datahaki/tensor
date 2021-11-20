@@ -139,8 +139,7 @@ public class LinearSolveTest extends TestCase {
   public void testQuantity2() {
     Scalar qs1 = Quantity.of(3, "m");
     Scalar qs2 = Quantity.of(4, "s");
-    Tensor ve1 = Tensors.of(qs1);
-    Tensor mat = Tensors.of(ve1);
+    Tensor mat = Tensors.matrix(new Scalar[][] { { qs1 } });
     Tensor rhs = Tensors.of(qs2);
     Tensor sol = LinearSolve.of(mat, rhs);
     Tensor res = mat.dot(sol);

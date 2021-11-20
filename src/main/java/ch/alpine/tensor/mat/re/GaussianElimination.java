@@ -5,6 +5,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Unprotect;
 
 /** Gaussian elimination is the most important algorithm of all time.
  * 
@@ -65,12 +66,14 @@ public class GaussianElimination extends AbstractReduce {
 
   /** @return x with m.dot(x) == b */
   public Tensor solve() {
-    Tensor sol = rhs.map(scalar -> scalar.one().zero()); // all-zeros copy of rhs
+    Tensor[] sol = new Tensor[rhs.length()];
     for (int c0 = ind.length - 1; 0 <= c0; --c0) {
       int ic0 = ind[c0];
-      Scalar factor = lhs[ic0].Get(c0);
-      sol.set(rhs.get(ic0).subtract(lhs[ic0].dot(sol)).divide(factor), c0);
+      Tensor sum = rhs.get(ic0);
+      for (int c1 = c0 + 1; c1 < ind.length; ++c1)
+        sum = sum.add(sol[c1].multiply(lhs[ic0].Get(c1).negate()));
+      sol[c0] = sum.divide(lhs[ic0].Get(c0));
     }
-    return sol;
+    return Unprotect.byRef(sol);
   }
 }
