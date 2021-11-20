@@ -22,7 +22,7 @@ public enum VandermondeSolve {
     VectorQ.require(q);
     if (n == 1)
       return q.copy();
-    Tensor c = x.map(Scalar::zero);
+    Tensor c = x.map(s -> s.one().zero());
     c.set(x.Get(0).negate(), n - 1);
     for (int i = 1; i < n; ++i) {
       Scalar xx = x.Get(i).negate();

@@ -83,6 +83,7 @@ public class DeleteDirectoryTest extends TestCase {
     boolean renameTo = folder1.renameTo(folder2);
     assertTrue(renameTo);
     folder2.isDirectory();
-    folder2.delete();
+    boolean delete = folder2.delete();
+    assertTrue(delete);
   }
 }

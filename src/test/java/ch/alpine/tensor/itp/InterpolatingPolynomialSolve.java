@@ -22,7 +22,8 @@ import ch.alpine.tensor.lie.Quaternion;
     VectorQ.requireLength(x, n);
     VectorQ.require(y);
     Tensor s = x.map(Scalar::zero);
-    s.set(x.get(0).negate(), n - 1);
+    // Tensor s = x.map(r->r.one().zero());
+    s.set(x.Get(0).negate(), n - 1);
     for (int i = 1; i < n; ++i) {
       Scalar xx = x.Get(i).negate();
       for (int j = n - 1 - i; j < n - 1; ++j) {

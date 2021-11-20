@@ -17,6 +17,7 @@ import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.LinearSolve;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
@@ -127,6 +128,11 @@ public class DurationScalarTest extends TestCase {
     assertEquals(scalar, ds);
   }
 
+  public void testFromSeconds() {
+    assertEquals(DurationScalar.fromSeconds(RealScalar.ONE).toString(), "PT1S");
+    assertEquals(DurationScalar.fromSeconds(Pi.VALUE).toString(), "PT3.141592653S");
+  }
+
   public void testClip() {
     DurationScalar dt1 = DurationScalar.of(Duration.ofDays(-100));
     assertTrue(Sign.isNegative(dt1));
@@ -143,11 +149,11 @@ public class DurationScalarTest extends TestCase {
   public void testLinearSolve() {
     Random random = new Random();
     int n = 5;
-    Tensor matrix = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, n);
-    AssertFail.of(() -> Inverse.of(matrix));
-    Tensor vector = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, 2 * n);
-    Tensor sol = LinearSolve.of(matrix, vector);
-    Chop._05.requireClose(matrix.dot(sol), vector);
+    Tensor lhs = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, n);
+    AssertFail.of(() -> Inverse.of(lhs));
+    Tensor rhs = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, 2 * n);
+    Tensor sol = LinearSolve.of(lhs, rhs);
+    Chop._05.requireClose(lhs.dot(sol), rhs);
   }
 
   public void testLinearSolve2() {
@@ -155,8 +161,8 @@ public class DurationScalarTest extends TestCase {
     DurationScalar ds2 = DurationScalar.fromSeconds(RealScalar.of(3.123));
     DurationScalar ds3 = DurationScalar.fromSeconds(RealScalar.of(10));
     DurationScalar ds4 = DurationScalar.fromSeconds(RealScalar.of(9));
-    DurationScalar ds5 = DurationScalar.fromSeconds(RealScalar.of(10));
-    DurationScalar ds6 = DurationScalar.fromSeconds(RealScalar.of(9));
+    DurationScalar ds5 = DurationScalar.fromSeconds(RealScalar.of(4));
+    DurationScalar ds6 = DurationScalar.fromSeconds(RealScalar.of(5));
     Tensor lhs = Tensors.matrix(new Scalar[][] { { ds1, ds2 }, { ds3, ds4 } });
     Tensor rhs = Tensors.of(ds5, ds6);
     Tensor sol = LinearSolve.of(lhs, rhs);

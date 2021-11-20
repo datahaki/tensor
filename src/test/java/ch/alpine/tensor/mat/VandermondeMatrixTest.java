@@ -11,6 +11,7 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.qty.DurationScalar;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -47,6 +48,16 @@ public class VandermondeMatrixTest extends TestCase {
     assertEquals(Dimensions.of(matrix), Arrays.asList(3, 8));
     int rank = MatrixRank.of(matrix);
     assertEquals(rank, 3);
+  }
+
+  public void testDurationScalar() {
+    Tensor vector = Tensors.of( //
+        DurationScalar.fromSeconds(RealScalar.of(10)), //
+        DurationScalar.fromSeconds(RealScalar.of(13.4)), //
+        DurationScalar.fromSeconds(RealScalar.of(4.8)), //
+        DurationScalar.fromSeconds(RealScalar.of(7)) //
+    );
+    VandermondeMatrix.of(vector, 1);
   }
 
   public void testDegrees() {

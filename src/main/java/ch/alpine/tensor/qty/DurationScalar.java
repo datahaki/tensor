@@ -40,8 +40,15 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
     return new DurationScalar(Objects.requireNonNull(duration));
   }
 
-  /** @param scalar
-   * @return */
+  /** Example:
+   * fromSeconds(1) == PT1S
+   * 
+   * in case the scalar is in double precision, then the nano
+   * seconds are approximated
+   * 
+   * @param scalar amount of seconds
+   * @return
+   * @throws Exception if scalar is not a {@link RealScalar} */
   public static DurationScalar fromSeconds(Scalar scalar) {
     Scalar integral = Floor.FUNCTION.apply(scalar);
     return new DurationScalar(Duration.ofSeconds( //

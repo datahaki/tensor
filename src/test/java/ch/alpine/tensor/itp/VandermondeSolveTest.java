@@ -4,6 +4,7 @@ package ch.alpine.tensor.itp;
 import java.util.Random;
 
 import ch.alpine.tensor.ExactTensorQ;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
@@ -15,6 +16,7 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.qty.DurationScalar;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -79,6 +81,21 @@ public class VandermondeSolveTest extends TestCase {
     Tensor ref = LinearSolve.of(Transpose.of(matrix), q, Pivots.FIRST_NON_ZERO);
     Tensor cmp = VandermondeSolve.of(x, q);
     assertEquals(ref, cmp);
+  }
+
+  public void testDurationScalar() {
+    Tensor vector = Tensors.of( //
+        DurationScalar.fromSeconds(RealScalar.of(10)), //
+        DurationScalar.fromSeconds(RealScalar.of(7)) //
+    );
+    Tensor lhs = Transpose.of(VandermondeMatrix.of(vector));
+    Tensor rhs = Tensors.of( //
+        RealScalar.of(13.4), //
+        DurationScalar.fromSeconds(RealScalar.of(4.8)) //
+    );
+    Tensor ref = LinearSolve.of(lhs, rhs, Pivots.FIRST_NON_ZERO);
+    Chop._06.requireClose(lhs.dot(ref), rhs);
+    // VandermondeSolve.of(vector, rhs);
   }
 
   public void testEmptyFail() {

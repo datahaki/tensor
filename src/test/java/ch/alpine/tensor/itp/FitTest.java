@@ -52,6 +52,13 @@ public class FitTest extends TestCase {
     for (int degree = 0; degree <= 4; ++degree) {
       Tensor x = Tensors.fromString("{100[K], 110.0[K], 120[K], 133[K], 140[K], 150[K]}");
       Tensor y = Tensors.fromString("{10[bar], 20[bar], 22[bar], 23[bar], 25[bar], 26.0[bar]}");
+      {
+        Tensor polynomial_coeffs = Fit.polynomial_coeffs(x, y, degree);
+        Tensor derivative_coeffs = Polynomial.derivative_coeffs(polynomial_coeffs);
+        assertEquals(polynomial_coeffs.length(), derivative_coeffs.length() + 1);
+        // System.out.println(polynomial_coeffs);
+        // System.out.println(derivative_coeffs);
+      }
       ScalarUnaryOperator x_to_y = Fit.polynomial(x, y, degree);
       Scalar pressure = x_to_y.apply(Quantity.of(103, "K"));
       pascal.apply(pressure);

@@ -140,6 +140,9 @@ import ch.alpine.tensor.sca.Sqrt;
       Quantity quantity = (Quantity) scalar;
       if (unit.equals(quantity.unit()))
         return ofUnit(value.add(quantity.value()));
+      // if (Scalars.isZero(value) && Scalars.isZero(quantity.value()))
+      // return scalar.add(value);
+      // throw TensorRuntimeException.of(this, scalar);
     }
     if (Scalars.isZero(value))
       return scalar.add(value);
