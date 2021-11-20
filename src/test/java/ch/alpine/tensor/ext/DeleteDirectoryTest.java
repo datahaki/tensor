@@ -75,4 +75,14 @@ public class DeleteDirectoryTest extends TestCase {
       // ---
     }
   }
+
+  public void testRenameDirectory() {
+    File folder1 = HomeDirectory.Downloads(getClass().getSimpleName() + "NotFound1234");
+    File folder2 = HomeDirectory.Downloads(getClass().getSimpleName() + "NotFound1235");
+    folder1.mkdir();
+    boolean renameTo = folder1.renameTo(folder2);
+    assertTrue(renameTo);
+    folder2.isDirectory();
+    folder2.delete();
+  }
 }

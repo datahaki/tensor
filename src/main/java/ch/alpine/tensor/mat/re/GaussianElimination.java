@@ -65,7 +65,7 @@ public class GaussianElimination extends AbstractReduce {
 
   /** @return x with m.dot(x) == b */
   public Tensor solve() {
-    Tensor sol = rhs.map(Scalar::zero); // all-zeros copy of rhs
+    Tensor sol = rhs.map(scalar -> scalar.one().zero()); // all-zeros copy of rhs
     for (int c0 = ind.length - 1; 0 <= c0; --c0) {
       int ic0 = ind[c0];
       Scalar factor = lhs[ic0].Get(c0);

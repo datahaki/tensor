@@ -61,6 +61,8 @@ public enum IdentityMatrix {
    * @throws Exception if given matrix is not a square matrix */
   public static Tensor of(Tensor matrix) {
     int n = Integers.requireEquals(matrix.length(), Unprotect.dimension1(matrix));
-    return Tensors.matrix((i, j) -> i.equals(j) ? matrix.Get(i, j).one() : matrix.Get(i, j).zero(), n, n);
+    return Tensors.matrix((i, j) -> i.equals(j) //
+        ? matrix.Get(i, j).one()
+        : matrix.Get(i, j).one().zero(), n, n);
   }
 }

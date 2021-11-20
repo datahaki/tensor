@@ -18,7 +18,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Append;
-import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.alg.Tuples;
 
 /** implementation is consistent with Mathematica
@@ -34,8 +33,6 @@ import ch.alpine.tensor.alg.Tuples;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Permutations.html">Permutations</a>
  * 
- * @see Signature
- * @see Sort
  * @see Tuples */
 public class Permutations {
   /** @param tensor that is not a {@link Scalar}

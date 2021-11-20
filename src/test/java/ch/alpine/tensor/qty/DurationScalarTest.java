@@ -18,6 +18,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
@@ -143,12 +144,33 @@ public class DurationScalarTest extends TestCase {
     Random random = new Random();
     int n = 5;
     Tensor matrix = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, n);
-    // TODO investigate how to find coefficients
     AssertFail.of(() -> Inverse.of(matrix));
-    Tensor vector = Tensors.vector(i -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n);
-    AssertFail.of(() -> //
-    LinearSolve.of(matrix, vector) //
-    );
+    Tensor vector = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, 2 * n);
+    Tensor sol = LinearSolve.of(matrix, vector);
+    Chop._05.requireClose(matrix.dot(sol), vector);
+  }
+
+  public void testLinearSolve2() {
+    DurationScalar ds1 = DurationScalar.fromSeconds(RealScalar.of(3));
+    DurationScalar ds2 = DurationScalar.fromSeconds(RealScalar.of(3.123));
+    DurationScalar ds3 = DurationScalar.fromSeconds(RealScalar.of(10));
+    DurationScalar ds4 = DurationScalar.fromSeconds(RealScalar.of(9));
+    DurationScalar ds5 = DurationScalar.fromSeconds(RealScalar.of(10));
+    DurationScalar ds6 = DurationScalar.fromSeconds(RealScalar.of(9));
+    Tensor lhs = Tensors.matrix(new Scalar[][] { { ds1, ds2 }, { ds3, ds4 } });
+    Tensor rhs = Tensors.of(ds5, ds6);
+    Tensor sol = LinearSolve.of(lhs, rhs);
+    Tensor err = lhs.dot(sol).subtract(rhs);
+    Chop._05.requireAllZero(err);
+    AssertFail.of(() -> Inverse.of(lhs));
+  }
+
+  public void testInverseFail() {
+    // failure because of reciprocal
+    Random random = new Random();
+    int n = 2;
+    Tensor matrix = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, n);
+    AssertFail.of(() -> Inverse.of(matrix));
   }
 
   public void testNEquals() {
