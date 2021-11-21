@@ -7,6 +7,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -26,5 +27,14 @@ public class NormalizeUnlessZeroTest extends TestCase {
     Tensor result = tensorUnaryOperator.apply(vector);
     assertEquals(vector, result);
     ExactTensorQ.require(result);
+  }
+
+  public void testQuantity() {
+    TensorUnaryOperator tuo = NormalizeUnlessZero.with(Vector2Norm::of);
+    Tensor one = Tensors.of(Quantity.of(2, "m"));
+    assertEquals(tuo.apply(one), Tensors.vector(1));
+    Tensor zer = Tensors.of(Quantity.of(0, "m"));
+    zer.length();
+    // System.out.println(tuo.apply(zer));
   }
 }

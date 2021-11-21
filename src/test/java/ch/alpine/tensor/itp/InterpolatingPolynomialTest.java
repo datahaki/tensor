@@ -4,6 +4,7 @@ package ch.alpine.tensor.itp;
 import java.io.IOException;
 import java.util.stream.IntStream;
 
+import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -16,12 +17,16 @@ import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.VandermondeMatrix;
+import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.UniformDistribution;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.QuantityTensor;
+import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -84,6 +89,39 @@ public class InterpolatingPolynomialTest extends TestCase {
     for (int index = 0; index < suppor.length(); ++index)
       assertEquals(suo1.apply(suppor.Get(index)), values.Get(index));
     assertEquals(suo1.apply(GaussScalar.of(54, prime)), GaussScalar.of(4527, prime));
+  }
+
+  private static Tensor polynomial_coeffs(Tensor xdata, Tensor ydata, int degree) {
+    return LinearSolve.of(VandermondeMatrix.of(xdata), ydata);
+  }
+
+  public void testDegreesUnits() {
+    Tensor xdata = Tensors.vector(10, 11, 14, 20).map(s -> Quantity.of(s, "K"));
+    Tensor ydata = Tensors.vector(5, -2, 1, 9).map(s -> Quantity.of(s, "bar"));
+    for (int degree = 0; degree <= 3; ++degree) {
+      Tensor x = xdata.extract(0, degree + 1);
+      Tensor y = ydata.extract(0, degree + 1);
+      Tensor coeffs = polynomial_coeffs(x, y, degree);
+      ExactTensorQ.require(coeffs);
+      ScalarUnaryOperator scalarUnaryOperator = InterpolatingPolynomial.of(xdata).scalarUnaryOperator(ydata);
+      assertEquals(xdata.map(scalarUnaryOperator), ydata);
+      // ExactTensorQ.require(coeff2);
+      // assertEquals(coeffs, coeff2);
+    }
+  }
+
+  public void testDegreesUnitsNumeric() {
+    Tensor xdata = Tensors.vector(10, 11, 14, 20).map(s -> Quantity.of(s, "K")).map(N.DOUBLE);
+    Tensor ydata = Tensors.vector(5, -2, 1, 9).map(s -> Quantity.of(s, "bar")).map(N.DOUBLE);
+    for (int degree = 0; degree <= 3; ++degree) {
+      Tensor x = xdata.extract(0, degree + 1);
+      Tensor y = ydata.extract(0, degree + 1);
+      // Tensor coeffs = polynomial_coeffs(x, y, degree);
+      // Tensor coeff2 = InterpolatingPolynomialSolve.of(x, y);
+      // Chop._08.requireClose(coeffs, coeff2);
+      ScalarUnaryOperator scalarUnaryOperator = InterpolatingPolynomial.of(xdata).scalarUnaryOperator(ydata);
+      Tolerance.CHOP.requireClose(xdata.map(scalarUnaryOperator), ydata);
+    }
   }
 
   public void testScalarLengthFail() throws ClassNotFoundException, IOException {

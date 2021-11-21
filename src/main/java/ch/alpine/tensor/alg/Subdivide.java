@@ -16,6 +16,9 @@ import ch.alpine.tensor.sca.Clip;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Subdivide.html">Subdivide</a>
  * 
+ * Reference:
+ * https://en.wikipedia.org/wiki/Linear_interpolation#Programming_language_support
+ * 
  * @see Range */
 public enum Subdivide {
   ;

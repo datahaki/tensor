@@ -43,7 +43,6 @@ public interface QRDecomposition {
     return new QRDecompositionImpl(matrix, qInv0, qrSignOperator);
   }
 
-  // ---
   /** @return upper triangular matrix */
   Tensor getR();
 

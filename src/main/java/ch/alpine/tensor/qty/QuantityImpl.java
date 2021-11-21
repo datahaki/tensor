@@ -31,7 +31,7 @@ import ch.alpine.tensor.sca.Sqrt;
 
 /** Mathematica does not resolve
  * Quantity[1, "Amperes"] + Quantity[0, "Meters"]
- * but the tensor library gives as result
+ * but the tensor library gives the result
  * Quantity[1, "Amperes"]
  * 
  * @implSpec
@@ -140,9 +140,6 @@ import ch.alpine.tensor.sca.Sqrt;
       Quantity quantity = (Quantity) scalar;
       if (unit.equals(quantity.unit()))
         return ofUnit(value.add(quantity.value()));
-      // if (Scalars.isZero(value) && Scalars.isZero(quantity.value()))
-      // return scalar.add(value);
-      // throw TensorRuntimeException.of(this, scalar);
     }
     if (Scalars.isZero(value))
       return scalar.add(value);
