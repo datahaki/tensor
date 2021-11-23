@@ -65,8 +65,8 @@ import ch.alpine.tensor.io.StringScalar;
 public interface Quantity extends Scalar, //
     AbsInterface, ArcTanInterface, ArgInterface, Comparable<Scalar>, ComplexEmbedding, //
     ConjugateInterface, PowerInterface, RoundingInterface, SignInterface, SqrtInterface {
-  static final char UNIT_OPENING_BRACKET = '[';
-  static final char UNIT_CLOSING_BRACKET = ']';
+  char UNIT_OPENING_BRACKET = '[';
+  char UNIT_CLOSING_BRACKET = ']';
 
   /** Hint: function does not check parameters for null, although
    * null as input is likely to cause problems subsequently.

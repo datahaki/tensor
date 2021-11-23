@@ -58,7 +58,7 @@ public class WindowFunctionsTest extends TestCase {
         windowFunction.get().apply(x);
         System.out.println(windowFunction);
         fail();
-      } catch (Exception e) {
+      } catch (Exception exception) {
         // ---
       }
   }

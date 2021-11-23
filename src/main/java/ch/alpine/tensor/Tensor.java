@@ -39,11 +39,11 @@ public interface Tensor extends Iterable<Tensor> {
    * 
    * <p>The value of ALL is deliberately <em>not</em> chosen to equal -1, since an index of -1
    * could likely be the result of a mistake in the application layer. */
-  static final int ALL = 0xA110CA7E;
+  int ALL = 0xA110CA7E;
   /** curly opening bracket of vector */
-  static final char OPENING_BRACKET = '{';
+  char OPENING_BRACKET = '{';
   /** curly closing bracket of vector */
-  static final char CLOSING_BRACKET = '}';
+  char CLOSING_BRACKET = '}';
 
   /** constructs a tensor that holds the tensors of the input stream.
    * 

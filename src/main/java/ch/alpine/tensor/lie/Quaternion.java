@@ -31,8 +31,8 @@ import ch.alpine.tensor.api.TrigonometryInterface;
 public interface Quaternion extends Scalar, //
     AbsInterface, ConjugateInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface {
-  static final Quaternion ZERO = of(0, 0, 0, 0);
-  static final Quaternion ONE = of(1, 0, 0, 0);
+  Quaternion ZERO = of(0, 0, 0, 0);
+  Quaternion ONE = of(1, 0, 0, 0);
 
   /** @param w real part
    * @param xyz vector of length 3

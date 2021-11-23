@@ -6,7 +6,7 @@ import ch.alpine.tensor.Tensor;
 
 public interface BipartiteMatching {
   /** value of element in array returned by matching */
-  static final int UNASSIGNED = -1;
+  int UNASSIGNED = -1;
 
   /** @param matrix of distances
    * @return */

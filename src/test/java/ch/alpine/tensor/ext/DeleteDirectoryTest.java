@@ -76,14 +76,20 @@ public class DeleteDirectoryTest extends TestCase {
     }
   }
 
-  public void testRenameDirectory() {
+  public void testRenameDirectory() throws IOException {
     File folder1 = HomeDirectory.Downloads(getClass().getSimpleName() + "NotFound1234");
     File folder2 = HomeDirectory.Downloads(getClass().getSimpleName() + "NotFound1235");
     folder1.mkdir();
+    {
+      File file1 = new File(folder1, "dummy.txt");
+      assertTrue(file1.createNewFile());
+    }
     boolean renameTo = folder1.renameTo(folder2);
     assertTrue(renameTo);
     folder2.isDirectory();
-    boolean delete = folder2.delete();
-    assertTrue(delete);
+    File file2 = new File(folder2, "dummy.txt");
+    assertTrue(file2.isFile());
+    assertTrue(file2.delete());
+    assertTrue(folder2.delete());
   }
 }

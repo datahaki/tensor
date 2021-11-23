@@ -103,10 +103,8 @@ public class InterpolatingPolynomialTest extends TestCase {
       Tensor y = ydata.extract(0, degree + 1);
       Tensor coeffs = polynomial_coeffs(x, y, degree);
       ExactTensorQ.require(coeffs);
-      ScalarUnaryOperator scalarUnaryOperator = InterpolatingPolynomial.of(xdata).scalarUnaryOperator(ydata);
-      assertEquals(xdata.map(scalarUnaryOperator), ydata);
-      // ExactTensorQ.require(coeff2);
-      // assertEquals(coeffs, coeff2);
+      ScalarUnaryOperator scalarUnaryOperator = InterpolatingPolynomial.of(x).scalarUnaryOperator(y);
+      assertEquals(x.map(scalarUnaryOperator), y);
     }
   }
 
@@ -116,11 +114,8 @@ public class InterpolatingPolynomialTest extends TestCase {
     for (int degree = 0; degree <= 3; ++degree) {
       Tensor x = xdata.extract(0, degree + 1);
       Tensor y = ydata.extract(0, degree + 1);
-      // Tensor coeffs = polynomial_coeffs(x, y, degree);
-      // Tensor coeff2 = InterpolatingPolynomialSolve.of(x, y);
-      // Chop._08.requireClose(coeffs, coeff2);
-      ScalarUnaryOperator scalarUnaryOperator = InterpolatingPolynomial.of(xdata).scalarUnaryOperator(ydata);
-      Tolerance.CHOP.requireClose(xdata.map(scalarUnaryOperator), ydata);
+      ScalarUnaryOperator scalarUnaryOperator = InterpolatingPolynomial.of(x).scalarUnaryOperator(y);
+      Tolerance.CHOP.requireClose(x.map(scalarUnaryOperator), y);
     }
   }
 
