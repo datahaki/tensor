@@ -26,23 +26,23 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
    * @param leafSizeMax non-negative is the maximum queue size of leaf nodes, except
    * for leaf nodes with maxDepth, which have unlimited queue size. The special case
    * maxDensity == 0 implies that values will only be stored at nodes of max depth */
-  public static <V> NdMap<V> of(Box box, int leafSizeMax) {
+  public static <V> NdMap<V> of(CoordinateBoundingBox box, int leafSizeMax) {
     return new NdTreeMap<>(box, leafSizeMax);
   }
 
   /** @param box axis aligned bounding box that contains the points to be added
    * @return */
-  public static <V> NdMap<V> of(Box box) {
+  public static <V> NdMap<V> of(CoordinateBoundingBox box) {
     return of(box, LEAF_SIZE_DEFAULT);
   }
 
   // ---
-  private final Box boxGlobal;
+  private final CoordinateBoundingBox boxGlobal;
   private final int maxDensity;
   private final Node root;
   private int size;
 
-  private NdTreeMap(Box box, int maxDensity) {
+  private NdTreeMap(CoordinateBoundingBox box, int maxDensity) {
     this.boxGlobal = Objects.requireNonNull(box);
     this.maxDensity = Integers.requirePositive(maxDensity);
     root = new Node(0);
@@ -100,7 +100,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       return depth % boxGlobal.dimensions();
     }
 
-    private void add(NdEntry<V> ndEntry, Box box) {
+    private void add(NdEntry<V> ndEntry, CoordinateBoundingBox box) {
       if (isInterior()) {
         Tensor location = ndEntry.location();
         int dimension = dimension();
@@ -139,7 +139,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       }
     }
 
-    private void visit(NdVisitor<V> ndVisitor, Box box) {
+    private void visit(NdVisitor<V> ndVisitor, CoordinateBoundingBox box) {
       if (isInterior()) {
         int dimension = dimension();
         Scalar median = box.median(dimension);
@@ -156,17 +156,17 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
         queue.forEach(ndVisitor::consider);
     }
 
-    private void visitLo(NdVisitor<V> ndVisitor, Box box) {
+    private void visitLo(NdVisitor<V> ndVisitor, CoordinateBoundingBox box) {
       if (Objects.nonNull(lChild)) {
-        Box splitLo = box.splitLo(dimension());
+        CoordinateBoundingBox splitLo = box.splitLo(dimension());
         if (ndVisitor.isViable(splitLo))
           lChild.visit(ndVisitor, splitLo);
       }
     }
 
-    private void visitHi(NdVisitor<V> ndVisitor, Box box) {
+    private void visitHi(NdVisitor<V> ndVisitor, CoordinateBoundingBox box) {
       if (Objects.nonNull(rChild)) {
-        Box splitHi = box.splitHi(dimension());
+        CoordinateBoundingBox splitHi = box.splitHi(dimension());
         if (ndVisitor.isViable(splitHi))
           rChild.visit(ndVisitor, splitHi);
       }

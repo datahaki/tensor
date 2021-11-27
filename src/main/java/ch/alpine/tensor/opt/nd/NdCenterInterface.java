@@ -22,7 +22,7 @@ public interface NdCenterInterface {
    * 
    * @param box
    * @return distance from center to given axis aligned bounding box */
-  Scalar distance(Box box);
+  Scalar distance(CoordinateBoundingBox box);
 
   /** <pre>
    * center[dimension] < median

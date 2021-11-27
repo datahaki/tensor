@@ -21,7 +21,7 @@ public class DiscreteDistributionTest extends TestCase {
       BernoulliDistribution.of(0.3), //
       BinomialDistribution.of(5, .4), //
       DiscreteUniformDistribution.of(2, 10), //
-      EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(1, 2, 0, 2, 3, 1)), //
+      CategoricalDistribution.fromUnscaledPDF(Tensors.vector(1, 2, 0, 2, 3, 1)), //
       GeometricDistribution.of(.3), //
       HypergeometricDistribution.of(2, 2, 10), //
       NegativeBinomialDistribution.of(4, 0.8), //

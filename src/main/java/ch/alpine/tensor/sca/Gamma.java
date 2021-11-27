@@ -38,7 +38,7 @@ public enum Gamma implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar z) {
-    Scalar re = Real.of(z);
+    Scalar re = Real.FUNCTION.apply(z);
     Scalar round = Round.FUNCTION.apply(re);
     if (z.equals(round)) { // ..., -2, -1, 0, 1, 2, ...
       z = round;

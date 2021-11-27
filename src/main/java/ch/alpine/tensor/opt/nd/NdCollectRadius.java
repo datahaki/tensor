@@ -35,7 +35,7 @@ public class NdCollectRadius<V> extends NdCollectBase<V> {
   }
 
   @Override // from NdVisitor
-  public boolean isViable(Box box) {
+  public boolean isViable(CoordinateBoundingBox box) {
     return Scalars.lessEquals(ndCenterInterface.distance(box), radius);
   }
 

@@ -14,7 +14,7 @@ import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
-/** EqualizingDistribution is a continuous {@link EmpiricalDistribution} */
+/** EqualizingDistribution is a continuous {@link CategoricalDistribution} */
 public class EqualizingDistribution implements ContinuousDistribution, Serializable {
   /** Hint: distribution can be used for arc-length parameterization
    * 
@@ -26,10 +26,10 @@ public class EqualizingDistribution implements ContinuousDistribution, Serializa
   }
 
   // ---
-  private final EmpiricalDistribution empiricalDistribution;
+  private final CategoricalDistribution empiricalDistribution;
 
   private EqualizingDistribution(Tensor unscaledPDF) {
-    empiricalDistribution = (EmpiricalDistribution) EmpiricalDistribution.fromUnscaledPDF(unscaledPDF);
+    empiricalDistribution = (CategoricalDistribution) CategoricalDistribution.fromUnscaledPDF(unscaledPDF);
   }
 
   @Override // from PDF

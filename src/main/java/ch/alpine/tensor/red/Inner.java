@@ -14,7 +14,10 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 
-/** <p>inspired by
+/** The implementation is only consistent with Mathematica::Inner[f, l1, l2, g]
+ * in the special case where g == Identity.
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Inner.html">Inner</a> */
 public class Inner implements BinaryOperator<Tensor>, Serializable {
   /** @param biFunction non-null

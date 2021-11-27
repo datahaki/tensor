@@ -47,14 +47,14 @@ public class ExpectationTest extends TestCase {
     _check(BernoulliDistribution.of(RationalScalar.of(2, 7)));
     _check(BinomialDistribution.of(10, RationalScalar.of(3, 7)));
     _check(HypergeometricDistribution.of(10, 40, 100));
-    _check(EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(3, 2, 1, 4)));
+    _check(CategoricalDistribution.fromUnscaledPDF(Tensors.vector(3, 2, 1, 4)));
   }
 
   public void testEmpiricalDistribution() {
     int upper = 200;
     Tensor unscaledPDF = RandomVariate.of(DiscreteUniformDistribution.of(0, 10000), upper);
     Clip clip = Clips.interval(2, 8);
-    Distribution distribution = EmpiricalDistribution.fromUnscaledPDF(unscaledPDF);
+    Distribution distribution = CategoricalDistribution.fromUnscaledPDF(unscaledPDF);
     ScalarUnaryOperator suo = clip;
     Scalar expect = Expectation.of(suo, distribution);
     Tensor accumulate = Accumulate.of(unscaledPDF);
@@ -74,7 +74,7 @@ public class ExpectationTest extends TestCase {
   public void testNumeric() {
     _check(PoissonDistribution.of(RationalScalar.of(4, 3)));
     _check(GeometricDistribution.of(RealScalar.of(0.3)));
-    _check(EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(3, 0.2, 1, 0.4)));
+    _check(CategoricalDistribution.fromUnscaledPDF(Tensors.vector(3, 0.2, 1, 0.4)));
   }
 
   public void testExpectationDistribution() {

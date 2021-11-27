@@ -3,10 +3,11 @@ package ch.alpine.tensor.opt.nd;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
@@ -14,41 +15,25 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
 /** n-dimensional axis aligned bounding box
  * 
- * an instance of Box is immutable */
-public class Box implements Serializable {
-  /** min and max are vectors of identical length
-   * for instance to describe the 3-dimensional unit cube use
-   * <pre>
-   * min = {0, 0, 0}
-   * max = {1, 1, 1}
-   * </pre>
-   * 
-   * @param min lower left corner of axis aligned bounding box
-   * @param max upper right corner of axis aligned bounding box
-   * @return
-   * @throws Exception if either input parameter is not a vector, or
-   * if vectors are different in length
-   * @see Entrywise */
-  public static Box of(Tensor min, Tensor max) {
-    return new Box(IntStream.range(0, Integers.requireEquals(min.length(), max.length())) //
-        .mapToObj(index -> Clips.interval(min.Get(index), max.Get(index))) //
-        .collect(Collectors.toList()));
-  }
-
-  public static Box of(Clip... clips) {
-    return new Box(Arrays.stream(clips).collect(Collectors.toList()));
+ * an instance of CoordinateBoundingBox is immutable
+ * 
+ * @see CoordinateBounds */
+public class CoordinateBoundingBox implements Serializable {
+  /** @param stream of clip instances
+   * @return */
+  public static CoordinateBoundingBox of(Stream<Clip> stream) {
+    return new CoordinateBoundingBox(stream.map(Objects::requireNonNull).collect(Collectors.toList()));
   }
 
   // ---
   private final List<Clip> list;
 
-  private Box(List<Clip> list) {
+  private CoordinateBoundingBox(List<Clip> list) {
     this.list = list;
   }
 
@@ -64,8 +49,8 @@ public class Box implements Serializable {
   }
 
   /** @param vector of length {@link #dimensions()}
-   * @return coordinates of vector clipped to bounds of this instance */
-  public Tensor clip(Tensor vector) {
+   * @return coordinates of vector clipped to bounds of this box instance */
+  public Tensor mapInside(Tensor vector) {
     return Tensors.vector(i -> getClip(i).apply(vector.Get(i)), //
         Integers.requireEquals(dimensions(), vector.length()));
   }
@@ -89,20 +74,20 @@ public class Box implements Serializable {
   // ---
   /** @param index of dimension
    * @return left, i.e. lower half of this bounding box */
-  public Box splitLo(int index) {
+  public CoordinateBoundingBox splitLo(int index) {
     List<Clip> copy = new ArrayList<>(list);
     Clip clip = getClip(index);
     copy.set(index, Clips.interval(clip.min(), median(clip)));
-    return new Box(copy);
+    return new CoordinateBoundingBox(copy);
   }
 
   /** @param index of dimension
    * @return right, i.e. upper half of this bounding box */
-  public Box splitHi(int index) {
+  public CoordinateBoundingBox splitHi(int index) {
     List<Clip> copy = new ArrayList<>(list);
     Clip clip = getClip(index);
     copy.set(index, Clips.interval(median(clip), clip.max()));
-    return new Box(copy);
+    return new CoordinateBoundingBox(copy);
   }
 
   /** @param index
@@ -134,8 +119,8 @@ public class Box implements Serializable {
 
   @Override // from Object
   public boolean equals(Object object) {
-    if (object instanceof Box) {
-      Box box = (Box) object;
+    if (object instanceof CoordinateBoundingBox) {
+      CoordinateBoundingBox box = (CoordinateBoundingBox) object;
       return list.equals(box.list);
     }
     return false;

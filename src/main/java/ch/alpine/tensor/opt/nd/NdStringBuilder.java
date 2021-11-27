@@ -22,7 +22,7 @@ import ch.alpine.tensor.Scalar;
   }
 
   @Override
-  public boolean isViable(Box box) {
+  public boolean isViable(CoordinateBoundingBox box) {
     return true;
   }
 

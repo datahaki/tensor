@@ -20,8 +20,8 @@ import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.pdf.CategoricalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.EmpiricalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
@@ -90,7 +90,7 @@ public class SparseArraysTest extends TestCase {
     tensor.toString();
   }
 
-  private final Distribution distribution = EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(10, 1, 0, 1, 1));
+  private final Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(10, 1, 0, 1, 1));
   private Random random = new Random(3);
 
   private Tensor _random(int... size) {

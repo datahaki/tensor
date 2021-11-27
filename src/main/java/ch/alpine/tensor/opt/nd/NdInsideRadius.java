@@ -29,7 +29,7 @@ public class NdInsideRadius<V> extends NdCollectBase<V> {
   }
 
   @Override // from NdVisitor
-  public boolean isViable(Box box) {
+  public boolean isViable(CoordinateBoundingBox box) {
     return !found //
         && Scalars.lessEquals(ndCenterInterface.distance(box), radius);
   }

@@ -12,10 +12,11 @@ import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Sign;
 
-/** Careful:
- * The constructor Mathematica::EmpiricalDistribution[data] has no direct equivalent in the tensor library.
+/** Tensor-lib:CategoricalDistribution corresponds to the special case of
+ * Mathematica:CategoricalDistribution with categories 0, 1, 2, 3, ...
+ * This is no loss of generality, since the integer i can simply be mapped to the i-th category.
  * 
- * <p>The constructor of the tensor library EmpiricalDistribution takes as input
+ * <p>The constructor of the tensor library CategoricalDistribution takes as input
  * an unscaled pdf vector with scalar entries that are interpreted over the samples
  * <pre>
  * 0, 1, 2, 3, ..., [length of unscaled pdf] - 1
@@ -24,28 +25,28 @@ import ch.alpine.tensor.sca.Sign;
  * <p>"unscaled" pdf means that the values in the input vector are not absolute probabilities,
  * but only proportional to the probabilities P[X == i] for i = 0, 1, 2, ... of the EmpiricalDistribution.
  * 
- * <p>An instance of EmpiricalDistribution supports the computation of variance via
+ * <p>An instance of CategoricalDistribution supports the computation of variance via
  * {@link Expectation#variance(Distribution)}.
  * 
  * <p>Mathematica::HistogramDistribution has a <em>continuous</em> CDF.
- * In contrast, the CDF of Tensor::EmpiricalDistribution has discontinuities.
+ * In contrast, the CDF of Tensor::CategoricalDistribution has discontinuities.
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/EmpiricalDistribution.html">EmpiricalDistribution</a> */
-public class EmpiricalDistribution extends EvaluatedDiscreteDistribution implements CDF {
+ * <a href="https://reference.wolfram.com/language/ref/CategoricalDistribution.html">CategoricalDistribution</a> */
+public class CategoricalDistribution extends EvaluatedDiscreteDistribution implements CDF {
   /** @param unscaledPDF vector of non-negative weights over the numbers
    * [0, 1, 2, ..., unscaledPDF.length() - 1]
    * @return
    * @throws Exception if any entry in given unscaledPDF is negative */
   public static Distribution fromUnscaledPDF(Tensor unscaledPDF) {
-    return new EmpiricalDistribution(unscaledPDF);
+    return new CategoricalDistribution(unscaledPDF);
   }
 
   // ---
   private final Tensor pdf;
   private final Tensor cdf;
 
-  private EmpiricalDistribution(Tensor unscaledPDF) {
+  private CategoricalDistribution(Tensor unscaledPDF) {
     unscaledPDF.stream() //
         .map(Scalar.class::cast) //
         .forEach(Sign::requirePositiveOrZero);

@@ -14,7 +14,7 @@ public interface NdVisitor<V> {
 
   /** @param box
    * @return whether visiting should proceed within the given bounds */
-  boolean isViable(Box box);
+  boolean isViable(CoordinateBoundingBox box);
 
   /** @param ndEntry */
   void consider(NdEntry<V> ndEntry);

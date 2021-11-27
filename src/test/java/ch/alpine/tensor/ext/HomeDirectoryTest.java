@@ -40,6 +40,13 @@ public class HomeDirectoryTest extends TestCase {
     assertEquals(HomeDirectory.Pictures("test.png"), HomeDirectory.file("Pictures", "test.png"));
   }
 
+  public void testFreeSpace() {
+    File file = HomeDirectory.file();
+    assertTrue(0 < file.getFreeSpace());
+    assertTrue(0 < file.getTotalSpace());
+    assertTrue(0 < file.getUsableSpace());
+  }
+
   public void testNullFail() {
     AssertFail.of(() -> HomeDirectory.file("Doc", null, "some.txt"));
   }

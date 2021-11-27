@@ -9,7 +9,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Rescale;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.pdf.CDF;
-import ch.alpine.tensor.pdf.EmpiricalDistribution;
+import ch.alpine.tensor.pdf.CategoricalDistribution;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/HistogramTransform.html">HistogramTransform</a> */
@@ -25,7 +25,7 @@ public enum HistogramTransform {
         .map(Scalar.class::cast) //
         .mapToInt(Scalars::intValueExact) //
         .forEach(index -> ++values[index]);
-    CDF cdf = CDF.of(EmpiricalDistribution.fromUnscaledPDF(Tensors.vectorInt(values)));
+    CDF cdf = CDF.of(CategoricalDistribution.fromUnscaledPDF(Tensors.vectorInt(values)));
     return Rescale.of(matrix.map(cdf::p_lessThan)).multiply(_255);
   }
 }

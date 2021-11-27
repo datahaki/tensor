@@ -17,7 +17,14 @@ public class DeleteDirectoryTest extends TestCase {
   public void testLayer1a() throws IOException {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "1a");
     folder.mkdir();
-    new File(folder, "sample1.txt").createNewFile();
+    File sample1_txt = new File(folder, "sample1.txt");
+    sample1_txt.createNewFile();
+    try {
+      DeleteDirectory.of(sample1_txt, 2, 10);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
     new File(folder, "sample2.txt").createNewFile();
     try {
       DeleteDirectory.of(folder, 0, 5);

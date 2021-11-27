@@ -9,7 +9,7 @@ public enum RenameDirectory {
   ;
   /** @param origin existing directory
    * @param target directory that will be created
-   * @throws Exception if origin is not a directory
+   * @throws Exception if origin is not an existing directory
    * @throws Exception if target already exists
    * @throws Exception if parent directory of target cannot be created
    * @throws Exception if origin cannot be renamed to target */
