@@ -4,10 +4,12 @@ package ch.alpine.tensor.mat.re;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GaussianEliminationTest extends TestCase {
@@ -37,5 +39,14 @@ public class GaussianEliminationTest extends TestCase {
       gaussianElimination.solve();
       assertEquals(Inverse.of(matrix), gaussianElimination.solve());
     }
+  }
+
+  public void testRecreateError1() {
+    AssertFail.of(() -> LinearSolve.of(HilbertMatrix.of(4, 5), UnitVector.of(4, 3)));
+    AssertFail.of(() -> LinearSolve.of(HilbertMatrix.of(5, 4), UnitVector.of(4, 3)));
+  }
+
+  public void testRecreateError2() {
+    AssertFail.of(() -> LinearSolve.of(HilbertMatrix.of(4, 4), UnitVector.of(5, 3)));
   }
 }

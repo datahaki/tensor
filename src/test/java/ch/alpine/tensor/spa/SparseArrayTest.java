@@ -16,6 +16,8 @@ import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.Pretty;
+import ch.alpine.tensor.lie.LeviCivitaTensor;
+import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.SquareMatrixQ;
@@ -83,6 +85,11 @@ public class SparseArrayTest extends TestCase {
     Tensor sparse = SparseArray.of(GaussScalar.of(0, 5), 5, 4, 8);
     sparse.set(GaussScalar.of(3, 5), 0, 1, 2);
     assertEquals(sparse.get(1, Tensor.ALL, 3), ConstantArray.of(GaussScalar.of(0, 5), 4));
+    AssertFail.of(() -> sparse.get(Tensor.ALL));
+    Tensor result = sparse.get(Tensor.ALL, 2);
+    assertTrue(result instanceof SparseArray);
+    assertEquals(result, Normal.of(sparse).get(Tensor.ALL, 2));
+    assertEquals(sparse.get(Tensor.ALL, 2, Tensor.ALL), Normal.of(sparse).get(Tensor.ALL, 2));
   }
 
   public void testFails() {
@@ -283,6 +290,12 @@ public class SparseArrayTest extends TestCase {
     sparse.set(Array.zeros(5), 2);
     AssertFail.of(() -> sparse.set(Array.zeros(5, 2), 2));
     AssertFail.of(() -> sparse.set(Tensors.fromString("{1,2,{3},4,5}"), 2));
+  }
+
+  public void testDotFull() {
+    Tensor tensor = LeviCivitaTensor.of(3).dot(HilbertMatrix.of(3));
+    tensor.toString();
+    assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3, 3));
   }
 
   public void testKeyCollision() {

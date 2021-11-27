@@ -15,17 +15,19 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * 
  * <p>https://en.wikipedia.org/wiki/Horner%27s_method */
 /* package */ class HornerScheme implements ScalarUnaryOperator {
-  private final Tensor coeffs;
+  private final Scalar head;
+  private final Tensor rest;
 
   // careful: the coeffs are in reversed order in comparison to Polynomial
   public HornerScheme(Tensor coeffs) {
-    this.coeffs = coeffs;
+    head = coeffs.Get(0);
+    rest = coeffs.extract(1, coeffs.length());
   }
 
   @Override
   public Scalar apply(Scalar scalar) {
-    Scalar total = scalar.zero();
-    for (Tensor entry : coeffs)
+    Scalar total = head;
+    for (Tensor entry : rest)
       total = total.multiply(scalar).add(entry); // a + b ** x + c ** x ** x
     // total = scalar.multiply(total).add(entry); // a + x ** b + x ** x ** c
     return total;

@@ -7,6 +7,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.red.Times;
 
 /** Evaluation of a polynomial using horner scheme.
  * 
@@ -26,14 +27,10 @@ public enum Polynomial {
    * == a + (b + (c + d ** x) ** x ) ** x
    * </pre>
    * 
-   * Given an empty list of coefficients, the operator evaluates to zero for any parameter x
-   * <pre>
-   * Polynomial.of({}).apply(x) == x.zero()
-   * </pre>
-   * 
-   * @param coeffs of polynomial
+   * @param coeffs of polynomial vector of length at least 1
    * @return evaluation of polynomial for scalar input
-   * @throws Exception if input is not a vector */
+   * @throws Exception if input is not a vector
+   * @throws Exception if input is empty vector */
   public static ScalarUnaryOperator of(Tensor coeffs) {
     return new HornerScheme(Reverse.of(VectorQ.require(coeffs)));
   }
@@ -60,6 +57,13 @@ public enum Polynomial {
    * derivative_coeffs[{a, b, c, d}] == {b, 2*c, 3*d}
    * </pre>
    * 
+   * Remark:
+   * Consider the polynomial that maps temperatures (in Kelvin) to pressure (in bar)
+   * with coefficients {-13[bar], 0.27[K^-1*bar]}
+   * The derivative maps temperatures to quantities with unit "K^-1*bar"
+   * {0.27[K^-1*bar]}
+   * At this point, the information about the units of domain and values is lost.
+   * 
    * @param coeffs
    * @return coefficients of polynomial that is the derivative of the polynomial defined by given coeffs
    * @throws Exception if given coeffs is not a vector */
@@ -67,6 +71,6 @@ public enum Polynomial {
     int length = coeffs.length();
     return length == 0 //
         ? Tensors.empty()
-        : coeffs.extract(1, length).pmul(Range.of(1, length));
+        : Times.of(coeffs.extract(1, length), Range.of(1, length));
   }
 }

@@ -3,12 +3,14 @@ package ch.alpine.tensor.lie;
 
 import java.util.Arrays;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.io.StringTensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -72,6 +74,16 @@ public class PermutationsTest extends TestCase {
   public void testMatrix() {
     assertEquals(Dimensions.of(Permutations.of(IdentityMatrix.of(3))), Arrays.asList(6, 3, 3));
     assertEquals(Dimensions.of(Permutations.of(IdentityMatrix.of(3).extract(0, 2))), Arrays.asList(2, 2, 3));
+  }
+
+  public void testNonComparable() {
+    Tensor tensor = Tensors.of( //
+        ComplexScalar.I, //
+        Quaternion.of(3, 2, 3, 4), //
+        Quantity.of(2, "s"), Quantity.of(2, "s"), //
+        Quantity.of(-1, "m"));
+    Tensor permut = Permutations.of(tensor);
+    assertEquals(permut.length(), 60);
   }
 
   public void testTensorScalarFail() {

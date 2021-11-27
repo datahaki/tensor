@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.qr;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -12,8 +13,6 @@ import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Vector2Norm;
-import ch.alpine.tensor.red.Diagonal;
-import ch.alpine.tensor.red.Times;
 
 /** decomposition Q.R = A with Det[Q] == +1
  * householder with even number of reflections
@@ -68,7 +67,7 @@ import ch.alpine.tensor.red.Times;
   @Override // from QRDecomposition
   public Scalar det() {
     return r.length() == m // check if R is square
-        ? (Scalar) Times.pmul(Diagonal.of(r))
+        ? IntStream.range(0, m).mapToObj(i -> r.Get(i, i)).reduce(Scalar::multiply).orElseThrow()
         : RealScalar.ZERO;
   }
 }

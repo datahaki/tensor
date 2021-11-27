@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -14,12 +15,16 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.lie.TensorWedge;
+import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.pdf.CategoricalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.EmpiricalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -44,11 +49,11 @@ public class SparseArraysTest extends TestCase {
       assertTrue(r_sub instanceof SparseArray);
     }
     {
-      Tensor r_pml = sa.pmul(sb);
-      assertEquals(a.pmul(b), r_pml);
-      assertEquals(a.pmul(sb), r_pml);
-      assertEquals(sa.pmul(b), r_pml);
-      assertTrue(r_pml instanceof SparseArray);
+      Tensor r_pml = Times.of(sa, sb);
+      assertEquals(Times.of(a, b), r_pml);
+      assertEquals(Times.of(a, sb), r_pml);
+      assertEquals(Times.of(sa, b), r_pml);
+      // assertTrue(r_pml instanceof SparseArray); // TODO !?
     }
   }
 
@@ -75,7 +80,17 @@ public class SparseArraysTest extends TestCase {
     AssertFail.of(() -> SparseArray.of(RealScalar.ONE, 2, 3));
   }
 
-  private final Distribution distribution = EmpiricalDistribution.fromUnscaledPDF(Tensors.vector(10, 1, 0, 1, 1));
+  public void testPMulFullSparse() {
+    Tensor tensor = Times.of(HilbertMatrix.of(3), LeviCivitaTensor.of(3));
+    tensor.toString();
+  }
+
+  public void testPMulSparseFull() {
+    Tensor tensor = Times.of(IdentityMatrix.sparse(3), HilbertMatrix.of(3));
+    tensor.toString();
+  }
+
+  private final Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(10, 1, 0, 1, 1));
   private Random random = new Random(3);
 
   private Tensor _random(int... size) {
@@ -126,8 +141,9 @@ public class SparseArraysTest extends TestCase {
 
   public void testFallbackFail() {
     Tensor tensor = Array.sparse(3);
-    AssertFail.of(() -> tensor.multiply(Quantity.of(7, "s*m")));
-    AssertFail.of(() -> tensor.divide(Quantity.of(7, "s*m")));
+    AssertFail.of(() -> tensor.divide(Quantity.of(0, "")));
+    AssertFail.of(() -> tensor.divide(Quantity.of(0, "s*m")));
+    AssertFail.of(() -> tensor.multiply(DoubleScalar.POSITIVE_INFINITY));
   }
 
   public void testArraysAsListSerialization() throws ClassNotFoundException, IOException {

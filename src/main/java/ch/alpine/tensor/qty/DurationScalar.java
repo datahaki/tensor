@@ -6,26 +6,31 @@ import java.time.Duration;
 import java.util.Objects;
 
 import ch.alpine.tensor.AbstractScalar;
-import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
+import ch.alpine.tensor.api.ChopInterface;
 import ch.alpine.tensor.api.ExactScalarQInterface;
 import ch.alpine.tensor.api.SignInterface;
+import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Floor;
+import ch.alpine.tensor.sca.N;
 
-/** EXPERIMENTAL
- * 
- * The string expression of {@link DurationScalar} is identical to that of {@link Duration}.
+/** The string expression of {@link DurationScalar} is identical to that of {@link Duration}.
  * 
  * Example:
  * Duration.ofSeconds(245234, 123_236_987).toString() == "PT68H7M14.123236987S"
  * 
+ * {@link Chop} treats duration scalar as decimal number of seconds.
+ * For instance Chop_05[0sec+1nano]==0sec
+ * 
  * @implSpec
  * This class is immutable and thread-safe. */
 public class DurationScalar extends AbstractScalar implements AbsInterface, //
-    ExactScalarQInterface, Comparable<Scalar>, SignInterface, Serializable {
+    ChopInterface, ExactScalarQInterface, Comparable<Scalar>, SignInterface, Serializable {
   public static final DurationScalar ZERO = new DurationScalar(Duration.ZERO);
 
   /** @param duration
@@ -33,6 +38,22 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
    * @throws Exception if given duration is null */
   public static DurationScalar of(Duration duration) {
     return new DurationScalar(Objects.requireNonNull(duration));
+  }
+
+  /** Example:
+   * fromSeconds(1) == PT1S
+   * 
+   * in case the scalar is in double precision, then the nano
+   * seconds are approximated
+   * 
+   * @param scalar amount of seconds
+   * @return
+   * @throws Exception if scalar is not a {@link RealScalar} */
+  public static DurationScalar fromSeconds(Scalar scalar) {
+    Scalar integral = Floor.FUNCTION.apply(scalar);
+    return new DurationScalar(Duration.ofSeconds( //
+        Scalars.longValueExact(integral), //
+        scalar.subtract(integral).multiply(NANOS).number().longValue()));
   }
 
   // ---
@@ -51,8 +72,9 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from Scalar
   public DurationScalar multiply(Scalar scalar) {
-    // TODO can to better
-    return new DurationScalar(duration.multipliedBy(IntegerQ.require(scalar).number().longValue()));
+    if (scalar instanceof DurationScalar) // condition inserted for clarity
+      throw TensorRuntimeException.of(this, scalar);
+    return fromSeconds(toSeconds().multiply(scalar));
   }
 
   @Override // from AbstractScalar
@@ -61,8 +83,7 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
       DurationScalar durationScalar = (DurationScalar) scalar;
       return toSeconds().divide(durationScalar.toSeconds());
     }
-    // TODO can to better
-    throw TensorRuntimeException.of(this, scalar);
+    return fromSeconds(toSeconds().divide(scalar));
   }
 
   @Override // from AbstractScalar
@@ -71,7 +92,6 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
       DurationScalar durationScalar = (DurationScalar) scalar;
       return durationScalar.toSeconds().divide(toSeconds());
     }
-    // TODO can to better
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -126,6 +146,13 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
     return true;
   }
 
+  @Override // from ChopInterface
+  public DurationScalar chop(Chop chop) {
+    return chop.isZero(N.DOUBLE.apply(toSeconds())) //
+        ? zero()
+        : this;
+  }
+
   @Override // from Comparable
   public int compareTo(Scalar scalar) {
     if (scalar instanceof DurationScalar) {
@@ -163,7 +190,12 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
     return duration.toString();
   }
 
+  private static final long NANOS_LONG = 1_000_000_000;
+  private static final Scalar NANOS = RealScalar.of(NANOS_LONG);
+
+  /** @return instance of rational scalar where fractional part corresponds to the nano seconds */
   private Scalar toSeconds() {
-    return RealScalar.of(duration.getSeconds()).add(RationalScalar.of(duration.getNano(), 1_000_000_000));
+    return RealScalar.of(duration.getSeconds()) //
+        .add(RationalScalar.of(duration.getNano(), NANOS_LONG));
   }
 }

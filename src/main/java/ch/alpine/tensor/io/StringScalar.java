@@ -27,6 +27,9 @@ import ch.alpine.tensor.TensorRuntimeException;
  * Whether this convention will adopted in the tensor library at some point
  * in the future is open for discussion. */
 public class StringScalar extends AbstractScalar implements Comparable<Scalar>, Serializable {
+  /** instance of string scalar with empty string "" as value */
+  public static final Scalar EMPTY = of("");
+
   /** @param string
    * @return new instance of {@link StringScalar} representing string
    * @throws Exception if argument is null */

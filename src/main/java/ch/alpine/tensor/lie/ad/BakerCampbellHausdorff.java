@@ -4,6 +4,7 @@ package ch.alpine.tensor.lie.ad;
 
 import java.io.Serializable;
 import java.util.function.BinaryOperator;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -11,12 +12,10 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Factorial;
@@ -82,8 +81,12 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
       final int k = p.length();
       if (chop.allZero(v))
         return;
-      Scalar f = RealScalar.of(Math.multiplyExact(SIGN[k & 1] * (k + 1), total_q + 1)) //
-          .multiply((Scalar) Times.pmul(Join.of(p, q).map(Factorial.FUNCTION)));
+      Scalar fac = Stream.concat(p.stream(), q.stream()) //
+          .map(Scalar.class::cast) //
+          .map(Factorial.FUNCTION) //
+          .reduce(Scalar::multiply) //
+          .orElse(RealScalar.ONE);
+      Scalar f = RealScalar.of(Math.multiplyExact(SIGN[k & 1] * (k + 1), total_q + 1)).multiply(fac);
       series.set(v.divide(f)::add, d - 1);
       if (d < degree) {
         if (0 < k) {

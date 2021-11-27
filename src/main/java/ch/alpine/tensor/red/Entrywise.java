@@ -73,10 +73,9 @@ public class Entrywise implements BinaryOperator<Tensor>, Serializable {
   public Tensor apply(Tensor a, Tensor b) {
     if (a instanceof Scalar)
       return scalarBinaryOperator.apply((Scalar) a, (Scalar) b);
-    Integers.requireEquals(a.length(), b.length());
     Iterator<Tensor> ia = a.iterator();
     Iterator<Tensor> ib = b.iterator();
-    List<Tensor> list = new ArrayList<>(a.length());
+    List<Tensor> list = new ArrayList<>(Integers.requireEquals(a.length(), b.length()));
     while (ia.hasNext())
       list.add(apply(ia.next(), ib.next()));
     return Unprotect.using(list);

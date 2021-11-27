@@ -30,11 +30,11 @@ public interface RealScalar extends Scalar, //
     ConjugateInterface, ExpInterface, LogInterface, PowerInterface, RoundingInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface {
   /** real scalar 0 as a {@link RationalScalar} */
-  static final Scalar ZERO = RationalScalar.integer(0);
+  Scalar ZERO = RationalScalar.integer(0);
   /** real scalar 1 as a {@link RationalScalar} */
-  static final Scalar ONE = RationalScalar.integer(1);
+  Scalar ONE = RationalScalar.integer(1);
   /** real scalar 2 as a {@link RationalScalar} */
-  static final Scalar TWO = RationalScalar.integer(2);
+  Scalar TWO = RationalScalar.integer(2);
 
   /** @param value
    * @return real scalar of given integer value */

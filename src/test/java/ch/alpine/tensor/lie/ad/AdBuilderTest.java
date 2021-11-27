@@ -6,8 +6,10 @@ import java.util.function.BinaryOperator;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
+import ch.alpine.tensor.lie.MatrixBracket;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.spa.Normal;
 import junit.framework.TestCase;
 
 public class AdBuilderTest extends TestCase {
@@ -34,11 +36,21 @@ public class AdBuilderTest extends TestCase {
     assertEquals(form, DiagonalMatrix.of(-2, -2, -2));
   }
 
+  public void testB0B2() {
+    Tensor b0 = Tensors.fromString("{{0, 0, 1[m]}, {0, 0, 0}, {0, 0, 0}}");
+    Tensor b2 = Normal.of(LeviCivitaTensor.of(3).get(2).negate());
+    assertEquals(b2.dot(b0), Normal.of(b2).dot(b0));
+    assertEquals(b0.dot(b2), b0.dot(Normal.of(b2)));
+  }
+
   public void testSe2Units() {
     Tensor b0 = Tensors.fromString("{{0, 0, 1[m]}, {0, 0, 0}, {0, 0, 0}}");
     Tensor b1 = Tensors.fromString("{{0, 0, 0}, {0, 0, 1[m]}, {0, 0, 0}}");
-    Tensor b2 = LeviCivitaTensor.of(3).get(2).negate();
+    Tensor b2 = Normal.of(LeviCivitaTensor.of(3).get(2).negate());
     Tensor basis = Tensors.of(b0, b1, b2);
+    MatrixBracket.of(b0, b1);
+    MatrixBracket.of(b0, b2);
+    MatrixBracket.of(b1, b2);
     Tensor ad = AdBuilder.of(basis);
     BinaryOperator<Tensor> binaryOperator = BakerCampbellHausdorff.of(ad, 6);
     Tensor x = Tensors.fromString("{1[m], 2[m], 3}");

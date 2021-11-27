@@ -4,7 +4,6 @@ package ch.alpine.tensor.qty;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -22,8 +21,8 @@ public class SiUnitSystemTest extends TestCase {
 
   public void testBase() {
     Set<String> base = UnitSystems.base(UnitSystem.SI());
-    assertEquals(base.size(), 7);
-    assertEquals(base, new HashSet<>(Arrays.asList("A", "cd", "s", "K", "mol", "kg", "m")));
+    assertTrue(7 <= base.size());
+    assertTrue(base.containsAll(Arrays.asList("A", "cd", "s", "K", "mol", "kg", "m")));
   }
 
   public void testExtension() {

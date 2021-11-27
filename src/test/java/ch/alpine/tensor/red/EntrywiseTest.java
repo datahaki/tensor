@@ -85,7 +85,7 @@ public class EntrywiseTest extends TestCase {
     Tensor b = RandomVariate.of(distribution, 7, 9);
     Tensor c = RandomVariate.of(distribution, 7, 9);
     Tensor res = Entrywise.with(Scalar::multiply).of(Tensors.of(a, b, c));
-    assertEquals(res, a.pmul(b).pmul(c));
+    assertEquals(res, Times.of(Times.of(a, b), c));
   }
 
   public void testEmpty() {

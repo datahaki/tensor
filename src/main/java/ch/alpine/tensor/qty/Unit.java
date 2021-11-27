@@ -11,12 +11,12 @@ import ch.alpine.tensor.Scalars;
  * Two instances of {@link Unit} are equal if their map()s are equal. */
 public interface Unit {
   /** Example: cd*m*s */
-  static final String JOIN_DELIMITER = "*";
+  String JOIN_DELIMITER = "*";
   /** Example: A*kg^-2 */
-  static final char POWER_DELIMITER = '^';
+  char POWER_DELIMITER = '^';
   /** holds the dimension-less unit ONE
    * Mathematica: "DimensionlessUnit" */
-  static final Unit ONE = of("");
+  Unit ONE = of("");
 
   /** The precedence for parsing a string expression of unit is first '*', then '^'.
    * That means, the brackets are obsolete "N*K^(1/2)" == "N*K^1/2".

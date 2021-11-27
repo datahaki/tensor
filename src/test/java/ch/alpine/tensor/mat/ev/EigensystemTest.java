@@ -23,6 +23,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
+import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -36,7 +37,7 @@ public class EigensystemTest extends TestCase {
       Tensor vectors = eigensystem.vectors();
       Tensor values = eigensystem.values();
       OrthogonalMatrixQ.require(vectors);
-      Tensor recons = Transpose.of(vectors).dot(values.pmul(vectors));
+      Tensor recons = Transpose.of(vectors).dot(Times.of(values, vectors));
       Scalar err = MatrixInfinityNorm.of(matrix.subtract(recons));
       if (!Tolerance.CHOP.isClose(matrix, recons)) {
         System.err.println(err);
@@ -79,7 +80,7 @@ public class EigensystemTest extends TestCase {
           RandomVariate.of(NormalDistribution.standard(), r), //
           Array.zeros(n - 4)).map(s -> Quantity.of(s, "m"));
       Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
-      Tensor matrix = Transpose.of(x).dot(v.pmul(x));
+      Tensor matrix = Transpose.of(x).dot(Times.of(v, x));
       assertEquals(MatrixRank.of(matrix), r);
       Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
       eigensystem.values().map(QuantityMagnitude.singleton("m"));

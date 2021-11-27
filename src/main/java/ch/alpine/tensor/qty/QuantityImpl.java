@@ -29,7 +29,12 @@ import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.Sqrt;
 
-/** @implSpec
+/** Mathematica does not resolve
+ * Quantity[1, "Amperes"] + Quantity[0, "Meters"]
+ * but the tensor library gives the result
+ * Quantity[1, "Amperes"]
+ * 
+ * @implSpec
  * This class is immutable and thread-safe. */
 /* package */ class QuantityImpl extends AbstractScalar implements Quantity, //
     ChopInterface, ExactScalarQInterface, NInterface, Serializable {

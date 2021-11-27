@@ -32,6 +32,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sqrt;
@@ -42,7 +43,7 @@ public class CholeskyDecompositionTest extends TestCase {
   static CholeskyDecomposition checkDecomp(Tensor matrix) {
     int n = matrix.length();
     CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix);
-    Tensor res = choleskyDecomposition.getL().dot(choleskyDecomposition.diagonal().pmul(ConjugateTranspose.of(choleskyDecomposition.getL())));
+    Tensor res = choleskyDecomposition.getL().dot(Times.of(choleskyDecomposition.diagonal(), ConjugateTranspose.of(choleskyDecomposition.getL())));
     Tolerance.CHOP.requireClose(matrix.subtract(res), Array.zeros(n, n));
     Tolerance.CHOP.requireClose(choleskyDecomposition.det(), Det.of(matrix));
     return choleskyDecomposition;
@@ -178,7 +179,7 @@ public class CholeskyDecompositionTest extends TestCase {
       CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
       assertEquals(Det.of(matrix), cd.det()); // 100[kg^2, m^2, rad^2]
       Tensor lower = rows_pmul_v(cd.getL(), Sqrt.of(cd.diagonal()));
-      Tensor upper = Sqrt.of(cd.diagonal()).pmul(ConjugateTranspose.of(cd.getL()));
+      Tensor upper = Times.of(Sqrt.of(cd.diagonal()), ConjugateTranspose.of(cd.getL()));
       Tensor res = lower.dot(upper);
       Chop._10.requireClose(matrix, res);
     }
@@ -191,14 +192,14 @@ public class CholeskyDecompositionTest extends TestCase {
   }
 
   private static Tensor rows_pmul_v(Tensor L, Tensor diag) {
-    return TensorMap.of(row -> row.pmul(diag), L, 1); // apply pmul on level 1
+    return TensorMap.of(row -> Times.of(row, diag), L, 1); // apply pmul on level 1
   }
 
   public void testQuantityComplex() {
     Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
     CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
     Tensor sdiag = Sqrt.of(cd.diagonal());
-    Tensor upper = sdiag.pmul(ConjugateTranspose.of(cd.getL()));
+    Tensor upper = Times.of(sdiag, ConjugateTranspose.of(cd.getL()));
     {
       Tensor res = ConjugateTranspose.of(upper).dot(upper);
       Chop._10.requireClose(matrix, res);

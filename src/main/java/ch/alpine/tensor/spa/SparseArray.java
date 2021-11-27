@@ -48,6 +48,8 @@ public class SparseArray extends AbstractTensor implements Serializable {
             Integers.asList(IntStream.of(dimensions).map(Integers::requirePositiveOrZero).toArray()));
   }
 
+  // TODO Mathematica allows Quantity[0, "m"] as fallback and returns Normal[result] in
+  // ... case calculation does not result in unique fallback.
   // ---
   private final Scalar fallback;
   /** the content of size is not modified by sparse array */
@@ -83,6 +85,23 @@ public class SparseArray extends AbstractTensor implements Serializable {
           ? fallback
           : new SparseArray(fallback, Lists.rest(size));
     return tensor;
+  }
+
+  @Override // from Tensor
+  public Tensor get(List<Integer> index) {
+    if (index.isEmpty())
+      return copy();
+    int head = index.get(0);
+    List<Integer> _index = Lists.rest(index);
+    if (head == ALL) {
+      List<Integer> list = IntStream.range(0, size.size()) //
+          .filter(i -> index.size() <= i || index.get(i) == ALL) //
+          .map(size::get) //
+          .boxed().collect(Collectors.toList());
+      return new SparseArray(fallback, list, navigableMap.entrySet().stream() //
+          .collect(_map(Entry::getKey, entry -> entry.getValue().get(_index)))); //
+    }
+    return byRef(head).get(_index);
   }
 
   @Override // from Tensor
@@ -197,13 +216,6 @@ public class SparseArray extends AbstractTensor implements Serializable {
   }
 
   @Override // from Tensor
-  public Tensor pmul(Tensor tensor) {
-    Integers.requireEquals(length(), tensor.length());
-    return new SparseArray(fallback, size, navigableMap.entrySet().stream() //
-        .collect(_map(Entry::getKey, entry -> entry.getValue().pmul(tensor.get(entry.getKey()))))).trim();
-  }
-
-  @Override // from Tensor
   public Tensor multiply(Scalar scalar) {
     return new SparseArray(StaticHelper.checkFallback(fallback.multiply(scalar)), size, //
         navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().multiply(scalar))));
@@ -217,22 +229,30 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor dot(Tensor tensor) {
-    if (size.size() == 1)
+    if (size.size() == 1) {
+      List<Integer> rest = Lists.rest(Dimensions.of(tensor));
+      if (rest.isEmpty())
+        return navigableMap.entrySet().stream() //
+            .map(entry -> tensor.Get(entry.getKey()).multiply((Scalar) entry.getValue())) //
+            .reduce(Scalar::add) //
+            .orElse(fallback);
       return navigableMap.entrySet().stream() //
-          .map(entry -> tensor.get(entry.getKey()).multiply((Scalar) entry.getValue())) //
+          .map(entry -> StaticHelper.of(fallback, rest, tensor.get(entry.getKey()).multiply((Scalar) entry.getValue()))) //
           .reduce(Tensor::add) //
-          .orElseGet(() -> {
-            List<Integer> list = Dot.combine(size, Dimensions.of(tensor));
-            return list.isEmpty() ? fallback : new SparseArray(fallback, list);
-          });
+          .orElseGet(() -> new SparseArray(fallback, rest));
+    }
     return new SparseArray(fallback, Dot.combine(size, Dimensions.of(tensor)), //
-        navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().dot(tensor)))).trim();
+        navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().dot(tensor))));
   }
 
   @Override // from Tensor
   public Tensor map(Function<Scalar, ? extends Tensor> function) {
-    return new SparseArray(StaticHelper.checkFallback((Scalar) function.apply(fallback)), size, navigableMap.entrySet() //
-        .stream().collect(_map(Entry::getKey, entry -> entry.getValue().map(function)))).trim();
+    Tensor map_fallback = function.apply(fallback);
+    Dimensions dimensions = new Dimensions(map_fallback);
+    List<Integer> result = Stream.concat(size.stream(), dimensions.list().stream()).collect(Collectors.toList());
+    SparseArray sparseArray = new SparseArray(fallback, result);
+    visit((list, scalar) -> sparseArray.set(function.apply(scalar), list));
+    return sparseArray;
   }
 
   @Override // from Tensor

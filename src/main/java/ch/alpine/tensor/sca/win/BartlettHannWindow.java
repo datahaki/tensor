@@ -22,7 +22,7 @@ public enum BartlettHannWindow implements ScalarUnaryOperator {
   public Scalar apply(Scalar x) {
     if (StaticHelper.SEMI.isInside(x)) {
       x = Abs.FUNCTION.apply(x);
-      return StaticHelper.deg1(A0, A1, x).add(x.pmul(L1));
+      return StaticHelper.deg1(A0, A1, x).add(x.multiply(L1));
     }
     return RealScalar.ZERO;
   }

@@ -37,11 +37,11 @@ public class JacobiMethodTest extends TestCase {
     Tensor vectors = eigensystem.vectors();
     Tensor values = eigensystem.values();
     {
-      Tensor sol = LinearSolve.of(vectors, values.pmul(vectors));
+      Tensor sol = LinearSolve.of(vectors, Times.of(values, vectors));
       Tolerance.CHOP.requireClose(sol, matrix);
     }
     {
-      Tensor sol = Transpose.of(vectors).dot(values.pmul(vectors));
+      Tensor sol = Transpose.of(vectors).dot(Times.of(values, vectors));
       Tolerance.CHOP.requireClose(sol, matrix);
     }
     Tensor Vi = Inverse.of(eigensystem.vectors());
@@ -53,7 +53,7 @@ public class JacobiMethodTest extends TestCase {
     assertEquals(res.subtract(matrix).map(Chop._08), matrix.multiply(RealScalar.ZERO));
     // testing determinant
     Scalar det = Det.of(matrix);
-    Tensor prd = Times.pmul(eigensystem.values());
+    Tensor prd = eigensystem.values().stream().map(Scalar.class::cast).reduce(Scalar::multiply).orElseThrow();
     Tolerance.CHOP.requireClose(det, prd);
     Tensor norm = Tensor.of(eigensystem.vectors().stream().map(Vector2Norm::of));
     Tolerance.CHOP.requireClose(norm, Tensors.vector(i -> RealScalar.ONE, norm.length()));

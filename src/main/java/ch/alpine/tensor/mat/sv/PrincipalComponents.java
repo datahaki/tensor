@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.sv;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.Times;
 
 /** Careful: implementation is not consistent with Mathematica
  * 
@@ -20,6 +21,6 @@ public enum PrincipalComponents {
   /** @param svd
    * @return */
   public static Tensor of(SingularValueDecomposition svd) {
-    return Tensor.of(svd.getU().stream().map(svd.values()::pmul));
+    return Tensor.of(svd.getU().stream().map(Times.operator(svd.values())));
   }
 }

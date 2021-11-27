@@ -4,8 +4,11 @@ package ch.alpine.tensor.lie;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
@@ -15,7 +18,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Append;
-import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.alg.Tuples;
 
 /** implementation is consistent with Mathematica
@@ -31,8 +33,6 @@ import ch.alpine.tensor.alg.Tuples;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Permutations.html">Permutations</a>
  * 
- * @see Signature
- * @see Sort
  * @see Tuples */
 public class Permutations {
   /** @param tensor that is not a {@link Scalar}
@@ -71,12 +71,12 @@ public class Permutations {
     if (length == 0)
       consumer.accept(ante);
     else {
-      Set<Tensor> set = new HashSet<>();
+      Set<Map<Tensor, Long>> set = new HashSet<>();
       for (int index = 0; index < length; ++index) {
         Tensor key = Tensor.of(Stream.concat( //
             post.stream().limit(index), //
             post.stream().skip(index + 1)));
-        if (set.add(Sort.of(key)))
+        if (set.add(key.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))))
           recur(Append.of(ante, post.get(index)), key);
       }
     }

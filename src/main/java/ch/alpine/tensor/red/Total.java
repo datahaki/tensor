@@ -16,7 +16,6 @@ import ch.alpine.tensor.nrm.NormalizeTotal;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Total.html">Total</a>
  * 
- * @see Times#pmul(Tensor)
  * @see NormalizeTotal */
 public enum Total {
   ;

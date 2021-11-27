@@ -37,4 +37,10 @@ public class DegreeTest extends TestCase {
   public void testStringScalarFail() {
     AssertFail.of(() -> Degree.of(StringScalar.of("abc")));
   }
+
+  public void testBytes() {
+    assertEquals(QuantityMagnitude.SI().in("B").apply(Quantity.of(3, "MB")), RealScalar.of(3000_000));
+    assertEquals(QuantityMagnitude.SI().in("kB").apply(Quantity.of(30_000, "B")), RealScalar.of(30));
+    assertEquals(QuantityMagnitude.SI().in("TB").apply(Quantity.of(2, "PB")), RealScalar.of(2000));
+  }
 }

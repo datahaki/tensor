@@ -28,32 +28,34 @@ public class DeleteDirectory {
    * 
    * The abort criteria are described at top of class
    * 
-   * @param file
+   * @param directory
    * @param max_nested
    * @param max_delete
    * @return
    * @throws Exception if given directory does not exist, or criteria are not met */
-  public static DeleteDirectory of(File file, int max_nested, long max_delete) throws IOException {
-    return of(file, max_nested, max_delete, 0);
+  public static DeleteDirectory of(File directory, int max_nested, long max_delete) throws IOException {
+    return of(directory, max_nested, max_delete, 0);
   }
 
-  /** @param file
+  /** @param directory
    * @param max_nested
    * @param max_delete
    * @param mask
    * @return
    * @throws IOException */
-  public static DeleteDirectory of(File file, int max_nested, long max_delete, int mask) throws IOException {
+  public static DeleteDirectory of(File directory, int max_nested, long max_delete, int mask) throws IOException {
+    if (directory.isFile())
+      throw new RuntimeException("not a directory: " + directory);
     DeleteDirectory deleteDirectory = new DeleteDirectory(max_nested, mask);
-    deleteDirectory.visitRecursively(file, 0, false);
+    deleteDirectory.visitRecursively(directory, 0, false);
     if (deleteDirectory.fileCount <= max_delete) { // else abort criteria 2)
       deleteDirectory.fileCount = 0; // reset counter
-      deleteDirectory.visitRecursively(file, 0, true);
+      deleteDirectory.visitRecursively(directory, 0, true);
       return deleteDirectory;
     }
     throw new IOException(String.format("more files to be deleted than allowed (%d <= %d) in %s", //
         max_delete, //
-        deleteDirectory.fileCount(), file));
+        deleteDirectory.fileCount(), directory));
   }
 
   // ---

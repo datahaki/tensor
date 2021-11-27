@@ -5,6 +5,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.ext.Integers;
 
 /** Gaussian elimination is the most important algorithm of all time.
  * 
@@ -39,12 +41,19 @@ public class GaussianElimination extends AbstractReduce {
   }
 
   // ---
-  private final Tensor rhs;
+  private final Tensor[] rhs;
 
+  /** @param matrix square and invertible
+   * @param b tensor with first dimension identical to size of matrix
+   * @param pivot
+   * @throws Exception if matrix is singular
+   * @throws Exception if dimensions mismatch */
   public GaussianElimination(Tensor matrix, Tensor b, Pivot pivot) {
     super(matrix, pivot);
-    rhs = b.copy();
-    for (int c0 = 0; c0 < lhs.length; ++c0) {
+    rhs = b.stream().toArray(Tensor[]::new);
+    int n = Integers.requireEquals(lhs.length, lhs[0].length()); // matrix is square
+    Integers.requireEquals(n, rhs.length); // rhs matches dimensions of lhs
+    for (int c0 = 0; c0 < n; ++c0) {
       pivot(c0, c0);
       Scalar piv = lhs[ind[c0]].Get(c0);
       if (Scalars.isZero(piv))
@@ -59,18 +68,20 @@ public class GaussianElimination extends AbstractReduce {
       int ic1 = ind[c1];
       Scalar fac = lhs[ic1].Get(c0).divide(piv).negate();
       lhs[ic1] = lhs[ic1].add(lhs[ic0].multiply(fac));
-      rhs.set(rhs.get(ic1).add(rhs.get(ic0).multiply(fac)), ic1);
+      rhs[ic1] = rhs[ic1].add(rhs[ic0].multiply(fac));
     }
   }
 
   /** @return x with m.dot(x) == b */
   public Tensor solve() {
-    Tensor sol = rhs.map(Scalar::zero); // all-zeros copy of rhs
+    Tensor[] sol = new Tensor[rhs.length];
     for (int c0 = ind.length - 1; 0 <= c0; --c0) {
       int ic0 = ind[c0];
-      Scalar factor = lhs[ic0].Get(c0);
-      sol.set(rhs.get(ic0).subtract(lhs[ic0].dot(sol)).divide(factor), c0);
+      Tensor sum = rhs[ic0];
+      for (int c1 = c0 + 1; c1 < ind.length; ++c1)
+        sum = sum.add(sol[c1].multiply(lhs[ic0].Get(c1).negate()));
+      sol[c0] = sum.divide(lhs[ic0].Get(c0));
     }
-    return sol;
+    return Unprotect.byRef(sol);
   }
 }

@@ -62,7 +62,7 @@ public class NdCollectNearest<V> implements NdVisitor<V> {
   }
 
   @Override // from NdVisitor
-  public boolean isViable(Box box) {
+  public boolean isViable(CoordinateBoundingBox box) {
     return queue.size() < limit //
         || Scalars.lessThan(ndCenterInterface.distance(box), queue.peek().distance());
   }

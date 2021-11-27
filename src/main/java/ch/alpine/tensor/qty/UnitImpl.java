@@ -23,7 +23,6 @@ import ch.alpine.tensor.ext.MergeIllegal;
  * @implSpec
  * This class is immutable and thread-safe. */
 /* package */ class UnitImpl implements Unit, Serializable {
-  private static final long serialVersionUID = -4163267919248734106L;
   private static final Collector<Entry<String, Scalar>, ?, NavigableMap<String, Scalar>> NEGATION = //
       Collectors.toMap(Entry::getKey, entry -> entry.getValue().negate(), MergeIllegal.operator(), TreeMap::new);
   private static final int MAX_SIZE = 1536;

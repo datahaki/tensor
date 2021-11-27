@@ -1,11 +1,14 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
-import java.util.Collections;
+import java.util.stream.IntStream;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.io.Primitives;
+import ch.alpine.tensor.spa.SparseArray;
 
 /** Quote: "The elements of LeviCivitaTensor[d] are 0, -1, +1, and can be obtained
  * by applying {@link Signature} to their indices."
@@ -14,6 +17,8 @@ import ch.alpine.tensor.alg.Array;
  * Mathematica::LeviCivitaTensor[0] throws an Exception
  * Tensor-lib.::LeviCivitaTensor[0] == 1
  * </pre>
+ * 
+ * LeviCivitaTensor[0] == 1 is warranted by Signature[{}] == 1.
  * 
  * For a matrix of dimensions n x n, the relation holds
  * <pre>
@@ -26,25 +31,15 @@ import ch.alpine.tensor.alg.Array;
  * @see HodgeDual */
 public enum LeviCivitaTensor {
   ;
-  // number of elements are indicated
-  private static final Tensor[] CACHE = { //
-      build(0), // 1
-      build(1), // 1
-      build(2), // 4
-      build(3), // 27
-      build(4) }; // 256
-
   /** @param d non-negative
-   * @return tensor of rank d and dimensions d x ... x d
+   * @return sparse tensor of rank d and dimensions d x ... x d
    * @throws Exception if d is negative */
   public static Tensor of(int d) {
-    return d < CACHE.length //
-        ? CACHE[d].copy()
-        : build(d);
-  }
-
-  // helper function
-  private static Tensor build(int d) {
-    return Array.of(list -> Signature.of(Tensors.vector(list)), Collections.nCopies(d, d));
+    if (d == 0)
+      return Signature.of(Tensors.empty());
+    Tensor tensor = SparseArray.of(RealScalar.ZERO, IntStream.generate(() -> d).limit(d).toArray());
+    Permutations.stream(Range.of(0, d)) //
+        .forEach(perm -> tensor.set(Signature.of(perm), Primitives.toIntArray(perm)));
+    return tensor;
   }
 }

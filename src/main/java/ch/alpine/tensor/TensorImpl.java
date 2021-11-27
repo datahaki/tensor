@@ -22,6 +22,11 @@ import ch.alpine.tensor.ext.Lists;
   }
 
   @Override // from Tensor
+  public Tensor copy() {
+    return Tensor.of(stream().map(Tensor::copy));
+  }
+
+  @Override // from Tensor
   public Tensor unmodifiable() {
     return new UnmodifiableTensor(list);
   }
@@ -29,6 +34,17 @@ import ch.alpine.tensor.ext.Lists;
   @Override // from AbstractTensor
   protected Tensor byRef(int i) {
     return list.get(i);
+  }
+
+  @Override // from Tensor
+  public Tensor get(List<Integer> index) {
+    if (index.isEmpty())
+      return copy();
+    int head = index.get(0);
+    List<Integer> _index = Lists.rest(index);
+    return head == ALL //
+        ? Tensor.of(stream().map(tensor -> tensor.get(_index)))
+        : byRef(head).get(_index);
   }
 
   @Override // from Tensor
@@ -87,6 +103,11 @@ import ch.alpine.tensor.ext.Lists;
   }
 
   @Override // from Tensor
+  public Tensor negate() {
+    return Tensor.of(stream().map(Tensor::negate));
+  }
+
+  @Override // from Tensor
   public Tensor add(Tensor tensor) {
     Integers.requireEquals(length(), tensor.length());
     AtomicInteger i = new AtomicInteger();
@@ -101,13 +122,31 @@ import ch.alpine.tensor.ext.Lists;
   }
 
   @Override // from Tensor
-  public Tensor pmul(Tensor tensor) {
-    Integers.requireEquals(length(), tensor.length());
-    AtomicInteger i = new AtomicInteger();
-    return Tensor.of(tensor.stream().map(entry -> list.get(i.getAndIncrement()).pmul(entry)));
+  public Tensor multiply(Scalar scalar) {
+    return Tensor.of(stream().map(tensor -> tensor.multiply(scalar)));
   }
 
-  // ---
+  @Override // from Tensor
+  public Tensor divide(Scalar scalar) {
+    return Tensor.of(stream().map(tensor -> tensor.divide(scalar)));
+  }
+
+  @Override // from Tensor
+  public Tensor map(Function<Scalar, ? extends Tensor> function) {
+    return Tensor.of(stream().map(tensor -> tensor.map(function)));
+  }
+
+  @Override // from Tensor
+  public Tensor dot(Tensor tensor) {
+    if (length() == 0 || byRef(0) instanceof Scalar) { // quick hint whether this is a vector
+      Integers.requireEquals(length(), tensor.length());
+      AtomicInteger i = new AtomicInteger();
+      return tensor.stream().map(entry -> entry.multiply(Get(i.getAndIncrement()))) //
+          .reduce(Tensor::add).orElse(RealScalar.ZERO);
+    }
+    return Tensor.of(stream().map(entry -> entry.dot(tensor)));
+  }
+
   @Override // from Tensor
   public Tensor block(List<Integer> ofs, List<Integer> len) {
     int size = Integers.requireEquals(ofs.size(), len.size());

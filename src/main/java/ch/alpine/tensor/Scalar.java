@@ -25,7 +25,7 @@ import ch.alpine.tensor.qty.SimpleUnitSystem;
 public interface Scalar extends Tensor {
   /** {@link Scalar#length()} returns LENGTH, as used in {@link Dimensions}.
    * LENGTH is required to be negative. */
-  static final int LENGTH = -1;
+  int LENGTH = -1;
 
   /** scalar addition
    * 

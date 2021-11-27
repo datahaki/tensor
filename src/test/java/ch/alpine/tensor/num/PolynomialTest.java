@@ -22,18 +22,6 @@ import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PolynomialTest extends TestCase {
-  public void testEmptyReal() {
-    Scalar scalar = Polynomial.of(Tensors.empty()).apply(RealScalar.of(2));
-    assertEquals(scalar, RealScalar.ZERO);
-    ExactScalarQ.require(scalar);
-  }
-
-  public void testEmptyGaussian() {
-    Scalar scalar = Polynomial.of(Tensors.empty()).apply(GaussScalar.of(4, 7));
-    assertEquals(scalar, GaussScalar.of(0, 7));
-    ExactScalarQ.require(scalar);
-  }
-
   public void testGauss() {
     Scalar scalar1 = Polynomial.of(Tensors.of( //
         GaussScalar.of(2, 7), GaussScalar.of(4, 7), GaussScalar.of(5, 7))) //
@@ -106,10 +94,6 @@ public class PolynomialTest extends TestCase {
     // System.out.println();
   }
 
-  public void testEmpty() {
-    assertEquals(Polynomial.of(Tensors.empty()).apply(Pi.VALUE), RealScalar.ZERO);
-  }
-
   public void testNullFail() {
     AssertFail.of(() -> Polynomial.of(null));
   }
@@ -128,6 +112,10 @@ public class PolynomialTest extends TestCase {
   public void testDerivativeEmpty() {
     assertEquals(Polynomial.derivative_coeffs(Tensors.vector()), Tensors.vector());
     assertEquals(Polynomial.derivative_coeffs(Tensors.vector(3)), Tensors.empty());
+  }
+
+  public void testEmptyFail() {
+    AssertFail.of(() -> Polynomial.of(Tensors.empty()));
   }
 
   public void testDerivativeScalarFail() {

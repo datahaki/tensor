@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import java.util.stream.IntStream;
 
+import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -14,6 +15,9 @@ import ch.alpine.tensor.sca.Clip;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Subdivide.html">Subdivide</a>
+ * 
+ * Reference:
+ * https://en.wikipedia.org/wiki/Linear_interpolation#Programming_language_support
  * 
  * @see Range */
 public enum Subdivide {
@@ -52,7 +56,14 @@ public enum Subdivide {
    * @throws Exception if n is negative or zero */
   public static Tensor of(Tensor startInclusive, Tensor endInclusive, int n) {
     Integers.requirePositive(n);
+    if (ExactTensorQ.of(startInclusive) && ExactTensorQ.of(endInclusive)) {
+      // general implementation suitable for DateTimeScalar
+      Tensor delta = endInclusive.subtract(startInclusive);
+      return Tensor.of(IntStream.rangeClosed(0, n) //
+          .mapToObj(count -> startInclusive.add(delta.multiply(RationalScalar.of(count, n)))));
+    }
     // implementation deliberately uses two multiplications instead of one
+    // tests have shown that this implementation is numerical more precise
     return Tensor.of(IntStream.rangeClosed(0, n) //
         .mapToObj(count -> startInclusive.multiply(RationalScalar.of(n - count, n)) //
             .add(endInclusive.multiply(RationalScalar.of(count, n)))));

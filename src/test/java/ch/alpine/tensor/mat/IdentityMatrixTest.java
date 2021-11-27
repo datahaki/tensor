@@ -1,11 +1,17 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import java.time.LocalDateTime;
+
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.lie.LehmerTensor;
 import ch.alpine.tensor.mat.gr.IdempotentQ;
+import ch.alpine.tensor.qty.DateTimeScalar;
+import ch.alpine.tensor.qty.DurationScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.spa.SparseArray;
 import ch.alpine.tensor.usr.AssertFail;
@@ -42,6 +48,27 @@ public class IdentityMatrixTest extends TestCase {
     // timing1.stop();
     // System.out.println(timing0.seconds());
     // System.out.println(timing1.seconds());
+  }
+
+  public void testDurationScalar() {
+    DurationScalar ds1 = DurationScalar.fromSeconds(RealScalar.of(3));
+    DurationScalar ds2 = DurationScalar.fromSeconds(RealScalar.of(3.123));
+    DurationScalar ds3 = DurationScalar.fromSeconds(RealScalar.of(10));
+    DurationScalar ds4 = DurationScalar.fromSeconds(RealScalar.of(9));
+    Tensor matrix = Tensors.matrix(new Scalar[][] { { ds1, ds2 }, { ds3, ds4 } });
+    Tensor eye = IdentityMatrix.of(matrix);
+    assertEquals(matrix.dot(eye), matrix);
+    assertEquals(eye.dot(matrix), matrix);
+  }
+
+  public void testDateTimeScalar() {
+    Scalar dts1 = DateTimeScalar.of(LocalDateTime.of(2000, 11, 3, 4, 5));
+    Scalar dts2 = DateTimeScalar.of(LocalDateTime.of(2001, 10, 5, 4, 8));
+    Scalar dts3 = DateTimeScalar.of(LocalDateTime.of(2002, 12, 7, 4, 11));
+    Scalar dts4 = DateTimeScalar.of(LocalDateTime.of(2003, 11, 9, 4, 14));
+    Tensor matrix = Tensors.matrix(new Scalar[][] { { dts1, dts2 }, { dts3, dts4 } });
+    Tensor eye = IdentityMatrix.of(matrix);
+    AssertFail.of(() -> matrix.dot(eye));
   }
 
   public void testSparseFail() {

@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.Floor;
  * </ul>
  * 
  * <p>The implementation combines
- * {@link EmpiricalDistribution}, {@link BinCounts}, and {@link UniformDistribution}.
+ * {@link CategoricalDistribution}, {@link BinCounts}, and {@link UniformDistribution}.
  * 
  * <p>Other approximation methods may be implemented in the future.
  * 
@@ -64,7 +64,7 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
   // ---
   private final ScalarUnaryOperator discrete;
   private final ScalarUnaryOperator original;
-  private final EmpiricalDistribution empiricalDistribution;
+  private final CategoricalDistribution empiricalDistribution;
   private final Scalar width;
   private final Scalar width_half;
   private final Clip clip;
@@ -75,7 +75,7 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
     original = scalar -> scalar.multiply(width).add(min);
     Tensor unscaledPDF = BinCounts.of(samples.map(discrete));
     empiricalDistribution = //
-        (EmpiricalDistribution) EmpiricalDistribution.fromUnscaledPDF(unscaledPDF);
+        (CategoricalDistribution) CategoricalDistribution.fromUnscaledPDF(unscaledPDF);
     this.width = width;
     width_half = width.multiply(RationalScalar.HALF);
     clip = Clips.interval(min, min.add(width.multiply(RealScalar.of(unscaledPDF.length()))));

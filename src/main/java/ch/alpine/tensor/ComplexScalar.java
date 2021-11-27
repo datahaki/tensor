@@ -29,7 +29,7 @@ public interface ComplexScalar extends Scalar, //
     AbsInterface, ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, ExpInterface, //
     LogInterface, PowerInterface, RoundingInterface, SignInterface, SqrtInterface, TrigonometryInterface {
   /** complex number I == 0+1*I */
-  static final Scalar I = of(0, 1);
+  Scalar I = of(0, 1);
 
   /** Hint: the function {@link #of(Scalar, Scalar)} can be used to combine two
    * tensors, one as real and the other as imaginary part into a single tensor

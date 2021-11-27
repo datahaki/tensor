@@ -15,7 +15,7 @@ import ch.alpine.tensor.ext.Integers;
   private int swaps = 0;
 
   public AbstractReduce(Tensor matrix, Pivot pivot) {
-    lhs = matrix.stream().map(Tensor::copy).toArray(Tensor[]::new);
+    lhs = matrix.stream().toArray(Tensor[]::new);
     this.pivot = pivot;
     ind = IntStream.range(0, lhs.length).toArray();
   }

@@ -143,13 +143,13 @@ public class HypotTest extends TestCase {
     assertEquals(Hypot.of(qs1, qs2), qs1);
   }
 
-  public void testMixedUnitZero() {
-    Scalar s1 = Quantity.of(-2, "m");
-    Scalar s2 = Quantity.of(0, "s");
+  public void testQuantity2() {
+    Scalar s1 = Quantity.of(-3, "m");
+    Scalar s2 = Quantity.of(-4, "m");
     Scalar sum = s1.add(s2);
-    assertEquals(sum, Quantity.of(-2, "m"));
+    assertEquals(sum, Quantity.of(-7, "m"));
     Scalar result = Sqrt.FUNCTION.apply(s1.multiply(s1).add(s2.multiply(s2)));
-    assertEquals(result, Quantity.of(2, "m"));
+    assertEquals(result, Quantity.of(5, "m"));
     ExactScalarQ.require(result);
     Scalar hypot = Hypot.of(s1, s2);
     assertEquals(result, hypot);

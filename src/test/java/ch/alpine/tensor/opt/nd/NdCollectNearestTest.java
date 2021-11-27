@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 
 public class NdCollectNearestTest extends TestCase {
   public void testSimple() {
-    Box box = Box.of(Tensors.vector(-2, -3), Tensors.vector(8, 9));
+    CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9));
     for (int n = 1; n < 10; ++n) {
       NdMap<String> ndTreeMap = NdTreeMap.of(box, n);
       ndTreeMap.toString();
@@ -59,7 +59,7 @@ public class NdCollectNearestTest extends TestCase {
   public void testClusterNearest() {
     int maxDensity = 2;
     NdMap<String> m1 = new NdListMap<>();
-    NdMap<String> m2 = NdTreeMap.of(Box.of(Tensors.vector(-2, -1), Tensors.vector(2, 10)), maxDensity);
+    NdMap<String> m2 = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(-2, -1), Tensors.vector(2, 10)), maxDensity);
     int index = 0;
     Distribution ux = UniformDistribution.of(-2, 2);
     Distribution uy = UniformDistribution.of(-1, 10);
@@ -86,7 +86,7 @@ public class NdCollectNearestTest extends TestCase {
   }
 
   public void testEmpty() {
-    NdMap<Void> ndMap = NdTreeMap.of(Box.of(Tensors.vector(0), Tensors.vector(1)));
+    NdMap<Void> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0), Tensors.vector(1)));
     for (NdCenters ndCenters : NdCenters.values()) {
       NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2));
       NdMatch<Void> ndMatch = NdCollectNearest.of(ndMap, ndCenterInterface);
