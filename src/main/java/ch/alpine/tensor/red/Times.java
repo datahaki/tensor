@@ -55,6 +55,8 @@ public enum Times {
   /** @param tensors
    * @return */
   public static Tensor of(Tensor... tensors) {
+    if (tensors.length == 1)
+      return tensors[0].copy();
     return Stream.of(tensors).reduce(BINARY_OPERATOR).orElse(RealScalar.ONE);
   }
 

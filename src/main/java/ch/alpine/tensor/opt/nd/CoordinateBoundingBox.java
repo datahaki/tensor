@@ -22,7 +22,10 @@ import ch.alpine.tensor.sca.Clips;
  * 
  * an instance of CoordinateBoundingBox is immutable
  * 
- * @see CoordinateBounds */
+ * @see CoordinateBounds
+ * 
+ * @implSpec
+ * This class is immutable and thread-safe. */
 public class CoordinateBoundingBox implements Serializable {
   /** @param stream of clip instances
    * @return */

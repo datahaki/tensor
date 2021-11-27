@@ -3,6 +3,7 @@ package ch.alpine.tensor.red;
 
 import java.io.IOException;
 
+import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
@@ -127,6 +128,24 @@ public class TimesTest extends TestCase {
         Tensors.vectorLong(-9, -2, -2));
     Tensor r = Tensors.fromString("{{3, 8, 18}, {-27, 2, 2}}");
     assertEquals(Times.of(a, c), r);
+  }
+
+  public void testChain() {
+    Tensor tensor = Times.of( //
+        Tensors.fromString("{1,2,3}"), //
+        Tensors.fromString("{1,2,3}"), //
+        Tensors.fromString("{1[s],2[m],3[N]}"), //
+        Tensors.fromString("{5,1/2,1/9}"));
+    ExactTensorQ.require(tensor);
+    assertEquals(tensor, Tensors.fromString("{5[s], 4[m], 3[N]}"));
+  }
+
+  public void testSingleCopy() {
+    Tensor tensor = Tensors.fromString("{1,2,3}");
+    Tensor result = Times.of(tensor);
+    tensor.set(RealScalar.of(0), 0);
+    assertEquals(tensor, Tensors.vector(0, 2, 3));
+    assertEquals(result, Tensors.vector(1, 2, 3));
   }
 
   public void testDiagonalMatrix() {

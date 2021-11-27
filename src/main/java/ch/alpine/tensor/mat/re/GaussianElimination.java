@@ -6,6 +6,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.ext.Integers;
 
 /** Gaussian elimination is the most important algorithm of all time.
  * 
@@ -42,10 +43,17 @@ public class GaussianElimination extends AbstractReduce {
   // ---
   private final Tensor[] rhs;
 
+  /** @param matrix square and invertible
+   * @param b tensor with first dimension identical to size of matrix
+   * @param pivot
+   * @throws Exception if matrix is singular
+   * @throws Exception if dimensions mismatch */
   public GaussianElimination(Tensor matrix, Tensor b, Pivot pivot) {
     super(matrix, pivot);
     rhs = b.stream().toArray(Tensor[]::new);
-    for (int c0 = 0; c0 < lhs.length; ++c0) {
+    int n = Integers.requireEquals(lhs.length, lhs[0].length()); // matrix is square
+    Integers.requireEquals(n, rhs.length); // rhs matches dimensions of lhs
+    for (int c0 = 0; c0 < n; ++c0) {
       pivot(c0, c0);
       Scalar piv = lhs[ind[c0]].Get(c0);
       if (Scalars.isZero(piv))
