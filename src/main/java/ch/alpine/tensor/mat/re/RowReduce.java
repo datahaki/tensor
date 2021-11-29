@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
-import java.util.Arrays;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
@@ -38,17 +38,17 @@ public class RowReduce extends AbstractReduce {
         .max().getAsInt());
     for (int c0 = 0, j = 0; c0 < lhs.length && j < m; ++j) {
       pivot(c0, j);
-      Scalar piv = lhs[ind[c0]].Get(j);
+      Scalar piv = lhs[ind(c0)].Get(j);
       if (Scalars.nonZero(piv)) {
         for (int c1 = 0; c1 < lhs.length; ++c1)
           if (c1 != c0) {
-            Scalar fac = lhs[ind[c1]].Get(j).divide(piv).negate();
-            lhs[ind[c1]] = lhs[ind[c1]].add(lhs[ind[c0]].multiply(fac));
+            Scalar fac = lhs[ind(c1)].Get(j).divide(piv).negate();
+            lhs[ind(c1)] = lhs[ind(c1)].add(lhs[ind(c0)].multiply(fac));
           }
-        lhs[ind[c0]] = lhs[ind[c0]].divide(piv);
+        lhs[ind(c0)] = lhs[ind(c0)].divide(piv);
         ++c0;
       }
     }
-    return Tensor.of(Arrays.stream(ind).mapToObj(i -> lhs[i]));
+    return Tensor.of(IntStream.range(0, lhs.length).map(this::ind).mapToObj(i -> lhs[i]));
   }
 }

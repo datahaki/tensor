@@ -55,7 +55,7 @@ public class GaussianElimination extends AbstractReduce {
     Integers.requireEquals(n, rhs.length); // rhs matches dimensions of lhs
     for (int c0 = 0; c0 < n; ++c0) {
       pivot(c0, c0);
-      Scalar piv = lhs[ind[c0]].Get(c0);
+      Scalar piv = lhs[ind(c0)].Get(c0);
       if (Scalars.isZero(piv))
         throw TensorRuntimeException.of(matrix, piv);
       eliminate(c0, piv);
@@ -63,9 +63,9 @@ public class GaussianElimination extends AbstractReduce {
   }
 
   private void eliminate(int c0, Scalar piv) {
-    int ic0 = ind[c0];
+    int ic0 = ind(c0);
     for (int c1 = c0 + 1; c1 < lhs.length; ++c1) { // deliberately without parallel
-      int ic1 = ind[c1];
+      int ic1 = ind(c1);
       Scalar fac = lhs[ic1].Get(c0).divide(piv).negate();
       lhs[ic1] = lhs[ic1].add(lhs[ic0].multiply(fac));
       rhs[ic1] = rhs[ic1].add(rhs[ic0].multiply(fac));
@@ -75,10 +75,10 @@ public class GaussianElimination extends AbstractReduce {
   /** @return x with m.dot(x) == b */
   public Tensor solve() {
     Tensor[] sol = new Tensor[rhs.length];
-    for (int c0 = ind.length - 1; 0 <= c0; --c0) {
-      int ic0 = ind[c0];
+    for (int c0 = sol.length - 1; 0 <= c0; --c0) {
+      int ic0 = ind(c0);
       Tensor sum = rhs[ic0];
-      for (int c1 = c0 + 1; c1 < ind.length; ++c1)
+      for (int c1 = c0 + 1; c1 < rhs.length; ++c1)
         sum = sum.add(sol[c1].multiply(lhs[ic0].Get(c1).negate()));
       sol[c0] = sum.divide(lhs[ic0].Get(c0));
     }
