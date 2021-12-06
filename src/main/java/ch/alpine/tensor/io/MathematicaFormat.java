@@ -48,8 +48,8 @@ public enum MathematicaFormat {
 
   // helper function
   private static String join(String string) {
-    if (string.endsWith("\\"))
-      return string.substring(0, string.length() - 1);
-    return string;
+    return string.endsWith("\\") //
+        ? string.substring(0, string.length() - 1)
+        : string;
   }
 }

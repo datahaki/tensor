@@ -7,8 +7,8 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 
 /** <pre>
- * LinearSolve.of(vectors, values.pmul(vectors)) == matrix
- * Transpose.of(vectors).dot(values.pmul(vectors)) == matrix
+ * LinearSolve.of(vectors, Times.of(values(), vectors)) == matrix
+ * Transpose.of(vectors).dot(Times.of(values, vectors)) == matrix
  * </pre>
  * 
  * <p>inspired by

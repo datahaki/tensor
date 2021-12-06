@@ -40,7 +40,7 @@ public class TimesTest extends TestCase {
    * @return total pointwise product of tensor entries at first level, or 1 if tensor is empty
    * @throws TensorRuntimeException if input tensor is a scalar */
   private static Tensor pmul(Tensor tensor) {
-    return tensor.stream().reduce(Times::of).orElse(RealScalar.ONE);
+    return Times.of(tensor.stream().toArray(Tensor[]::new));
   }
 
   public void testSingle() {
