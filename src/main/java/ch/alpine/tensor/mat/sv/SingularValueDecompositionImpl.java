@@ -262,11 +262,11 @@ import ch.alpine.tensor.sca.Sqrt;
   }
 
   private static void addScaled(int l, Tensor v, int i, int j, Scalar s) {
-    v.stream().skip(l).forEach(vk -> addSca(vk, i, j, s));
+    v.stream().skip(l).forEach(vk -> addScaled(vk, i, j, s));
   }
 
-  private static void addSca(Tensor vk, int i, int j, Scalar s) {
-    vk.set(Unprotect::zeroProject, j);
+  private static void addScaled(Tensor vk, int i, int j, Scalar s) {
+    vk.set(Unprotect::zeroDropUnit, j);
     vk.set(s.multiply(vk.Get(i))::add, j);
   }
 

@@ -30,7 +30,9 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.Sqrt;
 
 /** The addition of quantities with different units is not resolved by Mathematica.
- * Consequently the tensor library throws an exception for the calculation
+ * Consequently the tensor library also throws an exception when quantities
+ * of unequal unit are added. That is even the case, when the magnitude of both
+ * quantities is zero:
  * Quantity[0, "Meters"] + Quantity[0, "Seconds"]
  * 
  * @implSpec

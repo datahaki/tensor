@@ -11,6 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class Vector2NormTest extends TestCase {
@@ -50,16 +51,24 @@ public class Vector2NormTest extends TestCase {
   public void testQuantity() {
     Tensor vec = Tensors.of( //
         Quantity.of(3, "m^2"), //
-        // Quantity.of(0, "s*rad"), //
         Quantity.of(-4, "m^2"), //
         RealScalar.ZERO //
     );
     assertEquals(Vector2Norm.of(vec), Quantity.of(5, "m^2"));
   }
 
-  public void testQuantityMixed() {
-    // Tensor vec = Tensors.fromString("{0[m^2], 0[s*rad], 1}");
-    Tensor vec = Tensors.fromString("{0, 0, 1}");
-    assertEquals(Vector2Norm.of(vec), RealScalar.ONE);
+  public void testQuantityMixedFail1() {
+    Tensor vector = Tensors.fromString("{0[m^2], 0[s*rad]}");
+    AssertFail.of(() -> Vector2Norm.of(vector));
+  }
+
+  public void testQuantityMixedFail2() {
+    Tensor vector = Tensors.fromString("{0[m^2], 0[m]}");
+    AssertFail.of(() -> Vector2Norm.of(vector));
+  }
+
+  public void testUnity() {
+    Tensor vector = Tensors.fromString("{0, 0, 1}");
+    assertEquals(Vector2Norm.of(vector), RealScalar.ONE);
   }
 }

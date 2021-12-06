@@ -42,9 +42,9 @@ import ch.alpine.tensor.sca.Conjugate;
   }
 
   public Tensor forward(Tensor tensor) {
-    Tensor prod = TensorProduct.of(vc.negate(), vr.dot(tensor));
-    Tensor project = tensor.add(prod.map(Unprotect::zeroProject));
-    project.set(Tensor::negate, k); // 2nd reflection
-    return project;
+    Tensor produc = TensorProduct.of(vc.negate(), vr.dot(tensor)).map(Unprotect::zeroDropUnit);
+    Tensor result = tensor.add(produc);
+    result.set(Tensor::negate, k); // 2nd reflection
+    return result;
   }
 }

@@ -171,15 +171,12 @@ public class CholeskyDecompositionTest extends TestCase {
       Chop.NONE.requireClose(eye, res);
     }
     {
-      Tensor inv = Inverse.of(matrix);
-      // Chop.NONE.requireClose(matrix.dot(inv), inv.dot(matrix));
-      Chop.NONE.requireClose(matrix.dot(inv), IdentityMatrix.of(3));
-    }
-    {
       CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
       assertEquals(Det.of(matrix), cd.det()); // 100[kg^2, m^2, rad^2]
-      Tensor lower = rows_pmul_v(cd.getL(), Sqrt.of(cd.diagonal()));
-      Tensor upper = Times.of(Sqrt.of(cd.diagonal()), ConjugateTranspose.of(cd.getL()));
+      // Tensor lower =
+      rows_pmul_v(cd.getL(), Sqrt.of(cd.diagonal()));
+      // Tensor upper =
+      Times.of(Sqrt.of(cd.diagonal()), ConjugateTranspose.of(cd.getL()));
       // Tensor res = lower.dot(upper);
       // Chop._10.requireClose(matrix, res);
     }
@@ -195,11 +192,18 @@ public class CholeskyDecompositionTest extends TestCase {
     return TensorMap.of(row -> Times.of(row, diag), L, 1); // apply pmul on level 1
   }
 
+  /** Mathematica fails to compute L'.L
+   * A = {{Quantity[10, "Meters"^2], Quantity[I, "Kilograms"*"Meters"]}, {Quantity[-I,
+   * "Kilograms"*"Meters"], Quantity[10, "Kilograms"^2]}}
+   * L = CholeskyDecomposition[A]
+   * ConjugateTranspose[L] . L */
   public void testQuantityComplex() {
     Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
+    // System.out.println(MathematicaForm.of(matrix));
     CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
     Tensor sdiag = Sqrt.of(cd.diagonal());
-    Tensor upper = Times.of(sdiag, ConjugateTranspose.of(cd.getL()));
+    // Tensor upper =
+    Times.of(sdiag, ConjugateTranspose.of(cd.getL()));
     {
       // Tensor res = ConjugateTranspose.of(upper).dot(upper);
       // Chop._10.requireClose(matrix, res);
@@ -207,15 +211,16 @@ public class CholeskyDecompositionTest extends TestCase {
     {
       // the construction of the lower triangular matrix L . L* is not so convenient
       // Tensor lower = Transpose.of(sdiag.pmul(Transpose.of(cd.getL())));
-      Tensor lower = rows_pmul_v(cd.getL(), sdiag);
+      // Tensor lower =
+      rows_pmul_v(cd.getL(), sdiag);
+      // System.out.println(Pretty.of(lower));
+      // System.out.println(Pretty.of(upper));
       // Tensor res = lower.dot(upper);
       // Chop._10.requireClose(matrix, res);
     }
-    {
-      assertEquals( //
-          cd.solve(IdentityMatrix.of(2)), //
-          Inverse.of(matrix));
-    }
+    assertEquals( //
+        cd.solve(IdentityMatrix.of(2)), //
+        Inverse.of(matrix));
   }
 
   public void testRankDeficient() {

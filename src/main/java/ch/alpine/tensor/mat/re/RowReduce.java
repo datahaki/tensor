@@ -46,7 +46,7 @@ public class RowReduce extends AbstractReduce {
             Scalar fac = lhs[ind(c1)].Get(j).divide(piv).negate();
             Tensor mul = lhs[ind(c0)].multiply(fac);
             // lhs[ind(c1)] = lhs[ind(c1)].add(mul.map(Unprotect::zeroProject));
-            lhs[ind(c1)] = lhs[ind(c1)].map(Unprotect::zeroProject).add(mul.map(Unprotect::zeroProject));
+            lhs[ind(c1)] = lhs[ind(c1)].map(Unprotect::zeroDropUnit).add(mul.map(Unprotect::zeroDropUnit));
           }
         lhs[ind(c0)] = lhs[ind(c0)].divide(piv);
         ++c0;

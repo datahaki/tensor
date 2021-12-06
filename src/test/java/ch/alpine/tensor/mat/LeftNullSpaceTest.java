@@ -115,9 +115,6 @@ public class LeftNullSpaceTest extends TestCase {
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
     Tensor tensor = NullSpace.usingRowReduce(matrix);
     assertEquals(tensor.get(0), UnitVector.of(2, 1).map(suo));
-    // if (SquareMatrixQ.of(matrix)) {
-    // assertTrue(Scalars.isZero(Det.of(matrix)));
-    // }
   }
 
   public void testRectangle2x3G() {
@@ -126,7 +123,6 @@ public class LeftNullSpaceTest extends TestCase {
     Tensor tensor = NullSpace.usingRowReduce(matrix);
     assertEquals(tensor.get(0), UnitVector.of(3, 1).map(suo));
     assertEquals(tensor.get(1), UnitVector.of(3, 2).map(suo));
-    // assertTrue(Scalars.isZero(Det.of(matrix)));
   }
 
   public void testLeftGaussScalar() {

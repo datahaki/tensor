@@ -127,6 +127,13 @@ public class UnprotectTest extends TestCase {
     assertTrue(UnitQ.isOne(unit));
   }
 
+  public void testUnprotectZeroProject() {
+    assertEquals(Unprotect.zeroDropUnit(Quantity.of(0, "m")), RealScalar.ZERO);
+    assertEquals(Unprotect.zeroDropUnit(Quantity.of(0, "")), RealScalar.ZERO);
+    assertEquals(Unprotect.zeroDropUnit(Quantity.of(1, "A")), Quantity.of(1, "A"));
+    AssertFail.of(() -> Unprotect.zeroDropUnit(null));
+  }
+
   public void testGetUnitUniqueFail1() {
     AssertFail.of(() -> Unprotect.getUnitUnique(Tensors.fromString("{{1[m],2[s],3[m]}}")));
   }

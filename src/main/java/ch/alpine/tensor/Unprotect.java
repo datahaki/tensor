@@ -80,10 +80,14 @@ public enum Unprotect {
         : Objects.requireNonNull(scalar);
   }
 
-  public static Scalar zeroProject(Scalar scalar) {
-    if (Scalars.isZero(scalar))
-      return withoutUnit(scalar);
-    return scalar;
+  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
+   * 
+   * @param scalar
+   * @return */
+  public static Scalar zeroDropUnit(Scalar scalar) {
+    return Scalars.isZero(scalar) //
+        ? withoutUnit(scalar)
+        : scalar;
   }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !

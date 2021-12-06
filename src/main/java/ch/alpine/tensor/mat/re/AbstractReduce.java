@@ -30,6 +30,8 @@ import ch.alpine.tensor.ext.Integers;
     }
   }
 
+  /** @param index
+   * @return read-only access to index set */
   protected final int ind(int index) {
     return ind[index];
   }

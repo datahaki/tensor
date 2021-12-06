@@ -70,14 +70,14 @@ import ch.alpine.tensor.sca.Conjugate;
     for (int i = 0; i < n; ++i)
       for (int k = i - 1; 0 <= k; --k) {
         Tensor mul = x[k].multiply(l.Get(i, k));
-        x[i] = x[i].subtract(mul.map(Unprotect::zeroProject));
+        x[i] = x[i].subtract(mul.map(Unprotect::zeroDropUnit));
       }
     for (int i = 0; i < n; ++i)
       x[i] = x[i].divide(d.Get(i));
     for (int i = n - 1; 0 <= i; --i)
       for (int k = i + 1; k < n; ++k) {
         Tensor mul = x[k].multiply(Conjugate.FUNCTION.apply(l.Get(k, i)));
-        x[i] = x[i].map(Unprotect::zeroProject).subtract(mul);
+        x[i] = x[i].map(Unprotect::zeroDropUnit).subtract(mul);
       }
     return Unprotect.byRef(x);
   }
