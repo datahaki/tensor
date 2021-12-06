@@ -7,25 +7,37 @@ import java.math.MathContext;
 
 import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.ExactScalarQ;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ExactScalarQInterface;
+import ch.alpine.tensor.api.ExpInterface;
+import ch.alpine.tensor.api.LogInterface;
 import ch.alpine.tensor.api.NInterface;
+import ch.alpine.tensor.api.SqrtInterface;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.AbsSquared;
+import ch.alpine.tensor.sca.Exp;
+import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.Sqrt;
 
 /** "Around[mean, sigma] represents an approximate number or quantity with a value
  * around mean and an uncertainty sigma."
  * 
  * The implementation of Around attempts to be consistent with Mathematica::Around.
+ * 
+ * However, Mathematica uses properties of the function that is applied to Around
+ * in order to map mean and sigma. This results in seeminly inconsistent choices:
+ * Example: Let a = Around[3, 4], then a a != a ^ 2.
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Around.html">Around</a>
@@ -33,7 +45,8 @@ import ch.alpine.tensor.sca.Sign;
  * @implSpec
  * This class is immutable and thread-safe. */
 public class Around extends AbstractScalar implements //
-    AbsInterface, ExactScalarQInterface, MeanInterface, NInterface, Serializable {
+    AbsInterface, ExactScalarQInterface, ExpInterface, LogInterface, MeanInterface, //
+    NInterface, SqrtInterface, Serializable {
   /** @param mean
    * @param sigma non-negative
    * @return
@@ -104,8 +117,8 @@ public class Around extends AbstractScalar implements //
     }
     return of(mean.add(scalar), sigma);
   }
-  // ---
 
+  // ---
   @Override // from AbsInterface
   public Scalar abs() {
     return of(Abs.FUNCTION.apply(mean), sigma);
@@ -113,7 +126,19 @@ public class Around extends AbstractScalar implements //
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    return multiply(this);
+    return of(AbsSquared.FUNCTION.apply(mean), //
+        Sqrt.FUNCTION.apply(RealScalar.TWO).multiply(Abs.FUNCTION.apply(mean)).multiply(sigma));
+  }
+
+  @Override // from ExpInterface
+  public Scalar exp() {
+    Scalar exp = Exp.FUNCTION.apply(mean);
+    return of(exp, exp.multiply(sigma));
+  }
+
+  @Override // from LogInterface
+  public Scalar log() {
+    return of(Log.FUNCTION.apply(mean), sigma.divide(mean));
   }
 
   @Override // from ExactScalarQInterface
@@ -133,11 +158,19 @@ public class Around extends AbstractScalar implements //
     return of(n.apply(mean), n.apply(sigma));
   }
 
+  @Override // from SqrtInterface
+  public Scalar sqrt() {
+    Scalar sqrt = Sqrt.FUNCTION.apply(mean);
+    return of(sqrt, RationalScalar.HALF.multiply(sigma).divide(sqrt));
+  }
+
   @Override // from MeanInterface
   public Scalar mean() {
     return mean;
   }
 
+  /** Around[mean, sigma]["Uncertainty"] == sigma
+   * @return sigma */
   public Scalar uncertainty() {
     return sigma;
   }

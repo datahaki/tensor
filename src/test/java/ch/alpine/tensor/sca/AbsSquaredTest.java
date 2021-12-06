@@ -15,7 +15,6 @@ import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.qty.Around;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -67,10 +66,6 @@ public class AbsSquaredTest extends TestCase {
 
   public void testGaussScalar() {
     assertEquals(AbsSquared.FUNCTION.apply(GaussScalar.of(2, 3)), GaussScalar.of(-5, 3));
-  }
-
-  public void testGaussianFail() {
-    AssertFail.of(() -> AbsSquared.FUNCTION.apply(Around.of(2, 3)));
   }
 
   public void testStringFail() {

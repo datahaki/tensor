@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import java.util.Random;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -21,8 +22,12 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Exp;
+import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.N;
+import ch.alpine.tensor.sca.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -189,6 +194,29 @@ public class AroundTest extends TestCase {
   public void testNumberFail() {
     Scalar scalar = Around.of(2, 3);
     AssertFail.of(() -> scalar.number());
+  }
+
+  public void testSqrt() {
+    Around around = (Around) Sqrt.FUNCTION.apply(Around.of(30, 40));
+    Chop._12.requireClose(around.mean(), RealScalar.of(5.477225575051661));
+    Chop._12.requireClose(around.uncertainty(), RealScalar.of(3.6514837167011076));
+  }
+
+  public void testAbsSquared() {
+    Around around = (Around) AbsSquared.FUNCTION.apply(Around.of(ComplexScalar.of(2, 3), RealScalar.of(2)));
+    ExactScalarQ.require(around.mean());
+  }
+
+  public void testExp() {
+    Around around = (Around) Exp.FUNCTION.apply(Around.of(2, 3));
+    Chop._12.requireClose(around.mean(), RealScalar.of(7.38905609893065));
+    Chop._12.requireClose(around.uncertainty(), RealScalar.of(22.16716829679195));
+  }
+
+  public void testLog() {
+    Around around = (Around) Log.FUNCTION.apply(Around.of(2, 3));
+    Chop._12.requireClose(around.mean(), RealScalar.of(0.6931471805599453));
+    assertEquals(around.uncertainty(), RationalScalar.of(3, 2));
   }
 
   public void testNullFail() {
