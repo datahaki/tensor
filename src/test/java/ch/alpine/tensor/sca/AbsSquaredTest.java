@@ -4,7 +4,6 @@ package ch.alpine.tensor.sca;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactTensorQ;
-import ch.alpine.tensor.Gaussian;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -16,6 +15,7 @@ import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.qty.Around;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -70,7 +70,7 @@ public class AbsSquaredTest extends TestCase {
   }
 
   public void testGaussianFail() {
-    AssertFail.of(() -> AbsSquared.FUNCTION.apply(Gaussian.of(2, 3)));
+    AssertFail.of(() -> AbsSquared.FUNCTION.apply(Around.of(2, 3)));
   }
 
   public void testStringFail() {
