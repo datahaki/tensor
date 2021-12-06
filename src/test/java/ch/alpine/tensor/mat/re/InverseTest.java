@@ -151,6 +151,32 @@ public class InverseTest extends TestCase {
     assertFalse(SymmetricMatrixQ.of(matrix));
   }
 
+  public void testQuantity3() { // confirmed with Mathematica 12
+    Tensor matrix = Tensors.fromString("{{1[m], 1[s]}, {1[m], 2[s]}}");
+    Tensor tensor = Inverse.of(matrix);
+    // {{Quantity[2, 1/("Meters")], Quantity[-1, 1/("Meters")]}, {Quantity[-1, 1/("Seconds")], Quantity[1, 1/("Seconds")]}}
+    Tensor expect = Tensors.fromString("{{2[m^-1], -1[m^-1]}, {-1[s^-1], 1[s^-1]}}");
+    assertEquals(tensor, expect);
+    Tensor eye = matrix.dot(tensor);
+    assertEquals(eye, IdentityMatrix.of(2));
+    Tensor eye2 = tensor.dot(matrix);
+    // {{1, Quantity[0, ("Seconds")/("Meters")]}, {Quantity[0, ("Meters")/( "Seconds")], 1}}
+    Tensor expec2 = Tensors.fromString("{{1, 0[m^-1*s]}, {0[m*s^-1], 1}}");
+    assertEquals(expec2, eye2);
+  }
+
+  public void testQuantity4() { // confirmed with Mathematica 12
+    Tensor matrix = Tensors.fromString("{{1[m], 1[m]}, {1[s], 2[s]}}");
+    Tensor tensor = Inverse.of(matrix);
+    // {{Quantity[2, 1/("Meters")], Quantity[-1, 1/("Meters")]}, {Quantity[-1, 1/("Seconds")], Quantity[1, 1/("Seconds")]}}
+    Tensor expect = Tensors.fromString("{{2[m^-1], -1[s^-1]}, {-1[m^-1], 1[s^-1]}}");
+    assertEquals(tensor, expect);
+    assertEquals(tensor.dot(matrix), IdentityMatrix.of(2));
+    // {{1, Quantity[0, ("Meters")/("Seconds")]}, {Quantity[0, ("Seconds")/("Meters")], 1}}
+    Tensor expec2 = Tensors.fromString("{{1, 0[m*s^-1]}, {0[m^-1*s], 1}}");
+    assertEquals(expec2, matrix.dot(tensor));
+  }
+
   public void testDecimalScalarInverse() {
     Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
     Tensor invers = Inverse.of(matrix);

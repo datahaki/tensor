@@ -156,6 +156,10 @@ public class DurationScalarTest extends TestCase {
     Chop._05.requireClose(lhs.dot(sol), rhs);
   }
 
+  public void testSeconds() {
+    assertEquals(DurationScalar.of(Duration.ofDays(-1)).seconds(), RealScalar.of(-24 * 60 * 60));
+  }
+
   public void testLinearSolve2() {
     DurationScalar ds1 = DurationScalar.fromSeconds(RealScalar.of(3));
     DurationScalar ds2 = DurationScalar.fromSeconds(RealScalar.of(3.123));
