@@ -20,6 +20,7 @@ import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.LowerTriangularize;
+import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
@@ -48,14 +49,18 @@ public class QRDecompositionTest extends TestCase {
       Tensor R = qrDecomposition.getR();
       Chop._10.requireClose(Q.dot(R), A);
       Chop._10.requireClose(Q.dot(Qi), IdentityMatrix.of(A.length()));
-      Scalar qrDet = Det.of(Q).multiply(Det.of(R));
-      Chop._10.requireClose(qrDet, Det.of(A));
-      Tensor lower = LowerTriangularize.of(R, -1);
-      Chop.NONE.requireAllZero(lower);
-      if (qrSignOperator.isDetExact()) {
-        Chop._10.requireClose(qrDet, qrDecomposition.det());
-      } else {
-        assertTrue(Chop._10.isClose(qrDet, qrDecomposition.det()) || Chop._10.isClose(qrDet, qrDecomposition.det().negate()));
+      Scalar detR = Diagonal.of(R).stream().map(Scalar.class::cast).reduce(Scalar::multiply).get();
+      Scalar qrDet = Det.of(Q).multiply(detR);
+      if (SquareMatrixQ.of(A)) {
+        Scalar detA = Det.of(A);
+        Chop._10.requireClose(qrDet, detA);
+        Tensor lower = LowerTriangularize.of(R, -1);
+        Chop.NONE.requireAllZero(lower);
+        if (qrSignOperator.isDetExact()) {
+          Chop._10.requireClose(qrDet, qrDecomposition.det());
+        } else {
+          assertTrue(Chop._10.isClose(qrDet, qrDecomposition.det()) || Chop._10.isClose(qrDet, qrDecomposition.det().negate()));
+        }
       }
     }
     return qrDecomposition;

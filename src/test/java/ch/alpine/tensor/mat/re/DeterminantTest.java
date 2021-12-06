@@ -6,24 +6,24 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class DeterminantTest extends TestCase {
   public void testUnitsSingle() {
-    Tensor table = Tensors.fromString("{{1[m], 2}, {4, 5[m]}, {3, 5}}");
-    assertEquals(Det.of(table), Quantity.of(0, "m"));
+    Tensor tensor = Tensors.fromString("{{1[m], 2}, {4, 5[m]}, {3, 5}}");
+    AssertFail.of(() -> Det.of(tensor));
   }
 
   public void testUnitsMixed() {
-    Tensor table = Tensors.fromString("{{1[m], 2}, {4, 5[s]}, {3, 5}}");
-    assertEquals(Det.of(table), Quantity.of(0, ""));
+    Tensor tensor = Tensors.fromString("{{1[m], 2}, {4, 5[s]}, {3, 5}}");
+    AssertFail.of(() -> Det.of(tensor));
+    // assertEquals(Det.of(tensor), Quantity.of(0, ""));
   }
 
   public void testFailMatrixQ() {
-    Tensor table = Tensors.fromString("{{1, 2, 3}, {4, 5}}");
-    AssertFail.of(() -> Det.of(table));
+    Tensor tensor = Tensors.fromString("{{1, 2, 3}, {4, 5}}");
+    AssertFail.of(() -> Det.of(tensor));
   }
 
   public void testFailNonArray() {

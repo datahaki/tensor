@@ -26,7 +26,7 @@ public class Vector1NormTest extends TestCase {
   public void testQuantity2() {
     Tensor vec = Tensors.of( //
         Quantity.of(-3, "m"), //
-        Quantity.of(0, "s*rad"), //
+        // Quantity.of(0, "s*rad"), //
         RealScalar.ZERO, //
         Quantity.of(-4, "m") //
     );

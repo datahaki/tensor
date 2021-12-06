@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.sv;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Unprotect;
 
 /** complex rotation (x + y*i) (c + s*i) */
 /* package */ class Rotate {
@@ -13,8 +14,8 @@ import ch.alpine.tensor.Scalar;
    * @param c
    * @param s */
   public Rotate(Scalar x, Scalar y, Scalar c, Scalar s) {
-    re = x.multiply(c).subtract(y.multiply(s));
-    im = y.multiply(c).add(x.multiply(s));
+    re = Unprotect.zeroProject(x.multiply(c)).subtract(Unprotect.zeroProject(y.multiply(s)));
+    im = Unprotect.zeroProject(y.multiply(c)).add(Unprotect.zeroProject(x.multiply(s)));
   }
 
   /** @return x*c + y*s */

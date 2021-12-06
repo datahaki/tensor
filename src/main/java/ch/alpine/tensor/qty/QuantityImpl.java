@@ -29,18 +29,9 @@ import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.Sqrt;
 
-/** Mathematica 12 does not resolve
- * Quantity[1, "Meters"] + Quantity[1, "Seconds"]
- * Quantity[1, "Meters"] + Quantity[0, "Seconds"]
+/** The addition of quantities with different units is not resolved by Mathematica.
+ * Consequently the tensor library throws an exception for the calculation
  * Quantity[0, "Meters"] + Quantity[0, "Seconds"]
- * 
- * Mathematica 12 resolves
- * Quantity[1, "Meters"] + 0 == Quantity[1, "Meters"]
- * Quantity[0, "Meters"] + 0 == Quantity[0, "Meters"]
- * 
- * The tensor library resolves
- * Quantity[1, "Meters"] + Quantity[0, "Seconds"] == Quantity[1, "Meters"]
- * Quantity[0, "Meters"] + Quantity[0, "Seconds"] == 0
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
@@ -150,27 +141,19 @@ import ch.alpine.tensor.sca.Sqrt;
       Quantity quantity = (Quantity) scalar;
       if (unit.equals(quantity.unit()))
         return ofUnit(value.add(quantity.value()));
+      /** Mathematica 12 does not resolve
+       * Quantity[1, "Meters"] + Quantity[1, "Seconds"]
+       * Quantity[1, "Meters"] + Quantity[0, "Seconds"]
+       * Quantity[0, "Meters"] + Quantity[0, "Seconds"] */
+      throw TensorRuntimeException.of(this, scalar);
     }
-    if (Scalars.isZero(value))
-      return scalar.add(value);
     if (Scalars.isZero(scalar))
+      /** Mathematica 12 resolves
+       * Quantity[1, "Meters"] + 0 == Quantity[1, "Meters"]
+       * Quantity[0, "Meters"] + 0 == Quantity[0, "Meters"] */
       return ofUnit(scalar.add(value));
     throw TensorRuntimeException.of(this, scalar);
   }
-  // @Override // from AbstractScalar
-  // protected Scalar plus(Scalar scalar) {
-  // if (scalar instanceof Quantity) {
-  // Quantity quantity = (Quantity) scalar;
-  // if (unit.equals(quantity.unit()))
-  // return ofUnit(value.add(quantity.value()));
-  // throw TensorRuntimeException.of(this, scalar);
-  // }
-  // // if (Scalars.isZero(value))
-  // // return scalar.add(value);
-  // if (Scalars.isZero(scalar))
-  // return ofUnit(scalar.add(value));
-  // throw TensorRuntimeException.of(this, scalar);
-  // }
 
   // ---
   @Override // from AbsInterface

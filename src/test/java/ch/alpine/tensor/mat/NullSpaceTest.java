@@ -7,7 +7,6 @@ import java.util.Random;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.MachineNumberQ;
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
@@ -203,14 +202,14 @@ public class NullSpaceTest extends TestCase {
     Tensor tensor = NullSpace.of(matrix);
     assertEquals(tensor.get(0), UnitVector.of(3, 1));
     assertEquals(tensor.get(1), UnitVector.of(3, 2));
-    assertTrue(Scalars.isZero(Det.of(matrix)));
+    AssertFail.of(() -> Det.of(matrix));
   }
 
   public void testRectangle3x2() {
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}");
     Tensor tensor = NullSpace.of(matrix);
     assertEquals(tensor.get(0), UnitVector.of(2, 1));
-    assertTrue(Scalars.isZero(Det.of(matrix)));
+    AssertFail.of(() -> Det.of(matrix));
   }
 
   public void testZeros() {

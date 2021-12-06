@@ -2,13 +2,12 @@
 package ch.alpine.tensor.mat.re;
 
 import java.util.List;
-import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.red.Diagonal;
+import ch.alpine.tensor.ext.Integers;
 
 /** implementation is consistent with Mathematica
  * 
@@ -19,15 +18,17 @@ import ch.alpine.tensor.red.Diagonal;
  * <a href="https://reference.wolfram.com/language/ref/Det.html">Det</a> */
 public enum Det {
   ;
-  /** @param matrix
-   * @return determinant of matrix */
+  /** @param matrix square
+   * @return determinant of matrix
+   * @throws Exception if matrix is not square */
   public static Scalar of(Tensor matrix) {
     return of(matrix, Pivots.selection(matrix));
   }
 
-  /** @param matrix
+  /** @param matrix square
    * @param pivot
-   * @return determinant of matrix */
+   * @return determinant of matrix
+   * @throws Exception if matrix is not square */
   public static Scalar of(Tensor matrix, Pivot pivot) {
     Dimensions dimensions = new Dimensions(matrix);
     List<Integer> list = dimensions.list();
@@ -37,12 +38,13 @@ public enum Det {
         !dimensions.isArray() || //
         dimensions.maxDepth() != 2)
       throw TensorRuntimeException.of(matrix);
-    if (n == m) // square
-      return Determinant.of(matrix, pivot);
-    Objects.requireNonNull(pivot);
-    return Diagonal.of(matrix).stream() //
-        .map(Scalar.class::cast) //
-        .map(Scalar::zero) //
-        .reduce(Scalar::add).orElseThrow();
+    Integers.requireEquals(n, m);
+    // if (n == m) // square
+    return Determinant.of(matrix, pivot);
+    // Objects.requireNonNull(pivot);
+    // return Diagonal.of(matrix).stream() //
+    // .map(Scalar.class::cast) //
+    // .map(Scalar::zero) //
+    // .reduce(Scalar::add).orElseThrow();
   }
 }

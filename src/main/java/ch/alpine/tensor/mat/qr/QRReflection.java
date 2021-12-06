@@ -5,6 +5,7 @@ import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.nrm.NormalizeUnlessZero;
@@ -41,7 +42,8 @@ import ch.alpine.tensor.sca.Conjugate;
   }
 
   public Tensor forward(Tensor tensor) {
-    Tensor project = tensor.add(TensorProduct.of(vc.negate(), vr.dot(tensor)));
+    Tensor prod = TensorProduct.of(vc.negate(), vr.dot(tensor));
+    Tensor project = tensor.add(prod.map(Unprotect::zeroProject));
     project.set(Tensor::negate, k); // 2nd reflection
     return project;
   }

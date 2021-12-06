@@ -89,7 +89,8 @@ public class DetTest extends TestCase {
         { -2, 3, +4, 0 }, //
         { +0, 2, -1, 2 }, //
     });
-    assertEquals(Det.of(m), RealScalar.of(0));
+    // assertEquals(Det.of(m), RealScalar.of(0));
+    AssertFail.of(() -> Det.of(m));
   }
 
   public void testNonSquare2() {
@@ -99,7 +100,8 @@ public class DetTest extends TestCase {
         { -5, 3, +4 }, //
         { +0, 2, -1 } //
     });
-    assertEquals(Det.of(m), RealScalar.of(0));
+    AssertFail.of(() -> Det.of(m));
+    // assertEquals(Det.of(m), RealScalar.of(0));
   }
 
   public void testComplex1() {
@@ -150,9 +152,16 @@ public class DetTest extends TestCase {
   public void testSingular() {
     for (Pivot pivot : Pivots.values()) {
       assertEquals(Det.of(Array.zeros(5, 5), pivot), RealScalar.ZERO);
-      assertEquals(Det.of(Array.zeros(2, 5), pivot), RealScalar.ZERO);
-      assertEquals(Det.of(Array.zeros(5, 2), pivot), RealScalar.ZERO);
+      // assertEquals(Det.of(Array.zeros(2, 5), pivot), RealScalar.ZERO);
+      AssertFail.of(() -> Det.of(Array.zeros(2, 5), pivot));
+      AssertFail.of(() -> Det.of(Array.zeros(5, 2), pivot));
+      // assertEquals(Det.of(Array.zeros(5, 2), pivot), RealScalar.ZERO);
     }
+  }
+
+  public void testSingularFail() {
+    AssertFail.of(() -> Det.of(Array.zeros(2, 5)));
+    AssertFail.of(() -> Det.of(Array.zeros(5, 2)));
   }
 
   public void testNullFail() {

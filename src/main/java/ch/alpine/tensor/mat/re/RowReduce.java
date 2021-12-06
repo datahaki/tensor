@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 
 /** inspired by
@@ -43,7 +44,9 @@ public class RowReduce extends AbstractReduce {
         for (int c1 = 0; c1 < lhs.length; ++c1)
           if (c1 != c0) {
             Scalar fac = lhs[ind(c1)].Get(j).divide(piv).negate();
-            lhs[ind(c1)] = lhs[ind(c1)].add(lhs[ind(c0)].multiply(fac));
+            Tensor mul = lhs[ind(c0)].multiply(fac);
+            // lhs[ind(c1)] = lhs[ind(c1)].add(mul.map(Unprotect::zeroProject));
+            lhs[ind(c1)] = lhs[ind(c1)].map(Unprotect::zeroProject).add(mul.map(Unprotect::zeroProject));
           }
         lhs[ind(c0)] = lhs[ind(c0)].divide(piv);
         ++c0;

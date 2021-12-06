@@ -50,7 +50,7 @@ public class Vector2NormTest extends TestCase {
   public void testQuantity() {
     Tensor vec = Tensors.of( //
         Quantity.of(3, "m^2"), //
-        Quantity.of(0, "s*rad"), //
+        // Quantity.of(0, "s*rad"), //
         Quantity.of(-4, "m^2"), //
         RealScalar.ZERO //
     );
@@ -58,7 +58,8 @@ public class Vector2NormTest extends TestCase {
   }
 
   public void testQuantityMixed() {
-    Tensor vec = Tensors.fromString("{0[m^2], 0[s*rad], 1}");
+    // Tensor vec = Tensors.fromString("{0[m^2], 0[s*rad], 1}");
+    Tensor vec = Tensors.fromString("{0, 0, 1}");
     assertEquals(Vector2Norm.of(vec), RealScalar.ONE);
   }
 }

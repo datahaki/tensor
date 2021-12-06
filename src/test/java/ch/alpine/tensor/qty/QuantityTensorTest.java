@@ -65,8 +65,7 @@ public class QuantityTensorTest extends TestCase {
   }
 
   public void testZeroAssociativity() {
-    _checkAssociativity(Tensors.fromString("{0[A], 0[B], 0[C], 0}"));
-    _checkAssociativity(Tensors.fromString("{0.0[A], 0[B], 0.0[C], 0, 0.0}"));
+    _checkAssociativity(Tensors.fromString("{0[A], 0.0[A], 0, 0.0}"));
   }
 
   public void testComplexAssociativity() {
@@ -101,9 +100,9 @@ public class QuantityTensorTest extends TestCase {
   }
 
   public void testMixAssociativity() {
-    _checkAssociativity(Quantity.of(3, "m"), Tensors.fromString("{0[A], 0[B], 0[C], 0}"));
-    _checkAssociativity(Quantity.of(3, "m"), Tensors.fromString("{0.0[A], 0[B], 0, 0.0}"));
-    _checkAssociativity(Quantity.of(ComplexScalar.of(3, 1), "m"), Tensors.fromString("{0.0[A], 0[B], 0, 0.0}"));
+    _checkAssociativity(Quantity.of(3, "m"), Tensors.fromString("{0[m], 0[m], 0[m], 0}"));
+    _checkAssociativity(Quantity.of(3, "m"), Tensors.fromString("{0.0[m], 0[m], 0, 0.0}"));
+    _checkAssociativity(Quantity.of(ComplexScalar.of(3, 1), "m"), Tensors.fromString("{0.0[m], 0[m], 0, 0.0}"));
   }
 
   public void testFail() {
