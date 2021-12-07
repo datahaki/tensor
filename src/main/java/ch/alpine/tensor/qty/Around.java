@@ -30,14 +30,17 @@ import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.Sqrt;
 
-/** "Around[mean, sigma] represents an approximate number or quantity with a value
- * around mean and an uncertainty sigma."
+/** "Around[mean, sigma] represents an approximate number or quantity with a value around
+ * mean and an uncertainty sigma."
  * 
  * The implementation of Around attempts to be consistent with Mathematica::Around.
  * 
- * However, Mathematica uses properties of the function that is applied to Around
- * in order to map mean and sigma. This results in seeminly inconsistent choices:
+ * However, Mathematica uses a first order approximation of the function that is applied
+ * to Around in order to map mean and sigma. This results in seemingly inconsistent choices:
  * Example: Let a = Around[3, 4], then a a != a ^ 2.
+ * 
+ * Remark:
+ * Around[0, 1] Around[0, 1] == 0
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Around.html">Around</a>
@@ -47,7 +50,12 @@ import ch.alpine.tensor.sca.Sqrt;
 public class Around extends AbstractScalar implements //
     AbsInterface, ExactScalarQInterface, ExpInterface, LogInterface, MeanInterface, //
     NInterface, SqrtInterface, Serializable {
-  /** @param mean
+  private static final String SEPARATOR = "\u00B1";
+
+  /** Special case consistent with Mathematica:
+   * Around[Quantity[1, "m"], 0] == Quantity[1, "m"]
+   * 
+   * @param mean
    * @param sigma non-negative
    * @return
    * @throws Exception if mean and sigma are quantities of different units */
@@ -197,6 +205,6 @@ public class Around extends AbstractScalar implements //
 
   @Override
   public String toString() {
-    return mean + "~" + sigma;
+    return mean + SEPARATOR + sigma;
   }
 }

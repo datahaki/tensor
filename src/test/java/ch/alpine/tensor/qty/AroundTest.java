@@ -22,6 +22,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Exp;
@@ -193,7 +194,19 @@ public class AroundTest extends TestCase {
 
   public void testNumberFail() {
     Scalar scalar = Around.of(2, 3);
+    assertEquals(scalar.toString(), "2\u00B13");
     AssertFail.of(() -> scalar.number());
+  }
+
+  public void testAbsComplex() {
+    Scalar scalar = Around.of(ComplexScalar.of(3, 4), RealScalar.ONE);
+    Scalar abs = Abs.FUNCTION.apply(scalar);
+    assertEquals(abs, Around.of(5, 1));
+  }
+  
+  public void testSpecialCase() {
+    Scalar scalar = Around.of(Quantity.of(1, "m"), RealScalar.ZERO);
+    assertEquals(scalar, Quantity.of(1, "m"));
   }
 
   public void testSqrt() {
