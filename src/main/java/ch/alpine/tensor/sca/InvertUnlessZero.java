@@ -37,18 +37,26 @@ public enum InvertUnlessZero implements ScalarUnaryOperator {
    * Scalars.isZero(scalar) ? scalar : scalar.reciprocal(); */
   @Override
   public Scalar apply(Scalar scalar) {
-    if (Scalars.isZero(scalar)) {
-      if (scalar instanceof Quantity) {
-        Quantity quantity = (Quantity) scalar;
-        return Quantity.of(quantity.value(), quantity.unit().negate());
-      }
-      return scalar;
-    }
-    return scalar.reciprocal();
+    return Scalars.isZero(scalar) //
+        ? negateUnit(scalar)
+        : scalar.reciprocal();
   }
 
   @SuppressWarnings("unchecked")
   public static <T extends Tensor> T of(T tensor) {
     return (T) tensor.map(FUNCTION);
+  }
+
+  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
+   * 
+   * @param scalar
+   * @return */
+  // TODO make function private
+  public static Scalar negateUnit(Scalar scalar) {
+    if (scalar instanceof Quantity) {
+      Quantity quantity = (Quantity) scalar;
+      return Quantity.of(quantity.value(), quantity.unit().negate());
+    }
+    return scalar;
   }
 }

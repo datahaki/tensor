@@ -4,6 +4,7 @@ package ch.alpine.tensor.nrm;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 
@@ -34,7 +35,7 @@ public class NormalizeUnlessZero implements TensorUnaryOperator {
   public Tensor apply(Tensor vector) {
     Scalar norm = tensorScalarFunction.apply(vector); // throws exception if input is not a vector
     return Scalars.isZero(norm) //
-        ? vector.copy()
+        ? vector.map(Unprotect::withoutUnit)
         : normalize.normalize(vector, norm);
   }
 
