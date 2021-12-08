@@ -69,7 +69,6 @@ public class GaussianElimination extends AbstractReduce {
       Scalar fac = lhs[ic1].Get(c0).divide(piv).negate();
       lhs[ic1] = lhs[ic1].add(lhs[ic0].multiply(fac));
       Tensor mul = rhs[ic0].multiply(fac);
-      // mul
       rhs[ic1] = rhs[ic1].add(mul.map(Unprotect::zeroDropUnit));
     }
   }

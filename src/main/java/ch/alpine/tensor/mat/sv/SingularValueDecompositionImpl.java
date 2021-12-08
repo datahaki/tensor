@@ -213,9 +213,10 @@ import ch.alpine.tensor.sca.Sqrt;
     return 0;
   }
 
-  /** @param l < i
-   * @param i > 0 */
-  private void rotateUV(int l, int i) {
+  /** @param l
+   * @param i
+   * @return potentially with unit */
+  private Scalar fcompute(int l, int i) {
     Scalar x = w.Get(l);
     Scalar y = w.Get(i - 1);
     Scalar z = w.Get(i);
@@ -224,25 +225,33 @@ import ch.alpine.tensor.sca.Sqrt;
     Scalar hy = h.multiply(y);
     // ((y-z)(y+z)+(p-h)*(p+h))/(2hy)
     Scalar f = y.subtract(z).multiply(y.add(z)).add(p.subtract(h).multiply(p.add(h))).divide(hy.add(hy));
-    p = Hypot.withOne(f);
     // ((x-z)(x+z)+(h*(y/(f+-p)-h)))/x
-    f = x.subtract(z).multiply(x.add(z)).add(h.multiply(y.divide(f.add(CopySign.of(p, f))).subtract(h))).divide(x);
-    Scalar s = x.one();
-    Scalar c = x.one();
+    return x.subtract(z).multiply(x.add(z)).add(h.multiply(y.divide(f.add(CopySign.of(Hypot.withOne(f), f))).subtract(h))).divide(x);
+  }
+
+  /** @param l < i
+   * @param i > 0 */
+  private void rotateUV(int l, int i) {
+    Scalar f = fcompute(l, i);
+    Scalar x = w.Get(l);
+    Scalar s = x.one(); // without unit
+    Scalar c = s; // without unit
     for (int j = l; j < i; ++j) {
       int jp1 = j + 1;
-      p = r.Get(jp1);
-      y = w.Get(jp1);
-      h = s.multiply(p);
+      Scalar p = r.Get(jp1);
+      Scalar y = w.Get(jp1);
+      Scalar h = s.multiply(p);
       p = c.multiply(p);
-      z = Hypot.of(f, h);
+      Scalar z = Hypot.of(f, h);
       r.set(z, j);
       c = f.divide(z);
       s = h.divide(z);
       rotate(v, c, s, jp1, j);
-      Rotate rotate = new Rotate(p, x, c, s);
-      p = rotate.re();
-      f = rotate.im();
+      {
+        Rotate rotate = new Rotate(p, x, c, s);
+        p = rotate.re();
+        f = rotate.im();
+      }
       h = y.multiply(s);
       y = y.multiply(c);
       z = Hypot.of(f, h);
@@ -252,9 +261,11 @@ import ch.alpine.tensor.sca.Sqrt;
         s = h.divide(z);
       }
       rotate(u, c, s, jp1, j);
-      rotate = new Rotate(y, p, c, s);
-      x = rotate.re();
-      f = rotate.im();
+      {
+        Rotate rotate = new Rotate(y, p, c, s);
+        x = rotate.re();
+        f = rotate.im();
+      }
     }
     r.set(Scalar::zero, l);
     r.set(f, i);

@@ -11,12 +11,12 @@ import ch.alpine.tensor.Unprotect;
 
   /** @param x
    * @param y
-   * @param c
-   * @param s */
+   * @param c without unit
+   * @param s without unit */
   public Rotate(Scalar x, Scalar y, Scalar c, Scalar s) {
-    // TODO check if we can enhance this numerically
-    re = Unprotect.zeroDropUnit(x.multiply(c)).subtract(Unprotect.zeroDropUnit(y.multiply(s)));
-    im = Unprotect.zeroDropUnit(y.multiply(c)).add(Unprotect.zeroDropUnit(x.multiply(s)));
+    y = Unprotect.zeroDropUnit(y);
+    re = x.multiply(c).subtract(y.multiply(s));
+    im = y.multiply(c).add(x.multiply(s));
   }
 
   /** @return x*c + y*s */
