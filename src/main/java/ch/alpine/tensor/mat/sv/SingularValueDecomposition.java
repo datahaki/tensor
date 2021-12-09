@@ -22,14 +22,15 @@ public interface SingularValueDecomposition {
   }
 
   // ---
-  /** @return matrix of dimensions rows x cols */
+  /** @return matrix of dimensions rows x cols without units */
   Tensor getU();
 
   /** Careful: the entries in the vector are not necessarily ordered
    * 
-   * @return vector of non-negative singular values of length cols */
+   * @return vector of non-negative singular values of length cols
+   * with units as entries in matrix */
   Tensor values();
 
-  /** @return square matrix of dimensions cols x cols */
+  /** @return square matrix of dimensions cols x cols without units */
   Tensor getV();
 }

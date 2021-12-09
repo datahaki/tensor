@@ -30,10 +30,32 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.Sqrt;
 
 /** The addition of quantities with different units is not resolved by Mathematica.
+ * 
+ * Mathematica 12 does not resolve
+ * Quantity[1, "Meters"] + Quantity[1, "Seconds"]
+ * Quantity[1, "Meters"] + Quantity[0, "Seconds"]
+ * Quantity[0, "Meters"] + Quantity[0, "Seconds"]
+ * 
  * Consequently the tensor library also throws an exception when quantities
  * of unequal unit are added. That is even the case, when the magnitude of both
  * quantities is zero:
+ * <pre>
  * Quantity[0, "Meters"] + Quantity[0, "Seconds"]
+ * </pre>
+ * 
+ * The tensor library throws an exception whenever two quantities are added that
+ * have different units. This also holds when one of the units is {@link Unit#ONE}.
+ * 
+ * For instance
+ * <pre>
+ * Quantity[0, "Meters"] + 0 throws an Exception.
+ * </pre>
+ * 
+ * Careful: Mathematica 12 resolves
+ * <pre>
+ * Quantity[1, "Meters"] + 0 == Quantity[1, "Meters"]
+ * Quantity[0, "Meters"] + 0 == Quantity[0, "Meters"]
+ * </pre>
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
@@ -143,17 +165,7 @@ import ch.alpine.tensor.sca.Sqrt;
       Quantity quantity = (Quantity) scalar;
       if (unit.equals(quantity.unit()))
         return ofUnit(value.add(quantity.value()));
-      /* Mathematica 12 does not resolve
-       * Quantity[1, "Meters"] + Quantity[1, "Seconds"]
-       * Quantity[1, "Meters"] + Quantity[0, "Seconds"]
-       * Quantity[0, "Meters"] + Quantity[0, "Seconds"] */
-      throw TensorRuntimeException.of(this, scalar);
     }
-    if (Scalars.isZero(scalar))
-      /* Mathematica 12 resolves
-       * Quantity[1, "Meters"] + 0 == Quantity[1, "Meters"]
-       * Quantity[0, "Meters"] + 0 == Quantity[0, "Meters"] */
-      return ofUnit(scalar.add(value));
     throw TensorRuntimeException.of(this, scalar);
   }
 

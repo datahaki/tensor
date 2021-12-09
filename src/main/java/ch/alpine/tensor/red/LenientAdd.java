@@ -40,4 +40,8 @@ public enum LenientAdd {
   public static Tensor of(Tensor p, Tensor q) {
     return INNER.apply(p, q);
   }
+
+  public static Tensor dot(Tensor p, Tensor q) {
+    return Times.of(p, q).stream().reduce(LenientAdd::of).orElseThrow();
+  }
 }

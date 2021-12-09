@@ -52,8 +52,9 @@ public class Around extends AbstractScalar implements //
     NInterface, SqrtInterface, Serializable {
   private static final String SEPARATOR = "\u00B1";
 
-  /** Special case consistent with Mathematica:
+  /** Mathematica allows
    * Around[Quantity[1, "m"], 0] == Quantity[1, "m"]
+   * but in this special case, the tensor library throws an Exception
    * 
    * @param mean
    * @param sigma non-negative

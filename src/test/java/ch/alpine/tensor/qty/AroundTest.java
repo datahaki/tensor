@@ -205,8 +205,7 @@ public class AroundTest extends TestCase {
   }
 
   public void testSpecialCase() {
-    Scalar scalar = Around.of(Quantity.of(1, "m"), RealScalar.ZERO);
-    assertEquals(scalar, Quantity.of(1, "m"));
+    AssertFail.of(() -> Around.of(Quantity.of(1, "m"), RealScalar.ZERO));
   }
 
   public void testSqrt() {

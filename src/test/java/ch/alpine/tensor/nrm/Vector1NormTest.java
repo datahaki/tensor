@@ -26,10 +26,18 @@ public class Vector1NormTest extends TestCase {
   public void testQuantity2() {
     Tensor vec = Tensors.of( //
         Quantity.of(-3, "m"), //
-        RealScalar.ZERO, //
         Quantity.of(-4, "m") //
     );
     assertEquals(Vector1Norm.of(vec), Quantity.of(7, "m"));
+  }
+
+  public void testQuantityFail() {
+    Tensor vec = Tensors.of( //
+        Quantity.of(-3, "m"), //
+        RealScalar.ZERO, //
+        Quantity.of(-4, "m") //
+    );
+    AssertFail.of(() -> Vector1Norm.of(vec));
   }
 
   public void testBetween() {

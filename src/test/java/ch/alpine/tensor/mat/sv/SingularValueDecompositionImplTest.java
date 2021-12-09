@@ -14,6 +14,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.NullSpace;
 import ch.alpine.tensor.mat.SquareMatrixQ;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import junit.framework.TestCase;
@@ -38,6 +39,23 @@ public class SingularValueDecompositionImplTest extends TestCase {
 
   public void testCondition2() {
     Tensor matrix = ResourceData.of("/mat/svd2.csv");
+    SingularValueDecompositionTest.specialOps(matrix);
+  }
+
+  public void testCondition1Unit() {
+    Tensor matrix = ResourceData.of("/mat/svd3.csv");
+    SingularValueDecompositionTest.specialOps(matrix);
+  }
+
+  public void testCondition2Unit() {
+    Tensor matrix = ResourceData.of("/mat/svd2.csv").map(s -> Quantity.of(s, "m"));
+    matrix.append(matrix.get(0));
+    // System.out.println(Diagonal.of(matrix));
+    // SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
+    // System.out.println("v="+Pretty.of(svd.getV().map(Round._1)));
+    // System.out.println("u="+Pretty.of(svd.getU().map(Round._1)));
+    // System.out.println("w="+Pretty.of(svd.values().map(Round._1)));
+    // System.out.println(Dimensions.of());
     SingularValueDecompositionTest.specialOps(matrix);
   }
 

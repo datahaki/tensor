@@ -51,10 +51,17 @@ public class Vector2NormTest extends TestCase {
   public void testQuantity() {
     Tensor vec = Tensors.of( //
         Quantity.of(3, "m^2"), //
+        Quantity.of(-4, "m^2"));
+    assertEquals(Vector2Norm.of(vec), Quantity.of(5, "m^2"));
+  }
+
+  public void testQuantityFail() {
+    Tensor vec = Tensors.of( //
+        Quantity.of(3, "m^2"), //
         Quantity.of(-4, "m^2"), //
         RealScalar.ZERO //
     );
-    assertEquals(Vector2Norm.of(vec), Quantity.of(5, "m^2"));
+    AssertFail.of(() -> Vector2Norm.of(vec));
   }
 
   public void testQuantityMixedFail1() {

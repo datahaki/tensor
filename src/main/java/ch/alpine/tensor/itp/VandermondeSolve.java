@@ -7,6 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.red.LenientAdd;
 
 /** Reference:
  * G. B. Rybicki */
@@ -28,7 +29,9 @@ public enum VandermondeSolve {
       Scalar xx = x.Get(i).negate();
       for (int j = n - 1 - i; j < n - 1; ++j) {
         int fj = j;
-        c.set(xx.multiply(c.Get(fj + 1))::add, j);
+        // c.set(xx.multiply(c.Get(fj + 1))::add, j);
+        // TODO check for simplifications
+        c.set(s -> LenientAdd.of(s, xx.multiply(c.Get(fj + 1))), j);
       }
       c.set(xx::add, n - 1);
     }

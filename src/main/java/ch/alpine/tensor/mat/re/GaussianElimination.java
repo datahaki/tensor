@@ -82,7 +82,8 @@ public class GaussianElimination extends AbstractReduce {
       int ic0 = ind(c0);
       Tensor sum = rhs[ic0];
       for (int c1 = c0 + 1; c1 < rhs.length; ++c1)
-        sum = sum.add(sol[c1].multiply(lhs[ic0].Get(c1).negate()));
+        // sum = sum.add(sol[c1].multiply(lhs[ic0].Get(c1).negate()));
+        sum = LenientAdd.of(sum, sol[c1].multiply(lhs[ic0].Get(c1).negate()));
       sol[c0] = sum.divide(lhs[ic0].Get(c0));
     }
     return Unprotect.byRef(sol);

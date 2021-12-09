@@ -126,7 +126,8 @@ public class InverseTest extends TestCase {
     Tensor eye = IdentityMatrix.of(2); // <- yey!
     Tensor inv = LinearSolve.of(mat, eye);
     Tensor res = mat.dot(inv);
-    Chop.NONE.requireClose(eye, res);
+    // System.out.println(Pretty.of(res));
+    Chop.NONE.requireClose(eye, res.map(Unprotect::zeroDropUnit));
     Tensor inverse = Inverse.of(mat);
     Tensor expected = Tensors.fromString( //
         "{{-4/5[m^-2], 3/10[m^-1*rad^-1]}, {3/10[m^-1*rad^-1], -1/20[rad^-2]}}");
@@ -141,10 +142,10 @@ public class InverseTest extends TestCase {
     for (Pivot pivot : Pivots.values()) {
       Tensor inv = LinearSolve.of(matrix, eye, pivot);
       Tensor res = matrix.dot(inv);
-      Chop.NONE.requireClose(eye, res);
+      Chop.NONE.requireClose(eye, res.map(Unprotect::zeroDropUnit));
     }
     Tensor inverse = Inverse.of(matrix);
-    Chop.NONE.requireClose(matrix.dot(inverse), IdentityMatrix.of(3));
+    Chop.NONE.requireClose(matrix.dot(inverse).map(Unprotect::zeroDropUnit), IdentityMatrix.of(3));
     Chop.NONE.requireClose(inverse.dot(matrix).map(Unprotect::zeroDropUnit), IdentityMatrix.of(3));
     assertFalse(HermitianMatrixQ.of(matrix));
     assertFalse(SymmetricMatrixQ.of(matrix));
@@ -186,7 +187,7 @@ public class InverseTest extends TestCase {
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
     SymmetricMatrixQ.require(matrix);
     Tensor inverse = Inverse.of(matrix);
-    Chop.NONE.requireClose(matrix.dot(inverse), IdentityMatrix.of(3));
+    Chop.NONE.requireClose(matrix.dot(inverse).map(Unprotect::zeroDropUnit), IdentityMatrix.of(3));
     Tensor other = inverse.dot(matrix);
     assertEquals(other.get(0), Tensors.fromString("{1, 0[m^-1*rad], 0[kg*m^-1]}"));
     assertEquals(other.get(1), Tensors.fromString("{0[m*rad^-1], 1, 0[kg*rad^-1]}"));

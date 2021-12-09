@@ -9,7 +9,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.nrm.Hypot;
@@ -61,11 +60,11 @@ import ch.alpine.tensor.sca.Sign;
         chop.requireClose(A[ip][iq], A[iq][ip]);
     }
     V = IdentityMatrix.of(n);
-    Tensor z = Array.zeros(n);
     Tensor b = Diagonal.of(matrix);
     d = b.copy();
     Scalar factor = DoubleScalar.of(0.2 / (n * n));
     for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
+      Tensor z = d.map(Scalar::zero);
       Scalar sum = A[0][0].zero();
       for (int ip = 0; ip < n - 1; ++ip)
         for (int iq = ip + 1; iq < n; ++iq)
@@ -89,7 +88,7 @@ import ch.alpine.tensor.sca.Sign;
             process(ip, iq, g, z);
         }
       b = b.add(z);
-      z = Array.zeros(n);
+      // z = b.map(Scalar::zero);
       d = b.copy();
     }
     throw TensorRuntimeException.of(matrix);

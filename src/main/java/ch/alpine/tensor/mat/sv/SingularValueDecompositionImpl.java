@@ -18,6 +18,8 @@ import ch.alpine.tensor.nrm.Matrix1Norm;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.red.CopySign;
+import ch.alpine.tensor.red.Diagonal;
+import ch.alpine.tensor.red.LenientAdd;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.Sqrt;
@@ -45,8 +47,8 @@ import ch.alpine.tensor.sca.Sqrt;
     if (rows < cols)
       throw new IllegalArgumentException("rows=" + rows + " cols=" + cols);
     u = matrix.copy();
-    w = Array.zeros(cols);
-    r = Array.zeros(cols);
+    w = Diagonal.of(matrix).map(Scalar::zero);
+    r = w.copy();
     // ---
     for (int i = 0; i < cols; ++i) {
       initU1(i);
@@ -98,7 +100,7 @@ import ch.alpine.tensor.sca.Sqrt;
     if (Scalars.isZero(scale)) {
       Scalar zero_unitless = scale.one().zero();
       u.stream().skip(i).forEach(uk -> uk.set(zero_unitless, i));
-      w.set(scale.zero(), i);
+      w.set(Scalar::zero, i);
     } else {
       u.stream().skip(i).forEach(uk -> uk.set(scale::under, i));
       Scalar s = Vector2NormSquared.of(u.stream().skip(i).map(row -> row.Get(i)));
@@ -158,7 +160,7 @@ import ch.alpine.tensor.sca.Sqrt;
       for (int j = ip1; j < cols; ++j) {
         final int fj = j;
         addScaled(ip1, v, i, j, //
-            (Scalar) uiEx.dot(Tensor.of(v.stream().skip(ip1).map(row -> row.Get(fj)))));
+            (Scalar) LenientAdd.dot(uiEx, Tensor.of(v.stream().skip(ip1).map(row -> row.Get(fj)))));
       }
     }
     IntStream.range(ip1, cols).forEach(j -> v.set(Scalar::zero, i, j));
@@ -278,8 +280,7 @@ import ch.alpine.tensor.sca.Sqrt;
   }
 
   private static void addScaled(Tensor vk, int i, int j, Scalar s) {
-    vk.set(Unprotect::zeroDropUnit, j);
-    vk.set(s.multiply(vk.Get(i))::add, j);
+    vk.set(tmp -> LenientAdd.of(tmp, s.multiply(vk.Get(i))), j);
   }
 
   private static void rotate(Tensor m, Scalar c, Scalar s, int i, int j) {
