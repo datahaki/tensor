@@ -7,7 +7,10 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.FoldList;
+import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.lie.TensorProduct;
+import ch.alpine.tensor.red.Times;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CoefficientList.html">CoefficientList</a> */
@@ -21,20 +24,19 @@ import ch.alpine.tensor.lie.TensorProduct;
    * @param roots vector of length 1, 2, or 3
    * @return coefficients of polynomial */
   public static Tensor of(Tensor roots) {
-    Tensor box = linear(roots.Get(0));
-    for (int index = 1; index < roots.length(); ++index)
-      box = TensorProduct.of(box, linear(roots.Get(index)));
-    Tensor _box = box;
-    Tensor coeffs = Array.zeros(roots.length() + 1);
-    Array.of(list -> {
-      Scalar scalar = (Scalar) _box.get(list);
-      coeffs.set(scalar::add, list.stream().mapToInt(i -> i).sum());
-      return null;
-    }, Dimensions.of(box));
+    Scalar first = roots.Get(0);
+    Tensor box = roots.stream() //
+        .map(CoefficientList::linear) //
+        .reduce(TensorProduct::of) //
+        .orElseThrow();
+    Tensor coeffs = Reverse.of(FoldList.of(Times::of, roots.map(Scalar::zero))).append(first.one().zero());
+    Array.forEach( //
+        list -> coeffs.set(box.get(list)::add, list.stream().mapToInt(i -> i).sum()), //
+        Dimensions.of(box));
     return coeffs;
   }
 
-  private static Tensor linear(Scalar scalar) {
+  private static Tensor linear(Tensor scalar) {
     return Tensors.of(scalar.negate(), RealScalar.ONE);
   }
 }

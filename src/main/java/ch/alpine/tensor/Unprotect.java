@@ -82,16 +82,6 @@ public enum Unprotect {
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
-   * @param scalar
-   * @return */
-  public static Scalar zeroDropUnit(Scalar scalar) {
-    return Scalars.isZero(scalar) //
-        ? withoutUnit(scalar)
-        : scalar;
-  }
-
-  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
-   * 
    * @param tensor
    * @return whether scalar entries are quantities of identical unit */
   public static boolean isUnitUnique(Tensor tensor) {

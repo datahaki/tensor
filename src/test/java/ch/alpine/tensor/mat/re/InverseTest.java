@@ -11,7 +11,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.fft.FourierMatrix;
@@ -123,11 +122,10 @@ public class InverseTest extends TestCase {
     Tensor ve1 = Tensors.of(qs1.multiply(qs1), qs2.multiply(qs3));
     Tensor ve2 = Tensors.of(qs2.multiply(qs3), qs4.multiply(qs4));
     Tensor mat = Tensors.of(ve1, ve2);
-    Tensor eye = IdentityMatrix.of(2); // <- yey!
-    Tensor inv = LinearSolve.of(mat, eye);
+    Tensor inv = LinearSolve.of(mat, IdentityMatrix.of(2));
     Tensor res = mat.dot(inv);
-    // System.out.println(Pretty.of(res));
-    Chop.NONE.requireClose(eye, res.map(Unprotect::zeroDropUnit));
+    Tensor expect = Tensors.fromString("{{1, 0[m*rad^-1]}, {0[m^-1*rad], 1}}");
+    assertEquals(res, expect);
     Tensor inverse = Inverse.of(mat);
     Tensor expected = Tensors.fromString( //
         "{{-4/5[m^-2], 3/10[m^-1*rad^-1]}, {3/10[m^-1*rad^-1], -1/20[rad^-2]}}");
@@ -139,14 +137,16 @@ public class InverseTest extends TestCase {
     Tensor matrix = Tensors.fromString( //
         "{{1[m^2], 2[m*rad], 3[kg*m]}, {4[m*rad], 2[rad^2], 2[kg*rad]}, {5[kg*m], 1[kg*rad], 7[kg^2]}}");
     final Tensor eye = IdentityMatrix.of(3).unmodifiable();
+    Tensor expect = Tensors.fromString("{{1, 0[m*rad^-1], 0[kg^-1*m]}, {0[m^-1*rad], 1, 0[kg^-1*rad]}, {0[kg*m^-1], 0[kg*rad^-1], 1}}");
     for (Pivot pivot : Pivots.values()) {
       Tensor inv = LinearSolve.of(matrix, eye, pivot);
       Tensor res = matrix.dot(inv);
-      Chop.NONE.requireClose(eye, res.map(Unprotect::zeroDropUnit));
+      assertEquals(res, expect);
     }
     Tensor inverse = Inverse.of(matrix);
-    Chop.NONE.requireClose(matrix.dot(inverse).map(Unprotect::zeroDropUnit), IdentityMatrix.of(3));
-    Chop.NONE.requireClose(inverse.dot(matrix).map(Unprotect::zeroDropUnit), IdentityMatrix.of(3));
+    assertEquals(matrix.dot(inverse), expect);
+    Tensor dual = Tensors.fromString("{{1, 0[m^-1*rad], 0[kg*m^-1]}, {0[m*rad^-1], 1, 0[kg*rad^-1]}, {0[kg^-1*m], 0[kg^-1*rad], 1}}");
+    assertEquals(inverse.dot(matrix), dual);
     assertFalse(HermitianMatrixQ.of(matrix));
     assertFalse(SymmetricMatrixQ.of(matrix));
   }
@@ -187,7 +187,8 @@ public class InverseTest extends TestCase {
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
     SymmetricMatrixQ.require(matrix);
     Tensor inverse = Inverse.of(matrix);
-    Chop.NONE.requireClose(matrix.dot(inverse).map(Unprotect::zeroDropUnit), IdentityMatrix.of(3));
+    Tensor expect = Tensors.fromString("{{1, 0[m*rad^-1], 0[kg^-1*m]}, {0[m^-1*rad], 1, 0[kg^-1*rad]}, {0[kg*m^-1], 0[kg*rad^-1], 1}}");
+    assertEquals(matrix.dot(inverse), expect);
     Tensor other = inverse.dot(matrix);
     assertEquals(other.get(0), Tensors.fromString("{1, 0[m^-1*rad], 0[kg*m^-1]}"));
     assertEquals(other.get(1), Tensors.fromString("{0[m*rad^-1], 1, 0[kg*rad^-1]}"));

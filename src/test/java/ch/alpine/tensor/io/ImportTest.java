@@ -136,22 +136,16 @@ public class ImportTest extends TestCase {
     assertEquals(string, "tensorlib.importtest");
   }
 
-  // TODO reactivate
   public void _testSerialization1() throws ClassNotFoundException, IOException, DataFormatException {
     Tensor tensor = Import.object(IO_OBJECT_TENSOR);
     assertEquals(tensor, CONTENT);
   }
 
-  // TODO reactivate
   public void _testSerialization2() throws ClassNotFoundException, IOException, DataFormatException {
     Tensor tensor = Import.object(IO_OBJECT_UNMODIFIABLE);
     assertTrue(Tensors.isUnmodifiable(tensor));
     assertEquals(tensor, CONTENT);
   }
-  // public void testSerialization3() throws ClassNotFoundException, IOException, DataFormatException {
-  // Tensor tensor = Import.object(IO_OBJECT_VIEWTENSOR);
-  // assertEquals(tensor, CONTENT);
-  // }
 
   public void testUnknownFail() {
     File file = new File(getClass().getResource("/io/extension.unknown").getFile());

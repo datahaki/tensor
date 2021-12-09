@@ -6,7 +6,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.alg.Transpose;
@@ -169,7 +168,8 @@ public class CholeskyDecompositionTest extends TestCase {
       Tensor eye = IdentityMatrix.of(3);
       Tensor inv = LinearSolve.of(matrix, eye);
       Tensor res = matrix.dot(inv);
-      Chop.NONE.requireClose(eye, res.map(Unprotect::zeroDropUnit));
+      Tensor expect = Tensors.fromString("{{1, 0[m*rad^-1], 0[kg^-1*m]}, {0[m^-1*rad], 1, 0[kg^-1*rad]}, {0[kg*m^-1], 0[kg*rad^-1], 1}}");
+      assertEquals(res, expect);
     }
     {
       CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
