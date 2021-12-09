@@ -7,6 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.red.LenientAdd;
 
 /** Gaussian elimination is the most important algorithm of all time.
  * 
@@ -69,7 +70,8 @@ public class GaussianElimination extends AbstractReduce {
       Scalar fac = lhs[ic1].Get(c0).divide(piv).negate();
       lhs[ic1] = lhs[ic1].add(lhs[ic0].multiply(fac));
       Tensor mul = rhs[ic0].multiply(fac);
-      rhs[ic1] = rhs[ic1].add(mul.map(Unprotect::zeroDropUnit));
+      // rhs[ic1] = rhs[ic1].add(mul.map(Unprotect::zeroDropUnit));
+      rhs[ic1] = LenientAdd.of(rhs[ic1], mul);
     }
   }
 

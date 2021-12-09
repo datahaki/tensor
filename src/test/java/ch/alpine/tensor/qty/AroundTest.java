@@ -203,7 +203,7 @@ public class AroundTest extends TestCase {
     Scalar abs = Abs.FUNCTION.apply(scalar);
     assertEquals(abs, Around.of(5, 1));
   }
-  
+
   public void testSpecialCase() {
     Scalar scalar = Around.of(Quantity.of(1, "m"), RealScalar.ZERO);
     assertEquals(scalar, Quantity.of(1, "m"));

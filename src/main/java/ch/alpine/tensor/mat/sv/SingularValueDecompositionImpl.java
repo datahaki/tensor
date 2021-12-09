@@ -22,6 +22,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.Sqrt;
 
+// TODO document the unit distribution in u,v,w
 /* package */ class SingularValueDecompositionImpl implements SingularValueDecomposition, Serializable {
   /** Difference between 1.0 and the minimum double greater than 1.0
    * DBL_EPSILON == 2.220446049250313E-16 */
@@ -216,7 +217,7 @@ import ch.alpine.tensor.sca.Sqrt;
   /** @param l
    * @param i
    * @return potentially with unit */
-  private Scalar fcompute(int l, int i) {
+  private Scalar initf(int l, int i) {
     Scalar x = w.Get(l);
     Scalar y = w.Get(i - 1);
     Scalar z = w.Get(i);
@@ -232,7 +233,7 @@ import ch.alpine.tensor.sca.Sqrt;
   /** @param l < i
    * @param i > 0 */
   private void rotateUV(int l, int i) {
-    Scalar f = fcompute(l, i);
+    Scalar f = initf(l, i);
     Scalar x = w.Get(l);
     Scalar s = x.one(); // without unit
     Scalar c = s; // without unit

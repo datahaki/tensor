@@ -143,14 +143,14 @@ import ch.alpine.tensor.sca.Sqrt;
       Quantity quantity = (Quantity) scalar;
       if (unit.equals(quantity.unit()))
         return ofUnit(value.add(quantity.value()));
-      /** Mathematica 12 does not resolve
+      /* Mathematica 12 does not resolve
        * Quantity[1, "Meters"] + Quantity[1, "Seconds"]
        * Quantity[1, "Meters"] + Quantity[0, "Seconds"]
        * Quantity[0, "Meters"] + Quantity[0, "Seconds"] */
       throw TensorRuntimeException.of(this, scalar);
     }
     if (Scalars.isZero(scalar))
-      /** Mathematica 12 resolves
+      /* Mathematica 12 resolves
        * Quantity[1, "Meters"] + 0 == Quantity[1, "Meters"]
        * Quantity[0, "Meters"] + 0 == Quantity[0, "Meters"] */
       return ofUnit(scalar.add(value));

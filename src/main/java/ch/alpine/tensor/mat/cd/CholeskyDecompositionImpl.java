@@ -12,6 +12,7 @@ import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.red.LenientAdd;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 
@@ -70,14 +71,16 @@ import ch.alpine.tensor.sca.Conjugate;
     for (int i = 0; i < n; ++i)
       for (int k = i - 1; 0 <= k; --k) {
         Tensor mul = x[k].multiply(l.Get(i, k));
-        x[i] = x[i].subtract(mul.map(Unprotect::zeroDropUnit));
+        // x[i] = x[i].subtract(mul.map(Unprotect::zeroDropUnit));
+        x[i] = LenientAdd.of(x[i], mul.negate());
       }
     for (int i = 0; i < n; ++i)
       x[i] = x[i].divide(d.Get(i));
     for (int i = n - 1; 0 <= i; --i)
       for (int k = i + 1; k < n; ++k) {
         Tensor mul = x[k].multiply(Conjugate.FUNCTION.apply(l.Get(k, i)));
-        x[i] = x[i].map(Unprotect::zeroDropUnit).subtract(mul);
+        // x[i] = x[i].map(Unprotect::zeroDropUnit).subtract(mul);
+        x[i] = LenientAdd.of(x[i], mul.negate());
       }
     return Unprotect.byRef(x);
   }

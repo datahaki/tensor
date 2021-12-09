@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.red.LenientAdd;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/RowReduce.html">RowReduce</a>
@@ -45,8 +45,8 @@ public class RowReduce extends AbstractReduce {
           if (c1 != c0) {
             Scalar fac = lhs[ind(c1)].Get(j).divide(piv).negate();
             Tensor mul = lhs[ind(c0)].multiply(fac);
-            // lhs[ind(c1)] = lhs[ind(c1)].add(mul.map(Unprotect::zeroProject));
-            lhs[ind(c1)] = lhs[ind(c1)].map(Unprotect::zeroDropUnit).add(mul.map(Unprotect::zeroDropUnit));
+            // lhs[ind(c1)].map(Unprotect::zeroDropUnit).add(mul.map(Unprotect::zeroDropUnit));
+            lhs[ind(c1)] = LenientAdd.of(lhs[ind(c1)], mul);
           }
         lhs[ind(c0)] = lhs[ind(c0)].divide(piv);
         ++c0;
