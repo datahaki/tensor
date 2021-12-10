@@ -35,7 +35,7 @@ public class SingularValueDecompositionImplTest extends TestCase {
   public void testCondition1() {
     Tensor matrix = ResourceData.of("/mat/svd3.csv");
     TestHelper.specialOps(matrix);
-    // TestHelper.specialOps(matrix.map(s -> Quantity.of(s, "m")));
+     
   }
 
   public void testCondition2() {
@@ -43,8 +43,13 @@ public class SingularValueDecompositionImplTest extends TestCase {
     TestHelper.specialOps(matrix);
   }
 
-  public void testCondition1Unit() {
+  public void testCondition1UnitA() {
     Tensor matrix = ResourceData.of("/mat/svd3.csv");
+    TestHelper.specialOps(matrix.map(s -> Quantity.of(s, "m")));
+  }
+  public void testCondition1UnitB() {
+    Tensor matrix = ResourceData.of("/mat/svd3.csv").map(s -> Quantity.of(s, "m"));
+    matrix.append(matrix.get(0));
     TestHelper.specialOps(matrix);
   }
 
@@ -75,6 +80,7 @@ public class SingularValueDecompositionImplTest extends TestCase {
 
   public void testPackageVisibility() {
     assertTrue(Modifier.isPublic(SingularValueDecomposition.class.getModifiers()));
-    assertFalse(Modifier.isPublic(SingularValueDecompositionImpl.class.getModifiers()));
+    assertFalse(Modifier.isPublic(SingularValueDecompositionIter.class.getModifiers()));
+    assertFalse(Modifier.isPublic(SingularValueDecompositionInit.class.getModifiers()));
   }
 }

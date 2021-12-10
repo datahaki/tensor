@@ -1,7 +1,6 @@
 // code adapted by jph
 package ch.alpine.tensor.mat.sv;
 
-import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
@@ -14,7 +13,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Booleans;
-import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.nrm.Matrix1Norm;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
@@ -22,36 +20,32 @@ import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.CopySign;
 import ch.alpine.tensor.red.Diagonal;
-import ch.alpine.tensor.red.LenientAdd;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.Sqrt;
 
-// TODO document the unit distribution in u,v,w
-/* package */ class SingularValueDecompositionImpl implements SingularValueDecomposition, Serializable {
+/* package */ class SingularValueDecompositionInit implements SingularValueDecomposition {
   /** Difference between 1.0 and the minimum double greater than 1.0
    * DBL_EPSILON == 2.220446049250313E-16 */
   private static final Scalar DBL_EPSILON = DoubleScalar.of(Math.nextUp(1.0) - 1.0);
-  private static final int MAX_ITERATIONS = 28;
   // ---
   private final int rows;
   private final int cols;
-  private final Unit unit;
   /** rows x cols */
   private final Tensor u;
   private final Tensor w;
-  private final Tensor r;
+  final Tensor r;
   /** cols x cols */
   private final Tensor v;
+  final Chop chop;
 
   /** @param matrix with cols <= rows */
-  public SingularValueDecompositionImpl(Tensor matrix) {
+  public SingularValueDecompositionInit(Tensor matrix) {
     rows = matrix.length();
     cols = Unprotect.dimension1(matrix);
     if (rows < cols)
       throw new IllegalArgumentException("rows=" + rows + " cols=" + cols);
     // ---
-    unit = Unprotect.getUnitUnique(matrix);
+    Unprotect.getUnitUnique(matrix);
     // ---
     u = matrix.copy();
     w = Diagonal.of(matrix).map(Scalar::zero);
@@ -62,7 +56,7 @@ import ch.alpine.tensor.sca.Sqrt;
       initU2(i);
     }
     Unprotect.getUnitUnique(w);
-    Chop chop = Chop.below(Matrix1Norm.of(Tensors.of(w, r).map(Unprotect::withoutUnit)) //
+    chop = Chop.below(Matrix1Norm.of(Tensors.of(w, r).map(Unprotect::withoutUnit)) //
         .multiply(DBL_EPSILON) //
         .number().doubleValue());
     // ---
@@ -75,22 +69,7 @@ import ch.alpine.tensor.sca.Sqrt;
     // ---
     Unprotect.getUnitUnique(u);
     Unprotect.getUnitUnique(v);
-    Unprotect.getUnitUnique(w);
-    Unprotect.getUnitUnique(r);
-    for (int i = cols - 1; 0 <= i; --i) {
-      for (int iteration = 0; iteration <= MAX_ITERATIONS; ++iteration) {
-        int l = levelW(i, chop);
-        if (l == i)
-          break;
-        if (iteration == MAX_ITERATIONS)
-          throw new RuntimeException("no convergence");
-        rotateUV(l, i);
-      }
-      if (Sign.isNegative(w.Get(i))) { // ensure w[i] is positive
-        w.set(Scalar::negate, i);
-        v.set(Scalar::negate, Tensor.ALL, i);
-      }
-    }
+    Booleans.requireEquals(Unprotect.getUnitUnique(w), Unprotect.getUnitUnique(r));
   }
 
   @Override // from SingularValueDecomposition
@@ -110,7 +89,6 @@ import ch.alpine.tensor.sca.Sqrt;
 
   private void initU1(int i) {
     Scalar scale = Vector1Norm.of(u.stream().skip(i).map(row -> row.Get(i)));
-    Booleans.requireEquals(QuantityUnit.of(scale), unit);
     if (Scalars.isZero(scale)) {
       Scalar zero_unitless = scale.one().zero();
       u.stream().skip(i).forEach(uk -> uk.set(zero_unitless, i));
@@ -139,7 +117,6 @@ import ch.alpine.tensor.sca.Sqrt;
     final int ip1 = i + 1;
     if (ip1 != cols) {
       Scalar scale = Vector1Norm.of(u.get(i).extract(ip1, cols));
-      Booleans.requireEquals(QuantityUnit.of(scale), unit);
       if (Scalars.isZero(scale)) {
         Scalar zero_unitless = scale.one().zero();
         IntStream.range(ip1, cols).forEach(k -> u.set(zero_unitless, i, k));
@@ -154,8 +131,8 @@ import ch.alpine.tensor.sca.Sqrt;
         Booleans.requireEquals(QuantityUnit.of(h), Unit.ONE);
         u.set(f.subtract(p), i, ip1);
         // TODO does not always give consistent unit!?
-        Tensor print = Tensor.of(IntStream.range(ip1, cols).mapToObj(k -> u.Get(i, k).divide(h)));
-        Booleans.requireEquals(Unprotect.getUnitUnique(print), Unit.ONE);
+        // Tensor print = Tensor.of(IntStream.range(ip1, cols).mapToObj(k -> u.Get(i, k).divide(h)));
+        // Booleans.requireEquals(Unprotect.getUnitUnique(print), Unit.ONE);
         // System.out.println(print);
         IntStream.range(ip1, cols).forEach(k -> r.set(u.Get(i, k).divide(h), k));
         // IntStream.range(ip1, cols).forEach(k -> Booleans.requireEquals(QuantityUnit.of(r.Get(k)), unit));
@@ -183,7 +160,7 @@ import ch.alpine.tensor.sca.Sqrt;
       for (int j = ip1; j < cols; ++j) {
         final int fj = j;
         addScaled(ip1, v, i, j, //
-            (Scalar) LenientAdd.dot(uiEx, Tensor.of(v.stream().skip(ip1).map(row -> row.Get(fj)))));
+            (Scalar) uiEx.dot(Tensor.of(v.stream().skip(ip1).map(row -> row.Get(fj)))));
       }
     }
     Scalar z = p.one().zero();
@@ -214,111 +191,11 @@ import ch.alpine.tensor.sca.Sqrt;
     u.set(RealScalar.ONE::add, i, i);
   }
 
-  private int levelW(int k, Chop chop) {
-    for (int l = k; l > 0; --l) {
-      Scalar rl = r.Get(l);
-      if (chop.isZero(rl))
-        return l;
-      if (chop.isZero(w.Get(l - 1))) {
-        Scalar c = rl.zero();
-        Scalar s = rl.one();
-        for (int i = l; i < k + 1; ++i) {
-          Scalar f = s.multiply(r.Get(i));
-          r.set(c::multiply, i);
-          if (chop.isZero(f))
-            break;
-          Scalar g = w.Get(i);
-          Scalar h = Hypot.of(f, g);
-          w.set(h, i);
-          c = g.divide(h);
-          s = f.divide(h).negate();
-          rotate(u, c, s, i, l - 1);
-        }
-        return l;
-      }
-    }
-    return 0;
-  }
-
-  /** @param l
-   * @param i
-   * @return potentially with unit */
-  private Scalar initf(int l, int i) {
-    Scalar x = w.Get(l);
-    Scalar y = w.Get(i - 1);
-    Scalar z = w.Get(i);
-    Scalar p = r.Get(i - 1);
-    Scalar h = r.Get(i);
-    Scalar hy = h.multiply(y);
-    // ((y-z)(y+z)+(p-h)*(p+h))/(2hy)
-    Scalar f = y.subtract(z).multiply(y.add(z)).add(p.subtract(h).multiply(p.add(h))).divide(hy.add(hy));
-    // ((x-z)(x+z)+(h*(y/(f+-p)-h)))/x
-    return x.subtract(z).multiply(x.add(z)).add(h.multiply(y.divide(f.add(CopySign.of(Hypot.withOne(f), f))).subtract(h))).divide(x);
-  }
-
-  /** @param l < i
-   * @param i > 0 */
-  private void rotateUV(int l, int i) {
-    Scalar f = initf(l, i);
-    Scalar x = w.Get(l);
-    Scalar s = x.one(); // without unit
-    Scalar c = s; // without unit
-    for (int j = l; j < i; ++j) {
-      int jp1 = j + 1;
-      Scalar p = r.Get(jp1);
-      Scalar y = w.Get(jp1);
-      Scalar h = s.multiply(p);
-      p = c.multiply(p);
-      Scalar z = Hypot.of(f, h);
-      r.set(z, j);
-      c = f.divide(z);
-      s = h.divide(z);
-      rotate(v, c, s, jp1, j);
-      {
-        Rotate rotate = new Rotate(p, x, c, s);
-        p = rotate.re();
-        f = rotate.im();
-      }
-      h = y.multiply(s);
-      y = y.multiply(c);
-      z = Hypot.of(f, h);
-      w.set(z, j);
-      if (Scalars.nonZero(z)) {
-        c = f.divide(z);
-        s = h.divide(z);
-      }
-      rotate(u, c, s, jp1, j);
-      {
-        Rotate rotate = new Rotate(y, p, c, s);
-        x = rotate.re();
-        f = rotate.im();
-      }
-    }
-    r.set(Scalar::zero, l);
-    r.set(f, i);
-    w.set(x, i);
-  }
-
   private static void addScaled(int l, Tensor v, int i, int j, Scalar s) {
     v.stream().skip(l).forEach(vk -> addScaled(vk, i, j, s));
   }
 
   private static void addScaled(Tensor vk, int i, int j, Scalar s) {
-    vk.set(tmp -> LenientAdd.of(tmp, s.multiply(vk.Get(i))), j);
-  }
-
-  private static void rotate(Tensor m, Scalar c, Scalar s, int i, int j) {
-    m.stream().forEach(mk -> {
-      Rotate rotate = new Rotate(mk.Get(i), mk.Get(j), c, s);
-      mk.set(rotate.re(), i);
-      mk.set(rotate.im(), j);
-    });
-  }
-
-  @Override // from Object
-  public String toString() {
-    return String.format("%s[%s]", //
-        SingularValueDecomposition.class.getSimpleName(), //
-        Tensors.message(getU(), values(), getV()));
+    vk.set(s.multiply(vk.Get(i))::add, j);
   }
 }

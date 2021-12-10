@@ -22,7 +22,8 @@ public interface SingularValueDecomposition {
    * @return singular value decomposition of given matrix
    * @throws Exception input is not a matrix, or if decomposition cannot be established */
   static SingularValueDecomposition of(Tensor matrix) {
-    return new SingularValueDecompositionImpl(matrix);
+    SingularValueDecompositionInit svdInit = new SingularValueDecompositionInit(matrix);
+    return new SingularValueDecompositionIter(svdInit);
   }
 
   // ---
