@@ -3,12 +3,13 @@ package ch.alpine.tensor.mat.sv;
 
 import ch.alpine.tensor.Scalar;
 
-/** complex rotation (x + y*i) (c + s*i) */
 /* package */ class Rotate {
   private final Scalar re;
   private final Scalar im;
 
-  /** @param x
+  /** emulation of complex multiplication (x + y*i) (c + s*i)
+   * 
+   * @param x
    * @param y
    * @param c
    * @param s */

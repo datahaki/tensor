@@ -12,14 +12,10 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.ext.Booleans;
 import ch.alpine.tensor.nrm.Matrix1Norm;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
-import ch.alpine.tensor.qty.QuantityUnit;
-import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.CopySign;
-import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sqrt;
 
@@ -28,7 +24,6 @@ import ch.alpine.tensor.sca.Sqrt;
    * DBL_EPSILON == 2.220446049250313E-16 */
   private static final Scalar DBL_EPSILON = DoubleScalar.of(Math.nextUp(1.0) - 1.0);
   // ---
-  private final int rows;
   private final int cols;
   /** rows x cols */
   private final Tensor u;
@@ -38,27 +33,27 @@ import ch.alpine.tensor.sca.Sqrt;
   private final Tensor v;
   final Chop chop;
 
-  /** @param matrix with cols <= rows */
+  /** @param matrix with cols <= rows
+   * @throws Exception if rows < cols
+   * @throws Exception if matrix does not have entries with unique unit */
   public SingularValueDecompositionInit(Tensor matrix) {
-    rows = matrix.length();
     cols = Unprotect.dimension1(matrix);
-    if (rows < cols)
-      throw new IllegalArgumentException("rows=" + rows + " cols=" + cols);
+    if (matrix.length() < cols)
+      throw new IllegalArgumentException("rows=" + matrix.length() + " cols=" + cols);
     // ---
     Unprotect.getUnitUnique(matrix);
     // ---
     u = matrix.copy();
-    w = Diagonal.of(matrix).map(Scalar::zero);
+    w = matrix.get(0).map(Scalar::zero);
     r = w.copy();
     // ---
     for (int i = 0; i < cols; ++i) {
       initU1(i);
       initU2(i);
     }
-    Unprotect.getUnitUnique(w);
-    chop = Chop.below(Matrix1Norm.of(Tensors.of(w, r).map(Unprotect::withoutUnit)) //
-        .multiply(DBL_EPSILON) //
-        .number().doubleValue());
+    // the computation of the matrix norm ensures that the unit of the entries in w and r is unique
+    chop = Chop.below(Unprotect.withoutUnit(Matrix1Norm.of(Tensors.of(w, r)) //
+        .multiply(DBL_EPSILON)).number().doubleValue());
     // ---
     v = Array.zeros(cols, cols);
     v.set(RealScalar.ONE, cols - 1, cols - 1);
@@ -66,10 +61,6 @@ import ch.alpine.tensor.sca.Sqrt;
       initV(i);
     for (int i = cols - 1; 0 <= i; --i)
       initU3(i);
-    // ---
-    Unprotect.getUnitUnique(u);
-    Unprotect.getUnitUnique(v);
-    Booleans.requireEquals(Unprotect.getUnitUnique(w), Unprotect.getUnitUnique(r));
   }
 
   @Override // from SingularValueDecomposition
@@ -98,7 +89,6 @@ import ch.alpine.tensor.sca.Sqrt;
       Scalar s = Vector2NormSquared.of(u.stream().skip(i).map(row -> row.Get(i)));
       Scalar f = u.Get(i, i);
       Scalar p = CopySign.of(Sqrt.FUNCTION.apply(s), f).negate();
-      Booleans.requireEquals(QuantityUnit.of(p), Unit.ONE);
       Scalar h = f.multiply(p).subtract(s);
       u.set(f.subtract(p), i, i);
       for (int j = i + 1; j < cols; ++j) {
@@ -126,16 +116,9 @@ import ch.alpine.tensor.sca.Sqrt;
         Scalar s = Vector2NormSquared.of(u.get(i).extract(ip1, cols));
         Scalar f = u.Get(i, ip1);
         Scalar p = CopySign.of(Sqrt.FUNCTION.apply(s), f).negate();
-        Booleans.requireEquals(QuantityUnit.of(p), Unit.ONE);
         Scalar h = f.multiply(p).subtract(s);
-        Booleans.requireEquals(QuantityUnit.of(h), Unit.ONE);
         u.set(f.subtract(p), i, ip1);
-        // TODO does not always give consistent unit!?
-        // Tensor print = Tensor.of(IntStream.range(ip1, cols).mapToObj(k -> u.Get(i, k).divide(h)));
-        // Booleans.requireEquals(Unprotect.getUnitUnique(print), Unit.ONE);
-        // System.out.println(print);
         IntStream.range(ip1, cols).forEach(k -> r.set(u.Get(i, k).divide(h), k));
-        // IntStream.range(ip1, cols).forEach(k -> Booleans.requireEquals(QuantityUnit.of(r.Get(k)), unit));
         Tensor ui = u.get(i).extract(ip1, cols);
         u.stream().skip(ip1).forEach(uj -> {
           Scalar d = (Scalar) uj.extract(ip1, cols).dot(ui);
@@ -154,13 +137,14 @@ import ch.alpine.tensor.sca.Sqrt;
     if (Scalars.nonZero(p)) {
       Tensor ui = u.get(i);
       Scalar ui_ip1 = ui.Get(ip1).multiply(p);
-      AtomicInteger aj = new AtomicInteger(ip1);
-      v.stream().skip(ip1).forEach(vj -> vj.set(ui.Get(aj.getAndIncrement()).divide(ui_ip1), i));
+      {
+        AtomicInteger aj = new AtomicInteger(ip1);
+        v.stream().skip(ip1).forEach(vj -> vj.set(ui.Get(aj.getAndIncrement()).divide(ui_ip1), i));
+      }
       Tensor uiEx = ui.extract(ip1, cols);
       for (int j = ip1; j < cols; ++j) {
         final int fj = j;
-        addScaled(ip1, v, i, j, //
-            (Scalar) uiEx.dot(Tensor.of(v.stream().skip(ip1).map(row -> row.Get(fj)))));
+        addScaled(ip1, v, i, j, (Scalar) uiEx.dot(Tensor.of(v.stream().skip(ip1).map(row -> row.Get(fj)))));
       }
     }
     Scalar z = p.one().zero();
@@ -192,10 +176,6 @@ import ch.alpine.tensor.sca.Sqrt;
   }
 
   private static void addScaled(int l, Tensor v, int i, int j, Scalar s) {
-    v.stream().skip(l).forEach(vk -> addScaled(vk, i, j, s));
-  }
-
-  private static void addScaled(Tensor vk, int i, int j, Scalar s) {
-    vk.set(s.multiply(vk.Get(i))::add, j);
+    v.stream().skip(l).forEach(vk -> vk.set(s.multiply(vk.Get(i))::add, j));
   }
 }

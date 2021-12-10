@@ -6,9 +6,9 @@ import java.io.Serializable;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.ext.Booleans;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.red.CopySign;
 import ch.alpine.tensor.sca.Chop;
@@ -31,13 +31,11 @@ import ch.alpine.tensor.sca.Sign;
     w = svd.values();
     r = svd.r;
     // ---
-    Unprotect.getUnitUnique(u);
-    Unprotect.getUnitUnique(v);
-    Booleans.requireEquals(Unprotect.getUnitUnique(w), Unprotect.getUnitUnique(r));
     for (int i = w.length() - 1; 0 <= i; --i) {
       for (int iteration = 0; iteration <= MAX_ITERATIONS; ++iteration) {
         int l = levelW(i, svd.chop);
-        Booleans.requireEquals(Unprotect.getUnitUnique(w), Unprotect.getUnitUnique(r));
+        if (!Unprotect.getUnitUnique(w).equals(Unprotect.getUnitUnique(r)))
+          throw TensorRuntimeException.of(w, r);
         if (l == i)
           break;
         if (iteration == MAX_ITERATIONS)

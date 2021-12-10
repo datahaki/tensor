@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.itp;
+package ch.alpine.tensor.mat.re;
 
 import java.util.Random;
 
@@ -8,10 +8,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.itp.Fit;
 import ch.alpine.tensor.mat.VandermondeMatrix;
-import ch.alpine.tensor.mat.re.Det;
-import ch.alpine.tensor.mat.re.LinearSolve;
-import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;

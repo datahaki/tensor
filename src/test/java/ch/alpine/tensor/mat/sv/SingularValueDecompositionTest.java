@@ -47,6 +47,7 @@ public class SingularValueDecompositionTest extends TestCase {
     Tensor mat = RandomVariate.of(NormalDistribution.standard(), 10, 3);
     Tensor B = Tensors.matrixLong(new long[][] { //
         { 1, 2, 3 }, { 0, 0, 4 }, { 0, 0, 0 } });
+    TestHelper.specialOps(mat.dot(B).map(s -> Quantity.of(s, "A")));
     SingularValueDecomposition svd = TestHelper.specialOps(mat.dot(B));
     assertEquals(MatrixRank.of(svd), 2);
     TestHelper.specialOps(svd.getU());
@@ -60,6 +61,7 @@ public class SingularValueDecompositionTest extends TestCase {
     Tensor B = Tensors.matrixLong(new long[][] { //
         { 1, 2, 3, -1 }, { 0, 0, 4, 2 }, { 0, 0, 0, 1 }, { 0, 0, 0, 0 } });
     Tensor A = mat.dot(B);
+    TestHelper.specialOps(A.map(s -> Quantity.of(s, "A")));
     SingularValueDecomposition svd = TestHelper.specialOps(A);
     assertEquals(MatrixRank.of(svd), 3);
     TestHelper.specialOps(svd.getU());
@@ -74,6 +76,7 @@ public class SingularValueDecompositionTest extends TestCase {
     Tensor B = Tensors.matrixLong(new long[][] { //
         { 1, 2, 3, -1 }, { 0, 0, 4, 2 }, { 0, 0, 0, 1 }, { 0, 0, 0, 0 } });
     Tensor A = mat.dot(B);
+    TestHelper.specialOps(A.map(s -> Quantity.of(s, "V")));
     SingularValueDecomposition svd = TestHelper.specialOps(A);
     assertEquals(MatrixRank.of(svd), 3);
     Tensor nls = NullSpace.of(svd);

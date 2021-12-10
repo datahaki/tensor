@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.itp;
+package ch.alpine.tensor.mat.re;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;

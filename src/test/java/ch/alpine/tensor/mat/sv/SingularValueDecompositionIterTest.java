@@ -19,7 +19,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import junit.framework.TestCase;
 
-public class SingularValueDecompositionImplTest extends TestCase {
+public class SingularValueDecompositionIterTest extends TestCase {
   private static void _check(Tensor matrix) {
     assertTrue(SquareMatrixQ.of(matrix));
     TestHelper.specialOps(matrix);
@@ -35,7 +35,6 @@ public class SingularValueDecompositionImplTest extends TestCase {
   public void testCondition1() {
     Tensor matrix = ResourceData.of("/mat/svd3.csv");
     TestHelper.specialOps(matrix);
-     
   }
 
   public void testCondition2() {
@@ -47,6 +46,7 @@ public class SingularValueDecompositionImplTest extends TestCase {
     Tensor matrix = ResourceData.of("/mat/svd3.csv");
     TestHelper.specialOps(matrix.map(s -> Quantity.of(s, "m")));
   }
+
   public void testCondition1UnitB() {
     Tensor matrix = ResourceData.of("/mat/svd3.csv").map(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
@@ -67,7 +67,9 @@ public class SingularValueDecompositionImplTest extends TestCase {
   public void testEps() {
     Tensor A = Tensors.fromString("{{1, 0}, {0, 1E-14}}");
     assertTrue(NumberQ.all(A));
-    SingularValueDecomposition svd = SingularValueDecomposition.of(A);
+    TestHelper.specialOps(A);
+    TestHelper.specialOps(A.map(s -> Quantity.of(s, "kg")));
+    SingularValueDecomposition svd = TestHelper.specialOps(A);
     assertEquals(NullSpace.of(svd).length(), 1);
     assertEquals(NullSpace.of(svd, Chop._20), Tensors.empty());
     assertTrue(svd.toString().startsWith("SingularValueDecomposition["));

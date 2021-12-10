@@ -12,13 +12,21 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 
-/** implements the rule 3[m]+0[s] == 3[m]
- * which throws an exception by {@link Quantity#add(Tensor)}
- * but is require for some algorithms. */
+/** Lenient Add implements the rules
+ * <pre>
+ * 3[m]+0[s] == 3[m]
+ * 0[m]+0[s] == 0
+ * </pre>
+ * that are required for some algorithms.
+ * 
+ * Remark: The computations throw an exception by {@link Quantity#add(Tensor)}. */
 public enum LenientAdd {
   ;
   private static final BinaryOperator<Tensor> INNER = Inner.with((p, q) -> of(p, (Scalar) q));
 
+  /** @param p
+   * @param q
+   * @return */
   public static Scalar of(Scalar p, Scalar q) {
     Unit p_unit = QuantityUnit.of(p);
     Unit q_unit = QuantityUnit.of(q);
@@ -39,9 +47,5 @@ public enum LenientAdd {
 
   public static Tensor of(Tensor p, Tensor q) {
     return INNER.apply(p, q);
-  }
-
-  public static Tensor dot(Tensor p, Tensor q) {
-    return Times.of(p, q).stream().reduce(LenientAdd::of).orElseThrow();
   }
 }

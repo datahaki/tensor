@@ -22,7 +22,15 @@ import junit.framework.TestCase;
 /* package */ enum TestHelper {
   ;
   public static SingularValueDecomposition specialOps(Tensor A) {
-    SingularValueDecomposition svd = SingularValueDecomposition.of(A);
+    SingularValueDecompositionInit svdInit = new SingularValueDecompositionInit(A);
+    {
+      Unprotect.getUnitUnique(svdInit.getU());
+      Unprotect.getUnitUnique(svdInit.getV());
+      TestCase.assertEquals( //
+          Unprotect.getUnitUnique(svdInit.values()), //
+          Unprotect.getUnitUnique(svdInit.r));
+    }
+    SingularValueDecomposition svd = new SingularValueDecompositionIter(svdInit);
     Unit unit = Unprotect.getUnitUnique(A);
     List<Integer> dims = Dimensions.of(A);
     int N = dims.get(1);
