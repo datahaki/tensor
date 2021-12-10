@@ -161,6 +161,7 @@ public class CholeskyDecompositionTest extends TestCase {
     assertFalse(NegativeSemidefiniteMatrixQ.ofHermitian(mat));
   }
 
+  // TODO what's going on here!?
   public void testQuantity2() {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");

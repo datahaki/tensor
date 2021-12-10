@@ -19,24 +19,24 @@ import ch.alpine.tensor.red.CopySign;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sqrt;
 
-/* package */ class SingularValueDecompositionInit implements SingularValueDecomposition {
+/* package */ class Init {
   /** Difference between 1.0 and the minimum double greater than 1.0
    * DBL_EPSILON == 2.220446049250313E-16 */
   private static final Scalar DBL_EPSILON = DoubleScalar.of(Math.nextUp(1.0) - 1.0);
   // ---
   private final int cols;
   /** rows x cols */
-  private final Tensor u;
-  private final Tensor w;
+  final Tensor u;
+  final Tensor w;
   final Tensor r;
   /** cols x cols */
-  private final Tensor v;
+  final Tensor v;
   final Chop chop;
 
   /** @param matrix with cols <= rows
    * @throws Exception if rows < cols
    * @throws Exception if matrix does not have entries with unique unit */
-  public SingularValueDecompositionInit(Tensor matrix) {
+  public Init(Tensor matrix) {
     cols = Unprotect.dimension1(matrix);
     if (matrix.length() < cols)
       throw new IllegalArgumentException("rows=" + matrix.length() + " cols=" + cols);
@@ -61,21 +61,6 @@ import ch.alpine.tensor.sca.Sqrt;
       initV(i);
     for (int i = cols - 1; 0 <= i; --i)
       initU3(i);
-  }
-
-  @Override // from SingularValueDecomposition
-  public Tensor getU() {
-    return u;
-  }
-
-  @Override // from SingularValueDecomposition
-  public Tensor values() {
-    return w;
-  }
-
-  @Override // from SingularValueDecomposition
-  public Tensor getV() {
-    return v;
   }
 
   private void initU1(int i) {

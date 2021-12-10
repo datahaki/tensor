@@ -88,7 +88,6 @@ import ch.alpine.tensor.sca.Sign;
             process(ip, iq, g, z);
         }
       b = b.add(z);
-      // z = b.map(Scalar::zero);
       d = b.copy();
     }
     throw TensorRuntimeException.of(matrix);

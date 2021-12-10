@@ -86,7 +86,6 @@ public class ComplexHelperTest extends TestCase {
     Scalar q = Quantity.of(0, "V");
     // Mathematica 12 does not resolve this
     AssertFail.of(() -> c.add(q));
-    // assertTrue(p instanceof ComplexScalar);
   }
 
   public void testSqrt() {

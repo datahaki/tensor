@@ -26,7 +26,7 @@ public enum LenientAdd {
 
   /** @param p
    * @param q
-   * @return */
+   * @return p + q */
   public static Scalar of(Scalar p, Scalar q) {
     Unit p_unit = QuantityUnit.of(p);
     Unit q_unit = QuantityUnit.of(q);
@@ -45,6 +45,9 @@ public enum LenientAdd {
     return p.add(q);
   }
 
+  /** @param p
+   * @param q
+   * @return p + q */
   public static Tensor of(Tensor p, Tensor q) {
     return INNER.apply(p, q);
   }

@@ -21,18 +21,18 @@ import junit.framework.TestCase;
 
 /* package */ enum TestHelper {
   ;
-  public static SingularValueDecomposition specialOps(Tensor A) {
-    SingularValueDecompositionInit svdInit = new SingularValueDecompositionInit(A);
+  public static SingularValueDecomposition svd(Tensor matrix) {
+    Init init = new Init(matrix);
     {
-      Unprotect.getUnitUnique(svdInit.getU());
-      Unprotect.getUnitUnique(svdInit.getV());
+      Unprotect.getUnitUnique(init.u);
+      Unprotect.getUnitUnique(init.v);
       TestCase.assertEquals( //
-          Unprotect.getUnitUnique(svdInit.values()), //
-          Unprotect.getUnitUnique(svdInit.r));
+          Unprotect.getUnitUnique(init.w), //
+          Unprotect.getUnitUnique(init.r));
     }
-    SingularValueDecomposition svd = new SingularValueDecompositionIter(svdInit);
-    Unit unit = Unprotect.getUnitUnique(A);
-    List<Integer> dims = Dimensions.of(A);
+    SingularValueDecomposition svd = new SingularValueDecompositionImpl(init);
+    Unit unit = Unprotect.getUnitUnique(matrix);
+    List<Integer> dims = Dimensions.of(matrix);
     int N = dims.get(1);
     final Tensor U = svd.getU();
     TestCase.assertEquals(Unprotect.getUnitUnique(U), Unit.ONE);
@@ -49,14 +49,14 @@ import junit.framework.TestCase;
     TestCase.assertEquals(VVt, Array.zeros(N, N));
     Tensor VtV = Tolerance.CHOP.of(Transpose.of(V).dot(V).subtract(IdentityMatrix.of(N)));
     TestCase.assertEquals(VtV, Array.zeros(N, N));
-    Tensor UWVt = Tolerance.CHOP.of(MatrixDotTranspose.of(U.dot(W), V).subtract(A));
+    Tensor UWVt = Tolerance.CHOP.of(MatrixDotTranspose.of(U.dot(W), V).subtract(matrix));
     TestCase.assertEquals(UWVt, UWVt.map(Scalar::zero));
-    Tensor UW_AV = Tolerance.CHOP.of(U.dot(W).subtract(A.dot(V)));
+    Tensor UW_AV = Tolerance.CHOP.of(U.dot(W).subtract(matrix.dot(V)));
     TestCase.assertEquals(UW_AV, UW_AV.map(Scalar::zero));
     TestCase.assertTrue(w.stream().map(Scalar.class::cast).noneMatch(Sign::isNegative));
     if (MatrixRank.of(svd) < N) {
       Tensor nul = NullSpace.of(svd);
-      Tensor res = MatrixDotTranspose.of(A, nul);
+      Tensor res = MatrixDotTranspose.of(matrix, nul);
       TestCase.assertEquals(Tolerance.CHOP.of(res), res.map(Scalar::zero));
     }
     return svd;

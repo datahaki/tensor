@@ -14,7 +14,7 @@ import ch.alpine.tensor.red.CopySign;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
 
-/* package */ class SingularValueDecompositionIter implements SingularValueDecomposition, Serializable {
+/* package */ class SingularValueDecompositionImpl implements SingularValueDecomposition, Serializable {
   private static final int MAX_ITERATIONS = 28;
   // ---
   /** rows x cols */
@@ -25,15 +25,14 @@ import ch.alpine.tensor.sca.Sign;
   private final Tensor v;
 
   /** @param matrix with cols <= rows */
-  public SingularValueDecompositionIter(SingularValueDecompositionInit svd) {
-    u = svd.getU();
-    v = svd.getV();
-    w = svd.values();
-    r = svd.r;
-    // ---
+  public SingularValueDecompositionImpl(Init init) {
+    u = init.u;
+    v = init.v;
+    w = init.w;
+    r = init.r;
     for (int i = w.length() - 1; 0 <= i; --i) {
       for (int iteration = 0; iteration <= MAX_ITERATIONS; ++iteration) {
-        int l = levelW(i, svd.chop);
+        int l = levelW(i, init.chop);
         if (!Unprotect.getUnitUnique(w).equals(Unprotect.getUnitUnique(r)))
           throw TensorRuntimeException.of(w, r);
         if (l == i)

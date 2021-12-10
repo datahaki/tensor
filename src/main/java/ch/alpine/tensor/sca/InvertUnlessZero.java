@@ -5,6 +5,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -38,25 +39,12 @@ public enum InvertUnlessZero implements ScalarUnaryOperator {
   @Override
   public Scalar apply(Scalar scalar) {
     return Scalars.isZero(scalar) //
-        ? negateUnit(scalar)
+        ? Unprotect.negateUnit(scalar)
         : scalar.reciprocal();
   }
 
   @SuppressWarnings("unchecked")
   public static <T extends Tensor> T of(T tensor) {
     return (T) tensor.map(FUNCTION);
-  }
-
-  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
-   * 
-   * @param scalar
-   * @return */
-  // TODO make function private
-  public static Scalar negateUnit(Scalar scalar) {
-    if (scalar instanceof Quantity) {
-      Quantity quantity = (Quantity) scalar;
-      return Quantity.of(quantity.value(), quantity.unit().negate());
-    }
-    return scalar;
   }
 }

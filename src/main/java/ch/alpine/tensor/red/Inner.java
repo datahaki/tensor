@@ -17,8 +17,13 @@ import ch.alpine.tensor.ext.Integers;
 /** The implementation is only consistent with Mathematica::Inner[f, l1, l2, g]
  * in the special case where g == Identity.
  * 
+ * Inner is more general than {@link Entrywise} since the operator accepts a
+ * {@link Tensor} as second argument.
+ * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/Inner.html">Inner</a> */
+ * <a href="https://reference.wolfram.com/language/ref/Inner.html">Inner</a>
+ * 
+ * @see Entrywise */
 public class Inner implements BinaryOperator<Tensor>, Serializable {
   /** @param biFunction non-null
    * @return
@@ -27,6 +32,7 @@ public class Inner implements BinaryOperator<Tensor>, Serializable {
     return new Inner(Objects.requireNonNull(biFunction));
   }
 
+  // ---
   private final BiFunction<Scalar, ? super Tensor, ? extends Tensor> biFunction;
 
   private Inner(BiFunction<Scalar, ? super Tensor, ? extends Tensor> biFunction) {

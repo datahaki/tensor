@@ -82,6 +82,18 @@ public enum Unprotect {
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
+   * @param scalar typically with zero value
+   * @return */
+  public static Scalar negateUnit(Scalar scalar) {
+    if (scalar instanceof Quantity) {
+      Quantity quantity = (Quantity) scalar;
+      return Quantity.of(quantity.value(), quantity.unit().negate());
+    }
+    return scalar;
+  }
+
+  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
+   * 
    * @param tensor
    * @return whether scalar entries are quantities of identical unit */
   public static boolean isUnitUnique(Tensor tensor) {

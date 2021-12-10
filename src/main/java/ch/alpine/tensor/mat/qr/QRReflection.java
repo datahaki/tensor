@@ -5,13 +5,13 @@ import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.nrm.NormalizeUnlessZero;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.sca.Conjugate;
-import ch.alpine.tensor.sca.InvertUnlessZero;
 
 /** computes dot product {I - TensorProduct[vc, vr]) . tensor
  * followed by negating the k-th row */
@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.InvertUnlessZero;
       if (Scalars.isZero(norm2squared)) {
         // TODO not the best implementation
         vc = x;
-        vr = x.map(InvertUnlessZero::negateUnit); // invert units!
+        vr = x.map(Unprotect::negateUnit); // invert units!
       } else {
         vc = x;
         vr = Conjugate.of(x.add(x)).divide(norm2squared);
@@ -47,8 +47,8 @@ import ch.alpine.tensor.sca.InvertUnlessZero;
   /** @param tensor orthogonal matrix, and r matrix in qr-decomposition
    * @return */
   public Tensor forward(Tensor tensor) {
-    Tensor result = tensor.add(TensorProduct.of(vc.negate(), vr.dot(tensor)));
-    result.set(Tensor::negate, k); // 2nd reflection
-    return result;
+    Tensor project = tensor.add(TensorProduct.of(vc.negate(), vr.dot(tensor)));
+    project.set(Tensor::negate, k); // 2nd reflection
+    return project;
   }
 }

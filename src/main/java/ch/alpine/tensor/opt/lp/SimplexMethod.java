@@ -18,6 +18,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.red.ArgMax;
 import ch.alpine.tensor.red.ArgMin;
+import ch.alpine.tensor.red.LenientAdd;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Sign;
 
@@ -82,7 +83,7 @@ import ch.alpine.tensor.sca.Sign;
         Tensor tab_p = tab.get(p);
         for (int i = 0; i < tab.length(); ++i)
           if (i != p)
-            tab.set(row -> row.subtract(tab_p.multiply(row.Get(j))), i);
+            tab.set(row -> LenientAdd.of(row, tab_p.multiply(row.Get(j).negate())), i);
       } else
         /** "[...] if we have all c_j >= 0 in the tableau in the minimization
          * problem, then the current value of z is optimum."

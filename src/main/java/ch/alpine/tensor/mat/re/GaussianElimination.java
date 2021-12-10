@@ -69,9 +69,7 @@ public class GaussianElimination extends AbstractReduce {
       int ic1 = ind(c1);
       Scalar fac = lhs[ic1].Get(c0).divide(piv).negate();
       lhs[ic1] = lhs[ic1].add(lhs[ic0].multiply(fac));
-      Tensor mul = rhs[ic0].multiply(fac);
-      // rhs[ic1] = rhs[ic1].add(mul.map(Unprotect::zeroDropUnit));
-      rhs[ic1] = LenientAdd.of(rhs[ic1], mul);
+      rhs[ic1] = LenientAdd.of(rhs[ic1], rhs[ic0].multiply(fac));
     }
   }
 
@@ -82,7 +80,6 @@ public class GaussianElimination extends AbstractReduce {
       int ic0 = ind(c0);
       Tensor sum = rhs[ic0];
       for (int c1 = c0 + 1; c1 < rhs.length; ++c1)
-        // sum = sum.add(sol[c1].multiply(lhs[ic0].Get(c1).negate()));
         sum = LenientAdd.of(sum, sol[c1].multiply(lhs[ic0].Get(c1).negate()));
       sol[c0] = sum.divide(lhs[ic0].Get(c0));
     }
