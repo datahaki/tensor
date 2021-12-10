@@ -52,7 +52,7 @@ public class InfluenceMatrixAdapterTest extends TestCase {
     int n = 7;
     int m = 5;
     int prime = 7919;
-    Random random = new Random();
+    Random random = new Random(1);
     Tensor design = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, m);
     Tensor d_dt = MatrixDotTranspose.of(design, design);
     ExactTensorQ.require(d_dt);

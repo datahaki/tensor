@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.sv;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.qty.Quantity;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/SingularValueDecomposition.html">SingularValueDecomposition</a> */
@@ -14,6 +15,9 @@ public interface SingularValueDecomposition {
    * <li>Transpose.of(V).dot(V) == IdentityMatrix
    * </ul>
    * 
+   * If matrix entries are of type {@link Quantity}, the unit must be unique.
+   * The entries provided by {@link #values()} have the same unit.
+   * 
    * @param matrix is rows x cols matrix with rows >= cols
    * @return singular value decomposition of given matrix
    * @throws Exception input is not a matrix, or if decomposition cannot be established */
@@ -22,7 +26,7 @@ public interface SingularValueDecomposition {
   }
 
   // ---
-  /** @return matrix of dimensions rows x cols without units */
+  /** @return matrix of dimensions rows x cols with unitless entries */
   Tensor getU();
 
   /** Careful: the entries in the vector are not necessarily ordered
@@ -31,6 +35,6 @@ public interface SingularValueDecomposition {
    * with units as entries in matrix */
   Tensor values();
 
-  /** @return square matrix of dimensions cols x cols without units */
+  /** @return square matrix of dimensions cols x cols with unitless entries */
   Tensor getV();
 }

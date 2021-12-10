@@ -13,10 +13,13 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.ext.Booleans;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.nrm.Matrix1Norm;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.CopySign;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.red.LenientAdd;
@@ -33,6 +36,7 @@ import ch.alpine.tensor.sca.Sqrt;
   // ---
   private final int rows;
   private final int cols;
+  private final Unit unit;
   /** rows x cols */
   private final Tensor u;
   private final Tensor w;
@@ -46,6 +50,9 @@ import ch.alpine.tensor.sca.Sqrt;
     cols = Unprotect.dimension1(matrix);
     if (rows < cols)
       throw new IllegalArgumentException("rows=" + rows + " cols=" + cols);
+    // ---
+    unit = Unprotect.getUnitUnique(matrix);
+    // ---
     u = matrix.copy();
     w = Diagonal.of(matrix).map(Scalar::zero);
     r = w.copy();
@@ -54,6 +61,7 @@ import ch.alpine.tensor.sca.Sqrt;
       initU1(i);
       initU2(i);
     }
+    Unprotect.getUnitUnique(w);
     Chop chop = Chop.below(Matrix1Norm.of(Tensors.of(w, r).map(Unprotect::withoutUnit)) //
         .multiply(DBL_EPSILON) //
         .number().doubleValue());
@@ -64,6 +72,11 @@ import ch.alpine.tensor.sca.Sqrt;
       initV(i);
     for (int i = cols - 1; 0 <= i; --i)
       initU3(i);
+    // ---
+    Unprotect.getUnitUnique(u);
+    Unprotect.getUnitUnique(v);
+    Unprotect.getUnitUnique(w);
+    Unprotect.getUnitUnique(r);
     for (int i = cols - 1; 0 <= i; --i) {
       for (int iteration = 0; iteration <= MAX_ITERATIONS; ++iteration) {
         int l = levelW(i, chop);
@@ -97,15 +110,17 @@ import ch.alpine.tensor.sca.Sqrt;
 
   private void initU1(int i) {
     Scalar scale = Vector1Norm.of(u.stream().skip(i).map(row -> row.Get(i)));
+    Booleans.requireEquals(QuantityUnit.of(scale), unit);
     if (Scalars.isZero(scale)) {
       Scalar zero_unitless = scale.one().zero();
       u.stream().skip(i).forEach(uk -> uk.set(zero_unitless, i));
-      w.set(Scalar::zero, i);
+      w.set(scale.zero(), i);
     } else {
       u.stream().skip(i).forEach(uk -> uk.set(scale::under, i));
       Scalar s = Vector2NormSquared.of(u.stream().skip(i).map(row -> row.Get(i)));
       Scalar f = u.Get(i, i);
       Scalar p = CopySign.of(Sqrt.FUNCTION.apply(s), f).negate();
+      Booleans.requireEquals(QuantityUnit.of(p), Unit.ONE);
       Scalar h = f.multiply(p).subtract(s);
       u.set(f.subtract(p), i, i);
       for (int j = i + 1; j < cols; ++j) {
@@ -124,6 +139,7 @@ import ch.alpine.tensor.sca.Sqrt;
     final int ip1 = i + 1;
     if (ip1 != cols) {
       Scalar scale = Vector1Norm.of(u.get(i).extract(ip1, cols));
+      Booleans.requireEquals(QuantityUnit.of(scale), unit);
       if (Scalars.isZero(scale)) {
         Scalar zero_unitless = scale.one().zero();
         IntStream.range(ip1, cols).forEach(k -> u.set(zero_unitless, i, k));
@@ -133,9 +149,16 @@ import ch.alpine.tensor.sca.Sqrt;
         Scalar s = Vector2NormSquared.of(u.get(i).extract(ip1, cols));
         Scalar f = u.Get(i, ip1);
         Scalar p = CopySign.of(Sqrt.FUNCTION.apply(s), f).negate();
+        Booleans.requireEquals(QuantityUnit.of(p), Unit.ONE);
         Scalar h = f.multiply(p).subtract(s);
+        Booleans.requireEquals(QuantityUnit.of(h), Unit.ONE);
         u.set(f.subtract(p), i, ip1);
+        // TODO does not always give consistent unit!?
+        Tensor print = Tensor.of(IntStream.range(ip1, cols).mapToObj(k -> u.Get(i, k).divide(h)));
+        Booleans.requireEquals(Unprotect.getUnitUnique(print), Unit.ONE);
+        // System.out.println(print);
         IntStream.range(ip1, cols).forEach(k -> r.set(u.Get(i, k).divide(h), k));
+        // IntStream.range(ip1, cols).forEach(k -> Booleans.requireEquals(QuantityUnit.of(r.Get(k)), unit));
         Tensor ui = u.get(i).extract(ip1, cols);
         u.stream().skip(ip1).forEach(uj -> {
           Scalar d = (Scalar) uj.extract(ip1, cols).dot(ui);
@@ -163,8 +186,9 @@ import ch.alpine.tensor.sca.Sqrt;
             (Scalar) LenientAdd.dot(uiEx, Tensor.of(v.stream().skip(ip1).map(row -> row.Get(fj)))));
       }
     }
-    IntStream.range(ip1, cols).forEach(j -> v.set(Scalar::zero, i, j));
-    v.stream().skip(ip1).forEach(vj -> vj.set(Scalar::zero, i));
+    Scalar z = p.one().zero();
+    IntStream.range(ip1, cols).forEach(j -> v.set(z, i, j));
+    v.stream().skip(ip1).forEach(vj -> vj.set(z, i));
     v.set(Scalar::one, i, i);
   }
 

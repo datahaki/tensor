@@ -22,9 +22,9 @@ import junit.framework.TestCase;
 public class SingularValueDecompositionImplTest extends TestCase {
   private static void _check(Tensor matrix) {
     assertTrue(SquareMatrixQ.of(matrix));
-    SingularValueDecompositionTest.specialOps(matrix);
+    TestHelper.specialOps(matrix);
     Tensor svd = IdentityMatrix.of(matrix.length()).subtract(Transpose.of(matrix));
-    SingularValueDecompositionTest.specialOps(svd);
+    TestHelper.specialOps(svd);
   }
 
   public void testResource() throws Exception {
@@ -34,29 +34,29 @@ public class SingularValueDecompositionImplTest extends TestCase {
 
   public void testCondition1() {
     Tensor matrix = ResourceData.of("/mat/svd3.csv");
-    SingularValueDecompositionTest.specialOps(matrix);
+    TestHelper.specialOps(matrix);
+    // TestHelper.specialOps(matrix.map(s -> Quantity.of(s, "m")));
   }
 
   public void testCondition2() {
     Tensor matrix = ResourceData.of("/mat/svd2.csv");
-    SingularValueDecompositionTest.specialOps(matrix);
+    TestHelper.specialOps(matrix);
   }
 
   public void testCondition1Unit() {
     Tensor matrix = ResourceData.of("/mat/svd3.csv");
-    SingularValueDecompositionTest.specialOps(matrix);
+    TestHelper.specialOps(matrix);
   }
 
-  public void testCondition2Unit() {
+  public void testCondition2UnitA() {
+    Tensor matrix = ResourceData.of("/mat/svd2.csv").map(s -> Quantity.of(s, "m"));
+    TestHelper.specialOps(matrix);
+  }
+
+  public void testCondition2UnitB() {
     Tensor matrix = ResourceData.of("/mat/svd2.csv").map(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
-    // System.out.println(Diagonal.of(matrix));
-    // SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
-    // System.out.println("v="+Pretty.of(svd.getV().map(Round._1)));
-    // System.out.println("u="+Pretty.of(svd.getU().map(Round._1)));
-    // System.out.println("w="+Pretty.of(svd.values().map(Round._1)));
-    // System.out.println(Dimensions.of());
-    SingularValueDecompositionTest.specialOps(matrix);
+    TestHelper.specialOps(matrix);
   }
 
   public void testEps() {
