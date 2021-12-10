@@ -17,7 +17,6 @@ import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import junit.framework.TestCase;
 
@@ -57,7 +56,6 @@ public class HuKahngTest extends TestCase {
     Tensor c = Tensors.fromString("{12[USD], 10[USD], 1[USD]}");
     Tensor m = Tensors.fromString("{{11[lb], 10[lb], 9[lb]}}");
     Tensor b = Tensors.fromString("{20[lb]}");
-    Total.ofVector(c);
     NavigableMap<Scalar, Tensor> navigableMap = SimplexCorners.of(c, m, b, true);
     Tensor sol1 = navigableMap.get(Quantity.of(RationalScalar.of(240, 11), "USD"));
     assertEquals(sol1, Tensors.fromString("{{20/11, 0, 0}}"));

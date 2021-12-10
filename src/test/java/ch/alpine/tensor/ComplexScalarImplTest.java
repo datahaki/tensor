@@ -11,6 +11,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.nrm.Vector2Norm;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
@@ -235,6 +236,13 @@ public class ComplexScalarImplTest extends TestCase {
     // mathematica also does not simplify 1 / (inf+inf*I)
     // assertEquals(ComplexScalar.of( //
     // DoubleScalar.POSITIVE_INFINITY, DoubleScalar.POSITIVE_INFINITY).reciprocal(), RealScalar.ZERO);
+  }
+
+  public void testAddQuantityFail() {
+    Scalar s1 = Quantity.of(1, "m");
+    Scalar s2 = ComplexScalar.of(2, 3);
+    AssertFail.of(() -> s1.add(s2));
+    AssertFail.of(() -> s2.add(s1));
   }
 
   public void testDivisionInf1() {

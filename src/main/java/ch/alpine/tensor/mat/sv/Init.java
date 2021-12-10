@@ -127,10 +127,8 @@ import ch.alpine.tensor.sca.Sqrt;
         v.stream().skip(ip1).forEach(vj -> vj.set(ui.Get(aj.getAndIncrement()).divide(ui_ip1), i));
       }
       Tensor uiEx = ui.extract(ip1, cols);
-      for (int j = ip1; j < cols; ++j) {
-        final int fj = j;
-        addScaled(ip1, v, i, j, (Scalar) uiEx.dot(Tensor.of(v.stream().skip(ip1).map(row -> row.Get(fj)))));
-      }
+      IntStream.range(ip1, cols) //
+          .forEach(j -> addScaled(ip1, v, i, j, uiEx.dot(Tensor.of(v.stream().skip(ip1).map(row -> row.Get(j))))));
     }
     Scalar z = p.one().zero();
     IntStream.range(ip1, cols).forEach(j -> v.set(z, i, j));
@@ -160,7 +158,7 @@ import ch.alpine.tensor.sca.Sqrt;
     u.set(RealScalar.ONE::add, i, i);
   }
 
-  private static void addScaled(int l, Tensor v, int i, int j, Scalar s) {
+  private static void addScaled(int l, Tensor v, int i, int j, Tensor s) {
     v.stream().skip(l).forEach(vk -> vk.set(s.multiply(vk.Get(i))::add, j));
   }
 }

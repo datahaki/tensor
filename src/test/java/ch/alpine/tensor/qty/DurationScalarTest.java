@@ -191,6 +191,12 @@ public class DurationScalarTest extends TestCase {
     ExactScalarQ.require(DurationScalar.of(Duration.ofDays(-100)));
   }
 
+  public void testMultiplyFail() {
+    DurationScalar d1 = DurationScalar.of(Duration.ofDays(213));
+    DurationScalar d2 = DurationScalar.of(Duration.ofDays(113));
+    AssertFail.of(() -> d1.multiply(d2));
+  }
+
   public void testNullFail() {
     AssertFail.of(() -> DurationScalar.of(null));
   }

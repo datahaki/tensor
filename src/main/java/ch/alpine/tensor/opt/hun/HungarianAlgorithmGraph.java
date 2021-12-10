@@ -22,11 +22,16 @@ import ch.alpine.tensor.io.ScalarArray;
   protected int[] yMatch;
   protected int matchCount = 0;
 
+  /** @param _matrix with entries of unique unit */
   public HungarianAlgorithmGraph(Tensor _matrix) {
+    Unprotect.getUnitUnique(_matrix);
     rows = _matrix.length();
     cols = Unprotect.dimension1(_matrix);
     int dim = Math.max(rows, cols);
-    Tensor normal = PadRight.zeros(dim, dim).apply(rows <= cols ? _matrix.copy() : Transpose.of(_matrix));
+    Scalar zero = _matrix.Get(0, 0).zero();
+    Tensor normal = PadRight.with(zero, dim, dim).apply(rows <= cols //
+        ? _matrix
+        : Transpose.of(_matrix));
     matrix = ScalarArray.ofMatrix(normal);
     xMatch = new int[dim];
     Arrays.fill(xMatch, UNASSIGNED);

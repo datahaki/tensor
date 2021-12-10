@@ -14,6 +14,7 @@ import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -191,12 +192,32 @@ public class RootsTest extends TestCase {
     for (int length = 1; length <= 3; ++length)
       for (int index = 0; index < LIMIT; ++index) {
         Tensor zeros = ConstantArray.of(RandomVariate.of(distribution), length);
-        Tensor roots = Roots.of(CoefficientList.of(zeros));
+        Tensor coeff = CoefficientList.of(zeros);
+        Tensor roots = Roots.of(coeff);
         if (!Chop._01.isClose(zeros, roots)) {
           System.err.println(zeros);
           fail();
         }
       }
+  }
+
+  public void testRealTripleRoot1() {
+    Distribution distribution = NormalDistribution.of(Quantity.of(1, "m"), Quantity.of(0.5, "m"));
+    for (int index = 0; index < LIMIT; ++index) {
+      Tensor zeros = ConstantArray.of(RandomVariate.of(distribution), 3);
+      Tensor coeff = CoefficientList.of(zeros);
+      Tensor roots = Roots.of(coeff);
+      if (!Chop._01.isClose(zeros, roots)) {
+        System.err.println(zeros);
+        fail();
+      }
+    }
+  }
+
+  public void testSpecific() {
+    Tensor coeffs = Tensors.fromString("{-1.7577173839803[m^3], 4.36938808469565[m^2], -3.620519887265771[m], 1.0}");
+    Tensor roots = Roots.of(coeffs);
+    Tolerance.CHOP.requireClose(roots, ConstantArray.of(Scalars.fromString("1.2068399624219235[m]"), 3));
   }
 
   public void testComplexTripleRoot() {
