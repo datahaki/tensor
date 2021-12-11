@@ -5,7 +5,6 @@ import java.util.List;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Array;
 
 /* package */ enum StaticHelper {
@@ -13,7 +12,8 @@ import ch.alpine.tensor.alg.Array;
   /** @param fallback
    * @param size
    * @param tensor
-   * @return {@link SparseArray} of given fallback and size equals to tensor */
+   * @return {@link SparseArray} of given fallback and size equals to tensor, or
+   * fallback as {@link Scalar} if tensor equals to fallback */
   public static Tensor of(Scalar fallback, List<Integer> size, Tensor tensor) {
     Tensor sparseArray = SparseArray.of(fallback, size.stream().mapToInt(i -> i).toArray());
     Array.forEach(list -> {
@@ -22,13 +22,5 @@ import ch.alpine.tensor.alg.Array;
         sparseArray.set(entry, list);
     }, size);
     return sparseArray;
-  }
-
-  /** @param fallback
-   * @return */
-  public static Scalar checkFallback(Scalar fallback) {
-    if (fallback.one().zero().equals(fallback))
-      return fallback;
-    throw TensorRuntimeException.of(fallback);
   }
 }

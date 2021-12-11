@@ -24,6 +24,7 @@ import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -296,6 +297,26 @@ public class SparseArrayTest extends TestCase {
     Tensor tensor = LeviCivitaTensor.of(3).dot(HilbertMatrix.of(3));
     tensor.toString();
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3, 3));
+  }
+
+  public void testQuantity() {
+    Tensor tensor = LeviCivitaTensor.of(3);
+    assertTrue(tensor instanceof SparseArray);
+    tensor = tensor.multiply(Quantity.of(0, "m"));
+    assertEquals(tensor.toString(), "SparseArray[{}, {3, 3, 3}, 0[m]]");
+  }
+
+  public void testQuantityOps() {
+    String string = "{{3[m], 7[m], 0[m]}, {1[m], 0[m], 0[m]}}";
+    Tensor full = Tensors.fromString(string);
+    SparseArray sparseArray = (SparseArray) SparseArrays.of(full);
+    assertEquals(full, sparseArray);
+    int nnz = Nnz.of(sparseArray);
+    assertEquals(nnz, 3);
+    Tensor tensor = Normal.of(sparseArray);
+    assertEquals(tensor.toString(), string);
+    Tensor dot = sparseArray.dot(HilbertMatrix.of(3));
+    assertTrue(dot instanceof SparseArray);
   }
 
   public void testKeyCollision() {

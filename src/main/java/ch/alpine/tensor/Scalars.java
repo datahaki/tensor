@@ -91,6 +91,15 @@ public enum Scalars {
     return !scalar.equals(scalar.zero());
   }
 
+  /** @param scalar
+   * @return scalar
+   * @throws Exception if scalar is not equal to scalar.zero() */
+  public static Scalar requireZero(Scalar scalar) {
+    if (isZero(scalar))
+      return scalar;
+    throw TensorRuntimeException.of(scalar);
+  }
+
   /** bi-predicate that tests if m divides n, i.e. "m|n"
    * 
    * @param m in exact precision

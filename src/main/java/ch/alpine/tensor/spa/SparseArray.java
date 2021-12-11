@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.AbstractTensor;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
@@ -39,12 +40,12 @@ import ch.alpine.tensor.ext.MergeIllegal;
 public class SparseArray extends AbstractTensor implements Serializable {
   /** @param fallback zero element, for instance {@link RealScalar#ZERO}
    * @param dimensions with non-negative values
-   * @return empty sparse array with given dimensions
+   * @return empty sparse array with given dimensions, or fallback if no dimensions are specified
    * @throws Exception if fallback element is not zero */
   public static Tensor of(Scalar fallback, int... dimensions) {
     return dimensions.length == 0 //
         ? fallback
-        : new SparseArray(StaticHelper.checkFallback(fallback), //
+        : new SparseArray(Scalars.requireZero(fallback), //
             Integers.asList(IntStream.of(dimensions).map(Integers::requirePositiveOrZero).toArray()));
   }
 
@@ -217,13 +218,13 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor multiply(Scalar scalar) {
-    return new SparseArray(StaticHelper.checkFallback(fallback.multiply(scalar)), size, //
+    return new SparseArray(Scalars.requireZero(fallback.multiply(scalar)), size, //
         navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().multiply(scalar))));
   }
 
   @Override // from Tensor
   public Tensor divide(Scalar scalar) {
-    return new SparseArray(StaticHelper.checkFallback(fallback.divide(scalar)), size, //
+    return new SparseArray(Scalars.requireZero(fallback.divide(scalar)), size, //
         navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().divide(scalar))));
   }
 
