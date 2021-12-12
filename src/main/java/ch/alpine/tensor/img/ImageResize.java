@@ -57,6 +57,7 @@ public enum ImageResize {
     BufferedImage bufferedImage = new BufferedImage(dim1, dim0, gray //
         ? BufferedImage.TYPE_BYTE_GRAY
         : BufferedImage.TYPE_INT_ARGB);
+    // TODO algorithm could be improved using multiple step for resizing by large factor
     Graphics2D graphics = bufferedImage.createGraphics();
     graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
