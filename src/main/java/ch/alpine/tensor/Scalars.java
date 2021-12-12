@@ -12,6 +12,7 @@ import ch.alpine.tensor.num.Divisible;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.sca.Sign;
 
 /** collection of useful static functions related to {@link Scalar} */
 public enum Scalars {
@@ -93,7 +94,8 @@ public enum Scalars {
 
   /** @param scalar
    * @return scalar
-   * @throws Exception if scalar is not equal to scalar.zero() */
+   * @throws Exception if scalar is not equal to scalar.zero()
+   * @see Sign#requirePositive(Scalar) */
   public static Scalar requireZero(Scalar scalar) {
     if (isZero(scalar))
       return scalar;

@@ -43,15 +43,14 @@ public class SparseArray extends AbstractTensor implements Serializable {
    * @return empty sparse array with given dimensions, or fallback if no dimensions are specified
    * @throws Exception if fallback element is not zero */
   public static Tensor of(Scalar fallback, int... dimensions) {
+    Scalars.requireZero(fallback);
     return dimensions.length == 0 //
         ? fallback
-        : new SparseArray(Scalars.requireZero(fallback), //
+        : new SparseArray(fallback, //
             Integers.asList(IntStream.of(dimensions).map(Integers::requirePositiveOrZero).toArray()));
   }
 
-  // TODO Mathematica allows Quantity[0, "m"] as fallback and returns Normal[result] in
-  // ... case calculation does not result in unique fallback.
-  // ---
+  // TODO Mathematica returns Normal[result] in case calculation does not result in unique fallback
   private final Scalar fallback;
   /** the content of size is not modified by sparse array */
   private final List<Integer> size;

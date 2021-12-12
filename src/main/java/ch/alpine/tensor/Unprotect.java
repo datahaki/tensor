@@ -82,9 +82,11 @@ public enum Unprotect {
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
-   * @param scalar typically with zero value
-   * @return */
+   * @param scalar with zero value
+   * @return
+   * @throws Exception if scalar does not satisfy {@link Scalars#isZero(Scalar)} */
   public static Scalar negateUnit(Scalar scalar) {
+    Scalars.requireZero(scalar);
     if (scalar instanceof Quantity) {
       Quantity quantity = (Quantity) scalar;
       return Quantity.of(quantity.value(), quantity.unit().negate());

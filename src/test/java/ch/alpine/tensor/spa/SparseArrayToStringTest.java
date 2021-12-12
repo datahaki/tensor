@@ -8,7 +8,7 @@ import junit.framework.TestCase;
 public class SparseArrayToStringTest extends TestCase {
   public void testSimple() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
-    Tensor sparse = SparseArrays.of(tensor);
+    Tensor sparse = TestHelper.of(tensor);
     String string = sparse.toString();
     assertTrue(string.startsWith(SparseArray.class.getSimpleName()));
   }

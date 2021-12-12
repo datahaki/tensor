@@ -7,7 +7,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 
-public enum SparseArrays {
+/* package */ enum TestHelper {
   ;
   /** @param tensor with array structure
    * @return sparse array, or {@link Scalar} if tensor is a scalar
