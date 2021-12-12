@@ -12,6 +12,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.io.Import;
+import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
@@ -42,6 +43,18 @@ public class ImageResizeTest extends TestCase {
     Tensor tensor = Import.of(file);
     Tensor resize = ImageResize.of(tensor, new Dimension(40, 60));
     assertEquals(Dimensions.of(resize), Arrays.asList(60, 40, 4));
+  }
+
+  public void testFactor() throws Exception {
+    Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
+    ImageResize.of(tensor, Pi.VALUE);
+    ImageResize.of(tensor, Pi.HALF);
+    ImageResize.of(tensor, Pi.HALF.reciprocal());
+  }
+
+  public void testFactorNegativeFail() throws Exception {
+    Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
+    AssertFail.of(() -> ImageResize.of(tensor, Pi.VALUE.negate()));
   }
 
   public void testImageResizeGray() {

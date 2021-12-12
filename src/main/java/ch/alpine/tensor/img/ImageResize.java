@@ -3,24 +3,64 @@ package ch.alpine.tensor.img;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.util.List;
 import java.util.stream.IntStream;
 
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.ImageFormat;
 import ch.alpine.tensor.itp.MappedInterpolation;
 import ch.alpine.tensor.mat.MatrixQ;
+import ch.alpine.tensor.sca.Round;
 
-/** inspired by
+/** the general implementation {@link ImageResize#of(Tensor, Scalar)}
+ * uses Image.SCALE_AREA_AVERAGING with emphasis on quality.
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ImageResize.html">ImageResize</a>
  * 
  * @see MappedInterpolation */
 public enum ImageResize {
   ;
+  /** @param tensor
+   * @param dim0 height of image
+   * @param dim1 width of image
+   * @return */
+  public static Tensor of(Tensor tensor, int dim0, int dim1) {
+    boolean gray = MatrixQ.of(tensor);
+    BufferedImage bufferedImage = new BufferedImage(dim1, dim0, gray //
+        ? BufferedImage.TYPE_BYTE_GRAY
+        : BufferedImage.TYPE_INT_ARGB);
+    Graphics2D graphics = bufferedImage.createGraphics();
+    Image image = ImageFormat.of(tensor).getScaledInstance(dim1, dim0, Image.SCALE_AREA_AVERAGING);
+    graphics.drawImage(image, 0, 0, null);
+    return ImageFormat.from(bufferedImage);
+  }
+
+  /** @param tensor
+   * @param factor
+   * @return */
+  public static Tensor of(Tensor tensor, Scalar factor) {
+    List<Integer> list = Dimensions.of(tensor);
+    return of(tensor, //
+        Round.intValueExact(RealScalar.of(list.get(0)).multiply(factor)), //
+        Round.intValueExact(RealScalar.of(list.get(1)).multiply(factor)));
+  }
+
+  /** @param tensor
+   * @param dimension
+   * @return */
+  public static Tensor of(Tensor tensor, Dimension dimension) {
+    return of(tensor, dimension.height, dimension.width);
+  }
+
   /** function uses nearest neighbor interpolation
    * 
    * @param tensor
@@ -46,30 +86,5 @@ public enum ImageResize {
     return Tensors.matrix((i, j) -> tensor.get(ix[i], iy[j]), //
         dim0 * Integers.requirePositive(fx), //
         dim1 * Integers.requirePositive(fy));
-  }
-
-  /** @param tensor
-   * @param dim0 height of image
-   * @param dim1 width of image
-   * @return */
-  public static Tensor of(Tensor tensor, int dim0, int dim1) {
-    boolean gray = MatrixQ.of(tensor);
-    BufferedImage bufferedImage = new BufferedImage(dim1, dim0, gray //
-        ? BufferedImage.TYPE_BYTE_GRAY
-        : BufferedImage.TYPE_INT_ARGB);
-    // TODO algorithm could be improved using multiple step for resizing by large factor
-    Graphics2D graphics = bufferedImage.createGraphics();
-    graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    graphics.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-    graphics.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-    graphics.drawImage(ImageFormat.of(tensor), 0, 0, dim1, dim0, null);
-    return ImageFormat.from(bufferedImage);
-  }
-
-  /** @param tensor
-   * @param dimension
-   * @return */
-  public static Tensor of(Tensor tensor, Dimension dimension) {
-    return of(tensor, dimension.height, dimension.width);
   }
 }
