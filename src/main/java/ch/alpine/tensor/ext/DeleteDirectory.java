@@ -42,6 +42,7 @@ public class DeleteDirectory {
    * @param max_delete
    * @param mask
    * @return
+   * @throws Exception if given directory corresponds to an existing file
    * @throws IOException */
   public static DeleteDirectory of(File directory, int max_nested, long max_delete, int mask) throws IOException {
     if (directory.isFile())

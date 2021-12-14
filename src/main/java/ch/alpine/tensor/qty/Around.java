@@ -50,6 +50,7 @@ import ch.alpine.tensor.sca.Sqrt;
 public class Around extends AbstractScalar implements //
     AbsInterface, ExactScalarQInterface, ExpInterface, LogInterface, MeanInterface, //
     NInterface, SqrtInterface, Serializable {
+  // TODO sign/power interface
   private static final String SEPARATOR = "\u00B1";
 
   /** Mathematica allows

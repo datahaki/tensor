@@ -2,7 +2,6 @@
 package ch.alpine.tensor.img;
 
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -20,8 +19,8 @@ import ch.alpine.tensor.itp.MappedInterpolation;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.sca.Round;
 
-/** the general implementation {@link ImageResize#of(Tensor, Scalar)}
- * uses Image.SCALE_AREA_AVERAGING with emphasis on quality.
+/** the general implementation {@link ImageResize#of(Tensor, Scalar)} uses
+ * {@link Image#SCALE_AREA_AVERAGING} with emphasis on quality.
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ImageResize.html">ImageResize</a>
@@ -29,7 +28,7 @@ import ch.alpine.tensor.sca.Round;
  * @see MappedInterpolation */
 public enum ImageResize {
   ;
-  /** @param tensor
+  /** @param tensor of rank 2 or 3
    * @param dim0 height of image
    * @param dim1 width of image
    * @return */
@@ -38,15 +37,16 @@ public enum ImageResize {
     BufferedImage bufferedImage = new BufferedImage(dim1, dim0, gray //
         ? BufferedImage.TYPE_BYTE_GRAY
         : BufferedImage.TYPE_INT_ARGB);
-    Graphics2D graphics = bufferedImage.createGraphics();
     Image image = ImageFormat.of(tensor).getScaledInstance(dim1, dim0, Image.SCALE_AREA_AVERAGING);
-    graphics.drawImage(image, 0, 0, null);
+    bufferedImage.createGraphics().drawImage(image, 0, 0, null);
     return ImageFormat.from(bufferedImage);
   }
 
-  /** @param tensor
+  /** Remark: for a factor of one the width and height of the image remain identical
+   * 
+   * @param tensor of rank 2 or 3
    * @param factor
-   * @return */
+   * @return image scaled by given factor */
   public static Tensor of(Tensor tensor, Scalar factor) {
     List<Integer> list = Dimensions.of(tensor);
     return of(tensor, //
@@ -54,7 +54,7 @@ public enum ImageResize {
         Round.intValueExact(RealScalar.of(list.get(1)).multiply(factor)));
   }
 
-  /** @param tensor
+  /** @param tensor of rank 2 or 3
    * @param dimension
    * @return */
   public static Tensor of(Tensor tensor, Dimension dimension) {
@@ -63,7 +63,7 @@ public enum ImageResize {
 
   /** function uses nearest neighbor interpolation
    * 
-   * @param tensor
+   * @param tensor of rank 2 or 3
    * @param factor positive integer
    * @return */
   public static Tensor nearest(Tensor tensor, int factor) {
@@ -72,7 +72,7 @@ public enum ImageResize {
 
   /** function uses nearest neighbor interpolation
    * 
-   * @param tensor
+   * @param tensor of rank 2 or 3
    * @param fx positive scaling along x axis
    * @param fy positive scaling along y axis
    * @return

@@ -15,6 +15,8 @@ import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Mod;
@@ -117,11 +119,11 @@ public class PolynomialTest extends TestCase {
   public void testDerLinEx() {
     Tensor coeffs = Tensors.fromString("{-13[bar], 0.27[K^-1*bar]}");
     ScalarUnaryOperator polynomial = Polynomial.of(coeffs);
-    polynomial.apply(Quantity.of(3, "K"));
+    assertEquals(QuantityUnit.of(polynomial.apply(Quantity.of(3, "K"))), Unit.of("bar"));
     Tensor coeffs_d1 = Polynomial.derivative_coeffs(coeffs);
     assertEquals(coeffs_d1, Tensors.fromString("{0.27[K^-1*bar], 0.0[K^-2*bar]}"));
     ScalarUnaryOperator derivative = Polynomial.of(coeffs_d1);
-    derivative.apply(Quantity.of(3, "K"));
+    assertEquals(QuantityUnit.of(derivative.apply(Quantity.of(3, "K"))), Unit.of("bar*K^-1"));
     AssertFail.of(() -> derivative.apply(Quantity.of(3, "bar")));
   }
 
