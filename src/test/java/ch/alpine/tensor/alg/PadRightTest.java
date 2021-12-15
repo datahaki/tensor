@@ -74,5 +74,6 @@ public class PadRightTest extends TestCase {
 
   public void testFail2() {
     AssertFail.of(() -> PadRight.zeros(-2));
+    AssertFail.of(() -> PadRight.zeros(1, -2));
   }
 }

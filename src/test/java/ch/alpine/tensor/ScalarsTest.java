@@ -13,6 +13,7 @@ import junit.framework.TestCase;
 public class ScalarsTest extends TestCase {
   public void testRequireZero() {
     assertEquals(Scalars.requireZero(Quantity.of(0, "A")), Quantity.of(0, "A"));
+    AssertFail.of(() -> Scalars.requireZero(Quantity.of(1, "A")));
     AssertFail.of(() -> Scalars.requireZero(RealScalar.ONE));
   }
 

@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.cd;
 
+import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -32,6 +33,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.LenientAdd;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
@@ -161,7 +163,6 @@ public class CholeskyDecompositionTest extends TestCase {
     assertFalse(NegativeSemidefiniteMatrixQ.ofHermitian(mat));
   }
 
-  // TODO what's going on here!?
   public void testQuantity2() {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
@@ -172,15 +173,20 @@ public class CholeskyDecompositionTest extends TestCase {
       Tensor expect = Tensors.fromString("{{1, 0[m*rad^-1], 0[kg^-1*m]}, {0[m^-1*rad], 1, 0[kg^-1*rad]}, {0[kg*m^-1], 0[kg*rad^-1], 1}}");
       assertEquals(res, expect);
     }
+    CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
     {
-      CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
       assertEquals(Det.of(matrix), cd.det()); // 100[kg^2, m^2, rad^2]
-      // Tensor lower =
-      rows_pmul_v(cd.getL(), Sqrt.of(cd.diagonal()));
-      // Tensor upper =
-      Times.of(Sqrt.of(cd.diagonal()), ConjugateTranspose.of(cd.getL()));
-      // Tensor res = lower.dot(upper);
-      // Chop._10.requireClose(matrix, res);
+      Tensor lower = rows_pmul_v(cd.getL(), Sqrt.of(cd.diagonal()));
+      Tensor upper = Times.of(Sqrt.of(cd.diagonal()), ConjugateTranspose.of(cd.getL()));
+      Tensor res = Tensors.matrix((i, j) -> Times.of(lower.get(i), upper.get(Tensor.ALL, j)).stream().reduce(LenientAdd::of).orElseThrow(), 3, 3);
+      Chop._10.requireClose(matrix, res);
+    }
+    {
+      Tensor lower = rows_pmul_v(cd.getL(), cd.diagonal());
+      Tensor upper = ConjugateTranspose.of(cd.getL());
+      Tensor res = Tensors.matrix((i, j) -> Times.of(lower.get(i), upper.get(Tensor.ALL, j)).stream().reduce(LenientAdd::of).orElseThrow(), 3, 3);
+      ExactTensorQ.require(res);
+      assertEquals(res, matrix);
     }
     SymmetricMatrixQ.require(matrix);
     assertTrue(HermitianMatrixQ.of(matrix));
@@ -204,21 +210,13 @@ public class CholeskyDecompositionTest extends TestCase {
     // System.out.println(MathematicaForm.of(matrix));
     CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
     Tensor sdiag = Sqrt.of(cd.diagonal());
-    // Tensor upper =
     Times.of(sdiag, ConjugateTranspose.of(cd.getL()));
     {
-      // Tensor res = ConjugateTranspose.of(upper).dot(upper);
-      // Chop._10.requireClose(matrix, res);
-    }
-    {
-      // the construction of the lower triangular matrix L . L* is not so convenient
-      // Tensor lower = Transpose.of(sdiag.pmul(Transpose.of(cd.getL())));
-      // Tensor lower =
-      rows_pmul_v(cd.getL(), sdiag);
-      // System.out.println(Pretty.of(lower));
-      // System.out.println(Pretty.of(upper));
-      // Tensor res = lower.dot(upper);
-      // Chop._10.requireClose(matrix, res);
+      Tensor lower = rows_pmul_v(cd.getL(), cd.diagonal());
+      Tensor upper = ConjugateTranspose.of(cd.getL());
+      Tensor res = Tensors.matrix((i, j) -> Times.of(lower.get(i), upper.get(Tensor.ALL, j)).stream().reduce(LenientAdd::of).orElseThrow(), 2, 2);
+      ExactTensorQ.require(res);
+      assertEquals(res, matrix);
     }
     assertEquals( //
         cd.solve(IdentityMatrix.of(2)), //

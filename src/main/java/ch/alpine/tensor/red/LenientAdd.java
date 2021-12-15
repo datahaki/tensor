@@ -46,8 +46,8 @@ public enum LenientAdd {
   }
 
   /** @param p
-   * @param q
-   * @return p + q */
+   * @param q with dimensions of p
+   * @return sum of tensors p + q, i.e. entrywise addition */
   public static Tensor of(Tensor p, Tensor q) {
     return INNER.apply(p, q);
   }
