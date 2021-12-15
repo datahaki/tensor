@@ -14,10 +14,13 @@ import ch.alpine.tensor.nrm.Matrix2Norm;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.N;
 
-/** Reference: Pseudo Inverse Wikipedia
+/** implementation also operates on matrices with mixed units, for example:
+ * {{-4/5[m^-2], 3/10[m^-1*rad^-1]}, {3/10[m^-1*rad^-1], -1/20[rad^-2]}}
  * 
- * our experiments suggest that the iterative method works well for matrices
- * with non-zero imaginary part. */
+ * Experiments suggest that the iterative method works well for matrices
+ * with non-zero imaginary part.
+ * 
+ * Reference: Pseudo Inverse Wikipedia */
 /* package */ class BenIsraelCohen {
   private static final int MAX_ITERATIONS = 128;
 
@@ -34,12 +37,13 @@ import ch.alpine.tensor.sca.N;
     this.matrix = matrix;
   }
 
+  /** @return */
   public Tensor pseudoInverse() {
     Scalar sigma = N.DOUBLE.apply(Matrix2Norm.bound(matrix.map(Unprotect::withoutUnit)));
     DeterminateScalarQ.require(sigma); // fail fast
     Scalar sigma2 = sigma.multiply(sigma);
     Tensor ai = ConjugateTranspose.of(matrix.map(UnitNegate.FUNCTION));
-    if (Scalars.isZero(sigma2))
+    if (Scalars.isZero(sigma2)) // special case that all entries of matrix are zero
       return ai;
     ai = ai.divide(sigma2);
     for (int count = 0; count < MAX_ITERATIONS; ++count)

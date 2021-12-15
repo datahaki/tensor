@@ -1,14 +1,14 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.ext.Lists;
 
 /** Example:
  * <pre>
@@ -18,12 +18,13 @@ import ch.alpine.tensor.ext.Lists;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/PadRight.html">PadRight</a> */
-public class PadRight implements TensorUnaryOperator {
+public class PadRight extends PadBase {
   /** @param element
    * @param dimensions non-empty
    * @return */
   public static TensorUnaryOperator with(Tensor element, List<Integer> dimensions) {
-    return new PadRight(element, dimensions);
+    dimensions.stream().forEach(Integers::requirePositiveOrZero);
+    return new PadRight(Objects.requireNonNull(element), dimensions);
   }
 
   /** @param element
@@ -36,7 +37,7 @@ public class PadRight implements TensorUnaryOperator {
   /** @param dimensions non-empty
    * @return */
   public static TensorUnaryOperator zeros(List<Integer> dimensions) {
-    return new PadRight(RealScalar.ZERO, dimensions);
+    return with(RealScalar.ZERO, dimensions);
   }
 
   /** @param dimensions non-empty
@@ -46,30 +47,22 @@ public class PadRight implements TensorUnaryOperator {
   }
 
   // ---
-  private final Tensor element;
-  private final List<Integer> dimensions;
-
   private PadRight(Tensor element, List<Integer> dimensions) {
-    this.element = element;
-    this.dimensions = dimensions;
+    super(element, dimensions);
   }
 
-  @Override // from TensorUnaryOperator
-  public Tensor apply(Tensor tensor) {
-    int length = tensor.length();
-    final int dim0 = dimensions.get(0);
-    if (1 < dimensions.size()) { // recur
-      TensorUnaryOperator tensorUnaryOperator = with(element, Lists.rest(dimensions));
-      if (dim0 <= length)
-        return Tensor.of(tensor.stream().limit(dim0).map(tensorUnaryOperator));
-      List<Integer> copy = new ArrayList<>(dimensions);
-      copy.set(0, dim0 - length);
-      return Join.of( //
-          Tensor.of(tensor.stream().map(tensorUnaryOperator)), //
-          ConstantArray.of(element, copy));
-    }
-    return dim0 <= length //
-        ? tensor.extract(0, dim0)
-        : Join.of(tensor, ConstantArray.of(element, dim0 - length));
+  @Override
+  protected Stream<Tensor> trim(Tensor tensor, int dim0) {
+    return tensor.stream().limit(dim0);
+  }
+
+  @Override
+  protected Tensor join(Tensor tensor, Tensor pad) {
+    return Join.of(tensor, pad);
+  }
+
+  @Override
+  protected PadBase get(Tensor element, List<Integer> rest) {
+    return new PadRight(element, rest);
   }
 }

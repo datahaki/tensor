@@ -13,8 +13,8 @@ import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class PadRightTest extends TestCase {
-  public void testVectorLo() {
-    TensorUnaryOperator tuo = PadRight.zeros(10);
+  public void testVectorLo() throws ClassNotFoundException, IOException {
+    TensorUnaryOperator tuo = Serialization.copy(PadRight.zeros(10));
     Tensor vector = Tensors.vector(1, 2, 3, 4, 5, 6);
     Tensor result = tuo.apply(vector);
     assertEquals(result.extract(0, 6), vector);
@@ -73,7 +73,6 @@ public class PadRightTest extends TestCase {
   }
 
   public void testFail2() {
-    TensorUnaryOperator tuo = PadRight.zeros(-2);
-    AssertFail.of(() -> tuo.apply(Tensors.vector(1, 2, 3)));
+    AssertFail.of(() -> PadRight.zeros(-2));
   }
 }

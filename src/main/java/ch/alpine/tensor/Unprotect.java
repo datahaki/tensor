@@ -82,16 +82,22 @@ public enum Unprotect {
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
    * 
+   * Examples:
+   * <pre>
+   * Unprotect.negateUnit(0[m^2]) gives 0[m^-2]
+   * </pre>
+   * 
+   * Remark: see BenIsraelCohen.UnitNegate
+   * 
    * @param scalar with zero value
    * @return
    * @throws Exception if scalar does not satisfy {@link Scalars#isZero(Scalar)} */
   public static Scalar negateUnit(Scalar scalar) {
-    Scalars.requireZero(scalar);
     if (scalar instanceof Quantity) {
       Quantity quantity = (Quantity) scalar;
-      return Quantity.of(quantity.value(), quantity.unit().negate());
+      return Quantity.of(Scalars.requireZero(quantity.value()), quantity.unit().negate());
     }
-    return scalar;
+    return Scalars.requireZero(scalar);
   }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !

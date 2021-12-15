@@ -328,12 +328,6 @@ public class SparseArray extends AbstractTensor implements Serializable {
     return this;
   }
 
-  private static <T> Collector<T, ?, NavigableMap<Integer, Tensor>> _map( //
-      Function<? super T, Integer> keyMapper, //
-      Function<? super T, Tensor> valueMapper) {
-    return Collectors.toMap(keyMapper, valueMapper, MergeIllegal.operator(), TreeMap::new);
-  }
-
   /** @param index
    * @return index
    * @throws Exception if given index is negative or greater equals to length() */
@@ -341,5 +335,11 @@ public class SparseArray extends AbstractTensor implements Serializable {
     if (0 <= index && index < length())
       return index;
     throw new IllegalArgumentException("index=" + index + " length=" + length());
+  }
+
+  private static <T> Collector<T, ?, NavigableMap<Integer, Tensor>> _map( //
+      Function<? super T, Integer> keyMapper, //
+      Function<? super T, Tensor> valueMapper) {
+    return Collectors.toMap(keyMapper, valueMapper, MergeIllegal.operator(), TreeMap::new);
   }
 }
