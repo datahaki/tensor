@@ -64,7 +64,7 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
   // ---
   private final ScalarUnaryOperator discrete;
   private final ScalarUnaryOperator original;
-  private final CategoricalDistribution empiricalDistribution;
+  private final CategoricalDistribution categoricalDistribution;
   private final Scalar width;
   private final Scalar width_half;
   private final Clip clip;
@@ -74,8 +74,7 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
     discrete = scalar -> scalar.subtract(min).divide(width);
     original = scalar -> scalar.multiply(width).add(min);
     Tensor unscaledPDF = BinCounts.of(samples.map(discrete));
-    empiricalDistribution = //
-        (CategoricalDistribution) CategoricalDistribution.fromUnscaledPDF(unscaledPDF);
+    categoricalDistribution = CategoricalDistribution.fromUnscaledPDF(unscaledPDF);
     this.width = width;
     width_half = width.multiply(RationalScalar.HALF);
     clip = Clips.interval(min, min.add(width.multiply(RealScalar.of(unscaledPDF.length()))));
@@ -88,12 +87,12 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
 
   @Override // from PDF
   public Scalar at(Scalar x) {
-    return empiricalDistribution.at(Floor.FUNCTION.apply(discrete.apply(x))).divide(width);
+    return categoricalDistribution.at(Floor.FUNCTION.apply(discrete.apply(x))).divide(width);
   }
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return original.apply(empiricalDistribution.mean()).add(width_half);
+    return original.apply(categoricalDistribution.mean()).add(width_half);
   }
 
   @Override // from CDF
@@ -101,8 +100,8 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
     Scalar xlo = discrete.apply(Floor.toMultipleOf(width).apply(x));
     Scalar ofs = Clips.interval(xlo, RealScalar.ONE.add(xlo)).rescale(discrete.apply(x));
     return LinearInterpolation.of(Tensors.of( //
-        empiricalDistribution.p_lessThan(xlo), //
-        empiricalDistribution.p_lessEquals(xlo))).At(ofs);
+        categoricalDistribution.p_lessThan(xlo), //
+        categoricalDistribution.p_lessEquals(xlo))).At(ofs);
   }
 
   @Override // from CDF
@@ -112,21 +111,21 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
-    Scalar x_floor = empiricalDistribution.quantile(p);
+    Scalar x_floor = categoricalDistribution.quantile(p);
     return original.apply(x_floor.add(Clips.interval( //
-        empiricalDistribution.p_lessThan(x_floor), //
-        empiricalDistribution.p_lessEquals(x_floor)).rescale(p)));
+        categoricalDistribution.p_lessThan(x_floor), //
+        categoricalDistribution.p_lessEquals(x_floor)).rescale(p)));
   }
 
   @Override // from RandomVariateInterface
   public Scalar randomVariate(Random random) {
-    return original.apply(empiricalDistribution.randomVariate(random) //
+    return original.apply(categoricalDistribution.randomVariate(random) //
         .add(DoubleScalar.of(random.nextDouble())));
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    return Expectation.variance(empiricalDistribution).add(RationalScalar.of(1, 12)) //
+    return Expectation.variance(categoricalDistribution).add(RationalScalar.of(1, 12)) //
         .multiply(width).multiply(width);
   }
 

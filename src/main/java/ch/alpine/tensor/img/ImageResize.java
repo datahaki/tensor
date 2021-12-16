@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.List;
@@ -16,7 +17,6 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.ImageFormat;
 import ch.alpine.tensor.itp.MappedInterpolation;
-import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.sca.Round;
 
 /** the general implementation {@link ImageResize#of(Tensor, Scalar)} uses
@@ -28,18 +28,28 @@ import ch.alpine.tensor.sca.Round;
  * @see MappedInterpolation */
 public enum ImageResize {
   ;
+  /** @param bufferedImage
+   * @param width of rescaled image
+   * @param height of rescaled image
+   * @return */
+  public static BufferedImage of(BufferedImage bufferedImage, int width, int height) {
+    int type = bufferedImage.getType() == BufferedImage.TYPE_BYTE_GRAY //
+        ? BufferedImage.TYPE_BYTE_GRAY
+        : BufferedImage.TYPE_INT_ARGB;
+    BufferedImage result = new BufferedImage(width, height, type);
+    Graphics graphics = result.createGraphics();
+    Image image = bufferedImage.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
+    graphics.drawImage(image, 0, 0, null);
+    graphics.dispose();
+    return result;
+  }
+
   /** @param tensor of rank 2 or 3
    * @param dim0 height of image
    * @param dim1 width of image
    * @return */
   public static Tensor of(Tensor tensor, int dim0, int dim1) {
-    boolean gray = MatrixQ.of(tensor);
-    BufferedImage bufferedImage = new BufferedImage(dim1, dim0, gray //
-        ? BufferedImage.TYPE_BYTE_GRAY
-        : BufferedImage.TYPE_INT_ARGB);
-    Image image = ImageFormat.of(tensor).getScaledInstance(dim1, dim0, Image.SCALE_AREA_AVERAGING);
-    bufferedImage.createGraphics().drawImage(image, 0, 0, null);
-    return ImageFormat.from(bufferedImage);
+    return ImageFormat.from(of(ImageFormat.of(tensor), dim1, dim0));
   }
 
   /** Remark: for a factor of one the width and height of the image remain identical

@@ -1,13 +1,14 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
-import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Sign;
@@ -38,7 +39,8 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution imple
    * [0, 1, 2, ..., unscaledPDF.length() - 1]
    * @return
    * @throws Exception if any entry in given unscaledPDF is negative */
-  public static Distribution fromUnscaledPDF(Tensor unscaledPDF) {
+  // TODO currently unscaledPDF may consist of quantity
+  public static CategoricalDistribution fromUnscaledPDF(Tensor unscaledPDF) {
     return new CategoricalDistribution(unscaledPDF);
   }
 
@@ -59,7 +61,12 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution imple
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return (Scalar) pdf.dot(Range.of(0, pdf.length()));
+    AtomicInteger atomicInteger = new AtomicInteger();
+    return pdf.stream() //
+        .map(tensor -> tensor.multiply(RealScalar.of(atomicInteger.getAndIncrement()))) //
+        .reduce(Tensor::add) //
+        .map(Scalar.class::cast) //
+        .orElseThrow();
   }
 
   @Override // from DiscreteDistribution

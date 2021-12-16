@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -55,6 +56,13 @@ public class ImageResizeTest extends TestCase {
   public void testFactorNegativeFail() throws Exception {
     Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
     AssertFail.of(() -> ImageResize.of(tensor, Pi.VALUE.negate()));
+  }
+
+  public void testBufferedImage() {
+    BufferedImage bufferedImage = ImageResize.of(ResourceData.bufferedImage("/io/image/album_au_gray.jpg"), 12, 3);
+    assertEquals(bufferedImage.getWidth(), 12);
+    assertEquals(bufferedImage.getHeight(), 3);
+    assertEquals(bufferedImage.getType(), BufferedImage.TYPE_BYTE_GRAY);
   }
 
   public void testImageResizeGray() {
