@@ -69,19 +69,13 @@ import ch.alpine.tensor.sca.Conjugate;
     int n = Integers.requireEquals(l.length(), b.length());
     Tensor[] x = b.stream().toArray(Tensor[]::new);
     for (int i = 0; i < n; ++i)
-      for (int k = i - 1; 0 <= k; --k) {
-        Tensor mul = x[k].multiply(l.Get(i, k));
-        // x[i] = x[i].subtract(mul.map(Unprotect::zeroDropUnit));
-        x[i] = LenientAdd.of(x[i], mul.negate());
-      }
+      for (int k = i - 1; 0 <= k; --k)
+        x[i] = LenientAdd.of(x[i], x[k].multiply(l.Get(i, k)).negate());
     for (int i = 0; i < n; ++i)
       x[i] = x[i].divide(d.Get(i));
     for (int i = n - 1; 0 <= i; --i)
-      for (int k = i + 1; k < n; ++k) {
-        Tensor mul = x[k].multiply(Conjugate.FUNCTION.apply(l.Get(k, i)));
-        // x[i] = x[i].map(Unprotect::zeroDropUnit).subtract(mul);
-        x[i] = LenientAdd.of(x[i], mul.negate());
-      }
+      for (int k = i + 1; k < n; ++k)
+        x[i] = LenientAdd.of(x[i], x[k].multiply(Conjugate.FUNCTION.apply(l.Get(k, i))).negate());
     return Unprotect.byRef(x);
   }
 
