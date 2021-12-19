@@ -19,14 +19,12 @@ import ch.alpine.tensor.Tensors;
     Iterator<Tensor> iterator = tensor.iterator();
     Tensor ref = iterator.next();
     int arg = 0;
-    int index = 1;
-    while (iterator.hasNext()) {
+    for (int index = 1; iterator.hasNext(); ++index) {
       Tensor cmp = iterator.next();
       if (test(comparator.compare((T) ref, (T) cmp))) {
         ref = cmp;
         arg = index;
       }
-      ++index;
     }
     return arg;
   }
@@ -38,14 +36,12 @@ import ch.alpine.tensor.Tensors;
     Iterator<Tensor> iterator = tensor.iterator();
     T ref = (T) iterator.next();
     int arg = 0;
-    int index = 1;
-    while (iterator.hasNext()) {
+    for (int index = 1; iterator.hasNext(); ++index) {
       T cmp = (T) iterator.next();
       if (test(ref.compareTo(cmp))) {
         ref = cmp;
         arg = index;
       }
-      ++index;
     }
     return arg;
   }

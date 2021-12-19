@@ -51,17 +51,17 @@ public class PadRight extends PadBase {
     super(element, dimensions);
   }
 
-  @Override
+  @Override // from PadBase
   protected Stream<Tensor> trim(Tensor tensor, int dim0) {
     return tensor.stream().limit(dim0);
   }
 
-  @Override
+  @Override // from PadBase
   protected Tensor join(Tensor tensor, Tensor pad) {
     return Join.of(tensor, pad);
   }
 
-  @Override
+  @Override // from PadBase
   protected PadBase get(Tensor element, List<Integer> rest) {
     return new PadRight(element, rest);
   }

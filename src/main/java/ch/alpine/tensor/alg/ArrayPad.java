@@ -7,7 +7,14 @@ import java.util.List;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Lists;
 
-/** inspired by
+/** In order to set a matrix/array as a block within a larger matrix/array one can
+ * simply use the following pattern:
+ * <pre>
+ * Tensor tensor = Array.zeros(8, 8);
+ * tensor.block(Arrays.asList(2, 2), Arrays.asList(4, 4)).set(HilbertMatrix.of(4), Tensor.ALL, Tensor.ALL);
+ * </pre>
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ArrayPad.html">ArrayPad</a> */
 public enum ArrayPad {
   ;
