@@ -36,10 +36,10 @@ public enum LenientAdd {
       Scalar sum = Unprotect.withoutUnit(p).add(Unprotect.withoutUnit(q));
       if (p_zero)
         return q_zero //
-            ? sum // drop both units
-            : Quantity.of(sum, q_unit);
+            ? sum // drop both units 0[m] + 0[s] == 0; 0[m] + 0 == 0
+            : Quantity.of(sum, q_unit); // 0[m] + 3[s] == 3[s]; 0 + 3[s] == 3[s]; 0[m] + 3 == 3
       if (q_zero)
-        return Quantity.of(sum, p_unit);
+        return Quantity.of(sum, p_unit); // 3[m] + 0[s] == 3[m]; 3 + 0[s] == 3; 3[m] + 0 == 3[m]
       throw TensorRuntimeException.of(p, q);
     }
     return p.add(q);

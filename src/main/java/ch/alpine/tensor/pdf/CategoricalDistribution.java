@@ -9,6 +9,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Sign;
@@ -35,11 +36,15 @@ import ch.alpine.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/CategoricalDistribution.html">CategoricalDistribution</a> */
 public class CategoricalDistribution extends EvaluatedDiscreteDistribution implements CDF {
-  /** @param unscaledPDF vector of non-negative weights over the numbers
+  /** Remark:
+   * An entry in the vector unscaledPDF may be an instance of {@link Quantity}.
+   * This is warranted because the i-th entry represents the relative count of
+   * elements of the i-th category. For instance, the count may be 5[Apples].
+   * 
+   * @param unscaledPDF vector of non-negative weights over the numbers
    * [0, 1, 2, ..., unscaledPDF.length() - 1]
    * @return
    * @throws Exception if any entry in given unscaledPDF is negative */
-  // TODO currently unscaledPDF may consist of quantity
   public static CategoricalDistribution fromUnscaledPDF(Tensor unscaledPDF) {
     return new CategoricalDistribution(unscaledPDF);
   }

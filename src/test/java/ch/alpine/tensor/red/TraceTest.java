@@ -1,11 +1,14 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import java.util.Arrays;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -18,8 +21,10 @@ import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.spa.SparseArray;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -62,8 +67,17 @@ public class TraceTest extends TestCase {
   }
 
   public void testIdentityMatrix() {
-    for (int n = 3; n < 8; ++n)
+    for (int n = 3; n < 8; ++n) {
       assertEquals(Trace.of(IdentityMatrix.of(n), 0, 1), RealScalar.of(n));
+      assertEquals(Trace.of(IdentityMatrix.sparse(n), 0, 1), RealScalar.of(n));
+    }
+  }
+
+  public void testSparse() {
+    Tensor tensor = SparseArray.of(Quantity.of(0, "m"), 3, 4, 3);
+    Tensor traced = Trace.of(tensor, 0, 2);
+    assertTrue(traced instanceof SparseArray);
+    assertEquals(Dimensions.of(traced), Arrays.asList(4));
   }
 
   public void testMatrix1X1() {

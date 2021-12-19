@@ -66,7 +66,7 @@ public enum ImageResize {
 
   /** @param tensor of rank 2 or 3
    * @param dimension
-   * @return */
+   * @return tensor that is a resized version of given tensor to given dimension */
   public static Tensor of(Tensor tensor, Dimension dimension) {
     return of(tensor, dimension.height, dimension.width);
   }
