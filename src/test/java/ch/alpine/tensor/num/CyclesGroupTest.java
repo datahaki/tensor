@@ -18,9 +18,9 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.RotateLeft;
+import ch.alpine.tensor.ext.ArgMin;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.red.ArgMin;
 import junit.framework.TestCase;
 
 public class CyclesGroupTest extends TestCase {

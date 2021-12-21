@@ -1,6 +1,7 @@
 // code by jph
-package ch.alpine.tensor.red;
+package ch.alpine.tensor.ext;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 import ch.alpine.tensor.RealScalar;
@@ -17,6 +18,11 @@ public class ArgMaxTest extends TestCase {
   public void testDocumentation() {
     assertEquals(ArgMax.of(Tensors.vector(3, 4, 2, 0, 3)), 1);
     assertEquals(ArgMax.of(Tensors.vector(4, 3, 2, 4, 3)), 0);
+  }
+
+  public void testInteger() {
+    assertEquals(ArgMax.of(Arrays.asList(3, 4, 2, 0, 3)), 1);
+    assertEquals(ArgMax.of(Arrays.asList(4, 3, 2, 4, 3)), 0);
   }
 
   public void testConvention() {

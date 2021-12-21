@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.red;
+package ch.alpine.tensor.ext;
 
 import java.util.Collections;
 
