@@ -30,9 +30,8 @@ public class ArgMaxTest extends TestCase {
     assertEquals(ArgMax.EMPTY, -1);
   }
 
-  public void testEmpty1() {
-    assertEquals(ArgMin.EMPTY, ArgMin.of(Tensors.empty(), null));
-    assertEquals(ArgMax.EMPTY, ArgMax.of(Tensors.empty(), null));
+  public void testComparatorNullFail() {
+    AssertFail.of(() -> ArgMax.of(Tensors.empty(), null));
   }
 
   public void testEmpty2() {
