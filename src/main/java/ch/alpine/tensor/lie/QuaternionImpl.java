@@ -110,7 +110,7 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from Scalar
   public Scalar one() {
-    return new QuaternionImpl(w.one(), xyz.map(Scalar::zero));
+    return new QuaternionImpl(w.one(), xyz.map(Scalar::one).map(Scalar::zero));
   }
 
   @Override // from Scalar

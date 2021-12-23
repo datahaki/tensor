@@ -6,6 +6,7 @@ import java.util.List;
 
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Numel;
+import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -110,6 +111,16 @@ public class TensorTest extends TestCase {
     Tensors.vector(1, 2, 3, 4, 5, 6).extract(6, 6);
     AssertFail.of(() -> Tensors.vector(1, 2, 3, 4, 5, 6).extract(3, 7));
     AssertFail.of(() -> Tensors.vector(1, 2, 3, 4, 5, 6).extract(7, 6));
+  }
+
+  public void testBlockSerFail() {
+    Tensor tensor = Tensors.vectorLong(1, 2, 6).block(Arrays.asList(0), Arrays.asList(3));
+    try {
+      Serialization.copy(tensor);
+      fail();
+    } catch (Exception exception) {
+      // ---
+    }
   }
 
   public void testScalarStream() {

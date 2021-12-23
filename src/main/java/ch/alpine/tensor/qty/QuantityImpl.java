@@ -192,6 +192,7 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from ArgInterface
   public Scalar arg() {
+    // TODO check if the return value should be without unit!
     return ofUnit(Arg.FUNCTION.apply(value));
   }
 

@@ -2,16 +2,17 @@
 package ch.alpine.tensor.ext;
 
 import java.util.Comparator;
+import java.util.Objects;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ArgMin.html">ArgMin</a> */
-public class ArgMin extends ArgBase {
-  /** @param iterable
+public class ArgMin<T> extends ArgBase<T> {
+  /** @param iterable for instance instance of list
    * @param comparator
    * @return index of minimum entry in iterable according to comparator,
    * or -1 if iterable is empty */
   public static <T> int of(Iterable<T> iterable, Comparator<T> comparator) {
-    return new ArgMin().find(iterable, comparator);
+    return new ArgMin<T>().find(iterable, Objects.requireNonNull(comparator));
   }
 
   /** Examples:
@@ -20,10 +21,10 @@ public class ArgMin extends ArgBase {
    * ArgMin.of({1, 4, 1, 2, 3}) == 0
    * </pre>
    * 
-   * @param iterable
+   * @param iterable for instance instance of list
    * @return index of minimum entry in iterable, or -1 if iterable is empty */
   public static <T> int of(Iterable<T> iterable) {
-    return new ArgMin().find(iterable);
+    return new ArgMin<T>().find(iterable);
   }
 
   private ArgMin() {

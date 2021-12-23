@@ -5,11 +5,14 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.function.IntPredicate;
 
-/* package */ abstract class ArgBase implements IntPredicate {
+/* package */ abstract class ArgBase<T> implements IntPredicate {
   /** -1 is the Java standard, see also {@link String#indexOf(int)} */
   public static final int EMPTY = -1;
 
-  public <T> int find(Iterable<T> iterable, Comparator<T> comparator) {
+  /** @param iterable
+   * @param comparator
+   * @return */
+  public int find(Iterable<T> iterable, Comparator<T> comparator) {
     Iterator<T> iterator = iterable.iterator();
     if (!iterator.hasNext())
       return EMPTY;
@@ -25,8 +28,10 @@ import java.util.function.IntPredicate;
     return arg;
   }
 
+  /** @param iterable
+   * @return */
   @SuppressWarnings("unchecked")
-  public <T> int find(Iterable<T> iterable) {
+  public int find(Iterable<T> iterable) {
     Iterator<T> iterator = iterable.iterator();
     if (!iterator.hasNext())
       return EMPTY;

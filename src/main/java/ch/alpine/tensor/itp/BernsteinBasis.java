@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -29,7 +30,8 @@ public enum BernsteinBasis {
    * @param p typically in the unit interval [0, 1] but the evaluation is not
    * restricted to any range
    * @return vector of length n + 1
-   * @throws Exception if n is negative */
+   * @throws Exception if n is negative
+   * @throws Exception if p is not an instance of {@link RealScalar} */
   public static Tensor of(int n, Scalar p) {
     Integers.requirePositiveOrZero(n);
     boolean reverse = Scalars.lessThan(RationalScalar.HALF, p);
