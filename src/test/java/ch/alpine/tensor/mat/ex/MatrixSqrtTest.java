@@ -9,6 +9,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.mat.DiagonalMatrix;
+import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -47,9 +48,10 @@ public class MatrixSqrtTest extends TestCase {
   }
 
   public void testTrapezoidalNormal() {
+    Random random = new Random(1);
     Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
     for (int n = 1; n < 7; ++n) {
-      Tensor x = RandomVariate.of(distribution, n, n);
+      Tensor x = RandomVariate.of(distribution, random, n, n);
       Tensor x2 = x.dot(x);
       _check(x2, MatrixSqrt.of(x2));
     }
@@ -76,8 +78,11 @@ public class MatrixSqrtTest extends TestCase {
   }
 
   public void testRandomSymmetricQuantity() {
+    Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(0.2, "m"));
+    Random random = new Random(1);
     for (int n = 1; n < 5; ++n) {
-      Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.of(0, 0.2), n, n)).map(s -> Quantity.of(s, "m"));
+      Tensor matrix = RandomVariate.of(distribution, random, n, n);
+      Tensor x = Symmetrize.of(matrix);
       Tensor x2 = x.dot(x);
       _check(x2, MatrixSqrt.ofSymmetric(x2));
     }
@@ -112,6 +117,7 @@ public class MatrixSqrtTest extends TestCase {
 
   public void testNonSquareFail() {
     AssertFail.of(() -> MatrixSqrt.of(RandomVariate.of(UniformDistribution.of(-2, 2), 2, 3)));
+    AssertFail.of(() -> MatrixSqrt.of(HilbertMatrix.of(2, 3)));
   }
 
   public void testNonSymmetricFail() {

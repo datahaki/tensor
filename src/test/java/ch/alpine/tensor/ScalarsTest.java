@@ -11,6 +11,12 @@ import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class ScalarsTest extends TestCase {
+  public void testRequireZero() {
+    assertEquals(Scalars.requireZero(Quantity.of(0, "A")), Quantity.of(0, "A"));
+    AssertFail.of(() -> Scalars.requireZero(Quantity.of(1, "A")));
+    AssertFail.of(() -> Scalars.requireZero(RealScalar.ONE));
+  }
+
   void checkInvariant(String string, Class<?> myclass) {
     Scalar s = Scalars.fromString(string);
     Scalar t = Scalars.fromString(s.toString());

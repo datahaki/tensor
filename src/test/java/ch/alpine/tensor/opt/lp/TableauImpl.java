@@ -16,9 +16,9 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Partition;
 import ch.alpine.tensor.alg.TensorMap;
+import ch.alpine.tensor.ext.ArgMax;
+import ch.alpine.tensor.ext.ArgMin;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.red.ArgMax;
-import ch.alpine.tensor.red.ArgMin;
 import ch.alpine.tensor.sca.Sign;
 
 /* package */ class TableauImpl {

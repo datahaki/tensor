@@ -1,17 +1,10 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Range;
-import ch.alpine.tensor.alg.Subsets;
-import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -40,70 +33,6 @@ public class QuantityTensorTest extends TestCase {
     Tensor nuvec = QuantityTensor.of(vector, Unit.of("m*s^-1"));
     assertEquals(nuvec, //
         Tensors.fromString("{2[m*s^-1], 3.0[m * s^+1 * s^-2], -1.0[s^-1 * m]}"));
-  }
-
-  private static void _checkAssociativity(Tensor tensor) {
-    for (int k = 2; k <= tensor.length(); ++k) {
-      for (Tensor subset : Subsets.of(tensor, k)) {
-        Set<String> set = new HashSet<>();
-        for (Tensor perm : Permutations.of(Range.of(0, subset.length()))) {
-          Scalar scalar = perm.stream() //
-              .map(Scalar.class::cast) //
-              .map(Scalar::number) //
-              .mapToInt(Number::intValue) //
-              .mapToObj(subset::Get) //
-              .reduce(Scalar::add).get();
-          set.add(scalar.toString());
-        }
-        if (set.size() != 1) {
-          System.out.println(subset);
-          System.out.println(set);
-          fail();
-        }
-      }
-    }
-  }
-
-  public void testZeroAssociativity() {
-    _checkAssociativity(Tensors.fromString("{0[A], 0[B], 0[C], 0}"));
-    _checkAssociativity(Tensors.fromString("{0.0[A], 0[B], 0.0[C], 0, 0.0}"));
-  }
-
-  public void testComplexAssociativity() {
-    _checkAssociativity(Tensors.of( //
-        Quantity.of(ComplexScalar.of(2, 7), "m"), //
-        Quantity.of(ComplexScalar.of(3, 1), "m"), //
-        RealScalar.of(0), //
-        RealScalar.of(0.0)));
-  }
-
-  private static void _checkAssociativity(Scalar prep, Tensor tensor) {
-    for (int k = 1; k <= tensor.length(); ++k) {
-      for (Tensor _subset : Subsets.of(tensor, k)) {
-        Tensor subset = _subset.copy().append(prep);
-        Set<String> set = new HashSet<>();
-        for (Tensor perm : Permutations.of(Range.of(0, subset.length()))) {
-          Scalar scalar = perm.stream() //
-              .map(Scalar.class::cast) //
-              .map(Scalar::number) //
-              .mapToInt(Number::intValue) //
-              .mapToObj(subset::Get) //
-              .reduce(Scalar::add).get();
-          set.add(scalar.toString());
-        }
-        if (set.size() != 1) {
-          System.out.println(subset);
-          System.out.println(set);
-          fail();
-        }
-      }
-    }
-  }
-
-  public void testMixAssociativity() {
-    _checkAssociativity(Quantity.of(3, "m"), Tensors.fromString("{0[A], 0[B], 0[C], 0}"));
-    _checkAssociativity(Quantity.of(3, "m"), Tensors.fromString("{0.0[A], 0[B], 0, 0.0}"));
-    _checkAssociativity(Quantity.of(ComplexScalar.of(3, 1), "m"), Tensors.fromString("{0.0[A], 0[B], 0, 0.0}"));
   }
 
   public void testFail() {

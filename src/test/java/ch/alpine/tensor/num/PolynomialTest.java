@@ -15,6 +15,8 @@ import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Mod;
@@ -112,6 +114,86 @@ public class PolynomialTest extends TestCase {
   public void testDerivativeEmpty() {
     assertEquals(Polynomial.derivative_coeffs(Tensors.vector()), Tensors.vector());
     assertEquals(Polynomial.derivative_coeffs(Tensors.vector(3)), Tensors.empty());
+  }
+
+  public void testDerLinEx() {
+    Tensor coeffs = Tensors.fromString("{-13[bar], 0.27[K^-1*bar]}");
+    ScalarUnaryOperator polynomial = Polynomial.of(coeffs);
+    assertEquals(QuantityUnit.of(polynomial.apply(Quantity.of(3, "K"))), Unit.of("bar"));
+    Tensor coeffs_d1 = Polynomial.derivative_coeffs(coeffs);
+    assertEquals(coeffs_d1, Tensors.fromString("{0.27[K^-1*bar], 0.0[K^-2*bar]}"));
+    ScalarUnaryOperator derivative = Polynomial.of(coeffs_d1);
+    assertEquals(QuantityUnit.of(derivative.apply(Quantity.of(3, "K"))), Unit.of("bar*K^-1"));
+    AssertFail.of(() -> derivative.apply(Quantity.of(3, "bar")));
+  }
+
+  public void testDerivativeLinear() {
+    Tensor coeffs = Tensors.of(Quantity.of(3, "m"), Quantity.of(2, "m*s^-1"));
+    Scalar position = Polynomial.of(coeffs).apply(Quantity.of(10, "s"));
+    assertEquals(position, Quantity.of(23, "m"));
+    Tensor coeffs_d1 = Polynomial.derivative_coeffs(coeffs);
+    {
+      assertEquals(coeffs_d1, Tensors.fromString("{2[m*s^-1], 0[m*s^-2]}"));
+      ExactTensorQ.require(coeffs_d1);
+      ScalarUnaryOperator d1 = Polynomial.of(coeffs_d1);
+      AssertFail.of(() -> d1.apply(Quantity.of(4, "A")));
+      assertEquals(d1.apply(Quantity.of(4, "s")), Quantity.of(2, "m*s^-1"));
+    }
+    Tensor coeffs_d2 = Polynomial.derivative_coeffs(coeffs_d1);
+    {
+      assertEquals(coeffs_d2, Tensors.fromString("{0[m*s^-2], 0[m*s^-3]}"));
+      ExactTensorQ.require(coeffs_d2);
+      ScalarUnaryOperator d2 = Polynomial.of(coeffs_d2);
+      AssertFail.of(() -> d2.apply(Quantity.of(4, "A")));
+      assertEquals(d2.apply(Quantity.of(4, "s")), Quantity.of(0, "m*s^-2"));
+    }
+  }
+
+  public void testDerivativeGaussScalar() {
+    GaussScalar a = GaussScalar.of(3, 17);
+    GaussScalar b = GaussScalar.of(4, 17);
+    GaussScalar x = GaussScalar.of(5, 17);
+    Tensor coeffs = Tensors.of(a, b);
+    Scalar position = Polynomial.of(coeffs).apply(x);
+    assertEquals(position, GaussScalar.of(6, 17));
+    Tensor coeffs_d1 = Polynomial.derivative_coeffs(coeffs);
+    {
+      assertEquals(coeffs_d1, Tensors.of(b, b.zero()));
+      ExactTensorQ.require(coeffs_d1);
+      ScalarUnaryOperator d1 = Polynomial.of(coeffs_d1);
+      AssertFail.of(() -> d1.apply(Quantity.of(4, "A")));
+      assertEquals(d1.apply(x), b);
+    }
+    Tensor coeffs_d2 = Polynomial.derivative_coeffs(coeffs_d1);
+    {
+      assertEquals(coeffs_d2, Tensors.of(b.zero(), b.zero()));
+      ExactTensorQ.require(coeffs_d2);
+      ScalarUnaryOperator d2 = Polynomial.of(coeffs_d2);
+      AssertFail.of(() -> d2.apply(Quantity.of(4, "A")));
+      assertEquals(d2.apply(x), b.zero());
+    }
+  }
+
+  public void testDerivativeQuadr() {
+    Tensor coeffs = Tensors.of(Quantity.of(3, "m"), Quantity.of(2, "m*s^-2"));
+    Scalar position = Polynomial.of(coeffs).apply(Quantity.of(10, "s^2"));
+    assertEquals(position, Quantity.of(23, "m"));
+    Tensor coeffs_d1 = Polynomial.derivative_coeffs(coeffs);
+    {
+      assertEquals(coeffs_d1, Tensors.fromString("{2[m*s^-2], 0[m*s^-4]}"));
+      ExactTensorQ.require(coeffs_d1);
+      ScalarUnaryOperator d1 = Polynomial.of(coeffs_d1);
+      AssertFail.of(() -> d1.apply(Quantity.of(4, "A")));
+      assertEquals(d1.apply(Quantity.of(4, "s^2")), Quantity.of(2, "m*s^-2"));
+    }
+    Tensor coeffs_d2 = Polynomial.derivative_coeffs(coeffs_d1);
+    {
+      assertEquals(coeffs_d2, Tensors.fromString("{0[m*s^-4], 0[m*s^-6]}"));
+      ExactTensorQ.require(coeffs_d2);
+      ScalarUnaryOperator d2 = Polynomial.of(coeffs_d2);
+      AssertFail.of(() -> d2.apply(Quantity.of(4, "A")));
+      assertEquals(d2.apply(Quantity.of(4, "s^2")), Quantity.of(0, "m*s^-4"));
+    }
   }
 
   public void testEmptyFail() {

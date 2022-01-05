@@ -81,6 +81,7 @@ public class EigensystemTest extends TestCase {
           Array.zeros(n - 4)).map(s -> Quantity.of(s, "m"));
       Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
       Tensor matrix = Transpose.of(x).dot(Times.of(v, x));
+      // System.out.println(Pretty.of(matrix.map(Round._1)));
       assertEquals(MatrixRank.of(matrix), r);
       Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
       eigensystem.values().map(QuantityMagnitude.singleton("m"));

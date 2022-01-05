@@ -3,8 +3,11 @@ package ch.alpine.tensor.lie.ad;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
+import java.util.function.BinaryOperator;
 
 import ch.alpine.tensor.ExactTensorQ;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -17,6 +20,7 @@ import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.red.KroneckerDelta;
+import ch.alpine.tensor.spa.SparseArray;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -106,6 +110,20 @@ public class BakerCampbellHausdorffTest extends TestCase {
 
   public void testSo3() {
     _check(LieAlgebras.so3());
+  }
+
+  public void testSparse() {
+    CliffordAlgebra cliffordAlgebra = CliffordAlgebra.of(1, 2);
+    Tensor cp = cliffordAlgebra.cp();
+    assertTrue(cp instanceof SparseArray);
+    BinaryOperator<Tensor> binaryOperator = BakerCampbellHausdorff.of(cp, 3);
+    int n = cp.length();
+    Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
+    Random random = new Random(1234);
+    Tensor x = RandomVariate.of(distribution, random, n).divide(RealScalar.of(20));
+    Tensor y = RandomVariate.of(distribution, random, n).divide(RealScalar.of(20));
+    Tensor apply = binaryOperator.apply(x, y);
+    ExactTensorQ.require(apply);
   }
 
   public void testJacobiFail() throws ClassNotFoundException, IOException {

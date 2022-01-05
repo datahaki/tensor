@@ -12,6 +12,7 @@ import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.red.LenientAdd;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 
@@ -69,12 +70,12 @@ import ch.alpine.tensor.sca.Conjugate;
     Tensor[] x = b.stream().toArray(Tensor[]::new);
     for (int i = 0; i < n; ++i)
       for (int k = i - 1; 0 <= k; --k)
-        x[i] = x[i].subtract(x[k].multiply(l.Get(i, k)));
+        x[i] = LenientAdd.of(x[i], x[k].multiply(l.Get(i, k)).negate());
     for (int i = 0; i < n; ++i)
       x[i] = x[i].divide(d.Get(i));
     for (int i = n - 1; 0 <= i; --i)
       for (int k = i + 1; k < n; ++k)
-        x[i] = x[i].subtract(x[k].multiply(Conjugate.FUNCTION.apply(l.Get(k, i))));
+        x[i] = LenientAdd.of(x[i], x[k].multiply(Conjugate.FUNCTION.apply(l.Get(k, i))).negate());
     return Unprotect.byRef(x);
   }
 

@@ -26,20 +26,20 @@ public class EqualizingDistribution implements ContinuousDistribution, Serializa
   }
 
   // ---
-  private final CategoricalDistribution empiricalDistribution;
+  private final CategoricalDistribution categoricalDistribution;
 
   private EqualizingDistribution(Tensor unscaledPDF) {
-    empiricalDistribution = (CategoricalDistribution) CategoricalDistribution.fromUnscaledPDF(unscaledPDF);
+    categoricalDistribution = CategoricalDistribution.fromUnscaledPDF(unscaledPDF);
   }
 
   @Override // from PDF
   public Scalar at(Scalar x) {
-    return empiricalDistribution.at(Floor.FUNCTION.apply(x));
+    return categoricalDistribution.at(Floor.FUNCTION.apply(x));
   }
 
   @Override // from MeanInterface
   public Scalar mean() {
-    return empiricalDistribution.mean().add(RationalScalar.HALF);
+    return categoricalDistribution.mean().add(RationalScalar.HALF);
   }
 
   @Override // from CDF
@@ -47,8 +47,8 @@ public class EqualizingDistribution implements ContinuousDistribution, Serializa
     Scalar xlo = Floor.FUNCTION.apply(x);
     Scalar ofs = Clips.interval(xlo, RealScalar.ONE.add(xlo)).rescale(x);
     return LinearInterpolation.of(Tensors.of( //
-        empiricalDistribution.p_lessThan(xlo), //
-        empiricalDistribution.p_lessEquals(xlo))).At(ofs);
+        categoricalDistribution.p_lessThan(xlo), //
+        categoricalDistribution.p_lessEquals(xlo))).At(ofs);
   }
 
   @Override // from CDF
@@ -58,24 +58,24 @@ public class EqualizingDistribution implements ContinuousDistribution, Serializa
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
-    Scalar x_floor = empiricalDistribution.quantile(p);
+    Scalar x_floor = categoricalDistribution.quantile(p);
     return x_floor.add(Clips.interval( //
-        empiricalDistribution.p_lessThan(x_floor), //
-        empiricalDistribution.p_lessEquals(x_floor)).rescale(p));
+        categoricalDistribution.p_lessThan(x_floor), //
+        categoricalDistribution.p_lessEquals(x_floor)).rescale(p));
   }
 
   @Override // from RandomVariateInterface
   public Scalar randomVariate(Random random) {
-    return empiricalDistribution.randomVariate(random).add(DoubleScalar.of(random.nextDouble()));
+    return categoricalDistribution.randomVariate(random).add(DoubleScalar.of(random.nextDouble()));
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    return Expectation.variance(empiricalDistribution).add(RationalScalar.of(1, 12));
+    return Expectation.variance(categoricalDistribution).add(RationalScalar.of(1, 12));
   }
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), empiricalDistribution);
+    return String.format("%s[%s]", getClass().getSimpleName(), categoricalDistribution);
   }
 }

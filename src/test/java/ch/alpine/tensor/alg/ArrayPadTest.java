@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -35,6 +36,12 @@ public class ArrayPadTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
     Tensor vector = ArrayPad.of(tensor, Arrays.asList(2), Arrays.asList(3));
     assertEquals(vector.length(), 2 + 2 + 3);
+  }
+
+  public void testArrayAlternative() {
+    Tensor tensor = Array.zeros(8, 8);
+    tensor.block(Arrays.asList(2, 2), Arrays.asList(4, 4)).set(HilbertMatrix.of(4), Tensor.ALL, Tensor.ALL);
+    assertEquals(Dimensions.of(tensor), Arrays.asList(8, 8));
   }
 
   public void testFail() {

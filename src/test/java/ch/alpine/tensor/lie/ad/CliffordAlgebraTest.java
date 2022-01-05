@@ -42,7 +42,7 @@ import junit.framework.TestCase;
 
 public class CliffordAlgebraTest extends TestCase {
   private static final int MAX_SIZE = 12;
-  private final Cache<List<Integer>, CliffordAlgebra> CACHE = Cache.of(list -> {
+  private static final Cache<List<Integer>, CliffordAlgebra> CACHE = Cache.of(list -> {
     int p = list.get(0);
     int q = list.get(1);
     if (q == 0)
@@ -52,7 +52,7 @@ public class CliffordAlgebraTest extends TestCase {
     return CliffordAlgebra.of(p, q);
   }, MAX_SIZE);
 
-  private CliffordAlgebra _of(int p, int q) {
+  private static CliffordAlgebra _of(int p, int q) {
     return CACHE.apply(Arrays.asList( //
         Integers.requirePositiveOrZero(p), //
         Integers.requirePositiveOrZero(q)));
@@ -60,13 +60,13 @@ public class CliffordAlgebraTest extends TestCase {
 
   /** @param p non-negative
    * @return Cl(p, 0) */
-  private CliffordAlgebra _positive(int p) {
+  private static CliffordAlgebra _positive(int p) {
     return _of(p, 0);
   }
 
   /** @param q non-negative
    * @return Cl(0, q) */
-  private CliffordAlgebra _negative(int q) {
+  private static CliffordAlgebra _negative(int q) {
     return _of(0, q);
   }
 

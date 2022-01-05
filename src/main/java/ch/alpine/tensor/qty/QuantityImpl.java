@@ -29,10 +29,33 @@ import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.Sqrt;
 
-/** Mathematica does not resolve
- * Quantity[1, "Amperes"] + Quantity[0, "Meters"]
- * but the tensor library gives the result
- * Quantity[1, "Amperes"]
+/** The addition of quantities with different units is not resolved by Mathematica.
+ * 
+ * Mathematica 12 does not resolve
+ * Quantity[1, "Meters"] + Quantity[1, "Seconds"]
+ * Quantity[1, "Meters"] + Quantity[0, "Seconds"]
+ * Quantity[0, "Meters"] + Quantity[0, "Seconds"]
+ * 
+ * Consequently the tensor library also throws an exception when quantities
+ * of unequal unit are added. That is even the case, when the magnitude of both
+ * quantities is zero:
+ * <pre>
+ * Quantity[0, "Meters"] + Quantity[0, "Seconds"]
+ * </pre>
+ * 
+ * The tensor library throws an exception whenever two quantities are added that
+ * have different units. This also holds when one of the units is {@link Unit#ONE}.
+ * 
+ * For instance
+ * <pre>
+ * Quantity[0, "Meters"] + 0 throws an Exception.
+ * </pre>
+ * 
+ * Careful: Mathematica 12 resolves
+ * <pre>
+ * Quantity[1, "Meters"] + 0 == Quantity[1, "Meters"]
+ * Quantity[0, "Meters"] + 0 == Quantity[0, "Meters"]
+ * </pre>
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
@@ -48,6 +71,8 @@ import ch.alpine.tensor.sca.Sqrt;
   }
 
   // ---
+  /** @param scalar not instance of Quantity
+   * @return Quantity[scalar, this.unit] */
   private Quantity ofUnit(Scalar scalar) {
     return new QuantityImpl(scalar, unit);
   }
@@ -141,10 +166,6 @@ import ch.alpine.tensor.sca.Sqrt;
       if (unit.equals(quantity.unit()))
         return ofUnit(value.add(quantity.value()));
     }
-    if (Scalars.isZero(value))
-      return scalar.add(value);
-    if (Scalars.isZero(scalar))
-      return ofUnit(scalar.add(value));
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -171,6 +192,7 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from ArgInterface
   public Scalar arg() {
+    // TODO check if the return value should be without unit!
     return ofUnit(Arg.FUNCTION.apply(value));
   }
 

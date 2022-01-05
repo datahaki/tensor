@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.cd;
 
+import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -32,6 +33,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.LenientAdd;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
@@ -168,20 +170,23 @@ public class CholeskyDecompositionTest extends TestCase {
       Tensor eye = IdentityMatrix.of(3);
       Tensor inv = LinearSolve.of(matrix, eye);
       Tensor res = matrix.dot(inv);
-      Chop.NONE.requireClose(eye, res);
+      Tensor expect = Tensors.fromString("{{1, 0[m*rad^-1], 0[kg^-1*m]}, {0[m^-1*rad], 1, 0[kg^-1*rad]}, {0[kg*m^-1], 0[kg*rad^-1], 1}}");
+      assertEquals(res, expect);
     }
+    CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
     {
-      Tensor inv = Inverse.of(matrix);
-      Chop.NONE.requireClose(matrix.dot(inv), inv.dot(matrix));
-      Chop.NONE.requireClose(matrix.dot(inv), IdentityMatrix.of(3));
-    }
-    {
-      CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
       assertEquals(Det.of(matrix), cd.det()); // 100[kg^2, m^2, rad^2]
       Tensor lower = rows_pmul_v(cd.getL(), Sqrt.of(cd.diagonal()));
       Tensor upper = Times.of(Sqrt.of(cd.diagonal()), ConjugateTranspose.of(cd.getL()));
-      Tensor res = lower.dot(upper);
+      Tensor res = Tensors.matrix((i, j) -> Times.of(lower.get(i), upper.get(Tensor.ALL, j)).stream().reduce(LenientAdd::of).orElseThrow(), 3, 3);
       Chop._10.requireClose(matrix, res);
+    }
+    {
+      Tensor lower = rows_pmul_v(cd.getL(), cd.diagonal());
+      Tensor upper = ConjugateTranspose.of(cd.getL());
+      Tensor res = Tensors.matrix((i, j) -> Times.of(lower.get(i), upper.get(Tensor.ALL, j)).stream().reduce(LenientAdd::of).orElseThrow(), 3, 3);
+      ExactTensorQ.require(res);
+      assertEquals(res, matrix);
     }
     SymmetricMatrixQ.require(matrix);
     assertTrue(HermitianMatrixQ.of(matrix));
@@ -195,27 +200,27 @@ public class CholeskyDecompositionTest extends TestCase {
     return TensorMap.of(row -> Times.of(row, diag), L, 1); // apply pmul on level 1
   }
 
+  /** Mathematica fails to compute L'.L
+   * A = {{Quantity[10, "Meters"^2], Quantity[I, "Kilograms"*"Meters"]}, {Quantity[-I,
+   * "Kilograms"*"Meters"], Quantity[10, "Kilograms"^2]}}
+   * L = CholeskyDecomposition[A]
+   * ConjugateTranspose[L] . L */
   public void testQuantityComplex() {
     Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
+    // System.out.println(MathematicaForm.of(matrix));
     CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
     Tensor sdiag = Sqrt.of(cd.diagonal());
-    Tensor upper = Times.of(sdiag, ConjugateTranspose.of(cd.getL()));
+    Times.of(sdiag, ConjugateTranspose.of(cd.getL()));
     {
-      Tensor res = ConjugateTranspose.of(upper).dot(upper);
-      Chop._10.requireClose(matrix, res);
+      Tensor lower = rows_pmul_v(cd.getL(), cd.diagonal());
+      Tensor upper = ConjugateTranspose.of(cd.getL());
+      Tensor res = Tensors.matrix((i, j) -> Times.of(lower.get(i), upper.get(Tensor.ALL, j)).stream().reduce(LenientAdd::of).orElseThrow(), 2, 2);
+      ExactTensorQ.require(res);
+      assertEquals(res, matrix);
     }
-    {
-      // the construction of the lower triangular matrix L . L* is not so convenient
-      // Tensor lower = Transpose.of(sdiag.pmul(Transpose.of(cd.getL())));
-      Tensor lower = rows_pmul_v(cd.getL(), sdiag);
-      Tensor res = lower.dot(upper);
-      Chop._10.requireClose(matrix, res);
-    }
-    {
-      assertEquals( //
-          cd.solve(IdentityMatrix.of(2)), //
-          Inverse.of(matrix));
-    }
+    assertEquals( //
+        cd.solve(IdentityMatrix.of(2)), //
+        Inverse.of(matrix));
   }
 
   public void testRankDeficient() {

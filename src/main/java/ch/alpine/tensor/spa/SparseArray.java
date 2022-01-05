@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.AbstractTensor;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
@@ -39,18 +40,17 @@ import ch.alpine.tensor.ext.MergeIllegal;
 public class SparseArray extends AbstractTensor implements Serializable {
   /** @param fallback zero element, for instance {@link RealScalar#ZERO}
    * @param dimensions with non-negative values
-   * @return empty sparse array with given dimensions
+   * @return empty sparse array with given dimensions, or fallback if no dimensions are specified
    * @throws Exception if fallback element is not zero */
   public static Tensor of(Scalar fallback, int... dimensions) {
+    Scalars.requireZero(fallback);
     return dimensions.length == 0 //
         ? fallback
-        : new SparseArray(StaticHelper.checkFallback(fallback), //
+        : new SparseArray(fallback, //
             Integers.asList(IntStream.of(dimensions).map(Integers::requirePositiveOrZero).toArray()));
   }
 
-  // TODO Mathematica allows Quantity[0, "m"] as fallback and returns Normal[result] in
-  // ... case calculation does not result in unique fallback.
-  // ---
+  // TODO Mathematica returns Normal[result] in case calculation does not result in unique fallback
   private final Scalar fallback;
   /** the content of size is not modified by sparse array */
   private final List<Integer> size;
@@ -217,13 +217,13 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor multiply(Scalar scalar) {
-    return new SparseArray(StaticHelper.checkFallback(fallback.multiply(scalar)), size, //
+    return new SparseArray(Scalars.requireZero(fallback.multiply(scalar)), size, //
         navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().multiply(scalar))));
   }
 
   @Override // from Tensor
   public Tensor divide(Scalar scalar) {
-    return new SparseArray(StaticHelper.checkFallback(fallback.divide(scalar)), size, //
+    return new SparseArray(Scalars.requireZero(fallback.divide(scalar)), size, //
         navigableMap.entrySet().stream().collect(_map(Entry::getKey, entry -> entry.getValue().divide(scalar))));
   }
 
@@ -328,12 +328,6 @@ public class SparseArray extends AbstractTensor implements Serializable {
     return this;
   }
 
-  private static <T> Collector<T, ?, NavigableMap<Integer, Tensor>> _map( //
-      Function<? super T, Integer> keyMapper, //
-      Function<? super T, Tensor> valueMapper) {
-    return Collectors.toMap(keyMapper, valueMapper, MergeIllegal.operator(), TreeMap::new);
-  }
-
   /** @param index
    * @return index
    * @throws Exception if given index is negative or greater equals to length() */
@@ -341,5 +335,11 @@ public class SparseArray extends AbstractTensor implements Serializable {
     if (0 <= index && index < length())
       return index;
     throw new IllegalArgumentException("index=" + index + " length=" + length());
+  }
+
+  private static <T> Collector<T, ?, NavigableMap<Integer, Tensor>> _map( //
+      Function<? super T, Integer> keyMapper, //
+      Function<? super T, Tensor> valueMapper) {
+    return Collectors.toMap(keyMapper, valueMapper, MergeIllegal.operator(), TreeMap::new);
   }
 }

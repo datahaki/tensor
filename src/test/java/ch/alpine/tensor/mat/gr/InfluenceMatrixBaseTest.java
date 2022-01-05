@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.mat.gr;
 
+import java.util.Random;
+
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -25,19 +27,20 @@ import junit.framework.TestCase;
 
 public class InfluenceMatrixBaseTest extends TestCase {
   public void testExactRankDefficient() {
+    Random random = new Random(3);
     int n = 7;
     int _m = 5;
     Distribution distribution = DiscreteUniformDistribution.of(-20, 20);
     for (int count = 0; count < 10; ++count)
       for (int r = 1; r < _m - 1; ++r) {
-        Tensor m1 = RandomVariate.of(distribution, n, r).map(s -> Quantity.of(s, "m"));
-        Tensor m2 = RandomVariate.of(distribution, r, _m);
+        Tensor m1 = RandomVariate.of(distribution, random, n, r).map(s -> Quantity.of(s, "m"));
+        Tensor m2 = RandomVariate.of(distribution, random, r, _m);
         Tensor design = m1.dot(m2);
         ExactTensorQ.require(design);
         InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
         SymmetricMatrixQ.require(influenceMatrix.matrix());
         influenceMatrix.residualMaker();
-        Tensor vector = RandomVariate.of(distribution, n);
+        Tensor vector = RandomVariate.of(distribution, random, n);
         Tensor image = influenceMatrix.image(vector);
         VectorQ.requireLength(image, vector.length());
         Chop._10.requireClose(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(r));

@@ -6,6 +6,7 @@ import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
@@ -34,7 +35,24 @@ public class NormalizeUnlessZeroTest extends TestCase {
     Tensor one = Tensors.of(Quantity.of(2, "m"));
     assertEquals(tuo.apply(one), Tensors.vector(1));
     Tensor zer = Tensors.of(Quantity.of(0, "m"));
-    zer.length();
-    // System.out.println(tuo.apply(zer));
+    assertEquals(tuo.apply(zer), Array.zeros(1));
+  }
+
+  public void testUnitless() {
+    TensorUnaryOperator tuo = NormalizeUnlessZero.with(Vector2Norm::of);
+    Tensor one = Tensors.of(Quantity.of(0, "m"), Quantity.of(0, "m"));
+    assertEquals(tuo.apply(one), Array.zeros(2));
+  }
+
+  public void testMixedUnit1Fail() {
+    TensorUnaryOperator tuo = NormalizeUnlessZero.with(Vector2Norm::of);
+    Tensor one = Tensors.of(Quantity.of(0, "m"), Quantity.of(1, "s"));
+    AssertFail.of(() -> tuo.apply(one));
+  }
+
+  public void testMixedUnit2Fail() {
+    TensorUnaryOperator tuo = NormalizeUnlessZero.with(Vector2Norm::of);
+    Tensor one = Tensors.of(Quantity.of(0, "m"), Quantity.of(0, "s"));
+    AssertFail.of(() -> tuo.apply(one));
   }
 }

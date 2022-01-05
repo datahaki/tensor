@@ -4,15 +4,17 @@ package ch.alpine.tensor.opt.lp;
 import java.io.Serializable;
 import java.util.Objects;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
+import ch.alpine.tensor.red.LenientAdd;
 
 /** definition of a linear program
  * 
@@ -140,9 +142,14 @@ public class LinearProgram implements Serializable {
     Tensor eye = IdentityMatrix.of(m);
     if (constraintType.equals(ConstraintType.GREATER_EQUALS))
       eye = eye.negate();
+    Scalar c_zero = c.stream() //
+        .map(Scalar.class::cast) //
+        .map(Scalar::zero) //
+        .reduce(LenientAdd::of) //
+        .orElseThrow();
     return new LinearProgram( //
         objective, //
-        Join.of(c, Array.zeros(m)), //
+        Join.of(c, ConstantArray.of(c_zero, m)), //
         ConstraintType.EQUALS, //
         Join.of(1, A, eye), b, //
         variables, //

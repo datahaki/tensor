@@ -25,7 +25,7 @@ public enum CoordinateBounds {
    * @param max upper right corner of axis aligned bounding box
    * @return
    * @throws Exception if either input parameter is not a vector, or
-   * if vectors are different in length
+   * if min and max have different lengths
    * @see Entrywise */
   public static CoordinateBoundingBox of(Tensor min, Tensor max) {
     return CoordinateBoundingBox.of(IntStream.range(0, Integers.requireEquals(min.length(), max.length())) //

@@ -2,10 +2,10 @@
 package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.Gaussian;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.qty.Around;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -36,7 +36,7 @@ public class RampTest extends TestCase {
   }
 
   public void testFail() {
-    Scalar scalar = Gaussian.of(2, 3);
+    Scalar scalar = Around.of(2, 3);
     AssertFail.of(() -> Ramp.FUNCTION.apply(scalar));
   }
 }

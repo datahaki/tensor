@@ -11,7 +11,7 @@ import ch.alpine.tensor.ext.Integers;
 /* package */ class AbstractReduce {
   protected final Tensor[] lhs;
   private final Pivot pivot;
-  protected final int[] ind;
+  private final int[] ind;
   private int swaps = 0;
 
   public AbstractReduce(Tensor matrix, Pivot pivot) {
@@ -28,6 +28,12 @@ import ch.alpine.tensor.ext.Integers;
       ind[row] = swap;
       ++swaps;
     }
+  }
+
+  /** @param index
+   * @return read-only access to index set */
+  protected final int ind(int index) {
+    return ind[index];
   }
 
   /** @return determinant of matrix */

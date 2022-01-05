@@ -10,7 +10,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Abs;
@@ -44,7 +44,6 @@ import ch.alpine.tensor.sca.Sqrt;
   private static final Scalar R3_2 = ComplexScalar.of(RealScalar.ONE, Sqrt.of(_3).negate()).divide(Power.of(2, _2_3));
   private static final Scalar R3_3 = ComplexScalar.of(RealScalar.ONE, Sqrt.of(_3)).divide(_6).negate();
   private static final ScalarUnaryOperator POWER_1_3 = Power.function(_1_3);
-  private static final Tensor ZEROS = Array.zeros(3);
 
   /** finds the roots of the polynomial
    * <pre>
@@ -91,7 +90,7 @@ import ch.alpine.tensor.sca.Sqrt;
     //
     if (Chop._13.isZero(Dn)) {
       if (Chop._13.isZero(_3ac))
-        return ZEROS;
+        return ConstantArray.of(shift.zero(), 3);
       Scalar _3d_c = d.divide(c).multiply(_3);
       Scalar dr = _3d_c.multiply(N1_2);
       return Tensors.of(dr, dr, _3d_c);

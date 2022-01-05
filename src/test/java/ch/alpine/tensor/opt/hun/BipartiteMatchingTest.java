@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ConstantArray;
@@ -19,6 +20,10 @@ import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.UniformDistribution;
+import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -84,6 +89,23 @@ public class BipartiteMatchingTest extends TestCase {
         BipartiteMatching bipartiteMatching = BipartiteMatching.of(RandomVariate.of(distribution, rows, cols));
         ExactScalarQ.require(bipartiteMatching.minimum());
       }
+  }
+
+  public void testNegativeWithUnits() {
+    Distribution distribution = UniformDistribution.of(Quantity.of(-9, "MYR"), Quantity.of(10, "MYR"));
+    for (int rows = 1; rows < MAX; ++rows)
+      for (int cols = 1; cols < MAX; ++cols) {
+        Tensor tensor = RandomVariate.of(distribution, rows, cols).map(Round.FUNCTION);
+        BipartiteMatching bipartiteMatching = BipartiteMatching.of(tensor);
+        Scalar min = bipartiteMatching.minimum();
+        ExactScalarQ.require(min);
+        assertEquals(QuantityUnit.of(min), Unit.of("MYR"));
+      }
+  }
+
+  public void testMixedUnitsFail() {
+    Tensor matrix = Tensors.matrix(new Scalar[][] { { Quantity.of(1, "MYR"), Quantity.of(1, "SGD") } });
+    AssertFail.of(() -> BipartiteMatching.of(matrix));
   }
 
   public void testScalarFail() {

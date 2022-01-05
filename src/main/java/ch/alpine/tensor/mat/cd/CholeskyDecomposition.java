@@ -11,7 +11,7 @@ import ch.alpine.tensor.sca.Chop;
  * 
  * <code>matrix == L . D . L*</code>
  * 
- * <code>matrix == getL().dot(getD().pmul(ConjugateTranspose.of(getL())))</code>
+ * <code>matrix == getL().dot(Times.of(getD(), ConjugateTranspose.of(getL())))</code>
  * 
  * <p>The decomposition is robust for positive definite matrices.
  * 

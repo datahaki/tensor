@@ -11,13 +11,13 @@ import junit.framework.TestCase;
 public class NnzTest extends TestCase {
   public void testSimple() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
-    SparseArray sparseArray = (SparseArray) SparseArrays.of(tensor);
+    SparseArray sparseArray = (SparseArray) TestHelper.of(tensor);
     assertEquals(Nnz.of(sparseArray), 8);
   }
 
   public void testSubtraction() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
-    Tensor raw = SparseArrays.of(tensor);
+    Tensor raw = TestHelper.of(tensor);
     SparseArray sparse = (SparseArray) raw;
     SparseArray sparseArray = (SparseArray) sparse.subtract(sparse);
     assertEquals(Nnz.of(sparseArray), 0);
@@ -29,7 +29,7 @@ public class NnzTest extends TestCase {
 
   public void testSome() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
-    Tensor sparse = SparseArrays.of(tensor);
+    Tensor sparse = TestHelper.of(tensor);
     sparse.set(Tensors.vector(1, 2, 3, 4, 5), 1);
     sparse.toString();
   }

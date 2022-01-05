@@ -30,9 +30,9 @@ public class CholeskyDecompositionImplTest extends TestCase {
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
     CholeskyDecomposition choleskyDecomposition = //
         Serialization.copy(CholeskyDecomposition.of(matrix));
-    assertEquals( //
-        choleskyDecomposition.solve(IdentityMatrix.of(3)), //
-        Inverse.of(matrix));
+    Tensor inverse = Inverse.of(matrix);
+    Tensor solve = choleskyDecomposition.solve(IdentityMatrix.of(3));
+    assertEquals(solve, inverse);
     assertTrue(choleskyDecomposition.toString().startsWith("CholeskyDecomposition["));
   }
 

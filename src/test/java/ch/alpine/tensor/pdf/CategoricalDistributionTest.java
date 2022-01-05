@@ -10,6 +10,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.usr.AssertFail;
@@ -61,22 +62,22 @@ public class CategoricalDistributionTest extends TestCase {
   }
 
   public void testNextDown() {
-    AbstractDiscreteDistribution distribution = (AbstractDiscreteDistribution) //
-    CategoricalDistribution.fromUnscaledPDF(Tensors.vector(Math.PI, 2., 1., 1.123123, 3., 0, 0, 0));
+    AbstractDiscreteDistribution distribution = //
+        CategoricalDistribution.fromUnscaledPDF(Tensors.vector(Math.PI, 2., 1., 1.123123, 3., 0, 0, 0));
     Scalar s = distribution.quantile(RealScalar.of(Math.nextDown(1.0)));
     assertEquals(s, RealScalar.of(4));
   }
 
   public void testRandomVariateNeedle1() {
-    AbstractDiscreteDistribution distribution = (AbstractDiscreteDistribution) //
-    CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 2, 1, 0, 3, 0));
+    AbstractDiscreteDistribution distribution = //
+        CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 2, 1, 0, 3, 0));
     assertEquals(distribution.quantile(RealScalar.of(0)), RealScalar.ONE);
     assertEquals(distribution.quantile(RealScalar.of(0.99999999999)), RealScalar.of(4));
   }
 
   public void testRandomVariateNeedle2() {
-    AbstractDiscreteDistribution distribution = (AbstractDiscreteDistribution) //
-    CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
+    AbstractDiscreteDistribution distribution = //
+        CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
     assertEquals(distribution.quantile(RealScalar.of(0)), RealScalar.of(2));
     assertEquals(distribution.quantile(RealScalar.of(Math.nextDown(0.5))), RealScalar.of(2));
     assertEquals(distribution.quantile(RationalScalar.of(1, 2)), RealScalar.of(2));
@@ -87,6 +88,9 @@ public class CategoricalDistributionTest extends TestCase {
     Distribution distribution = //
         CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
     Scalar var = Variance.of(distribution);
+    Scalar mean = Mean.of(distribution);
+    ExactScalarQ.require(mean);
+    assertEquals(mean, RealScalar.of(3));
     ExactScalarQ.require(var);
     assertEquals(var, RealScalar.ONE);
   }
@@ -103,8 +107,8 @@ public class CategoricalDistributionTest extends TestCase {
   }
 
   public void testInverseCDFOne() {
-    AbstractDiscreteDistribution distribution = (AbstractDiscreteDistribution) //
-    CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0, 0, 0));
+    AbstractDiscreteDistribution distribution = //
+        CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0, 0, 0));
     assertEquals(distribution.quantile(RealScalar.of(1)), RealScalar.of(4));
   }
 
@@ -126,8 +130,8 @@ public class CategoricalDistributionTest extends TestCase {
   }
 
   public void testWrongReference() {
-    AbstractDiscreteDistribution distribution = (AbstractDiscreteDistribution) //
-    CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
+    AbstractDiscreteDistribution distribution = //
+        CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
     AssertFail.of(() -> distribution.quantile(RealScalar.of(Math.nextDown(0.0))));
   }
 

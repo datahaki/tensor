@@ -123,11 +123,11 @@ import ch.alpine.tensor.sca.Sinh;
   // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    if (isLocal(scalar)) {
+    if (scalar instanceof ComplexEmbedding) {
       ComplexEmbedding z = (ComplexEmbedding) scalar;
       return of(re.add(z.real()), im.add(z.imag()));
     }
-    return scalar.add(this);
+    throw TensorRuntimeException.of(this, scalar);
   }
 
   // ---

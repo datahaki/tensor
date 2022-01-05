@@ -197,6 +197,23 @@ public class QuaternionImplTest extends TestCase {
     assertEquals(q1, q2);
   }
 
+  public void testQuantity() {
+    Quaternion quaternion = Quaternion.of( //
+        Quantity.of(1, "m"), //
+        Quantity.of(2, "m"), //
+        Quantity.of(3, "m"), //
+        Quantity.of(4, "m"));
+    Scalar one = quaternion.one();
+    assertEquals(quaternion, quaternion.multiply(one));
+  }
+
+  public void testQuantity2() {
+    Scalar scalar = Quantity.of(Quaternion.of(1, 2, 3, 4), "m");
+    Scalar one = scalar.one();
+    Scalar product = scalar.multiply(one);
+    assertEquals(scalar, product);
+  }
+
   public void testGaussScalar() {
     Scalar q1 = Quaternion.of( //
         GaussScalar.of(11, 23), //

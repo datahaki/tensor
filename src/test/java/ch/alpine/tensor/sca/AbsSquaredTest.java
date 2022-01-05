@@ -4,7 +4,6 @@ package ch.alpine.tensor.sca;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactTensorQ;
-import ch.alpine.tensor.Gaussian;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -67,10 +66,6 @@ public class AbsSquaredTest extends TestCase {
 
   public void testGaussScalar() {
     assertEquals(AbsSquared.FUNCTION.apply(GaussScalar.of(2, 3)), GaussScalar.of(-5, 3));
-  }
-
-  public void testGaussianFail() {
-    AssertFail.of(() -> AbsSquared.FUNCTION.apply(Gaussian.of(2, 3)));
   }
 
   public void testStringFail() {

@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
@@ -278,7 +279,11 @@ public interface Tensor extends Iterable<Tensor> {
 
   /** the returned block consists of references to the elements in this tensor.
    * The function {@link #block(List, List)} is useful for applications such as
-   * {@link ListCorrelate}. When block is called on unmodifiable tensor, then
+   * {@link ListCorrelate}.
+   * 
+   * The returned instance is typically not {@link Serializable}.
+   * 
+   * When block is called on unmodifiable tensor, then
    * the returned block consists of the references but is also unmodifiable.
    * 
    * Example:

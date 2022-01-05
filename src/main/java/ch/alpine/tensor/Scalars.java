@@ -12,6 +12,7 @@ import ch.alpine.tensor.num.Divisible;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.sca.Sign;
 
 /** collection of useful static functions related to {@link Scalar} */
 public enum Scalars {
@@ -89,6 +90,16 @@ public enum Scalars {
    * @return true if given scalar does not equal scalar.zero() */
   public static boolean nonZero(Scalar scalar) {
     return !scalar.equals(scalar.zero());
+  }
+
+  /** @param scalar
+   * @return scalar
+   * @throws Exception if scalar is not equal to scalar.zero()
+   * @see Sign#requirePositive(Scalar) */
+  public static Scalar requireZero(Scalar scalar) {
+    if (isZero(scalar))
+      return scalar;
+    throw TensorRuntimeException.of(scalar);
   }
 
   /** bi-predicate that tests if m divides n, i.e. "m|n"

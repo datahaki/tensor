@@ -38,7 +38,7 @@ import ch.alpine.tensor.ext.Integers;
  * <p>Entrywise reproduces existing functionality:
  * <pre>
  * Entrywise.with(Scalar::add).of(Tensors.of(a, b, c)) == a.add(b).add(c)
- * Entrywise.with(Scalar::multiply).of(Tensors.of(a, b, c)) == a.pmul(b).pmul(c)
+ * Entrywise.with(Scalar::multiply).of(Tensors.of(a, b, c)) == Times.of(a, b, c)
  * </pre> */
 public class Entrywise implements BinaryOperator<Tensor>, Serializable {
   /** @param scalarBinaryOperator non-null

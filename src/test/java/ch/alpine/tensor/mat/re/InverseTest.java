@@ -122,10 +122,10 @@ public class InverseTest extends TestCase {
     Tensor ve1 = Tensors.of(qs1.multiply(qs1), qs2.multiply(qs3));
     Tensor ve2 = Tensors.of(qs2.multiply(qs3), qs4.multiply(qs4));
     Tensor mat = Tensors.of(ve1, ve2);
-    Tensor eye = IdentityMatrix.of(2); // <- yey!
-    Tensor inv = LinearSolve.of(mat, eye);
+    Tensor inv = LinearSolve.of(mat, IdentityMatrix.of(2));
     Tensor res = mat.dot(inv);
-    Chop.NONE.requireClose(eye, res);
+    Tensor expect = Tensors.fromString("{{1, 0[m*rad^-1]}, {0[m^-1*rad], 1}}");
+    assertEquals(res, expect);
     Tensor inverse = Inverse.of(mat);
     Tensor expected = Tensors.fromString( //
         "{{-4/5[m^-2], 3/10[m^-1*rad^-1]}, {3/10[m^-1*rad^-1], -1/20[rad^-2]}}");
@@ -137,18 +137,63 @@ public class InverseTest extends TestCase {
     Tensor matrix = Tensors.fromString( //
         "{{1[m^2], 2[m*rad], 3[kg*m]}, {4[m*rad], 2[rad^2], 2[kg*rad]}, {5[kg*m], 1[kg*rad], 7[kg^2]}}");
     final Tensor eye = IdentityMatrix.of(3).unmodifiable();
+    Tensor expect = Tensors.fromString("{{1, 0[m*rad^-1], 0[kg^-1*m]}, {0[m^-1*rad], 1, 0[kg^-1*rad]}, {0[kg*m^-1], 0[kg*rad^-1], 1}}");
     for (Pivot pivot : Pivots.values()) {
       Tensor inv = LinearSolve.of(matrix, eye, pivot);
       Tensor res = matrix.dot(inv);
-      Chop.NONE.requireClose(eye, res);
+      assertEquals(res, expect);
     }
-    {
-      Tensor inv = Inverse.of(matrix);
-      Chop.NONE.requireClose(matrix.dot(inv), inv.dot(matrix));
-      Chop.NONE.requireClose(matrix.dot(inv), IdentityMatrix.of(3));
-    }
+    Tensor inverse = Inverse.of(matrix);
+    assertEquals(matrix.dot(inverse), expect);
+    Tensor dual = Tensors.fromString("{{1, 0[m^-1*rad], 0[kg*m^-1]}, {0[m*rad^-1], 1, 0[kg*rad^-1]}, {0[kg^-1*m], 0[kg^-1*rad], 1}}");
+    assertEquals(inverse.dot(matrix), dual);
     assertFalse(HermitianMatrixQ.of(matrix));
     assertFalse(SymmetricMatrixQ.of(matrix));
+  }
+
+  public void testQuantity3() { // confirmed with Mathematica 12
+    Tensor matrix = Tensors.fromString("{{1[m], 1[s]}, {1[m], 2[s]}}");
+    Tensor tensor = Inverse.of(matrix);
+    // {{Quantity[2, 1/("Meters")], Quantity[-1, 1/("Meters")]}, {Quantity[-1, 1/("Seconds")], Quantity[1, 1/("Seconds")]}}
+    Tensor expect = Tensors.fromString("{{2[m^-1], -1[m^-1]}, {-1[s^-1], 1[s^-1]}}");
+    assertEquals(tensor, expect);
+    Tensor eye = matrix.dot(tensor);
+    assertEquals(eye, IdentityMatrix.of(2));
+    Tensor eye2 = tensor.dot(matrix);
+    // {{1, Quantity[0, ("Seconds")/("Meters")]}, {Quantity[0, ("Meters")/( "Seconds")], 1}}
+    Tensor expec2 = Tensors.fromString("{{1, 0[m^-1*s]}, {0[m*s^-1], 1}}");
+    assertEquals(expec2, eye2);
+  }
+
+  public void testQuantity4() { // confirmed with Mathematica 12
+    Tensor matrix = Tensors.fromString("{{1[m], 1[m]}, {1[s], 2[s]}}");
+    Tensor tensor = Inverse.of(matrix);
+    // {{Quantity[2, 1/("Meters")], Quantity[-1, 1/("Meters")]}, {Quantity[-1, 1/("Seconds")], Quantity[1, 1/("Seconds")]}}
+    Tensor expect = Tensors.fromString("{{2[m^-1], -1[s^-1]}, {-1[m^-1], 1[s^-1]}}");
+    assertEquals(tensor, expect);
+    assertEquals(tensor.dot(matrix), IdentityMatrix.of(2));
+    // {{1, Quantity[0, ("Meters")/("Seconds")]}, {Quantity[0, ("Seconds")/("Meters")], 1}}
+    Tensor expec2 = Tensors.fromString("{{1, 0[m*s^-1]}, {0[m^-1*s], 1}}");
+    assertEquals(expec2, matrix.dot(tensor));
+  }
+
+  public void testMixed2x2() {
+    Tensor matrix = Tensors.fromString("{{60[m^2], 30[m*rad]}, {30[m*rad], 20[rad^2]}}");
+    Inverse.of(matrix);
+  }
+
+  public void testMixed3x3() {
+    Tensor matrix = Tensors.fromString( //
+        "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
+    SymmetricMatrixQ.require(matrix);
+    Tensor inverse = Inverse.of(matrix);
+    Tensor expect = Tensors.fromString("{{1, 0[m*rad^-1], 0[kg^-1*m]}, {0[m^-1*rad], 1, 0[kg^-1*rad]}, {0[kg*m^-1], 0[kg*rad^-1], 1}}");
+    assertEquals(matrix.dot(inverse), expect);
+    Tensor other = inverse.dot(matrix);
+    assertEquals(other.get(0), Tensors.fromString("{1, 0[m^-1*rad], 0[kg*m^-1]}"));
+    assertEquals(other.get(1), Tensors.fromString("{0[m*rad^-1], 1, 0[kg*rad^-1]}"));
+    assertEquals(other.get(2), Tensors.fromString("{0[kg^-1*m], 0[kg^-1*rad], 1}"));
+    ExactTensorQ.require(inverse);
   }
 
   public void testDecimalScalarInverse() {

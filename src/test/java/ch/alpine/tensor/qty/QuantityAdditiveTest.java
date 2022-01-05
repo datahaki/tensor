@@ -18,32 +18,10 @@ public class QuantityAdditiveTest extends TestCase {
     assertEquals(r1.toString(), r2.toString());
   }
 
-  public void testPlusSymmetry() {
-    _checkPlusSymmetry(Quantity.of(0, "m"), Quantity.of(0, "kg"));
-    _checkPlusSymmetry(Quantity.of(0, "m"), Quantity.of(2, "kg"));
-    _checkPlusSymmetry( //
-        Quantity.of(ComplexScalar.of(0, 0), "m"), //
-        RealScalar.of(0));
-    _checkPlusSymmetry( //
-        Quantity.of(ComplexScalar.of(1, 3), "m"), //
-        RealScalar.of(0));
-    _checkPlusSymmetry(Quantity.of(0, "s"), RealScalar.of(0.0));
-    _checkPlusSymmetry(Quantity.of(0, "s"), RealScalar.of(2));
-    _checkPlusSymmetry(Quantity.of(2, "s"), RealScalar.of(0));
-  }
-
-  public void testPlusUnits1() {
-    Scalar s1 = Quantity.of(0, "m");
-    Scalar s2 = Quantity.of(0, "kg");
-    _checkPlusSymmetry(s1, s2);
-    assertEquals(s1.add(s2).toString(), RealScalar.ZERO.toString());
-  }
-
-  public void testPlusUnits2() {
-    Scalar s1 = Quantity.of(0, "m"); //
-    Scalar s2 = Quantity.of(0.0, "kg");
-    _checkPlusSymmetry(s1, s2);
-    assertEquals(s1.add(s2).toString(), RealScalar.of(0.0).toString());
+  public void testMixFail() {
+    AssertFail.of(() -> Quantity.of(0, "m").add(Quantity.of(0, "kg")));
+    AssertFail.of(() -> Quantity.of(0, "m").add(Quantity.of(2, "kg")));
+    AssertFail.of(() -> Quantity.of(0, "m").add(Quantity.of(2, "")));
   }
 
   public void testPlusUnits3() {
@@ -56,54 +34,55 @@ public class QuantityAdditiveTest extends TestCase {
   public void testPlusUnits4() {
     Scalar s1 = Quantity.of(0, "m"); //
     Scalar s2 = Quantity.of(0.0, "");
-    _checkPlusSymmetry(s1, s2);
-    assertEquals(s1.add(s2).toString(), s2.toString()); // result in numeric precision
+    AssertFail.of(() -> s1.add(s2));
   }
 
   public void testPlusUnits5() {
     Scalar s1 = Quantity.of(0.0, "m"); //
     Scalar s2 = RealScalar.ZERO;
-    _checkPlusSymmetry(s1, s2);
-    assertEquals(s1.add(s2).toString(), RealScalar.of(0.0).toString()); // result in numeric precision
+    AssertFail.of(() -> s1.add(s2));
   }
 
   public void testPlusMix() {
     Scalar s1 = Quantity.of(0, "m"); //
     Scalar s2 = Quantity.of(2, "kg");
-    _checkPlusSymmetry(s1, s2);
-    assertEquals(s1.add(s2).toString(), s2.toString()); // result in numeric precision
+    AssertFail.of(() -> s1.add(s2));
+    AssertFail.of(() -> s2.add(s1));
   }
 
   public void testPlusMix2() {
     Scalar s1 = Quantity.of(3, "m"); //
     Scalar s2 = Quantity.of(0, "kg");
-    _checkPlusSymmetry(s1, s2);
-    assertEquals(s1.add(s2).toString(), s1.toString()); // result in numeric precision
+    AssertFail.of(() -> s1.add(s2));
+    AssertFail.of(() -> s2.add(s1));
   }
 
   public void testPlusMix3() {
     Scalar s1 = Quantity.of(0, "m"); //
     Scalar s2 = Quantity.of(0, "kg");
-    _checkPlusSymmetry(s1, s2);
-    assertEquals(s1.add(s2).toString(), "0"); // result in numeric precision
+    AssertFail.of(() -> s1.add(s2));
+    AssertFail.of(() -> s2.add(s1));
   }
 
   public void testPlusMixFail() {
     Scalar s1 = Quantity.of(1.0, "m"); //
     Scalar s2 = GaussScalar.of(0, 7);
     AssertFail.of(() -> s1.add(s2));
+    AssertFail.of(() -> s2.add(s1));
   }
 
   public void testPlusMixZeroFail() {
     Scalar s1 = Quantity.of(0.0, "m"); //
     Scalar s2 = GaussScalar.of(0, 7);
     AssertFail.of(() -> s1.add(s2));
+    AssertFail.of(() -> s2.add(s1));
   }
 
   public void testComplex() {
     Scalar s1 = ComplexScalar.of(1, 2);
     Scalar s2 = Quantity.of(0, "m*s");
-    assertEquals(s1, s1.add(s2));
+    AssertFail.of(() -> s1.add(s2));
+    AssertFail.of(() -> s2.add(s1));
   }
 
   public void testAddDifferent() {

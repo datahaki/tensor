@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.red;
+package ch.alpine.tensor.ext;
 
 import java.util.Collections;
 
@@ -15,11 +15,6 @@ public class ArgMinTest extends TestCase {
     assertEquals(ArgMin.of(Tensors.vector(1, 4, 1, 2, 3)), 0);
   }
 
-  public void testEmpty() {
-    assertEquals(-1, ArgMin.of(Tensors.empty(), null));
-    assertEquals(-1, ArgMax.of(Tensors.empty(), null));
-  }
-
   public void testMin() {
     assertEquals(1, ArgMin.of(Tensors.vectorDouble(3., 0.6, 8, 0.6, 100)));
     assertEquals(2, ArgMin.of(Tensors.vectorDouble(3, 3., 0.6, 8, 0.6, 8)));
@@ -33,6 +28,10 @@ public class ArgMinTest extends TestCase {
   public void testMinComparatorDecr() {
     assertEquals(4, ArgMin.of(Tensors.vectorDouble(3., 0.6, 8, 0.6, 100), Collections.reverseOrder()));
     assertEquals(3, ArgMin.of(Tensors.vectorDouble(3, 3., 0.6, 8, 0.6, 8), Collections.reverseOrder()));
+  }
+
+  public void testComparatorNullFail() {
+    AssertFail.of(() -> ArgMin.of(Tensors.empty(), null));
   }
 
   public void testScalar() {

@@ -74,23 +74,23 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
   public DurationScalar multiply(Scalar scalar) {
     if (scalar instanceof DurationScalar) // condition inserted for clarity
       throw TensorRuntimeException.of(this, scalar);
-    return fromSeconds(toSeconds().multiply(scalar));
+    return fromSeconds(seconds().multiply(scalar));
   }
 
   @Override // from AbstractScalar
   public Scalar divide(Scalar scalar) {
     if (scalar instanceof DurationScalar) {
       DurationScalar durationScalar = (DurationScalar) scalar;
-      return toSeconds().divide(durationScalar.toSeconds());
+      return seconds().divide(durationScalar.seconds());
     }
-    return fromSeconds(toSeconds().divide(scalar));
+    return fromSeconds(seconds().divide(scalar));
   }
 
   @Override // from AbstractScalar
   public Scalar under(Scalar scalar) {
     if (scalar instanceof DurationScalar) {
       DurationScalar durationScalar = (DurationScalar) scalar;
-      return durationScalar.toSeconds().divide(toSeconds());
+      return durationScalar.seconds().divide(seconds());
     }
     throw TensorRuntimeException.of(this, scalar);
   }
@@ -148,7 +148,7 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from ChopInterface
   public DurationScalar chop(Chop chop) {
-    return chop.isZero(N.DOUBLE.apply(toSeconds())) //
+    return chop.isZero(N.DOUBLE.apply(seconds())) //
         ? zero()
         : this;
   }
@@ -193,8 +193,11 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
   private static final long NANOS_LONG = 1_000_000_000;
   private static final Scalar NANOS = RealScalar.of(NANOS_LONG);
 
-  /** @return instance of rational scalar where fractional part corresponds to the nano seconds */
-  private Scalar toSeconds() {
+  /** Example:
+   * DurationScalar.of(Duration.ofDays(-1)).seconds() == RealScalar.of(-24 * 60 * 60)
+   * 
+   * @return instance of rational scalar where fractional part corresponds to the nano seconds */
+  public Scalar seconds() {
     return RealScalar.of(duration.getSeconds()) //
         .add(RationalScalar.of(duration.getNano(), NANOS_LONG));
   }

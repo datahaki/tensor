@@ -1,12 +1,16 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Times;
 
 /** Evaluation of a polynomial using horner scheme.
@@ -61,14 +65,23 @@ public enum Polynomial {
    * Consider the polynomial that maps temperatures (in Kelvin) to pressure (in bar)
    * with coefficients {-13[bar], 0.27[K^-1*bar]}
    * The derivative maps temperatures to quantities with unit "K^-1*bar"
-   * {0.27[K^-1*bar]}
-   * At this point, the information about the units of domain and values is lost.
+   * {0.27[K^-1*bar], 0.0[K^-2*bar]}
+   * in order to preserve the units of the domain.
    * 
    * @param coeffs
    * @return coefficients of polynomial that is the derivative of the polynomial defined by given coeffs
    * @throws Exception if given coeffs is not a vector */
   public static Tensor derivative_coeffs(Tensor coeffs) {
     int length = coeffs.length();
+    if (length == 2) {
+      /* a linear polynomial is mapped to a linear polynomial (with zero factor).
+       * this ensures that the unit of the argument in the polynomial evaluation
+       * is checked. */
+      Scalar a = coeffs.Get(0);
+      Scalar b = coeffs.Get(1);
+      Unit unit = QuantityUnit.of(b).add(QuantityUnit.of(a).negate()); // of domain
+      return Tensors.of(b, b.zero().multiply(Quantity.of(b.one(), unit)));
+    }
     return length == 0 //
         ? Tensors.empty()
         : Times.of(coeffs.extract(1, length), Range.of(1, length));

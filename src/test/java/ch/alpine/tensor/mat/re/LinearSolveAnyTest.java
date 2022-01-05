@@ -43,7 +43,7 @@ public class LinearSolveAnyTest extends TestCase {
     Tensor b = Join.of(vector);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
-    assertEquals(Det.of(m), RealScalar.ZERO);
+    AssertFail.of(() -> Det.of(m));
   }
 
   public void testDiag3() {
@@ -82,7 +82,7 @@ public class LinearSolveAnyTest extends TestCase {
     Tensor b = Tensors.vector(2, 2, -2);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
-    assertEquals(Det.of(m), RealScalar.ZERO);
+    AssertFail.of(() -> Det.of(m)); // fail is consistent with Mathematica 12
   }
 
   public void testAnyN() {
@@ -90,7 +90,7 @@ public class LinearSolveAnyTest extends TestCase {
     Tensor b = Tensors.vector(-2, -2, 10);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
-    assertEquals(Det.of(m), RealScalar.ZERO);
+    AssertFail.of(() -> Det.of(m)); // fail is consistent with Mathematica 12
   }
 
   @SuppressWarnings("unused")

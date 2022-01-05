@@ -44,6 +44,7 @@ public class CoefficientListTest extends TestCase {
   public void testQuantityD3() {
     Tensor zeros = Tensors.fromString("{3[m], 4[m], 6[m]}");
     Tensor coeffs = CoefficientList.of(zeros);
+    assertEquals(coeffs, Tensors.fromString("{-72[m^3], 54[m^2], -13[m], 1}"));
     assertEquals(Polynomial.of(coeffs).apply(Quantity.of(3, "m")), Quantity.of(0, "m^3"));
     Chop._14.requireZero(Polynomial.of(coeffs).apply(Quantity.of(4, "m")));
     Chop._14.requireZero(Polynomial.of(coeffs).apply(Quantity.of(6, "m")));
