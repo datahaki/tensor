@@ -17,6 +17,10 @@ import ch.alpine.tensor.sca.Sign;
  * 
  * Quote: "LogNormalDistribution is also known as the Galton distribution."
  * 
+ * Quote: "When y has a normal distribution, the exponential Exp[y] has a log-normal distribution.
+ * [...] The distribution of x is log-normal when the distribution of y = Log[x] is normal. This
+ * requires x > 0. The log-normal distribution only enters for positive random variables."
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/LogNormalDistribution.html">LogNormalDistribution</a> */
 public class LogNormalDistribution implements ContinuousDistribution, Serializable {

@@ -123,6 +123,11 @@ public class CategoricalDistributionTest extends TestCase {
     assertEquals(PDF.of(distribution).at(RealScalar.of(1)), RationalScalar.of(2, 3));
   }
 
+  public void testMarkov() {
+    Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(1, 2, 3, 2, 4, 0, 2));
+    TestHelper.markov(distribution);
+  }
+
   public void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 3, 1)));
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));

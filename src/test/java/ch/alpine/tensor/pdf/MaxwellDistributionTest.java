@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import java.io.IOException;
+import java.util.Random;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.ext.Serialization;
@@ -32,6 +33,12 @@ public class MaxwellDistributionTest extends TestCase {
         Variance.of(distribution), //
         RealScalar.of(0.76645033879515));
     assertTrue(distribution.toString().startsWith("MaxwellDistribution["));
+  }
+
+  public void testMarkov() {
+    Random random = new Random();
+    Distribution distribution = MaxwellDistribution.of(0.1 + random.nextDouble());
+    TestHelper.markov(distribution);
   }
 
   public void testSigmaFail() {

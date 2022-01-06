@@ -14,7 +14,9 @@ import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.LogGamma;
 import ch.alpine.tensor.sca.Power;
 
-/** inspired by
+/** Quote: "If x has the standard N(0, 1) distribution, then x^2 has a chi-squared distribution."
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ChiSquareDistribution.html">ChiSquareDistribution</a> */
 public class ChiSquareDistribution implements ContinuousDistribution, Serializable {
   /** @param nu positive real

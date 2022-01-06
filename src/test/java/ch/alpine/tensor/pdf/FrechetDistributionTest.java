@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import java.io.IOException;
+import java.util.Random;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.NumberQ;
@@ -98,6 +99,12 @@ public class FrechetDistributionTest extends TestCase {
     assertTrue(Scalars.lessThan(x0, x1));
     assertTrue(Scalars.lessThan(x1, x2));
     assertTrue(Scalars.lessThan(x2, x3));
+  }
+
+  public void testMarkov() {
+    Random random = new Random();
+    Distribution distribution = FrechetDistribution.of(1.1 + random.nextDouble(), 0.1 + random.nextDouble());
+    TestHelper.markov(distribution);
   }
 
   public void testInverseCDF_1() {

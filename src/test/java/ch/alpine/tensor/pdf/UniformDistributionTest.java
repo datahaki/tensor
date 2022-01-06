@@ -79,6 +79,12 @@ public class UniformDistributionTest extends TestCase {
     assertEquals(inverseCDF.quantile(RationalScalar.of(3, 3)), Quantity.of(6, "g"));
   }
 
+  public void testMarkov() {
+    Random random = new Random();
+    Distribution distribution = UniformDistribution.of(random.nextDouble(), 1 + random.nextDouble());
+    TestHelper.markov(distribution);
+  }
+
   public void testToString() {
     Distribution distribution = UniformDistribution.of(Quantity.of(3, "g"), Quantity.of(6, "g"));
     assertEquals(distribution.toString(), "UniformDistribution[3[g], 6[g]]");

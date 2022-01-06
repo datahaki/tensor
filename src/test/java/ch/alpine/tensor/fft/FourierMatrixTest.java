@@ -3,17 +3,25 @@ package ch.alpine.tensor.fft;
 
 import java.util.Random;
 
+import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.nrm.FrobeniusNorm;
 import ch.alpine.tensor.nrm.Matrix1Norm;
 import ch.alpine.tensor.nrm.MatrixInfinityNorm;
+import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.sca.Exp;
+import ch.alpine.tensor.sca.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -42,6 +50,15 @@ public class FourierMatrixTest extends TestCase {
     assertEquals(Matrix1Norm.of(m), MatrixInfinityNorm.of(m));
     assertEquals(Matrix1Norm.of(m), FrobeniusNorm.of(m));
     // Norm._2.of m == 1 is confirmed with Mathematica
+  }
+
+  public void testVandermonde() {
+    for (int n = 1; n < 8; ++n) {
+      Tensor vector = Subdivide.of(RealScalar.ZERO, Pi.TWO, n).multiply(ComplexScalar.I).map(Exp.FUNCTION).extract(0, n);
+      Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, n));
+      Tensor matrix = VandermondeMatrix.of(vector).multiply(scalar);
+      Tolerance.CHOP.requireClose(FourierMatrix.of(n), matrix);
+    }
   }
 
   private static void _check(int n) {

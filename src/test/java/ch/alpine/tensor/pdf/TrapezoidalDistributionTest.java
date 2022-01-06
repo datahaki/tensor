@@ -181,6 +181,16 @@ public class TrapezoidalDistributionTest extends TestCase {
     }
   }
 
+  public void testMarkov() {
+    Random random = new Random();
+    Distribution distribution = TrapezoidalDistribution.of( //
+        0 + random.nextDouble(), //
+        1 + random.nextDouble(), //
+        2 + random.nextDouble(), //
+        3 + random.nextDouble());
+    TestHelper.markov(distribution);
+  }
+
   public void testExactFail() {
     TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
     TrapezoidalDistribution.of(Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));

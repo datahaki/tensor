@@ -55,6 +55,13 @@ public class BernoulliDistributionTest extends TestCase {
     assertTrue(Scalars.lessThan(dev, RealScalar.of(0.07)));
   }
 
+  public void testMarkov() {
+    TestHelper.markov(BernoulliDistribution.of(0));
+    TestHelper.markov(BernoulliDistribution.of(1));
+    TestHelper.markov(BernoulliDistribution.of(0.5));
+    TestHelper.markov(BernoulliDistribution.of(0.3));
+  }
+
   public void testNumber() {
     Distribution distribution = BernoulliDistribution.of(0.5);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
