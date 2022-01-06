@@ -10,6 +10,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.erf.Erf;
 
 /** "MaxwellDistribution is also known as Maxwell-Boltzmann distribution."
  * 

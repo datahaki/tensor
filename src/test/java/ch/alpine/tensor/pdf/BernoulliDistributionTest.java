@@ -60,6 +60,7 @@ public class BernoulliDistributionTest extends TestCase {
     TestHelper.markov(BernoulliDistribution.of(1));
     TestHelper.markov(BernoulliDistribution.of(0.5));
     TestHelper.markov(BernoulliDistribution.of(0.3));
+    TestHelper.chebyshev(BernoulliDistribution.of(0.0));
   }
 
   public void testNumber() {

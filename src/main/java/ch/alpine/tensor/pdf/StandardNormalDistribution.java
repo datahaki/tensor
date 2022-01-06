@@ -9,6 +9,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.erf.Erfc;
+import ch.alpine.tensor.sca.erf.InverseErfc;
 
 /* package */ enum StandardNormalDistribution implements ContinuousDistribution {
   INSTANCE;

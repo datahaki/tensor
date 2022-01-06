@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.pdf;
+package ch.alpine.tensor.sca.erf;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -7,6 +7,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.pdf.InverseCDF;
+import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;

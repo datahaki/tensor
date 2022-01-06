@@ -126,6 +126,7 @@ public class CategoricalDistributionTest extends TestCase {
   public void testMarkov() {
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(1, 2, 3, 2, 4, 0, 2));
     TestHelper.markov(distribution);
+    TestHelper.chebyshev(distribution);
   }
 
   public void testFailInverseCDF() {

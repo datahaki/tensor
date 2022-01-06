@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.pdf;
+package ch.alpine.tensor.sca.erf;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;

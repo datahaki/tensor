@@ -39,6 +39,7 @@ public class MaxwellDistributionTest extends TestCase {
     Random random = new Random();
     Distribution distribution = MaxwellDistribution.of(0.1 + random.nextDouble());
     TestHelper.markov(distribution);
+    TestHelper.chebyshev(distribution);
   }
 
   public void testSigmaFail() {

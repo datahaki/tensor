@@ -83,6 +83,7 @@ public class UniformDistributionTest extends TestCase {
     Random random = new Random();
     Distribution distribution = UniformDistribution.of(random.nextDouble(), 1 + random.nextDouble());
     TestHelper.markov(distribution);
+    TestHelper.chebyshev(distribution);
   }
 
   public void testToString() {

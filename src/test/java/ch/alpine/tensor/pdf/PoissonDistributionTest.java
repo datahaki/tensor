@@ -97,6 +97,7 @@ public class PoissonDistributionTest extends TestCase {
     Random random = new Random();
     Distribution distribution = PoissonDistribution.of(0.1 + 10 * random.nextDouble());
     TestHelper.markov(distribution);
+    TestHelper.chebyshev(distribution);
   }
 
   public void testToString() {

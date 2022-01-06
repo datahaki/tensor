@@ -77,6 +77,7 @@ public class LogNormalDistributionTest extends TestCase {
     Random random = new Random();
     Distribution distribution = LogNormalDistribution.of(random.nextDouble() - 0.5, 0.1 + random.nextDouble());
     TestHelper.markov(distribution);
+    TestHelper.chebyshev(distribution);
   }
 
   public void testSigmaNonPositiveFail() {

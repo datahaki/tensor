@@ -162,6 +162,7 @@ public class ExponentialDistributionTest extends TestCase {
     Random random = new Random();
     Distribution distribution = ExponentialDistribution.of(0.1 + 2 * random.nextDouble());
     TestHelper.markov(distribution);
+    TestHelper.chebyshev(distribution);
   }
 
   public void testFailInverseCDF() {

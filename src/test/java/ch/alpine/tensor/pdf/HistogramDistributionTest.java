@@ -232,6 +232,7 @@ public class HistogramDistributionTest extends TestCase {
   public void testMarkov() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(1, 2, 0, 3, 2, 0, 1, 2));
     TestHelper.markov(distribution);
+    TestHelper.chebyshev(distribution);
   }
 
   public void testFailEmpty() {

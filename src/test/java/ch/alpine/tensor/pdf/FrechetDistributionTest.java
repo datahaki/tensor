@@ -105,6 +105,7 @@ public class FrechetDistributionTest extends TestCase {
     Random random = new Random();
     Distribution distribution = FrechetDistribution.of(1.1 + random.nextDouble(), 0.1 + random.nextDouble());
     TestHelper.markov(distribution);
+    TestHelper.chebyshev(distribution);
   }
 
   public void testInverseCDF_1() {

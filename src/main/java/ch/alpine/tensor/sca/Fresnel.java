@@ -6,7 +6,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.pdf.Erf;
+import ch.alpine.tensor.sca.erf.Erf;
 
 /** <pre>
  * Fresnel[z] = FresnelC[z] + FresnelS[z] * I
