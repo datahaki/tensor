@@ -31,7 +31,10 @@ import ch.alpine.tensor.sca.Sign;
  * eigenvectors of A.
  * 
  * Implementation also works for matrices with entries of type Quantity of
- * the same unit. */
+ * the same unit.
+ * 
+ * Quote: "You cannot find eigenvectors (or eigenvalues) in a finite number
+ * of exact "arithmetic" steps for matrices of size n > 4." */
 /* package */ class JacobiMethod implements Eigensystem {
   private static final int MAX_ITERATIONS = 50;
   // higher phase 1 count increases numerical precision

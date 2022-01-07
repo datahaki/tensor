@@ -11,7 +11,9 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Sign;
 import junit.framework.Assert;
 
-public enum TestHelper {
+/** Reference:
+ * "Linear Algebra and Learning from data" by Gilbert Strang, 2019 */
+/* package */ enum TestHelper {
   ;
   public static void markov(Distribution distribution) {
     Random random = new Random();

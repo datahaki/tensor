@@ -1,0 +1,65 @@
+// code by jph
+package ch.alpine.tensor.mat.cd;
+
+import ch.alpine.tensor.ExactTensorQ;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.PositiveDefiniteMatrixQ;
+import ch.alpine.tensor.mat.re.LinearSolve;
+import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.usr.AssertFail;
+import junit.framework.TestCase;
+
+public class ConjugateGradientSolveTest extends TestCase {
+  public void testSimple() {
+    Tensor matrix = Tensors.matrix(new Number[][] { //
+        { 25, 15, -5 }, //
+        { 15, 18, 0 }, //
+        { -5, 0, 11 } //
+    });
+    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
+    Tensor b = Tensors.vector(1, 2, 3);
+    Tensor x = ConjugateGradientSolve.of(matrix, b);
+    assertEquals(matrix.dot(x), b);
+    ExactTensorQ.require(x);
+  }
+
+  public void testUnits1() {
+    ScalarUnaryOperator suo = s -> Quantity.of(s, "m^2");
+    Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}").map(suo);
+    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
+    Tensor b = Tensors.vector(1, 2, 3).map(suo);
+    Tensor x = LinearSolve.of(matrix, b);
+    assertEquals(matrix.dot(x), b);
+    x = ConjugateGradientSolve.of(matrix, b);
+    assertEquals(matrix.dot(x), b);
+    ExactTensorQ.require(x);
+  }
+
+  public void testUnits2() {
+    ScalarUnaryOperator suo = s -> Quantity.of(s, "m^2");
+    Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}").map(suo);
+    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
+    Tensor b = Tensors.vector(1, 2, 3);
+    Tensor x = LinearSolve.of(matrix, b);
+    assertEquals(matrix.dot(x), b);
+    x = ConjugateGradientSolve.of(matrix, b);
+    assertEquals(matrix.dot(x), b);
+    ExactTensorQ.require(x);
+  }
+
+  public void testLengthMismatchFail() {
+    AssertFail.of(() -> ConjugateGradientSolve.of(IdentityMatrix.of(3), Tensors.vector(1, 2)));
+    AssertFail.of(() -> ConjugateGradientSolve.of(IdentityMatrix.of(3), Tensors.vector(1, 2, 3, 4)));
+  }
+
+  public void testRhsMatrixFail() {
+    AssertFail.of(() -> ConjugateGradientSolve.of(IdentityMatrix.of(2), IdentityMatrix.of(2)));
+  }
+
+  public void testEmptyFail() {
+    AssertFail.of(() -> ConjugateGradientSolve.of(Tensors.empty(), Tensors.vector(1)));
+  }
+}

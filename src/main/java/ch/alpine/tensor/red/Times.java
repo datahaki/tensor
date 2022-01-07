@@ -10,7 +10,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 
-/** inspired by
+/** Hint: implementation covers the Hadamard product, i.e. entrywise/pointwise product
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Times.html">Times</a> */
 public enum Times {
   ;
