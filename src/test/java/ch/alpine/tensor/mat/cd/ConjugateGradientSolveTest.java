@@ -50,6 +50,43 @@ public class ConjugateGradientSolveTest extends TestCase {
     ExactTensorQ.require(x);
   }
 
+  public void testMixedUnits() {
+    Tensor matrix = Tensors.fromString("{{10[m^2], 1[m*kg]}, {1[m*kg], 10[kg^2]}}");
+    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
+    Tensor b = Tensors.fromString("{4[m], 3[kg]}");
+    Tensor x = CholeskyDecomposition.of(matrix).solve(b);
+    Tensor x2 = ConjugateGradientSolve.of(matrix, b);
+    ExactTensorQ.require(x2);
+    assertEquals(x, x2);
+  }
+
+  public void testComplex() {
+    Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
+    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
+    Tensor b = Tensors.fromString("{4[m], 3[kg]}");
+    Tensor x = CholeskyDecomposition.of(matrix).solve(b);
+    assertEquals(matrix.dot(x), b);
+    Tensor x1 = LinearSolve.of(matrix, b);
+    assertEquals(x, x1);
+    Tensor x2 = ConjugateGradientSolve.of(matrix, b);
+    ExactTensorQ.require(x2);
+    assertEquals(x, x2);
+  }
+
+  public void testComplex2() {
+    Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
+    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
+    Tensor b = Tensors.fromString("{2+I/5[m], 3-I[kg]}");
+    Tensor x = CholeskyDecomposition.of(matrix).solve(b);
+    Tensor x1 = LinearSolve.of(matrix, b);
+    assertEquals(x, x1);
+    Tensor x2 = ConjugateGradientSolve.of(matrix, b);
+    ExactTensorQ.require(x2);
+    // System.out.println(x);
+    // System.out.println(x2);
+    // assertEquals(x, x2);
+  }
+
   public void testLengthMismatchFail() {
     AssertFail.of(() -> ConjugateGradientSolve.of(IdentityMatrix.of(3), Tensors.vector(1, 2)));
     AssertFail.of(() -> ConjugateGradientSolve.of(IdentityMatrix.of(3), Tensors.vector(1, 2, 3, 4)));

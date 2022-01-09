@@ -9,7 +9,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 
 /** class provides ad-tensors of several low-dimensional Lie-algebras */
-public enum LieAlgebras {
+/* package */ enum LieAlgebras {
   ;
   private static final Scalar P1 = RealScalar.ONE;
   private static final Scalar N1 = RealScalar.ONE.negate();
@@ -35,14 +35,6 @@ public enum LieAlgebras {
     ad.set(N1, 0, 1, 2);
     ad.set(P1, 0, 2, 1);
     return ad;
-  }
-
-  // ---
-  public static Tensor sl2_basis() {
-    Tensor b1 = Tensors.fromString("{{1, 0}, {0, -1}}");
-    Tensor b2 = Tensors.fromString("{{0, 1}, {-1, 0}}");
-    Tensor b3 = Tensors.fromString("{{0, 1}, {1, 0}}");
-    return Tensors.of(b1, b2, b3);
   }
 
   /** @return ad */

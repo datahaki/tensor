@@ -207,6 +207,7 @@ public class CholeskyDecompositionTest extends TestCase {
    * ConjugateTranspose[L] . L */
   public void testQuantityComplex() {
     Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
+    assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     // System.out.println(MathematicaForm.of(matrix));
     CholeskyDecomposition cd = CholeskyDecomposition.of(matrix);
     Tensor sdiag = Sqrt.of(cd.diagonal());

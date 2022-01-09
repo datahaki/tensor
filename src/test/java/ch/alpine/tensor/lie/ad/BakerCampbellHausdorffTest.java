@@ -35,7 +35,6 @@ public class BakerCampbellHausdorffTest extends TestCase {
         Tensor ar = ad.dot(UnitVector.of(n, c0)).dot(UnitVector.of(n, c1));
         assertEquals(ar.dot(basis), mr);
       }
-    assertEquals(AdBuilder.of(basis), ad);
   }
 
   public void testHe1Basis() {
