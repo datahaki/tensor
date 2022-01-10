@@ -34,12 +34,10 @@ public enum ImageResize {
    * @param bufferedImage
    * @param width of rescaled image
    * @param height of rescaled image
-   * @return scaled instance of given buffered image with given dimensions */
+   * @return scaled instance of given buffered image with given dimensions and type
+   * either BufferedImage.TYPE_BYTE_GRAY or BufferedImage.TYPE_INT_ARGB */
   public static BufferedImage of(BufferedImage bufferedImage, int width, int height) {
-    int type = bufferedImage.getType() == BufferedImage.TYPE_BYTE_GRAY //
-        ? BufferedImage.TYPE_BYTE_GRAY
-        : BufferedImage.TYPE_INT_ARGB;
-    BufferedImage result = new BufferedImage(width, height, type);
+    BufferedImage result = new BufferedImage(width, height, StaticHelper.type(bufferedImage));
     Graphics graphics = result.createGraphics();
     Image image = bufferedImage.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING);
     graphics.drawImage(image, 0, 0, null);
