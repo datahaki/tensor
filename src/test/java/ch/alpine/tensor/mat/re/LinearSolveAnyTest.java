@@ -6,11 +6,13 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -32,7 +34,7 @@ public class LinearSolveAnyTest extends TestCase {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
     Tensor m = Join.of(DiagonalMatrix.with(vector), Array.zeros(3, 6));
     Tensor b = Join.of(vector, Array.zeros(3));
-    Tensor x = LinearSolve.any(m, b);
+    Tensor x = LinearSolve.any(m.unmodifiable(), b.unmodifiable());
     assertEquals(m.dot(x), b);
   }
 
@@ -77,6 +79,69 @@ public class LinearSolveAnyTest extends TestCase {
     assertEquals(x, b);
   }
 
+  public void testConstants() {
+    int n = 3;
+    for (int k = 1; k < 6; ++k) {
+      Tensor m = ConstantArray.of(RealScalar.ONE, n, k);
+      Tensor b = ConstantArray.of(RealScalar.ONE, n);
+      LinearSolve.any(m, b);
+    }
+  }
+
+  public void testConstantsMN() {
+    int n = 3;
+    for (int k = 1; k < 6; ++k) {
+      Tensor m = ConstantArray.of(RealScalar.of(1.0), n, k);
+      Tensor b = ConstantArray.of(RealScalar.ONE, n);
+      LinearSolve.any(m, b);
+    }
+  }
+
+  public void testConstantsVN() {
+    int n = 3;
+    for (int k = 1; k < 6; ++k) {
+      Tensor m = ConstantArray.of(RealScalar.ONE, n, k);
+      Tensor b = ConstantArray.of(RealScalar.of(1.0), n);
+      LinearSolve.any(m, b);
+    }
+  }
+
+  public void testConstantsUW() {
+    int n = 3;
+    for (int k = 1; k < 6; ++k) {
+      Tensor m = ConstantArray.of(Quantity.of(2, "m"), n, k);
+      Tensor b = ConstantArray.of(Quantity.of(3, "m"), n);
+      LinearSolve.any(m, b);
+    }
+  }
+
+  public void testConstantsUWM() {
+    int n = 3;
+    for (int k = 1; k < 6; ++k) {
+      Tensor m = ConstantArray.of(Quantity.of(2, "m"), n, k);
+      Tensor b = ConstantArray.of(Quantity.of(3, "m"), n, 2);
+      LinearSolve.any(m, b);
+    }
+  }
+
+  public void testConstantsN() {
+    int n = 3;
+    for (int k = 1; k < 6; ++k) {
+      Tensor m = ConstantArray.of(RealScalar.of(1.0), n, k);
+      Tensor b = ConstantArray.of(RealScalar.of(1.0), n);
+      LinearSolve.any(m, b);
+    }
+  }
+
+  public void testConstantsNUW() {
+    int n = 3;
+    for (int k = 1; k < 6; ++k) {
+      Tensor m = ConstantArray.of(Quantity.of(2.0, "m"), n, k);
+      Tensor b = ConstantArray.of(Quantity.of(3.0, "m"), n);
+      LinearSolve.any(m, b);
+    }
+  }
+
   public void testAny2() {
     Tensor m = Tensors.fromString("{{1}, {1}, {-1}}");
     Tensor b = Tensors.vector(2, 2, -2);
@@ -100,5 +165,10 @@ public class LinearSolveAnyTest extends TestCase {
     Tensor x = RandomVariate.of(distribution, 4);
     Tensor b = m.dot(x);
     // Tensor s = LinearSolve.any(m, b);
+  }
+
+  public void testNoSolutionFail() {
+    AssertFail.of(() -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1)));
+    AssertFail.of(() -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1.0)));
   }
 }

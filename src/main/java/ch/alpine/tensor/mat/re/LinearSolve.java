@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -8,9 +10,10 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.alg.Join;
-import ch.alpine.tensor.alg.Partition;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.pi.LeastSquares;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/LinearSolve.html">LinearSolve</a> */
@@ -40,9 +43,7 @@ public enum LinearSolve {
     return GaussianElimination.of(matrix, b, pivot);
   }
 
-  /** API EXPERIMENTAL
-   * 
-   * function for matrix not necessarily invertible, or square
+  /** function for matrix not necessarily invertible, or square
    * 
    * Example:
    * <pre>
@@ -51,31 +52,50 @@ public enum LinearSolve {
    * LinearSolve.any(matrix, b) == {2}
    * </pre>
    * 
-   * @param matrix with exact precision scalars
-   * @param b vector with exact precision scalars
+   * Known issues:
+   * does not work well for input consisting of mixed units
+   * 
+   * @param matrix
+   * @param b vector
    * @return x with matrix.x == b
    * @throws TensorRuntimeException if such an x does not exist
-   * @see ExactTensorQ */
+   * @see ExactTensorQ
+   * @see LeastSquares */
   public static Tensor any(Tensor matrix, Tensor b) {
-    return vector(matrix, VectorQ.require(b));
+    if (ExactTensorQ.of(matrix) && //
+        ExactTensorQ.of(b) && //
+        VectorQ.of(b)) {
+      Tensor x = vector(matrix, b);
+      if (matrix.dot(x).equals(b)) // TODO if implementation is correct, this check is not necessary
+        return x;
+      throw TensorRuntimeException.of(matrix, b);
+    }
+    Tensor x = LeastSquares.of(matrix, b);
+    // check is necessary since least squares does not guarantee equality
+    Tolerance.CHOP.requireClose(matrix.dot(x), b);
+    return x;
   }
 
   // helper function
   private static Tensor vector(Tensor matrix, Tensor b) {
-    int cols = Unprotect.dimension1(matrix);
-    Tensor r = RowReduce.of(ExactTensorQ.require(Join.of(1, matrix, Partition.of(b, 1))));
-    Tensor x = Array.zeros(cols);
-    int j = 0;
-    int c0 = 0;
-    while (c0 < cols) {
-      if (Scalars.nonZero(r.Get(j, c0))) { // use chop for numeric input?
-        x.set(r.Get(j, cols), c0);
-        ++j;
+    Integers.requireEquals(matrix.length(), b.length());
+    AtomicInteger atomicInteger = new AtomicInteger();
+    Tensor reduce = RowReduce.of(Tensor.of(matrix.stream() //
+        .map(Tensor::copy) //
+        .map(row -> row.append(b.Get(atomicInteger.getAndIncrement())))));
+    int last = Unprotect.dimension1(matrix);
+    Tensor x = Array.zeros(last); // initial solution
+    int row = 0;
+    int col = 0;
+    while (col < last) {
+      if (Scalars.nonZero(reduce.Get(row, col))) { // use chop for numeric input?
+        x.set(reduce.Get(row, last), col);
+        ++row;
       }
-      ++c0;
+      ++col;
     }
-    for (; j < matrix.length(); ++j)
-      if (Scalars.nonZero(r.Get(j, cols)))
+    for (; row < matrix.length(); ++row)
+      if (Scalars.nonZero(reduce.Get(row, last)))
         throw TensorRuntimeException.of(matrix, b);
     return x;
   }
