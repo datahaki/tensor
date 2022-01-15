@@ -13,7 +13,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.red.Total;
@@ -22,7 +21,15 @@ import ch.alpine.tensor.sca.Factorial;
 
 /** Log[Exp[-y] Exp[-x]] = -Log[Exp[x] Exp[y]]
  * 
- * Reference: Neeb
+ * <p>The series has a linear convergence rate, that mean
+ * for an increase in degree a certain number of digits
+ * in the precision is achieved
+ * 
+ * <p>For example, for the standard so(3)
+ * degree +5 gives precision of up to 3 digits
+ * degree 10 gives precision of up to 6 digits
+ * 
+ * <p>Reference: Neeb
  * Hakenberg.de kernel.nb */
 public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializable {
   private static final Scalar _0 = RealScalar.ZERO;
@@ -55,8 +62,13 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
     return Total.of(series(x, y));
   }
 
-  @PackageTestAccess
-  Tensor series(Tensor x, Tensor y) {
+  /** function allows to investigate the rate of convergence
+   * 
+   * @param x
+   * @param y
+   * @return list of contributions up to given degree the sum of which is the
+   * result of this binary operator */
+  public Tensor series(Tensor x, Tensor y) {
     return new Inner(x, y).series;
   }
 

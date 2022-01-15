@@ -14,6 +14,15 @@ import ch.alpine.tensor.mat.pi.LeastSquares;
  * whereas in Mathematica:
  * {q, r} = Mathematica::QRDecomposition[matrix] and then ConjugateTranspose[q].r == matrix.
  * 
+ * Our choice is motivated by the fact that the name "qr"-decomposition suggests
+ * that the product of q and r gives the original matrix.
+ * 
+ * Mathematica's choice is probably motivated by the fact that the implementations
+ * build ConjugateTranspose[q] instead of q.
+ * 
+ * Our interface simply provides ConjugateTranspose[q] via the method
+ * {@link #getQConjugateTranspose()}.
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/QRDecomposition.html">QRDecomposition</a>
  * 

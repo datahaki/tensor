@@ -31,8 +31,11 @@ public class MatrixAlgebra implements Serializable {
     int n = basis.length();
     ad = SparseArray.of(RealScalar.ZERO, n, n, n);
     for (int i = 0; i < n; ++i)
-      for (int j = 0; j < n; ++j)
-        ad.set(LinearSolve.any(matrix, Flatten.of(MatrixBracket.of(basis.get(i), basis.get(j)))), Tensor.ALL, j, i);
+      for (int j = i + 1; j < n; ++j) {
+        Tensor x = LinearSolve.any(matrix, Flatten.of(MatrixBracket.of(basis.get(i), basis.get(j))));
+        ad.set(x, Tensor.ALL, j, i);
+        ad.set(x.negate(), Tensor.ALL, i, j);
+      }
   }
 
   /** @return sparse array of rank 3 with dimensions n x n x n

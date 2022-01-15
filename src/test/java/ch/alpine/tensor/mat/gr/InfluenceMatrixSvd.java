@@ -11,8 +11,10 @@ import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.qr.GramSchmidt;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 
+/** {@link GramSchmidt} supersedes InfluenceMatrixSvd */
 /* package */ class InfluenceMatrixSvd extends InfluenceMatrixBase implements Serializable {
   /** matrix u is svd.getU() with columns associated to non-zero singular value
    * u may be of the form {{}, {}, ..., {}} */
