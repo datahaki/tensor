@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.lie.ad;
 
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -22,9 +23,20 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
     return ad;
   }
 
+  public static Tensor so3_basis() {
+    return LeviCivitaTensor.of(3).negate();
+  }
+
   /** @return ad tensor of 3-dimensional so(3) */
   public static Tensor so3() {
-    return LeviCivitaTensor.of(3).negate();
+    return new MatrixAlgebra(so3_basis()).ad();
+  }
+
+  public static Tensor se2_basis() {
+    return Tensors.of( //
+        Tensors.fromString("{{0,  0, 1}, {0, 0, 0}, {0, 0, 0}}"), //
+        Tensors.fromString("{{0,  0, 0}, {0, 0, 1}, {0, 0, 0}}"), //
+        Tensors.fromString("{{0, -1, 0}, {1, 0, 0}, {0, 0, 0}}"));
   }
 
   /** @return ad tensor of 3-dimensional se(2) */
@@ -37,9 +49,15 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
     return ad;
   }
 
-  /** @return ad */
+  public static Tensor sl2_basis() {
+    return Tensors.of( //
+        Tensors.fromString("{{1, 0}, {0, -1}}"), //
+        Tensors.fromString("{{0, 1}, {-1, 0}}"), //
+        Tensors.fromString("{{0, 1}, {+1, 0}}")).multiply(RationalScalar.HALF);
+  }
+
+  /** @return ad tensor of 3-dimensional sl(2) */
   public static Tensor sl2() {
-    return Tensors.fromString( //
-        "{{{0, 0, 0}, {0, 0, -2}, {0, 2, 0}}, {{0, 0, -2}, {0, 0, 0}, {2, 0, 0}}, {{0, -2, 0}, {2, 0, 0}, {0, 0, 0}}}");
+    return new MatrixAlgebra(sl2_basis()).ad();
   }
 }

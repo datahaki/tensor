@@ -69,4 +69,8 @@ public interface QRDecomposition {
    * @throws Exception if rank of matrix is not maximal
    * @throws Exception if n < m */
   Tensor pseudoInverse();
+
+  /** @return permutation where the i-th element indicates what column in {@link #getR()}
+   * to take the diagonal element from */
+  int[] sigma();
 }

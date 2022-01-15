@@ -3,12 +3,12 @@ package ch.alpine.tensor.lie.ad;
 
 import java.util.function.BinaryOperator;
 
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
-import ch.alpine.tensor.lie.MatrixBracket;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
@@ -43,24 +43,18 @@ public class MatrixAlgebraTest extends TestCase {
     assertTrue(rank4 instanceof SparseArray);
   }
 
-  /** @return ad */
-  public static Tensor sl2() {
-    return Tensors.fromString( //
-        "{{{0, 0, 0}, {0, 0, -2}, {0, 2, 0}}, {{0, 0, -2}, {0, 0, 0}, {2, 0, 0}}, {{0, -2, 0}, {2, 0, 0}, {0, 0, 0}}}");
-  }
-
-  public static Tensor sl2_basis() {
-    Tensor b1 = Tensors.fromString("{{1, 0}, {0, -1}}");
-    Tensor b2 = Tensors.fromString("{{0, 1}, {-1, 0}}");
-    Tensor b3 = Tensors.fromString("{{0, 1}, {1, 0}}");
-    return Tensors.of(b1, b2, b3);
+  private static Tensor sl2_basisA() {
+    return Tensors.of( //
+        Tensors.fromString("{{1, 0}, {0, -1}}"), //
+        Tensors.fromString("{{0, 1}, {-1, 0}}"), //
+        Tensors.fromString("{{0, 1}, {+1, 0}}")).multiply(RationalScalar.HALF);
   }
 
   public void testSl2() {
-    Tensor ad = new MatrixAlgebra(sl2_basis()).ad();
+    Tensor ad = new MatrixAlgebra(sl2_basisA()).ad();
     assertEquals(ad, LieAlgebras.sl2());
     Tensor form = KillingForm.of(ad);
-    assertEquals(form, DiagonalMatrix.of(8, -8, 8));
+    assertEquals(form, DiagonalMatrix.of(2, -2, 2));
   }
 
   public void testSo3() {

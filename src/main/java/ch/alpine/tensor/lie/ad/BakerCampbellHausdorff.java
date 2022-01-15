@@ -19,18 +19,24 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Factorial;
 
-/** Log[Exp[-y] Exp[-x]] = -Log[Exp[x] Exp[y]]
+/** The BakerCampbellHausdorff formula computes
+ * <pre>
+ * toMatrix(BCH[x, y]) := MatrixLog[MatrixExp[toMatrix(x)] . MatrixExp[toMatrix(y)]]
+ * </pre>
+ * where toMatrix is the function {@link MatrixAlgebra#toMatrix(Tensor)}
  * 
- * <p>The series has a linear convergence rate, that mean
- * for an increase in degree a certain number of digits
- * in the precision is achieved
+ * The following identity holds
+ * Log[Exp[-y] Exp[-x]] = -Log[Exp[x] Exp[y]]
  * 
- * <p>For example, for the standard so(3)
- * degree +5 gives precision of up to 3 digits
- * degree 10 gives precision of up to 6 digits
+ * <p>The BakerCampbellHausdorff series has a linear convergence rate, that means each
+ * additional term in the series improves the precision by a certain number of digits.
+ * 
+ * <p>The convergence is best for elements x, y close to {0, ..., 0}
  * 
  * <p>Reference: Neeb
- * Hakenberg.de kernel.nb */
+ * Hakenberg.de kernel.nb
+ * 
+ * @see MatrixAlgebra */
 public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializable {
   private static final Scalar _0 = RealScalar.ZERO;
   private static final Scalar _1 = RealScalar.ONE;
@@ -82,7 +88,7 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
       series.set(x, 0);
       adX = ad.dot(x);
       adY = ad.dot(y);
-      Tensor pwX = IdentityMatrix.of(x.length());
+      Tensor pwX = IdentityMatrix.sparse(x.length());
       for (int m = 0; m < degree; ++m) {
         recur(pwX.dot(y).divide(Factorial.of(m)), m + 1, Tensors.empty(), Tensors.empty(), 0, true);
         pwX = adX.dot(pwX);

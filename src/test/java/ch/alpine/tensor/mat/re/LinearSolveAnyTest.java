@@ -9,6 +9,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.mat.DiagonalMatrix;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -77,6 +78,7 @@ public class LinearSolveAnyTest extends TestCase {
     Scalar det = Det.of(m);
     assertEquals(det, RealScalar.ZERO);
     assertEquals(x, b);
+    assertEquals(m.dot(x), b);
   }
 
   public void testConstants() {
@@ -84,7 +86,8 @@ public class LinearSolveAnyTest extends TestCase {
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(RealScalar.ONE, n, k);
       Tensor b = ConstantArray.of(RealScalar.ONE, n);
-      LinearSolve.any(m, b);
+      Tensor x = LinearSolve.any(m, b);
+      assertEquals(m.dot(x), b);
     }
   }
 
@@ -93,7 +96,8 @@ public class LinearSolveAnyTest extends TestCase {
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(RealScalar.of(1.0), n, k);
       Tensor b = ConstantArray.of(RealScalar.ONE, n);
-      LinearSolve.any(m, b);
+      Tensor x = LinearSolve.any(m, b);
+      Tolerance.CHOP.requireClose(m.dot(x), b);
     }
   }
 
@@ -102,7 +106,8 @@ public class LinearSolveAnyTest extends TestCase {
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(RealScalar.ONE, n, k);
       Tensor b = ConstantArray.of(RealScalar.of(1.0), n);
-      LinearSolve.any(m, b);
+      Tensor x = LinearSolve.any(m, b);
+      Tolerance.CHOP.requireClose(m.dot(x), b);
     }
   }
 
@@ -111,7 +116,8 @@ public class LinearSolveAnyTest extends TestCase {
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(Quantity.of(2, "m"), n, k);
       Tensor b = ConstantArray.of(Quantity.of(3, "m"), n);
-      LinearSolve.any(m, b);
+      Tensor x = LinearSolve.any(m, b);
+      assertEquals(m.dot(x), b);
     }
   }
 
@@ -120,7 +126,8 @@ public class LinearSolveAnyTest extends TestCase {
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(Quantity.of(2, "m"), n, k);
       Tensor b = ConstantArray.of(Quantity.of(3, "m"), n, 2);
-      LinearSolve.any(m, b);
+      Tensor x = LinearSolve.any(m, b);
+      Tolerance.CHOP.requireClose(m.dot(x), b);
     }
   }
 
@@ -129,7 +136,8 @@ public class LinearSolveAnyTest extends TestCase {
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(RealScalar.of(1.0), n, k);
       Tensor b = ConstantArray.of(RealScalar.of(1.0), n);
-      LinearSolve.any(m, b);
+      Tensor x = LinearSolve.any(m, b);
+      Tolerance.CHOP.requireClose(m.dot(x), b);
     }
   }
 
@@ -138,7 +146,8 @@ public class LinearSolveAnyTest extends TestCase {
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(Quantity.of(2.0, "m"), n, k);
       Tensor b = ConstantArray.of(Quantity.of(3.0, "m"), n);
-      LinearSolve.any(m, b);
+      Tensor x = LinearSolve.any(m, b);
+      Tolerance.CHOP.requireClose(m.dot(x), b);
     }
   }
 
@@ -158,13 +167,13 @@ public class LinearSolveAnyTest extends TestCase {
     AssertFail.of(() -> Det.of(m)); // fail is consistent with Mathematica 12
   }
 
-  @SuppressWarnings("unused")
   public void testLarge() {
     Distribution distribution = NormalDistribution.standard();
     Tensor m = RandomVariate.of(distribution, 2, 4);
-    Tensor x = RandomVariate.of(distribution, 4);
-    Tensor b = m.dot(x);
-    // Tensor s = LinearSolve.any(m, b);
+    Tensor g = RandomVariate.of(distribution, 4);
+    Tensor b = m.dot(g);
+    Tensor x = LinearSolve.any(m, b);
+    Tolerance.CHOP.requireClose(m.dot(x), b);
   }
 
   public void testNoSolutionFail() {

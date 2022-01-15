@@ -4,8 +4,6 @@ package ch.alpine.tensor.mat.qr;
 import java.io.Serializable;
 import java.util.stream.IntStream;
 
-import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
@@ -42,26 +40,24 @@ public class GramSchmidt extends QRDecompositionBase implements Serializable {
   private final Tensor qInv = Tensors.empty();
   private final Tensor r = Tensors.empty();
   private final int[] sigma;
-  private final boolean isSquare;
 
   private GramSchmidt(Tensor matrix) {
     int m = Unprotect.dimension1(matrix);
-    isSquare = matrix.length() == m;
-    sigma = new int[m];
+    int[] _sigma = new int[m];
     for (int i = 0; i < m; ++i) {
       Tensor a = matrix;
       Tensor norms = Tensor.of(IntStream.range(0, m).mapToObj(l -> Vector2Norm.of(a.get(Tensor.ALL, l))));
-      int j = ArgMax.of(norms.map(Unprotect::withoutUnit));
-      sigma[i] = j;
-      if (Tolerance.CHOP.isZero(norms.Get(j)))
+      _sigma[i] = ArgMax.of(norms.map(Unprotect::withoutUnit));
+      if (Tolerance.CHOP.isZero(norms.Get(_sigma[i])))
         break;
-      Tensor q = Vector2Norm.NORMALIZE.apply(a.get(Tensor.ALL, j));
+      Tensor q = Vector2Norm.NORMALIZE.apply(a.get(Tensor.ALL, _sigma[i]));
       Tensor qc = Conjugate.of(q);
       qInv.append(qc);
       Tensor ri = qc.dot(matrix);
       r.append(ri);
       matrix = matrix.add(TensorProduct.of(q, ri.negate()));
     }
+    sigma = IntStream.of(_sigma).limit(qInv.length()).toArray();
   }
 
   @Override // from QRDecomposition
@@ -74,12 +70,8 @@ public class GramSchmidt extends QRDecompositionBase implements Serializable {
     return qInv;
   }
 
-  @Override // from QRDecomposition
-  public Scalar det() { // only exact up to sign
-    return isSquare //
-        ? IntStream.range(0, sigma.length) //
-            .mapToObj(i -> r.Get(i, sigma[i])) //
-            .reduce(Scalar::multiply).orElseThrow()
-        : RealScalar.ZERO;
+  @Override
+  public int[] sigma() {
+    return sigma;
   }
 }

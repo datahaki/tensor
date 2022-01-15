@@ -46,19 +46,15 @@ public interface InfluenceMatrix {
     if (ExactTensorQ.of(design) || //
         !Unprotect.isUnitUnique(design))
       try {
-        Tensor pinv = PseudoInverse.usingCholesky(design);
-        int m = pinv.length();
-        return n - m < m //
-            ? new InfluenceMatrixAdapter(design.dot(pinv))
-            : new InfluenceMatrixSplit(design, pinv);
+        return new InfluenceMatrixImpl(design, PseudoInverse.usingCholesky(design));
       } catch (Exception exception) {
         // design matrix does not have maximal rank
       }
     QRDecomposition qrDecomposition = GramSchmidt.of(design);
     Tensor qInv = qrDecomposition.getQConjugateTranspose();
     if (Tensors.isEmpty(qInv))
-      return new InfluenceMatrixAdapter(Array.sparse(n, n));
-    return new InfluenceMatrixAdapter(qrDecomposition.getQ().dot(qInv));
+      return new InfluenceMatrixImpl(Array.sparse(n, 1), Array.sparse(1, n));
+    return new InfluenceMatrixImpl(qrDecomposition.getQ(), qInv);
   }
 
   /** projection matrix defines a projection of a tangent vector at given point to a vector in

@@ -64,12 +64,8 @@ public enum LinearSolve {
   public static Tensor any(Tensor matrix, Tensor b) {
     if (ExactTensorQ.of(matrix) && //
         ExactTensorQ.of(b) && //
-        VectorQ.of(b)) {
-      Tensor x = vector(matrix, b);
-      if (matrix.dot(x).equals(b)) // TODO if implementation is correct, this check is not necessary
-        return x;
-      throw TensorRuntimeException.of(matrix, b);
-    }
+        VectorQ.of(b))
+      return vector(matrix, b);
     Tensor x = LeastSquares.of(matrix, b);
     // check is necessary since least squares does not guarantee equality
     Tolerance.CHOP.requireClose(matrix.dot(x), b);

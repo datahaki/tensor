@@ -15,7 +15,6 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
-import ch.alpine.tensor.lie.MatrixBracket;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -136,5 +135,15 @@ public class BakerCampbellHausdorffTest extends TestCase {
     Tensor ad = Array.zeros(2, 2, 2);
     BakerCampbellHausdorff.of(ad, 1);
     AssertFail.of(() -> BakerCampbellHausdorff.of(ad, 0));
+  }
+
+  public void testMatrixLogExpExpSe2() {
+    MatrixAlgebra matrixAlgebra = new MatrixAlgebra(LieAlgebras.se2_basis());
+    TestHelper.check(matrixAlgebra, 8);
+  }
+
+  public void testMatrixLogExpExpSo3() {
+    MatrixAlgebra matrixAlgebra = new MatrixAlgebra(LieAlgebras.so3_basis());
+    TestHelper.check(matrixAlgebra, 8);
   }
 }

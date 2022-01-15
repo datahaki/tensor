@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.lie;
+package ch.alpine.tensor.lie.ad;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.MatrixQ;

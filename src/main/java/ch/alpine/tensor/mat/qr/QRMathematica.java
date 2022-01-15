@@ -3,7 +3,6 @@ package ch.alpine.tensor.mat.qr;
 
 import java.io.Serializable;
 
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.mat.Orthogonalize;
@@ -38,8 +37,8 @@ public class QRMathematica extends QRDecompositionBase implements Serializable {
     return Tensor.of(qrDecomposition.getR().stream().limit(length)); // min(n, m) x m
   }
 
-  @Override // from QRDecomposition
-  public Scalar det() {
-    return qrDecomposition.det();
+  @Override
+  public int[] sigma() {
+    return qrDecomposition.sigma();
   }
 }

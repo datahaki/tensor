@@ -9,8 +9,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.lie.MatrixBracket;
-import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.spa.SparseArray;
@@ -48,9 +46,7 @@ public class MatrixAlgebra implements Serializable {
    * @return vector with vector . basis == matrix
    * @throws Exception if given matrix is not an element in the matrix Lie algebra */
   public Tensor toVector(Tensor matrix) {
-    Tensor x = LinearSolve.any(this.matrix, Flatten.of(matrix));
-    Tolerance.CHOP.requireClose(x.dot(basis), matrix);
-    return x;
+    return LinearSolve.any(this.matrix, Flatten.of(matrix));
   }
 
   /** @param vector

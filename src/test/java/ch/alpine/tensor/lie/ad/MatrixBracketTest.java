@@ -1,10 +1,11 @@
 // code by jph
-package ch.alpine.tensor.lie;
+package ch.alpine.tensor.lie.ad;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.lie.r2.RotationMatrix;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -45,5 +46,15 @@ public class MatrixBracketTest extends TestCase {
     Tensor y = Tensors.vector(1, 2, 3);
     AssertFail.of(() -> MatrixBracket.of(x, y));
     AssertFail.of(() -> MatrixBracket.of(y, x));
+  }
+
+  public void testMatrixAlg() {
+    assertEquals(LieAlgebras.so3(), LeviCivitaTensor.of(3).negate());
+  }
+
+  public void testSl2() {
+    Tensor ad = Tensors.fromString( //
+        "{{{0, 0, 0}, {0, 0, -1}, {0, 1, 0}}, {{0, 0, -1}, {0, 0, 0}, {1, 0, 0}}, {{0, -1, 0}, {1, 0, 0}, {0, 0, 0}}}");
+    assertEquals(LieAlgebras.sl2(), ad);
   }
 }
