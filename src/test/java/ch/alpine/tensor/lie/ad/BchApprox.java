@@ -13,7 +13,7 @@ import ch.alpine.tensor.red.Total;
  * Neeb
  * 
  * "Baker-Campbell-Hausdorff formula" Wikipedia */
-public class BchApprox implements BinaryOperator<Tensor>, Serializable {
+/* package */ class BchApprox implements BinaryOperator<Tensor>, Serializable {
   public static final int DEGREE = 5;
 
   /** @param ad

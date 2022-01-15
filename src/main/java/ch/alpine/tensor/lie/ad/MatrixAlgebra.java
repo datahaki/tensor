@@ -11,6 +11,7 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.re.MatrixRank;
+import ch.alpine.tensor.spa.Nnz;
 import ch.alpine.tensor.spa.SparseArray;
 
 public class MatrixAlgebra implements Serializable {
@@ -53,5 +54,10 @@ public class MatrixAlgebra implements Serializable {
    * @return */
   public Tensor toMatrix(Tensor vector) {
     return vector.dot(basis);
+  }
+  
+  @Override
+  public String toString() {
+    return String.format("%s[dim=%d, Nnz[ad]=%d]", getClass().getSimpleName(), ad().length(), Nnz.of((SparseArray) ad));
   }
 }

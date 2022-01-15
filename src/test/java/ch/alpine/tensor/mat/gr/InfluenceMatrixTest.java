@@ -220,7 +220,7 @@ public class InfluenceMatrixTest extends TestCase {
     Tensor image = influenceMatrix.image(Tensors.vector(1, 2, 3, 4));
     assertEquals(image, Array.zeros(4));
     InfluenceMatrixImpl influenceMatrixImpl = (InfluenceMatrixImpl) influenceMatrix;
-    assertFalse(influenceMatrixImpl.useMatrix());
+    assertFalse(influenceMatrixImpl.dotMatrix());
   }
 
   public void testNumericZeroQuantity() {

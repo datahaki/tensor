@@ -14,15 +14,13 @@ import ch.alpine.tensor.sca.Sqrt;
 /* package */ class InfluenceMatrixImpl implements InfluenceMatrix, Serializable {
   private final Tensor design;
   private final Tensor d_pinv;
-  private final boolean useMatrix;
+  private final boolean dotMatrix;
   private transient Tensor matrix = null;
 
   public InfluenceMatrixImpl(Tensor design, Tensor d_pinv) {
     this.design = design;
     this.d_pinv = d_pinv;
-    int n = design.length();
-    int d = d_pinv.length();
-    useMatrix = n < d + d;
+    dotMatrix = design.length() < 2 * d_pinv.length();
   }
 
   @Override // from InfluenceMatrix
@@ -34,8 +32,8 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from InfluenceMatrix
   public Tensor image(Tensor vector) {
-    return useMatrix //
-        ? vector.dot(matrix)
+    return dotMatrix() //
+        ? vector.dot(matrix())
         : vector.dot(design).dot(d_pinv);
   }
 
@@ -64,8 +62,10 @@ import ch.alpine.tensor.sca.Sqrt;
     return String.format("%s[%s]", InfluenceMatrix.class.getSimpleName(), Tensors.message(matrix()));
   }
 
+  /** @return whether image(vector) is computed as the product vector . design . d_pinv,
+   * or vector . matrix() in order to maximize efficiency */
   @PackageTestAccess
-  boolean useMatrix() {
-    return useMatrix;
+  /* package */ boolean dotMatrix() {
+    return dotMatrix;
   }
 }

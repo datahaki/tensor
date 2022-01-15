@@ -3,13 +3,14 @@ package ch.alpine.tensor.lie.ad;
 
 import java.util.function.BinaryOperator;
 
-import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.DiagonalMatrix;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
@@ -27,8 +28,7 @@ public class MatrixAlgebraTest extends TestCase {
     assertTrue(b2 instanceof SparseArray);
     Tensor basis = Tensors.of(b0, b1, b2);
     MatrixAlgebra matrixAlgebra = new MatrixAlgebra(basis);
-    // System.out.println(ad);
-    assertEquals(matrixAlgebra.ad(), LieAlgebras.se2());
+    assertEquals(matrixAlgebra.ad(), TestHelper.se2());
     assertEquals(matrixAlgebra.toVector(b1.add(b2)), Tensors.vector(0, 1, 1));
     assertEquals(matrixAlgebra.toVector(b0.subtract(b2)), Tensors.vector(1, 0, -1));
     Tensor matrix = matrixAlgebra.toMatrix(Tensors.vector(2, 3, 4));
@@ -43,16 +43,9 @@ public class MatrixAlgebraTest extends TestCase {
     assertTrue(rank4 instanceof SparseArray);
   }
 
-  private static Tensor sl2_basisA() {
-    return Tensors.of( //
-        Tensors.fromString("{{1, 0}, {0, -1}}"), //
-        Tensors.fromString("{{0, 1}, {-1, 0}}"), //
-        Tensors.fromString("{{0, 1}, {+1, 0}}")).multiply(RationalScalar.HALF);
-  }
-
   public void testSl2() {
-    Tensor ad = new MatrixAlgebra(sl2_basisA()).ad();
-    assertEquals(ad, LieAlgebras.sl2());
+    Tensor ad = new MatrixAlgebra(TestHelper.sl2_basis()).ad();
+    assertEquals(ad, TestHelper.sl2());
     Tensor form = KillingForm.of(ad);
     assertEquals(form, DiagonalMatrix.of(2, -2, 2));
   }
@@ -73,8 +66,6 @@ public class MatrixAlgebraTest extends TestCase {
     b2.set(Quantity.of(0, "m"), 1, 2);
     b2.set(Quantity.of(0, "m^-1"), 2, 0);
     b2.set(Quantity.of(0, "m^-1"), 2, 1);
-    // System.out.println(Pretty.of(b0));
-    // System.out.println(Pretty.of(b2));
     b2.dot(b0);
   }
 
@@ -100,6 +91,18 @@ public class MatrixAlgebraTest extends TestCase {
     Tolerance.CHOP.requireClose(tensor, expect);
     // Tensor approx = BchApprox.of(ad).apply(x, y);
     // Tolerance.CHOP.requireClose(approx, BakerCampbellHausdorff.of(ad, BchApprox.DEGREE).apply(x, y));
+  }
+
+  public void testUnivariate() {
+    MatrixAlgebra matrixAlgebra = new MatrixAlgebra(Tensors.of(IdentityMatrix.of(5)));
+    assertEquals(matrixAlgebra.toVector(IdentityMatrix.of(5)), UnitVector.of(1, 0));
+    String string = matrixAlgebra.toString();
+    // System.out.println(string);
+    assertTrue(string.startsWith("MatrixAlgebra["));
+  }
+
+  public void testNumericFail() {
+    AssertFail.of(() -> new MatrixAlgebra(TestHelper.he1().map(N.DOUBLE)));
   }
 
   public void testZeroFail() {

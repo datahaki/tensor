@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 
 public class KillingFormTest extends TestCase {
   public void testSe2() {
-    Tensor ad = LieAlgebras.se2().unmodifiable();
+    Tensor ad = TestHelper.se2().unmodifiable();
     JacobiIdentity.require(ad);
     assertEquals(JacobiIdentity.of(ad), Array.zeros(3, 3, 3, 3));
     assertEquals(ad.dot(UnitVector.of(3, 0)).dot(UnitVector.of(3, 1)), Array.zeros(3));
@@ -22,14 +22,14 @@ public class KillingFormTest extends TestCase {
   }
 
   public void testSo3() {
-    Tensor ad = LieAlgebras.so3();
+    Tensor ad = TestHelper.so3();
     assertEquals(JacobiIdentity.of(ad), Array.zeros(3, 3, 3, 3));
     Tensor kil = KillingForm.of(ad);
     assertEquals(kil, DiagonalMatrix.of(-2, -2, -2));
   }
 
   public void testSl2() {
-    Tensor ad = LieAlgebras.sl2();
+    Tensor ad = TestHelper.sl2();
     assertEquals(JacobiIdentity.of(ad), Array.zeros(3, 3, 3, 3));
     Tensor kil = KillingForm.of(ad);
     // killing form is non-degenerate
@@ -37,7 +37,7 @@ public class KillingFormTest extends TestCase {
   }
 
   public void testHe3() {
-    Tensor ad = LieAlgebras.he1();
+    Tensor ad = TestHelper.he1();
     assertEquals(JacobiIdentity.of(ad), Array.zeros(3, 3, 3, 3));
     Tensor kil = KillingForm.of(ad);
     assertTrue(Scalars.isZero(Det.of(kil)));

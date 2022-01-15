@@ -50,7 +50,7 @@ public class InfluenceMatrixImplTest extends TestCase {
         Tensor image = influenceMatrix.image(vector);
         {
           InfluenceMatrixImpl influenceMatrixImpl = (InfluenceMatrixImpl) influenceMatrix;
-          assertFalse(influenceMatrixImpl.useMatrix());
+          assertFalse(influenceMatrixImpl.dotMatrix());
         }
         VectorQ.requireLength(image, vector.length());
         Chop._10.requireClose(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(r));
@@ -123,14 +123,16 @@ public class InfluenceMatrixImplTest extends TestCase {
     Distribution distribution = LogNormalDistribution.standard();
     Tensor design = RandomVariate.of(distribution, 10, 2);
     InfluenceMatrixImpl influenceMatrixImpl = (InfluenceMatrixImpl) InfluenceMatrix.of(design);
-    assertFalse(influenceMatrixImpl.useMatrix());
+    influenceMatrixImpl.image(RandomVariate.of(distribution, 10));
+    assertFalse(influenceMatrixImpl.dotMatrix());
   }
 
   public void testUseMatrixTrue() {
     Distribution distribution = LogNormalDistribution.standard();
     Tensor design = RandomVariate.of(distribution, 8, 7);
     InfluenceMatrixImpl influenceMatrixImpl = (InfluenceMatrixImpl) InfluenceMatrix.of(design);
-    assertTrue(influenceMatrixImpl.useMatrix());
+    influenceMatrixImpl.image(RandomVariate.of(distribution, 8));
+    assertTrue(influenceMatrixImpl.dotMatrix());
   }
 
   public void testModifierNonPublic() {

@@ -2,7 +2,6 @@
 package ch.alpine.tensor.lie.ad;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.function.BinaryOperator;
 
@@ -10,53 +9,17 @@ import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.red.KroneckerDelta;
 import ch.alpine.tensor.spa.SparseArray;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BakerCampbellHausdorffTest extends TestCase {
-  private static void _check(Tensor ad, Tensor basis) {
-    JacobiIdentity.require(ad);
-    int n = ad.length();
-    assertEquals(n, basis.length());
-    for (int c0 = 0; c0 < n; ++c0)
-      for (int c1 = 0; c1 < n; ++c1) {
-        Tensor mr = MatrixBracket.of(basis.get(c0), basis.get(c1));
-        Tensor ar = ad.dot(UnitVector.of(n, c0)).dot(UnitVector.of(n, c1));
-        assertEquals(ar.dot(basis), mr);
-      }
-  }
-
-  public void testHe1Basis() {
-    Tensor b0 = Array.of(l -> KroneckerDelta.of(l, Arrays.asList(0, 1)), 3, 3);
-    Tensor b1 = Array.of(l -> KroneckerDelta.of(l, Arrays.asList(1, 2)), 3, 3);
-    Tensor b2 = Array.of(l -> KroneckerDelta.of(l, Arrays.asList(0, 2)), 3, 3);
-    Tensor basis = Tensors.of(b0, b1, b2);
-    _check(LieAlgebras.he1(), basis);
-  }
-
-  public void testSo3Basis() {
-    Tensor basis = LeviCivitaTensor.of(3).negate();
-    _check(LieAlgebras.so3(), basis);
-  }
-
-  public void testSe2Basis() {
-    Tensor b0 = Tensors.fromString("{{0, 0, 1}, {0, 0, 0}, {0, 0, 0}}");
-    Tensor b1 = Tensors.fromString("{{0, 0, 0}, {0, 0, 1}, {0, 0, 0}}");
-    Tensor b2 = LeviCivitaTensor.of(3).get(2).negate();
-    Tensor basis = Tensors.of(b0, b1, b2);
-    _check(LieAlgebras.se2(), basis);
-  }
-
   private static void _check(Tensor ad) {
     BakerCampbellHausdorff bakerCampbellHausdorff = //
         (BakerCampbellHausdorff) BakerCampbellHausdorff.of(ad, BchApprox.DEGREE);
@@ -95,19 +58,19 @@ public class BakerCampbellHausdorffTest extends TestCase {
   }
 
   public void testHe1() {
-    _check(LieAlgebras.he1());
+    _check(TestHelper.he1());
   }
 
   public void testSl2() {
-    _check(LieAlgebras.sl2());
+    _check(TestHelper.sl2());
   }
 
   public void testSe2() {
-    _check(LieAlgebras.se2());
+    _check(TestHelper.se2());
   }
 
   public void testSo3() {
-    _check(LieAlgebras.so3());
+    _check(TestHelper.so3());
   }
 
   public void testSparse() {
@@ -125,7 +88,7 @@ public class BakerCampbellHausdorffTest extends TestCase {
   }
 
   public void testJacobiFail() throws ClassNotFoundException, IOException {
-    Tensor ad = LieAlgebras.sl2();
+    Tensor ad = TestHelper.sl2();
     Serialization.copy(BakerCampbellHausdorff.of(ad, 2));
     ad.set(Scalar::zero, Tensor.ALL, 1, 2);
     AssertFail.of(() -> BakerCampbellHausdorff.of(ad, 2));
@@ -138,12 +101,12 @@ public class BakerCampbellHausdorffTest extends TestCase {
   }
 
   public void testMatrixLogExpExpSe2() {
-    MatrixAlgebra matrixAlgebra = new MatrixAlgebra(LieAlgebras.se2_basis());
+    MatrixAlgebra matrixAlgebra = new MatrixAlgebra(TestHelper.se2_basis());
     TestHelper.check(matrixAlgebra, 8);
   }
 
   public void testMatrixLogExpExpSo3() {
-    MatrixAlgebra matrixAlgebra = new MatrixAlgebra(LieAlgebras.so3_basis());
+    MatrixAlgebra matrixAlgebra = new MatrixAlgebra(TestHelper.so3_basis());
     TestHelper.check(matrixAlgebra, 8);
   }
 }

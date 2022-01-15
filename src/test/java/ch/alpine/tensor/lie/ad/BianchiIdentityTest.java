@@ -21,6 +21,6 @@ public class BianchiIdentityTest extends TestCase {
   }
 
   public void testRank3Fail() {
-    AssertFail.of(() -> BianchiIdentity.of(LieAlgebras.he1()));
+    AssertFail.of(() -> BianchiIdentity.of(TestHelper.he1()));
   }
 }

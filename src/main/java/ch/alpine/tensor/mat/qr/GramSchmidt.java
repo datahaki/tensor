@@ -21,7 +21,7 @@ import ch.alpine.tensor.sca.Conjugate;
  * 
  * TODO it would be nice to achieve Det[Q] == +1 for A square (as is the case for QRDImpl)
  * 
- * TODO the current implementation of {@link #pseudoInverse()} should use sigma
+ * FIXME the current implementation of {@link #pseudoInverse()} should use sigma
  * 
  * Reference:
  * Chapter "Gram-Schmidt with Column Pivoting"
