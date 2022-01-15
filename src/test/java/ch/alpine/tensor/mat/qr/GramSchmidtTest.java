@@ -10,7 +10,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.io.Pretty;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.VandermondeMatrix;
@@ -22,7 +21,6 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Round;
 import junit.framework.TestCase;
 
 public class GramSchmidtTest extends TestCase {
@@ -84,12 +82,12 @@ public class GramSchmidtTest extends TestCase {
     Random random = new Random(5); // 5 yields sigma = {0,1,2}
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, 4, 3);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
-    System.out.println(Tensors.vectorInt(qrDecomposition.sigma()));
+    // System.out.println(Tensors.vectorInt(qrDecomposition.sigma()));
     Tensor pinv1 = qrDecomposition.pseudoInverse();
     Tensor pinv2 = PseudoInverse.of(SingularValueDecomposition.of(matrix));
     pinv1.add(pinv2);
-    System.out.println(Pretty.of(matrix.dot(pinv2).map(Round._3)));
-    System.out.println(Pretty.of(matrix.dot(pinv1).map(Round._3)));
+    // System.out.println(Pretty.of(matrix.dot(pinv2).map(Round._3)));
+    // System.out.println(Pretty.of(matrix.dot(pinv1).map(Round._3)));
     // Tolerance.CHOP.requireClose(pinv1, pinv2);
   }
 

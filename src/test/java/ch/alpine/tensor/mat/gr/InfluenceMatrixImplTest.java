@@ -134,6 +134,6 @@ public class InfluenceMatrixImplTest extends TestCase {
   }
 
   public void testModifierNonPublic() {
-    assertEquals(InfluenceMatrixImpl.class.getModifiers() & Modifier.PUBLIC, 0);
+    assertFalse(Modifier.isPublic(InfluenceMatrixImpl.class.getModifiers()));
   }
 }

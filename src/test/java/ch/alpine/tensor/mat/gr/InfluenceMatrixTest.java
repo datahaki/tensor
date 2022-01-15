@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import java.util.Random;
 import java.util.stream.IntStream;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
@@ -17,6 +18,7 @@ import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
+import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -31,9 +33,11 @@ import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -182,8 +186,26 @@ public class InfluenceMatrixTest extends TestCase {
     InfluenceMatrix.of(design);
   }
 
-  public void testPackageVisibility() {
-    assertFalse(Modifier.isPublic(InfluenceMatrixImpl.class.getModifiers()));
+  public void testComplex5x3() {
+    Tensor re = RandomVariate.of(NormalDistribution.standard(), 5, 3);
+    Tensor im = RandomVariate.of(NormalDistribution.standard(), 5, 3);
+    Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im);
+    InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+    assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(5));
+    Tensor matrix = influenceMatrix.matrix();
+    assertTrue(HermitianMatrixQ.of(matrix));
+    InfluenceMatrixQ.require(matrix);
+  }
+
+  public void testComplex3x5() {
+    Tensor re = RandomVariate.of(NormalDistribution.standard(), 3, 5);
+    Tensor im = RandomVariate.of(NormalDistribution.standard(), 3, 5);
+    Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im);
+    InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+    assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(3));
+    Tensor matrix = influenceMatrix.matrix();
+    assertTrue(HermitianMatrixQ.of(matrix));
+    InfluenceMatrixQ.require(matrix);
   }
 
   public void testZeroQuantity() {
@@ -216,6 +238,6 @@ public class InfluenceMatrixTest extends TestCase {
   }
 
   public void testModifierPublic() {
-    assertEquals(InfluenceMatrix.class.getModifiers() & Modifier.PUBLIC, Modifier.PUBLIC);
+    assertTrue(Modifier.isPublic(InfluenceMatrix.class.getModifiers()));
   }
 }
