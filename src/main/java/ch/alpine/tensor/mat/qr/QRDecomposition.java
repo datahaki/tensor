@@ -52,7 +52,7 @@ public interface QRDecomposition {
     return new QRDecompositionImpl(matrix, qInv0, qrSignOperator);
   }
 
-  /** @return upper triangular matrix */
+  /** @return upper triangular matrix with respect to column permutation sigma */
   Tensor getR();
 
   /** @return ConjugateTranspose[getQ()]
@@ -65,7 +65,17 @@ public interface QRDecomposition {
   /** @return determinant of matrix */
   Scalar det();
 
-  /** @return least squares solution x with matrix.dot(x) ~ b
+  /** method performs
+   * <pre>
+   * Inverse[getR()] . getQConjugateTranspose()
+   * </pre>
+   * 
+   * equivalently:
+   * <pre>
+   * LinearSolve[getR()], getQConjugateTranspose()]
+   * </pre>
+   * 
+   * @return PseudoInverse[matrix], least squares solution x with matrix.dot(x) ~ qInv0
    * @throws Exception if rank of matrix is not maximal
    * @throws Exception if n < m */
   Tensor pseudoInverse();

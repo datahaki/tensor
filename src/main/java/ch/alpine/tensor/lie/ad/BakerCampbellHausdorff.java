@@ -3,6 +3,7 @@
 package ch.alpine.tensor.lie.ad;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
 
@@ -43,13 +44,21 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
   private static final int[] SIGN = { 1, -1 };
 
   /** @param ad tensor of rank 3 that satisfies the Jacobi identity
-   * @param degree positive
+   * @param degree strictly positive, depth of series
+   * @param chop tolerance for early abort
    * @return */
-  public static BinaryOperator<Tensor> of(Tensor ad, int degree) {
+  public static BinaryOperator<Tensor> of(Tensor ad, int degree, Chop chop) {
     return new BakerCampbellHausdorff( //
         JacobiIdentity.require(ad), //
         Integers.requirePositive(degree), //
-        Tolerance.CHOP);
+        Objects.requireNonNull(chop));
+  }
+
+  /** @param ad tensor of rank 3 that satisfies the Jacobi identity
+   * @param degree strictly positive
+   * @return */
+  public static BinaryOperator<Tensor> of(Tensor ad, int degree) {
+    return of(ad, degree, Tolerance.CHOP);
   }
 
   // ---
@@ -97,15 +106,16 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
 
     private void recur(Tensor v, int d, Tensor p, Tensor q, int total_q, boolean incrementQ) {
       final int k = p.length();
-      if (chop.allZero(v))
-        return;
       Scalar fac = Stream.concat(p.stream(), q.stream()) //
           .map(Scalar.class::cast) //
           .map(Factorial.FUNCTION) //
           .reduce(Scalar::multiply) //
           .orElse(RealScalar.ONE);
       Scalar f = RealScalar.of(Math.multiplyExact(SIGN[k & 1] * (k + 1), total_q + 1)).multiply(fac);
-      series.set(v.divide(f)::add, d - 1);
+      Tensor term = v.divide(f);
+      series.set(term::add, d - 1);
+      if (chop.allZero(term))
+        return;
       if (d < degree) {
         if (0 < k) {
           if (incrementQ) {

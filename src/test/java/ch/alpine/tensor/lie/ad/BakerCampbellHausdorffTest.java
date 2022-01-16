@@ -95,8 +95,9 @@ public class BakerCampbellHausdorffTest extends TestCase {
   }
 
   public void testDegreeFail() {
-    Tensor ad = Array.zeros(2, 2, 2);
+    Tensor ad = Array.sparse(2, 2, 2);
     BakerCampbellHausdorff.of(ad, 1);
+    AssertFail.of(() -> BakerCampbellHausdorff.of(ad, 1, null));
     AssertFail.of(() -> BakerCampbellHausdorff.of(ad, 0));
   }
 

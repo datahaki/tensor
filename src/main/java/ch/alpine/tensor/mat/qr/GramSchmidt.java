@@ -17,11 +17,7 @@ import ch.alpine.tensor.sca.Conjugate;
 /** the {@link GramSchmidt} algorithm is efficient for obtaining the {@link InfluenceMatrix}
  * for matrices, including rank-deficient matrices.
  * 
- * TODO in the current implementation r is a permutation of an upper triangular matrix
- * 
  * TODO it would be nice to achieve Det[Q] == +1 for A square (as is the case for QRDImpl)
- * 
- * FIXME the current implementation of {@link #pseudoInverse()} should use sigma
  * 
  * Reference:
  * Chapter "Gram-Schmidt with Column Pivoting"
@@ -57,7 +53,7 @@ public class GramSchmidt extends QRDecompositionBase implements Serializable {
       r.append(ri);
       matrix = matrix.add(TensorProduct.of(q, ri.negate()));
     }
-    sigma = IntStream.of(_sigma).limit(qInv.length()).toArray();
+    sigma = IntStream.of(_sigma).limit(r.length()).toArray();
   }
 
   @Override // from QRDecomposition

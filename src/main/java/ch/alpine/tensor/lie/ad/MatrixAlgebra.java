@@ -55,7 +55,7 @@ public class MatrixAlgebra implements Serializable {
   public Tensor toMatrix(Tensor vector) {
     return vector.dot(basis);
   }
-  
+
   @Override
   public String toString() {
     return String.format("%s[dim=%d, Nnz[ad]=%d]", getClass().getSimpleName(), ad().length(), Nnz.of((SparseArray) ad));
