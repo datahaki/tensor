@@ -95,18 +95,18 @@ public class SingularValueDecompositionTest extends TestCase {
     Tolerance.CHOP.requireClose(PseudoInverse.of(svd).dot(mat), IdentityMatrix.of(n));
   }
 
-  private static final Random RANDOM = new Random();
-
   public void testSvdR1() {
+    Random random = new Random(1);
     int n = 15;
-    Tensor matrix = Tensors.matrix((r, c) -> RationalScalar.of(RANDOM.nextInt(1000) - 500, RANDOM.nextInt(1000) + 1), n, n);
+    Tensor matrix = Tensors.matrix((r, c) -> RationalScalar.of(random.nextInt(1000) - 500, random.nextInt(1000) + 1), n, n);
     SingularValueDecomposition svd = TestHelper.svd(matrix);
     if (MatrixRank.of(svd) == n) // 1e-12 failed in the past
       Chop._08.requireClose(PseudoInverse.of(svd), Inverse.of(matrix));
   }
 
   public void testSvdR2() {
-    Tensor mat = Tensors.matrix((r, c) -> RationalScalar.of(RANDOM.nextInt(100) - 50, RANDOM.nextInt(100) + 1), 20, 4);
+    Random random = new Random(1);
+    Tensor mat = Tensors.matrix((r, c) -> RationalScalar.of(random.nextInt(100) - 50, random.nextInt(100) + 1), 20, 4);
     Tensor B = Tensors.matrix(new Scalar[][] { //
         // "{1, 2, 3, -1}"
         { RationalScalar.of(1, 1), RationalScalar.of(2, 1), RationalScalar.of(3, 1), RationalScalar.of(-1, 1) }, //

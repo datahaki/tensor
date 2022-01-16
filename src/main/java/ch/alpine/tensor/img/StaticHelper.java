@@ -7,8 +7,8 @@ import java.awt.image.BufferedImage;
   ;
   /** @param bufferedImage
    * @return either byte_gray or int_argb */
-  public static int type(BufferedImage bufferedImage) {
-    return bufferedImage.getType() == BufferedImage.TYPE_BYTE_GRAY //
+  public static int type(int type) {
+    return type == BufferedImage.TYPE_BYTE_GRAY //
         ? BufferedImage.TYPE_BYTE_GRAY
         : BufferedImage.TYPE_INT_ARGB;
   }
