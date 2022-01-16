@@ -33,6 +33,8 @@ import junit.framework.TestCase;
 public class QuaternionTest extends TestCase {
   public void testContructQuantity() {
     Quaternion quaternion = Quaternion.of(Quantity.of(3, "m"), Tensors.fromString("{2[m],3[m],4[m]}"));
+    assertEquals(quaternion.multiply(quaternion.one()), quaternion);
+    assertEquals(quaternion.one().multiply(quaternion), quaternion);
     Scalar abs = quaternion.abs();
     Tolerance.CHOP.requireClose(abs, Scalars.fromString("6.164414002968976[m]"));
     ExactScalarQ.require(quaternion);

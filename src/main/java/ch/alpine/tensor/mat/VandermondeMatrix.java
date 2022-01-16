@@ -24,6 +24,9 @@ import ch.alpine.tensor.itp.Fit;
  * https://en.wikipedia.org/wiki/Vandermonde_matrix
  * NR 2007
  * 
+ * "Linear Algebra and Learning from Data", p.180
+ * by Gilbert Strang, 2019
+ * 
  * @see Fit */
 public enum VandermondeMatrix {
   ;

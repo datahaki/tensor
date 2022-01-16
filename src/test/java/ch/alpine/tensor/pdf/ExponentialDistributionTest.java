@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import java.io.IOException;
+import java.util.Random;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.MachineNumberQ;
@@ -155,6 +156,13 @@ public class ExponentialDistributionTest extends TestCase {
   public void testStandard() {
     assertEquals(Mean.of(ExponentialDistribution.standard()), RealScalar.ONE);
     assertEquals(Variance.of(ExponentialDistribution.standard()), RealScalar.ONE);
+  }
+
+  public void testMarkov() {
+    Random random = new Random();
+    Distribution distribution = ExponentialDistribution.of(0.1 + 2 * random.nextDouble());
+    TestHelper.markov(distribution);
+    TestHelper.chebyshev(distribution);
   }
 
   public void testFailInverseCDF() {

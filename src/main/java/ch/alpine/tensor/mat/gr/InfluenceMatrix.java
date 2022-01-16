@@ -3,9 +3,12 @@ package ch.alpine.tensor.mat.gr;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
-import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
+import ch.alpine.tensor.mat.qr.GramSchmidt;
+import ch.alpine.tensor.mat.qr.QRDecomposition;
 
 /** Remark:
  * {@link Mahalanobis} is significantly faster than {@link InfluenceMatrix#of(Tensor)}
@@ -39,19 +42,19 @@ public interface InfluenceMatrix {
    * @return if the given matrix is in exact precision and has maximal rank,
    * then the implementation of influence matrix is also in exact precision */
   static InfluenceMatrix of(Tensor design) {
+    int n = design.length();
     if (ExactTensorQ.of(design) || //
         !Unprotect.isUnitUnique(design))
       try {
-        int n = design.length();
-        Tensor pinv = PseudoInverse.usingCholesky(design);
-        int m = pinv.length();
-        return n - m < m //
-            ? new InfluenceMatrixAdapter(design.dot(pinv))
-            : new InfluenceMatrixSplit(design, pinv);
+        return new InfluenceMatrixImpl(design, PseudoInverse.usingCholesky(design));
       } catch (Exception exception) {
         // design matrix does not have maximal rank
       }
-    return new InfluenceMatrixSvd(SingularValueDecomposition.of(design));
+    QRDecomposition qrDecomposition = GramSchmidt.of(design);
+    Tensor qInv = qrDecomposition.getQConjugateTranspose();
+    if (Tensors.isEmpty(qInv))
+      return new InfluenceMatrixImpl(Array.sparse(n, 1), Array.sparse(1, n));
+    return new InfluenceMatrixImpl(qrDecomposition.getQ(), qInv);
   }
 
   /** projection matrix defines a projection of a tangent vector at given point to a vector in

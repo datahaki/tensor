@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import java.io.IOException;
+import java.util.Random;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -70,6 +71,13 @@ public class LogNormalDistributionTest extends TestCase {
       Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
       Tolerance.CHOP.requireClose(x, q);
     }
+  }
+
+  public void testMarkov() {
+    Random random = new Random();
+    Distribution distribution = LogNormalDistribution.of(random.nextDouble() - 0.5, 0.1 + random.nextDouble());
+    TestHelper.markov(distribution);
+    TestHelper.chebyshev(distribution);
   }
 
   public void testSigmaNonPositiveFail() {

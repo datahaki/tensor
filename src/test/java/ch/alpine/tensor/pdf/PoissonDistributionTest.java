@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import java.util.Random;
+
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -91,19 +93,13 @@ public class PoissonDistributionTest extends TestCase {
     assertEquals(actual, expect);
   }
 
-  // public void testCDFInverseCDF() {
-  // int n = 20;
-  // Distribution distribution = BinomialDistribution.of(n, RationalScalar.of(1, 4));
-  // CDF cdf = CDF.of(distribution);
-  // InverseCDF inverseCDF = InverseCDF.of(distribution);
-  // Tensor r = Tensors.reserve(n + 1);
-  // for (Tensor _x : Range.of(0, n + 1)) {
-  // Scalar x = (Scalar) _x;
-  // Scalar p = cdf.p_lessThan(x);
-  // r.append(p);
-  // Scalar q = inverseCDF.quantile(p);
-  // }
-  // }
+  public void testMarkov() {
+    Random random = new Random();
+    Distribution distribution = PoissonDistribution.of(0.1 + 10 * random.nextDouble());
+    TestHelper.markov(distribution);
+    TestHelper.chebyshev(distribution);
+  }
+
   public void testToString() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(5.5));
     String string = distribution.toString();

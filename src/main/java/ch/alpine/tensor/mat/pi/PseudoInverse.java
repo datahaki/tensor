@@ -69,7 +69,11 @@ public enum PseudoInverse {
   }
 
   // ---
-  /** @param matrix with maximal rank
+  /** Quote: "A^+ could also be computed directly from A by modifying the elimination steps
+   * that usually produce A^-1. However each step of arithmetic would have to be exact! You
+   * need to distinguish exact zeros from small nonzeros. That is the hard part of A^+."
+   * 
+   * @param matrix with maximal rank
    * @return
    * @throws Exception if given matrix does not have maximal rank */
   public static Tensor usingCholesky(Tensor matrix) {

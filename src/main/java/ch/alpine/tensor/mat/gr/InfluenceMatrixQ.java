@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.gr;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
@@ -14,9 +15,10 @@ public enum InfluenceMatrixQ {
   ;
   /** @param matrix
    * @param chop
-   * @return */
+   * @return whether given matrix equals to ConjugateTranspose of matrix
+   * and satisfies the {@link IdempotentQ} predicate */
   public static boolean of(Tensor matrix, Chop chop) {
-    return SymmetricMatrixQ.of(matrix, chop) // P = P'
+    return HermitianMatrixQ.of(matrix, chop) // P = ConjugateTranspose[P]
         && IdempotentQ.of(matrix, chop); // P . P == P
   }
 

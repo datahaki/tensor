@@ -13,6 +13,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.Tally;
+import ch.alpine.tensor.spa.SparseArray;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -104,6 +105,13 @@ public class ArrayTest extends TestCase {
     Set<List<Integer>> set = new HashSet<>();
     Array.forEach(set::add, 2, 3, 4);
     assertEquals(set.size(), 2 * 3 * 4);
+  }
+
+  public void testSparseDot() {
+    int n = 7;
+    Tensor p = Array.sparse(n, 1);
+    Tensor q = Array.sparse(1, n);
+    assertTrue(p.dot(q) instanceof SparseArray);
   }
 
   public void testForEachFail() {

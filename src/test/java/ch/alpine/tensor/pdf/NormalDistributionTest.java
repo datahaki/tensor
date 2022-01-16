@@ -81,6 +81,12 @@ public class NormalDistributionTest extends TestCase {
     }
   }
 
+  public void testChebyshev() {
+    TestHelper.chebyshev(NormalDistribution.standard());
+    TestHelper.chebyshev(NormalDistribution.of(3, 2));
+    TestHelper.chebyshev(NormalDistribution.of(3, 0.5));
+  }
+
   public void testComplexFail() {
     AssertFail.of(() -> NormalDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
   }

@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -65,9 +64,7 @@ import ch.alpine.tensor.nrm.Vector2Norm;
   }
 
   @Override // from QRDecomposition
-  public Scalar det() {
-    return r.length() == m // check if R is square
-        ? IntStream.range(0, m).mapToObj(i -> r.Get(i, i)).reduce(Scalar::multiply).orElseThrow()
-        : RealScalar.ZERO;
+  public int[] sigma() {
+    return IntStream.range(0, m).toArray();
   }
 }

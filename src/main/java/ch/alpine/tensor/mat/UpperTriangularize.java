@@ -19,7 +19,7 @@ public enum UpperTriangularize {
   /** retains the entries on the diagonal and above
    * 
    * @param matrix
-   * @return
+   * @return given matrix with all entries below the diagonal set to zero
    * @throws Exception if given matrix is not an array of rank 2 */
   public static Tensor of(Tensor matrix) {
     return of(matrix, 0);

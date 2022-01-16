@@ -14,6 +14,15 @@ import ch.alpine.tensor.mat.pi.LeastSquares;
  * whereas in Mathematica:
  * {q, r} = Mathematica::QRDecomposition[matrix] and then ConjugateTranspose[q].r == matrix.
  * 
+ * Our choice is motivated by the fact that the name "qr"-decomposition suggests
+ * that the product of q and r gives the original matrix.
+ * 
+ * Mathematica's choice is probably motivated by the fact that the implementations
+ * build ConjugateTranspose[q] instead of q.
+ * 
+ * Our interface simply provides ConjugateTranspose[q] via the method
+ * {@link #getQConjugateTranspose()}.
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/QRDecomposition.html">QRDecomposition</a>
  * 
@@ -43,7 +52,7 @@ public interface QRDecomposition {
     return new QRDecompositionImpl(matrix, qInv0, qrSignOperator);
   }
 
-  /** @return upper triangular matrix */
+  /** @return upper triangular matrix with respect to column permutation sigma */
   Tensor getR();
 
   /** @return ConjugateTranspose[getQ()]
@@ -56,8 +65,22 @@ public interface QRDecomposition {
   /** @return determinant of matrix */
   Scalar det();
 
-  /** @return least squares solution x with matrix.dot(x) ~ b
+  /** method performs
+   * <pre>
+   * Inverse[getR()] . getQConjugateTranspose()
+   * </pre>
+   * 
+   * equivalently:
+   * <pre>
+   * LinearSolve[getR()], getQConjugateTranspose()]
+   * </pre>
+   * 
+   * @return PseudoInverse[matrix], least squares solution x with matrix.dot(x) ~ qInv0
    * @throws Exception if rank of matrix is not maximal
    * @throws Exception if n < m */
   Tensor pseudoInverse();
+
+  /** @return permutation where the i-th element indicates what column in {@link #getR()}
+   * to take the diagonal element from */
+  int[] sigma();
 }

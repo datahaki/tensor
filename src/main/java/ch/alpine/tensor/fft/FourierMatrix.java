@@ -8,6 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.ConjugateTranspose;
+import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Sqrt;
 
@@ -15,7 +16,9 @@ import ch.alpine.tensor.sca.Sqrt;
  * and inverse transform of vectors or matrices of arbitrary dimensions.
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/FourierMatrix.html">FourierMatrix</a> */
+ * <a href="https://reference.wolfram.com/language/ref/FourierMatrix.html">FourierMatrix</a>
+ * 
+ * @see VandermondeMatrix */
 public enum FourierMatrix {
   ;
   /** @param n positive

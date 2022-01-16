@@ -9,6 +9,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -162,6 +163,16 @@ public class DotTest extends TestCase {
     assertEquals(Dot.combine(Arrays.asList(2), Arrays.asList(2, 3, 4, 5)), Arrays.asList(3, 4, 5));
     assertEquals(Dot.combine(Arrays.asList(3), Arrays.asList(3)), Arrays.asList());
     assertEquals(Dot.combine(Arrays.asList(1, 2, 3), Arrays.asList(3, 4, 5)), Arrays.asList(1, 2, 4, 5));
+  }
+
+  public void testComparison() {
+    Distribution distribution = NormalDistribution.standard();
+    Tensor v = RandomVariate.of(distribution, 50);
+    Tensor m1 = RandomVariate.of(distribution, 50, 3);
+    Tensor m2 = RandomVariate.of(distribution, 3, 50);
+    v.dot(m1).dot(m2);
+    assertEquals(new Dot(v, m1, m2).multiplications(), 0); // immediately collapse due to vector
+    assertEquals(new Dot(m1, m2).multiplications(), 3 * 50 * 50);
   }
 
   public void testCombineFail() {

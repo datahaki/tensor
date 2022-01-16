@@ -5,7 +5,10 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.spa.SparseArray;
 
-/** dot product Dot[a, Transpose[b]] optimized for matrices (and restricted to them) */
+/** dot product Dot[a, Transpose[b]] optimized for matrices (and restricted to them)
+ * 
+ * the purpose of the implementation to make obsolete the explicit
+ * computation of the {@link Transpose} */
 public enum MatrixDotTranspose {
   ;
   /** the return value of the function is always identical to

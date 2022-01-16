@@ -24,13 +24,13 @@ public class StaticHelperTest extends TestCase {
 
   public void testRequireUnit() {
     Scalar scalar = RealScalar.of(1.0 + 1e-13);
-    Scalar mapped = StaticHelper.requireUnit(scalar);
+    Scalar mapped = InfluenceMatrixSvd.requireUnit(scalar);
     Clips.unit().requireInside(mapped);
   }
 
   public void testRequireUnitFail() {
     Scalar scalar = RealScalar.of(1.0 + 1e-5);
-    AssertFail.of(() -> StaticHelper.requireUnit(scalar));
+    AssertFail.of(() -> InfluenceMatrixSvd.requireUnit(scalar));
   }
 
   public void testUnitizeChop() {

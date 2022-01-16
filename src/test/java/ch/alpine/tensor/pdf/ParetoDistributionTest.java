@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import java.io.IOException;
+import java.util.Random;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.NumberQ;
@@ -28,10 +29,11 @@ public class ParetoDistributionTest extends TestCase {
     Tolerance.CHOP.requireClose(cdf.p_lessEquals(RealScalar.of(4.0)), RealScalar.of(0.6306806007557013));
     Tolerance.CHOP.requireZero(cdf.p_lessEquals(RealScalar.of(2.3)));
     Tolerance.CHOP.requireZero(cdf.p_lessEquals(RealScalar.of(2.2)));
+    TestHelper.markov(distribution);
   }
 
   public void testMeanVariance() {
-    Distribution distribution = ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(7.8));
+    Distribution distribution = ParetoDistribution.of(2.3, 7.8);
     Scalar mean = Mean.of(distribution);
     Scalar varc = Variance.of(distribution);
     Tensor tensor = RandomVariate.of(distribution, 1000);
@@ -45,12 +47,19 @@ public class ParetoDistributionTest extends TestCase {
     assertEquals(inverseCDF.quantile(RealScalar.ZERO), RealScalar.of(2.3));
     assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
     assertTrue(distribution.toString().startsWith("ParetoDistribution["));
+    TestHelper.markov(distribution);
   }
 
   public void testMeanVarianceIndeterminate() {
-    Distribution distribution = ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(1));
+    Distribution distribution = ParetoDistribution.of(2.3, 1);
     assertFalse(NumberQ.of(Mean.of(distribution)));
     assertFalse(NumberQ.of(Variance.of(distribution)));
+  }
+
+  public void testMarkov() {
+    Random random = new Random();
+    Distribution distribution = ParetoDistribution.of(1.1 + random.nextDouble(), 1.1 + random.nextDouble());
+    TestHelper.markov(distribution);
   }
 
   public void testNegativeFail() {

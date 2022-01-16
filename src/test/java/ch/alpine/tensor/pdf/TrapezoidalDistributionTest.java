@@ -10,7 +10,11 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Subdivide;
+import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.itp.BSplineFunctionString;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
@@ -181,12 +185,30 @@ public class TrapezoidalDistributionTest extends TestCase {
     }
   }
 
+  public void testBSpline2() {
+    Distribution distribution = TrapezoidalDistribution.of(0.5, 1.5, 1.5, 2.5);
+    CDF cdf = CDF.of(distribution);
+    Tensor sequence = Tensors.vector(0, 0, 1, 1);
+    Tensor domain = Subdivide.of(0, sequence.length() - 1, 100);
+    ScalarTensorFunction suo = BSplineFunctionString.of(2, sequence);
+    Tolerance.CHOP.requireClose(domain.map(cdf::p_lessEquals), domain.map(suo));
+  }
+
+  public void testMarkov() {
+    Random random = new Random();
+    Distribution distribution = TrapezoidalDistribution.of( //
+        0 + random.nextDouble(), //
+        1 + random.nextDouble(), //
+        2 + random.nextDouble(), //
+        3 + random.nextDouble());
+    TestHelper.markov(distribution);
+  }
+
   public void testExactFail() {
     TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
     TrapezoidalDistribution.of(Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
     AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m")));
     AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(1, "m")));
-    // AssertFail.of(() ->
     TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(5, "m"));
   }
 
@@ -195,7 +217,6 @@ public class TrapezoidalDistributionTest extends TestCase {
     TrapezoidalDistribution.of(Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
     AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m")));
     AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(1., "m")));
-    // AssertFail.of(() ->
     TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(5., "m"));
   }
 

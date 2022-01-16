@@ -35,6 +35,8 @@ public class InfluenceMatrixSvdTest extends TestCase {
       Tensor matrix = influenceMatrix.matrix();
       Tensor zeros = Dot.of(influenceMatrix.residualMaker(), matrix);
       Tolerance.CHOP.requireAllZero(zeros);
+      InfluenceMatrixSvd influenceMatrixSvd = new InfluenceMatrixSvd(SingularValueDecomposition.of(design));
+      Tolerance.CHOP.requireClose(influenceMatrix.matrix(), influenceMatrixSvd.matrix());
     }
   }
 
@@ -59,6 +61,8 @@ public class InfluenceMatrixSvdTest extends TestCase {
         Chop._10.requireClose(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(r));
         String string = influenceMatrix.toString();
         assertTrue(string.startsWith("InfluenceMatrix["));
+        InfluenceMatrixSvd influenceMatrixSvd = new InfluenceMatrixSvd(SingularValueDecomposition.of(design));
+        Tolerance.CHOP.requireClose(influenceMatrix.matrix(), influenceMatrixSvd.matrix());
       }
   }
 

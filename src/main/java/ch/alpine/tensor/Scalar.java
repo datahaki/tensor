@@ -116,7 +116,7 @@ public interface Scalar extends Tensor {
    * @see Scalars#nonZero(Scalar) */
   Scalar zero();
 
-  /** multiplicative one of this scalar
+  /** multiplicative neutral element of this scalar
    * 
    * <p>For any scalar s, the scalar s.one() shall satisfy the equation
    * <pre>
