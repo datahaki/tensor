@@ -10,20 +10,7 @@ import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.qr.GramSchmidt;
 import ch.alpine.tensor.mat.qr.QRDecomposition;
 
-/** Remark:
- * {@link Mahalanobis} is significantly faster than {@link InfluenceMatrix#of(Tensor)}
- * for computations such as
- * <pre>
- * influenceMatrix.kernel(influenceMatrix.leverages_sqrt());
- * </pre>
- * 
- * {@link Mahalanobis} is faster by a tiny amount than {@link InfluenceMatrix#of(Tensor)}
- * for computations such as
- * <pre>
- * influenceMatrix.kernel(vector); // where vector is independent of influence matrix
- * </pre>
- * 
- * {@link InfluenceMatrix#of(Tensor)} is faster than {@link Mahalanobis} when computing
+/** {@link InfluenceMatrix#of(Tensor)} is faster than {@link Mahalanobis} when computing
  * {@link InfluenceMatrix#matrix()}
  * 
  * References:

@@ -13,6 +13,7 @@ import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.re.Det;
@@ -50,6 +51,8 @@ public class GramSchmidtTest extends TestCase {
     Tolerance.CHOP.requireClose(matrix, res);
     OrthogonalMatrixQ.require(qrDecomposition.getQ());
     OrthogonalMatrixQ.require(qrDecomposition.getQConjugateTranspose());
+    UnitaryMatrixQ.require(qrDecomposition.getQ());
+    UnitaryMatrixQ.require(qrDecomposition.getQConjugateTranspose());
   }
 
   public void testComplex() {
@@ -59,6 +62,17 @@ public class GramSchmidtTest extends TestCase {
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, res);
+    UnitaryMatrixQ.require(qrDecomposition.getQConjugateTranspose());
+  }
+
+  public void testComplexLarge() {
+    Tensor re = RandomVariate.of(NormalDistribution.standard(), 100, 20);
+    Tensor im = RandomVariate.of(NormalDistribution.standard(), 100, 20);
+    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
+    QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
+    Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
+    Tolerance.CHOP.requireClose(matrix, res);
+    UnitaryMatrixQ.require(qrDecomposition.getQConjugateTranspose());
   }
 
   public void testMixedUnits() {

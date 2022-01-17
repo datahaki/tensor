@@ -50,8 +50,8 @@ public enum LeastSquares {
    * 
    * @param matrix of size n x m
    * @param b tensor of length n
-   * @return x == PseudoInverse[matrix] . b so that matrix.dot(x) is the least
-   * square error approximation to b */
+   * @return x == PseudoInverse[matrix] . b so that matrix.dot(x) is the least square
+   * error approximation to b. Also, x is the minimum norm least squares solution. */
   public static Tensor of(Tensor matrix, Tensor b) {
     boolean assumeRankM = true;
     if (ExactTensorQ.of(matrix) || //

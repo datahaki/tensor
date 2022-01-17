@@ -18,7 +18,7 @@ import ch.alpine.tensor.mat.ConjugateTranspose;
 
   @Override // from QRDecomposition
   public final Tensor pseudoInverse() {
-    return RSolve.of(getR(), getQConjugateTranspose(), sigma());
+    return RSolve.of(this, getQConjugateTranspose());
   }
 
   @Override // from QRDecomposition
