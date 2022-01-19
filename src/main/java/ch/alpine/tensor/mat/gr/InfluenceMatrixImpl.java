@@ -5,10 +5,14 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.mat.UpperEvaluation;
 import ch.alpine.tensor.red.Diagonal;
+import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Sqrt;
 
 /** base for a class that implements the {@link InfluenceMatrix} interface
@@ -34,7 +38,8 @@ import ch.alpine.tensor.sca.Sqrt;
   @Override // from InfluenceMatrix
   public synchronized Tensor matrix() {
     return Objects.isNull(matrix) //
-        ? matrix = design.dot(d_pinv)
+        ? matrix = UpperEvaluation.of( //
+            design, Transpose.of(d_pinv), (p, q) -> (Scalar) p.dot(q), Conjugate.FUNCTION)
         : matrix;
   }
 

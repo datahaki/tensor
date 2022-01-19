@@ -258,4 +258,5 @@ public class CliffordAlgebraTest extends TestCase {
       JacobiIdentity.require(cliffordAlgebra.cp());
     }
   }
+  // TODO show that multivectors of even grade generate a subalgebra
 }

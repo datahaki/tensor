@@ -7,8 +7,15 @@ import ch.alpine.tensor.Tensor;
 /** implements binary average as
  * <pre>
  * p * (1 - lambda) + q * lambda == p + lambda * (q - p)
- * </pre> */
-/* package */ enum LinearBinaryAverage implements BinaryAverage {
+ * </pre>
+ * 
+ * Remark:
+ * implementation is useful when only a single interpolations
+ * between p and q is needed.
+ * Otherwise, the difference q - p should be pre-computed.
+ * 
+ * @see LinearInterpolation */
+public enum LinearBinaryAverage implements BinaryAverage {
   INSTANCE;
 
   @Override // from BinaryAverage

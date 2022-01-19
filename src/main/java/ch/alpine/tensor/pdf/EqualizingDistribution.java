@@ -9,8 +9,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.itp.LinearInterpolation;
+import ch.alpine.tensor.itp.LinearBinaryAverage;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
@@ -46,9 +45,9 @@ public class EqualizingDistribution implements ContinuousDistribution, Serializa
   public Scalar p_lessThan(Scalar x) {
     Scalar xlo = Floor.FUNCTION.apply(x);
     Scalar ofs = Clips.interval(xlo, RealScalar.ONE.add(xlo)).rescale(x);
-    return LinearInterpolation.of(Tensors.of( //
+    return (Scalar) LinearBinaryAverage.INSTANCE.split( //
         categoricalDistribution.p_lessThan(xlo), //
-        categoricalDistribution.p_lessEquals(xlo))).At(ofs);
+        categoricalDistribution.p_lessEquals(xlo), ofs);
   }
 
   @Override // from CDF
