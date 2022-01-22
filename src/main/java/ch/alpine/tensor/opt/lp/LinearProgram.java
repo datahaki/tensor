@@ -69,14 +69,11 @@ public class LinearProgram implements Serializable {
     EQUALS, LESS_EQUALS, GREATER_EQUALS;
 
     public ConstraintType flipInequality() {
-      switch (this) {
-      case GREATER_EQUALS:
-        return LESS_EQUALS;
-      case LESS_EQUALS:
-        return GREATER_EQUALS;
-      default:
-        throw new RuntimeException();
-      }
+      return switch (this) {
+      case GREATER_EQUALS -> LESS_EQUALS;
+      case LESS_EQUALS -> GREATER_EQUALS;
+      default -> throw new RuntimeException();
+      };
     }
   }
 
