@@ -140,7 +140,7 @@ public class StaticHelperTest extends TestCase {
   }
 
   public void testFallbackFail() {
-    Tensor tensor = Array.sparse(3);
+    Tensor tensor = SparseArray.of(RealScalar.ZERO, 3);
     AssertFail.of(() -> tensor.divide(Quantity.of(0, "")));
     AssertFail.of(() -> tensor.divide(Quantity.of(0, "s*m")));
     AssertFail.of(() -> tensor.multiply(DoubleScalar.POSITIVE_INFINITY));

@@ -129,7 +129,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     }
     {
       Scalar density = pdf.at(Quantity.of(2.5, "m"));
-      ExactScalarQ.require(density);
+      // ExactScalarQ.require(density);
       assertEquals(density, Scalars.fromString("1/2[m^-1]"));
     }
     {

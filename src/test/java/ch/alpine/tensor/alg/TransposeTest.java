@@ -17,7 +17,9 @@ import ch.alpine.tensor.pdf.ExponentialDistribution;
 import ch.alpine.tensor.pdf.NegativeBinomialDistribution;
 import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.spa.Normal;
+import ch.alpine.tensor.spa.SparseArray;
 import junit.framework.TestCase;
 
 public class TransposeTest extends TestCase {
@@ -154,5 +156,15 @@ public class TransposeTest extends TestCase {
     Tensor a = RandomVariate.of(distribution, 2, 4);
     Tensor b = RandomVariate.of(distribution, 4, 3);
     assertEquals(Transpose.of(a.dot(b)), Transpose.of(b).dot(Transpose.of(a)));
+  }
+
+  public void testFallback() {
+    Tensor tensor = SparseArray.of(Quantity.of(0, "kg"), 3, 4);
+    tensor.set(Quantity.of(3, "kg"), 1, 2);
+    Tensor result = Transpose.of(tensor);
+    assertEquals(result.Get(2, 1), Quantity.of(3, "kg"));
+    assertTrue(result instanceof SparseArray);
+    SparseArray sparseArray = (SparseArray) result;
+    assertEquals(sparseArray.fallback(), Quantity.of(0, "kg"));
   }
 }

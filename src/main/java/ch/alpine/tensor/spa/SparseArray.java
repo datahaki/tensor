@@ -38,7 +38,7 @@ import ch.alpine.tensor.ext.MergeIllegal;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/SparseArray.html">SparseArray</a> */
 public class SparseArray extends AbstractTensor implements Serializable {
-  /** @param fallback zero element, for instance {@link RealScalar#ZERO}
+  /** @param fallback scalar, for instance {@link RealScalar#ZERO}
    * @param dimensions with non-negative values
    * @return empty sparse array with given dimensions, or fallback if no dimensions are specified
    * @throws Exception if fallback element is not zero */
@@ -64,6 +64,11 @@ public class SparseArray extends AbstractTensor implements Serializable {
     this.fallback = fallback;
     this.size = size;
     this.navigableMap = navigableMap;
+  }
+
+  /** @return fallback scalar */
+  public Scalar fallback() {
+    return fallback;
   }
 
   @Override // from Tensor

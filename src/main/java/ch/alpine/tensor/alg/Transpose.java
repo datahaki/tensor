@@ -77,10 +77,11 @@ public enum Transpose {
     Dimensions dimensions = new Dimensions(tensor);
     List<Integer> dimensions_list = dimensions.list();
     if (tensor instanceof SparseArray) {
+      SparseArray sparseArray = (SparseArray) tensor;
       Integers.requireLessEquals(sigma.length, dimensions_list.size());
       int[] sigma_ = IntStream.range(0, dimensions_list.size()).map(i -> i < sigma.length ? sigma[i] : i).toArray();
-      return ((SparseArray) tensor) //
-          .visit(new SparseEntryTranspose(sigma_, Array.sparse(Size.of(dimensions_list).permute(sigma_))));
+      return sparseArray.visit(new SparseEntryTranspose( //
+          sigma_, SparseArray.of(sparseArray.fallback(), Size.of(dimensions_list).permute(sigma_))));
     }
     if (dimensions.isArrayWith(list -> list.size() == sigma.length)) {
       Size size = Size.of(dimensions_list);

@@ -45,14 +45,14 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
   public Scalar p_lessThan(Scalar x) {
     return Scalars.lessEquals(k, x) //
         ? RealScalar.ONE.subtract(Power.of(k.divide(x), alpha))
-        : RealScalar.ZERO;
+        : x.one().zero();
   }
 
   @Override // from PDF
   public Scalar at(Scalar x) {
     return Scalars.lessEquals(k, x) //
         ? k_alpha.divide(Power.of(x, alpha.add(RealScalar.ONE))).multiply(alpha)
-        : RealScalar.ZERO;
+        : x.one().zero();
   }
 
   @Override // from MeanInterface
