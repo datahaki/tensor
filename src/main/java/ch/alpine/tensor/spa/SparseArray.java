@@ -198,9 +198,8 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor add(Tensor tensor) {
-    if (tensor instanceof SparseArray) {
+    if (tensor instanceof SparseArray sparseArray) {
       Integers.requireEquals(length(), tensor.length());
-      SparseArray sparseArray = (SparseArray) tensor;
       return new SparseArray(fallback.add(sparseArray.fallback), size, //
           Stream.concat(navigableMap.keySet().stream(), sparseArray.navigableMap.keySet().stream()) //
               .distinct().collect(_map(i -> i, i -> byRef(i).add(sparseArray.byRef(i))))).trim();
@@ -210,9 +209,8 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor subtract(Tensor tensor) {
-    if (tensor instanceof SparseArray) {
+    if (tensor instanceof SparseArray sparseArray) {
       Integers.requireEquals(length(), tensor.length());
-      SparseArray sparseArray = (SparseArray) tensor;
       return new SparseArray(fallback.subtract(sparseArray.fallback), size, //
           Stream.concat(navigableMap.keySet().stream(), sparseArray.navigableMap.keySet().stream()) //
               .distinct().collect(_map(i -> i, i -> byRef(i).subtract(sparseArray.byRef(i))))).trim();
@@ -328,7 +326,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   private SparseArray trim() {
     navigableMap.values().removeIf(1 < size.size() //
-        ? tensor -> (tensor instanceof SparseArray && ((SparseArray) tensor).navigableMap.isEmpty())
+        ? tensor -> (tensor instanceof SparseArray sparseArray && sparseArray.navigableMap.isEmpty())
         : fallback::equals);
     return this;
   }

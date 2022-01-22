@@ -155,10 +155,8 @@ public class SimpleUnitSystem implements UnitSystem {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof Quantity) {
-      Quantity quantity = (Quantity) scalar;
+    if (scalar instanceof Quantity quantity)
       return cache.apply(quantity.unit()).times(quantity);
-    }
     return Objects.requireNonNull(scalar);
   }
 

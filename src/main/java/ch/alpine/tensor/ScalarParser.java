@@ -110,8 +110,7 @@ import java.util.regex.Pattern;
    * @param im
    * @return */
   public static String imagToString(Scalar im) {
-    if (im instanceof RationalScalar) {
-      RationalScalar rationalScalar = (RationalScalar) im;
+    if (im instanceof RationalScalar rationalScalar) {
       BigInteger num = rationalScalar.numerator();
       BigInteger den = rationalScalar.denominator();
       if (num.equals(BigInteger.ONE))

@@ -32,10 +32,8 @@ public enum Log10 implements ScalarUnaryOperator {
         return DoubleScalar.of(Math.log10(value));
       return ComplexScalar.of(Math.log10(-value), PI_LOG10);
     }
-    if (scalar instanceof ComplexScalar) {
-      ComplexScalar z = (ComplexScalar) scalar;
+    if (scalar instanceof ComplexScalar z)
       return Log.FUNCTION.apply(z).divide(LOG10);
-    }
     throw TensorRuntimeException.of(scalar);
   }
 

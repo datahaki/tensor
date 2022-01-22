@@ -82,10 +82,8 @@ public class StringScalar extends AbstractScalar implements Comparable<Scalar>, 
 
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof StringScalar) {
-      StringScalar stringScalar = (StringScalar) scalar;
+    if (scalar instanceof StringScalar stringScalar)
       return string.compareTo(stringScalar.string);
-    }
     throw TensorRuntimeException.of(this, scalar);
   }
 

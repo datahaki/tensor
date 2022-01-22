@@ -196,11 +196,9 @@ public enum Scalars {
    * or empty if given scalar does not represent an integer
    * @throws Exception if given scalar is null */
   public static Optional<BigInteger> optionalBigInteger(Scalar scalar) {
-    if (scalar instanceof RationalScalar) {
-      RationalScalar rationalScalar = (RationalScalar) scalar;
+    if (scalar instanceof RationalScalar rationalScalar)
       if (rationalScalar.isInteger())
         return Optional.of(rationalScalar.numerator());
-    }
     Objects.requireNonNull(scalar);
     return Optional.empty();
   }

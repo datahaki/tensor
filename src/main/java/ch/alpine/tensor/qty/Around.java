@@ -87,10 +87,8 @@ public class Around extends AbstractScalar implements //
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    if (scalar instanceof Around) {
-      Around around = (Around) scalar;
+    if (scalar instanceof Around around)
       return of(mean.multiply(around.mean), Hypot.of(mean.multiply(around.sigma), around.mean.multiply(sigma)));
-    }
     return of(mean.multiply(scalar), sigma.multiply(Abs.FUNCTION.apply(scalar)));
   }
 
@@ -121,10 +119,8 @@ public class Around extends AbstractScalar implements //
 
   @Override // from Scalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof Around) {
-      Around around = (Around) scalar;
+    if (scalar instanceof Around around)
       return of(mean.add(around.mean), Hypot.of(sigma, around.sigma));
-    }
     return of(mean.add(scalar), sigma);
   }
 
@@ -197,11 +193,9 @@ public class Around extends AbstractScalar implements //
 
   @Override
   public boolean equals(Object object) {
-    if (object instanceof Around) {
-      Around around = (Around) object;
+    if (object instanceof Around around)
       return mean.equals(around.mean) //
           && sigma.equals(around.sigma);
-    }
     return false;
   }
 

@@ -23,10 +23,8 @@ public enum Arg implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof ArgInterface) {
-      ArgInterface argInterface = (ArgInterface) scalar;
+    if (scalar instanceof ArgInterface argInterface)
       return argInterface.arg();
-    }
     throw TensorRuntimeException.of(scalar);
   }
 

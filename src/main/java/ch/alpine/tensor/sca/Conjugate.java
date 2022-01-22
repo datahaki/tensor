@@ -22,10 +22,8 @@ public enum Conjugate implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof ConjugateInterface) {
-      ConjugateInterface conjugateInterface = (ConjugateInterface) scalar;
+    if (scalar instanceof ConjugateInterface conjugateInterface)
       return conjugateInterface.conjugate();
-    }
     throw TensorRuntimeException.of(scalar);
   }
 

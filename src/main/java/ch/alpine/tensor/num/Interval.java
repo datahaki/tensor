@@ -79,12 +79,10 @@ import ch.alpine.tensor.sca.Sign;
 
   @Override
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof Interval) {
-      Interval interval = (Interval) scalar;
+    if (scalar instanceof Interval interval)
       return of( //
           clip.min().add(interval.clip.min()), //
           clip.max().add(interval.clip.max()));
-    }
     return of( //
         clip.min().add(scalar), //
         clip.max().add(scalar));
@@ -92,8 +90,7 @@ import ch.alpine.tensor.sca.Sign;
 
   @Override
   public Scalar multiply(Scalar scalar) {
-    if (scalar instanceof Interval) {
-      Interval interval = (Interval) scalar;
+    if (scalar instanceof Interval interval) {
       Tensor va = Tensors.of(clip.min(), clip.max());
       Tensor vb = Tensors.of(interval.clip.min(), interval.clip.max());
       ScalarSummaryStatistics scalarSummaryStatistics = TensorProduct.of(va, vb).flatten(1) //
@@ -210,10 +207,8 @@ import ch.alpine.tensor.sca.Sign;
 
   @Override
   public boolean equals(Object object) {
-    if (object instanceof Interval) {
-      Interval interval = (Interval) object;
+    if (object instanceof Interval interval)
       return clip.equals(interval.clip);
-    }
     return false;
   }
 

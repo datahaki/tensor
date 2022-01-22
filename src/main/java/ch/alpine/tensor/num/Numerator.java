@@ -16,10 +16,8 @@ public enum Numerator implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof RationalScalar) {
-      RationalScalar rationalScalar = (RationalScalar) scalar;
+    if (scalar instanceof RationalScalar rationalScalar)
       return RealScalar.of(rationalScalar.numerator());
-    }
     return scalar;
   }
 }

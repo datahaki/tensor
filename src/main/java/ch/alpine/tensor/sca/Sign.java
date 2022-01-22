@@ -31,10 +31,8 @@ public enum Sign implements ScalarUnaryOperator {
 
   @Override // from ScalarUnaryOperator
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof SignInterface) {
-      SignInterface signInterface = (SignInterface) scalar;
+    if (scalar instanceof SignInterface signInterface)
       return signInterface.sign();
-    }
     throw TensorRuntimeException.of(scalar);
   }
 
