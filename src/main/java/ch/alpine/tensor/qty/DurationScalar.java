@@ -79,9 +79,9 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from AbstractScalar
   public Scalar divide(Scalar scalar) {
-    if (scalar instanceof DurationScalar durationScalar)
-      return seconds().divide(durationScalar.seconds());
-    return fromSeconds(seconds().divide(scalar));
+    return scalar instanceof DurationScalar durationScalar //
+        ? seconds().divide(durationScalar.seconds())
+        : fromSeconds(seconds().divide(scalar));
   }
 
   @Override // from AbstractScalar
@@ -170,9 +170,8 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from Object
   public boolean equals(Object object) {
-    if (object instanceof DurationScalar durationScalar)
-      return duration.equals(durationScalar.duration);
-    return false;
+    return object instanceof DurationScalar durationScalar //
+        && duration.equals(durationScalar.duration);
   }
 
   @Override // from Object

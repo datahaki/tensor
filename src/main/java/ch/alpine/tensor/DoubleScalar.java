@@ -79,9 +79,9 @@ public final class DoubleScalar extends AbstractRealScalar implements //
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    if (scalar instanceof RealScalar)
-      return of(value * scalar.number().doubleValue());
-    return scalar.multiply(this);
+    return scalar instanceof RealScalar //
+        ? of(value * scalar.number().doubleValue())
+        : scalar.multiply(this);
   }
 
   // implementation exists because 4.9E-324 / 4.9E-324 != 4.9E-324 * (1 / 4.9E-324)
@@ -89,16 +89,16 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   public Scalar divide(Scalar scalar) {
     // if (scalar instanceof RationalScalar)
     // return of(value * scalar.reciprocal().number().doubleValue());
-    if (scalar instanceof RealScalar)
-      return of(value / scalar.number().doubleValue());
-    return scalar.under(this);
+    return scalar instanceof RealScalar //
+        ? of(value / scalar.number().doubleValue())
+        : scalar.under(this);
   }
 
   @Override // from AbstractScalar
   public Scalar under(Scalar scalar) {
-    if (scalar instanceof RealScalar)
-      return of(scalar.number().doubleValue() / value);
-    return scalar.divide(this);
+    return scalar instanceof RealScalar //
+        ? of(scalar.number().doubleValue() / value)
+        : scalar.divide(this);
   }
 
   /** DOUBLE_ZERO.reciprocal() == Double.POSITIVE_INFINITY */
@@ -125,9 +125,9 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof RealScalar)
-      return of(value + scalar.number().doubleValue());
-    return scalar.add(this);
+    return scalar instanceof RealScalar //
+        ? of(value + scalar.number().doubleValue())
+        : scalar.add(this);
   }
 
   // ---
@@ -200,8 +200,8 @@ public final class DoubleScalar extends AbstractRealScalar implements //
 
   @Override // from AbstractScalar
   public boolean equals(Object object) {
-    return object instanceof RealScalar //
-        && value == ((RealScalar) object).number().doubleValue();
+    return object instanceof RealScalar realScalar //
+        && value == realScalar.number().doubleValue();
   }
 
   @Override // from AbstractScalar

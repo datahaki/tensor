@@ -69,25 +69,25 @@ public final class RationalScalar extends AbstractRealScalar implements //
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    if (scalar instanceof RationalScalar rationalScalar)
-      return new RationalScalar(bigFraction.multiply(rationalScalar.bigFraction));
-    return scalar.multiply(this);
+    return scalar instanceof RationalScalar rationalScalar //
+        ? new RationalScalar(bigFraction.multiply(rationalScalar.bigFraction))
+        : scalar.multiply(this);
   }
 
   @Override // from AbstractScalar
   public Scalar divide(Scalar scalar) {
-    if (scalar instanceof RationalScalar rationalScalar)
-      // default implementation in AbstractScalar uses 2x gcd
-      return new RationalScalar(bigFraction.divide(rationalScalar.bigFraction));
-    return scalar.under(this);
+    return scalar instanceof RationalScalar rationalScalar //
+        // default implementation in AbstractScalar uses 2x gcd
+        ? new RationalScalar(bigFraction.divide(rationalScalar.bigFraction))
+        : scalar.under(this);
   }
 
   @Override // from AbstractScalar
   public Scalar under(Scalar scalar) {
-    if (scalar instanceof RationalScalar rationalScalar)
-      // default implementation in AbstractScalar uses 2x gcd
-      return new RationalScalar(rationalScalar.bigFraction.divide(bigFraction));
-    return scalar.divide(this);
+    return scalar instanceof RationalScalar rationalScalar
+        // default implementation in AbstractScalar uses 2x gcd
+        ? new RationalScalar(rationalScalar.bigFraction.divide(bigFraction))
+        : scalar.divide(this);
   }
 
   @Override // from Scalar
@@ -127,9 +127,9 @@ public final class RationalScalar extends AbstractRealScalar implements //
   // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof RationalScalar rationalScalar)
-      return new RationalScalar(bigFraction.add(rationalScalar.bigFraction));
-    return scalar.add(this);
+    return scalar instanceof RationalScalar rationalScalar //
+        ? new RationalScalar(bigFraction.add(rationalScalar.bigFraction))
+        : scalar.add(this);
   }
 
   // ---
@@ -246,10 +246,9 @@ public final class RationalScalar extends AbstractRealScalar implements //
 
   @Override // from AbstractScalar
   public boolean equals(Object object) {
-    if (object instanceof RationalScalar rationalScalar)
-      return bigFraction._equals(rationalScalar.bigFraction);
-    return Objects.nonNull(object) //
-        && object.equals(this);
+    return object instanceof RationalScalar rationalScalar //
+        ? bigFraction._equals(rationalScalar.bigFraction)
+        : Objects.nonNull(object) && object.equals(this);
   }
 
   @Override // from AbstractScalar

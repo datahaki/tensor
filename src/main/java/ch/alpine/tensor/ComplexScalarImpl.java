@@ -275,10 +275,9 @@ import ch.alpine.tensor.sca.Sinh;
 
   @Override // from AbstractScalar
   public boolean equals(Object object) {
-    if (object instanceof ComplexEmbedding z)
-      return re.equals(z.real()) //
-          && im.equals(z.imag());
-    return false;
+    return object instanceof ComplexEmbedding z //
+        && re.equals(z.real()) //
+        && im.equals(z.imag());
   }
 
   @Override // from AbstractScalar

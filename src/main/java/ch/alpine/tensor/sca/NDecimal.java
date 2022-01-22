@@ -16,8 +16,8 @@ import ch.alpine.tensor.api.NInterface;
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof NInterface nInterface)
-      return nInterface.n(mathContext);
-    return Objects.requireNonNull(scalar);
+    return scalar instanceof NInterface nInterface //
+        ? nInterface.n(mathContext)
+        : Objects.requireNonNull(scalar);
   }
 }

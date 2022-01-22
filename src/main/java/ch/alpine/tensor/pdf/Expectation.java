@@ -32,9 +32,9 @@ public enum Expectation {
   /** @param distribution
    * @return mean of distribution, E[X] */
   public static Scalar mean(Distribution distribution) {
-    if (distribution instanceof MeanInterface meanInterface)
-      return meanInterface.mean();
-    return of(Function.identity(), distribution);
+    return distribution instanceof MeanInterface meanInterface //
+        ? meanInterface.mean()
+        : of(Function.identity(), distribution);
   }
 
   /** @param distribution

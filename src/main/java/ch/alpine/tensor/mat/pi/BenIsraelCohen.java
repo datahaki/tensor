@@ -66,9 +66,9 @@ import ch.alpine.tensor.sca.N;
 
     @Override
     public Scalar apply(Scalar scalar) {
-      if (scalar instanceof Quantity quantity)
-        return Quantity.of(quantity.value(), quantity.unit().negate());
-      return scalar;
+      return scalar instanceof Quantity quantity //
+          ? Quantity.of(quantity.value(), quantity.unit().negate())
+          : scalar;
     }
   }
 }

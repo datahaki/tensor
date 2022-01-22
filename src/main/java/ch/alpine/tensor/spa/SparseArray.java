@@ -326,7 +326,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   private SparseArray trim() {
     navigableMap.values().removeIf(1 < size.size() //
-        ? tensor -> (tensor instanceof SparseArray sparseArray && sparseArray.navigableMap.isEmpty())
+        ? tensor -> tensor instanceof SparseArray sparseArray && sparseArray.navigableMap.isEmpty()
         : fallback::equals);
     return this;
   }

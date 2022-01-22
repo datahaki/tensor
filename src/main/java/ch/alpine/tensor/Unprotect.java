@@ -93,9 +93,9 @@ public enum Unprotect {
    * @return
    * @throws Exception if scalar does not satisfy {@link Scalars#isZero(Scalar)} */
   public static Scalar negateUnit(Scalar scalar) {
-    if (scalar instanceof Quantity quantity)
-      return Quantity.of(Scalars.requireZero(quantity.value()), quantity.unit().negate());
-    return Scalars.requireZero(scalar);
+    return scalar instanceof Quantity quantity //
+        ? Quantity.of(Scalars.requireZero(quantity.value()), quantity.unit().negate())
+        : Scalars.requireZero(scalar);
   }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !

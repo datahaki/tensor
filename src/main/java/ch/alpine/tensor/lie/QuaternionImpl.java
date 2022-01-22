@@ -74,9 +74,9 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from Quaternion
   public Quaternion divide(Scalar scalar) {
-    if (scalar instanceof RealScalar)
-      return new QuaternionImpl(w.divide(scalar), xyz.divide(scalar));
-    return multiply(scalar.reciprocal());
+    return scalar instanceof RealScalar //
+        ? new QuaternionImpl(w.divide(scalar), xyz.divide(scalar))
+        : multiply(scalar.reciprocal());
   }
 
   @Override // from Quaternion

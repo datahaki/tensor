@@ -79,13 +79,13 @@ import ch.alpine.tensor.sca.Sign;
 
   @Override
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof Interval interval)
-      return of( //
-          clip.min().add(interval.clip.min()), //
-          clip.max().add(interval.clip.max()));
-    return of( //
-        clip.min().add(scalar), //
-        clip.max().add(scalar));
+    return scalar instanceof Interval interval //
+        ? of( //
+            clip.min().add(interval.clip.min()), //
+            clip.max().add(interval.clip.max()))
+        : of( //
+            clip.min().add(scalar), //
+            clip.max().add(scalar));
   }
 
   @Override
@@ -207,9 +207,8 @@ import ch.alpine.tensor.sca.Sign;
 
   @Override
   public boolean equals(Object object) {
-    if (object instanceof Interval interval)
-      return clip.equals(interval.clip);
-    return false;
+    return object instanceof Interval interval //
+        && clip.equals(interval.clip);
   }
 
   @Override

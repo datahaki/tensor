@@ -102,9 +102,8 @@ public class DateTimeScalar extends AbstractScalar implements ExactScalarQInterf
 
   @Override // from Object
   public boolean equals(Object object) {
-    if (object instanceof DateTimeScalar dateTimeScalar)
-      return localDateTime.equals(dateTimeScalar.localDateTime);
-    return false;
+    return object instanceof DateTimeScalar dateTimeScalar //
+        && localDateTime.equals(dateTimeScalar.localDateTime);
   }
 
   @Override // from Object

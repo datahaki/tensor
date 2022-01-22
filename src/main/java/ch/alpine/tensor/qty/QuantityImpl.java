@@ -104,23 +104,23 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    if (scalar instanceof Quantity quantity)
-      return of(value.multiply(quantity.value()), unit.add(quantity.unit()));
-    return ofUnit(value.multiply(scalar));
+    return scalar instanceof Quantity quantity //
+        ? of(value.multiply(quantity.value()), unit.add(quantity.unit()))
+        : ofUnit(value.multiply(scalar));
   }
 
   @Override // from Scalar
   public Scalar divide(Scalar scalar) {
-    if (scalar instanceof Quantity quantity)
-      return of(value.divide(quantity.value()), unit.add(quantity.unit().negate()));
-    return ofUnit(value.divide(scalar));
+    return scalar instanceof Quantity quantity //
+        ? of(value.divide(quantity.value()), unit.add(quantity.unit().negate()))
+        : ofUnit(value.divide(scalar));
   }
 
   @Override // from Scalar
   public Scalar under(Scalar scalar) {
-    if (scalar instanceof Quantity quantity)
-      return of(value.under(quantity.value()), unit.negate().add(quantity.unit()));
-    return new QuantityImpl(value.under(scalar), unit.negate());
+    return scalar instanceof Quantity quantity //
+        ? of(value.under(quantity.value()), unit.negate().add(quantity.unit()))
+        : new QuantityImpl(value.under(scalar), unit.negate());
   }
 
   @Override // from Scalar
@@ -174,9 +174,8 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from ArcTanInterface
   public Scalar arcTan(Scalar x) {
-    if (x instanceof Quantity quantity)
-      if (unit.equals(quantity.unit()))
-        return ArcTan.of(quantity.value(), value);
+    if (x instanceof Quantity quantity && unit.equals(quantity.unit()))
+      return ArcTan.of(quantity.value(), value);
     throw TensorRuntimeException.of(this, x);
   }
 
@@ -257,9 +256,8 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof Quantity quantity)
-      if (unit.equals(quantity.unit()))
-        return Scalars.compare(value, quantity.value());
+    if (scalar instanceof Quantity quantity && unit.equals(quantity.unit()))
+      return Scalars.compare(value, quantity.value());
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -271,10 +269,9 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from AbstractScalar
   public boolean equals(Object object) {
-    if (object instanceof Quantity quantity)
-      return value.equals(quantity.value()) //
-          && unit.equals(quantity.unit()); // 2[kg] == 2[kg]
-    return false;
+    return object instanceof Quantity quantity //
+        && value.equals(quantity.value()) //
+        && unit.equals(quantity.unit()); // 2[kg] == 2[kg]
   }
 
   @Override // from AbstractScalar

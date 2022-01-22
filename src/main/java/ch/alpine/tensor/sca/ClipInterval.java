@@ -81,10 +81,9 @@ import ch.alpine.tensor.TensorRuntimeException;
 
   @Override // from Object
   public final boolean equals(Object object) {
-    if (object instanceof Clip clip)
-      return min.equals(clip.min()) //
-          && max.equals(clip.max());
-    return false;
+    return object instanceof Clip clip //
+        && min.equals(clip.min()) //
+        && max.equals(clip.max());
   }
 
   @Override // from Object

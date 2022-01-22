@@ -193,10 +193,9 @@ public class GaussScalar extends AbstractScalar implements //
 
   @Override // from AbstractScalar
   public boolean equals(Object object) {
-    if (object instanceof GaussScalar gaussScalar)
-      return value.equals(gaussScalar.value) //
-          && prime.equals(gaussScalar.prime);
-    return false;
+    return object instanceof GaussScalar gaussScalar //
+        && value.equals(gaussScalar.value) //
+        && prime.equals(gaussScalar.prime);
   }
 
   @Override // from AbstractScalar
