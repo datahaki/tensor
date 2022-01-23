@@ -62,10 +62,8 @@ public enum ArcTan implements ScalarUnaryOperator {
    * @return arc tangent of y/x, taking into account which quadrant the point (x, y) is in
    * @throws Exception if y is not instance of ArcTanInterface */
   public static Scalar of(Scalar x, Scalar y) {
-    if (y instanceof ArcTanInterface) {
-      ArcTanInterface arcTanInterface = (ArcTanInterface) y;
+    if (y instanceof ArcTanInterface arcTanInterface)
       return arcTanInterface.arcTan(x);
-    }
     // return FUNCTION.apply(y.divide(x));
     throw TensorRuntimeException.of(x, y);
   }

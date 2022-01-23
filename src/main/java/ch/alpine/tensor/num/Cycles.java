@@ -201,11 +201,8 @@ public class Cycles implements Comparable<Cycles>, Serializable {
 
   @Override // from Object
   public boolean equals(Object object) {
-    if (object instanceof Cycles) {
-      Cycles cycles = (Cycles) object;
-      return navigableMap.equals(cycles.navigableMap);
-    }
-    return false;
+    return object instanceof Cycles cycles //
+        && navigableMap.equals(cycles.navigableMap);
   }
 
   @Override // from Object

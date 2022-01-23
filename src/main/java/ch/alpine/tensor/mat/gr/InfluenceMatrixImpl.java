@@ -3,14 +3,26 @@ package ch.alpine.tensor.mat.gr;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.mat.UpperEvaluation;
 import ch.alpine.tensor.red.Diagonal;
+import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Sqrt;
 
-/** base for a class that implements the {@link InfluenceMatrix} interface */
+/** base for a class that implements the {@link InfluenceMatrix} interface
+ * 
+ * the square influece matrix is is computed lazily and is triggered only
+ * when either {@link #matrix} or {@link #residualMaker()} are invoked.
+ * Another exception is, if the design matrix is close to being square.
+ * 
+ * {@link #leverages()} are obtained by dotting each rows of the design matrix
+ * with the corresponding column in the pseudoinverse design^+. */
 /* package */ class InfluenceMatrixImpl implements InfluenceMatrix, Serializable {
   private final Tensor design;
   private final Tensor d_pinv;
@@ -24,9 +36,10 @@ import ch.alpine.tensor.sca.Sqrt;
   }
 
   @Override // from InfluenceMatrix
-  public Tensor matrix() {
+  public synchronized Tensor matrix() {
     return Objects.isNull(matrix) //
-        ? matrix = design.dot(d_pinv)
+        ? matrix = UpperEvaluation.of( //
+            design, Transpose.of(d_pinv), (p, q) -> (Scalar) p.dot(q), Conjugate.FUNCTION)
         : matrix;
   }
 
@@ -38,27 +51,31 @@ import ch.alpine.tensor.sca.Sqrt;
   }
 
   @Override // from InfluenceMatrix
-  public final Tensor leverages() {
-    return Diagonal.of(matrix());
+  public Tensor leverages() {
+    if (Objects.nonNull(matrix))
+      return Diagonal.of(matrix);
+    AtomicInteger atomicInteger = new AtomicInteger();
+    return Tensor.of(design.stream() //
+        .map(row -> row.dot(d_pinv.get(Tensor.ALL, atomicInteger.getAndIncrement()))));
   }
 
   @Override // from InfluenceMatrix
-  public final Tensor leverages_sqrt() {
+  public Tensor leverages_sqrt() {
     return leverages().map(Sqrt.FUNCTION);
   }
 
   @Override // from InfluenceMatrix
-  public final Tensor residualMaker() {
+  public Tensor residualMaker() {
     return StaticHelper.residualMaker(matrix());
   }
 
   @Override // from InfluenceMatrix
-  public final Tensor kernel(Tensor vector) {
+  public Tensor kernel(Tensor vector) {
     return vector.subtract(image(vector));
   }
 
   @Override // from Object
-  public final String toString() {
+  public String toString() {
     return String.format("%s[%s]", InfluenceMatrix.class.getSimpleName(), Tensors.message(matrix()));
   }
 

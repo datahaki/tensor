@@ -23,8 +23,8 @@ public interface PDF {
    * @return probability density function
    * @throws Exception if given distribution does not implement PDF */
   static PDF of(Distribution distribution) {
-    if (distribution instanceof PDF)
-      return (PDF) distribution;
+    if (distribution instanceof PDF pdf)
+      return pdf;
     Objects.requireNonNull(distribution);
     throw new IllegalArgumentException(distribution.getClass().getName());
   }

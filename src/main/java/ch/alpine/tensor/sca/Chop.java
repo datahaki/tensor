@@ -97,11 +97,9 @@ public class Chop implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof ChopInterface) {
-      ChopInterface chopInterface = (ChopInterface) scalar;
-      return chopInterface.chop(this);
-    }
-    return Objects.requireNonNull(scalar);
+    return scalar instanceof ChopInterface chopInterface //
+        ? chopInterface.chop(this)
+        : Objects.requireNonNull(scalar);
   }
 
   /** @param scalar

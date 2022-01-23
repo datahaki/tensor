@@ -156,8 +156,8 @@ import java.math.BigInteger;
 
   @Override // from Object
   public boolean equals(Object object) {
-    return object instanceof BigFraction //
-        && _equals((BigFraction) object);
+    return object instanceof BigFraction bigFraction //
+        && _equals(bigFraction);
   }
 
   @Override // from Object

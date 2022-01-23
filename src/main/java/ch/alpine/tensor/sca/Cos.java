@@ -19,10 +19,8 @@ public enum Cos implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof TrigonometryInterface) {
-      TrigonometryInterface trigonometryInterface = (TrigonometryInterface) scalar;
+    if (scalar instanceof TrigonometryInterface trigonometryInterface)
       return trigonometryInterface.cos();
-    }
     throw TensorRuntimeException.of(scalar);
   }
 

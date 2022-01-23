@@ -36,11 +36,9 @@ public enum NumberQ {
   /** @param scalar
    * @return whether scalar satisfies the NumberQ predicate */
   public static boolean of(Scalar scalar) {
-    if (scalar instanceof ComplexScalar) {
-      ComplexScalar complexScalar = (ComplexScalar) scalar;
+    if (scalar instanceof ComplexScalar complexScalar)
       return of(complexScalar.real()) //
           && of(complexScalar.imag());
-    }
     if (scalar instanceof Quantity)
       return false;
     return MachineNumberQ.of(scalar) //

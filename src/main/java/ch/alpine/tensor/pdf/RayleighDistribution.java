@@ -43,14 +43,14 @@ public class RayleighDistribution extends AbstractContinuousDistribution impleme
   @Override // from PDF
   public Scalar at(Scalar x) {
     return Scalars.lessThan(x, RealScalar.ZERO) //
-        ? RealScalar.ZERO
+        ? x.zero()
         : Exp.FUNCTION.apply(x.multiply(x).divide(s2_n2)).multiply(x).divide(s2);
   }
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     return Scalars.lessThan(x, RealScalar.ZERO) //
-        ? RealScalar.ZERO
+        ? x.zero()
         : RealScalar.ONE.subtract(Exp.FUNCTION.apply(x.multiply(x).divide(s2_n2)));
   }
 

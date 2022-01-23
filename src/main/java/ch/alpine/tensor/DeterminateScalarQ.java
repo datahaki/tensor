@@ -9,12 +9,9 @@ public enum DeterminateScalarQ {
   /** @param scalar
    * @return whether scalar is in exact precision or a machine number but not Infinity or NaN */
   public static boolean of(Scalar scalar) {
-    if (scalar instanceof ComplexScalar) {
-      ComplexScalar complexScalar = (ComplexScalar) scalar;
-      return _of(complexScalar.real()) //
-          && _of(complexScalar.imag());
-    }
-    return _of(Unprotect.withoutUnit(scalar));
+    return scalar instanceof ComplexScalar complexScalar //
+        ? _of(complexScalar.real()) && _of(complexScalar.imag())
+        : _of(Unprotect.withoutUnit(scalar));
   }
 
   /** @param scalar

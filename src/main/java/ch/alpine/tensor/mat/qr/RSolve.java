@@ -14,11 +14,17 @@ import ch.alpine.tensor.sca.Abs;
 /** utility class for {@link QRDecompositionBase} */
 /* package */ enum RSolve {
   ;
-  /** @param r upper triangular matrix under given permutation sigma
+  public static Tensor of(QRDecomposition qrDecomposition, Tensor rhs) {
+    return of(qrDecomposition.getR(), qrDecomposition.sigma(), rhs);
+  }
+
+  /** method uses back substitution
+   * 
+   * @param r upper triangular matrix under given permutation sigma
    * @param rhs
    * @param sigma
    * @return LinearSolve[r, rhs] */
-  public static Tensor of(Tensor r, Tensor rhs, int[] sigma) {
+  public static Tensor of(Tensor r, int[] sigma, Tensor rhs) {
     int m = sigma.length;
     failFast(r, sigma);
     Tensor[] x = new Tensor[m];

@@ -3,6 +3,7 @@ package ch.alpine.tensor.ext;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.function.IntPredicate;
 
 /* package */ abstract class ArgBase<T> implements IntPredicate {
@@ -13,6 +14,7 @@ import java.util.function.IntPredicate;
    * @param comparator
    * @return */
   public int find(Iterable<T> iterable, Comparator<T> comparator) {
+    Objects.requireNonNull(comparator);
     Iterator<T> iterator = iterable.iterator();
     if (!iterator.hasNext())
       return EMPTY;

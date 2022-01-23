@@ -32,10 +32,8 @@ public enum Tanh implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof RealScalar)
       return DoubleScalar.of(Math.tanh(scalar.number().doubleValue()));
-    if (scalar instanceof ComplexScalar) {
-      ComplexScalar z = (ComplexScalar) scalar;
+    if (scalar instanceof ComplexScalar z)
       return Sinh.FUNCTION.apply(z).divide(Cosh.FUNCTION.apply(z));
-    }
     throw TensorRuntimeException.of(scalar);
   }
 

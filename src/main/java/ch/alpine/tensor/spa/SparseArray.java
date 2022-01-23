@@ -38,7 +38,7 @@ import ch.alpine.tensor.ext.MergeIllegal;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/SparseArray.html">SparseArray</a> */
 public class SparseArray extends AbstractTensor implements Serializable {
-  /** @param fallback zero element, for instance {@link RealScalar#ZERO}
+  /** @param fallback scalar, for instance {@link RealScalar#ZERO}
    * @param dimensions with non-negative values
    * @return empty sparse array with given dimensions, or fallback if no dimensions are specified
    * @throws Exception if fallback element is not zero */
@@ -64,6 +64,11 @@ public class SparseArray extends AbstractTensor implements Serializable {
     this.fallback = fallback;
     this.size = size;
     this.navigableMap = navigableMap;
+  }
+
+  /** @return fallback scalar */
+  public Scalar fallback() {
+    return fallback;
   }
 
   @Override // from Tensor
@@ -174,7 +179,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor extract(int fromIndex, int toIndex) {
-    requireInRange(fromIndex);
+    requireInRangeClosed(fromIndex);
     Integers.requireLessEquals(toIndex, length());
     int len0 = Integers.requirePositiveOrZero(toIndex - fromIndex);
     if (len0 == 0)
@@ -193,9 +198,8 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor add(Tensor tensor) {
-    if (tensor instanceof SparseArray) {
+    if (tensor instanceof SparseArray sparseArray) {
       Integers.requireEquals(length(), tensor.length());
-      SparseArray sparseArray = (SparseArray) tensor;
       return new SparseArray(fallback.add(sparseArray.fallback), size, //
           Stream.concat(navigableMap.keySet().stream(), sparseArray.navigableMap.keySet().stream()) //
               .distinct().collect(_map(i -> i, i -> byRef(i).add(sparseArray.byRef(i))))).trim();
@@ -205,9 +209,8 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor subtract(Tensor tensor) {
-    if (tensor instanceof SparseArray) {
+    if (tensor instanceof SparseArray sparseArray) {
       Integers.requireEquals(length(), tensor.length());
-      SparseArray sparseArray = (SparseArray) tensor;
       return new SparseArray(fallback.subtract(sparseArray.fallback), size, //
           Stream.concat(navigableMap.keySet().stream(), sparseArray.navigableMap.keySet().stream()) //
               .distinct().collect(_map(i -> i, i -> byRef(i).subtract(sparseArray.byRef(i))))).trim();
@@ -260,7 +263,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
     int depth = Integers.requireEquals(ofs.size(), len.size());
     if (depth == 0)
       return this;
-    int head = requireInRange(ofs.get(0));
+    int head = requireInRangeClosed(ofs.get(0));
     int len0 = Integers.requirePositiveOrZero(len.get(0));
     if (len0 == 0)
       return Tensors.empty();
@@ -323,7 +326,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   private SparseArray trim() {
     navigableMap.values().removeIf(1 < size.size() //
-        ? tensor -> (tensor instanceof SparseArray && ((SparseArray) tensor).navigableMap.isEmpty())
+        ? tensor -> tensor instanceof SparseArray sparseArray && sparseArray.navigableMap.isEmpty()
         : fallback::equals);
     return this;
   }
@@ -333,6 +336,15 @@ public class SparseArray extends AbstractTensor implements Serializable {
    * @throws Exception if given index is negative or greater equals to length() */
   private int requireInRange(int index) {
     if (0 <= index && index < length())
+      return index;
+    throw new IllegalArgumentException("index=" + index + " length=" + length());
+  }
+
+  /** @param index
+   * @return index
+   * @throws Exception if given index is negative or greater than length() */
+  private int requireInRangeClosed(int index) {
+    if (0 <= index && index <= length())
       return index;
     throw new IllegalArgumentException("index=" + index + " length=" + length());
   }

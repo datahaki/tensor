@@ -63,11 +63,9 @@ public enum Power {
   /** @param exponent
    * @return function that maps a scalar to scalar ^ exponent */
   public static ScalarUnaryOperator function(Scalar exponent) {
-    if (exponent instanceof RationalScalar) {
-      RationalScalar rationalScalar = (RationalScalar) exponent;
-      if (rationalScalar.denominator().equals(TWO))
-        return scalar -> evaluate(Sqrt.FUNCTION.apply(scalar), RealScalar.of(rationalScalar.numerator()));
-    }
+    if (exponent instanceof RationalScalar rationalScalar && //
+        rationalScalar.denominator().equals(TWO))
+      return scalar -> evaluate(Sqrt.FUNCTION.apply(scalar), RealScalar.of(rationalScalar.numerator()));
     Objects.requireNonNull(exponent);
     return scalar -> evaluate(scalar, exponent);
   }
@@ -83,10 +81,8 @@ public enum Power {
    * @param exponent
    * @return scalar ^ exponent */
   private static Scalar evaluate(Scalar scalar, Scalar exponent) {
-    if (scalar instanceof PowerInterface) {
-      PowerInterface powerInterface = (PowerInterface) scalar;
+    if (scalar instanceof PowerInterface powerInterface)
       return powerInterface.power(exponent);
-    }
     throw TensorRuntimeException.of(scalar, exponent);
   }
 }

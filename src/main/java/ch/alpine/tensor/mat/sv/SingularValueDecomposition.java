@@ -4,7 +4,11 @@ package ch.alpine.tensor.mat.sv;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.qty.Quantity;
 
-/** inspired by
+/** Quote: "The image of the unit sphere under any m x n matrix is a hyperellipse."
+ * Numerical Linear Algebra
+ * by Trefethen, Bau, 1997
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/SingularValueDecomposition.html">SingularValueDecomposition</a> */
 public interface SingularValueDecomposition {
   /** performs a singular value decomposition of a given matrix

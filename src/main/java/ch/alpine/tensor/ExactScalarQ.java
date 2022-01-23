@@ -39,8 +39,8 @@ public enum ExactScalarQ {
   /** @param scalar
    * @return true, if scalar is instance of {@link ExactScalarQInterface} which evaluates to true */
   public static boolean of(Scalar scalar) {
-    return Objects.requireNonNull(scalar) instanceof ExactScalarQInterface //
-        && ((ExactScalarQInterface) scalar).isExactScalar();
+    return Objects.requireNonNull(scalar) instanceof ExactScalarQInterface exactScalarQInterface //
+        && exactScalarQInterface.isExactScalar();
   }
 
   /** @param scalar

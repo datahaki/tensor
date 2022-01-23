@@ -121,11 +121,8 @@ public class CoordinateBoundingBox implements Serializable {
 
   @Override // from Object
   public boolean equals(Object object) {
-    if (object instanceof CoordinateBoundingBox) {
-      CoordinateBoundingBox box = (CoordinateBoundingBox) object;
-      return list.equals(box.list);
-    }
-    return false;
+    return object instanceof CoordinateBoundingBox coordinateBoundingBox //
+        && list.equals(coordinateBoundingBox.list);
   }
 
   @Override // from Object

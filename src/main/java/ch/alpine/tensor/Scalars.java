@@ -183,8 +183,7 @@ public enum Scalars {
    * @throws Exception if exact conversion is not possible
    * @see IntegerQ */
   public static BigInteger bigIntegerValueExact(Scalar scalar) {
-    RationalScalar rationalScalar = (RationalScalar) scalar;
-    if (rationalScalar.isInteger())
+    if (scalar instanceof RationalScalar rationalScalar && rationalScalar.isInteger())
       return rationalScalar.numerator();
     throw TensorRuntimeException.of(scalar);
   }
@@ -196,11 +195,8 @@ public enum Scalars {
    * or empty if given scalar does not represent an integer
    * @throws Exception if given scalar is null */
   public static Optional<BigInteger> optionalBigInteger(Scalar scalar) {
-    if (scalar instanceof RationalScalar) {
-      RationalScalar rationalScalar = (RationalScalar) scalar;
-      if (rationalScalar.isInteger())
-        return Optional.of(rationalScalar.numerator());
-    }
+    if (scalar instanceof RationalScalar rationalScalar && rationalScalar.isInteger())
+      return Optional.of(rationalScalar.numerator());
     Objects.requireNonNull(scalar);
     return Optional.empty();
   }

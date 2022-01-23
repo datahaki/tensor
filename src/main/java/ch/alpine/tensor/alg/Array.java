@@ -116,7 +116,6 @@ public enum Array {
     return fill(() -> RealScalar.ZERO, 0, dimensions);
   }
 
-  // ---
   /** @param dimensions
    * @return empty sparse array with given dimensions and {@link RealScalar#ZERO} as fallback */
   public static Tensor sparse(int... dimensions) {

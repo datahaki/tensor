@@ -79,19 +79,15 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from AbstractScalar
   public Scalar divide(Scalar scalar) {
-    if (scalar instanceof DurationScalar) {
-      DurationScalar durationScalar = (DurationScalar) scalar;
-      return seconds().divide(durationScalar.seconds());
-    }
-    return fromSeconds(seconds().divide(scalar));
+    return scalar instanceof DurationScalar durationScalar //
+        ? seconds().divide(durationScalar.seconds())
+        : fromSeconds(seconds().divide(scalar));
   }
 
   @Override // from AbstractScalar
   public Scalar under(Scalar scalar) {
-    if (scalar instanceof DurationScalar) {
-      DurationScalar durationScalar = (DurationScalar) scalar;
+    if (scalar instanceof DurationScalar durationScalar)
       return durationScalar.seconds().divide(seconds());
-    }
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -122,10 +118,8 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof DurationScalar) {
-      DurationScalar durationScalar = (DurationScalar) scalar;
+    if (scalar instanceof DurationScalar durationScalar)
       return new DurationScalar(duration.plus(durationScalar.duration));
-    }
     if (scalar instanceof DateTimeScalar)
       return scalar.add(this);
     throw TensorRuntimeException.of(this, scalar);
@@ -155,10 +149,8 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from Comparable
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof DurationScalar) {
-      DurationScalar durationScalar = (DurationScalar) scalar;
+    if (scalar instanceof DurationScalar durationScalar)
       return duration.compareTo(durationScalar.duration);
-    }
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -178,11 +170,8 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from Object
   public boolean equals(Object object) {
-    if (object instanceof DurationScalar) {
-      DurationScalar durationScalar = (DurationScalar) object;
-      return duration.equals(durationScalar.duration);
-    }
-    return false;
+    return object instanceof DurationScalar durationScalar //
+        && duration.equals(durationScalar.duration);
   }
 
   @Override // from Object

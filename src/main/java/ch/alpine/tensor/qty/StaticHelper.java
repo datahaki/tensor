@@ -33,11 +33,9 @@ import ch.alpine.tensor.sca.Power;
    * @param base
    * @return product of scalar and 1[base] where the multiplicative 1 is not used explicitly */
   public static Scalar multiply(Scalar scalar, Unit base) {
-    if (scalar instanceof Quantity) {
-      Quantity quantity = (Quantity) scalar;
-      return Quantity.of(quantity.value(), quantity.unit().add(base));
-    }
-    return Quantity.of(scalar, base);
+    return scalar instanceof Quantity quantity //
+        ? Quantity.of(quantity.value(), quantity.unit().add(base))
+        : Quantity.of(scalar, base);
   }
 
   /** @param unitSystem

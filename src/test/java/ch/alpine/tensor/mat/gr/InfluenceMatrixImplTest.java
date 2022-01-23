@@ -11,7 +11,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
@@ -66,15 +65,28 @@ public class InfluenceMatrixImplTest extends TestCase {
     Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}");
     Tensor design = VandermondeMatrix.of(x, 2);
     Tensor influe = design.dot(PseudoInverse.of(design));
-    assertTrue(IdempotentQ.of(influe));
+    {
+      assertTrue(IdempotentQ.of(influe));
+      // System.out.println("IM=" + Pretty.of(influe.map(Round._2)));
+      InfluenceMatrixQ.require(influe);
+    }
     {
       InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
       Tolerance.CHOP.requireClose(influe, influenceMatrix.matrix());
+      // Tensor matrix = influenceMatrix.matrix();
+      // System.out.println("IM=" + Pretty.of(matrix.map(Round._2)));
     }
-    {
-      InfluenceMatrix influenceMatrix = InfluenceMatrix.of(Transpose.of(design));
-      assertTrue(IdempotentQ.of(influenceMatrix.matrix(), Chop._07));
-    }
+    // InfluenceMatrix.of(Transpose.of(design));
+    // ... does not result in an influence matrix, since have mixed units
+    // {
+    // InfluenceMatrix influenceMatrix =
+    // Tensor matrix = influenceMatrix.matrix();
+    // System.out.println("IM=" + Pretty.of(matrix.map(Round._2)));
+    // InfluenceMatrixQ.require(matrix);
+    // System.out.println(Pretty.of(matrix.dot(matrix).map(Round._2)));
+    // assertTrue(IdempotentQ.of(matrix, Chop._07));
+    //
+    // }
   }
 
   public void testExact3() throws ClassNotFoundException, IOException {

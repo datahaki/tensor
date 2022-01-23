@@ -19,10 +19,8 @@ public enum Sinh implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof TrigonometryInterface) {
-      TrigonometryInterface trigonometryInterface = (TrigonometryInterface) scalar;
+    if (scalar instanceof TrigonometryInterface trigonometryInterface)
       return trigonometryInterface.sinh();
-    }
     throw TensorRuntimeException.of(scalar);
   }
 

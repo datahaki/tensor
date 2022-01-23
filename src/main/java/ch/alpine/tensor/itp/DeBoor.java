@@ -12,8 +12,14 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.ext.Integers;
 
-/** DeBoor denotes the function that is defined by control points over a sequence of knots. */
-public class DeBoor implements ScalarTensorFunction {
+/** DeBoor denotes the function that is defined by control points over a sequence of knots.
+ * 
+ * @param binaryAverage
+ * @param degree
+ * @param knots vector of length degree * 2
+ * @param control points of length degree + 1 */
+public record DeBoor(BinaryAverage binaryAverage, int degree, Tensor knots, Tensor control) //
+    implements ScalarTensorFunction {
   /** @param binaryAverage non-null
    * @param knots vector of length degree * 2
    * @param control points of length degree + 1
@@ -28,23 +34,6 @@ public class DeBoor implements ScalarTensorFunction {
     throw TensorRuntimeException.of(knots, control);
   }
 
-  // ---
-  private final BinaryAverage binaryAverage;
-  private final int degree;
-  private final Tensor knots;
-  private final Tensor control;
-
-  /** @param binaryAverage
-   * @param degree
-   * @param knots vector of length degree * 2
-   * @param control points of length degree + 1 */
-  public DeBoor(BinaryAverage binaryAverage, int degree, Tensor knots, Tensor control) {
-    this.binaryAverage = binaryAverage;
-    this.degree = degree;
-    this.knots = knots;
-    this.control = control;
-  }
-
   @Override
   public Tensor apply(Scalar x) {
     Tensor[] d = control.stream().toArray(Tensor[]::new); // d is modified over the course of the algorithm
@@ -57,20 +46,5 @@ public class DeBoor implements ScalarTensorFunction {
             : binaryAverage.split(d[j - 1], d[j], x.subtract(kj1).divide(den)); // control max index = degree - 1
       }
     return d[degree]; // control max index = degree
-  }
-
-  /** @return */
-  public int degree() {
-    return degree;
-  }
-
-  /** @return */
-  public Tensor knots() {
-    return knots.unmodifiable();
-  }
-
-  /** @return */
-  public Tensor control() {
-    return control.unmodifiable();
   }
 }

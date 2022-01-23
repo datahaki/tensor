@@ -54,14 +54,11 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from Quaternion
   public Quaternion multiply(Scalar scalar) {
-    if (scalar instanceof Quaternion) {
-      Quaternion quaternion = (Quaternion) scalar;
+    if (scalar instanceof Quaternion quaternion)
       return new QuaternionImpl( //
           w.multiply(quaternion.w()).subtract(xyz.dot(quaternion.xyz())), //
           xyz.multiply(quaternion.w()).add(quaternion.xyz().multiply(w())).add(Cross.of(xyz, quaternion.xyz())));
-    }
-    if (scalar instanceof ComplexEmbedding) {
-      ComplexEmbedding complexEmbedding = (ComplexEmbedding) scalar;
+    if (scalar instanceof ComplexEmbedding complexEmbedding) {
       Scalar imag = complexEmbedding.imag();
       return multiply(new QuaternionImpl( //
           complexEmbedding.real(), //
@@ -77,9 +74,9 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from Quaternion
   public Quaternion divide(Scalar scalar) {
-    if (scalar instanceof RealScalar)
-      return new QuaternionImpl(w.divide(scalar), xyz.divide(scalar));
-    return multiply(scalar.reciprocal());
+    return scalar instanceof RealScalar //
+        ? new QuaternionImpl(w.divide(scalar), xyz.divide(scalar))
+        : multiply(scalar.reciprocal());
   }
 
   @Override // from Quaternion
@@ -94,10 +91,8 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from AbstractScalar
   protected Quaternion plus(Scalar scalar) {
-    if (scalar instanceof Quaternion) {
-      Quaternion quaternion = (Quaternion) scalar;
+    if (scalar instanceof Quaternion quaternion)
       return new QuaternionImpl(w.add(quaternion.w()), xyz.add(quaternion.xyz()));
-    }
     if (scalar instanceof RealScalar)
       return new QuaternionImpl(w.add(scalar), xyz);
     throw TensorRuntimeException.of(this, scalar);
@@ -251,16 +246,12 @@ import ch.alpine.tensor.sca.Sqrt;
 
   @Override // from AbstractScalar
   public boolean equals(Object object) {
-    if (object instanceof Quaternion) {
-      Quaternion quaternion = (Quaternion) object;
+    if (object instanceof Quaternion quaternion)
       return w.equals(quaternion.w()) //
           && xyz.equals(quaternion.xyz());
-    }
-    if (object instanceof RealScalar) {
-      Scalar scalar = (RealScalar) object;
+    if (object instanceof RealScalar scalar)
       return w.equals(scalar) //
           && xyz.stream().map(Scalar.class::cast).allMatch(Scalars::isZero);
-    }
     return false;
   }
 

@@ -30,10 +30,8 @@ public enum Floor implements ScalarUnaryOperator {
    * @throws TensorRuntimeException if scalar is Infinity, or NaN */
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof RoundingInterface) {
-      RoundingInterface roundingInterface = (RoundingInterface) scalar;
+    if (scalar instanceof RoundingInterface roundingInterface)
       return roundingInterface.floor();
-    }
     throw TensorRuntimeException.of(scalar);
   }
 

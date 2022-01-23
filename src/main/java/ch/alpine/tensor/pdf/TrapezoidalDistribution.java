@@ -45,6 +45,8 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
   public static Distribution of(Number a, Number b, Number c, Number d) {
     return of(RealScalar.of(a), RealScalar.of(b), RealScalar.of(c), RealScalar.of(d));
   }
+  // TODO provide method that gives TrapezoidalDistribution that fits best to a
+  // NormalDistribution with given mean and sigma
 
   // ---
   private final Clip clip;
@@ -76,6 +78,11 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
+    Scalar value = _p_lessThan(x);
+    return x.one().multiply(value);
+  }
+
+  private Scalar _p_lessThan(Scalar x) {
     if (Scalars.lessThan(x, a))
       return RealScalar.ZERO;
     if (Scalars.lessThan(x, b)) {
@@ -97,6 +104,11 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
 
   @Override // from PDF
   public Scalar at(Scalar x) {
+    Scalar value = _at(x);
+    return x.one().multiply(value);
+  }
+
+  private Scalar _at(Scalar x) {
     if (clip.isInside(x)) { // support is [a, d]
       Scalar two_alpha = alpha.add(alpha);
       if (Scalars.lessThan(x, b)) {
@@ -121,6 +133,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
 
   @Override
   public Scalar variance() {
+    // TODO implement
     throw new UnsupportedOperationException();
   }
 

@@ -23,8 +23,8 @@ public enum Expectation {
    * @param distribution
    * @return */
   public static <T extends Tensor> T of(Function<Scalar, T> function, Distribution distribution) {
-    if (distribution instanceof DiscreteDistribution)
-      return _of(function, (DiscreteDistribution) distribution);
+    if (distribution instanceof DiscreteDistribution discreteDistribution)
+      return _of(function, discreteDistribution);
     Objects.requireNonNull(distribution);
     throw new IllegalArgumentException(distribution.getClass().getName());
   }
@@ -32,20 +32,16 @@ public enum Expectation {
   /** @param distribution
    * @return mean of distribution, E[X] */
   public static Scalar mean(Distribution distribution) {
-    if (distribution instanceof MeanInterface) {
-      MeanInterface meanInterface = (MeanInterface) distribution;
-      return meanInterface.mean();
-    }
-    return of(Function.identity(), distribution);
+    return distribution instanceof MeanInterface meanInterface //
+        ? meanInterface.mean()
+        : of(Function.identity(), distribution);
   }
 
   /** @param distribution
    * @return variance of distribution, E[ |X-E[X]|^2 ] */
   public static Scalar variance(Distribution distribution) {
-    if (distribution instanceof VarianceInterface) {
-      VarianceInterface varianceInterface = (VarianceInterface) distribution;
+    if (distribution instanceof VarianceInterface varianceInterface)
       return varianceInterface.variance();
-    }
     Scalar mean = mean(distribution);
     ScalarUnaryOperator scalarUnaryOperator = scalar -> AbsSquared.between(scalar, mean);
     return of(scalarUnaryOperator, distribution);
