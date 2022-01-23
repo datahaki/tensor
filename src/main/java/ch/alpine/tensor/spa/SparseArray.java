@@ -179,7 +179,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor extract(int fromIndex, int toIndex) {
-    requireInRange(fromIndex);
+    requireInRangeClosed(fromIndex);
     Integers.requireLessEquals(toIndex, length());
     int len0 = Integers.requirePositiveOrZero(toIndex - fromIndex);
     if (len0 == 0)
@@ -263,7 +263,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
     int depth = Integers.requireEquals(ofs.size(), len.size());
     if (depth == 0)
       return this;
-    int head = requireInRange(ofs.get(0));
+    int head = requireInRangeClosed(ofs.get(0));
     int len0 = Integers.requirePositiveOrZero(len.get(0));
     if (len0 == 0)
       return Tensors.empty();
@@ -336,6 +336,15 @@ public class SparseArray extends AbstractTensor implements Serializable {
    * @throws Exception if given index is negative or greater equals to length() */
   private int requireInRange(int index) {
     if (0 <= index && index < length())
+      return index;
+    throw new IllegalArgumentException("index=" + index + " length=" + length());
+  }
+
+  /** @param index
+   * @return index
+   * @throws Exception if given index is negative or greater than length() */
+  private int requireInRangeClosed(int index) {
+    if (0 <= index && index <= length())
       return index;
     throw new IllegalArgumentException("index=" + index + " length=" + length());
   }

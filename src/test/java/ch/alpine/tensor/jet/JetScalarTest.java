@@ -26,6 +26,7 @@ public class JetScalarTest extends TestCase {
     Scalar scalar = s1.multiply(s2);
     JetScalar jetScalar = (JetScalar) scalar;
     assertEquals(jetScalar.vector(), Tensors.vector(8, 14, 6));
+    AssertFail.of(() -> s1.multiply(null));
   }
 
   public void testReciprocal() {
