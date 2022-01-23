@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Conjugate;
  * 
  * Reference:
  * https://en.wikipedia.org/wiki/Kaczmarz_method */
-public class KaczmarzIteration {
+/* package */ class KaczmarzIteration {
   private final Tensor matrix;
   private final Tensor b;
   private final Tensor normsq;

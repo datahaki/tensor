@@ -23,7 +23,9 @@ public enum UpperEvaluation {
    * @param function mapping i-th element of sequence and j to matrix element (i, j)
    * @param mapping from matrix element (i, j) to matrix element (j, i)
    * @return matrix of size n x n */
-  public static Tensor of(Tensor ps, Tensor qs, BiFunction<Tensor, Tensor, Scalar> function, ScalarUnaryOperator sub) {
+  public static Tensor of(Tensor ps, Tensor qs, //
+      BiFunction<Tensor, Tensor, Scalar> function, //
+      ScalarUnaryOperator flip) {
     int n = Integers.requireEquals(ps.length(), qs.length());
     Scalar[][] matrix = new Scalar[n][n];
     Tensor[] q = qs.stream().toArray(Tensor[]::new);
@@ -33,7 +35,7 @@ public enum UpperEvaluation {
       for (int j = i + 1; j < n; ++j) {
         Scalar scalar = function.apply(p, q[j]);
         matrix[i][j] = scalar;
-        matrix[j][i] = sub.apply(scalar);
+        matrix[j][i] = flip.apply(scalar);
       }
       ++i;
     }

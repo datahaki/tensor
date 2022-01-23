@@ -9,9 +9,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.itp.LinearInterpolation;
+import ch.alpine.tensor.itp.LinearBinaryAverage;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.sca.Clip;
@@ -99,9 +98,9 @@ public class HistogramDistribution implements ContinuousDistribution, Serializab
   public Scalar p_lessThan(Scalar x) {
     Scalar xlo = discrete.apply(Floor.toMultipleOf(width).apply(x));
     Scalar ofs = Clips.interval(xlo, RealScalar.ONE.add(xlo)).rescale(discrete.apply(x));
-    return LinearInterpolation.of(Tensors.of( //
+    return (Scalar) LinearBinaryAverage.INSTANCE.split( //
         categoricalDistribution.p_lessThan(xlo), //
-        categoricalDistribution.p_lessEquals(xlo))).At(ofs);
+        categoricalDistribution.p_lessEquals(xlo), ofs);
   }
 
   @Override // from CDF

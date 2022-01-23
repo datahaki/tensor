@@ -10,8 +10,8 @@ import ch.alpine.tensor.Tensor;
  * </pre>
  * 
  * Remark:
- * implementation is useful when only a single interpolations
- * between p and q is needed.
+ * implementation is useful when only few interpolations
+ * between p and q are needed.
  * Otherwise, the difference q - p should be pre-computed.
  * 
  * @see LinearInterpolation */

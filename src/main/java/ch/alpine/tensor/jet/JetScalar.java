@@ -44,11 +44,12 @@ import ch.alpine.tensor.sca.Sinh;
  * 
  * automatic differentiation
  * 
- * The JetScalar was used to test the consistency between the {@link CDF} and {@link PDF}
+ * The JetScalar is used to test the consistency between the {@link CDF} and {@link PDF}
  * of {@link ContinuousDistribution}s.
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
+// TODO general makeover and more tests
 public class JetScalar extends AbstractScalar implements //
     AbsInterface, ArcTanInterface,
     // ComplexEmbedding, //
