@@ -96,6 +96,12 @@ public class LogNormalDistribution implements ContinuousDistribution, Serializab
     return Exp.FUNCTION.apply(variance.add(mu).add(mu)).multiply( //
         Exp.FUNCTION.apply(variance).subtract(RealScalar.ONE));
   }
+  // @Override
+  // public Scalar kurtosis() {
+  // // -3 + 3 E^(2 \[Sigma]^2) + 2 E^(3 \[Sigma]^2) + E^(4 \[Sigma]^2)
+  // // TODO
+  // return null;
+  // }
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {

@@ -45,8 +45,29 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
   public static Distribution of(Number a, Number b, Number c, Number d) {
     return of(RealScalar.of(a), RealScalar.of(b), RealScalar.of(c), RealScalar.of(d));
   }
-  // TODO provide method that gives TrapezoidalDistribution that fits best to a
-  // NormalDistribution with given mean and sigma
+
+  /** @param mean
+   * @param sigma
+   * @param factor
+   * @return distribution with support in the interval
+   * [mean - sigma * factor, mean + sigma * factor]
+   * and variance of sigma ^ 2 */
+  public static Distribution with(Scalar mean, Scalar sigma, Scalar factor) {
+    Scalar f1 = Sqrt.FUNCTION.apply(RealScalar.of(6).subtract(factor.multiply(factor)));
+    Scalar d1 = sigma.multiply(f1);
+    Scalar d2 = sigma.multiply(factor);
+    return of(mean.subtract(d2), mean.subtract(d1), mean.add(d1), mean.add(d2));
+  }
+
+  /** @param mean
+   * @param sigma
+   * @param factor
+   * @return distribution with support in the interval
+   * [mean - sigma * factor, mean + sigma * factor]
+   * and variance of sigma ^ 2 */
+  public static Distribution with(Number mean, Number sigma, Number factor) {
+    return with(RealScalar.of(mean), RealScalar.of(sigma), RealScalar.of(factor));
+  }
 
   // ---
   private final Clip clip;

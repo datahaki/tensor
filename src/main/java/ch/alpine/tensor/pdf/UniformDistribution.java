@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Clips;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/UniformDistribution.html">UniformDistribution</a> */
-public class UniformDistribution extends AbstractContinuousDistribution implements Serializable {
+public class UniformDistribution extends AbstractContinuousDistribution implements KurtosisInterface, Serializable {
   private static final Scalar _1_12 = RationalScalar.of(1, 12);
   private static final Distribution UNIT = new UniformDistribution(Clips.unit());
 
@@ -71,6 +71,11 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
   @Override // from VarianceInterface
   public Scalar variance() {
     return clip.width().multiply(clip.width()).multiply(_1_12);
+  }
+
+  @Override // from KurtosisInterface
+  public Scalar kurtosis() {
+    return RationalScalar.of(9, 5);
   }
 
   @Override // from PDF

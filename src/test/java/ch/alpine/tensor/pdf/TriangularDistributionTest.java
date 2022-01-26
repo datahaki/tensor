@@ -4,8 +4,11 @@ package ch.alpine.tensor.pdf;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -122,5 +125,28 @@ public class TriangularDistributionTest extends TestCase {
     assertEquals(Mean.of(distribution), RationalScalar.of(5, 3));
     Scalar mean = (Scalar) Mean.of(RandomVariate.of(distribution, 100));
     Clips.interval(1.5, 1.8).requireInside(mean);
+  }
+
+  public void testWith() {
+    Distribution distribution = TriangularDistribution.with(0, 1);
+    Scalar value = PDF.of(distribution).at(RealScalar.ZERO);
+    Tolerance.CHOP.requireClose(value, Sqrt.FUNCTION.apply(RealScalar.of(6).reciprocal()));
+  }
+
+  public void testWithMean() {
+    Distribution distribution = TriangularDistribution.with(10, 1);
+    Tolerance.CHOP.requireClose(Mean.of(distribution), RealScalar.of(10));
+    Scalar value = PDF.of(distribution).at(RealScalar.of(10));
+    Tolerance.CHOP.requireClose(value, Sqrt.FUNCTION.apply(RealScalar.of(6).reciprocal()));
+  }
+
+  public void testToString() {
+    Distribution distribution = TriangularDistribution.with(Quantity.of(3, "m"), Quantity.of(2, "m"));
+    PDF.of(distribution).at(Quantity.of(3.3, "m"));
+  }
+
+  public void testWithFail() {
+    AssertFail.of(() -> TriangularDistribution.with(RealScalar.of(0), RealScalar.of(0)));
+    AssertFail.of(() -> TriangularDistribution.with(RealScalar.of(0), RealScalar.of(-1)));
   }
 }

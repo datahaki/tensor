@@ -21,15 +21,16 @@ import ch.alpine.tensor.Scalar;
     MeanInterface, RandomVariateInterface, VarianceInterface, Serializable {
   private final int n;
   private final Scalar p;
+  private final double p_success;
 
   public BinomialRandomVariate(int n, Scalar p) {
     this.n = n;
     this.p = p;
+    p_success = p.number().doubleValue();
   }
 
   @Override // from RandomVariateInterface
   public Scalar randomVariate(Random random) {
-    double p_success = p.number().doubleValue();
     return RealScalar.of(DoubleStream.generate(random::nextDouble) //
         .limit(n) //
         .filter(value -> value < p_success) //

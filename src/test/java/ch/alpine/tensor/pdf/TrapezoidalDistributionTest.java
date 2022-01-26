@@ -212,6 +212,20 @@ public class TrapezoidalDistributionTest extends TestCase {
     TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(5, "m"));
   }
 
+  public void testObviousMean() {
+    Distribution distribution = TrapezoidalDistribution.of(4, 5, 6, 7);
+    Scalar mean = Mean.of(distribution);
+    assertEquals(mean, RationalScalar.of(11, 2));
+    ExactScalarQ.require(mean);
+  }
+
+  public void testWithMean() {
+    Distribution distribution = TrapezoidalDistribution.with(4, 3, 2);
+    Scalar mean = Mean.of(distribution);
+    assertEquals(mean, RealScalar.of(4));
+    // assertEquals(Variance.of(distribution), RealScalar.of(9));
+  }
+
   public void testNumericFail() {
     TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
     TrapezoidalDistribution.of(Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));

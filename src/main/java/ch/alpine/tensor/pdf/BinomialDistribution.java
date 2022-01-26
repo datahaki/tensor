@@ -13,7 +13,8 @@ import ch.alpine.tensor.sca.Clips;
  * <a href="https://reference.wolfram.com/language/ref/BinomialDistribution.html">BinomialDistribution</a>
  * 
  * @see BinomialRandomVariate */
-public class BinomialDistribution extends EvaluatedDiscreteDistribution implements VarianceInterface {
+public class BinomialDistribution extends EvaluatedDiscreteDistribution implements //
+    KurtosisInterface, VarianceInterface {
   /** Example:
    * PDF[BinomialDistribution[10, 1/3], 1] == 5120/59049
    * 
@@ -61,6 +62,14 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
   @Override // from VarianceInterface
   public Scalar variance() {
     return mean().multiply(RealScalar.ONE.subtract(p));
+  }
+
+  @Override // from KurtosisInterface
+  public Scalar kurtosis() {
+    Scalar fac = RealScalar.ONE.subtract(p).multiply(p);
+    Scalar num = RealScalar.ONE.subtract(RealScalar.of(6).multiply(fac));
+    Scalar den = RealScalar.of(n).multiply(fac);
+    return num.divide(den).add(RealScalar.of(3));
   }
 
   @Override // from DiscreteDistribution

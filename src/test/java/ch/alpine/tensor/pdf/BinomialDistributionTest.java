@@ -13,6 +13,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.usr.AssertFail;
@@ -216,6 +217,11 @@ public class BinomialDistributionTest extends TestCase {
       Scalar scalar = Median.of(distribution);
       assertEquals(scalar, RealScalar.of(index));
     }
+  }
+
+  public void testKurtosis() {
+    Scalar scalar = Kurtosis.of(BinomialDistribution.of(11, RationalScalar.of(1, 7)));
+    assertEquals(scalar, RationalScalar.of(211, 66));
   }
 
   public void testFailN() {

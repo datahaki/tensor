@@ -42,23 +42,26 @@ import ch.alpine.tensor.red.Total;
     private final Tensor sum;
 
     Inner(Tensor x, Tensor y) {
-      Tensor xxy = ad.dot(x).dot(ad.dot(x).dot(y)).multiply(RationalScalar.of(+1, 12));
-      Tensor yyx = ad.dot(y).dot(ad.dot(y).dot(x)).multiply(RationalScalar.of(+1, 12));
-      Tensor xyxy = ad.dot(x).dot(ad.dot(y).dot(ad.dot(x).dot(y))).multiply(RationalScalar.of(-1, 24));
-      Tensor x1a = ad.dot(y).dot(ad.dot(y).dot(ad.dot(y).dot(ad.dot(y).dot(x))));
-      Tensor x1b = ad.dot(x).dot(ad.dot(x).dot(ad.dot(x).dot(ad.dot(x).dot(y))));
-      Tensor x2a = ad.dot(x).dot(ad.dot(y).dot(ad.dot(y).dot(ad.dot(y).dot(x))));
-      Tensor x2b = ad.dot(y).dot(ad.dot(x).dot(ad.dot(x).dot(ad.dot(x).dot(y))));
-      Tensor x3a = ad.dot(y).dot(ad.dot(x).dot(ad.dot(y).dot(ad.dot(x).dot(y))));
-      Tensor x3b = ad.dot(x).dot(ad.dot(y).dot(ad.dot(x).dot(ad.dot(y).dot(x))));
-      Tensor t1 = x1a.add(x1b).multiply(RationalScalar.of(-1, 720));
-      Tensor t2 = x2a.add(x2b).multiply(RationalScalar.of(+1, 360));
-      Tensor t3 = x3a.add(x3b).multiply(RationalScalar.of(+1, 120));
+      Tensor adx = ad.dot(x);
+      Tensor ady = ad.dot(y);
+      Tensor adxy = adx.dot(y);
+      Tensor adxxy = adx.dot(adxy);
+      Tensor adyyx = ady.dot(adxy.negate());
+      Tensor adxyxy = adx.dot(adyyx.negate());
+      Tensor adyyyyx = ady.dot(ady.dot(adyyx));
+      Tensor adxxxxy = adx.dot(adx.dot(adxxy));
+      Tensor adxyyyx = adx.dot(ady.dot(adyyx));
+      Tensor adyxxxy = ady.dot(adx.dot(adxxy));
+      Tensor adyxyxy = ady.dot(adxyxy);
+      Tensor adxyxyx = adx.dot(ady.dot(adxxy.negate()));
+      Tensor t1 = adyyyyx.add(adxxxxy).multiply(RationalScalar.of(-1, 720));
+      Tensor t2 = adxyyyx.add(adyxxxy).multiply(RationalScalar.of(+1, 360));
+      Tensor t3 = adyxyxy.add(adxyxyx).multiply(RationalScalar.of(+1, 120));
       sum = Tensors.of( //
           x.add(y), //
-          ad.dot(x).dot(y).multiply(RationalScalar.HALF), //
-          xxy.add(yyx), //
-          xyxy, //
+          adxy.multiply(RationalScalar.HALF), //
+          adxxy.add(adyyx).multiply(RationalScalar.of(+1, 12)), //
+          adxyxy.multiply(RationalScalar.of(-1, 24)), //
           t1.add(t2).add(t3));
     }
 

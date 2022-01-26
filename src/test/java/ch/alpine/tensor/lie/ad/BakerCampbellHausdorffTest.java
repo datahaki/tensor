@@ -9,9 +9,11 @@ import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -27,8 +29,8 @@ public class BakerCampbellHausdorffTest extends TestCase {
     int n = ad.length();
     for (int c0 = 0; c0 < n; ++c0)
       for (int c1 = 0; c1 < n; ++c1) {
-        Tensor x = UnitVector.of(3, c0);
-        Tensor y = UnitVector.of(3, c1);
+        Tensor x = UnitVector.of(n, c0);
+        Tensor y = UnitVector.of(n, c1);
         {
           Tensor res1 = bakerCampbellHausdorff.apply(x, y);
           Tensor res2 = appx.apply(x, y);
@@ -44,8 +46,8 @@ public class BakerCampbellHausdorffTest extends TestCase {
       }
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     for (int count = 0; count < 10; ++count) {
-      Tensor x = RandomVariate.of(distribution, 3);
-      Tensor y = RandomVariate.of(distribution, 3);
+      Tensor x = RandomVariate.of(distribution, n);
+      Tensor y = RandomVariate.of(distribution, n);
       {
         Tensor res1 = bakerCampbellHausdorff.apply(x, y);
         Tensor res2 = appx.apply(x, y);
@@ -63,6 +65,13 @@ public class BakerCampbellHausdorffTest extends TestCase {
 
   public void testSl2() {
     _check(TestHelper.sl2());
+  }
+
+  public void testSl2Sophus() {
+    Tensor ad = Tensors.fromString( //
+        "{{{0, 0, 0}, {0, 0, 1}, {0, -1, 0}}, {{0, 0, 1}, {0, 0, 0}, {-1, 0, 0}}, {{0, -1, 0}, {1, 0, 0}, {0, 0, 0}}}");
+    _check(ad);
+    assertEquals(Det.of(KillingForm.of(ad)), RealScalar.of(-8));
   }
 
   public void testSe2() {

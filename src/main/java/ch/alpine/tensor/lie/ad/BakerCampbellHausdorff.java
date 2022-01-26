@@ -15,8 +15,6 @@ import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Factorial;
@@ -39,6 +37,7 @@ import ch.alpine.tensor.sca.Factorial;
  * Hakenberg.de kernel.nb
  * 
  * @see MatrixAlgebra */
+// TODO resort to BCH Approx for degree 4
 public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializable {
   private static final Scalar _0 = RealScalar.ZERO;
   private static final Scalar _1 = RealScalar.ONE;
@@ -59,7 +58,7 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
    * @param degree strictly positive
    * @return */
   public static BinaryOperator<Tensor> of(Tensor ad, int degree) {
-    return of(ad, degree, Tolerance.CHOP);
+    return of(ad, degree, Chop._14);
   }
 
   // ---
@@ -115,7 +114,7 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
       Scalar f = RealScalar.of(Math.multiplyExact(SIGN[k & 1] * (k + 1), total_q + 1)).multiply(fac);
       Tensor term = v.divide(f);
       series.set(term::add, d - 1);
-      if (chop.isZero(Vector1Norm.of(term)))
+      if (chop.allZero(term))
         return;
       if (d < degree) {
         if (0 < k) {

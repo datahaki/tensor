@@ -12,7 +12,7 @@ import ch.alpine.tensor.sca.Sqrt;
 import ch.alpine.tensor.sca.erf.Erfc;
 import ch.alpine.tensor.sca.erf.InverseErfc;
 
-/* package */ enum StandardNormalDistribution implements ContinuousDistribution {
+/* package */ enum StandardNormalDistribution implements ContinuousDistribution, KurtosisInterface {
   INSTANCE;
 
   private static final Scalar DEN = Sqrt.FUNCTION.apply(Pi.TWO);
@@ -53,6 +53,11 @@ import ch.alpine.tensor.sca.erf.InverseErfc;
   @Override // from MeanInterface
   public Scalar variance() {
     return RealScalar.ONE;
+  }
+
+  @Override // from KurtosisInterface
+  public Scalar kurtosis() {
+    return RealScalar.of(3);
   }
 
   @Override // from Object

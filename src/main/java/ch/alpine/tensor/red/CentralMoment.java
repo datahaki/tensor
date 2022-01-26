@@ -4,6 +4,7 @@ package ch.alpine.tensor.red;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Power;
 
 /** inspired by
@@ -29,5 +30,14 @@ public enum CentralMoment {
    * @return */
   public static Scalar of(Tensor vector, Number order) {
     return of(vector, RealScalar.of(order));
+  }
+
+  public static Scalar of(Distribution distribution, Scalar order) {
+    // TODO
+    throw new UnsupportedOperationException();
+  }
+
+  public static Scalar of(Distribution distribution, Number order) {
+    return of(distribution, RealScalar.of(order));
   }
 }

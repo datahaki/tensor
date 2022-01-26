@@ -18,7 +18,6 @@ import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.AbsInterface;
-import ch.alpine.tensor.api.ArcTanInterface;
 import ch.alpine.tensor.api.ExpInterface;
 import ch.alpine.tensor.api.LogInterface;
 import ch.alpine.tensor.api.PowerInterface;
@@ -30,7 +29,6 @@ import ch.alpine.tensor.pdf.ContinuousDistribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
-import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Cos;
 import ch.alpine.tensor.sca.Cosh;
 import ch.alpine.tensor.sca.Exp;
@@ -51,9 +49,7 @@ import ch.alpine.tensor.sca.Sinh;
  * This class is immutable and thread-safe. */
 // TODO general makeover and more tests
 public class JetScalar extends AbstractScalar implements //
-    AbsInterface, ArcTanInterface,
-    // ComplexEmbedding, //
-    ExpInterface, LogInterface, PowerInterface, //
+    AbsInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface, //
     Comparable<Scalar>, Serializable {
   /** @param vector {f[x], f'[x], f''[x], ...}
@@ -141,25 +137,17 @@ public class JetScalar extends AbstractScalar implements //
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    // TODO Auto-generated method stub
-    return StaticHelper.chain(vector, AbsSquared.FUNCTION, null);
+    return StaticHelper.chain(vector, AbsSquared.FUNCTION, s -> {
+      Scalar v1 = Abs.FUNCTION.apply(s);
+      Scalar v2 = Sign.FUNCTION.apply(s);
+      Scalar v3 = v1.multiply(v2);
+      return v3.add(v3);
+    });
   }
-
-  @Override // from ArcTanInterface
-  public Scalar arcTan(Scalar x) {
-    // this/x
-    // TODO
-    return StaticHelper.chain(vector, ArcTan.FUNCTION, s -> RealScalar.ONE.divide(RealScalar.ONE.add(s.multiply(s))));
-  }
-  // @Override // from ComplexEmbedding
-  // public Scalar real() {
-  // return Real.of(vector);
-  // }
-  //
-  // @Override // from ComplexEmbedding
-  // public Scalar imag() {
-  // // TODO Auto-generated method stub
-  // return null;
+  // @Override // from ArcTanInterface
+  // public Scalar arcTan(Scalar x) {
+  // JetScalar divide = (JetScalar) divide(x);
+  // return StaticHelper.chain(divide.vector, ArcTan.FUNCTION, s -> RealScalar.ONE.divide(RealScalar.ONE.add(s.multiply(s))));
   // }
 
   @Override // from ExpInterface
