@@ -13,6 +13,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.pdf.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.Distribution;
@@ -27,13 +28,19 @@ public class BakerCampbellHausdorffTest extends TestCase {
         (BakerCampbellHausdorff) BakerCampbellHausdorff.of(ad, BchApprox.DEGREE);
     BchApprox appx = (BchApprox) BchApprox.of(ad);
     int n = ad.length();
+    Timing t_bch = Timing.stopped();
+    Timing t_apx = Timing.stopped();
     for (int c0 = 0; c0 < n; ++c0)
       for (int c1 = 0; c1 < n; ++c1) {
         Tensor x = UnitVector.of(n, c0);
         Tensor y = UnitVector.of(n, c1);
         {
+          t_bch.start();
           Tensor res1 = bakerCampbellHausdorff.apply(x, y);
+          t_bch.stop();
+          t_apx.start();
           Tensor res2 = appx.apply(x, y);
+          t_apx.stop();
           assertEquals(res1, res2);
           ExactTensorQ.require(res1);
         }
@@ -49,14 +56,20 @@ public class BakerCampbellHausdorffTest extends TestCase {
       Tensor x = RandomVariate.of(distribution, n);
       Tensor y = RandomVariate.of(distribution, n);
       {
+        t_bch.start();
         Tensor res1 = bakerCampbellHausdorff.apply(x, y);
+        t_bch.stop();
+        t_apx.start();
         Tensor res2 = appx.apply(x, y);
+        t_apx.stop();
         assertEquals(res1, res2);
         ExactTensorQ.require(res1);
         Tensor res3 = bakerCampbellHausdorff.apply(y.negate(), x.negate()).negate();
         assertEquals(res1, res3);
       }
     }
+    // System.out.println(String.format("bch: %10d", t_bch.nanoSeconds()));
+    // System.out.println(String.format("apx: %10d", t_apx.nanoSeconds()));
   }
 
   public void testHe1() {

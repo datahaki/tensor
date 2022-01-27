@@ -19,7 +19,7 @@ public enum Pivots implements Pivot {
   ARGMAX_ABS {
     @Override // from Pivot
     public int get(int row, int col, int[] ind, Tensor[] lhs) {
-      Scalar max = Unprotect.withoutUnit(Abs.FUNCTION.apply(lhs[ind[row]].Get(col)));
+      Scalar max = Abs.FUNCTION.apply(Unprotect.withoutUnit(lhs[ind[row]].Get(col)));
       int arg = row;
       for (int i = row + 1; i < ind.length; ++i) {
         Scalar cmp = Abs.FUNCTION.apply(Unprotect.withoutUnit(lhs[ind[i]].Get(col)));

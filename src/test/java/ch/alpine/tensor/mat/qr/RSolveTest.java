@@ -7,9 +7,12 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.UpperTriangularize;
 import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.LinearSolve;
+import ch.alpine.tensor.mat.re.Pivot;
+import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.UniformDistribution;
@@ -68,5 +71,23 @@ public class RSolveTest extends TestCase {
     // ... perform the below computation with the public tensor API
     Tensor actual = RSolve.of(qrDecomposition, qrDecomposition.getQConjugateTranspose().dot(b));
     Tolerance.CHOP.requireClose(expect, actual);
+  }
+
+  public void testQuantity2() {
+    Tensor matrix = UpperTriangularize.of(Tensors.fromString( //
+        "{{1[m^2], 2[m*rad], 3[kg*m]}, {4[m*rad], 2[rad^2], 2[kg*rad]}, {5[kg*m], 1[kg*rad], 7[kg^2]}}"));
+    final Tensor eye = IdentityMatrix.of(3).unmodifiable();
+    Tensor sol = RSolve.of(matrix, new int[] { 0, 1, 2 }, eye);
+    for (Pivot pivot : Pivots.values()) {
+      Tensor inv = LinearSolve.of(matrix, eye, pivot);
+      assertEquals(inv, sol);
+    }
+  }
+
+  public void testQuantity3() { // confirmed with Mathematica 12
+    Tensor matrix = Tensors.fromString("{{1[m], 1[s]}, {0[m], 2[s]}}");
+    Tensor sol1 = Inverse.of(matrix);
+    Tensor sol2 = RSolve.of(matrix, new int[] { 0, 1 }, IdentityMatrix.of(2));
+    assertEquals(sol1, sol2);
   }
 }

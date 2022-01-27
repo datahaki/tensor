@@ -9,10 +9,12 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.red.Total;
 
-/** References:
- * Neeb
+/** the explicit computation of the terms in the series is about 8-10 times
+ * faster than using {@link BakerCampbellHausdorff}
  * 
- * "Baker-Campbell-Hausdorff formula" Wikipedia */
+ * References:
+ * 1) Neeb
+ * 2) "Baker-Campbell-Hausdorff formula" Wikipedia */
 /* package */ class BchApprox implements BinaryOperator<Tensor>, Serializable {
   public static final int DEGREE = 5;
 
@@ -35,11 +37,11 @@ import ch.alpine.tensor.red.Total;
   }
 
   /* package */ Tensor series(Tensor x, Tensor y) {
-    return new Inner(x, y).sum;
+    return new Inner(x, y).series;
   }
 
   private class Inner {
-    private final Tensor sum;
+    private final Tensor series;
 
     Inner(Tensor x, Tensor y) {
       Tensor adx = ad.dot(x);
@@ -57,7 +59,7 @@ import ch.alpine.tensor.red.Total;
       Tensor t1 = adyyyyx.add(adxxxxy).multiply(RationalScalar.of(-1, 720));
       Tensor t2 = adxyyyx.add(adyxxxy).multiply(RationalScalar.of(+1, 360));
       Tensor t3 = adyxyxy.add(adxyxyx).multiply(RationalScalar.of(+1, 120));
-      sum = Tensors.of( //
+      series = Tensors.of( //
           x.add(y), //
           adxy.multiply(RationalScalar.HALF), //
           adxxy.add(adyyx).multiply(RationalScalar.of(+1, 12)), //
@@ -66,7 +68,7 @@ import ch.alpine.tensor.red.Total;
     }
 
     private Tensor sum() {
-      return Total.of(sum);
+      return Total.of(series);
     }
   }
 }
