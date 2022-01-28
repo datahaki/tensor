@@ -1,13 +1,18 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.fft.ListConvolve;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
@@ -85,5 +90,26 @@ public enum Polynomial {
     return length == 0 //
         ? Tensors.empty()
         : Times.of(coeffs.extract(1, length), Range.of(1, length));
+  }
+
+  public static ScalarUnaryOperator integral(Tensor coeffs) {
+    return of(integral_coeffs(coeffs));
+  }
+
+  /** @param coeffs
+   * @return */
+  public static Tensor integral_coeffs(Tensor coeffs) {
+    // TODO not generic, function should also work for units
+    Tensor tensor = Tensors.reserve(coeffs.length() + 1);
+    tensor.append(RealScalar.ZERO);
+    for (int index = 0; index < coeffs.length(); ++index)
+      tensor.append(coeffs.Get(index).multiply(RationalScalar.of(1, index + 1)));
+    return tensor;
+  }
+
+  public static Tensor product(Tensor c1, Tensor c2) {
+    int l2 = c2.length();
+    // TODO it would be elegant to not have to attach zeros at all
+    return ListConvolve.of(c2, Join.of(Array.zeros(l2 - 1), c1, Array.zeros(l2 - 1)));
   }
 }

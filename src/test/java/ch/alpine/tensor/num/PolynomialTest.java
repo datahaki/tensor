@@ -4,6 +4,7 @@ package ch.alpine.tensor.num;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RandomQuaternion;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -11,6 +12,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.jet.JetScalar;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
@@ -194,6 +196,26 @@ public class PolynomialTest extends TestCase {
       AssertFail.of(() -> d2.apply(Quantity.of(4, "A")));
       assertEquals(d2.apply(Quantity.of(4, "s^2")), Quantity.of(0, "m*s^-4"));
     }
+  }
+
+  public void testIntegralCoeff() {
+    Tensor coeffs = Tensors.vector(2, 6, 3, 9, 0, 3);
+    Tensor integr = Polynomial.integral_coeffs(coeffs);
+    Tensor result = Polynomial.derivative_coeffs(integr);
+    assertEquals(coeffs, result);
+  }
+
+  public void testMultiplyCoeff() {
+    Tensor c1 = Tensors.vector(2, 6, 3, 9, 0, 3);
+    Tensor c2 = Tensors.vector(5, 7, 1);
+    Tensor pd = Polynomial.product(c1, c2);
+    Tensor al = Polynomial.product(c2, c1);
+    assertEquals(pd, al);
+    assertEquals(pd, Tensors.vector(10, 44, 59, 72, 66, 24, 21, 3));
+    JetScalar x = JetScalar.of(RationalScalar.HALF, 3);
+    Scalar t1 = Polynomial.of(c1).apply(x).multiply(Polynomial.of(c2).apply(x));
+    Scalar t2 = Polynomial.of(pd).apply(x);
+    assertEquals(t1, t2);
   }
 
   public void testEmptyFail() {

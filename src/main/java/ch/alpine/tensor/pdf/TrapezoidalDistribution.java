@@ -7,7 +7,14 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Differences;
+import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.itp.Fit;
+import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sqrt;
@@ -48,25 +55,25 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
 
   /** @param mean
    * @param sigma
-   * @param factor
+   * @param spread
    * @return distribution with support in the interval
-   * [mean - sigma * factor, mean + sigma * factor]
+   * [mean - sigma * spread, mean + sigma * spread]
    * and variance of sigma ^ 2 */
-  public static Distribution with(Scalar mean, Scalar sigma, Scalar factor) {
-    Scalar f1 = Sqrt.FUNCTION.apply(RealScalar.of(6).subtract(factor.multiply(factor)));
+  public static Distribution with(Scalar mean, Scalar sigma, Scalar spread) {
+    Scalar f1 = Sqrt.FUNCTION.apply(RealScalar.of(6).subtract(spread.multiply(spread)));
     Scalar d1 = sigma.multiply(f1);
-    Scalar d2 = sigma.multiply(factor);
+    Scalar d2 = sigma.multiply(spread);
     return of(mean.subtract(d2), mean.subtract(d1), mean.add(d1), mean.add(d2));
   }
 
   /** @param mean
    * @param sigma
-   * @param factor
+   * @param spread
    * @return distribution with support in the interval
-   * [mean - sigma * factor, mean + sigma * factor]
+   * [mean - sigma * spread, mean + sigma * spread]
    * and variance of sigma ^ 2 */
-  public static Distribution with(Number mean, Number sigma, Number factor) {
-    return with(RealScalar.of(mean), RealScalar.of(sigma), RealScalar.of(factor));
+  public static Distribution with(Number mean, Number sigma, Number spread) {
+    return with(RealScalar.of(mean), RealScalar.of(sigma), RealScalar.of(spread));
   }
 
   // ---
@@ -150,12 +157,31 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     Scalar cd = c.multiply(c).add(c.multiply(d)).add(d.multiply(d));
     Scalar ab = a.multiply(a).add(a.multiply(b)).add(b.multiply(b));
     return alpha.multiply(cd.subtract(ab)).multiply(_1_3);
+    // TODO for some reason cannot be substituted
+    // ScalarUnaryOperator n_mean = s->s;
+    // Tensor x2 = UnitVector.of(2, 1);
+    // return contrib(a, b, n_mean, x2).add(contrib(b, c, n_mean, x2)).add(contrib(c, d, n_mean, x2));
   }
 
-  @Override
+  private Scalar contrib(Scalar lo, Scalar hi, ScalarUnaryOperator map, Tensor x2) {
+    // TODO check with Quantity
+    if (lo.equals(hi)) {
+      Tensor dab = Tensors.of(lo).map(map);
+      Tensor _ab = Fit.polynomial_coeffs(dab, Tensors.of(lo).map(this::at), 0);
+      ScalarUnaryOperator iab = Polynomial.integral(Polynomial.product(_ab, x2));
+      return dab.map(iab).Get(0).zero();
+    }
+    Tensor dab = Tensors.of(lo, hi).map(map);
+    Tensor _ab = Fit.polynomial_coeffs(dab, Tensors.of(lo, hi).map(this::at), 1);
+    ScalarUnaryOperator iab = Polynomial.integral(Polynomial.product(_ab, x2));
+    return Differences.of(dab.map(iab)).Get(0);
+  }
+
+  @Override // from VarianceInterface
   public Scalar variance() {
-    // TODO implement
-    throw new UnsupportedOperationException();
+    ScalarUnaryOperator n_mean = mean().negate()::add;
+    Tensor x2 = UnitVector.of(3, 2);
+    return contrib(a, b, n_mean, x2).add(contrib(b, c, n_mean, x2)).add(contrib(c, d, n_mean, x2));
   }
 
   @Override // from AbstractContinuousDistribution

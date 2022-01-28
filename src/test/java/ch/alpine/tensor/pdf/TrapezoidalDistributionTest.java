@@ -19,6 +19,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -83,9 +84,13 @@ public class TrapezoidalDistributionTest extends TestCase {
     assertTrue(Scalars.lessEquals(diff, RealScalar.of(0.5)));
   }
 
-  public void testVarianceFail() {
-    TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of(1, 2, 3, 4);
-    AssertFail.of(() -> distribution.variance());
+  public void testVariance() {
+    // values confirmed with Mathematica
+    assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 3, 4)), RationalScalar.of(5, 12));
+    assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 4, 4)), RationalScalar.of(253, 450));
+    assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 4, 7)), RationalScalar.of(251, 144));
+    assertEquals(Variance.of(TrapezoidalDistribution.of(2, 2, 4, 13)), RationalScalar.of(6719, 1014));
+    assertEquals(Variance.of(TrapezoidalDistribution.of(-1, -1, 1, 1)), RationalScalar.of(1, 3));
   }
 
   public void testQuantity() {
@@ -217,6 +222,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     Scalar mean = Mean.of(distribution);
     assertEquals(mean, RationalScalar.of(11, 2));
     ExactScalarQ.require(mean);
+    assertEquals(Variance.of(distribution), RationalScalar.of(5, 12));
   }
 
   public void testWithMean() {
