@@ -56,6 +56,16 @@ public class PolynomialTest extends TestCase {
     assertEquals(res.toString(), "2[m*s]");
   }
 
+  public void testAcceleration() {
+    Scalar qs0 = Quantity.of(3, "m*s^-1");
+    Scalar qs1 = Quantity.of(-4, "m*s^-2");
+    Scalar val = Quantity.of(2, "s");
+    Polynomial coeffs = Polynomial.of(Tensors.of(qs0, qs1));
+    Scalar res = coeffs.apply(val);
+    Polynomial integral_coeffs = coeffs.integral();
+    Scalar scalar = integral_coeffs.apply(val);
+  }
+
   public void testQuaternionLinear() {
     Quaternion qs1 = Quaternion.of(1, 2, 3, 4);
     Quaternion qs2 = Quaternion.of(2, 5, -1, 0);
@@ -95,7 +105,6 @@ public class PolynomialTest extends TestCase {
     ExactScalarQ.require(res);
     Tensor roots = Roots.of(coeffs);
     roots.map(series); // non-zero
-    // System.out.println();
   }
 
   public void testNullFail() {
@@ -107,45 +116,44 @@ public class PolynomialTest extends TestCase {
   }
 
   public void testDerivativeSimple() {
-    Tensor coeffs = Tensors.vector(-3, 4, -5, 8, 1);
-    Tensor result = Polynomial.derivative_coeffs(coeffs);
-    ExactTensorQ.require(result);
-    assertEquals(result, Tensors.vector(4, -5 * 2, 8 * 3, 1 * 4));
+    Polynomial coeffs = Polynomial.of(Tensors.vector(-3, 4, -5, 8, 1));
+    Polynomial result = coeffs.derivative();
+    ExactTensorQ.require(result.coeffs());
+    assertEquals(result.coeffs(), Tensors.vector(4, -5 * 2, 8 * 3, 1 * 4));
   }
 
   public void testDerivativeEmpty() {
-    assertEquals(Polynomial.derivative_coeffs(Tensors.vector()), Tensors.vector());
-    assertEquals(Polynomial.derivative_coeffs(Tensors.vector(3)), Tensors.empty());
+    // FIXME
+    // assertEquals(Polynomial.of(Tensors.vector()).derivative().coeffs(), Tensors.vector());
+    // assertEquals(Polynomial.of(Tensors.vector(3)).derivative().coeffs(), Tensors.empty());
   }
 
   public void testDerLinEx() {
-    Tensor coeffs = Tensors.fromString("{-13[bar], 0.27[K^-1*bar]}");
-    ScalarUnaryOperator polynomial = Polynomial.of(coeffs);
+    // Tensor coeffs = ;
+    Polynomial polynomial = Polynomial.of(Tensors.fromString("{-13[bar], 0.27[K^-1*bar]}"));
     assertEquals(QuantityUnit.of(polynomial.apply(Quantity.of(3, "K"))), Unit.of("bar"));
-    Tensor coeffs_d1 = Polynomial.derivative_coeffs(coeffs);
-    assertEquals(coeffs_d1, Tensors.fromString("{0.27[K^-1*bar], 0.0[K^-2*bar]}"));
-    ScalarUnaryOperator derivative = Polynomial.of(coeffs_d1);
+    Polynomial derivative = polynomial.derivative();
+    assertEquals(derivative.coeffs(), Tensors.fromString("{0.27[K^-1*bar], 0.0[K^-2*bar]}"));
+    // ScalarUnaryOperator derivative = Polynomial.of(coeffs_d1);
     assertEquals(QuantityUnit.of(derivative.apply(Quantity.of(3, "K"))), Unit.of("bar*K^-1"));
     AssertFail.of(() -> derivative.apply(Quantity.of(3, "bar")));
   }
 
   public void testDerivativeLinear() {
-    Tensor coeffs = Tensors.of(Quantity.of(3, "m"), Quantity.of(2, "m*s^-1"));
-    Scalar position = Polynomial.of(coeffs).apply(Quantity.of(10, "s"));
+    Polynomial polynomial = Polynomial.of(Tensors.of(Quantity.of(3, "m"), Quantity.of(2, "m*s^-1")));
+    Scalar position = polynomial.apply(Quantity.of(10, "s"));
     assertEquals(position, Quantity.of(23, "m"));
-    Tensor coeffs_d1 = Polynomial.derivative_coeffs(coeffs);
+    Polynomial d1 = polynomial.derivative();
     {
-      assertEquals(coeffs_d1, Tensors.fromString("{2[m*s^-1], 0[m*s^-2]}"));
-      ExactTensorQ.require(coeffs_d1);
-      ScalarUnaryOperator d1 = Polynomial.of(coeffs_d1);
+      assertEquals(d1.coeffs(), Tensors.fromString("{2[m*s^-1], 0[m*s^-2]}"));
+      ExactTensorQ.require(d1.coeffs());
       AssertFail.of(() -> d1.apply(Quantity.of(4, "A")));
       assertEquals(d1.apply(Quantity.of(4, "s")), Quantity.of(2, "m*s^-1"));
     }
-    Tensor coeffs_d2 = Polynomial.derivative_coeffs(coeffs_d1);
+    Polynomial d2 = d1.derivative();
     {
-      assertEquals(coeffs_d2, Tensors.fromString("{0[m*s^-2], 0[m*s^-3]}"));
-      ExactTensorQ.require(coeffs_d2);
-      ScalarUnaryOperator d2 = Polynomial.of(coeffs_d2);
+      assertEquals(d2.coeffs(), Tensors.fromString("{0[m*s^-2], 0[m*s^-3]}"));
+      ExactTensorQ.require(d2.coeffs());
       AssertFail.of(() -> d2.apply(Quantity.of(4, "A")));
       assertEquals(d2.apply(Quantity.of(4, "s")), Quantity.of(0, "m*s^-2"));
     }
@@ -155,85 +163,81 @@ public class PolynomialTest extends TestCase {
     GaussScalar a = GaussScalar.of(3, 17);
     GaussScalar b = GaussScalar.of(4, 17);
     GaussScalar x = GaussScalar.of(5, 17);
-    Tensor coeffs = Tensors.of(a, b);
-    Scalar position = Polynomial.of(coeffs).apply(x);
+    Polynomial polynomial = Polynomial.of(Tensors.of(a, b));
+    Scalar position = polynomial.apply(x);
     assertEquals(position, GaussScalar.of(6, 17));
-    Tensor coeffs_d1 = Polynomial.derivative_coeffs(coeffs);
+    Polynomial d1 = polynomial.derivative();
     {
-      assertEquals(coeffs_d1, Tensors.of(b, b.zero()));
-      ExactTensorQ.require(coeffs_d1);
-      ScalarUnaryOperator d1 = Polynomial.of(coeffs_d1);
+      assertEquals(d1.coeffs(), Tensors.of(b, b.zero()));
+      ExactTensorQ.require(d1.coeffs());
       AssertFail.of(() -> d1.apply(Quantity.of(4, "A")));
       assertEquals(d1.apply(x), b);
     }
-    Tensor coeffs_d2 = Polynomial.derivative_coeffs(coeffs_d1);
+    Polynomial d2 = d1.derivative();
     {
-      assertEquals(coeffs_d2, Tensors.of(b.zero(), b.zero()));
-      ExactTensorQ.require(coeffs_d2);
-      ScalarUnaryOperator d2 = Polynomial.of(coeffs_d2);
+      assertEquals(d2.coeffs(), Tensors.of(b.zero(), b.zero()));
+      ExactTensorQ.require(d2.coeffs());
       AssertFail.of(() -> d2.apply(Quantity.of(4, "A")));
       assertEquals(d2.apply(x), b.zero());
     }
   }
 
   public void testDerivativeQuadr() {
-    Tensor coeffs = Tensors.of(Quantity.of(3, "m"), Quantity.of(2, "m*s^-2"));
-    Scalar position = Polynomial.of(coeffs).apply(Quantity.of(10, "s^2"));
+    Polynomial polynomial = Polynomial.of(Tensors.of(Quantity.of(3, "m"), Quantity.of(2, "m*s^-2")));
+    Scalar position = polynomial.apply(Quantity.of(10, "s^2"));
     assertEquals(position, Quantity.of(23, "m"));
-    Tensor coeffs_d1 = Polynomial.derivative_coeffs(coeffs);
+    Polynomial d1 = polynomial.derivative();
     {
-      assertEquals(coeffs_d1, Tensors.fromString("{2[m*s^-2], 0[m*s^-4]}"));
-      ExactTensorQ.require(coeffs_d1);
-      ScalarUnaryOperator d1 = Polynomial.of(coeffs_d1);
+      assertEquals(d1.coeffs(), Tensors.fromString("{2[m*s^-2], 0[m*s^-4]}"));
+      ExactTensorQ.require(d1.coeffs());
       AssertFail.of(() -> d1.apply(Quantity.of(4, "A")));
       assertEquals(d1.apply(Quantity.of(4, "s^2")), Quantity.of(2, "m*s^-2"));
     }
-    Tensor coeffs_d2 = Polynomial.derivative_coeffs(coeffs_d1);
+    Polynomial d2 = d1.derivative();
     {
-      assertEquals(coeffs_d2, Tensors.fromString("{0[m*s^-4], 0[m*s^-6]}"));
-      ExactTensorQ.require(coeffs_d2);
-      ScalarUnaryOperator d2 = Polynomial.of(coeffs_d2);
+      assertEquals(d2.coeffs(), Tensors.fromString("{0[m*s^-4], 0[m*s^-6]}"));
+      ExactTensorQ.require(d2.coeffs());
       AssertFail.of(() -> d2.apply(Quantity.of(4, "A")));
       assertEquals(d2.apply(Quantity.of(4, "s^2")), Quantity.of(0, "m*s^-4"));
     }
   }
 
   public void testIntegralCoeff() {
-    Tensor coeffs = Tensors.vector(2, 6, 3, 9, 0, 3);
-    Tensor integr = Polynomial.integral_coeffs(coeffs);
-    Tensor result = Polynomial.derivative_coeffs(integr);
+    Polynomial coeffs = Polynomial.of(Tensors.vector(2, 6, 3, 9, 0, 3));
+    Polynomial integr = coeffs.integral();
+    Polynomial result = integr.derivative();
     assertEquals(coeffs, result);
   }
 
   public void testMultiplyCoeff() {
-    Tensor c1 = Tensors.vector(2, 6, 3, 9, 0, 3);
-    Tensor c2 = Tensors.vector(5, 7, 1);
-    Tensor pd = Polynomial.product(c1, c2);
-    Tensor al = Polynomial.product(c2, c1);
-    assertEquals(pd, al);
-    assertEquals(pd, Tensors.vector(10, 44, 59, 72, 66, 24, 21, 3));
+    Polynomial c1 = Polynomial.of(Tensors.vector(2, 6, 3, 9, 0, 3));
+    Polynomial c2 = Polynomial.of(Tensors.vector(5, 7, 1));
+    Polynomial pd = c1.product(c2);
+    Polynomial al = c2.product(c1);
+    assertEquals(pd.coeffs(), al.coeffs());
+    assertEquals(pd.coeffs(), Tensors.vector(10, 44, 59, 72, 66, 24, 21, 3));
     {
       Scalar x = RationalScalar.HALF;
-      Scalar t1 = Polynomial.of(c1).apply(x).multiply(Polynomial.of(c2).apply(x));
-      Scalar t2 = Polynomial.of(pd).apply(x);
+      Scalar t1 = c1.apply(x).multiply(c2.apply(x));
+      Scalar t2 = pd.apply(x);
       assertEquals(t1, t2);
     }
     {
       JetScalar x = JetScalar.of(RationalScalar.HALF, 3);
-      Scalar t1 = Polynomial.of(c1).apply(x).multiply(Polynomial.of(c2).apply(x));
-      Scalar t2 = Polynomial.of(pd).apply(x);
+      Scalar t1 = c1.apply(x).multiply(c2.apply(x));
+      Scalar t2 = pd.apply(x);
       assertEquals(t1, t2);
     }
   }
 
   public void testMultiplyCoeffUnits() {
-    Tensor c1 = Tensors.fromString("{1[m^-1],3[m^-2]}");
-    Tensor c2 = Tensors.fromString("{2[m^-1],3[m^-2],-3[m^-3]}");
-    Tensor pd = Polynomial.product(c1, c2);
+    Polynomial c1 = Polynomial.of(Tensors.fromString("{1[m^-1],3[m^-2]}"));
+    Polynomial c2 = Polynomial.of(Tensors.fromString("{2[m^-1],3[m^-2],-3[m^-3]}"));
+    Polynomial pd = c1.product(c2);
     {
       Scalar x = Quantity.of(RationalScalar.HALF, "m");
-      Scalar t1 = Polynomial.of(c1).apply(x).multiply(Polynomial.of(c2).apply(x));
-      Scalar t2 = Polynomial.of(pd).apply(x);
+      Scalar t1 = c1.apply(x).multiply(c2.apply(x));
+      Scalar t2 = pd.apply(x);
       assertEquals(t1, t2);
     }
   }
@@ -243,14 +247,14 @@ public class PolynomialTest extends TestCase {
   }
 
   public void testDerivativeScalarFail() {
-    AssertFail.of(() -> Polynomial.derivative_coeffs(RealScalar.ONE));
+    AssertFail.of(() -> Polynomial.of(RealScalar.ONE));
   }
 
   public void testDerivativeMatrixFail() {
-    AssertFail.of(() -> Polynomial.derivative_coeffs(HilbertMatrix.of(4, 5)));
+    AssertFail.of(() -> Polynomial.of(HilbertMatrix.of(4, 5)));
   }
 
   public void testUnstructuredFail() {
-    AssertFail.of(() -> Polynomial.derivative_coeffs(Tensors.fromString("{2, {1}}")));
+    AssertFail.of(() -> Polynomial.of(Tensors.fromString("{2, {1}}")));
   }
 }

@@ -27,7 +27,7 @@ public class VandermondeSolveTest extends TestCase {
     Tensor cmp = VandermondeSolve.of(x, q);
     ExactTensorQ.require(cmp);
     assertEquals(ref, cmp);
-    Fit.polynomial_coeffs(x, q, 1);
+    Fit.polynomial(x, q, 1);
   }
 
   public void testMixedUnits() {

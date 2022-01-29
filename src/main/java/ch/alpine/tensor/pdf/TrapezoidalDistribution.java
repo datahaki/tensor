@@ -163,23 +163,23 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     // return contrib(a, b, n_mean, x2).add(contrib(b, c, n_mean, x2)).add(contrib(c, d, n_mean, x2));
   }
 
-  private Scalar contrib(Scalar lo, Scalar hi, ScalarUnaryOperator map, Tensor x2) {
+  private Scalar contrib(Scalar lo, Scalar hi, ScalarUnaryOperator map, Polynomial x2) {
     // System.out.println(lo);
     // System.out.println(hi);
     // TODO check with Quantity
     if (lo.equals(hi)) {
       Tensor dab = Tensors.of(lo).map(map);
       // System.out.println(dab);
-      Tensor _ab = Fit.polynomial_coeffs(dab, Tensors.of(lo).map(this::at), 0);
-      ScalarUnaryOperator iab = Polynomial.integral(Polynomial.product(_ab, x2));
+      Polynomial _ab = Fit.polynomial(dab, Tensors.of(lo).map(this::at), 0);
+      ScalarUnaryOperator iab = _ab.product(x2).integral();
       return dab.map(iab).Get(0).zero();
     }
     Tensor dab = Tensors.of(lo, hi).map(map);
     // System.out.println(dab);
-    Tensor _ab = Fit.polynomial_coeffs(dab, Tensors.of(lo, hi).map(this::at), 1);
+    Polynomial _ab = Fit.polynomial(dab, Tensors.of(lo, hi).map(this::at), 1);
     // System.out.println(_ab);
     // System.out.println(x2);
-    ScalarUnaryOperator iab = Polynomial.integral(Polynomial.product(_ab, x2));
+    ScalarUnaryOperator iab = _ab.product(x2).integral();
     // System.out.println(dab.map(iab));
     return Differences.of(dab.map(iab)).Get(0);
   }
@@ -187,7 +187,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
   @Override // from VarianceInterface
   public Scalar variance() {
     ScalarUnaryOperator n_mean = mean().negate()::add;
-    Tensor x2 = UnitVector.of(3, 2);
+    Polynomial x2 = Polynomial.of(UnitVector.of(3, 2));
     return contrib(a, b, n_mean, x2).add(contrib(b, c, n_mean, x2)).add(contrib(c, d, n_mean, x2));
   }
 

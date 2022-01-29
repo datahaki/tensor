@@ -11,9 +11,10 @@ import ch.alpine.tensor.sca.Abs;
 /** https://en.wikipedia.org/wiki/Newton%27s_method */
 /* package */ class NewtonScalarMethod implements ScalarUnaryOperator {
   public static NewtonScalarMethod polynomial(Tensor coeffs) {
+    Polynomial polynomial = Polynomial.of(coeffs);
     return new NewtonScalarMethod( //
-        Polynomial.of(coeffs), //
-        Polynomial.derivative(coeffs));
+        polynomial, //
+        polynomial.derivative());
   }
 
   // ---

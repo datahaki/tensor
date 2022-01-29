@@ -2,14 +2,12 @@
 package ch.alpine.tensor.num;
 
 import ch.alpine.tensor.RationalScalar;
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
-import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.fft.FullConvolve;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
@@ -20,12 +18,8 @@ import ch.alpine.tensor.red.Times;
  * 
  * <p>Mathematica does not have a dedicated function for polynomial evaluation.
  * In Matlab, there exists
- * <a href="https://www.mathworks.com/help/matlab/ref/polyval.html">polyval</a>.
- * 
- * <p>In earlier versions of the tensor library, the functionality was
- * called <i>Series</i>. */
-public enum Polynomial {
-  ;
+ * <a href="https://www.mathworks.com/help/matlab/ref/polyval.html">polyval</a>. */
+public class Polynomial extends HornerScheme {
   /** polynomial evaluation
    * 
    * <pre>
@@ -38,8 +32,21 @@ public enum Polynomial {
    * @return evaluation of polynomial for scalar input
    * @throws Exception if input is not a vector
    * @throws Exception if input is empty vector */
-  public static ScalarUnaryOperator of(Tensor coeffs) {
-    return new HornerScheme(Reverse.of(VectorQ.require(coeffs)));
+  public static Polynomial of(Tensor coeffs) {
+    return new Polynomial(VectorQ.require(coeffs).copy());
+  }
+
+  // ---
+  private final Tensor coeffs;
+
+  private Polynomial(Tensor coeffs) {
+    super(Reverse.of(coeffs));
+    this.coeffs = coeffs;
+  }
+
+  /** @return */
+  public Tensor coeffs() {
+    return coeffs.copy();
   }
 
   /** Applications
@@ -51,7 +58,7 @@ public enum Polynomial {
    * @param coeffs of polynomial
    * @return evaluation of first derivative of polynomial with given coefficients
    * @throws Exception if input is not a vector */
-  public static ScalarUnaryOperator derivative(Tensor coeffs) {
+  public Polynomial derivative() {
     return of(derivative_coeffs(coeffs));
   }
 
@@ -74,7 +81,7 @@ public enum Polynomial {
    * @param coeffs
    * @return coefficients of polynomial that is the derivative of the polynomial defined by given coeffs
    * @throws Exception if given coeffs is not a vector */
-  public static Tensor derivative_coeffs(Tensor coeffs) {
+  private static Tensor derivative_coeffs(Tensor coeffs) {
     int length = coeffs.length();
     if (length == 2) {
       /* a linear polynomial is mapped to a linear polynomial (with zero factor).
@@ -90,22 +97,51 @@ public enum Polynomial {
         : Times.of(coeffs.extract(1, length), Range.of(1, length));
   }
 
-  public static ScalarUnaryOperator integral(Tensor coeffs) {
+  public Polynomial integral() {
     return of(integral_coeffs(coeffs));
   }
 
   /** @param coeffs
    * @return */
-  public static Tensor integral_coeffs(Tensor coeffs) {
+  private static Tensor integral_coeffs(Tensor coeffs) {
+    int length = coeffs.length();
     // TODO not generic, function should also work for units
-    Tensor tensor = Tensors.reserve(coeffs.length() + 1);
-    tensor.append(RealScalar.ZERO);
+    Tensor tensor = Tensors.reserve(length + 1);
+    if (1 < length) {
+      Scalar a = coeffs.Get(0);
+      Scalar b = coeffs.Get(1);
+      Unit unit = QuantityUnit.of(a).add(QuantityUnit.of(b).negate()); // of domain
+      tensor.append(a.zero().multiply(Quantity.of(a.one(), unit)));
+    }
     for (int index = 0; index < coeffs.length(); ++index)
       tensor.append(coeffs.Get(index).multiply(RationalScalar.of(1, index + 1)));
     return tensor;
   }
 
-  public static Tensor product(Tensor c1, Tensor c2) {
-    return FullConvolve.with(c1).apply(c2);
+  public Polynomial product(Polynomial polynomial) {
+    return of(FullConvolve.with(coeffs).apply(polynomial.coeffs()));
+  }
+
+  /** @return roots of this polynomial
+   * @throws Exception if roots cannot be established
+   * @see Roots */
+  public Tensor roots() {
+    return Roots.of(coeffs);
+  }
+
+  @Override
+  public int hashCode() {
+    return coeffs.hashCode();
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    return object instanceof Polynomial polynomial //
+        && coeffs.equals(polynomial.coeffs);
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%s[%s]", getClass().getSimpleName(), coeffs);
   }
 }

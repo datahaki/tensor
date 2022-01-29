@@ -237,7 +237,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     Distribution distribution = TrapezoidalDistribution.with(4, 3, 2);
     Scalar mean = Mean.of(distribution);
     assertEquals(mean, RealScalar.of(4));
-    // assertEquals(Variance.of(distribution), RealScalar.of(9));
+    Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(9));
   }
 
   public void testNumericFail() {

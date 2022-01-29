@@ -7,7 +7,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
-import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.pdf.CDF;
@@ -30,8 +29,8 @@ import junit.framework.TestCase;
 public class StaticHelperTest extends TestCase {
   public void testPolynomial() {
     Tensor coeffs = Tensors.vector(2, 1, 3, 4);
-    ScalarUnaryOperator f0 = Polynomial.of(coeffs);
-    ScalarUnaryOperator f1 = Polynomial.derivative(coeffs);
+    Polynomial f0 = Polynomial.of(coeffs);
+    Polynomial f1 = f0.derivative();
     Scalar value = RationalScalar.of(3, 17);
     Tensor gnd = Tensors.of(f0.apply(value), f1.apply(value));
     Scalar scalar = JetScalar.of(value, gnd.length());
@@ -41,11 +40,9 @@ public class StaticHelperTest extends TestCase {
 
   public void testPolynomialRandom() {
     Tensor c0 = RandomVariate.of(DiscreteUniformDistribution.of(-3, 3), 4);
-    ScalarUnaryOperator f0 = Polynomial.of(c0);
-    Tensor c1 = Polynomial.derivative_coeffs(c0);
-    ScalarUnaryOperator f1 = Polynomial.of(c1);
-    Tensor c2 = Polynomial.derivative_coeffs(c1);
-    ScalarUnaryOperator f2 = Polynomial.of(c2);
+    Polynomial f0 = Polynomial.of(c0);
+    Polynomial f1 = f0.derivative();
+    Polynomial f2 = f1.derivative();
     Scalar value = RationalScalar.of(3, 17);
     Tensor gnd = Tensors.of(f0.apply(value), f1.apply(value), f2.apply(value));
     Scalar scalar = JetScalar.of(value, gnd.length());
