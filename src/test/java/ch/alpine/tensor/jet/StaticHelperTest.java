@@ -75,14 +75,4 @@ public class StaticHelperTest extends TestCase {
       }
     }
   }
-  // public void testCauchyDistribution() {
-  // Distribution distribution = CauchyDistribution.of(1, 2);
-  // CDF cdf = CDF.of(distribution);
-  // PDF pdf = PDF.of(distribution);
-  // // FIXME
-  // Scalar x = JetScalar.of(RealScalar.of(3), 4);
-  // JetScalar r1 = (JetScalar) cdf.p_lessEquals(x);
-  // JetScalar r2 = (JetScalar) pdf.at(x);
-  // Tolerance.CHOP.requireClose(r1.vector().extract(1, 3), r2.vector().extract(0, 2));
-  // }
 }

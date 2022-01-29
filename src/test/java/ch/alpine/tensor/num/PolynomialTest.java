@@ -56,14 +56,25 @@ public class PolynomialTest extends TestCase {
     assertEquals(res.toString(), "2[m*s]");
   }
 
+  public void testAccelerationConstant() {
+    Scalar c0 = Quantity.of(3, "m*s^-1");
+    Polynomial polynomial = Polynomial.of(Tensors.of(c0));
+    Scalar t = Quantity.of(2, "kg");
+    Scalar scalar = polynomial.apply(t);
+    assertEquals(scalar, c0);
+    AssertFail.of(() -> polynomial.apply(GaussScalar.of(2, 7)));
+    Polynomial derivative = polynomial.derivative();
+    derivative.apply(t);
+  }
+
   public void testAcceleration() {
     Scalar qs0 = Quantity.of(3, "m*s^-1");
     Scalar qs1 = Quantity.of(-4, "m*s^-2");
     Scalar val = Quantity.of(2, "s");
-    Polynomial coeffs = Polynomial.of(Tensors.of(qs0, qs1));
-    Scalar res = coeffs.apply(val);
-    Polynomial integral_coeffs = coeffs.integral();
-    Scalar scalar = integral_coeffs.apply(val);
+    Polynomial polynomial = Polynomial.of(Tensors.of(qs0, qs1));
+    Scalar res = polynomial.apply(val);
+    Polynomial integral = polynomial.integral();
+    Scalar scalar = integral.apply(val);
   }
 
   public void testQuaternionLinear() {
@@ -123,9 +134,7 @@ public class PolynomialTest extends TestCase {
   }
 
   public void testDerivativeEmpty() {
-    // FIXME
-    // assertEquals(Polynomial.of(Tensors.vector()).derivative().coeffs(), Tensors.vector());
-    // assertEquals(Polynomial.of(Tensors.vector(3)).derivative().coeffs(), Tensors.empty());
+    assertEquals(Polynomial.of(Tensors.vector(3)).derivative().coeffs(), Tensors.vector(0));
   }
 
   public void testDerLinEx() {
@@ -212,6 +221,13 @@ public class PolynomialTest extends TestCase {
   public void testMultiplyCoeff() {
     Polynomial c1 = Polynomial.of(Tensors.vector(2, 6, 3, 9, 0, 3));
     Polynomial c2 = Polynomial.of(Tensors.vector(5, 7, 1));
+    assertEquals(c2.toString(), "Polynomial[{5, 7, 1}]");
+    Tensor roots = c2.roots();
+    Tolerance.CHOP.requireAllZero(roots.map(c2));
+    assertFalse(c1.equals(c2));
+    assertFalse(c1.equals(null));
+    assertFalse(c1.equals((Object) Pi.VALUE));
+    assertFalse(c1.hashCode() == c2.hashCode());
     Polynomial pd = c1.product(c2);
     Polynomial al = c2.product(c1);
     assertEquals(pd.coeffs(), al.coeffs());
@@ -240,6 +256,9 @@ public class PolynomialTest extends TestCase {
       Scalar t2 = pd.apply(x);
       assertEquals(t1, t2);
     }
+    Tensor coeffs = c2.coeffs();
+    coeffs.set(Scalar::zero, 0);
+    assertEquals(c2.derivative().integral().coeffs(), coeffs);
   }
 
   public void testEmptyFail() {

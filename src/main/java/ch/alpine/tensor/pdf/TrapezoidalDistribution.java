@@ -11,7 +11,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Differences;
-import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.itp.Fit;
 import ch.alpine.tensor.num.Polynomial;
@@ -171,15 +170,17 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
       Tensor dab = Tensors.of(lo).map(map);
       // System.out.println(dab);
       Polynomial _ab = Fit.polynomial(dab, Tensors.of(lo).map(this::at), 0);
-      ScalarUnaryOperator iab = _ab.product(x2).integral();
+      System.out.println(_ab.coeffs());
+      Polynomial iab = _ab.product(x2).integral();
       return dab.map(iab).Get(0).zero();
     }
     Tensor dab = Tensors.of(lo, hi).map(map);
     // System.out.println(dab);
     Polynomial _ab = Fit.polynomial(dab, Tensors.of(lo, hi).map(this::at), 1);
+    System.out.println(_ab.coeffs());
     // System.out.println(_ab);
     // System.out.println(x2);
-    ScalarUnaryOperator iab = _ab.product(x2).integral();
+    Polynomial iab = _ab.product(x2).integral();
     // System.out.println(dab.map(iab));
     return Differences.of(dab.map(iab)).Get(0);
   }
@@ -187,7 +188,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
   @Override // from VarianceInterface
   public Scalar variance() {
     ScalarUnaryOperator n_mean = mean().negate()::add;
-    Polynomial x2 = Polynomial.of(UnitVector.of(3, 2));
+    Polynomial x2 = Polynomial.of(Tensors.fromString("{0[m^-1],0[m^-2],1[m^-3]}"));
     return contrib(a, b, n_mean, x2).add(contrib(b, c, n_mean, x2)).add(contrib(c, d, n_mean, x2));
   }
 

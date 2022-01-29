@@ -118,6 +118,8 @@ public class TrapezoidalDistributionTest extends TestCase {
     Scalar random = RandomVariate.of(distribution);
     Scalar apply = QuantityMagnitude.SI().in("km").apply(random);
     assertTrue(apply instanceof RealScalar);
+    Scalar variance = Variance.of(distribution);
+    System.out.println("variance=" + variance);
   }
 
   public void testQuantity2() {

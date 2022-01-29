@@ -130,9 +130,12 @@ public class GramSchmidtTest extends TestCase {
     }
   }
 
-  public void testDetRect() {
-    // FIXME
-    // assertEquals(GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 3, 2)).det(), RealScalar.ZERO);
+  public void testDetRect1() {
+    QRDecomposition qrDecomposition = GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 3, 2));
+    assertEquals(qrDecomposition.det(), RealScalar.ZERO);
+  }
+
+  public void testDetRect2() {
     assertEquals(GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 2, 3)).det(), RealScalar.ZERO);
   }
 }

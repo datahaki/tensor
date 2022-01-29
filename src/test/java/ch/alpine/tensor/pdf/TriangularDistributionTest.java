@@ -142,11 +142,12 @@ public class TriangularDistributionTest extends TestCase {
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.ONE);
   }
 
-  public void testToString() {
+  public void testQuantity() {
     Distribution distribution = TriangularDistribution.with(Quantity.of(3, "m"), Quantity.of(2, "m"));
     PDF.of(distribution).at(Quantity.of(3.3, "m"));
-    // FIXME does not work due to units
-    // Variance.of(distribution);
+    assertEquals(Mean.of(distribution), Quantity.of(3, "m"));
+    Scalar variance = Variance.of(distribution);
+    // Tolerance.CHOP.requireClose(variance, Quantity.of(4, "m"));
   }
 
   public void testWithFail() {
