@@ -11,6 +11,8 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.sca.ArcTan;
+import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.usr.AssertFail;
@@ -57,6 +59,13 @@ public class QuantityImplTest extends TestCase {
 
   public void testEqualsZero() {
     assertFalse(Quantity.of(0, "m").equals(RealScalar.ZERO));
+  }
+
+  public void testArg() { // checked with Mathematica
+    Scalar scalar = Quantity.of(ComplexScalar.of(2, 1), "m");
+    Scalar arg = Arg.FUNCTION.apply(scalar);
+    Tolerance.CHOP.requireClose(arg, ArcTan.FUNCTION.apply(RationalScalar.HALF));
+    Tolerance.CHOP.requireClose(arg, ArcTan.of(2, 1));
   }
 
   public void testHashCode() {

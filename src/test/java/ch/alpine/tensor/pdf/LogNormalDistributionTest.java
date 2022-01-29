@@ -10,6 +10,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
@@ -71,6 +72,11 @@ public class LogNormalDistributionTest extends TestCase {
       Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
       Tolerance.CHOP.requireClose(x, q);
     }
+  }
+
+  public void testKurtosis() {
+    Tolerance.CHOP.requireClose(Kurtosis.of(LogNormalDistribution.of(3, 0.2)), RealScalar.of(3.678365777175438));
+    Tolerance.CHOP.requireClose(Kurtosis.of(LogNormalDistribution.of(3, 1.2)), RealScalar.of(518.1684050407332));
   }
 
   public void testMarkov() {

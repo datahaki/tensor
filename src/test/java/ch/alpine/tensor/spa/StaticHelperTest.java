@@ -53,7 +53,6 @@ public class StaticHelperTest extends TestCase {
       assertEquals(Times.of(a, b), r_pml);
       assertEquals(Times.of(a, sb), r_pml);
       assertEquals(Times.of(sa, b), r_pml);
-      // assertTrue(r_pml instanceof SparseArray); // TODO !?
     }
   }
 

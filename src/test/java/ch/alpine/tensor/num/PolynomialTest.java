@@ -7,6 +7,7 @@ import ch.alpine.tensor.RandomQuaternion;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Accumulate;
@@ -72,9 +73,11 @@ public class PolynomialTest extends TestCase {
     Scalar qs1 = Quantity.of(-4, "m*s^-2");
     Scalar val = Quantity.of(2, "s");
     Polynomial polynomial = Polynomial.of(Tensors.of(qs0, qs1));
-    Scalar res = polynomial.apply(val);
+    Scalar result = polynomial.apply(val);
+    assertEquals(result, Scalars.fromString("-5[m*s^-1]"));
     Polynomial integral = polynomial.integral();
     Scalar scalar = integral.apply(val);
+    assertEquals(scalar, Quantity.of(-2, "m"));
   }
 
   public void testQuaternionLinear() {

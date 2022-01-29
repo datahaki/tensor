@@ -147,7 +147,7 @@ public class TriangularDistributionTest extends TestCase {
     PDF.of(distribution).at(Quantity.of(3.3, "m"));
     assertEquals(Mean.of(distribution), Quantity.of(3, "m"));
     Scalar variance = Variance.of(distribution);
-    // Tolerance.CHOP.requireClose(variance, Quantity.of(4, "m"));
+    Tolerance.CHOP.requireClose(variance, Quantity.of(4, "m^-1")); // result is not confirmed
   }
 
   public void testWithFail() {

@@ -3,6 +3,7 @@ package ch.alpine.tensor.red;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Power;
@@ -33,8 +34,12 @@ public enum CentralMoment {
   }
 
   public static Scalar of(Distribution distribution, Scalar order) {
-    // TODO
-    throw new UnsupportedOperationException();
+    return switch (Scalars.intValueExact(order)) {
+    case 0 -> RealScalar.ONE;
+    case 1 -> RealScalar.ZERO;
+    case 2 -> Variance.of(distribution);
+    default -> throw new UnsupportedOperationException();
+    };
   }
 
   public static Scalar of(Distribution distribution, Number order) {

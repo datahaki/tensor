@@ -7,7 +7,10 @@ import java.util.Random;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Log;
@@ -23,7 +26,7 @@ import ch.alpine.tensor.sca.Sign;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/LogNormalDistribution.html">LogNormalDistribution</a> */
-public class LogNormalDistribution implements ContinuousDistribution, Serializable {
+public class LogNormalDistribution implements ContinuousDistribution, KurtosisInterface, Serializable {
   private static final Distribution STANDARD = LogNormalDistribution.of(RealScalar.ZERO, RealScalar.ONE);
 
   /** @param mu any real number
@@ -96,12 +99,12 @@ public class LogNormalDistribution implements ContinuousDistribution, Serializab
     return Exp.FUNCTION.apply(variance.add(mu).add(mu)).multiply( //
         Exp.FUNCTION.apply(variance).subtract(RealScalar.ONE));
   }
-  // @Override
-  // public Scalar kurtosis() {
-  // // -3 + 3 E^(2 \[Sigma]^2) + 2 E^(3 \[Sigma]^2) + E^(4 \[Sigma]^2)
-  // // TODO
-  // return null;
-  // }
+
+  @Override // from KurtosisInterface
+  public Scalar kurtosis() {
+    Tensor vec = Range.of(2, 5).multiply(variance).map(Exp.FUNCTION);
+    return RealScalar.of(-3).add(Tensors.vector(3, 2, 1).dot(vec));
+  }
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {

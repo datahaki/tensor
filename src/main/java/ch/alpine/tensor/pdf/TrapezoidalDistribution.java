@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import java.io.Serializable;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -13,7 +14,11 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Differences;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.itp.Fit;
+import ch.alpine.tensor.num.Boole;
 import ch.alpine.tensor.num.Polynomial;
+import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sqrt;
@@ -156,39 +161,33 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     Scalar cd = c.multiply(c).add(c.multiply(d)).add(d.multiply(d));
     Scalar ab = a.multiply(a).add(a.multiply(b)).add(b.multiply(b));
     return alpha.multiply(cd.subtract(ab)).multiply(_1_3);
-    // TODO for some reason cannot be substituted
+    // TODO for some reason cannot be substituted, probably because of quantity
     // ScalarUnaryOperator n_mean = s->s;
     // Tensor x2 = UnitVector.of(2, 1);
     // return contrib(a, b, n_mean, x2).add(contrib(b, c, n_mean, x2)).add(contrib(c, d, n_mean, x2));
   }
 
   private Scalar contrib(Scalar lo, Scalar hi, ScalarUnaryOperator map, Polynomial x2) {
-    // System.out.println(lo);
-    // System.out.println(hi);
-    // TODO check with Quantity
     if (lo.equals(hi)) {
       Tensor dab = Tensors.of(lo).map(map);
-      // System.out.println(dab);
       Polynomial _ab = Fit.polynomial(dab, Tensors.of(lo).map(this::at), 0);
-      System.out.println(_ab.coeffs());
       Polynomial iab = _ab.product(x2).integral();
       return dab.map(iab).Get(0).zero();
     }
     Tensor dab = Tensors.of(lo, hi).map(map);
-    // System.out.println(dab);
     Polynomial _ab = Fit.polynomial(dab, Tensors.of(lo, hi).map(this::at), 1);
-    System.out.println(_ab.coeffs());
-    // System.out.println(_ab);
-    // System.out.println(x2);
     Polynomial iab = _ab.product(x2).integral();
-    // System.out.println(dab.map(iab));
     return Differences.of(dab.map(iab)).Get(0);
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    ScalarUnaryOperator n_mean = mean().negate()::add;
-    Polynomial x2 = Polynomial.of(Tensors.fromString("{0[m^-1],0[m^-2],1[m^-3]}"));
+    Scalar negate = mean().negate();
+    Unit unit = QuantityUnit.of(negate).negate();
+    Tensor coeffs = Tensor.of(IntStream.range(0, 3) //
+        .mapToObj(i -> Quantity.of(Boole.of(i == 2), unit.multiply(RealScalar.of(i + 1)))));
+    ScalarUnaryOperator n_mean = negate::add;
+    Polynomial x2 = Polynomial.of(coeffs);
     return contrib(a, b, n_mean, x2).add(contrib(b, c, n_mean, x2)).add(contrib(c, d, n_mean, x2));
   }
 
