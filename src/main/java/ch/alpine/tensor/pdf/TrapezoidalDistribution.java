@@ -164,16 +164,23 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
   }
 
   private Scalar contrib(Scalar lo, Scalar hi, ScalarUnaryOperator map, Tensor x2) {
+    // System.out.println(lo);
+    // System.out.println(hi);
     // TODO check with Quantity
     if (lo.equals(hi)) {
       Tensor dab = Tensors.of(lo).map(map);
+      // System.out.println(dab);
       Tensor _ab = Fit.polynomial_coeffs(dab, Tensors.of(lo).map(this::at), 0);
       ScalarUnaryOperator iab = Polynomial.integral(Polynomial.product(_ab, x2));
       return dab.map(iab).Get(0).zero();
     }
     Tensor dab = Tensors.of(lo, hi).map(map);
+    // System.out.println(dab);
     Tensor _ab = Fit.polynomial_coeffs(dab, Tensors.of(lo, hi).map(this::at), 1);
+    // System.out.println(_ab);
+    // System.out.println(x2);
     ScalarUnaryOperator iab = Polynomial.integral(Polynomial.product(_ab, x2));
+    // System.out.println(dab.map(iab));
     return Differences.of(dab.map(iab)).Get(0);
   }
 

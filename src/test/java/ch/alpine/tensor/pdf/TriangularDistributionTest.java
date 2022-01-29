@@ -7,6 +7,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
@@ -138,11 +139,14 @@ public class TriangularDistributionTest extends TestCase {
     Tolerance.CHOP.requireClose(Mean.of(distribution), RealScalar.of(10));
     Scalar value = PDF.of(distribution).at(RealScalar.of(10));
     Tolerance.CHOP.requireClose(value, Sqrt.FUNCTION.apply(RealScalar.of(6).reciprocal()));
+    Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.ONE);
   }
 
   public void testToString() {
     Distribution distribution = TriangularDistribution.with(Quantity.of(3, "m"), Quantity.of(2, "m"));
     PDF.of(distribution).at(Quantity.of(3.3, "m"));
+    // FIXME does not work due to units
+    // Variance.of(distribution);
   }
 
   public void testWithFail() {

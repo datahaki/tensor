@@ -225,6 +225,14 @@ public class TrapezoidalDistributionTest extends TestCase {
     assertEquals(Variance.of(distribution), RationalScalar.of(5, 12));
   }
 
+  public void testTriangularVar() {
+    Distribution distribution = TrapezoidalDistribution.of(4, 5, 5, 7);
+    // Scalar mean = Mean.of(distribution);
+    // assertEquals(mean, RationalScalar.of(11, 2));
+    // ExactScalarQ.require(mean);
+    assertEquals(Variance.of(distribution), RationalScalar.of(7, 18));
+  }
+
   public void testWithMean() {
     Distribution distribution = TrapezoidalDistribution.with(4, 3, 2);
     Scalar mean = Mean.of(distribution);

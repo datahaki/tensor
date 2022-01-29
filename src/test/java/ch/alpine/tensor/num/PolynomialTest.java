@@ -212,10 +212,30 @@ public class PolynomialTest extends TestCase {
     Tensor al = Polynomial.product(c2, c1);
     assertEquals(pd, al);
     assertEquals(pd, Tensors.vector(10, 44, 59, 72, 66, 24, 21, 3));
-    JetScalar x = JetScalar.of(RationalScalar.HALF, 3);
-    Scalar t1 = Polynomial.of(c1).apply(x).multiply(Polynomial.of(c2).apply(x));
-    Scalar t2 = Polynomial.of(pd).apply(x);
-    assertEquals(t1, t2);
+    {
+      Scalar x = RationalScalar.HALF;
+      Scalar t1 = Polynomial.of(c1).apply(x).multiply(Polynomial.of(c2).apply(x));
+      Scalar t2 = Polynomial.of(pd).apply(x);
+      assertEquals(t1, t2);
+    }
+    {
+      JetScalar x = JetScalar.of(RationalScalar.HALF, 3);
+      Scalar t1 = Polynomial.of(c1).apply(x).multiply(Polynomial.of(c2).apply(x));
+      Scalar t2 = Polynomial.of(pd).apply(x);
+      assertEquals(t1, t2);
+    }
+  }
+
+  public void testMultiplyCoeffUnits() {
+    Tensor c1 = Tensors.fromString("{1[m^-1],3[m^-2]}");
+    Tensor c2 = Tensors.fromString("{2[m^-1],3[m^-2],-3[m^-3]}");
+    Tensor pd = Polynomial.product(c1, c2);
+    {
+      Scalar x = Quantity.of(RationalScalar.HALF, "m");
+      Scalar t1 = Polynomial.of(c1).apply(x).multiply(Polynomial.of(c2).apply(x));
+      Scalar t2 = Polynomial.of(pd).apply(x);
+      assertEquals(t1, t2);
+    }
   }
 
   public void testEmptyFail() {
