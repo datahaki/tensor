@@ -9,8 +9,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.ExponentialDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.ExponentialDistribution;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/PoissonProcess.html">PoissonProcess</a> */

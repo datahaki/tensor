@@ -9,11 +9,11 @@ import ch.alpine.tensor.pdf.BinningMethod;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
-import ch.alpine.tensor.pdf.HistogramDistribution;
 import ch.alpine.tensor.pdf.InverseCDF;
-import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.HistogramDistribution;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Round;
 

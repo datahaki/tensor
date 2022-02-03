@@ -12,8 +12,8 @@ import ch.alpine.tensor.ext.HomeDirectory;
 import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.io.Put;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 
 /* package */ enum DotMatMatDemo {

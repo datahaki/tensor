@@ -4,6 +4,8 @@ package ch.alpine.tensor.pdf;
 import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
+import ch.alpine.tensor.pdf.d.GeometricDistribution;
 
 /** cumulative distribution function
  * 

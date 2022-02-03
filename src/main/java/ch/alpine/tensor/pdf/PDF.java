@@ -4,6 +4,7 @@ package ch.alpine.tensor.pdf;
 import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.pdf.d.AbstractDiscreteDistribution;
 import ch.alpine.tensor.qty.Quantity;
 
 /** probability density function

@@ -2,6 +2,10 @@
 package ch.alpine.tensor.pdf;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.pdf.c.ExponentialDistribution;
+import ch.alpine.tensor.pdf.c.FrechetDistribution;
+import ch.alpine.tensor.pdf.c.HistogramDistribution;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Quantile;
 

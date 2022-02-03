@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.pdf.c.ErlangDistribution;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
