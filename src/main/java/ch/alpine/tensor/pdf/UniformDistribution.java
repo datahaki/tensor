@@ -8,6 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
@@ -15,9 +16,12 @@ import ch.alpine.tensor.sca.Clips;
  * 
  * <p>InverseCDF is defined over interval [0, 1]
  * 
+ * UniformDistribution is a special {@link TrapezoidalDistribution}.
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/UniformDistribution.html">UniformDistribution</a> */
-public class UniformDistribution extends AbstractContinuousDistribution implements KurtosisInterface, Serializable {
+public class UniformDistribution extends AbstractContinuousDistribution //
+    implements CentralMomentInterface, KurtosisInterface, Serializable {
   private static final Scalar _1_12 = RationalScalar.of(1, 12);
   private static final Distribution UNIT = new UniformDistribution(Clips.unit());
 
@@ -76,6 +80,12 @@ public class UniformDistribution extends AbstractContinuousDistribution implemen
   @Override // from KurtosisInterface
   public Scalar kurtosis() {
     return RationalScalar.of(9, 5);
+  }
+
+  @Override // from CentralMomentInterface
+  public Scalar centralMoment(Scalar order) {
+    Distribution distribution = TrapezoidalDistribution.of(clip.min(), clip.min(), clip.max(), clip.max());
+    return CentralMoment.of(distribution, order);
   }
 
   @Override // from PDF

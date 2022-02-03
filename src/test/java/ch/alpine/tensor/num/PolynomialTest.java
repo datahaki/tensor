@@ -87,6 +87,20 @@ public class PolynomialTest extends TestCase {
     assertEquals(integral.getUnitDomain(), Unit.of("s"));
     Scalar scalar = integral.apply(val);
     assertEquals(scalar, Quantity.of(-2, "m"));
+    Polynomial identity = polynomial.identity();
+    assertEquals(identity.coeffs(), Tensors.fromString("{0[m*s^-1], 1[m*s^-2]}"));
+    assertEquals(identity.getUnitDomain(), Unit.of("s"));
+    assertEquals(identity.getUnitValue(), Unit.of("m*s^-1"));
+  }
+
+  public void testIntegralOne() {
+    Scalar qs0 = Quantity.of(3, "m*s^-1");
+    // Scalar val = Quantity.of(2, "s");
+    Polynomial polynomial = Polynomial.of(Tensors.of(qs0));
+    Polynomial integral = polynomial.integral();
+    // integral.apply(val);
+    integral.coeffs();
+    // System.out.println();
   }
 
   public void testShift() {
@@ -94,9 +108,13 @@ public class PolynomialTest extends TestCase {
     Scalar qs1 = Quantity.of(-4, "m*s^-2");
     // Scalar val = Quantity.of(2, "s");
     Polynomial polynomial = Polynomial.of(Tensors.of(qs0, qs1));
-    Polynomial shift = polynomial.shift(1);
-    assertEquals(shift.getUnitDomain(), Unit.of("s"));
-    // System.out.println(shift.coeffs());
+    assertEquals(polynomial.getUnitDomain(), Unit.of("s"));
+    Polynomial shift1 = polynomial.moment(1);
+    assertEquals(shift1.getUnitDomain(), Unit.of("s"));
+    assertEquals(shift1.getUnitValue(), Unit.of("m"));
+    Polynomial shift2 = polynomial.moment(2);
+    assertEquals(shift2.getUnitDomain(), Unit.of("s"));
+    assertEquals(shift2.getUnitValue(), Unit.of("m*s"));
   }
 
   public void testQuaternionLinear() {

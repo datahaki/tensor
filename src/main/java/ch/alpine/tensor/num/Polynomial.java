@@ -5,9 +5,11 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Insert;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.fft.FullConvolve;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
@@ -112,24 +114,36 @@ public class Polynomial extends HornerScheme {
   public Polynomial integral() {
     int length = coeffs.length();
     Tensor tensor = Tensors.reserve(length + 1);
-    if (1 < length) {
-      Scalar a = coeffs.Get(0);
-      Unit unit = getUnitDomain();
-      Scalar c0 = a.zero().multiply(Quantity.of(a.one(), unit));
-      tensor.append(c0);
-    }
+    Scalar a = coeffs.Get(0);
+    Unit unit = coeffs.length() == 1 //
+        ? Unit.ONE
+        : getUnitDomain();
+    Scalar c0 = a.zero().multiply(Quantity.of(a.one(), unit));
+    tensor.append(c0);
     for (int index = 0; index < length; ++index)
       tensor.append(coeffs.Get(index).multiply(RationalScalar.of(1, index + 1)));
     return new Polynomial(tensor);
   }
-  
-  public Polynomial shift(int i) {
+
+  public Polynomial moment(int i) {
+    if (i == 0)
+      return this;
+    Integers.requirePositive(i);
     Scalar a = coeffs.Get(0);
-    Unit unit = getUnitDomain();
-    Scalar c0 = a.one().multiply(Quantity.of(a.one(), unit));
-    // FIXME
-    return of(FullConvolve.of(Tensors.of(c0), coeffs));
-    
+    Unit unit = coeffs.length() == 1 //
+        ? Unit.ONE
+        : getUnitDomain();
+    Scalar c0 = a.zero().multiply(Quantity.of(a.one(), unit));
+    return of(Insert.of(coeffs, c0, 0)).moment(i - 1);
+  }
+
+  public Polynomial identity() {
+    Tensor c01 = coeffs.extract(0, 2);
+    c01.set(Scalar::zero, 0);
+    Scalar b = coeffs.Get(1);
+    Unit unit = getUnitValue().add(getUnitDomain().negate());
+    c01.set(Quantity.of(b.one(), unit), 1);
+    return of(c01);
   }
 
   /** @param polynomial

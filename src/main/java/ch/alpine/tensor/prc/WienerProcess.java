@@ -24,4 +24,9 @@ import ch.alpine.tensor.Tensor;
     // TODO Auto-generated method stub
     return null;
   }
+
+  @Override
+  public String toString() {
+    return String.format("%s[%s, %s]", getClass().getSimpleName(), mu, sigma);
+  }
 }

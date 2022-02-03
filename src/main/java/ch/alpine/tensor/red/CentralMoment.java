@@ -5,6 +5,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Power;
 
@@ -27,16 +28,21 @@ public enum CentralMoment {
   }
 
   /** @param vector
-   * @param order of moment
-   * @return */
+   * @param order of central moment
+   * @return central moment of given distribution and order */
   public static Scalar of(Tensor vector, Number order) {
     return of(vector, RealScalar.of(order));
   }
 
+  /** @param distribution
+   * @param order
+   * @return central moment of given distribution and order */
   public static Scalar of(Distribution distribution, Scalar order) {
+    if (distribution instanceof CentralMomentInterface centralMomentInterface)
+      return centralMomentInterface.centralMoment(order);
     return switch (Scalars.intValueExact(order)) {
     case 0 -> RealScalar.ONE;
-    case 1 -> RealScalar.ZERO;
+    case 1 -> Mean.of(distribution).zero();
     case 2 -> Variance.of(distribution);
     default -> throw new UnsupportedOperationException();
     };

@@ -14,6 +14,8 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -96,6 +98,22 @@ public class UniformDistributionTest extends TestCase {
     Distribution distribution = UniformDistribution.of(Clips.interval(3, 3));
     Scalar scalar = RandomVariate.of(distribution);
     assertEquals(scalar, RealScalar.of(3));
+  }
+
+  public void testMatchTrapezoidal() {
+    Distribution d1 = UniformDistribution.of(Clips.interval(3, 7));
+    Distribution d2 = TrapezoidalDistribution.of(3, 3, 7, 7);
+    assertEquals(Mean.of(d1), Mean.of(d2));
+    assertEquals(Variance.of(d1), Variance.of(d2));
+  }
+
+  public void testMatchTrapezoidalUnit() {
+    Scalar a = Quantity.of(4, "m");
+    Scalar b = Quantity.of(RationalScalar.of(5 * 3 + 1, 3), "m"); // == 5.3333...
+    Distribution d1 = UniformDistribution.of(Clips.interval(a, b));
+    Distribution d2 = TrapezoidalDistribution.of(a, a, b, b);
+    assertEquals(Mean.of(d1), Mean.of(d2));
+    assertEquals(Variance.of(d1), Variance.of(d2));
   }
 
   public void testClipNullFail() {

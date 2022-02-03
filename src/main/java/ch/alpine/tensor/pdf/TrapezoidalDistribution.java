@@ -2,7 +2,9 @@
 package ch.alpine.tensor.pdf;
 
 import java.io.Serializable;
-import java.util.stream.IntStream;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -14,11 +16,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Differences;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.itp.Fit;
-import ch.alpine.tensor.num.Boole;
 import ch.alpine.tensor.num.Polynomial;
-import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.qty.QuantityUnit;
-import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sqrt;
@@ -32,9 +30,8 @@ import ch.alpine.tensor.sca.Sqrt;
  * 
  * <p>inspired by
  * <a href="https://en.wikipedia.org/wiki/Trapezoidal_distribution">TrapezoidalDistribution</a> */
-public class TrapezoidalDistribution extends AbstractContinuousDistribution implements Serializable {
-  private static final Scalar _1_3 = RationalScalar.of(1, 3);
-
+public class TrapezoidalDistribution extends AbstractContinuousDistribution //
+    implements CentralMomentInterface, Serializable {
   /** @param a
    * @param b
    * @param c
@@ -90,6 +87,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
   private final Scalar alpha;
   private final Scalar yB;
   private final Scalar yC;
+  private final Scalar mean;
 
   private TrapezoidalDistribution(Scalar a, Scalar b, Scalar c, Scalar d) {
     clip = Clips.interval(a, d);
@@ -101,6 +99,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
     this.alpha = alpha_inv.reciprocal();
     yB = p_lessThan(b);
     yC = p_lessThan(c);
+    mean = moment(false, 1);
   }
 
   /** @return support of distribution */
@@ -158,37 +157,40 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution impl
 
   @Override // from MeanInterface
   public Scalar mean() {
-    Scalar cd = c.multiply(c).add(c.multiply(d)).add(d.multiply(d));
-    Scalar ab = a.multiply(a).add(a.multiply(b)).add(b.multiply(b));
-    return alpha.multiply(cd.subtract(ab)).multiply(_1_3);
-    // TODO for some reason cannot be substituted, probably because of quantity
-    // ScalarUnaryOperator n_mean = s->s;
-    // Tensor x2 = UnitVector.of(2, 1);
-    // return contrib(a, b, n_mean, x2).add(contrib(b, c, n_mean, x2)).add(contrib(c, d, n_mean, x2));
-  }
-
-  private Scalar contrib(Scalar lo, Scalar hi, ScalarUnaryOperator map, Polynomial x2) {
-    if (lo.equals(hi)) {
-      Tensor dab = Tensors.of(lo).map(map);
-      Polynomial _ab = Fit.polynomial(dab, Tensors.of(lo).map(this::at), 0);
-      Polynomial iab = _ab.product(x2).integral();
-      return dab.map(iab).Get(0).zero();
-    }
-    Tensor dab = Tensors.of(lo, hi).map(map);
-    Polynomial _ab = Fit.polynomial(dab, Tensors.of(lo, hi).map(this::at), 1);
-    Polynomial iab = _ab.product(x2).integral();
-    return Differences.of(dab.map(iab)).Get(0);
+    return mean;
   }
 
   @Override // from VarianceInterface
   public Scalar variance() {
-    Scalar negate = mean().negate();
-    Unit unit = QuantityUnit.of(negate).negate();
-    Tensor coeffs = Tensor.of(IntStream.range(0, 3) //
-        .mapToObj(i -> Quantity.of(Boole.of(i == 2), unit.multiply(RealScalar.of(i + 1)))));
-    ScalarUnaryOperator n_mean = negate::add;
-    Polynomial x2 = Polynomial.of(coeffs);
-    return contrib(a, b, n_mean, x2).add(contrib(b, c, n_mean, x2)).add(contrib(c, d, n_mean, x2));
+    return moment(true, 2);
+  }
+
+  @Override // from CentralMomentInterface
+  public Scalar centralMoment(Scalar order) {
+    return moment(true, Scalars.intValueExact(order));
+  }
+
+  private Scalar moment(boolean centered, int order) {
+    ScalarUnaryOperator n_mean = centered //
+        ? mean().negate()::add
+        : s -> s;
+    List<Optional<Scalar>> list = Arrays.asList( //
+        contrib(a, b, n_mean, order), //
+        contrib(b, c, n_mean, order), //
+        contrib(c, d, n_mean, order));
+    return list.stream() //
+        .flatMap(Optional::stream) //
+        .reduce(Scalar::add) //
+        .orElseThrow();
+  }
+
+  private Optional<Scalar> contrib(Scalar lo, Scalar hi, ScalarUnaryOperator map, int order) {
+    if (lo.equals(hi))
+      return Optional.empty();
+    Tensor xdata = Tensors.of(lo, hi).map(map);
+    Tensor ydata = Tensors.of(lo, hi).map(this::at);
+    Polynomial iab = Fit.polynomial(xdata, ydata, 1).moment(order).integral();
+    return Optional.of(Differences.of(xdata.map(iab)).Get(0));
   }
 
   @Override // from AbstractContinuousDistribution

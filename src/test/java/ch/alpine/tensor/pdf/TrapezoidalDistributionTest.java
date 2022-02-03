@@ -119,7 +119,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     Scalar apply = QuantityMagnitude.SI().in("km").apply(random);
     assertTrue(apply instanceof RealScalar);
     Scalar variance = Variance.of(distribution);
-    System.out.println("variance=" + variance);
+    ExactScalarQ.require(variance);
   }
 
   public void testQuantity2() {
@@ -190,6 +190,8 @@ public class TrapezoidalDistributionTest extends TestCase {
       Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
       Tolerance.CHOP.requireClose(x, q);
     }
+    ExactScalarQ.require(Mean.of(distribution));
+    ExactScalarQ.require(Variance.of(distribution));
   }
 
   public void testBSpline2() {
@@ -238,7 +240,7 @@ public class TrapezoidalDistributionTest extends TestCase {
   public void testWithMean() {
     Distribution distribution = TrapezoidalDistribution.with(4, 3, 2);
     Scalar mean = Mean.of(distribution);
-    assertEquals(mean, RealScalar.of(4));
+    Tolerance.CHOP.requireClose(mean, RealScalar.of(4));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(9));
   }
 
