@@ -49,6 +49,18 @@ public interface RealScalar extends Scalar, //
     return DoubleScalar.of(value);
   }
 
+  /** @param value
+   * @return real scalar of given integer value */
+  static Scalar of(Integer value) {
+    return RationalScalar.integer(value);
+  }
+
+  /** @param value
+   * @return real scalar of given integer value */
+  static Scalar of(Long value) {
+    return RationalScalar.integer(value);
+  }
+
   /** @param bigInteger
    * @return real scalar of given integer value */
   static Scalar of(BigInteger bigInteger) {

@@ -18,8 +18,8 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 public enum FullConvolve {
   ;
   /** <pre>
-   * ListConvolve[{x, y}, {a, b, c, d, e, f}] ==
-   * {b x + a y, c x + b y, d x + c y, e x + d y, f x + e y}
+   * FullConvolve[{x, y}, {a, b, c, d, e, f}] ==
+   * {a x, b x + a y, c x + b y, d x + c y, e x + d y, f x + e y, f y}
    * </pre>
    * 
    * @param kernel

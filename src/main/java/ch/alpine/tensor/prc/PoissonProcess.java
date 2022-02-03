@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.prc;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import ch.alpine.tensor.RealScalar;
@@ -13,7 +14,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/PoissonProcess.html">PoissonProcess</a> */
-/* package */ class PoissonProcess {
+/* package */ class PoissonProcess implements RandomProcess, Serializable {
   private final Distribution distribution;
   private int count = -1;
 
@@ -25,5 +26,11 @@ import ch.alpine.tensor.pdf.RandomVariate;
    * @return {time, count} */
   public Tensor next(Random random) {
     return Tensors.of(RandomVariate.of(distribution, random), RealScalar.of(++count));
+  }
+
+  @Override
+  public Tensor path() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

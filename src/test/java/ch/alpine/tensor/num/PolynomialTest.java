@@ -60,6 +60,8 @@ public class PolynomialTest extends TestCase {
   public void testAccelerationConstant() {
     Scalar c0 = Quantity.of(3, "m*s^-1");
     Polynomial polynomial = Polynomial.of(Tensors.of(c0));
+    Tensor roots = polynomial.roots();
+    assertEquals(roots, Tensors.empty());
     Scalar t = Quantity.of(2, "kg");
     Scalar scalar = polynomial.apply(t);
     assertEquals(scalar, c0);
@@ -73,11 +75,28 @@ public class PolynomialTest extends TestCase {
     Scalar qs1 = Quantity.of(-4, "m*s^-2");
     Scalar val = Quantity.of(2, "s");
     Polynomial polynomial = Polynomial.of(Tensors.of(qs0, qs1));
+    Tensor roots = polynomial.roots();
+    assertEquals(roots, Tensors.fromString("{3/4[s]}"));
+    assertEquals(polynomial.getUnitDomain(), Unit.of("s"));
+    assertEquals(polynomial.derivative().getUnitDomain(), Unit.of("s"));
+    assertEquals(polynomial.derivative().derivative().getUnitDomain(), Unit.of("s"));
     Scalar result = polynomial.apply(val);
     assertEquals(result, Scalars.fromString("-5[m*s^-1]"));
+    assertEquals(polynomial.getUnitValue(), Unit.of("m*s^-1"));
     Polynomial integral = polynomial.integral();
+    assertEquals(integral.getUnitDomain(), Unit.of("s"));
     Scalar scalar = integral.apply(val);
     assertEquals(scalar, Quantity.of(-2, "m"));
+  }
+
+  public void testShift() {
+    Scalar qs0 = Quantity.of(3, "m*s^-1");
+    Scalar qs1 = Quantity.of(-4, "m*s^-2");
+    // Scalar val = Quantity.of(2, "s");
+    Polynomial polynomial = Polynomial.of(Tensors.of(qs0, qs1));
+    Polynomial shift = polynomial.shift(1);
+    assertEquals(shift.getUnitDomain(), Unit.of("s"));
+    // System.out.println(shift.coeffs());
   }
 
   public void testQuaternionLinear() {
@@ -223,6 +242,8 @@ public class PolynomialTest extends TestCase {
 
   public void testMultiplyCoeff() {
     Polynomial c1 = Polynomial.of(Tensors.vector(2, 6, 3, 9, 0, 3));
+    assertEquals(c1.getUnitDomain(), Unit.ONE);
+    assertEquals(c1.getUnitValue(), Unit.ONE);
     Polynomial c2 = Polynomial.of(Tensors.vector(5, 7, 1));
     assertEquals(c2.toString(), "Polynomial[{5, 7, 1}]");
     Tensor roots = c2.roots();
@@ -252,6 +273,8 @@ public class PolynomialTest extends TestCase {
   public void testMultiplyCoeffUnits() {
     Polynomial c1 = Polynomial.of(Tensors.fromString("{1[m^-1],3[m^-2]}"));
     Polynomial c2 = Polynomial.of(Tensors.fromString("{2[m^-1],3[m^-2],-3[m^-3]}"));
+    assertEquals(c2.getUnitDomain(), Unit.of("m"));
+    assertEquals(c2.getUnitValue(), Unit.of("m^-1"));
     Polynomial pd = c1.product(c2);
     {
       Scalar x = Quantity.of(RationalScalar.HALF, "m");
