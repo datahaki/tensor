@@ -48,6 +48,9 @@ public enum CentralMoment {
     };
   }
 
+  /** @param distribution
+   * @param order
+   * @return central moment of given distribution and order */
   public static Scalar of(Distribution distribution, Number order) {
     return of(distribution, RealScalar.of(order));
   }

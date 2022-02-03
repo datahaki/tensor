@@ -10,8 +10,11 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
 
 /** functionality and suggested base class for a discrete probability distribution
@@ -21,9 +24,13 @@ import ch.alpine.tensor.sca.Sign;
  * {@link #inverse_cdf_build(Chop)} in the constructor
  * 
  * @see BinomialDistribution
- * @see PoissonDistribution
- * @see PascalDistribution */
-public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDistribution implements Serializable {
+ * @see CategoricalDistribution
+ * @see HypergeometricDistribution
+ * @see NegativeBinomialDistribution
+ * @see PascalDistribution
+ * @see PoissonDistribution */
+public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDistribution //
+    implements CentralMomentInterface, Serializable {
   private static final Scalar _1 = DoubleScalar.of(1);
   // ---
   /** inverse cdf maps from probability to integers and is built during random sampling generation.
@@ -64,6 +71,16 @@ public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDist
       }
       ++upperBound;
     }
+  }
+
+  @Override // from CentralMomentInterface
+  public final Scalar centralMoment(Scalar order) {
+    Scalar mean = mean();
+    ScalarUnaryOperator power = Power.function(order);
+    return inverse_cdf.values().stream() //
+        .map(x -> power.apply(x.subtract(mean)).multiply(at(x))) //
+        .reduce(Scalar::add) //
+        .orElseThrow();
   }
 
   @Override // from InverseCDF

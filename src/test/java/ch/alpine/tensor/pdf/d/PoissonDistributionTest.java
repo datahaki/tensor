@@ -12,15 +12,18 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Quantile;
 import ch.alpine.tensor.red.Total;
+import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -31,12 +34,17 @@ public class PoissonDistributionTest extends TestCase {
   }
 
   public void testSingle() {
-    Distribution distribution = PoissonDistribution.of(RealScalar.of(2));
+    Scalar lambda = RealScalar.of(2);
+    Distribution distribution = PoissonDistribution.of(lambda);
     PDF pdf = PDF.of(distribution);
     assertTrue(pdf.at(RealScalar.ZERO).toString().startsWith("0.13533"));
     assertTrue(pdf.at(RealScalar.ONE).toString().startsWith("0.27067"));
     assertTrue(pdf.at(RealScalar.of(2)).toString().startsWith("0.27067"));
     assertTrue(pdf.at(RealScalar.of(3)).toString().startsWith("0.18044"));
+    Tolerance.CHOP.requireClose(Variance.of(distribution), CentralMoment.of(distribution, 2));
+    Tolerance.CHOP.requireClose(CentralMoment.of(distribution, 3), lambda);
+    Chop._10.requireClose(CentralMoment.of(distribution, 4), Polynomial.of(Tensors.vector(0, 1, 3)).apply(lambda));
+    Chop._08.requireClose(CentralMoment.of(distribution, 5), Polynomial.of(Tensors.vector(0, 1, 10)).apply(lambda));
   }
 
   public void testConvergence() {

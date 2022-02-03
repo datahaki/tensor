@@ -3,14 +3,16 @@ package ch.alpine.tensor.num;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Insert;
+import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
-import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.fft.FullConvolve;
+import ch.alpine.tensor.itp.Fit;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
@@ -18,9 +20,16 @@ import ch.alpine.tensor.red.Times;
 
 /** Evaluation of a polynomial using horner scheme.
  * 
+ * Remark:
+ * A polynomial is stored without tailing zeros in the coefficient vector.
+ * two polynomials are considered equal if their coefficient vector (without
+ * tailing zeros) are equal.
+ * 
  * <p>Mathematica does not have a dedicated function for polynomial evaluation.
  * In Matlab, there exists
  * <a href="https://www.mathworks.com/help/matlab/ref/polyval.html">polyval</a>.
+ * 
+ * @see Fit#polynomial(Tensor, Tensor, int)
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
@@ -36,9 +45,17 @@ public class Polynomial extends HornerScheme {
    * @param coeffs of polynomial vector of length at least 1
    * @return evaluation of polynomial for scalar input
    * @throws Exception if input is not a vector
-   * @throws Exception if input is empty vector */
+   * @throws Exception if input is the empty vector */
   public static Polynomial of(Tensor coeffs) {
-    return new Polynomial(VectorQ.require(coeffs).copy());
+    VectorQ.require(coeffs);
+    return new Polynomial(coeffs.extract(0, Math.min(Math.max(1, lastNonZero(coeffs)) + 1, coeffs.length())));
+  }
+
+  private static int lastNonZero(Tensor coeffs) {
+    for (int index = coeffs.length() - 1; 0 <= index; --index)
+      if (Scalars.nonZero(coeffs.Get(index)))
+        return index;
+    return -1;
   }
 
   // ---
@@ -49,12 +66,19 @@ public class Polynomial extends HornerScheme {
     this.coeffs = coeffs;
   }
 
-  /** @return coefficients */
+  /** @return coefficients without tailing zeros */
   public Tensor coeffs() {
     return coeffs.copy();
   }
 
-  /** @return unit of domain */
+  /** @return degree of this polynomial, for instance 0 if this polynomial is constant,
+   * 1 for linear etc. */
+  public int degree() {
+    return lastNonZero(coeffs);
+  }
+
+  /** @return unit of domain
+   * @throws Exception if {@link #coeffs} has length 1 */
   public Unit getUnitDomain() {
     Scalar a = coeffs.Get(0);
     Scalar b = coeffs.Get(1);
@@ -102,10 +126,9 @@ public class Polynomial extends HornerScheme {
        * is checked. */
       Scalar b = coeffs.Get(1);
       Unit unit = getUnitDomain().negate(); // of domain
-      Scalar c1 = b.zero().multiply(Quantity.of(b.one(), unit));
-      return new Polynomial(Tensors.of(b, c1));
+      return of(Tensors.of(b, zero(b, unit)));
     }
-    return new Polynomial(length == 1 //
+    return of(length == 1 //
         ? Tensors.of(coeffs.Get(0).zero())
         : Times.of(coeffs.extract(1, length), Range.of(1, length)));
   }
@@ -118,23 +141,30 @@ public class Polynomial extends HornerScheme {
     Unit unit = coeffs.length() == 1 //
         ? Unit.ONE
         : getUnitDomain();
-    Scalar c0 = a.zero().multiply(Quantity.of(a.one(), unit));
-    tensor.append(c0);
+    tensor.append(zero(a, unit));
     for (int index = 0; index < length; ++index)
       tensor.append(coeffs.Get(index).multiply(RationalScalar.of(1, index + 1)));
-    return new Polynomial(tensor);
+    return of(tensor);
   }
 
-  public Polynomial moment(int i) {
-    if (i == 0)
-      return this;
-    Integers.requirePositive(i);
-    Scalar a = coeffs.Get(0);
+  /** @param order non-negative
+   * @return this times x^order
+   * @throws Exception if given order is negative */
+  public Polynomial moment(int order) {
     Unit unit = coeffs.length() == 1 //
         ? Unit.ONE
         : getUnitDomain();
-    Scalar c0 = a.zero().multiply(Quantity.of(a.one(), unit));
-    return of(Insert.of(coeffs, c0, 0)).moment(i - 1);
+    Tensor _coeffs = Join.of(Array.zeros(order), coeffs);
+    for (int index = order; 0 < index; --index)
+      _coeffs.set(zero(_coeffs.Get(index), unit), index - 1);
+    return of(_coeffs);
+  }
+
+  /** @param scalar
+   * @param unit
+   * @return scalar.zero() * Quantity(scalar.one(), unit) */
+  private static Scalar zero(Scalar scalar, Unit unit) {
+    return Quantity.of(scalar.one().zero(), QuantityUnit.of(scalar).add(unit));
   }
 
   public Polynomial identity() {
@@ -147,8 +177,16 @@ public class Polynomial extends HornerScheme {
   }
 
   /** @param polynomial
+   * @return sum of this and given polynomial */
+  public Polynomial plus(Polynomial polynomial) {
+    return degree() <= polynomial.degree() //
+        ? of(Join.of(coeffs.add(polynomial.coeffs.extract(0, coeffs.length())), polynomial.coeffs.extract(coeffs.length(), polynomial.coeffs.length())))
+        : of(Join.of(polynomial.coeffs.add(coeffs.extract(0, polynomial.coeffs.length())), coeffs.extract(polynomial.coeffs.length(), coeffs.length())));
+  }
+
+  /** @param polynomial
    * @return polynomial that is the product of this and given polynomials */
-  public Polynomial product(Polynomial polynomial) {
+  public Polynomial times(Polynomial polynomial) {
     return of(FullConvolve.of(coeffs, polynomial.coeffs()));
   }
 

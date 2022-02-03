@@ -49,6 +49,32 @@ public class PolynomialTest extends TestCase {
     }
   }
 
+  public void testPlus() {
+    Polynomial p1 = Polynomial.of(Tensors.vector(1, 5, 2, 10));
+    assertEquals(p1, p1.moment(0));
+    AssertFail.of(() -> p1.moment(-1));
+    Polynomial p2 = Polynomial.of(Tensors.vector(3, 8));
+    assertEquals(p1.degree(), 3);
+    assertEquals(p2.degree(), 1);
+    assertEquals(p1.plus(p2), p2.plus(p1));
+    Polynomial p3 = Polynomial.of(Tensors.vector(0));
+    assertEquals(p1.plus(p3), p3.plus(p1));
+    assertEquals(p1.plus(p3), p1);
+  }
+
+  public void testDegree() {
+    assertEquals(Polynomial.of(Tensors.vector(3, 0, 0)).degree(), 0);
+    assertEquals(Polynomial.of(Tensors.vector(0, 0, 0)).degree(), -1);
+  }
+
+  public void testLastNonZero() {
+    assertEquals(Polynomial.of(Tensors.vector(3, 2, 0, 6, 0, 0)).coeffs(), Tensors.vector(3, 2, 0, 6));
+    assertEquals(Polynomial.of(Tensors.vector(3)).coeffs(), Tensors.vector(3));
+    assertEquals(Polynomial.of(Tensors.vector(0)).coeffs(), Tensors.vector(0));
+    assertEquals(Polynomial.of(Tensors.vector(1, 0)).coeffs(), Tensors.vector(1, 0));
+    assertEquals(Polynomial.of(Tensors.vector(1, 0, 0)).coeffs(), Tensors.vector(1, 0));
+  }
+
   public void testQuantity() {
     Scalar qs1 = Quantity.of(-4, "m*s");
     Scalar qs2 = Quantity.of(3, "m");
@@ -75,6 +101,7 @@ public class PolynomialTest extends TestCase {
     Scalar qs1 = Quantity.of(-4, "m*s^-2");
     Scalar val = Quantity.of(2, "s");
     Polynomial polynomial = Polynomial.of(Tensors.of(qs0, qs1));
+    assertEquals(polynomial.coeffs(), polynomial.moment(0).coeffs());
     Tensor roots = polynomial.roots();
     assertEquals(roots, Tensors.fromString("{3/4[s]}"));
     assertEquals(polynomial.getUnitDomain(), Unit.of("s"));
@@ -103,7 +130,7 @@ public class PolynomialTest extends TestCase {
     // System.out.println();
   }
 
-  public void testShift() {
+  public void testMoment() {
     Scalar qs0 = Quantity.of(3, "m*s^-1");
     Scalar qs1 = Quantity.of(-4, "m*s^-2");
     // Scalar val = Quantity.of(2, "s");
@@ -115,6 +142,13 @@ public class PolynomialTest extends TestCase {
     Polynomial shift2 = polynomial.moment(2);
     assertEquals(shift2.getUnitDomain(), Unit.of("s"));
     assertEquals(shift2.getUnitValue(), Unit.of("m*s"));
+    for (int i = 0; i < 5; ++i) {
+      Polynomial expect = polynomial.moment(i);
+      Polynomial init = polynomial;
+      for (int j = 0; j < i; ++j)
+        init = init.moment(1);
+      assertEquals(expect, init);
+    }
   }
 
   public void testQuaternionLinear() {
@@ -270,8 +304,8 @@ public class PolynomialTest extends TestCase {
     assertFalse(c1.equals(null));
     assertFalse(c1.equals((Object) Pi.VALUE));
     assertFalse(c1.hashCode() == c2.hashCode());
-    Polynomial pd = c1.product(c2);
-    Polynomial al = c2.product(c1);
+    Polynomial pd = c1.times(c2);
+    Polynomial al = c2.times(c1);
     assertEquals(pd.coeffs(), al.coeffs());
     assertEquals(pd.coeffs(), Tensors.vector(10, 44, 59, 72, 66, 24, 21, 3));
     {
@@ -293,7 +327,7 @@ public class PolynomialTest extends TestCase {
     Polynomial c2 = Polynomial.of(Tensors.fromString("{2[m^-1],3[m^-2],-3[m^-3]}"));
     assertEquals(c2.getUnitDomain(), Unit.of("m"));
     assertEquals(c2.getUnitValue(), Unit.of("m^-1"));
-    Polynomial pd = c1.product(c2);
+    Polynomial pd = c1.times(c2);
     {
       Scalar x = Quantity.of(RationalScalar.HALF, "m");
       Scalar t1 = c1.apply(x).multiply(c2.apply(x));

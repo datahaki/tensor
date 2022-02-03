@@ -17,7 +17,7 @@ public enum Insert {
    * @param tensor
    * @param element
    * @param index in the range 0, 1, ..., tensor.length()
-   * @return
+   * @return new tensor equal to given tensor but with given element inserted at index
    * @throws Exception if index is out of range */
   public static Tensor of(Tensor tensor, Tensor element, int index) {
     return Tensor.of(Stream.concat( //

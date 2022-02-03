@@ -16,6 +16,7 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.TestMarkovChebyshev;
+import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
@@ -65,6 +66,7 @@ public class CategoricalDistributionTest extends TestCase {
     assertTrue(map.containsKey(RealScalar.of(4)));
     assertFalse(map.containsKey(RealScalar.of(5)));
     assertEquals(distribution.toString(), "CategoricalDistribution[{0, 1/3, 1/6, 0, 1/2, 0}]");
+    assertEquals(Variance.of(distribution), CentralMoment.of(distribution, 2));
   }
 
   public void testNextDown() {
@@ -116,6 +118,9 @@ public class CategoricalDistributionTest extends TestCase {
     AbstractDiscreteDistribution distribution = //
         CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0, 0, 0));
     assertEquals(distribution.quantile(RealScalar.of(1)), RealScalar.of(4));
+    Scalar variance = Variance.of(distribution);
+    ExactScalarQ.require(variance);
+    assertEquals(variance, RealScalar.ONE);
   }
 
   public void testToString() {

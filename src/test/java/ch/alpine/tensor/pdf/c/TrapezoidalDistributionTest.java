@@ -223,7 +223,9 @@ public class TrapezoidalDistributionTest extends TestCase {
   }
 
   public void testExactFail() {
-    TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
+    Distribution distribution = TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
+    TestMarkovChebyshev.chebyshev(distribution);
+    TestMarkovChebyshev.markov(distribution);
     TrapezoidalDistribution.of(Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
     AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m")));
     AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(1, "m")));
@@ -236,13 +238,15 @@ public class TrapezoidalDistributionTest extends TestCase {
     assertEquals(mean, RationalScalar.of(11, 2));
     ExactScalarQ.require(mean);
     assertEquals(Variance.of(distribution), RationalScalar.of(5, 12));
+    TestMarkovChebyshev.chebyshev(distribution);
+    TestMarkovChebyshev.markov(distribution);
   }
 
   public void testTriangularVar() {
     Distribution distribution = TrapezoidalDistribution.of(4, 5, 5, 7);
-    // Scalar mean = Mean.of(distribution);
-    // assertEquals(mean, RationalScalar.of(11, 2));
-    // ExactScalarQ.require(mean);
+    Scalar mean = Mean.of(distribution);
+    assertEquals(mean, RationalScalar.of(16, 3));
+    ExactScalarQ.require(mean);
     assertEquals(Variance.of(distribution), RationalScalar.of(7, 18));
     TestMarkovChebyshev.chebyshev(distribution);
     TestMarkovChebyshev.markov(distribution);

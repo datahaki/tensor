@@ -20,9 +20,11 @@ import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Tally;
+import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -70,6 +72,13 @@ public class BinomialDistributionTest extends TestCase {
     for (Tensor x : Range.of(0, 22))
       sum = sum.add(x.multiply(pdf.at((Scalar) x)));
     assertEquals(Expectation.mean(distribution), sum);
+    assertEquals(Variance.of(distribution), CentralMoment.of(distribution, 2));
+  }
+
+  public void testKurtosis2() {
+    Distribution distribution = BinomialDistribution.of(5, RationalScalar.of(7, 9));
+    Scalar variance = Variance.of(distribution);
+    assertEquals(Kurtosis.of(distribution), CentralMoment.of(distribution, 4).divide(variance).divide(variance));
   }
 
   public void testMean2() {
