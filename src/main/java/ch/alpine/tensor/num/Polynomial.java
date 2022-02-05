@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import java.util.function.Predicate;
+
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -17,6 +19,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Times;
+import ch.alpine.tensor.sca.Chop;
 
 /** Evaluation of a polynomial using horner scheme.
  * 
@@ -48,12 +51,21 @@ public class Polynomial extends HornerScheme {
    * @throws Exception if input is the empty vector */
   public static Polynomial of(Tensor coeffs) {
     VectorQ.require(coeffs);
-    return new Polynomial(coeffs.extract(0, Math.min(Math.max(1, lastNonZero(coeffs)) + 1, coeffs.length())));
+    return new Polynomial(truncate(coeffs, Scalars::isZero));
   }
 
   private static int lastNonZero(Tensor coeffs) {
+    return lastNot(coeffs, Scalars::isZero);
+  }
+
+  private static Tensor truncate(Tensor coeffs, Predicate<Scalar> predicate) {
+    int index = lastNot(coeffs, predicate);
+    return coeffs.extract(0, Math.min(Math.max(1, index) + 1, coeffs.length()));
+  }
+
+  private static int lastNot(Tensor coeffs, Predicate<Scalar> predicate) {
     for (int index = coeffs.length() - 1; 0 <= index; --index)
-      if (Scalars.nonZero(coeffs.Get(index)))
+      if (!predicate.test(coeffs.Get(index)))
         return index;
     return -1;
   }
@@ -188,6 +200,10 @@ public class Polynomial extends HornerScheme {
    * @return polynomial that is the product of this and given polynomials */
   public Polynomial times(Polynomial polynomial) {
     return of(FullConvolve.of(coeffs, polynomial.coeffs()));
+  }
+
+  public Polynomial chop(Chop chop) {
+    return new Polynomial(truncate(coeffs, chop::isZero));
   }
 
   /** @return roots of this polynomial

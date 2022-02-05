@@ -13,6 +13,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.Polynomial;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Mean;
@@ -70,6 +72,16 @@ public class FitTest extends TestCase {
       ScalarUnaryOperator y_to_x = Fit.polynomial(y, x, degree);
       Scalar temperat = y_to_x.apply(Quantity.of(15, "bar"));
       kelvin.apply(temperat);
+    }
+  }
+
+  public void testLinear() {
+    Polynomial polynomial = Polynomial.of(Tensors.vector(-2., 3., 0.5));
+    for (int n = 5; n < 10; ++n) {
+      Tensor xdata = RandomVariate.of(TriangularDistribution.of(-2, 1, 2), n);
+      Tensor ydata = xdata.map(polynomial);
+      Polynomial fit = Fit.polynomial(xdata, ydata, 4);
+      assertEquals(fit.degree(), polynomial.degree());
     }
   }
 

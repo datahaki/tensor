@@ -12,6 +12,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
+import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.jet.JetScalar;
 import ch.alpine.tensor.lie.Quaternion;
@@ -65,6 +66,11 @@ public class PolynomialTest extends TestCase {
   public void testDegree() {
     assertEquals(Polynomial.of(Tensors.vector(3, 0, 0)).degree(), 0);
     assertEquals(Polynomial.of(Tensors.vector(0, 0, 0)).degree(), -1);
+  }
+
+  public void testChop() {
+    Polynomial polynomial = Polynomial.of(Tensors.vector(1, 0, 0, 1e-11)).chop(Chop._10);
+    assertEquals(polynomial.coeffs(), UnitVector.of(2, 0));
   }
 
   public void testLastNonZero() {
