@@ -14,7 +14,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Factorial;
@@ -37,7 +36,7 @@ import ch.alpine.tensor.sca.Factorial;
  * Hakenberg.de kernel.nb
  * 
  * @see MatrixAlgebra */
-// TODO resort to BCH Approx for degree 4
+// TODO resort to BchApprox for degree 4
 public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializable {
   private static final Scalar _0 = RealScalar.ZERO;
   private static final Scalar _1 = RealScalar.ONE;
@@ -97,10 +96,10 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
       series.set(x, 0);
       adX = ad.dot(x);
       adY = ad.dot(y);
-      Tensor pwX = IdentityMatrix.sparse(x.length());
-      for (int m = 0; m < degree; ++m) {
-        recur(pwX.dot(y).divide(Factorial.of(m)), m + 1, Tensors.empty(), Tensors.empty(), 0, true);
-        pwX = adX.dot(pwX);
+      Tensor xn_y = y;
+      for (int d = 0; d < degree; ++d) {
+        recur(xn_y.divide(Factorial.of(d)), d + 1, Tensors.empty(), Tensors.empty(), 0, true);
+        xn_y = adX.dot(xn_y);
       }
     }
 
@@ -129,7 +128,8 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
             recur(adX.dot(v), d + 1, cp, q, total_q, false);
           }
         }
-        recur(adY.dot(v), d + 1, Append.of(p, _0), Append.of(q, _1), total_q + 1, true);
+        if (1 < d) // the base case d == 1 implies adY . y == 0
+          recur(adY.dot(v), d + 1, Append.of(p, _0), Append.of(q, _1), total_q + 1, true);
         recur(adX.dot(v), d + 1, Append.of(p, _1), Append.of(q, _0), total_q, false);
       }
     }
