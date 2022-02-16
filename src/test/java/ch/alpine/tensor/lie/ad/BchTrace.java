@@ -46,7 +46,7 @@ public class BchTrace implements Serializable {
     register(v, factor.divide(f));
     if (d < degree) {
       if (0 < k) {
-        if (incrementQ ) {
+        if (incrementQ) {
           Tensor cq = q.copy();
           cq.set(RealScalar.ONE::add, k - 1);
           recur("Y" + v, factor, d + 1, p, cq, total_q + 1, true);

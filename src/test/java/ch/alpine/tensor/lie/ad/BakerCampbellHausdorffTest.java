@@ -18,22 +18,30 @@ import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.spa.SparseArray;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class BakerCampbellHausdorffTest extends TestCase {
-  private static void _check(Tensor ad) {
+  private static void _check(Tensor ad, int degree) {
     BakerCampbellHausdorff bakerCampbellHausdorff = //
-        (BakerCampbellHausdorff) BakerCampbellHausdorff.of(ad, BchApprox.DEGREE);
-    BchApprox appx = (BchApprox) BchApprox.of(ad);
+        new BakerCampbellHausdorff(ad, degree, Chop._14);
+    BakerCampbellHausdorffSeries appx = (BakerCampbellHausdorffSeries) BakerCampbellHausdorff.of(ad, degree);
     int n = ad.length();
     Timing t_bch = Timing.stopped();
     Timing t_apx = Timing.stopped();
     for (int c0 = 0; c0 < n; ++c0)
-      for (int c1 = 0; c1 < n; ++c1) {
-        Tensor x = UnitVector.of(n, c0);
-        Tensor y = UnitVector.of(n, c1);
+      for (int c1 = 0; c1 < n; ++c1)
+      // Distribution distribution2 = DiscreteUniformDistribution.of(-10, 10);
+      // RandomVariate
+      {
+        Tensor x =
+            // RandomVariate.of(distribution2, n);
+            UnitVector.of(n, c0);
+        Tensor y =
+            // RandomVariate.of(distribution2, n);
+            UnitVector.of(n, c1);
         {
           t_bch.start();
           Tensor res1 = bakerCampbellHausdorff.apply(x, y);
@@ -72,27 +80,34 @@ public class BakerCampbellHausdorffTest extends TestCase {
     // System.out.println(String.format("apx: %10d", t_apx.nanoSeconds()));
   }
 
+  private static final int[] DEGREES = new int[] { 6, 8 };
+
   public void testHe1() {
-    _check(TestHelper.he1());
+    for (int d : DEGREES)
+      _check(TestHelper.he1(), d);
   }
 
   public void testSl2() {
-    _check(TestHelper.sl2());
+    for (int d : DEGREES)
+      _check(TestHelper.sl2(), d);
   }
 
   public void testSl2Sophus() {
     Tensor ad = Tensors.fromString( //
         "{{{0, 0, 0}, {0, 0, 1}, {0, -1, 0}}, {{0, 0, 1}, {0, 0, 0}, {-1, 0, 0}}, {{0, -1, 0}, {1, 0, 0}, {0, 0, 0}}}");
-    _check(ad);
+    for (int d : DEGREES)
+      _check(ad, d);
     assertEquals(Det.of(KillingForm.of(ad)), RealScalar.of(-8));
   }
 
   public void testSe2() {
-    _check(TestHelper.se2());
+    for (int d : new int[] { 6, 8, 10 })
+      _check(TestHelper.se2(), d);
   }
 
   public void testSo3() {
-    _check(TestHelper.so3());
+    for (int d : DEGREES)
+      _check(TestHelper.so3(), d);
   }
 
   public void testSparse() {

@@ -14,7 +14,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Factorial;
 
@@ -36,8 +35,7 @@ import ch.alpine.tensor.sca.Factorial;
  * Hakenberg.de kernel.nb
  * 
  * @see MatrixAlgebra */
-// TODO resort to BchApprox for degree 4
-public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializable {
+public class BakerCampbellHausdorff extends BchSeries implements Serializable {
   private static final Scalar _0 = RealScalar.ZERO;
   private static final Scalar _1 = RealScalar.ONE;
   private static final int[] SIGN = { 1, -1 };
@@ -47,10 +45,12 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
    * @param chop tolerance for early abort
    * @return */
   public static BinaryOperator<Tensor> of(Tensor ad, int degree, Chop chop) {
-    return new BakerCampbellHausdorff( //
-        JacobiIdentity.require(ad), //
-        Integers.requirePositive(degree), //
-        Objects.requireNonNull(chop));
+    return switch (degree) {
+    case 6 -> new BchSeries06(ad);
+    case 8 -> new BchSeries08(ad);
+    case 10 -> new BchSeries10(ad);
+    default -> new BakerCampbellHausdorff(ad, degree, chop);
+    };
   }
 
   /** @param ad tensor of rank 3 that satisfies the Jacobi identity
@@ -65,23 +65,13 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
   private final int degree;
   private final Chop chop;
 
-  private BakerCampbellHausdorff(Tensor ad, int degree, Chop chop) {
-    this.ad = ad;
-    this.degree = degree;
-    this.chop = chop;
+  public BakerCampbellHausdorff(Tensor ad, int degree, Chop chop) {
+    this.ad = JacobiIdentity.require(ad);
+    this.degree = Integers.requirePositive(degree);
+    this.chop = Objects.requireNonNull(chop);
   }
 
   @Override
-  public Tensor apply(Tensor x, Tensor y) {
-    return Total.of(series(x, y));
-  }
-
-  /** function allows to investigate the rate of convergence
-   * 
-   * @param x
-   * @param y
-   * @return list of contributions up to given degree the sum of which is the
-   * result of this binary operator */
   public Tensor series(Tensor x, Tensor y) {
     return new Inner(x, y).series;
   }
