@@ -40,7 +40,9 @@ public class BakerCampbellHausdorff extends BchSeries implements Serializable {
   private static final Scalar _1 = RealScalar.ONE;
   private static final int[] SIGN = { 1, -1 };
 
-  /** @param ad tensor of rank 3 that satisfies the Jacobi identity
+  /** Hint: the implementations for the degrees 6, 8, 10 are optimized
+   * 
+   * @param ad tensor of rank 3 that satisfies the Jacobi identity
    * @param degree strictly positive, depth of series
    * @param chop tolerance for early abort
    * @return */

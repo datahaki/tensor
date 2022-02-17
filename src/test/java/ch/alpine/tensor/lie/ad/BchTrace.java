@@ -32,6 +32,11 @@ public class BchTrace implements Serializable {
   }
 
   private void register(String string, Scalar factor) {
+    if (string.endsWith("XXYXy"))
+      string = string.substring(0, string.length() - 5) + "XYXXy";
+    else //
+    if (string.endsWith("YYXXy"))
+      string = string.substring(0, string.length() - 5) + "YXYXy";
     navigableMap.merge(string, factor, Scalar::add);
   }
 

@@ -59,8 +59,8 @@ public class BakerCampbellHausdorffTest extends TestCase {
           ExactTensorQ.require(res1);
         }
       }
-    Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
-    for (int count = 0; count < 10; ++count) {
+    {
+      Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
       Tensor x = RandomVariate.of(distribution, n);
       Tensor y = RandomVariate.of(distribution, n);
       {

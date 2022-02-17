@@ -15,7 +15,7 @@ import ch.alpine.tensor.sca.Sign;
 public enum BchCode {
   ;
   public static void main(String[] args) {
-    int n = 6;
+    int n = 10;
     BchTrace bchTrace = new BchTrace(n);
     Set<String> set1 = new HashSet<>();
     Set<Scalar> setConst = new LinkedHashSet<>();
