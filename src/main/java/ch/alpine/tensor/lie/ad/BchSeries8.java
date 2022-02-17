@@ -1,21 +1,12 @@
 // code by jph
 package ch.alpine.tensor.lie.ad;
 
-import java.io.Serializable;
-
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-/** the explicit computation of the terms in the series is about 8-10 times
- * faster than using {@link BakerCampbellHausdorff}
- * 
- * References:
- * 1) Neeb
- * 2) "Baker-Campbell-Hausdorff formula" Wikipedia */
-/* package */ class BchSeries08 extends BchSeries implements Serializable {
-  private static final Scalar P1_1 = RationalScalar.of(1, 1);
+/* package */ class BchSeries8 extends BchSeries {
   private static final Scalar P1_2 = RationalScalar.of(1, 2);
   private static final Scalar P1_12 = RationalScalar.of(1, 12);
   private static final Scalar N1_12 = RationalScalar.of(-1, 12);
@@ -61,11 +52,9 @@ import ch.alpine.tensor.Tensors;
   private static final Scalar P1_8400 = RationalScalar.of(1, 8400);
   private static final Scalar N11_100800 = RationalScalar.of(-11, 100800);
   private static final Scalar N1_60480 = RationalScalar.of(-1, 60480);
-  // ---
-  private final Tensor ad;
 
-  public BchSeries08(Tensor ad) {
-    this.ad = JacobiIdentity.require(ad);
+  public BchSeries8(Tensor ad) {
+    super(ad);
   }
 
   @Override
@@ -73,9 +62,7 @@ import ch.alpine.tensor.Tensors;
     Tensor adx = ad.dot(x);
     Tensor ady = ad.dot(y);
     // d = 1
-    Tensor t1_0 = x.multiply(P1_1);
-    Tensor t1_1 = y.multiply(P1_1);
-    Tensor t1 = t1_0.add(t1_1);
+    Tensor t1 = x.add(y);
     // d = 2
     Tensor xy = adx.dot(y);
     Tensor t2_0 = xy.multiply(P1_2);
@@ -94,9 +81,8 @@ import ch.alpine.tensor.Tensors;
     Tensor xxxy = adx.dot(xxy);
     Tensor xxxxy = adx.dot(xxxy);
     Tensor t5_0 = xxxxy.multiply(N1_720);
-    Tensor yxxy = ady.dot(xxy);
-    Tensor xyxxy = adx.dot(yxxy);
-    Tensor t5_1 = xyxxy.multiply(N1_120);
+    Tensor xxyxy = adx.dot(xyxy);
+    Tensor t5_1 = xxyxy.multiply(N1_120);
     Tensor yyxy = ady.dot(yxy);
     Tensor xyyxy = adx.dot(yyxy);
     Tensor t5_2 = xyyxy.multiply(N1_360);
@@ -108,8 +94,8 @@ import ch.alpine.tensor.Tensors;
     Tensor t5_5 = yyyxy.multiply(P1_720);
     Tensor t5 = t5_0.add(t5_1).add(t5_2).add(t5_3).add(t5_4).add(t5_5);
     // d = 6
-    Tensor xxyxxy = adx.dot(xyxxy);
-    Tensor t6_0 = xxyxxy.multiply(N1_1440);
+    Tensor xxxyxy = adx.dot(xxyxy);
+    Tensor t6_0 = xxxyxy.multiply(N1_1440);
     Tensor xxyyxy = adx.dot(xyyxy);
     Tensor t6_1 = xxyyxy.multiply(N1_720);
     Tensor xyxxxy = adx.dot(yxxxy);
@@ -123,8 +109,8 @@ import ch.alpine.tensor.Tensors;
     Tensor xxxxxy = adx.dot(xxxxy);
     Tensor xxxxxxy = adx.dot(xxxxxy);
     Tensor t7_0 = xxxxxxy.multiply(P1_30240);
-    Tensor xxxyxxy = adx.dot(xxyxxy);
-    Tensor t7_1 = xxxyxxy.multiply(P1_6720);
+    Tensor xxxxyxy = adx.dot(xxxyxy);
+    Tensor t7_1 = xxxxyxy.multiply(P1_6720);
     Tensor xxxyyxy = adx.dot(xxyyxy);
     Tensor t7_2 = xxxyyxy.multiply(N1_15120);
     Tensor xxyxxxy = adx.dot(xyxxxy);
@@ -136,9 +122,9 @@ import ch.alpine.tensor.Tensors;
     Tensor yxxxxy = ady.dot(xxxxy);
     Tensor xyxxxxy = adx.dot(yxxxxy);
     Tensor t7_6 = xyxxxxy.multiply(P1_4032);
-    Tensor yxyxxy = ady.dot(xyxxy);
-    Tensor xyxyxxy = adx.dot(yxyxxy);
-    Tensor t7_7 = xyxyxxy.multiply(P1_1260);
+    Tensor yxxyxy = ady.dot(xxyxy);
+    Tensor xyxxyxy = adx.dot(yxxyxy);
+    Tensor t7_7 = xyxxyxy.multiply(P1_1260);
     Tensor yxyyxy = ady.dot(xyyxy);
     Tensor xyxyyxy = adx.dot(yxyyxy);
     Tensor t7_8 = xyxyyxy.multiply(P1_3360);
@@ -153,8 +139,8 @@ import ch.alpine.tensor.Tensors;
     Tensor t7_11 = xyyyyxy.multiply(P1_10080);
     Tensor yxxxxxy = ady.dot(xxxxxy);
     Tensor t7_12 = yxxxxxy.multiply(N1_10080);
-    Tensor yxxyxxy = ady.dot(xxyxxy);
-    Tensor t7_13 = yxxyxxy.multiply(N1_7560);
+    Tensor yxxxyxy = ady.dot(xxxyxy);
+    Tensor t7_13 = yxxxyxy.multiply(N1_7560);
     Tensor yxxyyxy = ady.dot(xxyyxy);
     Tensor t7_14 = yxxyyxy.multiply(P1_3360);
     Tensor yxyxxxy = ady.dot(xyxxxy);
@@ -165,8 +151,8 @@ import ch.alpine.tensor.Tensors;
     Tensor t7_17 = yxyyyxy.multiply(N1_3150);
     Tensor yyxxxxy = ady.dot(yxxxxy);
     Tensor t7_18 = yyxxxxy.multiply(P1_6048);
-    Tensor yyxyxxy = ady.dot(yxyxxy);
-    Tensor t7_19 = yyxyxxy.multiply(P1_1680);
+    Tensor yyxxyxy = ady.dot(yxxyxy);
+    Tensor t7_19 = yyxxyxy.multiply(P1_1680);
     Tensor yyxyyxy = ady.dot(yxyyxy);
     Tensor t7_20 = yyxyyxy.multiply(P1_4200);
     Tensor yyyxxxy = ady.dot(yyxxxy);
@@ -178,8 +164,8 @@ import ch.alpine.tensor.Tensors;
     Tensor t7 = t7_0.add(t7_1).add(t7_2).add(t7_3).add(t7_4).add(t7_5).add(t7_6).add(t7_7).add(t7_8).add(t7_9).add(t7_10).add(t7_11).add(t7_12).add(t7_13)
         .add(t7_14).add(t7_15).add(t7_16).add(t7_17).add(t7_18).add(t7_19).add(t7_20).add(t7_21).add(t7_22).add(t7_23);
     // d = 8
-    Tensor xxxxyxxy = adx.dot(xxxyxxy);
-    Tensor t8_0 = xxxxyxxy.multiply(P1_13440);
+    Tensor xxxxxyxy = adx.dot(xxxxyxy);
+    Tensor t8_0 = xxxxxyxy.multiply(P1_13440);
     Tensor xxxxyyxy = adx.dot(xxxyyxy);
     Tensor t8_1 = xxxxyyxy.multiply(P1_12096);
     Tensor xxxyxxxy = adx.dot(xxyxxxy);
@@ -190,8 +176,8 @@ import ch.alpine.tensor.Tensors;
     Tensor t8_4 = xxxyyyxy.multiply(N1_12096);
     Tensor xxyxxxxy = adx.dot(xyxxxxy);
     Tensor t8_5 = xxyxxxxy.multiply(P1_8064);
-    Tensor xxyxyxxy = adx.dot(xyxyxxy);
-    Tensor t8_6 = xxyxyxxy.multiply(P1_2520);
+    Tensor xxyxxyxy = adx.dot(xyxxyxy);
+    Tensor t8_6 = xxyxxyxy.multiply(P1_2520);
     Tensor xxyxyyxy = adx.dot(xyxyyxy);
     Tensor t8_7 = xxyxyyxy.multiply(P1_6720);
     Tensor xxyyxxxy = adx.dot(xyyxxxy);
@@ -202,8 +188,8 @@ import ch.alpine.tensor.Tensors;
     Tensor t8_10 = xxyyyyxy.multiply(P1_20160);
     Tensor xyxxxxxy = adx.dot(yxxxxxy);
     Tensor t8_11 = xyxxxxxy.multiply(N1_20160);
-    Tensor xyxxyxxy = adx.dot(yxxyxxy);
-    Tensor t8_12 = xyxxyxxy.multiply(N1_15120);
+    Tensor xyxxxyxy = adx.dot(yxxxyxy);
+    Tensor t8_12 = xyxxxyxy.multiply(N1_15120);
     Tensor xyxxyyxy = adx.dot(yxxyyxy);
     Tensor t8_13 = xyxxyyxy.multiply(P1_6720);
     Tensor xyxyxxxy = adx.dot(yxyxxxy);
@@ -214,8 +200,8 @@ import ch.alpine.tensor.Tensors;
     Tensor t8_16 = xyxyyyxy.multiply(N1_6300);
     Tensor xyyxxxxy = adx.dot(yyxxxxy);
     Tensor t8_17 = xyyxxxxy.multiply(P1_12096);
-    Tensor xyyxyxxy = adx.dot(yyxyxxy);
-    Tensor t8_18 = xyyxyxxy.multiply(P1_3360);
+    Tensor xyyxxyxy = adx.dot(yyxxyxy);
+    Tensor t8_18 = xyyxxyxy.multiply(P1_3360);
     Tensor xyyxyyxy = adx.dot(yyxyyxy);
     Tensor t8_19 = xyyxyyxy.multiply(P1_8400);
     Tensor xyyyxxxy = adx.dot(yyyxxxy);

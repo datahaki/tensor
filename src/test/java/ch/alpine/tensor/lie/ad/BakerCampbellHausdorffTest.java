@@ -110,11 +110,11 @@ public class BakerCampbellHausdorffTest extends TestCase {
       _check(TestHelper.so3(), d);
   }
 
-  public void testSparse() {
+  public void testSparse() throws ClassNotFoundException, IOException {
     CliffordAlgebra cliffordAlgebra = CliffordAlgebra.of(1, 2);
     Tensor cp = cliffordAlgebra.cp();
     assertTrue(cp instanceof SparseArray);
-    BinaryOperator<Tensor> binaryOperator = BakerCampbellHausdorff.of(cp, 3);
+    BinaryOperator<Tensor> binaryOperator = Serialization.copy(BakerCampbellHausdorff.of(cp, 3));
     int n = cp.length();
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     Random random = new Random(1234);

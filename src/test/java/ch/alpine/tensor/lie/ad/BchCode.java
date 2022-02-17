@@ -6,6 +6,7 @@ import java.util.LinkedHashSet;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.num.Denominator;
@@ -15,11 +16,13 @@ import ch.alpine.tensor.sca.Sign;
 public enum BchCode {
   ;
   public static void main(String[] args) {
-    int n = 10;
+    int n = 6;
     BchTrace bchTrace = new BchTrace(n);
     Set<String> set1 = new HashSet<>();
     Set<Scalar> setConst = new LinkedHashSet<>();
-    for (int d = 1; d <= n; ++d) {
+    System.out.println("// d = " + 1);
+    System.out.println("Tensor t1 = x.add(y);");
+    for (int d = 2; d <= n; ++d) {
       System.out.println("// d = " + d);
       int cnt = 0;
       StringBuilder stringBuilder = new StringBuilder();
@@ -47,20 +50,24 @@ public enum BchCode {
           }
           // Scalar num = Numerator.FUNCTION.apply(value);
           // Scalar den = Denominator.FUNCTION.apply(value);
-          System.out.println("Tensor " + var + " = " + key + ".multiply(" + cns(value) + ");");
+          if (value.equals(RealScalar.ONE))
+            System.out.println("Tensor " + var + " = " + key + ";");
+          else
+            System.out.println("Tensor " + var + " = " + key + ".multiply(" + cns(value) + ");");
           ++cnt;
         }
       }
       System.out.println("Tensor t" + d + " = " + stringBuilder + ";");
     }
     System.out.println("// ---");
-    for (Scalar value : setConst) {
-      Scalar num = Numerator.FUNCTION.apply(value);
-      Scalar den = Denominator.FUNCTION.apply(value);
-      String cns = (Sign.isPositiveOrZero(num) ? "P" + num : "N" + num.negate()) + "_" + den;
-      String rat = "private static final Scalar " + cns + " = RationalScalar.of(" + num + ", " + den + ");";
-      System.out.println(rat);
-    }
+    for (Scalar value : setConst)
+      if (!value.equals(RealScalar.ONE)) {
+        Scalar num = Numerator.FUNCTION.apply(value);
+        Scalar den = Denominator.FUNCTION.apply(value);
+        String cns = (Sign.isPositiveOrZero(num) ? "P" + num : "N" + num.negate()) + "_" + den;
+        String rat = "private static final Scalar " + cns + " = RationalScalar.of(" + num + ", " + den + ");";
+        System.out.println(rat);
+      }
   }
 
   private static String cns(Scalar value) {

@@ -1,21 +1,12 @@
 // code by jph
 package ch.alpine.tensor.lie.ad;
 
-import java.io.Serializable;
-
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-/** the explicit computation of the terms in the series is about 8-10 times
- * faster than using {@link BakerCampbellHausdorff}
- * 
- * References:
- * 1) Neeb
- * 2) "Baker-Campbell-Hausdorff formula" Wikipedia */
-/* package */ class BchSeries06 extends BchSeries implements Serializable {
-  private static final Scalar P1_1 = RationalScalar.of(1, 1);
+/* package */ class BchSeries6 extends BchSeries {
   private static final Scalar P1_2 = RationalScalar.of(1, 2);
   private static final Scalar P1_12 = RationalScalar.of(1, 12);
   private static final Scalar N1_12 = RationalScalar.of(-1, 12);
@@ -29,11 +20,9 @@ import ch.alpine.tensor.Tensors;
   private static final Scalar N1_1440 = RationalScalar.of(-1, 1440);
   private static final Scalar P1_240 = RationalScalar.of(1, 240);
   private static final Scalar P1_1440 = RationalScalar.of(1, 1440);
-  // ---
-  private final Tensor ad;
 
-  public BchSeries06(Tensor ad) {
-    this.ad = JacobiIdentity.require(ad);
+  public BchSeries6(Tensor ad) {
+    super(ad);
   }
 
   @Override
@@ -41,9 +30,7 @@ import ch.alpine.tensor.Tensors;
     Tensor adx = ad.dot(x);
     Tensor ady = ad.dot(y);
     // d = 1
-    Tensor t1_0 = x.multiply(P1_1);
-    Tensor t1_1 = y.multiply(P1_1);
-    Tensor t1 = t1_0.add(t1_1);
+    Tensor t1 = x.add(y);
     // d = 2
     Tensor xy = adx.dot(y);
     Tensor t2_0 = xy.multiply(P1_2);
@@ -62,9 +49,8 @@ import ch.alpine.tensor.Tensors;
     Tensor xxxy = adx.dot(xxy);
     Tensor xxxxy = adx.dot(xxxy);
     Tensor t5_0 = xxxxy.multiply(N1_720);
-    Tensor yxxy = ady.dot(xxy);
-    Tensor xyxxy = adx.dot(yxxy);
-    Tensor t5_1 = xyxxy.multiply(N1_120);
+    Tensor xxyxy = adx.dot(xyxy);
+    Tensor t5_1 = xxyxy.multiply(N1_120);
     Tensor yyxy = ady.dot(yxy);
     Tensor xyyxy = adx.dot(yyxy);
     Tensor t5_2 = xyyxy.multiply(N1_360);
@@ -76,8 +62,8 @@ import ch.alpine.tensor.Tensors;
     Tensor t5_5 = yyyxy.multiply(P1_720);
     Tensor t5 = t5_0.add(t5_1).add(t5_2).add(t5_3).add(t5_4).add(t5_5);
     // d = 6
-    Tensor xxyxxy = adx.dot(xyxxy);
-    Tensor t6_0 = xxyxxy.multiply(N1_1440);
+    Tensor xxxyxy = adx.dot(xxyxy);
+    Tensor t6_0 = xxxyxy.multiply(N1_1440);
     Tensor xxyyxy = adx.dot(xyyxy);
     Tensor t6_1 = xxyyxy.multiply(N1_720);
     Tensor xyxxxy = adx.dot(yxxxy);

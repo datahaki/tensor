@@ -2,7 +2,6 @@
 // adapted from code by jph 2006
 package ch.alpine.tensor.lie.ad;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
@@ -35,7 +34,7 @@ import ch.alpine.tensor.sca.Factorial;
  * Hakenberg.de kernel.nb
  * 
  * @see MatrixAlgebra */
-public class BakerCampbellHausdorff extends BchSeries implements Serializable {
+public class BakerCampbellHausdorff extends BchSeries {
   private static final Scalar _0 = RealScalar.ZERO;
   private static final Scalar _1 = RealScalar.ONE;
   private static final int[] SIGN = { 1, -1 };
@@ -48,9 +47,9 @@ public class BakerCampbellHausdorff extends BchSeries implements Serializable {
    * @return */
   public static BinaryOperator<Tensor> of(Tensor ad, int degree, Chop chop) {
     return switch (degree) {
-    case 6 -> new BchSeries06(ad);
-    case 8 -> new BchSeries08(ad);
-    case 10 -> new BchSeries10(ad);
+    case 6 -> new BchSeries6(ad);
+    case 8 -> new BchSeries8(ad);
+    case 10 -> new BchSeriesA(ad);
     default -> new BakerCampbellHausdorff(ad, degree, chop);
     };
   }
@@ -63,12 +62,11 @@ public class BakerCampbellHausdorff extends BchSeries implements Serializable {
   }
 
   // ---
-  private final Tensor ad;
   private final int degree;
   private final Chop chop;
 
   public BakerCampbellHausdorff(Tensor ad, int degree, Chop chop) {
-    this.ad = JacobiIdentity.require(ad);
+    super(ad);
     this.degree = Integers.requirePositive(degree);
     this.chop = Objects.requireNonNull(chop);
   }
