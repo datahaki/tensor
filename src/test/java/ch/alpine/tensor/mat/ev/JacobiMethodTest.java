@@ -16,8 +16,10 @@ import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.DiagonalMatrix;
+import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.mat.NullSpace;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Det;
@@ -154,6 +156,17 @@ public class JacobiMethodTest extends TestCase {
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     assertTrue(eigensystem.vectors().Get(3, 3) instanceof DecimalScalar);
     assertTrue(eigensystem.values().Get(4) instanceof DecimalScalar);
+  }
+
+  public void testComplex() {
+    Tensor matrix = Tensors.fromString("{{2, 3-3*I}, {3+3*I, 5}}");
+    HermitianMatrixQ.require(matrix);
+    Scalar det = Det.of(matrix);
+    assertEquals(det, RealScalar.of(-8));
+    Tensor ns8 = NullSpace.of(matrix.subtract(IdentityMatrix.of(2).multiply(RealScalar.of(8))));
+    assertEquals(ns8.length(), 1);
+    Tensor ns1 = NullSpace.of(matrix.subtract(IdentityMatrix.of(2).multiply(RealScalar.of(-1))));
+    assertEquals(ns1.length(), 1);
   }
 
   public void testPackageVisibility() {

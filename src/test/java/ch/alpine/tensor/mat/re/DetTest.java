@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -19,6 +20,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
@@ -210,6 +212,19 @@ public class DetTest extends TestCase {
     Tensor tensor = Tensors.fromString("{{1[m], 2}, {4, 5[s]}, {3, 5}}");
     AssertFail.of(() -> Det.of(tensor));
     // assertEquals(Det.of(tensor), Quantity.of(0, ""));
+  }
+
+  public void testQuantity1() {
+    Scalar qs1 = Quantity.of(1, "m");
+    Scalar qs2 = Quantity.of(2, "m");
+    Scalar qs3 = Quantity.of(3, "rad");
+    Scalar qs4 = Quantity.of(4, "rad");
+    Tensor ve1 = Tensors.of(qs1.multiply(qs1), qs2.multiply(qs3));
+    Tensor ve2 = Tensors.of(qs2.multiply(qs3), qs4.multiply(qs4));
+    Tensor mat = Tensors.of(ve1, ve2);
+    Scalar det = Det.of(mat);
+    ExactScalarQ.require(det);
+    assertEquals(det, Scalars.fromString("-20[m^2*rad^2]"));
   }
 
   public void testFailMatrixQ() {

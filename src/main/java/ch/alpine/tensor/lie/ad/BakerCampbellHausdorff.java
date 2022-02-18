@@ -43,13 +43,14 @@ public class BakerCampbellHausdorff extends BchSeries {
    * 
    * @param ad tensor of rank 3 that satisfies the Jacobi identity
    * @param degree strictly positive, depth of series
-   * @param chop tolerance for early abort
+   * @param chop tolerance for truncation of recursive calls
    * @return */
   public static BinaryOperator<Tensor> of(Tensor ad, int degree, Chop chop) {
+    Objects.requireNonNull(chop);
     return switch (degree) {
-    case 6 -> new BchSeries6(ad);
-    case 8 -> new BchSeries8(ad);
-    case 10 -> new BchSeriesA(ad);
+    case 0x6 -> new BchSeries6(ad);
+    case 0x8 -> new BchSeries8(ad);
+    case 0xA -> new BchSeriesA(ad);
     default -> new BakerCampbellHausdorff(ad, degree, chop);
     };
   }

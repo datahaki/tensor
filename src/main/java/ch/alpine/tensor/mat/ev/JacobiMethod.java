@@ -35,6 +35,8 @@ import ch.alpine.tensor.sca.Sign;
  * 
  * Quote: "You cannot find eigenvectors (or eigenvalues) in a finite number
  * of exact "arithmetic" steps for matrices of size n > 4." */
+// TODO generalize to hermitian matrices
+// https://en.wikipedia.org/wiki/Jacobi_method_for_complex_Hermitian_matrices
 /* package */ class JacobiMethod implements Eigensystem {
   private static final int MAX_ITERATIONS = 50;
   // higher phase 1 count increases numerical precision

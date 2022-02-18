@@ -84,7 +84,7 @@ public enum Orthogonalize {
    * @return matrix of size k x n that satisfies {@link OrthogonalMatrixQ}
    * @throws Exception if given matrix does not have maximal rank k */
   public static Tensor usingPD(Tensor matrix) {
-    return PolarDecomposition.of(matrix).getR();
+    return PolarDecomposition.of(matrix).getQ();
   }
 
   // ---

@@ -110,6 +110,16 @@ public class BakerCampbellHausdorffTest extends TestCase {
       _check(TestHelper.so3(), d);
   }
 
+  public void testOptimized() {
+    Tensor ad = TestHelper.sl2();
+    assertTrue(BakerCampbellHausdorff.of(ad, 6) instanceof BchSeries6);
+    assertTrue(BakerCampbellHausdorff.of(ad, 8) instanceof BchSeries8);
+    assertTrue(BakerCampbellHausdorff.of(ad, 10) instanceof BchSeriesA);
+    assertTrue(BakerCampbellHausdorff.of(ad, 6, Chop._02) instanceof BchSeries6);
+    assertTrue(BakerCampbellHausdorff.of(ad, 8, Chop._02) instanceof BchSeries8);
+    assertTrue(BakerCampbellHausdorff.of(ad, 10, Chop._02) instanceof BchSeriesA);
+  }
+
   public void testSparse() throws ClassNotFoundException, IOException {
     CliffordAlgebra cliffordAlgebra = CliffordAlgebra.of(1, 2);
     Tensor cp = cliffordAlgebra.cp();
@@ -136,6 +146,11 @@ public class BakerCampbellHausdorffTest extends TestCase {
     BakerCampbellHausdorff.of(ad, 1);
     AssertFail.of(() -> BakerCampbellHausdorff.of(ad, 1, null));
     AssertFail.of(() -> BakerCampbellHausdorff.of(ad, 0));
+  }
+
+  public void testChopNullFail() {
+    Tensor ad = TestHelper.sl2();
+    AssertFail.of(() -> BakerCampbellHausdorff.of(ad, 6, null));
   }
 
   public void testMatrixLogExpExpSe2() {

@@ -13,7 +13,7 @@ import ch.alpine.tensor.red.Total;
  * 1) Neeb
  * 2) "Baker-Campbell-Hausdorff formula" Wikipedia */
 /* package */ abstract class BchSeries implements BakerCampbellHausdorffSeries, Serializable {
-  final Tensor ad;
+  protected final Tensor ad;
 
   public BchSeries(Tensor ad) {
     this.ad = JacobiIdentity.require(ad);
