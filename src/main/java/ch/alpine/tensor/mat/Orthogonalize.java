@@ -8,6 +8,7 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.PadRight;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.TensorProduct;
+import ch.alpine.tensor.mat.pd.PolarDecomposition;
 import ch.alpine.tensor.mat.qr.QRDecomposition;
 import ch.alpine.tensor.mat.qr.QRMathematica;
 import ch.alpine.tensor.mat.qr.QRSignOperators;
@@ -84,7 +85,7 @@ public enum Orthogonalize {
    * @return matrix of size k x n that satisfies {@link OrthogonalMatrixQ}
    * @throws Exception if given matrix does not have maximal rank k */
   public static Tensor usingPD(Tensor matrix) {
-    return PolarDecomposition.of(matrix).getQ();
+    return PolarDecomposition.su(matrix).getUnitary();
   }
 
   // ---

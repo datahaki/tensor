@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.N;
 /** implementation also operates on matrices with mixed units, for example:
  * {{-4/5[m^-2], 3/10[m^-1*rad^-1]}, {3/10[m^-1*rad^-1], -1/20[rad^-2]}}
  * 
- * Experiments suggest that the iterative method works well for matrices
+ * Experiments suggest that the iterative method also works well for matrices
  * with non-zero imaginary part.
  * 
  * Reference: Pseudo Inverse Wikipedia */
