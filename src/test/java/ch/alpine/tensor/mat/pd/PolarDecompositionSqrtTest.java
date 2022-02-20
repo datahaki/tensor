@@ -20,7 +20,6 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.re.Det;
-import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.CauchyDistribution;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
@@ -114,7 +113,5 @@ public class PolarDecompositionSqrtTest extends TestCase {
     Tensor matrix = RandomVariate.of(CauchyDistribution.standard(), random, 5, 3);
     PolarDecomposition pd_qs = PolarDecomposition.up(matrix);
     Tolerance.CHOP.requireClose(pd_qs.getUnitary().dot(pd_qs.getPositiveSemidefinite()), matrix);
-    SvdUp pd_kq = new SvdUp(SingularValueDecomposition.of(matrix));
-    Tolerance.CHOP.requireClose(pd_kq.getUnitary().dot(pd_kq.getPositiveSemidefinite()), matrix);
   }
 }

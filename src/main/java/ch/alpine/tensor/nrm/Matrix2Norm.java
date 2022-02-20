@@ -11,10 +11,9 @@ import ch.alpine.tensor.sca.Sqrt;
 
 public enum Matrix2Norm {
   ;
-  /** uses SVD for matrices
-   * 
-   * @param matrix
-   * @return 2-norm of given matrix */
+  /** @param matrix
+   * @return 2-norm of given matrix
+   * @see SingularValueList */
   public static Scalar of(Tensor matrix) {
     return SingularValueList.of(matrix).Get(0);
   }

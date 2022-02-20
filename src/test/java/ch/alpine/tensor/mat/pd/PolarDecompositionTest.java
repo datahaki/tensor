@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.mat.pd;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -11,7 +10,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
-import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
@@ -21,14 +19,11 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.re.Det;
-import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.c.CauchyDistribution;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.Sqrt;
 import junit.framework.TestCase;
 
 public class PolarDecompositionTest extends TestCase {
@@ -95,15 +90,6 @@ public class PolarDecompositionTest extends TestCase {
     }
   }
 
-  public void testStrang() throws ClassNotFoundException, IOException {
-    Tensor matrix = Tensors.fromString("{{3, 0}, {4, 5}}");
-    PolarDecomposition polarDecomposition = Serialization.copy(PolarDecomposition.pu(matrix));
-    Tensor s = polarDecomposition.getPositiveSemidefinite().multiply(Sqrt.FUNCTION.apply(RealScalar.of(5)));
-    Tensor expect = Tensors.fromString("{{6, 3}, {3, 14}}");
-    // TODO strang p67 says otherwise
-    Tolerance.CHOP.requireClose(s, expect);
-  }
-
   public void testComplex() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
     Tensor mmt = MatrixDotTranspose.of(matrix, Conjugate.of(matrix));
@@ -115,14 +101,5 @@ public class PolarDecompositionTest extends TestCase {
     UnitaryMatrixQ.require(result, Chop._06);
     _check(matrix, polarDecomposition);
     // System.out.println(Pretty.of(herm));
-  }
-
-  public void testSvd() {
-    Random random = new Random(3);
-    Tensor matrix = RandomVariate.of(CauchyDistribution.standard(), random, 5, 3);
-    PolarDecomposition pd_qs = PolarDecomposition.pu(matrix);
-    Tolerance.CHOP.requireClose(pd_qs.getPositiveSemidefinite().dot(pd_qs.getUnitary()), matrix);
-    SvdPu pd_kq = new SvdPu(SingularValueDecomposition.of(matrix));
-    Tolerance.CHOP.requireClose(pd_kq.getPositiveSemidefinite().dot(pd_kq.getUnitary()), matrix);
   }
 }

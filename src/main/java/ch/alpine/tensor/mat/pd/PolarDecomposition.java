@@ -8,7 +8,6 @@ import ch.alpine.tensor.mat.Orthogonalize;
 import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.ex.MatrixSqrt;
-import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 
 /** Q is unitary and P is symmetric/hermitian positive semi-definite
  * 
@@ -26,7 +25,7 @@ public interface PolarDecomposition {
     int cols = Unprotect.dimension1Hint(matrix);
     return matrix.length() <= cols //
         ? new SqrtPu(matrix)
-        : new SvdPu(SingularValueDecomposition.of(matrix));
+        : PolarDecompositionSvd.pu(matrix);
   }
 
   /** Hint: for a matrix A with rows < cols, the decomposition involves
@@ -39,7 +38,7 @@ public interface PolarDecomposition {
     int cols = Unprotect.dimension1Hint(matrix);
     return matrix.length() <= cols //
         ? new SqrtUp(matrix)
-        : new SvdUp(SingularValueDecomposition.of(matrix));
+        : PolarDecompositionSvd.up(matrix);
   }
 
   /** Quote from Strang: "P is the symmetric positive definite square root of A^T.A"
