@@ -14,10 +14,10 @@ import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.sca.Sqrt;
 import junit.framework.TestCase;
 
-public class SvdUsTest extends TestCase {
+public class SvdUpTest extends TestCase {
   public void testStrang() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.fromString("{{3, 0}, {4, 5}}");
-    PolarDecomposition polarDecomposition = Serialization.copy(new SvdUs(SingularValueDecomposition.of(matrix)));
+    PolarDecomposition polarDecomposition = Serialization.copy(new SvdUp(SingularValueDecomposition.of(matrix)));
     Tensor q = polarDecomposition.getUnitary();
     OrthogonalMatrixQ.require(q);
     Tensor qe = Tensors.fromString("{{2, -1}, {1, 2}}").divide(Sqrt.FUNCTION.apply(RealScalar.of(5)));

@@ -6,13 +6,13 @@ import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.red.Times;
 
-/* package */ class SvdUs extends PolarDecompositionSvd {
-  public SvdUs(SingularValueDecomposition svd) {
+/* package */ class SvdPu extends PolarDecompositionSvd {
+  public SvdPu(SingularValueDecomposition svd) {
     super(svd);
   }
 
   @Override // from PolarDecomposition
   public Tensor getPositiveSemidefinite() {
-    return MatrixDotTranspose.of(Tensor.of(svd.getV().stream().map(row -> Times.of(svd.values(), row))), svd.getV());
+    return MatrixDotTranspose.of(Tensor.of(svd.getU().stream().map(Times.operator(svd.values()))), svd.getU());
   }
 }

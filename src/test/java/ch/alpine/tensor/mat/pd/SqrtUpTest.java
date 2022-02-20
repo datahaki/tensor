@@ -11,12 +11,12 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 import junit.framework.TestCase;
 
-public class SqrtUsTest extends TestCase {
+public class SqrtUpTest extends TestCase {
   public void testRectangle() {
     Random random = new Random(2);
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, n, n);
-      PolarDecomposition polarDecomposition = new SqrtUs(matrix);
+      PolarDecomposition polarDecomposition = new SqrtUp(matrix);
       Tensor s = polarDecomposition.getPositiveSemidefinite();
       Tensor u = polarDecomposition.getUnitary();
       Tensor tensor = polarDecomposition.getUnitary().dot(s);

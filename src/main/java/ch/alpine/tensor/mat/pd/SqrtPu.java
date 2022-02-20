@@ -5,8 +5,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
 import ch.alpine.tensor.mat.ex.MatrixSqrt;
 
-/* package */ class SqrtSu extends PolarDecompositionSqrt {
-  public SqrtSu(Tensor matrix) {
+/* package */ class SqrtPu extends PolarDecompositionSqrt {
+  public SqrtPu(Tensor matrix) {
     super(matrix, MatrixSqrt.of(MatrixDotConjugateTranspose.of(matrix)));
   }
 
