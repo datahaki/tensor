@@ -17,7 +17,6 @@ public class PolarDecompositionBaseTest extends TestCase {
     PolarDecomposition polarDecomposition = Serialization.copy(PolarDecomposition.pu(matrix));
     Tensor s = polarDecomposition.getPositiveSemidefinite().multiply(Sqrt.FUNCTION.apply(RealScalar.of(5)));
     Tensor expect = Tensors.fromString("{{6, 3}, {3, 14}}");
-    // TODO strang p67 says otherwise
     Tolerance.CHOP.requireClose(s, expect);
   }
 }

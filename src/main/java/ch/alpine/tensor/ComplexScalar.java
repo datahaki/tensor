@@ -26,8 +26,9 @@ import ch.alpine.tensor.sca.Sin;
  * 
  * <p>interface {@link Comparable} is not implemented */
 public interface ComplexScalar extends Scalar, //
-    AbsInterface, ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, ExpInterface, //
-    LogInterface, PowerInterface, RoundingInterface, SignInterface, SqrtInterface, TrigonometryInterface {
+    AbsInterface, ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, //
+    ExpInterface, LogInterface, PowerInterface, RoundingInterface, SignInterface, //
+    SqrtInterface, TrigonometryInterface {
   /** complex number I == 0+1*I */
   Scalar I = of(0, 1);
 

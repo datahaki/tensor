@@ -26,11 +26,11 @@ import ch.alpine.tensor.red.Times;
 
   // ---
   private final SingularValueDecomposition svd;
-  private final Tensor orth;
+  private final Tensor basis;
 
-  public PolarDecompositionSvd(SingularValueDecomposition svd, Tensor orth) {
+  public PolarDecompositionSvd(SingularValueDecomposition svd, Tensor basis) {
     this.svd = svd;
-    this.orth = orth;
+    this.basis = basis;
   }
 
   @Override // from PolarDecomposition
@@ -40,6 +40,6 @@ import ch.alpine.tensor.red.Times;
 
   @Override // from PolarDecomposition
   public Tensor getPositiveSemidefinite() {
-    return MatrixDotTranspose.of(Tensor.of(orth.stream().map(Times.operator(svd.values()))), orth);
+    return MatrixDotTranspose.of(Tensor.of(basis.stream().map(Times.operator(svd.values()))), basis);
   }
 }

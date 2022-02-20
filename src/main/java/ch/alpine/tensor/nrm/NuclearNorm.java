@@ -7,7 +7,8 @@ import ch.alpine.tensor.mat.sv.SingularValueList;
 import ch.alpine.tensor.red.Total;
 
 /** Reference:
- * Gilbert Strang */
+ * "Linear Algebra learning from Data"
+ * by G. Strang, 2019 */
 public enum NuclearNorm {
   ;
   /** @param matrix

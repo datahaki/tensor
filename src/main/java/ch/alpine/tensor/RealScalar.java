@@ -11,7 +11,6 @@ import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.api.ConjugateInterface;
 import ch.alpine.tensor.api.ExpInterface;
 import ch.alpine.tensor.api.LogInterface;
-import ch.alpine.tensor.api.NumberInterface;
 import ch.alpine.tensor.api.PowerInterface;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.SignInterface;
@@ -28,8 +27,8 @@ import ch.alpine.tensor.api.TrigonometryInterface;
  * </ul> */
 public interface RealScalar extends Scalar, //
     AbsInterface, ArcTanInterface, ArgInterface, Comparable<Scalar>, ComplexEmbedding, //
-    ConjugateInterface, ExpInterface, LogInterface, NumberInterface, PowerInterface, //
-    RoundingInterface, SignInterface, SqrtInterface, TrigonometryInterface {
+    ConjugateInterface, ExpInterface, LogInterface, PowerInterface, RoundingInterface, //
+    SignInterface, SqrtInterface, TrigonometryInterface {
   /** real scalar 0 as a {@link RationalScalar} */
   Scalar ZERO = RationalScalar.integer(0);
   /** real scalar 1 as a {@link RationalScalar} */

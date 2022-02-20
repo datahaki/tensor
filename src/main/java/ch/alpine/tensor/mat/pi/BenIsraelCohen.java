@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.pi;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -18,7 +19,7 @@ import ch.alpine.tensor.sca.N;
  * {{-4/5[m^-2], 3/10[m^-1*rad^-1]}, {3/10[m^-1*rad^-1], -1/20[rad^-2]}}
  * 
  * Experiments suggest that the iterative method also works well for matrices
- * with non-zero imaginary part.
+ * with complex entries, i.e. scalars of type {@link ComplexScalar}.
  * 
  * Reference: Pseudo Inverse Wikipedia */
 /* package */ class BenIsraelCohen {

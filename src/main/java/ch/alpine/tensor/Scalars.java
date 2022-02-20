@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-import ch.alpine.tensor.api.NumberInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.Divisible;
@@ -200,23 +199,5 @@ public enum Scalars {
       return Optional.of(rationalScalar.numerator());
     Objects.requireNonNull(scalar);
     return Optional.empty();
-  }
-
-  public static Number number(Scalar scalar) {
-    if (scalar instanceof NumberInterface numberInterface)
-      return numberInterface.number();
-    throw TensorRuntimeException.of(scalar);
-  }
-
-  public static double doubleValue(Scalar scalar) {
-    if (scalar instanceof NumberInterface numberInterface)
-      return numberInterface.number().doubleValue();
-    throw TensorRuntimeException.of(scalar);
-  }
-
-  public static long longValue(Scalar scalar) {
-    if (scalar instanceof NumberInterface numberInterface)
-      return numberInterface.number().longValue();
-    throw TensorRuntimeException.of(scalar);
   }
 }

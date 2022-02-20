@@ -9,7 +9,13 @@ import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.ex.MatrixSqrt;
 
-/** Q is unitary and P is symmetric/hermitian positive semi-definite
+/** implementations either decompose a given matrix into the product
+ * 
+ * matrix == U . P, or
+ * matrix == P . U
+ * 
+ * where U is unitary and P is symmetric/hermitian positive semi-definite,
+ * with varying dimensions depending on the decomposition.
  * 
  * Reference:
  * "Meshless Deformations Based on Shape Matching"
@@ -41,7 +47,7 @@ public interface PolarDecomposition {
         : PolarDecompositionSvd.up(matrix);
   }
 
-  /** Quote from Strang: "P is the symmetric positive definite square root of A^T.A"
+  /** Quote from Strang: "P is the symmetric positive definite square root of A^T . A"
    * 
    * @return symmetric/hermitian positive semi-definite matrix k x k
    * @see PositiveSemidefiniteMatrixQ#ofHermitian(Tensor) */
