@@ -33,7 +33,7 @@ public enum Differences {
   }
 
   private static final AdjacentReduce ADJACENT_REDUCE = new AdjacentReduce() {
-    @Override
+    @Override // from AdjacentReduce
     protected Tensor reduce(Tensor prev, Tensor next) {
       return next.subtract(prev);
     }

@@ -18,7 +18,7 @@ public enum CentralMoment {
    * @return
    * @throws Exception if given vector is empty */
   public static Scalar of(Tensor vector, Scalar order) {
-    Scalar nmean = (Scalar) Mean.of(vector).negate();
+    Scalar nmean = Mean.ofVector(vector).negate();
     return vector.stream() //
         .map(nmean::add) //
         .map(Power.function(order)) //

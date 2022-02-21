@@ -22,7 +22,7 @@ public class MeanTest extends TestCase {
   public void testLimitTheorem() {
     Random random = new Random();
     Tensor tensor = Array.of(l -> RealScalar.of(100 + 100 * random.nextGaussian()), 10000);
-    Scalar mean1 = (Scalar) Mean.of(tensor);
+    Scalar mean1 = Mean.ofVector(tensor);
     Scalar mean2 = Total.ofVector(tensor.multiply(RealScalar.of(tensor.length()).reciprocal()));
     // possibly use error relative to magnitude
     Chop._10.requireClose(mean1, mean2);

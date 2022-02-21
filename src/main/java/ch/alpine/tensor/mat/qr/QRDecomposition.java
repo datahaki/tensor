@@ -62,7 +62,7 @@ public interface QRDecomposition {
   /** @return orthogonal matrix */
   Tensor getQ();
 
-  /** @return determinant of matrix */
+  /** @return determinant of matrix only up to sign */
   Scalar det();
 
   /** method performs

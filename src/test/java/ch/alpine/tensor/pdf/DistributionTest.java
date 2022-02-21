@@ -23,9 +23,9 @@ import junit.framework.TestCase;
 
 public class DistributionTest extends TestCase {
   private static void _check(Distribution distribution, int n) {
-    Tensor collect = RandomVariate.of(distribution, n);
-    Scalar mean = (Scalar) Mean.of(collect); // measured mean
-    Scalar var = Variance.ofVector(collect); // measured variance
+    Tensor vector = RandomVariate.of(distribution, n);
+    Scalar mean = Mean.ofVector(vector); // measured mean
+    Scalar var = Variance.ofVector(vector); // measured variance
     assertTrue(Scalars.nonZero(var));
     Scalar tmean = Expectation.mean(distribution); // theoretical mean
     Scalar tvar = Expectation.variance(distribution); // theoretical variance

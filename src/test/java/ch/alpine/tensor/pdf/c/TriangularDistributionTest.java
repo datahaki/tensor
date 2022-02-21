@@ -49,7 +49,7 @@ public class TriangularDistributionTest extends TestCase {
     Scalar b = RealScalar.of(2);
     Scalar c = RealScalar.of(3);
     Distribution distribution = TriangularDistribution.of(a, b, c);
-    Scalar mean = (Scalar) Mean.of(RandomVariate.of(distribution, 100));
+    Scalar mean = Mean.ofVector(RandomVariate.of(distribution, 100));
     Clips.interval(1.5, 2.5).requireInside(mean);
     assertEquals(Mean.of(distribution), RealScalar.of(2));
   }
@@ -95,7 +95,7 @@ public class TriangularDistributionTest extends TestCase {
     Scalar c = RealScalar.of(2);
     Distribution distribution = TriangularDistribution.of(a, b, c);
     assertEquals(Mean.of(distribution), RationalScalar.of(4, 3));
-    Scalar mean = (Scalar) Mean.of(RandomVariate.of(distribution, 100));
+    Scalar mean = Mean.ofVector(RandomVariate.of(distribution, 100));
     Clips.interval(1.2, 1.5).requireInside(mean);
   }
 
@@ -128,7 +128,7 @@ public class TriangularDistributionTest extends TestCase {
     Scalar b = RealScalar.of(2);
     Distribution distribution = TriangularDistribution.of(a, b, b);
     assertEquals(Mean.of(distribution), RationalScalar.of(5, 3));
-    Scalar mean = (Scalar) Mean.of(RandomVariate.of(distribution, 100));
+    Scalar mean = Mean.ofVector(RandomVariate.of(distribution, 100));
     Clips.interval(1.5, 1.8).requireInside(mean);
   }
 

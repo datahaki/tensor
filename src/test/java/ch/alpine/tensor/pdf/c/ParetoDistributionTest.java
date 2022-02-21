@@ -43,7 +43,7 @@ public class ParetoDistributionTest extends TestCase {
     Scalar mean = Mean.of(distribution);
     Scalar varc = Variance.of(distribution);
     Tensor tensor = RandomVariate.of(distribution, 1000);
-    Scalar empiricalMean = (Scalar) Mean.of(tensor);
+    Scalar empiricalMean = Mean.ofVector(tensor);
     Scalar empiricalVarc = Variance.ofVector(tensor);
     Chop chop = Chop.below(0.3);
     chop.requireClose(mean, empiricalMean);

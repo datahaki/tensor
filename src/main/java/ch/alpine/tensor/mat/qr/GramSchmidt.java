@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.qr;
 import java.io.Serializable;
 import java.util.stream.IntStream;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
@@ -16,8 +17,6 @@ import ch.alpine.tensor.sca.Conjugate;
 
 /** the {@link GramSchmidt} algorithm is efficient for obtaining the {@link InfluenceMatrix}
  * for matrices, including rank-deficient matrices.
- * 
- * TODO it would be nice to achieve Det[Q] == +1 for A square (as is the case for QRDImpl)
  * 
  * Reference:
  * Chapter "Gram-Schmidt with Column Pivoting"
@@ -44,9 +43,10 @@ public class GramSchmidt extends QRDecompositionBase implements Serializable {
       Tensor a = matrix;
       Tensor norms = Tensor.of(IntStream.range(0, m).mapToObj(l -> Vector2Norm.of(a.get(Tensor.ALL, l))));
       _sigma[i] = ArgMax.of(norms.map(Unprotect::withoutUnit));
-      if (Tolerance.CHOP.isZero(norms.Get(_sigma[i])))
+      Scalar norm = norms.Get(_sigma[i]);
+      if (Tolerance.CHOP.isZero(norm))
         break;
-      Tensor q = Vector2Norm.NORMALIZE.apply(a.get(Tensor.ALL, _sigma[i]));
+      Tensor q = Vector2Norm.NORMALIZE.apply(a.get(Tensor.ALL, _sigma[i]).divide(norm));
       Tensor qc = Conjugate.of(q);
       qInv.append(qc);
       Tensor ri = qc.dot(matrix);

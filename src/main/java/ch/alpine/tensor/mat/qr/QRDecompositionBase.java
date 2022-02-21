@@ -22,7 +22,7 @@ import ch.alpine.tensor.mat.ConjugateTranspose;
   }
 
   @Override // from QRDecomposition
-  public final Scalar det() { // only exact up to sign
+  public final Scalar det() {
     Tensor r = getR();
     Tensor qct = getQConjugateTranspose();
     if (r.length() == Unprotect.dimension1Hint(r) && // check if R is square

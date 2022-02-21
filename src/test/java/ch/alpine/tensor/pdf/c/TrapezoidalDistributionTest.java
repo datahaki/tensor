@@ -86,7 +86,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     Distribution distribution = TrapezoidalDistribution.of(a, b, c, d);
     Tensor all = RandomVariate.of(distribution, 3000);
     Scalar meanCalc = Mean.of(distribution);
-    Scalar meanSamples = (Scalar) Mean.of(all);
+    Scalar meanSamples = Mean.ofVector(all);
     Scalar diff = Abs.between(meanCalc, meanSamples);
     assertTrue(Scalars.lessEquals(diff, RealScalar.of(0.5)));
   }

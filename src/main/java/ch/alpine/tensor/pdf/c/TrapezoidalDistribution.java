@@ -58,7 +58,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
 
   /** @param mean
    * @param sigma
-   * @param spread
+   * @param spread between sqrt(3) and sqrt(6), i.e. in the interval [1.73205..., 2.44949...]
    * @return distribution with support in the interval
    * [mean - sigma * spread, mean + sigma * spread]
    * and variance of sigma ^ 2 */
@@ -71,7 +71,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
 
   /** @param mean
    * @param sigma
-   * @param spread
+   * @param spread between sqrt(3) and sqrt(6), i.e. in the interval [1.73205..., 2.44949...]
    * @return distribution with support in the interval
    * [mean - sigma * spread, mean + sigma * spread]
    * and variance of sigma ^ 2 */
