@@ -16,6 +16,7 @@ public enum StringTensor {
    * 
    * @param strings
    * @return */
+  @SafeVarargs
   public static Tensor vector(String... strings) {
     return Tensor.of(Stream.of(strings).map(StringScalar::of));
   }

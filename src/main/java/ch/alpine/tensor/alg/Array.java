@@ -36,6 +36,7 @@ public enum Array {
    * @param dimensions with non-negative entries
    * @return tensor with given dimensions and entries as function(index)
    * @throws Exception if any dimension is negative */
+  @SafeVarargs
   public static Tensor of(Function<List<Integer>, ? extends Tensor> function, int... dimensions) {
     return of(function, Integers.asList(dimensions));
   }
@@ -64,6 +65,7 @@ public enum Array {
   /** @param supplier
    * @param dimensions
    * @return */
+  @SafeVarargs
   public static Tensor fill(Supplier<? extends Scalar> supplier, int... dimensions) {
     return fill(supplier, 0, Integers.asList(dimensions));
   }
@@ -102,6 +104,7 @@ public enum Array {
    * @param dimensions
    * @return tensor of {@link RealScalar#ZERO} with given dimensions
    * @throws Exception if any of the integer parameters is negative */
+  @SafeVarargs
   public static Tensor zeros(int... dimensions) {
     return zeros(Integers.asList(dimensions));
   }
@@ -118,6 +121,7 @@ public enum Array {
 
   /** @param dimensions
    * @return empty sparse array with given dimensions and {@link RealScalar#ZERO} as fallback */
+  @SafeVarargs
   public static Tensor sparse(int... dimensions) {
     return SparseArray.of(RealScalar.ZERO, dimensions);
   }
@@ -129,6 +133,7 @@ public enum Array {
    * @param consumer maps given index to {@link Tensor}, or {@link Scalar}
    * @param dimensions with non-negative entries
    * @throws Exception if any dimension is negative */
+  @SafeVarargs
   public static void forEach(Consumer<List<Integer>> consumer, int... dimensions) {
     forEach(consumer, Integers.asList(dimensions));
   }

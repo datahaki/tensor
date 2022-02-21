@@ -22,6 +22,7 @@ public class StrictColorDataIndexed extends BaseColorDataIndexed {
 
   /** @param colors
    * @return palette of given colors where index maps to colors[index] */
+  @SafeVarargs
   public static ColorDataIndexed of(Color... colors) {
     return new StrictColorDataIndexed(Tensor.of(Arrays.stream(colors).map(ColorFormat::toVector)));
   }

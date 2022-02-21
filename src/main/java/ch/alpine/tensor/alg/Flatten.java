@@ -29,6 +29,7 @@ public enum Flatten {
    * 
    * @param tensors one or more
    * @return */
+  @SafeVarargs
   public static Tensor of(Tensor... tensors) {
     // input and output share references to scalar instances only
     // therefore Tensor::copy is not necessary

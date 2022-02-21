@@ -30,6 +30,7 @@ public enum Join {
    * @param tensors
    * @return joins tensors along dimension level
    * @throws Exception if any of the given tensors is a Scalar */
+  @SafeVarargs
   public static Tensor of(int level, Tensor... tensors) {
     return of(level, Arrays.asList(tensors));
   }
@@ -42,6 +43,7 @@ public enum Join {
    * @param tensors
    * @return joins elements of all tensors along their first dimension
    * @throws Exception if any of the given tensors is a scalar */
+  @SafeVarargs
   public static Tensor of(Tensor... tensors) {
     return of(0, Arrays.asList(tensors));
   }

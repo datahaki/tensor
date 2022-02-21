@@ -44,6 +44,7 @@ public enum ArrayReshape {
    * @param size
    * @return
    * @see #of(Stream, List) */
+  @SafeVarargs
   public static Tensor of(Stream<? extends Tensor> stream, int... size) {
     return of(stream, Integers.asList(size));
   }
@@ -61,6 +62,7 @@ public enum ArrayReshape {
    * @param dimensions non-empty
    * @return
    * @see #of(Tensor, List) */
+  @SafeVarargs
   public static Tensor of(Tensor tensor, int... dimensions) {
     return of(tensor, Integers.asList(dimensions));
   }

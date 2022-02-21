@@ -71,6 +71,7 @@ public enum Transpose {
    * @param sigma is a permutation with sigma.length less or equals to rank of tensor
    * @return
    * @throws Exception if sigma is not a permutation */
+  @SafeVarargs
   public static Tensor of(Tensor tensor, int... sigma) {
     if (sigma.length == 0)
       return tensor.copy();
