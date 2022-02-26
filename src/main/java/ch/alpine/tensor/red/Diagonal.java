@@ -5,7 +5,10 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 
-/** implementation is consistent with Mathematica:
+/** {@link #of(Tensor)} requies the input to have array structure up to level 2
+ * 
+ * {@link #mathematica(Tensor)} is consistent with Mathematica.
+ * 
  * <pre>
  * Diagonal[{{{0}, 1}, {2, 3}, {4, 5}}] == {{0}, 3}
  * Diagonal[{1, 2, 3, 4}] => {}
@@ -16,14 +19,37 @@ import ch.alpine.tensor.Unprotect;
  * Diagonal[3] => Exception
  * </pre>
  * 
+ * Mathematica additionally defines
+ * <pre>
+ * Diagonal[{{1}, {2}, {4, 5, 6}}] == {1}
+ * Diagonal[{{1}, {2, 3}, {4, 5, 6}}] == {1, 3, 6}
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Diagonal.html">Diagonal</a> */
 public enum Diagonal {
   ;
   /** @param tensor
    * @return vector of entries on diagonal of given tensor
-   * @throws Exception if tensor is a scalar */
+   * @throws Exception if tensor is a scalar
+   * @throws Exception if tensors on level 1 have different {@link Tensor#length()} */
   public static Tensor of(Tensor tensor) {
-    return Tensors.vector(i -> tensor.get(i, i), Math.min(tensor.length(), Unprotect.dimension1(tensor)));
+    int cols = Unprotect.dimension1(tensor);
+    return Tensors.vector(i -> tensor.get(i, i), Math.min(tensor.length(), cols));
+  }
+
+  /** @param tensor
+   * @return */
+  public static Tensor mathematica(Tensor tensor) {
+    Tensor vector = Tensors.empty();
+    int count = 0;
+    for (Tensor row : tensor) {
+      if (count < row.length())
+        vector.append(row.get(count));
+      else
+        break;
+      ++count;
+    }
+    return vector;
   }
 }

@@ -42,12 +42,13 @@ public class GramSchmidtTest extends TestCase {
   }
 
   public void testRankDeficientLeastSquares() {
+    Random random = new Random(1); // 5 yields sigma = {0,1,2}
     Distribution distribution = TrapezoidalDistribution.with(0, 1, 2);
-    Tensor m1 = RandomVariate.of(distribution, 8, 4);
-    Tensor m2 = RandomVariate.of(distribution, 4, 5);
+    Tensor m1 = RandomVariate.of(distribution, random, 8, 4);
+    Tensor m2 = RandomVariate.of(distribution, random, 4, 5);
     Tensor matrix = m1.dot(m2);
     assertEquals(MatrixRank.of(matrix), 4);
-    Tensor b = RandomVariate.of(distribution, 8);
+    Tensor b = RandomVariate.of(distribution, random, 8);
     Tensor x1 = LeastSquares.usingSvd(matrix, b);
     assertEquals(x1.length(), 5);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);

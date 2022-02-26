@@ -18,6 +18,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Sign;
@@ -75,7 +76,7 @@ public class LogNormalDistributionTest extends TestCase {
     for (int count = 0; count < 10; ++count) {
       Scalar x = RandomVariate.of(distribution);
       Scalar q = inverseCDF.quantile(cdf.p_lessEquals(x));
-      Tolerance.CHOP.requireClose(x, q);
+      Chop._10.requireClose(x, q);
     }
   }
 

@@ -37,7 +37,8 @@ public enum Hypot {
   }
 
   /** @param a without unit
-   * @return Sqrt[ |a|^2 + 1 ] */
+   * @return Sqrt[ |a|^2 + 1 ]
+   * @throws Exception if a has a unit */
   public static Scalar withOne(Scalar a) {
     Scalar ax = Abs.FUNCTION.apply(a);
     Scalar one = ax.one();
