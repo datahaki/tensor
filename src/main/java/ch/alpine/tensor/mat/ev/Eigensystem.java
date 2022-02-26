@@ -30,7 +30,7 @@ public interface Eigensystem {
    * @param chop threshold to check symmetry of matrix
    * @return */
   static Eigensystem ofSymmetric(Tensor matrix, Chop chop) {
-    return new EigensystemImpl(matrix, chop);
+    return new EigensystemImpl(new JacobiMethod(matrix, chop));
   }
 
   /** Careful: Mathematica orders the eigenvalues according to absolute value.

@@ -5,6 +5,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.BasisTransform;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.ScalarArray;
@@ -13,6 +14,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.ev.JacobiRotation.Inner;
 import ch.alpine.tensor.sca.Abs;
 import junit.framework.TestCase;
 
@@ -34,6 +36,7 @@ public class JacobiRotationTest extends TestCase {
     SymmetricMatrixQ.require(a);
     Tensor Vt = Transpose.of(V);
     Tolerance.CHOP.requireClose(matrix, Dot.of(Vt, a, V));
+    Tolerance.CHOP.requireClose(matrix, BasisTransform.ofMatrix(a, V));
   }
 
   public void testOneStep() {
@@ -49,12 +52,28 @@ public class JacobiRotationTest extends TestCase {
           Scalar g = HUNDRED.multiply(Apq);
           // ---
           _check(matrix, A, V);
-          JacobiRotation.one(A, V, p, q, g);
+          JacobiRotation.transform(A, V, p, q, g);
           _check(matrix, A, V);
-          {
-            // Tensor a = Tensors.matrix(A);
-            // System.out.println(Pretty.of(a));
-          }
         }
+  }
+
+  public void testEmulation() {
+    Tensor matrix = HilbertMatrix.of(4).unmodifiable();
+    Scalar[][] A = ScalarArray.ofMatrix(matrix);
+    Tensor V = IdentityMatrix.of(A.length);
+    int p = 1;
+    int q = 2;
+    JacobiRotation jacobiRotation = new JacobiRotation(A, V, p, q);
+    Scalar apq = A[p][q];
+    Scalar Apq = Abs.FUNCTION.apply(apq);
+    Scalar g = HUNDRED.multiply(Apq);
+    Scalar t = jacobiRotation.t(g);
+    Inner inner = jacobiRotation.new Inner(t);
+    inner.transform();
+    Tensor r = inner.rotation();
+    Tolerance.CHOP.requireClose(V, Transpose.of(r));
+    Tolerance.CHOP.requireClose( //
+        Tensors.matrix(A), //
+        BasisTransform.of(matrix, 1, r));
   }
 }

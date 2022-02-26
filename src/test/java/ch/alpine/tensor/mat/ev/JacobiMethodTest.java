@@ -1,4 +1,4 @@
-// code by guedelmi
+// code by guedelmi, jph
 package ch.alpine.tensor.mat.ev;
 
 import java.lang.reflect.Modifier;

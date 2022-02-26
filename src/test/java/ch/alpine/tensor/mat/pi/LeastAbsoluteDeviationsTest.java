@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.mat.pi;
 
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.nrm.Vector1Norm;
@@ -20,11 +19,11 @@ public class LeastAbsoluteDeviationsTest extends TestCase {
     Tensor matrix = RandomVariate.of(distribution, 8, 4);
     Tensor b = RandomVariate.of(distribution, 8);
     Tensor x0 = LeastSquares.of(matrix, b);
-    System.out.println(error(matrix, x0, b));
-    System.out.println(error(matrix, LeastAbsoluteDeviations.of(matrix, b, RealScalar.of(0.001)), b));
-    System.out.println(error(matrix, LeastAbsoluteDeviations.of(matrix, b, RealScalar.of(0.01)), b));
-    System.out.println(error(matrix, LeastAbsoluteDeviations.of(matrix, b, RealScalar.of(0.1)), b));
-    System.out.println(error(matrix, LeastAbsoluteDeviations.of(matrix, b, RealScalar.of(1)), b));
-    System.out.println(error(matrix, LeastAbsoluteDeviations.of(matrix, b, RealScalar.of(10)), b));
+    // System.out.println(error(matrix, x0, b));
+    // System.out.println(error(matrix, LeastAbsoluteDeviations.of(matrix, b, RealScalar.of(0.001)), b));
+    // System.out.println(error(matrix, LeastAbsoluteDeviations.of(matrix, b, RealScalar.of(0.01)), b));
+    // System.out.println(error(matrix, LeastAbsoluteDeviations.of(matrix, b, RealScalar.of(0.1)), b));
+    // System.out.println(error(matrix, LeastAbsoluteDeviations.of(matrix, b, RealScalar.of(1)), b));
+    // System.out.println(error(matrix, LeastAbsoluteDeviations.of(matrix, b, RealScalar.of(10)), b));
   }
 }

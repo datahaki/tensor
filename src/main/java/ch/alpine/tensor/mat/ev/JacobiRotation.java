@@ -7,6 +7,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Sign;
@@ -26,10 +27,9 @@ import ch.alpine.tensor.sca.Sign;
    * @param p
    * @param q
    * @param g */
-  public static void one(Scalar[][] A, Tensor V, int p, int q, Scalar g) {
+  public static void transform(Scalar[][] A, Tensor V, int p, int q, Scalar g) {
     JacobiRotation jacobiRotation = new JacobiRotation(A, V, p, q);
-    Scalar t = jacobiRotation.t(g);
-    jacobiRotation.new Inner(Hypot.withOne(t), t).one();
+    jacobiRotation.new Inner(jacobiRotation.t(g)).transform();
   }
 
   private final Scalar[][] A;
@@ -37,14 +37,14 @@ import ch.alpine.tensor.sca.Sign;
   private final int p;
   private final int q;
 
-  private JacobiRotation(Scalar[][] A, Tensor V, int p, int q) {
+  JacobiRotation(Scalar[][] A, Tensor V, int p, int q) {
     this.A = A;
     this.V = V;
     this.p = p;
     this.q = q;
   }
 
-  private Scalar t(Scalar g) {
+  Scalar t(Scalar g) {
     Scalar apq = A[p][q];
     Scalar h = A[q][q].subtract(A[p][p]);
     if (Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(h))))
@@ -54,60 +54,66 @@ import ch.alpine.tensor.sca.Sign;
     return Sign.isPositiveOrZero(theta) ? t : t.negate();
   }
 
-  private class Inner {
-    final Scalar ci;
-    final Scalar t;
+  class Inner {
+    private final Scalar ci;
+    private final Scalar t;
 
-    private Inner(Scalar ci, Scalar t) {
-      this.ci = ci;
+    Inner(Scalar t) {
+      this.ci = Hypot.withOne(t);
       this.t = t;
     }
 
-    private void one() {
-      Scalar apq = A[p][q];
-      { // update diagonal
-        Scalar h = t.multiply(apq);
-        A[p][p] = A[p][p].subtract(h);
-        A[q][q] = A[q][q].add(h);
-      }
+    void transform() {
       int n = A.length;
-      { // update symmetric matrix
-        A[p][q] = apq.zero();
-        A[q][p] = apq.zero();
-        IntStream.range(00000, p).forEach(j -> a(j, p, j, q));
-        IntStream.range(p + 1, q).forEach(j -> a(p, j, j, q));
-        IntStream.range(q + 1, n).forEach(j -> a(p, j, q, j));
+      { // preserve original values
+        Scalar h = t.multiply(A[p][q]);
+        Scalar app = A[p][p].subtract(h);
+        Scalar aqq = A[q][q].add(h);
+        // basis transform of symmetric matrix
+        IntStream.range(0, n).forEach(j -> a(p, j, q, j));
+        IntStream.range(0, n).forEach(j -> a(j, p, j, q));
+        A[p][p] = app;
+        A[q][q] = aqq;
       }
-      { // update vectors
-        IntStream.range(00000, n).forEach(j -> v(p, j, q, j));
+      { // multiplication from left
+        Tensor vp = V.get(p);
+        Tensor vq = V.get(q);
+        V.set(vp.subtract(vq.multiply(t)).divide(ci), p);
+        V.set(vq.add(vp.multiply(t)).divide(ci), q);
       }
     }
 
-    private class Jr2 {
+    private class Transform {
       final Scalar rij;
       final Scalar rkl;
 
       // TraceTest shows that division by ci is better that multiplication with ci.reciprocal()
-      public Jr2(Scalar aij, Scalar akl) {
+      public Transform(Scalar aij, Scalar akl) {
         rij = aij.subtract(akl.multiply(t)).divide(ci);
         rkl = akl.add(aij.multiply(t)).divide(ci);
       }
     }
 
     private void a(int i, int j, int k, int l) {
-      Jr2 jr2 = new Jr2(A[i][j], A[k][l]);
+      Transform jr2 = new Transform(A[i][j], A[k][l]);
       A[i][j] = jr2.rij;
       A[k][l] = jr2.rkl;
-      // TODO comment out again
-      // maintain symmetric for dev checks
-      A[j][i] = jr2.rij;
-      A[l][k] = jr2.rkl;
     }
 
-    private void v(int i, int j, int k, int l) {
-      Jr2 jr2 = new Jr2(V.Get(i, j), V.Get(k, l));
-      V.set(jr2.rij, i, j);
-      V.set(jr2.rkl, k, l);
+    // for testing
+    Tensor rotation() {
+      Tensor tensor = IdentityMatrix.of(A.length);
+      {
+        Scalar c = ci.reciprocal();
+        tensor.set(c, p, p);
+        tensor.set(c, q, q);
+      }
+      {
+        Scalar s = t.divide(ci);
+        tensor.set(s, p, q);
+        tensor.set(s.negate(), q, p);
+      }
+      return tensor;
     }
   }
 }

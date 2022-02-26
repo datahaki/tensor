@@ -137,7 +137,7 @@ public interface Tensor extends Iterable<Tensor> {
    * instance is a {@link Scalar}, or a vector. */
   Scalar Get(int i, int j);
 
-  /** set copy of tensor as element at location this[index[0], index[1], ...].
+  /** set copy of given tensor as element at location this[index[0], index[1], ...].
    * The operation is invalid if this tensor has been cast as unmodifiable.
    * 
    * <p>Tensor.ALL in the index array refers to all elements along that dimension.
@@ -155,7 +155,7 @@ public interface Tensor extends Iterable<Tensor> {
    * @throws Exception if this instance is unmodifiable */
   void set(Tensor tensor, int... index);
 
-  /** set copy of tensor as element at location this[index[0], index[1], ...].
+  /** set copy of given tensor as element at location this[index[0], index[1], ...].
    * 
    * @param tensor of which a copy replaces the existing element(s) at given index of this instance
    * @param index non-empty list

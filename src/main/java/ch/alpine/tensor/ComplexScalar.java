@@ -72,8 +72,8 @@ public interface ComplexScalar extends Scalar, //
     return fromPolar(RealScalar.of(abs), RealScalar.of(arg));
   }
 
-  /** @param arg
-   * @return complex number on unit circle with given argument */
+  /** @param arg angle
+   * @return Exp[I * angle], i.e. complex number on unit circle with given argument */
   static Scalar unit(Scalar arg) {
     if (arg instanceof ComplexScalar)
       throw TensorRuntimeException.of(arg);

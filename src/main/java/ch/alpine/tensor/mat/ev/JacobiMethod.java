@@ -39,8 +39,6 @@ import ch.alpine.tensor.sca.Chop;
  * 
  * Quote: "You cannot find eigenvectors (or eigenvalues) in a finite number
  * of exact "arithmetic" steps for matrices of size n > 4." */
-// TODO generalize to hermitian matrices
-// https://en.wikipedia.org/wiki/Jacobi_method_for_complex_Hermitian_matrices
 /* package */ class JacobiMethod implements Eigensystem {
   private static final int MAX_ITERATIONS = 50;
   // higher phase 1 count increases numerical precision
@@ -57,6 +55,7 @@ import ch.alpine.tensor.sca.Chop;
   /* A stores all elements of the square matrix, but the iteration
    * reads and modifies only the elements on and above the diagonal */
   private final Scalar[][] A;
+  // TODO perhaps use Tensor[] V
   private final Tensor V;
 
   public JacobiMethod(Tensor matrix, Chop chop) {
@@ -89,7 +88,7 @@ import ch.alpine.tensor.sca.Chop;
             A[q][p] = apq.zero();
           } else //
           if (Scalars.lessThan(tresh, Apq))
-            JacobiRotation.one(A, V, p, q, g);
+            JacobiRotation.transform(A, V, p, q, g);
         }
     }
     throw TensorRuntimeException.of(matrix);

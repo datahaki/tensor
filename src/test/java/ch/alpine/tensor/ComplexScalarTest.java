@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -66,6 +67,13 @@ public class ComplexScalarTest extends TestCase {
 
   public void testPolarNumberFail() {
     AssertFail.of(() -> ComplexScalar.fromPolar(-1, 3));
+  }
+
+  public void testUnitExp() {
+    Scalar theta = RealScalar.of(0.3);
+    Tolerance.CHOP.requireClose( //
+        Exp.FUNCTION.apply(theta.multiply(ComplexScalar.I)), //
+        ComplexScalar.unit(theta));
   }
 
   public void testUnitFail() {
