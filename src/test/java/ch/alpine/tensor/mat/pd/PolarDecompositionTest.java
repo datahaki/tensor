@@ -13,7 +13,6 @@ import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
-import ch.alpine.tensor.mat.Orthogonalize;
 import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;

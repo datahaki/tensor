@@ -14,7 +14,8 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Real;
 import ch.alpine.tensor.sca.Sign;
 
-/** https://en.wikipedia.org/wiki/Jacobi_method_for_complex_Hermitian_matrices */
+/** Reference:
+ * https://en.wikipedia.org/wiki/Jacobi_method_for_complex_Hermitian_matrices */
 /* package */ class JacobiComplex extends JacobiMethod {
   /** @param matrix hermitian
    * @param chop */
@@ -49,6 +50,7 @@ import ch.alpine.tensor.sca.Sign;
                   H[i][q] = hip.multiply(givensComplex.cqp).add(hiq.multiply(givensComplex.cqq));
                 }
               }
+              // TODO assert that imag is really close to zero
               H[p][p] = Real.FUNCTION.apply(H[p][p]);
               H[q][q] = Real.FUNCTION.apply(H[q][q]);
               { // update V

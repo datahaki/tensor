@@ -8,7 +8,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Ordering;
 
-/** container class to host results of {@link JacobiReal} */
+/** container class to host results of unsorted {@link Eigensystem} and convert
+ * to {@link Eigensystem} with eigenvalues sorted in decreasing order. */
 /* package */ class EigensystemImpl implements Eigensystem, Serializable {
   private final Tensor d;
   private final Tensor V;

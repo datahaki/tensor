@@ -1,10 +1,12 @@
 // code by jph
 package ch.alpine.tensor.mat.pd;
 
+import java.io.Serializable;
+
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.ex.MatrixSqrt;
 
-/* package */ abstract class PolarDecompositionSqrt extends PolarDecompositionBase {
+/* package */ abstract class PolarDecompositionSqrt extends PolarDecompositionBase implements Serializable {
   final Tensor matrix;
   final MatrixSqrt matrixSqrt;
 

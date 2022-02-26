@@ -4,7 +4,6 @@ package ch.alpine.tensor.mat.pd;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
-import ch.alpine.tensor.mat.Orthogonalize;
 import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.ex.MatrixSqrt;

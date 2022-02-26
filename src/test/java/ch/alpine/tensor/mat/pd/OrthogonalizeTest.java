@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.pd;
 
 import java.util.Arrays;
 
@@ -13,6 +13,12 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.lie.r2.AngleVector;
+import ch.alpine.tensor.mat.DiagonalMatrix;
+import ch.alpine.tensor.mat.HermitianMatrixQ;
+import ch.alpine.tensor.mat.MatrixDotTranspose;
+import ch.alpine.tensor.mat.OrthogonalMatrixQ;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.num.Pi;
@@ -229,7 +235,6 @@ public class OrthogonalizeTest extends TestCase {
       Tolerance.CHOP.requireClose(matrix, Orthogonalize.of(matrix));
       Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingSvd(matrix));
       Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingPD(matrix));
-      Tolerance.CHOP.requireClose(matrix, Orthogonalize.unprotected(matrix));
     }
   }
 
@@ -240,14 +245,6 @@ public class OrthogonalizeTest extends TestCase {
     assertEquals(rdetn1, Orthogonalize.of(matrix));
     assertEquals(rdetp1, Orthogonalize.usingSvd(matrix));
     assertEquals(rdetn1, Orthogonalize.usingPD(matrix));
-    assertEquals(rdetp1, Orthogonalize.unprotected(matrix));
-  }
-
-  public void testTransposeUsingSvd() {
-    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 3);
-    Tensor result = Orthogonalize.unprotected(matrix);
-    OrthogonalMatrixQ.require(Transpose.of(result));
-    assertEquals(Dimensions.of(result), Dimensions.of(matrix));
   }
 
   public void testUsingSvdFail() {

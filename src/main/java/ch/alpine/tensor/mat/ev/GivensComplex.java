@@ -9,6 +9,10 @@ import ch.alpine.tensor.sca.Cos;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Sin;
 
+/** encodes the product of two complex rotation matrices
+ * 
+ * Reference:
+ * https://en.wikipedia.org/wiki/Jacobi_method_for_complex_Hermitian_matrices */
 /* package */ class GivensComplex {
   final Scalar rpp;
   final Scalar rpq;
@@ -19,6 +23,8 @@ import ch.alpine.tensor.sca.Sin;
   final Scalar cqp;
   final Scalar cqq;
 
+  /** @param theta1
+   * @param theta2 */
   public GivensComplex(Scalar theta1, Scalar theta2) {
     Chop.NONE.requireZero(Imag.FUNCTION.apply(theta1));
     Chop.NONE.requireZero(Imag.FUNCTION.apply(theta2));

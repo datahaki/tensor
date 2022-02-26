@@ -1,20 +1,17 @@
 // code by jph
-package ch.alpine.tensor.mat;
+package ch.alpine.tensor.mat.pd;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.PadRight;
-import ch.alpine.tensor.alg.Transpose;
-import ch.alpine.tensor.lie.TensorProduct;
-import ch.alpine.tensor.mat.pd.PolarDecomposition;
+import ch.alpine.tensor.mat.ConjugateTranspose;
+import ch.alpine.tensor.mat.OrthogonalMatrixQ;
+import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.qr.QRDecomposition;
 import ch.alpine.tensor.mat.qr.QRMathematica;
 import ch.alpine.tensor.mat.qr.QRSignOperators;
-import ch.alpine.tensor.mat.re.Det;
-import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
-import ch.alpine.tensor.sca.Sign;
 
 /** API inspired by Mathematica convention:
  * The matrices that are input to the functions in Orthogonalize are interpreted as list of vectors
@@ -30,6 +27,7 @@ import ch.alpine.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Orthogonalize.html">Orthogonalize</a>
  * 
+ * @see PolarDecomposition
  * @see OrthogonalMatrixQ
  * @see UnitaryMatrixQ */
 public enum Orthogonalize {
@@ -49,7 +47,8 @@ public enum Orthogonalize {
   // ---
   /** Least square orthogonal fit to given matrix
    * 
-   * for input of square matrix, the function returns a matrix with determinant +1
+   * for input of square matrix, the function returns an orthogonal matrix with determinant +1
+   * regardless of whether the input matrix has positive determinant.
    * 
    * Reference:
    * "Least-Squares Rigid Motion Using SVD"
@@ -60,18 +59,11 @@ public enum Orthogonalize {
   public static Tensor usingSvd(Tensor matrix) {
     int k = matrix.length();
     int n = Unprotect.dimension1Hint(matrix);
-    if (k < n) {
-      SingularValueDecomposition svd = SingularValueDecomposition.of(Transpose.of(matrix));
-      return MatrixDotTranspose.of(svd.getV(), svd.getU());
-    }
     if (n < k) // case is forbidden to avoid confusion (despite functionally permissive)
       throw TensorRuntimeException.of(matrix);
-    SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
-    Tensor rotation = MatrixDotTranspose.of(svd.getU(), svd.getV());
-    if (Sign.isPositiveOrZero(Det.of(rotation)))
-      return rotation;
-    Tensor ve = svd.getV().get(Tensor.ALL, n - 1).negate();
-    return rotation.add(TensorProduct.of(svd.getU().get(Tensor.ALL, n - 1), ve.add(ve)));
+    return k < n //
+        ? PolarDecompositionSvd.pu(ConjugateTranspose.of(matrix)).getConjugateTransposeUnitary()
+        : PolarDecompositionSvd.pu(matrix).getUnitaryWithDetOne();
   }
 
   /** Least square orthogonal fit to given matrix
@@ -86,23 +78,5 @@ public enum Orthogonalize {
    * @throws Exception if given matrix does not have maximal rank k */
   public static Tensor usingPD(Tensor matrix) {
     return PolarDecomposition.pu(matrix).getUnitary();
-  }
-
-  // ---
-  /** EXPERIMENTAL
-   * 
-   * for input of square matrix, the function returns a matrix with determinant +1
-   * 
-   * @param matrix of size n x m with m <= n
-   * @return matrix of size n x m of which the transpose satisfies {@link OrthogonalMatrixQ} */
-  public static Tensor unprotected(Tensor matrix) {
-    int n = matrix.length();
-    SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
-    Tensor result = MatrixDotTranspose.of(svd.getU(), svd.getV());
-    if (n == Unprotect.dimension1Hint(matrix) && Sign.isNegative(Det.of(result))) {
-      Tensor ue = svd.getU().get(Tensor.ALL, n - 1).negate();
-      return result.add(TensorProduct.of(ue.add(ue), svd.getV().get(Tensor.ALL, n - 1)));
-    }
-    return result;
   }
 }

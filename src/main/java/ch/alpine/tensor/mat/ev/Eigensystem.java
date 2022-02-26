@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.ev;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
@@ -10,6 +11,8 @@ import ch.alpine.tensor.sca.Chop;
  * LinearSolve.of(vectors, Times.of(values(), vectors)) == matrix
  * Transpose.of(vectors).dot(Times.of(values, vectors)) == matrix
  * </pre>
+ * 
+ * The eigenvalues of a symmetric, or hermitian matrix are real.
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Eigensystem.html">Eigensystem</a> */
@@ -33,13 +36,17 @@ public interface Eigensystem {
     return new EigensystemImpl(new JacobiReal(matrix, chop));
   }
 
+  /** @param matrix hermitian
+   * @return eigenvalue decomposition of given matrix
+   * @see HermitianMatrixQ */
   static Eigensystem ofHermitian(Tensor matrix) {
     return ofHermitian(matrix, Tolerance.CHOP);
   }
 
-  /** @param matrix
+  /** @param matrix hermitian
    * @param chop
-   * @return */
+   * @return eigenvalue decomposition of given matrix
+   * @see HermitianMatrixQ */
   static Eigensystem ofHermitian(Tensor matrix, Chop chop) {
     return new EigensystemImpl(new JacobiComplex(matrix, chop));
   }
