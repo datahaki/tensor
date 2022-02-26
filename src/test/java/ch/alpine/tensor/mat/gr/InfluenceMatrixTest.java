@@ -24,6 +24,7 @@ import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.VandermondeMatrix;
+import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.re.MatrixRank;
@@ -199,6 +200,8 @@ public class InfluenceMatrixTest extends TestCase {
     assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(5));
     Tensor matrix = influenceMatrix.matrix();
     InfluenceMatrixQ.require(matrix);
+    Eigensystem eigensystem = Eigensystem.ofHermitian(matrix);
+    Tolerance.CHOP.requireClose(eigensystem.values(), Tensors.vector(1, 1, 1, 0, 0));
   }
 
   public void testComplex5x3Exact() {

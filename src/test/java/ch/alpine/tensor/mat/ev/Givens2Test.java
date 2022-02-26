@@ -17,14 +17,14 @@ public class Givens2Test extends TestCase {
     int n = 4;
     int p = 1;
     int q = 3;
-    Tensor matrix = new Givens2(n, theta1, theta2, p, q).matrix();
+    Givens2 givens2 = new Givens2(n, theta1, theta2, p, q);
+    Tensor matrix = givens2.matrix();
     Tolerance.CHOP.requireClose(Inverse.of(matrix), ConjugateTranspose.of(matrix));
     Tolerance.CHOP.requireClose( //
         Dot.of( //
             new Givens1(n, theta2, p, q).matrix(), //
             new Givens1(n, theta1, p, q).matrix()), //
         matrix);
-    // Tensor invers = new Givens2(n, theta2.negate(), theta1.negate(), p, q).matrix();
-    // Tolerance.CHOP.requireClose(Inverse.of(matrix), invers);
+    Tolerance.CHOP.requireClose(Inverse.of(matrix), givens2.inverse());
   }
 }

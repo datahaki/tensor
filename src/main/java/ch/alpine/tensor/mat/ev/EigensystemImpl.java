@@ -8,7 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Ordering;
 
-/** container class to host results of {@link JacobiMethod} */
+/** container class to host results of {@link JacobiReal} */
 /* package */ class EigensystemImpl implements Eigensystem, Serializable {
   private final Tensor d;
   private final Tensor V;

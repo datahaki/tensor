@@ -19,6 +19,7 @@ public class LeastAbsoluteDeviationsTest extends TestCase {
     Tensor matrix = RandomVariate.of(distribution, 8, 4);
     Tensor b = RandomVariate.of(distribution, 8);
     Tensor x0 = LeastSquares.of(matrix, b);
+    error(matrix, x0, b);
     // System.out.println(error(matrix, x0, b));
     // System.out.println(error(matrix, LeastAbsoluteDeviations.of(matrix, b, RealScalar.of(0.001)), b));
     // System.out.println(error(matrix, LeastAbsoluteDeviations.of(matrix, b, RealScalar.of(0.01)), b));
