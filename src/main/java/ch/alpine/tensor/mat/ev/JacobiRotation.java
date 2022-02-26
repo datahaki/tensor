@@ -74,6 +74,9 @@ import ch.alpine.tensor.sca.Sign;
         IntStream.range(0, n).forEach(j -> a(j, p, j, q));
         A[p][p] = app;
         A[q][q] = aqq;
+        // SqrtPuTest shows that setting Apq == Aqp == 0 is beneficial
+        A[p][q] = A[p][q].zero();
+        A[q][p] = A[q][p].zero();
       }
       { // multiplication from left
         Tensor vp = V.get(p);
