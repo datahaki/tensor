@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.Power;
@@ -56,6 +57,13 @@ public enum MatrixPower {
    * @param exponent
    * @return */
   public static Tensor ofSymmetric(Tensor matrix, Scalar exponent) {
-    return StaticHelper.mapEv_ofSymmetric(matrix, Tolerance.CHOP, Power.function(exponent));
+    return StaticHelper.mapEv(Eigensystem.ofSymmetric(matrix, Tolerance.CHOP), Power.function(exponent));
+  }
+
+  /** @param matrix
+   * @param exponent
+   * @return */
+  public static Tensor ofHermitian(Tensor matrix, Scalar exponent) {
+    return StaticHelper.mapEv(Eigensystem.ofHermitian(matrix, Tolerance.CHOP), Power.function(exponent));
   }
 }

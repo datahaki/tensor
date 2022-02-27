@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.ev;
 
 import java.util.stream.IntStream;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -12,8 +13,18 @@ import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.sca.Abs;
 
+/** vector of eigen{@link #values()} has strictly zero imaginary part */
 /* package */ class JacobiMethod implements Eigensystem {
   static final int MAX_ITERATIONS = 50;
+  // higher phase 1 count increases numerical precision
+  static final int[] PHASE1 = { //
+      0, 0, 0, // n==0,1,2
+      4, // n==3
+      5, 5, // n==4,5
+      6, 6, 6, 6, // n==6,...,9
+      7 };
+  static final Scalar HUNDRED = DoubleScalar.of(100);
+  static final Scalar EPS = DoubleScalar.of(Math.ulp(1));
   // ---
   protected final int n;
   protected final Scalar[][] H;

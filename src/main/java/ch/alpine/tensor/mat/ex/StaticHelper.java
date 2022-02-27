@@ -5,14 +5,13 @@ import java.util.function.Function;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Cache;
+import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Ceiling;
-import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Log;
 
 /** Hint: implementation makes use of eigenvalue decomposition of
@@ -33,14 +32,13 @@ import ch.alpine.tensor.sca.Log;
     return 1 << Ceiling.longValueExact(LOG2.apply(norm.add(norm.one())));
   }
 
-  /** @param matrix symmetric
+  /** @param matrix hermitian
    * @param scalarUnaryOperator applied to eigenvalues
    * @return resulting matrix is basis of given matrix
    * @throws Exception if input is not a real symmetric matrix */
-  public static Tensor mapEv_ofSymmetric(Tensor matrix, Chop chop, ScalarUnaryOperator scalarUnaryOperator) {
-    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix, chop);
+  public static Tensor mapEv(Eigensystem eigensystem, ScalarUnaryOperator scalarUnaryOperator) {
     Tensor values = eigensystem.values().map(scalarUnaryOperator);
     Tensor vectors = eigensystem.vectors();
-    return Transpose.of(vectors).dot(Times.of(values, vectors));
+    return ConjugateTranspose.of(vectors).dot(Times.of(values, vectors));
   }
 }

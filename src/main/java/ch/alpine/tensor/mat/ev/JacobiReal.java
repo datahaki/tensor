@@ -34,17 +34,6 @@ import ch.alpine.tensor.sca.Chop;
  * Quote: "You cannot find eigenvectors (or eigenvalues) in a finite number
  * of exact "arithmetic" steps for matrices of size n > 4." */
 /* package */ class JacobiReal extends JacobiMethod {
-  // higher phase 1 count increases numerical precision
-  private static final int[] PHASE1 = { //
-      0, 0, 0, // n==0,1,2
-      4, // n==3
-      5, 5, // n==4,5
-      6, 6, 6, 6, // n==6,...,9
-      7 };
-  private static final Scalar HUNDRED = DoubleScalar.of(100);
-  private static final Scalar EPS = DoubleScalar.of(Math.ulp(1));
-  // ---
-
   public JacobiReal(Tensor matrix, Chop chop) {
     super(matrix);
     if (H[0].length != n) // hint whether matrix is square
@@ -63,16 +52,16 @@ import ch.alpine.tensor.sca.Chop;
           : sum.multiply(factor);
       for (int p = 0; p < n - 1; ++p)
         for (int q = p + 1; q < n; ++q) {
-          Scalar apq = H[p][q];
-          Scalar Apq = Abs.FUNCTION.apply(apq);
-          Scalar g = HUNDRED.multiply(Apq);
+          Scalar off = H[p][q];
+          Scalar abs = Abs.FUNCTION.apply(off);
+          Scalar g = HUNDRED.multiply(abs);
           if (phase1 < iteration && //
               Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(diag(p)))) && //
               Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(diag(q))))) {
-            H[p][q] = apq.zero();
-            H[q][p] = apq.zero();
+            H[p][q] = off.zero();
+            H[q][p] = off.zero();
           } else //
-          if (Scalars.lessThan(tresh, Apq))
+          if (Scalars.lessThan(tresh, abs))
             JacobiRotation.transform(H, V, p, q, g);
         }
     }

@@ -5,44 +5,44 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.nrm.NormalizeTotal;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.red.Mean;
-import ch.alpine.tensor.red.Total;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/MixtureDistribution.html">MixtureDistribution</a> */
 public class MixtureDistribution implements Distribution, PDF, CDF, MeanInterface, //
     RandomVariateInterface, Serializable {
-  /** @param weights
+  /** @param unscaledPDF
    * @param distributions
    * @return */
-  public static Distribution of(Tensor weights, Distribution... distributions) {
+  @SafeVarargs
+  public static Distribution of(Tensor unscaledPDF, Distribution... distributions) {
     return new MixtureDistribution( //
-        NormalizeTotal.FUNCTION.apply(weights), //
+        unscaledPDF, //
         Arrays.asList(distributions));
   }
 
   // ---
-  private final Tensor weights;
-  private final List<Distribution> list;
   private final CategoricalDistribution categoricalDistribution;
+  private final List<Distribution> list;
 
   private MixtureDistribution(Tensor unscaledPDF, List<Distribution> list) {
     categoricalDistribution = CategoricalDistribution.fromUnscaledPDF(unscaledPDF);
-    Tolerance.CHOP.requireClose(Total.of(unscaledPDF), RealScalar.ONE);
-    this.weights = unscaledPDF;
     this.list = list;
   }
 
-  private Scalar dot(Function<Distribution, Scalar> f) {
-    return (Scalar) weights.dot(Tensor.of(list.stream().map(f)));
+  private Scalar dot(Function<Distribution, Scalar> function) {
+    AtomicInteger atomicInteger = new AtomicInteger();
+    return list.stream() //
+        .map(function) //
+        .map(scalar -> scalar.multiply(categoricalDistribution.p_equals(atomicInteger.getAndIncrement()))) //
+        .reduce(Scalar::add) //
+        .orElseThrow();
   }
 
   @Override // from PDF

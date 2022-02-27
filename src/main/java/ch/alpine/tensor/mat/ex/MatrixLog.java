@@ -13,6 +13,7 @@ import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.nrm.Matrix2Norm;
 import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Sign;
@@ -80,7 +81,13 @@ public enum MatrixLog {
    * @return
    * @see PositiveDefiniteMatrixQ */
   public static Tensor ofSymmetric(Tensor matrix) {
-    return StaticHelper.mapEv_ofSymmetric(matrix, Tolerance.CHOP, MatrixLog::logPositive);
+    return StaticHelper.mapEv(Eigensystem.ofSymmetric(matrix, Tolerance.CHOP), MatrixLog::logPositive);
+  }
+
+  /** @param matrix
+   * @return */
+  public static Tensor ofHermitian(Tensor matrix) {
+    return StaticHelper.mapEv(Eigensystem.ofHermitian(matrix, Tolerance.CHOP), MatrixLog::logPositive);
   }
 
   // helper function

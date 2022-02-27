@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Sqrt;
@@ -20,17 +20,15 @@ import ch.alpine.tensor.sca.Sqrt;
  * Edited by Xavier Pennec, Sommer, P. Thomas Fletcher, p. 80
  * 
  * @see MatrixPower */
-/* package */ class MatrixSqrtSymmetric implements MatrixSqrt, Serializable {
+/* package */ class MatrixSqrtEigensystem implements MatrixSqrt, Serializable {
   private final Tensor avec;
   private final Tensor ainv;
   private final Tensor sqrt;
 
-  /** @param matrix
-   * @throws Exception if input is not a real symmetric matrix */
-  public MatrixSqrtSymmetric(Tensor matrix) {
-    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+  /** @param eigensystem */
+  public MatrixSqrtEigensystem(Eigensystem eigensystem) {
     avec = eigensystem.vectors();
-    ainv = Transpose.of(avec);
+    ainv = ConjugateTranspose.of(avec);
     sqrt = eigensystem.values().map(Sqrt.FUNCTION);
   }
 
