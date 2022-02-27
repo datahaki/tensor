@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import java.io.IOException;
+import java.util.Random;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RandomQuaternion;
@@ -13,6 +14,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.Polynomial;
+import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.qty.Quantity;
@@ -76,9 +78,11 @@ public class FitTest extends TestCase {
   }
 
   public void testLinear() {
+    Random random = new Random(2);
     Polynomial polynomial = Polynomial.of(Tensors.vector(-2., 3., 0.5));
+    Distribution distribution = TriangularDistribution.of(-2, 1, 2);
     for (int n = 5; n < 10; ++n) {
-      Tensor xdata = RandomVariate.of(TriangularDistribution.of(-2, 1, 2), n);
+      Tensor xdata = RandomVariate.of(distribution, random, n);
       Tensor ydata = xdata.map(polynomial);
       Polynomial fit = Fit.polynomial(xdata, ydata, 4);
       assertEquals(fit.degree(), polynomial.degree());
