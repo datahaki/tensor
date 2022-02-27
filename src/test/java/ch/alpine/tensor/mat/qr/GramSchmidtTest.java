@@ -15,16 +15,21 @@ import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.VandermondeMatrix;
+import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.mat.re.LinearSolve;
+import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
-import ch.alpine.tensor.pdf.NormalDistribution;
+import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GramSchmidtTest extends TestCase {
@@ -34,6 +39,22 @@ public class GramSchmidtTest extends TestCase {
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, res);
     OrthogonalMatrixQ.require(qrDecomposition.getQConjugateTranspose());
+  }
+
+  public void testRankDeficientLeastSquares() {
+    Random random = new Random(1); // 5 yields sigma = {0,1,2}
+    Distribution distribution = TrapezoidalDistribution.with(0, 1, 2);
+    Tensor m1 = RandomVariate.of(distribution, random, 8, 4);
+    Tensor m2 = RandomVariate.of(distribution, random, 4, 5);
+    Tensor matrix = m1.dot(m2);
+    assertEquals(MatrixRank.of(matrix), 4);
+    Tensor b = RandomVariate.of(distribution, random, 8);
+    Tensor x1 = LeastSquares.usingSvd(matrix, b);
+    assertEquals(x1.length(), 5);
+    QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
+    Tensor rhs = qrDecomposition.getQConjugateTranspose().dot(b);
+    assertEquals(rhs.length(), 4);
+    AssertFail.of(() -> qrDecomposition.pseudoInverse());
   }
 
   public void testQuantity() {
@@ -130,9 +151,12 @@ public class GramSchmidtTest extends TestCase {
     }
   }
 
-  public void testDetRect() {
-    // FIXME
-    // assertEquals(GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 3, 2)).det(), RealScalar.ZERO);
+  public void testDetRect1() {
+    QRDecomposition qrDecomposition = GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 3, 2));
+    assertEquals(qrDecomposition.det(), RealScalar.ZERO);
+  }
+
+  public void testDetRect2() {
     assertEquals(GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 2, 3)).det(), RealScalar.ZERO);
   }
 }

@@ -19,35 +19,41 @@ public enum HomeDirectory {
 
   /** @param strings
    * @return /home/$USERNAME/string[0]/string[1]/... */
+  @SafeVarargs
   public static File file(String... strings) {
     return concat(USER_HOME, strings);
   }
 
   /** @param strings
    * @return /home/$USERNAME/Desktop/string[0]/string[1]/... */
+  @SafeVarargs
   public static File Desktop(String... strings) {
     return subfolder("Desktop", strings);
   }
 
   /** @param strings
    * @return /home/$USERNAME/Documents/string[0]/string[1]/... */
+  @SafeVarargs
   public static File Documents(String... strings) {
     return subfolder("Documents", strings);
   }
 
   /** @param strings
    * @return /home/$USERNAME/Downloads/string[0]/string[1]/... */
+  @SafeVarargs
   public static File Downloads(String... strings) {
     return subfolder("Downloads", strings);
   }
 
   /** @param strings
    * @return /home/$USERNAME/Pictures/string[0]/string[1]/... */
+  @SafeVarargs
   public static File Pictures(String... strings) {
     return subfolder("Pictures", strings);
   }
 
   // helper function
+  @SafeVarargs
   private static File subfolder(String folder, String... strings) {
     File file = file(folder);
     file.mkdir();

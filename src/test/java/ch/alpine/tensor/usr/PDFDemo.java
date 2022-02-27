@@ -5,13 +5,13 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.io.Pretty;
-import ch.alpine.tensor.pdf.BinomialDistribution;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.GeometricDistribution;
-import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.pdf.d.BinomialDistribution;
+import ch.alpine.tensor.pdf.d.GeometricDistribution;
 import ch.alpine.tensor.sca.Round;
 
 /* package */ enum PDFDemo {

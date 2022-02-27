@@ -26,8 +26,9 @@ import ch.alpine.tensor.sca.Sin;
  * 
  * <p>interface {@link Comparable} is not implemented */
 public interface ComplexScalar extends Scalar, //
-    AbsInterface, ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, ExpInterface, //
-    LogInterface, PowerInterface, RoundingInterface, SignInterface, SqrtInterface, TrigonometryInterface {
+    AbsInterface, ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, //
+    ExpInterface, LogInterface, PowerInterface, RoundingInterface, SignInterface, //
+    SqrtInterface, TrigonometryInterface {
   /** complex number I == 0+1*I */
   Scalar I = of(0, 1);
 
@@ -71,8 +72,8 @@ public interface ComplexScalar extends Scalar, //
     return fromPolar(RealScalar.of(abs), RealScalar.of(arg));
   }
 
-  /** @param arg
-   * @return complex number on unit circle with given argument */
+  /** @param arg angle
+   * @return Exp[I * angle], i.e. complex number on unit circle with given argument */
   static Scalar unit(Scalar arg) {
     if (arg instanceof ComplexScalar)
       throw TensorRuntimeException.of(arg);

@@ -11,7 +11,7 @@ import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.itp.Interpolation;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.UniformDistribution;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 /** demonstration that the function call
  * {@link Interpolation#at(Scalar)} is 2-3 times faster than

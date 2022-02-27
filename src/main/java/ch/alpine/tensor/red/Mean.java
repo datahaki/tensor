@@ -33,6 +33,16 @@ public enum Mean {
     return Total.of(tensor).divide(RealScalar.of(tensor.length()));
   }
 
+  /** in practice, the mean of a vector is the most common use
+   * 
+   * @param vector
+   * @return scalar that is the arithmetic mean of the entries in given vector
+   * @see Total#ofVector(Tensor)
+   * @see Variance#ofVector(Tensor) */
+  public static Scalar ofVector(Tensor vector) {
+    return (Scalar) of(vector);
+  }
+
   /** @param distribution
    * @return mean of given probability distribution */
   public static Scalar of(Distribution distribution) {

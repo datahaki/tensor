@@ -8,7 +8,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.InverseCDF;
-import ch.alpine.tensor.pdf.NormalDistribution;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -35,7 +36,7 @@ public class InverseErfcTest extends TestCase {
   }
 
   public void testFail() {
-    InverseCDF inverseCDF = (InverseCDF) NormalDistribution.of(2, 8);
+    InverseCDF inverseCDF = (InverseCDF) TriangularDistribution.with(2, 8);
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.5)));
   }
 }

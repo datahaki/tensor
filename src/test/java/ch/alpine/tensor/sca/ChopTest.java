@@ -130,6 +130,16 @@ public class ChopTest extends TestCase {
     AssertFail.of(() -> Chop._03.requireClose(Tensors.vector(1, 2, 3), Tensors.vector(1, 2)));
   }
 
+  public void testRequireCloseException() {
+    Tensor b1 = Tensors.vector(2, 3);
+    Tensor b2 = Tensors.vector(2, 4);
+    try {
+      Chop._40.requireClose(b1, b2);
+    } catch (Exception exception) {
+      assertEquals(exception.getMessage(), "3; 4; -1");
+    }
+  }
+
   public void testRequireZero() {
     Chop._04.requireZero(RealScalar.of(1e-8));
     Chop._04.requireAllZero(RealScalar.of(1e-8));

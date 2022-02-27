@@ -24,9 +24,8 @@ import ch.alpine.tensor.qty.Quantity;
  * an instance stores two non-negative integers: the value and the prime
  * which can be accessed via {@link #number()} and {@link #prime()}. */
 public class GaussScalar extends AbstractScalar implements //
-    AbsInterface, ConjugateInterface, ExactScalarQInterface, PowerInterface, //
-    RoundingInterface, SignInterface, SqrtInterface, //
-    Comparable<Scalar>, Serializable {
+    AbsInterface, Comparable<Scalar>, ConjugateInterface, ExactScalarQInterface, PowerInterface, //
+    RoundingInterface, SignInterface, SqrtInterface, Serializable {
   /** @param value
    * @param prime number
    * @return value in finite field with prime number of elements

@@ -74,7 +74,7 @@ public class AroundTest extends TestCase {
 
   public void testMean() {
     Tensor vector = Tensors.of(Around.of(2, 3), Around.of(3, 1), Around.of(-3, 1));
-    Scalar mean = (Scalar) Mean.of(vector);
+    Scalar mean = Mean.ofVector(vector);
     assertTrue(mean instanceof Around);
     Scalar actual = Around.of(Scalars.fromString("2/3"), RealScalar.of(1.1055415967851332));
     assertEquals(mean, actual);
@@ -111,7 +111,7 @@ public class AroundTest extends TestCase {
     Around around = (Around) Around.of(-200, 0.8);
     Distribution distribution = around.distribution();
     Random random = new Random(1);
-    Scalar mean = (Scalar) Mean.of(RandomVariate.of(distribution, random, 20));
+    Scalar mean = Mean.ofVector(RandomVariate.of(distribution, random, 20));
     Chop.below(3).requireClose(mean, RealScalar.of(-200));
   }
 

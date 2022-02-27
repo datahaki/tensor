@@ -2,8 +2,8 @@
 package ch.alpine.tensor;
 
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.pdf.ExponentialDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.ExponentialDistribution;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

@@ -4,10 +4,10 @@ package ch.alpine.tensor.usr;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.HistogramDistribution;
-import ch.alpine.tensor.pdf.PoissonBinomialDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.UniformDistribution;
+import ch.alpine.tensor.pdf.c.HistogramDistribution;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
+import ch.alpine.tensor.pdf.d.PoissonBinomialDistribution;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 

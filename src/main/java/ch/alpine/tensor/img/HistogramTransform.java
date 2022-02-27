@@ -9,7 +9,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Rescale;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.pdf.CDF;
-import ch.alpine.tensor.pdf.CategoricalDistribution;
+import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/HistogramTransform.html">HistogramTransform</a> */

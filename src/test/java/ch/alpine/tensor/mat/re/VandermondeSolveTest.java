@@ -12,8 +12,8 @@ import ch.alpine.tensor.itp.Fit;
 import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.DurationScalar;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
@@ -27,7 +27,7 @@ public class VandermondeSolveTest extends TestCase {
     Tensor cmp = VandermondeSolve.of(x, q);
     ExactTensorQ.require(cmp);
     assertEquals(ref, cmp);
-    Fit.polynomial_coeffs(x, q, 1);
+    Fit.polynomial(x, q, 1);
   }
 
   public void testMixedUnits() {

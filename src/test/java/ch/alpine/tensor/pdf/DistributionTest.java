@@ -6,6 +6,15 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.pdf.c.ExponentialDistribution;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
+import ch.alpine.tensor.pdf.d.BernoulliDistribution;
+import ch.alpine.tensor.pdf.d.BinomialDistribution;
+import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
+import ch.alpine.tensor.pdf.d.GeometricDistribution;
+import ch.alpine.tensor.pdf.d.HypergeometricDistribution;
+import ch.alpine.tensor.pdf.d.PoissonDistribution;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
@@ -14,9 +23,9 @@ import junit.framework.TestCase;
 
 public class DistributionTest extends TestCase {
   private static void _check(Distribution distribution, int n) {
-    Tensor collect = RandomVariate.of(distribution, n);
-    Scalar mean = (Scalar) Mean.of(collect); // measured mean
-    Scalar var = Variance.ofVector(collect); // measured variance
+    Tensor vector = RandomVariate.of(distribution, n);
+    Scalar mean = Mean.ofVector(vector); // measured mean
+    Scalar var = Variance.ofVector(vector); // measured variance
     assertTrue(Scalars.nonZero(var));
     Scalar tmean = Expectation.mean(distribution); // theoretical mean
     Scalar tvar = Expectation.variance(distribution); // theoretical variance

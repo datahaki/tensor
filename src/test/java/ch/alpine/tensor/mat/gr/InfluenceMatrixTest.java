@@ -20,17 +20,21 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
+import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.VandermondeMatrix;
+import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.num.Rationalize;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.NormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Entrywise;
@@ -59,14 +63,16 @@ public class InfluenceMatrixTest extends TestCase {
   }
 
   public void testLeftKernel() throws ClassNotFoundException, IOException {
-    Tensor design = RandomVariate.of(NormalDistribution.standard(), 10, 3);
+    Random random = new Random(2);
+    Tensor design = RandomVariate.of(NormalDistribution.standard(), random, 10, 3);
     InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
     _check(influenceMatrix);
-    Tensor vector = RandomVariate.of(NormalDistribution.standard(), 10);
+    Tensor vector = RandomVariate.of(NormalDistribution.standard(), random, 10);
     Tensor ker1 = influenceMatrix.kernel(vector);
     Tolerance.CHOP.requireAllZero(ker1.dot(design));
     Tensor ker2 = influenceMatrix.residualMaker().dot(vector);
     Tolerance.CHOP.requireClose(ker1, ker2);
+    assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(influenceMatrix.matrix()));
   }
 
   private static Tensor proj(InfluenceMatrix influenceMatrix, Tensor v) {
@@ -193,8 +199,21 @@ public class InfluenceMatrixTest extends TestCase {
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(5));
     Tensor matrix = influenceMatrix.matrix();
-    assertTrue(HermitianMatrixQ.of(matrix));
     InfluenceMatrixQ.require(matrix);
+    Eigensystem eigensystem = Eigensystem.ofHermitian(matrix);
+    Tolerance.CHOP.requireClose(eigensystem.values(), Tensors.vector(1, 1, 1, 0, 0));
+  }
+
+  public void testComplex5x3Exact() {
+    Distribution distribution = TriangularDistribution.with(0, 2);
+    Tensor re = RandomVariate.of(distribution, 5, 3);
+    Tensor im = RandomVariate.of(distribution, 5, 3);
+    Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im).map(Rationalize._5);
+    InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+    assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(5));
+    Tensor matrix = influenceMatrix.matrix();
+    InfluenceMatrixQ.require(matrix);
+    ExactTensorQ.require(matrix);
   }
 
   public void testComplex3x5() {
@@ -206,6 +225,17 @@ public class InfluenceMatrixTest extends TestCase {
     Tensor matrix = influenceMatrix.matrix();
     assertTrue(HermitianMatrixQ.of(matrix));
     InfluenceMatrixQ.require(matrix);
+  }
+
+  public void testComplex3x5Exact() {
+    Tensor re = RandomVariate.of(NormalDistribution.standard(), 3, 5);
+    Tensor im = RandomVariate.of(NormalDistribution.standard(), 3, 5);
+    Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im).map(Rationalize._5);
+    InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
+    assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(3));
+    Tensor matrix = influenceMatrix.matrix();
+    InfluenceMatrixQ.require(matrix);
+    ExactTensorQ.require(matrix);
   }
 
   public void testZeroQuantity() {

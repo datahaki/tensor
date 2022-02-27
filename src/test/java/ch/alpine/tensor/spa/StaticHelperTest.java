@@ -20,9 +20,9 @@ import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.pdf.CategoricalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.usr.AssertFail;
@@ -53,7 +53,6 @@ public class StaticHelperTest extends TestCase {
       assertEquals(Times.of(a, b), r_pml);
       assertEquals(Times.of(a, sb), r_pml);
       assertEquals(Times.of(sa, b), r_pml);
-      // assertTrue(r_pml instanceof SparseArray); // TODO !?
     }
   }
 

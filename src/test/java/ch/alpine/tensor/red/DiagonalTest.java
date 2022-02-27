@@ -35,6 +35,35 @@ public class DiagonalTest extends TestCase {
     assertTrue(MatrixQ.of(Diagonal.of(LeviCivitaTensor.of(3))));
   }
 
+  public void testCase1() {
+    Tensor tensor = Tensors.fromString("{{2}, 3}");
+    Tensor diagonal = Diagonal.mathematica(tensor);
+    assertEquals(diagonal, Tensors.vector(2));
+  }
+
+  public void testCase2() {
+    Tensor tensor = Tensors.fromString("{{2}, {3, 4}}");
+    Tensor diagonal = Diagonal.mathematica(tensor);
+    assertEquals(diagonal, Tensors.vector(2, 4));
+  }
+
+  public void testCase3() {
+    Tensor tensor = Tensors.fromString("{{2}, {3, 4},{5,6,7}}");
+    Tensor diagonal = Diagonal.mathematica(tensor);
+    assertEquals(diagonal, Tensors.vector(2, 4, 7));
+  }
+
+  public void testCase4() {
+    Tensor tensor = Tensors.fromString("{{2}, {3},{5,6,7}}");
+    Tensor diagonal = Diagonal.mathematica(tensor);
+    assertEquals(diagonal, Tensors.vector(2));
+  }
+
+  public void testCase5() {
+    assertEquals(Diagonal.of(HilbertMatrix.of(4, 5)), Diagonal.mathematica(HilbertMatrix.of(4, 5)));
+    assertEquals(Diagonal.of(HilbertMatrix.of(5, 4)), Diagonal.mathematica(HilbertMatrix.of(5, 4)));
+  }
+
   public void testFailScalar() {
     AssertFail.of(() -> Diagonal.of(RealScalar.ONE));
   }

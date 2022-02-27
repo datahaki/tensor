@@ -22,15 +22,17 @@ import ch.alpine.tensor.mat.ConjugateTranspose;
   }
 
   @Override // from QRDecomposition
-  public final Scalar det() { // only exact up to sign
+  public final Scalar det() {
     Tensor r = getR();
-    int m = Unprotect.dimension1Hint(r);
-    int[] sigma = sigma();
-    return r.length() == m // check if R is square
-        ? IntStream.range(0, sigma.length) //
-            .mapToObj(i -> r.Get(i, sigma[i])) //
-            .reduce(Scalar::multiply).orElseThrow()
-        : RealScalar.ZERO;
+    Tensor qct = getQConjugateTranspose();
+    if (r.length() == Unprotect.dimension1Hint(r) && // check if R is square
+        qct.length() == Unprotect.dimension1Hint(qct)) { // check if RInv is square
+      int[] sigma = sigma();
+      return IntStream.range(0, sigma.length) //
+          .mapToObj(i -> r.Get(i, sigma[i])) //
+          .reduce(Scalar::multiply).orElseThrow();
+    }
+    return RealScalar.ZERO;
   }
 
   @Override // from Object

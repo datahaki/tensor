@@ -13,6 +13,7 @@ import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.ex.MatrixLog;
 import ch.alpine.tensor.mat.ex.MatrixSqrt;
 import ch.alpine.tensor.mat.gr.InfluenceMatrix;
+import ch.alpine.tensor.mat.pd.Orthogonalize;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.qr.QRDecomposition;
 import ch.alpine.tensor.mat.re.Det;

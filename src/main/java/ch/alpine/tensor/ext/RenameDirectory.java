@@ -15,9 +15,9 @@ public enum RenameDirectory {
    * @throws Exception if origin cannot be renamed to target */
   public static void of(File origin, File target) throws Exception {
     if (!origin.isDirectory())
-      throw new RuntimeException("does not exist: " + origin);
+      throw new IllegalArgumentException("does not exist: " + origin);
     if (target.exists())
-      throw new RuntimeException("already exists: " + target);
+      throw new IllegalArgumentException("already exists: " + target);
     File parent = target.getParentFile();
     if (!parent.isDirectory()) { // if parent is not an existing directory ...
       boolean mkdirs = parent.mkdirs(); // ... attempt to create parent folder

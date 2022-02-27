@@ -38,7 +38,7 @@ public class ArgTest extends TestCase {
     Scalar s = Quantity.of(ComplexScalar.of(3, 4), unit);
     Scalar a = Arg.of(s);
     Scalar b = ArcTan.of(RealScalar.of(3), RealScalar.of(4));
-    assertEquals(a, Quantity.of(b, unit));
+    assertEquals(a, b);
   }
 
   public void testQuaternionFail() {

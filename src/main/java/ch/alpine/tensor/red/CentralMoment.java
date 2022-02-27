@@ -3,7 +3,10 @@ package ch.alpine.tensor.red;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.pdf.CentralMomentInterface;
+import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Power;
 
 /** inspired by
@@ -15,7 +18,7 @@ public enum CentralMoment {
    * @return
    * @throws Exception if given vector is empty */
   public static Scalar of(Tensor vector, Scalar order) {
-    Scalar nmean = (Scalar) Mean.of(vector).negate();
+    Scalar nmean = Mean.ofVector(vector).negate();
     return vector.stream() //
         .map(nmean::add) //
         .map(Power.function(order)) //
@@ -25,9 +28,30 @@ public enum CentralMoment {
   }
 
   /** @param vector
-   * @param order of moment
-   * @return */
+   * @param order of central moment
+   * @return central moment of given distribution and order */
   public static Scalar of(Tensor vector, Number order) {
     return of(vector, RealScalar.of(order));
+  }
+
+  /** @param distribution
+   * @param order
+   * @return central moment of given distribution and order */
+  public static Scalar of(Distribution distribution, Scalar order) {
+    if (distribution instanceof CentralMomentInterface centralMomentInterface)
+      return centralMomentInterface.centralMoment(order);
+    return switch (Scalars.intValueExact(order)) {
+    case 0 -> RealScalar.ONE;
+    case 1 -> Mean.of(distribution).zero();
+    case 2 -> Variance.of(distribution);
+    default -> throw new UnsupportedOperationException();
+    };
+  }
+
+  /** @param distribution
+   * @param order
+   * @return central moment of given distribution and order */
+  public static Scalar of(Distribution distribution, Number order) {
+    return of(distribution, RealScalar.of(order));
   }
 }

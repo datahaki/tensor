@@ -25,8 +25,9 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
   }
 
   @Override
-  public Scalar apply(Scalar scalar) {
+  public final Scalar apply(Scalar scalar) {
     Scalar total = head;
+    total.multiply(scalar); // consistency check
     for (Tensor entry : rest)
       total = total.multiply(scalar).add(entry); // a + b ** x + c ** x ** x
     // total = scalar.multiply(total).add(entry); // a + x ** b + x ** x ** c

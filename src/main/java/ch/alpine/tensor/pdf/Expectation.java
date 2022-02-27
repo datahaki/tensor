@@ -8,6 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.pdf.d.GeometricDistribution;
 import ch.alpine.tensor.sca.AbsSquared;
 
 /** Careful:

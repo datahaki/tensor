@@ -2,7 +2,6 @@
 // adapted from code by jph 2006
 package ch.alpine.tensor.lie.ad;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.function.BinaryOperator;
 import java.util.stream.Stream;
@@ -14,10 +13,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.nrm.Vector1Norm;
-import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Factorial;
 
@@ -39,51 +34,45 @@ import ch.alpine.tensor.sca.Factorial;
  * Hakenberg.de kernel.nb
  * 
  * @see MatrixAlgebra */
-public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializable {
+public class BakerCampbellHausdorff extends BchSeries {
   private static final Scalar _0 = RealScalar.ZERO;
   private static final Scalar _1 = RealScalar.ONE;
   private static final int[] SIGN = { 1, -1 };
 
-  /** @param ad tensor of rank 3 that satisfies the Jacobi identity
+  /** Hint: the implementations for the degrees 6, 8, 10 are optimized
+   * 
+   * @param ad tensor of rank 3 that satisfies the Jacobi identity
    * @param degree strictly positive, depth of series
-   * @param chop tolerance for early abort
+   * @param chop tolerance for truncation of recursive calls
    * @return */
   public static BinaryOperator<Tensor> of(Tensor ad, int degree, Chop chop) {
-    return new BakerCampbellHausdorff( //
-        JacobiIdentity.require(ad), //
-        Integers.requirePositive(degree), //
-        Objects.requireNonNull(chop));
+    Objects.requireNonNull(chop);
+    return switch (degree) {
+    case 0x6 -> new BchSeries6(ad);
+    case 0x8 -> new BchSeries8(ad);
+    case 0xA -> new BchSeriesA(ad);
+    default -> new BakerCampbellHausdorff(ad, degree, chop);
+    };
   }
 
   /** @param ad tensor of rank 3 that satisfies the Jacobi identity
    * @param degree strictly positive
    * @return */
   public static BinaryOperator<Tensor> of(Tensor ad, int degree) {
-    return of(ad, degree, Tolerance.CHOP);
+    return of(ad, degree, Chop._14);
   }
 
   // ---
-  private final Tensor ad;
   private final int degree;
   private final Chop chop;
 
-  private BakerCampbellHausdorff(Tensor ad, int degree, Chop chop) {
-    this.ad = ad;
-    this.degree = degree;
-    this.chop = chop;
+  public BakerCampbellHausdorff(Tensor ad, int degree, Chop chop) {
+    super(ad);
+    this.degree = Integers.requirePositive(degree);
+    this.chop = Objects.requireNonNull(chop);
   }
 
   @Override
-  public Tensor apply(Tensor x, Tensor y) {
-    return Total.of(series(x, y));
-  }
-
-  /** function allows to investigate the rate of convergence
-   * 
-   * @param x
-   * @param y
-   * @return list of contributions up to given degree the sum of which is the
-   * result of this binary operator */
   public Tensor series(Tensor x, Tensor y) {
     return new Inner(x, y).series;
   }
@@ -98,10 +87,10 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
       series.set(x, 0);
       adX = ad.dot(x);
       adY = ad.dot(y);
-      Tensor pwX = IdentityMatrix.sparse(x.length());
-      for (int m = 0; m < degree; ++m) {
-        recur(pwX.dot(y).divide(Factorial.of(m)), m + 1, Tensors.empty(), Tensors.empty(), 0, true);
-        pwX = adX.dot(pwX);
+      Tensor xn_y = y;
+      for (int d = 0; d < degree; ++d) {
+        recur(xn_y.divide(Factorial.of(d)), d + 1, Tensors.empty(), Tensors.empty(), 0, true);
+        xn_y = adX.dot(xn_y);
       }
     }
 
@@ -115,7 +104,7 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
       Scalar f = RealScalar.of(Math.multiplyExact(SIGN[k & 1] * (k + 1), total_q + 1)).multiply(fac);
       Tensor term = v.divide(f);
       series.set(term::add, d - 1);
-      if (chop.isZero(Vector1Norm.of(term)))
+      if (chop.allZero(term))
         return;
       if (d < degree) {
         if (0 < k) {
@@ -130,7 +119,8 @@ public class BakerCampbellHausdorff implements BinaryOperator<Tensor>, Serializa
             recur(adX.dot(v), d + 1, cp, q, total_q, false);
           }
         }
-        recur(adY.dot(v), d + 1, Append.of(p, _0), Append.of(q, _1), total_q + 1, true);
+        if (1 < d) // the base case d == 1 implies adY . y == 0
+          recur(adY.dot(v), d + 1, Append.of(p, _0), Append.of(q, _1), total_q + 1, true);
         recur(adX.dot(v), d + 1, Append.of(p, _1), Append.of(q, _0), total_q, false);
       }
     }

@@ -4,6 +4,7 @@ package ch.alpine.tensor.alg;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -74,6 +75,11 @@ public class DimensionsTest extends TestCase {
     assertEquals(dimensions.lengths(1), new HashSet<>(Arrays.asList(Scalar.LENGTH, 2, 3)));
     assertEquals(dimensions.lengths(2), new HashSet<>(Arrays.asList(Scalar.LENGTH, 1, 2)));
     assertEquals(dimensions.lengths(3), new HashSet<>(Arrays.asList(Scalar.LENGTH, 0)));
+  }
+
+  public void testIntEquality() {
+    List<Integer> list = Dimensions.of(HilbertMatrix.of(3));
+    assertTrue(list.get(0) == list.get(1));
   }
 
   public void testScalar2() {

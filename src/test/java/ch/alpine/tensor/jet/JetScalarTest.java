@@ -9,6 +9,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Log;
@@ -89,6 +90,18 @@ public class JetScalarTest extends TestCase {
     Chop._10.requireClose(scalar.vector(), //
         Tensors.vector(27.28991719712775, 54.61646567203297, 109.159668788511, 136.54116418008243));
   }
+
+  public void testAbsSquared() {
+    Scalar s1 = JetScalar.of(Tensors.vector(3, 1));
+    JetScalar absSq = (JetScalar) AbsSquared.FUNCTION.apply(s1);
+    JetScalar quadr = (JetScalar) s1.multiply(s1);
+    assertEquals(absSq, quadr);
+  }
+  // public void testArcTan() {
+  // Scalar s1 = JetScalar.of(Tensors.vector(3, 1));
+  // JetScalar scalar = (JetScalar) ArcTan.of(s1, RealScalar.of(1));
+  // System.out.println(scalar);
+  // }
 
   public void testScalarFail() {
     AssertFail.of(() -> JetScalar.of(RealScalar.of(2)));

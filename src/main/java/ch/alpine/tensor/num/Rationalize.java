@@ -24,6 +24,16 @@ import ch.alpine.tensor.sca.Sign;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Rationalize.html">Rationalize</a> */
 public class Rationalize implements ScalarUnaryOperator {
+  public static final ScalarUnaryOperator _1 = Round.toMultipleOf(RationalScalar.of(1, 10));
+  public static final ScalarUnaryOperator _2 = Round.toMultipleOf(RationalScalar.of(1, 100));
+  public static final ScalarUnaryOperator _3 = Round.toMultipleOf(RationalScalar.of(1, 1000));
+  public static final ScalarUnaryOperator _4 = Round.toMultipleOf(RationalScalar.of(1, 10000));
+  public static final ScalarUnaryOperator _5 = Round.toMultipleOf(RationalScalar.of(1, 100000));
+  public static final ScalarUnaryOperator _6 = Round.toMultipleOf(RationalScalar.of(1, 1000000));
+  public static final ScalarUnaryOperator _7 = Round.toMultipleOf(RationalScalar.of(1, 10000000));
+  public static final ScalarUnaryOperator _8 = Round.toMultipleOf(RationalScalar.of(1, 100000000));
+  public static final ScalarUnaryOperator _9 = Round.toMultipleOf(RationalScalar.of(1, 1000000000));
+
   /** @param max positive integer
    * @return {@link ScalarUnaryOperator} that returns the closest {@link RationalScalar} to the
    * given argument, with denominator less or equals to max, and ties rounding to positive infinity.

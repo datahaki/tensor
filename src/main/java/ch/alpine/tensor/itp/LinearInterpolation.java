@@ -62,7 +62,7 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
   public Tensor at(Scalar index) {
     Scalar floor = Floor.FUNCTION.apply(index);
     Scalar remain = index.subtract(floor);
-    int below = floor.number().intValue();
+    int below = Scalars.intValueExact(floor);
     if (Scalars.isZero(remain))
       return tensor.get(below);
     return Tensors.of(remain.one().subtract(remain), remain) //

@@ -8,9 +8,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
-import ch.alpine.tensor.pdf.CategoricalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.sca.Conjugate;
 
 /** Careful: convergence is dubious

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -14,7 +15,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.UniformDistribution;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Chop;
@@ -127,6 +129,14 @@ public class RationalizeTest extends TestCase {
       Scalar max = RealScalar.of(random.nextInt(10_000_000));
       denCheck((Scalar) scalar, max);
     }
+  }
+
+  public void testRationalize() {
+    assertEquals(Rationalize._1.apply(DoubleScalar.of(12.435)), RationalScalar.of(124, 10));
+    assertEquals(Rationalize._2.apply(DoubleScalar.of(12.435)), RationalScalar.of(311, 25));
+    assertEquals(Rationalize._3.apply(DoubleScalar.of(12.435)), RationalScalar.of(12435, 1000));
+    assertEquals(Rationalize._4.apply(Pi.VALUE), RationalScalar.of(31416, 10000));
+    assertEquals(Rationalize._3.apply(Quantity.of(1.23456, "m")), Quantity.of(RationalScalar.of(1235, 1000), "m"));
   }
 
   public void testFailPositive() {

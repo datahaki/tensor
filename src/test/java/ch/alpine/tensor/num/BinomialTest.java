@@ -11,6 +11,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.sca.Chop;
@@ -160,5 +161,24 @@ public class BinomialTest extends TestCase {
   public void testToString() {
     Binomial binomial = Binomial.of(13);
     assertEquals(binomial.toString(), "Binomial[13]");
+  }
+
+  public void testGaussScalar() {
+    int prime = 251;
+    Scalar n = GaussScalar.of(4, prime);
+    Tensor row = Tensors.of(n.one());
+    Scalar top = n;
+    for (Scalar j = GaussScalar.of(1, prime); true; j = j.add(n.one())) {
+      Scalar x = Last.of(row);
+      row.append(x.multiply(top).divide(j));
+      if (j.equals(n))
+        break;
+      top = top.subtract(n.one());
+    }
+    // System.out.println(row);
+  }
+
+  public void testGaussScalarFail() {
+    AssertFail.of(() -> Binomial.of(GaussScalar.of(3, 5), GaussScalar.of(2, 5)));
   }
 }

@@ -1,4 +1,4 @@
-// code by guedelmi
+// code by guedelmi, jph
 package ch.alpine.tensor.mat.ev;
 
 import java.lang.reflect.Modifier;
@@ -19,6 +19,7 @@ import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
+import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -67,6 +68,8 @@ public class JacobiMethodTest extends TestCase {
     assertTrue(OrthogonalMatrixQ.of(Vt));
     // assert that values are sorted from max to min
     assertEquals(eigensystem.values(), Reverse.of(Sort.of(eigensystem.values())));
+    JacobiReal jacobiMethod = new JacobiReal(matrix, Chop._12);
+    SymmetricMatrixQ.require(jacobiMethod.package_H(), Chop.NONE);
   }
 
   public void testJacobiWithTensor1() {

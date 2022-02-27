@@ -12,11 +12,11 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.pdf.BinomialDistribution;
-import ch.alpine.tensor.pdf.CauchyDistribution;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.LogNormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.CauchyDistribution;
+import ch.alpine.tensor.pdf.c.LogNormalDistribution;
+import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

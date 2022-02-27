@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import ch.alpine.tensor.ExactScalarQ;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -8,6 +10,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -20,6 +24,15 @@ public class CentralMomentTest extends TestCase {
     assertEquals(CentralMoment.of(tensor, 2), RealScalar.of(10));
     assertEquals(CentralMoment.of(tensor, 3), RealScalar.of(36));
     assertEquals(CentralMoment.of(tensor, 4), Scalars.fromString("1394/5"));
+  }
+
+  public void testTrapezoidal() {
+    Distribution distribution = TrapezoidalDistribution.of(2, 3, 4, 7);
+    Scalar scalar = CentralMoment.of(distribution, 3);
+    ExactScalarQ.require(scalar);
+    assertEquals(scalar, RationalScalar.of(326, 729));
+    assertEquals(CentralMoment.of(distribution, 2), Variance.of(distribution));
+    AssertFail.of(() -> CentralMoment.of(distribution, RealScalar.of(-1)));
   }
 
   public void testComplex() {
