@@ -191,9 +191,11 @@ public class Polynomial extends HornerScheme {
   /** @param polynomial
    * @return sum of this and given polynomial */
   public Polynomial plus(Polynomial polynomial) {
-    return degree() <= polynomial.degree() //
-        ? of(Join.of(coeffs.add(polynomial.coeffs.extract(0, coeffs.length())), polynomial.coeffs.extract(coeffs.length(), polynomial.coeffs.length())))
-        : of(Join.of(polynomial.coeffs.add(coeffs.extract(0, polynomial.coeffs.length())), coeffs.extract(polynomial.coeffs.length(), coeffs.length())));
+    int n1 = coeffs.length();
+    int n2 = polynomial.coeffs.length();
+    return n1 <= n2 //
+        ? of(Join.of(coeffs.add(polynomial.coeffs.extract(0, n1)), polynomial.coeffs.extract(n1, n2)))
+        : of(Join.of(polynomial.coeffs.add(coeffs.extract(0, n2)), coeffs.extract(n2, n1)));
   }
 
   /** @param polynomial

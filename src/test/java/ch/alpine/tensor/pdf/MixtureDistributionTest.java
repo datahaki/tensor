@@ -39,8 +39,15 @@ public class MixtureDistributionTest extends TestCase {
     PDF.of(d1).at(RealScalar.of(1));
   }
 
-  public void testFail() {
+  public void testFailNegative() {
     AssertFail.of(() -> MixtureDistribution.of(Tensors.vector(1, -2, 3), //
+        NormalDistribution.of(0, 1), //
+        NormalDistribution.of(3, 1), //
+        NormalDistribution.of(10, 1)));
+  }
+
+  public void testFailLength() {
+    AssertFail.of(() -> MixtureDistribution.of(Tensors.vector(1, 3), //
         NormalDistribution.of(0, 1), //
         NormalDistribution.of(3, 1), //
         NormalDistribution.of(10, 1)));

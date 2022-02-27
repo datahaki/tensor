@@ -56,10 +56,12 @@ import ch.alpine.tensor.sca.Sin;
       H[i][p] = hip.multiply(cpp).add(hiq.multiply(cpq));
       H[i][q] = hip.multiply(cqp).add(hiq.multiply(cqq));
     }
-    // chop.requireZero(H[p][q]); // dev check
+    // Tolerance.CHOP.requireZero(H[p][q]); // dev check
+    // Tolerance.CHOP.requireZero(H[q][p]); // dev check
     H[p][q] = H[p][q].zero();
-    // chop.requireZero(Imag.FUNCTION.apply(H[p][p])); // dev check
-    // chop.requireZero(Imag.FUNCTION.apply(H[q][q])); // dev check
+    H[q][p] = H[q][p].zero();
+    // Tolerance.CHOP.requireZero(Imag.FUNCTION.apply(H[p][p])); // dev check
+    // Tolerance.CHOP.requireZero(Imag.FUNCTION.apply(H[q][q])); // dev check
     H[p][p] = Real.FUNCTION.apply(H[p][p]);
     H[q][q] = Real.FUNCTION.apply(H[q][q]);
   }

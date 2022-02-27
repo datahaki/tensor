@@ -3,7 +3,7 @@
 
 	<groupId>ch.alpine</groupId>
 	<artifactId>tensor</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<packaging>jar</packaging>
 
 	<name>tensor</name>

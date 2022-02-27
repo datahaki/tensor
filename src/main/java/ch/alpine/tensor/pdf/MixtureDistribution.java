@@ -5,11 +5,12 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.red.Mean;
 
@@ -17,14 +18,22 @@ import ch.alpine.tensor.red.Mean;
  * <a href="https://reference.wolfram.com/language/ref/MixtureDistribution.html">MixtureDistribution</a> */
 public class MixtureDistribution implements Distribution, PDF, CDF, MeanInterface, //
     RandomVariateInterface, Serializable {
-  /** @param unscaledPDF
+  /** @param weights vector with non-negative entries
    * @param distributions
    * @return */
   @SafeVarargs
-  public static Distribution of(Tensor unscaledPDF, Distribution... distributions) {
-    return new MixtureDistribution( //
-        unscaledPDF, //
-        Arrays.asList(distributions));
+  public static Distribution of(Tensor weights, Distribution... distributions) {
+    return of(weights, Arrays.asList(distributions));
+  }
+
+  /** @param weights vector with non-negative entries
+   * @param list non-empty
+   * @return
+   * @throws Exception if weights vectors not not have the same length as list */
+  public static Distribution of(Tensor weights, List<Distribution> list) {
+    Integers.requirePositive(list.size());
+    Integers.requireEquals(weights.length(), list.size());
+    return new MixtureDistribution(weights, list);
   }
 
   // ---
@@ -37,10 +46,8 @@ public class MixtureDistribution implements Distribution, PDF, CDF, MeanInterfac
   }
 
   private Scalar dot(Function<Distribution, Scalar> function) {
-    AtomicInteger atomicInteger = new AtomicInteger();
-    return list.stream() //
-        .map(function) //
-        .map(scalar -> scalar.multiply(categoricalDistribution.p_equals(atomicInteger.getAndIncrement()))) //
+    return IntStream.range(0, list.size()) //
+        .mapToObj(i -> function.apply(list.get(i)).multiply(categoricalDistribution.p_equals(i))) //
         .reduce(Scalar::add) //
         .orElseThrow();
   }

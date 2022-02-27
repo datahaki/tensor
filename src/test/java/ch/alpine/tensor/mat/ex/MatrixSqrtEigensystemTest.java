@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 public class MatrixSqrtEigensystemTest extends TestCase {
   public void testSimple() throws ClassNotFoundException, IOException {
     Random random = new Random();
-    int n = 6;
+    int n = 10;
     Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), random, n, n));
     Tensor x2 = x.dot(x);
     DenmanBeaversDet denmanBeaversDet = //
