@@ -25,7 +25,7 @@ public class TensorSpectrogramTest extends TestCase {
     Tensor vector = Tensor.of(IntStream.range(0, 2000) //
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(RealScalar::of));
-    Tensor image = TensorSpectrogram.of(vector, DirichletWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM);
+    Tensor image = TensorSpectrogram.of(vector, DirichletWindow.FUNCTION, ColorDataGradients.VISIBLE_SPECTRUM);
     ImageFormat.of(image);
     assertEquals(Dimensions.of(image), Arrays.asList(32, 93, 4));
     assertEquals(Dimensions.of(SpectrogramArray.half_abs(vector, DirichletWindow.FUNCTION)), Arrays.asList(32, 93));
@@ -36,16 +36,16 @@ public class TensorSpectrogramTest extends TestCase {
   public void testQuantity() {
     Tensor signal = Tensors.vector(1, 2, 1, 4, 3, 2, 3, 4, 3, 4);
     Tensor vector = signal.map(s -> Quantity.of(s, "m"));
-    Tensor array1 = TensorSpectrogram.of(signal, GaussianWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM);
-    Tensor array2 = TensorSpectrogram.of(vector, GaussianWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM);
+    Tensor array1 = TensorSpectrogram.of(signal, GaussianWindow.FUNCTION, ColorDataGradients.VISIBLE_SPECTRUM);
+    Tensor array2 = TensorSpectrogram.of(vector, GaussianWindow.FUNCTION, ColorDataGradients.VISIBLE_SPECTRUM);
     assertEquals(array1, array2);
   }
 
   public void testScalarFail() {
-    AssertFail.of(() -> TensorSpectrogram.of(RealScalar.ONE, ParzenWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM));
+    AssertFail.of(() -> TensorSpectrogram.of(RealScalar.ONE, ParzenWindow.FUNCTION, ColorDataGradients.VISIBLE_SPECTRUM));
   }
 
   public void testMatrixFail() {
-    AssertFail.of(() -> TensorSpectrogram.of(HilbertMatrix.of(32), BlackmanWindow.FUNCTION, ColorDataGradients.VISIBLESPECTRUM));
+    AssertFail.of(() -> TensorSpectrogram.of(HilbertMatrix.of(32), BlackmanWindow.FUNCTION, ColorDataGradients.VISIBLE_SPECTRUM));
   }
 }

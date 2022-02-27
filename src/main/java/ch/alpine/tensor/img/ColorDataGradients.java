@@ -36,7 +36,7 @@ public enum ColorDataGradients implements ColorDataGradient {
    * white , yellow, orange, red, violet, black, */
   SUNSET_REVERSED,
   /** [0, 1] corresponds to wavelengths [380, 750] */
-  VISIBLESPECTRUM,
+  VISIBLE_SPECTRUM,
   /** blue, cyan, yellow, red
    * inspired by Matlab::jet */
   JET,
@@ -44,6 +44,8 @@ public enum ColorDataGradients implements ColorDataGradient {
   RAINBOW,
   /** black, gray, yellow, magenta, cyan */
   CMYK_REVERSED,
+  /** for mapmaking, encoding elevations between -6000...6000[m] */
+  HYPSOMETRIC,
   /** blue to red, has yellow before turning red */
   TEMPERATURE,
   /** blue to red, has yellow before turning red */
@@ -51,9 +53,11 @@ public enum ColorDataGradients implements ColorDataGradient {
   /** blue to red, symmetric */
   THERMOMETER,
   /** red-brown, white, cyan */
-  BROWNCYAN,
+  BROWN_CYAN,
   /** pink, yellow, cyan */
   PASTEL,
+  /** heated black body object emitting temperatures between 1000...10000[K] */
+  BLACK_BODY_SPECTRUM,
   /** orange, yellow, white */
   BEACH,
   /** green to red pastel, symmetric */
@@ -81,9 +85,9 @@ public enum ColorDataGradients implements ColorDataGradient {
   /** black, pink, white */
   PINK,
   /** black, green, yellow, brown, white */
-  GREENBROWNTERRAIN,
+  GREEN_BROWN_TERRAIN,
   /** black, blue, yellow */
-  STARRYNIGHT,
+  STARRY_NIGHT,
   /** gray, brown, orange, yellow */
   FALL,
   /** green, brown, red */

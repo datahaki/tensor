@@ -24,7 +24,7 @@ public enum TensorSpectrogram {
    * 
    * @param vector
    * @param window for instance {@link HannWindow#FUNCTION}
-   * @param function for instance {@link ColorDataGradients#VISIBLESPECTRUM}
+   * @param function for instance {@link ColorDataGradients#VISIBLE_SPECTRUM}
    * @return array plot of the spectrogram of given vector with colors specified by given function
    * @throws Exception if input is not a vector */
   public static Tensor of(Tensor vector, ScalarUnaryOperator window, Function<Scalar, ? extends Tensor> function) {
