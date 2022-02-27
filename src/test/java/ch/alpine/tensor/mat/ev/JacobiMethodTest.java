@@ -68,7 +68,7 @@ public class JacobiMethodTest extends TestCase {
     assertTrue(OrthogonalMatrixQ.of(Vt));
     // assert that values are sorted from max to min
     assertEquals(eigensystem.values(), Reverse.of(Sort.of(eigensystem.values())));
-    JacobiReal jacobiMethod = new JacobiReal(matrix, Chop._12);
+    JacobiReal jacobiMethod = new JacobiReal(matrix);
     SymmetricMatrixQ.require(jacobiMethod.package_H(), Chop.NONE);
   }
 

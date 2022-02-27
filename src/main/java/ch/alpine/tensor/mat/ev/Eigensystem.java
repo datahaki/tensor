@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.ev;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
+import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 
@@ -33,7 +34,7 @@ public interface Eigensystem {
    * @param chop threshold to check symmetry of matrix
    * @return */
   static Eigensystem ofSymmetric(Tensor matrix, Chop chop) {
-    return new EigensystemImpl(new JacobiReal(matrix, chop));
+    return new EigensystemImpl(new JacobiReal(SymmetricMatrixQ.require(matrix, chop)));
   }
 
   /** @param matrix hermitian
@@ -48,7 +49,7 @@ public interface Eigensystem {
    * @return eigenvalue decomposition of given matrix
    * @see HermitianMatrixQ */
   static Eigensystem ofHermitian(Tensor matrix, Chop chop) {
-    return new EigensystemImpl(new JacobiComplex(matrix, chop));
+    return new EigensystemImpl(new JacobiComplex(HermitianMatrixQ.require(matrix, chop)));
   }
 
   /** Careful: Mathematica orders the eigenvalues according to absolute value.

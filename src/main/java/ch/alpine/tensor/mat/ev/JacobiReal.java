@@ -1,14 +1,8 @@
-// code by guedelmi
-// modified by jph
+// code by jph
 package ch.alpine.tensor.mat.ev;
 
-import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Chop;
 
 /** The Jacobi transformations of a real symmetric matrix establishes the
  * eigenvectors and eigenvalues of given matrix.
@@ -34,37 +28,18 @@ import ch.alpine.tensor.sca.Chop;
  * Quote: "You cannot find eigenvectors (or eigenvalues) in a finite number
  * of exact "arithmetic" steps for matrices of size n > 4." */
 /* package */ class JacobiReal extends JacobiMethod {
-  public JacobiReal(Tensor matrix, Chop chop) {
+  /** @param matrix symmetric */
+  public JacobiReal(Tensor matrix) {
     super(matrix);
-    if (H[0].length != n) // hint whether matrix is square
-      throw TensorRuntimeException.of(matrix);
-    for (int p = 0; p < n; ++p)
-      for (int q = p + 1; q < n; ++q) // check that matrix is symmetric
-        chop.requireClose(H[p][q], H[q][p]);
-    Scalar factor = DoubleScalar.of(0.2 / (n * n));
-    int phase1 = PHASE1[Math.min(n, PHASE1.length - 1)];
-    for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
-      Scalar sum = sumAbs_offDiagonal();
-      if (Scalars.isZero(sum))
-        return;
-      Scalar tresh = phase1 <= iteration //
-          ? sum.zero()
-          : sum.multiply(factor);
-      for (int p = 0; p < n - 1; ++p)
-        for (int q = p + 1; q < n; ++q) {
-          Scalar off = H[p][q];
-          Scalar abs = Abs.FUNCTION.apply(off);
-          Scalar g = HUNDRED.multiply(abs);
-          if (phase1 < iteration && //
-              Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(diag(p)))) && //
-              Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(diag(q))))) {
-            H[p][q] = off.zero();
-            H[q][p] = off.zero();
-          } else //
-          if (Scalars.lessThan(tresh, abs))
-            JacobiRotation.transform(H, V, p, q, g);
-        }
-    }
-    throw TensorRuntimeException.of(matrix);
+  }
+
+  @Override // from JacobiMethod
+  protected void init() {
+    // ---
+  }
+
+  @Override // from JacobiMethod
+  protected void run(int p, int q, Scalar apq) {
+    JacobiRotation.transform(H, V, p, q, apq);
   }
 }

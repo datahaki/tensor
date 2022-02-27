@@ -43,7 +43,7 @@ public class JacobiComplexTest extends TestCase {
       Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
       Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
       HermitianMatrixQ.require(matrix);
-      JacobiComplex jacobiComplex = new JacobiComplex(matrix, Tolerance.CHOP);
+      JacobiComplex jacobiComplex = new JacobiComplex(matrix);
       Chop.NONE.requireAllZero(Imag.of(jacobiComplex.values()));
       Tensor h = jacobiComplex.package_H();
       Tolerance.CHOP.requireClose(DiagonalMatrix.with(Diagonal.of(h)), h);

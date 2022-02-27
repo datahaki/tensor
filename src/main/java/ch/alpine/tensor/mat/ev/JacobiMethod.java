@@ -1,11 +1,14 @@
-// code by jph
+// code by guedelmi
+// modified by jph
 package ch.alpine.tensor.mat.ev;
 
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.UnitVector;
@@ -14,17 +17,17 @@ import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.sca.Abs;
 
 /** vector of eigen{@link #values()} has strictly zero imaginary part */
-/* package */ class JacobiMethod implements Eigensystem {
-  static final int MAX_ITERATIONS = 50;
+/* package */ abstract class JacobiMethod implements Eigensystem {
+  private static final int MAX_ITERATIONS = 50;
   // higher phase 1 count increases numerical precision
-  static final int[] PHASE1 = { //
+  private static final int[] PHASE1 = { //
       0, 0, 0, // n==0,1,2
       4, // n==3
       5, 5, // n==4,5
       6, 6, 6, 6, // n==6,...,9
       7 };
-  static final Scalar HUNDRED = DoubleScalar.of(100);
-  static final Scalar EPS = DoubleScalar.of(Math.ulp(1));
+  private static final Scalar EPS = DoubleScalar.of(Math.ulp(1));
+  private static final Scalar HUNDRED = DoubleScalar.of(100);
   // ---
   protected final int n;
   protected final Scalar[][] H;
@@ -36,13 +39,47 @@ import ch.alpine.tensor.sca.Abs;
     V = IntStream.range(0, n) //
         .mapToObj(k -> UnitVector.of(n, k)) //
         .toArray(Tensor[]::new);
+    // ---
+    init();
+    Scalar factor = DoubleScalar.of(0.2 / (n * n));
+    int phase1 = PHASE1[Math.min(n, PHASE1.length - 1)];
+    for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
+      Scalar sum = sumAbs_offDiagonal();
+      if (Scalars.isZero(sum))
+        return;
+      Scalar tresh = iteration < phase1 //
+          ? sum.multiply(factor)
+          : sum.zero();
+      for (int p = 0; p < n - 1; ++p)
+        for (int q = p + 1; q < n; ++q) {
+          Scalar hpq = H[p][q];
+          Scalar apq = Abs.FUNCTION.apply(hpq);
+          Scalar g = HUNDRED.multiply(apq);
+          if (phase1 < iteration && //
+              Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(diag(p)))) && //
+              Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(diag(q))))) {
+            H[p][q] = hpq.zero();
+            H[q][p] = hpq.zero();
+          } else //
+          if (Scalars.lessThan(tresh, apq))
+            run(p, q, apq);
+        }
+    }
+    throw TensorRuntimeException.of(matrix);
   }
+
+  protected abstract void init();
+
+  /** @param p
+   * @param q
+   * @param apq Abs[H[p][q]] */
+  protected abstract void run(int p, int q, Scalar apq);
 
   protected final Scalar diag(int p) {
     return H[p][p];
   }
 
-  protected final Scalar sumAbs_offDiagonal() {
+  private final Scalar sumAbs_offDiagonal() {
     Scalar sum = H[0][0].zero(); // preserve unit
     for (int p = 0; p < n - 1; ++p)
       for (int q = p + 1; q < n; ++q)
