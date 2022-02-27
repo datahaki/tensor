@@ -19,14 +19,7 @@ import ch.alpine.tensor.sca.Abs;
 /** vector of eigen{@link #values()} has strictly zero imaginary part */
 /* package */ abstract class JacobiMethod implements Eigensystem {
   private static final int MAX_ITERATIONS = 50;
-  // higher phase 1 count increases numerical precision
-  private static final int[] PHASE1 = { //
-      0, 0, 0, // n==0,1,2
-      4, // n==3
-      5, 5, // n==4,5
-      6, 6, 6, 6, // n==6,...,9
-      7 };
-  private static final Scalar EPS = DoubleScalar.of(Math.ulp(1));
+  private static final Scalar DBL_EPSILON = DoubleScalar.of(Math.ulp(1.0));
   private static final Scalar HUNDRED = DoubleScalar.of(100);
   // ---
   protected final int n;
@@ -42,12 +35,11 @@ import ch.alpine.tensor.sca.Abs;
     // ---
     init();
     Scalar factor = DoubleScalar.of(0.2 / (n * n));
-    int phase1 = PHASE1[Math.min(n, PHASE1.length - 1)];
     for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
       Scalar sum = sumAbs_offDiagonal();
       if (Scalars.isZero(sum))
         return;
-      Scalar tresh = iteration < phase1 //
+      Scalar tresh = iteration < 4 //
           ? sum.multiply(factor)
           : sum.zero();
       for (int p = 0; p < n - 1; ++p)
@@ -55,14 +47,14 @@ import ch.alpine.tensor.sca.Abs;
           Scalar hpq = H[p][q];
           Scalar apq = Abs.FUNCTION.apply(hpq);
           Scalar g = HUNDRED.multiply(apq);
-          if (phase1 < iteration && //
-              Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(diag(p)))) && //
-              Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(diag(q))))) {
+          if (4 < iteration && //
+              Scalars.lessEquals(g, DBL_EPSILON.multiply(Abs.FUNCTION.apply(diag(p)))) && //
+              Scalars.lessEquals(g, DBL_EPSILON.multiply(Abs.FUNCTION.apply(diag(q))))) {
             H[p][q] = hpq.zero();
             H[q][p] = hpq.zero();
           } else //
           if (Scalars.lessThan(tresh, apq))
-            run(p, q, apq);
+            run(p, q);
         }
     }
     throw TensorRuntimeException.of(matrix);
@@ -73,8 +65,10 @@ import ch.alpine.tensor.sca.Abs;
   /** @param p
    * @param q
    * @param apq Abs[H[p][q]] */
-  protected abstract void run(int p, int q, Scalar apq);
+  protected abstract void run(int p, int q);
 
+  /** @param p
+   * @return diagonal element */
   protected final Scalar diag(int p) {
     return H[p][p];
   }

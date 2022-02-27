@@ -5,6 +5,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Real;
@@ -25,10 +26,11 @@ import ch.alpine.tensor.sca.Real;
   }
 
   @Override // from JacobiMethod
-  protected void run(int p, int q, Scalar apq) {
+  protected void run(int p, int q) {
     Scalar hpp = diag(p);
     Scalar hqq = diag(q);
     Scalar hpq = H[p][q];
+    Scalar apq = Abs.FUNCTION.apply(hpq);
     Scalar phi1 = Arg.FUNCTION.apply(hpq);
     Scalar phi2 = ArcTan.of(hpp.subtract(hqq), apq.add(apq));
     Scalar theta1 = phi1.subtract(Pi.HALF).multiply(RationalScalar.HALF);

@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.mat.ev;
 
-import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -16,12 +15,9 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.ev.JacobiRotation.Inner;
-import ch.alpine.tensor.sca.Abs;
 import junit.framework.TestCase;
 
 public class JacobiRotationTest extends TestCase {
-  private static final Scalar HUNDRED = DoubleScalar.of(100);
-
   public void testSimple() {
     Tensor matrix = HilbertMatrix.of(4).unmodifiable();
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
@@ -49,12 +45,8 @@ public class JacobiRotationTest extends TestCase {
     for (int count = 0; count < 5; ++count)
       for (int p = 0; p < n - 1; ++p)
         for (int q = p + 1; q < n; ++q) {
-          Scalar apq = A[p][q];
-          Scalar Apq = Abs.FUNCTION.apply(apq);
-          Scalar g = HUNDRED.multiply(Apq);
-          // ---
           _check(matrix, A, V);
-          JacobiRotation.transform(A, V, p, q, g);
+          JacobiRotation.transform(A, V, p, q);
           _check(matrix, A, V);
         }
   }
@@ -66,10 +58,9 @@ public class JacobiRotationTest extends TestCase {
     int p = 1;
     int q = 2;
     JacobiRotation jacobiRotation = new JacobiRotation(A, V, p, q);
-    Scalar apq = A[p][q];
-    Scalar Apq = Abs.FUNCTION.apply(apq);
-    Scalar g = HUNDRED.multiply(Apq);
-    Scalar t = jacobiRotation.t(g);
+    Scalar dif = A[q][q].subtract(A[p][p]);
+    Scalar hpq = A[p][q];
+    Scalar t = JacobiRotation.t(dif, hpq);
     Inner inner = jacobiRotation.new Inner(t);
     inner.transform();
     Tensor r = inner.rotation();
@@ -77,5 +68,11 @@ public class JacobiRotationTest extends TestCase {
     Tolerance.CHOP.requireClose( //
         Tensors.matrix(A), //
         BasisTransform.of(matrix, 1, r));
+  }
+
+  public void testEpsDouble() {
+    double dbl_ulp = Math.ulp(1.0);
+    float flt_ulp = Math.ulp(1);
+    assertTrue(dbl_ulp < flt_ulp);
   }
 }

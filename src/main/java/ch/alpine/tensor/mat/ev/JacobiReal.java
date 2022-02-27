@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.mat.ev;
 
-import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 
 /** The Jacobi transformations of a real symmetric matrix establishes the
@@ -39,7 +38,7 @@ import ch.alpine.tensor.Tensor;
   }
 
   @Override // from JacobiMethod
-  protected void run(int p, int q, Scalar apq) {
-    JacobiRotation.transform(H, V, p, q, apq);
+  protected void run(int p, int q) {
+    JacobiRotation.transform(H, V, p, q);
   }
 }

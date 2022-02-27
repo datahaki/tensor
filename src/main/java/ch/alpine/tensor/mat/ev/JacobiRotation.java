@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.ev;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -20,18 +21,38 @@ import ch.alpine.tensor.sca.Sign;
  * then
  * 1/ci ^ 2 + s ^ 2 == 1 */
 /* package */ class JacobiRotation {
-  private static final Scalar EPS = DoubleScalar.of(Math.ulp(1));
+  private static final Scalar DBL_EPSILON = DoubleScalar.of(Math.ulp(1.0));
 
   /** @param H
    * @param V
    * @param p
    * @param q
    * @param g */
-  public static void transform(Scalar[][] H, Tensor[] V, int p, int q, Scalar g) {
+  public static void transform(Scalar[][] H, Tensor[] V, int p, int q) {
     JacobiRotation jacobiRotation = new JacobiRotation(H, V, p, q);
-    jacobiRotation.new Inner(jacobiRotation.t(g)).transform();
+    Scalar dif = H[q][q].subtract(H[p][p]);
+    Scalar hpq = H[p][q];
+    Scalar t = t(dif, hpq);
+    jacobiRotation.new Inner(t).transform();
   }
 
+  public static Scalar t(Scalar dif, Scalar hpq) {
+    return Scalars.lessEquals( //
+        Abs.FUNCTION.apply(hpq).multiply(RealScalar.of(100.0)), //
+        Abs.FUNCTION.apply(dif).multiply(DBL_EPSILON)) //
+            ? hpq.divide(dif)
+            : t_exact(dif, hpq);
+  }
+
+  private static Scalar t_exact(Scalar dif, Scalar hpq) {
+    Scalar theta = dif.divide(hpq.add(hpq));
+    Scalar t = Abs.FUNCTION.apply(theta).add(Hypot.withOne(theta)).reciprocal();
+    return Sign.isPositiveOrZero(theta) //
+        ? t
+        : t.negate();
+  }
+
+  // ---
   private final Scalar[][] H;
   private final Tensor[] V;
   private final int p;
@@ -42,16 +63,6 @@ import ch.alpine.tensor.sca.Sign;
     this.V = V;
     this.p = p;
     this.q = q;
-  }
-
-  Scalar t(Scalar g) {
-    Scalar dif = H[q][q].subtract(H[p][p]);
-    Scalar hpq = H[p][q];
-    if (Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(dif))))
-      return hpq.divide(dif);
-    Scalar theta = dif.divide(hpq.add(hpq));
-    Scalar t = Abs.FUNCTION.apply(theta).add(Hypot.withOne(theta)).reciprocal();
-    return Sign.isPositiveOrZero(theta) ? t : t.negate();
   }
 
   class Inner {
@@ -75,6 +86,8 @@ import ch.alpine.tensor.sca.Sign;
         H[p][p] = hpp;
         H[q][q] = hqq;
         // SqrtPuTest shows that setting Apq == Aqp == 0 is beneficial
+        // Tolerance.CHOP.requireZero(H[p][q]); // dev check
+        // Tolerance.CHOP.requireZero(H[q][p]); // dev check
         H[p][q] = H[p][q].zero();
         H[q][p] = H[q][p].zero();
       }
