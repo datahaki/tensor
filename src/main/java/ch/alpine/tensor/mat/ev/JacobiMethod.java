@@ -6,9 +6,10 @@ import java.util.stream.IntStream;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.ScalarArray;
-import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Abs;
 
 /* package */ class JacobiMethod implements Eigensystem {
@@ -16,12 +17,14 @@ import ch.alpine.tensor.sca.Abs;
   // ---
   protected final int n;
   protected final Scalar[][] H;
-  protected final Tensor V;
+  protected final Tensor[] V;
 
   public JacobiMethod(Tensor matrix) {
     n = matrix.length();
     H = ScalarArray.ofMatrix(matrix);
-    V = IdentityMatrix.of(n); // init vectors
+    V = IntStream.range(0, n) //
+        .mapToObj(k -> UnitVector.of(n, k)) //
+        .toArray(Tensor[]::new);
   }
 
   protected final Scalar diag(int p) {
@@ -43,7 +46,7 @@ import ch.alpine.tensor.sca.Abs;
 
   @Override // from Eigensystem
   public final Tensor vectors() {
-    return V;
+    return Unprotect.byRef(V);
   }
 
   @PackageTestAccess

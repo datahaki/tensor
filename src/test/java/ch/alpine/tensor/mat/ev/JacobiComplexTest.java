@@ -24,6 +24,16 @@ import ch.alpine.tensor.red.Entrywise;
 import junit.framework.TestCase;
 
 public class JacobiComplexTest extends TestCase {
+  private static void _check(Tensor matrix, Eigensystem eigensystem) {
+    Tensor v = eigensystem.vectors();
+    UnitaryMatrixQ.require(v);
+    Tensor diagon = DiagonalMatrix.with(eigensystem.values());
+    Tensor m1 = BasisTransform.ofMatrix(diagon, v);
+    Tolerance.CHOP.requireClose(m1, matrix);
+    Tensor m2 = BasisTransform.of(diagon, 1, v);
+    Tolerance.CHOP.requireClose(m2, matrix);
+  }
+
   public void testHermitian() {
     Distribution distribution = TriangularDistribution.with(0, 1);
     for (int n = 1; n < 6; ++n) {
@@ -31,14 +41,13 @@ public class JacobiComplexTest extends TestCase {
       Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
       Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
       HermitianMatrixQ.require(matrix);
-      // System.out.println(Diagonal.of(matrix));
       JacobiComplex jacobiComplex = new JacobiComplex(matrix, Tolerance.CHOP);
       Tensor h = jacobiComplex.package_H();
       Tolerance.CHOP.requireClose(DiagonalMatrix.with(Diagonal.of(h)), h);
       Tolerance.CHOP.requireClose( //
           BasisTransform.ofMatrix(h, jacobiComplex.vectors()), //
           matrix);
-      UnitaryMatrixQ.require(jacobiComplex.vectors());
+      _check(matrix, jacobiComplex);
     }
   }
 
@@ -53,5 +62,24 @@ public class JacobiComplexTest extends TestCase {
     assertEquals(ns1.length(), 1);
     Eigensystem eigensystem = Eigensystem.ofHermitian(matrix);
     Tolerance.CHOP.requireClose(eigensystem.values(), Tensors.vector(8, -1));
+    _check(matrix, eigensystem);
+  }
+
+  public void testComplexUnits() {
+    Tensor matrix = Tensors.fromString("{{2[m], 3-3*I[m]}, {3+3*I[m], 5[m]}}");
+    Eigensystem eigensystem = Eigensystem.ofHermitian(matrix);
+    _check(matrix, eigensystem);
+  }
+
+  public void testRealComparison() {
+    Distribution distribution = TriangularDistribution.with(0, 1);
+    for (int n = 1; n < 6; ++n) {
+      Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
+      Eigensystem e1 = Eigensystem.ofHermitian(matrix);
+      Eigensystem e2 = Eigensystem.ofSymmetric(matrix);
+      _check(matrix, e1);
+      _check(matrix, e2);
+      Tolerance.CHOP.requireClose(e1.values(), e2.values());
+    }
   }
 }

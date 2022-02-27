@@ -22,34 +22,34 @@ import ch.alpine.tensor.sca.Sign;
 /* package */ class JacobiRotation {
   private static final Scalar EPS = DoubleScalar.of(Math.ulp(1));
 
-  /** @param A
+  /** @param H
    * @param V
    * @param p
    * @param q
    * @param g */
-  public static void transform(Scalar[][] A, Tensor V, int p, int q, Scalar g) {
-    JacobiRotation jacobiRotation = new JacobiRotation(A, V, p, q);
+  public static void transform(Scalar[][] H, Tensor[] V, int p, int q, Scalar g) {
+    JacobiRotation jacobiRotation = new JacobiRotation(H, V, p, q);
     jacobiRotation.new Inner(jacobiRotation.t(g)).transform();
   }
 
-  private final Scalar[][] A;
-  private final Tensor V;
+  private final Scalar[][] H;
+  private final Tensor[] V;
   private final int p;
   private final int q;
 
-  JacobiRotation(Scalar[][] A, Tensor V, int p, int q) {
-    this.A = A;
+  JacobiRotation(Scalar[][] H, Tensor[] V, int p, int q) {
+    this.H = H;
     this.V = V;
     this.p = p;
     this.q = q;
   }
 
   Scalar t(Scalar g) {
-    Scalar apq = A[p][q];
-    Scalar h = A[q][q].subtract(A[p][p]);
-    if (Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(h))))
-      return apq.divide(h);
-    Scalar theta = h.divide(apq.add(apq));
+    Scalar dif = H[q][q].subtract(H[p][p]);
+    Scalar hpq = H[p][q];
+    if (Scalars.lessEquals(g, EPS.multiply(Abs.FUNCTION.apply(dif))))
+      return hpq.divide(dif);
+    Scalar theta = dif.divide(hpq.add(hpq));
     Scalar t = Abs.FUNCTION.apply(theta).add(Hypot.withOne(theta)).reciprocal();
     return Sign.isPositiveOrZero(theta) ? t : t.negate();
   }
@@ -64,25 +64,25 @@ import ch.alpine.tensor.sca.Sign;
     }
 
     void transform() {
-      int n = A.length;
+      int n = H.length;
       { // preserve original values
-        Scalar h = t.multiply(A[p][q]);
-        Scalar app = A[p][p].subtract(h);
-        Scalar aqq = A[q][q].add(h);
+        Scalar h = t.multiply(H[p][q]);
+        Scalar hpp = H[p][p].subtract(h);
+        Scalar hqq = H[q][q].add(h);
         // basis transform of symmetric matrix
         IntStream.range(0, n).forEach(j -> a(p, j, q, j));
         IntStream.range(0, n).forEach(j -> a(j, p, j, q));
-        A[p][p] = app;
-        A[q][q] = aqq;
+        H[p][p] = hpp;
+        H[q][q] = hqq;
         // SqrtPuTest shows that setting Apq == Aqp == 0 is beneficial
-        A[p][q] = A[p][q].zero();
-        A[q][p] = A[q][p].zero();
+        H[p][q] = H[p][q].zero();
+        H[q][p] = H[q][p].zero();
       }
       { // multiplication from left
-        Tensor vp = V.get(p);
-        Tensor vq = V.get(q);
-        V.set(vp.subtract(vq.multiply(t)).divide(ci), p);
-        V.set(vq.add(vp.multiply(t)).divide(ci), q);
+        Tensor vp = V[p];
+        Tensor vq = V[q];
+        V[p] = vp.subtract(vq.multiply(t)).divide(ci);
+        V[q] = vq.add(vp.multiply(t)).divide(ci);
       }
     }
 
@@ -91,21 +91,21 @@ import ch.alpine.tensor.sca.Sign;
       final Scalar rkl;
 
       // TraceTest shows that division by ci is better that multiplication with ci.reciprocal()
-      public Transform(Scalar aij, Scalar akl) {
-        rij = aij.subtract(akl.multiply(t)).divide(ci);
-        rkl = akl.add(aij.multiply(t)).divide(ci);
+      public Transform(Scalar hij, Scalar hkl) {
+        rij = hij.subtract(hkl.multiply(t)).divide(ci);
+        rkl = hkl.add(hij.multiply(t)).divide(ci);
       }
     }
 
     private void a(int i, int j, int k, int l) {
-      Transform jr2 = new Transform(A[i][j], A[k][l]);
-      A[i][j] = jr2.rij;
-      A[k][l] = jr2.rkl;
+      Transform jr2 = new Transform(H[i][j], H[k][l]);
+      H[i][j] = jr2.rij;
+      H[k][l] = jr2.rkl;
     }
 
     // for testing
     Tensor rotation() {
-      Tensor tensor = IdentityMatrix.of(A.length);
+      Tensor tensor = IdentityMatrix.of(H.length);
       {
         Scalar c = ci.reciprocal();
         tensor.set(c, p, p);

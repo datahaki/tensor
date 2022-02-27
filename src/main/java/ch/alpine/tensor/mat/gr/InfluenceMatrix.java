@@ -39,9 +39,9 @@ public interface InfluenceMatrix {
       }
     QRDecomposition qrDecomposition = GramSchmidt.of(design);
     Tensor qInv = qrDecomposition.getQConjugateTranspose();
-    if (Tensors.isEmpty(qInv))
-      return new InfluenceMatrixImpl(Array.sparse(n, 1), Array.sparse(1, n));
-    return new InfluenceMatrixImpl(qrDecomposition.getQ(), qInv);
+    return Tensors.nonEmpty(qInv) //
+        ? new InfluenceMatrixImpl(qrDecomposition.getQ(), qInv)
+        : new InfluenceMatrixImpl(Array.sparse(n, 1), Array.sparse(1, n));
   }
 
   /** projection matrix defines a projection of a tangent vector at given point to a vector in
