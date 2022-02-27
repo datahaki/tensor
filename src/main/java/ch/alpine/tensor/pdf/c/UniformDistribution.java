@@ -86,7 +86,7 @@ public class UniformDistribution extends AbstractContinuousDistribution //
   }
 
   @Override // from CentralMomentInterface
-  public Scalar centralMoment(Scalar order) {
+  public Scalar centralMoment(int order) {
     Distribution distribution = TrapezoidalDistribution.of(clip.min(), clip.min(), clip.max(), clip.max());
     return CentralMoment.of(distribution, order);
   }

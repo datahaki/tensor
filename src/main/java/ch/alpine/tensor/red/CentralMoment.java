@@ -3,7 +3,6 @@ package ch.alpine.tensor.red;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
@@ -37,21 +36,14 @@ public enum CentralMoment {
   /** @param distribution
    * @param order
    * @return central moment of given distribution and order */
-  public static Scalar of(Distribution distribution, Scalar order) {
+  public static Scalar of(Distribution distribution, int order) {
     if (distribution instanceof CentralMomentInterface centralMomentInterface)
       return centralMomentInterface.centralMoment(order);
-    return switch (Scalars.intValueExact(order)) {
+    return switch (order) {
     case 0 -> RealScalar.ONE;
     case 1 -> Mean.of(distribution).zero();
     case 2 -> Variance.of(distribution);
     default -> throw new UnsupportedOperationException();
     };
-  }
-
-  /** @param distribution
-   * @param order
-   * @return central moment of given distribution and order */
-  public static Scalar of(Distribution distribution, Number order) {
-    return of(distribution, RealScalar.of(order));
   }
 }

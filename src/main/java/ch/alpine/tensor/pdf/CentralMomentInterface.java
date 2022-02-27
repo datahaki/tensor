@@ -7,5 +7,5 @@ import ch.alpine.tensor.Scalar;
 public interface CentralMomentInterface {
   /** @param order
    * @return central moment of given order */
-  Scalar centralMoment(Scalar order);
+  Scalar centralMoment(int order);
 }

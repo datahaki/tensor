@@ -168,8 +168,8 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
   }
 
   @Override // from CentralMomentInterface
-  public Scalar centralMoment(Scalar order) {
-    return moment(true, Scalars.intValueExact(order));
+  public Scalar centralMoment(int order) {
+    return moment(true, order);
   }
 
   private Scalar moment(boolean centered, int order) {
