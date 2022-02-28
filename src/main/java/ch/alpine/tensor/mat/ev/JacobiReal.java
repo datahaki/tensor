@@ -39,6 +39,7 @@ import ch.alpine.tensor.Tensor;
 
   @Override // from JacobiMethod
   protected void run(int p, int q) {
+    // TODO merge JacobiRotation into here
     JacobiRotation.transform(H, V, p, q);
   }
 }

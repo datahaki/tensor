@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -16,14 +17,23 @@ import ch.alpine.tensor.ext.Integers;
 public enum Factorial2 implements ScalarUnaryOperator {
   FUNCTION;
 
+  /** MEMO[index] == Factorial2[index] */
   private static final Tensor MEMO = Tensors.vector(1, 1);
 
-  /** @param index non-negative
-   * @return
+  /** @param index
+   * @return Factorial2[index]
    * @throws Exception if index is negative */
   public static Scalar of(int index) {
-    if (index == -1)
-      return RealScalar.ONE;
+    if (index < 0) {
+      if (index == -1)
+        return RealScalar.ONE;
+      if (index % 2 == 0)
+        return DoubleScalar.INDETERMINATE; // ComplexInfinity
+      Scalar scalar = of(-index - 2).reciprocal();
+      return ((index + 1) / 2) % 2 == 0 //
+          ? scalar
+          : scalar.negate();
+    }
     if (MEMO.length() <= Integers.requirePositiveOrZero(index))
       synchronized (FUNCTION) {
         for (int i = MEMO.length(); i <= index; ++i)

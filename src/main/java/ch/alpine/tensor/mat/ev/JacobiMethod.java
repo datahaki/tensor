@@ -21,6 +21,8 @@ import ch.alpine.tensor.sca.Abs;
   private static final int MAX_ITERATIONS = 50;
   private static final Scalar DBL_EPSILON = DoubleScalar.of(Math.ulp(1.0));
   private static final Scalar HUNDRED = DoubleScalar.of(100);
+  // TODO reintroduce adapted phase, but cap at 4?
+  private static final int PHASE1 = 4;
   // ---
   protected final int n;
   protected final Scalar[][] H;
@@ -39,7 +41,7 @@ import ch.alpine.tensor.sca.Abs;
       Scalar sum = sumAbs_offDiagonal();
       if (Scalars.isZero(sum))
         return;
-      Scalar tresh = iteration < 4 //
+      Scalar tresh = iteration < PHASE1 //
           ? sum.multiply(factor)
           : sum.zero();
       for (int p = 0; p < n - 1; ++p)
@@ -47,7 +49,7 @@ import ch.alpine.tensor.sca.Abs;
           Scalar hpq = H[p][q];
           Scalar apq = Abs.FUNCTION.apply(hpq);
           Scalar g = HUNDRED.multiply(apq);
-          if (4 < iteration && //
+          if (PHASE1 < iteration && //
               Scalars.lessEquals(g, DBL_EPSILON.multiply(Abs.FUNCTION.apply(diag(p)))) && //
               Scalars.lessEquals(g, DBL_EPSILON.multiply(Abs.FUNCTION.apply(diag(q))))) {
             H[p][q] = hpq.zero();
