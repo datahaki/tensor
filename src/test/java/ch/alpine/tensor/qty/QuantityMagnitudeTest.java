@@ -58,7 +58,7 @@ public class QuantityMagnitudeTest extends TestCase {
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     ScalarUnaryOperator suo = quantityMagnitude.in("J");
     Scalar result = suo.apply(scalar);
-    assertEquals(result, RealScalar.ONE);
+    Tolerance.CHOP.requireClose(result, RealScalar.ONE);
   }
 
   public void testConversionPa() {

@@ -1,25 +1,61 @@
 // code by jph
-package ch.alpine.tensor.usr;
+package ch.alpine.tensor.qty;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.io.ResourceData;
-import ch.alpine.tensor.qty.Quantity;
 
 /** function exists to export expressions from the tensor library to a string
  * that can be parsed by Mathematica */
 public enum MathematicaForm {
-  ;
+  INSTANCE;
+
   private static final String OPENING_BRACKET_STRING = Character.toString(Tensor.OPENING_BRACKET);
   private static final String CLOSING_BRACKET_STRING = Character.toString(Tensor.CLOSING_BRACKET);
   private static final Collector<CharSequence, ?, String> EMBRACE = //
       Collectors.joining(", ", OPENING_BRACKET_STRING, CLOSING_BRACKET_STRING);
-  private static final Properties UNIT_NAMES = ResourceData.properties("/unit/names.properties");
+  private final Map<String, String> map = new HashMap<>();
+
+  private MathematicaForm() {
+    Set<String> block = ResourceData.properties("/unit/si.properties").stringPropertyNames();
+    Properties properties = ResourceData.properties("/unit/names.properties");
+    for (String key : properties.stringPropertyNames()) {
+      if (key.charAt(0) == '_') {
+        String value = properties.getProperty(key);
+        key = key.substring(1);
+        set(key, "", value);
+        value = (value.charAt(0) + "").toLowerCase() + value.substring(1);
+        for (MetricPrefix metricPrefix : MetricPrefix.values()) {
+          String result = metricPrefix.prefix() + key;
+          if (!block.contains(result))
+            set(result, metricPrefix.english(), value);
+          // else
+          // System.out.println("BLOCK "+result);
+        }
+      } else {
+        map.put(key, properties.getProperty(key));
+      }
+    }
+  }
+
+  private void set(String key, String order, String value) {
+    if (map.containsKey(key))
+      throw new IllegalArgumentException(key);
+    map.put(key, order + value);
+  }
+
+  public Map<String, String> getMap() {
+    return Collections.unmodifiableMap(map);
+  }
 
   public static String of(Tensor tensor) {
     if (tensor instanceof Scalar) {
@@ -39,6 +75,6 @@ public enum MathematicaForm {
   private static String of(Entry<String, Scalar> entry) {
     String string = entry.getValue().toString();
     String reduce = string.equals("1") ? "" : '^' + string;
-    return '\"' + UNIT_NAMES.getProperty(entry.getKey()) + '\"' + reduce;
+    return '\"' + INSTANCE.map.get(entry.getKey()) + '\"' + reduce;
   }
 }

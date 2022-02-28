@@ -34,7 +34,6 @@ public class KnownUnitQTest extends TestCase {
   public void testAll() {
     KnownUnitQ knownUnitQ = KnownUnitQ.SI();
     knownUnitQ.require(Unit.of("cd"));
-    knownUnitQ.require(Unit.of("cd"));
     knownUnitQ.require(Unit.of("m"));
     knownUnitQ.require(Unit.of("kg"));
     knownUnitQ.require(Unit.of("K"));

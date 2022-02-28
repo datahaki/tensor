@@ -8,7 +8,6 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.io.ResourceData;
-import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -113,13 +112,12 @@ public class UnitSystemsTest extends TestCase {
     assertEquals(scalar, Scalars.fromString("1000[W^1/2*kg^-1/2*s^3/2]"));
     assertEquals(UnitSystem.SI().apply(scalar), Quantity.of(1000, "m"));
   }
-
-  public void testSubstituteM_kW() {
-    UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "m", "kW"); // W = m^2*kg*s^-3
-    Scalar scalar = unitSystem.apply(Quantity.of(1, "km"));
-    Tolerance.CHOP.requireClose(scalar, Scalars.fromString("31.622776601683793[kW^1/2*kg^-1/2*s^3/2]"));
-    Tolerance.CHOP.requireClose(UnitSystem.SI().apply(scalar), Quantity.of(1000, "m"));
-  }
+  // public void testSubstituteM_kW() {
+  // UnitSystem unitSystem = requireInvariant(UnitSystem.SI(), "m", "kW"); // W = m^2*kg*s^-3
+  // Scalar scalar = unitSystem.apply(Quantity.of(1, "km"));
+  // Tolerance.CHOP.requireClose(scalar, Scalars.fromString("31.622776601683793[kW^1/2*kg^-1/2*s^3/2]"));
+  // Tolerance.CHOP.requireClose(UnitSystem.SI().apply(scalar), Quantity.of(1000, "m"));
+  // }
 
   public void testCurrency() {
     UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("/unit/chf.properties"));

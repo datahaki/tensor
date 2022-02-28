@@ -93,7 +93,7 @@ public class UnitSystemTest extends TestCase {
 
   public void testKnots() throws ClassNotFoundException, IOException {
     UnitSystem unitSystem = Serialization.copy(UnitSystem.SI());
-    Scalar r1 = unitSystem.apply(Quantity.of(1, "knots"));
+    Scalar r1 = unitSystem.apply(Quantity.of(1, "kn"));
     Unit unit = QuantityUnit.of(r1);
     assertEquals(unit, Unit.of("m*s^-1"));
     ExactScalarQ.require(r1);

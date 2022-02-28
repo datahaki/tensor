@@ -28,8 +28,8 @@ public class UnitQTest extends TestCase {
 
   public void testWeightPercent() {
     Scalar scalar = Quantity.of(2, "kg").divide(Quantity.of(10, "kg"));
-    Scalar wtp = UnitConvert.SI().to("wt%").apply(scalar);
-    assertEquals(wtp, Quantity.of(20, "wt%"));
+    Scalar wtp = UnitConvert.SI().to("mass%").apply(scalar);
+    assertEquals(wtp, Quantity.of(20, "mass%"));
     assertFalse(UnitQ.isOne(QuantityUnit.of(wtp)));
   }
 }

@@ -63,10 +63,12 @@ public class SimpleUnitSystem implements UnitSystem {
         if (map.containsKey(atom)) {
           Scalar value = ((Quantity) scalar).value();
           Unit alt = QuantityUnit.of(map.get(atom));
-          if (Scalars.isZero(value) || // non-zero
-              !value.one().equals(value) || // not multiplicative 1
-              !alt.toString().equals(atom))
-            throw TensorRuntimeException.of(scalar);
+          if (Scalars.isZero(value)) // non-zero
+            throw new IllegalArgumentException(atom + " " + value);
+          if (!value.one().equals(value)) // not multiplicative 1
+            throw new IllegalArgumentException(atom + " " + value);
+          if (!alt.toString().equals(atom))
+            throw new IllegalArgumentException(atom + " " + value);
         }
     return map;
   }
