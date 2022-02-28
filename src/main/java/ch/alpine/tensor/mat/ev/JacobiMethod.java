@@ -9,17 +9,15 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.UnitVector;
-import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.sca.Abs;
 
 /** vector of eigen{@link #values()} has strictly zero imaginary part */
 /* package */ abstract class JacobiMethod implements Eigensystem {
   private static final int MAX_ITERATIONS = 50;
-  private static final Scalar DBL_EPSILON = DoubleScalar.of(Math.ulp(1.0));
+  protected static final Scalar DBL_EPSILON = DoubleScalar.of(Math.ulp(1.0));
   private static final Scalar HUNDRED = DoubleScalar.of(100);
   // TODO reintroduce adapted phase, but cap at 4?
   private static final int PHASE1 = 4;
@@ -34,8 +32,10 @@ import ch.alpine.tensor.sca.Abs;
     V = IntStream.range(0, n) //
         .mapToObj(k -> UnitVector.of(n, k)) //
         .toArray(Tensor[]::new);
-    // ---
-    init();
+  }
+
+  /** @throws Exception if iteration does not converge */
+  public void solve() {
     Scalar factor = DoubleScalar.of(0.2 / (n * n));
     for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
       Scalar sum = sumAbs_offDiagonal();
@@ -56,18 +56,15 @@ import ch.alpine.tensor.sca.Abs;
             H[q][p] = hpq.zero();
           } else //
           if (Scalars.lessThan(tresh, apq))
-            run(p, q);
+            eliminate(p, q);
         }
     }
-    throw TensorRuntimeException.of(matrix);
+    throw TensorRuntimeException.of();
   }
 
-  protected abstract void init();
-
   /** @param p
-   * @param q
-   * @param apq Abs[H[p][q]] */
-  protected abstract void run(int p, int q);
+   * @param q */
+  protected abstract void eliminate(int p, int q);
 
   /** @param p
    * @return diagonal element */
@@ -91,10 +88,5 @@ import ch.alpine.tensor.sca.Abs;
   @Override // from Eigensystem
   public final Tensor vectors() {
     return Unprotect.byRef(V);
-  }
-
-  @PackageTestAccess
-  final Tensor package_H() {
-    return Tensors.matrix(H);
   }
 }

@@ -69,7 +69,7 @@ public class JacobiMethodTest extends TestCase {
     // assert that values are sorted from max to min
     assertEquals(eigensystem.values(), Reverse.of(Sort.of(eigensystem.values())));
     JacobiReal jacobiMethod = new JacobiReal(matrix);
-    SymmetricMatrixQ.require(jacobiMethod.package_H(), Chop.NONE);
+    SymmetricMatrixQ.require(Tensors.matrix(jacobiMethod.H), Chop.NONE);
   }
 
   public void testJacobiWithTensor1() {

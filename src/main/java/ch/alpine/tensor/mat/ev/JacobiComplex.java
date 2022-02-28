@@ -16,17 +16,13 @@ import ch.alpine.tensor.sca.Real;
   /** @param matrix hermitian */
   public JacobiComplex(Tensor matrix) {
     super(matrix);
-  }
-
-  @Override
-  protected void init() {
     // remove any imaginary part on diagonal after check that hermitian numerical
     for (int p = 0; p < n; ++p)
       H[p][p] = Real.FUNCTION.apply(H[p][p]);
   }
 
   @Override // from JacobiMethod
-  protected void run(int p, int q) {
+  protected void eliminate(int p, int q) {
     Scalar hpp = diag(p);
     Scalar hqq = diag(q);
     Scalar hpq = H[p][q];

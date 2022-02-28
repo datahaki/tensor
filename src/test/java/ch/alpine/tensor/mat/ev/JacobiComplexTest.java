@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.mat.ev;
 
+import java.lang.reflect.Modifier;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -44,8 +46,9 @@ public class JacobiComplexTest extends TestCase {
       Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
       HermitianMatrixQ.require(matrix);
       JacobiComplex jacobiComplex = new JacobiComplex(matrix);
+      jacobiComplex.solve();
       Chop.NONE.requireAllZero(Imag.of(jacobiComplex.values()));
-      Tensor h = jacobiComplex.package_H();
+      Tensor h = Tensors.matrix(jacobiComplex.H);
       Tolerance.CHOP.requireClose(DiagonalMatrix.with(Diagonal.of(h)), h);
       Tolerance.CHOP.requireClose( //
           BasisTransform.ofMatrix(h, jacobiComplex.vectors()), //
@@ -84,5 +87,9 @@ public class JacobiComplexTest extends TestCase {
       _check(matrix, e2);
       Tolerance.CHOP.requireClose(e1.values(), e2.values());
     }
+  }
+
+  public void testPackage() {
+    assertFalse(Modifier.isPublic(JacobiComplex.class.getModifiers()));
   }
 }
