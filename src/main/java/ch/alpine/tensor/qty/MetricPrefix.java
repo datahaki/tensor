@@ -7,6 +7,9 @@ import ch.alpine.tensor.sca.Power;
 /** Reference:
  * https://en.wikipedia.org/wiki/Metric_prefix */
 /* package */ enum MetricPrefix {
+  // YOTTA
+  // ZETTA
+  // EXA
   PETA("P", 15), //
   TERA("T", 12), //
   GIGA("G", 9), //
@@ -22,6 +25,9 @@ import ch.alpine.tensor.sca.Power;
   NANO("n", -9), //
   PICO("p", -12), //
   FEMTO("f", -15), //
+  // ATTO
+  // ZEPTO
+  // YOCTO
   ;
 
   private final String prefix;

@@ -46,14 +46,14 @@ public class ImageResizeTest extends TestCase {
     assertEquals(Dimensions.of(resize), Arrays.asList(60, 40, 4));
   }
 
-  public void testFactor() throws Exception {
+  public void testFactor() {
     Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
     ImageResize.of(tensor, Pi.VALUE);
     ImageResize.of(tensor, Pi.HALF);
     ImageResize.of(tensor, Pi.HALF.reciprocal());
   }
 
-  public void testFactorNegativeFail() throws Exception {
+  public void testFactorNegativeFail() {
     Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
     AssertFail.of(() -> ImageResize.of(tensor, Pi.VALUE.negate()));
   }

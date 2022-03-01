@@ -7,42 +7,120 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.itp.LinearInterpolation;
+import ch.alpine.tensor.pdf.c.DiracDistribution;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/TruncatedDistribution.html">TruncatedDistribution</a> */
-public class TruncatedDistribution implements Distribution, RandomVariateInterface, Serializable {
+public class TruncatedDistribution implements Distribution, PDF, CDF, InverseCDF, RandomVariateInterface, Serializable {
   /** maximum number of attempts to produce a random variate before an exception is thrown */
   private static final int MAX_ITERATIONS = 100;
 
-  /** Careful: function does not check for plausibility of input
-   * 
-   * @param distribution non-null
+  /** @param distribution non-null
    * @param clip non-null
    * @return
-   * @throws Exception if either parameter is null */
+   * @throws Exception if either parameter is null
+   * @throws if CDF of given distribution is not monotonous over given interval */
   public static Distribution of(Distribution distribution, Clip clip) {
-    return new TruncatedDistribution( //
-        Objects.requireNonNull((RandomVariateInterface) distribution), //
-        Objects.requireNonNull(clip));
+    RandomVariateInterface rvin = (RandomVariateInterface) Objects.requireNonNull(distribution);
+    if (Scalars.isZero(clip.width()))
+      return new DiracDistribution(clip.min());
+    if (distribution instanceof CDF cdf) {
+      Clip clip_cdf = Clips.interval(cdf.p_lessThan(clip.min()), cdf.p_lessEquals(clip.max()));
+      if (Scalars.isZero(clip_cdf.width()))
+        throw new IllegalArgumentException();
+      RandomVariateInterface rvi = distribution instanceof InverseCDF inverseCDF //
+          ? new RV_I(inverseCDF, clip_cdf)
+          : new RV_S(rvin, clip);
+      return new TruncatedDistribution(distribution, cdf, rvi, clip, clip_cdf);
+    }
+    return new RV_S(rvin, clip);
   }
-
   // ---
-  private final RandomVariateInterface randomVariateInterface;
-  private final Clip clip;
 
-  private TruncatedDistribution(RandomVariateInterface randomVariateInterface, Clip clip) {
+  private final PDF pdf;
+  private final CDF cdf;
+  private final RandomVariateInterface randomVariateInterface;
+  private final InverseCDF inverseCDF;
+  private final Clip clip;
+  private final Clip clip_cdf;
+
+  public TruncatedDistribution( //
+      Distribution distribution, CDF cdf, //
+      RandomVariateInterface randomVariateInterface, Clip clip, Clip clip_cdf) {
+    pdf = PDF.of(distribution);
+    this.cdf = cdf;
+    inverseCDF = InverseCDF.of(distribution);
     this.randomVariateInterface = randomVariateInterface;
     this.clip = clip;
-    // TODO truncated distrib can be improved much by using CDF and InverseCDF
+    this.clip_cdf = clip_cdf;
+  }
+
+  @Override // from PDF
+  public Scalar at(Scalar x) {
+    Scalar p = pdf.at(x);
+    return clip.isInside(x) //
+        ? p.divide(clip_cdf.width())
+        : p.zero();
+  }
+
+  @Override // from CDF
+  public Scalar p_lessThan(Scalar x) {
+    return clip_cdf.rescale(cdf.p_lessThan(x));
+  }
+
+  @Override // from CDF
+  public Scalar p_lessEquals(Scalar x) {
+    return clip_cdf.rescale(cdf.p_lessEquals(x));
   }
 
   @Override // from RandomVariateInterface
   public Scalar randomVariate(Random random) {
-    return Stream.generate(() -> randomVariateInterface.randomVariate(random)) //
-        .limit(MAX_ITERATIONS) //
-        .filter(clip::isInside) //
-        .findFirst() //
-        .orElseThrow();
+    return randomVariateInterface.randomVariate(random);
+  }
+
+  @Override
+  public Scalar quantile(Scalar p) {
+    Scalar scalar = LinearInterpolation.of(Tensors.of(clip_cdf.min(), clip_cdf.max())).At(p);
+    return inverseCDF.quantile(scalar);
+  }
+
+  private static final class RV_I implements RandomVariateInterface, Serializable {
+    private final InverseCDF inverseCDF;
+    private final Clip clip_cdf;
+
+    private RV_I(InverseCDF inverseCDF, Clip clip_cdf) {
+      this.inverseCDF = inverseCDF;
+      this.clip_cdf = clip_cdf;
+    }
+
+    @Override // from RandomVariateInterface
+    public Scalar randomVariate(Random random) {
+      return inverseCDF.quantile(RandomVariate.of(UniformDistribution.of(clip_cdf), random));
+    }
+  }
+
+  private static final class RV_S implements Distribution, RandomVariateInterface, Serializable {
+    private final RandomVariateInterface randomVariateInterface;
+    private final Clip clip;
+
+    private RV_S(RandomVariateInterface randomVariateInterface, Clip clip) {
+      this.randomVariateInterface = randomVariateInterface;
+      this.clip = clip;
+    }
+
+    @Override // from RandomVariateInterface
+    public Scalar randomVariate(Random random) {
+      return Stream.generate(() -> randomVariateInterface.randomVariate(random)) //
+          .limit(MAX_ITERATIONS) //
+          .filter(clip::isInside) //
+          .findFirst() //
+          .orElseThrow();
+    }
   }
 }

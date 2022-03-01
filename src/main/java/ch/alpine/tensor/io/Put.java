@@ -38,9 +38,8 @@ public enum Put {
   }
 
   /** @param outputStream
-   * @param tensor
-   * @throws IOException */
-  public static void of(OutputStream outputStream, Tensor tensor) throws IOException {
+   * @param tensor */
+  public static void of(OutputStream outputStream, Tensor tensor) {
     ExportHelper.lines(MathematicaFormat.of(tensor), outputStream);
   }
 

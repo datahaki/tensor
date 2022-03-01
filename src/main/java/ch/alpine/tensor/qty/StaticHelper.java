@@ -5,11 +5,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.sca.Power;
 
 /* package */ enum StaticHelper {
@@ -71,5 +74,11 @@ import ch.alpine.tensor.sca.Power;
       set.addAll(QuantityUnit.of(entry.getValue()).map().keySet());
     }
     return set;
+  }
+
+  public static Map<String, Scalar> stringScalarMap(Properties properties) {
+    return properties.stringPropertyNames().stream().collect(Collectors.toMap( //
+        Function.identity(), // example: "kW"
+        key -> Scalars.fromString(properties.getProperty(key)))); // example: 1000[m^2*kg*s^-3]
   }
 }

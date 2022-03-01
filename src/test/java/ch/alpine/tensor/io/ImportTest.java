@@ -57,7 +57,7 @@ public class ImportTest extends TestCase {
     assertEquals(ResourceData.of(string), expected);
   }
 
-  public void testCsvFail() throws Exception {
+  public void testCsvFail() {
     File file = new File("/io/doesnotexist.csv");
     try {
       Import.of(file);

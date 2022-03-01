@@ -13,7 +13,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariateInterface;
 
 /** @see UniformDistribution */
-/* package */ class DiracDistribution implements Distribution, CDF, RandomVariateInterface, Serializable {
+public class DiracDistribution implements Distribution, CDF, RandomVariateInterface, Serializable {
   private final Scalar value;
 
   public DiracDistribution(Scalar value) {

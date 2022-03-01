@@ -3,77 +3,58 @@ package ch.alpine.tensor.qty;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.ext.PackageTestAccess;
 
-// TODO clean up
 /* package */ class UnitSystemInflator {
   public static final char INFLATOR = '_';
-  private final Map<String, Scalar> map = new HashMap<>();
-  private final Set<String> atoms;
-  private final Set<String> skipped = new HashSet<>();
 
-  public UnitSystemInflator(Properties properties) {
-    Map<String, Scalar> input = properties.stringPropertyNames().stream().collect(Collectors.toMap( //
-        Function.identity(), //
-        key -> Scalars.fromString(properties.getProperty(key))));
+  /** @param properties
+   * @return */
+  public static UnitSystem of(Properties properties) {
+    return SimpleUnitSystem.from(new UnitSystemInflator(StaticHelper.stringScalarMap(properties)).map);
+  }
+
+  // ---
+  private final Map<String, Scalar> map = new HashMap<>();
+  private final Set<String> skipped = new HashSet<>();
+  private final Set<String> atoms;
+
+  @PackageTestAccess
+  UnitSystemInflator(Map<String, Scalar> input) {
     atoms = input.values().stream() //
         .map(QuantityUnit::of) //
         .map(Unit::map) //
         .map(Map::keySet) //
         .flatMap(Set::stream) //
         .collect(Collectors.toSet());
+    // give precedence to explicitly listed units: ft, pt, PS
     for (Entry<String, Scalar> entry : input.entrySet()) {
       String key = entry.getKey();
-      if (key.charAt(0) != INFLATOR) {
-        if (map.containsKey(key))
-          throw new IllegalArgumentException(key);
-        map.put(key, entry.getValue());
-      }
+      if (key.charAt(0) != INFLATOR)
+        map.put(key, entry.getValue()); // key is unit
     }
+    // handle specifications that have underscore prefix, e.g. "_g"
     for (Entry<String, Scalar> entry : input.entrySet()) {
       String key = entry.getKey();
-      if (key.charAt(0) == INFLATOR) {
-        String suffix = key.substring(1);
+      if (key.charAt(0) == INFLATOR) { //
+        String suffix = key.substring(1); // "g"
         for (MetricPrefix metricPrefix : MetricPrefix.values()) {
-          String result = metricPrefix.prefix(suffix);
-          if (!atoms.contains(result))
-            putDefensive(result, entry.getValue().multiply(metricPrefix.factor()));
+          String unit = metricPrefix.prefix(suffix); // "mg", or "kg"
+          if (!atoms.contains(unit)) // exclude "kg"
+            if (map.containsKey(unit)) // collisions are "PS", "pt", "ft"
+              skipped.add(unit);
+            else
+              map.put(unit, entry.getValue().multiply(metricPrefix.factor()));
         }
       }
     }
-    for (Scalar scalar : new LinkedList<>(map.values())) {
-      for (String atom : QuantityUnit.of(scalar).map().keySet()) // example: m, kg, s, A
-        if (map.containsKey(atom)) {
-          Scalar conversion = map.get(atom);
-          if (conversion.equals(Quantity.of(1, atom))) {
-            System.err.println("SHOULD NOT BE NECESSARY");
-            map.remove(atom);
-          }
-          System.out.println("atom self " + atom + " " + conversion);
-        }
-    }
-  }
-
-  /** @param key
-   * @param value */
-  private void putDefensive(String key, Scalar value) {
-    if (map.containsKey(key))
-      skipped.add(key);
-    else
-      map.put(key, value);
-  }
-
-  public Map<String, Scalar> getMap() {
-    return map;
   }
 
   /** Example:

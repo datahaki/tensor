@@ -8,6 +8,5 @@ import ch.alpine.tensor.io.ResourceData;
   INSTANCE;
 
   /** Cached field instance. */
-  final UnitSystem unitSystem = SimpleUnitSystem.from( //
-      new UnitSystemInflator(ResourceData.properties("/unit/si.properties")).getMap());
+  final UnitSystem unitSystem = UnitSystemInflator.of(ResourceData.properties("/unit/si.properties"));
 }

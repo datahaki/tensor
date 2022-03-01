@@ -35,13 +35,8 @@ public class MathematicaFormTest extends TestCase {
 
   public void testUnits() {
     Map<String, String> map = MathematicaForm.INSTANCE.getMap();
-    int count = 0;
-    for (String string : UnitSystem.SI().map().keySet()) {
-      if (!map.containsKey(string)) {
-        ++count;
-        // System.err.println(string);
-      }
-    }
-    assertTrue(count < 5);
+    for (String string : UnitSystem.SI().map().keySet())
+      if (!map.containsKey(string))
+        throw new IllegalArgumentException(string);
   }
 }

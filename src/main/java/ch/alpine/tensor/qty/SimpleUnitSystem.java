@@ -40,9 +40,7 @@ public class SimpleUnitSystem implements UnitSystem {
    * @return
    * @throws Exception if keys do not define unit conversions */
   public static UnitSystem from(Properties properties) {
-    return from(properties.stringPropertyNames().stream().collect(Collectors.toMap( //
-        Function.identity(), // example: "kW"
-        key -> Scalars.fromString(properties.getProperty(key))))); // example: 1000[m^2*kg*s^-3]
+    return from(StaticHelper.stringScalarMap(properties));
   }
 
   /** @param map
