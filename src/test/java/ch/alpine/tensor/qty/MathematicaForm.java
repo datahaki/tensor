@@ -29,28 +29,23 @@ public enum MathematicaForm {
     Set<String> block = ResourceData.properties("/unit/si.properties").stringPropertyNames();
     Properties properties = ResourceData.properties("/unit/names.properties");
     for (String key : properties.stringPropertyNames()) {
-      if (key.charAt(0) == '_') {
+      if (key.charAt(0) == UnitSystemInflator.INFLATOR) {
         String value = properties.getProperty(key);
         key = key.substring(1);
-        set(key, "", value);
-        value = (value.charAt(0) + "").toLowerCase() + value.substring(1);
         for (MetricPrefix metricPrefix : MetricPrefix.values()) {
-          String result = metricPrefix.prefix() + key;
+          String result = metricPrefix.prefix(key);
           if (!block.contains(result))
-            set(result, metricPrefix.english(), value);
-          // else
-          // System.out.println("BLOCK "+result);
+            set(result, metricPrefix.english(value));
         }
-      } else {
+      } else
         map.put(key, properties.getProperty(key));
-      }
     }
   }
 
-  private void set(String key, String order, String value) {
+  private void set(String key, String value) {
     if (map.containsKey(key))
       throw new IllegalArgumentException(key);
-    map.put(key, order + value);
+    map.put(key, value);
   }
 
   public Map<String, String> getMap() {

@@ -4,6 +4,8 @@ package ch.alpine.tensor.qty;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Power;
 
+/** Reference:
+ * https://en.wikipedia.org/wiki/Metric_prefix */
 /* package */ enum MetricPrefix {
   PETA("P", 15), //
   TERA("T", 12), //
@@ -12,6 +14,7 @@ import ch.alpine.tensor.sca.Power;
   KILO("k", 3), //
   HECTO("h", 2), //
   DECA("da", 1), //
+  NULL("", 0), //
   DECI("d", -1), //
   CENTI("c", -2), //
   MILLI("m", -3), //
@@ -31,12 +34,24 @@ import ch.alpine.tensor.sca.Power;
     english = name().charAt(0) + name().substring(1).toLowerCase();
   }
 
-  public String prefix() {
-    return prefix;
+  /** Example:
+   * GIGA.prefix("Hz") == "GHz"
+   * 
+   * @param string
+   * @return */
+  public String prefix(String string) {
+    return prefix + string;
   }
 
-  public String english() {
-    return english;
+  /** Example:
+   * GIGA.english("Hertz") == "Gigahertz"
+   * 
+   * @param string
+   * @return */
+  public String english(String string) {
+    return equals(NULL) //
+        ? string
+        : english + Character.toLowerCase(string.charAt(0)) + string.substring(1);
   }
 
   public Scalar factor() {

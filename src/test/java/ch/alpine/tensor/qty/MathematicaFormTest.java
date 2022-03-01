@@ -42,6 +42,6 @@ public class MathematicaFormTest extends TestCase {
         // System.err.println(string);
       }
     }
-    assertTrue(count < 30);
+    assertTrue(count < 5);
   }
 }

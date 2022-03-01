@@ -18,9 +18,9 @@ public class KnownUnitQTest extends TestCase {
   public void testSimple() {
     assertTrue(KnownUnitQ.SI().test(Unit.of("V*K*CD*kOhm^-2")));
     assertTrue(KnownUnitQ.SI().test(Unit.of("PS^3")));
-    assertTrue(KnownUnitQ.SI().test(Unit.of("cups")));
+    assertTrue(KnownUnitQ.SI().test(Unit.of("cup"))); // Cups
     assertTrue(KnownUnitQ.SI().test(Unit.of("atm^-1.5E-3")));
-    assertTrue(KnownUnitQ.SI().test(Unit.of("cups*u^2")));
+    assertTrue(KnownUnitQ.SI().test(Unit.of("cup*u^2")));
     assertTrue(KnownUnitQ.SI().test(Unit.of("%*%")));
   }
 

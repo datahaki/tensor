@@ -34,6 +34,7 @@ public class TruncatedDistribution implements Distribution, RandomVariateInterfa
   private TruncatedDistribution(RandomVariateInterface randomVariateInterface, Clip clip) {
     this.randomVariateInterface = randomVariateInterface;
     this.clip = clip;
+    // TODO truncated distrib can be improved much by using CDF and InverseCDF
   }
 
   @Override // from RandomVariateInterface

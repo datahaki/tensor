@@ -14,7 +14,9 @@ import java.util.stream.Collectors;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 
+// TODO clean up
 /* package */ class UnitSystemInflator {
+  public static final char INFLATOR = '_';
   private final Map<String, Scalar> map = new HashMap<>();
   private final Set<String> atoms;
   private final Set<String> skipped = new HashSet<>();
@@ -31,7 +33,7 @@ import ch.alpine.tensor.Scalars;
         .collect(Collectors.toSet());
     for (Entry<String, Scalar> entry : input.entrySet()) {
       String key = entry.getKey();
-      if (key.charAt(0) != '_') {
+      if (key.charAt(0) != INFLATOR) {
         if (map.containsKey(key))
           throw new IllegalArgumentException(key);
         map.put(key, entry.getValue());
@@ -39,15 +41,12 @@ import ch.alpine.tensor.Scalars;
     }
     for (Entry<String, Scalar> entry : input.entrySet()) {
       String key = entry.getKey();
-      if (key.charAt(0) == '_') {
-        Scalar value = entry.getValue();
+      if (key.charAt(0) == INFLATOR) {
         String suffix = key.substring(1);
-        if (!atoms.contains(suffix))
-          putDefensive(suffix, value);
         for (MetricPrefix metricPrefix : MetricPrefix.values()) {
-          String result = metricPrefix.prefix() + suffix;
+          String result = metricPrefix.prefix(suffix);
           if (!atoms.contains(result))
-            putDefensive(result, value.multiply(metricPrefix.factor()));
+            putDefensive(result, entry.getValue().multiply(metricPrefix.factor()));
         }
       }
     }
