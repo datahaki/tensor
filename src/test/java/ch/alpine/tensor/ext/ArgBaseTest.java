@@ -13,12 +13,12 @@ public class ArgBaseTest extends TestCase {
   }
 
   public void testEmpty2() {
-    assertEquals(ArgMin.of(Tensors.empty()), ArgMin.EMPTY);
-    assertEquals(ArgMax.of(Tensors.empty()), ArgMax.EMPTY);
+    assertEquals(ArgMin.of(Tensors.empty()), ArgBase.EMPTY);
+    assertEquals(ArgMax.of(Tensors.empty()), ArgBase.EMPTY);
   }
 
   public void testMaxComparatorEmpty() {
-    assertEquals(ArgMin.EMPTY, ArgMax.of(Tensors.empty(), Collections.reverseOrder()));
-    assertEquals(ArgMax.EMPTY, ArgMin.of(Tensors.empty(), Collections.reverseOrder()));
+    assertEquals(ArgBase.EMPTY, ArgMax.of(Tensors.empty(), Collections.reverseOrder()));
+    assertEquals(ArgBase.EMPTY, ArgMin.of(Tensors.empty(), Collections.reverseOrder()));
   }
 }

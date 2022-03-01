@@ -17,6 +17,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.ev.JacobiReal.GivensReal;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -101,7 +102,9 @@ public class JacobiRealTest extends TestCase {
     Scalar dif = A[q][q].subtract(A[p][p]);
     Scalar hpq = A[p][q];
     Scalar t = JacobiReal.t(dif, hpq);
-    jacobiReal.new JacobiRotation(t).eliminate(p, q);
+    GivensReal givensReal = jacobiReal.new GivensReal(t);
+    givensReal.transform(p, q);
+    givensReal.dot(p, q);
     Tensor r = rotation(A.length, p, q, t);
     Tolerance.CHOP.requireClose(Unprotect.byRef(V), Transpose.of(r));
     Tolerance.CHOP.requireClose( //

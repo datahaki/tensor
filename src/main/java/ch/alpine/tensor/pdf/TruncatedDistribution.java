@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.pdf.c.DiracDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
@@ -84,24 +83,23 @@ public class TruncatedDistribution implements Distribution, PDF, CDF, InverseCDF
     return randomVariateInterface.randomVariate(random);
   }
 
-  @Override
+  @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
-    Scalar scalar = LinearInterpolation.of(Tensors.of(clip_cdf.min(), clip_cdf.max())).At(p);
-    return inverseCDF.quantile(scalar);
+    return inverseCDF.quantile(LinearInterpolation.of(clip_cdf).At(p));
   }
 
   private static final class RV_I implements RandomVariateInterface, Serializable {
     private final InverseCDF inverseCDF;
-    private final Clip clip_cdf;
+    private final Distribution distribution;
 
     private RV_I(InverseCDF inverseCDF, Clip clip_cdf) {
       this.inverseCDF = inverseCDF;
-      this.clip_cdf = clip_cdf;
+      distribution = UniformDistribution.of(clip_cdf);
     }
 
     @Override // from RandomVariateInterface
     public Scalar randomVariate(Random random) {
-      return inverseCDF.quantile(RandomVariate.of(UniformDistribution.of(clip_cdf), random));
+      return inverseCDF.quantile(RandomVariate.of(distribution, random));
     }
   }
 
