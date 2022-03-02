@@ -154,7 +154,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
       Scalar term = d.subtract(x).divide(d.subtract(c));
       return two_alpha.multiply(term);
     }
-    return RealScalar.ZERO;
+    return alpha.zero();
   }
 
   @Override // from MeanInterface

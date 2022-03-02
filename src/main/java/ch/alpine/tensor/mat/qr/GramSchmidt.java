@@ -12,6 +12,7 @@ import ch.alpine.tensor.ext.ArgMax;
 import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.gr.InfluenceMatrix;
+import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.sca.Conjugate;
 
@@ -23,7 +24,8 @@ import ch.alpine.tensor.sca.Conjugate;
  * in "Linear Algebra and Learning from Data", p. 129
  * by Gilbert Strang, 2019
  * 
- * @see InfluenceMatrix */
+ * @see InfluenceMatrix
+ * @see MatrixRank */
 public class GramSchmidt extends QRDecompositionBase implements Serializable {
   /** @param matrix of any dimension
    * @return */
@@ -47,7 +49,6 @@ public class GramSchmidt extends QRDecompositionBase implements Serializable {
       if (Tolerance.CHOP.isZero(norm))
         break;
       Tensor q = a.get(Tensor.ALL, _sigma[i]).divide(norm);
-      q = Vector2Norm.NORMALIZE.apply(q); // thorough normalization does not make a difference in the tests
       Tensor qc = Conjugate.of(q);
       qInv.append(qc);
       Tensor ri = qc.dot(matrix);
