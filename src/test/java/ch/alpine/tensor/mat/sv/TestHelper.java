@@ -14,7 +14,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
 import ch.alpine.tensor.mat.NullSpace;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.mat.re.MatrixRank;
+import ch.alpine.tensor.mat.re.MatrixRankTest;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Sign;
 import junit.framework.Assert;
@@ -54,7 +54,7 @@ import junit.framework.Assert;
     Tensor UW_AV = Tolerance.CHOP.of(U.dot(W).subtract(matrix.dot(V)));
     Assert.assertEquals(UW_AV, UW_AV.map(Scalar::zero));
     Assert.assertTrue(w.stream().map(Scalar.class::cast).noneMatch(Sign::isNegative));
-    if (MatrixRank.of(svd) < N) {
+    if (MatrixRankTest.of(svd) < N) {
       Tensor nul = NullSpace.of(svd);
       Tensor res = MatrixDotTranspose.of(matrix, nul);
       Assert.assertEquals(Tolerance.CHOP.of(res), res.map(Scalar::zero));

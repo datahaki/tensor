@@ -8,7 +8,9 @@ import ch.alpine.tensor.sca.Chop;
 /** A is anti-hermitian if A = -ConjugateTranspose[A]
  * 
  * <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/AntihermitianMatrixQ.html">AntihermitianMatrixQ</a> */
+ * <a href="https://reference.wolfram.com/language/ref/AntihermitianMatrixQ.html">AntihermitianMatrixQ</a>
+ * 
+ * https://en.wikipedia.org/wiki/Skew-Hermitian_matrix */
 public enum AntihermitianMatrixQ {
   ;
   /** @param tensor

@@ -3,7 +3,6 @@ package ch.alpine.tensor.lie.ad;
 
 import java.io.Serializable;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Flatten;
@@ -24,7 +23,7 @@ public class MatrixAlgebra implements Serializable {
   /** @param basis consisting of n matrices that generate the Lie algebra
    * @throws Exception if basis contains redundant elements */
   public MatrixAlgebra(Tensor basis) {
-    this.basis = ExactTensorQ.require(basis);
+    this.basis = basis;
     matrix = Transpose.of(Tensor.of(basis.stream().map(Flatten::of)));
     Integers.requireEquals(basis.length(), MatrixRank.of(matrix));
     int n = basis.length();
