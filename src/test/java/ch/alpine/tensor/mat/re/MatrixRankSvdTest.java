@@ -29,5 +29,4 @@ public class MatrixRankSvdTest extends TestCase {
     assertEquals(MatrixRankSvd.of(m), 1);
     assertEquals(MatrixRank.of(m), 1); // <- numeric
   }
-
 }

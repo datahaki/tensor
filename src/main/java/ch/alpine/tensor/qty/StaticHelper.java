@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -68,11 +68,8 @@ import ch.alpine.tensor.sca.Power;
    * @return set of all atomic units known by the unit system including those that
    * are not further convertible */
   public static Set<String> buildSet(UnitSystem unitSystem) {
-    Set<String> set = new HashSet<>();
-    for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
-      set.add(entry.getKey());
-      set.addAll(QuantityUnit.of(entry.getValue()).map().keySet());
-    }
+    Set<String> set = StaticHelper.base(unitSystem.map().values());
+    set.addAll(unitSystem.map().keySet());
     return set;
   }
 
@@ -80,5 +77,16 @@ import ch.alpine.tensor.sca.Power;
     return properties.stringPropertyNames().stream().collect(Collectors.toMap( //
         Function.identity(), // example: "kW"
         key -> Scalars.fromString(properties.getProperty(key)))); // example: 1000[m^2*kg*s^-3]
+  }
+
+  /** @param collection
+   * @return base units, for instance the set [m, A, s, kg, cd, K, mol] */
+  public static Set<String> base(Collection<Scalar> collection) {
+    return collection.stream() //
+        .map(QuantityUnit::of) //
+        .map(Unit::map) //
+        .map(Map::keySet) //
+        .flatMap(Collection::stream) //
+        .collect(Collectors.toSet());
   }
 }

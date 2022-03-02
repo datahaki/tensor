@@ -7,13 +7,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.PackageTestAccess;
 
 /* package */ class UnitSystemInflator {
-  public static final char INFLATOR = '_';
+  /* package */ static final char INFLATOR = '_';
 
   /** @param properties
    * @return */
@@ -28,12 +27,7 @@ import ch.alpine.tensor.ext.PackageTestAccess;
 
   @PackageTestAccess
   UnitSystemInflator(Map<String, Scalar> input) {
-    atoms = input.values().stream() //
-        .map(QuantityUnit::of) //
-        .map(Unit::map) //
-        .map(Map::keySet) //
-        .flatMap(Set::stream) //
-        .collect(Collectors.toSet());
+    atoms = StaticHelper.base(input.values());
     // give precedence to explicitly listed units: ft, pt, PS
     for (Entry<String, Scalar> entry : input.entrySet()) {
       String key = entry.getKey();
