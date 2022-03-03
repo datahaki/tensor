@@ -38,7 +38,7 @@ public class PascalDistribution extends EvaluatedDiscreteDistribution implements
     this.n = n;
     this.p = p;
     o_p = RealScalar.ONE.subtract(p);
-    inverse_cdf_build(Chop._14);
+    build(Chop._14);
   }
 
   @Override // from DiscreteDistribution

@@ -47,7 +47,7 @@ public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution 
     this.p = Sign.requirePositive(p);
     _1_p = RealScalar.ONE.subtract(p);
     pn = Power.of(p, n);
-    inverse_cdf_build(TOLERANCE);
+    build(TOLERANCE);
   }
 
   @Override // from DiscreteDistribution

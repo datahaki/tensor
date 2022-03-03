@@ -54,7 +54,7 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
     this.n = n;
     this.p = p;
     this.table = table;
-    inverse_cdf_build(n);
+    build(n);
   }
 
   @Override // from MeanInterface

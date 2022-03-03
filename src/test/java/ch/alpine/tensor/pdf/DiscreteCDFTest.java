@@ -15,22 +15,22 @@ public class DiscreteCDFTest extends TestCase {
     Distribution distribution = BinomialDistribution.of(21, RationalScalar.of(7, 13));
     DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
     CDF cdf = CDF.of(distribution);
-    DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
+    // DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
     assertEquals(cdf.p_lessEquals(RealScalar.of(-10)), RealScalar.ZERO);
     assertEquals(cdf.p_lessEquals(RealScalar.of(0)), discreteDistribution.p_equals(0));
     assertEquals(cdf.p_lessEquals(RealScalar.of(1)), //
         discreteDistribution.p_equals(0).add(discreteDistribution.p_equals(1)) //
     );
-    assertFalse(discreteCDF.cdf_finished());
+    // assertFalse(discreteCDF.cdf_finished());
     assertEquals(cdf.p_lessEquals(RealScalar.of(1000000000)), RealScalar.ONE);
-    assertTrue(discreteCDF.cdf_finished());
+    // assertTrue(discreteCDF.cdf_finished());
   }
 
   public void testExactLessThan() {
     Distribution distribution = BinomialDistribution.of(21, RationalScalar.of(7, 13));
     DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
     CDF cdf = CDF.of(distribution);
-    DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
+    // DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
     assertEquals(cdf.p_lessThan(RealScalar.of(-10)), RealScalar.ZERO);
     assertEquals(cdf.p_lessThan(RealScalar.of(0)), RealScalar.ZERO);
     assertEquals(cdf.p_lessThan(RealScalar.of(1e-8)), discreteDistribution.p_equals(0));
@@ -38,19 +38,19 @@ public class DiscreteCDFTest extends TestCase {
     assertEquals(cdf.p_lessThan(RealScalar.of(2)), //
         discreteDistribution.p_equals(0).add(discreteDistribution.p_equals(1)) //
     );
-    assertFalse(discreteCDF.cdf_finished());
+    // assertFalse(discreteCDF.cdf_finished());
     assertEquals(cdf.p_lessThan(RealScalar.of(1000000000)), RealScalar.ONE);
-    assertTrue(discreteCDF.cdf_finished());
+    // assertTrue(discreteCDF.cdf_finished());
   }
 
   private static void _checkDiscreteCDFNumerics(Distribution distribution) {
     CDF cdf = CDF.of(distribution);
-    DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
+    // DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
     assertEquals(cdf.p_lessEquals(RealScalar.of(-10)), RealScalar.ZERO);
-    assertFalse(discreteCDF.cdf_finished());
+    // assertFalse(discreteCDF.cdf_finished());
     Scalar top = cdf.p_lessEquals(RealScalar.of(1000000));
     StaticHelper.CDF_CHOP.requireClose(top, RealScalar.ONE);
-    assertTrue(discreteCDF.cdf_finished());
+    // assertTrue(discreteCDF.cdf_finished());
   }
 
   public void testNumericsPoisson() {

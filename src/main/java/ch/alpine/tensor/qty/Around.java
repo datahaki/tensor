@@ -167,6 +167,8 @@ public class Around extends AbstractScalar implements //
 
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
+    if (exponent instanceof Around)
+      throw TensorRuntimeException.of(this, exponent);
     Scalar scalar = Power.of(mean, exponent);
     return of(scalar, Abs.FUNCTION.apply(scalar.divide(mean).multiply(sigma).multiply(exponent)));
   }

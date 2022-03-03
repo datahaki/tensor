@@ -49,6 +49,8 @@ public class GramSchmidt extends QRDecompositionBase implements Serializable {
       if (Tolerance.CHOP.isZero(norm))
         break;
       Tensor q = a.get(Tensor.ALL, _sigma[i]).divide(norm);
+      // we refrain from using the more thorough Normalization for vector q
+      // ... until data shows that it is necessary
       Tensor qc = Conjugate.of(q);
       qInv.append(qc);
       Tensor ri = qc.dot(matrix);

@@ -30,6 +30,7 @@ public class TruncatedDistribution implements Distribution, PDF, CDF, InverseCDF
     RandomVariateInterface rvin = (RandomVariateInterface) Objects.requireNonNull(distribution);
     if (Scalars.isZero(clip.width()))
       return new DiracDistribution(clip.min());
+    // TODO technically this is not the correct way, but CDF.of should be used
     if (distribution instanceof CDF cdf) {
       Clip clip_cdf = Clips.interval(cdf.p_lessThan(clip.min()), cdf.p_lessEquals(clip.max()));
       if (Scalars.isZero(clip_cdf.width()))

@@ -14,8 +14,10 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
+import ch.alpine.tensor.pdf.d.PoissonDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Quantile;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
@@ -85,6 +87,18 @@ public class TruncatedDistributionTest extends TestCase {
     assertTrue(clip.isInside(scalar));
     Serialization.copy(distribution);
     Serialization.copy(TruncatedDistribution.of(NormalDistribution.of(10, 2), clip));
+  }
+
+  public void testDiscrete() {
+    Distribution original = PoissonDistribution.of(7);
+    Distribution distribution = TruncatedDistribution.of(original, Clips.interval(5, 10));
+    CDF cdf = CDF.of(distribution);
+    Chop.NONE.requireZero(cdf.p_lessThan(RealScalar.of(2)));
+    Chop.NONE.requireZero(cdf.p_lessEquals(RealScalar.of(2)));
+    Chop.NONE.requireZero(cdf.p_lessThan(RealScalar.of(5)));
+    assertTrue(Scalars.lessThan( //
+        PDF.of(original).at(RealScalar.of(5)), //
+        PDF.of(distribution).at(RealScalar.of(5))));
   }
 
   public void testFail() {

@@ -243,6 +243,10 @@ public class AroundTest extends TestCase {
         Around.of(-8, 96));
   }
 
+  public void testPowerFail() {
+    AssertFail.of(() -> Power.of(Around.of(-3, 2), Around.of(9, 12)));
+  }
+
   public void testNullFail() {
     AssertFail.of(() -> Around.of(null, 2));
     AssertFail.of(() -> Around.of(2, null));

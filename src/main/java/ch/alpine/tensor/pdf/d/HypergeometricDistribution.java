@@ -45,7 +45,7 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution im
     binomial_n = Binomial.of(n);
     binomial_m = Binomial.of(m);
     binomial_m_n = Binomial.of(m_n);
-    inverse_cdf_build(Math.min(N, n));
+    build(Math.min(N, n));
   }
 
   @Override // from MeanInterface
