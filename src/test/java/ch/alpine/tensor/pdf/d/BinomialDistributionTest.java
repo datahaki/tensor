@@ -13,6 +13,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
+import ch.alpine.tensor.pdf.DiscreteDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.InverseCDF;
@@ -238,6 +239,38 @@ public class BinomialDistributionTest extends TestCase {
   public void testKurtosis() {
     Scalar scalar = Kurtosis.of(BinomialDistribution.of(11, RationalScalar.of(1, 7)));
     assertEquals(scalar, RationalScalar.of(211, 66));
+  }
+
+  public void testExactLessEquals() {
+    Distribution distribution = BinomialDistribution.of(21, RationalScalar.of(7, 13));
+    DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
+    CDF cdf = CDF.of(distribution);
+    // DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
+    assertEquals(cdf.p_lessEquals(RealScalar.of(-10)), RealScalar.ZERO);
+    assertEquals(cdf.p_lessEquals(RealScalar.of(0)), discreteDistribution.p_equals(0));
+    assertEquals(cdf.p_lessEquals(RealScalar.of(1)), //
+        discreteDistribution.p_equals(0).add(discreteDistribution.p_equals(1)) //
+    );
+    // assertFalse(discreteCDF.cdf_finished());
+    assertEquals(cdf.p_lessEquals(RealScalar.of(1000000000)), RealScalar.ONE);
+    // assertTrue(discreteCDF.cdf_finished());
+  }
+
+  public void testExactLessThan() {
+    Distribution distribution = BinomialDistribution.of(21, RationalScalar.of(7, 13));
+    DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
+    CDF cdf = CDF.of(distribution);
+    // DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
+    assertEquals(cdf.p_lessThan(RealScalar.of(-10)), RealScalar.ZERO);
+    assertEquals(cdf.p_lessThan(RealScalar.of(0)), RealScalar.ZERO);
+    assertEquals(cdf.p_lessThan(RealScalar.of(1e-8)), discreteDistribution.p_equals(0));
+    assertEquals(cdf.p_lessThan(RealScalar.of(1)), discreteDistribution.p_equals(0));
+    assertEquals(cdf.p_lessThan(RealScalar.of(2)), //
+        discreteDistribution.p_equals(0).add(discreteDistribution.p_equals(1)) //
+    );
+    // assertFalse(discreteCDF.cdf_finished());
+    assertEquals(cdf.p_lessThan(RealScalar.of(1000000000)), RealScalar.ONE);
+    // assertTrue(discreteCDF.cdf_finished());
   }
 
   public void testFailN() {

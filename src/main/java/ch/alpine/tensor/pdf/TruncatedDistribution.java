@@ -42,8 +42,8 @@ public class TruncatedDistribution implements Distribution, PDF, CDF, InverseCDF
     }
     return new RV_S(rvin, clip);
   }
-  // ---
 
+  // ---
   private final PDF pdf;
   private final CDF cdf;
   private final RandomVariateInterface randomVariateInterface;

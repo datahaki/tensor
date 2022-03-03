@@ -17,6 +17,7 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -136,5 +137,19 @@ public class GeometricDistributionTest extends TestCase {
       // ---
     }
     AssertFail.of(() -> CDF.of(distribution).p_lessEquals(Quantity.of(-2, "s")));
+  }
+
+  private static void _checkCDFNumerics(Distribution distribution) {
+    CDF cdf = CDF.of(distribution);
+    assertEquals(cdf.p_lessEquals(RealScalar.of(-10)), RealScalar.ZERO);
+    Scalar top = cdf.p_lessEquals(RealScalar.of(1000000));
+    Chop._14.requireClose(top, RealScalar.ONE);
+  }
+
+  public void testNumericsGeometric() {
+    _checkCDFNumerics(GeometricDistribution.of(RealScalar.of(0.01)));
+    _checkCDFNumerics(GeometricDistribution.of(RealScalar.of(0.1)));
+    _checkCDFNumerics(GeometricDistribution.of(RealScalar.of(0.9)));
+    _checkCDFNumerics(GeometricDistribution.of(RealScalar.of(0.99)));
   }
 }

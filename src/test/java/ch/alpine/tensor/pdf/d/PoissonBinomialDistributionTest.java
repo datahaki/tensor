@@ -9,6 +9,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.DiscreteDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
@@ -70,6 +71,11 @@ public class PoissonBinomialDistributionTest extends TestCase {
     } catch (Exception exception) {
       assertTrue(UnsupportedOperationException.class.isInstance(exception));
     }
+  }
+
+  public void testCdfFail() {
+    Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(0.1, 0.3, 1, 0.1, 0.5));
+    AssertFail.of(() -> CDF.of(distribution));
   }
 
   public void testFail() {

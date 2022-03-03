@@ -28,8 +28,6 @@ public interface CDF {
   static CDF of(Distribution distribution) {
     if (distribution instanceof CDF cdf)
       return cdf;
-    if (distribution instanceof DiscreteDistribution discreteDistribution)
-      return new DiscreteCDF(discreteDistribution);
     Objects.requireNonNull(distribution);
     throw new IllegalArgumentException(distribution.getClass().getName());
   }

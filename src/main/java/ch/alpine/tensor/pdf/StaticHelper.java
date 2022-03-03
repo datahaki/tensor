@@ -14,7 +14,6 @@ import ch.alpine.tensor.sca.Chop;
   /** @param p_equals
    * @param cumprob
    * @return
-   * @see DiscreteCDF
    * @see Exception */
   public static boolean isFinished(Scalar p_equals, Scalar cumprob) {
     if (cumprob.equals(RealScalar.ONE))
