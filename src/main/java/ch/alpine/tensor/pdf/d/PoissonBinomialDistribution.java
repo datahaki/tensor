@@ -10,9 +10,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.pdf.DiscreteDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
+import ch.alpine.tensor.pdf.RandomVariateInterface;
 import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Clips;
@@ -21,8 +21,8 @@ import ch.alpine.tensor.sca.Clips;
  * 
  * @see BinomialDistribution
  * @see BinomialRandomVariate */
-public class PoissonBinomialDistribution implements DiscreteDistribution, //
-    MeanInterface, VarianceInterface, Serializable {
+public class PoissonBinomialDistribution implements Distribution, //
+    RandomVariateInterface, MeanInterface, VarianceInterface, Serializable {
   /** Hint:
    * if p_vector consists of identical entries, the {@link BinomialDistribution}
    * or {@link BinomialRandomVariate} should be used instead.
@@ -78,21 +78,10 @@ public class PoissonBinomialDistribution implements DiscreteDistribution, //
         .orElse(RealScalar.ZERO);
   }
 
-  @Override // from DiscreteDistribution
-  public int lowerBound() {
-    return lowerBound;
-  }
-
-  @Override // from PDF
-  public Scalar at(Scalar x) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override // from DiscreteDistribution
-  public Scalar p_equals(int n) {
-    throw new UnsupportedOperationException();
-  }
-
+  // @Override // from DiscreteDistribution
+  // public int lowerBound() {
+  // return lowerBound;
+  // }
   @Override // from Object
   public String toString() {
     return String.format("%s[%s]", getClass().getSimpleName(), p_vector);

@@ -72,6 +72,11 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
         .orElseThrow();
   }
 
+  @Override
+  public Scalar variance() {
+    return centralMoment(2);
+  }
+
   @Override // from DiscreteDistribution
   public int lowerBound() {
     return 0;

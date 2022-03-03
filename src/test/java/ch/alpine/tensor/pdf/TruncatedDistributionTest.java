@@ -101,6 +101,14 @@ public class TruncatedDistributionTest extends TestCase {
         PDF.of(distribution).at(RealScalar.of(5))));
   }
 
+  public void testToString() {
+    Distribution original = PoissonDistribution.of(7);
+    Distribution distribution = TruncatedDistribution.of(original, Clips.interval(5, 10));
+    assertEquals( //
+        distribution.toString(), //
+        "TruncatedDistribution[PoissonDistribution[7], Clip[5, 10]]");
+  }
+
   public void testFail() {
     Clip clip = Clips.interval(10, 11);
     AssertFail.of(() -> TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), clip));

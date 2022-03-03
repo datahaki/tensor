@@ -6,7 +6,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.VarianceInterface;
 
 /** Quote from Mathematica:
  * "A hypergeometric distribution gives the distribution of the number of successes
@@ -14,7 +13,7 @@ import ch.alpine.tensor.pdf.VarianceInterface;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/HypergeometricDistribution.html">HypergeometricDistribution</a> */
-public class HypergeometricDistribution extends EvaluatedDiscreteDistribution implements VarianceInterface {
+public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
   /** see the Mathematica documentation of HypergeometricDistribution
    * 
    * @param N number of draws

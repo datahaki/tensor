@@ -14,7 +14,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.PackageTestAccess;
-import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Power;
@@ -33,7 +32,7 @@ import ch.alpine.tensor.sca.Sign;
  * @see PascalDistribution
  * @see PoissonDistribution */
 public abstract class EvaluatedDiscreteDistribution extends AbstractDiscreteDistribution //
-    implements CDF, CentralMomentInterface, Serializable {
+    implements CentralMomentInterface, Serializable {
   private static final Scalar _1 = DoubleScalar.of(1);
   // ---
   private final NavigableMap<Scalar, Scalar> cdf = new TreeMap<>();

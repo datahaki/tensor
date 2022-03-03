@@ -64,7 +64,7 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
     return b2.add(b2);
   }
 
-  @Override
+  @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
     if (Scalars.lessEquals(p, RationalScalar.HALF))
       return mean.add(Log.FUNCTION.apply(p.add(p)).multiply(beta));

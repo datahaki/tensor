@@ -20,7 +20,6 @@ package ch.alpine.tensor.pdf;
  * TrapezoidalDistribution
  * 
  * @see DiscreteDistribution */
-public interface ContinuousDistribution extends Distribution, //
-    CDF, PDF, InverseCDF, RandomVariateInterface, MeanInterface, VarianceInterface {
+public interface ContinuousDistribution extends UnivariateDistribution {
   // ---
 }

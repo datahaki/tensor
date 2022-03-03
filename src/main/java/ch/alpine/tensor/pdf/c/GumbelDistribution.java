@@ -69,7 +69,7 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
         Exp.FUNCTION.apply(x.subtract(alpha).divide(beta)).negate()));
   }
 
-  @Override
+  @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
     return alpha.add(beta.multiply(Log.FUNCTION.apply(Log.FUNCTION.apply(RealScalar.ONE.subtract(p)).negate())));
   }

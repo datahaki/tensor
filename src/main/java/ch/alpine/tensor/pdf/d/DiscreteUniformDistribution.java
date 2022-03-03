@@ -8,9 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
@@ -21,8 +19,7 @@ import ch.alpine.tensor.sca.Floor;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/DiscreteUniformDistribution.html">DiscreteUniformDistribution</a> */
-public class DiscreteUniformDistribution extends AbstractDiscreteDistribution implements CDF, //
-    VarianceInterface, Serializable {
+public class DiscreteUniformDistribution extends AbstractDiscreteDistribution implements Serializable {
   private static final Scalar _12 = RealScalar.of(12);
 
   /** Example:

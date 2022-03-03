@@ -14,10 +14,17 @@ import ch.alpine.tensor.pdf.RandomVariateInterface;
 
 /** @see UniformDistribution */
 public class DiracDistribution implements Distribution, CDF, RandomVariateInterface, Serializable {
+  /** @param value
+   * @return */
+  public static Distribution of(Scalar value) {
+    return new DiracDistribution(Objects.requireNonNull(value));
+  }
+
+  // ---
   private final Scalar value;
 
-  public DiracDistribution(Scalar value) {
-    this.value = Objects.requireNonNull(value);
+  private DiracDistribution(Scalar value) {
+    this.value = value;
   }
 
   @Override // from CDF

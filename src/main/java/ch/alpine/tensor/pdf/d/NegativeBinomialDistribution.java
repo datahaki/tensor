@@ -6,7 +6,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Power;
@@ -17,7 +16,7 @@ import ch.alpine.tensor.sca.Sign;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/NegativeBinomialDistribution.html">NegativeBinomialDistribution</a> */
-public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution implements VarianceInterface {
+public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution {
   private static final Chop TOLERANCE = Chop._12;
 
   /** @param n non-negative

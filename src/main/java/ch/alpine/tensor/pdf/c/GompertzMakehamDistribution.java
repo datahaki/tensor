@@ -63,7 +63,7 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
         : RealScalar.ZERO;
   }
 
-  @Override
+  @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
     return Log.FUNCTION.apply(RealScalar.ONE.subtract( //
         Log.FUNCTION.apply(RealScalar.ONE.subtract(p)).divide(xi))).divide(lambda);
@@ -71,10 +71,11 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
 
   @Override // from MeanInterface
   public Scalar mean() {
+    // Mean[GompertzMakehamDistribution[a, b]] == (E^b Gamma[0, b]) / a
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from VarianceInterface
   public Scalar variance() {
     throw new UnsupportedOperationException();
   }

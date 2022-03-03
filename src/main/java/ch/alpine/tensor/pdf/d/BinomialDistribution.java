@@ -8,7 +8,6 @@ import ch.alpine.tensor.itp.BernsteinBasis;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.KurtosisInterface;
-import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Clips;
 
@@ -16,8 +15,7 @@ import ch.alpine.tensor.sca.Clips;
  * <a href="https://reference.wolfram.com/language/ref/BinomialDistribution.html">BinomialDistribution</a>
  * 
  * @see BinomialRandomVariate */
-public class BinomialDistribution extends EvaluatedDiscreteDistribution implements //
-    KurtosisInterface, VarianceInterface {
+public class BinomialDistribution extends EvaluatedDiscreteDistribution implements KurtosisInterface {
   /** Example:
    * PDF[BinomialDistribution[10, 1/3], 1] == 5120/59049
    * 

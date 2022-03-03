@@ -100,7 +100,7 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
     return DoubleScalar.INDETERMINATE;
   }
 
-  @Override
+  @Override // from VarianceInterface
   public Scalar variance() {
     throw new UnsupportedOperationException();
   }

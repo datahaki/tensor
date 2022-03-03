@@ -72,7 +72,7 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
     return DoubleScalar.INDETERMINATE;
   }
 
-  @Override
+  @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
     return k.divide(Power.of(RealScalar.ONE.subtract(p), alpha.reciprocal()));
   }
