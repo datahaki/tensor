@@ -5,7 +5,10 @@ import java.util.List;
 
 import ch.alpine.tensor.Scalar;
 
-/** matlab::nnz */
+/** unlike Mathematica, the implementation of SparseArray in the
+ * tensor library only allows zero as fallback
+ * 
+ * matlab::nnz */
 public class Nnz implements SparseEntryVisitor<Integer> {
   /** @param sparseArray
    * @return number of non-zero elements in given sparse array */

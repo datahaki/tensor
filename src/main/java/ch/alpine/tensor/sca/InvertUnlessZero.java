@@ -5,7 +5,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -38,9 +37,12 @@ public enum InvertUnlessZero implements ScalarUnaryOperator {
    * Scalars.isZero(scalar) ? scalar : scalar.reciprocal(); */
   @Override
   public Scalar apply(Scalar scalar) {
-    return Scalars.isZero(scalar) //
-        ? Unprotect.negateUnit(scalar)
-        : scalar.reciprocal();
+    if (Scalars.isZero(scalar))
+      // BenIsraelCohen.UnitNegate:
+      return scalar instanceof Quantity quantity //
+          ? Quantity.of(quantity.value(), quantity.unit().negate())
+          : scalar;
+    return scalar.reciprocal();
   }
 
   @SuppressWarnings("unchecked")

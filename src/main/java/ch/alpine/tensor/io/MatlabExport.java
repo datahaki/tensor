@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
@@ -51,8 +50,8 @@ public enum MatlabExport {
     list.add("% auto-generated code. do not modify.");
     list.add("Infinity=Inf;");
     list.add("I=i;");
-    if (ScalarQ.of(tensor))
-      list.add("a=" + function.apply((Scalar) tensor) + ";");
+    if (tensor instanceof Scalar scalar)
+      list.add("a=" + function.apply(scalar) + ";");
     else {
       List<Integer> dims = new ArrayList<>(dimensions.list());
       int[] sigma = new int[dims.size()];

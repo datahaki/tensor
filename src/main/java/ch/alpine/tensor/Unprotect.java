@@ -58,7 +58,10 @@ public enum Unprotect {
    * based on first entry of tensor
    * @throws Exception if tensor is a scalar */
   public static int dimension1Hint(Tensor tensor) {
-    return tensor.stream().findFirst().map(Tensor::length).orElse(Scalar.LENGTH);
+    return tensor.stream() //
+        .findFirst() //
+        .map(Tensor::length) //
+        .orElse(Scalar.LENGTH);
   }
 
   // ---
@@ -78,24 +81,6 @@ public enum Unprotect {
     return scalar instanceof Quantity quantity //
         ? quantity.value()
         : Objects.requireNonNull(scalar);
-  }
-
-  /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
-   * 
-   * Examples:
-   * <pre>
-   * Unprotect.negateUnit(0[m^2]) gives 0[m^-2]
-   * </pre>
-   * 
-   * Remark: see BenIsraelCohen.UnitNegate
-   * 
-   * @param scalar with zero value
-   * @return
-   * @throws Exception if scalar does not satisfy {@link Scalars#isZero(Scalar)} */
-  public static Scalar negateUnit(Scalar scalar) {
-    return scalar instanceof Quantity quantity //
-        ? Quantity.of(Scalars.requireZero(quantity.value()), quantity.unit().negate())
-        : Scalars.requireZero(scalar);
   }
 
   /** THE USE OF THIS FUNCTION IN THE APPLICATION LAYER IS NOT RECOMMENDED !
@@ -126,6 +111,7 @@ public enum Unprotect {
         .collect(Collectors.toList());
     if (list.size() == 1)
       return list.get(0);
+    // list has at most 2 elements, so list.toString() is acceptable
     throw new IllegalArgumentException(list.toString());
   }
 }

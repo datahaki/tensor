@@ -1,13 +1,17 @@
 // code by jph
 package ch.alpine.tensor.spa;
 
-import ch.alpine.tensor.ScalarQ;
+import java.util.function.Function;
+
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.api.TensorUnaryOperator;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Normal.html">Normal</a> */
-public enum Normal {
-  ;
+public class Normal implements TensorUnaryOperator {
+  private static final TensorUnaryOperator IDENTITY = new Normal(s -> s);
+
   /** Converts {@link SparseArray} to full tensor
    * 
    * <p>Special case:
@@ -16,8 +20,19 @@ public enum Normal {
    * @param tensor
    * @return */
   public static Tensor of(Tensor tensor) {
-    return ScalarQ.of(tensor) //
-        ? tensor
-        : Tensor.of(tensor.stream().map(Normal::of));
+    return IDENTITY.apply(tensor);
+  }
+
+  private final Function<Scalar, ? extends Tensor> function;
+
+  /* package */ Normal(Function<Scalar, ? extends Tensor> function) {
+    this.function = function;
+  }
+
+  @Override
+  public Tensor apply(Tensor tensor) {
+    return tensor instanceof Scalar scalar //
+        ? function.apply(scalar)
+        : Tensor.of(tensor.stream().map(this::apply));
   }
 }
