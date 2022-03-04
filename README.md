@@ -2,11 +2,7 @@
 
 # ch.alpine.tensor
 
-Library for tensor computations in Java 17, version `1.0.4`. 
-
-The last version that supports Java 11 is `1.0.1`.
-
-The last version that supports Java 8 is `0.9.4`.
+Library for tensor computations in Java 17, version `1.0.4`.
 
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions
@@ -58,7 +54,6 @@ Autonomous Gokart
 * parametric functions `LinearInterpolation`, `BSplineFunction`, etc.
 * window functions: Gaussian, Hamming, Hann, Blackman, etc.
 * spectral analysis: `Fourier`, `SpectrogramArray`, etc.
-* algebra computations `BakerCampbellHausdorff`-formula, `CliffordAlgebra`, ...
 * import from and export to `Mathematica`, `CSV`, and image files
 
 ## Gallery
