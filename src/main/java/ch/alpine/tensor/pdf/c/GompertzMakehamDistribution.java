@@ -9,9 +9,9 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GompertzMakehamDistribution.html">GompertzMakehamDistribution</a> */

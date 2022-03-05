@@ -6,7 +6,7 @@ import java.util.Objects;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
-import ch.alpine.tensor.sca.Exp;
+import ch.alpine.tensor.sca.exp.Exp;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GaussianWindow.html">GaussianWindow</a> */

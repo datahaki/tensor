@@ -3,10 +3,10 @@ package ch.alpine.tensor.lie;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Cosh;
-import ch.alpine.tensor.sca.Sin;
-import ch.alpine.tensor.sca.Sinh;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Cosh;
+import ch.alpine.tensor.sca.tri.Sin;
+import ch.alpine.tensor.sca.tri.Sinh;
 import junit.framework.TestCase;
 
 public class TrigonometrySeriesTest extends TestCase {

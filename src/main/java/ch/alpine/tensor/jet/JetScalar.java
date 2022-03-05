@@ -18,25 +18,25 @@ import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.AbsInterface;
-import ch.alpine.tensor.api.ExpInterface;
-import ch.alpine.tensor.api.LogInterface;
-import ch.alpine.tensor.api.PowerInterface;
 import ch.alpine.tensor.api.SignInterface;
-import ch.alpine.tensor.api.SqrtInterface;
-import ch.alpine.tensor.api.TrigonometryInterface;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Cosh;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.Sin;
-import ch.alpine.tensor.sca.Sinh;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.ExpInterface;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.exp.LogInterface;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.PowerInterface;
+import ch.alpine.tensor.sca.pow.SqrtInterface;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Cosh;
+import ch.alpine.tensor.sca.tri.Sin;
+import ch.alpine.tensor.sca.tri.Sinh;
+import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
 /** API EXPERIMENTAL
  * 

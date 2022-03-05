@@ -15,7 +15,7 @@ import ch.alpine.tensor.pdf.c.ExponentialDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.PoissonDistribution;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Log;
+import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

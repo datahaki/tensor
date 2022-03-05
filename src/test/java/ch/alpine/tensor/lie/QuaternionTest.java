@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

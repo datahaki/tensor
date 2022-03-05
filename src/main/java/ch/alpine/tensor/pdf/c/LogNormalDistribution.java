@@ -15,9 +15,9 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.KurtosisInterface;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
 
 /** Remark: the implementation of InverseCDF is not very accurate, expect errors of 1%.
  * 

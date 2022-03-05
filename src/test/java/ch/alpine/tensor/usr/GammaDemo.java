@@ -13,7 +13,7 @@ import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Gamma;
+import ch.alpine.tensor.sca.gam.Gamma;
 
 /** inspired by Mathematica's documentation of Gamma */
 /* package */ enum GammaDemo implements BivariateEvaluation {

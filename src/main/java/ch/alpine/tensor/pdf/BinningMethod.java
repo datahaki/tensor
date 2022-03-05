@@ -11,8 +11,8 @@ import ch.alpine.tensor.red.InterquartileRange;
 import ch.alpine.tensor.red.ScalarSummaryStatistics;
 import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.sca.Ceiling;
-import ch.alpine.tensor.sca.CubeRoot;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.CubeRoot;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** BinningMethod maps samples to recommended width of bins.
  * 

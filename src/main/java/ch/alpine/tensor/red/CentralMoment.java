@@ -6,7 +6,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CentralMoment.html">CentralMoment</a> */

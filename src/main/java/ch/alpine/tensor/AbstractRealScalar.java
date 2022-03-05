@@ -6,9 +6,9 @@ import java.math.BigInteger;
 
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
 
 /** suggested base class for implementations of {@link RealScalar} */
 public abstract class AbstractRealScalar extends AbstractScalar implements RealScalar {

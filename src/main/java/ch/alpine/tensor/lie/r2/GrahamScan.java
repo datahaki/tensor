@@ -16,9 +16,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.PackageTestAccess;
-import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.tri.ArcTan;
 
 /** Quote from Wikipedia:
  * Graham's scan is a method of finding the convex hull of a finite set of points

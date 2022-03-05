@@ -12,11 +12,11 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ConjugateInterface;
 import ch.alpine.tensor.api.ExactScalarQInterface;
-import ch.alpine.tensor.api.PowerInterface;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.SignInterface;
-import ch.alpine.tensor.api.SqrtInterface;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.pow.PowerInterface;
+import ch.alpine.tensor.sca.pow.SqrtInterface;
 
 /** scalars from finite field with prime number of elements and values
  * 0, 1, 2, ..., prime - 1

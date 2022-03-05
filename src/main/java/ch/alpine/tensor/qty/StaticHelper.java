@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 
 /* package */ enum StaticHelper {
   ;

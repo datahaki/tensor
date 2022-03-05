@@ -11,7 +11,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import ch.alpine.tensor.sca.Factorial;
+import ch.alpine.tensor.sca.gam.Factorial;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

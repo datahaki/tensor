@@ -15,9 +15,6 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ExactScalarQInterface;
-import ch.alpine.tensor.api.ExpInterface;
-import ch.alpine.tensor.api.LogInterface;
-import ch.alpine.tensor.api.PowerInterface;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.lie.TensorProduct;
@@ -29,11 +26,14 @@ import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Floor;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.ExpInterface;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.exp.LogInterface;
+import ch.alpine.tensor.sca.pow.PowerInterface;
 
 /** EXPERIMENTAL multiple clip */
 /* package */ class Interval extends AbstractScalar implements //

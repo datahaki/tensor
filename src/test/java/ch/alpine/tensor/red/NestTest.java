@@ -10,9 +10,9 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Gamma;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.gam.Gamma;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

@@ -15,11 +15,11 @@ import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Gamma;
-import ch.alpine.tensor.sca.Log;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.gam.Gamma;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** Hint:
  * The InverseCDF of a FrechetDistribution at p == 1 is not defined.

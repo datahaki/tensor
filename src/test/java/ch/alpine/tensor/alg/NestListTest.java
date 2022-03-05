@@ -9,7 +9,7 @@ import ch.alpine.tensor.mat.ex.MatrixPower;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import ch.alpine.tensor.sca.Cos;
+import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

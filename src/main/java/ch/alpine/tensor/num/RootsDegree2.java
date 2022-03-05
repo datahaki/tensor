@@ -4,7 +4,7 @@ package ch.alpine.tensor.num;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** implementation permits coefficients of type {@link GaussScalar} */
 /* package */ enum RootsDegree2 {

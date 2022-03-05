@@ -12,7 +12,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Total;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

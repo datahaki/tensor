@@ -9,9 +9,9 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/RayleighDistribution.html">RayleighDistribution</a> */

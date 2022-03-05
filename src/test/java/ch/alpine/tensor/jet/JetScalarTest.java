@@ -11,12 +11,12 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
-import ch.alpine.tensor.sca.Power;
-import ch.alpine.tensor.sca.Sin;
-import ch.alpine.tensor.sca.Sinh;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.Sqrt;
+import ch.alpine.tensor.sca.tri.Sin;
+import ch.alpine.tensor.sca.tri.Sinh;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

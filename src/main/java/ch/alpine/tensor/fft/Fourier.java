@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** Discrete Fourier transform of a vector.
  * Functionality works also for vectors with entries of type {@link Quantity}.

@@ -3,6 +3,31 @@ package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.sca.erf.Fresnel;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.exp.Log10;
+import ch.alpine.tensor.sca.exp.LogisticSigmoid;
+import ch.alpine.tensor.sca.gam.Gamma;
+import ch.alpine.tensor.sca.gam.LogGamma;
+import ch.alpine.tensor.sca.pow.CubeRoot;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.Sqrt;
+import ch.alpine.tensor.sca.pow.Surd;
+import ch.alpine.tensor.sca.tri.ArcCos;
+import ch.alpine.tensor.sca.tri.ArcCosh;
+import ch.alpine.tensor.sca.tri.ArcSin;
+import ch.alpine.tensor.sca.tri.ArcSinh;
+import ch.alpine.tensor.sca.tri.ArcTan;
+import ch.alpine.tensor.sca.tri.ArcTanh;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Cosh;
+import ch.alpine.tensor.sca.tri.Cot;
+import ch.alpine.tensor.sca.tri.Sin;
+import ch.alpine.tensor.sca.tri.Sinc;
+import ch.alpine.tensor.sca.tri.Sinh;
+import ch.alpine.tensor.sca.tri.Tan;
+import ch.alpine.tensor.sca.tri.Tanh;
 import junit.framework.TestCase;
 
 public class ScalarUnaryOperatorsTest extends TestCase {

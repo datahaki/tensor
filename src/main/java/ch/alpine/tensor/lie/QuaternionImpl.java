@@ -27,15 +27,15 @@ import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.num.ScalarProduct;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.ArcCos;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.sca.Power;
-import ch.alpine.tensor.sca.Sin;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.Sqrt;
+import ch.alpine.tensor.sca.tri.ArcCos;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Sin;
 
 /** @implSpec
  * This class is immutable and thread-safe. */

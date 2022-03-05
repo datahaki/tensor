@@ -6,7 +6,7 @@ import ch.alpine.tensor.alg.TensorRank;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.red.Total;
-import ch.alpine.tensor.sca.Factorial;
+import ch.alpine.tensor.sca.gam.Factorial;
 
 /** <pre>
  * Mathematica::HodgeDual[scalar, 0] is not defined

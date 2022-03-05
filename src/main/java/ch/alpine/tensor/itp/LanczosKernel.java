@@ -6,7 +6,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.Sinc;
+import ch.alpine.tensor.sca.tri.Sinc;
 
 /** The Lanczos kernel is the function t -> sinc[t] Sinc[t/semi]
  * 

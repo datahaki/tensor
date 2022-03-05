@@ -5,8 +5,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Sin;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Sin;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/RotationMatrix.html">RotationMatrix</a> */

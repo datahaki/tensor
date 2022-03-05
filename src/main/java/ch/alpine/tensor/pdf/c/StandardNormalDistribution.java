@@ -9,10 +9,10 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.KurtosisInterface;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Sqrt;
 import ch.alpine.tensor.sca.erf.Erfc;
 import ch.alpine.tensor.sca.erf.InverseErfc;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /* package */ enum StandardNormalDistribution implements UnivariateDistribution, KurtosisInterface {
   INSTANCE;

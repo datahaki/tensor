@@ -4,7 +4,7 @@ package ch.alpine.tensor.num;
 import java.util.Arrays;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.sca.Factorial;
+import ch.alpine.tensor.sca.gam.Factorial;
 
 /** Implementation does not support negative input.
  * 

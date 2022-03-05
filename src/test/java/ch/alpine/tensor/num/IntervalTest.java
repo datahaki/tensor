@@ -14,12 +14,12 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Floor;
-import ch.alpine.tensor.sca.Log;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

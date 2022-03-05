@@ -17,7 +17,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.io.StringScalar;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** reference implementation of {@link UnitSystem} with emphasis on simplicity
  * 

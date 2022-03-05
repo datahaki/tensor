@@ -5,7 +5,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Exp;
+import ch.alpine.tensor.sca.exp.Exp;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/PoissonWindow.html">PoissonWindow</a> */

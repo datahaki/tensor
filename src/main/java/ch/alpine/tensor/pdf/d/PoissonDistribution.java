@@ -9,7 +9,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.sca.Exp;
+import ch.alpine.tensor.sca.exp.Exp;
 
 /** in Mathematica, the CDF of the Poisson-distribution is expressed as
  * 

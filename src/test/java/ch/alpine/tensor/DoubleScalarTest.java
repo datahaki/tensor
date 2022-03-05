@@ -7,7 +7,7 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

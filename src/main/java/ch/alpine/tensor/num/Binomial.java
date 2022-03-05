@@ -14,7 +14,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.sca.Gamma;
+import ch.alpine.tensor.sca.gam.Gamma;
 
 /** binomial coefficient implemented for integer input
  * <pre>

@@ -8,7 +8,7 @@ import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/PascalDistribution.html">PascalDistribution</a> */

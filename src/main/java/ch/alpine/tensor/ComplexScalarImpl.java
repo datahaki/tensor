@@ -16,18 +16,18 @@ import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.num.ScalarProduct;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Cosh;
-import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Floor;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Round;
-import ch.alpine.tensor.sca.Sin;
-import ch.alpine.tensor.sca.Sinh;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.tri.ArcTan;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Cosh;
+import ch.alpine.tensor.sca.tri.Sin;
+import ch.alpine.tensor.sca.tri.Sinh;
 
 /** @implSpec
  * This class is immutable and thread-safe. */

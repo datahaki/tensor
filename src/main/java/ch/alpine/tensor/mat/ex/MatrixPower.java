@@ -9,7 +9,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** Implementation is consistent with Mathematica.
  * 

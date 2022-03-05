@@ -25,11 +25,11 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.sca.Power;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

@@ -7,14 +7,14 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
-import ch.alpine.tensor.sca.Cos;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Real;
-import ch.alpine.tensor.sca.Sin;
+import ch.alpine.tensor.sca.tri.ArcTan;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Sin;
 
 /** Reference:
  * https://en.wikipedia.org/wiki/Jacobi_method_for_complex_Hermitian_matrices */

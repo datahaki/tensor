@@ -6,8 +6,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Sin;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Sin;
 
 /** BohmanWindow[1/2]=0
  * 

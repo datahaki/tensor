@@ -12,7 +12,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Ceiling;
-import ch.alpine.tensor.sca.Log;
+import ch.alpine.tensor.sca.exp.Log;
 
 /** Hint: implementation makes use of eigenvalue decomposition of
  * real-valued symmetric matrices for various applications.

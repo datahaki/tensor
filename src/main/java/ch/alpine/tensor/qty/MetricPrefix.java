@@ -2,7 +2,7 @@
 package ch.alpine.tensor.qty;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** Reference:
  * https://en.wikipedia.org/wiki/Metric_prefix */

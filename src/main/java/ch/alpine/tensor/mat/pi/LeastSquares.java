@@ -6,6 +6,7 @@ import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
 import ch.alpine.tensor.mat.Tolerance;
@@ -128,5 +129,15 @@ public enum LeastSquares {
       return svd.getV().dot(Times.of(wi, b.dot(svd.getU()))); // U^t . b == b . U
     }
     return PseudoInverse.of(svd, CHOP).dot(b);
+  }
+
+  /** Remark: application is iterative target coordinate
+   * 
+   * @param svd
+   * @return operator that maps a vector b to the least square solution x */
+  public static TensorUnaryOperator operator(SingularValueDecomposition svd) {
+    Tensor wi = SingularValueList.inverted(svd, CHOP);
+    // TODO TENSOR ALG extract non-zero indices from b and U
+    return b -> svd.getV().dot(Times.of(wi, VectorQ.require(b).dot(svd.getU()))); // U^t . b == b . U
   }
 }

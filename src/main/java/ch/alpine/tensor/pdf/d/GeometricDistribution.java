@@ -11,8 +11,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
-import ch.alpine.tensor.sca.Log;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** Careful:
  * if parameter p is in exact precision, the probabilities may evaluate

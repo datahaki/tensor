@@ -9,7 +9,7 @@ import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** Quote from Wikipedia:
  * 

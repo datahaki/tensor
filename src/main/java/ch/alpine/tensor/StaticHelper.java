@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.tri.ArcTan;
 
 /* package */ enum StaticHelper {
   ;

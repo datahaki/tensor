@@ -15,7 +15,7 @@ import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

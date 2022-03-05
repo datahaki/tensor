@@ -11,7 +11,7 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.num.Multinomial;
-import ch.alpine.tensor.sca.Factorial;
+import ch.alpine.tensor.sca.gam.Factorial;
 
 /** Implementation is consistent with Mathematica, in particular
  * <pre>

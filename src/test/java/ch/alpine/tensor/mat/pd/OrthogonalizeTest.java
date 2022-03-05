@@ -28,11 +28,11 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.red.VectorAngle;
-import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

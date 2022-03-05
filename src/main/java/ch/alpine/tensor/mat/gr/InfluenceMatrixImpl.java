@@ -13,7 +13,7 @@ import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.UpperEvaluation;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.sca.Conjugate;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** base for a class that implements the {@link InfluenceMatrix} interface
  * 

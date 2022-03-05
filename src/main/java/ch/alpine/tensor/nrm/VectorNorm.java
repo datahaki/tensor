@@ -10,7 +10,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** p-Norm for vectors
  * 

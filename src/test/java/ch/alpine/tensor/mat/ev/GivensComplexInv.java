@@ -4,9 +4,9 @@ package ch.alpine.tensor.mat.ev;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Cos;
 import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Sin;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Sin;
 
 class GivensComplexInv {
   final Scalar rpp;

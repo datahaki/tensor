@@ -15,9 +15,9 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
+import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

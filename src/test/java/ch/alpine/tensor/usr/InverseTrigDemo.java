@@ -7,13 +7,13 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.img.ColorDataGradients;
-import ch.alpine.tensor.sca.ArcCosh;
-import ch.alpine.tensor.sca.ArcSinh;
-import ch.alpine.tensor.sca.ArcTanh;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.tri.ArcCosh;
+import ch.alpine.tensor.sca.tri.ArcSinh;
+import ch.alpine.tensor.sca.tri.ArcTanh;
 
 /** inspired by Mathematica's documentation of DensityPlot */
 /* package */ class InverseTrigDemo implements BivariateEvaluation {

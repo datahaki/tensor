@@ -11,10 +11,10 @@ import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Factorial;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.gam.Factorial;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** ErlangDistribution[k, lambda] == GammaDistribution[k, 1 / lambda]
  * 

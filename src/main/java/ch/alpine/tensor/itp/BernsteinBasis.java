@@ -13,7 +13,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** evaluation of Bernstein basis is used in binomial distribution and Bezier curves
  * 

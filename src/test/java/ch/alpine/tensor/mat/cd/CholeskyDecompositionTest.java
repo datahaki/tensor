@@ -37,7 +37,7 @@ import ch.alpine.tensor.red.LenientAdd;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

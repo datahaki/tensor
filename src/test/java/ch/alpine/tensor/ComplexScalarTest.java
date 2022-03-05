@@ -3,8 +3,8 @@ package ch.alpine.tensor;
 
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

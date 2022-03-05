@@ -10,7 +10,7 @@ import ch.alpine.tensor.alg.TensorRank;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.io.Primitives;
-import ch.alpine.tensor.sca.Factorial;
+import ch.alpine.tensor.sca.gam.Factorial;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Symmetrize.html">Symmetrize</a>

@@ -14,6 +14,7 @@ import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

@@ -25,10 +25,10 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Floor;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

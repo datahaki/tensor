@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Sin;
+import ch.alpine.tensor.sca.tri.Sin;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/TukeyWindow.html">TukeyWindow</a> */

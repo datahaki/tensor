@@ -20,8 +20,8 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

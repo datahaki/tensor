@@ -16,8 +16,8 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** functionality and suggested base class for a discrete probability distribution
  * 

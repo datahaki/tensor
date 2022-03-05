@@ -7,7 +7,7 @@ import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.nrm.Matrix2Norm;
-import ch.alpine.tensor.sca.Exp;
+import ch.alpine.tensor.sca.exp.Exp;
 
 /** Reference:
  * "The Scaling and Squaring Method for the Matrix Exponential Revisited"

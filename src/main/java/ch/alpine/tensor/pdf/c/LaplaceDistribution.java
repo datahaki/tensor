@@ -9,9 +9,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/LaplaceDistribution.html">LaplaceDistribution</a> */

@@ -15,8 +15,8 @@ import ch.alpine.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.nrm.Matrix2Norm;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Log;
 
 /** Hint: implementation uses inverse of the scaling and squaring procedure that
  * involves repeated matrix square roots.

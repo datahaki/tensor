@@ -6,8 +6,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.img.ColorDataGradients;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.tri.Cos;
 
 /* package */ enum WeierstrassDemo implements BivariateEvaluation {
   INSTANCE;

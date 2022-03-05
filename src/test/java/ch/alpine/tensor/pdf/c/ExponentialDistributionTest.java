@@ -27,9 +27,9 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

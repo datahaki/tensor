@@ -18,10 +18,10 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Real;
 import ch.alpine.tensor.sca.Round;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

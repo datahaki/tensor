@@ -8,8 +8,8 @@ import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** Quote: "the distribution of the number of failures in a sequence of trials with success
  * probability p before n successes occur."

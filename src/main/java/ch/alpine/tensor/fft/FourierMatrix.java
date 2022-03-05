@@ -10,7 +10,7 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** applications of {@link FourierMatrix} is to perform {@link Fourier} transform
  * and inverse transform of vectors or matrices of arbitrary dimensions.

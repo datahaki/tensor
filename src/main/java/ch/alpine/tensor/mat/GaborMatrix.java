@@ -13,8 +13,8 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.AbsSquared;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Exp;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.tri.Cos;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GaborMatrix.html">GaborMatrix</a> */

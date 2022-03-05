@@ -4,7 +4,7 @@ package ch.alpine.tensor;
 import java.io.Serializable;
 
 import ch.alpine.tensor.api.ExactScalarQInterface;
-import ch.alpine.tensor.api.SqrtInterface;
+import ch.alpine.tensor.sca.pow.SqrtInterface;
 
 /** arithmetic of BooleanScalar is as for an element of the finite field F with cardinality |F|=2
  * multiplication is logical AND

@@ -11,10 +11,10 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
-import ch.alpine.tensor.sca.LogGamma;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.gam.LogGamma;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** Quote: "If x has the standard N(0, 1) distribution, then x^2 has a chi-squared distribution."
  * 

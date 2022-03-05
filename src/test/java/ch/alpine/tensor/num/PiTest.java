@@ -7,8 +7,8 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Sin;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Sin;
 import junit.framework.TestCase;
 
 public class PiTest extends TestCase {

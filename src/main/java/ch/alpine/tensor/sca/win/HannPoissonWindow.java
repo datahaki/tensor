@@ -6,8 +6,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Exp;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.tri.Cos;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/HannPoissonWindow.html">HannPoissonWindow</a> */

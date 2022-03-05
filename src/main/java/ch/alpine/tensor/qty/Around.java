@@ -14,23 +14,23 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ExactScalarQInterface;
-import ch.alpine.tensor.api.ExpInterface;
-import ch.alpine.tensor.api.LogInterface;
 import ch.alpine.tensor.api.NInterface;
-import ch.alpine.tensor.api.PowerInterface;
-import ch.alpine.tensor.api.SqrtInterface;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.ExpInterface;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.exp.LogInterface;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.PowerInterface;
+import ch.alpine.tensor.sca.pow.Sqrt;
+import ch.alpine.tensor.sca.pow.SqrtInterface;
 
 /** "Around[mean, sigma] represents an approximate number or quantity with a value around
  * mean and an uncertainty sigma."
