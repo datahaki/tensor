@@ -49,7 +49,6 @@ import ch.alpine.tensor.sca.Power;
     Scalar factor = unitSystem.map().get(next);
     Unit unit = Unit.of(next);
     if (Objects.isNull(factor) && //
-    // TODO KnownUnitQ.in(unitSystem) rebuilds a map every time: avoid?
         KnownUnitQ.in(unitSystem).require(unit).equals(Unit.of(prev)))
       return RealScalar.ONE;
     Unit rhs = QuantityUnit.of(factor);
@@ -60,17 +59,6 @@ import ch.alpine.tensor.sca.Power;
         QuantityMagnitude.singleton(rhs).apply(factor).reciprocal(), //
         unit), //
         rhs.map().get(prev).reciprocal());
-  }
-
-  /** Example: for the SI unit system, the set of known atomic units contains
-   * "m", "K", "W", "kW", "s", "Hz", ...
-   * 
-   * @return set of all atomic units known by the unit system including those that
-   * are not further convertible */
-  public static Set<String> buildSet(UnitSystem unitSystem) {
-    Set<String> set = StaticHelper.base(unitSystem.map().values());
-    set.addAll(unitSystem.map().keySet());
-    return set;
   }
 
   public static Map<String, Scalar> stringScalarMap(Properties properties) {

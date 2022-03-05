@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import java.util.stream.IntStream;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
 
@@ -34,7 +35,7 @@ public enum Reverse {
   /** @param tensor
    * @return tensor with entries on all levels reversed */
   public static Tensor all(Tensor tensor) {
-    return ScalarQ.of(tensor) //
+    return tensor instanceof Scalar //
         ? tensor
         : of(Tensor.of(tensor.stream().map(Reverse::all)));
   }

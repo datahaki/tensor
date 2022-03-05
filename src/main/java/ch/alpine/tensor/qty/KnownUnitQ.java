@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.ext.Cache;
 
 /** Predicate determines if unit is defined by a given unit system.
  * 
@@ -18,12 +19,25 @@ import ch.alpine.tensor.Scalar;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/KnownUnitQ.html">KnownUnitQ</a> */
 public class KnownUnitQ implements Predicate<Unit>, Serializable {
+  private static final Cache<UnitSystem, KnownUnitQ> CACHE = Cache.of(KnownUnitQ::build, 8);
+
+  /** Example: for the SI unit system, the set of known atomic units contains
+   * "m", "K", "W", "kW", "s", "Hz", ...
+   * 
+   * @return predicate to check for all atomic units known by the unit system including
+   * those that are not further convertible */
+  private static KnownUnitQ build(UnitSystem unitSystem) {
+    Set<String> set = StaticHelper.base(unitSystem.map().values());
+    set.addAll(unitSystem.map().keySet());
+    return new KnownUnitQ(set);
+  }
+
   private static final KnownUnitQ SI = in(UnitSystem.SI());
 
   /** @param unitSystem non-null
    * @return predicate according to given unit system */
   public static KnownUnitQ in(UnitSystem unitSystem) {
-    return new KnownUnitQ(StaticHelper.buildSet(unitSystem));
+    return CACHE.apply(unitSystem);
   }
 
   /** Examples:

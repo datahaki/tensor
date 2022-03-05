@@ -14,7 +14,7 @@ import junit.framework.Assert;
     return sp.dot(lpp.c).Get(0);
   }
 
-  /** TODO primal and dual do not always correspond, namely wherever check_both == false
+  /** TODO TENSOR LP primal and dual do not always correspond, namely wherever check_both == false
    * 
    * @param lpp
    * @param check_both

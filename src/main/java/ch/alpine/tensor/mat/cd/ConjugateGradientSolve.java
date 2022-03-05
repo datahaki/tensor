@@ -8,7 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.qty.Quantity;
 
-/** TODO algorithm is only partially suitable for use with {@link Quantity}
+/** TODO TENSOR MAT algorithm is only partially suitable for use with {@link Quantity}
  * 
  * Reference:
  * Chapter "Conjugate Gradients for Sx=b"

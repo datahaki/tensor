@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 
 public class ScalarTest extends TestCase {
   public void testIsScalar() {
-    assertTrue(ScalarQ.of(DoubleScalar.POSITIVE_INFINITY));
+    assertTrue(ScalarQTest.of(DoubleScalar.POSITIVE_INFINITY));
   }
 
   public void testLengthNegative() {

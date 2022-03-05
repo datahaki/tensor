@@ -7,9 +7,12 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.sca.InvertUnlessZero;
 
 /** @throws Exception if input is not a vector, or is empty
- * @throws Exception if vector contains Infinity, or NaN */
+ * @throws Exception if vector contains Infinity, or NaN
+ * 
+ * @see InvertUnlessZero */
 public class NormalizeUnlessZero implements TensorUnaryOperator {
   /** Example:
    * <pre>

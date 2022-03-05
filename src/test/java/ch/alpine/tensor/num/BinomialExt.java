@@ -44,7 +44,7 @@ import ch.alpine.tensor.sca.Sign;
   public Scalar over(Scalar k) {
     k = Min.of(k, n.subtract(k));
     if (Sign.isPositiveOrZero(k)) {
-      // TODO implement to work for GaussScalar
+      // TODO TENSOR NUM implement to work for GaussScalar
       // if (k < row.length())
       // return row.Get(k);
       // synchronized (this) {

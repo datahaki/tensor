@@ -2,7 +2,6 @@
 package ch.alpine.tensor.alg;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Integers;
@@ -14,7 +13,7 @@ public enum VectorQ {
   /** @param tensor
    * @return true if all entries of given tensor are of type {@link Scalar} */
   public static boolean of(Tensor tensor) {
-    return !ScalarQ.of(tensor) //
+    return !(tensor instanceof Scalar) //
         && tensor.stream().allMatch(Scalar.class::isInstance);
   }
 

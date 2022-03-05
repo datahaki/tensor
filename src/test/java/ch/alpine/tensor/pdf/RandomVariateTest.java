@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.RationalScalar;
-import ch.alpine.tensor.ScalarQ;
+import ch.alpine.tensor.ScalarQTest;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
@@ -50,6 +50,6 @@ public class RandomVariateTest extends TestCase {
     Distribution distribution = BinomialDistribution.of(3, RationalScalar.of(1, 2));
     Tensor array = RandomVariate.of(distribution, 1);
     assertEquals(Dimensions.of(array), Arrays.asList(1));
-    assertFalse(ScalarQ.of(array));
+    assertFalse(ScalarQTest.of(array));
   }
 }

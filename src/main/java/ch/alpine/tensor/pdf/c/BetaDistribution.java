@@ -27,7 +27,7 @@ public class BetaDistribution implements Distribution, MeanInterface, PDF, Varia
     if (Scalars.lessEquals(a1, RealScalar.ZERO) || //
         Scalars.lessEquals(a2, RealScalar.ZERO))
       throw TensorRuntimeException.of(a1, a2);
-    // TODO for a1 == 1 OR a2 == 1 the distribution does not require the beta function
+    // TODO TENSOR PDF for a1 == 1 OR a2 == 1 the distribution does not require the beta function
     return new BetaDistribution(a1, a2);
   }
 

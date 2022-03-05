@@ -52,7 +52,8 @@ public enum Partition {
    * @return stream of tensors
    * @throws Exception if given tensor is a scalar */
   public static Stream<Tensor> stream(Tensor tensor, int size, int offset) {
-    if (offset <= 0 || size < offset || ScalarQ.of(tensor))
+    ScalarQ.thenThrow(tensor);
+    if (offset <= 0 || size < offset)
       throw new IllegalArgumentException("size=" + size + " offset=" + offset);
     return IntStream.iterate(0, index -> index + offset) //
         .limit((tensor.length() + offset - size) / offset) //

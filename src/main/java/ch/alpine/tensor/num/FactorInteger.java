@@ -54,7 +54,7 @@ import java.util.TreeMap;
     return new BigInteger(bigInteger.bitLength(), RANDOM).mod(bigInteger.subtract(BigInteger.ONE));
   }
 
-  // TODO improve cycle detection
+  // TODO TENSOR NUM improve cycle detection
   private static BigInteger divisor(BigInteger n) {
     int i = 1;
     BigInteger xi = random(n);

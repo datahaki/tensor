@@ -2,7 +2,6 @@
 package ch.alpine.tensor.qty;
 
 import java.util.Map.Entry;
-import java.util.Set;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
@@ -14,12 +13,16 @@ import junit.framework.TestCase;
 
 public class UnitSystemsTest extends TestCase {
   public void testKnownAtoms() {
-    Set<String> set = StaticHelper.buildSet(UnitSystem.SI());
-    assertTrue(set.contains("K"));
-    assertTrue(set.contains("m"));
-    assertTrue(set.contains("kW"));
-    Set<String> base = UnitSystems.base(UnitSystem.SI());
-    assertTrue(set.containsAll(base));
+    KnownUnitQ knownUnitQ = KnownUnitQ.SI();
+    assertTrue(knownUnitQ.test(Unit.of("")));
+    assertTrue(knownUnitQ.test(Unit.of("K")));
+    assertTrue(knownUnitQ.test(Unit.of("m")));
+    assertTrue(knownUnitQ.test(Unit.of("kW")));
+    assertTrue(knownUnitQ.test(Unit.of("kW*s")));
+    for (String base : UnitSystems.base(UnitSystem.SI())) {
+      assertTrue(knownUnitQ.test(Unit.of(base)));
+      assertTrue(knownUnitQ.test(Unit.of(base + "^2")));
+    }
   }
 
   public void testNoEffect() {

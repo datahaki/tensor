@@ -50,7 +50,6 @@ public class SparseArray extends AbstractTensor implements Serializable {
             Integers.asList(IntStream.of(dimensions).map(Integers::requirePositiveOrZero).toArray()));
   }
 
-  // TODO Mathematica returns Normal[result] in case calculation does not result in unique fallback
   private final Scalar fallback;
   /** the content of size is not modified by sparse array */
   private final List<Integer> size;

@@ -31,9 +31,8 @@ import ch.alpine.tensor.sca.InvertUnlessZero;
     if (ExactTensorQ.of(x)) {
       Scalar norm2squared = Vector2NormSquared.of(x);
       if (Scalars.isZero(norm2squared)) {
-        // TODO not the best implementation
         vc = x;
-        vr = x.map(InvertUnlessZero.FUNCTION); // invert units!
+        vr = x.map(InvertUnlessZero.FUNCTION);
       } else {
         vc = x;
         vr = Conjugate.of(x.add(x)).divide(norm2squared);

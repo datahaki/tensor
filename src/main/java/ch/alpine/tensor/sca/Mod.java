@@ -15,7 +15,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Mod.html">Mod</a> */
-// TODO implement https://en.wikipedia.org/wiki/Modular_arithmetic
+// TODO TENSOR NUM implement https://en.wikipedia.org/wiki/Modular_arithmetic
 public class Mod implements ScalarUnaryOperator {
   /** @param n
    * @return remainder on division by n */

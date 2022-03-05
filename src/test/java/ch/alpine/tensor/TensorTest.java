@@ -17,12 +17,12 @@ public class TensorTest extends TestCase {
   }
 
   public void testIsScalar() {
-    assertFalse(ScalarQ.of(Tensors.empty()));
+    assertFalse(ScalarQTest.of(Tensors.empty()));
   }
 
   public void testLength() {
     Tensor a = DoubleScalar.of(2.32123);
-    assertTrue(ScalarQ.of(a));
+    assertTrue(ScalarQTest.of(a));
     assertEquals(a.length(), Scalar.LENGTH);
     Tensor b = Tensors.vectorLong(3, 2);
     assertEquals(b.length(), 2);
