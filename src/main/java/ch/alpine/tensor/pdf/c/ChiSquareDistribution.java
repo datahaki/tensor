@@ -9,8 +9,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.pdf.ContinuousDistribution;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.LogGamma;
@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.Power;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ChiSquareDistribution.html">ChiSquareDistribution</a> */
-public class ChiSquareDistribution implements ContinuousDistribution, Serializable {
+public class ChiSquareDistribution implements UnivariateDistribution, Serializable {
   /** @param nu positive real
    * @return
    * @throws Exception if nu is not positive or not an instance of {@link RealScalar} */

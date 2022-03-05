@@ -258,10 +258,11 @@ public class SparseArray extends AbstractTensor implements Serializable {
     if (dimensions.isArray()) {
       List<Scalar> elements = map_fallback.flatten(-1) //
           .map(Scalar.class::cast) //
+          .filter(Scalars::isZero) //
           .distinct() //
           .limit(2) //
           .collect(Collectors.toList());
-      if (elements.size() == 1 && Scalars.isZero(elements.get(0))) {
+      if (elements.size() == 1) {
         List<Integer> result = Stream.concat(size.stream(), dimensions.list().stream()).collect(Collectors.toList());
         SparseArray sparseArray = new SparseArray(elements.get(0), result);
         visit((list, scalar) -> sparseArray.set(function.apply(scalar), list));

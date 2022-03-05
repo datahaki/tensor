@@ -9,10 +9,10 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
-import ch.alpine.tensor.pdf.ContinuousDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.KurtosisInterface;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.sca.Factorial2;
 import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.Sqrt;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/NormalDistribution.html">NormalDistribution</a> */
-public class NormalDistribution implements ContinuousDistribution, //
+public class NormalDistribution implements UnivariateDistribution, //
     CentralMomentInterface, KurtosisInterface, Serializable {
   /** The parameters mean and sigma may be of type Quantity with identical Unit.
    * Example:

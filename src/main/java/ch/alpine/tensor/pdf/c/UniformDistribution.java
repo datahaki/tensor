@@ -48,7 +48,7 @@ public class UniformDistribution extends AbstractContinuousDistribution //
    * @return uniform distribution over the half-open interval [clip.min(), clip.max()) */
   public static Distribution of(Clip clip) {
     return Scalars.isZero(clip.width()) //
-        ? DiracDistribution.of(clip.min())
+        ? DiracDeltaDistribution.of(clip.min())
         : new UniformDistribution(clip);
   }
 

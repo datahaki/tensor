@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
-public class ContinuousDistributionTest extends TestCase {
+public class UnivariateDistributionTest extends TestCase {
   static final Distribution[] DISTRIBUTIONS = { //
       CauchyDistribution.of(.2, .3), //
       DagumDistribution.of(.3, .4, .5), //

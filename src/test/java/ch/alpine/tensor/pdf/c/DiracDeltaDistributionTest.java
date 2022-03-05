@@ -10,10 +10,10 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import junit.framework.TestCase;
 
-public class DiracDistributionTest extends TestCase {
+public class DiracDeltaDistributionTest extends TestCase {
   public void testCdf() {
-    Distribution distribution = DiracDistribution.of(RealScalar.TWO);
-    DiracDistribution diracDistribution = (DiracDistribution) distribution;
+    Distribution distribution = DiracDeltaDistribution.of(RealScalar.TWO);
+    DiracDeltaDistribution diracDistribution = (DiracDeltaDistribution) distribution;
     assertEquals(diracDistribution.p_lessThan(RealScalar.of(1)), RealScalar.ZERO);
     assertEquals(diracDistribution.p_lessThan(RealScalar.of(2)), RealScalar.ZERO);
     assertEquals(diracDistribution.p_lessThan(RealScalar.of(3)), RealScalar.ONE);
@@ -23,7 +23,7 @@ public class DiracDistributionTest extends TestCase {
   }
 
   public void testRandom() throws ClassNotFoundException, IOException {
-    Distribution diracDistribution = Serialization.copy(DiracDistribution.of(Pi.VALUE));
+    Distribution diracDistribution = Serialization.copy(DiracDeltaDistribution.of(Pi.VALUE));
     assertEquals(RandomVariate.of(diracDistribution), Pi.VALUE);
   }
 }

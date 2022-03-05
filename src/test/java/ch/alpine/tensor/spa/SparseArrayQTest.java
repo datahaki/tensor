@@ -3,6 +3,7 @@ package ch.alpine.tensor.spa;
 
 import java.util.Arrays;
 
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -34,9 +35,9 @@ public class SparseArrayQTest extends TestCase {
 
   public void testVector2() {
     Tensor tensor = LeviCivitaTensor.of(3);
-    Tensor result = tensor.map(s -> Tensors.of(s, s.one()));
-    assertEquals(Dimensions.of(result), Arrays.asList(3, 3, 3, 2));
-    assertFalse(SparseArrayQ.of(result));
+    Tensor result = tensor.map(s -> Tensors.of(s, s.one(), s, RationalScalar.HALF));
+    assertEquals(Dimensions.of(result), Arrays.asList(3, 3, 3, 4));
+    assertTrue(SparseArrayQ.of(result));
   }
 
   public void testUnit() {

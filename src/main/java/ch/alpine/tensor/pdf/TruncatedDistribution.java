@@ -10,7 +10,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.itp.LinearInterpolation;
-import ch.alpine.tensor.pdf.c.DiracDistribution;
+import ch.alpine.tensor.pdf.c.DiracDeltaDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -30,7 +30,7 @@ public class TruncatedDistribution implements Distribution, //
   public static Distribution of(Distribution distribution, Clip clip) {
     RandomVariateInterface rvin = (RandomVariateInterface) Objects.requireNonNull(distribution);
     if (Scalars.isZero(clip.width()))
-      return DiracDistribution.of(clip.min());
+      return DiracDeltaDistribution.of(clip.min());
     if (distribution instanceof UnivariateDistribution univariateDistribution) {
       Clip clip_cdf = Clips.interval( //
           univariateDistribution.p_lessThan(clip.min()), //

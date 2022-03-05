@@ -16,7 +16,7 @@ import ch.alpine.tensor.Scalar;
  * PoissonBinomialDistribution
  * PoissonDistribution
  * 
- * @see ContinuousDistribution */
+ * @see UnivariateDistribution */
 public interface DiscreteDistribution extends UnivariateDistribution {
   /** @return lowest value a random variable from this distribution may attain */
   int lowerBound();

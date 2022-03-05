@@ -25,8 +25,8 @@ import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.api.SqrtInterface;
 import ch.alpine.tensor.api.TrigonometryInterface;
 import ch.alpine.tensor.pdf.CDF;
-import ch.alpine.tensor.pdf.ContinuousDistribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Cos;
@@ -43,7 +43,7 @@ import ch.alpine.tensor.sca.Sinh;
  * automatic differentiation
  * 
  * The JetScalar is used to test the consistency between the {@link CDF} and {@link PDF}
- * of {@link ContinuousDistribution}s.
+ * of {@link UnivariateDistribution}s.
  * 
  * @implSpec
  * This class is immutable and thread-safe. */

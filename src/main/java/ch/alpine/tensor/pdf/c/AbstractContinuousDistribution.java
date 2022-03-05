@@ -5,10 +5,10 @@ import java.util.Random;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.pdf.ContinuousDistribution;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.sca.Clips;
 
-public abstract class AbstractContinuousDistribution implements ContinuousDistribution {
+public abstract class AbstractContinuousDistribution implements UnivariateDistribution {
   @Override // from CDF
   public final Scalar p_lessEquals(Scalar x) {
     return p_lessThan(x);
