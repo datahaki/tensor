@@ -21,8 +21,7 @@ public enum Factorial2 implements ScalarUnaryOperator {
   private static final Tensor MEMO = Tensors.vector(1, 1);
 
   /** @param index
-   * @return Factorial2[index]
-   * @throws Exception if index is negative */
+   * @return Factorial2[index] */
   public static Scalar of(int index) {
     if (index < 0) {
       if (index == -1)

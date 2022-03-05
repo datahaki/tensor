@@ -10,12 +10,13 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.num.Boole;
+import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
 
 /** Reference:
  * https://en.wikipedia.org/wiki/Dirac_delta_function */
-public class DiracDeltaDistribution implements UnivariateDistribution, Serializable {
+public class DiracDeltaDistribution implements UnivariateDistribution, CentralMomentInterface, Serializable {
   /** @param value
    * @return */
   public static Distribution of(Scalar value) {
@@ -64,5 +65,10 @@ public class DiracDeltaDistribution implements UnivariateDistribution, Serializa
   @Override // from VarianceInterface
   public Scalar variance() {
     return RealScalar.ZERO;
+  }
+
+  @Override // from CentralMomentInterface
+  public Scalar centralMoment(int order) {
+    return Boole.of(order == 0);
   }
 }

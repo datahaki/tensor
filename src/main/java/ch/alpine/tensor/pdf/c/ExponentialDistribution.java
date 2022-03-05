@@ -8,6 +8,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
@@ -15,6 +16,8 @@ import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.gam.Subfactorial;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** Characteristics of an exponential distribution:
  * <ul>
@@ -28,7 +31,8 @@ import ch.alpine.tensor.sca.exp.Log;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ExponentialDistribution.html">ExponentialDistribution</a> */
-public class ExponentialDistribution implements UnivariateDistribution, Serializable {
+public class ExponentialDistribution implements UnivariateDistribution, //
+    CentralMomentInterface, Serializable {
   private static final Distribution STANDARD = ExponentialDistribution.of(RealScalar.ONE);
 
   /** @param lambda positive, may be instance of {@link Quantity}
@@ -102,6 +106,11 @@ public class ExponentialDistribution implements UnivariateDistribution, Serializ
   @Override // from CDF
   public Scalar p_lessEquals(Scalar x) {
     return p_lessThan(x);
+  }
+
+  @Override // from CentralMomentInterface
+  public Scalar centralMoment(int order) {
+    return Subfactorial.of(order).divide(Power.of(lambda, order));
   }
 
   @Override // from Object

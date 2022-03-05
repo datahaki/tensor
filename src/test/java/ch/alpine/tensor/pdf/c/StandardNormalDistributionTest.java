@@ -7,6 +7,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
+import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.usr.AssertFail;
@@ -52,5 +53,10 @@ public class StandardNormalDistributionTest extends TestCase {
     assertEquals(Mean.of(distribution), RealScalar.ZERO);
     assertEquals(Variance.of(distribution), RealScalar.ONE);
     assertEquals(distribution.toString(), "StandardNormalDistribution");
+    assertEquals(CentralMoment.of(distribution, 0), RealScalar.ONE);
+    assertEquals(CentralMoment.of(distribution, 1), RealScalar.ZERO);
+    assertEquals(CentralMoment.of(distribution, 2), RealScalar.ONE);
+    assertEquals(CentralMoment.of(distribution, 3), RealScalar.ZERO);
+    assertEquals(CentralMoment.of(distribution, 4), RealScalar.of(3));
   }
 }
