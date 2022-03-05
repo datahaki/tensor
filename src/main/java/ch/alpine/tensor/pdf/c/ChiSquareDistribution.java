@@ -9,18 +9,18 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.pdf.ContinuousDistribution;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
-import ch.alpine.tensor.sca.LogGamma;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.gam.LogGamma;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** Quote: "If x has the standard N(0, 1) distribution, then x^2 has a chi-squared distribution."
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ChiSquareDistribution.html">ChiSquareDistribution</a> */
-public class ChiSquareDistribution implements ContinuousDistribution, Serializable {
+public class ChiSquareDistribution implements UnivariateDistribution, Serializable {
   /** @param nu positive real
    * @return
    * @throws Exception if nu is not positive or not an instance of {@link RealScalar} */

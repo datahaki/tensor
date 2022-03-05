@@ -9,8 +9,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.VarianceInterface;
-import ch.alpine.tensor.sca.Exp;
+import ch.alpine.tensor.sca.exp.Exp;
 
 /** in Mathematica, the CDF of the Poisson-distribution is expressed as
  * 
@@ -18,7 +17,7 @@ import ch.alpine.tensor.sca.Exp;
  * 
  * inspired by
  * <a href="https://reference.wolfram.com/language/ref/PoissonDistribution.html">PoissonDistribution</a> */
-public class PoissonDistribution extends EvaluatedDiscreteDistribution implements VarianceInterface {
+public class PoissonDistribution extends EvaluatedDiscreteDistribution {
   /** probabilities are zero beyond P_EQUALS_MAX */
   private static final int P_EQUALS_MAX = 1950;
   /** lambda above max leads to incorrect results due to numerics */
@@ -52,7 +51,7 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution implement
   private PoissonDistribution(Scalar lambda) {
     this.lambda = lambda;
     values.append(Exp.FUNCTION.apply(lambda.negate()));
-    inverse_cdf_build(P_EQUALS_MAX);
+    build(P_EQUALS_MAX);
   }
 
   @Override // from MeanInterface

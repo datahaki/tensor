@@ -10,15 +10,15 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.itp.LinearBinaryAverage;
-import ch.alpine.tensor.pdf.ContinuousDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Floor;
 
 /** EqualizingDistribution is a continuous {@link CategoricalDistribution} */
-public class EqualizingDistribution implements ContinuousDistribution, Serializable {
+public class EqualizingDistribution implements UnivariateDistribution, Serializable {
   /** Hint: distribution can be used for arc-length parameterization
    * 
    * @param unscaledPDF vector with non-negative weights over the numbers

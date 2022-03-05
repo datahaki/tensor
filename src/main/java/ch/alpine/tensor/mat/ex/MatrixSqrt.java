@@ -6,6 +6,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.ev.Eigensystem;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Imag;
 
@@ -36,7 +37,13 @@ public interface MatrixSqrt {
    * @return sqrt of given matrix
    * @throws Exception if matrix is not symmetric, or has complex entries */
   static MatrixSqrt ofSymmetric(Tensor matrix) {
-    return new MatrixSqrtSymmetric(matrix);
+    return new MatrixSqrtEigensystem(Eigensystem.ofSymmetric(matrix));
+  }
+
+  /** @param matrix
+   * @return */
+  static MatrixSqrt ofHermitian(Tensor matrix) {
+    return new MatrixSqrtEigensystem(Eigensystem.ofHermitian(matrix));
   }
 
   // ---

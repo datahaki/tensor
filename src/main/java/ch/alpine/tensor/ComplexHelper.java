@@ -5,7 +5,7 @@ import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** auxiliary functions used in {@link ComplexScalarImpl} */
 /* package */ enum ComplexHelper {

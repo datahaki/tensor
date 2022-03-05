@@ -25,11 +25,6 @@ public class ArgMaxTest extends TestCase {
     assertEquals(ArgMax.of(Arrays.asList(4, 3, 2, 4, 3)), 0);
   }
 
-  public void testConvention() {
-    assertEquals(ArgMin.EMPTY, -1);
-    assertEquals(ArgMax.EMPTY, -1);
-  }
-
   public void testComparatorNullFail() {
     AssertFail.of(() -> ArgMax.of(Tensors.empty(), null));
   }

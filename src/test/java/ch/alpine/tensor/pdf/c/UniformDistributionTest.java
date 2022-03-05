@@ -24,6 +24,7 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -39,6 +40,29 @@ public class UniformDistributionTest extends TestCase {
     ExactScalarQ.require(prob);
   }
 
+  private static void _checkCentralMoment(Clip clip) {
+    Distribution d1 = UniformDistribution.of(clip);
+    Distribution d2 = TrapezoidalDistribution.of(clip.min(), clip.min(), clip.max(), clip.max());
+    for (int order = 0; order <= 6; ++order) {
+      Scalar uni = CentralMoment.of(d1, order);
+      Scalar tra = CentralMoment.of(d2, order);
+      assertEquals(uni, tra);
+    }
+  }
+
+  public void testCentralMoment() {
+    _checkCentralMoment(Clips.interval(-2, 4));
+    _checkCentralMoment(Clips.interval(2, 5));
+    _checkCentralMoment(Clips.positive(Quantity.of(2, "m")));
+  }
+
+  public void testPdfQuantity() {
+    Distribution distribution = UniformDistribution.of(Clips.positive(Quantity.of(2, "m")));
+    PDF pdf = PDF.of(distribution);
+    assertEquals(pdf.at(Quantity.of(-1, "m")), Quantity.of(0, "m^-1"));
+    assertEquals(pdf.at(Quantity.of(+1, "m")), Quantity.of(RationalScalar.HALF, "m^-1"));
+  }
+
   public void testPdf() {
     UniformDistribution distribution = (UniformDistribution) UniformDistribution.of(1, 3);
     assertEquals(distribution.support(), Clips.interval(1, 3));
@@ -48,6 +72,11 @@ public class UniformDistributionTest extends TestCase {
     assertEquals(pdf.at(RealScalar.of(2)), RationalScalar.HALF);
     assertEquals(pdf.at(RealScalar.of(3)), RationalScalar.HALF);
     assertEquals(pdf.at(DoubleScalar.POSITIVE_INFINITY), RealScalar.ZERO);
+    assertEquals(CentralMoment.of(distribution, 3), RealScalar.ZERO);
+    assertEquals(CentralMoment.of(distribution, 5), RealScalar.ZERO);
+    // ---
+    assertEquals(CentralMoment.of(distribution, 4), RationalScalar.of(1, 5));
+    assertEquals(CentralMoment.of(distribution, 6), RationalScalar.of(1, 7));
   }
 
   public void testUnit() throws ClassNotFoundException, IOException {

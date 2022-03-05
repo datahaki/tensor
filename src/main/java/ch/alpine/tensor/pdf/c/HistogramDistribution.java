@@ -13,9 +13,9 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.itp.LinearBinaryAverage;
 import ch.alpine.tensor.pdf.BinCounts;
 import ch.alpine.tensor.pdf.BinningMethod;
-import ch.alpine.tensor.pdf.ContinuousDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Min;
@@ -39,7 +39,7 @@ import ch.alpine.tensor.sca.Floor;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/HistogramDistribution.html">HistogramDistribution</a> */
-public class HistogramDistribution implements ContinuousDistribution, Serializable {
+public class HistogramDistribution implements UnivariateDistribution, Serializable {
   /** Example:
    * HistogramDistribution[{10.2, -1.6, 3.2, -0.4, 11.5, 7.3, 3.8, 9.8}, 2]
    * 

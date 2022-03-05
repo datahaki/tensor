@@ -31,6 +31,13 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
     return new LinearInterpolation(tensor);
   }
 
+  /** @param clip
+   * @return interpolation for evaluation over the unit interval with
+   * values ranging linearly between given clip.min and clip.max */
+  public static Interpolation of(Clip clip) {
+    return of(Tensors.of(clip.min(), clip.max()));
+  }
+
   // ---
   private final Tensor tensor;
 

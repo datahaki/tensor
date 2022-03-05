@@ -32,6 +32,14 @@ public class CategoricalDistributionTest extends TestCase {
     assertEquals(pdf.at(RealScalar.of(2)), RationalScalar.of(1, 10));
   }
 
+  public void testP_Equals() {
+    CategoricalDistribution categoricalDistribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1, 5));
+    assertEquals(categoricalDistribution.p_equals(0), RationalScalar.of(0, 1));
+    assertEquals(categoricalDistribution.p_equals(1), RationalScalar.of(9, 15));
+    assertEquals(categoricalDistribution.p_equals(2), RationalScalar.of(1, 15));
+    assertEquals(categoricalDistribution.p_equals(3), RationalScalar.of(5, 15));
+  }
+
   public void testCDF() {
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1));
     CDF pdf = CDF.of(distribution);

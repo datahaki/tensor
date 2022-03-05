@@ -9,6 +9,8 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 /** UnitSystem is an operator that maps a given {@link Quantity} to a {@link Quantity}
  * that makes use only of standard units defined by the unit system.
  * 
+ * An instance of UnitSystem is assumed to be immutable.
+ * 
  * <p>Example when using the built-in SI definitions:
  * <pre>
  * UnitSystem.SI().apply(Quantity.of(1, "V")) == 1[A^-1*kg*m^2*s^-3]

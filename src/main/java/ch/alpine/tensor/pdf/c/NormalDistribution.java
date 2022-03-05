@@ -7,16 +7,21 @@ import java.util.Random;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.pdf.ContinuousDistribution;
+import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.KurtosisInterface;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.gam.Factorial2;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/NormalDistribution.html">NormalDistribution</a> */
-public class NormalDistribution implements ContinuousDistribution, KurtosisInterface, Serializable {
+public class NormalDistribution implements UnivariateDistribution, //
+    CentralMomentInterface, KurtosisInterface, Serializable {
   /** The parameters mean and sigma may be of type Quantity with identical Unit.
    * Example:
    * <pre>
@@ -100,6 +105,14 @@ public class NormalDistribution implements ContinuousDistribution, KurtosisInter
   @Override // from KurtosisInterface
   public Scalar kurtosis() {
     return RealScalar.of(3);
+  }
+
+  @Override // from CentralMomentInterface
+  public Scalar centralMoment(int order) {
+    Integers.requirePositiveOrZero(order);
+    return order % 2 == 0 //
+        ? Factorial2.of(order - 1).multiply(Power.of(sigma, order))
+        : Power.of(sigma.zero(), order);
   }
 
   @Override // from Object

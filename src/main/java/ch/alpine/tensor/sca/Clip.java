@@ -51,12 +51,13 @@ public interface Clip extends ScalarUnaryOperator {
    * of the condition scalar < min or max < scalar. */
   boolean isOutside(Scalar scalar);
 
-  /** If max - min > 0, the given scalar is divided by width.
+  /** If max - min > 0, the given scalar is clipped to the [min max] interval,
+   * then min is subtracted and the result divided by width.
    * If max == min the result is always RealScalar.ZERO.
    * 
    * <p>When using Clip with {@link Quantity}s, all three scalars
    * min, max, and the given scalar, must be of identical unit.
-   * Rescale always returns a {@link RealScalar}.
+   * {@link #rescale(Scalar)} always returns a {@link RealScalar}.
    * 
    * @param scalar
    * @return value in interval [0, 1] relative to position of scalar in clip interval.

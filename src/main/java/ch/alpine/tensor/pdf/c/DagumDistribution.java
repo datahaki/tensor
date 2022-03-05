@@ -10,10 +10,10 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.red.Times;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.LogGamma;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.gam.LogGamma;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/DagumDistribution.html">DagumDistribution</a> */
@@ -100,7 +100,7 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
     return DoubleScalar.INDETERMINATE;
   }
 
-  @Override
+  @Override // from VarianceInterface
   public Scalar variance() {
     throw new UnsupportedOperationException();
   }

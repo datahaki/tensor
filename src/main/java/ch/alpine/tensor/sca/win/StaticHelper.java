@@ -6,7 +6,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Cos;
+import ch.alpine.tensor.sca.tri.Cos;
 
 /** helper functions to evaluate window functions */
 /* package */ enum StaticHelper {

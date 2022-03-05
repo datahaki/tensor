@@ -13,9 +13,9 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.VarianceInterface;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Sqrt;
 import ch.alpine.tensor.sca.erf.Erf;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** "MaxwellDistribution is also known as Maxwell-Boltzmann distribution."
  * 

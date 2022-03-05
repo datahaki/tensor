@@ -11,10 +11,10 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Arg;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

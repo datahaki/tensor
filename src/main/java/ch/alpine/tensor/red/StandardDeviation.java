@@ -3,7 +3,7 @@ package ch.alpine.tensor.red;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** implementation is consistent with Mathematica::StandardDeviation
  * 

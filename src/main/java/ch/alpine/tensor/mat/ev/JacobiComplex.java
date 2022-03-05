@@ -1,48 +1,109 @@
 // code by jph
 package ch.alpine.tensor.mat.ev;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Conjugate;
+import ch.alpine.tensor.sca.Imag;
+import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.tri.ArcTan;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Sin;
 
 /** Reference:
  * https://en.wikipedia.org/wiki/Jacobi_method_for_complex_Hermitian_matrices */
 /* package */ class JacobiComplex extends JacobiMethod {
-  /** @param matrix hermitian
-   * @param chop */
-  public JacobiComplex(Tensor matrix, Chop chop) {
+  /** @param matrix hermitian */
+  public JacobiComplex(Tensor matrix) {
     super(matrix);
-    HermitianMatrixQ.require(matrix, chop);
-    for (int iteration = 0; iteration < MAX_ITERATIONS; ++iteration) {
-      for (int p = 0; p < n; ++p)
-        for (int q = 0; q < n; ++q)
-          if (p != q) {
-            Scalar hpp = H[p][p];
-            Scalar hpq = H[p][q];
-            Scalar hqq = H[q][q];
-            if (Scalars.nonZero(hpq)) {
-              Scalar abs = Abs.FUNCTION.apply(hpq);
-              Scalar phi1 = Arg.FUNCTION.apply(hpq);
-              Scalar phi2 = ArcTan.of(hpp.subtract(hqq), abs.add(abs));
-              Scalar theta1 = phi1.subtract(Pi.HALF).multiply(RationalScalar.HALF);
-              Scalar theta2 = phi2.multiply(RationalScalar.HALF);
-              GivensComplex givensComplex = new GivensComplex(theta1, theta2);
-              givensComplex.transform(H, p, q);
-              givensComplex.dot(V, p, q);
-            }
-          }
-      // TODO not the best stop criteria
-      if (Chop._14.isZero(sumAbs_offDiagonal()))
-        return;
+    // remove any imaginary part on diagonal after check that hermitian numerical
+    for (int p = 0; p < n; ++p)
+      H[p][p] = Real.FUNCTION.apply(H[p][p]);
+  }
+
+  @Override // from JacobiMethod
+  protected void eliminate(int p, int q) {
+    Scalar hpp = diag(p);
+    Scalar hqq = diag(q);
+    Scalar hpq = H[p][q];
+    Scalar apq = Abs.FUNCTION.apply(hpq);
+    Scalar phi1 = Arg.FUNCTION.apply(hpq);
+    Scalar phi2 = ArcTan.of(hpp.subtract(hqq), apq.add(apq));
+    Scalar theta1 = phi1.subtract(Pi.HALF).multiply(RationalScalar.HALF);
+    Scalar theta2 = phi2.multiply(RationalScalar.HALF);
+    GivensRotation givensRotation = new GivensComplex(theta1, theta2);
+    givensRotation.transform(p, q);
+    givensRotation.dot(p, q);
+  }
+
+  /** encodes the product of two complex rotation matrices
+   * 
+   * Reference:
+   * https://en.wikipedia.org/wiki/Jacobi_method_for_complex_Hermitian_matrices */
+  /* package */ class GivensComplex implements GivensRotation {
+    final Scalar rpp;
+    final Scalar rpq;
+    final Scalar rqp;
+    final Scalar rqq;
+    final Scalar cpp;
+    final Scalar cpq;
+    final Scalar cqp;
+    final Scalar cqq;
+
+    /** @param theta1
+     * @param theta2 */
+    GivensComplex(Scalar theta1, Scalar theta2) {
+      Chop.NONE.requireZero(Imag.FUNCTION.apply(theta1));
+      Chop.NONE.requireZero(Imag.FUNCTION.apply(theta2));
+      Scalar cos = Cos.FUNCTION.apply(theta2);
+      Scalar sin = Sin.FUNCTION.apply(theta2);
+      rpp = ComplexScalar.unit(theta1.negate()).multiply(ComplexScalar.I).negate().multiply(sin);
+      rpq = ComplexScalar.unit(theta1).negate().multiply(cos);
+      rqp = ComplexScalar.unit(theta1.negate()).multiply(cos);
+      rqq = ComplexScalar.unit(theta1).multiply(ComplexScalar.I).multiply(sin);
+      cpp = Conjugate.of(rpp);
+      cpq = Conjugate.of(rpq);
+      cqp = Conjugate.of(rqp);
+      cqq = Conjugate.of(rqq);
     }
-    throw TensorRuntimeException.of(matrix);
+
+    @Override // from GivensRotation
+    public void transform(int p, int q) {
+      int n = H.length;
+      for (int i = 0; i < n; ++i) {
+        Scalar hpi = H[p][i];
+        Scalar hqi = H[q][i];
+        H[p][i] = hpi.multiply(rpp).add(hqi.multiply(rpq));
+        H[q][i] = hpi.multiply(rqp).add(hqi.multiply(rqq));
+      }
+      for (int i = 0; i < n; ++i) {
+        Scalar hip = H[i][p];
+        Scalar hiq = H[i][q];
+        H[i][p] = hip.multiply(cpp).add(hiq.multiply(cpq));
+        H[i][q] = hip.multiply(cqp).add(hiq.multiply(cqq));
+      }
+      // Tolerance.CHOP.requireZero(H[p][q]); // dev check
+      // Tolerance.CHOP.requireZero(H[q][p]); // dev check
+      H[p][q] = H[p][q].zero();
+      H[q][p] = H[q][p].zero();
+      // Tolerance.CHOP.requireZero(Imag.FUNCTION.apply(H[p][p])); // dev check
+      // Tolerance.CHOP.requireZero(Imag.FUNCTION.apply(H[q][q])); // dev check
+      H[p][p] = Real.FUNCTION.apply(H[p][p]);
+      H[q][q] = Real.FUNCTION.apply(H[q][q]);
+    }
+
+    @Override // from GivensRotation
+    public void dot(int p, int q) {
+      Tensor vp = V[p];
+      Tensor vq = V[q];
+      V[p] = vp.multiply(rpp).add(vq.multiply(rpq));
+      V[q] = vp.multiply(rqp).add(vq.multiply(rqq));
+    }
   }
 }

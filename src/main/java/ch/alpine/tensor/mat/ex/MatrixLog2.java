@@ -10,8 +10,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.red.Times;
-import ch.alpine.tensor.sca.Log;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /* package */ enum MatrixLog2 {
   ;

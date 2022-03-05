@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 public class TensorDotTest extends TestCase {
   public void testDotEmpty() {
     Tensor a = Tensors.empty().dot(Tensors.empty());
-    assertTrue(ScalarQ.of(a));
+    assertTrue(ScalarQTest.of(a));
     assertEquals(a, RealScalar.ZERO);
     assertEquals(a, DoubleScalar.of(0));
     assertEquals(RealScalar.ZERO, a);

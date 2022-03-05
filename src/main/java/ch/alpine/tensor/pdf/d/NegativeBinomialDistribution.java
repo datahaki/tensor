@@ -6,18 +6,17 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.VarianceInterface;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** Quote: "the distribution of the number of failures in a sequence of trials with success
  * probability p before n successes occur."
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/NegativeBinomialDistribution.html">NegativeBinomialDistribution</a> */
-public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution implements VarianceInterface {
+public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution {
   private static final Chop TOLERANCE = Chop._12;
 
   /** @param n non-negative
@@ -47,7 +46,7 @@ public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution 
     this.p = Sign.requirePositive(p);
     _1_p = RealScalar.ONE.subtract(p);
     pn = Power.of(p, n);
-    inverse_cdf_build(TOLERANCE);
+    build(TOLERANCE);
   }
 
   @Override // from DiscreteDistribution

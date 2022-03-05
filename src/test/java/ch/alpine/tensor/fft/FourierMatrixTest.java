@@ -20,8 +20,8 @@ import ch.alpine.tensor.nrm.FrobeniusNorm;
 import ch.alpine.tensor.nrm.Matrix1Norm;
 import ch.alpine.tensor.nrm.MatrixInfinityNorm;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

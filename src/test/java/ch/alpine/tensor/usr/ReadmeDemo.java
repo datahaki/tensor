@@ -25,10 +25,10 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.HypergeometricDistribution;
-import ch.alpine.tensor.sca.Exp;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Round;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /* package */ enum ReadmeDemo {
   ;

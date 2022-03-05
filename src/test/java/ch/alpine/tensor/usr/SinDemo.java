@@ -7,11 +7,11 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.img.ColorDataGradients;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.Nest;
-import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Real;
-import ch.alpine.tensor.sca.Sin;
+import ch.alpine.tensor.sca.tri.ArcTan;
+import ch.alpine.tensor.sca.tri.Sin;
 
 /** inspired by mathematica's documentation of Gamma */
 /* package */ enum SinDemo implements BivariateEvaluation {

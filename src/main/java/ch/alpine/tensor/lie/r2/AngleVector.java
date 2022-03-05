@@ -5,9 +5,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.sca.Cos;
 import ch.alpine.tensor.sca.Mod;
-import ch.alpine.tensor.sca.Sin;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Sin;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/AngleVector.html">AngleVector</a>

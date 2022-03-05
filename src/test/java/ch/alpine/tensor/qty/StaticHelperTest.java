@@ -2,6 +2,7 @@
 package ch.alpine.tensor.qty;
 
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -87,6 +88,11 @@ public class StaticHelperTest extends TestCase {
   public void testM_kW() {
     Scalar scalar = StaticHelper.conversion(UnitSystem.SI(), "m", "kW"); // W = 1[m^2*kg*s^-3]
     Tolerance.CHOP.requireClose(scalar, Scalars.fromString("0.03162277660168379[kW^1/2*kg^-1/2*s^3/2]"));
+  }
+
+  public void testBase() {
+    Set<String> set = StaticHelper.base(UnitSystem.SI().map().values());
+    assertTrue(Arrays.asList("cd A B s mol K kg m".split(" ")).containsAll(set));
   }
 
   public void testMultiplyNullFail() {

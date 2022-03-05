@@ -10,9 +10,9 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.nrm.Vector2Norm;
-import ch.alpine.tensor.sca.ArcCos;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Conjugate;
+import ch.alpine.tensor.sca.tri.ArcCos;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/VectorAngle.html">VectorAngle</a> */

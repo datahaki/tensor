@@ -47,7 +47,7 @@ public class RenameDirectoryTest extends TestCase {
     folder2.getParentFile().delete();
   }
 
-  public void testRenameToFail() throws Exception {
+  public void testRenameToFail() {
     if (!isLinux)
       return;
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
@@ -58,7 +58,7 @@ public class RenameDirectoryTest extends TestCase {
     folder1.delete();
   }
 
-  public void testCreateParentFail() throws Exception {
+  public void testCreateParentFail() {
     if (!isLinux)
       return;
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());

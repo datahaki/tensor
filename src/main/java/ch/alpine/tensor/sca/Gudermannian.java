@@ -5,6 +5,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.tri.ArcTan;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Gudermannian.html">Gudermannian</a> */

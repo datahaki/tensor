@@ -9,12 +9,9 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.pdf.DiscreteDistribution;
-import ch.alpine.tensor.pdf.InverseCDF;
-import ch.alpine.tensor.pdf.MeanInterface;
 
 /** functionality and suggested base class for a discrete probability distribution */
-public abstract class AbstractDiscreteDistribution implements DiscreteDistribution, //
-    InverseCDF, MeanInterface {
+public abstract class AbstractDiscreteDistribution implements DiscreteDistribution {
   @Override // from RandomVariateInterface
   public final Scalar randomVariate(Random random) {
     return protected_quantile(DoubleScalar.of(random.nextDouble()));

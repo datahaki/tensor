@@ -16,6 +16,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.MathematicaFormat;
+import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.lie.TensorWedge;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -25,6 +26,7 @@ import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Chop;
@@ -171,6 +173,21 @@ public class MatrixExpTest extends TestCase {
     Tensor tensor1 = MatrixExp.of(matrix); // 19
     Tensor tensor2 = MatrixExpSeries.FUNCTION.apply(matrix); // 119
     Chop._04.requireClose(tensor1, tensor2);
+  }
+
+  public void testHermitian() {
+    Distribution distribution = TriangularDistribution.with(0, 1);
+    for (int n = 1; n < 6; ++n) {
+      Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
+      Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
+      Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
+      HermitianMatrixQ.require(matrix);
+      Tensor exp1 = MatrixExp.of(matrix);
+      Tensor exp2 = MatrixExp.ofHermitian(matrix);
+      Tolerance.CHOP.requireClose(exp1, exp2);
+      Tensor log = MatrixLog.ofHermitian(exp2);
+      Tolerance.CHOP.requireClose(exp1, MatrixExp.of(log));
+    }
   }
 
   public void testFail() {

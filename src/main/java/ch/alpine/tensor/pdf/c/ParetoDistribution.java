@@ -9,8 +9,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ParetoDistribution.html">ParetoDistribution</a> */
@@ -72,7 +72,7 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
     return DoubleScalar.INDETERMINATE;
   }
 
-  @Override
+  @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
     return k.divide(Power.of(RealScalar.ONE.subtract(p), alpha.reciprocal()));
   }

@@ -6,9 +6,9 @@ import java.util.List;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.sca.ArcCosh;
-import ch.alpine.tensor.sca.ArcSinh;
-import ch.alpine.tensor.sca.ArcTanh;
+import ch.alpine.tensor.sca.tri.ArcCosh;
+import ch.alpine.tensor.sca.tri.ArcSinh;
+import ch.alpine.tensor.sca.tri.ArcTanh;
 import junit.framework.TestCase;
 
 public class BivariateEvaluationTest extends TestCase {

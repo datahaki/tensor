@@ -71,7 +71,7 @@ public class NdTreeMapTest extends TestCase {
     }
   }
 
-  public void testEmpty() throws Exception {
+  public void testEmpty() {
     NdMap<String> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9)), 10);
     assertTrue(ndMap.isEmpty());
     NdCenterInterface distancer = NdCenters.VECTOR_2_NORM.apply(Tensors.vector(0, 0));

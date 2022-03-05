@@ -5,7 +5,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 import junit.framework.TestCase;
 
 public class LanczosWindowTest extends TestCase {

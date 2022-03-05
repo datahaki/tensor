@@ -17,6 +17,7 @@ import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -93,6 +94,17 @@ public class NormalDistributionTest extends TestCase {
     TestMarkovChebyshev.chebyshev(NormalDistribution.standard());
     TestMarkovChebyshev.chebyshev(NormalDistribution.of(3, 2));
     TestMarkovChebyshev.chebyshev(NormalDistribution.of(3, 0.5));
+  }
+
+  public void testCentralMoment() {
+    Distribution distribution = NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "m"));
+    assertEquals(CentralMoment.of(distribution, 0), RealScalar.ONE);
+    assertEquals(CentralMoment.of(distribution, 2), Quantity.of(4, "m^2"));
+    assertEquals(CentralMoment.of(distribution, 4), Quantity.of(48, "m^4"));
+    assertEquals(CentralMoment.of(distribution, 6), Quantity.of(960, "m^6"));
+    assertEquals(CentralMoment.of(distribution, 1), Quantity.of(0, "m^1"));
+    assertEquals(CentralMoment.of(distribution, 3), Quantity.of(0, "m^3"));
+    assertEquals(CentralMoment.of(distribution, 5), Quantity.of(0, "m^5"));
   }
 
   public void testComplexFail() {

@@ -7,14 +7,17 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.pdf.ContinuousDistribution;
+import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.KurtosisInterface;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.sca.erf.Erfc;
 import ch.alpine.tensor.sca.erf.InverseErfc;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.gam.Factorial2;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
-/* package */ enum StandardNormalDistribution implements ContinuousDistribution, KurtosisInterface {
+/* package */ enum StandardNormalDistribution implements UnivariateDistribution, //
+    CentralMomentInterface, KurtosisInterface {
   INSTANCE;
 
   private static final Scalar DEN = Sqrt.FUNCTION.apply(Pi.TWO);
@@ -55,6 +58,13 @@ import ch.alpine.tensor.sca.erf.InverseErfc;
   @Override // from MeanInterface
   public Scalar variance() {
     return RealScalar.ONE;
+  }
+
+  @Override // from CentralMomentInterface
+  public Scalar centralMoment(int order) {
+    return order % 2 == 0 //
+        ? Factorial2.of(order - 1)
+        : RealScalar.ZERO;
   }
 
   @Override // from KurtosisInterface

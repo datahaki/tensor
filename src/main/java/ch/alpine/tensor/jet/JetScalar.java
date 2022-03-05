@@ -18,36 +18,36 @@ import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.AbsInterface;
-import ch.alpine.tensor.api.ExpInterface;
-import ch.alpine.tensor.api.LogInterface;
-import ch.alpine.tensor.api.PowerInterface;
 import ch.alpine.tensor.api.SignInterface;
-import ch.alpine.tensor.api.SqrtInterface;
-import ch.alpine.tensor.api.TrigonometryInterface;
 import ch.alpine.tensor.pdf.CDF;
-import ch.alpine.tensor.pdf.ContinuousDistribution;
 import ch.alpine.tensor.pdf.PDF;
+import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Cosh;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.Sin;
-import ch.alpine.tensor.sca.Sinh;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.ExpInterface;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.exp.LogInterface;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.PowerInterface;
+import ch.alpine.tensor.sca.pow.SqrtInterface;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Cosh;
+import ch.alpine.tensor.sca.tri.Sin;
+import ch.alpine.tensor.sca.tri.Sinh;
+import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
 /** API EXPERIMENTAL
  * 
  * automatic differentiation
  * 
  * The JetScalar is used to test the consistency between the {@link CDF} and {@link PDF}
- * of {@link ContinuousDistribution}s.
+ * of {@link UnivariateDistribution}s.
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-// TODO general makeover and more tests
+// TODO TENSOR NUM general makeover and more tests
 public class JetScalar extends AbstractScalar implements //
     AbsInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface, //
@@ -60,7 +60,7 @@ public class JetScalar extends AbstractScalar implements //
     return new JetScalar(VectorQ.require(vector).copy());
   }
 
-  /** TODO important:
+  /** TODO TENSOR NUM important:
    * Distinguish between constants with value js == {v,0,...}
    * ... and variables with value js == {v,1,0,...}
    * 
@@ -165,7 +165,7 @@ public class JetScalar extends AbstractScalar implements //
     OptionalInt optionalInt = Scalars.optionalInt(exponent);
     if (optionalInt.isPresent()) {
       int expInt = optionalInt.getAsInt();
-      if (0 <= expInt) // TODO exponent == zero!?
+      if (0 <= expInt) // TODO TENSOR NUM exponent == zero!?
         return new JetScalar(StaticHelper.power(vector, expInt));
     }
     return StaticHelper.chain(vector, Power.function(exponent), //

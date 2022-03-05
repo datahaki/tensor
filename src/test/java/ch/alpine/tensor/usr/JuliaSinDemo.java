@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.Sin;
+import ch.alpine.tensor.sca.tri.Sin;
 
 /** inspired by document by Paul Bourke */
 /* package */ class JuliaSinDemo implements BivariateEvaluation {

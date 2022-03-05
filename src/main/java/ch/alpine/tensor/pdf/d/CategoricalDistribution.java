@@ -9,12 +9,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
-import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Ceiling;
-import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Sign;
 
 /** Tensor-lib:CategoricalDistribution corresponds to the special case of
@@ -38,7 +35,7 @@ import ch.alpine.tensor.sca.Sign;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/CategoricalDistribution.html">CategoricalDistribution</a> */
-public class CategoricalDistribution extends EvaluatedDiscreteDistribution implements CDF {
+public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
   /** Remark:
    * An entry in the vector unscaledPDF may be an instance of {@link Quantity}.
    * This is warranted because the i-th entry represents the relative count of
@@ -54,7 +51,6 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution imple
 
   // ---
   private final Tensor pdf;
-  private final Tensor cdf;
 
   private CategoricalDistribution(Tensor unscaledPDF) {
     unscaledPDF.stream() //
@@ -63,8 +59,7 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution imple
     Tensor accumulate = Accumulate.of(unscaledPDF);
     Scalar scale = Last.of(accumulate);
     pdf = unscaledPDF.divide(scale);
-    cdf = accumulate.divide(scale);
-    inverse_cdf_build(cdf.length() - 1);
+    build(accumulate.length() - 1);
   }
 
   @Override // from MeanInterface
@@ -77,6 +72,11 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution imple
         .orElseThrow();
   }
 
+  @Override
+  public Scalar variance() {
+    return centralMoment(2);
+  }
+
   @Override // from DiscreteDistribution
   public int lowerBound() {
     return 0;
@@ -87,25 +87,6 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution imple
     return n < pdf.length() //
         ? pdf.Get(n)
         : RealScalar.ZERO;
-  }
-
-  @Override // from CDF
-  public Scalar p_lessThan(Scalar x) {
-    return cdf_get(Ceiling.intValueExact(x) - 1);
-  }
-
-  @Override // from CDF
-  public Scalar p_lessEquals(Scalar x) {
-    return cdf_get(Floor.intValueExact(x));
-  }
-
-  // helper function
-  private Scalar cdf_get(int n) {
-    if (0 <= n)
-      return n < cdf.length() //
-          ? cdf.Get(n)
-          : RealScalar.ONE;
-    return RealScalar.ZERO;
   }
 
   @Override // from Object

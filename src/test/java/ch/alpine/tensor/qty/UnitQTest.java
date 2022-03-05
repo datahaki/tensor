@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -23,5 +24,12 @@ public class UnitQTest extends TestCase {
 
   public void testFail() {
     AssertFail.of(() -> UnitQ.isOne(null));
+  }
+
+  public void testWeightPercent() {
+    Scalar scalar = Quantity.of(2, "kg").divide(Quantity.of(10, "kg"));
+    Scalar wtp = UnitConvert.SI().to("mass%").apply(scalar);
+    assertEquals(wtp, Quantity.of(20, "mass%"));
+    assertFalse(UnitQ.isOne(QuantityUnit.of(wtp)));
   }
 }

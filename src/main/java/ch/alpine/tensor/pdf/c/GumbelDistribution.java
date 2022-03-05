@@ -9,10 +9,10 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Gamma;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.gam.Gamma;
 
 /** Quantile returns -Infinity as reference approaches 0.0
  * 
@@ -69,7 +69,7 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
         Exp.FUNCTION.apply(x.subtract(alpha).divide(beta)).negate()));
   }
 
-  @Override
+  @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
     return alpha.add(beta.multiply(Log.FUNCTION.apply(Log.FUNCTION.apply(RealScalar.ONE.subtract(p)).negate())));
   }

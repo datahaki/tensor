@@ -3,11 +3,11 @@ package ch.alpine.tensor.red;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CentralMoment.html">CentralMoment</a> */
@@ -34,24 +34,21 @@ public enum CentralMoment {
     return of(vector, RealScalar.of(order));
   }
 
-  /** @param distribution
-   * @param order
-   * @return central moment of given distribution and order */
-  public static Scalar of(Distribution distribution, Scalar order) {
+  /** Remark:
+   * all symmetric distributions have CentralMoment[uneven order] == 0
+   * 
+   * @param distribution
+   * @param order non-negative
+   * @return central moment of given distribution and order
+   * @throws Exception if order is negative */
+  public static Scalar of(Distribution distribution, int order) {
     if (distribution instanceof CentralMomentInterface centralMomentInterface)
-      return centralMomentInterface.centralMoment(order);
-    return switch (Scalars.intValueExact(order)) {
+      return centralMomentInterface.centralMoment(Integers.requirePositiveOrZero(order));
+    return switch (order) {
     case 0 -> RealScalar.ONE;
     case 1 -> Mean.of(distribution).zero();
     case 2 -> Variance.of(distribution);
     default -> throw new UnsupportedOperationException();
     };
-  }
-
-  /** @param distribution
-   * @param order
-   * @return central moment of given distribution and order */
-  public static Scalar of(Distribution distribution, Number order) {
-    return of(distribution, RealScalar.of(order));
   }
 }

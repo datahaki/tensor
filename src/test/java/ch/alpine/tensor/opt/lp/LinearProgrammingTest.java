@@ -32,7 +32,7 @@ public class LinearProgrammingTest extends TestCase {
         Tensors.matrixInt(new int[][] { { 1, 5 }, { 2, 1 }, { 1, 1 } }), //
         Tensors.vector(40, 20, 12), Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
-    // TODO primal vs dual
+    // TODO TENSOR LP primal vs dual
     TestHelper.check(lpd, false);
     Tensor x = LinearProgramming.of(lpd);
     assertEquals(x, Tensors.vector(5, 7));
@@ -59,7 +59,7 @@ public class LinearProgrammingTest extends TestCase {
     assertEquals(lpd.A, lpc.A);
     assertEquals(lpd.b, lpc.b);
     assertEquals(lpd.var_count(), lpc.var_count());
-    // TODO primal vs dual, strictly speaking the lp in its
+    // TODO TENSOR LP primal vs dual, strictly speaking the lp in its
     // current form is not covered by the duality theorem
     // TestHelper.check(lpd, false);
   }
@@ -80,11 +80,11 @@ public class LinearProgrammingTest extends TestCase {
     assertEquals(xp, solp.get(0));
     LinearProgram lpp = lpd.toggle();
     assertTrue(lpp.isCanonicPrimal());
-    // LinearProgramming.of(lpd); // TODO throws exception due to "unbounded"
+    // LinearProgramming.of(lpd); // TODO TENSOR LP throws exception due to "unbounded"
     Tensor sold = SimplexCorners.of(lpp);
     assertEquals(sold.dot(lpp.c).Get(0), RationalScalar.of(10, 9));
     AssertFail.of(() -> lpp.requireFeasible(Tensors.vector(1, 1)));
-    // TODO primal vs dual
+    // TODO TENSOR LP primal vs dual
     // TestHelper.check(lpp, false);
   }
 
@@ -103,7 +103,7 @@ public class LinearProgrammingTest extends TestCase {
     assertEquals(x, Tensors.vector(0, 2));
     Tensor solp = SimplexCorners.of(lpd);
     assertEquals(x, solp.get(0));
-    // TODO primal vs dual
+    // TODO TENSOR LP primal vs dual
     // TestHelper.check(lpp);
   }
 }

@@ -15,7 +15,7 @@ import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** product form of DenmanBeavers iteration to converge to sqrt of matrix
  * coefficients based on determinant and size of matrix

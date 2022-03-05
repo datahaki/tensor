@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
-import ch.alpine.tensor.ScalarQ;
+import ch.alpine.tensor.ScalarQTest;
 import ch.alpine.tensor.Tensor;
 import junit.framework.TestCase;
 
@@ -14,7 +14,7 @@ public class GetTest extends TestCase {
     File file = new File(getClass().getResource("/io/basic.mathematica").getFile());
     Tensor tensor = Get.of(file);
     assertTrue(Objects.nonNull(tensor));
-    assertFalse(ScalarQ.of(tensor));
+    assertFalse(ScalarQTest.of(tensor));
     assertEquals(tensor.length(), 13);
     assertEquals(tensor, Get.of(file));
   }

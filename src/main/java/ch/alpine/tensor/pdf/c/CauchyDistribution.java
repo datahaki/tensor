@@ -10,9 +10,9 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.Tan;
+import ch.alpine.tensor.sca.tri.ArcTan;
+import ch.alpine.tensor.sca.tri.Tan;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CauchyDistribution.html">CauchyDistribution</a> */

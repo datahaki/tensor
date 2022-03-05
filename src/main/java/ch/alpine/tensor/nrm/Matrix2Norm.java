@@ -7,7 +7,7 @@ import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.ex.MatrixLog;
 import ch.alpine.tensor.mat.sv.SingularValueList;
 import ch.alpine.tensor.red.Min;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 public enum Matrix2Norm {
   ;

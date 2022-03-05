@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
 
 /** implementation consistent with Mathematica
@@ -55,7 +54,7 @@ public class Dimensions implements Serializable {
     if (lengths.size() <= level)
       lengths.add(new HashSet<>());
     lengths.get(level).add(tensor.length());
-    if (!ScalarQ.of(tensor))
+    if (!(tensor instanceof Scalar))
       tensor.stream().forEach(entry -> build(entry, level + 1));
   }
 

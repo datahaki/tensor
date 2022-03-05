@@ -198,7 +198,7 @@ public enum Tensors {
 
   // ---
   private static final int MAX_NUMEL = 12;
-  private static final int MAX_LENGTH = 32;
+  private static final int MAX_LENGTH = 64;
 
   /** @param tensors
    * @return compact, possibly abbreviated expressions of given tensors */

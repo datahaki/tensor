@@ -6,7 +6,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.sca.Factorial;
+import ch.alpine.tensor.sca.gam.Factorial;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

@@ -39,6 +39,7 @@ public class ImportHelperTest extends TestCase {
     }
   }
 
+  @SuppressWarnings("null")
   public void testSwitch() {
     Extension extension = null;
     try {

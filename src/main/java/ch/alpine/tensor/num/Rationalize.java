@@ -45,7 +45,7 @@ public class Rationalize implements ScalarUnaryOperator {
   /** @param max positive integer
    * @return {@link ScalarUnaryOperator} that returns the closest {@link RationalScalar} to the
    * given argument, with denominator less or equals to max, and ties rounding to positive infinity.
-   * @throws Exception if max does not satisfy {@link IntegerQ}, or is negative */
+   * @throws Exception if max is not strictly positive */
   public static ScalarUnaryOperator withDenominatorLessEquals(long max) {
     return new Rationalize(RealScalar.of(max));
   }

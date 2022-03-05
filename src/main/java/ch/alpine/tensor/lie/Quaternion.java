@@ -10,12 +10,12 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ConjugateInterface;
-import ch.alpine.tensor.api.ExpInterface;
-import ch.alpine.tensor.api.LogInterface;
-import ch.alpine.tensor.api.PowerInterface;
 import ch.alpine.tensor.api.SignInterface;
-import ch.alpine.tensor.api.SqrtInterface;
-import ch.alpine.tensor.api.TrigonometryInterface;
+import ch.alpine.tensor.sca.exp.ExpInterface;
+import ch.alpine.tensor.sca.exp.LogInterface;
+import ch.alpine.tensor.sca.pow.PowerInterface;
+import ch.alpine.tensor.sca.pow.SqrtInterface;
+import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
 /** Important: not all algorithms are tested for {@link Quaternion} input.
  * The consistent handling of the non-commutativity of the multiplication

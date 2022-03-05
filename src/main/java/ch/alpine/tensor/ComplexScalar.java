@@ -4,21 +4,21 @@ package ch.alpine.tensor;
 import java.util.Objects;
 
 import ch.alpine.tensor.api.AbsInterface;
-import ch.alpine.tensor.api.ArcTanInterface;
 import ch.alpine.tensor.api.ArgInterface;
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.api.ConjugateInterface;
-import ch.alpine.tensor.api.ExpInterface;
-import ch.alpine.tensor.api.LogInterface;
-import ch.alpine.tensor.api.PowerInterface;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.SignInterface;
-import ch.alpine.tensor.api.SqrtInterface;
-import ch.alpine.tensor.api.TrigonometryInterface;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Cos;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.Sin;
+import ch.alpine.tensor.sca.exp.ExpInterface;
+import ch.alpine.tensor.sca.exp.LogInterface;
+import ch.alpine.tensor.sca.pow.PowerInterface;
+import ch.alpine.tensor.sca.pow.SqrtInterface;
+import ch.alpine.tensor.sca.tri.ArcTanInterface;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Sin;
+import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
 /** complex number
  * 

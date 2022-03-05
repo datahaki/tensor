@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -19,12 +18,7 @@ public enum UnitSystems {
    * @param unitSystem
    * @return base units of the given unitSystem */
   public static Set<String> base(UnitSystem unitSystem) {
-    return unitSystem.map().values().stream() //
-        .map(QuantityUnit::of) //
-        .map(Unit::map) //
-        .map(Map::keySet) //
-        .flatMap(Collection::stream) //
-        .collect(Collectors.toSet());
+    return StaticHelper.base(unitSystem.map().values());
   }
 
   // ---

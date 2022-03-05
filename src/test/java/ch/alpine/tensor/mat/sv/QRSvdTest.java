@@ -37,7 +37,7 @@ public class QRSvdTest extends TestCase {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 5, 2);
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
     List<Integer> list = Dimensions.of(qrDecomposition.getR());
-    // TODO the zeros in r are to be avoided when computing SVD
+    // TODO TENSOR QR the zeros in r are to be avoided when computing SVD
     // System.out.println(list);
     list.size();
     SingularValueDecomposition approximateSvd = Serialization.copy(QRSvd.of(qrDecomposition));

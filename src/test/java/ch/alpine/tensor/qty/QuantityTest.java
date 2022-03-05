@@ -19,7 +19,7 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.io.CsvFormat;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

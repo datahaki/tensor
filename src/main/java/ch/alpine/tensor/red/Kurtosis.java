@@ -27,6 +27,6 @@ public enum Kurtosis {
     if (distribution instanceof KurtosisInterface kurtosisInterface)
       return kurtosisInterface.kurtosis();
     Scalar variance = Variance.of(distribution);
-    return CentralMoment.of(distribution, _4).divide(variance).divide(variance);
+    return CentralMoment.of(distribution, 4).divide(variance).divide(variance);
   }
 }

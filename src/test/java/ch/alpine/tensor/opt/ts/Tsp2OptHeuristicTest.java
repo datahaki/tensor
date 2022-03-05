@@ -20,9 +20,10 @@ import junit.framework.TestCase;
 public class Tsp2OptHeuristicTest extends TestCase {
   public void testSimple() {
     Distribution distribution = DiscreteUniformDistribution.of(-5, 5);
+    Random random = new Random(1);
     for (int n = 1; n < 10; ++n) {
-      Tensor tensor = Symmetrize.of(RandomVariate.of(distribution, n, n)).multiply(RealScalar.TWO);
-      Tsp2OptHeuristic tsp2OptHeuristic = new Tsp2OptHeuristic(tensor, new Random());
+      Tensor tensor = Symmetrize.of(RandomVariate.of(distribution, random, n, n)).multiply(RealScalar.TWO);
+      Tsp2OptHeuristic tsp2OptHeuristic = new Tsp2OptHeuristic(tensor, random);
       Scalar cost0 = tsp2OptHeuristic.cost();
       boolean next = tsp2OptHeuristic.next();
       Integers.requirePermutation(tsp2OptHeuristic.index());
@@ -36,8 +37,9 @@ public class Tsp2OptHeuristicTest extends TestCase {
   public void testIterate() {
     Distribution distribution = UniformDistribution.of(-5, 5);
     int n = 11;
-    Tensor tensor = Symmetrize.of(RandomVariate.of(distribution, n, n));
-    Tsp2OptHeuristic tsp2OptHeuristic = new Tsp2OptHeuristic(tensor, new Random(1));
+    Random random = new Random(1);
+    Tensor tensor = Symmetrize.of(RandomVariate.of(distribution, random, n, n));
+    Tsp2OptHeuristic tsp2OptHeuristic = new Tsp2OptHeuristic(tensor, random);
     Scalar cost0 = tsp2OptHeuristic.cost();
     for (int count = 0; count < 10; ++count) {
       tsp2OptHeuristic.next();

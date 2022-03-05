@@ -18,7 +18,7 @@ import ch.alpine.tensor.pdf.d.PoissonDistribution;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 import junit.framework.TestCase;
 
 public class DistributionTest extends TestCase {

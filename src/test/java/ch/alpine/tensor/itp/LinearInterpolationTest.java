@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import java.io.IOException;
+
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
@@ -13,12 +15,15 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.d.GeometricDistribution;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -164,8 +169,18 @@ public class LinearInterpolationTest extends TestCase {
     TestHelper.getScalarFail(interpolation);
   }
 
+  public void testClip() throws ClassNotFoundException, IOException {
+    Interpolation interpolation = Serialization.copy(LinearInterpolation.of(Clips.interval(10, 14)));
+    assertEquals(ExactScalarQ.require(interpolation.At(RealScalar.ZERO)), RealScalar.of(10));
+    assertEquals(ExactScalarQ.require(interpolation.At(RationalScalar.of(1, 4))), RealScalar.of(11));
+    assertEquals(ExactScalarQ.require(interpolation.At(RealScalar.ONE)), RealScalar.of(14));
+    AssertFail.of(() -> interpolation.At(RealScalar.of(-0.1)));
+    AssertFail.of(() -> interpolation.At(RealScalar.of(1.1)));
+  }
+
   public void testFailNull() {
-    AssertFail.of(() -> LinearInterpolation.of(null));
+    AssertFail.of(() -> LinearInterpolation.of((Tensor) null));
+    AssertFail.of(() -> LinearInterpolation.of((Clip) null));
   }
 
   public void testFailScalar() {

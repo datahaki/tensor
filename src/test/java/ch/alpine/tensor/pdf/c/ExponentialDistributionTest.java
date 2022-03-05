@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.MachineNumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -23,13 +24,14 @@ import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
+import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -192,6 +194,9 @@ public class ExponentialDistributionTest extends TestCase {
 
   public void testQuantityCDF() {
     Distribution distribution = ExponentialDistribution.of(Quantity.of(3, "m"));
+    Scalar scalar = CentralMoment.of(distribution, 5);
+    ExactScalarQ.require(scalar);
+    assertEquals(scalar, Scalars.fromString("44/243[m^-5]"));
     {
       Scalar prob = CDF.of(distribution).p_lessThan(Quantity.of(2, "m^-1"));
       assertTrue(Sign.isPositive(prob));

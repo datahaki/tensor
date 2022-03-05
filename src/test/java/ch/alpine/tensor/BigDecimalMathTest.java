@@ -7,11 +7,11 @@ import java.math.MathContext;
 import java.math.RoundingMode;
 
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Cos;
-import ch.alpine.tensor.sca.Cosh;
-import ch.alpine.tensor.sca.Sin;
-import ch.alpine.tensor.sca.Sinh;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
+import ch.alpine.tensor.sca.tri.Cos;
+import ch.alpine.tensor.sca.tri.Cosh;
+import ch.alpine.tensor.sca.tri.Sin;
+import ch.alpine.tensor.sca.tri.Sinh;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

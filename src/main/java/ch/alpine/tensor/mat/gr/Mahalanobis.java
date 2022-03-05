@@ -13,7 +13,7 @@ import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** Mahalanobis is an alternative to {@link InfluenceMatrix} for the computation of
  * leverages. Mahalanobis derives the leverages from the bilinear form determined by

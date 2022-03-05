@@ -25,10 +25,11 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
@@ -229,6 +230,21 @@ public class AroundTest extends TestCase {
     Around around = (Around) Log.FUNCTION.apply(Around.of(2, 3));
     Chop._12.requireClose(around.mean(), RealScalar.of(0.6931471805599453));
     assertEquals(around.uncertainty(), RationalScalar.of(3, 2));
+  }
+
+  public void testPower() {
+    assertEquals(Power.of(Around.of(-4, 3), RealScalar.of(3)), Around.of(-64, 144));
+    assertEquals(Power.of(Around.of(-3, 2), RealScalar.of(2)), Around.of(9, 12));
+    assertEquals(Power.of( //
+        Around.of(RationalScalar.HALF.negate(), RealScalar.TWO), RealScalar.of(-2)), //
+        Around.of(4, 32));
+    assertEquals(Power.of( //
+        Around.of(RationalScalar.HALF.negate(), RealScalar.TWO), RealScalar.of(-3)), //
+        Around.of(-8, 96));
+  }
+
+  public void testPowerFail() {
+    AssertFail.of(() -> Power.of(Around.of(-3, 2), Around.of(9, 12)));
   }
 
   public void testNullFail() {

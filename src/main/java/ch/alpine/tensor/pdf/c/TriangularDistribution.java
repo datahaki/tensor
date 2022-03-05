@@ -4,7 +4,7 @@ package ch.alpine.tensor.pdf.c;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** The triangular distribution is a special case of a {@link TrapezoidalDistribution}
  * 

@@ -32,7 +32,7 @@ public class CentralMomentTest extends TestCase {
     ExactScalarQ.require(scalar);
     assertEquals(scalar, RationalScalar.of(326, 729));
     assertEquals(CentralMoment.of(distribution, 2), Variance.of(distribution));
-    AssertFail.of(() -> CentralMoment.of(distribution, RealScalar.of(-1)));
+    AssertFail.of(() -> CentralMoment.of(distribution, -1));
   }
 
   public void testComplex() {

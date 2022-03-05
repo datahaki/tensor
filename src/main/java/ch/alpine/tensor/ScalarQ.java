@@ -1,21 +1,14 @@
 // code by jph
 package ch.alpine.tensor;
 
-/** predicate that determines if a given tensor is instance of {@link Scalar} */
+/** Hint:
+ * use the instanceof predicate to determine whether an object is instance of {@link Scalar} */
 public enum ScalarQ {
   ;
-  /** equivalent to the predicate {@code tensor.length() == Scalar.LENGTH}
-   * 
-   * @param tensor
-   * @return true if given tensor is instance of {@link Scalar} */
-  public static boolean of(Tensor tensor) {
-    return tensor instanceof Scalar;
-  }
-
   /** @param tensor
    * @throws Exception if given tensor is an instance of {@link Scalar} */
   public static void thenThrow(Tensor tensor) {
-    if (of(tensor))
+    if (tensor instanceof Scalar)
       throw TensorRuntimeException.of(tensor);
   }
 }

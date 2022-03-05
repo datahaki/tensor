@@ -29,7 +29,7 @@ public class SimplexMethodTest extends TestCase {
     assertTrue(lpd.isCanonicDual());
     TestHelper.check(lpp, lpd);
     Tensor xp = LinearProgramming.of(lpp);
-    // TODO lp solver does not find optimal solution of primal problem!
+    // TODO TENSOR LP solver does not find optimal solution of primal problem!
     NavigableMap<Scalar, Tensor> map = SimplexCorners.of(lpp.c, lpp.A, lpp.b, true);
     assertTrue(map.values().contains(Tensors.of(xp)));
     Tensor xd = LinearProgramming.of(lpd);
@@ -112,7 +112,7 @@ public class SimplexMethodTest extends TestCase {
     assertTrue(lpd.isCanonicDual());
     LinearProgram lpp = lpd.toggle();
     assertTrue(lpp.isCanonicPrimal());
-    // TODO apparently non symmetric
+    // TODO TENSOR LP apparently non symmetric
     // TestHelper.check(lpp, lpd);
     Tensor sols = SimplexCorners.of(lpd);
     assertEquals(sols, Tensors.empty());

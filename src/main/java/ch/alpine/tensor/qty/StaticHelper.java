@@ -1,16 +1,19 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.sca.pow.Power;
 
 /* package */ enum StaticHelper {
   ;
@@ -46,7 +49,6 @@ import ch.alpine.tensor.sca.Power;
     Scalar factor = unitSystem.map().get(next);
     Unit unit = Unit.of(next);
     if (Objects.isNull(factor) && //
-    // TODO KnownUnitQ.in(unitSystem) rebuilds a map every time: avoid?
         KnownUnitQ.in(unitSystem).require(unit).equals(Unit.of(prev)))
       return RealScalar.ONE;
     Unit rhs = QuantityUnit.of(factor);
@@ -59,17 +61,20 @@ import ch.alpine.tensor.sca.Power;
         rhs.map().get(prev).reciprocal());
   }
 
-  /** Example: for the SI unit system, the set of known atomic units contains
-   * "m", "K", "W", "kW", "s", "Hz", ...
-   * 
-   * @return set of all atomic units known by the unit system including those that
-   * are not further convertible */
-  public static Set<String> buildSet(UnitSystem unitSystem) {
-    Set<String> set = new HashSet<>();
-    for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
-      set.add(entry.getKey());
-      set.addAll(QuantityUnit.of(entry.getValue()).map().keySet());
-    }
-    return set;
+  public static Map<String, Scalar> stringScalarMap(Properties properties) {
+    return properties.stringPropertyNames().stream().collect(Collectors.toMap( //
+        Function.identity(), // example: "kW"
+        key -> Scalars.fromString(properties.getProperty(key)))); // example: 1000[m^2*kg*s^-3]
+  }
+
+  /** @param collection
+   * @return base units, for instance the set [m, A, s, kg, cd, K, mol] */
+  public static Set<String> base(Collection<Scalar> collection) {
+    return collection.stream() //
+        .map(QuantityUnit::of) //
+        .map(Unit::map) //
+        .map(Map::keySet) //
+        .flatMap(Collection::stream) //
+        .collect(Collectors.toSet());
   }
 }

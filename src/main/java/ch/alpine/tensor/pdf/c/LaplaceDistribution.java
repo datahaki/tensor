@@ -9,9 +9,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/LaplaceDistribution.html">LaplaceDistribution</a> */
@@ -64,7 +64,7 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
     return b2.add(b2);
   }
 
-  @Override
+  @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
     if (Scalars.lessEquals(p, RationalScalar.HALF))
       return mean.add(Log.FUNCTION.apply(p.add(p)).multiply(beta));

@@ -2,11 +2,7 @@
 
 # ch.alpine.tensor
 
-Library for tensor computations in Java 17, version `1.0.3`. 
-
-The last version that supports Java 11 is `1.0.1`.
-
-The last version that supports Java 8 is `0.9.4`.
+Library for tensor computations in Java 17, version `1.0.4`.
 
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions
@@ -58,7 +54,6 @@ Autonomous Gokart
 * parametric functions `LinearInterpolation`, `BSplineFunction`, etc.
 * window functions: Gaussian, Hamming, Hann, Blackman, etc.
 * spectral analysis: `Fourier`, `SpectrogramArray`, etc.
-* algebra computations `BakerCampbellHausdorff`-formula, `CliffordAlgebra`, ...
 * import from and export to `Mathematica`, `CSV`, and image files
 
 ## Gallery
@@ -278,7 +273,7 @@ radius search
 
 Predefined color gradients
 
-![ColorDataGradients](https://user-images.githubusercontent.com/4012178/139557217-4465558d-8d42-4df1-a408-48347354012a.png)
+![colordatagradients](https://user-images.githubusercontent.com/4012178/155898471-1fc657ae-7318-455c-852f-20469c8e4564.png)
 
 Predefined color lists
 
@@ -304,7 +299,7 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
   <dependency>
     <groupId>ch.alpine</groupId>
     <artifactId>tensor</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </dependency>
 </dependencies>
 ```

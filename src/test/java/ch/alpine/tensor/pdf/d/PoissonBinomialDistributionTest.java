@@ -9,9 +9,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.pdf.DiscreteDistribution;
+import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
@@ -49,27 +48,18 @@ public class PoissonBinomialDistributionTest extends TestCase {
     RandomVariate.of(distribution, 10);
     Chop._12.requireClose(Mean.of(distribution), RealScalar.of(3.4));
     Chop._12.requireClose(Variance.of(distribution), RealScalar.of(0.86));
-    DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
-    assertEquals(discreteDistribution.lowerBound(), 2);
+    // DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
+    // assertEquals(discreteDistribution.lowerBound(), 2);
   }
 
   public void testProbFail() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1));
     assertTrue(distribution.toString().startsWith("PoissonBinomialDistribution["));
-    PDF pdf = PDF.of(distribution);
-    try {
-      pdf.at(RealScalar.of(2));
-      fail();
-    } catch (Exception exception) {
-      assertTrue(UnsupportedOperationException.class.isInstance(exception));
-    }
-    DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
-    try {
-      discreteDistribution.p_equals(3);
-      fail();
-    } catch (Exception exception) {
-      assertTrue(UnsupportedOperationException.class.isInstance(exception));
-    }
+  }
+
+  public void testCdfFail() {
+    Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(0.1, 0.3, 1, 0.1, 0.5));
+    AssertFail.of(() -> CDF.of(distribution));
   }
 
   public void testFail() {

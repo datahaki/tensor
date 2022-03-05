@@ -21,7 +21,7 @@ import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** Characteristics of a trapezoidal distribution: the graph of the PDF resembles
  * a trapezoid which begins rising at a until b, has a plateau from b to c, and
@@ -154,7 +154,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
       Scalar term = d.subtract(x).divide(d.subtract(c));
       return two_alpha.multiply(term);
     }
-    return RealScalar.ZERO;
+    return alpha.zero();
   }
 
   @Override // from MeanInterface
@@ -168,8 +168,8 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
   }
 
   @Override // from CentralMomentInterface
-  public Scalar centralMoment(Scalar order) {
-    return moment(true, Scalars.intValueExact(order));
+  public Scalar centralMoment(int order) {
+    return moment(true, order);
   }
 
   private Scalar moment(boolean centered, int order) {

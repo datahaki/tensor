@@ -111,6 +111,10 @@ public class TrapezoidalDistributionTest extends TestCase {
       Scalar density = pdf.at(Quantity.of(3, "m"));
       assertEquals(density, Scalars.fromString("2/5[m^-1]"));
     }
+    {
+      Scalar density = pdf.at(Quantity.of(-3, "m"));
+      assertEquals(density, Scalars.fromString("0[m^-1]"));
+    }
     CDF cdf = CDF.of(distribution);
     {
       Scalar prob = cdf.p_lessEquals(Quantity.of(4, "m"));

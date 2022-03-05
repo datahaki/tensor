@@ -93,7 +93,7 @@ public class UnitSystemTest extends TestCase {
 
   public void testKnots() throws ClassNotFoundException, IOException {
     UnitSystem unitSystem = Serialization.copy(UnitSystem.SI());
-    Scalar r1 = unitSystem.apply(Quantity.of(1, "knots"));
+    Scalar r1 = unitSystem.apply(Quantity.of(1, "kn"));
     Unit unit = QuantityUnit.of(r1);
     assertEquals(unit, Unit.of("m*s^-1"));
     ExactScalarQ.require(r1);
@@ -118,10 +118,12 @@ public class UnitSystemTest extends TestCase {
     assertTrue(set.contains("kg"));
     assertTrue(set.contains("mol"));
     // unitSystem.apply(Quantity.of(1, "K"));
-    Set<String> set2 = StaticHelper.buildSet(unitSystem);
-    assertTrue(set2.contains("K"));
-    assertTrue(set2.contains("N"));
-    assertTrue(set2.contains("kg"));
+    KnownUnitQ knownUnitQ = KnownUnitQ.in(unitSystem);
+    // Set<String> set2 = StaticHelper.buildSet(unitSystem);
+    assertTrue(knownUnitQ.test(Unit.of("K")));
+    assertTrue(knownUnitQ.test(Unit.of("N")));
+    assertTrue(knownUnitQ.test(Unit.of("kg")));
+    assertTrue(knownUnitQ.test(Unit.of("kg*N")));
   }
 
   public void testFail1() {

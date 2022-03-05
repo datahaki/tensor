@@ -7,9 +7,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.img.ColorDataGradients;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.sca.Arg;
-import ch.alpine.tensor.sca.Beta;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.gam.Beta;
 
 /** inspired by Mathematica's documentation of Beta */
 /* package */ enum BetaDemo implements BivariateEvaluation {

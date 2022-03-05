@@ -21,7 +21,7 @@ import ch.alpine.tensor.Tensor;
 
   @Override
   public Tensor path() {
-    // TODO Auto-generated method stub
+    // TODO TENSOR PRC Auto-generated method stub
     return null;
   }
 

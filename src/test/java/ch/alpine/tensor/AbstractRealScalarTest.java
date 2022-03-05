@@ -2,8 +2,8 @@
 package ch.alpine.tensor;
 
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.sca.ArcTan;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

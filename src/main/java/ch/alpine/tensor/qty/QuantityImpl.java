@@ -15,7 +15,6 @@ import ch.alpine.tensor.api.ExactScalarQInterface;
 import ch.alpine.tensor.api.NInterface;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
-import ch.alpine.tensor.sca.ArcTan;
 import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Chop;
@@ -23,11 +22,12 @@ import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.sca.Power;
 import ch.alpine.tensor.sca.Real;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Power;
+import ch.alpine.tensor.sca.pow.Sqrt;
+import ch.alpine.tensor.sca.tri.ArcTan;
 
 /** The addition of quantities with different units is not resolved by Mathematica.
  * 

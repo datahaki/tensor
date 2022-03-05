@@ -12,8 +12,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.VarianceInterface;
-import ch.alpine.tensor.sca.Beta;
-import ch.alpine.tensor.sca.Power;
+import ch.alpine.tensor.sca.gam.Beta;
+import ch.alpine.tensor.sca.pow.Power;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/BetaDistribution.html">BetaDistribution</a>
@@ -27,7 +27,7 @@ public class BetaDistribution implements Distribution, MeanInterface, PDF, Varia
     if (Scalars.lessEquals(a1, RealScalar.ZERO) || //
         Scalars.lessEquals(a2, RealScalar.ZERO))
       throw TensorRuntimeException.of(a1, a2);
-    // TODO for a1 == 1 OR a2 == 1 the distribution does not require the beta function
+    // TODO TENSOR PDF for a1 == 1 OR a2 == 1 the distribution does not require the beta function
     return new BetaDistribution(a1, a2);
   }
 

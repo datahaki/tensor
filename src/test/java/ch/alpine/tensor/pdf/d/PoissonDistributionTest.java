@@ -149,4 +149,25 @@ public class PoissonDistributionTest extends TestCase {
       assertTrue(Scalars.lessEquals(Mean.of(distribution), scalar));
     }
   }
+
+  private static void _checkDiscreteCDFNumerics(Distribution distribution) {
+    CDF cdf = CDF.of(distribution);
+    // DiscreteCDF discreteCDF = (DiscreteCDF) cdf;
+    assertEquals(cdf.p_lessEquals(RealScalar.of(-10)), RealScalar.ZERO);
+    // assertFalse(discreteCDF.cdf_finished());
+    Scalar top = cdf.p_lessEquals(RealScalar.of(1000000));
+    Chop._14.requireClose(top, RealScalar.ONE);
+    // assertTrue(discreteCDF.cdf_finished());
+  }
+
+  public void testNumericsPoisson() {
+    _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(0.1)));
+    _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(1.0)));
+    _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(70)));
+    _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(700.0)));
+  }
+
+  public void testFailPoisson() {
+    AssertFail.of(() -> PoissonDistribution.of(RealScalar.of(800)));
+  }
 }

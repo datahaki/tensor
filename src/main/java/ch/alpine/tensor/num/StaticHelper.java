@@ -23,7 +23,7 @@ import ch.alpine.tensor.sca.Abs;
   }
 
   // ---
-  // TODO function does not result in Mathematica standard for all input
+  // TODO TENSOR NUM function does not result in Mathematica standard for all input
   public static Scalar normalForm(Scalar scalar) {
     return scalar instanceof RealScalar //
         ? Abs.FUNCTION.apply(scalar)

@@ -9,9 +9,9 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.sca.Exp;
-import ch.alpine.tensor.sca.Log;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.exp.Exp;
+import ch.alpine.tensor.sca.exp.Log;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/GompertzMakehamDistribution.html">GompertzMakehamDistribution</a> */
@@ -63,7 +63,7 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
         : RealScalar.ZERO;
   }
 
-  @Override
+  @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
     return Log.FUNCTION.apply(RealScalar.ONE.subtract( //
         Log.FUNCTION.apply(RealScalar.ONE.subtract(p)).divide(xi))).divide(lambda);
@@ -71,10 +71,11 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
 
   @Override // from MeanInterface
   public Scalar mean() {
+    // Mean[GompertzMakehamDistribution[a, b]] == (E^b Gamma[0, b]) / a
     throw new UnsupportedOperationException();
   }
 
-  @Override
+  @Override // from VarianceInterface
   public Scalar variance() {
     throw new UnsupportedOperationException();
   }

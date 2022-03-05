@@ -33,6 +33,6 @@ import ch.alpine.tensor.sca.Clips;
   }
 
   public static void main(String[] args) throws IOException {
-    StaticHelper.export(INSTANCE, GaussScalar.class, ColorDataGradients.STARRYNIGHT);
+    StaticHelper.export(INSTANCE, GaussScalar.class, ColorDataGradients.STARRY_NIGHT);
   }
 }

@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.sv;
 import java.lang.reflect.Modifier;
 import java.nio.file.Paths;
 
+import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.NumberQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -14,6 +15,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.NullSpace;
 import ch.alpine.tensor.mat.SquareMatrixQ;
+import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
@@ -81,5 +83,15 @@ public class SingularValueDecompositionImplTest extends TestCase {
 
   public void testPackageVisibility() {
     assertFalse(Modifier.isPublic(SingularValueDecompositionImpl.class.getModifiers()));
+  }
+
+  public void testUnit() {
+    Tensor a = Tensors.fromString("{{1, 0}, {0, 0}}").map(s -> Quantity.of(s, "m"));
+    SingularValueDecomposition svd = SingularValueDecomposition.of(a);
+    ExactTensorQ.require(svd.values());
+    assertEquals(svd.values(), Tensors.fromString("{1[m], 0[m]}"));
+    Tensor tensor = PseudoInverse.of(svd);
+    ExactTensorQ.require(tensor);
+    assertEquals(tensor, Tensors.fromString("{{1[m^-1], 0[m^-1]}, {0[m^-1], 0[m^-1]}}"));
   }
 }

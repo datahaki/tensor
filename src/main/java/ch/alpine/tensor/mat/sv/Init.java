@@ -17,7 +17,7 @@ import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.red.CopySign;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Sqrt;
+import ch.alpine.tensor.sca.pow.Sqrt;
 
 /* package */ class Init {
   /** Difference between 1.0 and the minimum double greater than 1.0

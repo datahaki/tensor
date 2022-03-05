@@ -32,8 +32,9 @@ import ch.alpine.tensor.io.ImageFormat;
   public static void main(String[] args) throws IOException {
     int spa = 0;
     int hei = 15 + spa;
-    int sep = 142;
-    Tensor array = Array.of(list -> RealScalar.of(list.get(1)), hei - spa, 256);
+    int wid = 256 - 15;
+    int sep = 142 + 15;
+    Tensor array = Array.of(list -> RealScalar.of(list.get(1)), hei - spa, wid);
     Tensor image = Tensors.empty();
     Tensor white = Array.of(l -> TFF, hei - spa, sep, 4);
     List<ColorDataGradients> list = Arrays.stream(ColorDataGradients.values()).collect(Collectors.toList());
@@ -53,7 +54,7 @@ import ch.alpine.tensor.io.ImageFormat;
       for (ColorDataGradients cdg : ColorDataGradients.values()) {
         piy += hei;
         String string = cdg.name();
-        graphics.drawString(string, 256 + 2, piy);
+        graphics.drawString(string, wid + 2, piy);
       }
       image = ImageFormat.from(bufferedImage);
     }

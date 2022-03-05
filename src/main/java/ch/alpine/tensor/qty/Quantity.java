@@ -8,17 +8,17 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.AbsInterface;
-import ch.alpine.tensor.api.ArcTanInterface;
 import ch.alpine.tensor.api.ArgInterface;
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.api.ConjugateInterface;
-import ch.alpine.tensor.api.PowerInterface;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.SignInterface;
-import ch.alpine.tensor.api.SqrtInterface;
 import ch.alpine.tensor.ext.ObjectFormat;
 import ch.alpine.tensor.io.CsvFormat;
 import ch.alpine.tensor.io.StringScalar;
+import ch.alpine.tensor.sca.pow.PowerInterface;
+import ch.alpine.tensor.sca.pow.SqrtInterface;
+import ch.alpine.tensor.sca.tri.ArcTanInterface;
 
 /** {@link Quantity} represents a magnitude and unit.
  * <pre>
