@@ -73,7 +73,7 @@ public enum ColorDataGradients implements ColorDataGradient {
   /** black, blue-gray, white */
   BONE,
   /** purple, blue, white */
-  DEEPSEA, //
+  DEEP_SEA, //
   /** black, brown, orange */
   COPPER,
   /** black, green, yellow */

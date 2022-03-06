@@ -44,7 +44,7 @@ public class EigensystemTest extends TestCase {
         // System.err.println("error");
         System.out.println("n=" + n);
         System.out.println(matrix);
-        Export.of(HomeDirectory.file("eigensystem.csv"), matrix);
+        Export.of(HomeDirectory.file("eigensystem_fail_" + System.currentTimeMillis() + ".csv"), matrix);
         fail();
       }
     }
