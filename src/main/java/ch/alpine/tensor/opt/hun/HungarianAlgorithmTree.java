@@ -56,7 +56,7 @@ import ch.alpine.tensor.red.Min;
     }
   }
 
-  public int pickNlsMinusT(int x) {
+  public int pickNlsMinusT() {
     if (nlsMinusT.isEmpty()) {
       bipartition.notNodes().stream().filter(y -> Scalars.isZero(alpha[y])).forEach(nlsMinusT::add);
       Scalar min = bipartition.notNodes().stream().map(y -> alpha[y]).reduce(Min::of).orElseThrow();
@@ -90,18 +90,18 @@ import ch.alpine.tensor.red.Min;
     return escapeFromY[y];
   }
 
-  public int addS(int x) {
+  public int addS() {
     while (true) {
-      int y = pickNlsMinusT(x);
+      int y = pickNlsMinusT();
       if (yMatch[y] == BipartiteMatching.UNASSIGNED)
         return y;
-      x = addT(x, y);
+      int x = addT(y);
       _addS(x);
       updateAlpha(x);
     }
   }
 
-  private int addT(int x, int y) {
+  private int addT(int y) {
     escapeFromX[yMatch[y]] = y;
     bipartition.add(y);
     nlsMinusT.remove(y);

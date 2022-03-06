@@ -37,7 +37,7 @@ import ch.alpine.tensor.red.Min;
     initializeFreeNodes();
     while (!isSolved()) {
       int x = pickFreeX();
-      int y = hungarianAlgorithmTree.addS(x);
+      int y = hungarianAlgorithmTree.addS();
       augmentMatching(x, y);
       hungarianAlgorithmTree.clear();
       ++iterations;
