@@ -91,7 +91,7 @@ public class InterpolatingPolynomialTest extends TestCase {
     assertEquals(suo1.apply(GaussScalar.of(54, prime)), GaussScalar.of(4527, prime));
   }
 
-  private static Tensor polynomial_coeffs(Tensor xdata, Tensor ydata, int degree) {
+  private static Tensor polynomial_coeffs(Tensor xdata, Tensor ydata) {
     return LinearSolve.of(VandermondeMatrix.of(xdata), ydata);
   }
 
@@ -101,7 +101,7 @@ public class InterpolatingPolynomialTest extends TestCase {
     for (int degree = 0; degree <= 3; ++degree) {
       Tensor x = xdata.extract(0, degree + 1);
       Tensor y = ydata.extract(0, degree + 1);
-      Tensor coeffs = polynomial_coeffs(x, y, degree);
+      Tensor coeffs = polynomial_coeffs(x, y);
       ExactTensorQ.require(coeffs);
       ScalarUnaryOperator scalarUnaryOperator = InterpolatingPolynomial.of(x).scalarUnaryOperator(y);
       assertEquals(x.map(scalarUnaryOperator), y);

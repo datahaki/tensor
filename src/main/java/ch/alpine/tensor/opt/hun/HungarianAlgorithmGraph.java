@@ -45,7 +45,7 @@ import ch.alpine.tensor.io.ScalarArray;
     ++matchCount;
   }
 
-  @Override
+  @Override // from BipartiteMatching
   public final int[] matching() {
     int[] result = new int[rows];
     int[] resvec = rows <= cols ? xMatch : yMatch;
@@ -56,7 +56,7 @@ import ch.alpine.tensor.io.ScalarArray;
     return result;
   }
 
-  @Override
+  @Override // from BipartiteMatching
   public final Scalar minimum() {
     Stream<Scalar> stream = rows <= cols //
         ? IntStream.range(0, rows).mapToObj(i -> matrix[i][xMatch[i]]) //

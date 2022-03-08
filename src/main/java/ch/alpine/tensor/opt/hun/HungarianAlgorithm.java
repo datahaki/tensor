@@ -45,6 +45,7 @@ import ch.alpine.tensor.red.Min;
   }
 
   private void setInitialMatching(Scalar[] xLabel) {
+    // TODO TENSOR ALG calling match should probably be implemented differently
     for (int x = 0; x < xMatch.length; ++x) {
       Scalar xValue = xLabel[x];
       for (int y = 0; y < yMatch.length; ++y)

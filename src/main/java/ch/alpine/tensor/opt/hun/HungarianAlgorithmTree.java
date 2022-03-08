@@ -41,7 +41,7 @@ import ch.alpine.tensor.red.Min;
     Scalar xLabelX = xLabel[x];
     for (int y = 0; y < alpha.length; ++y)
       alpha[y] = matrix[x][y].subtract(yLabel[y]).subtract(xLabelX);
-    _addS(x);
+    S.add(x);
   }
 
   public void updateAlpha(int x) { // slows down (n x n)-Problem
@@ -56,7 +56,7 @@ import ch.alpine.tensor.red.Min;
     }
   }
 
-  public int pickNlsMinusT() {
+  private int pickNlsMinusT() {
     if (nlsMinusT.isEmpty()) {
       bipartition.notNodes().stream().filter(y -> Scalars.isZero(alpha[y])).forEach(nlsMinusT::add);
       Scalar min = bipartition.notNodes().stream().map(y -> alpha[y]).reduce(Min::of).orElseThrow();
@@ -96,7 +96,7 @@ import ch.alpine.tensor.red.Min;
       if (yMatch[y] == BipartiteMatching.UNASSIGNED)
         return y;
       int x = addT(y);
-      _addS(x);
+      S.add(x);
       updateAlpha(x);
     }
   }
@@ -106,10 +106,6 @@ import ch.alpine.tensor.red.Min;
     bipartition.add(y);
     nlsMinusT.remove(y);
     return yMatch[y];
-  }
-
-  private void _addS(int x) {
-    S.add(x);
   }
 
   public void clear() {

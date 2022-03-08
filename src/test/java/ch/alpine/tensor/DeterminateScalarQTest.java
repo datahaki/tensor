@@ -28,6 +28,8 @@ public class DeterminateScalarQTest extends TestCase {
     assertFalse(DeterminateScalarQ.of(Quantity.of(DoubleScalar.POSITIVE_INFINITY, "s")));
     assertFalse(DeterminateScalarQ.of(Quantity.of(DoubleScalar.NEGATIVE_INFINITY, "N")));
     assertFalse(DeterminateScalarQ.of(Quantity.of(DoubleScalar.INDETERMINATE, "m")));
+    assertFalse(DeterminateScalarQ.of(Quantity.of(ComplexScalar.of(3, Double.NaN), "m")));
+    assertFalse(DeterminateScalarQ.of(Quantity.of(ComplexScalar.of(Double.NaN, 3), "m")));
   }
 
   public void testComplexBranching() {

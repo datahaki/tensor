@@ -37,7 +37,7 @@ public class NdListMapTest extends TestCase {
     assertTrue(m1.isEmpty());
   }
 
-  private static Scalar addDistances(Collection<NdMatch<String>> cluster, Tensor center, NdCenterInterface d) {
+  private static Scalar addDistances(Collection<NdMatch<String>> cluster, NdCenterInterface d) {
     Scalar sum = RealScalar.ZERO;
     for (NdMatch<String> entry : cluster) {
       Scalar dist = d.distance(entry.location());
@@ -71,8 +71,8 @@ public class NdListMapTest extends TestCase {
     Collection<NdMatch<String>> c2 = NdCollectNearest.of(m2, dinf, n);
     assertEquals(c1.size(), c2.size());
     assertTrue(c1.size() <= n);
-    Scalar s1 = addDistances(c1, center, dinf);
-    Scalar s2 = addDistances(c2, center, dinf);
+    Scalar s1 = addDistances(c1, dinf);
+    Scalar s2 = addDistances(c2, dinf);
     Chop._10.requireClose(s1, s2);
   }
 

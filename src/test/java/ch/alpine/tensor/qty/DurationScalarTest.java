@@ -147,7 +147,7 @@ public class DurationScalarTest extends TestCase {
   }
 
   public void testLinearSolve() {
-    Random random = new Random();
+    Random random = new Random(1);
     int n = 5;
     Tensor lhs = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, n);
     AssertFail.of(() -> Inverse.of(lhs));
