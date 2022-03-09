@@ -72,11 +72,11 @@ public class NdCollectNearest<V> implements NdVisitor<V> {
     NdMatch<V> ndMatch = new NdMatch<>(ndEntry, ndCenterInterface.distance(ndEntry.location()));
     if (queue.size() < limit)
       queue.add(ndMatch);
-    else //
-    if (Scalars.lessThan(ndMatch.distance(), queue.peek().distance())) {
-      queue.poll();
-      queue.add(ndMatch);
-    }
+    else
+      if (Scalars.lessThan(ndMatch.distance(), queue.peek().distance())) {
+        queue.poll();
+        queue.add(ndMatch);
+      }
   }
 
   /** @return priority queue */

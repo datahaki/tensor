@@ -28,6 +28,7 @@ package ch.alpine.tensor.io;
   /** compressed image format with alpha channel */
   PNG,
   /** ".vector" is an extension specific to the tensor library
+   * 
    * @see VectorFormat */
   VECTOR;
 

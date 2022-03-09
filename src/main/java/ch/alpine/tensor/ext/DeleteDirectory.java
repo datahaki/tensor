@@ -83,9 +83,9 @@ public class DeleteDirectory {
       boolean file_delete = file.delete();
       if (!file_delete && delete_fail_aborts) // abort criteria 4)
         throw new IOException("cannot delete " + file.getAbsolutePath());
-    } else //
-    if (!file.canWrite()) // abort criteria 3)
-      throw new IOException("cannot write " + file.getAbsolutePath());
+    } else
+      if (!file.canWrite()) // abort criteria 3)
+        throw new IOException("cannot write " + file.getAbsolutePath());
   }
 
   /** @return number of deleted files including directories */

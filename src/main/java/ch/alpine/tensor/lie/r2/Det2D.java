@@ -7,8 +7,7 @@ import ch.alpine.tensor.lie.Cross;
 
 public enum Det2D {
   ;
-  /** .
-   * @param p vector of length 2 with entries {px, py}
+  /** @param p vector of length 2 with entries {px, py}
    * @param q vector of length 2 with entries {qx, qy}
    * @return px * qy - py * qx
    * @throws Exception if p or q is not a vector of length 2 */
