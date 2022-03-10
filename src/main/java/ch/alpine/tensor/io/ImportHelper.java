@@ -34,6 +34,7 @@ import ch.alpine.tensor.ext.ReadLine;
     case CSV -> CsvFormat.parse(ReadLine.of(inputStream));
     case MATHEMATICA -> Get.of(inputStream);
     case BMP, GIF, JPG, PNG -> ImageFormat.from(ImageIO.read(inputStream));
+    case TSV -> TsvFormat.parse(ReadLine.of(inputStream));
     case VECTOR -> VectorFormat.parse(ReadLine.of(inputStream));
     default -> throw new UnsupportedOperationException(extension.name());
     };

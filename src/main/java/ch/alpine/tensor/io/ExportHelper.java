@@ -39,6 +39,7 @@ import ch.alpine.tensor.Tensor;
     case M -> lines(MatlabExport.of(tensor), outputStream);
     case MATHEMATICA -> Put.of(outputStream, tensor);
     case GIF, PNG -> ImageIO.write(ImageFormat.of(tensor), extension.name(), outputStream);
+    case TSV -> lines(TsvFormat.of(tensor), outputStream);
     case VECTOR -> lines(VectorFormat.of(tensor), outputStream);
     default -> throw new UnsupportedOperationException(extension.name());
     }

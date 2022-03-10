@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
 
-/** EXPERIMENTAL */
+/** utilities for {@link UnitSystem}s */
 public enum UnitSystems {
   ;
   /** Example: the base units of the SI unit system are
