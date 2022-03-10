@@ -9,9 +9,9 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 /* package */ enum TestHelper {
   ;
-  public static Tensor sample(CoordinateBoundingBox box) {
-    return Tensor.of(IntStream.range(0, box.dimensions()) //
-        .mapToObj(index -> box.getClip(index)) //
+  public static Tensor sample(CoordinateBoundingBox coordinateBoundingBox) {
+    return Tensor.of(IntStream.range(0, coordinateBoundingBox.dimensions()) //
+        .mapToObj(coordinateBoundingBox::getClip) //
         .map(UniformDistribution::of) //
         .map(RandomVariate::of));
   }

@@ -9,9 +9,18 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
+import junit.framework.Assert;
 import junit.framework.TestCase;
 
 public class UnitSystemsTest extends TestCase {
+  private static void checkInvariant(UnitSystem unitSystem) {
+    for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
+      Scalar scalar = Quantity.of(1, entry.getKey());
+      Assert.assertEquals(unitSystem.apply(scalar), entry.getValue());
+      Assert.assertEquals(unitSystem.apply(entry.getValue()), entry.getValue());
+    }
+  }
+
   public void testKnownAtoms() {
     KnownUnitQ knownUnitQ = KnownUnitQ.SI();
     assertTrue(knownUnitQ.test(Unit.of("")));
@@ -36,6 +45,10 @@ public class UnitSystemsTest extends TestCase {
     AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "kW", "W"));
   }
 
+  public void testSize() {
+    checkInvariant(UnitSystem.SI());
+  }
+
   private static UnitSystem requireInvariant(UnitSystem unitSystem, String prev, String next) {
     UnitSystem u1 = UnitSystems.rotate(unitSystem, prev, next);
     assertEquals(u1.map().size(), unitSystem.map().size());
@@ -44,20 +57,20 @@ public class UnitSystemsTest extends TestCase {
       Scalar scalar = u2.map().get(entry.getKey());
       Chop._07.requireClose(entry.getValue(), scalar);
     }
-    TestHelper.checkInvariant(u1);
-    TestHelper.checkInvariant(u2);
+    checkInvariant(u1);
+    checkInvariant(u2);
     return u1;
   }
 
   public void testTrival() {
     UnitSystem unitSystem = UnitSystems.rotate(UnitSystem.SI(), "K", "K");
-    TestHelper.checkInvariant(unitSystem);
+    checkInvariant(unitSystem);
     assertEquals(unitSystem.map(), UnitSystem.SI().map());
   }
 
   public void testTrival2() {
     UnitSystem unitSystem = UnitSystems.rotate(UnitSystem.SI(), "m", "m");
-    TestHelper.checkInvariant(unitSystem);
+    checkInvariant(unitSystem);
     assertEquals(unitSystem.map(), UnitSystem.SI().map());
   }
 

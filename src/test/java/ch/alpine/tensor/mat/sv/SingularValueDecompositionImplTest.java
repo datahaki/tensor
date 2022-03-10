@@ -24,9 +24,9 @@ import junit.framework.TestCase;
 public class SingularValueDecompositionImplTest extends TestCase {
   private static void _check(Tensor matrix) {
     assertTrue(SquareMatrixQ.of(matrix));
-    TestHelper.svd(matrix);
+    InitTest.svd(matrix);
     Tensor svd = IdentityMatrix.of(matrix.length()).subtract(Transpose.of(matrix));
-    TestHelper.svd(svd);
+    InitTest.svd(svd);
   }
 
   public void testResource() throws Exception {
@@ -36,41 +36,41 @@ public class SingularValueDecompositionImplTest extends TestCase {
 
   public void testCondition1() {
     Tensor matrix = ResourceData.of("/mat/svd3.csv");
-    TestHelper.svd(matrix);
+    InitTest.svd(matrix);
   }
 
   public void testCondition2() {
     Tensor matrix = ResourceData.of("/mat/svd2.csv");
-    TestHelper.svd(matrix);
+    InitTest.svd(matrix);
   }
 
   public void testCondition1UnitA() {
     Tensor matrix = ResourceData.of("/mat/svd3.csv");
-    TestHelper.svd(matrix.map(s -> Quantity.of(s, "m")));
+    InitTest.svd(matrix.map(s -> Quantity.of(s, "m")));
   }
 
   public void testCondition1UnitB() {
     Tensor matrix = ResourceData.of("/mat/svd3.csv").map(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
-    TestHelper.svd(matrix);
+    InitTest.svd(matrix);
   }
 
   public void testCondition2UnitA() {
     Tensor matrix = ResourceData.of("/mat/svd2.csv").map(s -> Quantity.of(s, "m"));
-    TestHelper.svd(matrix);
+    InitTest.svd(matrix);
   }
 
   public void testCondition2UnitB() {
     Tensor matrix = ResourceData.of("/mat/svd2.csv").map(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
-    TestHelper.svd(matrix);
+    InitTest.svd(matrix);
   }
 
   public void testEps() {
     Tensor A = Tensors.fromString("{{1, 0}, {0, 1E-14}}");
     assertTrue(NumberQ.all(A));
-    TestHelper.svd(A.map(s -> Quantity.of(s, "kg")));
-    SingularValueDecomposition svd = TestHelper.svd(A);
+    InitTest.svd(A.map(s -> Quantity.of(s, "kg")));
+    SingularValueDecomposition svd = InitTest.svd(A);
     assertEquals(NullSpace.of(svd).length(), 1);
     assertEquals(NullSpace.of(svd, Chop._20), Tensors.empty());
     assertTrue(svd.toString().startsWith("SingularValueDecomposition["));

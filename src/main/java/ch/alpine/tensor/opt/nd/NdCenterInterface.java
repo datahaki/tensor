@@ -20,9 +20,9 @@ public interface NdCenterInterface {
    * In particular, if the center of this instance is located inside the given box, then
    * the function returns zero.
    * 
-   * @param box
+   * @param coordinateBoundingBox
    * @return distance from center to given axis aligned bounding box */
-  Scalar distance(CoordinateBoundingBox box);
+  Scalar distance(CoordinateBoundingBox coordinateBoundingBox);
 
   /** <pre>
    * center[dimension] < median

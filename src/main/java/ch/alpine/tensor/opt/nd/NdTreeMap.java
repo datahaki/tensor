@@ -22,18 +22,18 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
    * 2^20 == 1048576 */
   private static final int MAX_DEPTH = 20;
 
-  /** @param box axis aligned bounding box that contains the points to be added
+  /** @param coordinateBoundingBox axis aligned bounding box that contains the points to be added
    * @param leafSizeMax non-negative is the maximum queue size of leaf nodes, except
    * for leaf nodes with maxDepth, which have unlimited queue size. The special case
    * maxDensity == 0 implies that values will only be stored at nodes of max depth */
-  public static <V> NdMap<V> of(CoordinateBoundingBox box, int leafSizeMax) {
-    return new NdTreeMap<>(box, leafSizeMax);
+  public static <V> NdMap<V> of(CoordinateBoundingBox coordinateBoundingBox, int leafSizeMax) {
+    return new NdTreeMap<>(coordinateBoundingBox, leafSizeMax);
   }
 
-  /** @param box axis aligned bounding box that contains the points to be added
+  /** @param coordinateBoundingBox that contains the points to be added
    * @return */
-  public static <V> NdMap<V> of(CoordinateBoundingBox box) {
-    return of(box, LEAF_SIZE_DEFAULT);
+  public static <V> NdMap<V> of(CoordinateBoundingBox coordinateBoundingBox) {
+    return of(coordinateBoundingBox, LEAF_SIZE_DEFAULT);
   }
 
   // ---
@@ -42,8 +42,8 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
   private final Node root;
   private int size;
 
-  private NdTreeMap(CoordinateBoundingBox box, int maxDensity) {
-    this.boxGlobal = Objects.requireNonNull(box);
+  private NdTreeMap(CoordinateBoundingBox coordinateBoundingBox, int maxDensity) {
+    this.boxGlobal = Objects.requireNonNull(coordinateBoundingBox);
     this.maxDensity = Integers.requirePositive(maxDensity);
     root = new Node(0);
   }
@@ -100,22 +100,22 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
       return depth % boxGlobal.dimensions();
     }
 
-    private void add(NdEntry<V> ndEntry, CoordinateBoundingBox box) {
+    private void add(NdEntry<V> ndEntry, CoordinateBoundingBox coordinateBoundingBox) {
       if (isInterior()) {
         Tensor location = ndEntry.location();
         int dimension = dimension();
-        if (Scalars.lessThan(location.Get(dimension), box.median(dimension))) {
+        if (Scalars.lessThan(location.Get(dimension), coordinateBoundingBox.median(dimension))) {
           if (Objects.isNull(lChild)) {
             lChild = createChild();
             lChild.queue.add(ndEntry);
           } else
-            lChild.add(ndEntry, box.splitLo(dimension));
+            lChild.add(ndEntry, coordinateBoundingBox.splitLo(dimension));
         } else {
           if (Objects.isNull(rChild)) {
             rChild = createChild();
             rChild.queue.add(ndEntry);
           } else
-            rChild.add(ndEntry, box.splitHi(dimension));
+            rChild.add(ndEntry, coordinateBoundingBox.splitHi(dimension));
         }
       } else { // queue != null
         if (queue.size() < maxDensity || depth == MAX_DEPTH)
@@ -123,7 +123,7 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
         else { // split queue into left and right
           int dimension = dimension();
           for (NdEntry<V> entry : queue)
-            if (Scalars.lessThan(entry.location().Get(dimension), box.median(dimension))) {
+            if (Scalars.lessThan(entry.location().Get(dimension), coordinateBoundingBox.median(dimension))) {
               if (Objects.isNull(lChild))
                 lChild = createChild();
               lChild.queue.add(entry);
@@ -134,22 +134,22 @@ public class NdTreeMap<V> implements NdMap<V>, Serializable {
             }
           queue.clear();
           queue = null;
-          add(ndEntry, box);
+          add(ndEntry, coordinateBoundingBox);
         }
       }
     }
 
-    private void visit(NdVisitor<V> ndVisitor, CoordinateBoundingBox box) {
+    private void visit(NdVisitor<V> ndVisitor, CoordinateBoundingBox coordinateBoundingBox) {
       if (isInterior()) {
         int dimension = dimension();
-        Scalar median = box.median(dimension);
+        Scalar median = coordinateBoundingBox.median(dimension);
         boolean leftFirst = ndVisitor.push_firstLo(dimension, median);
         if (leftFirst) {
-          visitLo(ndVisitor, box);
-          visitHi(ndVisitor, box);
+          visitLo(ndVisitor, coordinateBoundingBox);
+          visitHi(ndVisitor, coordinateBoundingBox);
         } else {
-          visitHi(ndVisitor, box);
-          visitLo(ndVisitor, box);
+          visitHi(ndVisitor, coordinateBoundingBox);
+          visitLo(ndVisitor, coordinateBoundingBox);
         }
         ndVisitor.pop();
       } else

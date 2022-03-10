@@ -18,6 +18,7 @@ import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.re.Det;
+import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
@@ -33,6 +34,11 @@ import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class GramSchmidtTest extends TestCase {
+  private static void _checkPInv(Tensor pInv, Tensor r, Tensor qInv) {
+    Chop._08.requireClose(pInv, LinearSolve.of(r, qInv));
+    Chop._08.requireClose(pInv, Inverse.of(r).dot(qInv));
+  }
+
   public void testSimple() throws ClassNotFoundException, IOException {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 5, 4);
     QRDecomposition qrDecomposition = Serialization.copy(GramSchmidt.of(matrix));
@@ -138,11 +144,11 @@ public class GramSchmidtTest extends TestCase {
       Tolerance.CHOP.requireAllZero(qrDecomposi.getR().extract(m, qrDecomposi.getR().length()));
       // System.out.println(Dimensions.of(qrDecomposi.getQConjugateTranspose()));
       Tensor actu = qrDecomposi.pseudoInverse();
-      TestHelper.checkPInv(pinv, qrDecomposi.getR().extract(0, m), qrDecomposi.getQConjugateTranspose().extract(0, m));
+      _checkPInv(pinv, qrDecomposi.getR().extract(0, m), qrDecomposi.getQConjugateTranspose().extract(0, m));
       Tolerance.CHOP.requireClose(actu, pinv);
       QRDecomposition gramSchmidt = GramSchmidt.of(matrix);
       assertEquals(gramSchmidt.sigma().length, 3);
-      TestHelper.checkPInv(pinv, gramSchmidt.getR(), gramSchmidt.getQConjugateTranspose());
+      _checkPInv(pinv, gramSchmidt.getR(), gramSchmidt.getQConjugateTranspose());
       Chop._08.requireClose(pinv, LinearSolve.of(gramSchmidt.getR(), gramSchmidt.getQConjugateTranspose()));
       Chop._08.requireClose(pinv, gramSchmidt.pseudoInverse());
       Tensor pinv1 = gramSchmidt.pseudoInverse();
