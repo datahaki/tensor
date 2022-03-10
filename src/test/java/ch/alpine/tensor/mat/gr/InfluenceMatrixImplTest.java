@@ -10,6 +10,7 @@ import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -56,8 +57,8 @@ public class InfluenceMatrixImplTest extends TestCase {
         String string = influenceMatrix.toString();
         assertTrue(string.startsWith("InfluenceMatrix["));
         SingularValueDecomposition svd = SingularValueDecomposition.of(design);
-        TestHelper.requireNonQuantity(svd.getU());
-        TestHelper.requireUnit(svd.values(), Unit.of("m"));
+        assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);
+        assertEquals(Unprotect.getUnitUnique(svd.values()), Unit.of("m"));
       }
   }
 
@@ -107,7 +108,7 @@ public class InfluenceMatrixImplTest extends TestCase {
       assertTrue(string.startsWith("InfluenceMatrix"));
     }
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
-    TestHelper.requireNonQuantity(svd.getU());
+    assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);
   }
 
   public void testExact5() throws ClassNotFoundException, IOException {
@@ -128,7 +129,7 @@ public class InfluenceMatrixImplTest extends TestCase {
       assertTrue(string.startsWith("InfluenceMatrix"));
     }
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
-    TestHelper.requireNonQuantity(svd.getU());
+    assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);
   }
 
   public void testUseMatrixFalse() {

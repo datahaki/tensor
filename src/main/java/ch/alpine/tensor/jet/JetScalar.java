@@ -47,7 +47,7 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-// TODO TENSOR NUM general makeover and more tests
+// TODO TENSOR JET general makeover and more tests
 public class JetScalar extends AbstractScalar implements //
     AbsInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface, //
@@ -60,11 +60,9 @@ public class JetScalar extends AbstractScalar implements //
     return new JetScalar(VectorQ.require(vector).copy());
   }
 
-  /** TODO TENSOR NUM important:
-   * Distinguish between constants with value js == {v,0,...}
-   * ... and variables with value js == {v,1,0,...}
-   * 
-   * @param scalar
+  // TODO TENSOR JET important: Distinguish between constants with value js == {v,0,...}
+  // ... and variables with value js == {v,1,0,...}
+  /** @param scalar
    * @param n strictly positive
    * @return J{scalar, 1, 0, 0, ...} */
   public static JetScalar of(Scalar scalar, int n) {
@@ -165,7 +163,7 @@ public class JetScalar extends AbstractScalar implements //
     OptionalInt optionalInt = Scalars.optionalInt(exponent);
     if (optionalInt.isPresent()) {
       int expInt = optionalInt.getAsInt();
-      if (0 <= expInt) // TODO TENSOR NUM exponent == zero!?
+      if (0 <= expInt) // TODO TENSOR JET exponent == zero!?
         return new JetScalar(StaticHelper.power(vector, expInt));
     }
     return StaticHelper.chain(vector, Power.function(exponent), //
