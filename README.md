@@ -273,7 +273,7 @@ radius search
 
 Predefined color gradients
 
-![colordatagradients](https://user-images.githubusercontent.com/4012178/155898471-1fc657ae-7318-455c-852f-20469c8e4564.png)
+![colordatagradients](https://user-images.githubusercontent.com/4012178/157915484-62554aac-60d5-4e98-b6ab-1b14c0942b7f.png)
 
 Predefined color lists
 
