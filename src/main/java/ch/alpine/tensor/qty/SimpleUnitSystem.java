@@ -172,6 +172,6 @@ public class SimpleUnitSystem implements UnitSystem {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[size=%d]", getClass().getSimpleName(), map().size());
+    return String.format("%s[%s]", UnitSystem.class.getSimpleName(), map());
   }
 }

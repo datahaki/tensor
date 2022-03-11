@@ -1,17 +1,9 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import java.util.function.Function;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
-import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.ObjectFormat;
@@ -51,51 +43,11 @@ import ch.alpine.tensor.qty.Quantity;
  * 
  * <p>Within the realm of Java, use {@link ObjectFormat}
  * to store and reload tensors, and do not use csv format.
- * 
+ *
+ * @see XsvFormat
  * @see Export */
 public enum CsvFormat {
   ;
-  private static final Collector<CharSequence, ?, String> COLLECTOR = Collectors.joining(",");
-
-  /** In Mathematica the csv file is imported using
-   * A=Import["filename.csv"];
-   * 
-   * <p>In MATLAB the csv file can be imported using
-   * A=load('filename.csv');
-   * 
-   * @param tensor that may also be a {@link Scalar}
-   * @return stream of lines that make up the csv format */
-  public static Stream<String> of(Tensor tensor) {
-    // flatten(0) handles scalars as opposed to stream()
-    return tensor.flatten(0).map(CsvFormat::row);
-  }
-
-  /** Example: The stream of the following strings
-   * <pre>
-   * "10, 200, 3"
-   * "78"
-   * "-3, 2.3"
-   * </pre>
-   * results in the tensor {{10, 200, 3}, {78}, {-3, 2.3}}
-   * 
-   * <p>Hint: To import a table from a csv file use {@link Import}.
-   * 
-   * @param stream of lines of file
-   * @return tensor with rows defined by the entries of the input stream */
-  public static Tensor parse(Stream<String> stream) {
-    return parse(stream, CsvFormat::embrace);
-  }
-
-  /** Default function for parsing:
-   * Tensors::fromString
-   * 
-   * @param stream of lines of file
-   * @param function that parses a row to a tensor
-   * @return */
-  public static Tensor parse(Stream<String> stream, Function<String, Tensor> function) {
-    return Tensor.of(stream.parallel().map(function).sequential());
-  }
-
   /** the scalar operator attempts to guarantee that the CSV import in Mathematica
    * as numeric values.
    * 
@@ -114,16 +66,5 @@ public enum CsvFormat {
    * </pre> */
   public static ScalarUnaryOperator strict() {
     return CsvHelper.FUNCTION;
-  }
-
-  // helper function
-  private static String row(Tensor tensor) {
-    // flatten(0) handles scalars as opposed to stream()
-    return tensor.flatten(0).map(Tensor::toString).collect(COLLECTOR);
-  }
-
-  // helper function
-  private static Tensor embrace(String string) {
-    return Tensors.fromString(Tensor.OPENING_BRACKET + string + Tensor.CLOSING_BRACKET);
   }
 }

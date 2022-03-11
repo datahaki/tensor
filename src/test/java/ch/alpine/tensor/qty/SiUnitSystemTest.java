@@ -98,6 +98,6 @@ public class SiUnitSystemTest extends TestCase {
   }
 
   public void testToString() {
-    assertTrue(SiUnitSystem.INSTANCE.unitSystem.toString().startsWith("SimpleUnitSystem["));
+    assertTrue(SiUnitSystem.INSTANCE.unitSystem.toString().startsWith("UnitSystem[{"));
   }
 }

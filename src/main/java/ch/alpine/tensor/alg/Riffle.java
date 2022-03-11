@@ -9,7 +9,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 
 /** <p>inspired by
- * <a href="https://reference.wolfram.com/language/ref/ListConvolve.html">ListConvolve</a> */
+ * <a href="https://reference.wolfram.com/language/ref/Riffle.html">Riffle</a> */
 public enum Riffle {
   ;
   /** @param tensor
@@ -21,7 +21,7 @@ public enum Riffle {
     List<Tensor> list = new ArrayList<>(tensor.length() * 2 - 1);
     list.add(tensor.get(0));
     for (int index = 1; index < tensor.length(); ++index) {
-      list.add(element);
+      list.add(element.copy());
       list.add(tensor.get(index));
     }
     return Unprotect.using(list);

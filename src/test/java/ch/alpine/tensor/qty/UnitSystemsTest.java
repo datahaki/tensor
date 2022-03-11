@@ -1,11 +1,14 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
@@ -145,11 +148,28 @@ public class UnitSystemsTest extends TestCase {
     Chop._06.requireClose(unitSystem.apply(Quantity.of(10, "CHF*m^-1")), Quantity.of(9.2902266, "EUR*m^-1"));
   }
 
-  public void testIdentity() {
+  public void testIdentity() throws ClassNotFoundException, IOException {
     UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("/unit/chf.properties"));
     UnitSystem unitSystem = requireInvariant(baseSystem, "CHF", "CHF");
     assertTrue(unitSystem == baseSystem);
     assertFalse(unitSystem.map().containsKey("CHF"));
-    UnitSystems.join(baseSystem, UnitSystem.SI());
+    UnitSystem joined = UnitSystems.join(baseSystem, UnitSystem.SI());
+    Serialization.copy(joined);
+  }
+
+  public void testSame() {
+    UnitSystem s1 = UnitSystem.SI();
+    UnitSystem s2 = UnitSystem.SI();
+    UnitSystem s3 = UnitSystems.join(s1, s2);
+    assertEquals(s1.map(), s3.map());
+    AssertFail.of(() -> s1.map().clear());
+    AssertFail.of(() -> s3.map().clear());
+  }
+
+  public void testJoinFail() {
+    UnitSystem s1 = SimpleUnitSystem.from(Map.of("ym", Quantity.of(10, "m")));
+    UnitSystem s2 = SimpleUnitSystem.from(Map.of("ym", Quantity.of(100, "m")));
+    UnitSystems.join(s1, s1);
+    AssertFail.of(() -> UnitSystems.join(s1, s2));
   }
 }

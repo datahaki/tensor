@@ -1,10 +1,6 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DeterminateScalarQ;
@@ -13,10 +9,6 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.io.CsvFormat;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.pow.Power;
@@ -109,18 +101,6 @@ public class QuantityTest extends TestCase {
 
   public void testEmptyPass() {
     assertEquals(Quantity.of(3.14, ""), RealScalar.of(3.14));
-  }
-
-  public void testImport() throws Exception {
-    String path = getClass().getResource("/io/qty/quantity0.csv").getPath();
-    Tensor tensor = CsvFormat.parse( //
-        Files.readAllLines(Paths.get(path)).stream(), //
-        string -> Tensors.fromString("{" + string + "}"));
-    assertEquals(Dimensions.of(tensor), Arrays.asList(2, 2));
-    assertTrue(tensor.Get(0, 0) instanceof Quantity);
-    assertTrue(tensor.Get(0, 1) instanceof Quantity);
-    assertTrue(tensor.Get(1, 0) instanceof Quantity);
-    assertTrue(tensor.Get(1, 1) instanceof RealScalar);
   }
 
   public void testPowerZeroExact() {

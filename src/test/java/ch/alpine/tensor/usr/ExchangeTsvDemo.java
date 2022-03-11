@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.usr;
 
 import java.io.IOException;
@@ -10,11 +11,14 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.HomeDirectory;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.SimpleUnitSystem;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.qty.UnitSystem;
 import ch.alpine.tensor.qty.UnitSystems;
 
@@ -36,11 +40,19 @@ public enum ExchangeTsvDemo {
       if (!string.equals(":")) {
         Scalar scalar = Quantity.of(Scalars.fromString(string).reciprocal(), unit);
         map.put(key, scalar);
-        // System.out.println(key + "=" + scalar);
+        System.out.println(key + "=" + scalar);
       }
     }
     UnitSystem unitSystem = SimpleUnitSystem.from(map);
     UnitSystem rotate = UnitSystems.rotate(unitSystem, unit.toString(), "CHF");
-    rotate.map().entrySet().stream().forEach(System.out::println);
+    System.out.println(rotate);
+    // rotate.map().entrySet().stream().forEach(System.out::println);
+    UnitSystem joined = UnitSystems.join(UnitSystem.SI(), rotate);
+    Scalar scalar = Quantity.of(10000, "kW*EUR^-1");
+    Unit target = Unit.of("MW*CHF^-1");
+    ScalarUnaryOperator suo = UnitConvert.of(joined).to(target);
+    Scalar apply = suo.apply(scalar);
+    if (!QuantityUnit.of(apply).equals(target))
+      System.err.println(apply);
   }
 }

@@ -33,6 +33,7 @@ public class DateTimeScalarTest extends TestCase {
     assertEquals(dt2.subtract(dt1.multiply(RealScalar.of(1))), scalar2);
   }
 
+  @SuppressWarnings("unlikely-arg-type")
   public void testSpecific() {
     LocalDateTime ldt1 = LocalDateTime.of(2020, 12, 20, 4, 30);
     LocalDateTime ldt2 = LocalDateTime.of(2020, 12, 21, 4, 30);

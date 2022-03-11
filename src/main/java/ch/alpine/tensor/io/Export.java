@@ -12,7 +12,10 @@ import java.util.Objects;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.ObjectFormat;
 
-/** supported file formats are: BMP, CSV, CSV.GZ, JPG, M, PNG
+/** supported file formats are:
+ * BMP, JPG, PNG (for images)
+ * CSV, CSV.GZ, TSV, TSV.GZ (for matrices)
+ * M (for arrays)
  * 
  * <p>Hint: Do not use Export when exchanging {@link Tensor}s with
  * Mathematica. For that purpose use {@link Put} and {@link Get}.
@@ -24,7 +27,7 @@ import ch.alpine.tensor.ext.ObjectFormat;
  * @see Put */
 public enum Export {
   ;
-  /** See the documentation of {@link CsvFormat}, {@link ImageFormat}, and {@link MatlabExport}
+  /** See the documentation of {@link XsvFormat}, {@link ImageFormat}, and {@link MatlabExport}
    * for information on how tensors are encoded in the respective format.
    * 
    * <p>If the extension of the given file is not used in the tensor library, an exception

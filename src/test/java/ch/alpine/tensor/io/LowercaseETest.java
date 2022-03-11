@@ -41,7 +41,7 @@ public class LowercaseETest extends TestCase {
 
   public static Tensor importMatlabCsv(String string) throws IOException {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) { // auto closeable
-      return CsvFormat.parse(ReadLine.of(inputStream).map(String::toUpperCase));
+      return XsvFormat.CSV.parse(ReadLine.of(inputStream).map(String::toUpperCase));
     }
   }
 

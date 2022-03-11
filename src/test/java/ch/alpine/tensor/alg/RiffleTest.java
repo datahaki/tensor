@@ -4,6 +4,7 @@ package ch.alpine.tensor.alg;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 
 public class RiffleTest extends TestCase {
@@ -15,5 +16,9 @@ public class RiffleTest extends TestCase {
   public void testEmpty() {
     Tensor vector = Riffle.of(Tensors.empty(), RealScalar.ZERO);
     assertTrue(Tensors.isEmpty(vector));
+  }
+
+  public void testScalarFail() {
+    AssertFail.of(() -> Riffle.of(RealScalar.ZERO, RealScalar.ZERO));
   }
 }
