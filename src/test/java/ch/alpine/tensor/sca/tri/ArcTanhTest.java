@@ -4,7 +4,7 @@ package ch.alpine.tensor.sca.tri;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.qty.Around;
+import ch.alpine.tensor.jet.Around;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.qty;
+package ch.alpine.tensor.jet;
 
 import java.util.Random;
 
@@ -21,6 +21,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;

@@ -32,11 +32,12 @@ import junit.framework.TestCase;
 
 public class BenIsraelCohenTest extends TestCase {
   public void testQuantity() {
+    Random random = new Random(2);
     Distribution distribution = LogisticDistribution.of(1, 5);
     ScalarUnaryOperator suo = QuantityMagnitude.singleton("K^1/2*m^-1");
     for (int r = 1; r < 5; ++r) {
-      Tensor p1 = RandomVariate.of(distribution, 8, r);
-      Tensor p2 = RandomVariate.of(distribution, r, 4).map(s -> Quantity.of(s, "m*K^-1/2"));
+      Tensor p1 = RandomVariate.of(distribution, random, 8, r);
+      Tensor p2 = RandomVariate.of(distribution, random, r, 4).map(s -> Quantity.of(s, "m*K^-1/2"));
       Tensor design = p1.dot(p2);
       Tensor pinv = BenIsraelCohen.of(design);
       suo.apply(pinv.Get(0, 0));

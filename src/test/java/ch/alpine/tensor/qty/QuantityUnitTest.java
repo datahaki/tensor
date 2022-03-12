@@ -39,6 +39,12 @@ public class QuantityUnitTest extends TestCase {
     assertEquals(scalar, RealScalar.ONE);
   }
 
+  public void testBytes() {
+    Scalar scalar = UnitSystem.SI().apply(Quantity.of(10, "KiB"));
+    ExactScalarQ.require(scalar);
+    assertEquals(scalar, Quantity.of(10240, "B"));
+  }
+
   public void testClips() {
     assertEquals(QuantityUnit.of(Clips.positive(3)), Unit.ONE);
     assertEquals(QuantityUnit.of(Clips.absolute(Quantity.of(3, "m^3"))), Unit.of("m^3"));

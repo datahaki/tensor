@@ -19,7 +19,8 @@ import ch.alpine.tensor.sca.Clips;
 
 /** n-dimensional axis aligned bounding box
  * 
- * an instance of CoordinateBoundingBox is immutable
+ * <p>inspired by
+ * <a href="https://reference.wolfram.com/language/ref/CoordinateBoundingBox.html">CoordinateBoundingBox</a>
  * 
  * @see CoordinateBounds
  * 

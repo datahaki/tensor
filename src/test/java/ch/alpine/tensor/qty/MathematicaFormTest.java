@@ -4,6 +4,7 @@ package ch.alpine.tensor.qty;
 import java.util.Map;
 
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.sca.pow.Power;
 import junit.framework.TestCase;
 
 public class MathematicaFormTest extends TestCase {
@@ -38,5 +39,20 @@ public class MathematicaFormTest extends TestCase {
     for (String string : UnitSystem.SI().map().keySet())
       if (!map.containsKey(string))
         throw new IllegalArgumentException(string);
+  }
+
+  public void testNamesUppercase() {
+    for (String string : MathematicaForm.INSTANCE.getMap().values()) {
+      String u = "" + string.charAt(0);
+      assertEquals(u, u.toUpperCase());
+    }
+  }
+
+  public void testXibi() {
+    assertEquals(QuantityMagnitude.SI().in("B").apply(Quantity.of(1, "KiB")), Power.of(1024, 1));
+    assertEquals(QuantityMagnitude.SI().in("B").apply(Quantity.of(1, "MiB")), Power.of(1024, 2));
+    assertEquals(QuantityMagnitude.SI().in("B").apply(Quantity.of(1, "GiB")), Power.of(1024, 3));
+    assertEquals(QuantityMagnitude.SI().in("B").apply(Quantity.of(1, "TiB")), Power.of(1024, 4));
+    assertEquals(QuantityMagnitude.SI().in("B").apply(Quantity.of(1, "PiB")), Power.of(1024, 5));
   }
 }
