@@ -9,9 +9,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.qty.DurationScalar;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
 

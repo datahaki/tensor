@@ -8,7 +8,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
-import ch.alpine.tensor.qty.DateTimeScalar;
+import ch.alpine.tensor.jet.DateTimeScalar;
 import junit.framework.TestCase;
 
 public class LinearBinaryAverageTest extends TestCase {
