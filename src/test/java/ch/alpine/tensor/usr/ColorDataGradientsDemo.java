@@ -40,7 +40,6 @@ import ch.alpine.tensor.io.ImageFormat;
     Tensor image = Tensors.empty();
     Tensor white = Array.of(l -> TFF, hei - spa, sep, 4);
     List<ColorDataGradient> list = Arrays.stream(ColorDataGradients.values()).collect(Collectors.toList());
-    
     if (list.size() % 2 == 1)
       list.add(LinearColorDataGradient.of(Tensors.fromString("{{255,255,255,255}}")));
     for (ScalarTensorFunction cdf : list) {

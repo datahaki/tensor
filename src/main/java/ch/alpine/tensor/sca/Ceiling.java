@@ -1,6 +1,9 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import java.math.BigDecimal;
+
+import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -24,6 +27,16 @@ import ch.alpine.tensor.qty.Quantity;
  * @see Round */
 public enum Ceiling implements ScalarUnaryOperator {
   FUNCTION;
+
+  public static final ScalarUnaryOperator _1 = Ceiling.toMultipleOf(DecimalScalar.of(new BigDecimal("0.1")));
+  public static final ScalarUnaryOperator _2 = Ceiling.toMultipleOf(DecimalScalar.of(new BigDecimal("0.01")));
+  public static final ScalarUnaryOperator _3 = Ceiling.toMultipleOf(DecimalScalar.of(new BigDecimal("0.001")));
+  public static final ScalarUnaryOperator _4 = Ceiling.toMultipleOf(DecimalScalar.of(new BigDecimal("0.0001")));
+  public static final ScalarUnaryOperator _5 = Ceiling.toMultipleOf(DecimalScalar.of(new BigDecimal("0.00001")));
+  public static final ScalarUnaryOperator _6 = Ceiling.toMultipleOf(DecimalScalar.of(new BigDecimal("0.000001")));
+  public static final ScalarUnaryOperator _7 = Ceiling.toMultipleOf(DecimalScalar.of(new BigDecimal("0.0000001")));
+  public static final ScalarUnaryOperator _8 = Ceiling.toMultipleOf(DecimalScalar.of(new BigDecimal("0.00000001")));
+  public static final ScalarUnaryOperator _9 = Ceiling.toMultipleOf(DecimalScalar.of(new BigDecimal("0.000000001")));
 
   /** @param scalar instance if {@link RealScalar}
    * @return best integer scalar approximation to ceiling of scalar

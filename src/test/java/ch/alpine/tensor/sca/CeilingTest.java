@@ -12,6 +12,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -85,6 +86,20 @@ public class CeilingTest extends TestCase {
     assertEquals(suo.apply(Quantity.of(-2, "K")), w.negate());
     assertEquals(suo.apply(Quantity.of(-2.1, "K")), w.multiply(RealScalar.of(-1)));
     assertEquals(suo.apply(Quantity.of(-3.9, "K")), w.multiply(RealScalar.of(-1)));
+  }
+
+  public void testDecimalPlacesP() {
+    Scalar w = Quantity.of(1.00001, "K");
+    Tolerance.CHOP.requireClose(Ceiling._1.apply(w), Quantity.of(1.1, "K"));
+    Tolerance.CHOP.requireClose(Ceiling._2.apply(w), Quantity.of(1.01, "K"));
+    Tolerance.CHOP.requireClose(Ceiling._3.apply(w), Quantity.of(1.001, "K"));
+  }
+
+  public void testDecimalPlacesN() {
+    Scalar w = Quantity.of(-1.99999, "K");
+    Tolerance.CHOP.requireClose(Ceiling._1.apply(w), Quantity.of(-1.9, "K"));
+    Tolerance.CHOP.requireClose(Ceiling._2.apply(w), Quantity.of(-1.99, "K"));
+    Tolerance.CHOP.requireClose(Ceiling._3.apply(w), Quantity.of(-1.999, "K"));
   }
 
   public void testPositiveInfinity() {

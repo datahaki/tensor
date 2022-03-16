@@ -10,6 +10,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
 import junit.framework.TestCase;
@@ -103,6 +104,20 @@ public class FloorTest extends TestCase {
   public void testNaN() {
     Scalar scalar = Floor.FUNCTION.apply(DoubleScalar.INDETERMINATE);
     assertTrue(Double.isNaN(scalar.number().doubleValue()));
+  }
+
+  public void testDecimalPlacesP() {
+    Scalar w = Quantity.of(1.99999, "K");
+    Tolerance.CHOP.requireClose(Floor._1.apply(w), Quantity.of(1.9, "K"));
+    Tolerance.CHOP.requireClose(Floor._2.apply(w), Quantity.of(1.99, "K"));
+    Tolerance.CHOP.requireClose(Floor._3.apply(w), Quantity.of(1.999, "K"));
+  }
+
+  public void testDecimalPlacesN() {
+    Scalar w = Quantity.of(-1.00000001, "K");
+    Tolerance.CHOP.requireClose(Floor._1.apply(w), Quantity.of(-1.1, "K"));
+    Tolerance.CHOP.requireClose(Floor._2.apply(w), Quantity.of(-1.01, "K"));
+    Tolerance.CHOP.requireClose(Floor._3.apply(w), Quantity.of(-1.001, "K"));
   }
 
   public void testTypeFail() {

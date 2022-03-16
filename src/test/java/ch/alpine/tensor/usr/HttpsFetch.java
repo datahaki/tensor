@@ -46,8 +46,7 @@ import javax.net.ssl.X509TrustManager;
       Thread.sleep(1000);
       System.out.println(is.available());
       byte[] data = is.readAllBytes();
-      System.out.println(
-      new String(data));
+      System.out.println(new String(data));
     }
   }
 }
