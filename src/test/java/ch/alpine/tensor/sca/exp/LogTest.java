@@ -79,6 +79,10 @@ public class LogTest extends TestCase {
     assertFalse(NumberQ.of(scalar));
   }
 
+  public void testNaN() {
+    assertEquals(Log.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+  }
+
   public void testBaseOneFail() {
     AssertFail.of(() -> Log.base(1));
   }

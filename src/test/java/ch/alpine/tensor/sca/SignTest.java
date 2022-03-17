@@ -90,6 +90,10 @@ public class SignTest extends TestCase {
     AssertFail.of(() -> Sign.requirePositive(DoubleScalar.INDETERMINATE));
   }
 
+  public void testNaN() {
+    assertEquals(Sign.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+  }
+
   private static void _checkFailAll(Scalar value) {
     AssertFail.of(() -> Sign.FUNCTION.apply(value));
     _checkSignIntFail(value);
@@ -105,7 +109,7 @@ public class SignTest extends TestCase {
   public void testFail() {
     _checkSignIntFail(ComplexScalar.of(2, 3));
     _checkSignIntFail(Quaternion.of(RealScalar.of(-4), Tensors.vector(1, 2, 3)));
-    _checkFailAll(DoubleScalar.INDETERMINATE);
+    // _checkFailAll(DoubleScalar.INDETERMINATE);
     _checkFailAll(StringScalar.of("string"));
   }
 }

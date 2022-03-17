@@ -31,7 +31,8 @@ import ch.alpine.tensor.sca.tri.Tanh;
 import junit.framework.TestCase;
 
 public class ScalarUnaryOperatorsTest extends TestCase {
-  public static final ScalarUnaryOperator[] ARRAY = { Abs.FUNCTION, //
+  public static final ScalarUnaryOperator[] ARRAY = { //
+      Abs.FUNCTION, //
       Abs.FUNCTION, //
       AbsSquared.FUNCTION, //
       ArcCos.FUNCTION, //

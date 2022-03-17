@@ -95,6 +95,10 @@ public class SqrtTest extends TestCase {
     assertEquals(Sqrt.of(qs1), qs2);
   }
 
+  public void testNaN() {
+    assertEquals(Sqrt.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+  }
+
   public void testFail() {
     Scalar scalar = StringScalar.of("string");
     AssertFail.of(() -> Sqrt.of(scalar));

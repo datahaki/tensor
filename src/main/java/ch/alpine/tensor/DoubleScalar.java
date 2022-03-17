@@ -129,8 +129,22 @@ public final class DoubleScalar extends AbstractRealScalar implements //
         ? of(value + scalar.number().doubleValue())
         : scalar.add(this);
   }
-
   // ---
+
+  @Override // from AbsInterface
+  public Scalar abs() {
+    return Double.isNaN(value)//
+        ? DoubleScalar.INDETERMINATE
+        : super.abs();
+  }
+
+  @Override // from ArgInterface
+  public Scalar arg() {
+    return Double.isNaN(value)//
+        ? DoubleScalar.INDETERMINATE
+        : super.arg();
+  }
+
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
     if (Double.isNaN(value))
@@ -165,6 +179,13 @@ public final class DoubleScalar extends AbstractRealScalar implements //
         : this; // value non finite
   }
 
+  @Override // from LogInterface
+  public Scalar log() {
+    return Double.isNaN(value)//
+        ? DoubleScalar.INDETERMINATE
+        : super.log();
+  }
+
   /** @return true if the argument is a finite floating-point
    * value; false otherwise (for NaN and infinity arguments). */
   @Override // from MachineNumberQInterface
@@ -184,6 +205,20 @@ public final class DoubleScalar extends AbstractRealScalar implements //
     if (Double.isNaN(value))
       throw TensorRuntimeException.of(this);
     return value < 0 ? -1 : (0 == value ? 0 : 1);
+  }
+
+  @Override // from SignInterface
+  public Scalar sign() {
+    return Double.isNaN(value) //
+        ? DoubleScalar.INDETERMINATE
+        : super.sign();
+  }
+
+  @Override // from SqrtInterface
+  public Scalar sqrt() {
+    return Double.isNaN(value) //
+        ? DoubleScalar.INDETERMINATE
+        : super.sqrt();
   }
 
   // helper function used for implementation in RoundingInterface

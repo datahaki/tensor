@@ -20,6 +20,11 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * <p>not compliant with Mathematica
  * Mathematica::Power[0, 0] == 0^0 -> indeterminate
  * 
+ * <pre>
+ * Power[NaN, *] == NaN
+ * Power[*, NaN] == NaN
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Power.html">Power</a> */
 public enum Power {

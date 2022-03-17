@@ -16,6 +16,10 @@ import ch.alpine.tensor.qty.Quantity;
  *
  * <p>Arg gives the argument of a number in the complex plane.
  * 
+ * <pre>
+ * Arg[NaN] == NaN
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Arg.html">Arg</a> */
 public enum Arg implements ScalarUnaryOperator {

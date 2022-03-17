@@ -24,6 +24,10 @@ import ch.alpine.tensor.qty.Quantity;
  * <p>Sign offers predicates to check positive, non-negative, negative, and non-positive scalars.
  * As checks for zero, and non-zero use {@link Scalars#isZero(Scalar)}, and {@link Scalars#nonZero(Scalar)}.
  * 
+ * <pre>
+ * Sign[NaN] == NaN
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Sign.html">Sign</a> */
 public enum Sign implements ScalarUnaryOperator {

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.qty.Quantity;
@@ -28,5 +29,9 @@ public class AbsTest extends TestCase {
     assertEquals(Abs.between(c, a), Quantity.of(11, "s"));
     assertEquals(Abs.between(b, c), Quantity.of(7, "s"));
     assertEquals(Abs.between(c, b), Quantity.of(7, "s"));
+  }
+
+  public void testNaN() {
+    assertEquals(Abs.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
   }
 }

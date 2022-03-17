@@ -42,6 +42,10 @@ public class ArgTest extends TestCase {
     assertEquals(a, b);
   }
 
+  public void testNaN() {
+    assertEquals(Arg.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+  }
+
   public void testQuaternionFail() {
     AssertFail.of(() -> Arg.FUNCTION.apply(Quaternion.of(1, 2, 3, 4)));
   }

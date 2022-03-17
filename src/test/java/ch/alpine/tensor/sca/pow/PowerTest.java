@@ -152,6 +152,14 @@ public class PowerTest extends TestCase {
     AssertFail.of(() -> Power.of(qs1, qs2));
   }
 
+  public void testNaN() {
+    assertEquals(Power.of(Double.NaN, Double.NaN).toString(), "NaN");
+    assertEquals(Power.of(1, Double.NaN).toString(), "NaN");
+    assertEquals(Power.of(Double.NaN, 1).toString(), "NaN");
+    assertEquals(Power.of(1.2, Double.NaN).toString(), "NaN");
+    assertEquals(Power.of(Double.NaN, 1.3).toString(), "NaN");
+  }
+
   public void testFailNullNumber() {
     AssertFail.of(() -> Power.function((Number) null));
   }
