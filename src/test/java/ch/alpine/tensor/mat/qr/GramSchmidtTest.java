@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.mat.qr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -18,6 +22,7 @@ import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.pi.LeastSquares;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.re.Det;
+import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
@@ -30,9 +35,14 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class GramSchmidtTest extends TestCase {
+public class GramSchmidtTest {
+  private static void _checkPInv(Tensor pInv, Tensor r, Tensor qInv) {
+    Chop._08.requireClose(pInv, LinearSolve.of(r, qInv));
+    Chop._08.requireClose(pInv, Inverse.of(r).dot(qInv));
+  }
+
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 5, 4);
     QRDecomposition qrDecomposition = Serialization.copy(GramSchmidt.of(matrix));
@@ -41,6 +51,7 @@ public class GramSchmidtTest extends TestCase {
     OrthogonalMatrixQ.require(qrDecomposition.getQConjugateTranspose());
   }
 
+  @Test
   public void testRankDeficientLeastSquares() {
     Random random = new Random(1); // 5 yields sigma = {0,1,2}
     Distribution distribution = TrapezoidalDistribution.with(0, 1, 2);
@@ -57,6 +68,7 @@ public class GramSchmidtTest extends TestCase {
     AssertFail.of(() -> qrDecomposition.pseudoInverse());
   }
 
+  @Test
   public void testQuantity() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 5, 4).map(s -> Quantity.of(s, "m"));
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
@@ -65,6 +77,7 @@ public class GramSchmidtTest extends TestCase {
     OrthogonalMatrixQ.require(qrDecomposition.getQConjugateTranspose());
   }
 
+  @Test
   public void testRect() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
@@ -76,6 +89,7 @@ public class GramSchmidtTest extends TestCase {
     UnitaryMatrixQ.require(qrDecomposition.getQConjugateTranspose());
   }
 
+  @Test
   public void testComplex() {
     Tensor re = RandomVariate.of(NormalDistribution.standard(), 5, 3);
     Tensor im = RandomVariate.of(NormalDistribution.standard(), 5, 3);
@@ -86,6 +100,7 @@ public class GramSchmidtTest extends TestCase {
     UnitaryMatrixQ.require(qrDecomposition.getQConjugateTranspose());
   }
 
+  @Test
   public void testComplexLarge() {
     Tensor re = RandomVariate.of(NormalDistribution.standard(), 100, 20);
     Tensor im = RandomVariate.of(NormalDistribution.standard(), 100, 20);
@@ -96,6 +111,7 @@ public class GramSchmidtTest extends TestCase {
     UnitaryMatrixQ.require(qrDecomposition.getQConjugateTranspose());
   }
 
+  @Test
   public void testMixedUnits() {
     Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}");
     Tensor design = VandermondeMatrix.of(x, 2);
@@ -104,6 +120,7 @@ public class GramSchmidtTest extends TestCase {
     Tolerance.CHOP.requireClose(design, res);
   }
 
+  @Test
   public void testDet() {
     Random random = new Random(5);
     for (int n = 2; n < 6; ++n) {
@@ -117,6 +134,7 @@ public class GramSchmidtTest extends TestCase {
     }
   }
 
+  @Test
   public void testPInv2x2() {
     Random random = new Random(2);
     for (int n = 0; n < 6; ++n) {
@@ -128,6 +146,7 @@ public class GramSchmidtTest extends TestCase {
     }
   }
 
+  @Test
   public void testPInv() {
     Random random = new Random(1); // 5 yields sigma = {0,1,2}
     for (int n = 0; n < 6; ++n) {
@@ -138,11 +157,11 @@ public class GramSchmidtTest extends TestCase {
       Tolerance.CHOP.requireAllZero(qrDecomposi.getR().extract(m, qrDecomposi.getR().length()));
       // System.out.println(Dimensions.of(qrDecomposi.getQConjugateTranspose()));
       Tensor actu = qrDecomposi.pseudoInverse();
-      TestHelper.checkPInv(pinv, qrDecomposi.getR().extract(0, m), qrDecomposi.getQConjugateTranspose().extract(0, m));
+      _checkPInv(pinv, qrDecomposi.getR().extract(0, m), qrDecomposi.getQConjugateTranspose().extract(0, m));
       Tolerance.CHOP.requireClose(actu, pinv);
       QRDecomposition gramSchmidt = GramSchmidt.of(matrix);
       assertEquals(gramSchmidt.sigma().length, 3);
-      TestHelper.checkPInv(pinv, gramSchmidt.getR(), gramSchmidt.getQConjugateTranspose());
+      _checkPInv(pinv, gramSchmidt.getR(), gramSchmidt.getQConjugateTranspose());
       Chop._08.requireClose(pinv, LinearSolve.of(gramSchmidt.getR(), gramSchmidt.getQConjugateTranspose()));
       Chop._08.requireClose(pinv, gramSchmidt.pseudoInverse());
       Tensor pinv1 = gramSchmidt.pseudoInverse();
@@ -151,11 +170,13 @@ public class GramSchmidtTest extends TestCase {
     }
   }
 
+  @Test
   public void testDetRect1() {
     QRDecomposition qrDecomposition = GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 3, 2));
     assertEquals(qrDecomposition.det(), RealScalar.ZERO);
   }
 
+  @Test
   public void testDetRect2() {
     assertEquals(GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 2, 3)).det(), RealScalar.ZERO);
   }

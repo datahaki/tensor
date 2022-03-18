@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -18,9 +23,9 @@ import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class BinomialRandomVariateTest extends TestCase {
+public class BinomialRandomVariateTest {
+  @Test
   public void testDivert() {
     assertEquals(BinomialDistribution.of(1200, DoubleScalar.of(0.5)).getClass(), BinomialRandomVariate.class);
     assertEquals(BinomialDistribution.of(1200, RationalScalar.of(1, 2)).getClass(), BinomialDistribution.class);
@@ -28,6 +33,7 @@ public class BinomialRandomVariateTest extends TestCase {
     assertEquals(BinomialDistribution.of(120000, DoubleScalar.of(0.0001)).getClass(), BinomialRandomVariate.class);
   }
 
+  @Test
   public void testRandom() throws ClassNotFoundException, IOException {
     int n = 200;
     Distribution distribution = Serialization.copy(new BinomialRandomVariate(n, RealScalar.of(0.4)));
@@ -40,6 +46,7 @@ public class BinomialRandomVariateTest extends TestCase {
     assertEquals(var, RealScalar.of(n * 0.4 * 0.6));
   }
 
+  @Test
   public void testRandomVector() {
     int n = 200;
     Distribution distribution = new BinomialRandomVariate(n, RealScalar.of(0.4));
@@ -48,6 +55,7 @@ public class BinomialRandomVariateTest extends TestCase {
     assertTrue(5 < unique.length());
   }
 
+  @Test
   public void testCorner() {
     Distribution distribution1 = BinomialDistribution.of(10, RealScalar.ONE);
     Distribution distribution2 = new BinomialRandomVariate(10, RealScalar.ONE);
@@ -57,10 +65,12 @@ public class BinomialRandomVariateTest extends TestCase {
     assertEquals(s2, RealScalar.of(10));
   }
 
+  @Test
   public void testPDFFail() {
     AssertFail.of(() -> PDF.of(BinomialDistribution.of(1200, DoubleScalar.of(0.5))));
   }
 
+  @Test
   public void testCDFFail() {
     AssertFail.of(() -> CDF.of(BinomialDistribution.of(1200, DoubleScalar.of(0.5))));
   }

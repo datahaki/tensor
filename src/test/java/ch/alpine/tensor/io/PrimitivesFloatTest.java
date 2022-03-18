@@ -1,16 +1,20 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.nio.FloatBuffer;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class PrimitivesFloatTest extends TestCase {
+public class PrimitivesFloatTest {
+  @Test
   public void testToListFloat() {
     Tensor tensor = Tensors.vector(-2.5f, -2.7f);
     List<Float> list = Primitives.toListFloat(tensor);
@@ -19,6 +23,7 @@ public class PrimitivesFloatTest extends TestCase {
     assertEquals(list.size(), 2);
   }
 
+  @Test
   public void testToFloatArray() {
     Tensor a = Tensors.vector(-2.5f, -2.7f);
     Tensor b = Tensors.vector(4.3f, 5.4f, 6.2f, 10.5f);
@@ -32,6 +37,7 @@ public class PrimitivesFloatTest extends TestCase {
     assertEquals(array.length, 6);
   }
 
+  @Test
   public void testToFloatArray2D() {
     Tensor a = Tensors.vector(-2.5f, -2.7f);
     Tensor b = Tensors.vector(4.3f, 5.4f, 6.2f, 10.5f);
@@ -47,6 +53,7 @@ public class PrimitivesFloatTest extends TestCase {
     assertEquals(array[1].length, 4);
   }
 
+  @Test
   public void testToFloatBuffer() {
     Tensor a = Tensors.vector(-2.5f, -2.7f);
     Tensor b = Tensors.vector(4.3f, 5.4f, 6.2f, 10.5f);
@@ -58,6 +65,7 @@ public class PrimitivesFloatTest extends TestCase {
     assertEquals(floatBuffer.limit(), 6);
   }
 
+  @Test
   public void testToFloatArray2Dscalar() {
     AssertFail.of(() -> Primitives.toFloatArray2D(RealScalar.of(123.456)));
   }

@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Random;
 import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -13,9 +17,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.spa.SparseArray;
-import junit.framework.TestCase;
 
-public class KaczmarzIterationTest extends TestCase {
+public class KaczmarzIterationTest {
+  @Test
   public void testSimple() {
     Random random = new Random(10);
     int n = 3;
@@ -30,6 +34,7 @@ public class KaczmarzIterationTest extends TestCase {
     Chop._03.requireClose(actual, expect);
   }
 
+  @Test
   public void testSparse() {
     Random random = new Random(10);
     int n = 100;

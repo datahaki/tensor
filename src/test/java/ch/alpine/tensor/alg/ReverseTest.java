@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -12,9 +16,9 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ReverseTest extends TestCase {
+public class ReverseTest {
+  @Test
   public void testRev() {
     Tensor tensor = Tensors.vector(3, 2, 6, 5);
     Tensor rev = Reverse.of(tensor);
@@ -22,6 +26,7 @@ public class ReverseTest extends TestCase {
     assertEquals(rev, res);
   }
 
+  @Test
   public void testReverse() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 100);
     int n = 5;
@@ -34,10 +39,12 @@ public class ReverseTest extends TestCase {
     assertEquals(t1, t3);
   }
 
+  @Test
   public void testEmpty() {
     assertEquals(Tensors.empty(), Reverse.of(Tensors.empty()));
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> Reverse.of(RealScalar.ONE));
   }

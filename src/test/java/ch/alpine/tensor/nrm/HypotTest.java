@@ -1,6 +1,13 @@
 // code by jph
 package ch.alpine.tensor.nrm;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -16,9 +23,8 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class HypotTest extends TestCase {
+public class HypotTest {
   private static void _checkPair(double x, double y) {
     Scalar res = Hypot.of(RealScalar.of(x), RealScalar.of(y));
     double jav = Math.hypot(x, y);
@@ -36,6 +42,7 @@ public class HypotTest extends TestCase {
     _checkPair(-y, -x);
   }
 
+  @Test
   public void testBasic() {
     checkPair(1e-300, 1e-300);
     checkPair(0, 1e-300);
@@ -55,6 +62,7 @@ public class HypotTest extends TestCase {
     assertEquals(hyp, nrm);
   }
 
+  @Test
   public void testExact3() {
     int[][] array = new int[][] { //
         { 1, 4, 8 }, { 2, 3, 6 }, { 2, 5, 14 }, { 2, 6, 9 }, { 2, 8, 16 }, //
@@ -65,6 +73,7 @@ public class HypotTest extends TestCase {
       checkVectorExact(vec);
   }
 
+  @Test
   public void testTuple() {
     int[][] array = new int[][] { //
         { 3, 4 }, { 5, 12 }, { 6, 8 }, { 7, 24 }, { 8, 15 }, { 9, 12 }, { 10, 24 }, //
@@ -73,6 +82,7 @@ public class HypotTest extends TestCase {
       checkVectorExact(vec);
   }
 
+  @Test
   public void testComplex() {
     Scalar c1 = ComplexScalar.of(1, -5);
     Scalar c2 = ComplexScalar.of(2, 4);
@@ -84,6 +94,7 @@ public class HypotTest extends TestCase {
     assertEquals(norm, pair);
   }
 
+  @Test
   public void testNaNdivNaN() {
     Scalar s1 = DoubleScalar.INDETERMINATE;
     Scalar s2 = DoubleScalar.INDETERMINATE;
@@ -91,6 +102,7 @@ public class HypotTest extends TestCase {
     assertEquals(s3.toString(), "NaN");
   }
 
+  @Test
   public void testInfNan() {
     Scalar s1 = DoubleScalar.POSITIVE_INFINITY;
     assertFalse(Scalars.isZero(s1));
@@ -108,28 +120,33 @@ public class HypotTest extends TestCase {
     }
   }
 
+  @Test
   public void testFailScalar() {
     AssertFail.of(() -> Hypot.ofVector(RealScalar.ONE));
   }
 
+  @Test
   public void testWithOne0() {
     Scalar scalar = Hypot.withOne(RealScalar.ZERO);
     assertEquals(scalar, RealScalar.ONE);
     ExactScalarQ.require(scalar);
   }
 
+  @Test
   public void testWithOne1() {
     Tolerance.CHOP.requireClose( //
         Hypot.withOne(RealScalar.of(5)), //
         Sqrt.FUNCTION.apply(RealScalar.of(5 * 5 + 1)));
   }
 
+  @Test
   public void testWithOne2() {
     Tolerance.CHOP.requireClose( //
         Hypot.withOne(RealScalar.of(0.5)), //
         Sqrt.FUNCTION.apply(RealScalar.of(0.25 + 1)));
   }
 
+  @Test
   public void testQuantity() {
     Scalar qs1 = Quantity.of(3, "m");
     Scalar qs2 = Quantity.of(4, "m");
@@ -137,12 +154,14 @@ public class HypotTest extends TestCase {
     assertEquals(Hypot.of(qs1, qs2), qs3);
   }
 
+  @Test
   public void testQuantityZero() {
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(0, "m");
     assertEquals(Hypot.of(qs1, qs2), qs1);
   }
 
+  @Test
   public void testQuantity2() {
     Scalar s1 = Quantity.of(-3, "m");
     Scalar s2 = Quantity.of(-4, "m");
@@ -157,6 +176,7 @@ public class HypotTest extends TestCase {
     assertEquals(Hypot.of(s1, s2), Hypot.of(s2, s1));
   }
 
+  @Test
   public void testMixedUnitFail() {
     AssertFail.of(() -> Hypot.of(Quantity.of(2, "m"), Quantity.of(3, "s")));
   }

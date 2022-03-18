@@ -1,7 +1,13 @@
 // code by jph
-package ch.alpine.tensor.qty;
+package ch.alpine.tensor.jet;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -21,6 +27,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
@@ -31,13 +38,14 @@ import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class AroundTest extends TestCase {
+public class AroundTest {
+  @Test
   public void testZeroDropSigma() {
     assertEquals(Around.of(4, 0), RealScalar.of(4));
   }
 
+  @Test
   public void testPlusGaussian() {
     Scalar a = Around.of(10, 3);
     Scalar b = Around.of(-2, 4);
@@ -45,6 +53,7 @@ public class AroundTest extends TestCase {
     assertEquals(c, Around.of(8, 5));
   }
 
+  @Test
   public void testPlusReal() {
     Scalar a = Around.of(10, 1);
     Scalar b = RealScalar.of(3);
@@ -52,6 +61,7 @@ public class AroundTest extends TestCase {
     assertEquals(c, Around.of(13, 1));
   }
 
+  @Test
   public void testMultiply() {
     Scalar a = Around.of(5, 2);
     Scalar b = RealScalar.of(-3);
@@ -59,6 +69,7 @@ public class AroundTest extends TestCase {
     assertEquals(c, Around.of(-15, 2 * 3));
   }
 
+  @Test
   public void testMultiplyAround() {
     Scalar a = Around.of(7, 2);
     Scalar b = Around.of(-4, 3);
@@ -67,12 +78,14 @@ public class AroundTest extends TestCase {
     Chop._06.requireClose(c.uncertainty(), RealScalar.of(22.472205054));
   }
 
+  @Test
   public void testNegate() {
     Scalar b = Around.of(-4, 3);
     ExactScalarQ.require(b);
     assertEquals(b.negate(), Around.of(4, 3));
   }
 
+  @Test
   public void testMean() {
     Tensor vector = Tensors.of(Around.of(2, 3), Around.of(3, 1), Around.of(-3, 1));
     Scalar mean = Mean.ofVector(vector);
@@ -81,6 +94,7 @@ public class AroundTest extends TestCase {
     assertEquals(mean, actual);
   }
 
+  @Test
   public void testNonExact() {
     assertTrue(ExactScalarQ.of(Around.of(1, 2)));
     assertFalse(ExactScalarQ.of(Around.of(1, 0.2)));
@@ -88,6 +102,7 @@ public class AroundTest extends TestCase {
     assertFalse(ExactScalarQ.of(Around.of(0.3, 0.5)));
   }
 
+  @Test
   public void testGaussianWithQuantity() {
     Scalar gq1 = Around.of( //
         Quantity.of(10, "m"), //
@@ -108,6 +123,7 @@ public class AroundTest extends TestCase {
     assertEquals(gq4, ga4);
   }
 
+  @Test
   public void testDistribution() {
     Around around = (Around) Around.of(-200, 0.8);
     Distribution distribution = around.distribution();
@@ -116,6 +132,7 @@ public class AroundTest extends TestCase {
     Chop.below(3).requireClose(mean, RealScalar.of(-200));
   }
 
+  @Test
   public void testDistWithQuantity() {
     Around gq1 = (Around) Around.of( //
         Quantity.of(3, "m"), //
@@ -131,6 +148,7 @@ public class AroundTest extends TestCase {
         Expectation.variance(distribution), Quantity.of(4, "m^2"));
   }
 
+  @Test
   public void testZero() {
     Scalar scalar = Around.of( //
         Quantity.of(3, "m"), //
@@ -148,6 +166,7 @@ public class AroundTest extends TestCase {
     assertFalse(scalar.equals(a));
   }
 
+  @Test
   public void testReciprocal() {
     Scalar scalar = Around.of( //
         Quantity.of(-3, "s"), //
@@ -164,6 +183,7 @@ public class AroundTest extends TestCase {
     return tensor.map(s -> ((Around) s).mean());
   }
 
+  @Test
   public void testMultiplySymmetric() {
     Scalar a = Around.of( //
         Quantity.of(-3, "s"), //
@@ -176,6 +196,7 @@ public class AroundTest extends TestCase {
     assertEquals(a.multiply(factor), factor.multiply(a));
   }
 
+  @Test
   public void testGaussianElimination() {
     Tensor matrix = Tensors.matrix(new Scalar[][] { //
         { Around.of(Quantity.of(-3, "s"), Quantity.of(2, "s")), Around.of(Quantity.of(3, "s"), Quantity.of(1, "s")) }, //
@@ -189,49 +210,58 @@ public class AroundTest extends TestCase {
     assertEquals(_meanOnly(c2), IdentityMatrix.of(2));
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> Around.of(2, -3));
   }
 
+  @Test
   public void testNumberFail() {
     Scalar scalar = Around.of(2, 3);
     assertEquals(scalar.toString(), "2\u00B13");
     AssertFail.of(() -> scalar.number());
   }
 
+  @Test
   public void testAbsComplex() {
     Scalar scalar = Around.of(ComplexScalar.of(3, 4), RealScalar.ONE);
     Scalar abs = Abs.FUNCTION.apply(scalar);
     assertEquals(abs, Around.of(5, 1));
   }
 
+  @Test
   public void testSpecialCase() {
     AssertFail.of(() -> Around.of(Quantity.of(1, "m"), RealScalar.ZERO));
   }
 
+  @Test
   public void testSqrt() {
     Around around = (Around) Sqrt.FUNCTION.apply(Around.of(30, 40));
     Chop._12.requireClose(around.mean(), RealScalar.of(5.477225575051661));
     Chop._12.requireClose(around.uncertainty(), RealScalar.of(3.6514837167011076));
   }
 
+  @Test
   public void testAbsSquared() {
     Around around = (Around) AbsSquared.FUNCTION.apply(Around.of(ComplexScalar.of(2, 3), RealScalar.of(2)));
     ExactScalarQ.require(around.mean());
   }
 
+  @Test
   public void testExp() {
     Around around = (Around) Exp.FUNCTION.apply(Around.of(2, 3));
     Chop._12.requireClose(around.mean(), RealScalar.of(7.38905609893065));
     Chop._12.requireClose(around.uncertainty(), RealScalar.of(22.16716829679195));
   }
 
+  @Test
   public void testLog() {
     Around around = (Around) Log.FUNCTION.apply(Around.of(2, 3));
     Chop._12.requireClose(around.mean(), RealScalar.of(0.6931471805599453));
     assertEquals(around.uncertainty(), RationalScalar.of(3, 2));
   }
 
+  @Test
   public void testPower() {
     assertEquals(Power.of(Around.of(-4, 3), RealScalar.of(3)), Around.of(-64, 144));
     assertEquals(Power.of(Around.of(-3, 2), RealScalar.of(2)), Around.of(9, 12));
@@ -243,10 +273,12 @@ public class AroundTest extends TestCase {
         Around.of(-8, 96));
   }
 
+  @Test
   public void testPowerFail() {
     AssertFail.of(() -> Power.of(Around.of(-3, 2), Around.of(9, 12)));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> Around.of(null, 2));
     AssertFail.of(() -> Around.of(2, null));

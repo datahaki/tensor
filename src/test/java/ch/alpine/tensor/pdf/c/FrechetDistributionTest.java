@@ -1,8 +1,14 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.NumberQ;
@@ -23,9 +29,9 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class FrechetDistributionTest extends TestCase {
+public class FrechetDistributionTest {
+  @Test
   public void testPDF() throws ClassNotFoundException, IOException {
     Distribution distribution = //
         Serialization.copy(FrechetDistribution.of(RealScalar.of(1.3), RealScalar.of(1.2)));
@@ -35,6 +41,7 @@ public class FrechetDistributionTest extends TestCase {
     assertFalse(pdf.at(RealScalar.of(20000)).equals(RealScalar.ZERO));
   }
 
+  @Test
   public void testCDF() {
     Distribution distribution = FrechetDistribution.of(1.5, 1.3);
     CDF cdf = CDF.of(distribution);
@@ -42,12 +49,14 @@ public class FrechetDistributionTest extends TestCase {
     Chop._13.requireClose(prob, RealScalar.of(0.6538117883387893));
   }
 
+  @Test
   public void testRandomVariate() {
     FrechetDistribution gmd = (FrechetDistribution) FrechetDistribution.of(3, 0.2);
     assertTrue(Scalars.lessThan(gmd.randomVariate(0), RealScalar.of(0.1)));
     assertTrue(Scalars.lessThan(gmd.randomVariate(Math.nextDown(1.0)), RealScalar.of(42000)));
   }
 
+  @Test
   public void testQuantity() {
     Distribution distribution = FrechetDistribution.of(Quantity.of(1.3, ""), Quantity.of(1.4, "m^-1"));
     Scalar rand = RandomVariate.of(distribution);
@@ -65,6 +74,7 @@ public class FrechetDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testMean() {
     Distribution distribution = //
         FrechetDistribution.of(Quantity.of(1.3, ""), Quantity.of(2.4, "m^-1"));
@@ -72,6 +82,7 @@ public class FrechetDistributionTest extends TestCase {
     Chop._13.requireClose(mean, Quantity.of(9.470020440153482, "m^-1"));
   }
 
+  @Test
   public void testMeanInf() {
     Distribution distribution = //
         FrechetDistribution.of(RealScalar.of(0.9), Quantity.of(2.4, "m^-1"));
@@ -79,6 +90,7 @@ public class FrechetDistributionTest extends TestCase {
     assertEquals(mean, Quantity.of(DoubleScalar.POSITIVE_INFINITY, "m^-1"));
   }
 
+  @Test
   public void testVariance() {
     Distribution distribution = //
         FrechetDistribution.of(Quantity.of(2.3, ""), Quantity.of(1.5, "m^-1"));
@@ -86,6 +98,7 @@ public class FrechetDistributionTest extends TestCase {
     Chop._13.requireClose(var, Quantity.of(10.631533530833654, "m^-2"));
   }
 
+  @Test
   public void testVarianceInf() {
     Distribution distribution = //
         FrechetDistribution.of(RealScalar.of(1.3), Quantity.of(1.5, "m^-1"));
@@ -96,6 +109,7 @@ public class FrechetDistributionTest extends TestCase {
     assertTrue(distribution.toString().startsWith("FrechetDistribution"));
   }
 
+  @Test
   public void testInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
     Scalar x0 = inverseCDF.quantile(RealScalar.of(0.0));
@@ -108,6 +122,7 @@ public class FrechetDistributionTest extends TestCase {
     assertTrue(Scalars.lessThan(x2, x3));
   }
 
+  @Test
   public void testMarkov() {
     Random random = new Random();
     Distribution distribution = FrechetDistribution.of(1.1 + random.nextDouble(), 0.1 + random.nextDouble());
@@ -115,16 +130,19 @@ public class FrechetDistributionTest extends TestCase {
     TestMarkovChebyshev.chebyshev(distribution);
   }
 
+  @Test
   public void testInverseCDF_1() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.0)));
   }
 
+  @Test
   public void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> FrechetDistribution.of(RealScalar.of(3), RealScalar.of(0)));
     AssertFail.of(() -> FrechetDistribution.of(RealScalar.of(0), RealScalar.of(2)));

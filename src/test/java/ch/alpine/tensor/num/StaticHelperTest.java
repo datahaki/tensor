@@ -1,11 +1,15 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigInteger;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class StaticHelperTest extends TestCase {
+public class StaticHelperTest {
+  @Test
   public void testSimple() {
     BigInteger p1 = BigInteger.valueOf(7829);
     BigInteger p2 = BigInteger.valueOf(7829);

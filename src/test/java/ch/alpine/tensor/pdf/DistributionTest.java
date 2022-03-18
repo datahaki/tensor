@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -19,9 +23,8 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import junit.framework.TestCase;
 
-public class DistributionTest extends TestCase {
+public class DistributionTest {
   private static void _check(Distribution distribution, int n) {
     Tensor vector = RandomVariate.of(distribution, n);
     Scalar mean = Mean.ofVector(vector); // measured mean
@@ -39,6 +42,7 @@ public class DistributionTest extends TestCase {
     assertTrue(Scalars.lessThan(dvar, RealScalar.of(0.22)));
   }
 
+  @Test
   public void testDiscrete() {
     _check(BernoulliDistribution.of(RationalScalar.of(2, 3)), 1000);
     _check(BinomialDistribution.of(10, RationalScalar.of(1, 4)), 1000);
@@ -51,6 +55,7 @@ public class DistributionTest extends TestCase {
     _check(PoissonDistribution.of(RealScalar.of(2.5)), 1000);
   }
 
+  @Test
   public void testContinuous() {
     _check(ExponentialDistribution.of(RealScalar.of(2.5)), 2500); // failed with 2000, 2300
     _check(ExponentialDistribution.of(RealScalar.of(10)), 3000);

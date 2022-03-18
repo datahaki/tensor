@@ -4,14 +4,16 @@ package ch.alpine.tensor.usr;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.sca.tri.ArcCosh;
 import ch.alpine.tensor.sca.tri.ArcSinh;
 import ch.alpine.tensor.sca.tri.ArcTanh;
-import junit.framework.TestCase;
 
-public class BivariateEvaluationTest extends TestCase {
+public class BivariateEvaluationTest {
+  @Test
   public void testSimple() {
     List<BivariateEvaluation> list = Arrays.asList( //
         BetaDemo.INSTANCE, //

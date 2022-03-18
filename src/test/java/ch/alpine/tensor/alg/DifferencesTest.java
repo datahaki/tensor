@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -9,9 +13,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class DifferencesTest extends TestCase {
+public class DifferencesTest {
+  @Test
   public void testVector() {
     Tensor dif = Differences.of(Tensors.vector(3, 2, 9).unmodifiable());
     assertEquals(dif, Tensors.vector(-1, 7));
@@ -19,11 +23,13 @@ public class DifferencesTest extends TestCase {
     assertEquals(dif, Tensors.vector(0, 0));
   }
 
+  @Test
   public void testMatrix1() {
     Tensor dif = Differences.of(Tensors.of(Tensors.vector(3, 2, 9)));
     assertEquals(dif, Tensors.empty());
   }
 
+  @Test
   public void testMatrix2() {
     Tensor dif = Differences.of(Tensors.of( //
         Tensors.vector(3, 2, 9), //
@@ -34,21 +40,25 @@ public class DifferencesTest extends TestCase {
     assertEquals(dif.get(0), Tensors.vector(6, 1, -8, 3));
   }
 
+  @Test
   public void testAd() {
     Tensor dif = Differences.of(Array.zeros(3, 3, 3));
     assertEquals(Dimensions.of(dif), Arrays.asList(2, 3, 3));
   }
 
+  @Test
   public void testConsistent() {
     assertEquals(Differences.of(Tensors.empty()), Tensors.empty());
     assertEquals(Differences.of(Tensors.vector(1)), Tensors.empty());
   }
 
+  @Test
   public void testNonArray() {
     Tensor tensor = Tensors.fromString("{{1, {2, 4}}}");
     assertEquals(Differences.of(tensor), Tensors.empty());
   }
 
+  @Test
   public void testScalar() {
     AssertFail.of(() -> Differences.of(Pi.TWO));
   }

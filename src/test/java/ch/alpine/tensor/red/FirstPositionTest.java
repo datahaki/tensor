@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -8,9 +13,9 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class FirstPositionTest extends TestCase {
+public class FirstPositionTest {
+  @Test
   public void testSimple() {
     Tensor tensor = Tensors.vector(5, 6, 7, 8, 9);
     assertEquals(FirstPosition.of(tensor, RealScalar.of(5)).getAsInt(), 0);
@@ -21,6 +26,7 @@ public class FirstPositionTest extends TestCase {
     assertFalse(FirstPosition.of(tensor, RealScalar.of(10)).isPresent());
   }
 
+  @Test
   public void testQuantity() {
     Tensor tensor = Tensors.vector(5, 6, 7, 8, 9.0).map(s -> Quantity.of(s, "km"));
     assertFalse(FirstPosition.of(tensor, RealScalar.of(5)).isPresent());
@@ -29,27 +35,33 @@ public class FirstPositionTest extends TestCase {
     assertFalse(FirstPosition.of(tensor, RealScalar.of(10)).isPresent());
   }
 
+  @Test
   public void testMatrix() {
     Tensor tensor = HilbertMatrix.of(10);
     assertEquals(FirstPosition.of(tensor, tensor.get(3)).getAsInt(), 3);
   }
 
+  @Test
   public void testEmpty() {
     FirstPosition.of(Tensors.empty(), Pi.VALUE);
   }
 
+  @Test
   public void testFailScalar() {
     AssertFail.of(() -> FirstPosition.of(RealScalar.of(7), RealScalar.of(7)));
   }
 
+  @Test
   public void testFailTensorNull() {
     AssertFail.of(() -> FirstPosition.of(null, RealScalar.of(7)));
   }
 
+  @Test
   public void testFailElementNull() {
     AssertFail.of(() -> FirstPosition.of(Tensors.vector(5, 6, 7, 8, 9), null));
   }
 
+  @Test
   public void testFailEmptyNull() {
     AssertFail.of(() -> FirstPosition.of(Tensors.empty(), null));
   }

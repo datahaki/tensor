@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -12,15 +16,16 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class KurtosisTest extends TestCase {
+public class KurtosisTest {
+  @Test
   public void testMathematica() {
     Tensor tensor = Tensors.vector(10, 2, 3, 4, 1);
     Scalar result = Kurtosis.of(tensor);
     assertEquals(result, Scalars.fromString("697/250")); // confirmed in mathematica
   }
 
+  @Test
   public void testTrapezoidal() {
     Distribution distribution = TrapezoidalDistribution.of(4, 5, 7, 10);
     Scalar scalar = Kurtosis.of(distribution);
@@ -29,6 +34,7 @@ public class KurtosisTest extends TestCase {
     ExactScalarQ.require(check);
   }
 
+  @Test
   public void testUniform() {
     Distribution distribution = UniformDistribution.of(-3, -1);
     Scalar scalar = Kurtosis.of(distribution);
@@ -38,10 +44,12 @@ public class KurtosisTest extends TestCase {
     ExactScalarQ.require(check);
   }
 
+  @Test
   public void testFailScalar() {
     AssertFail.of(() -> Kurtosis.of(RealScalar.ONE));
   }
 
+  @Test
   public void testFailMatrix() {
     AssertFail.of(() -> Kurtosis.of(HilbertMatrix.of(3)));
   }

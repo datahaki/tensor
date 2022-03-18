@@ -33,9 +33,10 @@ public enum Import {
   /** Supported extensions include
    * <ul>
    * <li>bmp for {@link ImageFormat}
-   * <li>csv for {@link CsvFormat}
+   * <li>csv for comma separated values format
    * <li>jpg for {@link ImageFormat}
    * <li>png for {@link ImageFormat}
+   * <li>tsv for tab separated values format
    * </ul>
    * 
    * @param file source

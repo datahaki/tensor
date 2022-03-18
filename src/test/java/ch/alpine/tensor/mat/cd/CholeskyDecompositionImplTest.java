@@ -1,9 +1,15 @@
 // code by jph
 package ch.alpine.tensor.mat.cd;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.Scalar;
@@ -22,9 +28,9 @@ import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.N;
-import junit.framework.TestCase;
 
-public class CholeskyDecompositionImplTest extends TestCase {
+public class CholeskyDecompositionImplTest {
+  @Test
   public void testSolveQuantity() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
@@ -36,6 +42,7 @@ public class CholeskyDecompositionImplTest extends TestCase {
     assertTrue(choleskyDecomposition.toString().startsWith("CholeskyDecomposition["));
   }
 
+  @Test
   public void testGaussScalar() throws ClassNotFoundException, IOException {
     int n = 7;
     int prime = 7879;
@@ -59,6 +66,7 @@ public class CholeskyDecompositionImplTest extends TestCase {
     assertEquals(res1, res2);
   }
 
+  @Test
   public void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
     CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix);
@@ -70,6 +78,7 @@ public class CholeskyDecompositionImplTest extends TestCase {
     Tolerance.CHOP.requireClose(matrix, result);
   }
 
+  @Test
   public void testPackageVisibility() {
     assertTrue(Modifier.isPublic(CholeskyDecomposition.class.getModifiers()));
     assertFalse(Modifier.isPublic(CholeskyDecompositionImpl.class.getModifiers()));

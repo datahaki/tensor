@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.sca.exp;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -9,14 +11,15 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class LogcTest extends TestCase {
+public class LogcTest {
+  @Test
   public void testSimple() {
     Scalar scalar = Logc.FUNCTION.apply(RealScalar.of(1 + 1e-13));
     Chop._08.requireClose(scalar, RealScalar.ONE);
   }
 
+  @Test
   public void testFraction() {
     Scalar dl1 = RandomVariate.of(NormalDistribution.standard());
     Scalar dl2 = RandomVariate.of(NormalDistribution.standard());
@@ -32,6 +35,7 @@ public class LogcTest extends TestCase {
     return Log.FUNCTION.apply(lambda).divide(den);
   }
 
+  @Test
   public void testRandom() {
     Distribution distribution = UniformDistribution.of(0, 2e-10);
     for (int count = 0; count < 100; ++count) {

@@ -1,10 +1,15 @@
 // code by jph
 package ch.alpine.tensor.mat.pd;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -25,9 +30,8 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import junit.framework.TestCase;
 
-public class PolarDecompositionSqrtTest extends TestCase {
+public class PolarDecompositionSqrtTest {
   private static void _check(Tensor matrix, PolarDecomposition polarDecomposition) {
     List<Integer> list = Dimensions.of(matrix);
     int k = list.get(0);
@@ -42,6 +46,7 @@ public class PolarDecompositionSqrtTest extends TestCase {
     assertTrue(hermitian);
   }
 
+  @Test
   public void testRectangle() {
     Random random = new Random(1);
     int n = 5;
@@ -52,6 +57,7 @@ public class PolarDecompositionSqrtTest extends TestCase {
     }
   }
 
+  @Test
   public void testSquare() {
     Random random = new Random(3);
     int d = 7;
@@ -73,6 +79,7 @@ public class PolarDecompositionSqrtTest extends TestCase {
     }
   }
 
+  @Test
   public void testDet1Invariance() {
     Random random = new Random(5);
     int d = 7;
@@ -88,6 +95,7 @@ public class PolarDecompositionSqrtTest extends TestCase {
     }
   }
 
+  @Test
   public void testStrang() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.fromString("{{3, 0}, {4, 5}}");
     PolarDecomposition polarDecomposition = Serialization.copy(PolarDecomposition.up(matrix));
@@ -107,6 +115,7 @@ public class PolarDecompositionSqrtTest extends TestCase {
   // // System.out.println(Pretty.of(herm));
   // }
 
+  @Test
   public void testSvd() {
     Random random = new Random(3);
     Tensor matrix = RandomVariate.of(CauchyDistribution.standard(), random, 5, 3);

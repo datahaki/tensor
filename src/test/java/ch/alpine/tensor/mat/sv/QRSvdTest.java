@@ -1,10 +1,14 @@
 // code by jph
 package ch.alpine.tensor.mat.sv;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -21,9 +25,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.LogNormalDistribution;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import junit.framework.TestCase;
 
-public class QRSvdTest extends TestCase {
+public class QRSvdTest {
+  @Test
   public void testSquare() {
     Tensor matrix = HilbertMatrix.of(6);
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
@@ -33,6 +37,7 @@ public class QRSvdTest extends TestCase {
     Tolerance.CHOP.requireClose(v1, v2);
   }
 
+  @Test
   public void testRect5x2() throws ClassNotFoundException, IOException {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 5, 2);
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
@@ -46,6 +51,7 @@ public class QRSvdTest extends TestCase {
     Tolerance.CHOP.requireClose(v1, v2);
   }
 
+  @Test
   public void testRect5x3() {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 5, 3);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
@@ -56,6 +62,7 @@ public class QRSvdTest extends TestCase {
     Tolerance.CHOP.requireClose(v1, v2);
   }
 
+  @Test
   public void testMatrix6x4() {
     Tensor matrix = RandomVariate.of(TriangularDistribution.with(0.2, 1), 6, 4);
     SingularValueDecomposition svd = QRSvd.of(matrix);
@@ -66,6 +73,7 @@ public class QRSvdTest extends TestCase {
     Tolerance.CHOP.requireClose(approx, matrix);
   }
 
+  @Test
   public void testMatrix6x4NonTrivial() {
     Random random = new Random(3);
     Tensor matrix = RandomVariate.of(LogNormalDistribution.standard(), random, 6, 4);
@@ -79,6 +87,7 @@ public class QRSvdTest extends TestCase {
     Tolerance.CHOP.requireClose(approx, matrix);
   }
 
+  @Test
   public void testMatrix60x4NonTrivial() {
     Random random = new Random(2);
     Tensor matrix = RandomVariate.of(LogNormalDistribution.standard(), random, 6, 4);

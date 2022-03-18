@@ -1,8 +1,13 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.function.Function;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -14,13 +19,13 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Abs;
-import junit.framework.TestCase;
 
-public class ExtendedGCDTest extends TestCase {
+public class ExtendedGCDTest {
   private static boolean isConsistent(Tensor vector, ExtendedGCD extendedGCD) {
     return vector.dot(extendedGCD.factors()).equals(extendedGCD.gcd());
   }
 
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Function<Tensor, ExtendedGCD> function = ExtendedGCD.function();
     Tensor vector = Tensors.vector(12334 * 5, 32332 * 5);
@@ -29,6 +34,7 @@ public class ExtendedGCDTest extends TestCase {
     assertEquals(extendedGCD.gcd(), RealScalar.of(10)); // confirmed with Mathematica
   }
 
+  @Test
   public void testGCD() {
     Distribution distribution = DiscreteUniformDistribution.of(-10000, 10000);
     for (int index = 0; index <= 100; ++index) {
@@ -40,6 +46,7 @@ public class ExtendedGCDTest extends TestCase {
     }
   }
 
+  @Test
   public void testGaussScalar() {
     int prime = 379;
     Scalar a = GaussScalar.of(4 * 3, prime);

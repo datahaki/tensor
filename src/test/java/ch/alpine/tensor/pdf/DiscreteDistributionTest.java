@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
@@ -24,9 +28,8 @@ import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class DiscreteDistributionTest extends TestCase {
+public class DiscreteDistributionTest {
   static final Distribution[] DISTRIBUTIONS = { //
       BernoulliDistribution.of(0.3), //
       BinomialDistribution.of(5, .4), //
@@ -40,6 +43,7 @@ public class DiscreteDistributionTest extends TestCase {
       PoissonDistribution.of(0.3), //
   };
 
+  @Test
   public void testInverseCDF() {
     for (Distribution distribution : DISTRIBUTIONS)
       if (distribution instanceof InverseCDF) {
@@ -54,6 +58,7 @@ public class DiscreteDistributionTest extends TestCase {
       }
   }
 
+  @Test
   public void testInverseCDFIncreasing() {
     for (Distribution distribution : DISTRIBUTIONS)
       if (distribution instanceof InverseCDF) {
@@ -65,6 +70,7 @@ public class DiscreteDistributionTest extends TestCase {
       }
   }
 
+  @Test
   public void testMean() {
     for (Distribution distribution : DISTRIBUTIONS) {
       RandomVariate.of(distribution);
@@ -73,6 +79,7 @@ public class DiscreteDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testVariance() {
     for (Distribution distribution : DISTRIBUTIONS) {
       Scalar scalar = Variance.of(distribution);

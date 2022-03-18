@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -15,9 +19,9 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class MixtureDistributionTest extends TestCase {
+public class MixtureDistributionTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution d = BernoulliDistribution.of(RationalScalar.HALF);
     Distribution d1 = Serialization.copy(MixtureDistribution.of(Tensors.vector(1, 2, 3), d, d, d));
@@ -26,6 +30,7 @@ public class MixtureDistributionTest extends TestCase {
     assertEquals(domain.map(PDF.of(d1)::at), domain.map(PDF.of(d2)::at));
   }
 
+  @Test
   public void testNormal() {
     Distribution d1 = MixtureDistribution.of(Tensors.vector(1, 2, 3), //
         NormalDistribution.of(0, 1), //
@@ -39,6 +44,7 @@ public class MixtureDistributionTest extends TestCase {
     PDF.of(d1).at(RealScalar.of(1));
   }
 
+  @Test
   public void testFailNegative() {
     AssertFail.of(() -> MixtureDistribution.of(Tensors.vector(1, -2, 3), //
         NormalDistribution.of(0, 1), //
@@ -46,6 +52,7 @@ public class MixtureDistributionTest extends TestCase {
         NormalDistribution.of(10, 1)));
   }
 
+  @Test
   public void testFailLength() {
     AssertFail.of(() -> MixtureDistribution.of(Tensors.vector(1, 3), //
         NormalDistribution.of(0, 1), //

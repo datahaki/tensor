@@ -1,13 +1,16 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Random;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class CompressionTest extends TestCase {
+public class CompressionTest {
   private static byte[] createBytes(int length) {
     Random random = new SecureRandom();
     byte[] bytes = new byte[length];
@@ -16,6 +19,7 @@ public class CompressionTest extends TestCase {
     return bytes;
   }
 
+  @Test
   public void testInflate() {
     byte[] bytes = createBytes(1000);
     byte[] comp = Compression.deflate(bytes);
@@ -28,6 +32,7 @@ public class CompressionTest extends TestCase {
     }
   }
 
+  @Test
   public void testInflateEmpty() {
     byte[] bytes = createBytes(0);
     byte[] comp = Compression.deflate(bytes);
@@ -39,6 +44,7 @@ public class CompressionTest extends TestCase {
     }
   }
 
+  @Test
   public void testInflateEmpty2() {
     try {
       Compression.inflate(new byte[0]);
@@ -48,6 +54,7 @@ public class CompressionTest extends TestCase {
     }
   }
 
+  @Test
   public void testInflateCurrupt() {
     byte[] bytes = createBytes(1000);
     byte[] comp = Compression.deflate(bytes);
@@ -63,6 +70,7 @@ public class CompressionTest extends TestCase {
     }
   }
 
+  @Test
   public void testInflateIncomplete() {
     byte[] bytes = createBytes(1000);
     byte[] comp = Compression.deflate(bytes);

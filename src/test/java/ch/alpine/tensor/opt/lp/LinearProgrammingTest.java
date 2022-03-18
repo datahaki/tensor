@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.opt.lp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -8,9 +13,9 @@ import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class LinearProgrammingTest extends TestCase {
+public class LinearProgrammingTest {
+  @Test
   public void testCase4() {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 5, 1, 0, 0 }, { 2, 1, 0, 1, 0 }, { 1, 1, 0, 0, 1 } });
     Tensor b = Tensors.vector(40, 20, 12);
@@ -25,6 +30,7 @@ public class LinearProgrammingTest extends TestCase {
     assertEquals(x, tensor.get(0));
   }
 
+  @Test
   public void testCase4max() {
     LinearProgram lpd = LinearProgram.of( //
         Objective.MAX, Tensors.vector(3, 5), //
@@ -41,6 +47,7 @@ public class LinearProgrammingTest extends TestCase {
   }
 
   // MATLAB linprog example
+  @Test
   public void testMatlab1() { // min c.x == -10/9
     Tensor m = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");
     Tensor b = Tensors.vector(2, 1, 2, 1, -1, 2);
@@ -65,6 +72,7 @@ public class LinearProgrammingTest extends TestCase {
   }
 
   // MATLAB linprog example
+  @Test
   public void testMatlab1max() { // max c.x == min -c.x == -10/9
     Tensor m = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");
     Tensor b = Tensors.vector(2, 1, 2, 1, -1, 2);
@@ -89,6 +97,7 @@ public class LinearProgrammingTest extends TestCase {
   }
 
   // MATLAB linprog example
+  @Test
   public void testMatlab2() {
     Tensor A = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}, {1, 1/4}}");
     Tensor b = Tensors.fromString("{2, 1, 2, 1, -1, 2, 1/2}");

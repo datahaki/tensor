@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.nrm;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -23,9 +27,9 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class SchattenNormTest extends TestCase {
+public class SchattenNormTest {
+  @Test
   public void testFrobenius() throws ClassNotFoundException, IOException {
     TensorScalarFunction tensorScalarFunction = Serialization.copy(SchattenNorm.of(2));
     Distribution distribution = UniformDistribution.of(-2, 2);
@@ -36,6 +40,7 @@ public class SchattenNormTest extends TestCase {
     assertEquals(tensorScalarFunction.toString(), "SchattenNorm[2]");
   }
 
+  @Test
   public void testExact() throws ClassNotFoundException, IOException {
     Random random = new Random(1);
     TensorScalarFunction tensorScalarFunction = Serialization.copy(SchattenNorm.of(1.2));
@@ -45,6 +50,7 @@ public class SchattenNormTest extends TestCase {
     Sign.requirePositive(scalar);
   }
 
+  @Test
   public void testZero() {
     Tensor matrix = Array.zeros(3, 2);
     for (Tensor p : Subdivide.of(1, 3, 6)) {
@@ -53,10 +59,12 @@ public class SchattenNormTest extends TestCase {
     }
   }
 
+  @Test
   public void testPOutsideRangeFail() {
     AssertFail.of(() -> SchattenNorm.of(0.999));
   }
 
+  @Test
   public void testFormatFail() {
     TensorScalarFunction tensorScalarFunction = SchattenNorm.of(RationalScalar.of(3, 2));
     AssertFail.of(() -> tensorScalarFunction.apply(LeviCivitaTensor.of(3)));
@@ -65,6 +73,7 @@ public class SchattenNormTest extends TestCase {
     AssertFail.of(() -> tensorScalarFunction.apply(Pi.HALF));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> SchattenNorm.of((Number) null));
     AssertFail.of(() -> SchattenNorm.of((Scalar) null));

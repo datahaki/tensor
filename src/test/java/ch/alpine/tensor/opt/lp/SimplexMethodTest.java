@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.opt.lp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.NavigableMap;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -11,10 +16,10 @@ import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
 /** with examples from CLRS */
-public class SimplexMethodTest extends TestCase {
+public class SimplexMethodTest {
+  @Test
   public void testP845() {
     Tensor m = Tensors.matrixInt(new int[][] { //
         { -2, 8, 0, 10 }, //
@@ -39,6 +44,7 @@ public class SimplexMethodTest extends TestCase {
     TestHelper.check(lpp, false);
   }
 
+  @Test
   public void testP846() { // max cost = 8
     Tensor m = Tensors.matrixInt(new int[][] { //
         { 4, -1 }, //
@@ -66,6 +72,7 @@ public class SimplexMethodTest extends TestCase {
   }
 
   // same as p846 except that (0,0) is not feasible
+  @Test
   public void testP846var() {
     Tensor m = Tensors.matrixInt(new int[][] { { 4, -1 }, { 2, 1 }, { -5, 2 }, { -1, -1 } });
     LinearProgram lpd = LinearProgram.of( //
@@ -86,6 +93,7 @@ public class SimplexMethodTest extends TestCase {
     AssertFail.of(() -> lpd.requireFeasible(Tensors.vector(3, 3)));
   }
 
+  @Test
   public void testP854() { // max cost = 8
     Tensor m = Tensors.matrixInt(new int[][] { //
         { 1, 1, -1 }, //
@@ -103,6 +111,7 @@ public class SimplexMethodTest extends TestCase {
   }
 
   // infeasible
+  @Test
   public void testP858_6() {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 1 }, { -2, -2 } });
     Tensor b = Tensors.vector(2, -10);
@@ -120,6 +129,7 @@ public class SimplexMethodTest extends TestCase {
   }
 
   // unbounded
+  @Test
   public void testP858_7() {
     Tensor m = Tensors.matrixInt(new int[][] { { -2, 1 }, { -1, -2 } });
     Tensor b = Tensors.vector(-1, -2);
@@ -130,6 +140,7 @@ public class SimplexMethodTest extends TestCase {
     AssertFail.of(() -> LinearProgramming.of(lpd));
   }
 
+  @Test
   public void testP865() {
     Tensor m = Tensors.matrixInt(new int[][] { //
         { 1, 1, 3 }, //
@@ -147,6 +158,7 @@ public class SimplexMethodTest extends TestCase {
     TestHelper.check(lpd, true);
   }
 
+  @Test
   public void testP878_5() {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 1 }, { 1, 0 }, { 0, 1 } });
     Tensor b = Tensors.vector(20, 12, 16);
@@ -167,6 +179,7 @@ public class SimplexMethodTest extends TestCase {
     TestHelper.check(lpd, true);
   }
 
+  @Test
   public void testP879_6() {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, -1 }, { 2, 1 } });
     Tensor b = Tensors.vector(1, 2);
@@ -181,6 +194,7 @@ public class SimplexMethodTest extends TestCase {
     TestHelper.check(lpd, true);
   }
 
+  @Test
   public void testP879_7() {
     Tensor c = Tensors.vector(1, 1, 1);
     Tensor m = Tensors.fromString("{{-2, -7.5, -3}, {-20, -5, -10}}");

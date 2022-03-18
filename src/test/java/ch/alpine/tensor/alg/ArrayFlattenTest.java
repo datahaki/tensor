@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
@@ -12,9 +16,9 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ArrayFlattenTest extends TestCase {
+public class ArrayFlattenTest {
+  @Test
   public void testSimple() {
     Tensor[][] blocks = new Tensor[2][2];
     blocks[0][0] = DiagonalMatrix.of(2, RealScalar.of(1));
@@ -30,6 +34,7 @@ public class ArrayFlattenTest extends TestCase {
     assertEquals(blocks[1][1], DiagonalMatrix.of(2, RealScalar.of(4)));
   }
 
+  @Test
   public void testRect() {
     Tensor[][] blocks = new Tensor[][] { //
         { HilbertMatrix.of(2, 3), IdentityMatrix.of(2) }, //
@@ -40,6 +45,7 @@ public class ArrayFlattenTest extends TestCase {
     ExactTensorQ.require(tensor);
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> ArrayFlatten.of(null));
   }

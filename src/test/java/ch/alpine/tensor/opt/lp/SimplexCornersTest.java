@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.opt.lp;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.NavigableMap;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -11,9 +15,9 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import junit.framework.TestCase;
 
-public class SimplexCornersTest extends TestCase {
+public class SimplexCornersTest {
+  @Test
   public void testCase4() {
     Tensor c = Tensors.vector(3, 5, 0, 0, 0);
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 5, 1, 0, 0 }, { 2, 1, 0, 1, 0 }, { 1, 1, 0, 0, 1 } });
@@ -26,6 +30,7 @@ public class SimplexCornersTest extends TestCase {
   }
 
   // MATLAB linprog example
+  @Test
   public void testMatlab1() { // min c.x == -10/9
     Tensor c = Tensors.fromString("{-1, -1/3, 0, 0, 0, 0, 0, 0}");
     Tensor Ap = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");
@@ -38,6 +43,7 @@ public class SimplexCornersTest extends TestCase {
   }
 
   // MATLAB linprog example
+  @Test
   public void testMatlab1Dual() {
     Tensor c = Tensors.vector(2, 1, 2, 1, -1, 2, 0, 0).negate();
     Tensor Ap = Transpose.of(Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}")); // .negate();
@@ -51,6 +57,7 @@ public class SimplexCornersTest extends TestCase {
   }
 
   // MATLAB linprog example
+  @Test
   public void testMatlab2() {
     Tensor c = Tensors.fromString("{-1, -1/3, 0, 0, 0, 0, 0, 0}");
     Tensor Ap = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");

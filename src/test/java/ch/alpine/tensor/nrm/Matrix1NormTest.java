@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.nrm;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -10,9 +14,9 @@ import ch.alpine.tensor.num.Rationalize;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
-import junit.framework.TestCase;
 
-public class Matrix1NormTest extends TestCase {
+public class Matrix1NormTest {
+  @Test
   public void testOneInfNorm2() {
     Tensor a = Tensors.vector(1, 2);
     Tensor b = Tensors.vector(3, 4);
@@ -21,6 +25,7 @@ public class Matrix1NormTest extends TestCase {
     assertEquals(MatrixInfinityNorm.of(c), Scalars.fromString("7"));
   }
 
+  @Test
   public void testTranspose() {
     Distribution distribution = TrapezoidalDistribution.with(1, 2, 2);
     Tensor matrix = RandomVariate.of(distribution, 3, 6).map(Rationalize._3);

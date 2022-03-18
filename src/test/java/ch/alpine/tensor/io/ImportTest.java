@@ -1,12 +1,18 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.zip.DataFormatException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -19,9 +25,8 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.TestFile;
-import junit.framework.TestCase;
 
-public class ImportTest extends TestCase {
+public class ImportTest {
   private static final File IO_OBJECT = new File("src/test/resources/io/object");
   public static final File IO_OBJECT_TENSOR = new File(IO_OBJECT, "tensor.object");
   public static final File IO_OBJECT_UNMODIFIABLE = new File(IO_OBJECT, "unmodifiable.object");
@@ -34,6 +39,7 @@ public class ImportTest extends TestCase {
       GaussScalar.of(3, 17), //
       Quaternion.of(3, 4, 5, 6));
 
+  @Test
   public void testCsv() throws Exception {
     String string = "/io/libreoffice_calc.csv";
     File file = new File(getClass().getResource(string).getFile());
@@ -42,6 +48,7 @@ public class ImportTest extends TestCase {
     assertEquals(ResourceData.of(string), table);
   }
 
+  @Test
   public void testCsvEmpty() throws Exception {
     String string = "/io/empty.csv"; // file has byte length 0
     File file = new File(getClass().getResource(string).getFile());
@@ -49,6 +56,7 @@ public class ImportTest extends TestCase {
     assertTrue(Tensors.isEmpty(ResourceData.of(string)));
   }
 
+  @Test
   public void testCsvEmptyLine() throws Exception {
     String string = "/io/emptyline.csv"; // file consist of a single line break character
     File file = new File(getClass().getResource(string).getFile());
@@ -57,6 +65,7 @@ public class ImportTest extends TestCase {
     assertEquals(ResourceData.of(string), expected);
   }
 
+  @Test
   public void testCsvFail() {
     File file = new File("/io/doesnotexist.csv");
     try {
@@ -67,6 +76,7 @@ public class ImportTest extends TestCase {
     }
   }
 
+  @Test
   public void testCsvGz() throws Exception {
     String string = "/io/mathematica23.csv.gz";
     File file = new File(getClass().getResource(string).getFile());
@@ -77,6 +87,7 @@ public class ImportTest extends TestCase {
   /** gjoel noticed that on java9/windows Files::lines in an old implementation of
    * Import::of the file was not closed sufficiently fast to allow the deletion of
    * the file. */
+  @Test
   public void testCsvClosed() throws IOException {
     File file = TestFile.withExtension("csv");
     Export.of(file, Tensors.fromString("{{1, 2}, {3, 4}}"));
@@ -86,6 +97,7 @@ public class ImportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testImageClose() throws Exception {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4}}");
     File file = TestFile.withExtension("png");
@@ -96,6 +108,7 @@ public class ImportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testFolderCsvClosed() throws IOException {
     File file = TestFile.withExtension("csv");
     Export.of(file, Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}}"));
@@ -106,12 +119,14 @@ public class ImportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testPng() throws Exception {
     File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
   }
 
+  @Test
   public void testPngClose() throws Exception {
     Tensor tensor = ResourceData.of("/io/image/rgba15x33.png");
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
@@ -122,6 +137,7 @@ public class ImportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testJpg() throws Exception {
     File file = new File(getClass().getResource("/io/image/rgb15x33.jpg").getFile());
     Tensor tensor = Import.of(file);
@@ -129,6 +145,7 @@ public class ImportTest extends TestCase {
     assertEquals(Tensors.vector(180, 46, 47, 255), tensor.get(21, 3)); // verified with gimp
   }
 
+  @Test
   public void testObject() throws ClassNotFoundException, DataFormatException, IOException {
     // Export.object(UserHome.file("string.object"), "tensorlib.importtest");
     File file = new File(getClass().getResource("/io/string.object").getFile());
@@ -147,6 +164,7 @@ public class ImportTest extends TestCase {
     assertEquals(tensor, CONTENT);
   }
 
+  @Test
   public void testUnknownFail() {
     File file = new File(getClass().getResource("/io/extension.unknown").getFile());
     try {
@@ -157,6 +175,7 @@ public class ImportTest extends TestCase {
     }
   }
 
+  @Test
   public void testUnknownObjectFail() {
     File file = new File("doesnotexist.fileext");
     try {
@@ -168,6 +187,7 @@ public class ImportTest extends TestCase {
     }
   }
 
+  @Test
   public void testTensor() throws Exception {
     File file = TestFile.withExtension("object");
     Export.object(file, Tensors.vector(1, 2, 3, 4));
@@ -176,6 +196,7 @@ public class ImportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testProperties() throws FileNotFoundException, IOException {
     File file = new File(getClass().getResource("/io/simple.properties").getFile());
     Properties properties = Import.properties(file);

@@ -1,8 +1,13 @@
 // code by jph
 package ch.alpine.tensor.sca.tri;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
@@ -14,9 +19,9 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class SinhTest extends TestCase {
+public class SinhTest {
+  @Test
   public void testReal() {
     Scalar i = RealScalar.of(2);
     Scalar c = Sinh.FUNCTION.apply(i);
@@ -25,6 +30,7 @@ public class SinhTest extends TestCase {
     assertEquals(c, s);
   }
 
+  @Test
   public void testComplex() {
     Scalar c = Sinh.of(ComplexScalar.of(2, 3.));
     // -3.59056 + 0.530921 I
@@ -32,6 +38,7 @@ public class SinhTest extends TestCase {
     assertEquals(c, s);
   }
 
+  @Test
   public void testDecimal() {
     MathContext mc = MathContext.DECIMAL128;
     Scalar scalar = Sinh.of(DecimalScalar.of(new BigDecimal("1.2356", MathContext.DECIMAL128), mc.getPrecision()));
@@ -39,10 +46,12 @@ public class SinhTest extends TestCase {
     Tolerance.CHOP.requireClose(scalar, DoubleScalar.of(Math.sinh(1.2356)));
   }
 
+  @Test
   public void testQuantityFail() {
     AssertFail.of(() -> Sinh.of(Quantity.of(1, "deg")));
   }
 
+  @Test
   public void testGaussScalarFail() {
     AssertFail.of(() -> Sinh.of(GaussScalar.of(6, 7)));
   }

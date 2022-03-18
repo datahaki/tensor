@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
@@ -20,9 +24,9 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class LogisticDistributionTest extends TestCase {
+public class LogisticDistributionTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(LogisticDistribution.of(2, 3));
     PDF pdf = PDF.of(distribution);
@@ -38,6 +42,7 @@ public class LogisticDistributionTest extends TestCase {
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
+  @Test
   public void testRandomMeanVar() {
     Distribution distribution = LogisticDistribution.of(3, 2);
     RandomVariate.of(distribution, 100);
@@ -46,6 +51,7 @@ public class LogisticDistributionTest extends TestCase {
     assertEquals(distribution.toString(), "LogisticDistribution[3, 2]");
   }
 
+  @Test
   public void testQuantity() {
     Distribution distribution = LogisticDistribution.of(Quantity.of(2, "m"), Quantity.of(3, "m"));
     Scalar scalar = Variance.of(distribution);
@@ -54,25 +60,30 @@ public class LogisticDistributionTest extends TestCase {
     assertEquals(lo, Quantity.of(DoubleScalar.NEGATIVE_INFINITY, "m"));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> LogisticDistribution.of(null, RealScalar.ONE));
     AssertFail.of(() -> LogisticDistribution.of(RealScalar.ONE, null));
   }
 
+  @Test
   public void testZeroFail() {
     AssertFail.of(() -> LogisticDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 
+  @Test
   public void testComplexFail() {
     AssertFail.of(() -> LogisticDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
   }
 
+  @Test
   public void testQuantityFail() {
     AssertFail.of(() -> LogisticDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
     AssertFail.of(() -> LogisticDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
     AssertFail.of(() -> LogisticDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
+  @Test
   public void testNegativeSigmaFail() {
     LogisticDistribution.of(5, 1);
     AssertFail.of(() -> LogisticDistribution.of(5, -1));

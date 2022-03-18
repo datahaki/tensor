@@ -1,9 +1,13 @@
 // code by jph
 package ch.alpine.tensor;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TensorDotTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+public class TensorDotTest {
+  @Test
   public void testDotEmpty() {
     Tensor a = Tensors.empty().dot(Tensors.empty());
     assertTrue(ScalarQTest.of(a));
@@ -13,6 +17,7 @@ public class TensorDotTest extends TestCase {
     assertEquals(DoubleScalar.of(0), a);
   }
 
+  @Test
   public void testDot2() {
     Tensor tensor = Tensors.of(Tensors.empty());
     Tensor sca = tensor.dot(Tensors.empty());
@@ -20,12 +25,14 @@ public class TensorDotTest extends TestCase {
     assertEquals(sca, Tensors.vectorDouble(0));
   }
 
+  @Test
   public void testDot3() {
     Tensor tensor = Tensors.of(Tensors.empty(), Tensors.empty());
     Tensor sca = tensor.dot(Tensors.empty());
     assertEquals(sca, Tensors.vectorLong(0, 0));
   }
 
+  @Test
   public void testDot4() {
     Tensor c = Tensors.vectorLong(1, 2, 6);
     Tensor d = Tensors.vectorLong(3, 4, 5);
@@ -33,6 +40,7 @@ public class TensorDotTest extends TestCase {
     assertEquals(c.dot(d), RationalScalar.of(3 + 8 + 30, 1));
   }
 
+  @Test
   public void testDot5() {
     Tensor c = Tensors.vectorDouble(1, 2, 6.);
     Tensor d = Tensors.vectorLong(3, 4, 5);
@@ -40,6 +48,7 @@ public class TensorDotTest extends TestCase {
     assertEquals(c.dot(d), RationalScalar.of(3 + 8 + 30, 1));
   }
 
+  @Test
   public void testDot6() {
     Tensor a = Tensors.vectorLong(7, 2);
     Tensor b = Tensors.vectorLong(3, 4);
@@ -51,18 +60,21 @@ public class TensorDotTest extends TestCase {
     assertEquals(f, g);
   }
 
+  @Test
   public void testDotIrregularExample() {
     Tensor a = Tensors.vector(1, 2);
     Tensor b = Tensors.fromString("{{3, {4}}, {5, {6}}}");
     assertEquals(a.dot(b), Tensors.fromString("{13, {16}}"));
   }
 
+  @Test
   public void testDotIrregularRight() {
     Tensor a = Tensors.vector(1, 2, 3);
     Tensor b = Tensors.fromString("{{1, {2}}, {2, {3}}, {4, {5}}}");
     assertEquals(a.dot(b), Tensors.fromString("{17, {23}}"));
   }
 
+  @Test
   public void testDotIrregularLeft() {
     Tensor a = Tensors.fromString("{{1, 2, 3}, {{2, 3, 4}, {5, 6, 7}}}");
     Tensor b = Tensors.vector(4, 5, 6);

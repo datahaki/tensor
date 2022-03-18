@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.mat.ex;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.BitSet;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -29,9 +34,8 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Real;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class MatrixPowerTest extends TestCase {
+public class MatrixPowerTest {
   private static boolean trunc(Tensor m, Tensor r) {
     return Tolerance.CHOP.of(m.subtract(r)).equals(Array.zeros(m.length(), m.length()));
   }
@@ -51,15 +55,18 @@ public class MatrixPowerTest extends TestCase {
     assertTrue(trunc(MatrixPower.of(m, 6), m.dot(m).dot(m).dot(m).dot(m).dot(m)));
   }
 
+  @Test
   public void testHilbert() {
     checkLow(HilbertMatrix.of(4));
   }
 
+  @Test
   public void testFourier() {
     checkLow(FourierMatrix.of(3));
     checkLow(FourierMatrix.of(6));
   }
 
+  @Test
   public void testMathematicaEx() {
     assertEquals( //
         MatrixPower.of(Tensors.fromString("{{1, 1}, {1, 2}}"), 10), //
@@ -67,6 +74,7 @@ public class MatrixPowerTest extends TestCase {
     );
   }
 
+  @Test
   public void testMathematicaInv2() {
     assertEquals( //
         MatrixPower.of(Tensors.fromString("{{1, 1}, {1, 2}}"), -2), //
@@ -89,6 +97,7 @@ public class MatrixPowerTest extends TestCase {
     return y;
   }
 
+  @Test
   public void testSet() {
     assertEquals(powerOf(3, 5), 243);
     assertEquals(powerOf(2, 21), 2097152);
@@ -96,6 +105,7 @@ public class MatrixPowerTest extends TestCase {
     assertEquals(powerOf(5, 0), 1);
   }
 
+  @Test
   public void testIdentityMatrix() {
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = IdentityMatrix.of(n);
@@ -104,12 +114,14 @@ public class MatrixPowerTest extends TestCase {
     }
   }
 
+  @Test
   public void testNegativeDiagonal() {
     Tensor matrix = DiagonalMatrix.of(-1, -2, -3);
     Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
     Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
   }
 
+  @Test
   public void testSymmetric() {
     for (int n = 2; n < 10; ++n) {
       Distribution distribution = NormalDistribution.standard();
@@ -132,11 +144,13 @@ public class MatrixPowerTest extends TestCase {
     }
   }
 
+  @Test
   public void testComplexDiagnoal() {
     Tensor tensor = MatrixPower.ofSymmetric(DiagonalMatrix.of(-1, 4), RationalScalar.HALF);
     Tolerance.CHOP.requireClose(tensor, Tensors.fromString("{{I, 0}, {0, 2}}"));
   }
 
+  @Test
   public void testComplex() {
     Tensor tensor = MatrixPower.ofSymmetric(Tensors.fromString("{{3, 4}, {4, -5.}}"), RealScalar.of(0.345));
     Tensor re = Tensors.fromString("{{1.58297621781119750, +0.28292717088123903}, {+0.2829271708812389, 1.0171218760487195}}");
@@ -145,6 +159,7 @@ public class MatrixPowerTest extends TestCase {
     Tolerance.CHOP.requireClose(Imag.of(tensor), im);
   }
 
+  @Test
   public void testGaussian() {
     int prime = 7879;
     Distribution distribution = DiscreteUniformDistribution.of(0, prime);
@@ -158,14 +173,17 @@ public class MatrixPowerTest extends TestCase {
     }
   }
 
+  @Test
   public void testNonSymmetricFail() {
     AssertFail.of(() -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), RationalScalar.HALF));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> MatrixPower.ofSymmetric(null, RationalScalar.HALF));
   }
 
+  @Test
   public void testFailZero() {
     Tensor matrix = Array.zeros(2, 3);
     AssertFail.of(() -> MatrixPower.of(matrix, -1));
@@ -173,6 +191,7 @@ public class MatrixPowerTest extends TestCase {
     AssertFail.of(() -> MatrixPower.of(matrix, 1));
   }
 
+  @Test
   public void testFailOne() {
     Tensor matrix = HilbertMatrix.of(3, 2);
     AssertFail.of(() -> MatrixPower.of(matrix, -1));
@@ -180,6 +199,7 @@ public class MatrixPowerTest extends TestCase {
     AssertFail.of(() -> MatrixPower.of(matrix, 1));
   }
 
+  @Test
   public void testFailAd() {
     AssertFail.of(() -> MatrixPower.of(LeviCivitaTensor.of(3), 1));
   }

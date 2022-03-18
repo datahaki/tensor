@@ -10,6 +10,10 @@ import ch.alpine.tensor.sca.exp.Log;
 
 /** ArcTanh[z] == 1/2 (log(1+z)-log(1-z))
  * 
+ * <pre>
+ * ArcTanh[NaN] == NaN
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ArcTanh.html">ArcTanh</a>
  * 

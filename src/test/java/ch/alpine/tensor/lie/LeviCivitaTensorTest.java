@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Collections;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -10,34 +14,38 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Numel;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class LeviCivitaTensorTest extends TestCase {
+public class LeviCivitaTensorTest {
   // former non-sparse implementation
   private static Tensor full(int d) {
     return Array.of(list -> Signature.of(Tensors.vector(list)), Collections.nCopies(d, d));
   }
 
+  @Test
   public void testRank0() {
     Tensor tensor = LeviCivitaTensor.of(0);
     assertEquals(tensor, RealScalar.ONE);
   }
 
+  @Test
   public void testRank1() {
     Tensor tensor = LeviCivitaTensor.of(1);
     assertEquals(tensor, Tensors.fromString("{1}"));
   }
 
+  @Test
   public void testRank2() {
     Tensor tensor = LeviCivitaTensor.of(2);
     assertEquals(tensor, Tensors.fromString("{{0, 1}, {-1, 0}}"));
   }
 
+  @Test
   public void testRank3() {
     Tensor tensor = LeviCivitaTensor.of(3);
     assertEquals(tensor, Tensors.fromString("{{{0, 0, 0}, {0, 0, 1}, {0, -1, 0}}, {{0, 0, -1}, {0, 0, 0}, {1, 0, 0}}, {{0, 1, 0}, {-1, 0, 0}, {0, 0, 0}}}"));
   }
 
+  @Test
   public void testAlternating() {
     for (int n = 0; n < 5; ++n) {
       Tensor tensor = LeviCivitaTensor.of(n);
@@ -48,6 +56,7 @@ public class LeviCivitaTensorTest extends TestCase {
     }
   }
 
+  @Test
   public void testRankNegativeFail() {
     AssertFail.of(() -> LeviCivitaTensor.of(-1));
   }

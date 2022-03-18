@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -12,9 +16,9 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class EntrywiseTest extends TestCase {
+public class EntrywiseTest {
+  @Test
   public void testMax() {
     Entrywise entrywise = Entrywise.with(Max::of);
     Tensor result = entrywise.of(Tensors.of( //
@@ -22,11 +26,13 @@ public class EntrywiseTest extends TestCase {
     assertEquals(result, Tensors.vector(3, 4, 4));
   }
 
+  @Test
   public void testHelpOf() {
     assertEquals(Entrywise.with(Max::of).of(Tensors.of(Tensors.vector(1, 2, 3), Tensors.vector(5, 0, 4))), Tensors.vector(5, 2, 4));
     assertEquals(Entrywise.with(Min::of).of(Tensors.of(Tensors.vector(1, 2, 3), Tensors.vector(5, 0, 4))), Tensors.vector(1, 0, 3));
   }
 
+  @Test
   public void testStreamReduce() {
     Tensor box = Tensors.fromString("{{0, 7}, {0, 8}, {1, 5}, {2, 7}}");
     Tensor max = box.stream().reduce(Entrywise.max()).get();
@@ -35,6 +41,7 @@ public class EntrywiseTest extends TestCase {
     assertEquals(min, Tensors.vector(0, 5));
   }
 
+  @Test
   public void testMaxSimple() {
     Entrywise entrywise = Entrywise.max();
     Tensor result = entrywise.apply( //
@@ -42,6 +49,7 @@ public class EntrywiseTest extends TestCase {
     assertEquals(result, Tensors.vector(3, 2, 4));
   }
 
+  @Test
   public void testMinSimple() throws ClassNotFoundException, IOException {
     Entrywise entrywise = Serialization.copy(Entrywise.min());
     Tensor result = entrywise.apply( //
@@ -49,6 +57,7 @@ public class EntrywiseTest extends TestCase {
     assertEquals(result, Tensors.vector(-2, 1, 3));
   }
 
+  @Test
   public void testMaxScalar() throws ClassNotFoundException, IOException {
     Entrywise entrywise = Serialization.copy(Entrywise.max());
     Tensor result = entrywise.apply( //
@@ -56,6 +65,7 @@ public class EntrywiseTest extends TestCase {
     assertEquals(result, RealScalar.of(5));
   }
 
+  @Test
   public void testMinScalar() {
     Entrywise entrywise = Entrywise.min();
     Tensor result = entrywise.apply( //
@@ -63,6 +73,7 @@ public class EntrywiseTest extends TestCase {
     assertEquals(result, RealScalar.of(3));
   }
 
+  @Test
   public void testSingle() {
     Tensor single = Tensors.vector(3, 2, 3);
     Entrywise entrywise = Entrywise.with(Max::of);
@@ -70,6 +81,7 @@ public class EntrywiseTest extends TestCase {
     assertEquals(result, RealScalar.of(3));
   }
 
+  @Test
   public void testAdd() {
     Distribution distribution = UniformDistribution.unit();
     Tensor a = RandomVariate.of(distribution, 7, 9);
@@ -79,6 +91,7 @@ public class EntrywiseTest extends TestCase {
     assertEquals(res, a.add(b).add(c));
   }
 
+  @Test
   public void testMultiply() {
     Distribution distribution = UniformDistribution.unit();
     Tensor a = RandomVariate.of(distribution, 7, 9);
@@ -88,22 +101,26 @@ public class EntrywiseTest extends TestCase {
     assertEquals(res, Times.of(Times.of(a, b), c));
   }
 
+  @Test
   public void testEmpty() {
     Entrywise entrywise = Entrywise.with(Max::of);
     AssertFail.of(() -> entrywise.of(Tensors.empty()));
   }
 
+  @Test
   public void testFail() {
     Entrywise entrywise = Entrywise.max();
     AssertFail.of(() -> entrywise.apply(Tensors.vector(3, 2, 3), Tensors.vector(-2, 1)));
   }
 
+  @Test
   public void testScalarTensorFail() {
     Entrywise entrywise = Entrywise.max();
     AssertFail.of(() -> entrywise.apply(Tensors.vector(3, 2, 3), RealScalar.ONE));
     AssertFail.of(() -> entrywise.apply(RealScalar.ONE, Tensors.vector(3, 2, 3)));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> Entrywise.with(null));
   }

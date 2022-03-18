@@ -1,13 +1,17 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.nio.ByteBuffer;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import junit.framework.TestCase;
 
-public class PrimitivesTest extends TestCase {
+public class PrimitivesTest {
+  @Test
   public void testByteArray() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, -1, {{256}}}");
     byte[] array = Primitives.toByteArray(tensor);
@@ -18,6 +22,7 @@ public class PrimitivesTest extends TestCase {
     assertEquals(array.length, 5);
   }
 
+  @Test
   public void testByteBuffer() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, -1, {{256}}}");
     ByteBuffer byteBuffer = Primitives.toByteBuffer(tensor);

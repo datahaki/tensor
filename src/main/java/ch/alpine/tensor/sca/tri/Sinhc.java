@@ -5,7 +5,11 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
-/** Sinhc[z] := Sinh[z] / z */
+/** Sinhc[z] := Sinh[z] / z
+ * 
+ * <pre>
+ * Sinhc[NaN] == NaN
+ * </pre> */
 public enum Sinhc implements ScalarUnaryOperator {
   FUNCTION;
 

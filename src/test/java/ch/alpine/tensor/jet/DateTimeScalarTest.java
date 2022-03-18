@@ -1,9 +1,15 @@
 // code by jph
-package ch.alpine.tensor.qty;
+package ch.alpine.tensor.jet;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -17,9 +23,9 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class DateTimeScalarTest extends TestCase {
+public class DateTimeScalarTest {
+  @Test
   public void test1() throws ClassNotFoundException, IOException {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2021, 1, 10, 6, 30));
@@ -33,6 +39,8 @@ public class DateTimeScalarTest extends TestCase {
     assertEquals(dt2.subtract(dt1.multiply(RealScalar.of(1))), scalar2);
   }
 
+  @SuppressWarnings("unlikely-arg-type")
+  @Test
   public void testSpecific() {
     LocalDateTime ldt1 = LocalDateTime.of(2020, 12, 20, 4, 30);
     LocalDateTime ldt2 = LocalDateTime.of(2020, 12, 21, 4, 30);
@@ -49,6 +57,7 @@ public class DateTimeScalarTest extends TestCase {
     assertFalse(dt1.hashCode() == dt2.hashCode());
   }
 
+  @Test
   public void testSubdivide() {
     LocalDateTime ldt1 = LocalDateTime.of(2020, 12, 20, 4, 30);
     LocalDateTime ldt2 = LocalDateTime.of(2020, 12, 21, 4, 30);
@@ -57,6 +66,7 @@ public class DateTimeScalarTest extends TestCase {
     Subdivide.of(dt1, dt2, 73);
   }
 
+  @Test
   public void test2() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2021, 1, 10, 6, 30));
@@ -69,6 +79,7 @@ public class DateTimeScalarTest extends TestCase {
     assertEquals(diff, diff.zero());
   }
 
+  @Test
   public void testToStringParse() {
     DateTimeScalar dts = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30, 3, 125_239_876));
     String string = dts.toString();
@@ -77,6 +88,7 @@ public class DateTimeScalarTest extends TestCase {
     assertEquals(scalar, dts);
   }
 
+  @Test
   public void testClip() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2017, 12, 20, 4, 30));
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 21, 4, 30));
@@ -87,6 +99,7 @@ public class DateTimeScalarTest extends TestCase {
     assertTrue(clip.isOutside(dt4));
   }
 
+  @Test
   public void testExact() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2017, 12, 20, 4, 30));
     ExactScalarQ.require(dt1);
@@ -95,6 +108,7 @@ public class DateTimeScalarTest extends TestCase {
     assertTrue(scalar instanceof DateTimeScalar);
   }
 
+  @Test
   public void testAddFail1() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 21, 4, 30));
@@ -109,6 +123,7 @@ public class DateTimeScalarTest extends TestCase {
     assertEquals(dt1.one(), RealScalar.ONE);
   }
 
+  @Test
   public void testAddFail2() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     AssertFail.of(() -> dt1.add(RealScalar.of(3)));
@@ -116,6 +131,7 @@ public class DateTimeScalarTest extends TestCase {
     AssertFail.of(() -> dt1.compareTo(ComplexScalar.I));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> DateTimeScalar.of(null));
   }

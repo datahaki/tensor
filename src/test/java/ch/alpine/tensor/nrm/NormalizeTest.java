@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.nrm;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
@@ -25,9 +30,8 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class NormalizeTest extends TestCase {
+public class NormalizeTest {
   // function requires that vector != 0
   private static void _checkNormalize(Tensor vector, TensorScalarFunction tsf) {
     Scalar value = tsf.apply(Normalize.with(tsf).apply(vector));
@@ -41,6 +45,7 @@ public class NormalizeTest extends TestCase {
     _checkNormalize(vector, Vector2Norm::of);
   }
 
+  @Test
   public void testVector1() {
     Tensor vector = Tensors.vector(3, 3, 3, 3);
     Tensor n = Vector2Norm.NORMALIZE.apply(vector);
@@ -49,16 +54,19 @@ public class NormalizeTest extends TestCase {
     _checkNormalizeAllNorms(Tensors.vector(3, 2, 1));
   }
 
+  @Test
   public void testVectorNumeric() {
     Distribution distribution = LogisticDistribution.of(1, 100);
     _checkNormalizeAllNorms(RandomVariate.of(distribution, 1000));
   }
 
+  @Test
   public void testVectorExact() {
     Distribution distribution = NegativeBinomialDistribution.of(3, RationalScalar.of(2, 3));
     _checkNormalizeAllNorms(RandomVariate.of(distribution, 1000));
   }
 
+  @Test
   public void testNorm1Documentation() {
     Tensor vector = Tensors.vector(2, -3, 1);
     Tensor result = Normalize.with(Vector1Norm::of).apply(vector);
@@ -66,6 +74,7 @@ public class NormalizeTest extends TestCase {
     ExactTensorQ.require(result);
   }
 
+  @Test
   public void testNormInfinityDocumentation() {
     Tensor vector = Tensors.vector(2, -3, 1);
     Tensor result = Normalize.with(VectorInfinityNorm::of).apply(vector);
@@ -73,6 +82,7 @@ public class NormalizeTest extends TestCase {
     ExactTensorQ.require(result);
   }
 
+  @Test
   public void testEps() {
     Tensor vector = Tensors.vector(0, Double.MIN_VALUE, 0);
     assertEquals(Normalize.with(Vector1Norm::of).apply(vector), Tensors.vector(0, 1, 0));
@@ -80,6 +90,7 @@ public class NormalizeTest extends TestCase {
     assertEquals(Normalize.with(VectorInfinityNorm::of).apply(vector), Tensors.vector(0, 1, 0));
   }
 
+  @Test
   public void testEps2() {
     _checkNormalizeAllNorms(Tensors.vector(0, -Double.MIN_VALUE, 0, 0, 0));
     _checkNormalizeAllNorms(Tensors.vector(0, 0, Double.MIN_VALUE));
@@ -87,6 +98,7 @@ public class NormalizeTest extends TestCase {
     _checkNormalizeAllNorms(Tensors.vector(Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE));
   }
 
+  @Test
   public void testNorm1() {
     Tensor v = Tensors.vector(1, 1, 1);
     Tensor n = Normalize.with(Vector1Norm::of).apply(v);
@@ -94,6 +106,7 @@ public class NormalizeTest extends TestCase {
     _checkNormalizeAllNorms(v);
   }
 
+  @Test
   public void testNormInf() {
     Tensor d = Tensors.vector(1, 1, 1).multiply(RealScalar.of(2));
     Tensor n = Normalize.with(VectorInfinityNorm::of).apply(d);
@@ -103,6 +116,7 @@ public class NormalizeTest extends TestCase {
     _checkNormalizeAllNorms(n);
   }
 
+  @Test
   public void testComplex() throws ClassNotFoundException, IOException {
     TensorUnaryOperator normalize = Serialization.copy(Vector2Norm.NORMALIZE);
     Tensor vector = Tensors.fromString("{1+I, 2*I, -3-9.2*I}");
@@ -111,6 +125,7 @@ public class NormalizeTest extends TestCase {
     Chop._13.requireClose(Conjugate.of(s).dot(s), RealScalar.ONE);
   }
 
+  @Test
   public void testComplex2() {
     Tensor vector = Tensors.fromString("{3*I, 4}");
     Tensor s = Vector2Norm.NORMALIZE.apply(vector);
@@ -120,11 +135,13 @@ public class NormalizeTest extends TestCase {
     Chop._13.requireClose(Conjugate.of(s).dot(s), RealScalar.ONE);
   }
 
+  @Test
   public void testQuantityTensor() {
     Tensor vector = QuantityTensor.of(Tensors.vector(2, 3, 4), "m*s^-1");
     _checkNormalizeAllNorms(vector);
   }
 
+  @Test
   public void testDecimalScalar() {
     Tensor vector = Range.of(3, 6).map(N.DECIMAL128);
     Tensor tensor = Vector2Norm.NORMALIZE.apply(vector);
@@ -132,6 +149,7 @@ public class NormalizeTest extends TestCase {
     assertTrue(scalar.toString().startsWith("1.0000000000000000000000000000000"));
   }
 
+  @Test
   public void testNormalizeTotal() {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);
     assertTrue(tensorUnaryOperator.toString().startsWith("Normalize"));
@@ -140,17 +158,20 @@ public class NormalizeTest extends TestCase {
     AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.empty()));
   }
 
+  @Test
   public void testInconsistentFail() {
     Distribution distribution = UniformDistribution.of(3, 5);
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(v -> RandomVariate.of(distribution));
     AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2)));
   }
 
+  @Test
   public void testNormalizeTotalFail() {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);
     AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, -2)));
   }
 
+  @Test
   public void testNormalizeNullFail() {
     TensorScalarFunction tensorScalarFunction = null;
     AssertFail.of(() -> Normalize.with(tensorScalarFunction));

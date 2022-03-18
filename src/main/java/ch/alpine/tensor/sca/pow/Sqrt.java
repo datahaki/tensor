@@ -6,7 +6,11 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
-/** inspired by
+/** <pre>
+ * Sqrt[NaN] == NaN
+ * </pre>
+ * 
+ * inspired by
  * <a href="https://reference.wolfram.com/language/ref/Sqrt.html">Sqrt</a> */
 public enum Sqrt implements ScalarUnaryOperator {
   FUNCTION;

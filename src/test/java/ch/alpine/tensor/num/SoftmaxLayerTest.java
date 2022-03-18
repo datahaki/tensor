@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -11,9 +15,9 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class SoftmaxLayerTest extends TestCase {
+public class SoftmaxLayerTest {
+  @Test
   public void testMathematica() {
     Tensor tensor = Tensors.vector(0.1, 4.5, -0.2, 3.3, 5.4);
     Tensor actual = SoftmaxLayer.of(tensor);
@@ -21,16 +25,19 @@ public class SoftmaxLayerTest extends TestCase {
     assertEquals(expected.subtract(actual).map(Round.toMultipleOf(DoubleScalar.of(0.0001))), Array.zeros(5));
   }
 
+  @Test
   public void testSumOne() {
     Tensor tensor = Range.of(-3, 6);
     Tensor actual = SoftmaxLayer.of(tensor);
     Chop._15.requireClose(Total.of(actual), RealScalar.ONE);
   }
 
+  @Test
   public void testEmptyFail() {
     AssertFail.of(() -> SoftmaxLayer.of(Tensors.empty()));
   }
 
+  @Test
   public void testScalarFail() {
     AssertFail.of(() -> SoftmaxLayer.of(RealScalar.ONE));
   }

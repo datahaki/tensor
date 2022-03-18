@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.mat.ev;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.lang.reflect.Modifier;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -25,9 +30,8 @@ import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
-import junit.framework.TestCase;
 
-public class JacobiComplexTest extends TestCase {
+public class JacobiComplexTest {
   private static void _check(Tensor matrix, Eigensystem eigensystem) {
     Tensor v = eigensystem.vectors();
     UnitaryMatrixQ.require(v);
@@ -38,6 +42,7 @@ public class JacobiComplexTest extends TestCase {
     Tolerance.CHOP.requireClose(m2, matrix);
   }
 
+  @Test
   public void testHermitian() {
     Distribution distribution = TriangularDistribution.with(0, 1);
     for (int n = 1; n < 6; ++n) {
@@ -57,6 +62,7 @@ public class JacobiComplexTest extends TestCase {
     }
   }
 
+  @Test
   public void testComplex() {
     Tensor matrix = Tensors.fromString("{{2, 3-3*I}, {3+3*I, 5}}");
     HermitianMatrixQ.require(matrix);
@@ -71,12 +77,14 @@ public class JacobiComplexTest extends TestCase {
     _check(matrix, eigensystem);
   }
 
+  @Test
   public void testComplexUnits() {
     Tensor matrix = Tensors.fromString("{{2[m], 3-3*I[m]}, {3+3*I[m], 5[m]}}");
     Eigensystem eigensystem = Eigensystem.ofHermitian(matrix);
     _check(matrix, eigensystem);
   }
 
+  @Test
   public void testRealComparison() {
     Distribution distribution = TriangularDistribution.with(0, 1);
     for (int n = 1; n < 6; ++n) {
@@ -89,6 +97,7 @@ public class JacobiComplexTest extends TestCase {
     }
   }
 
+  @Test
   public void testPackage() {
     assertFalse(Modifier.isPublic(JacobiComplex.class.getModifiers()));
   }

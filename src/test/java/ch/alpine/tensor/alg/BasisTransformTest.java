@@ -1,9 +1,13 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
@@ -20,15 +24,16 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class BasisTransformTest extends TestCase {
+public class BasisTransformTest {
+  @Test
   public void testDimensions() {
     int n = 3;
     Tensor s = BasisTransform.ofForm(Array.zeros(n, n, n, n), Array.zeros(n, n + 2));
     assertEquals(Dimensions.of(s), Arrays.asList(5, 5, 5, 5));
   }
 
+  @Test
   public void testFormRank2() {
     int n = 4;
     Distribution distribution = BinomialDistribution.of(80, 0.3);
@@ -38,6 +43,7 @@ public class BasisTransformTest extends TestCase {
     assertEquals(s, Transpose.of(v).dot(form).dot(v));
   }
 
+  @Test
   public void testForm() {
     int rows = 6;
     int cols = 8;
@@ -51,6 +57,7 @@ public class BasisTransformTest extends TestCase {
     assertEquals(t, g);
   }
 
+  @Test
   public void testStream() {
     int n = 5;
     Integer[] asd = new Integer[n];
@@ -59,6 +66,7 @@ public class BasisTransformTest extends TestCase {
     assertEquals(asd[n - 1].intValue(), 0);
   }
 
+  @Test
   public void testMatrix() {
     Random random = new Random(3);
     int n = 5;
@@ -74,6 +82,7 @@ public class BasisTransformTest extends TestCase {
     }
   }
 
+  @Test
   public void testAd() {
     Tensor v = HilbertMatrix.of(3);
     Tensor _a = LeviCivitaTensor.of(3).negate();
@@ -82,21 +91,25 @@ public class BasisTransformTest extends TestCase {
     assertEquals(he, _a);
   }
 
+  @Test
   public void testAdTypeFail() {
     Tensor v = HilbertMatrix.of(3);
     AssertFail.of(() -> BasisTransform.of(Array.zeros(3, 3, 3), -1, v));
   }
 
+  @Test
   public void testAdInverseFail() {
     Tensor v = Array.zeros(3);
     AssertFail.of(() -> BasisTransform.of(Array.zeros(3, 3, 3), 1, v));
   }
 
+  @Test
   public void testFormVectorFail() {
     int n = 3;
     AssertFail.of(() -> BasisTransform.ofForm(Array.zeros(n, n, n), Array.zeros(n)));
   }
 
+  @Test
   public void testMatrixFail() {
     AssertFail.of(() -> BasisTransform.ofMatrix(IdentityMatrix.of(3), DiagonalMatrix.of(1, 1, 0)));
   }

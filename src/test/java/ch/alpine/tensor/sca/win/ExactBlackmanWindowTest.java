@@ -1,11 +1,13 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.mat.Tolerance;
-import junit.framework.TestCase;
 
-public class ExactBlackmanWindowTest extends TestCase {
+public class ExactBlackmanWindowTest {
+  @Test
   public void testSimple() {
     Tolerance.CHOP.requireClose( //
         ExactBlackmanWindow.FUNCTION.apply(RealScalar.of(0.2)), //

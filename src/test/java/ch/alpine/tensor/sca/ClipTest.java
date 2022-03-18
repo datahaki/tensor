@@ -1,6 +1,12 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -12,9 +18,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ClipTest extends TestCase {
+public class ClipTest {
+  @Test
   public void testApply() {
     Scalar min = RealScalar.of(-3);
     Scalar max = RealScalar.of(10);
@@ -25,6 +31,7 @@ public class ClipTest extends TestCase {
     assertEquals(clip.apply(RealScalar.of(13)), max);
   }
 
+  @Test
   public void testVector() {
     Scalar min = RealScalar.of(-3);
     Scalar max = RealScalar.of(10);
@@ -33,17 +40,20 @@ public class ClipTest extends TestCase {
     assertEquals(clip.of(vector), Tensors.vector(-3, 10, 5));
   }
 
+  @Test
   public void testUnit() {
     assertEquals(Clips.unit().apply(RealScalar.of(-0.1)), RealScalar.ZERO);
     assertEquals(Clips.unit().apply(RealScalar.of(0.1)), RealScalar.of(0.1));
     assertEquals(Clips.unit().apply(RealScalar.of(1.1)), RealScalar.ONE);
   }
 
+  @Test
   public void testFail() {
     Clips.interval(5, 5);
     AssertFail.of(() -> Clips.interval(2, -3));
   }
 
+  @Test
   public void testQuantity() {
     Scalar min = Quantity.of(-3, "m");
     Scalar max = Quantity.of(2, "m");
@@ -54,6 +64,7 @@ public class ClipTest extends TestCase {
     assertEquals(clip.apply(value), value);
   }
 
+  @Test
   public void testQuantityInside() {
     Scalar min = Quantity.of(-3, "m");
     Scalar max = Quantity.of(2, "m");
@@ -65,6 +76,7 @@ public class ClipTest extends TestCase {
     AssertFail.of(() -> clip.isInside(Quantity.of(3, "V")));
   }
 
+  @Test
   public void testRescaleQuantity() {
     Scalar min = Quantity.of(-3, "m");
     Scalar max = Quantity.of(2, "m");
@@ -78,6 +90,7 @@ public class ClipTest extends TestCase {
     assertEquals(clip.width(), Quantity.of(5, "m"));
   }
 
+  @Test
   public void testRescale() {
     Scalar min = RealScalar.of(5);
     Scalar max = RealScalar.of(25);
@@ -88,6 +101,7 @@ public class ClipTest extends TestCase {
     assertEquals(clip.width(), RealScalar.of(20));
   }
 
+  @Test
   public void testClipMinMax() {
     Clip clip = Clips.interval(3, 5);
     assertEquals(clip.min(), RealScalar.of(3));
@@ -95,24 +109,28 @@ public class ClipTest extends TestCase {
     assertEquals(clip.width(), RealScalar.of(2));
   }
 
+  @Test
   public void testClipOutside() {
     Clip clip = Clips.interval(3, 5);
     assertEquals(clip.requireInside(RealScalar.of(3.9)), RealScalar.of(3.9));
     AssertFail.of(() -> clip.requireInside(RealScalar.of(2.9)));
   }
 
+  @Test
   public void testClipInfty() {
     Clip clip = Clips.interval(DoubleScalar.NEGATIVE_INFINITY, DoubleScalar.POSITIVE_INFINITY);
     Tensor tensor = RandomVariate.of(NormalDistribution.standard(), 2, 3, 4);
     assertEquals(tensor.map(clip), tensor);
   }
 
+  @Test
   public void testClipInftyQuantity() {
     Clip clip = Clips.interval(Quantity.of(Double.NEGATIVE_INFINITY, "V"), Quantity.of(Double.POSITIVE_INFINITY, "V"));
     Tensor tensor = RandomVariate.of(NormalDistribution.standard(), 2, 3, 4).map(s -> Quantity.of(s, "V"));
     assertEquals(tensor.map(clip), tensor);
   }
 
+  @Test
   public void testQuantityOutside() {
     Scalar min = Quantity.of(-3, "m");
     Scalar max = Quantity.of(2, "m");
@@ -123,6 +141,7 @@ public class ClipTest extends TestCase {
     AssertFail.of(() -> clip.isOutside(Quantity.of(3, "V")));
   }
 
+  @Test
   public void testEps() {
     Clip clip = Clips.interval(0, Double.MIN_VALUE);
     assertEquals(clip.rescale(RealScalar.of(Double.MIN_VALUE)), RealScalar.ONE);

@@ -1,12 +1,18 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -15,9 +21,9 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class NdCollectNearestTest extends TestCase {
+public class NdCollectNearestTest {
+  @Test
   public void testSimple() {
     CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9));
     for (int n = 1; n < 10; ++n) {
@@ -56,6 +62,7 @@ public class NdCollectNearestTest extends TestCase {
     }
   }
 
+  @Test
   public void testClusterNearest() {
     int maxDensity = 2;
     NdMap<String> m1 = new NdListMap<>();
@@ -85,6 +92,7 @@ public class NdCollectNearestTest extends TestCase {
     }
   }
 
+  @Test
   public void testEmpty() {
     NdMap<Void> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0), Tensors.vector(1)));
     for (NdCenters ndCenters : NdCenters.values()) {
@@ -94,6 +102,7 @@ public class NdCollectNearestTest extends TestCase {
     }
   }
 
+  @Test
   public void testProtected() {
     for (NdCenters ndCenters : NdCenters.values()) {
       NdCenterInterface ndCenterInterface = ndCenters.apply(Array.zeros(2));
@@ -101,10 +110,12 @@ public class NdCollectNearestTest extends TestCase {
     }
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> new NdCollectNearest<>(null, 1));
   }
 
+  @Test
   public void testNonPositiveFail() {
     for (NdCenters ndCenters : NdCenters.values()) {
       NdCenterInterface ndCenterInterface = ndCenters.apply(Array.zeros(2));

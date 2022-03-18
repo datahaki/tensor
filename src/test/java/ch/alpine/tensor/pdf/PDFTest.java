@@ -1,21 +1,24 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.pdf.c.ExponentialDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class PDFTest extends TestCase {
+public class PDFTest {
+  @Test
   public void testExponentialDistribution() {
     PDF pdf = PDF.of(ExponentialDistribution.of(RationalScalar.of(3, 2)));
     Scalar density = pdf.at(RealScalar.of(3));
     Chop._15.requireClose(density, RealScalar.of(0.016663494807363458));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> PDF.of(null));
   }

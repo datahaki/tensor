@@ -1,10 +1,14 @@
 // code by jph
 package ch.alpine.tensor.opt.hun;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
@@ -25,11 +29,11 @@ import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class BipartiteMatchingTest extends TestCase {
+public class BipartiteMatchingTest {
   private static final int MAX = 7;
 
+  @Test
   public void testExactPrecision() {
     Distribution distribution = DiscreteUniformDistribution.of(2, 50);
     for (int rows = 4; rows < MAX; ++rows)
@@ -56,6 +60,7 @@ public class BipartiteMatchingTest extends TestCase {
       }
   }
 
+  @Test
   public void testNumericPrecision() {
     Distribution distribution = UniformDistribution.of(2, 3);
     for (int rows = 4; rows < MAX; ++rows)
@@ -82,6 +87,7 @@ public class BipartiteMatchingTest extends TestCase {
       }
   }
 
+  @Test
   public void testNegative() {
     Distribution distribution = DiscreteUniformDistribution.of(-50, 50);
     for (int rows = 1; rows < MAX; ++rows)
@@ -91,6 +97,7 @@ public class BipartiteMatchingTest extends TestCase {
       }
   }
 
+  @Test
   public void testNegativeWithUnits() {
     Distribution distribution = UniformDistribution.of(Quantity.of(-9, "MYR"), Quantity.of(10, "MYR"));
     for (int rows = 1; rows < MAX; ++rows)
@@ -103,15 +110,18 @@ public class BipartiteMatchingTest extends TestCase {
       }
   }
 
+  @Test
   public void testMixedUnitsFail() {
     Tensor matrix = Tensors.matrix(new Scalar[][] { { Quantity.of(1, "MYR"), Quantity.of(1, "SGD") } });
     AssertFail.of(() -> BipartiteMatching.of(matrix));
   }
 
+  @Test
   public void testScalarFail() {
     AssertFail.of(() -> BipartiteMatching.of(Pi.VALUE));
   }
 
+  @Test
   public void testEmptyFail() {
     AssertFail.of(() -> BipartiteMatching.of(Tensors.empty()));
   }

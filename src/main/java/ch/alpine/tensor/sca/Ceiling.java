@@ -16,6 +16,10 @@ import ch.alpine.tensor.qty.Quantity;
  * Ceiling[-8.2] == -8
  * </pre>
  * 
+ * <pre>
+ * Ceiling[NaN] == NaN
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Ceiling.html">Ceiling</a>
  * 
@@ -24,6 +28,16 @@ import ch.alpine.tensor.qty.Quantity;
  * @see Round */
 public enum Ceiling implements ScalarUnaryOperator {
   FUNCTION;
+
+  public static final ScalarUnaryOperator _1 = Ceiling.toMultipleOf(StaticHelper._1);
+  public static final ScalarUnaryOperator _2 = Ceiling.toMultipleOf(StaticHelper._2);
+  public static final ScalarUnaryOperator _3 = Ceiling.toMultipleOf(StaticHelper._3);
+  public static final ScalarUnaryOperator _4 = Ceiling.toMultipleOf(StaticHelper._4);
+  public static final ScalarUnaryOperator _5 = Ceiling.toMultipleOf(StaticHelper._5);
+  public static final ScalarUnaryOperator _6 = Ceiling.toMultipleOf(StaticHelper._6);
+  public static final ScalarUnaryOperator _7 = Ceiling.toMultipleOf(StaticHelper._7);
+  public static final ScalarUnaryOperator _8 = Ceiling.toMultipleOf(StaticHelper._8);
+  public static final ScalarUnaryOperator _9 = Ceiling.toMultipleOf(StaticHelper._9);
 
   /** @param scalar instance if {@link RealScalar}
    * @return best integer scalar approximation to ceiling of scalar

@@ -5,7 +5,11 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
-/** inspired by
+/** <pre>
+ * Cot[NaN] == NaN
+ * </pre>
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Cot.html">Cot</a> */
 public enum Cot implements ScalarUnaryOperator {
   FUNCTION;

@@ -1,7 +1,13 @@
 // code by jph
 package ch.alpine.tensor.mat.pd;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -34,9 +40,8 @@ import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class OrthogonalizeTest extends TestCase {
+public class OrthogonalizeTest {
   private static void orthogonalMatrixQ_require(Tensor q) {
     Tensor id = q.dot(Transpose.of(q));
     Tensor diagonal = Diagonal.of(id);
@@ -51,12 +56,14 @@ public class OrthogonalizeTest extends TestCase {
     orthogonalMatrixQ_require(q);
   }
 
+  @Test
   public void testMatrix1X3() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1}}");
     assertFalse(OrthogonalMatrixQ.of(matrix));
     _check(matrix);
   }
 
+  @Test
   public void testZeroPad() {
     Tensor v1 = Tensors.vector(1, 2, 3);
     Tensor v0 = v1.map(Scalar::zero);
@@ -67,12 +74,14 @@ public class OrthogonalizeTest extends TestCase {
     Tolerance.CHOP.requireClose(Det.of(q2), RealScalar.ONE);
   }
 
+  @Test
   public void testMatrix2X3() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1}, {1, 1, 1}}");
     assertFalse(OrthogonalMatrixQ.of(matrix));
     _check(matrix);
   }
 
+  @Test
   public void testMatrix2X3b() {
     Tensor v0 = Tensors.fromString("{1, 0, 1}");
     Tensor v1 = Tensors.fromString("{0, 1, 0}");
@@ -90,6 +99,7 @@ public class OrthogonalizeTest extends TestCase {
     Tolerance.CHOP.requireClose(q2, q3);
   }
 
+  @Test
   public void testMatrix2X3bDeficient() {
     Tensor v0 = Tensors.fromString("{1, 0, 1}");
     Tensor v1 = Tensors.fromString("{0, 0, 0}");
@@ -100,6 +110,7 @@ public class OrthogonalizeTest extends TestCase {
     AssertFail.of(() -> Orthogonalize.usingPD(matrix));
   }
 
+  @Test
   public void testRandom() {
     Distribution distribution = NormalDistribution.standard();
     for (int rows = 1; rows < 7; ++rows)
@@ -107,12 +118,14 @@ public class OrthogonalizeTest extends TestCase {
         _check(RandomVariate.of(distribution, rows, cols));
   }
 
+  @Test
   public void test2x1() {
     Tensor matrix = Tensors.fromString("{{-1.63342010908827}, {0.07817413797055835}}");
     Tensor tensor = Orthogonalize.of(matrix);
     Tolerance.CHOP.requireClose(tensor, Tensors.fromString("{{-1}, {0}}"));
   }
 
+  @Test
   public void testSpan() {
     Tensor v0 = Tensors.vector(1, 1, 1);
     Tensor matrix = Tensors.of(v0);
@@ -126,6 +139,7 @@ public class OrthogonalizeTest extends TestCase {
     Tolerance.CHOP.requireClose(q2, q3);
   }
 
+  @Test
   public void testComplex() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
     Tensor mmt = MatrixDotTranspose.of(matrix, Conjugate.of(matrix));
@@ -142,6 +156,7 @@ public class OrthogonalizeTest extends TestCase {
     // Tolerance.CHOP.requireClose(q1, q3);
   }
 
+  @Test
   public void test3x4() {
     Tensor a = Transpose.of(Tensors.fromString("{{1, 2, 3}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}}"));
     _check(a);
@@ -151,6 +166,7 @@ public class OrthogonalizeTest extends TestCase {
     Tolerance.CHOP.requireClose(m_mt, DiagonalMatrix.of(1, 1, 1));
   }
 
+  @Test
   public void test4x3() {
     Tensor a = Tensors.fromString("{{1, 2, 3}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}}");
     assertEquals(Dimensions.of(a), Arrays.asList(4, 3));
@@ -162,6 +178,7 @@ public class OrthogonalizeTest extends TestCase {
     Tolerance.CHOP.requireClose(mt_m, DiagonalMatrix.of(1, 1, 1));
   }
 
+  @Test
   public void testInvariantPD() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     Tensor s1 = Orthogonalize.usingSvd(matrix);
@@ -179,6 +196,7 @@ public class OrthogonalizeTest extends TestCase {
     return ArcTan.of(vector.Get(0), vector.Get(1));
   }
 
+  @Test
   public void testAngles2D() {
     Scalar i0 = RealScalar.of(1.2);
     Scalar i1 = i0.add(RealScalar.of(0.2));
@@ -205,6 +223,7 @@ public class OrthogonalizeTest extends TestCase {
     }
   }
 
+  @Test
   public void testAngles3D() {
     Scalar i0 = RealScalar.of(-1.5);
     Scalar i1 = i0.add(RealScalar.of(0.2));
@@ -228,6 +247,7 @@ public class OrthogonalizeTest extends TestCase {
     }
   }
 
+  @Test
   public void testMatrixExp() {
     for (int d = 2; d < 5; ++d) {
       Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
@@ -238,6 +258,7 @@ public class OrthogonalizeTest extends TestCase {
     }
   }
 
+  @Test
   public void testDiag() {
     Tensor matrix = DiagonalMatrix.of(2, -2);
     Tensor rdetp1 = DiagonalMatrix.of(1, +1);
@@ -247,19 +268,23 @@ public class OrthogonalizeTest extends TestCase {
     assertEquals(rdetn1, Orthogonalize.usingPD(matrix));
   }
 
+  @Test
   public void testUsingSvdFail() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 3);
     AssertFail.of(() -> Orthogonalize.usingSvd(matrix));
   }
 
+  @Test
   public void testFailScalar() {
     AssertFail.of(() -> Orthogonalize.of(Pi.VALUE));
   }
 
+  @Test
   public void testFailVector() {
     AssertFail.of(() -> Orthogonalize.of(Tensors.vector(1, 2, 3, 4)));
   }
 
+  @Test
   public void testFailMatrix() {
     Tensor matrix = Transpose.of(Tensors.fromString("{{1, 0, 1}, {1, 1, 1}}"));
     Tensor result = Orthogonalize.of(matrix);
@@ -268,6 +293,7 @@ public class OrthogonalizeTest extends TestCase {
     Tolerance.CHOP.requireClose(result, expect);
   }
 
+  @Test
   public void testFailAd() {
     AssertFail.of(() -> Orthogonalize.of(LeviCivitaTensor.of(3)));
   }

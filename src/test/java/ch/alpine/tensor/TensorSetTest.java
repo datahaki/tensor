@@ -1,8 +1,14 @@
 // code by jph
 package ch.alpine.tensor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ArrayQ;
@@ -13,9 +19,9 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TensorSetTest extends TestCase {
+public class TensorSetTest {
+  @Test
   public void testSetScalar() {
     Tensor eye = IdentityMatrix.of(5);
     Tensor cpy = eye.copy();
@@ -25,6 +31,7 @@ public class TensorSetTest extends TestCase {
     cpy.set(s -> s.negate(), 2, 2);
   }
 
+  @Test
   public void testSetTensor0() {
     Tensor eye = HilbertMatrix.of(3);
     Tensor matrix = eye.copy();
@@ -34,6 +41,7 @@ public class TensorSetTest extends TestCase {
     assertEquals(matrix, Tensors.fromString("{{1, 1/2, 1/3}, {1/2, 1/3, 1/4}, {-1/3, -1/4, -1/5}}"));
   }
 
+  @Test
   public void testSetTensor0Total() {
     Tensor eye = HilbertMatrix.of(3);
     Tensor matrix = eye.copy();
@@ -44,6 +52,7 @@ public class TensorSetTest extends TestCase {
     AssertFail.of(() -> eye.set(Total::ofVector, Tensor.ALL, 2));
   }
 
+  @Test
   public void testSetTensor1() {
     Tensor eye = HilbertMatrix.of(3);
     Tensor cpy = eye.copy();
@@ -53,6 +62,7 @@ public class TensorSetTest extends TestCase {
     assertEquals(cpy, Tensors.fromString("{{1, 1/2, -1/3}, {1/2, 1/3, -1/4}, {1/3, 1/4, -1/5}}"));
   }
 
+  @Test
   public void testSetNotByRef() {
     Tensor a = Tensors.vector(1);
     Tensor row = Tensors.vector(1, 2, 3, 4);
@@ -62,6 +72,7 @@ public class TensorSetTest extends TestCase {
     assertEquals(a, copy);
   }
 
+  @Test
   public void testSetAllLast() {
     Tensor a = Tensors.vector(0, 1, 3, 4);
     Tensor row = Tensors.vector(5, 6, 7, 8);
@@ -69,6 +80,7 @@ public class TensorSetTest extends TestCase {
     assertEquals(a, row);
   }
 
+  @Test
   public void testSetMultiAll0() {
     Tensor a = Array.zeros(2, 3);
     Tensor b = Array.zeros(2, 1);
@@ -77,6 +89,7 @@ public class TensorSetTest extends TestCase {
     assertEquals(a, c);
   }
 
+  @Test
   public void testSetMultiAll1() {
     Tensor a = Array.zeros(2, 3, 4, 5);
     Tensor b = Array.zeros(3, 5, 1);
@@ -86,6 +99,7 @@ public class TensorSetTest extends TestCase {
     assertEquals(dims, Dimensions.of(b));
   }
 
+  @Test
   public void testSetMultiAll2() {
     Tensor a = Array.zeros(2, 3, 4, 5);
     Tensor b = Array.zeros(2, 4, 1);
@@ -95,6 +109,7 @@ public class TensorSetTest extends TestCase {
     assertEquals(dims, Dimensions.of(b));
   }
 
+  @Test
   public void testSetAllFail() {
     Tensor a = Tensors.vector(0, 1, 3, 4);
     Tensor c = a.copy();
@@ -104,6 +119,7 @@ public class TensorSetTest extends TestCase {
     assertEquals(a, c);
   }
 
+  @Test
   public void testSet333() {
     Tensor ad = Array.zeros(3, 3, 3);
     Tensor mat = HilbertMatrix.of(3);
@@ -112,6 +128,7 @@ public class TensorSetTest extends TestCase {
     assertEquals(ad.get(Tensor.ALL, 2), mat);
   }
 
+  @Test
   public void testSetSelf() {
     Tensor a = Tensors.vector(1); // 1
     assertTrue(TensorRank.of(a) == 1);
@@ -127,12 +144,14 @@ public class TensorSetTest extends TestCase {
     assertTrue(TensorRank.of(a) == 5);
   }
 
+  @Test
   public void testSetAllSelfVector() {
     Tensor a = Range.of(10, 20);
     a.set(a, Tensor.ALL);
     assertEquals(a, Range.of(10, 20));
   }
 
+  @Test
   public void testSetAllSelfMatrix() {
     Tensor a = HilbertMatrix.of(3, 5);
     a.set(a, Tensor.ALL);
@@ -141,6 +160,7 @@ public class TensorSetTest extends TestCase {
     assertEquals(a, HilbertMatrix.of(3, 5));
   }
 
+  @Test
   public void testSetAllSelfUnstructured() {
     Tensor a = Tensors.fromString("{{1, 2}, {3+I, 4, 5, 6}, {}}");
     Tensor c = a.copy().unmodifiable();
@@ -150,6 +170,7 @@ public class TensorSetTest extends TestCase {
     assertEquals(a, c);
   }
 
+  @Test
   public void testSetFunctionAllLast() {
     Tensor a = Tensors.vector(0, 1, 3, 4, 9);
     a.set(RealScalar.ONE::add, Tensor.ALL);
@@ -157,6 +178,7 @@ public class TensorSetTest extends TestCase {
     assertEquals(a, b);
   }
 
+  @Test
   public void testSetAll() {
     Tensor matrix = HilbertMatrix.of(4, 6);
     List<Integer> l1 = Dimensions.of(matrix);
@@ -167,12 +189,14 @@ public class TensorSetTest extends TestCase {
     assertEquals(l1, l2);
   }
 
+  @Test
   public void testSetAllBlob() {
     Tensor vector = Tensors.vector(3, 4, 5, 6);
     vector.set(HilbertMatrix.of(2), 2);
     assertEquals(vector.toString(), "{3, 4, {{1, 1/2}, {1/2, 1/3}}, 6}");
   }
 
+  @Test
   public void testSetFunctionAll() {
     Tensor matrix = HilbertMatrix.of(4, 6);
     Tensor column = Tensors.vector(3, 4, 5, 6);
@@ -180,11 +204,13 @@ public class TensorSetTest extends TestCase {
     assertEquals(matrix.get(Tensor.ALL, 2), column);
   }
 
+  @Test
   public void testSetTensorLevel0() {
     Tensor vector = Tensors.vector(2, 3, 4);
     AssertFail.of(() -> vector.set(RealScalar.ONE));
   }
 
+  @Test
   public void testSetFunctionLevel0() {
     Tensor vector = Tensors.vector(2, 3, 4);
     AssertFail.of(() -> vector.set(t -> RealScalar.ONE));

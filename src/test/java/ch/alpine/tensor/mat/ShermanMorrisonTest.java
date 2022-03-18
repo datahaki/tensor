@@ -3,6 +3,8 @@ package ch.alpine.tensor.mat;
 
 import java.util.Random;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -11,10 +13,10 @@ import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
-import junit.framework.TestCase;
 
 /** Reference: NR 2007 eq. (2.7.2) */
-public class ShermanMorrisonTest extends TestCase {
+public class ShermanMorrisonTest {
+  @Test
   public void testSimple() {
     Random random = new Random(3);
     Distribution distribution = NormalDistribution.standard();

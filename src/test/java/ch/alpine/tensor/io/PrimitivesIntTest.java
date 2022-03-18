@@ -1,23 +1,29 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.nio.IntBuffer;
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class PrimitivesIntTest extends TestCase {
+public class PrimitivesIntTest {
+  @Test
   public void testToListInteger() {
     Tensor tensor = Tensors.vector(-2.5, -2.7, 4.3, 5.4, 6.2, 10.5);
     List<Integer> list = Primitives.toListInteger(tensor);
     assertEquals(Arrays.asList(-2, -2, 4, 5, 6, 10), list);
   }
 
+  @Test
   public void testToListInteger2() {
     Tensor a = Tensors.vector(-2, -3, 4, 5, 6, 11);
     Tensor b = Tensors.vector(-2.5, -3.7, 4.3, 5.4, 6.2, 11.5);
@@ -27,6 +33,7 @@ public class PrimitivesIntTest extends TestCase {
     assertEquals(a, Tensors.vector(listB));
   }
 
+  @Test
   public void testToIntArray() {
     Tensor a = Tensors.vector(-2, -3, 4, 5, 6, 11);
     Tensor b = Tensors.vector(-2.5, -3.7, 4.3, 5.4, 6.2, 11.5);
@@ -36,6 +43,7 @@ public class PrimitivesIntTest extends TestCase {
         new int[] { -2, -3, 4, 5, 6, 11 }));
   }
 
+  @Test
   public void testToIntArray2D() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, {4}, 5}, {6}}");
     int[][] array = Primitives.toIntArray2D(tensor);
@@ -45,6 +53,7 @@ public class PrimitivesIntTest extends TestCase {
     assertEquals(array.length, 3);
   }
 
+  @Test
   public void testToIntArray2Dvector() {
     Tensor tensor = Tensors.fromString("{1, 2, {3, {4}, 5}, {{6}, 7}}");
     int[][] array = Primitives.toIntArray2D(tensor);
@@ -55,6 +64,7 @@ public class PrimitivesIntTest extends TestCase {
     assertEquals(array.length, 4);
   }
 
+  @Test
   public void testToIntBuffer() {
     Tensor a = Tensors.vector(-2, -27, Math.PI);
     Tensor b = Tensors.vector(43, 54, 62, 105);
@@ -67,6 +77,7 @@ public class PrimitivesIntTest extends TestCase {
     assertEquals(intBuffer.limit(), 7);
   }
 
+  @Test
   public void testToIntArray2Dscalar() {
     AssertFail.of(() -> Primitives.toIntArray2D(RealScalar.of(123.456)));
   }

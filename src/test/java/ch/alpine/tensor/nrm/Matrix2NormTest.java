@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.nrm;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -24,9 +29,9 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class Matrix2NormTest extends TestCase {
+public class Matrix2NormTest {
+  @Test
   public void testMatrix1() {
     Tensor matrix = Tensors.matrix(new Number[][] { { 1, 2, 3 }, { 9, -3, 0 } });
     Scalar nrm = Matrix2Norm.of(matrix);
@@ -35,6 +40,7 @@ public class Matrix2NormTest extends TestCase {
     Chop._14.requireClose(nrm, DoubleScalar.of(9.493062577750756));
   }
 
+  @Test
   public void testMatrix2() {
     Tensor matrix = Tensors.fromString("{{}}");
     AssertFail.of(() -> Matrix2Norm.of(matrix));
@@ -50,6 +56,7 @@ public class Matrix2NormTest extends TestCase {
     }
   }
 
+  @Test
   public void testQuantity() {
     Unit unit = Unit.of("m*K^1/2");
     for (int n = 2; n < 6; ++n) {
@@ -60,6 +67,7 @@ public class Matrix2NormTest extends TestCase {
     }
   }
 
+  @Test
   public void testNonSquareQuantity() {
     for (int n = 3; n < 6; ++n) {
       _check(RandomVariate.of(NormalDistribution.standard(), n - 2, n).map(s -> Quantity.of(s, "m")));
@@ -68,6 +76,7 @@ public class Matrix2NormTest extends TestCase {
     }
   }
 
+  @Test
   public void testNonSquareQuantity2() {
     for (int n = 3; n < 6; ++n) {
       _check(RandomVariate.of(NormalDistribution.standard(), n, n - 2).map(s -> Quantity.of(s, "m")));
@@ -76,6 +85,7 @@ public class Matrix2NormTest extends TestCase {
     }
   }
 
+  @Test
   public void testComplex() {
     Distribution distribution = LogisticDistribution.of(2, 3);
     Tensor re = RandomVariate.of(distribution, 5, 3);
@@ -87,17 +97,20 @@ public class Matrix2NormTest extends TestCase {
     Tolerance.CHOP.requireClose(norm2bound1, norm2bound2);
   }
 
+  @Test
   public void testZero() {
     assertEquals(Matrix2Norm.bound(Array.zeros(2, 3)), RealScalar.ZERO);
     assertEquals(Matrix2Norm.bound(Array.zeros(3, 2)), RealScalar.ZERO);
   }
 
+  @Test
   public void testNonMatrixFail() {
     AssertFail.of(() -> Matrix2Norm.bound(RealScalar.of(2)));
     AssertFail.of(() -> Matrix2Norm.bound(Tensors.vector(1, 2, 3)));
     AssertFail.of(() -> Matrix2Norm.bound(LehmerTensor.of(3)));
   }
 
+  @Test
   public void testNonArray() {
     AssertFail.of(() -> Matrix2Norm.bound(Tensors.fromString("{{1, 2, 3}, {4, 5}}")));
   }

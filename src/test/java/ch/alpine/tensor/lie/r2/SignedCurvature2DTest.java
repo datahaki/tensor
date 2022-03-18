@@ -1,15 +1,20 @@
 // code by jph
 package ch.alpine.tensor.lie.r2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class SignedCurvature2DTest extends TestCase {
+public class SignedCurvature2DTest {
+  @Test
   public void testCounterClockwise() {
     Tensor a = Tensors.vector(1, 0);
     Tensor b = Tensors.vector(0, 1);
@@ -18,6 +23,7 @@ public class SignedCurvature2DTest extends TestCase {
     Chop._12.requireClose(SignedCurvature2D.of(c, b, a).get(), RealScalar.ONE.negate());
   }
 
+  @Test
   public void testStraight() {
     Tensor a = Tensors.vector(1, 1);
     Tensor b = Tensors.vector(2, 2);
@@ -25,6 +31,7 @@ public class SignedCurvature2DTest extends TestCase {
     assertEquals(SignedCurvature2D.of(a, b, c).get(), RealScalar.ZERO);
   }
 
+  @Test
   public void testSingular1() {
     Tensor a = Tensors.vector(1, 1);
     Tensor b = Tensors.vector(1, 1);
@@ -32,6 +39,7 @@ public class SignedCurvature2DTest extends TestCase {
     assertFalse(SignedCurvature2D.of(a, b, c).isPresent());
   }
 
+  @Test
   public void testSingular2() {
     Tensor a = Tensors.vector(1, 1);
     Tensor b = Tensors.vector(2, 2);
@@ -39,6 +47,7 @@ public class SignedCurvature2DTest extends TestCase {
     assertFalse(SignedCurvature2D.of(a, b, c).isPresent());
   }
 
+  @Test
   public void testSingular3() {
     Tensor a = Tensors.vector(1, 1);
     Tensor b = Tensors.vector(1, 1);
@@ -46,6 +55,7 @@ public class SignedCurvature2DTest extends TestCase {
     assertFalse(SignedCurvature2D.of(a, b, c).isPresent());
   }
 
+  @Test
   public void testQuantity() {
     Tensor a = Tensors.fromString("{1[m], 0[m]}");
     Tensor b = Tensors.fromString("{0[m], 1[m]}");
@@ -54,6 +64,7 @@ public class SignedCurvature2DTest extends TestCase {
     Chop._10.requireClose(SignedCurvature2D.of(c, b, a).get(), Quantity.of(-1, "m^-1"));
   }
 
+  @Test
   public void testFail() {
     Tensor a = Tensors.vector(1, 1, 0);
     Tensor b = Tensors.vector(1, 2, 1);

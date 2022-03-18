@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -15,9 +19,9 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TriangularDistributionTest extends TestCase {
+public class TriangularDistributionTest {
+  @Test
   public void testPdf() {
     Scalar a = RealScalar.of(1);
     Scalar b = RealScalar.of(2);
@@ -29,6 +33,7 @@ public class TriangularDistributionTest extends TestCase {
     assertEquals(PDF.of(distribution).at(RealScalar.of(100)), RealScalar.ZERO);
   }
 
+  @Test
   public void testCdf() {
     Scalar a = RealScalar.of(1);
     Scalar b = RealScalar.of(2);
@@ -44,6 +49,7 @@ public class TriangularDistributionTest extends TestCase {
     assertEquals(CDF.of(distribution).p_lessEquals(c), RealScalar.ONE);
   }
 
+  @Test
   public void testMean() {
     Scalar a = RealScalar.of(1);
     Scalar b = RealScalar.of(2);
@@ -54,6 +60,7 @@ public class TriangularDistributionTest extends TestCase {
     assertEquals(Mean.of(distribution), RealScalar.of(2));
   }
 
+  @Test
   public void testExactFail() {
     TriangularDistribution.of(RealScalar.of(3), RealScalar.of(3), RealScalar.of(5));
     TriangularDistribution.of(RealScalar.of(3), RealScalar.of(5), RealScalar.of(5));
@@ -61,6 +68,7 @@ public class TriangularDistributionTest extends TestCase {
     AssertFail.of(() -> TriangularDistribution.of(RealScalar.of(3), RealScalar.of(4), RealScalar.of(3)));
   }
 
+  @Test
   public void testNumericFail() {
     TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(3.), RealScalar.of(5.));
     TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(5.), RealScalar.of(5.));
@@ -68,6 +76,7 @@ public class TriangularDistributionTest extends TestCase {
     AssertFail.of(() -> TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(4.), RealScalar.of(3.)));
   }
 
+  @Test
   public void testPdfLo() {
     Scalar a = RealScalar.of(1);
     Scalar b = RealScalar.of(2);
@@ -78,6 +87,7 @@ public class TriangularDistributionTest extends TestCase {
     assertEquals(PDF.of(distribution).at(RealScalar.of(100)), RealScalar.ZERO);
   }
 
+  @Test
   public void testCdfLo() {
     Scalar a = RealScalar.of(1);
     Scalar c = RealScalar.of(2);
@@ -89,6 +99,7 @@ public class TriangularDistributionTest extends TestCase {
     assertEquals(CDF.of(distribution).p_lessThan(RationalScalar.of(5, 2)), RealScalar.ONE);
   }
 
+  @Test
   public void testMeanLo() {
     Scalar a = RealScalar.of(1);
     Scalar b = RealScalar.of(1);
@@ -99,6 +110,7 @@ public class TriangularDistributionTest extends TestCase {
     Clips.interval(1.2, 1.5).requireInside(mean);
   }
 
+  @Test
   public void testPdfHi() {
     Scalar a = RealScalar.of(1);
     Scalar b = RealScalar.of(2);
@@ -110,6 +122,7 @@ public class TriangularDistributionTest extends TestCase {
     assertEquals(PDF.of(distribution).at(RealScalar.of(100)), RealScalar.ZERO);
   }
 
+  @Test
   public void testCdfHi() {
     Scalar a = RealScalar.of(1);
     Scalar b = RealScalar.of(2);
@@ -123,6 +136,7 @@ public class TriangularDistributionTest extends TestCase {
     assertEquals(CDF.of(distribution).p_lessThan(RationalScalar.of(5, 2)), RealScalar.ONE);
   }
 
+  @Test
   public void testMeanHi() {
     Scalar a = RealScalar.of(1);
     Scalar b = RealScalar.of(2);
@@ -132,12 +146,14 @@ public class TriangularDistributionTest extends TestCase {
     Clips.interval(1.5, 1.8).requireInside(mean);
   }
 
+  @Test
   public void testWith() {
     Distribution distribution = TriangularDistribution.with(0, 1);
     Scalar value = PDF.of(distribution).at(RealScalar.ZERO);
     Tolerance.CHOP.requireClose(value, Sqrt.FUNCTION.apply(RealScalar.of(6).reciprocal()));
   }
 
+  @Test
   public void testWithMean() {
     Distribution distribution = TriangularDistribution.with(10, 1);
     Tolerance.CHOP.requireClose(Mean.of(distribution), RealScalar.of(10));
@@ -146,6 +162,7 @@ public class TriangularDistributionTest extends TestCase {
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.ONE);
   }
 
+  @Test
   public void testQuantity() {
     Distribution distribution = TriangularDistribution.with(Quantity.of(3, "m"), Quantity.of(2, "m"));
     PDF.of(distribution).at(Quantity.of(3.3, "m"));
@@ -154,6 +171,7 @@ public class TriangularDistributionTest extends TestCase {
     Tolerance.CHOP.requireClose(variance, Quantity.of(4, "m^2"));
   }
 
+  @Test
   public void testWithFail() {
     AssertFail.of(() -> TriangularDistribution.with(RealScalar.of(0), RealScalar.of(0)));
     AssertFail.of(() -> TriangularDistribution.with(RealScalar.of(0), RealScalar.of(-1)));

@@ -1,10 +1,14 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import ch.alpine.tensor.Tensors;
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class TensorComparatorTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+import ch.alpine.tensor.Tensors;
+
+public class TensorComparatorTest {
+  @Test
   public void testSimple() {
     assertEquals(TensorComparator.INSTANCE.compare( //
         Tensors.vector(2, 1), Tensors.vector(2, 1, 3)), Integer.compare(1, 2));

@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -19,9 +24,9 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class PascalDistributionTest extends TestCase {
+public class PascalDistributionTest {
+  @Test
   public void testPDF() {
     Scalar p = RationalScalar.of(2, 3);
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(5, p);
@@ -31,6 +36,7 @@ public class PascalDistributionTest extends TestCase {
     assertTrue(Scalars.lessEquals(RealScalar.of(43), distribution.inverse_cdf().lastEntry().getValue()));
   }
 
+  @Test
   public void testCDF() {
     Scalar p = RationalScalar.of(2, 3);
     Distribution distribution = PascalDistribution.of(5, p);
@@ -40,6 +46,7 @@ public class PascalDistributionTest extends TestCase {
     ExactScalarQ.require(probability);
   }
 
+  @Test
   public void testMean() {
     Distribution distribution = PascalDistribution.of(5, RationalScalar.of(2, 3));
     assertTrue(distribution.toString().startsWith("PascalDistribution["));
@@ -51,6 +58,7 @@ public class PascalDistributionTest extends TestCase {
     ExactScalarQ.require(var);
   }
 
+  @Test
   public void testVariance() {
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(11, RationalScalar.of(5, 17));
     Scalar mean = Mean.of(distribution);
@@ -62,6 +70,7 @@ public class PascalDistributionTest extends TestCase {
     assertTrue(Scalars.lessEquals(RealScalar.of(172), distribution.inverse_cdf().lastEntry().getValue()));
   }
 
+  @Test
   public void testRandomVariate() {
     Scalar p = RationalScalar.of(3, 4);
     Distribution distribution = PascalDistribution.of(5, p);
@@ -72,6 +81,7 @@ public class PascalDistributionTest extends TestCase {
     ExactScalarQ.require(diff);
   }
 
+  @Test
   public void testInverseCdf() {
     Scalar p = RationalScalar.of(1, 5);
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(5, p);
@@ -83,6 +93,7 @@ public class PascalDistributionTest extends TestCase {
     assertTrue(Scalars.nonZero(distribution.p_equals(5)));
   }
 
+  @Test
   public void testCDFMathematica() {
     int n = 5;
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
@@ -92,6 +103,7 @@ public class PascalDistributionTest extends TestCase {
     assertEquals(actual, expect);
   }
 
+  @Test
   public void testInverseCDFMathematica() {
     int n = 5;
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
@@ -101,6 +113,7 @@ public class PascalDistributionTest extends TestCase {
     assertEquals(actual, expect);
   }
 
+  @Test
   public void testCDFInverseCDF() {
     int n = 5;
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
@@ -114,11 +127,13 @@ public class PascalDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testFailN() {
     AssertFail.of(() -> PascalDistribution.of(0, RealScalar.of(0.2)));
     AssertFail.of(() -> PascalDistribution.of(-3, RealScalar.of(0.2)));
   }
 
+  @Test
   public void testFailP() {
     AssertFail.of(() -> PascalDistribution.of(3, RealScalar.of(-0.2)));
     AssertFail.of(() -> PascalDistribution.of(3, RealScalar.of(1.2)));

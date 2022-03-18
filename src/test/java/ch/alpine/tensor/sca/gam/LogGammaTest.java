@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.sca.gam;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -9,9 +11,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
-import junit.framework.TestCase;
 
-public class LogGammaTest extends TestCase {
+public class LogGammaTest {
+  @Test
   public void testSimple() {
     Distribution distribution = UniformDistribution.of(0.2, 4.5);
     for (int count = 0; count < 10; ++count) {
@@ -27,6 +29,7 @@ public class LogGammaTest extends TestCase {
     Tolerance.CHOP.requireClose(LogGamma.of(z), expect);
   }
 
+  @Test
   public void testMathematica() {
     _check( //
         ComplexScalar.of(3.2363893230567875, 2.665896822743508), //
@@ -42,6 +45,7 @@ public class LogGammaTest extends TestCase {
         ComplexScalar.of(-7.570209329344152, +12.652654015719346));
   }
 
+  @Test
   public void testNegativeMathematica() {
     _check(ComplexScalar.of(-0.2, +0.3), ComplexScalar.of(+1.0734581009508424, -2.429743746722234)); // mathematica
     _check(ComplexScalar.of(-0.3, -0.2), ComplexScalar.of(+1.2259360301379854, +2.789379730848464)); // mathematica
@@ -53,6 +57,7 @@ public class LogGammaTest extends TestCase {
     // _check(ComplexScalar.of(-1.2, 2.3), ComplexScalar.of(-4.235543307932702, -3.623795254074647)); // mathematica
   }
 
+  @Test
   public void testComplex() {
     Distribution distribution = UniformDistribution.of(0.2, 3.5);
     for (int count = 0; count < 10; ++count) {

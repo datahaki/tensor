@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.jet;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -24,9 +28,9 @@ import ch.alpine.tensor.pdf.c.RayleighDistribution;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import junit.framework.TestCase;
 
-public class StaticHelperTest extends TestCase {
+public class StaticHelperTest {
+  @Test
   public void testPolynomial() {
     Tensor coeffs = Tensors.vector(2, 1, 3, 4);
     Polynomial f0 = Polynomial.of(coeffs);
@@ -38,6 +42,7 @@ public class StaticHelperTest extends TestCase {
     assertEquals(der.vector(), gnd);
   }
 
+  @Test
   public void testPolynomialRandom() {
     Tensor c0 = RandomVariate.of(DiscreteUniformDistribution.of(-3, 3), 4);
     Polynomial f0 = Polynomial.of(c0);
@@ -63,6 +68,7 @@ public class StaticHelperTest extends TestCase {
       RayleighDistribution.of(2) //
   };
 
+  @Test
   public void testDistributions() {
     for (Distribution distribution : DISTRIBUTIONS) {
       CDF cdf = CDF.of(distribution);

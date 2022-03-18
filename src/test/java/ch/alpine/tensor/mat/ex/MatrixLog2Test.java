@@ -1,8 +1,13 @@
 // code by jph
 package ch.alpine.tensor.mat.ex;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.lang.reflect.Modifier;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -21,9 +26,8 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class MatrixLog2Test extends TestCase {
+public class MatrixLog2Test {
   private static void _checkExpLog(Tensor matrix) {
     Tensor exp = MatrixExp.of(matrix);
     Tensor log = MatrixLog.of(exp);
@@ -38,16 +42,19 @@ public class MatrixLog2Test extends TestCase {
     Tolerance.CHOP.requireClose(exp, matrix);
   }
 
+  @Test
   public void testIdentity() {
     Tensor mlog = MatrixLog.of(IdentityMatrix.of(2));
     assertEquals(mlog, Array.zeros(2, 2));
   }
 
+  @Test
   public void testDiagonal() {
     Tensor mlog = MatrixLog.of(DiagonalMatrix.of(2, 3));
     assertEquals(mlog, DiagonalMatrix.of(Math.log(2), Math.log(3)));
   }
 
+  @Test
   public void testFull() {
     Tensor matrix = Tensors.fromString("{{4, 2}, {-1, 1}}");
     Tensor mlog = MatrixLog.of(matrix);
@@ -57,6 +64,7 @@ public class MatrixLog2Test extends TestCase {
     Tolerance.CHOP.requireClose(matrix, MatrixExp.of(mlog));
   }
 
+  @Test
   public void testUpper() {
     Tensor matrix = Tensors.fromString("{{4, 2}, {0, 1}}");
     Tensor mlog = MatrixLog.of(matrix);
@@ -66,6 +74,7 @@ public class MatrixLog2Test extends TestCase {
     Tolerance.CHOP.requireClose(matrix, MatrixExp.of(mlog));
   }
 
+  @Test
   public void testLower() {
     Tensor matrix = Tensors.fromString("{{4, 0}, {2, 1}}");
     Tensor mlog = MatrixLog.of(matrix);
@@ -75,6 +84,7 @@ public class MatrixLog2Test extends TestCase {
     Tolerance.CHOP.requireClose(matrix, MatrixExp.of(mlog));
   }
 
+  @Test
   public void testTraceZero() {
     Random random = new Random(3);
     Distribution distribution = NormalDistribution.of(0, 2);
@@ -87,6 +97,7 @@ public class MatrixLog2Test extends TestCase {
     }
   }
 
+  @Test
   public void testComplex() {
     Distribution distribution = NormalDistribution.standard();
     for (int index = 0; index < 10; ++index) {
@@ -98,6 +109,7 @@ public class MatrixLog2Test extends TestCase {
     }
   }
 
+  @Test
   public void testComplexTraceZero() {
     Distribution distribution = NormalDistribution.standard();
     for (int index = 0; index < 10; ++index) {
@@ -111,6 +123,7 @@ public class MatrixLog2Test extends TestCase {
     }
   }
 
+  @Test
   public void test2x2() {
     for (int count = 0; count < 10; ++count) {
       Tensor x = RandomVariate.of(UniformDistribution.of(-1, 1), 2, 2);
@@ -121,12 +134,14 @@ public class MatrixLog2Test extends TestCase {
     }
   }
 
+  @Test
   public void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 2, 3);
     AssertFail.of(() -> MatrixLog.of(matrix));
   }
 
+  @Test
   public void testPackageVisibility() {
     assertFalse(Modifier.isPublic(MatrixLog2.class.getModifiers()));
   }

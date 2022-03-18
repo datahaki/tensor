@@ -1,7 +1,13 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -14,9 +20,9 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class WindowFunctionsTest extends TestCase {
+public class WindowFunctionsTest {
+  @Test
   public void testSimple() {
     for (WindowFunctions windowFunction : WindowFunctions.values()) {
       ScalarUnaryOperator suo = windowFunction.get();
@@ -27,11 +33,13 @@ public class WindowFunctionsTest extends TestCase {
     }
   }
 
+  @Test
   public void testSerializable() throws ClassNotFoundException, IOException {
     for (WindowFunctions windowFunction : WindowFunctions.values())
       Serialization.copy(windowFunction.get());
   }
 
+  @Test
   public void testSymmetry() {
     Distribution distribution = UniformDistribution.of(-0.6, 0.6);
     for (WindowFunctions windowFunction : WindowFunctions.values())
@@ -41,16 +49,19 @@ public class WindowFunctionsTest extends TestCase {
       }
   }
 
+  @Test
   public void testInsideFail() {
     for (WindowFunctions windowFunction : WindowFunctions.values())
       AssertFail.of(() -> windowFunction.get().apply(Quantity.of(0.1, "s")));
   }
 
+  @Test
   public void testOustideFail() {
     for (WindowFunctions windowFunction : WindowFunctions.values())
       AssertFail.of(() -> windowFunction.get().apply(Quantity.of(1, "s")));
   }
 
+  @Test
   public void testComplexFail() {
     Scalar x = ComplexScalar.of(0.1, 0.2);
     for (WindowFunctions windowFunction : WindowFunctions.values())

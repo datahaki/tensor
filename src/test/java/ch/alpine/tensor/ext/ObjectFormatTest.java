@@ -1,9 +1,15 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.zip.DataFormatException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -17,9 +23,9 @@ import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.TestFile;
-import junit.framework.TestCase;
 
-public class ObjectFormatTest extends TestCase {
+public class ObjectFormatTest {
+  @Test
   public void testSome() throws Exception {
     Tensor inp = Tensors.fromString("{1, {2, 3, {4.3}}, 1}");
     byte[] bytes = ObjectFormat.of(inp);
@@ -27,6 +33,7 @@ public class ObjectFormatTest extends TestCase {
     assertEquals(inp, ten);
   }
 
+  @Test
   public void testNull() throws Exception {
     final Object put = null;
     byte[] bytes = ObjectFormat.of(put);
@@ -35,6 +42,7 @@ public class ObjectFormatTest extends TestCase {
     assertNull(get);
   }
 
+  @Test
   public void testUnderClear() throws ClassNotFoundException, IOException, DataFormatException {
     Scalar q1 = Quantity.of(ComplexScalar.of(RationalScalar.of(2, 7), RationalScalar.HALF.negate()), "m");
     Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "m");
@@ -55,6 +63,7 @@ public class ObjectFormatTest extends TestCase {
     ExactScalarQ.require(quc);
   }
 
+  @Test
   public void testUnderMix() throws ClassNotFoundException, IOException, DataFormatException {
     Scalar q1 = Quantity.of(ComplexScalar.of(RationalScalar.of(2, 7), RationalScalar.HALF.negate()), "CHF");
     Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "m");
@@ -75,6 +84,7 @@ public class ObjectFormatTest extends TestCase {
     ExactScalarQ.require(quc);
   }
 
+  @Test
   public void testExportImportObject() throws IOException, ClassNotFoundException, DataFormatException {
     Tensor tensor = HilbertMatrix.of(3, 4);
     File file = TestFile.withExtension("random");

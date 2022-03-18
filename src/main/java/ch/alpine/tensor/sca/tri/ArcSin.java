@@ -12,6 +12,10 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
 /** For real input in the interval [-1, 1] the returned angle is in the range -pi/2 through pi/2.
  * 
+ * <pre>
+ * ArcSin[NaN] == NaN
+ * </pre>
+ * 
  * <p>Reference:
  * <a href="http://www.milefoot.com/math/complex/functionsofi.htm">functions of i</a>
  * 
@@ -30,6 +34,8 @@ public enum ArcSin implements ScalarUnaryOperator {
       double value = scalar.number().doubleValue();
       if (-1 <= value && value <= 1)
         return DoubleScalar.of(Math.asin(value));
+      if (Double.isNaN(value))
+        return DoubleScalar.INDETERMINATE;
     }
     Scalar o_x2 = Sqrt.FUNCTION.apply(RealScalar.ONE.subtract(scalar.multiply(scalar)));
     return I_NEGATE.multiply(Log.FUNCTION.apply(ComplexScalar.I.multiply(scalar).add(o_x2)));

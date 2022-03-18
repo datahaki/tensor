@@ -1,14 +1,18 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class RotateRightTest extends TestCase {
+public class RotateRightTest {
+  @Test
   public void testVector() {
     Tensor vector = Tensors.vector(0, 1, 2, 3, 4).unmodifiable();
     assertEquals(RotateRight.of(vector, +6), Tensors.vector(4, 0, 1, 2, 3));
@@ -20,6 +24,7 @@ public class RotateRightTest extends TestCase {
     assertEquals(vector, Range.of(0, 5));
   }
 
+  @Test
   public void testMatrix() {
     int size = 5;
     for (int k = 0; k < size * 2; ++k) {
@@ -28,16 +33,19 @@ public class RotateRightTest extends TestCase {
     }
   }
 
+  @Test
   public void testEmpty() {
     assertEquals(RotateRight.of(Tensors.empty(), +1), Tensors.empty());
     assertEquals(RotateRight.of(Tensors.empty(), +0), Tensors.empty());
     assertEquals(RotateRight.of(Tensors.empty(), -1), Tensors.empty());
   }
 
+  @Test
   public void testFailScalar() {
     AssertFail.of(() -> RotateRight.of(RealScalar.ONE, 0));
   }
 
+  @Test
   public void testFailNull() {
     AssertFail.of(() -> RotateRight.of(null, 0));
   }

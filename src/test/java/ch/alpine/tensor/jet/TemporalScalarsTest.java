@@ -1,7 +1,11 @@
 // code by jph
-package ch.alpine.tensor.qty;
+package ch.alpine.tensor.jet;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
@@ -9,9 +13,9 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.sca.Sign;
-import junit.framework.TestCase;
 
-public class TemporalScalarsTest extends TestCase {
+public class TemporalScalarsTest {
+  @Test
   public void testSimple() {
     Tensor a = Tensors.of( //
         DateTimeScalar.of(LocalDateTime.of(1657, 11, 10, 4, 8)), //
@@ -33,6 +37,7 @@ public class TemporalScalarsTest extends TestCase {
     assertEquals(Sign.of(a.subtract(b)), Tensors.vector(-1, -1, -1));
   }
 
+  @Test
   public void testParsing() {
     Tensor a = Tensors.of( //
         DateTimeScalar.of(LocalDateTime.of(1657, 11, 10, 4, 8)), //

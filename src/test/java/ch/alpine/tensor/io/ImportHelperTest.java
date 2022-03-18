@@ -1,20 +1,26 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.sca.Unitize;
-import junit.framework.TestCase;
 
-public class ImportHelperTest extends TestCase {
+public class ImportHelperTest {
+  @Test
   public void testGif() throws Exception {
     String string = "/io/image/rgba7x3.gif"; // file consist of a single line break character
     File file = new File(getClass().getResource(string).getFile());
@@ -29,6 +35,7 @@ public class ImportHelperTest extends TestCase {
     assertEquals(units.flatten(-1).reduce(Tensor::add).get(), RealScalar.of(9));
   }
 
+  @Test
   public void testExtensionMFail() {
     InputStream inputStream = new ByteArrayInputStream(new byte[128]);
     try {
@@ -40,6 +47,7 @@ public class ImportHelperTest extends TestCase {
   }
 
   @SuppressWarnings("null")
+  @Test
   public void testSwitch() {
     Extension extension = null;
     try {
@@ -58,6 +66,7 @@ public class ImportHelperTest extends TestCase {
     }
   }
 
+  @Test
   public void testVisibility() {
     assertFalse(Modifier.isPublic(ImportHelper.class.getModifiers()));
   }

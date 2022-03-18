@@ -31,11 +31,11 @@ import java.util.TreeMap;
   private FactorInteger(BigInteger n) {
     if (n.equals(BigInteger.ZERO))
       map.put(BigInteger.ZERO, 1);
-    else //
-    if (n.equals(BigInteger.ONE))
-      map.put(BigInteger.ONE, 1);
     else
-      recur(n);
+      if (n.equals(BigInteger.ONE))
+        map.put(BigInteger.ONE, 1);
+      else
+        recur(n);
   }
 
   private void recur(BigInteger n) {

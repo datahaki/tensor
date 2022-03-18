@@ -1,8 +1,6 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
-import java.math.BigDecimal;
-
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -22,6 +20,10 @@ import ch.alpine.tensor.qty.Quantity;
  * 
  * not consistent with java.lang.Math::round which rounds -11.5 to -11.
  * 
+ * <pre>
+ * Round[NaN] == NaN
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Round.html">Round</a>
  * 
@@ -31,15 +33,15 @@ import ch.alpine.tensor.qty.Quantity;
 public enum Round implements ScalarUnaryOperator {
   FUNCTION;
 
-  public static final ScalarUnaryOperator _1 = Round.toMultipleOf(DecimalScalar.of(new BigDecimal("0.1")));
-  public static final ScalarUnaryOperator _2 = Round.toMultipleOf(DecimalScalar.of(new BigDecimal("0.01")));
-  public static final ScalarUnaryOperator _3 = Round.toMultipleOf(DecimalScalar.of(new BigDecimal("0.001")));
-  public static final ScalarUnaryOperator _4 = Round.toMultipleOf(DecimalScalar.of(new BigDecimal("0.0001")));
-  public static final ScalarUnaryOperator _5 = Round.toMultipleOf(DecimalScalar.of(new BigDecimal("0.00001")));
-  public static final ScalarUnaryOperator _6 = Round.toMultipleOf(DecimalScalar.of(new BigDecimal("0.000001")));
-  public static final ScalarUnaryOperator _7 = Round.toMultipleOf(DecimalScalar.of(new BigDecimal("0.0000001")));
-  public static final ScalarUnaryOperator _8 = Round.toMultipleOf(DecimalScalar.of(new BigDecimal("0.00000001")));
-  public static final ScalarUnaryOperator _9 = Round.toMultipleOf(DecimalScalar.of(new BigDecimal("0.000000001")));
+  public static final ScalarUnaryOperator _1 = Round.toMultipleOf(StaticHelper._1);
+  public static final ScalarUnaryOperator _2 = Round.toMultipleOf(StaticHelper._2);
+  public static final ScalarUnaryOperator _3 = Round.toMultipleOf(StaticHelper._3);
+  public static final ScalarUnaryOperator _4 = Round.toMultipleOf(StaticHelper._4);
+  public static final ScalarUnaryOperator _5 = Round.toMultipleOf(StaticHelper._5);
+  public static final ScalarUnaryOperator _6 = Round.toMultipleOf(StaticHelper._6);
+  public static final ScalarUnaryOperator _7 = Round.toMultipleOf(StaticHelper._7);
+  public static final ScalarUnaryOperator _8 = Round.toMultipleOf(StaticHelper._8);
+  public static final ScalarUnaryOperator _9 = Round.toMultipleOf(StaticHelper._9);
 
   @Override
   public Scalar apply(Scalar scalar) {

@@ -1,6 +1,9 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Collections;
@@ -12,6 +15,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -21,9 +26,8 @@ import ch.alpine.tensor.alg.RotateLeft;
 import ch.alpine.tensor.ext.ArgMin;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Serialization;
-import junit.framework.TestCase;
 
-public class CyclesGroupTest extends TestCase {
+public class CyclesGroupTest {
   private static final BinaryPower<Cycles> BINARY_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
 
   private static void _check(Cycles arg, BigInteger exponent, Cycles expexted) throws ClassNotFoundException, IOException {
@@ -32,6 +36,7 @@ public class CyclesGroupTest extends TestCase {
     assertEquals(arg.power(RealScalar.of(exponent)), expexted);
   }
 
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     _check(Cycles.of(Tensors.fromString("{{4, 2, 5}, {6, 3, 1, 7}}")), BigInteger.valueOf(6), //
         Cycles.of(Tensors.fromString("{{1, 6}, {3, 7}}")));
@@ -41,6 +46,7 @@ public class CyclesGroupTest extends TestCase {
         Cycles.identity());
   }
 
+  @Test
   public void testForloop() {
     Tensor factor = Tensors.fromString("{{5, 9}, {7, 14, 13}, {18, 4, 10, 19, 6}, {20, 1}, {}}");
     Cycles cycles = Cycles.of(factor);
@@ -74,6 +80,7 @@ public class CyclesGroupTest extends TestCase {
     return all;
   }
 
+  @Test
   public void testOrbit3() {
     Set<Cycles> set = new HashSet<>();
     set.add(Cycles.of("{{0, 1}}"));
@@ -93,6 +100,7 @@ public class CyclesGroupTest extends TestCase {
       assertEquals(cycles.parity(), Integers.parity(PermutationList.of(cycles, 3)));
   }
 
+  @Test
   public void testOrbit4() {
     Set<Cycles> set = new HashSet<>();
     set.add(Cycles.of("{{0, 1}}"));
@@ -111,10 +119,12 @@ public class CyclesGroupTest extends TestCase {
       assertEquals(cycles.parity(), Integers.parity(PermutationList.of(cycles, 4)));
   }
 
+  @Test
   public void testGroupEx0() {
     assertEquals(_group(Collections.singleton(Cycles.identity())).size(), 1);
   }
 
+  @Test
   public void testGroupEx1() {
     Set<Cycles> gen = new HashSet<>();
     gen.add(Cycles.of("{{2, 10}, {4, 11}, {5, 7}}"));
@@ -122,6 +132,7 @@ public class CyclesGroupTest extends TestCase {
     assertEquals(_group(gen).size(), 1440);
   }
 
+  @Test
   public void testGroupEx2() {
     Cycles cycles = Cycles.of( //
         "{{1, 18, 25, 8, 11, 33, 45, 34, 19, 39, 4, 35, 46, 37, 10, 48, 7, 31, 6, 42, 36, 15, 29}, {2, 21, 14, 38, 26, 24, 41, 22, 12, 49}, {3, 28,  20, 50, 43, 23, 9, 5, 16, 44, 30, 27, 17}, {13, 40, 32, 47}}");
@@ -132,6 +143,7 @@ public class CyclesGroupTest extends TestCase {
     assertEquals(set.size(), 5980);
   }
 
+  @Test
   public void testToString() {
     assertEquals(CyclesGroup.INSTANCE.toString(), "CyclesGroup");
   }

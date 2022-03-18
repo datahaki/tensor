@@ -54,9 +54,9 @@ import ch.alpine.tensor.sca.Abs;
               Scalars.lessEquals(g, DBL_EPSILON.multiply(Abs.FUNCTION.apply(diag(q))))) {
             H[p][q] = hpq.zero();
             H[q][p] = hpq.zero();
-          } else //
-          if (Scalars.lessThan(tresh, apq))
-            eliminate(p, q);
+          } else
+            if (Scalars.lessThan(tresh, apq))
+              eliminate(p, q);
         }
     }
     throw TensorRuntimeException.of();

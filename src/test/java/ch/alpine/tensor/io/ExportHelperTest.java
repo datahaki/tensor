@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,14 +16,16 @@ import java.lang.reflect.Modifier;
 
 import javax.imageio.ImageIO;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.nrm.FrobeniusNorm;
 import ch.alpine.tensor.usr.TestFile;
-import junit.framework.TestCase;
 
-public class ExportHelperTest extends TestCase {
+public class ExportHelperTest {
+  @Test
   public void testGif() throws IOException {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(128);
     Tensor image = Tensors.fromString("{{{255, 2, 3, 255}, {0, 0, 0, 0}, {91, 120, 230, 255}, {0, 0, 0, 0}}}");
@@ -33,6 +40,7 @@ public class ExportHelperTest extends TestCase {
     assertEquals(image, tensor);
   }
 
+  @Test
   public void testGif2() throws IOException {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(128);
     Tensor row1 = Tensors.fromString("{{255, 2, 3, 255}, {0, 0, 0, 0}, {91, 120, 230, 255}, {0, 0, 0, 0}}");
@@ -46,11 +54,13 @@ public class ExportHelperTest extends TestCase {
     // unfortunately there seems to be a problem with the java gif parser
   }
 
+  @Test
   public void testFileExtensionFail() throws IOException {
     OutputStream outputStream = new ByteArrayOutputStream(512);
     ExportHelper.of(Extension.VECTOR, Tensors.empty(), outputStream);
   }
 
+  @Test
   public void testGzFail() {
     OutputStream outputStream = new ByteArrayOutputStream(512);
     try {
@@ -61,6 +71,7 @@ public class ExportHelperTest extends TestCase {
     }
   }
 
+  @Test
   public void testVisibility() {
     assertFalse(Modifier.isPublic(ExportHelper.class.getModifiers()));
   }

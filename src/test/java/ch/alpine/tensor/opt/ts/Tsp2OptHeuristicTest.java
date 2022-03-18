@@ -3,6 +3,8 @@ package ch.alpine.tensor.opt.ts;
 
 import java.util.Random;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -15,9 +17,9 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class Tsp2OptHeuristicTest extends TestCase {
+public class Tsp2OptHeuristicTest {
+  @Test
   public void testSimple() {
     Distribution distribution = DiscreteUniformDistribution.of(-5, 5);
     Random random = new Random(1);
@@ -34,6 +36,7 @@ public class Tsp2OptHeuristicTest extends TestCase {
     }
   }
 
+  @Test
   public void testIterate() {
     Distribution distribution = UniformDistribution.of(-5, 5);
     int n = 11;
@@ -49,6 +52,7 @@ public class Tsp2OptHeuristicTest extends TestCase {
     Sign.requirePositive(cost0.subtract(cost1));
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> new Tsp2OptHeuristic(HilbertMatrix.of(2, 3), new Random(1)));
   }

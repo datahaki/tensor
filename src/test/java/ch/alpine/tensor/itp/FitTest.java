@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RandomQuaternion;
@@ -21,9 +25,9 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class FitTest extends TestCase {
+public class FitTest {
+  @Test
   public void testDegree0() {
     Tensor ydata = Tensors.vector(5, -2);
     Polynomial polynomial = Fit.polynomial(Tensors.vector(10, 11), ydata, 0);
@@ -31,6 +35,7 @@ public class FitTest extends TestCase {
     assertEquals(Mean.of(ydata), RationalScalar.of(3, 2));
   }
 
+  @Test
   public void testDegree1() throws ClassNotFoundException, IOException {
     Polynomial polynomial = Serialization.copy(Fit.polynomial(Tensors.vector(10, 11), Tensors.vector(5, -2), 1));
     ExactTensorQ.require(polynomial.coeffs());
@@ -42,6 +47,7 @@ public class FitTest extends TestCase {
     assertEquals(polynomial.apply(RealScalar.of(11)), RealScalar.of(-2));
   }
 
+  @Test
   public void testQuaternionDeg1() {
     Tensor xdata = Tensors.of(RandomQuaternion.get(), RandomQuaternion.get());
     Tensor ydata = Tensors.of(RandomQuaternion.get(), RandomQuaternion.get());
@@ -52,6 +58,7 @@ public class FitTest extends TestCase {
       assertEquals(polynomial.apply(xdata.Get(index)), ydata.Get(index));
   }
 
+  @Test
   public void testMixedUnits() {
     ScalarUnaryOperator pascal = QuantityMagnitude.SI().in("Pa");
     ScalarUnaryOperator kelvin = QuantityMagnitude.SI().in("K");
@@ -62,12 +69,12 @@ public class FitTest extends TestCase {
       if (1 == f0.coeffs().length()) {
         Polynomial f1 = f0.derivative();
         assertEquals(f0.coeffs().length(), f1.coeffs().length());
-      } else //
-      if (1 < f0.coeffs().length()) {
-        Polynomial f1 = f0.derivative();
-        if (f0.coeffs().length() != 2)
-          assertEquals(f0.coeffs().length(), f1.coeffs().length() + 1);
-      }
+      } else
+        if (1 < f0.coeffs().length()) {
+          Polynomial f1 = f0.derivative();
+          if (f0.coeffs().length() != 2)
+            assertEquals(f0.coeffs().length(), f1.coeffs().length() + 1);
+        }
       ScalarUnaryOperator x_to_y = Fit.polynomial(x, y, degree);
       Scalar pressure = x_to_y.apply(Quantity.of(103, "K"));
       pascal.apply(pressure);
@@ -77,6 +84,7 @@ public class FitTest extends TestCase {
     }
   }
 
+  @Test
   public void testLinear() {
     Random random = new Random(2);
     Polynomial polynomial = Polynomial.of(Tensors.vector(-2., 3., 0.5));
@@ -89,10 +97,12 @@ public class FitTest extends TestCase {
     }
   }
 
+  @Test
   public void testDegreeLargeFail() {
     AssertFail.of(() -> Fit.polynomial(Tensors.vector(10, 11), Tensors.vector(5, -2), 2));
   }
 
+  @Test
   public void testNegativeFail() {
     AssertFail.of(() -> Fit.polynomial(Tensors.vector(10, 11), Tensors.vector(5, -2), -1));
   }

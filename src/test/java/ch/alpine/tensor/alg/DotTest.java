@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -12,9 +17,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class DotTest extends TestCase {
+public class DotTest {
   /** @param tensor
    * @param v's
    * @return ( ... ( ( tensor . v[0] ) . v[1] ). ... ) . v[end-1] */
@@ -26,6 +30,7 @@ public class DotTest extends TestCase {
     return tensor;
   }
 
+  @Test
   public void testDot1() {
     Tensor m1 = Tensors.matrix((i, j) -> RealScalar.of(2 + i - 3 * j), 3, 4);
     Tensor m2 = Tensors.matrix((i, j) -> RealScalar.of(8 + 2 * i + 9 * j), 4, 2);
@@ -36,6 +41,7 @@ public class DotTest extends TestCase {
     assertEquals(d1, m1.dot(m2).dot(m3).dot(m4));
   }
 
+  @Test
   public void testDot2() {
     Tensor m1 = Tensors.matrix((i, j) -> RealScalar.of(2 + i - 3 * j), 3, 4);
     Tensor m2 = Tensors.vector(i -> RealScalar.of(8 + 2 * i), 4);
@@ -44,6 +50,7 @@ public class DotTest extends TestCase {
     assertEquals(d1, m1.dot(m2).dot(m3));
   }
 
+  @Test
   public void testCopy() {
     Tensor in = Array.zeros(2);
     Tensor re = Dot.of(in);
@@ -52,12 +59,14 @@ public class DotTest extends TestCase {
     assertEquals(in, Array.zeros(2));
   }
 
+  @Test
   public void testIdentity() {
     Tensor m = IdentityMatrix.of(7);
     Tensor d = Dot.of(m, m, m, m);
     assertEquals(m, d);
   }
 
+  @Test
   public void testSimple1() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor x = RandomVariate.of(distribution, 5);
@@ -66,6 +75,7 @@ public class DotTest extends TestCase {
     assertEquals(Dot.of(x, y), dot(x, y));
   }
 
+  @Test
   public void testSimple1Empty() {
     Tensor x = Tensors.empty();
     Tensor y = Tensors.empty();
@@ -74,6 +84,7 @@ public class DotTest extends TestCase {
     assertEquals(Dot.of(x, y), x.dot(y));
   }
 
+  @Test
   public void testSimple1Fail() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor x = RandomVariate.of(distribution, 5);
@@ -81,6 +92,7 @@ public class DotTest extends TestCase {
     AssertFail.of(() -> Dot.of(x, y));
   }
 
+  @Test
   public void testSimple2() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor x = RandomVariate.of(distribution, 3);
@@ -92,6 +104,7 @@ public class DotTest extends TestCase {
     assertEquals(Dot.of(y, m, x), dot(y, m, x));
   }
 
+  @Test
   public void testSimple2b() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor x = RandomVariate.of(distribution, 3);
@@ -102,6 +115,7 @@ public class DotTest extends TestCase {
     assertEquals(Dot.of(m2, y, m1, x), dot(m2, y, m1, x));
   }
 
+  @Test
   public void testSimple3() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor x = RandomVariate.of(distribution, 3);
@@ -114,6 +128,7 @@ public class DotTest extends TestCase {
     assertEquals(Dot.of(x, m, z, y), dot(x, m, z, y));
   }
 
+  @Test
   public void testExampleP156() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor m1 = RandomVariate.of(distribution, 50, 10);
@@ -124,6 +139,7 @@ public class DotTest extends TestCase {
     assertEquals(dot.dimensions(), Arrays.asList(50, 5));
   }
 
+  @Test
   public void testExampleP159() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor m1 = RandomVariate.of(distribution, 6, 12);
@@ -138,6 +154,7 @@ public class DotTest extends TestCase {
     assertEquals(dot.product(), res2);
   }
 
+  @Test
   public void testExample1() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor m1 = RandomVariate.of(distribution, 5, 5, 3);
@@ -148,6 +165,7 @@ public class DotTest extends TestCase {
     assertEquals(dot.dimensions(), Arrays.asList(5, 5, 2, 3, 5));
   }
 
+  @Test
   public void testExample2() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor m1 = RandomVariate.of(distribution, 5, 5, 3, 7);
@@ -159,12 +177,14 @@ public class DotTest extends TestCase {
     assertEquals(dot.dimensions(), Arrays.asList(5, 5, 2, 3, 5));
   }
 
+  @Test
   public void testCombine() {
     assertEquals(Dot.combine(Arrays.asList(2), Arrays.asList(2, 3, 4, 5)), Arrays.asList(3, 4, 5));
     assertEquals(Dot.combine(Arrays.asList(3), Arrays.asList(3)), Arrays.asList());
     assertEquals(Dot.combine(Arrays.asList(1, 2, 3), Arrays.asList(3, 4, 5)), Arrays.asList(1, 2, 4, 5));
   }
 
+  @Test
   public void testComparison() {
     Distribution distribution = NormalDistribution.standard();
     Tensor v = RandomVariate.of(distribution, 50);
@@ -175,10 +195,12 @@ public class DotTest extends TestCase {
     assertEquals(new Dot(m1, m2).multiplications(), 3 * 50 * 50);
   }
 
+  @Test
   public void testCombineFail() {
     AssertFail.of(() -> Dot.combine(Arrays.asList(2, 2), Arrays.asList(3, 4, 5)));
   }
 
+  @Test
   public void testDot0Fail() {
     AssertFail.of(() -> Dot.of());
   }

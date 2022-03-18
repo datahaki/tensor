@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -16,9 +21,9 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class PoissonBinomialDistributionTest extends TestCase {
+public class PoissonBinomialDistributionTest {
+  @Test
   public void testEmpty() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(PoissonBinomialDistribution.of(Tensors.empty()));
     Tensor samples = RandomVariate.of(distribution, 10);
@@ -27,6 +32,7 @@ public class PoissonBinomialDistributionTest extends TestCase {
     assertEquals(Variance.of(distribution), RealScalar.ZERO);
   }
 
+  @Test
   public void testZeros() {
     Distribution distribution = PoissonBinomialDistribution.of(Array.zeros(4));
     Tensor samples = RandomVariate.of(distribution, 10);
@@ -35,6 +41,7 @@ public class PoissonBinomialDistributionTest extends TestCase {
     assertEquals(Variance.of(distribution), RealScalar.ZERO);
   }
 
+  @Test
   public void testOnes() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1));
     Tensor samples = RandomVariate.of(distribution, 10);
@@ -43,6 +50,7 @@ public class PoissonBinomialDistributionTest extends TestCase {
     assertEquals(Variance.of(distribution), RealScalar.ZERO);
   }
 
+  @Test
   public void testMixed() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 0, 0.2, 0.3, 0.4, 0.5, 1, 0, 0));
     RandomVariate.of(distribution, 10);
@@ -52,21 +60,25 @@ public class PoissonBinomialDistributionTest extends TestCase {
     // assertEquals(discreteDistribution.lowerBound(), 2);
   }
 
+  @Test
   public void testProbFail() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1));
     assertTrue(distribution.toString().startsWith("PoissonBinomialDistribution["));
   }
 
+  @Test
   public void testCdfFail() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(0.1, 0.3, 1, 0.1, 0.5));
     AssertFail.of(() -> CDF.of(distribution));
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> PoissonBinomialDistribution.of(RealScalar.ZERO));
     AssertFail.of(() -> PoissonBinomialDistribution.of(IdentityMatrix.of(3)));
   }
 
+  @Test
   public void testFailInvalid() {
     AssertFail.of(() -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, 2, 0)));
     AssertFail.of(() -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, -1, 1)));

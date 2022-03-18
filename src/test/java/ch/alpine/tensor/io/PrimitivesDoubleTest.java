@@ -1,22 +1,28 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.nio.DoubleBuffer;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class PrimitivesDoubleTest extends TestCase {
+public class PrimitivesDoubleTest {
+  @Test
   public void testToListDouble() {
     Tensor a = Tensors.vector(-2.5, -2.7, 4.3, 5.4, 6.2, 10.5);
     List<Double> listA = Primitives.toListDouble(a);
     assertEquals(a, Tensors.vector(listA));
   }
 
+  @Test
   public void testToDoubleArray() {
     Tensor tensor = Tensors.vector(Double.NaN, Math.PI, Double.POSITIVE_INFINITY);
     double[] array = Primitives.toDoubleArray(tensor);
@@ -26,6 +32,7 @@ public class PrimitivesDoubleTest extends TestCase {
     assertEquals(array[2], Double.POSITIVE_INFINITY);
   }
 
+  @Test
   public void testToDoubleArray2D() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, {4}, 5}, {6}}");
     double[][] array = Primitives.toDoubleArray2D(tensor);
@@ -35,6 +42,7 @@ public class PrimitivesDoubleTest extends TestCase {
     assertEquals(array.length, 3);
   }
 
+  @Test
   public void testToDoubleArray2Dvector() {
     Tensor tensor = Tensors.fromString("{1, 2, {3, {4}, 5}, {{6}, 7}}");
     double[][] array = Primitives.toDoubleArray2D(tensor);
@@ -45,6 +53,7 @@ public class PrimitivesDoubleTest extends TestCase {
     assertEquals(array.length, 4);
   }
 
+  @Test
   public void testToDoubleBuffer() {
     Tensor a = Tensors.vector(-2.5, -2.7, Math.PI);
     Tensor b = Tensors.vector(4.3, 5.4, 6.2, 10.5);
@@ -56,6 +65,7 @@ public class PrimitivesDoubleTest extends TestCase {
     assertEquals(doubleBuffer.get(), 5.4);
   }
 
+  @Test
   public void testToDoubleArray2Dscalar() {
     AssertFail.of(() -> Primitives.toDoubleArray2D(RealScalar.of(123.456)));
   }

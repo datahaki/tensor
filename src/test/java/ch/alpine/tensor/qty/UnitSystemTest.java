@@ -1,9 +1,16 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.util.Properties;
 import java.util.Set;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
@@ -16,11 +23,10 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class UnitSystemTest extends TestCase {
+public class UnitSystemTest {
+  @Test
   public void testSize() {
-    TestHelper.checkInvariant(UnitSystem.SI());
     int size = UnitSystem.SI().map().size();
     if (size < 121) {
       System.err.println("unit count: " + size);
@@ -28,12 +34,14 @@ public class UnitSystemTest extends TestCase {
     }
   }
 
+  @Test
   public void testExact() {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(3, "Hz^-2*N*m^-1"));
     assertEquals(scalar, Quantity.of(3, "kg"));
     ExactScalarQ.require(scalar);
   }
 
+  @Test
   public void testScalar() {
     Scalar scalar = RealScalar.ONE;
     Scalar result = UnitSystem.SI().apply(scalar);
@@ -41,21 +49,25 @@ public class UnitSystemTest extends TestCase {
     ExactScalarQ.require(result);
   }
 
+  @Test
   public void testVoltage() {
     Scalar normal = UnitSystem.SI().apply(Quantity.of(1, "V"));
     assertEquals(normal, Quantity.of(1, "A^-1*kg*m^2*s^-3"));
     ExactScalarQ.require(normal);
   }
 
+  @Test
   public void testMiles() {
     Scalar normal = UnitSystem.SI().apply(Quantity.of(125, "mi"));
     assertEquals(normal, Quantity.of(201168, "m"));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> UnitSystem.SI().apply(null));
   }
 
+  @Test
   public void testMore() {
     Tensor tensor = Tensors.of( //
         Quantity.of(3, "Hz^-2*N*m^-1"), //
@@ -68,6 +80,7 @@ public class UnitSystemTest extends TestCase {
         Scalars.fromString("1/5000[m^2]")));
   }
 
+  @Test
   public void testElectric() {
     UnitSystem unitSystem = UnitSystem.SI();
     Scalar r1 = unitSystem.apply(Quantity.of(3, "Ohm"));
@@ -75,6 +88,7 @@ public class UnitSystemTest extends TestCase {
     assertEquals(r1, r2);
   }
 
+  @Test
   public void testCustom() {
     Properties properties = new Properties();
     properties.setProperty("EUR", "1.25[CHF]");
@@ -91,6 +105,7 @@ public class UnitSystemTest extends TestCase {
     assertEquals(euro, Quantity.of(12.8, "EUR"));
   }
 
+  @Test
   public void testKnots() throws ClassNotFoundException, IOException {
     UnitSystem unitSystem = Serialization.copy(UnitSystem.SI());
     Scalar r1 = unitSystem.apply(Quantity.of(1, "kn"));
@@ -104,6 +119,7 @@ public class UnitSystemTest extends TestCase {
     assertEquals(r2, r3);
   }
 
+  @Test
   public void testSmallSi() throws ClassNotFoundException, IOException {
     Properties properties = ResourceData.properties("/unit/small.properties");
     assertFalse(properties.entrySet().isEmpty());
@@ -126,30 +142,35 @@ public class UnitSystemTest extends TestCase {
     assertTrue(knownUnitQ.test(Unit.of("kg*N")));
   }
 
+  @Test
   public void testFail1() {
     Properties properties = ResourceData.properties("/unit/fail1.properties");
     assertFalse(properties.entrySet().isEmpty());
     AssertFail.of(() -> SimpleUnitSystem.from(properties));
   }
 
+  @Test
   public void testFail2() {
     Properties properties = ResourceData.properties("/unit/fail2.properties");
     assertFalse(properties.entrySet().isEmpty());
     AssertFail.of(() -> SimpleUnitSystem.from(properties));
   }
 
+  @Test
   public void testFail3() {
     Properties properties = ResourceData.properties("/unit/fail3.properties");
     assertFalse(properties.entrySet().isEmpty());
     AssertFail.of(() -> SimpleUnitSystem.from(properties));
   }
 
+  @Test
   public void testFail4() {
     Properties properties = ResourceData.properties("/unit/fail4.properties");
     assertFalse(properties.entrySet().isEmpty());
     AssertFail.of(() -> SimpleUnitSystem.from(properties));
   }
 
+  @Test
   public void testFail5() {
     Properties properties = ResourceData.properties("/unit/fail5.properties");
     assertFalse(properties.entrySet().isEmpty());

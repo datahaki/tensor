@@ -1,15 +1,21 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class CoordinateBoundingBoxTest extends TestCase {
+public class CoordinateBoundingBoxTest {
+  @Test
   public void testProject() {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
     assertEquals(coordinateBoundingBox.mapInside(Tensors.vector(0, 0)), Tensors.vector(2, 3));
@@ -22,12 +28,14 @@ public class CoordinateBoundingBoxTest extends TestCase {
     AssertFail.of(() -> coordinateBoundingBox.mapInside(Tensors.vector(14, 10, 3)));
   }
 
+  @Test
   public void testSimple() {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
     assertEquals(coordinateBoundingBox.min(), Tensors.vector(2, 3));
     assertEquals(coordinateBoundingBox.max(), Tensors.vector(12, 23));
   }
 
+  @Test
   public void testUnits() {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of( //
         Tensors.fromString("{1[m], 2[m], 3[m]}"), //
@@ -37,6 +45,7 @@ public class CoordinateBoundingBoxTest extends TestCase {
     coordinateBoundingBox.requireInside(tensor);
   }
 
+  @Test
   public void testMixedUnits() {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of( //
         Tensors.fromString("{1[m], 2[s], 3[A]}"), //
@@ -46,6 +55,7 @@ public class CoordinateBoundingBoxTest extends TestCase {
     coordinateBoundingBox.requireInside(tensor);
   }
 
+  @Test
   public void testDegenerate() {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of( //
         Tensors.fromString("{1[m], 2[m], 4[m]}"), //
@@ -57,6 +67,7 @@ public class CoordinateBoundingBoxTest extends TestCase {
     assertEquals(coordinateBoundingBox.toString(), "[Clip[1[m], 2[m]], Clip[2[m], 3[m]], Clip[4[m], 4[m]]]");
   }
 
+  @Test
   public void testHashAndEquals() {
     CoordinateBoundingBox box1 = CoordinateBounds.of( //
         Tensors.fromString("{1[m], 2[m], 4[m]}"), //
@@ -76,6 +87,7 @@ public class CoordinateBoundingBoxTest extends TestCase {
     assertFalse(((Object) box1).equals("abc"));
   }
 
+  @Test
   public void testEmpty() {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.empty(), Tensors.empty());
     assertEquals(coordinateBoundingBox.dimensions(), 0);
@@ -83,6 +95,7 @@ public class CoordinateBoundingBoxTest extends TestCase {
     assertEquals(coordinateBoundingBox.max(), Tensors.empty());
   }
 
+  @Test
   public void testFail1() {
     CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
     box.requireInside(Tensors.vector(4, 3));

@@ -1,4 +1,4 @@
-// code adapted from 
+// code adapted from
 // http://qupera.blogspot.ch/2013/02/howto-compress-and-uncompress-java-byte.html
 package ch.alpine.tensor.ext;
 
@@ -57,8 +57,9 @@ public enum Compression {
       byteArrayOutputStream.write(buffer, 0, length);
       if (inflater.finished())
         break;
-      else if (length == 0)
-        throw new DataFormatException();
+      else
+        if (length == 0)
+          throw new DataFormatException();
     }
     inflater.end();
     return byteArrayOutputStream.toByteArray();

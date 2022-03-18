@@ -1,7 +1,13 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.RealScalar;
@@ -18,9 +24,9 @@ import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class CauchyDistributionTest extends TestCase {
+public class CauchyDistributionTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(CauchyDistribution.of(2, 3));
     PDF pdf = PDF.of(distribution);
@@ -35,6 +41,7 @@ public class CauchyDistributionTest extends TestCase {
     assertEquals(distribution.toString(), "CauchyDistribution[2, 3]");
   }
 
+  @Test
   public void testMedian() {
     Distribution distribution = CauchyDistribution.of(2, 0.3);
     Scalar median = (Scalar) Median.of(RandomVariate.of(distribution, 100));
@@ -44,19 +51,23 @@ public class CauchyDistributionTest extends TestCase {
     assertFalse(DeterminateScalarQ.of(Variance.of(distribution)));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> CauchyDistribution.of(null, RealScalar.ONE));
     AssertFail.of(() -> CauchyDistribution.of(RealScalar.ONE, null));
   }
 
+  @Test
   public void testZeroFail() {
     AssertFail.of(() -> CauchyDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 
+  @Test
   public void testNegativeFail() {
     AssertFail.of(() -> CauchyDistribution.of(RealScalar.ONE, RealScalar.of(-1)));
   }
 
+  @Test
   public void testStandardString() {
     assertEquals(CauchyDistribution.standard().toString(), "CauchyDistribution[0, 1]");
   }

@@ -1,9 +1,14 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
@@ -15,9 +20,9 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class RoundTest extends TestCase {
+public class RoundTest {
+  @Test
   public void testDouble() {
     assertEquals(Round.FUNCTION.apply(DoubleScalar.of(11.3)), DoubleScalar.of(11));
     assertEquals(Round.FUNCTION.apply(DoubleScalar.of(11.5)), DoubleScalar.of(12));
@@ -26,16 +31,19 @@ public class RoundTest extends TestCase {
     assertEquals(Round.FUNCTION.apply(DoubleScalar.of(-11.6)), DoubleScalar.of(-12));
   }
 
+  @Test
   public void testLarge1() {
     BigInteger bigInteger = BigDecimal.valueOf(-999.5).setScale(0, RoundingMode.HALF_UP).toBigIntegerExact();
     assertEquals(bigInteger.toString(), "-1000");
   }
 
+  @Test
   public void testLarge2() {
     BigInteger bigInteger = BigDecimal.valueOf(1e30).setScale(0, RoundingMode.HALF_UP).toBigIntegerExact();
     assertEquals(bigInteger.toString(), "1000000000000000000000000000000");
   }
 
+  @Test
   public void testRational1() {
     Scalar s = RationalScalar.of(234534584545L, 13423656767L); // 17.4717
     assertEquals(Round.intValueExact(s), 17);
@@ -45,11 +53,13 @@ public class RoundTest extends TestCase {
     assertTrue(r instanceof RationalScalar);
   }
 
+  @Test
   public void testIntExactValueFail() {
     AssertFail.of(() -> Round.intValueExact(Quantity.of(1.2, "h")));
     AssertFail.of(() -> Round.longValueExact(Quantity.of(2.3, "h*s")));
   }
 
+  @Test
   public void testRational2() {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
     Scalar r = Round.of(s);
@@ -57,6 +67,7 @@ public class RoundTest extends TestCase {
     assertTrue(r instanceof RationalScalar);
   }
 
+  @Test
   public void testLarge() {
     BigInteger bi = new BigInteger("97826349587623498756234545976");
     Scalar s = RealScalar.of(bi);
@@ -65,6 +76,7 @@ public class RoundTest extends TestCase {
     assertEquals(s, r);
   }
 
+  @Test
   public void testMatsim() {
     Scalar e = DoubleScalar.of(Math.exp(1));
     Scalar b = e.multiply(RealScalar.of(new BigInteger("1000000000000000000000000000000000")));
@@ -76,18 +88,21 @@ public class RoundTest extends TestCase {
     // x86_64 : "2718281828459045000000000000000000"
   }
 
+  @Test
   public void testToMultipleOf1() {
     Scalar s = DoubleScalar.of(3.37151617);
     Scalar sr = Round.toMultipleOf(DecimalScalar.of(new BigDecimal("0.1"))).apply(s);
     assertEquals(sr.toString(), "3.4");
   }
 
+  @Test
   public void testToMultipleOf2() {
     Scalar s = DoubleScalar.of(3.37151617);
     Scalar sr = Round.toMultipleOf(RationalScalar.of(1, 2)).apply(s);
     assertEquals(sr.toString(), "7/2");
   }
 
+  @Test
   public void testMultiple() {
     Scalar w = Quantity.of(2, "K");
     ScalarUnaryOperator suo = Round.toMultipleOf(w);
@@ -97,6 +112,7 @@ public class RoundTest extends TestCase {
     assertEquals(suo.apply(Quantity.of(-3.9, "K")), w.multiply(RealScalar.of(-2)));
   }
 
+  @Test
   public void testRoundOptions() {
     Scalar pi = DoubleScalar.of(Math.PI);
     assertEquals(pi.map(Round._1).toString(), "3.1");
@@ -110,6 +126,7 @@ public class RoundTest extends TestCase {
     assertEquals(pi.map(Round._9).toString(), "3.141592654");
   }
 
+  @Test
   public void testRoundOptions2() {
     Scalar pi = Scalars.fromString("3.100000000000008");
     assertEquals(pi.map(Round._1).toString(), "3.1");
@@ -123,6 +140,7 @@ public class RoundTest extends TestCase {
     assertEquals(pi.map(Round._9).toString(), "3.100000000");
   }
 
+  @Test
   public void testRoundOptions3() {
     Scalar pi = (Scalar) Scalars.fromString("1234.100000000000008").map(Round._2);
     DecimalScalar ds = (DecimalScalar) pi;
@@ -130,6 +148,7 @@ public class RoundTest extends TestCase {
     assertEquals(bd.precision(), 4 + 2);
   }
 
+  @Test
   public void testPrecision() {
     Scalar pi = DecimalScalar.of(new BigDecimal("1234.10"));
     DecimalScalar ds = (DecimalScalar) pi;
@@ -137,27 +156,32 @@ public class RoundTest extends TestCase {
     assertEquals(bd.precision(), 4 + 2);
   }
 
+  @Test
   public void testQuantity() {
     Scalar qs1 = Quantity.of(2.333, "m");
     Scalar qs2 = Quantity.of(2, "m");
     assertEquals(Round.of(qs1), qs2);
   }
 
+  @Test
   public void testNonFailInfPos() {
     Scalar scalar = DoubleScalar.POSITIVE_INFINITY;
     assertEquals(Round.of(scalar), scalar);
   }
 
+  @Test
   public void testNonFailInfNeg() {
     Scalar scalar = DoubleScalar.NEGATIVE_INFINITY;
     assertEquals(Round.of(scalar), scalar);
   }
 
+  @Test
   public void testNonFailNaN() {
-    Scalar scalar = Round.of(DoubleScalar.INDETERMINATE);
-    assertTrue(Double.isNaN(scalar.number().doubleValue()));
+    assertTrue(Double.isNaN(Round.of(DoubleScalar.INDETERMINATE).number().doubleValue()));
+    assertTrue(Double.isNaN(Round._2.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
   }
 
+  @Test
   public void testTypeFail() {
     AssertFail.of(() -> Round.of(StringScalar.of("some")));
   }

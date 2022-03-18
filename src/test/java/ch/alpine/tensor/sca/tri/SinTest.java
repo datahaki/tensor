@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.sca.tri;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -9,9 +13,9 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class SinTest extends TestCase {
+public class SinTest {
+  @Test
   public void testReal() {
     Scalar i = RealScalar.of(2);
     Scalar c = Sin.FUNCTION.apply(i);
@@ -20,6 +24,7 @@ public class SinTest extends TestCase {
     assertEquals(c, s);
   }
 
+  @Test
   public void testComplex() {
     Scalar c = Sin.FUNCTION.apply(ComplexScalar.of(2, 3.));
     // 9.1544991469114295735 - 4.1689069599665643508 I
@@ -27,10 +32,12 @@ public class SinTest extends TestCase {
     assertEquals(c, s);
   }
 
+  @Test
   public void testQuantityFail() {
     AssertFail.of(() -> Sin.of(Quantity.of(1, "deg")));
   }
 
+  @Test
   public void testStringScalarFail() {
     AssertFail.of(() -> Sin.of(StringScalar.of("some")));
   }

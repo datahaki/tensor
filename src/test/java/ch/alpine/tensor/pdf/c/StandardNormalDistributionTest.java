@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -11,14 +16,15 @@ import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class StandardNormalDistributionTest extends TestCase {
+public class StandardNormalDistributionTest {
+  @Test
   public void testPdfZero() {
     Scalar x = StandardNormalDistribution.INSTANCE.at(RealScalar.ZERO);
     assertTrue(x.toString().startsWith("0.398942280"));
   }
 
+  @Test
   public void testPdfOneSymmetric() {
     Scalar x = StandardNormalDistribution.INSTANCE.at(RealScalar.ONE);
     Scalar xn = StandardNormalDistribution.INSTANCE.at(RealScalar.ONE.negate());
@@ -26,6 +32,7 @@ public class StandardNormalDistributionTest extends TestCase {
     assertEquals(x, xn);
   }
 
+  @Test
   public void testCdf() {
     CDF cdf = StandardNormalDistribution.INSTANCE;
     Tolerance.CHOP.requireClose(cdf.p_lessEquals(RealScalar.ZERO), RealScalar.of(0.5));
@@ -35,12 +42,14 @@ public class StandardNormalDistributionTest extends TestCase {
     assertEquals(p.add(q), RealScalar.ONE);
   }
 
+  @Test
   public void testQuantile() {
     Tolerance.CHOP.requireClose( //
         StandardNormalDistribution.INSTANCE.quantile(RealScalar.of(0.6307)), //
         RealScalar.of(0.3337078836526057));
   }
 
+  @Test
   public void testInverseCDF() {
     Distribution distribution = StandardNormalDistribution.INSTANCE;
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -48,6 +57,7 @@ public class StandardNormalDistributionTest extends TestCase {
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
   }
 
+  @Test
   public void testMeanVar() {
     Distribution distribution = NormalDistribution.standard();
     assertEquals(Mean.of(distribution), RealScalar.ZERO);

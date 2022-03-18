@@ -1,6 +1,12 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -19,9 +25,9 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class SymmetrizeTest extends TestCase {
+public class SymmetrizeTest {
+  @Test
   public void testSimple() {
     Distribution distribution = UniformDistribution.unit();
     Tensor tensor = RandomVariate.of(distribution, 3, 3, 3);
@@ -36,6 +42,7 @@ public class SymmetrizeTest extends TestCase {
     Chop._10.requireAllZero(zeros);
   }
 
+  @Test
   public void testMatrixExplicit() {
     Distribution distribution = UniformDistribution.unit();
     Tensor tensor = RandomVariate.of(distribution, 3, 3);
@@ -43,6 +50,7 @@ public class SymmetrizeTest extends TestCase {
     Tolerance.CHOP.requireClose(symmet, tensor.add(Transpose.of(tensor)).multiply(RationalScalar.HALF));
   }
 
+  @Test
   public void testMatrixExact() {
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     Tensor tensor = RandomVariate.of(distribution, 3, 3);
@@ -51,15 +59,18 @@ public class SymmetrizeTest extends TestCase {
     ExactTensorQ.require(symmet);
   }
 
+  @Test
   public void testScalar() {
     Tensor tensor = Symmetrize.of(RealScalar.ONE);
     assertEquals(tensor, RealScalar.ONE);
   }
 
+  @Test
   public void testEmpty() {
     assertEquals(Symmetrize.of(Tensors.empty()), Tensors.empty());
   }
 
+  @Test
   public void testVector() {
     Tensor vector = Tensors.vector(1, 2, 3, 4);
     Tensor tensor = Symmetrize.of(vector);
@@ -68,6 +79,7 @@ public class SymmetrizeTest extends TestCase {
     assertFalse(vector.equals(tensor));
   }
 
+  @Test
   public void testMatrix() {
     Distribution distribution = NormalDistribution.standard();
     Tensor tensor = RandomVariate.of(distribution, 9, 9);
@@ -75,17 +87,20 @@ public class SymmetrizeTest extends TestCase {
     assertEquals(Symmetrize.of(IdentityMatrix.of(10)), IdentityMatrix.of(10));
   }
 
+  @Test
   public void testRectangularFail() {
     Distribution distribution = UniformDistribution.unit();
     AssertFail.of(() -> Symmetrize.of(RandomVariate.of(distribution, 3, 2)));
     AssertFail.of(() -> Symmetrize.of(RandomVariate.of(distribution, 3, 3, 2)));
   }
 
+  @Test
   public void testNonArrayFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
     AssertFail.of(() -> Symmetrize.of(tensor));
   }
 
+  @Test
   public void test01() {
     Tensor tensor = Array.of(Tensors::vector, 3, 3); // results in dimensions [3 x 3 x 2]
     assertFalse(SymmetricMatrixQ.of(tensor.get(Tensor.ALL, Tensor.ALL, 0)));

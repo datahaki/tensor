@@ -47,7 +47,7 @@ public interface InverseCDF {
    * For a continuous distribution the inverse CDF at q is the value x such that CDF[distribution, x] == q.
    * For a discrete distribution the inverse CDF at q is the smallest integer x such that CDF[distribution, x] >= q.
    * 
-   * * @param p in the closed interval [0, 1]
+   * @param p in the closed interval [0, 1]
    * @return x
    * @throws Exception if given p is outside of the interval [0, 1] */
   Scalar quantile(Scalar p);

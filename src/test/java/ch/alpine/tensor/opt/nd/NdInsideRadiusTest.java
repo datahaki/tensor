@@ -1,12 +1,18 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class NdInsideRadiusTest extends TestCase {
+public class NdInsideRadiusTest {
+  @Test
   public void testSimple() {
     NdMap<Void> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0), Tensors.vector(1)));
     ndMap.insert(Tensors.vector(0), null);
@@ -19,6 +25,7 @@ public class NdInsideRadiusTest extends TestCase {
     }
   }
 
+  @Test
   public void testExact() {
     NdMap<Void> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0), Tensors.vector(4)));
     ndMap.insert(Tensors.vector(0), null);
@@ -35,6 +42,7 @@ public class NdInsideRadiusTest extends TestCase {
     }
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> new NdInsideRadius<>(null, RealScalar.ONE));
   }
@@ -48,6 +56,7 @@ public class NdInsideRadiusTest extends TestCase {
     }
   }
 
+  @Test
   public void testEffective() {
     boolean found = false;
     CallCount callCount = new CallCount();
@@ -58,6 +67,7 @@ public class NdInsideRadiusTest extends TestCase {
     assertEquals(callCount.count, 1);
   }
 
+  @Test
   public void testEffective2() {
     boolean found = false;
     CallCount callCount = new CallCount();

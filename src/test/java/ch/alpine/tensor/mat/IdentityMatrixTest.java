@@ -1,32 +1,39 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.time.LocalDateTime;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Timing;
+import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.lie.LehmerTensor;
 import ch.alpine.tensor.mat.gr.IdempotentQ;
-import ch.alpine.tensor.qty.DateTimeScalar;
-import ch.alpine.tensor.qty.DurationScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.spa.SparseArray;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class IdentityMatrixTest extends TestCase {
+public class IdentityMatrixTest {
+  @Test
   public void testOneQuantity() {
     Tensor matrix = DiagonalMatrix.of(2, Quantity.of(1, "s"));
     assertEquals(matrix, Tensors.fromString("{{1[s], 0[s]}, {0[s], 1[s]}}"));
   }
 
+  @Test
   public void testHilbertMatrix() {
     assertEquals(IdentityMatrix.of(HilbertMatrix.of(3)), IdentityMatrix.of(3));
   }
 
+  @Test
   public void testSparse() {
     int n = 7;
     Tensor matrix = IdentityMatrix.sparse(n);
@@ -50,6 +57,7 @@ public class IdentityMatrixTest extends TestCase {
     // System.out.println(timing1.seconds());
   }
 
+  @Test
   public void testDurationScalar() {
     DurationScalar ds1 = DurationScalar.fromSeconds(RealScalar.of(3));
     DurationScalar ds2 = DurationScalar.fromSeconds(RealScalar.of(3.123));
@@ -61,6 +69,7 @@ public class IdentityMatrixTest extends TestCase {
     assertEquals(eye.dot(matrix), matrix);
   }
 
+  @Test
   public void testDateTimeScalar() {
     Scalar dts1 = DateTimeScalar.of(LocalDateTime.of(2000, 11, 3, 4, 5));
     Scalar dts2 = DateTimeScalar.of(LocalDateTime.of(2001, 10, 5, 4, 8));
@@ -71,27 +80,33 @@ public class IdentityMatrixTest extends TestCase {
     AssertFail.of(() -> matrix.dot(eye));
   }
 
+  @Test
   public void testSparseFail() {
     AssertFail.of(() -> IdentityMatrix.sparse(0));
     AssertFail.of(() -> IdentityMatrix.sparse(-1));
   }
 
+  @Test
   public void testFailZero() {
     AssertFail.of(() -> IdentityMatrix.of(0));
   }
 
+  @Test
   public void testFailNegative() {
     AssertFail.of(() -> IdentityMatrix.of(-3));
   }
 
+  @Test
   public void testFailOneZero() {
     AssertFail.of(() -> DiagonalMatrix.of(0, Quantity.of(1, "s")));
   }
 
+  @Test
   public void testFailOneNegative() {
     AssertFail.of(() -> DiagonalMatrix.of(-3, Quantity.of(1, "s")));
   }
 
+  @Test
   public void testEmptyFail() {
     AssertFail.of(() -> IdentityMatrix.of(Tensors.empty()));
     AssertFail.of(() -> IdentityMatrix.of(Tensors.fromString("{{}}")));

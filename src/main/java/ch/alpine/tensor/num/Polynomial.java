@@ -36,6 +36,8 @@ import ch.alpine.tensor.sca.Chop;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
+// TODO TENSOR ALG f[g[x]]
+// TODO TENSOR DOC document functions better, e.g. moment, identity
 public class Polynomial extends HornerScheme {
   /** polynomial evaluation
    * 
@@ -159,7 +161,12 @@ public class Polynomial extends HornerScheme {
     return of(tensor);
   }
 
-  /** @param order non-negative
+  /** Example:
+   * <pre>
+   * {3[m*s^-1], -4[m*s^-2]} . moment(2) == {0[m*s], 0[m], 3[m*s^-1], -4[m*s^-2]}
+   * </pre>
+   * 
+   * @param order non-negative
    * @return this times x^order
    * @throws Exception if given order is negative */
   public Polynomial moment(int order) {
@@ -179,6 +186,10 @@ public class Polynomial extends HornerScheme {
     return Quantity.of(scalar.one().zero(), QuantityUnit.of(scalar).add(unit));
   }
 
+  /** Remark:
+   * identity does not give the multiplicative neutral element!
+   * 
+   * @return x -> x where units of domain and values are identical as this polynomial */
   public Polynomial identity() {
     Tensor c01 = coeffs.extract(0, 2);
     c01.set(Scalar::zero, 0);

@@ -1,9 +1,14 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
@@ -16,9 +21,9 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class MatlabExportTest extends TestCase {
+public class MatlabExportTest {
+  @Test
   public void testScalar() {
     Stream<String> stream = MatlabExport.of(ComplexScalar.of(2, 3));
     List<String> list = stream.collect(Collectors.toList());
@@ -26,6 +31,7 @@ public class MatlabExportTest extends TestCase {
     // list.forEach(System.out::println);
   }
 
+  @Test
   public void testScalar2() {
     Scalar s = Scalars.fromString("-1/41+73333/12*I");
     Stream<String> stream = MatlabExport.of(s);
@@ -33,6 +39,7 @@ public class MatlabExportTest extends TestCase {
     assertTrue(list.contains("a=-1/41+73333/12*I;"));
   }
 
+  @Test
   public void testVector() {
     Stream<String> stream = MatlabExport.of(Tensors.vector(1, 2, 3));
     List<String> list = stream.collect(Collectors.toList());
@@ -40,6 +47,7 @@ public class MatlabExportTest extends TestCase {
     // list.forEach(System.out::println);
   }
 
+  @Test
   public void testMatrix() {
     Tensor m = HilbertMatrix.of(3, 4);
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply(m, m);
@@ -48,6 +56,7 @@ public class MatlabExportTest extends TestCase {
     assertTrue(list.contains("a=zeros([3, 4]);"));
   }
 
+  @Test
   public void testLieAlgebras() {
     Tensor m = LeviCivitaTensor.of(3);
     Stream<String> stream = MatlabExport.of(m);
@@ -57,6 +66,7 @@ public class MatlabExportTest extends TestCase {
     // list.forEach(System.out::println);
   }
 
+  @Test
   public void testUnits() {
     ScalarUnaryOperator scalarUnaryOperator = //
         scalar -> scalar instanceof Quantity //
@@ -75,6 +85,7 @@ public class MatlabExportTest extends TestCase {
     assertFalse(list.stream().anyMatch(s -> s.startsWith("a(5)=")));
   }
 
+  @Test
   public void testFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
     AssertFail.of(() -> MatlabExport.of(tensor));

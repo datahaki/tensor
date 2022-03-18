@@ -1,16 +1,21 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.math.BigInteger;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ScalarProductTest extends TestCase {
+public class ScalarProductTest {
+  @Test
   public void testGaussScalar() {
     int prime = 677;
     GaussScalar gaussScalar = GaussScalar.of(432, prime);
@@ -26,12 +31,14 @@ public class ScalarProductTest extends TestCase {
     assertTrue(string.startsWith("ScalarProduct"));
   }
 
+  @Test
   public void testSerializable() throws ClassNotFoundException, IOException {
     BinaryPower<Scalar> binaryPower = new BinaryPower<>(ScalarProduct.INSTANCE);
     BinaryPower<Scalar> copy = Serialization.copy(binaryPower);
     assertEquals(copy.raise(RealScalar.of(2), BigInteger.valueOf(3)), RealScalar.of(8));
   }
 
+  @Test
   public void testSimple() {
     AssertFail.of(() -> ScalarProduct.INSTANCE.neutral(null));
   }

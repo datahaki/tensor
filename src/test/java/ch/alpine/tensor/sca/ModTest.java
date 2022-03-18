@@ -1,10 +1,15 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
@@ -17,9 +22,9 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ModTest extends TestCase {
+public class ModTest {
+  @Test
   public void testOffset() {
     Mod mod = Mod.function(4, -2);
     assertEquals(mod.apply(RealScalar.ONE), RealScalar.ONE);
@@ -29,6 +34,7 @@ public class ModTest extends TestCase {
     assertEquals(mod.apply(RealScalar.of(-2)), RealScalar.of(-2));
   }
 
+  @Test
   public void testPi() {
     Mod mod = Mod.function(2 * Math.PI, -Math.PI);
     assertEquals(mod.apply(RealScalar.ONE), RealScalar.ONE);
@@ -40,23 +46,27 @@ public class ModTest extends TestCase {
     assertEquals(mod.apply(RealScalar.of(5)), RealScalar.of(5 - 2 * Math.PI));
   }
 
+  @Test
   public void testPart() {
     Mod mod = Mod.function(3, 1);
     assertEquals(mod.apply(RealScalar.ZERO), RealScalar.of(3));
   }
 
+  @Test
   public void testPartInteger() {
     Mod mod = Mod.function(3);
     assertEquals(mod.apply(RealScalar.of(5)), RealScalar.of(2));
     assertEquals(mod.apply(RealScalar.of(3)), RealScalar.ZERO);
   }
 
+  @Test
   public void testPartDouble() {
     Mod mod = Mod.function(2.3);
     assertEquals(mod.apply(RealScalar.of(5)), RealScalar.of(5 - 2.3 - 2.3));
     assertEquals(mod.apply(RealScalar.of(2.3)), RealScalar.ZERO);
   }
 
+  @Test
   public void testRational1() {
     Scalar m = RationalScalar.of( //
         new BigInteger("816345827635482763548726354817635487162354876135284765"), //
@@ -78,6 +88,7 @@ public class ModTest extends TestCase {
     }
   }
 
+  @Test
   public void testRational2() {
     Scalar m = RationalScalar.of( //
         new BigInteger("816345827635482763548726354817635487162354876135284765"), //
@@ -97,12 +108,14 @@ public class ModTest extends TestCase {
     }
   }
 
+  @Test
   public void testTemplate() {
     Mod mod = Mod.function(RealScalar.of(5));
     assertEquals(mod.of(RealScalar.of(6)), RealScalar.ONE);
     assertEquals(mod.of(Tensors.vector(-1, 3, 6)), Tensors.vector(4, 3, 1));
   }
 
+  @Test
   public void testNegative() {
     Mod mod = Mod.function(RealScalar.of(-5));
     @SuppressWarnings("unused")
@@ -111,6 +124,7 @@ public class ModTest extends TestCase {
     // System.out.println(m);
   }
 
+  @Test
   public void testComplex() {
     // Mathematica Mod[10, 2 + 3 I] == -2 I
     Mod mod = Mod.function(ComplexScalar.of(2, 3));
@@ -119,6 +133,7 @@ public class ModTest extends TestCase {
     assertEquals(res, ComplexScalar.of(-1, 3));
   }
 
+  @Test
   public void testDecimal1() {
     Scalar pi = DecimalScalar.of(new BigDecimal("3.141592653589793238462643383279502884197169399375105820974944592"));
     Mod mod = Mod.function(pi);
@@ -147,12 +162,14 @@ public class ModTest extends TestCase {
     // [1+2*I, I, 0, -2+3*I, -1+4*I, 4*I, -2+2*I, -1+3*I, 3*I, -1+2*I, 2*I, 1+3*I, -1+I]
   }
 
+  @Test
   public void testComplexSet() {
     _checkComplexSet(ComplexScalar.of(2, 3), 13);
     // _checkComplexSet(ComplexScalar.of(1, 3), 13); // not consistent with Mathematica
     // _checkComplexSet(ComplexScalar.of(2, 4), 13);
   }
 
+  @Test
   public void testQuantity() {
     Scalar qs1 = Quantity.of(5, "s");
     Scalar qs2 = Quantity.of(3, "s");
@@ -161,29 +178,35 @@ public class ModTest extends TestCase {
     assertEquals(res, qs3);
   }
 
+  @Test
   public void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(5, "m");
     Scalar qs2 = Quantity.of(3, "s");
     AssertFail.of(() -> Mod.function(qs2).apply(qs1));
   }
 
+  @Test
   public void testToString() {
     String string = Mod.function(3, 0).toString();
     assertTrue(string.startsWith("Mod"));
   }
 
+  @Test
   public void testNull1Fail() {
     AssertFail.of(() -> Mod.function(RealScalar.ONE, null));
   }
 
+  @Test
   public void testNull2Fail() {
     AssertFail.of(() -> Mod.function(null, RealScalar.ONE));
   }
 
+  @Test
   public void testZeroAFail() {
     AssertFail.of(() -> Mod.function(RealScalar.ZERO));
   }
 
+  @Test
   public void testZeroBFail() {
     AssertFail.of(() -> Mod.function(RealScalar.ZERO, RealScalar.ONE));
   }

@@ -37,6 +37,9 @@ public enum ColorDataGradients implements ColorDataGradient {
   SUNSET_REVERSED,
   /** [0, 1] corresponds to wavelengths [380, 750] */
   VISIBLE_SPECTRUM,
+  /** extracted from
+   * https://www.yourweather.co.uk/weather-maps/temp2m-europ.html */
+  TEMPERATURE_WEATHER,
   /** blue, cyan, yellow, red
    * inspired by Matlab::jet */
   JET,
@@ -73,7 +76,7 @@ public enum ColorDataGradients implements ColorDataGradient {
   /** black, blue-gray, white */
   BONE,
   /** purple, blue, white */
-  DEEPSEA, //
+  DEEP_SEA, //
   /** black, brown, orange */
   COPPER,
   /** black, green, yellow */

@@ -1,16 +1,20 @@
 // code by jph
 package ch.alpine.tensor.opt.lp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
 /** Reference: "Linear and Integer Programming made Easy", 2016 */
-public class LinearProgramTest extends TestCase {
+public class LinearProgramTest {
+  @Test
   public void testP59a() {
     LinearProgram lpp = LinearProgram.of( //
         Objective.MAX, //
@@ -29,6 +33,7 @@ public class LinearProgramTest extends TestCase {
     assertEquals(solp.dot(lpp.c), sold.dot(lpd.c));
   }
 
+  @Test
   public void testP60a() {
     LinearProgram linearProgram = LinearProgram.of( //
         Objective.MIN, Tensors.vector(-1, 1), //
@@ -41,6 +46,7 @@ public class LinearProgramTest extends TestCase {
     AssertFail.of(() -> linearProgram.toggle());
   }
 
+  @Test
   public void testP62() {
     LinearProgram lpp = LinearProgram.of( //
         Objective.MIN, Tensors.vector(1, 2, 3), //
@@ -61,6 +67,7 @@ public class LinearProgramTest extends TestCase {
   }
 
   // MATLAB linprog example
+  @Test
   public void testLinProgMatlab1() { // min c.x == -10/9
     Tensor c = Tensors.fromString("{-1,-1/3}");
     Tensor m = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");
@@ -74,6 +81,7 @@ public class LinearProgramTest extends TestCase {
   }
 
   // MATLAB linprog example
+  @Test
   public void testMatlab1() { // min c.x == -10/9
     Tensor c = Tensors.fromString("{-1[m], -1/3[s]}");
     Tensor m = Tensors.fromString("{{1[m], 1[s]}, {1[m], 1/4[s]}, {1[m], -1[s]}, {-1/4[m], -1[s]}, {-1[m], -1[s]}, {-1[m], 1[s]}}");
@@ -86,11 +94,13 @@ public class LinearProgramTest extends TestCase {
     assertEquals(solp.get(0), x);
   }
 
+  @Test
   public void testObjective() {
     assertEquals(Objective.MIN.flip(), Objective.MAX);
     assertEquals(Objective.MAX.flip(), Objective.MIN);
   }
 
+  @Test
   public void testConstraint() {
     assertEquals(ConstraintType.LESS_EQUALS.flipInequality(), ConstraintType.GREATER_EQUALS);
     assertEquals(ConstraintType.GREATER_EQUALS.flipInequality(), ConstraintType.LESS_EQUALS);

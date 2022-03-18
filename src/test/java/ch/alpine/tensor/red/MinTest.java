@@ -1,10 +1,14 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -16,13 +20,13 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class MinTest extends TestCase {
+public class MinTest {
   static Tensor min(List<Tensor> col) {
     return col.stream().reduce(Min::of).get();
   }
 
+  @Test
   public void testColumnwise() {
     Tensor matrix = Tensors.matrixInt(new int[][] { { 1, 3, 3 }, { 2, 2, 7 } });
     Tensor res = matrix.stream().reduce(Entrywise.min()).get();
@@ -31,6 +35,7 @@ public class MinTest extends TestCase {
     assertEquals(map, res);
   }
 
+  @Test
   public void testRowwise() {
     Tensor matrix = Tensors.matrixInt(new int[][] { { 8, 3, 3 }, { 2, 2, 7 } });
     Tensor map = Tensor.of(matrix.stream().map( //
@@ -38,6 +43,7 @@ public class MinTest extends TestCase {
     assertEquals(map, Tensors.vector(3, 2));
   }
 
+  @Test
   public void testElementWise() {
     Tensor tensor = Tensors.matrixInt(new int[][] { { -8, 3, -3 }, { 2, -2, 7 } });
     Tensor capped = tensor.map(Min.function(RealScalar.ZERO));
@@ -45,6 +51,7 @@ public class MinTest extends TestCase {
     assertEquals(capped, blub);
   }
 
+  @Test
   public void testSet() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.matrixInt(new int[][] { { -8, 3, -3 }, { 2, -2, 7 } });
     ScalarUnaryOperator _op = Min.function(RealScalar.ZERO);
@@ -54,18 +61,21 @@ public class MinTest extends TestCase {
     assertEquals(matrix, blub);
   }
 
+  @Test
   public void testGenericInteger() {
     UnaryOperator<Integer> function = Min.function(100);
     assertEquals(function.apply(50), Integer.valueOf(50));
     assertEquals(function.apply(200), Integer.valueOf(100));
   }
 
+  @Test
   public void testGenericString() {
     UnaryOperator<String> function = Min.function("math");
     assertEquals(function.apply("library"), "library");
     assertEquals(function.apply("tensor"), "math");
   }
 
+  @Test
   public void testFail() {
     Scalar string = StringScalar.of("string");
     Scalar gauss = GaussScalar.of(1, 3);

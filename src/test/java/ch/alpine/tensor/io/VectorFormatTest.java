@@ -1,20 +1,25 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import junit.framework.TestCase;
 
-public class VectorFormatTest extends TestCase {
+public class VectorFormatTest {
+  @Test
   public void testVector() throws IOException {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream(128);
     Tensor tensor = Tensors.fromString("{2, 3, 4.125,\"abc\", 4/3[m*s^-1],xyz\",3+I/7,ethz}");
@@ -25,6 +30,7 @@ public class VectorFormatTest extends TestCase {
     assertEquals(tensor, result);
   }
 
+  @Test
   public void testMatrix() throws IOException {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream(128);
     Tensor tensor = IdentityMatrix.of(3);
@@ -33,6 +39,7 @@ public class VectorFormatTest extends TestCase {
     assertEquals(new String(array), "{1, 0, 0}\n{0, 1, 0}\n{0, 0, 1}\n");
   }
 
+  @Test
   public void testStrings() {
     Tensor tensor = VectorFormat.parse(Stream.of("ethz", "idsc", "tensor library"));
     VectorQ.requireLength(tensor, 3);
@@ -44,6 +51,7 @@ public class VectorFormatTest extends TestCase {
     assertEquals(tensor.Get(2).toString(), "tensor library");
   }
 
+  @Test
   public void testScalarFail() {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream(128);
     Tensor tensor = RealScalar.ONE;

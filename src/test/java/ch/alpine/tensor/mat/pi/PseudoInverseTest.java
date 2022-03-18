@@ -1,9 +1,14 @@
 // code by jph
 package ch.alpine.tensor.mat.pi;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
@@ -36,9 +41,9 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class PseudoInverseTest extends TestCase {
+public class PseudoInverseTest {
+  @Test
   public void testHilbertSquare() {
     for (int n = 1; n < 8; ++n) {
       Tensor matrix = HilbertMatrix.of(n);
@@ -49,6 +54,7 @@ public class PseudoInverseTest extends TestCase {
     }
   }
 
+  @Test
   public void testMixedUnitsVantHoff() {
     // inspired by code by gjoel
     for (int deg = 0; deg <= 2; ++deg) {
@@ -60,18 +66,21 @@ public class PseudoInverseTest extends TestCase {
     }
   }
 
+  @Test
   public void testGaussScalar() {
     Tensor vector = Tensor.of(IntStream.range(100, 110).mapToObj(i -> GaussScalar.of(3 * i, 239873)));
     Tensor design = VandermondeMatrix.of(vector, 3);
     PseudoInverse.of(design);
   }
 
+  @Test
   public void testMathematica() {
     Tensor expect = Tensors.fromString("{{252/73, -(198/73), -(240/73)}, {-(360/73), 408/73, 468/73}}");
     assertEquals(PseudoInverse.of(HilbertMatrix.of(3, 2)), expect);
     assertEquals(PseudoInverse.of(HilbertMatrix.of(2, 3)), Transpose.of(expect));
   }
 
+  @Test
   public void testHilbertRect() {
     for (int m = 2; m < 6; ++m) {
       int n = m + 2;
@@ -87,6 +96,7 @@ public class PseudoInverseTest extends TestCase {
     }
   }
 
+  @Test
   public void testHilbert46() {
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = HilbertMatrix.of(n, 6);
@@ -96,6 +106,7 @@ public class PseudoInverseTest extends TestCase {
     }
   }
 
+  @Test
   public void testMathematica1() {
     Tensor matrix = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}}");
     assertEquals(MatrixRank.of(matrix), 2);
@@ -107,6 +118,7 @@ public class PseudoInverseTest extends TestCase {
     Chop._12.requireClose(res1, res2);
   }
 
+  @Test
   public void testMathematica2() {
     Tensor matrix = Transpose.of(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}}"));
     Tensor result = PseudoInverse.usingSvd(matrix);
@@ -114,6 +126,7 @@ public class PseudoInverseTest extends TestCase {
     Chop._12.requireClose(result.subtract(actual), Array.zeros(4, 3));
   }
 
+  @Test
   public void testQuantity() {
     Random random = new Random(3);
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(1, "m"));
@@ -125,6 +138,7 @@ public class PseudoInverseTest extends TestCase {
     }
   }
 
+  @Test
   public void testRectangular() {
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(1, "m"));
     for (int m = 5; m < 12; ++m) {
@@ -137,6 +151,7 @@ public class PseudoInverseTest extends TestCase {
     }
   }
 
+  @Test
   public void testCDecRhs() {
     Random random = new Random(1);
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
@@ -148,6 +163,7 @@ public class PseudoInverseTest extends TestCase {
     assertEquals(sol0, sol1);
   }
 
+  @Test
   public void testCDecRhs2() {
     Random random = new Random(2);
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
@@ -159,6 +175,7 @@ public class PseudoInverseTest extends TestCase {
     assertEquals(sol0, sol1);
   }
 
+  @Test
   public void testComplexRectangular() {
     Distribution distribution = NormalDistribution.standard(); // of(Quantity.of(0, "m"), Quantity.of(1, "m"));
     for (int m = 3; m < 9; ++m) {
@@ -173,18 +190,21 @@ public class PseudoInverseTest extends TestCase {
     }
   }
 
+  @Test
   public void testComplexExact() {
     Tensor expect = Tensors.fromString("{{-(1/3) - I/3, 1/6 - I/6, 1/6 + I/6}, {1/6 - I/3, 5/12 + I/12, -(1/12) - I/12}}");
     Tensor matrix = Tensors.fromString("{{-1 + I, 0}, {-I, 2}, {2 - I, 2 * I}}");
     assertEquals(PseudoInverse.of(matrix), expect);
   }
 
+  @Test
   public void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
     Tensor pseudo = PseudoInverse.of(matrix);
     assertTrue(pseudo.Get(1, 2) instanceof DecimalScalar);
   }
 
+  @Test
   public void testPseudoInverseIdempotent() {
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
@@ -195,6 +215,7 @@ public class PseudoInverseTest extends TestCase {
     }
   }
 
+  @Test
   public void testRankDeficient() {
     int r = 2;
     Distribution distribution = NormalDistribution.standard();
@@ -222,6 +243,7 @@ public class PseudoInverseTest extends TestCase {
     }
   }
 
+  @Test
   public void testSimple() {
     Tensor sequence = RandomVariate.of(NormalDistribution.standard(), 10, 3);
     Tensor point = RandomVariate.of(NormalDistribution.standard(), 3);
@@ -235,6 +257,7 @@ public class PseudoInverseTest extends TestCase {
     return vector.dot(PseudoInverse.usingSvd(nullsp)).dot(nullsp);
   }
 
+  @Test
   public void testQR() {
     Distribution distribution = UniformDistribution.unit();
     for (int count = 0; count < 10; ++count) {
@@ -247,23 +270,27 @@ public class PseudoInverseTest extends TestCase {
     }
   }
 
+  @Test
   public void testEmptyFail() {
     Tensor tensor = Tensors.empty();
     AssertFail.of(() -> PseudoInverse.of(tensor));
     AssertFail.of(() -> PseudoInverse.usingSvd(tensor));
   }
 
+  @Test
   public void testVectorFail() {
     Tensor tensor = Tensors.vector(1, 2, 3, 4);
     AssertFail.of(() -> PseudoInverse.of(tensor));
     AssertFail.of(() -> PseudoInverse.usingSvd(tensor));
   }
 
+  @Test
   public void testScalarFail() {
     AssertFail.of(() -> PseudoInverse.of(RealScalar.ONE));
     AssertFail.of(() -> PseudoInverse.usingSvd(RealScalar.ONE));
   }
 
+  @Test
   public void testEmptyMatrixFail() {
     Tensor tensor = Tensors.of(Tensors.empty());
     AssertFail.of(() -> PseudoInverse.of(tensor));

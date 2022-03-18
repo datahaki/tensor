@@ -1,12 +1,16 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 
-import ch.alpine.tensor.Tensors;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class SpecialContentTest extends TestCase {
+import ch.alpine.tensor.Tensors;
+
+public class SpecialContentTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     SpecialContent sc = new SpecialContent();
     SpecialContent cp = Serialization.copy(sc);

@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -13,9 +17,9 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.nrm.Normalize;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TotalTest extends TestCase {
+public class TotalTest {
+  @Test
   public void testTotal() {
     Tensor a = Tensors.vectorLong(7, 2);
     Tensor b = Tensors.vectorLong(3, 4);
@@ -28,27 +32,32 @@ public class TotalTest extends TestCase {
     assertEquals(DoubleScalar.of(0), Total.of(Tensors.empty()));
   }
 
+  @Test
   public void testAddEmpty() {
     Tensor a = Tensors.of(Tensors.empty());
     Tensor b = Total.of(a);
     assertEquals(b, Tensors.empty());
   }
 
+  @Test
   public void testExample() {
     Tensor tensor = Total.of(Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}}"));
     assertEquals(tensor, Tensors.vector(9, 12));
   }
 
+  @Test
   public void testOfVectorSimple() {
     Scalar scalar = Total.ofVector(Tensors.vector(1, 2, 3));
     assertEquals(scalar, RealScalar.of(6));
   }
 
+  @Test
   public void testOfVectorEmpty() {
     Scalar scalar = Total.ofVector(Tensors.empty());
     assertEquals(scalar, RealScalar.ZERO);
   }
 
+  @Test
   public void testOfVectorNormalize() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);
     TensorUnaryOperator copy = Serialization.copy(tensorUnaryOperator);
@@ -56,11 +65,13 @@ public class TotalTest extends TestCase {
     assertEquals(vector, Tensors.vector(1, 2, 3).divide(RealScalar.of(6)));
   }
 
+  @Test
   public void testOfVectorFail() {
     AssertFail.of(() -> Total.ofVector(RealScalar.ONE));
     AssertFail.of(() -> Total.ofVector(HilbertMatrix.of(3)));
   }
 
+  @Test
   public void testTotalScalarFail() {
     AssertFail.of(() -> Total.of(RealScalar.ONE));
   }

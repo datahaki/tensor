@@ -1,9 +1,13 @@
 // code by jph
 package ch.alpine.tensor;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class DoubleTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+public class DoubleTest {
+  @Test
   public void testZeros() {
     final double d1 = 0.0;
     final double d2 = -0.0;
@@ -19,6 +23,7 @@ public class DoubleTest extends TestCase {
     assertTrue(Double.compare(d2, d1) == -1);
   }
 
+  @Test
   public void testReciprocal() {
     double e1 = 1e-300;
     double e2 = 1e-200;

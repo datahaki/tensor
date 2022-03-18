@@ -2,7 +2,7 @@
 
 # ch.alpine.tensor
 
-Library for tensor computations in Java 17, version `1.0.4`.
+Library for tensor computations in Java 17, version `1.0.5`.
 
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions
@@ -273,7 +273,7 @@ radius search
 
 Predefined color gradients
 
-![colordatagradients](https://user-images.githubusercontent.com/4012178/155898471-1fc657ae-7318-455c-852f-20469c8e4564.png)
+![colordatagradients](https://user-images.githubusercontent.com/4012178/157915484-62554aac-60d5-4e98-b6ab-1b14c0942b7f.png)
 
 Predefined color lists
 
@@ -299,7 +299,7 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
   <dependency>
     <groupId>ch.alpine</groupId>
     <artifactId>tensor</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </dependency>
 </dependencies>
 ```

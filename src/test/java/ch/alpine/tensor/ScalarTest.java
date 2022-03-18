@@ -1,33 +1,44 @@
 // code by jph
 package ch.alpine.tensor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.Collections;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ScalarTest extends TestCase {
+public class ScalarTest {
+  @Test
   public void testIsScalar() {
     assertTrue(ScalarQTest.of(DoubleScalar.POSITIVE_INFINITY));
   }
 
+  @Test
   public void testLengthNegative() {
     assertTrue(Scalar.LENGTH < 0);
   }
 
+  @Test
   public void testGet() {
     Tensor t = RealScalar.of(3);
     Scalar s = (Scalar) t;
     assertEquals(t, s);
   }
 
+  @Test
   public void testUnmodifiable() {
     Scalar s = RealScalar.of(3);
     assertEquals(s.unmodifiable(), s);
   }
 
+  @Test
   public void testNumber() {
     Scalar zero = RealScalar.ZERO;
     assertEquals(zero.number().getClass(), Integer.class);
@@ -36,6 +47,7 @@ public class ScalarTest extends TestCase {
     assertEquals(Double.valueOf(1.9).intValue(), 1);
   }
 
+  @Test
   public void testDimensions() {
     Scalar a = DoubleScalar.of(3);
     assertEquals(Dimensions.of(a), Collections.emptyList());
@@ -43,12 +55,14 @@ public class ScalarTest extends TestCase {
     assertEquals(Dimensions.of(b), Collections.emptyList());
   }
 
+  @Test
   public void testFails() {
     Scalar a = DoubleScalar.of(3);
     Scalar b = DoubleScalar.of(5);
     AssertFail.of(() -> a.dot(b));
   }
 
+  @Test
   public void testNumber2() {
     Scalar a = DoubleScalar.of(3);
     Scalar b = DoubleScalar.of(5);
@@ -59,6 +73,7 @@ public class ScalarTest extends TestCase {
     assertEquals(c, d);
   }
 
+  @Test
   public void testEquals() {
     assertFalse(Tensors.empty().equals(null));
     assertFalse(RealScalar.ZERO.equals(null));
@@ -69,6 +84,7 @@ public class ScalarTest extends TestCase {
   }
 
   @SuppressWarnings("unused")
+  @Test
   public void testIteratorFail() {
     try {
       for (Tensor entry : RealScalar.ZERO) {

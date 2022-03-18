@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -10,9 +12,9 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class MatrixDotTransposeTest extends TestCase {
+public class MatrixDotTransposeTest {
+  @Test
   public void testSimple() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     Tensor tensor = Dot.of(matrix, Transpose.of(matrix));
@@ -20,6 +22,7 @@ public class MatrixDotTransposeTest extends TestCase {
     Tolerance.CHOP.requireClose(tensor, result);
   }
 
+  @Test
   public void testTwo() {
     Tensor a = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     Tensor b = RandomVariate.of(NormalDistribution.standard(), 3, 5);
@@ -28,6 +31,7 @@ public class MatrixDotTransposeTest extends TestCase {
     Tolerance.CHOP.requireClose(tensor, result);
   }
 
+  @Test
   public void testRank3() {
     Tensor a = RandomVariate.of(NormalDistribution.standard(), 4, 3);
     Tensor b = LeviCivitaTensor.of(3);
@@ -36,18 +40,21 @@ public class MatrixDotTransposeTest extends TestCase {
     Tolerance.CHOP.requireClose(tensor, result);
   }
 
+  @Test
   public void testVectorFail() {
     AssertFail.of(() -> MatrixDotTranspose.of(Tensors.vector(2, 1), Tensors.vector(3, 7)));
     AssertFail.of(() -> MatrixDotTranspose.of(Tensors.vector(2, 1), HilbertMatrix.of(2, 3)));
     AssertFail.of(() -> MatrixDotTranspose.of(HilbertMatrix.of(2), Tensors.vector(3, 7)));
   }
 
+  @Test
   public void testScalarFail() {
     AssertFail.of(() -> MatrixDotTranspose.of(RealScalar.ONE, RealScalar.ONE));
     AssertFail.of(() -> MatrixDotTranspose.of(RealScalar.ONE, HilbertMatrix.of(2, 3)));
     AssertFail.of(() -> MatrixDotTranspose.of(HilbertMatrix.of(2), RealScalar.ONE));
   }
 
+  @Test
   public void testThreeFail() {
     Tensor a = RandomVariate.of(NormalDistribution.standard(), 3, 5, 4);
     Tensor b = RandomVariate.of(NormalDistribution.standard(), 2, 4);

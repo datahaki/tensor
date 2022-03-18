@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -11,9 +15,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class NestListTest extends TestCase {
+public class NestListTest {
+  @Test
   public void testLength() {
     Tensor list = NestList.of(Cos::of, RealScalar.ONE, 4);
     assertEquals(list.length(), 5);
@@ -25,11 +29,13 @@ public class NestListTest extends TestCase {
     return Tensors.vector(1, 2, 3);
   }
 
+  @Test
   public void testProduct() {
     Tensor tensor = NestList.of(RealScalar.of(3)::multiply, RealScalar.ONE, 5);
     assertEquals(tensor.toString(), "{1, 3, 9, 27, 81, 243}");
   }
 
+  @Test
   public void testClear() {
     Tensor t = Tensors.vector(1, 2, 3);
     Tensor x = Tensors.vector(1, 2, 3);
@@ -37,6 +43,7 @@ public class NestListTest extends TestCase {
     assertEquals(list, Tensors.of(t, t, t, t));
   }
 
+  @Test
   public void testReferences() {
     Tensor vector = Tensors.vector(1, 2, 3);
     Tensor list = NestList.of(f -> f, vector, 0);
@@ -44,15 +51,18 @@ public class NestListTest extends TestCase {
     assertEquals(list, Tensors.fromString("{{1, 2, 3}}"));
   }
 
+  @Test
   public void testZero() {
     Tensor vector = NestList.of(Cos::of, RealScalar.ONE, 0);
     assertEquals(vector, Tensors.vector(1));
   }
 
+  @Test
   public void testNullOperator() {
     assertEquals(NestList.of(null, RealScalar.ONE, 0), Tensors.vector(1));
   }
 
+  @Test
   public void testMatrixPower() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 4);
     Tensor matrix = RandomVariate.of(distribution, 3, 3);
@@ -61,10 +71,12 @@ public class NestListTest extends TestCase {
       assertEquals(list.get(index), MatrixPower.of(matrix, index));
   }
 
+  @Test
   public void testFailNull() {
     AssertFail.of(() -> NestList.of(Cos::of, null, 0));
   }
 
+  @Test
   public void testFailNegative() {
     AssertFail.of(() -> NestList.of(Cos::of, RealScalar.ONE, -1));
     AssertFail.of(() -> NestList.of(Cos::of, RealScalar.ONE, -2));

@@ -1,10 +1,14 @@
 // code by jph
 package ch.alpine.tensor.mat.ex;
 
-import ch.alpine.tensor.RealScalar;
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class StaticHelperTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+import ch.alpine.tensor.RealScalar;
+
+public class StaticHelperTest {
+  @Test
   public void testExponents() {
     assertEquals(StaticHelper.exponent(RealScalar.of(0)), 1);
     assertEquals(StaticHelper.exponent(RealScalar.of(0.99)), 2);

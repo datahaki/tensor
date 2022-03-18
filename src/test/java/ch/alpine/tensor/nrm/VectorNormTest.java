@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.nrm;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -14,9 +19,9 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class VectorNormTest extends TestCase {
+public class VectorNormTest {
+  @Test
   public void testOdd() {
     Tensor tensor = Tensors.vector(2.3, 1.0, 3.2);
     Scalar n = VectorNorm.of(1.5).apply(tensor);
@@ -24,17 +29,20 @@ public class VectorNormTest extends TestCase {
     assertEquals(n, RealScalar.of(4.707100665786122));
   }
 
+  @Test
   public void testNormP() {
     Scalar n = VectorNorm.of(1.23).apply(Tensors.vector(1, 2, 3));
     assertEquals(n, RealScalar.of(4.982125211204371));
   }
 
+  @Test
   public void testNormalize() {
     TensorScalarFunction vni = VectorNorm.of(2.6);
     Tensor nrm = Normalize.with(vni).apply(Tensors.vector(1, 2, 3));
     Chop._15.requireClose(vni.apply(nrm), RealScalar.ONE);
   }
 
+  @Test
   public void testNormalize2() {
     Distribution distribution = NormalDistribution.standard();
     TensorScalarFunction vni = VectorNorm.of(3.4);
@@ -44,6 +52,7 @@ public class VectorNormTest extends TestCase {
     Chop._15.requireClose(norm, RealScalar.ONE);
   }
 
+  @Test
   public void testQuantity1() {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(4, "m");
@@ -53,6 +62,7 @@ public class VectorNormTest extends TestCase {
     Chop._13.requireClose(lhs, rhs);
   }
 
+  @Test
   public void testQuantity2() {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(4, "m");
@@ -62,26 +72,31 @@ public class VectorNormTest extends TestCase {
     Chop._13.requireClose(lhs, rhs);
   }
 
+  @Test
   public void testToString() {
     TensorScalarFunction tensorScalarFunction = VectorNorm.of(3);
     String string = tensorScalarFunction.toString();
     assertTrue(string.startsWith("VectorNorm["));
   }
 
+  @Test
   public void testNormPFail() {
     AssertFail.of(() -> VectorNorm.of(0.99));
   }
 
+  @Test
   public void testMatrixFail() {
     TensorScalarFunction tensorScalarFunction = VectorNorm.of(2.6);
     AssertFail.of(() -> tensorScalarFunction.apply(IdentityMatrix.of(2)));
   }
 
+  @Test
   public void testScalarFail() {
     TensorScalarFunction tensorScalarFunction = VectorNorm.of(2.6);
     AssertFail.of(() -> tensorScalarFunction.apply(RealScalar.of(12)));
   }
 
+  @Test
   public void testPNullFail() {
     AssertFail.of(() -> VectorNorm.of((Number) null));
     AssertFail.of(() -> VectorNorm.of((Scalar) null));

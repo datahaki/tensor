@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.security.SecureRandom;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -16,11 +20,11 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class QuaternionToRotationMatrixTest extends TestCase {
+public class QuaternionToRotationMatrixTest {
   private static final Tensor ID3 = IdentityMatrix.of(3);
 
+  @Test
   public void testSimple() {
     Quaternion quaternion = Quaternion.of(0.240810, -0.761102, -0.355923, -0.485854);
     Tensor matrix = QuaternionToRotationMatrix.of(quaternion);
@@ -30,6 +34,7 @@ public class QuaternionToRotationMatrixTest extends TestCase {
     Chop._12.requireClose(matrix, altern);
   }
 
+  @Test
   public void testRandom() {
     Distribution distribution = NormalDistribution.standard();
     for (int index = 0; index < 10; ++index) {
@@ -44,6 +49,7 @@ public class QuaternionToRotationMatrixTest extends TestCase {
     }
   }
 
+  @Test
   public void testQuaternionVector() {
     Random random = new SecureRandom();
     for (int index = 0; index < 10; ++index) {
@@ -61,6 +67,7 @@ public class QuaternionToRotationMatrixTest extends TestCase {
     }
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> QuaternionToRotationMatrix.of(Quaternion.of(0, 0, 0, 0)));
     AssertFail.of(() -> QuaternionToRotationMatrix.of(Quaternion.of(0.0, 0.0, 0.0, 0.0)));

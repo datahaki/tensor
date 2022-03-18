@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.ExactTensorQ;
@@ -25,14 +30,15 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class LinearInterpolationTest extends TestCase {
+public class LinearInterpolationTest {
+  @Test
   public void testEmpty() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.empty());
     assertEquals(interpolation.get(Tensors.empty()), Tensors.empty());
   }
 
+  @Test
   public void testEmpty1() {
     Tensor tensor = Tensors.vector(10, 20, 30, 40);
     Interpolation interpolation = LinearInterpolation.of(tensor);
@@ -40,6 +46,7 @@ public class LinearInterpolationTest extends TestCase {
     assertEquals(res, tensor);
   }
 
+  @Test
   public void testEmpty2() {
     Tensor tensor = Tensors.vector(10, 20, 30, 40);
     Tensor ori = tensor.copy();
@@ -51,6 +58,7 @@ public class LinearInterpolationTest extends TestCase {
     assertEquals(interpolation.get(Tensors.empty()), ori);
   }
 
+  @Test
   public void testVectorGet() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.vector(10, 20, 30, 40));
     assertEquals(interpolation.get(Tensors.vector(0)), RealScalar.of(10));
@@ -59,6 +67,7 @@ public class LinearInterpolationTest extends TestCase {
     assertEquals(interpolation.get(Tensors.vector(3)), RealScalar.of(40));
   }
 
+  @Test
   public void testVectorAt() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.vector(10, 20, 30, 40));
     assertEquals(interpolation.At(RealScalar.of(0)), RealScalar.of(10));
@@ -67,6 +76,7 @@ public class LinearInterpolationTest extends TestCase {
     assertEquals(interpolation.At(RealScalar.of(3)), RealScalar.of(40));
   }
 
+  @Test
   public void testMatrix1() {
     Tensor tensor = Tensors.matrix(new Number[][] { { 5, 5, 5 }, { 1, 10, 100 } });
     Interpolation interpolation = LinearInterpolation.of(tensor);
@@ -81,6 +91,7 @@ public class LinearInterpolationTest extends TestCase {
     }
   }
 
+  @Test
   public void testMatrix2() {
     Tensor tensor = Tensors.matrix(new Number[][] { { 5, 5, 5 }, { 1, 10, 100 } });
     Interpolation interpolation = LinearInterpolation.of(tensor);
@@ -91,6 +102,7 @@ public class LinearInterpolationTest extends TestCase {
     assertEquals(interpolation.get(Array.zeros(2)), RealScalar.of(5));
   }
 
+  @Test
   public void testRank3() {
     Tensor arr = Array.of(Tensors::vector, 2, 3);
     Interpolation interpolation = LinearInterpolation.of(arr);
@@ -99,6 +111,7 @@ public class LinearInterpolationTest extends TestCase {
     assertEquals(result, RationalScalar.of(3, 4));
   }
 
+  @Test
   public void testQuantity() {
     Tensor vector = Tensors.of(Quantity.of(1, "m"), Quantity.of(4, "m"), Quantity.of(2, "m"));
     Interpolation interpolation = LinearInterpolation.of(vector);
@@ -107,6 +120,7 @@ public class LinearInterpolationTest extends TestCase {
     assertEquals(s, r);
   }
 
+  @Test
   public void testQuantity2() {
     Tensor v1 = Tensors.of(Quantity.of(1, "m"), Quantity.of(4, "m"), Quantity.of(2, "m"));
     Tensor v2 = Tensors.of(Quantity.of(9, "s"), Quantity.of(6, "s"), Quantity.of(-3, "s"));
@@ -122,6 +136,7 @@ public class LinearInterpolationTest extends TestCase {
     ExactTensorQ.require(at);
   }
 
+  @Test
   public void testExact() {
     Distribution distribution = GeometricDistribution.of(RationalScalar.of(1, 3));
     Tensor matrix = RandomVariate.of(distribution, 3, 5);
@@ -135,6 +150,7 @@ public class LinearInterpolationTest extends TestCase {
     assertEquals(res1, res2);
   }
 
+  @Test
   public void testUseCase() {
     Tensor tensor = Range.of(1, 11);
     Interpolation interpolation = LinearInterpolation.of(tensor);
@@ -149,11 +165,13 @@ public class LinearInterpolationTest extends TestCase {
     }
   }
 
+  @Test
   public void test0D() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.empty());
     AssertFail.of(() -> interpolation.get(RealScalar.ZERO));
   }
 
+  @Test
   public void test1D() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.vector(10, 20, 30, 40));
     TestHelper.checkMatch(interpolation);
@@ -161,6 +179,7 @@ public class LinearInterpolationTest extends TestCase {
     TestHelper.getScalarFail(interpolation);
   }
 
+  @Test
   public void test2D() {
     Distribution distribution = UniformDistribution.unit();
     Interpolation interpolation = LinearInterpolation.of(RandomVariate.of(distribution, 3, 5));
@@ -169,6 +188,7 @@ public class LinearInterpolationTest extends TestCase {
     TestHelper.getScalarFail(interpolation);
   }
 
+  @Test
   public void testClip() throws ClassNotFoundException, IOException {
     Interpolation interpolation = Serialization.copy(LinearInterpolation.of(Clips.interval(10, 14)));
     assertEquals(ExactScalarQ.require(interpolation.At(RealScalar.ZERO)), RealScalar.of(10));
@@ -178,11 +198,13 @@ public class LinearInterpolationTest extends TestCase {
     AssertFail.of(() -> interpolation.At(RealScalar.of(1.1)));
   }
 
+  @Test
   public void testFailNull() {
     AssertFail.of(() -> LinearInterpolation.of((Tensor) null));
     AssertFail.of(() -> LinearInterpolation.of((Clip) null));
   }
 
+  @Test
   public void testFailScalar() {
     Interpolation interpolation = LinearInterpolation.of(RealScalar.ONE);
     assertEquals(interpolation.get(Tensors.empty()), RealScalar.ONE);

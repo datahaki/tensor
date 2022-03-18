@@ -27,7 +27,10 @@ package ch.alpine.tensor.io;
   MATHEMATICA,
   /** compressed image format with alpha channel */
   PNG,
+  /** tab separated values */
+  TSV,
   /** ".vector" is an extension specific to the tensor library
+   * 
    * @see VectorFormat */
   VECTOR;
 

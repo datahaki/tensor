@@ -1,6 +1,6 @@
 // concept by njw
 // adapted by jph
-package ch.alpine.tensor.qty;
+package ch.alpine.tensor.jet;
 
 import java.io.Serializable;
 import java.math.MathContext;

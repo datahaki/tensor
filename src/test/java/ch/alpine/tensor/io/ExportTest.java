@@ -1,8 +1,15 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
@@ -18,9 +25,9 @@ import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.usr.TestFile;
-import junit.framework.TestCase;
 
-public class ExportTest extends TestCase {
+public class ExportTest {
+  @Test
   public void testMathematica() throws IOException {
     File file = TestFile.withExtension("mathematica");
     Tensor tensor = Tensors.fromString("{{2[m*s^-3], {3.123+3*I[V], {}}}, {{34.1231`32, 556}, 3/456, -323/2}}");
@@ -30,6 +37,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testMathematicaGz() throws IOException {
     File file = TestFile.withExtension("mathematica.gz");
     Tensor tensor = Tensors.fromString("{{2[m*s^-3], {3.123+3*I[V], {}}}, {{34.1231`32, 556}, 3/456, -323/2}}");
@@ -39,6 +47,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testCsv() throws IOException {
     File file = TestFile.withExtension("csv");
     Tensor tensor = Tensors.fromString("{{2, 3.123+3*I[V]}, {34.1231`32, 556, 3/456, -323/2}}");
@@ -47,6 +56,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testCsvGz() throws IOException {
     File file = TestFile.withExtension("csv.gz");
     Tensor tensor = Tensors.fromString("{{0, 2, 3.123+3*I[V]}, {34.1231`32, 556, 3/456, -323/2}}");
@@ -56,6 +66,7 @@ public class ExportTest extends TestCase {
     assertEquals(tensor, imported);
   }
 
+  @Test
   public void testCsvGzLarge() throws IOException {
     File file = TestFile.withExtension("csv.gz");
     Distribution distribution = BinomialDistribution.of(10, RealScalar.of(0.3));
@@ -67,6 +78,7 @@ public class ExportTest extends TestCase {
     ExactTensorQ.require(imported);
   }
 
+  @Test
   public void testPngColor() throws IOException {
     File file = TestFile.withExtension("png");
     Tensor image = RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11, 4);
@@ -75,6 +87,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testPngGray() throws IOException {
     File file = TestFile.withExtension("png");
     Tensor image = RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11);
@@ -83,6 +96,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testJpgColor() throws IOException {
     File file = TestFile.withExtension("jpg");
     Tensor image = MeanFilter.of(RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11, 4), 2);
@@ -95,6 +109,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testJpgGray() throws IOException {
     File file = TestFile.withExtension("jpg");
     Tensor image = MeanFilter.of(RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11), 4);
@@ -106,6 +121,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testBmpColor() throws IOException {
     File file = TestFile.withExtension("bmp");
     Tensor image = RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11, 4);
@@ -115,6 +131,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testBmpGray() throws IOException {
     File file = TestFile.withExtension("bmp");
     Tensor image = RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11);
@@ -123,6 +140,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testBmpGzGray() throws IOException {
     File file = TestFile.withExtension("bmp.gz");
     Tensor image = RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11);
@@ -131,6 +149,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testBmpGzGzGray() throws IOException {
     File file = TestFile.withExtension("bmp.gz.gz");
     Tensor image = RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 7, 11);
@@ -139,6 +158,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testMatlabM() throws IOException {
     File file = TestFile.withExtension("m");
     Tensor tensor = Tensors.fromString("{{2, 3.123+3*I, 34.1231}, {556, 3/456, -323/2}}");
@@ -146,6 +166,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testFailFile() {
     File file = new File("folder/does/not/exist/ethz.m");
     assertFalse(file.exists());
@@ -158,6 +179,7 @@ public class ExportTest extends TestCase {
     assertFalse(file.exists());
   }
 
+  @Test
   public void testGzOnlyFail() {
     File file = TestFile.withExtension("gz");
     Tensor tensor = Tensors.vector(1, 2, 3, 4);
@@ -170,6 +192,7 @@ public class ExportTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testFailExtension() {
     File file = new File("ethz.idsc");
     assertFalse(file.exists());
@@ -182,6 +205,7 @@ public class ExportTest extends TestCase {
     assertFalse(file.exists());
   }
 
+  @Test
   public void testBmpNull() {
     File file = TestFile.withExtension("bmp");
     try {
@@ -193,6 +217,7 @@ public class ExportTest extends TestCase {
     assertFalse(file.exists());
   }
 
+  @Test
   public void testBmpGzNull() {
     File file = TestFile.withExtension("bmp.gz");
     try {
@@ -204,6 +229,7 @@ public class ExportTest extends TestCase {
     assertFalse(file.exists());
   }
 
+  @Test
   public void testObjectNullFail() {
     File file = new File("tensorTestObjectNullFail.file");
     assertFalse(file.exists());

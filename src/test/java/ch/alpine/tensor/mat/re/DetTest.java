@@ -1,8 +1,13 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigInteger;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -24,13 +29,14 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class DetTest extends TestCase {
+public class DetTest {
+  @Test
   public void testEmpty() {
     AssertFail.of(() -> Det.of(Tensors.empty()));
   }
 
+  @Test
   public void testEmptyMatrix() {
     Tensor m = Tensors.matrix(new Number[][] { {} });
     // this is consistent with Mathematica
@@ -38,6 +44,7 @@ public class DetTest extends TestCase {
     AssertFail.of(() -> Det.of(m));
   }
 
+  @Test
   public void testDet1() {
     Tensor m = Tensors.matrix(new Number[][] { //
         { +2, 3, 4 }, //
@@ -46,6 +53,7 @@ public class DetTest extends TestCase {
     assertEquals(Det.of(m), RealScalar.of(-21));
   }
 
+  @Test
   public void testDet2() {
     Tensor m = Tensors.matrix(new Number[][] { //
         { -2, 3, 4 }, //
@@ -54,6 +62,7 @@ public class DetTest extends TestCase {
     assertEquals(Det.of(m), RealScalar.of(-9));
   }
 
+  @Test
   public void testDet3() {
     Tensor m = Tensors.matrix(new Number[][] { //
         { -2, 3, +4 }, //
@@ -62,11 +71,13 @@ public class DetTest extends TestCase {
     assertEquals(Det.of(m), RealScalar.of(33));
   }
 
+  @Test
   public void testId() {
     for (int n = 1; n < 10; ++n)
       assertEquals(Det.of(IdentityMatrix.of(n)), RealScalar.ONE);
   }
 
+  @Test
   public void testReversedId() {
     Tensor actual = Tensors.vector(0, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, 1);
     for (int n = 1; n < 10; ++n) {
@@ -76,6 +87,7 @@ public class DetTest extends TestCase {
     }
   }
 
+  @Test
   public void testDet4() {
     Tensor m = Tensors.matrix(new Number[][] { //
         { -2, 3, +4, 0 }, //
@@ -88,6 +100,7 @@ public class DetTest extends TestCase {
     assertEquals(Det.of(m), RealScalar.of(33));
   }
 
+  @Test
   public void testNonSquare() {
     Tensor m = Tensors.matrix(new Number[][] { //
         { -2, 3, +4, 0 }, //
@@ -96,6 +109,7 @@ public class DetTest extends TestCase {
     AssertFail.of(() -> Det.of(m));
   }
 
+  @Test
   public void testNonSquare2() {
     Tensor m = Tensors.matrix(new Number[][] { //
         { -2, 3, +4 }, //
@@ -106,6 +120,7 @@ public class DetTest extends TestCase {
     AssertFail.of(() -> Det.of(m));
   }
 
+  @Test
   public void testComplex1() {
     Tensor re = Tensors.matrix(new Number[][] { //
         { 0, 0, 3 }, //
@@ -121,6 +136,7 @@ public class DetTest extends TestCase {
     assertEquals(Det.of(matrix), ComplexScalar.of(270, -63));
   }
 
+  @Test
   public void testComplex2() {
     Tensor re = Tensors.matrix(new Number[][] { //
         { 5, 0, 3 }, //
@@ -136,6 +152,7 @@ public class DetTest extends TestCase {
     assertEquals(Det.of(matrix), ComplexScalar.of(387, 108));
   }
 
+  @Test
   public void testComplex3() {
     Tensor re = Tensors.matrix(new Number[][] { //
         { 5, 0, 3 }, //
@@ -151,6 +168,7 @@ public class DetTest extends TestCase {
     assertEquals(Det.of(matrix), ComplexScalar.of(421, 120));
   }
 
+  @Test
   public void testSingular() {
     for (Pivot pivot : Pivots.values()) {
       assertEquals(Det.of(Array.zeros(5, 5), pivot), RealScalar.ZERO);
@@ -159,17 +177,20 @@ public class DetTest extends TestCase {
     }
   }
 
+  @Test
   public void testSingularFail() {
     AssertFail.of(() -> Det.of(Array.zeros(2, 5)));
     AssertFail.of(() -> Det.of(Array.zeros(5, 2)));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> Det.of(Array.zeros(5, 2), null));
     AssertFail.of(() -> Det.of(Array.zeros(2, 5), null));
   }
 
   // https://ch.mathworks.com/help/matlab/ref/det.html
+  @Test
   public void testMatlabEx() {
     Tensor matrix = ResourceData.of("/mat/det0-matlab.csv");
     Scalar det = Det.of(matrix);
@@ -184,17 +205,20 @@ public class DetTest extends TestCase {
     num2.toString(); // to eliminate warning
   }
 
+  @Test
   public void testHilbert() {
     Scalar det = Det.of(HilbertMatrix.of(8));
     assertEquals(det, RationalScalar.of( //
         BigInteger.ONE, new BigInteger("365356847125734485878112256000000")));
   }
 
+  @Test
   public void testHilbert2() {
     Scalar det = Det.of(HilbertMatrix.of(8), Pivots.FIRST_NON_ZERO);
     assertEquals(det, Scalars.fromString("1/365356847125734485878112256000000"));
   }
 
+  @Test
   public void testGaussScalar() {
     int n = 7;
     int prime = 7879;
@@ -203,17 +227,20 @@ public class DetTest extends TestCase {
     assertTrue(Det.of(matrix) instanceof GaussScalar);
   }
 
+  @Test
   public void testUnitsSingle() {
     Tensor tensor = Tensors.fromString("{{1[m], 2}, {4, 5[m]}, {3, 5}}");
     AssertFail.of(() -> Det.of(tensor));
   }
 
+  @Test
   public void testUnitsMixed() {
     Tensor tensor = Tensors.fromString("{{1[m], 2}, {4, 5[s]}, {3, 5}}");
     AssertFail.of(() -> Det.of(tensor));
     // assertEquals(Det.of(tensor), Quantity.of(0, ""));
   }
 
+  @Test
   public void testQuantity1() {
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(2, "m");
@@ -227,33 +254,40 @@ public class DetTest extends TestCase {
     assertEquals(det, Scalars.fromString("-20[m^2*rad^2]"));
   }
 
+  @Test
   public void testFailMatrixQ() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {4, 5}}");
     AssertFail.of(() -> Det.of(tensor));
   }
 
+  @Test
   public void testFailNonArray() {
     Tensor matrix = HilbertMatrix.of(4);
     matrix.set(Tensors.vector(1, 2, 3), 1, 2);
     AssertFail.of(() -> Det.of(matrix));
   }
 
+  @Test
   public void testFailRank3() {
     AssertFail.of(() -> Det.of(LeviCivitaTensor.of(3)));
   }
 
+  @Test
   public void testFailScalar() {
     AssertFail.of(() -> Det.of(Pi.HALF));
   }
 
+  @Test
   public void testFailVector() {
     AssertFail.of(() -> Det.of(Tensors.vector(1, 2, 3)));
   }
 
+  @Test
   public void testFailRank3b() {
     AssertFail.of(() -> Det.of(Array.zeros(2, 2, 3)));
   }
 
+  @Test
   public void testFailNull() {
     AssertFail.of(() -> Det.of(null));
     AssertFail.of(() -> Det.of(HilbertMatrix.of(3), null));

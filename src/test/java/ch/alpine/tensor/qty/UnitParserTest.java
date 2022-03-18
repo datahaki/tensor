@@ -1,16 +1,22 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.lang.reflect.Modifier;
 
-import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class UnitParserTest extends TestCase {
+import ch.alpine.tensor.usr.AssertFail;
+
+public class UnitParserTest {
   private static void _confirmFail(String string) {
     AssertFail.of(() -> UnitParser.of(string));
   }
 
+  @Test
   public void testLookup() {
     UnitParser.of("A*kg^-1*s^2");
     UnitParser.of("HaqiuytasdMAM");
@@ -19,6 +25,7 @@ public class UnitParserTest extends TestCase {
     assertEquals(UnitParser.of(""), Unit.ONE);
   }
 
+  @Test
   public void testFail() {
     _confirmFail("Haqiuyt asdMAM");
     _confirmFail("HaqiuytasdMAM2");
@@ -31,6 +38,7 @@ public class UnitParserTest extends TestCase {
     _confirmFail("^2");
   }
 
+  @Test
   public void testDubious() {
     assertEquals(UnitParser.of("*a"), UnitParser.of("a"));
     assertEquals(UnitParser.of("a*"), UnitParser.of("a"));
@@ -38,6 +46,7 @@ public class UnitParserTest extends TestCase {
     assertEquals(UnitParser.of("**a***b**"), UnitParser.of("a*b"));
   }
 
+  @Test
   public void testUnderscore() {
     Unit unit = UnitParser.of("V_AC");
     assertTrue(unit == UnitParser.of("V_AC"));
@@ -45,6 +54,7 @@ public class UnitParserTest extends TestCase {
     assertFalse(UnitParser.of("___").equals(UnitParser.of("____")));
   }
 
+  @Test
   public void testPackageVisibility() {
     assertFalse(Modifier.isPublic(UnitParser.class.getModifiers()));
   }

@@ -1,15 +1,17 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Cosh;
 import ch.alpine.tensor.sca.tri.Sin;
 import ch.alpine.tensor.sca.tri.Sinh;
-import junit.framework.TestCase;
 
-public class TrigonometrySeriesTest extends TestCase {
+public class TrigonometrySeriesTest {
+  @Test
   public void testTrigonometryExact() {
     Scalar q1 = Quaternion.of(1, 3, -2, 2);
     Quaternion sin = Quaternion.of( //
@@ -26,6 +28,7 @@ public class TrigonometrySeriesTest extends TestCase {
     Tolerance.CHOP.requireClose(Cosh.FUNCTION.apply(q1), cosh);
   }
 
+  @Test
   public void testTrigonometryNumeric() {
     Scalar q1 = Quaternion.of(1, 3., -2, 2);
     Quaternion sin = Quaternion.of( //

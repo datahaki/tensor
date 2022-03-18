@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.lie.r2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -16,24 +20,27 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ConvexHullTest extends TestCase {
+public class ConvexHullTest {
+  @Test
   public void testEmpty() {
     assertEquals(ConvexHull.of(Tensors.empty()), Tensors.empty());
   }
 
+  @Test
   public void testSingle() {
     Tensor v = Tensors.of(Tensors.vector(-1.3, 2.5));
     assertEquals(ConvexHull.of(v), v);
   }
 
+  @Test
   public void testSingleCopies() {
     Tensor vec = Tensors.vector(-1.3, 2.5);
     Tensor v = Array.of(l -> vec, 4);
     assertEquals(ConvexHull.of(v), Tensors.of(vec));
   }
 
+  @Test
   public void testDuo() {
     Tensor v = Tensors.of( //
         Tensors.vector(-1.3, 2.5), //
@@ -43,6 +50,7 @@ public class ConvexHullTest extends TestCase {
     assertEquals(hull, v);
   }
 
+  @Test
   public void testExample() {
     Tensor points = Tensors.matrix(new Number[][] { //
         { -1, 2 }, //
@@ -64,6 +72,7 @@ public class ConvexHullTest extends TestCase {
     assertEquals(expected, actual);
   }
 
+  @Test
   public void testQuantity() {
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(4, "m");
@@ -76,6 +85,7 @@ public class ConvexHullTest extends TestCase {
     assertEquals(hull, mat);
   }
 
+  @Test
   public void testChallenge() {
     double variance = 1e-10;
     Tensor cube = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}");
@@ -88,6 +98,7 @@ public class ConvexHullTest extends TestCase {
   // this issue appeared first in owl
   // due to the introduction of chop._12 the issue of clustering in the
   // epsilon range seems to be resolved at least for interior points
+  @Test
   public void testChallenge2() {
     Tensor cube = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}");
     double variance = 1e-15;
@@ -97,16 +108,19 @@ public class ConvexHullTest extends TestCase {
     assertEquals(hull, cube);
   }
 
+  @Test
   public void testStream() {
     ConvexHull.of(Stream.empty(), Chop._10);
   }
 
+  @Test
   public void testConvexHull() {
     Tensor tensor = CirclePoints.of(6);
     Tensor hull = ConvexHull.of(tensor);
     assertEquals(Tally.of(tensor), Tally.of(hull));
   }
 
+  @Test
   public void testFail() {
     Distribution distribution = UniformDistribution.unit();
     AssertFail.of(() -> ConvexHull.of(RandomVariate.of(distribution, 5, 2, 3)));
@@ -115,6 +129,7 @@ public class ConvexHullTest extends TestCase {
     AssertFail.of(() -> ConvexHull.of(Tensors.fromString("{{2, 3}, {{1}, 2}}")));
   }
 
+  @Test
   public void testFailMore() {
     Tensor bad1 = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
     AssertFail.of(() -> ConvexHull.of(bad1));

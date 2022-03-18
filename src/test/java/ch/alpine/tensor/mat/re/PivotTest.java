@@ -1,11 +1,14 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.lang.reflect.Modifier;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class PivotTest extends TestCase {
+public class PivotTest {
+  @Test
   public void testPackageVisibility() {
     assertTrue(Modifier.isPublic(Pivot.class.getModifiers()));
   }

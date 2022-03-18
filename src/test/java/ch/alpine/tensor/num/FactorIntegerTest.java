@@ -1,16 +1,19 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
-import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class FactorIntegerTest extends TestCase {
+import ch.alpine.tensor.usr.AssertFail;
+
+public class FactorIntegerTest {
   private static void _check(BigInteger n) {
     Map<BigInteger, Integer> map = FactorInteger.of(n);
     BigInteger p = BigInteger.ONE;
@@ -19,22 +22,26 @@ public class FactorIntegerTest extends TestCase {
     assertEquals(p, n);
   }
 
+  @Test
   public void testZero() {
     Map<BigInteger, Integer> map = FactorInteger.of(BigInteger.valueOf(0));
     // System.out.println(map);
     assertEquals(map, Collections.singletonMap(BigInteger.ZERO, 1));
   }
 
+  @Test
   public void testOne() {
     Map<BigInteger, Integer> map = FactorInteger.of(BigInteger.ONE);
     assertEquals(map, Collections.singletonMap(BigInteger.ONE, 1));
   }
 
+  @Test
   public void testTwo() {
     Map<BigInteger, Integer> map = FactorInteger.of(BigInteger.valueOf(2));
     assertEquals(map, Collections.singletonMap(BigInteger.valueOf(2), 1));
   }
 
+  @Test
   public void testSimple() {
     Map<BigInteger, Integer> map = FactorInteger.of(BigInteger.valueOf(144002631));
     assertEquals(map.size(), 4);
@@ -44,6 +51,7 @@ public class FactorIntegerTest extends TestCase {
     assertEquals(map.get(BigInteger.valueOf(67)), (Integer) 2);
   }
 
+  @Test
   public void testRandom() {
     Random random = new Random();
     for (int count = 0; count < 10; ++count) {
@@ -52,6 +60,7 @@ public class FactorIntegerTest extends TestCase {
     }
   }
 
+  @Test
   public void testSmall() {
     for (int count = 0; count < 100; ++count) {
       BigInteger n = BigInteger.valueOf(count);
@@ -59,6 +68,7 @@ public class FactorIntegerTest extends TestCase {
     }
   }
 
+  @Test
   public void testNegativeFail() {
     AssertFail.of(() -> FactorInteger.of(BigInteger.valueOf(-3)));
   }

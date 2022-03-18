@@ -1,20 +1,25 @@
 // code by jph
 package ch.alpine.tensor.sca.tri;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class ArcCosTest extends TestCase {
+public class ArcCosTest {
+  @Test
   public void testReal() {
     assertEquals(ArcCos.of(Scalars.fromString("1")), RealScalar.of(Math.acos(1)));
     assertEquals(ArcCos.of(Scalars.fromString("-1")), RealScalar.of(Math.acos(-1)));
   }
 
+  @Test
   public void testRealOutside() {
     Scalar s = RealScalar.of(3);
     Scalar r = ArcCos.of(s);
@@ -22,6 +27,7 @@ public class ArcCosTest extends TestCase {
     assertEquals(r, Scalars.fromString("0+1.7627471740390872*I"));
   }
 
+  @Test
   public void testRealOutsideNeg() {
     Scalar s = RealScalar.of(-3);
     Scalar r = ArcCos.of(s);
@@ -30,6 +36,7 @@ public class ArcCosTest extends TestCase {
     Chop._14.requireClose(r, Scalars.fromString("3.141592653589793-1.762747174039086*I"));
   }
 
+  @Test
   public void testComplex() {
     Scalar s = ComplexScalar.of(5, -7);
     Scalar r = ArcCos.of(s);

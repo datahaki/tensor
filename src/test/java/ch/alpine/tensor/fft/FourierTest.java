@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.fft;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -12,9 +14,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class FourierTest extends TestCase {
+public class FourierTest {
+  @Test
   public void test2() {
     Tensor vector = Tensors.fromString("{1 + 2*I, 3 + 11*I}");
     Tensor expect = Tensors.fromString("{2.828427124746190 + 9.19238815542512*I, -1.414213562373095 - 6.36396103067893*I}");
@@ -22,6 +24,7 @@ public class FourierTest extends TestCase {
     Tolerance.CHOP.requireClose(InverseFourier.of(Fourier.of(vector)), vector);
   }
 
+  @Test
   public void test2Quantity() {
     Tensor vector = Tensors.fromString("{1 + 2*I[m], 3 + 11*I[m]}");
     Tensor expect = Tensors.fromString("{2.828427124746190 + 9.19238815542512*I[m], -1.414213562373095 - 6.36396103067893*I[m]}");
@@ -29,6 +32,7 @@ public class FourierTest extends TestCase {
     Tolerance.CHOP.requireClose(InverseFourier.of(Fourier.of(vector)), vector);
   }
 
+  @Test
   public void test4() {
     Tensor vector = Tensors.vector(1, 2, 0, 0);
     Tensor tensor = Fourier.of(vector);
@@ -40,6 +44,7 @@ public class FourierTest extends TestCase {
     Tolerance.CHOP.requireClose(backed, Tensors.vector(1, 0, 0, 2));
   }
 
+  @Test
   public void testRandom() {
     Distribution distribution = NormalDistribution.standard();
     for (int n = 0; n < 7; ++n)
@@ -53,19 +58,23 @@ public class FourierTest extends TestCase {
       }
   }
 
+  @Test
   public void testFailScalar() {
     AssertFail.of(() -> Fourier.of(RealScalar.ONE));
   }
 
+  @Test
   public void testFailEmpty() {
     AssertFail.of(() -> Fourier.of(Tensors.empty()));
   }
 
+  @Test
   public void test3Fail() {
     Tensor vector = Tensors.vector(1, 2, 0);
     AssertFail.of(() -> Fourier.of(vector));
   }
 
+  @Test
   public void testFailMatrix() {
     AssertFail.of(() -> Fourier.of(HilbertMatrix.of(4)));
   }

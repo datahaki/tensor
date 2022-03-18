@@ -25,7 +25,11 @@ import ch.alpine.tensor.sca.exp.Log;
  * <pre>
  * ArcTan[x, y] == ArcTan[ y / x ]
  * </pre>
- *
+ * 
+ * <pre>
+ * ArcTan[NaN] == NaN
+ * </pre>
+ * 
  * <p>Reference:
  * <a href="http://www.milefoot.com/math/complex/functionsofi.htm">functions of i</a>
  * 

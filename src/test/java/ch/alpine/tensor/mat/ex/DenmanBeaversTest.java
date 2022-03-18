@@ -3,15 +3,17 @@ package ch.alpine.tensor.mat.ex;
 
 import java.util.Random;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class DenmanBeaversTest extends TestCase {
+public class DenmanBeaversTest {
+  @Test
   public void testSimple() {
     Random random = new Random(3);
     Distribution distribution = NormalDistribution.standard();

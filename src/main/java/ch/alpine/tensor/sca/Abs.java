@@ -14,6 +14,10 @@ import ch.alpine.tensor.qty.Quantity;
 /** Abs is consistent with Mathematica for {@link RealScalar}, {@link ComplexScalar},
  * {@link Quaternion}, and {@link Quantity}.
  * 
+ * <pre>
+ * Abs[NaN] == NaN
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Abs.html">Abs</a> */
 public enum Abs implements ScalarUnaryOperator {

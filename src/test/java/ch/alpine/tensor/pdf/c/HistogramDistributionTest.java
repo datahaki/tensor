@@ -1,9 +1,14 @@
 // code by jph, gjoel
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
@@ -26,9 +31,9 @@ import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class HistogramDistributionTest extends TestCase {
+public class HistogramDistributionTest {
+  @Test
   public void testPdf() {
     Distribution distribution = //
         HistogramDistribution.of(Tensors.vector(-3, -3, -2, -2, 10), RealScalar.of(2));
@@ -49,6 +54,7 @@ public class HistogramDistributionTest extends TestCase {
     assertTrue(90 < set.size());
   }
 
+  @Test
   public void testFreedman() {
     Tensor samples = Tensors.vector(-4, -3, -3, -2, -2, 10);
     Distribution distribution = HistogramDistribution.of(samples, BinningMethod.IQR);
@@ -57,12 +63,14 @@ public class HistogramDistributionTest extends TestCase {
     assertTrue(Scalars.lessThan(RealScalar.ONE, BinningMethod.IQR.apply(samples)));
   }
 
+  @Test
   public void testFreedmanMin() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(3, 4));
     assertTrue(distribution.toString().startsWith("HistogramDistribution"));
     AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(3, 3)));
   }
 
+  @Test
   public void testScott() {
     Tensor samples = Tensors.vector(-4, -3, -3, -2, -2, 10);
     Distribution distribution = HistogramDistribution.of(samples, BinningMethod.VARIANCE);
@@ -71,6 +79,7 @@ public class HistogramDistributionTest extends TestCase {
     assertTrue(Scalars.lessThan(RealScalar.ONE, BinningMethod.VARIANCE.apply(samples)));
   }
 
+  @Test
   public void testQuantity() {
     Tensor vector = QuantityTensor.of(Tensors.vector(1, 1.7, 2, 3, 3.9, 4, 4.1), "m");
     Scalar width = Quantity.of(0.7, "m");
@@ -91,6 +100,7 @@ public class HistogramDistributionTest extends TestCase {
     assertTrue(90 < set.size());
   }
 
+  @Test
   public void testMean() {
     Tensor vector = QuantityTensor.of(Tensors.vector(1, 2, 3), "m");
     Distribution distribution = //
@@ -99,6 +109,7 @@ public class HistogramDistributionTest extends TestCase {
     assertEquals(mean, Quantity.of(2.5, "m"));
   }
 
+  @Test
   public void testVariance() {
     Tensor vector = QuantityTensor.of(Tensors.vector(1, 2, 3), "m");
     Distribution distribution = HistogramDistribution.of(vector, Quantity.of(1, "m"));
@@ -108,6 +119,7 @@ public class HistogramDistributionTest extends TestCase {
             Expectation.variance(UniformDistribution.of(0, 3)), "m^2"));
   }
 
+  @Test
   public void testVariance1() {
     assertEquals( //
         Expectation.variance(HistogramDistribution.of(Tensors.vector(0.5), RealScalar.of(1))), //
@@ -117,6 +129,7 @@ public class HistogramDistributionTest extends TestCase {
         Expectation.variance(UniformDistribution.of(0, 2)));
   }
 
+  @Test
   public void testVariance2() {
     assertEquals( //
         Expectation.variance(HistogramDistribution.of(Tensors.vector(0.5, 1.5), RealScalar.of(1))), //
@@ -126,21 +139,25 @@ public class HistogramDistributionTest extends TestCase {
         Expectation.variance(UniformDistribution.of(0, 4)));
   }
 
+  @Test
   public void testVarianceIr1() {
     assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(0.5, 1.5, 1.5), RealScalar.of(1))), RationalScalar.of(11, 36));
     assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(2.5, 1.5, 1.5), RealScalar.of(1))), RationalScalar.of(11, 36));
   }
 
+  @Test
   public void testVarianceIr2() {
     assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(4.5, 4.5, 2.5), RealScalar.of(2))), RationalScalar.of(11, 9));
     assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(2.5, 1.5, 1.5), RealScalar.of(2))), RationalScalar.of(11, 9));
   }
 
+  @Test
   public void testVarianceIr3() {
     assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(4.5, 4.5, 2.5, 10.5), RealScalar.of(2))), RationalScalar.of(28, 3));
     assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(2.5, 1.5, 1.5, 10.5), RealScalar.of(2))), RationalScalar.of(52, 3));
   }
 
+  @Test
   public void testCDF() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(0.5, 1.5, 1.5, 2.2), RealScalar.of(1));
     CDF cdf = CDF.of(distribution);
@@ -151,6 +168,7 @@ public class HistogramDistributionTest extends TestCase {
     assertEquals(cdf.p_lessThan(RationalScalar.of(3, 1)), RationalScalar.of(1, 1));
   }
 
+  @Test
   public void testQuantityCDF() {
     Random random = new Random(3);
     Tensor samples = QuantityTensor.of(RandomVariate.of(UniformDistribution.of(100, 120), random, 100), "kg");
@@ -168,6 +186,7 @@ public class HistogramDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testInverseCDF() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(0.5, 1.5, 1.5, 2.2), RealScalar.of(1));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -193,6 +212,7 @@ public class HistogramDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testInverseCDF2() {
     Tensor vector = QuantityTensor.of(Tensors.vector(1, 2, 3), "m");
     Distribution distribution = HistogramDistribution.of(vector, Quantity.of(2, "m"));
@@ -214,6 +234,7 @@ public class HistogramDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testInverseCDFOne() {
     Tensor vector = QuantityTensor.of(Tensors.vector(1, 2, 3), "m");
     Distribution distribution = HistogramDistribution.of(vector, Quantity.of(2, "m"));
@@ -221,6 +242,7 @@ public class HistogramDistributionTest extends TestCase {
     assertEquals(inverseCDF.quantile(RealScalar.ONE), Quantity.of(4, "m"));
   }
 
+  @Test
   public void testCDFInverseCDF() {
     Tensor samples = QuantityTensor.of(Tensors.vector(-6, -3.5, -1.3, 1, 2, 0, 3, 0, 3, 0), "m");
     HistogramDistribution distribution = (HistogramDistribution) HistogramDistribution.of(samples, Quantity.of(2, "m"));
@@ -237,16 +259,19 @@ public class HistogramDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testMarkov() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(1, 2, 0, 3, 2, 0, 1, 2));
     TestMarkovChebyshev.markov(distribution);
     TestMarkovChebyshev.chebyshev(distribution);
   }
 
+  @Test
   public void testFailEmpty() {
     AssertFail.of(() -> HistogramDistribution.of(Tensors.empty(), RealScalar.of(2)));
   }
 
+  @Test
   public void testFailWidth() {
     AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.ZERO));
     AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.of(-2)));

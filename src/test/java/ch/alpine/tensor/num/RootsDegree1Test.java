@@ -1,13 +1,17 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class RootsDegree1Test extends TestCase {
+public class RootsDegree1Test {
+  @Test
   public void testGaussScalar() {
     Tensor coeffs = Tensors.of(GaussScalar.of(4, 7), GaussScalar.of(5, 7));
     Tensor roots = Roots.of(coeffs);

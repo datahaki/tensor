@@ -8,8 +8,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 
-/** EXPERIMENTAL */
+/** utilities for {@link UnitSystem}s */
 public enum UnitSystems {
   ;
   /** Example: the base units of the SI unit system are
@@ -58,10 +59,21 @@ public enum UnitSystems {
   }
 
   // ---
+  /** @param u1
+   * @param u2
+   * @return unit system with conversions from both u1 and u2
+   * @throws Exception if u1 and u2 contain a key that maps to a different value */
   public static UnitSystem join(UnitSystem u1, UnitSystem u2) {
     Map<String, Scalar> map = new HashMap<>(u1.map());
-    u2.map().entrySet().stream() //
-        .forEach(entry -> map.put(entry.getKey(), entry.getValue()));
+    for (Entry<String, Scalar> entry : u2.map().entrySet()) {
+      String key = entry.getKey();
+      Scalar value = entry.getValue();
+      if (map.containsKey(key)) {
+        if (!map.get(key).equals(value))
+          throw TensorRuntimeException.of(map.get(key), value);
+      } else
+        map.put(key, value);
+    }
     return SimpleUnitSystem.from(map);
   }
 }

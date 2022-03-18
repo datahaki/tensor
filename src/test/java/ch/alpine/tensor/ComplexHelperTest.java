@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
@@ -9,9 +14,9 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ComplexHelperTest extends TestCase {
+public class ComplexHelperTest {
+  @Test
   public void testAdd() {
     Scalar a = Scalars.fromString("-13*I[m]");
     Scalar b = Scalars.fromString("-3/7[m]");
@@ -21,6 +26,7 @@ public class ComplexHelperTest extends TestCase {
     assertTrue(c instanceof Quantity);
   }
 
+  @Test
   public void testPolar() {
     Scalar abs = Quantity.of(2, "V*m^-1");
     Scalar q = ComplexScalar.fromPolar(abs, RealScalar.ONE);
@@ -29,6 +35,7 @@ public class ComplexHelperTest extends TestCase {
     assertEquals(modulus, abs);
   }
 
+  @Test
   public void testUnder1() {
     Scalar c = ComplexScalar.of(2, 3);
     Scalar q = Quantity.of(1, "V");
@@ -42,6 +49,7 @@ public class ComplexHelperTest extends TestCase {
     assertEquals(cuq, qdc);
   }
 
+  @Test
   public void testUnder2() {
     Scalar c = ComplexScalar.of(2, 3);
     Scalar q = Quantity.of(1, "V");
@@ -55,6 +63,7 @@ public class ComplexHelperTest extends TestCase {
     assertEquals(quc, cdq);
   }
 
+  @Test
   public void testUnder3() {
     Scalar q1 = Quantity.of(ComplexScalar.of(2, 3), "m");
     Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "V");
@@ -68,6 +77,7 @@ public class ComplexHelperTest extends TestCase {
     assertEquals(quc, cdq);
   }
 
+  @Test
   public void testUnder4() {
     Scalar q1 = Quantity.of(ComplexScalar.of(2, 3), "m");
     Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "m");
@@ -81,6 +91,7 @@ public class ComplexHelperTest extends TestCase {
     assertEquals(quc, cdq);
   }
 
+  @Test
   public void testPlusQuantity() {
     Scalar c = ComplexScalar.of(2, 3);
     Scalar q = Quantity.of(0, "V");
@@ -88,6 +99,7 @@ public class ComplexHelperTest extends TestCase {
     AssertFail.of(() -> c.add(q));
   }
 
+  @Test
   public void testSqrt() {
     Distribution distribution = NormalDistribution.standard();
     for (int count = 0; count < 100; ++count) {
@@ -100,6 +112,7 @@ public class ComplexHelperTest extends TestCase {
     }
   }
 
+  @Test
   public void testEpsilonP1() {
     Scalar re = RealScalar.of(4.9E-324);
     Scalar im = RealScalar.of(4.9E-324);
@@ -113,6 +126,7 @@ public class ComplexHelperTest extends TestCase {
     assertTrue(lessThan);
   }
 
+  @Test
   public void testEpsilonN1() {
     Scalar re = RealScalar.of(-4.9E-324);
     Scalar im = RealScalar.of(4.9E-324);
@@ -127,6 +141,7 @@ public class ComplexHelperTest extends TestCase {
   }
 
   @SuppressWarnings("unused")
+  @Test
   public void testEpsilon01() {
     Scalar re = RealScalar.of(0);
     Scalar im = RealScalar.of(4.9E-324);
@@ -141,12 +156,14 @@ public class ComplexHelperTest extends TestCase {
     // 2.432040959320809*10^-162 + 1.007384349597552*10^-162 I
   }
 
+  @Test
   public void testPlusQuantityFail() {
     Scalar c = DeterminateScalarQ.require(ComplexScalar.of(2, 3));
     Scalar q = DeterminateScalarQ.require(Quantity.of(1, "V"));
     AssertFail.of(() -> c.add(q));
   }
 
+  @Test
   public void testQuantityFail() {
     Scalar c = DeterminateScalarQ.require(Quantity.of(3, "m"));
     Scalar r = DeterminateScalarQ.require(Pi.VALUE);

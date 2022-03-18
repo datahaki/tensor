@@ -1,15 +1,17 @@
 // code by jph
 package ch.alpine.tensor.mat.qr;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class QREigensystemTest extends TestCase {
+public class QREigensystemTest {
+  @Test
   public void testSymmetric() {
     Tensor matrix = Tensors.fromString("{{52, 30, 49, 28}, {30, 50, 8, 44}, {49, 8, 46, 16}, {28, 44, 16, 22}}");
     QREigensystem qrEigensystem = new QREigensystem(matrix, Chop._12);

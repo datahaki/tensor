@@ -1,9 +1,12 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SparseEntryTransposeTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+public class SparseEntryTransposeTest {
+  @Test
   public void testVisibility() {
     assertEquals(SparseEntryTranspose.class.getModifiers() & 1, 0);
   }

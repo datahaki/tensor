@@ -1,14 +1,19 @@
 // code by jph
 package ch.alpine.tensor.num;
 
-import ch.alpine.tensor.RealScalar;
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BooleTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+import ch.alpine.tensor.RealScalar;
+
+public class BooleTest {
+  @Test
   public void testTrue() {
     assertEquals(Boole.of(true), RealScalar.ONE);
   }
 
+  @Test
   public void testFalse() {
     assertEquals(Boole.of(false), RealScalar.ZERO);
   }

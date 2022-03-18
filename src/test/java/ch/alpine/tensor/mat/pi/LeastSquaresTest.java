@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.mat.pi;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactTensorQ;
@@ -34,9 +38,9 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
-import junit.framework.TestCase;
 
-public class LeastSquaresTest extends TestCase {
+public class LeastSquaresTest {
+  @Test
   public void testSquareExact() {
     Tensor matrix = HilbertMatrix.of(4, 4);
     Tensor pinv = PseudoInverse.of(matrix);
@@ -44,6 +48,7 @@ public class LeastSquaresTest extends TestCase {
     ExactTensorQ.require(pinv);
   }
 
+  @Test
   public void testMixedUnitsVantHoff() {
     // inspired by code by gjoel
     for (int deg = 0; deg <= 2; ++deg) {
@@ -86,6 +91,7 @@ public class LeastSquaresTest extends TestCase {
     Tolerance.CHOP.requireClose(x3, x2);
   }
 
+  @Test
   public void testEasy() {
     Tensor m = Transpose.of(IdentityMatrix.of(4).extract(0, 3));
     for (Tensor perm : Permutations.of(Range.of(0, 4))) {
@@ -95,6 +101,7 @@ public class LeastSquaresTest extends TestCase {
     }
   }
 
+  @Test
   public void testMathematica() {
     Tensor matrix = HilbertMatrix.of(2, 3);
     assertEquals(matrix, Tensors.fromString("{{1, 1/2, 1/3}, {1/2, 1/3, 1/4}}"));
@@ -103,6 +110,7 @@ public class LeastSquaresTest extends TestCase {
     assertEquals(cholesky2, expect);
   }
 
+  @Test
   public void testMathematicaB() {
     Tensor matrix = HilbertMatrix.of(2, 3);
     assertEquals(matrix, Tensors.fromString("{{1, 1/2, 1/3}, {1/2, 1/3, 1/4}}"));
@@ -113,6 +121,7 @@ public class LeastSquaresTest extends TestCase {
     assertEquals(cholesky2, expect);
   }
 
+  @Test
   public void testFullRank() {
     Tensor m = Tensors.matrix( //
         (i, j) -> RationalScalar.of(2 * i + 2 + j, 1 + 9 * i + j), 4, 3);
@@ -125,6 +134,7 @@ public class LeastSquaresTest extends TestCase {
     Chop._10.requireClose(x3, x2); // not below tolerance
   }
 
+  @Test
   public void testLowRank() {
     Tensor m = Tensors.matrix( //
         (i, j) -> RationalScalar.of(2 * i + j, 9 + j), 4, 3);
@@ -134,6 +144,7 @@ public class LeastSquaresTest extends TestCase {
     Tolerance.CHOP.requireClose(m.dot(x2), b);
   }
 
+  @Test
   public void testFullRankComplex() {
     Tensor m = Tensors.matrix( //
         (i, j) -> ComplexScalar.of( //
@@ -148,12 +159,14 @@ public class LeastSquaresTest extends TestCase {
     assertEquals(d1, s1);
   }
 
+  @Test
   public void testRankDeficient() {
     assertEquals(LeastSquares.of(Array.zeros(3, 3), UnitVector.of(3, 1)), Array.zeros(3));
     assertEquals(LeastSquares.of(Array.zeros(3, 2), UnitVector.of(3, 1)), Array.zeros(2));
     assertEquals(LeastSquares.of(DiagonalMatrix.of(0, 1, 0), UnitVector.of(3, 0)), Array.zeros(3));
   }
 
+  @Test
   public void testFullRankComplex2() {
     Tensor m = Tensors.matrix( //
         (i, j) -> ComplexScalar.of( //
@@ -171,6 +184,7 @@ public class LeastSquaresTest extends TestCase {
     Chop._08.requireClose(d1, d2);
   }
 
+  @Test
   public void testRect() {
     Distribution distribution = UniformDistribution.unit();
     Tensor matrix = RandomVariate.of(distribution, 10, 3);
@@ -180,6 +194,7 @@ public class LeastSquaresTest extends TestCase {
     assertEquals(Dimensions.of(matrix.dot(x)), Dimensions.of(b));
   }
 
+  @Test
   public void testLeastSquaresReal() {
     for (int n = 3; n < 6; ++n) {
       Tensor matrix = IdentityMatrix.of(n).add(RandomVariate.of(NormalDistribution.standard(), n, n));
@@ -190,6 +205,7 @@ public class LeastSquaresTest extends TestCase {
     }
   }
 
+  @Test
   public void testLeastSquaresComplexSquare() {
     Random random = new Random(3);
     for (int n = 3; n < 6; ++n) {
@@ -203,6 +219,7 @@ public class LeastSquaresTest extends TestCase {
     }
   }
 
+  @Test
   public void testLeastSquaresRect() {
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
@@ -222,6 +239,7 @@ public class LeastSquaresTest extends TestCase {
     }
   }
 
+  @Test
   public void testLeastSquaresSmallBig() {
     for (int n = 3; n < 6; ++n) {
       int m = n + 3;
@@ -233,6 +251,7 @@ public class LeastSquaresTest extends TestCase {
     }
   }
 
+  @Test
   public void testComplexExact() {
     Tensor m = Tensors.fromString("{{1, 1/2 - I}, {1/2 + I, 1/3 + 3*I}, {1/3, 1/4}}");
     Tensor b = Tensors.fromString("{{2, 8 + I}, {3*I, -2}, {4 - I, 3}}");
@@ -252,6 +271,7 @@ public class LeastSquaresTest extends TestCase {
     Tolerance.CHOP.requireClose(r1, r4);
   }
 
+  @Test
   public void testComplexExactQuantity() {
     Tensor m = Tensors.fromString("{{1, 1/2 - I}, {1/2 + I, 1/3 + 3*I}, {1/3, 1/4}}").map(Scalars.attach(Unit.of("A")));
     Tensor b = Tensors.fromString("{{2, 8 + I}, {3*I, -2}, {4 - I, 3}}").map(Scalars.attach(Unit.of("s")));
@@ -273,6 +293,7 @@ public class LeastSquaresTest extends TestCase {
     Tolerance.CHOP.requireClose(r1, r4);
   }
 
+  @Test
   public void testComplexSmallBig() {
     Tensor m = Tensors.fromString("{{1, 1/2 + I, 1/3}, {1/2 - I, 1/3 + 3*I, 1/4}}");
     Tensor b = Tensors.fromString("{{2, 3*I, 4 - I}, {8 + I, -2, 3}}");
@@ -294,6 +315,7 @@ public class LeastSquaresTest extends TestCase {
     Tolerance.CHOP.requireClose(r1, r4);
   }
 
+  @Test
   public void testComplexSmallBigQuantity() {
     Tensor m = Tensors.fromString("{{1, 1/2 + I, 1/3}, {1/2 - I, 1/3 + 3*I, 1/4}}").map(Scalars.attach(Unit.of("kg^-1")));
     Tensor b = Tensors.fromString("{{2, 3*I, 4 - I}, {8 + I, -2, 3}}").map(Scalars.attach(Unit.of("m")));

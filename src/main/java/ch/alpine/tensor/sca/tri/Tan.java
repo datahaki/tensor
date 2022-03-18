@@ -9,7 +9,11 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
-/** inspired by
+/** <pre>
+ * Tan[NaN] == NaN
+ * </pre>
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Tan.html">Tan</a>
  * 
  * @see ArcTan */

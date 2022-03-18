@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
@@ -16,9 +20,9 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ArgTest extends TestCase {
+public class ArgTest {
+  @Test
   public void testArg() {
     Scalar scalar = ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));
     assertEquals(Arg.of(scalar).toString(), "-3.066732805879026");
@@ -28,12 +32,14 @@ public class ArgTest extends TestCase {
     assertEquals(Arg.of(RationalScalar.of(-1, 3)), DoubleScalar.of(Math.PI));
   }
 
+  @Test
   public void testDecimal() {
     MathContext mc = MathContext.DECIMAL128;
     assertEquals(Arg.of(DecimalScalar.of(new BigDecimal("3.14", mc), mc.getPrecision())), RealScalar.ZERO);
     assertEquals(Arg.of(DecimalScalar.of(new BigDecimal("-112.14", mc), mc.getPrecision())), RealScalar.of(Math.PI));
   }
 
+  @Test
   public void testQuantity() {
     Unit unit = Unit.of("s*m^3");
     Scalar s = Quantity.of(ComplexScalar.of(3, 4), unit);
@@ -42,10 +48,17 @@ public class ArgTest extends TestCase {
     assertEquals(a, b);
   }
 
+  @Test
+  public void testNaN() {
+    assertEquals(Arg.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+  }
+
+  @Test
   public void testQuaternionFail() {
     AssertFail.of(() -> Arg.FUNCTION.apply(Quaternion.of(1, 2, 3, 4)));
   }
 
+  @Test
   public void testGaussScalarFail() {
     Scalar scalar = GaussScalar.of(1, 7);
     AssertFail.of(() -> Arg.of(scalar));

@@ -22,12 +22,6 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
     return 0 <= signum();
   }
 
-  /** @return this or this.negate() depending on whichever is non-negative */
-  @Override // from AbsInterface
-  public final Scalar abs() {
-    return isNonNegative() ? this : negate();
-  }
-
   @Override // from AbsInterface
   public final Scalar absSquared() {
     return multiply(this);
@@ -48,18 +42,20 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
     return this;
   }
 
-  @Override // from SignInterface
-  public final Scalar sign() {
-    return StaticHelper.SIGN[1 + signum()];
-  }
-
   /** @return gives -1, 0, or 1 depending on whether this is negative, zero, or positive.
    * @see BigInteger#signum()
    * @see BigDecimal#signum() */
   protected abstract int signum();
 
   // ---
+  /** @return this or this.negate() depending on whichever is non-negative */
+  @Override // from AbsInterface
+  public Scalar abs() {
+    return isNonNegative() ? this : negate();
+  }
+
   // methods are non-final because overriding classes may support better precision
+  // or handling of NaN
   @Override // from ArcTanInterface
   public Scalar arcTan(Scalar x) {
     if (x instanceof ComplexScalar)
@@ -109,6 +105,11 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
         return DoubleScalar.of(result);
     }
     return Exp.FUNCTION.apply(exponent.multiply(Log.FUNCTION.apply(this)));
+  }
+
+  @Override // from SignInterface
+  public Scalar sign() {
+    return StaticHelper.SIGN[1 + signum()];
   }
 
   /** implementation is used by {@link DoubleScalar},

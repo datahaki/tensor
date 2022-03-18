@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.qty;
+package ch.alpine.tensor.jet;
 
 import java.io.Serializable;
 import java.time.Duration;

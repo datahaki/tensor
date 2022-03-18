@@ -1,15 +1,19 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ArrayPadTest extends TestCase {
+public class ArrayPadTest {
+  @Test
   public void testVector() {
     Tensor vec = Tensors.vector(2, 3, -3, 1);
     Tensor pad = ArrayPad.of(vec, Arrays.asList(3), Arrays.asList(4));
@@ -17,6 +21,7 @@ public class ArrayPadTest extends TestCase {
     assertEquals(pad, actual);
   }
 
+  @Test
   public void testMatrix() {
     Tensor matrix = Tensors.of(Tensors.vector(2, 3, 1), Tensors.vector(7, 8, 9));
     assertEquals(Dimensions.of(matrix), Arrays.asList(2, 3));
@@ -24,6 +29,7 @@ public class ArrayPadTest extends TestCase {
     assertEquals(Dimensions.of(pad), Arrays.asList(1 + 2 + 3, 2 + 3 + 4));
   }
 
+  @Test
   public void testForm() {
     Tensor matrix = Tensors.of(Tensors.vector(2, 3, 1), Tensors.vector(7, 8, 9));
     Tensor form = Tensors.of(matrix, matrix, matrix, matrix);
@@ -32,18 +38,21 @@ public class ArrayPadTest extends TestCase {
     assertEquals(Dimensions.of(pad), Arrays.asList(2 + 4 + 1, 1 + 2 + 3, 2 + 3 + 4));
   }
 
+  @Test
   public void testNonArray() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
     Tensor vector = ArrayPad.of(tensor, Arrays.asList(2), Arrays.asList(3));
     assertEquals(vector.length(), 2 + 2 + 3);
   }
 
+  @Test
   public void testArrayAlternative() {
     Tensor tensor = Array.zeros(8, 8);
     tensor.block(Arrays.asList(2, 2), Arrays.asList(4, 4)).set(HilbertMatrix.of(4), Tensor.ALL, Tensor.ALL);
     assertEquals(Dimensions.of(tensor), Arrays.asList(8, 8));
   }
 
+  @Test
   public void testFail() {
     Tensor vector = Tensors.vector(2, 3, -3, 1);
     AssertFail.of(() -> ArrayPad.of(vector, Arrays.asList(1), Arrays.asList(-2)));

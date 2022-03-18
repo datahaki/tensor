@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -16,14 +20,15 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class FoldTest extends TestCase {
+public class FoldTest {
+  @Test
   public void testSimple() {
     Tensor fold = Fold.of(Tensor::dot, LeviCivitaTensor.of(4), IdentityMatrix.of(4));
     assertEquals(fold, RealScalar.ONE);
   }
 
+  @Test
   public void testZero() {
     Tensor x = HilbertMatrix.of(3);
     Tensor fold = Fold.of(Tensor::dot, x, Tensors.empty());
@@ -32,10 +37,12 @@ public class FoldTest extends TestCase {
     assertEquals(fold, HilbertMatrix.of(3));
   }
 
+  @Test
   public void testSingletonStream() {
     assertEquals(Stream.of(Pi.VALUE).reduce(Scalar::add).get(), Pi.VALUE);
   }
 
+  @Test
   public void testDet() {
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     for (int n = 1; n < 6; ++n) {
@@ -44,10 +51,12 @@ public class FoldTest extends TestCase {
     }
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> Fold.of(null, Pi.HALF, Tensors.empty()));
   }
 
+  @Test
   public void testScalarFail() {
     AssertFail.of(() -> Fold.of(Tensor::dot, Pi.HALF, Pi.HALF));
   }

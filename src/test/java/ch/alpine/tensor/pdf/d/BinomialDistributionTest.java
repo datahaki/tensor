@@ -1,7 +1,13 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.IntegerQ;
@@ -27,9 +33,9 @@ import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class BinomialDistributionTest extends TestCase {
+public class BinomialDistributionTest {
+  @Test
   public void testPdf() {
     Distribution distribution = BinomialDistribution.of(10, RationalScalar.of(1, 7));
     PDF pdf = PDF.of(distribution);
@@ -40,6 +46,7 @@ public class BinomialDistributionTest extends TestCase {
     assertEquals(prob, RealScalar.ONE);
   }
 
+  @Test
   public void testValue() {
     Distribution distribution = BinomialDistribution.of(10, RationalScalar.of(1, 2));
     PDF pdf = PDF.of(distribution);
@@ -48,6 +55,7 @@ public class BinomialDistributionTest extends TestCase {
     assertEquals(pdf.at(RealScalar.of(1)), RationalScalar.of(5, 512));
   }
 
+  @Test
   public void testValue2() {
     Distribution distribution = BinomialDistribution.of(10, RationalScalar.of(1, 3));
     PDF pdf = PDF.of(distribution);
@@ -58,6 +66,7 @@ public class BinomialDistributionTest extends TestCase {
     assertEquals(pdf.at(RealScalar.of(10)), RationalScalar.of(1, 59049));
   }
 
+  @Test
   public void testValue3() {
     Distribution distribution = BinomialDistribution.of(10, RationalScalar.of(1, 3));
     PDF pdf = PDF.of(distribution);
@@ -66,6 +75,7 @@ public class BinomialDistributionTest extends TestCase {
     assertEquals(pdf.at(RealScalar.of(12)), RealScalar.ZERO);
   }
 
+  @Test
   public void testMean() {
     Distribution distribution = BinomialDistribution.of(21, RationalScalar.of(7, 13));
     PDF pdf = PDF.of(distribution);
@@ -76,17 +86,20 @@ public class BinomialDistributionTest extends TestCase {
     assertEquals(Variance.of(distribution), CentralMoment.of(distribution, 2));
   }
 
+  @Test
   public void testKurtosis2() {
     Distribution distribution = BinomialDistribution.of(5, RationalScalar.of(7, 9));
     Scalar variance = Variance.of(distribution);
     assertEquals(Kurtosis.of(distribution), CentralMoment.of(distribution, 4).divide(variance).divide(variance));
   }
 
+  @Test
   public void testMean2() {
     Distribution distribution = BinomialDistribution.of(10, RationalScalar.of(3, 10));
     assertEquals(Expectation.mean(distribution), RealScalar.of(3));
   }
 
+  @Test
   public void testHigh() {
     Distribution distribution = BinomialDistribution.of(21, RationalScalar.of(7, 13));
     CDF cdf = CDF.of(distribution);
@@ -96,31 +109,37 @@ public class BinomialDistributionTest extends TestCase {
     cdf.p_lessEquals(RealScalar.of(+1000000000));
   }
 
+  @Test
   public void testCornerCase() {
     assertEquals(RandomVariate.of(BinomialDistribution.of(0, RealScalar.ONE)), RealScalar.ZERO);
     assertEquals(RandomVariate.of(BinomialDistribution.of(0, RealScalar.ZERO)), RealScalar.ZERO);
     assertEquals(RandomVariate.of(BinomialDistribution.of(0, RealScalar.of(0.3))), RealScalar.ZERO);
   }
 
+  @Test
   public void testBug1() {
     assertTrue(10 < Tally.of(RandomVariate.of(BinomialDistribution.of(20, RationalScalar.of(2, 3)), 10000)).size());
   }
 
+  @Test
   public void testBug2() {
     assertTrue(20 < Tally.of(RandomVariate.of(BinomialDistribution.of(100, RationalScalar.of(2, 3)), 10000)).size());
   }
 
+  @Test
   public void testBug3() {
     Distribution distribution = BinomialDistribution.of(1207, RationalScalar.of(2, 3));
     int size = Tally.of(RandomVariate.of(distribution, 1000)).size();
     assertTrue(50 < size);
   }
 
+  @Test
   public void testBlub() {
     BinomialDistribution.of(1200, RealScalar.of(0.1));
     BinomialDistribution.of(1200, RealScalar.of(0.9));
   }
 
+  @Test
   public void testInRange() {
     assertEquals(BinomialDistribution.of(1000, DoubleScalar.of(0.5)).getClass(), BinomialDistribution.class);
     assertEquals(BinomialDistribution.of(2000, DoubleScalar.of(0.1)).getClass(), BinomialDistribution.class);
@@ -130,12 +149,14 @@ public class BinomialDistributionTest extends TestCase {
     assertEquals(BinomialDistribution.of(10000, DoubleScalar.of(1.0)).getClass(), BinomialDistribution.class);
   }
 
+  @Test
   public void testNextDownOne() {
     AbstractDiscreteDistribution distribution = //
         (AbstractDiscreteDistribution) BinomialDistribution.of(1000, DoubleScalar.of(0.5));
     distribution.quantile(RealScalar.of(Math.nextDown(1.0)));
   }
 
+  @Test
   public void testNZero() {
     Distribution distribution = BinomialDistribution.of(0, RealScalar.ZERO);
     assertEquals(Expectation.mean(distribution), RealScalar.ZERO);
@@ -144,6 +165,7 @@ public class BinomialDistributionTest extends TestCase {
     assertEquals(RandomVariate.of(distribution), RealScalar.ZERO);
   }
 
+  @Test
   public void testInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(BinomialDistribution.of(100, RationalScalar.of(2, 3)));
     Scalar x0 = inverseCDF.quantile(RealScalar.ZERO);
@@ -156,6 +178,7 @@ public class BinomialDistributionTest extends TestCase {
     assertEquals(x3, RealScalar.of(98));
   }
 
+  @Test
   public void testCDFMathematica() {
     int n = 5;
     Distribution distribution = BinomialDistribution.of(n, RationalScalar.of(1, 4));
@@ -165,6 +188,7 @@ public class BinomialDistributionTest extends TestCase {
     assertEquals(actual, expect);
   }
 
+  @Test
   public void testInverseCDFMathematica() {
     int n = 5;
     Distribution distribution = BinomialDistribution.of(n, RationalScalar.of(1, 4));
@@ -174,6 +198,7 @@ public class BinomialDistributionTest extends TestCase {
     assertEquals(actual, expect);
   }
 
+  @Test
   public void testCDFInverseCDF() {
     int n = 20;
     Distribution distribution = BinomialDistribution.of(n, RationalScalar.of(1, 4));
@@ -186,6 +211,7 @@ public class BinomialDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testInverseCDF2() {
     InverseCDF inverseCDF = InverseCDF.of(BinomialDistribution.of(10, RationalScalar.of(1, 2)));
     Scalar x0 = inverseCDF.quantile(RealScalar.ZERO);
@@ -200,12 +226,14 @@ public class BinomialDistributionTest extends TestCase {
     assertEquals(x3, RealScalar.of(10));
   }
 
+  @Test
   public void testInverseCDFOne() {
     InverseCDF inverseCDF = InverseCDF.of(BinomialDistribution.of(10, RationalScalar.of(2, 3)));
     Scalar last = inverseCDF.quantile(RealScalar.ONE);
     assertEquals(last, RealScalar.of(10)); // consistent with Mathematica
   }
 
+  @Test
   public void testHashEquals() throws Exception {
     Distribution d1 = BinomialDistribution.of(3, RationalScalar.of(1, 2));
     Distribution d2 = BinomialDistribution.of(3, RationalScalar.of(1, 2));
@@ -222,12 +250,14 @@ public class BinomialDistributionTest extends TestCase {
     assertTrue(Arrays.equals(b1, b2));
   }
 
+  @Test
   public void testToString() {
     Distribution distribution = BinomialDistribution.of(3, RationalScalar.of(1, 2));
     String string = distribution.toString();
     assertEquals(string, "BinomialDistribution[3, 1/2]");
   }
 
+  @Test
   public void testMedian() {
     for (int index = 0; index < 5; ++index) {
       Distribution distribution = BinomialDistribution.of(index * 2, RationalScalar.HALF);
@@ -236,11 +266,13 @@ public class BinomialDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testKurtosis() {
     Scalar scalar = Kurtosis.of(BinomialDistribution.of(11, RationalScalar.of(1, 7)));
     assertEquals(scalar, RationalScalar.of(211, 66));
   }
 
+  @Test
   public void testExactLessEquals() {
     Distribution distribution = BinomialDistribution.of(21, RationalScalar.of(7, 13));
     DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
@@ -256,6 +288,7 @@ public class BinomialDistributionTest extends TestCase {
     // assertTrue(discreteCDF.cdf_finished());
   }
 
+  @Test
   public void testExactLessThan() {
     Distribution distribution = BinomialDistribution.of(21, RationalScalar.of(7, 13));
     DiscreteDistribution discreteDistribution = (DiscreteDistribution) distribution;
@@ -273,10 +306,12 @@ public class BinomialDistributionTest extends TestCase {
     // assertTrue(discreteCDF.cdf_finished());
   }
 
+  @Test
   public void testFailN() {
     AssertFail.of(() -> BinomialDistribution.of(-1, RationalScalar.of(1, 3)));
   }
 
+  @Test
   public void testFailP() {
     BinomialDistribution.of(3, RealScalar.ZERO);
     AssertFail.of(() -> BinomialDistribution.of(10, RationalScalar.of(-1, 3)));

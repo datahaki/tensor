@@ -1,13 +1,17 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class LenientAddTest extends TestCase {
+public class LenientAddTest {
+  @Test
   public void testDifferent() {
     Scalar p = Quantity.of(3, "m");
     Scalar q = Quantity.of(0, "s");
@@ -16,6 +20,7 @@ public class LenientAddTest extends TestCase {
     AssertFail.of(() -> p.add(q));
   }
 
+  @Test
   public void testZeros() {
     Scalar p = Quantity.of(0, "m");
     Scalar q = Quantity.of(0, "s");
@@ -24,6 +29,7 @@ public class LenientAddTest extends TestCase {
     AssertFail.of(() -> p.add(q));
   }
 
+  @Test
   public void testDifferentFail() {
     Scalar p = Quantity.of(3, "m");
     Scalar q = Quantity.of(1, "s");

@@ -13,6 +13,7 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Numel;
+import ch.alpine.tensor.alg.Outer;
 import ch.alpine.tensor.io.StringScalar;
 
 /** utility class that provides constructors of tensors for convenience.
@@ -102,7 +103,8 @@ public enum Tensors {
   /** @param biFunction
    * @param n number of rows
    * @param m number of columns
-   * @return (n x m)-matrix with (i, j)th-entry == bifunction.apply(i, j) */
+   * @return (n x m)-matrix with (i, j)th-entry == bifunction.apply(i, j)
+   * @see Outer */
   public static Tensor matrix(BiFunction<Integer, Integer, ? extends Tensor> biFunction, int n, int m) {
     return Tensor.of(IntStream.range(0, n).mapToObj( //
         i -> Tensor.of(IntStream.range(0, m).mapToObj(j -> biFunction.apply(i, j)))));

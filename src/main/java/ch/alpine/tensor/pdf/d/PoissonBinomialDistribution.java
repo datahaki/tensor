@@ -38,9 +38,9 @@ public class PoissonBinomialDistribution implements Distribution, //
       Scalar p = Clips.unit().requireInside((Scalar) _p);
       if (RealScalar.ONE.equals(p))
         ++lowerBound;
-      else //
-      if (Scalars.nonZero(p))
-        p_result.append(p);
+      else
+        if (Scalars.nonZero(p))
+          p_result.append(p);
     }
     return new PoissonBinomialDistribution(lowerBound, p_result);
   }

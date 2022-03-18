@@ -1,7 +1,9 @@
 // code by jph
 package ch.alpine.tensor.usr;
 
-import junit.framework.Assert;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /* package */ enum DoubleInversion {
   ;
@@ -17,7 +19,7 @@ import junit.framework.Assert;
   }
 
   private static boolean invariantInvert2x(double value) {
-    Assert.assertTrue(invertible2x(value));
+    assertTrue(invertible2x(value));
     double inverse = 1.0 / value;
     return value == 1.0 / inverse;
   }
@@ -27,8 +29,8 @@ import junit.framework.Assert;
     if (min == sec || sec == max) {
       System.out.println("BISECTION RESULT:");
       System.out.println("found " + min + " " + max);
-      Assert.assertFalse(invertible2x(min));
-      Assert.assertTrue(invertible2x(max));
+      assertFalse(invertible2x(min));
+      assertTrue(invertible2x(max));
       return;
     }
     if (invertible2x(sec)) {
@@ -44,8 +46,8 @@ import junit.framework.Assert;
     if (min == sec || sec == max) {
       System.out.println("BISECTION RESULT:");
       System.out.println("found " + min + " " + max);
-      Assert.assertTrue(invertible2x(min));
-      Assert.assertFalse(invertible2x(max));
+      assertTrue(invertible2x(min));
+      assertFalse(invertible2x(max));
       return;
     }
     if (!invertible2x(sec)) {
@@ -71,20 +73,20 @@ import junit.framework.Assert;
     System.out.println(Double.hashCode(+0.0));
     System.out.println(Double.hashCode(-0.0));
     System.exit(0);
-    Assert.assertFalse(invertible(5.562684646268003E-309));
-    Assert.assertTrue(invertible(MIN_INVERTIBLE2X));
-    Assert.assertFalse(invertible2x(5.562684646268003E-309));
-    Assert.assertTrue(invertible2x(MIN_INVERTIBLE2X));
+    assertFalse(invertible(5.562684646268003E-309));
+    assertTrue(invertible(MIN_INVERTIBLE2X));
+    assertFalse(invertible2x(5.562684646268003E-309));
+    assertTrue(invertible2x(MIN_INVERTIBLE2X));
     // 5.562684646268003E-309 <- not invertible
     // 5.562684646268010E-309 <- invertible
     // 5.562684646268003E-309
     // 5.562684646268010E-309
     // 1.7976931348623151E308 <- invertible2x
     // 1.7976931348623153E308 <- not invertible2x
-    Assert.assertTrue(invertible(MAX_INVERTIBLE2X));
+    assertTrue(invertible(MAX_INVERTIBLE2X));
     // assertFalse(invertible(1.7976931348623153E308));
-    Assert.assertTrue(invertible2x(MAX_INVERTIBLE2X));
-    Assert.assertFalse(invertible2x(1.7976931348623153E308));
+    assertTrue(invertible2x(MAX_INVERTIBLE2X));
+    assertFalse(invertible2x(1.7976931348623153E308));
     System.out.println("CHECK:" + invariantInvert2x(MIN_INVERTIBLE2X));
     // double res = 1.0 / Double.MAX_VALUE;
     // res = Math.nextDown(res);
@@ -93,16 +95,16 @@ import junit.framework.Assert;
     {
       double min = Double.MIN_VALUE;
       double max = 1E-300;
-      Assert.assertFalse(invertible(min));
-      Assert.assertTrue(invertible(max));
+      assertFalse(invertible(min));
+      assertTrue(invertible(max));
       bisectionSearch1(min, max);
       System.out.println("---");
     }
     {
       double min = 1E200;
       double max = Double.MAX_VALUE;
-      Assert.assertTrue(invertible2x(min));
-      Assert.assertFalse(invertible2x(max));
+      assertTrue(invertible2x(min));
+      assertFalse(invertible2x(max));
       bisectionSearch2(min, max);
       System.out.println("---");
     }
@@ -124,9 +126,9 @@ import junit.framework.Assert;
     {
       double value = MIN_INVERTIBLE2X;
       for (int c = 0; c < 1000; ++c) {
-        Assert.assertTrue(invertible(value));
-        Assert.assertTrue(invertible2x(value));
-        Assert.assertTrue(invariantInvert2x(value));
+        assertTrue(invertible(value));
+        assertTrue(invertible2x(value));
+        assertTrue(invariantInvert2x(value));
         value = Math.nextUp(value);
       }
     }
@@ -139,7 +141,7 @@ import junit.framework.Assert;
     }
     {
       double inf = Math.nextUp(Double.MAX_VALUE);
-      Assert.assertEquals(inf, Double.POSITIVE_INFINITY);
+      assertEquals(inf, Double.POSITIVE_INFINITY);
     }
   }
 }

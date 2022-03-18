@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -10,9 +14,9 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Boole;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class LanczosKernelTest extends TestCase {
+public class LanczosKernelTest {
+  @Test
   public void testSimple() {
     LanczosKernel lanczosKernel = LanczosKernel._3;
     assertEquals(lanczosKernel.semi(), 3);
@@ -24,6 +28,7 @@ public class LanczosKernelTest extends TestCase {
     }
   }
 
+  @Test
   public void testIntermediate() {
     LanczosKernel lanczosKernel = LanczosKernel._3;
     Scalar apply = lanczosKernel.apply(RationalScalar.HALF);

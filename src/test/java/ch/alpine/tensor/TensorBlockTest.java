@@ -1,20 +1,25 @@
 // code by jph
 package ch.alpine.tensor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TensorBlockTest extends TestCase {
+public class TensorBlockTest {
+  @Test
   public void testBlock() {
     Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);
     assertEquals(a.block(Arrays.asList(2), Arrays.asList(2)), Tensors.vector(3, 4));
     AssertFail.of(() -> a.block(Arrays.asList(1), Arrays.asList(2, 1)));
   }
 
+  @Test
   public void testBlock2() {
     Tensor array = Array.zeros(5, 5);
     Tensor refs = array;
@@ -23,6 +28,7 @@ public class TensorBlockTest extends TestCase {
         Tensors.fromString("{{0, 0, 0, 0, 0}, {0, 0, 1, 1, 1}, {0, 0, 1, 1, 1}, {0, 0, 0, 0, 0}, {0, 0, 0, 0, 0}}"));
   }
 
+  @Test
   public void testNonRefs() {
     Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);
     Tensor b = a.block(Arrays.asList(2), Arrays.asList(3));
@@ -30,6 +36,7 @@ public class TensorBlockTest extends TestCase {
     assertEquals(a, Tensors.vector(1, 2, 0, 0, 0, 6));
   }
 
+  @Test
   public void testRefs2d() {
     Tensor a = HilbertMatrix.of(5, 6);
     Tensor b = a.block(Arrays.asList(1, 2), Arrays.asList(3, 4));

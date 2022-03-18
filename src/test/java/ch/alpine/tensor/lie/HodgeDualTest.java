@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
@@ -13,9 +18,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.gam.Factorial;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class HodgeDualTest extends TestCase {
+public class HodgeDualTest {
   /** @param tensor of rank at least 1
    * @return
    * @throws Exception if tensor is a scalar */
@@ -36,6 +40,7 @@ public class HodgeDualTest extends TestCase {
     throw TensorRuntimeException.of(tensor);
   }
 
+  @Test
   public void testVector3() {
     Tensor vector = Tensors.vector(1, 2, 3);
     Tensor matrix = HodgeDual.of(vector, 3);
@@ -47,6 +52,7 @@ public class HodgeDualTest extends TestCase {
     assertEquals(checks, vector);
   }
 
+  @Test
   public void testVector4() {
     Tensor vector = Tensors.vector(1, 2, 3, 4);
     Tensor tensor = HodgeDual.of(vector, 4);
@@ -56,16 +62,19 @@ public class HodgeDualTest extends TestCase {
     assertEquals(checks, TensorWedge.of(checks));
   }
 
+  @Test
   public void testScalar2() {
     Tensor matrix = HodgeDual.of(RealScalar.of(3), 2);
     assertEquals(matrix, Tensors.fromString("{{0, 3}, {-3, 0}}"));
   }
 
+  @Test
   public void testScalar3() {
     Tensor matrix = HodgeDual.of(RealScalar.of(5), 3);
     assertEquals(matrix, Tensors.fromString("{{{0, 0, 0}, {0, 0, 5}, {0, -5, 0}}, {{0, 0, -5}, {0, 0, 0}, {5, 0, 0}}, {{0, 5, 0}, {-5, 0, 0}, {0, 0, 0}}}"));
   }
 
+  @Test
   public void testLeviCivitaTensor() {
     for (int d = 1; d < 5; ++d)
       assertEquals(LeviCivitaTensor.of(d), HodgeDual.of(RealScalar.ONE, d));
@@ -73,15 +82,18 @@ public class HodgeDualTest extends TestCase {
       assertEquals(RealScalar.ONE, HodgeDual.of(LeviCivitaTensor.of(d), d));
   }
 
+  @Test
   public void testScalar0() {
     Tensor tensor = HodgeDual.of(Pi.HALF, 0);
     assertEquals(tensor, Pi.HALF);
   }
 
+  @Test
   public void testScalar1() {
     AssertFail.of(() -> HodgeDual.of(Tensors.vector(1, 2, 3), 0));
   }
 
+  @Test
   public void testNonAlternating() {
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     for (int count = 0; count < 5; ++count) {
@@ -92,28 +104,33 @@ public class HodgeDualTest extends TestCase {
     }
   }
 
+  @Test
   public void testEmpty() {
     assertTrue(new Dimensions(Tensors.empty()).isArray());
     AssertFail.of(() -> HodgeDual.of(Tensors.empty(), 0));
   }
 
+  @Test
   public void testMismatchFail() {
     Tensor vector = Tensors.vector(1, 2, 3);
     AssertFail.of(() -> HodgeDual.of(vector, 2));
   }
 
+  @Test
   public void testNonArrayFail() {
     Tensor vector = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
     AssertFail.of(() -> HodgeDual.of(vector, 2));
     AssertFail.of(() -> HodgeDual.of(vector, 3));
   }
 
+  @Test
   public void testNonRegularFail() {
     Tensor vector = Array.zeros(2, 3);
     AssertFail.of(() -> HodgeDual.of(vector, 2));
     AssertFail.of(() -> HodgeDual.of(vector, 3));
   }
 
+  @Test
   public void testNegativeDimFail() {
     AssertFail.of(() -> of(RealScalar.ONE));
     AssertFail.of(() -> HodgeDual.of(RealScalar.ONE, -1));

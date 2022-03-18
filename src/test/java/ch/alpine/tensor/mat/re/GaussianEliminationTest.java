@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -10,14 +14,15 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class GaussianEliminationTest extends TestCase {
+public class GaussianEliminationTest {
+  @Test
   public void testPackageVisibility() {
     int modifiers = GaussianElimination.class.getModifiers();
     assertEquals(modifiers & 0x1, 0x1); // non public but package
   }
 
+  @Test
   public void testPivots() {
     Tensor matrix = HilbertMatrix.of(3);
     Tensor rhs = Tensors.vector(-1, -2, 3);
@@ -29,6 +34,7 @@ public class GaussianEliminationTest extends TestCase {
     assertEquals(ge1, Tensors.vector(153, -888, 870));
   }
 
+  @Test
   public void testDeterminant() {
     for (int n = 4; n < 7; ++n) {
       Tensor matrix = RandomVariate.of(DiscreteUniformDistribution.of(-20, 100), n, n);
@@ -41,11 +47,13 @@ public class GaussianEliminationTest extends TestCase {
     }
   }
 
+  @Test
   public void testRecreateError1() {
     AssertFail.of(() -> LinearSolve.of(HilbertMatrix.of(4, 5), UnitVector.of(4, 3)));
     AssertFail.of(() -> LinearSolve.of(HilbertMatrix.of(5, 4), UnitVector.of(4, 3)));
   }
 
+  @Test
   public void testRecreateError2() {
     AssertFail.of(() -> LinearSolve.of(HilbertMatrix.of(4, 4), UnitVector.of(5, 3)));
   }

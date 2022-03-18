@@ -1,6 +1,12 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -11,21 +17,23 @@ import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class SignTest extends TestCase {
+public class SignTest {
+  @Test
   public void testSome() {
     assertEquals(Sign.FUNCTION.apply(DoubleScalar.of(-345)), RealScalar.of(-1));
     assertEquals(Sign.FUNCTION.apply(DoubleScalar.of(9324.5)), RealScalar.of(1));
     assertEquals(Sign.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);
   }
 
+  @Test
   public void testDiff() {
     assertEquals(Sign.FUNCTION.apply(RealScalar.of(3 - 9)), RealScalar.ONE.negate());
     assertEquals(Sign.FUNCTION.apply(RealScalar.of(3 - 3)), RealScalar.ZERO);
     assertEquals(Sign.FUNCTION.apply(RealScalar.of(9 - 3)), RealScalar.ONE);
   }
 
+  @Test
   public void testDoubleNegZero() {
     Scalar d1 = DoubleScalar.of(-0.0);
     Sign.requirePositiveOrZero(d1);
@@ -35,6 +43,7 @@ public class SignTest extends TestCase {
     assertEquals(d1, d1.zero());
   }
 
+  @Test
   public void testInfinity() {
     assertEquals(Sign.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY), RealScalar.of(+1));
     assertEquals(Sign.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), RealScalar.of(-1));
@@ -42,6 +51,7 @@ public class SignTest extends TestCase {
     assertTrue(Sign.isNegative(DoubleScalar.NEGATIVE_INFINITY));
   }
 
+  @Test
   public void testIsNegative() {
     Unit apples = Unit.of("Apples");
     assertTrue(Sign.isNegative(Quantity.of(-2, apples)));
@@ -49,6 +59,7 @@ public class SignTest extends TestCase {
     assertFalse(Sign.isNegative(Quantity.of(2, apples)));
   }
 
+  @Test
   public void testIsPositive() {
     assertFalse(Sign.isPositive(Quantity.of(-2, "V*A")));
     assertFalse(Sign.isPositive(Quantity.of(0, "V*A")));
@@ -58,6 +69,7 @@ public class SignTest extends TestCase {
     assertTrue(Sign.isPositive(Quantity.of(2, Unit.ONE)));
   }
 
+  @Test
   public void testIsPositiveOrZero() {
     Unit apples = Unit.of("Apples");
     assertFalse(Sign.isPositiveOrZero(Quantity.of(-2, apples)));
@@ -65,6 +77,7 @@ public class SignTest extends TestCase {
     assertTrue(Sign.isPositiveOrZero(Quantity.of(2, apples)));
   }
 
+  @Test
   public void testIsNegativeOrZero() {
     assertTrue(Sign.isNegativeOrZero(Quantity.of(-2, "V*A")));
     assertTrue(Sign.isNegativeOrZero(Quantity.of(0, "V*A")));
@@ -74,6 +87,7 @@ public class SignTest extends TestCase {
     assertFalse(Sign.isNegativeOrZero(Quantity.of(2, Unit.ONE)));
   }
 
+  @Test
   public void testRequireNonNegative() {
     Sign.requirePositiveOrZero(RealScalar.ZERO);
     Sign.requirePositiveOrZero(RealScalar.ONE);
@@ -82,12 +96,18 @@ public class SignTest extends TestCase {
     AssertFail.of(() -> Sign.requirePositiveOrZero(DoubleScalar.INDETERMINATE));
   }
 
+  @Test
   public void testRequirePositive() {
     Sign.requirePositive(RealScalar.ONE);
     Sign.requirePositive(Quantity.of(2, "m*s^-2"));
     AssertFail.of(() -> Sign.requirePositive(RealScalar.ZERO));
     AssertFail.of(() -> Sign.requirePositive(RealScalar.ONE.negate()));
     AssertFail.of(() -> Sign.requirePositive(DoubleScalar.INDETERMINATE));
+  }
+
+  @Test
+  public void testNaN() {
+    assertEquals(Sign.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
   }
 
   private static void _checkFailAll(Scalar value) {
@@ -102,10 +122,11 @@ public class SignTest extends TestCase {
     AssertFail.of(() -> Sign.isNegativeOrZero(value));
   }
 
+  @Test
   public void testFail() {
     _checkSignIntFail(ComplexScalar.of(2, 3));
     _checkSignIntFail(Quaternion.of(RealScalar.of(-4), Tensors.vector(1, 2, 3)));
-    _checkFailAll(DoubleScalar.INDETERMINATE);
+    // _checkFailAll(DoubleScalar.INDETERMINATE);
     _checkFailAll(StringScalar.of("string"));
   }
 }

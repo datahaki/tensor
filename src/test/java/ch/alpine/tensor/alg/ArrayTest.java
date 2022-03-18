@@ -1,11 +1,16 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -15,9 +20,9 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.spa.SparseArray;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ArrayTest extends TestCase {
+public class ArrayTest {
+  @Test
   public void testEmpty1() {
     assertEquals(Array.of(l -> {
       assertTrue(l.isEmpty());
@@ -25,18 +30,21 @@ public class ArrayTest extends TestCase {
     }), RealScalar.ONE);
   }
 
+  @Test
   public void testArray() {
     Tensor table = Array.of(l -> RealScalar.of(l.get(0) * l.get(2)), 3, 2, 4);
     Tensor res = Tensors.fromString("{{{0, 0, 0, 0}, {0, 0, 0, 0}}, {{0, 1, 2, 3}, {0, 1, 2, 3}}, {{0, 2, 4, 6}, {0, 2, 4, 6}}}");
     assertEquals(table, res);
   }
 
+  @Test
   public void testCopy() {
     Tensor hilbert = HilbertMatrix.of(3, 5);
     Tensor table = Array.of(hilbert::get, Dimensions.of(hilbert));
     assertEquals(hilbert, table);
   }
 
+  @Test
   public void testVectorBlock() {
     Tensor tensor = Tensors.vector(0, 1, 2, 3, 4, 5);
     assertEquals(tensor.block(Arrays.asList(2), Arrays.asList(2)), tensor.extract(2, 4));
@@ -51,16 +59,19 @@ public class ArrayTest extends TestCase {
         Dimensions.of(array).subList(dims.size(), rank));
   }
 
+  @Test
   public void testFillEmpty() {
     Tensor tensor = Array.fill(() -> Pi.VALUE, Arrays.asList());
     assertEquals(tensor, Pi.VALUE);
   }
 
+  @Test
   public void testFillIntegers() {
     Tensor tensor = Array.fill(() -> Pi.VALUE, 1, 2);
     assertEquals(Dimensions.of(tensor), Arrays.asList(1, 2));
   }
 
+  @Test
   public void testBlock() {
     Tensor table = Array.of(l -> Tensors.vector(l.get(0), l.get(1), l.get(2)), 3, 2, 4);
     checkDims(table, Arrays.asList(), Arrays.asList());
@@ -70,6 +81,7 @@ public class ArrayTest extends TestCase {
     checkDims(table, Arrays.asList(2, 1, 0, 1), Arrays.asList(1, 1, 2, 1));
   }
 
+  @Test
   public void testZeros() {
     Tensor zeros = Array.zeros(3, 5, 2, 7);
     Tensor table = Array.of(l -> RealScalar.ZERO, 3, 5, 2, 7);
@@ -80,11 +92,13 @@ public class ArrayTest extends TestCase {
     assertEquals(map.get(RealScalar.ONE), (Long) 1L);
   }
 
+  @Test
   public void testZeros2() {
     Tensor zeros = Array.zeros(2, 3);
     assertEquals(zeros, Tensors.fromString("{ {  0,0, 0} ,  {0,0,0}  }"));
   }
 
+  @Test
   public void testEmpty() {
     assertEquals(Array.zeros(), RealScalar.ZERO);
     assertEquals(Array.zeros(0), Tensors.empty());
@@ -93,20 +107,24 @@ public class ArrayTest extends TestCase {
     assertEquals(Array.zeros(1, 0, 0, 1), Tensors.of(Tensors.empty()));
   }
 
+  @Test
   public void testInvalid() {
     AssertFail.of(() -> Array.zeros(-1));
   }
 
+  @Test
   public void testInvalid2() {
     AssertFail.of(() -> Array.of(l -> Tensors.vector(l.get(0), l.get(1), l.get(2)), 3, -2, 4));
   }
 
+  @Test
   public void testForEach() {
     Set<List<Integer>> set = new HashSet<>();
     Array.forEach(set::add, 2, 3, 4);
     assertEquals(set.size(), 2 * 3 * 4);
   }
 
+  @Test
   public void testSparseDot() {
     int n = 7;
     Tensor p = Array.sparse(n, 1);
@@ -114,6 +132,7 @@ public class ArrayTest extends TestCase {
     assertTrue(p.dot(q) instanceof SparseArray);
   }
 
+  @Test
   public void testForEachFail() {
     Set<List<Integer>> set = new HashSet<>();
     AssertFail.of(() -> Array.forEach(set::add, 2, -1, 4));
