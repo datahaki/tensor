@@ -6,7 +6,11 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
-/** Reference:
+/** <pre>
+ * Cos[NaN] == NaN
+ * </pre>
+ * 
+ * Reference:
  * <a href="http://www.milefoot.com/math/complex/functionsofi.htm">functions of i</a>
  * 
  * <p>inspired by

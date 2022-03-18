@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca.tri;
 
 import java.util.function.Function;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -37,6 +38,23 @@ public class TrigonometryInterfaceTest extends TestCase {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(180, "deg"));
     Chop._13.requireClose(Sin.of(scalar), RealScalar.ZERO);
     Chop._13.requireClose(Cos.of(scalar), RealScalar.ONE.negate());
+  }
+
+  public void testNaN() {
+    assertEquals(Sin.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(Cos.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(Tan.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(Cot.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(Sinh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(Cosh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(Tanh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(Sinhc.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(ArcSin.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(ArcCos.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(ArcTan.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(ArcSinh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(ArcCosh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
+    assertEquals(ArcTanh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
   }
 
   public void testFails() {

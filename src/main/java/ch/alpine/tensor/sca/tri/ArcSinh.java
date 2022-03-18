@@ -8,7 +8,11 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-/** Reference:
+/** <pre>
+ * ArcSinh[NaN] == NaN
+ * </pre>
+ * 
+ * Reference:
  * <a href="http://www.milefoot.com/math/complex/functionsofi.htm">functions of i</a>
  * 
  * <p>inspired by

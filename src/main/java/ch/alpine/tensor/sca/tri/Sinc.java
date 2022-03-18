@@ -17,6 +17,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * <pre>
  * Sinc[+Infinity] = 0
  * Sinc[-Infinity] = 0
+ * Sinc[NaN] == NaN
  * </pre>
  * 
  * <p>inspired by
