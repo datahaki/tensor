@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.re;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,6 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class GaussianEliminationTest {
   @Test
@@ -49,12 +49,12 @@ public class GaussianEliminationTest {
 
   @Test
   public void testRecreateError1() {
-    AssertFail.of(() -> LinearSolve.of(HilbertMatrix.of(4, 5), UnitVector.of(4, 3)));
-    AssertFail.of(() -> LinearSolve.of(HilbertMatrix.of(5, 4), UnitVector.of(4, 3)));
+    assertThrows(IllegalArgumentException.class, () -> LinearSolve.of(HilbertMatrix.of(4, 5), UnitVector.of(4, 3)));
+    assertThrows(IllegalArgumentException.class, () -> LinearSolve.of(HilbertMatrix.of(5, 4), UnitVector.of(4, 3)));
   }
 
   @Test
   public void testRecreateError2() {
-    AssertFail.of(() -> LinearSolve.of(HilbertMatrix.of(4, 4), UnitVector.of(5, 3)));
+    assertThrows(IllegalArgumentException.class, () -> LinearSolve.of(HilbertMatrix.of(4, 4), UnitVector.of(5, 3)));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SoftThresholdTest {
   @Test
@@ -26,6 +26,6 @@ public class SoftThresholdTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> SoftThreshold.of(null));
+    assertThrows(NullPointerException.class, () -> SoftThreshold.of(null));
   }
 }

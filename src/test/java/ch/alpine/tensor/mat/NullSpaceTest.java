@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.MachineNumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
@@ -32,7 +34,6 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class NullSpaceTest {
   private static void _checkZeros(Tensor zeros) {
@@ -223,7 +224,7 @@ public class NullSpaceTest {
     Tensor tensor = NullSpace.of(matrix);
     assertEquals(tensor.get(0), UnitVector.of(3, 1));
     assertEquals(tensor.get(1), UnitVector.of(3, 2));
-    AssertFail.of(() -> Det.of(matrix));
+    assertThrows(TensorRuntimeException.class, () -> Det.of(matrix));
   }
 
   @Test
@@ -231,7 +232,7 @@ public class NullSpaceTest {
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}");
     Tensor tensor = NullSpace.of(matrix);
     assertEquals(tensor.get(0), UnitVector.of(2, 1));
-    AssertFail.of(() -> Det.of(matrix));
+    assertThrows(TensorRuntimeException.class, () -> Det.of(matrix));
   }
 
   @Test
@@ -292,16 +293,16 @@ public class NullSpaceTest {
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> NullSpace.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> NullSpace.of(RealScalar.ONE));
   }
 
   @Test
   public void testFailVector() {
-    AssertFail.of(() -> NullSpace.of(Tensors.vector(1, 2, 3, 1)));
+    assertThrows(TensorRuntimeException.class, () -> NullSpace.of(Tensors.vector(1, 2, 3, 1)));
   }
 
   @Test
   public void testFailRank3() {
-    AssertFail.of(() -> NullSpace.of(LeviCivitaTensor.of(3)));
+    assertThrows(ClassCastException.class, () -> NullSpace.of(LeviCivitaTensor.of(3)));
   }
 }

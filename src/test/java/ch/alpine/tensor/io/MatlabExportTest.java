@@ -2,6 +2,7 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -14,13 +15,13 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MatlabExportTest {
   @Test
@@ -88,6 +89,6 @@ public class MatlabExportTest {
   @Test
   public void testFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
-    AssertFail.of(() -> MatlabExport.of(tensor));
+    assertThrows(TensorRuntimeException.class, () -> MatlabExport.of(tensor));
   }
 }

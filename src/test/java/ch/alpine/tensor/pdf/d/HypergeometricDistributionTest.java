@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,6 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class HypergeometricDistributionTest {
   @Test
@@ -34,10 +34,10 @@ public class HypergeometricDistributionTest {
   public void testFail() {
     // int N, int n, int m_n
     // 0 < N && N <= m_n && 0 <= n && n <= m_n
-    AssertFail.of(() -> HypergeometricDistribution.of(0, 50, 100)); // violates 0 < N
-    AssertFail.of(() -> HypergeometricDistribution.of(5, -1, 100)); // violates 0 <= n
-    AssertFail.of(() -> HypergeometricDistribution.of(11, 10, 10)); // violates N <= m_n
-    AssertFail.of(() -> HypergeometricDistribution.of(10, 11, 10)); // violates n <= m_n
+    assertThrows(IllegalArgumentException.class, () -> HypergeometricDistribution.of(0, 50, 100)); // violates 0 < N
+    assertThrows(IllegalArgumentException.class, () -> HypergeometricDistribution.of(5, -1, 100)); // violates 0 <= n
+    assertThrows(IllegalArgumentException.class, () -> HypergeometricDistribution.of(11, 10, 10)); // violates N <= m_n
+    assertThrows(IllegalArgumentException.class, () -> HypergeometricDistribution.of(10, 11, 10)); // violates n <= m_n
   }
 
   @Test

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +15,6 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.sca.gam.Factorial;
 import ch.alpine.tensor.sca.pow.Power;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class PermanentTest {
   @Test
@@ -40,10 +40,10 @@ public class PermanentTest {
 
   @Test
   public void testFailAd() {
-    AssertFail.of(() -> Permanent.of(Tensors.empty()));
-    AssertFail.of(() -> Permanent.of(Tensors.vector(1, 2, 3)));
-    AssertFail.of(() -> Permanent.of(Array.zeros(3, 3, 3)));
-    AssertFail.of(() -> Permanent.of(HilbertMatrix.of(2, 3)));
-    AssertFail.of(() -> Permanent.of(HilbertMatrix.of(3, 2)));
+    assertThrows(IllegalArgumentException.class, () -> Permanent.of(Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> Permanent.of(Tensors.vector(1, 2, 3)));
+    assertThrows(ClassCastException.class, () -> Permanent.of(Array.zeros(3, 3, 3)));
+    assertThrows(IllegalArgumentException.class, () -> Permanent.of(HilbertMatrix.of(2, 3)));
+    assertThrows(IllegalArgumentException.class, () -> Permanent.of(HilbertMatrix.of(3, 2)));
   }
 }

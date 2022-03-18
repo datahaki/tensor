@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -10,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ClipPointTest {
   @Test
@@ -59,7 +60,7 @@ public class ClipPointTest {
     Scalar value = Quantity.of(2, "m*s^-1");
     Clip clip = Clips.interval(value, value);
     assertEquals(clip.rescale(Quantity.of(4, "m*s^-1")), RealScalar.ZERO);
-    AssertFail.of(() -> clip.requireInside(Quantity.of(3, "m*s^-1")));
+    assertThrows(TensorRuntimeException.class, () -> clip.requireInside(Quantity.of(3, "m*s^-1")));
   }
 
   @Test
@@ -67,7 +68,7 @@ public class ClipPointTest {
     Scalar value = Quantity.of(2, "m*s^-1");
     Clip clip = Clips.interval(value, value);
     assertEquals(clip.requireInside(value), value);
-    AssertFail.of(() -> clip.rescale(Quantity.of(2, "kg")));
+    assertThrows(TensorRuntimeException.class, () -> clip.rescale(Quantity.of(2, "kg")));
   }
 
   @Test

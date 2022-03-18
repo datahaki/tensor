@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.Color;
 
@@ -9,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class CyclicColorDataIndexedTest {
   @Test
@@ -45,17 +46,17 @@ public class CyclicColorDataIndexedTest {
 
   @Test
   public void testFailEmpty() {
-    AssertFail.of(() -> CyclicColorDataIndexed.of(Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> CyclicColorDataIndexed.of(Tensors.empty()));
   }
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> CyclicColorDataIndexed.of(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> CyclicColorDataIndexed.of(RealScalar.ZERO));
   }
 
   @Test
   public void testFailRGB() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}}");
-    AssertFail.of(() -> CyclicColorDataIndexed.of(tensor));
+    assertThrows(TensorRuntimeException.class, () -> CyclicColorDataIndexed.of(tensor));
   }
 }

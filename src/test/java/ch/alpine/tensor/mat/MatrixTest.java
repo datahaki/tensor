@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
@@ -25,33 +27,32 @@ import ch.alpine.tensor.mat.re.RowReduce;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MatrixTest {
   private static <T> void _checkFail(Function<Tensor, T> function) {
-    AssertFail.of(() -> function.apply(null));
-    AssertFail.of(() -> function.apply(RealScalar.ONE));
-    AssertFail.of(() -> function.apply(Pi.VALUE));
-    AssertFail.of(() -> function.apply(Tensors.empty()));
-    AssertFail.of(() -> function.apply(Tensors.vector(1, 2, 3)));
-    AssertFail.of(() -> function.apply(Tensors.vector(1.0, 2, 3)));
-    AssertFail.of(() -> function.apply(LeviCivitaTensor.of(3)));
-    AssertFail.of(() -> function.apply(LeviCivitaTensor.of(3).map(N.DOUBLE)));
+    assertThrows(NullPointerException.class, () -> function.apply(null));
+    assertThrows(Exception.class, () -> function.apply(RealScalar.ONE));
+    assertThrows(Exception.class, () -> function.apply(Pi.VALUE));
+    assertThrows(Exception.class, () -> function.apply(Tensors.empty()));
+    assertThrows(Exception.class, () -> function.apply(Tensors.vector(1, 2, 3)));
+    assertThrows(Exception.class, () -> function.apply(Tensors.vector(1.0, 2, 3)));
+    assertThrows(Exception.class, () -> function.apply(LeviCivitaTensor.of(3)));
+    assertThrows(Exception.class, () -> function.apply(LeviCivitaTensor.of(3).map(N.DOUBLE)));
     {
       Tensor tensor = Tensors.fromString("{{1, 2, 3}, {4, 5}}");
-      AssertFail.of(() -> function.apply(tensor));
+      assertThrows(Exception.class, () -> function.apply(tensor));
     }
     {
       Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}}").map(N.DOUBLE);
-      AssertFail.of(() -> function.apply(tensor));
+      assertThrows(Exception.class, () -> function.apply(tensor));
     }
     {
       Tensor tensor = Tensors.fromString("{{1, 2, 3}, {4, 5}}");
-      AssertFail.of(() -> function.apply(tensor));
+      assertThrows(Exception.class, () -> function.apply(tensor));
     }
     {
       Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}}").map(N.DOUBLE);
-      AssertFail.of(() -> function.apply(tensor));
+      assertThrows(Exception.class, () -> function.apply(tensor));
     }
   }
 

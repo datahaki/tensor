@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.pow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -16,11 +17,11 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class PowerTest {
   @Test
@@ -71,7 +72,7 @@ public class PowerTest {
 
   @Test
   public void testZeroFail() {
-    AssertFail.of(() -> Power.of(0, -2));
+    assertThrows(ArithmeticException.class, () -> Power.of(0, -2));
   }
 
   @Test
@@ -90,12 +91,12 @@ public class PowerTest {
 
   @Test
   public void testZeroComplex1Fail() {
-    AssertFail.of(() -> Power.of(RealScalar.ZERO, ComplexScalar.I));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(RealScalar.ZERO, ComplexScalar.I));
   }
 
   @Test
   public void testZeroComplex2Fail() {
-    AssertFail.of(() -> Power.of(RealScalar.ZERO, Scalars.fromString("-0.1+3*I")));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(RealScalar.ZERO, Scalars.fromString("-0.1+3*I")));
   }
 
   @Test
@@ -136,7 +137,7 @@ public class PowerTest {
   @Test
   public void testTypeFail() {
     Scalar scalar = StringScalar.of("some");
-    AssertFail.of(() -> Power.of(scalar, 0));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(scalar, 0));
   }
 
   @Test
@@ -149,7 +150,7 @@ public class PowerTest {
   @Test
   public void testGaussScalar() {
     Scalar scalar = GaussScalar.of(6, 31);
-    AssertFail.of(() -> Power.of(scalar, 3.13));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(scalar, 3.13));
   }
 
   @Test
@@ -175,7 +176,7 @@ public class PowerTest {
   public void testQuantityFail() {
     Scalar qs1 = Quantity.of(2, "cd");
     Scalar qs2 = Quantity.of(4, "cd");
-    AssertFail.of(() -> Power.of(qs1, qs2));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(qs1, qs2));
   }
 
   @Test
@@ -189,11 +190,11 @@ public class PowerTest {
 
   @Test
   public void testFailNullNumber() {
-    AssertFail.of(() -> Power.function((Number) null));
+    assertThrows(NullPointerException.class, () -> Power.function((Number) null));
   }
 
   @Test
   public void testFailNullScalar() {
-    AssertFail.of(() -> Power.function((Scalar) null));
+    assertThrows(NullPointerException.class, () -> Power.function((Scalar) null));
   }
 }

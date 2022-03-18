@@ -2,12 +2,14 @@
 package ch.alpine.tensor.mat.ex;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
@@ -26,7 +28,6 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MatrixSqrtTest {
   private static void _check(Tensor g, MatrixSqrt matrixSqrt) {
@@ -109,7 +110,7 @@ public class MatrixSqrtTest {
     Tensor matrix = Array.zeros(2, 2);
     MatrixSqrt matrixSqrt = MatrixSqrt.of(matrix);
     assertEquals(matrixSqrt.sqrt(), Array.zeros(2, 2));
-    AssertFail.of(() -> matrixSqrt.sqrt_inverse());
+    assertThrows(ArithmeticException.class, () -> matrixSqrt.sqrt_inverse());
   }
 
   @Test
@@ -125,17 +126,17 @@ public class MatrixSqrtTest {
     Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
     SymmetricMatrixQ.require(matrix);
     MatrixSqrt.of(matrix);
-    AssertFail.of(() -> MatrixSqrt.ofSymmetric(matrix));
+    assertThrows(ClassCastException.class, () -> MatrixSqrt.ofSymmetric(matrix));
   }
 
   @Test
   public void testNonSquareFail() {
-    AssertFail.of(() -> MatrixSqrt.of(RandomVariate.of(UniformDistribution.of(-2, 2), 2, 3)));
-    AssertFail.of(() -> MatrixSqrt.of(HilbertMatrix.of(2, 3)));
+    assertThrows(IllegalArgumentException.class, () -> MatrixSqrt.of(RandomVariate.of(UniformDistribution.of(-2, 2), 2, 3)));
+    assertThrows(IllegalArgumentException.class, () -> MatrixSqrt.of(HilbertMatrix.of(2, 3)));
   }
 
   @Test
   public void testNonSymmetricFail() {
-    AssertFail.of(() -> MatrixSqrt.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4)));
+    assertThrows(TensorRuntimeException.class, () -> MatrixSqrt.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4)));
   }
 }

@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ExactScalarQTest {
   @Test
@@ -63,11 +63,11 @@ public class ExactScalarQTest {
 
   @Test
   public void testRequireFail() {
-    AssertFail.of(() -> ExactScalarQ.require(DoubleScalar.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> ExactScalarQ.require(DoubleScalar.of(3)));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> ExactScalarQ.of(null));
+    assertThrows(NullPointerException.class, () -> ExactScalarQ.of(null));
   }
 }

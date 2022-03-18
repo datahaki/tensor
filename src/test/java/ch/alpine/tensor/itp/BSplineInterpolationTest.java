@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -13,6 +14,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
@@ -21,7 +23,6 @@ import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class BSplineInterpolationTest {
   @Test
@@ -50,11 +51,11 @@ public class BSplineInterpolationTest {
         Tensor vvalue = interpolation.get(Tensors.vector(3));
         assertEquals(vvalue, tensor.get(3));
       }
-      AssertFail.of(() -> interpolation.at(RealScalar.of(-0.1)));
-      AssertFail.of(() -> interpolation.at(RealScalar.of(9.1)));
+      assertThrows(TensorRuntimeException.class, () -> interpolation.at(RealScalar.of(-0.1)));
+      assertThrows(TensorRuntimeException.class, () -> interpolation.at(RealScalar.of(9.1)));
       interpolation.get(Tensors.vector(1));
       interpolation.get(Tensors.vector(1, 2));
-      AssertFail.of(() -> interpolation.get(Tensors.vector(1, 1.8)));
+      assertThrows(TensorRuntimeException.class, () -> interpolation.get(Tensors.vector(1, 1.8)));
     }
   }
 

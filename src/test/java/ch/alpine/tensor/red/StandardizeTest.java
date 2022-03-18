@@ -2,16 +2,17 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class StandardizeTest {
   @Test
@@ -38,17 +39,17 @@ public class StandardizeTest {
 
   @Test
   public void testLengthShort() {
-    AssertFail.of(() -> Standardize.ofVector(Tensors.empty()));
-    AssertFail.of(() -> Standardize.ofVector(Tensors.vector(2)));
+    assertThrows(ArithmeticException.class, () -> Standardize.ofVector(Tensors.empty()));
+    assertThrows(ArithmeticException.class, () -> Standardize.ofVector(Tensors.vector(2)));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Standardize.ofVector(RealScalar.of(84.312)));
+    assertThrows(TensorRuntimeException.class, () -> Standardize.ofVector(RealScalar.of(84.312)));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> Standardize.ofVector(HilbertMatrix.of(5)));
+    assertThrows(ClassCastException.class, () -> Standardize.ofVector(HilbertMatrix.of(5)));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Range;
@@ -16,7 +18,6 @@ import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.Tally;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SignatureTest {
   @Test
@@ -82,6 +83,6 @@ public class SignatureTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Signature.of(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> Signature.of(RealScalar.ZERO));
   }
 }

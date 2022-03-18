@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.d;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -15,6 +16,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.ext.Serialization;
@@ -32,7 +34,6 @@ import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class BinomialDistributionTest {
   @Test
@@ -308,15 +309,15 @@ public class BinomialDistributionTest {
 
   @Test
   public void testFailN() {
-    AssertFail.of(() -> BinomialDistribution.of(-1, RationalScalar.of(1, 3)));
+    assertThrows(IllegalArgumentException.class, () -> BinomialDistribution.of(-1, RationalScalar.of(1, 3)));
   }
 
   @Test
   public void testFailP() {
     BinomialDistribution.of(3, RealScalar.ZERO);
-    AssertFail.of(() -> BinomialDistribution.of(10, RationalScalar.of(-1, 3)));
+    assertThrows(TensorRuntimeException.class, () -> BinomialDistribution.of(10, RationalScalar.of(-1, 3)));
     BinomialDistribution.of(3, RealScalar.ONE);
-    AssertFail.of(() -> BinomialDistribution.of(10, RationalScalar.of(4, 3)));
-    AssertFail.of(() -> BinomialDistribution.of(10, Quantity.of(0.2, "s")));
+    assertThrows(TensorRuntimeException.class, () -> BinomialDistribution.of(10, RationalScalar.of(4, 3)));
+    assertThrows(TensorRuntimeException.class, () -> BinomialDistribution.of(10, Quantity.of(0.2, "s")));
   }
 }

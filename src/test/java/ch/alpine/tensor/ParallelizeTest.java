@@ -2,13 +2,13 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.ExponentialDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ParallelizeTest {
   @Test
@@ -43,7 +43,7 @@ public class ParallelizeTest {
 
   @Test
   public void testDotFail() {
-    AssertFail.of(() -> Parallelize.dot(RealScalar.ONE, RealScalar.ZERO));
-    AssertFail.of(() -> Parallelize.dot(Tensors.vector(1, 2, 3), HilbertMatrix.of(4)));
+    assertThrows(TensorRuntimeException.class, () -> Parallelize.dot(RealScalar.ONE, RealScalar.ZERO));
+    assertThrows(IllegalArgumentException.class, () -> Parallelize.dot(Tensors.vector(1, 2, 3), HilbertMatrix.of(4)));
   }
 }

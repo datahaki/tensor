@@ -2,11 +2,11 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TensorExtractTest {
   @Test
@@ -16,11 +16,11 @@ public class TensorExtractTest {
 
   @Test
   public void testRadiusFail() {
-    AssertFail.of(() -> TensorExtract.of(Tensors.empty(), -1, t -> t));
+    assertThrows(IllegalArgumentException.class, () -> TensorExtract.of(Tensors.empty(), -1, t -> t));
   }
 
   @Test
   public void testFunctionNullFail() {
-    AssertFail.of(() -> TensorExtract.of(Tensors.empty(), 2, null));
+    assertThrows(NullPointerException.class, () -> TensorExtract.of(Tensors.empty(), 2, null));
   }
 }

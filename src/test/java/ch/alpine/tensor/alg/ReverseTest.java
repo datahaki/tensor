@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.function.UnaryOperator;
 import java.util.stream.IntStream;
@@ -10,12 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ReverseTest {
   @Test
@@ -46,7 +47,7 @@ public class ReverseTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> Reverse.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Reverse.of(RealScalar.ONE));
   }
 
   private static Tensor nestRank(Tensor tensor, UnaryOperator<Tensor> operator) {

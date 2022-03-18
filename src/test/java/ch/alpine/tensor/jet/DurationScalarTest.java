@@ -3,6 +3,7 @@ package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.ext.Serialization;
@@ -29,7 +31,6 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class DurationScalarTest {
   @Test
@@ -51,13 +52,13 @@ public class DurationScalarTest {
     DateTimeScalar ofs = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DurationScalar len = DurationScalar.of(Duration.ofDays(100));
     assertEquals(ofs.add(len), len.add(ofs));
-    AssertFail.of(() -> ofs.add(RealScalar.TWO));
-    AssertFail.of(() -> len.add(RealScalar.TWO));
-    AssertFail.of(() -> len.compareTo(RealScalar.TWO));
-    AssertFail.of(() -> len.number());
-    AssertFail.of(() -> len.absSquared());
-    AssertFail.of(() -> len.divide(ComplexScalar.I));
-    AssertFail.of(() -> len.under(ComplexScalar.I));
+    assertThrows(TensorRuntimeException.class, () -> ofs.add(RealScalar.TWO));
+    assertThrows(TensorRuntimeException.class, () -> len.add(RealScalar.TWO));
+    assertThrows(TensorRuntimeException.class, () -> len.compareTo(RealScalar.TWO));
+    assertThrows(TensorRuntimeException.class, () -> len.number());
+    assertThrows(TensorRuntimeException.class, () -> len.absSquared());
+    assertThrows(TensorRuntimeException.class, () -> len.divide(ComplexScalar.I));
+    assertThrows(TensorRuntimeException.class, () -> len.under(ComplexScalar.I));
   }
 
   @Test
@@ -77,7 +78,7 @@ public class DurationScalarTest {
     assertEquals(d2.one(), RealScalar.ONE);
     assertEquals(d2.multiply(RealScalar.ONE), d2);
     assertEquals(RealScalar.ONE.multiply(d2), d2);
-    AssertFail.of(() -> d2.reciprocal());
+    assertThrows(TensorRuntimeException.class, () -> d2.reciprocal());
   }
 
   @Test
@@ -98,15 +99,15 @@ public class DurationScalarTest {
 
   @Test
   public void testDivideZero() {
-    AssertFail.of(() -> DurationScalar.ZERO.divide(DurationScalar.ZERO));
+    assertThrows(ArithmeticException.class, () -> DurationScalar.ZERO.divide(DurationScalar.ZERO));
     DurationScalar d1 = DurationScalar.of(Duration.ofSeconds(100).negated());
-    AssertFail.of(() -> d1.divide(DurationScalar.ZERO));
+    assertThrows(ArithmeticException.class, () -> d1.divide(DurationScalar.ZERO));
   }
 
   @Test
   public void testUnderP() {
     DurationScalar d1 = DurationScalar.of(Duration.ofSeconds(100));
-    AssertFail.of(() -> d1.under(RealScalar.of(300)));
+    assertThrows(TensorRuntimeException.class, () -> d1.under(RealScalar.of(300)));
   }
 
   @Test
@@ -170,7 +171,7 @@ public class DurationScalarTest {
     Random random = new Random(1);
     int n = 5;
     Tensor lhs = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, n);
-    AssertFail.of(() -> Inverse.of(lhs));
+    assertThrows(TensorRuntimeException.class, () -> Inverse.of(lhs));
     Tensor rhs = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, 2 * n);
     Tensor sol = LinearSolve.of(lhs, rhs);
     Chop._05.requireClose(lhs.dot(sol), rhs);
@@ -194,7 +195,7 @@ public class DurationScalarTest {
     Tensor sol = LinearSolve.of(lhs, rhs);
     Tensor err = lhs.dot(sol).subtract(rhs);
     Chop._05.requireAllZero(err);
-    AssertFail.of(() -> Inverse.of(lhs));
+    assertThrows(TensorRuntimeException.class, () -> Inverse.of(lhs));
   }
 
   @Test
@@ -203,7 +204,7 @@ public class DurationScalarTest {
     Random random = new Random();
     int n = 2;
     Tensor matrix = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, n);
-    AssertFail.of(() -> Inverse.of(matrix));
+    assertThrows(TensorRuntimeException.class, () -> Inverse.of(matrix));
   }
 
   @Test
@@ -220,11 +221,11 @@ public class DurationScalarTest {
   public void testMultiplyFail() {
     DurationScalar d1 = DurationScalar.of(Duration.ofDays(213));
     DurationScalar d2 = DurationScalar.of(Duration.ofDays(113));
-    AssertFail.of(() -> d1.multiply(d2));
+    assertThrows(TensorRuntimeException.class, () -> d1.multiply(d2));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> DurationScalar.of(null));
+    assertThrows(NullPointerException.class, () -> DurationScalar.of(null));
   }
 }

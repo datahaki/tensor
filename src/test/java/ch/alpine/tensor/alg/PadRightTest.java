@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -9,11 +10,11 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class PadRightTest {
   @Test
@@ -81,12 +82,12 @@ public class PadRightTest {
   @Test
   public void testFail() {
     TensorUnaryOperator tuo = PadRight.zeros(2, 2, 6);
-    AssertFail.of(() -> tuo.apply(Tensors.fromString("{{1}, {2}, {4, 5}}")));
+    assertThrows(TensorRuntimeException.class, () -> tuo.apply(Tensors.fromString("{{1}, {2}, {4, 5}}")));
   }
 
   @Test
   public void testFail2() {
-    AssertFail.of(() -> PadRight.zeros(-2));
-    AssertFail.of(() -> PadRight.zeros(1, -2));
+    assertThrows(IllegalArgumentException.class, () -> PadRight.zeros(-2));
+    assertThrows(IllegalArgumentException.class, () -> PadRight.zeros(1, -2));
   }
 }

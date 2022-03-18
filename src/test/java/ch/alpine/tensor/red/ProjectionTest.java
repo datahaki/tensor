@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -10,12 +11,12 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ProjectionTest {
   @Test
@@ -33,7 +34,7 @@ public class ProjectionTest {
     Tensor p2 = tensorUnaryOperator.apply(Tensors.fromString("{5, I, 7}"));
     assertEquals(Tensors.fromString("{4 + I/3, 4 + I/3, 4 + I/3}"), p2);
     ExactTensorQ.require(p2);
-    AssertFail.of(() -> tensorUnaryOperator.apply(HilbertMatrix.of(3, 3)));
+    assertThrows(ClassCastException.class, () -> tensorUnaryOperator.apply(HilbertMatrix.of(3, 3)));
   }
 
   @Test
@@ -64,18 +65,18 @@ public class ProjectionTest {
 
   @Test
   public void testZeroFail() {
-    AssertFail.of(() -> Projection.on(Tensors.vector(0, 0, 0)));
-    AssertFail.of(() -> Projection.on(Tensors.vector(0.0, 0, 0)));
+    assertThrows(TensorRuntimeException.class, () -> Projection.on(Tensors.vector(0, 0, 0)));
+    assertThrows(TensorRuntimeException.class, () -> Projection.on(Tensors.vector(0.0, 0, 0)));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Projection.on(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Projection.on(RealScalar.ONE));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> Projection.on(HilbertMatrix.of(2, 2)));
-    AssertFail.of(() -> Projection.on(HilbertMatrix.of(3, 2)));
+    assertThrows(ClassCastException.class, () -> Projection.on(HilbertMatrix.of(2, 2)));
+    assertThrows(IllegalArgumentException.class, () -> Projection.on(HilbertMatrix.of(3, 2)));
   }
 }

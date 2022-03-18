@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigInteger;
 
@@ -9,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class RangeTest {
   @Test
@@ -48,7 +48,7 @@ public class RangeTest {
 
   @Test
   public void testBigIntegerNullFail() {
-    AssertFail.of(() -> Range.of(new BigInteger("123"), null));
-    AssertFail.of(() -> Range.of(null, new BigInteger("123")));
+    assertThrows(NullPointerException.class, () -> Range.of(new BigInteger("123"), null));
+    assertThrows(NullPointerException.class, () -> Range.of(null, new BigInteger("123")));
   }
 }

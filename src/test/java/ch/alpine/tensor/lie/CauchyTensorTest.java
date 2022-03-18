@@ -2,6 +2,7 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ArrayQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class CauchyTensorTest {
   private static void _check(int n) {
@@ -35,7 +35,7 @@ public class CauchyTensorTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> CauchyTensor.of(RealScalar.ONE, 1));
-    AssertFail.of(() -> CauchyTensor.of(Tensors.fromString("{{1, 2}}"), 1));
+    assertThrows(IllegalArgumentException.class, () -> CauchyTensor.of(RealScalar.ONE, 1));
+    assertThrows(ClassCastException.class, () -> CauchyTensor.of(Tensors.fromString("{{1, 2}}"), 1));
   }
 }

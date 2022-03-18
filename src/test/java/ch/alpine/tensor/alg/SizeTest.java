@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.List;
@@ -10,8 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SizeTest {
   @Test
@@ -35,7 +34,7 @@ public class SizeTest {
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> Size.of(Arrays.asList()));
+    assertThrows(ArrayIndexOutOfBoundsException.class, () -> Size.of(Arrays.asList()));
   }
 
   @Test

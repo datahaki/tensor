@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -18,13 +19,13 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ColorDataGradientsTest {
   @ParameterizedTest
@@ -102,9 +103,9 @@ public class ColorDataGradientsTest {
     if (colorDataGradient.equals(ColorDataGradients.HUE)) {
       // hue is implemented periodically [0, 1) == [1, 2) == ...
     } else {
-      AssertFail.of(() -> colorDataGradient.apply(RealScalar.of(-0.1)));
-      AssertFail.of(() -> colorDataGradient.apply(RealScalar.of(1.1)));
-      AssertFail.of(() -> colorDataGradient.apply(ComplexScalar.of(0.5, 0.5)));
+      assertThrows(IndexOutOfBoundsException.class, () -> colorDataGradient.apply(RealScalar.of(-0.1)));
+      assertThrows(IndexOutOfBoundsException.class, () -> colorDataGradient.apply(RealScalar.of(1.1)));
+      assertThrows(TensorRuntimeException.class, () -> colorDataGradient.apply(ComplexScalar.of(0.5, 0.5)));
     }
   }
 }

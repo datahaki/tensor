@@ -3,6 +3,7 @@ package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,6 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.gam.Gamma;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.Cos;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class NestTest {
   @Test
@@ -54,6 +54,6 @@ public class NestTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> Nest.of(Cos.FUNCTION, RealScalar.of(0.3), -1));
+    assertThrows(IllegalArgumentException.class, () -> Nest.of(Cos.FUNCTION, RealScalar.of(0.3), -1));
   }
 }

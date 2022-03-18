@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.stream.IntStream;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.api.ScalarTensorFunction;
@@ -31,7 +33,6 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class InterpolatingPolynomialTest {
   private static final ScalarUnaryOperator MINUS_ONE = RealScalar.ONE.negate()::add;
@@ -75,7 +76,7 @@ public class InterpolatingPolynomialTest {
     Tolerance.CHOP.requireClose( //
         domain.map(suo1), //
         domain.multiply(RealScalar.of(3)).map(MINUS_ONE).map(suo2));
-    AssertFail.of(() -> InterpolatingPolynomial.of(suppor).scalarTensorFunction(Tensors.vector(2, 3, 4, 5)));
+    assertThrows(IllegalArgumentException.class, () -> InterpolatingPolynomial.of(suppor).scalarTensorFunction(Tensors.vector(2, 3, 4, 5)));
   }
 
   @Test
@@ -133,20 +134,20 @@ public class InterpolatingPolynomialTest {
   public void testScalarLengthFail() throws ClassNotFoundException, IOException {
     InterpolatingPolynomial interpolatingPolynomial = //
         Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
-    AssertFail.of(() -> interpolatingPolynomial.scalarUnaryOperator(Tensors.vector(1, 2)));
-    AssertFail.of(() -> interpolatingPolynomial.scalarUnaryOperator(HilbertMatrix.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> interpolatingPolynomial.scalarUnaryOperator(Tensors.vector(1, 2)));
+    assertThrows(TensorRuntimeException.class, () -> interpolatingPolynomial.scalarUnaryOperator(HilbertMatrix.of(3)));
   }
 
   @Test
   public void testTensorLengthFail() throws ClassNotFoundException, IOException {
     InterpolatingPolynomial interpolatingPolynomial = //
         Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
-    AssertFail.of(() -> interpolatingPolynomial.scalarTensorFunction(Tensors.vector(1, 2)));
-    AssertFail.of(() -> interpolatingPolynomial.scalarTensorFunction(HilbertMatrix.of(2, 3)));
+    assertThrows(IllegalArgumentException.class, () -> interpolatingPolynomial.scalarTensorFunction(Tensors.vector(1, 2)));
+    assertThrows(IllegalArgumentException.class, () -> interpolatingPolynomial.scalarTensorFunction(HilbertMatrix.of(2, 3)));
   }
 
   @Test
   public void testKnotsNonVectorFail() {
-    AssertFail.of(() -> InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, IdentityMatrix.of(3)));
+    assertThrows(ClassCastException.class, () -> InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, IdentityMatrix.of(3)));
   }
 }

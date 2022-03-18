@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -11,12 +12,12 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SignTest {
   @Test
@@ -92,17 +93,17 @@ public class SignTest {
     Sign.requirePositiveOrZero(RealScalar.ZERO);
     Sign.requirePositiveOrZero(RealScalar.ONE);
     Sign.requirePositiveOrZero(Quantity.of(2, "m*s^-2"));
-    AssertFail.of(() -> Sign.requirePositiveOrZero(RealScalar.ONE.negate()));
-    AssertFail.of(() -> Sign.requirePositiveOrZero(DoubleScalar.INDETERMINATE));
+    assertThrows(TensorRuntimeException.class, () -> Sign.requirePositiveOrZero(RealScalar.ONE.negate()));
+    assertThrows(TensorRuntimeException.class, () -> Sign.requirePositiveOrZero(DoubleScalar.INDETERMINATE));
   }
 
   @Test
   public void testRequirePositive() {
     Sign.requirePositive(RealScalar.ONE);
     Sign.requirePositive(Quantity.of(2, "m*s^-2"));
-    AssertFail.of(() -> Sign.requirePositive(RealScalar.ZERO));
-    AssertFail.of(() -> Sign.requirePositive(RealScalar.ONE.negate()));
-    AssertFail.of(() -> Sign.requirePositive(DoubleScalar.INDETERMINATE));
+    assertThrows(TensorRuntimeException.class, () -> Sign.requirePositive(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> Sign.requirePositive(RealScalar.ONE.negate()));
+    assertThrows(TensorRuntimeException.class, () -> Sign.requirePositive(DoubleScalar.INDETERMINATE));
   }
 
   @Test
@@ -111,15 +112,15 @@ public class SignTest {
   }
 
   private static void _checkFailAll(Scalar value) {
-    AssertFail.of(() -> Sign.FUNCTION.apply(value));
+    assertThrows(TensorRuntimeException.class, () -> Sign.FUNCTION.apply(value));
     _checkSignIntFail(value);
   }
 
   private static void _checkSignIntFail(Scalar value) {
-    AssertFail.of(() -> Sign.isPositive(value));
-    AssertFail.of(() -> Sign.isNegative(value));
-    AssertFail.of(() -> Sign.isPositiveOrZero(value));
-    AssertFail.of(() -> Sign.isNegativeOrZero(value));
+    assertThrows(Exception.class, () -> Sign.isPositive(value));
+    assertThrows(Exception.class, () -> Sign.isNegative(value));
+    assertThrows(Exception.class, () -> Sign.isPositiveOrZero(value));
+    assertThrows(Exception.class, () -> Sign.isNegativeOrZero(value));
   }
 
   @Test

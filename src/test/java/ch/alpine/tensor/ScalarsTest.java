@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.function.Predicate;
@@ -13,14 +14,13 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.io.StringScalarQ;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ScalarsTest {
   @Test
   public void testRequireZero() {
     assertEquals(Scalars.requireZero(Quantity.of(0, "A")), Quantity.of(0, "A"));
-    AssertFail.of(() -> Scalars.requireZero(Quantity.of(1, "A")));
-    AssertFail.of(() -> Scalars.requireZero(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.requireZero(Quantity.of(1, "A")));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.requireZero(RealScalar.ONE));
   }
 
   void checkInvariant(String string, Class<?> myclass) {
@@ -188,13 +188,13 @@ public class ScalarsTest {
 
   @Test
   public void testIntValueExactFail() {
-    AssertFail.of(() -> Scalars.intValueExact(RealScalar.of(Long.MIN_VALUE)));
-    AssertFail.of(() -> Scalars.intValueExact(RealScalar.of(Long.MAX_VALUE)));
+    assertThrows(ArithmeticException.class, () -> Scalars.intValueExact(RealScalar.of(Long.MIN_VALUE)));
+    assertThrows(ArithmeticException.class, () -> Scalars.intValueExact(RealScalar.of(Long.MAX_VALUE)));
   }
 
   @Test
   public void testIntValueExactFractionFail() {
-    AssertFail.of(() -> Scalars.intValueExact(RationalScalar.of(2, 3)));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.intValueExact(RationalScalar.of(2, 3)));
   }
 
   @Test
@@ -261,16 +261,16 @@ public class ScalarsTest {
   public void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(6, "m");
     Scalar qs2 = Quantity.of(3, "s");
-    AssertFail.of(() -> Scalars.divides(qs1, qs2));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.divides(qs1, qs2));
   }
 
   @Test
   public void testBigIntegerExactNullFail() {
-    AssertFail.of(() -> Scalars.bigIntegerValueExact(null));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.bigIntegerValueExact(null));
   }
 
   @Test
   public void testOptionalBigIntegerNullFail() {
-    AssertFail.of(() -> Scalars.optionalBigInteger(null));
+    assertThrows(NullPointerException.class, () -> Scalars.optionalBigInteger(null));
   }
 }

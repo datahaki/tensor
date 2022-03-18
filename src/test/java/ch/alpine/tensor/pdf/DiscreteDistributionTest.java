@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
@@ -27,7 +29,6 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class DiscreteDistributionTest {
   static final Distribution[] DISTRIBUTIONS = { //
@@ -51,8 +52,8 @@ public class DiscreteDistributionTest {
         Scalar scalar = Median.of(distribution);
         DeterminateScalarQ.require(scalar);
         IntegerQ.require(scalar);
-        AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
-        AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
+        assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+        assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
         DeterminateScalarQ.require(inverseCDF.quantile(RealScalar.ZERO));
         DeterminateScalarQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));
       }

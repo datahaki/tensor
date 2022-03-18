@@ -2,6 +2,7 @@
 package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.ext.Serialization;
@@ -21,7 +23,6 @@ import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.Sin;
 import ch.alpine.tensor.sca.tri.Sinh;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class JetScalarTest {
   @Test
@@ -31,7 +32,7 @@ public class JetScalarTest {
     Scalar scalar = s1.multiply(s2);
     JetScalar jetScalar = (JetScalar) scalar;
     assertEquals(jetScalar.vector(), Tensors.vector(8, 14, 6));
-    AssertFail.of(() -> s1.multiply(null));
+    assertThrows(NullPointerException.class, () -> s1.multiply(null));
   }
 
   @Test
@@ -119,17 +120,17 @@ public class JetScalarTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> JetScalar.of(RealScalar.of(2)));
+    assertThrows(TensorRuntimeException.class, () -> JetScalar.of(RealScalar.of(2)));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> JetScalar.of(HilbertMatrix.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> JetScalar.of(HilbertMatrix.of(3)));
   }
 
   @Test
   public void testNestFail() {
     JetScalar js = JetScalar.of(RealScalar.of(2), 3);
-    AssertFail.of(() -> JetScalar.of(Tensors.of(RealScalar.of(1), js)));
+    assertThrows(TensorRuntimeException.class, () -> JetScalar.of(Tensors.of(RealScalar.of(1), js)));
   }
 }

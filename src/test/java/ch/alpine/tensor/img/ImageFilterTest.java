@@ -2,12 +2,14 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.pdf.Distribution;
@@ -15,7 +17,6 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ImageFilterTest {
   private static final TensorScalarFunction MIN = block -> (Scalar) block.flatten(-1).reduce(Min::of).get();
@@ -47,16 +48,16 @@ public class ImageFilterTest {
 
   @Test
   public void testRadiusFail() {
-    AssertFail.of(() -> ImageFilter.of(Tensors.empty(), -1, MAX));
+    assertThrows(IllegalArgumentException.class, () -> ImageFilter.of(Tensors.empty(), -1, MAX));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> ImageFilter.of(RealScalar.ONE, 1, MAX));
+    assertThrows(TensorRuntimeException.class, () -> ImageFilter.of(RealScalar.ONE, 1, MAX));
   }
 
   @Test
   public void testFunctionNullFail() {
-    AssertFail.of(() -> ImageFilter.of(Tensors.empty(), 3, null));
+    assertThrows(NullPointerException.class, () -> ImageFilter.of(Tensors.empty(), 3, null));
   }
 }

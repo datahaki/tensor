@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -19,7 +20,6 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.spa.SparseArray;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ArrayTest {
   @Test
@@ -109,12 +109,12 @@ public class ArrayTest {
 
   @Test
   public void testInvalid() {
-    AssertFail.of(() -> Array.zeros(-1));
+    assertThrows(IllegalArgumentException.class, () -> Array.zeros(-1));
   }
 
   @Test
   public void testInvalid2() {
-    AssertFail.of(() -> Array.of(l -> Tensors.vector(l.get(0), l.get(1), l.get(2)), 3, -2, 4));
+    assertThrows(IllegalArgumentException.class, () -> Array.of(l -> Tensors.vector(l.get(0), l.get(1), l.get(2)), 3, -2, 4));
   }
 
   @Test
@@ -135,6 +135,6 @@ public class ArrayTest {
   @Test
   public void testForEachFail() {
     Set<List<Integer>> set = new HashSet<>();
-    AssertFail.of(() -> Array.forEach(set::add, 2, -1, 4));
+    assertThrows(IllegalArgumentException.class, () -> Array.forEach(set::add, 2, -1, 4));
   }
 }

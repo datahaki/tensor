@@ -2,15 +2,16 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SoftplusTest {
   @Test
@@ -35,6 +36,6 @@ public class SoftplusTest {
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> Softplus.FUNCTION.apply(Quantity.of(1, "s")));
+    assertThrows(TensorRuntimeException.class, () -> Softplus.FUNCTION.apply(Quantity.of(1, "s")));
   }
 }

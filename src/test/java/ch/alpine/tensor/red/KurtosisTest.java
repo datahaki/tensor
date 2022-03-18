@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,12 +11,12 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class KurtosisTest {
   @Test
@@ -46,11 +47,11 @@ public class KurtosisTest {
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> Kurtosis.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Kurtosis.of(RealScalar.ONE));
   }
 
   @Test
   public void testFailMatrix() {
-    AssertFail.of(() -> Kurtosis.of(HilbertMatrix.of(3)));
+    assertThrows(ClassCastException.class, () -> Kurtosis.of(HilbertMatrix.of(3)));
   }
 }

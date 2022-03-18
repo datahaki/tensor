@@ -2,6 +2,7 @@
 package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
@@ -16,7 +17,6 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.lie.Permutations;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SparseEntryVisitorTest {
   @Test
@@ -37,7 +37,7 @@ public class SparseEntryVisitorTest {
     Tensor transp = Transpose.of(sparseArray);
     assertTrue(transp instanceof SparseArray);
     assertEquals(transp, Transpose.of(tensor));
-    AssertFail.of(() -> Transpose.of(sparseArray, 1, 0, 2));
+    assertThrows(IllegalArgumentException.class, () -> Transpose.of(sparseArray, 1, 0, 2));
   }
 
   @Test

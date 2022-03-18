@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -15,10 +16,10 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SinhTest {
   @Test
@@ -48,11 +49,11 @@ public class SinhTest {
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> Sinh.of(Quantity.of(1, "deg")));
+    assertThrows(TensorRuntimeException.class, () -> Sinh.of(Quantity.of(1, "deg")));
   }
 
   @Test
   public void testGaussScalarFail() {
-    AssertFail.of(() -> Sinh.of(GaussScalar.of(6, 7)));
+    assertThrows(TensorRuntimeException.class, () -> Sinh.of(GaussScalar.of(6, 7)));
   }
 }

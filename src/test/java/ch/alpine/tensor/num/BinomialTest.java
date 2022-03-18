@@ -3,6 +3,7 @@ package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -15,13 +16,13 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Power;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class BinomialTest {
   @Test
@@ -117,8 +118,8 @@ public class BinomialTest {
 
   @Test
   public void testFailN() {
-    AssertFail.of(() -> Binomial.of(RealScalar.of(10.21)));
-    AssertFail.of(() -> Binomial.of(-1));
+    assertThrows(TensorRuntimeException.class, () -> Binomial.of(RealScalar.of(10.21)));
+    assertThrows(IllegalArgumentException.class, () -> Binomial.of(-1));
   }
 
   @Test
@@ -154,7 +155,7 @@ public class BinomialTest {
   @Test
   public void testLargeFail() {
     assertFalse(DeterminateScalarQ.of(Binomial.of(RealScalar.of(123412341234324L), RealScalar.ZERO)));
-    AssertFail.of(() -> Binomial.of(RealScalar.of(-123412341234324L), RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> Binomial.of(RealScalar.of(-123412341234324L), RealScalar.ZERO));
   }
 
   @Test
@@ -208,6 +209,6 @@ public class BinomialTest {
 
   @Test
   public void testGaussScalarFail() {
-    AssertFail.of(() -> Binomial.of(GaussScalar.of(3, 5), GaussScalar.of(2, 5)));
+    assertThrows(TensorRuntimeException.class, () -> Binomial.of(GaussScalar.of(3, 5), GaussScalar.of(2, 5)));
   }
 }

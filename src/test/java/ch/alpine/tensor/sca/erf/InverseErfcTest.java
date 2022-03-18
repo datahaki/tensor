@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.erf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,13 +10,13 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class InverseErfcTest {
   public static final Chop CHOP_04 = Chop.below(1.4e-04);
@@ -44,6 +45,6 @@ public class InverseErfcTest {
   @Test
   public void testFail() {
     InverseCDF inverseCDF = (InverseCDF) TriangularDistribution.with(2, 8);
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.5)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.5)));
   }
 }

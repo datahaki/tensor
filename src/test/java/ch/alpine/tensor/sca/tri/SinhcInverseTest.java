@@ -2,15 +2,16 @@
 package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SinhcInverseTest {
   @Test
@@ -32,6 +33,6 @@ public class SinhcInverseTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> SinhcInverse.FUNCTION.apply(Quantity.of(0, "m")));
+    assertThrows(TensorRuntimeException.class, () -> SinhcInverse.FUNCTION.apply(Quantity.of(0, "m")));
   }
 }

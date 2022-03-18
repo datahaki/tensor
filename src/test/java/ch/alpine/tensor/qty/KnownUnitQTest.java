@@ -2,6 +2,7 @@
 package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class KnownUnitQTest {
   @Test
@@ -69,18 +69,18 @@ public class KnownUnitQTest {
   @Test
   public void testRequire() {
     KnownUnitQ.SI().require(Unit.of("PS^3"));
-    AssertFail.of(() -> KnownUnitQ.SI().require(Unit.of("CHF")));
+    assertThrows(IllegalArgumentException.class, () -> KnownUnitQ.SI().require(Unit.of("CHF")));
   }
 
   @Test
   public void testNullCreationFail() {
-    AssertFail.of(() -> KnownUnitQ.in(null));
+    assertThrows(NullPointerException.class, () -> KnownUnitQ.in(null));
   }
 
   @Test
   public void testNullArgumentFail() throws ClassNotFoundException, IOException {
     KnownUnitQ knownUnitQ = Serialization.copy(KnownUnitQ.SI());
-    AssertFail.of(() -> knownUnitQ.test(null));
-    AssertFail.of(() -> knownUnitQ.require(null));
+    assertThrows(NullPointerException.class, () -> knownUnitQ.test(null));
+    assertThrows(NullPointerException.class, () -> knownUnitQ.require(null));
   }
 }

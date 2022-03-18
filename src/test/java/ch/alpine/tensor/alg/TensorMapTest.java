@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
@@ -12,12 +13,12 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.red.Total;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TensorMapTest {
   @Test
@@ -97,6 +98,6 @@ public class TensorMapTest {
   @Test
   public void testNegativeFail() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}");
-    AssertFail.of(() -> TensorMap.of(Total::of, tensor, -1));
+    assertThrows(TensorRuntimeException.class, () -> TensorMap.of(Total::of, tensor, -1));
   }
 }

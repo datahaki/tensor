@@ -2,9 +2,11 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
 
@@ -16,6 +18,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.BinningMethod;
@@ -30,7 +33,6 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class HistogramDistributionTest {
   @Test
@@ -67,7 +69,7 @@ public class HistogramDistributionTest {
   public void testFreedmanMin() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(3, 4));
     assertTrue(distribution.toString().startsWith("HistogramDistribution"));
-    AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(3, 3)));
+    assertThrows(TensorRuntimeException.class, () -> HistogramDistribution.of(Tensors.vector(3, 3)));
   }
 
   @Test
@@ -268,12 +270,12 @@ public class HistogramDistributionTest {
 
   @Test
   public void testFailEmpty() {
-    AssertFail.of(() -> HistogramDistribution.of(Tensors.empty(), RealScalar.of(2)));
+    assertThrows(NoSuchElementException.class, () -> HistogramDistribution.of(Tensors.empty(), RealScalar.of(2)));
   }
 
   @Test
   public void testFailWidth() {
-    AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.ZERO));
-    AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.of(-2)));
+    assertThrows(ArithmeticException.class, () -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.of(-2)));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,12 +10,12 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ColorDataGradientTest {
   @Test
@@ -56,6 +57,6 @@ public class ColorDataGradientTest {
   @Test
   public void testGaussScalar() {
     Scalar scalar = GaussScalar.of(123, 251);
-    AssertFail.of(() -> ColorDataGradients.ALPINE.apply(scalar));
+    assertThrows(TensorRuntimeException.class, () -> ColorDataGradients.ALPINE.apply(scalar));
   }
 }

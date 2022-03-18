@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -16,10 +17,10 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class RoundTest {
   @Test
@@ -55,8 +56,8 @@ public class RoundTest {
 
   @Test
   public void testIntExactValueFail() {
-    AssertFail.of(() -> Round.intValueExact(Quantity.of(1.2, "h")));
-    AssertFail.of(() -> Round.longValueExact(Quantity.of(2.3, "h*s")));
+    assertThrows(TensorRuntimeException.class, () -> Round.intValueExact(Quantity.of(1.2, "h")));
+    assertThrows(TensorRuntimeException.class, () -> Round.longValueExact(Quantity.of(2.3, "h*s")));
   }
 
   @Test
@@ -183,6 +184,6 @@ public class RoundTest {
 
   @Test
   public void testTypeFail() {
-    AssertFail.of(() -> Round.of(StringScalar.of("some")));
+    assertThrows(TensorRuntimeException.class, () -> Round.of(StringScalar.of("some")));
   }
 }

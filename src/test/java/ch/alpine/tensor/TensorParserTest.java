@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -16,7 +17,6 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.io.StringScalarQ;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TensorParserTest {
   @Test
@@ -192,7 +192,7 @@ public class TensorParserTest {
 
   @Test
   public void testFailStringNull() {
-    AssertFail.of(() -> Tensors.fromString(null));
+    assertThrows(NullPointerException.class, () -> Tensors.fromString(null));
   }
 
   @Test

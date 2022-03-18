@@ -2,20 +2,22 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class EntrywiseTest {
   @Test
@@ -104,24 +106,24 @@ public class EntrywiseTest {
   @Test
   public void testEmpty() {
     Entrywise entrywise = Entrywise.with(Max::of);
-    AssertFail.of(() -> entrywise.of(Tensors.empty()));
+    assertThrows(NoSuchElementException.class, () -> entrywise.of(Tensors.empty()));
   }
 
   @Test
   public void testFail() {
     Entrywise entrywise = Entrywise.max();
-    AssertFail.of(() -> entrywise.apply(Tensors.vector(3, 2, 3), Tensors.vector(-2, 1)));
+    assertThrows(IllegalArgumentException.class, () -> entrywise.apply(Tensors.vector(3, 2, 3), Tensors.vector(-2, 1)));
   }
 
   @Test
   public void testScalarTensorFail() {
     Entrywise entrywise = Entrywise.max();
-    AssertFail.of(() -> entrywise.apply(Tensors.vector(3, 2, 3), RealScalar.ONE));
-    AssertFail.of(() -> entrywise.apply(RealScalar.ONE, Tensors.vector(3, 2, 3)));
+    assertThrows(TensorRuntimeException.class, () -> entrywise.apply(Tensors.vector(3, 2, 3), RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> entrywise.apply(RealScalar.ONE, Tensors.vector(3, 2, 3)));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> Entrywise.with(null));
+    assertThrows(NullPointerException.class, () -> Entrywise.with(null));
   }
 }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -16,7 +17,6 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class DotTest {
   /** @param tensor
@@ -89,7 +89,7 @@ public class DotTest {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor x = RandomVariate.of(distribution, 5);
     Tensor y = RandomVariate.of(distribution, 6);
-    AssertFail.of(() -> Dot.of(x, y));
+    assertThrows(IllegalArgumentException.class, () -> Dot.of(x, y));
   }
 
   @Test
@@ -197,11 +197,11 @@ public class DotTest {
 
   @Test
   public void testCombineFail() {
-    AssertFail.of(() -> Dot.combine(Arrays.asList(2, 2), Arrays.asList(3, 4, 5)));
+    assertThrows(IllegalArgumentException.class, () -> Dot.combine(Arrays.asList(2, 2), Arrays.asList(3, 4, 5)));
   }
 
   @Test
   public void testDot0Fail() {
-    AssertFail.of(() -> Dot.of());
+    assertThrows(ArrayIndexOutOfBoundsException.class, () -> Dot.of());
   }
 }

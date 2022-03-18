@@ -2,6 +2,7 @@
 package ch.alpine.tensor.lie.r2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -26,7 +27,6 @@ import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class CirclePointsTest {
   static Tensor numeric(int n) {
@@ -91,6 +91,6 @@ public class CirclePointsTest {
 
   @Test
   public void testFailNegative() {
-    AssertFail.of(() -> CirclePoints.of(-1));
+    assertThrows(IllegalArgumentException.class, () -> CirclePoints.of(-1));
   }
 }

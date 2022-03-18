@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
@@ -14,6 +15,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.mat.Tolerance;
@@ -30,7 +32,6 @@ import ch.alpine.tensor.red.Quantile;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class PoissonDistributionTest {
   static Tensor values(PDF pdf, int length) {
@@ -135,13 +136,13 @@ public class PoissonDistributionTest {
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> PoissonDistribution.of(Quantity.of(3, "m")));
+    assertThrows(TensorRuntimeException.class, () -> PoissonDistribution.of(Quantity.of(3, "m")));
   }
 
   @Test
   public void testFailLambda() {
-    AssertFail.of(() -> PoissonDistribution.of(RealScalar.ZERO));
-    AssertFail.of(() -> PoissonDistribution.of(RealScalar.of(-0.1)));
+    assertThrows(TensorRuntimeException.class, () -> PoissonDistribution.of(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> PoissonDistribution.of(RealScalar.of(-0.1)));
   }
 
   @Test
@@ -188,6 +189,6 @@ public class PoissonDistributionTest {
 
   @Test
   public void testFailPoisson() {
-    AssertFail.of(() -> PoissonDistribution.of(RealScalar.of(800)));
+    assertThrows(TensorRuntimeException.class, () -> PoissonDistribution.of(RealScalar.of(800)));
   }
 }

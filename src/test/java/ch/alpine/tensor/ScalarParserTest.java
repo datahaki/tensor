@@ -3,13 +3,12 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ScalarParserTest {
   @Test
@@ -101,21 +100,21 @@ public class ScalarParserTest {
 
   @Test
   public void testAbcFail() {
-    AssertFail.of(() -> ScalarParser.of("(3"));
-    AssertFail.of(() -> ScalarParser.of("3)"));
-    AssertFail.of(() -> ScalarParser.of("314abc34"));
-    AssertFail.of(() -> ScalarParser.of("314abc"));
-    AssertFail.of(() -> ScalarParser.of("abc34"));
-    AssertFail.of(() -> ScalarParser.of("3e0.1"));
-    AssertFail.of(() -> ScalarParser.of("3e.1"));
-    AssertFail.of(() -> ScalarParser.of("3e-0.1"));
-    AssertFail.of(() -> ScalarParser.of("3e.-0.1"));
-    AssertFail.of(() -> ScalarParser.of("(3)(5)"));
+    assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("(3"));
+    assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("3)"));
+    assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("314abc34"));
+    assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("314abc"));
+    assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("abc34"));
+    assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("3e0.1"));
+    assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("3e.1"));
+    assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("3e-0.1"));
+    assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("3e.-0.1"));
+    assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("(3)(5)"));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> ScalarParser.of("3.14[m]"));
+    assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("3.14[m]"));
   }
 
   @Test

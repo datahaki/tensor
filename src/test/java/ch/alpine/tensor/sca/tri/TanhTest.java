@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,9 +11,9 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TanhTest {
   @Test
@@ -34,6 +35,6 @@ public class TanhTest {
   @Test
   public void testFail() {
     Scalar scalar = GaussScalar.of(3, 11);
-    AssertFail.of(() -> Tanh.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Tanh.of(scalar));
   }
 }

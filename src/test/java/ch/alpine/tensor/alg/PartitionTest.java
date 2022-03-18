@@ -2,15 +2,16 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class PartitionTest {
   @Test
@@ -62,13 +63,13 @@ public class PartitionTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Partition.of(RealScalar.ONE, 2));
+    assertThrows(TensorRuntimeException.class, () -> Partition.of(RealScalar.ONE, 2));
   }
 
   @Test
   public void testFailOffsetZero() {
     Tensor tensor = Tensors.vector(1, 2, 3, 4);
-    AssertFail.of(() -> Partition.of(tensor, 2, 0));
+    assertThrows(IllegalArgumentException.class, () -> Partition.of(tensor, 2, 0));
   }
 
   @Test
@@ -87,7 +88,7 @@ public class PartitionTest {
 
   @Test
   public void testStreamFail() {
-    AssertFail.of(() -> Partition.stream(Pi.VALUE, 3, 2));
-    AssertFail.of(() -> Partition.stream(Pi.VALUE, 2, 3));
+    assertThrows(TensorRuntimeException.class, () -> Partition.stream(Pi.VALUE, 3, 2));
+    assertThrows(TensorRuntimeException.class, () -> Partition.stream(Pi.VALUE, 2, 3));
   }
 }

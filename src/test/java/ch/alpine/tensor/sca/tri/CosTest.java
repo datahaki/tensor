@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,9 +11,9 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class CosTest {
   @Test
@@ -32,12 +33,12 @@ public class CosTest {
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> Cos.of(Quantity.of(1, "deg")));
+    assertThrows(TensorRuntimeException.class, () -> Cos.of(Quantity.of(1, "deg")));
   }
 
   @Test
   public void testStringFail() {
     Scalar scalar = StringScalar.of("string");
-    AssertFail.of(() -> Cos.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Cos.of(scalar));
   }
 }

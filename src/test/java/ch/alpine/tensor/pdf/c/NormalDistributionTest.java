@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -24,7 +26,6 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class NormalDistributionTest {
   @Test
@@ -122,19 +123,19 @@ public class NormalDistributionTest {
 
   @Test
   public void testComplexFail() {
-    AssertFail.of(() -> NormalDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> NormalDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
-    AssertFail.of(() -> NormalDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
-    AssertFail.of(() -> NormalDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    assertThrows(TensorRuntimeException.class, () -> NormalDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> NormalDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
   @Test
   public void testNegativeSigmaFail() {
     NormalDistribution.of(5, 1);
-    AssertFail.of(() -> NormalDistribution.of(5, -1));
+    assertThrows(TensorRuntimeException.class, () -> NormalDistribution.of(5, -1));
   }
 }

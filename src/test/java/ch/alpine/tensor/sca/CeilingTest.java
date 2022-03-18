@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
@@ -14,12 +15,12 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class CeilingTest {
   @Test
@@ -70,8 +71,8 @@ public class CeilingTest {
 
   @Test
   public void testIntExactValueFail() {
-    AssertFail.of(() -> Ceiling.intValueExact(Quantity.of(1.2, "h")));
-    AssertFail.of(() -> Ceiling.longValueExact(Quantity.of(2.3, "h*s")));
+    assertThrows(TensorRuntimeException.class, () -> Ceiling.intValueExact(Quantity.of(1.2, "h")));
+    assertThrows(TensorRuntimeException.class, () -> Ceiling.longValueExact(Quantity.of(2.3, "h*s")));
   }
 
   @Test
@@ -144,6 +145,6 @@ public class CeilingTest {
   @Test
   public void testTypeFail() {
     Scalar scalar = StringScalar.of("string");
-    AssertFail.of(() -> Ceiling.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Ceiling.of(scalar));
   }
 }

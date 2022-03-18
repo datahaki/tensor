@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -14,7 +15,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ConstantArrayTest {
   @Test
@@ -66,8 +66,8 @@ public class ConstantArrayTest {
     assertEquals(tensor.length(), 6);
     assertEquals(tensor.get(1), Tensors.vector(1, 2, 3));
     assertEquals(tensor.Get(1, 2), RealScalar.of(3));
-    AssertFail.of(() -> tensor.set(s -> s, 0, 0));
-    AssertFail.of(() -> tensor.append(RealScalar.ONE));
+    assertThrows(UnsupportedOperationException.class, () -> tensor.set(s -> s, 0, 0));
+    assertThrows(UnsupportedOperationException.class, () -> tensor.append(RealScalar.ONE));
   }
 
   @Test
@@ -77,13 +77,13 @@ public class ConstantArrayTest {
     assertEquals(tensor.length(), 6);
     assertEquals(tensor.get(1), RealScalar.of(3));
     assertEquals(tensor.extract(2, 5), Tensors.vector(3, 3, 3));
-    AssertFail.of(() -> tensor.set(s -> s, 0));
-    AssertFail.of(() -> tensor.append(RealScalar.ONE));
+    assertThrows(UnsupportedOperationException.class, () -> tensor.set(s -> s, 0));
+    assertThrows(UnsupportedOperationException.class, () -> tensor.append(RealScalar.ONE));
   }
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> ConstantArray.of(null, 6, 3));
+    assertThrows(NullPointerException.class, () -> ConstantArray.of(null, 6, 3));
   }
 
   @Test
@@ -91,6 +91,6 @@ public class ConstantArrayTest {
     Tensor repmat = ConstantArray.of(RealScalar.ONE, 6, 0, 3);
     assertEquals(Dimensions.of(repmat), Arrays.asList(6, 0));
     assertEquals(repmat, Tensors.fromString("{{}, {}, {}, {}, {}, {}}"));
-    AssertFail.of(() -> ConstantArray.of(RealScalar.ONE, 6, -1, 3));
+    assertThrows(IllegalArgumentException.class, () -> ConstantArray.of(RealScalar.ONE, 6, -1, 3));
   }
 }

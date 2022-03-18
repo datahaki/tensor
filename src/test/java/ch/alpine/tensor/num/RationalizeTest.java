@@ -3,6 +3,7 @@ package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.pdf.Distribution;
@@ -28,7 +30,6 @@ import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class RationalizeTest {
   @Test
@@ -155,11 +156,11 @@ public class RationalizeTest {
 
   @Test
   public void testFailPositive() {
-    AssertFail.of(() -> Rationalize.withDenominatorLessEquals(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> Rationalize.withDenominatorLessEquals(RealScalar.ZERO));
   }
 
   @Test
   public void testFailIntegerQ() {
-    AssertFail.of(() -> Rationalize.withDenominatorLessEquals(RealScalar.of(1.23)));
+    assertThrows(TensorRuntimeException.class, () -> Rationalize.withDenominatorLessEquals(RealScalar.of(1.23)));
   }
 }

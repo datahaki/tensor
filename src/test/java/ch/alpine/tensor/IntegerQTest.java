@@ -2,11 +2,10 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.AssertFail;
 
 public class IntegerQTest {
   @Test
@@ -31,11 +30,11 @@ public class IntegerQTest {
 
   @Test
   public void testRequireFail() {
-    AssertFail.of(() -> IntegerQ.require(RealScalar.of(0.2)));
+    assertThrows(TensorRuntimeException.class, () -> IntegerQ.require(RealScalar.of(0.2)));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> IntegerQ.of(null));
+    assertThrows(NullPointerException.class, () -> IntegerQ.of(null));
   }
 }

@@ -2,19 +2,22 @@
 package ch.alpine.tensor.mat.re;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MatrixRankTest {
   private static void _check(Tensor matrix, int expect) {
@@ -66,20 +69,20 @@ public class MatrixRankTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> MatrixRank.of(RealScalar.TWO));
-    AssertFail.of(() -> MatrixRank.of(Pi.VALUE));
+    assertThrows(TensorRuntimeException.class, () -> MatrixRank.of(RealScalar.TWO));
+    assertThrows(TensorRuntimeException.class, () -> MatrixRank.of(Pi.VALUE));
   }
 
   @Test
   public void testVectorFail() {
     Tensor vector = Tensors.vector(1, 2, 3);
-    AssertFail.of(() -> MatrixRank.of(vector));
-    AssertFail.of(() -> MatrixRank.of(vector.map(N.DOUBLE)));
+    assertThrows(IllegalArgumentException.class, () -> MatrixRank.of(vector));
+    assertThrows(NegativeArraySizeException.class, () -> MatrixRank.of(vector.map(N.DOUBLE)));
   }
 
   @Test
   public void testEmptyTensorFail() {
     Tensor tensor = Tensors.empty();
-    AssertFail.of(() -> MatrixRank.of(tensor));
+    assertThrows(NoSuchElementException.class, () -> MatrixRank.of(tensor));
   }
 }

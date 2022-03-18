@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Reverse;
-import ch.alpine.tensor.usr.AssertFail;
 
 /** [
  * [ 0.0113 0.0838 0.0113 ]
@@ -35,7 +35,7 @@ public class GaussianMatrixTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> GaussianMatrix.of(0));
-    AssertFail.of(() -> GaussianMatrix.of(-1));
+    assertThrows(ArithmeticException.class, () -> GaussianMatrix.of(0));
+    assertThrows(IllegalArgumentException.class, () -> GaussianMatrix.of(-1));
   }
 }

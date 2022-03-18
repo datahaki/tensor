@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.gr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
@@ -24,7 +26,6 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MahalanobisTest {
   @Test
@@ -82,11 +83,11 @@ public class MahalanobisTest {
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> new Mahalanobis(Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> new Mahalanobis(Tensors.empty()));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> new Mahalanobis(null));
+    assertThrows(NullPointerException.class, () -> new Mahalanobis(null));
   }
 }

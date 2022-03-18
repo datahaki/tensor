@@ -2,6 +2,7 @@
 package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,10 +10,10 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class Normalize2DTest {
   private static Tensor unlessZero(Scalar x, Scalar y) {
@@ -52,18 +53,18 @@ public class Normalize2DTest {
   public void testFail() {
     Tensor vector = Tensors.vectorDouble(0.0, 0.0);
     NormalizeUnlessZero.with(Vector2Norm::of).apply(vector);
-    AssertFail.of(() -> Vector2Norm.NORMALIZE.apply(vector));
+    assertThrows(TensorRuntimeException.class, () -> Vector2Norm.NORMALIZE.apply(vector));
   }
 
   @Test
   public void testNumberQFail1() {
-    AssertFail.of(() -> unlessZero(DoubleScalar.POSITIVE_INFINITY, RealScalar.ZERO));
-    AssertFail.of(() -> unlessZero(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> unlessZero(DoubleScalar.POSITIVE_INFINITY, RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> unlessZero(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
   }
 
   @Test
   public void testNumberQFail2() {
-    AssertFail.of(() -> unlessZero(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));
-    AssertFail.of(() -> unlessZero(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
+    assertThrows(TensorRuntimeException.class, () -> unlessZero(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));
+    assertThrows(TensorRuntimeException.class, () -> unlessZero(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
   }
 }

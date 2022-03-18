@@ -3,6 +3,7 @@ package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
@@ -16,6 +17,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -37,7 +39,6 @@ import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class AroundTest {
   @Test
@@ -212,14 +213,14 @@ public class AroundTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> Around.of(2, -3));
+    assertThrows(TensorRuntimeException.class, () -> Around.of(2, -3));
   }
 
   @Test
   public void testNumberFail() {
     Scalar scalar = Around.of(2, 3);
     assertEquals(scalar.toString(), "2\u00B13");
-    AssertFail.of(() -> scalar.number());
+    assertThrows(TensorRuntimeException.class, () -> scalar.number());
   }
 
   @Test
@@ -231,7 +232,7 @@ public class AroundTest {
 
   @Test
   public void testSpecialCase() {
-    AssertFail.of(() -> Around.of(Quantity.of(1, "m"), RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> Around.of(Quantity.of(1, "m"), RealScalar.ZERO));
   }
 
   @Test
@@ -275,14 +276,14 @@ public class AroundTest {
 
   @Test
   public void testPowerFail() {
-    AssertFail.of(() -> Power.of(Around.of(-3, 2), Around.of(9, 12)));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(Around.of(-3, 2), Around.of(9, 12)));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> Around.of(null, 2));
-    AssertFail.of(() -> Around.of(2, null));
-    AssertFail.of(() -> Around.of(Pi.VALUE, null));
-    AssertFail.of(() -> Around.of(null, Pi.VALUE));
+    assertThrows(NullPointerException.class, () -> Around.of(null, 2));
+    assertThrows(NullPointerException.class, () -> Around.of(2, null));
+    assertThrows(NullPointerException.class, () -> Around.of(Pi.VALUE, null));
+    assertThrows(NullPointerException.class, () -> Around.of(null, Pi.VALUE));
   }
 }

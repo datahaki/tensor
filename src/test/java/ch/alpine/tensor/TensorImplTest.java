@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -17,13 +18,12 @@ import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TensorImplTest {
   @Test
   public void testUnmodifiable() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
-    AssertFail.of(() -> eye.flatten(0).forEach(e -> e.set(RealScalar.of(4), 2)));
+    assertThrows(UnsupportedOperationException.class, () -> eye.flatten(0).forEach(e -> e.set(RealScalar.of(4), 2)));
   }
 
   @Test
@@ -47,7 +47,7 @@ public class TensorImplTest {
   public void testIteratorUnmod() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     for (Tensor unit : eye)
-      AssertFail.of(() -> unit.set(RealScalar.of(4), 2));
+      assertThrows(UnsupportedOperationException.class, () -> unit.set(RealScalar.of(4), 2));
     assertEquals(eye.get(Tensor.ALL, 2), Tensors.vector(0, 0, 1, 0));
   }
 
@@ -64,7 +64,7 @@ public class TensorImplTest {
   public void testIteratorUnmod3() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     for (Tensor unit : eye)
-      AssertFail.of(() -> unit.append(RealScalar.ZERO));
+      assertThrows(UnsupportedOperationException.class, () -> unit.append(RealScalar.ZERO));
   }
 
   @Test
@@ -125,7 +125,7 @@ public class TensorImplTest {
   @Test
   public void testSetFail() {
     Tensor matrix = HilbertMatrix.of(3, 3);
-    AssertFail.of(() -> matrix.set(Array.zeros(2), Tensor.ALL, 1));
+    assertThrows(IllegalArgumentException.class, () -> matrix.set(Array.zeros(2), Tensor.ALL, 1));
   }
 
   @Test

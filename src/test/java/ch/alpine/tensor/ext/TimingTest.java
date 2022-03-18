@@ -3,13 +3,12 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.Serializable;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TimingTest {
   @Test
@@ -17,7 +16,7 @@ public class TimingTest {
     Timing timing = Timing.stopped();
     assertEquals(timing.nanoSeconds(), 0);
     assertEquals(timing.seconds(), 0.0);
-    AssertFail.of(() -> timing.stop());
+    assertThrows(NullPointerException.class, () -> timing.stop());
     timing.start();
     Math.sin(1);
     assertTrue(0 < timing.nanoSeconds());
@@ -35,7 +34,7 @@ public class TimingTest {
   @Test
   public void testStartedFail() {
     Timing timing = Timing.started();
-    AssertFail.of(() -> timing.start());
+    assertThrows(IllegalStateException.class, () -> timing.start());
     assertTrue(0 < timing.nanoSeconds());
   }
 
@@ -45,6 +44,6 @@ public class TimingTest {
     Math.sin(1);
     assertTrue(0 < timing.nanoSeconds());
     timing.stop();
-    AssertFail.of(() -> timing.stop());
+    assertThrows(NullPointerException.class, () -> timing.stop());
   }
 }

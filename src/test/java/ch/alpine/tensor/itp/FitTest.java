@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.Random;
@@ -24,7 +25,6 @@ import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Mean;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class FitTest {
   @Test
@@ -99,11 +99,11 @@ public class FitTest {
 
   @Test
   public void testDegreeLargeFail() {
-    AssertFail.of(() -> Fit.polynomial(Tensors.vector(10, 11), Tensors.vector(5, -2), 2));
+    assertThrows(IllegalArgumentException.class, () -> Fit.polynomial(Tensors.vector(10, 11), Tensors.vector(5, -2), 2));
   }
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> Fit.polynomial(Tensors.vector(10, 11), Tensors.vector(5, -2), -1));
+    assertThrows(IllegalArgumentException.class, () -> Fit.polynomial(Tensors.vector(10, 11), Tensors.vector(5, -2), -1));
   }
 }

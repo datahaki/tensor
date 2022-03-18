@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.Color;
 import java.io.IOException;
@@ -10,9 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class StrictColorDataIndexedTest {
   @Test
@@ -66,24 +67,24 @@ public class StrictColorDataIndexedTest {
     assertEquals(colorDataIndexed.getColor(0), Color.BLUE);
     assertEquals(colorDataIndexed.getColor(1), Color.RED);
     assertEquals(colorDataIndexed.getColor(2), Color.BLACK);
-    AssertFail.of(() -> colorDataIndexed.getColor(3));
+    assertThrows(ArrayIndexOutOfBoundsException.class, () -> colorDataIndexed.getColor(3));
   }
 
   @Test
   public void testFailCreate() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}}");
-    AssertFail.of(() -> StrictColorDataIndexed.of(tensor));
+    assertThrows(TensorRuntimeException.class, () -> StrictColorDataIndexed.of(tensor));
   }
 
   @Test
   public void testFailCreateScalar() {
-    AssertFail.of(() -> StrictColorDataIndexed.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> StrictColorDataIndexed.of(RealScalar.ONE));
   }
 
   @Test
   public void testFailExtract() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(tensor);
-    AssertFail.of(() -> colorDataIndexed.getColor(-1));
+    assertThrows(ArrayIndexOutOfBoundsException.class, () -> colorDataIndexed.getColor(-1));
   }
 }

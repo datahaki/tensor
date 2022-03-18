@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -13,10 +14,10 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class QuantityComparatorTest {
   @Test
@@ -52,7 +53,7 @@ public class QuantityComparatorTest {
   public void testIncompatibleFail() {
     Comparator<Scalar> comparator = QuantityComparator.SI();
     Tensor vector = Tensors.fromString("{4[h], 300[s], 2[km], 180[s]}");
-    AssertFail.of(() -> Sort.ofVector(vector, comparator));
+    assertThrows(TensorRuntimeException.class, () -> Sort.ofVector(vector, comparator));
   }
 
   @Test
@@ -66,6 +67,6 @@ public class QuantityComparatorTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> QuantityComparator.of(null));
+    assertThrows(NullPointerException.class, () -> QuantityComparator.of(null));
   }
 }

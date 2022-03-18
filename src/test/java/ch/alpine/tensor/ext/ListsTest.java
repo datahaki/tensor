@@ -2,13 +2,12 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ListsTest {
   @Test
@@ -18,7 +17,7 @@ public class ListsTest {
 
   @Test
   public void testWithoutHeadFail() {
-    AssertFail.of(() -> Lists.rest(new LinkedList<>()));
+    assertThrows(IllegalArgumentException.class, () -> Lists.rest(new LinkedList<>()));
   }
 
   @Test
@@ -28,6 +27,6 @@ public class ListsTest {
 
   @Test
   public void testLastFail() {
-    AssertFail.of(() -> Lists.last(new LinkedList<>()));
+    assertThrows(IndexOutOfBoundsException.class, () -> Lists.last(new LinkedList<>()));
   }
 }

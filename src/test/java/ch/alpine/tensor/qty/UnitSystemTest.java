@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -18,11 +19,11 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.red.Total;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class UnitSystemTest {
   @Test
@@ -64,7 +65,7 @@ public class UnitSystemTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> UnitSystem.SI().apply(null));
+    assertThrows(NullPointerException.class, () -> UnitSystem.SI().apply(null));
   }
 
   @Test
@@ -98,7 +99,7 @@ public class UnitSystemTest {
     UnitSystem prices = SimpleUnitSystem.from(properties);
     assertEquals(prices.apply(Quantity.of(3, "Apples")), Quantity.of(6, "CHF"));
     Tensor cart = Tensors.of(Quantity.of(2, "Apples"), Quantity.of(3, "Chocolates"), Quantity.of(3, "Oranges"));
-    AssertFail.of(() -> Total.of(cart));
+    assertThrows(TensorRuntimeException.class, () -> Total.of(cart));
     Scalar total = Total.ofVector(cart.map(prices));
     assertEquals(total, Quantity.of(16, "CHF"));
     Scalar euro = UnitConvert.of(prices).to(Unit.of("EUR")).apply(total);
@@ -146,34 +147,34 @@ public class UnitSystemTest {
   public void testFail1() {
     Properties properties = ResourceData.properties("/unit/fail1.properties");
     assertFalse(properties.entrySet().isEmpty());
-    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+    assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
   public void testFail2() {
     Properties properties = ResourceData.properties("/unit/fail2.properties");
     assertFalse(properties.entrySet().isEmpty());
-    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+    assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
   public void testFail3() {
     Properties properties = ResourceData.properties("/unit/fail3.properties");
     assertFalse(properties.entrySet().isEmpty());
-    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+    assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
   public void testFail4() {
     Properties properties = ResourceData.properties("/unit/fail4.properties");
     assertFalse(properties.entrySet().isEmpty());
-    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+    assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
   public void testFail5() {
     Properties properties = ResourceData.properties("/unit/fail5.properties");
     assertFalse(properties.entrySet().isEmpty());
-    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+    assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 }

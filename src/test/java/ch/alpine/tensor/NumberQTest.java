@@ -3,13 +3,13 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class NumberQTest {
   @Test
@@ -71,11 +71,11 @@ public class NumberQTest {
 
   @Test
   public void testRequireFail() {
-    AssertFail.of(() -> NumberQ.require(Quantity.of(6, "apples")));
+    assertThrows(TensorRuntimeException.class, () -> NumberQ.require(Quantity.of(6, "apples")));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> NumberQ.of(null));
+    assertThrows(NullPointerException.class, () -> NumberQ.of(null));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -12,12 +13,12 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class DeBoorTest {
   @Test
@@ -235,24 +236,24 @@ public class DeBoorTest {
     Tensor knots = Tensors.vector(-1, 0, 1, 2, 2, 2).unmodifiable();
     Tensor control = Tensors.vector(6, 0, 0, 0).unmodifiable();
     DeBoor.of(LinearBinaryAverage.INSTANCE, knots, control);
-    AssertFail.of(() -> DeBoor.of(null, knots, control));
+    assertThrows(NullPointerException.class, () -> DeBoor.of(null, knots, control));
   }
 
   @Test
   public void testKnotsScalarFail() {
-    AssertFail.of(() -> DeBoor.of(LinearBinaryAverage.INSTANCE, RealScalar.ONE, Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> DeBoor.of(LinearBinaryAverage.INSTANCE, RealScalar.ONE, Tensors.empty()));
   }
 
   @Test
   public void testKnotsMatrixFail() {
-    AssertFail.of(() -> DeBoor.of(LinearBinaryAverage.INSTANCE, HilbertMatrix.of(2), Tensors.vector(1, 2)));
+    assertThrows(TensorRuntimeException.class, () -> DeBoor.of(LinearBinaryAverage.INSTANCE, HilbertMatrix.of(2), Tensors.vector(1, 2)));
   }
 
   @Test
   public void testKnotsLengthOdd() {
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2), Range.of(0, 2));
     assertEquals(deBoor.degree(), 1);
-    AssertFail.of(() -> DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3), Range.of(0, 2)));
+    assertThrows(TensorRuntimeException.class, () -> DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3), Range.of(0, 2)));
   }
 
   @Test
@@ -260,7 +261,7 @@ public class DeBoorTest {
     for (int length = 0; length < 10; ++length)
       if (length != 2) {
         int fl = length;
-        AssertFail.of(() -> DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2), Range.of(0, fl)));
+        assertThrows(IllegalArgumentException.class, () -> DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2), Range.of(0, fl)));
       }
   }
 }

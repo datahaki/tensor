@@ -2,17 +2,18 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.fft.FourierMatrix;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class UnitaryMatrixQTest {
   @Test
@@ -44,6 +45,6 @@ public class UnitaryMatrixQTest {
   public void testRequire() {
     UnitaryMatrixQ.require(FourierMatrix.of(7), Chop._12);
     UnitaryMatrixQ.require(FourierMatrix.of(8));
-    AssertFail.of(() -> UnitaryMatrixQ.require(Tensors.fromString("{{1, 2}, {I, I}}")));
+    assertThrows(TensorRuntimeException.class, () -> UnitaryMatrixQ.require(Tensors.fromString("{{1, 2}, {I, I}}")));
   }
 }

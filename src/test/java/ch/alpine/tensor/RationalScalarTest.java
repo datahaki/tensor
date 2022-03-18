@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
@@ -15,7 +16,6 @@ import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Power;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class RationalScalarTest {
   @Test
@@ -39,7 +39,7 @@ public class RationalScalarTest {
 
   @Test
   public void testInvertFail() {
-    AssertFail.of(() -> RationalScalar.of(0, 1).reciprocal());
+    assertThrows(ArithmeticException.class, () -> RationalScalar.of(0, 1).reciprocal());
   }
 
   @Test
@@ -201,17 +201,17 @@ public class RationalScalarTest {
 
   @Test
   public void testDivideZeroFail() {
-    AssertFail.of(() -> RealScalar.ONE.divide(RealScalar.ZERO));
+    assertThrows(ArithmeticException.class, () -> RealScalar.ONE.divide(RealScalar.ZERO));
   }
 
   @Test
   public void testZeroUnderFail() {
-    AssertFail.of(() -> RealScalar.ZERO.under(RealScalar.ONE));
+    assertThrows(ArithmeticException.class, () -> RealScalar.ZERO.under(RealScalar.ONE));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> RationalScalar.of(null, BigInteger.ONE));
-    AssertFail.of(() -> RationalScalar.of(BigInteger.ONE, null));
+    assertThrows(NullPointerException.class, () -> RationalScalar.of(null, BigInteger.ONE));
+    assertThrows(NullPointerException.class, () -> RationalScalar.of(BigInteger.ONE, null));
   }
 }

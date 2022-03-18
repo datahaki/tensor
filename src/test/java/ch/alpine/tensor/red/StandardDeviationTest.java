@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,13 +10,13 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.nrm.Normalize;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class StandardDeviationTest {
   @Test
@@ -34,11 +35,11 @@ public class StandardDeviationTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> StandardDeviation.ofVector(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> StandardDeviation.ofVector(RealScalar.ONE));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> StandardDeviation.ofVector(HilbertMatrix.of(3)));
+    assertThrows(ClassCastException.class, () -> StandardDeviation.ofVector(HilbertMatrix.of(3)));
   }
 }

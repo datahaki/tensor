@@ -2,6 +2,7 @@
 package ch.alpine.tensor.opt.lp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class LinearProgrammingTest {
   @Test
@@ -91,7 +91,7 @@ public class LinearProgrammingTest {
     // LinearProgramming.of(lpd); // TODO TENSOR LP throws exception due to "unbounded"
     Tensor sold = SimplexCorners.of(lpp);
     assertEquals(sold.dot(lpp.c).Get(0), RationalScalar.of(10, 9));
-    AssertFail.of(() -> lpp.requireFeasible(Tensors.vector(1, 1)));
+    assertThrows(IllegalArgumentException.class, () -> lpp.requireFeasible(Tensors.vector(1, 1)));
     // TODO TENSOR LP primal vs dual
     // TestHelper.check(lpp, false);
   }

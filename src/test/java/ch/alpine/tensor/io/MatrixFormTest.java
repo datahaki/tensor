@@ -2,13 +2,14 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MatrixFormTest {
   @Test
@@ -47,6 +48,6 @@ public class MatrixFormTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> MatrixForm.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> MatrixForm.of(RealScalar.ONE));
   }
 }

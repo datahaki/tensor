@@ -3,16 +3,17 @@ package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class FirstPositionTest {
   @Test
@@ -48,21 +49,21 @@ public class FirstPositionTest {
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> FirstPosition.of(RealScalar.of(7), RealScalar.of(7)));
+    assertThrows(TensorRuntimeException.class, () -> FirstPosition.of(RealScalar.of(7), RealScalar.of(7)));
   }
 
   @Test
   public void testFailTensorNull() {
-    AssertFail.of(() -> FirstPosition.of(null, RealScalar.of(7)));
+    assertThrows(NullPointerException.class, () -> FirstPosition.of(null, RealScalar.of(7)));
   }
 
   @Test
   public void testFailElementNull() {
-    AssertFail.of(() -> FirstPosition.of(Tensors.vector(5, 6, 7, 8, 9), null));
+    assertThrows(NullPointerException.class, () -> FirstPosition.of(Tensors.vector(5, 6, 7, 8, 9), null));
   }
 
   @Test
   public void testFailEmptyNull() {
-    AssertFail.of(() -> FirstPosition.of(Tensors.empty(), null));
+    assertThrows(NullPointerException.class, () -> FirstPosition.of(Tensors.empty(), null));
   }
 }

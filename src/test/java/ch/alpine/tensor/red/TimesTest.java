@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -22,7 +23,6 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TimesTest {
   /** The return value has {@link Dimensions} of input tensor reduced by 1.
@@ -181,16 +181,16 @@ public class TimesTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> Times.of(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3, 4)));
+    assertThrows(IllegalArgumentException.class, () -> Times.of(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
   public void testTotalProdFail() {
-    AssertFail.of(() -> pmul(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> pmul(RealScalar.ONE));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> Times.of(RealScalar.of(3), null, RealScalar.of(8)));
+    assertThrows(NullPointerException.class, () -> Times.of(RealScalar.of(3), null, RealScalar.of(8)));
   }
 }

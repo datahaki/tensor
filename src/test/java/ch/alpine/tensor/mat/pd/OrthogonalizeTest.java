@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.pd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -13,6 +14,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
@@ -39,7 +41,6 @@ import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.tri.ArcTan;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class OrthogonalizeTest {
   private static void orthogonalMatrixQ_require(Tensor q) {
@@ -107,7 +108,7 @@ public class OrthogonalizeTest {
     Tensor q1 = Orthogonalize.of(matrix);
     Tensor q2 = Orthogonalize.usingSvd(matrix);
     Tolerance.CHOP.requireClose(q1, q2);
-    AssertFail.of(() -> Orthogonalize.usingPD(matrix));
+    assertThrows(ArithmeticException.class, () -> Orthogonalize.usingPD(matrix));
   }
 
   @Test
@@ -271,17 +272,17 @@ public class OrthogonalizeTest {
   @Test
   public void testUsingSvdFail() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 3);
-    AssertFail.of(() -> Orthogonalize.usingSvd(matrix));
+    assertThrows(TensorRuntimeException.class, () -> Orthogonalize.usingSvd(matrix));
   }
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> Orthogonalize.of(Pi.VALUE));
+    assertThrows(TensorRuntimeException.class, () -> Orthogonalize.of(Pi.VALUE));
   }
 
   @Test
   public void testFailVector() {
-    AssertFail.of(() -> Orthogonalize.of(Tensors.vector(1, 2, 3, 4)));
+    assertThrows(TensorRuntimeException.class, () -> Orthogonalize.of(Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
@@ -295,6 +296,6 @@ public class OrthogonalizeTest {
 
   @Test
   public void testFailAd() {
-    AssertFail.of(() -> Orthogonalize.of(LeviCivitaTensor.of(3)));
+    assertThrows(ClassCastException.class, () -> Orthogonalize.of(LeviCivitaTensor.of(3)));
   }
 }

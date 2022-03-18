@@ -2,6 +2,7 @@
 package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ArrayPad;
 import ch.alpine.tensor.alg.Dimensions;
@@ -18,7 +20,6 @@ import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.alg.TensorRank;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ListConvolveTest {
   @Test
@@ -103,11 +104,11 @@ public class ListConvolveTest {
         { 0, 1, -1, 3, 3 }, //
         { 0, 1, -1, 3, 3 } });
     ListConvolve.of(kernel, matrix);
-    AssertFail.of(() -> ListConvolve.of(kernel, matrix.get(0)));
+    assertThrows(TensorRuntimeException.class, () -> ListConvolve.of(kernel, matrix.get(0)));
   }
 
   @Test
   public void testConvolveNullFail() {
-    AssertFail.of(() -> ListConvolve.with(null));
+    assertThrows(NullPointerException.class, () -> ListConvolve.with(null));
   }
 }

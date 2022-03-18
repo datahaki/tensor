@@ -4,6 +4,7 @@ package ch.alpine.tensor.mat.re;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.SecureRandom;
@@ -17,6 +18,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.UnitVector;
@@ -38,7 +40,6 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class InverseTest {
   @Test
@@ -107,26 +108,26 @@ public class InverseTest {
   public void testDet0() {
     Tensor matrix = ResourceData.of("/mat/det0-matlab.csv"); // det(matrix) == 0
     assertNotNull(matrix);
-    AssertFail.of(() -> Inverse.of(matrix));
-    AssertFail.of(() -> Inverse.of(N.DOUBLE.of(matrix)));
+    assertThrows(TensorRuntimeException.class, () -> Inverse.of(matrix));
+    assertThrows(TensorRuntimeException.class, () -> Inverse.of(N.DOUBLE.of(matrix)));
   }
 
   @Test
   public void testZeroFail() {
     Tensor matrix = DiagonalMatrix.of(1, 2, 0, 3);
-    AssertFail.of(() -> Inverse.of(matrix));
-    AssertFail.of(() -> Inverse.of(matrix, Pivots.FIRST_NON_ZERO));
+    assertThrows(TensorRuntimeException.class, () -> Inverse.of(matrix));
+    assertThrows(TensorRuntimeException.class, () -> Inverse.of(matrix, Pivots.FIRST_NON_ZERO));
   }
 
   @Test
   public void testFailNonSquare() {
-    AssertFail.of(() -> Inverse.of(HilbertMatrix.of(3, 4)));
-    AssertFail.of(() -> Inverse.of(HilbertMatrix.of(4, 3)));
+    assertThrows(IllegalArgumentException.class, () -> Inverse.of(HilbertMatrix.of(3, 4)));
+    assertThrows(IllegalArgumentException.class, () -> Inverse.of(HilbertMatrix.of(4, 3)));
   }
 
   @Test
   public void testFailRank3() {
-    AssertFail.of(() -> Inverse.of(LeviCivitaTensor.of(3)));
+    assertThrows(ClassCastException.class, () -> Inverse.of(LeviCivitaTensor.of(3)));
   }
 
   @Test

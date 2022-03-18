@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Differences;
 import ch.alpine.tensor.alg.Last;
@@ -31,7 +33,6 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class EqualizingDistributionTest {
   @Test
@@ -80,26 +81,26 @@ public class EqualizingDistributionTest {
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
+    assertThrows(TensorRuntimeException.class, () -> EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
   }
 
   @Test
   public void testZeroFail() {
-    AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 0)));
+    assertThrows(ArithmeticException.class, () -> EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 0)));
   }
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(Tensors.empty()));
+    assertThrows(IndexOutOfBoundsException.class, () -> EqualizingDistribution.fromUnscaledPDF(Tensors.empty()));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> EqualizingDistribution.fromUnscaledPDF(RealScalar.ONE));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(HilbertMatrix.of(10)));
+    assertThrows(ClassCastException.class, () -> EqualizingDistribution.fromUnscaledPDF(HilbertMatrix.of(10)));
   }
 }

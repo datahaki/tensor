@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.cd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,6 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ConjugateGradientSolveTest {
   @Test
@@ -100,17 +100,17 @@ public class ConjugateGradientSolveTest {
 
   @Test
   public void testLengthMismatchFail() {
-    AssertFail.of(() -> ConjugateGradientSolve.of(IdentityMatrix.of(3), Tensors.vector(1, 2)));
-    AssertFail.of(() -> ConjugateGradientSolve.of(IdentityMatrix.of(3), Tensors.vector(1, 2, 3, 4)));
+    assertThrows(IndexOutOfBoundsException.class, () -> ConjugateGradientSolve.of(IdentityMatrix.of(3), Tensors.vector(1, 2)));
+    assertThrows(IllegalArgumentException.class, () -> ConjugateGradientSolve.of(IdentityMatrix.of(3), Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
   public void testRhsMatrixFail() {
-    AssertFail.of(() -> ConjugateGradientSolve.of(IdentityMatrix.of(2), IdentityMatrix.of(2)));
+    assertThrows(ClassCastException.class, () -> ConjugateGradientSolve.of(IdentityMatrix.of(2), IdentityMatrix.of(2)));
   }
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> ConjugateGradientSolve.of(Tensors.empty(), Tensors.vector(1)));
+    assertThrows(IllegalArgumentException.class, () -> ConjugateGradientSolve.of(Tensors.empty(), Tensors.vector(1)));
   }
 }

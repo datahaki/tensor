@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.ev;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
@@ -31,7 +33,6 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class EigensystemTest {
   @Test
@@ -101,35 +102,35 @@ public class EigensystemTest {
   public void testQuantityMixed() {
     Tensor matrix = Tensors.fromString("{{10[m^2], 2[m*kg]}, {2[m*kg], 4[kg^2]}}");
     SymmetricMatrixQ.require(matrix);
-    AssertFail.of(() -> Eigensystem.ofSymmetric(matrix));
+    assertThrows(TensorRuntimeException.class, () -> Eigensystem.ofSymmetric(matrix));
   }
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> Eigensystem.ofSymmetric(Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> Eigensystem.ofSymmetric(Tensors.empty()));
   }
 
   @Test
   public void testNonSymmetricFail() {
-    AssertFail.of(() -> Eigensystem.ofSymmetric(Tensors.fromString("{{1, 2}, {3, 4}}")));
+    assertThrows(TensorRuntimeException.class, () -> Eigensystem.ofSymmetric(Tensors.fromString("{{1, 2}, {3, 4}}")));
   }
 
   @Test
   public void testComplexFail() {
     Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
     SymmetricMatrixQ.require(matrix);
-    AssertFail.of(() -> Eigensystem.ofSymmetric(matrix));
+    assertThrows(ClassCastException.class, () -> Eigensystem.ofSymmetric(matrix));
   }
 
   @Test
   public void testComplex2Fail() {
     Tensor matrix = Tensors.fromString("{{0, I}, {I, 0}}");
     SymmetricMatrixQ.require(matrix);
-    AssertFail.of(() -> Eigensystem.ofSymmetric(matrix));
+    assertThrows(ClassCastException.class, () -> Eigensystem.ofSymmetric(matrix));
   }
 
   @Test
   public void testNonSymmetric2Fail() {
-    AssertFail.of(() -> Eigensystem.ofSymmetric(Array.zeros(2, 3)));
+    assertThrows(TensorRuntimeException.class, () -> Eigensystem.ofSymmetric(Array.zeros(2, 3)));
   }
 }

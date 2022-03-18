@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
 
@@ -12,6 +13,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.RotateRight;
 import ch.alpine.tensor.api.ScalarTensorFunction;
@@ -23,7 +25,6 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class BSplineFunctionCyclicTest {
   @Test
@@ -91,14 +92,15 @@ public class BSplineFunctionCyclicTest {
 
   @Test
   public void testEmptyFail() {
-    for (int degree = -2; degree <= 4; ++degree) {
-      int fd = degree;
-      AssertFail.of(() -> BSplineFunctionCyclic.of(fd, Tensors.empty()));
-    }
+    assertThrows(IllegalArgumentException.class, () -> BSplineFunctionCyclic.of(-2, Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> BSplineFunctionCyclic.of(-1, Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> BSplineFunctionCyclic.of(+0, Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> BSplineFunctionCyclic.of(+1, Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> BSplineFunctionCyclic.of(+2, Tensors.empty()));
   }
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> BSplineFunctionString.of(-1, Tensors.vector(1, 2, 3, 4)));
+    assertThrows(IllegalArgumentException.class, () -> BSplineFunctionString.of(-1, Tensors.vector(1, 2, 3, 4)));
   }
 }

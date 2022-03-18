@@ -3,6 +3,7 @@ package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -33,7 +35,6 @@ import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class QuaternionTest {
   @Test
@@ -49,8 +50,8 @@ public class QuaternionTest {
     Quaternion actual = quaternion.reciprocal();
     Quaternion expect = Quaternion.of(Scalars.fromString("3/38[m^-1]"), Tensors.fromString("{-1/19[m^-1], -3/38[m^-1], -2/19[m^-1]}"));
     assertEquals(expect, actual);
-    AssertFail.of(() -> quaternion.exp());
-    AssertFail.of(() -> quaternion.log());
+    assertThrows(TensorRuntimeException.class, () -> quaternion.exp());
+    assertThrows(TensorRuntimeException.class, () -> quaternion.log());
   }
 
   @Test
@@ -273,33 +274,33 @@ public class QuaternionTest {
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> Quaternion.of(RealScalar.ONE, HilbertMatrix.of(3, 3)));
-    AssertFail.of(() -> Quaternion.of(RealScalar.ONE, RealScalar.of(4)));
+    assertThrows(TensorRuntimeException.class, () -> Quaternion.of(RealScalar.ONE, HilbertMatrix.of(3, 3)));
+    assertThrows(TensorRuntimeException.class, () -> Quaternion.of(RealScalar.ONE, RealScalar.of(4)));
   }
 
   @Test
   public void testNull1Fail() {
-    AssertFail.of(() -> Quaternion.of(null, Tensors.vector(1, 2, 3)));
-    AssertFail.of(() -> Quaternion.of(RealScalar.ONE, null));
+    assertThrows(NullPointerException.class, () -> Quaternion.of(null, Tensors.vector(1, 2, 3)));
+    assertThrows(NullPointerException.class, () -> Quaternion.of(RealScalar.ONE, null));
   }
 
   @Test
   public void testNull2Fail() {
-    AssertFail.of(() -> Quaternion.of(null, RealScalar.ONE, RealScalar.of(2), RealScalar.of(8)));
+    assertThrows(NullPointerException.class, () -> Quaternion.of(null, RealScalar.ONE, RealScalar.of(2), RealScalar.of(8)));
   }
 
   @Test
   public void testNull2bFail() {
-    AssertFail.of(() -> Quaternion.of(RealScalar.ONE, null, RealScalar.of(2), RealScalar.of(8)));
+    assertThrows(NullPointerException.class, () -> Quaternion.of(RealScalar.ONE, null, RealScalar.of(2), RealScalar.of(8)));
   }
 
   @Test
   public void testNull3Fail() {
-    AssertFail.of(() -> Quaternion.of(1, null, 2, 3));
+    assertThrows(NullPointerException.class, () -> Quaternion.of(1, null, 2, 3));
   }
 
   @Test
   public void testFormatFail() {
-    AssertFail.of(() -> Quaternion.of(RealScalar.ONE, Tensors.vector(1, 2, 3, 4)));
+    assertThrows(TensorRuntimeException.class, () -> Quaternion.of(RealScalar.ONE, Tensors.vector(1, 2, 3, 4)));
   }
 }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca.exp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -15,13 +16,13 @@ import ch.alpine.tensor.NumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class LogTest {
   @Test
@@ -100,18 +101,18 @@ public class LogTest {
 
   @Test
   public void testBaseOneFail() {
-    AssertFail.of(() -> Log.base(1));
+    assertThrows(TensorRuntimeException.class, () -> Log.base(1));
   }
 
   @Test
   public void testFailQuantity() {
     Scalar scalar = Quantity.of(2, "m");
-    AssertFail.of(() -> Log.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Log.of(scalar));
   }
 
   @Test
   public void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
-    AssertFail.of(() -> Log.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Log.of(scalar));
   }
 }

@@ -2,14 +2,15 @@
 package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class QuantityTensorTest {
   @Test
@@ -45,7 +46,7 @@ public class QuantityTensorTest {
   @Test
   public void testFail() {
     Scalar q = Quantity.of(1, "s");
-    AssertFail.of(() -> QuantityTensor.of(q, Unit.of("m*kg^2")));
-    AssertFail.of(() -> QuantityTensor.of(Tensors.of(q, q), Unit.of("m*kg^2")));
+    assertThrows(TensorRuntimeException.class, () -> QuantityTensor.of(q, Unit.of("m*kg^2")));
+    assertThrows(TensorRuntimeException.class, () -> QuantityTensor.of(Tensors.of(q, q), Unit.of("m*kg^2")));
   }
 }

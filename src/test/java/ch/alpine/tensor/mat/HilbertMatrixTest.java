@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.re.Inverse;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class HilbertMatrixTest {
   @Test
@@ -29,7 +29,7 @@ public class HilbertMatrixTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> HilbertMatrix.of(0, 4));
-    AssertFail.of(() -> HilbertMatrix.of(4, 0));
+    assertThrows(IllegalArgumentException.class, () -> HilbertMatrix.of(0, 4));
+    assertThrows(IllegalArgumentException.class, () -> HilbertMatrix.of(4, 0));
   }
 }

@@ -2,16 +2,17 @@
 package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class NormalizeTotalTest {
   @Test
@@ -28,26 +29,26 @@ public class NormalizeTotalTest {
 
   @Test
   public void testEmpty() {
-    AssertFail.of(() -> NormalizeTotal.FUNCTION.apply(Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> NormalizeTotal.FUNCTION.apply(Tensors.empty()));
   }
 
   @Test
   public void testZeroFail() {
-    AssertFail.of(() -> NormalizeTotal.FUNCTION.apply(Tensors.vector(2, -2, 1, -1)));
+    assertThrows(ArithmeticException.class, () -> NormalizeTotal.FUNCTION.apply(Tensors.vector(2, -2, 1, -1)));
   }
 
   @Test
   public void testZeroNumericFail() {
-    AssertFail.of(() -> NormalizeTotal.FUNCTION.apply(Tensors.vectorDouble(2, -2, 1, -1)));
+    assertThrows(TensorRuntimeException.class, () -> NormalizeTotal.FUNCTION.apply(Tensors.vectorDouble(2, -2, 1, -1)));
   }
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> NormalizeTotal.FUNCTION.apply(Pi.TWO));
+    assertThrows(TensorRuntimeException.class, () -> NormalizeTotal.FUNCTION.apply(Pi.TWO));
   }
 
   @Test
   public void testFailMatrix() {
-    AssertFail.of(() -> NormalizeTotal.FUNCTION.apply(HilbertMatrix.of(3)));
+    assertThrows(ClassCastException.class, () -> NormalizeTotal.FUNCTION.apply(HilbertMatrix.of(3)));
   }
 }

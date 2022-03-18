@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.re;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
 
@@ -22,7 +23,6 @@ import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class LinearSolveTest {
   private static final Random RANDOM = new Random();
@@ -118,7 +118,7 @@ public class LinearSolveTest {
   public void testEmpty() {
     Tensor m = Tensors.matrix(new Number[][] { {} });
     Tensor b = Tensors.vector(new Number[] {});
-    AssertFail.of(() -> LinearSolve.of(m, b));
+    assertThrows(IllegalArgumentException.class, () -> LinearSolve.of(m, b));
   }
 
   @Test

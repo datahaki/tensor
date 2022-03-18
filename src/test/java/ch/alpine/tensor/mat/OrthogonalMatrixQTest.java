@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -11,12 +12,12 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class OrthogonalMatrixQTest {
   @Test
@@ -45,12 +46,12 @@ public class OrthogonalMatrixQTest {
   @Test
   public void testRequireChop() {
     OrthogonalMatrixQ.require(IdentityMatrix.of(4), Chop.NONE);
-    AssertFail.of(() -> OrthogonalMatrixQ.require(HilbertMatrix.of(3), Chop.NONE));
+    assertThrows(TensorRuntimeException.class, () -> OrthogonalMatrixQ.require(HilbertMatrix.of(3), Chop.NONE));
   }
 
   @Test
   public void testRequire() {
     OrthogonalMatrixQ.require(IdentityMatrix.of(4));
-    AssertFail.of(() -> OrthogonalMatrixQ.require(HilbertMatrix.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> OrthogonalMatrixQ.require(HilbertMatrix.of(3)));
   }
 }

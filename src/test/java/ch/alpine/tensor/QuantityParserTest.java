@@ -2,11 +2,10 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.AssertFail;
 
 public class QuantityParserTest {
   @Test
@@ -18,11 +17,11 @@ public class QuantityParserTest {
 
   @Test
   public void testBug() {
-    AssertFail.of(() -> QuantityParser.of("1[m2]"));
+    assertThrows(IllegalArgumentException.class, () -> QuantityParser.of("1[m2]"));
   }
 
   @Test
   public void testNestedFail() {
-    AssertFail.of(() -> QuantityParser.of("1[s][m]"));
+    assertThrows(IllegalArgumentException.class, () -> QuantityParser.of("1[s][m]"));
   }
 }

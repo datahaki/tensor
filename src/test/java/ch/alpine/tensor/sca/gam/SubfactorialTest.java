@@ -2,13 +2,13 @@
 package ch.alpine.tensor.sca.gam;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SubfactorialTest {
   @Test
@@ -20,6 +20,6 @@ public class SubfactorialTest {
 
   @Test
   public void testNegative() {
-    AssertFail.of(() -> Subfactorial.of(-1));
+    assertThrows(IllegalArgumentException.class, () -> Subfactorial.of(-1));
   }
 }

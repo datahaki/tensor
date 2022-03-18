@@ -3,6 +3,7 @@ package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Modifier;
 
@@ -21,7 +22,6 @@ import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.win.DirichletWindow;
 import ch.alpine.tensor.sca.win.WindowFunctions;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class StaticHelperTest {
   @ParameterizedTest
@@ -58,7 +58,7 @@ public class StaticHelperTest {
 
   @Test
   public void testZeroFail() {
-    AssertFail.of(() -> StaticHelper.weights(0, s -> s));
+    assertThrows(ArithmeticException.class, () -> StaticHelper.weights(0, s -> s));
   }
 
   @Test

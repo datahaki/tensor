@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class RealScalarTest {
   @Test
@@ -141,11 +141,11 @@ public class RealScalarTest {
     Number number = new AtomicInteger(123);
     Scalar scalar = RealScalar.of(number.intValue());
     assertEquals(scalar, RealScalar.of(123));
-    AssertFail.of(() -> RealScalar.of(number));
+    assertThrows(IllegalArgumentException.class, () -> RealScalar.of(number));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> RealScalar.of((Number) null));
+    assertThrows(NullPointerException.class, () -> RealScalar.of((Number) null));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -16,7 +17,6 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class VandermondeMatrixTest {
   @Test
@@ -73,21 +73,21 @@ public class VandermondeMatrixTest {
   public void testDegrees() {
     VandermondeMatrix.of(Tensors.empty(), 0);
     VandermondeMatrix.of(Tensors.empty(), 1);
-    AssertFail.of(() -> VandermondeMatrix.of(Tensors.empty(), -1));
+    assertThrows(IllegalArgumentException.class, () -> VandermondeMatrix.of(Tensors.empty(), -1));
   }
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> VandermondeMatrix.of(Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> VandermondeMatrix.of(Tensors.empty()));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> VandermondeMatrix.of(RealScalar.ONE));
+    assertThrows(IllegalArgumentException.class, () -> VandermondeMatrix.of(RealScalar.ONE));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> VandermondeMatrix.of(HilbertMatrix.of(3)));
+    assertThrows(ClassCastException.class, () -> VandermondeMatrix.of(HilbertMatrix.of(3)));
   }
 }

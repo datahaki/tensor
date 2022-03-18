@@ -2,13 +2,13 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MachineNumberQTest {
   @Test
@@ -56,6 +56,6 @@ public class MachineNumberQTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> MachineNumberQ.of(null));
+    assertThrows(NullPointerException.class, () -> MachineNumberQ.of(null));
   }
 }

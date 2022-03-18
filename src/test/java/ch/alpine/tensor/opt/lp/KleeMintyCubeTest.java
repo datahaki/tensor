@@ -2,17 +2,18 @@
 package ch.alpine.tensor.opt.lp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class KleeMintyCubeTest {
   private static void _callKlee(int n) {
@@ -53,7 +54,7 @@ public class KleeMintyCubeTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> KleeMintyCube.of(0));
-    AssertFail.of(() -> KleeMintyCube.of(-1));
+    assertThrows(TensorRuntimeException.class, () -> KleeMintyCube.of(0));
+    assertThrows(TensorRuntimeException.class, () -> KleeMintyCube.of(-1));
   }
 }

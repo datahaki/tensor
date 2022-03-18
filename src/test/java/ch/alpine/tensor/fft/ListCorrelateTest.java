@@ -2,6 +2,7 @@
 package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -13,11 +14,11 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ListCorrelateTest {
   @Test
@@ -84,28 +85,28 @@ public class ListCorrelateTest {
   public void testNarrow1() {
     Tensor kernel = Tensors.vector(2, 1, 3);
     Tensor tensor = Tensors.vector(4, 5);
-    AssertFail.of(() -> ListCorrelate.of(kernel, tensor));
+    assertThrows(IllegalArgumentException.class, () -> ListCorrelate.of(kernel, tensor));
   }
 
   @Test
   public void testNarrow2() {
     Tensor kernel = Tensors.fromString("{{1, 2, 3}}");
     Tensor tensor = Tensors.fromString("{{1, 2}}");
-    AssertFail.of(() -> ListCorrelate.of(kernel, tensor));
+    assertThrows(IllegalArgumentException.class, () -> ListCorrelate.of(kernel, tensor));
   }
 
   @Test
   public void testNarrow3() {
     Tensor kernel = Tensors.fromString("{{1, 2, 3}, {2, 3, 4}}");
     Tensor tensor = Tensors.fromString("{{1, 2, 3}}");
-    AssertFail.of(() -> ListCorrelate.of(kernel, tensor));
+    assertThrows(IllegalArgumentException.class, () -> ListCorrelate.of(kernel, tensor));
   }
 
   @Test
   public void testScalarFail() {
     Tensor kernel = RealScalar.ZERO;
     Tensor tensor = RealScalar.ONE;
-    AssertFail.of(() -> ListCorrelate.of(kernel, tensor));
+    assertThrows(TensorRuntimeException.class, () -> ListCorrelate.of(kernel, tensor));
   }
 
   @Test
@@ -122,7 +123,7 @@ public class ListCorrelateTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> ListCorrelate.with(null));
+    assertThrows(NullPointerException.class, () -> ListCorrelate.with(null));
   }
 
   @Test

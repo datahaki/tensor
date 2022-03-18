@@ -2,6 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Objects;
@@ -15,7 +16,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class CacheTest {
   @Test
@@ -29,7 +29,7 @@ public class CacheTest {
   @Test
   public void testInception() {
     Function<Object, Double> memo1 = Cache.of(k -> Math.random(), 32);
-    AssertFail.of(() -> Cache.of(memo1, 32));
+    assertThrows(IllegalArgumentException.class, () -> Cache.of(memo1, 32));
   }
 
   @Test
@@ -169,11 +169,11 @@ public class CacheTest {
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> Cache.of(null, 32));
+    assertThrows(NullPointerException.class, () -> Cache.of(null, 32));
   }
 
   @Test
   public void testFailNegative() {
-    AssertFail.of(() -> Cache.of(Function.identity(), -1));
+    assertThrows(IllegalArgumentException.class, () -> Cache.of(Function.identity(), -1));
   }
 }

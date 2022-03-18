@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class CoefficientListTest {
   @Test
@@ -61,6 +61,6 @@ public class CoefficientListTest {
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> CoefficientList.of(Tensors.empty()));
+    assertThrows(IndexOutOfBoundsException.class, () -> CoefficientList.of(Tensors.empty()));
   }
 }

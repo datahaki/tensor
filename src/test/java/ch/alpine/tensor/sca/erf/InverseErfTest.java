@@ -2,15 +2,16 @@
 package ch.alpine.tensor.sca.erf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class InverseErfTest {
   public static final Chop CHOP_04 = Chop.below(1e-04);
@@ -31,7 +32,7 @@ public class InverseErfTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> InverseErf.FUNCTION.apply(RealScalar.of(+1.3)));
-    AssertFail.of(() -> InverseErf.FUNCTION.apply(RealScalar.of(-1.1)));
+    assertThrows(TensorRuntimeException.class, () -> InverseErf.FUNCTION.apply(RealScalar.of(+1.3)));
+    assertThrows(TensorRuntimeException.class, () -> InverseErf.FUNCTION.apply(RealScalar.of(-1.1)));
   }
 }

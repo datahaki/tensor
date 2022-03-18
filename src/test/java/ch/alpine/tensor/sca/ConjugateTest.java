@@ -2,15 +2,16 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ConjugateTest {
   @Test
@@ -33,6 +34,6 @@ public class ConjugateTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> Conjugate.of(StringScalar.of("asd")));
+    assertThrows(TensorRuntimeException.class, () -> Conjugate.of(StringScalar.of("asd")));
   }
 }

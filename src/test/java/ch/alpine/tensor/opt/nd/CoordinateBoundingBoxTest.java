@@ -3,6 +3,7 @@ package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -10,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class CoordinateBoundingBoxTest {
   @Test
@@ -24,8 +25,8 @@ public class CoordinateBoundingBoxTest {
     assertEquals(coordinateBoundingBox.mapInside(Tensors.vector(3, 40)), Tensors.vector(3, 23));
     assertEquals(coordinateBoundingBox.mapInside(Tensors.vector(4, 10)), Tensors.vector(4, 10));
     assertEquals(coordinateBoundingBox.mapInside(Tensors.vector(14, 10)), Tensors.vector(12, 10));
-    AssertFail.of(() -> coordinateBoundingBox.mapInside(Tensors.vector(14)));
-    AssertFail.of(() -> coordinateBoundingBox.mapInside(Tensors.vector(14, 10, 3)));
+    assertThrows(IllegalArgumentException.class, () -> coordinateBoundingBox.mapInside(Tensors.vector(14)));
+    assertThrows(IllegalArgumentException.class, () -> coordinateBoundingBox.mapInside(Tensors.vector(14, 10, 3)));
   }
 
   @Test
@@ -99,6 +100,6 @@ public class CoordinateBoundingBoxTest {
   public void testFail1() {
     CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
     box.requireInside(Tensors.vector(4, 3));
-    AssertFail.of(() -> box.requireInside(Tensors.vector(14, 3)));
+    assertThrows(TensorRuntimeException.class, () -> box.requireInside(Tensors.vector(14, 3)));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.FloatBuffer;
 import java.util.List;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class PrimitivesFloatTest {
   @Test
@@ -67,6 +67,6 @@ public class PrimitivesFloatTest {
 
   @Test
   public void testToFloatArray2Dscalar() {
-    AssertFail.of(() -> Primitives.toFloatArray2D(RealScalar.of(123.456)));
+    assertThrows(NegativeArraySizeException.class, () -> Primitives.toFloatArray2D(RealScalar.of(123.456)));
   }
 }

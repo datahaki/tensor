@@ -3,6 +3,7 @@ package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
@@ -15,6 +16,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.num.Pi;
@@ -22,7 +24,6 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class NdCollectRadiusTest {
   @Test
@@ -76,12 +77,12 @@ public class NdCollectRadiusTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> new NdCollectRadius<>(null, Pi.VALUE));
+    assertThrows(NullPointerException.class, () -> new NdCollectRadius<>(null, Pi.VALUE));
   }
 
   @Test
   public void testNonPositiveFail() {
     NdCenterInterface ndCenterInterface = NdCenters.VECTOR_INFINITY_NORM.apply(Array.zeros(2));
-    AssertFail.of(() -> new NdCollectRadius<>(ndCenterInterface, RealScalar.ONE.negate()));
+    assertThrows(TensorRuntimeException.class, () -> new NdCollectRadius<>(ndCenterInterface, RealScalar.ONE.negate()));
   }
 }

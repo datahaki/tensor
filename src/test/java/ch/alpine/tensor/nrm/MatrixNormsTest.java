@@ -2,15 +2,16 @@
 package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MatrixNormsTest {
   public static final TensorScalarFunction[] VALUES = { //
@@ -30,11 +31,11 @@ public class MatrixNormsTest {
   @Test
   public void testFails() {
     for (TensorScalarFunction norm : VALUES) {
-      AssertFail.of(() -> norm.apply(RealScalar.ONE));
-      AssertFail.of(() -> norm.apply(Tensors.empty()));
-      AssertFail.of(() -> norm.apply(Tensors.vector(1, 2, 3)));
-      AssertFail.of(() -> norm.apply(LeviCivitaTensor.of(3)));
-      AssertFail.of(() -> norm.apply(Tensors.fromString("{{1, 2}, {3}}")));
+      assertThrows(TensorRuntimeException.class, () -> norm.apply(RealScalar.ONE));
+      assertThrows(Exception.class, () -> norm.apply(Tensors.empty()));
+      assertThrows(TensorRuntimeException.class, () -> norm.apply(Tensors.vector(1, 2, 3)));
+      assertThrows(Exception.class, () -> norm.apply(LeviCivitaTensor.of(3)));
+      assertThrows(Exception.class, () -> norm.apply(Tensors.fromString("{{1, 2}, {3}}")));
     }
   }
 }

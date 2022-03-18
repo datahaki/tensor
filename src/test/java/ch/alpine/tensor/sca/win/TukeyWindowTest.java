@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.win;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
@@ -14,12 +15,12 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TukeyWindowTest {
   @Test
@@ -64,12 +65,12 @@ public class TukeyWindowTest {
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> TukeyWindow.FUNCTION.apply(Quantity.of(0, "s")));
-    AssertFail.of(() -> TukeyWindow.FUNCTION.apply(Quantity.of(2, "s")));
+    assertThrows(TensorRuntimeException.class, () -> TukeyWindow.FUNCTION.apply(Quantity.of(0, "s")));
+    assertThrows(TensorRuntimeException.class, () -> TukeyWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> TukeyWindow.of(null));
+    assertThrows(NullPointerException.class, () -> TukeyWindow.of(null));
   }
 }

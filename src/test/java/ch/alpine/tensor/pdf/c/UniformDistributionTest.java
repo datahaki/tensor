@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -31,7 +33,6 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class UniformDistributionTest {
   @Test
@@ -175,24 +176,24 @@ public class UniformDistributionTest {
 
   @Test
   public void testClipNullFail() {
-    AssertFail.of(() -> UniformDistribution.of(null));
+    assertThrows(NullPointerException.class, () -> UniformDistribution.of(null));
   }
 
   @Test
   public void testQuantileFail() {
     Distribution distribution = UniformDistribution.of(Quantity.of(3, "g"), Quantity.of(6, "g"));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> UniformDistribution.of(Quantity.of(3, "m"), Quantity.of(5, "km")));
+    assertThrows(TensorRuntimeException.class, () -> UniformDistribution.of(Quantity.of(3, "m"), Quantity.of(5, "km")));
   }
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> UniformDistribution.of(RealScalar.ONE, RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> UniformDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.qr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.Random;
@@ -34,7 +35,6 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class GramSchmidtTest {
   private static void _checkPInv(Tensor pInv, Tensor r, Tensor qInv) {
@@ -65,7 +65,7 @@ public class GramSchmidtTest {
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     Tensor rhs = qrDecomposition.getQConjugateTranspose().dot(b);
     assertEquals(rhs.length(), 4);
-    AssertFail.of(() -> qrDecomposition.pseudoInverse());
+    assertThrows(ArrayIndexOutOfBoundsException.class, () -> qrDecomposition.pseudoInverse());
   }
 
   @Test

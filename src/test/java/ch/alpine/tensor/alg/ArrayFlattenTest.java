@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -15,7 +16,6 @@ import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ArrayFlattenTest {
   @Test
@@ -47,6 +47,6 @@ public class ArrayFlattenTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> ArrayFlatten.of(null));
+    assertThrows(NullPointerException.class, () -> ArrayFlatten.of(null));
   }
 }

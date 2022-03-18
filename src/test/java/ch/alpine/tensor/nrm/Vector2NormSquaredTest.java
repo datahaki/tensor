@@ -2,6 +2,9 @@
 package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +15,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class Vector2NormSquaredTest {
   @Test
@@ -32,6 +34,6 @@ public class Vector2NormSquaredTest {
 
   @Test
   public void testEmpty() {
-    AssertFail.of(() -> Vector2NormSquared.of(Tensors.empty()));
+    assertThrows(NoSuchElementException.class, () -> Vector2NormSquared.of(Tensors.empty()));
   }
 }

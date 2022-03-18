@@ -3,6 +3,7 @@ package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
@@ -28,13 +30,12 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class QuaternionImplTest {
   @Test
   public void testImmutable() {
     Quaternion quaternion = Quaternion.of(1, 3, -2, 2);
-    AssertFail.of(() -> quaternion.xyz().set(RealScalar.ONE, 1));
+    assertThrows(UnsupportedOperationException.class, () -> quaternion.xyz().set(RealScalar.ONE, 1));
   }
 
   @Test
@@ -142,8 +143,8 @@ public class QuaternionImplTest {
   public void testPlusFail() {
     Scalar quaternion = Quaternion.of(1, 3, -2, 2);
     Scalar quantity = Quantity.of(1, "m");
-    AssertFail.of(() -> quaternion.add(quantity));
-    AssertFail.of(() -> quantity.add(quaternion));
+    assertThrows(TensorRuntimeException.class, () -> quaternion.add(quantity));
+    assertThrows(TensorRuntimeException.class, () -> quantity.add(quaternion));
   }
 
   @Test
@@ -152,8 +153,8 @@ public class QuaternionImplTest {
     Scalar gaussScalar = GaussScalar.of(3, 11);
     assertFalse(quaternion.equals(gaussScalar));
     assertFalse(gaussScalar.equals(quaternion));
-    AssertFail.of(() -> quaternion.multiply(gaussScalar));
-    AssertFail.of(() -> gaussScalar.multiply(quaternion));
+    assertThrows(TensorRuntimeException.class, () -> quaternion.multiply(gaussScalar));
+    assertThrows(TensorRuntimeException.class, () -> gaussScalar.multiply(quaternion));
   }
 
   @Test
@@ -171,7 +172,7 @@ public class QuaternionImplTest {
   @Test
   public void testNumberFail() {
     Quaternion quaternion = Quaternion.of(1, 3, -2, 2);
-    AssertFail.of(() -> quaternion.number());
+    assertThrows(TensorRuntimeException.class, () -> quaternion.number());
   }
 
   @Test

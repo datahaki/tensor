@@ -2,17 +2,18 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ScalarArrayTest {
   @Test
@@ -34,16 +35,16 @@ public class ScalarArrayTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> ScalarArray.ofVector(Pi.HALF));
+    assertThrows(TensorRuntimeException.class, () -> ScalarArray.ofVector(Pi.HALF));
   }
 
   @Test
   public void testVectorFail() {
-    AssertFail.of(() -> ScalarArray.ofVector(HilbertMatrix.of(3)));
+    assertThrows(ClassCastException.class, () -> ScalarArray.ofVector(HilbertMatrix.of(3)));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> ScalarArray.ofMatrix(Array.zeros(2, 2, 2)));
+    assertThrows(ClassCastException.class, () -> ScalarArray.ofMatrix(Array.zeros(2, 2, 2)));
   }
 }

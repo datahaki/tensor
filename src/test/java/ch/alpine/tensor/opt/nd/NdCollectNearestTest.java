@@ -3,6 +3,7 @@ package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -20,7 +21,6 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class NdCollectNearestTest {
   @Test
@@ -112,14 +112,14 @@ public class NdCollectNearestTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> new NdCollectNearest<>(null, 1));
+    assertThrows(NullPointerException.class, () -> new NdCollectNearest<>(null, 1));
   }
 
   @Test
   public void testNonPositiveFail() {
     for (NdCenters ndCenters : NdCenters.values()) {
       NdCenterInterface ndCenterInterface = ndCenters.apply(Array.zeros(2));
-      AssertFail.of(() -> new NdCollectNearest<>(ndCenterInterface, 0));
+      assertThrows(IllegalArgumentException.class, () -> new NdCollectNearest<>(ndCenterInterface, 0));
     }
   }
 }

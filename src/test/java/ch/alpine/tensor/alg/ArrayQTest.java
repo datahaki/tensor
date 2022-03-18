@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -11,10 +12,10 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ArrayQTest {
   @Test
@@ -49,11 +50,11 @@ public class ArrayQTest {
   @Test
   public void testRequire() {
     Tensor tensor = Tensors.fromString("{{1, 2}, 3}");
-    AssertFail.of(() -> ArrayQ.require(tensor));
+    assertThrows(TensorRuntimeException.class, () -> ArrayQ.require(tensor));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> ArrayQ.of(null));
+    assertThrows(NullPointerException.class, () -> ArrayQ.of(null));
   }
 }

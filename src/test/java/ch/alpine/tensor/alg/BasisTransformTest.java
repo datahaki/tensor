@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -13,6 +14,7 @@ import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.DiagonalMatrix;
@@ -23,7 +25,6 @@ import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class BasisTransformTest {
   @Test
@@ -94,23 +95,23 @@ public class BasisTransformTest {
   @Test
   public void testAdTypeFail() {
     Tensor v = HilbertMatrix.of(3);
-    AssertFail.of(() -> BasisTransform.of(Array.zeros(3, 3, 3), -1, v));
+    assertThrows(IllegalArgumentException.class, () -> BasisTransform.of(Array.zeros(3, 3, 3), -1, v));
   }
 
   @Test
   public void testAdInverseFail() {
     Tensor v = Array.zeros(3);
-    AssertFail.of(() -> BasisTransform.of(Array.zeros(3, 3, 3), 1, v));
+    assertThrows(IllegalArgumentException.class, () -> BasisTransform.of(Array.zeros(3, 3, 3), 1, v));
   }
 
   @Test
   public void testFormVectorFail() {
     int n = 3;
-    AssertFail.of(() -> BasisTransform.ofForm(Array.zeros(n, n, n), Array.zeros(n)));
+    assertThrows(IndexOutOfBoundsException.class, () -> BasisTransform.ofForm(Array.zeros(n, n, n), Array.zeros(n)));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> BasisTransform.ofMatrix(IdentityMatrix.of(3), DiagonalMatrix.of(1, 1, 0)));
+    assertThrows(TensorRuntimeException.class, () -> BasisTransform.ofMatrix(IdentityMatrix.of(3), DiagonalMatrix.of(1, 1, 0)));
   }
 }

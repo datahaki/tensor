@@ -3,6 +3,7 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -11,8 +12,6 @@ import java.util.LinkedList;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.AssertFail;
 
 public class BoundedLinkedListTest {
   @Test
@@ -52,8 +51,8 @@ public class BoundedLinkedListTest {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(2);
     assertTrue(boundedLinkedList.add(0));
     assertTrue(boundedLinkedList.add(1));
-    AssertFail.of(() -> boundedLinkedList.addAll(Arrays.asList(6, 7)));
-    AssertFail.of(() -> boundedLinkedList.addAll(0, Arrays.asList(6, 7)));
+    assertThrows(UnsupportedOperationException.class, () -> boundedLinkedList.addAll(Arrays.asList(6, 7)));
+    assertThrows(UnsupportedOperationException.class, () -> boundedLinkedList.addAll(0, Arrays.asList(6, 7)));
   }
 
   @Test
@@ -101,17 +100,17 @@ public class BoundedLinkedListTest {
   @Test
   public void testAddAllFail() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(7);
-    AssertFail.of(() -> boundedLinkedList.addAll(Arrays.asList(1, 2, 3, 4)));
+    assertThrows(UnsupportedOperationException.class, () -> boundedLinkedList.addAll(Arrays.asList(1, 2, 3, 4)));
   }
 
   @Test
   public void testAddFirstFail() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(7);
-    AssertFail.of(() -> boundedLinkedList.addFirst(4));
+    assertThrows(UnsupportedOperationException.class, () -> boundedLinkedList.addFirst(4));
   }
 
   @Test
   public void testFailNegativeSize() {
-    AssertFail.of(() -> new BoundedLinkedList<>(-1));
+    assertThrows(IllegalArgumentException.class, () -> new BoundedLinkedList<>(-1));
   }
 }

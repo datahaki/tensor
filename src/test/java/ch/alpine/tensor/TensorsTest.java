@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -16,7 +17,6 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TensorsTest {
   @Test
@@ -31,7 +31,7 @@ public class TensorsTest {
   @Test
   public void testReserveFail() {
     Tensors.reserve(0);
-    AssertFail.of(() -> Tensors.reserve(-1));
+    assertThrows(IllegalArgumentException.class, () -> Tensors.reserve(-1));
   }
 
   @Test

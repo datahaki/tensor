@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.win;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class WelchWindowTest {
   @Test
@@ -35,6 +35,6 @@ public class WelchWindowTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> WelchWindow.of(null));
+    assertThrows(NullPointerException.class, () -> WelchWindow.of(null));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class AccumulateTest {
   @Test
@@ -52,21 +52,21 @@ public class AccumulateTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Accumulate.of(RealScalar.ONE));
+    assertThrows(IllegalArgumentException.class, () -> Accumulate.of(RealScalar.ONE));
   }
 
   @Test
   public void testScalarProdFail() {
-    AssertFail.of(() -> Accumulate.prod(RealScalar.ONE));
+    assertThrows(IllegalArgumentException.class, () -> Accumulate.prod(RealScalar.ONE));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> Accumulate.of(null));
+    assertThrows(NullPointerException.class, () -> Accumulate.of(null));
   }
 
   @Test
   public void testNullProdFail() {
-    AssertFail.of(() -> Accumulate.prod(null));
+    assertThrows(NullPointerException.class, () -> Accumulate.prod(null));
   }
 }

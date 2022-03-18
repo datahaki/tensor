@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,6 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class BinningMethodTest {
   @Test
@@ -45,6 +45,6 @@ public class BinningMethodTest {
   @Test
   public void testFail() {
     for (BinningMethod binningMethod : BinningMethod.values())
-      AssertFail.of(() -> binningMethod.apply(Tensors.empty()));
+      assertThrows(Exception.class, () -> binningMethod.apply(Tensors.empty()));
   }
 }

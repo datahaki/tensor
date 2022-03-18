@@ -2,6 +2,7 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -10,12 +11,12 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.io.StringTensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class PermutationsTest {
   @Test
@@ -102,11 +103,11 @@ public class PermutationsTest {
 
   @Test
   public void testTensorScalarFail() {
-    AssertFail.of(() -> Permutations.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Permutations.of(RealScalar.ONE));
   }
 
   @Test
   public void testStreamScalarFail() {
-    AssertFail.of(() -> Permutations.stream(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Permutations.stream(RealScalar.ONE));
   }
 }

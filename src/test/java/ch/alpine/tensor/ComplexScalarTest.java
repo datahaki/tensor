@@ -11,7 +11,6 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ComplexScalarTest {
   @Test
@@ -57,21 +56,21 @@ public class ComplexScalarTest {
 
   @Test
   public void testNullFail() {
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(RealScalar.ONE, null));
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(null, RealScalar.ONE));
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(null, RealScalar.ZERO));
+    assertThrows(NullPointerException.class, () -> ComplexScalar.of(RealScalar.ONE, null));
+    assertThrows(NullPointerException.class, () -> ComplexScalar.of(null, RealScalar.ONE));
+    assertThrows(NullPointerException.class, () -> ComplexScalar.of(null, RealScalar.ZERO));
   }
 
   @Test
   public void testPolarFail() {
-    AssertFail.of(() -> ComplexScalar.fromPolar(RealScalar.ONE, ComplexScalar.I));
-    AssertFail.of(() -> ComplexScalar.fromPolar(ComplexScalar.I, RealScalar.ONE));
-    AssertFail.of(() -> ComplexScalar.fromPolar(ComplexScalar.I, ComplexScalar.I));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.fromPolar(RealScalar.ONE, ComplexScalar.I));
+    assertThrows(ClassCastException.class, () -> ComplexScalar.fromPolar(ComplexScalar.I, RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> ComplexScalar.fromPolar(ComplexScalar.I, ComplexScalar.I));
   }
 
   @Test
   public void testPolarQuantityFail() {
-    AssertFail.of(() -> ComplexScalar.fromPolar(RealScalar.ONE, Quantity.of(1.3, "m")));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.fromPolar(RealScalar.ONE, Quantity.of(1.3, "m")));
   }
 
   @Test
@@ -82,7 +81,7 @@ public class ComplexScalarTest {
 
   @Test
   public void testPolarNumberFail() {
-    AssertFail.of(() -> ComplexScalar.fromPolar(-1, 3));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.fromPolar(-1, 3));
   }
 
   @Test
@@ -95,7 +94,7 @@ public class ComplexScalarTest {
 
   @Test
   public void testUnitFail() {
-    AssertFail.of(() -> ComplexScalar.unit(ComplexScalar.of(-1, 3)));
-    AssertFail.of(() -> ComplexScalar.unit(Quantity.of(3, "s")));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.unit(ComplexScalar.of(-1, 3)));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.unit(Quantity.of(3, "s")));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.api.ScalarTensorFunction;
@@ -35,7 +37,6 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TrapezoidalDistributionTest {
   final Random random = new Random();
@@ -182,8 +183,8 @@ public class TrapezoidalDistributionTest {
     assertTrue(apply instanceof RealScalar);
     assertTrue(distribution.toString().startsWith("TrapezoidalDistribution["));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
   @Test
@@ -247,8 +248,10 @@ public class TrapezoidalDistributionTest {
     TestMarkovChebyshev.chebyshev(distribution);
     TestMarkovChebyshev.markov(distribution);
     TrapezoidalDistribution.of(Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
-    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m")));
-    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(1, "m")));
+    assertThrows(TensorRuntimeException.class,
+        () -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m")));
+    assertThrows(TensorRuntimeException.class,
+        () -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(1, "m")));
     TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(5, "m"));
   }
 
@@ -286,13 +289,16 @@ public class TrapezoidalDistributionTest {
   public void testNumericFail() {
     TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
     TrapezoidalDistribution.of(Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
-    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m")));
-    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(1., "m")));
+    assertThrows(TensorRuntimeException.class,
+        () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m")));
+    assertThrows(TensorRuntimeException.class,
+        () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(1., "m")));
     TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(5., "m"));
   }
 
   @Test
   public void testCenterFail() {
-    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(3., "m"), Quantity.of(2., "m"), Quantity.of(9., "m")));
+    assertThrows(TensorRuntimeException.class,
+        () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(3., "m"), Quantity.of(2., "m"), Quantity.of(9., "m")));
   }
 }

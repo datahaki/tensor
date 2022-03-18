@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -12,6 +13,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -23,7 +25,6 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class LogisticDistributionTest {
   @Test
@@ -38,8 +39,8 @@ public class LogisticDistributionTest {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar quantile = inverseCDF.quantile(p_lessEquals);
     Tolerance.CHOP.requireClose(quantile, x);
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
   @Test
@@ -62,30 +63,30 @@ public class LogisticDistributionTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> LogisticDistribution.of(null, RealScalar.ONE));
-    AssertFail.of(() -> LogisticDistribution.of(RealScalar.ONE, null));
+    assertThrows(NullPointerException.class, () -> LogisticDistribution.of(null, RealScalar.ONE));
+    assertThrows(NullPointerException.class, () -> LogisticDistribution.of(RealScalar.ONE, null));
   }
 
   @Test
   public void testZeroFail() {
-    AssertFail.of(() -> LogisticDistribution.of(RealScalar.ONE, RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 
   @Test
   public void testComplexFail() {
-    AssertFail.of(() -> LogisticDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> LogisticDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> LogisticDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
-    AssertFail.of(() -> LogisticDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
-    AssertFail.of(() -> LogisticDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
   @Test
   public void testNegativeSigmaFail() {
     LogisticDistribution.of(5, 1);
-    AssertFail.of(() -> LogisticDistribution.of(5, -1));
+    assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(5, -1));
   }
 }

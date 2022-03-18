@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -10,11 +11,11 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MitchellNetravaliKernelTest {
   @Test
@@ -34,6 +35,6 @@ public class MitchellNetravaliKernelTest {
     Tolerance.CHOP.requireClose(mnk.apply(RealScalar.of(0.4)), RealScalar.of(0.6581333333333335));
     Tolerance.CHOP.requireClose(mnk.apply(RealScalar.of(-0.4)), RealScalar.of(0.6581333333333335));
     Tolerance.CHOP.requireZero(mnk.apply(RealScalar.of(2.4)));
-    AssertFail.of(() -> mnk.apply(Quantity.of(1, "m")));
+    assertThrows(TensorRuntimeException.class, () -> mnk.apply(Quantity.of(1, "m")));
   }
 }

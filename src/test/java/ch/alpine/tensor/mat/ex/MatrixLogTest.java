@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.ex;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Transpose;
@@ -20,7 +22,6 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MatrixLogTest {
   @Test
@@ -72,15 +73,20 @@ public class MatrixLogTest {
   public void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 4, 5);
-    AssertFail.of(() -> MatrixLog.of(matrix));
+    assertThrows(IllegalArgumentException.class, () -> MatrixLog.of(matrix));
   }
 
   @Test
   public void test1x2Fail() {
-    for (int d = 1; d < 4; ++d) {
+    for (int d = 1; d < 3; ++d) {
       Tensor matrix = IdentityMatrix.of(d + 1).extract(0, d);
       assertEquals(matrix.length(), d);
-      AssertFail.of(() -> MatrixLog.of(matrix));
+      assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(matrix));
+    }
+    for (int d = 3; d < 4; ++d) {
+      Tensor matrix = IdentityMatrix.of(d + 1).extract(0, d);
+      assertEquals(matrix.length(), d);
+      assertThrows(IllegalArgumentException.class, () -> MatrixLog.of(matrix));
     }
   }
 
@@ -88,15 +94,15 @@ public class MatrixLogTest {
   public void test3x2Fail() {
     Tensor matrix = Transpose.of(IdentityMatrix.of(3).extract(0, 2));
     assertEquals(matrix.length(), 3);
-    AssertFail.of(() -> MatrixLog.of(matrix));
+    assertThrows(IllegalArgumentException.class, () -> MatrixLog.of(matrix));
   }
 
   @Test
   public void test_of() {
-    AssertFail.of(() -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e20), 3, 3)));
-    AssertFail.of(() -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e100), 3, 3)));
-    AssertFail.of(() -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e200), 3, 3)));
-    AssertFail.of(() -> MatrixLog.of(ConstantArray.of(DoubleScalar.POSITIVE_INFINITY, 3, 3)));
-    AssertFail.of(() -> MatrixLog.of(ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3)));
+    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e20), 3, 3)));
+    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e100), 3, 3)));
+    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e200), 3, 3)));
+    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.POSITIVE_INFINITY, 3, 3)));
+    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3)));
   }
 }

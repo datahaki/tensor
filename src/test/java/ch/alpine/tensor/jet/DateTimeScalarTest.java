@@ -3,6 +3,7 @@ package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -16,13 +17,13 @@ import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class DateTimeScalarTest {
   @Test
@@ -33,9 +34,9 @@ public class DateTimeScalarTest {
     Scalar scalar2 = dt2.subtract(dt1);
     assertTrue(scalar2 instanceof DurationScalar);
     assertEquals(dt1.add(scalar2), dt2);
-    AssertFail.of(() -> dt1.negate());
-    AssertFail.of(() -> dt1.multiply(RealScalar.of(-1)));
-    AssertFail.of(() -> dt1.subtract(RationalScalar.HALF));
+    assertThrows(TensorRuntimeException.class, () -> dt1.negate());
+    assertThrows(TensorRuntimeException.class, () -> dt1.multiply(RealScalar.of(-1)));
+    assertThrows(TensorRuntimeException.class, () -> dt1.subtract(RationalScalar.HALF));
     assertEquals(dt2.subtract(dt1.multiply(RealScalar.of(1))), scalar2);
   }
 
@@ -114,11 +115,11 @@ public class DateTimeScalarTest {
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 21, 4, 30));
     assertFalse(dt1.equals(RealScalar.ONE));
     assertFalse(dt1.equals(dt2));
-    AssertFail.of(() -> dt1.add(dt2));
-    AssertFail.of(() -> dt1.negate().add(dt2.negate()));
-    AssertFail.of(() -> dt1.multiply(Pi.TWO));
-    AssertFail.of(() -> dt1.reciprocal());
-    AssertFail.of(() -> dt1.number());
+    assertThrows(TensorRuntimeException.class, () -> dt1.add(dt2));
+    assertThrows(TensorRuntimeException.class, () -> dt1.negate().add(dt2.negate()));
+    assertThrows(TensorRuntimeException.class, () -> dt1.multiply(Pi.TWO));
+    assertThrows(TensorRuntimeException.class, () -> dt1.reciprocal());
+    assertThrows(TensorRuntimeException.class, () -> dt1.number());
     assertEquals(dt1.zero(), DurationScalar.ZERO);
     assertEquals(dt1.one(), RealScalar.ONE);
   }
@@ -126,13 +127,13 @@ public class DateTimeScalarTest {
   @Test
   public void testAddFail2() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
-    AssertFail.of(() -> dt1.add(RealScalar.of(3)));
-    AssertFail.of(() -> dt1.add(ComplexScalar.I));
-    AssertFail.of(() -> dt1.compareTo(ComplexScalar.I));
+    assertThrows(TensorRuntimeException.class, () -> dt1.add(RealScalar.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> dt1.add(ComplexScalar.I));
+    assertThrows(TensorRuntimeException.class, () -> dt1.compareTo(ComplexScalar.I));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> DateTimeScalar.of(null));
+    assertThrows(NullPointerException.class, () -> DateTimeScalar.of(null));
   }
 }

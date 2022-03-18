@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -19,7 +20,6 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ErlangDistributionTest {
   @Test
@@ -69,6 +69,6 @@ public class ErlangDistributionTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> ErlangDistribution.of(0, RealScalar.of(1.8)));
+    assertThrows(IllegalArgumentException.class, () -> ErlangDistribution.of(0, RealScalar.of(1.8)));
   }
 }

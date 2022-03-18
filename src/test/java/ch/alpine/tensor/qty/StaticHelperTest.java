@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
@@ -19,14 +20,13 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class StaticHelperTest {
   @Test
   public void testSimple() {
     UnitParser.requireAtomic("m");
-    AssertFail.of(() -> UnitParser.requireAtomic("m2"));
-    AssertFail.of(() -> UnitParser.requireAtomic("m^2"));
+    assertThrows(IllegalArgumentException.class, () -> UnitParser.requireAtomic("m2"));
+    assertThrows(IllegalArgumentException.class, () -> UnitParser.requireAtomic("m^2"));
   }
 
   // only used in tests
@@ -113,31 +113,31 @@ public class StaticHelperTest {
 
   @Test
   public void testMultiplyNullFail() {
-    AssertFail.of(() -> StaticHelper.multiply(Quantity.of(1, "s"), null));
-    AssertFail.of(() -> StaticHelper.multiply(null, Unit.of("s")));
+    assertThrows(NullPointerException.class, () -> StaticHelper.multiply(Quantity.of(1, "s"), null));
+    assertThrows(NullPointerException.class, () -> StaticHelper.multiply(null, Unit.of("s")));
   }
 
   @Test
   public void testConversionFail0() {
-    AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "rad", ""));
-    AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "", "rad"));
+    assertThrows(NullPointerException.class, () -> StaticHelper.conversion(UnitSystem.SI(), "rad", ""));
+    assertThrows(NullPointerException.class, () -> StaticHelper.conversion(UnitSystem.SI(), "", "rad"));
   }
 
   @Test
   public void testConversionFail1() {
-    AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "K", "N"));
-    AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "kg*m", "N"));
-    AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "kg", "N*kg"));
-    AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "kg", "N*s^2"));
-    AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "kg*s", "N"));
+    assertThrows(NullPointerException.class, () -> StaticHelper.conversion(UnitSystem.SI(), "K", "N"));
+    assertThrows(NullPointerException.class, () -> StaticHelper.conversion(UnitSystem.SI(), "kg*m", "N"));
+    assertThrows(NullPointerException.class, () -> StaticHelper.conversion(UnitSystem.SI(), "kg", "N*kg"));
+    assertThrows(NullPointerException.class, () -> StaticHelper.conversion(UnitSystem.SI(), "kg", "N*s^2"));
+    assertThrows(NullPointerException.class, () -> StaticHelper.conversion(UnitSystem.SI(), "kg*s", "N"));
   }
 
   @Test
   public void testConversionFail2() {
-    AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "K", "CHF"));
-    AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "CHF", "K"));
-    AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "m", "CHF"));
-    AssertFail.of(() -> StaticHelper.conversion(UnitSystem.SI(), "CHF", "m"));
+    assertThrows(IllegalArgumentException.class, () -> StaticHelper.conversion(UnitSystem.SI(), "K", "CHF"));
+    assertThrows(NullPointerException.class, () -> StaticHelper.conversion(UnitSystem.SI(), "CHF", "K"));
+    assertThrows(IllegalArgumentException.class, () -> StaticHelper.conversion(UnitSystem.SI(), "m", "CHF"));
+    assertThrows(NullPointerException.class, () -> StaticHelper.conversion(UnitSystem.SI(), "CHF", "m"));
   }
 
   @Test

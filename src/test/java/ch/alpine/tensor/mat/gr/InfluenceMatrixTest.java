@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.gr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -49,7 +50,6 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class InfluenceMatrixTest {
   private static void _check(InfluenceMatrix influenceMatrix) throws ClassNotFoundException, IOException {
@@ -284,7 +284,7 @@ public class InfluenceMatrixTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> InfluenceMatrix.of(null));
+    assertThrows(NullPointerException.class, () -> InfluenceMatrix.of(null));
   }
 
   @Test

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.ex;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.BitSet;
@@ -12,6 +13,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
@@ -33,7 +35,6 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Real;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MatrixPowerTest {
   private static boolean trunc(Tensor m, Tensor r) {
@@ -175,32 +176,32 @@ public class MatrixPowerTest {
 
   @Test
   public void testNonSymmetricFail() {
-    AssertFail.of(() -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), RationalScalar.HALF));
+    assertThrows(TensorRuntimeException.class, () -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), RationalScalar.HALF));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> MatrixPower.ofSymmetric(null, RationalScalar.HALF));
+    assertThrows(NullPointerException.class, () -> MatrixPower.ofSymmetric(null, RationalScalar.HALF));
   }
 
   @Test
   public void testFailZero() {
     Tensor matrix = Array.zeros(2, 3);
-    AssertFail.of(() -> MatrixPower.of(matrix, -1));
-    AssertFail.of(() -> MatrixPower.of(matrix, 0));
-    AssertFail.of(() -> MatrixPower.of(matrix, 1));
+    assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, -1));
+    assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, 0));
+    assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, 1));
   }
 
   @Test
   public void testFailOne() {
     Tensor matrix = HilbertMatrix.of(3, 2);
-    AssertFail.of(() -> MatrixPower.of(matrix, -1));
-    AssertFail.of(() -> MatrixPower.of(matrix, 0));
-    AssertFail.of(() -> MatrixPower.of(matrix, 1));
+    assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, -1));
+    assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, 0));
+    assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, 1));
   }
 
   @Test
   public void testFailAd() {
-    AssertFail.of(() -> MatrixPower.of(LeviCivitaTensor.of(3), 1));
+    assertThrows(ClassCastException.class, () -> MatrixPower.of(LeviCivitaTensor.of(3), 1));
   }
 }

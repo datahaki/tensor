@@ -3,6 +3,7 @@ package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -18,6 +19,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
@@ -32,7 +34,6 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class StaticHelperTest {
   @Test
@@ -85,8 +86,8 @@ public class StaticHelperTest {
     SparseArray.of(RealScalar.ZERO, 2, 3);
     assertEquals(SparseArray.of(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(SparseArray.of(GaussScalar.of(0, 7)), GaussScalar.of(0, 7));
-    AssertFail.of(() -> SparseArray.of(RealScalar.ZERO, 2, -3));
-    AssertFail.of(() -> SparseArray.of(RealScalar.ONE, 2, 3));
+    assertThrows(IllegalArgumentException.class, () -> SparseArray.of(RealScalar.ZERO, 2, -3));
+    assertThrows(TensorRuntimeException.class, () -> SparseArray.of(RealScalar.ONE, 2, 3));
   }
 
   @Test
@@ -156,9 +157,9 @@ public class StaticHelperTest {
   @Test
   public void testFallbackFail() {
     Tensor tensor = SparseArray.of(RealScalar.ZERO, 3);
-    AssertFail.of(() -> tensor.divide(Quantity.of(0, "")));
-    AssertFail.of(() -> tensor.divide(Quantity.of(0, "s*m")));
-    AssertFail.of(() -> tensor.multiply(DoubleScalar.POSITIVE_INFINITY));
+    assertThrows(ArithmeticException.class, () -> tensor.divide(Quantity.of(0, "")));
+    assertThrows(ArithmeticException.class, () -> tensor.divide(Quantity.of(0, "s*m")));
+    assertThrows(TensorRuntimeException.class, () -> tensor.multiply(DoubleScalar.POSITIVE_INFINITY));
   }
 
   @Test

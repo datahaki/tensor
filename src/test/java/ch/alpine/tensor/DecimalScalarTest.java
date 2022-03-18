@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -28,7 +29,6 @@ import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Sin;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class DecimalScalarTest {
   private static final String PI100 = "3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068";
@@ -375,6 +375,6 @@ public class DecimalScalarTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> DecimalScalar.of((BigDecimal) null));
+    assertThrows(NullPointerException.class, () -> DecimalScalar.of((BigDecimal) null));
   }
 }

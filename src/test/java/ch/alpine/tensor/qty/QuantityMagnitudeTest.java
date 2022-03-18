@@ -2,6 +2,7 @@
 package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -13,12 +14,12 @@ import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class QuantityMagnitudeTest {
   @Test
@@ -165,16 +166,16 @@ public class QuantityMagnitudeTest {
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     Scalar quantity = Quantity.of(360, "kg");
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in("m");
-    AssertFail.of(() -> scalarUnaryOperator.apply(quantity));
+    assertThrows(TensorRuntimeException.class, () -> scalarUnaryOperator.apply(quantity));
   }
 
   @Test
   public void testFailInNull() {
-    AssertFail.of(() -> QuantityMagnitude.SI().in((Unit) null));
+    assertThrows(NullPointerException.class, () -> QuantityMagnitude.SI().in((Unit) null));
   }
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> new QuantityMagnitude(null));
+    assertThrows(NullPointerException.class, () -> new QuantityMagnitude(null));
   }
 }

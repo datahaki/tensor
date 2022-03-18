@@ -2,6 +2,7 @@
 package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,10 +13,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class Vector2NormTest {
   @Test
@@ -71,19 +72,19 @@ public class Vector2NormTest {
         Quantity.of(-4, "m^2"), //
         RealScalar.ZERO //
     );
-    AssertFail.of(() -> Vector2Norm.of(vec));
+    assertThrows(TensorRuntimeException.class, () -> Vector2Norm.of(vec));
   }
 
   @Test
   public void testQuantityMixedFail1() {
     Tensor vector = Tensors.fromString("{0[m^2], 0[s*rad]}");
-    AssertFail.of(() -> Vector2Norm.of(vector));
+    assertThrows(TensorRuntimeException.class, () -> Vector2Norm.of(vector));
   }
 
   @Test
   public void testQuantityMixedFail2() {
     Tensor vector = Tensors.fromString("{0[m^2], 0[m]}");
-    AssertFail.of(() -> Vector2Norm.of(vector));
+    assertThrows(TensorRuntimeException.class, () -> Vector2Norm.of(vector));
   }
 
   @Test

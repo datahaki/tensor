@@ -2,6 +2,7 @@
 package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -13,10 +14,10 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SimpleUnitSystemTest {
   @Test
@@ -39,28 +40,28 @@ public class SimpleUnitSystemTest {
   public void testFailKey1() {
     Properties properties = new Properties();
     properties.setProperty("cent123", "1/100[FRA]");
-    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+    assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
   public void testFailKey2() {
     Properties properties = new Properties();
     properties.setProperty(" cent", "1/100[FRA]");
-    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+    assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
   public void testFailValue1() {
     Properties properties = new Properties();
     properties.setProperty("cent", "1/100a[FRA]");
-    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+    assertThrows(TensorRuntimeException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
   public void testFailValue2() {
     Properties properties = new Properties();
     properties.setProperty("cent", "b/100a");
-    AssertFail.of(() -> SimpleUnitSystem.from(properties));
+    assertThrows(TensorRuntimeException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
@@ -73,7 +74,7 @@ public class SimpleUnitSystemTest {
   public void testXFree0Fail() {
     Map<String, Scalar> map = new HashMap<>();
     map.put("m", Quantity.of(GaussScalar.of(0, 17), "m"));
-    AssertFail.of(() -> SimpleUnitSystem.from(map));
+    assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(map));
   }
 
   @Test
@@ -87,7 +88,7 @@ public class SimpleUnitSystemTest {
   public void testXFree2Fail() {
     Map<String, Scalar> map = new HashMap<>();
     map.put("m", Quantity.of(GaussScalar.of(2, 17), "m"));
-    AssertFail.of(() -> SimpleUnitSystem.from(map));
+    assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(map));
   }
 
   @Test
@@ -110,8 +111,8 @@ public class SimpleUnitSystemTest {
 
   @Test
   public void testDimensionsFail() {
-    AssertFail.of(() -> UnitSystem.SI().apply(null));
-    AssertFail.of(() -> UnitSystem.SI().dimensions(null));
+    assertThrows(NullPointerException.class, () -> UnitSystem.SI().apply(null));
+    assertThrows(NullPointerException.class, () -> UnitSystem.SI().dimensions(null));
   }
 
   @Test
@@ -123,11 +124,11 @@ public class SimpleUnitSystemTest {
 
   @Test
   public void testFailNullProperties() {
-    AssertFail.of(() -> SimpleUnitSystem.from((Properties) null));
+    assertThrows(NullPointerException.class, () -> SimpleUnitSystem.from((Properties) null));
   }
 
   @Test
   public void testFailNullMap() {
-    AssertFail.of(() -> SimpleUnitSystem.from((Map<String, Scalar>) null));
+    assertThrows(NullPointerException.class, () -> SimpleUnitSystem.from((Map<String, Scalar>) null));
   }
 }

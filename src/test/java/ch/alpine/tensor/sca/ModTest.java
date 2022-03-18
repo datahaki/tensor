@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -18,10 +19,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ModTest {
   @Test
@@ -182,7 +183,7 @@ public class ModTest {
   public void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(5, "m");
     Scalar qs2 = Quantity.of(3, "s");
-    AssertFail.of(() -> Mod.function(qs2).apply(qs1));
+    assertThrows(TensorRuntimeException.class, () -> Mod.function(qs2).apply(qs1));
   }
 
   @Test
@@ -193,21 +194,21 @@ public class ModTest {
 
   @Test
   public void testNull1Fail() {
-    AssertFail.of(() -> Mod.function(RealScalar.ONE, null));
+    assertThrows(NullPointerException.class, () -> Mod.function(RealScalar.ONE, null));
   }
 
   @Test
   public void testNull2Fail() {
-    AssertFail.of(() -> Mod.function(null, RealScalar.ONE));
+    assertThrows(NullPointerException.class, () -> Mod.function(null, RealScalar.ONE));
   }
 
   @Test
   public void testZeroAFail() {
-    AssertFail.of(() -> Mod.function(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> Mod.function(RealScalar.ZERO));
   }
 
   @Test
   public void testZeroBFail() {
-    AssertFail.of(() -> Mod.function(RealScalar.ZERO, RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Mod.function(RealScalar.ZERO, RealScalar.ONE));
   }
 }

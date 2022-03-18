@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -12,12 +13,12 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ClipTest {
   @Test
@@ -50,7 +51,7 @@ public class ClipTest {
   @Test
   public void testFail() {
     Clips.interval(5, 5);
-    AssertFail.of(() -> Clips.interval(2, -3));
+    assertThrows(TensorRuntimeException.class, () -> Clips.interval(2, -3));
   }
 
   @Test
@@ -72,8 +73,8 @@ public class ClipTest {
     assertTrue(clip.isInside(Quantity.of(1, "m")));
     assertTrue(clip.isInside(Quantity.of(2, "m")));
     assertFalse(clip.isInside(Quantity.of(3, "m")));
-    AssertFail.of(() -> clip.isInside(Quantity.of(0, "V")));
-    AssertFail.of(() -> clip.isInside(Quantity.of(3, "V")));
+    assertThrows(TensorRuntimeException.class, () -> clip.isInside(Quantity.of(0, "V")));
+    assertThrows(TensorRuntimeException.class, () -> clip.isInside(Quantity.of(3, "V")));
   }
 
   @Test
@@ -113,7 +114,7 @@ public class ClipTest {
   public void testClipOutside() {
     Clip clip = Clips.interval(3, 5);
     assertEquals(clip.requireInside(RealScalar.of(3.9)), RealScalar.of(3.9));
-    AssertFail.of(() -> clip.requireInside(RealScalar.of(2.9)));
+    assertThrows(TensorRuntimeException.class, () -> clip.requireInside(RealScalar.of(2.9)));
   }
 
   @Test
@@ -138,7 +139,7 @@ public class ClipTest {
     assertFalse(clip.isOutside(Quantity.of(1, "m")));
     assertFalse(clip.isOutside(Quantity.of(2, "m")));
     assertTrue(clip.isOutside(Quantity.of(3, "m")));
-    AssertFail.of(() -> clip.isOutside(Quantity.of(3, "V")));
+    assertThrows(TensorRuntimeException.class, () -> clip.isOutside(Quantity.of(3, "V")));
   }
 
   @Test

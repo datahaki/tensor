@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.sca.gam;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
@@ -8,7 +10,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class BetaTest {
   @Test
@@ -27,6 +28,6 @@ public class BetaTest {
 
   @Test
   public void testVectorFail() {
-    AssertFail.of(() -> Beta.of(HilbertMatrix.of(3)));
+    assertThrows(ClassCastException.class, () -> Beta.of(HilbertMatrix.of(3)));
   }
 }

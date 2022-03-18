@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -9,14 +10,13 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TensorBlockTest {
   @Test
   public void testBlock() {
     Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);
     assertEquals(a.block(Arrays.asList(2), Arrays.asList(2)), Tensors.vector(3, 4));
-    AssertFail.of(() -> a.block(Arrays.asList(1), Arrays.asList(2, 1)));
+    assertThrows(IllegalArgumentException.class, () -> a.block(Arrays.asList(1), Arrays.asList(2, 1)));
   }
 
   @Test

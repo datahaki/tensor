@@ -2,6 +2,7 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
@@ -29,7 +30,6 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Round;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TransposedImageFormatTest {
   static Tensor _readRGBA() throws IOException {
@@ -113,7 +113,7 @@ public class TransposedImageFormatTest {
     Tensor tensor = TransposedImageFormat.from(bufferedImage);
     Tensor kernel = Array.of(l -> RationalScalar.of(1, 1), 3, 5, 1);
     Tensor array = ListConvolve.of(kernel, tensor);
-    AssertFail.of(() -> TransposedImageFormat.of(array));
+    assertThrows(IllegalArgumentException.class, () -> TransposedImageFormat.of(array));
   }
 
   private static Tensor _gradients() {

@@ -3,14 +3,13 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.AssertFail;
 
 public class IntegersTest {
   @Test
@@ -28,25 +27,25 @@ public class IntegersTest {
   @Test
   public void testPositiveFail() {
     for (int value : new int[] { Integer.MIN_VALUE, -3, -1, 0 })
-      AssertFail.of(() -> Integers.requirePositive(value));
+      assertThrows(IllegalArgumentException.class, () -> Integers.requirePositive(value));
   }
 
   @Test
   public void testPositiveOrZeroFail() {
     for (int value : new int[] { Integer.MIN_VALUE, -3, -1 })
-      AssertFail.of(() -> Integers.requirePositiveOrZero(value));
+      assertThrows(IllegalArgumentException.class, () -> Integers.requirePositiveOrZero(value));
   }
 
   @Test
   public void testRequireLessThan() {
     Integers.requireLessThan(2, 3);
-    AssertFail.of(() -> Integers.requireLessThan(3, 3));
+    assertThrows(IllegalArgumentException.class, () -> Integers.requireLessThan(3, 3));
   }
 
   @Test
   public void testRequireLessEquals() {
     Integers.requireLessEquals(3, 3);
-    AssertFail.of(() -> Integers.requireLessEquals(4, 3));
+    assertThrows(IllegalArgumentException.class, () -> Integers.requireLessEquals(4, 3));
   }
 
   @Test
@@ -84,10 +83,10 @@ public class IntegersTest {
 
   @Test
   public void testPowerOf2Fail() {
-    AssertFail.of(() -> Integers.isPowerOf2(-3));
-    AssertFail.of(() -> Integers.isPowerOf2(-2));
-    AssertFail.of(() -> Integers.isPowerOf2(-1));
-    AssertFail.of(() -> Integers.isPowerOf2(0));
+    assertThrows(IllegalArgumentException.class, () -> Integers.isPowerOf2(-3));
+    assertThrows(IllegalArgumentException.class, () -> Integers.isPowerOf2(-2));
+    assertThrows(IllegalArgumentException.class, () -> Integers.isPowerOf2(-1));
+    assertThrows(IllegalArgumentException.class, () -> Integers.isPowerOf2(0));
   }
 
   @Test
@@ -132,8 +131,8 @@ public class IntegersTest {
   public void testRequireEquals() {
     assertEquals(3, Integers.requireEquals(3, 3));
     assertEquals(7, Integers.requireEquals(7, 7));
-    AssertFail.of(() -> Integers.requireEquals(3, 4));
-    AssertFail.of(() -> Integers.requireEquals(3, -3));
+    assertThrows(IllegalArgumentException.class, () -> Integers.requireEquals(3, 4));
+    assertThrows(IllegalArgumentException.class, () -> Integers.requireEquals(3, -3));
   }
 
   @Test
@@ -159,7 +158,7 @@ public class IntegersTest {
   @Test
   public void testRequirePermutation() {
     Integers.requirePermutation(new int[] { 0, 2, 1 });
-    AssertFail.of(() -> Integers.requirePermutation(new int[] { 2, 3 }));
+    assertThrows(IllegalArgumentException.class, () -> Integers.requirePermutation(new int[] { 2, 3 }));
   }
 
   @Test
@@ -192,9 +191,9 @@ public class IntegersTest {
 
   @Test
   public void testParityFail() {
-    AssertFail.of(() -> Integers.parity(new int[] { 0, 0 }));
-    AssertFail.of(() -> Integers.parity(new int[] { 1, 1 }));
-    AssertFail.of(() -> Integers.parity(new int[] { 2, 1 }));
+    assertThrows(IllegalArgumentException.class, () -> Integers.parity(new int[] { 0, 0 }));
+    assertThrows(IllegalArgumentException.class, () -> Integers.parity(new int[] { 1, 1 }));
+    assertThrows(IllegalArgumentException.class, () -> Integers.parity(new int[] { 2, 1 }));
   }
 
   @Test
@@ -205,6 +204,6 @@ public class IntegersTest {
 
   @Test
   public void testAsListNullFail() {
-    AssertFail.of(() -> Integers.asList(null));
+    assertThrows(NullPointerException.class, () -> Integers.asList(null));
   }
 }

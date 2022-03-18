@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -11,8 +12,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class DivisibleTest {
   @Test
@@ -55,24 +56,24 @@ public class DivisibleTest {
   public void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(6, "m");
     Scalar qs2 = Quantity.of(3, "s");
-    AssertFail.of(() -> Divisible.of(qs1, qs2));
+    assertThrows(TensorRuntimeException.class, () -> Divisible.of(qs1, qs2));
   }
 
   @Test
   public void testNumericFail() {
-    AssertFail.of(() -> Divisible.of(RealScalar.of(9.), RealScalar.of(3)));
-    AssertFail.of(() -> Divisible.of(Quantity.of(9., "m"), Quantity.of(3, "m")));
+    assertThrows(TensorRuntimeException.class, () -> Divisible.of(RealScalar.of(9.), RealScalar.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> Divisible.of(Quantity.of(9., "m"), Quantity.of(3, "m")));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> Divisible.of(null, RealScalar.of(3)));
-    AssertFail.of(() -> Divisible.of(Quantity.of(9, "m"), null));
+    assertThrows(NullPointerException.class, () -> Divisible.of(null, RealScalar.of(3)));
+    assertThrows(NullPointerException.class, () -> Divisible.of(Quantity.of(9, "m"), null));
   }
 
   @Test
   public void testZeroFail() {
-    AssertFail.of(() -> Divisible.of(RealScalar.ONE, RealScalar.ZERO));
-    AssertFail.of(() -> Scalars.divides(RealScalar.ZERO, RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Divisible.of(RealScalar.ONE, RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.divides(RealScalar.ZERO, RealScalar.ONE));
   }
 }

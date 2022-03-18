@@ -2,6 +2,7 @@
 package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
@@ -31,7 +33,6 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SparseArrayTest {
   @Test
@@ -59,9 +60,9 @@ public class SparseArrayTest {
   public void testVector() {
     Tensor matrix = SparseArray.of(RealScalar.ZERO, 100);
     assertEquals(matrix.Get(99), RealScalar.ZERO);
-    AssertFail.of(() -> matrix.get(-1));
-    AssertFail.of(() -> matrix.get(100));
-    AssertFail.of(() -> matrix.Get(100));
+    assertThrows(IllegalArgumentException.class, () -> matrix.get(-1));
+    assertThrows(IllegalArgumentException.class, () -> matrix.get(100));
+    assertThrows(IllegalArgumentException.class, () -> matrix.Get(100));
   }
 
   @Test
@@ -97,7 +98,7 @@ public class SparseArrayTest {
     Tensor sparse = SparseArray.of(GaussScalar.of(0, 5), 5, 4, 8);
     sparse.set(GaussScalar.of(3, 5), 0, 1, 2);
     assertEquals(sparse.get(1, Tensor.ALL, 3), ConstantArray.of(GaussScalar.of(0, 5), 4));
-    AssertFail.of(() -> sparse.get(Tensor.ALL));
+    assertThrows(IllegalArgumentException.class, () -> sparse.get(Tensor.ALL));
     Tensor result = sparse.get(Tensor.ALL, 2);
     assertTrue(result instanceof SparseArray);
     assertEquals(result, Normal.of(sparse).get(Tensor.ALL, 2));
@@ -107,9 +108,9 @@ public class SparseArrayTest {
   @Test
   public void testFails() {
     Tensor sparse = SparseArray.of(GaussScalar.of(0, 5), 5, 4, 8);
-    AssertFail.of(() -> sparse.unmodifiable());
-    AssertFail.of(() -> sparse.append(Array.zeros(4, 8)));
-    AssertFail.of(() -> sparse.map(RealScalar.ONE::add));
+    assertThrows(UnsupportedOperationException.class, () -> sparse.unmodifiable());
+    assertThrows(UnsupportedOperationException.class, () -> sparse.append(Array.zeros(4, 8)));
+    assertThrows(TensorRuntimeException.class, () -> sparse.map(RealScalar.ONE::add));
   }
 
   @Test
@@ -117,8 +118,8 @@ public class SparseArrayTest {
     Tensor matrix = SparseArray.of(RealScalar.ZERO, 5, 10);
     assertEquals(matrix.Get(3, 2), RealScalar.ZERO);
     matrix.set(Pi.VALUE, 2, 3);
-    AssertFail.of(() -> matrix.set(RealScalar.ONE, 5, 3));
-    AssertFail.of(() -> matrix.set(RealScalar.ONE, 2, 10));
+    assertThrows(IllegalArgumentException.class, () -> matrix.set(RealScalar.ONE, 5, 3));
+    assertThrows(IllegalArgumentException.class, () -> matrix.set(RealScalar.ONE, 2, 10));
     assertEquals(matrix.get(2, 3), Pi.VALUE);
     Tensor minus = matrix.negate();
     assertTrue(minus instanceof SparseArray);
@@ -144,8 +145,8 @@ public class SparseArrayTest {
     assertEquals(tensor.extract(0, 5), Array.zeros(5));
     assertEquals(tensor.extract(3, 5), Array.zeros(2));
     assertEquals(tensor.extract(3, 3), Array.zeros(0));
-    AssertFail.of(() -> tensor.extract(-1, 3));
-    AssertFail.of(() -> tensor.extract(1, 6));
+    assertThrows(IllegalArgumentException.class, () -> tensor.extract(-1, 3));
+    assertThrows(IllegalArgumentException.class, () -> tensor.extract(1, 6));
   }
 
   @Test
@@ -217,7 +218,7 @@ public class SparseArrayTest {
     sparse.set(RealScalar.TWO::add, 1);
     assertEquals(sparse, Tensors.vector(2, 3, 4, 1, 1));
     assertTrue(sparse instanceof SparseArray);
-    AssertFail.of(() -> sparse.set(Tensors.vector(3), 2));
+    assertThrows(TensorRuntimeException.class, () -> sparse.set(Tensors.vector(3), 2));
   }
 
   @Test
@@ -227,8 +228,8 @@ public class SparseArrayTest {
     tensor.set(Tensors.vector(-1, -2, -3, -4, -5), 1, Tensor.ALL);
     sparse.set(Tensors.vector(-1, -2, -3, -4, -5), 1, Tensor.ALL);
     assertEquals(tensor, sparse);
-    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, -3, -4), 1, Tensor.ALL));
-    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, -3, -4, -5), 3, Tensor.ALL));
+    assertThrows(IllegalArgumentException.class, () -> sparse.set(Tensors.vector(-1, -2, -3, -4), 1, Tensor.ALL));
+    assertThrows(IllegalArgumentException.class, () -> sparse.set(Tensors.vector(-1, -2, -3, -4, -5), 3, Tensor.ALL));
   }
 
   @Test
@@ -238,9 +239,9 @@ public class SparseArrayTest {
     tensor.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 4);
     sparse.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 4);
     assertEquals(tensor, sparse);
-    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 5));
-    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2), Tensor.ALL, 4));
-    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, 3, 4), Tensor.ALL, 4));
+    assertThrows(IllegalArgumentException.class, () -> sparse.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 5));
+    assertThrows(IllegalArgumentException.class, () -> sparse.set(Tensors.vector(-1, -2), Tensor.ALL, 4));
+    assertThrows(IllegalArgumentException.class, () -> sparse.set(Tensors.vector(-1, -2, 3, 4), Tensor.ALL, 4));
   }
 
   @Test
@@ -250,9 +251,9 @@ public class SparseArrayTest {
     tensor.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 4);
     sparse.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 4);
     assertEquals(tensor, sparse);
-    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 5));
-    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2), Tensor.ALL, 4));
-    AssertFail.of(() -> sparse.set(Tensors.vector(-1, -2, 3, 4), Tensor.ALL, 4));
+    assertThrows(IllegalArgumentException.class, () -> sparse.set(Tensors.vector(-1, -2, -3), Tensor.ALL, 5));
+    assertThrows(IllegalArgumentException.class, () -> sparse.set(Tensors.vector(-1, -2), Tensor.ALL, 4));
+    assertThrows(IllegalArgumentException.class, () -> sparse.set(Tensors.vector(-1, -2, 3, 4), Tensor.ALL, 4));
   }
 
   @Test
@@ -321,8 +322,8 @@ public class SparseArrayTest {
     Tensor sparse = TestHelper.of(tensor);
     sparse.set(Tensors.vector(1, 2, 3, 4, 5), 2);
     sparse.set(Array.zeros(5), 2);
-    AssertFail.of(() -> sparse.set(Array.zeros(5, 2), 2));
-    AssertFail.of(() -> sparse.set(Tensors.fromString("{1,2,{3},4,5}"), 2));
+    assertThrows(TensorRuntimeException.class, () -> sparse.set(Array.zeros(5, 2), 2));
+    assertThrows(TensorRuntimeException.class, () -> sparse.set(Tensors.fromString("{1,2,{3},4,5}"), 2));
   }
 
   @Test
@@ -365,12 +366,12 @@ public class SparseArrayTest {
   @Test
   public void testFallbackScalarFail() {
     assertEquals(SparseArray.of(Quantity.of(0, "A")), Quantity.of(0, "A"));
-    AssertFail.of(() -> SparseArray.of(Pi.VALUE));
+    assertThrows(TensorRuntimeException.class, () -> SparseArray.of(Pi.VALUE));
   }
 
   @Test
   public void testFail() {
     Tensor tensor = Tensors.fromString("{1,0,{3},0,0}");
-    AssertFail.of(() -> TestHelper.of(tensor));
+    assertThrows(ClassCastException.class, () -> TestHelper.of(tensor));
   }
 }

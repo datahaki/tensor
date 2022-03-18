@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.lie.Quaternion;
@@ -20,7 +22,6 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class AbsSquaredTest {
   @Test
@@ -80,6 +81,6 @@ public class AbsSquaredTest {
 
   @Test
   public void testStringFail() {
-    AssertFail.of(() -> AbsSquared.FUNCTION.apply(StringScalar.of("idsc")));
+    assertThrows(TensorRuntimeException.class, () -> AbsSquared.FUNCTION.apply(StringScalar.of("idsc")));
   }
 }

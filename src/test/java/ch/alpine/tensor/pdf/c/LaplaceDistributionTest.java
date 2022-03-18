@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -20,7 +22,6 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class LaplaceDistributionTest {
   @Test
@@ -56,19 +57,19 @@ public class LaplaceDistributionTest {
 
   @Test
   public void testComplexFail() {
-    AssertFail.of(() -> LaplaceDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> LaplaceDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> LaplaceDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
-    AssertFail.of(() -> LaplaceDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
-    AssertFail.of(() -> LaplaceDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
   @Test
   public void testNegativeSigmaFail() {
     LaplaceDistribution.of(5, 1);
-    AssertFail.of(() -> LaplaceDistribution.of(5, -1));
+    assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(5, -1));
   }
 }

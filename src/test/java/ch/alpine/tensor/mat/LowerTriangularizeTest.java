@@ -2,14 +2,15 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class LowerTriangularizeTest {
   @Test
@@ -35,11 +36,11 @@ public class LowerTriangularizeTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> LowerTriangularize.of(RealScalar.ONE, 0));
+    assertThrows(TensorRuntimeException.class, () -> LowerTriangularize.of(RealScalar.ONE, 0));
   }
 
   @Test
   public void testRank3Fail() {
-    AssertFail.of(() -> LowerTriangularize.of(LeviCivitaTensor.of(3), 0));
+    assertThrows(ClassCastException.class, () -> LowerTriangularize.of(LeviCivitaTensor.of(3), 0));
   }
 }

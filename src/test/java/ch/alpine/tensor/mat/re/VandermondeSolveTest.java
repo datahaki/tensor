@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.re;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
 
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.itp.Fit;
@@ -20,7 +22,6 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class VandermondeSolveTest {
   @Test
@@ -62,14 +63,14 @@ public class VandermondeSolveTest {
   public void testSingularFail() {
     Tensor x = Tensors.vector(2, 3, 2);
     Tensor q = Tensors.vector(4, 7, 6);
-    AssertFail.of(() -> VandermondeSolve.of(x, q));
+    assertThrows(TensorRuntimeException.class, () -> VandermondeSolve.of(x, q));
   }
 
   @Test
   public void testLengthFail() {
     Tensor x = Tensors.vector(2, 3);
     Tensor q = Tensors.vector(4, 7, 6);
-    AssertFail.of(() -> VandermondeSolve.of(x, q));
+    assertThrows(TensorRuntimeException.class, () -> VandermondeSolve.of(x, q));
   }
 
   @Test
@@ -108,6 +109,6 @@ public class VandermondeSolveTest {
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> VandermondeSolve.of(Tensors.empty(), Tensors.empty()));
+    assertThrows(IndexOutOfBoundsException.class, () -> VandermondeSolve.of(Tensors.empty(), Tensors.empty()));
   }
 }

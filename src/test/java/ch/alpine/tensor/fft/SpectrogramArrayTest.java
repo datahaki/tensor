@@ -2,6 +2,7 @@
 package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
@@ -30,7 +32,6 @@ import ch.alpine.tensor.sca.win.HannWindow;
 import ch.alpine.tensor.sca.win.NuttallWindow;
 import ch.alpine.tensor.sca.win.TukeyWindow;
 import ch.alpine.tensor.sca.win.WindowFunctions;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SpectrogramArrayTest {
   @Test
@@ -75,8 +76,8 @@ public class SpectrogramArrayTest {
 
   @Test
   public void testStaticOpsFail() {
-    AssertFail.of(() -> SpectrogramArray.of(Quantity.of(0, "s"), Quantity.of(100, "s^-1"), NuttallWindow.FUNCTION));
-    AssertFail.of(() -> SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1"), BlackmanHarrisWindow.FUNCTION));
+    assertThrows(IllegalArgumentException.class, () -> SpectrogramArray.of(Quantity.of(0, "s"), Quantity.of(100, "s^-1"), NuttallWindow.FUNCTION));
+    assertThrows(IllegalArgumentException.class, () -> SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1"), BlackmanHarrisWindow.FUNCTION));
   }
 
   @Test
@@ -105,38 +106,38 @@ public class SpectrogramArrayTest {
 
   @Test
   public void testFailWindowLength() {
-    AssertFail.of(() -> SpectrogramArray.of(0, 8));
+    assertThrows(IllegalArgumentException.class, () -> SpectrogramArray.of(0, 8));
   }
 
   @Test
   public void testFailWindowLengthOffset() {
-    AssertFail.of(() -> SpectrogramArray.of(4, 8));
+    assertThrows(IllegalArgumentException.class, () -> SpectrogramArray.of(4, 8));
   }
 
   @Test
   public void testFailOffset() {
-    AssertFail.of(() -> SpectrogramArray.of(4, 0));
+    assertThrows(IllegalArgumentException.class, () -> SpectrogramArray.of(4, 0));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> SpectrogramArray.half_abs(null, HammingWindow.FUNCTION));
+    assertThrows(NullPointerException.class, () -> SpectrogramArray.half_abs(null, HammingWindow.FUNCTION));
   }
 
   @Test
   public void testDimensionsFail() {
     TensorUnaryOperator tensorUnaryOperator = SpectrogramArray.of(32, 8);
-    AssertFail.of(() -> tensorUnaryOperator.apply(RealScalar.ONE));
-    AssertFail.of(() -> tensorUnaryOperator.apply(HilbertMatrix.of(32)));
+    assertThrows(TensorRuntimeException.class, () -> tensorUnaryOperator.apply(RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> tensorUnaryOperator.apply(HilbertMatrix.of(32)));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> SpectrogramArray.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> SpectrogramArray.of(RealScalar.ONE));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> SpectrogramArray.of(HilbertMatrix.of(32)));
+    assertThrows(ClassCastException.class, () -> SpectrogramArray.of(HilbertMatrix.of(32)));
   }
 }

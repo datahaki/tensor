@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,9 +13,9 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.StringScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ImagTest {
   @Test
@@ -52,6 +53,6 @@ public class ImagTest {
   @Test
   public void testFail() {
     Scalar scalar = StringScalar.of("string");
-    AssertFail.of(() -> Imag.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Imag.of(scalar));
   }
 }

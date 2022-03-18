@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.gr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Modifier;
 
@@ -10,10 +11,10 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.InvertUnlessZero;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class StaticHelperTest {
   private static final Scalar _0 = RealScalar.of(0.0);
@@ -36,7 +37,7 @@ public class StaticHelperTest {
   @Test
   public void testRequireUnitFail() {
     Scalar scalar = RealScalar.of(1.0 + 1e-5);
-    AssertFail.of(() -> InfluenceMatrixSvd.requireUnit(scalar));
+    assertThrows(TensorRuntimeException.class, () -> InfluenceMatrixSvd.requireUnit(scalar));
   }
 
   @Test

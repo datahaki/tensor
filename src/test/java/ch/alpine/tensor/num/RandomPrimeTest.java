@@ -1,11 +1,11 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.AssertFail;
 
 public class RandomPrimeTest {
   @Test
@@ -18,6 +18,6 @@ public class RandomPrimeTest {
   public void testFail() {
     Random random = new Random();
     RandomPrime.of(Prime.MAX_INDEX, random);
-    AssertFail.of(() -> RandomPrime.of(Prime.MAX_INDEX + 1, random));
+    assertThrows(IllegalArgumentException.class, () -> RandomPrime.of(Prime.MAX_INDEX + 1, random));
   }
 }

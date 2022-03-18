@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -17,8 +18,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class QuantityCompareTest {
   private static void _checkEquals(Scalar s1, Scalar s2, boolean actual) {
@@ -53,8 +54,8 @@ public class QuantityCompareTest {
     Scalar q1 = Quantity.of(0, "s");
     Scalar q2 = Quantity.of(0, "rad");
     assertFalse(q1.equals(q2));
-    AssertFail.of(() -> Scalars.compare(q1, q2));
-    AssertFail.of(() -> Scalars.compare(RealScalar.ZERO, q2));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.compare(q1, q2));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.compare(RealScalar.ZERO, q2));
   }
 
   @Test
@@ -101,7 +102,7 @@ public class QuantityCompareTest {
 
   @Test
   public void testCompareFail2() {
-    AssertFail.of(() -> Scalars.compare(DoubleScalar.of(3.14), Quantity.of(0, "m*s")));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.compare(DoubleScalar.of(3.14), Quantity.of(0, "m*s")));
   }
 
   @Test

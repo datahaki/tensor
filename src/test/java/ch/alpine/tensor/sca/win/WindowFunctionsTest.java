@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.win;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -13,6 +14,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
@@ -20,7 +22,6 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class WindowFunctionsTest {
   @ParameterizedTest
@@ -52,13 +53,13 @@ public class WindowFunctionsTest {
   @ParameterizedTest
   @EnumSource(WindowFunctions.class)
   public void testInsideFail(WindowFunctions windowFunction) {
-    AssertFail.of(() -> windowFunction.get().apply(Quantity.of(0.1, "s")));
+    assertThrows(TensorRuntimeException.class, () -> windowFunction.get().apply(Quantity.of(0.1, "s")));
   }
 
   @ParameterizedTest
   @EnumSource(WindowFunctions.class)
   public void testOustideFail(WindowFunctions windowFunction) {
-    AssertFail.of(() -> windowFunction.get().apply(Quantity.of(1, "s")));
+    assertThrows(TensorRuntimeException.class, () -> windowFunction.get().apply(Quantity.of(1, "s")));
   }
 
   @ParameterizedTest

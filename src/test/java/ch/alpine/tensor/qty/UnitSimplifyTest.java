@@ -2,6 +2,7 @@
 package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -14,7 +15,6 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class UnitSimplifyTest {
   @Test
@@ -50,7 +50,7 @@ public class UnitSimplifyTest {
   @Test
   public void testNonUnitFail() {
     Set<String> set = ResourceData.properties("/unit/simplify2.properties").stringPropertyNames();
-    AssertFail.of(() -> UnitSimplify.from(UnitSystem.SI(), set));
+    assertThrows(IllegalArgumentException.class, () -> UnitSimplify.from(UnitSystem.SI(), set));
   }
 
   @Test
@@ -58,12 +58,12 @@ public class UnitSimplifyTest {
     Set<Unit> set = new HashSet<>();
     set.add(Unit.of("kW"));
     set.add(Unit.of("W"));
-    AssertFail.of(() -> UnitSimplify.of(UnitSystem.SI(), set));
+    assertThrows(IllegalArgumentException.class, () -> UnitSimplify.of(UnitSystem.SI(), set));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> UnitSimplify.of(UnitSystem.SI(), null));
-    AssertFail.of(() -> UnitSimplify.of(null, new HashSet<>()));
+    assertThrows(NullPointerException.class, () -> UnitSimplify.of(UnitSystem.SI(), null));
+    assertThrows(NullPointerException.class, () -> UnitSimplify.of(null, new HashSet<>()));
   }
 }

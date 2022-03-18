@@ -3,6 +3,7 @@ package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.Pretty;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -26,7 +28,6 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Power;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class IntervalTest {
   @Test
@@ -82,17 +83,17 @@ public class IntervalTest {
 
   @Test
   public void testReciprocalFail() {
-    AssertFail.of(() -> Interval.of(-2.3, 5.6).reciprocal());
+    assertThrows(TensorRuntimeException.class, () -> Interval.of(-2.3, 5.6).reciprocal());
   }
 
   @Test
   public void testPowerFail() {
-    AssertFail.of(() -> Power.of(Interval.of(-2.3, 5.6), 2.3));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(Interval.of(-2.3, 5.6), 2.3));
   }
 
   @Test
   public void testNumberFail() {
-    AssertFail.of(() -> Interval.of(-2.3, 5.6).number());
+    assertThrows(TensorRuntimeException.class, () -> Interval.of(-2.3, 5.6).number());
   }
 
   @Test

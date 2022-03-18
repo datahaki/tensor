@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -12,12 +13,12 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class FloorTest {
   @Test
@@ -69,8 +70,8 @@ public class FloorTest {
 
   @Test
   public void testIntExactValueFail() {
-    AssertFail.of(() -> Floor.intValueExact(Quantity.of(1.2, "h")));
-    AssertFail.of(() -> Floor.longValueExact(Quantity.of(4.5, "km*h^-1")));
+    assertThrows(TensorRuntimeException.class, () -> Floor.intValueExact(Quantity.of(1.2, "h")));
+    assertThrows(TensorRuntimeException.class, () -> Floor.longValueExact(Quantity.of(4.5, "km*h^-1")));
   }
 
   @Test
@@ -141,6 +142,6 @@ public class FloorTest {
 
   @Test
   public void testTypeFail() {
-    AssertFail.of(() -> Floor.of(StringScalar.of("some")));
+    assertThrows(TensorRuntimeException.class, () -> Floor.of(StringScalar.of("some")));
   }
 }

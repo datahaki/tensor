@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.StringScalarQ;
 import ch.alpine.tensor.spa.Normal;
 import ch.alpine.tensor.spa.SparseArray;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class InsertTest {
   @Test
@@ -58,18 +58,18 @@ public class InsertTest {
   @Test
   public void testAFailSmall() {
     Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, 0);
-    AssertFail.of(() -> Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, -1));
+    assertThrows(IllegalArgumentException.class, () -> Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, -1));
   }
 
   @Test
   public void testAFailLarge() {
     Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, 3);
-    AssertFail.of(() -> Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, 4));
+    assertThrows(IndexOutOfBoundsException.class, () -> Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, 4));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> Insert.of(null, RealScalar.ZERO, 0));
-    AssertFail.of(() -> Insert.of(Tensors.vector(1, 2, 3), null, 0));
+    assertThrows(NullPointerException.class, () -> Insert.of(null, RealScalar.ZERO, 0));
+    assertThrows(NullPointerException.class, () -> Insert.of(Tensors.vector(1, 2, 3), null, 0));
   }
 }

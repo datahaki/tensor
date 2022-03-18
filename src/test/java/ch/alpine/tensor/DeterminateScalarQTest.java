@@ -3,13 +3,13 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class DeterminateScalarQTest {
   @Test
@@ -55,17 +55,17 @@ public class DeterminateScalarQTest {
     Scalar scalar = Scalars.fromString("NaN+2*I[m*s]");
     assertEquals(scalar.toString(), "NaN+2*I[m*s]");
     assertTrue(scalar instanceof Quantity);
-    AssertFail.of(() -> DeterminateScalarQ.require(scalar));
+    assertThrows(TensorRuntimeException.class, () -> DeterminateScalarQ.require(scalar));
   }
 
   @Test
   public void testRequireThrow() {
     DeterminateScalarQ.require(Pi.VALUE);
-    AssertFail.of(() -> DeterminateScalarQ.require(DoubleScalar.POSITIVE_INFINITY));
+    assertThrows(TensorRuntimeException.class, () -> DeterminateScalarQ.require(DoubleScalar.POSITIVE_INFINITY));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> DeterminateScalarQ.of(null));
+    assertThrows(NullPointerException.class, () -> DeterminateScalarQ.of(null));
   }
 }

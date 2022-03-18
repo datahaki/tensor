@@ -2,17 +2,18 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MedianTest {
   @Test
@@ -42,13 +43,13 @@ public class MedianTest {
 
   @Test
   public void testEmpty() {
-    AssertFail.of(() -> Median.of(Tensors.empty()));
-    AssertFail.of(() -> Median.of(Pi.VALUE));
+    assertThrows(IllegalArgumentException.class, () -> Median.of(Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> Median.of(Pi.VALUE));
   }
 
   @Test
   public void testUnorderedFail() {
-    AssertFail.of(() -> Median.ofSorted(Tensors.vector(3, 2, 1)));
-    AssertFail.of(() -> Median.ofSorted(Tensors.vector(1, 2, 1)));
+    assertThrows(TensorRuntimeException.class, () -> Median.ofSorted(Tensors.vector(3, 2, 1)));
+    assertThrows(TensorRuntimeException.class, () -> Median.ofSorted(Tensors.vector(1, 2, 1)));
   }
 }

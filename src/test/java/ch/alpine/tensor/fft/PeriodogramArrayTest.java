@@ -2,6 +2,7 @@
 package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -15,7 +16,6 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.win.WindowFunctions;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class PeriodogramArrayTest {
   @Test
@@ -49,6 +49,6 @@ public class PeriodogramArrayTest {
 
   @Test
   public void testZeroFail() {
-    AssertFail.of(() -> PeriodogramArray.of(Tensors.vector(0, 1, 0, -1, 0, 1, 0, -1), 0));
+    assertThrows(IllegalArgumentException.class, () -> PeriodogramArray.of(Tensors.vector(0, 1, 0, -1, 0, 1, 0, -1), 0));
   }
 }

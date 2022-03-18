@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.sv;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
@@ -14,6 +15,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Sort;
@@ -31,7 +33,6 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SingularValueDecompositionTest {
   @Test
@@ -193,10 +194,10 @@ public class SingularValueDecompositionTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> SingularValueDecomposition.of(RealScalar.ONE));
-    AssertFail.of(() -> SingularValueDecomposition.of(Tensors.vector(1, 2, 3)));
-    AssertFail.of(() -> SingularValueDecomposition.of(Tensors.fromString("{{1, 2}, {2, {3}}}")));
-    AssertFail.of(() -> SingularValueDecomposition.of(Array.zeros(2, 3, 4)));
+    assertThrows(TensorRuntimeException.class, () -> SingularValueDecomposition.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> SingularValueDecomposition.of(Tensors.vector(1, 2, 3)));
+    assertThrows(ClassCastException.class, () -> SingularValueDecomposition.of(Tensors.fromString("{{1, 2}, {2, {3}}}")));
+    assertThrows(IllegalArgumentException.class, () -> SingularValueDecomposition.of(Array.zeros(2, 3, 4)));
   }
 
   @Test

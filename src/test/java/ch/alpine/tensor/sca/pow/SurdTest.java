@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.pow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,6 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SurdTest {
   @Test
@@ -87,11 +87,11 @@ public class SurdTest {
   @Test
   public void testComplexFail() {
     Scalar scalar = ComplexScalar.of(12, 23);
-    AssertFail.of(() -> Surd.of(3).apply(scalar));
+    assertThrows(ClassCastException.class, () -> Surd.of(3).apply(scalar));
   }
 
   @Test
   public void testZeroExpFail() {
-    AssertFail.of(() -> Surd.of(0));
+    assertThrows(ArithmeticException.class, () -> Surd.of(0));
   }
 }

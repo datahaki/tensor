@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.Random;
@@ -12,13 +13,13 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.red.Mean;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MixtureDistributionTest {
   @Test
@@ -46,7 +47,7 @@ public class MixtureDistributionTest {
 
   @Test
   public void testFailNegative() {
-    AssertFail.of(() -> MixtureDistribution.of(Tensors.vector(1, -2, 3), //
+    assertThrows(TensorRuntimeException.class, () -> MixtureDistribution.of(Tensors.vector(1, -2, 3), //
         NormalDistribution.of(0, 1), //
         NormalDistribution.of(3, 1), //
         NormalDistribution.of(10, 1)));
@@ -54,7 +55,7 @@ public class MixtureDistributionTest {
 
   @Test
   public void testFailLength() {
-    AssertFail.of(() -> MixtureDistribution.of(Tensors.vector(1, 3), //
+    assertThrows(IllegalArgumentException.class, () -> MixtureDistribution.of(Tensors.vector(1, 3), //
         NormalDistribution.of(0, 1), //
         NormalDistribution.of(3, 1), //
         NormalDistribution.of(10, 1)));

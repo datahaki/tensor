@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -10,7 +11,6 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TensorGetTest {
   @Test
@@ -92,6 +92,6 @@ public class TensorGetTest {
   @Test
   public void testGetAllFail() {
     Tensor matrix = Array.zeros(3, 4, 5);
-    AssertFail.of(() -> matrix.Get(Tensor.ALL));
+    assertThrows(IndexOutOfBoundsException.class, () -> matrix.Get(Tensor.ALL));
   }
 }

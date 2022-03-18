@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -12,7 +13,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class NdCentersTest {
   @Test
@@ -64,6 +64,6 @@ public class NdCentersTest {
   @Test
   public void testNullFail() {
     for (NdCenters ndCenters : NdCenters.values())
-      AssertFail.of(() -> ndCenters.apply(null));
+      assertThrows(NullPointerException.class, () -> ndCenters.apply(null));
   }
 }

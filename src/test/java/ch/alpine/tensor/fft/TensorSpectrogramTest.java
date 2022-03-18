@@ -2,6 +2,7 @@
 package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.img.ColorDataGradients;
@@ -21,7 +23,6 @@ import ch.alpine.tensor.sca.win.BlackmanWindow;
 import ch.alpine.tensor.sca.win.DirichletWindow;
 import ch.alpine.tensor.sca.win.GaussianWindow;
 import ch.alpine.tensor.sca.win.ParzenWindow;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TensorSpectrogramTest {
   @Test
@@ -48,11 +49,11 @@ public class TensorSpectrogramTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> TensorSpectrogram.of(RealScalar.ONE, ParzenWindow.FUNCTION, ColorDataGradients.VISIBLE_SPECTRUM));
+    assertThrows(TensorRuntimeException.class, () -> TensorSpectrogram.of(RealScalar.ONE, ParzenWindow.FUNCTION, ColorDataGradients.VISIBLE_SPECTRUM));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> TensorSpectrogram.of(HilbertMatrix.of(32), BlackmanWindow.FUNCTION, ColorDataGradients.VISIBLE_SPECTRUM));
+    assertThrows(ClassCastException.class, () -> TensorSpectrogram.of(HilbertMatrix.of(32), BlackmanWindow.FUNCTION, ColorDataGradients.VISIBLE_SPECTRUM));
   }
 }

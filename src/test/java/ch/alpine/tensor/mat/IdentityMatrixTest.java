@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.jet.DateTimeScalar;
@@ -19,7 +21,6 @@ import ch.alpine.tensor.lie.LehmerTensor;
 import ch.alpine.tensor.mat.gr.IdempotentQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.spa.SparseArray;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class IdentityMatrixTest {
   @Test
@@ -77,39 +78,39 @@ public class IdentityMatrixTest {
     Scalar dts4 = DateTimeScalar.of(LocalDateTime.of(2003, 11, 9, 4, 14));
     Tensor matrix = Tensors.matrix(new Scalar[][] { { dts1, dts2 }, { dts3, dts4 } });
     Tensor eye = IdentityMatrix.of(matrix);
-    AssertFail.of(() -> matrix.dot(eye));
+    assertThrows(TensorRuntimeException.class, () -> matrix.dot(eye));
   }
 
   @Test
   public void testSparseFail() {
-    AssertFail.of(() -> IdentityMatrix.sparse(0));
-    AssertFail.of(() -> IdentityMatrix.sparse(-1));
+    assertThrows(IllegalArgumentException.class, () -> IdentityMatrix.sparse(0));
+    assertThrows(IllegalArgumentException.class, () -> IdentityMatrix.sparse(-1));
   }
 
   @Test
   public void testFailZero() {
-    AssertFail.of(() -> IdentityMatrix.of(0));
+    assertThrows(IllegalArgumentException.class, () -> IdentityMatrix.of(0));
   }
 
   @Test
   public void testFailNegative() {
-    AssertFail.of(() -> IdentityMatrix.of(-3));
+    assertThrows(IllegalArgumentException.class, () -> IdentityMatrix.of(-3));
   }
 
   @Test
   public void testFailOneZero() {
-    AssertFail.of(() -> DiagonalMatrix.of(0, Quantity.of(1, "s")));
+    assertThrows(IllegalArgumentException.class, () -> DiagonalMatrix.of(0, Quantity.of(1, "s")));
   }
 
   @Test
   public void testFailOneNegative() {
-    AssertFail.of(() -> DiagonalMatrix.of(-3, Quantity.of(1, "s")));
+    assertThrows(IllegalArgumentException.class, () -> DiagonalMatrix.of(-3, Quantity.of(1, "s")));
   }
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> IdentityMatrix.of(Tensors.empty()));
-    AssertFail.of(() -> IdentityMatrix.of(Tensors.fromString("{{}}")));
-    AssertFail.of(() -> IdentityMatrix.of(LehmerTensor.of(3)));
+    assertThrows(IllegalArgumentException.class, () -> IdentityMatrix.of(Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> IdentityMatrix.of(Tensors.fromString("{{}}")));
+    assertThrows(ClassCastException.class, () -> IdentityMatrix.of(LehmerTensor.of(3)));
   }
 }

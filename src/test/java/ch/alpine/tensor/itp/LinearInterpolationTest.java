@@ -3,6 +3,7 @@ package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -14,6 +15,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Range;
@@ -29,7 +31,6 @@ import ch.alpine.tensor.pdf.d.GeometricDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class LinearInterpolationTest {
   @Test
@@ -168,7 +169,7 @@ public class LinearInterpolationTest {
   @Test
   public void test0D() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.empty());
-    AssertFail.of(() -> interpolation.get(RealScalar.ZERO));
+    assertThrows(IndexOutOfBoundsException.class, () -> interpolation.get(RealScalar.ZERO));
   }
 
   @Test
@@ -194,20 +195,20 @@ public class LinearInterpolationTest {
     assertEquals(ExactScalarQ.require(interpolation.At(RealScalar.ZERO)), RealScalar.of(10));
     assertEquals(ExactScalarQ.require(interpolation.At(RationalScalar.of(1, 4))), RealScalar.of(11));
     assertEquals(ExactScalarQ.require(interpolation.At(RealScalar.ONE)), RealScalar.of(14));
-    AssertFail.of(() -> interpolation.At(RealScalar.of(-0.1)));
-    AssertFail.of(() -> interpolation.At(RealScalar.of(1.1)));
+    assertThrows(IndexOutOfBoundsException.class, () -> interpolation.At(RealScalar.of(-0.1)));
+    assertThrows(IndexOutOfBoundsException.class, () -> interpolation.At(RealScalar.of(1.1)));
   }
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> LinearInterpolation.of((Tensor) null));
-    AssertFail.of(() -> LinearInterpolation.of((Clip) null));
+    assertThrows(NullPointerException.class, () -> LinearInterpolation.of((Tensor) null));
+    assertThrows(NullPointerException.class, () -> LinearInterpolation.of((Clip) null));
   }
 
   @Test
   public void testFailScalar() {
     Interpolation interpolation = LinearInterpolation.of(RealScalar.ONE);
     assertEquals(interpolation.get(Tensors.empty()), RealScalar.ONE);
-    AssertFail.of(() -> interpolation.get(Tensors.vector(0)));
+    assertThrows(TensorRuntimeException.class, () -> interpolation.get(Tensors.vector(0)));
   }
 }

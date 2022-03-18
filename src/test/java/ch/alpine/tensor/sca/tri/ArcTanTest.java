@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
@@ -22,7 +24,6 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ArcTanTest {
   @Test
@@ -143,14 +144,14 @@ public class ArcTanTest {
 
   @Test
   public void testDoubleNaNFail() {
-    AssertFail.of(() -> ArcTan.FUNCTION.apply(ComplexScalar.of(Double.NaN, Double.NaN)));
+    assertThrows(TensorRuntimeException.class, () -> ArcTan.FUNCTION.apply(ComplexScalar.of(Double.NaN, Double.NaN)));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> ArcTan.of(Quantity.of(12, "m"), Quantity.of(4, "s")));
-    AssertFail.of(() -> ArcTan.of(Quantity.of(12, "m"), RealScalar.of(4)));
-    AssertFail.of(() -> ArcTan.of(RealScalar.of(12), Quantity.of(4, "s")));
+    assertThrows(TensorRuntimeException.class, () -> ArcTan.of(Quantity.of(12, "m"), Quantity.of(4, "s")));
+    assertThrows(TensorRuntimeException.class, () -> ArcTan.of(Quantity.of(12, "m"), RealScalar.of(4)));
+    assertThrows(TensorRuntimeException.class, () -> ArcTan.of(RealScalar.of(12), Quantity.of(4, "s")));
   }
 
   @Test
@@ -158,8 +159,8 @@ public class ArcTanTest {
     Tensor tensor = Tensors.fromString("{0.3, 1/3, 3+4*I, 1.2+3.4*I}");
     for (Tensor _x : tensor) {
       Scalar x = (Scalar) _x;
-      AssertFail.of(() -> ArcTan.of(x, GaussScalar.of(1, 7)));
-      AssertFail.of(() -> ArcTan.of(GaussScalar.of(1, 7), x));
+      assertThrows(TensorRuntimeException.class, () -> ArcTan.of(x, GaussScalar.of(1, 7)));
+      assertThrows(TensorRuntimeException.class, () -> ArcTan.of(GaussScalar.of(1, 7), x));
     }
   }
 }

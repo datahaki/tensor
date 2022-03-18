@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
@@ -21,7 +23,6 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class LanczosInterpolationTest {
   @Test
@@ -40,7 +41,7 @@ public class LanczosInterpolationTest {
   public void testGetEmpty() {
     Interpolation interpolation = LanczosInterpolation.of(LeviCivitaTensor.of(3));
     Tensor tensor = interpolation.get(Tensors.empty());
-    AssertFail.of(() -> tensor.set(t -> t.append(RealScalar.ONE), Tensor.ALL));
+    assertThrows(UnsupportedOperationException.class, () -> tensor.set(t -> t.append(RealScalar.ONE), Tensor.ALL));
   }
 
   @Test
@@ -101,13 +102,13 @@ public class LanczosInterpolationTest {
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> LanczosInterpolation.of(null, 3));
+    assertThrows(NullPointerException.class, () -> LanczosInterpolation.of(null, 3));
   }
 
   @Test
   public void testFailSemi() {
     Tensor vector = Tensors.vector(-1, 0, 3, 2, 0, -4, 2);
-    AssertFail.of(() -> LanczosInterpolation.of(vector, 0));
-    AssertFail.of(() -> LanczosInterpolation.of(vector, -1));
+    assertThrows(TensorRuntimeException.class, () -> LanczosInterpolation.of(vector, 0));
+    assertThrows(TensorRuntimeException.class, () -> LanczosInterpolation.of(vector, -1));
   }
 }

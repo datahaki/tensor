@@ -3,13 +3,13 @@ package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class NdInsideRadiusTest {
   @Test
@@ -44,7 +44,7 @@ public class NdInsideRadiusTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> new NdInsideRadius<>(null, RealScalar.ONE));
+    assertThrows(NullPointerException.class, () -> new NdInsideRadius<>(null, RealScalar.ONE));
   }
 
   public static class CallCount {

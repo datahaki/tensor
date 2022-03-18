@@ -3,6 +3,7 @@ package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class VectorAngleTest {
   @Test
@@ -70,7 +70,7 @@ public class VectorAngleTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> VectorAngle.of(HilbertMatrix.of(3), HilbertMatrix.of(3)));
+    assertThrows(ClassCastException.class, () -> VectorAngle.of(HilbertMatrix.of(3), HilbertMatrix.of(3)));
   }
 
   @Test
@@ -89,8 +89,8 @@ public class VectorAngleTest {
 
   @Test
   public void testLengthFail() {
-    AssertFail.of(() -> VectorAngle.of(Tensors.vector(1, 0, 0), Tensors.vector(1, 0)));
-    AssertFail.of(() -> VectorAngle.of(Tensors.vector(0, 0, 0), Tensors.vector(1, 0)));
-    AssertFail.of(() -> VectorAngle.of(Tensors.vector(1, 0, 0), Tensors.vector(0, 0)));
+    assertThrows(IllegalArgumentException.class, () -> VectorAngle.of(Tensors.vector(1, 0, 0), Tensors.vector(1, 0)));
+    assertThrows(IllegalArgumentException.class, () -> VectorAngle.of(Tensors.vector(0, 0, 0), Tensors.vector(1, 0)));
+    assertThrows(IllegalArgumentException.class, () -> VectorAngle.of(Tensors.vector(1, 0, 0), Tensors.vector(0, 0)));
   }
 }

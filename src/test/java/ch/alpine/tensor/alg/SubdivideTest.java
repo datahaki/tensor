@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.stream.IntStream;
 
@@ -11,6 +12,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.num.GaussScalar;
@@ -19,7 +21,6 @@ import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SubdivideTest {
   static Tensor compare(Tensor startInclusive, Tensor endInclusive, int n) {
@@ -120,22 +121,22 @@ public class SubdivideTest {
 
   @Test
   public void testZeroFail() {
-    AssertFail.of(() -> Subdivide.of(RealScalar.of(-2), RealScalar.of(2), 0));
+    assertThrows(IllegalArgumentException.class, () -> Subdivide.of(RealScalar.of(-2), RealScalar.of(2), 0));
   }
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> Subdivide.of(RealScalar.of(-2), RealScalar.of(2), -10));
+    assertThrows(IllegalArgumentException.class, () -> Subdivide.of(RealScalar.of(-2), RealScalar.of(2), -10));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> Subdivide.of(RealScalar.of(2), null, 1));
-    AssertFail.of(() -> Subdivide.of(null, RealScalar.of(2), 1));
+    assertThrows(NullPointerException.class, () -> Subdivide.of(RealScalar.of(2), null, 1));
+    assertThrows(NullPointerException.class, () -> Subdivide.of(null, RealScalar.of(2), 1));
   }
 
   @Test
   public void testGaussScalarFail() {
-    AssertFail.of(() -> Subdivide.of(GaussScalar.of(2, 7), GaussScalar.of(1, 7), 2));
+    assertThrows(TensorRuntimeException.class, () -> Subdivide.of(GaussScalar.of(2, 7), GaussScalar.of(1, 7), 2));
   }
 }

@@ -4,6 +4,7 @@ package ch.alpine.tensor.io;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
@@ -18,11 +19,10 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.itp.Interpolation;
 import ch.alpine.tensor.itp.LinearInterpolation;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ResourceDataTest {
   private static void _checkColorscheme(Interpolation interpolation) {
-    AssertFail.of(() -> interpolation.get(Tensors.vector(256)));
+    assertThrows(IndexOutOfBoundsException.class, () -> interpolation.get(Tensors.vector(256)));
   }
 
   @Test

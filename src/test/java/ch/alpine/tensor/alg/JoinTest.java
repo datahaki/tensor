@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -9,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class JoinTest {
   @Test
@@ -113,16 +114,16 @@ public class JoinTest {
   @Test
   public void testFailScalar() {
     // in Mathematica Join that involves scalars is not defined!
-    AssertFail.of(() -> Join.of(RealScalar.of(2)));
+    assertThrows(TensorRuntimeException.class, () -> Join.of(RealScalar.of(2)));
   }
 
   @Test
   public void testFailScalarTwo() {
-    AssertFail.of(() -> Join.of(RealScalar.of(2), RealScalar.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> Join.of(RealScalar.of(2), RealScalar.of(3)));
   }
 
   @Test
   public void testFailVectorScalar() {
-    AssertFail.of(() -> Join.of(Tensors.vector(0, 1, 2), RealScalar.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> Join.of(Tensors.vector(0, 1, 2), RealScalar.of(3)));
   }
 }

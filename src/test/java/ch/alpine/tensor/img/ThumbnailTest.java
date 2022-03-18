@@ -3,6 +3,7 @@ package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
@@ -19,7 +20,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.ResourceData;
-import ch.alpine.tensor.usr.AssertFail;
 import ch.alpine.tensor.usr.TestFile;
 
 public class ThumbnailTest {
@@ -60,6 +60,6 @@ public class ThumbnailTest {
   @Test
   public void testAuGray1() {
     Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
-    AssertFail.of(() -> Thumbnail.of(tensor, -3));
+    assertThrows(IllegalArgumentException.class, () -> Thumbnail.of(tensor, -3));
   }
 }

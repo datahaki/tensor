@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.win;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -10,10 +11,10 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class HannWindowTest {
   @Test
@@ -71,11 +72,11 @@ public class HannWindowTest {
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> HannWindow.FUNCTION.apply(Quantity.of(2, "s")));
+    assertThrows(TensorRuntimeException.class, () -> HannWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> HannWindow.of(null));
+    assertThrows(NullPointerException.class, () -> HannWindow.of(null));
   }
 }

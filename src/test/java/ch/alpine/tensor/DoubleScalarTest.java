@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,6 @@ import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class DoubleScalarTest {
   @Test
@@ -127,16 +127,16 @@ public class DoubleScalarTest {
   @Test
   public void testNaN() {
     DoubleScalar nan = (DoubleScalar) DoubleScalar.INDETERMINATE;
-    AssertFail.of(() -> nan.isNonNegative());
-    AssertFail.of(() -> nan.signum());
+    assertThrows(TensorRuntimeException.class, () -> nan.isNonNegative());
+    assertThrows(TensorRuntimeException.class, () -> nan.signum());
   }
 
   @Test
   public void testCompareFail() {
     Scalar a = RealScalar.of(7.2);
     Scalar b = GaussScalar.of(3, 5);
-    AssertFail.of(() -> Max.of(a, b));
-    AssertFail.of(() -> Max.of(b, a));
+    assertThrows(TensorRuntimeException.class, () -> Max.of(a, b));
+    assertThrows(TensorRuntimeException.class, () -> Max.of(b, a));
   }
 
   @Test

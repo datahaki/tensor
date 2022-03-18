@@ -3,6 +3,7 @@ package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -10,9 +11,9 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class CyclesTest {
   @Test
@@ -87,28 +88,28 @@ public class CyclesTest {
   public void testReplaceFail() {
     Cycles cycles = Cycles.of(Tensors.fromString("{{2, 3, 4, 6}}"));
     assertEquals(cycles.replace(0), 0);
-    AssertFail.of(() -> cycles.replace(-1));
+    assertThrows(IllegalArgumentException.class, () -> cycles.replace(-1));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Cycles.of(Tensors.fromString("{3}")));
+    assertThrows(TensorRuntimeException.class, () -> Cycles.of(Tensors.fromString("{3}")));
   }
 
   @Test
   public void testDuplicateFail() {
-    AssertFail.of(() -> Cycles.of(Tensors.fromString("{{5, 5}, {3}, {2, 2, 2}}")));
+    assertThrows(TensorRuntimeException.class, () -> Cycles.of(Tensors.fromString("{{5, 5}, {3}, {2, 2, 2}}")));
   }
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> Cycles.of(Tensors.fromString("{{-3}}")));
-    AssertFail.of(() -> Cycles.of(Tensors.fromString("{{3, -0.1}}")));
+    assertThrows(TensorRuntimeException.class, () -> Cycles.of(Tensors.fromString("{{-3}}")));
+    assertThrows(TensorRuntimeException.class, () -> Cycles.of(Tensors.fromString("{{3, -0.1}}")));
   }
 
   @Test
   public void testPowerFail() {
     Cycles cycles = Cycles.of(Tensors.fromString("{{1, 20}, {4, 10, 19, 6, 18}, {5, 9}, {7, 14, 13}}"));
-    AssertFail.of(() -> cycles.power(Pi.HALF));
+    assertThrows(TensorRuntimeException.class, () -> cycles.power(Pi.HALF));
   }
 }

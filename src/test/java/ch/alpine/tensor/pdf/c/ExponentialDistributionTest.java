@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
@@ -38,7 +40,6 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ExponentialDistributionTest {
   @Test
@@ -101,8 +102,8 @@ public class ExponentialDistributionTest {
 
   @Test
   public void testFailL() {
-    AssertFail.of(() -> ExponentialDistribution.of(RealScalar.ZERO));
-    AssertFail.of(() -> ExponentialDistribution.of(RealScalar.of(-0.1)));
+    assertThrows(TensorRuntimeException.class, () -> ExponentialDistribution.of(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> ExponentialDistribution.of(RealScalar.of(-0.1)));
   }
 
   @Test
@@ -197,7 +198,7 @@ public class ExponentialDistributionTest {
   @Test
   public void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(ExponentialDistribution.of(Quantity.of(3, "")));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test

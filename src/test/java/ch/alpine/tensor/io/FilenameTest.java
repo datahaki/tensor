@@ -2,6 +2,7 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,7 +21,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 import ch.alpine.tensor.usr.TestFile;
 
 public class FilenameTest {
@@ -48,24 +48,24 @@ public class FilenameTest {
   @Test
   public void testFailSpacing() {
     Filename filename = new Filename("dir/title.bmp ");
-    AssertFail.of(() -> filename.extension());
+    assertThrows(IllegalArgumentException.class, () -> filename.extension());
   }
 
   @Test
   public void testFailExtension() {
     Filename filename = new Filename("dir/title.ext");
-    AssertFail.of(() -> filename.extension());
+    assertThrows(IllegalArgumentException.class, () -> filename.extension());
   }
 
   @Test
   public void testFailNoExt() {
     Filename filename = new Filename("dir/mybmp");
-    AssertFail.of(() -> filename.extension());
+    assertThrows(IllegalArgumentException.class, () -> filename.extension());
   }
 
   @Test
   public void testFailTruncate() {
     Filename filename = new Filename("dir/mybmp");
-    AssertFail.of(() -> filename.truncate());
+    assertThrows(StringIndexOutOfBoundsException.class, () -> filename.truncate());
   }
 }

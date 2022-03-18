@@ -2,17 +2,18 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class UnitStepTest {
   @Test
@@ -38,12 +39,12 @@ public class UnitStepTest {
   @Test
   public void testQuaternionFail() {
     Scalar scalar = Quaternion.of(RealScalar.of(-4), Tensors.vector(1, 2, 3));
-    AssertFail.of(() -> UnitStep.FUNCTION.apply(scalar));
+    assertThrows(ClassCastException.class, () -> UnitStep.FUNCTION.apply(scalar));
   }
 
   @Test
   public void testStringFail() {
     Scalar scalar = StringScalar.of("abc");
-    AssertFail.of(() -> UnitStep.FUNCTION.apply(scalar));
+    assertThrows(TensorRuntimeException.class, () -> UnitStep.FUNCTION.apply(scalar));
   }
 }

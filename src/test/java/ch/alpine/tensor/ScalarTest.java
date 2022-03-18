@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ScalarTest {
   @Test
@@ -59,7 +59,7 @@ public class ScalarTest {
   public void testFails() {
     Scalar a = DoubleScalar.of(3);
     Scalar b = DoubleScalar.of(5);
-    AssertFail.of(() -> a.dot(b));
+    assertThrows(TensorRuntimeException.class, () -> a.dot(b));
   }
 
   @Test

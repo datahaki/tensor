@@ -2,8 +2,10 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +14,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.TensorRank;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class LehmerTensorTest {
   @Test
@@ -32,7 +33,7 @@ public class LehmerTensorTest {
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> LehmerTensor.of(0));
-    AssertFail.of(() -> LehmerTensor.of(-1));
+    assertThrows(NoSuchElementException.class, () -> LehmerTensor.of(0));
+    assertThrows(IllegalArgumentException.class, () -> LehmerTensor.of(-1));
   }
 }

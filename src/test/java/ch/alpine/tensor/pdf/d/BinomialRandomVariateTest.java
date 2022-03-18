@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -22,7 +23,6 @@ import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class BinomialRandomVariateTest {
   @Test
@@ -67,11 +67,11 @@ public class BinomialRandomVariateTest {
 
   @Test
   public void testPDFFail() {
-    AssertFail.of(() -> PDF.of(BinomialDistribution.of(1200, DoubleScalar.of(0.5))));
+    assertThrows(IllegalArgumentException.class, () -> PDF.of(BinomialDistribution.of(1200, DoubleScalar.of(0.5))));
   }
 
   @Test
   public void testCDFFail() {
-    AssertFail.of(() -> CDF.of(BinomialDistribution.of(1200, DoubleScalar.of(0.5))));
+    assertThrows(IllegalArgumentException.class, () -> CDF.of(BinomialDistribution.of(1200, DoubleScalar.of(0.5))));
   }
 }

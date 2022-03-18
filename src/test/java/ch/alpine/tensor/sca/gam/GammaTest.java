@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca.gam;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 
@@ -15,11 +16,11 @@ import ch.alpine.tensor.NumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class GammaTest {
   @Test
@@ -70,12 +71,12 @@ public class GammaTest {
 
   @Test
   public void testLargeNegativeInteger() {
-    AssertFail.of(() -> Gamma.of(RealScalar.of(-100000000000L)));
+    assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(-100000000000L)));
   }
 
   @Test
   public void testLargeNegativeIntegerDouble() {
-    AssertFail.of(() -> Gamma.of(DecimalScalar.of(new BigDecimal("-100000000000.0"))));
+    assertThrows(TensorRuntimeException.class, () -> Gamma.of(DecimalScalar.of(new BigDecimal("-100000000000.0"))));
   }
 
   @Test
@@ -132,28 +133,28 @@ public class GammaTest {
 
   @Test
   public void testInt0Fail() {
-    AssertFail.of(() -> Gamma.of(RealScalar.of(0)));
+    assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(0)));
   }
 
   @Test
   public void testIntN1Fail() {
-    AssertFail.of(() -> Gamma.of(RealScalar.of(-1)));
+    assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(-1)));
   }
 
   @Test
   public void testDouble0Fail() {
-    AssertFail.of(() -> Gamma.of(RealScalar.of(0.0)));
+    assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(0.0)));
   }
 
   @Test
   public void testDoubleN1Fail() {
-    AssertFail.of(() -> Gamma.of(RealScalar.of(-1.0)));
+    assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(-1.0)));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> Gamma.of(Quantity.of(3, "m*s")));
-    AssertFail.of(() -> Gamma.of(Quantity.of(-2, "m"))); // <- fails for the wrong reason
-    AssertFail.of(() -> Gamma.of(Quantity.of(-2.12, "m^2")));
+    assertThrows(TensorRuntimeException.class, () -> Gamma.of(Quantity.of(3, "m*s")));
+    assertThrows(TensorRuntimeException.class, () -> Gamma.of(Quantity.of(-2, "m"))); // <- fails for the wrong reason
+    assertThrows(TensorRuntimeException.class, () -> Gamma.of(Quantity.of(-2.12, "m^2")));
   }
 }

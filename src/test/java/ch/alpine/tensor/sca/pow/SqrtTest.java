@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.pow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
@@ -20,7 +22,6 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Rationalize;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.AbsSquared;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SqrtTest {
   @Test
@@ -118,6 +119,6 @@ public class SqrtTest {
   @Test
   public void testFail() {
     Scalar scalar = StringScalar.of("string");
-    AssertFail.of(() -> Sqrt.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Sqrt.of(scalar));
   }
 }

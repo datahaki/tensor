@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -27,7 +29,6 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class GompertzMakehamDistributionTest {
   @Test
@@ -98,7 +99,7 @@ public class GompertzMakehamDistributionTest {
   public void testVarianceFail() {
     GompertzMakehamDistribution distribution = //
         (GompertzMakehamDistribution) GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
-    AssertFail.of(() -> distribution.variance());
+    assertThrows(UnsupportedOperationException.class, () -> distribution.variance());
   }
 
   @Test
@@ -113,8 +114,8 @@ public class GompertzMakehamDistributionTest {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(Quantity.of(0.0, "m")), Quantity.of(0.03, "m^-1"));
-    AssertFail.of(() -> pdf.at(Quantity.of(-1, "m^2")));
-    AssertFail.of(() -> pdf.at(Quantity.of(+1, "m^2")));
+    assertThrows(TensorRuntimeException.class, () -> pdf.at(Quantity.of(-1, "m^2")));
+    assertThrows(TensorRuntimeException.class, () -> pdf.at(Quantity.of(+1, "m^2")));
   }
 
   @Test
@@ -124,8 +125,8 @@ public class GompertzMakehamDistributionTest {
     Tolerance.CHOP.requireClose(cdf.p_lessEquals(Quantity.of(+0.1, "m")), RealScalar.of(0.003040820706232905));
     assertEquals(cdf.p_lessEquals(Quantity.of(+0.0, "m")), RealScalar.ZERO);
     assertEquals(cdf.p_lessEquals(Quantity.of(-0.1, "m")), RealScalar.ZERO);
-    AssertFail.of(() -> cdf.p_lessEquals(Quantity.of(-1, "m^2")));
-    AssertFail.of(() -> cdf.p_lessEquals(Quantity.of(+1, "m^2")));
+    assertThrows(TensorRuntimeException.class, () -> cdf.p_lessEquals(Quantity.of(-1, "m^2")));
+    assertThrows(TensorRuntimeException.class, () -> cdf.p_lessEquals(Quantity.of(+1, "m^2")));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar quantile = inverseCDF.quantile(RationalScalar.of(1, 8));
     Tolerance.CHOP.requireClose(quantile, Scalars.fromString("2.8271544195740326[m]"));
@@ -136,14 +137,14 @@ public class GompertzMakehamDistributionTest {
     Distribution distribution = //
         GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> GompertzMakehamDistribution.of(RealScalar.of(0), RealScalar.of(0.2)));
-    AssertFail.of(() -> GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0)));
-    AssertFail.of(() -> GompertzMakehamDistribution.of(RealScalar.of(1e-300), RealScalar.of(1e-300)));
+    assertThrows(TensorRuntimeException.class, () -> GompertzMakehamDistribution.of(RealScalar.of(0), RealScalar.of(0.2)));
+    assertThrows(TensorRuntimeException.class, () -> GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0)));
+    assertThrows(TensorRuntimeException.class, () -> GompertzMakehamDistribution.of(RealScalar.of(1e-300), RealScalar.of(1e-300)));
   }
 }

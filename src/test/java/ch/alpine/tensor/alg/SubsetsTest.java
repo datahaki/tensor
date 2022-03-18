@@ -2,18 +2,19 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class SubsetsTest {
   @Test
@@ -77,16 +78,16 @@ public class SubsetsTest {
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> Subsets.of(Tensors.vector(2, 3, 4), -1));
+    assertThrows(IndexOutOfBoundsException.class, () -> Subsets.of(Tensors.vector(2, 3, 4), -1));
   }
 
   @Test
   public void testNegative2Fail() {
-    AssertFail.of(() -> Subsets.of(Tensors.empty(), -1));
+    assertThrows(IndexOutOfBoundsException.class, () -> Subsets.of(Tensors.empty(), -1));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Subsets.of(Pi.HALF, 2));
+    assertThrows(TensorRuntimeException.class, () -> Subsets.of(Pi.HALF, 2));
   }
 }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashMap;
@@ -22,7 +23,6 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.MergeIllegal;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class UnitTest {
   public static Scalar requireNonZero(Scalar scalar) {
@@ -99,7 +99,7 @@ public class UnitTest {
   public void testMultiplyFail() {
     Unit kg1 = Unit.of("kg");
     Scalar q = Quantity.of(3, "m");
-    AssertFail.of(() -> kg1.multiply(q));
+    assertThrows(TensorRuntimeException.class, () -> kg1.multiply(q));
   }
 
   @Test
@@ -114,14 +114,14 @@ public class UnitTest {
     map.put("some", GaussScalar.of(1, 7));
     unit(map);
     map.put("zero", GaussScalar.of(0, 7));
-    AssertFail.of(() -> unit(map));
+    assertThrows(TensorRuntimeException.class, () -> unit(map));
   }
 
   @Test
   public void testQuantityExponentFail() {
     Map<String, Scalar> map = new HashMap<>();
     map.put("some", Quantity.of(1, "r"));
-    AssertFail.of(() -> unit(map));
+    assertThrows(TensorRuntimeException.class, () -> unit(map));
   }
 
   // https://tinyurl.com/y44sj2et
@@ -146,23 +146,23 @@ public class UnitTest {
     map1.put("b", RealScalar.ONE.negate());
     Map<String, Scalar> map2 = new HashMap<>();
     map2.put("a", RealScalar.TWO);
-    AssertFail.of(() -> Stream.concat(map1.entrySet().stream(), map2.entrySet().stream()).collect(COLLECTOR));
+    assertThrows(IllegalStateException.class, () -> Stream.concat(map1.entrySet().stream(), map2.entrySet().stream()).collect(COLLECTOR));
   }
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> Unit.of(" m >"));
-    AssertFail.of(() -> Unit.of("| m "));
-    AssertFail.of(() -> Unit.of("|"));
-    AssertFail.of(() -> Unit.of("^"));
-    AssertFail.of(() -> Unit.of("unknown-seeManual"));
-    AssertFail.of(() -> Unit.of("a+b"));
-    AssertFail.of(() -> Unit.of("b=c"));
+    assertThrows(IllegalArgumentException.class, () -> Unit.of(" m >"));
+    assertThrows(IllegalArgumentException.class, () -> Unit.of("| m "));
+    assertThrows(IllegalArgumentException.class, () -> Unit.of("|"));
+    assertThrows(IllegalArgumentException.class, () -> Unit.of("^"));
+    assertThrows(IllegalArgumentException.class, () -> Unit.of("unknown-seeManual"));
+    assertThrows(IllegalArgumentException.class, () -> Unit.of("a+b"));
+    assertThrows(IllegalArgumentException.class, () -> Unit.of("b=c"));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> Unit.of((String) null));
-    AssertFail.of(() -> unit((Map<String, Scalar>) null));
+    assertThrows(NullPointerException.class, () -> Unit.of((String) null));
+    assertThrows(NullPointerException.class, () -> unit((Map<String, Scalar>) null));
   }
 }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -16,13 +17,13 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.ArcTan;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class HypotTest {
   private static void _checkPair(double x, double y) {
@@ -122,7 +123,7 @@ public class HypotTest {
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> Hypot.ofVector(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Hypot.ofVector(RealScalar.ONE));
   }
 
   @Test
@@ -178,6 +179,6 @@ public class HypotTest {
 
   @Test
   public void testMixedUnitFail() {
-    AssertFail.of(() -> Hypot.of(Quantity.of(2, "m"), Quantity.of(3, "s")));
+    assertThrows(TensorRuntimeException.class, () -> Hypot.of(Quantity.of(2, "m"), Quantity.of(3, "s")));
   }
 }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.cd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.TensorMap;
@@ -44,7 +46,6 @@ import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class CholeskyDecompositionTest {
   static CholeskyDecomposition checkDecomp(Tensor matrix) {
@@ -80,9 +81,9 @@ public class CholeskyDecompositionTest {
       Tensor actual = choleskyDecomposition.solve(b);
       assertEquals(actual, expect);
     }
-    AssertFail.of(() -> choleskyDecomposition.solve(Tensors.vector(1, 2, 3, 4)));
-    AssertFail.of(() -> choleskyDecomposition.solve(Tensors.vector(1, 2)));
-    AssertFail.of(() -> choleskyDecomposition.solve(RealScalar.ONE));
+    assertThrows(IllegalArgumentException.class, () -> choleskyDecomposition.solve(Tensors.vector(1, 2, 3, 4)));
+    assertThrows(IllegalArgumentException.class, () -> choleskyDecomposition.solve(Tensors.vector(1, 2)));
+    assertThrows(IllegalArgumentException.class, () -> choleskyDecomposition.solve(RealScalar.ONE));
   }
 
   @Test
@@ -121,12 +122,12 @@ public class CholeskyDecompositionTest {
 
   @Test
   public void testFail1() {
-    AssertFail.of(() -> checkDecomp(Tensors.fromString("{{4, 2}, {1, 4}}")));
+    assertThrows(TensorRuntimeException.class, () -> checkDecomp(Tensors.fromString("{{4, 2}, {1, 4}}")));
   }
 
   @Test
   public void testFail2() {
-    AssertFail.of(() -> checkDecomp(Tensors.fromString("{{4, I}, {I, 4}}")));
+    assertThrows(TensorRuntimeException.class, () -> checkDecomp(Tensors.fromString("{{4, I}, {I, 4}}")));
   }
 
   @Test
@@ -256,7 +257,7 @@ public class CholeskyDecompositionTest {
       Tensor matrix = m1.dot(m2);
       assertEquals(MatrixRank.of(matrix), r);
       {
-        AssertFail.of(() -> PseudoInverse.usingCholesky(matrix));
+        assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingCholesky(matrix));
         Tensor ls1 = LeastSquares.of(matrix, br);
         Tensor ls2 = PseudoInverse.of(matrix).dot(br);
         Tolerance.CHOP.requireClose(ls1, ls2);
@@ -264,7 +265,7 @@ public class CholeskyDecompositionTest {
       {
         Tensor m = Transpose.of(matrix);
         Tensor b = RandomVariate.of(distribution, _m);
-        AssertFail.of(() -> PseudoInverse.usingCholesky(m));
+        assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingCholesky(m));
         Tensor ls1 = LeastSquares.of(m, b);
         Tensor ls2 = PseudoInverse.of(m).dot(b);
         Tolerance.CHOP.requireClose(ls1, ls2);
@@ -275,6 +276,6 @@ public class CholeskyDecompositionTest {
   @Test
   public void testRectFail() {
     Tensor matrix = Tensors.fromString("{{10, I}}");
-    AssertFail.of(() -> CholeskyDecomposition.of(matrix));
+    assertThrows(IllegalArgumentException.class, () -> CholeskyDecomposition.of(matrix));
   }
 }

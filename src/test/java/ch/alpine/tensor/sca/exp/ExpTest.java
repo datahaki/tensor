@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.exp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -13,12 +14,12 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ExpTest {
   @Test
@@ -60,12 +61,12 @@ public class ExpTest {
   @Test
   public void testFailQuantity() {
     Scalar scalar = Quantity.of(2, "m");
-    AssertFail.of(() -> Exp.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Exp.of(scalar));
   }
 
   @Test
   public void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
-    AssertFail.of(() -> Exp.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Exp.of(scalar));
   }
 }

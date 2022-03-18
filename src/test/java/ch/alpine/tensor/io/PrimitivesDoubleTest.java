@@ -2,6 +2,7 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.DoubleBuffer;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class PrimitivesDoubleTest {
   @Test
@@ -67,6 +67,6 @@ public class PrimitivesDoubleTest {
 
   @Test
   public void testToDoubleArray2Dscalar() {
-    AssertFail.of(() -> Primitives.toDoubleArray2D(RealScalar.of(123.456)));
+    assertThrows(NegativeArraySizeException.class, () -> Primitives.toDoubleArray2D(RealScalar.of(123.456)));
   }
 }

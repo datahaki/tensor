@@ -1,11 +1,11 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MergeIllegalTest {
   @Test
@@ -15,6 +15,6 @@ public class MergeIllegalTest {
 
   @Test
   public void testCollisionFail() {
-    AssertFail.of(() -> MergeIllegal.operator().apply(null, null));
+    assertThrows(IllegalStateException.class, () -> MergeIllegal.operator().apply(null, null));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
@@ -13,6 +14,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
@@ -22,7 +24,6 @@ import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class BernoulliDistributionTest {
   @Test
@@ -84,19 +85,19 @@ public class BernoulliDistributionTest {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertEquals(inverseCDF.quantile(RealScalar.of(0.50)), RealScalar.ZERO);
     assertEquals(inverseCDF.quantile(RealScalar.of(0.51)), RealScalar.ONE);
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(NullPointerException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
   public void testFailP() {
-    AssertFail.of(() -> BernoulliDistribution.of(RationalScalar.of(-1, 3)));
-    AssertFail.of(() -> BernoulliDistribution.of(RationalScalar.of(4, 3)));
+    assertThrows(TensorRuntimeException.class, () -> BernoulliDistribution.of(RationalScalar.of(-1, 3)));
+    assertThrows(TensorRuntimeException.class, () -> BernoulliDistribution.of(RationalScalar.of(4, 3)));
   }
 
   @Test
   public void testFailPNumber() {
-    AssertFail.of(() -> BernoulliDistribution.of(-1e-10));
-    AssertFail.of(() -> BernoulliDistribution.of(1.0001));
+    assertThrows(TensorRuntimeException.class, () -> BernoulliDistribution.of(-1e-10));
+    assertThrows(TensorRuntimeException.class, () -> BernoulliDistribution.of(1.0001));
   }
 }

@@ -2,15 +2,16 @@
 package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class DegreeTest {
   private final Unit turns = Unit.of("turns");
@@ -43,7 +44,7 @@ public class DegreeTest {
 
   @Test
   public void testStringScalarFail() {
-    AssertFail.of(() -> Degree.of(StringScalar.of("abc")));
+    assertThrows(TensorRuntimeException.class, () -> Degree.of(StringScalar.of("abc")));
   }
 
   @Test

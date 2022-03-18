@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +18,6 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class CentralMomentTest {
   @Test
@@ -37,7 +37,7 @@ public class CentralMomentTest {
     ExactScalarQ.require(scalar);
     assertEquals(scalar, RationalScalar.of(326, 729));
     assertEquals(CentralMoment.of(distribution, 2), Variance.of(distribution));
-    AssertFail.of(() -> CentralMoment.of(distribution, -1));
+    assertThrows(IllegalArgumentException.class, () -> CentralMoment.of(distribution, -1));
   }
 
   @Test
@@ -57,11 +57,11 @@ public class CentralMomentTest {
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> CentralMoment.of(Tensors.empty(), 2));
+    assertThrows(ArithmeticException.class, () -> CentralMoment.of(Tensors.empty(), 2));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> CentralMoment.of(HilbertMatrix.of(2, 3), RealScalar.of(2)));
+    assertThrows(ClassCastException.class, () -> CentralMoment.of(HilbertMatrix.of(2, 3), RealScalar.of(2)));
   }
 }

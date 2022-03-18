@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -26,7 +27,6 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TruncatedDistributionTest {
   @Test
@@ -122,12 +122,12 @@ public class TruncatedDistributionTest {
   @Test
   public void testFail() {
     Clip clip = Clips.interval(10, 11);
-    AssertFail.of(() -> TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), clip));
+    assertThrows(IllegalArgumentException.class, () -> TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), clip));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), null));
-    AssertFail.of(() -> TruncatedDistribution.of(null, Clips.interval(10, 11)));
+    assertThrows(NullPointerException.class, () -> TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), null));
+    assertThrows(NullPointerException.class, () -> TruncatedDistribution.of(null, Clips.interval(10, 11)));
   }
 }

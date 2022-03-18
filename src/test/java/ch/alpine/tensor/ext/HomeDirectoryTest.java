@@ -3,13 +3,12 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.AssertFail;
 
 public class HomeDirectoryTest {
   @Test
@@ -61,6 +60,6 @@ public class HomeDirectoryTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> HomeDirectory.file("Doc", null, "some.txt"));
+    assertThrows(NullPointerException.class, () -> HomeDirectory.file("Doc", null, "some.txt"));
   }
 }

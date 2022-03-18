@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.ex;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Modifier;
 import java.util.Random;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
@@ -25,7 +27,6 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MatrixLog2Test {
   private static void _checkExpLog(Tensor matrix) {
@@ -138,7 +139,7 @@ public class MatrixLog2Test {
   public void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 2, 3);
-    AssertFail.of(() -> MatrixLog.of(matrix));
+    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(matrix));
   }
 
   @Test

@@ -3,12 +3,12 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class UnitQTest {
   @Test
@@ -32,7 +32,7 @@ public class UnitQTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> UnitQ.isOne(null));
+    assertThrows(NullPointerException.class, () -> UnitQ.isOne(null));
   }
 
   @Test

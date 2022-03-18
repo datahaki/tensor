@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.ex;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
@@ -17,6 +18,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
@@ -36,7 +38,6 @@ import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class MatrixExpTest {
   private static final Random RANDOM = new Random();
@@ -210,17 +211,17 @@ public class MatrixExpTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> MatrixExp.of(Array.zeros(4, 3)));
-    AssertFail.of(() -> MatrixExp.of(Array.zeros(3, 4)));
+    assertThrows(IllegalArgumentException.class, () -> MatrixExp.of(Array.zeros(4, 3)));
+    assertThrows(IllegalArgumentException.class, () -> MatrixExp.of(Array.zeros(3, 4)));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> MatrixExp.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> MatrixExp.of(RealScalar.ONE));
   }
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> MatrixExp.of(Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> MatrixExp.of(Tensors.empty()));
   }
 }

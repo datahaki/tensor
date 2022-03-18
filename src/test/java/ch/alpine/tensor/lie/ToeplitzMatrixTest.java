@@ -2,12 +2,14 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -17,7 +19,6 @@ import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.mat.re.RowReduce;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ToeplitzMatrixTest {
   @Test
@@ -56,21 +57,21 @@ public class ToeplitzMatrixTest {
 
   @Test
   public void testFailEven() {
-    AssertFail.of(() -> ToeplitzMatrix.of(Tensors.vector(1, 2)));
+    assertThrows(TensorRuntimeException.class, () -> ToeplitzMatrix.of(Tensors.vector(1, 2)));
   }
 
   @Test
   public void testFailEmpty() {
-    AssertFail.of(() -> ToeplitzMatrix.of(Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> ToeplitzMatrix.of(Tensors.empty()));
   }
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> ToeplitzMatrix.of(RealScalar.of(5)));
+    assertThrows(TensorRuntimeException.class, () -> ToeplitzMatrix.of(RealScalar.of(5)));
   }
 
   @Test
   public void testFailMatrix() {
-    AssertFail.of(() -> ToeplitzMatrix.of(HilbertMatrix.of(5)));
+    assertThrows(ClassCastException.class, () -> ToeplitzMatrix.of(HilbertMatrix.of(5)));
   }
 }

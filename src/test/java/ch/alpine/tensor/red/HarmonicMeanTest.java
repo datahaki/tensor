@@ -2,15 +2,16 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class HarmonicMeanTest {
   @Test
@@ -23,21 +24,21 @@ public class HarmonicMeanTest {
 
   @Test
   public void testEmpty() {
-    AssertFail.of(() -> HarmonicMean.ofVector(Tensors.empty()));
+    assertThrows(ArithmeticException.class, () -> HarmonicMean.ofVector(Tensors.empty()));
   }
 
   @Test
   public void testZero() {
-    AssertFail.of(() -> HarmonicMean.ofVector(Tensors.vector(3, 0, 2)));
+    assertThrows(ArithmeticException.class, () -> HarmonicMean.ofVector(Tensors.vector(3, 0, 2)));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> HarmonicMean.ofVector(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> HarmonicMean.ofVector(RealScalar.ONE));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> HarmonicMean.ofVector(HilbertMatrix.of(4)));
+    assertThrows(ClassCastException.class, () -> HarmonicMean.ofVector(HilbertMatrix.of(4)));
   }
 }

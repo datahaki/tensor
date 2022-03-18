@@ -2,6 +2,7 @@
 package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class TestHelperTest {
   Tensor tensor = Tensors.fromString("{{1,0,3,0,0,7},{0,0,0,0,0,9},{0,2,0,0,4,0},{0,0,0,0,0,0},{0,0,0,8,0,1}}");
@@ -38,8 +38,8 @@ public class TestHelperTest {
   }
 
   private void _checkBlockFail(List<Integer> ofs, List<Integer> len) {
-    AssertFail.of(() -> tensor.block(ofs, len));
-    AssertFail.of(() -> sparse.block(ofs, len));
+    assertThrows(Exception.class, () -> tensor.block(ofs, len));
+    assertThrows(Exception.class, () -> sparse.block(ofs, len));
   }
 
   @Test
@@ -65,8 +65,8 @@ public class TestHelperTest {
   }
 
   private void _checkExtractFail(int head, int tail) {
-    AssertFail.of(() -> tensor.extract(head, tail));
-    AssertFail.of(() -> sparse.extract(head, tail));
+    assertThrows(Exception.class, () -> tensor.extract(head, tail));
+    assertThrows(Exception.class, () -> sparse.extract(head, tail));
   }
 
   @Test

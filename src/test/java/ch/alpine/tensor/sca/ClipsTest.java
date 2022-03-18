@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -12,10 +13,10 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ClipsTest {
   @Test
@@ -139,7 +140,7 @@ public class ClipsTest {
 
   @Test
   public void testIntersectionFail() {
-    AssertFail.of(() -> Clips.intersection(Clips.interval(2, 3), Clips.interval(5, 10)));
+    assertThrows(TensorRuntimeException.class, () -> Clips.intersection(Clips.interval(2, 3), Clips.interval(5, 10)));
   }
 
   @Test
@@ -153,16 +154,16 @@ public class ClipsTest {
   public void testCoverFail0() {
     Clip c1 = Clips.positive(Quantity.of(0, "m"));
     Clip c2 = Clips.positive(Quantity.of(0, "s"));
-    AssertFail.of(() -> Clips.cover(c1, c2));
-    AssertFail.of(() -> Clips.intersection(c1, c2));
+    assertThrows(TensorRuntimeException.class, () -> Clips.cover(c1, c2));
+    assertThrows(TensorRuntimeException.class, () -> Clips.intersection(c1, c2));
   }
 
   @Test
   public void testCoverFail1() {
     Clip c1 = Clips.positive(Quantity.of(1, "m"));
     Clip c2 = Clips.positive(Quantity.of(2, "s"));
-    AssertFail.of(() -> Clips.cover(c1, c2));
-    AssertFail.of(() -> Clips.intersection(c1, c2));
+    assertThrows(TensorRuntimeException.class, () -> Clips.cover(c1, c2));
+    assertThrows(TensorRuntimeException.class, () -> Clips.intersection(c1, c2));
   }
 
   @Test
@@ -174,44 +175,44 @@ public class ClipsTest {
 
   @Test
   public void testPositiveFail() {
-    AssertFail.of(() -> Clips.positive(Quantity.of(-1, "kg")));
+    assertThrows(TensorRuntimeException.class, () -> Clips.positive(Quantity.of(-1, "kg")));
   }
 
   @Test
   public void testNaNFail() {
-    AssertFail.of(() -> Clips.interval(DoubleScalar.INDETERMINATE, DoubleScalar.INDETERMINATE));
-    AssertFail.of(() -> Clips.interval(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
-    AssertFail.of(() -> Clips.interval(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> Clips.interval(DoubleScalar.INDETERMINATE, DoubleScalar.INDETERMINATE));
+    assertThrows(TensorRuntimeException.class, () -> Clips.interval(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
+    assertThrows(TensorRuntimeException.class, () -> Clips.interval(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
   }
 
   @Test
   public void testAbsoluteFail() {
-    AssertFail.of(() -> Clips.absolute(Quantity.of(-1, "kg")));
+    assertThrows(TensorRuntimeException.class, () -> Clips.absolute(Quantity.of(-1, "kg")));
   }
 
   @Test
   public void testInsideFail() {
-    AssertFail.of(() -> Clips.unit().isInside(Quantity.of(0.5, "m")));
+    assertThrows(TensorRuntimeException.class, () -> Clips.unit().isInside(Quantity.of(0.5, "m")));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> Clips.unit().apply(Quantity.of(-5, "m")));
-    AssertFail.of(() -> Clips.absoluteOne().apply(Quantity.of(-5, "m")));
+    assertThrows(TensorRuntimeException.class, () -> Clips.unit().apply(Quantity.of(-5, "m")));
+    assertThrows(TensorRuntimeException.class, () -> Clips.absoluteOne().apply(Quantity.of(-5, "m")));
   }
 
   @Test
   public void testQuantityMixedZero() {
-    AssertFail.of(() -> Clips.interval(Quantity.of(0, "m"), Quantity.of(0, "")));
+    assertThrows(TensorRuntimeException.class, () -> Clips.interval(Quantity.of(0, "m"), Quantity.of(0, "")));
   }
 
   @Test
   public void testQuantityMixedUnitsFail() {
-    AssertFail.of(() -> Clips.interval(Quantity.of(2, "m"), Quantity.of(3, "kg")));
+    assertThrows(TensorRuntimeException.class, () -> Clips.interval(Quantity.of(2, "m"), Quantity.of(3, "kg")));
   }
 
   @Test
   public void testComplexFail() {
-    AssertFail.of(() -> Clips.absolute(ComplexScalar.I));
+    assertThrows(ClassCastException.class, () -> Clips.absolute(ComplexScalar.I));
   }
 }
