@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
@@ -25,31 +27,28 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
 
 public class ColorDataGradientsTest {
-  @Test
-  public void testDimensions() {
-    for (ColorDataGradient colorDataGradient : ColorDataGradients.values()) {
-      assertEquals(Dimensions.of(colorDataGradient.apply(RealScalar.ZERO)), Arrays.asList(4));
-      assertEquals(Dimensions.of(colorDataGradient.apply(RealScalar.ONE)), Arrays.asList(4));
-    }
+  @ParameterizedTest
+  @EnumSource(ColorDataGradients.class)
+  public void testDimensions(ColorDataGradient colorDataGradient) {
+    assertEquals(Dimensions.of(colorDataGradient.apply(RealScalar.ZERO)), Arrays.asList(4));
+    assertEquals(Dimensions.of(colorDataGradient.apply(RealScalar.ONE)), Arrays.asList(4));
   }
 
-  @Test
-  public void testQuantity() {
+  @ParameterizedTest
+  @EnumSource(ColorDataGradients.class)
+  public void testQuantity(ColorDataGradient colorDataGradient) {
     Scalar scalar = Quantity.of(Double.POSITIVE_INFINITY, "s");
-    for (ColorDataGradient colorDataGradient : ColorDataGradients.values()) {
-      Chop.NONE.requireAllZero(colorDataGradient.apply(scalar));
-    }
+    Chop.NONE.requireAllZero(colorDataGradient.apply(scalar));
   }
 
-  @Test
-  public void testUnmodified() {
+  @ParameterizedTest
+  @EnumSource(ColorDataGradients.class)
+  public void testUnmodified(ColorDataGradient colorDataGradient) {
     Scalar nan = DoubleScalar.INDETERMINATE;
-    for (ColorDataGradient colorDataGradient : ColorDataGradients.values()) {
-      Tensor copy = colorDataGradient.apply(nan);
-      colorDataGradient.apply(nan).set(RealScalar.ONE::add, 1);
-      assertEquals(copy, colorDataGradient.apply(nan));
-      Chop.NONE.requireAllZero(colorDataGradient.apply(nan));
-    }
+    Tensor copy = colorDataGradient.apply(nan);
+    colorDataGradient.apply(nan).set(RealScalar.ONE::add, 1);
+    assertEquals(copy, colorDataGradient.apply(nan));
+    Chop.NONE.requireAllZero(colorDataGradient.apply(nan));
   }
 
   @Test
@@ -63,10 +62,10 @@ public class ColorDataGradientsTest {
     assertEquals(rgba2.get(3), RealScalar.of(127.5));
   }
 
-  @Test
-  public void testDeriveWithOpacityAll() throws ClassNotFoundException, IOException {
-    for (ColorDataGradient colorDataGradient : ColorDataGradients.values())
-      Serialization.copy(colorDataGradient.deriveWithOpacity(RealScalar.of(0.2)));
+  @ParameterizedTest
+  @EnumSource(ColorDataGradients.class)
+  public void testDeriveWithOpacityAll(ColorDataGradient colorDataGradient) throws ClassNotFoundException, IOException {
+    Serialization.copy(colorDataGradient.deriveWithOpacity(RealScalar.of(0.2)));
   }
 
   @Test
@@ -79,7 +78,7 @@ public class ColorDataGradientsTest {
         ++count;
       }
     }
-    assertTrue(28 < count);
+    assertTrue(33 <= count);
   }
 
   @Test
@@ -95,19 +94,17 @@ public class ColorDataGradientsTest {
     assertTrue(Objects.isNull(ColorDataGradients.GRAYSCALE.getTableRgba()));
   }
 
-  @Test
-  public void testFail() {
-    for (ColorDataGradient colorDataGradient : ColorDataGradients.values()) {
-      // ColorDataGradients cdg = (ColorDataGradients) colorDataGradient;
-      colorDataGradient.apply(RealScalar.of(0.5));
-      colorDataGradient.apply(RealScalar.of(0.99));
-      if (colorDataGradient.equals(ColorDataGradients.HUE)) {
-        // hue is implemented periodically [0, 1) == [1, 2) == ...
-      } else {
-        AssertFail.of(() -> colorDataGradient.apply(RealScalar.of(-0.1)));
-        AssertFail.of(() -> colorDataGradient.apply(RealScalar.of(1.1)));
-        AssertFail.of(() -> colorDataGradient.apply(ComplexScalar.of(0.5, 0.5)));
-      }
+  @ParameterizedTest
+  @EnumSource(ColorDataGradients.class)
+  public void testFail(ColorDataGradient colorDataGradient) {
+    colorDataGradient.apply(RealScalar.of(0.5));
+    colorDataGradient.apply(RealScalar.of(0.99));
+    if (colorDataGradient.equals(ColorDataGradients.HUE)) {
+      // hue is implemented periodically [0, 1) == [1, 2) == ...
+    } else {
+      AssertFail.of(() -> colorDataGradient.apply(RealScalar.of(-0.1)));
+      AssertFail.of(() -> colorDataGradient.apply(RealScalar.of(1.1)));
+      AssertFail.of(() -> colorDataGradient.apply(ComplexScalar.of(0.5, 0.5)));
     }
   }
 }

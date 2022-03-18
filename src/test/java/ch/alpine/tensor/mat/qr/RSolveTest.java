@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -81,16 +83,15 @@ public class RSolveTest {
     Tolerance.CHOP.requireClose(expect, actual);
   }
 
-  @Test
-  public void testQuantity2() {
+  @ParameterizedTest
+  @EnumSource(Pivots.class)
+  public void testQuantity2(Pivot pivot) {
     Tensor matrix = UpperTriangularize.of(Tensors.fromString( //
         "{{1[m^2], 2[m*rad], 3[kg*m]}, {4[m*rad], 2[rad^2], 2[kg*rad]}, {5[kg*m], 1[kg*rad], 7[kg^2]}}"));
     final Tensor eye = IdentityMatrix.of(3).unmodifiable();
     Tensor sol = RSolve.of(matrix, new int[] { 0, 1, 2 }, eye);
-    for (Pivot pivot : Pivots.values()) {
-      Tensor inv = LinearSolve.of(matrix, eye, pivot);
-      assertEquals(inv, sol);
-    }
+    Tensor inv = LinearSolve.of(matrix, eye, pivot);
+    assertEquals(inv, sol);
   }
 
   @Test

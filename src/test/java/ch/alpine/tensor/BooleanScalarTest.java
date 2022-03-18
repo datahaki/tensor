@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
@@ -19,7 +20,6 @@ import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class BooleanScalarTest {
   @Test
@@ -46,7 +46,7 @@ public class BooleanScalarTest {
   @Test
   public void testReciprocal() {
     assertEquals(BooleanScalar.TRUE.reciprocal(), BooleanScalar.TRUE);
-    AssertFail.of(() -> BooleanScalar.FALSE.reciprocal());
+    assertThrows(TensorRuntimeException.class, () -> BooleanScalar.FALSE.reciprocal());
   }
 
   @Test

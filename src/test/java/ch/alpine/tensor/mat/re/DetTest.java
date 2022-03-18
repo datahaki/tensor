@@ -8,6 +8,8 @@ import java.math.BigInteger;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -168,13 +170,12 @@ public class DetTest {
     assertEquals(Det.of(matrix), ComplexScalar.of(421, 120));
   }
 
-  @Test
-  public void testSingular() {
-    for (Pivot pivot : Pivots.values()) {
-      assertEquals(Det.of(Array.zeros(5, 5), pivot), RealScalar.ZERO);
-      AssertFail.of(() -> Det.of(Array.zeros(2, 5), pivot));
-      AssertFail.of(() -> Det.of(Array.zeros(5, 2), pivot));
-    }
+  @ParameterizedTest
+  @EnumSource(Pivots.class)
+  public void testSingular(Pivot pivot) {
+    assertEquals(Det.of(Array.zeros(5, 5), pivot), RealScalar.ZERO);
+    AssertFail.of(() -> Det.of(Array.zeros(2, 5), pivot));
+    AssertFail.of(() -> Det.of(Array.zeros(5, 2), pivot));
   }
 
   @Test

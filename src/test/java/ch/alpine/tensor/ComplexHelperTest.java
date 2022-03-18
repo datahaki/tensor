@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +14,6 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ComplexHelperTest {
   @Test
@@ -96,7 +96,7 @@ public class ComplexHelperTest {
     Scalar c = ComplexScalar.of(2, 3);
     Scalar q = Quantity.of(0, "V");
     // Mathematica 12 does not resolve this
-    AssertFail.of(() -> c.add(q));
+    assertThrows(TensorRuntimeException.class, () -> c.add(q));
   }
 
   @Test
@@ -160,14 +160,14 @@ public class ComplexHelperTest {
   public void testPlusQuantityFail() {
     Scalar c = DeterminateScalarQ.require(ComplexScalar.of(2, 3));
     Scalar q = DeterminateScalarQ.require(Quantity.of(1, "V"));
-    AssertFail.of(() -> c.add(q));
+    assertThrows(TensorRuntimeException.class, () -> c.add(q));
   }
 
   @Test
   public void testQuantityFail() {
     Scalar c = DeterminateScalarQ.require(Quantity.of(3, "m"));
     Scalar r = DeterminateScalarQ.require(Pi.VALUE);
-    AssertFail.of(() -> ComplexScalar.of(c, r));
-    AssertFail.of(() -> ComplexScalar.of(r, c));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(c, r));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(r, c));
   }
 }

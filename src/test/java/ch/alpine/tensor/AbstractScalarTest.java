@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -11,7 +12,6 @@ import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class AbstractScalarTest {
   @Test
@@ -47,42 +47,42 @@ public class AbstractScalarTest {
   @Test
   public void testGet1Fail() {
     assertEquals(Pi.VALUE.get(), Pi.VALUE);
-    AssertFail.of(() -> Pi.VALUE.get(Arrays.asList(0)));
-    AssertFail.of(() -> Pi.VALUE.get(Arrays.asList(0, 0)));
-    AssertFail.of(() -> Pi.VALUE.get(Arrays.asList(-1)));
-    AssertFail.of(() -> Pi.VALUE.get(Arrays.asList(-1, 0)));
-    AssertFail.of(() -> RealScalar.ONE.Get(1));
-    AssertFail.of(() -> RealScalar.ONE.get(new int[] { 1 }));
+    assertThrows(TensorRuntimeException.class, () -> Pi.VALUE.get(Arrays.asList(0)));
+    assertThrows(TensorRuntimeException.class, () -> Pi.VALUE.get(Arrays.asList(0, 0)));
+    assertThrows(TensorRuntimeException.class, () -> Pi.VALUE.get(Arrays.asList(-1)));
+    assertThrows(TensorRuntimeException.class, () -> Pi.VALUE.get(Arrays.asList(-1, 0)));
+    assertThrows(TensorRuntimeException.class, () -> RealScalar.ONE.Get(1));
+    assertThrows(TensorRuntimeException.class, () -> RealScalar.ONE.get(new int[] { 1 }));
   }
 
   @Test
   public void testGet2Fail() {
-    AssertFail.of(() -> RationalScalar.HALF.Get(1, 4));
-    AssertFail.of(() -> Pi.TWO.get(new int[] { 1, 2 }));
+    assertThrows(TensorRuntimeException.class, () -> RationalScalar.HALF.Get(1, 4));
+    assertThrows(TensorRuntimeException.class, () -> Pi.TWO.get(new int[] { 1, 2 }));
   }
 
   @Test
   public void testSetFail() {
-    AssertFail.of(() -> RealScalar.ONE.set(RealScalar.ZERO));
-    AssertFail.of(() -> RealScalar.ONE.set(s -> RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> RealScalar.ONE.set(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> RealScalar.ONE.set(s -> RealScalar.ZERO));
   }
 
   @Test
   public void testSetListFail() {
-    AssertFail.of(() -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] {})));
-    AssertFail.of(() -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] { 2 })));
-    AssertFail.of(() -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] {})));
-    AssertFail.of(() -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] { 2 })));
+    assertThrows(TensorRuntimeException.class, () -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] {})));
+    assertThrows(TensorRuntimeException.class, () -> Pi.VALUE.set(RealScalar.ZERO, Integers.asList(new int[] { 2 })));
+    assertThrows(TensorRuntimeException.class, () -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] {})));
+    assertThrows(TensorRuntimeException.class, () -> Pi.VALUE.set(RealScalar.ZERO::add, Integers.asList(new int[] { 2 })));
   }
 
   @Test
   public void testAppendFail() {
-    AssertFail.of(() -> RealScalar.ONE.append(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> RealScalar.ONE.append(RealScalar.ZERO));
   }
 
   @Test
   public void testExtractFail() {
-    AssertFail.of(() -> RealScalar.ONE.extract(1, 2));
+    assertThrows(TensorRuntimeException.class, () -> RealScalar.ONE.extract(1, 2));
   }
 
   @Test
@@ -92,6 +92,6 @@ public class AbstractScalarTest {
 
   @Test
   public void testBlockFail() {
-    AssertFail.of(() -> RealScalar.ONE.block(Arrays.asList(1), Arrays.asList(1)));
+    assertThrows(TensorRuntimeException.class, () -> RealScalar.ONE.block(Arrays.asList(1), Arrays.asList(1)));
   }
 }

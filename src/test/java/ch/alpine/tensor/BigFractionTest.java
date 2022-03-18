@@ -3,13 +3,12 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.AssertFail;
 
 public class BigFractionTest {
   @Test
@@ -24,7 +23,7 @@ public class BigFractionTest {
   public void testDivide() {
     BigFraction num = BigFraction.of(1, 1);
     BigFraction den = BigFraction.of(0, 1);
-    AssertFail.of(() -> num.divide(den));
+    assertThrows(ArithmeticException.class, () -> num.divide(den));
   }
 
   @Test
@@ -49,7 +48,7 @@ public class BigFractionTest {
 
   @Test
   public void testDenZero() {
-    AssertFail.of(() -> BigFraction.of(3, 0));
+    assertThrows(ArithmeticException.class, () -> BigFraction.of(3, 0));
   }
 
   @Test

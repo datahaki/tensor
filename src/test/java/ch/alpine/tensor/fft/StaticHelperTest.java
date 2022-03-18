@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -22,14 +24,14 @@ import ch.alpine.tensor.sca.win.WindowFunctions;
 import ch.alpine.tensor.usr.AssertFail;
 
 public class StaticHelperTest {
-  @Test
-  public void testSimple() {
+  @ParameterizedTest
+  @EnumSource(WindowFunctions.class)
+  public void testSimple(WindowFunctions windowFunctions) {
     int[] lengths = new int[] { 1, 2, 3, 4, 10, 32 };
-    for (WindowFunctions windowFunctions : WindowFunctions.values())
-      for (int windowLength : lengths) {
-        Tensor weights = StaticHelper.weights(windowLength, windowFunctions.get());
-        Tolerance.CHOP.requireClose(Total.of(weights), RealScalar.of(windowLength));
-      }
+    for (int windowLength : lengths) {
+      Tensor weights = StaticHelper.weights(windowLength, windowFunctions.get());
+      Tolerance.CHOP.requireClose(Total.of(weights), RealScalar.of(windowLength));
+    }
   }
 
   @Test

@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -50,15 +51,15 @@ public class ComplexScalarTest {
 
   @Test
   public void testConstructFail() {
-    AssertFail.of(() -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
-    AssertFail.of(() -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> ComplexScalar.of(RealScalar.ONE, null));
-    AssertFail.of(() -> ComplexScalar.of(null, RealScalar.ONE));
-    AssertFail.of(() -> ComplexScalar.of(null, RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(RealScalar.ONE, null));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(null, RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(null, RealScalar.ZERO));
   }
 
   @Test

@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.Color;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -33,24 +35,22 @@ public class ColorDataListsTest {
     assertEquals(colorDataIndexed.apply(Quantity.of(2, "s")), Array.zeros(4));
   }
 
-  @Test
-  public void testInfinityTransparentCyclic() {
-    for (ColorDataLists colorDataLists : ColorDataLists.values()) {
-      ColorDataIndexed colorDataIndexed = colorDataLists.cyclic();
-      assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
-      assertEquals(colorDataIndexed.apply(DoubleScalar.NEGATIVE_INFINITY), Array.zeros(4));
-      assertEquals(colorDataIndexed.apply(DoubleScalar.POSITIVE_INFINITY), Array.zeros(4));
-    }
+  @ParameterizedTest
+  @EnumSource(ColorDataLists.class)
+  public void testInfinityTransparentCyclic(ColorDataLists colorDataLists) {
+    ColorDataIndexed colorDataIndexed = colorDataLists.cyclic();
+    assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
+    assertEquals(colorDataIndexed.apply(DoubleScalar.NEGATIVE_INFINITY), Array.zeros(4));
+    assertEquals(colorDataIndexed.apply(DoubleScalar.POSITIVE_INFINITY), Array.zeros(4));
   }
 
-  @Test
-  public void testInfinityTransparentStrict() {
-    for (ColorDataLists colorDataLists : ColorDataLists.values()) {
-      ColorDataIndexed colorDataIndexed = colorDataLists.strict();
-      assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
-      assertEquals(colorDataIndexed.apply(DoubleScalar.NEGATIVE_INFINITY), Array.zeros(4));
-      assertEquals(colorDataIndexed.apply(DoubleScalar.POSITIVE_INFINITY), Array.zeros(4));
-    }
+  @ParameterizedTest
+  @EnumSource(ColorDataLists.class)
+  public void testInfinityTransparentStrict(ColorDataLists colorDataLists) {
+    ColorDataIndexed colorDataIndexed = colorDataLists.strict();
+    assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
+    assertEquals(colorDataIndexed.apply(DoubleScalar.NEGATIVE_INFINITY), Array.zeros(4));
+    assertEquals(colorDataIndexed.apply(DoubleScalar.POSITIVE_INFINITY), Array.zeros(4));
   }
 
   @Test
@@ -73,22 +73,20 @@ public class ColorDataListsTest {
   public void testSize() {
     ColorDataLists colorDataLists = ColorDataLists._097;
     assertEquals(colorDataLists.cyclic().length(), 16);
-  }
-
-  @Test
-  public void testSize2() {
     assertTrue(21 <= ColorDataLists.values().length);
-    for (ColorDataLists colorDataLists : ColorDataLists.values()) {
-      assertTrue(1 < colorDataLists.cyclic().length());
-      assertTrue(colorDataLists.cyclic().length() < 100);
-    }
   }
 
-  @Test
-  public void testSize3() {
-    for (ColorDataLists colorDataLists : ColorDataLists.values()) {
-      assertTrue(1 < colorDataLists.strict().length());
-      assertTrue(colorDataLists.strict().length() < 100);
-    }
+  @ParameterizedTest
+  @EnumSource(ColorDataLists.class)
+  public void testSizeCyclic(ColorDataLists colorDataLists) {
+    assertTrue(1 < colorDataLists.cyclic().length());
+    assertTrue(colorDataLists.cyclic().length() < 100);
+  }
+
+  @ParameterizedTest
+  @EnumSource(ColorDataLists.class)
+  public void testSizeStrict(ColorDataLists colorDataLists) {
+    assertTrue(1 < colorDataLists.strict().length());
+    assertTrue(colorDataLists.strict().length() < 100);
   }
 }

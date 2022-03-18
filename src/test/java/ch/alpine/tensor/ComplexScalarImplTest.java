@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -28,7 +29,6 @@ import ch.alpine.tensor.sca.Real;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
 public class ComplexScalarImplTest {
   @Test
@@ -56,10 +56,10 @@ public class ComplexScalarImplTest {
   public void testFalseConstruct() {
     Scalar c1 = ComplexScalar.of(3, -4);
     Scalar c2 = ComplexScalar.of(-2, 9);
-    AssertFail.of(() -> ComplexScalar.of(c1, c2));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(c1, c2));
     Scalar r1 = RealScalar.of(7);
-    AssertFail.of(() -> ComplexScalar.of(r1, c2));
-    AssertFail.of(() -> ComplexScalar.of(c1, r1));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(r1, c2));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(c1, r1));
   }
 
   @Test
@@ -268,8 +268,8 @@ public class ComplexScalarImplTest {
   public void testAddQuantityFail() {
     Scalar s1 = Quantity.of(1, "m");
     Scalar s2 = ComplexScalar.of(2, 3);
-    AssertFail.of(() -> s1.add(s2));
-    AssertFail.of(() -> s2.add(s1));
+    assertThrows(TensorRuntimeException.class, () -> s1.add(s2));
+    assertThrows(TensorRuntimeException.class, () -> s2.add(s1));
   }
 
   @Test

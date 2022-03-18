@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -37,13 +39,12 @@ public class PeriodogramArrayTest {
     Tolerance.CHOP.requireClose(tensor, result);
   }
 
-  @Test
-  public void testWindow() throws ClassNotFoundException, IOException {
-    for (WindowFunctions windowFunctions : WindowFunctions.values()) {
-      TensorUnaryOperator tuo = Serialization.copy(PeriodogramArray.of(4, 1, windowFunctions.get()));
-      Tensor res = tuo.apply(Tensors.vector(0, 1, 0, -1, 0, 1, 0, -1));
-      assertEquals(res.length(), 4);
-    }
+  @ParameterizedTest
+  @EnumSource(WindowFunctions.class)
+  public void testWindow(WindowFunctions windowFunctions) throws ClassNotFoundException, IOException {
+    TensorUnaryOperator tuo = Serialization.copy(PeriodogramArray.of(4, 1, windowFunctions.get()));
+    Tensor res = tuo.apply(Tensors.vector(0, 1, 0, -1, 0, 1, 0, -1));
+    assertEquals(res.length(), 4);
   }
 
   @Test
