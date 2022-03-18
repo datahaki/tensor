@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.sca.erf;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -10,9 +14,9 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class ErfTest extends TestCase {
+public class ErfTest {
+  @Test
   public void testMathematica() {
     Tensor xs = Subdivide.of(-2, 2., 20);
     double[] values = new double[] { //
@@ -32,11 +36,13 @@ public class ErfTest extends TestCase {
     }
   }
 
+  @Test
   public void testLimits() {
     assertEquals(Erf.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY), RealScalar.ONE);
     assertEquals(Erf.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), RealScalar.ONE.negate());
   }
 
+  @Test
   public void testMathematica2() {
     Tensor xs = Subdivide.of(1.5, 5., 20);
     double[] values = new double[] { //
@@ -51,6 +57,7 @@ public class ErfTest extends TestCase {
     Chop._07.requireClose(Erf.of(xs), Tensors.vectorDouble(values));
   }
 
+  @Test
   public void testComplex() {
     Scalar scalar = ComplexScalar.of(1.2, 1.4);
     Scalar expect = ComplexScalar.of(1.294669945215742, -0.4089868112498779); // Mathematica
@@ -58,6 +65,7 @@ public class ErfTest extends TestCase {
     Tolerance.CHOP.requireClose(expect, result);
   }
 
+  @Test
   public void testComplexNeg() {
     Scalar scalar = ComplexScalar.of(-1.2, 1.4);
     Scalar expect = ComplexScalar.of(-1.294669945215742, -0.4089868112498779); // Mathematica

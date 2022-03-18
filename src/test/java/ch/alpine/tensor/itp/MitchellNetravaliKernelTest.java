@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -11,9 +15,9 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class MitchellNetravaliKernelTest extends TestCase {
+public class MitchellNetravaliKernelTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(MitchellNetravaliKernel.of( //
         RationalScalar.of(1, 5), //
@@ -24,6 +28,7 @@ public class MitchellNetravaliKernelTest extends TestCase {
     assertEquals(s12, RationalScalar.of(-21, 640));
   }
 
+  @Test
   public void testDirect() {
     ScalarUnaryOperator mnk = MitchellNetravaliKernel.of(0.2, 1 / 3.0);
     Tolerance.CHOP.requireClose(mnk.apply(RealScalar.of(0.4)), RealScalar.of(0.6581333333333335));

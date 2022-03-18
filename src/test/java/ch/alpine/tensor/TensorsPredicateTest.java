@@ -1,9 +1,13 @@
 // code by jph
 package ch.alpine.tensor;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class TensorsPredicateTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+public class TensorsPredicateTest {
+  @Test
   public void testIsEmpty() {
     assertFalse(Tensors.isEmpty(RealScalar.ONE));
     assertTrue(Tensors.isEmpty(Tensors.empty()));
@@ -11,6 +15,7 @@ public class TensorsPredicateTest extends TestCase {
     assertFalse(Tensors.isEmpty(Tensors.vector(1, 2, 3)));
   }
 
+  @Test
   public void testNonEmpty() {
     assertTrue(Tensors.nonEmpty(RealScalar.ONE));
     assertFalse(Tensors.nonEmpty(Tensors.empty()));
@@ -18,6 +23,7 @@ public class TensorsPredicateTest extends TestCase {
     assertTrue(Tensors.nonEmpty(Tensors.vector(1, 2, 3)));
   }
 
+  @Test
   public void testIsUnmodifiable() {
     Tensor canwrite = Tensors.vector(1, 2, 3);
     Tensor readonly = canwrite.unmodifiable();

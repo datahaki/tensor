@@ -1,6 +1,9 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
@@ -11,6 +14,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -18,9 +23,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class RandomPermutationTest extends TestCase {
+public class RandomPermutationTest {
+  @Test
   public void testSimple() {
     for (int count = 0; count < 10; ++count) {
       int[] sigma = RandomPermutation.of(count);
@@ -30,12 +35,14 @@ public class RandomPermutationTest extends TestCase {
     Integers.requirePermutation(RandomPermutation.of(13));
   }
 
+  @Test
   public void testCycles() {
     Cycles cycles1 = RandomPermutation.cycles(6);
     Cycles cycles2 = RandomPermutation.cycles(9);
     cycles1.combine(cycles2);
   }
 
+  @Test
   public void testComplete2() {
     Random random = new Random(345);
     Set<Cycles> set = new TreeSet<>();
@@ -45,6 +52,7 @@ public class RandomPermutationTest extends TestCase {
     assertEquals(set.toString(), "[{}, {{0, 1}}]");
   }
 
+  @Test
   public void testComplete3() {
     Random random = new Random(345);
     Set<Cycles> set = new HashSet<>();
@@ -53,6 +61,7 @@ public class RandomPermutationTest extends TestCase {
     assertEquals(set.size(), 6);
   }
 
+  @Test
   public void testComplete4() {
     Random random = new Random(345);
     Set<Cycles> set = new HashSet<>();
@@ -61,6 +70,7 @@ public class RandomPermutationTest extends TestCase {
     assertEquals(set.size(), 24);
   }
 
+  @Test
   public void testTally() {
     Random random = new Random(2);
     Map<Cycles, Long> map = Stream.generate(() -> RandomPermutation.cycles(3, random)) //
@@ -70,10 +80,12 @@ public class RandomPermutationTest extends TestCase {
     assertTrue(Scalars.lessThan(scalar, RealScalar.of(5)));
   }
 
+  @Test
   public void testCycles0() {
     assertEquals(RandomPermutation.cycles(0), Cycles.identity());
   }
 
+  @Test
   public void testSameCycles() {
     int seed = new Random().nextInt();
     Cycles c1 = RandomPermutation.cycles(123, new Random(seed));
@@ -81,6 +93,7 @@ public class RandomPermutationTest extends TestCase {
     assertEquals(c1, c2);
   }
 
+  @Test
   public void testSameArrays() {
     int seed = new Random().nextInt();
     int[] c1 = RandomPermutation.of(123, new Random(seed));
@@ -88,6 +101,7 @@ public class RandomPermutationTest extends TestCase {
     assertTrue(Arrays.equals(c1, c2));
   }
 
+  @Test
   public void testFails() {
     AssertFail.of(() -> RandomPermutation.cycles(-1));
     AssertFail.of(() -> RandomPermutation.of(-1));

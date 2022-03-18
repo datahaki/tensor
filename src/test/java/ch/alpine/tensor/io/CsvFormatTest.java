@@ -1,11 +1,15 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -16,9 +20,9 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Partition;
 import ch.alpine.tensor.ext.ReadLine;
 import ch.alpine.tensor.ext.Serialization;
-import junit.framework.TestCase;
 
-public class CsvFormatTest extends TestCase {
+public class CsvFormatTest {
+  @Test
   public void testNonRect() throws Exception {
     Tensor s = Tensors.empty();
     s.append(Tensors.of(StringScalar.of("ksah   g d fkhjg")));
@@ -38,6 +42,7 @@ public class CsvFormatTest extends TestCase {
     }
   }
 
+  @Test
   public void testParse() {
     Tensor t = XsvFormat.CSV.parse(Arrays.asList("10, 200, 3", "", "78", "-3, 2.3").stream());
     Tensor r = Tensors.fromString("{{10, 200, 3}, {}, {78}, {-3, 2.3}}");
@@ -45,6 +50,7 @@ public class CsvFormatTest extends TestCase {
     assertEquals(t.toString(), r.toString());
   }
 
+  @Test
   public void testParse2() {
     Tensor t = XsvFormat.CSV.parse(Arrays.asList("10, {200, 3}", "78", "-3, 2.3").stream());
     Tensor r = Tensors.fromString("{{10, {200, 3}}, {78}, {-3, 2.3}}");
@@ -52,6 +58,7 @@ public class CsvFormatTest extends TestCase {
     assertEquals(t.toString(), r.toString());
   }
 
+  @Test
   public void testSpacing() {
     Tensor r = Tensors.fromString("{{10, {200, 3}}, {},  {78}, {-3, 2.3, 1-3*I}}");
     List<String> list = XsvFormat.CSV.of(r).collect(Collectors.toList());
@@ -61,6 +68,7 @@ public class CsvFormatTest extends TestCase {
     assertEquals(list.get(3), "-3,2.3,1-3*I");
   }
 
+  @Test
   public void testVector() {
     Tensor r = Tensors.fromString("{123, 456}");
     List<String> list = XsvFormat.CSV.of(r).collect(Collectors.toList());
@@ -68,6 +76,7 @@ public class CsvFormatTest extends TestCase {
     assertEquals(Partition.of(r, 1), s);
   }
 
+  @Test
   public void testScalar() {
     Tensor r = Scalars.fromString("123");
     List<String> list = XsvFormat.CSV.of(r).collect(Collectors.toList());
@@ -75,6 +84,7 @@ public class CsvFormatTest extends TestCase {
     assertEquals(Tensors.of(Tensors.of(r)), s);
   }
 
+  @Test
   public void testLibreofficeCalcFile() throws Exception {
     try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
       Stream<String> stream = ReadLine.of(inputStream);
@@ -83,6 +93,7 @@ public class CsvFormatTest extends TestCase {
     }
   }
 
+  @Test
   public void testMatlabFile() throws Exception {
     try (InputStream inputStream = getClass().getResource("/io/matlab_3x5.csv").openStream()) {
       Stream<String> stream = ReadLine.of(inputStream);
@@ -91,6 +102,7 @@ public class CsvFormatTest extends TestCase {
     }
   }
 
+  @Test
   public void testGeditFile() throws Exception {
     try (InputStream inputStream = getClass().getResource("/io/gedit_mixed.csv").openStream()) {
       Stream<String> stream = ReadLine.of(inputStream);
@@ -99,6 +111,7 @@ public class CsvFormatTest extends TestCase {
     }
   }
 
+  @Test
   public void testStrict() {
     Tensor matrix = Tensors.of(Tensors.of( //
         StringScalar.of("PUT"), //
@@ -109,6 +122,7 @@ public class CsvFormatTest extends TestCase {
     assertEquals(strict.toString(), "{{\"PUT\", 0.5, 5, 1.25}}");
   }
 
+  @Test
   public void testStringWithComma() {
     Tensor row = Tensors.of(StringTensor.vector("123", "[ , ]", "a"));
     Stream<String> stream = XsvFormat.CSV.of(row);
@@ -117,6 +131,7 @@ public class CsvFormatTest extends TestCase {
     assertEquals(list.get(0), "123,[ , ],a");
   }
 
+  @Test
   public void testStringStrict() {
     Tensor row = Tensors.of(StringTensor.vector("123", "[ , ]", "a"));
     Stream<String> stream = XsvFormat.CSV.of(row.map(CsvFormat.strict()));
@@ -125,6 +140,7 @@ public class CsvFormatTest extends TestCase {
     assertEquals(list.get(0), "\"123\",\"[ , ]\",\"a\"");
   }
 
+  @Test
   public void testVectorWithComma() {
     Tensor row = StringTensor.vector(" 2  ,  3 ", "[ , ]", "` ;  ;  ,   ;`");
     Stream<String> stream = XsvFormat.CSV.of(row);

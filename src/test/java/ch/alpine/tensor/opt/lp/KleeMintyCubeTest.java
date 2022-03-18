@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.opt.lp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
@@ -8,9 +13,8 @@ import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class KleeMintyCubeTest extends TestCase {
+public class KleeMintyCubeTest {
   private static void _callKlee(int n) {
     KleeMintyCube kleeMintyCube = KleeMintyCube.of(n);
     assertTrue(kleeMintyCube.linearProgram.isCanonicDual());
@@ -32,6 +36,7 @@ public class KleeMintyCubeTest extends TestCase {
     assertEquals(x, kleeMintyCube.x);
   }
 
+  @Test
   public void testKleeMinty() {
     for (int n = 1; n <= 5; ++n) {
       _callKlee(n);
@@ -39,12 +44,14 @@ public class KleeMintyCubeTest extends TestCase {
     }
   }
 
+  @Test
   public void testSmallCorners() {
     KleeMintyCube kleeMintyCube = KleeMintyCube.of(3);
     Tensor sol = SimplexCorners.of(kleeMintyCube.linearProgram);
     assertEquals(sol, Tensors.fromString("{{0, 0, 125}}"));
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> KleeMintyCube.of(0));
     AssertFail.of(() -> KleeMintyCube.of(-1));

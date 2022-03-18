@@ -1,6 +1,12 @@
 // code by jph
 package ch.alpine.tensor.mat.cd;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -39,9 +45,8 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class CholeskyDecompositionTest extends TestCase {
+public class CholeskyDecompositionTest {
   static CholeskyDecomposition checkDecomp(Tensor matrix) {
     int n = matrix.length();
     CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix);
@@ -51,6 +56,7 @@ public class CholeskyDecompositionTest extends TestCase {
     return choleskyDecomposition;
   }
 
+  @Test
   public void testRosetta1() {
     // +5 0 0
     // +3 3 0
@@ -79,6 +85,7 @@ public class CholeskyDecompositionTest extends TestCase {
     AssertFail.of(() -> choleskyDecomposition.solve(RealScalar.ONE));
   }
 
+  @Test
   public void testWikiEn() throws Exception {
     CholeskyDecomposition cd = //
         checkDecomp(Tensors.matrix(new Number[][] { //
@@ -97,6 +104,7 @@ public class CholeskyDecompositionTest extends TestCase {
     Chop.NONE.requireAllZero(UpperTriangularize.of(cd.getL(), 1));
   }
 
+  @Test
   public void testMathematica1() {
     checkDecomp(Tensors.matrix(new Number[][] { //
         { 2, 1 }, //
@@ -104,28 +112,34 @@ public class CholeskyDecompositionTest extends TestCase {
     }));
   }
 
+  @Test
   public void testMathematica2() {
     checkDecomp(Tensors.fromString("{{4, 3, 2, 1}, {3, 4, 3, 2}, {2, 3, 4, 3}, {+1, 2, 3, 4}}"));
     checkDecomp(Tensors.fromString("{{4, 3, 2, I}, {3, 4, 3, 2}, {2, 3, 4, 3}, {-I, 2, 3, 4}}"));
     checkDecomp(Tensors.fromString("{{4, 3, 2, I}, {3, 4, 3, 2}, {2, 3, 4, 3}, {-I, 2, 3, 0}}"));
   }
 
+  @Test
   public void testFail1() {
     AssertFail.of(() -> checkDecomp(Tensors.fromString("{{4, 2}, {1, 4}}")));
   }
 
+  @Test
   public void testFail2() {
     AssertFail.of(() -> checkDecomp(Tensors.fromString("{{4, I}, {I, 4}}")));
   }
 
+  @Test
   public void testHilbert1() {
     checkDecomp(HilbertMatrix.of(10));
   }
 
+  @Test
   public void testHilbertN1() {
     checkDecomp(N.DOUBLE.of(HilbertMatrix.of(16)));
   }
 
+  @Test
   public void testDiag() {
     checkDecomp(DiagonalMatrix.of(1, -2, 3, -4));
     checkDecomp(DiagonalMatrix.of(0, -2, 3, -4));
@@ -136,16 +150,19 @@ public class CholeskyDecompositionTest extends TestCase {
     checkDecomp(DiagonalMatrix.of(1, 0, 3, 0));
   }
 
+  @Test
   public void testZeros1() {
     checkDecomp(Array.zeros(1, 1));
     checkDecomp(Array.zeros(5, 5));
   }
 
+  @Test
   public void testComplex() {
     checkDecomp(Tensors.fromString("{{10, I}, {-I, 10}}"));
     checkDecomp(N.DOUBLE.of(Tensors.fromString("{{10, I}, {-I, 10}}")));
   }
 
+  @Test
   public void testQuantity1() {
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(2, "m");
@@ -163,6 +180,7 @@ public class CholeskyDecompositionTest extends TestCase {
     assertFalse(NegativeSemidefiniteMatrixQ.ofHermitian(mat));
   }
 
+  @Test
   public void testQuantity2() {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
@@ -205,6 +223,7 @@ public class CholeskyDecompositionTest extends TestCase {
    * "Kilograms"*"Meters"], Quantity[10, "Kilograms"^2]}}
    * L = CholeskyDecomposition[A]
    * ConjugateTranspose[L] . L */
+  @Test
   public void testQuantityComplex() {
     Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
@@ -224,6 +243,7 @@ public class CholeskyDecompositionTest extends TestCase {
         Inverse.of(matrix));
   }
 
+  @Test
   public void testRankDeficient() {
     int n = 7;
     int _m = 5;
@@ -252,6 +272,7 @@ public class CholeskyDecompositionTest extends TestCase {
     }
   }
 
+  @Test
   public void testRectFail() {
     Tensor matrix = Tensors.fromString("{{10, I}}");
     AssertFail.of(() -> CholeskyDecomposition.of(matrix));

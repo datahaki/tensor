@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -10,6 +14,8 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -17,9 +23,8 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.MergeIllegal;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class UnitTest extends TestCase {
+public class UnitTest {
   public static Scalar requireNonZero(Scalar scalar) {
     if (scalar instanceof Quantity || //
         Scalars.isZero(scalar))
@@ -39,12 +44,14 @@ public class UnitTest extends TestCase {
     return UnitImpl.create(map.entrySet().stream().collect(COLLECTOR));
   }
 
+  @Test
   public void testString() {
     String check = "m*s^3";
     Unit unit = Unit.of(check);
     assertEquals(unit.toString(), check);
   }
 
+  @Test
   public void testSpaces() {
     assertEquals(Unit.of(" m ").toString(), "m");
     assertEquals(Unit.of(" m ^ 3 ").toString(), "m^3");
@@ -54,6 +61,7 @@ public class UnitTest extends TestCase {
     assertEquals(Unit.of("  "), Unit.ONE);
   }
 
+  @Test
   public void testSeparators() {
     assertEquals(Unit.of("*"), Unit.ONE);
     assertEquals(Unit.of(" * "), Unit.ONE);
@@ -62,6 +70,7 @@ public class UnitTest extends TestCase {
     assertEquals(Unit.of("  **  * "), Unit.ONE);
   }
 
+  @Test
   public void testEqualsHash() {
     Unit kg1 = Unit.of("kg");
     Unit kg2 = Unit.of("kg*m");
@@ -72,29 +81,34 @@ public class UnitTest extends TestCase {
     assertFalse(kg1.equals(new Object()));
   }
 
+  @Test
   public void testMultiplyZero() {
     Unit unit = Unit.of("kg");
     Unit gone = unit.multiply(RealScalar.ZERO);
     assertTrue(UnitQ.isOne(gone));
   }
 
+  @Test
   public void testMultiplyZero2() {
     Unit unit = Unit.of("kg*m^-3");
     Unit gone = unit.multiply(RealScalar.ZERO);
     assertTrue(UnitQ.isOne(gone));
   }
 
+  @Test
   public void testMultiplyFail() {
     Unit kg1 = Unit.of("kg");
     Scalar q = Quantity.of(3, "m");
     AssertFail.of(() -> kg1.multiply(q));
   }
 
+  @Test
   public void testOneString() {
     assertEquals(Unit.ONE.toString(), "");
     assertTrue(Unit.ONE.map().isEmpty());
   }
 
+  @Test
   public void testGaussScalar() {
     Map<String, Scalar> map = new HashMap<>();
     map.put("some", GaussScalar.of(1, 7));
@@ -103,6 +117,7 @@ public class UnitTest extends TestCase {
     AssertFail.of(() -> unit(map));
   }
 
+  @Test
   public void testQuantityExponentFail() {
     Map<String, Scalar> map = new HashMap<>();
     map.put("some", Quantity.of(1, "r"));
@@ -110,6 +125,7 @@ public class UnitTest extends TestCase {
   }
 
   // https://tinyurl.com/y44sj2et
+  @Test
   public void testRational() {
     Unit uExact = Unit.of("m^6*bar*mol^-2*K^1/2");
     Unit uNumer = Unit.of("m^6*bar*mol^-2*K^0.5");
@@ -118,10 +134,12 @@ public class UnitTest extends TestCase {
     assertEquals(uExact, uBrack);
   }
 
+  @Test
   public void testReference() {
     assertTrue(Unit.of("m*s") == Unit.of("s*m"));
   }
 
+  @Test
   public void testKeyCollision() {
     Map<String, Scalar> map1 = new HashMap<>();
     map1.put("a", RealScalar.ONE);
@@ -131,6 +149,7 @@ public class UnitTest extends TestCase {
     AssertFail.of(() -> Stream.concat(map1.entrySet().stream(), map2.entrySet().stream()).collect(COLLECTOR));
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> Unit.of(" m >"));
     AssertFail.of(() -> Unit.of("| m "));
@@ -141,6 +160,7 @@ public class UnitTest extends TestCase {
     AssertFail.of(() -> Unit.of("b=c"));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> Unit.of((String) null));
     AssertFail.of(() -> unit((Map<String, Scalar>) null));

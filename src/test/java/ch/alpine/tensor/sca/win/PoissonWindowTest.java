@@ -1,12 +1,14 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
-import junit.framework.TestCase;
 
-public class PoissonWindowTest extends TestCase {
+public class PoissonWindowTest {
+  @Test
   public void testSimple() {
     ScalarUnaryOperator suo = PoissonWindow.of(RealScalar.of(1.6));
     Tolerance.CHOP.requireClose( //

@@ -1,16 +1,22 @@
 // code by jph
 package ch.alpine.tensor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.Iterator;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class UnmodifiableTensorTest extends TestCase {
+public class UnmodifiableTensorTest {
+  @Test
   public void testUnmodificableEmptyEquals() {
     assertTrue(Tensors.unmodifiableEmpty() == Tensors.unmodifiableEmpty());
     assertTrue(Tensors.unmodifiableEmpty() != Tensors.empty());
@@ -18,6 +24,7 @@ public class UnmodifiableTensorTest extends TestCase {
     assertTrue(Tensors.unmodifiableEmpty() == Tensors.unmodifiableEmpty().unmodifiable());
   }
 
+  @Test
   public void testUnmodifiable() {
     Tensor tensor = Tensors.vector(3, 4, 5, 6, -2);
     tensor.set(DoubleScalar.of(0.3), 2);
@@ -32,6 +39,7 @@ public class UnmodifiableTensorTest extends TestCase {
     assertEquals(DoubleScalar.of(65.09), dot);
   }
 
+  @Test
   public void testUnmodifiable2() {
     Tensor matrix = Tensors.matrixInt(new int[][] { { 1, 2 }, { 3, 4 } }).unmodifiable();
     Tensor copy = matrix.copy();
@@ -40,6 +48,7 @@ public class UnmodifiableTensorTest extends TestCase {
     assertTrue(matrix == matrix.unmodifiable());
   }
 
+  @Test
   public void testHashUnmod() {
     Tensor a = Tensors.of(Tensors.vectorLong(2, -81, 7, 2, 8), Tensors.vector(32, 3.123));
     Tensor b = a.unmodifiable();
@@ -48,6 +57,7 @@ public class UnmodifiableTensorTest extends TestCase {
     assertTrue(b == b.unmodifiable());
   }
 
+  @Test
   public void testHashUnmodVector() {
     Tensor a = Tensors.vector(2, -81, 7, 2, 8, 3.123);
     Tensor b = a.unmodifiable();
@@ -56,6 +66,7 @@ public class UnmodifiableTensorTest extends TestCase {
     assertTrue(b == b.unmodifiable());
   }
 
+  @Test
   public void testHashUnmodEmpty() {
     Tensor a = Tensors.vector();
     Tensor b = Tensors.empty().unmodifiable();
@@ -64,11 +75,13 @@ public class UnmodifiableTensorTest extends TestCase {
     assertTrue(b == b.unmodifiable());
   }
 
+  @Test
   public void testUnmodifiableSet() {
     Tensor eye = IdentityMatrix.of(3).unmodifiable();
     AssertFail.of(() -> eye.set(RealScalar.ZERO, 2, 2));
   }
 
+  @Test
   public void testUnmodifiableIterator() {
     Tensor eye = IdentityMatrix.of(3).unmodifiable();
     Iterator<Tensor> iterator = eye.iterator();
@@ -78,6 +91,7 @@ public class UnmodifiableTensorTest extends TestCase {
     AssertFail.of(() -> iterator.remove());
   }
 
+  @Test
   public void testBlockReferences() {
     Tensor eye = IdentityMatrix.of(3);
     Tensor unm = eye.unmodifiable();
@@ -88,6 +102,7 @@ public class UnmodifiableTensorTest extends TestCase {
     assertEquals(blk, Tensors.fromString("{{2, 1}, {0, 0}}"));
   }
 
+  @Test
   public void testIteratorRemove() {
     Tensor tensor = IdentityMatrix.of(4).unmodifiable();
     for (Iterator<Tensor> iterator = tensor.iterator(); iterator.hasNext();) {
@@ -97,18 +112,21 @@ public class UnmodifiableTensorTest extends TestCase {
     assertEquals(tensor, IdentityMatrix.of(4));
   }
 
+  @Test
   public void testIteratorNestRemove() {
     Tensor tensor = HilbertMatrix.of(4).unmodifiable();
     Iterator<Tensor> iterator = tensor.iterator().next().iterator();
     AssertFail.of(() -> iterator.remove());
   }
 
+  @Test
   public void testByRefAccess() {
     Tensor tensor = HilbertMatrix.of(4).unmodifiable();
     AbstractTensor abstractTensor = (AbstractTensor) tensor;
     AssertFail.of(() -> abstractTensor.byRef(2).set(RealScalar.ZERO, 0));
   }
 
+  @Test
   public void testNonPublic() {
     assertEquals(UnmodifiableTensor.class.getModifiers(), 0);
   }

@@ -1,10 +1,16 @@
 // code by jph
 package ch.alpine.tensor.mat.gr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
@@ -28,9 +34,9 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class InfluenceMatrixImplTest extends TestCase {
+public class InfluenceMatrixImplTest {
+  @Test
   public void testExactRankDefficient7x5() {
     Random random = new Random(3);
     int n = 7;
@@ -62,6 +68,7 @@ public class InfluenceMatrixImplTest extends TestCase {
       }
   }
 
+  @Test
   public void testMixedQuantity() {
     Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}");
     Tensor design = VandermondeMatrix.of(x, 2);
@@ -90,6 +97,7 @@ public class InfluenceMatrixImplTest extends TestCase {
     // }
   }
 
+  @Test
   public void testExact3() throws ClassNotFoundException, IOException {
     int n = 7;
     int m = 3;
@@ -111,6 +119,7 @@ public class InfluenceMatrixImplTest extends TestCase {
     assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);
   }
 
+  @Test
   public void testExact5() throws ClassNotFoundException, IOException {
     int n = 7;
     int m = 5;
@@ -132,6 +141,7 @@ public class InfluenceMatrixImplTest extends TestCase {
     assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);
   }
 
+  @Test
   public void testUseMatrixFalse() {
     Distribution distribution = LogNormalDistribution.standard();
     Tensor design = RandomVariate.of(distribution, 10, 2);
@@ -140,6 +150,7 @@ public class InfluenceMatrixImplTest extends TestCase {
     assertFalse(influenceMatrixImpl.dotMatrix());
   }
 
+  @Test
   public void testUseMatrixTrue() {
     Distribution distribution = LogNormalDistribution.standard();
     Tensor design = RandomVariate.of(distribution, 8, 7);
@@ -148,6 +159,7 @@ public class InfluenceMatrixImplTest extends TestCase {
     assertTrue(influenceMatrixImpl.dotMatrix());
   }
 
+  @Test
   public void testModifierNonPublic() {
     assertFalse(Modifier.isPublic(InfluenceMatrixImpl.class.getModifiers()));
   }

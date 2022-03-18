@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +14,8 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -22,14 +28,14 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.TestFile;
-import junit.framework.TestCase;
 
-public class XsvFormatTest extends TestCase {
+public class XsvFormatTest {
   private static void convertCheck(Tensor A) {
     for (XsvFormat xsvFormat : XsvFormat.values())
       assertEquals(A, xsvFormat.parse(xsvFormat.of(A)));
   }
 
+  @Test
   public void testCsvR() {
     Random random = new Random();
     convertCheck( //
@@ -38,6 +44,7 @@ public class XsvFormatTest extends TestCase {
     convertCheck(Tensors.matrix((i, j) -> DoubleScalar.of(random.nextGaussian() * 1e+50), 20, 10));
   }
 
+  @Test
   public void testRandom() throws IOException {
     File file = TestFile.withExtension("tsv");
     Tensor matrix = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), 6, 4);
@@ -47,6 +54,7 @@ public class XsvFormatTest extends TestCase {
     file.delete();
   }
 
+  @Test
   public void testParse() throws IOException {
     try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
       try (Stream<String> stream = ReadLine.of(inputStream)) {
@@ -56,6 +64,7 @@ public class XsvFormatTest extends TestCase {
     }
   }
 
+  @Test
   public void testCount2() throws IOException {
     try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
       try (Stream<String> stream = ReadLine.of(inputStream)) {
@@ -66,6 +75,7 @@ public class XsvFormatTest extends TestCase {
     }
   }
 
+  @Test
   public void testImport() throws Exception {
     String path = getClass().getResource("/io/qty/quantity0.csv").getPath();
     Tensor tensor = XsvFormat.parse( //
@@ -78,6 +88,7 @@ public class XsvFormatTest extends TestCase {
     assertTrue(tensor.Get(1, 1) instanceof RealScalar);
   }
 
+  @Test
   public void testVisibility() {
     assertFalse(Modifier.isPublic(XsvFormat.class.getModifiers()));
   }

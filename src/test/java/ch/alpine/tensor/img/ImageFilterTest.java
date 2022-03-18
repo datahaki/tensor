@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.img;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -12,12 +16,12 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ImageFilterTest extends TestCase {
+public class ImageFilterTest {
   private static final TensorScalarFunction MIN = block -> (Scalar) block.flatten(-1).reduce(Min::of).get();
   private static final TensorScalarFunction MAX = block -> (Scalar) block.flatten(-1).reduce(Max::of).get();
 
+  @Test
   public void testMin() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 256);
     Tensor tensor = RandomVariate.of(distribution, 20, 30);
@@ -26,6 +30,7 @@ public class ImageFilterTest extends TestCase {
     assertEquals(filter, result);
   }
 
+  @Test
   public void testMax() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 256);
     Tensor tensor = RandomVariate.of(distribution, 10, 15);
@@ -34,19 +39,23 @@ public class ImageFilterTest extends TestCase {
     assertEquals(filter, result);
   }
 
+  @Test
   public void testEmpty() {
     Tensor result = ImageFilter.of(Tensors.empty(), 3, MAX);
     assertEquals(result, Tensors.empty());
   }
 
+  @Test
   public void testRadiusFail() {
     AssertFail.of(() -> ImageFilter.of(Tensors.empty(), -1, MAX));
   }
 
+  @Test
   public void testScalarFail() {
     AssertFail.of(() -> ImageFilter.of(RealScalar.ONE, 1, MAX));
   }
 
+  @Test
   public void testFunctionNullFail() {
     AssertFail.of(() -> ImageFilter.of(Tensors.empty(), 3, null));
   }

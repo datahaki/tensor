@@ -1,23 +1,30 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Map;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.sca.pow.Power;
-import junit.framework.TestCase;
 
-public class MathematicaFormTest extends TestCase {
+public class MathematicaFormTest {
+  @Test
   public void testSimple() {
     String string = MathematicaForm.of(Quantity.of(3, "m^2*s"));
     assertEquals(string, "Quantity[3, \"Meters\"^2*\"Seconds\"]");
   }
 
+  @Test
   public void testSimple2() {
     String string = MathematicaForm.of(Tensors.of(Quantity.of(3, "A^2*V^-1")));
     assertEquals(string, "{Quantity[3, \"Amperes\"^2*\"Volts\"^-1]}");
   }
 
+  @Test
   public void testKeys() {
     for (String string : MathematicaForm.INSTANCE.getMap().keySet()) {
       boolean test = KnownUnitQ.SI().test(Unit.of(string));
@@ -27,6 +34,7 @@ public class MathematicaFormTest extends TestCase {
     }
   }
 
+  @Test
   public void testSpecific() {
     Map<String, String> map = MathematicaForm.INSTANCE.getMap();
     assertTrue(map.containsKey("kV"));
@@ -34,6 +42,7 @@ public class MathematicaFormTest extends TestCase {
     assertTrue(map.containsKey("dcd"));
   }
 
+  @Test
   public void testUnits() {
     Map<String, String> map = MathematicaForm.INSTANCE.getMap();
     for (String string : UnitSystem.SI().map().keySet())
@@ -41,6 +50,7 @@ public class MathematicaFormTest extends TestCase {
         throw new IllegalArgumentException(string);
   }
 
+  @Test
   public void testNamesUppercase() {
     for (String string : MathematicaForm.INSTANCE.getMap().values()) {
       String u = "" + string.charAt(0);
@@ -48,6 +58,7 @@ public class MathematicaFormTest extends TestCase {
     }
   }
 
+  @Test
   public void testXibi() {
     assertEquals(QuantityMagnitude.SI().in("B").apply(Quantity.of(1, "KiB")), Power.of(1024, 1));
     assertEquals(QuantityMagnitude.SI().in("B").apply(Quantity.of(1, "MiB")), Power.of(1024, 2));

@@ -1,14 +1,18 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import ch.alpine.tensor.usr.TestFile;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class AnimatedGifWriterTest extends TestCase {
+import ch.alpine.tensor.usr.TestFile;
+
+public class AnimatedGifWriterTest {
+  @Test
   public void testColor() throws IOException {
     File file = TestFile.withExtension("gif");
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
@@ -23,6 +27,7 @@ public class AnimatedGifWriterTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testColorNonLoop() throws IOException {
     File file = TestFile.withExtension("gif");
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, false)) {
@@ -37,6 +42,7 @@ public class AnimatedGifWriterTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testGray() throws IOException {
     File file = TestFile.withExtension("gif");
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
@@ -46,6 +52,7 @@ public class AnimatedGifWriterTest extends TestCase {
     assertTrue(file.delete());
   }
 
+  @Test
   public void testEmpty() throws IOException {
     File file = TestFile.withExtension("gif");
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {

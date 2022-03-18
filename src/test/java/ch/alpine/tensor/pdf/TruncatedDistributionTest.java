@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -22,9 +27,9 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TruncatedDistributionTest extends TestCase {
+public class TruncatedDistributionTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Clip clip = Clips.interval(10, 11);
     Distribution distribution = Serialization.copy(TruncatedDistribution.of(NormalDistribution.of(10, 2), clip));
@@ -32,6 +37,7 @@ public class TruncatedDistributionTest extends TestCase {
     assertTrue(clip.isInside(scalar));
   }
 
+  @Test
   public void testInfinite() {
     Clip clip = Clips.interval(0, Double.POSITIVE_INFINITY);
     Distribution distribution = TruncatedDistribution.of(NormalDistribution.of(0, 1), clip);
@@ -45,6 +51,7 @@ public class TruncatedDistributionTest extends TestCase {
     Tolerance.CHOP.requireZero(cdf.p_lessThan(RealScalar.ZERO));
   }
 
+  @Test
   public void testQuantity() {
     Distribution all = TriangularDistribution.with(Quantity.of(10, "m"), Quantity.of(2, "m"));
     Clip clip = Clips.interval(Quantity.of(RationalScalar.of(95, 10), "m"), Quantity.of(12, "m"));
@@ -79,6 +86,7 @@ public class TruncatedDistributionTest extends TestCase {
     clip.requireInside(r);
   }
 
+  @Test
   public void testSerializable() throws ClassNotFoundException, IOException {
     Clip clip = Clips.interval(10, 11);
     Distribution distribution = TruncatedDistribution.of(BinomialDistribution.of(20, DoubleScalar.of(0.5)), clip);
@@ -89,6 +97,7 @@ public class TruncatedDistributionTest extends TestCase {
     Serialization.copy(TruncatedDistribution.of(NormalDistribution.of(10, 2), clip));
   }
 
+  @Test
   public void testDiscrete() {
     Distribution original = PoissonDistribution.of(7);
     Distribution distribution = TruncatedDistribution.of(original, Clips.interval(5, 10));
@@ -101,6 +110,7 @@ public class TruncatedDistributionTest extends TestCase {
         PDF.of(distribution).at(RealScalar.of(5))));
   }
 
+  @Test
   public void testToString() {
     Distribution original = PoissonDistribution.of(7);
     Distribution distribution = TruncatedDistribution.of(original, Clips.interval(5, 10));
@@ -109,11 +119,13 @@ public class TruncatedDistributionTest extends TestCase {
         "TruncatedDistribution[PoissonDistribution[7], Clip[5, 10]]");
   }
 
+  @Test
   public void testFail() {
     Clip clip = Clips.interval(10, 11);
     AssertFail.of(() -> TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), clip));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), null));
     AssertFail.of(() -> TruncatedDistribution.of(null, Clips.interval(10, 11)));

@@ -1,8 +1,14 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.MachineNumberQ;
@@ -27,9 +33,8 @@ import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class NullSpaceTest extends TestCase {
+public class NullSpaceTest {
   private static void _checkZeros(Tensor zeros) {
     int n = zeros.length();
     Tensor nul = NullSpace.usingSvd(zeros);
@@ -38,6 +43,7 @@ public class NullSpaceTest extends TestCase {
     assertEquals(nul, IdentityMatrix.of(n));
   }
 
+  @Test
   public void testZerosUsingSvd() {
     for (int n = 1; n < 10; ++n) {
       _checkZeros(Array.zeros(n, n));
@@ -45,6 +51,7 @@ public class NullSpaceTest extends TestCase {
     }
   }
 
+  @Test
   public void testRowReduce() {
     Tensor m = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}}");
     Tensor r = NullSpace.of(m);
@@ -55,6 +62,7 @@ public class NullSpaceTest extends TestCase {
     ExactTensorQ.require(r);
   }
 
+  @Test
   public void testZeros2() {
     Tensor m = Array.zeros(5, 5);
     Tensor r = NullSpace.of(m);
@@ -63,6 +71,7 @@ public class NullSpaceTest extends TestCase {
     ExactTensorQ.require(r);
   }
 
+  @Test
   public void testIdentity() {
     Tensor m = IdentityMatrix.of(5);
     Tensor r = NullSpace.of(m);
@@ -71,6 +80,7 @@ public class NullSpaceTest extends TestCase {
     ExactTensorQ.require(r);
   }
 
+  @Test
   public void testIdentityReversed() {
     Tensor m = Reverse.of(IdentityMatrix.of(5));
     Tensor r = NullSpace.of(m);
@@ -79,6 +89,7 @@ public class NullSpaceTest extends TestCase {
     ExactTensorQ.require(r);
   }
 
+  @Test
   public void testWikipediaKernel() {
     Tensor A = Tensors.matrix(new Number[][] { //
         { 1, 0, -3, 0, 2, -8 }, //
@@ -94,6 +105,7 @@ public class NullSpaceTest extends TestCase {
     ExactTensorQ.require(nul);
   }
 
+  @Test
   public void testSome1() {
     Tensor A = Tensors.matrix(new Number[][] { //
         { -1, -2, -1 }, //
@@ -111,6 +123,7 @@ public class NullSpaceTest extends TestCase {
     assertEquals(nul, nrr);
   }
 
+  @Test
   public void testSome2() {
     Tensor A = Tensors.matrix(new Number[][] { //
         { 1, 0, -3, 0, 2, -8 }, //
@@ -126,6 +139,7 @@ public class NullSpaceTest extends TestCase {
     ExactTensorQ.require(nul);
   }
 
+  @Test
   public void testSome3() {
     Tensor A = Tensors.matrix(new Number[][] { //
         { 0, 0, 0, 0, 0, 0 }, //
@@ -141,11 +155,13 @@ public class NullSpaceTest extends TestCase {
     ExactTensorQ.require(nul);
   }
 
+  @Test
   public void testSingleVector() {
     Tensor nullsp = NullSpace.of(Tensors.of(Tensors.vector(0.0, 1.0)));
     Chop._12.requireClose(nullsp, Tensors.of(Tensors.vector(1.0, 0.0)));
   }
 
+  @Test
   public void testComplex() {
     // {{17/101-32/101*I, 0, 1, -99/101+20/101*I},
     // {106/505-253/505*I, 1, 0, -89/101+19/101*I}}
@@ -160,6 +176,7 @@ public class NullSpaceTest extends TestCase {
     ExactTensorQ.require(nul);
   }
 
+  @Test
   public void testMatsim() {
     Tensor matrix = Tensors.matrixDouble(new double[][] { //
         { 1.0, -0.2, -0.8 }, //
@@ -171,6 +188,7 @@ public class NullSpaceTest extends TestCase {
         || Chop._14.isClose(nullspace.get(0), Vector2Norm.NORMALIZE.apply(Tensors.vector(-1, -1, -1))));
   }
 
+  @Test
   public void testQuantity() {
     Tensor mat = Tensors.of(QuantityTensor.of(Tensors.vector(1, 2), "m"));
     Tensor nul = NullSpace.of(mat);
@@ -179,6 +197,7 @@ public class NullSpaceTest extends TestCase {
     ExactTensorQ.require(nul);
   }
 
+  @Test
   public void testQuantityMixed() {
     Tensor mat = Tensors.of( //
         Tensors.of(Quantity.of(-2, "m"), Quantity.of(1, "kg"), Quantity.of(3, "s")));
@@ -186,6 +205,7 @@ public class NullSpaceTest extends TestCase {
     Chop.NONE.requireAllZero(mat.dot(Transpose.of(nul)));
   }
 
+  @Test
   public void testQuantityMixed2() {
     Tensor mat = Tensors.of( //
         Tensors.of(Quantity.of(-2, "m"), Quantity.of(1, "kg"), Quantity.of(3, "s")), //
@@ -197,6 +217,7 @@ public class NullSpaceTest extends TestCase {
     Chop.NONE.requireAllZero(mat.dot(Transpose.of(nul)));
   }
 
+  @Test
   public void testRectangle2x3() {
     Tensor matrix = Tensors.fromString("{{1, 0, 0}, {0, 0, 0}}");
     Tensor tensor = NullSpace.of(matrix);
@@ -205,6 +226,7 @@ public class NullSpaceTest extends TestCase {
     AssertFail.of(() -> Det.of(matrix));
   }
 
+  @Test
   public void testRectangle3x2() {
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}");
     Tensor tensor = NullSpace.of(matrix);
@@ -212,6 +234,7 @@ public class NullSpaceTest extends TestCase {
     AssertFail.of(() -> Det.of(matrix));
   }
 
+  @Test
   public void testZeros() {
     for (int d = 3; d < 6; ++d) {
       Tensor matrix = Array.zeros(3, d);
@@ -221,6 +244,7 @@ public class NullSpaceTest extends TestCase {
     }
   }
 
+  @Test
   public void testExtended() {
     Distribution distribution = CauchyDistribution.of(-1, 2);
     Random random = new Random(1344343);
@@ -248,6 +272,7 @@ public class NullSpaceTest extends TestCase {
     }
   }
 
+  @Test
   public void testGaussScalar() {
     int prime = 7879;
     Random random = new Random();
@@ -258,20 +283,24 @@ public class NullSpaceTest extends TestCase {
       Chop.NONE.requireAllZero(Dot.of(matrix, vector));
   }
 
+  @Test
   public void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
     Tensor ns = NullSpace.of(matrix);
     Tolerance.CHOP.requireAllZero(matrix.dot(Transpose.of(ns)));
   }
 
+  @Test
   public void testFailScalar() {
     AssertFail.of(() -> NullSpace.of(RealScalar.ONE));
   }
 
+  @Test
   public void testFailVector() {
     AssertFail.of(() -> NullSpace.of(Tensors.vector(1, 2, 3, 1)));
   }
 
+  @Test
   public void testFailRank3() {
     AssertFail.of(() -> NullSpace.of(LeviCivitaTensor.of(3)));
   }

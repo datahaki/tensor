@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalar;
@@ -10,9 +14,9 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.nrm.Hypot;
-import junit.framework.TestCase;
 
-public class OuterTest extends TestCase {
+public class OuterTest {
+  @Test
   public void testSimple() {
     Tensor a = Tensors.vector(1, 2);
     Tensor b = Tensors.vector(3, 4, 5);
@@ -21,12 +25,14 @@ public class OuterTest extends TestCase {
     assertEquals(tensor, TensorProduct.of(a, b));
   }
 
+  @Test
   public void testScalar() {
     Tensor tensor = Outer.of(Hypot::of, Tensors.vector(12, 3), Tensors.vector(1, 7, 9, 0));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 4));
     assertEquals(tensor.get(0).extract(2, 4), Tensors.vector(15, 12));
   }
 
+  @Test
   public void testScalarDivide() {
     Tensor result = Outer.of(Scalar::divide, Tensors.vector(12, 3), Tensors.vector(1, 7, 9, 2));
     assertEquals(Dimensions.of(result), Arrays.asList(2, 4));
@@ -35,6 +41,7 @@ public class OuterTest extends TestCase {
     assertEquals(tensor, result);
   }
 
+  @Test
   public void testMixed() {
     Tensor result = Outer.of(Tensor::multiply, HilbertMatrix.of(2), Tensors.vector(1, 7, 9));
     assertEquals(Dimensions.of(result), Arrays.asList(2, 3, 2));
@@ -43,6 +50,7 @@ public class OuterTest extends TestCase {
     assertEquals(result, tensor);
   }
 
+  @Test
   public void testAppend() {
     Tensor matrix = HilbertMatrix.of(2);
     Tensor tensor = Outer.of(Tensor::append, matrix, Tensors.vector(1, 7, 9));

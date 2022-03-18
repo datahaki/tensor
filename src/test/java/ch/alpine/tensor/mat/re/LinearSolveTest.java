@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
@@ -19,11 +23,11 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class LinearSolveTest extends TestCase {
+public class LinearSolveTest {
   private static final Random RANDOM = new Random();
 
+  @Test
   public void testSolveCR() {
     int n = 5 + RANDOM.nextInt(6);
     Tensor A = Tensors.matrix((i, j) -> //
@@ -40,6 +44,7 @@ public class LinearSolveTest extends TestCase {
     }
   }
 
+  @Test
   public void testSolveRC() {
     int n = 5 + RANDOM.nextInt(6);
     Tensor A = Tensors.matrix((i, j) -> //
@@ -56,6 +61,7 @@ public class LinearSolveTest extends TestCase {
     }
   }
 
+  @Test
   public void testSolveDC() {
     Random random = new Random(123);
     int n = 7;
@@ -69,6 +75,7 @@ public class LinearSolveTest extends TestCase {
     Tolerance.CHOP.requireClose(err, Array.zeros(Dimensions.of(b)));
   }
 
+  @Test
   public void testGauss() {
     Tensor vec1 = Tensors.vectorDouble(0, 2, 5.3);
     Tensor vec2 = Tensors.vectorDouble(-1.0, 3.1, 0.3);
@@ -93,6 +100,7 @@ public class LinearSolveTest extends TestCase {
     }
   }
 
+  @Test
   public void testIdentity() {
     int n = 5;
     Tensor A = Tensors.matrix((i, j) -> //
@@ -106,12 +114,14 @@ public class LinearSolveTest extends TestCase {
     }
   }
 
+  @Test
   public void testEmpty() {
     Tensor m = Tensors.matrix(new Number[][] { {} });
     Tensor b = Tensors.vector(new Number[] {});
     AssertFail.of(() -> LinearSolve.of(m, b));
   }
 
+  @Test
   public void testEps() {
     Tensor m = Tensors.matrixDouble(new double[][] { { Double.MIN_VALUE } });
     Tensor b = Tensors.vectorDouble(new double[] { Double.MIN_VALUE });
@@ -120,6 +130,7 @@ public class LinearSolveTest extends TestCase {
     assertEquals(Det.of(m), DoubleScalar.of(Double.MIN_VALUE));
   }
 
+  @Test
   public void testQuantity1() {
     final Scalar one = Quantity.of(1, "m");
     Scalar qs1 = Quantity.of(1, "m");
@@ -136,6 +147,7 @@ public class LinearSolveTest extends TestCase {
     ExactTensorQ.require(inv);
   }
 
+  @Test
   public void testQuantity2() {
     Scalar qs1 = Quantity.of(3, "m");
     Scalar qs2 = Quantity.of(4, "s");

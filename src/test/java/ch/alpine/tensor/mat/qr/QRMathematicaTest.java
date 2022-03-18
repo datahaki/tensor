@@ -1,8 +1,13 @@
 // code by jph
 package ch.alpine.tensor.mat.qr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -19,9 +24,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class QRMathematicaTest extends TestCase {
+public class QRMathematicaTest {
+  @Test
   public void testSkinny() {
     Tensor b = Transpose.of(IdentityMatrix.of(9).extract(0, 4));
     assertEquals(Dimensions.of(b), Arrays.asList(9, 4));
@@ -32,6 +37,7 @@ public class QRMathematicaTest extends TestCase {
     // Chop._05.requireClose(qinv, wrap.getQ());
   }
 
+  @Test
   public void testSimple() {
     Tensor a = Tensors.fromString("{{1, 2, 3}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}}");
     assertEquals(Dimensions.of(a), Arrays.asList(4, 3));
@@ -49,6 +55,7 @@ public class QRMathematicaTest extends TestCase {
     Tolerance.CHOP.requireClose(qrdi.pseudoInverse(), qrDecomposition.pseudoInverse());
   }
 
+  @Test
   public void testDet() {
     Distribution distribution = UniformDistribution.unit();
     for (int n = 3; n < 6; ++n) {
@@ -58,6 +65,7 @@ public class QRMathematicaTest extends TestCase {
     }
   }
 
+  @Test
   public void testRectangularBigSmall() {
     Distribution distribution = NormalDistribution.standard();
     for (int m = 3; m < 6; ++m) {
@@ -77,6 +85,7 @@ public class QRMathematicaTest extends TestCase {
     }
   }
 
+  @Test
   public void testRectangularSmallBig() {
     Distribution distribution = NormalDistribution.standard();
     for (int n = 3; n < 6; ++n) {
@@ -95,6 +104,7 @@ public class QRMathematicaTest extends TestCase {
     }
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> QRMathematica.wrap(null));
   }

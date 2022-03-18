@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
@@ -17,9 +21,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class VandermondeSolveTest extends TestCase {
+public class VandermondeSolveTest {
+  @Test
   public void testSimple() {
     Tensor x = Tensors.vector(2, 3);
     Tensor q = Tensors.vector(4, 7);
@@ -30,6 +34,7 @@ public class VandermondeSolveTest extends TestCase {
     Fit.polynomial(x, q, 1);
   }
 
+  @Test
   public void testMixedUnits() {
     for (int degree = 0; degree <= 5; ++degree) {
       Tensor x = Tensors.fromString("{100[K], 110.0[K], 120[K], 133[K], 140[K], 150[K]}").extract(0, degree + 1);
@@ -40,6 +45,7 @@ public class VandermondeSolveTest extends TestCase {
     }
   }
 
+  @Test
   public void testNumeric() {
     Random random = new Random(3);
     Distribution distribution = NormalDistribution.standard();
@@ -52,18 +58,21 @@ public class VandermondeSolveTest extends TestCase {
     }
   }
 
+  @Test
   public void testSingularFail() {
     Tensor x = Tensors.vector(2, 3, 2);
     Tensor q = Tensors.vector(4, 7, 6);
     AssertFail.of(() -> VandermondeSolve.of(x, q));
   }
 
+  @Test
   public void testLengthFail() {
     Tensor x = Tensors.vector(2, 3);
     Tensor q = Tensors.vector(4, 7, 6);
     AssertFail.of(() -> VandermondeSolve.of(x, q));
   }
 
+  @Test
   public void testGaussScalar() {
     int prime = 7817;
     Tensor x = Tensors.of( //
@@ -81,6 +90,7 @@ public class VandermondeSolveTest extends TestCase {
     assertEquals(ref, cmp);
   }
 
+  @Test
   public void testDurationScalar() {
     Tensor vector = Tensors.of( //
         DurationScalar.fromSeconds(RealScalar.of(10)), //
@@ -96,6 +106,7 @@ public class VandermondeSolveTest extends TestCase {
     // VandermondeSolve.of(vector, rhs);
   }
 
+  @Test
   public void testEmptyFail() {
     AssertFail.of(() -> VandermondeSolve.of(Tensors.empty(), Tensors.empty()));
   }

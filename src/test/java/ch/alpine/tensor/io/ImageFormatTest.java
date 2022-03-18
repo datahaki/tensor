@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
@@ -9,6 +11,8 @@ import java.io.File;
 import java.util.Arrays;
 
 import javax.imageio.ImageIO;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -19,9 +23,9 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import junit.framework.TestCase;
 
-public class ImageFormatTest extends TestCase {
+public class ImageFormatTest {
+  @Test
   public void testRGBAFile() throws Exception {
     Tensor tensor = TransposedImageFormatTest._readRGBA();
     String string = "/io/image/rgba15x33.png";
@@ -34,6 +38,7 @@ public class ImageFormatTest extends TestCase {
     assertEquals(image.get(32, 0), Tensors.vector(126, 120, 94, 255));
   }
 
+  @Test
   public void testGray() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 256);
     Tensor image = RandomVariate.of(distribution, 100, 200);
@@ -41,6 +46,7 @@ public class ImageFormatTest extends TestCase {
     assertEquals(image, bimap);
   }
 
+  @Test
   public void testColor() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 256);
     Tensor image = RandomVariate.of(distribution, 100, 200, 4);
@@ -48,6 +54,7 @@ public class ImageFormatTest extends TestCase {
     assertEquals(image, bimap);
   }
 
+  @Test
   public void testGrayFile() throws Exception {
     String string = "/io/image/gray15x9.png";
     File file = new File(getClass().getResource(string).getFile());
@@ -61,6 +68,7 @@ public class ImageFormatTest extends TestCase {
     assertEquals(Dimensions.of(tensor), Arrays.asList(9, 15));
   }
 
+  @Test
   public void testGrayscale() {
     Tensor tensor = Tensors.of(Range.of(0, 256));
     BufferedImage bufferedImage = ImageFormat.of(tensor);

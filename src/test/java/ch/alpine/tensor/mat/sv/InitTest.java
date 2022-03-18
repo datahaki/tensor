@@ -1,8 +1,14 @@
 // code by jph
 package ch.alpine.tensor.mat.sv;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.lang.reflect.Modifier;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -18,16 +24,14 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.MatrixRankSvd;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Sign;
-import junit.framework.Assert;
-import junit.framework.TestCase;
 
-public class InitTest extends TestCase {
+public class InitTest {
   public static SingularValueDecomposition svd(Tensor matrix) {
     Init init = new Init(matrix);
     {
       Unprotect.getUnitUnique(init.u);
       Unprotect.getUnitUnique(init.v);
-      Assert.assertEquals( //
+      assertEquals( //
           Unprotect.getUnitUnique(init.w), //
           Unprotect.getUnitUnique(init.r));
     }
@@ -36,33 +40,34 @@ public class InitTest extends TestCase {
     List<Integer> dims = Dimensions.of(matrix);
     int N = dims.get(1);
     final Tensor U = svd.getU();
-    Assert.assertEquals(Unprotect.getUnitUnique(U), Unit.ONE);
-    Assert.assertEquals(dims, Dimensions.of(U));
+    assertEquals(Unprotect.getUnitUnique(U), Unit.ONE);
+    assertEquals(dims, Dimensions.of(U));
     final Tensor w = svd.values();
     Unit unitUnique = Unprotect.getUnitUnique(w);
-    Assert.assertEquals(unit, unitUnique);
+    assertEquals(unit, unitUnique);
     final Tensor V = svd.getV();
-    Assert.assertEquals(Unprotect.getUnitUnique(V), Unit.ONE);
+    assertEquals(Unprotect.getUnitUnique(V), Unit.ONE);
     Tensor W = DiagonalMatrix.with(w);
     Tensor UtU = Tolerance.CHOP.of(Transpose.of(U).dot(U).subtract(IdentityMatrix.of(N)));
-    Assert.assertEquals(UtU, Array.zeros(N, N));
+    assertEquals(UtU, Array.zeros(N, N));
     Tensor VVt = Tolerance.CHOP.of(MatrixDotTranspose.of(V, V).subtract(IdentityMatrix.of(N)));
-    Assert.assertEquals(VVt, Array.zeros(N, N));
+    assertEquals(VVt, Array.zeros(N, N));
     Tensor VtV = Tolerance.CHOP.of(Transpose.of(V).dot(V).subtract(IdentityMatrix.of(N)));
-    Assert.assertEquals(VtV, Array.zeros(N, N));
+    assertEquals(VtV, Array.zeros(N, N));
     Tensor UWVt = Tolerance.CHOP.of(MatrixDotTranspose.of(U.dot(W), V).subtract(matrix));
-    Assert.assertEquals(UWVt, UWVt.map(Scalar::zero));
+    assertEquals(UWVt, UWVt.map(Scalar::zero));
     Tensor UW_AV = Tolerance.CHOP.of(U.dot(W).subtract(matrix.dot(V)));
-    Assert.assertEquals(UW_AV, UW_AV.map(Scalar::zero));
-    Assert.assertTrue(w.stream().map(Scalar.class::cast).noneMatch(Sign::isNegative));
+    assertEquals(UW_AV, UW_AV.map(Scalar::zero));
+    assertTrue(w.stream().map(Scalar.class::cast).noneMatch(Sign::isNegative));
     if (MatrixRankSvd.of(svd) < N) {
       Tensor nul = NullSpace.of(svd);
       Tensor res = MatrixDotTranspose.of(matrix, nul);
-      Assert.assertEquals(Tolerance.CHOP.of(res), res.map(Scalar::zero));
+      assertEquals(Tolerance.CHOP.of(res), res.map(Scalar::zero));
     }
     return svd;
   }
 
+  @Test
   public void testPackageVisibility() {
     assertFalse(Modifier.isPublic(Init.class.getModifiers()));
   }

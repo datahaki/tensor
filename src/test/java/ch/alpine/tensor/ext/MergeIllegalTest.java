@@ -3,14 +3,17 @@ package ch.alpine.tensor.ext;
 
 import java.io.IOException;
 
-import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class MergeIllegalTest extends TestCase {
+import ch.alpine.tensor.usr.AssertFail;
+
+public class MergeIllegalTest {
+  @Test
   public void testSerializable() throws ClassNotFoundException, IOException {
     Serialization.copy(MergeIllegal.operator());
   }
 
+  @Test
   public void testCollisionFail() {
     AssertFail.of(() -> MergeIllegal.operator().apply(null, null));
   }

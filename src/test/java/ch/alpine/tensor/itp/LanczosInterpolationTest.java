@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -18,9 +22,9 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class LanczosInterpolationTest extends TestCase {
+public class LanczosInterpolationTest {
+  @Test
   public void testVector() {
     Tensor vector = Tensors.vector(-1, 0, 3, 2, 0, -4, 2);
     for (int size = 1; size < 5; ++size) {
@@ -32,12 +36,14 @@ public class LanczosInterpolationTest extends TestCase {
     }
   }
 
+  @Test
   public void testGetEmpty() {
     Interpolation interpolation = LanczosInterpolation.of(LeviCivitaTensor.of(3));
     Tensor tensor = interpolation.get(Tensors.empty());
     AssertFail.of(() -> tensor.set(t -> t.append(RealScalar.ONE), Tensor.ALL));
   }
 
+  @Test
   public void testImage() {
     String string = "/io/image/gray15x9.png";
     Tensor tensor = ResourceData.of(string);
@@ -49,6 +55,7 @@ public class LanczosInterpolationTest extends TestCase {
     Chop._14.requireClose(scalar, RealScalar.of(105.27240539882584));
   }
 
+  @Test
   public void testImage3() {
     String string = "/io/image/gray15x9.png";
     Tensor tensor = ResourceData.of(string);
@@ -60,6 +67,7 @@ public class LanczosInterpolationTest extends TestCase {
     Chop._14.requireClose(scalar, RealScalar.of(94.24810834850828));
   }
 
+  @Test
   public void testUseCase() {
     Tensor tensor = Range.of(1, 11);
     Interpolation interpolation = LanczosInterpolation.of(tensor);
@@ -74,6 +82,7 @@ public class LanczosInterpolationTest extends TestCase {
     }
   }
 
+  @Test
   public void test1D() {
     Interpolation interpolation = LanczosInterpolation.of(Tensors.vector(10, 20, 30, 40));
     TestHelper.checkMatch(interpolation);
@@ -81,6 +90,7 @@ public class LanczosInterpolationTest extends TestCase {
     TestHelper.getScalarFail(interpolation);
   }
 
+  @Test
   public void test2D() {
     Distribution distribution = UniformDistribution.unit();
     Interpolation interpolation = LanczosInterpolation.of(RandomVariate.of(distribution, 3, 5));
@@ -89,10 +99,12 @@ public class LanczosInterpolationTest extends TestCase {
     TestHelper.getScalarFail(interpolation);
   }
 
+  @Test
   public void testFailNull() {
     AssertFail.of(() -> LanczosInterpolation.of(null, 3));
   }
 
+  @Test
   public void testFailSemi() {
     Tensor vector = Tensors.vector(-1, 0, 3, 2, 0, -4, 2);
     AssertFail.of(() -> LanczosInterpolation.of(vector, 0));

@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.DoubleScalar;
@@ -21,9 +26,9 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class GumbelDistributionTest extends TestCase {
+public class GumbelDistributionTest {
+  @Test
   public void testPDF() {
     Distribution distribution = //
         GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
@@ -33,6 +38,7 @@ public class GumbelDistributionTest extends TestCase {
     assertEquals(pdf.at(RealScalar.of(4.5)), RealScalar.ZERO);
   }
 
+  @Test
   public void testCDF() {
     Distribution distribution = //
         GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
@@ -42,6 +48,7 @@ public class GumbelDistributionTest extends TestCase {
     assertEquals(cdf.p_lessEquals(RealScalar.of(4)), RealScalar.ONE);
   }
 
+  @Test
   public void testRandomVariate() {
     GumbelDistribution gmd = (GumbelDistribution) //
     GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
@@ -57,6 +64,7 @@ public class GumbelDistributionTest extends TestCase {
     DeterminateScalarQ.require(gmd.protected_quantile(RealScalar.of(Math.nextDown(1.0))));
   }
 
+  @Test
   public void testQuantity() {
     Distribution distribution = GumbelDistribution.of(Quantity.of(0.3, "m^-1"), Quantity.of(0.4, "m^-1"));
     Scalar rand = RandomVariate.of(distribution);
@@ -74,6 +82,7 @@ public class GumbelDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testMean() {
     Distribution distribution = //
         GumbelDistribution.of(Quantity.of(-0.3, "m^-1"), Quantity.of(0.4, "m^-1"));
@@ -81,6 +90,7 @@ public class GumbelDistributionTest extends TestCase {
     Chop._13.requireClose(mean, Quantity.of(-0.5308862659606132, "m^-1"));
   }
 
+  @Test
   public void testVariance() {
     Distribution distribution = //
         GumbelDistribution.of(Quantity.of(-1.3, "m^-1"), Quantity.of(1.5, "m^-1"));
@@ -88,21 +98,25 @@ public class GumbelDistributionTest extends TestCase {
     Chop._13.requireClose(var, Quantity.of(3.7011016504085092, "m^-2"));
   }
 
+  @Test
   public void testToString() {
     Distribution distribution = //
         GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     assertEquals(distribution.toString(), "GumbelDistribution[3, 0.2]");
   }
 
+  @Test
   public void testBetaNonPositiveFail() {
     AssertFail.of(() -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0)));
     AssertFail.of(() -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(-1)));
   }
 
+  @Test
   public void testComplexFail() {
     AssertFail.of(() -> GumbelDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
   }
 
+  @Test
   public void testQuantityFail() {
     AssertFail.of(() -> GumbelDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
     AssertFail.of(() -> GumbelDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));

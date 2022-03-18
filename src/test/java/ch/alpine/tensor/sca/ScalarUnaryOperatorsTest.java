@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.erf.Fresnel;
@@ -28,9 +32,8 @@ import ch.alpine.tensor.sca.tri.Sinc;
 import ch.alpine.tensor.sca.tri.Sinh;
 import ch.alpine.tensor.sca.tri.Tan;
 import ch.alpine.tensor.sca.tri.Tanh;
-import junit.framework.TestCase;
 
-public class ScalarUnaryOperatorsTest extends TestCase {
+public class ScalarUnaryOperatorsTest {
   public static final ScalarUnaryOperator[] ARRAY = { //
       Abs.FUNCTION, //
       Abs.FUNCTION, //
@@ -84,6 +87,7 @@ public class ScalarUnaryOperatorsTest extends TestCase {
       UnitStep.FUNCTION //
   };
 
+  @Test
   public void testFailNull() {
     for (ScalarUnaryOperator scalarUnaryOperator : ARRAY) {
       try {

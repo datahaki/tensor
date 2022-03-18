@@ -1,12 +1,18 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.Serializable;
 
-import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class TimingTest extends TestCase {
+import ch.alpine.tensor.usr.AssertFail;
+
+public class TimingTest {
+  @Test
   public void testSimple() {
     Timing timing = Timing.stopped();
     assertEquals(timing.nanoSeconds(), 0);
@@ -20,17 +26,20 @@ public class TimingTest extends TestCase {
     assertEquals(timing.seconds(), timing.nanoSeconds() * 1e-9);
   }
 
+  @Test
   public void testNonSerializable() {
     Timing timing = Timing.started();
     assertFalse(timing instanceof Serializable);
   }
 
+  @Test
   public void testStartedFail() {
     Timing timing = Timing.started();
     AssertFail.of(() -> timing.start());
     assertTrue(0 < timing.nanoSeconds());
   }
 
+  @Test
   public void testStopFail() {
     Timing timing = Timing.started();
     Math.sin(1);

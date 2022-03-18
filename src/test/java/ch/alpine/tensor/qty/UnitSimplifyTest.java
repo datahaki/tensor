@@ -1,9 +1,13 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
@@ -11,9 +15,9 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class UnitSimplifyTest extends TestCase {
+public class UnitSimplifyTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Set<Unit> set = new HashSet<>();
     set.add(Unit.of("kW"));
@@ -28,6 +32,7 @@ public class UnitSimplifyTest extends TestCase {
     assertEquals(scalarUnaryOperator.apply(Quantity.of(20, "unknown")), Quantity.of(20, "unknown"));
   }
 
+  @Test
   public void testPartsPer() {
     assertEquals(QuantityMagnitude.SI().in("ppt").apply(Quantity.of(1, "ppb")), RealScalar.of(1000));
     assertEquals(QuantityMagnitude.SI().in("ppb").apply(Quantity.of(1, "ppm")), RealScalar.of(1000));
@@ -35,17 +40,20 @@ public class UnitSimplifyTest extends TestCase {
     assertEquals(QuantityMagnitude.SI().in("").apply(Quantity.of(100, "%")), RealScalar.of(1));
   }
 
+  @Test
   public void testProperties() {
     Set<String> set = ResourceData.properties("/unit/simplify1.properties").stringPropertyNames();
     UnitSimplify.from(UnitSystem.SI(), set);
     assertEquals(set.size(), 4);
   }
 
+  @Test
   public void testNonUnitFail() {
     Set<String> set = ResourceData.properties("/unit/simplify2.properties").stringPropertyNames();
     AssertFail.of(() -> UnitSimplify.from(UnitSystem.SI(), set));
   }
 
+  @Test
   public void testDuplicateFail() {
     Set<Unit> set = new HashSet<>();
     set.add(Unit.of("kW"));
@@ -53,6 +61,7 @@ public class UnitSimplifyTest extends TestCase {
     AssertFail.of(() -> UnitSimplify.of(UnitSystem.SI(), set));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> UnitSimplify.of(UnitSystem.SI(), null));
     AssertFail.of(() -> UnitSimplify.of(null, new HashSet<>()));

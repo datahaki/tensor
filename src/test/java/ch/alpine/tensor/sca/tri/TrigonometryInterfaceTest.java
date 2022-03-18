@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.sca.tri;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.function.Function;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -14,9 +18,8 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.UnitSystem;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TrigonometryInterfaceTest extends TestCase {
+public class TrigonometryInterfaceTest {
   private static void _check(Scalar value, ScalarUnaryOperator suo, Function<Double, Double> f) {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(value, "rad"));
     Scalar result = suo.apply(scalar);
@@ -24,6 +27,7 @@ public class TrigonometryInterfaceTest extends TestCase {
     assertEquals(result, actual);
   }
 
+  @Test
   public void testQuantity() {
     for (Tensor _value : Tensors.vector(-2.323, -1, -0.3, 0, 0.2, 1.2, 3., 4.456)) {
       Scalar value = (Scalar) _value;
@@ -34,12 +38,14 @@ public class TrigonometryInterfaceTest extends TestCase {
     }
   }
 
+  @Test
   public void testQuantityDegree() {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(180, "deg"));
     Chop._13.requireClose(Sin.of(scalar), RealScalar.ZERO);
     Chop._13.requireClose(Cos.of(scalar), RealScalar.ONE.negate());
   }
 
+  @Test
   public void testNaN() {
     assertEquals(Sin.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
     assertEquals(Cos.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
@@ -57,6 +63,7 @@ public class TrigonometryInterfaceTest extends TestCase {
     assertEquals(ArcTanh.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
   }
 
+  @Test
   public void testFails() {
     AssertFail.of(() -> Sin.of(Quantity.of(1.2, "m")));
     AssertFail.of(() -> Sin.of(GaussScalar.of(2, 7)));

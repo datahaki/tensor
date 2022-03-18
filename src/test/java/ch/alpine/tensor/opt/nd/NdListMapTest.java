@@ -1,9 +1,15 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -15,9 +21,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class NdListMapTest extends TestCase {
+public class NdListMapTest {
+  @Test
   public void testSimple() {
     NdMap<String> m1 = new NdListMap<>();
     m1.insert(Tensors.vector(1, 0), "p2");
@@ -76,6 +82,7 @@ public class NdListMapTest extends TestCase {
     Chop._10.requireClose(s1, s2);
   }
 
+  @Test
   public void testOne() {
     for (int dim = 1; dim < 5; ++dim) {
       _checkCenter(Tensors.vector(0.3, .3), 1, dim);
@@ -85,6 +92,7 @@ public class NdListMapTest extends TestCase {
     }
   }
 
+  @Test
   public void testFew() {
     for (int dim = 1; dim < 5; ++dim) {
       _checkCenter(Tensors.vector(0.3, .3), 3, dim);
@@ -94,6 +102,7 @@ public class NdListMapTest extends TestCase {
     }
   }
 
+  @Test
   public void testMany() {
     for (int dim = 1; dim < 5; ++dim) {
       _checkCenter(Tensors.vector(0.3, .3), 20, dim);
@@ -103,6 +112,7 @@ public class NdListMapTest extends TestCase {
     }
   }
 
+  @Test
   public void testMost() {
     for (int dim = 1; dim < 5; ++dim) {
       _checkCenter(Tensors.vector(0.3, .3), 60, dim);
@@ -112,6 +122,7 @@ public class NdListMapTest extends TestCase {
     }
   }
 
+  @Test
   public void testAll() {
     for (int dim = 1; dim < 5; ++dim) {
       _checkCenter(Tensors.vector(0.3, .3), 160, dim);

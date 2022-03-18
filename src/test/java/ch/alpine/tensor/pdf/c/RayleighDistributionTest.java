@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.NumberQ;
 import ch.alpine.tensor.RealScalar;
@@ -17,9 +22,9 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class RayleighDistributionTest extends TestCase {
+public class RayleighDistributionTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(RayleighDistribution.of(1.3));
     Tolerance.CHOP.requireClose( //
@@ -44,6 +49,7 @@ public class RayleighDistributionTest extends TestCase {
     assertTrue(distribution.toString().startsWith("RayleighDistribution["));
   }
 
+  @Test
   public void testRandom() {
     RayleighDistribution distribution = (RayleighDistribution) RayleighDistribution.of(RealScalar.of(1.3));
     RandomVariate.of(distribution, 100);
@@ -53,6 +59,7 @@ public class RayleighDistributionTest extends TestCase {
     NumberQ.require(q1);
   }
 
+  @Test
   public void testSigmaFail() {
     AssertFail.of(() -> RayleighDistribution.of(0));
     AssertFail.of(() -> RayleighDistribution.of(-1));

@@ -1,20 +1,24 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
 /** [
  * [ 0.0113 0.0838 0.0113 ]
  * [ 0.0838 0.6193 0.0838 ]
  * [ 0.0113 0.0838 0.0113 ]
  * ] */
-public class GaussianMatrixTest extends TestCase {
+public class GaussianMatrixTest {
   private static void _check(int n) {
     Tensor matrix = GaussianMatrix.of(n);
     int size = 2 * n + 1;
@@ -23,11 +27,13 @@ public class GaussianMatrixTest extends TestCase {
     assertEquals(Reverse.of(matrix), matrix);
   }
 
+  @Test
   public void testSmall() {
     for (int index = 1; index < 5; ++index)
       _check(index);
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> GaussianMatrix.of(0));
     AssertFail.of(() -> GaussianMatrix.of(-1));

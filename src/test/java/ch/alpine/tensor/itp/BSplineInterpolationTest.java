@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.ExactTensorQ;
@@ -18,9 +22,9 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class BSplineInterpolationTest extends TestCase {
+public class BSplineInterpolationTest {
+  @Test
   public void testVector() {
     Tensor tensor = Tensors.vector(2, 6, 4, 9, 10, 3);
     for (int degree = 0; degree < 4; ++degree) {
@@ -33,6 +37,7 @@ public class BSplineInterpolationTest extends TestCase {
     }
   }
 
+  @Test
   public void testMatrix1() {
     Tensor tensor = HilbertMatrix.of(10, 5);
     for (int degree = 0; degree < 4; ++degree) {
@@ -53,6 +58,7 @@ public class BSplineInterpolationTest extends TestCase {
     }
   }
 
+  @Test
   public void testMatrix2() {
     Tensor tensor = HilbertMatrix.of(5, 10);
     for (int degree = 0; degree < 4; ++degree) {
@@ -64,6 +70,7 @@ public class BSplineInterpolationTest extends TestCase {
     }
   }
 
+  @Test
   public void testAd() {
     Tensor tensor = LeviCivitaTensor.of(3);
     for (int degree = 0; degree < 4; ++degree) {
@@ -78,6 +85,7 @@ public class BSplineInterpolationTest extends TestCase {
     }
   }
 
+  @Test
   public void testSolve() {
     Tensor interp = Tensors.vector(1, 0, 3, 2);
     for (int degree = 0; degree < 4; ++degree) {
@@ -89,6 +97,7 @@ public class BSplineInterpolationTest extends TestCase {
     }
   }
 
+  @Test
   public void testLinear() {
     for (int n = 1; n < 6; ++n) {
       Tensor tensor = BSplineInterpolation.matrix(1, n);
@@ -97,6 +106,7 @@ public class BSplineInterpolationTest extends TestCase {
     }
   }
 
+  @Test
   public void testQuadratic() {
     for (int n = 1; n <= 6; ++n) {
       Tensor vector = Array.of(l -> RealScalar.ONE, n);
@@ -107,6 +117,7 @@ public class BSplineInterpolationTest extends TestCase {
     }
   }
 
+  @Test
   public void testCubic() {
     for (int n = 1; n <= 6; ++n) {
       Tensor vector = Array.of(l -> RealScalar.ONE, n);

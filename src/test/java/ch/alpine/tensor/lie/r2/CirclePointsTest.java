@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.lie.r2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -22,19 +27,20 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class CirclePointsTest extends TestCase {
+public class CirclePointsTest {
   static Tensor numeric(int n) {
     if (n < 0)
       throw new RuntimeException("n=" + n);
     return Range.of(0, n).multiply(DoubleScalar.of(2 * Math.PI / n)).map(AngleVector::of);
   }
 
+  @Test
   public void testZero() {
     assertEquals(CirclePoints.of(0), Tensors.empty());
   }
 
+  @Test
   public void testExact() {
     ExactTensorQ.require(CirclePoints.of(2));
     ExactTensorQ.require(CirclePoints.of(4));
@@ -46,11 +52,13 @@ public class CirclePointsTest extends TestCase {
     assertEquals(CirclePoints.of(12).flatten(-1).map(Scalar.class::cast).filter(ExactScalarQ::of).count(), 16);
   }
 
+  @Test
   public void testNumeric() {
     for (int count = 0; count <= 32; ++count)
       Tolerance.CHOP.requireClose(CirclePoints.of(count), numeric(count));
   }
 
+  @Test
   public void testNorm() {
     int n = 5;
     Tensor tensor = CirclePoints.of(n);
@@ -59,6 +67,7 @@ public class CirclePointsTest extends TestCase {
     Chop._14.requireAllZero(Tensor.of(tensor.stream().map(Vector2NormSquared::of).map(s -> s.subtract(RealScalar.ONE))));
   }
 
+  @Test
   public void testFirst() {
     int n = 5;
     Tensor tensor = CirclePoints.of(n);
@@ -66,18 +75,21 @@ public class CirclePointsTest extends TestCase {
     assertEquals(tensor.get(0), UnitVector.of(2, 0));
   }
 
+  @Test
   public void testSmall() {
     assertEquals(CirclePoints.of(0), Tensors.empty());
     assertEquals(CirclePoints.of(1), Tensors.fromString("{{1, 0}}"));
     assertEquals(Chop._14.of(CirclePoints.of(2)), Tensors.fromString("{{1, 0}, {-1, 0}}"));
   }
 
+  @Test
   public void testCirclePoints() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, CirclePoints.of(10));
     Tensor polygon = Subdivide.of(0, 9, 20).map(bSplineFunction::apply);
     assertTrue(MatrixQ.of(polygon));
   }
 
+  @Test
   public void testFailNegative() {
     AssertFail.of(() -> CirclePoints.of(-1));
   }

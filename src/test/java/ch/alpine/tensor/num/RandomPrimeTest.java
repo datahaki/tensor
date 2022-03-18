@@ -3,15 +3,18 @@ package ch.alpine.tensor.num;
 
 import java.util.Random;
 
-import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class RandomPrimeTest extends TestCase {
+import ch.alpine.tensor.usr.AssertFail;
+
+public class RandomPrimeTest {
+  @Test
   public void testSimple() {
     Random random = new Random();
     RandomPrime.of(10, random);
   }
 
+  @Test
   public void testFail() {
     Random random = new Random();
     RandomPrime.of(Prime.MAX_INDEX, random);

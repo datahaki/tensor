@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.lie.r2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -11,9 +16,9 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Sign;
-import junit.framework.TestCase;
 
-public class GrahamScanTest extends TestCase {
+public class GrahamScanTest {
+  @Test
   public void testColinear() {
     assertTrue(Scalars.isZero(GrahamScan.ccw( //
         Tensors.vector(1, 0), //
@@ -29,6 +34,7 @@ public class GrahamScanTest extends TestCase {
         Tensors.vector(-1, 0))));
   }
 
+  @Test
   public void testCcw() {
     assertTrue(Sign.isPositive(GrahamScan.ccw( //
         Tensors.vector(1, 0), //
@@ -44,6 +50,7 @@ public class GrahamScanTest extends TestCase {
         Tensors.vector(-1, 1))));
   }
 
+  @Test
   public void testCw() {
     assertTrue(Sign.isNegative(GrahamScan.ccw( //
         Tensors.vector(1, 0), //
@@ -59,6 +66,7 @@ public class GrahamScanTest extends TestCase {
         Tensors.vector(-1, -1))));
   }
 
+  @Test
   public void testCluster() {
     Tensor tensor = Tensors.empty();
     tensor.append(Tensors.vector(1, 1));
@@ -74,6 +82,7 @@ public class GrahamScanTest extends TestCase {
     assertTrue(hull.length() <= 3);
   }
 
+  @Test
   public void testClusterOnly() {
     double variance = 1e-20;
     Distribution distribution = NormalDistribution.of(0.0, variance);

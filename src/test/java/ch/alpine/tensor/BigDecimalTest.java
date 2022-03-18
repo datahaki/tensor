@@ -1,14 +1,18 @@
 // code by jph
 package ch.alpine.tensor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class BigDecimalTest extends TestCase {
+public class BigDecimalTest {
+  @Test
   public void testPrecision() {
     BigDecimal value = new BigDecimal(new BigInteger("12333"), new MathContext(100, RoundingMode.HALF_EVEN));
     value = new BigDecimal("12333", new MathContext(100, RoundingMode.HALF_EVEN));
@@ -17,6 +21,7 @@ public class BigDecimalTest extends TestCase {
     assertTrue(0 < precision);
   }
 
+  @Test
   public void testMultiply() {
     BigDecimal a = new BigDecimal("19.2134534512334534343");
     assertEquals(a.precision(), 21);
@@ -31,6 +36,7 @@ public class BigDecimalTest extends TestCase {
     assertEquals(d.precision(), 21);
   }
 
+  @Test
   public void testDivide() {
     BigDecimal a = new BigDecimal("0.0002134534512334534343");
     BigDecimal b = new BigDecimal("33333.8375654545222327883");
@@ -38,6 +44,7 @@ public class BigDecimalTest extends TestCase {
     assertEquals(ab2.precision(), 34);
   }
 
+  @Test
   public void testSqrt() {
     MathContext mc = MathContext.DECIMAL128;
     BigDecimal b = new BigDecimal("29.1373503383756545452223278558123399996876");

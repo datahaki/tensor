@@ -1,16 +1,21 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.ReadLine;
 import ch.alpine.tensor.mat.MatrixQ;
 import ch.alpine.tensor.mat.SquareMatrixQ;
-import junit.framework.TestCase;
 
 /** reported by mgini:
  * 
@@ -26,9 +31,10 @@ import junit.framework.TestCase;
  * 
  * After importing the csv file using {@link Import}
  * the check StringScalarQ.any(tensor) should return false. */
-public class LowercaseETest extends TestCase {
+public class LowercaseETest {
   private static final String RESOURCE = "/io/lowercase_e.csv";
 
+  @Test
   public void testConventional() {
     Tensor tensor = ResourceData.of(RESOURCE);
     assertTrue(StringScalarQ.any(tensor));
@@ -45,6 +51,7 @@ public class LowercaseETest extends TestCase {
     }
   }
 
+  @Test
   public void testUppercase() throws IOException {
     Tensor tensor = importMatlabCsv(RESOURCE);
     assertFalse(StringScalarQ.any(tensor));

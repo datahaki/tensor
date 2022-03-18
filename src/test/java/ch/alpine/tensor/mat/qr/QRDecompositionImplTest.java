@@ -1,8 +1,14 @@
 // code by jph
 package ch.alpine.tensor.mat.qr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -25,9 +31,9 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class QRDecompositionImplTest extends TestCase {
+public class QRDecompositionImplTest {
+  @Test
   public void testDegenerate0Square() {
     for (int n = 1; n < 6; ++n) {
       QRDecomposition qrDecomposition = QRDecomposition.of(Array.zeros(n, n));
@@ -36,6 +42,7 @@ public class QRDecompositionImplTest extends TestCase {
     }
   }
 
+  @Test
   public void testDegenerate1Square() {
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = DiagonalMatrix.with(UnitVector.of(n, 0));
@@ -45,6 +52,7 @@ public class QRDecompositionImplTest extends TestCase {
     }
   }
 
+  @Test
   public void testDegenerateRect() {
     for (int m = 1; m < 6; ++m) {
       int n = m + 2;
@@ -54,6 +62,7 @@ public class QRDecompositionImplTest extends TestCase {
     }
   }
 
+  @Test
   public void testDimensionsBigSmall() {
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
@@ -68,6 +77,7 @@ public class QRDecompositionImplTest extends TestCase {
     }
   }
 
+  @Test
   public void testSmallBigVector() {
     for (int m = 4; m < 7; ++m) {
       int n = m - 2;
@@ -82,6 +92,7 @@ public class QRDecompositionImplTest extends TestCase {
     }
   }
 
+  @Test
   public void testPseudoInverseRankDeficient() {
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
@@ -94,11 +105,13 @@ public class QRDecompositionImplTest extends TestCase {
     }
   }
 
+  @Test
   public void testToString() {
     QRDecomposition qrDecomposition = QRDecomposition.of(HilbertMatrix.of(3, 2));
     assertTrue(qrDecomposition.toString().startsWith("QRDecomposition"));
   }
 
+  @Test
   public void testBic() {
     Tensor matrix = ResourceData.of("/mat/bic1.csv");
     QRDecompositionImpl qrDecomposition = (QRDecompositionImpl) QRDecomposition.of(matrix);
@@ -110,6 +123,7 @@ public class QRDecompositionImplTest extends TestCase {
     AssertFail.of(() -> qrDecomposition.pseudoInverse());
   }
 
+  @Test
   public void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
@@ -117,6 +131,7 @@ public class QRDecompositionImplTest extends TestCase {
     Tolerance.CHOP.requireClose(matrix, tensor);
   }
 
+  @Test
   public void testPackageVisibility() {
     assertTrue(Modifier.isPublic(QRDecomposition.class.getModifiers()));
     assertFalse(Modifier.isPublic(QRDecompositionImpl.class.getModifiers()));

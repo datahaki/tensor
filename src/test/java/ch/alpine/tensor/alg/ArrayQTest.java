@@ -1,6 +1,12 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -9,15 +15,16 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ArrayQTest extends TestCase {
+public class ArrayQTest {
+  @Test
   public void testScalar() {
     assertTrue(ArrayQ.of(RealScalar.ONE));
     assertTrue(ArrayQ.of(ComplexScalar.fromPolar(3.7, 9.8)));
     assertTrue(ArrayQ.of(Quantity.of(4, "m")));
   }
 
+  @Test
   public void testIsArray() {
     Tensor d = DoubleScalar.of(0.12);
     assertTrue(ArrayQ.of(d));
@@ -29,6 +36,7 @@ public class ArrayQTest extends TestCase {
     assertFalse(ArrayQ.of(c));
   }
 
+  @Test
   public void testOfRank() {
     for (int rank = 0; rank < 5; ++rank) {
       assertEquals(rank == 0, ArrayQ.ofRank(RealScalar.ONE, rank));
@@ -38,11 +46,13 @@ public class ArrayQTest extends TestCase {
     }
   }
 
+  @Test
   public void testRequire() {
     Tensor tensor = Tensors.fromString("{{1, 2}, 3}");
     AssertFail.of(() -> ArrayQ.require(tensor));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> ArrayQ.of(null));
   }

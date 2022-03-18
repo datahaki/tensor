@@ -1,12 +1,17 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -22,9 +27,9 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class DbscanTest extends TestCase {
+public class DbscanTest {
+  @Test
   public void testSimple() {
     Distribution dist_b = UniformDistribution.of(0, 10);
     Distribution dist_r = NormalDistribution.of(0, 1);
@@ -45,36 +50,42 @@ public class DbscanTest extends TestCase {
     // System.out.println(map.size());
   }
 
+  @Test
   public void testUniform() {
     Tensor points = Range.of(0, 8).map(Tensors::of);
     Integer[] integers = Dbscan.of(points, NdCenters.VECTOR_1_NORM, RealScalar.of(1), 3);
     assertEquals(Tensors.vector(integers), Array.zeros(integers.length));
   }
 
+  @Test
   public void testInsufficientRadius() {
     Tensor points = Range.of(0, 8).map(Tensors::of);
     Integer[] integers = Dbscan.of(points, NdCenters.VECTOR_2_NORM, RealScalar.of(0.1), 2);
     assertEquals(Tensors.vector(integers), ConstantArray.of(RealScalar.of(-1), integers.length));
   }
 
+  @Test
   public void testInsufficientPoints() {
     Tensor points = Range.of(0, 8).map(Tensors::of);
     Integer[] integers = Dbscan.of(points, NdCenters.VECTOR_INFINITY_NORM, RealScalar.of(1), 4);
     assertEquals(Tensors.vector(integers), ConstantArray.of(RealScalar.of(-1), integers.length));
   }
 
+  @Test
   public void testQuantity() {
     Tensor points = Range.of(0, 8).map(Tensors::of).map(s -> Quantity.of(s, "m"));
     Integer[] integers = Dbscan.of(points, NdCenters.VECTOR_2_NORM, Quantity.of(1, "m"), 3);
     assertEquals(Tensors.vector(integers), Array.zeros(integers.length));
   }
 
+  @Test
   public void testSpaced() {
     Tensor points = Join.of(Range.of(0, 7), Range.of(10, 15), Range.of(20, 24)).map(Tensors::of);
     Integer[] integers = Dbscan.of(points, NdCenters.VECTOR_INFINITY_NORM, Quantity.of(1, ""), 3);
     assertEquals(Tensors.vector(integers), Tensors.vector(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2));
   }
 
+  @Test
   public void testSpacedPermuted() {
     Tensor points = Join.of(Range.of(0, 7), Range.of(10, 15), Range.of(20, 24)).map(Tensors::of);
     List<Integer> perm = IntStream.range(0, points.length()).boxed().collect(Collectors.toList());
@@ -88,6 +99,7 @@ public class DbscanTest extends TestCase {
     assertTrue(map.values().contains(7L));
   }
 
+  @Test
   public void testFail() {
     Tensor points = Range.of(0, 8).map(Tensors::of);
     AssertFail.of(() -> Dbscan.of(points, NdCenters.VECTOR_2_NORM, RealScalar.of(-1.1), 3));

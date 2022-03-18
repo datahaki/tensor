@@ -1,12 +1,18 @@
 // code by jph
 package ch.alpine.tensor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class DeterminateScalarQTest extends TestCase {
+public class DeterminateScalarQTest {
+  @Test
   public void testTrue() {
     assertTrue(DeterminateScalarQ.of(Pi.HALF));
     assertTrue(DeterminateScalarQ.of(RationalScalar.HALF));
@@ -17,6 +23,7 @@ public class DeterminateScalarQTest extends TestCase {
     assertTrue(DeterminateScalarQ.of(Quantity.of(Pi.VALUE, "kg")));
   }
 
+  @Test
   public void testFalse() {
     assertFalse(DeterminateScalarQ.of(DoubleScalar.POSITIVE_INFINITY));
     assertFalse(DeterminateScalarQ.of(DoubleScalar.NEGATIVE_INFINITY));
@@ -32,6 +39,7 @@ public class DeterminateScalarQTest extends TestCase {
     assertFalse(DeterminateScalarQ.of(Quantity.of(ComplexScalar.of(Double.NaN, 3), "m")));
   }
 
+  @Test
   public void testComplexBranching() {
     Scalar scalar = ComplexScalar.of(Double.NaN, Double.NaN);
     assertTrue(scalar instanceof ComplexScalar);
@@ -42,6 +50,7 @@ public class DeterminateScalarQTest extends TestCase {
     assertFalse(DeterminateScalarQ.of(ComplexScalar.of(Double.NaN, Double.NaN)));
   }
 
+  @Test
   public void testInvariance() {
     Scalar scalar = Scalars.fromString("NaN+2*I[m*s]");
     assertEquals(scalar.toString(), "NaN+2*I[m*s]");
@@ -49,11 +58,13 @@ public class DeterminateScalarQTest extends TestCase {
     AssertFail.of(() -> DeterminateScalarQ.require(scalar));
   }
 
+  @Test
   public void testRequireThrow() {
     DeterminateScalarQ.require(Pi.VALUE);
     AssertFail.of(() -> DeterminateScalarQ.require(DoubleScalar.POSITIVE_INFINITY));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> DeterminateScalarQ.of(null));
   }

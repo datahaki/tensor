@@ -1,9 +1,12 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class NdCollectBaseTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+public class NdCollectBaseTest {
+  @Test
   public void testVisibility() {
     assertEquals(NdCollectBase.class.getModifiers() & 1, 1);
   }

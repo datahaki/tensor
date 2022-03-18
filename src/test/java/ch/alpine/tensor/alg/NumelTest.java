@@ -1,17 +1,22 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import junit.framework.TestCase;
 
-public class NumelTest extends TestCase {
+public class NumelTest {
+  @Test
   public void testScalar() {
     Tensor a = DoubleScalar.of(2.32123);
     assertEquals(Numel.of(a), 1);
   }
 
+  @Test
   public void testNumel() {
     assertEquals(Numel.of(Tensors.empty()), 0);
     Tensor b = Tensors.vectorLong(3, 2);
@@ -23,6 +28,7 @@ public class NumelTest extends TestCase {
     assertEquals(Numel.of(Array.zeros(3, 5, 4)), 3 * 4 * 5);
   }
 
+  @Test
   public void testFlatten() {
     Tensor a = DoubleScalar.of(1.23);
     Tensor b = Tensors.vectorLong(3, 2, 3, 5);

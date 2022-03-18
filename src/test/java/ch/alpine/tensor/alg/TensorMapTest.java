@@ -1,7 +1,13 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
@@ -12,9 +18,9 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TensorMapTest extends TestCase {
+public class TensorMapTest {
+  @Test
   public void testUnmodifiable() {
     Tensor matrix = Array.zeros(3, 1).unmodifiable();
     try {
@@ -29,12 +35,14 @@ public class TensorMapTest extends TestCase {
     assertEquals(matrix, Array.zeros(3, 1));
   }
 
+  @Test
   public void testTotal() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {4, 5}}");
     Tensor result = TensorMap.of(Total::of, tensor, 1);
     assertEquals(result, Tensors.vector(6, 9));
   }
 
+  @Test
   public void testIrregular() {
     Tensor array = Tensors.fromString("{{1, 2, 3}, {8, 9}}");
     Tensor result = TensorMap.of(row -> Total.of(row), array, 1);
@@ -42,6 +50,7 @@ public class TensorMapTest extends TestCase {
     assertEquals(result, Tensors.vector(6, 17));
   }
 
+  @Test
   public void testModifiable() {
     Tensor matrix = Array.zeros(3, 1);
     Tensor blub = TensorMap.of(s -> {
@@ -53,6 +62,7 @@ public class TensorMapTest extends TestCase {
     assertFalse(matrix == blub);
   }
 
+  @Test
   public void testImageTUO() {
     TensorUnaryOperator tensorUnaryOperator = rgba -> {
       if (Scalars.isZero(rgba.Get(0)))
@@ -65,6 +75,7 @@ public class TensorMapTest extends TestCase {
     assertEquals(Dimensions.of(result), Arrays.asList(33, 15, 4));
   }
 
+  @Test
   public void testImageTSF() {
     TensorScalarFunction tensorScalarFunction = rgba -> {
       if (Scalars.isZero(rgba.Get(0)))
@@ -77,11 +88,13 @@ public class TensorMapTest extends TestCase {
     assertEquals(Dimensions.of(result), Arrays.asList(33, 15));
   }
 
+  @Test
   public void testScalar() {
     Tensor result = TensorMap.of(RealScalar.ONE::add, RealScalar.ONE, 0);
     assertEquals(result, RealScalar.of(2));
   }
 
+  @Test
   public void testNegativeFail() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}");
     AssertFail.of(() -> TensorMap.of(Total::of, tensor, -1));

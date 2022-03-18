@@ -3,11 +3,13 @@ package ch.alpine.tensor.prc;
 
 import java.util.Random;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.qty.Quantity;
-import junit.framework.TestCase;
 
-public class PoissonProcessTest extends TestCase {
+public class PoissonProcessTest {
+  @Test
   public void testSimple() {
     Random random = new Random(1);
     PoissonProcess poissonProcess = new PoissonProcess(Quantity.of(0.2, "s^-1"));

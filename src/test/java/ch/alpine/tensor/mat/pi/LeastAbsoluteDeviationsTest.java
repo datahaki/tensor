@@ -1,19 +1,21 @@
 // code by jph
 package ch.alpine.tensor.mat.pi;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.nrm.Vector1Norm;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
-import junit.framework.TestCase;
 
-public class LeastAbsoluteDeviationsTest extends TestCase {
+public class LeastAbsoluteDeviationsTest {
   private static Scalar error(Tensor A, Tensor x, Tensor b) {
     return Vector1Norm.of(A.dot(x).subtract(b));
   }
 
+  @Test
   public void testSimple() {
     Distribution distribution = TriangularDistribution.with(0, 1);
     Tensor matrix = RandomVariate.of(distribution, 8, 4);

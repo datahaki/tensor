@@ -1,13 +1,16 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Serialization;
-import junit.framework.TestCase;
 
-public class AdjacentReduceTest extends TestCase {
+public class AdjacentReduceTest {
   public static class Some extends AdjacentReduce {
     @Override
     protected Tensor reduce(Tensor prev, Tensor next) {
@@ -15,6 +18,7 @@ public class AdjacentReduceTest extends TestCase {
     }
   }
 
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Tensor tensor = Range.of(0, 5);
     int length = tensor.length();

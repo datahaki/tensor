@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.mat.gr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
@@ -20,9 +25,9 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class MahalanobisTest extends TestCase {
+public class MahalanobisTest {
+  @Test
   public void testRankDeficientQuantity() {
     int n = 7;
     int _m = 5;
@@ -47,6 +52,7 @@ public class MahalanobisTest extends TestCase {
     }
   }
 
+  @Test
   public void testExact() throws ClassNotFoundException, IOException {
     for (int n = 7; n < 9; ++n) {
       Distribution distribution = DiscreteUniformDistribution.of(-1000, 1000);
@@ -74,10 +80,12 @@ public class MahalanobisTest extends TestCase {
     }
   }
 
+  @Test
   public void testEmptyFail() {
     AssertFail.of(() -> new Mahalanobis(Tensors.empty()));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> new Mahalanobis(null));
   }

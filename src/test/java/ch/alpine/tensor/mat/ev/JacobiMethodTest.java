@@ -1,7 +1,13 @@
 // code by guedelmi, jph
 package ch.alpine.tensor.mat.ev;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.lang.reflect.Modifier;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -30,9 +36,8 @@ import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
-import junit.framework.TestCase;
 
-public class JacobiMethodTest extends TestCase {
+public class JacobiMethodTest {
   private static void checkEquation(Tensor matrix, Eigensystem eigensystem) {
     assertTrue(eigensystem.toString().startsWith("Eigensystem["));
     Tensor vectors = eigensystem.vectors();
@@ -72,6 +77,7 @@ public class JacobiMethodTest extends TestCase {
     SymmetricMatrixQ.require(Tensors.matrix(jacobiMethod.H), Chop.NONE);
   }
 
+  @Test
   public void testJacobiWithTensor1() {
     Tensor tensor = Tensors.fromString("{{2, 3, 0, 1}, {3, 1, 7, 5}, {0, 7, 10, 9}, {1, 5, 9, 13}}");
     Eigensystem eigensystem = Eigensystem.ofSymmetric(tensor);
@@ -83,6 +89,7 @@ public class JacobiMethodTest extends TestCase {
     checkEquation(tensor, eigensystem);
   }
 
+  @Test
   public void testJacobiWithTensor2() {
     Tensor tensor = Tensors.fromString("{{0, 3, 0, 1}, {3, 0, 7, 5}, {0, 7, -2, 9}, {1, 5, 9, 0}}");
     Eigensystem eigensystem = Eigensystem.ofSymmetric(tensor);
@@ -96,6 +103,7 @@ public class JacobiMethodTest extends TestCase {
     assertEquals(Tolerance.CHOP.of(expEigvl.subtract(eigensystem.values())), Array.zeros(4));
   }
 
+  @Test
   public void testHilberts() {
     for (int size = 1; size < 10; ++size) {
       Tensor matrix = HilbertMatrix.of(size);
@@ -106,6 +114,7 @@ public class JacobiMethodTest extends TestCase {
     }
   }
 
+  @Test
   public void testZeros() {
     for (int c = 1; c < 10; ++c) {
       Tensor matrix = Array.zeros(c, c);
@@ -119,6 +128,7 @@ public class JacobiMethodTest extends TestCase {
     }
   }
 
+  @Test
   public void testHilbert1() {
     Tensor matrix = HilbertMatrix.of(1);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
@@ -126,6 +136,7 @@ public class JacobiMethodTest extends TestCase {
     Tolerance.CHOP.requireClose(expected.subtract(eigensystem.values()), Array.zeros(matrix.length()));
   }
 
+  @Test
   public void testHilbert2() {
     Tensor matrix = HilbertMatrix.of(2);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
@@ -133,6 +144,7 @@ public class JacobiMethodTest extends TestCase {
     Tolerance.CHOP.requireClose(expected.subtract(eigensystem.values()), Array.zeros(matrix.length()));
   }
 
+  @Test
   public void testHilbert3() {
     Tensor matrix = HilbertMatrix.of(3);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
@@ -140,18 +152,21 @@ public class JacobiMethodTest extends TestCase {
     Tolerance.CHOP.requireClose(expected.subtract(eigensystem.values()), Array.zeros(matrix.length()));
   }
 
+  @Test
   public void testChallenge1() {
     Tensor matrix = ResourceData.of("/mat/jacobi1.csv");
     Tolerance.CHOP.requireClose(matrix, IdentityMatrix.of(3));
     checkEquation(matrix, Eigensystem.ofSymmetric(matrix));
   }
 
+  @Test
   public void testChallenge2() {
     Tensor matrix = ResourceData.of("/mat/jacobi2.csv");
     Tolerance.CHOP.requireClose(matrix, IdentityMatrix.of(3));
     checkEquation(matrix, Eigensystem.ofSymmetric(matrix));
   }
 
+  @Test
   public void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
@@ -159,6 +174,7 @@ public class JacobiMethodTest extends TestCase {
     assertTrue(eigensystem.values().Get(4) instanceof DecimalScalar);
   }
 
+  @Test
   public void testPackageVisibility() {
     assertTrue(Modifier.isPublic(Eigensystem.class.getModifiers()));
     assertFalse(Modifier.isPublic(EigensystemImpl.class.getModifiers()));

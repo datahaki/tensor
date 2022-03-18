@@ -1,11 +1,14 @@
 // code by jph
 package ch.alpine.tensor.opt.hun;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.lang.reflect.Modifier;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class HungarianAlgorithmGraphTest extends TestCase {
+public class HungarianAlgorithmGraphTest {
+  @Test
   public void testPackageVisibility() {
     assertFalse(Modifier.isPublic(HungarianAlgorithmGraph.class.getModifiers()));
   }

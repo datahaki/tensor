@@ -1,9 +1,13 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.NavigableMap;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -11,9 +15,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TallyTest extends TestCase {
+public class TallyTest {
+  @Test
   public void testSome() {
     Tensor tensor = Tensors.vector(4, 2, 3, 7, 2, 5, 4, 2, 2, 5);
     Map<Tensor, Long> map = Tally.of(tensor);
@@ -22,11 +26,13 @@ public class TallyTest extends TestCase {
     assertEquals((long) map.get(RealScalar.of(5)), 2);
   }
 
+  @Test
   public void testEmpty() {
     Map<Tensor, Long> map = Tally.of(Tensors.empty());
     assertEquals(map, Collections.emptyMap());
   }
 
+  @Test
   public void testStreamScalar() {
     Tensor tensor = Tensors.vector(4, 2, 3, 7, 2, 5, 4, 2, 2, 5);
     Map<Scalar, Long> map = Tally.of(tensor.stream().map(Scalar.class::cast));
@@ -35,6 +41,7 @@ public class TallyTest extends TestCase {
     assertEquals((long) map.get(RealScalar.of(5)), 2);
   }
 
+  @Test
   public void testInfty() {
     Tensor tensor = Tensors.of( //
         DoubleScalar.POSITIVE_INFINITY, RealScalar.ONE, //
@@ -46,6 +53,7 @@ public class TallyTest extends TestCase {
     assertEquals((long) map.get(RealScalar.of(1)), 1);
   }
 
+  @Test
   public void testSorted() {
     Tensor vector = Tensors.vector(4, 2, 3, 7, 2, 5, 4, 2, 2, 5);
     NavigableMap<Tensor, Long> navigableMap = Tally.sorted(vector);
@@ -53,11 +61,13 @@ public class TallyTest extends TestCase {
     assertEquals(keys, Tensors.vector(2, 3, 4, 5, 7));
   }
 
+  @Test
   public void testNumZero() {
     Tensor vector = Tensors.vector(-0.0, 0.0, -0.0);
     assertEquals(Tally.of(vector).size(), 1);
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> Tally.of(RealScalar.of(3.1234)));
   }

@@ -1,14 +1,19 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class LruCacheTest extends TestCase {
+public class LruCacheTest {
+  @Test
   public void testLru1() {
     Map<Integer, String> map = new LruCache<>(2);
     map.put(3, "1");
@@ -36,12 +41,14 @@ public class LruCacheTest extends TestCase {
     }
   }
 
+  @Test
   public void testMax() {
     Map<Integer, String> map = new LruCache<>(3);
     IntStream.range(0, 100).forEach(i -> map.put(i, "" + i));
     assertEquals(map.size(), 3);
   }
 
+  @Test
   public void testLruAccessOrder() {
     Map<Integer, String> map = new LruCache<>(2);
     map.put(3, "3");
@@ -51,6 +58,7 @@ public class LruCacheTest extends TestCase {
     assertFalse(map.containsKey(3));
   }
 
+  @Test
   public void testLruAccessOrder2() {
     Map<Integer, String> map = new LruCache<>(2);
     map.put(3, "3");
@@ -61,6 +69,7 @@ public class LruCacheTest extends TestCase {
     assertFalse(map.containsKey(4));
   }
 
+  @Test
   public void testThreadSafe() {
     Map<Integer, Integer> map = Collections.synchronizedMap(new LruCache<>(12));
     IntStream.range(0, 1024).boxed().parallel().forEach(index -> map.put(index % 32, index));

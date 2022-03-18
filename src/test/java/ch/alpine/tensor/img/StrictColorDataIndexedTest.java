@@ -1,17 +1,21 @@
 // code by jph
 package ch.alpine.tensor.img;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.awt.Color;
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class StrictColorDataIndexedTest extends TestCase {
+public class StrictColorDataIndexedTest {
+  @Test
   public void testColors2() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(tensor);
@@ -24,6 +28,7 @@ public class StrictColorDataIndexedTest extends TestCase {
     assertEquals(colorDataIndexed.getColor(1), ref1);
   }
 
+  @Test
   public void testColors3() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}");
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(tensor);
@@ -38,6 +43,7 @@ public class StrictColorDataIndexedTest extends TestCase {
     assertEquals(colorDataIndexed.getColor(2), ref2);
   }
 
+  @Test
   public void testDerive() throws ClassNotFoundException, IOException {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
     ColorDataIndexed colorDataIndexed = Serialization.copy(StrictColorDataIndexed.of(tensor));
@@ -48,11 +54,13 @@ public class StrictColorDataIndexedTest extends TestCase {
     assertEquals(colorDataIndexed.getColor(1), ref1);
   }
 
+  @Test
   public void testEmpty() throws ClassNotFoundException, IOException {
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(Tensors.empty());
     Serialization.copy(colorDataIndexed.deriveWithAlpha(128));
   }
 
+  @Test
   public void testColors() {
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(Color.BLUE, Color.RED, Color.BLACK);
     assertEquals(colorDataIndexed.getColor(0), Color.BLUE);
@@ -61,15 +69,18 @@ public class StrictColorDataIndexedTest extends TestCase {
     AssertFail.of(() -> colorDataIndexed.getColor(3));
   }
 
+  @Test
   public void testFailCreate() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}}");
     AssertFail.of(() -> StrictColorDataIndexed.of(tensor));
   }
 
+  @Test
   public void testFailCreateScalar() {
     AssertFail.of(() -> StrictColorDataIndexed.of(RealScalar.ONE));
   }
 
+  @Test
   public void testFailExtract() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(tensor);

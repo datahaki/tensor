@@ -3,6 +3,8 @@ package ch.alpine.tensor.mat;
 
 import java.util.function.Function;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -24,9 +26,8 @@ import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class MatrixTest extends TestCase {
+public class MatrixTest {
   private static <T> void _checkFail(Function<Tensor, T> function) {
     AssertFail.of(() -> function.apply(null));
     AssertFail.of(() -> function.apply(RealScalar.ONE));
@@ -54,6 +55,7 @@ public class MatrixTest extends TestCase {
     }
   }
 
+  @Test
   public void testSimple() {
     _checkFail(RowReduce::of);
     _checkFail(MatrixRank::of);

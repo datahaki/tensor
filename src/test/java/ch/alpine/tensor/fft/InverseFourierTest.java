@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.fft;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -12,9 +14,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class InverseFourierTest extends TestCase {
+public class InverseFourierTest {
+  @Test
   public void testRandom() {
     Distribution distribution = NormalDistribution.standard();
     for (int n = 0; n < 7; ++n)
@@ -26,14 +28,17 @@ public class InverseFourierTest extends TestCase {
       }
   }
 
+  @Test
   public void testFailScalar() {
     AssertFail.of(() -> InverseFourier.of(RealScalar.ONE));
   }
 
+  @Test
   public void testFailEmpty() {
     AssertFail.of(() -> InverseFourier.of(Tensors.empty()));
   }
 
+  @Test
   public void testFailMatrix() {
     AssertFail.of(() -> InverseFourier.of(HilbertMatrix.of(4)));
   }

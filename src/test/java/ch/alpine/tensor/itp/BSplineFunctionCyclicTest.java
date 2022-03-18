@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
@@ -20,9 +24,9 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class BSplineFunctionCyclicTest extends TestCase {
+public class BSplineFunctionCyclicTest {
+  @Test
   public void testDegree0() {
     ScalarTensorFunction scalarTensorFunction = BSplineFunctionCyclic.of(0, Tensors.vector(1, 2, 3));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(-0.1)), RealScalar.of(1));
@@ -38,6 +42,7 @@ public class BSplineFunctionCyclicTest extends TestCase {
     assertEquals(scalarTensorFunction.apply(RealScalar.of(3.1)), RealScalar.of(1));
   }
 
+  @Test
   public void testDegree1() {
     ScalarTensorFunction scalarTensorFunction = BSplineFunctionCyclic.of(1, Tensors.vector(3, 4, 5));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(-0.5)), RealScalar.of(4.0));
@@ -51,6 +56,7 @@ public class BSplineFunctionCyclicTest extends TestCase {
     assertEquals(scalarTensorFunction.apply(RealScalar.of(3.5)), RealScalar.of(3.5));
   }
 
+  @Test
   public void testCyclic() {
     Random random = new Random();
     Distribution distribution = DiscreteUniformDistribution.of(-50, 50);
@@ -70,6 +76,7 @@ public class BSplineFunctionCyclicTest extends TestCase {
       }
   }
 
+  @Test
   public void testExact() {
     Distribution distribution = UniformDistribution.of(0, 3);
     ScalarUnaryOperator scalarUnaryOperator = Round.toMultipleOf(RationalScalar.of(1, 7));
@@ -82,6 +89,7 @@ public class BSplineFunctionCyclicTest extends TestCase {
     }
   }
 
+  @Test
   public void testEmptyFail() {
     for (int degree = -2; degree <= 4; ++degree) {
       int fd = degree;
@@ -89,6 +97,7 @@ public class BSplineFunctionCyclicTest extends TestCase {
     }
   }
 
+  @Test
   public void testNegativeFail() {
     AssertFail.of(() -> BSplineFunctionString.of(-1, Tensors.vector(1, 2, 3, 4)));
   }

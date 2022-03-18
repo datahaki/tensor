@@ -1,13 +1,15 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class HannPoissonWindowTest extends TestCase {
+public class HannPoissonWindowTest {
+  @Test
   public void testSimple() {
     ScalarUnaryOperator suo = HannPoissonWindow.of(RealScalar.of(1.3));
     Tolerance.CHOP.requireClose( //
@@ -18,6 +20,7 @@ public class HannPoissonWindowTest extends TestCase {
         RealScalar.of(0));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> HannPoissonWindow.of(null));
   }

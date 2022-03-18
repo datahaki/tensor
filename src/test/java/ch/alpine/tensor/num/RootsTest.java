@@ -1,6 +1,12 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
@@ -23,21 +29,23 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class RootsTest extends TestCase {
+public class RootsTest {
   private static final int LIMIT = 20;
 
+  @Test
   public void testConstantUniform() {
     Tensor roots = Roots.of(Tensors.vector(2));
     assertTrue(Tensors.isEmpty(roots));
   }
 
+  @Test
   public void testZeros() {
     Tensor roots = Roots.of(Tensors.vector(0, 0, 1, 0));
     assertEquals(roots, Array.zeros(2));
   }
 
+  @Test
   public void testUnitVector() {
     for (int length = 1; length < 10; ++length) {
       Tensor coeffs = UnitVector.of(length, length - 1);
@@ -45,6 +53,7 @@ public class RootsTest extends TestCase {
     }
   }
 
+  @Test
   public void testUnitVectorPlus() {
     for (int length = 1; length < 10; ++length) {
       Tensor coeffs = UnitVector.of(length + 3, length - 1);
@@ -52,6 +61,7 @@ public class RootsTest extends TestCase {
     }
   }
 
+  @Test
   public void testUniform5() {
     Distribution distribution = UniformDistribution.of(-5, 5);
     for (int length = 1; length <= 4; ++length)
@@ -71,6 +81,7 @@ public class RootsTest extends TestCase {
       }
   }
 
+  @Test
   public void testUniform10() {
     Distribution distribution = UniformDistribution.of(-10, 10);
     for (int length = 1; length <= 4; ++length)
@@ -90,6 +101,7 @@ public class RootsTest extends TestCase {
       }
   }
 
+  @Test
   public void testNormal() {
     Distribution distribution = NormalDistribution.of(0, 0.3);
     for (int length = 1; length <= 4; ++length)
@@ -101,6 +113,7 @@ public class RootsTest extends TestCase {
       }
   }
 
+  @Test
   public void testRandomReal() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 4; ++length)
@@ -118,6 +131,7 @@ public class RootsTest extends TestCase {
       }
   }
 
+  @Test
   public void testRandomRealQuantity() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 4; ++length)
@@ -135,6 +149,7 @@ public class RootsTest extends TestCase {
       }
   }
 
+  @Test
   public void testRandomComplex() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 4; ++length)
@@ -154,6 +169,7 @@ public class RootsTest extends TestCase {
       }
   }
 
+  @Test
   public void testRandomComplexQuantity() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 4; ++length)
@@ -172,6 +188,7 @@ public class RootsTest extends TestCase {
       }
   }
 
+  @Test
   public void testRealUniqueRoots() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 3; ++length)
@@ -187,6 +204,7 @@ public class RootsTest extends TestCase {
       }
   }
 
+  @Test
   public void testRealTripleRoot() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 3; ++length)
@@ -201,6 +219,7 @@ public class RootsTest extends TestCase {
       }
   }
 
+  @Test
   public void testRealTripleRoot1() {
     Distribution distribution = NormalDistribution.of(Quantity.of(1, "m"), Quantity.of(0.5, "m"));
     for (int index = 0; index < LIMIT; ++index) {
@@ -214,12 +233,14 @@ public class RootsTest extends TestCase {
     }
   }
 
+  @Test
   public void testSpecific() {
     Tensor coeffs = Tensors.fromString("{-1.7577173839803[m^3], 4.36938808469565[m^2], -3.620519887265771[m], 1.0}");
     Tensor roots = Roots.of(coeffs);
     Tolerance.CHOP.requireClose(roots, ConstantArray.of(Scalars.fromString("1.2068399624219235[m]"), 3));
   }
 
+  @Test
   public void testComplexTripleRoot() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 3; ++length)
@@ -240,23 +261,28 @@ public class RootsTest extends TestCase {
       }
   }
 
+  @Test
   public void testScalarFail() {
     AssertFail.of(() -> Roots.of(RealScalar.ONE));
   }
 
+  @Test
   public void testEmptyFail() {
     AssertFail.of(() -> Roots.of(Tensors.empty()));
   }
 
+  @Test
   public void testOnes() {
     Tensor coeffs = Tensors.vector(0);
     AssertFail.of(() -> Roots.of(coeffs));
   }
 
+  @Test
   public void testConstantZeroFail() {
     AssertFail.of(() -> Roots.of(Tensors.vector(0)));
   }
 
+  @Test
   public void testZerosFail() {
     for (int n = 0; n < 10; ++n) {
       int fn = n;
@@ -264,10 +290,12 @@ public class RootsTest extends TestCase {
     }
   }
 
+  @Test
   public void testMatrixFail() {
     AssertFail.of(() -> Roots.of(HilbertMatrix.of(2, 3)));
   }
 
+  @Test
   public void testNotImplemented() {
     AssertFail.of(() -> Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6)));
   }

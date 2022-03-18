@@ -1,20 +1,26 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class KnownUnitQTest extends TestCase {
+public class KnownUnitQTest {
+  @Test
   public void testKnownUnitQ() {
     assertTrue(KnownUnitQ.SI().test(Unit.of("kgf^2*K*gal^-1")));
     assertTrue(KnownUnitQ.SI().test(Unit.ONE));
     KnownUnitQ.SI().require(Unit.ONE);
   }
 
+  @Test
   public void testSimple() {
     assertTrue(KnownUnitQ.SI().test(Unit.of("V*K*CD*kOhm^-2")));
     assertTrue(KnownUnitQ.SI().test(Unit.of("PS^3")));
@@ -24,6 +30,7 @@ public class KnownUnitQTest extends TestCase {
     assertTrue(KnownUnitQ.SI().test(Unit.of("%*%")));
   }
 
+  @Test
   public void testFalse() {
     assertFalse(KnownUnitQ.SI().test(Unit.of("CHF")));
     assertFalse(KnownUnitQ.SI().test(Unit.of("CHF*K")));
@@ -31,6 +38,7 @@ public class KnownUnitQTest extends TestCase {
     assertFalse(KnownUnitQ.SI().test(Unit.of("%%")));
   }
 
+  @Test
   public void testAll() {
     KnownUnitQ knownUnitQ = KnownUnitQ.SI();
     knownUnitQ.require(Unit.of("cd"));
@@ -44,6 +52,7 @@ public class KnownUnitQTest extends TestCase {
     assertFalse(knownUnitQ.test(Unit.of("USD")));
   }
 
+  @Test
   public void testCurrencies() {
     UnitSystem unitSystem = SimpleUnitSystem.from(ResourceData.properties("/unit/chf.properties"));
     KnownUnitQ knownUnitQ = KnownUnitQ.in(unitSystem);
@@ -52,19 +61,23 @@ public class KnownUnitQTest extends TestCase {
     assertFalse(knownUnitQ.test(Unit.of("m")));
   }
 
+  @Test
   public void testToString() {
     assertTrue(KnownUnitQ.SI().toString().startsWith("KnownUnitQ["));
   }
 
+  @Test
   public void testRequire() {
     KnownUnitQ.SI().require(Unit.of("PS^3"));
     AssertFail.of(() -> KnownUnitQ.SI().require(Unit.of("CHF")));
   }
 
+  @Test
   public void testNullCreationFail() {
     AssertFail.of(() -> KnownUnitQ.in(null));
   }
 
+  @Test
   public void testNullArgumentFail() throws ClassNotFoundException, IOException {
     KnownUnitQ knownUnitQ = Serialization.copy(KnownUnitQ.SI());
     AssertFail.of(() -> knownUnitQ.test(null));

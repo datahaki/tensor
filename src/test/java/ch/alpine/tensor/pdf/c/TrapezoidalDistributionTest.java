@@ -1,8 +1,13 @@
 // code by clruch
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
@@ -31,11 +36,11 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TrapezoidalDistributionTest extends TestCase {
+public class TrapezoidalDistributionTest {
   final Random random = new Random();
 
+  @Test
   public void testPositive() {
     Scalar a = RationalScalar.of(random.nextInt(100), 1);
     Scalar b = a.add(RealScalar.of(random.nextDouble() * 10));
@@ -48,6 +53,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testPDF() throws ClassNotFoundException, IOException {
     Scalar a = RationalScalar.of(1, 1);
     Scalar b = RationalScalar.of(2, 1);
@@ -65,6 +71,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testCDFPositive() {
     Scalar a = RealScalar.of(1);
     Scalar b = RealScalar.of(2);
@@ -77,6 +84,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     assertEquals(cdf.p_lessEquals(RealScalar.of(+4)), RealScalar.ONE);
   }
 
+  @Test
   public void testMean() {
     Scalar a = RandomVariate.of(DiscreteUniformDistribution.of(0, 100));
     Distribution paramDist = UniformDistribution.of(0, 10);
@@ -91,6 +99,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     assertTrue(Scalars.lessEquals(diff, RealScalar.of(0.5)));
   }
 
+  @Test
   public void testVariance() {
     // values confirmed with Mathematica
     assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 3, 4)), RationalScalar.of(5, 12));
@@ -100,6 +109,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     assertEquals(Variance.of(TrapezoidalDistribution.of(-1, -1, 1, 1)), RationalScalar.of(1, 3));
   }
 
+  @Test
   public void testQuantity() {
     Distribution distribution = //
         TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(5, "m"));
@@ -133,6 +143,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     ExactScalarQ.require(variance);
   }
 
+  @Test
   public void testQuantity2() {
     Distribution distribution = //
         TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(4, "m"));
@@ -175,6 +186,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
+  @Test
   public void testCDFInverseCDF() {
     TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of( //
         Quantity.of(1, "m"), Quantity.of(5, "m"), Quantity.of(7, "m"), Quantity.of(11, "m"));
@@ -189,6 +201,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testCDFInverseCDF2() {
     TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of( //
         Quantity.of(1, "m"), Quantity.of(5, "m"), Quantity.of(5, "m"), Quantity.of(11, "m"));
@@ -207,6 +220,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     TestMarkovChebyshev.markov(distribution);
   }
 
+  @Test
   public void testBSpline2() {
     Distribution distribution = TrapezoidalDistribution.of(0.5, 1.5, 1.5, 2.5);
     CDF cdf = CDF.of(distribution);
@@ -216,6 +230,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     Tolerance.CHOP.requireClose(domain.map(cdf::p_lessEquals), domain.map(suo));
   }
 
+  @Test
   public void testMarkov() {
     Random random = new Random();
     Distribution distribution = TrapezoidalDistribution.of( //
@@ -226,6 +241,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     TestMarkovChebyshev.markov(distribution);
   }
 
+  @Test
   public void testExactFail() {
     Distribution distribution = TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
     TestMarkovChebyshev.chebyshev(distribution);
@@ -236,6 +252,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(5, "m"));
   }
 
+  @Test
   public void testObviousMean() {
     Distribution distribution = TrapezoidalDistribution.of(4, 5, 6, 7);
     Scalar mean = Mean.of(distribution);
@@ -246,6 +263,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     TestMarkovChebyshev.markov(distribution);
   }
 
+  @Test
   public void testTriangularVar() {
     Distribution distribution = TrapezoidalDistribution.of(4, 5, 5, 7);
     Scalar mean = Mean.of(distribution);
@@ -256,6 +274,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     TestMarkovChebyshev.markov(distribution);
   }
 
+  @Test
   public void testWithMean() {
     Distribution distribution = TrapezoidalDistribution.with(4, 3, 2);
     Scalar mean = Mean.of(distribution);
@@ -263,6 +282,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(9));
   }
 
+  @Test
   public void testNumericFail() {
     TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
     TrapezoidalDistribution.of(Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
@@ -271,6 +291,7 @@ public class TrapezoidalDistributionTest extends TestCase {
     TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(5., "m"));
   }
 
+  @Test
   public void testCenterFail() {
     AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(3., "m"), Quantity.of(2., "m"), Quantity.of(9., "m")));
   }

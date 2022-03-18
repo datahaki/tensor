@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
@@ -9,7 +11,6 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.Assert;
 
 /* package */ enum TestHelper {
   ;
@@ -17,7 +18,7 @@ import junit.framework.Assert;
     Distribution distribution = UniformDistribution.of(0, 2);
     for (int count = 0; count < 10; ++count) {
       Scalar scalar = RandomVariate.of(distribution);
-      Assert.assertEquals( //
+      assertEquals( //
           interpolation.get(Tensors.of(scalar)), //
           interpolation.at(scalar));
     }
@@ -27,7 +28,7 @@ import junit.framework.Assert;
     Distribution distribution = DiscreteUniformDistribution.of(0, 3);
     for (int count = 0; count < 10; ++count) {
       Scalar scalar = RandomVariate.of(distribution);
-      Assert.assertEquals( //
+      assertEquals( //
           interpolation.get(Tensors.of(scalar)), //
           interpolation.at(scalar));
     }

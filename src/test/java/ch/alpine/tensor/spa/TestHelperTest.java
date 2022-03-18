@@ -1,16 +1,20 @@
 // code by jph
 package ch.alpine.tensor.spa;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TestHelperTest extends TestCase {
+public class TestHelperTest {
   Tensor tensor = Tensors.fromString("{{1,0,3,0,0,7},{0,0,0,0,0,9},{0,2,0,0,4,0},{0,0,0,0,0,0},{0,0,0,8,0,1}}");
   Tensor sparse = TestHelper.of(tensor);
 
@@ -20,6 +24,7 @@ public class TestHelperTest extends TestCase {
     assertEquals(block1, block2);
   }
 
+  @Test
   public void testBlock() {
     assertTrue(sparse instanceof SparseArray);
     int dimension1 = Unprotect.dimension1(tensor);
@@ -37,6 +42,7 @@ public class TestHelperTest extends TestCase {
     AssertFail.of(() -> sparse.block(ofs, len));
   }
 
+  @Test
   public void testBlockFail() {
     _checkBlockFail(Arrays.asList(-1), Arrays.asList(0));
     _checkBlockFail(Arrays.asList(6), Arrays.asList(0));
@@ -50,6 +56,7 @@ public class TestHelperTest extends TestCase {
     assertEquals(block1, block2);
   }
 
+  @Test
   public void testExtract() {
     assertTrue(sparse instanceof SparseArray);
     for (int ofs0 = 0; ofs0 <= tensor.length(); ++ofs0)
@@ -62,6 +69,7 @@ public class TestHelperTest extends TestCase {
     AssertFail.of(() -> sparse.extract(head, tail));
   }
 
+  @Test
   public void testExtractFail() {
     _checkExtractFail(-1, 2);
     _checkExtractFail(3, 2);

@@ -1,20 +1,25 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class HilbertMatrixTest extends TestCase {
+public class HilbertMatrixTest {
+  @Test
   public void testMatrix() {
     Tensor m = HilbertMatrix.of(3, 4);
     Tensor d = Transpose.of(m);
     assertEquals(d, HilbertMatrix.of(4, 3));
   }
 
+  @Test
   public void testInverse() {
     Tensor m = HilbertMatrix.of(4, 4);
     Tensor mi = Inverse.of(m);
@@ -22,6 +27,7 @@ public class HilbertMatrixTest extends TestCase {
     assertEquals(mi, ci);
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> HilbertMatrix.of(0, 4));
     AssertFail.of(() -> HilbertMatrix.of(4, 0));

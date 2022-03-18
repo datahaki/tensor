@@ -1,12 +1,16 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.io.InputStream;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class ReadLineTest extends TestCase {
+public class ReadLineTest {
+  @Test
   public void testCount() throws IOException {
     try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
       long count = ReadLine.of(inputStream).count();
@@ -22,6 +26,7 @@ public class ReadLineTest extends TestCase {
     }
   }
 
+  @Test
   public void testFail() {
     try (InputStream inputStream = getClass().getResource("/io/doesnotexist.csv").openStream()) {
       fail();
@@ -30,6 +35,7 @@ public class ReadLineTest extends TestCase {
     }
   }
 
+  @Test
   public void testNullFail() {
     try {
       ReadLine.of(null);

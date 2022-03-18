@@ -1,9 +1,13 @@
 // code by jph
 package ch.alpine.tensor.opt.lp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.util.NavigableMap;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
@@ -17,14 +21,15 @@ import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.KroneckerDelta;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class SimplexPivotsTest extends TestCase {
+public class SimplexPivotsTest {
+  @Test
   public void testSerializable() throws ClassNotFoundException, IOException {
     for (SimplexPivot simplexPivot : SimplexPivots.values())
       Serialization.copy(simplexPivot);
   }
 
+  @Test
   public void testP14() {
     // x >= 0 that minimizes c.x subject to m.x <= b
     Tensor c = Tensors.fromString("{4[USD], 5[USD]}");
@@ -57,6 +62,7 @@ public class SimplexPivotsTest extends TestCase {
    * It is obvious that because Cj = 0 for all j,
    * the reduced costs in any basic solution to this problem are always zero,
    * and every feasible solution is optimal */
+  @Test
   public void testUnique() {
     Tensor c = Array.zeros(2);
     Tensor A = Tensors.matrixInt(new int[][] { { 3, -1 }, { -3, 2 }, { 1, -1 } });
@@ -66,6 +72,7 @@ public class SimplexPivotsTest extends TestCase {
     assertEquals(x, Tensors.vector(0, 1));
   }
 
+  @Test
   public void testUnique2() {
     Tensor c = Array.zeros(2);
     Tensor A = Tensors.matrixInt(new int[][] { { 3, -1 }, { -3, 2 }, { 1, -1 } });
@@ -84,6 +91,7 @@ public class SimplexPivotsTest extends TestCase {
    * An Additive Eigenvalue Problem of Physics
    * Related to Linear Programming
    * by WEIREN CHOU and R. J. DUFFIN */
+  @Test
   public void testAEV() {
     Tensor m = fromString( //
         "{1, 0, 0, 0, 0}", //
@@ -122,6 +130,7 @@ public class SimplexPivotsTest extends TestCase {
    * Combinatorial Optimization
    * by Papadimitriou and Steiglitz
    * pp. 30 */
+  @Test
   public void testP30() {
     Tensor m = fromString( //
         "{1, 1, 1, 1, 0, 0, 0}", //
@@ -142,6 +151,7 @@ public class SimplexPivotsTest extends TestCase {
    * Combinatorial Optimization
    * by Papadimitriou and Steiglitz
    * pp. 51 */
+  @Test
   public void testCyclingP51() {
     // Tensor m = fromString( //
     // "{1/4, -8,-1 , 9}", //

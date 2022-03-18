@@ -1,17 +1,21 @@
 // code by jph
 package ch.alpine.tensor.img;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.awt.Color;
 import java.security.SecureRandom;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ColorFormatTest extends TestCase {
+public class ColorFormatTest {
+  @Test
   public void testRandom() {
     Random random = new SecureRandom();
     for (int index = 0; index < 10; ++index) {
@@ -32,11 +36,13 @@ public class ColorFormatTest extends TestCase {
     }
   }
 
+  @Test
   public void testFailValue() {
     ColorFormat.toColor(Tensors.vector(0, 0, 0, 255.9));
     AssertFail.of(() -> ColorFormat.toColor(Tensors.vector(0, 0, 0, 256)));
   }
 
+  @Test
   public void testFailLength() {
     AssertFail.of(() -> ColorFormat.toColor(Array.zeros(3)));
     AssertFail.of(() -> ColorFormat.toColor(Array.zeros(5)));

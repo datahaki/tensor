@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -13,9 +18,9 @@ import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class GammaDistributionTest extends TestCase {
+public class GammaDistributionTest {
+  @Test
   public void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(GammaDistribution.of(RealScalar.of(1.123), RealScalar.of(2.3)));
     PDF pdf = PDF.of(distribution);
@@ -23,11 +28,13 @@ public class GammaDistributionTest extends TestCase {
     assertTrue(Scalars.isZero(pdf.at(RealScalar.of(-0.3))));
   }
 
+  @Test
   public void testExp() {
     Distribution distribution = GammaDistribution.of(RealScalar.of(1.0), RealScalar.of(2.3));
     assertTrue(distribution instanceof ExponentialDistribution);
   }
 
+  @Test
   public void testMean() {
     Scalar a = RealScalar.of(1.123);
     Scalar b = RealScalar.of(2.3);
@@ -36,6 +43,7 @@ public class GammaDistributionTest extends TestCase {
     assertEquals(Expectation.variance(distribution), a.multiply(b).multiply(b));
   }
 
+  @Test
   public void testToString() {
     Scalar a = RealScalar.of(1.123);
     Scalar b = RealScalar.of(2.3);
@@ -43,6 +51,7 @@ public class GammaDistributionTest extends TestCase {
     assertEquals(distribution.toString(), "GammaDistribution[1.123, 2.3]");
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> GammaDistribution.of(RealScalar.of(-1.0), RealScalar.of(2.3)));
     AssertFail.of(() -> GammaDistribution.of(RealScalar.of(0.1), RealScalar.of(-2.3)));

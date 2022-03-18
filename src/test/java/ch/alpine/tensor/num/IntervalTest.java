@@ -1,6 +1,12 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -21,9 +27,9 @@ import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class IntervalTest extends TestCase {
+public class IntervalTest {
+  @Test
   public void testInverse1() {
     Tensor matrix = Tensors.of( //
         Tensors.of(RealScalar.of(3), Interval.of(Clips.interval(RationalScalar.of(9, 10), RationalScalar.of(11, 10)))), //
@@ -34,6 +40,7 @@ public class IntervalTest extends TestCase {
     // System.out.println();
   }
 
+  @Test
   public void testInverse2() {
     Tensor matrix = Tensors.of( //
         Tensors.of(RealScalar.of(3), Interval.of(Clips.interval(RationalScalar.of(9, 10), RationalScalar.of(11, 10)))), //
@@ -44,16 +51,19 @@ public class IntervalTest extends TestCase {
     // System.out.println();
   }
 
+  @Test
   public void testAbs() {
     assertEquals(Abs.FUNCTION.apply(Interval.of(-4, 1)), Interval.of(0, 4));
     assertEquals(Abs.FUNCTION.apply(Interval.of(-4, -2)), Interval.of(2, 4));
   }
 
+  @Test
   public void testAbsSquared() {
     assertEquals(AbsSquared.FUNCTION.apply(Interval.of(-4, 1)), Interval.of(0, 16));
     assertEquals(AbsSquared.FUNCTION.apply(Interval.of(-4, -2)), Interval.of(4, 16));
   }
 
+  @Test
   public void testExact() {
     assertTrue(ExactScalarQ.of(Interval.of(-4, 1)));
     assertFalse(ExactScalarQ.of(Interval.of(-4.3, 1.4)));
@@ -61,6 +71,7 @@ public class IntervalTest extends TestCase {
     assertFalse(ExactScalarQ.of(Interval.of(-4.1, 1)));
   }
 
+  @Test
   public void testRound() {
     Scalar scalar = Interval.of(2.3, 5.6);
     Round.FUNCTION.apply(scalar);
@@ -69,24 +80,29 @@ public class IntervalTest extends TestCase {
     Sign.FUNCTION.apply(scalar);
   }
 
+  @Test
   public void testReciprocalFail() {
     AssertFail.of(() -> Interval.of(-2.3, 5.6).reciprocal());
   }
 
+  @Test
   public void testPowerFail() {
     AssertFail.of(() -> Power.of(Interval.of(-2.3, 5.6), 2.3));
   }
 
+  @Test
   public void testNumberFail() {
     AssertFail.of(() -> Interval.of(-2.3, 5.6).number());
   }
 
+  @Test
   public void testExp() {
     Exp.FUNCTION.apply(Interval.of(-4, 1));
     Log.FUNCTION.apply(Interval.of(2, 3));
     Interval.of(-4, 1).hashCode();
   }
 
+  @Test
   public void testPower() {
     Power.of(Interval.of(-4, 1), 7);
   }

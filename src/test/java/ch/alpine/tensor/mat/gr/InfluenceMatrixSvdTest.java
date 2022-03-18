@@ -1,7 +1,13 @@
 // code by jph
 package ch.alpine.tensor.mat.gr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.lang.reflect.Modifier;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
@@ -21,9 +27,9 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class InfluenceMatrixSvdTest extends TestCase {
+public class InfluenceMatrixSvdTest {
+  @Test
   public void testRankDeficient() {
     int n = 7;
     int _m = 5;
@@ -42,6 +48,7 @@ public class InfluenceMatrixSvdTest extends TestCase {
     }
   }
 
+  @Test
   public void testSvdWithQuantity() {
     int n = 4;
     int _m = 3;
@@ -68,6 +75,7 @@ public class InfluenceMatrixSvdTest extends TestCase {
       }
   }
 
+  @Test
   public void testProblem0() {
     Tensor design = Tensors.fromString( //
         "{{-304[m], -144[m], 16[m]}, {-19[m], -9[m], 1[m]}, {285[m], 135[m], -15[m]}, {-152[m], -72[m], 8[m]}}");
@@ -75,6 +83,7 @@ public class InfluenceMatrixSvdTest extends TestCase {
     SymmetricMatrixQ.require(influenceMatrix.matrix());
   }
 
+  @Test
   public void testProblem1() {
     Tensor design = Tensors.fromString( //
         "{{0[m], 0[m], 0[m]}, {0[m], -228[m], 0[m]}, {0[m], -266[m], 0[m]}, {0[m], 342[m], 0[m]}}");
@@ -82,6 +91,7 @@ public class InfluenceMatrixSvdTest extends TestCase {
     SymmetricMatrixQ.require(influenceMatrix.matrix());
   }
 
+  @Test
   public void testProblem2() {
     Tensor design = Tensors.fromString( //
         "{{0[m], 0[m], 0[m]}, {0[m], 30[m], -285[m]}, {0[m], -32[m], 304[m]}, {0[m], 10[m], -95[m]}}");
@@ -89,6 +99,7 @@ public class InfluenceMatrixSvdTest extends TestCase {
     SymmetricMatrixQ.require(influenceMatrix.matrix());
   }
 
+  @Test
   public void testPackageVisibility() {
     assertFalse(Modifier.isPublic(InfluenceMatrixSvd.class.getModifiers()));
   }

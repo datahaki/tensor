@@ -1,9 +1,15 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -23,9 +29,9 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class RationalizeTest extends TestCase {
+public class RationalizeTest {
+  @Test
   public void testBasics1000() {
     final Scalar max = RealScalar.of(1000);
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(max);
@@ -54,12 +60,14 @@ public class RationalizeTest extends TestCase {
     assertTrue(Scalars.lessEquals(be, e2));
   }
 
+  @Test
   public void testLong() {
     RandomVariate.of(UniformDistribution.of(-20, 20), 1000).stream() //
         .map(Scalar.class::cast) //
         .forEach(RationalizeTest::betterEquals);
   }
 
+  @Test
   public void testBasics5() {
     final Scalar max = RealScalar.of(5);
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(max);
@@ -68,6 +76,7 @@ public class RationalizeTest extends TestCase {
     assertEquals(suo.apply(tenth.negate()), RealScalar.ZERO);
   }
 
+  @Test
   public void testBasics4() {
     final Scalar max = RealScalar.of(4);
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(max);
@@ -76,6 +85,7 @@ public class RationalizeTest extends TestCase {
     assertEquals(suo.apply(tenth.negate()), RealScalar.ZERO);
   }
 
+  @Test
   public void testRational() {
     Scalar THND = RealScalar.of(1000);
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(THND);
@@ -95,6 +105,7 @@ public class RationalizeTest extends TestCase {
     }
   }
 
+  @Test
   public void testSol1() {
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(RealScalar.of(6));
     Scalar tenth = RealScalar.of(0.1);
@@ -104,6 +115,7 @@ public class RationalizeTest extends TestCase {
     assertEquals(suo.apply(tenth.negate()), RationalScalar.of(-1, 6));
   }
 
+  @Test
   public void testRoundConsistency() {
     Tensor vector = Tensors.vectorDouble(-2.5, -2, -1.5, -1, -0.5, 0, 0.1, 0.5, 1, 1.5, 2, 2.5);
     List<Long> round = vector.stream() //
@@ -122,6 +134,7 @@ public class RationalizeTest extends TestCase {
     assertTrue(Scalars.lessEquals(RealScalar.of(rationalScalar.denominator()), max));
   }
 
+  @Test
   public void testDenominator() {
     Random random = new Random();
     Distribution distribution = UniformDistribution.of(-0.5, 0.5);
@@ -131,6 +144,7 @@ public class RationalizeTest extends TestCase {
     }
   }
 
+  @Test
   public void testRationalize() {
     assertEquals(Rationalize._1.apply(DoubleScalar.of(12.435)), RationalScalar.of(124, 10));
     assertEquals(Rationalize._2.apply(DoubleScalar.of(12.435)), RationalScalar.of(311, 25));
@@ -139,10 +153,12 @@ public class RationalizeTest extends TestCase {
     assertEquals(Rationalize._3.apply(Quantity.of(1.23456, "m")), Quantity.of(RationalScalar.of(1235, 1000), "m"));
   }
 
+  @Test
   public void testFailPositive() {
     AssertFail.of(() -> Rationalize.withDenominatorLessEquals(RealScalar.ZERO));
   }
 
+  @Test
   public void testFailIntegerQ() {
     AssertFail.of(() -> Rationalize.withDenominatorLessEquals(RealScalar.of(1.23)));
   }

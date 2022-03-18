@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.api;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
@@ -36,13 +41,13 @@ import ch.alpine.tensor.sca.tri.Sinc;
 import ch.alpine.tensor.sca.tri.Sinh;
 import ch.alpine.tensor.sca.tri.Tan;
 import ch.alpine.tensor.sca.tri.Tanh;
-import junit.framework.TestCase;
 
 /** the purpose of the test is to demonstrate that
  * none of the special input cases: NaN, Infty
  * result in a stack overflow error when provided to the
  * scalar unary operators */
-public class ScalarUnaryOperatorTest extends TestCase {
+public class ScalarUnaryOperatorTest {
+  @Test
   public void testFunctionalInterface() {
     assertNotNull(ScalarUnaryOperator.class.getAnnotation(FunctionalInterface.class));
   }
@@ -144,12 +149,14 @@ public class ScalarUnaryOperatorTest extends TestCase {
     scalar.map(RealScalar.ONE::add);
   }
 
+  @Test
   public void testTrinity() {
     _checkOps(DoubleScalar.INDETERMINATE);
     _checkOps(DoubleScalar.POSITIVE_INFINITY);
     _checkOps(DoubleScalar.NEGATIVE_INFINITY);
   }
 
+  @Test
   public void testSerializable() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator scalarUnaryOperator = t -> t;
     ScalarUnaryOperator copy = Serialization.copy(scalarUnaryOperator);

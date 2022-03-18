@@ -1,24 +1,30 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.qty.Quantity;
-import junit.framework.TestCase;
 
-public class AbsTest extends TestCase {
+public class AbsTest {
+  @Test
   public void testReal() {
     assertEquals(Abs.FUNCTION.apply(RealScalar.of(+3)), RealScalar.of(3));
     assertEquals(Abs.FUNCTION.apply(RealScalar.of(-3)), RealScalar.of(3));
   }
 
+  @Test
   public void testComplex() {
     assertEquals(Abs.FUNCTION.apply(ComplexScalar.of(3, 4)), RealScalar.of(5));
     assertEquals(Abs.FUNCTION.apply(ComplexScalar.of(4, 3)), RealScalar.of(5));
   }
 
+  @Test
   public void testBetween() {
     Scalar a = Quantity.of(+9, "s");
     Scalar b = Quantity.of(+5, "s");
@@ -31,6 +37,7 @@ public class AbsTest extends TestCase {
     assertEquals(Abs.between(c, b), Quantity.of(7, "s"));
   }
 
+  @Test
   public void testNaN() {
     assertEquals(Abs.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
   }

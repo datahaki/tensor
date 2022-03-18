@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.mat.ex;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -21,9 +25,9 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Sign;
-import junit.framework.TestCase;
 
-public class MatrixSqrtEigensystemTest extends TestCase {
+public class MatrixSqrtEigensystemTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Random random = new Random(1);
     int n = 11;
@@ -46,6 +50,7 @@ public class MatrixSqrtEigensystemTest extends TestCase {
     Tolerance.CHOP.requireClose(matrixSqrtSymmetric.sqrt_inverse(), matrixSqrtHermitian.sqrt_inverse());
   }
 
+  @Test
   public void testNegative() {
     Tensor matrix = Tensors.fromString("{{-10[m^2], -2[m^2]}, {-2[m^2], 4[m^2]}}");
     MatrixSqrt matrixSqrt = new MatrixSqrtEigensystem(Eigensystem.ofSymmetric(matrix));
@@ -54,6 +59,7 @@ public class MatrixSqrtEigensystemTest extends TestCase {
     Tolerance.CHOP.requireClose(eye, IdentityMatrix.of(2));
   }
 
+  @Test
   public void testQuantity() {
     Tensor matrix = Tensors.fromString("{{10[m^2], -2[m^2]}, {-2[m^2], 4[m^2]}}");
     MatrixSqrtEigensystem matrixSqrtSymmetric = new MatrixSqrtEigensystem(Eigensystem.ofSymmetric(matrix));

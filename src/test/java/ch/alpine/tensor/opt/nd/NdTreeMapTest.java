@@ -1,9 +1,15 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.NavigableMap;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -22,9 +28,9 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class NdTreeMapTest extends TestCase {
+public class NdTreeMapTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     CoordinateBoundingBox box = CoordinateBounds.of( //
         Tensors.fromString("{1[m], 2[m], 3[m]}"), //
@@ -45,6 +51,7 @@ public class NdTreeMapTest extends TestCase {
     }
   }
 
+  @Test
   public void testBinSize() {
     NdMap<String> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0, 0), Tensors.vector(1, 1)));
     Distribution distribution = BernoulliDistribution.of(.3);
@@ -53,6 +60,7 @@ public class NdTreeMapTest extends TestCase {
     ndMap.toString();
   }
 
+  @Test
   public void testParallel() {
     NdMap<Void> ndTreeMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0, 0), Tensors.vector(1, 1)), 2);
     Distribution distribution = UniformDistribution.unit();
@@ -71,6 +79,7 @@ public class NdTreeMapTest extends TestCase {
     }
   }
 
+  @Test
   public void testEmpty() {
     NdMap<String> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9)), 10);
     assertTrue(ndMap.isEmpty());
@@ -79,6 +88,7 @@ public class NdTreeMapTest extends TestCase {
     assertEquals(cluster.size(), 0);
   }
 
+  @Test
   public void testClear() throws Exception {
     NdMap<String> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9)), 10);
     ndMap.insert(Tensors.vector(1, 1), "d1");
@@ -102,6 +112,7 @@ public class NdTreeMapTest extends TestCase {
     }
   }
 
+  @Test
   public void testCornerCase() {
     NdMap<String> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9)), 3);
     Tensor location = Array.zeros(2);
@@ -109,6 +120,7 @@ public class NdTreeMapTest extends TestCase {
       ndMap.insert(location, "s" + c);
   }
 
+  @Test
   public void testSimple1() {
     final int n = 10;
     NdMap<String> ndTreeMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0, 0), Tensors.vector(1, 1)), n);
@@ -124,6 +136,7 @@ public class NdTreeMapTest extends TestCase {
     // assertEquals(last, RealScalar.of(n));
   }
 
+  @Test
   public void testMixedUnits() {
     CoordinateBoundingBox box = CoordinateBounds.of( //
         Tensors.fromString("{1[m], 2[s], 3[A]}"), //
@@ -151,6 +164,7 @@ public class NdTreeMapTest extends TestCase {
     }
   }
 
+  @Test
   public void testPrint() {
     NdMap<String> ndTreeMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0, 0), Tensors.vector(1, 1)), 3);
     for (int c = 0; c < 12; ++c) {
@@ -159,17 +173,20 @@ public class NdTreeMapTest extends TestCase {
     }
   }
 
+  @Test
   public void testLeafSizeFail() {
     CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(0, 0), Tensors.vector(1, 1));
     AssertFail.of(() -> NdTreeMap.of(box, -1));
     AssertFail.of(() -> NdTreeMap.of(box, +0));
   }
 
+  @Test
   public void testFail0() {
     AssertFail.of(() -> NdTreeMap.of(null));
     AssertFail.of(() -> NdTreeMap.of(null, 2));
   }
 
+  @Test
   public void testFail1() {
     NdMap<String> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9)), 2);
     Tensor location = Array.zeros(3);

@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,13 +16,15 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
 import ch.alpine.tensor.usr.TestFile;
-import junit.framework.TestCase;
 
-public class FilenameTest extends TestCase {
+public class FilenameTest {
+  @Test
   public void testImageWriter() throws IOException {
     File file = TestFile.withExtension("jpg");
     try (OutputStream outputStream = new FileOutputStream(file)) {
@@ -41,21 +45,25 @@ public class FilenameTest extends TestCase {
     assertFalse(file.exists());
   }
 
+  @Test
   public void testFailSpacing() {
     Filename filename = new Filename("dir/title.bmp ");
     AssertFail.of(() -> filename.extension());
   }
 
+  @Test
   public void testFailExtension() {
     Filename filename = new Filename("dir/title.ext");
     AssertFail.of(() -> filename.extension());
   }
 
+  @Test
   public void testFailNoExt() {
     Filename filename = new Filename("dir/mybmp");
     AssertFail.of(() -> filename.extension());
   }
 
+  @Test
   public void testFailTruncate() {
     Filename filename = new Filename("dir/mybmp");
     AssertFail.of(() -> filename.truncate());

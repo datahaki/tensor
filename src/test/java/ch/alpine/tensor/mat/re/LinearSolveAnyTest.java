@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -15,9 +19,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class LinearSolveAnyTest extends TestCase {
+public class LinearSolveAnyTest {
+  @Test
   public void testSome1() {
     Tensor m = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}, {7, 8, 9}}");
     Tensor b = Tensors.fromString("{1, 1, 1}");
@@ -25,12 +29,14 @@ public class LinearSolveAnyTest extends TestCase {
     assertEquals(x, Tensors.fromString("{-1, 1, 0}"));
   }
 
+  @Test
   public void testDiag() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
     Tensor x = LinearSolve.any(DiagonalMatrix.with(vector), vector);
     assertEquals(x, Tensors.fromString("{1, 1, 0, 1, 1, 1}"));
   }
 
+  @Test
   public void testDiag2() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
     Tensor m = Join.of(DiagonalMatrix.with(vector), Array.zeros(3, 6));
@@ -39,6 +45,7 @@ public class LinearSolveAnyTest extends TestCase {
     assertEquals(m.dot(x), b);
   }
 
+  @Test
   public void testDiag2b() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
     // m is 6 x 9 matrix
@@ -49,6 +56,7 @@ public class LinearSolveAnyTest extends TestCase {
     AssertFail.of(() -> Det.of(m));
   }
 
+  @Test
   public void testDiag3() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
     Tensor m = Join.of(Array.zeros(3, 6), DiagonalMatrix.with(vector));
@@ -57,6 +65,7 @@ public class LinearSolveAnyTest extends TestCase {
     assertEquals(m.dot(x), b);
   }
 
+  @Test
   public void testDiag3b() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
     Tensor m = Join.of(1, Array.zeros(6, 3), DiagonalMatrix.with(vector));
@@ -65,12 +74,14 @@ public class LinearSolveAnyTest extends TestCase {
     assertEquals(m.dot(x), b);
   }
 
+  @Test
   public void testSome2() {
     Tensor m = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}, {7, 8, 9}}");
     Tensor b = Tensors.fromString("{1, -2, 1}");
     AssertFail.of(() -> LinearSolve.any(m, b));
   }
 
+  @Test
   public void testAny() {
     Tensor m = Tensors.fromString("{{1, 0, -1}, {0, 1, 0}, {1, 0, -1}}");
     Tensor b = Tensors.fromString("{0, 0, 0}");
@@ -81,6 +92,7 @@ public class LinearSolveAnyTest extends TestCase {
     assertEquals(m.dot(x), b);
   }
 
+  @Test
   public void testConstants() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
@@ -91,6 +103,7 @@ public class LinearSolveAnyTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstantsMN() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
@@ -101,6 +114,7 @@ public class LinearSolveAnyTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstantsVN() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
@@ -111,6 +125,7 @@ public class LinearSolveAnyTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstantsUW() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
@@ -121,6 +136,7 @@ public class LinearSolveAnyTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstantsUWM() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
@@ -131,6 +147,7 @@ public class LinearSolveAnyTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstantsN() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
@@ -141,6 +158,7 @@ public class LinearSolveAnyTest extends TestCase {
     }
   }
 
+  @Test
   public void testConstantsNUW() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
@@ -151,6 +169,7 @@ public class LinearSolveAnyTest extends TestCase {
     }
   }
 
+  @Test
   public void testAny2() {
     Tensor m = Tensors.fromString("{{1}, {1}, {-1}}");
     Tensor b = Tensors.vector(2, 2, -2);
@@ -159,6 +178,7 @@ public class LinearSolveAnyTest extends TestCase {
     AssertFail.of(() -> Det.of(m)); // fail is consistent with Mathematica 12
   }
 
+  @Test
   public void testAnyN() {
     Tensor m = Tensors.fromString("{{1}, {1}, {-5}}");
     Tensor b = Tensors.vector(-2, -2, 10);
@@ -167,6 +187,7 @@ public class LinearSolveAnyTest extends TestCase {
     AssertFail.of(() -> Det.of(m)); // fail is consistent with Mathematica 12
   }
 
+  @Test
   public void testLarge() {
     Distribution distribution = NormalDistribution.standard();
     Tensor m = RandomVariate.of(distribution, 2, 4);
@@ -176,6 +197,7 @@ public class LinearSolveAnyTest extends TestCase {
     Tolerance.CHOP.requireClose(m.dot(x), b);
   }
 
+  @Test
   public void testNoSolutionFail() {
     AssertFail.of(() -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1)));
     AssertFail.of(() -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1.0)));

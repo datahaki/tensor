@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -17,9 +21,9 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class LaplaceDistributionTest extends TestCase {
+public class LaplaceDistributionTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(LaplaceDistribution.of(2, 5));
     PDF pdf = PDF.of(distribution);
@@ -34,6 +38,7 @@ public class LaplaceDistributionTest extends TestCase {
     assertEquals(distribution.toString(), "LaplaceDistribution[2, 5]");
   }
 
+  @Test
   public void testRandomMeanVar() {
     Distribution distribution = LaplaceDistribution.of(3, 2);
     RandomVariate.of(distribution, 100);
@@ -41,6 +46,7 @@ public class LaplaceDistributionTest extends TestCase {
     assertEquals(ExactScalarQ.require(Variance.of(distribution)), RealScalar.of(8));
   }
 
+  @Test
   public void testQuantity() {
     Distribution distribution = LaplaceDistribution.of(Quantity.of(3, "kg"), Quantity.of(2, "kg"));
     RandomVariate.of(distribution, 100);
@@ -48,16 +54,19 @@ public class LaplaceDistributionTest extends TestCase {
     assertEquals(ExactScalarQ.require(Variance.of(distribution)), Quantity.of(8, "kg^2"));
   }
 
+  @Test
   public void testComplexFail() {
     AssertFail.of(() -> LaplaceDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
   }
 
+  @Test
   public void testQuantityFail() {
     AssertFail.of(() -> LaplaceDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
     AssertFail.of(() -> LaplaceDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
     AssertFail.of(() -> LaplaceDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
+  @Test
   public void testNegativeSigmaFail() {
     LaplaceDistribution.of(5, 1);
     AssertFail.of(() -> LaplaceDistribution.of(5, -1));

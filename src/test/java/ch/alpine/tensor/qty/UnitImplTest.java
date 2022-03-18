@@ -1,18 +1,24 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.Collections;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class UnitImplTest extends TestCase {
+public class UnitImplTest {
+  @Test
   public void testMap() {
     Unit unit = Unit.of("kg^2*m^-1");
     assertEquals(unit.map().get("kg"), RealScalar.of(2));
@@ -20,6 +26,7 @@ public class UnitImplTest extends TestCase {
     assertFalse(unit.map().containsKey("A"));
   }
 
+  @Test
   public void testMap2() {
     Unit unit = Unit.of("kg^2*m^-1*s");
     assertEquals(unit.map().get("kg"), RealScalar.of(2));
@@ -28,11 +35,13 @@ public class UnitImplTest extends TestCase {
     assertFalse(unit.map().containsKey("A"));
   }
 
+  @Test
   public void testMultiplyFail() {
     Unit unit = Unit.of("kg^2*m^-1");
     AssertFail.of(() -> unit.multiply(Quantity.of(3, "s")));
   }
 
+  @Test
   public void testSerializationEquals() throws ClassNotFoundException, IOException {
     Unit unit1 = Unit.of("kg^2*m^-1*K*ABC");
     Unit unit2 = Serialization.copy(unit1);
@@ -43,6 +52,7 @@ public class UnitImplTest extends TestCase {
     assertTrue(unit1_negate == unit2_negate);
   }
 
+  @Test
   public void testCachedEquals() {
     Unit unit1 = Unit.of("kg^2/3*m^-3*K");
     Unit unit2 = Unit.of("kg^2/3*m^-3*K");
@@ -52,11 +62,13 @@ public class UnitImplTest extends TestCase {
     assertTrue(unit1_negate == unit2_negate);
   }
 
+  @Test
   public void testUnmodifiableMap() {
     Unit unit = Unit.of("kg^2*m^-1");
     AssertFail.of(() -> unit.map().clear());
   }
 
+  @Test
   public void testReference1() {
     NavigableMap<String, Scalar> m1 = new TreeMap<>();
     m1.put("some", RealScalar.ONE);
@@ -67,17 +79,20 @@ public class UnitImplTest extends TestCase {
     assertTrue(UnitImpl.create(m1) == UnitImpl.create(m2));
   }
 
+  @Test
   public void testReference2() {
     assertTrue(UnitImpl.create(Collections.emptyNavigableMap()) == //
         UnitImpl.create(Collections.emptyNavigableMap()));
   }
 
+  @Test
   public void testEqualsMerged() {
     Unit unit = Unit.of("m^2*m^-1*kg*m^1");
     assertEquals(unit, Unit.of("kg****m ** m*  "));
     assertEquals(unit.toString(), "kg*m^2");
   }
 
+  @Test
   public void testEqualsNull() {
     assertFalse(Unit.ONE.equals(null));
     assertFalse(Unit.of("m").equals(null));

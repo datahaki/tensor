@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.sca.tri;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.NumberQ;
@@ -11,9 +16,8 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class SincTest extends TestCase {
+public class SincTest {
   static final Scalar THRESHOLD = DoubleScalar.of(0.05);
 
   private static Scalar checkBoth(Scalar scalar) {
@@ -23,6 +27,7 @@ public class SincTest extends TestCase {
     return c;
   }
 
+  @Test
   public void testDouble() {
     double value = .01;
     Scalar c = checkBoth(RealScalar.of(value));
@@ -30,6 +35,7 @@ public class SincTest extends TestCase {
     assertEquals(c, s);
   }
 
+  @Test
   public void testReal() {
     checkBoth(RealScalar.of(0.5));
     checkBoth(RealScalar.of(0.1));
@@ -41,6 +47,7 @@ public class SincTest extends TestCase {
     checkBoth(RealScalar.of(0.0001));
   }
 
+  @Test
   public void testReal2() {
     checkBoth(RealScalar.of(-0.5));
     checkBoth(RealScalar.of(-0.1));
@@ -52,11 +59,13 @@ public class SincTest extends TestCase {
     checkBoth(RealScalar.of(-0.0001));
   }
 
+  @Test
   public void testZero() {
     assertEquals(Sinc.of(RealScalar.ZERO), RealScalar.ONE);
     assertEquals(Sinc.FUNCTION.apply(RealScalar.ZERO), RealScalar.ONE);
   }
 
+  @Test
   public void testComplex() {
     checkBoth(Sinc.of(ComplexScalar.of(2, 3.0)));
     checkBoth(Sinc.of(ComplexScalar.of(-0.002, 0.03)));
@@ -68,6 +77,7 @@ public class SincTest extends TestCase {
     checkBoth(Sinc.of(ComplexScalar.of(-Double.MIN_VALUE, -Double.MIN_VALUE)));
   }
 
+  @Test
   public void testThreshold() {
     Scalar res1 = Sinc.of(THRESHOLD);
     double val1 = THRESHOLD.number().doubleValue();
@@ -78,29 +88,35 @@ public class SincTest extends TestCase {
     Tolerance.CHOP.requireClose(res1, res0);
   }
 
+  @Test
   public void testMin() {
     Scalar eps = DoubleScalar.of(Double.MIN_VALUE);
     Tolerance.CHOP.requireClose(Sinc.FUNCTION.apply(eps), RealScalar.ONE);
   }
 
+  @Test
   public void testEps() {
     Scalar eps = DoubleScalar.of(1e-12);
     Tolerance.CHOP.requireClose(Sinc.FUNCTION.apply(eps), RealScalar.ONE);
   }
 
+  @Test
   public void testInfinity() {
     Tolerance.CHOP.requireZero(Sinc.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY));
     Tolerance.CHOP.requireZero(Sinc.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY));
   }
 
+  @Test
   public void testNan() {
     assertFalse(NumberQ.of(Sinc.FUNCTION.apply(DoubleScalar.INDETERMINATE)));
   }
 
+  @Test
   public void testQuantity() {
     AssertFail.of(() -> Sinc.FUNCTION.apply(Quantity.of(0, "m")));
   }
 
+  @Test
   public void testTypeFail() {
     AssertFail.of(() -> Sinc.of(StringScalar.of("some")));
   }

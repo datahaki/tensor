@@ -1,16 +1,22 @@
 // code by jph
 package ch.alpine.tensor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class RealScalarTest extends TestCase {
+public class RealScalarTest {
+  @Test
   public void testSerializable() throws Exception {
     Scalar a = RealScalar.ZERO;
     Scalar b = Serialization.parse(Serialization.of(a));
@@ -18,6 +24,7 @@ public class RealScalarTest extends TestCase {
     assertFalse(a == b);
   }
 
+  @Test
   public void testSign() {
     assertEquals(Sign.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(Sign.FUNCTION.apply(RealScalar.of(+5)), RealScalar.ONE);
@@ -28,6 +35,7 @@ public class RealScalarTest extends TestCase {
     assertEquals(Sign.FUNCTION.apply(r2), RealScalar.ONE.negate());
   }
 
+  @Test
   public void testCompare() {
     assertEquals(Scalars.compare(RealScalar.ZERO, RealScalar.ZERO), 0);
     {
@@ -48,11 +56,13 @@ public class RealScalarTest extends TestCase {
     }
   }
 
+  @Test
   public void testCompareDouble() {
     assertEquals(Double.compare(0.3, 0.4), Scalars.compare(DoubleScalar.of(0.3), DoubleScalar.of(0.4)));
     assertEquals(Double.compare(0.3, -4e10), Scalars.compare(DoubleScalar.of(0.3), DoubleScalar.of(-4e10)));
   }
 
+  @Test
   public void testCompareRational() {
     Scalar r1 = RationalScalar.of(1927365481254298736L, 1927365481254298737L);
     Scalar r2 = RationalScalar.of(1927365481254298741L, 1927365481254298739L);
@@ -62,6 +72,7 @@ public class RealScalarTest extends TestCase {
     assertEquals(Scalars.compare(d1, d2), 0);
   }
 
+  @Test
   public void testNumber() {
     assertEquals(RealScalar.ZERO, RealScalar.of(0));
     assertEquals(RealScalar.ZERO, RealScalar.of(0.));
@@ -74,6 +85,7 @@ public class RealScalarTest extends TestCase {
     assertEquals(RationalScalar.of(1, 1), RealScalar.of(BigDecimal.ONE));
   }
 
+  @Test
   public void testNumberByte() {
     assertTrue(RealScalar.of(-1).number().byteValue() == (byte) 255);
     assertTrue(RealScalar.of(0).number().byteValue() == (byte) 0);
@@ -83,22 +95,26 @@ public class RealScalarTest extends TestCase {
     assertTrue(RealScalar.of(256).number().byteValue() == (byte) 0);
   }
 
+  @Test
   public void testNumberTypes() {
     assertEquals(RealScalar.of((byte) 0xff), RealScalar.ONE.negate());
     assertEquals(RealScalar.of((short) 0xffff), RealScalar.ONE.negate());
   }
 
+  @Test
   public void testInvertInfinity() {
     assertEquals(DoubleScalar.POSITIVE_INFINITY.reciprocal(), RealScalar.ZERO);
     assertEquals(DoubleScalar.NEGATIVE_INFINITY.reciprocal(), RealScalar.ZERO);
   }
 
+  @Test
   public void testBigInteger() {
     Scalar scalar = RealScalar.of(new BigInteger("123"));
     assertTrue(scalar instanceof RationalScalar);
     assertEquals(scalar, RealScalar.of(123));
   }
 
+  @Test
   public void testMiscPrimitives() {
     short vals = -312;
     assertEquals(RealScalar.of(vals), RealScalar.of(-312));
@@ -108,6 +124,7 @@ public class RealScalarTest extends TestCase {
     ExactScalarQ.require(RealScalar.of(valb));
   }
 
+  @Test
   public void testMiscTypes() {
     Short vals = -312;
     assertEquals(RealScalar.of(vals), RealScalar.of(-312));
@@ -119,6 +136,7 @@ public class RealScalarTest extends TestCase {
     assertEquals(RealScalar.of(number), RealScalar.of(10));
   }
 
+  @Test
   public void testCreateFail() {
     Number number = new AtomicInteger(123);
     Scalar scalar = RealScalar.of(number.intValue());
@@ -126,6 +144,7 @@ public class RealScalarTest extends TestCase {
     AssertFail.of(() -> RealScalar.of(number));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> RealScalar.of((Number) null));
   }

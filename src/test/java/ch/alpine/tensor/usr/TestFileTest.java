@@ -1,12 +1,16 @@
 // code by jph
 package ch.alpine.tensor.usr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
 
-import ch.alpine.tensor.ext.HomeDirectory;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class TestFileTest extends TestCase {
+import ch.alpine.tensor.ext.HomeDirectory;
+
+public class TestFileTest {
+  @Test
   public void testSimple() {
     File file = TestFile.withExtension("ethz");
     assertEquals(file, HomeDirectory.file("TestFileTest_testSimple.ethz"));

@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
@@ -10,9 +14,9 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class CoefficientListTest extends TestCase {
+public class CoefficientListTest {
+  @Test
   public void testSimple() {
     Tensor zeros = Tensors.vector(3);
     Tensor coeffs = CoefficientList.of(zeros);
@@ -21,6 +25,7 @@ public class CoefficientListTest extends TestCase {
     assertEquals(roots, zeros);
   }
 
+  @Test
   public void testQuantityD1() {
     Tensor zeros = Tensors.fromString("{3[m]}");
     Tensor coeffs = CoefficientList.of(zeros);
@@ -31,6 +36,7 @@ public class CoefficientListTest extends TestCase {
     assertEquals(roots, zeros);
   }
 
+  @Test
   public void testQuantityD2() {
     Tensor zeros = Tensors.fromString("{3[m], 4[m]}");
     Tensor coeffs = CoefficientList.of(zeros);
@@ -41,6 +47,7 @@ public class CoefficientListTest extends TestCase {
     assertEquals(roots, zeros);
   }
 
+  @Test
   public void testQuantityD3() {
     Tensor zeros = Tensors.fromString("{3[m], 4[m], 6[m]}");
     Tensor coeffs = CoefficientList.of(zeros);
@@ -52,6 +59,7 @@ public class CoefficientListTest extends TestCase {
     Chop._14.requireClose(roots, zeros);
   }
 
+  @Test
   public void testEmptyFail() {
     AssertFail.of(() -> CoefficientList.of(Tensors.empty()));
   }

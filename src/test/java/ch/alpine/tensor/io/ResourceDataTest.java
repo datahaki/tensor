@@ -1,9 +1,16 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -12,13 +19,13 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.itp.Interpolation;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ResourceDataTest extends TestCase {
+public class ResourceDataTest {
   private static void _checkColorscheme(Interpolation interpolation) {
     AssertFail.of(() -> interpolation.get(Tensors.vector(256)));
   }
 
+  @Test
   public void testColorschemeClassic() {
     Tensor tensor = ResourceData.of("/colorscheme/classic.csv");
     assertNotNull(tensor);
@@ -28,6 +35,7 @@ public class ResourceDataTest extends TestCase {
     _checkColorscheme(interpolation);
   }
 
+  @Test
   public void testHue() {
     Tensor tensor = ResourceData.of("/colorscheme/_hue.csv");
     assertNotNull(tensor);
@@ -37,6 +45,7 @@ public class ResourceDataTest extends TestCase {
     _checkColorscheme(interpolation);
   }
 
+  @Test
   public void testPrimes() {
     Tensor primes = ResourceData.of("/number/primes.vector");
     List<Integer> dimensions = Dimensions.of(primes);
@@ -45,18 +54,21 @@ public class ResourceDataTest extends TestCase {
     assertEquals(primes.Get(5), Scalars.fromString("13"));
   }
 
+  @Test
   public void testPrimesLines() {
     Tensor linesp = Tensor.of(ResourceData.lines("/number/primes.vector").stream().map(Scalars::fromString));
     Tensor vector = ResourceData.of("/number/primes.vector");
     assertEquals(linesp, vector);
   }
 
+  @Test
   public void testCsvGz() {
     Tensor actual = ResourceData.of("/io/mathematica23.csv.gz");
     Tensor expected = Tensors.fromString("{{123/875+I, 9.3}, {-9, 5/8123123123123123, 1010101}}");
     assertEquals(expected, actual);
   }
 
+  @Test
   public void testBufferedImagePng() {
     BufferedImage bufferedImage = ResourceData.bufferedImage("/io/image/rgba15x33.png");
     assertEquals(bufferedImage.getWidth(), 15);
@@ -64,6 +76,7 @@ public class ResourceDataTest extends TestCase {
     assertEquals(bufferedImage.getType(), BufferedImage.TYPE_4BYTE_ABGR);
   }
 
+  @Test
   public void testBufferedImageJpg() {
     BufferedImage bufferedImage = ResourceData.bufferedImage("/io/image/rgb15x33.jpg");
     assertEquals(bufferedImage.getWidth(), 15);
@@ -71,11 +84,13 @@ public class ResourceDataTest extends TestCase {
     assertEquals(bufferedImage.getType(), BufferedImage.TYPE_3BYTE_BGR);
   }
 
+  @Test
   public void testJpg() {
     Tensor image = ResourceData.of("/io/image/rgb15x33.jpg");
     assertEquals(Dimensions.of(image), Arrays.asList(33, 15, 4));
   }
 
+  @Test
   public void testBufferedImageBmp() {
     BufferedImage bufferedImage = ResourceData.bufferedImage("/io/image/rgb7x11.bmp");
     assertEquals(bufferedImage.getWidth(), 7);
@@ -83,42 +98,51 @@ public class ResourceDataTest extends TestCase {
     assertEquals(bufferedImage.getType(), BufferedImage.TYPE_3BYTE_BGR);
   }
 
+  @Test
   public void testBufferedImageBmpNull() {
     assertNull(ResourceData.bufferedImage("/doesnotexist.jpg"));
   }
 
+  @Test
   public void testBmp() {
     Tensor image = ResourceData.of("/io/image/rgb7x11.bmp");
     assertEquals(Dimensions.of(image), Arrays.asList(11, 7, 4));
     assertEquals(image.get(10, 4), Tensors.vector(0, 7, 95, 255));
   }
 
+  @Test
   public void testFailNull() {
     assertNull(ResourceData.of("/number/exists.fail"));
     assertNull(ResourceData.of("/number/exists.fail.bmp"));
   }
 
+  @Test
   public void testObjectNull() {
     assertNull(ResourceData.object("/number/exists.fail"));
   }
 
+  @Test
   public void testPropertiesFailNull() {
     assertNull(ResourceData.properties("/number/exists.properties"));
   }
 
+  @Test
   public void testUnknownExtension() {
     assertNull(ResourceData.of("/io/extension.unknown"));
   }
 
+  @Test
   public void testCorruptContent() {
     assertNull(ResourceData.of("/io/corrupt.png"));
   }
 
+  @Test
   public void testLines() {
     List<String> lines = ResourceData.lines("/io/basic.mathematica");
     assertEquals(lines.size(), 7);
   }
 
+  @Test
   public void testLinesNull() {
     List<String> lines = ResourceData.lines("/io/doesnotexist");
     assertNull(lines);

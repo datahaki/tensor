@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.mat.sv;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.OrderedQ;
@@ -14,9 +16,9 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class SingularValueListTest extends TestCase {
+public class SingularValueListTest {
+  @Test
   public void testSimple() {
     Distribution distribution = UniformDistribution.of(-1, 1);
     Tensor x = RandomVariate.of(distribution, 3, 4);
@@ -27,6 +29,7 @@ public class SingularValueListTest extends TestCase {
     OrderedQ.require(Reverse.of(values2));
   }
 
+  @Test
   public void testMixedUnitFail() {
     Distribution distribution = DiscreteUniformDistribution.of(1, 4);
     Tensor matrix = RandomVariate.of(distribution, 7, 2);

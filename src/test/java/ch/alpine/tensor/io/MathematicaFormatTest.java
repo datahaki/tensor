@@ -1,11 +1,17 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
@@ -13,9 +19,9 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import junit.framework.TestCase;
 
-public class MathematicaFormatTest extends TestCase {
+public class MathematicaFormatTest {
+  @Test
   public void testMathematica() {
     int n = 20;
     int m = 10;
@@ -40,6 +46,7 @@ public class MathematicaFormatTest extends TestCase {
     assertFalse(StringScalarQ.any(tensor));
   }
 
+  @Test
   public void testStrings() {
     String[] strings = new String[] { //
         "{{3 + 2*I}, I,-I,-1.0348772853950305 + 0.042973906265653894*I, ", //
@@ -50,6 +57,7 @@ public class MathematicaFormatTest extends TestCase {
     checkNonString(tensor);
   }
 
+  @Test
   public void testComplex() {
     String[] strings = new String[] { //
         "{{3 + I}, -1.0348772853950305 - 0.042973906265653894*I, {}, ", //
@@ -61,17 +69,20 @@ public class MathematicaFormatTest extends TestCase {
     assertEquals(tensor.length(), 8);
   }
 
+  @Test
   public void testBasic() throws IOException {
     String string = getClass().getResource("/io/basic.mathematica").getPath();
     Tensor tensor = Get.of(Paths.get(string).toFile());
     checkNonString(tensor);
   }
 
+  @Test
   public void testBasicResource() {
     Tensor tensor = ResourceData.of("/io/basic.mathematica");
     checkNonString(tensor);
   }
 
+  @Test
   public void testExponent() throws IOException {
     String string = getClass().getResource("/io/exponent.mathematica").getPath();
     Tensor tensor = Get.of(Paths.get(string).toFile());
@@ -79,6 +90,7 @@ public class MathematicaFormatTest extends TestCase {
     assertEquals(tensor, ResourceData.of("/io/exponent.mathematica"));
   }
 
+  @Test
   public void testExponent2() {
     Tensor tensor = MathematicaFormat.parse(Stream.of("{1*^-10, 1*^10}"));
     checkNonString(tensor);
@@ -87,6 +99,7 @@ public class MathematicaFormatTest extends TestCase {
     assertEquals(tensor, recon);
   }
 
+  @Test
   public void testPrime() throws IOException {
     String string = getClass().getResource("/io/prime.mathematica").getPath();
     // System.out.println(Paths.get(string).toFile());

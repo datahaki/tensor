@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
@@ -10,9 +15,9 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TensorContractTest extends TestCase {
+public class TensorContractTest {
+  @Test
   public void testRank3() {
     Tensor vector = TensorContract.of(LeviCivitaTensor.of(3), 0, 2);
     assertTrue(VectorQ.ofLength(vector, 3));
@@ -20,10 +25,12 @@ public class TensorContractTest extends TestCase {
     ExactTensorQ.require(vector);
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> TensorContract.of(LeviCivitaTensor.of(3), 0, 3));
   }
 
+  @Test
   public void testContraction() {
     Tensor array = Array.of(Tensors::vector, 2, 3, 2, 4);
     AssertFail.of(() -> TensorContract.of(array, 0, 3));

@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
@@ -26,13 +31,13 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class PoissonDistributionTest extends TestCase {
+public class PoissonDistributionTest {
   static Tensor values(PDF pdf, int length) {
     return Tensors.vector(i -> pdf.at(RealScalar.of(i)), length);
   }
 
+  @Test
   public void testSingle() {
     Scalar lambda = RealScalar.of(2);
     Distribution distribution = PoissonDistribution.of(lambda);
@@ -47,6 +52,7 @@ public class PoissonDistributionTest extends TestCase {
     Chop._08.requireClose(CentralMoment.of(distribution, 5), Polynomial.of(Tensors.vector(0, 1, 10)).apply(lambda));
   }
 
+  @Test
   public void testConvergence() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(2));
     PDF pdf = PDF.of(distribution);
@@ -56,6 +62,7 @@ public class PoissonDistributionTest extends TestCase {
     assertTrue(Scalars.lessThan(scalar, RealScalar.ONE));
   }
 
+  @Test
   public void testValues() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(3));
     PDF pdf = PDF.of(distribution);
@@ -65,6 +72,7 @@ public class PoissonDistributionTest extends TestCase {
     assertEquals(sum, RealScalar.ONE);
   }
 
+  @Test
   public void testPDF() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(10.5));
     CDF cdf = CDF.of(distribution);
@@ -72,6 +80,7 @@ public class PoissonDistributionTest extends TestCase {
     assertEquals(Chop._12.of(scalar.subtract(RealScalar.ONE)), RealScalar.ZERO);
   }
 
+  @Test
   public void testPDF2() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(1.5));
     CDF cdf = CDF.of(distribution);
@@ -79,6 +88,7 @@ public class PoissonDistributionTest extends TestCase {
     assertEquals(Chop._12.of(scalar.subtract(RealScalar.ONE)), RealScalar.ZERO);
   }
 
+  @Test
   public void testInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(PoissonDistribution.of(RealScalar.of(5.5)));
     Scalar x0 = inverseCDF.quantile(RealScalar.of(0.0));
@@ -88,6 +98,7 @@ public class PoissonDistributionTest extends TestCase {
     assertTrue(Scalars.lessThan(x1, x2));
   }
 
+  @Test
   public void testCDFMathematica() {
     int n = 5;
     Distribution distribution = PoissonDistribution.of(RationalScalar.of(1, 4));
@@ -98,6 +109,7 @@ public class PoissonDistributionTest extends TestCase {
     Tolerance.CHOP.requireClose(actual, expect);
   }
 
+  @Test
   public void testInverseCDFMathematica() {
     Distribution distribution = PoissonDistribution.of(RationalScalar.of(1, 4));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -106,6 +118,7 @@ public class PoissonDistributionTest extends TestCase {
     assertEquals(actual, expect);
   }
 
+  @Test
   public void testMarkov() {
     Random random = new Random();
     Distribution distribution = PoissonDistribution.of(0.1 + 10 * random.nextDouble());
@@ -113,21 +126,25 @@ public class PoissonDistributionTest extends TestCase {
     TestMarkovChebyshev.chebyshev(distribution);
   }
 
+  @Test
   public void testToString() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(5.5));
     String string = distribution.toString();
     assertEquals(string, "PoissonDistribution[5.5]");
   }
 
+  @Test
   public void testQuantityFail() {
     AssertFail.of(() -> PoissonDistribution.of(Quantity.of(3, "m")));
   }
 
+  @Test
   public void testFailLambda() {
     AssertFail.of(() -> PoissonDistribution.of(RealScalar.ZERO));
     AssertFail.of(() -> PoissonDistribution.of(RealScalar.of(-0.1)));
   }
 
+  @Test
   public void testLarge() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(700));
     PDF pdf = PDF.of(distribution);
@@ -140,6 +157,7 @@ public class PoissonDistributionTest extends TestCase {
     assertTrue(Scalars.isZero(pdf.at(RealScalar.of(-1000000.12))));
   }
 
+  @Test
   public void testNextDownOne() {
     Scalar last = RealScalar.of(Math.nextDown(1.0));
     for (int lambda = 1; lambda < 700; lambda += 30) {
@@ -160,6 +178,7 @@ public class PoissonDistributionTest extends TestCase {
     // assertTrue(discreteCDF.cdf_finished());
   }
 
+  @Test
   public void testNumericsPoisson() {
     _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(0.1)));
     _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(1.0)));
@@ -167,6 +186,7 @@ public class PoissonDistributionTest extends TestCase {
     _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(700.0)));
   }
 
+  @Test
   public void testFailPoisson() {
     AssertFail.of(() -> PoissonDistribution.of(RealScalar.of(800)));
   }

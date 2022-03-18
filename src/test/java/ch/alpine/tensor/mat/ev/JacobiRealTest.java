@@ -1,8 +1,13 @@
 // code by jph
 package ch.alpine.tensor.mat.ev;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.lang.reflect.Modifier;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -22,9 +27,9 @@ import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import junit.framework.TestCase;
 
-public class JacobiRealTest extends TestCase {
+public class JacobiRealTest {
+  @Test
   public void testRandom() {
     Random random = new Random(1);
     Distribution distribution = UniformDistribution.of(-10, 10);
@@ -38,6 +43,7 @@ public class JacobiRealTest extends TestCase {
       }
   }
 
+  @Test
   public void testSimple() {
     Tensor matrix = HilbertMatrix.of(4).unmodifiable();
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
@@ -57,6 +63,7 @@ public class JacobiRealTest extends TestCase {
     Tolerance.CHOP.requireClose(matrix, BasisTransform.ofMatrix(a, V));
   }
 
+  @Test
   public void testOneStep() {
     Tensor matrix = HilbertMatrix.of(4).unmodifiable();
     JacobiReal jacobiReal = new JacobiReal(matrix);
@@ -90,6 +97,7 @@ public class JacobiRealTest extends TestCase {
     return tensor;
   }
 
+  @Test
   public void testEmulation() {
     Tensor matrix = HilbertMatrix.of(4).unmodifiable();
     int p = 1;
@@ -112,12 +120,14 @@ public class JacobiRealTest extends TestCase {
         BasisTransform.of(matrix, 1, r));
   }
 
+  @Test
   public void testEpsDouble() {
     double dbl_ulp = Math.ulp(1.0);
     float flt_ulp = Math.ulp(1);
     assertTrue(dbl_ulp < flt_ulp);
   }
 
+  @Test
   public void testPackage() {
     assertFalse(Modifier.isPublic(JacobiReal.class.getModifiers()));
   }

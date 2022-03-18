@@ -1,42 +1,55 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.Arrays;
 
-import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class IntegersTest extends TestCase {
+import ch.alpine.tensor.usr.AssertFail;
+
+public class IntegersTest {
+  @Test
   public void testPositive() {
     for (int value : new int[] { 1, 2, Integer.MAX_VALUE })
       Integers.requirePositive(value);
   }
 
+  @Test
   public void testPositiveOrZero() {
     for (int value : new int[] { 0, 1, 2, Integer.MAX_VALUE })
       Integers.requirePositiveOrZero(value);
   }
 
+  @Test
   public void testPositiveFail() {
     for (int value : new int[] { Integer.MIN_VALUE, -3, -1, 0 })
       AssertFail.of(() -> Integers.requirePositive(value));
   }
 
+  @Test
   public void testPositiveOrZeroFail() {
     for (int value : new int[] { Integer.MIN_VALUE, -3, -1 })
       AssertFail.of(() -> Integers.requirePositiveOrZero(value));
   }
 
+  @Test
   public void testRequireLessThan() {
     Integers.requireLessThan(2, 3);
     AssertFail.of(() -> Integers.requireLessThan(3, 3));
   }
 
+  @Test
   public void testRequireLessEquals() {
     Integers.requireLessEquals(3, 3);
     AssertFail.of(() -> Integers.requireLessEquals(4, 3));
   }
 
+  @Test
   public void testIsEven() {
     assertTrue(Integers.isEven(-2));
     assertTrue(Integers.isEven(0));
@@ -44,6 +57,7 @@ public class IntegersTest extends TestCase {
     assertTrue(Integers.isEven(Integer.MIN_VALUE));
   }
 
+  @Test
   public void testIsEvenFalse() {
     assertFalse(Integers.isEven(-3));
     assertFalse(Integers.isEven(-1));
@@ -52,11 +66,13 @@ public class IntegersTest extends TestCase {
     assertFalse(Integers.isEven(Integer.MAX_VALUE));
   }
 
+  @Test
   public void testCuriosity() {
     int value = -1;
     assertEquals(value & 1, 1);
   }
 
+  @Test
   public void testPowerOf2() {
     assertTrue(Integers.isPowerOf2(1));
     assertTrue(Integers.isPowerOf2(2));
@@ -66,6 +82,7 @@ public class IntegersTest extends TestCase {
     assertFalse(Integers.isPowerOf2(6));
   }
 
+  @Test
   public void testPowerOf2Fail() {
     AssertFail.of(() -> Integers.isPowerOf2(-3));
     AssertFail.of(() -> Integers.isPowerOf2(-2));
@@ -73,6 +90,7 @@ public class IntegersTest extends TestCase {
     AssertFail.of(() -> Integers.isPowerOf2(0));
   }
 
+  @Test
   public void testMisra3_3() {
     int a = -5;
     int b = 3;
@@ -82,6 +100,7 @@ public class IntegersTest extends TestCase {
     assertEquals(rem, -2);
   }
 
+  @Test
   public void testMisra6_10_3_int() {
     int a = Integer.MAX_VALUE;
     int b = Integer.MAX_VALUE;
@@ -93,6 +112,7 @@ public class IntegersTest extends TestCase {
     assertEquals(c3, 4294967294L);
   }
 
+  @Test
   public void testMisra6_10_3_short() {
     short a = Short.MAX_VALUE;
     short b = Short.MAX_VALUE;
@@ -100,6 +120,7 @@ public class IntegersTest extends TestCase {
     assertEquals(c1, 65534);
   }
 
+  @Test
   public void testMisra6_10_3_byte() {
     byte a = Byte.MAX_VALUE;
     byte b = Byte.MAX_VALUE;
@@ -107,6 +128,7 @@ public class IntegersTest extends TestCase {
     assertEquals(c1, 254);
   }
 
+  @Test
   public void testRequireEquals() {
     assertEquals(3, Integers.requireEquals(3, 3));
     assertEquals(7, Integers.requireEquals(7, 7));
@@ -114,6 +136,7 @@ public class IntegersTest extends TestCase {
     AssertFail.of(() -> Integers.requireEquals(3, -3));
   }
 
+  @Test
   public void testRequireEqualsMessage() {
     try {
       Integers.requireEquals(3, 4);
@@ -123,6 +146,7 @@ public class IntegersTest extends TestCase {
     }
   }
 
+  @Test
   public void testIsPermutation() {
     assertTrue(Integers.isPermutation(new int[] {}));
     assertTrue(Integers.isPermutation(new int[] { 2, 0, 1 }));
@@ -132,11 +156,13 @@ public class IntegersTest extends TestCase {
     assertFalse(Integers.isPermutation(new int[] { -1, 0 }));
   }
 
+  @Test
   public void testRequirePermutation() {
     Integers.requirePermutation(new int[] { 0, 2, 1 });
     AssertFail.of(() -> Integers.requirePermutation(new int[] { 2, 3 }));
   }
 
+  @Test
   public void testRequirePermutationMessage() {
     try {
       Integers.requirePermutation(new int[] { 0, 2 });
@@ -146,6 +172,7 @@ public class IntegersTest extends TestCase {
     }
   }
 
+  @Test
   public void testRequirePermutationLong() {
     try {
       Integers.requirePermutation(new int[20]);
@@ -155,6 +182,7 @@ public class IntegersTest extends TestCase {
     }
   }
 
+  @Test
   public void testParity() {
     assertEquals(Integers.parity(new int[] { 0, 1 }), 0);
     assertEquals(Integers.parity(new int[] { 1, 0 }), 1);
@@ -162,17 +190,20 @@ public class IntegersTest extends TestCase {
     assertEquals(Integers.parity(new int[] { 2, 1, 0 }), 1);
   }
 
+  @Test
   public void testParityFail() {
     AssertFail.of(() -> Integers.parity(new int[] { 0, 0 }));
     AssertFail.of(() -> Integers.parity(new int[] { 1, 1 }));
     AssertFail.of(() -> Integers.parity(new int[] { 2, 1 }));
   }
 
+  @Test
   public void testAsList() {
     assertEquals(Integers.asList(new int[] { 3, 4, 556 }), Arrays.asList(3, 4, 556));
     // assertEquals(Integers.asList(3, 4, 556), Arrays.asList(3, 4, 556));
   }
 
+  @Test
   public void testAsListNullFail() {
     AssertFail.of(() -> Integers.asList(null));
   }

@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
@@ -14,9 +18,9 @@ import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class DeBoorTest extends TestCase {
+public class DeBoorTest {
+  @Test
   public void testDegree0() throws ClassNotFoundException, IOException {
     Tensor knots = Tensors.empty().unmodifiable();
     Tensor control = Tensors.vector(-1).unmodifiable();
@@ -29,6 +33,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.control(), control);
   }
 
+  @Test
   public void testLinearUnit() {
     Tensor knots = Tensors.vector(9, 10).unmodifiable();
     Tensor control = Tensors.vector(-1, 3).unmodifiable();
@@ -39,6 +44,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.apply(RealScalar.of(10)), RealScalar.of(3));
   }
 
+  @Test
   public void testLinearDouble() {
     Tensor knots = Tensors.vector(9, 11).unmodifiable();
     Tensor control = Tensors.vector(-1, 3).unmodifiable();
@@ -53,6 +59,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.control(), control);
   }
 
+  @Test
   public void testQuadratic() {
     Tensor knots = Tensors.vector(9, 10, 11, 12).unmodifiable();
     Tensor control = Tensors.vector(-1, 3, 2).unmodifiable();
@@ -65,6 +72,7 @@ public class DeBoorTest extends TestCase {
     ExactTensorQ.require(points);
   }
 
+  @Test
   public void testQuadratic2() {
     Tensor knots = Tensors.vector(9, 10, 11, 12).unmodifiable();
     Tensor control = Tensors.vector(-1, 3, 2).unmodifiable();
@@ -81,6 +89,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.control(), control);
   }
 
+  @Test
   public void testCubic() {
     Tensor knots = Tensors.vector(9, 10, 11, 12, 13, 14).unmodifiable();
     Tensor control = Tensors.vector(-1, 3, 2, 7).unmodifiable();
@@ -97,6 +106,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.control(), control);
   }
 
+  @Test
   public void testCubicLimit() {
     Tensor knots = Tensors.vector(11, 11, 11, 12, 13, 14).unmodifiable();
     Tensor control = Tensors.vector(3, 3, 2, 7).unmodifiable();
@@ -109,6 +119,7 @@ public class DeBoorTest extends TestCase {
     ExactTensorQ.require(points);
   }
 
+  @Test
   public void testWikiStyleConstant0() throws ClassNotFoundException, IOException {
     Tensor knots = Tensors.unmodifiableEmpty();
     Tensor control = Tensors.vector(90).unmodifiable();
@@ -119,6 +130,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.apply(RealScalar.of(1)), RealScalar.of(90));
   }
 
+  @Test
   public void testWikiStyleLinear0() {
     Tensor knots = Tensors.vector(0, 1).unmodifiable();
     Tensor control = Tensors.vector(90, 100).unmodifiable();
@@ -129,6 +141,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.apply(RealScalar.of(1)), RealScalar.of(100));
   }
 
+  @Test
   public void testWikiStyleLinear1() {
     Tensor knots = Tensors.vector(1, 2).unmodifiable();
     Tensor control = Tensors.vector(100, 120).unmodifiable();
@@ -140,6 +153,7 @@ public class DeBoorTest extends TestCase {
   }
 
   /** example from Wikipedia */
+  @Test
   public void testWikiQuadratic0() {
     Tensor knots = Tensors.vector(0, 0, 1, 2).unmodifiable();
     Tensor control = Tensors.vector(0, 0, 1).unmodifiable();
@@ -150,6 +164,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.apply(RealScalar.of(1)), RationalScalar.of(1, 2));
   }
 
+  @Test
   public void testWikiQuadratic1() {
     Tensor knots = Tensors.vector(0, 1, 2, 3).unmodifiable();
     Tensor control = Tensors.vector(0, 1, 0).unmodifiable();
@@ -160,6 +175,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.apply(RealScalar.of(2)), RationalScalar.of(1, 2));
   }
 
+  @Test
   public void testWikiQuadratic2() {
     Tensor knots = Tensors.vector(1, 2, 3, 3).unmodifiable();
     Tensor control = Tensors.vector(1, 0, 0).unmodifiable();
@@ -171,6 +187,7 @@ public class DeBoorTest extends TestCase {
   }
 
   /** example from Wikipedia */
+  @Test
   public void testWikiCubic0() {
     Tensor knots = Tensors.vector(-2, -2, -2, -1, 0, 1).unmodifiable();
     Tensor control = Tensors.vector(0, 0, 0, 6).unmodifiable();
@@ -181,6 +198,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.apply(RealScalar.of(-1)), RealScalar.of(1));
   }
 
+  @Test
   public void testWikiCubic1() {
     Tensor knots = Tensors.vector(-2, -2, -1, 0, 1, 2).unmodifiable();
     Tensor control = Tensors.vector(0, 0, 6, 0).unmodifiable();
@@ -191,6 +209,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.apply(RealScalar.of(0)), RealScalar.of(4));
   }
 
+  @Test
   public void testWikiCubic2() {
     Tensor knots = Tensors.vector(-2, -1, 0, 1, 2, 2).unmodifiable();
     Tensor control = Tensors.vector(0, 6, 0, 0).unmodifiable();
@@ -201,6 +220,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.apply(RealScalar.of(1)), RealScalar.of(1));
   }
 
+  @Test
   public void testWikiCubic3() {
     Tensor knots = Tensors.vector(-1, 0, 1, 2, 2, 2).unmodifiable();
     Tensor control = Tensors.vector(6, 0, 0, 0).unmodifiable();
@@ -210,6 +230,7 @@ public class DeBoorTest extends TestCase {
     assertEquals(deBoor.apply(RealScalar.of(2)), RealScalar.of(0));
   }
 
+  @Test
   public void testNullFail() {
     Tensor knots = Tensors.vector(-1, 0, 1, 2, 2, 2).unmodifiable();
     Tensor control = Tensors.vector(6, 0, 0, 0).unmodifiable();
@@ -217,20 +238,24 @@ public class DeBoorTest extends TestCase {
     AssertFail.of(() -> DeBoor.of(null, knots, control));
   }
 
+  @Test
   public void testKnotsScalarFail() {
     AssertFail.of(() -> DeBoor.of(LinearBinaryAverage.INSTANCE, RealScalar.ONE, Tensors.empty()));
   }
 
+  @Test
   public void testKnotsMatrixFail() {
     AssertFail.of(() -> DeBoor.of(LinearBinaryAverage.INSTANCE, HilbertMatrix.of(2), Tensors.vector(1, 2)));
   }
 
+  @Test
   public void testKnotsLengthOdd() {
     DeBoor deBoor = DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2), Range.of(0, 2));
     assertEquals(deBoor.degree(), 1);
     AssertFail.of(() -> DeBoor.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3), Range.of(0, 2)));
   }
 
+  @Test
   public void testControlFail() {
     for (int length = 0; length < 10; ++length)
       if (length != 2) {

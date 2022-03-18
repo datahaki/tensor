@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigInteger;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -15,9 +20,9 @@ import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class CeilingTest extends TestCase {
+public class CeilingTest {
+  @Test
   public void testCeiling() {
     assertEquals(Ceiling.of(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(Ceiling.of(RationalScalar.of(-5, 2)), RationalScalar.of(-2, 1));
@@ -27,6 +32,7 @@ public class CeilingTest extends TestCase {
     assertEquals(Ceiling.of(DoubleScalar.of(-0.123)), RationalScalar.of(0, 1));
   }
 
+  @Test
   public void testHash() {
     Tensor a = Tensors.of( //
         DoubleScalar.of(0.123), DoubleScalar.of(3.343), DoubleScalar.of(-0.123));
@@ -36,6 +42,7 @@ public class CeilingTest extends TestCase {
     assertEquals(b.hashCode(), c.hashCode());
   }
 
+  @Test
   public void testGetCeiling() {
     Tensor v = Tensors.vectorDouble(3.5, 5.6, 9.12);
     Scalar s = Ceiling.of(v.Get(1));
@@ -43,6 +50,7 @@ public class CeilingTest extends TestCase {
     assertEquals(rs.number(), 6);
   }
 
+  @Test
   public void testComplex() {
     Scalar c = Scalars.fromString("7-2*I");
     assertEquals(Ceiling.of(c), c);
@@ -50,6 +58,7 @@ public class CeilingTest extends TestCase {
     assertEquals(Ceiling.of(d), c);
   }
 
+  @Test
   public void testRational1() {
     Scalar s = RationalScalar.of(234534584545L, 13423656767L); // 17.4717
     assertEquals(Ceiling.intValueExact(s), 18);
@@ -59,11 +68,13 @@ public class CeilingTest extends TestCase {
     assertTrue(r instanceof RationalScalar);
   }
 
+  @Test
   public void testIntExactValueFail() {
     AssertFail.of(() -> Ceiling.intValueExact(Quantity.of(1.2, "h")));
     AssertFail.of(() -> Ceiling.longValueExact(Quantity.of(2.3, "h*s")));
   }
 
+  @Test
   public void testRational2() {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
     Scalar r = Ceiling.of(s);
@@ -71,6 +82,7 @@ public class CeilingTest extends TestCase {
     assertTrue(r instanceof RationalScalar);
   }
 
+  @Test
   public void testLarge() {
     BigInteger bi = new BigInteger("97826349587623498756234545976");
     Scalar s = RealScalar.of(bi);
@@ -79,6 +91,7 @@ public class CeilingTest extends TestCase {
     assertTrue(r instanceof RationalScalar);
   }
 
+  @Test
   public void testMultiple() {
     Scalar w = Quantity.of(2, "K");
     ScalarUnaryOperator suo = Ceiling.toMultipleOf(w);
@@ -88,6 +101,7 @@ public class CeilingTest extends TestCase {
     assertEquals(suo.apply(Quantity.of(-3.9, "K")), w.multiply(RealScalar.of(-1)));
   }
 
+  @Test
   public void testDecimalPlacesP() {
     Scalar w = Quantity.of(1.00001, "K");
     Tolerance.CHOP.requireClose(Ceiling._1.apply(w), Quantity.of(1.1, "K"));
@@ -95,6 +109,7 @@ public class CeilingTest extends TestCase {
     Tolerance.CHOP.requireClose(Ceiling._3.apply(w), Quantity.of(1.001, "K"));
   }
 
+  @Test
   public void testDecimalPlacesN() {
     Scalar w = Quantity.of(-1.99999, "K");
     Tolerance.CHOP.requireClose(Ceiling._1.apply(w), Quantity.of(-1.9, "K"));
@@ -102,26 +117,31 @@ public class CeilingTest extends TestCase {
     Tolerance.CHOP.requireClose(Ceiling._3.apply(w), Quantity.of(-1.999, "K"));
   }
 
+  @Test
   public void testPositiveInfinity() {
     Scalar scalar = DoubleScalar.POSITIVE_INFINITY;
     assertEquals(Ceiling.of(scalar), scalar);
   }
 
+  @Test
   public void testNegativeInfinity() {
     Scalar scalar = DoubleScalar.NEGATIVE_INFINITY;
     assertEquals(Ceiling.of(scalar), scalar);
   }
 
+  @Test
   public void testNaN() {
     assertTrue(Double.isNaN(Ceiling.of(DoubleScalar.INDETERMINATE).number().doubleValue()));
     assertTrue(Double.isNaN(Ceiling._2.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
   }
 
+  @Test
   public void testQuantity() {
     Scalar scalar = Quantity.of(2.1, "K");
     assertEquals(Ceiling.FUNCTION.apply(scalar), Quantity.of(3, "K"));
   }
 
+  @Test
   public void testTypeFail() {
     Scalar scalar = StringScalar.of("string");
     AssertFail.of(() -> Ceiling.of(scalar));

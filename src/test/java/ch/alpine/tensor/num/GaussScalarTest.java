@@ -1,11 +1,17 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
@@ -30,9 +36,9 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class GaussScalarTest extends TestCase {
+public class GaussScalarTest {
+  @Test
   public void testReciprocal() {
     long prime = 7919;
     for (int v = 1; v < prime; ++v) {
@@ -43,6 +49,7 @@ public class GaussScalarTest extends TestCase {
     }
   }
 
+  @Test
   public void testDivideUnder() {
     GaussScalar num = GaussScalar.of(132, 193);
     GaussScalar den = GaussScalar.of(37, 193);
@@ -51,6 +58,7 @@ public class GaussScalarTest extends TestCase {
     assertEquals(div1, div2);
   }
 
+  @Test
   public void testGetter() {
     GaussScalar num = GaussScalar.of(32, 193);
     assertEquals(num.number().intValue(), 32);
@@ -58,6 +66,7 @@ public class GaussScalarTest extends TestCase {
     assertEquals(num.prime(), BigInteger.valueOf(193));
   }
 
+  @Test
   public void testMatrix1() {
     Tensor m = Tensors.matrix(new Scalar[][] { //
         { GaussScalar.of(0, 7), GaussScalar.of(3, 7) }, //
@@ -71,12 +80,14 @@ public class GaussScalarTest extends TestCase {
     assertEquals(m.dot(a), b);
   }
 
+  @Test
   public void testNegativePrime() {
     Scalar a = GaussScalar.of(2, 7);
     Scalar b = GaussScalar.of(3, 7);
     assertEquals(GaussScalar.of(-2, 7), a.add(b));
   }
 
+  @Test
   public void testMultiplyQuantity() {
     Scalar a = GaussScalar.of(4, 13);
     Scalar b = Quantity.of(GaussScalar.of(7, 13), "some");
@@ -85,17 +96,20 @@ public class GaussScalarTest extends TestCase {
     assertEquals(ab, ba);
   }
 
+  @Test
   public void testSqrt() {
     Scalar a = GaussScalar.of(4, 7);
     Scalar s = GaussScalar.of(2, 7);
     assertEquals(Sqrt.of(a), s);
   }
 
+  @Test
   public void testSqrt0() {
     Scalar zero = GaussScalar.of(0, 7);
     assertEquals(Sqrt.of(zero), zero);
   }
 
+  @Test
   public void testSqrt11() {
     int prime = 11;
     int count = 0;
@@ -113,6 +127,7 @@ public class GaussScalarTest extends TestCase {
     AssertFail.of(() -> Sqrt.of(GaussScalar.of(2, 11)));
   }
 
+  @Test
   public void testSqrt5() {
     assertEquals(Sqrt.of(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
     assertEquals(Sqrt.of(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
@@ -120,11 +135,13 @@ public class GaussScalarTest extends TestCase {
     AssertFail.of(() -> Sqrt.of(GaussScalar.of(3, 5)));
   }
 
+  @Test
   public void testNumber() {
     Scalar scalar = GaussScalar.of(9, 23);
     assertTrue(scalar.number() instanceof BigInteger);
   }
 
+  @Test
   public void testSort() {
     Tensor v = Tensors.of(GaussScalar.of(4, 7), GaussScalar.of(1, 7), GaussScalar.of(2, 7), GaussScalar.of(0, 7));
     Tensor r = Tensors.of(GaussScalar.of(0, 7), GaussScalar.of(1, 7), GaussScalar.of(2, 7), GaussScalar.of(4, 7));
@@ -132,12 +149,14 @@ public class GaussScalarTest extends TestCase {
     assertEquals(s, r);
   }
 
+  @Test
   public void testArgMax() {
     Tensor vector = Tensors.of(GaussScalar.of(1, 7), GaussScalar.of(4, 7), GaussScalar.of(2, 7), GaussScalar.of(0, 7));
     int i = ArgMax.of(vector);
     assertEquals(i, 1);
   }
 
+  @Test
   public void testPower() {
     int prime = 677;
     Scalar scalar = GaussScalar.of(432, prime);
@@ -148,6 +167,7 @@ public class GaussScalarTest extends TestCase {
     }
   }
 
+  @Test
   public void testPowerNegative() {
     int prime = 677;
     Scalar scalar = GaussScalar.of(432, prime);
@@ -158,6 +178,7 @@ public class GaussScalarTest extends TestCase {
     }
   }
 
+  @Test
   public void testPower2() {
     long prime = 59;
     BinaryPower<Scalar> binaryPower = new BinaryPower<>(ScalarProduct.INSTANCE);
@@ -173,6 +194,7 @@ public class GaussScalarTest extends TestCase {
     }
   }
 
+  @Test
   public void testPowerZero() {
     long prime = 43;
     Scalar scalar = GaussScalar.of(1, prime);
@@ -184,12 +206,14 @@ public class GaussScalarTest extends TestCase {
     }
   }
 
+  @Test
   public void testVector2NormSquared() {
     int prime = 107;
     Scalar normSquared = Vector2NormSquared.of(Tensors.of(GaussScalar.of(99, prime)));
     assertEquals(normSquared, GaussScalar.of(64, prime));
   }
 
+  @Test
   public void testPowerFail() {
     GaussScalar gaussScalar = GaussScalar.of(3, 107);
     assertEquals(gaussScalar.number(), BigInteger.valueOf(3));
@@ -197,11 +221,13 @@ public class GaussScalarTest extends TestCase {
     AssertFail.of(() -> Power.of(gaussScalar, Pi.HALF));
   }
 
+  @Test
   public void testSign() {
     assertEquals(Sign.FUNCTION.apply(GaussScalar.of(0, 677)), GaussScalar.of(0, 677));
     assertEquals(Sign.FUNCTION.apply(GaussScalar.of(-432, 677)), GaussScalar.of(1, 677));
   }
 
+  @Test
   public void testRounding() {
     Scalar scalar = GaussScalar.of(-432, 677);
     assertEquals(Round.of(scalar), scalar);
@@ -209,12 +235,14 @@ public class GaussScalarTest extends TestCase {
     assertEquals(Floor.of(scalar), scalar);
   }
 
+  @Test
   public void testSerializable() throws Exception {
     Scalar a = GaussScalar.of(4, 7);
     assertEquals(a, Serialization.parse(Serialization.of(a)));
     assertEquals(a, Serialization.copy(a));
   }
 
+  @Test
   public void testHash() {
     Scalar g = GaussScalar.of(4, 7);
     ExactScalarQ.require(g);
@@ -229,6 +257,7 @@ public class GaussScalarTest extends TestCase {
     assertEquals(set.size(), 4);
   }
 
+  @Test
   public void testBinaryOpFail() {
     GaussScalar gs1 = GaussScalar.of(432, 677);
     GaussScalar gs2 = GaussScalar.of(4, 13);
@@ -239,26 +268,31 @@ public class GaussScalarTest extends TestCase {
     AssertFail.of(() -> gs1.compareTo(gs2));
   }
 
+  @Test
   public void testHash2() {
     assertFalse(GaussScalar.of(3, 7).hashCode() == GaussScalar.of(7, 3).hashCode());
     assertFalse(GaussScalar.of(1, 7).hashCode() == GaussScalar.of(2, 7).hashCode());
     assertFalse(GaussScalar.of(1, 7).hashCode() == GaussScalar.of(1, 11).hashCode());
   }
 
+  @Test
   public void testEquals() {
     assertFalse(GaussScalar.of(3, 7).equals(GaussScalar.of(4, 7)));
     assertFalse(GaussScalar.of(3, 7).equals(GaussScalar.of(3, 11)));
   }
 
+  @Test
   public void testEqualsNull() {
     assertFalse(GaussScalar.of(3, 7).equals(null));
   }
 
+  @Test
   public void testEqualsMisc() {
     Object object = GaussScalar.of(3, 7);
     assertFalse(object.equals("hello"));
   }
 
+  @Test
   public void testToString() {
     String string = GaussScalar.of(3, 7).toString();
     assertTrue(0 < string.indexOf('3'));
@@ -266,6 +300,7 @@ public class GaussScalarTest extends TestCase {
     // assertEquals(string, "{\"value\": 3, \"prime\": 7}");
   }
 
+  @Test
   public void testDivideZeroFail() {
     Scalar a = GaussScalar.of(3, 13);
     Scalar b = GaussScalar.of(0, 13);
@@ -273,6 +308,7 @@ public class GaussScalarTest extends TestCase {
     AssertFail.of(() -> b.under(a));
   }
 
+  @Test
   public void testPrimes() {
     Tensor tensor = ResourceData.of("/number/primes.vector");
     tensor.extract(3, tensor.length()).stream() //

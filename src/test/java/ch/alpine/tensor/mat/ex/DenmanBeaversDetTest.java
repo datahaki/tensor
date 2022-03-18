@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.mat.ex;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -14,9 +18,9 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class DenmanBeaversDetTest extends TestCase {
+public class DenmanBeaversDetTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     for (int n = 1; n < 10; ++n) {
       Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
@@ -33,6 +37,7 @@ public class DenmanBeaversDetTest extends TestCase {
     }
   }
 
+  @Test
   public void testComplex() {
     Tensor x2 = Tensors.fromString("{{6, 1+5*I}, {1-5*I, 11}}");
     HermitianMatrixQ.require(x2);
@@ -44,6 +49,7 @@ public class DenmanBeaversDetTest extends TestCase {
   }
 
   @SuppressWarnings("unused")
+  @Test
   public void testFail() throws IOException {
     Tensor matrix = ResourceData.of("/mat/dbd_fail.csv");
     try {

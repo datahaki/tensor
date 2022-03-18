@@ -1,7 +1,13 @@
 // code by jph
 package ch.alpine.tensor.mat.ev;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -26,9 +32,9 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class EigensystemTest extends TestCase {
+public class EigensystemTest {
+  @Test
   public void testPhase1Tuning() throws IOException {
     Distribution distribution = UniformDistribution.of(-2, 2);
     for (int n = 1; n < 13; ++n) {
@@ -50,6 +56,7 @@ public class EigensystemTest extends TestCase {
     }
   }
 
+  @Test
   public void testQuantity() {
     Tensor matrix = Tensors.fromString("{{10[m], -2[m]}, {-2[m], 4[m]}}");
     SymmetricMatrixQ.require(matrix);
@@ -65,6 +72,7 @@ public class EigensystemTest extends TestCase {
     }
   }
 
+  @Test
   public void testQuantityLarge() {
     for (int n = 8; n < 10; ++n) {
       Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), n, n)).map(s -> Quantity.of(s, "m"));
@@ -73,6 +81,7 @@ public class EigensystemTest extends TestCase {
     }
   }
 
+  @Test
   public void testQuantityDegenerate() {
     int r = 4;
     for (int n = 8; n < 10; ++n) {
@@ -88,32 +97,38 @@ public class EigensystemTest extends TestCase {
     }
   }
 
+  @Test
   public void testQuantityMixed() {
     Tensor matrix = Tensors.fromString("{{10[m^2], 2[m*kg]}, {2[m*kg], 4[kg^2]}}");
     SymmetricMatrixQ.require(matrix);
     AssertFail.of(() -> Eigensystem.ofSymmetric(matrix));
   }
 
+  @Test
   public void testEmptyFail() {
     AssertFail.of(() -> Eigensystem.ofSymmetric(Tensors.empty()));
   }
 
+  @Test
   public void testNonSymmetricFail() {
     AssertFail.of(() -> Eigensystem.ofSymmetric(Tensors.fromString("{{1, 2}, {3, 4}}")));
   }
 
+  @Test
   public void testComplexFail() {
     Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
     SymmetricMatrixQ.require(matrix);
     AssertFail.of(() -> Eigensystem.ofSymmetric(matrix));
   }
 
+  @Test
   public void testComplex2Fail() {
     Tensor matrix = Tensors.fromString("{{0, I}, {I, 0}}");
     SymmetricMatrixQ.require(matrix);
     AssertFail.of(() -> Eigensystem.ofSymmetric(matrix));
   }
 
+  @Test
   public void testNonSymmetric2Fail() {
     AssertFail.of(() -> Eigensystem.ofSymmetric(Array.zeros(2, 3)));
   }

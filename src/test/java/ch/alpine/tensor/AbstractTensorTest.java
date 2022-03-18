@@ -1,10 +1,16 @@
 // code by jph
 package ch.alpine.tensor;
 
-import ch.alpine.tensor.alg.Array;
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class AbstractTensorTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+import ch.alpine.tensor.alg.Array;
+
+public class AbstractTensorTest {
+  @Test
   public void testHash() {
     Tensor a = Tensors.vectorLong(7, 2);
     Tensor b = Tensors.vectorLong(7, 2);
@@ -13,12 +19,14 @@ public class AbstractTensorTest extends TestCase {
     assertTrue(a.hashCode() != 0);
   }
 
+  @Test
   public void testHashDifferent() {
     Tensor a = Tensors.vectorLong(7, 2);
     Tensor b = Tensors.vectorLong(722, 18275);
     assertFalse(a.hashCode() == b.hashCode());
   }
 
+  @Test
   public void testHashCopy() {
     Tensor a = Tensors.of(Tensors.vectorLong(2, -81, 7, 2, 8), Tensors.vector(32, 3.123));
     Tensor b = a.copy();
@@ -26,6 +34,7 @@ public class AbstractTensorTest extends TestCase {
     assertEquals(a.hashCode(), b.hashCode());
   }
 
+  @Test
   public void testHashScalar() {
     Tensor c = DoubleScalar.of(3.14);
     Tensor d = DoubleScalar.of(3.14);
@@ -33,6 +42,7 @@ public class AbstractTensorTest extends TestCase {
     assertEquals(c.hashCode(), d.hashCode());
   }
 
+  @Test
   public void testEquals() {
     Tensor a = DoubleScalar.of(1.23);
     assertEquals(a, DoubleScalar.of(1.23));
@@ -49,6 +59,7 @@ public class AbstractTensorTest extends TestCase {
     assertFalse(d.equals(f));
   }
 
+  @Test
   public void testEmptyEquals() {
     Object empty = Tensors.empty();
     assertFalse(empty.equals(null));
@@ -56,11 +67,13 @@ public class AbstractTensorTest extends TestCase {
     assertFalse(empty.equals(RealScalar.of(2)));
   }
 
+  @Test
   public void testNotEquals() {
     assertFalse(Array.zeros(3, 2).equals(Array.zeros(2, 3)));
     assertFalse(Array.zeros(3, 2).equals(Array.zeros(3, 3)));
   }
 
+  @Test
   public void testToString() {
     assertEquals(Tensors.vector(2, 3, 4).toString(), "{2, 3, 4}");
   }

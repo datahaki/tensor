@@ -1,10 +1,13 @@
 // code by jph
 package ch.alpine.tensor.num;
 
-import ch.alpine.tensor.RealScalar;
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CoprimeQTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+import ch.alpine.tensor.RealScalar;
+
+public class CoprimeQTest {
   public static void _check(int n1, int n2, boolean expected) {
     assertEquals(CoprimeQ.of(RealScalar.of(n1), RealScalar.of(n2)), expected);
     assertEquals(CoprimeQ.of(RealScalar.of(-n1), RealScalar.of(n2)), expected);
@@ -12,6 +15,7 @@ public class CoprimeQTest extends TestCase {
     assertEquals(CoprimeQ.of(RealScalar.of(-n1), RealScalar.of(-n2)), expected);
   }
 
+  @Test
   public void testSimple() {
     _check(3, 9, false);
     _check(2, 3, true);

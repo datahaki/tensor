@@ -1,6 +1,11 @@
 // code by jph
 package ch.alpine.tensor.lie.r2;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -19,9 +24,9 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class AngleVectorTest extends TestCase {
+public class AngleVectorTest {
+  @Test
   public void testNumeric() {
     for (int count = 0; count < 12; ++count) {
       Scalar scalar = N.DOUBLE.of(RationalScalar.of(count, 12));
@@ -30,6 +35,7 @@ public class AngleVectorTest extends TestCase {
     }
   }
 
+  @Test
   public void testNorm() {
     Distribution distribution = UniformDistribution.of(Pi.VALUE.negate(), Pi.VALUE);
     for (int index = 0; index < 10; ++index) {
@@ -41,6 +47,7 @@ public class AngleVectorTest extends TestCase {
     }
   }
 
+  @Test
   public void testMatrix() {
     Scalar angle = RealScalar.ONE;
     Tensor vector = AngleVector.of(angle);
@@ -48,6 +55,7 @@ public class AngleVectorTest extends TestCase {
     assertEquals(vector, matrix.get(Tensor.ALL, 0));
   }
 
+  @Test
   public void testRotation() {
     ExactTensorQ.require(AngleVector.turns(RationalScalar.of(-2, 2)));
     assertEquals(AngleVector.turns(RationalScalar.of(-2, 2)), Tensors.vector(+1, 0));
@@ -56,6 +64,7 @@ public class AngleVectorTest extends TestCase {
     assertFalse(ExactTensorQ.of(AngleVector.turns(RealScalar.of(-2.0))));
   }
 
+  @Test
   public void testRotationOfEquivalence() {
     Distribution distribution = NormalDistribution.standard();
     for (int count = 0; count < 10; ++count) {
@@ -64,6 +73,7 @@ public class AngleVectorTest extends TestCase {
     }
   }
 
+  @Test
   public void testModify() {
     Tensor o1 = AngleVector.turns(RealScalar.ZERO);
     assertEquals(o1, UnitVector.of(2, 0));
@@ -72,6 +82,7 @@ public class AngleVectorTest extends TestCase {
     assertEquals(o2, UnitVector.of(2, 0));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> AngleVector.of(null));
   }

@@ -1,9 +1,12 @@
 // code by jph
 package ch.alpine.tensor.red;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class ScalarSummaryStatisticsCollectorTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+public class ScalarSummaryStatisticsCollectorTest {
+  @Test
   public void testFinisher() {
     assertNull(ScalarSummaryStatisticsCollector.INSTANCE.finisher().apply(null));
   }

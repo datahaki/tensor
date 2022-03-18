@@ -1,10 +1,14 @@
 // code by jph
 package ch.alpine.tensor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Range;
@@ -18,9 +22,8 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.ArcTan;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class AbstractRealScalarTest extends TestCase {
+public class AbstractRealScalarTest {
   private static final List<Scalar> SCALARS = Arrays.asList( //
       RealScalar.ZERO, RealScalar.ONE, //
       RationalScalar.of(-7, 3), //
@@ -52,6 +55,7 @@ public class AbstractRealScalarTest extends TestCase {
     }
   }
 
+  @Test
   public void testAdd() {
     Unit unit = Unit.of("m^2*s^-3");
     List<Scalar> list = SCALARS;
@@ -72,6 +76,7 @@ public class AbstractRealScalarTest extends TestCase {
     assertEquals(ab.getClass(), ba.getClass());
   }
 
+  @Test
   public void testMultiply() {
     Unit ua = Unit.of("m^2*s^-3");
     Unit ub = Unit.of("kg*CHF^-1");
@@ -88,6 +93,7 @@ public class AbstractRealScalarTest extends TestCase {
       }
   }
 
+  @Test
   public void testPermutationZero() {
     Tensor vector = Tensors.of(RealScalar.ZERO, Quantity.of(0, "m"), Quantity.of(0, "s"));
     Tensor produc = Tensor.of(Permutations.stream(Range.of(0, vector.length())) //
@@ -112,6 +118,7 @@ public class AbstractRealScalarTest extends TestCase {
     }
   }
 
+  @Test
   public void testDivide() {
     Unit ua = Unit.of("m^2*s^-3");
     Unit ub = Unit.of("kg*CHF^-1");
@@ -128,28 +135,33 @@ public class AbstractRealScalarTest extends TestCase {
       }
   }
 
+  @Test
   public void testArcTan() {
     AssertFail.of(() -> ArcTan.of(RealScalar.of(2.3), GaussScalar.of(3, 7)));
     AssertFail.of(() -> ArcTan.of(GaussScalar.of(3, 7), RealScalar.of(2.3)));
   }
 
+  @Test
   public void testRange() {
     assertEquals(Math.log(AbstractRealScalar.LOG_HI), Math.log1p(AbstractRealScalar.LOG_HI - 1));
     assertEquals(Math.log(AbstractRealScalar.LOG_LO), Math.log1p(AbstractRealScalar.LOG_LO - 1));
   }
 
+  @Test
   public void testPower00() {
     Scalar one = Power.of(0, 0);
     ExactScalarQ.require(one);
     assertEquals(one, RealScalar.ONE);
   }
 
+  @Test
   public void testPower00Numeric() {
     Scalar one = Power.of(0.0, 0.0);
     ExactScalarQ.require(one);
     assertEquals(one, RealScalar.ONE);
   }
 
+  @Test
   public void testPowerFail() {
     AssertFail.of(() -> Power.of(1, GaussScalar.of(2, 7)));
   }

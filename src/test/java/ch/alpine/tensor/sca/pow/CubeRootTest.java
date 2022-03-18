@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.sca.pow;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
@@ -12,14 +16,15 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class CubeRootTest extends TestCase {
+public class CubeRootTest {
+  @Test
   public void testSimple() {
     Scalar scalar = CubeRoot.FUNCTION.apply(RealScalar.of(27));
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(3));
   }
 
+  @Test
   public void testQuantity() {
     Scalar input = Quantity.of(2, "m^3");
     Scalar scalar = CubeRoot.FUNCTION.apply(input);
@@ -27,23 +32,27 @@ public class CubeRootTest extends TestCase {
     Tolerance.CHOP.requireClose(Times.of(scalar, scalar, scalar), input);
   }
 
+  @Test
   public void testNegative() {
     Scalar input = Quantity.of(-2, "m^3");
     Scalar scalar = CubeRoot.FUNCTION.apply(input);
     Tolerance.CHOP.requireClose(scalar, Quantity.of(-1.2599210498948731648, "m"));
   }
 
+  @Test
   public void testZero() {
     Scalar scalar = CubeRoot.FUNCTION.apply(RealScalar.ZERO);
     assertEquals(scalar, RealScalar.ZERO);
     ExactScalarQ.require(scalar);
   }
 
+  @Test
   public void testOf() {
     Tensor tensor = Tensors.vector(-27, -8, -1, 0, 1, 8, 27).map(CubeRoot.FUNCTION);
     assertEquals(tensor, Range.of(-3, 4));
   }
 
+  @Test
   public void testComplexFail() {
     Scalar scalar = ComplexScalar.of(12, 23);
     AssertFail.of(() -> CubeRoot.FUNCTION.apply(scalar));

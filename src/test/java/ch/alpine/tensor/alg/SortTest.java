@@ -1,8 +1,13 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import java.util.Collections;
 import java.util.Comparator;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -14,9 +19,9 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class SortTest extends TestCase {
+public class SortTest {
+  @Test
   public void testSort() {
     assertEquals(Sort.of(Tensors.vector(0, 4, 5, 2, -3)), Tensors.vector(-3, 0, 2, 4, 5));
     assertEquals(Sort.of(Tensors.vector(4, 5, 0, 2, -3)), Tensors.vector(-3, 0, 2, 4, 5));
@@ -28,6 +33,7 @@ public class SortTest extends TestCase {
     assertEquals(Sort.of(m.unmodifiable()), Sort.of(m));
   }
 
+  @Test
   public void testSortRows() {
     Comparator<Tensor> comparator = new Comparator<>() {
       @Override
@@ -40,6 +46,7 @@ public class SortTest extends TestCase {
     assertEquals(s, Tensors.fromString("{{2, 8}, {3, 5}, {4, 1}, {9, 0}}"));
   }
 
+  @Test
   public void testStrings() {
     Tensor vector = Tensors.of( //
         StringScalar.of("c"), //
@@ -49,6 +56,7 @@ public class SortTest extends TestCase {
     assertEquals(Sort.of(vector.unmodifiable()).toString(), "{a, b, c}");
   }
 
+  @Test
   public void testStringScalar() {
     Comparator<GaussScalar> comparator = new Comparator<>() {
       @Override
@@ -63,6 +71,7 @@ public class SortTest extends TestCase {
     assertEquals(Sort.ofVector(vec.unmodifiable(), comparator), Tensors.of(qs1, qs2));
   }
 
+  @Test
   public void testQuantity1() {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(2, "m");
@@ -71,6 +80,7 @@ public class SortTest extends TestCase {
     assertEquals(Sort.ofVector(vec, Collections.reverseOrder()), Tensors.of(qs2, qs1));
   }
 
+  @Test
   public void testQuantity2() {
     Tensor vector = Tensors.of( //
         Quantity.of(0, "m"), Quantity.of(9, "m"), //
@@ -78,6 +88,7 @@ public class SortTest extends TestCase {
     AssertFail.of(() -> Sort.of(vector));
   }
 
+  @Test
   public void testReference() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}}");
     Tensor sorted = Sort.of(tensor);
@@ -88,18 +99,21 @@ public class SortTest extends TestCase {
     assertEquals(tensor, Tensors.fromString("{{2, 3, 4}}"));
   }
 
+  @Test
   public void testSortEmpty() {
     assertEquals(Sort.of(Tensors.empty()), Tensors.empty());
     assertEquals(Sort.ofVector(Tensors.empty(), Collections.reverseOrder()), Tensors.empty());
     assertEquals(Sort.of(Tensors.empty(), Collections.reverseOrder()), Tensors.empty());
   }
 
+  @Test
   public void testMatrix() {
     assertEquals(Sort.of(IdentityMatrix.of(3)), Tensors.fromString("{{0, 0, 1}, {0, 1, 0}, {1, 0, 0}}"));
     assertEquals(Sort.of(Tensors.fromString("{{1, 2, 4}, {1, 2}, 3}")), Tensors.fromString("{3, {1, 2}, {1, 2, 4}}"));
     assertEquals(Sort.of(Tensors.fromString("{{1, 2, 4}, {2, 1}, 5, {}}")), Tensors.fromString("{5, {}, {2, 1}, {1, 2, 4}}"));
   }
 
+  @Test
   public void testMatrixReference() {
     Tensor matrix = IdentityMatrix.of(3);
     Tensor sorted = Sort.of(matrix);
@@ -107,10 +121,12 @@ public class SortTest extends TestCase {
     assertEquals(matrix, IdentityMatrix.of(3));
   }
 
+  @Test
   public void testScalarFail() {
     AssertFail.of(() -> Sort.of(RealScalar.of(3.12)));
   }
 
+  @Test
   public void testScalarVectorFail() {
     AssertFail.of(() -> Sort.ofVector(Tensors.vector(1, 2, 3), null));
   }

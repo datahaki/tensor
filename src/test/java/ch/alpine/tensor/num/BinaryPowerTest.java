@@ -1,12 +1,17 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.math.BigInteger;
 
-import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class BinaryPowerTest extends TestCase {
+import ch.alpine.tensor.usr.AssertFail;
+
+public class BinaryPowerTest {
+  @Test
   public void testInteger() {
     GroupInterface<Integer> groupInterface = new GroupInterface<>() {
       @Override // from BinaryPower
@@ -38,6 +43,7 @@ public class BinaryPowerTest extends TestCase {
     assertTrue(string.startsWith("BinaryPower"));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> new BinaryPower<>(null));
   }

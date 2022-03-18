@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
@@ -19,9 +23,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TimesTest extends TestCase {
+public class TimesTest {
   /** The return value has {@link Dimensions} of input tensor reduced by 1.
    * 
    * <p>For instance
@@ -43,25 +46,30 @@ public class TimesTest extends TestCase {
     return Times.of(tensor.stream().toArray(Tensor[]::new));
   }
 
+  @Test
   public void testSingle() {
     assertEquals(Times.of(RealScalar.of(3)), RealScalar.of(3));
   }
 
+  @Test
   public void testProduct() {
     assertEquals(RealScalar.of(3).multiply(RealScalar.of(8)), RealScalar.of(3 * 8));
     assertEquals(Times.of(RealScalar.of(3), RealScalar.of(8), RealScalar.of(-4)), RealScalar.of(3 * 8 * -4));
   }
 
+  @Test
   public void testEmpty() {
     assertEquals(Times.of(), RealScalar.ONE);
   }
 
+  @Test
   public void testGaussScalar() {
     GaussScalar a = GaussScalar.of(3, 7);
     GaussScalar b = GaussScalar.of(4, 7);
     assertEquals(a.multiply(b), GaussScalar.of(12, 7));
   }
 
+  @Test
   public void testPmulEmpty() {
     Tensor a = Tensors.of(Tensors.empty());
     Tensor b = pmul(a);
@@ -69,12 +77,14 @@ public class TimesTest extends TestCase {
     assertEquals(RealScalar.of(1), pmul(Tensors.empty()));
   }
 
+  @Test
   public void testPmul1() {
     Tensor a = Tensors.vectorLong(1, 2, 2, 5, 1);
     Tensor r = pmul(a);
     assertEquals(r, RealScalar.of(20));
   }
 
+  @Test
   public void testPmul2() {
     Tensor a = Tensors.matrix(new Number[][] { { 1, 2 }, { 3, 4 }, { 5, 6 } });
     Tensor r = pmul(a);
@@ -82,12 +92,14 @@ public class TimesTest extends TestCase {
     assertEquals(Dimensions.of(r), Lists.rest(Dimensions.of(a)));
   }
 
+  @Test
   public void testPmul3() {
     Tensor a = Tensors.matrix(new Number[][] { { 1., 2, 3 }, { 4, 5., 6 } });
     Tensor r = pmul(a);
     assertEquals(r, Tensors.vector(4, 10, 18));
   }
 
+  @Test
   public void testVectorMatrixEx1() {
     Tensor mat = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}");
     Times.of(Tensors.vector(-2, 2), mat);
@@ -96,6 +108,7 @@ public class TimesTest extends TestCase {
     assertEquals(rep, Tensors.fromString("{{-2, 4, 6}, {-8, 10, 12}}"));
   }
 
+  @Test
   public void testVectorMatrixEx2() {
     Tensor a = Tensors.of( //
         Tensors.vectorLong(1, 2, 3), //
@@ -108,6 +121,7 @@ public class TimesTest extends TestCase {
     assertEquals(r, c);
   }
 
+  @Test
   public void testVectorMatrix() {
     Tensor a = Tensors.of( //
         Tensors.vectorLong(new long[] { 1, 2, 3 }), //
@@ -119,6 +133,7 @@ public class TimesTest extends TestCase {
     assertEquals(Times.of(b, a), c);
   }
 
+  @Test
   public void testMatrixMatrix() {
     Tensor a = Tensors.of( //
         Tensors.vectorLong(1, 2, 3), //
@@ -130,6 +145,7 @@ public class TimesTest extends TestCase {
     assertEquals(Times.of(a, c), r);
   }
 
+  @Test
   public void testChain() {
     Tensor tensor = Times.of( //
         Tensors.fromString("{1,2,3}"), //
@@ -140,6 +156,7 @@ public class TimesTest extends TestCase {
     assertEquals(tensor, Tensors.fromString("{5[s], 4[m], 3[N]}"));
   }
 
+  @Test
   public void testSingleCopy() {
     Tensor tensor = Tensors.fromString("{1,2,3}");
     Tensor result = Times.of(tensor);
@@ -148,6 +165,7 @@ public class TimesTest extends TestCase {
     assertEquals(result, Tensors.vector(1, 2, 3));
   }
 
+  @Test
   public void testDiagonalMatrix() {
     Distribution distribution = UniformDistribution.of(-10, 10);
     Tensor v = RandomVariate.of(distribution, 3);
@@ -155,19 +173,23 @@ public class TimesTest extends TestCase {
     assertEquals(DiagonalMatrix.with(v).dot(m), Times.of(v, m));
   }
 
+  @Test
   public void testOperator() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tuo = Times.operator(Tensors.vector(1, 2, 3));
     Serialization.copy(tuo).apply(Tensors.vector(3, 4, 5));
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> Times.of(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3, 4)));
   }
 
+  @Test
   public void testTotalProdFail() {
     AssertFail.of(() -> pmul(RealScalar.ONE));
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> Times.of(RealScalar.of(3), null, RealScalar.of(8)));
   }

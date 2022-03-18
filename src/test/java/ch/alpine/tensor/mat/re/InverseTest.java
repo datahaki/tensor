@@ -1,8 +1,15 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.security.SecureRandom;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.ExactTensorQ;
@@ -32,9 +39,9 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class InverseTest extends TestCase {
+public class InverseTest {
+  @Test
   public void testInverse() {
     int n = 25;
     Tensor A = RandomVariate.of(NormalDistribution.standard(), n, n);
@@ -44,6 +51,7 @@ public class InverseTest extends TestCase {
     Chop._09.requireClose(Ai.dot(A), id);
   }
 
+  @Test
   public void testInverseNoAbs() {
     int n = 12;
     int p = 20357;
@@ -63,6 +71,7 @@ public class InverseTest extends TestCase {
     assertEquals(Ai.dot(A), id);
   }
 
+  @Test
   public void testGeneralIdentity() {
     Tensor A = HilbertMatrix.of(3, 3);
     Tensor b = UnitVector.of(3, 1);
@@ -71,12 +80,14 @@ public class InverseTest extends TestCase {
     assertEquals(Inverse.of(A).dot(b), x);
   }
 
+  @Test
   public void testFourier() {
     Tensor inv1 = Inverse.of(FourierMatrix.of(5), Pivots.FIRST_NON_ZERO);
     Tensor inv2 = Inverse.of(FourierMatrix.of(5), Pivots.ARGMAX_ABS);
     Tolerance.CHOP.requireClose(inv1, inv2);
   }
 
+  @Test
   public void testGaussian() {
     int prime = 3121;
     Distribution distribution = DiscreteUniformDistribution.of(0, prime);
@@ -92,6 +103,7 @@ public class InverseTest extends TestCase {
     }
   }
 
+  @Test
   public void testDet0() {
     Tensor matrix = ResourceData.of("/mat/det0-matlab.csv"); // det(matrix) == 0
     assertNotNull(matrix);
@@ -99,21 +111,25 @@ public class InverseTest extends TestCase {
     AssertFail.of(() -> Inverse.of(N.DOUBLE.of(matrix)));
   }
 
+  @Test
   public void testZeroFail() {
     Tensor matrix = DiagonalMatrix.of(1, 2, 0, 3);
     AssertFail.of(() -> Inverse.of(matrix));
     AssertFail.of(() -> Inverse.of(matrix, Pivots.FIRST_NON_ZERO));
   }
 
+  @Test
   public void testFailNonSquare() {
     AssertFail.of(() -> Inverse.of(HilbertMatrix.of(3, 4)));
     AssertFail.of(() -> Inverse.of(HilbertMatrix.of(4, 3)));
   }
 
+  @Test
   public void testFailRank3() {
     AssertFail.of(() -> Inverse.of(LeviCivitaTensor.of(3)));
   }
 
+  @Test
   public void testQuantity1() {
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(2, "m");
@@ -133,6 +149,7 @@ public class InverseTest extends TestCase {
     ExactTensorQ.require(inverse);
   }
 
+  @Test
   public void testQuantity2() {
     Tensor matrix = Tensors.fromString( //
         "{{1[m^2], 2[m*rad], 3[kg*m]}, {4[m*rad], 2[rad^2], 2[kg*rad]}, {5[kg*m], 1[kg*rad], 7[kg^2]}}");
@@ -151,6 +168,7 @@ public class InverseTest extends TestCase {
     assertFalse(SymmetricMatrixQ.of(matrix));
   }
 
+  @Test
   public void testQuantity3() { // confirmed with Mathematica 12
     Tensor matrix = Tensors.fromString("{{1[m], 1[s]}, {1[m], 2[s]}}");
     Tensor tensor = Inverse.of(matrix);
@@ -165,6 +183,7 @@ public class InverseTest extends TestCase {
     assertEquals(expec2, eye2);
   }
 
+  @Test
   public void testQuantity4() { // confirmed with Mathematica 12
     Tensor matrix = Tensors.fromString("{{1[m], 1[m]}, {1[s], 2[s]}}");
     Tensor tensor = Inverse.of(matrix);
@@ -177,11 +196,13 @@ public class InverseTest extends TestCase {
     assertEquals(expec2, matrix.dot(tensor));
   }
 
+  @Test
   public void testMixed2x2() {
     Tensor matrix = Tensors.fromString("{{60[m^2], 30[m*rad]}, {30[m*rad], 20[rad^2]}}");
     Inverse.of(matrix);
   }
 
+  @Test
   public void testMixed3x3() {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
@@ -196,6 +217,7 @@ public class InverseTest extends TestCase {
     ExactTensorQ.require(inverse);
   }
 
+  @Test
   public void testDecimalScalarInverse() {
     Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
     Tensor invers = Inverse.of(matrix);

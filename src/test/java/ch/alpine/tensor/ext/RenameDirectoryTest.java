@@ -1,12 +1,16 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.File;
 
-import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class RenameDirectoryTest extends TestCase {
+import ch.alpine.tensor.usr.AssertFail;
+
+public class RenameDirectoryTest {
   private static boolean isLinux = System.getProperty("os.name").equals("Linux");
 
   private static void wrap(File src, File dst) {
@@ -17,14 +21,17 @@ public class RenameDirectoryTest extends TestCase {
     }
   }
 
+  @Test
   public void testFailSrcDoesNotExist() {
     AssertFail.of(() -> wrap(HomeDirectory.file("DOESNOTEXIST"), HomeDirectory.file()));
   }
 
+  @Test
   public void testDstAlreadyExist() {
     AssertFail.of(() -> wrap(HomeDirectory.Documents(), HomeDirectory.Pictures()));
   }
 
+  @Test
   public void testSimple() throws Exception {
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
     assertFalse(folder1.exists());
@@ -35,6 +42,7 @@ public class RenameDirectoryTest extends TestCase {
     folder2.delete();
   }
 
+  @Test
   public void testCreateParent() throws Exception {
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
     assertFalse(folder1.exists());
@@ -47,6 +55,7 @@ public class RenameDirectoryTest extends TestCase {
     folder2.getParentFile().delete();
   }
 
+  @Test
   public void testRenameToFail() {
     if (!isLinux)
       return;
@@ -58,6 +67,7 @@ public class RenameDirectoryTest extends TestCase {
     folder1.delete();
   }
 
+  @Test
   public void testCreateParentFail() {
     if (!isLinux)
       return;

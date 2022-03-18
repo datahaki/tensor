@@ -1,11 +1,16 @@
 // code by jph
 package ch.alpine.tensor.sca.exp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import junit.framework.TestCase;
 
-public class LogisticSigmoidTest extends TestCase {
+public class LogisticSigmoidTest {
+  @Test
   public void testBasic() {
     assertEquals(LogisticSigmoid.of(RealScalar.ZERO), RealScalar.of(0.5));
     assertEquals(LogisticSigmoid.of(RealScalar.of(0.)), RealScalar.of(0.5));
@@ -13,6 +18,7 @@ public class LogisticSigmoidTest extends TestCase {
     assertEquals(LogisticSigmoid.FUNCTION.apply(RealScalar.of(-1e3)), RealScalar.ZERO);
   }
 
+  @Test
   public void testMathematica() {
     Scalar big = LogisticSigmoid.of(RealScalar.of(0.5));
     assertTrue(big.toString().startsWith("0.622459")); // from Mathematica

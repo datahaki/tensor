@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.mat.qr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -17,9 +21,9 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
-public class RSolveTest extends TestCase {
+public class RSolveTest {
+  @Test
   public void testSimple2x2() {
     Tensor r = Tensors.fromString("{{2,5},{3,0}}");
     Tensor rhs = Tensors.vector(1, 2);
@@ -29,6 +33,7 @@ public class RSolveTest extends TestCase {
     assertEquals(expect, actual);
   }
 
+  @Test
   public void testSimple3x3() {
     Tensor r = Tensors.fromString("{{2,5,1},{2,0,3},{4,0,0}}");
     Tensor rhs = Tensors.vector(1, 2, 3);
@@ -38,6 +43,7 @@ public class RSolveTest extends TestCase {
     assertEquals(expect, actual);
   }
 
+  @Test
   public void testSimple4x4() {
     Tensor r = Tensors.fromString("{{2,5,1,7},{2,0,3,0},{4,0,0,0},{0,3,0,0}}");
     Tensor rhs = Tensors.vector(1, 2, 3, 4);
@@ -47,6 +53,7 @@ public class RSolveTest extends TestCase {
     assertEquals(expect, actual);
   }
 
+  @Test
   public void testGs() {
     Random random = new Random(1);
     Distribution distribution = UniformDistribution.unit();
@@ -59,6 +66,7 @@ public class RSolveTest extends TestCase {
     }
   }
 
+  @Test
   public void testLeastSquaresWithGramSchmidt() {
     Random random = new Random(1);
     Distribution distribution = UniformDistribution.of(-2, 2);
@@ -73,6 +81,7 @@ public class RSolveTest extends TestCase {
     Tolerance.CHOP.requireClose(expect, actual);
   }
 
+  @Test
   public void testQuantity2() {
     Tensor matrix = UpperTriangularize.of(Tensors.fromString( //
         "{{1[m^2], 2[m*rad], 3[kg*m]}, {4[m*rad], 2[rad^2], 2[kg*rad]}, {5[kg*m], 1[kg*rad], 7[kg^2]}}"));
@@ -84,6 +93,7 @@ public class RSolveTest extends TestCase {
     }
   }
 
+  @Test
   public void testQuantity3() { // confirmed with Mathematica 12
     Tensor matrix = Tensors.fromString("{{1[m], 1[s]}, {0[m], 2[s]}}");
     Tensor sol1 = Inverse.of(matrix);

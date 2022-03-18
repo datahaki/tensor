@@ -1,9 +1,13 @@
 // code by jph
 package ch.alpine.tensor.mat.ex;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Tensor;
@@ -17,9 +21,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class MatrixLogTest extends TestCase {
+public class MatrixLogTest {
+  @Test
   public void testIdentityMatrix() {
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = IdentityMatrix.of(n);
@@ -28,6 +32,7 @@ public class MatrixLogTest extends TestCase {
     }
   }
 
+  @Test
   public void testSymmetric() {
     for (int n = 1; n < 8; ++n) {
       Distribution distribution = NormalDistribution.of(0, 0.1 / n);
@@ -42,6 +47,7 @@ public class MatrixLogTest extends TestCase {
     }
   }
 
+  @Test
   public void testExp() {
     for (int n = 2; n < 7; ++n) {
       Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
@@ -52,6 +58,7 @@ public class MatrixLogTest extends TestCase {
     }
   }
 
+  @Test
   public void testDeque() {
     Deque<Integer> deque = new ArrayDeque<>();
     deque.add(3);
@@ -61,12 +68,14 @@ public class MatrixLogTest extends TestCase {
     assertEquals(iterator.next(), (Integer) 5);
   }
 
+  @Test
   public void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 4, 5);
     AssertFail.of(() -> MatrixLog.of(matrix));
   }
 
+  @Test
   public void test1x2Fail() {
     for (int d = 1; d < 4; ++d) {
       Tensor matrix = IdentityMatrix.of(d + 1).extract(0, d);
@@ -75,12 +84,14 @@ public class MatrixLogTest extends TestCase {
     }
   }
 
+  @Test
   public void test3x2Fail() {
     Tensor matrix = Transpose.of(IdentityMatrix.of(3).extract(0, 2));
     assertEquals(matrix.length(), 3);
     AssertFail.of(() -> MatrixLog.of(matrix));
   }
 
+  @Test
   public void test_of() {
     AssertFail.of(() -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e20), 3, 3)));
     AssertFail.of(() -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e100), 3, 3)));

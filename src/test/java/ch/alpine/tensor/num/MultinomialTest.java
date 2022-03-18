@@ -1,14 +1,19 @@
 // code by jph
 package ch.alpine.tensor.num;
 
-import ch.alpine.tensor.RealScalar;
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MultinomialTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+import ch.alpine.tensor.RealScalar;
+
+public class MultinomialTest {
+  @Test
   public void testEmpty() {
     assertEquals(Multinomial.of(), RealScalar.ONE);
   }
 
+  @Test
   public void testSimple() {
     assertEquals(Multinomial.of(1, 2, 1), RealScalar.of(12));
     assertEquals(Multinomial.of(3, 2, 4), RealScalar.of(1260));

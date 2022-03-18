@@ -1,7 +1,14 @@
 // code by jph
 package ch.alpine.tensor.qty;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.math.BigDecimal;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
@@ -12,14 +19,14 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class QuantityCompareTest extends TestCase {
+public class QuantityCompareTest {
   private static void _checkEquals(Scalar s1, Scalar s2, boolean actual) {
     assertEquals(s1.equals(s2), s2.equals(s1));
     assertEquals(s1.equals(s2), actual);
   }
 
+  @Test
   public void testEquals() {
     _checkEquals(Quantity.of(2, "m"), RealScalar.of(2), false);
     _checkEquals(Quantity.of(0, "m"), RealScalar.of(0.0), false);
@@ -27,18 +34,21 @@ public class QuantityCompareTest extends TestCase {
     _checkEquals(Quantity.of(0, "s*kg^2"), RealScalar.of(2), false);
   }
 
+  @Test
   public void testEquals2() {
     _checkEquals(RationalScalar.of(0, 1), Quantity.of(0, "m"), false);
     _checkEquals(DoubleScalar.of(0.0), Quantity.of(0, "m"), false);
     _checkEquals(DecimalScalar.of(new BigDecimal("0.0")), Quantity.of(0, "m"), false);
   }
 
+  @Test
   public void testEquals3() {
     Scalar s1 = Quantity.of(2, "m");
     Scalar s2 = Quantity.of(2, "m^1.0");
     _checkEquals(s1, s2, true);
   }
 
+  @Test
   public void testCompareEquals() {
     Scalar q1 = Quantity.of(0, "s");
     Scalar q2 = Quantity.of(0, "rad");
@@ -47,6 +57,7 @@ public class QuantityCompareTest extends TestCase {
     AssertFail.of(() -> Scalars.compare(RealScalar.ZERO, q2));
   }
 
+  @Test
   public void testIsZero() {
     Scalar qs1 = Quantity.of(2, "m");
     Scalar qs2 = Quantity.of(3, "m");
@@ -58,6 +69,7 @@ public class QuantityCompareTest extends TestCase {
     return Scalars.lessEquals(scalar.zero(), scalar);
   }
 
+  @Test
   public void testPredicate() {
     assertTrue(_isNonNegative(Quantity.of(3, "m^2")));
     assertTrue(_isNonNegative(Quantity.of(0, "s*kg")));
@@ -71,11 +83,13 @@ public class QuantityCompareTest extends TestCase {
     assertEquals(res1, value);
   }
 
+  @Test
   public void testCompare() {
     _checkCompareTo(Quantity.of(2, "m"), Quantity.of(3, "m"), Integer.compare(2, 3));
     _checkCompareTo(Quantity.of(-3, "m*s"), Quantity.of(7, "s*m"), Integer.compare(-3, 7));
   }
 
+  @Test
   public void testCompareFail() {
     try {
       _checkCompareTo(Quantity.of(2, "m"), Quantity.of(2, "kg"), Integer.compare(2, 2));
@@ -85,10 +99,12 @@ public class QuantityCompareTest extends TestCase {
     }
   }
 
+  @Test
   public void testCompareFail2() {
     AssertFail.of(() -> Scalars.compare(DoubleScalar.of(3.14), Quantity.of(0, "m*s")));
   }
 
+  @Test
   public void testDistinct() {
     Scalar qs0 = Quantity.of(0, Unit.ONE);
     Scalar qs1 = Quantity.of(0, "m");

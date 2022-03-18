@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.usr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.mat.Tolerance;
@@ -8,9 +12,9 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import junit.framework.TestCase;
 
-public class StrassenTest extends TestCase {
+public class StrassenTest {
+  @Test
   public void testSimple() {
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     for (int count = 12; count < 25; count += 2) {
@@ -22,6 +26,7 @@ public class StrassenTest extends TestCase {
     }
   }
 
+  @Test
   public void testHuge() {
     Distribution distribution = UniformDistribution.of(-10, 10);
     int count = 32;

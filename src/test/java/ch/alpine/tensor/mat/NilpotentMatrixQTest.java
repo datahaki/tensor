@@ -1,17 +1,21 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.sca.N;
-import junit.framework.TestCase;
 
-public class NilpotentMatrixQTest extends TestCase {
+public class NilpotentMatrixQTest {
   private static void _check(Tensor matrix) {
     assertTrue(NilpotentMatrixQ.of(matrix));
     assertTrue(NilpotentMatrixQ.of(matrix.map(N.DOUBLE)));
   }
 
+  @Test
   public void test234() {
     // Reference: https://en.wikipedia.org/wiki/Nilpotent_matrix
     _check(Tensors.fromString("{{2,-1},{4,-2}}"));

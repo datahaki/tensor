@@ -1,8 +1,13 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.Collections;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
@@ -27,9 +32,9 @@ import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class EqualizingDistributionTest extends TestCase {
+public class EqualizingDistributionTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(EqualizingDistribution.fromUnscaledPDF(Tensors.vector(3)));
     CDF cdf = CDF.of(distribution);
@@ -45,6 +50,7 @@ public class EqualizingDistributionTest extends TestCase {
     RandomVariate.of(distribution, 30).map(Clips.unit()::requireInside);
   }
 
+  @Test
   public void testResample() {
     Tensor vector = Tensors.vector(-3, 6, 10, 20, 22, 30);
     Distribution distribution = EqualizingDistribution.fromUnscaledPDF(Differences.of(vector));
@@ -60,6 +66,7 @@ public class EqualizingDistributionTest extends TestCase {
     assertTrue(distribution.toString().startsWith("EqualizingDistribution"));
   }
 
+  @Test
   public void testCDFInverseCDF() {
     Distribution distribution = EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, 6, 10, 20, 0, 22, 30, 0));
     CDF cdf = CDF.of(distribution);
@@ -71,22 +78,27 @@ public class EqualizingDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testNegativeFail() {
     AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
   }
 
+  @Test
   public void testZeroFail() {
     AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 0)));
   }
 
+  @Test
   public void testEmptyFail() {
     AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(Tensors.empty()));
   }
 
+  @Test
   public void testScalarFail() {
     AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(RealScalar.ONE));
   }
 
+  @Test
   public void testMatrixFail() {
     AssertFail.of(() -> EqualizingDistribution.fromUnscaledPDF(HilbertMatrix.of(10)));
   }

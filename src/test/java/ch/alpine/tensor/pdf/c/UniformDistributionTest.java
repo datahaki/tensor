@@ -1,8 +1,13 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -27,9 +32,9 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class UniformDistributionTest extends TestCase {
+public class UniformDistributionTest {
+  @Test
   public void testCdf() {
     CDF cdf = CDF.of(UniformDistribution.of(RealScalar.ONE, RealScalar.of(3)));
     assertEquals(cdf.p_lessThan(RealScalar.ONE), RealScalar.ZERO);
@@ -50,12 +55,14 @@ public class UniformDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testCentralMoment() {
     _checkCentralMoment(Clips.interval(-2, 4));
     _checkCentralMoment(Clips.interval(2, 5));
     _checkCentralMoment(Clips.positive(Quantity.of(2, "m")));
   }
 
+  @Test
   public void testPdfQuantity() {
     Distribution distribution = UniformDistribution.of(Clips.positive(Quantity.of(2, "m")));
     PDF pdf = PDF.of(distribution);
@@ -63,6 +70,7 @@ public class UniformDistributionTest extends TestCase {
     assertEquals(pdf.at(Quantity.of(+1, "m")), Quantity.of(RationalScalar.HALF, "m^-1"));
   }
 
+  @Test
   public void testPdf() {
     UniformDistribution distribution = (UniformDistribution) UniformDistribution.of(1, 3);
     assertEquals(distribution.support(), Clips.interval(1, 3));
@@ -79,6 +87,7 @@ public class UniformDistributionTest extends TestCase {
     assertEquals(CentralMoment.of(distribution, 6), RationalScalar.of(1, 7));
   }
 
+  @Test
   public void testUnit() throws ClassNotFoundException, IOException {
     UniformDistribution distribution = //
         (UniformDistribution) Serialization.copy(UniformDistribution.unit());
@@ -86,12 +95,14 @@ public class UniformDistributionTest extends TestCase {
     assertEquals(distribution.variance(), RationalScalar.of(1, 12));
   }
 
+  @Test
   public void testRandomVariate() {
     Scalar s1 = RandomVariate.of(UniformDistribution.of(0, 1), new Random(1000));
     Scalar s2 = RandomVariate.of(UniformDistribution.unit(), new Random(1000));
     assertEquals(s1, s2);
   }
 
+  @Test
   public void testQuantity() {
     Distribution distribution = UniformDistribution.of(Quantity.of(3, "g"), Quantity.of(5, "g"));
     assertTrue(RandomVariate.of(distribution) instanceof Quantity);
@@ -109,6 +120,7 @@ public class UniformDistributionTest extends TestCase {
     assertEquals(CDF.of(distribution).p_lessEquals(mean), RationalScalar.of(1, 2));
   }
 
+  @Test
   public void testQuantile() {
     Distribution distribution = UniformDistribution.of(Quantity.of(3, "g"), Quantity.of(6, "g"));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -118,6 +130,7 @@ public class UniformDistributionTest extends TestCase {
     assertEquals(inverseCDF.quantile(RationalScalar.of(3, 3)), Quantity.of(6, "g"));
   }
 
+  @Test
   public void testMarkov() {
     Random random = new Random();
     Distribution distribution = UniformDistribution.of(random.nextDouble(), 1 + random.nextDouble());
@@ -125,11 +138,13 @@ public class UniformDistributionTest extends TestCase {
     TestMarkovChebyshev.chebyshev(distribution);
   }
 
+  @Test
   public void testToString() {
     Distribution distribution = UniformDistribution.of(Quantity.of(3, "g"), Quantity.of(6, "g"));
     assertEquals(distribution.toString(), "UniformDistribution[3[g], 6[g]]");
   }
 
+  @Test
   public void testClipPointFail() {
     UniformDistribution.of(Clips.interval(3, 5));
     Distribution distribution = UniformDistribution.of(Clips.interval(3, 3));
@@ -137,6 +152,7 @@ public class UniformDistributionTest extends TestCase {
     assertEquals(scalar, RealScalar.of(3));
   }
 
+  @Test
   public void testMatchTrapezoidal() {
     Distribution d1 = UniformDistribution.of(Clips.interval(3, 7));
     Distribution d2 = TrapezoidalDistribution.of(3, 3, 7, 7);
@@ -144,6 +160,7 @@ public class UniformDistributionTest extends TestCase {
     assertEquals(Variance.of(d1), Variance.of(d2));
   }
 
+  @Test
   public void testMatchTrapezoidalUnit() {
     Scalar a = Quantity.of(4, "m");
     Scalar b = Quantity.of(RationalScalar.of(5 * 3 + 1, 3), "m"); // == 5.3333...
@@ -156,10 +173,12 @@ public class UniformDistributionTest extends TestCase {
     assertEquals(variance, CentralMoment.of(d2, 2));
   }
 
+  @Test
   public void testClipNullFail() {
     AssertFail.of(() -> UniformDistribution.of(null));
   }
 
+  @Test
   public void testQuantileFail() {
     Distribution distribution = UniformDistribution.of(Quantity.of(3, "g"), Quantity.of(6, "g"));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -167,10 +186,12 @@ public class UniformDistributionTest extends TestCase {
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
+  @Test
   public void testQuantityFail() {
     AssertFail.of(() -> UniformDistribution.of(Quantity.of(3, "m"), Quantity.of(5, "km")));
   }
 
+  @Test
   public void testFail() {
     AssertFail.of(() -> UniformDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }

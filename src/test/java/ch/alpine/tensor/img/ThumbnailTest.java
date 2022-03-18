@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.img;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,15 +13,17 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.usr.AssertFail;
 import ch.alpine.tensor.usr.TestFile;
-import junit.framework.TestCase;
 
-public class ThumbnailTest extends TestCase {
+public class ThumbnailTest {
+  @Test
   public void testSimple() {
     Tensor tensor = ResourceData.of("/io/image/rgba15x33.png");
     Tensor square = Thumbnail.of(tensor, 7);
@@ -25,6 +31,7 @@ public class ThumbnailTest extends TestCase {
     assertEquals(list, Arrays.asList(7, 7, 4));
   }
 
+  @Test
   public void testAuGray() {
     Tensor tensor1 = ResourceData.of("/io/image/album_au_gray.jpg");
     Tensor square1 = Thumbnail.of(tensor1, 64);
@@ -38,6 +45,7 @@ public class ThumbnailTest extends TestCase {
     assertEquals(Transpose.of(tensor1), tensor2);
   }
 
+  @Test
   public void testAuGrayBufferedImage() throws IOException {
     BufferedImage original = ResourceData.bufferedImage("/io/image/album_au_gray.jpg");
     BufferedImage expected = Thumbnail.of(original, 64);
@@ -49,6 +57,7 @@ public class ThumbnailTest extends TestCase {
     assertFalse(file.exists());
   }
 
+  @Test
   public void testAuGray1() {
     Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
     AssertFail.of(() -> Thumbnail.of(tensor, -3));

@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -11,9 +15,9 @@ import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
-import junit.framework.TestCase;
 
-public class InverseSteerCubicTest extends TestCase {
+public class InverseSteerCubicTest {
+  @Test
   public void testSteer() {
     Scalar c = RealScalar.of(+0.8284521034333863);
     Scalar a = RealScalar.of(-0.33633373640449604);
@@ -27,6 +31,7 @@ public class InverseSteerCubicTest extends TestCase {
     }
   }
 
+  @Test
   public void testCubicOp() {
     Scalar b = RealScalar.of(+0.8284521034333863);
     Scalar d = RealScalar.of(-0.33633373640449604);

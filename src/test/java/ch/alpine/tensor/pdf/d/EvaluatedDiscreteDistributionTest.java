@@ -1,8 +1,13 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Map.Entry;
 import java.util.NavigableMap;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
@@ -11,9 +16,9 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import junit.framework.TestCase;
 
-public class EvaluatedDiscreteDistributionTest extends TestCase {
+public class EvaluatedDiscreteDistributionTest {
+  @Test
   public void testBinomial() {
     for (int n = 10; n < 1200; n += 10) {
       EvaluatedDiscreteDistribution distribution = //
@@ -27,6 +32,7 @@ public class EvaluatedDiscreteDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testBernoulli() {
     Scalar p = RationalScalar.of(1, 3);
     EvaluatedDiscreteDistribution distribution = //
@@ -36,6 +42,7 @@ public class EvaluatedDiscreteDistributionTest extends TestCase {
     assertEquals(map.get(RationalScalar.of(1, 1)), RealScalar.ONE);
   }
 
+  @Test
   public void testPoisson() {
     EvaluatedDiscreteDistribution evaluatedDiscreteDistribution = //
         (EvaluatedDiscreteDistribution) PoissonDistribution.of(RealScalar.of(5.5));

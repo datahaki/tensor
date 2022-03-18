@@ -1,9 +1,14 @@
 // code by jph
 package ch.alpine.tensor.img;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
@@ -18,9 +23,9 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ColorDataGradientsTest extends TestCase {
+public class ColorDataGradientsTest {
+  @Test
   public void testDimensions() {
     for (ColorDataGradient colorDataGradient : ColorDataGradients.values()) {
       assertEquals(Dimensions.of(colorDataGradient.apply(RealScalar.ZERO)), Arrays.asList(4));
@@ -28,6 +33,7 @@ public class ColorDataGradientsTest extends TestCase {
     }
   }
 
+  @Test
   public void testQuantity() {
     Scalar scalar = Quantity.of(Double.POSITIVE_INFINITY, "s");
     for (ColorDataGradient colorDataGradient : ColorDataGradients.values()) {
@@ -35,6 +41,7 @@ public class ColorDataGradientsTest extends TestCase {
     }
   }
 
+  @Test
   public void testUnmodified() {
     Scalar nan = DoubleScalar.INDETERMINATE;
     for (ColorDataGradient colorDataGradient : ColorDataGradients.values()) {
@@ -45,6 +52,7 @@ public class ColorDataGradientsTest extends TestCase {
     }
   }
 
+  @Test
   public void testDeriveWithOpacity() {
     ColorDataGradient colorDataGradient1 = ColorDataGradients.CLASSIC.deriveWithOpacity(RealScalar.ONE);
     ColorDataGradient colorDataGradient2 = ColorDataGradients.CLASSIC.deriveWithOpacity(RationalScalar.HALF);
@@ -55,11 +63,13 @@ public class ColorDataGradientsTest extends TestCase {
     assertEquals(rgba2.get(3), RealScalar.of(127.5));
   }
 
+  @Test
   public void testDeriveWithOpacityAll() throws ClassNotFoundException, IOException {
     for (ColorDataGradient colorDataGradient : ColorDataGradients.values())
       Serialization.copy(colorDataGradient.deriveWithOpacity(RealScalar.of(0.2)));
   }
 
+  @Test
   public void testStrict() {
     int count = 0;
     for (ColorDataGradients colorDataGradients : ColorDataGradients.values()) {
@@ -72,17 +82,20 @@ public class ColorDataGradientsTest extends TestCase {
     assertTrue(28 < count);
   }
 
+  @Test
   public void testSunset() {
     Tensor t1 = Reverse.of(ColorDataGradients.SUNSET.getTableRgba());
     Tensor t2 = ColorDataGradients.SUNSET_REVERSED.getTableRgba();
     assertEquals(t1, t2);
   }
 
+  @Test
   public void testGrayscaleTable() {
     assertTrue(Objects.isNull(ColorDataGradients.HUE.getTableRgba()));
     assertTrue(Objects.isNull(ColorDataGradients.GRAYSCALE.getTableRgba()));
   }
 
+  @Test
   public void testFail() {
     for (ColorDataGradient colorDataGradient : ColorDataGradients.values()) {
       // ColorDataGradients cdg = (ColorDataGradients) colorDataGradient;

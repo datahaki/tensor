@@ -1,7 +1,13 @@
 // code by jph
 package ch.alpine.tensor.sca.exp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
@@ -16,32 +22,36 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class LogTest extends TestCase {
+public class LogTest {
+  @Test
   public void testOne() {
     Scalar scalar = Log.of(RealScalar.ONE);
     assertTrue(Scalars.isZero(scalar));
   }
 
+  @Test
   public void testLog() {
     Scalar scalar = DoubleScalar.of(-3);
     Chop._14.requireClose(Log.of(scalar), Scalars.fromString("1.0986122886681098+3.141592653589793*I"));
     assertEquals(Log.of(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
   }
 
+  @Test
   public void testComplex() {
     Scalar s = ComplexScalar.of(2, 3);
     Scalar r = Scalars.fromString("1.2824746787307681+0.982793723247329*I"); // mathematica
     Chop._14.requireClose(Log.of(s), r);
   }
 
+  @Test
   public void testRational() {
     Scalar rem = Scalars.fromString("1/10000000000");
     Scalar ratio = RealScalar.ONE.add(rem);
     assertEquals(Log.of(ratio).toString(), "" + Math.log1p(rem.number().doubleValue()));
   }
 
+  @Test
   public void testSerializable() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(RealScalar.of(2));
     ScalarUnaryOperator copy = Serialization.copy(scalarUnaryOperator);
@@ -49,12 +59,14 @@ public class LogTest extends TestCase {
     assertEquals(scalar, RealScalar.of(2));
   }
 
+  @Test
   public void testBaseNumber() {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(2);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(64));
     assertEquals(scalar, RealScalar.of(6));
   }
 
+  @Test
   public void testStrangeBase() {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(0.1);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(3));
@@ -62,6 +74,7 @@ public class LogTest extends TestCase {
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(-0.47712125471966255));
   }
 
+  @Test
   public void testNegativeBase() {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(-0.1);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(3));
@@ -70,6 +83,7 @@ public class LogTest extends TestCase {
     Tolerance.CHOP.requireClose(scalar, result);
   }
 
+  @Test
   public void testBaseZero() {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(0);
     assertEquals(scalarUnaryOperator.apply(RealScalar.of(+4)), RealScalar.ZERO);
@@ -79,19 +93,23 @@ public class LogTest extends TestCase {
     assertFalse(NumberQ.of(scalar));
   }
 
+  @Test
   public void testNaN() {
     assertEquals(Log.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
   }
 
+  @Test
   public void testBaseOneFail() {
     AssertFail.of(() -> Log.base(1));
   }
 
+  @Test
   public void testFailQuantity() {
     Scalar scalar = Quantity.of(2, "m");
     AssertFail.of(() -> Log.of(scalar));
   }
 
+  @Test
   public void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
     AssertFail.of(() -> Log.of(scalar));

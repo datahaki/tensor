@@ -1,9 +1,14 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -24,9 +29,9 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
-import junit.framework.TestCase;
 
-public class LeftNullSpaceTest extends TestCase {
+public class LeftNullSpaceTest {
+  @Test
   public void testRankDeficient() {
     Tensor matrix = Tensors.fromString("{{0, 1}, {0, 1}, {0, 1}, {0, 1}}");
     Tensor nullsp = LeftNullSpace.of(matrix);
@@ -34,6 +39,7 @@ public class LeftNullSpaceTest extends TestCase {
     Chop._10.requireAllZero(nullsp.dot(matrix));
   }
 
+  @Test
   public void testMaxRank() {
     Tensor matrix = Tensors.fromString("{{0, 1}, {2, 1}, {0, 1}, {0, 1}}");
     Tensor nullsp = LeftNullSpace.of(matrix);
@@ -41,6 +47,7 @@ public class LeftNullSpaceTest extends TestCase {
     Chop._10.requireAllZero(nullsp.dot(matrix));
   }
 
+  @Test
   public void testRankDeficientTranspose() {
     Tensor matrix = Tensors.fromString("{{0, 0, 0, 0}, {1, 1, 1, 1}}");
     Tensor nullsp = LeftNullSpace.of(matrix);
@@ -48,6 +55,7 @@ public class LeftNullSpaceTest extends TestCase {
     Chop._10.requireAllZero(nullsp.dot(matrix));
   }
 
+  @Test
   public void testMaxRankTranspose() {
     Tensor matrix = Tensors.fromString("{{0, 2, 0, 0}, {1, 1, 1, 1}}");
     Tensor nullsp = LeftNullSpace.of(matrix);
@@ -71,6 +79,7 @@ public class LeftNullSpaceTest extends TestCase {
     _matrix(Transpose.of(A));
   }
 
+  @Test
   public void testBulk() {
     _check(Tensors.fromString("{{0, 0}}"));
     _check(Tensors.fromString("{{0, 1}}"));
@@ -86,6 +95,7 @@ public class LeftNullSpaceTest extends TestCase {
     _check(Tensors.fromString("{{0, 5, 1}, {0, 0, 0}, {1, 0, 0}, {3, 2, 0}}").map(s -> Quantity.of(s, "m")));
   }
 
+  @Test
   public void testRandom() {
     Distribution distribution = NormalDistribution.standard();
     Tensor x = RandomVariate.of(distribution, 3);
@@ -94,6 +104,7 @@ public class LeftNullSpaceTest extends TestCase {
     _matrixNumeric(TensorProduct.of(y, x));
   }
 
+  @Test
   public void testGaussScalar() {
     Random random = new Random();
     int prime = 7741;
@@ -110,6 +121,7 @@ public class LeftNullSpaceTest extends TestCase {
     }
   }
 
+  @Test
   public void testRectangle3x2G() {
     ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
@@ -117,6 +129,7 @@ public class LeftNullSpaceTest extends TestCase {
     assertEquals(tensor.get(0), UnitVector.of(2, 1).map(suo));
   }
 
+  @Test
   public void testRectangle2x3G() {
     ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
     Tensor matrix = Tensors.fromString("{{1, 0, 0}, {0, 0, 0}}").map(suo);
@@ -125,6 +138,7 @@ public class LeftNullSpaceTest extends TestCase {
     assertEquals(tensor.get(1), UnitVector.of(3, 2).map(suo));
   }
 
+  @Test
   public void testLeftGaussScalar() {
     int prime = 7879;
     Random random = new Random();

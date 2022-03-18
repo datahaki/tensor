@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactTensorQ;
@@ -17,9 +21,9 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class AbsSquaredTest extends TestCase {
+public class AbsSquaredTest {
+  @Test
   public void testAbsAndSquared() {
     Tensor tensor = Tensors.of( //
         Quaternion.of(1, 2, 3, 4), //
@@ -34,12 +38,14 @@ public class AbsSquaredTest extends TestCase {
     }
   }
 
+  @Test
   public void testQuantity() {
     Scalar qs1 = Scalars.fromString("3+4*I[s^2*m^-1]");
     Scalar qs2 = AbsSquared.FUNCTION.apply(qs1);
     assertEquals(qs2.toString(), "25[m^-2*s^4]");
   }
 
+  @Test
   public void testTensor() {
     Tensor qs1 = Tensors.fromString("{3+4*I[s^2*m^-1]}");
     Tensor qs2 = AbsSquared.of(qs1);
@@ -47,11 +53,13 @@ public class AbsSquaredTest extends TestCase {
     assertEquals(qs2.toString(), "{25[m^-2*s^4]}");
   }
 
+  @Test
   public void testBetween() {
     assertEquals(AbsSquared.between(RealScalar.of(101), RealScalar.of(103)), RealScalar.of(4));
     assertEquals(AbsSquared.between(RealScalar.of(104), RealScalar.of(101)), RealScalar.of(9));
   }
 
+  @Test
   public void testNonConjugate() {
     GaussScalar a = GaussScalar.of(3, 12347);
     GaussScalar b = GaussScalar.of(3962, 12347);
@@ -59,15 +67,18 @@ public class AbsSquaredTest extends TestCase {
     assertEquals(scalar.multiply(scalar), GaussScalar.of(3959 * 3959, 12347));
   }
 
+  @Test
   public void testInfinity() {
     assertEquals(AbsSquared.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY), DoubleScalar.POSITIVE_INFINITY);
     assertEquals(AbsSquared.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), DoubleScalar.POSITIVE_INFINITY);
   }
 
+  @Test
   public void testGaussScalar() {
     assertEquals(AbsSquared.FUNCTION.apply(GaussScalar.of(2, 3)), GaussScalar.of(-5, 3));
   }
 
+  @Test
   public void testStringFail() {
     AssertFail.of(() -> AbsSquared.FUNCTION.apply(StringScalar.of("idsc")));
   }

@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.pdf.c;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -23,9 +27,9 @@ import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class LogNormalDistributionTest extends TestCase {
+public class LogNormalDistributionTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     LogNormalDistribution distribution = (LogNormalDistribution) Serialization.copy( //
         LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(2, 3)));
@@ -58,6 +62,7 @@ public class LogNormalDistributionTest extends TestCase {
     assertEquals(distribution.toString(), distribution.getClass().getSimpleName() + "[1/2, 2/3]");
   }
 
+  @Test
   public void testMean() {
     Distribution distribution = LogNormalDistribution.of(RationalScalar.of(4, 5), RationalScalar.of(2, 3));
     Scalar value = Mean.ofVector(RandomVariate.of(distribution, 200));
@@ -69,6 +74,7 @@ public class LogNormalDistributionTest extends TestCase {
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
+  @Test
   public void testCDFInverseCDF() {
     Distribution distribution = LogNormalDistribution.of(3, 0.2);
     CDF cdf = CDF.of(distribution);
@@ -80,11 +86,13 @@ public class LogNormalDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testKurtosis() {
     Tolerance.CHOP.requireClose(Kurtosis.of(LogNormalDistribution.of(3, 0.2)), RealScalar.of(3.678365777175438));
     Tolerance.CHOP.requireClose(Kurtosis.of(LogNormalDistribution.of(3, 1.2)), RealScalar.of(518.1684050407332));
   }
 
+  @Test
   public void testMarkov() {
     Random random = new Random();
     Distribution distribution = LogNormalDistribution.of(random.nextDouble() - 0.5, 0.1 + random.nextDouble());
@@ -92,16 +100,19 @@ public class LogNormalDistributionTest extends TestCase {
     TestMarkovChebyshev.chebyshev(distribution);
   }
 
+  @Test
   public void testSigmaNonPositiveFail() {
     AssertFail.of(() -> LogNormalDistribution.of(RationalScalar.HALF, RealScalar.ZERO));
     AssertFail.of(() -> LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(-2, 3)));
   }
 
+  @Test
   public void testQuantityFail() {
     AssertFail.of(() -> LogNormalDistribution.of(Quantity.of(RationalScalar.HALF, "m"), RationalScalar.of(2, 3)));
     AssertFail.of(() -> LogNormalDistribution.of(RationalScalar.of(2, 3), Quantity.of(RationalScalar.HALF, "m")));
   }
 
+  @Test
   public void testStandardString() {
     assertEquals(LogNormalDistribution.standard().toString(), "LogNormalDistribution[0, 1]");
   }

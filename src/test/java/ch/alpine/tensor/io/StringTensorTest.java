@@ -1,10 +1,15 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import ch.alpine.tensor.Tensor;
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class StringTensorTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+import ch.alpine.tensor.Tensor;
+
+public class StringTensorTest {
+  @Test
   public void testVector() {
     Tensor tensor = StringTensor.vector("IDSC", "ETH-Z", "ch");
     assertTrue(StringScalarQ.of(tensor.Get(0)));

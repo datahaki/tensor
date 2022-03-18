@@ -1,20 +1,25 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TableBuilderTest extends TestCase {
+public class TableBuilderTest {
+  @Test
   public void testEmpty() {
     TableBuilder tableBuilder = new TableBuilder();
     assertEquals(tableBuilder.getRowCount(), 0);
     assertEquals(tableBuilder.getTable(), Tensors.empty());
   }
 
+  @Test
   public void testAppendRow() {
     TableBuilder tableBuilder = new TableBuilder();
     tableBuilder.appendRow(RealScalar.ONE, Tensors.vector(2, 3, 4), RealScalar.of(5));
@@ -31,6 +36,7 @@ public class TableBuilderTest extends TestCase {
     assertEquals(table, Tensors.fromString("{{1, 2, 3, 4, 5}, {-2, 6, 0, 7}, {}, {100}, {1, 2, 3}}"));
   }
 
+  @Test
   public void testModify() {
     TableBuilder tableBuilder = new TableBuilder();
     tableBuilder.appendRow(Tensors.vector(1, 2, 3, 4));
@@ -39,6 +45,7 @@ public class TableBuilderTest extends TestCase {
     assertEquals(table.get(0), Range.of(1, 5));
   }
 
+  @Test
   public void testUnmodifiableWrapper() {
     TableBuilder tableBuilder = new TableBuilder();
     Tensor tensor = tableBuilder.getTable();
@@ -50,6 +57,7 @@ public class TableBuilderTest extends TestCase {
     assertEquals(tableBuilder.getRowCount(), 2);
   }
 
+  @Test
   public void testFail() {
     TableBuilder tableBuilder = new TableBuilder();
     assertEquals(tableBuilder.getRowCount(), 0);

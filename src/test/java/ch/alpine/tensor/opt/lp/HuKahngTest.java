@@ -1,10 +1,15 @@
 // code by jph
 package ch.alpine.tensor.opt.lp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.NavigableMap;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -18,12 +23,12 @@ import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import junit.framework.TestCase;
 
 /** Reference:
  * "Linear and Integer Programming made Easy"
  * by T.C. Hu, Andrew B. Kahng, 2016 */
-public class HuKahngTest extends TestCase {
+public class HuKahngTest {
+  @Test
   public void testP14() {
     // x >= 0 that minimizes c.x subject to m.x <= b
     Tensor c = Tensors.fromString("{4[USD], 5[USD]}");
@@ -52,6 +57,7 @@ public class HuKahngTest extends TestCase {
     assertEquals(sold.get(0), xd);
   }
 
+  @Test
   public void testP18_2() {
     Tensor c = Tensors.fromString("{12[USD], 10[USD], 1[USD]}");
     Tensor m = Tensors.fromString("{{11[lb], 10[lb], 9[lb]}}");
@@ -72,6 +78,7 @@ public class HuKahngTest extends TestCase {
     assertEquals(xp.dot(lpd.c), xd.dot(lpp.c));
   }
 
+  @Test
   public void testP18_3() {
     Tensor c = Tensors.vector(1, 1, 1);
     Tensor m = Tensors.matrixInt(new int[][] { { 6, 3, 1 }, { 4, 5, 6 } });
@@ -83,6 +90,7 @@ public class HuKahngTest extends TestCase {
     assertEquals(scalar, RationalScalar.of(10, 3));
   }
 
+  @Test
   public void testP21() {
     Tensor c = Tensors.fromString("{1[USD], 1[USD], 1[USD]}");
     Tensor m = Tensors.fromString("{{4[ap], 1[ap], 3[ap]}, {1[or], 4[or], 2[or]}}");
@@ -105,6 +113,7 @@ public class HuKahngTest extends TestCase {
     assertEquals(sold.get(0), xd);
   }
 
+  @Test
   public void testP23() {
     Tensor c = Tensors.fromString("{15[USD], 7[USD], 4[USD], 6[USD]}");
     Tensor m = Tensors.fromString("{{3[va], 1[va], 0[va], -1[va]}, {1[vb], 1[vb], 1[vb], 2[vb]}}");
@@ -126,6 +135,7 @@ public class HuKahngTest extends TestCase {
     assertEquals(sold.dot(lpd.c).Get(0), key);
   }
 
+  @Test
   public void testP42() {
     Tensor c = Array.zeros(4);
     Tensor m = Tensors.matrixInt(new int[][] { { 4, 1, 0, 0 }, { 8, 0, 2, 0 }, { 10, 0, 1, 3 } });
@@ -135,6 +145,7 @@ public class HuKahngTest extends TestCase {
     assertEquals(Dimensions.of(xs), Arrays.asList(3, 4));
   }
 
+  @Test
   public void testP44() {
     Tensor c = Tensors.vector(1, 1, 2, 1);
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 0, 2, -2 }, { 0, 1, 1, 4 } });
@@ -152,6 +163,7 @@ public class HuKahngTest extends TestCase {
     assertEquals(xp, Tensors.vector(0, 0, 2, 1)); // as stated on p.45
   }
 
+  @Test
   public void testP45() {
     Tensor c = Tensors.vector(1, 2);
     Tensor A = Tensors.matrixInt(new int[][] { { -1, 1 }, { 0, 1 }, { 1, 1 }, { 4, 1 } });
@@ -170,6 +182,7 @@ public class HuKahngTest extends TestCase {
     assertEquals(tensor, Tensors.fromString("{{4, 8, 2, 0, 0, 12}}")); // as stated on p.46
   }
 
+  @Test
   public void testP71_1() {
     LinearProgram lpp = LinearProgram.of( //
         Objective.MIN, Tensors.vector(3, 3), //
@@ -180,6 +193,7 @@ public class HuKahngTest extends TestCase {
     TestHelper.check(lpp, true);
   }
 
+  @Test
   public void testP71_2() {
     LinearProgram lpp = LinearProgram.of( //
         Objective.MIN, Tensors.vector(4, 1, 1), //
@@ -190,6 +204,7 @@ public class HuKahngTest extends TestCase {
     TestHelper.check(lpp, false);
   }
 
+  @Test
   public void testP72_3() {
     LinearProgram lpd = LinearProgram.of( //
         Objective.MAX, Tensors.vector(-5, -35, -20), //
@@ -206,6 +221,7 @@ public class HuKahngTest extends TestCase {
     TestHelper.check(lp2, true);
   }
 
+  @Test
   public void testP72_4() {
     LinearProgram lpd = LinearProgram.of( //
         Objective.MAX, Tensors.vector(-2, -1, 0), //
@@ -222,6 +238,7 @@ public class HuKahngTest extends TestCase {
     TestHelper.check(lp2, true);
   }
 
+  @Test
   public void testP72_5() {
     LinearProgram lpd = LinearProgram.of( //
         Objective.MAX, Tensors.vector(-4, -12, -18), //

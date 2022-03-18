@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -14,9 +18,9 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class CentralMomentTest extends TestCase {
+public class CentralMomentTest {
+  @Test
   public void testVarious() {
     Tensor tensor = Tensors.vector(10, 2, 3, 4, 1);
     assertEquals(CentralMoment.of(tensor, 0), RealScalar.of(1));
@@ -26,6 +30,7 @@ public class CentralMomentTest extends TestCase {
     assertEquals(CentralMoment.of(tensor, 4), Scalars.fromString("1394/5"));
   }
 
+  @Test
   public void testTrapezoidal() {
     Distribution distribution = TrapezoidalDistribution.of(2, 3, 4, 7);
     Scalar scalar = CentralMoment.of(distribution, 3);
@@ -35,6 +40,7 @@ public class CentralMomentTest extends TestCase {
     AssertFail.of(() -> CentralMoment.of(distribution, -1));
   }
 
+  @Test
   public void testComplex() {
     Tensor tensor = Tensors.vector(10, 2, 3, 4, 1);
     Scalar result = CentralMoment.of(tensor, 1.3);
@@ -42,16 +48,19 @@ public class CentralMomentTest extends TestCase {
     Tolerance.CHOP.requireClose(result, gndtru);
   }
 
+  @Test
   public void testQuantity() {
     Tensor vector = Tensors.of(Quantity.of(2, "kg"), Quantity.of(3, "kg"));
     Scalar result = CentralMoment.of(vector, 2);
     assertEquals(result, Scalars.fromString("1/4[kg^2]"));
   }
 
+  @Test
   public void testEmptyFail() {
     AssertFail.of(() -> CentralMoment.of(Tensors.empty(), 2));
   }
 
+  @Test
   public void testMatrixFail() {
     AssertFail.of(() -> CentralMoment.of(HilbertMatrix.of(2, 3), RealScalar.of(2)));
   }

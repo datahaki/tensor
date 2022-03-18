@@ -1,6 +1,10 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -26,9 +30,8 @@ import ch.alpine.tensor.red.InterquartileRange;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class UnivariateDistributionTest extends TestCase {
+public class UnivariateDistributionTest {
   static final Distribution[] DISTRIBUTIONS = { //
       CauchyDistribution.of(.2, .3), //
       DagumDistribution.of(.3, .4, .5), //
@@ -47,6 +50,7 @@ public class UnivariateDistributionTest extends TestCase {
       TrapezoidalDistribution.of(-2, 1, 3, 6), //
   };
 
+  @Test
   public void testSimple() {
     for (Distribution distribution : DISTRIBUTIONS) {
       RandomVariate.of(distribution);
@@ -61,6 +65,7 @@ public class UnivariateDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testInverseCDFIncreasing() {
     for (Distribution distribution : DISTRIBUTIONS) {
       InverseCDF inverseCDF = InverseCDF.of(distribution);

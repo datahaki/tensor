@@ -1,15 +1,21 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.stream.Collectors;
 
-import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class BoundedLinkedListTest extends TestCase {
+import ch.alpine.tensor.usr.AssertFail;
+
+public class BoundedLinkedListTest {
+  @Test
   public void testSimple() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(3);
     assertTrue(boundedLinkedList.add(0));
@@ -30,6 +36,7 @@ public class BoundedLinkedListTest extends TestCase {
     assertEquals(boundedLinkedList.size(), 0);
   }
 
+  @Test
   public void testPoll() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(3);
     assertTrue(boundedLinkedList.add(0));
@@ -40,6 +47,7 @@ public class BoundedLinkedListTest extends TestCase {
     assertTrue(boundedLinkedList.isEmpty());
   }
 
+  @Test
   public void testAddAll() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(2);
     assertTrue(boundedLinkedList.add(0));
@@ -48,6 +56,7 @@ public class BoundedLinkedListTest extends TestCase {
     AssertFail.of(() -> boundedLinkedList.addAll(0, Arrays.asList(6, 7)));
   }
 
+  @Test
   public void testEmpty() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(0);
     assertEquals(boundedLinkedList.size(), 0);
@@ -56,6 +65,7 @@ public class BoundedLinkedListTest extends TestCase {
     assertEquals(boundedLinkedList.size(), 0);
   }
 
+  @Test
   public void testAddAtIndex() {
     LinkedList<String> linkedList = new BoundedLinkedList<>(3);
     linkedList.add(0, "3");
@@ -65,6 +75,7 @@ public class BoundedLinkedListTest extends TestCase {
     assertEquals(linkedList, Arrays.asList("1", "2", "3"));
   }
 
+  @Test
   public void testAddLast() {
     LinkedList<String> linkedList = new BoundedLinkedList<>(3);
     linkedList.addLast("0");
@@ -74,6 +85,7 @@ public class BoundedLinkedListTest extends TestCase {
     assertEquals(linkedList, Arrays.asList("1", "2", "3"));
   }
 
+  @Test
   public void testSerializable() throws ClassNotFoundException, IOException {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(2);
     assertTrue(boundedLinkedList.add(3));
@@ -86,16 +98,19 @@ public class BoundedLinkedListTest extends TestCase {
     assertEquals(copy.get(1).intValue(), 4);
   }
 
+  @Test
   public void testAddAllFail() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(7);
     AssertFail.of(() -> boundedLinkedList.addAll(Arrays.asList(1, 2, 3, 4)));
   }
 
+  @Test
   public void testAddFirstFail() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(7);
     AssertFail.of(() -> boundedLinkedList.addFirst(4));
   }
 
+  @Test
   public void testFailNegativeSize() {
     AssertFail.of(() -> new BoundedLinkedList<>(-1));
   }

@@ -1,11 +1,18 @@
 // code by jph
 package ch.alpine.tensor.spa;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -26,9 +33,9 @@ import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class StaticHelperTest extends TestCase {
+public class StaticHelperTest {
+  @Test
   public void testSparseBinary() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
     Tensor b = Tensors.fromString("{{3,0,0,7,0},{0,0,0,0,0},{0,4,0,3,0}}");
@@ -56,6 +63,7 @@ public class StaticHelperTest extends TestCase {
     }
   }
 
+  @Test
   public void testSparseWedge() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4},{0,0,0,0,0},{0,0,0,0,0}}");
     Tensor s = TestHelper.of(a);
@@ -65,12 +73,14 @@ public class StaticHelperTest extends TestCase {
     assertEquals(Transpose.of(a), Transpose.of(s));
   }
 
+  @Test
   public void testSparseTranspose() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4},{0,0,0,0,0}}");
     Tensor s = TestHelper.of(a);
     assertEquals(Transpose.of(a), Transpose.of(s));
   }
 
+  @Test
   public void testGenerateFail() {
     SparseArray.of(RealScalar.ZERO, 2, 3);
     assertEquals(SparseArray.of(RealScalar.ZERO), RealScalar.ZERO);
@@ -79,11 +89,13 @@ public class StaticHelperTest extends TestCase {
     AssertFail.of(() -> SparseArray.of(RealScalar.ONE, 2, 3));
   }
 
+  @Test
   public void testPMulFullSparse() {
     Tensor tensor = Times.of(HilbertMatrix.of(3), LeviCivitaTensor.of(3));
     tensor.toString();
   }
 
+  @Test
   public void testPMulSparseFull() {
     Tensor tensor = Times.of(IdentityMatrix.sparse(3), HilbertMatrix.of(3));
     tensor.toString();
@@ -117,6 +129,7 @@ public class StaticHelperTest extends TestCase {
     assertEquals(sa_fb, sa_sb);
   }
 
+  @Test
   public void testDot() {
     _check(_random(7), _random(7));
     _check(_random(8), _random(8, 2));
@@ -124,6 +137,7 @@ public class StaticHelperTest extends TestCase {
     _check(_random(2, 3, 4), _random(4, 5));
   }
 
+  @Test
   public void testDotZeroX() {
     _check(Array.zeros(7), _random(7));
     _check(Array.zeros(8), _random(8, 2));
@@ -131,6 +145,7 @@ public class StaticHelperTest extends TestCase {
     _check(Array.zeros(2, 3, 4), _random(4, 5));
   }
 
+  @Test
   public void testDotXZero() {
     _check(_random(7), Array.zeros(7));
     _check(_random(8), Array.zeros(8, 2));
@@ -138,6 +153,7 @@ public class StaticHelperTest extends TestCase {
     _check(_random(2, 3, 4), Array.zeros(4, 5));
   }
 
+  @Test
   public void testFallbackFail() {
     Tensor tensor = SparseArray.of(RealScalar.ZERO, 3);
     AssertFail.of(() -> tensor.divide(Quantity.of(0, "")));
@@ -145,6 +161,7 @@ public class StaticHelperTest extends TestCase {
     AssertFail.of(() -> tensor.multiply(DoubleScalar.POSITIVE_INFINITY));
   }
 
+  @Test
   public void testArraysAsListSerialization() throws ClassNotFoundException, IOException {
     Serialization.copy(Arrays.asList(3, 4, 5, 6));
     try {
@@ -155,6 +172,7 @@ public class StaticHelperTest extends TestCase {
     }
   }
 
+  @Test
   public void testArrayListSerialization() throws ClassNotFoundException, IOException {
     List<Integer> list = new ArrayList<>();
     list.add(3);
@@ -170,6 +188,7 @@ public class StaticHelperTest extends TestCase {
     }
   }
 
+  @Test
   public void testVisibility() {
     assertEquals(StaticHelper.class.getModifiers() & 1, 0);
   }

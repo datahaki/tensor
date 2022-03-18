@@ -1,14 +1,19 @@
 // code by jph
 package ch.alpine.tensor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TensorGetTest extends TestCase {
+public class TensorGetTest {
+  @Test
   public void testGetEmpty() {
     assertEquals(Tensors.empty().get(), Tensors.empty());
     assertEquals(Tensors.empty().get(new int[] {}), Tensors.empty());
@@ -16,10 +21,12 @@ public class TensorGetTest extends TestCase {
     assertEquals(Array.zeros(2, 3).get(new int[] {}), Array.zeros(2, 3));
   }
 
+  @Test
   public void testGetScalar() {
     assertTrue(IdentityMatrix.of(10).Get(3, 4) instanceof RealScalar);
   }
 
+  @Test
   public void testGet() {
     Tensor matrix = Tensors.matrixInt( //
         new int[][] { { 3, 4 }, { 1, 2 }, { 9, 8 } });
@@ -32,6 +39,7 @@ public class TensorGetTest extends TestCase {
     assertEquals(matrix.get(Tensor.ALL, 1), Tensors.fromString("{4, 2, 8}"));
   }
 
+  @Test
   public void testGetAllSimple() {
     Tensor a = Array.zeros(3, 4);
     Tensor c = a.get(Tensor.ALL, 2);
@@ -39,6 +47,7 @@ public class TensorGetTest extends TestCase {
     assertEquals(a, Array.zeros(3, 4));
   }
 
+  @Test
   public void testGetAll() {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 2, 3, 4);
     assertEquals(matrix.get(), matrix);
@@ -47,6 +56,7 @@ public class TensorGetTest extends TestCase {
     assertEquals(matrix.get(Tensor.ALL, Tensor.ALL, Tensor.ALL), matrix);
   }
 
+  @Test
   public void testGetAll1() {
     Tensor a = Array.zeros(3).unmodifiable();
     a.get().set(RealScalar.ONE, 1);
@@ -57,6 +67,7 @@ public class TensorGetTest extends TestCase {
     assertEquals(a, Array.zeros(3));
   }
 
+  @Test
   public void testGetAll2() {
     Tensor matrix = Array.zeros(3, 4).unmodifiable();
     matrix.get().set(RealScalar.ONE, 1);
@@ -68,6 +79,7 @@ public class TensorGetTest extends TestCase {
     assertEquals(matrix, Array.zeros(3, 4));
   }
 
+  @Test
   public void testGetAll3() {
     Tensor tensor = Array.zeros(3, 4, 3).unmodifiable();
     tensor.get().set(RealScalar.ONE, 1);
@@ -77,6 +89,7 @@ public class TensorGetTest extends TestCase {
     tensor.get(2, Tensor.ALL).set(Tensors.vector(1, 2, 3, 4), Tensor.ALL);
   }
 
+  @Test
   public void testGetAllFail() {
     Tensor matrix = Array.zeros(3, 4, 5);
     AssertFail.of(() -> matrix.Get(Tensor.ALL));

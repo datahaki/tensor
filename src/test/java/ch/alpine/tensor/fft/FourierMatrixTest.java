@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.fft;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -23,9 +27,8 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class FourierMatrixTest extends TestCase {
+public class FourierMatrixTest {
   public void checkFormat(int n) {
     Tensor zeros = Array.zeros(n, n);
     Tensor original = FourierMatrix.of(n);
@@ -38,12 +41,14 @@ public class FourierMatrixTest extends TestCase {
     Tolerance.CHOP.requireClose(Inverse.of(matrix), invert);
   }
 
+  @Test
   public void testSeveral() {
     Random random = new Random();
     int n = 1 + random.nextInt(20);
     checkFormat(n);
   }
 
+  @Test
   public void testNorm4() {
     Tensor m = FourierMatrix.of(4);
     assertEquals(Matrix1Norm.of(m), RealScalar.of(2));
@@ -52,6 +57,7 @@ public class FourierMatrixTest extends TestCase {
     // Norm._2.of m == 1 is confirmed with Mathematica
   }
 
+  @Test
   public void testVandermonde() {
     for (int n = 1; n < 8; ++n) {
       Tensor vector = Subdivide.of(RealScalar.ZERO, Pi.TWO, n).multiply(ComplexScalar.I).map(Exp.FUNCTION).extract(0, n);
@@ -67,12 +73,14 @@ public class FourierMatrixTest extends TestCase {
     Tolerance.CHOP.requireClose(matrix.dot(inverse), IdentityMatrix.of(n));
   }
 
+  @Test
   public void testInverse() {
     _check(8);
     _check(10);
     _check(11);
   }
 
+  @Test
   public void testNegativeFail() {
     AssertFail.of(() -> FourierMatrix.of(0));
     AssertFail.of(() -> FourierMatrix.of(-1));

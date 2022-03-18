@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Map;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -17,9 +22,9 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
-import junit.framework.TestCase;
 
-public class RootsDegree3Test extends TestCase {
+public class RootsDegree3Test {
+  @Test
   public void testSteer() {
     Scalar c = RealScalar.of(+0.8284521034333863);
     Scalar a = RealScalar.of(-0.33633373640449604);
@@ -31,6 +36,7 @@ public class RootsDegree3Test extends TestCase {
     Chop._13.requireAllZero(roots.map(cubic));
   }
 
+  @Test
   public void testCubicChallenge2() {
     Tensor coeffs = Tensors.vector(1.5583019232667707, 0.08338030361650195, 0.5438230916311243, 1.1822223716596811);
     ScalarUnaryOperator polynomial = Polynomial.of(coeffs);
@@ -47,6 +53,7 @@ public class RootsDegree3Test extends TestCase {
     assertTrue(roots.stream().anyMatch(root -> Chop._12.isClose(root, cN)));
   }
 
+  @Test
   public void testOrdering1() {
     Tensor coeffs = Tensors.vector(4, 5, 0, 1);
     Tensor actual = Roots.of(coeffs);
@@ -54,6 +61,7 @@ public class RootsDegree3Test extends TestCase {
     Tolerance.CHOP.requireClose(actual, expect);
   }
 
+  @Test
   public void testOrdering2() {
     Tensor coeffs = Tensors.vector(-4, 5, 0, 1);
     Tensor actual = Roots.of(coeffs);
@@ -61,6 +69,7 @@ public class RootsDegree3Test extends TestCase {
     Tolerance.CHOP.requireClose(actual, expect);
   }
 
+  @Test
   public void testOrdering3() {
     Tensor coeffs = Tensors.vector(-4, -5, 0, 1);
     Tensor actual = Roots.of(coeffs);
@@ -68,12 +77,14 @@ public class RootsDegree3Test extends TestCase {
     Tolerance.CHOP.requireClose(actual, expect);
   }
 
+  @Test
   public void testRoots3() {
     Tensor roots = Tensors.vector(0.27349919995262256, 0.28215588800565544, 0.3056009752969802);
     Tensor coeffs = CoefficientList.of(roots);
     Chop._12.requireClose(roots, Sort.of(RootsDegree3.of(coeffs)));
   }
 
+  @Test
   public void testTriple1() {
     // {0.22765732048577852, 0.22765732048577852, 0.22765732048577852}
     Tensor roots = Tensors.vector(2.146361758590232, 2.146361758590232, 2.146361758590232);
@@ -82,6 +93,7 @@ public class RootsDegree3Test extends TestCase {
     Chop._12.requireClose(roots, r2);
   }
 
+  @Test
   public void testTriple2() {
     Tensor roots = Tensors.vector(0.22765732048577852, 0.22765732048577852, 0.22765732048577852);
     Tensor coeffs = CoefficientList.of(roots);
@@ -95,6 +107,7 @@ public class RootsDegree3Test extends TestCase {
       assertTrue(depres.stream().anyMatch(s -> Chop._10.isClose(root, s)));
   }
 
+  @Test
   public void testCubic() {
     Tensor coeffs = Tensors.vector(2, 3, 4, 5);
     Tensor roots = Roots.of(coeffs);
@@ -105,6 +118,7 @@ public class RootsDegree3Test extends TestCase {
     check(roots, depres);
   }
 
+  @Test
   public void testMonomial() {
     Tensor coeffs = Tensors.vector(0, 0, 0, 10);
     Tensor roots = Roots.of(coeffs);
@@ -115,6 +129,7 @@ public class RootsDegree3Test extends TestCase {
     Chop._10.requireClose(depres, roots);
   }
 
+  @Test
   public void testMonomialShiftedP() {
     Tensor coeffs = Tensors.vector(1, 3, 3, 1);
     Tensor roots = Roots.of(coeffs);
@@ -126,6 +141,7 @@ public class RootsDegree3Test extends TestCase {
     Chop._10.requireClose(depres, roots);
   }
 
+  @Test
   public void testMonomialShiftedN() {
     Tensor coeffs = Tensors.vector(1, -3, 3, -1);
     Tensor roots = Roots.of(coeffs);
@@ -137,6 +153,7 @@ public class RootsDegree3Test extends TestCase {
     Chop._10.requireClose(depres, roots);
   }
 
+  @Test
   public void testMonomialQuadShift() {
     Tensor coeffs = Tensors.vector(1, 1, -1, -1);
     Tensor roots = Roots.of(coeffs);
@@ -150,6 +167,7 @@ public class RootsDegree3Test extends TestCase {
     Chop._10.requireClose(depres, roots);
   }
 
+  @Test
   public void testCubicQuantity() {
     Tensor coeffs = Tensors.fromString("{2[m^-5], 3[m^-4], 4[m^-3], 5[m^-2]}");
     Tensor roots = Roots.of(coeffs);
@@ -160,6 +178,7 @@ public class RootsDegree3Test extends TestCase {
     check(roots, depres);
   }
 
+  @Test
   public void testCubicNumerics() {
     Tensor coeffs = Tensors.vector(0.7480756509468256, -0.11264914570345713, 0.5215628590156208, -0.8016542468533115);
     Tensor roots = Roots.of(coeffs);
@@ -170,6 +189,7 @@ public class RootsDegree3Test extends TestCase {
     check(roots, depres);
   }
 
+  @Test
   public void testCubicChallenge() {
     Tensor coeffs = Tensors.vector(1.8850384838238452, -0.07845356111460325, -0.6128180724984655, -1.5845220466594934);
     Tensor roots = Roots.of(coeffs);

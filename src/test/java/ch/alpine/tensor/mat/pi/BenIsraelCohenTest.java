@@ -1,7 +1,11 @@
 // code by jph
 package ch.alpine.tensor.mat.pi;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -28,9 +32,9 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class BenIsraelCohenTest extends TestCase {
+public class BenIsraelCohenTest {
+  @Test
   public void testQuantity() {
     Random random = new Random(2);
     Distribution distribution = LogisticDistribution.of(1, 5);
@@ -45,6 +49,7 @@ public class BenIsraelCohenTest extends TestCase {
     }
   }
 
+  @Test
   public void testMathematica() {
     Tensor matrix = ResourceData.of("/mat/bic1.csv");
     Tensor mathem = ResourceData.of("/mat/bic1pinv.csv");
@@ -54,6 +59,7 @@ public class BenIsraelCohenTest extends TestCase {
     Chop._08.requireClose(pinv, PseudoInverse.of(svd));
   }
 
+  @Test
   public void testMixedUnitsSquare() {
     Tensor matrix = Tensors.fromString( //
         "{{-4/5[m^-2], 3/10[m^-1*rad^-1]}, {3/10[m^-1*rad^-1], -1/20[rad^-2]}}");
@@ -62,6 +68,7 @@ public class BenIsraelCohenTest extends TestCase {
     Tolerance.CHOP.requireClose(inv1, pinv);
   }
 
+  @Test
   public void testMixedUnitsGeneral() {
     Tensor matrix = Tensors.fromString( //
         "{{-4/5[m], 3/10[m], 1/2[m]}, {3[s], -2[s], 1[s]}}");
@@ -71,21 +78,25 @@ public class BenIsraelCohenTest extends TestCase {
     InfluenceMatrixQ.require(pinv1.dot(matrix));
   }
 
+  @Test
   public void testMixedUnitsFail() {
     Tensor matrix = Tensors.fromString( //
         "{{-4/5[kg], 3/10[m], 1/2[m]}, {3[s], -2[s], 1[s]}}");
     AssertFail.of(() -> BenIsraelCohen.of(matrix));
   }
 
+  @Test
   public void testZeros() {
     Tensor refine = BenIsraelCohen.of(Array.zeros(4, 3));
     assertEquals(refine, Array.zeros(3, 4));
   }
 
+  @Test
   public void testEpsilonNonFail() {
     BenIsraelCohen.of(Tensors.fromString("{{1E-300}}"));
   }
 
+  @Test
   public void testReal() {
     Random random = new Random(3);
     Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
@@ -97,12 +108,14 @@ public class BenIsraelCohenTest extends TestCase {
     InfluenceMatrixQ.require(refine.dot(matrix));
   }
 
+  @Test
   public void testExceedIters() {
     Tensor matrix = ResourceData.of("/mat/bic_fail.csv");
     MatrixQ.require(matrix);
     AssertFail.of(() -> BenIsraelCohen.of(matrix));
   }
 
+  @Test
   public void testComplexFullRank() {
     Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
     Tensor re = RandomVariate.of(distribution, 5, 3);
@@ -114,6 +127,7 @@ public class BenIsraelCohenTest extends TestCase {
     Tolerance.CHOP.requireClose(Transpose.of(pinvtr), refine);
   }
 
+  @Test
   public void testComplexRankDeficient() {
     Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
     for (int r = 1; r < 5; ++r) {
@@ -130,12 +144,14 @@ public class BenIsraelCohenTest extends TestCase {
     }
   }
 
+  @Test
   public void testAbsurd() {
     AssertFail.of(() -> BenIsraelCohen.of(Tensors.fromString("{{NaN}}")));
     AssertFail.of(() -> BenIsraelCohen.of(Tensors.fromString("{{Infinity}}")));
     AssertFail.of(() -> BenIsraelCohen.of(Tensors.fromString("{{1.7976931348623157e+308}}")));
   }
 
+  @Test
   public void testVisibility() {
     assertEquals(BenIsraelCohen.class.getModifiers() & 1, 0);
   }

@@ -1,7 +1,12 @@
 // code by gjoel
 package ch.alpine.tensor.red;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Random;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -17,29 +22,33 @@ import ch.alpine.tensor.pdf.d.PoissonDistribution;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class InterquartileRangeTest extends TestCase {
+public class InterquartileRangeTest {
+  @Test
   public void testSamples() {
     Tensor samples = Tensors.vector(0, 1, 2, 3, 10);
     assertEquals(InterquartileRange.of(samples), RealScalar.of(2)); // == 3 - 1
   }
 
+  @Test
   public void testMathematica() {
     assertEquals(InterquartileRange.of(Tensors.vector(1, 3, 4, 2, 5, 6)), RealScalar.of(3));
   }
 
+  @Test
   public void testDistributionExp() { // continuous
     Scalar lambda = RealScalar.of(5);
     Distribution distribution = ExponentialDistribution.of(lambda);
     Tolerance.CHOP.requireClose(InterquartileRange.of(distribution), Log.of(RealScalar.of(3)).divide(lambda));
   }
 
+  @Test
   public void testDistributionUniform() { // continuous
     Distribution distribution = UniformDistribution.of(22, 30);
     Tolerance.CHOP.requireClose(InterquartileRange.of(distribution), RealScalar.of(4));
   }
 
+  @Test
   public void testDistributionPoisson() { // discrete
     Random random = new Random(123);
     // Mathematica: InterquartileRange[PoissonDistribution[10.5]] == 5
@@ -52,10 +61,12 @@ public class InterquartileRangeTest extends TestCase {
     assertTrue(Clips.interval(4, 6).isInside(test));
   }
 
+  @Test
   public void testEmptyFail() {
     AssertFail.of(() -> InterquartileRange.of(Tensors.empty()));
   }
 
+  @Test
   public void testMatrixFail() {
     AssertFail.of(() -> InterquartileRange.of(IdentityMatrix.of(5)));
   }

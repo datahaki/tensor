@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Arrays;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -26,9 +31,8 @@ import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.spa.SparseArray;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class TraceTest extends TestCase {
+public class TraceTest {
   // from wikipedia
   private static Scalar _tr2Formula(Tensor A) {
     assertTrue(SquareMatrixQ.of(A));
@@ -38,6 +42,7 @@ public class TraceTest extends TestCase {
   }
 
   // from wikipedia
+  @Test
   public void testViete() {
     Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}");
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
@@ -55,6 +60,7 @@ public class TraceTest extends TestCase {
     }
   }
 
+  @Test
   public void testDetExpIsExpTrace() {
     Distribution distribution = NormalDistribution.of(0, 0.3);
     for (int n = 1; n < 5; ++n)
@@ -66,6 +72,7 @@ public class TraceTest extends TestCase {
       }
   }
 
+  @Test
   public void testIdentityMatrix() {
     for (int n = 3; n < 8; ++n) {
       assertEquals(Trace.of(IdentityMatrix.of(n), 0, 1), RealScalar.of(n));
@@ -73,6 +80,7 @@ public class TraceTest extends TestCase {
     }
   }
 
+  @Test
   public void testSparse() {
     Tensor tensor = SparseArray.of(Quantity.of(0, "m"), 3, 4, 3);
     Tensor traced = Trace.of(tensor, 0, 2);
@@ -80,25 +88,30 @@ public class TraceTest extends TestCase {
     assertEquals(Dimensions.of(traced), Arrays.asList(4));
   }
 
+  @Test
   public void testMatrix1X1() {
     assertEquals(Trace.of(Tensors.fromString("{{3+2*I}}")), ComplexScalar.of(3, 2));
   }
 
+  @Test
   public void testEmpty() {
     AssertFail.of(() -> Trace.of(Tensors.empty())); // mathematica gives 0 == Tr[{}]
     AssertFail.of(() -> Trace.of(Tensors.fromString("{{}}"))); // mathematica gives 0 == Tr[{{}}]
   }
 
+  @Test
   public void testDimensionsFail() {
     AssertFail.of(() -> Trace.of(RealScalar.ONE));
     AssertFail.of(() -> Trace.of(Tensors.vector(1, 2, 3)));
     AssertFail.of(() -> Trace.of(LeviCivitaTensor.of(3)));
   }
 
+  @Test
   public void testParamFail() {
     AssertFail.of(() -> Trace.of(HilbertMatrix.of(3, 3), 0, 0));
   }
 
+  @Test
   public void testFormatFail() {
     AssertFail.of(() -> Trace.of(HilbertMatrix.of(3, 4), 0, 1));
   }

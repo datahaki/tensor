@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.itp;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
@@ -28,11 +32,11 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class InterpolatingPolynomialTest extends TestCase {
+public class InterpolatingPolynomialTest {
   private static final ScalarUnaryOperator MINUS_ONE = RealScalar.ONE.negate()::add;
 
+  @Test
   public void testScaleInvariant() {
     Tensor suppor = Tensors.vector(2, 2.3, 4);
     Tensor values = Tensors.vector(6, -7, 20);
@@ -45,6 +49,7 @@ public class InterpolatingPolynomialTest extends TestCase {
         domain.multiply(RealScalar.of(3)).map(MINUS_ONE).map(suo2));
   }
 
+  @Test
   public void testPermutationInvariant() {
     Tensor suppor = Tensors.vector(2, 2.3, 4);
     Tensor values = Tensors.vector(6, -7, 20);
@@ -59,6 +64,7 @@ public class InterpolatingPolynomialTest extends TestCase {
     }
   }
 
+  @Test
   public void testScaleInvariantMatrix() {
     Tensor suppor = Tensors.vector(2, 2.3, 4);
     Tensor values = Tensors.fromString("{{2,-3}, {-7, 5}, {5, 9}}");
@@ -72,6 +78,7 @@ public class InterpolatingPolynomialTest extends TestCase {
     AssertFail.of(() -> InterpolatingPolynomial.of(suppor).scalarTensorFunction(Tensors.vector(2, 3, 4, 5)));
   }
 
+  @Test
   public void testQuantity() {
     Tensor suppor = Tensors.fromString("{2[m], 2.3[m], 4[m]}");
     Tensor values = Tensors.fromString("{6[s], -7[s], 20[s]}");
@@ -81,6 +88,7 @@ public class InterpolatingPolynomialTest extends TestCase {
     domain.map(suo1).map(QuantityMagnitude.singleton("s"));
   }
 
+  @Test
   public void testGaussScalar() {
     int prime = 7211;
     Tensor suppor = Tensors.of(GaussScalar.of(53, prime), GaussScalar.of(519, prime), GaussScalar.of(6322, prime));
@@ -95,6 +103,7 @@ public class InterpolatingPolynomialTest extends TestCase {
     return LinearSolve.of(VandermondeMatrix.of(xdata), ydata);
   }
 
+  @Test
   public void testDegreesUnits() {
     Tensor xdata = Tensors.vector(10, 11, 14, 20).map(s -> Quantity.of(s, "K"));
     Tensor ydata = Tensors.vector(5, -2, 1, 9).map(s -> Quantity.of(s, "bar"));
@@ -108,6 +117,7 @@ public class InterpolatingPolynomialTest extends TestCase {
     }
   }
 
+  @Test
   public void testDegreesUnitsNumeric() {
     Tensor xdata = Tensors.vector(10, 11, 14, 20).map(s -> Quantity.of(s, "K")).map(N.DOUBLE);
     Tensor ydata = Tensors.vector(5, -2, 1, 9).map(s -> Quantity.of(s, "bar")).map(N.DOUBLE);
@@ -119,6 +129,7 @@ public class InterpolatingPolynomialTest extends TestCase {
     }
   }
 
+  @Test
   public void testScalarLengthFail() throws ClassNotFoundException, IOException {
     InterpolatingPolynomial interpolatingPolynomial = //
         Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
@@ -126,6 +137,7 @@ public class InterpolatingPolynomialTest extends TestCase {
     AssertFail.of(() -> interpolatingPolynomial.scalarUnaryOperator(HilbertMatrix.of(3)));
   }
 
+  @Test
   public void testTensorLengthFail() throws ClassNotFoundException, IOException {
     InterpolatingPolynomial interpolatingPolynomial = //
         Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
@@ -133,6 +145,7 @@ public class InterpolatingPolynomialTest extends TestCase {
     AssertFail.of(() -> interpolatingPolynomial.scalarTensorFunction(HilbertMatrix.of(2, 3)));
   }
 
+  @Test
   public void testKnotsNonVectorFail() {
     AssertFail.of(() -> InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, IdentityMatrix.of(3)));
   }

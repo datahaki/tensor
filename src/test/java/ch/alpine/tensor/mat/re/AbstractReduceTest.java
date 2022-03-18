@@ -1,9 +1,12 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
-import junit.framework.TestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AbstractReduceTest extends TestCase {
+import org.junit.jupiter.api.Test;
+
+public class AbstractReduceTest {
+  @Test
   public void testVisibility() {
     assertEquals(AbstractReduce.class.getModifiers() & 1, 0);
   }

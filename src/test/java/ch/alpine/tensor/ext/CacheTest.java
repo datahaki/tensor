@@ -1,9 +1,14 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -11,9 +16,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class CacheTest extends TestCase {
+public class CacheTest {
+  @Test
   public void testSimple() {
     Function<Object, Double> function = Cache.of(k -> Math.random(), 3);
     double double1 = function.apply("eth");
@@ -21,11 +26,13 @@ public class CacheTest extends TestCase {
     assertEquals(double1, double2);
   }
 
+  @Test
   public void testInception() {
     Function<Object, Double> memo1 = Cache.of(k -> Math.random(), 32);
     AssertFail.of(() -> Cache.of(memo1, 32));
   }
 
+  @Test
   public void testMap() {
     Function<String, Integer> function = Cache.of(k -> 1, 768);
     IntStream.range(0, 26).parallel().forEach(c1 -> {
@@ -54,6 +61,7 @@ public class CacheTest extends TestCase {
     }
   }
 
+  @Test
   public void testSingle() {
     ScalarStringFunc scalarStringFunc = new ScalarStringFunc();
     Cache<Scalar, String> cache = Cache.of(scalarStringFunc, 1);
@@ -83,6 +91,7 @@ public class CacheTest extends TestCase {
     }
   }
 
+  @Test
   public void testTensor() {
     TensorStringFunc tensorStringFunc = new TensorStringFunc();
     Tensor tensor = Tensors.fromString( //
@@ -98,6 +107,7 @@ public class CacheTest extends TestCase {
     assertEquals(tensorStringFunc.count, 1);
   }
 
+  @Test
   public void testValueNull() {
     Cache<Tensor, String> cache = Cache.of(t -> t.equals(RealScalar.ZERO) ? null : t.toString(), 10);
     assertEquals(cache.apply(RealScalar.ONE), "1");
@@ -105,6 +115,7 @@ public class CacheTest extends TestCase {
     assertTrue(Objects.isNull(cache.apply(RealScalar.ZERO)));
   }
 
+  @Test
   public void testTensor2() {
     TensorStringFunc tensorStringFunc = new TensorStringFunc();
     Tensor tensor = Tensors.fromString( //
@@ -143,6 +154,7 @@ public class CacheTest extends TestCase {
     }
   }
 
+  @Test
   public void testDelayed() {
     DelayedStringFunc delayedStringFunc = new DelayedStringFunc();
     Tensor tensor = Tensors.fromString( //
@@ -155,10 +167,12 @@ public class CacheTest extends TestCase {
     assertTrue(0 <= delayedStringFunc.count);
   }
 
+  @Test
   public void testFailNull() {
     AssertFail.of(() -> Cache.of(null, 32));
   }
 
+  @Test
   public void testFailNegative() {
     AssertFail.of(() -> Cache.of(Function.identity(), -1));
   }

@@ -1,8 +1,12 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
 import java.util.IntSummaryStatistics;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -16,9 +20,9 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ScalarSummaryStatisticsTest extends TestCase {
+public class ScalarSummaryStatisticsTest {
+  @Test
   public void testMembers() {
     ScalarSummaryStatistics scalarSummaryStatistics = Tensors.vector(1, 4, 2, 8, 3, 10) //
         .stream().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
@@ -29,6 +33,7 @@ public class ScalarSummaryStatisticsTest extends TestCase {
     assertEquals(scalarSummaryStatistics.getCount(), 6);
   }
 
+  @Test
   public void testMembersParallel() {
     ScalarSummaryStatistics scalarSummaryStatistics = Tensors.vector(1, 4, 2, 8, 3, 10) //
         .stream().parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
@@ -39,6 +44,7 @@ public class ScalarSummaryStatisticsTest extends TestCase {
     assertEquals(scalarSummaryStatistics.getCount(), 6);
   }
 
+  @Test
   public void testQuantity() {
     ScalarSummaryStatistics stats = Tensors.fromString("{3[s], 11[s], 6[s], 4[s]}").stream() //
         .parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
@@ -51,6 +57,7 @@ public class ScalarSummaryStatisticsTest extends TestCase {
     assertEquals(stats.getClip(), Clips.interval(Quantity.of(3, "s"), Quantity.of(11, "s")));
   }
 
+  @Test
   public void testCollector() {
     ScalarSummaryStatistics stats = Tensors.vector(1, 4, 2, 8, 3, 10).stream() //
         .parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
@@ -62,6 +69,7 @@ public class ScalarSummaryStatisticsTest extends TestCase {
     assertEquals(stats.toString(), "ScalarSummaryStatistics{count=6, sum=28, min=1, average=14/3, max=10}");
   }
 
+  @Test
   public void testEmpty() {
     ScalarSummaryStatistics stats = Tensors.empty().stream() //
         .parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
@@ -74,6 +82,7 @@ public class ScalarSummaryStatisticsTest extends TestCase {
     assertEquals(stats.getClip(), null);
   }
 
+  @Test
   public void testEmptyCombine() {
     IntSummaryStatistics iss1 = new IntSummaryStatistics();
     IntSummaryStatistics iss2 = new IntSummaryStatistics();
@@ -83,6 +92,7 @@ public class ScalarSummaryStatisticsTest extends TestCase {
     sss1.combine(sss2);
   }
 
+  @Test
   public void testSemiCombine() {
     IntSummaryStatistics iss1 = new IntSummaryStatistics();
     IntSummaryStatistics iss2 = Arrays.asList(3, 2).stream() //
@@ -95,6 +105,7 @@ public class ScalarSummaryStatisticsTest extends TestCase {
     sss1.combine(sss2);
   }
 
+  @Test
   public void testRandom() {
     Tensor vector = RandomVariate.of(UniformDistribution.unit(), 100);
     ScalarSummaryStatistics ss1 = vector.stream().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
@@ -104,6 +115,7 @@ public class ScalarSummaryStatisticsTest extends TestCase {
     Chop._14.requireClose(ss1.getAverage(), mean);
   }
 
+  @Test
   public void testGaussian() {
     Tensor vector = Tensors.of( //
         GaussScalar.of(2, 7), //

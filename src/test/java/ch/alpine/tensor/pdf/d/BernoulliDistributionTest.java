@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Map;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -18,9 +23,9 @@ import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class BernoulliDistributionTest extends TestCase {
+public class BernoulliDistributionTest {
+  @Test
   public void testEquals() {
     Scalar p = RationalScalar.of(1, 3);
     Distribution distribution = BernoulliDistribution.of(p);
@@ -31,6 +36,7 @@ public class BernoulliDistributionTest extends TestCase {
     assertEquals(pdf.at(RealScalar.of(2)), RealScalar.ZERO);
   }
 
+  @Test
   public void testLessThan() {
     Scalar p = RationalScalar.of(1, 3);
     Distribution distribution = BernoulliDistribution.of(p);
@@ -40,6 +46,7 @@ public class BernoulliDistributionTest extends TestCase {
     assertEquals(cdf.p_lessThan(RealScalar.of(2)), RealScalar.ONE);
   }
 
+  @Test
   public void testLessEquals() {
     Scalar p = RationalScalar.of(1, 3);
     Distribution distribution = BernoulliDistribution.of(p);
@@ -49,6 +56,7 @@ public class BernoulliDistributionTest extends TestCase {
     assertEquals(cdf.p_lessEquals(RealScalar.of(2)), RealScalar.ONE);
   }
 
+  @Test
   public void testSample() {
     final Scalar p = RationalScalar.of(1, 3);
     Distribution distribution = BernoulliDistribution.of(p);
@@ -61,6 +69,7 @@ public class BernoulliDistributionTest extends TestCase {
     assertTrue(Scalars.lessThan(dev, RealScalar.of(0.07)));
   }
 
+  @Test
   public void testMarkov() {
     TestMarkovChebyshev.markov(BernoulliDistribution.of(0));
     TestMarkovChebyshev.markov(BernoulliDistribution.of(1));
@@ -69,6 +78,7 @@ public class BernoulliDistributionTest extends TestCase {
     TestMarkovChebyshev.chebyshev(BernoulliDistribution.of(0.0));
   }
 
+  @Test
   public void testNumber() {
     Distribution distribution = BernoulliDistribution.of(0.5);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -78,11 +88,13 @@ public class BernoulliDistributionTest extends TestCase {
     AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
+  @Test
   public void testFailP() {
     AssertFail.of(() -> BernoulliDistribution.of(RationalScalar.of(-1, 3)));
     AssertFail.of(() -> BernoulliDistribution.of(RationalScalar.of(4, 3)));
   }
 
+  @Test
   public void testFailPNumber() {
     AssertFail.of(() -> BernoulliDistribution.of(-1e-10));
     AssertFail.of(() -> BernoulliDistribution.of(1.0001));

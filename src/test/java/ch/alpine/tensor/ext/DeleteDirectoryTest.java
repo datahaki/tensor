@@ -1,12 +1,17 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.File;
 import java.io.IOException;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class DeleteDirectoryTest extends TestCase {
+public class DeleteDirectoryTest {
+  @Test
   public void testLayer0() throws IOException {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "0");
     folder.mkdir();
@@ -14,6 +19,7 @@ public class DeleteDirectoryTest extends TestCase {
     assertEquals(deleteDirectory.fileCount(), 1);
   }
 
+  @Test
   public void testLayer1a() throws IOException {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "1a");
     folder.mkdir();
@@ -44,6 +50,7 @@ public class DeleteDirectoryTest extends TestCase {
     assertEquals(reachedDepth, 1);
   }
 
+  @Test
   public void testLayer1b() throws IOException {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "1b");
     folder.mkdir();
@@ -55,6 +62,7 @@ public class DeleteDirectoryTest extends TestCase {
     assertEquals(deleteDirectory.fileCount(), 4);
   }
 
+  @Test
   public void testLayer2() throws IOException {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "2");
     folder.mkdir();
@@ -73,6 +81,7 @@ public class DeleteDirectoryTest extends TestCase {
     assertEquals(deleteDirectory.fileCount(), 5);
   }
 
+  @Test
   public void testNotFound() {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "NotFound");
     try {
@@ -83,6 +92,7 @@ public class DeleteDirectoryTest extends TestCase {
     }
   }
 
+  @Test
   public void testRenameDirectory() throws IOException {
     File folder1 = HomeDirectory.Downloads(getClass().getSimpleName() + "NotFound1234");
     File folder2 = HomeDirectory.Downloads(getClass().getSimpleName() + "NotFound1235");

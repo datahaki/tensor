@@ -1,7 +1,12 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -17,9 +22,9 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class NegativeBinomialDistributionTest extends TestCase {
+public class NegativeBinomialDistributionTest {
+  @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(NegativeBinomialDistribution.of(4, RationalScalar.of(1, 3)));
     assertEquals(PDF.of(distribution).at(RealScalar.of(3)), RationalScalar.of(160, 2187));
@@ -37,6 +42,7 @@ public class NegativeBinomialDistributionTest extends TestCase {
     assertEquals(inverseCDF.quantile(RealScalar.of(1 - 1e-10)), RealScalar.of(76));
   }
 
+  @Test
   public void testPOne() {
     int k = 0;
     for (int n = 0; n < 4; ++n) {
@@ -49,6 +55,7 @@ public class NegativeBinomialDistributionTest extends TestCase {
     }
   }
 
+  @Test
   public void testFails() {
     AssertFail.of(() -> NegativeBinomialDistribution.of(-1, RationalScalar.HALF));
     AssertFail.of(() -> NegativeBinomialDistribution.of(2, RealScalar.ZERO));

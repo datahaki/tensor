@@ -1,9 +1,15 @@
 // code by jph
 package ch.alpine.tensor.opt.nd;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -17,9 +23,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class NdCollectRadiusTest extends TestCase {
+public class NdCollectRadiusTest {
+  @Test
   public void testClusterRadius() {
     int maxDensity = 2;
     NdMap<String> m1 = new NdListMap<>();
@@ -58,6 +64,7 @@ public class NdCollectRadiusTest extends TestCase {
     }
   }
 
+  @Test
   public void testEmpty() {
     for (NdCenters ndCenters : NdCenters.values()) {
       NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2, 4.3));
@@ -67,10 +74,12 @@ public class NdCollectRadiusTest extends TestCase {
     }
   }
 
+  @Test
   public void testNullFail() {
     AssertFail.of(() -> new NdCollectRadius<>(null, Pi.VALUE));
   }
 
+  @Test
   public void testNonPositiveFail() {
     NdCenterInterface ndCenterInterface = NdCenters.VECTOR_INFINITY_NORM.apply(Array.zeros(2));
     AssertFail.of(() -> new NdCollectRadius<>(ndCenterInterface, RealScalar.ONE.negate()));

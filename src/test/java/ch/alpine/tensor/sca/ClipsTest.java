@@ -1,6 +1,12 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -10,9 +16,9 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.usr.AssertFail;
-import junit.framework.TestCase;
 
-public class ClipsTest extends TestCase {
+public class ClipsTest {
+  @Test
   public void testSignZero1() {
     Clip clip = Clips.interval(-0.0, +0.0);
     assertTrue(clip instanceof ClipPoint);
@@ -20,6 +26,7 @@ public class ClipsTest extends TestCase {
     assertEquals(clip.max(), RealScalar.ZERO);
   }
 
+  @Test
   public void testSignZero2() {
     Clip clip = Clips.interval(+0.0, -0.0);
     assertTrue(clip instanceof ClipPoint);
@@ -27,6 +34,7 @@ public class ClipsTest extends TestCase {
     assertEquals(clip.max(), RealScalar.ZERO);
   }
 
+  @Test
   public void testInftyHalf() {
     Clip clip = Clips.interval(-0.0, Double.POSITIVE_INFINITY);
     assertTrue(clip instanceof ClipInterval);
@@ -38,6 +46,7 @@ public class ClipsTest extends TestCase {
     assertFalse(clip.isInside(DoubleScalar.NEGATIVE_INFINITY));
   }
 
+  @Test
   public void testRealNumbers() {
     Clip clip = Clips.interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
     assertTrue(clip instanceof ClipInterval);
@@ -49,6 +58,7 @@ public class ClipsTest extends TestCase {
     clip.requireInside(DoubleScalar.POSITIVE_INFINITY);
   }
 
+  @Test
   public void testAbsolute() {
     Clip clip = Clips.absolute(Quantity.of(10, "N"));
     clip.requireInside(Quantity.of(-10, "N"));
@@ -57,6 +67,7 @@ public class ClipsTest extends TestCase {
     assertTrue(clip.isOutside(Quantity.of(+10.1, "N")));
   }
 
+  @Test
   public void testAbsoluteNumber() {
     Clip clip = Clips.absolute(Math.PI);
     assertTrue(clip.isInside(RealScalar.of(-1)));
@@ -67,6 +78,7 @@ public class ClipsTest extends TestCase {
     assertTrue(clip.isOutside(RealScalar.of(Math.nextDown(-Math.PI))));
   }
 
+  @Test
   public void testAbsoluteOne() {
     Clip clip = Clips.absoluteOne();
     assertTrue(clip.isInside(RealScalar.of(-1)));
@@ -75,6 +87,7 @@ public class ClipsTest extends TestCase {
     assertTrue(clip.isOutside(RealScalar.of(Math.nextDown(-1.0))));
   }
 
+  @Test
   public void testAbsoluteZero() {
     Clip clip = Clips.absolute(Quantity.of(0, "N"));
     Scalar scalar = clip.rescale(Quantity.of(5, "N"));
@@ -82,6 +95,7 @@ public class ClipsTest extends TestCase {
     ExactScalarQ.require(scalar);
   }
 
+  @Test
   public void testPositive() {
     Clip clip = Clips.positive(Quantity.of(10, "N"));
     clip.requireInside(Quantity.of(0, "N"));
@@ -90,6 +104,7 @@ public class ClipsTest extends TestCase {
     assertTrue(clip.isOutside(Quantity.of(Math.nextUp(10.0), "N")));
   }
 
+  @Test
   public void testPositiveNumber() {
     Clip clip = Clips.positive(10);
     clip.requireInside(Quantity.of(0, ""));
@@ -98,18 +113,21 @@ public class ClipsTest extends TestCase {
     assertTrue(clip.isOutside(Quantity.of(Math.nextUp(10.0), "")));
   }
 
+  @Test
   public void testIntersectionSimple() {
     Clip clip = Clips.intersection(Clips.interval(2, 6), Clips.interval(3, 10));
     assertEquals(clip.min(), RealScalar.of(3));
     assertEquals(clip.max(), RealScalar.of(6));
   }
 
+  @Test
   public void testIntersectionPoint() {
     Clip clip = Clips.intersection(Clips.interval(2, 6), Clips.interval(-3, 2));
     assertEquals(clip.min(), RealScalar.of(2));
     assertEquals(clip.max(), RealScalar.of(2));
   }
 
+  @Test
   public void testGaussScalar() {
     Clip clip = Clips.positive(GaussScalar.of(3, 13));
     clip.requireInside(GaussScalar.of(0, 13));
@@ -119,16 +137,19 @@ public class ClipsTest extends TestCase {
     assertFalse(clip.isInside(GaussScalar.of(4, 13)));
   }
 
+  @Test
   public void testIntersectionFail() {
     AssertFail.of(() -> Clips.intersection(Clips.interval(2, 3), Clips.interval(5, 10)));
   }
 
+  @Test
   public void testCoverSimple() {
     Clip clip = Clips.cover(Clips.interval(2, 6), Clips.interval(3, 10));
     assertEquals(clip.min(), RealScalar.of(2));
     assertEquals(clip.max(), RealScalar.of(10));
   }
 
+  @Test
   public void testCoverFail0() {
     Clip c1 = Clips.positive(Quantity.of(0, "m"));
     Clip c2 = Clips.positive(Quantity.of(0, "s"));
@@ -136,6 +157,7 @@ public class ClipsTest extends TestCase {
     AssertFail.of(() -> Clips.intersection(c1, c2));
   }
 
+  @Test
   public void testCoverFail1() {
     Clip c1 = Clips.positive(Quantity.of(1, "m"));
     Clip c2 = Clips.positive(Quantity.of(2, "s"));
@@ -143,43 +165,52 @@ public class ClipsTest extends TestCase {
     AssertFail.of(() -> Clips.intersection(c1, c2));
   }
 
+  @Test
   public void testCoverPoint() {
     Clip clip = Clips.cover(Clips.interval(2, 6), Clips.interval(-3, 2));
     assertEquals(clip.min(), RealScalar.of(-3));
     assertEquals(clip.max(), RealScalar.of(6));
   }
 
+  @Test
   public void testPositiveFail() {
     AssertFail.of(() -> Clips.positive(Quantity.of(-1, "kg")));
   }
 
+  @Test
   public void testNaNFail() {
     AssertFail.of(() -> Clips.interval(DoubleScalar.INDETERMINATE, DoubleScalar.INDETERMINATE));
     AssertFail.of(() -> Clips.interval(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
     AssertFail.of(() -> Clips.interval(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
   }
 
+  @Test
   public void testAbsoluteFail() {
     AssertFail.of(() -> Clips.absolute(Quantity.of(-1, "kg")));
   }
 
+  @Test
   public void testInsideFail() {
     AssertFail.of(() -> Clips.unit().isInside(Quantity.of(0.5, "m")));
   }
 
+  @Test
   public void testQuantityFail() {
     AssertFail.of(() -> Clips.unit().apply(Quantity.of(-5, "m")));
     AssertFail.of(() -> Clips.absoluteOne().apply(Quantity.of(-5, "m")));
   }
 
+  @Test
   public void testQuantityMixedZero() {
     AssertFail.of(() -> Clips.interval(Quantity.of(0, "m"), Quantity.of(0, "")));
   }
 
+  @Test
   public void testQuantityMixedUnitsFail() {
     AssertFail.of(() -> Clips.interval(Quantity.of(2, "m"), Quantity.of(3, "kg")));
   }
 
+  @Test
   public void testComplexFail() {
     AssertFail.of(() -> Clips.absolute(ComplexScalar.I));
   }

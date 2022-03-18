@@ -1,17 +1,23 @@
 // code by jph
 package ch.alpine.tensor;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Abs;
-import junit.framework.TestCase;
 
-public class TensorStreamTest extends TestCase {
+public class TensorStreamTest {
+  @Test
   public void testStream() {
     Tensor row = IdentityMatrix.of(5).stream().skip(2).findFirst().get();
     assertEquals(row, UnitVector.of(5, 2));
   }
 
+  @Test
   public void testReduction() {
     Tensor a = Tensors.vectorDouble(2., 1.123, 0.3123);
     assertTrue(a.flatten(-1) //
@@ -21,6 +27,7 @@ public class TensorStreamTest extends TestCase {
         .allMatch(d -> d > 0));
   }
 
+  @Test
   public void testNorm3() {
     Tensor a = Tensors.vectorLong(2, -3, 4, -1);
     double ods = a.flatten(0) //
@@ -33,6 +40,7 @@ public class TensorStreamTest extends TestCase {
     assertEquals(ods, 4.0);
   }
 
+  @Test
   public void testNorm4() {
     Tensor a = Tensors.vectorLong(2, -3, 4, -1);
     double ods = a.flatten(0) //
