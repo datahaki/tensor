@@ -102,8 +102,8 @@ public class FloorTest extends TestCase {
   }
 
   public void testNaN() {
-    Scalar scalar = Floor.FUNCTION.apply(DoubleScalar.INDETERMINATE);
-    assertTrue(Double.isNaN(scalar.number().doubleValue()));
+    assertTrue(Double.isNaN(Floor.FUNCTION.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
+    assertTrue(Double.isNaN(Floor._2.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
   }
 
   public void testDecimalPlacesP() {

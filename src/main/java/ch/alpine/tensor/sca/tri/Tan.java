@@ -13,7 +13,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * Tan[NaN] == NaN
  * </pre>
  * 
- * inspired by
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Tan.html">Tan</a>
  * 
  * @see ArcTan */

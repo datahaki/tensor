@@ -1,9 +1,6 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
-import java.math.BigDecimal;
-
-import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -19,6 +16,10 @@ import ch.alpine.tensor.qty.Quantity;
  * Floor[-8.2] == -9
  * </pre>
  * 
+ * <pre>
+ * Floor[NaN] == NaN
+ * </pre>
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Floor.html">Floor</a>
  * 
@@ -28,15 +29,15 @@ import ch.alpine.tensor.qty.Quantity;
 public enum Floor implements ScalarUnaryOperator {
   FUNCTION;
 
-  public static final ScalarUnaryOperator _1 = Floor.toMultipleOf(DecimalScalar.of(new BigDecimal("0.1")));
-  public static final ScalarUnaryOperator _2 = Floor.toMultipleOf(DecimalScalar.of(new BigDecimal("0.01")));
-  public static final ScalarUnaryOperator _3 = Floor.toMultipleOf(DecimalScalar.of(new BigDecimal("0.001")));
-  public static final ScalarUnaryOperator _4 = Floor.toMultipleOf(DecimalScalar.of(new BigDecimal("0.0001")));
-  public static final ScalarUnaryOperator _5 = Floor.toMultipleOf(DecimalScalar.of(new BigDecimal("0.00001")));
-  public static final ScalarUnaryOperator _6 = Floor.toMultipleOf(DecimalScalar.of(new BigDecimal("0.000001")));
-  public static final ScalarUnaryOperator _7 = Floor.toMultipleOf(DecimalScalar.of(new BigDecimal("0.0000001")));
-  public static final ScalarUnaryOperator _8 = Floor.toMultipleOf(DecimalScalar.of(new BigDecimal("0.00000001")));
-  public static final ScalarUnaryOperator _9 = Floor.toMultipleOf(DecimalScalar.of(new BigDecimal("0.000000001")));
+  public static final ScalarUnaryOperator _1 = Floor.toMultipleOf(StaticHelper._1);
+  public static final ScalarUnaryOperator _2 = Floor.toMultipleOf(StaticHelper._2);
+  public static final ScalarUnaryOperator _3 = Floor.toMultipleOf(StaticHelper._3);
+  public static final ScalarUnaryOperator _4 = Floor.toMultipleOf(StaticHelper._4);
+  public static final ScalarUnaryOperator _5 = Floor.toMultipleOf(StaticHelper._5);
+  public static final ScalarUnaryOperator _6 = Floor.toMultipleOf(StaticHelper._6);
+  public static final ScalarUnaryOperator _7 = Floor.toMultipleOf(StaticHelper._7);
+  public static final ScalarUnaryOperator _8 = Floor.toMultipleOf(StaticHelper._8);
+  public static final ScalarUnaryOperator _9 = Floor.toMultipleOf(StaticHelper._9);
 
   /** @param scalar instance if {@link RealScalar}
    * @return best integer scalar approximation to floor of scalar

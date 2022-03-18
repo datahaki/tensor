@@ -12,7 +12,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * ArcCosh[NaN] == NaN
  * </pre>
  * 
- * Reference:
+ * <p>Reference:
  * <a href="http://www.milefoot.com/math/complex/functionsofi.htm">functions of i</a>
  * 
  * <p>inspired by

@@ -154,8 +154,8 @@ public class RoundTest extends TestCase {
   }
 
   public void testNonFailNaN() {
-    Scalar scalar = Round.of(DoubleScalar.INDETERMINATE);
-    assertTrue(Double.isNaN(scalar.number().doubleValue()));
+    assertTrue(Double.isNaN(Round.of(DoubleScalar.INDETERMINATE).number().doubleValue()));
+    assertTrue(Double.isNaN(Round._2.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
   }
 
   public void testTypeFail() {

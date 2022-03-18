@@ -10,7 +10,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
  * Cos[NaN] == NaN
  * </pre>
  * 
- * Reference:
+ * <p>Reference:
  * <a href="http://www.milefoot.com/math/complex/functionsofi.htm">functions of i</a>
  * 
  * <p>inspired by

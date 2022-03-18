@@ -113,8 +113,8 @@ public class CeilingTest extends TestCase {
   }
 
   public void testNaN() {
-    Scalar scalar = Ceiling.of(DoubleScalar.INDETERMINATE);
-    assertTrue(Double.isNaN(scalar.number().doubleValue()));
+    assertTrue(Double.isNaN(Ceiling.of(DoubleScalar.INDETERMINATE).number().doubleValue()));
+    assertTrue(Double.isNaN(Ceiling._2.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
   }
 
   public void testQuantity() {
