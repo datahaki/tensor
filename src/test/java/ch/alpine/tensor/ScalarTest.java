@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Collections;
 
@@ -83,16 +82,12 @@ public class ScalarTest {
     assertFalse(Integer.valueOf(1233).equals(null));
   }
 
-  @SuppressWarnings("unused")
   @Test
   public void testIteratorFail() {
-    try {
+    assertThrows(Exception.class, () -> {
       for (Tensor entry : RealScalar.ZERO) {
-        // ---
+        entry.copy();
       }
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    });
   }
 }

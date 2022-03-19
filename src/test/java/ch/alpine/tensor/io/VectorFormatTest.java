@@ -2,7 +2,7 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -55,11 +55,6 @@ public class VectorFormatTest {
   public void testScalarFail() {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream(128);
     Tensor tensor = RealScalar.ONE;
-    try {
-      ExportHelper.of(Extension.VECTOR, tensor, outputStream);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> ExportHelper.of(Extension.VECTOR, tensor, outputStream));
   }
 }

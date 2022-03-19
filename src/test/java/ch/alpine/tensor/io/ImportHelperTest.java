@@ -3,6 +3,7 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayInputStream;
@@ -38,12 +39,7 @@ public class ImportHelperTest {
   @Test
   public void testExtensionMFail() {
     InputStream inputStream = new ByteArrayInputStream(new byte[128]);
-    try {
-      ImportHelper.of(new Filename("some.m"), inputStream);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> ImportHelper.of(new Filename("some.m"), inputStream));
   }
 
   @SuppressWarnings("null")

@@ -3,7 +3,6 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
@@ -111,13 +110,8 @@ public class QuantityAdditiveTest {
   @Test
   public void testPlusFail() {
     assertThrows(TensorRuntimeException.class, () -> Quantity.of(2, "m").add(Quantity.of(2, "kg")));
-    try {
-      _checkPlusSymmetry( //
-          Quantity.of(ComplexScalar.of(1, 2), "m"), //
-          Quantity.of(2, "kg"));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> _checkPlusSymmetry( //
+        Quantity.of(ComplexScalar.of(1, 2), "m"), //
+        Quantity.of(2, "kg")));
   }
 }

@@ -2,8 +2,8 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,25 +25,10 @@ public class DeleteDirectoryTest {
     folder.mkdir();
     File sample1_txt = new File(folder, "sample1.txt");
     sample1_txt.createNewFile();
-    try {
-      DeleteDirectory.of(sample1_txt, 2, 10);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> DeleteDirectory.of(sample1_txt, 2, 10));
     new File(folder, "sample2.txt").createNewFile();
-    try {
-      DeleteDirectory.of(folder, 0, 5);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
-    try {
-      DeleteDirectory.of(folder, 1, 2);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> DeleteDirectory.of(folder, 0, 5));
+    assertThrows(Exception.class, () -> DeleteDirectory.of(folder, 1, 2));
     DeleteDirectory deleteDirectory = DeleteDirectory.of(folder, 1, 3);
     assertEquals(deleteDirectory.fileCount(), 3);
     int reachedDepth = deleteDirectory.reachedDepth();
@@ -71,12 +56,7 @@ public class DeleteDirectoryTest {
     File sub = new File(folder, "sub");
     sub.mkdir();
     new File(sub, "content1.txt").createNewFile();
-    try {
-      DeleteDirectory.of(folder, 1, 10);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> DeleteDirectory.of(folder, 1, 10));
     DeleteDirectory deleteDirectory = DeleteDirectory.of(folder, 2, 5);
     assertEquals(deleteDirectory.fileCount(), 5);
   }
@@ -84,12 +64,7 @@ public class DeleteDirectoryTest {
   @Test
   public void testNotFound() {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "NotFound");
-    try {
-      DeleteDirectory.of(folder, 1, 10);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> DeleteDirectory.of(folder, 1, 10));
   }
 
   @Test

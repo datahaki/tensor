@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
 import java.util.List;
@@ -134,12 +133,7 @@ public class TensorTest {
   @Test
   public void testBlockSerFail() {
     Tensor tensor = Tensors.vectorLong(1, 2, 6).block(Arrays.asList(0), Arrays.asList(3));
-    try {
-      Serialization.copy(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Serialization.copy(tensor));
   }
 
   @Test

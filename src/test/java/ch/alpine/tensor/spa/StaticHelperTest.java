@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -165,12 +164,7 @@ public class StaticHelperTest {
   @Test
   public void testArraysAsListSerialization() throws ClassNotFoundException, IOException {
     Serialization.copy(Arrays.asList(3, 4, 5, 6));
-    try {
-      Serialization.copy(Arrays.asList(3, 4, 5, 6).subList(1, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Serialization.copy(Arrays.asList(3, 4, 5, 6).subList(1, 3)));
   }
 
   @Test
@@ -181,12 +175,7 @@ public class StaticHelperTest {
     list.add(5);
     list.add(6);
     Serialization.copy(list);
-    try {
-      Serialization.copy(list.subList(1, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Serialization.copy(list.subList(1, 3)));
   }
 
   @Test

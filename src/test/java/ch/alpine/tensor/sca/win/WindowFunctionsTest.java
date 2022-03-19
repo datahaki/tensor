@@ -4,7 +4,6 @@ package ch.alpine.tensor.sca.win;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 
@@ -66,12 +65,6 @@ public class WindowFunctionsTest {
   @EnumSource(WindowFunctions.class)
   public void testComplexFail(WindowFunctions windowFunction) {
     Scalar x = ComplexScalar.of(0.1, 0.2);
-    try {
-      windowFunction.get().apply(x);
-      System.out.println(windowFunction);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> windowFunction.get().apply(x));
   }
 }

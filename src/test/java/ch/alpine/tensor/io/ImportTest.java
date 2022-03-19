@@ -2,8 +2,8 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -68,12 +68,7 @@ public class ImportTest {
   @Test
   public void testCsvFail() {
     File file = new File("/io/doesnotexist.csv");
-    try {
-      Import.of(file);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Import.of(file));
   }
 
   @Test
@@ -163,24 +158,13 @@ public class ImportTest {
   @Test
   public void testUnknownFail() {
     File file = new File(getClass().getResource("/io/extension.unknown").getFile());
-    try {
-      Import.of(file);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(IllegalArgumentException.class, () -> Import.of(file));
   }
 
   @Test
   public void testUnknownObjectFail() {
     File file = new File("doesnotexist.fileext");
-    try {
-      Import.object(file);
-      fail();
-    } catch (Exception exception) {
-      // ---
-      assertTrue(exception instanceof IOException);
-    }
+    assertThrows(IOException.class, () -> Import.object(file));
   }
 
   @Test

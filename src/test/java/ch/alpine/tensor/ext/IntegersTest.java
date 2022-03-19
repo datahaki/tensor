@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
 
@@ -137,12 +136,7 @@ public class IntegersTest {
 
   @Test
   public void testRequireEqualsMessage() {
-    try {
-      Integers.requireEquals(3, 4);
-      fail();
-    } catch (Exception exception) {
-      assertEquals(exception.getMessage(), "3 != 4");
-    }
+    assertThrows(Exception.class, () -> Integers.requireEquals(3, 4));
   }
 
   @Test
@@ -163,22 +157,12 @@ public class IntegersTest {
 
   @Test
   public void testRequirePermutationMessage() {
-    try {
-      Integers.requirePermutation(new int[] { 0, 2 });
-      fail();
-    } catch (Exception exception) {
-      assertEquals(exception.getMessage(), "[0, 2]");
-    }
+    assertThrows(Exception.class, () -> Integers.requirePermutation(new int[] { 0, 2 }));
   }
 
   @Test
   public void testRequirePermutationLong() {
-    try {
-      Integers.requirePermutation(new int[20]);
-      fail();
-    } catch (Exception exception) {
-      assertEquals(exception.getMessage(), "");
-    }
+    assertThrows(Exception.class, () -> Integers.requirePermutation(new int[20]));
   }
 
   @Test

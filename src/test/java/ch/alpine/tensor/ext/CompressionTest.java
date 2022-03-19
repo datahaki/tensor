@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -46,12 +47,7 @@ public class CompressionTest {
 
   @Test
   public void testInflateEmpty2() {
-    try {
-      Compression.inflate(new byte[0]);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Compression.inflate(new byte[0]));
   }
 
   @Test
@@ -62,23 +58,13 @@ public class CompressionTest {
     comp[comp.length - 5] = (byte) (comp[comp.length - 5] - 23);
     comp[comp.length - 4] = (byte) (comp[comp.length - 4] - 23);
     comp[comp.length - 3] = (byte) (comp[comp.length - 3] - 23);
-    try {
-      Compression.inflate(comp);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Compression.inflate(comp));
   }
 
   @Test
   public void testInflateIncomplete() {
     byte[] bytes = createBytes(1000);
     byte[] comp = Compression.deflate(bytes);
-    try {
-      Compression.inflate(comp, 0, comp.length - 3);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Compression.inflate(comp, 0, comp.length - 3));
   }
 }

@@ -141,12 +141,7 @@ public class ChopTest {
   @Test
   public void testRequireCloseTensor() {
     Chop._03.requireClose(Tensors.vector(1, 2, 3.00001), Tensors.vector(1, 2.00001, 3));
-    try {
-      Chop._03.requireClose(Tensors.vector(1, 2, 3.00001), Tensors.vector(1, 2.01, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Chop._03.requireClose(Tensors.vector(1, 2, 3.00001), Tensors.vector(1, 2.01, 3)));
   }
 
   @Test

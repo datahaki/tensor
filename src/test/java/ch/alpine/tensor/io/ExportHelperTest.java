@@ -3,8 +3,8 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -63,12 +63,7 @@ public class ExportHelperTest {
   @Test
   public void testGzFail() {
     OutputStream outputStream = new ByteArrayOutputStream(512);
-    try {
-      ExportHelper.of(Extension.GZ, Tensors.empty(), outputStream);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> ExportHelper.of(Extension.GZ, Tensors.empty(), outputStream));
   }
 
   @Test

@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -21,6 +20,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.red.Total;
@@ -28,11 +28,7 @@ import ch.alpine.tensor.red.Total;
 public class UnitSystemTest {
   @Test
   public void testSize() {
-    int size = UnitSystem.SI().map().size();
-    if (size < 121) {
-      System.err.println("unit count: " + size);
-      fail();
-    }
+    Integers.requireLessEquals(463, UnitSystem.SI().map().size());
   }
 
   @Test
