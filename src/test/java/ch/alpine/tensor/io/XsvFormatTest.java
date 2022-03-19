@@ -16,6 +16,7 @@ import java.util.Random;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -27,7 +28,6 @@ import ch.alpine.tensor.ext.ReadLine;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.TestFile;
 
 public class XsvFormatTest {
   private static void convertCheck(Tensor A) {
@@ -45,13 +45,12 @@ public class XsvFormatTest {
   }
 
   @Test
-  public void testRandom() throws IOException {
-    File file = TestFile.withExtension("tsv");
+  public void testRandom(@TempDir File tempDir) throws IOException {
+    File file = new File(tempDir, "file.tsv");
     Tensor matrix = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), 6, 4);
     Export.of(file, matrix);
     Tensor result = Import.of(file);
     assertEquals(matrix, result);
-    file.delete();
   }
 
   @Test

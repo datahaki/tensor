@@ -1,8 +1,8 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -18,15 +18,15 @@ import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import ch.alpine.tensor.usr.TestFile;
 
 public class FilenameTest {
   @Test
-  public void testImageWriter() throws IOException {
-    File file = TestFile.withExtension("jpg");
+  public void testImageWriter(@TempDir File tempDir) throws IOException {
+    File file = new File(tempDir, "file.jpg");
     try (OutputStream outputStream = new FileOutputStream(file)) {
       Iterator<ImageWriter> iterator = ImageIO.getImageWritersByFormatName("jpeg");
       ImageWriter imageWriter = iterator.next();
@@ -41,8 +41,7 @@ public class FilenameTest {
         imageWriter.dispose();
       }
     }
-    file.delete();
-    assertFalse(file.exists());
+    assertTrue(file.exists());
   }
 
   @Test

@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -61,13 +63,10 @@ public class UnitTest {
     assertEquals(Unit.of("  "), Unit.ONE);
   }
 
-  @Test
-  public void testSeparators() {
-    assertEquals(Unit.of("*"), Unit.ONE);
-    assertEquals(Unit.of(" * "), Unit.ONE);
-    assertEquals(Unit.of("**"), Unit.ONE);
-    assertEquals(Unit.of("* * "), Unit.ONE);
-    assertEquals(Unit.of("  **  * "), Unit.ONE);
+  @ParameterizedTest
+  @ValueSource(strings = { "*", " * ", "**", "* * ", "  **  * " })
+  public void testSeparators(String string) {
+    assertEquals(Unit.of(string), Unit.ONE);
   }
 
   @Test
@@ -136,7 +135,7 @@ public class UnitTest {
 
   @Test
   public void testReference() {
-    assertTrue(Unit.of("m*s") == Unit.of("s*m"));
+    assertTrue(Unit.of("m*s*") == Unit.of("s*m"));
   }
 
   @Test
@@ -149,15 +148,10 @@ public class UnitTest {
     assertThrows(IllegalStateException.class, () -> Stream.concat(map1.entrySet().stream(), map2.entrySet().stream()).collect(COLLECTOR));
   }
 
-  @Test
-  public void testFail() {
-    assertThrows(IllegalArgumentException.class, () -> Unit.of(" m >"));
-    assertThrows(IllegalArgumentException.class, () -> Unit.of("| m "));
-    assertThrows(IllegalArgumentException.class, () -> Unit.of("|"));
-    assertThrows(IllegalArgumentException.class, () -> Unit.of("^"));
-    assertThrows(IllegalArgumentException.class, () -> Unit.of("unknown-seeManual"));
-    assertThrows(IllegalArgumentException.class, () -> Unit.of("a+b"));
-    assertThrows(IllegalArgumentException.class, () -> Unit.of("b=c"));
+  @ParameterizedTest
+  @ValueSource(strings = { " m >", "| m ", "|", "^", "unknown-seeManual", "a+b", "b=c" })
+  public void testFail(String string) {
+    assertThrows(IllegalArgumentException.class, () -> Unit.of(string));
   }
 
   @Test

@@ -8,13 +8,12 @@ import java.io.File;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
-
-import ch.alpine.tensor.usr.TestFile;
+import org.junit.jupiter.api.io.TempDir;
 
 public class AnimatedGifWriterTest {
   @Test
-  public void testColor() throws IOException {
-    File file = TestFile.withExtension("gif");
+  public void testColor(@TempDir File tempDir) throws IOException {
+    File file = new File(tempDir, "file.gif");
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
@@ -24,12 +23,12 @@ public class AnimatedGifWriterTest {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
     }
-    assertTrue(file.delete());
+    assertTrue(file.isFile());
   }
 
   @Test
-  public void testColorNonLoop() throws IOException {
-    File file = TestFile.withExtension("gif");
+  public void testColorNonLoop(@TempDir File tempDir) throws IOException {
+    File file = new File(tempDir, "file.gif");
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, false)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
@@ -39,26 +38,25 @@ public class AnimatedGifWriterTest {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
     }
-    assertTrue(file.delete());
+    assertTrue(file.isFile());
   }
 
   @Test
-  public void testGray() throws IOException {
-    File file = TestFile.withExtension("gif");
+  public void testGray(@TempDir File tempDir) throws IOException {
+    File file = new File(tempDir, "file.gif");
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_BYTE_GRAY));
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_BYTE_GRAY));
     }
-    assertTrue(file.delete());
+    assertTrue(file.isFile());
   }
 
   @Test
-  public void testEmpty() throws IOException {
-    File file = TestFile.withExtension("gif");
+  public void testEmpty(@TempDir File tempDir) throws IOException {
+    File file = new File(tempDir, "file.gif");
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
       // ---
     }
     assertTrue(file.isFile());
-    assertTrue(file.delete());
   }
 }

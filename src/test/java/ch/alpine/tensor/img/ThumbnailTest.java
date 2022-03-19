@@ -15,12 +15,12 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.ResourceData;
-import ch.alpine.tensor.usr.TestFile;
 
 public class ThumbnailTest {
   @Test
@@ -46,15 +46,13 @@ public class ThumbnailTest {
   }
 
   @Test
-  public void testAuGrayBufferedImage() throws IOException {
+  public void testAuGrayBufferedImage(@TempDir File tempDir) throws IOException {
     BufferedImage original = ResourceData.bufferedImage("/io/image/album_au_gray.jpg");
     BufferedImage expected = Thumbnail.of(original, 64);
-    File file = TestFile.withExtension("jpg");
+    File file = new File(tempDir, "file.jpg");
     assertFalse(file.exists());
     ImageIO.write(expected, "JPG", file);
     assertTrue(file.isFile());
-    file.delete();
-    assertFalse(file.exists());
   }
 
   @Test

@@ -8,20 +8,19 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.usr.TestFile;
 
 public class AnimationWriterTest {
   @Test
-  public void testColor() throws Exception {
-    File file = TestFile.withExtension("gif");
+  public void testColor(@TempDir File tempDir) throws Exception {
+    File file = new File(tempDir, "file.gif");
     try (AnimationWriter animationWriter = new GifAnimationWriter(file, 100, TimeUnit.MILLISECONDS)) {
       animationWriter.write(Array.zeros(3, 4));
       animationWriter.write(Array.zeros(3, 4));
     }
     assertTrue(file.isFile());
-    assertTrue(file.delete());
   }
 
   @Test

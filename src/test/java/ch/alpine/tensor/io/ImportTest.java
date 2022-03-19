@@ -13,6 +13,7 @@ import java.util.Properties;
 import java.util.zip.DataFormatException;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -24,7 +25,6 @@ import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.TestFile;
 
 public class ImportTest {
   private static final File IO_OBJECT = new File("src/test/resources/io/object");
@@ -88,35 +88,32 @@ public class ImportTest {
    * Import::of the file was not closed sufficiently fast to allow the deletion of
    * the file. */
   @Test
-  public void testCsvClosed() throws IOException {
-    File file = TestFile.withExtension("csv");
+  public void testCsvClosed(@TempDir File tempDir) throws IOException {
+    File file = new File(tempDir, "file.csv");
     Export.of(file, Tensors.fromString("{{1, 2}, {3, 4}}"));
     assertTrue(file.isFile());
     assertTrue(8 <= file.length());
     Import.of(file);
-    assertTrue(file.delete());
   }
 
   @Test
-  public void testImageClose() throws Exception {
+  public void testImageClose(@TempDir File tempDir) throws Exception {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4}}");
-    File file = TestFile.withExtension("png");
+    File file = new File(tempDir, "file.png");
     Export.of(file, tensor);
     assertTrue(file.isFile());
     Tensor image = Import.of(file);
     assertEquals(tensor, image);
-    assertTrue(file.delete());
   }
 
   @Test
-  public void testFolderCsvClosed() throws IOException {
-    File file = TestFile.withExtension("csv");
+  public void testFolderCsvClosed(@TempDir File tempDir) throws IOException {
+    File file = new File(tempDir, "file.csv");
     Export.of(file, Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}}"));
     assertTrue(file.isFile());
     assertTrue(12 <= file.length());
     Tensor table = Import.of(file);
     assertEquals(Dimensions.of(table), Arrays.asList(3, 2));
-    assertTrue(file.delete());
   }
 
   @Test
@@ -127,14 +124,13 @@ public class ImportTest {
   }
 
   @Test
-  public void testPngClose() throws Exception {
+  public void testPngClose(@TempDir File tempDir) throws Exception {
     Tensor tensor = ResourceData.of("/io/image/rgba15x33.png");
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
-    File file = TestFile.withExtension("png");
+    File file = new File(tempDir, "file.png");
     Export.of(file, tensor);
     assertTrue(file.isFile());
     Import.of(file);
-    assertTrue(file.delete());
   }
 
   @Test
@@ -188,12 +184,11 @@ public class ImportTest {
   }
 
   @Test
-  public void testTensor() throws Exception {
-    File file = TestFile.withExtension("object");
+  public void testTensor(@TempDir File tempDir) throws Exception {
+    File file = new File(tempDir, "file.object");
     Export.object(file, Tensors.vector(1, 2, 3, 4));
     Tensor vector = Import.object(file);
     assertEquals(vector, Tensors.vector(1, 2, 3, 4));
-    assertTrue(file.delete());
   }
 
   @Test

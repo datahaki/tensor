@@ -7,7 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.io.IOException;
 import java.util.Random;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -42,7 +45,8 @@ public class GramSchmidtTest {
     Chop._08.requireClose(pInv, Inverse.of(r).dot(qInv));
   }
 
-  @Test
+  @RepeatedTest(3)
+  // RepetitionInfo repetitionInfo
   public void testSimple() throws ClassNotFoundException, IOException {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 5, 4);
     QRDecomposition qrDecomposition = Serialization.copy(GramSchmidt.of(matrix));
@@ -146,28 +150,27 @@ public class GramSchmidtTest {
     }
   }
 
-  @Test
-  public void testPInv() {
+  @ParameterizedTest
+  @ValueSource(ints = { 0, 1, 2, 3, 4, 5 })
+  public void testPInv(int n) {
     Random random = new Random(1); // 5 yields sigma = {0,1,2}
-    for (int n = 0; n < 6; ++n) {
-      Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, 3 + n, 3);
-      int m = Unprotect.dimension1(matrix);
-      QRDecomposition qrDecomposi = QRDecomposition.of(matrix);
-      Tensor pinv = PseudoInverse.of(matrix);
-      Tolerance.CHOP.requireAllZero(qrDecomposi.getR().extract(m, qrDecomposi.getR().length()));
-      // System.out.println(Dimensions.of(qrDecomposi.getQConjugateTranspose()));
-      Tensor actu = qrDecomposi.pseudoInverse();
-      _checkPInv(pinv, qrDecomposi.getR().extract(0, m), qrDecomposi.getQConjugateTranspose().extract(0, m));
-      Tolerance.CHOP.requireClose(actu, pinv);
-      QRDecomposition gramSchmidt = GramSchmidt.of(matrix);
-      assertEquals(gramSchmidt.sigma().length, 3);
-      _checkPInv(pinv, gramSchmidt.getR(), gramSchmidt.getQConjugateTranspose());
-      Chop._08.requireClose(pinv, LinearSolve.of(gramSchmidt.getR(), gramSchmidt.getQConjugateTranspose()));
-      Chop._08.requireClose(pinv, gramSchmidt.pseudoInverse());
-      Tensor pinv1 = gramSchmidt.pseudoInverse();
-      Tensor pinv2 = PseudoInverse.of(SingularValueDecomposition.of(matrix));
-      pinv1.add(pinv2);
-    }
+    Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, 3 + n, 3);
+    int m = Unprotect.dimension1(matrix);
+    QRDecomposition qrDecomposi = QRDecomposition.of(matrix);
+    Tensor pinv = PseudoInverse.of(matrix);
+    Tolerance.CHOP.requireAllZero(qrDecomposi.getR().extract(m, qrDecomposi.getR().length()));
+    // System.out.println(Dimensions.of(qrDecomposi.getQConjugateTranspose()));
+    Tensor actu = qrDecomposi.pseudoInverse();
+    _checkPInv(pinv, qrDecomposi.getR().extract(0, m), qrDecomposi.getQConjugateTranspose().extract(0, m));
+    Tolerance.CHOP.requireClose(actu, pinv);
+    QRDecomposition gramSchmidt = GramSchmidt.of(matrix);
+    assertEquals(gramSchmidt.sigma().length, 3);
+    _checkPInv(pinv, gramSchmidt.getR(), gramSchmidt.getQConjugateTranspose());
+    Chop._08.requireClose(pinv, LinearSolve.of(gramSchmidt.getR(), gramSchmidt.getQConjugateTranspose()));
+    Chop._08.requireClose(pinv, gramSchmidt.pseudoInverse());
+    Tensor pinv1 = gramSchmidt.pseudoInverse();
+    Tensor pinv2 = PseudoInverse.of(SingularValueDecomposition.of(matrix));
+    pinv1.add(pinv2);
   }
 
   @Test

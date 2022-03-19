@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.zip.DataFormatException;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.ExactScalarQ;
@@ -22,7 +23,6 @@ import ch.alpine.tensor.io.Export;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.TestFile;
 
 public class ObjectFormatTest {
   @Test
@@ -85,12 +85,11 @@ public class ObjectFormatTest {
   }
 
   @Test
-  public void testExportImportObject() throws IOException, ClassNotFoundException, DataFormatException {
+  public void testExportImportObject(@TempDir File tempDir) throws IOException, ClassNotFoundException, DataFormatException {
     Tensor tensor = HilbertMatrix.of(3, 4);
-    File file = TestFile.withExtension("random");
+    File file = new File(tempDir, "file.random");
     Export.object(file, tensor);
     assertTrue(file.isFile());
     assertEquals(Import.object(file), tensor);
-    assertTrue(file.delete());
   }
 }
