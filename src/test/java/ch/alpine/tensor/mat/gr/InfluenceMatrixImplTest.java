@@ -75,26 +75,14 @@ public class InfluenceMatrixImplTest {
     Tensor influe = design.dot(PseudoInverse.of(design));
     {
       assertTrue(IdempotentQ.of(influe));
-      // System.out.println("IM=" + Pretty.of(influe.map(Round._2)));
       InfluenceMatrixQ.require(influe);
     }
     {
       InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
       Tolerance.CHOP.requireClose(influe, influenceMatrix.matrix());
-      // Tensor matrix = influenceMatrix.matrix();
-      // System.out.println("IM=" + Pretty.of(matrix.map(Round._2)));
+      Tensor matrix = influenceMatrix.matrix();
+      InfluenceMatrixQ.require(matrix);
     }
-    // InfluenceMatrix.of(Transpose.of(design));
-    // ... does not result in an influence matrix, since have mixed units
-    // {
-    // InfluenceMatrix influenceMatrix =
-    // Tensor matrix = influenceMatrix.matrix();
-    // System.out.println("IM=" + Pretty.of(matrix.map(Round._2)));
-    // InfluenceMatrixQ.require(matrix);
-    // System.out.println(Pretty.of(matrix.dot(matrix).map(Round._2)));
-    // assertTrue(IdempotentQ.of(matrix, Chop._07));
-    //
-    // }
   }
 
   @Test
@@ -113,7 +101,7 @@ public class InfluenceMatrixImplTest {
       SymmetricMatrixQ.require(influenceMatrix.matrix());
       assertEquals(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(m));
       String string = influenceMatrix.toString();
-      assertTrue(string.startsWith("InfluenceMatrix"));
+      assertTrue(string.startsWith("InfluenceMatrix["));
     }
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
     assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);
@@ -135,7 +123,7 @@ public class InfluenceMatrixImplTest {
       SymmetricMatrixQ.require(influenceMatrix.matrix());
       assertEquals(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(m));
       String string = influenceMatrix.toString();
-      assertTrue(string.startsWith("InfluenceMatrix"));
+      assertTrue(string.startsWith("InfluenceMatrix["));
     }
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
     assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);

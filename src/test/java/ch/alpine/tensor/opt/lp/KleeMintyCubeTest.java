@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
@@ -37,12 +39,11 @@ public class KleeMintyCubeTest {
     assertEquals(x, kleeMintyCube.x);
   }
 
-  @Test
-  public void testKleeMinty() {
-    for (int n = 1; n <= 5; ++n) {
-      _callKlee(n);
-      _callKleeN(n);
-    }
+  @RepeatedTest(5)
+  public void testKleeMinty(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    _callKlee(n);
+    _callKleeN(n);
   }
 
   @Test

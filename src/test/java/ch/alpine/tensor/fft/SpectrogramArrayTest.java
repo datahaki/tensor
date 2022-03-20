@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -80,16 +82,16 @@ public class SpectrogramArrayTest {
     assertThrows(IllegalArgumentException.class, () -> SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1"), BlackmanHarrisWindow.FUNCTION));
   }
 
-  @Test
-  public void testPreallocate() {
-    for (int windowLength = 1; windowLength < 8; ++windowLength)
-      for (int offset = 1; offset <= windowLength; ++offset) {
-        TensorUnaryOperator tensorUnaryOperator = SpectrogramArray.of(windowLength, offset);
-        for (int length = 10; length < 20; ++length) {
-          Tensor signal = Range.of(0, length);
-          tensorUnaryOperator.apply(signal);
-        }
+  @RepeatedTest(7)
+  public void testPreallocate(RepetitionInfo repetitionInfo) {
+    int windowLength = repetitionInfo.getCurrentRepetition();
+    for (int offset = 1; offset <= windowLength; ++offset) {
+      TensorUnaryOperator tensorUnaryOperator = SpectrogramArray.of(windowLength, offset);
+      for (int length = 10; length < 20; ++length) {
+        Tensor signal = Range.of(0, length);
+        tensorUnaryOperator.apply(signal);
       }
+    }
   }
 
   @Test

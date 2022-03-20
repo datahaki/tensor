@@ -9,6 +9,7 @@ import java.awt.Color;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
@@ -53,14 +54,13 @@ public class ColorDataListsTest {
     assertEquals(colorDataIndexed.apply(DoubleScalar.POSITIVE_INFINITY), Array.zeros(4));
   }
 
-  @Test
-  public void testDerive() {
+  @ParameterizedTest
+  @ValueSource(ints = { 0, 10, 128, 255 })
+  public void testDerive(int alpha) {
     ColorDataIndexed master = ColorDataLists._112.cyclic();
-    for (int alpha = 0; alpha < 256; ++alpha) {
-      ColorDataIndexed colorDataIndexed = master.deriveWithAlpha(alpha);
-      Color color = colorDataIndexed.getColor(3);
-      assertEquals(color.getAlpha(), alpha);
-    }
+    ColorDataIndexed colorDataIndexed = master.deriveWithAlpha(alpha);
+    Color color = colorDataIndexed.getColor(3);
+    assertEquals(color.getAlpha(), alpha);
   }
 
   @Test

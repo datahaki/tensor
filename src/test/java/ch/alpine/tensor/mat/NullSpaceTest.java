@@ -9,7 +9,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.Random;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.MachineNumberQ;
@@ -44,12 +48,11 @@ public class NullSpaceTest {
     assertEquals(nul, IdentityMatrix.of(n));
   }
 
-  @Test
-  public void testZerosUsingSvd() {
-    for (int n = 1; n < 10; ++n) {
-      _checkZeros(Array.zeros(n, n));
-      _checkZeros(N.DOUBLE.of(Array.zeros(n, n)));
-    }
+  @RepeatedTest(10)
+  public void testZerosUsingSvd(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    _checkZeros(Array.zeros(n, n));
+    _checkZeros(N.DOUBLE.of(Array.zeros(n, n)));
   }
 
   @Test
@@ -235,14 +238,13 @@ public class NullSpaceTest {
     assertThrows(TensorRuntimeException.class, () -> Det.of(matrix));
   }
 
-  @Test
-  public void testZeros() {
-    for (int d = 3; d < 6; ++d) {
-      Tensor matrix = Array.zeros(3, d);
-      Tensor id = IdentityMatrix.of(d);
-      assertEquals(id, NullSpace.of(matrix));
-      assertEquals(id, NullSpace.usingQR(matrix.map(N.DOUBLE)));
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 4, 5 })
+  public void testZeros(int d) {
+    Tensor matrix = Array.zeros(3, d);
+    Tensor id = IdentityMatrix.of(d);
+    assertEquals(id, NullSpace.of(matrix));
+    assertEquals(id, NullSpace.usingQR(matrix.map(N.DOUBLE)));
   }
 
   @Test

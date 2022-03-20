@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.File;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 public class RenameDirectoryTest {
-  private static boolean isLinux = System.getProperty("os.name").equals("Linux");
-
   private static void wrap(File src, File dst) {
     try {
       RenameDirectory.of(src, dst);
@@ -55,9 +55,8 @@ public class RenameDirectoryTest {
   }
 
   @Test
+  @EnabledOnOs(OS.LINUX)
   public void testRenameToFail() {
-    if (!isLinux)
-      return;
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();
@@ -67,9 +66,8 @@ public class RenameDirectoryTest {
   }
 
   @Test
+  @EnabledOnOs(OS.LINUX)
   public void testCreateParentFail() {
-    if (!isLinux)
-      return;
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();

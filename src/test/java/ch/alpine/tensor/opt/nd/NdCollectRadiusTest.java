@@ -11,6 +11,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -65,14 +67,13 @@ public class NdCollectRadiusTest {
     }
   }
 
-  @Test
-  public void testEmpty() {
-    for (NdCenters ndCenters : NdCenters.values()) {
-      NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2, 4.3));
-      Scalar radius = RealScalar.of(4);
-      NdCollectRadius<Object> ndCollectRadius = new NdCollectRadius<>(ndCenterInterface, radius);
-      assertTrue(ndCollectRadius.list().isEmpty());
-    }
+  @ParameterizedTest
+  @EnumSource(NdCenters.class)
+  public void testEmpty(NdCenters ndCenters) {
+    NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2, 4.3));
+    Scalar radius = RealScalar.of(4);
+    NdCollectRadius<Object> ndCollectRadius = new NdCollectRadius<>(ndCenterInterface, radius);
+    assertTrue(ndCollectRadius.list().isEmpty());
   }
 
   @Test

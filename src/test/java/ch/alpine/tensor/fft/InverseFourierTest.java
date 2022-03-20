@@ -3,6 +3,7 @@ package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -17,16 +18,15 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.red.Entrywise;
 
 public class InverseFourierTest {
-  @Test
+  @RepeatedTest(10)
   public void testRandom() {
     Distribution distribution = NormalDistribution.standard();
-    for (int n = 0; n < 7; ++n)
-      for (int count = 0; count < 10; ++count) {
-        Tensor vector = Entrywise.with(ComplexScalar::of).apply( //
-            RandomVariate.of(distribution, 1 << n), //
-            RandomVariate.of(distribution, 1 << n));
-        Tolerance.CHOP.requireClose(InverseFourier.of(Fourier.of(vector)), vector);
-      }
+    for (int n = 0; n < 7; ++n) {
+      Tensor vector = Entrywise.with(ComplexScalar::of).apply( //
+          RandomVariate.of(distribution, 1 << n), //
+          RandomVariate.of(distribution, 1 << n));
+      Tolerance.CHOP.requireClose(InverseFourier.of(Fourier.of(vector)), vector);
+    }
   }
 
   @Test

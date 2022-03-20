@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
@@ -37,14 +39,13 @@ public class ArrayQTest {
     assertFalse(ArrayQ.of(c));
   }
 
-  @Test
-  public void testOfRank() {
-    for (int rank = 0; rank < 5; ++rank) {
-      assertEquals(rank == 0, ArrayQ.ofRank(RealScalar.ONE, rank));
-      assertEquals(rank == 1, ArrayQ.ofRank(Tensors.vector(1, 2, 3), rank));
-      assertEquals(rank == 2, ArrayQ.ofRank(HilbertMatrix.of(2, 3), rank));
-      assertEquals(rank == 3, ArrayQ.ofRank(Array.zeros(3, 4, 5), rank));
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 0, 1, 2, 3, 4 })
+  public void testOfRank(int rank) {
+    assertEquals(rank == 0, ArrayQ.ofRank(RealScalar.ONE, rank));
+    assertEquals(rank == 1, ArrayQ.ofRank(Tensors.vector(1, 2, 3), rank));
+    assertEquals(rank == 2, ArrayQ.ofRank(HilbertMatrix.of(2, 3), rank));
+    assertEquals(rank == 3, ArrayQ.ofRank(Array.zeros(3, 4, 5), rank));
   }
 
   @Test

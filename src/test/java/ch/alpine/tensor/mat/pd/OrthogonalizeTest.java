@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -248,15 +250,14 @@ public class OrthogonalizeTest {
     }
   }
 
-  @Test
-  public void testMatrixExp() {
-    for (int d = 2; d < 5; ++d) {
-      Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
-      OrthogonalMatrixQ.require(matrix);
-      Tolerance.CHOP.requireClose(matrix, Orthogonalize.of(matrix));
-      Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingSvd(matrix));
-      Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingPD(matrix));
-    }
+  @RepeatedTest(4)
+  public void testMatrixExp(RepetitionInfo repetitionInfo) {
+    int d = repetitionInfo.getCurrentRepetition();
+    Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
+    OrthogonalMatrixQ.require(matrix);
+    Tolerance.CHOP.requireClose(matrix, Orthogonalize.of(matrix));
+    Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingSvd(matrix));
+    Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingPD(matrix));
   }
 
   @Test

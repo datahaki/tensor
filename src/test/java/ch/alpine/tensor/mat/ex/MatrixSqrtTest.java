@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
@@ -44,13 +46,12 @@ public class MatrixSqrtTest {
     Tolerance.CHOP.requireClose(matrixSqrt.sqrt(), Tensors.fromString("{{2, 2}, {0, 3}}"));
   }
 
-  @Test
-  public void testIdentity() {
-    for (int n = 1; n <= 5; ++n) {
-      Tensor x = IdentityMatrix.of(n);
-      _check(x, MatrixSqrt.of(x));
-      _check(x, MatrixSqrt.ofSymmetric(x));
-    }
+  @RepeatedTest(5)
+  public void testIdentity(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor x = IdentityMatrix.of(n);
+    _check(x, MatrixSqrt.of(x));
+    _check(x, MatrixSqrt.ofSymmetric(x));
   }
 
   @Test

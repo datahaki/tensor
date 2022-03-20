@@ -8,7 +8,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -35,25 +39,24 @@ import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.N;
 
 public class EigensystemTest {
-  @Test
-  public void testPhase1Tuning() throws IOException {
+  @RepeatedTest(12)
+  public void testPhase1Tuning(RepetitionInfo repetitionInfo) throws IOException {
     Distribution distribution = UniformDistribution.of(-2, 2);
-    for (int n = 1; n < 13; ++n) {
-      Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
-      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-      Tensor vectors = eigensystem.vectors();
-      Tensor values = eigensystem.values();
-      OrthogonalMatrixQ.require(vectors);
-      Tensor recons = Transpose.of(vectors).dot(Times.of(values, vectors));
-      Scalar err = MatrixInfinityNorm.of(matrix.subtract(recons));
-      if (!Tolerance.CHOP.isClose(matrix, recons)) {
-        System.err.println(err);
-        // System.err.println("error");
-        System.out.println("n=" + n);
-        System.out.println(matrix);
-        Export.of(HomeDirectory.file("eigensystem_fail_" + System.currentTimeMillis() + ".csv"), matrix);
-        fail();
-      }
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+    Tensor vectors = eigensystem.vectors();
+    Tensor values = eigensystem.values();
+    OrthogonalMatrixQ.require(vectors);
+    Tensor recons = Transpose.of(vectors).dot(Times.of(values, vectors));
+    Scalar err = MatrixInfinityNorm.of(matrix.subtract(recons));
+    if (!Tolerance.CHOP.isClose(matrix, recons)) {
+      System.err.println(err);
+      // System.err.println("error");
+      System.out.println("n=" + n);
+      System.out.println(matrix);
+      Export.of(HomeDirectory.file("eigensystem_fail_" + System.currentTimeMillis() + ".csv"), matrix);
+      fail();
     }
   }
 
@@ -73,29 +76,27 @@ public class EigensystemTest {
     }
   }
 
-  @Test
-  public void testQuantityLarge() {
-    for (int n = 8; n < 10; ++n) {
-      Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), n, n)).map(s -> Quantity.of(s, "m"));
-      Eigensystem eigensystem = Eigensystem.ofSymmetric(x);
-      eigensystem.values().map(QuantityMagnitude.singleton("m"));
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 8, 9 })
+  public void testQuantityLarge(int n) {
+    Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), n, n)).map(s -> Quantity.of(s, "m"));
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(x);
+    eigensystem.values().map(QuantityMagnitude.singleton("m"));
   }
 
-  @Test
-  public void testQuantityDegenerate() {
+  @ParameterizedTest
+  @ValueSource(ints = { 8, 9 })
+  public void testQuantityDegenerate(int n) {
     int r = 4;
-    for (int n = 8; n < 10; ++n) {
-      Tensor v = Join.of( //
-          RandomVariate.of(NormalDistribution.standard(), r), //
-          Array.zeros(n - 4)).map(s -> Quantity.of(s, "m"));
-      Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
-      Tensor matrix = Transpose.of(x).dot(Times.of(v, x));
-      // System.out.println(Pretty.of(matrix.map(Round._1)));
-      assertEquals(MatrixRank.of(matrix), r);
-      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-      eigensystem.values().map(QuantityMagnitude.singleton("m"));
-    }
+    Tensor v = Join.of( //
+        RandomVariate.of(NormalDistribution.standard(), r), //
+        Array.zeros(n - 4)).map(s -> Quantity.of(s, "m"));
+    Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
+    Tensor matrix = Transpose.of(x).dot(Times.of(v, x));
+    // System.out.println(Pretty.of(matrix.map(Round._1)));
+    assertEquals(MatrixRank.of(matrix), r);
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+    eigensystem.values().map(QuantityMagnitude.singleton("m"));
   }
 
   @Test

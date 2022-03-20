@@ -3,6 +3,7 @@ package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -46,18 +47,17 @@ public class FourierTest {
     Tolerance.CHOP.requireClose(backed, Tensors.vector(1, 0, 0, 2));
   }
 
-  @Test
+  @RepeatedTest(10)
   public void testRandom() {
     Distribution distribution = NormalDistribution.standard();
-    for (int n = 0; n < 7; ++n)
-      for (int count = 0; count < 10; ++count) {
-        Tensor vector = Entrywise.with(ComplexScalar::of).apply( //
-            RandomVariate.of(distribution, 1 << n), //
-            RandomVariate.of(distribution, 1 << n));
-        Tensor result = Fourier.of(vector);
-        Tensor dotmat = vector.dot(FourierMatrix.of(vector.length()));
-        Tolerance.CHOP.requireClose(dotmat, result);
-      }
+    for (int n = 0; n < 7; ++n) {
+      Tensor vector = Entrywise.with(ComplexScalar::of).apply( //
+          RandomVariate.of(distribution, 1 << n), //
+          RandomVariate.of(distribution, 1 << n));
+      Tensor result = Fourier.of(vector);
+      Tensor dotmat = vector.dot(FourierMatrix.of(vector.length()));
+      Tolerance.CHOP.requireClose(dotmat, result);
+    }
   }
 
   @Test

@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DecimalScalar;
@@ -114,18 +116,17 @@ public class JacobiMethodTest {
     }
   }
 
-  @Test
-  public void testZeros() {
-    for (int c = 1; c < 10; ++c) {
-      Tensor matrix = Array.zeros(c, c);
-      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-      checkEquation(matrix, eigensystem);
-      SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
-      Tensor values1 = Reverse.of(Sort.of(svd.values()));
-      Tensor values2 = Sort.of(svd.values(), TensorComparator.INSTANCE.reversed());
-      Tolerance.CHOP.requireClose(eigensystem.values(), values1);
-      assertEquals(values1, values2);
-    }
+  @RepeatedTest(9)
+  public void testZeros(RepetitionInfo repetitionInfo) {
+    int c = repetitionInfo.getCurrentRepetition();
+    Tensor matrix = Array.zeros(c, c);
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+    checkEquation(matrix, eigensystem);
+    SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
+    Tensor values1 = Reverse.of(Sort.of(svd.values()));
+    Tensor values2 = Sort.of(svd.values(), TensorComparator.INSTANCE.reversed());
+    Tolerance.CHOP.requireClose(eigensystem.values(), values1);
+    assertEquals(values1, values2);
   }
 
   @Test

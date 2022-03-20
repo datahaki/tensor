@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
@@ -19,18 +21,14 @@ import ch.alpine.tensor.alg.Reverse;
  * [ 0.0113 0.0838 0.0113 ]
  * ] */
 public class GaussianMatrixTest {
-  private static void _check(int n) {
+  @RepeatedTest(4)
+  public void testSmall(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = GaussianMatrix.of(n);
     int size = 2 * n + 1;
     assertEquals(Dimensions.of(matrix), Arrays.asList(size, size));
     assertTrue(SymmetricMatrixQ.of(matrix));
     assertEquals(Reverse.of(matrix), matrix);
-  }
-
-  @Test
-  public void testSmall() {
-    for (int index = 1; index < 5; ++index)
-      _check(index);
   }
 
   @Test

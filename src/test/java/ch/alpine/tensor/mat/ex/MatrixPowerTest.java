@@ -7,7 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.BitSet;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -122,26 +126,25 @@ public class MatrixPowerTest {
     Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
   }
 
-  @Test
-  public void testSymmetric() {
-    for (int n = 2; n < 10; ++n) {
-      Distribution distribution = NormalDistribution.standard();
-      Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
-      {
-        Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
-        SymmetricMatrixQ.require(sqrt);
-        Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
-      }
-      {
-        Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.of(1, 3));
-        SymmetricMatrixQ.require(sqrt);
-        Tolerance.CHOP.requireClose(sqrt.dot(sqrt).dot(sqrt), matrix);
-      }
-      {
-        Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.of(1, 4));
-        SymmetricMatrixQ.require(sqrt);
-        Tolerance.CHOP.requireClose(sqrt.dot(sqrt).dot(sqrt).dot(sqrt), matrix);
-      }
+  @RepeatedTest(9)
+  public void testSymmetric(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    Distribution distribution = NormalDistribution.standard();
+    Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
+    {
+      Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
+      SymmetricMatrixQ.require(sqrt);
+      Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
+    }
+    {
+      Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.of(1, 3));
+      SymmetricMatrixQ.require(sqrt);
+      Tolerance.CHOP.requireClose(sqrt.dot(sqrt).dot(sqrt), matrix);
+    }
+    {
+      Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.of(1, 4));
+      SymmetricMatrixQ.require(sqrt);
+      Tolerance.CHOP.requireClose(sqrt.dot(sqrt).dot(sqrt).dot(sqrt), matrix);
     }
   }
 
@@ -160,18 +163,17 @@ public class MatrixPowerTest {
     Tolerance.CHOP.requireClose(Imag.of(tensor), im);
   }
 
-  @Test
-  public void testGaussian() {
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 4, 5 })
+  public void testGaussian(int n) {
     int prime = 7879;
     Distribution distribution = DiscreteUniformDistribution.of(0, prime);
     Scalar one = GaussScalar.of(1, prime);
-    for (int n = 3; n < 6; ++n) {
-      Tensor matrix = RandomVariate.of(distribution, n, n).map(s -> GaussScalar.of(s.number().intValue(), prime));
-      Tensor result = MatrixPower.of(matrix, +343386231231234L);
-      Tensor revers = MatrixPower.of(matrix, -343386231231234L);
-      MatrixQ.requireSize(result, n, n);
-      assertEquals(DiagonalMatrix.of(n, one), Dot.of(result, revers));
-    }
+    Tensor matrix = RandomVariate.of(distribution, n, n).map(s -> GaussScalar.of(s.number().intValue(), prime));
+    Tensor result = MatrixPower.of(matrix, +343386231231234L);
+    Tensor revers = MatrixPower.of(matrix, -343386231231234L);
+    MatrixQ.requireSize(result, n, n);
+    assertEquals(DiagonalMatrix.of(n, one), Dot.of(result, revers));
   }
 
   @Test
