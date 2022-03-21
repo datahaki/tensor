@@ -34,14 +34,31 @@ import ch.alpine.tensor.Tensor;
    * @throws IOException */
   public static void of(Extension extension, Tensor tensor, OutputStream outputStream) throws IOException {
     switch (extension) {
-    case BMP, JPG -> ImageIO.write(ImageFormat.bgr(tensor), extension.name(), outputStream);
-    case CSV -> lines(XsvFormat.CSV.of(tensor), outputStream);
-    case M -> lines(MatlabExport.of(tensor), outputStream);
-    case MATHEMATICA -> Put.of(outputStream, tensor);
-    case GIF, PNG -> ImageIO.write(ImageFormat.of(tensor), extension.name(), outputStream);
-    case TSV -> lines(XsvFormat.TSV.of(tensor), outputStream);
-    case VECTOR -> lines(VectorFormat.of(tensor), outputStream);
-    default -> throw new UnsupportedOperationException(extension.name());
+    case BMP:
+    case JPG:
+      ImageIO.write(ImageFormat.bgr(tensor), extension.name(), outputStream);
+      break;
+    case CSV:
+      lines(XsvFormat.CSV.of(tensor), outputStream);
+      break;
+    case M:
+      lines(MatlabExport.of(tensor), outputStream);
+      break;
+    case MATHEMATICA:
+      Put.of(outputStream, tensor);
+      break;
+    case GIF:
+    case PNG:
+      ImageIO.write(ImageFormat.of(tensor), extension.name(), outputStream);
+      break;
+    case TSV:
+      lines(XsvFormat.TSV.of(tensor), outputStream);
+      break;
+    case VECTOR:
+      lines(VectorFormat.of(tensor), outputStream);
+      break;
+    default:
+      throw new UnsupportedOperationException(extension.name());
     }
   }
 

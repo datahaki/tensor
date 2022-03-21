@@ -60,10 +60,12 @@ public abstract class AbstractTensor implements Tensor {
 
   @Override // from Object
   public final boolean equals(Object object) {
-    if (object instanceof Tensor tensor && //
-        length() == tensor.length()) {
-      AtomicInteger i = new AtomicInteger();
-      return tensor.stream().allMatch(entry -> entry.equals(byRef(i.getAndIncrement())));
+    if (object instanceof Tensor) { //
+      Tensor tensor = (Tensor) object;
+      if (length() == tensor.length()) {
+        AtomicInteger i = new AtomicInteger();
+        return tensor.stream().allMatch(entry -> entry.equals(byRef(i.getAndIncrement())));
+      }
     }
     return false;
   }

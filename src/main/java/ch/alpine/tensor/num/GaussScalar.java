@@ -110,8 +110,8 @@ public class GaussScalar extends AbstractScalar implements //
   // ---
   @Override // from AbstractScalar
   protected GaussScalar plus(Scalar scalar) {
-    if (scalar instanceof GaussScalar gaussScalar)
-      return in(value.add(requireCommonPrime(gaussScalar)), prime);
+    if (scalar instanceof GaussScalar)
+      return in(value.add(requireCommonPrime((GaussScalar) scalar)), prime);
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -128,8 +128,8 @@ public class GaussScalar extends AbstractScalar implements //
 
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof GaussScalar gaussScalar)
-      return value.compareTo(requireCommonPrime(gaussScalar));
+    if (scalar instanceof GaussScalar)
+      return value.compareTo(requireCommonPrime((GaussScalar) scalar));
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -192,9 +192,12 @@ public class GaussScalar extends AbstractScalar implements //
 
   @Override // from AbstractScalar
   public boolean equals(Object object) {
-    return object instanceof GaussScalar gaussScalar //
-        && value.equals(gaussScalar.value) //
-        && prime.equals(gaussScalar.prime);
+    if (object instanceof GaussScalar) {
+      GaussScalar gaussScalar = (GaussScalar) object;
+      return value.equals(gaussScalar.value) //
+          && prime.equals(gaussScalar.prime);
+    }
+    return false;
   }
 
   @Override // from AbstractScalar

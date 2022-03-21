@@ -54,11 +54,14 @@ import ch.alpine.tensor.sca.tri.Sin;
 
   @Override // from Quaternion
   public Quaternion multiply(Scalar scalar) {
-    if (scalar instanceof Quaternion quaternion)
+    if (scalar instanceof Quaternion) {
+      Quaternion quaternion = (Quaternion) scalar;
       return new QuaternionImpl( //
           w.multiply(quaternion.w()).subtract(xyz.dot(quaternion.xyz())), //
           xyz.multiply(quaternion.w()).add(quaternion.xyz().multiply(w())).add(Cross.of(xyz, quaternion.xyz())));
-    if (scalar instanceof ComplexEmbedding complexEmbedding) {
+    }
+    if (scalar instanceof ComplexEmbedding) {
+      ComplexEmbedding complexEmbedding = (ComplexEmbedding) scalar;
       Scalar imag = complexEmbedding.imag();
       return multiply(new QuaternionImpl( //
           complexEmbedding.real(), //
@@ -91,8 +94,10 @@ import ch.alpine.tensor.sca.tri.Sin;
 
   @Override // from AbstractScalar
   protected Quaternion plus(Scalar scalar) {
-    if (scalar instanceof Quaternion quaternion)
+    if (scalar instanceof Quaternion) {
+      Quaternion quaternion = (Quaternion) scalar;
       return new QuaternionImpl(w.add(quaternion.w()), xyz.add(quaternion.xyz()));
+    }
     if (scalar instanceof RealScalar)
       return new QuaternionImpl(w.add(scalar), xyz);
     throw TensorRuntimeException.of(this, scalar);
@@ -246,11 +251,13 @@ import ch.alpine.tensor.sca.tri.Sin;
 
   @Override // from AbstractScalar
   public boolean equals(Object object) {
-    if (object instanceof Quaternion quaternion)
+    if (object instanceof Quaternion) {
+      Quaternion quaternion = (Quaternion) object;
       return w.equals(quaternion.w()) //
           && xyz.equals(quaternion.xyz());
-    if (object instanceof RealScalar scalar)
-      return w.equals(scalar) //
+    }
+    if (object instanceof RealScalar)
+      return w.equals(object) //
           && xyz.stream().map(Scalar.class::cast).allMatch(Scalars::isZero);
     return false;
   }

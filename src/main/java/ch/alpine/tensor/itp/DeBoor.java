@@ -18,8 +18,7 @@ import ch.alpine.tensor.ext.Integers;
  * @param degree
  * @param knots vector of length degree * 2
  * @param control points of length degree + 1 */
-public record DeBoor(BinaryAverage binaryAverage, int degree, Tensor knots, Tensor control) //
-    implements ScalarTensorFunction {
+public class DeBoor implements ScalarTensorFunction {
   /** @param binaryAverage non-null
    * @param knots vector of length degree * 2
    * @param control points of length degree + 1
@@ -32,6 +31,30 @@ public record DeBoor(BinaryAverage binaryAverage, int degree, Tensor knots, Tens
     if (Integers.isEven(length))
       return new DeBoor(Objects.requireNonNull(binaryAverage), degree, VectorQ.require(knots), control);
     throw TensorRuntimeException.of(knots, control);
+  }
+
+  private final BinaryAverage binaryAverage;
+  private final int degree;
+  private final Tensor knots;
+  private final Tensor control;
+
+  public DeBoor(BinaryAverage binaryAverage, int degree, Tensor knots, Tensor control) {
+    this.binaryAverage = binaryAverage;
+    this.degree = degree;
+    this.knots = knots;
+    this.control = control;
+  }
+
+  public int degree() {
+    return degree;
+  }
+
+  public Tensor knots() {
+    return knots;
+  }
+
+  public Tensor control() {
+    return control;
   }
 
   @Override

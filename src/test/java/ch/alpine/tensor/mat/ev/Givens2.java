@@ -8,7 +8,21 @@ import ch.alpine.tensor.mat.ev.JacobiComplex.GivensComplex;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
 
-record Givens2(int n, Scalar theta1, Scalar theta2, int p, int q) {
+class Givens2 {
+  private final int n;
+  private final Scalar theta1;
+  private final Scalar theta2;
+  private final int p;
+  private final int q;
+
+  Givens2(int n, Scalar theta1, Scalar theta2, int p, int q) {
+    this.n = n;
+    this.theta1 = theta1;
+    this.theta2 = theta2;
+    this.p = p;
+    this.q = q;
+  }
+
   public Tensor matrix() {
     Chop.NONE.requireZero(Imag.FUNCTION.apply(theta1));
     Chop.NONE.requireZero(Imag.FUNCTION.apply(theta2));

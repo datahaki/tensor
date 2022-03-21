@@ -14,8 +14,8 @@ public enum QuantityUnit {
    * @return unit associated with the specified scalar
    * @throws Exception if given scalar is null */
   public static Unit of(Scalar scalar) {
-    if (scalar instanceof Quantity quantity)
-      return quantity.unit();
+    if (scalar instanceof Quantity)
+      return ((Quantity) scalar).unit();
     Objects.requireNonNull(scalar);
     return Unit.ONE;
   }

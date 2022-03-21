@@ -25,8 +25,8 @@ public enum Abs implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof AbsInterface absInterface)
-      return absInterface.abs();
+    if (scalar instanceof AbsInterface)
+      return ((AbsInterface) scalar).abs();
     throw TensorRuntimeException.of(scalar);
   }
 

@@ -37,10 +37,10 @@ public class DateTimeScalar extends AbstractScalar implements ExactScalarQInterf
 
   @Override // from AbstractScalar
   public Scalar subtract(Tensor tensor) {
-    if (tensor instanceof DateTimeScalar dateTimeScalar)
-      return new DurationScalar(Duration.between(dateTimeScalar.localDateTime, localDateTime));
-    if (tensor instanceof DurationScalar durationScalar)
-      return new DateTimeScalar(localDateTime.minus(durationScalar.duration()));
+    if (tensor instanceof DateTimeScalar)
+      return new DurationScalar(Duration.between(((DateTimeScalar) tensor).localDateTime, localDateTime));
+    if (tensor instanceof DurationScalar)
+      return new DateTimeScalar(localDateTime.minus(((DurationScalar) tensor).duration()));
     throw TensorRuntimeException.of(this, tensor);
   }
 
@@ -78,8 +78,8 @@ public class DateTimeScalar extends AbstractScalar implements ExactScalarQInterf
 
   @Override // from Scalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof DurationScalar durationScalar)
-      return new DateTimeScalar(localDateTime.plus(durationScalar.duration()));
+    if (scalar instanceof DurationScalar)
+      return new DateTimeScalar(localDateTime.plus(((DurationScalar) scalar).duration()));
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -90,8 +90,8 @@ public class DateTimeScalar extends AbstractScalar implements ExactScalarQInterf
 
   @Override // from Comparable
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof DateTimeScalar dateTimeScalar)
-      return localDateTime.compareTo(dateTimeScalar.localDateTime);
+    if (scalar instanceof DateTimeScalar)
+      return localDateTime.compareTo(((DateTimeScalar) scalar).localDateTime);
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -102,8 +102,8 @@ public class DateTimeScalar extends AbstractScalar implements ExactScalarQInterf
 
   @Override // from Object
   public boolean equals(Object object) {
-    return object instanceof DateTimeScalar dateTimeScalar //
-        && localDateTime.equals(dateTimeScalar.localDateTime);
+    return object instanceof DateTimeScalar //
+        && localDateTime.equals(((DateTimeScalar) object).localDateTime);
   }
 
   @Override // from Object

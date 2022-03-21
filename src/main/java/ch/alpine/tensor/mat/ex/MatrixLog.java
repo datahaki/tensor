@@ -44,11 +44,14 @@ public enum MatrixLog {
    * @return
    * @throws Exception if computation is not supported for given matrix */
   public static Tensor of(Tensor matrix) {
-    return switch (matrix.length()) {
-    case 1 -> MatrixLog1.of(matrix);
-    case 2 -> MatrixLog2.of(matrix);
-    default -> _of(matrix);
-    };
+    switch (matrix.length()) {
+    case 1:
+      return MatrixLog1.of(matrix);
+    case 2:
+      return MatrixLog2.of(matrix);
+    default:
+      return _of(matrix);
+    }
   }
 
   @PackageTestAccess

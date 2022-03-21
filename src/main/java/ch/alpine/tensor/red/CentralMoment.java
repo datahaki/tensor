@@ -42,13 +42,17 @@ public enum CentralMoment {
    * @return central moment of given distribution and order
    * @throws Exception if order is negative */
   public static Scalar of(Distribution distribution, int order) {
-    if (distribution instanceof CentralMomentInterface centralMomentInterface)
-      return centralMomentInterface.centralMoment(Integers.requirePositiveOrZero(order));
-    return switch (order) {
-    case 0 -> RealScalar.ONE;
-    case 1 -> Mean.of(distribution).zero();
-    case 2 -> Variance.of(distribution);
-    default -> throw new UnsupportedOperationException();
-    };
+    if (distribution instanceof CentralMomentInterface)
+      return ((CentralMomentInterface) distribution).centralMoment(Integers.requirePositiveOrZero(order));
+    switch (order) {
+    case 0:
+      return RealScalar.ONE;
+    case 1:
+      return Mean.of(distribution).zero();
+    case 2:
+      return Variance.of(distribution);
+    default:
+      throw new UnsupportedOperationException();
+    }
   }
 }

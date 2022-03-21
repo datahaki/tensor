@@ -123,8 +123,10 @@ import ch.alpine.tensor.sca.tri.Sinh;
   // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof ComplexEmbedding z)
+    if (scalar instanceof ComplexEmbedding) {
+      ComplexEmbedding z = (ComplexEmbedding) scalar;
       return of(re.add(z.real()), im.add(z.imag()));
+    }
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -275,9 +277,12 @@ import ch.alpine.tensor.sca.tri.Sinh;
 
   @Override // from AbstractScalar
   public boolean equals(Object object) {
-    return object instanceof ComplexEmbedding z //
-        && re.equals(z.real()) //
-        && im.equals(z.imag());
+    if (object instanceof ComplexEmbedding) {
+      ComplexEmbedding z = (ComplexEmbedding) object;
+      return re.equals(z.real()) //
+          && im.equals(z.imag());
+    }
+    return false;
   }
 
   @Override // from AbstractScalar

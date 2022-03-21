@@ -24,8 +24,8 @@ public enum Kurtosis {
   /** @param distribution
    * @return CentralMoment[pdf, 4] / CentralMoment[pdf, 2]^2 */
   public static Scalar of(Distribution distribution) {
-    if (distribution instanceof KurtosisInterface kurtosisInterface)
-      return kurtosisInterface.kurtosis();
+    if (distribution instanceof KurtosisInterface)
+      return ((KurtosisInterface) distribution).kurtosis();
     Scalar variance = Variance.of(distribution);
     return CentralMoment.of(distribution, 4).divide(variance).divide(variance);
   }

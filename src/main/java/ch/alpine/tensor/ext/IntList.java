@@ -197,9 +197,12 @@ import java.util.stream.Stream;
 
   @Override // from List
   public boolean equals(Object object) {
-    if (object instanceof List<?> list && list.size() == len) {
-      AtomicInteger atomicInteger = new AtomicInteger(ofs);
-      return list.stream().allMatch(value -> value.equals(array[atomicInteger.getAndIncrement()]));
+    if (object instanceof List<?>) {
+      List<?> list = (List<?>) object;
+      if (list.size() == len) {
+        AtomicInteger atomicInteger = new AtomicInteger(ofs);
+        return list.stream().allMatch(value -> value.equals(array[atomicInteger.getAndIncrement()]));
+      }
     }
     return false;
   }

@@ -10,9 +10,21 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-record Givens1(int n, Scalar theta, int p, int q) {
+class Givens1 {
+  private final int n;
+  private final Scalar theta;
+  private final int p;
+  private final int q;
+
+  Givens1(int n, Scalar theta, int p, int q) {
+    this.n = n;
+    this.theta = theta;
+    this.p = p;
+    this.q = q;
+  }
 
   private static final Scalar SQRT2 = Sqrt.FUNCTION.apply(RealScalar.TWO);
+
   public Tensor matrix() {
     Chop.NONE.requireZero(Imag.FUNCTION.apply(theta));
     Tensor tensor = IdentityMatrix.of(n);

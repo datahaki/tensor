@@ -63,10 +63,10 @@ public class FullCorrelate implements TensorUnaryOperator {
         .mapToObj(Integers::requirePositive) //
         .collect(Collectors.toList());
     return Array.of(index -> {
-      List<Integer> kofs = IntStream.range(0, index.size()).mapToObj(i -> Math.max(0, mask.get(i) - 1 - index.get(i))).toList();
-      List<Integer> tofs = IntStream.range(0, index.size()).mapToObj(i -> Math.max(0, index.get(i) - mask.get(i) + 1)).toList();
+      List<Integer> kofs = IntStream.range(0, index.size()).mapToObj(i -> Math.max(0, mask.get(i) - 1 - index.get(i))).collect(Collectors.toList());
+      List<Integer> tofs = IntStream.range(0, index.size()).mapToObj(i -> Math.max(0, index.get(i) - mask.get(i) + 1)).collect(Collectors.toList());
       List<Integer> widt = IntStream.range(0, index.size()) //
-          .mapToObj(i -> Math.min(mask.get(i) - kofs.get(i), size.get(i) - tofs.get(i))).toList();
+          .mapToObj(i -> Math.min(mask.get(i) - kofs.get(i), size.get(i) - tofs.get(i))).collect(Collectors.toList());
       return Times.of(kernel.block(kofs, widt), tensor.block(tofs, widt)).flatten(level) //
           .reduce(Tensor::add).orElseThrow();
     }, dimensions);

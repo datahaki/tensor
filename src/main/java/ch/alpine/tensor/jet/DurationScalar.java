@@ -79,15 +79,15 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from AbstractScalar
   public Scalar divide(Scalar scalar) {
-    return scalar instanceof DurationScalar durationScalar //
-        ? seconds().divide(durationScalar.seconds())
+    return scalar instanceof DurationScalar //
+        ? seconds().divide(((DurationScalar) scalar).seconds())
         : fromSeconds(seconds().divide(scalar));
   }
 
   @Override // from AbstractScalar
   public Scalar under(Scalar scalar) {
-    if (scalar instanceof DurationScalar durationScalar)
-      return durationScalar.seconds().divide(seconds());
+    if (scalar instanceof DurationScalar)
+      return ((DurationScalar) scalar).seconds().divide(seconds());
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -118,8 +118,8 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof DurationScalar durationScalar)
-      return new DurationScalar(duration.plus(durationScalar.duration));
+    if (scalar instanceof DurationScalar)
+      return new DurationScalar(duration.plus(((DurationScalar) scalar).duration));
     if (scalar instanceof DateTimeScalar)
       return scalar.add(this);
     throw TensorRuntimeException.of(this, scalar);
@@ -149,8 +149,8 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from Comparable
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof DurationScalar durationScalar)
-      return duration.compareTo(durationScalar.duration);
+    if (scalar instanceof DurationScalar)
+      return duration.compareTo(((DurationScalar) scalar).duration);
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -170,8 +170,8 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from Object
   public boolean equals(Object object) {
-    return object instanceof DurationScalar durationScalar //
-        && duration.equals(durationScalar.duration);
+    return object instanceof DurationScalar //
+        && duration.equals(((DurationScalar) object).duration);
   }
 
   @Override // from Object

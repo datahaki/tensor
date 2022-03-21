@@ -31,7 +31,8 @@ public class TruncatedDistribution implements Distribution, //
     RandomVariateInterface rvin = (RandomVariateInterface) Objects.requireNonNull(distribution);
     if (Scalars.isZero(clip.width()))
       return DiracDeltaDistribution.of(clip.min());
-    if (distribution instanceof UnivariateDistribution univariateDistribution) {
+    if (distribution instanceof UnivariateDistribution) {
+      UnivariateDistribution univariateDistribution = (UnivariateDistribution) distribution;
       Clip clip_cdf = Clips.interval( //
           univariateDistribution.p_lessThan(clip.min()), //
           univariateDistribution.p_lessEquals(clip.max()));

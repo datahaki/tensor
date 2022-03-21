@@ -78,8 +78,8 @@ public enum Unprotect {
    * @return
    * @throws Exception if given scalar is null */
   public static Scalar withoutUnit(Scalar scalar) {
-    return scalar instanceof Quantity quantity //
-        ? quantity.value()
+    return scalar instanceof Quantity //
+        ? ((Quantity) scalar).value()
         : Objects.requireNonNull(scalar);
   }
 

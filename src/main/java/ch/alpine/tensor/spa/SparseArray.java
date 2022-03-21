@@ -197,7 +197,8 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor add(Tensor tensor) {
-    if (tensor instanceof SparseArray sparseArray) {
+    if (tensor instanceof SparseArray) {
+      SparseArray sparseArray = (SparseArray) tensor;
       Integers.requireEquals(length(), tensor.length());
       return new SparseArray(fallback.add(sparseArray.fallback), size, //
           Stream.concat(navigableMap.keySet().stream(), sparseArray.navigableMap.keySet().stream()) //
@@ -208,7 +209,8 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor subtract(Tensor tensor) {
-    if (tensor instanceof SparseArray sparseArray) {
+    if (tensor instanceof SparseArray) {
+      SparseArray sparseArray = (SparseArray) tensor;
       Integers.requireEquals(length(), tensor.length());
       return new SparseArray(fallback.subtract(sparseArray.fallback), size, //
           Stream.concat(navigableMap.keySet().stream(), sparseArray.navigableMap.keySet().stream()) //
@@ -231,8 +233,8 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor dot(Tensor tensor) {
-    Scalar dot_fallback = tensor instanceof SparseArray sparseArray //
-        ? fallback.multiply(sparseArray.fallback())
+    Scalar dot_fallback = tensor instanceof SparseArray //
+        ? fallback.multiply(((SparseArray) tensor).fallback())
         : fallback;
     if (size.size() == 1) {
       List<Integer> rest = Lists.rest(Dimensions.of(tensor));
@@ -339,7 +341,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   private SparseArray trim() {
     navigableMap.values().removeIf(1 < size.size() //
-        ? tensor -> tensor instanceof SparseArray sparseArray && sparseArray.navigableMap.isEmpty()
+        ? tensor -> tensor instanceof SparseArray && ((SparseArray) tensor).navigableMap.isEmpty()
         : fallback::equals);
     return this;
   }

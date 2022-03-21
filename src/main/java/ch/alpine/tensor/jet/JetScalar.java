@@ -88,8 +88,8 @@ public class JetScalar extends AbstractScalar implements //
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    return scalar instanceof JetScalar jetScalar //
-        ? new JetScalar(StaticHelper.product(vector, jetScalar.vector))
+    return scalar instanceof JetScalar //
+        ? new JetScalar(StaticHelper.product(vector, ((JetScalar) scalar).vector))
         : new JetScalar(vector.multiply(scalar));
   }
 
@@ -120,8 +120,8 @@ public class JetScalar extends AbstractScalar implements //
 
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof JetScalar jetScalar)
-      return new JetScalar(vector.add(jetScalar.vector));
+    if (scalar instanceof JetScalar)
+      return new JetScalar(vector.add(((JetScalar) scalar).vector));
     Tensor result = vector.copy();
     result.set(scalar::add, 0); // this + constant scalar
     return new JetScalar(result);
@@ -202,8 +202,8 @@ public class JetScalar extends AbstractScalar implements //
 
   @Override // from Comparable
   public int compareTo(Scalar scalar) {
-    return scalar instanceof JetScalar jetScalar //
-        ? TensorComparator.INSTANCE.compare(vector, jetScalar.vector)
+    return scalar instanceof JetScalar //
+        ? TensorComparator.INSTANCE.compare(vector, ((JetScalar) scalar).vector)
         : TensorComparator.INSTANCE.compare(vector, Join.of(Tensors.of(scalar), Array.zeros(vector.length() - 1)));
   }
 
@@ -215,8 +215,8 @@ public class JetScalar extends AbstractScalar implements //
 
   @Override
   public boolean equals(Object object) {
-    return object instanceof JetScalar jetScalar //
-        && vector.equals(jetScalar.vector);
+    return object instanceof JetScalar //
+        && vector.equals(((JetScalar) object).vector);
   }
 
   @Override

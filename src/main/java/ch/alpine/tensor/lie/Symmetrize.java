@@ -25,16 +25,20 @@ public enum Symmetrize {
    * @throws Exception if given tensor does not have regular dimensions */
   public static Tensor of(Tensor tensor) {
     int rank = TensorRank.ofArray(tensor);
-    return switch (rank) {
-    case 0 -> tensor; // scalar
-    case 1 -> tensor.copy(); // vector
-    case 2 -> _01(tensor); // matrix
-    default -> Permutations.stream(Range.of(0, rank)) //
-        .map(permutation -> Transpose.of(tensor, Primitives.toIntArray(permutation))) //
-        .reduce(Tensor::add) //
-        .orElseThrow() //
-        .divide(Factorial.of(rank));
-    };
+    switch (rank) {
+    case 0:
+      return tensor; // scalar
+    case 1:
+      return tensor.copy(); // vector
+    case 2:
+      return _01(tensor); // matrix
+    default:
+      return Permutations.stream(Range.of(0, rank)) //
+          .map(permutation -> Transpose.of(tensor, Primitives.toIntArray(permutation))) //
+          .reduce(Tensor::add) //
+          .orElseThrow() //
+          .divide(Factorial.of(rank));
+    }
   }
 
   /** @param tensor of rank at least 2

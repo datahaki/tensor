@@ -44,8 +44,8 @@ public enum Ceiling implements ScalarUnaryOperator {
    * @throws TensorRuntimeException if scalar is Infinity, or NaN */
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof RoundingInterface roundingInterface)
-      return roundingInterface.ceiling();
+    if (scalar instanceof RoundingInterface)
+      return ((RoundingInterface) scalar).ceiling();
     throw TensorRuntimeException.of(scalar);
   }
 

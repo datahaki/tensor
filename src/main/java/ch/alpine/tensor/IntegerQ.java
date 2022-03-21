@@ -21,8 +21,8 @@ public enum IntegerQ {
   /** @param scalar
    * @return true, if given scalar is instance of {@link RationalScalar} with denominator == 1 */
   public static boolean of(Scalar scalar) {
-    return Objects.requireNonNull(scalar) instanceof RationalScalar rationalScalar //
-        && rationalScalar.isInteger();
+    return Objects.requireNonNull(scalar) instanceof RationalScalar //
+        && ((RationalScalar) scalar).isInteger();
   }
 
   /** @param scalar

@@ -26,8 +26,8 @@ public interface CDF {
    * @return cumulative distribution function
    * @throws Exception if distribution does not support the computation of the CDF */
   static CDF of(Distribution distribution) {
-    if (distribution instanceof CDF cdf)
-      return cdf;
+    if (distribution instanceof CDF)
+      return (CDF) distribution;
     Objects.requireNonNull(distribution);
     throw new IllegalArgumentException(distribution.getClass().getName());
   }

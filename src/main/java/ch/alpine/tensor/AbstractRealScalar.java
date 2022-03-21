@@ -94,8 +94,8 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
     if (Scalars.isZero(this)) {
       if (Scalars.isZero(exponent))
         return ONE; // Mathematica evaluates 0^0 as Indeterminate
-      if (exponent instanceof ComplexEmbedding complexEmbedding)
-        if (Sign.isPositive(complexEmbedding.real()))
+      if (exponent instanceof ComplexEmbedding)
+        if (Sign.isPositive(((ComplexEmbedding) exponent).real()))
           return zero();
       throw TensorRuntimeException.of(this, exponent);
     }

@@ -2,7 +2,7 @@
 
 # ch.alpine.tensor
 
-Library for tensor computations in Java 17, version `1.0.6`.
+Library for tensor computations in Java 11, version `1.0.5-jdk-11`.
 
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions

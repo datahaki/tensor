@@ -17,8 +17,8 @@ public enum Sqrt implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof SqrtInterface sqrtInterface)
-      return sqrtInterface.sqrt();
+    if (scalar instanceof SqrtInterface)
+      return ((SqrtInterface) scalar).sqrt();
     throw TensorRuntimeException.of(scalar);
   }
 

@@ -21,8 +21,8 @@ public enum Log implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof LogInterface logInterface)
-      return logInterface.log();
+    if (scalar instanceof LogInterface)
+      return ((LogInterface) scalar).log();
     throw TensorRuntimeException.of(scalar);
   }
 

@@ -18,8 +18,8 @@ public enum Imag implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof ComplexEmbedding complexEmbedding)
-      return complexEmbedding.imag();
+    if (scalar instanceof ComplexEmbedding)
+      return ((ComplexEmbedding) scalar).imag();
     throw TensorRuntimeException.of(scalar);
   }
 

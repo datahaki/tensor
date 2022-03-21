@@ -74,7 +74,8 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    if (scalar instanceof DecimalScalar decimalScalar) {
+    if (scalar instanceof DecimalScalar) {
+      DecimalScalar decimalScalar = (DecimalScalar) scalar;
       MathContext mathContext = hint(decimalScalar);
       BigDecimal bigDecimal = value.multiply(decimalScalar.number(), mathContext);
       return new DecimalScalar(bigDecimal, mathContext.getPrecision());
@@ -86,26 +87,28 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from Scalar
   public Scalar divide(Scalar scalar) {
-    if (scalar instanceof DecimalScalar decimalScalar) {
+    if (scalar instanceof DecimalScalar) {
+      DecimalScalar decimalScalar = (DecimalScalar) scalar;
       MathContext mathContext = hint(decimalScalar);
       BigDecimal bigDecimal = value.divide(decimalScalar.number(), mathContext);
       return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
-    if (scalar instanceof RationalScalar rationalScalar)
-      return times(rationalScalar.reciprocal());
+    if (scalar instanceof RationalScalar)
+      return times(((RationalScalar) scalar).reciprocal());
     return scalar.under(this);
   }
 
   @Override // from Scalar
   public Scalar under(Scalar scalar) {
-    if (scalar instanceof DecimalScalar decimalScalar) {
+    if (scalar instanceof DecimalScalar) {
+      DecimalScalar decimalScalar = (DecimalScalar) scalar;
       MathContext mathContext = hint(decimalScalar);
       BigDecimal bigDecimal = decimalScalar.number().divide(value, mathContext);
       return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
-    if (scalar instanceof RationalScalar rationalScalar) {
+    if (scalar instanceof RationalScalar) {
       MathContext mathContext = mathContext();
-      BigDecimal bigDecimal = rationalScalar.toBigDecimal(mathContext).divide(value, mathContext);
+      BigDecimal bigDecimal = ((RationalScalar) scalar).toBigDecimal(mathContext).divide(value, mathContext);
       return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
     return scalar.divide(this);
@@ -148,14 +151,15 @@ public class DecimalScalar extends AbstractRealScalar implements //
   // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof DecimalScalar decimalScalar) {
+    if (scalar instanceof DecimalScalar) {
+      DecimalScalar decimalScalar = (DecimalScalar) scalar;
       MathContext mathContext = hint(decimalScalar);
       BigDecimal bigDecimal = value.add(decimalScalar.number(), mathContext);
       return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
-    if (scalar instanceof RationalScalar rationalScalar) {
+    if (scalar instanceof RationalScalar) {
       MathContext mathContext = mathContext();
-      BigDecimal bigDecimal = value.add(rationalScalar.toBigDecimal(mathContext));
+      BigDecimal bigDecimal = value.add(((RationalScalar) scalar).toBigDecimal(mathContext));
       return new DecimalScalar(bigDecimal, mathContext.getPrecision());
     }
     return scalar.add(this);
@@ -179,8 +183,8 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
-    if (scalar instanceof DecimalScalar decimalScalar)
-      return value.compareTo(decimalScalar.number());
+    if (scalar instanceof DecimalScalar)
+      return value.compareTo(((DecimalScalar) scalar).number());
     @SuppressWarnings("unchecked")
     Comparable<Scalar> comparable = (Comparable<Scalar>) N.in(precision).apply(scalar);
     return -comparable.compareTo(this);
@@ -276,16 +280,16 @@ public class DecimalScalar extends AbstractRealScalar implements //
 
   @Override // from AbstractScalar
   public boolean equals(Object object) {
-    if (object instanceof DecimalScalar decimalScalar)
+    if (object instanceof DecimalScalar)
       // "equal() only if given BigDecimal's are equal in value and scale,
       // thus 2.0 is not equal to 2.00 when compared by equals()."
-      return value.compareTo(decimalScalar.number()) == 0;
-    if (object instanceof RationalScalar rationalScalar) {
-      BigDecimal bigDecimal = rationalScalar.toBigDecimal(mathContext());
+      return value.compareTo(((DecimalScalar) object).number()) == 0;
+    if (object instanceof RationalScalar) {
+      BigDecimal bigDecimal = ((RationalScalar) object).toBigDecimal(mathContext());
       return value.compareTo(bigDecimal) == 0;
     }
-    if (object instanceof RealScalar realScalar)
-      return number().doubleValue() == realScalar.number().doubleValue();
+    if (object instanceof RealScalar)
+      return number().doubleValue() == ((RealScalar) object).number().doubleValue();
     return Objects.nonNull(object) //
         && object.equals(this);
   }

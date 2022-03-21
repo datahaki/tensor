@@ -18,8 +18,8 @@ public enum Real implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof ComplexEmbedding complexEmbedding)
-      return complexEmbedding.real();
+    if (scalar instanceof ComplexEmbedding)
+      return ((ComplexEmbedding) scalar).real();
     throw TensorRuntimeException.of(scalar);
   }
 

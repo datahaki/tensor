@@ -233,8 +233,8 @@ public class Polynomial extends HornerScheme {
 
   @Override // from Object
   public boolean equals(Object object) {
-    return object instanceof Polynomial polynomial //
-        && coeffs.equals(polynomial.coeffs);
+    return object instanceof Polynomial //
+        && coeffs.equals(((Polynomial) object).coeffs);
   }
 
   @Override // from Object

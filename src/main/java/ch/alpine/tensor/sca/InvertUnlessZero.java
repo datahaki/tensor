@@ -40,11 +40,14 @@ public enum InvertUnlessZero implements ScalarUnaryOperator {
    * Scalars.isZero(scalar) ? scalar : scalar.reciprocal(); */
   @Override
   public Scalar apply(Scalar scalar) {
-    if (Scalars.isZero(scalar))
+    if (Scalars.isZero(scalar)) {
       // BenIsraelCohen.UnitNegate:
-      return scalar instanceof Quantity quantity //
-          ? Quantity.of(quantity.value(), quantity.unit().negate())
-          : scalar;
+      if (scalar instanceof Quantity) {
+        Quantity quantity = (Quantity) scalar;
+        return Quantity.of(quantity.value(), quantity.unit().negate());
+      }
+      return scalar;
+    }
     return scalar.reciprocal();
   }
 

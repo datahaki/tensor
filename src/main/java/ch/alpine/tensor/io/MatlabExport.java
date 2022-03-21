@@ -50,8 +50,8 @@ public enum MatlabExport {
     list.add("% auto-generated code. do not modify.");
     list.add("Infinity=Inf;");
     list.add("I=i;");
-    if (tensor instanceof Scalar scalar)
-      list.add("a=" + function.apply(scalar) + ";");
+    if (tensor instanceof Scalar)
+      list.add("a=" + function.apply((Scalar) tensor) + ";");
     else {
       List<Integer> dims = new ArrayList<>(dimensions.list());
       int[] sigma = new int[dims.size()];

@@ -85,8 +85,8 @@ import ch.alpine.tensor.ext.MergeIllegal;
 
   @Override // from Object
   public boolean equals(Object object) {
-    return object instanceof Unit unit //
-        && navigableMap.equals(unit.map());
+    return object instanceof Unit //
+        && navigableMap.equals(((Unit) object).map());
   }
 
   @Override // from Object

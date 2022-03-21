@@ -21,8 +21,8 @@ public enum Exp implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    if (scalar instanceof ExpInterface expInterface)
-      return expInterface.exp();
+    if (scalar instanceof ExpInterface)
+      return ((ExpInterface) scalar).exp();
     throw TensorRuntimeException.of(scalar);
   }
 
