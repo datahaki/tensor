@@ -131,15 +131,15 @@ public class ImageResizeTest {
   @Test
   public void testImageResizeNegative1Fail() {
     Tensor tensor = HilbertMatrix.of(3);
-    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, new Dimension(50, -20)));
-    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, new Dimension(-50, 20)));
+    assertThrows(Exception.class, () -> ImageResize.of(tensor, new Dimension(50, -20)));
+    assertThrows(Exception.class, () -> ImageResize.of(tensor, new Dimension(-50, 20)));
   }
 
   @Test
   public void testImageResizeNegative2Fail() {
     Tensor tensor = HilbertMatrix.of(3);
     ImageResize.of(tensor, 10, 10);
-    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, 50, -20));
-    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, -50, 20));
+    assertThrows(Exception.class, () -> ImageResize.of(tensor, 50, -20));
+    assertThrows(Exception.class, () -> ImageResize.of(tensor, -50, 20));
   }
 }
