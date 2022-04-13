@@ -8,7 +8,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UpperTriangularize;
-import ch.alpine.tensor.red.LenientAdd;
+import ch.alpine.tensor.qty.LenientAdd;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.sca.Abs;

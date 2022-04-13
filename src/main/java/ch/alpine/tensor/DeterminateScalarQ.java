@@ -9,8 +9,10 @@ public enum DeterminateScalarQ {
   /** @param scalar
    * @return whether scalar is in exact precision or a machine number but not Infinity or NaN */
   public static boolean of(Scalar scalar) {
+    // TODO check not elegant
     scalar = Unprotect.withoutUnit(scalar);
     return MachineNumberQ.of(scalar) //
+        || scalar instanceof DecimalScalar //
         || ExactScalarQ.of(scalar);
   }
 

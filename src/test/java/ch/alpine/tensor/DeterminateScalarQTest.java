@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.num.Pi;
@@ -37,6 +39,12 @@ public class DeterminateScalarQTest {
     assertFalse(DeterminateScalarQ.of(Quantity.of(DoubleScalar.INDETERMINATE, "m")));
     assertFalse(DeterminateScalarQ.of(Quantity.of(ComplexScalar.of(3, Double.NaN), "m")));
     assertFalse(DeterminateScalarQ.of(Quantity.of(ComplexScalar.of(Double.NaN, 3), "m")));
+  }
+
+  @Test
+  public void testDecimalScalar() {
+    Scalar scalar = DecimalScalar.of(BigDecimal.ONE);
+    assertTrue(DeterminateScalarQ.of(scalar));
   }
 
   @Test

@@ -250,6 +250,18 @@ public class DecimalScalarTest {
   }
 
   @Test
+  public void testDivideZero() {
+    Scalar scalar = DecimalScalar.of(BigDecimal.ZERO);
+    assertThrows(ArithmeticException.class, () -> scalar.reciprocal());
+  }
+
+  @Test
+  public void testDivideZero2() {
+    Scalar scalar = DecimalScalar.of(new BigDecimal("0", MathContext.UNLIMITED));
+    assertThrows(ArithmeticException.class, () -> scalar.reciprocal());
+  }
+
+  @Test
   public void testSqrt() {
     // Mathematica N[Sqrt[2], 50] gives
     // ................1.4142135623730950488016887242096980785696718753769

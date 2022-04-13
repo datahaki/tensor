@@ -28,6 +28,8 @@ import ch.alpine.tensor.sca.N;
  * [precision] denotes how many digits from left to right are correct.
  * The pattern is consistent with Mathematica.
  * 
+ * <p>A division by zero throws an ArithmeticException.
+ * 
  * @implSpec
  * This class is immutable and thread-safe.
  * 
