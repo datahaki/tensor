@@ -3,7 +3,7 @@ package ch.alpine.tensor;
 
 import java.util.Objects;
 
-import ch.alpine.tensor.api.MachineNumberQInterface;
+import ch.alpine.tensor.api.InexactScalarMarker;
 
 /** implementation consistent with Mathematica
  * <pre>
@@ -22,24 +22,22 @@ import ch.alpine.tensor.api.MachineNumberQInterface;
  * <a href="https://reference.wolfram.com/language/ref/MachineNumberQ.html">MachineNumberQ</a>
  * 
  * @see ExactScalarQ */
-@Deprecated
-public enum MachineNumberQ {
+public enum FiniteQ {
   ;
   /** @param scalar
-   * @return true, if scalar is instance of {@link MachineNumberQInterface} which evaluates to true,
-   * otherwise false */
+   * @return true otherwise true */
   public static boolean of(Scalar scalar) {
-    if (scalar instanceof MachineNumberQInterface machineNumberQInterface)
-      return machineNumberQInterface.isMachineNumber();
+    if (scalar instanceof InexactScalarMarker inexactScalarMarker)
+      return inexactScalarMarker.isFinite();
     if (scalar instanceof MultiplexScalar multiplexScalar)
-      return multiplexScalar.allMatch(MachineNumberQ::of);
+      return multiplexScalar.allMatch(FiniteQ::of);
     Objects.requireNonNull(scalar);
-    return false;
+    return true;
   }
 
   /** @param tensor
-   * @return true, if any scalar entry in given tensor satisfies {@link #of(Scalar)} predicate */
-  public static boolean any(Tensor tensor) {
-    return tensor.flatten(-1).map(Scalar.class::cast).anyMatch(MachineNumberQ::of);
+   * @return true, if all scalar entries in given tensor are finite */
+  public static boolean all(Tensor tensor) {
+    return tensor.flatten(-1).map(Scalar.class::cast).allMatch(FiniteQ::of);
   }
 }

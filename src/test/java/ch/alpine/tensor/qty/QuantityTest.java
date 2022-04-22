@@ -12,7 +12,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.MachineNumberQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -120,7 +120,8 @@ public class QuantityTest {
     Scalar round = Round.FUNCTION.apply(scalar);
     assertTrue(round instanceof Quantity);
     assertEquals(round, Scalars.fromString("-7+4*I[kg^-1*m^2*s]"));
-    assertFalse(MachineNumberQ.of(scalar));
+    ExactScalarQ.require(round);
+    assertTrue(FiniteQ.of(round));
   }
 
   @Test

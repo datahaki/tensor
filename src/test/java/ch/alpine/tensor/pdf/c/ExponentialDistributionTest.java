@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.MachineNumberQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -117,7 +117,7 @@ public class ExponentialDistributionTest {
   private static void _checkCorner(Scalar lambda) {
     ExponentialDistribution exponentialDistribution = (ExponentialDistribution) ExponentialDistribution.of(lambda);
     Scalar from0 = exponentialDistribution.randomVariate(0);
-    assertTrue(MachineNumberQ.of(from0));
+    assertTrue(FiniteQ.of(from0));
     assertTrue(Scalars.lessThan(RealScalar.ZERO, from0));
     double max = Math.nextDown(1.0);
     Scalar from1 = exponentialDistribution.randomVariate(max);

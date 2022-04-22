@@ -11,7 +11,7 @@ public enum DeterminateScalarQ {
   public static boolean of(Scalar scalar) {
     // TODO check not elegant
     scalar = Unprotect.withoutUnit(scalar);
-    return MachineNumberQ.of(scalar) //
+    return FiniteQ.of(scalar) //
         || scalar instanceof DecimalScalar //
         || ExactScalarQ.of(scalar);
   }

@@ -1,13 +1,19 @@
 // code by jph
 package ch.alpine.tensor.api;
 
+import ch.alpine.tensor.DecimalScalar;
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.Scalar;
 
-/** a {@link Scalar} may implement the interface to signal that the value is in exact precision.
+/** a {@link Scalar} may implement the interface to signal that the value is not an exact encoding.
  * 
  * <p>a {@link Scalar} that does not implement {@link InexactScalarMarker} is assumed to
- * <em>not</em> represent an exact quantity by {@link ExactScalarQ}. */
+ * be encoded with exact precision by {@link ExactScalarQ}.
+ * 
+ * @see DoubleScalar
+ * @see DecimalScalar */
 public interface InexactScalarMarker {
-  // ---
+  /** @return */
+  boolean isFinite();
 }

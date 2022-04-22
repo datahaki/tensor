@@ -33,7 +33,7 @@ import ch.alpine.tensor.qty.Quantity;
  * 
  * @see InexactScalarMarker
  * @see IntegerQ
- * @see MachineNumberQ */
+ * @see FiniteQ */
 public enum ExactScalarQ {
   ;
   /** @param scalar

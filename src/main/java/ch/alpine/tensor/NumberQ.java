@@ -41,7 +41,7 @@ public enum NumberQ {
           && of(complexScalar.imag());
     if (scalar instanceof Quantity)
       return false;
-    return MachineNumberQ.of(scalar) //
+    return FiniteQ.of(scalar) //
         || ExactScalarQ.of(scalar);
   }
 

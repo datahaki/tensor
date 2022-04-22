@@ -10,7 +10,6 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.api.MachineNumberQInterface;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Arg;
@@ -63,7 +62,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
  * @implSpec
  * This class is immutable and thread-safe. */
 /* package */ class QuantityImpl extends MultiplexScalar implements Quantity, //
-    MachineNumberQInterface, Serializable {
+    Serializable {
   /** @param value is assumed to be not instance of {@link Quantity}
    * @param unit
    * @return */
@@ -205,11 +204,6 @@ import ch.alpine.tensor.sca.tri.ArcTan;
     return new QuantityImpl( //
         Sqrt.FUNCTION.apply(value), //
         unit.multiply(RationalScalar.HALF));
-  }
-
-  @Override
-  public boolean isMachineNumber() {
-    return false;
   }
 
   @Override // from MultiplexScalar

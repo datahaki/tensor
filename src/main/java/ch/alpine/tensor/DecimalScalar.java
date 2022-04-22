@@ -271,6 +271,11 @@ public class DecimalScalar extends AbstractRealScalar implements //
     return new DecimalScalar(bigDecimal, mathContext.getPrecision());
   }
 
+  @Override
+  public boolean isFinite() {
+    return true;
+  }
+
   // ---
   @Override // from AbstractScalar
   public int hashCode() {

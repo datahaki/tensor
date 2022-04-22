@@ -4,7 +4,7 @@ package ch.alpine.tensor.mat;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.ExactTensorQ;
-import ch.alpine.tensor.MachineNumberQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
@@ -40,7 +40,7 @@ import ch.alpine.tensor.sca.Chop;
  * @see LeftNullSpace */
 public enum NullSpace {
   ;
-  /** if matrix has any entry in machine precision, i.e. {@link MachineNumberQ} returns true,
+  /** if matrix has any entry in machine precision, i.e. {@link FiniteQ} returns true,
    * the nullspace is computed using {@link SingularValueDecomposition}.
    * In that case the vectors in the return value are normalized.
    * 

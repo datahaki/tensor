@@ -2,7 +2,7 @@
 package ch.alpine.tensor.img;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.MachineNumberQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
@@ -53,7 +53,7 @@ public class LinearColorDataGradient implements ColorDataGradient {
   public Tensor apply(Scalar scalar) {
     Scalar value = scalar.multiply(scale); // throws Exception for GaussScalar
     // TODO use FiniteQ
-    return MachineNumberQ.of(value) //
+    return FiniteQ.of(value) //
         ? interpolation.at(value)
         : Transparent.rgba();
   }
