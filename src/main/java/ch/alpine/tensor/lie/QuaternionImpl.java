@@ -176,28 +176,30 @@ import ch.alpine.tensor.sca.tri.Sin;
     return new QuaternionImpl(nre.multiply(RationalScalar.HALF), xyz.divide(nre));
   }
 
-  private Scalar _n() {
-    return new QuaternionImpl(N.DOUBLE.apply(w), xyz.map(N.DOUBLE));
+  private Scalar nonExact() {
+    return ExactScalarQ.of(this) //
+        ? new QuaternionImpl(N.DOUBLE.apply(w), xyz.map(N.DOUBLE))
+        : this;
   }
 
   @Override // from TrigonometryInterface
   public Scalar cos() {
-    return TrigonometrySeries.DEFAULT.cos(ExactScalarQ.of(this) ? _n() : this);
+    return TrigonometrySeries.DEFAULT.cos(nonExact());
   }
 
   @Override // from TrigonometryInterface
   public Scalar cosh() {
-    return TrigonometrySeries.DEFAULT.cosh(ExactScalarQ.of(this) ? _n() : this);
+    return TrigonometrySeries.DEFAULT.cosh(nonExact());
   }
 
   @Override // from TrigonometryInterface
   public Scalar sin() {
-    return TrigonometrySeries.DEFAULT.sin(ExactScalarQ.of(this) ? _n() : this);
+    return TrigonometrySeries.DEFAULT.sin(nonExact());
   }
 
   @Override // from TrigonometryInterface
   public Scalar sinh() {
-    return TrigonometrySeries.DEFAULT.sinh(ExactScalarQ.of(this) ? _n() : this);
+    return TrigonometrySeries.DEFAULT.sinh(nonExact());
   }
 
   @Override // from MultiplexScalar

@@ -48,8 +48,8 @@ public enum Round implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof RoundingInterface roundingInterface)
       return roundingInterface.round();
-    if (scalar instanceof MultiplexScalar legionScalar)
-      return legionScalar.eachMap(FUNCTION);
+    if (scalar instanceof MultiplexScalar multiplexScalar)
+      return multiplexScalar.eachMap(FUNCTION);
     throw TensorRuntimeException.of(scalar);
   }
 

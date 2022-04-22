@@ -2,10 +2,8 @@
 package ch.alpine.tensor.sca;
 
 import java.math.MathContext;
-import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.api.NInterface;
 
 /* package */ class NDecimal extends N {
@@ -16,11 +14,7 @@ import ch.alpine.tensor.api.NInterface;
   }
 
   @Override
-  public Scalar apply(Scalar scalar) {
-    if (scalar instanceof NInterface nInterface)
-      return nInterface.n(mathContext);
-    if (scalar instanceof MultiplexScalar legionScalar)
-      return legionScalar.eachMap(this);
-    return Objects.requireNonNull(scalar);
+  protected Scalar numeric(NInterface nInterface) {
+    return nInterface.n(mathContext);
   }
 }

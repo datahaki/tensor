@@ -47,8 +47,8 @@ public enum Ceiling implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof RoundingInterface roundingInterface)
       return roundingInterface.ceiling();
-    if (scalar instanceof MultiplexScalar legionScalar)
-      return legionScalar.eachMap(FUNCTION);
+    if (scalar instanceof MultiplexScalar multiplexScalar)
+      return multiplexScalar.eachMap(FUNCTION);
     throw TensorRuntimeException.of(scalar);
   }
 
