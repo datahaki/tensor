@@ -8,6 +8,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
@@ -47,6 +48,8 @@ public enum Round implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof RoundingInterface roundingInterface)
       return roundingInterface.round();
+    if (scalar instanceof MultiplexScalar legionScalar)
+      return legionScalar.eachMap(FUNCTION);
     throw TensorRuntimeException.of(scalar);
   }
 

@@ -7,7 +7,6 @@ import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ArgInterface;
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.api.ConjugateInterface;
-import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Sign;
@@ -27,7 +26,7 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * <p>interface {@link Comparable} is not implemented */
 public interface ComplexScalar extends Scalar, //
     AbsInterface, ArcTanInterface, ArgInterface, ComplexEmbedding, ConjugateInterface, //
-    ExpInterface, LogInterface, PowerInterface, RoundingInterface, SignInterface, //
+    ExpInterface, LogInterface, PowerInterface, SignInterface, //
     SqrtInterface, TrigonometryInterface {
   /** complex number I == 0+1*I */
   Scalar I = of(0, 1);

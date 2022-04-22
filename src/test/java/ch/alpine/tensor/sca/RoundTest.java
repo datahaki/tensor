@@ -11,6 +11,7 @@ import java.math.RoundingMode;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -139,6 +140,14 @@ public class RoundTest {
     assertEquals(pi.map(Round._7).toString(), "3.1000000");
     assertEquals(pi.map(Round._8).toString(), "3.10000000");
     assertEquals(pi.map(Round._9).toString(), "3.100000000");
+  }
+
+  @Test
+  public void testParsing() {
+    Scalar scalar = ComplexScalar.of(RealScalar.of(2.3), RationalScalar.of(5, 8));
+    assertEquals(Round.FUNCTION.apply(scalar), ComplexScalar.of(2, 1));
+    assertEquals(Ceiling.FUNCTION.apply(scalar), ComplexScalar.of(3, 1));
+    assertEquals(Floor.FUNCTION.apply(scalar), ComplexScalar.of(2, 0));
   }
 
   @Test

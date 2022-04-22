@@ -4,6 +4,7 @@ package ch.alpine.tensor;
 import java.util.Objects;
 
 import ch.alpine.tensor.api.MachineNumberQInterface;
+import ch.alpine.tensor.api.MultiplexScalar;
 
 /** implementation consistent with Mathematica
  * <pre>
@@ -28,8 +29,12 @@ public enum MachineNumberQ {
    * @return true, if scalar is instance of {@link MachineNumberQInterface} which evaluates to true,
    * otherwise false */
   public static boolean of(Scalar scalar) {
-    return Objects.requireNonNull(scalar) instanceof MachineNumberQInterface machineNumberQInterface //
-        && machineNumberQInterface.isMachineNumber();
+    if (scalar instanceof MachineNumberQInterface machineNumberQInterface)
+      return machineNumberQInterface.isMachineNumber();
+    if (scalar instanceof MultiplexScalar multiplexScalar)
+      return multiplexScalar.allMatch(MachineNumberQ::of);
+    Objects.requireNonNull(scalar);
+    return false;
   }
 
   /** @param tensor

@@ -102,6 +102,16 @@ public class ComplexScalarTest {
   }
 
   @Test
+  public void testGaussScalarCommute() {
+    int p = 43;
+    Scalar cs = ComplexScalar.of(GaussScalar.of(31, p), GaussScalar.of(22, p));
+    Scalar gs = GaussScalar.of(16, p);
+    assertEquals(cs.multiply(gs), gs.multiply(cs));
+    assertEquals(cs.divide(gs), gs.under(cs));
+    assertEquals(cs.under(gs), gs.divide(cs));
+  }
+
+  @Test
   public void testAsField() {
     // primes not resulting in field: 5,13,17
     // int c = 0;

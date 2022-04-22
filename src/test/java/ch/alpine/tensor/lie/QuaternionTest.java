@@ -30,8 +30,10 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.KroneckerDelta;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
+import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
@@ -262,8 +264,10 @@ public class QuaternionTest {
 
   @Test
   public void testRound() {
-    Quaternion quaternion = Quaternion.of(0.1, 0.3, 0.2, -0.3);
-    assertThrows(TensorRuntimeException.class, () -> Round.FUNCTION.apply(quaternion));
+    Quaternion quaternion = Quaternion.of(3.9, 2.3, 1.8, -1.3);
+    assertEquals(Round.FUNCTION.apply(quaternion), Quaternion.of(4, 2, 2, -1));
+    assertEquals(Ceiling.FUNCTION.apply(quaternion), Quaternion.of(4, 3, 2, -1));
+    assertEquals(Floor.FUNCTION.apply(quaternion), Quaternion.of(3, 2, 1, -2));
   }
 
   @Test

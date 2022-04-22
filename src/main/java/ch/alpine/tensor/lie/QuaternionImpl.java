@@ -4,12 +4,12 @@ package ch.alpine.tensor.lie;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.math.MathContext;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -18,16 +18,13 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Append;
-import ch.alpine.tensor.api.ChopInterface;
 import ch.alpine.tensor.api.ComplexEmbedding;
-import ch.alpine.tensor.api.ExactScalarQInterface;
-import ch.alpine.tensor.api.NInterface;
+import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.num.ScalarProduct;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
@@ -40,7 +37,7 @@ import ch.alpine.tensor.sca.tri.Sin;
 /** @implSpec
  * This class is immutable and thread-safe. */
 /* package */ class QuaternionImpl extends AbstractScalar implements Quaternion, //
-    ChopInterface, ExactScalarQInterface, NInterface, Serializable {
+    MultiplexScalar, Serializable {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
   // ---
   private final Scalar w;
@@ -125,11 +122,6 @@ import ch.alpine.tensor.sca.tri.Sin;
     return w.multiply(w).add(xyz.dot(xyz));
   }
 
-  @Override // from ChopInterface
-  public Quaternion chop(Chop chop) {
-    return new QuaternionImpl(chop.apply(w), xyz.map(chop));
-  }
-
   @Override // from ConjugateInterface
   public Quaternion conjugate() {
     return new QuaternionImpl(w, xyz.negate());
@@ -144,12 +136,6 @@ import ch.alpine.tensor.sca.tri.Sin;
             .multiply(Exp.FUNCTION.apply(w));
   }
 
-  @Override // from ExactScalarQInterface
-  public boolean isExactScalar() {
-    return ExactScalarQ.of(w) //
-        && ExactTensorQ.of(xyz);
-  }
-
   @Override // from LogInterface
   public Quaternion log() {
     Scalar abs = abs();
@@ -157,17 +143,6 @@ import ch.alpine.tensor.sca.tri.Sin;
     return new QuaternionImpl( //
         Log.FUNCTION.apply(abs), //
         xyz.multiply(ArcCos.FUNCTION.apply(w.divide(abs))).divide(vn));
-  }
-
-  @Override // from NInterface
-  public Scalar n() {
-    return new QuaternionImpl(N.DOUBLE.apply(w), xyz.map(N.DOUBLE));
-  }
-
-  @Override // from NInterface
-  public Scalar n(MathContext mathContext) {
-    N n = N.in(mathContext.getPrecision());
-    return new QuaternionImpl(n.apply(w), xyz.map(n));
   }
 
   /** @param exponent
@@ -186,7 +161,7 @@ import ch.alpine.tensor.sca.tri.Sin;
 
   @Override // from PowerInterface
   public Quaternion power(Scalar exponent) {
-    if (isExactScalar()) {
+    if (ExactScalarQ.of(this)) {
       Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
       if (optional.isPresent())
         return (Quaternion) BINARY_POWER.raise(this, optional.orElseThrow());
@@ -207,24 +182,39 @@ import ch.alpine.tensor.sca.tri.Sin;
     return new QuaternionImpl(nre.multiply(RationalScalar.HALF), xyz.divide(nre));
   }
 
+  private Scalar _n() {
+    return new QuaternionImpl(N.DOUBLE.apply(w), xyz.map(N.DOUBLE));
+  }
+
   @Override // from TrigonometryInterface
   public Scalar cos() {
-    return TrigonometrySeries.DEFAULT.cos(isExactScalar() ? n() : this);
+    return TrigonometrySeries.DEFAULT.cos(ExactScalarQ.of(this) ? _n() : this);
   }
 
   @Override // from TrigonometryInterface
   public Scalar cosh() {
-    return TrigonometrySeries.DEFAULT.cosh(isExactScalar() ? n() : this);
+    return TrigonometrySeries.DEFAULT.cosh(ExactScalarQ.of(this) ? _n() : this);
   }
 
   @Override // from TrigonometryInterface
   public Scalar sin() {
-    return TrigonometrySeries.DEFAULT.sin(isExactScalar() ? n() : this);
+    return TrigonometrySeries.DEFAULT.sin(ExactScalarQ.of(this) ? _n() : this);
   }
 
   @Override // from TrigonometryInterface
   public Scalar sinh() {
-    return TrigonometrySeries.DEFAULT.sinh(isExactScalar() ? n() : this);
+    return TrigonometrySeries.DEFAULT.sinh(ExactScalarQ.of(this) ? _n() : this);
+  }
+
+  @Override
+  public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
+    return new QuaternionImpl(unaryOperator.apply(w), xyz.map(unaryOperator));
+  }
+
+  @Override
+  public boolean allMatch(Predicate<Scalar> predicate) {
+    return predicate.test(w) //
+        && xyz.stream().map(Scalar.class::cast).allMatch(predicate);
   }
 
   // ---

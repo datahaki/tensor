@@ -4,6 +4,7 @@ package ch.alpine.tensor;
 import java.util.Objects;
 
 import ch.alpine.tensor.api.ExactScalarQInterface;
+import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.mat.re.RowReduce;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.qty.Quantity;
@@ -39,8 +40,12 @@ public enum ExactScalarQ {
   /** @param scalar
    * @return true, if scalar is instance of {@link ExactScalarQInterface} which evaluates to true */
   public static boolean of(Scalar scalar) {
-    return Objects.requireNonNull(scalar) instanceof ExactScalarQInterface exactScalarQInterface //
-        && exactScalarQInterface.isExactScalar();
+    if (scalar instanceof ExactScalarQInterface exactScalarQInterface)
+      return exactScalarQInterface.isExactScalar();
+    if (scalar instanceof MultiplexScalar multiplexScalar)
+      return multiplexScalar.allMatch(ExactScalarQ::of);
+    Objects.requireNonNull(scalar);
+    return false;
   }
 
   /** @param scalar

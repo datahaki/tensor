@@ -86,8 +86,8 @@ public class LruCacheTest {
   @Test
   public void testNegativeFail() {
     assertThrows(IllegalArgumentException.class, () -> new LruCache<>(-1));
-    assertThrows(IllegalArgumentException.class, () -> new LruCache<>(10,-0.2f));
-    assertThrows(IllegalArgumentException.class, () -> new LruCache<>(10,0f));
+    assertThrows(IllegalArgumentException.class, () -> new LruCache<>(10, -0.2f));
+    assertThrows(IllegalArgumentException.class, () -> new LruCache<>(10, 0f));
     assertThrows(ArithmeticException.class, () -> new LruCache<>(Integer.MAX_VALUE));
   }
 }

@@ -3,25 +3,17 @@ package ch.alpine.tensor;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.math.MathContext;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
-import ch.alpine.tensor.api.ChopInterface;
 import ch.alpine.tensor.api.ComplexEmbedding;
-import ch.alpine.tensor.api.ExactScalarQInterface;
-import ch.alpine.tensor.api.MachineNumberQInterface;
-import ch.alpine.tensor.api.NInterface;
+import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.num.BinaryPower;
-import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.ScalarProduct;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
-import ch.alpine.tensor.sca.Ceiling;
-import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.sca.Floor;
-import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.tri.ArcTan;
@@ -33,7 +25,7 @@ import ch.alpine.tensor.sca.tri.Sinh;
 /** @implSpec
  * This class is immutable and thread-safe. */
 /* package */ class ComplexScalarImpl extends AbstractScalar implements ComplexScalar, //
-    ChopInterface, ExactScalarQInterface, MachineNumberQInterface, NInterface, Serializable {
+    MultiplexScalar, Serializable {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
 
   /** creator with package visibility
@@ -78,9 +70,6 @@ import ch.alpine.tensor.sca.tri.Sinh;
           re.multiply(z_re).subtract(im.multiply(z_im)), //
           re.multiply(z_im).add(im.multiply(z_re)));
     }
-    // TODO GaussScalar*/_Complex should be handled in GaussScalar (also below)
-    if (scalar instanceof GaussScalar)
-      return new ComplexScalarImpl(re.multiply(scalar), im.multiply(scalar));
     return scalar.multiply(this);
   }
 
@@ -90,8 +79,6 @@ import ch.alpine.tensor.sca.tri.Sinh;
       ComplexEmbedding z = (ComplexEmbedding) scalar;
       return ComplexHelper.division(re, im, z.real(), z.imag());
     }
-    if (scalar instanceof GaussScalar)
-      return new ComplexScalarImpl(re.divide(scalar), im.divide(scalar));
     return scalar.under(this);
   }
 
@@ -155,16 +142,6 @@ import ch.alpine.tensor.sca.tri.Sinh;
     return ArcTan.of(re, im); // Mathematica::ArcTan[x, y]
   }
 
-  @Override // from RoundingInterface
-  public Scalar ceiling() {
-    return of(Ceiling.FUNCTION.apply(re), Ceiling.FUNCTION.apply(im));
-  }
-
-  @Override // from ChopInterface
-  public Scalar chop(Chop chop) {
-    return of(chop.apply(re), chop.apply(im));
-  }
-
   @Override // from ComplexEmbedding
   public Scalar conjugate() {
     return of(re, im.negate());
@@ -174,11 +151,6 @@ import ch.alpine.tensor.sca.tri.Sinh;
   public Scalar exp() {
     // construct in polar coordinates
     return ComplexScalar.fromPolar(Exp.FUNCTION.apply(real()), imag());
-  }
-
-  @Override // from RoundingInterface
-  public Scalar floor() {
-    return of(Floor.FUNCTION.apply(re), Floor.FUNCTION.apply(im));
   }
 
   @Override // from LogInterface
@@ -191,32 +163,9 @@ import ch.alpine.tensor.sca.tri.Sinh;
     return im;
   }
 
-  @Override // from ExactNumberInterface
-  public boolean isExactScalar() {
-    return ExactScalarQ.of(re) //
-        && ExactScalarQ.of(im);
-  }
-
-  @Override // MachineNumberQInterface
-  public boolean isMachineNumber() {
-    return MachineNumberQ.of(re) //
-        && MachineNumberQ.of(im);
-  }
-
-  @Override // from NInterface
-  public Scalar n() {
-    return of(N.DOUBLE.apply(re), N.DOUBLE.apply(im));
-  }
-
-  @Override // from NInterface
-  public Scalar n(MathContext mathContext) {
-    N n = N.in(mathContext.getPrecision());
-    return of(n.apply(re), n.apply(im));
-  }
-
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
-    if (isExactScalar()) {
+    if (ExactScalarQ.of(this)) {
       Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
       if (optional.isPresent())
         return BINARY_POWER.raise(this, optional.orElseThrow());
@@ -227,11 +176,6 @@ import ch.alpine.tensor.sca.tri.Sinh;
   @Override // from ComplexEmbedding
   public Scalar real() {
     return re;
-  }
-
-  @Override // from RoundingInterface
-  public Scalar round() {
-    return of(Round.FUNCTION.apply(re), Round.FUNCTION.apply(im));
   }
 
   @Override // from SignInterface
@@ -271,6 +215,19 @@ import ch.alpine.tensor.sca.tri.Sinh;
     return of( //
         Sinh.of(re).multiply(Cos.of(im)), //
         Cosh.of(re).multiply(Sin.of(im)));
+  }
+
+  @Override // from MultiplexScalar
+  public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
+    return of( //
+        unaryOperator.apply(re), //
+        unaryOperator.apply(im));
+  }
+
+  @Override // from MultiplexScalar
+  public boolean allMatch(Predicate<Scalar> predicate) {
+    return predicate.test(re) //
+        && predicate.test(im);
   }
 
   // ---

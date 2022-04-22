@@ -9,6 +9,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ChopInterface;
+import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.red.Entrywise;
@@ -97,9 +98,11 @@ public class Chop implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    return scalar instanceof ChopInterface chopInterface //
-        ? chopInterface.chop(this)
-        : Objects.requireNonNull(scalar);
+    if (scalar instanceof ChopInterface chopInterface)
+      return chopInterface.chop(this);
+    if (scalar instanceof MultiplexScalar multiplexScalar)
+      return multiplexScalar.eachMap(this);
+    return Objects.requireNonNull(scalar);
   }
 
   /** @param scalar

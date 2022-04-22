@@ -271,6 +271,7 @@ public class ComplexScalarImplTest {
     Scalar g = GaussScalar.of(1, 7);
     for (Tensor _x : tensor) {
       Scalar x = (Scalar) _x;
+      System.out.println(x);
       assertThrows(Exception.class, () -> x.divide(g));
       assertThrows(Exception.class, () -> x.under(g));
       assertThrows(Exception.class, () -> x.multiply(g));

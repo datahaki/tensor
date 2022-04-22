@@ -54,8 +54,8 @@ public class GaussScalarTest {
   public void testDivideUnder() {
     GaussScalar num = GaussScalar.of(132, 193);
     GaussScalar den = GaussScalar.of(37, 193);
-    GaussScalar div1 = num.divide(den);
-    GaussScalar div2 = den.under(num);
+    Scalar div1 = num.divide(den);
+    Scalar div2 = den.under(num);
     assertEquals(div1, div2);
   }
 

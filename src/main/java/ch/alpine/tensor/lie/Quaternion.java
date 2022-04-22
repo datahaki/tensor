@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
 import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
 /** Quote from Mathematica:
- * Quaternion objects will not automatically simplify to Complex or Real numbers. 
+ * Quaternion objects will not automatically simplify to Complex or Real numbers.
  * 
  * <p>Important in the tensor library:
  * not all algorithms are tested for {@link Quaternion} input.
