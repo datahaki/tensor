@@ -3,25 +3,23 @@
 package ch.alpine.tensor.jet;
 
 import java.io.Serializable;
-import java.math.MathContext;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.AbstractScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
-import ch.alpine.tensor.api.ExactScalarQInterface;
-import ch.alpine.tensor.api.NInterface;
+import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
-import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.ExpInterface;
@@ -50,8 +48,8 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
  * @implSpec
  * This class is immutable and thread-safe. */
 public class Around extends AbstractScalar implements //
-    AbsInterface, ExactScalarQInterface, ExpInterface, LogInterface, MeanInterface, //
-    NInterface, PowerInterface, SqrtInterface, Serializable {
+    AbsInterface, ExpInterface, LogInterface, MeanInterface, //
+    MultiplexScalar, PowerInterface, SqrtInterface, Serializable {
   private static final String SEPARATOR = "\u00B1";
 
   /** Mathematica allows
@@ -148,23 +146,6 @@ public class Around extends AbstractScalar implements //
     return of(Log.FUNCTION.apply(mean), sigma.divide(mean));
   }
 
-  @Override // from ExactScalarQInterface
-  public boolean isExactScalar() {
-    return ExactScalarQ.of(mean) //
-        && ExactScalarQ.of(sigma);
-  }
-
-  @Override // from NInterface
-  public Scalar n() {
-    return of(N.DOUBLE.apply(mean), N.DOUBLE.apply(sigma));
-  }
-
-  @Override // from NInterface
-  public Scalar n(MathContext mathContext) {
-    N n = N.in(mathContext.getPrecision());
-    return of(n.apply(mean), n.apply(sigma));
-  }
-
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
     if (exponent instanceof Around)
@@ -193,6 +174,19 @@ public class Around extends AbstractScalar implements //
 
   public Distribution distribution() {
     return NormalDistribution.of(mean, sigma);
+  }
+
+  @Override // from MultiplexScalar
+  public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
+    return of( //
+        unaryOperator.apply(mean), //
+        unaryOperator.apply(sigma));
+  }
+
+  @Override // from MultiplexScalar
+  public boolean allMatch(Predicate<Scalar> predicate) {
+    return predicate.test(mean) //
+        && predicate.test(sigma);
   }
 
   // ---

@@ -32,7 +32,6 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Quaternion.html">Quaternion</a> */
-// TODO Mathematica::Quaternion supports Round
 public interface Quaternion extends Scalar, //
     AbsInterface, ConjugateInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface {
