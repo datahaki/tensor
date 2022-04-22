@@ -24,8 +24,8 @@ import ch.alpine.tensor.sca.tri.Sinh;
 
 /** @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class ComplexScalarImpl extends AbstractScalar implements ComplexScalar, //
-    MultiplexScalar, Serializable {
+/* package */ class ComplexScalarImpl extends MultiplexScalar implements ComplexScalar, //
+    Serializable {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
 
   /** creator with package visibility
@@ -106,11 +106,6 @@ import ch.alpine.tensor.sca.tri.Sinh;
   @Override // from Scalar
   public Scalar one() {
     return re.one();
-  }
-
-  @Override // from Scalar
-  public Number number() {
-    throw TensorRuntimeException.of(this);
   }
 
   // ---

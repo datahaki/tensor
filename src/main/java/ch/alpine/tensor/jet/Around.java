@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -47,9 +46,9 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-public class Around extends AbstractScalar implements //
+public class Around extends MultiplexScalar implements //
     AbsInterface, ExpInterface, LogInterface, MeanInterface, //
-    MultiplexScalar, PowerInterface, SqrtInterface, Serializable {
+    PowerInterface, SqrtInterface, Serializable {
   private static final String SEPARATOR = "\u00B1";
 
   /** Mathematica allows
@@ -109,11 +108,6 @@ public class Around extends AbstractScalar implements //
   @Override // from Scalar
   public Scalar one() {
     return mean.zero().one();
-  }
-
-  @Override // from Scalar
-  public Number number() {
-    throw TensorRuntimeException.of(this);
   }
 
   @Override // from Scalar

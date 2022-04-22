@@ -2,28 +2,21 @@
 package ch.alpine.tensor.qty;
 
 import java.io.Serializable;
-import java.math.MathContext;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
-import ch.alpine.tensor.AbstractScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.api.ChopInterface;
-import ch.alpine.tensor.api.ExactScalarQInterface;
-import ch.alpine.tensor.api.NInterface;
+import ch.alpine.tensor.api.MachineNumberQInterface;
+import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Arg;
-import ch.alpine.tensor.sca.Ceiling;
-import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
-import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Real;
-import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -57,10 +50,20 @@ import ch.alpine.tensor.sca.tri.ArcTan;
  * Quantity[0, "Meters"] + 0 == Quantity[0, "Meters"]
  * </pre>
  * 
+ * <p>Extracting the value of a Quantity to a primitive goes against the spirit
+ * of using units in the first place. For instance, 3[s] and 3[h] are from the
+ * same scale, but are not identical, despite their value part being identical.
+ * The function #number() is available for instances of RealScalar`s, which can
+ * be obtained from a Quantity via QuantityMagnitude.
+ * 
+ * Hint: use
+ * scalar -> QuantityMagnitude.SI().in(unit).apply(scalar).number();
+ * where unit is the desired reference for instance "kW*h^-1"
+ * 
  * @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class QuantityImpl extends AbstractScalar implements Quantity, //
-    ChopInterface, ExactScalarQInterface, NInterface, Serializable {
+/* package */ class QuantityImpl extends MultiplexScalar implements Quantity, //
+    MachineNumberQInterface, Serializable {
   /** @param value is assumed to be not instance of {@link Quantity}
    * @param unit
    * @return */
@@ -138,20 +141,6 @@ import ch.alpine.tensor.sca.tri.ArcTan;
     return value.one();
   }
 
-  @Override // from Scalar
-  public Number number() {
-    /* extracting the value of a Quantity to a primitive goes against the spirit
-     * of using units in the first place. For instance, 3[s] and 3[h] are from the
-     * same scale, but are not identical, despite their value part being identical.
-     * The function #number() is available for instances of RealScalar`s, which can
-     * be obtained from a Quantity via QuantityMagnitude.
-     * 
-     * Hint: use
-     * scalar -> QuantityMagnitude.SI().in(unit).apply(scalar).number();
-     * where unit is the desired reference for instance "kW*h^-1" */
-    throw TensorRuntimeException.of(this);
-  }
-
   // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
@@ -184,11 +173,6 @@ import ch.alpine.tensor.sca.tri.ArcTan;
     return Arg.FUNCTION.apply(value);
   }
 
-  @Override // from ChopInterface
-  public Scalar chop(Chop chop) {
-    return ofUnit(chop.apply(value));
-  }
-
   @Override // from ConjugateInterface
   public Scalar conjugate() {
     return ofUnit(Conjugate.FUNCTION.apply(value));
@@ -204,41 +188,11 @@ import ch.alpine.tensor.sca.tri.ArcTan;
     return ofUnit(Imag.FUNCTION.apply(value));
   }
 
-  @Override // from ExactScalarQInterface
-  public boolean isExactScalar() {
-    return ExactScalarQ.of(value);
-  }
-
-  @Override // from NInterface
-  public Scalar n() {
-    return ofUnit(N.DOUBLE.apply(value));
-  }
-
-  @Override // from NInterface
-  public Scalar n(MathContext mathContext) {
-    return ofUnit(N.in(mathContext.getPrecision()).apply(value));
-  }
-
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
     // exponent has to be RealScalar, otherwise an Exception is thrown
     // Mathematica allows 2[m]^3[s], but the tensor library does not:
     return of(Power.of(value, exponent), unit.multiply(exponent));
-  }
-
-  @Override // from RoundingInterface
-  public Scalar ceiling() {
-    return ofUnit(Ceiling.FUNCTION.apply(value));
-  }
-
-  @Override // from RoundingInterface
-  public Scalar floor() {
-    return ofUnit(Floor.FUNCTION.apply(value));
-  }
-
-  @Override // from RoundingInterface
-  public Scalar round() {
-    return ofUnit(Round.FUNCTION.apply(value));
   }
 
   @Override // from SignInterface
@@ -251,6 +205,21 @@ import ch.alpine.tensor.sca.tri.ArcTan;
     return new QuantityImpl( //
         Sqrt.FUNCTION.apply(value), //
         unit.multiply(RationalScalar.HALF));
+  }
+
+  @Override
+  public boolean isMachineNumber() {
+    return false;
+  }
+
+  @Override // from MultiplexScalar
+  public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
+    return ofUnit(unaryOperator.apply(value));
+  }
+
+  @Override // from MultiplexScalar
+  public boolean allMatch(Predicate<Scalar> predicate) {
+    return predicate.test(value);
   }
 
   @Override // from Comparable<Scalar>

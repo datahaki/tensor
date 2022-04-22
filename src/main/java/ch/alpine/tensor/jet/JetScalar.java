@@ -6,7 +6,6 @@ import java.util.OptionalInt;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -51,8 +50,8 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * @implSpec
  * This class is immutable and thread-safe. */
 // TODO TENSOR JET general makeover and more tests
-public class JetScalar extends AbstractScalar implements //
-    AbsInterface, ExpInterface, LogInterface, MultiplexScalar, PowerInterface, //
+public class JetScalar extends MultiplexScalar implements //
+    AbsInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface, //
     Comparable<Scalar>, Serializable {
   /** @param vector {f[x], f'[x], f''[x], ...}
@@ -114,11 +113,6 @@ public class JetScalar extends AbstractScalar implements //
   @Override // from Scalar
   public Scalar one() {
     return StaticHelper.CACHE_ONE.apply(vector.length());
-  }
-
-  @Override // from Scalar
-  public Number number() {
-    throw TensorRuntimeException.of(this);
   }
 
   @Override // from AbstractScalar
@@ -203,21 +197,21 @@ public class JetScalar extends AbstractScalar implements //
     return StaticHelper.chain(vector, Sinh.FUNCTION, Cosh.FUNCTION);
   }
 
-  @Override // from Comparable
-  public int compareTo(Scalar scalar) {
-    return scalar instanceof JetScalar jetScalar //
-        ? TensorComparator.INSTANCE.compare(vector, jetScalar.vector)
-        : TensorComparator.INSTANCE.compare(vector, Join.of(Tensors.of(scalar), Array.zeros(vector.length() - 1)));
-  }
-
   @Override // from MultiplexScalar
   public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
-    return of(vector.map(unaryOperator));
+    return new JetScalar(vector.map(unaryOperator));
   }
 
   @Override // from MultiplexScalar
   public boolean allMatch(Predicate<Scalar> predicate) {
     return vector.stream().map(Scalar.class::cast).allMatch(predicate);
+  }
+
+  @Override // from Comparable
+  public int compareTo(Scalar scalar) {
+    return scalar instanceof JetScalar jetScalar //
+        ? TensorComparator.INSTANCE.compare(vector, jetScalar.vector)
+        : TensorComparator.INSTANCE.compare(vector, Join.of(Tensors.of(scalar), Array.zeros(vector.length() - 1)));
   }
 
   // ---

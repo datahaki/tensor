@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -36,8 +35,8 @@ import ch.alpine.tensor.sca.tri.Sin;
 
 /** @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class QuaternionImpl extends AbstractScalar implements Quaternion, //
-    MultiplexScalar, Serializable {
+/* package */ class QuaternionImpl extends MultiplexScalar implements Quaternion, //
+    Serializable {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
   // ---
   private final Scalar w;
@@ -103,11 +102,6 @@ import ch.alpine.tensor.sca.tri.Sin;
   @Override // from Scalar
   public Scalar one() {
     return new QuaternionImpl(w.one(), xyz.map(Scalar::one).map(Scalar::zero));
-  }
-
-  @Override // from Scalar
-  public Number number() {
-    throw TensorRuntimeException.of(this);
   }
 
   // ---
@@ -206,12 +200,12 @@ import ch.alpine.tensor.sca.tri.Sin;
     return TrigonometrySeries.DEFAULT.sinh(ExactScalarQ.of(this) ? _n() : this);
   }
 
-  @Override
+  @Override // from MultiplexScalar
   public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
     return new QuaternionImpl(unaryOperator.apply(w), xyz.map(unaryOperator));
   }
 
-  @Override
+  @Override // from MultiplexScalar
   public boolean allMatch(Predicate<Scalar> predicate) {
     return predicate.test(w) //
         && xyz.stream().map(Scalar.class::cast).allMatch(predicate);

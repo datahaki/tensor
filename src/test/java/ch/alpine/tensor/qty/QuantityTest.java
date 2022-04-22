@@ -12,6 +12,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.ExactScalarQ;
+import ch.alpine.tensor.MachineNumberQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -19,6 +20,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.pow.Power;
 
 public class QuantityTest {
@@ -107,6 +109,18 @@ public class QuantityTest {
     Quantity quantity = (Quantity) Scalars.fromString("-7+3*I[kg^-2*m*s]");
     Scalar scalar = quantity.value();
     assertEquals(scalar, ComplexScalar.of(-7, 3));
+    ExactScalarQ.require(quantity);
+  }
+
+  @Test
+  public void testRounding() {
+    Scalar scalar = Scalars.fromString("-7.2+3.7*I[kg^-1*m^2*s]");
+    assertFalse(ExactScalarQ.of(scalar));
+    assertTrue(scalar instanceof Quantity);
+    Scalar round = Round.FUNCTION.apply(scalar);
+    assertTrue(round instanceof Quantity);
+    assertEquals(round, Scalars.fromString("-7+4*I[kg^-1*m^2*s]"));
+    assertFalse(MachineNumberQ.of(scalar));
   }
 
   @Test

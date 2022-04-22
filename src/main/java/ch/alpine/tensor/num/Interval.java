@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
-import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -36,9 +35,8 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-/* package */ class Interval extends AbstractScalar implements //
-    AbsInterface, ExpInterface, LogInterface, MultiplexScalar, //
-    PowerInterface, SignInterface {
+/* package */ class Interval extends MultiplexScalar implements //
+    AbsInterface, ExpInterface, LogInterface, PowerInterface, SignInterface {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
 
   /** @param clip
@@ -116,11 +114,6 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
   @Override
   public Scalar one() {
     return clip.min().one();
-  }
-
-  @Override
-  public Number number() {
-    throw TensorRuntimeException.of(this);
   }
 
   // ---

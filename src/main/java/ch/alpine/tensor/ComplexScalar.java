@@ -46,8 +46,6 @@ public interface ComplexScalar extends Scalar, //
   static Scalar of(Scalar re, Scalar im) {
     if (re instanceof MultiplexScalar || im instanceof MultiplexScalar)
       throw TensorRuntimeException.of(re, im);
-    if (re instanceof Quantity || im instanceof Quantity)
-      throw TensorRuntimeException.of(re, im);
     return ComplexScalarImpl.of(Objects.requireNonNull(re), im);
   }
 
