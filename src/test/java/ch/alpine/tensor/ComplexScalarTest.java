@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
@@ -53,6 +54,8 @@ public class ComplexScalarTest {
   public void testConstructFail() {
     assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
     assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(Quaternion.ONE, RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(RealScalar.ONE, Quaternion.ONE));
   }
 
   @Test

@@ -7,6 +7,7 @@ import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ArgInterface;
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.api.ConjugateInterface;
+import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Sign;
@@ -43,7 +44,7 @@ public interface ComplexScalar extends Scalar, //
    * @return scalar with re as real part and im as imaginary part
    * @throws Exception if re or im are {@link ComplexScalar} */
   static Scalar of(Scalar re, Scalar im) {
-    if (re instanceof ComplexScalar || im instanceof ComplexScalar)
+    if (re instanceof MultiplexScalar || im instanceof MultiplexScalar)
       throw TensorRuntimeException.of(re, im);
     if (re instanceof Quantity || im instanceof Quantity)
       throw TensorRuntimeException.of(re, im);

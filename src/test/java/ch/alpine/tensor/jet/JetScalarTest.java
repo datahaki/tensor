@@ -2,12 +2,15 @@
 package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
@@ -17,6 +20,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Power;
@@ -36,6 +40,15 @@ public class JetScalarTest {
   }
 
   @Test
+  public void testComplex() {
+    Scalar s1 = JetScalar.of(Tensors.of(ComplexScalar.of(7, 5), ComplexScalar.of(4, 2)));
+    Scalar s2 = JetScalar.of(Tensors.of(ComplexScalar.of(-2, 3), ComplexScalar.of(1, -1)));
+    Scalar s12 = s1.multiply(s2);
+    Scalar s21 = s2.multiply(s1);
+    assertEquals(s12, s21);
+  }
+
+  @Test
   public void testReciprocal() {
     Scalar s1 = JetScalar.of(Tensors.vector(4, 1, 2));
     Scalar reciprocal = s1.reciprocal();
@@ -50,6 +63,14 @@ public class JetScalarTest {
     Scalar scalar = Power.of(s1, 5);
     JetScalar jetScalar = (JetScalar) scalar;
     assertEquals(jetScalar.vector(), Tensors.vector(1024, 1280, 3840, 4800));
+  }
+
+  @Test
+  public void testMultiplex() {
+    Scalar s1 = JetScalar.of(Tensors.vector(4, 1, 2, -3));
+    ExactScalarQ.require(s1);
+    Scalar s2 = N.DOUBLE.apply(s1);
+    assertFalse(ExactScalarQ.of(s2));
   }
 
   @Test

@@ -59,8 +59,10 @@ public interface Quaternion extends Scalar, //
    * @return instance of Quaternion with components (w, x, y, z) */
   static Quaternion of(Scalar w, Scalar x, Scalar y, Scalar z) {
     return new QuaternionImpl( //
-        Objects.requireNonNull(w), //
-        Tensors.of(Objects.requireNonNull(x), Objects.requireNonNull(y), Objects.requireNonNull(z)));
+        Objects.requireNonNull(w), Tensors.of( //
+            Objects.requireNonNull(x), //
+            Objects.requireNonNull(y), //
+            Objects.requireNonNull(z)));
   }
 
   /** Hint: As in Mathematica, "Quaternion objects will not automatically

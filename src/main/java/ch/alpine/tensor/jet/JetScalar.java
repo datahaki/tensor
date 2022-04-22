@@ -3,6 +3,8 @@ package ch.alpine.tensor.jet;
 
 import java.io.Serializable;
 import java.util.OptionalInt;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -18,6 +20,7 @@ import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.AbsInterface;
+import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.PDF;
@@ -49,7 +52,7 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * This class is immutable and thread-safe. */
 // TODO TENSOR JET general makeover and more tests
 public class JetScalar extends AbstractScalar implements //
-    AbsInterface, ExpInterface, LogInterface, PowerInterface, //
+    AbsInterface, ExpInterface, LogInterface, MultiplexScalar, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface, //
     Comparable<Scalar>, Serializable {
   /** @param vector {f[x], f'[x], f''[x], ...}
@@ -205,6 +208,16 @@ public class JetScalar extends AbstractScalar implements //
     return scalar instanceof JetScalar jetScalar //
         ? TensorComparator.INSTANCE.compare(vector, jetScalar.vector)
         : TensorComparator.INSTANCE.compare(vector, Join.of(Tensors.of(scalar), Array.zeros(vector.length() - 1)));
+  }
+
+  @Override // from MultiplexScalar
+  public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
+    return of(vector.map(unaryOperator));
+  }
+
+  @Override // from MultiplexScalar
+  public boolean allMatch(Predicate<Scalar> predicate) {
+    return vector.stream().map(Scalar.class::cast).allMatch(predicate);
   }
 
   // ---

@@ -32,7 +32,10 @@ import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.exp.LogInterface;
 import ch.alpine.tensor.sca.pow.PowerInterface;
 
-/** EXPERIMENTAL multiple clip */
+/** EXPERIMENTAL multiple clip
+ * 
+ * @implSpec
+ * This class is immutable and thread-safe. */
 /* package */ class Interval extends AbstractScalar implements //
     AbsInterface, ExpInterface, LogInterface, MultiplexScalar, //
     PowerInterface, SignInterface {
