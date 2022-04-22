@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.NumberQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -120,7 +120,7 @@ public class GammaTest {
     seed = Gamma.of(seed);
     seed = Gamma.of(seed);
     seed = Gamma.of(seed);
-    assertFalse(NumberQ.of(seed));
+    assertFalse(FiniteQ.of(seed));
   }
 
   @Test

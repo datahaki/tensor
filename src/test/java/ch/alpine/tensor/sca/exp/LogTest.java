@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.NumberQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -91,7 +91,7 @@ public class LogTest {
     assertEquals(scalarUnaryOperator.apply(RealScalar.of(-4)), RealScalar.ZERO);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(0));
     assertTrue(Double.isNaN(scalar.number().doubleValue()));
-    assertFalse(NumberQ.of(scalar));
+    assertFalse(FiniteQ.of(scalar));
   }
 
   @Test

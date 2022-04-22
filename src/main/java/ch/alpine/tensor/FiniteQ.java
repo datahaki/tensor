@@ -35,6 +35,15 @@ public enum FiniteQ {
     return true;
   }
 
+  /** @param scalar
+   * @return given scalar
+   * @throws Exception if given scalar is not a finite scalar */
+  public static Scalar require(Scalar scalar) {
+    if (of(scalar))
+      return scalar;
+    throw TensorRuntimeException.of(scalar);
+  }
+
   /** @param tensor
    * @return true, if all scalar entries in given tensor are finite */
   public static boolean all(Tensor tensor) {

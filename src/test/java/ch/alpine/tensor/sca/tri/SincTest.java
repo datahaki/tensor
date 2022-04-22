@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.NumberQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
@@ -109,7 +109,7 @@ public class SincTest {
 
   @Test
   public void testNan() {
-    assertFalse(NumberQ.of(Sinc.FUNCTION.apply(DoubleScalar.INDETERMINATE)));
+    assertFalse(FiniteQ.of(Sinc.FUNCTION.apply(DoubleScalar.INDETERMINATE)));
   }
 
   @Test

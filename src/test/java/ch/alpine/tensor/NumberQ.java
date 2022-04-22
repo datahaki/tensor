@@ -31,7 +31,7 @@ import ch.alpine.tensor.qty.Quantity;
  * @see ExactScalarQ
  * @see IntegerQ
  * @see DeterminateScalarQ */
-public enum NumberQ {
+/* package */ enum NumberQ {
   ;
   /** @param scalar
    * @return whether scalar satisfies the NumberQ predicate */

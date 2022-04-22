@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca;
 
 import java.util.Objects;
 
-import ch.alpine.tensor.NumberQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -57,7 +57,7 @@ public class Mod implements ScalarUnaryOperator {
   @Override
   public Scalar apply(Scalar scalar) {
     Scalar loops = Floor.FUNCTION.apply(scalar.subtract(d).divide(n));
-    return scalar.subtract(NumberQ.require(loops).multiply(n));
+    return scalar.subtract(FiniteQ.require(loops).multiply(n));
   }
 
   @SuppressWarnings("unchecked")
