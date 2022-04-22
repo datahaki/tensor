@@ -10,7 +10,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.OptionalInt;
 
-import ch.alpine.tensor.api.ExactScalarQInterface;
 import ch.alpine.tensor.api.NInterface;
 
 /** a RationalScalar corresponds to an element from the field of rational numbers.
@@ -22,7 +21,7 @@ import ch.alpine.tensor.api.NInterface;
  * @implSpec
  * This class is immutable and thread-safe. */
 public final class RationalScalar extends AbstractRealScalar implements //
-    ExactScalarQInterface, NInterface, Serializable {
+    NInterface, Serializable {
   /** rational number {@code 1/2} with decimal value {@code 0.5} */
   public static final Scalar HALF = of(1, 2);
 
@@ -150,11 +149,6 @@ public final class RationalScalar extends AbstractRealScalar implements //
   @Override // from RoundingInterface
   public Scalar floor() {
     return round(RoundingMode.FLOOR);
-  }
-
-  @Override // from ExactScalarQInterface
-  public boolean isExactScalar() {
-    return true;
   }
 
   @Override // from NInterface

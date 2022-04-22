@@ -7,7 +7,6 @@ import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ArgInterface;
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.api.ConjugateInterface;
-import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Sign;

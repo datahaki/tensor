@@ -1,9 +1,9 @@
 // code by jph
 package ch.alpine.tensor;
 
-import ch.alpine.tensor.api.ExactScalarQInterface;
+import ch.alpine.tensor.api.InexactScalarMarker;
 
-/** @see ExactScalarQInterface
+/** @see InexactScalarMarker
  * @see ExactScalarQ */
 public enum ExactTensorQ {
   ;

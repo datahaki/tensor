@@ -8,7 +8,6 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.api.ComplexEmbedding;
-import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.num.BinaryPower;
 import ch.alpine.tensor.num.ScalarProduct;

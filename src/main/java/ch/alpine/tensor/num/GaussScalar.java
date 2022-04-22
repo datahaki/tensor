@@ -12,7 +12,6 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ConjugateInterface;
-import ch.alpine.tensor.api.ExactScalarQInterface;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.qty.Quantity;
@@ -25,7 +24,7 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
  * an instance stores two non-negative integers: the value and the prime
  * which can be accessed via {@link #number()} and {@link #prime()}. */
 public class GaussScalar extends AbstractScalar implements //
-    AbsInterface, Comparable<Scalar>, ConjugateInterface, ExactScalarQInterface, PowerInterface, //
+    AbsInterface, Comparable<Scalar>, ConjugateInterface, PowerInterface, //
     RoundingInterface, SignInterface, SqrtInterface, Serializable {
   /** @param value
    * @param prime number
@@ -157,11 +156,6 @@ public class GaussScalar extends AbstractScalar implements //
   @Override // from ConjugateInterface
   public Scalar conjugate() {
     return this;
-  }
-
-  @Override // from ExactScalarQInterface
-  public boolean isExactScalar() {
-    return true;
   }
 
   @Override // from PowerInterface

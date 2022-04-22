@@ -4,7 +4,6 @@ package ch.alpine.tensor;
 import java.util.Objects;
 
 import ch.alpine.tensor.api.MachineNumberQInterface;
-import ch.alpine.tensor.api.MultiplexScalar;
 
 /** implementation consistent with Mathematica
  * <pre>
@@ -23,6 +22,7 @@ import ch.alpine.tensor.api.MultiplexScalar;
  * <a href="https://reference.wolfram.com/language/ref/MachineNumberQ.html">MachineNumberQ</a>
  * 
  * @see ExactScalarQ */
+@Deprecated
 public enum MachineNumberQ {
   ;
   /** @param scalar

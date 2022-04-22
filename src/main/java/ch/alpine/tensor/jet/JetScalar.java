@@ -6,6 +6,7 @@ import java.util.OptionalInt;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
+import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -19,7 +20,6 @@ import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.AbsInterface;
-import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.PDF;

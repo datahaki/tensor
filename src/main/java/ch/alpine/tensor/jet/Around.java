@@ -6,13 +6,13 @@ import java.io.Serializable;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
+import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
-import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;

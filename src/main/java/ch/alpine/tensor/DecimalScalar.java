@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.OptionalInt;
 
 import ch.alpine.tensor.api.ChopInterface;
+import ch.alpine.tensor.api.InexactScalarMarker;
 import ch.alpine.tensor.api.NInterface;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Chop;
@@ -36,7 +37,7 @@ import ch.alpine.tensor.sca.N;
  * @see N
  * @see Pi */
 public class DecimalScalar extends AbstractRealScalar implements //
-    ChopInterface, NInterface, Serializable {
+    ChopInterface, InexactScalarMarker, NInterface, Serializable {
   private static final int DEFAULT_CONTEXT = 34;
   /** BigDecimal precision of a double */
   private static final int DOUBLE_PRECISION = 17;

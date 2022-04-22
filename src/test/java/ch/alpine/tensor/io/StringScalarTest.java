@@ -76,6 +76,6 @@ public class StringScalarTest {
 
   @Test
   public void testNonExact() {
-    assertFalse(ExactScalarQ.of(StringScalar.of("abc")));
+    assertTrue(ExactScalarQ.of(StringScalar.of("abc")));
   }
 }

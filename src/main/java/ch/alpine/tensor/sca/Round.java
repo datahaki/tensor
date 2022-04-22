@@ -3,12 +3,12 @@ package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;

@@ -23,6 +23,7 @@ public class DeterminateScalarQTest {
     assertTrue(DeterminateScalarQ.of(Scalars.fromString("2+3.4*I[s^3]")));
     assertTrue(DeterminateScalarQ.of(Scalars.fromString("8.2+3.3*I[m^2]")));
     assertTrue(DeterminateScalarQ.of(Quantity.of(Pi.VALUE, "kg")));
+    assertTrue(DeterminateScalarQ.of(Scalars.fromString("abc")));
   }
 
   @Test
@@ -30,7 +31,6 @@ public class DeterminateScalarQTest {
     assertFalse(DeterminateScalarQ.of(DoubleScalar.POSITIVE_INFINITY));
     assertFalse(DeterminateScalarQ.of(DoubleScalar.NEGATIVE_INFINITY));
     assertFalse(DeterminateScalarQ.of(DoubleScalar.INDETERMINATE));
-    assertFalse(DeterminateScalarQ.of(Scalars.fromString("abc")));
     assertFalse(DeterminateScalarQ.of(Scalars.fromString("8.2+NaN*I[m^2]")));
     assertFalse(DeterminateScalarQ.of(Scalars.fromString("NaN+2*I[m*s]")));
     assertFalse(DeterminateScalarQ.of(Scalars.fromString("NaN+NaN*I[m*s]")));

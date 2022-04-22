@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import ch.alpine.tensor.api.ChopInterface;
+import ch.alpine.tensor.api.InexactScalarMarker;
 import ch.alpine.tensor.api.MachineNumberQInterface;
 import ch.alpine.tensor.sca.Chop;
 
@@ -43,7 +44,7 @@ import ch.alpine.tensor.sca.Chop;
  * @implSpec
  * This class is immutable and thread-safe. */
 public final class DoubleScalar extends AbstractRealScalar implements //
-    ChopInterface, MachineNumberQInterface, Serializable {
+    ChopInterface, InexactScalarMarker, MachineNumberQInterface, Serializable {
   /** real scalar that encodes +Infinity. value is backed by Double.POSITIVE_INFINITY */
   public static final Scalar POSITIVE_INFINITY = of(Double.POSITIVE_INFINITY);
   /** real scalar that encodes -Infinity. value is backed by Double.NEGATIVE_INFINITY */

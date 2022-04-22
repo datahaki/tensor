@@ -11,7 +11,6 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.api.ExactScalarQInterface;
 
 /** Addition of two instances of {@link DateTimeScalar} results in an exception.
  * Subtraction of two instances of {@link DateTimeScalar} results in a {@link DurationScalar}.
@@ -19,7 +18,7 @@ import ch.alpine.tensor.api.ExactScalarQInterface;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-public class DateTimeScalar extends AbstractScalar implements ExactScalarQInterface, //
+public class DateTimeScalar extends AbstractScalar implements //
     Comparable<Scalar>, Serializable {
   /** @param localDateTime
    * @return
@@ -81,11 +80,6 @@ public class DateTimeScalar extends AbstractScalar implements ExactScalarQInterf
     if (scalar instanceof DurationScalar durationScalar)
       return new DateTimeScalar(localDateTime.plus(durationScalar.duration()));
     throw TensorRuntimeException.of(this, scalar);
-  }
-
-  @Override // from ExactScalarQInterface
-  public boolean isExactScalar() {
-    return true;
   }
 
   @Override // from Comparable

@@ -52,6 +52,7 @@ public class LinearColorDataGradient implements ColorDataGradient {
   @Override // from ColorDataGradient
   public Tensor apply(Scalar scalar) {
     Scalar value = scalar.multiply(scale); // throws Exception for GaussScalar
+    // TODO use FiniteQ
     return MachineNumberQ.of(value) //
         ? interpolation.at(value)
         : Transparent.rgba();

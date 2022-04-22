@@ -5,12 +5,12 @@ import java.io.Serializable;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
+import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.MachineNumberQInterface;
-import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Arg;

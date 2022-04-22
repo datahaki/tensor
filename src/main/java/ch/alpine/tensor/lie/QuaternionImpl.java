@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import ch.alpine.tensor.ExactScalarQ;
+import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -18,7 +19,6 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.api.ComplexEmbedding;
-import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.num.BinaryPower;

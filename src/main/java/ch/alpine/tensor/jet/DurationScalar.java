@@ -13,7 +13,6 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ChopInterface;
-import ch.alpine.tensor.api.ExactScalarQInterface;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Floor;
@@ -30,7 +29,7 @@ import ch.alpine.tensor.sca.N;
  * @implSpec
  * This class is immutable and thread-safe. */
 public class DurationScalar extends AbstractScalar implements AbsInterface, //
-    ChopInterface, ExactScalarQInterface, Comparable<Scalar>, SignInterface, Serializable {
+    ChopInterface, Comparable<Scalar>, SignInterface, Serializable {
   public static final DurationScalar ZERO = new DurationScalar(Duration.ZERO);
 
   /** @param duration
@@ -133,11 +132,6 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
   @Override // from AbsInterface
   public Scalar absSquared() {
     throw TensorRuntimeException.of(this);
-  }
-
-  @Override // from ExactScalarQInterface
-  public boolean isExactScalar() {
-    return true;
   }
 
   @Override // from ChopInterface

@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
+import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -14,7 +15,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.AbsInterface;
-import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.red.Max;

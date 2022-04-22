@@ -7,10 +7,10 @@ import java.util.Objects;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.api.MultiplexScalar;
 import ch.alpine.tensor.api.NInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
