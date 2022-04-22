@@ -33,6 +33,7 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.N;
+import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
@@ -257,6 +258,12 @@ public class QuaternionTest {
     Scalar sign = Sign.FUNCTION.apply(quaternion);
     Scalar abs = Abs.FUNCTION.apply(quaternion);
     Tolerance.CHOP.requireClose(sign.multiply(abs), quaternion);
+  }
+
+  @Test
+  public void testRound() {
+    Quaternion quaternion = Quaternion.of(0.1, 0.3, 0.2, -0.3);
+    assertThrows(TensorRuntimeException.class, () -> Round.FUNCTION.apply(quaternion));
   }
 
   @Test

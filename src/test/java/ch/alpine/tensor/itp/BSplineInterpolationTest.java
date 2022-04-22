@@ -128,4 +128,7 @@ public class BSplineInterpolationTest {
       ExactTensorQ.require(tensor);
     }
   }
+  // TODO
+  // Table[Sin[j^2 + i], {i, 0, Pi, Pi/5}, {j, 0, Pi, Pi/5}];
+  // see ListDensityPlot help
 }

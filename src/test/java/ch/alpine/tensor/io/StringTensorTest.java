@@ -12,7 +12,7 @@ public class StringTensorTest {
   @Test
   public void testVector() {
     Tensor tensor = StringTensor.vector("IDSC", "ETH-Z", "ch");
-    assertTrue(StringScalarQ.of(tensor.Get(0)));
+    assertTrue(tensor.Get(0) instanceof StringScalar);
     assertEquals(tensor.Get(0).toString(), "IDSC");
   }
 }

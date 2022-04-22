@@ -6,6 +6,7 @@ import java.math.BigInteger;
 import java.util.Objects;
 
 import ch.alpine.tensor.AbstractScalar;
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
@@ -73,6 +74,8 @@ public class GaussScalar extends AbstractScalar implements //
     if (scalar instanceof GaussScalar)
       return in(value.multiply(requireCommonPrime((GaussScalar) scalar)), prime);
     if (scalar instanceof Quantity)
+      return scalar.multiply(this);
+    if (scalar instanceof ComplexScalar)
       return scalar.multiply(this);
     throw TensorRuntimeException.of(this, scalar);
   }

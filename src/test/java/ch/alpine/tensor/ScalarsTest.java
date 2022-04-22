@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.io.StringScalar;
-import ch.alpine.tensor.io.StringScalarQ;
 import ch.alpine.tensor.qty.Quantity;
 
 public class ScalarsTest {
@@ -215,14 +214,14 @@ public class ScalarsTest {
 
   @Test
   public void testParseFail() {
-    assertTrue(StringScalarQ.of(Scalars.fromString("(3+2)(-1+4")));
+    assertTrue(Scalars.fromString("(3+2)(-1+4") instanceof StringScalar);
     assertTrue(Scalars.fromString("(3+2)(-1+4+") instanceof StringScalar);
     assertTrue(Scalars.fromString("3+2-1+4+") instanceof StringScalar);
     assertTrue(Scalars.fromString("3+2-1+4-") instanceof StringScalar);
     assertTrue(Scalars.fromString("3++4") instanceof StringScalar);
     assertTrue(Scalars.fromString("3--4") instanceof StringScalar);
     assertTrue(Scalars.fromString("3**4") instanceof StringScalar);
-    assertTrue(StringScalarQ.of(Scalars.fromString("3//4")));
+    assertTrue(Scalars.fromString("3//4") instanceof StringScalar);
   }
 
   @Test

@@ -17,7 +17,11 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
 import ch.alpine.tensor.sca.pow.SqrtInterface;
 import ch.alpine.tensor.sca.tri.TrigonometryInterface;
 
-/** Important: not all algorithms are tested for {@link Quaternion} input.
+/** Quote from Mathematica:
+ * Quaternion objects will not automatically simplify to Complex or Real numbers. 
+ * 
+ * <p>Important in the tensor library:
+ * not all algorithms are tested for {@link Quaternion} input.
  * The consistent handling of the non-commutativity of the multiplication
  * may require significant modifications of the existing algorithms.
  * 
@@ -28,36 +32,46 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Quaternion.html">Quaternion</a> */
+// TODO Mathematica::Quaternion supports Round
 public interface Quaternion extends Scalar, //
     AbsInterface, ConjugateInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface {
   Quaternion ZERO = of(0, 0, 0, 0);
   Quaternion ONE = of(1, 0, 0, 0);
 
-  /** @param w real part
+  /** Hint: As in Mathematica, "Quaternion objects will not automatically
+   * simplify to Complex or Real numbers."
+   * 
+   * @param w real part
    * @param xyz vector of length 3
-   * @return quaternion
+   * @return instance of Quaternion with components (w, x, y, z)
    * @throws Exception if given xyz is not a vector of length 3 */
   static Quaternion of(Scalar w, Tensor xyz) {
     return new QuaternionImpl(Objects.requireNonNull(w), VectorQ.requireLength(xyz, 3).copy());
   }
 
-  /** @param w real part
+  /** Hint: As in Mathematica, "Quaternion objects will not automatically
+   * simplify to Complex or Real numbers."
+   * 
+   * @param w real part
    * @param x
    * @param y
    * @param z
-   * @return quaternion */
+   * @return instance of Quaternion with components (w, x, y, z) */
   static Quaternion of(Scalar w, Scalar x, Scalar y, Scalar z) {
     return new QuaternionImpl( //
         Objects.requireNonNull(w), //
         Tensors.of(Objects.requireNonNull(x), Objects.requireNonNull(y), Objects.requireNonNull(z)));
   }
 
-  /** @param w real part
+  /** Hint: As in Mathematica, "Quaternion objects will not automatically
+   * simplify to Complex or Real numbers."
+   * 
+   * @param w real part
    * @param x
    * @param y
    * @param z
-   * @return quaternion */
+   * @return instance of Quaternion with components (w, x, y, z) */
   static Quaternion of(Number w, Number x, Number y, Number z) {
     return new QuaternionImpl(RealScalar.of(w), Tensors.vector(x, y, z));
   }

@@ -37,7 +37,8 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
 
 /** EXPERIMENTAL multiple clip */
 /* package */ class Interval extends AbstractScalar implements //
-    AbsInterface, ExactScalarQInterface, ExpInterface, LogInterface, PowerInterface, RoundingInterface, SignInterface {
+    AbsInterface, ExactScalarQInterface, ExpInterface, LogInterface, //
+    PowerInterface, RoundingInterface, SignInterface {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
 
   /** @param clip
@@ -200,18 +201,18 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
   }
 
   // ---
-  @Override
+  @Override // from Object
   public int hashCode() {
     return clip.hashCode();
   }
 
-  @Override
+  @Override // from Object
   public boolean equals(Object object) {
     return object instanceof Interval interval //
         && clip.equals(interval.clip);
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return clip.toString();
   }

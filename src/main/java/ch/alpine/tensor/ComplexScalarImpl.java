@@ -13,6 +13,7 @@ import ch.alpine.tensor.api.MachineNumberQInterface;
 import ch.alpine.tensor.api.NInterface;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.num.BinaryPower;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.ScalarProduct;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
@@ -77,6 +78,9 @@ import ch.alpine.tensor.sca.tri.Sinh;
           re.multiply(z_re).subtract(im.multiply(z_im)), //
           re.multiply(z_im).add(im.multiply(z_re)));
     }
+    // TODO GaussScalar*/_Complex should be handled in GaussScalar (also below)
+    if (scalar instanceof GaussScalar)
+      return new ComplexScalarImpl(re.multiply(scalar), im.multiply(scalar));
     return scalar.multiply(this);
   }
 
@@ -86,6 +90,8 @@ import ch.alpine.tensor.sca.tri.Sinh;
       ComplexEmbedding z = (ComplexEmbedding) scalar;
       return ComplexHelper.division(re, im, z.real(), z.imag());
     }
+    if (scalar instanceof GaussScalar)
+      return new ComplexScalarImpl(re.divide(scalar), im.divide(scalar));
     return scalar.under(this);
   }
 

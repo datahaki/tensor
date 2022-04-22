@@ -18,6 +18,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.nrm.Vector2Norm;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
@@ -262,6 +263,20 @@ public class ComplexScalarImplTest {
     // mathematica also does not simplify 1 / (inf+inf*I)
     // assertEquals(ComplexScalar.of( //
     // DoubleScalar.POSITIVE_INFINITY, DoubleScalar.POSITIVE_INFINITY).reciprocal(), RealScalar.ZERO);
+  }
+
+  @Test
+  public void testGaussScalarFail() {
+    Tensor tensor = Tensors.fromString("{0.3, 1/3, 3+4*I, 1.2+3.4*I}");
+    Scalar g = GaussScalar.of(1, 7);
+    for (Tensor _x : tensor) {
+      Scalar x = (Scalar) _x;
+      assertThrows(Exception.class, () -> x.divide(g));
+      assertThrows(Exception.class, () -> x.under(g));
+      assertThrows(Exception.class, () -> x.multiply(g));
+      assertThrows(Exception.class, () -> g.divide(x));
+      assertThrows(Exception.class, () -> g.under(x));
+    }
   }
 
   @Test
