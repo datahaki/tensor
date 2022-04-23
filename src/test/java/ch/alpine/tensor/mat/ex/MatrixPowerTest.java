@@ -177,6 +177,12 @@ public class MatrixPowerTest {
   }
 
   @Test
+  public void testHermitian() {
+    Tensor matrix = Tensors.fromString("{{0, I}, {-I, 0}}");
+    MatrixPower.ofHermitian(matrix, RealScalar.of(2.3));
+  }
+
+  @Test
   public void testNonSymmetricFail() {
     assertThrows(TensorRuntimeException.class, () -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), RationalScalar.HALF));
   }

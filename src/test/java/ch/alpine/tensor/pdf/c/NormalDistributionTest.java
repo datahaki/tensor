@@ -25,6 +25,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.CentralMoment;
+import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.sca.Chop;
 
 public class NormalDistributionTest {
@@ -119,6 +120,11 @@ public class NormalDistributionTest {
     assertEquals(CentralMoment.of(distribution, 1), Quantity.of(0, "m^1"));
     assertEquals(CentralMoment.of(distribution, 3), Quantity.of(0, "m^3"));
     assertEquals(CentralMoment.of(distribution, 5), Quantity.of(0, "m^5"));
+  }
+
+  @Test
+  public void testKurtosis() {
+    assertEquals(Kurtosis.of(NormalDistribution.of(3, 4)), RealScalar.of(3));
   }
 
   @Test

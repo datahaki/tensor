@@ -66,6 +66,7 @@ public class DurationScalarTest {
     DurationScalar d1 = DurationScalar.of(Duration.ofDays(213));
     DurationScalar d2 = DurationScalar.of(Duration.ofDays(113).negated());
     Subdivide.of(d1, d2, 41);
+    assertEquals(Chop._01.apply(d1), d1);
   }
 
   @Test

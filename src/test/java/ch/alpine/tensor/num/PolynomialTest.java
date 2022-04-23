@@ -3,6 +3,7 @@ package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -187,6 +188,13 @@ public class PolynomialTest {
         init = init.moment(1);
       assertEquals(expect, init);
     }
+  }
+
+  @Test
+  public void testMomentCoeffs1() {
+    Polynomial polynomial = Polynomial.of(Tensors.vector(3));
+    Polynomial p2 = polynomial.moment(3);
+    assertEquals(p2.coeffs(), Tensors.vector(0, 0, 0, 3));
   }
 
   @Test
@@ -389,6 +397,11 @@ public class PolynomialTest {
     Tensor coeffs = c2.coeffs();
     coeffs.set(Scalar::zero, 0);
     assertEquals(c2.derivative().integral().coeffs(), coeffs);
+  }
+
+  @Test
+  public void testEquals() {
+    assertNotEquals(Polynomial.of(Tensors.vector(1, 2, 3)), "abc");
   }
 
   @Test

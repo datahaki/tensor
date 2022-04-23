@@ -2,7 +2,6 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,7 +9,6 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
@@ -48,9 +46,8 @@ public class CauchyDistributionTest {
     Scalar median = (Scalar) Median.of(RandomVariate.of(distribution, 100));
     Clips.interval(-2, 4).requireInside(median);
     assertTrue(distribution.toString().startsWith("CauchyDistribution["));
-    // TODO can be more specific
-    assertFalse(FiniteQ.of(Mean.of(distribution)));
-    assertFalse(FiniteQ.of(Variance.of(distribution)));
+    assertEquals(Mean.of(distribution).toString(), "NaN");
+    assertEquals(Variance.of(distribution).toString(), "NaN");
   }
 
   @Test

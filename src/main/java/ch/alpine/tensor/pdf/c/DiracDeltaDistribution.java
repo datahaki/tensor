@@ -13,6 +13,7 @@ import ch.alpine.tensor.num.Boole;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
+import ch.alpine.tensor.sca.Clips;
 
 /** Reference:
  * https://en.wikipedia.org/wiki/Dirac_delta_function */
@@ -54,6 +55,7 @@ public class DiracDeltaDistribution implements UnivariateDistribution, CentralMo
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
+    Clips.unit().requireInside(p);
     return value;
   }
 

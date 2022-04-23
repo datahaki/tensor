@@ -34,4 +34,10 @@ public class ExpcTest {
           RealScalar.ONE);
     }
   }
+
+  @Test
+  public void test2ndCase() {
+    Scalar scalar = Expc.FUNCTION.apply(RealScalar.of(2));
+    Tolerance.CHOP.requireClose(scalar, RealScalar.of((Math.exp(2) - 1) * 0.5));
+  }
 }

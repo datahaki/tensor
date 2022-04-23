@@ -2,6 +2,8 @@
 package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 
@@ -11,6 +13,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Reverse;
+import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.mat.GaussianMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
@@ -42,5 +45,13 @@ public class FullCorrelateTest {
     Tensor b = GaussianMatrix.of(2); // 5x5
     Tensor result = FullCorrelate.of(a, b);
     assertEquals(Dimensions.of(result), Arrays.asList(6, 7));
+  }
+
+  @Test
+  public void testObject() {
+    Tensor a = HilbertMatrix.of(3, 3);
+    TensorUnaryOperator tuo = FullCorrelate.with(a);
+    assertTrue(tuo.toString().startsWith("FullCorrelate["));
+    assertThrows(Exception.class, () -> tuo.apply(Tensors.vector(1, 2, 3)));
   }
 }

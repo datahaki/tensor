@@ -25,6 +25,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
+import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.sca.Chop;
 
 public class GumbelDistributionTest {
@@ -96,6 +97,17 @@ public class GumbelDistributionTest {
         GumbelDistribution.of(Quantity.of(-1.3, "m^-1"), Quantity.of(1.5, "m^-1"));
     Scalar var = Expectation.variance(distribution);
     Chop._13.requireClose(var, Quantity.of(3.7011016504085092, "m^-2"));
+  }
+
+  @Test
+  public void testCentralMoment() {
+    Distribution distribution = //
+        GumbelDistribution.of(Quantity.of(-1.3, "m^-1"), Quantity.of(1.5, "m^-1"));
+    assertEquals(CentralMoment.of(distribution, 0), RealScalar.ONE);
+    assertEquals(CentralMoment.of(distribution, 1), Quantity.of(0, "m^-1"));
+    Scalar var = CentralMoment.of(distribution, 2);
+    Chop._13.requireClose(var, Quantity.of(3.7011016504085092, "m^-2"));
+    assertThrows(Exception.class, () -> CentralMoment.of(distribution, 3));
   }
 
   @Test
