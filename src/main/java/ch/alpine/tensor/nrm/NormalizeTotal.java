@@ -4,7 +4,7 @@ package ch.alpine.tensor.nrm;
 import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
-import ch.alpine.tensor.DeterminateScalarQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.TensorUnaryOperator;
@@ -33,7 +33,7 @@ public enum NormalizeTotal implements TensorUnaryOperator {
    * @return */
   public static OptionalInt indeterminate(Tensor vector) {
     return IntStream.range(0, vector.length()) //
-        .filter(index -> !DeterminateScalarQ.of(vector.Get(index))) //
+        .filter(index -> !FiniteQ.of(vector.Get(index))) //
         .findFirst();
   }
 }

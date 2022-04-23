@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.DeterminateScalarQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
@@ -48,8 +48,9 @@ public class CauchyDistributionTest {
     Scalar median = (Scalar) Median.of(RandomVariate.of(distribution, 100));
     Clips.interval(-2, 4).requireInside(median);
     assertTrue(distribution.toString().startsWith("CauchyDistribution["));
-    assertFalse(DeterminateScalarQ.of(Mean.of(distribution)));
-    assertFalse(DeterminateScalarQ.of(Variance.of(distribution)));
+    // TODO can be more specific
+    assertFalse(FiniteQ.of(Mean.of(distribution)));
+    assertFalse(FiniteQ.of(Variance.of(distribution)));
   }
 
   @Test

@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat.pi;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.DeterminateScalarQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -41,7 +41,7 @@ import ch.alpine.tensor.sca.N;
   /** @return */
   public Tensor pseudoInverse() {
     Scalar sigma = N.DOUBLE.apply(Matrix2Norm.bound(matrix.map(Unprotect::withoutUnit)));
-    DeterminateScalarQ.require(sigma); // fail fast
+    FiniteQ.require(sigma); // fail fast
     Scalar sigma2 = sigma.multiply(sigma);
     Tensor ai = ConjugateTranspose.of(matrix.map(UnitNegate.FUNCTION));
     if (Scalars.isZero(sigma2)) // special case that all entries of matrix are zero

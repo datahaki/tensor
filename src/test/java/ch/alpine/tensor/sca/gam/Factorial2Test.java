@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.DeterminateScalarQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -46,7 +46,7 @@ public class Factorial2Test {
 
   @Test
   public void testNegativeEven() {
-    assertFalse(DeterminateScalarQ.of(Factorial2.of(-2)));
-    assertFalse(DeterminateScalarQ.of(Factorial2.of(-4)));
+    assertFalse(FiniteQ.of(Factorial2.of(-2)));
+    assertFalse(FiniteQ.of(Factorial2.of(-4)));
   }
 }

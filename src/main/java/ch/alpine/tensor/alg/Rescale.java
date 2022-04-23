@@ -2,7 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.DeterminateScalarQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ScalarQ;
@@ -26,7 +26,7 @@ public class Rescale {
   /** RealScalar.ZERO is used instead of {@link Scalar#zero()}
    * to eliminate unit of {@link Quantity}. */
   private static final ScalarUnaryOperator FINITE_NUMBER_ZERO = //
-      scalar -> DeterminateScalarQ.of(scalar) ? RealScalar.ZERO : scalar;
+      scalar -> FiniteQ.of(scalar) ? RealScalar.ZERO : scalar;
 
   /** The scalar entries of the given tensor may also be instance of
    * {@link Quantity} with identical unit.
@@ -66,7 +66,7 @@ public class Rescale {
     ScalarQ.thenThrow(tensor);
     scalarSummaryStatistics = tensor.flatten(-1) //
         .map(Scalar.class::cast) //
-        .filter(DeterminateScalarQ::of) //
+        .filter(FiniteQ::of) //
         .collect(ScalarSummaryStatistics.collector());
     result = _result(tensor, scalarSummaryStatistics);
   }

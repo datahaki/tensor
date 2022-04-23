@@ -158,15 +158,15 @@ public class ComplexHelperTest {
 
   @Test
   public void testPlusQuantityFail() {
-    Scalar c = DeterminateScalarQ.require(ComplexScalar.of(2, 3));
-    Scalar q = DeterminateScalarQ.require(Quantity.of(1, "V"));
+    Scalar c = ComplexScalar.of(2, 3);
+    Scalar q = Quantity.of(1, "V");
     assertThrows(TensorRuntimeException.class, () -> c.add(q));
   }
 
   @Test
   public void testQuantityFail() {
-    Scalar c = DeterminateScalarQ.require(Quantity.of(3, "m"));
-    Scalar r = DeterminateScalarQ.require(Pi.VALUE);
+    Scalar c = Quantity.of(3, "m");
+    Scalar r = Pi.VALUE;
     assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(c, r));
     assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(r, c));
   }

@@ -10,8 +10,8 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.ExactScalarQ;
+import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
@@ -42,8 +42,8 @@ public class StudentTDistributionTest {
 
   @Test
   public void testMeanVarSpecial() {
-    assertFalse(DeterminateScalarQ.of(Mean.of(StudentTDistribution.of(5, 4, 0.5))));
-    assertFalse(DeterminateScalarQ.of(Variance.of(StudentTDistribution.of(5, 4, 1.5))));
+    assertFalse(FiniteQ.of(Mean.of(StudentTDistribution.of(5, 4, 0.5))));
+    assertFalse(FiniteQ.of(Variance.of(StudentTDistribution.of(5, 4, 1.5))));
   }
 
   @Test

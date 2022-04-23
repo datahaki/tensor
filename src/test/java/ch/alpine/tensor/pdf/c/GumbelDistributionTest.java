@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
@@ -62,7 +61,7 @@ public class GumbelDistributionTest {
     assertEquals(inverseCDF.quantile(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
     assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
     // System.out.println(gmd.randomVariate(0.0));
-    DeterminateScalarQ.require(gmd.protected_quantile(RealScalar.of(Math.nextDown(1.0))));
+    FiniteQ.require(gmd.protected_quantile(RealScalar.of(Math.nextDown(1.0))));
   }
 
   @Test

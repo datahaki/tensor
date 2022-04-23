@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
-import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RationalScalar;
@@ -61,7 +60,7 @@ public class QuantityTest {
   @Test
   public void testPercent() {
     Scalar of = Quantity.of(50, "%");
-    DeterminateScalarQ.require(of);
+    FiniteQ.require(of);
     Scalar pr = Scalars.fromString("50[%]");
     assertEquals(of, pr);
     Scalar n1 = UnitSystem.SI().apply(pr);

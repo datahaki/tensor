@@ -39,7 +39,7 @@ public class ColorDataGradientsTest {
   @EnumSource(ColorDataGradients.class)
   public void testQuantity(ColorDataGradient colorDataGradient) {
     Scalar scalar = Quantity.of(Double.POSITIVE_INFINITY, "s");
-    Chop.NONE.requireAllZero(colorDataGradient.apply(scalar));
+    assertThrows(Exception.class, () -> colorDataGradient.apply(scalar));
   }
 
   @ParameterizedTest

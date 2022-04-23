@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.img;
 
-import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -19,8 +18,9 @@ import ch.alpine.tensor.sca.Clips;
 
   @Override // from ScalarTensorFunction
   public Tensor apply(Scalar scalar) {
-    return DeterminateScalarQ.of(scalar) //
-        ? tensors[toInt(scalar.number().doubleValue())].copy()
+    double value = scalar.number().doubleValue();
+    return Double.isFinite(value) //
+        ? tensors[toInt(value)].copy()
         : Transparent.rgba();
   }
 

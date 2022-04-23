@@ -14,6 +14,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.qty.Quantity;
 
 public class StrictColorDataIndexedTest {
   @Test
@@ -68,6 +69,14 @@ public class StrictColorDataIndexedTest {
     assertEquals(colorDataIndexed.getColor(1), Color.RED);
     assertEquals(colorDataIndexed.getColor(2), Color.BLACK);
     assertThrows(ArrayIndexOutOfBoundsException.class, () -> colorDataIndexed.getColor(3));
+  }
+
+  @Test
+  public void testFails() {
+    ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(Color.BLUE, Color.RED);
+    assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(1, "m")));
+    assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(Double.NaN, "m")));
+    assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(Double.POSITIVE_INFINITY, "m")));
   }
 
   @Test
