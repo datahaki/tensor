@@ -1,6 +1,9 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.chq;
 
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.InexactScalarMarker;
 
 /** @see InexactScalarMarker

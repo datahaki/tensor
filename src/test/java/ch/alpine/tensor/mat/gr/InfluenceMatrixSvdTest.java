@@ -11,12 +11,12 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.pdf.Distribution;

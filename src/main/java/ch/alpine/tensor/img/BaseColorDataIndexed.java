@@ -3,13 +3,13 @@ package ch.alpine.tensor.img;
 
 import java.awt.Color;
 
-import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 
 /* package */ abstract class BaseColorDataIndexed implements ColorDataIndexed {
   private final Tensor tensor;
@@ -26,7 +26,7 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
   public final Tensor apply(Scalar scalar) {
     if (scalar instanceof MultiplexScalar)
       throw TensorRuntimeException.of(scalar);
-    return FiniteQ.of(scalar) //
+    return FiniteScalarQ.of(scalar) //
         ? tensor.get(toInt(scalar))
         : Transparent.rgba();
   }

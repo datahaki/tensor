@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.ext.Integers;
 
 /** Hint: the implementation also operates on unstructured tensors.

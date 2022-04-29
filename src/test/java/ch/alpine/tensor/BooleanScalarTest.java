@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.Sort;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;

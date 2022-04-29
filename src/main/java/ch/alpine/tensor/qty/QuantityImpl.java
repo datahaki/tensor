@@ -16,6 +16,7 @@ import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Real;
+import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -58,6 +59,14 @@ import ch.alpine.tensor.sca.tri.ArcTan;
  * Hint: use
  * scalar -> QuantityMagnitude.SI().in(unit).apply(scalar).number();
  * where unit is the desired reference for instance "kW*h^-1"
+ * 
+ * <p>Careful: the multiplex scalar only involves the value-part of the Quantity.
+ * For example, {@link Round} only affects the value-part. Also, predicates
+ * only consider the value-part. For example:
+ * <pre>
+ * ExactScalarQ[ 10 [m^2.0] ] == true
+ * ExactScalarQ[ 10 [m^2.5] ] == true
+ * </pre>
  * 
  * @implSpec
  * This class is immutable and thread-safe. */

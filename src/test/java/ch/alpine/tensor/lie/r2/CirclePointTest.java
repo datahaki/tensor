@@ -10,12 +10,12 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Chop;
 

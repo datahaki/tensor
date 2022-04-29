@@ -9,8 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RandomQuaternion;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -23,6 +21,8 @@ import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.jet.JetScalar;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.mat.HilbertMatrix;

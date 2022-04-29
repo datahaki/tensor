@@ -10,13 +10,14 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.pdf.c.DiracDeltaDistribution;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
@@ -35,6 +36,13 @@ public class TruncatedDistributionTest {
     Distribution distribution = Serialization.copy(TruncatedDistribution.of(NormalDistribution.of(10, 2), clip));
     Scalar scalar = RandomVariate.of(distribution);
     assertTrue(clip.isInside(scalar));
+  }
+
+  @Test
+  public void testZero() {
+    Clip clip = Clips.interval(2, 2);
+    Distribution distribution = TruncatedDistribution.of(NormalDistribution.of(0, 1), clip);
+    assertTrue(distribution instanceof DiracDeltaDistribution);
   }
 
   @Test

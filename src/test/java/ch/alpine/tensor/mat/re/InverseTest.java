@@ -13,7 +13,6 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DecimalScalar;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -22,6 +21,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.fft.FourierMatrix;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.lie.LeviCivitaTensor;

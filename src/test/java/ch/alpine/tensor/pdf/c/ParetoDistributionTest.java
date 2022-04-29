@@ -12,11 +12,11 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -67,8 +67,8 @@ public class ParetoDistributionTest {
   @Test
   public void testMeanVarianceIndeterminate() {
     Distribution distribution = ParetoDistribution.of(2.3, 1);
-    assertFalse(FiniteQ.of(Mean.of(distribution)));
-    assertFalse(FiniteQ.of(Variance.of(distribution)));
+    assertFalse(FiniteScalarQ.of(Mean.of(distribution)));
+    assertFalse(FiniteScalarQ.of(Variance.of(distribution)));
   }
 
   @Test

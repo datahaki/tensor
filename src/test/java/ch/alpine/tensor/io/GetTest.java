@@ -12,8 +12,8 @@ import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ScalarQTest;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.chq.ScalarQTest;
 
 public class GetTest {
   @Test

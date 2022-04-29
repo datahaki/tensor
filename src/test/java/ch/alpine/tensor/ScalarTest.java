@@ -11,6 +11,7 @@ import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.chq.ScalarQTest;
 import ch.alpine.tensor.num.GaussScalar;
 
 public class ScalarTest {

@@ -9,10 +9,10 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -65,7 +65,7 @@ public class DagumDistributionTest {
   public void testMeanIndeterminate() {
     Distribution distribution = DagumDistribution.of(2.3, 1, 0.7);
     Scalar scalar = Mean.of(distribution);
-    assertFalse(FiniteQ.of(scalar));
+    assertFalse(FiniteScalarQ.of(scalar));
   }
 
   @Test

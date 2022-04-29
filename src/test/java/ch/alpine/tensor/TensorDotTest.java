@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.chq.ScalarQTest;
+
 public class TensorDotTest {
   @Test
   public void testDotEmpty() {

@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.chq;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,6 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;

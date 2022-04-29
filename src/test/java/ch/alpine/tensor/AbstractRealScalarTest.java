@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.num.GaussScalar;

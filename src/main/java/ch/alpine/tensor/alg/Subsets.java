@@ -7,10 +7,10 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
-import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.num.Binomial;
 
 /** inspired by

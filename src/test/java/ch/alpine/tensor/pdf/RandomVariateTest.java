@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
-import ch.alpine.tensor.ScalarQTest;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.chq.ScalarQTest;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;

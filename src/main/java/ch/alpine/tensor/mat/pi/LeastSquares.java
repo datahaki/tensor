@@ -2,11 +2,11 @@
 // https://stats.stackexchange.com/questions/66088/analysis-with-complex-data-anything-different
 package ch.alpine.tensor.mat.pi;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
 import ch.alpine.tensor.mat.Tolerance;

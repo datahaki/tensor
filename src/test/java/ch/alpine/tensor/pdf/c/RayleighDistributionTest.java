@@ -9,10 +9,10 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -56,8 +56,8 @@ public class RayleighDistributionTest {
     RandomVariate.of(distribution, 100);
     Scalar q0 = distribution.protected_quantile(RealScalar.ZERO);
     Scalar q1 = distribution.protected_quantile(RealScalar.of(Math.nextDown(1.0)));
-    FiniteQ.require(q0);
-    FiniteQ.require(q1);
+    FiniteScalarQ.require(q0);
+    FiniteScalarQ.require(q1);
   }
 
   @Test

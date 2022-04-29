@@ -10,13 +10,13 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
-import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Round;
@@ -60,7 +60,7 @@ public class QuantityTest {
   @Test
   public void testPercent() {
     Scalar of = Quantity.of(50, "%");
-    FiniteQ.require(of);
+    FiniteScalarQ.require(of);
     Scalar pr = Scalars.fromString("50[%]");
     assertEquals(of, pr);
     Scalar n1 = UnitSystem.SI().apply(pr);
@@ -120,7 +120,7 @@ public class QuantityTest {
     assertTrue(round instanceof Quantity);
     assertEquals(round, Scalars.fromString("-7+4*I[kg^-1*m^2*s]"));
     ExactScalarQ.require(round);
-    assertTrue(FiniteQ.of(round));
+    assertTrue(FiniteScalarQ.of(round));
   }
 
   @Test

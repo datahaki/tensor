@@ -1,6 +1,11 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.chq;
 
+import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.IntegerQ;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.qty.Quantity;
 
 /** implementation consistent with Mathematica
@@ -40,7 +45,7 @@ import ch.alpine.tensor.qty.Quantity;
           && of(complexScalar.imag());
     if (scalar instanceof Quantity)
       return false;
-    return FiniteQ.of(scalar) //
+    return FiniteScalarQ.of(scalar) //
         || ExactScalarQ.of(scalar);
   }
 

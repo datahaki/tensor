@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Numel;
+import ch.alpine.tensor.chq.ScalarQTest;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 

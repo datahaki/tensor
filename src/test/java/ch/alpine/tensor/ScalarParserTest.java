@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.chq.ExactScalarQ;
+
 public class ScalarParserTest {
   @Test
   public void testDouble() {

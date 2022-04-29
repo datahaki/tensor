@@ -1,8 +1,13 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.chq;
 
 import java.util.Objects;
 
+import ch.alpine.tensor.IntegerQ;
+import ch.alpine.tensor.MultiplexScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.InexactScalarMarker;
 import ch.alpine.tensor.mat.re.RowReduce;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
@@ -33,7 +38,7 @@ import ch.alpine.tensor.qty.Quantity;
  * 
  * @see InexactScalarMarker
  * @see IntegerQ
- * @see FiniteQ */
+ * @see FiniteScalarQ */
 public enum ExactScalarQ {
   ;
   /** @param scalar

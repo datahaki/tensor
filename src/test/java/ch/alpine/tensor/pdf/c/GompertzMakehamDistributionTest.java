@@ -10,12 +10,12 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -79,7 +79,7 @@ public class GompertzMakehamDistributionTest {
       CDF cdf = CDF.of(distribution);
       Scalar prob = cdf.p_lessEquals(Quantity.of(10, "m"));
       assertTrue(prob instanceof DoubleScalar);
-      assertTrue(FiniteQ.of(prob));
+      assertTrue(FiniteScalarQ.of(prob));
     }
   }
 

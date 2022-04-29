@@ -6,13 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.FiniteQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.pdf.c.CauchyDistribution;
 import ch.alpine.tensor.pdf.c.DagumDistribution;
 import ch.alpine.tensor.pdf.c.EqualizingDistribution;
@@ -57,12 +57,12 @@ public class UnivariateDistributionTest {
       RandomVariate.of(distribution);
       InverseCDF inverseCDF = InverseCDF.of(distribution);
       Scalar scalar = Median.of(distribution);
-      FiniteQ.require(scalar);
+      FiniteScalarQ.require(scalar);
       assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
       assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
       inverseCDF.quantile(RealScalar.ZERO);
       inverseCDF.quantile(RealScalar.of(Math.nextUp(0)));
-      FiniteQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));
+      FiniteScalarQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));
     }
   }
 
