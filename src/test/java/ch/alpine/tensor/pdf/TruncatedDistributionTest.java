@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -42,7 +43,7 @@ public class TruncatedDistributionTest {
   public void testZero() {
     Clip clip = Clips.interval(2, 2);
     Distribution distribution = TruncatedDistribution.of(NormalDistribution.of(0, 1), clip);
-    assertTrue(distribution instanceof DiracDeltaDistribution);
+    assertInstanceOf(DiracDeltaDistribution.class, distribution);
   }
 
   @Test

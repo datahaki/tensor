@@ -2,6 +2,7 @@
 package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,7 +24,7 @@ public class SimpleUnitSystemTest {
   @Test
   public void testInstance() {
     UnitSystem unitSystem = UnitSystem.SI();
-    assertTrue(unitSystem instanceof SimpleUnitSystem);
+    assertInstanceOf(SimpleUnitSystem.class, unitSystem);
   }
 
   @Test

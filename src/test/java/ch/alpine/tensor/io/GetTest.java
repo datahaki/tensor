@@ -4,12 +4,11 @@ package ch.alpine.tensor.io;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +20,7 @@ public class GetTest {
   public void testResource() throws IOException {
     File file = new File(getClass().getResource("/io/basic.mathematica").getFile());
     Tensor tensor = Get.of(file);
-    assertTrue(Objects.nonNull(tensor));
+    assertNotNull(tensor);
     assertFalse(ScalarQTest.of(tensor));
     assertEquals(tensor.length(), 13);
     assertEquals(tensor, Get.of(file));

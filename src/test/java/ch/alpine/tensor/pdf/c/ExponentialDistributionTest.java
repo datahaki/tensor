@@ -208,7 +208,7 @@ public class ExponentialDistributionTest {
     {
       Scalar prob = PDF.of(distribution).at(Quantity.of(2, "m^-1"));
       assertTrue(Sign.isPositive(prob));
-      assertTrue(prob instanceof Quantity);
+      assertInstanceOf(Quantity.class, prob);
     }
     {
       Scalar prob = PDF.of(distribution).at(Quantity.of(-2, "m^-1"));

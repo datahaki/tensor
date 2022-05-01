@@ -3,8 +3,8 @@ package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +49,7 @@ public class QuaternionTest {
     Tolerance.CHOP.requireClose(abs, Scalars.fromString("6.164414002968976[m]"));
     ExactScalarQ.require(quaternion);
     assertEquals(quaternion.conjugate(), Quaternion.of(Quantity.of(3, "m"), Tensors.fromString("{-2[m],-3[m],-4[m]}")));
-    assertTrue(quaternion.sqrt() instanceof QuaternionImpl);
+    assertInstanceOf(QuaternionImpl.class, quaternion.sqrt());
     Quaternion actual = quaternion.reciprocal();
     Quaternion expect = Quaternion.of(Scalars.fromString("3/38[m^-1]"), Tensors.fromString("{-1/19[m^-1], -3/38[m^-1], -2/19[m^-1]}"));
     assertEquals(expect, actual);

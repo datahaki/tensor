@@ -71,7 +71,7 @@ public class FrechetDistributionTest {
     {
       CDF cdf = CDF.of(distribution);
       Scalar prob = cdf.p_lessEquals(Quantity.of(10, "m^-1"));
-      assertTrue(prob instanceof DoubleScalar);
+      assertInstanceOf(DoubleScalar.class, prob);
       assertTrue(FiniteScalarQ.of(prob));
     }
   }

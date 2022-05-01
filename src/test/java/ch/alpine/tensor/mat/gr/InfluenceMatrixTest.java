@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.gr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -166,7 +167,7 @@ public class InfluenceMatrixTest {
     Tensor design = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, m);
     if (MatrixRank.of(design) == m) {
       InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
-      assertTrue(influenceMatrix instanceof InfluenceMatrixImpl);
+      assertInstanceOf(InfluenceMatrixImpl.class, influenceMatrix);
       Tensor matrix = influenceMatrix.matrix();
       SymmetricMatrixQ.require(matrix);
       assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));
@@ -188,7 +189,7 @@ public class InfluenceMatrixTest {
     if (MatrixRank.of(d_dt) == m) { // apparently rank(design) == m does not imply rank(d dt) == m !
       PseudoInverse.usingCholesky(design);
       InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
-      assertTrue(influenceMatrix instanceof InfluenceMatrixImpl);
+      assertInstanceOf(InfluenceMatrixImpl.class, influenceMatrix);
       Tensor matrix = influenceMatrix.matrix();
       SymmetricMatrixQ.require(matrix);
       assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));

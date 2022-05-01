@@ -2,8 +2,8 @@
 package ch.alpine.tensor.mat.pi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -202,7 +202,7 @@ public class PseudoInverseTest {
   public void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
     Tensor pseudo = PseudoInverse.of(matrix);
-    assertTrue(pseudo.Get(1, 2) instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, pseudo.Get(1, 2));
   }
 
   @Test

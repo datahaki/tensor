@@ -3,6 +3,7 @@ package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,7 +33,7 @@ public class DateTimeScalarTest {
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2021, 1, 10, 6, 30));
     Serialization.copy(dt1);
     Scalar scalar2 = dt2.subtract(dt1);
-    assertTrue(scalar2 instanceof DurationScalar);
+    assertInstanceOf(DurationScalar.class, scalar2);
     assertEquals(dt1.add(scalar2), dt2);
     assertThrows(TensorRuntimeException.class, () -> dt1.negate());
     assertThrows(TensorRuntimeException.class, () -> dt1.multiply(RealScalar.of(-1)));
@@ -73,7 +74,7 @@ public class DateTimeScalarTest {
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2021, 1, 10, 6, 30));
     Scalar scalar1 = dt2.subtract(dt1);
     Scalar scalar3 = dt1.subtract(dt2);
-    assertTrue(scalar3 instanceof DurationScalar);
+    assertInstanceOf(DurationScalar.class, scalar3);
     assertEquals(scalar1, scalar3.negate());
     scalar1.add(scalar3);
     Scalar diff = scalar1.add(scalar3);
@@ -106,7 +107,7 @@ public class DateTimeScalarTest {
     ExactScalarQ.require(dt1);
     DurationScalar ds = DurationScalar.of(Duration.ofSeconds(245234, 123_236_987).negated());
     Scalar scalar = dt1.subtract(ds);
-    assertTrue(scalar instanceof DateTimeScalar);
+    assertInstanceOf(DateTimeScalar.class, scalar);
   }
 
   @Test

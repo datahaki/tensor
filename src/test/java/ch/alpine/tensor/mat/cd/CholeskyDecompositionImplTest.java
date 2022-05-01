@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.cd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -74,7 +75,7 @@ public class CholeskyDecompositionImplTest {
         choleskyDecomposition.getL(), //
         DiagonalMatrix.with(choleskyDecomposition.diagonal()), //
         Transpose.of(choleskyDecomposition.getL()));
-    assertTrue(result.Get(3, 3) instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, result.Get(3, 3));
     Tolerance.CHOP.requireClose(matrix, result);
   }
 

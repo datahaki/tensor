@@ -3,6 +3,7 @@ package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -139,7 +140,7 @@ public class GaussScalarTest {
   @Test
   public void testNumber() {
     Scalar scalar = GaussScalar.of(9, 23);
-    assertTrue(scalar.number() instanceof BigInteger);
+    assertInstanceOf(BigInteger.class, scalar.number());
   }
 
   @Test

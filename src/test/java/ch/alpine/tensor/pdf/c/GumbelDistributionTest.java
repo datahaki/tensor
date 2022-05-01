@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -69,7 +70,7 @@ public class GumbelDistributionTest {
   public void testQuantity() {
     Distribution distribution = GumbelDistribution.of(Quantity.of(0.3, "m^-1"), Quantity.of(0.4, "m^-1"));
     Scalar rand = RandomVariate.of(distribution);
-    assertTrue(rand instanceof Quantity);
+    assertInstanceOf(Quantity.class, rand);
     UnitConvert.SI().to(Unit.of("in^-1")).apply(rand);
     {
       Scalar prob = PDF.of(distribution).at(Quantity.of(1, "m^-1"));
@@ -78,7 +79,7 @@ public class GumbelDistributionTest {
     {
       CDF cdf = CDF.of(distribution);
       Scalar prob = cdf.p_lessEquals(Quantity.of(10, "m^-1"));
-      assertTrue(prob instanceof DoubleScalar);
+      assertInstanceOf(DoubleScalar.class, prob);
       assertTrue(FiniteScalarQ.of(prob));
     }
   }

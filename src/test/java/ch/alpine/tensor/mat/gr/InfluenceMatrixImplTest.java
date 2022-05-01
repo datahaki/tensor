@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.gr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -93,7 +94,7 @@ public class InfluenceMatrixImplTest {
     Tensor design = RandomVariate.of(distribution, n, m);
     if (MatrixRank.of(design) == m) {
       InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
-      assertTrue(influenceMatrix instanceof InfluenceMatrixImpl);
+      assertInstanceOf(InfluenceMatrixImpl.class, influenceMatrix);
       ExactTensorQ.require(influenceMatrix.matrix());
       Tensor vector = RandomVariate.of(distribution, n);
       Tensor image = influenceMatrix.image(vector);
@@ -115,7 +116,7 @@ public class InfluenceMatrixImplTest {
     Tensor design = RandomVariate.of(distribution, n, m);
     if (MatrixRank.of(design) == m) {
       InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
-      assertTrue(influenceMatrix instanceof InfluenceMatrixImpl);
+      assertInstanceOf(InfluenceMatrixImpl.class, influenceMatrix);
       ExactTensorQ.require(influenceMatrix.matrix());
       Tensor vector = RandomVariate.of(distribution, n);
       Tensor image = influenceMatrix.image(vector);

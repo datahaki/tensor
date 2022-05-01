@@ -2,6 +2,7 @@
 package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,7 @@ public class QuantityMultiplicativeTest {
     Scalar qs2 = Quantity.of(4, "m");
     Scalar qs3 = Quantity.of(3, "m^0");
     assertEquals(qs1.divide(qs2), qs3);
-    assertTrue(qs3 instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, qs3);
   }
 
   @Test

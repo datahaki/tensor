@@ -2,8 +2,8 @@
 package ch.alpine.tensor.mat.re;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.util.Random;
@@ -226,7 +226,7 @@ public class DetTest {
     int prime = 7879;
     Random random = new Random();
     Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, n);
-    assertTrue(Det.of(matrix) instanceof GaussScalar);
+    assertInstanceOf(GaussScalar.class, Det.of(matrix));
   }
 
   @Test
