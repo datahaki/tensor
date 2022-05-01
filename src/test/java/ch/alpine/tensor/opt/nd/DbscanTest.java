@@ -29,7 +29,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
 
-public class DbscanTest {
+class DbscanTest {
   @Test
   public void testSimple() {
     Distribution dist_b = UniformDistribution.of(0, 10);

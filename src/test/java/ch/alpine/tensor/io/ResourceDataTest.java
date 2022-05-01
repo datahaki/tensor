@@ -20,7 +20,7 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.itp.Interpolation;
 import ch.alpine.tensor.itp.LinearInterpolation;
 
-public class ResourceDataTest {
+class ResourceDataTest {
   private static void _checkColorscheme(Interpolation interpolation) {
     assertThrows(IndexOutOfBoundsException.class, () -> interpolation.get(Tensors.vector(256)));
   }

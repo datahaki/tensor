@@ -34,7 +34,7 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.N;
 
-public class InterpolatingPolynomialTest {
+class InterpolatingPolynomialTest {
   private static final ScalarUnaryOperator MINUS_ONE = RealScalar.ONE.negate()::add;
 
   @Test

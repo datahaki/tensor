@@ -14,7 +14,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class SignedCurvature2DTest {
+class SignedCurvature2DTest {
   @Test
   public void testCounterClockwise() {
     Tensor a = Tensors.vector(1, 0);

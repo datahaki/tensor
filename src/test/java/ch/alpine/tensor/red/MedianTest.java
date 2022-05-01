@@ -15,7 +15,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
 
-public class MedianTest {
+class MedianTest {
   @Test
   public void testEven() {
     /** Median[{1, 2, 3, 4, 5, 6, 7, 8}] == 9/2 */

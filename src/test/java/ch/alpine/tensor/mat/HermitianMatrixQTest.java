@@ -15,7 +15,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.sca.Chop;
 
-public class HermitianMatrixQTest {
+class HermitianMatrixQTest {
   @Test
   public void testMatrix() {
     assertTrue(HermitianMatrixQ.of(Tensors.fromString("{{0, I}, {-I, 0}}")));

@@ -19,7 +19,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ColorDataListsTest {
+class ColorDataListsTest {
   @Test
   public void testApply() {
     ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();

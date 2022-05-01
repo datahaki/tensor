@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Sin;
 
-public class PiTest {
+class PiTest {
   @Test
   public void testTrigonometry() {
     Scalar pi = Pi.in(100);

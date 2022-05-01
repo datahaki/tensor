@@ -18,7 +18,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class SincTest {
+class SincTest {
   static final Scalar THRESHOLD = DoubleScalar.of(0.05);
 
   private static Scalar checkBoth(Scalar scalar) {

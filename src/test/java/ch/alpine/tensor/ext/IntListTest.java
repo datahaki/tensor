@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-public class IntListTest {
+class IntListTest {
   @Test
   public void testEmpty() {
     List<Integer> intList = IntList.wrap(new int[] {});

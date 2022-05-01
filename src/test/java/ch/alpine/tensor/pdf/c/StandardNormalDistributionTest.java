@@ -19,7 +19,7 @@ import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
-public class StandardNormalDistributionTest {
+class StandardNormalDistributionTest {
   @Test
   public void testPdfZero() {
     Scalar x = StandardNormalDistribution.INSTANCE.at(RealScalar.ZERO);

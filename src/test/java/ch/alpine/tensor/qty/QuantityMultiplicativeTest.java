@@ -17,7 +17,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.chq.ExactScalarQ;
 
-public class QuantityMultiplicativeTest {
+class QuantityMultiplicativeTest {
   @Test
   public void testMultiplyScalar() {
     Scalar qs1 = Quantity.of(3, "m");

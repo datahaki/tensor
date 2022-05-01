@@ -42,7 +42,7 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 
-public class ExponentialDistributionTest {
+class ExponentialDistributionTest {
   @Test
   public void testPositive() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(ExponentialDistribution.of(RealScalar.ONE));

@@ -15,7 +15,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class CoefficientListTest {
+class CoefficientListTest {
   @Test
   public void testSimple() {
     Tensor zeros = Tensors.vector(3);

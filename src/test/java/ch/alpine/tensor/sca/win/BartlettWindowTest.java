@@ -14,7 +14,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.sca.Chop;
 
-public class BartlettWindowTest {
+class BartlettWindowTest {
   @Test
   public void testZero() {
     Scalar scalar = BartlettWindow.FUNCTION.apply(RealScalar.ZERO);

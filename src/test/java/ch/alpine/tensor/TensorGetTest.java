@@ -12,7 +12,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
-public class TensorGetTest {
+class TensorGetTest {
   @Test
   public void testGetEmpty() {
     assertEquals(Tensors.empty().get(), Tensors.empty());

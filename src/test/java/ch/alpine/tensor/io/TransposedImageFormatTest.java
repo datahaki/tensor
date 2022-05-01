@@ -31,7 +31,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Round;
 
-public class TransposedImageFormatTest {
+class TransposedImageFormatTest {
   static Tensor _readRGBA() throws IOException {
     File file = new File(TransposedImageFormatTest.class.getResource("/io/image/rgba15x33.png").getFile());
     assertTrue(file.isFile());

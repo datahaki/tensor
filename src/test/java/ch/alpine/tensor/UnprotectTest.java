@@ -26,7 +26,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitQ;
 
-public class UnprotectTest {
+class UnprotectTest {
   @Test
   public void testUsingNullFail() {
     assertThrows(NullPointerException.class, () -> Unprotect.using(null));

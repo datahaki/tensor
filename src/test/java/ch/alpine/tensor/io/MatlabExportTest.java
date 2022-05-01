@@ -23,7 +23,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 
-public class MatlabExportTest {
+class MatlabExportTest {
   @Test
   public void testScalar() {
     Stream<String> stream = MatlabExport.of(ComplexScalar.of(2, 3));

@@ -30,7 +30,7 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
 
-public class ParetoDistributionTest {
+class ParetoDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(1.8)));

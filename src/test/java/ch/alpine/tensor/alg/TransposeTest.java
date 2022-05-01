@@ -28,7 +28,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.spa.Normal;
 import ch.alpine.tensor.spa.SparseArray;
 
-public class TransposeTest {
+class TransposeTest {
   @Test
   public void testScalar() {
     Tensor scalar = DoubleScalar.NEGATIVE_INFINITY;

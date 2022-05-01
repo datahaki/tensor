@@ -24,7 +24,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
-public class RayleighDistributionTest {
+class RayleighDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(RayleighDistribution.of(1.3));

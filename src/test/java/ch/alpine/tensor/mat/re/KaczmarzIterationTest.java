@@ -18,7 +18,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.spa.SparseArray;
 
-public class KaczmarzIterationTest {
+class KaczmarzIterationTest {
   @Test
   public void testSimple() {
     Random random = new Random(10);

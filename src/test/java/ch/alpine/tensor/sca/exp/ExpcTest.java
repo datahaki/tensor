@@ -11,7 +11,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class ExpcTest {
+class ExpcTest {
   @Test
   public void testSimple() {
     Scalar scalar = Expc.FUNCTION.apply(RealScalar.of(-1e-13));

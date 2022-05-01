@@ -29,7 +29,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Sign;
 
-public class PolarDecompositionTest {
+class PolarDecompositionTest {
   private static void _check(Tensor matrix, PolarDecomposition polarDecomposition) {
     List<Integer> list = Dimensions.of(matrix);
     int k = list.get(0);

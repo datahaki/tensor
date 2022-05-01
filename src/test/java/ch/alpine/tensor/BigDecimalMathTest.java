@@ -19,7 +19,7 @@ import ch.alpine.tensor.sca.tri.Cosh;
 import ch.alpine.tensor.sca.tri.Sin;
 import ch.alpine.tensor.sca.tri.Sinh;
 
-public class BigDecimalMathTest {
+class BigDecimalMathTest {
   private static void _check(BigDecimal bd1, MathContext mathContext) {
     BigDecimal rt1 = BigDecimalMath.sqrt(bd1, MathContext.DECIMAL32);
     assertEquals(rt1.multiply(rt1, mathContext).subtract(bd1).compareTo(BigDecimal.ZERO), 0);

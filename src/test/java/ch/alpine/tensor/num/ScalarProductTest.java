@@ -14,7 +14,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Serialization;
 
-public class ScalarProductTest {
+class ScalarProductTest {
   @Test
   public void testGaussScalar() {
     int prime = 677;

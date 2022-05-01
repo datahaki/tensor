@@ -18,7 +18,7 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.qty.Quantity;
 
-public class SparseArrayQTest {
+class SparseArrayQTest {
   @Test
   public void testSimple() {
     SparseArrayQ.require(LeviCivitaTensor.of(2));

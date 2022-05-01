@@ -23,7 +23,7 @@ import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Sign;
 
-public class MixtureDistributionTest {
+class MixtureDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution d = BernoulliDistribution.of(RationalScalar.HALF);

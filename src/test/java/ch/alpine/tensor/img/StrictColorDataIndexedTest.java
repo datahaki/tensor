@@ -16,7 +16,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
 
-public class StrictColorDataIndexedTest {
+class StrictColorDataIndexedTest {
   @Test
   public void testColors2() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");

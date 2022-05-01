@@ -32,7 +32,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-public class LinearInterpolationTest {
+class LinearInterpolationTest {
   @Test
   public void testEmpty() {
     Interpolation interpolation = LinearInterpolation.of(Tensors.empty());

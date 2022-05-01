@@ -9,7 +9,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.sca.N;
 
-public class NilpotentMatrixQTest {
+class NilpotentMatrixQTest {
   private static void _check(Tensor matrix) {
     assertTrue(NilpotentMatrixQ.of(matrix));
     assertTrue(NilpotentMatrixQ.of(matrix.map(N.DOUBLE)));

@@ -34,7 +34,7 @@ import ch.alpine.tensor.sca.Clips;
 
 // cubic basis functions over unit interval [0, 1]
 // {(1 - t)^3, 4 - 6 t^2 + 3 t^3, 1 + 3 t + 3 t^2 - 3 t^3, t^3}/6
-public class BSplineFunctionStringTest {
+class BSplineFunctionStringTest {
   @Test
   public void testConstant() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(0, Tensors.vector(2, 1, 5, 0, -2));

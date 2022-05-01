@@ -27,7 +27,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ChopTest {
+class ChopTest {
   @Test
   public void testChop() {
     Tensor v = Tensors.vectorDouble(1e-10, 1e-12, 1e-14, 1e-16);

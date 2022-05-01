@@ -36,7 +36,7 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 
-public class InfluenceMatrixImplTest {
+class InfluenceMatrixImplTest {
   @Test
   public void testExactRankDefficient7x5() {
     Random random = new Random(3);

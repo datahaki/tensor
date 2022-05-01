@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 
-public class StringTensorTest {
+class StringTensorTest {
   @Test
   public void testVector() {
     Tensor tensor = StringTensor.vector("IDSC", "ETH-Z", "ch");

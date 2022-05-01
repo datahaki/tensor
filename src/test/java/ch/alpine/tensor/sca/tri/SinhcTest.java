@@ -12,7 +12,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.qty.Quantity;
 
-public class SinhcTest {
+class SinhcTest {
   @Test
   public void testSimple() {
     assertEquals(Sinhc.FUNCTION.apply(RealScalar.ZERO), RealScalar.ONE);

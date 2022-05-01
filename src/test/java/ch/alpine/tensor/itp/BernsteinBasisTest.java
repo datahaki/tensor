@@ -14,7 +14,7 @@ import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.red.Total;
 
-public class BernsteinBasisTest {
+class BernsteinBasisTest {
   @Test
   public void testSimple() {
     Tensor actual = BernsteinBasis.of(5, RationalScalar.of(2, 3));

@@ -20,7 +20,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Abs;
 
-public class ExtendedGCDTest {
+class ExtendedGCDTest {
   private static boolean isConsistent(Tensor vector, ExtendedGCD extendedGCD) {
     return vector.dot(extendedGCD.factors()).equals(extendedGCD.gcd());
   }

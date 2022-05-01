@@ -21,7 +21,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 
-public class QuantityCompareTest {
+class QuantityCompareTest {
   private static void _checkEquals(Scalar s1, Scalar s2, boolean actual) {
     assertEquals(s1.equals(s2), s2.equals(s1));
     assertEquals(s1.equals(s2), actual);

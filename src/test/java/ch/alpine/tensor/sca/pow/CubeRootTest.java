@@ -17,7 +17,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
 
-public class CubeRootTest {
+class CubeRootTest {
   @Test
   public void testSimple() {
     Scalar scalar = CubeRoot.FUNCTION.apply(RealScalar.of(27));

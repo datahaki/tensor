@@ -15,7 +15,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
 
-public class CyclicColorDataIndexedTest {
+class CyclicColorDataIndexedTest {
   @Test
   public void testCustom() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");

@@ -40,7 +40,7 @@ import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class JacobiMethodTest {
+class JacobiMethodTest {
   private static void checkEquation(Tensor matrix, Eigensystem eigensystem) {
     assertTrue(eigensystem.toString().startsWith("Eigensystem["));
     Tensor vectors = eigensystem.vectors();

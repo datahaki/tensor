@@ -26,7 +26,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
 
-public class BasisTransformTest {
+class BasisTransformTest {
   @Test
   public void testDimensions() {
     int n = 3;

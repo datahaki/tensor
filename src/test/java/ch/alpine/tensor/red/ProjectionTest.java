@@ -18,7 +18,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class ProjectionTest {
+class ProjectionTest {
   @Test
   public void testReal() throws ClassNotFoundException, IOException {
     Tensor projection = Serialization.copy(Projection.on(Tensors.vector(1, 0, 0))).apply(Tensors.vector(1, 1, 1));

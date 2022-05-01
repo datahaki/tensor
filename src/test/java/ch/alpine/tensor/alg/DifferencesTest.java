@@ -15,7 +15,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 
-public class DifferencesTest {
+class DifferencesTest {
   @Test
   public void testVector() {
     Tensor dif = Differences.of(Tensors.vector(3, 2, 9).unmodifiable());

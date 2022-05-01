@@ -15,7 +15,7 @@ import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
-public class UnmodifiableTensorTest {
+class UnmodifiableTensorTest {
   @Test
   public void testUnmodificableEmptyEquals() {
     assertTrue(Tensors.unmodifiableEmpty() == Tensors.unmodifiableEmpty());

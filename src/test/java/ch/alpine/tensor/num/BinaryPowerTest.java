@@ -9,7 +9,7 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
-public class BinaryPowerTest {
+class BinaryPowerTest {
   @Test
   public void testInteger() {
     GroupInterface<Integer> groupInterface = new GroupInterface<>() {

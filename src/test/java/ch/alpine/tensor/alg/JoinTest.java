@@ -13,7 +13,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 
-public class JoinTest {
+class JoinTest {
   @Test
   public void testVectors() {
     Tensor v1 = Tensors.vector(2, 3, 4);

@@ -16,7 +16,7 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
 
-public class PadLeftTest {
+class PadLeftTest {
   @Test
   public void testVectorLo() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tuo = Serialization.copy(PadLeft.zeros(10));

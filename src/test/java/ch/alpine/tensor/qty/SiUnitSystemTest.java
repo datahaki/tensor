@@ -19,7 +19,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.chq.ExactScalarQ;
 
-public class SiUnitSystemTest {
+class SiUnitSystemTest {
   @Test
   public void testInstances() {
     assertEquals(UnitSystem.SI(), SiUnitSystem.INSTANCE.unitSystem);

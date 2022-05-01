@@ -18,7 +18,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.GaussScalar;
 
-public class CompatibleUnitQTest {
+class CompatibleUnitQTest {
   @Test
   public void testCompatibleUnitQ() {
     assertTrue(CompatibleUnitQ.SI().with(Unit.of("kgf^2*L^-3")).test(Quantity.of(2, "N^2*m^-9")));

@@ -24,7 +24,7 @@ import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
 
-public class CauchyDistributionTest {
+class CauchyDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(CauchyDistribution.of(2, 3));

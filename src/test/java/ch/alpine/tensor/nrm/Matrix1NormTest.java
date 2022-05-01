@@ -15,7 +15,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 
-public class Matrix1NormTest {
+class Matrix1NormTest {
   @Test
   public void testOneInfNorm2() {
     Tensor a = Tensors.vector(1, 2);

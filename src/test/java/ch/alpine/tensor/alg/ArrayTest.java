@@ -22,7 +22,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.spa.SparseArray;
 
-public class ArrayTest {
+class ArrayTest {
   @Test
   public void testEmpty1() {
     assertEquals(Array.of(l -> {

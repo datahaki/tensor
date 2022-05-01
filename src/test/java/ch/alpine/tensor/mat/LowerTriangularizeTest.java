@@ -12,7 +12,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 
-public class LowerTriangularizeTest {
+class LowerTriangularizeTest {
   @Test
   public void test1x1() {
     Tensor matrix = Tensors.fromString("{{1}}");

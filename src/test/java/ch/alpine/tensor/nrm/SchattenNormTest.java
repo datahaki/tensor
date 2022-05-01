@@ -29,7 +29,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Sign;
 
-public class SchattenNormTest {
+class SchattenNormTest {
   @Test
   public void testFrobenius() throws ClassNotFoundException, IOException {
     TensorScalarFunction tensorScalarFunction = Serialization.copy(SchattenNorm.of(2));

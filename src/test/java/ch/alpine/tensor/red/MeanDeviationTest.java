@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.N;
 
-public class MeanDeviationTest {
+class MeanDeviationTest {
   @Test
   public void testMathematica1() {
     Scalar value = MeanDeviation.ofVector(Tensors.fromString("{1, 2, 3, 7}"));

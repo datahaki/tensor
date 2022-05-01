@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-public class BigIntegerMathTest {
+class BigIntegerMathTest {
   @Test
   public void testZeroOne() {
     assertEquals(BigIntegerMath.sqrt(BigInteger.ZERO).get(), BigInteger.ZERO);

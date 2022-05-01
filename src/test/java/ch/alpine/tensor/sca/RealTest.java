@@ -12,7 +12,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.StringScalar;
 
-public class RealTest {
+class RealTest {
   @Test
   public void testReal() {
     Scalar scalar = Scalars.fromString("11");

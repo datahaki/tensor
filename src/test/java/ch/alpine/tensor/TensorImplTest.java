@@ -19,7 +19,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
 
-public class TensorImplTest {
+class TensorImplTest {
   @Test
   public void testUnmodifiable() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();

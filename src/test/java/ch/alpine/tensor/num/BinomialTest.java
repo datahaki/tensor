@@ -22,7 +22,7 @@ import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Power;
 
-public class BinomialTest {
+class BinomialTest {
   @Test
   public void testBasic() {
     // assertEquals(Binomial.of(10, Integer.MIN_VALUE), RealScalar.ZERO);

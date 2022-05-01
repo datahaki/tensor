@@ -20,7 +20,7 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Sign;
 
-public class BinningMethodTest {
+class BinningMethodTest {
   @Test
   public void testRice() {
     Scalar width = BinningMethod.RICE.apply(Tensors.vector(2, 4, 3, 6));

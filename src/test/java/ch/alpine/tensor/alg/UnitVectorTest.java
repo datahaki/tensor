@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.mat.IdentityMatrix;
 
-public class UnitVectorTest {
+class UnitVectorTest {
   @Test
   public void testRegular() {
     assertEquals(UnitVector.of(10, 3), IdentityMatrix.of(10).get(3));

@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
-public class SizeTest {
+class SizeTest {
   @Test
   public void testTotal() {
     assertEquals(Size.of(Arrays.asList(4, 2, 3)).total(), 24);

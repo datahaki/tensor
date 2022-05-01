@@ -38,7 +38,7 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.N;
 
-public class EigensystemTest {
+class EigensystemTest {
   @RepeatedTest(12)
   public void testPhase1Tuning(RepetitionInfo repetitionInfo) throws IOException {
     Distribution distribution = UniformDistribution.of(-2, 2);

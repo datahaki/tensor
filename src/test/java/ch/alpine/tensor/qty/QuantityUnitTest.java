@@ -16,7 +16,7 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-public class QuantityUnitTest {
+class QuantityUnitTest {
   @Test
   public void testParsecs() {
     // QuantityMagnitude[Quantity[1*^-12, "Parsecs"], "Kilometers"]

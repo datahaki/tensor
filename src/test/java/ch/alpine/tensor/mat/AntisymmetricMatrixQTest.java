@@ -14,7 +14,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.lie.Cross;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 
-public class AntisymmetricMatrixQTest {
+class AntisymmetricMatrixQTest {
   @Test
   public void testMatrix() {
     assertTrue(AntisymmetricMatrixQ.of(Array.zeros(4, 4)));

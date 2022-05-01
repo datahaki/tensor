@@ -11,7 +11,7 @@ import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.sca.Chop;
 
-public class RootsDegree2Test {
+class RootsDegree2Test {
   @Test
   public void testZerosQuantity() {
     Tensor roots = Roots.of(Tensors.fromString("{0, 0, 1[m^-2], 0[m^-3]}"));

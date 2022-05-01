@@ -27,7 +27,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 
-public class NdCollectRadiusTest {
+class NdCollectRadiusTest {
   @Test
   public void testClusterRadius() {
     int maxDensity = 2;

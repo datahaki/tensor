@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class ComplexScalarImplTest {
+class ComplexScalarImplTest {
   @Test
   public void testAbs() {
     ComplexScalar s = (ComplexScalar) ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));

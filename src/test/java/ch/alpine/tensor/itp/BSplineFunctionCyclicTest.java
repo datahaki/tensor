@@ -26,7 +26,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 
-public class BSplineFunctionCyclicTest {
+class BSplineFunctionCyclicTest {
   @Test
   public void testDegree0() {
     ScalarTensorFunction scalarTensorFunction = BSplineFunctionCyclic.of(0, Tensors.vector(1, 2, 3));

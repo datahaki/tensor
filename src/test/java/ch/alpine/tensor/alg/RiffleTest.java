@@ -11,7 +11,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class RiffleTest {
+class RiffleTest {
   @Test
   public void testSimple() {
     Tensor vector = Riffle.of(Tensors.vector(1, 2, 3, 4, 5), RealScalar.ZERO);

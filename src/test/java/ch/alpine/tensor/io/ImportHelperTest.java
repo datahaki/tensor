@@ -20,7 +20,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.sca.Unitize;
 
-public class ImportHelperTest {
+class ImportHelperTest {
   @Test
   public void testGif() throws Exception {
     String string = "/io/image/rgba7x3.gif"; // file consist of a single line break character

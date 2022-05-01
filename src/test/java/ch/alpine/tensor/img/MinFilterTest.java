@@ -13,7 +13,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.chq.ExactTensorQ;
 
-public class MinFilterTest {
+class MinFilterTest {
   @Test
   public void testId() {
     Tensor vector = Tensors.vector(1, 2, 3, 4, 5, 6);

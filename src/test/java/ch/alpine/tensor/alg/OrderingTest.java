@@ -25,7 +25,7 @@ import ch.alpine.tensor.pdf.c.CauchyDistribution;
 import ch.alpine.tensor.pdf.c.LogNormalDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
 
-public class OrderingTest {
+class OrderingTest {
   @Test
   public void testVector() throws ClassNotFoundException, IOException {
     Tensor vector = Tensors.vector(4, 2, 3, 0, 1);

@@ -23,7 +23,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class VandermondeSolveTest {
+class VandermondeSolveTest {
   @Test
   public void testSimple() {
     Tensor x = Tensors.vector(2, 3);

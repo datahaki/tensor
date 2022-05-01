@@ -16,7 +16,7 @@ import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
-public class VarianceTest {
+class VarianceTest {
   @Test
   public void testVariance() {
     Tensor A = Tensors.vector(1, 2, 5, 7);

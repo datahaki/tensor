@@ -10,7 +10,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
 
-public class AbstractContinuousDistributionTest {
+class AbstractContinuousDistributionTest {
   @Test
   public void testEquals() {
     Distribution d1 = NormalDistribution.of(1, 2);

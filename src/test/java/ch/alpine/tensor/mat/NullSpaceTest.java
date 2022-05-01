@@ -37,7 +37,7 @@ import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class NullSpaceTest {
+class NullSpaceTest {
   private static void _checkZeros(Tensor zeros) {
     int n = zeros.length();
     Tensor nul = NullSpace.usingSvd(zeros);

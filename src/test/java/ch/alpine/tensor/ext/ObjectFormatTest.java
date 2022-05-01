@@ -25,7 +25,7 @@ import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ObjectFormatTest {
+class ObjectFormatTest {
   @Test
   public void testSome() throws Exception {
     Tensor inp = Tensors.fromString("{1, {2, 3, {4.3}}, 1}");

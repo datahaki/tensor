@@ -21,7 +21,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class SinhTest {
+class SinhTest {
   @Test
   public void testReal() {
     Scalar i = RealScalar.of(2);

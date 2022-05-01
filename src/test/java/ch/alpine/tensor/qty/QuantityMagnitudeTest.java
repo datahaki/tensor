@@ -21,7 +21,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class QuantityMagnitudeTest {
+class QuantityMagnitudeTest {
   @Test
   public void testMagnitudeKgf() {
     Scalar scalar = QuantityMagnitude.SI().in("N").apply(Quantity.of(1, "kgf"));

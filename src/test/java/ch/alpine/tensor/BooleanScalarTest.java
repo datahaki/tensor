@@ -23,7 +23,7 @@ import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class BooleanScalarTest {
+class BooleanScalarTest {
   @Test
   public void testString() {
     Tensor logical = Tensors.of(BooleanScalar.of(true), BooleanScalar.of(false));

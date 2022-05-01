@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-public class PadBaseTest {
+class PadBaseTest {
   @Test
   public void testSimple() {
     assertFalse(Modifier.isPublic(PadBase.class.getModifiers()));

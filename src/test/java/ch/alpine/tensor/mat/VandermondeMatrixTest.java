@@ -18,7 +18,7 @@ import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.num.GaussScalar;
 
-public class VandermondeMatrixTest {
+class VandermondeMatrixTest {
   @Test
   public void testSimple() {
     Tensor tensor = VandermondeMatrix.of(Tensors.vector(2, 1, 3, 4));

@@ -12,7 +12,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class ExactTensorQTest {
+class ExactTensorQTest {
   @Test
   public void testAll() {
     assertTrue(ExactTensorQ.of(RationalScalar.HALF));

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class PrimitivesTest {
+class PrimitivesTest {
   @Test
   public void testByteArray() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, -1, {{256}}}");

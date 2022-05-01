@@ -20,7 +20,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class DeBoorTest {
+class DeBoorTest {
   @Test
   public void testDegree0() throws ClassNotFoundException, IOException {
     Tensor knots = Tensors.empty().unmodifiable();

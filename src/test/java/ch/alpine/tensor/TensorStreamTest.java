@@ -10,7 +10,7 @@ import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Abs;
 
-public class TensorStreamTest {
+class TensorStreamTest {
   @Test
   public void testStream() {
     Tensor row = IdentityMatrix.of(5).stream().skip(2).findFirst().get();

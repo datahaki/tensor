@@ -30,7 +30,7 @@ import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.N;
 
-public class CholeskyDecompositionImplTest {
+class CholeskyDecompositionImplTest {
   @Test
   public void testSolveQuantity() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.fromString( //

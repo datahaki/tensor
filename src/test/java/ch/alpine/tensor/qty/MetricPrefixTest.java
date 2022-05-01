@@ -13,7 +13,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.chq.ExactScalarQ;
 
-public class MetricPrefixTest {
+class MetricPrefixTest {
   @Test
   public void testGiga() {
     assertEquals(MetricPrefix.GIGA.prefix("Hz"), "GHz");

@@ -22,7 +22,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 
-public class ScalarSummaryStatisticsTest {
+class ScalarSummaryStatisticsTest {
   @Test
   public void testMembers() {
     ScalarSummaryStatistics scalarSummaryStatistics = Tensors.vector(1, 4, 2, 8, 3, 10) //

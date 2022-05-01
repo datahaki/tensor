@@ -31,7 +31,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.N;
 
-public class RationalizeTest {
+class RationalizeTest {
   @Test
   public void testBasics1000() {
     final Scalar max = RealScalar.of(1000);

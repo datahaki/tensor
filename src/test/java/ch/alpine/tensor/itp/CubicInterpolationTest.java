@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.chq.ExactScalarQ;
 
-public class CubicInterpolationTest {
+class CubicInterpolationTest {
   @Test
   public void testSimple() {
     Interpolation interpolation = CubicInterpolation.of(Tensors.vector(1, 0, 0, 2, 0));

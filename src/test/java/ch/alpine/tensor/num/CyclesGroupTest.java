@@ -27,7 +27,7 @@ import ch.alpine.tensor.ext.ArgMin;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Serialization;
 
-public class CyclesGroupTest {
+class CyclesGroupTest {
   private static final BinaryPower<Cycles> BINARY_POWER = new BinaryPower<>(CyclesGroup.INSTANCE);
 
   private static void _check(Cycles arg, BigInteger exponent, Cycles expexted) throws ClassNotFoundException, IOException {

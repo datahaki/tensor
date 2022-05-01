@@ -16,7 +16,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.chq.ExactScalarQ;
 
-public class HornerSchemeTest {
+class HornerSchemeTest {
   @Test
   public void testHorner1() {
     Tensor coeffs = Tensors.vector(-3, 4);

@@ -31,7 +31,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class MatrixSqrtTest {
+class MatrixSqrtTest {
   private static void _check(Tensor g, MatrixSqrt matrixSqrt) {
     Chop._08.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt_inverse()), IdentityMatrix.of(g.length()));
     Chop._04.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt()), g);

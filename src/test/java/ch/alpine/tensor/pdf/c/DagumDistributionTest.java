@@ -23,7 +23,7 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
 
-public class DagumDistributionTest {
+class DagumDistributionTest {
   @Test
   public void testCdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(DagumDistribution.of(0.2, 0.3, 0.6));

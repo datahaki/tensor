@@ -34,7 +34,7 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Mod;
 
-public class PolynomialTest {
+class PolynomialTest {
   @Test
   public void testGauss() {
     Scalar scalar1 = Polynomial.of(Tensors.of( //

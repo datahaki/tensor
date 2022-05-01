@@ -18,7 +18,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
 
-public class ImageFilterTest {
+class ImageFilterTest {
   private static final TensorScalarFunction MIN = block -> (Scalar) block.flatten(-1).reduce(Min::of).get();
   private static final TensorScalarFunction MAX = block -> (Scalar) block.flatten(-1).reduce(Max::of).get();
 

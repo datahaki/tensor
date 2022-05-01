@@ -20,7 +20,7 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.sca.Clips;
 
-public class DiscreteUniformDistributionTest {
+class DiscreteUniformDistributionTest {
   @Test
   public void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = //

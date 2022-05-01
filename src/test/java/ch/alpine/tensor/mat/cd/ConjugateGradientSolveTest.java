@@ -16,7 +16,7 @@ import ch.alpine.tensor.mat.PositiveDefiniteMatrixQ;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ConjugateGradientSolveTest {
+class ConjugateGradientSolveTest {
   @Test
   public void testSimple() {
     Tensor matrix = Tensors.matrix(new Number[][] { //

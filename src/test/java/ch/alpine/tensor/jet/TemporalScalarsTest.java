@@ -14,7 +14,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.sca.Sign;
 
-public class TemporalScalarsTest {
+class TemporalScalarsTest {
   @Test
   public void testSimple() {
     Tensor a = Tensors.of( //

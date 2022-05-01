@@ -18,7 +18,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
-public class KurtosisTest {
+class KurtosisTest {
   @Test
   public void testMathematica() {
     Tensor tensor = Tensors.vector(10, 2, 3, 4, 1);

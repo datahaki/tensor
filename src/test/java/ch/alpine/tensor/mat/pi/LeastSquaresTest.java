@@ -39,7 +39,7 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class LeastSquaresTest {
+class LeastSquaresTest {
   @Test
   public void testSquareExact() {
     Tensor matrix = HilbertMatrix.of(4, 4);

@@ -21,7 +21,7 @@ import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Chop;
 
-public class ErlangDistributionTest {
+class ErlangDistributionTest {
   @Test
   public void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(ErlangDistribution.of(3, RealScalar.of(1.8)));

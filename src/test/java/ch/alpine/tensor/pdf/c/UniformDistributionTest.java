@@ -34,7 +34,7 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-public class UniformDistributionTest {
+class UniformDistributionTest {
   @Test
   public void testCdf() {
     CDF cdf = CDF.of(UniformDistribution.of(RealScalar.ONE, RealScalar.of(3)));

@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.gam.Gamma;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.Cos;
 
-public class NestTest {
+class NestTest {
   @Test
   public void testPolynomial() {
     Tensor actual = Nest.of( //

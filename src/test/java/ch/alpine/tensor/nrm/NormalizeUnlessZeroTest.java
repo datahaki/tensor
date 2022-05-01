@@ -18,7 +18,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
 
-public class NormalizeUnlessZeroTest {
+class NormalizeUnlessZeroTest {
   @Test
   public void testNormalizeNaN() {
     Tensor vector = Tensors.of(RealScalar.ONE, DoubleScalar.INDETERMINATE, RealScalar.ONE);

@@ -13,7 +13,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 
 // Mathematica gives the result for 1/4, 1/3, 1/2 in exact precision
-public class BlackmanNuttallWindowTest {
+class BlackmanNuttallWindowTest {
   @Test
   public void testSimple() {
     ScalarUnaryOperator windowFunction = BlackmanNuttallWindow.FUNCTION;

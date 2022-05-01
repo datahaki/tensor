@@ -17,7 +17,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.Pi;
 
-public class NormalTest {
+class NormalTest {
   @Test
   public void testSimple() {
     Tensor tensor = Tensors.fromString("{{1}, 2}");

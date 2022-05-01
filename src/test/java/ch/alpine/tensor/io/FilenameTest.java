@@ -23,7 +23,7 @@ import org.junit.jupiter.api.io.TempDir;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
-public class FilenameTest {
+class FilenameTest {
   @Test
   public void testImageWriter(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.jpg");

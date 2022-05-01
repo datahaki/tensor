@@ -17,7 +17,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.StringScalar;
 
-public class ImagTest {
+class ImagTest {
   @Test
   public void testExact() {
     Scalar scalar = Imag.FUNCTION.apply(Scalars.fromString("3+I*6/7"));

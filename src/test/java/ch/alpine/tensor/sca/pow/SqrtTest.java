@@ -23,7 +23,7 @@ import ch.alpine.tensor.num.Rationalize;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.AbsSquared;
 
-public class SqrtTest {
+class SqrtTest {
   @Test
   public void testNegative() {
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(RealScalar.of(10000));

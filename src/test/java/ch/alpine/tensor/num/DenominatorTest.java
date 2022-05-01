@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 
-public class DenominatorTest {
+class DenominatorTest {
   @Test
   public void testSimple() {
     assertEquals(Denominator.FUNCTION.apply(RationalScalar.of(+2, 3)), RealScalar.of(3));

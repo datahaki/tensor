@@ -18,7 +18,7 @@ import ch.alpine.tensor.io.StringTensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.qty.Quantity;
 
-public class PermutationsTest {
+class PermutationsTest {
   @Test
   public void testEmpty() {
     assertEquals(Permutations.of(Tensors.vector()), Tensors.fromString("{{}}")); // 0! == 1

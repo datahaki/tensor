@@ -33,7 +33,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.N;
 
-public class DetTest {
+class DetTest {
   @Test
   public void testEmpty() {
     assertThrows(TensorRuntimeException.class, () -> Det.of(Tensors.empty()));

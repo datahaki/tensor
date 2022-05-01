@@ -17,7 +17,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 
-public class ConstantArrayTest {
+class ConstantArrayTest {
   @Test
   public void testRepmat() {
     Tensor vector = Tensors.vector(1, 2, 3);

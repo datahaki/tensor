@@ -20,7 +20,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.sca.Chop;
 
-public class UnitConvertTest {
+class UnitConvertTest {
   @Test
   public void testKm() throws ClassNotFoundException, IOException {
     UnitConvert unitConvert = Serialization.copy(UnitConvert.SI());

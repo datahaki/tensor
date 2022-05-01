@@ -28,7 +28,7 @@ import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Abs;
 
-public class ExportTest {
+class ExportTest {
   @Test
   public void testMathematica(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.mathematica");

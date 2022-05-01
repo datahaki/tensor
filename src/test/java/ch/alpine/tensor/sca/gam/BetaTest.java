@@ -11,7 +11,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.sca.Chop;
 
-public class BetaTest {
+class BetaTest {
   @Test
   public void testExact() {
     Scalar beta = Beta.of(5, 4);

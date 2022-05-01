@@ -15,7 +15,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Numel;
 import ch.alpine.tensor.sca.pow.Power;
 
-public class LeviCivitaTensorTest {
+class LeviCivitaTensorTest {
   // former non-sparse implementation
   private static Tensor full(int d) {
     return Array.of(list -> Signature.of(Tensors.vector(list)), Collections.nCopies(d, d));

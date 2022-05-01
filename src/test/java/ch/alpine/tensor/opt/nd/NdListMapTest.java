@@ -24,7 +24,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class NdListMapTest {
+class NdListMapTest {
   @Test
   public void testSimple() {
     NdMap<String> m1 = new NdListMap<>();

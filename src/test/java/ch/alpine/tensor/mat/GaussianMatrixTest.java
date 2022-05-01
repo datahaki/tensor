@@ -20,7 +20,7 @@ import ch.alpine.tensor.alg.Reverse;
  * [ 0.0838 0.6193 0.0838 ]
  * [ 0.0113 0.0838 0.0113 ]
  * ] */
-public class GaussianMatrixTest {
+class GaussianMatrixTest {
   @RepeatedTest(4)
   public void testSmall(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();

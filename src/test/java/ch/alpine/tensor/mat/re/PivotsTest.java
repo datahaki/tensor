@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.ext.Serialization;
 
-public class PivotsTest {
+class PivotsTest {
   @ParameterizedTest
   @EnumSource(Pivots.class)
   public void testSerializable(Pivot pivot) throws ClassNotFoundException, IOException {

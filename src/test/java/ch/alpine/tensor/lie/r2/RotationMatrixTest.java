@@ -18,7 +18,7 @@ import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 
-public class RotationMatrixTest {
+class RotationMatrixTest {
   @Test
   public void testPointThree() {
     Tensor matrix = RotationMatrix.of(RealScalar.of(0.3));

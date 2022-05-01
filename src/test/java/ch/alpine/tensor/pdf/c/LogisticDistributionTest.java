@@ -26,7 +26,7 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
-public class LogisticDistributionTest {
+class LogisticDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(LogisticDistribution.of(2, 3));

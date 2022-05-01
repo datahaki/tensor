@@ -32,7 +32,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 
-public class XsvFormatTest {
+class XsvFormatTest {
   private static void convertCheck(Tensor A) {
     for (XsvFormat xsvFormat : XsvFormat.values())
       assertEquals(A, xsvFormat.parse(xsvFormat.of(A)));

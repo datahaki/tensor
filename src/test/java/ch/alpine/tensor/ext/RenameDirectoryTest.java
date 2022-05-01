@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
-public class RenameDirectoryTest {
+class RenameDirectoryTest {
   private static void wrap(File src, File dst) {
     try {
       RenameDirectory.of(src, dst);

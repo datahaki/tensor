@@ -14,7 +14,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.qty.Quantity;
 
-public class DiagonalMatrixTest {
+class DiagonalMatrixTest {
   @Test
   public void testIdentity() {
     Tensor matrix = DiagonalMatrix.with(Tensors.vector(1, 1, 1, 1, 1, 1, 1, 1, 1, 1));

@@ -12,7 +12,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Real;
 
-public class RotateTest {
+class RotateTest {
   @Test
   public void testSimple() {
     Rotate rotate = new Rotate(RealScalar.of(3), RealScalar.of(4), RealScalar.of(7), RealScalar.of(11));

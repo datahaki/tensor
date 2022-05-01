@@ -14,7 +14,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-public class LastTest {
+class LastTest {
   @Test
   public void testScalarReturn() {
     Scalar scalar = Last.of(Range.of(1, 4));

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-public class LogGammaRestrictedTest {
+class LogGammaRestrictedTest {
   @Test
   public void testNullFail() {
     assertThrows(NullPointerException.class, () -> LogGammaRestricted.FUNCTION.apply(null));

@@ -15,7 +15,7 @@ import ch.alpine.tensor.io.StringScalarQ;
 import ch.alpine.tensor.spa.Normal;
 import ch.alpine.tensor.spa.SparseArray;
 
-public class InsertTest {
+class InsertTest {
   @Test
   public void testAIndex0() {
     Tensor tensor = Tensors.fromString("{{1}, {2}, {3, 4}, 5, {}}");

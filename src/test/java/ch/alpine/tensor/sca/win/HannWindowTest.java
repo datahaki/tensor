@@ -16,7 +16,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 
-public class HannWindowTest {
+class HannWindowTest {
   @Test
   public void testSimple() {
     ScalarUnaryOperator suo = HannWindow.of(RealScalar.of(0.8));

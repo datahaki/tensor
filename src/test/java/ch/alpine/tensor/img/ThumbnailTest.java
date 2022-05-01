@@ -22,7 +22,7 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.ResourceData;
 
-public class ThumbnailTest {
+class ThumbnailTest {
   @Test
   public void testSimple() {
     Tensor tensor = ResourceData.of("/io/image/rgba15x33.png");

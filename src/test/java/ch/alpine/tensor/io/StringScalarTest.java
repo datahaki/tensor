@@ -17,7 +17,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.chq.ExactScalarQ;
 
-public class StringScalarTest {
+class StringScalarTest {
   @Test
   public void testStrings() {
     Tensor a = StringScalar.of("asd");

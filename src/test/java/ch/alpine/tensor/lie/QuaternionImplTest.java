@@ -31,7 +31,7 @@ import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 
-public class QuaternionImplTest {
+class QuaternionImplTest {
   @Test
   public void testImmutable() {
     Quaternion quaternion = Quaternion.of(1, 3, -2, 2);

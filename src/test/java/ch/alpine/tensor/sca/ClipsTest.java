@@ -19,7 +19,7 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ClipsTest {
+class ClipsTest {
   @Test
   public void testSignZero1() {
     Clip clip = Clips.interval(-0.0, +0.0);

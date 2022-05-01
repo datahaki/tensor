@@ -29,7 +29,7 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Chop;
 
-public class MahalanobisTest {
+class MahalanobisTest {
   @ParameterizedTest
   @ValueSource(ints = { 1, 2, 3 })
   public void testRankDeficientQuantity(int r) {

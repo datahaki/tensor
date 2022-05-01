@@ -16,7 +16,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
 
-public class InverseSteerCubicTest {
+class InverseSteerCubicTest {
   @Test
   public void testSteer() {
     Scalar c = RealScalar.of(+0.8284521034333863);

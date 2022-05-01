@@ -23,7 +23,7 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class PowerTest {
+class PowerTest {
   @Test
   public void testInteger() {
     assertEquals(Power.of(2, 4), RealScalar.of(16));

@@ -15,7 +15,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ClipPointTest {
+class ClipPointTest {
   @Test
   public void testZeroWidth() {
     Clip clip = Clips.interval(2, 2);

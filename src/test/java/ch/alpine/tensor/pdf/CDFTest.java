@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.pdf.c.ErlangDistribution;
 
-public class CDFTest {
+class CDFTest {
   @Test
   public void testCDFFail() {
     Distribution distribution = ErlangDistribution.of(3, RealScalar.of(0.3));

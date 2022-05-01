@@ -14,7 +14,7 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class FullConvolveTest {
+class FullConvolveTest {
   @Test
   public void testSimple() {
     TensorUnaryOperator tuo = FullConvolve.with(Tensors.vector(1, 2, 3));

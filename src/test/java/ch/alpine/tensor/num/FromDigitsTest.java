@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
 
-public class FromDigitsTest {
+class FromDigitsTest {
   @Test
   public void testSimple() {
     assertEquals(FromDigits.of(Tensors.vector(1, 2, 3)), RealScalar.of(123));

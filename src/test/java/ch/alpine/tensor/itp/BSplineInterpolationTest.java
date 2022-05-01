@@ -24,7 +24,7 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
-public class BSplineInterpolationTest {
+class BSplineInterpolationTest {
   @Test
   public void testVector() {
     Tensor tensor = Tensors.vector(2, 6, 4, 9, 10, 3);

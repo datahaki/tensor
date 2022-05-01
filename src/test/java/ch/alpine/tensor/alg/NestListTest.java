@@ -16,7 +16,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.tri.Cos;
 
-public class NestListTest {
+class NestListTest {
   @Test
   public void testLength() {
     Tensor list = NestList.of(Cos::of, RealScalar.ONE, 4);

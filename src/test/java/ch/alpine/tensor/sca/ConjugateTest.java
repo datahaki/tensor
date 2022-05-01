@@ -13,7 +13,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ConjugateTest {
+class ConjugateTest {
   @Test
   public void testQuantity1() {
     Scalar scalar = Scalars.fromString("0+0*I[m*s]");

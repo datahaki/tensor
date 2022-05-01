@@ -15,7 +15,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 
-public class FirstPositionTest {
+class FirstPositionTest {
   @Test
   public void testSimple() {
     Tensor tensor = Tensors.vector(5, 6, 7, 8, 9);

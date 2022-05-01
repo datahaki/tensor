@@ -22,7 +22,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.KroneckerDelta;
 import ch.alpine.tensor.sca.Chop;
 
-public class SimplexPivotsTest {
+class SimplexPivotsTest {
   @Test
   public void testSerializable() throws ClassNotFoundException, IOException {
     for (SimplexPivot simplexPivot : SimplexPivots.values())

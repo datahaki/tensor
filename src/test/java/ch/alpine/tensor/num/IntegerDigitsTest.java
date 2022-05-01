@@ -14,7 +14,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 
-public class IntegerDigitsTest {
+class IntegerDigitsTest {
   @Test
   public void testSimple() {
     assertEquals(IntegerDigits.of(RealScalar.of(+321)), Tensors.vector(3, 2, 1));

@@ -14,7 +14,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 
-public class CauchyWindowTest {
+class CauchyWindowTest {
   @Test
   public void testSimple() {
     ScalarUnaryOperator suo = CauchyWindow.of(RealScalar.of(1.6));

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class TensorBlockTest {
+class TensorBlockTest {
   @Test
   public void testBlock() {
     Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);

@@ -14,7 +14,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 
-public class TestHelperTest {
+class TestHelperTest {
   Tensor tensor = Tensors.fromString("{{1,0,3,0,0,7},{0,0,0,0,0,9},{0,2,0,0,4,0},{0,0,0,0,0,0},{0,0,0,8,0,1}}");
   Tensor sparse = TestHelper.of(tensor);
 

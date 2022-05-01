@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Serialization;
 
-public class AdjacentReduceTest {
+class AdjacentReduceTest {
   public static class Some extends AdjacentReduce {
     @Override
     protected Tensor reduce(Tensor prev, Tensor next) {

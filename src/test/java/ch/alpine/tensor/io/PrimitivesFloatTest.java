@@ -13,7 +13,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class PrimitivesFloatTest {
+class PrimitivesFloatTest {
   @Test
   public void testToListFloat() {
     Tensor tensor = Tensors.vector(-2.5f, -2.7f);

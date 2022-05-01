@@ -26,7 +26,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.MergeIllegal;
 import ch.alpine.tensor.num.GaussScalar;
 
-public class UnitTest {
+class UnitTest {
   public static Scalar requireNonZero(Scalar scalar) {
     if (scalar instanceof Quantity || //
         Scalars.isZero(scalar))

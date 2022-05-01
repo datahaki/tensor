@@ -17,7 +17,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 
-public class CacheTest {
+class CacheTest {
   @Test
   public void testSimple() {
     Function<Object, Double> function = Cache.of(k -> Math.random(), 3);

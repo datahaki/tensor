@@ -17,7 +17,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Round;
 
-public class CsvHelperTest {
+class CsvHelperTest {
   @Test
   public void testFraction() {
     Scalar scalar = CsvHelper.FUNCTION.apply(RationalScalar.of(1, 2));

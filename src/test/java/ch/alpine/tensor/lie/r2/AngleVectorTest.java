@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
-public class AngleVectorTest {
+class AngleVectorTest {
   @Test
   public void testNumeric() {
     for (int count = 0; count < 12; ++count) {

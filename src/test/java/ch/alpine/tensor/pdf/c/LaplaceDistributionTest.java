@@ -23,7 +23,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
-public class LaplaceDistributionTest {
+class LaplaceDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(LaplaceDistribution.of(2, 5));

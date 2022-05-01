@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
 
-public class NdInsideRadiusTest {
+class NdInsideRadiusTest {
   @ParameterizedTest
   @EnumSource(NdCenters.class)
   public void testSimple(NdCenters ndCenters) {

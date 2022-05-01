@@ -20,7 +20,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class CoshTest {
+class CoshTest {
   @Test
   public void testReal() {
     Scalar c = Cosh.FUNCTION.apply(RealScalar.of(2));

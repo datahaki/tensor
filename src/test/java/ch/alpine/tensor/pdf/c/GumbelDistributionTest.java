@@ -29,7 +29,7 @@ import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.sca.Chop;
 
-public class GumbelDistributionTest {
+class GumbelDistributionTest {
   @Test
   public void testPDF() {
     Distribution distribution = //

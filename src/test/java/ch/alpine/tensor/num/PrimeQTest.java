@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.ResourceData;
 
-public class PrimeQTest {
+class PrimeQTest {
   @Test
   public void testPrimes() {
     for (Tensor _x : ResourceData.of("/number/primes.vector")) {

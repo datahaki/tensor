@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.sca.Chop;
 
-public class Normalize2DTest {
+class Normalize2DTest {
   private static Tensor unlessZero(Scalar x, Scalar y) {
     return NormalizeUnlessZero.with(Vector2Norm::of).apply(Tensors.of(x, y));
   }

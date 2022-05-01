@@ -26,7 +26,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class SingularValueDecompositionImplTest {
+class SingularValueDecompositionImplTest {
   private static void _check(Tensor matrix) {
     assertTrue(SquareMatrixQ.of(matrix));
     InitTest.svd(matrix);

@@ -15,7 +15,7 @@ import ch.alpine.tensor.fft.FourierMatrix;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.sca.Chop;
 
-public class UnitaryMatrixQTest {
+class UnitaryMatrixQTest {
   @Test
   public void testExample2d() {
     Tensor matrix = Tensors.fromString("{{1, I}, {I, 1}}").multiply(RealScalar.of(Math.sqrt(0.5)));

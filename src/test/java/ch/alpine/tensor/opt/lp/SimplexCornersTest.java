@@ -16,7 +16,7 @@ import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
-public class SimplexCornersTest {
+class SimplexCornersTest {
   @Test
   public void testCase4() {
     Tensor c = Tensors.vector(3, 5, 0, 0, 0);

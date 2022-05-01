@@ -16,7 +16,7 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Chop;
 
-public class FrobeniusNormTest {
+class FrobeniusNormTest {
   @Test
   public void testVector() {
     Scalar norm = FrobeniusNorm.of(Tensors.vector(3, 4));

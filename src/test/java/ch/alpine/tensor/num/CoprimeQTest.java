@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 
-public class CoprimeQTest {
+class CoprimeQTest {
   public static void _check(int n1, int n2, boolean expected) {
     assertEquals(CoprimeQ.of(RealScalar.of(n1), RealScalar.of(n2)), expected);
     assertEquals(CoprimeQ.of(RealScalar.of(-n1), RealScalar.of(n2)), expected);

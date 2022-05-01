@@ -33,7 +33,7 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
 
-public class JacobiComplexTest {
+class JacobiComplexTest {
   private static void _check(Tensor matrix, Eigensystem eigensystem) {
     Tensor v = eigensystem.vectors();
     UnitaryMatrixQ.require(v);

@@ -19,7 +19,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
 
-public class SurdTest {
+class SurdTest {
   @Test
   public void testSimple() {
     ScalarUnaryOperator surd = Surd.of(3);

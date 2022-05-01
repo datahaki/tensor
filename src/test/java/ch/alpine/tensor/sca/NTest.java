@@ -16,7 +16,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 
-public class NTest {
+class NTest {
   @Test
   public void testZero() {
     Scalar result = N.DOUBLE.of(RealScalar.ZERO);

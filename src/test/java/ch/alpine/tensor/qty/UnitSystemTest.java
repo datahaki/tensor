@@ -25,7 +25,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.red.Total;
 
-public class UnitSystemTest {
+class UnitSystemTest {
   @Test
   public void testSize() {
     Integers.requireLessEquals(463, UnitSystem.SI().map().size());

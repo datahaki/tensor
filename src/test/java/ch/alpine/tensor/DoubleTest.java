@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class DoubleTest {
+class DoubleTest {
   @Test
   public void testZeros() {
     final double d1 = 0.0;

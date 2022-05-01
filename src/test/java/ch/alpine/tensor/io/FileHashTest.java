@@ -13,7 +13,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.Tensors;
 
-public class FileHashTest {
+class FileHashTest {
   @Test
   public void testSimple(@TempDir File tempDir) throws IOException, NoSuchAlgorithmException {
     File file = new File(tempDir, "file.png");

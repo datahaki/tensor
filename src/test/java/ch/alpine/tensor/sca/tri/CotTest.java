@@ -13,7 +13,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
 
-public class CotTest {
+class CotTest {
   @Test
   public void testReal() {
     Scalar scalar = RealScalar.of(1.23);

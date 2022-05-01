@@ -19,7 +19,7 @@ import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.io.StringScalarQ;
 import ch.alpine.tensor.qty.Quantity;
 
-public class TensorParserTest {
+class TensorParserTest {
   @Test
   public void testScalar() {
     assertEquals(Tensors.fromString("123"), RealScalar.of(123));

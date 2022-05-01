@@ -39,7 +39,7 @@ import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class QuaternionTest {
+class QuaternionTest {
   @Test
   public void testContructQuantity() {
     Quaternion quaternion = Quaternion.of(Quantity.of(3, "m"), Tensors.fromString("{2[m],3[m],4[m]}"));

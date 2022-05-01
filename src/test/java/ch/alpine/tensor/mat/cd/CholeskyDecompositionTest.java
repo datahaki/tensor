@@ -49,7 +49,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class CholeskyDecompositionTest {
+class CholeskyDecompositionTest {
   static CholeskyDecomposition checkDecomp(Tensor matrix) {
     int n = matrix.length();
     CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix);

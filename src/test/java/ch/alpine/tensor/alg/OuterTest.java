@@ -15,7 +15,7 @@ import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.nrm.Hypot;
 
-public class OuterTest {
+class OuterTest {
   @Test
   public void testSimple() {
     Tensor a = Tensors.vector(1, 2);

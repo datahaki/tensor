@@ -12,7 +12,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class IdempotentQTest {
+class IdempotentQTest {
   @Test
   public void testSimple() {
     Tensor matrix = Tensors.of(UnitVector.of(2, 1), UnitVector.of(2, 1));

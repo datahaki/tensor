@@ -19,7 +19,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.N;
 
-public class MatrixRankTest {
+class MatrixRankTest {
   private static void _check(Tensor matrix, int expect) {
     {
       int rank = MatrixRank.of(matrix);

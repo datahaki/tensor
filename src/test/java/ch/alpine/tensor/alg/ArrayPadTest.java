@@ -12,7 +12,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class ArrayPadTest {
+class ArrayPadTest {
   @Test
   public void testVector() {
     Tensor vec = Tensors.vector(2, 3, -3, 1);

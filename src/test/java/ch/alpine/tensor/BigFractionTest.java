@@ -10,7 +10,7 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-public class BigFractionTest {
+class BigFractionTest {
   @Test
   public void testCompactString() {
     assertEquals(BigFraction.of(24, 1).toString(), "24");

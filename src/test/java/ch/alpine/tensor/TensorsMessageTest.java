@@ -11,7 +11,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 
-public class TensorsMessageTest {
+class TensorsMessageTest {
   @Test
   public void testSimple() {
     assertEquals(Tensors.message(Pi.VALUE), "3.141592653589793");

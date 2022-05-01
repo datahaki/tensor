@@ -21,7 +21,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 
-public class StaticHelperTest {
+class StaticHelperTest {
   @Test
   public void testSimple() {
     UnitParser.requireAtomic("m");

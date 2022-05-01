@@ -18,7 +18,7 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.lie.Permutations;
 
-public class SparseEntryVisitorTest {
+class SparseEntryVisitorTest {
   @Test
   public void testSimple() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");

@@ -30,7 +30,7 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 
-public class TruncatedDistributionTest {
+class TruncatedDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Clip clip = Clips.interval(10, 11);

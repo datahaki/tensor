@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 
-public class DeleteDuplicatesTest {
+class DeleteDuplicatesTest {
   @Test
   public void testVector() {
     Tensor unique = DeleteDuplicates.of(Tensors.vector(7, 3, 3, 7, 1, 2, 3, 2, 3, 1));

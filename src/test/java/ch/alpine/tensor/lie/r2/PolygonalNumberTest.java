@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.chq.ExactTensorQ;
 
-public class PolygonalNumberTest {
+class PolygonalNumberTest {
   @Test
   public void testSimple() {
     Tensor tensor = Range.of(0, 8).map(PolygonalNumber::of);

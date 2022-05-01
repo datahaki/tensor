@@ -20,7 +20,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Sign;
 
-public class Tsp2OptHeuristicTest {
+class Tsp2OptHeuristicTest {
   @Test
   public void testSimple() {
     Distribution distribution = DiscreteUniformDistribution.of(-5, 5);

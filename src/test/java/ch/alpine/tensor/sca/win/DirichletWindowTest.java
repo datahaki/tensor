@@ -15,7 +15,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.qty.Quantity;
 
-public class DirichletWindowTest {
+class DirichletWindowTest {
   @Test
   public void testSimple() {
     ScalarUnaryOperator scalarUnaryOperator = DirichletWindow.FUNCTION;

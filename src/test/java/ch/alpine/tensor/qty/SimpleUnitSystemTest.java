@@ -20,7 +20,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.GaussScalar;
 
-public class SimpleUnitSystemTest {
+class SimpleUnitSystemTest {
   @Test
   public void testInstance() {
     UnitSystem unitSystem = UnitSystem.SI();

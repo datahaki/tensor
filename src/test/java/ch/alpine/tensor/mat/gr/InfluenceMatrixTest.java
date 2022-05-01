@@ -52,7 +52,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Imag;
 
-public class InfluenceMatrixTest {
+class InfluenceMatrixTest {
   private static void _check(InfluenceMatrix influenceMatrix) throws ClassNotFoundException, IOException {
     InfluenceMatrix _influenceMatrix = Serialization.copy(influenceMatrix);
     Tensor leverages = _influenceMatrix.leverages();

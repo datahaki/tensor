@@ -12,7 +12,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 
-public class HammingWindowTest {
+class HammingWindowTest {
   @Test
   public void testSimple() {
     Scalar result = HammingWindow.FUNCTION.apply(RealScalar.of(0.2));

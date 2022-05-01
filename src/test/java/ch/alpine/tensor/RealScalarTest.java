@@ -17,7 +17,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.sca.Sign;
 
-public class RealScalarTest {
+class RealScalarTest {
   @Test
   public void testSerializable() throws Exception {
     Scalar a = RealScalar.ZERO;

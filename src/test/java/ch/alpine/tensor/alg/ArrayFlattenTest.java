@@ -17,7 +17,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
 
-public class ArrayFlattenTest {
+class ArrayFlattenTest {
   @Test
   public void testSimple() {
     Tensor[][] blocks = new Tensor[2][2];

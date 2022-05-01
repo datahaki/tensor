@@ -15,7 +15,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.TensorRank;
 import ch.alpine.tensor.chq.ExactTensorQ;
 
-public class LehmerTensorTest {
+class LehmerTensorTest {
   @Test
   public void testSimple() {
     Tensor lehmer = LehmerTensor.of(3);

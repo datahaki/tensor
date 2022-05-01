@@ -15,7 +15,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.num.Pi;
 
-public class HistogramTransformTest {
+class HistogramTransformTest {
   @Test
   public void testSimple() {
     Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");

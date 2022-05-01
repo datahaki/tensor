@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 import org.junit.jupiter.api.Test;
 
-public class TimingTest {
+class TimingTest {
   @Test
   public void testSimple() {
     Timing timing = Timing.stopped();

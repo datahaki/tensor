@@ -21,7 +21,7 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Quantile;
 import ch.alpine.tensor.red.Variance;
 
-public class DiracDeltaDistributionTest {
+class DiracDeltaDistributionTest {
   @Test
   public void testProb() {
     Distribution distribution = DiracDeltaDistribution.of(Pi.VALUE);

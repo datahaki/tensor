@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 
-public class DurationScalarTest {
+class DurationScalarTest {
   @Test
   public void testAddSubtract() throws ClassNotFoundException, IOException {
     DurationScalar d1 = DurationScalar.of(Duration.ofDays(213));

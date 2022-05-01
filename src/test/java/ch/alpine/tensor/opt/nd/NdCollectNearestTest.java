@@ -26,7 +26,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
-public class NdCollectNearestTest {
+class NdCollectNearestTest {
   @RepeatedTest(9)
   public void testSimple(RepetitionInfo repetitionInfo) {
     CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9));

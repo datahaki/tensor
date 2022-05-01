@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
-public class HypotTest {
+class HypotTest {
   private static void _checkPair(double x, double y) {
     Scalar res = Hypot.of(RealScalar.of(x), RealScalar.of(y));
     double jav = Math.hypot(x, y);

@@ -12,7 +12,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 
-public class LogGammaTest {
+class LogGammaTest {
   @Test
   public void testSimple() {
     Distribution distribution = UniformDistribution.of(0.2, 4.5);

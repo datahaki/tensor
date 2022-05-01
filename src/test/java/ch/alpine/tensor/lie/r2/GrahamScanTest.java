@@ -17,7 +17,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Sign;
 
-public class GrahamScanTest {
+class GrahamScanTest {
   @Test
   public void testColinear() {
     assertTrue(Scalars.isZero(GrahamScan.ccw( //

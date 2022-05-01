@@ -39,7 +39,7 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class GaussScalarTest {
+class GaussScalarTest {
   @Test
   public void testReciprocal() {
     long prime = 7919;

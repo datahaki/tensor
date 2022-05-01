@@ -18,7 +18,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 
-public class SingularValueListTest {
+class SingularValueListTest {
   @Test
   public void testSimple() {
     Distribution distribution = UniformDistribution.of(-1, 1);

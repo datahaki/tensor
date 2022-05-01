@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-public class ExpectationTest {
+class ExpectationTest {
   private static void _check(Distribution distribution) {
     Scalar mean = Expectation.mean(distribution);
     {

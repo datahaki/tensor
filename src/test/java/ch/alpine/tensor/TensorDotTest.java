@@ -3,18 +3,16 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.chq.ExactTensorQ;
-import ch.alpine.tensor.chq.ScalarQTest;
 
-public class TensorDotTest {
+class TensorDotTest {
   @Test
   public void testDotEmpty() {
     Tensor a = Tensors.empty().dot(Tensors.empty());
-    assertTrue(ScalarQTest.of(a));
+    assertInstanceOf(Scalar.class, a);
     assertEquals(a, RealScalar.ZERO);
     assertEquals(a, DoubleScalar.of(0));
     assertEquals(RealScalar.ZERO, a);

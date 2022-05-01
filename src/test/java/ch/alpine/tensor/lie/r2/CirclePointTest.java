@@ -19,7 +19,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Chop;
 
-public class CirclePointTest {
+class CirclePointTest {
   @Test
   public void testNonPublic() {
     assertFalse(Modifier.isPublic(CirclePoint.class.getModifiers()));

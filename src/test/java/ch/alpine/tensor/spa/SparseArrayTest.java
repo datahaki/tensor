@@ -34,7 +34,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
 
-public class SparseArrayTest {
+class SparseArrayTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Tensor tensor = Serialization.copy(SparseArray.of(RealScalar.ZERO, 5, 6, 8));

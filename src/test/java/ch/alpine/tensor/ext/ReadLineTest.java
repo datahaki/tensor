@@ -10,7 +10,7 @@ import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
 
-public class ReadLineTest {
+class ReadLineTest {
   @Test
   public void testCount() throws IOException {
     try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {

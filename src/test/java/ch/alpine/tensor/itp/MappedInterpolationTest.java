@@ -13,7 +13,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.sca.Floor;
 
-public class MappedInterpolationTest {
+class MappedInterpolationTest {
   @Test
   public void testFloor() throws ClassNotFoundException, IOException {
     Interpolation interpolation = //

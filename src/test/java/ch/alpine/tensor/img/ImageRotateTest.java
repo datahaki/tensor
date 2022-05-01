@@ -17,7 +17,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.red.Nest;
 
-public class ImageRotateTest {
+class ImageRotateTest {
   @Test
   public void testSimple() {
     Tensor tensor = ImageRotate.of(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));

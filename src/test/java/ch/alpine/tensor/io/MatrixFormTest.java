@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 
-public class MatrixFormTest {
+class MatrixFormTest {
   @Test
   public void testEmpty() {
     assertEquals(MatrixForm.of(Tensors.empty()), "");

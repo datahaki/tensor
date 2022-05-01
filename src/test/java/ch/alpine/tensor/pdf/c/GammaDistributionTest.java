@@ -21,7 +21,7 @@ import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.sca.Chop;
 
-public class GammaDistributionTest {
+class GammaDistributionTest {
   @Test
   public void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(GammaDistribution.of(RealScalar.of(1.123), RealScalar.of(2.3)));

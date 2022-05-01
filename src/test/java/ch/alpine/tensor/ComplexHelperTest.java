@@ -16,7 +16,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 
-public class ComplexHelperTest {
+class ComplexHelperTest {
   @Test
   public void testAdd() {
     Scalar a = Scalars.fromString("-13*I[m]");

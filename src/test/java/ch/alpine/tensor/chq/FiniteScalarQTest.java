@@ -25,7 +25,7 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 
-public class FiniteScalarQTest {
+class FiniteScalarQTest {
   @Test
   public void testRealFinite() {
     assertTrue(FiniteScalarQ.of(RealScalar.of(0.)));

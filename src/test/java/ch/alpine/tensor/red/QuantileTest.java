@@ -32,7 +32,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 
-public class QuantileTest {
+class QuantileTest {
   @Test
   public void testMultiple() throws ClassNotFoundException, IOException {
     Tensor vector = Tensors.vector(0, 2, 1, 4, 3);

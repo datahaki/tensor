@@ -11,7 +11,7 @@ import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
 
-public class Givens2Test {
+class Givens2Test {
   @Test
   public void testProduct() {
     Scalar theta1 = RealScalar.of(0.2);

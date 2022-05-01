@@ -31,7 +31,7 @@ import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Round;
 
-public class BipartiteMatchingTest {
+class BipartiteMatchingTest {
   private static final int MAX = 7;
 
   @Test

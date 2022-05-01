@@ -15,7 +15,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
-public class GaussianEliminationTest {
+class GaussianEliminationTest {
   @Test
   public void testPackageVisibility() {
     int modifiers = GaussianElimination.class.getModifiers();

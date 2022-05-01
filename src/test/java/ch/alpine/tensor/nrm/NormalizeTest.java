@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.N;
 
-public class NormalizeTest {
+class NormalizeTest {
   // function requires that vector != 0
   private static void _checkNormalize(Tensor vector, TensorScalarFunction tsf) {
     Scalar value = tsf.apply(Normalize.with(tsf).apply(vector));

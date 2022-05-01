@@ -19,7 +19,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 
-public class CentralMomentTest {
+class CentralMomentTest {
   @Test
   public void testVarious() {
     Tensor tensor = Tensors.vector(10, 2, 3, 4, 1);

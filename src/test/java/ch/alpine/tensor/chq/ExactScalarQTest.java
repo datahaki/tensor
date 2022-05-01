@@ -21,7 +21,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ExactScalarQTest {
+class ExactScalarQTest {
   @Test
   public void testPositive() {
     assertTrue(ExactScalarQ.of(RealScalar.ZERO));

@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
-public class LruCacheTest {
+class LruCacheTest {
   @Test
   public void testLru1() {
     Map<Integer, String> map = new LruCache<>(2);

@@ -22,7 +22,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 
-public class DimensionsTest {
+class DimensionsTest {
   @Test
   public void testScalar() {
     assertTrue(Dimensions.of(DoubleScalar.of(0.123)).isEmpty());

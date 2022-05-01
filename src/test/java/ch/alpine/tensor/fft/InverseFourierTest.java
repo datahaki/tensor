@@ -17,7 +17,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.red.Entrywise;
 
-public class InverseFourierTest {
+class InverseFourierTest {
   @RepeatedTest(10)
   public void testRandom() {
     Distribution distribution = NormalDistribution.standard();

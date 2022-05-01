@@ -22,7 +22,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.sca.Chop;
 
-public class GammaTest {
+class GammaTest {
   @Test
   public void testFactorial() {
     for (int index = 0; index < 20; ++index)

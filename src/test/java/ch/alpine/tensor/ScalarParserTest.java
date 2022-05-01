@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.chq.ExactScalarQ;
 
-public class ScalarParserTest {
+class ScalarParserTest {
   @Test
   public void testDouble() {
     assertEquals(ScalarParser.of("3.14`30.123"), ScalarParser.of("3.14"));

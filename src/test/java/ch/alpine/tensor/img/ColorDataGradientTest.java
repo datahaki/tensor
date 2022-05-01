@@ -17,7 +17,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.num.GaussScalar;
 
-public class ColorDataGradientTest {
+class ColorDataGradientTest {
   @Test
   public void testDimensions() {
     Tensor tensor = ResourceData.of("/colorscheme/_hue.csv");

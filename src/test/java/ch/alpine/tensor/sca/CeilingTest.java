@@ -23,7 +23,7 @@ import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 
-public class CeilingTest {
+class CeilingTest {
   @Test
   public void testCeiling() {
     assertEquals(Ceiling.of(RealScalar.ZERO), RealScalar.ZERO);

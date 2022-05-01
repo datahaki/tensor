@@ -21,7 +21,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
-public class CrossTest {
+class CrossTest {
   private static final Tensor SO3 = LeviCivitaTensor.of(3).negate();
 
   public static Tensor alt_skew3(Tensor a) {

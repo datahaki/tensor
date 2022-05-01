@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.mat.Tolerance;
 
-public class BartlettHannWindowTest {
+class BartlettHannWindowTest {
   @Test
   public void testSimple() {
     Tolerance.CHOP.requireClose( //

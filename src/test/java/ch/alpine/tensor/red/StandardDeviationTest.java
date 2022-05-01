@@ -18,7 +18,7 @@ import ch.alpine.tensor.nrm.Normalize;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class StandardDeviationTest {
+class StandardDeviationTest {
   @Test
   public void testSimple() {
     Scalar scalar = StandardDeviation.ofVector(Tensors.vector(1, 2, 6, 3, -2, 3, 10));

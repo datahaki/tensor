@@ -20,7 +20,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.sca.Chop;
 
-public class UnitSystemsTest {
+class UnitSystemsTest {
   private static void checkInvariant(UnitSystem unitSystem) {
     for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
       Scalar scalar = Quantity.of(1, entry.getKey());

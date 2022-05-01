@@ -11,7 +11,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.sca.Chop;
 
-public class ArcSinhTest {
+class ArcSinhTest {
   @Test
   public void testReal() {
     Scalar value = RealScalar.of(0.88137358701954302523);

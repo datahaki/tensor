@@ -11,7 +11,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.Pi;
 
-public class TensorRuntimeExceptionTest {
+class TensorRuntimeExceptionTest {
   @Test
   public void testFull() throws ClassNotFoundException, IOException {
     Exception exception = Serialization.copy(TensorRuntimeException.of(Tensors.vector(1, 2), Tensors.vector(9, 3)));

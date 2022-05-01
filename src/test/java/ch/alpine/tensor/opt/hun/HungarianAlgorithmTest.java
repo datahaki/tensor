@@ -25,7 +25,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
-public class HungarianAlgorithmTest {
+class HungarianAlgorithmTest {
   private static void _verify(Tensor matrix, Scalar minimum, Tensor expected) {
     BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
     Tolerance.CHOP.requireClose(bipartiteMatching.minimum(), minimum);

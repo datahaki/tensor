@@ -17,7 +17,7 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.mat.GaussianMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class FullCorrelateTest {
+class FullCorrelateTest {
   @Test
   public void testSimple() {
     Tensor res1 = FullCorrelate.of(Tensors.vector(3, 7, 2), Tensors.vector(1, 2, 3, 8, 9));

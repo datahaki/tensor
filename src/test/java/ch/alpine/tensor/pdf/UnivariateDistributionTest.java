@@ -32,7 +32,7 @@ import ch.alpine.tensor.red.InterquartileRange;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.sca.Sign;
 
-public class UnivariateDistributionTest {
+class UnivariateDistributionTest {
   static final Distribution[] DISTRIBUTIONS = { //
       CauchyDistribution.of(.2, .3), //
       DagumDistribution.of(.3, .4, .5), //

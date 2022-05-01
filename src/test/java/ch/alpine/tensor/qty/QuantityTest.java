@@ -23,7 +23,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.pow.Power;
 
-public class QuantityTest {
+class QuantityTest {
   @Test
   public void testFromString() {
     assertEquals(Scalars.fromString("-7[m*kg^-2]"), Quantity.of(-7, "m*kg^-2"));

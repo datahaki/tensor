@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class AbstractInterpolationTest {
+class AbstractInterpolationTest {
   @Test
   public void testVisibility() {
     assertEquals(AbstractInterpolation.class.getModifiers() & 1, 1);

@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.tri.Sinh;
 import ch.alpine.tensor.sca.tri.Tan;
 import ch.alpine.tensor.sca.tri.Tanh;
 
-public class ScalarUnaryOperatorsTest {
+class ScalarUnaryOperatorsTest {
   public static final ScalarUnaryOperator[] ARRAY = { //
       Abs.FUNCTION, //
       Abs.FUNCTION, //

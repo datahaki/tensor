@@ -30,7 +30,7 @@ import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Sign;
 
-public class DiscreteDistributionTest {
+class DiscreteDistributionTest {
   static final Distribution[] DISTRIBUTIONS = { //
       BernoulliDistribution.of(0.3), //
       BinomialDistribution.of(5, .4), //

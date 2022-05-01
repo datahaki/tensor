@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 
-public class DivideTest {
+class DivideTest {
   @Test
   public void testSimple() {
     assertTrue(Divide.nonZero(3, 0).isEmpty());

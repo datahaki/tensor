@@ -12,7 +12,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class FlattenTest {
+class FlattenTest {
   @Test
   public void testLevel0a() {
     Tensor m = HilbertMatrix.of(5, 4);

@@ -28,7 +28,7 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 
-public class InfluenceMatrixSvdTest {
+class InfluenceMatrixSvdTest {
   @RepeatedTest(3)
   public void testRankDeficient(RepetitionInfo repetitionInfo) {
     int n = 7;

@@ -16,7 +16,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.gam.Factorial;
 
-public class OrderedQTest {
+class OrderedQTest {
   @Test
   public void testCornerCases() {
     assertTrue(OrderedQ.of(Tensors.empty()));

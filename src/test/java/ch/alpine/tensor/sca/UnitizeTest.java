@@ -13,7 +13,7 @@ import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class UnitizeTest {
+class UnitizeTest {
   @Test
   public void testVector() {
     Tensor tensor = Unitize.of(Tensors.vector(0, 0, 1e-3, -3, Double.NaN, 0));

@@ -27,7 +27,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class SymmetrizeTest {
+class SymmetrizeTest {
   @Test
   public void testSimple() {
     Distribution distribution = UniformDistribution.unit();

@@ -21,7 +21,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 
-public class TensorsTest {
+class TensorsTest {
   @Test
   public void testEmpty() {
     Tensor tensor = Tensors.empty();

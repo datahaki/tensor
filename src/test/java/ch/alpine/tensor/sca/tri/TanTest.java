@@ -15,7 +15,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.sca.Chop;
 
-public class TanTest {
+class TanTest {
   @Test
   public void testReal() {
     Scalar i = RealScalar.of(2);

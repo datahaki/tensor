@@ -43,7 +43,7 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class PseudoInverseTest {
+class PseudoInverseTest {
   @Test
   public void testHilbertSquare() {
     for (int n = 1; n < 8; ++n) {

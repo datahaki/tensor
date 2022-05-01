@@ -22,7 +22,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
 
-public class ConvexHullTest {
+class ConvexHullTest {
   @Test
   public void testEmpty() {
     assertEquals(ConvexHull.of(Tensors.empty()), Tensors.empty());

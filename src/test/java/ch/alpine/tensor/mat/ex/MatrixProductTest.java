@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ext.Serialization;
 
-public class MatrixProductTest {
+class MatrixProductTest {
   @Test
   public void testToString() throws ClassNotFoundException, IOException {
     MatrixProduct matrixProduct = Serialization.copy(MatrixProduct.INSTANCE);

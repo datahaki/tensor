@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 
-public class TensorRankTest {
+class TensorRankTest {
   @Test
   public void testRank0() {
     Tensor a = DoubleScalar.of(2.32123);

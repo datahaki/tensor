@@ -14,7 +14,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.sca.Chop;
 
-public class StandardizeTest {
+class StandardizeTest {
   @Test
   public void testNumeric() {
     Tensor tensor = Standardize.ofVector(Tensors.vector(6.5, 3.8, 6.6, 5.7, 6.0, 6.4, 5.3));

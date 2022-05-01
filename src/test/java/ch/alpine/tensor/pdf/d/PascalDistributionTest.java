@@ -26,7 +26,7 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.pow.Power;
 
-public class PascalDistributionTest {
+class PascalDistributionTest {
   @Test
   public void testPDF() {
     Scalar p = RationalScalar.of(2, 3);

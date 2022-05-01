@@ -21,7 +21,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class SortTest {
+class SortTest {
   @Test
   public void testSort() {
     assertEquals(Sort.of(Tensors.vector(0, 4, 5, 2, -3)), Tensors.vector(-3, 0, 2, 4, 5));

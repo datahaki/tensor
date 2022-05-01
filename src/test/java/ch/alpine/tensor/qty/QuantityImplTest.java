@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
-public class QuantityImplTest {
+class QuantityImplTest {
   @Test
   public void testSerializable() throws Exception {
     Quantity quantity = (Quantity) Scalars.fromString("-7+3*I[kg^-2*m*s]");

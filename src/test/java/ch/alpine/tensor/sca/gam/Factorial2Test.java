@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 
-public class Factorial2Test {
+class Factorial2Test {
   @Test
   public void testSimple() {
     Scalar f2_20 = Factorial2.FUNCTION.apply(RealScalar.of(20));

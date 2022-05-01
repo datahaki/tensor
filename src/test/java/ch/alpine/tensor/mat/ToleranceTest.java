@@ -11,7 +11,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 
-public class ToleranceTest {
+class ToleranceTest {
   @Test
   public void testTrue() {
     Scalar scalar = Scalars.fromString("1E-20");

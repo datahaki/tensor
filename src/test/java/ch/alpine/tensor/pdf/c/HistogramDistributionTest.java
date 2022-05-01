@@ -35,7 +35,7 @@ import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-public class HistogramDistributionTest {
+class HistogramDistributionTest {
   @Test
   public void testPdf() {
     Distribution distribution = //

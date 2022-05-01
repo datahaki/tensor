@@ -18,7 +18,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class InverseErfcTest {
+class InverseErfcTest {
   public static final Chop CHOP_04 = Chop.below(1.4e-04);
 
   @Test

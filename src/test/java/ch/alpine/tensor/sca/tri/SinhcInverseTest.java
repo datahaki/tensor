@@ -13,7 +13,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 
-public class SinhcInverseTest {
+class SinhcInverseTest {
   @Test
   public void testSimple() {
     assertEquals(SinhcInverse.FUNCTION.apply(RealScalar.ZERO), RealScalar.ONE);

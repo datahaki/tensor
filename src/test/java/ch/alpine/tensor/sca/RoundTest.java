@@ -24,7 +24,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class RoundTest {
+class RoundTest {
   @Test
   public void testDouble() {
     assertEquals(Round.FUNCTION.apply(DoubleScalar.of(11.3)), DoubleScalar.of(11));

@@ -13,7 +13,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class ArgMinTest {
+class ArgMinTest {
   @Test
   public void testDocumentation() {
     assertEquals(ArgMin.of(Tensors.vector(3, 4, 1, 2, 3)), 2);

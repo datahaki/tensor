@@ -32,7 +32,7 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.sca.Chop;
 
-public class FrechetDistributionTest {
+class FrechetDistributionTest {
   @Test
   public void testPDF() throws ClassNotFoundException, IOException {
     Distribution distribution = //

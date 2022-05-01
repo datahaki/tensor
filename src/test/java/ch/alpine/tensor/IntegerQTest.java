@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class IntegerQTest {
+class IntegerQTest {
   @Test
   public void testPositive() {
     assertTrue(IntegerQ.of(Scalars.fromString("9/3")));

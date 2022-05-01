@@ -20,7 +20,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.red.Total;
 
-public class TensorSetTest {
+class TensorSetTest {
   @Test
   public void testSetScalar() {
     Tensor eye = IdentityMatrix.of(5);

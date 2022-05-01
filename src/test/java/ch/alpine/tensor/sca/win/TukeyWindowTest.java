@@ -22,7 +22,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
 
-public class TukeyWindowTest {
+class TukeyWindowTest {
   @Test
   public void testSimple() {
     ScalarUnaryOperator suo = TukeyWindow.of(RealScalar.of(0.45));

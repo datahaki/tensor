@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.qty.Quantity;
 
-public class CoordinateBoundingBoxTest {
+class CoordinateBoundingBoxTest {
   @Test
   public void testProject() {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));

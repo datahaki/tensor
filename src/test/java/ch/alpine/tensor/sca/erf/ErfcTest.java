@@ -17,7 +17,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.Chop;
 
-public class ErfcTest {
+class ErfcTest {
   @Test
   public void testCompare() {
     Tensor x = Subdivide.of(-0.6, 0.6, 50);

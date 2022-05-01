@@ -45,7 +45,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sign;
 
-public class QRDecompositionTest {
+class QRDecompositionTest {
   private static QRDecomposition _specialOps(Tensor A) {
     QRDecomposition qrDecomposition = null;
     for (QRSignOperator qrSignOperator : QRSignOperators.values()) {

@@ -19,7 +19,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
 
-public class DiagonalTest {
+class DiagonalTest {
   @Test
   public void testVector() {
     Tensor tensor = Diagonal.of(Range.of(10, 20));

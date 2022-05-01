@@ -24,7 +24,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.nrm.FrobeniusNorm;
 
-public class ExportHelperTest {
+class ExportHelperTest {
   @Test
   public void testGif(@TempDir File tempDir) throws IOException {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(128);

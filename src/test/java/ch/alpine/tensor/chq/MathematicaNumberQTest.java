@@ -17,7 +17,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class MathematicaNumberQTest {
+class MathematicaNumberQTest {
   @Test
   public void testRealFinite() {
     assertTrue(MathematicaNumberQ.of(RealScalar.of(0.)));

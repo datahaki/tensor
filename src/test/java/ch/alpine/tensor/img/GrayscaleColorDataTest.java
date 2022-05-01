@@ -21,7 +21,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.nrm.Vector2Norm;
 
-public class GrayscaleColorDataTest {
+class GrayscaleColorDataTest {
   @Test
   public void testColor() {
     assertEquals(ColorFormat.toColor(GrayscaleColorData.DEFAULT.apply(RealScalar.ZERO)), Color.BLACK);

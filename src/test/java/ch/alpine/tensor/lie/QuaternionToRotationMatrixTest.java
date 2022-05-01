@@ -22,7 +22,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 
-public class QuaternionToRotationMatrixTest {
+class QuaternionToRotationMatrixTest {
   private static final Tensor ID3 = IdentityMatrix.of(3);
 
   @Test

@@ -12,16 +12,16 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.chq.ScalarQTest;
 
-public class GetTest {
+class GetTest {
   @Test
   public void testResource() throws IOException {
     File file = new File(getClass().getResource("/io/basic.mathematica").getFile());
     Tensor tensor = Get.of(file);
     assertNotNull(tensor);
-    assertFalse(ScalarQTest.of(tensor));
+    assertFalse(tensor instanceof Scalar);
     assertEquals(tensor.length(), 13);
     assertEquals(tensor, Get.of(file));
   }

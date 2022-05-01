@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.sca.pow.Power;
 
-public class MathematicaFormTest {
+class MathematicaFormTest {
   @Test
   public void testSimple() {
     String string = MathematicaForm.of(Quantity.of(3, "m^2*s"));

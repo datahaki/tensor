@@ -26,7 +26,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class GeometricDistributionTest {
+class GeometricDistributionTest {
   @Test
   public void testPdf() {
     PDF pdf = PDF.of(GeometricDistribution.of(RationalScalar.of(1, 3)));

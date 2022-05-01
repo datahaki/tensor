@@ -10,7 +10,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 
-public class MatrixLogSeries1PTest {
+class MatrixLogSeries1PTest {
   @Test
   public void testSeries1p() {
     MatrixLogSeries1P.FUNCTION.apply(Array.zeros(3, 3));

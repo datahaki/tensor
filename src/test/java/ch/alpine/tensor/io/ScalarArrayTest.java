@@ -15,7 +15,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 
-public class ScalarArrayTest {
+class ScalarArrayTest {
   @Test
   public void testEmpty() {
     Scalar[] array = ScalarArray.ofVector(Tensors.empty());

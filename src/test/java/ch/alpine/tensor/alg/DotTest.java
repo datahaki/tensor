@@ -18,7 +18,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
-public class DotTest {
+class DotTest {
   /** @param tensor
    * @param v's
    * @return ( ... ( ( tensor . v[0] ) . v[1] ). ... ) . v[end-1] */

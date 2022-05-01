@@ -15,7 +15,7 @@ import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.jet.DateTimeScalar;
 
-public class LinearBinaryAverageTest {
+class LinearBinaryAverageTest {
   @Test
   public void testSimple() {
     Tensor tensor = LinearBinaryAverage.INSTANCE.split(UnitVector.of(3, 1), UnitVector.of(3, 2), RationalScalar.of(1, 3));

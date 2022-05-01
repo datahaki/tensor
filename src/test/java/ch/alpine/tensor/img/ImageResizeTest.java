@@ -25,7 +25,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class ImageResizeTest {
+class ImageResizeTest {
   @Test
   public void testImage1() throws Exception {
     File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());

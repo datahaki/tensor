@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-public class QRReflectionTest {
+class QRReflectionTest {
   @Test
   public void testPackageVisibility() {
     assertFalse(Modifier.isPublic(QRReflection.class.getModifiers()));

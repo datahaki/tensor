@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-public class BipartitionImplTest {
+class BipartitionImplTest {
   @Test
   public void testPackageVisibility() {
     assertFalse(Modifier.isPublic(BipartitionImpl.class.getModifiers()));

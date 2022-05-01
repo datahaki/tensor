@@ -25,7 +25,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ModTest {
+class ModTest {
   @Test
   public void testOffset() {
     Mod mod = Mod.function(4, -2);

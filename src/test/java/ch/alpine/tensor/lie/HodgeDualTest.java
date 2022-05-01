@@ -19,7 +19,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.gam.Factorial;
 
-public class HodgeDualTest {
+class HodgeDualTest {
   /** @param tensor of rank at least 1
    * @return
    * @throws Exception if tensor is a scalar */

@@ -40,7 +40,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Real;
 
-public class MatrixPowerTest {
+class MatrixPowerTest {
   private static boolean trunc(Tensor m, Tensor r) {
     return Tolerance.CHOP.of(m.subtract(r)).equals(Array.zeros(m.length(), m.length()));
   }

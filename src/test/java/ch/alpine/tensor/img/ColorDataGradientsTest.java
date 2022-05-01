@@ -28,7 +28,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class ColorDataGradientsTest {
+class ColorDataGradientsTest {
   @ParameterizedTest
   @EnumSource(ColorDataGradients.class)
   public void testDimensions(ColorDataGradient colorDataGradient) {

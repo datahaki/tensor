@@ -26,7 +26,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Mean;
 
-public class FitTest {
+class FitTest {
   @Test
   public void testDegree0() {
     Tensor ydata = Tensors.vector(5, -2);

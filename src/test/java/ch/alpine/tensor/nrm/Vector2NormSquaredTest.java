@@ -16,7 +16,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
 
-public class Vector2NormSquaredTest {
+class Vector2NormSquaredTest {
   @Test
   public void testBetween() {
     Tensor v1 = Tensors.vector(1, 2, 5);

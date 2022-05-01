@@ -12,7 +12,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 
-public class AntihermitianMatrixQTest {
+class AntihermitianMatrixQTest {
   @Test
   public void testSimple() {
     assertTrue(AntihermitianMatrixQ.of(Array.zeros(2, 2)));

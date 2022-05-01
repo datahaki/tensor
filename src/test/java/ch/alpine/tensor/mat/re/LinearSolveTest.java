@@ -24,7 +24,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 
-public class LinearSolveTest {
+class LinearSolveTest {
   private static final Random RANDOM = new Random();
 
   @Test

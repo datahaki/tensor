@@ -13,7 +13,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 
-public class PartitionTest {
+class PartitionTest {
   @Test
   public void testPartition() {
     Tensor s = Partition.of(Tensors.vector(1, 2, 3), 3);

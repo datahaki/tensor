@@ -31,7 +31,7 @@ import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 
-public class GompertzMakehamDistributionTest {
+class GompertzMakehamDistributionTest {
   @Test
   public void testPDF() throws ClassNotFoundException, IOException {
     Distribution distribution = //

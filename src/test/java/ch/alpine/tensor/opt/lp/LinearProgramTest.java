@@ -13,7 +13,7 @@ import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 
 /** Reference: "Linear and Integer Programming made Easy", 2016 */
-public class LinearProgramTest {
+class LinearProgramTest {
   @Test
   public void testP59a() {
     LinearProgram lpp = LinearProgram.of( //

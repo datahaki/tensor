@@ -28,7 +28,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.sca.Chop;
 
-public class CirclePointsTest {
+class CirclePointsTest {
   static Tensor numeric(int n) {
     if (n < 0)
       throw new RuntimeException("n=" + n);

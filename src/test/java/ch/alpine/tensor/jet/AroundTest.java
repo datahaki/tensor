@@ -41,7 +41,7 @@ import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class AroundTest {
+class AroundTest {
   @Test
   public void testZeroDropSigma() {
     assertEquals(Around.of(4, 0), RealScalar.of(4));

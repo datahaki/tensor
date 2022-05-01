@@ -10,7 +10,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
 
-public class LenientAddTest {
+class LenientAddTest {
   @Test
   public void testDifferent() {
     Scalar p = Quantity.of(3, "m");

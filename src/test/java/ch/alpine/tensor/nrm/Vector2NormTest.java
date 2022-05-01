@@ -18,7 +18,7 @@ import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.qty.Quantity;
 
-public class Vector2NormTest {
+class Vector2NormTest {
   @Test
   public void testScalar() {
     assertEquals(Vector2Norm.of(Tensors.fromString("{0}")), RealScalar.ZERO);

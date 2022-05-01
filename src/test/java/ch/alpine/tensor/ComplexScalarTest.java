@@ -14,7 +14,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 
-public class ComplexScalarTest {
+class ComplexScalarTest {
   @Test
   public void testSign() {
     Scalar scalar = ComplexScalar.of(4, 3);

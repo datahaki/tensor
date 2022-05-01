@@ -22,7 +22,7 @@ import ch.alpine.tensor.mat.gr.IdempotentQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.spa.SparseArray;
 
-public class IdentityMatrixTest {
+class IdentityMatrixTest {
   @Test
   public void testOneQuantity() {
     Tensor matrix = DiagonalMatrix.of(2, Quantity.of(1, "s"));

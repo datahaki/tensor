@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
-public class AbstractRealScalarTest {
+class AbstractRealScalarTest {
   private static final List<Scalar> SCALARS = Arrays.asList( //
       RealScalar.ZERO, RealScalar.ONE, //
       RationalScalar.of(-7, 3), //

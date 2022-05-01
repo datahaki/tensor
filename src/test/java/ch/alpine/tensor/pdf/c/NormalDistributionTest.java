@@ -29,7 +29,7 @@ import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.sca.Chop;
 
-public class NormalDistributionTest {
+class NormalDistributionTest {
   @Test
   public void testExpectationMean() {
     Scalar mean = RationalScalar.of(3, 5);

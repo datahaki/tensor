@@ -15,7 +15,7 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 
-public class MatrixDotTransposeTest {
+class MatrixDotTransposeTest {
   @Test
   public void testSimple() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 3, 5);

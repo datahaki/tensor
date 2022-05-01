@@ -20,7 +20,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ClipTest {
+class ClipTest {
   @Test
   public void testApply() {
     Scalar min = RealScalar.of(-3);

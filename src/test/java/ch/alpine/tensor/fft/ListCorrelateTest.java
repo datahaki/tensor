@@ -20,7 +20,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class ListCorrelateTest {
+class ListCorrelateTest {
   @Test
   public void testVector1() {
     Tensor kernel = Tensors.vector(2, 1, 3);

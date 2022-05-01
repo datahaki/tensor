@@ -41,7 +41,7 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Chop;
 
-public class MatrixExpTest {
+class MatrixExpTest {
   @Test
   public void testZeros() {
     Tensor zeros = Array.zeros(7, 7);

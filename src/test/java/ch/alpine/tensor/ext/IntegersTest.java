@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-public class IntegersTest {
+class IntegersTest {
   @Test
   public void testPositive() {
     for (int value : new int[] { 1, 2, Integer.MAX_VALUE })

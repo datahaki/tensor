@@ -15,7 +15,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 
-public class CyclesTest {
+class CyclesTest {
   @Test
   public void testSingleton() throws ClassNotFoundException, IOException {
     Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));

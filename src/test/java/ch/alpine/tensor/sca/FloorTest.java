@@ -21,7 +21,7 @@ import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 
-public class FloorTest {
+class FloorTest {
   @Test
   public void testFloor() {
     assertEquals(Floor.of(RealScalar.ZERO), RealScalar.ZERO);

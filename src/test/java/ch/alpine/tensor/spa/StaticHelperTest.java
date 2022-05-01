@@ -35,7 +35,7 @@ import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
 
-public class StaticHelperTest {
+class StaticHelperTest {
   @Test
   public void testSparseBinary() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");

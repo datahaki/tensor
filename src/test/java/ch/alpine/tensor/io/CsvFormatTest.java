@@ -20,7 +20,7 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.ext.ReadLine;
 import ch.alpine.tensor.ext.Serialization;
 
-public class CsvFormatTest {
+class CsvFormatTest {
   @Test
   public void testNonRect() throws Exception {
     Tensor s = Tensors.empty();

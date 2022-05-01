@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
 
-public class StringScalarQTest {
+class StringScalarQTest {
   @Test
   public void testOf() {
     assertFalse(RealScalar.ZERO instanceof StringScalar);

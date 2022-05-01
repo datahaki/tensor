@@ -24,7 +24,7 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class LogTest {
+class LogTest {
   @Test
   public void testOne() {
     Scalar scalar = Log.of(RealScalar.ONE);

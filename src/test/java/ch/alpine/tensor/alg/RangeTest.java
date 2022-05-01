@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class RangeTest {
+class RangeTest {
   @Test
   public void testRange() {
     Tensor t = Range.of(Integer.MAX_VALUE, Integer.MAX_VALUE + 4L);

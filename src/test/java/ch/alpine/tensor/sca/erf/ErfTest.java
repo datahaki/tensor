@@ -15,7 +15,7 @@ import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 
-public class ErfTest {
+class ErfTest {
   @Test
   public void testMathematica() {
     Tensor xs = Subdivide.of(-2, 2., 20);

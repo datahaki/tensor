@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ScalarsTest {
+class ScalarsTest {
   @Test
   public void testRequireZero() {
     assertEquals(Scalars.requireZero(Quantity.of(0, "A")), Quantity.of(0, "A"));

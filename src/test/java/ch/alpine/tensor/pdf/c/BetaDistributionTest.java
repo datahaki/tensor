@@ -16,7 +16,7 @@ import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
-public class BetaDistributionTest {
+class BetaDistributionTest {
   @Test
   public void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(BetaDistribution.of(2, 3));

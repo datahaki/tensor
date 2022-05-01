@@ -10,7 +10,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 
-public class TuplesTest {
+class TuplesTest {
   @Test
   public void testSimple0() {
     Tensor tuples = Tuples.of(Tensors.vector(3, 4, 5), 0);

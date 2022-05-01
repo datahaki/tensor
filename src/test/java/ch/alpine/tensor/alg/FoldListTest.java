@@ -14,7 +14,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
 
-public class FoldListTest {
+class FoldListTest {
   @Test
   public void testEmpty() {
     Tensor tensor = FoldList.of(Tensor::add, Tensors.unmodifiableEmpty());

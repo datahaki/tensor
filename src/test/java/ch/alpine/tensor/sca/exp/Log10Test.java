@@ -16,7 +16,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 
-public class Log10Test {
+class Log10Test {
   @Test
   public void testOne() {
     Scalar scalar = Log10.of(RealScalar.ONE);

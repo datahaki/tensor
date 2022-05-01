@@ -35,7 +35,7 @@ import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
 
-public class BinomialDistributionTest {
+class BinomialDistributionTest {
   @Test
   public void testPdf() {
     Distribution distribution = BinomialDistribution.of(10, RationalScalar.of(1, 7));

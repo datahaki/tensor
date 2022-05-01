@@ -33,7 +33,7 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
 
-public class PoissonDistributionTest {
+class PoissonDistributionTest {
   static Tensor values(PDF pdf, int length) {
     return Tensors.vector(i -> pdf.at(RealScalar.of(i)), length);
   }

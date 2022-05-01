@@ -17,7 +17,7 @@ import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class DoubleScalarTest {
+class DoubleScalarTest {
   @Test
   public void testZero() {
     assertEquals(RealScalar.ZERO, DoubleScalar.of(0));

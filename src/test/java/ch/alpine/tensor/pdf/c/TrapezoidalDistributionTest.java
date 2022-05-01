@@ -39,7 +39,7 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-public class TrapezoidalDistributionTest {
+class TrapezoidalDistributionTest {
   final Random random = new Random();
 
   @Test

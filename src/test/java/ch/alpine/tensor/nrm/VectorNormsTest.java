@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 
-public class VectorNormsTest {
+class VectorNormsTest {
   public static final TensorScalarFunction[] VALUES = { //
       Vector1Norm::of, //
       Vector2Norm::of, //

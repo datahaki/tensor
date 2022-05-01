@@ -29,7 +29,7 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Variance;
 
-public class CategoricalDistributionTest {
+class CategoricalDistributionTest {
   @Test
   public void testPDF() {
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1));

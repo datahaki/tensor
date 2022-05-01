@@ -23,7 +23,7 @@ import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 
-public class AbsSquaredTest {
+class AbsSquaredTest {
   @Test
   public void testAbsAndSquared() {
     Tensor tensor = Tensors.of( //

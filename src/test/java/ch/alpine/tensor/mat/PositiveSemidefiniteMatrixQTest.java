@@ -10,7 +10,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.sca.N;
 
-public class PositiveSemidefiniteMatrixQTest {
+class PositiveSemidefiniteMatrixQTest {
   @Test
   public void testDiagonal() {
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(DiagonalMatrix.of(3, 2, 0, 1)));

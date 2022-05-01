@@ -16,7 +16,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.sca.Clips;
 
-public class CoordinateBoundsTest {
+class CoordinateBoundsTest {
   @Test
   public void testSimple() {
     // CoordinateBoundingBox[{{0, 1}, {1, 2}, {2, 1}, {3, 2}, {4, 1}}]

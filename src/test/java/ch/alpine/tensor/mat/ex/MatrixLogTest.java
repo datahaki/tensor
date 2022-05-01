@@ -23,7 +23,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class MatrixLogTest {
+class MatrixLogTest {
   @Test
   public void testIdentityMatrix() {
     for (int n = 1; n < 6; ++n) {

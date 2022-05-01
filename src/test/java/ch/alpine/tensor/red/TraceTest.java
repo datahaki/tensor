@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.spa.SparseArray;
 
-public class TraceTest {
+class TraceTest {
   // from wikipedia
   private static Scalar _tr2Formula(Tensor A) {
     assertTrue(SquareMatrixQ.of(A));

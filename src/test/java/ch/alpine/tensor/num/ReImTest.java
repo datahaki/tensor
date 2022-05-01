@@ -9,7 +9,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.alg.UnitVector;
 
-public class ReImTest {
+class ReImTest {
   @Test
   public void testSimple() {
     assertEquals(ReIm.of(RealScalar.ONE), UnitVector.of(2, 0));

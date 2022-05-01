@@ -29,7 +29,7 @@ import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Power;
 
-public class IntervalTest {
+class IntervalTest {
   @Test
   public void testInverse1() {
     Tensor matrix = Tensors.of( //

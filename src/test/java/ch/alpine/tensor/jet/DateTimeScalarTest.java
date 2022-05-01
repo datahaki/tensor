@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 
-public class DateTimeScalarTest {
+class DateTimeScalarTest {
   @Test
   public void test1() throws ClassNotFoundException, IOException {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));

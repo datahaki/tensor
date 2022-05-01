@@ -12,7 +12,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 
-public class FactorialTest {
+class FactorialTest {
   @Test
   public void testRealScalar() {
     assertEquals(Factorial.of(RealScalar.of(0)), RealScalar.of(1));

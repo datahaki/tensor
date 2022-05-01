@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.Sin;
 import ch.alpine.tensor.sca.tri.Sinh;
 
-public class JetScalarTest {
+class JetScalarTest {
   @Test
   public void testMultiply() throws ClassNotFoundException, IOException {
     Scalar s1 = Serialization.copy(JetScalar.of(Tensors.vector(4, 1, 2)));

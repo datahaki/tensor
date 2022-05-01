@@ -18,7 +18,7 @@ import ch.alpine.tensor.red.ScalarSummaryStatistics;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
 
-public class RescaleTest {
+class RescaleTest {
   @Test
   public void testEmpty() {
     assertEquals(Rescale.of(Tensors.empty()), Tensors.empty());

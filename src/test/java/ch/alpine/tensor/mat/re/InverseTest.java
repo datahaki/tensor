@@ -41,7 +41,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class InverseTest {
+class InverseTest {
   @Test
   public void testInverse() {
     int n = 25;

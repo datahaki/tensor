@@ -21,7 +21,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class ListConvolveTest {
+class ListConvolveTest {
   @Test
   public void testVector1() {
     Tensor kernel = Tensors.vector(0, -1, 3);

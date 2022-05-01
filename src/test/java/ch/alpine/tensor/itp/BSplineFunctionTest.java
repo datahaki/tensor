@@ -12,7 +12,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 
-public class BSplineFunctionTest {
+class BSplineFunctionTest {
   @Test
   public void testIdentical() {
     Tensor control = HilbertMatrix.of(20, 3).map(scalar -> Quantity.of(scalar, "bsp"));

@@ -18,7 +18,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Chop;
 
-public class VectorAngleTest {
+class VectorAngleTest {
   @Test
   public void testReal1() {
     Tensor id = IdentityMatrix.of(5);
