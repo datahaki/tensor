@@ -2,8 +2,8 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -79,8 +79,8 @@ public class ComplexScalarTest {
 
   @Test
   public void testPolar() {
-    assertTrue(ComplexScalar.fromPolar(1, 3) instanceof ComplexScalar);
-    assertTrue(ComplexScalar.fromPolar(1, 0) instanceof RealScalar);
+    assertInstanceOf(ComplexScalar.class, ComplexScalar.fromPolar(1, 3));
+    assertInstanceOf(RealScalar.class, ComplexScalar.fromPolar(1, 0));
   }
 
   @Test

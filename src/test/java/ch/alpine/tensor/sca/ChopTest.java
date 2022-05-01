@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -83,14 +84,14 @@ public class ChopTest {
   @Test
   public void testNaN() {
     Scalar scalar = Chop._05.apply(DoubleScalar.INDETERMINATE);
-    assertTrue(scalar instanceof DoubleScalar);
+    assertInstanceOf(DoubleScalar.class, scalar);
     assertTrue(Double.isNaN(scalar.number().doubleValue()));
   }
 
   @Test
   public void testInf() {
     Scalar scalar = Chop._05.apply(DoubleScalar.NEGATIVE_INFINITY);
-    assertTrue(scalar instanceof DoubleScalar);
+    assertInstanceOf(DoubleScalar.class, scalar);
     assertTrue(Double.isInfinite(scalar.number().doubleValue()));
   }
 

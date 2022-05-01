@@ -3,8 +3,8 @@ package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -105,7 +105,7 @@ public class ArcTanTest {
     {
       assertFalse(qs1 instanceof RealScalar);
       Scalar res = ArcTan.of(qs1, qs2);
-      assertTrue(res instanceof RealScalar);
+      assertInstanceOf(RealScalar.class, res);
       Tolerance.CHOP.requireClose(res, RealScalar.of(0.32175055439664219340));
     }
   }
@@ -116,12 +116,12 @@ public class ArcTanTest {
     Scalar qs1 = Quantity.of(12, "m");
     {
       Scalar res = ArcTan.of(qs0, qs1);
-      assertTrue(res instanceof RealScalar);
+      assertInstanceOf(RealScalar.class, res);
       Tolerance.CHOP.requireClose(res, RealScalar.of(Math.PI / 2));
     }
     {
       Scalar res = ArcTan.of(qs1, qs0);
-      assertTrue(res instanceof RealScalar);
+      assertInstanceOf(RealScalar.class, res);
       Tolerance.CHOP.requireZero(res);
     }
   }

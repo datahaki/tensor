@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -139,7 +140,7 @@ public class TrapezoidalDistributionTest {
     }
     Scalar random = RandomVariate.of(distribution);
     Scalar apply = QuantityMagnitude.SI().in("km").apply(random);
-    assertTrue(apply instanceof RealScalar);
+    assertInstanceOf(RealScalar.class, apply);
     Scalar variance = Variance.of(distribution);
     ExactScalarQ.require(variance);
   }
@@ -180,7 +181,7 @@ public class TrapezoidalDistributionTest {
     }
     Scalar random = RandomVariate.of(distribution);
     Scalar apply = QuantityMagnitude.SI().in("km").apply(random);
-    assertTrue(apply instanceof RealScalar);
+    assertInstanceOf(RealScalar.class, apply);
     assertTrue(distribution.toString().startsWith("TrapezoidalDistribution["));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));

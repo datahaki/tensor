@@ -2,8 +2,8 @@
 package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +26,7 @@ public class TestHelperTest {
 
   @Test
   public void testBlock() {
-    assertTrue(sparse instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, sparse);
     int dimension1 = Unprotect.dimension1(tensor);
     for (int ofs0 = 0; ofs0 <= tensor.length(); ++ofs0)
       for (int len0 = 0; len0 <= tensor.length() - ofs0; ++len0) {
@@ -58,7 +58,7 @@ public class TestHelperTest {
 
   @Test
   public void testExtract() {
-    assertTrue(sparse instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, sparse);
     for (int ofs0 = 0; ofs0 <= tensor.length(); ++ofs0)
       for (int len0 = ofs0; len0 <= tensor.length(); ++len0)
         _checkExtract(ofs0, len0);

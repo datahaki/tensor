@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,7 +39,7 @@ public class BinningMethodTest {
   public void testQuantity(BinningMethod binningMethod) {
     Tensor samples = QuantityTensor.of(Tensors.vector(1, 2, 3, 1, 2, 3, 7, 2, 9, 3, 3), "Apples");
     Scalar width = binningMethod.apply(samples);
-    assertTrue(width instanceof Quantity);
+    assertInstanceOf(Quantity.class, width);
     Scalar value = QuantityMagnitude.singleton("Apples").apply(width);
     assertTrue(Sign.isPositive(value));
   }

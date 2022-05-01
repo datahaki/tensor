@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.qr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -193,7 +194,7 @@ public class QRDecompositionTest {
     _specialOps(matrix);
     _specialOps(N.DOUBLE.of(matrix));
     QRDecomposition qr = QRDecomposition.of(matrix);
-    assertTrue(qr.det() instanceof Quantity);
+    assertInstanceOf(Quantity.class, qr.det());
   }
 
   @Test
@@ -241,7 +242,7 @@ public class QRDecompositionTest {
     _specialOps(matrix);
     _specialOps(N.DOUBLE.of(matrix));
     QRDecomposition qr = QRDecomposition.of(matrix);
-    assertTrue(qr.det() instanceof Quantity);
+    assertInstanceOf(Quantity.class, qr.det());
   }
 
   @Test

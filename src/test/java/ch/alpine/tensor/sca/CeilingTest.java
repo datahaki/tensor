@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -66,7 +67,7 @@ public class CeilingTest {
     assertEquals(Ceiling.longValueExact(s), 18);
     Scalar r = Ceiling.of(s);
     assertEquals(r, RealScalar.of(18));
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test
@@ -80,7 +81,7 @@ public class CeilingTest {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
     Scalar r = Ceiling.of(s);
     assertEquals(r, RealScalar.of(55));
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test
@@ -89,7 +90,7 @@ public class CeilingTest {
     Scalar s = RealScalar.of(bi);
     Scalar r = Ceiling.of(s);
     assertEquals(s, r);
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test

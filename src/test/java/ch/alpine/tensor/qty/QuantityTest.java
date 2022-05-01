@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -25,9 +26,9 @@ import ch.alpine.tensor.sca.pow.Power;
 public class QuantityTest {
   @Test
   public void testFromString() {
-    assertTrue(Scalars.fromString("-7[m*kg^-2]") instanceof Quantity);
-    assertTrue(Scalars.fromString("3 [ m ]") instanceof Quantity);
-    assertTrue(Scalars.fromString("3 [ m *rad ]  ") instanceof Quantity);
+    assertEquals(Scalars.fromString("-7[m*kg^-2]"), Quantity.of(-7, "m*kg^-2"));
+    assertEquals(Scalars.fromString("3 [ m ]"), Quantity.of(3, "m"));
+    assertEquals(Scalars.fromString("3 [ m *rad ]  "), Quantity.of(3, "m*rad"));
     assertFalse(Scalars.fromString(" 3  ") instanceof Quantity);
     assertFalse(Scalars.fromString(" 3 [] ") instanceof Quantity);
   }
@@ -80,7 +81,7 @@ public class QuantityTest {
   @Test
   public void testDecimal() {
     Quantity quantity = (Quantity) Scalars.fromString("-7.23459823746593784659387465`13.0123[m*kg^-2]");
-    assertTrue(quantity.value() instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, quantity.value());
   }
 
   @Test
@@ -115,9 +116,9 @@ public class QuantityTest {
   public void testRounding() {
     Scalar scalar = Scalars.fromString("-7.2+3.7*I[kg^-1*m^2*s]");
     assertFalse(ExactScalarQ.of(scalar));
-    assertTrue(scalar instanceof Quantity);
+    assertInstanceOf(Quantity.class, scalar);
     Scalar round = Round.FUNCTION.apply(scalar);
-    assertTrue(round instanceof Quantity);
+    assertInstanceOf(Quantity.class, round);
     assertEquals(round, Scalars.fromString("-7+4*I[kg^-1*m^2*s]"));
     ExactScalarQ.require(round);
     assertTrue(FiniteScalarQ.of(round));

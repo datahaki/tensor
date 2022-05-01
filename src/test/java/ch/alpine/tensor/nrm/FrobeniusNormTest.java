@@ -2,7 +2,7 @@
 package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +41,7 @@ public class FrobeniusNormTest {
   @Test
   public void testMatrixComplex() {
     Scalar norm = FrobeniusNorm.of(FourierMatrix.of(25));
-    assertTrue(norm instanceof RealScalar);
+    assertInstanceOf(RealScalar.class, norm);
   }
 
   @Test

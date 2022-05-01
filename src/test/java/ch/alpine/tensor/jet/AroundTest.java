@@ -3,6 +3,7 @@ package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -141,7 +142,7 @@ public class AroundTest {
     ExactScalarQ.require(gq1);
     Distribution distribution = gq1.distribution(); // operates on Quantity
     Scalar rand = RandomVariate.of(distribution); // produces quantity with [m]
-    assertTrue(rand instanceof Quantity);
+    assertInstanceOf(Quantity.class, rand);
     assertEquals(Expectation.mean(distribution), Quantity.of(3, "m"));
     assertEquals(gq1.one(), RealScalar.ONE);
     assertEquals(gq1.one().multiply(gq1), gq1);

@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,7 +51,7 @@ public class ComplexScalarImplTest {
   @Test
   public void testAbs2() {
     Scalar s = ComplexScalar.of(RealScalar.of(-3), RealScalar.of(4));
-    assertTrue(Abs.of(s) instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, Abs.of(s));
   }
 
   @Test

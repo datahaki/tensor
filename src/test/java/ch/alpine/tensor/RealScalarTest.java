@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -111,7 +112,7 @@ public class RealScalarTest {
   @Test
   public void testBigInteger() {
     Scalar scalar = RealScalar.of(new BigInteger("123"));
-    assertTrue(scalar instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, scalar);
     assertEquals(scalar, RealScalar.of(123));
   }
 

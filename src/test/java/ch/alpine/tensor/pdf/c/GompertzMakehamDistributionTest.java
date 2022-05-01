@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -69,7 +70,7 @@ public class GompertzMakehamDistributionTest {
   public void testQuantity() {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     Scalar rand = RandomVariate.of(distribution);
-    assertTrue(rand instanceof Quantity);
+    assertInstanceOf(Quantity.class, rand);
     UnitConvert.SI().to(Unit.of("in")).apply(rand);
     {
       Scalar prob = PDF.of(distribution).at(Quantity.of(1, "m"));
@@ -88,7 +89,7 @@ public class GompertzMakehamDistributionTest {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     {
       Scalar prob = PDF.of(distribution).at(Quantity.of(-1, "m"));
-      assertTrue(prob instanceof Quantity);
+      assertInstanceOf(Quantity.class, prob);
       assertTrue(Scalars.isZero(prob));
       QuantityMagnitude.SI().in(Unit.of("in^-1")).apply(prob);
     }

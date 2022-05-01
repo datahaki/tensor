@@ -2,8 +2,8 @@
 package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -42,7 +42,7 @@ public class CoshTest {
   public void testDecimal() {
     MathContext mc = MathContext.DECIMAL128;
     Scalar scalar = Cosh.of(DecimalScalar.of(new BigDecimal("1.2356", mc), mc.getPrecision()));
-    assertTrue(scalar instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, scalar);
     assertEquals(scalar, DoubleScalar.of(Math.cosh(1.2356)));
   }
 

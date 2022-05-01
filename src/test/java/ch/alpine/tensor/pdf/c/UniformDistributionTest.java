@@ -2,8 +2,8 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Random;
@@ -106,12 +106,12 @@ public class UniformDistributionTest {
   @Test
   public void testQuantity() {
     Distribution distribution = UniformDistribution.of(Quantity.of(3, "g"), Quantity.of(5, "g"));
-    assertTrue(RandomVariate.of(distribution) instanceof Quantity);
+    assertInstanceOf(Quantity.class, RandomVariate.of(distribution));
     Scalar mean = Expectation.mean(distribution);
-    assertTrue(mean instanceof Quantity);
+    assertInstanceOf(Quantity.class, mean);
     assertEquals(mean, Quantity.of(4, "g"));
     Scalar var = Expectation.variance(distribution);
-    assertTrue(var instanceof Quantity);
+    assertInstanceOf(Quantity.class, var);
     assertEquals(var, Scalars.fromString("1/3[g^2]"));
     {
       Scalar prob = PDF.of(distribution).at(mean);

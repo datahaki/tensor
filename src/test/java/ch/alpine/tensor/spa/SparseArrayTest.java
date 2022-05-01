@@ -2,8 +2,8 @@
 package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -100,7 +100,7 @@ public class SparseArrayTest {
     assertEquals(sparse.get(1, Tensor.ALL, 3), ConstantArray.of(GaussScalar.of(0, 5), 4));
     assertThrows(IllegalArgumentException.class, () -> sparse.get(Tensor.ALL));
     Tensor result = sparse.get(Tensor.ALL, 2);
-    assertTrue(result instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, result);
     assertEquals(result, Normal.of(sparse).get(Tensor.ALL, 2));
     assertEquals(sparse.get(Tensor.ALL, 2, Tensor.ALL), Normal.of(sparse).get(Tensor.ALL, 2));
   }
@@ -122,7 +122,7 @@ public class SparseArrayTest {
     assertThrows(IllegalArgumentException.class, () -> matrix.set(RealScalar.ONE, 2, 10));
     assertEquals(matrix.get(2, 3), Pi.VALUE);
     Tensor minus = matrix.negate();
-    assertTrue(minus instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, minus);
     assertEquals(minus.get(2, 3), Pi.VALUE.negate());
     Tensor grid = matrix.add(Array.zeros(5, 10));
     assertEquals(Total.ofVector(Total.of(grid)), Pi.VALUE);
@@ -164,7 +164,7 @@ public class SparseArrayTest {
     Tensor result = sparse.divide(RationalScalar.HALF);
     assertEquals(result, tensor.multiply(RealScalar.TWO));
     ExactTensorQ.require(sparse);
-    assertTrue(result instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, result);
   }
 
   @Test
@@ -178,7 +178,7 @@ public class SparseArrayTest {
     assertEquals(result, expect);
     Tensor mapped = result.map(s -> s);
     assertEquals(mapped, expect);
-    assertTrue(mapped instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, mapped);
     assertEquals(Normal.of(result), expect);
   }
 
@@ -217,7 +217,7 @@ public class SparseArrayTest {
     assertEquals(sparse, Tensors.vector(2, 1, 4, 1, 1));
     sparse.set(RealScalar.TWO::add, 1);
     assertEquals(sparse, Tensors.vector(2, 3, 4, 1, 1));
-    assertTrue(sparse instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, sparse);
     assertThrows(TensorRuntimeException.class, () -> sparse.set(Tensors.vector(3), 2));
   }
 
@@ -262,7 +262,7 @@ public class SparseArrayTest {
     Tensor sparse = TestHelper.of(tensor);
     sparse.set(RealScalar.of(-3)::add, 2);
     assertEquals(sparse, Tensors.vector(1, 0, 0, 0, 0));
-    assertTrue(sparse instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, sparse);
   }
 
   @Test
@@ -312,8 +312,8 @@ public class SparseArrayTest {
     Tensor expect = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{1,2,3,4,5},{0,0,0,0,0}}");
     assertEquals(sparse, expect);
     SparseArray sa = (SparseArray) sparse;
-    assertTrue(sa.byRef(1) instanceof SparseArray);
-    assertTrue(sa.byRef(2) instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, sa.byRef(1));
+    assertInstanceOf(SparseArray.class, sa.byRef(2));
   }
 
   @Test
@@ -336,7 +336,7 @@ public class SparseArrayTest {
   @Test
   public void testQuantity() {
     Tensor tensor = LeviCivitaTensor.of(3);
-    assertTrue(tensor instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, tensor);
     tensor = tensor.multiply(Quantity.of(0, "m"));
     assertEquals(tensor.toString(), "SparseArray[{}, {3, 3, 3}, 0[m]]");
   }
@@ -352,7 +352,7 @@ public class SparseArrayTest {
     Tensor tensor = Normal.of(sparseArray);
     assertEquals(tensor.toString(), string);
     Tensor dot = sparseArray.dot(HilbertMatrix.of(3));
-    assertTrue(dot instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, dot);
   }
 
   @Test

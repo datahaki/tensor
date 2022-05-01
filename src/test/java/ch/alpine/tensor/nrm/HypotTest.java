@@ -3,8 +3,8 @@ package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
@@ -57,9 +57,9 @@ public class HypotTest {
 
   private static void checkVectorExact(Tensor vec) {
     Scalar hyp = Hypot.ofVector(vec);
-    assertTrue(hyp instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, hyp);
     Scalar nrm = Vector2Norm.of(vec);
-    assertTrue(nrm instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, nrm);
     assertEquals(hyp, nrm);
   }
 
@@ -111,7 +111,7 @@ public class HypotTest {
     assertFalse(Scalars.isZero(s2));
     try {
       Scalar s3 = Hypot.of(s1, s2); // NaN+NaN*I
-      assertTrue(s3 instanceof ComplexScalar);
+      assertInstanceOf(ComplexScalar.class, s3);
       assertFalse(Scalars.isZero(s3));
       @SuppressWarnings("unused")
       Scalar s4 = ArcTan.FUNCTION.apply(s2);

@@ -2,8 +2,8 @@
 package ch.alpine.tensor.sca.pow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -66,7 +66,7 @@ public class SqrtTest {
   public void testRational() {
     assertEquals(Sqrt.of(RationalScalar.of(16, 25)).toString(), "4/5");
     Scalar scalar = Sqrt.of(RationalScalar.of(-16, 25));
-    assertTrue(scalar instanceof ComplexScalar);
+    assertInstanceOf(ComplexScalar.class, scalar);
     assertEquals(scalar.toString(), "4/5*I");
   }
 

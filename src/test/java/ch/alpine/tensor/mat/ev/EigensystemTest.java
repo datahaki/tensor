@@ -2,8 +2,8 @@
 package ch.alpine.tensor.mat.ev;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
@@ -66,13 +66,13 @@ public class EigensystemTest {
     SymmetricMatrixQ.require(matrix);
     {
       Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-      assertTrue(eigensystem.values().Get(0) instanceof Quantity);
-      assertTrue(eigensystem.values().Get(1) instanceof Quantity);
+      assertInstanceOf(Quantity.class, eigensystem.values().Get(0));
+      assertInstanceOf(Quantity.class, eigensystem.values().Get(1));
     }
     {
       Eigensystem eigensystem = Eigensystem.ofSymmetric(N.DOUBLE.of(matrix));
-      assertTrue(eigensystem.values().Get(0) instanceof Quantity);
-      assertTrue(eigensystem.values().Get(1) instanceof Quantity);
+      assertInstanceOf(Quantity.class, eigensystem.values().Get(0));
+      assertInstanceOf(Quantity.class, eigensystem.values().Get(1));
     }
   }
 

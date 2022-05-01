@@ -2,8 +2,8 @@
 package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -43,7 +43,7 @@ public class SinhTest {
   public void testDecimal() {
     MathContext mc = MathContext.DECIMAL128;
     Scalar scalar = Sinh.of(DecimalScalar.of(new BigDecimal("1.2356", MathContext.DECIMAL128), mc.getPrecision()));
-    assertTrue(scalar instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, scalar);
     Tolerance.CHOP.requireClose(scalar, DoubleScalar.of(Math.sinh(1.2356)));
   }
 

@@ -2,7 +2,7 @@
 package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -34,7 +34,7 @@ public class NormalTest {
   public void testMixed() {
     Tensor mixed = Tensors.of( //
         SparseArray.of(RealScalar.ZERO, 3), Tensors.vector(1, 2), SparseArray.of(RealScalar.ZERO, 3));
-    assertTrue(mixed.get(0) instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, mixed.get(0));
     assertEquals(Normal.of(mixed).toString(), "{{0, 0, 0}, {1, 2}, {0, 0, 0}}");
   }
 

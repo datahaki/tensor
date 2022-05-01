@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -139,7 +140,7 @@ public class ModTest {
     Scalar pi = DecimalScalar.of(new BigDecimal("3.141592653589793238462643383279502884197169399375105820974944592"));
     Mod mod = Mod.function(pi);
     Scalar re = mod.apply(RealScalar.of(100));
-    assertTrue(re instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, re);
     // Mathematica gives
     // ................................. 2.610627738716409607658055118335410589887748619371719549776717638
     assertTrue(re.toString().startsWith("2.6106277387164096076580551183354105898877486193717195497767176"));

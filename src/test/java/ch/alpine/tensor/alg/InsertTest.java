@@ -3,8 +3,8 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +48,7 @@ public class InsertTest {
   public void testSparse() {
     Tensor sparse = SparseArray.of(RealScalar.ZERO, 2, 3);
     Tensor insert = Insert.of(sparse, Tensors.vector(1, 2), 1);
-    assertTrue(insert.get(0) instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, insert.get(0));
     Tensor expect = Tensors.fromString("{{0, 0, 0}, {1, 2}, {0, 0, 0}}");
     assertFalse(StringScalarQ.any(expect));
     assertEquals(Normal.of(insert), expect);

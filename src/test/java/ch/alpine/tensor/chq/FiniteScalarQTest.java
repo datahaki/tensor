@@ -3,6 +3,7 @@ package ch.alpine.tensor.chq;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -104,7 +105,7 @@ public class FiniteScalarQTest {
   @Test
   public void testComplexBranching() {
     Scalar scalar = ComplexScalar.of(Double.NaN, Double.NaN);
-    assertTrue(scalar instanceof ComplexScalar);
+    assertInstanceOf(ComplexScalar.class, scalar);
     assertFalse(FiniteScalarQ.of(scalar));
     assertTrue(FiniteScalarQ.of(ComplexScalar.of(1, 2)));
     assertFalse(FiniteScalarQ.of(ComplexScalar.of(3, Double.NaN)));
@@ -116,7 +117,7 @@ public class FiniteScalarQTest {
   public void testInvariance() {
     Scalar scalar = Scalars.fromString("NaN+2*I[m*s]");
     assertEquals(scalar.toString(), "NaN+2*I[m*s]");
-    assertTrue(scalar instanceof Quantity);
+    assertInstanceOf(Quantity.class, scalar);
     assertThrows(TensorRuntimeException.class, () -> FiniteScalarQ.require(scalar));
   }
 

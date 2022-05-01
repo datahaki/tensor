@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -214,14 +215,14 @@ public class ScalarsTest {
 
   @Test
   public void testParseFail() {
-    assertTrue(Scalars.fromString("(3+2)(-1+4") instanceof StringScalar);
-    assertTrue(Scalars.fromString("(3+2)(-1+4+") instanceof StringScalar);
-    assertTrue(Scalars.fromString("3+2-1+4+") instanceof StringScalar);
-    assertTrue(Scalars.fromString("3+2-1+4-") instanceof StringScalar);
-    assertTrue(Scalars.fromString("3++4") instanceof StringScalar);
-    assertTrue(Scalars.fromString("3--4") instanceof StringScalar);
-    assertTrue(Scalars.fromString("3**4") instanceof StringScalar);
-    assertTrue(Scalars.fromString("3//4") instanceof StringScalar);
+    assertInstanceOf(StringScalar.class, Scalars.fromString("(3+2)(-1+4"));
+    assertInstanceOf(StringScalar.class, Scalars.fromString("(3+2)(-1+4+"));
+    assertInstanceOf(StringScalar.class, Scalars.fromString("3+2-1+4+"));
+    assertInstanceOf(StringScalar.class, Scalars.fromString("3+2-1+4-"));
+    assertInstanceOf(StringScalar.class, Scalars.fromString("3++4"));
+    assertInstanceOf(StringScalar.class, Scalars.fromString("3--4"));
+    assertInstanceOf(StringScalar.class, Scalars.fromString("3**4"));
+    assertInstanceOf(StringScalar.class, Scalars.fromString("3//4"));
   }
 
   @Test

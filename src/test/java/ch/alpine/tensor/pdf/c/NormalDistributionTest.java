@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -69,11 +70,11 @@ public class NormalDistributionTest {
   @Test
   public void testQuantity() {
     Distribution distribution = NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "m"));
-    assertTrue(RandomVariate.of(distribution) instanceof Quantity);
+    assertInstanceOf(Quantity.class, RandomVariate.of(distribution));
     Scalar mean = Expectation.mean(distribution);
-    assertTrue(mean instanceof Quantity);
+    assertInstanceOf(Quantity.class, mean);
     Scalar var = Expectation.variance(distribution);
-    assertTrue(var instanceof Quantity);
+    assertInstanceOf(Quantity.class, var);
     assertEquals(QuantityMagnitude.SI().in(Unit.of("m^2")).apply(var), RealScalar.of(4));
     {
       Scalar prob = PDF.of(distribution).at(mean);

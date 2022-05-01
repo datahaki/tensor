@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -42,7 +42,7 @@ public class KaczmarzIterationTest {
     int[] sigma = RandomPermutation.of(n, random);
     Tensor matrix = SparseArray.of(RealScalar.ZERO, n, n);
     IntStream.range(0, n).forEach(i -> matrix.set(RealScalar.ONE, i, sigma[i]));
-    assertTrue(matrix instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, matrix);
     Tensor b = RandomVariate.of(distribution, random, n);
     KaczmarzIteration kaczmarzIteration = new KaczmarzIteration(matrix, b);
     for (int i = 0; i < n; ++i)

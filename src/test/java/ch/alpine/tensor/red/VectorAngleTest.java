@@ -3,8 +3,8 @@ package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +50,7 @@ public class VectorAngleTest {
     Tensor v = Tensors.fromString("{0.4+0.4*I, -0.2+0.8*I}");
     // mathematica gives 1.9215250682210188` - 2.8189256484623115`*^-17 I +
     Scalar s1 = VectorAngle.of(u, v).get();
-    assertTrue(s1 instanceof RealScalar);
+    assertInstanceOf(RealScalar.class, s1);
     Chop._14.requireClose(s1, Scalars.fromString("1.921525068221019"));
   }
 

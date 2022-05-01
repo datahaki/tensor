@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -186,7 +187,7 @@ public class TransposeTest {
     tensor.set(Quantity.of(3, "kg"), 1, 2);
     Tensor result = Transpose.of(tensor);
     assertEquals(result.Get(2, 1), Quantity.of(3, "kg"));
-    assertTrue(result instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, result);
     SparseArray sparseArray = (SparseArray) result;
     assertEquals(sparseArray.fallback(), Quantity.of(0, "kg"));
   }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -138,11 +139,11 @@ public class ExponentialDistributionTest {
   public void testQuantity() {
     Distribution distribution = ExponentialDistribution.of(Quantity.of(3, "m"));
     Scalar rand = RandomVariate.of(distribution);
-    assertTrue(rand instanceof Quantity);
+    assertInstanceOf(Quantity.class, rand);
     UnitConvert.SI().to(Unit.of("mi^-1")).apply(rand);
-    assertTrue(Expectation.mean(distribution) instanceof Quantity);
+    assertInstanceOf(Quantity.class, Expectation.mean(distribution));
     Scalar var = Expectation.variance(distribution);
-    assertTrue(var instanceof Quantity);
+    assertInstanceOf(Quantity.class, var);
   }
 
   @Test
@@ -224,7 +225,7 @@ public class ExponentialDistributionTest {
     {
       Scalar prob = CDF.of(distribution).p_lessThan(Quantity.of(2, "m^-1"));
       assertTrue(Sign.isPositive(prob));
-      assertTrue(prob instanceof RealScalar);
+      assertInstanceOf(RealScalar.class, prob);
     }
     {
       Scalar prob = CDF.of(distribution).p_lessEquals(Quantity.of(-2, "m^-1"));

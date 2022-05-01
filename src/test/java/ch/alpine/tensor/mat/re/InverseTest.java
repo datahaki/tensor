@@ -3,9 +3,9 @@ package ch.alpine.tensor.mat.re;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.SecureRandom;
 import java.util.Random;
@@ -225,7 +225,7 @@ public class InverseTest {
     Scalar detmat = Det.of(matrix);
     Scalar detinv = Det.of(invers);
     Scalar one = detmat.multiply(detinv);
-    assertTrue(one instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, one);
     Tolerance.CHOP.requireClose(one, RealScalar.ONE);
   }
 }

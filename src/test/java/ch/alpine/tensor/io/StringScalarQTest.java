@@ -2,6 +2,7 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ public class StringScalarQTest {
   public void testOf() {
     assertFalse(RealScalar.ZERO instanceof StringScalar);
     assertFalse(Tensors.fromString("{hello}") instanceof StringScalar);
-    assertTrue(StringScalar.of("world") instanceof StringScalar);
+    assertInstanceOf(StringScalar.class, StringScalar.of("world"));
   }
 
   @Test

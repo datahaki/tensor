@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -87,7 +88,7 @@ public class HistogramDistributionTest {
     Scalar width = Quantity.of(0.7, "m");
     Distribution distribution = //
         HistogramDistribution.of(vector, width);
-    assertTrue(RandomVariate.of(distribution) instanceof Quantity);
+    assertInstanceOf(Quantity.class, RandomVariate.of(distribution));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(Quantity.of(0, "m")), RealScalar.ZERO.divide(width));
     assertEquals(pdf.at(Quantity.of(1.2, "m")), RationalScalar.of(1, 7).divide(width));

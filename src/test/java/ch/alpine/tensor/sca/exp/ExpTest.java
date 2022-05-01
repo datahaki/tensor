@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.exp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -38,7 +39,7 @@ public class ExpTest {
   @Test
   public void testDecimal() {
     Scalar scalar = Exp.of(DecimalScalar.of(new BigDecimal("1")));
-    assertTrue(scalar instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, scalar);
     assertTrue(scalar.toString().startsWith("2.71828182845904523536028747135266"));
   }
 
@@ -47,7 +48,7 @@ public class ExpTest {
     Scalar scalar = Exp.of(ComplexScalar.of( //
         DecimalScalar.of(new BigDecimal("1")), //
         DecimalScalar.of(new BigDecimal("2.12"))));
-    assertTrue(scalar instanceof ComplexScalar);
+    assertInstanceOf(ComplexScalar.class, scalar);
     // mathematica gives -1.4189653368301074` + 2.3185326117622904` I
     Scalar m = Scalars.fromString("-1.4189653368301074 + 2.3185326117622904 * I");
     Chop._15.requireClose(scalar, m);

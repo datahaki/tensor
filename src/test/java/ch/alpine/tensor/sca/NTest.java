@@ -2,7 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +20,7 @@ public class NTest {
   @Test
   public void testZero() {
     Scalar result = N.DOUBLE.of(RealScalar.ZERO);
-    assertTrue(result instanceof DoubleScalar);
+    assertInstanceOf(DoubleScalar.class, result);
     assertEquals(result.toString(), "0.0");
   }
 
@@ -40,8 +40,8 @@ public class NTest {
 
   @Test
   public void testDoubleId() {
-    assertTrue(N.DOUBLE.of(RealScalar.of(3.14)) instanceof DoubleScalar);
-    assertTrue(N.DECIMAL32.of(RealScalar.of(3.14)) instanceof DoubleScalar);
+    assertInstanceOf(DoubleScalar.class, N.DOUBLE.of(RealScalar.of(3.14)));
+    assertInstanceOf(DoubleScalar.class, N.DECIMAL32.of(RealScalar.of(3.14)));
   }
 
   @Test
@@ -64,7 +64,7 @@ public class NTest {
   @Test
   public void testQuantity() {
     Quantity n = (Quantity) N.DECIMAL128.apply(Quantity.of(RationalScalar.of(1, 7), "cd^-2*K"));
-    assertTrue(n.value() instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, n.value());
     assertEquals(Unit.of("  K * cd  ^  -2"), n.unit());
   }
 }

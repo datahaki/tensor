@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -129,7 +130,7 @@ public class ArrayTest {
     int n = 7;
     Tensor p = Array.sparse(n, 1);
     Tensor q = Array.sparse(1, n);
-    assertTrue(p.dot(q) instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, p.dot(q));
   }
 
   @Test

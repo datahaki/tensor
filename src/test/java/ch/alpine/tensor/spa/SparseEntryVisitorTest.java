@@ -2,8 +2,8 @@
 package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class SparseEntryVisitorTest {
     SparseArray sparseArray = (SparseArray) TestHelper.of(tensor);
     sparseArray.set(s -> RealScalar.ZERO, 2, 0);
     Tensor transp = Transpose.of(sparseArray);
-    assertTrue(transp instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, transp);
     assertEquals(transp, Transpose.of(tensor));
     assertThrows(IllegalArgumentException.class, () -> Transpose.of(sparseArray, 1, 0, 2));
   }
@@ -45,7 +45,7 @@ public class SparseEntryVisitorTest {
     Tensor tensor = Tensors.fromString("{{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}},{{0,1,0,0,6},{2,0,0,9,8},{2,1,0,5,3}}}");
     SparseArray sparseArray = (SparseArray) TestHelper.of(tensor);
     Tensor transp = Transpose.of(sparseArray);
-    assertTrue(transp instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, transp);
     assertEquals(transp, Transpose.of(tensor));
   }
 
@@ -56,7 +56,7 @@ public class SparseEntryVisitorTest {
     for (Tensor perm : Permutations.of(Range.of(0, 3))) {
       int[] sigma = Primitives.toIntArray(perm);
       Tensor transp = Transpose.of(sparseArray, sigma);
-      assertTrue(transp instanceof SparseArray);
+      assertInstanceOf(SparseArray.class, transp);
       assertEquals(transp, Transpose.of(tensor, sigma));
     }
   }

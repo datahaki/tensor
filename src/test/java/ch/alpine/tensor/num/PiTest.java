@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
@@ -46,7 +47,7 @@ public class PiTest {
   @Test
   public void testString() {
     Scalar pi = Pi.in(110);
-    assertTrue(pi instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, pi);
     String PI99 = "3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706";
     assertTrue(pi.toString().startsWith(PI99));
   }
@@ -55,7 +56,7 @@ public class PiTest {
   public void test500() {
     Random random = new Random();
     Scalar pi = Pi.in(400 + random.nextInt(200));
-    assertTrue(pi instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, pi);
     double value = pi.add(pi).number().doubleValue();
     assertEquals(value, 2 * Math.PI);
   }

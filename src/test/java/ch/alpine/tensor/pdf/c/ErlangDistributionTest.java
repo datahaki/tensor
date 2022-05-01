@@ -2,8 +2,8 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 
@@ -56,7 +56,7 @@ public class ErlangDistributionTest {
     }
     {
       Scalar prob = pdf.at(Quantity.of(-1.2, "m^-1"));
-      assertTrue(prob instanceof Quantity);
+      assertInstanceOf(Quantity.class, prob);
       assertEquals(QuantityUnit.of(prob), Unit.of("m"));
     }
   }

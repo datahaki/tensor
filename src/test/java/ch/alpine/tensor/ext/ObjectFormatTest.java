@@ -2,6 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -50,14 +51,14 @@ public class ObjectFormatTest {
     Scalar expected = Scalars.fromString("-742/65+294/65*I");
     assertEquals(quc, expected);
     assertEquals(Serialization.copy(quc), expected);
-    assertTrue(quc instanceof ComplexScalar);
+    assertInstanceOf(ComplexScalar.class, quc);
     byte[] bytes = ObjectFormat.of(quc);
     Scalar copy = ObjectFormat.parse(bytes);
     assertEquals(copy, expected);
     Scalar cdq = q2.divide(q1);
-    assertTrue(cdq instanceof ComplexScalar);
+    assertInstanceOf(ComplexScalar.class, cdq);
     Scalar qrc = q1.reciprocal().multiply(q2);
-    assertTrue(qrc instanceof ComplexScalar);
+    assertInstanceOf(ComplexScalar.class, qrc);
     assertEquals(quc, qrc);
     assertEquals(quc, cdq);
     ExactScalarQ.require(quc);
@@ -71,14 +72,14 @@ public class ObjectFormatTest {
     Scalar expected = Scalars.fromString("-742/65+294/65*I[m*CHF^-1]");
     assertEquals(quc, expected);
     assertEquals(Serialization.copy(quc), expected);
-    assertTrue(quc instanceof Quantity);
+    assertInstanceOf(Quantity.class, quc);
     byte[] bytes = ObjectFormat.of(quc);
     Scalar copy = ObjectFormat.parse(bytes);
     assertEquals(copy, expected);
     Scalar cdq = q2.divide(q1);
-    assertTrue(cdq instanceof Quantity);
+    assertInstanceOf(Quantity.class, cdq);
     Scalar qrc = q1.reciprocal().multiply(q2);
-    assertTrue(qrc instanceof Quantity);
+    assertInstanceOf(Quantity.class, qrc);
     assertEquals(quc, qrc);
     assertEquals(quc, cdq);
     ExactScalarQ.require(quc);

@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -98,8 +99,8 @@ public class BooleanScalarTest {
 
   @Test
   public void testNumberType() {
-    assertTrue(BooleanScalar.TRUE.number() instanceof Integer);
-    assertTrue(BooleanScalar.FALSE.number() instanceof Integer);
+    assertInstanceOf(Integer.class, BooleanScalar.TRUE.number());
+    assertInstanceOf(Integer.class, BooleanScalar.FALSE.number());
   }
 
   @Test

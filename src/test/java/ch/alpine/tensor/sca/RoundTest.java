@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -52,7 +53,7 @@ public class RoundTest {
     assertEquals(Round.longValueExact(s), 17);
     Scalar r = Round.of(s);
     assertEquals(r, RealScalar.of(17));
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test
@@ -66,7 +67,7 @@ public class RoundTest {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
     Scalar r = Round.of(s);
     assertEquals(r, RealScalar.of(55));
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test
@@ -74,7 +75,7 @@ public class RoundTest {
     BigInteger bi = new BigInteger("97826349587623498756234545976");
     Scalar s = RealScalar.of(bi);
     Scalar r = Round.of(s);
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
     assertEquals(s, r);
   }
 

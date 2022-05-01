@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -43,13 +44,13 @@ public class ConstantArrayTest {
   @Test
   public void testScalar() {
     Tensor repmat = ConstantArray.of(RealScalar.ZERO);
-    assertTrue(repmat instanceof Scalar);
+    assertInstanceOf(Scalar.class, repmat);
   }
 
   @Test
   public void testScalar1() {
     Tensor repmat = ConstantArray.of(Pi.VALUE, Arrays.asList());
-    assertTrue(repmat instanceof Scalar);
+    assertInstanceOf(Scalar.class, repmat);
   }
 
   @Test

@@ -2,7 +2,7 @@
 package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,10 +27,10 @@ public class NnzTest {
     SparseArray sparse = (SparseArray) raw;
     SparseArray sparseArray = (SparseArray) sparse.subtract(sparse);
     assertEquals(Nnz.of(sparseArray), 0);
-    assertTrue(MatrixDotConjugateTranspose.of(sparse) instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, MatrixDotConjugateTranspose.of(sparse));
     Tensor dot = MatrixDotConjugateTranspose.of(Transpose.of(sparse));
-    assertTrue(dot instanceof SparseArray);
-    assertTrue(Conjugate.of(raw) instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, dot);
+    assertInstanceOf(SparseArray.class, Conjugate.of(raw));
   }
 
   @Test

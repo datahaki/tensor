@@ -3,7 +3,7 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,10 +81,10 @@ public class XsvFormatTest {
         Files.readAllLines(Paths.get(path)).stream(), //
         string -> Tensors.fromString("{" + string + "}"));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 2));
-    assertTrue(tensor.Get(0, 0) instanceof Quantity);
-    assertTrue(tensor.Get(0, 1) instanceof Quantity);
-    assertTrue(tensor.Get(1, 0) instanceof Quantity);
-    assertTrue(tensor.Get(1, 1) instanceof RealScalar);
+    assertInstanceOf(Quantity.class, tensor.Get(0, 0));
+    assertInstanceOf(Quantity.class, tensor.Get(0, 1));
+    assertInstanceOf(Quantity.class, tensor.Get(1, 0));
+    assertInstanceOf(RealScalar.class, tensor.Get(1, 1));
   }
 
   @Test
