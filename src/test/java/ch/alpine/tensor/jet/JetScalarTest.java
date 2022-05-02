@@ -3,11 +3,16 @@ package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
@@ -18,6 +23,7 @@ import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
@@ -142,6 +148,23 @@ class JetScalarTest {
   @Test
   public void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> JetScalar.of(RealScalar.of(2)));
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3 })
+  public void testJetScalarConstantFail(int n) {
+    JetScalar jetScalar = JetScalar.of(RealScalar.of(2), n);
+    assertThrows(TensorRuntimeException.class, () -> JetScalar.of(jetScalar, n));
+  }
+
+  @Test
+  public void testJetScalarHashSet() {
+    Set<Scalar> set = new HashSet<>();
+    for (int n = 3; n < 10; ++n)
+      set.add(JetScalar.of(RealScalar.of(n), 3));
+    assertEquals(JetScalar.of(Pi.VALUE, 3), JetScalar.of(Pi.VALUE, 3));
+    assertNotEquals(JetScalar.of(Pi.VALUE, 2), JetScalar.of(Pi.VALUE, 3));
+    assertNotEquals(JetScalar.of(Pi.VALUE, 3), JetScalar.of(Pi.HALF, 3));
   }
 
   @Test

@@ -6,6 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -15,6 +18,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.chq.FiniteScalarQ;
+import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -28,6 +33,7 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clips;
 
 class GumbelDistributionTest {
   @Test
@@ -119,6 +125,20 @@ class GumbelDistributionTest {
   }
 
   @Test
+  public void testDateTimeScalar() {
+    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
+    DurationScalar durationScalar = DurationScalar.of(Duration.ofMinutes(123));
+    Distribution distribution = GumbelDistribution.of(dateTimeScalar, durationScalar);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTimeScalar.class, scalar);
+    PDF pdf = PDF.of(distribution);
+    pdf.at(DateTimeScalar.of(LocalDateTime.now()));
+    CDF cdf = CDF.of(distribution);
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTimeScalar.of(LocalDateTime.now()));
+    Clips.interval(0.5, 0.8).requireInside(p_lessEquals);
+  }
+
+  @Test
   public void testBetaNonPositiveFail() {
     assertThrows(TensorRuntimeException.class, () -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0)));
     assertThrows(TensorRuntimeException.class, () -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(-1)));
@@ -127,6 +147,7 @@ class GumbelDistributionTest {
   @Test
   public void testComplexFail() {
     assertThrows(ClassCastException.class, () -> GumbelDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> GumbelDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));
   }
 
   @Test

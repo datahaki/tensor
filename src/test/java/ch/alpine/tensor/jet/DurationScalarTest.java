@@ -23,6 +23,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.num.Pi;
@@ -31,6 +32,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
+import ch.alpine.tensor.sca.tri.ArcTan;
 
 class DurationScalarTest {
   @Test
@@ -79,7 +81,14 @@ class DurationScalarTest {
     assertEquals(d2.one(), RealScalar.ONE);
     assertEquals(d2.multiply(RealScalar.ONE), d2);
     assertEquals(RealScalar.ONE.multiply(d2), d2);
-    assertThrows(TensorRuntimeException.class, () -> d2.reciprocal());
+    Scalar reciprocal = d2.reciprocal();
+    assertEquals(reciprocal, RationalScalar.of(1, 25920000));
+  }
+
+  @Test
+  public void testReciprocalFail() {
+    DurationScalar d1 = DurationScalar.of(Duration.ofDays(0));
+    assertThrows(ArithmeticException.class, () -> d1.reciprocal());
   }
 
   @Test
@@ -107,8 +116,9 @@ class DurationScalarTest {
 
   @Test
   public void testUnderP() {
-    DurationScalar d1 = DurationScalar.of(Duration.ofSeconds(100));
-    assertThrows(TensorRuntimeException.class, () -> d1.under(RealScalar.of(300)));
+    DurationScalar d1 = DurationScalar.of(Duration.ofSeconds(200));
+    Scalar under = d1.under(RealScalar.of(300));
+    assertEquals(under, RationalScalar.of(3, 2));
   }
 
   @Test
@@ -216,6 +226,13 @@ class DurationScalarTest {
   @Test
   public void testExactScalar() {
     ExactScalarQ.require(DurationScalar.of(Duration.ofDays(-100)));
+  }
+
+  @Test
+  public void testArcTan() {
+    Scalar atan1 = ArcTan.of(DurationScalar.of(Duration.ofDays(-100)), DurationScalar.of(Duration.ofDays(200)));
+    Scalar atan2 = ArcTan.of(-100, 200);
+    Tolerance.CHOP.requireClose(atan1, atan2);
   }
 
   @Test

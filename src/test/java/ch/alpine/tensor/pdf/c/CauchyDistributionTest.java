@@ -2,17 +2,23 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -22,6 +28,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 
 class CauchyDistributionTest {
@@ -48,6 +55,20 @@ class CauchyDistributionTest {
     assertTrue(distribution.toString().startsWith("CauchyDistribution["));
     assertEquals(Mean.of(distribution).toString(), "NaN");
     assertEquals(Variance.of(distribution).toString(), "NaN");
+  }
+
+  @Test
+  public void testDateTimeScalar() {
+    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
+    DurationScalar durationScalar = DurationScalar.of(Duration.ofMinutes(123));
+    Distribution distribution = CauchyDistribution.of(dateTimeScalar, durationScalar);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTimeScalar.class, scalar);
+    PDF pdf = PDF.of(distribution);
+    pdf.at(DateTimeScalar.of(LocalDateTime.now()));
+    CDF cdf = CDF.of(distribution);
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTimeScalar.of(LocalDateTime.now()));
+    Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
   }
 
   @Test

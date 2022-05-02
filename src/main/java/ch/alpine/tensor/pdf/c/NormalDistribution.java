@@ -32,7 +32,7 @@ public class NormalDistribution implements UnivariateDistribution, //
    * @param sigma standard deviation
    * @return instance of NormalDistribution with given characteristics */
   public static Distribution of(Scalar mean, Scalar sigma) {
-    Scalars.compare(mean, sigma); // assert that parameters have identical units
+    Scalars.compare(mean, mean.add(sigma)); // assert that parameters are non-complex with identical units
     return new NormalDistribution(mean, sigma);
   }
 
