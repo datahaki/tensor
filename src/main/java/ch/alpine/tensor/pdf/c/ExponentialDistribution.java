@@ -10,6 +10,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.StandardDeviationInterface;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Clips;
@@ -32,7 +33,7 @@ import ch.alpine.tensor.sca.pow.Power;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ExponentialDistribution.html">ExponentialDistribution</a> */
 public class ExponentialDistribution implements UnivariateDistribution, //
-    CentralMomentInterface, Serializable {
+    CentralMomentInterface, StandardDeviationInterface, Serializable {
   private static final Distribution STANDARD = ExponentialDistribution.of(RealScalar.ONE);
 
   /** @param lambda positive, may be instance of {@link Quantity}
@@ -81,6 +82,11 @@ public class ExponentialDistribution implements UnivariateDistribution, //
 
   @Override // from MeanInterface
   public Scalar mean() {
+    return lambda.reciprocal();
+  }
+
+  @Override // from StandardDeviationInterface
+  public Scalar standardDeviation() {
     return lambda.reciprocal();
   }
 

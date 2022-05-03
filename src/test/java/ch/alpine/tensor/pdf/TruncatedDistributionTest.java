@@ -129,6 +129,13 @@ class TruncatedDistributionTest {
   }
 
   @Test
+  public void testArtifical() {
+    Distribution distribution = new ArtificalDistribution();
+    Distribution truncated = TruncatedDistribution.of(distribution, Clips.interval(0, 10));
+    RandomVariate.of(truncated, 10);
+  }
+
+  @Test
   public void testFail() {
     Clip clip = Clips.interval(10, 11);
     assertThrows(IllegalArgumentException.class, () -> TruncatedDistribution.of(NormalDistribution.of(-100, 0.2), clip));

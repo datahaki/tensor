@@ -14,7 +14,9 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Normalize;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
@@ -41,5 +43,11 @@ class StandardDeviationTest {
   @Test
   public void testMatrixFail() {
     assertThrows(ClassCastException.class, () -> StandardDeviation.ofVector(HilbertMatrix.of(3)));
+  }
+
+  @Test
+  public void testDistribution() {
+    Scalar scalar = StandardDeviation.of(UniformDistribution.of(10, 20));
+    Tolerance.CHOP.requireClose(scalar, RealScalar.of(2.8867513459481287));
   }
 }

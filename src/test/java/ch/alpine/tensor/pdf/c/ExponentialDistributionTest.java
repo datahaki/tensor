@@ -13,6 +13,7 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -36,6 +37,7 @@ import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Median;
+import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Sign;
@@ -73,6 +75,14 @@ class ExponentialDistributionTest {
     Scalar actual = cdf.p_lessEquals(RealScalar.of(3));
     Scalar expected = RealScalar.ONE.subtract(Exp.of(RealScalar.of(6)).reciprocal());
     assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testStandardDeviation() {
+    Distribution distribution = ExponentialDistribution.of(RealScalar.of(2));
+    Scalar stdDev = StandardDeviation.of(distribution);
+    ExactScalarQ.require(stdDev);
+    assertEquals(stdDev, RationalScalar.HALF);
   }
 
   @Test

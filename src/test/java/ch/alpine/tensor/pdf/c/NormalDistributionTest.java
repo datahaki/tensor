@@ -32,6 +32,8 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Kurtosis;
+import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.sca.Chop;
 
 class NormalDistributionTest {
@@ -145,6 +147,8 @@ class NormalDistributionTest {
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(DateTimeScalar.of(LocalDateTime.now()));
     Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+    assertEquals(Mean.of(distribution), dateTimeScalar);
+    assertEquals(StandardDeviation.of(distribution), durationScalar);
   }
 
   @Test
