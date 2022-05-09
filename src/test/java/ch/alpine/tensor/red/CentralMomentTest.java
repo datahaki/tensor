@@ -49,6 +49,14 @@ class CentralMomentTest {
   }
 
   @Test
+  public void testNegative() {
+    Tensor tensor = Tensors.vector(-10, -2, 3, 4);
+    Scalar result = CentralMoment.of(tensor, -3.3);
+    Scalar gndtru = Scalars.fromString("-0.3766679353623411 + 0.5227888787805336* I");
+    Tolerance.CHOP.requireClose(result, gndtru);
+  }
+
+  @Test
   public void testQuantity() {
     Tensor vector = Tensors.of(Quantity.of(2, "kg"), Quantity.of(3, "kg"));
     Scalar result = CentralMoment.of(vector, 2);

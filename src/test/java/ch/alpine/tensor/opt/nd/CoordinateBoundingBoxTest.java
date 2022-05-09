@@ -37,6 +37,17 @@ class CoordinateBoundingBoxTest {
   }
 
   @Test
+  public void testMedian() {
+    CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.vector(2), Tensors.vector(12));
+    CoordinateBoundingBox splitLo = coordinateBoundingBox.splitLo(0);
+    assertEquals(splitLo.min(), Tensors.vector(2));
+    assertEquals(splitLo.max(), Tensors.vector(7));
+    CoordinateBoundingBox splitHi = coordinateBoundingBox.splitHi(0);
+    assertEquals(splitHi.min(), Tensors.vector(7));
+    assertEquals(splitHi.max(), Tensors.vector(12));
+  }
+
+  @Test
   public void testUnits() {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of( //
         Tensors.fromString("{1[m], 2[m], 3[m]}"), //

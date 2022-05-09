@@ -17,7 +17,8 @@ public enum Fit {
   ;
   /** @param xdata vector
    * @param ydata vector
-   * @param degree of polynomial non-negative strictly less than xdata.length()
+   * @param degree of polynomial non-negative strictly less than xdata.length(), for instance
+   * degree == 1 will return a linear polynomial
    * @return polynomial function with coefficients to polynomial as vector of length degree + 1
    * @see Polynomial
    * @see LeastSquares */
