@@ -24,6 +24,7 @@ import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.Round;
 
 class FiniteScalarQTest {
   @Test
@@ -100,6 +101,16 @@ class FiniteScalarQTest {
   @Test
   public void testJetScalar() {
     assertTrue(FiniteScalarQ.of(JetScalar.of(Pi.VALUE, 3)));
+  }
+
+  @Test
+  void testRoundFalse() {
+    assertFalse(FiniteScalarQ.of(Round._2.apply(DoubleScalar.INDETERMINATE)));
+    assertFalse(FiniteScalarQ.of(Round._2.apply(DoubleScalar.POSITIVE_INFINITY)));
+  }
+
+  void testRoundTrue() {
+    assertTrue(FiniteScalarQ.of(Round._2.apply(Pi.VALUE)));
   }
 
   @Test

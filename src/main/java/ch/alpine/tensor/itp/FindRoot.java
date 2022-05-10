@@ -10,21 +10,40 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 
-/** <p>inspired by
+/** Given a continuous function over a 1-dimensional domain, {@link FindRoot}
+ * finds a value x inside a provided search interval [x0, x1] so that
+ * approximately function(x) == 0.
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/FindRoot.html">FindRoot</a> */
 public class FindRoot implements Serializable {
+  /** the max iterations was chosen with the following consideration:
+   * 
+   * When starting with the unit interval as search interval, 40 iterations
+   * of halving the interval results a width |x0-x1| below 1E-12, i.e.
+   * {@link Tolerance#CHOP}.
+   * 
+   * Every second iteration step is guaranteed to half the search interval,
+   * that means after 80 iterations the search interval has at least shrunk
+   * by the factor 1E-12.
+   * 
+   * The abort criteria concerns the function values. If the function
+   * is very steep, the search interval may need to be reduced to
+   * 1E-16 for instance, so we add a few iterations more. */
   private static final int MAX_ITERATIONS = 128;
   private static final Scalar HALF = RealScalar.of(0.5);
 
-  /** @param function
+  /** @param function continuous
    * @return */
   public static FindRoot of(ScalarUnaryOperator function) {
     return of(function, Tolerance.CHOP);
   }
 
-  /** @param function
+  /** @param function continuous
    * @param chop accuracy that determines function(x) is sufficiently close to 0
    * @return */
   public static FindRoot of(ScalarUnaryOperator function, Chop chop) {
@@ -43,35 +62,33 @@ public class FindRoot implements Serializable {
     this.chop = chop;
   }
 
-  /** @param x0
-   * @param x1
-   * @return x between x0 and x1 so that function(x) == 0 with given chop accuracy
-   * @throws Exception if function(x0) and function(x1) have the same sign unequal to zero */
-  public Scalar between(Scalar x0, Scalar x1) {
-    return between(x0, x1, function.apply(x0), function.apply(x1));
+  /** @param clip search interval
+   * @return x inside clip so that function(x) == 0 with given chop accuracy
+   * @throws Exception if function(clip.min()) and function(clip.max()) have the same sign unequal to zero */
+  public Scalar inside(Clip clip) {
+    return inside(clip, function.apply(clip.min()), function.apply(clip.max()));
   }
 
-  /** @param x0
-   * @param x1
-   * @param y0 == function(x0)
-   * @param y1 == function(x1)
-   * @return x between x0 and x1 so that function(x) == 0 with given chop accuracy
-   * @throws Exception if y0 and y1 have the same sign unequal to zero */
-  public Scalar between(Scalar x0, Scalar x1, Scalar y0, Scalar y1) {
+  /** @param clip search interval
+   * @param y0 == function(clip.min())
+   * @param y1 == function(clip.max())
+   * @return x inside clip so that function(x) == 0 with given chop accuracy
+   * @throws Exception if function(clip.min()) and function(clip.max()) have the same sign unequal to zero */
+  public Scalar inside(Clip clip, Scalar y0, Scalar y1) {
     if (chop.isZero(y0))
-      return x0;
+      return clip.min();
     if (chop.isZero(y1))
-      return x1;
+      return clip.max();
     // ---
-    Scalar s0 = Sign.FUNCTION.apply(y0); // s0 is never 0
-    Scalar s1 = Sign.FUNCTION.apply(y1); // s1 is never 0
+    final Scalar s0 = Sign.FUNCTION.apply(y0); // s0 is never 0
+    final Scalar s1 = Sign.FUNCTION.apply(y1); // s1 is never 0
     if (s0.equals(s1))
-      throw TensorRuntimeException.of(x0, x1, y0, y1);
+      throw TensorRuntimeException.of(clip.min(), clip.max(), y0, y1);
     // ---
     for (int index = 0; index < MAX_ITERATIONS; ++index) {
       Scalar xn = index % 2 == 0 //
-          ? (Scalar) LinearBinaryAverage.INSTANCE.split(x0, x1, HALF)
-          : FindRoot.linear(x0, x1, y0, y1);
+          ? (Scalar) LinearBinaryAverage.INSTANCE.split(clip.min(), clip.max(), HALF)
+          : FindRoot.linear(clip, y0, y1);
       // ---
       Scalar yn = function.apply(xn);
       // ---
@@ -80,33 +97,30 @@ public class FindRoot implements Serializable {
         return xn;
       }
       Scalar sn = Sign.FUNCTION.apply(yn); // sn is never 0
-      if (s0.equals(sn)) {
-        x0 = xn;
+      if (s0.equals(sn)) { // s0 == sn
+        clip = Clips.interval(xn, clip.max());
         y0 = yn;
-        // s0 == sn
-      } else {
-        x1 = xn;
+      } else { // s1 == sn
+        clip = Clips.interval(clip.min(), xn);
         y1 = yn;
-        // s1 == sn
       }
     }
-    throw TensorRuntimeException.of(x0, x1, y0, y1);
+    throw TensorRuntimeException.of(clip.min(), clip.max(), y0, y1);
   }
 
   /** Function is equivalent to
    * <pre>
-   * Fit.polynomial(Tensors.of(x0, x1), Tensors.of(y0, y1), 1).roots().Get(0);
+   * Fit.polynomial(Tensors.of(clip.min(), clip.max()), Tensors.of(y0, y1), 1).roots().Get(0);
    * </pre>
    * 
    * Functionality is implemented explicitly for speed.
    * 
-   * @param x0
-   * @param x1
+   * @param clip
    * @param y0
    * @param y1
    * @return (x0 y1 - x1 y0) / (y1 - y0) */
   @PackageTestAccess
-  static Scalar linear(Scalar x0, Scalar x1, Scalar y0, Scalar y1) {
-    return x0.multiply(y1).subtract(x1.multiply(y0)).divide(y1.subtract(y0));
+  static Scalar linear(Clip clip, Scalar y0, Scalar y1) {
+    return clip.min().multiply(y1).subtract(clip.max().multiply(y0)).divide(y1.subtract(y0));
   }
 }
