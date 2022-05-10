@@ -18,7 +18,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
-public class ReverseTest {
+class ReverseTest {
   @Test
   public void testRev() {
     Tensor tensor = Tensors.vector(3, 2, 6, 5);

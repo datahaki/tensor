@@ -16,7 +16,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 
-public class SquareMatrixQTest {
+class SquareMatrixQTest {
   @Test
   public void testMatrix() {
     assertTrue(SquareMatrixQ.of(IdentityMatrix.of(10)));

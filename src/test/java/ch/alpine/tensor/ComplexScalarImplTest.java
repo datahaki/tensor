@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -18,6 +19,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.nrm.Vector2Norm;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
@@ -30,7 +32,7 @@ import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class ComplexScalarImplTest {
+class ComplexScalarImplTest {
   @Test
   public void testAbs() {
     ComplexScalar s = (ComplexScalar) ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));
@@ -49,7 +51,7 @@ public class ComplexScalarImplTest {
   @Test
   public void testAbs2() {
     Scalar s = ComplexScalar.of(RealScalar.of(-3), RealScalar.of(4));
-    assertTrue(Abs.of(s) instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, Abs.of(s));
   }
 
   @Test
@@ -262,6 +264,20 @@ public class ComplexScalarImplTest {
     // mathematica also does not simplify 1 / (inf+inf*I)
     // assertEquals(ComplexScalar.of( //
     // DoubleScalar.POSITIVE_INFINITY, DoubleScalar.POSITIVE_INFINITY).reciprocal(), RealScalar.ZERO);
+  }
+
+  @Test
+  public void testGaussScalarFail() {
+    Tensor tensor = Tensors.fromString("{0.3, 1/3, 3+4*I, 1.2+3.4*I}");
+    Scalar g = GaussScalar.of(1, 7);
+    for (Tensor _x : tensor) {
+      Scalar x = (Scalar) _x;
+      assertThrows(Exception.class, () -> x.divide(g));
+      assertThrows(Exception.class, () -> x.under(g));
+      assertThrows(Exception.class, () -> x.multiply(g));
+      assertThrows(Exception.class, () -> g.divide(x));
+      assertThrows(Exception.class, () -> g.under(x));
+    }
   }
 
   @Test

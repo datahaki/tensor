@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class DropTest {
+class DropTest {
   @Test
   public void testHead() {
     assertEquals(Drop.head(Tensors.empty(), 0), Tensors.empty());

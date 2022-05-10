@@ -46,7 +46,7 @@ import ch.alpine.tensor.sca.tri.Tanh;
  * none of the special input cases: NaN, Infty
  * result in a stack overflow error when provided to the
  * scalar unary operators */
-public class ScalarUnaryOperatorTest {
+class ScalarUnaryOperatorTest {
   @Test
   public void testFunctionalInterface() {
     assertNotNull(ScalarUnaryOperator.class.getAnnotation(FunctionalInterface.class));

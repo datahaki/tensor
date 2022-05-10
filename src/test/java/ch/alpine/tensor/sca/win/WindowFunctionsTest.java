@@ -22,7 +22,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class WindowFunctionsTest {
+class WindowFunctionsTest {
   @ParameterizedTest
   @EnumSource(WindowFunctions.class)
   public void testSimple(WindowFunctions windowFunction) {

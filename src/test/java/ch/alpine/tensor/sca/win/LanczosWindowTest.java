@@ -11,7 +11,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class LanczosWindowTest {
+class LanczosWindowTest {
   @Test
   public void testSimple() {
     Chop._15.requireClose(LanczosWindow.FUNCTION.apply(RealScalar.of(0.125)), Sqrt.of(RealScalar.of(2)).divide(Pi.HALF));

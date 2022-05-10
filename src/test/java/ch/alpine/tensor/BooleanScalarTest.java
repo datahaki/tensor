@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.Sort;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
@@ -21,7 +23,7 @@ import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class BooleanScalarTest {
+class BooleanScalarTest {
   @Test
   public void testString() {
     Tensor logical = Tensors.of(BooleanScalar.of(true), BooleanScalar.of(false));
@@ -97,8 +99,8 @@ public class BooleanScalarTest {
 
   @Test
   public void testNumberType() {
-    assertTrue(BooleanScalar.TRUE.number() instanceof Integer);
-    assertTrue(BooleanScalar.FALSE.number() instanceof Integer);
+    assertInstanceOf(Integer.class, BooleanScalar.TRUE.number());
+    assertInstanceOf(Integer.class, BooleanScalar.FALSE.number());
   }
 
   @Test

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ext.Serialization;
 
-public class QRSignOperatorsTest {
+class QRSignOperatorsTest {
   @Test
   public void testSerializable() throws ClassNotFoundException, IOException {
     for (QRSignOperator qrSignOperator : QRSignOperators.values())

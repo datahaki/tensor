@@ -22,7 +22,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.GaussScalar;
 
-public class MinTest {
+class MinTest {
   static Tensor min(List<Tensor> col) {
     return col.stream().reduce(Min::of).get();
   }

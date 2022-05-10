@@ -12,7 +12,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 
-public class SoftThresholdTest {
+class SoftThresholdTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator deadzone = Serialization.copy(SoftThreshold.of(Clips.interval(-2, 1)));

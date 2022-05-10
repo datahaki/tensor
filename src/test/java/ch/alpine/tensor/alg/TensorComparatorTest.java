@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensors;
 
-public class TensorComparatorTest {
+class TensorComparatorTest {
   @Test
   public void testSimple() {
     assertEquals(TensorComparator.INSTANCE.compare( //

@@ -17,7 +17,7 @@ import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Total;
 
-public class BinCountsTest {
+class BinCountsTest {
   @Test
   public void testWidthTwo() {
     Tensor hist = BinCounts.of(Tensors.vector(6, 7, 1, 2, 3, 4, 2), RealScalar.of(2));

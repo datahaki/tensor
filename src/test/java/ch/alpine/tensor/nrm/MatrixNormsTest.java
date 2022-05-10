@@ -13,7 +13,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 
-public class MatrixNormsTest {
+class MatrixNormsTest {
   public static final TensorScalarFunction[] VALUES = { //
       Matrix1Norm::of, //
       Matrix2Norm::of, //

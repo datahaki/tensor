@@ -12,17 +12,17 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.NumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Nest;
 import ch.alpine.tensor.sca.Chop;
 
-public class GammaTest {
+class GammaTest {
   @Test
   public void testFactorial() {
     for (int index = 0; index < 20; ++index)
@@ -120,7 +120,7 @@ public class GammaTest {
     seed = Gamma.of(seed);
     seed = Gamma.of(seed);
     seed = Gamma.of(seed);
-    assertFalse(NumberQ.of(seed));
+    assertFalse(FiniteScalarQ.of(seed));
   }
 
   @Test

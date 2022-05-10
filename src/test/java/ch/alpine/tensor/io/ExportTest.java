@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -14,13 +15,13 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.img.MeanFilter;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -28,7 +29,7 @@ import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Abs;
 
-public class ExportTest {
+class ExportTest {
   @Test
   public void testMathematica(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.mathematica");
@@ -122,7 +123,13 @@ public class ExportTest {
   public void testFailFile(@TempDir File tempDir) {
     File file = new File(tempDir, "folder/does/not/exist/ethz.m");
     assertFalse(file.exists());
-    assertThrows(Exception.class, () -> Export.of(file, Tensors.empty()));
+    assertThrows(FileNotFoundException.class, () -> Export.of(file, Tensors.empty()));
+  }
+
+  @Test
+  public void testExportPermissionFail() {
+    File file = new File("/some.csv");
+    assertThrows(FileNotFoundException.class, () -> Export.of(file, Tensors.vector(1, 2, 3)));
   }
 
   @ParameterizedTest
@@ -130,20 +137,20 @@ public class ExportTest {
   public void testUnknownExtension(String extension, @TempDir File tempDir) {
     File file = new File(tempDir, "file." + extension);
     Tensor tensor = Tensors.vector(1, 2, 3, 4);
-    assertThrows(Exception.class, () -> Export.of(file, tensor));
+    assertThrows(IllegalArgumentException.class, () -> Export.of(file, tensor));
   }
 
   @ParameterizedTest
   @ValueSource(strings = { "bmp", "bmp.gz" })
   public void testExportNull(String extension, @TempDir File tempDir) {
     File file = new File(tempDir, "file." + extension);
-    assertThrows(Exception.class, () -> Export.of(file, null));
+    assertThrows(NullPointerException.class, () -> Export.of(file, null));
   }
 
   @Test
   public void testObjectNullFail(@TempDir File tempDir) {
     File file = new File(tempDir, "tensor.file");
     assertFalse(file.exists());
-    assertThrows(Exception.class, () -> Export.object(file, null));
+    assertThrows(NullPointerException.class, () -> Export.object(file, null));
   }
 }

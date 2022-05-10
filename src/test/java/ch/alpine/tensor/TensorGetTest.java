@@ -2,8 +2,8 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +12,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
-public class TensorGetTest {
+class TensorGetTest {
   @Test
   public void testGetEmpty() {
     assertEquals(Tensors.empty().get(), Tensors.empty());
@@ -23,7 +23,7 @@ public class TensorGetTest {
 
   @Test
   public void testGetScalar() {
-    assertTrue(IdentityMatrix.of(10).Get(3, 4) instanceof RealScalar);
+    assertInstanceOf(RealScalar.class, IdentityMatrix.of(10).Get(3, 4));
   }
 
   @Test

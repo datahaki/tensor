@@ -7,7 +7,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-public class RandomPrimeTest {
+class RandomPrimeTest {
   @Test
   public void testSimple() {
     Random random = new Random();

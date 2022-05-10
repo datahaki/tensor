@@ -11,7 +11,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.sca.Chop;
 
-public class ArcSinTest {
+class ArcSinTest {
   @Test
   public void testReal() {
     assertEquals(ArcSin.of(Scalars.fromString("1")), RealScalar.of(Math.asin(1)));

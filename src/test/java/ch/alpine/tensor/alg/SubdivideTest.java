@@ -22,7 +22,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-public class SubdivideTest {
+class SubdivideTest {
   static Tensor compare(Tensor startInclusive, Tensor endInclusive, int n) {
     Integers.requirePositive(n);
     Tensor difference = endInclusive.subtract(startInclusive);

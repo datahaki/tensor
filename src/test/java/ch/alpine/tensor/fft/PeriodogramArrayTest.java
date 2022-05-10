@@ -17,7 +17,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.win.WindowFunctions;
 
-public class PeriodogramArrayTest {
+class PeriodogramArrayTest {
   @Test
   public void testDefault() {
     Tensor tensor = PeriodogramArray.of(Tensors.vector(0, 1, 0, -1, 0, 1, 0, -1));

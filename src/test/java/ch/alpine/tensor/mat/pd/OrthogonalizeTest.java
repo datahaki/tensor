@@ -44,7 +44,7 @@ import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
-public class OrthogonalizeTest {
+class OrthogonalizeTest {
   private static void orthogonalMatrixQ_require(Tensor q) {
     Tensor id = q.dot(Transpose.of(q));
     Tensor diagonal = Diagonal.of(id);

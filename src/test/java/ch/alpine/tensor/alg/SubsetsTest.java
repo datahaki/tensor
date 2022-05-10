@@ -16,7 +16,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.num.Pi;
 
-public class SubsetsTest {
+class SubsetsTest {
   @Test
   public void testCardinality() {
     Tensor vector = Tensors.vector(3, 4, 5, 6);

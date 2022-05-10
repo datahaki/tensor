@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-public class PivotTest {
+class PivotTest {
   @Test
   public void testPackageVisibility() {
     assertTrue(Modifier.isPublic(Pivot.class.getModifiers()));

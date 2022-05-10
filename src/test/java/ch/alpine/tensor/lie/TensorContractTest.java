@@ -9,14 +9,14 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 
-public class TensorContractTest {
+class TensorContractTest {
   @Test
   public void testRank3() {
     Tensor vector = TensorContract.of(LeviCivitaTensor.of(3), 0, 2);

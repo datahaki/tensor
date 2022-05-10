@@ -12,7 +12,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class AccumulateTest {
+class AccumulateTest {
   @Test
   public void testEmpty() {
     assertEquals(Accumulate.of(Tensors.empty()), Tensors.empty());

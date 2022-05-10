@@ -13,7 +13,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
 
-public class SoftplusTest {
+class SoftplusTest {
   @Test
   public void testZero() {
     Scalar s = Softplus.FUNCTION.apply(RealScalar.ZERO);

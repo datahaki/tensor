@@ -7,14 +7,14 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class FullConvolveTest {
+class FullConvolveTest {
   @Test
   public void testSimple() {
     TensorUnaryOperator tuo = FullConvolve.with(Tensors.vector(1, 2, 3));

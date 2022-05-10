@@ -2,8 +2,8 @@
 package ch.alpine.tensor.mat.pi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -24,6 +23,7 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.NestList;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.LeftNullSpace;
@@ -43,7 +43,7 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class PseudoInverseTest {
+class PseudoInverseTest {
   @Test
   public void testHilbertSquare() {
     for (int n = 1; n < 8; ++n) {
@@ -202,7 +202,7 @@ public class PseudoInverseTest {
   public void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
     Tensor pseudo = PseudoInverse.of(matrix);
-    assertTrue(pseudo.Get(1, 2) instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, pseudo.Get(1, 2));
   }
 
   @Test

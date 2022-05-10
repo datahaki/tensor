@@ -9,13 +9,13 @@ import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.TensorRank;
+import ch.alpine.tensor.chq.ExactTensorQ;
 
-public class LehmerTensorTest {
+class LehmerTensorTest {
   @Test
   public void testSimple() {
     Tensor lehmer = LehmerTensor.of(3);

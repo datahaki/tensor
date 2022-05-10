@@ -3,13 +3,13 @@ package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,7 +26,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
-public class NdCollectNearestTest {
+class NdCollectNearestTest {
   @RepeatedTest(9)
   public void testSimple(RepetitionInfo repetitionInfo) {
     CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9));
@@ -101,7 +101,7 @@ public class NdCollectNearestTest {
     NdMap<Void> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0), Tensors.vector(1)));
     NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2));
     NdMatch<Void> ndMatch = NdCollectNearest.of(ndMap, ndCenterInterface);
-    assertTrue(Objects.isNull(ndMatch));
+    assertNull(ndMatch);
   }
 
   @ParameterizedTest

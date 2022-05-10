@@ -11,7 +11,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
 
-public class NuttallWindowTest {
+class NuttallWindowTest {
   @Test
   public void testZero() {
     ScalarUnaryOperator scalarUnaryOperator = NuttallWindow.FUNCTION;

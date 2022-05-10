@@ -14,7 +14,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 
-public class HankelTensorTest {
+class HankelTensorTest {
   @Test
   public void testRank2() {
     Tensor tensor = HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5), 2);

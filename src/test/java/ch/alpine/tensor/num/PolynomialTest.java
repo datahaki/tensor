@@ -3,13 +3,12 @@ package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RandomQuaternion;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -22,6 +21,8 @@ import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.jet.JetScalar;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -33,7 +34,7 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Mod;
 
-public class PolynomialTest {
+class PolynomialTest {
   @Test
   public void testGauss() {
     Scalar scalar1 = Polynomial.of(Tensors.of( //
@@ -187,6 +188,13 @@ public class PolynomialTest {
         init = init.moment(1);
       assertEquals(expect, init);
     }
+  }
+
+  @Test
+  public void testMomentCoeffs1() {
+    Polynomial polynomial = Polynomial.of(Tensors.vector(3));
+    Polynomial p2 = polynomial.moment(3);
+    assertEquals(p2.coeffs(), Tensors.vector(0, 0, 0, 3));
   }
 
   @Test
@@ -389,6 +397,11 @@ public class PolynomialTest {
     Tensor coeffs = c2.coeffs();
     coeffs.set(Scalar::zero, 0);
     assertEquals(c2.derivative().integral().coeffs(), coeffs);
+  }
+
+  @Test
+  public void testEquals() {
+    assertNotEquals(Polynomial.of(Tensors.vector(1, 2, 3)), "abc");
   }
 
   @Test

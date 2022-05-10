@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.qty.Quantity;
 
-public class PoissonProcessTest {
+class PoissonProcessTest {
   @Test
   public void testSimple() {
     Random random = new Random(1);

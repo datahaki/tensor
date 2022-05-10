@@ -13,7 +13,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.num.Pi;
 
-public class AbstractScalarTest {
+class AbstractScalarTest {
   @Test
   public void testMap() {
     Tensor c = Tensors.fromString("{{1}, {4}, {4}}");

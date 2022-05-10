@@ -14,7 +14,7 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
-import ch.alpine.tensor.red.LenientAdd;
+import ch.alpine.tensor.qty.LenientAdd;
 
 /** definition of a linear program
  * 

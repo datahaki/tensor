@@ -15,7 +15,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.qty.Quantity;
 
-public class DivisibleTest {
+class DivisibleTest {
   @Test
   public void testSimple() {
     assertTrue(Divisible.of(RealScalar.of(9), RealScalar.of(3)));

@@ -7,15 +7,15 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.nrm.Hypot;
 
-public class OuterTest {
+class OuterTest {
   @Test
   public void testSimple() {
     Tensor a = Tensors.vector(1, 2);

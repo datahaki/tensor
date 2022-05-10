@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -20,7 +21,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 
-public class QuantityCompareTest {
+class QuantityCompareTest {
   private static void _checkEquals(Scalar s1, Scalar s2, boolean actual) {
     assertEquals(s1.equals(s2), s2.equals(s1));
     assertEquals(s1.equals(s2), actual);
@@ -106,7 +107,7 @@ public class QuantityCompareTest {
     Scalar qs2 = Quantity.of(0, "kg");
     Scalar qs3 = Quantity.of(0, "s");
     Scalar qs4 = Quantity.of(0, "");
-    assertTrue(qs4 instanceof RealScalar);
+    assertInstanceOf(RealScalar.class, qs4);
     Tensor vec = Tensors.of(qs0, qs1, qs2, qs3, qs4);
     assertEquals(vec.stream().distinct().count(), 4);
   }

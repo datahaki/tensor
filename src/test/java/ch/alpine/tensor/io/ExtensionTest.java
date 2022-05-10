@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-public class ExtensionTest {
+class ExtensionTest {
   @Test
   public void testTruncate() {
     Filename filename = new Filename("dir/some.bmp.gz");

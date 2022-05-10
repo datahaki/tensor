@@ -15,7 +15,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class PrimitivesIntTest {
+class PrimitivesIntTest {
   @Test
   public void testToListInteger() {
     Tensor tensor = Tensors.vector(-2.5, -2.7, 4.3, 5.4, 6.2, 10.5);

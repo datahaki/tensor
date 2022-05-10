@@ -2,6 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,18 +14,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.Export;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ObjectFormatTest {
+class ObjectFormatTest {
   @Test
   public void testSome() throws Exception {
     Tensor inp = Tensors.fromString("{1, {2, 3, {4.3}}, 1}");
@@ -50,14 +51,14 @@ public class ObjectFormatTest {
     Scalar expected = Scalars.fromString("-742/65+294/65*I");
     assertEquals(quc, expected);
     assertEquals(Serialization.copy(quc), expected);
-    assertTrue(quc instanceof ComplexScalar);
+    assertInstanceOf(ComplexScalar.class, quc);
     byte[] bytes = ObjectFormat.of(quc);
     Scalar copy = ObjectFormat.parse(bytes);
     assertEquals(copy, expected);
     Scalar cdq = q2.divide(q1);
-    assertTrue(cdq instanceof ComplexScalar);
+    assertInstanceOf(ComplexScalar.class, cdq);
     Scalar qrc = q1.reciprocal().multiply(q2);
-    assertTrue(qrc instanceof ComplexScalar);
+    assertInstanceOf(ComplexScalar.class, qrc);
     assertEquals(quc, qrc);
     assertEquals(quc, cdq);
     ExactScalarQ.require(quc);
@@ -71,14 +72,14 @@ public class ObjectFormatTest {
     Scalar expected = Scalars.fromString("-742/65+294/65*I[m*CHF^-1]");
     assertEquals(quc, expected);
     assertEquals(Serialization.copy(quc), expected);
-    assertTrue(quc instanceof Quantity);
+    assertInstanceOf(Quantity.class, quc);
     byte[] bytes = ObjectFormat.of(quc);
     Scalar copy = ObjectFormat.parse(bytes);
     assertEquals(copy, expected);
     Scalar cdq = q2.divide(q1);
-    assertTrue(cdq instanceof Quantity);
+    assertInstanceOf(Quantity.class, cdq);
     Scalar qrc = q1.reciprocal().multiply(q2);
-    assertTrue(qrc instanceof Quantity);
+    assertInstanceOf(Quantity.class, qrc);
     assertEquals(quc, qrc);
     assertEquals(quc, cdq);
     ExactScalarQ.require(quc);

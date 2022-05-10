@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class TensorsPredicateTest {
+class TensorsPredicateTest {
   @Test
   public void testIsEmpty() {
     assertFalse(Tensors.isEmpty(RealScalar.ONE));

@@ -27,7 +27,7 @@ import ch.alpine.tensor.pdf.c.LogNormalDistribution;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
-public class QRSvdTest {
+class QRSvdTest {
   @Test
   public void testSquare() {
     Tensor matrix = HilbertMatrix.of(6);

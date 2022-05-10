@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,6 +12,7 @@ import java.math.RoundingMode;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -22,7 +24,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class RoundTest {
+class RoundTest {
   @Test
   public void testDouble() {
     assertEquals(Round.FUNCTION.apply(DoubleScalar.of(11.3)), DoubleScalar.of(11));
@@ -51,7 +53,7 @@ public class RoundTest {
     assertEquals(Round.longValueExact(s), 17);
     Scalar r = Round.of(s);
     assertEquals(r, RealScalar.of(17));
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test
@@ -65,7 +67,7 @@ public class RoundTest {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
     Scalar r = Round.of(s);
     assertEquals(r, RealScalar.of(55));
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test
@@ -73,7 +75,7 @@ public class RoundTest {
     BigInteger bi = new BigInteger("97826349587623498756234545976");
     Scalar s = RealScalar.of(bi);
     Scalar r = Round.of(s);
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
     assertEquals(s, r);
   }
 
@@ -139,6 +141,14 @@ public class RoundTest {
     assertEquals(pi.map(Round._7).toString(), "3.1000000");
     assertEquals(pi.map(Round._8).toString(), "3.10000000");
     assertEquals(pi.map(Round._9).toString(), "3.100000000");
+  }
+
+  @Test
+  public void testParsing() {
+    Scalar scalar = ComplexScalar.of(RealScalar.of(2.3), RationalScalar.of(5, 8));
+    assertEquals(Round.FUNCTION.apply(scalar), ComplexScalar.of(2, 1));
+    assertEquals(Ceiling.FUNCTION.apply(scalar), ComplexScalar.of(3, 1));
+    assertEquals(Floor.FUNCTION.apply(scalar), ComplexScalar.of(2, 0));
   }
 
   @Test

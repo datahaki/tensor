@@ -1,10 +1,10 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
-import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.ext.Integers;
 
 /** Quote from Wikipedia:

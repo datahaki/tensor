@@ -19,7 +19,7 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Round;
 
-public class SoftmaxLayerTest {
+class SoftmaxLayerTest {
   @Test
   public void testMathematica() {
     Tensor tensor = Tensors.vector(0.1, 4.5, -0.2, 3.3, 5.4);

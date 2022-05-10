@@ -20,7 +20,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.UnitSystem;
 import ch.alpine.tensor.sca.Chop;
 
-public class TrigonometryInterfaceTest {
+class TrigonometryInterfaceTest {
   private static void _check(Scalar value, ScalarUnaryOperator suo, Function<Double, Double> f) {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(value, "rad"));
     Scalar result = suo.apply(scalar);

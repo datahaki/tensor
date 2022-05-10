@@ -2,10 +2,10 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -17,7 +17,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 
-public class CacheTest {
+class CacheTest {
   @Test
   public void testSimple() {
     Function<Object, Double> function = Cache.of(k -> Math.random(), 3);
@@ -111,8 +111,8 @@ public class CacheTest {
   public void testValueNull() {
     Cache<Tensor, String> cache = Cache.of(t -> t.equals(RealScalar.ZERO) ? null : t.toString(), 10);
     assertEquals(cache.apply(RealScalar.ONE), "1");
-    assertTrue(Objects.isNull(cache.apply(RealScalar.ZERO)));
-    assertTrue(Objects.isNull(cache.apply(RealScalar.ZERO)));
+    assertNull(cache.apply(RealScalar.ZERO));
+    assertNull(cache.apply(RealScalar.ZERO));
   }
 
   @Test

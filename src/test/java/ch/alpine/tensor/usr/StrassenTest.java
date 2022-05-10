@@ -13,7 +13,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
-public class StrassenTest {
+class StrassenTest {
   @Test
   public void testSimple() {
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);

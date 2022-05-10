@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,7 +13,6 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -20,6 +20,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.BinningMethod;
 import ch.alpine.tensor.pdf.CDF;
@@ -34,7 +35,7 @@ import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-public class HistogramDistributionTest {
+class HistogramDistributionTest {
   @Test
   public void testPdf() {
     Distribution distribution = //
@@ -87,7 +88,7 @@ public class HistogramDistributionTest {
     Scalar width = Quantity.of(0.7, "m");
     Distribution distribution = //
         HistogramDistribution.of(vector, width);
-    assertTrue(RandomVariate.of(distribution) instanceof Quantity);
+    assertInstanceOf(Quantity.class, RandomVariate.of(distribution));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(Quantity.of(0, "m")), RealScalar.ZERO.divide(width));
     assertEquals(pdf.at(Quantity.of(1.2, "m")), RationalScalar.of(1, 7).divide(width));

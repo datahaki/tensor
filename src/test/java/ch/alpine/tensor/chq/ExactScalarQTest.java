@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.chq;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -10,10 +10,18 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.DecimalScalar;
+import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ExactScalarQTest {
+class ExactScalarQTest {
   @Test
   public void testPositive() {
     assertTrue(ExactScalarQ.of(RealScalar.ZERO));
@@ -47,6 +55,11 @@ public class ExactScalarQTest {
   public void testQuantity() {
     assertTrue(ExactScalarQ.of(Quantity.of(3, "m")));
     assertFalse(ExactScalarQ.of(Quantity.of(2.71, "kg*s")));
+  }
+
+  @Test
+  public void testQuantityExponent() {
+    assertTrue(ExactScalarQ.of(Quantity.of(3, "m^2.2")));
   }
 
   @Test

@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,7 +17,7 @@ import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class DoubleScalarTest {
+class DoubleScalarTest {
   @Test
   public void testZero() {
     assertEquals(RealScalar.ZERO, DoubleScalar.of(0));
@@ -107,7 +108,7 @@ public class DoubleScalarTest {
   @Test
   public void testNegZeroString() {
     Scalar scalar = Scalars.fromString("-0.0");
-    assertTrue(scalar instanceof DoubleScalar);
+    assertInstanceOf(DoubleScalar.class, scalar);
     assertEquals(scalar.toString(), "0.0");
   }
 

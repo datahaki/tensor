@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import ch.alpine.tensor.api.ChopInterface;
-import ch.alpine.tensor.api.MachineNumberQInterface;
+import ch.alpine.tensor.api.InexactScalarMarker;
 import ch.alpine.tensor.sca.Chop;
 
 /** scalar with double precision, 64-bit, MATLAB style
@@ -43,7 +43,7 @@ import ch.alpine.tensor.sca.Chop;
  * @implSpec
  * This class is immutable and thread-safe. */
 public final class DoubleScalar extends AbstractRealScalar implements //
-    ChopInterface, MachineNumberQInterface, Serializable {
+    ChopInterface, InexactScalarMarker, Serializable {
   /** real scalar that encodes +Infinity. value is backed by Double.POSITIVE_INFINITY */
   public static final Scalar POSITIVE_INFINITY = of(Double.POSITIVE_INFINITY);
   /** real scalar that encodes -Infinity. value is backed by Double.NEGATIVE_INFINITY */
@@ -162,7 +162,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar ceiling() {
-    return isMachineNumber() //
+    return isFinite() //
         ? RationalScalar.integer(BigDecimalMath.ceiling(bigDecimal()))
         : this; // value non finite
   }
@@ -174,7 +174,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
 
   @Override // from RoundingInterface
   public Scalar floor() {
-    return isMachineNumber() //
+    return isFinite() //
         ? RationalScalar.integer(BigDecimalMath.floor(bigDecimal()))
         : this; // value non finite
   }
@@ -186,16 +186,16 @@ public final class DoubleScalar extends AbstractRealScalar implements //
         : super.log();
   }
 
-  /** @return true if the argument is a finite floating-point
+  /* @return true if the argument is a finite floating-point
    * value; false otherwise (for NaN and infinity arguments). */
-  @Override // from MachineNumberQInterface
-  public boolean isMachineNumber() {
+  @Override
+  public boolean isFinite() {
     return Double.isFinite(value);
   }
 
   @Override // from RoundingInterface
   public Scalar round() {
-    return isMachineNumber() //
+    return isFinite() //
         ? RationalScalar.integer(bigDecimal().setScale(0, RoundingMode.HALF_UP).toBigIntegerExact())
         : this; // value non finite
   }

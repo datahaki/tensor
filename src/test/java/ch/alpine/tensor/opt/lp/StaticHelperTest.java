@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensors;
 
-public class StaticHelperTest {
+class StaticHelperTest {
   @Test
   public void testSimple() {
     assertTrue(StaticHelper.isInsideRange(Tensors.vector(3, 2, 1), 4));

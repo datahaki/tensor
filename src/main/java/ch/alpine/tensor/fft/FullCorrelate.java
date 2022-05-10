@@ -6,12 +6,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.red.Times;
 

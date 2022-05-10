@@ -12,7 +12,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-public class FactorIntegerTest {
+class FactorIntegerTest {
   private static void _check(BigInteger n) {
     Map<BigInteger, Integer> map = FactorInteger.of(n);
     BigInteger p = BigInteger.ONE;

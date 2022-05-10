@@ -17,7 +17,7 @@ import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 
-public class EvaluatedDiscreteDistributionTest {
+class EvaluatedDiscreteDistributionTest {
   @Test
   public void testBinomial() {
     for (int n = 10; n < 1200; n += 10) {

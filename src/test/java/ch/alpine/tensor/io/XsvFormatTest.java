@@ -3,7 +3,7 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +32,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 
-public class XsvFormatTest {
+class XsvFormatTest {
   private static void convertCheck(Tensor A) {
     for (XsvFormat xsvFormat : XsvFormat.values())
       assertEquals(A, xsvFormat.parse(xsvFormat.of(A)));
@@ -81,10 +81,10 @@ public class XsvFormatTest {
         Files.readAllLines(Paths.get(path)).stream(), //
         string -> Tensors.fromString("{" + string + "}"));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 2));
-    assertTrue(tensor.Get(0, 0) instanceof Quantity);
-    assertTrue(tensor.Get(0, 1) instanceof Quantity);
-    assertTrue(tensor.Get(1, 0) instanceof Quantity);
-    assertTrue(tensor.Get(1, 1) instanceof RealScalar);
+    assertInstanceOf(Quantity.class, tensor.Get(0, 0));
+    assertInstanceOf(Quantity.class, tensor.Get(0, 1));
+    assertInstanceOf(Quantity.class, tensor.Get(1, 0));
+    assertInstanceOf(RealScalar.class, tensor.Get(1, 1));
   }
 
   @Test

@@ -3,11 +3,11 @@ package ch.alpine.tensor.mat.re;
 
 import java.util.stream.IntStream;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.sca.Abs;
 
 public enum Pivots implements Pivot {

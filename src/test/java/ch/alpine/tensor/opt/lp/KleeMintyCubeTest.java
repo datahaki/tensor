@@ -17,7 +17,7 @@ import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 import ch.alpine.tensor.sca.N;
 
-public class KleeMintyCubeTest {
+class KleeMintyCubeTest {
   private static void _callKlee(int n) {
     KleeMintyCube kleeMintyCube = KleeMintyCube.of(n);
     assertTrue(kleeMintyCube.linearProgram.isCanonicDual());

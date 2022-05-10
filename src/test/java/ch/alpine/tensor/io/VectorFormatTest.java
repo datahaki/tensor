@@ -18,7 +18,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
-public class VectorFormatTest {
+class VectorFormatTest {
   @Test
   public void testVector() throws IOException {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream(128);

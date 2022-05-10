@@ -12,7 +12,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class SqrtUpTest {
+class SqrtUpTest {
   @Test
   public void testRectangle() {
     Random random = new Random(2);

@@ -11,13 +11,13 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
@@ -25,7 +25,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
-public class HungarianAlgorithmTest {
+class HungarianAlgorithmTest {
   private static void _verify(Tensor matrix, Scalar minimum, Tensor expected) {
     BipartiteMatching bipartiteMatching = BipartiteMatching.of(matrix);
     Tolerance.CHOP.requireClose(bipartiteMatching.minimum(), minimum);

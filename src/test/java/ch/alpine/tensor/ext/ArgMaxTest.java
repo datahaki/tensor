@@ -18,7 +18,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.spa.SparseArray;
 
-public class ArgMaxTest {
+class ArgMaxTest {
   @Test
   public void testDocumentation() {
     assertEquals(ArgMax.of(Tensors.vector(3, 4, 2, 0, 3)), 1);

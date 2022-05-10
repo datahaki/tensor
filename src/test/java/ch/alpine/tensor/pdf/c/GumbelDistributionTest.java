@@ -2,19 +2,24 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.NumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.FiniteScalarQ;
+import ch.alpine.tensor.jet.DateTimeScalar;
+import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -26,9 +31,11 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
+import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clips;
 
-public class GumbelDistributionTest {
+class GumbelDistributionTest {
   @Test
   public void testPDF() {
     Distribution distribution = //
@@ -62,14 +69,14 @@ public class GumbelDistributionTest {
     assertEquals(inverseCDF.quantile(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
     assertEquals(inverseCDF.quantile(RealScalar.ONE), DoubleScalar.POSITIVE_INFINITY);
     // System.out.println(gmd.randomVariate(0.0));
-    DeterminateScalarQ.require(gmd.protected_quantile(RealScalar.of(Math.nextDown(1.0))));
+    FiniteScalarQ.require(gmd.protected_quantile(RealScalar.of(Math.nextDown(1.0))));
   }
 
   @Test
   public void testQuantity() {
     Distribution distribution = GumbelDistribution.of(Quantity.of(0.3, "m^-1"), Quantity.of(0.4, "m^-1"));
     Scalar rand = RandomVariate.of(distribution);
-    assertTrue(rand instanceof Quantity);
+    assertInstanceOf(Quantity.class, rand);
     UnitConvert.SI().to(Unit.of("in^-1")).apply(rand);
     {
       Scalar prob = PDF.of(distribution).at(Quantity.of(1, "m^-1"));
@@ -78,8 +85,8 @@ public class GumbelDistributionTest {
     {
       CDF cdf = CDF.of(distribution);
       Scalar prob = cdf.p_lessEquals(Quantity.of(10, "m^-1"));
-      assertTrue(prob instanceof DoubleScalar);
-      assertTrue(NumberQ.of(prob));
+      assertInstanceOf(DoubleScalar.class, prob);
+      assertTrue(FiniteScalarQ.of(prob));
     }
   }
 
@@ -100,10 +107,35 @@ public class GumbelDistributionTest {
   }
 
   @Test
+  public void testCentralMoment() {
+    Distribution distribution = //
+        GumbelDistribution.of(Quantity.of(-1.3, "m^-1"), Quantity.of(1.5, "m^-1"));
+    assertEquals(CentralMoment.of(distribution, 0), RealScalar.ONE);
+    assertEquals(CentralMoment.of(distribution, 1), Quantity.of(0, "m^-1"));
+    Scalar var = CentralMoment.of(distribution, 2);
+    Chop._13.requireClose(var, Quantity.of(3.7011016504085092, "m^-2"));
+    assertThrows(Exception.class, () -> CentralMoment.of(distribution, 3));
+  }
+
+  @Test
   public void testToString() {
     Distribution distribution = //
         GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     assertEquals(distribution.toString(), "GumbelDistribution[3, 0.2]");
+  }
+
+  @Test
+  public void testDateTimeScalar() {
+    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
+    DurationScalar durationScalar = DurationScalar.of(Duration.ofMinutes(123));
+    Distribution distribution = GumbelDistribution.of(dateTimeScalar, durationScalar);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTimeScalar.class, scalar);
+    PDF pdf = PDF.of(distribution);
+    pdf.at(DateTimeScalar.of(LocalDateTime.now()));
+    CDF cdf = CDF.of(distribution);
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTimeScalar.of(LocalDateTime.now()));
+    Clips.interval(0.5, 0.8).requireInside(p_lessEquals);
   }
 
   @Test
@@ -115,6 +147,7 @@ public class GumbelDistributionTest {
   @Test
   public void testComplexFail() {
     assertThrows(ClassCastException.class, () -> GumbelDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> GumbelDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));
   }
 
   @Test

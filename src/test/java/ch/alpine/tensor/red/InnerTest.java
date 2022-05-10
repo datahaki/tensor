@@ -9,7 +9,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.num.Pi;
 
-public class InnerTest {
+class InnerTest {
   @Test
   public void testSimple() {
     BiFunction<Scalar, Tensor, Scalar> ex = (s, ar) -> Pi.VALUE;

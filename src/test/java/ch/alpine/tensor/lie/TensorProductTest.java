@@ -16,7 +16,7 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 
-public class TensorProductTest {
+class TensorProductTest {
   @Test
   public void testEmpty() {
     assertEquals(TensorProduct.of(Tensors.empty(), LeviCivitaTensor.of(3)), Tensors.empty());

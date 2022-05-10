@@ -12,7 +12,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 
-public class AppendTest {
+class AppendTest {
   @Test
   public void testSimple() {
     Tensor x = Tensors.vector(1, 2, 3);

@@ -24,7 +24,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 
-public class LanczosInterpolationTest {
+class LanczosInterpolationTest {
   @Test
   public void testVector() {
     Tensor vector = Tensors.vector(-1, 0, 3, 2, 0, -4, 2);

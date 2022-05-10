@@ -28,7 +28,7 @@ import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.N;
 
-public class MatrixTest {
+class MatrixTest {
   private static <T> void _checkFail(Function<Tensor, T> function) {
     assertThrows(NullPointerException.class, () -> function.apply(null));
     assertThrows(Exception.class, () -> function.apply(RealScalar.ONE));

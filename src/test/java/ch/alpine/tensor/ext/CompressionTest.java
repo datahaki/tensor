@@ -11,7 +11,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-public class CompressionTest {
+class CompressionTest {
   private static byte[] createBytes(int length) {
     Random random = new SecureRandom();
     byte[] bytes = new byte[length];

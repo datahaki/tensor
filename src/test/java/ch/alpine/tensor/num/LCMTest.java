@@ -11,7 +11,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
 
-public class LCMTest {
+class LCMTest {
   @Test
   public void testZero() {
     assertEquals(LCM.of(RealScalar.ZERO, RealScalar.ZERO), RealScalar.ZERO);

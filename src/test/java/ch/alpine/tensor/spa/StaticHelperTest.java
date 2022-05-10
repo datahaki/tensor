@@ -3,6 +3,7 @@ package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,7 +35,7 @@ import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
 
-public class StaticHelperTest {
+class StaticHelperTest {
   @Test
   public void testSparseBinary() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
@@ -46,14 +47,14 @@ public class StaticHelperTest {
       assertEquals(a.add(b), r_add);
       assertEquals(a.add(sb), r_add);
       assertEquals(sa.add(b), r_add);
-      assertTrue(r_add instanceof SparseArray);
+      assertInstanceOf(SparseArray.class, r_add);
     }
     {
       Tensor r_sub = sa.subtract(sb);
       assertEquals(a.subtract(b), r_sub);
       assertEquals(a.subtract(sb), r_sub);
       assertEquals(sa.subtract(b), r_sub);
-      assertTrue(r_sub instanceof SparseArray);
+      assertInstanceOf(SparseArray.class, r_sub);
     }
     {
       Tensor r_pml = Times.of(sa, sb);
@@ -68,7 +69,7 @@ public class StaticHelperTest {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4},{0,0,0,0,0},{0,0,0,0,0}}");
     Tensor s = TestHelper.of(a);
     Tensor tw_s = TensorWedge.of(s);
-    assertTrue(tw_s instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, tw_s);
     assertEquals(TensorWedge.of(a), tw_s);
     assertEquals(Transpose.of(a), Transpose.of(s));
   }
@@ -113,8 +114,8 @@ public class StaticHelperTest {
     assertFalse(fb instanceof SparseArray);
     Tensor sa = TestHelper.of(fa);
     Tensor sb = TestHelper.of(fb);
-    assertTrue(sa instanceof SparseArray);
-    assertTrue(sb instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, sa);
+    assertInstanceOf(SparseArray.class, sb);
     Tensor fa_fb = fa.dot(fb);
     Tensor fa_sb = fa.dot(sb);
     Tensor sa_fb = sa.dot(fb);

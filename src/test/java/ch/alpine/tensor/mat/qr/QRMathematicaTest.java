@@ -25,7 +25,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
-public class QRMathematicaTest {
+class QRMathematicaTest {
   @Test
   public void testSkinny() {
     Tensor b = Transpose.of(IdentityMatrix.of(9).extract(0, 4));

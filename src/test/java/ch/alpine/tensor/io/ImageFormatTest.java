@@ -24,7 +24,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
-public class ImageFormatTest {
+class ImageFormatTest {
   @Test
   public void testRGBAFile() throws Exception {
     Tensor tensor = TransposedImageFormatTest._readRGBA();

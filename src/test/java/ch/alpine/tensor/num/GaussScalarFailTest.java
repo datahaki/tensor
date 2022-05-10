@@ -13,7 +13,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.sca.pow.Power;
 
-public class GaussScalarFailTest {
+class GaussScalarFailTest {
   @Test
   public void testPrimeNegative() {
     assertThrows(ArithmeticException.class, () -> GaussScalar.of(2, -7));

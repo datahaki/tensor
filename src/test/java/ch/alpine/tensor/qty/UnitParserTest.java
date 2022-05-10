@@ -10,7 +10,7 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-public class UnitParserTest {
+class UnitParserTest {
   private static void _confirmFail(String string) {
     assertThrows(Exception.class, () -> UnitParser.of(string));
   }

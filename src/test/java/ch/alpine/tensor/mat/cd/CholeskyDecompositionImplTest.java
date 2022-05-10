@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.cd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -29,7 +30,7 @@ import ch.alpine.tensor.mat.re.Pivots;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.N;
 
-public class CholeskyDecompositionImplTest {
+class CholeskyDecompositionImplTest {
   @Test
   public void testSolveQuantity() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.fromString( //
@@ -46,7 +47,7 @@ public class CholeskyDecompositionImplTest {
   public void testGaussScalar() throws ClassNotFoundException, IOException {
     int n = 7;
     int prime = 7879;
-    Random random = new Random();
+    Random random = new Random(1);
     Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, n);
     // Symmetrize
     matrix = Transpose.of(matrix).add(matrix).divide(GaussScalar.of(2, prime));
@@ -74,7 +75,7 @@ public class CholeskyDecompositionImplTest {
         choleskyDecomposition.getL(), //
         DiagonalMatrix.with(choleskyDecomposition.diagonal()), //
         Transpose.of(choleskyDecomposition.getL()));
-    assertTrue(result.Get(3, 3) instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, result.Get(3, 3));
     Tolerance.CHOP.requireClose(matrix, result);
   }
 

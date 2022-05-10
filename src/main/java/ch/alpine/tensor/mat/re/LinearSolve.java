@@ -3,7 +3,6 @@ package ch.alpine.tensor.mat.re;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
@@ -11,6 +10,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.pi.LeastSquares;

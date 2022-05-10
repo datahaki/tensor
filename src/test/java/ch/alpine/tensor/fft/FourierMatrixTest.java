@@ -28,7 +28,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class FourierMatrixTest {
+class FourierMatrixTest {
   public void checkFormat(int n) {
     Tensor zeros = Array.zeros(n, n);
     Tensor original = FourierMatrix.of(n);

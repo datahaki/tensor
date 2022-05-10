@@ -31,7 +31,7 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
 
-public class Matrix2NormTest {
+class Matrix2NormTest {
   @Test
   public void testMatrix1() {
     Tensor matrix = Tensors.matrix(new Number[][] { { 1, 2, 3 }, { 9, -3, 0 } });

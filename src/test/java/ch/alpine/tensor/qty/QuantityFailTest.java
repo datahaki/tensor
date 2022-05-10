@@ -11,7 +11,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.Pi;
 
-public class QuantityFailTest {
+class QuantityFailTest {
   @Test
   public void testStringScalarFail() {
     Unit unit = Unit.of("a");

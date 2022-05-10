@@ -12,7 +12,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 
-public class KhatriRaoTest {
+class KhatriRaoTest {
   @Test
   public void testSimple() {
     Tensor a = Tensors.fromString("{{7, 7, 7}, {8, 8, 8}, {9, 9, 9}}");

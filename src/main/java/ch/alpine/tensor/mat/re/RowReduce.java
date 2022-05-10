@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.red.LenientAdd;
+import ch.alpine.tensor.qty.LenientAdd;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/RowReduce.html">RowReduce</a>

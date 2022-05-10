@@ -21,7 +21,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 
-public class LinearSolveAnyTest {
+class LinearSolveAnyTest {
   @Test
   public void testSome1() {
     Tensor m = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}, {7, 8, 9}}");

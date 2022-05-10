@@ -19,7 +19,7 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.sca.Chop;
 
-public class OrthogonalMatrixQTest {
+class OrthogonalMatrixQTest {
   @Test
   public void testExact() {
     Tensor matrix = Tensors.fromString("{{1, 1, 1, -1}, {-1, 1, 1, 1}}").multiply(RationalScalar.of(1, 2));

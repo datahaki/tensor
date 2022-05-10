@@ -16,7 +16,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 
-public class MatrixQTest {
+class MatrixQTest {
   @Test
   public void testEmpty() {
     assertFalse(MatrixQ.of(Tensors.fromString("{}")));

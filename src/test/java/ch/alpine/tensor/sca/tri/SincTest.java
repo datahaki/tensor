@@ -9,16 +9,16 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.NumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class SincTest {
+class SincTest {
   static final Scalar THRESHOLD = DoubleScalar.of(0.05);
 
   private static Scalar checkBoth(Scalar scalar) {
@@ -109,7 +109,7 @@ public class SincTest {
 
   @Test
   public void testNan() {
-    assertFalse(NumberQ.of(Sinc.FUNCTION.apply(DoubleScalar.INDETERMINATE)));
+    assertFalse(FiniteScalarQ.of(Sinc.FUNCTION.apply(DoubleScalar.INDETERMINATE)));
   }
 
   @Test

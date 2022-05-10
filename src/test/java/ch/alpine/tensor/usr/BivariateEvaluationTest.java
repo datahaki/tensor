@@ -12,7 +12,7 @@ import ch.alpine.tensor.sca.tri.ArcCosh;
 import ch.alpine.tensor.sca.tri.ArcSinh;
 import ch.alpine.tensor.sca.tri.ArcTanh;
 
-public class BivariateEvaluationTest {
+class BivariateEvaluationTest {
   @Test
   public void testSimple() {
     List<BivariateEvaluation> list = Arrays.asList( //

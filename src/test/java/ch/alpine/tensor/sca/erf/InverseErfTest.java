@@ -13,7 +13,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 
-public class InverseErfTest {
+class InverseErfTest {
   public static final Chop CHOP_04 = Chop.below(1e-04);
 
   @Test

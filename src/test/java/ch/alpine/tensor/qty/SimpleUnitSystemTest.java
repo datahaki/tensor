@@ -2,6 +2,7 @@
 package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,11 +20,11 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.GaussScalar;
 
-public class SimpleUnitSystemTest {
+class SimpleUnitSystemTest {
   @Test
   public void testInstance() {
     UnitSystem unitSystem = UnitSystem.SI();
-    assertTrue(unitSystem instanceof SimpleUnitSystem);
+    assertInstanceOf(SimpleUnitSystem.class, unitSystem);
   }
 
   @Test

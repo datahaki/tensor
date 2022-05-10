@@ -12,7 +12,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ClipIntervalTest {
+class ClipIntervalTest {
   @Test
   public void testEqualsInterval() {
     assertEquals(Clips.interval(3, 7), Clips.interval(3, 7));

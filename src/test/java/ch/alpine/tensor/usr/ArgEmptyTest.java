@@ -8,7 +8,10 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ext.ArgMax;
 import ch.alpine.tensor.ext.ArgMin;
 
-public class ArgEmptyTest {
+/** the location of the test here asserts that the constants are public:
+ * ArgMin.EMPTY
+ * ArgMax.EMPTY */
+class ArgEmptyTest {
   @Test
   public void testConvention() {
     assertEquals(ArgMin.EMPTY, -1);

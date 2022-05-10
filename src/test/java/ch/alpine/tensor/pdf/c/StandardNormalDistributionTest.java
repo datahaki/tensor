@@ -15,10 +15,11 @@ import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.red.CentralMoment;
+import ch.alpine.tensor.red.Kurtosis;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
-public class StandardNormalDistributionTest {
+class StandardNormalDistributionTest {
   @Test
   public void testPdfZero() {
     Scalar x = StandardNormalDistribution.INSTANCE.at(RealScalar.ZERO);
@@ -69,5 +70,11 @@ public class StandardNormalDistributionTest {
     assertEquals(CentralMoment.of(distribution, 2), RealScalar.ONE);
     assertEquals(CentralMoment.of(distribution, 3), RealScalar.ZERO);
     assertEquals(CentralMoment.of(distribution, 4), RealScalar.of(3));
+  }
+
+  @Test
+  public void testKurtosis() {
+    Distribution distribution = NormalDistribution.standard();
+    assertEquals(Kurtosis.of(distribution), RealScalar.of(3));
   }
 }

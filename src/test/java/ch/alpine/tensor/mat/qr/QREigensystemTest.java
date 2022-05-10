@@ -10,7 +10,7 @@ import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.sca.Chop;
 
-public class QREigensystemTest {
+class QREigensystemTest {
   @Test
   public void testSymmetric() {
     Tensor matrix = Tensors.fromString("{{52, 30, 49, 28}, {30, 50, 8, 44}, {49, 8, 46, 16}, {28, 44, 16, 22}}");

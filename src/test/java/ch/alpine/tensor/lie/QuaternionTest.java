@@ -3,13 +3,12 @@ package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RandomQuaternion;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -18,6 +17,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
@@ -30,13 +30,16 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.KroneckerDelta;
 import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
+import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.N;
+import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class QuaternionTest {
+class QuaternionTest {
   @Test
   public void testContructQuantity() {
     Quaternion quaternion = Quaternion.of(Quantity.of(3, "m"), Tensors.fromString("{2[m],3[m],4[m]}"));
@@ -46,7 +49,7 @@ public class QuaternionTest {
     Tolerance.CHOP.requireClose(abs, Scalars.fromString("6.164414002968976[m]"));
     ExactScalarQ.require(quaternion);
     assertEquals(quaternion.conjugate(), Quaternion.of(Quantity.of(3, "m"), Tensors.fromString("{-2[m],-3[m],-4[m]}")));
-    assertTrue(quaternion.sqrt() instanceof QuaternionImpl);
+    assertInstanceOf(QuaternionImpl.class, quaternion.sqrt());
     Quaternion actual = quaternion.reciprocal();
     Quaternion expect = Quaternion.of(Scalars.fromString("3/38[m^-1]"), Tensors.fromString("{-1/19[m^-1], -3/38[m^-1], -2/19[m^-1]}"));
     assertEquals(expect, actual);
@@ -257,6 +260,14 @@ public class QuaternionTest {
     Scalar sign = Sign.FUNCTION.apply(quaternion);
     Scalar abs = Abs.FUNCTION.apply(quaternion);
     Tolerance.CHOP.requireClose(sign.multiply(abs), quaternion);
+  }
+
+  @Test
+  public void testRound() {
+    Quaternion quaternion = Quaternion.of(3.9, 2.3, 1.8, -1.3);
+    assertEquals(Round.FUNCTION.apply(quaternion), Quaternion.of(4, 2, 2, -1));
+    assertEquals(Ceiling.FUNCTION.apply(quaternion), Quaternion.of(4, 3, 2, -1));
+    assertEquals(Floor.FUNCTION.apply(quaternion), Quaternion.of(3, 2, 1, -2));
   }
 
   @Test

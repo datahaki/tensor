@@ -15,30 +15,13 @@ import java.util.zip.DataFormatException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.lie.Quaternion;
-import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ImportTest {
-  private static final File IO_OBJECT = new File("src/test/resources/io/object");
-  public static final File IO_OBJECT_TENSOR = new File(IO_OBJECT, "tensor.object");
-  public static final File IO_OBJECT_UNMODIFIABLE = new File(IO_OBJECT, "unmodifiable.object");
-  public static final Tensor CONTENT = Tensors.of( //
-      RealScalar.ONE, //
-      RealScalar.of(3.15), //
-      Pi.in(30), //
-      ComplexScalar.of(2, 3), //
-      Quantity.of(3, "m"), //
-      GaussScalar.of(3, 17), //
-      Quaternion.of(3, 4, 5, 6));
-
+class ImportTest {
   @Test
   public void testCsv() throws Exception {
     String string = "/io/libreoffice_calc.csv";
@@ -145,14 +128,14 @@ public class ImportTest {
   }
 
   public void _testSerialization1() throws ClassNotFoundException, IOException, DataFormatException {
-    Tensor tensor = Import.object(IO_OBJECT_TENSOR);
-    assertEquals(tensor, CONTENT);
+    Tensor tensor = Import.object(ImportPublic.IO_OBJECT_TENSOR);
+    assertEquals(tensor, ImportPublic.CONTENT);
   }
 
   public void _testSerialization2() throws ClassNotFoundException, IOException, DataFormatException {
-    Tensor tensor = Import.object(IO_OBJECT_UNMODIFIABLE);
+    Tensor tensor = Import.object(ImportPublic.IO_OBJECT_UNMODIFIABLE);
     assertTrue(Tensors.isUnmodifiable(tensor));
-    assertEquals(tensor, CONTENT);
+    assertEquals(tensor, ImportPublic.CONTENT);
   }
 
   @Test

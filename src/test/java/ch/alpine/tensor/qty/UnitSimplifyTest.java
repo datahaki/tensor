@@ -16,7 +16,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.num.Pi;
 
-public class UnitSimplifyTest {
+class UnitSimplifyTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Set<Unit> set = new HashSet<>();

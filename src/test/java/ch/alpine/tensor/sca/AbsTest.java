@@ -11,7 +11,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class AbsTest {
+class AbsTest {
   @Test
   public void testReal() {
     assertEquals(Abs.FUNCTION.apply(RealScalar.of(+3)), RealScalar.of(3));

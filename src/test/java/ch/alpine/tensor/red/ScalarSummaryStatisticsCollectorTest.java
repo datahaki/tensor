@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
-public class ScalarSummaryStatisticsCollectorTest {
+class ScalarSummaryStatisticsCollectorTest {
   @Test
   public void testFinisher() {
     assertNull(ScalarSummaryStatisticsCollector.INSTANCE.finisher().apply(null));

@@ -2,8 +2,8 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +19,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
 
-public class TensorImplTest {
+class TensorImplTest {
   @Test
   public void testUnmodifiable() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
@@ -119,7 +119,7 @@ public class TensorImplTest {
   @Test
   public void testArrayList() {
     List<Tensor> list = Arrays.asList(RealScalar.of(2), RealScalar.of(3)).stream().map(Tensor.class::cast).collect(Collectors.toList());
-    assertTrue(list instanceof ArrayList); // used in TensorParser
+    assertInstanceOf(ArrayList.class, list); // used in TensorParser
   }
 
   @Test

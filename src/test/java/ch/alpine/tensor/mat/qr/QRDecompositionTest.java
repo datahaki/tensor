@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.qr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -11,8 +12,6 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -22,6 +21,8 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -44,7 +45,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sign;
 
-public class QRDecompositionTest {
+class QRDecompositionTest {
   private static QRDecomposition _specialOps(Tensor A) {
     QRDecomposition qrDecomposition = null;
     for (QRSignOperator qrSignOperator : QRSignOperators.values()) {
@@ -193,7 +194,7 @@ public class QRDecompositionTest {
     _specialOps(matrix);
     _specialOps(N.DOUBLE.of(matrix));
     QRDecomposition qr = QRDecomposition.of(matrix);
-    assertTrue(qr.det() instanceof Quantity);
+    assertInstanceOf(Quantity.class, qr.det());
   }
 
   @Test
@@ -241,7 +242,7 @@ public class QRDecompositionTest {
     _specialOps(matrix);
     _specialOps(N.DOUBLE.of(matrix));
     QRDecomposition qr = QRDecomposition.of(matrix);
-    assertTrue(qr.det() instanceof Quantity);
+    assertInstanceOf(Quantity.class, qr.det());
   }
 
   @Test

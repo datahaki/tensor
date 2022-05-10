@@ -14,7 +14,7 @@ import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 
-public class NormalizeTotalTest {
+class NormalizeTotalTest {
   @Test
   public void testSimple() {
     Tensor tensor = NormalizeTotal.FUNCTION.apply(Tensors.vector(2, -3, 4, 5));

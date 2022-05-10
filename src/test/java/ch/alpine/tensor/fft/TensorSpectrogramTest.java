@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.win.DirichletWindow;
 import ch.alpine.tensor.sca.win.GaussianWindow;
 import ch.alpine.tensor.sca.win.ParzenWindow;
 
-public class TensorSpectrogramTest {
+class TensorSpectrogramTest {
   @Test
   public void testDefault() {
     Tensor vector = Tensor.of(IntStream.range(0, 2000) //

@@ -10,7 +10,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.ConstantArray;
 
-public class MatrixExpSeriesTest {
+class MatrixExpSeriesTest {
   @Test
   public void testNaNFail() {
     Tensor matrix = ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3);

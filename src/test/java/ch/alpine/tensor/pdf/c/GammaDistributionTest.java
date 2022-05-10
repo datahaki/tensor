@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -20,7 +21,7 @@ import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.sca.Chop;
 
-public class GammaDistributionTest {
+class GammaDistributionTest {
   @Test
   public void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(GammaDistribution.of(RealScalar.of(1.123), RealScalar.of(2.3)));
@@ -32,7 +33,7 @@ public class GammaDistributionTest {
   @Test
   public void testExp() {
     Distribution distribution = GammaDistribution.of(RealScalar.of(1.0), RealScalar.of(2.3));
-    assertTrue(distribution instanceof ExponentialDistribution);
+    assertInstanceOf(ExponentialDistribution.class, distribution);
   }
 
   @Test

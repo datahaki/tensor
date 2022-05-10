@@ -10,7 +10,7 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-public class HomeDirectoryTest {
+class HomeDirectoryTest {
   @Test
   public void testUserHome() {
     assertTrue(HomeDirectory.file().isDirectory());

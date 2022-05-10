@@ -12,7 +12,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class PolarDecompositionBaseTest {
+class PolarDecompositionBaseTest {
   @Test
   public void testStrang() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.fromString("{{3, 0}, {4, 5}}");

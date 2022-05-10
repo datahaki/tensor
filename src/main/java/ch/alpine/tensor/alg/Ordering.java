@@ -4,8 +4,8 @@ package ch.alpine.tensor.alg;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.lie.Signature;
 import ch.alpine.tensor.mat.ev.Eigensystem;
 

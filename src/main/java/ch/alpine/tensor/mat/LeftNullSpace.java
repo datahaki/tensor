@@ -4,12 +4,12 @@ package ch.alpine.tensor.mat;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.qr.QRDecomposition;
 import ch.alpine.tensor.mat.re.Pivot;
 import ch.alpine.tensor.mat.re.Pivots;

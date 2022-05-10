@@ -31,7 +31,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 
-public class RootsTest {
+class RootsTest {
   private static final int LIMIT = 20;
 
   @Test

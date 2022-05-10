@@ -34,7 +34,7 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Chop;
 
-public class BenIsraelCohenTest {
+class BenIsraelCohenTest {
   @Test
   public void testQuantity() {
     Random random = new Random(2);

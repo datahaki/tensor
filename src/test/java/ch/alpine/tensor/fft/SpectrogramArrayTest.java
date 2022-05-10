@@ -35,7 +35,7 @@ import ch.alpine.tensor.sca.win.NuttallWindow;
 import ch.alpine.tensor.sca.win.TukeyWindow;
 import ch.alpine.tensor.sca.win.WindowFunctions;
 
-public class SpectrogramArrayTest {
+class SpectrogramArrayTest {
   @Test
   public void testDimension() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tensorUnaryOperator = Serialization.copy(SpectrogramArray.of(8, 8));

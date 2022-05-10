@@ -23,7 +23,7 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.win.DirichletWindow;
 import ch.alpine.tensor.sca.win.WindowFunctions;
 
-public class StaticHelperTest {
+class StaticHelperTest {
   @ParameterizedTest
   @EnumSource(WindowFunctions.class)
   public void testSimple(WindowFunctions windowFunctions) {

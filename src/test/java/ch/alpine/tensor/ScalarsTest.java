@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,12 +11,13 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.io.StringScalar;
-import ch.alpine.tensor.io.StringScalarQ;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ScalarsTest {
+class ScalarsTest {
   @Test
   public void testRequireZero() {
     assertEquals(Scalars.requireZero(Quantity.of(0, "A")), Quantity.of(0, "A"));
@@ -23,27 +25,35 @@ public class ScalarsTest {
     assertThrows(TensorRuntimeException.class, () -> Scalars.requireZero(RealScalar.ONE));
   }
 
-  void checkInvariant(String string, Class<?> myclass) {
+  void checkInvariant(String string, Class<?> cls) {
     Scalar s = Scalars.fromString(string);
     Scalar t = Scalars.fromString(s.toString());
     assertEquals(s, t);
-    assertEquals(s.getClass(), myclass);
-    assertEquals(t.getClass(), myclass);
+    assertEquals(s.getClass(), cls);
+    assertEquals(t.getClass(), cls);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "123", "  123  ", "3 /  4", "0" })
+  public void testParseRationalScalar(String string) {
+    checkInvariant(string, RationalScalar.class);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { //
+      "12+15 /4*I", //
+      "1.0E-50 + 1.0E50*I", //
+      "I", //
+      " ( I ) ", //
+      "123123*I", //
+      "123E-123*I" })
+  public void testParseComplexScalar(String string) {
+    checkInvariant(string, ComplexScalarImpl.class);
   }
 
   @Test
   public void testParse() {
-    checkInvariant("123", RationalScalar.class);
-    checkInvariant("  123  ", RationalScalar.class);
-    checkInvariant("3 /  4", RationalScalar.class);
     checkInvariant("34.23123", DoubleScalar.class);
-    checkInvariant("0", RationalScalar.class);
-    checkInvariant("12+15 /4*I", ComplexScalarImpl.class);
-    checkInvariant("1.0E-50 + 1.0E50*I", ComplexScalarImpl.class);
-    checkInvariant("I", ComplexScalarImpl.class);
-    checkInvariant(" ( I ) ", ComplexScalarImpl.class);
-    checkInvariant("123123*I", ComplexScalarImpl.class);
-    checkInvariant("123E-123*I", ComplexScalarImpl.class);
     checkInvariant("asndbvf", StringScalar.class);
     checkInvariant("asn.dbv.f", StringScalar.class);
     checkInvariant("123-1A23*I", StringScalar.class);
@@ -213,16 +223,19 @@ public class ScalarsTest {
     assertEquals(s, c);
   }
 
-  @Test
-  public void testParseFail() {
-    assertTrue(StringScalarQ.of(Scalars.fromString("(3+2)(-1+4")));
-    assertTrue(Scalars.fromString("(3+2)(-1+4+") instanceof StringScalar);
-    assertTrue(Scalars.fromString("3+2-1+4+") instanceof StringScalar);
-    assertTrue(Scalars.fromString("3+2-1+4-") instanceof StringScalar);
-    assertTrue(Scalars.fromString("3++4") instanceof StringScalar);
-    assertTrue(Scalars.fromString("3--4") instanceof StringScalar);
-    assertTrue(Scalars.fromString("3**4") instanceof StringScalar);
-    assertTrue(StringScalarQ.of(Scalars.fromString("3//4")));
+  @ParameterizedTest
+  @ValueSource(strings = { //
+      "(3+2)(-1+4", //
+      "(3+2)(-1+4+", //
+      "3+2-1+4+", //
+      "3+2-1+4-", //
+      "3++4", //
+      "3--4", //
+      "3**4", //
+      "3//4", //
+  })
+  public void testParseFail(String string) {
+    assertInstanceOf(StringScalar.class, Scalars.fromString(string));
   }
 
   @Test

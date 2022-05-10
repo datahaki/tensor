@@ -40,7 +40,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Real;
 
-public class MatrixPowerTest {
+class MatrixPowerTest {
   private static boolean trunc(Tensor m, Tensor r) {
     return Tolerance.CHOP.of(m.subtract(r)).equals(Array.zeros(m.length(), m.length()));
   }
@@ -174,6 +174,12 @@ public class MatrixPowerTest {
     Tensor revers = MatrixPower.of(matrix, -343386231231234L);
     MatrixQ.requireSize(result, n, n);
     assertEquals(DiagonalMatrix.of(n, one), Dot.of(result, revers));
+  }
+
+  @Test
+  public void testHermitian() {
+    Tensor matrix = Tensors.fromString("{{0, I}, {-I, 0}}");
+    MatrixPower.ofHermitian(matrix, RealScalar.of(2.3));
   }
 
   @Test

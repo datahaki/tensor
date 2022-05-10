@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.io.ResourceData;
 
-public class UnitSystemInflatorTest {
+class UnitSystemInflatorTest {
   private final UnitSystemInflator unitSystemInflator = //
       new UnitSystemInflator(StaticHelper.stringScalarMap(ResourceData.properties("/unit/si.properties")));
 

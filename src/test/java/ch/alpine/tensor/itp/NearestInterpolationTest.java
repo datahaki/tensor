@@ -15,7 +15,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
-public class NearestInterpolationTest {
+class NearestInterpolationTest {
   @Test
   public void testEmpty() {
     Interpolation interpolation = NearestInterpolation.of(Tensors.empty());

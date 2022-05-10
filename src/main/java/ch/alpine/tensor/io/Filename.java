@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import java.util.Objects;
+
 /* package */ class Filename {
   private static final char DOT = '.';
   // ---
@@ -9,7 +11,7 @@ package ch.alpine.tensor.io;
 
   /** @param string */
   public Filename(String string) {
-    this.string = string;
+    this.string = Objects.requireNonNull(string);
   }
 
   /** @return
@@ -22,7 +24,7 @@ package ch.alpine.tensor.io;
    * "title.csv.gz" gives {@link Extension#GZ}
    * 
    * @return ultimate extension of file derived from the characters after the last '.'
-   * @throws Exception if extension is not listed in {@link Extension} */
+   * @throws IllegalArgumentException if extension is not listed in {@link Extension} */
   public Extension extension() {
     return Extension.of(string.substring(string.lastIndexOf(DOT) + 1));
   }

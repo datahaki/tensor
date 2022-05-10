@@ -29,7 +29,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Total;
 
-public class NdTreeMapTest {
+class NdTreeMapTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     CoordinateBoundingBox box = CoordinateBounds.of( //

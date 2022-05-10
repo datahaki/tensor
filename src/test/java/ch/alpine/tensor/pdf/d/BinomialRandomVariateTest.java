@@ -24,7 +24,7 @@ import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.sca.Sign;
 
-public class BinomialRandomVariateTest {
+class BinomialRandomVariateTest {
   @Test
   public void testDivert() {
     assertEquals(BinomialDistribution.of(1200, DoubleScalar.of(0.5)).getClass(), BinomialRandomVariate.class);

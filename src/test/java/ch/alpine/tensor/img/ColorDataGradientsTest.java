@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -27,7 +28,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class ColorDataGradientsTest {
+class ColorDataGradientsTest {
   @ParameterizedTest
   @EnumSource(ColorDataGradients.class)
   public void testDimensions(ColorDataGradient colorDataGradient) {
@@ -39,7 +40,7 @@ public class ColorDataGradientsTest {
   @EnumSource(ColorDataGradients.class)
   public void testQuantity(ColorDataGradient colorDataGradient) {
     Scalar scalar = Quantity.of(Double.POSITIVE_INFINITY, "s");
-    Chop.NONE.requireAllZero(colorDataGradient.apply(scalar));
+    assertThrows(Exception.class, () -> colorDataGradient.apply(scalar));
   }
 
   @ParameterizedTest
@@ -91,8 +92,8 @@ public class ColorDataGradientsTest {
 
   @Test
   public void testGrayscaleTable() {
-    assertTrue(Objects.isNull(ColorDataGradients.HUE.getTableRgba()));
-    assertTrue(Objects.isNull(ColorDataGradients.GRAYSCALE.getTableRgba()));
+    assertNull(ColorDataGradients.HUE.getTableRgba());
+    assertNull(ColorDataGradients.GRAYSCALE.getTableRgba());
   }
 
   @ParameterizedTest

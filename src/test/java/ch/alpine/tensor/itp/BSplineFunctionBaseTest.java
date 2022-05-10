@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class BSplineFunctionBaseTest {
+class BSplineFunctionBaseTest {
   @Test
   public void testVisibility() {
     assertEquals(BSplineFunctionBase.class.getModifiers() & 1, 1);

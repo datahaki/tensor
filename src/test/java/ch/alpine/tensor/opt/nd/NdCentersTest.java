@@ -14,7 +14,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Serialization;
 
-public class NdCentersTest {
+class NdCentersTest {
   @Test
   public void testSimple() {
     CoordinateBoundingBox outer = CoordinateBounds.of(Tensors.vector(0.1, 0.3), Tensors.vector(2.4, 3.5));

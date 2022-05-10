@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.red;
+package ch.alpine.tensor.qty;
 
 import java.util.function.BinaryOperator;
 
@@ -8,16 +8,23 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Unprotect;
-import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.qty.QuantityUnit;
-import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
+import ch.alpine.tensor.mat.re.GaussianElimination;
+import ch.alpine.tensor.mat.re.RowReduce;
+import ch.alpine.tensor.opt.lp.LinearProgram;
+import ch.alpine.tensor.red.Inner;
 
 /** Lenient Add implements the rules
  * <pre>
  * 3[m]+0[s] == 3[m]
  * 0[m]+0[s] == 0
  * </pre>
- * that are required for some algorithms.
+ * that are required for some algorithms:
+ * 
+ * {@link CholeskyDecomposition}
+ * {@link GaussianElimination}
+ * {@link RowReduce}
+ * {@link LinearProgram}
  * 
  * Remark: The computations throw an exception by {@link Quantity#add(Tensor)}. */
 public enum LenientAdd {

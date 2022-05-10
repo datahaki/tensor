@@ -24,7 +24,7 @@ import ch.alpine.tensor.pdf.d.PoissonDistribution;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.exp.Log;
 
-public class InterquartileRangeTest {
+class InterquartileRangeTest {
   @Test
   public void testSamples() {
     Tensor samples = Tensors.vector(0, 1, 2, 3, 10);

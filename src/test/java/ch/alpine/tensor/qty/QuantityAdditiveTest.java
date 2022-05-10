@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.red.Total;
 
-public class QuantityAdditiveTest {
+class QuantityAdditiveTest {
   private static void _checkPlusSymmetry(Scalar s1, Scalar s2) {
     Scalar r1 = s1.add(s2);
     Scalar r2 = s2.add(s1);

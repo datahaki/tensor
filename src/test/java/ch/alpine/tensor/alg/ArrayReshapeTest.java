@@ -13,7 +13,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
 
-public class ArrayReshapeTest {
+class ArrayReshapeTest {
   @Test
   public void testReshape() {
     Tensor s = Tensors.vector(1, 2, 3, 4, 5, 6);

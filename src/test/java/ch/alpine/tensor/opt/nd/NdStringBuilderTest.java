@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
 
-public class NdStringBuilderTest {
+class NdStringBuilderTest {
   @Test
   public void testSimple() {
     NdMap<String> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9)), 2);

@@ -10,14 +10,14 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
 
-public class StringScalarTest {
+class StringScalarTest {
   @Test
   public void testStrings() {
     Tensor a = StringScalar.of("asd");
@@ -76,6 +76,6 @@ public class StringScalarTest {
 
   @Test
   public void testNonExact() {
-    assertFalse(ExactScalarQ.of(StringScalar.of("abc")));
+    assertTrue(ExactScalarQ.of(StringScalar.of("abc")));
   }
 }

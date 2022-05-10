@@ -10,7 +10,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 
-public class SubfactorialTest {
+class SubfactorialTest {
   @Test
   public void testSimple() {
     Tensor vector = Range.of(0, 10).map(Subfactorial.FUNCTION);

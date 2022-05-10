@@ -20,7 +20,7 @@ import ch.alpine.tensor.pdf.d.PoissonDistribution;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.red.Total;
 
-public class UpperTriangularizeTest {
+class UpperTriangularizeTest {
   @Test
   public void testIncludingDiagonal() {
     Tensor matrix = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {9, 5, 2}}");

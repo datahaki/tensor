@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 
-public class UnitQTest {
+class UnitQTest {
   @Test
   public void testZero() {
     Unit unit = Unit.of("m^0*s^-0");

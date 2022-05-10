@@ -20,7 +20,7 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.red.Total;
 
-public class TensorMapTest {
+class TensorMapTest {
   @Test
   public void testUnmodifiable() {
     Tensor matrix = Array.zeros(3, 1).unmodifiable();

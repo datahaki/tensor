@@ -10,11 +10,11 @@ import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
-import ch.alpine.tensor.NumberQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.chq.FiniteTensorQ;
 import ch.alpine.tensor.io.Get;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -26,7 +26,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class SingularValueDecompositionImplTest {
+class SingularValueDecompositionImplTest {
   private static void _check(Tensor matrix) {
     assertTrue(SquareMatrixQ.of(matrix));
     InitTest.svd(matrix);
@@ -81,7 +81,7 @@ public class SingularValueDecompositionImplTest {
   @Test
   public void testEps() {
     Tensor A = Tensors.fromString("{{1, 0}, {0, 1E-14}}");
-    assertTrue(NumberQ.all(A));
+    assertTrue(FiniteTensorQ.of(A));
     InitTest.svd(A.map(s -> Quantity.of(s, "kg")));
     SingularValueDecomposition svd = InitTest.svd(A);
     assertEquals(NullSpace.of(svd).length(), 1);

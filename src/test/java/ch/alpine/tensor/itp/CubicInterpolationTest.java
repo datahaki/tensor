@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -14,8 +13,9 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
+import ch.alpine.tensor.chq.ExactScalarQ;
 
-public class CubicInterpolationTest {
+class CubicInterpolationTest {
   @Test
   public void testSimple() {
     Interpolation interpolation = CubicInterpolation.of(Tensors.vector(1, 0, 0, 2, 0));

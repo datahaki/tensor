@@ -20,7 +20,7 @@ import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
-public class HypergeometricDistributionTest {
+class HypergeometricDistributionTest {
   @Test
   public void testPdf() {
     PDF pdf = PDF.of(HypergeometricDistribution.of(10, 50, 100));

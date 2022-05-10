@@ -36,7 +36,8 @@ package ch.alpine.tensor.io;
 
   /** @param string
    * @return
-   * @throws Exception if given string does not match */
+   * @throws IllegalArgumentException if given string does not match
+   * any known file types */
   public static Extension of(String string) {
     return valueOf(string.toUpperCase());
   }

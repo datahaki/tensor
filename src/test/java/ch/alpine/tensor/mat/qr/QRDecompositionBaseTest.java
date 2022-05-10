@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-public class QRDecompositionBaseTest {
+class QRDecompositionBaseTest {
   @Test
   public void testPackageVisibility() {
     assertFalse(Modifier.isPublic(QRDecompositionBase.class.getModifiers()));

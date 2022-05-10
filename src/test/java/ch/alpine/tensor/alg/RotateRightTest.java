@@ -12,7 +12,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
-public class RotateRightTest {
+class RotateRightTest {
   @Test
   public void testVector() {
     Tensor vector = Tensors.vector(0, 1, 2, 3, 4).unmodifiable();

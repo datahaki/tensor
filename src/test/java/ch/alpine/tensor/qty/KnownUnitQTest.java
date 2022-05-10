@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 
-public class KnownUnitQTest {
+class KnownUnitQTest {
   @Test
   public void testKnownUnitQ() {
     assertTrue(KnownUnitQ.SI().test(Unit.of("kgf^2*K*gal^-1")));

@@ -28,7 +28,7 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Chop;
 
-public class MatrixLog2Test {
+class MatrixLog2Test {
   private static void _checkExpLog(Tensor matrix) {
     Tensor exp = MatrixExp.of(matrix);
     Tensor log = MatrixLog.of(exp);

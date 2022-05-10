@@ -15,7 +15,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 
 /** Reference: NR 2007 eq. (2.7.2) */
-public class ShermanMorrisonTest {
+class ShermanMorrisonTest {
   @Test
   public void testSimple() {
     Random random = new Random(3);

@@ -16,7 +16,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.InvertUnlessZero;
 
-public class StaticHelperTest {
+class StaticHelperTest {
   private static final Scalar _0 = RealScalar.of(0.0);
   private static final Scalar _1 = RealScalar.of(1.0);
 

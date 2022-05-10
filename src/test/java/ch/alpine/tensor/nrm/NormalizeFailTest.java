@@ -16,7 +16,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class NormalizeFailTest {
+class NormalizeFailTest {
   @Test
   public void testEmpty() {
     assertThrows(NoSuchElementException.class, () -> Vector2Norm.NORMALIZE.apply(Tensors.empty()));

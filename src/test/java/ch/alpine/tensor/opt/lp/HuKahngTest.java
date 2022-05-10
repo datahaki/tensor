@@ -27,7 +27,7 @@ import ch.alpine.tensor.sca.Chop;
 /** Reference:
  * "Linear and Integer Programming made Easy"
  * by T.C. Hu, Andrew B. Kahng, 2016 */
-public class HuKahngTest {
+class HuKahngTest {
   @Test
   public void testP14() {
     // x >= 0 that minimizes c.x subject to m.x <= b

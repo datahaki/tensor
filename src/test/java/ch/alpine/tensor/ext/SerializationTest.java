@@ -17,7 +17,7 @@ class NonSerializable {
   int value;
 }
 
-public class SerializationTest {
+class SerializationTest {
   @Test
   public void testCopy() throws ClassNotFoundException, IOException {
     String s1 = "abc";

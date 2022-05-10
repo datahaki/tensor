@@ -13,7 +13,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class HarmonicMeanTest {
+class HarmonicMeanTest {
   @Test
   public void testGeo1() {
     Tensor a = HarmonicMean.ofVector(Tensors.vector(8, 27, 525));

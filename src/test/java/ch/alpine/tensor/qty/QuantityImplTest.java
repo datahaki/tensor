@@ -3,8 +3,8 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
 
@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
-public class QuantityImplTest {
+class QuantityImplTest {
   @Test
   public void testSerializable() throws Exception {
     Quantity quantity = (Quantity) Scalars.fromString("-7+3*I[kg^-2*m*s]");
@@ -95,8 +95,8 @@ public class QuantityImplTest {
     Scalar q1 = Quantity.of(3, "m*s");
     Scalar q2 = Quantity.of(7, "s*m");
     Scalar s3 = q1.divide(q2);
-    assertTrue(s3 instanceof RationalScalar);
-    assertTrue(q1.under(q2) instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, s3);
+    assertInstanceOf(RationalScalar.class, q1.under(q2));
   }
 
   @Test

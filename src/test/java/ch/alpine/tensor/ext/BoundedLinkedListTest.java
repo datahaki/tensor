@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-public class BoundedLinkedListTest {
+class BoundedLinkedListTest {
   @Test
   public void testSimple() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(3);

@@ -24,7 +24,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.red.StandardDeviation;
 
-public class RandomPermutationTest {
+class RandomPermutationTest {
   @Test
   public void testSimple() {
     for (int count = 0; count < 10; ++count) {

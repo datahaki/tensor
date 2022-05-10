@@ -11,7 +11,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 
-public class NdMatchTest {
+class NdMatchTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     NdMatch<String> ndMatch = Serialization.copy( //

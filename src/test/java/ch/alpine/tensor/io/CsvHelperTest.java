@@ -2,8 +2,8 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +17,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Round;
 
-public class CsvHelperTest {
+class CsvHelperTest {
   @Test
   public void testFraction() {
     Scalar scalar = CsvHelper.FUNCTION.apply(RationalScalar.of(1, 2));
@@ -46,9 +46,9 @@ public class CsvHelperTest {
   @Test
   public void testDecimal() {
     Scalar scalar = (Scalar) DoubleScalar.of(0.25).map(Round._6);
-    assertTrue(scalar instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, scalar);
     scalar = CsvHelper.FUNCTION.apply(scalar);
-    assertTrue(scalar instanceof DoubleScalar);
+    assertInstanceOf(DoubleScalar.class, scalar);
   }
 
   @Test

@@ -25,7 +25,7 @@ import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.N;
 
-public class BernoulliDistributionTest {
+class BernoulliDistributionTest {
   @Test
   public void testEquals() {
     Scalar p = RationalScalar.of(1, 3);

@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class QRDecompositionImplTest {
+class QRDecompositionImplTest {
   @Test
   public void testDegenerate0Square() {
     for (int n = 1; n < 6; ++n) {

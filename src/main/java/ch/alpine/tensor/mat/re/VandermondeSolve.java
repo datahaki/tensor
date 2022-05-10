@@ -7,7 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
-import ch.alpine.tensor.red.LenientAdd;
+import ch.alpine.tensor.qty.LenientAdd;
 
 /** Reference:
  * G. B. Rybicki */

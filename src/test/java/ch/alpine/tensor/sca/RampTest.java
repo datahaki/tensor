@@ -13,7 +13,7 @@ import ch.alpine.tensor.jet.Around;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class RampTest {
+class RampTest {
   @Test
   public void testRealScalar() {
     assertEquals(Ramp.of(RealScalar.ZERO), RealScalar.ZERO);

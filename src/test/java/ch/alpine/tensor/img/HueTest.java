@@ -8,7 +8,7 @@ import java.awt.Color;
 
 import org.junit.jupiter.api.Test;
 
-public class HueTest {
+class HueTest {
   @Test
   public void testMod() {
     assertEquals(Hue.of(0, 1, 1, 1), Hue.of(1, 1, 1, 1));

@@ -3,6 +3,8 @@ package ch.alpine.tensor;
 
 import java.util.Objects;
 
+import ch.alpine.tensor.chq.ExactScalarQ;
+
 /** implementation consistent with Mathematica but requires scalar type as input
  * 
  * <p>Examples:

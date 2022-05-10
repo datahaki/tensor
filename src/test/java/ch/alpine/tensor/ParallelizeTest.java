@@ -10,7 +10,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.ExponentialDistribution;
 
-public class ParallelizeTest {
+class ParallelizeTest {
   @Test
   public void testDotSimple() {
     Tensor a = Tensors.vector(1, 2, 3);

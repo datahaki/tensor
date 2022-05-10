@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-public class OuterProductStreamTest {
+class OuterProductStreamTest {
   @Test
   public void testSimple() {
     long count = OuterProductStream.of(Size.of(Arrays.asList(3, 4)), new int[] { 1, 0 }).count();

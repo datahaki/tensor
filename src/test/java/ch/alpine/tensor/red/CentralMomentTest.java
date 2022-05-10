@@ -6,20 +6,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 
-public class CentralMomentTest {
+class CentralMomentTest {
   @Test
   public void testVarious() {
     Tensor tensor = Tensors.vector(10, 2, 3, 4, 1);
@@ -45,6 +45,14 @@ public class CentralMomentTest {
     Tensor tensor = Tensors.vector(10, 2, 3, 4, 1);
     Scalar result = CentralMoment.of(tensor, 1.3);
     Scalar gndtru = Scalars.fromString("1.1567572194352718 - 1.2351191805935866* I");
+    Tolerance.CHOP.requireClose(result, gndtru);
+  }
+
+  @Test
+  public void testNegative() {
+    Tensor tensor = Tensors.vector(-10, -2, 3, 4);
+    Scalar result = CentralMoment.of(tensor, -3.3);
+    Scalar gndtru = Scalars.fromString("-0.3766679353623411 + 0.5227888787805336* I");
     Tolerance.CHOP.requireClose(result, gndtru);
   }
 

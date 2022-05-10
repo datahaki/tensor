@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.alg.Array;
 
-public class FallbackColorDataGradientTest {
+class FallbackColorDataGradientTest {
   @Test
   public void testNull() {
     assertEquals(FallbackColorDataGradient.INSTANCE.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));

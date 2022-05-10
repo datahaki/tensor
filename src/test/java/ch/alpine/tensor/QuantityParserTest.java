@@ -2,16 +2,16 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class QuantityParserTest {
+class QuantityParserTest {
   @Test
   public void testSome() {
     Scalar scalar = QuantityParser.of("3.25[]");
-    assertTrue(scalar instanceof DoubleScalar);
+    assertInstanceOf(DoubleScalar.class, scalar);
     assertEquals(scalar, RealScalar.of(3.25));
   }
 

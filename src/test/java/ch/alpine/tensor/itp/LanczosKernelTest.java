@@ -15,7 +15,7 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Boole;
 import ch.alpine.tensor.sca.Chop;
 
-public class LanczosKernelTest {
+class LanczosKernelTest {
   @Test
   public void testSimple() {
     LanczosKernel lanczosKernel = LanczosKernel._3;

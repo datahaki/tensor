@@ -8,17 +8,17 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.num.GaussScalar;
 
-public class VandermondeMatrixTest {
+class VandermondeMatrixTest {
   @Test
   public void testSimple() {
     Tensor tensor = VandermondeMatrix.of(Tensors.vector(2, 1, 3, 4));

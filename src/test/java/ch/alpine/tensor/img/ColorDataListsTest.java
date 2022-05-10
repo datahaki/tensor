@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.Color;
@@ -13,11 +14,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ColorDataListsTest {
+class ColorDataListsTest {
   @Test
   public void testApply() {
     ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();
@@ -33,7 +35,8 @@ public class ColorDataListsTest {
   @Test
   public void testQuantityTransparent() {
     ColorDataIndexed colorDataIndexed = ColorDataLists._103.cyclic();
-    assertEquals(colorDataIndexed.apply(Quantity.of(2, "s")), Array.zeros(4));
+    assertThrows(TensorRuntimeException.class, () -> colorDataIndexed.apply(Quantity.of(2, "s")));
+    assertThrows(TensorRuntimeException.class, () -> colorDataIndexed.apply(Quantity.of(Double.NaN, "s")));
   }
 
   @ParameterizedTest

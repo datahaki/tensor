@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,23 +11,24 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
-import ch.alpine.tensor.DeterminateScalarQ;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.pow.Power;
 
-public class QuantityTest {
+class QuantityTest {
   @Test
   public void testFromString() {
-    assertTrue(Scalars.fromString("-7[m*kg^-2]") instanceof Quantity);
-    assertTrue(Scalars.fromString("3 [ m ]") instanceof Quantity);
-    assertTrue(Scalars.fromString("3 [ m *rad ]  ") instanceof Quantity);
+    assertEquals(Scalars.fromString("-7[m*kg^-2]"), Quantity.of(-7, "m*kg^-2"));
+    assertEquals(Scalars.fromString("3 [ m ]"), Quantity.of(3, "m"));
+    assertEquals(Scalars.fromString("3 [ m *rad ]  "), Quantity.of(3, "m*rad"));
     assertFalse(Scalars.fromString(" 3  ") instanceof Quantity);
     assertFalse(Scalars.fromString(" 3 [] ") instanceof Quantity);
   }
@@ -59,7 +61,7 @@ public class QuantityTest {
   @Test
   public void testPercent() {
     Scalar of = Quantity.of(50, "%");
-    DeterminateScalarQ.require(of);
+    FiniteScalarQ.require(of);
     Scalar pr = Scalars.fromString("50[%]");
     assertEquals(of, pr);
     Scalar n1 = UnitSystem.SI().apply(pr);
@@ -79,7 +81,7 @@ public class QuantityTest {
   @Test
   public void testDecimal() {
     Quantity quantity = (Quantity) Scalars.fromString("-7.23459823746593784659387465`13.0123[m*kg^-2]");
-    assertTrue(quantity.value() instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, quantity.value());
   }
 
   @Test
@@ -107,6 +109,19 @@ public class QuantityTest {
     Quantity quantity = (Quantity) Scalars.fromString("-7+3*I[kg^-2*m*s]");
     Scalar scalar = quantity.value();
     assertEquals(scalar, ComplexScalar.of(-7, 3));
+    ExactScalarQ.require(quantity);
+  }
+
+  @Test
+  public void testRounding() {
+    Scalar scalar = Scalars.fromString("-7.2+3.7*I[kg^-1*m^2*s]");
+    assertFalse(ExactScalarQ.of(scalar));
+    assertInstanceOf(Quantity.class, scalar);
+    Scalar round = Round.FUNCTION.apply(scalar);
+    assertInstanceOf(Quantity.class, round);
+    assertEquals(round, Scalars.fromString("-7+4*I[kg^-1*m^2*s]"));
+    ExactScalarQ.require(round);
+    assertTrue(FiniteScalarQ.of(round));
   }
 
   @Test

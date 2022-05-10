@@ -15,7 +15,7 @@ import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class UnitStepTest {
+class UnitStepTest {
   @Test
   public void testRealScalar() {
     assertEquals(UnitStep.of(RealScalar.of(-0.3)), RealScalar.ZERO);

@@ -12,7 +12,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.jet.Around;
 
-public class ArcTanhTest {
+class ArcTanhTest {
   @Test
   public void testReal() {
     Scalar scalar = ArcTanh.of(RealScalar.of(0.5));

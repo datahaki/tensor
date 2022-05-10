@@ -17,11 +17,13 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.sca.Sign;
 
-public class MixtureDistributionTest {
+class MixtureDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution d = BernoulliDistribution.of(RationalScalar.HALF);
@@ -41,8 +43,11 @@ public class MixtureDistributionTest {
     Scalar r1 = RandomVariate.of(d1, new Random(1));
     Scalar r2 = RandomVariate.of(d1, new Random(1));
     assertEquals(r1, r2);
-    CDF.of(d1).p_lessEquals(RealScalar.of(1));
-    PDF.of(d1).at(RealScalar.of(1));
+    CDF cdf = CDF.of(d1);
+    Scalar x = RealScalar.of(1.2);
+    Tolerance.CHOP.requireClose(cdf.p_lessEquals(x), cdf.p_lessThan(x));
+    Scalar scalar = PDF.of(d1).at(RealScalar.of(1));
+    Sign.requirePositive(scalar);
   }
 
   @Test

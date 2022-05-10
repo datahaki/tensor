@@ -24,7 +24,7 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class DistributionTest {
+class DistributionTest {
   private static void _check(Distribution distribution, int n) {
     Tensor vector = RandomVariate.of(distribution, n);
     Scalar mean = Mean.ofVector(vector); // measured mean

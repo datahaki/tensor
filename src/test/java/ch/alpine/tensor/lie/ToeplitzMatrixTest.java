@@ -20,7 +20,7 @@ import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.mat.re.RowReduce;
 
-public class ToeplitzMatrixTest {
+class ToeplitzMatrixTest {
   @Test
   public void testSquare() {
     Tensor matrix = ToeplitzMatrix.of(Tensors.vector(1, 2, 3, 4, 5));

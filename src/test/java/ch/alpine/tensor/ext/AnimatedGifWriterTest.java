@@ -10,7 +10,7 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-public class AnimatedGifWriterTest {
+class AnimatedGifWriterTest {
   @Test
   public void testColor(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.gif");

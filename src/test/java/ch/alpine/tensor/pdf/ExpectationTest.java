@@ -9,7 +9,6 @@ import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -19,6 +18,7 @@ import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.pdf.c.GompertzMakehamDistribution;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-public class ExpectationTest {
+class ExpectationTest {
   private static void _check(Distribution distribution) {
     Scalar mean = Expectation.mean(distribution);
     {

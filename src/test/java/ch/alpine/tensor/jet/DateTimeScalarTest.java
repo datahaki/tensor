@@ -3,6 +3,7 @@ package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,26 +14,26 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Subdivide;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 
-public class DateTimeScalarTest {
+class DateTimeScalarTest {
   @Test
   public void test1() throws ClassNotFoundException, IOException {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2021, 1, 10, 6, 30));
     Serialization.copy(dt1);
     Scalar scalar2 = dt2.subtract(dt1);
-    assertTrue(scalar2 instanceof DurationScalar);
+    assertInstanceOf(DurationScalar.class, scalar2);
     assertEquals(dt1.add(scalar2), dt2);
     assertThrows(TensorRuntimeException.class, () -> dt1.negate());
     assertThrows(TensorRuntimeException.class, () -> dt1.multiply(RealScalar.of(-1)));
@@ -73,7 +74,7 @@ public class DateTimeScalarTest {
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2021, 1, 10, 6, 30));
     Scalar scalar1 = dt2.subtract(dt1);
     Scalar scalar3 = dt1.subtract(dt2);
-    assertTrue(scalar3 instanceof DurationScalar);
+    assertInstanceOf(DurationScalar.class, scalar3);
     assertEquals(scalar1, scalar3.negate());
     scalar1.add(scalar3);
     Scalar diff = scalar1.add(scalar3);
@@ -106,7 +107,7 @@ public class DateTimeScalarTest {
     ExactScalarQ.require(dt1);
     DurationScalar ds = DurationScalar.of(Duration.ofSeconds(245234, 123_236_987).negated());
     Scalar scalar = dt1.subtract(ds);
-    assertTrue(scalar instanceof DateTimeScalar);
+    assertInstanceOf(DateTimeScalar.class, scalar);
   }
 
   @Test

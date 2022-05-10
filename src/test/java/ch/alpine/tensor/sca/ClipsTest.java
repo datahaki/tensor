@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,19 +11,19 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ClipsTest {
+class ClipsTest {
   @Test
   public void testSignZero1() {
     Clip clip = Clips.interval(-0.0, +0.0);
-    assertTrue(clip instanceof ClipPoint);
+    assertInstanceOf(ClipPoint.class, clip);
     assertEquals(clip.min(), RealScalar.ZERO);
     assertEquals(clip.max(), RealScalar.ZERO);
   }
@@ -30,7 +31,7 @@ public class ClipsTest {
   @Test
   public void testSignZero2() {
     Clip clip = Clips.interval(+0.0, -0.0);
-    assertTrue(clip instanceof ClipPoint);
+    assertInstanceOf(ClipPoint.class, clip);
     assertEquals(clip.min(), RealScalar.ZERO);
     assertEquals(clip.max(), RealScalar.ZERO);
   }
@@ -38,7 +39,7 @@ public class ClipsTest {
   @Test
   public void testInftyHalf() {
     Clip clip = Clips.interval(-0.0, Double.POSITIVE_INFINITY);
-    assertTrue(clip instanceof ClipInterval);
+    assertInstanceOf(ClipInterval.class, clip);
     assertTrue(clip.isInside(Pi.VALUE));
     assertEquals(clip.min(), RealScalar.ZERO);
     assertEquals(clip.max(), DoubleScalar.POSITIVE_INFINITY);
@@ -50,7 +51,7 @@ public class ClipsTest {
   @Test
   public void testRealNumbers() {
     Clip clip = Clips.interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-    assertTrue(clip instanceof ClipInterval);
+    assertInstanceOf(ClipInterval.class, clip);
     assertTrue(clip.isInside(Pi.VALUE));
     assertEquals(clip.min(), DoubleScalar.NEGATIVE_INFINITY);
     assertEquals(clip.max(), DoubleScalar.POSITIVE_INFINITY);

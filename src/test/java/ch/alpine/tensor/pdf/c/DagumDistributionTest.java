@@ -9,11 +9,10 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.DeterminateScalarQ;
-import ch.alpine.tensor.MachineNumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -24,7 +23,7 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
 
-public class DagumDistributionTest {
+class DagumDistributionTest {
   @Test
   public void testCdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(DagumDistribution.of(0.2, 0.3, 0.6));
@@ -66,8 +65,7 @@ public class DagumDistributionTest {
   public void testMeanIndeterminate() {
     Distribution distribution = DagumDistribution.of(2.3, 1, 0.7);
     Scalar scalar = Mean.of(distribution);
-    assertFalse(MachineNumberQ.of(scalar));
-    assertFalse(DeterminateScalarQ.of(scalar));
+    assertFalse(FiniteScalarQ.of(scalar));
   }
 
   @Test

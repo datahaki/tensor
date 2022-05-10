@@ -12,7 +12,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 
-public class ScalarTensorFunctionTest {
+class ScalarTensorFunctionTest {
   @Test
   public void testFunctionalInterface() {
     assertNotNull(ScalarTensorFunction.class.getAnnotation(FunctionalInterface.class));

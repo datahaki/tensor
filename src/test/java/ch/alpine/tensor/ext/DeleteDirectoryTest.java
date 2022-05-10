@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-public class DeleteDirectoryTest {
+class DeleteDirectoryTest {
   @Test
   public void testLayer0() throws IOException {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "0");

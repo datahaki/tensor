@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -20,7 +21,7 @@ import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 
-public class FloorTest {
+class FloorTest {
   @Test
   public void testFloor() {
     assertEquals(Floor.of(RealScalar.ZERO), RealScalar.ZERO);
@@ -65,7 +66,7 @@ public class FloorTest {
     assertEquals(Floor.longValueExact(s), 17);
     Scalar r = Floor.of(s);
     assertEquals(r, RealScalar.of(17));
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test
@@ -79,7 +80,7 @@ public class FloorTest {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
     Scalar r = Floor.of(s);
     assertEquals(r, RealScalar.of(54));
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test

@@ -19,7 +19,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.Tally;
 
-public class SignatureTest {
+class SignatureTest {
   @Test
   public void testEmpty() {
     assertEquals(Signature.of(Tensors.empty()), RealScalar.ONE);

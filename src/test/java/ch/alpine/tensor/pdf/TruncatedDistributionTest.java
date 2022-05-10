@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,13 +11,14 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.pdf.c.DiracDeltaDistribution;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
@@ -28,13 +30,20 @@ import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 
-public class TruncatedDistributionTest {
+class TruncatedDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Clip clip = Clips.interval(10, 11);
     Distribution distribution = Serialization.copy(TruncatedDistribution.of(NormalDistribution.of(10, 2), clip));
     Scalar scalar = RandomVariate.of(distribution);
     assertTrue(clip.isInside(scalar));
+  }
+
+  @Test
+  public void testZero() {
+    Clip clip = Clips.interval(2, 2);
+    Distribution distribution = TruncatedDistribution.of(NormalDistribution.of(0, 1), clip);
+    assertInstanceOf(DiracDeltaDistribution.class, distribution);
   }
 
   @Test
@@ -117,6 +126,13 @@ public class TruncatedDistributionTest {
     assertEquals( //
         distribution.toString(), //
         "TruncatedDistribution[PoissonDistribution[7], Clip[5, 10]]");
+  }
+
+  @Test
+  public void testArtifical() {
+    Distribution distribution = new ArtificalDistribution();
+    Distribution truncated = TruncatedDistribution.of(distribution, Clips.interval(0, 10));
+    RandomVariate.of(truncated, 10);
   }
 
   @Test

@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.sca;
 
+import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -46,6 +47,10 @@ public enum Ceiling implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof RoundingInterface)
       return ((RoundingInterface) scalar).ceiling();
+    if (scalar instanceof MultiplexScalar) {
+      MultiplexScalar multiplexScalar = (MultiplexScalar) scalar;
+      return multiplexScalar.eachMap(FUNCTION);
+    }
     throw TensorRuntimeException.of(scalar);
   }
 

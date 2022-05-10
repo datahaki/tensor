@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 
-public class TableBuilderTest {
+class TableBuilderTest {
   @Test
   public void testEmpty() {
     TableBuilder tableBuilder = new TableBuilder();

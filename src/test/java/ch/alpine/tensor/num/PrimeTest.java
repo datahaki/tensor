@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class PrimeTest {
+class PrimeTest {
   @Test
   public void testSimple() {
     Tensor tensor = Tensor.of(IntStream.range(1, 11).mapToObj(Prime::of));

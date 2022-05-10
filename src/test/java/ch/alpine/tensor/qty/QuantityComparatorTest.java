@@ -19,7 +19,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.ext.Serialization;
 
-public class QuantityComparatorTest {
+class QuantityComparatorTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.SI());

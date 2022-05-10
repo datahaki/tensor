@@ -18,7 +18,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
 
-public class UnitImplTest {
+class UnitImplTest {
   @Test
   public void testMap() {
     Unit unit = Unit.of("kg^2*m^-1");

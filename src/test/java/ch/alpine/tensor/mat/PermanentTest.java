@@ -18,7 +18,7 @@ import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.sca.gam.Factorial;
 import ch.alpine.tensor.sca.pow.Power;
 
-public class PermanentTest {
+class PermanentTest {
   @Test
   public void testSimple() {
     Scalar scalar = Permanent.of(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}"));

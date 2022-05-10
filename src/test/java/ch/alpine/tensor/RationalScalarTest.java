@@ -17,7 +17,7 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Power;
 
-public class RationalScalarTest {
+class RationalScalarTest {
   @Test
   public void testAdd() {
     Scalar a = RationalScalar.of(3, 17);

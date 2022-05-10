@@ -15,7 +15,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class CosTest {
+class CosTest {
   @Test
   public void testReal() {
     Scalar c = Cos.of(RealScalar.of(2));

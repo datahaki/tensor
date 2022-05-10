@@ -21,7 +21,7 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class TriangularDistributionTest {
+class TriangularDistributionTest {
   @Test
   public void testPdf() {
     Scalar a = RealScalar.of(1);

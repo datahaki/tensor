@@ -16,7 +16,7 @@ import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 
-public class ImageCropTest {
+class ImageCropTest {
   @Test
   public void testSerialization() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tensorUnaryOperator = //

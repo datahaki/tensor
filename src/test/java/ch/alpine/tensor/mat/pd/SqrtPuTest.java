@@ -9,7 +9,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.PositiveSemidefiniteMatrixQ;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 
-public class SqrtPuTest {
+class SqrtPuTest {
   @Test
   public void testSimple() {
     SqrtPu sqrtPu = new SqrtPu(HilbertMatrix.of(3));

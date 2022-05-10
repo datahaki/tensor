@@ -9,7 +9,14 @@ import ch.alpine.tensor.Tensor;
  * http://www.vixra.org/abs/1810.0283 */
 @FunctionalInterface
 public interface BinaryAverage {
-  /** An implementation of split function treats the parameters p and q as unmodifiable.
+  /** implementations are not required to be symmetric at parameter 1/2.
+   * 
+   * Example: For clothoids
+   * <pre>
+   * split(p, q, 1/2) != split(q, p, 1/2)
+   * </pre>
+   * 
+   * @implSpec the function treats the parameters p and q as unmodifiable.
    * That means, the calling entity may passes in the parameters by reference and has
    * the guarantee that the content is not altered after the call.
    * 

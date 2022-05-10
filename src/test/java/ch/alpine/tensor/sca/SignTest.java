@@ -19,7 +19,7 @@ import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 
-public class SignTest {
+class SignTest {
   @Test
   public void testSome() {
     assertEquals(Sign.FUNCTION.apply(DoubleScalar.of(-345)), RealScalar.of(-1));

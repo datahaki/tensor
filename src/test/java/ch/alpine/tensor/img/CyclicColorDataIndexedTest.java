@@ -8,12 +8,14 @@ import java.awt.Color;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.qty.Quantity;
 
-public class CyclicColorDataIndexedTest {
+class CyclicColorDataIndexedTest {
   @Test
   public void testCustom() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
@@ -42,6 +44,34 @@ public class CyclicColorDataIndexedTest {
     assertEquals(colorDataIndexed.getColor(0), ref0);
     final Color ref1 = new Color(5, 6, 7, 255);
     assertEquals(colorDataIndexed.getColor(1), ref1);
+  }
+
+  @Test
+  public void testColors() {
+    ColorDataIndexed colorDataIndexed = CyclicColorDataIndexed.of(Color.BLUE, Color.RED, Color.BLACK);
+    assertEquals(colorDataIndexed.getColor(-3), Color.BLUE);
+    assertEquals(colorDataIndexed.getColor(-2), Color.RED);
+    assertEquals(colorDataIndexed.getColor(-1), Color.BLACK);
+    assertEquals(colorDataIndexed.getColor(0), Color.BLUE);
+    assertEquals(colorDataIndexed.getColor(1), Color.RED);
+    assertEquals(colorDataIndexed.getColor(2), Color.BLACK);
+  }
+
+  @Test
+  public void testCornerCase() {
+    ColorDataIndexed colorDataIndexed = CyclicColorDataIndexed.of(Color.BLUE, Color.RED);
+    assertEquals(ColorFormat.toColor(colorDataIndexed.apply(RealScalar.of(0.2))), Color.BLUE);
+    assertEquals(ColorFormat.toColor(colorDataIndexed.apply(RealScalar.of(1.2))), Color.RED);
+    assertEquals(ColorFormat.toColor(colorDataIndexed.apply(DoubleScalar.INDETERMINATE)), new Color(0, 0, 0, 0));
+    assertEquals(ColorFormat.toColor(colorDataIndexed.apply(DoubleScalar.POSITIVE_INFINITY)), new Color(0, 0, 0, 0));
+  }
+
+  @Test
+  public void testFails() {
+    ColorDataIndexed colorDataIndexed = CyclicColorDataIndexed.of(Color.BLUE, Color.RED);
+    assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(1, "m")));
+    assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(Double.NaN, "m")));
+    assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(Double.POSITIVE_INFINITY, "m")));
   }
 
   @Test

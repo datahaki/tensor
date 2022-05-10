@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensors;
 
-public class ArgBaseTest {
+class ArgBaseTest {
   @Test
   public void testVisibility() {
     assertFalse(Modifier.isPublic(ArgBase.class.getModifiers()));

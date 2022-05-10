@@ -31,7 +31,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class MatrixSqrtTest {
+class MatrixSqrtTest {
   private static void _check(Tensor g, MatrixSqrt matrixSqrt) {
     Chop._08.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt_inverse()), IdentityMatrix.of(g.length()));
     Chop._04.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt()), g);
@@ -97,6 +97,13 @@ public class MatrixSqrtTest {
       Tensor x2 = x.dot(x);
       _check(x2, MatrixSqrt.ofSymmetric(x2));
     }
+  }
+
+  @Test
+  public void testHermitian() {
+    Tensor matrix = Tensors.fromString("{{0, I}, {-I, 0}}");
+    MatrixSqrt matrixSqrt = MatrixSqrt.ofHermitian(matrix);
+    _check(matrix, matrixSqrt);
   }
 
   @Test

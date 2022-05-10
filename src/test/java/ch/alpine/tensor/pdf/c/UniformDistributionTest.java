@@ -2,8 +2,8 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Random;
@@ -11,12 +11,12 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -34,7 +34,7 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 
-public class UniformDistributionTest {
+class UniformDistributionTest {
   @Test
   public void testCdf() {
     CDF cdf = CDF.of(UniformDistribution.of(RealScalar.ONE, RealScalar.of(3)));
@@ -106,12 +106,12 @@ public class UniformDistributionTest {
   @Test
   public void testQuantity() {
     Distribution distribution = UniformDistribution.of(Quantity.of(3, "g"), Quantity.of(5, "g"));
-    assertTrue(RandomVariate.of(distribution) instanceof Quantity);
+    assertInstanceOf(Quantity.class, RandomVariate.of(distribution));
     Scalar mean = Expectation.mean(distribution);
-    assertTrue(mean instanceof Quantity);
+    assertInstanceOf(Quantity.class, mean);
     assertEquals(mean, Quantity.of(4, "g"));
     Scalar var = Expectation.variance(distribution);
-    assertTrue(var instanceof Quantity);
+    assertInstanceOf(Quantity.class, var);
     assertEquals(var, Scalars.fromString("1/3[g^2]"));
     {
       Scalar prob = PDF.of(distribution).at(mean);

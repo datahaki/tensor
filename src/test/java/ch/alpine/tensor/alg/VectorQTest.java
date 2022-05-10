@@ -17,7 +17,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
-public class VectorQTest {
+class VectorQTest {
   @Test
   public void testScalar() {
     assertFalse(VectorQ.of(RealScalar.ONE));

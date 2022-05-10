@@ -10,10 +10,10 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.DeterminateScalarQ;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
@@ -22,7 +22,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 
-public class StudentTDistributionTest {
+class StudentTDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(StudentTDistribution.of(2, 3, 5));
@@ -42,8 +42,8 @@ public class StudentTDistributionTest {
 
   @Test
   public void testMeanVarSpecial() {
-    assertFalse(DeterminateScalarQ.of(Mean.of(StudentTDistribution.of(5, 4, 0.5))));
-    assertFalse(DeterminateScalarQ.of(Variance.of(StudentTDistribution.of(5, 4, 1.5))));
+    assertFalse(FiniteScalarQ.of(Mean.of(StudentTDistribution.of(5, 4, 0.5))));
+    assertFalse(FiniteScalarQ.of(Variance.of(StudentTDistribution.of(5, 4, 1.5))));
   }
 
   @Test

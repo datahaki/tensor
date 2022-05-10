@@ -12,7 +12,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class LogcTest {
+class LogcTest {
   @Test
   public void testSimple() {
     Scalar scalar = Logc.FUNCTION.apply(RealScalar.of(1 + 1e-13));

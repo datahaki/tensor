@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.TensorRuntimeException;
 
-public class ColorDataIndexedTest {
+class ColorDataIndexedTest {
   @Test
   public void testLumaPalette() {
     assertEquals(ColorDataLists._250.cyclic().length(), 13);

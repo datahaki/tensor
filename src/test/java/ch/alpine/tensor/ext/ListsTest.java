@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 import org.junit.jupiter.api.Test;
 
-public class ListsTest {
+class ListsTest {
   @Test
   public void testWithoutHead() {
     assertEquals(Lists.rest(Arrays.asList(3, 2, 8)), Arrays.asList(2, 8));

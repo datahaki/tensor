@@ -9,7 +9,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class NumelTest {
+class NumelTest {
   @Test
   public void testScalar() {
     Tensor a = DoubleScalar.of(2.32123);

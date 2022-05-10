@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 
-public class PrincipalComponentsTest {
+class PrincipalComponentsTest {
   @Test
   public void testSimple() {
     Tensor tensor = PrincipalComponents.of(Tensors.fromString("{{2, -5}, {3, 0}, {2, 5}, {2, 0}}"));

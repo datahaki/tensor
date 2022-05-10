@@ -3,15 +3,14 @@ package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -19,13 +18,14 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
-public class HypotTest {
+class HypotTest {
   private static void _checkPair(double x, double y) {
     Scalar res = Hypot.of(RealScalar.of(x), RealScalar.of(y));
     double jav = Math.hypot(x, y);
@@ -57,9 +57,9 @@ public class HypotTest {
 
   private static void checkVectorExact(Tensor vec) {
     Scalar hyp = Hypot.ofVector(vec);
-    assertTrue(hyp instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, hyp);
     Scalar nrm = Vector2Norm.of(vec);
-    assertTrue(nrm instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, nrm);
     assertEquals(hyp, nrm);
   }
 
@@ -111,7 +111,7 @@ public class HypotTest {
     assertFalse(Scalars.isZero(s2));
     try {
       Scalar s3 = Hypot.of(s1, s2); // NaN+NaN*I
-      assertTrue(s3 instanceof ComplexScalar);
+      assertInstanceOf(ComplexScalar.class, s3);
       assertFalse(Scalars.isZero(s3));
       @SuppressWarnings("unused")
       Scalar s4 = ArcTan.FUNCTION.apply(s2);

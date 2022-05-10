@@ -15,7 +15,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 
-public class ColorFormatTest {
+class ColorFormatTest {
   @Test
   public void testRandom() {
     Random random = new SecureRandom();

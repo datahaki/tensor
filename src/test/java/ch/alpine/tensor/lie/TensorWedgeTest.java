@@ -18,7 +18,7 @@ import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 
-public class TensorWedgeTest {
+class TensorWedgeTest {
   @Test
   public void testLength0() {
     assertEquals(TensorWedge.of(), RealScalar.ONE);

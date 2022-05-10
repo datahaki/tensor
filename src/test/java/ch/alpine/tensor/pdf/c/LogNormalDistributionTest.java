@@ -29,7 +29,7 @@ import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 
-public class LogNormalDistributionTest {
+class LogNormalDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     LogNormalDistribution distribution = (LogNormalDistribution) Serialization.copy( //

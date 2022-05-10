@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/RayleighDistribution.html">RayleighDistribution</a> */
 public class RayleighDistribution extends AbstractContinuousDistribution implements Serializable {
-  /** @param sigma positive
+  /** @param sigma positive real
    * @return */
   public static Distribution of(Scalar sigma) {
     if (Scalars.lessThan(RealScalar.ZERO, sigma))

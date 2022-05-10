@@ -14,7 +14,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ArrayQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class CauchyTensorTest {
+class CauchyTensorTest {
   private static void _check(int n) {
     Tensor hilbert = HilbertMatrix.of(n);
     Tensor matrix = CauchyTensor.of(Tensors.vector(i -> RationalScalar.of(2 * i + 1, 2), n), 2);

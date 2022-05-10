@@ -2,7 +2,6 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -11,7 +10,6 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -24,7 +22,7 @@ import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Power;
 
-public class BinomialTest {
+class BinomialTest {
   @Test
   public void testBasic() {
     // assertEquals(Binomial.of(10, Integer.MIN_VALUE), RealScalar.ZERO);
@@ -154,7 +152,6 @@ public class BinomialTest {
 
   @Test
   public void testLargeFail() {
-    assertFalse(DeterminateScalarQ.of(Binomial.of(RealScalar.of(123412341234324L), RealScalar.ZERO)));
     assertThrows(TensorRuntimeException.class, () -> Binomial.of(RealScalar.of(-123412341234324L), RealScalar.ZERO));
   }
 

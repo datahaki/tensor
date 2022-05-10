@@ -19,7 +19,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.NegativeBinomialDistribution;
 import ch.alpine.tensor.qty.Quantity;
 
-public class Vector1NormTest {
+class Vector1NormTest {
   @Test
   public void testQuantity1() {
     Scalar qs1 = Quantity.of(-3, "m");

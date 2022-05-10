@@ -12,11 +12,11 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -25,7 +25,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class ImageResizeTest {
+class ImageResizeTest {
   @Test
   public void testImage1() throws Exception {
     File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());

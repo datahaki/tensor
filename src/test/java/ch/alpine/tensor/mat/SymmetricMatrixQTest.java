@@ -16,7 +16,7 @@ import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.lie.Cross;
 import ch.alpine.tensor.sca.Chop;
 
-public class SymmetricMatrixQTest {
+class SymmetricMatrixQTest {
   @Test
   public void testHilbert() {
     SymmetricMatrixQ.require(HilbertMatrix.of(7));

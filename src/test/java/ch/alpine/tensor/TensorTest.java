@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,7 +17,7 @@ import ch.alpine.tensor.alg.Numel;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 
-public class TensorTest {
+class TensorTest {
   @Test
   public void testConstantAll() {
     assertTrue(Tensor.ALL < -1000000);
@@ -24,13 +25,13 @@ public class TensorTest {
 
   @Test
   public void testIsScalar() {
-    assertFalse(ScalarQTest.of(Tensors.empty()));
+    assertFalse(Tensors.empty() instanceof Scalar);
   }
 
   @Test
   public void testLength() {
     Tensor a = DoubleScalar.of(2.32123);
-    assertTrue(ScalarQTest.of(a));
+    assertInstanceOf(Scalar.class, a);
     assertEquals(a.length(), Scalar.LENGTH);
     Tensor b = Tensors.vectorLong(3, 2);
     assertEquals(b.length(), 2);

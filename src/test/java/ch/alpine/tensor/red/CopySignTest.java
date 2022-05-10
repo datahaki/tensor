@@ -9,7 +9,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.qty.Quantity;
 
-public class CopySignTest {
+class CopySignTest {
   @Test
   public void testNonZero() {
     assertEquals(Math.copySign(+2.0, +3.0), +2.0);

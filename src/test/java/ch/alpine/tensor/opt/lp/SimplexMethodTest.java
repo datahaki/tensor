@@ -19,7 +19,7 @@ import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 
 /** with examples from CLRS */
-public class SimplexMethodTest {
+class SimplexMethodTest {
   @Test
   public void testP845() {
     Tensor m = Tensors.matrixInt(new int[][] { //

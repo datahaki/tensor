@@ -23,7 +23,7 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
 
-public class PoissonBinomialDistributionTest {
+class PoissonBinomialDistributionTest {
   @Test
   public void testEmpty() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(PoissonBinomialDistribution.of(Tensors.empty()));

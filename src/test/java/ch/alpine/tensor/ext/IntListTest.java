@@ -3,6 +3,7 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-public class IntListTest {
+class IntListTest {
   @Test
   public void testEmpty() {
     List<Integer> intList = IntList.wrap(new int[] {});
@@ -241,7 +242,7 @@ public class IntListTest {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     List<Integer> copy = Serialization.copy(intList);
     assertEquals(copy, Arrays.asList(2, 3, 4));
-    assertTrue(intList instanceof RandomAccess);
+    assertInstanceOf(RandomAccess.class, intList);
   }
 
   @Test

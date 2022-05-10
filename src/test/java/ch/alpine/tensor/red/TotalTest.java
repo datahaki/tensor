@@ -19,7 +19,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.nrm.Normalize;
 
-public class TotalTest {
+class TotalTest {
   @Test
   public void testTotal() {
     Tensor a = Tensors.vectorLong(7, 2);

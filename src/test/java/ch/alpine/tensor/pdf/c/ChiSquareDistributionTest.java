@@ -23,7 +23,7 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
 
-public class ChiSquareDistributionTest {
+class ChiSquareDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(ChiSquareDistribution.of(2.3));

@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.gr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,7 +15,6 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -24,6 +24,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
@@ -51,7 +52,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Imag;
 
-public class InfluenceMatrixTest {
+class InfluenceMatrixTest {
   private static void _check(InfluenceMatrix influenceMatrix) throws ClassNotFoundException, IOException {
     InfluenceMatrix _influenceMatrix = Serialization.copy(influenceMatrix);
     Tensor leverages = _influenceMatrix.leverages();
@@ -166,7 +167,7 @@ public class InfluenceMatrixTest {
     Tensor design = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, m);
     if (MatrixRank.of(design) == m) {
       InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
-      assertTrue(influenceMatrix instanceof InfluenceMatrixImpl);
+      assertInstanceOf(InfluenceMatrixImpl.class, influenceMatrix);
       Tensor matrix = influenceMatrix.matrix();
       SymmetricMatrixQ.require(matrix);
       assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));
@@ -188,7 +189,7 @@ public class InfluenceMatrixTest {
     if (MatrixRank.of(d_dt) == m) { // apparently rank(design) == m does not imply rank(d dt) == m !
       PseudoInverse.usingCholesky(design);
       InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
-      assertTrue(influenceMatrix instanceof InfluenceMatrixImpl);
+      assertInstanceOf(InfluenceMatrixImpl.class, influenceMatrix);
       Tensor matrix = influenceMatrix.matrix();
       SymmetricMatrixQ.require(matrix);
       assertEquals(Total.ofVector(influenceMatrix.leverages()), GaussScalar.of(m, prime));

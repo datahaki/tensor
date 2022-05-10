@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.red;
+package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -9,9 +9,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.qty.Quantity;
 
-public class LenientAddTest {
+class LenientAddTest {
   @Test
   public void testDifferent() {
     Scalar p = Quantity.of(3, "m");

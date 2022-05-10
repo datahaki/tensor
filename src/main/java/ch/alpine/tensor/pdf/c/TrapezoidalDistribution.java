@@ -97,7 +97,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
     this.b = clip.requireInside(b);
     this.c = clip.requireInside(c);
     this.d = d;
-    alpha_inv = d.add(c).subtract(a).subtract(b);
+    alpha_inv = d.subtract(a).add(c.subtract(b));
     this.alpha = alpha_inv.reciprocal();
     yB = p_lessThan(b);
     yC = p_lessThan(c);
@@ -124,7 +124,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
       return alpha.multiply(term1).multiply(term2);
     }
     if (Scalars.lessEquals(x, c)) {
-      Scalar term2 = x.add(x).subtract(a).subtract(b);
+      Scalar term2 = x.subtract(a).add(x.subtract(b));
       return alpha.multiply(term2);
     }
     if (Scalars.lessThan(x, d)) {
@@ -174,7 +174,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
 
   private Scalar moment(boolean centered, int order) {
     ScalarUnaryOperator n_mean = centered //
-        ? mean().negate()::add
+        ? s -> s.subtract(mean)
         : s -> s;
     List<Optional<Scalar>> list = Arrays.asList( //
         contrib(a, b, n_mean, order), //

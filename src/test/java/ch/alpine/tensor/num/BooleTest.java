@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 
-public class BooleTest {
+class BooleTest {
   @Test
   public void testTrue() {
     assertEquals(Boole.of(true), RealScalar.ONE);

@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,11 +13,11 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.NumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -31,7 +32,7 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.sca.Chop;
 
-public class FrechetDistributionTest {
+class FrechetDistributionTest {
   @Test
   public void testPDF() throws ClassNotFoundException, IOException {
     Distribution distribution = //
@@ -61,7 +62,7 @@ public class FrechetDistributionTest {
   public void testQuantity() {
     Distribution distribution = FrechetDistribution.of(Quantity.of(1.3, ""), Quantity.of(1.4, "m^-1"));
     Scalar rand = RandomVariate.of(distribution);
-    assertTrue(rand instanceof Quantity);
+    assertInstanceOf(Quantity.class, rand);
     UnitConvert.SI().to(Unit.of("in^-1")).apply(rand);
     {
       Scalar prob = PDF.of(distribution).at(Quantity.of(1, "m^-1"));
@@ -70,8 +71,8 @@ public class FrechetDistributionTest {
     {
       CDF cdf = CDF.of(distribution);
       Scalar prob = cdf.p_lessEquals(Quantity.of(10, "m^-1"));
-      assertTrue(prob instanceof DoubleScalar);
-      assertTrue(NumberQ.of(prob));
+      assertInstanceOf(DoubleScalar.class, prob);
+      assertTrue(FiniteScalarQ.of(prob));
     }
   }
 

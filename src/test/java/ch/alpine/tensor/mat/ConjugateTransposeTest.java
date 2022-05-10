@@ -16,7 +16,7 @@ import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
-public class ConjugateTransposeTest {
+class ConjugateTransposeTest {
   @Test
   public void testExample1() {
     Tensor m1 = Tensors.fromString("{{1, 5+I}, {2, 3}}");

@@ -15,7 +15,7 @@ import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
-public class LinearColorDataGradientTest {
+class LinearColorDataGradientTest {
   @Test
   public void testRandom() {
     ColorDataGradient colorDataGradient = //

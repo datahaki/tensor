@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,11 +15,13 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 
-public class TensorsTest {
+class TensorsTest {
   @Test
   public void testEmpty() {
     Tensor tensor = Tensors.empty();
@@ -68,14 +71,14 @@ public class TensorsTest {
     Tensor p = Tensors.vector(Arrays.asList(3, 4, -5, 6));
     Tensor q = Tensors.vector(3, 4, -5, 6);
     Tensor r = Tensors.vector(3.0, 4.0, -5.0, 6.0);
-    assertTrue(p.Get(0) instanceof RationalScalar);
-    assertTrue(p.Get(1) instanceof RationalScalar);
-    assertTrue(p.Get(2) instanceof RationalScalar);
-    assertTrue(p.Get(3) instanceof RationalScalar);
-    assertTrue(q.Get(0) instanceof RationalScalar);
-    assertTrue(q.Get(1) instanceof RationalScalar);
-    assertTrue(q.Get(2) instanceof RationalScalar);
-    assertTrue(q.Get(3) instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, p.Get(0));
+    assertInstanceOf(RationalScalar.class, p.Get(1));
+    assertInstanceOf(RationalScalar.class, p.Get(2));
+    assertInstanceOf(RationalScalar.class, p.Get(3));
+    assertInstanceOf(RationalScalar.class, q.Get(0));
+    assertInstanceOf(RationalScalar.class, q.Get(1));
+    assertInstanceOf(RationalScalar.class, q.Get(2));
+    assertInstanceOf(RationalScalar.class, q.Get(3));
     assertEquals(p, q);
     assertEquals(p, r);
   }
@@ -97,7 +100,7 @@ public class TensorsTest {
   public void testNumber() {
     Tensor p = Tensors.vector(Arrays.asList(3, 4, 5.3, 6));
     Tensor q = Tensors.vector(3, 4, 5.3, 6);
-    assertTrue(p.Get(0) instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, p.Get(0));
     assertEquals(p, q);
   }
 

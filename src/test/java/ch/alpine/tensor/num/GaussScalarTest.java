@@ -3,6 +3,7 @@ package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -16,13 +17,13 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Sort;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.ArgMax;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
@@ -38,7 +39,7 @@ import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class GaussScalarTest {
+class GaussScalarTest {
   @Test
   public void testReciprocal() {
     long prime = 7919;
@@ -54,8 +55,8 @@ public class GaussScalarTest {
   public void testDivideUnder() {
     GaussScalar num = GaussScalar.of(132, 193);
     GaussScalar den = GaussScalar.of(37, 193);
-    GaussScalar div1 = num.divide(den);
-    GaussScalar div2 = den.under(num);
+    Scalar div1 = num.divide(den);
+    Scalar div2 = den.under(num);
     assertEquals(div1, div2);
   }
 
@@ -139,7 +140,7 @@ public class GaussScalarTest {
   @Test
   public void testNumber() {
     Scalar scalar = GaussScalar.of(9, 23);
-    assertTrue(scalar.number() instanceof BigInteger);
+    assertInstanceOf(BigInteger.class, scalar.number());
   }
 
   @Test

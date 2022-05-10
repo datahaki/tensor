@@ -12,7 +12,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.alg.Array;
 
-public class AnimationWriterTest {
+class AnimationWriterTest {
   @Test
   public void testColor(@TempDir File tempDir) throws Exception {
     File file = new File(tempDir, "file.gif");

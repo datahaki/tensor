@@ -17,7 +17,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class RowReduceTest {
+class RowReduceTest {
   // from Mathematica, RowReduce Applications: solving a linear system
   @Test
   public void testReduce1() {

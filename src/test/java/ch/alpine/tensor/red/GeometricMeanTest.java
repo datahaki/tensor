@@ -14,7 +14,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 
-public class GeometricMeanTest {
+class GeometricMeanTest {
   @Test
   public void testGeo1() {
     assertEquals(GeometricMean.of(Tensors.vectorDouble(4, 9)), RealScalar.of(6));

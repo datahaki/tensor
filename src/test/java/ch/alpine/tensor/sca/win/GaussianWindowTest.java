@@ -15,7 +15,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 
-public class GaussianWindowTest {
+class GaussianWindowTest {
   @Test
   public void testSimple() {
     Scalar apply = GaussianWindow.FUNCTION.apply(RealScalar.of(0.2));

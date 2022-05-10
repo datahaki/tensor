@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Sign;
 
-public class MatrixSqrtEigensystemTest {
+class MatrixSqrtEigensystemTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Random random = new Random(1);

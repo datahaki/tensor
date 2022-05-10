@@ -8,14 +8,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.qty.Quantity;
 
-public class CoordinateBoundingBoxTest {
+class CoordinateBoundingBoxTest {
   @Test
   public void testProject() {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
@@ -34,6 +34,17 @@ public class CoordinateBoundingBoxTest {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
     assertEquals(coordinateBoundingBox.min(), Tensors.vector(2, 3));
     assertEquals(coordinateBoundingBox.max(), Tensors.vector(12, 23));
+  }
+
+  @Test
+  public void testMedian() {
+    CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.vector(2), Tensors.vector(12));
+    CoordinateBoundingBox splitLo = coordinateBoundingBox.splitLo(0);
+    assertEquals(splitLo.min(), Tensors.vector(2));
+    assertEquals(splitLo.max(), Tensors.vector(7));
+    CoordinateBoundingBox splitHi = coordinateBoundingBox.splitHi(0);
+    assertEquals(splitHi.min(), Tensors.vector(7));
+    assertEquals(splitHi.max(), Tensors.vector(12));
   }
 
   @Test

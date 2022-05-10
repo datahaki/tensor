@@ -25,7 +25,7 @@ import ch.alpine.tensor.mat.re.MatrixRankSvd;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Sign;
 
-public class InitTest {
+class InitTest {
   public static SingularValueDecomposition svd(Tensor matrix) {
     Init init = new Init(matrix);
     {

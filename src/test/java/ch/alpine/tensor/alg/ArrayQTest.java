@@ -19,7 +19,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 
-public class ArrayQTest {
+class ArrayQTest {
   @Test
   public void testScalar() {
     assertTrue(ArrayQ.of(RealScalar.ONE));

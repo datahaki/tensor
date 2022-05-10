@@ -12,7 +12,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 
-public class QuantityTensorTest {
+class QuantityTensorTest {
   @Test
   public void testScalar() {
     Tensor tensor = QuantityTensor.of(RealScalar.ONE, Unit.of("N"));

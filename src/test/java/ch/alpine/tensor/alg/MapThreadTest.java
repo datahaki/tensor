@@ -16,7 +16,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
-public class MapThreadTest {
+class MapThreadTest {
   @Test
   public void testEmptyPositive() {
     assertEquals(MapThread.of(l -> l.get(0), Collections.emptyList(), 1), Tensors.empty());

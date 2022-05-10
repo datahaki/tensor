@@ -12,7 +12,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
 
-public class ArcCosTest {
+class ArcCosTest {
   @Test
   public void testReal() {
     assertEquals(ArcCos.of(Scalars.fromString("1")), RealScalar.of(Math.acos(1)));

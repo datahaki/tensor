@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 
-public class ShannonEntropyTest {
+class ShannonEntropyTest {
   @Test
   public void testEvaluation() {
     assertEquals(ShannonEntropy.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);

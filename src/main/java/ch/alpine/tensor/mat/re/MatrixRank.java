@@ -1,11 +1,11 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.qr.GramSchmidt;
 
 /** inspired by

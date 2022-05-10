@@ -39,7 +39,7 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 
-public class GramSchmidtTest {
+class GramSchmidtTest {
   private static void _checkPInv(Tensor pInv, Tensor r, Tensor qInv) {
     Chop._08.requireClose(pInv, LinearSolve.of(r, qInv));
     Chop._08.requireClose(pInv, Inverse.of(r).dot(qInv));

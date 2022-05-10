@@ -11,7 +11,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
 
-public class InfluenceMatrixQTest {
+class InfluenceMatrixQTest {
   @Test
   public void testSimple() {
     Tensor matrix = Tensors.fromString("{{1, 0}, {2, 3}}");

@@ -23,7 +23,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.GaussScalar;
 
-public class MaxTest {
+class MaxTest {
   static Tensor max(List<Tensor> col) {
     return col.stream().reduce(Max::of).get();
   }

@@ -10,7 +10,9 @@ import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 
-public class ScalarParserTest {
+import ch.alpine.tensor.chq.ExactScalarQ;
+
+class ScalarParserTest {
   @Test
   public void testDouble() {
     assertEquals(ScalarParser.of("3.14`30.123"), ScalarParser.of("3.14"));

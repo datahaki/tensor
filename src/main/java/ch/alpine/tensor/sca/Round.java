@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -47,6 +48,10 @@ public enum Round implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof RoundingInterface)
       return ((RoundingInterface) scalar).round();
+    if (scalar instanceof MultiplexScalar) {
+      MultiplexScalar multiplexScalar = (MultiplexScalar) scalar;
+      return multiplexScalar.eachMap(FUNCTION);
+    }
     throw TensorRuntimeException.of(scalar);
   }
 

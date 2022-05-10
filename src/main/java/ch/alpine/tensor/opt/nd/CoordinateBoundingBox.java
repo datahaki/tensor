@@ -100,7 +100,7 @@ public class CoordinateBoundingBox implements Serializable {
   }
 
   private static Scalar median(Clip clip) {
-    return clip.min().add(clip.max()).multiply(RationalScalar.HALF);
+    return clip.min().add(clip.width().multiply(RationalScalar.HALF));
   }
 
   // ---

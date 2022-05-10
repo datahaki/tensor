@@ -24,7 +24,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class RSolveTest {
+class RSolveTest {
   @Test
   public void testSimple2x2() {
     Tensor r = Tensors.fromString("{{2,5},{3,0}}");

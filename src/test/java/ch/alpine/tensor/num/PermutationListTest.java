@@ -16,7 +16,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
 
-public class PermutationListTest {
+class PermutationListTest {
   @Test
   public void testSimple() {
     Tensor perm = Tensors.fromString("{{3, 2}, {1, 6, 7}}").map(s -> s.subtract(RealScalar.ONE));

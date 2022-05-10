@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-public class MergeIllegalTest {
+class MergeIllegalTest {
   @Test
   public void testSerializable() throws ClassNotFoundException, IOException {
     Serialization.copy(MergeIllegal.operator());

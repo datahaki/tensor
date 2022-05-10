@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensors;
 
-public class TensorExtractTest {
+class TensorExtractTest {
   @Test
   public void testEmpty() {
     assertEquals(TensorExtract.of(Tensors.empty(), 0, t -> t), Tensors.empty());

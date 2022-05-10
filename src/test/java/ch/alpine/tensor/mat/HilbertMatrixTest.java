@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.re.Inverse;
 
-public class HilbertMatrixTest {
+class HilbertMatrixTest {
   @Test
   public void testMatrix() {
     Tensor m = HilbertMatrix.of(3, 4);

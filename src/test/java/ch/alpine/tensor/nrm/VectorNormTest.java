@@ -21,7 +21,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
-public class VectorNormTest {
+class VectorNormTest {
   @Test
   public void testOdd() {
     Tensor tensor = Tensors.vector(2.3, 1.0, 3.2);

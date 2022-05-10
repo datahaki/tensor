@@ -13,7 +13,7 @@ import org.junit.jupiter.api.io.TempDir;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class PutTest {
+class PutTest {
   @Test
   public void testUnstructured(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.put");

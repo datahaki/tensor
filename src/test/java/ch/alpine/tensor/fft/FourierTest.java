@@ -18,7 +18,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.red.Entrywise;
 
-public class FourierTest {
+class FourierTest {
   @Test
   public void test2() {
     Tensor vector = Tensors.fromString("{1 + 2*I, 3 + 11*I}");

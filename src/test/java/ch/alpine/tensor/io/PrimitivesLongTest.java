@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class PrimitivesLongTest {
+class PrimitivesLongTest {
   @Test
   public void testToListLong() {
     Tensor tensor = Tensors.vector(-2.5, -2.7, 4.3, 5.4, 6.2, 10.5);

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -32,7 +33,7 @@ import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.spa.SparseArray;
 
-public class TraceTest {
+class TraceTest {
   // from wikipedia
   private static Scalar _tr2Formula(Tensor A) {
     assertTrue(SquareMatrixQ.of(A));
@@ -84,7 +85,7 @@ public class TraceTest {
   public void testSparse() {
     Tensor tensor = SparseArray.of(Quantity.of(0, "m"), 3, 4, 3);
     Tensor traced = Trace.of(tensor, 0, 2);
-    assertTrue(traced instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, traced);
     assertEquals(Dimensions.of(traced), Arrays.asList(4));
   }
 

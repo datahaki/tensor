@@ -17,7 +17,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class MeanTest {
+class MeanTest {
   @Test
   public void testSome() {
     assertEquals(Mean.of(Tensors.vector(3, 5)), RealScalar.of(4));

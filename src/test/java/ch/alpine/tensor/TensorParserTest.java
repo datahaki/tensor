@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -18,7 +19,7 @@ import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.io.StringScalarQ;
 import ch.alpine.tensor.qty.Quantity;
 
-public class TensorParserTest {
+class TensorParserTest {
   @Test
   public void testScalar() {
     assertEquals(Tensors.fromString("123"), RealScalar.of(123));
@@ -106,29 +107,29 @@ public class TensorParserTest {
   @Test
   public void testComma() {
     Tensor scalar = Tensors.fromString("3.12,");
-    assertTrue(scalar instanceof StringScalar);
+    assertInstanceOf(StringScalar.class, scalar);
   }
 
   @Test
   public void testEmptyPost() {
     Tensor vector = Tensors.fromString("{2.2,3,}");
     assertEquals(vector.length(), 3);
-    assertTrue(vector.Get(2) instanceof StringScalar);
+    assertInstanceOf(StringScalar.class, vector.Get(2));
   }
 
   @Test
   public void testEmptyAnte() {
     Tensor vector = Tensors.fromString("{,2.2,3}");
     assertEquals(vector.length(), 3);
-    assertTrue(vector.Get(0) instanceof StringScalar);
+    assertInstanceOf(StringScalar.class, vector.Get(0));
   }
 
   @Test
   public void testEmptyMid() {
     Tensor vector = Tensors.fromString("{2.2,,,3}");
     assertEquals(vector.length(), 4);
-    assertTrue(vector.Get(1) instanceof StringScalar);
-    assertTrue(vector.Get(2) instanceof StringScalar);
+    assertInstanceOf(StringScalar.class, vector.Get(1));
+    assertInstanceOf(StringScalar.class, vector.Get(2));
   }
 
   @Test

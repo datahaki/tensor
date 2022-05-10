@@ -11,7 +11,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.pdf.c.ExponentialDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class PDFTest {
+class PDFTest {
   @Test
   public void testExponentialDistribution() {
     PDF pdf = PDF.of(ExponentialDistribution.of(RationalScalar.of(3, 2)));

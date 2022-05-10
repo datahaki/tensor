@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 
-public class StaticHelperTest {
+class StaticHelperTest {
   @Test
   public void testExponents() {
     assertEquals(StaticHelper.exponent(RealScalar.of(0)), 1);

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import java.awt.Color;
+import java.util.Arrays;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -15,6 +16,13 @@ public class CyclicColorDataIndexed extends BaseColorDataIndexed {
    * @see StrictColorDataIndexed */
   public static ColorDataIndexed of(Tensor tensor) {
     return new CyclicColorDataIndexed(tensor.copy());
+  }
+
+  /** @param colors
+   * @return palette of given colors where index maps to colors[index] */
+  @SafeVarargs
+  public static ColorDataIndexed of(Color... colors) {
+    return new CyclicColorDataIndexed(Tensor.of(Arrays.stream(colors).map(ColorFormat::toVector)));
   }
 
   // ---

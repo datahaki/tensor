@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class UserNameTest {
+class UserNameTest {
   @Test
   public void testGetProperty() {
     String name = System.getProperty("user.name");

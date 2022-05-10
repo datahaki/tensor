@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.num.GaussScalar;
@@ -23,7 +24,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.ArcTan;
 
-public class AbstractRealScalarTest {
+class AbstractRealScalarTest {
   private static final List<Scalar> SCALARS = Arrays.asList( //
       RealScalar.ZERO, RealScalar.ONE, //
       RationalScalar.of(-7, 3), //

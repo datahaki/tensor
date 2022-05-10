@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 
-public class TransposeFailTest {
+class TransposeFailTest {
   @Test
   public void testScalarFail() {
     Tensor v = DoubleScalar.NEGATIVE_INFINITY;

@@ -2,8 +2,8 @@
 package ch.alpine.tensor.mat.re;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.util.Random;
@@ -13,7 +13,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -23,6 +22,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Reverse;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -33,7 +33,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.N;
 
-public class DetTest {
+class DetTest {
   @Test
   public void testEmpty() {
     assertThrows(TensorRuntimeException.class, () -> Det.of(Tensors.empty()));
@@ -226,7 +226,7 @@ public class DetTest {
     int prime = 7879;
     Random random = new Random();
     Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), n, n);
-    assertTrue(Det.of(matrix) instanceof GaussScalar);
+    assertInstanceOf(GaussScalar.class, Det.of(matrix));
   }
 
   @Test

@@ -11,7 +11,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.mat.Tolerance;
 
-public class GudermannianTest {
+class GudermannianTest {
   @Test
   public void testSimple() {
     Scalar scalar = Gudermannian.FUNCTION.apply(RationalScalar.HALF);

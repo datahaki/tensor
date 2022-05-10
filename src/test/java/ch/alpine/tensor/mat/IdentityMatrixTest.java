@@ -2,8 +2,8 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 
@@ -22,7 +22,7 @@ import ch.alpine.tensor.mat.gr.IdempotentQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.spa.SparseArray;
 
-public class IdentityMatrixTest {
+class IdentityMatrixTest {
   @Test
   public void testOneQuantity() {
     Tensor matrix = DiagonalMatrix.of(2, Quantity.of(1, "s"));
@@ -38,18 +38,18 @@ public class IdentityMatrixTest {
   public void testSparse() {
     int n = 7;
     Tensor matrix = IdentityMatrix.sparse(n);
-    assertTrue(matrix instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, matrix);
     Timing timing0 = Timing.started();
     Tensor square = matrix.dot(matrix);
     timing0.stop();
-    assertTrue(square instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, square);
     assertEquals(square, matrix);
     assertEquals(square, IdentityMatrix.of(n));
     IdempotentQ.of(matrix);
     Tensor matrow = matrix.get(1);
-    assertTrue(matrow instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, matrow);
     Tensor squrow = square.get(1);
-    assertTrue(squrow instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, squrow);
     // Tensor re = IdentityMatrix.of(n);
     // Timing timing1 = Timing.started();
     // re.dot(re);

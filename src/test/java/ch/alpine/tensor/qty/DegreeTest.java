@@ -13,7 +13,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.Pi;
 
-public class DegreeTest {
+class DegreeTest {
   private final Unit turns = Unit.of("turns");
 
   @Test

@@ -12,7 +12,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 
-public class MeanFilterTest {
+class MeanFilterTest {
   @Test
   public void testId() {
     Tensor vector1 = Tensors.vector(1, 2, 3, 4, 5, 6);

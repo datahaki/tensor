@@ -9,7 +9,7 @@ import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
 
-public class Givens1Test {
+class Givens1Test {
   @Test
   public void testSimple() {
     Givens1 givens = new Givens1(4, RealScalar.of(0.3), 1, 2);

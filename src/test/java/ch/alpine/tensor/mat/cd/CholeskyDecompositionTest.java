@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -20,6 +19,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.DiagonalMatrix;
@@ -42,14 +42,14 @@ import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.qty.LenientAdd;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.red.LenientAdd;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class CholeskyDecompositionTest {
+class CholeskyDecompositionTest {
   static CholeskyDecomposition checkDecomp(Tensor matrix) {
     int n = matrix.length();
     CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix);
