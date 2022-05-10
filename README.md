@@ -299,7 +299,7 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
   <dependency>
     <groupId>ch.alpine</groupId>
     <artifactId>tensor</artifactId>
-    <version>1.0.5-jdk-11</version>
+    <version>1.0.6-jdk-11</version>
   </dependency>
 </dependencies>
 ```
