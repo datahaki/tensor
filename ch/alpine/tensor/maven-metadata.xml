@@ -3,10 +3,10 @@
   <groupId>ch.alpine</groupId>
   <artifactId>tensor</artifactId>
   <versioning>
-    <release>1.0.5-jdk-11</release>
+    <release>1.0.6-jdk-11</release>
     <versions>
-      <version>1.0.5-jdk-11</version>
+      <version>1.0.6-jdk-11</version>
     </versions>
-    <lastUpdated>20220321165407</lastUpdated>
+    <lastUpdated>20220510135628</lastUpdated>
   </versioning>
 </metadata>
