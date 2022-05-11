@@ -13,7 +13,7 @@ import ch.alpine.tensor.io.ResourceData;
 
 class UnitSystemInflatorTest {
   private final UnitSystemInflator unitSystemInflator = //
-      new UnitSystemInflator(StaticHelper.stringScalarMap(ResourceData.properties("/unit/si.properties")));
+      new UnitSystemInflator(StaticHelper.stringScalarMap(ResourceData.properties("/ch/alpine/tensor/qty/si.properties")));
 
   @Test
   public void testAtoms() {
@@ -44,7 +44,7 @@ class UnitSystemInflatorTest {
   @Test
   public void testSmall() {
     UnitSystemInflator unitSystemInflator = //
-        new UnitSystemInflator(StaticHelper.stringScalarMap(ResourceData.properties("/unit/small.properties")));
+        new UnitSystemInflator(StaticHelper.stringScalarMap(ResourceData.properties("/ch/alpine/tensor/qty/small.properties")));
     Set<String> atoms = unitSystemInflator.atoms();
     assertTrue(atoms.containsAll(Arrays.asList("cd A s K mol kg m".split(" "))));
     assertEquals(atoms.size(), 7);
@@ -52,7 +52,7 @@ class UnitSystemInflatorTest {
 
   @Test
   public void testSmallUS() {
-    UnitSystem unitSystem = UnitSystemInflator.of(ResourceData.properties("/unit/small.properties"));
+    UnitSystem unitSystem = UnitSystemInflator.of(ResourceData.properties("/ch/alpine/tensor/qty/small.properties"));
     assertEquals(unitSystem.apply(Quantity.of(12, "K")), Quantity.of(12, "K"));
     assertTrue(KnownUnitQ.in(unitSystem).test(Unit.of("K")));
   }

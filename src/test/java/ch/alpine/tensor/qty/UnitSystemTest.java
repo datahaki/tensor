@@ -118,7 +118,7 @@ class UnitSystemTest {
 
   @Test
   public void testSmallSi() throws ClassNotFoundException, IOException {
-    Properties properties = ResourceData.properties("/unit/small.properties");
+    Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/small.properties");
     assertFalse(properties.entrySet().isEmpty());
     UnitSystem unitSystem = Serialization.copy(SimpleUnitSystem.from(properties));
     Set<String> set = UnitSystems.base(unitSystem);
@@ -141,35 +141,35 @@ class UnitSystemTest {
 
   @Test
   public void testFail1() {
-    Properties properties = ResourceData.properties("/unit/fail1.properties");
+    Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/fail1.properties");
     assertFalse(properties.entrySet().isEmpty());
     assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
   public void testFail2() {
-    Properties properties = ResourceData.properties("/unit/fail2.properties");
+    Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/fail2.properties");
     assertFalse(properties.entrySet().isEmpty());
     assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
   public void testFail3() {
-    Properties properties = ResourceData.properties("/unit/fail3.properties");
+    Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/fail3.properties");
     assertFalse(properties.entrySet().isEmpty());
     assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
   public void testFail4() {
-    Properties properties = ResourceData.properties("/unit/fail4.properties");
+    Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/fail4.properties");
     assertFalse(properties.entrySet().isEmpty());
     assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
   public void testFail5() {
-    Properties properties = ResourceData.properties("/unit/fail5.properties");
+    Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/fail5.properties");
     assertFalse(properties.entrySet().isEmpty());
     assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }

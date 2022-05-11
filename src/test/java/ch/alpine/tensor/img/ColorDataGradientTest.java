@@ -20,21 +20,21 @@ import ch.alpine.tensor.num.GaussScalar;
 class ColorDataGradientTest {
   @Test
   public void testDimensions() {
-    Tensor tensor = ResourceData.of("/colorscheme/_hue.csv");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
     assertEquals(Dimensions.of(tensor).get(1), Integer.valueOf(4));
     LinearColorDataGradient.of(tensor);
   }
 
   @Test
   public void testSerializable() throws Exception {
-    Tensor tensor = ResourceData.of("/colorscheme/_hue.csv");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
     ColorDataGradient cdg = LinearColorDataGradient.of(tensor);
     Serialization.copy(cdg);
   }
 
   @Test
   public void testModifiable() {
-    Tensor tensor = ResourceData.of("/colorscheme/_hue.csv");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
     ColorDataGradient cdg = LinearColorDataGradient.of(tensor);
     cdg.apply(RealScalar.ONE).set(RealScalar.ONE, 1);
     cdg.apply(RealScalar.ZERO).set(RealScalar.ONE, 1);

@@ -9,7 +9,7 @@ import ch.alpine.tensor.io.ResourceData;
  * <a href="https://reference.wolfram.com/language/ref/Prime.html">Prime</a> */
 public enum Prime {
   ;
-  private static final Tensor LIST = ResourceData.of("/number/primes.vector");
+  private static final Tensor LIST = ResourceData.of("/io/primes.vector");
   public static final int MAX_INDEX = LIST.length();
 
   /** @param n strictly positive

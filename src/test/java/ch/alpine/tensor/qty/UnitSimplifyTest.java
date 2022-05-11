@@ -42,14 +42,14 @@ class UnitSimplifyTest {
 
   @Test
   public void testProperties() {
-    Set<String> set = ResourceData.properties("/unit/simplify1.properties").stringPropertyNames();
+    Set<String> set = ResourceData.properties("/ch/alpine/tensor/qty/simplify1.properties").stringPropertyNames();
     UnitSimplify.from(UnitSystem.SI(), set);
     assertEquals(set.size(), 4);
   }
 
   @Test
   public void testNonUnitFail() {
-    Set<String> set = ResourceData.properties("/unit/simplify2.properties").stringPropertyNames();
+    Set<String> set = ResourceData.properties("/ch/alpine/tensor/qty/simplify2.properties").stringPropertyNames();
     assertThrows(IllegalArgumentException.class, () -> UnitSimplify.from(UnitSystem.SI(), set));
   }
 
