@@ -51,6 +51,20 @@ class HomeDirectoryTest {
   }
 
   @Test
+  public void testMusic() {
+    assertTrue(HomeDirectory.Music().isDirectory());
+    assertEquals(HomeDirectory.Music(), HomeDirectory.file("Music"));
+    assertEquals(HomeDirectory.Music("test.png"), HomeDirectory.file("Music", "test.png"));
+  }
+
+  @Test
+  public void testVideos() {
+    assertTrue(HomeDirectory.Videos().isDirectory());
+    assertEquals(HomeDirectory.Videos(), HomeDirectory.file("Videos"));
+    assertEquals(HomeDirectory.Videos("test.png"), HomeDirectory.file("Videos", "test.png"));
+  }
+
+  @Test
   public void testFreeSpace() {
     File file = HomeDirectory.file();
     assertTrue(0 < file.getFreeSpace());
