@@ -19,14 +19,19 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.BasisTransform;
 import ch.alpine.tensor.alg.Join;
+import ch.alpine.tensor.alg.Reverse;
+import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.HomeDirectory;
 import ch.alpine.tensor.io.Export;
 import ch.alpine.tensor.lie.Symmetrize;
+import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.pd.Orthogonalize;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.nrm.MatrixInfinityNorm;
 import ch.alpine.tensor.pdf.Distribution;
@@ -39,6 +44,19 @@ import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.N;
 
 class EigensystemTest {
+  @Test
+  public void testExact() {
+    // TODO TENSOR ALG tune iterations of phase 1 based on cross checking accuracy to exact result
+    int n = 6;
+    Distribution distribution = UniformDistribution.of(-10, 10);
+    Tensor vector = RandomVariate.of(distribution, n);
+    Tensor diag = DiagonalMatrix.with(vector);
+    Tensor v = Orthogonalize.of(RandomVariate.of(NormalDistribution.standard(), n, n));
+    Tensor matrix = BasisTransform.ofMatrix(diag, v);
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+    Tolerance.CHOP.requireClose(Reverse.of(eigensystem.values()), Sort.of(vector));
+  }
+
   @RepeatedTest(12)
   public void testPhase1Tuning(RepetitionInfo repetitionInfo) throws IOException {
     Distribution distribution = UniformDistribution.of(-2, 2);

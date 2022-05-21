@@ -217,6 +217,10 @@ public class Polynomial extends HornerScheme {
     return of(FullConvolve.of(coeffs, polynomial.coeffs()));
   }
 
+  public Polynomial times(Scalar scalar) {
+    return of(coeffs.multiply(scalar));
+  }
+
   public Polynomial chop(Chop chop) {
     return new Polynomial(truncate(coeffs, chop::isZero));
   }

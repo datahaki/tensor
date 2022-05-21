@@ -15,6 +15,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
+import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Sin;
@@ -82,5 +83,13 @@ class FindRootTest {
   public void testOther() {
     Scalar scalar = FindRoot.linear(Clips.interval(5, 6), RealScalar.of(2), RealScalar.of(-1));
     assertEquals(scalar, RationalScalar.of(5 * 3 + 2, 3));
+  }
+
+  @Test
+  public void testFail() {
+    FindRoot findRoot = FindRoot.of(s -> Sign.isPositiveOrZero(s) //
+        ? RealScalar.ONE
+        : RealScalar.ONE.negate());
+    assertThrows(Exception.class, () -> findRoot.inside(Clips.absolute(1)));
   }
 }
