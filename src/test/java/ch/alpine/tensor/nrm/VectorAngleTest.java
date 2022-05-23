@@ -1,5 +1,5 @@
 // code by jph
-package ch.alpine.tensor.red;
+package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
