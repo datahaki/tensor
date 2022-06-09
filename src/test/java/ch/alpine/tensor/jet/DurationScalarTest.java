@@ -11,6 +11,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -50,6 +51,7 @@ class DurationScalarTest {
   }
 
   @Test
+  @Disabled
   public void testAdd() {
     DateTimeScalar ofs = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DurationScalar len = DurationScalar.of(Duration.ofDays(100));
@@ -140,6 +142,7 @@ class DurationScalarTest {
   }
 
   @Test
+  @Disabled
   public void testToStringParse() {
     DurationScalar ds = DurationScalar.of(Duration.ofSeconds(245234, 123_236_987));
     String string = ds.toString();
@@ -149,6 +152,7 @@ class DurationScalarTest {
   }
 
   @Test
+  @Disabled
   public void testNegateToStringParse() {
     DurationScalar ds = DurationScalar.of(Duration.ofSeconds(245234, 123_236_987).negated());
     String string = ds.toString();

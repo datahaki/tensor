@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,6 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.jet.DateTimeScalar;
-import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -71,7 +69,7 @@ class LogisticDistributionTest {
   @Test
   public void testDateTimeScalar() {
     DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
-    DurationScalar durationScalar = DurationScalar.of(Duration.ofMinutes(123));
+    Scalar durationScalar = Quantity.of(123, "s");
     Distribution distribution = LogisticDistribution.of(dateTimeScalar, durationScalar);
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTimeScalar.class, scalar);

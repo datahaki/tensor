@@ -41,6 +41,13 @@ class TuplesTest {
   }
 
   @Test
+  public void testFive() {
+    Tensor tensor = Tuples.of(Range.of(0, 5), 2);
+    Tensor result = Tensor.of(tensor.stream().filter(OrderedQ::of));
+    assertEquals(result.length(), 15);
+  }
+
+  @Test
   public void testFailNegative() {
     assertThrows(IllegalArgumentException.class, () -> Tuples.of(Tensors.vector(1, 2, 3), -1));
   }

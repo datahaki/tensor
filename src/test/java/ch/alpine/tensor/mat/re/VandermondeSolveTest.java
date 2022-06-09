@@ -8,14 +8,12 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.itp.Fit;
-import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
@@ -89,22 +87,6 @@ class VandermondeSolveTest {
     Tensor ref = LinearSolve.of(Transpose.of(matrix), q, Pivots.FIRST_NON_ZERO);
     Tensor cmp = VandermondeSolve.of(x, q);
     assertEquals(ref, cmp);
-  }
-
-  @Test
-  public void testDurationScalar() {
-    Tensor vector = Tensors.of( //
-        DurationScalar.fromSeconds(RealScalar.of(10)), //
-        DurationScalar.fromSeconds(RealScalar.of(7)) //
-    );
-    Tensor lhs = Transpose.of(VandermondeMatrix.of(vector));
-    Tensor rhs = Tensors.of( //
-        RealScalar.of(13.4), //
-        DurationScalar.fromSeconds(RealScalar.of(4.8)) //
-    );
-    Tensor ref = LinearSolve.of(lhs, rhs, Pivots.FIRST_NON_ZERO);
-    Chop._06.requireClose(lhs.dot(ref), rhs);
-    // VandermondeSolve.of(vector, rhs);
   }
 
   @Test

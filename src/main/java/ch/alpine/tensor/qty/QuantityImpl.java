@@ -10,6 +10,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Arg;
@@ -155,6 +156,8 @@ import ch.alpine.tensor.sca.tri.ArcTan;
     if (scalar instanceof Quantity quantity)
       if (unit.equals(quantity.unit()))
         return ofUnit(value.add(quantity.value()));
+    if (scalar instanceof DateTimeScalar dateTimeScalar)
+      return dateTimeScalar.add(this);
     throw TensorRuntimeException.of(this, scalar);
   }
 

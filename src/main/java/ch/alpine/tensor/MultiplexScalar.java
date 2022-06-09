@@ -35,7 +35,7 @@ public abstract class MultiplexScalar extends AbstractScalar {
    * scalar components are in exact precision.
    * 
    * @param predicate
-   * @return whether all scalar components satify given predicate */
+   * @return whether all scalar components satisfy given predicate */
   public abstract boolean allMatch(Predicate<Scalar> predicate);
 
   @Override

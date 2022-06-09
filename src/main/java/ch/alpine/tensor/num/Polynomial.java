@@ -169,7 +169,7 @@ public class Polynomial extends HornerScheme {
    * @param order non-negative
    * @return this times x^order
    * @throws Exception if given order is negative */
-  // TODO TENSOR misnomer, since moment is intergal[x^n, dP]
+  // TODO TENSOR API misnomer, since moment is intergal[x^n, dP]
   public Polynomial moment(int order) {
     Unit unit = coeffs.length() == 1 //
         ? Unit.ONE
@@ -191,7 +191,7 @@ public class Polynomial extends HornerScheme {
    * identity does not give the multiplicative neutral element!
    * 
    * @return x -> x where units of domain and values are identical as this polynomial */
-  // TODO TENSOR misnomer since units of input and output may not be "identical"
+  // TODO TENSOR API misnomer since units of input and output may not be "identical"
   public Polynomial identity() {
     Tensor c01 = coeffs.extract(0, 2);
     c01.set(Scalar::zero, 0);

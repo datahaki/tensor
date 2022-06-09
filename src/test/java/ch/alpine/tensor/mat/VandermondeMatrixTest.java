@@ -14,7 +14,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
-import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.num.GaussScalar;
 
@@ -56,17 +55,6 @@ class VandermondeMatrixTest {
     assertEquals(Dimensions.of(matrix), Arrays.asList(3, 8));
     int rank = MatrixRank.of(matrix);
     assertEquals(rank, 3);
-  }
-
-  @Test
-  public void testDurationScalar() {
-    Tensor vector = Tensors.of( //
-        DurationScalar.fromSeconds(RealScalar.of(10)), //
-        DurationScalar.fromSeconds(RealScalar.of(13.4)), //
-        DurationScalar.fromSeconds(RealScalar.of(4.8)), //
-        DurationScalar.fromSeconds(RealScalar.of(7)) //
-    );
-    VandermondeMatrix.of(vector, 1);
   }
 
   @Test

@@ -11,15 +11,19 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.Unit;
 
 /** Addition of two instances of {@link DateTimeScalar} results in an exception.
- * Subtraction of two instances of {@link DateTimeScalar} results in a {@link DurationScalar}.
+ * Subtraction of two instances of {@link DateTimeScalar} results in a {@link Quantity}.
  * Negation of a {@link DateTimeScalar} results in an exception.
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
 public class DateTimeScalar extends AbstractScalar implements //
     Comparable<Scalar>, Serializable {
+  private static final Unit UNIT_S = Unit.of("s");
+
   /** @param localDateTime
    * @return
    * @throws Exception if given localDateTime is null */
@@ -37,9 +41,9 @@ public class DateTimeScalar extends AbstractScalar implements //
   @Override // from AbstractScalar
   public Scalar subtract(Tensor tensor) {
     if (tensor instanceof DateTimeScalar dateTimeScalar)
-      return new DurationScalar(Duration.between(dateTimeScalar.localDateTime, localDateTime));
-    if (tensor instanceof DurationScalar durationScalar)
-      return new DateTimeScalar(localDateTime.minus(durationScalar.duration()));
+      return TemporalScalars.seconds(Duration.between(dateTimeScalar.localDateTime, localDateTime));
+    if (tensor instanceof Scalar scalar)
+      return new DateTimeScalar(localDateTime.minus(TemporalScalars.duration(scalar)));
     throw TensorRuntimeException.of(this, tensor);
   }
 
@@ -67,7 +71,7 @@ public class DateTimeScalar extends AbstractScalar implements //
 
   @Override // from Scalar
   public Scalar zero() {
-    return DurationScalar.ZERO;
+    return Quantity.of(0, UNIT_S);
   }
 
   @Override // from Scalar
@@ -77,9 +81,7 @@ public class DateTimeScalar extends AbstractScalar implements //
 
   @Override // from Scalar
   protected Scalar plus(Scalar scalar) {
-    if (scalar instanceof DurationScalar durationScalar)
-      return new DateTimeScalar(localDateTime.plus(durationScalar.duration()));
-    throw TensorRuntimeException.of(this, scalar);
+    return new DateTimeScalar(localDateTime.plus(TemporalScalars.duration(scalar)));
   }
 
   @Override // from Comparable

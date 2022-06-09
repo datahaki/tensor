@@ -9,14 +9,12 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.jet.DateTimeScalar;
-import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.lie.LehmerTensor;
 import ch.alpine.tensor.mat.gr.IdempotentQ;
 import ch.alpine.tensor.qty.Quantity;
@@ -56,18 +54,6 @@ class IdentityMatrixTest {
     // timing1.stop();
     // System.out.println(timing0.seconds());
     // System.out.println(timing1.seconds());
-  }
-
-  @Test
-  public void testDurationScalar() {
-    DurationScalar ds1 = DurationScalar.fromSeconds(RealScalar.of(3));
-    DurationScalar ds2 = DurationScalar.fromSeconds(RealScalar.of(3.123));
-    DurationScalar ds3 = DurationScalar.fromSeconds(RealScalar.of(10));
-    DurationScalar ds4 = DurationScalar.fromSeconds(RealScalar.of(9));
-    Tensor matrix = Tensors.matrix(new Scalar[][] { { ds1, ds2 }, { ds3, ds4 } });
-    Tensor eye = IdentityMatrix.of(matrix);
-    assertEquals(matrix.dot(eye), matrix);
-    assertEquals(eye.dot(matrix), matrix);
   }
 
   @Test
