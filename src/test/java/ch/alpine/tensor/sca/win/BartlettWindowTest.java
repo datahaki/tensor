@@ -7,14 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.sca.Chop;
 
-public class BartlettWindowTest {
+class BartlettWindowTest {
   @Test
   public void testZero() {
     Scalar scalar = BartlettWindow.FUNCTION.apply(RealScalar.ZERO);

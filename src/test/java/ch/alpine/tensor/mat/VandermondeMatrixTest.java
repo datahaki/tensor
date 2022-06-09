@@ -2,23 +2,22 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
-import ch.alpine.tensor.jet.DurationScalar;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class VandermondeMatrixTest {
+class VandermondeMatrixTest {
   @Test
   public void testSimple() {
     Tensor tensor = VandermondeMatrix.of(Tensors.vector(2, 1, 3, 4));
@@ -59,35 +58,24 @@ public class VandermondeMatrixTest {
   }
 
   @Test
-  public void testDurationScalar() {
-    Tensor vector = Tensors.of( //
-        DurationScalar.fromSeconds(RealScalar.of(10)), //
-        DurationScalar.fromSeconds(RealScalar.of(13.4)), //
-        DurationScalar.fromSeconds(RealScalar.of(4.8)), //
-        DurationScalar.fromSeconds(RealScalar.of(7)) //
-    );
-    VandermondeMatrix.of(vector, 1);
-  }
-
-  @Test
   public void testDegrees() {
     VandermondeMatrix.of(Tensors.empty(), 0);
     VandermondeMatrix.of(Tensors.empty(), 1);
-    AssertFail.of(() -> VandermondeMatrix.of(Tensors.empty(), -1));
+    assertThrows(IllegalArgumentException.class, () -> VandermondeMatrix.of(Tensors.empty(), -1));
   }
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> VandermondeMatrix.of(Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> VandermondeMatrix.of(Tensors.empty()));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> VandermondeMatrix.of(RealScalar.ONE));
+    assertThrows(IllegalArgumentException.class, () -> VandermondeMatrix.of(RealScalar.ONE));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> VandermondeMatrix.of(HilbertMatrix.of(3)));
+    assertThrows(ClassCastException.class, () -> VandermondeMatrix.of(HilbertMatrix.of(3)));
   }
 }

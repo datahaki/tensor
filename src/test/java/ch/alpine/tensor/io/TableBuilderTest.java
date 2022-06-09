@@ -2,6 +2,7 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,9 +10,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TableBuilderTest {
+class TableBuilderTest {
   @Test
   public void testEmpty() {
     TableBuilder tableBuilder = new TableBuilder();
@@ -41,7 +41,7 @@ public class TableBuilderTest {
     TableBuilder tableBuilder = new TableBuilder();
     tableBuilder.appendRow(Tensors.vector(1, 2, 3, 4));
     Tensor table = tableBuilder.getTable();
-    AssertFail.of(() -> table.set(RealScalar.of(99), 0, 2));
+    assertThrows(UnsupportedOperationException.class, () -> table.set(RealScalar.of(99), 0, 2));
     assertEquals(table.get(0), Range.of(1, 5));
   }
 
@@ -61,7 +61,7 @@ public class TableBuilderTest {
   public void testFail() {
     TableBuilder tableBuilder = new TableBuilder();
     assertEquals(tableBuilder.getRowCount(), 0);
-    AssertFail.of(() -> tableBuilder.appendRow((Tensor[]) null));
+    assertThrows(NullPointerException.class, () -> tableBuilder.appendRow((Tensor[]) null));
     assertEquals(tableBuilder.getRowCount(), 0);
   }
 }

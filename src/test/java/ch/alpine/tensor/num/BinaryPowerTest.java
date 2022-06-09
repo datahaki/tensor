@@ -2,15 +2,14 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.usr.AssertFail;
-
-public class BinaryPowerTest {
+class BinaryPowerTest {
   @Test
   public void testInteger() {
     GroupInterface<Integer> groupInterface = new GroupInterface<>() {
@@ -45,6 +44,6 @@ public class BinaryPowerTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> new BinaryPower<>(null));
+    assertThrows(NullPointerException.class, () -> new BinaryPower<>(null));
   }
 }

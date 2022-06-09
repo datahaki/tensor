@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -9,11 +10,12 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -23,9 +25,8 @@ import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class GeometricDistributionTest {
+class GeometricDistributionTest {
   @Test
   public void testPdf() {
     PDF pdf = PDF.of(GeometricDistribution.of(RationalScalar.of(1, 3)));
@@ -61,8 +62,8 @@ public class GeometricDistributionTest {
 
   @Test
   public void testFailP() {
-    AssertFail.of(() -> GeometricDistribution.of(RealScalar.ZERO));
-    AssertFail.of(() -> GeometricDistribution.of(RealScalar.of(1.1)));
+    assertThrows(TensorRuntimeException.class, () -> GeometricDistribution.of(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> GeometricDistribution.of(RealScalar.of(1.1)));
   }
 
   @Test
@@ -126,8 +127,8 @@ public class GeometricDistributionTest {
   public void testFailQuantile() {
     Distribution distribution = GeometricDistribution.of(RealScalar.of(0.2));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
@@ -143,7 +144,7 @@ public class GeometricDistributionTest {
 
   @Test
   public void testQuantity() {
-    AssertFail.of(() -> GeometricDistribution.of(Quantity.of(2, "s")));
+    assertThrows(TensorRuntimeException.class, () -> GeometricDistribution.of(Quantity.of(2, "s")));
     final Scalar p = RationalScalar.of(1, 19);
     GeometricDistribution distribution = (GeometricDistribution) GeometricDistribution.of(p);
     try {
@@ -152,7 +153,7 @@ public class GeometricDistributionTest {
     } catch (Exception exception) {
       // ---
     }
-    AssertFail.of(() -> CDF.of(distribution).p_lessEquals(Quantity.of(-2, "s")));
+    assertThrows(TensorRuntimeException.class, () -> CDF.of(distribution).p_lessEquals(Quantity.of(-2, "s")));
   }
 
   private static void _checkCDFNumerics(Distribution distribution) {

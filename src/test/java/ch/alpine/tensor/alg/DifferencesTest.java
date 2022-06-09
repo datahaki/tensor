@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -10,11 +11,11 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class DifferencesTest {
+class DifferencesTest {
   @Test
   public void testVector() {
     Tensor dif = Differences.of(Tensors.vector(3, 2, 9).unmodifiable());
@@ -60,6 +61,6 @@ public class DifferencesTest {
 
   @Test
   public void testScalar() {
-    AssertFail.of(() -> Differences.of(Pi.TWO));
+    assertThrows(TensorRuntimeException.class, () -> Differences.of(Pi.TWO));
   }
 }

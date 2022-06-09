@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.num.Boole;
@@ -21,9 +23,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.pow.Power;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class NegativeBinomialDistributionTest {
+class NegativeBinomialDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(NegativeBinomialDistribution.of(4, RationalScalar.of(1, 3)));
@@ -57,8 +58,8 @@ public class NegativeBinomialDistributionTest {
 
   @Test
   public void testFails() {
-    AssertFail.of(() -> NegativeBinomialDistribution.of(-1, RationalScalar.HALF));
-    AssertFail.of(() -> NegativeBinomialDistribution.of(2, RealScalar.ZERO));
-    AssertFail.of(() -> NegativeBinomialDistribution.of(2, RealScalar.of(1.1)));
+    assertThrows(IllegalArgumentException.class, () -> NegativeBinomialDistribution.of(-1, RationalScalar.HALF));
+    assertThrows(TensorRuntimeException.class, () -> NegativeBinomialDistribution.of(2, RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> NegativeBinomialDistribution.of(2, RealScalar.of(1.1)));
   }
 }

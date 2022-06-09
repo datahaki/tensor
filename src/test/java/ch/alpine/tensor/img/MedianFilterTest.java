@@ -2,17 +2,18 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
+import ch.alpine.tensor.chq.ExactTensorQ;
 
-public class MedianFilterTest {
+class MedianFilterTest {
   @Test
   public void testId() {
     Tensor vector1 = Tensors.vector(1, 2, 3, 4, 5, 6);
@@ -89,11 +90,11 @@ public class MedianFilterTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> MedianFilter.of(RealScalar.of(3), 1));
+    assertThrows(TensorRuntimeException.class, () -> MedianFilter.of(RealScalar.of(3), 1));
   }
 
   @Test
   public void testRadiusFail() {
-    AssertFail.of(() -> MedianFilter.of(Tensors.vector(1, 2, 3, 4), -1));
+    assertThrows(IllegalArgumentException.class, () -> MedianFilter.of(Tensors.vector(1, 2, 3, 4), -1));
   }
 }

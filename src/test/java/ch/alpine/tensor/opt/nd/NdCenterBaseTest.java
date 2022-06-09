@@ -10,7 +10,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 
-public class NdCenterBaseTest {
+class NdCenterBaseTest {
   @Test
   public void test1Norm() throws Exception {
     for (NdCenters ndCenters : NdCenters.values())

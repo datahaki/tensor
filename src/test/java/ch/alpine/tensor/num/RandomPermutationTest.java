@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -22,9 +23,8 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.red.StandardDeviation;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class RandomPermutationTest {
+class RandomPermutationTest {
   @Test
   public void testSimple() {
     for (int count = 0; count < 10; ++count) {
@@ -103,7 +103,7 @@ public class RandomPermutationTest {
 
   @Test
   public void testFails() {
-    AssertFail.of(() -> RandomPermutation.cycles(-1));
-    AssertFail.of(() -> RandomPermutation.of(-1));
+    assertThrows(IllegalArgumentException.class, () -> RandomPermutation.cycles(-1));
+    assertThrows(IllegalArgumentException.class, () -> RandomPermutation.of(-1));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -11,14 +12,14 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.nrm.Normalize;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TotalTest {
+class TotalTest {
   @Test
   public void testTotal() {
     Tensor a = Tensors.vectorLong(7, 2);
@@ -67,12 +68,12 @@ public class TotalTest {
 
   @Test
   public void testOfVectorFail() {
-    AssertFail.of(() -> Total.ofVector(RealScalar.ONE));
-    AssertFail.of(() -> Total.ofVector(HilbertMatrix.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> Total.ofVector(RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> Total.ofVector(HilbertMatrix.of(3)));
   }
 
   @Test
   public void testTotalScalarFail() {
-    AssertFail.of(() -> Total.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Total.of(RealScalar.ONE));
   }
 }

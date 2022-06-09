@@ -2,19 +2,20 @@
 package ch.alpine.tensor.sca.win;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class DirichletWindowTest {
+class DirichletWindowTest {
   @Test
   public void testSimple() {
     ScalarUnaryOperator scalarUnaryOperator = DirichletWindow.FUNCTION;
@@ -40,7 +41,7 @@ public class DirichletWindowTest {
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> DirichletWindow.FUNCTION.apply(Quantity.of(0, "s")));
-    AssertFail.of(() -> DirichletWindow.FUNCTION.apply(Quantity.of(2, "s")));
+    assertThrows(TensorRuntimeException.class, () -> DirichletWindow.FUNCTION.apply(Quantity.of(0, "s")));
+    assertThrows(TensorRuntimeException.class, () -> DirichletWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 }

@@ -2,20 +2,20 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class CoefficientListTest {
+class CoefficientListTest {
   @Test
   public void testSimple() {
     Tensor zeros = Tensors.vector(3);
@@ -61,6 +61,6 @@ public class CoefficientListTest {
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> CoefficientList.of(Tensors.empty()));
+    assertThrows(IndexOutOfBoundsException.class, () -> CoefficientList.of(Tensors.empty()));
   }
 }

@@ -2,8 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
 
@@ -18,7 +17,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class MeanTest {
+class MeanTest {
   @Test
   public void testSome() {
     assertEquals(Mean.of(Tensors.vector(3, 5)), RealScalar.of(4));
@@ -37,12 +36,7 @@ public class MeanTest {
 
   @Test
   public void testEmpty1() {
-    try {
-      Mean.of(Tensors.empty());
-      fail();
-    } catch (Exception exception) {
-      assertTrue(exception instanceof ArithmeticException);
-    }
+    assertThrows(ArithmeticException.class, () -> Mean.of(Tensors.empty()));
   }
 
   @Test

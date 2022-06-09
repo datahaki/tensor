@@ -2,17 +2,16 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
-import ch.alpine.tensor.usr.AssertFail;
-
-public class RenameDirectoryTest {
-  private static boolean isLinux = System.getProperty("os.name").equals("Linux");
-
+class RenameDirectoryTest {
   private static void wrap(File src, File dst) {
     try {
       RenameDirectory.of(src, dst);
@@ -23,12 +22,12 @@ public class RenameDirectoryTest {
 
   @Test
   public void testFailSrcDoesNotExist() {
-    AssertFail.of(() -> wrap(HomeDirectory.file("DOESNOTEXIST"), HomeDirectory.file()));
+    assertThrows(RuntimeException.class, () -> wrap(HomeDirectory.file("DOESNOTEXIST"), HomeDirectory.file()));
   }
 
   @Test
   public void testDstAlreadyExist() {
-    AssertFail.of(() -> wrap(HomeDirectory.Documents(), HomeDirectory.Pictures()));
+    assertThrows(RuntimeException.class, () -> wrap(HomeDirectory.Documents(), HomeDirectory.Pictures()));
   }
 
   @Test
@@ -56,26 +55,24 @@ public class RenameDirectoryTest {
   }
 
   @Test
+  @EnabledOnOs(OS.LINUX)
   public void testRenameToFail() {
-    if (!isLinux)
-      return;
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();
     File folder2 = new File("/etc", getClass().getSimpleName());
-    AssertFail.of(() -> wrap(folder1, folder2));
+    assertThrows(RuntimeException.class, () -> wrap(folder1, folder2));
     folder1.delete();
   }
 
   @Test
+  @EnabledOnOs(OS.LINUX)
   public void testCreateParentFail() {
-    if (!isLinux)
-      return;
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();
     File folder2 = new File("/etc", getClass().getSimpleName() + "/sub");
-    AssertFail.of(() -> wrap(folder1, folder2));
+    assertThrows(RuntimeException.class, () -> wrap(folder1, folder2));
     folder1.delete();
   }
 }

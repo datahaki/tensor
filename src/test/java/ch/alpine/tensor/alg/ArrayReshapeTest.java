@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.List;
@@ -11,9 +12,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ArrayReshapeTest {
+class ArrayReshapeTest {
   @Test
   public void testReshape() {
     Tensor s = Tensors.vector(1, 2, 3, 4, 5, 6);
@@ -40,6 +40,6 @@ public class ArrayReshapeTest {
   public void testFail() {
     Tensor s = Tensors.vector(1, 2, 3, 4, 5, 6);
     ArrayReshape.of(s, 2, 3);
-    AssertFail.of(() -> ArrayReshape.of(s, 3, 3));
+    assertThrows(IllegalArgumentException.class, () -> ArrayReshape.of(s, 3, 3));
   }
 }

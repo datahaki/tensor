@@ -3,15 +3,16 @@ package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.DeterminateScalarQ;
-import ch.alpine.tensor.MachineNumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -21,9 +22,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class DagumDistributionTest {
+class DagumDistributionTest {
   @Test
   public void testCdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(DagumDistribution.of(0.2, 0.3, 0.6));
@@ -58,15 +58,14 @@ public class DagumDistributionTest {
   @Test
   public void testVarianceFail() {
     DagumDistribution distribution = (DagumDistribution) DagumDistribution.of(2.3, 1.2, 0.7);
-    AssertFail.of(() -> distribution.variance());
+    assertThrows(UnsupportedOperationException.class, () -> distribution.variance());
   }
 
   @Test
   public void testMeanIndeterminate() {
     Distribution distribution = DagumDistribution.of(2.3, 1, 0.7);
     Scalar scalar = Mean.of(distribution);
-    assertFalse(MachineNumberQ.of(scalar));
-    assertFalse(DeterminateScalarQ.of(scalar));
+    assertFalse(FiniteScalarQ.of(scalar));
   }
 
   @Test
@@ -84,15 +83,15 @@ public class DagumDistributionTest {
 
   @Test
   public void testFailNonPositive() {
-    AssertFail.of(() -> DagumDistribution.of(0, 2, 3));
-    AssertFail.of(() -> DagumDistribution.of(1, 0, 3));
-    AssertFail.of(() -> DagumDistribution.of(1, 2, 0));
+    assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(0, 2, 3));
+    assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(1, 0, 3));
+    assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(1, 2, 0));
   }
 
   @Test
   public void testFailNegative() {
-    AssertFail.of(() -> DagumDistribution.of(-1, 2, 3));
-    AssertFail.of(() -> DagumDistribution.of(1, -1, 3));
-    AssertFail.of(() -> DagumDistribution.of(1, 2, -1));
+    assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(-1, 2, 3));
+    assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(1, -1, 3));
+    assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(1, 2, -1));
   }
 }

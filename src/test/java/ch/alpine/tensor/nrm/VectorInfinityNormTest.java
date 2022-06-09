@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
 
-public class VectorInfinityNormTest {
+class VectorInfinityNormTest {
   @Test
   public void testOneInfNorm1() {
     Tensor a = Tensors.vector(3, -4);

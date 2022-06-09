@@ -2,6 +2,7 @@
 package ch.alpine.tensor.opt.lp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,10 +11,9 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
-import ch.alpine.tensor.usr.AssertFail;
 
 /** Reference: "Linear and Integer Programming made Easy", 2016 */
-public class LinearProgramTest {
+class LinearProgramTest {
   @Test
   public void testP59a() {
     LinearProgram lpp = LinearProgram.of( //
@@ -43,7 +43,7 @@ public class LinearProgramTest {
         Variables.UNRESTRICTED);
     Tensor sol1 = SimplexCorners.of(linearProgram);
     assertEquals(sol1, Tensors.fromString("{{650/3, 0}}"));
-    AssertFail.of(() -> linearProgram.toggle());
+    assertThrows(RuntimeException.class, () -> linearProgram.toggle());
   }
 
   @Test
@@ -104,6 +104,6 @@ public class LinearProgramTest {
   public void testConstraint() {
     assertEquals(ConstraintType.LESS_EQUALS.flipInequality(), ConstraintType.GREATER_EQUALS);
     assertEquals(ConstraintType.GREATER_EQUALS.flipInequality(), ConstraintType.LESS_EQUALS);
-    AssertFail.of(() -> ConstraintType.EQUALS.flipInequality());
+    assertThrows(RuntimeException.class, () -> ConstraintType.EQUALS.flipInequality());
   }
 }

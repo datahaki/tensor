@@ -2,12 +2,14 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -18,9 +20,8 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TriangularDistributionTest {
+class TriangularDistributionTest {
   @Test
   public void testPdf() {
     Scalar a = RealScalar.of(1);
@@ -64,16 +65,16 @@ public class TriangularDistributionTest {
   public void testExactFail() {
     TriangularDistribution.of(RealScalar.of(3), RealScalar.of(3), RealScalar.of(5));
     TriangularDistribution.of(RealScalar.of(3), RealScalar.of(5), RealScalar.of(5));
-    AssertFail.of(() -> TriangularDistribution.of(RealScalar.of(3), RealScalar.of(3), RealScalar.of(3)));
-    AssertFail.of(() -> TriangularDistribution.of(RealScalar.of(3), RealScalar.of(4), RealScalar.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> TriangularDistribution.of(RealScalar.of(3), RealScalar.of(3), RealScalar.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> TriangularDistribution.of(RealScalar.of(3), RealScalar.of(4), RealScalar.of(3)));
   }
 
   @Test
   public void testNumericFail() {
     TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(3.), RealScalar.of(5.));
     TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(5.), RealScalar.of(5.));
-    AssertFail.of(() -> TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(3.), RealScalar.of(3.)));
-    AssertFail.of(() -> TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(4.), RealScalar.of(3.)));
+    assertThrows(TensorRuntimeException.class, () -> TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(3.), RealScalar.of(3.)));
+    assertThrows(TensorRuntimeException.class, () -> TriangularDistribution.of(RealScalar.of(3.), RealScalar.of(4.), RealScalar.of(3.)));
   }
 
   @Test
@@ -173,7 +174,7 @@ public class TriangularDistributionTest {
 
   @Test
   public void testWithFail() {
-    AssertFail.of(() -> TriangularDistribution.with(RealScalar.of(0), RealScalar.of(0)));
-    AssertFail.of(() -> TriangularDistribution.with(RealScalar.of(0), RealScalar.of(-1)));
+    assertThrows(TensorRuntimeException.class, () -> TriangularDistribution.with(RealScalar.of(0), RealScalar.of(0)));
+    assertThrows(TensorRuntimeException.class, () -> TriangularDistribution.with(RealScalar.of(0), RealScalar.of(-1)));
   }
 }

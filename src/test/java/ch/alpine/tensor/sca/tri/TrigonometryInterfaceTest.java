@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.function.Function;
 
@@ -11,15 +12,15 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.UnitSystem;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TrigonometryInterfaceTest {
+class TrigonometryInterfaceTest {
   private static void _check(Scalar value, ScalarUnaryOperator suo, Function<Double, Double> f) {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(value, "rad"));
     Scalar result = suo.apply(scalar);
@@ -65,7 +66,7 @@ public class TrigonometryInterfaceTest {
 
   @Test
   public void testFails() {
-    AssertFail.of(() -> Sin.of(Quantity.of(1.2, "m")));
-    AssertFail.of(() -> Sin.of(GaussScalar.of(2, 7)));
+    assertThrows(TensorRuntimeException.class, () -> Sin.of(Quantity.of(1.2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> Sin.of(GaussScalar.of(2, 7)));
   }
 }

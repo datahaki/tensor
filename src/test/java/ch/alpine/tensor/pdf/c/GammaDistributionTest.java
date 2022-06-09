@@ -2,6 +2,8 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -12,14 +14,14 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class GammaDistributionTest {
+class GammaDistributionTest {
   @Test
   public void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(GammaDistribution.of(RealScalar.of(1.123), RealScalar.of(2.3)));
@@ -31,7 +33,7 @@ public class GammaDistributionTest {
   @Test
   public void testExp() {
     Distribution distribution = GammaDistribution.of(RealScalar.of(1.0), RealScalar.of(2.3));
-    assertTrue(distribution instanceof ExponentialDistribution);
+    assertInstanceOf(ExponentialDistribution.class, distribution);
   }
 
   @Test
@@ -53,7 +55,7 @@ public class GammaDistributionTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> GammaDistribution.of(RealScalar.of(-1.0), RealScalar.of(2.3)));
-    AssertFail.of(() -> GammaDistribution.of(RealScalar.of(0.1), RealScalar.of(-2.3)));
+    assertThrows(TensorRuntimeException.class, () -> GammaDistribution.of(RealScalar.of(-1.0), RealScalar.of(2.3)));
+    assertThrows(TensorRuntimeException.class, () -> GammaDistribution.of(RealScalar.of(0.1), RealScalar.of(-2.3)));
   }
 }

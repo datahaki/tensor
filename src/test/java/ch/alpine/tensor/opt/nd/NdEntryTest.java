@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensors;
 
-public class NdEntryTest {
+class NdEntryTest {
   @Test
   public void testSimple() {
     NdEntry<Integer> ndEntry = new NdEntry<>(Tensors.vector(1, 2, 3), 123);

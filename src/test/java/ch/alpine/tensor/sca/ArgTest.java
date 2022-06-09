@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -14,14 +15,14 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.tri.ArcTan;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ArgTest {
+class ArgTest {
   @Test
   public void testArg() {
     Scalar scalar = ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));
@@ -55,12 +56,12 @@ public class ArgTest {
 
   @Test
   public void testQuaternionFail() {
-    AssertFail.of(() -> Arg.FUNCTION.apply(Quaternion.of(1, 2, 3, 4)));
+    assertThrows(TensorRuntimeException.class, () -> Arg.FUNCTION.apply(Quaternion.of(1, 2, 3, 4)));
   }
 
   @Test
   public void testGaussScalarFail() {
     Scalar scalar = GaussScalar.of(1, 7);
-    AssertFail.of(() -> Arg.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Arg.of(scalar));
   }
 }

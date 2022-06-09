@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.IntSummaryStatistics;
@@ -12,6 +13,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -19,9 +21,8 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ScalarSummaryStatisticsTest {
+class ScalarSummaryStatisticsTest {
   @Test
   public void testMembers() {
     ScalarSummaryStatistics scalarSummaryStatistics = Tensors.vector(1, 4, 2, 8, 3, 10) //
@@ -127,6 +128,6 @@ public class ScalarSummaryStatisticsTest {
     Scalar sum = sss1.getSum();
     assertEquals(sum, GaussScalar.of(4, 7));
     assertEquals(sss1.getCount(), 4);
-    AssertFail.of(() -> sss1.getAverage());
+    assertThrows(TensorRuntimeException.class, () -> sss1.getAverage());
   }
 }

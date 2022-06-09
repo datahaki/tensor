@@ -12,7 +12,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class DenmanBeaversTest {
+class DenmanBeaversTest {
   @Test
   public void testSimple() {
     Random random = new Random(3);

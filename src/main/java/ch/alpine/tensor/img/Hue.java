@@ -4,11 +4,11 @@ package ch.alpine.tensor.img;
 
 import java.awt.Color;
 
-import ch.alpine.tensor.NumberQ;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 
 /** standalone hsv to rgb conversion
  * 
- * an input scalar that does not satisfy {@link NumberQ} is mapped to a transparent color
+ * an input scalar that does not satisfy {@link FiniteScalarQ} is mapped to a transparent color
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Hue.html">Hue</a> */

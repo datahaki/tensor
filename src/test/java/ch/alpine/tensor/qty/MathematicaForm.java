@@ -26,8 +26,8 @@ public enum MathematicaForm {
   private final Map<String, String> map = new HashMap<>();
 
   private MathematicaForm() {
-    Set<String> block = ResourceData.properties("/unit/si.properties").stringPropertyNames();
-    Properties properties = ResourceData.properties("/unit/names.properties");
+    Set<String> block = ResourceData.properties("/ch/alpine/tensor/qty/si.properties").stringPropertyNames();
+    Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/names.properties");
     for (String key : properties.stringPropertyNames()) {
       if (key.charAt(0) == UnitSystemInflator.INFLATOR) {
         String value = properties.getProperty(key);

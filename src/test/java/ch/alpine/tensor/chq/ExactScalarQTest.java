@@ -1,19 +1,27 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.chq;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.DecimalScalar;
+import ch.alpine.tensor.DoubleScalar;
+import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ExactScalarQTest {
+class ExactScalarQTest {
   @Test
   public void testPositive() {
     assertTrue(ExactScalarQ.of(RealScalar.ZERO));
@@ -50,6 +58,11 @@ public class ExactScalarQTest {
   }
 
   @Test
+  public void testQuantityExponent() {
+    assertTrue(ExactScalarQ.of(Quantity.of(3, "m^2.2")));
+  }
+
+  @Test
   public void testAny() {
     assertTrue(ExactScalarQ.any(Tensors.vector(1., 1, 1.)));
     assertFalse(ExactScalarQ.any(Tensors.vectorDouble(1, 2, 3)));
@@ -63,11 +76,11 @@ public class ExactScalarQTest {
 
   @Test
   public void testRequireFail() {
-    AssertFail.of(() -> ExactScalarQ.require(DoubleScalar.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> ExactScalarQ.require(DoubleScalar.of(3)));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> ExactScalarQ.of(null));
+    assertThrows(NullPointerException.class, () -> ExactScalarQ.of(null));
   }
 }

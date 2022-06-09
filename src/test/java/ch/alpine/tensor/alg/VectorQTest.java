@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -11,12 +12,12 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class VectorQTest {
+class VectorQTest {
   @Test
   public void testScalar() {
     assertFalse(VectorQ.of(RealScalar.ONE));
@@ -58,20 +59,20 @@ public class VectorQTest {
 
   @Test
   public void testRequireFail() {
-    AssertFail.of(() -> VectorQ.requireLength(Tensors.vector(1, 2, 3), 4));
-    AssertFail.of(() -> VectorQ.requireLength(Tensors.vector(1, 2, 3), -3));
-    AssertFail.of(() -> VectorQ.requireLength(RealScalar.ZERO, Scalar.LENGTH));
+    assertThrows(TensorRuntimeException.class, () -> VectorQ.requireLength(Tensors.vector(1, 2, 3), 4));
+    assertThrows(TensorRuntimeException.class, () -> VectorQ.requireLength(Tensors.vector(1, 2, 3), -3));
+    assertThrows(TensorRuntimeException.class, () -> VectorQ.requireLength(RealScalar.ZERO, Scalar.LENGTH));
   }
 
   @Test
   public void testEnsure() {
     Tensor empty = VectorQ.require(Tensors.empty());
     assertTrue(Tensors.isEmpty(empty));
-    AssertFail.of(() -> VectorQ.require(HilbertMatrix.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> VectorQ.require(HilbertMatrix.of(3)));
   }
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> VectorQ.ofLength(Tensors.empty(), Scalar.LENGTH));
+    assertThrows(IllegalArgumentException.class, () -> VectorQ.ofLength(Tensors.empty(), Scalar.LENGTH));
   }
 }

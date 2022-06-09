@@ -2,16 +2,17 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class MeanFilterTest {
+class MeanFilterTest {
   @Test
   public void testId() {
     Tensor vector1 = Tensors.vector(1, 2, 3, 4, 5, 6);
@@ -60,7 +61,7 @@ public class MeanFilterTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> MeanFilter.of(RealScalar.of(3), 1));
+    assertThrows(TensorRuntimeException.class, () -> MeanFilter.of(RealScalar.of(3), 1));
   }
 
   @Test
@@ -68,11 +69,11 @@ public class MeanFilterTest {
     Tensor matrix = Tensors.fromString("{{1, 2, 3, 3, {3, 2, 3}}, {3}, {0, 0, 0}}");
     matrix.flatten(-1).forEach(RationalScalar.class::cast); // test if parsing went ok
     MeanFilter.of(matrix, 0);
-    AssertFail.of(() -> MeanFilter.of(matrix, 1));
+    assertThrows(IllegalArgumentException.class, () -> MeanFilter.of(matrix, 1));
   }
 
   @Test
   public void testRadiusFail() {
-    AssertFail.of(() -> MeanFilter.of(Tensors.vector(1, 2, 3, 4), -1));
+    assertThrows(IllegalArgumentException.class, () -> MeanFilter.of(Tensors.vector(1, 2, 3, 4), -1));
   }
 }

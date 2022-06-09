@@ -1,11 +1,11 @@
 // code by jph
 package ch.alpine.tensor.mat.gr;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.pi.PseudoInverse;
 import ch.alpine.tensor.mat.qr.GramSchmidt;
 import ch.alpine.tensor.mat.qr.QRDecomposition;
@@ -23,7 +23,8 @@ import ch.alpine.tensor.mat.qr.QRDecomposition;
  * "Biinvariant Generalized Barycentric Coordinates on Lie Groups"
  * by Jan Hakenberg, 2020
  * 
- * @see Mahalanobis */
+ * @see Mahalanobis
+ * @see InfluenceMatrixQ */
 public interface InfluenceMatrix {
   /** @param design matrix
    * @return if the given matrix is in exact precision and has maximal rank,

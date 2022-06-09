@@ -3,8 +3,9 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigDecimal;
 
@@ -17,10 +18,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class QuantityCompareTest {
+class QuantityCompareTest {
   private static void _checkEquals(Scalar s1, Scalar s2, boolean actual) {
     assertEquals(s1.equals(s2), s2.equals(s1));
     assertEquals(s1.equals(s2), actual);
@@ -53,8 +54,8 @@ public class QuantityCompareTest {
     Scalar q1 = Quantity.of(0, "s");
     Scalar q2 = Quantity.of(0, "rad");
     assertFalse(q1.equals(q2));
-    AssertFail.of(() -> Scalars.compare(q1, q2));
-    AssertFail.of(() -> Scalars.compare(RealScalar.ZERO, q2));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.compare(q1, q2));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.compare(RealScalar.ZERO, q2));
   }
 
   @Test
@@ -91,17 +92,12 @@ public class QuantityCompareTest {
 
   @Test
   public void testCompareFail() {
-    try {
-      _checkCompareTo(Quantity.of(2, "m"), Quantity.of(2, "kg"), Integer.compare(2, 2));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> _checkCompareTo(Quantity.of(2, "m"), Quantity.of(2, "kg"), Integer.compare(2, 2)));
   }
 
   @Test
   public void testCompareFail2() {
-    AssertFail.of(() -> Scalars.compare(DoubleScalar.of(3.14), Quantity.of(0, "m*s")));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.compare(DoubleScalar.of(3.14), Quantity.of(0, "m*s")));
   }
 
   @Test
@@ -111,7 +107,7 @@ public class QuantityCompareTest {
     Scalar qs2 = Quantity.of(0, "kg");
     Scalar qs3 = Quantity.of(0, "s");
     Scalar qs4 = Quantity.of(0, "");
-    assertTrue(qs4 instanceof RealScalar);
+    assertInstanceOf(RealScalar.class, qs4);
     Tensor vec = Tensors.of(qs0, qs1, qs2, qs3, qs4);
     assertEquals(vec.stream().distinct().count(), 4);
   }

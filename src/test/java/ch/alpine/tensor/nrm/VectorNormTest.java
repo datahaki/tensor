@@ -2,6 +2,7 @@
 package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -18,9 +20,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class VectorNormTest {
+class VectorNormTest {
   @Test
   public void testOdd() {
     Tensor tensor = Tensors.vector(2.3, 1.0, 3.2);
@@ -81,24 +82,24 @@ public class VectorNormTest {
 
   @Test
   public void testNormPFail() {
-    AssertFail.of(() -> VectorNorm.of(0.99));
+    assertThrows(TensorRuntimeException.class, () -> VectorNorm.of(0.99));
   }
 
   @Test
   public void testMatrixFail() {
     TensorScalarFunction tensorScalarFunction = VectorNorm.of(2.6);
-    AssertFail.of(() -> tensorScalarFunction.apply(IdentityMatrix.of(2)));
+    assertThrows(ClassCastException.class, () -> tensorScalarFunction.apply(IdentityMatrix.of(2)));
   }
 
   @Test
   public void testScalarFail() {
     TensorScalarFunction tensorScalarFunction = VectorNorm.of(2.6);
-    AssertFail.of(() -> tensorScalarFunction.apply(RealScalar.of(12)));
+    assertThrows(TensorRuntimeException.class, () -> tensorScalarFunction.apply(RealScalar.of(12)));
   }
 
   @Test
   public void testPNullFail() {
-    AssertFail.of(() -> VectorNorm.of((Number) null));
-    AssertFail.of(() -> VectorNorm.of((Scalar) null));
+    assertThrows(NullPointerException.class, () -> VectorNorm.of((Number) null));
+    assertThrows(NullPointerException.class, () -> VectorNorm.of((Scalar) null));
   }
 }

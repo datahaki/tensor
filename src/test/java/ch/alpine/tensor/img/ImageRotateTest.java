@@ -2,10 +2,12 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.VectorQ;
@@ -14,9 +16,8 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.red.Nest;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ImageRotateTest {
+class ImageRotateTest {
   @Test
   public void testSimple() {
     Tensor tensor = ImageRotate.of(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
@@ -63,25 +64,25 @@ public class ImageRotateTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> ImageRotate.of(Pi.HALF));
-    AssertFail.of(() -> ImageRotate.cw(Pi.HALF));
-    AssertFail.of(() -> ImageRotate._180(Pi.HALF));
+    assertThrows(TensorRuntimeException.class, () -> ImageRotate.of(Pi.HALF));
+    assertThrows(TensorRuntimeException.class, () -> ImageRotate.cw(Pi.HALF));
+    assertThrows(TensorRuntimeException.class, () -> ImageRotate._180(Pi.HALF));
   }
 
   @Test
   public void testVectorFail() {
     Tensor vector = Range.of(1, 4);
     VectorQ.requireLength(vector, 3);
-    AssertFail.of(() -> ImageRotate.of(vector));
-    AssertFail.of(() -> ImageRotate.cw(vector));
-    AssertFail.of(() -> ImageRotate._180(vector));
+    assertThrows(IllegalArgumentException.class, () -> ImageRotate.of(vector));
+    assertThrows(IllegalArgumentException.class, () -> ImageRotate.cw(vector));
+    assertThrows(IllegalArgumentException.class, () -> ImageRotate._180(vector));
   }
 
   @Test
   public void testUnstructuredFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
-    AssertFail.of(() -> ImageRotate.of(tensor));
-    AssertFail.of(() -> ImageRotate.cw(tensor));
-    AssertFail.of(() -> ImageRotate._180(tensor));
+    assertThrows(TensorRuntimeException.class, () -> ImageRotate.of(tensor));
+    assertThrows(TensorRuntimeException.class, () -> ImageRotate.cw(tensor));
+    assertThrows(TensorRuntimeException.class, () -> ImageRotate._180(tensor));
   }
 }

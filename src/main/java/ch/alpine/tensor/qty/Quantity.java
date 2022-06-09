@@ -11,7 +11,6 @@ import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ArgInterface;
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.api.ConjugateInterface;
-import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.ext.ObjectFormat;
 import ch.alpine.tensor.io.CsvFormat;
@@ -64,7 +63,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
  * <a href="https://reference.wolfram.com/language/ref/Quantity.html">Quantity</a> */
 public interface Quantity extends Scalar, //
     AbsInterface, ArcTanInterface, ArgInterface, Comparable<Scalar>, ComplexEmbedding, //
-    ConjugateInterface, PowerInterface, RoundingInterface, SignInterface, SqrtInterface {
+    ConjugateInterface, PowerInterface, SignInterface, SqrtInterface {
   char UNIT_OPENING_BRACKET = '[';
   char UNIT_CLOSING_BRACKET = ']';
 

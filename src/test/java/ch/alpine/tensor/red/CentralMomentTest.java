@@ -2,24 +2,24 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class CentralMomentTest {
+class CentralMomentTest {
   @Test
   public void testVarious() {
     Tensor tensor = Tensors.vector(10, 2, 3, 4, 1);
@@ -37,7 +37,7 @@ public class CentralMomentTest {
     ExactScalarQ.require(scalar);
     assertEquals(scalar, RationalScalar.of(326, 729));
     assertEquals(CentralMoment.of(distribution, 2), Variance.of(distribution));
-    AssertFail.of(() -> CentralMoment.of(distribution, -1));
+    assertThrows(IllegalArgumentException.class, () -> CentralMoment.of(distribution, -1));
   }
 
   @Test
@@ -45,6 +45,14 @@ public class CentralMomentTest {
     Tensor tensor = Tensors.vector(10, 2, 3, 4, 1);
     Scalar result = CentralMoment.of(tensor, 1.3);
     Scalar gndtru = Scalars.fromString("1.1567572194352718 - 1.2351191805935866* I");
+    Tolerance.CHOP.requireClose(result, gndtru);
+  }
+
+  @Test
+  public void testNegative() {
+    Tensor tensor = Tensors.vector(-10, -2, 3, 4);
+    Scalar result = CentralMoment.of(tensor, -3.3);
+    Scalar gndtru = Scalars.fromString("-0.3766679353623411 + 0.5227888787805336* I");
     Tolerance.CHOP.requireClose(result, gndtru);
   }
 
@@ -57,11 +65,11 @@ public class CentralMomentTest {
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> CentralMoment.of(Tensors.empty(), 2));
+    assertThrows(ArithmeticException.class, () -> CentralMoment.of(Tensors.empty(), 2));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> CentralMoment.of(HilbertMatrix.of(2, 3), RealScalar.of(2)));
+    assertThrows(ClassCastException.class, () -> CentralMoment.of(HilbertMatrix.of(2, 3), RealScalar.of(2)));
   }
 }

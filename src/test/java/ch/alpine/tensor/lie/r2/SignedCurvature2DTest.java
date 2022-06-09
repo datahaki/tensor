@@ -3,17 +3,18 @@ package ch.alpine.tensor.lie.r2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class SignedCurvature2DTest {
+class SignedCurvature2DTest {
   @Test
   public void testCounterClockwise() {
     Tensor a = Tensors.vector(1, 0);
@@ -69,6 +70,6 @@ public class SignedCurvature2DTest {
     Tensor a = Tensors.vector(1, 1, 0);
     Tensor b = Tensors.vector(1, 2, 1);
     Tensor c = Tensors.vector(1, 3, 2);
-    AssertFail.of(() -> SignedCurvature2D.of(a, b, c));
+    assertThrows(TensorRuntimeException.class, () -> SignedCurvature2D.of(a, b, c));
   }
 }

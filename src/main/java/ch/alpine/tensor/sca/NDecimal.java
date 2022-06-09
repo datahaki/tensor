@@ -2,7 +2,6 @@
 package ch.alpine.tensor.sca;
 
 import java.math.MathContext;
-import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.NInterface;
@@ -15,9 +14,7 @@ import ch.alpine.tensor.api.NInterface;
   }
 
   @Override
-  public Scalar apply(Scalar scalar) {
-    return scalar instanceof NInterface nInterface //
-        ? nInterface.n(mathContext)
-        : Objects.requireNonNull(scalar);
+  protected Scalar numeric(NInterface nInterface) {
+    return nInterface.n(mathContext);
   }
 }

@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.SecureRandom;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.re.Det;
@@ -19,9 +21,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class QuaternionToRotationMatrixTest {
+class QuaternionToRotationMatrixTest {
   private static final Tensor ID3 = IdentityMatrix.of(3);
 
   @Test
@@ -69,7 +70,7 @@ public class QuaternionToRotationMatrixTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> QuaternionToRotationMatrix.of(Quaternion.of(0, 0, 0, 0)));
-    AssertFail.of(() -> QuaternionToRotationMatrix.of(Quaternion.of(0.0, 0.0, 0.0, 0.0)));
+    assertThrows(TensorRuntimeException.class, () -> QuaternionToRotationMatrix.of(Quaternion.of(0, 0, 0, 0)));
+    assertThrows(TensorRuntimeException.class, () -> QuaternionToRotationMatrix.of(Quaternion.of(0.0, 0.0, 0.0, 0.0)));
   }
 }

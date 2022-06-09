@@ -2,12 +2,14 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -17,9 +19,8 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class MeanDeviationTest {
+class MeanDeviationTest {
   @Test
   public void testMathematica1() {
     Scalar value = MeanDeviation.ofVector(Tensors.fromString("{1, 2, 3, 7}"));
@@ -42,21 +43,21 @@ public class MeanDeviationTest {
 
   @Test
   public void testVectorFail() {
-    AssertFail.of(() -> MeanDeviation.ofVector(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> MeanDeviation.ofVector(RealScalar.ONE));
   }
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> MeanDeviation.ofVector(Tensors.empty()));
+    assertThrows(ArithmeticException.class, () -> MeanDeviation.ofVector(Tensors.empty()));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> MeanDeviation.ofVector(HilbertMatrix.of(3, 4)));
+    assertThrows(ClassCastException.class, () -> MeanDeviation.ofVector(HilbertMatrix.of(3, 4)));
   }
 
   @Test
   public void testTensorFail() {
-    AssertFail.of(() -> MeanDeviation.ofVector(LeviCivitaTensor.of(3)));
+    assertThrows(ClassCastException.class, () -> MeanDeviation.ofVector(LeviCivitaTensor.of(3)));
   }
 }

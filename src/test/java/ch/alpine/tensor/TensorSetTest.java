@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -18,9 +19,8 @@ import ch.alpine.tensor.alg.TensorRank;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.red.Total;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TensorSetTest {
+class TensorSetTest {
   @Test
   public void testSetScalar() {
     Tensor eye = IdentityMatrix.of(5);
@@ -49,7 +49,7 @@ public class TensorSetTest {
     matrix.set(Total::ofVector, 2);
     assertFalse(eye.equals(matrix));
     assertEquals(matrix, Tensors.fromString("{{1, 1/2, 1/3}, {1/2, 1/3, 1/4}, 47/60}"));
-    AssertFail.of(() -> eye.set(Total::ofVector, Tensor.ALL, 2));
+    assertThrows(TensorRuntimeException.class, () -> eye.set(Total::ofVector, Tensor.ALL, 2));
   }
 
   @Test
@@ -113,9 +113,9 @@ public class TensorSetTest {
   public void testSetAllFail() {
     Tensor a = Tensors.vector(0, 1, 3, 4);
     Tensor c = a.copy();
-    AssertFail.of(() -> a.set(Tensors.vector(5, 6, 7, 8, 9), Tensor.ALL));
+    assertThrows(IllegalArgumentException.class, () -> a.set(Tensors.vector(5, 6, 7, 8, 9), Tensor.ALL));
     assertEquals(a, c);
-    AssertFail.of(() -> a.set(Tensors.vector(5, 6, 7), Tensor.ALL));
+    assertThrows(IllegalArgumentException.class, () -> a.set(Tensors.vector(5, 6, 7), Tensor.ALL));
     assertEquals(a, c);
   }
 
@@ -207,12 +207,12 @@ public class TensorSetTest {
   @Test
   public void testSetTensorLevel0() {
     Tensor vector = Tensors.vector(2, 3, 4);
-    AssertFail.of(() -> vector.set(RealScalar.ONE));
+    assertThrows(IllegalArgumentException.class, () -> vector.set(RealScalar.ONE));
   }
 
   @Test
   public void testSetFunctionLevel0() {
     Tensor vector = Tensors.vector(2, 3, 4);
-    AssertFail.of(() -> vector.set(t -> RealScalar.ONE));
+    assertThrows(IllegalArgumentException.class, () -> vector.set(t -> RealScalar.ONE));
   }
 }

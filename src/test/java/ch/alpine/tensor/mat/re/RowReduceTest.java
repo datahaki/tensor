@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.re;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,9 +16,8 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class RowReduceTest {
+class RowReduceTest {
   // from Mathematica, RowReduce Applications: solving a linear system
   @Test
   public void testReduce1() {
@@ -99,11 +99,11 @@ public class RowReduceTest {
   @Test
   public void testUnstructuredFail() {
     Tensor matrix = Tensors.fromString("{{}, {2, 3}}");
-    AssertFail.of(() -> RowReduce.of(matrix));
+    assertThrows(IndexOutOfBoundsException.class, () -> RowReduce.of(matrix));
   }
 
   @Test
   public void testVectorFail() {
-    AssertFail.of(() -> RowReduce.of(Tensors.vector(1, 2, 3)));
+    assertThrows(IllegalArgumentException.class, () -> RowReduce.of(Tensors.vector(1, 2, 3)));
   }
 }

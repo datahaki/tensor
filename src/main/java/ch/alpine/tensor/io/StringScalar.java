@@ -26,7 +26,8 @@ import ch.alpine.tensor.TensorRuntimeException;
  * For example, Mathematica::{"Hello", "World"}.
  * Whether this convention will adopted in the tensor library at some point
  * in the future is open for discussion. */
-public class StringScalar extends AbstractScalar implements Comparable<Scalar>, Serializable {
+public class StringScalar extends AbstractScalar implements //
+    Comparable<Scalar>, Serializable {
   /** instance of string scalar with empty string "" as value */
   public static final Scalar EMPTY = of("");
 

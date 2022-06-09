@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -14,10 +15,10 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class UnitImplTest {
+class UnitImplTest {
   @Test
   public void testMap() {
     Unit unit = Unit.of("kg^2*m^-1");
@@ -38,7 +39,7 @@ public class UnitImplTest {
   @Test
   public void testMultiplyFail() {
     Unit unit = Unit.of("kg^2*m^-1");
-    AssertFail.of(() -> unit.multiply(Quantity.of(3, "s")));
+    assertThrows(TensorRuntimeException.class, () -> unit.multiply(Quantity.of(3, "s")));
   }
 
   @Test
@@ -65,7 +66,7 @@ public class UnitImplTest {
   @Test
   public void testUnmodifiableMap() {
     Unit unit = Unit.of("kg^2*m^-1");
-    AssertFail.of(() -> unit.map().clear());
+    assertThrows(UnsupportedOperationException.class, () -> unit.map().clear());
   }
 
   @Test

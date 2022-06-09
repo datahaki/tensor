@@ -2,15 +2,17 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import org.junit.jupiter.api.Test;
 
-public class TensorDotTest {
+import ch.alpine.tensor.chq.ExactTensorQ;
+
+class TensorDotTest {
   @Test
   public void testDotEmpty() {
     Tensor a = Tensors.empty().dot(Tensors.empty());
-    assertTrue(ScalarQTest.of(a));
+    assertInstanceOf(Scalar.class, a);
     assertEquals(a, RealScalar.ZERO);
     assertEquals(a, DoubleScalar.of(0));
     assertEquals(RealScalar.ZERO, a);
@@ -36,7 +38,7 @@ public class TensorDotTest {
   public void testDot4() {
     Tensor c = Tensors.vectorLong(1, 2, 6);
     Tensor d = Tensors.vectorLong(3, 4, 5);
-    assertTrue(c.dot(d) instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, c.dot(d));
     assertEquals(c.dot(d), RationalScalar.of(3 + 8 + 30, 1));
   }
 
@@ -44,7 +46,7 @@ public class TensorDotTest {
   public void testDot5() {
     Tensor c = Tensors.vectorDouble(1, 2, 6.);
     Tensor d = Tensors.vectorLong(3, 4, 5);
-    assertTrue(c.dot(d) instanceof DoubleScalar);
+    assertInstanceOf(DoubleScalar.class, c.dot(d));
     assertEquals(c.dot(d), RationalScalar.of(3 + 8 + 30, 1));
   }
 

@@ -2,7 +2,8 @@
 package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -15,11 +16,11 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class CoshTest {
+class CoshTest {
   @Test
   public void testReal() {
     Scalar c = Cosh.FUNCTION.apply(RealScalar.of(2));
@@ -41,17 +42,17 @@ public class CoshTest {
   public void testDecimal() {
     MathContext mc = MathContext.DECIMAL128;
     Scalar scalar = Cosh.of(DecimalScalar.of(new BigDecimal("1.2356", mc), mc.getPrecision()));
-    assertTrue(scalar instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, scalar);
     assertEquals(scalar, DoubleScalar.of(Math.cosh(1.2356)));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> Cosh.of(Quantity.of(1, "deg")));
+    assertThrows(TensorRuntimeException.class, () -> Cosh.of(Quantity.of(1, "deg")));
   }
 
   @Test
   public void testGaussScalarFail() {
-    AssertFail.of(() -> Cosh.of(GaussScalar.of(6, 7)));
+    assertThrows(TensorRuntimeException.class, () -> Cosh.of(GaussScalar.of(6, 7)));
   }
 }

@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
@@ -8,9 +10,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.pdf.c.ExponentialDistribution;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class PDFTest {
+class PDFTest {
   @Test
   public void testExponentialDistribution() {
     PDF pdf = PDF.of(ExponentialDistribution.of(RationalScalar.of(3, 2)));
@@ -20,6 +21,6 @@ public class PDFTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> PDF.of(null));
+    assertThrows(NullPointerException.class, () -> PDF.of(null));
   }
 }

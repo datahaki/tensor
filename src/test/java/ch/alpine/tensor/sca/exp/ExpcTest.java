@@ -11,7 +11,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class ExpcTest {
+class ExpcTest {
   @Test
   public void testSimple() {
     Scalar scalar = Expc.FUNCTION.apply(RealScalar.of(-1e-13));
@@ -33,5 +33,11 @@ public class ExpcTest {
           Expc.FUNCTION.apply(mu), //
           RealScalar.ONE);
     }
+  }
+
+  @Test
+  public void test2ndCase() {
+    Scalar scalar = Expc.FUNCTION.apply(RealScalar.of(2));
+    Tolerance.CHOP.requireClose(scalar, RealScalar.of((Math.exp(2) - 1) * 0.5));
   }
 }

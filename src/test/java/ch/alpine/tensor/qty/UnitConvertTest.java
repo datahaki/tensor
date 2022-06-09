@@ -2,6 +2,7 @@
 package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -9,17 +10,17 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class UnitConvertTest {
+class UnitConvertTest {
   @Test
   public void testKm() throws ClassNotFoundException, IOException {
     UnitConvert unitConvert = Serialization.copy(UnitConvert.SI());
@@ -131,16 +132,16 @@ public class UnitConvertTest {
     Scalar mass = Quantity.of(200, "g"); // gram
     Scalar a = Quantity.of(981, "cm*s^-2");
     Scalar force = mass.multiply(a);
-    AssertFail.of(() -> UnitConvert.SI().to(Unit.of("m")).apply(force));
+    assertThrows(TensorRuntimeException.class, () -> UnitConvert.SI().to(Unit.of("m")).apply(force));
   }
 
   @Test
   public void testFailInNull() {
-    AssertFail.of(() -> UnitConvert.SI().to((Unit) null));
+    assertThrows(NullPointerException.class, () -> UnitConvert.SI().to((Unit) null));
   }
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> UnitConvert.of(null));
+    assertThrows(NullPointerException.class, () -> UnitConvert.of(null));
   }
 }

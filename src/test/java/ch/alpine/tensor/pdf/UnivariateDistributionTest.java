@@ -1,16 +1,18 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.pdf.c.CauchyDistribution;
 import ch.alpine.tensor.pdf.c.DagumDistribution;
 import ch.alpine.tensor.pdf.c.EqualizingDistribution;
@@ -29,9 +31,8 @@ import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.red.InterquartileRange;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class UnivariateDistributionTest {
+class UnivariateDistributionTest {
   static final Distribution[] DISTRIBUTIONS = { //
       CauchyDistribution.of(.2, .3), //
       DagumDistribution.of(.3, .4, .5), //
@@ -56,12 +57,12 @@ public class UnivariateDistributionTest {
       RandomVariate.of(distribution);
       InverseCDF inverseCDF = InverseCDF.of(distribution);
       Scalar scalar = Median.of(distribution);
-      DeterminateScalarQ.require(scalar);
-      AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
-      AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
+      FiniteScalarQ.require(scalar);
+      assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+      assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
       inverseCDF.quantile(RealScalar.ZERO);
       inverseCDF.quantile(RealScalar.of(Math.nextUp(0)));
-      DeterminateScalarQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));
+      FiniteScalarQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));
     }
   }
 

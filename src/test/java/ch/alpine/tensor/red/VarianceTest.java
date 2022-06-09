@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,13 +10,13 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class VarianceTest {
+class VarianceTest {
   @Test
   public void testVariance() {
     Tensor A = Tensors.vector(1, 2, 5, 7);
@@ -48,17 +49,17 @@ public class VarianceTest {
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> Variance.ofVector(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Variance.ofVector(RealScalar.ONE));
   }
 
   @Test
   public void testFailLength() {
-    AssertFail.of(() -> Variance.ofVector(Tensors.empty()));
-    AssertFail.of(() -> Variance.ofVector(Tensors.vector(3)));
+    assertThrows(ArithmeticException.class, () -> Variance.ofVector(Tensors.empty()));
+    assertThrows(ArithmeticException.class, () -> Variance.ofVector(Tensors.vector(3)));
   }
 
   @Test
   public void testFailMatrix() {
-    AssertFail.of(() -> Variance.ofVector(HilbertMatrix.of(5)));
+    assertThrows(ClassCastException.class, () -> Variance.ofVector(HilbertMatrix.of(5)));
   }
 }

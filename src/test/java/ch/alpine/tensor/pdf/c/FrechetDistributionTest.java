@@ -3,6 +3,8 @@ package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -11,10 +13,11 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.NumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -28,9 +31,8 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class FrechetDistributionTest {
+class FrechetDistributionTest {
   @Test
   public void testPDF() throws ClassNotFoundException, IOException {
     Distribution distribution = //
@@ -60,7 +62,7 @@ public class FrechetDistributionTest {
   public void testQuantity() {
     Distribution distribution = FrechetDistribution.of(Quantity.of(1.3, ""), Quantity.of(1.4, "m^-1"));
     Scalar rand = RandomVariate.of(distribution);
-    assertTrue(rand instanceof Quantity);
+    assertInstanceOf(Quantity.class, rand);
     UnitConvert.SI().to(Unit.of("in^-1")).apply(rand);
     {
       Scalar prob = PDF.of(distribution).at(Quantity.of(1, "m^-1"));
@@ -69,8 +71,8 @@ public class FrechetDistributionTest {
     {
       CDF cdf = CDF.of(distribution);
       Scalar prob = cdf.p_lessEquals(Quantity.of(10, "m^-1"));
-      assertTrue(prob instanceof DoubleScalar);
-      assertTrue(NumberQ.of(prob));
+      assertInstanceOf(DoubleScalar.class, prob);
+      assertTrue(FiniteScalarQ.of(prob));
     }
   }
 
@@ -133,19 +135,19 @@ public class FrechetDistributionTest {
   @Test
   public void testInverseCDF_1() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.0)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.0)));
   }
 
   @Test
   public void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> FrechetDistribution.of(RealScalar.of(3), RealScalar.of(0)));
-    AssertFail.of(() -> FrechetDistribution.of(RealScalar.of(0), RealScalar.of(2)));
-    AssertFail.of(() -> FrechetDistribution.of(Quantity.of(2.3, "s"), Quantity.of(1.5, "m^-1")));
+    assertThrows(TensorRuntimeException.class, () -> FrechetDistribution.of(RealScalar.of(3), RealScalar.of(0)));
+    assertThrows(TensorRuntimeException.class, () -> FrechetDistribution.of(RealScalar.of(0), RealScalar.of(2)));
+    assertThrows(TensorRuntimeException.class, () -> FrechetDistribution.of(Quantity.of(2.3, "s"), Quantity.of(1.5, "m^-1")));
   }
 }

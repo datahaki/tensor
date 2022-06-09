@@ -4,9 +4,10 @@ package ch.alpine.tensor.num;
 import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
-import ch.alpine.tensor.AbstractScalar;
-import ch.alpine.tensor.ExactScalarQ;
+import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -14,8 +15,6 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.AbsInterface;
-import ch.alpine.tensor.api.ExactScalarQInterface;
-import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.lie.TensorProduct;
 import ch.alpine.tensor.red.Max;
@@ -23,11 +22,8 @@ import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.red.ScalarSummaryStatistics;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
-import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.sca.Floor;
-import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.ExpInterface;
@@ -35,9 +31,12 @@ import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.exp.LogInterface;
 import ch.alpine.tensor.sca.pow.PowerInterface;
 
-/** EXPERIMENTAL multiple clip */
-/* package */ class Interval extends AbstractScalar implements //
-    AbsInterface, ExactScalarQInterface, ExpInterface, LogInterface, PowerInterface, RoundingInterface, SignInterface {
+/** EXPERIMENTAL multiple clip
+ * 
+ * @implSpec
+ * This class is immutable and thread-safe. */
+/* package */ class Interval extends MultiplexScalar implements //
+    AbsInterface, ExpInterface, LogInterface, PowerInterface, SignInterface {
   private static final BinaryPower<Scalar> BINARY_POWER = new BinaryPower<>(ScalarProduct.INSTANCE);
 
   /** @param clip
@@ -117,11 +116,6 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
     return clip.min().one();
   }
 
-  @Override
-  public Number number() {
-    throw TensorRuntimeException.of(this);
-  }
-
   // ---
   @Override // from AbsInterface
   public Scalar abs() {
@@ -141,12 +135,6 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
     if (clip.isInside(zero()))
       return new Interval(Clips.positive(max));
     return of(Min.of(pa, pb), max);
-  }
-
-  @Override // from ExactScalarQInterface
-  public boolean isExactScalar() {
-    return ExactScalarQ.of(clip.min()) //
-        && ExactScalarQ.of(clip.max());
   }
 
   @Override // from ExpInterface
@@ -171,27 +159,6 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
     throw TensorRuntimeException.of(this);
   }
 
-  @Override // from RoundingInterface
-  public Scalar ceiling() {
-    return of( //
-        Ceiling.FUNCTION.apply(clip.min()), //
-        Ceiling.FUNCTION.apply(clip.max()));
-  }
-
-  @Override // from RoundingInterface
-  public Scalar floor() {
-    return of( //
-        Floor.FUNCTION.apply(clip.min()), //
-        Floor.FUNCTION.apply(clip.max()));
-  }
-
-  @Override // from RoundingInterface
-  public Scalar round() {
-    return of( //
-        Round.FUNCTION.apply(clip.min()), //
-        Round.FUNCTION.apply(clip.max()));
-  }
-
   @Override // from SignInterface
   public Scalar sign() {
     return of( //
@@ -199,19 +166,32 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
         Sign.FUNCTION.apply(clip.max()));
   }
 
+  @Override // from MultiplexScalar
+  public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
+    return of( //
+        unaryOperator.apply(clip.min()), //
+        unaryOperator.apply(clip.max()));
+  }
+
+  @Override // from MultiplexScalar
+  public boolean allMatch(Predicate<Scalar> predicate) {
+    return predicate.test(clip.min()) //
+        && predicate.test(clip.max());
+  }
+
   // ---
-  @Override
+  @Override // from Object
   public int hashCode() {
     return clip.hashCode();
   }
 
-  @Override
+  @Override // from Object
   public boolean equals(Object object) {
     return object instanceof Interval interval //
         && clip.equals(interval.clip);
   }
 
-  @Override
+  @Override // from Object
   public String toString() {
     return clip.toString();
   }

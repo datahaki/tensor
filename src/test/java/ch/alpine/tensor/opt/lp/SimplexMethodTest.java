@@ -2,6 +2,7 @@
 package ch.alpine.tensor.opt.lp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.NavigableMap;
@@ -10,15 +11,15 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
-import ch.alpine.tensor.usr.AssertFail;
 
 /** with examples from CLRS */
-public class SimplexMethodTest {
+class SimplexMethodTest {
   @Test
   public void testP845() {
     Tensor m = Tensors.matrixInt(new int[][] { //
@@ -65,8 +66,8 @@ public class SimplexMethodTest {
     lpd.requireFeasible(Tensors.vector(3, 4));
     lpd.requireFeasible(Tensors.vector(1, 3));
     lpd.requireFeasible(Tensors.vector(0, 1));
-    AssertFail.of(() -> lpd.requireFeasible(Tensors.vector(-3, 3)));
-    AssertFail.of(() -> lpd.requireFeasible(Tensors.vector(3, 3)));
+    assertThrows(TensorRuntimeException.class, () -> lpd.requireFeasible(Tensors.vector(-3, 3)));
+    assertThrows(TensorRuntimeException.class, () -> lpd.requireFeasible(Tensors.vector(3, 3)));
     Tensor xd = LinearProgramming.of(lpp);
     assertEquals(xp.dot(lpd.c), xd.dot(lpp.c));
   }
@@ -89,8 +90,8 @@ public class SimplexMethodTest {
     lpd.requireFeasible(Tensors.vector(3, 4));
     lpd.requireFeasible(Tensors.vector(1, 3));
     lpd.requireFeasible(Tensors.vector(2, 0));
-    AssertFail.of(() -> lpd.requireFeasible(Tensors.vector(0, 0)));
-    AssertFail.of(() -> lpd.requireFeasible(Tensors.vector(3, 3)));
+    assertThrows(TensorRuntimeException.class, () -> lpd.requireFeasible(Tensors.vector(0, 0)));
+    assertThrows(TensorRuntimeException.class, () -> lpd.requireFeasible(Tensors.vector(3, 3)));
   }
 
   @Test
@@ -125,7 +126,7 @@ public class SimplexMethodTest {
     // TestHelper.check(lpp, lpd);
     Tensor sols = SimplexCorners.of(lpd);
     assertEquals(sols, Tensors.empty());
-    AssertFail.of(() -> LinearProgramming.of(lpd));
+    assertThrows(TensorRuntimeException.class, () -> LinearProgramming.of(lpd));
   }
 
   // unbounded
@@ -137,7 +138,7 @@ public class SimplexMethodTest {
         Objective.MAX, Tensors.vector(1, -1), //
         ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
-    AssertFail.of(() -> LinearProgramming.of(lpd));
+    assertThrows(TensorRuntimeException.class, () -> LinearProgramming.of(lpd));
   }
 
   @Test
@@ -201,7 +202,7 @@ public class SimplexMethodTest {
     Tensor b = Tensors.vector(-10000, -30000);
     LinearProgram linearProgram = //
         LinearProgram.of(Objective.MIN, c, ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
-    AssertFail.of(() -> LinearProgramming.of(linearProgram));
+    assertThrows(TensorRuntimeException.class, () -> LinearProgramming.of(linearProgram));
     // MATLAB
     // A=[[-2, -7.5, -3];[-20, -5, -10]];
     // b=[-10000;-30000]

@@ -23,7 +23,7 @@ public class LogisticDistribution extends AbstractContinuousDistribution impleme
    * @param b positive
    * @return */
   public static Distribution of(Scalar a, Scalar b) {
-    Scalars.compare(a, b); // assert that parameters have identical units
+    Scalars.compare(a, a.add(b)); // assert that parameters have identical units
     return new LogisticDistribution(Objects.requireNonNull(a), Sign.requirePositive(b));
   }
 

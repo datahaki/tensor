@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -11,11 +12,11 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -23,9 +24,8 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ImageResizeTest {
+class ImageResizeTest {
   @Test
   public void testImage1() throws Exception {
     File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());
@@ -63,7 +63,7 @@ public class ImageResizeTest {
   @Test
   public void testFactorNegativeFail() {
     Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
-    AssertFail.of(() -> ImageResize.of(tensor, Pi.VALUE.negate()));
+    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, Pi.VALUE.negate()));
   }
 
   @Test
@@ -116,30 +116,30 @@ public class ImageResizeTest {
   public void testFail() {
     Tensor image = Array.zeros(10, 10, 4);
     ImageResize.nearest(image, 2);
-    AssertFail.of(() -> ImageResize.nearest(image, 0));
-    AssertFail.of(() -> ImageResize.nearest(image, -1));
-    AssertFail.of(() -> ImageResize.nearest(image, -1, 2));
-    AssertFail.of(() -> ImageResize.nearest(image, 2, -1));
+    assertThrows(IllegalArgumentException.class, () -> ImageResize.nearest(image, 0));
+    assertThrows(IllegalArgumentException.class, () -> ImageResize.nearest(image, -1));
+    assertThrows(IllegalArgumentException.class, () -> ImageResize.nearest(image, -1, 2));
+    assertThrows(IllegalArgumentException.class, () -> ImageResize.nearest(image, 2, -1));
   }
 
   @Test
   public void testImageResizeFail() {
-    AssertFail.of(() -> ImageResize.of(Pi.TWO, new Dimension(50, 20)));
-    AssertFail.of(() -> ImageResize.of(Tensors.vector(1, 2, 3, 4), new Dimension(50, 20)));
+    assertThrows(IndexOutOfBoundsException.class, () -> ImageResize.of(Pi.TWO, new Dimension(50, 20)));
+    assertThrows(IndexOutOfBoundsException.class, () -> ImageResize.of(Tensors.vector(1, 2, 3, 4), new Dimension(50, 20)));
   }
 
   @Test
   public void testImageResizeNegative1Fail() {
     Tensor tensor = HilbertMatrix.of(3);
-    AssertFail.of(() -> ImageResize.of(tensor, new Dimension(50, -20)));
-    AssertFail.of(() -> ImageResize.of(tensor, new Dimension(-50, 20)));
+    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, new Dimension(50, -20)));
+    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, new Dimension(-50, 20)));
   }
 
   @Test
   public void testImageResizeNegative2Fail() {
     Tensor tensor = HilbertMatrix.of(3);
     ImageResize.of(tensor, 10, 10);
-    AssertFail.of(() -> ImageResize.of(tensor, 50, -20));
-    AssertFail.of(() -> ImageResize.of(tensor, -50, 20));
+    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, 50, -20));
+    assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, -50, 20));
   }
 }

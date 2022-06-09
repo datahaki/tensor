@@ -3,6 +3,8 @@ package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -11,13 +13,15 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.MachineNumberQ;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -33,14 +37,14 @@ import ch.alpine.tensor.qty.UnitConvert;
 import ch.alpine.tensor.red.CentralMoment;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Median;
+import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ExponentialDistributionTest {
+class ExponentialDistributionTest {
   @Test
   public void testPositive() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(ExponentialDistribution.of(RealScalar.ONE));
@@ -74,6 +78,14 @@ public class ExponentialDistributionTest {
   }
 
   @Test
+  public void testStandardDeviation() {
+    Distribution distribution = ExponentialDistribution.of(RealScalar.of(2));
+    Scalar stdDev = StandardDeviation.of(distribution);
+    ExactScalarQ.require(stdDev);
+    assertEquals(stdDev, RationalScalar.HALF);
+  }
+
+  @Test
   public void testCDFNegative() {
     Distribution distribution = ExponentialDistribution.of(RealScalar.ONE);
     CDF cdf = CDF.of(distribution);
@@ -101,8 +113,8 @@ public class ExponentialDistributionTest {
 
   @Test
   public void testFailL() {
-    AssertFail.of(() -> ExponentialDistribution.of(RealScalar.ZERO));
-    AssertFail.of(() -> ExponentialDistribution.of(RealScalar.of(-0.1)));
+    assertThrows(TensorRuntimeException.class, () -> ExponentialDistribution.of(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> ExponentialDistribution.of(RealScalar.of(-0.1)));
   }
 
   @Test
@@ -116,7 +128,7 @@ public class ExponentialDistributionTest {
   private static void _checkCorner(Scalar lambda) {
     ExponentialDistribution exponentialDistribution = (ExponentialDistribution) ExponentialDistribution.of(lambda);
     Scalar from0 = exponentialDistribution.randomVariate(0);
-    assertTrue(MachineNumberQ.of(from0));
+    assertTrue(FiniteScalarQ.of(from0));
     assertTrue(Scalars.lessThan(RealScalar.ZERO, from0));
     double max = Math.nextDown(1.0);
     Scalar from1 = exponentialDistribution.randomVariate(max);
@@ -137,11 +149,11 @@ public class ExponentialDistributionTest {
   public void testQuantity() {
     Distribution distribution = ExponentialDistribution.of(Quantity.of(3, "m"));
     Scalar rand = RandomVariate.of(distribution);
-    assertTrue(rand instanceof Quantity);
+    assertInstanceOf(Quantity.class, rand);
     UnitConvert.SI().to(Unit.of("mi^-1")).apply(rand);
-    assertTrue(Expectation.mean(distribution) instanceof Quantity);
+    assertInstanceOf(Quantity.class, Expectation.mean(distribution));
     Scalar var = Expectation.variance(distribution);
-    assertTrue(var instanceof Quantity);
+    assertInstanceOf(Quantity.class, var);
   }
 
   @Test
@@ -197,7 +209,7 @@ public class ExponentialDistributionTest {
   @Test
   public void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(ExponentialDistribution.of(Quantity.of(3, "")));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
@@ -206,7 +218,7 @@ public class ExponentialDistributionTest {
     {
       Scalar prob = PDF.of(distribution).at(Quantity.of(2, "m^-1"));
       assertTrue(Sign.isPositive(prob));
-      assertTrue(prob instanceof Quantity);
+      assertInstanceOf(Quantity.class, prob);
     }
     {
       Scalar prob = PDF.of(distribution).at(Quantity.of(-2, "m^-1"));
@@ -223,7 +235,7 @@ public class ExponentialDistributionTest {
     {
       Scalar prob = CDF.of(distribution).p_lessThan(Quantity.of(2, "m^-1"));
       assertTrue(Sign.isPositive(prob));
-      assertTrue(prob instanceof RealScalar);
+      assertInstanceOf(RealScalar.class, prob);
     }
     {
       Scalar prob = CDF.of(distribution).p_lessEquals(Quantity.of(-2, "m^-1"));

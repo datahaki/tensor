@@ -2,24 +2,30 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Random;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.api.ScalarTensorFunction;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.itp.BSplineFunctionString;
+import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -35,9 +41,8 @@ import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TrapezoidalDistributionTest {
+class TrapezoidalDistributionTest {
   final Random random = new Random();
 
   @Test
@@ -138,7 +143,7 @@ public class TrapezoidalDistributionTest {
     }
     Scalar random = RandomVariate.of(distribution);
     Scalar apply = QuantityMagnitude.SI().in("km").apply(random);
-    assertTrue(apply instanceof RealScalar);
+    assertInstanceOf(RealScalar.class, apply);
     Scalar variance = Variance.of(distribution);
     ExactScalarQ.require(variance);
   }
@@ -179,11 +184,11 @@ public class TrapezoidalDistributionTest {
     }
     Scalar random = RandomVariate.of(distribution);
     Scalar apply = QuantityMagnitude.SI().in("km").apply(random);
-    assertTrue(apply instanceof RealScalar);
+    assertInstanceOf(RealScalar.class, apply);
     assertTrue(distribution.toString().startsWith("TrapezoidalDistribution["));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
   @Test
@@ -247,8 +252,10 @@ public class TrapezoidalDistributionTest {
     TestMarkovChebyshev.chebyshev(distribution);
     TestMarkovChebyshev.markov(distribution);
     TrapezoidalDistribution.of(Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
-    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m")));
-    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(1, "m")));
+    assertThrows(TensorRuntimeException.class,
+        () -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m"), Quantity.of(1, "m")));
+    assertThrows(TensorRuntimeException.class,
+        () -> TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(1, "m")));
     TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(2, "m"), Quantity.of(5, "m"));
   }
 
@@ -283,16 +290,37 @@ public class TrapezoidalDistributionTest {
   }
 
   @Test
+  @Disabled
+  public void testDateTimeScalar() {
+    DateTimeScalar a = DateTimeScalar.of(LocalDateTime.of(2022, 1, 2, 12, 02));
+    DateTimeScalar b = DateTimeScalar.of(LocalDateTime.of(2022, 1, 4, 11, 05));
+    DateTimeScalar c = DateTimeScalar.of(LocalDateTime.of(2022, 1, 7, 19, 06));
+    DateTimeScalar d = DateTimeScalar.of(LocalDateTime.of(2022, 1, 8, 05, 07));
+    Distribution distribution = TrapezoidalDistribution.of(a, b, c, d);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTimeScalar.class, scalar);
+    PDF pdf = PDF.of(distribution);
+    Scalar t = DateTimeScalar.of(LocalDateTime.of(2022, 1, 6, 8, 06));
+    pdf.at(t);
+    // CDF cdf = CDF.of(distribution);
+    // Scalar p_lessEquals = cdf.p_lessEquals(t);
+    // Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+  }
+
+  @Test
   public void testNumericFail() {
     TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
     TrapezoidalDistribution.of(Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
-    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m")));
-    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(1., "m")));
+    assertThrows(TensorRuntimeException.class,
+        () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m"), Quantity.of(1., "m")));
+    assertThrows(TensorRuntimeException.class,
+        () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(1., "m")));
     TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(5., "m"));
   }
 
   @Test
   public void testCenterFail() {
-    AssertFail.of(() -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(3., "m"), Quantity.of(2., "m"), Quantity.of(9., "m")));
+    assertThrows(TensorRuntimeException.class,
+        () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(3., "m"), Quantity.of(2., "m"), Quantity.of(9., "m")));
   }
 }

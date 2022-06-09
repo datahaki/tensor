@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -14,12 +15,12 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class UnitSystemsTest {
+class UnitSystemsTest {
   private static void checkInvariant(UnitSystem unitSystem) {
     for (Entry<String, Scalar> entry : unitSystem.map().entrySet()) {
       Scalar scalar = Quantity.of(1, entry.getKey());
@@ -44,14 +45,14 @@ public class UnitSystemsTest {
 
   @Test
   public void testNoEffect() {
-    AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "unknownUnit", "unknownUnit"));
-    AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "s", "kg"));
-    AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "s", "K"));
-    AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "N", "K"));
-    AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "N", "kg"));
-    AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "N", "s"));
-    AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "W", "kW"));
-    AssertFail.of(() -> UnitSystems.rotate(UnitSystem.SI(), "kW", "W"));
+    assertThrows(IllegalArgumentException.class, () -> UnitSystems.rotate(UnitSystem.SI(), "unknownUnit", "unknownUnit"));
+    assertThrows(NullPointerException.class, () -> UnitSystems.rotate(UnitSystem.SI(), "s", "kg"));
+    assertThrows(NullPointerException.class, () -> UnitSystems.rotate(UnitSystem.SI(), "s", "K"));
+    assertThrows(NullPointerException.class, () -> UnitSystems.rotate(UnitSystem.SI(), "N", "K"));
+    assertThrows(NullPointerException.class, () -> UnitSystems.rotate(UnitSystem.SI(), "N", "kg"));
+    assertThrows(NullPointerException.class, () -> UnitSystems.rotate(UnitSystem.SI(), "N", "s"));
+    assertThrows(NullPointerException.class, () -> UnitSystems.rotate(UnitSystem.SI(), "W", "kW"));
+    assertThrows(NullPointerException.class, () -> UnitSystems.rotate(UnitSystem.SI(), "kW", "W"));
   }
 
   @Test
@@ -156,7 +157,7 @@ public class UnitSystemsTest {
 
   @Test
   public void testCurrency() {
-    UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("/unit/chf.properties"));
+    UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("/ch/alpine/tensor/qty/chf.properties"));
     assertTrue(baseSystem.map().containsKey("EUR"));
     UnitSystem unitSystem = requireInvariant(baseSystem, "CHF", "EUR");
     assertFalse(unitSystem.map().containsKey("EUR"));
@@ -167,7 +168,7 @@ public class UnitSystemsTest {
 
   @Test
   public void testIdentity() throws ClassNotFoundException, IOException {
-    UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("/unit/chf.properties"));
+    UnitSystem baseSystem = SimpleUnitSystem.from(ResourceData.properties("/ch/alpine/tensor/qty/chf.properties"));
     UnitSystem unitSystem = requireInvariant(baseSystem, "CHF", "CHF");
     assertTrue(unitSystem == baseSystem);
     assertFalse(unitSystem.map().containsKey("CHF"));
@@ -181,8 +182,8 @@ public class UnitSystemsTest {
     UnitSystem s2 = UnitSystem.SI();
     UnitSystem s3 = UnitSystems.join(s1, s2);
     assertEquals(s1.map(), s3.map());
-    AssertFail.of(() -> s1.map().clear());
-    AssertFail.of(() -> s3.map().clear());
+    assertThrows(UnsupportedOperationException.class, () -> s1.map().clear());
+    assertThrows(UnsupportedOperationException.class, () -> s3.map().clear());
   }
 
   @Test
@@ -190,6 +191,6 @@ public class UnitSystemsTest {
     UnitSystem s1 = SimpleUnitSystem.from(Map.of("ym", Quantity.of(10, "m")));
     UnitSystem s2 = SimpleUnitSystem.from(Map.of("ym", Quantity.of(100, "m")));
     UnitSystems.join(s1, s1);
-    AssertFail.of(() -> UnitSystems.join(s1, s2));
+    assertThrows(TensorRuntimeException.class, () -> UnitSystems.join(s1, s2));
   }
 }

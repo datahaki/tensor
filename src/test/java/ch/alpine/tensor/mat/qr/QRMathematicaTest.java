@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.qr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -23,9 +24,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class QRMathematicaTest {
+class QRMathematicaTest {
   @Test
   public void testSkinny() {
     Tensor b = Transpose.of(IdentityMatrix.of(9).extract(0, 4));
@@ -106,6 +106,6 @@ public class QRMathematicaTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> QRMathematica.wrap(null));
+    assertThrows(NullPointerException.class, () -> QRMathematica.wrap(null));
   }
 }

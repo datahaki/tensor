@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -17,9 +18,8 @@ import ch.alpine.tensor.sca.tri.Cos;
 import ch.alpine.tensor.sca.tri.Cosh;
 import ch.alpine.tensor.sca.tri.Sin;
 import ch.alpine.tensor.sca.tri.Sinh;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class BigDecimalMathTest {
+class BigDecimalMathTest {
   private static void _check(BigDecimal bd1, MathContext mathContext) {
     BigDecimal rt1 = BigDecimalMath.sqrt(bd1, MathContext.DECIMAL32);
     assertEquals(rt1.multiply(rt1, mathContext).subtract(bd1).compareTo(BigDecimal.ZERO), 0);
@@ -79,7 +79,7 @@ public class BigDecimalMathTest {
 
   @Test
   public void testSqrtNegative() {
-    AssertFail.of(() -> BigDecimalMath.sqrt(new BigDecimal("-2340"), MathContext.DECIMAL64));
+    assertThrows(IllegalArgumentException.class, () -> BigDecimalMath.sqrt(new BigDecimal("-2340"), MathContext.DECIMAL64));
   }
 
   @Test

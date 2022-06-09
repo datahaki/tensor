@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -11,15 +12,15 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class DiscreteUniformDistributionTest {
+class DiscreteUniformDistributionTest {
   @Test
   public void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = //
@@ -86,20 +87,20 @@ public class DiscreteUniformDistributionTest {
   public void testFailQuantile() {
     Distribution distribution = DiscreteUniformDistribution.of(3, 10);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
   public void testFailsOrder() {
-    AssertFail.of(() -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(2)));
-    AssertFail.of(() -> DiscreteUniformDistribution.of(3, 2));
-    AssertFail.of(() -> DiscreteUniformDistribution.of(3, 3));
+    assertThrows(IllegalArgumentException.class, () -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(2)));
+    assertThrows(IllegalArgumentException.class, () -> DiscreteUniformDistribution.of(3, 2));
+    assertThrows(IllegalArgumentException.class, () -> DiscreteUniformDistribution.of(3, 3));
   }
 
   @Test
   public void testFailsInt() {
-    AssertFail.of(() -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(4.5)));
+    assertThrows(TensorRuntimeException.class, () -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(4.5)));
   }
 
   @Test

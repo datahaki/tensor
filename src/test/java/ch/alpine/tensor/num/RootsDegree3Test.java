@@ -23,7 +23,7 @@ import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
 
-public class RootsDegree3Test {
+class RootsDegree3Test {
   @Test
   public void testSteer() {
     Scalar c = RealScalar.of(+0.8284521034333863);

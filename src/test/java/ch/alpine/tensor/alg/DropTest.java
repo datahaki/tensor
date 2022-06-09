@@ -2,14 +2,14 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class DropTest {
+class DropTest {
   @Test
   public void testHead() {
     assertEquals(Drop.head(Tensors.empty(), 0), Tensors.empty());
@@ -27,8 +27,8 @@ public class DropTest {
     Drop.head(Tensors.vector(1, 2), 0);
     Drop.head(Tensors.vector(1, 2), 1);
     Drop.head(Tensors.vector(1, 2), 2);
-    AssertFail.of(() -> Drop.head(Tensors.vector(1, 2), 3));
-    AssertFail.of(() -> Drop.head(Tensors.vector(1, 2), -1));
+    assertThrows(IllegalArgumentException.class, () -> Drop.head(Tensors.vector(1, 2), 3));
+    assertThrows(IndexOutOfBoundsException.class, () -> Drop.head(Tensors.vector(1, 2), -1));
   }
 
   @Test
@@ -36,7 +36,7 @@ public class DropTest {
     Drop.tail(Tensors.vector(1, 2), 0);
     Drop.tail(Tensors.vector(1, 2), 1);
     Drop.tail(Tensors.vector(1, 2), 2);
-    AssertFail.of(() -> Drop.tail(Tensors.vector(1, 2), 3));
-    AssertFail.of(() -> Drop.tail(Tensors.vector(1, 2), -1));
+    assertThrows(IllegalArgumentException.class, () -> Drop.tail(Tensors.vector(1, 2), 3));
+    assertThrows(IndexOutOfBoundsException.class, () -> Drop.tail(Tensors.vector(1, 2), -1));
   }
 }

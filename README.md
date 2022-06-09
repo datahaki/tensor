@@ -2,7 +2,7 @@
 
 # ch.alpine.tensor
 
-Library for tensor computations in Java 17, version `1.0.5`.
+Library for tensor computations in Java 17, version `1.0.6`.
 
 Library for tensor computations in Java 11, version `1.0.5-jdk-11`.
 
@@ -301,7 +301,7 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
   <dependency>
     <groupId>ch.alpine</groupId>
     <artifactId>tensor</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
   </dependency>
 </dependencies>
 ```

@@ -1,15 +1,20 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.chq;
 
 import java.util.Objects;
 
-import ch.alpine.tensor.api.ExactScalarQInterface;
+import ch.alpine.tensor.IntegerQ;
+import ch.alpine.tensor.MultiplexScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.api.InexactScalarMarker;
 import ch.alpine.tensor.mat.re.RowReduce;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.qty.Quantity;
 
 /** predicate to test if scalar is encoded in exact precision.
- * result is determined by implementation of {@link ExactScalarQInterface}.
+ * result is determined by implementation of {@link InexactScalarMarker}.
  * 
  * <p>Examples:
  * <pre>
@@ -31,16 +36,20 @@ import ch.alpine.tensor.qty.Quantity;
  * 
  * <p>Identical to Mathematica::Exact"Number"Q except for input of type {@link Quantity}.
  * 
- * @see ExactScalarQInterface
+ * @see InexactScalarMarker
  * @see IntegerQ
- * @see MachineNumberQ */
+ * @see FiniteScalarQ */
 public enum ExactScalarQ {
   ;
   /** @param scalar
-   * @return true, if scalar is instance of {@link ExactScalarQInterface} which evaluates to true */
+   * @return true, if scalar is instance of {@link InexactScalarMarker} which evaluates to true */
   public static boolean of(Scalar scalar) {
-    return Objects.requireNonNull(scalar) instanceof ExactScalarQInterface exactScalarQInterface //
-        && exactScalarQInterface.isExactScalar();
+    if (scalar instanceof InexactScalarMarker)
+      return false;
+    if (scalar instanceof MultiplexScalar multiplexScalar)
+      return multiplexScalar.allMatch(ExactScalarQ::of);
+    Objects.requireNonNull(scalar);
+    return true;
   }
 
   /** @param scalar

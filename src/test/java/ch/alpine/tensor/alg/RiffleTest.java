@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -9,9 +10,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class RiffleTest {
+class RiffleTest {
   @Test
   public void testSimple() {
     Tensor vector = Riffle.of(Tensors.vector(1, 2, 3, 4, 5), RealScalar.ZERO);
@@ -26,6 +26,6 @@ public class RiffleTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Riffle.of(RealScalar.ZERO, RealScalar.ZERO));
+    assertThrows(IllegalArgumentException.class, () -> Riffle.of(RealScalar.ZERO, RealScalar.ZERO));
   }
 }

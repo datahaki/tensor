@@ -3,24 +3,28 @@ package ch.alpine.tensor.mat.ex;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
 import java.util.stream.Stream;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.lie.TensorWedge;
@@ -36,11 +40,8 @@ import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class MatrixExpTest {
-  private static final Random RANDOM = new Random();
-
+class MatrixExpTest {
   @Test
   public void testZeros() {
     Tensor zeros = Array.zeros(7, 7);
@@ -51,9 +52,10 @@ public class MatrixExpTest {
 
   @Test
   public void testExp() {
-    double val = RANDOM.nextGaussian() * 0.1;
-    double va2 = RANDOM.nextGaussian() * 0.1;
-    double va3 = RANDOM.nextGaussian() * 0.1;
+    Random random = new Random();
+    double val = random.nextGaussian() * 0.1;
+    double va2 = random.nextGaussian() * 0.1;
+    double va3 = random.nextGaussian() * 0.1;
     double[][] mat = new double[][] { { 0, val, va2 }, { -val, 0, va3 }, { -va2, -va3, 0 } };
     Tensor bu = Tensors.matrixDouble(mat);
     Tensor ort = MatrixExp.of(bu);
@@ -152,28 +154,24 @@ public class MatrixExpTest {
     Chop.below(1e75).requireClose(tensor, result);
   }
 
-  @Test
+  @RepeatedTest(5)
   public void testNoScale() {
     Distribution distribution = NormalDistribution.of(0, 6);
-    for (int count = 0; count < 10; ++count) {
-      Tensor matrix = RandomVariate.of(distribution, 2, 2);
-      Tensor exp1 = MatrixExp.of(matrix);
-      Tensor exp2 = MatrixExpSeries.FUNCTION.apply(matrix);
-      Chop._01.requireClose(exp1, exp2);
-    }
+    Tensor matrix = RandomVariate.of(distribution, 2, 2);
+    Tensor exp1 = MatrixExp.of(matrix);
+    Tensor exp2 = MatrixExpSeries.FUNCTION.apply(matrix);
+    Chop._01.requireClose(exp1, exp2);
   }
 
-  @Test
+  @RepeatedTest(5)
   public void testNoScaleComplex() {
     Distribution distribution = NormalDistribution.of(0, 5);
-    for (int count = 0; count < 10; ++count) {
-      Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
-          RandomVariate.of(distribution, 2, 2), //
-          RandomVariate.of(distribution, 2, 2));
-      Tensor exp1 = MatrixExp.of(matrix);
-      Tensor exp2 = MatrixExpSeries.FUNCTION.apply(matrix);
-      Chop._01.requireClose(exp1, exp2);
-    }
+    Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
+        RandomVariate.of(distribution, 2, 2), //
+        RandomVariate.of(distribution, 2, 2));
+    Tensor exp1 = MatrixExp.of(matrix);
+    Tensor exp2 = MatrixExpSeries.FUNCTION.apply(matrix);
+    Chop._01.requireClose(exp1, exp2);
   }
 
   @Test
@@ -192,35 +190,34 @@ public class MatrixExpTest {
     Chop._04.requireClose(tensor1, tensor2);
   }
 
-  @Test
-  public void testHermitian() {
+  @RepeatedTest(5)
+  public void testHermitian(RepetitionInfo repetitionInfo) {
     Distribution distribution = TriangularDistribution.with(0, 1);
-    for (int n = 1; n < 6; ++n) {
-      Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
-      Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
-      Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
-      HermitianMatrixQ.require(matrix);
-      Tensor exp1 = MatrixExp.of(matrix);
-      Tensor exp2 = MatrixExp.ofHermitian(matrix);
-      Tolerance.CHOP.requireClose(exp1, exp2);
-      Tensor log = MatrixLog.ofHermitian(exp2);
-      Tolerance.CHOP.requireClose(exp1, MatrixExp.of(log));
-    }
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
+    Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
+    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
+    HermitianMatrixQ.require(matrix);
+    Tensor exp1 = MatrixExp.of(matrix);
+    Tensor exp2 = MatrixExp.ofHermitian(matrix);
+    Tolerance.CHOP.requireClose(exp1, exp2);
+    Tensor log = MatrixLog.ofHermitian(exp2);
+    Tolerance.CHOP.requireClose(exp1, MatrixExp.of(log));
   }
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> MatrixExp.of(Array.zeros(4, 3)));
-    AssertFail.of(() -> MatrixExp.of(Array.zeros(3, 4)));
+    assertThrows(IllegalArgumentException.class, () -> MatrixExp.of(Array.zeros(4, 3)));
+    assertThrows(IllegalArgumentException.class, () -> MatrixExp.of(Array.zeros(3, 4)));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> MatrixExp.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> MatrixExp.of(RealScalar.ONE));
   }
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> MatrixExp.of(Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> MatrixExp.of(Tensors.empty()));
   }
 }

@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.Test;
 
-public class GifAnimationWriterTest {
+class GifAnimationWriterTest {
   @Test
   public void testSimple() {
     assertEquals(TimeUnit.MILLISECONDS.convert(1, TimeUnit.SECONDS), 1000L);

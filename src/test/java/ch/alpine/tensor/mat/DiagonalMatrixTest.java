@@ -2,19 +2,19 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class DiagonalMatrixTest {
+class DiagonalMatrixTest {
   @Test
   public void testIdentity() {
     Tensor matrix = DiagonalMatrix.with(Tensors.vector(1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
@@ -46,7 +46,7 @@ public class DiagonalMatrixTest {
   @Test
   public void testMisc3() {
     Tensor tensor = RealScalar.of(-2);
-    AssertFail.of(() -> DiagonalMatrix.with(tensor));
+    assertThrows(IllegalArgumentException.class, () -> DiagonalMatrix.with(tensor));
   }
 
   @Test
@@ -63,26 +63,26 @@ public class DiagonalMatrixTest {
   public void testFailScalar() {
     Tensor matrix = DiagonalMatrix.of(RealScalar.ONE);
     assertEquals(matrix.toString(), "{{1}}");
-    AssertFail.of(() -> DiagonalMatrix.with(RealScalar.ONE));
+    assertThrows(IllegalArgumentException.class, () -> DiagonalMatrix.with(RealScalar.ONE));
   }
 
   @Test
   public void testFailNonVector() {
-    AssertFail.of(() -> DiagonalMatrix.with(Tensors.fromString("{1, 2, {3}}")));
+    assertThrows(ClassCastException.class, () -> DiagonalMatrix.with(Tensors.fromString("{1, 2, {3}}")));
   }
 
   @Test
   public void testFailEmpty() {
-    AssertFail.of(() -> DiagonalMatrix.with(Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> DiagonalMatrix.with(Tensors.empty()));
   }
 
   @Test
   public void testFailScalarEmpty() {
-    AssertFail.of(() -> DiagonalMatrix.of(new Scalar[] {}));
+    assertThrows(IllegalArgumentException.class, () -> DiagonalMatrix.of(new Scalar[] {}));
   }
 
   @Test
   public void testFailNumberEmpty() {
-    AssertFail.of(() -> DiagonalMatrix.of(new Number[] {}));
+    assertThrows(IllegalArgumentException.class, () -> DiagonalMatrix.of(new Number[] {}));
   }
 }

@@ -8,7 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.mat.Tolerance;
 
-public class FresnelTest {
+class FresnelTest {
   @Test
   public void testSimple() {
     Scalar result = Fresnel.FUNCTION.apply(RealScalar.of(2.3));

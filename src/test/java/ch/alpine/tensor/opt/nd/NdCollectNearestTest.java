@@ -3,16 +3,21 @@ package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -20,45 +25,43 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class NdCollectNearestTest {
-  @Test
-  public void testSimple() {
+class NdCollectNearestTest {
+  @RepeatedTest(9)
+  public void testSimple(RepetitionInfo repetitionInfo) {
     CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9));
-    for (int n = 1; n < 10; ++n) {
-      NdMap<String> ndTreeMap = NdTreeMap.of(box, n);
-      ndTreeMap.toString();
-      assertTrue(ndTreeMap.isEmpty());
-      ndTreeMap.insert(Tensors.vector(1, 1), "d1");
-      assertFalse(ndTreeMap.isEmpty());
-      ndTreeMap.insert(Tensors.vector(1, 0), "d2");
-      ndTreeMap.insert(Tensors.vector(0, 1), "d3");
-      ndTreeMap.insert(Tensors.vector(1, 1), "d4");
-      ndTreeMap.insert(Tensors.vector(0.1, 0.1), "d5");
-      ndTreeMap.insert(Tensors.vector(6, 7), "d6");
-      ndTreeMap.toString();
-      {
-        Tensor center = Tensors.vector(0, 0);
-        NdCenterInterface distancer = NdCenters.VECTOR_2_NORM.apply(center);
-        Collection<NdMatch<String>> cluster = NdCollectNearest.of(ndTreeMap, distancer, 1);
-        assertTrue(cluster.iterator().next().value().equals("d5"));
-      }
-      {
-        Tensor center = Tensors.vector(5, 5);
-        NdCenterInterface distancer = NdCenters.VECTOR_2_NORM.apply(center);
-        Collection<NdMatch<String>> cluster = NdCollectNearest.of(ndTreeMap, distancer, 1);
-        assertTrue(cluster.iterator().next().value().equals("d6"));
-      }
-      {
-        Tensor center = Tensors.vector(1.1, 0.9);
-        NdCenterInterface distancer = NdCenters.VECTOR_2_NORM.apply(center);
-        Collection<NdMatch<String>> cluster = NdCollectNearest.of(ndTreeMap, distancer, 2);
-        assertEquals(cluster.size(), 2);
-        List<String> list = Arrays.asList("d1", "d4");
-        for (NdMatch<String> point : cluster)
-          assertTrue(list.contains(point.value()));
-      }
+    int n = repetitionInfo.getCurrentRepetition();
+    NdMap<String> ndTreeMap = NdTreeMap.of(box, n);
+    ndTreeMap.toString();
+    assertTrue(ndTreeMap.isEmpty());
+    ndTreeMap.insert(Tensors.vector(1, 1), "d1");
+    assertFalse(ndTreeMap.isEmpty());
+    ndTreeMap.insert(Tensors.vector(1, 0), "d2");
+    ndTreeMap.insert(Tensors.vector(0, 1), "d3");
+    ndTreeMap.insert(Tensors.vector(1, 1), "d4");
+    ndTreeMap.insert(Tensors.vector(0.1, 0.1), "d5");
+    ndTreeMap.insert(Tensors.vector(6, 7), "d6");
+    ndTreeMap.toString();
+    {
+      Tensor center = Tensors.vector(0, 0);
+      NdCenterInterface distancer = NdCenters.VECTOR_2_NORM.apply(center);
+      Collection<NdMatch<String>> cluster = NdCollectNearest.of(ndTreeMap, distancer, 1);
+      assertTrue(cluster.iterator().next().value().equals("d5"));
+    }
+    {
+      Tensor center = Tensors.vector(5, 5);
+      NdCenterInterface distancer = NdCenters.VECTOR_2_NORM.apply(center);
+      Collection<NdMatch<String>> cluster = NdCollectNearest.of(ndTreeMap, distancer, 1);
+      assertTrue(cluster.iterator().next().value().equals("d6"));
+    }
+    {
+      Tensor center = Tensors.vector(1.1, 0.9);
+      NdCenterInterface distancer = NdCenters.VECTOR_2_NORM.apply(center);
+      Collection<NdMatch<String>> cluster = NdCollectNearest.of(ndTreeMap, distancer, 2);
+      assertEquals(cluster.size(), 2);
+      List<String> list = Arrays.asList("d1", "d4");
+      for (NdMatch<String> point : cluster)
+        assertTrue(list.contains(point.value()));
     }
   }
 
@@ -92,34 +95,31 @@ public class NdCollectNearestTest {
     }
   }
 
-  @Test
-  public void testEmpty() {
+  @ParameterizedTest
+  @EnumSource(NdCenters.class)
+  public void testEmpty(NdCenters ndCenters) {
     NdMap<Void> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0), Tensors.vector(1)));
-    for (NdCenters ndCenters : NdCenters.values()) {
-      NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2));
-      NdMatch<Void> ndMatch = NdCollectNearest.of(ndMap, ndCenterInterface);
-      assertTrue(Objects.isNull(ndMatch));
-    }
+    NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2));
+    NdMatch<Void> ndMatch = NdCollectNearest.of(ndMap, ndCenterInterface);
+    assertNull(ndMatch);
   }
 
-  @Test
-  public void testProtected() {
-    for (NdCenters ndCenters : NdCenters.values()) {
-      NdCenterInterface ndCenterInterface = ndCenters.apply(Array.zeros(2));
-      assertTrue(new NdCollectNearest<>(ndCenterInterface, 1).queue().isEmpty());
-    }
+  @ParameterizedTest
+  @EnumSource(NdCenters.class)
+  public void testProtected(NdCenters ndCenters) {
+    NdCenterInterface ndCenterInterface = ndCenters.apply(Array.zeros(2));
+    assertTrue(new NdCollectNearest<>(ndCenterInterface, 1).queue().isEmpty());
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> new NdCollectNearest<>(null, 1));
+    assertThrows(NullPointerException.class, () -> new NdCollectNearest<>(null, 1));
   }
 
-  @Test
-  public void testNonPositiveFail() {
-    for (NdCenters ndCenters : NdCenters.values()) {
-      NdCenterInterface ndCenterInterface = ndCenters.apply(Array.zeros(2));
-      AssertFail.of(() -> new NdCollectNearest<>(ndCenterInterface, 0));
-    }
+  @ParameterizedTest
+  @EnumSource(NdCenters.class)
+  public void testNonPositiveFail(NdCenters ndCenters) {
+    NdCenterInterface ndCenterInterface = ndCenters.apply(Array.zeros(2));
+    assertThrows(IllegalArgumentException.class, () -> new NdCollectNearest<>(ndCenterInterface, 0));
   }
 }

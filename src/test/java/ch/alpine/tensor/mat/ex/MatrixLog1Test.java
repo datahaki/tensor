@@ -12,7 +12,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class MatrixLog1Test {
+class MatrixLog1Test {
   @Test
   public void test1x1() {
     for (int count = 0; count < 10; ++count) {

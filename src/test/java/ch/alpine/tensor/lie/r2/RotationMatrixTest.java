@@ -3,6 +3,7 @@ package ch.alpine.tensor.lie.r2;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -10,14 +11,14 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class RotationMatrixTest {
+class RotationMatrixTest {
   @Test
   public void testPointThree() {
     Tensor matrix = RotationMatrix.of(RealScalar.of(0.3));
@@ -45,6 +46,6 @@ public class RotationMatrixTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> RotationMatrix.of(GaussScalar.of(2, 7)));
+    assertThrows(TensorRuntimeException.class, () -> RotationMatrix.of(GaussScalar.of(2, 7)));
   }
 }

@@ -1,17 +1,19 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;
@@ -27,9 +29,8 @@ import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class DiscreteDistributionTest {
+class DiscreteDistributionTest {
   static final Distribution[] DISTRIBUTIONS = { //
       BernoulliDistribution.of(0.3), //
       BinomialDistribution.of(5, .4), //
@@ -49,12 +50,12 @@ public class DiscreteDistributionTest {
       if (distribution instanceof InverseCDF) {
         InverseCDF inverseCDF = InverseCDF.of(distribution);
         Scalar scalar = Median.of(distribution);
-        DeterminateScalarQ.require(scalar);
+        FiniteScalarQ.require(scalar);
         IntegerQ.require(scalar);
-        AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
-        AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
-        DeterminateScalarQ.require(inverseCDF.quantile(RealScalar.ZERO));
-        DeterminateScalarQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));
+        assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+        assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
+        FiniteScalarQ.require(inverseCDF.quantile(RealScalar.ZERO));
+        FiniteScalarQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));
       }
   }
 
@@ -75,7 +76,7 @@ public class DiscreteDistributionTest {
     for (Distribution distribution : DISTRIBUTIONS) {
       RandomVariate.of(distribution);
       Scalar scalar = Mean.of(distribution);
-      DeterminateScalarQ.require(scalar);
+      FiniteScalarQ.require(scalar);
     }
   }
 
@@ -83,7 +84,7 @@ public class DiscreteDistributionTest {
   public void testVariance() {
     for (Distribution distribution : DISTRIBUTIONS) {
       Scalar scalar = Variance.of(distribution);
-      DeterminateScalarQ.require(scalar);
+      FiniteScalarQ.require(scalar);
       // System.out.println(distribution);
     }
   }

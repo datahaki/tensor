@@ -2,18 +2,19 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class HankelTensorTest {
+class HankelTensorTest {
   @Test
   public void testRank2() {
     Tensor tensor = HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5), 2);
@@ -42,12 +43,12 @@ public class HankelTensorTest {
 
   @Test
   public void testFailVector() {
-    AssertFail.of(() -> HankelTensor.of(RealScalar.ONE, 1));
-    AssertFail.of(() -> HankelTensor.of(Tensors.fromString("{{1, 2}}"), 1));
+    assertThrows(IllegalArgumentException.class, () -> HankelTensor.of(RealScalar.ONE, 1));
+    assertThrows(ClassCastException.class, () -> HankelTensor.of(Tensors.fromString("{{1, 2}}"), 1));
   }
 
   @Test
   public void testFailRank() {
-    AssertFail.of(() -> HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5, 6), 2));
+    assertThrows(TensorRuntimeException.class, () -> HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5, 6), 2));
   }
 }

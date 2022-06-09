@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.qr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
@@ -30,9 +32,8 @@ import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class QRDecompositionImplTest {
+class QRDecompositionImplTest {
   @Test
   public void testDegenerate0Square() {
     for (int n = 1; n < 6; ++n) {
@@ -101,7 +102,7 @@ public class QRDecompositionImplTest {
       Tensor matrix = Dot.of(base, mult);
       QRDecompositionImpl qrDecompositionImpl = //
           new QRDecompositionImpl(matrix, IdentityMatrix.of(n), QRSignOperators.STABILITY);
-      AssertFail.of(() -> qrDecompositionImpl.pseudoInverse());
+      assertThrows(TensorRuntimeException.class, () -> qrDecompositionImpl.pseudoInverse());
     }
   }
 
@@ -120,7 +121,7 @@ public class QRDecompositionImplTest {
     double thres = max.number().doubleValue() * 1e-12;
     Chop chop = Chop.below(thres);
     chop.requireAllZero(rs.stream().reduce(Min::of).get());
-    AssertFail.of(() -> qrDecomposition.pseudoInverse());
+    assertThrows(TensorRuntimeException.class, () -> qrDecomposition.pseudoInverse());
   }
 
   @Test

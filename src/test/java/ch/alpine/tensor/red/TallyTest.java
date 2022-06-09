@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
 import java.util.Map;
@@ -13,10 +14,10 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TallyTest {
+class TallyTest {
   @Test
   public void testSome() {
     Tensor tensor = Tensors.vector(4, 2, 3, 7, 2, 5, 4, 2, 2, 5);
@@ -69,6 +70,6 @@ public class TallyTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> Tally.of(RealScalar.of(3.1234)));
+    assertThrows(TensorRuntimeException.class, () -> Tally.of(RealScalar.of(3.1234)));
   }
 }

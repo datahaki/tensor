@@ -3,6 +3,7 @@ package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
@@ -10,11 +11,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.num.Pi;
@@ -22,9 +26,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class NdCollectRadiusTest {
+class NdCollectRadiusTest {
   @Test
   public void testClusterRadius() {
     int maxDensity = 2;
@@ -64,24 +67,23 @@ public class NdCollectRadiusTest {
     }
   }
 
-  @Test
-  public void testEmpty() {
-    for (NdCenters ndCenters : NdCenters.values()) {
-      NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2, 4.3));
-      Scalar radius = RealScalar.of(4);
-      NdCollectRadius<Object> ndCollectRadius = new NdCollectRadius<>(ndCenterInterface, radius);
-      assertTrue(ndCollectRadius.list().isEmpty());
-    }
+  @ParameterizedTest
+  @EnumSource(NdCenters.class)
+  public void testEmpty(NdCenters ndCenters) {
+    NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2, 4.3));
+    Scalar radius = RealScalar.of(4);
+    NdCollectRadius<Object> ndCollectRadius = new NdCollectRadius<>(ndCenterInterface, radius);
+    assertTrue(ndCollectRadius.list().isEmpty());
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> new NdCollectRadius<>(null, Pi.VALUE));
+    assertThrows(NullPointerException.class, () -> new NdCollectRadius<>(null, Pi.VALUE));
   }
 
   @Test
   public void testNonPositiveFail() {
     NdCenterInterface ndCenterInterface = NdCenters.VECTOR_INFINITY_NORM.apply(Array.zeros(2));
-    AssertFail.of(() -> new NdCollectRadius<>(ndCenterInterface, RealScalar.ONE.negate()));
+    assertThrows(TensorRuntimeException.class, () -> new NdCollectRadius<>(ndCenterInterface, RealScalar.ONE.negate()));
   }
 }

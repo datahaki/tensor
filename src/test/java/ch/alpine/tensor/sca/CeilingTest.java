@@ -2,6 +2,8 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
@@ -14,14 +16,14 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class CeilingTest {
+class CeilingTest {
   @Test
   public void testCeiling() {
     assertEquals(Ceiling.of(RealScalar.ZERO), RealScalar.ZERO);
@@ -65,13 +67,13 @@ public class CeilingTest {
     assertEquals(Ceiling.longValueExact(s), 18);
     Scalar r = Ceiling.of(s);
     assertEquals(r, RealScalar.of(18));
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test
   public void testIntExactValueFail() {
-    AssertFail.of(() -> Ceiling.intValueExact(Quantity.of(1.2, "h")));
-    AssertFail.of(() -> Ceiling.longValueExact(Quantity.of(2.3, "h*s")));
+    assertThrows(TensorRuntimeException.class, () -> Ceiling.intValueExact(Quantity.of(1.2, "h")));
+    assertThrows(TensorRuntimeException.class, () -> Ceiling.longValueExact(Quantity.of(2.3, "h*s")));
   }
 
   @Test
@@ -79,7 +81,7 @@ public class CeilingTest {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
     Scalar r = Ceiling.of(s);
     assertEquals(r, RealScalar.of(55));
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test
@@ -88,7 +90,7 @@ public class CeilingTest {
     Scalar s = RealScalar.of(bi);
     Scalar r = Ceiling.of(s);
     assertEquals(s, r);
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test
@@ -144,6 +146,6 @@ public class CeilingTest {
   @Test
   public void testTypeFail() {
     Scalar scalar = StringScalar.of("string");
-    AssertFail.of(() -> Ceiling.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Ceiling.of(scalar));
   }
 }

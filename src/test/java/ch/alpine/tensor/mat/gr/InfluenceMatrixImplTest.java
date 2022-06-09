@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.gr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -12,13 +13,13 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -35,7 +36,7 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 
-public class InfluenceMatrixImplTest {
+class InfluenceMatrixImplTest {
   @Test
   public void testExactRankDefficient7x5() {
     Random random = new Random(3);
@@ -75,26 +76,14 @@ public class InfluenceMatrixImplTest {
     Tensor influe = design.dot(PseudoInverse.of(design));
     {
       assertTrue(IdempotentQ.of(influe));
-      // System.out.println("IM=" + Pretty.of(influe.map(Round._2)));
       InfluenceMatrixQ.require(influe);
     }
     {
       InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
       Tolerance.CHOP.requireClose(influe, influenceMatrix.matrix());
-      // Tensor matrix = influenceMatrix.matrix();
-      // System.out.println("IM=" + Pretty.of(matrix.map(Round._2)));
+      Tensor matrix = influenceMatrix.matrix();
+      InfluenceMatrixQ.require(matrix);
     }
-    // InfluenceMatrix.of(Transpose.of(design));
-    // ... does not result in an influence matrix, since have mixed units
-    // {
-    // InfluenceMatrix influenceMatrix =
-    // Tensor matrix = influenceMatrix.matrix();
-    // System.out.println("IM=" + Pretty.of(matrix.map(Round._2)));
-    // InfluenceMatrixQ.require(matrix);
-    // System.out.println(Pretty.of(matrix.dot(matrix).map(Round._2)));
-    // assertTrue(IdempotentQ.of(matrix, Chop._07));
-    //
-    // }
   }
 
   @Test
@@ -105,7 +94,7 @@ public class InfluenceMatrixImplTest {
     Tensor design = RandomVariate.of(distribution, n, m);
     if (MatrixRank.of(design) == m) {
       InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
-      assertTrue(influenceMatrix instanceof InfluenceMatrixImpl);
+      assertInstanceOf(InfluenceMatrixImpl.class, influenceMatrix);
       ExactTensorQ.require(influenceMatrix.matrix());
       Tensor vector = RandomVariate.of(distribution, n);
       Tensor image = influenceMatrix.image(vector);
@@ -113,7 +102,7 @@ public class InfluenceMatrixImplTest {
       SymmetricMatrixQ.require(influenceMatrix.matrix());
       assertEquals(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(m));
       String string = influenceMatrix.toString();
-      assertTrue(string.startsWith("InfluenceMatrix"));
+      assertTrue(string.startsWith("InfluenceMatrix["));
     }
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
     assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);
@@ -127,7 +116,7 @@ public class InfluenceMatrixImplTest {
     Tensor design = RandomVariate.of(distribution, n, m);
     if (MatrixRank.of(design) == m) {
       InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
-      assertTrue(influenceMatrix instanceof InfluenceMatrixImpl);
+      assertInstanceOf(InfluenceMatrixImpl.class, influenceMatrix);
       ExactTensorQ.require(influenceMatrix.matrix());
       Tensor vector = RandomVariate.of(distribution, n);
       Tensor image = influenceMatrix.image(vector);
@@ -135,7 +124,7 @@ public class InfluenceMatrixImplTest {
       SymmetricMatrixQ.require(influenceMatrix.matrix());
       assertEquals(Total.ofVector(influenceMatrix.leverages()), RealScalar.of(m));
       String string = influenceMatrix.toString();
-      assertTrue(string.startsWith("InfluenceMatrix"));
+      assertTrue(string.startsWith("InfluenceMatrix["));
     }
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
     assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);

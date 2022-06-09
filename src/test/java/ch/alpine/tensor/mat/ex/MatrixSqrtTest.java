@@ -2,12 +2,16 @@
 package ch.alpine.tensor.mat.ex;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
@@ -26,9 +30,8 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class MatrixSqrtTest {
+class MatrixSqrtTest {
   private static void _check(Tensor g, MatrixSqrt matrixSqrt) {
     Chop._08.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt_inverse()), IdentityMatrix.of(g.length()));
     Chop._04.requireClose(matrixSqrt.sqrt().dot(matrixSqrt.sqrt()), g);
@@ -43,13 +46,12 @@ public class MatrixSqrtTest {
     Tolerance.CHOP.requireClose(matrixSqrt.sqrt(), Tensors.fromString("{{2, 2}, {0, 3}}"));
   }
 
-  @Test
-  public void testIdentity() {
-    for (int n = 1; n <= 5; ++n) {
-      Tensor x = IdentityMatrix.of(n);
-      _check(x, MatrixSqrt.of(x));
-      _check(x, MatrixSqrt.ofSymmetric(x));
-    }
+  @RepeatedTest(5)
+  public void testIdentity(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor x = IdentityMatrix.of(n);
+    _check(x, MatrixSqrt.of(x));
+    _check(x, MatrixSqrt.ofSymmetric(x));
   }
 
   @Test
@@ -98,6 +100,13 @@ public class MatrixSqrtTest {
   }
 
   @Test
+  public void testHermitian() {
+    Tensor matrix = Tensors.fromString("{{0, I}, {-I, 0}}");
+    MatrixSqrt matrixSqrt = MatrixSqrt.ofHermitian(matrix);
+    _check(matrix, matrixSqrt);
+  }
+
+  @Test
   public void testSymNegativeDiagonal() {
     Tensor matrix = DiagonalMatrix.of(-1, -2, -3);
     _check(matrix, MatrixSqrt.of(matrix));
@@ -109,7 +118,7 @@ public class MatrixSqrtTest {
     Tensor matrix = Array.zeros(2, 2);
     MatrixSqrt matrixSqrt = MatrixSqrt.of(matrix);
     assertEquals(matrixSqrt.sqrt(), Array.zeros(2, 2));
-    AssertFail.of(() -> matrixSqrt.sqrt_inverse());
+    assertThrows(ArithmeticException.class, () -> matrixSqrt.sqrt_inverse());
   }
 
   @Test
@@ -125,17 +134,17 @@ public class MatrixSqrtTest {
     Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
     SymmetricMatrixQ.require(matrix);
     MatrixSqrt.of(matrix);
-    AssertFail.of(() -> MatrixSqrt.ofSymmetric(matrix));
+    assertThrows(ClassCastException.class, () -> MatrixSqrt.ofSymmetric(matrix));
   }
 
   @Test
   public void testNonSquareFail() {
-    AssertFail.of(() -> MatrixSqrt.of(RandomVariate.of(UniformDistribution.of(-2, 2), 2, 3)));
-    AssertFail.of(() -> MatrixSqrt.of(HilbertMatrix.of(2, 3)));
+    assertThrows(IllegalArgumentException.class, () -> MatrixSqrt.of(RandomVariate.of(UniformDistribution.of(-2, 2), 2, 3)));
+    assertThrows(IllegalArgumentException.class, () -> MatrixSqrt.of(HilbertMatrix.of(2, 3)));
   }
 
   @Test
   public void testNonSymmetricFail() {
-    AssertFail.of(() -> MatrixSqrt.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4)));
+    assertThrows(TensorRuntimeException.class, () -> MatrixSqrt.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4)));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -11,9 +12,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.sca.Floor;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class MappedInterpolationTest {
+class MappedInterpolationTest {
   @Test
   public void testFloor() throws ClassNotFoundException, IOException {
     Interpolation interpolation = //
@@ -24,11 +24,11 @@ public class MappedInterpolationTest {
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> MappedInterpolation.of(null, Floor.FUNCTION));
+    assertThrows(NullPointerException.class, () -> MappedInterpolation.of(null, Floor.FUNCTION));
   }
 
   @Test
   public void testFailFunctionNull() {
-    AssertFail.of(() -> MappedInterpolation.of(Tensors.vector(3, 4, 5), null));
+    assertThrows(NullPointerException.class, () -> MappedInterpolation.of(Tensors.vector(3, 4, 5), null));
   }
 }

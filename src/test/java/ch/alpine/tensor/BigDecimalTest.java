@@ -11,7 +11,7 @@ import java.math.RoundingMode;
 
 import org.junit.jupiter.api.Test;
 
-public class BigDecimalTest {
+class BigDecimalTest {
   @Test
   public void testPrecision() {
     BigDecimal value = new BigDecimal(new BigInteger("12333"), new MathContext(100, RoundingMode.HALF_EVEN));

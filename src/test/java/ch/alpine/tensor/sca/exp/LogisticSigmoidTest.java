@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 
-public class LogisticSigmoidTest {
+class LogisticSigmoidTest {
   @Test
   public void testBasic() {
     assertEquals(LogisticSigmoid.of(RealScalar.ZERO), RealScalar.of(0.5));

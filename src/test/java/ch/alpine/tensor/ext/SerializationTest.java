@@ -3,7 +3,7 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -17,7 +17,7 @@ class NonSerializable {
   int value;
 }
 
-public class SerializationTest {
+class SerializationTest {
   @Test
   public void testCopy() throws ClassNotFoundException, IOException {
     String s1 = "abc";
@@ -47,33 +47,18 @@ public class SerializationTest {
   @Test
   public void testOfFail() {
     NonSerializable nonSerializable = new NonSerializable();
-    try {
-      Serialization.of(nonSerializable);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Serialization.of(nonSerializable));
   }
 
   @Test
   public void testParseFail() {
-    try {
-      Serialization.parse(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Serialization.parse(null));
   }
 
   @Test
   public void testParseFail2() {
     byte[] bytes = new byte[100];
     new SecureRandom().nextBytes(bytes);
-    try {
-      Serialization.parse(bytes);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Serialization.parse(bytes));
   }
 }

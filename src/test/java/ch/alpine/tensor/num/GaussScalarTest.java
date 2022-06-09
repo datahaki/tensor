@@ -3,6 +3,8 @@ package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
@@ -15,12 +17,13 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Sort;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.ArgMax;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
@@ -35,9 +38,8 @@ import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class GaussScalarTest {
+class GaussScalarTest {
   @Test
   public void testReciprocal() {
     long prime = 7919;
@@ -53,8 +55,8 @@ public class GaussScalarTest {
   public void testDivideUnder() {
     GaussScalar num = GaussScalar.of(132, 193);
     GaussScalar den = GaussScalar.of(37, 193);
-    GaussScalar div1 = num.divide(den);
-    GaussScalar div2 = den.under(num);
+    Scalar div1 = num.divide(den);
+    Scalar div2 = den.under(num);
     assertEquals(div1, div2);
   }
 
@@ -124,21 +126,21 @@ public class GaussScalarTest {
       }
     }
     assertEquals(count, 6);
-    AssertFail.of(() -> Sqrt.of(GaussScalar.of(2, 11)));
+    assertThrows(TensorRuntimeException.class, () -> Sqrt.of(GaussScalar.of(2, 11)));
   }
 
   @Test
   public void testSqrt5() {
     assertEquals(Sqrt.of(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
     assertEquals(Sqrt.of(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
-    AssertFail.of(() -> Sqrt.of(GaussScalar.of(2, 5)));
-    AssertFail.of(() -> Sqrt.of(GaussScalar.of(3, 5)));
+    assertThrows(TensorRuntimeException.class, () -> Sqrt.of(GaussScalar.of(2, 5)));
+    assertThrows(TensorRuntimeException.class, () -> Sqrt.of(GaussScalar.of(3, 5)));
   }
 
   @Test
   public void testNumber() {
     Scalar scalar = GaussScalar.of(9, 23);
-    assertTrue(scalar.number() instanceof BigInteger);
+    assertInstanceOf(BigInteger.class, scalar.number());
   }
 
   @Test
@@ -218,7 +220,7 @@ public class GaussScalarTest {
     GaussScalar gaussScalar = GaussScalar.of(3, 107);
     assertEquals(gaussScalar.number(), BigInteger.valueOf(3));
     assertEquals(gaussScalar.prime(), BigInteger.valueOf(107));
-    AssertFail.of(() -> Power.of(gaussScalar, Pi.HALF));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(gaussScalar, Pi.HALF));
   }
 
   @Test
@@ -261,11 +263,11 @@ public class GaussScalarTest {
   public void testBinaryOpFail() {
     GaussScalar gs1 = GaussScalar.of(432, 677);
     GaussScalar gs2 = GaussScalar.of(4, 13);
-    AssertFail.of(() -> gs1.multiply(gs2));
-    AssertFail.of(() -> gs1.add(gs2));
-    AssertFail.of(() -> gs1.divide(gs2));
-    AssertFail.of(() -> gs1.under(gs2));
-    AssertFail.of(() -> gs1.compareTo(gs2));
+    assertThrows(TensorRuntimeException.class, () -> gs1.multiply(gs2));
+    assertThrows(TensorRuntimeException.class, () -> gs1.add(gs2));
+    assertThrows(TensorRuntimeException.class, () -> gs1.divide(gs2));
+    assertThrows(TensorRuntimeException.class, () -> gs1.under(gs2));
+    assertThrows(TensorRuntimeException.class, () -> gs1.compareTo(gs2));
   }
 
   @Test
@@ -304,13 +306,13 @@ public class GaussScalarTest {
   public void testDivideZeroFail() {
     Scalar a = GaussScalar.of(3, 13);
     Scalar b = GaussScalar.of(0, 13);
-    AssertFail.of(() -> a.divide(b));
-    AssertFail.of(() -> b.under(a));
+    assertThrows(ArithmeticException.class, () -> a.divide(b));
+    assertThrows(ArithmeticException.class, () -> b.under(a));
   }
 
   @Test
   public void testPrimes() {
-    Tensor tensor = ResourceData.of("/number/primes.vector");
+    Tensor tensor = ResourceData.of("/io/primes.vector");
     tensor.extract(3, tensor.length()).stream() //
         .parallel() //
         .map(Scalar.class::cast) //

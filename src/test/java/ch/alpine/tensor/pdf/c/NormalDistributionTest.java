@@ -2,7 +2,11 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,6 +14,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -23,10 +29,12 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.CentralMoment;
+import ch.alpine.tensor.red.Kurtosis;
+import ch.alpine.tensor.red.Mean;
+import ch.alpine.tensor.red.StandardDeviation;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class NormalDistributionTest {
+class NormalDistributionTest {
   @Test
   public void testExpectationMean() {
     Scalar mean = RationalScalar.of(3, 5);
@@ -67,11 +75,11 @@ public class NormalDistributionTest {
   @Test
   public void testQuantity() {
     Distribution distribution = NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "m"));
-    assertTrue(RandomVariate.of(distribution) instanceof Quantity);
+    assertInstanceOf(Quantity.class, RandomVariate.of(distribution));
     Scalar mean = Expectation.mean(distribution);
-    assertTrue(mean instanceof Quantity);
+    assertInstanceOf(Quantity.class, mean);
     Scalar var = Expectation.variance(distribution);
-    assertTrue(var instanceof Quantity);
+    assertInstanceOf(Quantity.class, var);
     assertEquals(QuantityMagnitude.SI().in(Unit.of("m^2")).apply(var), RealScalar.of(4));
     {
       Scalar prob = PDF.of(distribution).at(mean);
@@ -121,20 +129,42 @@ public class NormalDistributionTest {
   }
 
   @Test
+  public void testKurtosis() {
+    assertEquals(Kurtosis.of(NormalDistribution.of(3, 4)), RealScalar.of(3));
+  }
+
+  @Test
+  public void testDateTimeScalar() {
+    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
+    Scalar durationScalar = Quantity.of(123, "s");
+    Distribution distribution = NormalDistribution.of(dateTimeScalar, durationScalar);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTimeScalar.class, scalar);
+    PDF pdf = PDF.of(distribution);
+    pdf.at(DateTimeScalar.of(LocalDateTime.now()));
+    CDF cdf = CDF.of(distribution);
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTimeScalar.of(LocalDateTime.now()));
+    Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+    assertEquals(Mean.of(distribution), dateTimeScalar);
+    assertEquals(StandardDeviation.of(distribution), durationScalar);
+  }
+
+  @Test
   public void testComplexFail() {
-    AssertFail.of(() -> NormalDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> NormalDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> NormalDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
-    AssertFail.of(() -> NormalDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
-    AssertFail.of(() -> NormalDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    assertThrows(TensorRuntimeException.class, () -> NormalDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> NormalDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
   @Test
   public void testNegativeSigmaFail() {
     NormalDistribution.of(5, 1);
-    AssertFail.of(() -> NormalDistribution.of(5, -1));
+    assertThrows(TensorRuntimeException.class, () -> NormalDistribution.of(5, -1));
   }
 }

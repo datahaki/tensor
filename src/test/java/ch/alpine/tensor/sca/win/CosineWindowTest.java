@@ -1,14 +1,15 @@
 // code by jph
 package ch.alpine.tensor.sca.win;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class CosineWindowTest {
+class CosineWindowTest {
   @Test
   public void testSimple() {
     ScalarUnaryOperator connesWindow = CosineWindow.of(RealScalar.of(1.6));
@@ -21,6 +22,6 @@ public class CosineWindowTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> CosineWindow.of(null));
+    assertThrows(NullPointerException.class, () -> CosineWindow.of(null));
   }
 }

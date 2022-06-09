@@ -2,6 +2,7 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
 
@@ -13,9 +14,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Numel;
 import ch.alpine.tensor.sca.pow.Power;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class LeviCivitaTensorTest {
+class LeviCivitaTensorTest {
   // former non-sparse implementation
   private static Tensor full(int d) {
     return Array.of(list -> Signature.of(Tensors.vector(list)), Collections.nCopies(d, d));
@@ -58,6 +58,6 @@ public class LeviCivitaTensorTest {
 
   @Test
   public void testRankNegativeFail() {
-    AssertFail.of(() -> LeviCivitaTensor.of(-1));
+    assertThrows(IllegalArgumentException.class, () -> LeviCivitaTensor.of(-1));
   }
 }

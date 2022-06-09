@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -22,7 +24,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class NdListMapTest {
+class NdListMapTest {
   @Test
   public void testSimple() {
     NdMap<String> m1 = new NdListMap<>();
@@ -82,53 +84,48 @@ public class NdListMapTest {
     Chop._10.requireClose(s1, s2);
   }
 
-  @Test
-  public void testOne() {
-    for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(0.3, .3), 1, dim);
-      _checkCenter(Tensors.vector(0.1, .3), 1, dim);
-      _checkCenter(Tensors.vector(5, 4.3), 1, dim);
-      _checkCenter(Tensors.vector(5, -3.3), 1, dim);
-    }
+  @RepeatedTest(4)
+  public void testOne(RepetitionInfo repetitionInfo) {
+    int dim = repetitionInfo.getCurrentRepetition();
+    _checkCenter(Tensors.vector(0.3, .3), 1, dim);
+    _checkCenter(Tensors.vector(0.1, .3), 1, dim);
+    _checkCenter(Tensors.vector(5, 4.3), 1, dim);
+    _checkCenter(Tensors.vector(5, -3.3), 1, dim);
   }
 
-  @Test
-  public void testFew() {
-    for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(0.3, .3), 3, dim);
-      _checkCenter(Tensors.vector(0.1, .3), 3, dim);
-      _checkCenter(Tensors.vector(5, 4.3), 3, dim);
-      _checkCenter(Tensors.vector(5, -3.3), 3, dim);
-    }
+  @RepeatedTest(4)
+  public void testFew(RepetitionInfo repetitionInfo) {
+    int dim = repetitionInfo.getCurrentRepetition();
+    _checkCenter(Tensors.vector(0.3, .3), 3, dim);
+    _checkCenter(Tensors.vector(0.1, .3), 3, dim);
+    _checkCenter(Tensors.vector(5, 4.3), 3, dim);
+    _checkCenter(Tensors.vector(5, -3.3), 3, dim);
   }
 
-  @Test
-  public void testMany() {
-    for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(0.3, .3), 20, dim);
-      _checkCenter(Tensors.vector(0.1, .3), 20, dim);
-      _checkCenter(Tensors.vector(5, 4.3), 20, dim);
-      _checkCenter(Tensors.vector(5, -3.3), 20, dim);
-    }
+  @RepeatedTest(4)
+  public void testMany(RepetitionInfo repetitionInfo) {
+    int dim = repetitionInfo.getCurrentRepetition();
+    _checkCenter(Tensors.vector(0.3, .3), 20, dim);
+    _checkCenter(Tensors.vector(0.1, .3), 20, dim);
+    _checkCenter(Tensors.vector(5, 4.3), 20, dim);
+    _checkCenter(Tensors.vector(5, -3.3), 20, dim);
   }
 
-  @Test
-  public void testMost() {
-    for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(0.3, .3), 60, dim);
-      _checkCenter(Tensors.vector(0.1, .3), 60, dim);
-      _checkCenter(Tensors.vector(5, 4.3), 60, dim);
-      _checkCenter(Tensors.vector(5, -3.3), 60, dim);
-    }
+  @RepeatedTest(4)
+  public void testMost(RepetitionInfo repetitionInfo) {
+    int dim = repetitionInfo.getCurrentRepetition();
+    _checkCenter(Tensors.vector(0.3, .3), 60, dim);
+    _checkCenter(Tensors.vector(0.1, .3), 60, dim);
+    _checkCenter(Tensors.vector(5, 4.3), 60, dim);
+    _checkCenter(Tensors.vector(5, -3.3), 60, dim);
   }
 
-  @Test
-  public void testAll() {
-    for (int dim = 1; dim < 5; ++dim) {
-      _checkCenter(Tensors.vector(0.3, .3), 160, dim);
-      _checkCenter(Tensors.vector(0.1, .3), 160, dim);
-      _checkCenter(Tensors.vector(5, 4.3), 160, dim);
-      _checkCenter(Tensors.vector(5, -3.3), 160, dim);
-    }
+  @RepeatedTest(4)
+  public void testAll(RepetitionInfo repetitionInfo) {
+    int dim = repetitionInfo.getCurrentRepetition();
+    _checkCenter(Tensors.vector(0.3, .3), 160, dim);
+    _checkCenter(Tensors.vector(0.1, .3), 160, dim);
+    _checkCenter(Tensors.vector(5, 4.3), 160, dim);
+    _checkCenter(Tensors.vector(5, -3.3), 160, dim);
   }
 }

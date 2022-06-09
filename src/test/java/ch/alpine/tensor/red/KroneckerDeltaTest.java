@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
-public class KroneckerDeltaTest {
+class KroneckerDeltaTest {
   /** @param scalar
    * @return function that maps input to 1 if input matches scalar, otherwise gives 0 */
   public static ScalarUnaryOperator function(Scalar scalar) {

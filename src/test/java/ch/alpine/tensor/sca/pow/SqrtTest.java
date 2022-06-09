@@ -2,7 +2,8 @@
 package ch.alpine.tensor.sca.pow;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +14,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
@@ -20,9 +22,8 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Rationalize;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.AbsSquared;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class SqrtTest {
+class SqrtTest {
   @Test
   public void testNegative() {
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(RealScalar.of(10000));
@@ -65,7 +66,7 @@ public class SqrtTest {
   public void testRational() {
     assertEquals(Sqrt.of(RationalScalar.of(16, 25)).toString(), "4/5");
     Scalar scalar = Sqrt.of(RationalScalar.of(-16, 25));
-    assertTrue(scalar instanceof ComplexScalar);
+    assertInstanceOf(ComplexScalar.class, scalar);
     assertEquals(scalar.toString(), "4/5*I");
   }
 
@@ -118,6 +119,6 @@ public class SqrtTest {
   @Test
   public void testFail() {
     Scalar scalar = StringScalar.of("string");
-    AssertFail.of(() -> Sqrt.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Sqrt.of(scalar));
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -9,13 +10,13 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.lie.Cross;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class SymmetricMatrixQTest {
+class SymmetricMatrixQTest {
   @Test
   public void testHilbert() {
     SymmetricMatrixQ.require(HilbertMatrix.of(7));
@@ -32,7 +33,7 @@ public class SymmetricMatrixQTest {
     Tensor matrix = Tensors.fromString("{{1, 2.000000000000001}, {2, 1}}");
     SymmetricMatrixQ.require(matrix);
     assertFalse(SymmetricMatrixQ.of(matrix, Chop.NONE));
-    AssertFail.of(() -> SymmetricMatrixQ.require(matrix, Chop.NONE));
+    assertThrows(TensorRuntimeException.class, () -> SymmetricMatrixQ.require(matrix, Chop.NONE));
   }
 
   @Test
@@ -57,18 +58,18 @@ public class SymmetricMatrixQTest {
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> SymmetricMatrixQ.of(null));
+    assertThrows(NullPointerException.class, () -> SymmetricMatrixQ.of(null));
   }
 
   @Test
   public void testRequire() {
     SymmetricMatrixQ.require(IdentityMatrix.of(3));
-    AssertFail.of(() -> SymmetricMatrixQ.require(Tensors.vector(1, 2, 3)));
-    AssertFail.of(() -> SymmetricMatrixQ.require(Cross.skew3(Tensors.vector(1, 2, 3))));
+    assertThrows(TensorRuntimeException.class, () -> SymmetricMatrixQ.require(Tensors.vector(1, 2, 3)));
+    assertThrows(TensorRuntimeException.class, () -> SymmetricMatrixQ.require(Cross.skew3(Tensors.vector(1, 2, 3))));
   }
 
   @Test
   public void testRequireEmptyFail() {
-    AssertFail.of(() -> SymmetricMatrixQ.require(Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> SymmetricMatrixQ.require(Tensors.empty()));
   }
 }

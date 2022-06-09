@@ -2,6 +2,7 @@
 package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.Random;
@@ -12,6 +13,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Subdivide;
@@ -26,9 +28,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class SchattenNormTest {
+class SchattenNormTest {
   @Test
   public void testFrobenius() throws ClassNotFoundException, IOException {
     TensorScalarFunction tensorScalarFunction = Serialization.copy(SchattenNorm.of(2));
@@ -61,21 +62,21 @@ public class SchattenNormTest {
 
   @Test
   public void testPOutsideRangeFail() {
-    AssertFail.of(() -> SchattenNorm.of(0.999));
+    assertThrows(TensorRuntimeException.class, () -> SchattenNorm.of(0.999));
   }
 
   @Test
   public void testFormatFail() {
     TensorScalarFunction tensorScalarFunction = SchattenNorm.of(RationalScalar.of(3, 2));
-    AssertFail.of(() -> tensorScalarFunction.apply(LeviCivitaTensor.of(3)));
-    AssertFail.of(() -> tensorScalarFunction.apply(Tensors.vector(1, 2, 3)));
-    AssertFail.of(() -> tensorScalarFunction.apply(Tensors.empty()));
-    AssertFail.of(() -> tensorScalarFunction.apply(Pi.HALF));
+    assertThrows(ClassCastException.class, () -> tensorScalarFunction.apply(LeviCivitaTensor.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> tensorScalarFunction.apply(Tensors.vector(1, 2, 3)));
+    assertThrows(IllegalArgumentException.class, () -> tensorScalarFunction.apply(Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> tensorScalarFunction.apply(Pi.HALF));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> SchattenNorm.of((Number) null));
-    AssertFail.of(() -> SchattenNorm.of((Scalar) null));
+    assertThrows(NullPointerException.class, () -> SchattenNorm.of((Number) null));
+    assertThrows(NullPointerException.class, () -> SchattenNorm.of((Scalar) null));
   }
 }

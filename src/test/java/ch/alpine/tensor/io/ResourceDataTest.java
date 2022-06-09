@@ -4,6 +4,7 @@ package ch.alpine.tensor.io;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
@@ -18,16 +19,15 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.itp.Interpolation;
 import ch.alpine.tensor.itp.LinearInterpolation;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ResourceDataTest {
+class ResourceDataTest {
   private static void _checkColorscheme(Interpolation interpolation) {
-    AssertFail.of(() -> interpolation.get(Tensors.vector(256)));
+    assertThrows(IndexOutOfBoundsException.class, () -> interpolation.get(Tensors.vector(256)));
   }
 
   @Test
   public void testColorschemeClassic() {
-    Tensor tensor = ResourceData.of("/colorscheme/classic.csv");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorscheme/classic.csv");
     assertNotNull(tensor);
     assertEquals(Dimensions.of(tensor), Arrays.asList(256, 4));
     Interpolation interpolation = LinearInterpolation.of(tensor);
@@ -37,7 +37,7 @@ public class ResourceDataTest {
 
   @Test
   public void testHue() {
-    Tensor tensor = ResourceData.of("/colorscheme/_hue.csv");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
     assertNotNull(tensor);
     assertEquals(Dimensions.of(tensor), Arrays.asList(7, 4));
     Interpolation interpolation = LinearInterpolation.of(tensor);
@@ -47,7 +47,7 @@ public class ResourceDataTest {
 
   @Test
   public void testPrimes() {
-    Tensor primes = ResourceData.of("/number/primes.vector");
+    Tensor primes = ResourceData.of("/io/primes.vector");
     List<Integer> dimensions = Dimensions.of(primes);
     assertEquals(dimensions.size(), 1);
     assertTrue(500 < dimensions.get(0));
@@ -56,8 +56,8 @@ public class ResourceDataTest {
 
   @Test
   public void testPrimesLines() {
-    Tensor linesp = Tensor.of(ResourceData.lines("/number/primes.vector").stream().map(Scalars::fromString));
-    Tensor vector = ResourceData.of("/number/primes.vector");
+    Tensor linesp = Tensor.of(ResourceData.lines("/io/primes.vector").stream().map(Scalars::fromString));
+    Tensor vector = ResourceData.of("/io/primes.vector");
     assertEquals(linesp, vector);
   }
 

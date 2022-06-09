@@ -7,7 +7,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 
-public class PoissonWindowTest {
+class PoissonWindowTest {
   @Test
   public void testSimple() {
     ScalarUnaryOperator suo = PoissonWindow.of(RealScalar.of(1.6));

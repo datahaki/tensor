@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigInteger;
 import java.util.Collections;
@@ -11,9 +12,7 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.usr.AssertFail;
-
-public class FactorIntegerTest {
+class FactorIntegerTest {
   private static void _check(BigInteger n) {
     Map<BigInteger, Integer> map = FactorInteger.of(n);
     BigInteger p = BigInteger.ONE;
@@ -70,6 +69,6 @@ public class FactorIntegerTest {
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> FactorInteger.of(BigInteger.valueOf(-3)));
+    assertThrows(IllegalArgumentException.class, () -> FactorInteger.of(BigInteger.valueOf(-3)));
   }
 }

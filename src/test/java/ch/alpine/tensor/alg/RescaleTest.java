@@ -2,12 +2,14 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
@@ -15,9 +17,8 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.ScalarSummaryStatistics;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class RescaleTest {
+class RescaleTest {
   @Test
   public void testEmpty() {
     assertEquals(Rescale.of(Tensors.empty()), Tensors.empty());
@@ -117,24 +118,24 @@ public class RescaleTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Rescale.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Rescale.of(RealScalar.ONE));
   }
 
   @Test
   public void testQuantityMixedFail() {
     Tensor vector = Tensors.of(Quantity.of(1, "s"), Quantity.of(2, "m"));
-    AssertFail.of(() -> Rescale.of(vector));
+    assertThrows(TensorRuntimeException.class, () -> Rescale.of(vector));
   }
 
   @Test
   public void testQuantityZeroFail() {
     Tensor vector = Tensors.of(Quantity.of(0, ""), Quantity.of(0, "m"));
-    AssertFail.of(() -> Rescale.of(vector));
+    assertThrows(TensorRuntimeException.class, () -> Rescale.of(vector));
   }
 
   @Test
   public void testComplexFail() {
     Tensor vector = Tensors.fromString("{2+I, 1+2*I}");
-    AssertFail.of(() -> Rescale.of(vector));
+    assertThrows(ClassCastException.class, () -> Rescale.of(vector));
   }
 }

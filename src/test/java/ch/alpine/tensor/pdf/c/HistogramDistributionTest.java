@@ -2,21 +2,25 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.BinningMethod;
 import ch.alpine.tensor.pdf.CDF;
@@ -30,9 +34,8 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class HistogramDistributionTest {
+class HistogramDistributionTest {
   @Test
   public void testPdf() {
     Distribution distribution = //
@@ -67,7 +70,7 @@ public class HistogramDistributionTest {
   public void testFreedmanMin() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(3, 4));
     assertTrue(distribution.toString().startsWith("HistogramDistribution"));
-    AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(3, 3)));
+    assertThrows(TensorRuntimeException.class, () -> HistogramDistribution.of(Tensors.vector(3, 3)));
   }
 
   @Test
@@ -85,7 +88,7 @@ public class HistogramDistributionTest {
     Scalar width = Quantity.of(0.7, "m");
     Distribution distribution = //
         HistogramDistribution.of(vector, width);
-    assertTrue(RandomVariate.of(distribution) instanceof Quantity);
+    assertInstanceOf(Quantity.class, RandomVariate.of(distribution));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(Quantity.of(0, "m")), RealScalar.ZERO.divide(width));
     assertEquals(pdf.at(Quantity.of(1.2, "m")), RationalScalar.of(1, 7).divide(width));
@@ -268,12 +271,12 @@ public class HistogramDistributionTest {
 
   @Test
   public void testFailEmpty() {
-    AssertFail.of(() -> HistogramDistribution.of(Tensors.empty(), RealScalar.of(2)));
+    assertThrows(NoSuchElementException.class, () -> HistogramDistribution.of(Tensors.empty(), RealScalar.of(2)));
   }
 
   @Test
   public void testFailWidth() {
-    AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.ZERO));
-    AssertFail.of(() -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.of(-2)));
+    assertThrows(ArithmeticException.class, () -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.of(-2)));
   }
 }

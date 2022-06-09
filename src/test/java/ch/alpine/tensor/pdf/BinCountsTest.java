@@ -2,21 +2,22 @@
 package ch.alpine.tensor.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.pdf.c.ExponentialDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Total;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class BinCountsTest {
+class BinCountsTest {
   @Test
   public void testWidthTwo() {
     Tensor hist = BinCounts.of(Tensors.vector(6, 7, 1, 2, 3, 4, 2), RealScalar.of(2));
@@ -52,19 +53,19 @@ public class BinCountsTest {
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> BinCounts.of(Tensors.vector(-1e-10), RealScalar.ONE));
-    AssertFail.of(() -> BinCounts.of(Tensors.vector(-1e-10, -10), RealScalar.ONE));
-    AssertFail.of(() -> BinCounts.of(Tensors.vector(1, 2, 3, 4, 0, -3, 12, 32), RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> BinCounts.of(Tensors.vector(-1e-10), RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> BinCounts.of(Tensors.vector(-1e-10, -10), RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> BinCounts.of(Tensors.vector(1, 2, 3, 4, 0, -3, 12, 32), RealScalar.ONE));
   }
 
   @Test
   public void testDomainFail() {
-    AssertFail.of(() -> BinCounts.of(Tensors.vector(-1e-10), RealScalar.of(1.0)));
+    assertThrows(TensorRuntimeException.class, () -> BinCounts.of(Tensors.vector(-1e-10), RealScalar.of(1.0)));
   }
 
   @Test
   public void testWidthFail() {
-    AssertFail.of(() -> BinCounts.of(Tensors.vector(1, 2), RealScalar.of(0.0))); // zero
-    AssertFail.of(() -> BinCounts.of(Tensors.vector(1, 2), RealScalar.of(-0.2))); // negative
+    assertThrows(TensorRuntimeException.class, () -> BinCounts.of(Tensors.vector(1, 2), RealScalar.of(0.0))); // zero
+    assertThrows(TensorRuntimeException.class, () -> BinCounts.of(Tensors.vector(1, 2), RealScalar.of(-0.2))); // negative
   }
 }

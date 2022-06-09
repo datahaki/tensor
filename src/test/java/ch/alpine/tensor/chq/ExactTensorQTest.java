@@ -1,15 +1,18 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.chq;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ExactTensorQTest {
+class ExactTensorQTest {
   @Test
   public void testAll() {
     assertTrue(ExactTensorQ.of(RationalScalar.HALF));
@@ -21,6 +24,6 @@ public class ExactTensorQTest {
   @Test
   public void testRequireAll() {
     ExactTensorQ.require(Tensors.fromString("{{9/8, 3/2[s]}, 1/2+3/4*I}"));
-    AssertFail.of(() -> ExactTensorQ.require(Tensors.vector(1, 2, 3, 0.7)));
+    assertThrows(TensorRuntimeException.class, () -> ExactTensorQ.require(Tensors.vector(1, 2, 3, 0.7)));
   }
 }

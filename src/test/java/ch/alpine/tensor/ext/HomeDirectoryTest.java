@@ -3,15 +3,14 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.usr.AssertFail;
-
-public class HomeDirectoryTest {
+class HomeDirectoryTest {
   @Test
   public void testUserHome() {
     assertTrue(HomeDirectory.file().isDirectory());
@@ -52,6 +51,20 @@ public class HomeDirectoryTest {
   }
 
   @Test
+  public void testMusic() {
+    assertTrue(HomeDirectory.Music().isDirectory());
+    assertEquals(HomeDirectory.Music(), HomeDirectory.file("Music"));
+    assertEquals(HomeDirectory.Music("test.png"), HomeDirectory.file("Music", "test.png"));
+  }
+
+  @Test
+  public void testVideos() {
+    assertTrue(HomeDirectory.Videos().isDirectory());
+    assertEquals(HomeDirectory.Videos(), HomeDirectory.file("Videos"));
+    assertEquals(HomeDirectory.Videos("test.png"), HomeDirectory.file("Videos", "test.png"));
+  }
+
+  @Test
   public void testFreeSpace() {
     File file = HomeDirectory.file();
     assertTrue(0 < file.getFreeSpace());
@@ -61,6 +74,6 @@ public class HomeDirectoryTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> HomeDirectory.file("Doc", null, "some.txt"));
+    assertThrows(NullPointerException.class, () -> HomeDirectory.file("Doc", null, "some.txt"));
   }
 }

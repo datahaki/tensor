@@ -10,7 +10,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 
-public class LeastAbsoluteDeviationsTest {
+class LeastAbsoluteDeviationsTest {
   private static Scalar error(Tensor A, Tensor x, Tensor b) {
     return Vector1Norm.of(A.dot(x).subtract(b));
   }

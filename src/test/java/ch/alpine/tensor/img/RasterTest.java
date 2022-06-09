@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 
-public class RasterTest {
+class RasterTest {
   @Test
   public void testSmall() {
     Tensor matrix = Tensors.fromString("{{0, 0.1}}");

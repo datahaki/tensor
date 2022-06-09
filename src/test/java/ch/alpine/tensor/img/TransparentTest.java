@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.alg.Array;
 
-public class TransparentTest {
+class TransparentTest {
   @Test
   public void testSimple() {
     assertEquals(Transparent.rgba(), Array.zeros(4));

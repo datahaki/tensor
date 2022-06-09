@@ -31,7 +31,7 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class PolarDecompositionSqrtTest {
+class PolarDecompositionSqrtTest {
   private static void _check(Tensor matrix, PolarDecomposition polarDecomposition) {
     List<Integer> list = Dimensions.of(matrix);
     int k = list.get(0);

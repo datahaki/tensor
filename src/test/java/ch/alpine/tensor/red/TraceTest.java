@@ -2,6 +2,8 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -30,9 +32,8 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.spa.SparseArray;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TraceTest {
+class TraceTest {
   // from wikipedia
   private static Scalar _tr2Formula(Tensor A) {
     assertTrue(SquareMatrixQ.of(A));
@@ -84,7 +85,7 @@ public class TraceTest {
   public void testSparse() {
     Tensor tensor = SparseArray.of(Quantity.of(0, "m"), 3, 4, 3);
     Tensor traced = Trace.of(tensor, 0, 2);
-    assertTrue(traced instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, traced);
     assertEquals(Dimensions.of(traced), Arrays.asList(4));
   }
 
@@ -95,24 +96,24 @@ public class TraceTest {
 
   @Test
   public void testEmpty() {
-    AssertFail.of(() -> Trace.of(Tensors.empty())); // mathematica gives 0 == Tr[{}]
-    AssertFail.of(() -> Trace.of(Tensors.fromString("{{}}"))); // mathematica gives 0 == Tr[{{}}]
+    assertThrows(IndexOutOfBoundsException.class, () -> Trace.of(Tensors.empty())); // mathematica gives 0 == Tr[{}]
+    assertThrows(IllegalArgumentException.class, () -> Trace.of(Tensors.fromString("{{}}"))); // mathematica gives 0 == Tr[{{}}]
   }
 
   @Test
   public void testDimensionsFail() {
-    AssertFail.of(() -> Trace.of(RealScalar.ONE));
-    AssertFail.of(() -> Trace.of(Tensors.vector(1, 2, 3)));
-    AssertFail.of(() -> Trace.of(LeviCivitaTensor.of(3)));
+    assertThrows(IndexOutOfBoundsException.class, () -> Trace.of(RealScalar.ONE));
+    assertThrows(IndexOutOfBoundsException.class, () -> Trace.of(Tensors.vector(1, 2, 3)));
+    assertThrows(ClassCastException.class, () -> Trace.of(LeviCivitaTensor.of(3)));
   }
 
   @Test
   public void testParamFail() {
-    AssertFail.of(() -> Trace.of(HilbertMatrix.of(3, 3), 0, 0));
+    assertThrows(IllegalArgumentException.class, () -> Trace.of(HilbertMatrix.of(3, 3), 0, 0));
   }
 
   @Test
   public void testFormatFail() {
-    AssertFail.of(() -> Trace.of(HilbertMatrix.of(3, 4), 0, 1));
+    assertThrows(IllegalArgumentException.class, () -> Trace.of(HilbertMatrix.of(3, 4), 0, 1));
   }
 }

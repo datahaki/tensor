@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.OrderedQ;
@@ -29,9 +31,8 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class QuantileTest {
+class QuantileTest {
   @Test
   public void testMultiple() throws ClassNotFoundException, IOException {
     Tensor vector = Tensors.vector(0, 2, 1, 4, 3);
@@ -61,14 +62,14 @@ public class QuantileTest {
   @Test
   public void testBounds() {
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(Tensors.vector(0, 2, 1, 4, 3));
-    AssertFail.of(() -> scalarUnaryOperator.apply(RealScalar.of(1.01)));
-    AssertFail.of(() -> scalarUnaryOperator.apply(RealScalar.of(-0.01)));
+    assertThrows(IndexOutOfBoundsException.class, () -> scalarUnaryOperator.apply(RealScalar.of(1.01)));
+    assertThrows(IndexOutOfBoundsException.class, () -> scalarUnaryOperator.apply(RealScalar.of(-0.01)));
   }
 
   @Test
   public void testFailSorted() {
     Tensor vector = Tensors.vector(0, 2, 1, 4, 3);
-    AssertFail.of(() -> Quantile.ofSorted(vector));
+    assertThrows(TensorRuntimeException.class, () -> Quantile.ofSorted(vector));
   }
 
   @Test
@@ -81,7 +82,7 @@ public class QuantileTest {
     assertEquals(scalarUnaryOperator.apply(RealScalar.ZERO), qs1);
     assertEquals(scalarUnaryOperator.apply(RealScalar.ONE), qs2);
     Scalar qs4 = Quantity.of(2, "s");
-    AssertFail.of(() -> Sort.of(Tensors.of(qs1, qs4))); // comparison fails
+    assertThrows(TensorRuntimeException.class, () -> Sort.of(Tensors.of(qs1, qs4))); // comparison fails
   }
 
   @Test
@@ -98,17 +99,17 @@ public class QuantileTest {
   @Test
   public void testDistribution() {
     ScalarUnaryOperator suo = Quantile.of(UniformDistribution.of(5, 10));
-    AssertFail.of(() -> suo.apply(RationalScalar.of(-1, 5)));
+    assertThrows(TensorRuntimeException.class, () -> suo.apply(RationalScalar.of(-1, 5)));
     assertEquals(suo.apply(RationalScalar.of(0, 5)), RealScalar.of(5));
     assertEquals(suo.apply(RationalScalar.of(1, 5)), RealScalar.of(6));
     assertEquals(suo.apply(RationalScalar.of(2, 5)), RealScalar.of(7));
     assertEquals(suo.apply(RationalScalar.of(5, 5)), RealScalar.of(10));
-    AssertFail.of(() -> suo.apply(RationalScalar.of(+6, 5)));
+    assertThrows(TensorRuntimeException.class, () -> suo.apply(RationalScalar.of(+6, 5)));
   }
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> Quantile.of(Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> Quantile.of(Tensors.empty()));
   }
 
   @Test
@@ -116,39 +117,39 @@ public class QuantileTest {
     Tensor tensor = Tensors.vector(-3, 2, 1, 100);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
     Tensor weight = Tensors.of(RealScalar.ONE, ComplexScalar.of(1, 2));
-    AssertFail.of(() -> weight.map(scalarUnaryOperator));
+    assertThrows(TensorRuntimeException.class, () -> weight.map(scalarUnaryOperator));
   }
 
   @Test
   public void testFailQuantity() {
     Tensor tensor = Tensors.vector(-3, 2, 1, 100);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
-    AssertFail.of(() -> scalarUnaryOperator.apply(Quantity.of(0, "m")));
-    AssertFail.of(() -> scalarUnaryOperator.apply(Quantity.of(0.2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> scalarUnaryOperator.apply(Quantity.of(0, "m")));
+    assertThrows(TensorRuntimeException.class, () -> scalarUnaryOperator.apply(Quantity.of(0.2, "m")));
   }
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> Quantile.of(Pi.VALUE));
+    assertThrows(TensorRuntimeException.class, () -> Quantile.of(Pi.VALUE));
   }
 
   @Test
   public void testMatrixFail() {
     Tensor matrix = Reverse.of(IdentityMatrix.of(7));
     OrderedQ.require(matrix);
-    AssertFail.of(() -> Quantile.of(matrix));
-    AssertFail.of(() -> Quantile.ofSorted(matrix));
+    assertThrows(TensorRuntimeException.class, () -> Quantile.of(matrix));
+    assertThrows(TensorRuntimeException.class, () -> Quantile.ofSorted(matrix));
   }
 
   @Test
   public void testEmptyVectorFail() {
-    AssertFail.of(() -> Quantile.of(Tensors.empty()));
-    AssertFail.of(() -> Quantile.ofSorted(Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> Quantile.of(Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> Quantile.ofSorted(Tensors.empty()));
   }
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> Quantile.of((Tensor) null));
-    AssertFail.of(() -> Quantile.of((Distribution) null));
+    assertThrows(NullPointerException.class, () -> Quantile.of((Tensor) null));
+    assertThrows(NullPointerException.class, () -> Quantile.of((Distribution) null));
   }
 }

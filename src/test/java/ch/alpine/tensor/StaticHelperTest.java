@@ -8,7 +8,7 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-public class StaticHelperTest {
+class StaticHelperTest {
   @Test
   public void testStringLastIndex() {
     String string = "{ { } } ";

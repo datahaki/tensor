@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-public class HungarianAlgorithmTreeTest {
+class HungarianAlgorithmTreeTest {
   @Test
   public void testPackageVisibility() {
     assertFalse(Modifier.isPublic(HungarianAlgorithmTree.class.getModifiers()));

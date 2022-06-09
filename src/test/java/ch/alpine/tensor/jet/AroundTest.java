@@ -3,6 +3,8 @@ package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
@@ -10,14 +12,15 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -37,9 +40,8 @@ import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class AroundTest {
+class AroundTest {
   @Test
   public void testZeroDropSigma() {
     assertEquals(Around.of(4, 0), RealScalar.of(4));
@@ -89,7 +91,7 @@ public class AroundTest {
   public void testMean() {
     Tensor vector = Tensors.of(Around.of(2, 3), Around.of(3, 1), Around.of(-3, 1));
     Scalar mean = Mean.ofVector(vector);
-    assertTrue(mean instanceof Around);
+    assertInstanceOf(Around.class, mean);
     Scalar actual = Around.of(Scalars.fromString("2/3"), RealScalar.of(1.1055415967851332));
     assertEquals(mean, actual);
   }
@@ -140,7 +142,7 @@ public class AroundTest {
     ExactScalarQ.require(gq1);
     Distribution distribution = gq1.distribution(); // operates on Quantity
     Scalar rand = RandomVariate.of(distribution); // produces quantity with [m]
-    assertTrue(rand instanceof Quantity);
+    assertInstanceOf(Quantity.class, rand);
     assertEquals(Expectation.mean(distribution), Quantity.of(3, "m"));
     assertEquals(gq1.one(), RealScalar.ONE);
     assertEquals(gq1.one().multiply(gq1), gq1);
@@ -212,14 +214,14 @@ public class AroundTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> Around.of(2, -3));
+    assertThrows(TensorRuntimeException.class, () -> Around.of(2, -3));
   }
 
   @Test
   public void testNumberFail() {
     Scalar scalar = Around.of(2, 3);
     assertEquals(scalar.toString(), "2\u00B13");
-    AssertFail.of(() -> scalar.number());
+    assertThrows(TensorRuntimeException.class, () -> scalar.number());
   }
 
   @Test
@@ -231,7 +233,7 @@ public class AroundTest {
 
   @Test
   public void testSpecialCase() {
-    AssertFail.of(() -> Around.of(Quantity.of(1, "m"), RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> Around.of(Quantity.of(1, "m"), RealScalar.ZERO));
   }
 
   @Test
@@ -275,14 +277,14 @@ public class AroundTest {
 
   @Test
   public void testPowerFail() {
-    AssertFail.of(() -> Power.of(Around.of(-3, 2), Around.of(9, 12)));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(Around.of(-3, 2), Around.of(9, 12)));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> Around.of(null, 2));
-    AssertFail.of(() -> Around.of(2, null));
-    AssertFail.of(() -> Around.of(Pi.VALUE, null));
-    AssertFail.of(() -> Around.of(null, Pi.VALUE));
+    assertThrows(NullPointerException.class, () -> Around.of(null, 2));
+    assertThrows(NullPointerException.class, () -> Around.of(2, null));
+    assertThrows(NullPointerException.class, () -> Around.of(Pi.VALUE, null));
+    assertThrows(NullPointerException.class, () -> Around.of(null, Pi.VALUE));
   }
 }

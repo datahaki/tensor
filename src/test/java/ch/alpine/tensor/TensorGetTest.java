@@ -2,7 +2,8 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,9 +11,8 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TensorGetTest {
+class TensorGetTest {
   @Test
   public void testGetEmpty() {
     assertEquals(Tensors.empty().get(), Tensors.empty());
@@ -23,7 +23,7 @@ public class TensorGetTest {
 
   @Test
   public void testGetScalar() {
-    assertTrue(IdentityMatrix.of(10).Get(3, 4) instanceof RealScalar);
+    assertInstanceOf(RealScalar.class, IdentityMatrix.of(10).Get(3, 4));
   }
 
   @Test
@@ -92,6 +92,6 @@ public class TensorGetTest {
   @Test
   public void testGetAllFail() {
     Tensor matrix = Array.zeros(3, 4, 5);
-    AssertFail.of(() -> matrix.Get(Tensor.ALL));
+    assertThrows(IndexOutOfBoundsException.class, () -> matrix.Get(Tensor.ALL));
   }
 }

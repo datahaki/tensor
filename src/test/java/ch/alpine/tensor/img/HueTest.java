@@ -2,14 +2,13 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.Color;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.usr.AssertFail;
-
-public class HueTest {
+class HueTest {
   @Test
   public void testMod() {
     assertEquals(Hue.of(0, 1, 1, 1), Hue.of(1, 1, 1, 1));
@@ -32,7 +31,7 @@ public class HueTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> Hue.of(0, 0, 1.01, 0));
-    AssertFail.of(() -> Hue.of(Double.POSITIVE_INFINITY, 1, 1, 1));
+    assertThrows(IllegalArgumentException.class, () -> Hue.of(0, 0, 1.01, 0));
+    assertThrows(IllegalArgumentException.class, () -> Hue.of(Double.POSITIVE_INFINITY, 1, 1, 1));
   }
 }

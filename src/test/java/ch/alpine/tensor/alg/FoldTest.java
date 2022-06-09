@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.stream.Stream;
 
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -19,9 +21,8 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class FoldTest {
+class FoldTest {
   @Test
   public void testSimple() {
     Tensor fold = Fold.of(Tensor::dot, LeviCivitaTensor.of(4), IdentityMatrix.of(4));
@@ -53,11 +54,11 @@ public class FoldTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> Fold.of(null, Pi.HALF, Tensors.empty()));
+    assertThrows(NullPointerException.class, () -> Fold.of(null, Pi.HALF, Tensors.empty()));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Fold.of(Tensor::dot, Pi.HALF, Pi.HALF));
+    assertThrows(TensorRuntimeException.class, () -> Fold.of(Tensor::dot, Pi.HALF, Pi.HALF));
   }
 }

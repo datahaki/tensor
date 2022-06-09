@@ -2,6 +2,7 @@
 package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
@@ -28,9 +30,8 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class Matrix2NormTest {
+class Matrix2NormTest {
   @Test
   public void testMatrix1() {
     Tensor matrix = Tensors.matrix(new Number[][] { { 1, 2, 3 }, { 9, -3, 0 } });
@@ -43,7 +44,7 @@ public class Matrix2NormTest {
   @Test
   public void testMatrix2() {
     Tensor matrix = Tensors.fromString("{{}}");
-    AssertFail.of(() -> Matrix2Norm.of(matrix));
+    assertThrows(IllegalArgumentException.class, () -> Matrix2Norm.of(matrix));
   }
 
   private static void _check(Tensor x) {
@@ -105,13 +106,13 @@ public class Matrix2NormTest {
 
   @Test
   public void testNonMatrixFail() {
-    AssertFail.of(() -> Matrix2Norm.bound(RealScalar.of(2)));
-    AssertFail.of(() -> Matrix2Norm.bound(Tensors.vector(1, 2, 3)));
-    AssertFail.of(() -> Matrix2Norm.bound(LehmerTensor.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> Matrix2Norm.bound(RealScalar.of(2)));
+    assertThrows(TensorRuntimeException.class, () -> Matrix2Norm.bound(Tensors.vector(1, 2, 3)));
+    assertThrows(ClassCastException.class, () -> Matrix2Norm.bound(LehmerTensor.of(3)));
   }
 
   @Test
   public void testNonArray() {
-    AssertFail.of(() -> Matrix2Norm.bound(Tensors.fromString("{{1, 2, 3}, {4, 5}}")));
+    assertThrows(IllegalArgumentException.class, () -> Matrix2Norm.bound(Tensors.fromString("{{1, 2, 3}, {4, 5}}")));
   }
 }

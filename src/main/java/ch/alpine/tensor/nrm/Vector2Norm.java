@@ -26,7 +26,10 @@ public enum Vector2Norm {
     return Sqrt.FUNCTION.apply(Vector2NormSquared.of(vector));
   }
 
-  /** @param v1 vector
+  /** inspired by
+   * <a href="https://reference.wolfram.com/language/ref/EuclideanDistance.html">EuclideanDistance</a>
+   * 
+   * @param v1 vector
    * @param v2 vector
    * @return 2-norm of vector difference || v1 - v2 || */
   public static Scalar between(Tensor v1, Tensor v2) {

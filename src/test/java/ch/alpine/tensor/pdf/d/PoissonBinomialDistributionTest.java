@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.d;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Serialization;
@@ -20,9 +22,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class PoissonBinomialDistributionTest {
+class PoissonBinomialDistributionTest {
   @Test
   public void testEmpty() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(PoissonBinomialDistribution.of(Tensors.empty()));
@@ -69,18 +70,18 @@ public class PoissonBinomialDistributionTest {
   @Test
   public void testCdfFail() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(0.1, 0.3, 1, 0.1, 0.5));
-    AssertFail.of(() -> CDF.of(distribution));
+    assertThrows(IllegalArgumentException.class, () -> CDF.of(distribution));
   }
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> PoissonBinomialDistribution.of(RealScalar.ZERO));
-    AssertFail.of(() -> PoissonBinomialDistribution.of(IdentityMatrix.of(3)));
+    assertThrows(IllegalArgumentException.class, () -> PoissonBinomialDistribution.of(RealScalar.ZERO));
+    assertThrows(ClassCastException.class, () -> PoissonBinomialDistribution.of(IdentityMatrix.of(3)));
   }
 
   @Test
   public void testFailInvalid() {
-    AssertFail.of(() -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, 2, 0)));
-    AssertFail.of(() -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, -1, 1)));
+    assertThrows(TensorRuntimeException.class, () -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, 2, 0)));
+    assertThrows(TensorRuntimeException.class, () -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, -1, 1)));
   }
 }

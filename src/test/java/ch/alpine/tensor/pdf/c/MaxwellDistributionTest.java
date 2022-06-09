@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -10,6 +11,7 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -19,9 +21,8 @@ import ch.alpine.tensor.pdf.TestMarkovChebyshev;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class MaxwellDistributionTest {
+class MaxwellDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(MaxwellDistribution.of(1.3));
@@ -54,8 +55,8 @@ public class MaxwellDistributionTest {
 
   @Test
   public void testSigmaFail() {
-    AssertFail.of(() -> MaxwellDistribution.of(0));
-    AssertFail.of(() -> MaxwellDistribution.of(-1));
-    AssertFail.of(() -> MaxwellDistribution.of(Quantity.of(2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> MaxwellDistribution.of(0));
+    assertThrows(TensorRuntimeException.class, () -> MaxwellDistribution.of(-1));
+    assertThrows(TensorRuntimeException.class, () -> MaxwellDistribution.of(Quantity.of(2, "m")));
   }
 }

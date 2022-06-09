@@ -3,14 +3,13 @@ package ch.alpine.tensor;
 
 import java.io.Serializable;
 
-import ch.alpine.tensor.api.ExactScalarQInterface;
 import ch.alpine.tensor.sca.pow.SqrtInterface;
 
 /** arithmetic of BooleanScalar is as for an element of the finite field F with cardinality |F|=2
  * multiplication is logical AND
  * addition is logical XOR */
 /* package */ final class BooleanScalar extends AbstractScalar implements //
-    Comparable<Scalar>, ExactScalarQInterface, Serializable, SqrtInterface {
+    Comparable<Scalar>, SqrtInterface, Serializable {
   /** instance with value true, toString() == "true" */
   public static final Scalar TRUE = new BooleanScalar(true);
   /** instance with value false, toString() == "false" */
@@ -89,11 +88,6 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
       return Boolean.compare(value, booleanScalar.value);
     }
     throw TensorRuntimeException.of(this, scalar);
-  }
-
-  @Override // from ExactScalarQInterface
-  public boolean isExactScalar() {
-    return true;
   }
 
   @Override // from SqrtInterface

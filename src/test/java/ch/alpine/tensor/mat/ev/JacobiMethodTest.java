@@ -3,10 +3,13 @@ package ch.alpine.tensor.mat.ev;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DecimalScalar;
@@ -37,7 +40,7 @@ import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class JacobiMethodTest {
+class JacobiMethodTest {
   private static void checkEquation(Tensor matrix, Eigensystem eigensystem) {
     assertTrue(eigensystem.toString().startsWith("Eigensystem["));
     Tensor vectors = eigensystem.vectors();
@@ -114,18 +117,17 @@ public class JacobiMethodTest {
     }
   }
 
-  @Test
-  public void testZeros() {
-    for (int c = 1; c < 10; ++c) {
-      Tensor matrix = Array.zeros(c, c);
-      Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-      checkEquation(matrix, eigensystem);
-      SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
-      Tensor values1 = Reverse.of(Sort.of(svd.values()));
-      Tensor values2 = Sort.of(svd.values(), TensorComparator.INSTANCE.reversed());
-      Tolerance.CHOP.requireClose(eigensystem.values(), values1);
-      assertEquals(values1, values2);
-    }
+  @RepeatedTest(9)
+  public void testZeros(RepetitionInfo repetitionInfo) {
+    int c = repetitionInfo.getCurrentRepetition();
+    Tensor matrix = Array.zeros(c, c);
+    Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
+    checkEquation(matrix, eigensystem);
+    SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
+    Tensor values1 = Reverse.of(Sort.of(svd.values()));
+    Tensor values2 = Sort.of(svd.values(), TensorComparator.INSTANCE.reversed());
+    Tolerance.CHOP.requireClose(eigensystem.values(), values1);
+    assertEquals(values1, values2);
   }
 
   @Test
@@ -170,8 +172,8 @@ public class JacobiMethodTest {
   public void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
-    assertTrue(eigensystem.vectors().Get(3, 3) instanceof DecimalScalar);
-    assertTrue(eigensystem.values().Get(4) instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, eigensystem.vectors().Get(3, 3));
+    assertInstanceOf(DecimalScalar.class, eigensystem.values().Get(4));
   }
 
   @Test

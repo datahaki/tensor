@@ -2,21 +2,21 @@
 package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class QuantityUnitTest {
+class QuantityUnitTest {
   @Test
   public void testParsecs() {
     // QuantityMagnitude[Quantity[1*^-12, "Parsecs"], "Kilometers"]
@@ -61,7 +61,7 @@ public class QuantityUnitTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> QuantityUnit.of((Scalar) null));
-    AssertFail.of(() -> QuantityUnit.of((Clip) null));
+    assertThrows(NullPointerException.class, () -> QuantityUnit.of((Scalar) null));
+    assertThrows(NullPointerException.class, () -> QuantityUnit.of((Clip) null));
   }
 }

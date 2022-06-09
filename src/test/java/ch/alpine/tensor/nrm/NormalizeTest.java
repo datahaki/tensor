@@ -2,21 +2,23 @@
 package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -29,9 +31,8 @@ import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class NormalizeTest {
+class NormalizeTest {
   // function requires that vector != 0
   private static void _checkNormalize(Tensor vector, TensorScalarFunction tsf) {
     Scalar value = tsf.apply(Normalize.with(tsf).apply(vector));
@@ -155,25 +156,25 @@ public class NormalizeTest {
     assertTrue(tensorUnaryOperator.toString().startsWith("Normalize"));
     Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2));
     assertEquals(tensor, Tensors.fromString("{-1/4, 3/4, 1/2}"));
-    AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> tensorUnaryOperator.apply(Tensors.empty()));
   }
 
   @Test
   public void testInconsistentFail() {
     Distribution distribution = UniformDistribution.of(3, 5);
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(v -> RandomVariate.of(distribution));
-    AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2)));
+    assertThrows(TensorRuntimeException.class, () -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2)));
   }
 
   @Test
   public void testNormalizeTotalFail() {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);
-    AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, -2)));
+    assertThrows(ArithmeticException.class, () -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, -2)));
   }
 
   @Test
   public void testNormalizeNullFail() {
     TensorScalarFunction tensorScalarFunction = null;
-    AssertFail.of(() -> Normalize.with(tensorScalarFunction));
+    assertThrows(NullPointerException.class, () -> Normalize.with(tensorScalarFunction));
   }
 }

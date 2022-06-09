@@ -13,11 +13,12 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ChopInterface;
-import ch.alpine.tensor.api.ExactScalarQInterface;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.N;
+import ch.alpine.tensor.sca.tri.ArcTan;
+import ch.alpine.tensor.sca.tri.ArcTanInterface;
 
 /** The string expression of {@link DurationScalar} is identical to that of {@link Duration}.
  * 
@@ -29,8 +30,8 @@ import ch.alpine.tensor.sca.N;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-public class DurationScalar extends AbstractScalar implements AbsInterface, //
-    ChopInterface, ExactScalarQInterface, Comparable<Scalar>, SignInterface, Serializable {
+/* package */ class DurationScalar extends AbstractScalar implements AbsInterface, //
+    ArcTanInterface, ChopInterface, Comparable<Scalar>, SignInterface, Serializable {
   public static final DurationScalar ZERO = new DurationScalar(Duration.ZERO);
 
   /** @param duration
@@ -88,6 +89,8 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
   public Scalar under(Scalar scalar) {
     if (scalar instanceof DurationScalar durationScalar)
       return durationScalar.seconds().divide(seconds());
+    if (scalar instanceof RealScalar realScalar)
+      return realScalar.divide(seconds());
     throw TensorRuntimeException.of(this, scalar);
   }
 
@@ -98,7 +101,7 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from Scalar
   public Scalar reciprocal() {
-    throw TensorRuntimeException.of(this);
+    return seconds().reciprocal();
   }
 
   @Override // from Scalar
@@ -130,14 +133,18 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
     return new DurationScalar(duration.abs());
   }
 
+  @Override // from ArcTanInterface
+  public Scalar arcTan(Scalar x) {
+    if (x instanceof DurationScalar durationScalar)
+      return ArcTan.of(durationScalar.seconds(), seconds());
+    if (x instanceof RealScalar realScalar)
+      return ArcTan.of(realScalar, seconds());
+    throw TensorRuntimeException.of(x, this);
+  }
+
   @Override // from AbsInterface
   public Scalar absSquared() {
     throw TensorRuntimeException.of(this);
-  }
-
-  @Override // from ExactScalarQInterface
-  public boolean isExactScalar() {
-    return true;
   }
 
   @Override // from ChopInterface

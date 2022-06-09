@@ -12,9 +12,9 @@ public interface NdVisitor<V> {
   /** a pop is invoked for each call to {@link #push_firstLo(int, Scalar)} */
   void pop();
 
-  /** @param box
+  /** @param coordinateBoundingBox
    * @return whether visiting should proceed within the given bounds */
-  boolean isViable(CoordinateBoundingBox box);
+  boolean isViable(CoordinateBoundingBox coordinateBoundingBox);
 
   /** @param ndEntry */
   void consider(NdEntry<V> ndEntry);

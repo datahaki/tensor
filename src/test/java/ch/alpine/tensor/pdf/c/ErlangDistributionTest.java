@@ -2,7 +2,8 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -19,9 +20,8 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ErlangDistributionTest {
+class ErlangDistributionTest {
   @Test
   public void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(ErlangDistribution.of(3, RealScalar.of(1.8)));
@@ -56,7 +56,7 @@ public class ErlangDistributionTest {
     }
     {
       Scalar prob = pdf.at(Quantity.of(-1.2, "m^-1"));
-      assertTrue(prob instanceof Quantity);
+      assertInstanceOf(Quantity.class, prob);
       assertEquals(QuantityUnit.of(prob), Unit.of("m"));
     }
   }
@@ -69,6 +69,6 @@ public class ErlangDistributionTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> ErlangDistribution.of(0, RealScalar.of(1.8)));
+    assertThrows(IllegalArgumentException.class, () -> ErlangDistribution.of(0, RealScalar.of(1.8)));
   }
 }

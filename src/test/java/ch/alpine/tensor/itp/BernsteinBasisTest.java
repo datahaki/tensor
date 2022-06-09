@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,9 +13,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.red.Total;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class BernsteinBasisTest {
+class BernsteinBasisTest {
   @Test
   public void testSimple() {
     Tensor actual = BernsteinBasis.of(5, RationalScalar.of(2, 3));
@@ -34,12 +34,12 @@ public class BernsteinBasisTest {
   @Test
   public void testQuaternion() {
     Quaternion quaternion = Quaternion.of(2, 3, 4, 5);
-    AssertFail.of(() -> BernsteinBasis.of(5, quaternion));
+    assertThrows(ClassCastException.class, () -> BernsteinBasis.of(5, quaternion));
   }
 
   @Test
   public void testNegFail() {
     assertEquals(BernsteinBasis.of(0, RationalScalar.of(2, 3)), Tensors.vector(1));
-    AssertFail.of(() -> BernsteinBasis.of(-1, RationalScalar.of(2, 3)));
+    assertThrows(IllegalArgumentException.class, () -> BernsteinBasis.of(-1, RationalScalar.of(2, 3)));
   }
 }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
-public class LruCacheTest {
+class LruCacheTest {
   @Test
   public void testLru1() {
     Map<Integer, String> map = new LruCache<>(2);
@@ -81,4 +82,12 @@ public class LruCacheTest {
   // IntStream.range(0, 1024).boxed().parallel().forEach(index -> map.put(index, index));
   // assertTrue(3 < map.size());
   // }
+
+  @Test
+  public void testNegativeFail() {
+    assertThrows(IllegalArgumentException.class, () -> new LruCache<>(-1));
+    assertThrows(IllegalArgumentException.class, () -> new LruCache<>(10, -0.2f));
+    assertThrows(IllegalArgumentException.class, () -> new LruCache<>(10, 0f));
+    assertThrows(ArithmeticException.class, () -> new LruCache<>(Integer.MAX_VALUE));
+  }
 }

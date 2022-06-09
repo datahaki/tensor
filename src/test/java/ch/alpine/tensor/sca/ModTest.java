@@ -2,6 +2,8 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -18,12 +20,12 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ModTest {
+class ModTest {
   @Test
   public void testOffset() {
     Mod mod = Mod.function(4, -2);
@@ -138,7 +140,7 @@ public class ModTest {
     Scalar pi = DecimalScalar.of(new BigDecimal("3.141592653589793238462643383279502884197169399375105820974944592"));
     Mod mod = Mod.function(pi);
     Scalar re = mod.apply(RealScalar.of(100));
-    assertTrue(re instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, re);
     // Mathematica gives
     // ................................. 2.610627738716409607658055118335410589887748619371719549776717638
     assertTrue(re.toString().startsWith("2.6106277387164096076580551183354105898877486193717195497767176"));
@@ -182,7 +184,7 @@ public class ModTest {
   public void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(5, "m");
     Scalar qs2 = Quantity.of(3, "s");
-    AssertFail.of(() -> Mod.function(qs2).apply(qs1));
+    assertThrows(TensorRuntimeException.class, () -> Mod.function(qs2).apply(qs1));
   }
 
   @Test
@@ -193,21 +195,21 @@ public class ModTest {
 
   @Test
   public void testNull1Fail() {
-    AssertFail.of(() -> Mod.function(RealScalar.ONE, null));
+    assertThrows(NullPointerException.class, () -> Mod.function(RealScalar.ONE, null));
   }
 
   @Test
   public void testNull2Fail() {
-    AssertFail.of(() -> Mod.function(null, RealScalar.ONE));
+    assertThrows(NullPointerException.class, () -> Mod.function(null, RealScalar.ONE));
   }
 
   @Test
   public void testZeroAFail() {
-    AssertFail.of(() -> Mod.function(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> Mod.function(RealScalar.ZERO));
   }
 
   @Test
   public void testZeroBFail() {
-    AssertFail.of(() -> Mod.function(RealScalar.ZERO, RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Mod.function(RealScalar.ZERO, RealScalar.ONE));
   }
 }

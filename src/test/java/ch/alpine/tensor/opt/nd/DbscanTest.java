@@ -2,6 +2,7 @@
 package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
@@ -26,9 +28,8 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class DbscanTest {
+class DbscanTest {
   @Test
   public void testSimple() {
     Distribution dist_b = UniformDistribution.of(0, 10);
@@ -102,7 +103,7 @@ public class DbscanTest {
   @Test
   public void testFail() {
     Tensor points = Range.of(0, 8).map(Tensors::of);
-    AssertFail.of(() -> Dbscan.of(points, NdCenters.VECTOR_2_NORM, RealScalar.of(-1.1), 3));
-    AssertFail.of(() -> Dbscan.of(points, NdCenters.VECTOR_2_NORM, RealScalar.of(+1.1), 0));
+    assertThrows(TensorRuntimeException.class, () -> Dbscan.of(points, NdCenters.VECTOR_2_NORM, RealScalar.of(-1.1), 3));
+    assertThrows(IllegalArgumentException.class, () -> Dbscan.of(points, NdCenters.VECTOR_2_NORM, RealScalar.of(+1.1), 0));
   }
 }

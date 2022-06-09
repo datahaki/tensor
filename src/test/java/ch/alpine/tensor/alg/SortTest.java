@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,14 +14,14 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class SortTest {
+class SortTest {
   @Test
   public void testSort() {
     assertEquals(Sort.of(Tensors.vector(0, 4, 5, 2, -3)), Tensors.vector(-3, 0, 2, 4, 5));
@@ -85,7 +86,7 @@ public class SortTest {
     Tensor vector = Tensors.of( //
         Quantity.of(0, "m"), Quantity.of(9, "m"), //
         Quantity.of(-3, "m"), Quantity.of(0, "s"), RealScalar.ZERO);
-    AssertFail.of(() -> Sort.of(vector));
+    assertThrows(TensorRuntimeException.class, () -> Sort.of(vector));
   }
 
   @Test
@@ -123,11 +124,11 @@ public class SortTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Sort.of(RealScalar.of(3.12)));
+    assertThrows(TensorRuntimeException.class, () -> Sort.of(RealScalar.of(3.12)));
   }
 
   @Test
   public void testScalarVectorFail() {
-    AssertFail.of(() -> Sort.ofVector(Tensors.vector(1, 2, 3), null));
+    assertThrows(NullPointerException.class, () -> Sort.ofVector(Tensors.vector(1, 2, 3), null));
   }
 }

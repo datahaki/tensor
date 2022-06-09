@@ -3,6 +3,8 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.nrm.Vector2Norm;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
@@ -28,9 +31,8 @@ import ch.alpine.tensor.sca.Real;
 import ch.alpine.tensor.sca.Round;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ComplexScalarImplTest {
+class ComplexScalarImplTest {
   @Test
   public void testAbs() {
     ComplexScalar s = (ComplexScalar) ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));
@@ -49,17 +51,17 @@ public class ComplexScalarImplTest {
   @Test
   public void testAbs2() {
     Scalar s = ComplexScalar.of(RealScalar.of(-3), RealScalar.of(4));
-    assertTrue(Abs.of(s) instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, Abs.of(s));
   }
 
   @Test
   public void testFalseConstruct() {
     Scalar c1 = ComplexScalar.of(3, -4);
     Scalar c2 = ComplexScalar.of(-2, 9);
-    AssertFail.of(() -> ComplexScalar.of(c1, c2));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(c1, c2));
     Scalar r1 = RealScalar.of(7);
-    AssertFail.of(() -> ComplexScalar.of(r1, c2));
-    AssertFail.of(() -> ComplexScalar.of(c1, r1));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(r1, c2));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(c1, r1));
   }
 
   @Test
@@ -265,11 +267,25 @@ public class ComplexScalarImplTest {
   }
 
   @Test
+  public void testGaussScalarFail() {
+    Tensor tensor = Tensors.fromString("{0.3, 1/3, 3+4*I, 1.2+3.4*I}");
+    Scalar g = GaussScalar.of(1, 7);
+    for (Tensor _x : tensor) {
+      Scalar x = (Scalar) _x;
+      assertThrows(Exception.class, () -> x.divide(g));
+      assertThrows(Exception.class, () -> x.under(g));
+      assertThrows(Exception.class, () -> x.multiply(g));
+      assertThrows(Exception.class, () -> g.divide(x));
+      assertThrows(Exception.class, () -> g.under(x));
+    }
+  }
+
+  @Test
   public void testAddQuantityFail() {
     Scalar s1 = Quantity.of(1, "m");
     Scalar s2 = ComplexScalar.of(2, 3);
-    AssertFail.of(() -> s1.add(s2));
-    AssertFail.of(() -> s2.add(s1));
+    assertThrows(TensorRuntimeException.class, () -> s1.add(s2));
+    assertThrows(TensorRuntimeException.class, () -> s2.add(s1));
   }
 
   @Test

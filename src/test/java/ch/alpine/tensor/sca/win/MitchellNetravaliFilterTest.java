@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 
-public class MitchellNetravaliFilterTest {
+class MitchellNetravaliFilterTest {
   @Test
   public void testSimple() {
     Scalar scalar = MitchellNetravaliFilter.FUNCTION.apply(RealScalar.of(0.1));

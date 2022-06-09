@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -10,9 +11,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ArrayPadTest {
+class ArrayPadTest {
   @Test
   public void testVector() {
     Tensor vec = Tensors.vector(2, 3, -3, 1);
@@ -55,7 +55,7 @@ public class ArrayPadTest {
   @Test
   public void testFail() {
     Tensor vector = Tensors.vector(2, 3, -3, 1);
-    AssertFail.of(() -> ArrayPad.of(vector, Arrays.asList(1), Arrays.asList(-2)));
-    AssertFail.of(() -> ArrayPad.of(vector, Arrays.asList(-1), Arrays.asList(2)));
+    assertThrows(IllegalArgumentException.class, () -> ArrayPad.of(vector, Arrays.asList(1), Arrays.asList(-2)));
+    assertThrows(IllegalArgumentException.class, () -> ArrayPad.of(vector, Arrays.asList(-1), Arrays.asList(2)));
   }
 }

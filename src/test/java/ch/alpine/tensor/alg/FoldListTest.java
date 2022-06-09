@@ -2,18 +2,19 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Min;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class FoldListTest {
+class FoldListTest {
   @Test
   public void testEmpty() {
     Tensor tensor = FoldList.of(Tensor::add, Tensors.unmodifiableEmpty());
@@ -34,7 +35,7 @@ public class FoldListTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> FoldList.of(Tensor::add, RealScalar.of(31)));
+    assertThrows(IllegalArgumentException.class, () -> FoldList.of(Tensor::add, RealScalar.of(31)));
   }
 
   @Test
@@ -65,6 +66,6 @@ public class FoldListTest {
 
   @Test
   public void testFailSecond() {
-    AssertFail.of(() -> FoldList.of(Tensor::add, RealScalar.of(31), RealScalar.of(31)));
+    assertThrows(TensorRuntimeException.class, () -> FoldList.of(Tensor::add, RealScalar.of(31), RealScalar.of(31)));
   }
 }

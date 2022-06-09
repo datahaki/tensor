@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Random;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
@@ -21,9 +23,8 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.PoissonDistribution;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.exp.Log;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class InterquartileRangeTest {
+class InterquartileRangeTest {
   @Test
   public void testSamples() {
     Tensor samples = Tensors.vector(0, 1, 2, 3, 10);
@@ -63,11 +64,11 @@ public class InterquartileRangeTest {
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> InterquartileRange.of(Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> InterquartileRange.of(Tensors.empty()));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> InterquartileRange.of(IdentityMatrix.of(5)));
+    assertThrows(TensorRuntimeException.class, () -> InterquartileRange.of(IdentityMatrix.of(5)));
   }
 }

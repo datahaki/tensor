@@ -2,21 +2,22 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.io.StringScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ImagTest {
+class ImagTest {
   @Test
   public void testExact() {
     Scalar scalar = Imag.FUNCTION.apply(Scalars.fromString("3+I*6/7"));
@@ -52,6 +53,6 @@ public class ImagTest {
   @Test
   public void testFail() {
     Scalar scalar = StringScalar.of("string");
-    AssertFail.of(() -> Imag.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Imag.of(scalar));
   }
 }

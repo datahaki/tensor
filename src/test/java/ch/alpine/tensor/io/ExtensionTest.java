@@ -3,14 +3,13 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.usr.AssertFail;
-
-public class ExtensionTest {
+class ExtensionTest {
   @Test
   public void testTruncate() {
     Filename filename = new Filename("dir/some.bmp.gz");
@@ -33,7 +32,7 @@ public class ExtensionTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> Extension.of("unknown"));
+    assertThrows(IllegalArgumentException.class, () -> Extension.of("unknown"));
   }
 
   @Test

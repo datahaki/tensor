@@ -14,14 +14,14 @@ import java.util.Map;
 public class LruCache<K, V> extends LinkedHashMap<K, V> {
   private final int maxSize;
 
-  /** @param maxSize
-   * @param loadFactor */
+  /** @param maxSize non-negative
+   * @param loadFactor positive */
   public LruCache(int maxSize, float loadFactor) {
     super(Math.multiplyExact(maxSize, 4) / 3, loadFactor, true);
     this.maxSize = maxSize;
   }
 
-  /** @param maxSize */
+  /** @param maxSize non-negative */
   public LruCache(int maxSize) {
     this(maxSize, 0.75f);
   }

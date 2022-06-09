@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -9,13 +10,13 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ImageCropTest {
+class ImageCropTest {
   @Test
   public void testSerialization() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tensorUnaryOperator = //
@@ -59,6 +60,6 @@ public class ImageCropTest {
   @Test
   public void testVectorFail() {
     TensorUnaryOperator tensorUnaryOperator = ImageCrop.color(RealScalar.ONE);
-    AssertFail.of(() -> tensorUnaryOperator.apply(Tensors.vector(1, 2, 3)));
+    assertThrows(TensorRuntimeException.class, () -> tensorUnaryOperator.apply(Tensors.vector(1, 2, 3)));
   }
 }

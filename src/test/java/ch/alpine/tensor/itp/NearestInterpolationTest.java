@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -13,9 +14,8 @@ import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class NearestInterpolationTest {
+class NearestInterpolationTest {
   @Test
   public void testEmpty() {
     Interpolation interpolation = NearestInterpolation.of(Tensors.empty());
@@ -53,6 +53,6 @@ public class NearestInterpolationTest {
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> NearestInterpolation.of(null));
+    assertThrows(NullPointerException.class, () -> NearestInterpolation.of(null));
   }
 }

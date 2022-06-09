@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,9 +15,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.tri.Cos;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class NestListTest {
+class NestListTest {
   @Test
   public void testLength() {
     Tensor list = NestList.of(Cos::of, RealScalar.ONE, 4);
@@ -73,12 +73,12 @@ public class NestListTest {
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> NestList.of(Cos::of, null, 0));
+    assertThrows(NullPointerException.class, () -> NestList.of(Cos::of, null, 0));
   }
 
   @Test
   public void testFailNegative() {
-    AssertFail.of(() -> NestList.of(Cos::of, RealScalar.ONE, -1));
-    AssertFail.of(() -> NestList.of(Cos::of, RealScalar.ONE, -2));
+    assertThrows(IllegalArgumentException.class, () -> NestList.of(Cos::of, RealScalar.ONE, -1));
+    assertThrows(IllegalArgumentException.class, () -> NestList.of(Cos::of, RealScalar.ONE, -2));
   }
 }

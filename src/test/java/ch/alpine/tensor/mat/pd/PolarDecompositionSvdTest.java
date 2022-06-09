@@ -29,7 +29,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.pow.Sqrt;
 
-public class PolarDecompositionSvdTest {
+class PolarDecompositionSvdTest {
   @Test
   public void testSvd() {
     Random random = new Random(3);

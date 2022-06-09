@@ -3,8 +3,9 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Collections;
 
@@ -12,12 +13,11 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ScalarTest {
+class ScalarTest {
   @Test
   public void testIsScalar() {
-    assertTrue(ScalarQTest.of(DoubleScalar.POSITIVE_INFINITY));
+    assertInstanceOf(Scalar.class, DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
@@ -59,7 +59,7 @@ public class ScalarTest {
   public void testFails() {
     Scalar a = DoubleScalar.of(3);
     Scalar b = DoubleScalar.of(5);
-    AssertFail.of(() -> a.dot(b));
+    assertThrows(TensorRuntimeException.class, () -> a.dot(b));
   }
 
   @Test
@@ -83,16 +83,12 @@ public class ScalarTest {
     assertFalse(Integer.valueOf(1233).equals(null));
   }
 
-  @SuppressWarnings("unused")
   @Test
   public void testIteratorFail() {
-    try {
+    assertThrows(Exception.class, () -> {
       for (Tensor entry : RealScalar.ZERO) {
-        // ---
+        entry.copy();
       }
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    });
   }
 }

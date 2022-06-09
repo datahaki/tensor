@@ -2,9 +2,10 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -15,9 +16,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class CacheTest {
+class CacheTest {
   @Test
   public void testSimple() {
     Function<Object, Double> function = Cache.of(k -> Math.random(), 3);
@@ -29,7 +29,7 @@ public class CacheTest {
   @Test
   public void testInception() {
     Function<Object, Double> memo1 = Cache.of(k -> Math.random(), 32);
-    AssertFail.of(() -> Cache.of(memo1, 32));
+    assertThrows(IllegalArgumentException.class, () -> Cache.of(memo1, 32));
   }
 
   @Test
@@ -111,8 +111,8 @@ public class CacheTest {
   public void testValueNull() {
     Cache<Tensor, String> cache = Cache.of(t -> t.equals(RealScalar.ZERO) ? null : t.toString(), 10);
     assertEquals(cache.apply(RealScalar.ONE), "1");
-    assertTrue(Objects.isNull(cache.apply(RealScalar.ZERO)));
-    assertTrue(Objects.isNull(cache.apply(RealScalar.ZERO)));
+    assertNull(cache.apply(RealScalar.ZERO));
+    assertNull(cache.apply(RealScalar.ZERO));
   }
 
   @Test
@@ -169,11 +169,11 @@ public class CacheTest {
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> Cache.of(null, 32));
+    assertThrows(NullPointerException.class, () -> Cache.of(null, 32));
   }
 
   @Test
   public void testFailNegative() {
-    AssertFail.of(() -> Cache.of(Function.identity(), -1));
+    assertThrows(IllegalArgumentException.class, () -> Cache.of(Function.identity(), -1));
   }
 }

@@ -9,14 +9,14 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Reverse;
+import ch.alpine.tensor.chq.ExactScalarQ;
 
-public class HornerSchemeTest {
+class HornerSchemeTest {
   @Test
   public void testHorner1() {
     Tensor coeffs = Tensors.vector(-3, 4);

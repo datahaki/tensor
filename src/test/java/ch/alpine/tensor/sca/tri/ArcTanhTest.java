@@ -2,16 +2,17 @@
 package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.jet.Around;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ArcTanhTest {
+class ArcTanhTest {
   @Test
   public void testReal() {
     Scalar scalar = ArcTanh.of(RealScalar.of(0.5));
@@ -28,6 +29,6 @@ public class ArcTanhTest {
   @Test
   public void testFail() {
     Scalar scalar = Around.of(2, 3);
-    AssertFail.of(() -> ArcTanh.FUNCTION.apply(scalar));
+    assertThrows(TensorRuntimeException.class, () -> ArcTanh.FUNCTION.apply(scalar));
   }
 }

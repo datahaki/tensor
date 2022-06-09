@@ -2,16 +2,17 @@
 package ch.alpine.tensor.sca.win;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class HammingWindowTest {
+class HammingWindowTest {
   @Test
   public void testSimple() {
     Scalar result = HammingWindow.FUNCTION.apply(RealScalar.of(0.2));
@@ -27,7 +28,7 @@ public class HammingWindowTest {
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> HammingWindow.FUNCTION.apply(Quantity.of(0, "s")));
-    AssertFail.of(() -> HammingWindow.FUNCTION.apply(Quantity.of(2, "s")));
+    assertThrows(TensorRuntimeException.class, () -> HammingWindow.FUNCTION.apply(Quantity.of(0, "s")));
+    assertThrows(TensorRuntimeException.class, () -> HammingWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 }

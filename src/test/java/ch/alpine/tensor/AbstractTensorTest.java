@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.Array;
 
-public class AbstractTensorTest {
+class AbstractTensorTest {
   @Test
   public void testHash() {
     Tensor a = Tensors.vectorLong(7, 2);

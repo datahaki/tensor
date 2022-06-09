@@ -2,6 +2,7 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.Primitives;
 import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.num.GaussScalar;
@@ -21,9 +23,8 @@ import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.ArcTan;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class AbstractRealScalarTest {
+class AbstractRealScalarTest {
   private static final List<Scalar> SCALARS = Arrays.asList( //
       RealScalar.ZERO, RealScalar.ONE, //
       RationalScalar.of(-7, 3), //
@@ -137,8 +138,8 @@ public class AbstractRealScalarTest {
 
   @Test
   public void testArcTan() {
-    AssertFail.of(() -> ArcTan.of(RealScalar.of(2.3), GaussScalar.of(3, 7)));
-    AssertFail.of(() -> ArcTan.of(GaussScalar.of(3, 7), RealScalar.of(2.3)));
+    assertThrows(TensorRuntimeException.class, () -> ArcTan.of(RealScalar.of(2.3), GaussScalar.of(3, 7)));
+    assertThrows(TensorRuntimeException.class, () -> ArcTan.of(GaussScalar.of(3, 7), RealScalar.of(2.3)));
   }
 
   @Test
@@ -163,6 +164,6 @@ public class AbstractRealScalarTest {
 
   @Test
   public void testPowerFail() {
-    AssertFail.of(() -> Power.of(1, GaussScalar.of(2, 7)));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(1, GaussScalar.of(2, 7)));
   }
 }

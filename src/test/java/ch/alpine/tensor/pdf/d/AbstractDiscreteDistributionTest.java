@@ -7,7 +7,7 @@ import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-public class AbstractDiscreteDistributionTest {
+class AbstractDiscreteDistributionTest {
   @Test
   public void testVisibility() {
     assertTrue(Modifier.isPublic(AbstractDiscreteDistribution.class.getModifiers()));

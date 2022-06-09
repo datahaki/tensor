@@ -2,7 +2,8 @@
 package ch.alpine.tensor.mat.pi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -12,16 +13,17 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.NestList;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.LeftNullSpace;
@@ -40,9 +42,8 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class PseudoInverseTest {
+class PseudoInverseTest {
   @Test
   public void testHilbertSquare() {
     for (int n = 1; n < 8; ++n) {
@@ -201,7 +202,7 @@ public class PseudoInverseTest {
   public void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
     Tensor pseudo = PseudoInverse.of(matrix);
-    assertTrue(pseudo.Get(1, 2) instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, pseudo.Get(1, 2));
   }
 
   @Test
@@ -226,8 +227,8 @@ public class PseudoInverseTest {
     Tensor matrix = m1.dot(m2);
     assertEquals(MatrixRank.of(matrix), r);
     {
-      AssertFail.of(() -> PseudoInverse.usingQR(matrix));
-      AssertFail.of(() -> LeastSquares.usingQR(matrix, br));
+      assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingQR(matrix));
+      assertThrows(TensorRuntimeException.class, () -> LeastSquares.usingQR(matrix, br));
       Tensor ls1 = LeastSquares.of(matrix, br);
       Tensor ls2 = PseudoInverse.of(matrix).dot(br);
       Tolerance.CHOP.requireClose(ls1, ls2);
@@ -235,8 +236,8 @@ public class PseudoInverseTest {
     {
       Tensor m = Transpose.of(matrix);
       Tensor b = RandomVariate.of(distribution, 4);
-      AssertFail.of(() -> PseudoInverse.usingQR(m));
-      AssertFail.of(() -> LeastSquares.usingQR(m, b));
+      assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingQR(m));
+      assertThrows(TensorRuntimeException.class, () -> LeastSquares.usingQR(m, b));
       Tensor ls1 = LeastSquares.of(m, b);
       Tensor ls2 = PseudoInverse.of(m).dot(b);
       Tolerance.CHOP.requireClose(ls1, ls2);
@@ -273,27 +274,27 @@ public class PseudoInverseTest {
   @Test
   public void testEmptyFail() {
     Tensor tensor = Tensors.empty();
-    AssertFail.of(() -> PseudoInverse.of(tensor));
-    AssertFail.of(() -> PseudoInverse.usingSvd(tensor));
+    assertThrows(IllegalArgumentException.class, () -> PseudoInverse.of(tensor));
+    assertThrows(IllegalArgumentException.class, () -> PseudoInverse.usingSvd(tensor));
   }
 
   @Test
   public void testVectorFail() {
     Tensor tensor = Tensors.vector(1, 2, 3, 4);
-    AssertFail.of(() -> PseudoInverse.of(tensor));
-    AssertFail.of(() -> PseudoInverse.usingSvd(tensor));
+    assertThrows(TensorRuntimeException.class, () -> PseudoInverse.of(tensor));
+    assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingSvd(tensor));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> PseudoInverse.of(RealScalar.ONE));
-    AssertFail.of(() -> PseudoInverse.usingSvd(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> PseudoInverse.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingSvd(RealScalar.ONE));
   }
 
   @Test
   public void testEmptyMatrixFail() {
     Tensor tensor = Tensors.of(Tensors.empty());
-    AssertFail.of(() -> PseudoInverse.of(tensor));
-    AssertFail.of(() -> PseudoInverse.usingSvd(tensor));
+    assertThrows(IllegalArgumentException.class, () -> PseudoInverse.of(tensor));
+    assertThrows(IllegalArgumentException.class, () -> PseudoInverse.usingSvd(tensor));
   }
 }

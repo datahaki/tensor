@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -24,12 +25,11 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.qty.UnitQ;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class UnprotectTest {
+class UnprotectTest {
   @Test
   public void testUsingNullFail() {
-    AssertFail.of(() -> Unprotect.using(null));
+    assertThrows(NullPointerException.class, () -> Unprotect.using(null));
   }
 
   @Test
@@ -60,12 +60,12 @@ public class UnprotectTest {
   public void testUsingNCopies() {
     Tensor tensor = Unprotect.using(Collections.nCopies(5, RealScalar.of(2)));
     assertEquals(tensor, Tensors.vector(2, 2, 2, 2, 2));
-    AssertFail.of(() -> tensor.append(RealScalar.ONE));
+    assertThrows(UnsupportedOperationException.class, () -> tensor.append(RealScalar.ONE));
   }
 
   @Test
   public void testEmptyLinkedListUnmodifiable() {
-    AssertFail.of(() -> Unprotect.using(new LinkedList<>()).unmodifiable().append(RealScalar.ZERO));
+    assertThrows(UnsupportedOperationException.class, () -> Unprotect.using(new LinkedList<>()).unmodifiable().append(RealScalar.ZERO));
   }
 
   @Test
@@ -83,8 +83,8 @@ public class UnprotectTest {
     Tensor byref = Unprotect.byRef(beg, null, beg);
     byref.get(0);
     byref.get(2);
-    AssertFail.of(() -> byref.get(1)); // invokes copy() on the entry
-    AssertFail.of(() -> byref.extract(0, 3)); // invokes copy() on the entries
+    assertThrows(NullPointerException.class, () -> byref.get(1)); // invokes copy() on the entry
+    assertThrows(NullPointerException.class, () -> byref.extract(0, 3)); // invokes copy() on the entries
   }
 
   @Test
@@ -98,7 +98,7 @@ public class UnprotectTest {
   public void testDimension1Hint() {
     Tensor tensor = Tensors.fromString("{{0, 2, 3}, {0, 2, 3, 5}, {{}}}");
     assertEquals(Unprotect.dimension1Hint(tensor), 3);
-    AssertFail.of(() -> Unprotect.dimension1(tensor));
+    assertThrows(TensorRuntimeException.class, () -> Unprotect.dimension1(tensor));
   }
 
   @Test
@@ -123,7 +123,7 @@ public class UnprotectTest {
     assertEquals(Unprotect.withoutUnit(Quantity.of(3, "s")), RealScalar.of(3));
     assertEquals(Unprotect.withoutUnit(RealScalar.of(5)), RealScalar.of(5));
     assertEquals(Unprotect.withoutUnit(GaussScalar.of(3, 11)), GaussScalar.of(3, 11));
-    AssertFail.of(() -> Unprotect.withoutUnit(null));
+    assertThrows(NullPointerException.class, () -> Unprotect.withoutUnit(null));
   }
 
   @Test
@@ -150,26 +150,26 @@ public class UnprotectTest {
 
   @Test
   public void testGetUnitUniqueFail1() {
-    AssertFail.of(() -> Unprotect.getUnitUnique(Tensors.fromString("{{1[m],2[s],3[m]}}")));
+    assertThrows(IllegalArgumentException.class, () -> Unprotect.getUnitUnique(Tensors.fromString("{{1[m],2[s],3[m]}}")));
   }
 
   @Test
   public void testGetUnitUniqueFail2() {
     Tensor tensor = Tensors.fromString("{1[m], 2[s]}");
     assertFalse(StringScalarQ.any(tensor));
-    AssertFail.of(() -> Unprotect.getUnitUnique(tensor));
+    assertThrows(IllegalArgumentException.class, () -> Unprotect.getUnitUnique(tensor));
   }
 
   @Test
   public void testDimension1Fail() {
     Tensor unstruct = Tensors.fromString("{{-1, 0, 1, 2}, {3, 4, 5}}");
     assertEquals(unstruct.length(), 2);
-    AssertFail.of(() -> Unprotect.dimension1(unstruct));
+    assertThrows(TensorRuntimeException.class, () -> Unprotect.dimension1(unstruct));
   }
 
   @Test
   public void testDimension1HintFail() {
-    AssertFail.of(() -> Unprotect.dimension1(RealScalar.ONE));
-    AssertFail.of(() -> Unprotect.dimension1Hint(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Unprotect.dimension1(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Unprotect.dimension1Hint(RealScalar.ONE));
   }
 }

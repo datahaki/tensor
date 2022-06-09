@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.tri;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,11 +11,11 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class SinTest {
+class SinTest {
   @Test
   public void testReal() {
     Scalar i = RealScalar.of(2);
@@ -34,11 +35,11 @@ public class SinTest {
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> Sin.of(Quantity.of(1, "deg")));
+    assertThrows(TensorRuntimeException.class, () -> Sin.of(Quantity.of(1, "deg")));
   }
 
   @Test
   public void testStringScalarFail() {
-    AssertFail.of(() -> Sin.of(StringScalar.of("some")));
+    assertThrows(TensorRuntimeException.class, () -> Sin.of(StringScalar.of("some")));
   }
 }

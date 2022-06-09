@@ -33,7 +33,7 @@ public abstract class AbstractScalar implements Scalar {
   public final Tensor get(int... index) {
     if (index.length == 0)
       return this;
-    throw new IllegalArgumentException();
+    throw TensorRuntimeException.of(this);
   }
 
   /** when using get() on {@code AbstractScalar} the list of arguments has to be empty */
@@ -41,7 +41,7 @@ public abstract class AbstractScalar implements Scalar {
   public final Tensor get(List<Integer> index) {
     if (index.size() == 0)
       return this;
-    throw new IllegalArgumentException();
+    throw TensorRuntimeException.of(this);
   }
 
   @Override // from Tensor

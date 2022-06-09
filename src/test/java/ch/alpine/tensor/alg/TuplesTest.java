@@ -2,15 +2,15 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TuplesTest {
+class TuplesTest {
   @Test
   public void testSimple0() {
     Tensor tuples = Tuples.of(Tensors.vector(3, 4, 5), 0);
@@ -41,12 +41,19 @@ public class TuplesTest {
   }
 
   @Test
+  public void testFive() {
+    Tensor tensor = Tuples.of(Range.of(0, 5), 2);
+    Tensor result = Tensor.of(tensor.stream().filter(OrderedQ::of));
+    assertEquals(result.length(), 15);
+  }
+
+  @Test
   public void testFailNegative() {
-    AssertFail.of(() -> Tuples.of(Tensors.vector(1, 2, 3), -1));
+    assertThrows(IllegalArgumentException.class, () -> Tuples.of(Tensors.vector(1, 2, 3), -1));
   }
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> Tuples.of(Pi.VALUE, 2));
+    assertThrows(IllegalArgumentException.class, () -> Tuples.of(Pi.VALUE, 2));
   }
 }

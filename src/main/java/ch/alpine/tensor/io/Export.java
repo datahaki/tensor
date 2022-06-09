@@ -35,7 +35,9 @@ public enum Export {
    * 
    * @param file destination
    * @param tensor non-null
-   * @throws IOException */
+   * @throws IOException if writing to the file fails
+   * @throws IllegalArgumentException if extension of given file can not be associated
+   * to a supported file format */
   public static void of(File file, Tensor tensor) throws IOException {
     Filename filename = new Filename(file.getName());
     filename.extension(); // known extension

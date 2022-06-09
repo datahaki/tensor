@@ -2,6 +2,7 @@
 package ch.alpine.tensor.opt.hun;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,14 +11,15 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Range;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
@@ -28,9 +30,8 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.sca.Round;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class BipartiteMatchingTest {
+class BipartiteMatchingTest {
   private static final int MAX = 7;
 
   @Test
@@ -113,16 +114,16 @@ public class BipartiteMatchingTest {
   @Test
   public void testMixedUnitsFail() {
     Tensor matrix = Tensors.matrix(new Scalar[][] { { Quantity.of(1, "MYR"), Quantity.of(1, "SGD") } });
-    AssertFail.of(() -> BipartiteMatching.of(matrix));
+    assertThrows(IllegalArgumentException.class, () -> BipartiteMatching.of(matrix));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> BipartiteMatching.of(Pi.VALUE));
+    assertThrows(TensorRuntimeException.class, () -> BipartiteMatching.of(Pi.VALUE));
   }
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> BipartiteMatching.of(Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> BipartiteMatching.of(Tensors.empty()));
   }
 }

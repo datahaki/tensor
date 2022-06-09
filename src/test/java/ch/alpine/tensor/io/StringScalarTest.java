@@ -3,20 +3,21 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
+import ch.alpine.tensor.chq.ExactScalarQ;
 
-public class StringScalarTest {
+class StringScalarTest {
   @Test
   public void testStrings() {
     Tensor a = StringScalar.of("asd");
@@ -49,32 +50,32 @@ public class StringScalarTest {
 
   @Test
   public void testFailOp() {
-    AssertFail.of(() -> StringScalar.of("asd").reciprocal());
-    AssertFail.of(() -> StringScalar.of("asd").negate());
-    AssertFail.of(() -> StringScalar.of("asd").number());
-    AssertFail.of(() -> StringScalar.of("asd").multiply(RealScalar.ONE));
-    AssertFail.of(() -> StringScalar.of("asd").add(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> StringScalar.of("asd").reciprocal());
+    assertThrows(TensorRuntimeException.class, () -> StringScalar.of("asd").negate());
+    assertThrows(TensorRuntimeException.class, () -> StringScalar.of("asd").number());
+    assertThrows(TensorRuntimeException.class, () -> StringScalar.of("asd").multiply(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> StringScalar.of("asd").add(RealScalar.ONE));
   }
 
   @Test
   public void testMultiplyFail() {
-    AssertFail.of(() -> ComplexScalar.I.multiply(StringScalar.of("asd")));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.I.multiply(StringScalar.of("asd")));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> StringScalar.of(null));
+    assertThrows(NullPointerException.class, () -> StringScalar.of(null));
   }
 
   @Test
   public void testOneFail() {
     Scalar scalar = StringScalar.of("abc");
-    AssertFail.of(() -> scalar.zero());
-    AssertFail.of(() -> scalar.one());
+    assertThrows(TensorRuntimeException.class, () -> scalar.zero());
+    assertThrows(TensorRuntimeException.class, () -> scalar.one());
   }
 
   @Test
   public void testNonExact() {
-    assertFalse(ExactScalarQ.of(StringScalar.of("abc")));
+    assertTrue(ExactScalarQ.of(StringScalar.of("abc")));
   }
 }

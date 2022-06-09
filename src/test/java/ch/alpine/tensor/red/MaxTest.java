@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,15 +15,15 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.MapThread;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class MaxTest {
+class MaxTest {
   static Tensor max(List<Tensor> col) {
     return col.stream().reduce(Max::of).get();
   }
@@ -78,17 +79,17 @@ public class MaxTest {
 
   @Test
   public void testMaxNaN() {
-    AssertFail.of(() -> Max.of(DoubleScalar.of(1), DoubleScalar.INDETERMINATE));
-    AssertFail.of(() -> Max.of(DoubleScalar.INDETERMINATE, DoubleScalar.of(1)));
-    AssertFail.of(() -> Max.of(RealScalar.of(1), DoubleScalar.INDETERMINATE));
-    AssertFail.of(() -> Max.of(DoubleScalar.INDETERMINATE, RealScalar.of(1)));
+    assertThrows(TensorRuntimeException.class, () -> Max.of(DoubleScalar.of(1), DoubleScalar.INDETERMINATE));
+    assertThrows(TensorRuntimeException.class, () -> Max.of(DoubleScalar.INDETERMINATE, DoubleScalar.of(1)));
+    assertThrows(TensorRuntimeException.class, () -> Max.of(RealScalar.of(1), DoubleScalar.INDETERMINATE));
+    assertThrows(TensorRuntimeException.class, () -> Max.of(DoubleScalar.INDETERMINATE, RealScalar.of(1)));
   }
 
   @Test
   public void testFail() {
     Scalar string = StringScalar.of("string");
     Scalar gauss = GaussScalar.of(1, 3);
-    AssertFail.of(() -> Max.of(string, gauss));
-    AssertFail.of(() -> Max.of(gauss, string));
+    assertThrows(TensorRuntimeException.class, () -> Max.of(string, gauss));
+    assertThrows(TensorRuntimeException.class, () -> Max.of(gauss, string));
   }
 }

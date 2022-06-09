@@ -3,8 +3,8 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -17,20 +17,20 @@ import java.lang.reflect.Modifier;
 import javax.imageio.ImageIO;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.nrm.FrobeniusNorm;
-import ch.alpine.tensor.usr.TestFile;
 
-public class ExportHelperTest {
+class ExportHelperTest {
   @Test
-  public void testGif() throws IOException {
+  public void testGif(@TempDir File tempDir) throws IOException {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(128);
     Tensor image = Tensors.fromString("{{{255, 2, 3, 255}, {0, 0, 0, 0}, {91, 120, 230, 255}, {0, 0, 0, 0}}}");
     ExportHelper.of(Extension.GIF, image, byteArrayOutputStream);
-    File file = TestFile.withExtension("gif");
+    File file = new File(tempDir, "file.gif");
     Export.of(file, image);
     assertTrue(file.isFile());
     assertTrue(file.delete());
@@ -63,12 +63,7 @@ public class ExportHelperTest {
   @Test
   public void testGzFail() {
     OutputStream outputStream = new ByteArrayOutputStream(512);
-    try {
-      ExportHelper.of(Extension.GZ, Tensors.empty(), outputStream);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> ExportHelper.of(Extension.GZ, Tensors.empty(), outputStream));
   }
 
   @Test

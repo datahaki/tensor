@@ -8,7 +8,7 @@ import java.math.BigInteger;
 
 import org.junit.jupiter.api.Test;
 
-public class StaticHelperTest {
+class StaticHelperTest {
   @Test
   public void testSimple() {
     BigInteger p1 = BigInteger.valueOf(7829);

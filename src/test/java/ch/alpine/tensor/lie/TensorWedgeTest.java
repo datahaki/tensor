@@ -2,12 +2,14 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.AntisymmetricMatrixQ;
@@ -15,9 +17,8 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TensorWedgeTest {
+class TensorWedgeTest {
   @Test
   public void testLength0() {
     assertEquals(TensorWedge.of(), RealScalar.ONE);
@@ -104,22 +105,22 @@ public class TensorWedgeTest {
   @Test
   public void testFailIrrectangular() {
     Tensor matrix = Tensors.fromString("{{1, 2}, {0, 4, 3}}");
-    AssertFail.of(() -> TensorWedge.of(matrix));
+    assertThrows(TensorRuntimeException.class, () -> TensorWedge.of(matrix));
   }
 
   @Test
   public void testFailRectangularMatrix() {
-    AssertFail.of(() -> TensorWedge.of(HilbertMatrix.of(3, 4)));
+    assertThrows(IllegalArgumentException.class, () -> TensorWedge.of(HilbertMatrix.of(3, 4)));
   }
 
   @Test
   public void testFailRectangularArray() {
-    AssertFail.of(() -> TensorWedge.of(Array.zeros(2, 2, 3)));
+    assertThrows(IllegalArgumentException.class, () -> TensorWedge.of(Array.zeros(2, 2, 3)));
   }
 
   @Test
   public void testFailLength() {
     TensorWedge.of(Array.zeros(3), Array.zeros(3));
-    AssertFail.of(() -> TensorWedge.of(Array.zeros(3), Array.zeros(4)));
+    assertThrows(IllegalArgumentException.class, () -> TensorWedge.of(Array.zeros(3), Array.zeros(4)));
   }
 }

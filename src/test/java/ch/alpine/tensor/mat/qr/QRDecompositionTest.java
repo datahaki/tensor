@@ -2,6 +2,8 @@
 package ch.alpine.tensor.mat.qr;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -10,16 +12,17 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -41,9 +44,8 @@ import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.Sign;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class QRDecompositionTest {
+class QRDecompositionTest {
   private static QRDecomposition _specialOps(Tensor A) {
     QRDecomposition qrDecomposition = null;
     for (QRSignOperator qrSignOperator : QRSignOperators.values()) {
@@ -98,7 +100,7 @@ public class QRDecompositionTest {
     assertEquals(MatrixRank.of(matrix), r);
     _specialOps(matrix);
     {
-      AssertFail.of(() -> LeastSquares.usingQR(matrix, br));
+      assertThrows(TensorRuntimeException.class, () -> LeastSquares.usingQR(matrix, br));
       Tensor ls1 = LeastSquares.of(matrix, br);
       Tensor ls2 = PseudoInverse.of(matrix).dot(br);
       Tolerance.CHOP.requireClose(ls1, ls2);
@@ -106,7 +108,7 @@ public class QRDecompositionTest {
     {
       Tensor m = Transpose.of(matrix);
       Tensor b = RandomVariate.of(distribution, 4);
-      AssertFail.of(() -> LeastSquares.usingQR(m, b));
+      assertThrows(TensorRuntimeException.class, () -> LeastSquares.usingQR(m, b));
       Tensor ls1 = LeastSquares.of(m, b);
       Tensor ls2 = PseudoInverse.of(m).dot(b);
       Tolerance.CHOP.requireClose(ls1, ls2);
@@ -192,7 +194,7 @@ public class QRDecompositionTest {
     _specialOps(matrix);
     _specialOps(N.DOUBLE.of(matrix));
     QRDecomposition qr = QRDecomposition.of(matrix);
-    assertTrue(qr.det() instanceof Quantity);
+    assertInstanceOf(Quantity.class, qr.det());
   }
 
   @Test
@@ -240,7 +242,7 @@ public class QRDecompositionTest {
     _specialOps(matrix);
     _specialOps(N.DOUBLE.of(matrix));
     QRDecomposition qr = QRDecomposition.of(matrix);
-    assertTrue(qr.det() instanceof Quantity);
+    assertInstanceOf(Quantity.class, qr.det());
   }
 
   @Test
@@ -305,6 +307,6 @@ public class QRDecompositionTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> QRDecomposition.of(IdentityMatrix.of(3), null));
+    assertThrows(NullPointerException.class, () -> QRDecomposition.of(IdentityMatrix.of(3), null));
   }
 }

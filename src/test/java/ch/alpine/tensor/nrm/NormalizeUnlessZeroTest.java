@@ -2,26 +2,27 @@
 package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Total;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class NormalizeUnlessZeroTest {
+class NormalizeUnlessZeroTest {
   @Test
   public void testNormalizeNaN() {
     Tensor vector = Tensors.of(RealScalar.ONE, DoubleScalar.INDETERMINATE, RealScalar.ONE);
-    AssertFail.of(() -> NormalizeUnlessZero.with(Vector2Norm::of).apply(vector));
+    assertThrows(TensorRuntimeException.class, () -> NormalizeUnlessZero.with(Vector2Norm::of).apply(vector));
   }
 
   @Test
@@ -56,13 +57,13 @@ public class NormalizeUnlessZeroTest {
   public void testMixedUnit1Fail() {
     TensorUnaryOperator tuo = NormalizeUnlessZero.with(Vector2Norm::of);
     Tensor one = Tensors.of(Quantity.of(0, "m"), Quantity.of(1, "s"));
-    AssertFail.of(() -> tuo.apply(one));
+    assertThrows(TensorRuntimeException.class, () -> tuo.apply(one));
   }
 
   @Test
   public void testMixedUnit2Fail() {
     TensorUnaryOperator tuo = NormalizeUnlessZero.with(Vector2Norm::of);
     Tensor one = Tensors.of(Quantity.of(0, "m"), Quantity.of(0, "s"));
-    AssertFail.of(() -> tuo.apply(one));
+    assertThrows(TensorRuntimeException.class, () -> tuo.apply(one));
   }
 }

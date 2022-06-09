@@ -3,6 +3,7 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -16,9 +17,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class CompatibleUnitQTest {
+class CompatibleUnitQTest {
   @Test
   public void testCompatibleUnitQ() {
     assertTrue(CompatibleUnitQ.SI().with(Unit.of("kgf^2*L^-3")).test(Quantity.of(2, "N^2*m^-9")));
@@ -95,12 +95,12 @@ public class CompatibleUnitQTest {
 
   @Test
   public void testWithFail() {
-    AssertFail.of(() -> CompatibleUnitQ.SI().with((Unit) null));
-    AssertFail.of(() -> CompatibleUnitQ.SI().with((String) null));
+    assertThrows(NullPointerException.class, () -> CompatibleUnitQ.SI().with((Unit) null));
+    assertThrows(NullPointerException.class, () -> CompatibleUnitQ.SI().with((String) null));
   }
 
   @Test
   public void testInNullFail() {
-    AssertFail.of(() -> CompatibleUnitQ.in(null));
+    assertThrows(NullPointerException.class, () -> CompatibleUnitQ.in(null));
   }
 }

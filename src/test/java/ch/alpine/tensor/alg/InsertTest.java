@@ -3,7 +3,8 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,9 +14,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.io.StringScalarQ;
 import ch.alpine.tensor.spa.Normal;
 import ch.alpine.tensor.spa.SparseArray;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class InsertTest {
+class InsertTest {
   @Test
   public void testAIndex0() {
     Tensor tensor = Tensors.fromString("{{1}, {2}, {3, 4}, 5, {}}");
@@ -48,7 +48,7 @@ public class InsertTest {
   public void testSparse() {
     Tensor sparse = SparseArray.of(RealScalar.ZERO, 2, 3);
     Tensor insert = Insert.of(sparse, Tensors.vector(1, 2), 1);
-    assertTrue(insert.get(0) instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, insert.get(0));
     Tensor expect = Tensors.fromString("{{0, 0, 0}, {1, 2}, {0, 0, 0}}");
     assertFalse(StringScalarQ.any(expect));
     assertEquals(Normal.of(insert), expect);
@@ -58,18 +58,18 @@ public class InsertTest {
   @Test
   public void testAFailSmall() {
     Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, 0);
-    AssertFail.of(() -> Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, -1));
+    assertThrows(IllegalArgumentException.class, () -> Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, -1));
   }
 
   @Test
   public void testAFailLarge() {
     Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, 3);
-    AssertFail.of(() -> Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, 4));
+    assertThrows(IndexOutOfBoundsException.class, () -> Insert.of(Tensors.vector(1, 2, 3), RealScalar.ZERO, 4));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> Insert.of(null, RealScalar.ZERO, 0));
-    AssertFail.of(() -> Insert.of(Tensors.vector(1, 2, 3), null, 0));
+    assertThrows(NullPointerException.class, () -> Insert.of(null, RealScalar.ZERO, 0));
+    assertThrows(NullPointerException.class, () -> Insert.of(Tensors.vector(1, 2, 3), null, 0));
   }
 }

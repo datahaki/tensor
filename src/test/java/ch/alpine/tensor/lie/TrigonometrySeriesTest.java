@@ -10,7 +10,7 @@ import ch.alpine.tensor.sca.tri.Cosh;
 import ch.alpine.tensor.sca.tri.Sin;
 import ch.alpine.tensor.sca.tri.Sinh;
 
-public class TrigonometrySeriesTest {
+class TrigonometrySeriesTest {
   @Test
   public void testTrigonometryExact() {
     Scalar q1 = Quaternion.of(1, 3, -2, 2);

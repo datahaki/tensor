@@ -19,7 +19,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 
-public class DenmanBeaversDetTest {
+class DenmanBeaversDetTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     for (int n = 1; n < 10; ++n) {

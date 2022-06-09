@@ -2,6 +2,7 @@
 package ch.alpine.tensor.fft;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Random;
 
@@ -26,9 +27,8 @@ import ch.alpine.tensor.nrm.MatrixInfinityNorm;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class FourierMatrixTest {
+class FourierMatrixTest {
   public void checkFormat(int n) {
     Tensor zeros = Array.zeros(n, n);
     Tensor original = FourierMatrix.of(n);
@@ -82,7 +82,7 @@ public class FourierMatrixTest {
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> FourierMatrix.of(0));
-    AssertFail.of(() -> FourierMatrix.of(-1));
+    assertThrows(IllegalArgumentException.class, () -> FourierMatrix.of(0));
+    assertThrows(IllegalArgumentException.class, () -> FourierMatrix.of(-1));
   }
 }

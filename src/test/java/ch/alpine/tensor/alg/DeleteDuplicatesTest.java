@@ -2,15 +2,16 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class DeleteDuplicatesTest {
+class DeleteDuplicatesTest {
   @Test
   public void testVector() {
     Tensor unique = DeleteDuplicates.of(Tensors.vector(7, 3, 3, 7, 1, 2, 3, 2, 3, 1));
@@ -27,6 +28,6 @@ public class DeleteDuplicatesTest {
 
   @Test
   public void testScalar() {
-    AssertFail.of(() -> DeleteDuplicates.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> DeleteDuplicates.of(RealScalar.ONE));
   }
 }

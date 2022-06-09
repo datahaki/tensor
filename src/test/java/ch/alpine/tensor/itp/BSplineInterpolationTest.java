@@ -2,28 +2,29 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarTensorFunction;
+import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class BSplineInterpolationTest {
+class BSplineInterpolationTest {
   @Test
   public void testVector() {
     Tensor tensor = Tensors.vector(2, 6, 4, 9, 10, 3);
@@ -50,11 +51,11 @@ public class BSplineInterpolationTest {
         Tensor vvalue = interpolation.get(Tensors.vector(3));
         assertEquals(vvalue, tensor.get(3));
       }
-      AssertFail.of(() -> interpolation.at(RealScalar.of(-0.1)));
-      AssertFail.of(() -> interpolation.at(RealScalar.of(9.1)));
+      assertThrows(TensorRuntimeException.class, () -> interpolation.at(RealScalar.of(-0.1)));
+      assertThrows(TensorRuntimeException.class, () -> interpolation.at(RealScalar.of(9.1)));
       interpolation.get(Tensors.vector(1));
       interpolation.get(Tensors.vector(1, 2));
-      AssertFail.of(() -> interpolation.get(Tensors.vector(1, 1.8)));
+      assertThrows(TensorRuntimeException.class, () -> interpolation.get(Tensors.vector(1, 1.8)));
     }
   }
 
@@ -127,4 +128,7 @@ public class BSplineInterpolationTest {
       ExactTensorQ.require(tensor);
     }
   }
+  // TODO TENSOR
+  // Table[Sin[j^2 + i], {i, 0, Pi, Pi/5}, {j, 0, Pi, Pi/5}];
+  // see ListDensityPlot help
 }

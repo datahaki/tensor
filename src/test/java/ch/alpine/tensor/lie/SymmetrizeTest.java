@@ -3,18 +3,20 @@ package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -24,9 +26,8 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class SymmetrizeTest {
+class SymmetrizeTest {
   @Test
   public void testSimple() {
     Distribution distribution = UniformDistribution.unit();
@@ -90,14 +91,14 @@ public class SymmetrizeTest {
   @Test
   public void testRectangularFail() {
     Distribution distribution = UniformDistribution.unit();
-    AssertFail.of(() -> Symmetrize.of(RandomVariate.of(distribution, 3, 2)));
-    AssertFail.of(() -> Symmetrize.of(RandomVariate.of(distribution, 3, 3, 2)));
+    assertThrows(IllegalArgumentException.class, () -> Symmetrize.of(RandomVariate.of(distribution, 3, 2)));
+    assertThrows(IllegalArgumentException.class, () -> Symmetrize.of(RandomVariate.of(distribution, 3, 3, 2)));
   }
 
   @Test
   public void testNonArrayFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
-    AssertFail.of(() -> Symmetrize.of(tensor));
+    assertThrows(TensorRuntimeException.class, () -> Symmetrize.of(tensor));
   }
 
   @Test

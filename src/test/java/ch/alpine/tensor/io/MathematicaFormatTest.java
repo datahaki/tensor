@@ -20,7 +20,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class MathematicaFormatTest {
+class MathematicaFormatTest {
   @Test
   public void testMathematica() {
     int n = 20;

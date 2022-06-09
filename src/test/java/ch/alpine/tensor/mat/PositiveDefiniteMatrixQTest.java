@@ -10,7 +10,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.sca.N;
 
-public class PositiveDefiniteMatrixQTest {
+class PositiveDefiniteMatrixQTest {
   @Test
   public void testMathematica2() {
     boolean status = PositiveDefiniteMatrixQ.ofHermitian(Tensors.fromString("{{8, 3}, {3, 8}}"));

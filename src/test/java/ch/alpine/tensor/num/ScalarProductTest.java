@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -12,9 +13,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Serialization;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ScalarProductTest {
+class ScalarProductTest {
   @Test
   public void testGaussScalar() {
     int prime = 677;
@@ -40,6 +40,6 @@ public class ScalarProductTest {
 
   @Test
   public void testSimple() {
-    AssertFail.of(() -> ScalarProduct.INSTANCE.neutral(null));
+    assertThrows(NullPointerException.class, () -> ScalarProduct.INSTANCE.neutral(null));
   }
 }

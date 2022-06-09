@@ -3,7 +3,8 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Modifier;
 
@@ -14,6 +15,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
@@ -21,9 +23,8 @@ import ch.alpine.tensor.sca.Arg;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.ArcTan;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class QuantityImplTest {
+class QuantityImplTest {
   @Test
   public void testSerializable() throws Exception {
     Quantity quantity = (Quantity) Scalars.fromString("-7+3*I[kg^-2*m*s]");
@@ -48,13 +49,13 @@ public class QuantityImplTest {
   @Test
   public void testExactIntFail() {
     Scalar scalar = Quantity.of(10, "m");
-    AssertFail.of(() -> Scalars.intValueExact(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Scalars.intValueExact(scalar));
   }
 
   @Test
   public void testNumberFail() {
     Scalar scalar = Quantity.of(11, "m*s");
-    AssertFail.of(() -> scalar.number());
+    assertThrows(TensorRuntimeException.class, () -> scalar.number());
   }
 
   @Test
@@ -94,24 +95,24 @@ public class QuantityImplTest {
     Scalar q1 = Quantity.of(3, "m*s");
     Scalar q2 = Quantity.of(7, "s*m");
     Scalar s3 = q1.divide(q2);
-    assertTrue(s3 instanceof RationalScalar);
-    assertTrue(q1.under(q2) instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, s3);
+    assertInstanceOf(RationalScalar.class, q1.under(q2));
   }
 
   @Test
   public void testPowerQuantityQuantityFail() {
     Scalar scalar = Scalars.fromString("-7+3*I[kg^-2*m*s]");
-    AssertFail.of(() -> Power.of(scalar, Quantity.of(3, "s")));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(scalar, Quantity.of(3, "s")));
   }
 
   @Test
   public void testPowerRealQuantityFail() {
-    AssertFail.of(() -> Power.of(RealScalar.ONE, Quantity.of(3, "s")));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(RealScalar.ONE, Quantity.of(3, "s")));
   }
 
   @Test
   public void testPowerDoubleQuantityFail() {
-    AssertFail.of(() -> Power.of(Pi.VALUE, Quantity.of(3, "s")));
+    assertThrows(TensorRuntimeException.class, () -> Power.of(Pi.VALUE, Quantity.of(3, "s")));
   }
 
   @Test

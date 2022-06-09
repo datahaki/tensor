@@ -10,7 +10,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 
-public class PrettyTest {
+class PrettyTest {
   @Test
   public void testEmpty() {
     assertEquals(Pretty.of(Tensors.empty()), "[]");

@@ -2,17 +2,20 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.Color;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
+import ch.alpine.tensor.qty.Quantity;
 
-public class CyclicColorDataIndexedTest {
+class CyclicColorDataIndexedTest {
   @Test
   public void testCustom() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
@@ -44,18 +47,46 @@ public class CyclicColorDataIndexedTest {
   }
 
   @Test
+  public void testColors() {
+    ColorDataIndexed colorDataIndexed = CyclicColorDataIndexed.of(Color.BLUE, Color.RED, Color.BLACK);
+    assertEquals(colorDataIndexed.getColor(-3), Color.BLUE);
+    assertEquals(colorDataIndexed.getColor(-2), Color.RED);
+    assertEquals(colorDataIndexed.getColor(-1), Color.BLACK);
+    assertEquals(colorDataIndexed.getColor(0), Color.BLUE);
+    assertEquals(colorDataIndexed.getColor(1), Color.RED);
+    assertEquals(colorDataIndexed.getColor(2), Color.BLACK);
+  }
+
+  @Test
+  public void testCornerCase() {
+    ColorDataIndexed colorDataIndexed = CyclicColorDataIndexed.of(Color.BLUE, Color.RED);
+    assertEquals(ColorFormat.toColor(colorDataIndexed.apply(RealScalar.of(0.2))), Color.BLUE);
+    assertEquals(ColorFormat.toColor(colorDataIndexed.apply(RealScalar.of(1.2))), Color.RED);
+    assertEquals(ColorFormat.toColor(colorDataIndexed.apply(DoubleScalar.INDETERMINATE)), new Color(0, 0, 0, 0));
+    assertEquals(ColorFormat.toColor(colorDataIndexed.apply(DoubleScalar.POSITIVE_INFINITY)), new Color(0, 0, 0, 0));
+  }
+
+  @Test
+  public void testFails() {
+    ColorDataIndexed colorDataIndexed = CyclicColorDataIndexed.of(Color.BLUE, Color.RED);
+    assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(1, "m")));
+    assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(Double.NaN, "m")));
+    assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(Double.POSITIVE_INFINITY, "m")));
+  }
+
+  @Test
   public void testFailEmpty() {
-    AssertFail.of(() -> CyclicColorDataIndexed.of(Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> CyclicColorDataIndexed.of(Tensors.empty()));
   }
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> CyclicColorDataIndexed.of(RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> CyclicColorDataIndexed.of(RealScalar.ZERO));
   }
 
   @Test
   public void testFailRGB() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}}");
-    AssertFail.of(() -> CyclicColorDataIndexed.of(tensor));
+    assertThrows(TensorRuntimeException.class, () -> CyclicColorDataIndexed.of(tensor));
   }
 }

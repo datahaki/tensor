@@ -2,18 +2,21 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Random;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ExactTensorQ;
-import ch.alpine.tensor.MachineNumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
@@ -21,6 +24,7 @@ import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.re.Det;
 import ch.alpine.tensor.nrm.Vector2Norm;
@@ -32,9 +36,8 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class NullSpaceTest {
+class NullSpaceTest {
   private static void _checkZeros(Tensor zeros) {
     int n = zeros.length();
     Tensor nul = NullSpace.usingSvd(zeros);
@@ -43,12 +46,11 @@ public class NullSpaceTest {
     assertEquals(nul, IdentityMatrix.of(n));
   }
 
-  @Test
-  public void testZerosUsingSvd() {
-    for (int n = 1; n < 10; ++n) {
-      _checkZeros(Array.zeros(n, n));
-      _checkZeros(N.DOUBLE.of(Array.zeros(n, n)));
-    }
+  @RepeatedTest(10)
+  public void testZerosUsingSvd(RepetitionInfo repetitionInfo) {
+    int n = repetitionInfo.getCurrentRepetition();
+    _checkZeros(Array.zeros(n, n));
+    _checkZeros(N.DOUBLE.of(Array.zeros(n, n)));
   }
 
   @Test
@@ -58,7 +60,6 @@ public class NullSpaceTest {
     for (Tensor v : r)
       assertEquals(m.dot(v), Array.zeros(4));
     assertEquals(Dimensions.of(r), Arrays.asList(2, 4));
-    assertFalse(MachineNumberQ.any(r));
     ExactTensorQ.require(r);
   }
 
@@ -67,7 +68,6 @@ public class NullSpaceTest {
     Tensor m = Array.zeros(5, 5);
     Tensor r = NullSpace.of(m);
     assertEquals(r, IdentityMatrix.of(5));
-    assertFalse(MachineNumberQ.any(r));
     ExactTensorQ.require(r);
   }
 
@@ -76,7 +76,6 @@ public class NullSpaceTest {
     Tensor m = IdentityMatrix.of(5);
     Tensor r = NullSpace.of(m);
     assertEquals(r, Tensors.empty());
-    assertFalse(MachineNumberQ.any(r));
     ExactTensorQ.require(r);
   }
 
@@ -85,7 +84,6 @@ public class NullSpaceTest {
     Tensor m = Reverse.of(IdentityMatrix.of(5));
     Tensor r = NullSpace.of(m);
     assertEquals(r, Tensors.empty());
-    assertFalse(MachineNumberQ.any(r));
     ExactTensorQ.require(r);
   }
 
@@ -101,7 +99,6 @@ public class NullSpaceTest {
     for (Tensor v : nul)
       assertEquals(A.dot(v), Array.zeros(4));
     assertEquals(Dimensions.of(nul), Arrays.asList(3, 6));
-    assertFalse(MachineNumberQ.any(nul));
     ExactTensorQ.require(nul);
   }
 
@@ -117,7 +114,6 @@ public class NullSpaceTest {
     for (Tensor v : nul)
       assertEquals(A.dot(v), Array.zeros(4));
     assertEquals(Dimensions.of(nul), Arrays.asList(1, 3));
-    assertFalse(MachineNumberQ.any(nul));
     ExactTensorQ.require(nul);
     Tensor nrr = NullSpace.usingRowReduce(A);
     assertEquals(nul, nrr);
@@ -135,7 +131,6 @@ public class NullSpaceTest {
     for (Tensor v : nul)
       assertEquals(A.dot(v), Array.zeros(4));
     assertEquals(Dimensions.of(nul), Arrays.asList(3, 6));
-    assertFalse(MachineNumberQ.any(nul));
     ExactTensorQ.require(nul);
   }
 
@@ -151,7 +146,6 @@ public class NullSpaceTest {
     for (Tensor v : nul)
       assertEquals(A.dot(v), Array.zeros(4));
     assertEquals(Dimensions.of(nul), Arrays.asList(3, 6));
-    assertFalse(MachineNumberQ.any(nul));
     ExactTensorQ.require(nul);
   }
 
@@ -172,7 +166,6 @@ public class NullSpaceTest {
     assertEquals(Dimensions.of(nul), Arrays.asList(2, 4));
     for (Tensor v : nul)
       assertEquals(m.dot(v), Array.zeros(2));
-    assertFalse(MachineNumberQ.any(nul));
     ExactTensorQ.require(nul);
   }
 
@@ -193,7 +186,6 @@ public class NullSpaceTest {
     Tensor mat = Tensors.of(QuantityTensor.of(Tensors.vector(1, 2), "m"));
     Tensor nul = NullSpace.of(mat);
     assertEquals(nul, Tensors.fromString("{{1, -1/2}}"));
-    assertFalse(MachineNumberQ.any(nul));
     ExactTensorQ.require(nul);
   }
 
@@ -223,7 +215,7 @@ public class NullSpaceTest {
     Tensor tensor = NullSpace.of(matrix);
     assertEquals(tensor.get(0), UnitVector.of(3, 1));
     assertEquals(tensor.get(1), UnitVector.of(3, 2));
-    AssertFail.of(() -> Det.of(matrix));
+    assertThrows(TensorRuntimeException.class, () -> Det.of(matrix));
   }
 
   @Test
@@ -231,17 +223,16 @@ public class NullSpaceTest {
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}");
     Tensor tensor = NullSpace.of(matrix);
     assertEquals(tensor.get(0), UnitVector.of(2, 1));
-    AssertFail.of(() -> Det.of(matrix));
+    assertThrows(TensorRuntimeException.class, () -> Det.of(matrix));
   }
 
-  @Test
-  public void testZeros() {
-    for (int d = 3; d < 6; ++d) {
-      Tensor matrix = Array.zeros(3, d);
-      Tensor id = IdentityMatrix.of(d);
-      assertEquals(id, NullSpace.of(matrix));
-      assertEquals(id, NullSpace.usingQR(matrix.map(N.DOUBLE)));
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 3, 4, 5 })
+  public void testZeros(int d) {
+    Tensor matrix = Array.zeros(3, d);
+    Tensor id = IdentityMatrix.of(d);
+    assertEquals(id, NullSpace.of(matrix));
+    assertEquals(id, NullSpace.usingQR(matrix.map(N.DOUBLE)));
   }
 
   @Test
@@ -292,16 +283,16 @@ public class NullSpaceTest {
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> NullSpace.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> NullSpace.of(RealScalar.ONE));
   }
 
   @Test
   public void testFailVector() {
-    AssertFail.of(() -> NullSpace.of(Tensors.vector(1, 2, 3, 1)));
+    assertThrows(TensorRuntimeException.class, () -> NullSpace.of(Tensors.vector(1, 2, 3, 1)));
   }
 
   @Test
   public void testFailRank3() {
-    AssertFail.of(() -> NullSpace.of(LeviCivitaTensor.of(3)));
+    assertThrows(ClassCastException.class, () -> NullSpace.of(LeviCivitaTensor.of(3)));
   }
 }

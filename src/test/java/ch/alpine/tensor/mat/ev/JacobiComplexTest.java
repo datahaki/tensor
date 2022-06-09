@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.lang.reflect.Modifier;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -31,7 +33,7 @@ import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Imag;
 
-public class JacobiComplexTest {
+class JacobiComplexTest {
   private static void _check(Tensor matrix, Eigensystem eigensystem) {
     Tensor v = eigensystem.vectors();
     UnitaryMatrixQ.require(v);
@@ -42,24 +44,23 @@ public class JacobiComplexTest {
     Tolerance.CHOP.requireClose(m2, matrix);
   }
 
-  @Test
-  public void testHermitian() {
+  @RepeatedTest(5)
+  public void testHermitian(RepetitionInfo repetitionInfo) {
     Distribution distribution = TriangularDistribution.with(0, 1);
-    for (int n = 1; n < 6; ++n) {
-      Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
-      Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
-      Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
-      HermitianMatrixQ.require(matrix);
-      JacobiComplex jacobiComplex = new JacobiComplex(matrix);
-      jacobiComplex.solve();
-      Chop.NONE.requireAllZero(Imag.of(jacobiComplex.values()));
-      Tensor h = Tensors.matrix(jacobiComplex.H);
-      Tolerance.CHOP.requireClose(DiagonalMatrix.with(Diagonal.of(h)), h);
-      Tolerance.CHOP.requireClose( //
-          BasisTransform.ofMatrix(h, jacobiComplex.vectors()), //
-          matrix);
-      _check(matrix, jacobiComplex);
-    }
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
+    Tensor imag = TensorWedge.of(RandomVariate.of(distribution, n, n));
+    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(real, imag);
+    HermitianMatrixQ.require(matrix);
+    JacobiComplex jacobiComplex = new JacobiComplex(matrix);
+    jacobiComplex.solve();
+    Chop.NONE.requireAllZero(Imag.of(jacobiComplex.values()));
+    Tensor h = Tensors.matrix(jacobiComplex.H);
+    Tolerance.CHOP.requireClose(DiagonalMatrix.with(Diagonal.of(h)), h);
+    Tolerance.CHOP.requireClose( //
+        BasisTransform.ofMatrix(h, jacobiComplex.vectors()), //
+        matrix);
+    _check(matrix, jacobiComplex);
   }
 
   @Test
@@ -84,17 +85,16 @@ public class JacobiComplexTest {
     _check(matrix, eigensystem);
   }
 
-  @Test
-  public void testRealComparison() {
+  @RepeatedTest(5)
+  public void testRealComparison(RepetitionInfo repetitionInfo) {
     Distribution distribution = TriangularDistribution.with(0, 1);
-    for (int n = 1; n < 6; ++n) {
-      Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
-      Eigensystem e1 = Eigensystem.ofHermitian(matrix);
-      Eigensystem e2 = Eigensystem.ofSymmetric(matrix);
-      _check(matrix, e1);
-      _check(matrix, e2);
-      Tolerance.CHOP.requireClose(e1.values(), e2.values());
-    }
+    int n = repetitionInfo.getCurrentRepetition();
+    Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
+    Eigensystem e1 = Eigensystem.ofHermitian(matrix);
+    Eigensystem e2 = Eigensystem.ofSymmetric(matrix);
+    _check(matrix, e1);
+    _check(matrix, e2);
+    Tolerance.CHOP.requireClose(e1.values(), e2.values());
   }
 
   @Test

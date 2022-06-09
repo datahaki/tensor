@@ -1,9 +1,9 @@
 // code by jph
 package ch.alpine.tensor.num;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.sca.Mod;
 
 /** implementation is consistent with Mathematica::Divisible

@@ -3,33 +3,36 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.ext.ReadLine;
+import ch.alpine.tensor.alg.Partition;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.TestFile;
 
-public class XsvFormatTest {
+class XsvFormatTest {
   private static void convertCheck(Tensor A) {
     for (XsvFormat xsvFormat : XsvFormat.values())
       assertEquals(A, xsvFormat.parse(xsvFormat.of(A)));
@@ -45,34 +48,30 @@ public class XsvFormatTest {
   }
 
   @Test
-  public void testRandom() throws IOException {
-    File file = TestFile.withExtension("tsv");
+  public void testRandom(@TempDir File tempDir) throws IOException {
+    File file = new File(tempDir, "file.tsv");
     Tensor matrix = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), 6, 4);
     Export.of(file, matrix);
     Tensor result = Import.of(file);
     assertEquals(matrix, result);
-    file.delete();
   }
 
-  @Test
-  public void testParse() throws IOException {
-    try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
-      try (Stream<String> stream = ReadLine.of(inputStream)) {
-        Tensor table = XsvFormat.CSV.parse(stream);
-        assertEquals(Dimensions.of(table), Arrays.asList(4, 2));
-      }
-    }
+  @ParameterizedTest
+  @EnumSource(XsvFormat.class)
+  public void testVector(XsvFormat xsvFormat) {
+    Tensor r = Tensors.fromString("{123, 456}");
+    List<String> list = xsvFormat.of(r).collect(Collectors.toList());
+    Tensor s = xsvFormat.parse(list.stream()); // [[123], [456]]
+    assertEquals(Partition.of(r, 1), s);
   }
 
-  @Test
-  public void testCount2() throws IOException {
-    try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
-      try (Stream<String> stream = ReadLine.of(inputStream)) {
-        Tensor table = XsvFormat.CSV.parse(stream);
-        assertEquals(Dimensions.of(table), Arrays.asList(4, 2));
-      }
-      assertEquals(inputStream.available(), 0);
-    }
+  @ParameterizedTest
+  @EnumSource(XsvFormat.class)
+  public void testScalar(XsvFormat xsvFormat) {
+    Tensor r = Scalars.fromString("123");
+    List<String> list = xsvFormat.of(r).collect(Collectors.toList());
+    Tensor s = xsvFormat.parse(list.stream());
+    assertEquals(Tensors.of(Tensors.of(r)), s);
   }
 
   @Test
@@ -82,10 +81,10 @@ public class XsvFormatTest {
         Files.readAllLines(Paths.get(path)).stream(), //
         string -> Tensors.fromString("{" + string + "}"));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 2));
-    assertTrue(tensor.Get(0, 0) instanceof Quantity);
-    assertTrue(tensor.Get(0, 1) instanceof Quantity);
-    assertTrue(tensor.Get(1, 0) instanceof Quantity);
-    assertTrue(tensor.Get(1, 1) instanceof RealScalar);
+    assertInstanceOf(Quantity.class, tensor.Get(0, 0));
+    assertInstanceOf(Quantity.class, tensor.Get(0, 1));
+    assertInstanceOf(Quantity.class, tensor.Get(1, 0));
+    assertInstanceOf(RealScalar.class, tensor.Get(1, 1));
   }
 
   @Test

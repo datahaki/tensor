@@ -3,6 +3,7 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -13,9 +14,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class UnmodifiableTensorTest {
+class UnmodifiableTensorTest {
   @Test
   public void testUnmodificableEmptyEquals() {
     assertTrue(Tensors.unmodifiableEmpty() == Tensors.unmodifiableEmpty());
@@ -30,9 +30,9 @@ public class UnmodifiableTensorTest {
     tensor.set(DoubleScalar.of(0.3), 2);
     Tensor unmodi = tensor.unmodifiable();
     assertEquals(tensor, unmodi);
-    AssertFail.of(() -> unmodi.set(DoubleScalar.of(0.3), 2));
-    AssertFail.of(() -> unmodi.append(Tensors.empty()));
-    AssertFail.of(() -> unmodi.set(t -> t.append(RealScalar.ZERO)));
+    assertThrows(UnsupportedOperationException.class, () -> unmodi.set(DoubleScalar.of(0.3), 2));
+    assertThrows(UnsupportedOperationException.class, () -> unmodi.append(Tensors.empty()));
+    assertThrows(UnsupportedOperationException.class, () -> unmodi.set(t -> t.append(RealScalar.ZERO)));
     Tensor dot = unmodi.dot(unmodi);
     assertFalse(Tensors.isUnmodifiable(dot));
     assertEquals(dot, DoubleScalar.of(65.09));
@@ -78,7 +78,7 @@ public class UnmodifiableTensorTest {
   @Test
   public void testUnmodifiableSet() {
     Tensor eye = IdentityMatrix.of(3).unmodifiable();
-    AssertFail.of(() -> eye.set(RealScalar.ZERO, 2, 2));
+    assertThrows(UnsupportedOperationException.class, () -> eye.set(RealScalar.ZERO, 2, 2));
   }
 
   @Test
@@ -87,8 +87,8 @@ public class UnmodifiableTensorTest {
     Iterator<Tensor> iterator = eye.iterator();
     Tensor next = iterator.next();
     assertEquals(next, UnitVector.of(3, 0));
-    AssertFail.of(() -> next.set(RealScalar.ONE, 1));
-    AssertFail.of(() -> iterator.remove());
+    assertThrows(UnsupportedOperationException.class, () -> next.set(RealScalar.ONE, 1));
+    assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
   }
 
   @Test
@@ -97,7 +97,7 @@ public class UnmodifiableTensorTest {
     Tensor unm = eye.unmodifiable();
     Tensor blk = unm.block(Arrays.asList(1, 0), Arrays.asList(2, 2));
     assertEquals(blk, Tensors.fromString("{{0, 1}, {0, 0}}"));
-    AssertFail.of(() -> blk.set(RealScalar.TWO, 1, 0));
+    assertThrows(UnsupportedOperationException.class, () -> blk.set(RealScalar.TWO, 1, 0));
     eye.set(RealScalar.TWO, 1, 0);
     assertEquals(blk, Tensors.fromString("{{2, 1}, {0, 0}}"));
   }
@@ -107,7 +107,7 @@ public class UnmodifiableTensorTest {
     Tensor tensor = IdentityMatrix.of(4).unmodifiable();
     for (Iterator<Tensor> iterator = tensor.iterator(); iterator.hasNext();) {
       iterator.next();
-      AssertFail.of(() -> iterator.remove());
+      assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
     }
     assertEquals(tensor, IdentityMatrix.of(4));
   }
@@ -116,14 +116,14 @@ public class UnmodifiableTensorTest {
   public void testIteratorNestRemove() {
     Tensor tensor = HilbertMatrix.of(4).unmodifiable();
     Iterator<Tensor> iterator = tensor.iterator().next().iterator();
-    AssertFail.of(() -> iterator.remove());
+    assertThrows(UnsupportedOperationException.class, () -> iterator.remove());
   }
 
   @Test
   public void testByRefAccess() {
     Tensor tensor = HilbertMatrix.of(4).unmodifiable();
     AbstractTensor abstractTensor = (AbstractTensor) tensor;
-    AssertFail.of(() -> abstractTensor.byRef(2).set(RealScalar.ZERO, 0));
+    assertThrows(UnsupportedOperationException.class, () -> abstractTensor.byRef(2).set(RealScalar.ZERO, 0));
   }
 
   @Test

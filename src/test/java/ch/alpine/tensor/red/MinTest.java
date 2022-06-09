@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,15 +14,15 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.MapThread;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class MinTest {
+class MinTest {
   static Tensor min(List<Tensor> col) {
     return col.stream().reduce(Min::of).get();
   }
@@ -79,7 +80,7 @@ public class MinTest {
   public void testFail() {
     Scalar string = StringScalar.of("string");
     Scalar gauss = GaussScalar.of(1, 3);
-    AssertFail.of(() -> Min.of(string, gauss));
-    AssertFail.of(() -> Min.of(gauss, string));
+    assertThrows(TensorRuntimeException.class, () -> Min.of(string, gauss));
+    assertThrows(TensorRuntimeException.class, () -> Min.of(gauss, string));
   }
 }

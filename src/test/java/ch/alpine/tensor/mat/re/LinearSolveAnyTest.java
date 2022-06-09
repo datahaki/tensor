@@ -2,12 +2,14 @@
 package ch.alpine.tensor.mat.re;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
@@ -18,9 +20,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class LinearSolveAnyTest {
+class LinearSolveAnyTest {
   @Test
   public void testSome1() {
     Tensor m = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}, {7, 8, 9}}");
@@ -53,7 +54,7 @@ public class LinearSolveAnyTest {
     Tensor b = Join.of(vector);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
-    AssertFail.of(() -> Det.of(m));
+    assertThrows(TensorRuntimeException.class, () -> Det.of(m));
   }
 
   @Test
@@ -78,7 +79,7 @@ public class LinearSolveAnyTest {
   public void testSome2() {
     Tensor m = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}, {7, 8, 9}}");
     Tensor b = Tensors.fromString("{1, -2, 1}");
-    AssertFail.of(() -> LinearSolve.any(m, b));
+    assertThrows(TensorRuntimeException.class, () -> LinearSolve.any(m, b));
   }
 
   @Test
@@ -175,7 +176,7 @@ public class LinearSolveAnyTest {
     Tensor b = Tensors.vector(2, 2, -2);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
-    AssertFail.of(() -> Det.of(m)); // fail is consistent with Mathematica 12
+    assertThrows(TensorRuntimeException.class, () -> Det.of(m)); // fail is consistent with Mathematica 12
   }
 
   @Test
@@ -184,7 +185,7 @@ public class LinearSolveAnyTest {
     Tensor b = Tensors.vector(-2, -2, 10);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
-    AssertFail.of(() -> Det.of(m)); // fail is consistent with Mathematica 12
+    assertThrows(TensorRuntimeException.class, () -> Det.of(m)); // fail is consistent with Mathematica 12
   }
 
   @Test
@@ -199,7 +200,7 @@ public class LinearSolveAnyTest {
 
   @Test
   public void testNoSolutionFail() {
-    AssertFail.of(() -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1)));
-    AssertFail.of(() -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1.0)));
+    assertThrows(TensorRuntimeException.class, () -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1)));
+    assertThrows(TensorRuntimeException.class, () -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1.0)));
   }
 }

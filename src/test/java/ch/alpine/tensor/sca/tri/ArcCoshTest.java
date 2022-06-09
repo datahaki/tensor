@@ -9,7 +9,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 
-public class ArcCoshTest {
+class ArcCoshTest {
   @Test
   public void testArcCosh() {
     Scalar s = ComplexScalar.of(5, -7);

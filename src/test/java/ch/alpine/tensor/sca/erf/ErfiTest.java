@@ -9,7 +9,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.Tolerance;
 
-public class ErfiTest {
+class ErfiTest {
   @Test
   public void testSimple() {
     Scalar result = Erfi.FUNCTION.apply(ComplexScalar.of(1.2, 3.4));

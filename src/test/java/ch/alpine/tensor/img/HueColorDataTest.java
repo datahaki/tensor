@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.sca.Chop;
 
-public class HueColorDataTest {
+class HueColorDataTest {
   @Test
   public void testSimple() {
     Tensor color = HueColorData.DEFAULT.apply(RealScalar.of(0.1));

@@ -2,15 +2,22 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.ExactScalarQ;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -20,9 +27,9 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
-import ch.alpine.tensor.usr.AssertFail;
+import ch.alpine.tensor.sca.Chop;
 
-public class LaplaceDistributionTest {
+class LaplaceDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(LaplaceDistribution.of(2, 5));
@@ -55,20 +62,34 @@ public class LaplaceDistributionTest {
   }
 
   @Test
+  public void testDateTimeScalar() {
+    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
+    Scalar durationScalar = Quantity.of(123, "s");
+    Distribution distribution = LaplaceDistribution.of(dateTimeScalar, durationScalar);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTimeScalar.class, scalar);
+    PDF pdf = PDF.of(distribution);
+    pdf.at(DateTimeScalar.of(LocalDateTime.now()));
+    CDF cdf = CDF.of(distribution);
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTimeScalar.of(LocalDateTime.now()));
+    Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
+  }
+
+  @Test
   public void testComplexFail() {
-    AssertFail.of(() -> LaplaceDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> LaplaceDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> LaplaceDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
-    AssertFail.of(() -> LaplaceDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
-    AssertFail.of(() -> LaplaceDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
   @Test
   public void testNegativeSigmaFail() {
     LaplaceDistribution.of(5, 1);
-    AssertFail.of(() -> LaplaceDistribution.of(5, -1));
+    assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(5, -1));
   }
 }

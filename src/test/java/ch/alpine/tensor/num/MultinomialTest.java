@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 
-public class MultinomialTest {
+class MultinomialTest {
   @Test
   public void testEmpty() {
     assertEquals(Multinomial.of(), RealScalar.ONE);

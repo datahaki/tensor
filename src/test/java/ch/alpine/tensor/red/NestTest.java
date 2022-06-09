@@ -3,24 +3,24 @@ package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.gam.Gamma;
 import ch.alpine.tensor.sca.pow.Power;
 import ch.alpine.tensor.sca.tri.Cos;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class NestTest {
+class NestTest {
   @Test
   public void testPolynomial() {
     Tensor actual = Nest.of( //
@@ -54,6 +54,6 @@ public class NestTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> Nest.of(Cos.FUNCTION, RealScalar.of(0.3), -1));
+    assertThrows(IllegalArgumentException.class, () -> Nest.of(Cos.FUNCTION, RealScalar.of(0.3), -1));
   }
 }

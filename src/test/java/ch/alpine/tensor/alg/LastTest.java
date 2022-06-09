@@ -2,18 +2,19 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class LastTest {
+class LastTest {
   @Test
   public void testScalarReturn() {
     Scalar scalar = Last.of(Range.of(1, 4));
@@ -38,11 +39,11 @@ public class LastTest {
 
   @Test
   public void testFailEmpty() {
-    AssertFail.of(() -> Last.of(Tensors.empty()));
+    assertThrows(IndexOutOfBoundsException.class, () -> Last.of(Tensors.empty()));
   }
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> Last.of(RealScalar.of(99)));
+    assertThrows(TensorRuntimeException.class, () -> Last.of(RealScalar.of(99)));
   }
 }

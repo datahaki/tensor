@@ -2,7 +2,8 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,11 +13,11 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Round;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class CsvHelperTest {
+class CsvHelperTest {
   @Test
   public void testFraction() {
     Scalar scalar = CsvHelper.FUNCTION.apply(RationalScalar.of(1, 2));
@@ -45,9 +46,9 @@ public class CsvHelperTest {
   @Test
   public void testDecimal() {
     Scalar scalar = (Scalar) DoubleScalar.of(0.25).map(Round._6);
-    assertTrue(scalar instanceof DecimalScalar);
+    assertInstanceOf(DecimalScalar.class, scalar);
     scalar = CsvHelper.FUNCTION.apply(scalar);
-    assertTrue(scalar instanceof DoubleScalar);
+    assertInstanceOf(DoubleScalar.class, scalar);
   }
 
   @Test
@@ -73,24 +74,24 @@ public class CsvHelperTest {
 
   @Test
   public void testComplexFail() {
-    AssertFail.of(() -> CsvHelper.FUNCTION.apply(ComplexScalar.of(3, 4)));
+    assertThrows(TensorRuntimeException.class, () -> CsvHelper.FUNCTION.apply(ComplexScalar.of(3, 4)));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> CsvHelper.FUNCTION.apply(Quantity.of(3, "s")));
+    assertThrows(TensorRuntimeException.class, () -> CsvHelper.FUNCTION.apply(Quantity.of(3, "s")));
   }
 
   @Test
   public void testFailSingleQuote() {
     CsvHelper.requireQuotesFree("");
-    AssertFail.of(() -> CsvHelper.wrap(StringScalar.of("\"")));
+    assertThrows(StringIndexOutOfBoundsException.class, () -> CsvHelper.wrap(StringScalar.of("\"")));
   }
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> CsvHelper.wrap(StringScalar.of("\"abc\"\"")));
-    AssertFail.of(() -> CsvHelper.wrap(StringScalar.of("abc\"")));
-    AssertFail.of(() -> CsvHelper.wrap(StringScalar.of("\"abc")));
+    assertThrows(IllegalArgumentException.class, () -> CsvHelper.wrap(StringScalar.of("\"abc\"\"")));
+    assertThrows(IllegalArgumentException.class, () -> CsvHelper.wrap(StringScalar.of("abc\"")));
+    assertThrows(IllegalArgumentException.class, () -> CsvHelper.wrap(StringScalar.of("\"abc")));
   }
 }

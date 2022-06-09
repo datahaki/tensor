@@ -18,7 +18,7 @@ import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.ext.ArgMax;
 import ch.alpine.tensor.ext.ArgMin;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.red.LenientAdd;
+import ch.alpine.tensor.qty.LenientAdd;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Sign;
 

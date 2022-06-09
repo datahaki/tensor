@@ -2,6 +2,7 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.awt.Color;
 import java.security.SecureRandom;
@@ -10,11 +11,11 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ColorFormatTest {
+class ColorFormatTest {
   @Test
   public void testRandom() {
     Random random = new SecureRandom();
@@ -39,12 +40,12 @@ public class ColorFormatTest {
   @Test
   public void testFailValue() {
     ColorFormat.toColor(Tensors.vector(0, 0, 0, 255.9));
-    AssertFail.of(() -> ColorFormat.toColor(Tensors.vector(0, 0, 0, 256)));
+    assertThrows(IllegalArgumentException.class, () -> ColorFormat.toColor(Tensors.vector(0, 0, 0, 256)));
   }
 
   @Test
   public void testFailLength() {
-    AssertFail.of(() -> ColorFormat.toColor(Array.zeros(3)));
-    AssertFail.of(() -> ColorFormat.toColor(Array.zeros(5)));
+    assertThrows(TensorRuntimeException.class, () -> ColorFormat.toColor(Array.zeros(3)));
+    assertThrows(TensorRuntimeException.class, () -> ColorFormat.toColor(Array.zeros(5)));
   }
 }

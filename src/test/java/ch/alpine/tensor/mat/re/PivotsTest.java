@@ -8,20 +8,22 @@ import java.io.IOException;
 import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 
 import ch.alpine.tensor.ext.Serialization;
 
-public class PivotsTest {
-  @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
-    for (Pivot pivot : Pivots.values())
-      Serialization.copy(pivot);
+class PivotsTest {
+  @ParameterizedTest
+  @EnumSource(Pivots.class)
+  public void testSerializable(Pivot pivot) throws ClassNotFoundException, IOException {
+    Serialization.copy(pivot);
   }
 
-  @Test
-  public void testValueOf() {
-    for (Pivots pivots : Pivots.values())
-      assertEquals(Enum.valueOf(Pivots.class, pivots.name()), pivots);
+  @ParameterizedTest
+  @EnumSource(Pivots.class)
+  public void testValueOf(Pivots pivots) {
+    assertEquals(Enum.valueOf(Pivots.class, pivots.name()), pivots);
   }
 
   @Test

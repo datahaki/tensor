@@ -2,13 +2,13 @@
 package ch.alpine.tensor.pdf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.function.Function;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -18,6 +18,7 @@ import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.pdf.c.GompertzMakehamDistribution;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
@@ -31,9 +32,8 @@ import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ExpectationTest {
+class ExpectationTest {
   private static void _check(Distribution distribution) {
     Scalar mean = Expectation.mean(distribution);
     {
@@ -95,12 +95,12 @@ public class ExpectationTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> Expectation.of(s -> s, NormalDistribution.standard()));
+    assertThrows(IllegalArgumentException.class, () -> Expectation.of(s -> s, NormalDistribution.standard()));
   }
 
   @Test
   public void testFail2() {
     Distribution distribution = GompertzMakehamDistribution.of(RealScalar.of(1), RealScalar.of(2));
-    AssertFail.of(() -> Expectation.mean(distribution));
+    assertThrows(UnsupportedOperationException.class, () -> Expectation.mean(distribution));
   }
 }

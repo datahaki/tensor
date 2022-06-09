@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,11 +10,11 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class GCDTest {
+class GCDTest {
   @Test
   public void testExamples() {
     assertEquals(GCD.of(RealScalar.of(+90), RealScalar.of(+60)), RealScalar.of(30));
@@ -66,7 +67,7 @@ public class GCDTest {
 
   @Test
   public void testNumericFail() {
-    AssertFail.of(() -> GCD.of(RealScalar.of(0.3), RealScalar.of(+60)));
-    AssertFail.of(() -> GCD.of(RealScalar.of(123), RealScalar.of(0.2)));
+    assertThrows(TensorRuntimeException.class, () -> GCD.of(RealScalar.of(0.3), RealScalar.of(+60)));
+    assertThrows(TensorRuntimeException.class, () -> GCD.of(RealScalar.of(123), RealScalar.of(0.2)));
   }
 }

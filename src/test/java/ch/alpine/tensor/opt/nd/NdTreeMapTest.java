@@ -3,6 +3,7 @@ package ch.alpine.tensor.opt.nd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -27,9 +28,8 @@ import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.red.Total;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class NdTreeMapTest {
+class NdTreeMapTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     CoordinateBoundingBox box = CoordinateBounds.of( //
@@ -176,20 +176,20 @@ public class NdTreeMapTest {
   @Test
   public void testLeafSizeFail() {
     CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(0, 0), Tensors.vector(1, 1));
-    AssertFail.of(() -> NdTreeMap.of(box, -1));
-    AssertFail.of(() -> NdTreeMap.of(box, +0));
+    assertThrows(IllegalArgumentException.class, () -> NdTreeMap.of(box, -1));
+    assertThrows(IllegalArgumentException.class, () -> NdTreeMap.of(box, +0));
   }
 
   @Test
   public void testFail0() {
-    AssertFail.of(() -> NdTreeMap.of(null));
-    AssertFail.of(() -> NdTreeMap.of(null, 2));
+    assertThrows(NullPointerException.class, () -> NdTreeMap.of(null));
+    assertThrows(NullPointerException.class, () -> NdTreeMap.of(null, 2));
   }
 
   @Test
   public void testFail1() {
     NdMap<String> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9)), 2);
     Tensor location = Array.zeros(3);
-    AssertFail.of(() -> ndMap.insert(location, "string"));
+    assertThrows(IllegalArgumentException.class, () -> ndMap.insert(location, "string"));
   }
 }

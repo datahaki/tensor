@@ -2,6 +2,7 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -17,9 +18,8 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.sca.gam.Factorial;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class HodgeDualTest {
+class HodgeDualTest {
   /** @param tensor of rank at least 1
    * @return
    * @throws Exception if tensor is a scalar */
@@ -90,7 +90,7 @@ public class HodgeDualTest {
 
   @Test
   public void testScalar1() {
-    AssertFail.of(() -> HodgeDual.of(Tensors.vector(1, 2, 3), 0));
+    assertThrows(TensorRuntimeException.class, () -> HodgeDual.of(Tensors.vector(1, 2, 3), 0));
   }
 
   @Test
@@ -107,32 +107,32 @@ public class HodgeDualTest {
   @Test
   public void testEmpty() {
     assertTrue(new Dimensions(Tensors.empty()).isArray());
-    AssertFail.of(() -> HodgeDual.of(Tensors.empty(), 0));
+    assertThrows(TensorRuntimeException.class, () -> HodgeDual.of(Tensors.empty(), 0));
   }
 
   @Test
   public void testMismatchFail() {
     Tensor vector = Tensors.vector(1, 2, 3);
-    AssertFail.of(() -> HodgeDual.of(vector, 2));
+    assertThrows(IllegalArgumentException.class, () -> HodgeDual.of(vector, 2));
   }
 
   @Test
   public void testNonArrayFail() {
     Tensor vector = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
-    AssertFail.of(() -> HodgeDual.of(vector, 2));
-    AssertFail.of(() -> HodgeDual.of(vector, 3));
+    assertThrows(TensorRuntimeException.class, () -> HodgeDual.of(vector, 2));
+    assertThrows(TensorRuntimeException.class, () -> HodgeDual.of(vector, 3));
   }
 
   @Test
   public void testNonRegularFail() {
     Tensor vector = Array.zeros(2, 3);
-    AssertFail.of(() -> HodgeDual.of(vector, 2));
-    AssertFail.of(() -> HodgeDual.of(vector, 3));
+    assertThrows(IllegalArgumentException.class, () -> HodgeDual.of(vector, 2));
+    assertThrows(IllegalArgumentException.class, () -> HodgeDual.of(vector, 3));
   }
 
   @Test
   public void testNegativeDimFail() {
-    AssertFail.of(() -> of(RealScalar.ONE));
-    AssertFail.of(() -> HodgeDual.of(RealScalar.ONE, -1));
+    assertThrows(IllegalArgumentException.class, () -> of(RealScalar.ONE));
+    assertThrows(IllegalArgumentException.class, () -> HodgeDual.of(RealScalar.ONE, -1));
   }
 }

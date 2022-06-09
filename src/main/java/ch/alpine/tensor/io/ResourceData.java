@@ -17,13 +17,12 @@ import ch.alpine.tensor.ext.ReadLine;
  * 
  * <p>Tensor resources provided by the tensor library include
  * <pre>
- * /colorscheme/classic.csv
- * /number/primes.vector
+ * /ch/alpine/tensor/img/colorscheme/classic.csv
  * </pre>
  * 
  * <p>Properties provided by the tensor library include
  * <pre>
- * /unit/si.properties
+ * /ch/alpine/tensor/qty/si.properties
  * </pre>
  * 
  * <p>inspired by

@@ -2,16 +2,17 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.IdentityMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class RotateRightTest {
+class RotateRightTest {
   @Test
   public void testVector() {
     Tensor vector = Tensors.vector(0, 1, 2, 3, 4).unmodifiable();
@@ -42,11 +43,11 @@ public class RotateRightTest {
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> RotateRight.of(RealScalar.ONE, 0));
+    assertThrows(TensorRuntimeException.class, () -> RotateRight.of(RealScalar.ONE, 0));
   }
 
   @Test
   public void testFailNull() {
-    AssertFail.of(() -> RotateRight.of(null, 0));
+    assertThrows(NullPointerException.class, () -> RotateRight.of(null, 0));
   }
 }

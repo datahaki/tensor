@@ -3,6 +3,7 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -13,15 +14,13 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.alg.Partition;
 import ch.alpine.tensor.ext.ReadLine;
 import ch.alpine.tensor.ext.Serialization;
 
-public class CsvFormatTest {
+class CsvFormatTest {
   @Test
   public void testNonRect() throws Exception {
     Tensor s = Tensors.empty();
@@ -69,19 +68,14 @@ public class CsvFormatTest {
   }
 
   @Test
-  public void testVector() {
-    Tensor r = Tensors.fromString("{123, 456}");
-    List<String> list = XsvFormat.CSV.of(r).collect(Collectors.toList());
-    Tensor s = XsvFormat.CSV.parse(list.stream()); // [[123], [456]]
-    assertEquals(Partition.of(r, 1), s);
-  }
-
-  @Test
-  public void testScalar() {
-    Tensor r = Scalars.fromString("123");
-    List<String> list = XsvFormat.CSV.of(r).collect(Collectors.toList());
-    Tensor s = XsvFormat.CSV.parse(list.stream());
-    assertEquals(Tensors.of(Tensors.of(r)), s);
+  public void testCount2() throws IOException {
+    try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
+      try (Stream<String> stream = ReadLine.of(inputStream)) {
+        Tensor table = XsvFormat.CSV.parse(stream);
+        assertEquals(Dimensions.of(table), Arrays.asList(4, 2));
+      }
+      assertEquals(inputStream.available(), 0);
+    }
   }
 
   @Test
@@ -90,6 +84,7 @@ public class CsvFormatTest {
       Stream<String> stream = ReadLine.of(inputStream);
       Tensor table = XsvFormat.CSV.parse(stream);
       assertEquals(Dimensions.of(table), Arrays.asList(4, 2));
+      assertEquals(inputStream.available(), 0);
     }
   }
 

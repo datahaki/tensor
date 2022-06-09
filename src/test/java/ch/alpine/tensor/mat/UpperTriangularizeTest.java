@@ -2,11 +2,13 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.num.GaussScalar;
@@ -17,9 +19,8 @@ import ch.alpine.tensor.pdf.d.PascalDistribution;
 import ch.alpine.tensor.pdf.d.PoissonDistribution;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.red.Total;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class UpperTriangularizeTest {
+class UpperTriangularizeTest {
   @Test
   public void testIncludingDiagonal() {
     Tensor matrix = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {9, 5, 2}}");
@@ -97,11 +98,11 @@ public class UpperTriangularizeTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> UpperTriangularize.of(RealScalar.ONE, 0));
+    assertThrows(TensorRuntimeException.class, () -> UpperTriangularize.of(RealScalar.ONE, 0));
   }
 
   @Test
   public void testRank3Fail() {
-    AssertFail.of(() -> UpperTriangularize.of(LeviCivitaTensor.of(3), 0));
+    assertThrows(ClassCastException.class, () -> UpperTriangularize.of(LeviCivitaTensor.of(3), 0));
   }
 }

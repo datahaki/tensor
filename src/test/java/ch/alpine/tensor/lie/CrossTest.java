@@ -2,25 +2,26 @@
 package ch.alpine.tensor.lie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class CrossTest {
+class CrossTest {
   private static final Tensor SO3 = LeviCivitaTensor.of(3).negate();
 
   public static Tensor alt_skew3(Tensor a) {
@@ -88,23 +89,23 @@ public class CrossTest {
 
   @Test
   public void testSkew3LengthFail() {
-    AssertFail.of(() -> Cross.skew3(Tensors.vector(1, 2, 3, 4)));
+    assertThrows(TensorRuntimeException.class, () -> Cross.skew3(Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
   public void testFailLength2() {
     Tensor v1 = UnitVector.of(3, 0);
     Tensor v2 = UnitVector.of(2, 1);
-    AssertFail.of(() -> Cross.of(v1, v2));
-    AssertFail.of(() -> Cross.of(v2, v1));
+    assertThrows(TensorRuntimeException.class, () -> Cross.of(v1, v2));
+    assertThrows(TensorRuntimeException.class, () -> Cross.of(v2, v1));
   }
 
   @Test
   public void testFailLength4() {
     Tensor v1 = UnitVector.of(4, 0);
     Tensor v2 = UnitVector.of(3, 1);
-    AssertFail.of(() -> Cross.of(v1, v2));
-    AssertFail.of(() -> Cross.of(v2, v1));
+    assertThrows(TensorRuntimeException.class, () -> Cross.of(v1, v2));
+    assertThrows(TensorRuntimeException.class, () -> Cross.of(v2, v1));
   }
 
   @Test
@@ -128,16 +129,16 @@ public class CrossTest {
 
   @Test
   public void test2DFail() {
-    AssertFail.of(() -> Cross.of(HilbertMatrix.of(2)));
+    assertThrows(ClassCastException.class, () -> Cross.of(HilbertMatrix.of(2)));
   }
 
   @Test
   public void test2DFail2() {
-    AssertFail.of(() -> Cross.of(Tensors.vector(1, 2, 3)));
+    assertThrows(TensorRuntimeException.class, () -> Cross.of(Tensors.vector(1, 2, 3)));
   }
 
   @Test
   public void test2DFailNull() {
-    AssertFail.of(() -> Cross.of(null));
+    assertThrows(NullPointerException.class, () -> Cross.of(null));
   }
 }

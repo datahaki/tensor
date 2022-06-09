@@ -1,9 +1,10 @@
 // code by jph
-package ch.alpine.tensor.red;
+package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,9 +17,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class VectorAngleTest {
+class VectorAngleTest {
   @Test
   public void testReal1() {
     Tensor id = IdentityMatrix.of(5);
@@ -50,7 +50,7 @@ public class VectorAngleTest {
     Tensor v = Tensors.fromString("{0.4+0.4*I, -0.2+0.8*I}");
     // mathematica gives 1.9215250682210188` - 2.8189256484623115`*^-17 I +
     Scalar s1 = VectorAngle.of(u, v).get();
-    assertTrue(s1 instanceof RealScalar);
+    assertInstanceOf(RealScalar.class, s1);
     Chop._14.requireClose(s1, Scalars.fromString("1.921525068221019"));
   }
 
@@ -70,7 +70,7 @@ public class VectorAngleTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> VectorAngle.of(HilbertMatrix.of(3), HilbertMatrix.of(3)));
+    assertThrows(ClassCastException.class, () -> VectorAngle.of(HilbertMatrix.of(3), HilbertMatrix.of(3)));
   }
 
   @Test
@@ -89,8 +89,8 @@ public class VectorAngleTest {
 
   @Test
   public void testLengthFail() {
-    AssertFail.of(() -> VectorAngle.of(Tensors.vector(1, 0, 0), Tensors.vector(1, 0)));
-    AssertFail.of(() -> VectorAngle.of(Tensors.vector(0, 0, 0), Tensors.vector(1, 0)));
-    AssertFail.of(() -> VectorAngle.of(Tensors.vector(1, 0, 0), Tensors.vector(0, 0)));
+    assertThrows(IllegalArgumentException.class, () -> VectorAngle.of(Tensors.vector(1, 0, 0), Tensors.vector(1, 0)));
+    assertThrows(IllegalArgumentException.class, () -> VectorAngle.of(Tensors.vector(0, 0, 0), Tensors.vector(1, 0)));
+    assertThrows(IllegalArgumentException.class, () -> VectorAngle.of(Tensors.vector(1, 0, 0), Tensors.vector(0, 0)));
   }
 }

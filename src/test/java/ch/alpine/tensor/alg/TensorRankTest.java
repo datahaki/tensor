@@ -2,15 +2,16 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TensorRankTest {
+class TensorRankTest {
   @Test
   public void testRank0() {
     Tensor a = DoubleScalar.of(2.32123);
@@ -67,7 +68,7 @@ public class TensorRankTest {
 
   @Test
   public void testOfArrayFail() {
-    AssertFail.of(() -> TensorRank.ofArray(Tensors.fromString("{{1}, 2}")));
-    AssertFail.of(() -> TensorRank.ofArray(Tensors.fromString("{{1, 2}, {2}}")));
+    assertThrows(TensorRuntimeException.class, () -> TensorRank.ofArray(Tensors.fromString("{{1}, 2}")));
+    assertThrows(TensorRuntimeException.class, () -> TensorRank.ofArray(Tensors.fromString("{{1, 2}, {2}}")));
   }
 }

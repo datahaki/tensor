@@ -3,20 +3,23 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ArrayQTest {
+class ArrayQTest {
   @Test
   public void testScalar() {
     assertTrue(ArrayQ.of(RealScalar.ONE));
@@ -36,24 +39,23 @@ public class ArrayQTest {
     assertFalse(ArrayQ.of(c));
   }
 
-  @Test
-  public void testOfRank() {
-    for (int rank = 0; rank < 5; ++rank) {
-      assertEquals(rank == 0, ArrayQ.ofRank(RealScalar.ONE, rank));
-      assertEquals(rank == 1, ArrayQ.ofRank(Tensors.vector(1, 2, 3), rank));
-      assertEquals(rank == 2, ArrayQ.ofRank(HilbertMatrix.of(2, 3), rank));
-      assertEquals(rank == 3, ArrayQ.ofRank(Array.zeros(3, 4, 5), rank));
-    }
+  @ParameterizedTest
+  @ValueSource(ints = { 0, 1, 2, 3, 4 })
+  public void testOfRank(int rank) {
+    assertEquals(rank == 0, ArrayQ.ofRank(RealScalar.ONE, rank));
+    assertEquals(rank == 1, ArrayQ.ofRank(Tensors.vector(1, 2, 3), rank));
+    assertEquals(rank == 2, ArrayQ.ofRank(HilbertMatrix.of(2, 3), rank));
+    assertEquals(rank == 3, ArrayQ.ofRank(Array.zeros(3, 4, 5), rank));
   }
 
   @Test
   public void testRequire() {
     Tensor tensor = Tensors.fromString("{{1, 2}, 3}");
-    AssertFail.of(() -> ArrayQ.require(tensor));
+    assertThrows(TensorRuntimeException.class, () -> ArrayQ.require(tensor));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> ArrayQ.of(null));
+    assertThrows(NullPointerException.class, () -> ArrayQ.of(null));
   }
 }

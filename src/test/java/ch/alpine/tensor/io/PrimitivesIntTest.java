@@ -2,6 +2,7 @@
 package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.IntBuffer;
@@ -13,9 +14,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class PrimitivesIntTest {
+class PrimitivesIntTest {
   @Test
   public void testToListInteger() {
     Tensor tensor = Tensors.vector(-2.5, -2.7, 4.3, 5.4, 6.2, 10.5);
@@ -79,6 +79,6 @@ public class PrimitivesIntTest {
 
   @Test
   public void testToIntArray2Dscalar() {
-    AssertFail.of(() -> Primitives.toIntArray2D(RealScalar.of(123.456)));
+    assertThrows(NegativeArraySizeException.class, () -> Primitives.toIntArray2D(RealScalar.of(123.456)));
   }
 }

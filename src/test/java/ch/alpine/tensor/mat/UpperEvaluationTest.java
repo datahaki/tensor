@@ -10,7 +10,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 
-public class UpperEvaluationTest {
+class UpperEvaluationTest {
   @Test
   public void testSimple() {
     Tensor result = UpperEvaluation.of(Range.of(1, 4), Range.of(3, 6), (p, q) -> (Scalar) p.add(q), Scalar::one);

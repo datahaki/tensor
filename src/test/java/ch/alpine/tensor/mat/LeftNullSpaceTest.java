@@ -30,7 +30,7 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
-public class LeftNullSpaceTest {
+class LeftNullSpaceTest {
   @Test
   public void testRankDeficient() {
     Tensor matrix = Tensors.fromString("{{0, 1}, {0, 1}, {0, 1}, {0, 1}}");

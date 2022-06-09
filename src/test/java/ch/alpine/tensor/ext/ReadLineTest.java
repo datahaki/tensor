@@ -2,6 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
@@ -9,7 +10,7 @@ import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
 
-public class ReadLineTest {
+class ReadLineTest {
   @Test
   public void testCount() throws IOException {
     try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
@@ -17,12 +18,7 @@ public class ReadLineTest {
       assertEquals(count, 4);
       assertEquals(inputStream.available(), 0);
       inputStream.close();
-      try {
-        inputStream.available();
-        fail();
-      } catch (Exception exception) {
-        // ---
-      }
+      assertThrows(Exception.class, () -> inputStream.available());
     }
   }
 
@@ -37,11 +33,6 @@ public class ReadLineTest {
 
   @Test
   public void testNullFail() {
-    try {
-      ReadLine.of(null);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> ReadLine.of(null));
   }
 }

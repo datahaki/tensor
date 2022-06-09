@@ -2,30 +2,35 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.DeterminateScalarQ;
+import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Median;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class CauchyDistributionTest {
+class CauchyDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(CauchyDistribution.of(2, 3));
@@ -47,24 +52,38 @@ public class CauchyDistributionTest {
     Scalar median = (Scalar) Median.of(RandomVariate.of(distribution, 100));
     Clips.interval(-2, 4).requireInside(median);
     assertTrue(distribution.toString().startsWith("CauchyDistribution["));
-    assertFalse(DeterminateScalarQ.of(Mean.of(distribution)));
-    assertFalse(DeterminateScalarQ.of(Variance.of(distribution)));
+    assertEquals(Mean.of(distribution).toString(), "NaN");
+    assertEquals(Variance.of(distribution).toString(), "NaN");
+  }
+
+  @Test
+  public void testDateTimeScalar() {
+    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
+    Scalar durationScalar = Quantity.of(123, "s");
+    Distribution distribution = CauchyDistribution.of(dateTimeScalar, durationScalar);
+    Scalar scalar = RandomVariate.of(distribution);
+    assertInstanceOf(DateTimeScalar.class, scalar);
+    PDF pdf = PDF.of(distribution);
+    pdf.at(DateTimeScalar.of(LocalDateTime.now()));
+    CDF cdf = CDF.of(distribution);
+    Scalar p_lessEquals = cdf.p_lessEquals(DateTimeScalar.of(LocalDateTime.now()));
+    Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> CauchyDistribution.of(null, RealScalar.ONE));
-    AssertFail.of(() -> CauchyDistribution.of(RealScalar.ONE, null));
+    assertThrows(NullPointerException.class, () -> CauchyDistribution.of(null, RealScalar.ONE));
+    assertThrows(NullPointerException.class, () -> CauchyDistribution.of(RealScalar.ONE, null));
   }
 
   @Test
   public void testZeroFail() {
-    AssertFail.of(() -> CauchyDistribution.of(RealScalar.ONE, RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> CauchyDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> CauchyDistribution.of(RealScalar.ONE, RealScalar.of(-1)));
+    assertThrows(TensorRuntimeException.class, () -> CauchyDistribution.of(RealScalar.ONE, RealScalar.of(-1)));
   }
 
   @Test

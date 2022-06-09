@@ -3,17 +3,16 @@ package ch.alpine.tensor.qty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.usr.AssertFail;
-
-public class UnitParserTest {
+class UnitParserTest {
   private static void _confirmFail(String string) {
-    AssertFail.of(() -> UnitParser.of(string));
+    assertThrows(Exception.class, () -> UnitParser.of(string));
   }
 
   @Test

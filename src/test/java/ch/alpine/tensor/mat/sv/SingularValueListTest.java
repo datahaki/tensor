@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.mat.sv;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
@@ -15,9 +17,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class SingularValueListTest {
+class SingularValueListTest {
   @Test
   public void testSimple() {
     Distribution distribution = UniformDistribution.of(-1, 1);
@@ -34,6 +35,6 @@ public class SingularValueListTest {
     Distribution distribution = DiscreteUniformDistribution.of(1, 4);
     Tensor matrix = RandomVariate.of(distribution, 7, 2);
     matrix.set(s -> Quantity.of((Scalar) s, "s"), Tensor.ALL, 1);
-    AssertFail.of(() -> SingularValueDecomposition.of(matrix));
+    assertThrows(IllegalArgumentException.class, () -> SingularValueDecomposition.of(matrix));
   }
 }

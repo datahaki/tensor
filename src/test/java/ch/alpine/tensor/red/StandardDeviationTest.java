@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,15 +10,17 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.mat.HilbertMatrix;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Normalize;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class StandardDeviationTest {
+class StandardDeviationTest {
   @Test
   public void testSimple() {
     Scalar scalar = StandardDeviation.ofVector(Tensors.vector(1, 2, 6, 3, -2, 3, 10));
@@ -34,11 +37,17 @@ public class StandardDeviationTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> StandardDeviation.ofVector(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> StandardDeviation.ofVector(RealScalar.ONE));
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> StandardDeviation.ofVector(HilbertMatrix.of(3)));
+    assertThrows(ClassCastException.class, () -> StandardDeviation.ofVector(HilbertMatrix.of(3)));
+  }
+
+  @Test
+  public void testDistribution() {
+    Scalar scalar = StandardDeviation.of(UniformDistribution.of(10, 20));
+    Tolerance.CHOP.requireClose(scalar, RealScalar.of(2.8867513459481287));
   }
 }

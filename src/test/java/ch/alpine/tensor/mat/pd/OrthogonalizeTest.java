@@ -3,16 +3,20 @@ package ch.alpine.tensor.mat.pd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
@@ -27,21 +31,20 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UnitaryMatrixQ;
 import ch.alpine.tensor.mat.ex.MatrixExp;
 import ch.alpine.tensor.mat.re.Det;
+import ch.alpine.tensor.nrm.VectorAngle;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.red.Diagonal;
-import ch.alpine.tensor.red.VectorAngle;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Conjugate;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.tri.ArcTan;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class OrthogonalizeTest {
+class OrthogonalizeTest {
   private static void orthogonalMatrixQ_require(Tensor q) {
     Tensor id = q.dot(Transpose.of(q));
     Tensor diagonal = Diagonal.of(id);
@@ -107,7 +110,7 @@ public class OrthogonalizeTest {
     Tensor q1 = Orthogonalize.of(matrix);
     Tensor q2 = Orthogonalize.usingSvd(matrix);
     Tolerance.CHOP.requireClose(q1, q2);
-    AssertFail.of(() -> Orthogonalize.usingPD(matrix));
+    assertThrows(ArithmeticException.class, () -> Orthogonalize.usingPD(matrix));
   }
 
   @Test
@@ -247,15 +250,14 @@ public class OrthogonalizeTest {
     }
   }
 
-  @Test
-  public void testMatrixExp() {
-    for (int d = 2; d < 5; ++d) {
-      Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
-      OrthogonalMatrixQ.require(matrix);
-      Tolerance.CHOP.requireClose(matrix, Orthogonalize.of(matrix));
-      Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingSvd(matrix));
-      Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingPD(matrix));
-    }
+  @RepeatedTest(4)
+  public void testMatrixExp(RepetitionInfo repetitionInfo) {
+    int d = repetitionInfo.getCurrentRepetition();
+    Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
+    OrthogonalMatrixQ.require(matrix);
+    Tolerance.CHOP.requireClose(matrix, Orthogonalize.of(matrix));
+    Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingSvd(matrix));
+    Tolerance.CHOP.requireClose(matrix, Orthogonalize.usingPD(matrix));
   }
 
   @Test
@@ -271,17 +273,17 @@ public class OrthogonalizeTest {
   @Test
   public void testUsingSvdFail() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 3);
-    AssertFail.of(() -> Orthogonalize.usingSvd(matrix));
+    assertThrows(TensorRuntimeException.class, () -> Orthogonalize.usingSvd(matrix));
   }
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> Orthogonalize.of(Pi.VALUE));
+    assertThrows(TensorRuntimeException.class, () -> Orthogonalize.of(Pi.VALUE));
   }
 
   @Test
   public void testFailVector() {
-    AssertFail.of(() -> Orthogonalize.of(Tensors.vector(1, 2, 3, 4)));
+    assertThrows(TensorRuntimeException.class, () -> Orthogonalize.of(Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
@@ -295,6 +297,6 @@ public class OrthogonalizeTest {
 
   @Test
   public void testFailAd() {
-    AssertFail.of(() -> Orthogonalize.of(LeviCivitaTensor.of(3)));
+    assertThrows(ClassCastException.class, () -> Orthogonalize.of(LeviCivitaTensor.of(3)));
   }
 }

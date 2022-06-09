@@ -2,6 +2,7 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -10,7 +11,6 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
 /* package */ enum TestHelper {
   ;
@@ -35,7 +35,7 @@ import ch.alpine.tensor.usr.AssertFail;
   }
 
   public static void getScalarFail(Interpolation interpolation) {
-    AssertFail.of(() -> interpolation.get(RealScalar.of(1.4)));
-    AssertFail.of(() -> interpolation.get(RealScalar.ONE));
+    assertThrows(Exception.class, () -> interpolation.get(RealScalar.of(1.4)));
+    assertThrows(Exception.class, () -> interpolation.get(RealScalar.ONE));
   }
 }

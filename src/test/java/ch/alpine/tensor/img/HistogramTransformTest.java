@@ -2,19 +2,20 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class HistogramTransformTest {
+class HistogramTransformTest {
   @Test
   public void testSimple() {
     Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
@@ -47,27 +48,27 @@ public class HistogramTransformTest {
   @Test
   public void testOutOfRankFail() {
     Tensor tensor = Tensors.of(Tensors.vector(0, 256, 0, 3));
-    AssertFail.of(() -> HistogramTransform.of(tensor));
+    assertThrows(ArrayIndexOutOfBoundsException.class, () -> HistogramTransform.of(tensor));
   }
 
   @Test
   public void testNegativeFail() {
     Tensor tensor = Tensors.of(Tensors.vector(0, -0.1, 3));
-    AssertFail.of(() -> HistogramTransform.of(tensor));
+    assertThrows(TensorRuntimeException.class, () -> HistogramTransform.of(tensor));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> HistogramTransform.of(Pi.VALUE));
+    assertThrows(TensorRuntimeException.class, () -> HistogramTransform.of(Pi.VALUE));
   }
 
   @Test
   public void testVectorFail() {
-    AssertFail.of(() -> HistogramTransform.of(Tensors.vector(1, 2, 3)));
+    assertThrows(TensorRuntimeException.class, () -> HistogramTransform.of(Tensors.vector(1, 2, 3)));
   }
 
   @Test
   public void testRank3Fail() {
-    AssertFail.of(() -> HistogramTransform.of(Array.zeros(2, 2, 2)));
+    assertThrows(TensorRuntimeException.class, () -> HistogramTransform.of(Array.zeros(2, 2, 2)));
   }
 }

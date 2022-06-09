@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -11,6 +12,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
@@ -28,9 +30,8 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class RootsTest {
+class RootsTest {
   private static final int LIMIT = 20;
 
   @Test
@@ -263,40 +264,40 @@ public class RootsTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Roots.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Roots.of(RealScalar.ONE));
   }
 
   @Test
   public void testEmptyFail() {
-    AssertFail.of(() -> Roots.of(Tensors.empty()));
+    assertThrows(IndexOutOfBoundsException.class, () -> Roots.of(Tensors.empty()));
   }
 
   @Test
   public void testOnes() {
     Tensor coeffs = Tensors.vector(0);
-    AssertFail.of(() -> Roots.of(coeffs));
+    assertThrows(IndexOutOfBoundsException.class, () -> Roots.of(coeffs));
   }
 
   @Test
   public void testConstantZeroFail() {
-    AssertFail.of(() -> Roots.of(Tensors.vector(0)));
+    assertThrows(IndexOutOfBoundsException.class, () -> Roots.of(Tensors.vector(0)));
   }
 
   @Test
   public void testZerosFail() {
     for (int n = 0; n < 10; ++n) {
       int fn = n;
-      AssertFail.of(() -> Roots.of(Array.zeros(fn)));
+      assertThrows(IndexOutOfBoundsException.class, () -> Roots.of(Array.zeros(fn)));
     }
   }
 
   @Test
   public void testMatrixFail() {
-    AssertFail.of(() -> Roots.of(HilbertMatrix.of(2, 3)));
+    assertThrows(ClassCastException.class, () -> Roots.of(HilbertMatrix.of(2, 3)));
   }
 
   @Test
   public void testNotImplemented() {
-    AssertFail.of(() -> Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6)));
+    assertThrows(TensorRuntimeException.class, () -> Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6)));
   }
 }

@@ -1,6 +1,11 @@
 // code by jph
-package ch.alpine.tensor;
+package ch.alpine.tensor.chq;
 
+import ch.alpine.tensor.ComplexScalar;
+import ch.alpine.tensor.IntegerQ;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.qty.Quantity;
 
 /** implementation consistent with Mathematica
@@ -29,9 +34,8 @@ import ch.alpine.tensor.qty.Quantity;
  * <a href="https://reference.wolfram.com/language/ref/NumberQ.html">NumberQ</a>
  * 
  * @see ExactScalarQ
- * @see IntegerQ
- * @see DeterminateScalarQ */
-public enum NumberQ {
+ * @see IntegerQ */
+/* package */ enum MathematicaNumberQ {
   ;
   /** @param scalar
    * @return whether scalar satisfies the NumberQ predicate */
@@ -41,7 +45,7 @@ public enum NumberQ {
           && of(complexScalar.imag());
     if (scalar instanceof Quantity)
       return false;
-    return MachineNumberQ.of(scalar) //
+    return FiniteScalarQ.of(scalar) //
         || ExactScalarQ.of(scalar);
   }
 
@@ -55,8 +59,8 @@ public enum NumberQ {
   }
 
   /** @param tensor
-   * @return whether all scalar entries in given tensor satisfy the predicate {@link NumberQ#of(Tensor)} */
+   * @return whether all scalar entries in given tensor satisfy the predicate {@link MathematicaNumberQ#of(Tensor)} */
   public static boolean all(Tensor tensor) {
-    return tensor.flatten(-1).map(Scalar.class::cast).allMatch(NumberQ::of);
+    return tensor.flatten(-1).map(Scalar.class::cast).allMatch(MathematicaNumberQ::of);
   }
 }

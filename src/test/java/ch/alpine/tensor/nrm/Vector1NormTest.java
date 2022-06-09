@@ -2,7 +2,9 @@
 package ch.alpine.tensor.nrm;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -10,14 +12,14 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.NegativeBinomialDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class Vector1NormTest {
+class Vector1NormTest {
   @Test
   public void testQuantity1() {
     Scalar qs1 = Quantity.of(-3, "m");
@@ -43,7 +45,7 @@ public class Vector1NormTest {
         RealScalar.ZERO, //
         Quantity.of(-4, "m") //
     );
-    AssertFail.of(() -> Vector1Norm.of(vec));
+    assertThrows(TensorRuntimeException.class, () -> Vector1Norm.of(vec));
   }
 
   @Test
@@ -58,6 +60,6 @@ public class Vector1NormTest {
 
   @Test
   public void testEmptyStreamFail() {
-    AssertFail.of(() -> Vector1Norm.of(Stream.of()));
+    assertThrows(NoSuchElementException.class, () -> Vector1Norm.of(Stream.of()));
   }
 }

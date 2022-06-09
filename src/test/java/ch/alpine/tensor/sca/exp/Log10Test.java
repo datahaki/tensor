@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.exp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -11,11 +12,11 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class Log10Test {
+class Log10Test {
   @Test
   public void testOne() {
     Scalar scalar = Log10.of(RealScalar.ONE);
@@ -46,6 +47,6 @@ public class Log10Test {
   @Test
   public void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
-    AssertFail.of(() -> Log10.of(scalar));
+    assertThrows(TensorRuntimeException.class, () -> Log10.of(scalar));
   }
 }

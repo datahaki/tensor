@@ -3,6 +3,8 @@ package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -18,14 +20,14 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ChopTest {
+class ChopTest {
   @Test
   public void testChop() {
     Tensor v = Tensors.vectorDouble(1e-10, 1e-12, 1e-14, 1e-16);
@@ -69,7 +71,7 @@ public class ChopTest {
   @Test
   public void testRequireNonZero() {
     assertEquals(Chop._06.requireNonZero(Pi.TWO), Pi.TWO);
-    AssertFail.of(() -> Chop._06.requireNonZero(RealScalar.of(1e-10)));
+    assertThrows(TensorRuntimeException.class, () -> Chop._06.requireNonZero(RealScalar.of(1e-10)));
   }
 
   @Test
@@ -82,14 +84,14 @@ public class ChopTest {
   @Test
   public void testNaN() {
     Scalar scalar = Chop._05.apply(DoubleScalar.INDETERMINATE);
-    assertTrue(scalar instanceof DoubleScalar);
+    assertInstanceOf(DoubleScalar.class, scalar);
     assertTrue(Double.isNaN(scalar.number().doubleValue()));
   }
 
   @Test
   public void testInf() {
     Scalar scalar = Chop._05.apply(DoubleScalar.NEGATIVE_INFINITY);
-    assertTrue(scalar instanceof DoubleScalar);
+    assertInstanceOf(DoubleScalar.class, scalar);
     assertTrue(Double.isInfinite(scalar.number().doubleValue()));
   }
 
@@ -123,34 +125,29 @@ public class ChopTest {
   @Test
   public void testCloseNaNFail() {
     Chop.below(Double.POSITIVE_INFINITY);
-    AssertFail.of(() -> Chop.below(Double.NaN));
+    assertThrows(IllegalArgumentException.class, () -> Chop.below(Double.NaN));
   }
 
   @Test
   public void testCloseFail() {
-    AssertFail.of(() -> Chop._05.isClose(Tensors.vector(1), Tensors.vector(1, 1)));
+    assertThrows(IllegalArgumentException.class, () -> Chop._05.isClose(Tensors.vector(1), Tensors.vector(1, 1)));
   }
 
   @Test
   public void testRequireCloseScalar() {
     Chop._06.requireClose(RealScalar.of(2), RealScalar.of(2.000000001));
-    AssertFail.of(() -> Chop._06.requireClose(RealScalar.of(2), RealScalar.of(2.1)));
+    assertThrows(TensorRuntimeException.class, () -> Chop._06.requireClose(RealScalar.of(2), RealScalar.of(2.1)));
   }
 
   @Test
   public void testRequireCloseTensor() {
     Chop._03.requireClose(Tensors.vector(1, 2, 3.00001), Tensors.vector(1, 2.00001, 3));
-    try {
-      Chop._03.requireClose(Tensors.vector(1, 2, 3.00001), Tensors.vector(1, 2.01, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Chop._03.requireClose(Tensors.vector(1, 2, 3.00001), Tensors.vector(1, 2.01, 3)));
   }
 
   @Test
   public void testRequireCloseFormatFail() {
-    AssertFail.of(() -> Chop._03.requireClose(Tensors.vector(1, 2, 3), Tensors.vector(1, 2)));
+    assertThrows(IllegalArgumentException.class, () -> Chop._03.requireClose(Tensors.vector(1, 2, 3), Tensors.vector(1, 2)));
   }
 
   @Test
@@ -168,15 +165,15 @@ public class ChopTest {
   public void testRequireZero() {
     Chop._04.requireZero(RealScalar.of(1e-8));
     Chop._04.requireAllZero(RealScalar.of(1e-8));
-    AssertFail.of(() -> Chop._04.requireZero(RealScalar.of(1e-2)));
-    AssertFail.of(() -> Chop._04.requireAllZero(RealScalar.of(1e-2)));
+    assertThrows(TensorRuntimeException.class, () -> Chop._04.requireZero(RealScalar.of(1e-2)));
+    assertThrows(TensorRuntimeException.class, () -> Chop._04.requireAllZero(RealScalar.of(1e-2)));
   }
 
   @Test
   public void testRequireAllZero() {
     Tensor tensor = Tensors.vector(0, 0, 0, 1e-5);
     Chop._04.requireAllZero(tensor);
-    AssertFail.of(() -> Chop._06.requireAllZero(tensor));
+    assertThrows(TensorRuntimeException.class, () -> Chop._06.requireAllZero(tensor));
   }
 
   @Test

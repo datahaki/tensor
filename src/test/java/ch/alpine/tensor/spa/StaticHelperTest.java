@@ -3,8 +3,9 @@ package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
@@ -32,9 +34,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.d.CategoricalDistribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Times;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class StaticHelperTest {
+class StaticHelperTest {
   @Test
   public void testSparseBinary() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
@@ -46,14 +47,14 @@ public class StaticHelperTest {
       assertEquals(a.add(b), r_add);
       assertEquals(a.add(sb), r_add);
       assertEquals(sa.add(b), r_add);
-      assertTrue(r_add instanceof SparseArray);
+      assertInstanceOf(SparseArray.class, r_add);
     }
     {
       Tensor r_sub = sa.subtract(sb);
       assertEquals(a.subtract(b), r_sub);
       assertEquals(a.subtract(sb), r_sub);
       assertEquals(sa.subtract(b), r_sub);
-      assertTrue(r_sub instanceof SparseArray);
+      assertInstanceOf(SparseArray.class, r_sub);
     }
     {
       Tensor r_pml = Times.of(sa, sb);
@@ -68,7 +69,7 @@ public class StaticHelperTest {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4},{0,0,0,0,0},{0,0,0,0,0}}");
     Tensor s = TestHelper.of(a);
     Tensor tw_s = TensorWedge.of(s);
-    assertTrue(tw_s instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, tw_s);
     assertEquals(TensorWedge.of(a), tw_s);
     assertEquals(Transpose.of(a), Transpose.of(s));
   }
@@ -85,8 +86,8 @@ public class StaticHelperTest {
     SparseArray.of(RealScalar.ZERO, 2, 3);
     assertEquals(SparseArray.of(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(SparseArray.of(GaussScalar.of(0, 7)), GaussScalar.of(0, 7));
-    AssertFail.of(() -> SparseArray.of(RealScalar.ZERO, 2, -3));
-    AssertFail.of(() -> SparseArray.of(RealScalar.ONE, 2, 3));
+    assertThrows(IllegalArgumentException.class, () -> SparseArray.of(RealScalar.ZERO, 2, -3));
+    assertThrows(TensorRuntimeException.class, () -> SparseArray.of(RealScalar.ONE, 2, 3));
   }
 
   @Test
@@ -113,8 +114,8 @@ public class StaticHelperTest {
     assertFalse(fb instanceof SparseArray);
     Tensor sa = TestHelper.of(fa);
     Tensor sb = TestHelper.of(fb);
-    assertTrue(sa instanceof SparseArray);
-    assertTrue(sb instanceof SparseArray);
+    assertInstanceOf(SparseArray.class, sa);
+    assertInstanceOf(SparseArray.class, sb);
     Tensor fa_fb = fa.dot(fb);
     Tensor fa_sb = fa.dot(sb);
     Tensor sa_fb = sa.dot(fb);
@@ -156,20 +157,15 @@ public class StaticHelperTest {
   @Test
   public void testFallbackFail() {
     Tensor tensor = SparseArray.of(RealScalar.ZERO, 3);
-    AssertFail.of(() -> tensor.divide(Quantity.of(0, "")));
-    AssertFail.of(() -> tensor.divide(Quantity.of(0, "s*m")));
-    AssertFail.of(() -> tensor.multiply(DoubleScalar.POSITIVE_INFINITY));
+    assertThrows(ArithmeticException.class, () -> tensor.divide(Quantity.of(0, "")));
+    assertThrows(ArithmeticException.class, () -> tensor.divide(Quantity.of(0, "s*m")));
+    assertThrows(TensorRuntimeException.class, () -> tensor.multiply(DoubleScalar.POSITIVE_INFINITY));
   }
 
   @Test
   public void testArraysAsListSerialization() throws ClassNotFoundException, IOException {
     Serialization.copy(Arrays.asList(3, 4, 5, 6));
-    try {
-      Serialization.copy(Arrays.asList(3, 4, 5, 6).subList(1, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Serialization.copy(Arrays.asList(3, 4, 5, 6).subList(1, 3)));
   }
 
   @Test
@@ -180,12 +176,7 @@ public class StaticHelperTest {
     list.add(5);
     list.add(6);
     Serialization.copy(list);
-    try {
-      Serialization.copy(list.subList(1, 3));
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Serialization.copy(list.subList(1, 3)));
   }
 
   @Test

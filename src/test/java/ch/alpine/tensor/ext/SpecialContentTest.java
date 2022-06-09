@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensors;
 
-public class SpecialContentTest {
+class SpecialContentTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     SpecialContent sc = new SpecialContent();

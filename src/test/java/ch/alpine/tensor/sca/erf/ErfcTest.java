@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.erf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -10,13 +11,13 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ErfcTest {
+class ErfcTest {
   @Test
   public void testCompare() {
     Tensor x = Subdivide.of(-0.6, 0.6, 50);
@@ -48,6 +49,6 @@ public class ErfcTest {
 
   @Test
   public void testFail() {
-    AssertFail.of(() -> ErfcRestricted.FUNCTION.apply(GaussScalar.of(6, 7)));
+    assertThrows(TensorRuntimeException.class, () -> ErfcRestricted.FUNCTION.apply(GaussScalar.of(6, 7)));
   }
 }

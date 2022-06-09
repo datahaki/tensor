@@ -2,6 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -22,9 +24,8 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.CauchyDistribution;
 import ch.alpine.tensor.pdf.c.LogNormalDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class OrderingTest {
+class OrderingTest {
   @Test
   public void testVector() throws ClassNotFoundException, IOException {
     Tensor vector = Tensors.vector(4, 2, 3, 0, 1);
@@ -110,6 +111,6 @@ public class OrderingTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> Ordering.INCREASING.of(Pi.HALF));
+    assertThrows(TensorRuntimeException.class, () -> Ordering.INCREASING.of(Pi.HALF));
   }
 }

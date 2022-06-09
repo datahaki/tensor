@@ -4,8 +4,8 @@ package ch.alpine.tensor.alg;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.chq.ScalarQ;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/Reverse.html">Reverse</a>

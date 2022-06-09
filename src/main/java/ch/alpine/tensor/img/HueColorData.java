@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.img;
 
-import ch.alpine.tensor.DeterminateScalarQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.sca.Clips;
@@ -17,8 +16,9 @@ import ch.alpine.tensor.sca.Clips;
 
   @Override // from ScalarTensorFunction
   public Tensor apply(Scalar scalar) {
-    return DeterminateScalarQ.of(scalar) //
-        ? ColorFormat.toVector(Hue.of(scalar.number().doubleValue(), 1, 1, opacity))
+    double value = scalar.number().doubleValue();
+    return Double.isFinite(value) //
+        ? ColorFormat.toVector(Hue.of(value, 1, 1, opacity))
         : Transparent.rgba();
   }
 

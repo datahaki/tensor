@@ -1,13 +1,13 @@
 // code by jph
 package ch.alpine.tensor.sca.gam;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.usr.AssertFail;
-
-public class LogGammaRestrictedTest {
+class LogGammaRestrictedTest {
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> LogGammaRestricted.FUNCTION.apply(null));
+    assertThrows(NullPointerException.class, () -> LogGammaRestricted.FUNCTION.apply(null));
   }
 }

@@ -3,15 +3,16 @@ package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ClipIntervalTest {
+class ClipIntervalTest {
   @Test
   public void testEqualsInterval() {
     assertEquals(Clips.interval(3, 7), Clips.interval(3, 7));
@@ -51,15 +52,15 @@ public class ClipIntervalTest {
 
   @Test
   public void testUnits0() {
-    AssertFail.of(() -> Clips.interval(RealScalar.of(0), Quantity.of(0, "m")));
-    AssertFail.of(() -> Clips.interval(Quantity.of(0, "m"), RealScalar.of(0)));
+    assertThrows(TensorRuntimeException.class, () -> Clips.interval(RealScalar.of(0), Quantity.of(0, "m")));
+    assertThrows(TensorRuntimeException.class, () -> Clips.interval(Quantity.of(0, "m"), RealScalar.of(0)));
   }
 
   @Test
   public void testUnits1() {
-    AssertFail.of(() -> Clips.interval(RealScalar.of(0), Quantity.of(2, "m")));
-    AssertFail.of(() -> Clips.interval(Quantity.of(0, "m"), RealScalar.of(2)));
-    AssertFail.of(() -> Clips.interval(Quantity.of(-2, "m"), RealScalar.of(0)));
+    assertThrows(TensorRuntimeException.class, () -> Clips.interval(RealScalar.of(0), Quantity.of(2, "m")));
+    assertThrows(TensorRuntimeException.class, () -> Clips.interval(Quantity.of(0, "m"), RealScalar.of(2)));
+    assertThrows(TensorRuntimeException.class, () -> Clips.interval(Quantity.of(-2, "m"), RealScalar.of(0)));
   }
 
   @Test

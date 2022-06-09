@@ -29,7 +29,7 @@ import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
-public class StaticHelperTest {
+class StaticHelperTest {
   @Test
   public void testPolynomial() {
     Tensor coeffs = Tensors.vector(2, 1, 3, 4);

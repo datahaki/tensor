@@ -3,6 +3,7 @@ package ch.alpine.tensor.sca;
 
 import java.util.Objects;
 
+import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -97,9 +98,11 @@ public class Chop implements ScalarUnaryOperator {
 
   @Override
   public Scalar apply(Scalar scalar) {
-    return scalar instanceof ChopInterface chopInterface //
-        ? chopInterface.chop(this)
-        : Objects.requireNonNull(scalar);
+    if (scalar instanceof ChopInterface chopInterface)
+      return chopInterface.chop(this);
+    if (scalar instanceof MultiplexScalar multiplexScalar)
+      return multiplexScalar.eachMap(this);
+    return Objects.requireNonNull(scalar);
   }
 
   /** @param scalar

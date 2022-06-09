@@ -2,6 +2,8 @@
 package ch.alpine.tensor.sca;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -10,18 +12,19 @@ import java.math.RoundingMode;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class RoundTest {
+class RoundTest {
   @Test
   public void testDouble() {
     assertEquals(Round.FUNCTION.apply(DoubleScalar.of(11.3)), DoubleScalar.of(11));
@@ -50,13 +53,13 @@ public class RoundTest {
     assertEquals(Round.longValueExact(s), 17);
     Scalar r = Round.of(s);
     assertEquals(r, RealScalar.of(17));
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test
   public void testIntExactValueFail() {
-    AssertFail.of(() -> Round.intValueExact(Quantity.of(1.2, "h")));
-    AssertFail.of(() -> Round.longValueExact(Quantity.of(2.3, "h*s")));
+    assertThrows(TensorRuntimeException.class, () -> Round.intValueExact(Quantity.of(1.2, "h")));
+    assertThrows(TensorRuntimeException.class, () -> Round.longValueExact(Quantity.of(2.3, "h*s")));
   }
 
   @Test
@@ -64,7 +67,7 @@ public class RoundTest {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
     Scalar r = Round.of(s);
     assertEquals(r, RealScalar.of(55));
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
   }
 
   @Test
@@ -72,7 +75,7 @@ public class RoundTest {
     BigInteger bi = new BigInteger("97826349587623498756234545976");
     Scalar s = RealScalar.of(bi);
     Scalar r = Round.of(s);
-    assertTrue(r instanceof RationalScalar);
+    assertInstanceOf(RationalScalar.class, r);
     assertEquals(s, r);
   }
 
@@ -141,6 +144,14 @@ public class RoundTest {
   }
 
   @Test
+  public void testParsing() {
+    Scalar scalar = ComplexScalar.of(RealScalar.of(2.3), RationalScalar.of(5, 8));
+    assertEquals(Round.FUNCTION.apply(scalar), ComplexScalar.of(2, 1));
+    assertEquals(Ceiling.FUNCTION.apply(scalar), ComplexScalar.of(3, 1));
+    assertEquals(Floor.FUNCTION.apply(scalar), ComplexScalar.of(2, 0));
+  }
+
+  @Test
   public void testRoundOptions3() {
     Scalar pi = (Scalar) Scalars.fromString("1234.100000000000008").map(Round._2);
     DecimalScalar ds = (DecimalScalar) pi;
@@ -183,6 +194,6 @@ public class RoundTest {
 
   @Test
   public void testTypeFail() {
-    AssertFail.of(() -> Round.of(StringScalar.of("some")));
+    assertThrows(TensorRuntimeException.class, () -> Round.of(StringScalar.of("some")));
   }
 }

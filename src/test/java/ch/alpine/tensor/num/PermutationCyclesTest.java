@@ -2,12 +2,11 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.usr.AssertFail;
-
-public class PermutationCyclesTest {
+class PermutationCyclesTest {
   @Test
   public void testSimple() {
     Cycles cycles = PermutationCycles.of(1, 4, 2, 5, 0, 7, 6, 8, 3, 9);
@@ -16,8 +15,8 @@ public class PermutationCyclesTest {
 
   @Test
   public void testSigmaFail() {
-    AssertFail.of(() -> PermutationCycles.of(1, 4));
-    AssertFail.of(() -> PermutationCycles.of(0, 0));
-    AssertFail.of(() -> PermutationCycles.of(1, 1));
+    assertThrows(IllegalArgumentException.class, () -> PermutationCycles.of(1, 4));
+    assertThrows(IllegalArgumentException.class, () -> PermutationCycles.of(0, 0));
+    assertThrows(IllegalArgumentException.class, () -> PermutationCycles.of(1, 1));
   }
 }

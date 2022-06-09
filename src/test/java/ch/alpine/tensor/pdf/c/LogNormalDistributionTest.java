@@ -2,6 +2,7 @@
 package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.Random;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -26,9 +28,8 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class LogNormalDistributionTest {
+class LogNormalDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     LogNormalDistribution distribution = (LogNormalDistribution) Serialization.copy( //
@@ -70,8 +71,8 @@ public class LogNormalDistributionTest {
     Tolerance.CHOP.requireClose(Mean.of(distribution), Exp.FUNCTION.apply(RationalScalar.of(46, 45)));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(4.323016391513655));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    AssertFail.of(() -> inverseCDF.quantile(RealScalar.of(+1.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
   @Test
@@ -102,14 +103,14 @@ public class LogNormalDistributionTest {
 
   @Test
   public void testSigmaNonPositiveFail() {
-    AssertFail.of(() -> LogNormalDistribution.of(RationalScalar.HALF, RealScalar.ZERO));
-    AssertFail.of(() -> LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(-2, 3)));
+    assertThrows(TensorRuntimeException.class, () -> LogNormalDistribution.of(RationalScalar.HALF, RealScalar.ZERO));
+    assertThrows(TensorRuntimeException.class, () -> LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(-2, 3)));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> LogNormalDistribution.of(Quantity.of(RationalScalar.HALF, "m"), RationalScalar.of(2, 3)));
-    AssertFail.of(() -> LogNormalDistribution.of(RationalScalar.of(2, 3), Quantity.of(RationalScalar.HALF, "m")));
+    assertThrows(TensorRuntimeException.class, () -> LogNormalDistribution.of(Quantity.of(RationalScalar.HALF, "m"), RationalScalar.of(2, 3)));
+    assertThrows(TensorRuntimeException.class, () -> LogNormalDistribution.of(RationalScalar.of(2, 3), Quantity.of(RationalScalar.HALF, "m")));
   }
 
   @Test

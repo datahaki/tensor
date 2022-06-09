@@ -2,19 +2,20 @@
 package ch.alpine.tensor.mat;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class HermitianMatrixQTest {
+class HermitianMatrixQTest {
   @Test
   public void testMatrix() {
     assertTrue(HermitianMatrixQ.of(Tensors.fromString("{{0, I}, {-I, 0}}")));
@@ -47,11 +48,11 @@ public class HermitianMatrixQTest {
   @Test
   public void testRequire() {
     HermitianMatrixQ.require(HilbertMatrix.of(10));
-    AssertFail.of(() -> HermitianMatrixQ.require(Tensors.vector(1, 2, 3)));
+    assertThrows(TensorRuntimeException.class, () -> HermitianMatrixQ.require(Tensors.vector(1, 2, 3)));
   }
 
   @Test
   public void testRequireChop() {
-    AssertFail.of(() -> HermitianMatrixQ.require(Tensors.vector(1, 2, 3), Chop._02));
+    assertThrows(TensorRuntimeException.class, () -> HermitianMatrixQ.require(Tensors.vector(1, 2, 3), Chop._02));
   }
 }

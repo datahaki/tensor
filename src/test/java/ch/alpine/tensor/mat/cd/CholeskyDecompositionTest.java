@@ -3,19 +3,23 @@ package ch.alpine.tensor.mat.cd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.DiagonalMatrix;
@@ -38,15 +42,14 @@ import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
+import ch.alpine.tensor.qty.LenientAdd;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.red.LenientAdd;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 import ch.alpine.tensor.sca.pow.Sqrt;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class CholeskyDecompositionTest {
+class CholeskyDecompositionTest {
   static CholeskyDecomposition checkDecomp(Tensor matrix) {
     int n = matrix.length();
     CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix);
@@ -80,9 +83,9 @@ public class CholeskyDecompositionTest {
       Tensor actual = choleskyDecomposition.solve(b);
       assertEquals(actual, expect);
     }
-    AssertFail.of(() -> choleskyDecomposition.solve(Tensors.vector(1, 2, 3, 4)));
-    AssertFail.of(() -> choleskyDecomposition.solve(Tensors.vector(1, 2)));
-    AssertFail.of(() -> choleskyDecomposition.solve(RealScalar.ONE));
+    assertThrows(IllegalArgumentException.class, () -> choleskyDecomposition.solve(Tensors.vector(1, 2, 3, 4)));
+    assertThrows(IllegalArgumentException.class, () -> choleskyDecomposition.solve(Tensors.vector(1, 2)));
+    assertThrows(IllegalArgumentException.class, () -> choleskyDecomposition.solve(RealScalar.ONE));
   }
 
   @Test
@@ -121,12 +124,12 @@ public class CholeskyDecompositionTest {
 
   @Test
   public void testFail1() {
-    AssertFail.of(() -> checkDecomp(Tensors.fromString("{{4, 2}, {1, 4}}")));
+    assertThrows(TensorRuntimeException.class, () -> checkDecomp(Tensors.fromString("{{4, 2}, {1, 4}}")));
   }
 
   @Test
   public void testFail2() {
-    AssertFail.of(() -> checkDecomp(Tensors.fromString("{{4, I}, {I, 4}}")));
+    assertThrows(TensorRuntimeException.class, () -> checkDecomp(Tensors.fromString("{{4, I}, {I, 4}}")));
   }
 
   @Test
@@ -243,38 +246,37 @@ public class CholeskyDecompositionTest {
         Inverse.of(matrix));
   }
 
-  @Test
-  public void testRankDeficient() {
+  @ParameterizedTest
+  @ValueSource(ints = { 1, 2, 3 })
+  public void testRankDeficient(int r) {
     int n = 7;
     int _m = 5;
     Distribution distribution = NormalDistribution.standard();
-    for (int r = 1; r < _m - 1; ++r) {
-      Tensor m1 = RandomVariate.of(distribution, n, r);
-      Tensor m2 = RandomVariate.of(distribution, r, _m);
-      Tensor br = RandomVariate.of(distribution, n);
-      assertEquals(MatrixRank.of(m1), r);
-      Tensor matrix = m1.dot(m2);
-      assertEquals(MatrixRank.of(matrix), r);
-      {
-        AssertFail.of(() -> PseudoInverse.usingCholesky(matrix));
-        Tensor ls1 = LeastSquares.of(matrix, br);
-        Tensor ls2 = PseudoInverse.of(matrix).dot(br);
-        Tolerance.CHOP.requireClose(ls1, ls2);
-      }
-      {
-        Tensor m = Transpose.of(matrix);
-        Tensor b = RandomVariate.of(distribution, _m);
-        AssertFail.of(() -> PseudoInverse.usingCholesky(m));
-        Tensor ls1 = LeastSquares.of(m, b);
-        Tensor ls2 = PseudoInverse.of(m).dot(b);
-        Tolerance.CHOP.requireClose(ls1, ls2);
-      }
+    Tensor m1 = RandomVariate.of(distribution, n, r);
+    Tensor m2 = RandomVariate.of(distribution, r, _m);
+    Tensor br = RandomVariate.of(distribution, n);
+    assertEquals(MatrixRank.of(m1), r);
+    Tensor matrix = m1.dot(m2);
+    assertEquals(MatrixRank.of(matrix), r);
+    {
+      assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingCholesky(matrix));
+      Tensor ls1 = LeastSquares.of(matrix, br);
+      Tensor ls2 = PseudoInverse.of(matrix).dot(br);
+      Tolerance.CHOP.requireClose(ls1, ls2);
+    }
+    {
+      Tensor m = Transpose.of(matrix);
+      Tensor b = RandomVariate.of(distribution, _m);
+      assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingCholesky(m));
+      Tensor ls1 = LeastSquares.of(m, b);
+      Tensor ls2 = PseudoInverse.of(m).dot(b);
+      Tolerance.CHOP.requireClose(ls1, ls2);
     }
   }
 
   @Test
   public void testRectFail() {
     Tensor matrix = Tensors.fromString("{{10, I}}");
-    AssertFail.of(() -> CholeskyDecomposition.of(matrix));
+    assertThrows(IllegalArgumentException.class, () -> CholeskyDecomposition.of(matrix));
   }
 }

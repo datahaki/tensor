@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 
 import org.junit.jupiter.api.Test;
 
-public class StaticHelperTest {
+class StaticHelperTest {
   @Test
   public void testSimple() {
     assertEquals(StaticHelper.type(BufferedImage.TYPE_3BYTE_BGR), BufferedImage.TYPE_INT_ARGB);

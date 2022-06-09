@@ -2,6 +2,7 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -11,13 +12,13 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.spa.SparseArray;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ArgMaxTest {
+class ArgMaxTest {
   @Test
   public void testDocumentation() {
     assertEquals(ArgMax.of(Tensors.vector(3, 4, 2, 0, 3)), 1);
@@ -32,7 +33,7 @@ public class ArgMaxTest {
 
   @Test
   public void testComparatorNullFail() {
-    AssertFail.of(() -> ArgMax.of(Tensors.empty(), null));
+    assertThrows(NullPointerException.class, () -> ArgMax.of(Tensors.empty(), null));
   }
 
   @Test
@@ -71,11 +72,11 @@ public class ArgMaxTest {
 
   @Test
   public void testScalar() {
-    AssertFail.of(() -> ArgMax.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> ArgMax.of(RealScalar.ONE));
   }
 
   @Test
   public void testFailMatrix() {
-    AssertFail.of(() -> ArgMax.of(HilbertMatrix.of(6)));
+    assertThrows(ClassCastException.class, () -> ArgMax.of(HilbertMatrix.of(6)));
   }
 }

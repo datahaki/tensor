@@ -15,14 +15,14 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
-import ch.alpine.tensor.ScalarQTest;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
-public class RandomVariateTest {
+class RandomVariateTest {
   @Test
   public void testVarying() {
     Distribution distribution = NormalDistribution.standard();
@@ -60,6 +60,6 @@ public class RandomVariateTest {
     Distribution distribution = BinomialDistribution.of(3, RationalScalar.of(1, 2));
     Tensor array = RandomVariate.of(distribution, 1);
     assertEquals(Dimensions.of(array), Arrays.asList(1));
-    assertFalse(ScalarQTest.of(array));
+    assertFalse(array instanceof Scalar);
   }
 }

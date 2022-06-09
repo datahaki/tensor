@@ -3,8 +3,10 @@ package ch.alpine.tensor.jet;
 
 import java.io.Serializable;
 import java.util.OptionalInt;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 
-import ch.alpine.tensor.AbstractScalar;
+import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -48,7 +50,7 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * @implSpec
  * This class is immutable and thread-safe. */
 // TODO TENSOR JET general makeover and more tests
-public class JetScalar extends AbstractScalar implements //
+public class JetScalar extends MultiplexScalar implements //
     AbsInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface, //
     Comparable<Scalar>, Serializable {
@@ -111,11 +113,6 @@ public class JetScalar extends AbstractScalar implements //
   @Override // from Scalar
   public Scalar one() {
     return StaticHelper.CACHE_ONE.apply(vector.length());
-  }
-
-  @Override // from Scalar
-  public Number number() {
-    throw TensorRuntimeException.of(this);
   }
 
   @Override // from AbstractScalar
@@ -198,6 +195,16 @@ public class JetScalar extends AbstractScalar implements //
   @Override // from TrigonometryInterface
   public Scalar sinh() {
     return StaticHelper.chain(vector, Sinh.FUNCTION, Cosh.FUNCTION);
+  }
+
+  @Override // from MultiplexScalar
+  public Scalar eachMap(UnaryOperator<Scalar> unaryOperator) {
+    return new JetScalar(vector.map(unaryOperator));
+  }
+
+  @Override // from MultiplexScalar
+  public boolean allMatch(Predicate<Scalar> predicate) {
+    return vector.stream().map(Scalar.class::cast).allMatch(predicate);
   }
 
   @Override // from Comparable

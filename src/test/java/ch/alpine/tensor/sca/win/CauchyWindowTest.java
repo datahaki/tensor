@@ -2,19 +2,19 @@
 package ch.alpine.tensor.sca.win;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactScalarQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class CauchyWindowTest {
+class CauchyWindowTest {
   @Test
   public void testSimple() {
     ScalarUnaryOperator suo = CauchyWindow.of(RealScalar.of(1.6));
@@ -35,6 +35,6 @@ public class CauchyWindowTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> CauchyWindow.of(null));
+    assertThrows(NullPointerException.class, () -> CauchyWindow.of(null));
   }
 }

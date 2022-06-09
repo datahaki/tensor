@@ -11,7 +11,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 
-public class MatrixRankSvdTest {
+class MatrixRankSvdTest {
   @Test
   public void testZeros() {
     Tensor matrix = Array.zeros(9, 5);

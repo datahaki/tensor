@@ -3,6 +3,7 @@ package ch.alpine.tensor.alg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -20,9 +21,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class DimensionsTest {
+class DimensionsTest {
   @Test
   public void testScalar() {
     assertTrue(Dimensions.of(DoubleScalar.of(0.123)).isEmpty());
@@ -107,9 +107,9 @@ public class DimensionsTest {
   public void testLengthsFail() {
     Tensor tensor = Tensors.fromString("{{{2, 3}, {{}}}, {4, 5, 7}, 3}");
     Dimensions dimensions = new Dimensions(tensor);
-    AssertFail.of(() -> dimensions.lengths(-1));
+    assertThrows(IndexOutOfBoundsException.class, () -> dimensions.lengths(-1));
     dimensions.lengths(dimensions.maxDepth());
-    AssertFail.of(() -> dimensions.lengths(dimensions.maxDepth() + 1));
-    AssertFail.of(() -> dimensions.lengths(0).add(1));
+    assertThrows(IndexOutOfBoundsException.class, () -> dimensions.lengths(dimensions.maxDepth() + 1));
+    assertThrows(UnsupportedOperationException.class, () -> dimensions.lengths(0).add(1));
   }
 }

@@ -2,17 +2,18 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
+import ch.alpine.tensor.chq.ExactTensorQ;
 
-public class MinFilterTest {
+class MinFilterTest {
   @Test
   public void testId() {
     Tensor vector = Tensors.vector(1, 2, 3, 4, 5, 6);
@@ -61,7 +62,7 @@ public class MinFilterTest {
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> MinFilter.of(RealScalar.of(3), 1));
+    assertThrows(TensorRuntimeException.class, () -> MinFilter.of(RealScalar.of(3), 1));
   }
 
   @Test
@@ -69,11 +70,11 @@ public class MinFilterTest {
     Tensor matrix = Tensors.fromString("{{1, 2, 3, 3, {3, 2, 3}}, {3}, {0, 0, 0}}");
     matrix.flatten(-1).forEach(RationalScalar.class::cast); // test if parsing went ok
     MinFilter.of(matrix, 0);
-    AssertFail.of(() -> MinFilter.of(matrix, 1));
+    assertThrows(IllegalArgumentException.class, () -> MinFilter.of(matrix, 1));
   }
 
   @Test
   public void testRadiusFail() {
-    AssertFail.of(() -> MinFilter.of(Tensors.vector(1, 2, 3, 4), -1));
+    assertThrows(IllegalArgumentException.class, () -> MinFilter.of(Tensors.vector(1, 2, 3, 4), -1));
   }
 }

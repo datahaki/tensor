@@ -2,17 +2,19 @@
 package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ComplexScalarTest {
+class ComplexScalarTest {
   @Test
   public void testSign() {
     Scalar scalar = ComplexScalar.of(4, 3);
@@ -50,38 +52,40 @@ public class ComplexScalarTest {
 
   @Test
   public void testConstructFail() {
-    AssertFail.of(() -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
-    AssertFail.of(() -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(Quaternion.ONE, RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(RealScalar.ONE, Quaternion.ONE));
   }
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> ComplexScalar.of(RealScalar.ONE, null));
-    AssertFail.of(() -> ComplexScalar.of(null, RealScalar.ONE));
-    AssertFail.of(() -> ComplexScalar.of(null, RealScalar.ZERO));
+    assertThrows(NullPointerException.class, () -> ComplexScalar.of(RealScalar.ONE, null));
+    assertThrows(NullPointerException.class, () -> ComplexScalar.of(null, RealScalar.ONE));
+    assertThrows(NullPointerException.class, () -> ComplexScalar.of(null, RealScalar.ZERO));
   }
 
   @Test
   public void testPolarFail() {
-    AssertFail.of(() -> ComplexScalar.fromPolar(RealScalar.ONE, ComplexScalar.I));
-    AssertFail.of(() -> ComplexScalar.fromPolar(ComplexScalar.I, RealScalar.ONE));
-    AssertFail.of(() -> ComplexScalar.fromPolar(ComplexScalar.I, ComplexScalar.I));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.fromPolar(RealScalar.ONE, ComplexScalar.I));
+    assertThrows(ClassCastException.class, () -> ComplexScalar.fromPolar(ComplexScalar.I, RealScalar.ONE));
+    assertThrows(ClassCastException.class, () -> ComplexScalar.fromPolar(ComplexScalar.I, ComplexScalar.I));
   }
 
   @Test
   public void testPolarQuantityFail() {
-    AssertFail.of(() -> ComplexScalar.fromPolar(RealScalar.ONE, Quantity.of(1.3, "m")));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.fromPolar(RealScalar.ONE, Quantity.of(1.3, "m")));
   }
 
   @Test
   public void testPolar() {
-    assertTrue(ComplexScalar.fromPolar(1, 3) instanceof ComplexScalar);
-    assertTrue(ComplexScalar.fromPolar(1, 0) instanceof RealScalar);
+    assertInstanceOf(ComplexScalar.class, ComplexScalar.fromPolar(1, 3));
+    assertInstanceOf(RealScalar.class, ComplexScalar.fromPolar(1, 0));
   }
 
   @Test
   public void testPolarNumberFail() {
-    AssertFail.of(() -> ComplexScalar.fromPolar(-1, 3));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.fromPolar(-1, 3));
   }
 
   @Test
@@ -93,8 +97,50 @@ public class ComplexScalarTest {
   }
 
   @Test
+  public void testGaussScalar() {
+    Scalar scalar = ComplexScalar.of(GaussScalar.of(3, 7), GaussScalar.of(2, 7));
+    Scalar invers = scalar.reciprocal();
+    assertEquals(scalar.multiply(invers), GaussScalar.of(1, 7));
+    assertEquals(invers.multiply(scalar), GaussScalar.of(1, 7));
+  }
+
+  @Test
+  public void testGaussScalarCommute() {
+    int p = 43;
+    Scalar cs = ComplexScalar.of(GaussScalar.of(31, p), GaussScalar.of(22, p));
+    Scalar gs = GaussScalar.of(16, p);
+    assertEquals(cs.multiply(gs), gs.multiply(cs));
+    assertEquals(cs.divide(gs), gs.under(cs));
+    assertEquals(cs.under(gs), gs.divide(cs));
+  }
+
+  @Test
+  public void testAsField() {
+    // primes not resulting in field: 5,13,17
+    // int c = 0;
+    // primes resulting in field:
+    for (int p : new int[] { 3, 7, 11, 19 }) { // also 23, 31, 43
+      Scalar neutral = GaussScalar.of(1, p);
+      for (int i = 0; i < p; ++i)
+        for (int j = (0 < i ? 0 : 1); j < p; ++j) {
+          Scalar scalar = ComplexScalar.of(GaussScalar.of(i, p), GaussScalar.of(j, p));
+          // try {
+          assertEquals(scalar.reciprocal().multiply(scalar), neutral);
+          assertEquals(scalar.multiply(scalar.reciprocal()), neutral);
+          assertEquals(scalar.divide(scalar), neutral);
+          assertEquals(scalar.under(scalar), neutral);
+          // } catch (Exception e) {
+          // System.out.println(scalar);
+          // ++c;
+          // }
+        }
+    }
+    // System.out.println(c + " of " + p * p);
+  }
+
+  @Test
   public void testUnitFail() {
-    AssertFail.of(() -> ComplexScalar.unit(ComplexScalar.of(-1, 3)));
-    AssertFail.of(() -> ComplexScalar.unit(Quantity.of(3, "s")));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.unit(ComplexScalar.of(-1, 3)));
+    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.unit(Quantity.of(3, "s")));
   }
 }

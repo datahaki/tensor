@@ -2,17 +2,18 @@
 package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.mat.HilbertMatrix;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ArgMinTest {
+class ArgMinTest {
   @Test
   public void testDocumentation() {
     assertEquals(ArgMin.of(Tensors.vector(3, 4, 1, 2, 3)), 2);
@@ -39,16 +40,16 @@ public class ArgMinTest {
 
   @Test
   public void testComparatorNullFail() {
-    AssertFail.of(() -> ArgMin.of(Tensors.empty(), null));
+    assertThrows(NullPointerException.class, () -> ArgMin.of(Tensors.empty(), null));
   }
 
   @Test
   public void testScalar() {
-    AssertFail.of(() -> ArgMin.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> ArgMin.of(RealScalar.ONE));
   }
 
   @Test
   public void testFailMatrix() {
-    AssertFail.of(() -> ArgMin.of(HilbertMatrix.of(6)));
+    assertThrows(ClassCastException.class, () -> ArgMin.of(HilbertMatrix.of(6)));
   }
 }

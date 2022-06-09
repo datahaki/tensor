@@ -3,8 +3,9 @@ package ch.alpine.tensor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,9 +16,8 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Numel;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class TensorTest {
+class TensorTest {
   @Test
   public void testConstantAll() {
     assertTrue(Tensor.ALL < -1000000);
@@ -25,13 +25,13 @@ public class TensorTest {
 
   @Test
   public void testIsScalar() {
-    assertFalse(ScalarQTest.of(Tensors.empty()));
+    assertFalse(Tensors.empty() instanceof Scalar);
   }
 
   @Test
   public void testLength() {
     Tensor a = DoubleScalar.of(2.32123);
-    assertTrue(ScalarQTest.of(a));
+    assertInstanceOf(Scalar.class, a);
     assertEquals(a.length(), Scalar.LENGTH);
     Tensor b = Tensors.vectorLong(3, 2);
     assertEquals(b.length(), 2);
@@ -73,7 +73,7 @@ public class TensorTest {
 
   @Test
   public void testAddFail() {
-    AssertFail.of(() -> Tensors.vector(1, 2, 3).add(Tensors.vector(1, 2, 3, 4)));
+    assertThrows(IllegalArgumentException.class, () -> Tensors.vector(1, 2, 3).add(Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
@@ -127,19 +127,14 @@ public class TensorTest {
   public void testExtractFail() {
     Tensors.vector(1, 2, 3, 4, 5, 6).extract(3, 6);
     Tensors.vector(1, 2, 3, 4, 5, 6).extract(6, 6);
-    AssertFail.of(() -> Tensors.vector(1, 2, 3, 4, 5, 6).extract(3, 7));
-    AssertFail.of(() -> Tensors.vector(1, 2, 3, 4, 5, 6).extract(7, 6));
+    assertThrows(IndexOutOfBoundsException.class, () -> Tensors.vector(1, 2, 3, 4, 5, 6).extract(3, 7));
+    assertThrows(IllegalArgumentException.class, () -> Tensors.vector(1, 2, 3, 4, 5, 6).extract(7, 6));
   }
 
   @Test
   public void testBlockSerFail() {
     Tensor tensor = Tensors.vectorLong(1, 2, 6).block(Arrays.asList(0), Arrays.asList(3));
-    try {
-      Serialization.copy(tensor);
-      fail();
-    } catch (Exception exception) {
-      // ---
-    }
+    assertThrows(Exception.class, () -> Serialization.copy(tensor));
   }
 
   @Test
@@ -165,6 +160,6 @@ public class TensorTest {
 
   @Test
   public void testMapNullFail() {
-    AssertFail.of(() -> Tensors.vector(1, 2, 3).map(s -> null));
+    assertThrows(NullPointerException.class, () -> Tensors.vector(1, 2, 3).map(s -> null));
   }
 }

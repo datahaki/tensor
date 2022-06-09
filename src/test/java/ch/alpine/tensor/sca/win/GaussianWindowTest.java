@@ -2,6 +2,7 @@
 package ch.alpine.tensor.sca.win;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -13,9 +14,8 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class GaussianWindowTest {
+class GaussianWindowTest {
   @Test
   public void testSimple() {
     Scalar apply = GaussianWindow.FUNCTION.apply(RealScalar.of(0.2));
@@ -45,6 +45,6 @@ public class GaussianWindowTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> GaussianWindow.of(null));
+    assertThrows(NullPointerException.class, () -> GaussianWindow.of(null));
   }
 }

@@ -28,7 +28,7 @@ import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
-public class JacobiRealTest {
+class JacobiRealTest {
   @Test
   public void testRandom() {
     Random random = new Random(1);

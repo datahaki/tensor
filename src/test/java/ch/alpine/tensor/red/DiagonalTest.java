@@ -2,6 +2,7 @@
 package ch.alpine.tensor.red;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Range;
@@ -16,9 +18,8 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class DiagonalTest {
+class DiagonalTest {
   @Test
   public void testVector() {
     Tensor tensor = Diagonal.of(Range.of(10, 20));
@@ -79,6 +80,6 @@ public class DiagonalTest {
 
   @Test
   public void testFailScalar() {
-    AssertFail.of(() -> Diagonal.of(RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> Diagonal.of(RealScalar.ONE));
   }
 }

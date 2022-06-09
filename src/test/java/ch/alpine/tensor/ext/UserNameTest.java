@@ -3,13 +3,12 @@ package ch.alpine.tensor.ext;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.usr.AssertFail;
-
-public class UserNameTest {
+class UserNameTest {
   @Test
   public void testGetProperty() {
     String name = System.getProperty("user.name");
@@ -31,6 +30,6 @@ public class UserNameTest {
 
   @Test
   public void testNullFail() {
-    AssertFail.of(() -> UserName.is(null));
+    assertThrows(NullPointerException.class, () -> UserName.is(null));
   }
 }

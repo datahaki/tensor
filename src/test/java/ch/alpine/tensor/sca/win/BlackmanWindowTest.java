@@ -9,7 +9,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.sca.Chop;
 
-public class BlackmanWindowTest {
+class BlackmanWindowTest {
   @Test
   public void testSimple() {
     Scalar result = BlackmanWindow.FUNCTION.apply(RealScalar.of(0.2));

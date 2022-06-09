@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
@@ -26,7 +27,7 @@ import ch.alpine.tensor.pdf.c.LogNormalDistribution;
 import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
-public class QRSvdTest {
+class QRSvdTest {
   @Test
   public void testSquare() {
     Tensor matrix = HilbertMatrix.of(6);
@@ -37,7 +38,7 @@ public class QRSvdTest {
     Tolerance.CHOP.requireClose(v1, v2);
   }
 
-  @Test
+  @RepeatedTest(3)
   public void testRect5x2() throws ClassNotFoundException, IOException {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 5, 2);
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
@@ -51,7 +52,7 @@ public class QRSvdTest {
     Tolerance.CHOP.requireClose(v1, v2);
   }
 
-  @Test
+  @RepeatedTest(3)
   public void testRect5x3() {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 5, 3);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
@@ -62,7 +63,7 @@ public class QRSvdTest {
     Tolerance.CHOP.requireClose(v1, v2);
   }
 
-  @Test
+  @RepeatedTest(3)
   public void testMatrix6x4() {
     Tensor matrix = RandomVariate.of(TriangularDistribution.with(0.2, 1), 6, 4);
     SingularValueDecomposition svd = QRSvd.of(matrix);
@@ -73,7 +74,6 @@ public class QRSvdTest {
     Tolerance.CHOP.requireClose(approx, matrix);
   }
 
-  @Test
   public void testMatrix6x4NonTrivial() {
     Random random = new Random(3);
     Tensor matrix = RandomVariate.of(LogNormalDistribution.standard(), random, 6, 4);
@@ -87,7 +87,6 @@ public class QRSvdTest {
     Tolerance.CHOP.requireClose(approx, matrix);
   }
 
-  @Test
   public void testMatrix60x4NonTrivial() {
     Random random = new Random(2);
     Tensor matrix = RandomVariate.of(LogNormalDistribution.standard(), random, 6, 4);

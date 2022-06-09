@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 
@@ -10,10 +11,10 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class IntegerDigitsTest {
+class IntegerDigitsTest {
   @Test
   public void testSimple() {
     assertEquals(IntegerDigits.of(RealScalar.of(+321)), Tensors.vector(3, 2, 1));
@@ -37,9 +38,9 @@ public class IntegerDigitsTest {
 
   @Test
   public void testBaseFail() {
-    AssertFail.of(() -> IntegerDigits.base(1));
-    AssertFail.of(() -> IntegerDigits.base(0));
-    AssertFail.of(() -> IntegerDigits.base(-1));
+    assertThrows(IllegalArgumentException.class, () -> IntegerDigits.base(1));
+    assertThrows(IllegalArgumentException.class, () -> IntegerDigits.base(0));
+    assertThrows(IllegalArgumentException.class, () -> IntegerDigits.base(-1));
   }
 
   @Test
@@ -49,11 +50,11 @@ public class IntegerDigitsTest {
 
   @Test
   public void testPrecisionFail() {
-    AssertFail.of(() -> IntegerDigits.of(RealScalar.of(1.0)));
+    assertThrows(TensorRuntimeException.class, () -> IntegerDigits.of(RealScalar.of(1.0)));
   }
 
   @Test
   public void testRationalFail() {
-    AssertFail.of(() -> IntegerDigits.of(RationalScalar.of(10, 3)));
+    assertThrows(TensorRuntimeException.class, () -> IntegerDigits.of(RationalScalar.of(10, 3)));
   }
 }

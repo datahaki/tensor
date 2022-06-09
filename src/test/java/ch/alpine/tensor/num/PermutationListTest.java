@@ -2,6 +2,7 @@
 package ch.alpine.tensor.num;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,9 +15,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class PermutationListTest {
+class PermutationListTest {
   @Test
   public void testSimple() {
     Tensor perm = Tensors.fromString("{{3, 2}, {1, 6, 7}}").map(s -> s.subtract(RealScalar.ONE));
@@ -45,15 +45,15 @@ public class PermutationListTest {
   @Test
   public void testLengthFail() {
     Cycles cycles = Cycles.of("{{2, 1}, {0, 5, 6}}");
-    AssertFail.of(() -> PermutationList.of(cycles, 0));
-    AssertFail.of(() -> PermutationList.of(cycles, 6));
+    assertThrows(IllegalArgumentException.class, () -> PermutationList.of(cycles, 0));
+    assertThrows(IllegalArgumentException.class, () -> PermutationList.of(cycles, 6));
   }
 
   @Test
   public void testMinLength2() {
     Cycles cycles = Cycles.of("{{0, 1}}");
     PermutationList.of(cycles, 2);
-    AssertFail.of(() -> PermutationList.of(cycles, 1));
+    assertThrows(IllegalArgumentException.class, () -> PermutationList.of(cycles, 1));
   }
 
   @Test
@@ -61,6 +61,6 @@ public class PermutationListTest {
     Cycles cycles = Cycles.identity();
     PermutationList.of(cycles, 0);
     PermutationList.of(cycles, 1);
-    AssertFail.of(() -> PermutationList.of(cycles, -1));
+    assertThrows(IllegalArgumentException.class, () -> PermutationList.of(cycles, -1));
   }
 }

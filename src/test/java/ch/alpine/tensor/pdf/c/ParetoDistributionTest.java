@@ -3,6 +3,7 @@ package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -11,10 +12,11 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
-import ch.alpine.tensor.NumberQ;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -27,9 +29,8 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
 import ch.alpine.tensor.sca.Chop;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class ParetoDistributionTest {
+class ParetoDistributionTest {
   @Test
   public void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(1.8)));
@@ -66,8 +67,8 @@ public class ParetoDistributionTest {
   @Test
   public void testMeanVarianceIndeterminate() {
     Distribution distribution = ParetoDistribution.of(2.3, 1);
-    assertFalse(NumberQ.of(Mean.of(distribution)));
-    assertFalse(NumberQ.of(Variance.of(distribution)));
+    assertFalse(FiniteScalarQ.of(Mean.of(distribution)));
+    assertFalse(FiniteScalarQ.of(Variance.of(distribution)));
   }
 
   @Test
@@ -79,17 +80,17 @@ public class ParetoDistributionTest {
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(0)));
-    AssertFail.of(() -> ParetoDistribution.of(RealScalar.of(0), RealScalar.of(3)));
+    assertThrows(TensorRuntimeException.class, () -> ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(0)));
+    assertThrows(TensorRuntimeException.class, () -> ParetoDistribution.of(RealScalar.of(0), RealScalar.of(3)));
   }
 
   @Test
   public void testQuantityFail() {
-    AssertFail.of(() -> ParetoDistribution.of(RealScalar.of(3.3), Quantity.of(2.3, "m")));
+    assertThrows(TensorRuntimeException.class, () -> ParetoDistribution.of(RealScalar.of(3.3), Quantity.of(2.3, "m")));
   }
 
   @Test
   public void testKQuantityFail() {
-    AssertFail.of(() -> ParetoDistribution.of(Quantity.of(2.3, "m"), RealScalar.of(3.3)));
+    assertThrows(TensorRuntimeException.class, () -> ParetoDistribution.of(Quantity.of(2.3, "m"), RealScalar.of(3.3)));
   }
 }

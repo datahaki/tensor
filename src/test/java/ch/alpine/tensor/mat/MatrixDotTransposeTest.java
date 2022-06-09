@@ -1,19 +1,21 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
-import ch.alpine.tensor.usr.AssertFail;
 
-public class MatrixDotTransposeTest {
+class MatrixDotTransposeTest {
   @Test
   public void testSimple() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 3, 5);
@@ -42,16 +44,16 @@ public class MatrixDotTransposeTest {
 
   @Test
   public void testVectorFail() {
-    AssertFail.of(() -> MatrixDotTranspose.of(Tensors.vector(2, 1), Tensors.vector(3, 7)));
-    AssertFail.of(() -> MatrixDotTranspose.of(Tensors.vector(2, 1), HilbertMatrix.of(2, 3)));
-    AssertFail.of(() -> MatrixDotTranspose.of(HilbertMatrix.of(2), Tensors.vector(3, 7)));
+    assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(Tensors.vector(2, 1), Tensors.vector(3, 7)));
+    assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(Tensors.vector(2, 1), HilbertMatrix.of(2, 3)));
+    assertThrows(IllegalArgumentException.class, () -> MatrixDotTranspose.of(HilbertMatrix.of(2), Tensors.vector(3, 7)));
   }
 
   @Test
   public void testScalarFail() {
-    AssertFail.of(() -> MatrixDotTranspose.of(RealScalar.ONE, RealScalar.ONE));
-    AssertFail.of(() -> MatrixDotTranspose.of(RealScalar.ONE, HilbertMatrix.of(2, 3)));
-    AssertFail.of(() -> MatrixDotTranspose.of(HilbertMatrix.of(2), RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(RealScalar.ONE, RealScalar.ONE));
+    assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(RealScalar.ONE, HilbertMatrix.of(2, 3)));
+    assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(HilbertMatrix.of(2), RealScalar.ONE));
   }
 
   @Test
@@ -60,6 +62,6 @@ public class MatrixDotTransposeTest {
     Tensor b = RandomVariate.of(NormalDistribution.standard(), 2, 4);
     // Tolerance.CHOP.requireClose(a.dot(Transpose.of(b)), MatrixDotTranspose.of(a, b));
     // Tolerance.CHOP.requireClose(Dot.of(a, Transpose.of(b)), MatrixDotTranspose.of(a, b));
-    AssertFail.of(() -> MatrixDotTranspose.of(a, b));
+    assertThrows(ClassCastException.class, () -> MatrixDotTranspose.of(a, b));
   }
 }

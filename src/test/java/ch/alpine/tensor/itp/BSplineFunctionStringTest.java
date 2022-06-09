@@ -2,15 +2,16 @@
 package ch.alpine.tensor.itp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ExactTensorQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Reverse;
@@ -18,6 +19,7 @@ import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.ScalarTensorFunction;
+import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
@@ -29,11 +31,10 @@ import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
-import ch.alpine.tensor.usr.AssertFail;
 
 // cubic basis functions over unit interval [0, 1]
 // {(1 - t)^3, 4 - 6 t^2 + 3 t^3, 1 + 3 t + 3 t^2 - 3 t^3, t^3}/6
-public class BSplineFunctionStringTest {
+class BSplineFunctionStringTest {
   @Test
   public void testConstant() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(0, Tensors.vector(2, 1, 5, 0, -2));
@@ -261,23 +262,24 @@ public class BSplineFunctionStringTest {
 
   @Test
   public void testEmptyFail() {
-    for (int degree = -2; degree <= 4; ++degree) {
-      int fd = degree;
-      AssertFail.of(() -> BSplineFunctionString.of(fd, Tensors.empty()));
-    }
+    assertThrows(IllegalArgumentException.class, () -> BSplineFunctionString.of(-2, Tensors.empty()));
+    assertThrows(IllegalArgumentException.class, () -> BSplineFunctionString.of(-1, Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> BSplineFunctionString.of(-0, Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> BSplineFunctionString.of(+1, Tensors.empty()));
+    assertThrows(TensorRuntimeException.class, () -> BSplineFunctionString.of(+2, Tensors.empty()));
   }
 
   @Test
   public void testNegativeFail() {
-    AssertFail.of(() -> BSplineFunctionString.of(-1, Tensors.vector(1, 2, 3, 4)));
+    assertThrows(IllegalArgumentException.class, () -> BSplineFunctionString.of(-1, Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
   public void testOutsideFail() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, Tensors.vector(2, 1, 0, -1, -2));
     bSplineFunction.apply(RealScalar.of(4));
-    AssertFail.of(() -> bSplineFunction.apply(RealScalar.of(-0.1)));
-    AssertFail.of(() -> bSplineFunction.apply(RealScalar.of(5.1)));
-    AssertFail.of(() -> bSplineFunction.apply(RealScalar.of(4.1)));
+    assertThrows(TensorRuntimeException.class, () -> bSplineFunction.apply(RealScalar.of(-0.1)));
+    assertThrows(TensorRuntimeException.class, () -> bSplineFunction.apply(RealScalar.of(5.1)));
+    assertThrows(TensorRuntimeException.class, () -> bSplineFunction.apply(RealScalar.of(4.1)));
   }
 }

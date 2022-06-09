@@ -13,12 +13,12 @@ import java.util.stream.Stream;
 import java.util.stream.Stream.Builder;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.ScalarQ;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.alg.Tuples;
+import ch.alpine.tensor.chq.ScalarQ;
 
 /** implementation is consistent with Mathematica
  * 

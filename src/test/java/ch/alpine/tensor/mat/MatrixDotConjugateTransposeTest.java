@@ -15,7 +15,7 @@ import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.red.Entrywise;
 
-public class MatrixDotConjugateTransposeTest {
+class MatrixDotConjugateTransposeTest {
   @Test
   public void testDimensions() {
     Tensor tensor = MatrixDotConjugateTranspose.of(HilbertMatrix.of(2, 3));
