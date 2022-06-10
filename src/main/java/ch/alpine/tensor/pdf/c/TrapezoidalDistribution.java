@@ -209,6 +209,6 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s, %s, %s]", getClass().getSimpleName(), a, b, c, d);
+    return String.format("TrapezoidalDistribution[%s, %s, %s, %s]", a, b, c, d);
   }
 }

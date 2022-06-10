@@ -136,6 +136,6 @@ public class HistogramDistribution implements UnivariateDistribution, Serializab
 
   @Override // from Object
   public String toString() {
-    return getClass().getSimpleName();
+    return "HistogramDistribution";
   }
 }

@@ -88,7 +88,7 @@ public class FindRoot implements Serializable {
     for (int index = 0; index < MAX_ITERATIONS; ++index) {
       Scalar xn = index % 2 == 0 //
           ? (Scalar) LinearBinaryAverage.INSTANCE.split(clip.min(), clip.max(), HALF)
-          : FindRoot.linear(clip, y0, y1);
+          : linear(clip, y0, y1);
       // ---
       Scalar yn = function.apply(xn);
       // ---

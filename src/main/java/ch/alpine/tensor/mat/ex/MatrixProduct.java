@@ -27,6 +27,6 @@ import ch.alpine.tensor.num.GroupInterface;
 
   @Override // from Object
   public String toString() {
-    return getClass().getSimpleName();
+    return "MatrixProduct";
   }
 }

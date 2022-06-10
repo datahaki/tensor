@@ -76,6 +76,6 @@ public class KnownUnitQ implements Predicate<Unit>, Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[size=%s]", getClass().getSimpleName(), set.size());
+    return String.format("KnownUnitQ[size=%s]", set.size());
   }
 }

@@ -76,6 +76,6 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
 
   @Override // from Object
   public final String toString() {
-    return String.format("%s[%s, %s]", getClass().getSimpleName(), alpha, beta);
+    return String.format("GumbelDistribution[%s, %s]", alpha, beta);
   }
 }

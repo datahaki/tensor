@@ -65,6 +65,6 @@ public class VectorNorm implements TensorScalarFunction {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), p);
+    return String.format("VectorNorm[%s]", p);
   }
 }

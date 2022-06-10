@@ -4,7 +4,7 @@
 
 Library for tensor computations in Java 17, version `1.0.6`.
 
-Library for tensor computations in Java 11, version `1.0.5-jdk-11`.
+Library for tensor computations in Java 11, version `1.0.6-jdk-11`.
 
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions
@@ -301,11 +301,11 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
   <dependency>
     <groupId>ch.alpine</groupId>
     <artifactId>tensor</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
   </dependency>
 </dependencies>
 ```
 
-When using Java 11, change the reference to `<version>1.0.5-jdk-11</version>`.
+When using Java 11, change the reference to `<version>1.0.6-jdk-11</version>`.
 
 The source code is attached to every release.

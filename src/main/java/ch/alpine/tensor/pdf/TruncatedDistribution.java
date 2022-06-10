@@ -84,8 +84,7 @@ public class TruncatedDistribution implements Distribution, //
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s]", //
-        getClass().getSimpleName(), //
+    return String.format("TruncatedDistribution[%s, %s]", //
         univariateDistribution, //
         clip);
   }

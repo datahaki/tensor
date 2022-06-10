@@ -29,6 +29,6 @@ public enum BartlettHannWindow implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return getClass().getSimpleName();
+    return "BartlettHannWindow";
   }
 }

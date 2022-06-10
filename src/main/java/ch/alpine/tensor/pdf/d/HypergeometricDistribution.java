@@ -78,6 +78,6 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%d, %d, %d]", getClass().getSimpleName(), N, n, m_n);
+    return String.format("HypergeometricDistribution[%d, %d, %d]", N, n, m_n);
   }
 }

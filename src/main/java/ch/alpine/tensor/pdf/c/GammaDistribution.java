@@ -69,6 +69,6 @@ public class GammaDistribution implements Distribution, //
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s]", getClass().getSimpleName(), alpha, beta);
+    return String.format("GammaDistribution[%s, %s]", alpha, beta);
   }
 }

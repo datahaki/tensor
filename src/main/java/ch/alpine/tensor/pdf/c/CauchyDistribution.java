@@ -75,6 +75,6 @@ public class CauchyDistribution extends AbstractContinuousDistribution implement
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s]", getClass().getSimpleName(), a, b);
+    return String.format("CauchyDistribution[%s, %s]", a, b);
   }
 }

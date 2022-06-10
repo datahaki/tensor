@@ -82,6 +82,6 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s]", getClass().getSimpleName(), lambda, xi);
+    return String.format("GompertzMakehamDistribution[%s, %s]", lambda, xi);
   }
 }

@@ -107,6 +107,6 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s, %s]", getClass().getSimpleName(), p, a, b);
+    return String.format("DagumDistribution[%s, %s, %s]", p, a, b);
   }
 }

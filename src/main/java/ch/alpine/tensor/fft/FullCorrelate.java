@@ -74,6 +74,6 @@ public class FullCorrelate implements TensorUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), mask);
+    return String.format("FullCorrelate[%s]", mask);
   }
 }

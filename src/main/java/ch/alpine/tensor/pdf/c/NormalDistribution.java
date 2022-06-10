@@ -123,6 +123,6 @@ public class NormalDistribution implements UnivariateDistribution, //
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s]", getClass().getSimpleName(), mean, sigma);
+    return String.format("NormalDistribution[%s, %s]", mean, sigma);
   }
 }
