@@ -1,12 +1,11 @@
 // code by jph
 package ch.alpine.tensor.ext;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.security.SecureRandom;
-import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,7 @@ class CompressionTest {
     byte[] comp = Compression.deflate(bytes);
     try {
       byte[] deco = Compression.inflate(comp);
-      assertTrue(Arrays.equals(bytes, deco));
+      assertArrayEquals(bytes, deco);
     } catch (Exception exception) {
       exception.printStackTrace();
       fail();
@@ -39,7 +38,7 @@ class CompressionTest {
     byte[] comp = Compression.deflate(bytes);
     try {
       byte[] deco = Compression.inflate(comp);
-      assertTrue(Arrays.equals(bytes, deco));
+      assertArrayEquals(bytes, deco);
     } catch (Exception exception) {
       exception.printStackTrace();
     }

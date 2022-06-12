@@ -1,11 +1,11 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
@@ -98,7 +98,7 @@ class RandomPermutationTest {
     int seed = new Random().nextInt();
     int[] c1 = RandomPermutation.of(123, new Random(seed));
     int[] c2 = RandomPermutation.of(123, new Random(seed));
-    assertTrue(Arrays.equals(c1, c2));
+    assertArrayEquals(c1, c2);
   }
 
   @Test

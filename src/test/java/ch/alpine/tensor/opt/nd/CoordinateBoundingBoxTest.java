@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
@@ -13,12 +15,16 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.Clip;
+import ch.alpine.tensor.sca.Clips;
 
 class CoordinateBoundingBoxTest {
   @Test
-  public void testProject() {
+  public void testProject() throws ClassNotFoundException, IOException {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
+    Serialization.copy(coordinateBoundingBox);
     assertEquals(coordinateBoundingBox.mapInside(Tensors.vector(0, 0)), Tensors.vector(2, 3));
     assertEquals(coordinateBoundingBox.mapInside(Tensors.vector(0, 20)), Tensors.vector(2, 20));
     assertEquals(coordinateBoundingBox.mapInside(Tensors.vector(0, 40)), Tensors.vector(2, 23));
@@ -30,10 +36,22 @@ class CoordinateBoundingBoxTest {
   }
 
   @Test
-  public void testSimple() {
+  public void testSimple() throws ClassNotFoundException, IOException {
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
     assertEquals(coordinateBoundingBox.min(), Tensors.vector(2, 3));
     assertEquals(coordinateBoundingBox.max(), Tensors.vector(12, 23));
+    CoordinateBoundingBox cbb2 = Serialization.copy(CoordinateBoundingBox.of(Clips.interval(2, 12), Clips.interval(3, 23)));
+    assertEquals(coordinateBoundingBox, cbb2);
+  }
+
+  @Test
+  public void testSame() {
+    Clip clip = Clips.absolute(1);
+    CoordinateBoundingBox coordinateBoundingBox = CoordinateBoundingBox.of(clip, clip);
+    CoordinateBoundingBox lo = coordinateBoundingBox.splitLo(1);
+    assertEquals(lo.getClip(0), clip);
+    assertTrue(lo.getClip(0) == clip);
+    assertEquals(lo.getClip(1), Clips.interval(-1, 0));
   }
 
   @Test
@@ -112,5 +130,11 @@ class CoordinateBoundingBoxTest {
     CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
     box.requireInside(Tensors.vector(4, 3));
     assertThrows(TensorRuntimeException.class, () -> box.requireInside(Tensors.vector(14, 3)));
+  }
+
+  @Test
+  public void testFail2() {
+    // Arrays.asList
+    assertThrows(NullPointerException.class, () -> CoordinateBoundingBox.of(Clips.unit(), null));
   }
 }

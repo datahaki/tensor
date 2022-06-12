@@ -4,7 +4,7 @@ package ch.alpine.tensor.alg;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +47,7 @@ class AccumulateTest {
   @Test
   public void testProdAd() {
     Tensor tensor = Accumulate.prod(Array.zeros(3, 3, 3));
-    assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3, 3));
+    assertEquals(Dimensions.of(tensor), List.of(3, 3, 3));
   }
 
   @Test

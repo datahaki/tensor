@@ -1,9 +1,9 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.IntBuffer;
 import java.util.Arrays;
@@ -37,10 +37,10 @@ class PrimitivesIntTest {
   public void testToIntArray() {
     Tensor a = Tensors.vector(-2, -3, 4, 5, 6, 11);
     Tensor b = Tensors.vector(-2.5, -3.7, 4.3, 5.4, 6.2, 11.5);
-    assertTrue(Arrays.equals(Primitives.toIntArray(a), //
-        new int[] { -2, -3, 4, 5, 6, 11 }));
-    assertTrue(Arrays.equals(Primitives.toIntArray(b), //
-        new int[] { -2, -3, 4, 5, 6, 11 }));
+    assertArrayEquals(Primitives.toIntArray(a), //
+        new int[] { -2, -3, 4, 5, 6, 11 });
+    assertArrayEquals(Primitives.toIntArray(b), //
+        new int[] { -2, -3, 4, 5, 6, 11 });
   }
 
   @Test

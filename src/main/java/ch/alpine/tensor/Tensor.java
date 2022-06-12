@@ -289,7 +289,7 @@ public interface Tensor extends Iterable<Tensor> {
    * Example:
    * <pre>
    * Tensor a = {1, 2, 3, 4, 5, 6};
-   * Tensor b = a.block(Arrays.asList(2), Arrays.asList(3));
+   * Tensor b = a.block(List.of(2), List.of(3));
    * b.set(Array.zeros(3), Tensor.ALL);
    * </pre>
    * Afterwards the tensor a == {1, 2, 0, 0, 0, 6}.

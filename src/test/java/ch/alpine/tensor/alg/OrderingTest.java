@@ -1,12 +1,11 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -94,8 +93,8 @@ class OrderingTest {
 
   @Test
   public void testMatrix() {
-    assertTrue(Arrays.equals(Ordering.INCREASING.of(HilbertMatrix.of(4)), new int[] { 3, 2, 1, 0 }));
-    assertTrue(Arrays.equals(Ordering.DECREASING.of(HilbertMatrix.of(4)), new int[] { 0, 1, 2, 3 }));
+    assertArrayEquals(Ordering.INCREASING.of(HilbertMatrix.of(4)), new int[] { 3, 2, 1, 0 });
+    assertArrayEquals(Ordering.DECREASING.of(HilbertMatrix.of(4)), new int[] { 0, 1, 2, 3 });
   }
 
   @Test

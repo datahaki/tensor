@@ -2,7 +2,6 @@
 package ch.alpine.tensor.pdf;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
@@ -23,7 +22,7 @@ public class MixtureDistribution implements Distribution, PDF, CDF, MeanInterfac
    * @return */
   @SafeVarargs
   public static Distribution of(Tensor weights, Distribution... distributions) {
-    return of(weights, Arrays.asList(distributions));
+    return of(weights, List.of(distributions));
   }
 
   /** @param weights vector with non-negative entries

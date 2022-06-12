@@ -1,12 +1,11 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
@@ -248,7 +247,7 @@ class BinomialDistributionTest {
     assertFalse(d1.hashCode() == d4.hashCode());
     byte[] b1 = Serialization.of(d1);
     byte[] b2 = Serialization.of(d2);
-    assertTrue(Arrays.equals(b1, b2));
+    assertArrayEquals(b1, b2);
   }
 
   @Test

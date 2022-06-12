@@ -2,7 +2,6 @@
 package ch.alpine.tensor.itp;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -73,6 +72,6 @@ public class LinearInterpolation extends AbstractInterpolation implements Serial
     if (Scalars.isZero(remain))
       return tensor.get(below);
     return Tensors.of(remain.one().subtract(remain), remain) //
-        .dot(tensor.block(Arrays.asList(below), Arrays.asList(2)));
+        .dot(tensor.block(List.of(below), List.of(2)));
   }
 }
