@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 class ReadLineTest {
   @Test
-  public void testCount() throws IOException {
+  void testCount() throws IOException {
     try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
       long count = ReadLine.of(inputStream).count();
       assertEquals(count, 4);
@@ -23,7 +23,7 @@ class ReadLineTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     try (InputStream inputStream = getClass().getResource("/io/doesnotexist.csv").openStream()) {
       fail();
     } catch (Exception exception) {
@@ -32,7 +32,7 @@ class ReadLineTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(Exception.class, () -> ReadLine.of(null));
   }
 }

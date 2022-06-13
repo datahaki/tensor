@@ -40,7 +40,7 @@ class TransposedImageFormatTest {
   }
 
   @Test
-  public void testRGBAFile() throws Exception {
+  void testRGBAFile() throws Exception {
     Tensor tensor = _readRGBA();
     assertEquals(tensor.get(12, 19), Tensors.vector(118, 130, 146, 200));
     assertEquals(tensor.get(14, 0), Tensors.vector(254, 0, 0, 255)); // almost red, fe0000
@@ -48,7 +48,7 @@ class TransposedImageFormatTest {
   }
 
   @Test
-  public void testGrayFile() throws Exception {
+  void testGrayFile() throws Exception {
     File file = new File(getClass().getResource("/io/image/gray15x9.png").getFile());
     assertTrue(file.isFile());
     BufferedImage bufferedImage = ImageIO.read(file);
@@ -61,7 +61,7 @@ class TransposedImageFormatTest {
   }
 
   @Test
-  public void testGrayJpg() throws Exception {
+  void testGrayJpg() throws Exception {
     File file = new File(getClass().getResource("/io/image/gray15x9.jpg").getFile());
     assertTrue(file.isFile());
     BufferedImage bufferedImage = ImageIO.read(file);
@@ -75,13 +75,13 @@ class TransposedImageFormatTest {
   }
 
   @Test
-  public void testGrayBimap1() {
+  void testGrayBimap1() {
     Tensor scale = Array.of(list -> RealScalar.of(list.get(0)), 256, 20);
     assertEquals(scale, TransposedImageFormat.from(TransposedImageFormat.of(scale)));
   }
 
   @Test
-  public void testGrayBimap2() {
+  void testGrayBimap2() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 256);
     Tensor image = RandomVariate.of(distribution, 20, 30);
     Tensor bimap = TransposedImageFormat.from(TransposedImageFormat.of(image));
@@ -89,7 +89,7 @@ class TransposedImageFormatTest {
   }
 
   @Test
-  public void testRGBAConvert() throws Exception {
+  void testRGBAConvert() throws Exception {
     File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());
     BufferedImage bufferedImage = ImageIO.read(file);
     Tensor tensor = TransposedImageFormat.from(bufferedImage);
@@ -97,7 +97,7 @@ class TransposedImageFormatTest {
   }
 
   @Test
-  public void testRGBASmooth() throws Exception {
+  void testRGBASmooth() throws Exception {
     File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());
     BufferedImage bufferedImage = ImageIO.read(file);
     Tensor tensor = TransposedImageFormat.from(bufferedImage);
@@ -107,7 +107,7 @@ class TransposedImageFormatTest {
   }
 
   @Test
-  public void testRGBAInvalid() throws Exception {
+  void testRGBAInvalid() throws Exception {
     File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());
     BufferedImage bufferedImage = ImageIO.read(file);
     Tensor tensor = TransposedImageFormat.from(bufferedImage);
@@ -127,7 +127,7 @@ class TransposedImageFormatTest {
   }
 
   @Test
-  public void testColorBimap() {
+  void testColorBimap() {
     Tensor scale = _gradients();
     assertEquals(scale, TransposedImageFormat.from(TransposedImageFormat.of(scale)));
   }

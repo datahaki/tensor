@@ -39,7 +39,7 @@ class XsvFormatTest {
   }
 
   @Test
-  public void testCsvR() {
+  void testCsvR() {
     Random random = new Random();
     convertCheck( //
         Tensors.matrix((i, j) -> RationalScalar.of(random.nextInt(100) - 50, random.nextInt(100) + 1), 20, 4));
@@ -48,7 +48,7 @@ class XsvFormatTest {
   }
 
   @Test
-  public void testRandom(@TempDir File tempDir) throws IOException {
+  void testRandom(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.tsv");
     Tensor matrix = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), 6, 4);
     Export.of(file, matrix);
@@ -58,7 +58,7 @@ class XsvFormatTest {
 
   @ParameterizedTest
   @EnumSource(XsvFormat.class)
-  public void testVector(XsvFormat xsvFormat) {
+  void testVector(XsvFormat xsvFormat) {
     Tensor r = Tensors.fromString("{123, 456}");
     List<String> list = xsvFormat.of(r).collect(Collectors.toList());
     Tensor s = xsvFormat.parse(list.stream()); // [[123], [456]]
@@ -67,7 +67,7 @@ class XsvFormatTest {
 
   @ParameterizedTest
   @EnumSource(XsvFormat.class)
-  public void testScalar(XsvFormat xsvFormat) {
+  void testScalar(XsvFormat xsvFormat) {
     Tensor r = Scalars.fromString("123");
     List<String> list = xsvFormat.of(r).collect(Collectors.toList());
     Tensor s = xsvFormat.parse(list.stream());
@@ -75,7 +75,7 @@ class XsvFormatTest {
   }
 
   @Test
-  public void testImport() throws Exception {
+  void testImport() throws Exception {
     String path = getClass().getResource("/io/qty/quantity0.csv").getPath();
     Tensor tensor = XsvFormat.parse( //
         Files.readAllLines(Paths.get(path)).stream(), //
@@ -88,7 +88,7 @@ class XsvFormatTest {
   }
 
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertFalse(Modifier.isPublic(XsvFormat.class.getModifiers()));
   }
 }

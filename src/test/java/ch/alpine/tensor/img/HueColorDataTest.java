@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class HueColorDataTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor color = HueColorData.DEFAULT.apply(RealScalar.of(0.1));
     Tensor alter = ColorDataGradients.HUE.apply(RealScalar.of(0.1));
     Chop._05.requireClose(color, alter);
@@ -26,7 +26,7 @@ class HueColorDataTest {
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     Serialization.copy(HueColorData.DEFAULT);
   }
 }

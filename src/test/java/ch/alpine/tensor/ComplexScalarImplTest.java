@@ -34,7 +34,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
 class ComplexScalarImplTest {
   @Test
-  public void testAbs() {
+  void testAbs() {
     ComplexScalar s = (ComplexScalar) ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));
     // ----------------------------------------- 0.668539037337719303091638399542
     Scalar a = Abs.of(s); // ------------------- 0.6685390373377194
@@ -49,13 +49,13 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testAbs2() {
+  void testAbs2() {
     Scalar s = ComplexScalar.of(RealScalar.of(-3), RealScalar.of(4));
     assertInstanceOf(RationalScalar.class, Abs.of(s));
   }
 
   @Test
-  public void testFalseConstruct() {
+  void testFalseConstruct() {
     Scalar c1 = ComplexScalar.of(3, -4);
     Scalar c2 = ComplexScalar.of(-2, 9);
     assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(c1, c2));
@@ -65,7 +65,7 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testMultiply() {
+  void testMultiply() {
     Scalar c = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
     assertEquals(Real.of(c), RealScalar.of(2));
     assertEquals(Imag.of(c), RationalScalar.of(5, 8));
@@ -81,7 +81,7 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testSolveCR() {
+  void testSolveCR() {
     int n = 8;
     Random random = new Random();
     Tensor A = Tensors.matrix((i, j) -> //
@@ -101,7 +101,7 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testParsing() {
+  void testParsing() {
     Scalar c1 = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
     Scalar c2 = ComplexScalar.of(RealScalar.ZERO, RationalScalar.of(5, 8));
     Scalar c3 = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(-5, 8));
@@ -119,7 +119,7 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     Scalar c1 = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
     Scalar c2 = ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
     Scalar s1 = RationalScalar.of(3, 2);
@@ -129,14 +129,14 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testSerializable() throws Exception {
+  void testSerializable() throws Exception {
     Scalar a = ComplexScalar.of(3, 5.2345);
     assertEquals(a, Serialization.parse(Serialization.of(a)));
     assertEquals(a, Serialization.copy(a));
   }
 
   @Test
-  public void testConjugate() {
+  void testConjugate() {
     Scalar s = ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));
     assertEquals(AbsSquared.of(s), RationalScalar.of(1609, 3600));
     ComplexScalar c = (ComplexScalar) ComplexScalar.of(RealScalar.of(2), RationalScalar.of(5, 8));
@@ -151,38 +151,38 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testPower() {
+  void testPower() {
     assertEquals(Power.of(ComplexScalar.I, 3), ComplexScalar.I.negate());
   }
 
   @Test
-  public void testFloor() {
+  void testFloor() {
     Scalar s = ComplexScalar.of(121.3, -111.1);
     Scalar r = ComplexScalar.of(121, -112);
     assertEquals(Floor.of(s), r);
   }
 
   @Test
-  public void testRound() {
+  void testRound() {
     Scalar s = ComplexScalar.of(12.3, -3.9);
     Scalar r = ComplexScalar.of(12, -4);
     assertEquals(Round.of(s), r);
   }
 
   @Test
-  public void testPower2() {
+  void testPower2() {
     Scalar s = ComplexScalar.of(RationalScalar.of(2, 7), RationalScalar.of(-4, 3));
     assertEquals(Power.of(s, -3), Scalars.fromString("-16086357/68921000-10955763/34460500*I"));
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     Scalar c2 = ComplexScalar.of(RealScalar.ZERO, RationalScalar.of(5, 8));
     assertEquals(c2.toString(), "5/8*I");
   }
 
   @Test
-  public void testTensor() {
+  void testTensor() {
     Tensor u = Tensors.fromString("{I, 3/4-5*I}");
     Tensor uc = Conjugate.of(u);
     assertEquals(uc.toString(), "{-I, 3/4+5*I}");
@@ -194,7 +194,7 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testDivision1() {
+  void testDivision1() {
     Scalar zero = RealScalar.ZERO;
     Scalar eps = ComplexScalar.of(0, 5.562684646268010E-309);
     assertEquals(zero.divide(eps), RealScalar.ZERO);
@@ -202,7 +202,7 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testDivision2a() {
+  void testDivision2a() {
     double eps = 5.562684646268010E-309;
     Scalar reps = RealScalar.of(eps);
     Scalar ieps = ComplexScalar.of(0, eps);
@@ -213,13 +213,13 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testDivision3() {
+  void testDivision3() {
     Scalar reps = ComplexScalar.of(0, Double.MIN_VALUE);
     assertEquals(reps.divide(reps), RealScalar.ONE);
   }
 
   @Test
-  public void testDivision4() {
+  void testDivision4() {
     final double eps = Double.MIN_VALUE;
     {
       Scalar reps = ComplexScalar.of(eps, eps);
@@ -234,7 +234,7 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testDivision2b() {
+  void testDivision2b() {
     double eps = Double.MIN_VALUE; // 5.562684646268010E-309
     Scalar reps = RealScalar.of(eps);
     Scalar ieps = ComplexScalar.of(0, eps);
@@ -252,7 +252,7 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testInversion() {
+  void testInversion() {
     assertEquals(ComplexScalar.of(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY).reciprocal(), RealScalar.ZERO);
     assertEquals(ComplexScalar.of(RealScalar.ZERO, DoubleScalar.NEGATIVE_INFINITY).reciprocal(), RealScalar.ZERO);
     assertEquals(ComplexScalar.of(RealScalar.ONE, DoubleScalar.POSITIVE_INFINITY).reciprocal(), RealScalar.ZERO);
@@ -267,7 +267,7 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testGaussScalarFail() {
+  void testGaussScalarFail() {
     Tensor tensor = Tensors.fromString("{0.3, 1/3, 3+4*I, 1.2+3.4*I}");
     Scalar g = GaussScalar.of(1, 7);
     for (Tensor _x : tensor) {
@@ -281,7 +281,7 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testAddQuantityFail() {
+  void testAddQuantityFail() {
     Scalar s1 = Quantity.of(1, "m");
     Scalar s2 = ComplexScalar.of(2, 3);
     assertThrows(TensorRuntimeException.class, () -> s1.add(s2));
@@ -289,7 +289,7 @@ class ComplexScalarImplTest {
   }
 
   @Test
-  public void testDivisionInf1() {
+  void testDivisionInf1() {
     _assertDivideSymmetric( //
         ComplexScalar.of(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY), //
         ComplexScalar.of(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));

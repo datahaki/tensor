@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class CauchyDistributionTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(CauchyDistribution.of(2, 3));
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(1.2)), RealScalar.of(0.09905909321072325));
@@ -47,7 +47,7 @@ class CauchyDistributionTest {
   }
 
   @Test
-  public void testMedian() {
+  void testMedian() {
     Distribution distribution = CauchyDistribution.of(2, 0.3);
     Scalar median = (Scalar) Median.of(RandomVariate.of(distribution, 100));
     Clips.interval(-2, 4).requireInside(median);
@@ -57,7 +57,7 @@ class CauchyDistributionTest {
   }
 
   @Test
-  public void testDateTimeScalar() {
+  void testDateTimeScalar() {
     DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
     Scalar durationScalar = Quantity.of(123, "s");
     Distribution distribution = CauchyDistribution.of(dateTimeScalar, durationScalar);
@@ -71,23 +71,23 @@ class CauchyDistributionTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> CauchyDistribution.of(null, RealScalar.ONE));
     assertThrows(NullPointerException.class, () -> CauchyDistribution.of(RealScalar.ONE, null));
   }
 
   @Test
-  public void testZeroFail() {
+  void testZeroFail() {
     assertThrows(TensorRuntimeException.class, () -> CauchyDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(TensorRuntimeException.class, () -> CauchyDistribution.of(RealScalar.ONE, RealScalar.of(-1)));
   }
 
   @Test
-  public void testStandardString() {
+  void testStandardString() {
     assertEquals(CauchyDistribution.standard().toString(), "CauchyDistribution[0, 1]");
   }
 }

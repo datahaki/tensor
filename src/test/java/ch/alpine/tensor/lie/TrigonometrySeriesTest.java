@@ -12,7 +12,7 @@ import ch.alpine.tensor.sca.tri.Sinh;
 
 class TrigonometrySeriesTest {
   @Test
-  public void testTrigonometryExact() {
+  void testTrigonometryExact() {
     Scalar q1 = Quaternion.of(1, 3, -2, 2);
     Quaternion sin = Quaternion.of( //
         25.987532783271178, 12.134775109731375, -8.089850073154249, 8.089850073154249); // mathematica
@@ -29,7 +29,7 @@ class TrigonometrySeriesTest {
   }
 
   @Test
-  public void testTrigonometryNumeric() {
+  void testTrigonometryNumeric() {
     Scalar q1 = Quaternion.of(1, 3., -2, 2);
     Quaternion sin = Quaternion.of( //
         25.987532783271178, 12.134775109731375, -8.089850073154249, 8.089850073154249); // mathematica

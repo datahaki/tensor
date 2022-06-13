@@ -21,7 +21,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class TensorParserTest {
   @Test
-  public void testScalar() {
+  void testScalar() {
     assertEquals(Tensors.fromString("123"), RealScalar.of(123));
     assertEquals(Tensors.fromString("5/4[A]"), Quantity.of(RationalScalar.of(5, 4), "A"));
     assertEquals(Tensors.fromString("-3"), RealScalar.of(-3));
@@ -29,13 +29,13 @@ class TensorParserTest {
   }
 
   @Test
-  public void testVector() {
+  void testVector() {
     assertEquals(Tensors.fromString(" {123}  "), Tensors.vector(123));
     assertEquals(Tensors.fromString(" { 1  , 2    ,3   ,4}  "), Tensors.vector(1, 2, 3, 4));
   }
 
   @Test
-  public void testNested() {
+  void testNested() {
     assertEquals(Tensors.fromString(" {123}  "), Tensors.vector(123));
     assertEquals(Tensors.fromString(" { 1  , {2,2/3}    ,3 ,{},{   }  ,4}  "), Tensors.of( //
         RealScalar.of(1), //
@@ -47,14 +47,14 @@ class TensorParserTest {
   }
 
   @Test
-  public void testVectorString() {
+  void testVectorString() {
     assertEquals(Tensors.fromString(" {, 1  , 2  ,    ,4  ,,6  ,7,}  ").length(), 9);
     assertEquals(Tensors.fromString(" { 1  , 2  ,  ,3  ,,1  ,4}  ").length(), 7);
     assertEquals(Tensors.fromString("{2.2,3,}").length(), 3);
   }
 
   @Test
-  public void testStrangeBrackets() {
+  void testStrangeBrackets() {
     _checkString("}");
     _checkString("{");
     _checkString(",");
@@ -70,13 +70,13 @@ class TensorParserTest {
   }
 
   @Test
-  public void testChars() {
+  void testChars() {
     Tensor tensor = Tensors.fromString("{{a, b, a}, {a, a, b}, {b, a, a}}");
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3));
   }
 
   @Test
-  public void testFromString() {
+  void testFromString() {
     assertEquals(Tensors.fromString("{   }"), Tensors.empty());
     assertEquals(Tensors.fromString("{ 2 ,-3   , 4}"), Tensors.vector(2, -3, 4));
     assertEquals(Tensors.fromString("{   {2, -3, 4  }, {2.3,-.2   }, {  }   }"), //
@@ -84,7 +84,7 @@ class TensorParserTest {
   }
 
   @Test
-  public void testFromString2() {
+  void testFromString2() {
     assertEquals(Tensors.fromString("{   }"), Tensors.empty());
     assertEquals(Tensors.fromString("{ 2 ,-3   , 4}"), Tensors.vector(2, -3, 4));
     assertEquals(Tensors.fromString("  {   {2, -3, 4  }, {2.3,-.2   }, { \t }  }  \t "), //
@@ -96,7 +96,7 @@ class TensorParserTest {
   }
 
   @Test
-  public void testFailBug() {
+  void testFailBug() {
     _checkString("{2.5");
     _checkString("{2.5,");
     _checkString("{2.5,}}");
@@ -105,27 +105,27 @@ class TensorParserTest {
   }
 
   @Test
-  public void testComma() {
+  void testComma() {
     Tensor scalar = Tensors.fromString("3.12,");
     assertInstanceOf(StringScalar.class, scalar);
   }
 
   @Test
-  public void testEmptyPost() {
+  void testEmptyPost() {
     Tensor vector = Tensors.fromString("{2.2,3,}");
     assertEquals(vector.length(), 3);
     assertInstanceOf(StringScalar.class, vector.Get(2));
   }
 
   @Test
-  public void testEmptyAnte() {
+  void testEmptyAnte() {
     Tensor vector = Tensors.fromString("{,2.2,3}");
     assertEquals(vector.length(), 3);
     assertInstanceOf(StringScalar.class, vector.Get(0));
   }
 
   @Test
-  public void testEmptyMid() {
+  void testEmptyMid() {
     Tensor vector = Tensors.fromString("{2.2,,,3}");
     assertEquals(vector.length(), 4);
     assertInstanceOf(StringScalar.class, vector.Get(1));
@@ -133,7 +133,7 @@ class TensorParserTest {
   }
 
   @Test
-  public void testExcessChars() {
+  void testExcessChars() {
     _checkString("{1, 2}a");
     _checkString("a{1, 2}");
     _checkString("{2, {1, 2}a}");
@@ -145,30 +145,30 @@ class TensorParserTest {
   }
 
   @Test
-  public void testEmptyString() {
+  void testEmptyString() {
     assertEquals(Tensors.fromString(""), StringScalar.of(""));
     assertEquals(Tensors.fromString("   "), StringScalar.of("   "));
     assertEquals(Tensors.fromString(" \t  "), StringScalar.of(" \t  "));
   }
 
   @Test
-  public void testFromStringFunction() {
+  void testFromStringFunction() {
     assertEquals(Tensors.fromString("{ 2 ,-3   , 4}", string -> RealScalar.of(3)), Tensors.vector(3, 3, 3));
   }
 
   @Test
-  public void testFromStringFunctionNested() {
+  void testFromStringFunctionNested() {
     assertEquals(Tensors.fromString("{ 2 ,{-3   , 4} }", string -> RealScalar.of(3)), Tensors.fromString("{3, {3, 3}}"));
   }
 
   @Test
-  public void testEMatlab() {
+  void testEMatlab() {
     Tensor tensor = Tensors.fromString("3e-2");
     assertTrue(StringScalarQ.any(tensor));
   }
 
   @Test
-  public void testWhitespace() {
+  void testWhitespace() {
     Pattern pattern = Pattern.compile("\\s*");
     assertFalse(pattern.matcher("   a").matches());
     assertFalse(pattern.matcher("   {").matches());
@@ -184,7 +184,7 @@ class TensorParserTest {
   }
 
   @Test
-  public void testRandom() {
+  void testRandom() {
     for (int count = 0; count < 20; ++count) {
       Tensor tensor = generate(0, 4);
       assertEquals(tensor, Tensors.fromString(tensor.toString()));
@@ -192,12 +192,12 @@ class TensorParserTest {
   }
 
   @Test
-  public void testFailStringNull() {
+  void testFailStringNull() {
     assertThrows(NullPointerException.class, () -> Tensors.fromString(null));
   }
 
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertEquals(TensorParser.class.getModifiers() & 1, 0);
   }
 }

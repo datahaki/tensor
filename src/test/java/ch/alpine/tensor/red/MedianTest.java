@@ -17,7 +17,7 @@ import ch.alpine.tensor.qty.QuantityTensor;
 
 class MedianTest {
   @Test
-  public void testEven() {
+  void testEven() {
     /** Median[{1, 2, 3, 4, 5, 6, 7, 8}] == 9/2 */
     Tensor vector = Tensors.vector(1, 2, 3, 4, 5, 6, 7, 8);
     assertEquals(Median.of(vector), RationalScalar.of(9, 2));
@@ -25,7 +25,7 @@ class MedianTest {
   }
 
   @Test
-  public void testOdd() {
+  void testOdd() {
     /** Median[{1, 2, 3, 4, 5, 6, 7}] == 4 */
     Tensor vector = Tensors.vector(1, 2, 3, 4, 5, 6, 7);
     assertEquals(Median.of(vector), RealScalar.of(4));
@@ -33,7 +33,7 @@ class MedianTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     // confirmed with mathematica:
     // Median[{1, 2, 3, 1, 2, 3, 7, 2, 9, 3, 3}] == 3
     Tensor tensor = QuantityTensor.of(Tensors.vector(1, 2, 3, 1, 2, 3, 7, 2, 9, 3, 3), "Apples");
@@ -42,13 +42,13 @@ class MedianTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertThrows(IllegalArgumentException.class, () -> Median.of(Tensors.empty()));
     assertThrows(TensorRuntimeException.class, () -> Median.of(Pi.VALUE));
   }
 
   @Test
-  public void testUnorderedFail() {
+  void testUnorderedFail() {
     assertThrows(TensorRuntimeException.class, () -> Median.ofSorted(Tensors.vector(3, 2, 1)));
     assertThrows(TensorRuntimeException.class, () -> Median.ofSorted(Tensors.vector(1, 2, 1)));
   }

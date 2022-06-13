@@ -17,19 +17,19 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ScalarQTest {
   @Test
-  public void testScalar() {
+  void testScalar() {
     assertInstanceOf(Scalar.class, Quantity.of(3, "m"));
     assertInstanceOf(Scalar.class, GaussScalar.of(3, 11));
     assertInstanceOf(Scalar.class, StringScalar.of("IDSC"));
   }
 
   @Test
-  public void testVector() {
+  void testVector() {
     assertFalse(Tensors.vector(1, 2, 3) instanceof Scalar);
   }
 
   @Test
-  public void testThenThrow() {
+  void testThenThrow() {
     ScalarQ.thenThrow(Tensors.vector(1, 2, 3));
     assertThrows(TensorRuntimeException.class, () -> ScalarQ.thenThrow(RealScalar.ONE));
   }

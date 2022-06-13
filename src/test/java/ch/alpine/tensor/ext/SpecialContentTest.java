@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensors;
 
 class SpecialContentTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     SpecialContent sc = new SpecialContent();
     SpecialContent cp = Serialization.copy(sc);
     assertEquals(cp.value, Tensors.vector(1, 2, 3));

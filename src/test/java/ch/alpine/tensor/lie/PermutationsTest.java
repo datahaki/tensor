@@ -20,12 +20,12 @@ import ch.alpine.tensor.qty.Quantity;
 
 class PermutationsTest {
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertEquals(Permutations.of(Tensors.vector()), Tensors.fromString("{{}}")); // 0! == 1
   }
 
   @Test
-  public void testThree() {
+  void testThree() {
     Tensor res = Permutations.of(Tensors.vector(1, 2, 3));
     assertEquals(res.get(0), Tensors.vector(1, 2, 3));
     assertEquals(res.get(1), Tensors.vector(1, 3, 2));
@@ -33,7 +33,7 @@ class PermutationsTest {
   }
 
   @Test
-  public void testThree2() {
+  void testThree2() {
     Tensor res = Permutations.of(Tensors.vector(1, 2, 1));
     assertEquals(res.get(0), Tensors.vector(1, 2, 1));
     assertEquals(res.get(1), Tensors.vector(1, 1, 2));
@@ -42,13 +42,13 @@ class PermutationsTest {
   }
 
   @Test
-  public void testThree1() {
+  void testThree1() {
     Tensor res = Permutations.of(Tensors.vector(1, 1, 1));
     assertEquals(res.length(), 1);
   }
 
   @Test
-  public void testFour2() {
+  void testFour2() {
     Tensor res = Permutations.of(Tensors.vector(2, -1, 2, -1));
     assertEquals(res.get(0), Tensors.vector(2, -1, 2, -1));
     assertEquals(res.get(1), Tensors.vector(2, -1, -1, 2));
@@ -58,20 +58,20 @@ class PermutationsTest {
   }
 
   @Test
-  public void testStreamOf() {
+  void testStreamOf() {
     assertEquals(Permutations.of(Tensors.vector(2, -1, 2, -1)), //
         Tensor.of(Permutations.stream(Tensors.vector(2, -1, 2, -1))));
   }
 
   @Test
-  public void testStrings() {
+  void testStrings() {
     Tensor vector = StringTensor.vector("a", "b", "a");
     Tensor tensor = Permutations.of(vector);
     assertEquals(tensor, Tensors.fromString("{{a, b, a}, {a, a, b}, {b, a, a}}"));
   }
 
   @Test
-  public void testRank2() {
+  void testRank2() {
     Tensor tensor = Tensors.fromString("{{a, b, a}}");
     Tensor perms = Permutations.of(tensor);
     Tensor expect = Tensors.fromString("{{{a, b, a}}}");
@@ -79,19 +79,19 @@ class PermutationsTest {
   }
 
   @Test
-  public void testStream() {
+  void testStream() {
     Tensor vector = StringTensor.vector("a", "b", "a");
     assertEquals(Permutations.stream(vector).count(), 3);
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     assertEquals(Dimensions.of(Permutations.of(IdentityMatrix.of(3))), Arrays.asList(6, 3, 3));
     assertEquals(Dimensions.of(Permutations.of(IdentityMatrix.of(3).extract(0, 2))), Arrays.asList(2, 2, 3));
   }
 
   @Test
-  public void testNonComparable() {
+  void testNonComparable() {
     Tensor tensor = Tensors.of( //
         ComplexScalar.I, //
         Quaternion.of(3, 2, 3, 4), //
@@ -102,12 +102,12 @@ class PermutationsTest {
   }
 
   @Test
-  public void testTensorScalarFail() {
+  void testTensorScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Permutations.of(RealScalar.ONE));
   }
 
   @Test
-  public void testStreamScalarFail() {
+  void testStreamScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Permutations.stream(RealScalar.ONE));
   }
 }

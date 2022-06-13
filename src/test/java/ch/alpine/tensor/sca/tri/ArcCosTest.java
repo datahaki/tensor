@@ -14,13 +14,13 @@ import ch.alpine.tensor.sca.Chop;
 
 class ArcCosTest {
   @Test
-  public void testReal() {
+  void testReal() {
     assertEquals(ArcCos.of(Scalars.fromString("1")), RealScalar.of(Math.acos(1)));
     assertEquals(ArcCos.of(Scalars.fromString("-1")), RealScalar.of(Math.acos(-1)));
   }
 
   @Test
-  public void testRealOutside() {
+  void testRealOutside() {
     Scalar s = RealScalar.of(3);
     Scalar r = ArcCos.of(s);
     // 1.7627471740390860505 I
@@ -28,7 +28,7 @@ class ArcCosTest {
   }
 
   @Test
-  public void testRealOutsideNeg() {
+  void testRealOutsideNeg() {
     Scalar s = RealScalar.of(-3);
     Scalar r = ArcCos.of(s);
     assertEquals(r, ArcCos.of(s));
@@ -37,7 +37,7 @@ class ArcCosTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar s = ComplexScalar.of(5, -7);
     Scalar r = ArcCos.of(s);
     assertEquals(r, ArcCos.of(s));

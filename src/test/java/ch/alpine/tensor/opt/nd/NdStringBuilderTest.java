@@ -10,7 +10,7 @@ import ch.alpine.tensor.alg.VectorQ;
 
 class NdStringBuilderTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     NdMap<String> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9)), 2);
     ndMap.insert(Tensors.vector(1, 1), "d1");
     ndMap.insert(Tensors.vector(1, 0), "d2");

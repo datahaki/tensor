@@ -21,7 +21,7 @@ import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 /** with examples from CLRS */
 class SimplexMethodTest {
   @Test
-  public void testP845() {
+  void testP845() {
     Tensor m = Tensors.matrixInt(new int[][] { //
         { -2, 8, 0, 10 }, //
         { 5, 2, 0, 0 }, //
@@ -46,7 +46,7 @@ class SimplexMethodTest {
   }
 
   @Test
-  public void testP846() { // max cost = 8
+  void testP846() { // max cost = 8
     Tensor m = Tensors.matrixInt(new int[][] { //
         { 4, -1 }, //
         { 2, 1 }, //
@@ -74,7 +74,7 @@ class SimplexMethodTest {
 
   // same as p846 except that (0,0) is not feasible
   @Test
-  public void testP846var() {
+  void testP846var() {
     Tensor m = Tensors.matrixInt(new int[][] { { 4, -1 }, { 2, 1 }, { -5, 2 }, { -1, -1 } });
     LinearProgram lpd = LinearProgram.of( //
         Objective.MAX, Tensors.vector(1, 1), //
@@ -95,7 +95,7 @@ class SimplexMethodTest {
   }
 
   @Test
-  public void testP854() { // max cost = 8
+  void testP854() { // max cost = 8
     Tensor m = Tensors.matrixInt(new int[][] { //
         { 1, 1, -1 }, //
         { -1, -1, 1 }, //
@@ -113,7 +113,7 @@ class SimplexMethodTest {
 
   // infeasible
   @Test
-  public void testP858_6() {
+  void testP858_6() {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 1 }, { -2, -2 } });
     Tensor b = Tensors.vector(2, -10);
     LinearProgram lpd = LinearProgram.of( //
@@ -131,7 +131,7 @@ class SimplexMethodTest {
 
   // unbounded
   @Test
-  public void testP858_7() {
+  void testP858_7() {
     Tensor m = Tensors.matrixInt(new int[][] { { -2, 1 }, { -1, -2 } });
     Tensor b = Tensors.vector(-1, -2);
     LinearProgram lpd = LinearProgram.of( //
@@ -142,7 +142,7 @@ class SimplexMethodTest {
   }
 
   @Test
-  public void testP865() {
+  void testP865() {
     Tensor m = Tensors.matrixInt(new int[][] { //
         { 1, 1, 3 }, //
         { 2, 2, 5 }, //
@@ -160,7 +160,7 @@ class SimplexMethodTest {
   }
 
   @Test
-  public void testP878_5() {
+  void testP878_5() {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 1 }, { 1, 0 }, { 0, 1 } });
     Tensor b = Tensors.vector(20, 12, 16);
     LinearProgram lpd = LinearProgram.of( //
@@ -181,7 +181,7 @@ class SimplexMethodTest {
   }
 
   @Test
-  public void testP879_6() {
+  void testP879_6() {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, -1 }, { 2, 1 } });
     Tensor b = Tensors.vector(1, 2);
     LinearProgram lpd = LinearProgram.of( //
@@ -196,7 +196,7 @@ class SimplexMethodTest {
   }
 
   @Test
-  public void testP879_7() {
+  void testP879_7() {
     Tensor c = Tensors.vector(1, 1, 1);
     Tensor m = Tensors.fromString("{{-2, -7.5, -3}, {-20, -5, -10}}");
     Tensor b = Tensors.vector(-10000, -30000);

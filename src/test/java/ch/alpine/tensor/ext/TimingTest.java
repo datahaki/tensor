@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 class TimingTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Timing timing = Timing.stopped();
     assertEquals(timing.nanoSeconds(), 0);
     assertEquals(timing.seconds(), 0.0);
@@ -26,20 +26,20 @@ class TimingTest {
   }
 
   @Test
-  public void testNonSerializable() {
+  void testNonSerializable() {
     Timing timing = Timing.started();
     assertFalse(timing instanceof Serializable);
   }
 
   @Test
-  public void testStartedFail() {
+  void testStartedFail() {
     Timing timing = Timing.started();
     assertThrows(IllegalStateException.class, () -> timing.start());
     assertTrue(0 < timing.nanoSeconds());
   }
 
   @Test
-  public void testStopFail() {
+  void testStopFail() {
     Timing timing = Timing.started();
     Math.sin(1);
     assertTrue(0 < timing.nanoSeconds());

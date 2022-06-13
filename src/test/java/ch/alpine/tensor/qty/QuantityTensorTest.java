@@ -14,13 +14,13 @@ import ch.alpine.tensor.Tensors;
 
 class QuantityTensorTest {
   @Test
-  public void testScalar() {
+  void testScalar() {
     Tensor tensor = QuantityTensor.of(RealScalar.ONE, Unit.of("N"));
     assertEquals(tensor, Quantity.of(1, "N"));
   }
 
   @Test
-  public void testVectorString() {
+  void testVectorString() {
     Tensor tensor = QuantityTensor.of(Tensors.vector(7, 2, 3), "N");
     assertEquals(tensor.Get(0), Quantity.of(7, "N"));
     assertEquals(tensor.Get(1), Quantity.of(2, "N"));
@@ -28,7 +28,7 @@ class QuantityTensorTest {
   }
 
   @Test
-  public void testVector() {
+  void testVector() {
     Tensor vector = Tensors.vector(1, 2, 3);
     Tensor nuvec = QuantityTensor.of(vector, Unit.of("m*kg^2"));
     assertEquals(nuvec, //
@@ -36,7 +36,7 @@ class QuantityTensorTest {
   }
 
   @Test
-  public void testExample() {
+  void testExample() {
     Tensor vector = Tensors.vector(2, 3, -1);
     Tensor nuvec = QuantityTensor.of(vector, Unit.of("m*s^-1"));
     assertEquals(nuvec, //
@@ -44,7 +44,7 @@ class QuantityTensorTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Scalar q = Quantity.of(1, "s");
     assertThrows(TensorRuntimeException.class, () -> QuantityTensor.of(q, Unit.of("m*kg^2")));
     assertThrows(TensorRuntimeException.class, () -> QuantityTensor.of(Tensors.of(q, q), Unit.of("m*kg^2")));

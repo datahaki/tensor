@@ -60,14 +60,14 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void testMatrix1X3() {
+  void testMatrix1X3() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1}}");
     assertFalse(OrthogonalMatrixQ.of(matrix));
     _check(matrix);
   }
 
   @Test
-  public void testZeroPad() {
+  void testZeroPad() {
     Tensor v1 = Tensors.vector(1, 2, 3);
     Tensor v0 = v1.map(Scalar::zero);
     Tensor matrix = Tensors.of(v1, v0, v0);
@@ -78,14 +78,14 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void testMatrix2X3() {
+  void testMatrix2X3() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1}, {1, 1, 1}}");
     assertFalse(OrthogonalMatrixQ.of(matrix));
     _check(matrix);
   }
 
   @Test
-  public void testMatrix2X3b() {
+  void testMatrix2X3b() {
     Tensor v0 = Tensors.fromString("{1, 0, 1}");
     Tensor v1 = Tensors.fromString("{0, 1, 0}");
     Tensor matrix = Tensors.of(v0, v1);
@@ -103,7 +103,7 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void testMatrix2X3bDeficient() {
+  void testMatrix2X3bDeficient() {
     Tensor v0 = Tensors.fromString("{1, 0, 1}");
     Tensor v1 = Tensors.fromString("{0, 0, 0}");
     Tensor matrix = Tensors.of(v0, v1);
@@ -114,7 +114,7 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void testRandom() {
+  void testRandom() {
     Distribution distribution = NormalDistribution.standard();
     for (int rows = 1; rows < 7; ++rows)
       for (int cols = 1; cols < 7; ++cols)
@@ -122,14 +122,14 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void test2x1() {
+  void test2x1() {
     Tensor matrix = Tensors.fromString("{{-1.63342010908827}, {0.07817413797055835}}");
     Tensor tensor = Orthogonalize.of(matrix);
     Tolerance.CHOP.requireClose(tensor, Tensors.fromString("{{-1}, {0}}"));
   }
 
   @Test
-  public void testSpan() {
+  void testSpan() {
     Tensor v0 = Tensors.vector(1, 1, 1);
     Tensor matrix = Tensors.of(v0);
     _check(matrix);
@@ -143,7 +143,7 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
     Tensor mmt = MatrixDotTranspose.of(matrix, Conjugate.of(matrix));
     HermitianMatrixQ.require(mmt);
@@ -160,7 +160,7 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void test3x4() {
+  void test3x4() {
     Tensor a = Transpose.of(Tensors.fromString("{{1, 2, 3}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}}"));
     _check(a);
     Tensor m = Orthogonalize.of(a);
@@ -170,7 +170,7 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void test4x3() {
+  void test4x3() {
     Tensor a = Tensors.fromString("{{1, 2, 3}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}}");
     assertEquals(Dimensions.of(a), Arrays.asList(4, 3));
     Tensor m = Orthogonalize.of(a);
@@ -182,7 +182,7 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void testInvariantPD() {
+  void testInvariantPD() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     Tensor s1 = Orthogonalize.usingSvd(matrix);
     Tensor r1 = Orthogonalize.usingPD(matrix);
@@ -200,7 +200,7 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void testAngles2D() {
+  void testAngles2D() {
     Scalar i0 = RealScalar.of(1.2);
     Scalar i1 = i0.add(RealScalar.of(0.2));
     Tensor d0 = AngleVector.of(i0);
@@ -227,7 +227,7 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void testAngles3D() {
+  void testAngles3D() {
     Scalar i0 = RealScalar.of(-1.5);
     Scalar i1 = i0.add(RealScalar.of(0.2));
     Tensor d0 = AngleVector.of(i0).append(RealScalar.ZERO);
@@ -251,7 +251,7 @@ class OrthogonalizeTest {
   }
 
   @RepeatedTest(4)
-  public void testMatrixExp(RepetitionInfo repetitionInfo) {
+  void testMatrixExp(RepetitionInfo repetitionInfo) {
     int d = repetitionInfo.getCurrentRepetition();
     Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
     OrthogonalMatrixQ.require(matrix);
@@ -261,7 +261,7 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void testDiag() {
+  void testDiag() {
     Tensor matrix = DiagonalMatrix.of(2, -2);
     Tensor rdetp1 = DiagonalMatrix.of(1, +1);
     Tensor rdetn1 = DiagonalMatrix.of(1, -1);
@@ -271,23 +271,23 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void testUsingSvdFail() {
+  void testUsingSvdFail() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 3);
     assertThrows(TensorRuntimeException.class, () -> Orthogonalize.usingSvd(matrix));
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> Orthogonalize.of(Pi.VALUE));
   }
 
   @Test
-  public void testFailVector() {
+  void testFailVector() {
     assertThrows(TensorRuntimeException.class, () -> Orthogonalize.of(Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
-  public void testFailMatrix() {
+  void testFailMatrix() {
     Tensor matrix = Transpose.of(Tensors.fromString("{{1, 0, 1}, {1, 1, 1}}"));
     Tensor result = Orthogonalize.of(matrix);
     Tensor expect = Tensors.fromString( // consistent with Mathematica
@@ -296,7 +296,7 @@ class OrthogonalizeTest {
   }
 
   @Test
-  public void testFailAd() {
+  void testFailAd() {
     assertThrows(ClassCastException.class, () -> Orthogonalize.of(LeviCivitaTensor.of(3)));
   }
 }

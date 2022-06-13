@@ -57,7 +57,7 @@ class AbstractRealScalarTest {
   }
 
   @Test
-  public void testAdd() {
+  void testAdd() {
     Unit unit = Unit.of("m^2*s^-3");
     List<Scalar> list = SCALARS;
     for (int i = 0; i < list.size(); ++i)
@@ -78,7 +78,7 @@ class AbstractRealScalarTest {
   }
 
   @Test
-  public void testMultiply() {
+  void testMultiply() {
     Unit ua = Unit.of("m^2*s^-3");
     Unit ub = Unit.of("kg*CHF^-1");
     List<Scalar> list = SCALARS;
@@ -95,7 +95,7 @@ class AbstractRealScalarTest {
   }
 
   @Test
-  public void testPermutationZero() {
+  void testPermutationZero() {
     Tensor vector = Tensors.of(RealScalar.ZERO, Quantity.of(0, "m"), Quantity.of(0, "s"));
     Tensor produc = Tensor.of(Permutations.stream(Range.of(0, vector.length())) //
         .map(Primitives::toIntArray) //
@@ -120,7 +120,7 @@ class AbstractRealScalarTest {
   }
 
   @Test
-  public void testDivide() {
+  void testDivide() {
     Unit ua = Unit.of("m^2*s^-3");
     Unit ub = Unit.of("kg*CHF^-1");
     List<Scalar> list = SCALARS;
@@ -137,33 +137,33 @@ class AbstractRealScalarTest {
   }
 
   @Test
-  public void testArcTan() {
+  void testArcTan() {
     assertThrows(TensorRuntimeException.class, () -> ArcTan.of(RealScalar.of(2.3), GaussScalar.of(3, 7)));
     assertThrows(TensorRuntimeException.class, () -> ArcTan.of(GaussScalar.of(3, 7), RealScalar.of(2.3)));
   }
 
   @Test
-  public void testRange() {
+  void testRange() {
     assertEquals(Math.log(AbstractRealScalar.LOG_HI), Math.log1p(AbstractRealScalar.LOG_HI - 1));
     assertEquals(Math.log(AbstractRealScalar.LOG_LO), Math.log1p(AbstractRealScalar.LOG_LO - 1));
   }
 
   @Test
-  public void testPower00() {
+  void testPower00() {
     Scalar one = Power.of(0, 0);
     ExactScalarQ.require(one);
     assertEquals(one, RealScalar.ONE);
   }
 
   @Test
-  public void testPower00Numeric() {
+  void testPower00Numeric() {
     Scalar one = Power.of(0.0, 0.0);
     ExactScalarQ.require(one);
     assertEquals(one, RealScalar.ONE);
   }
 
   @Test
-  public void testPowerFail() {
+  void testPowerFail() {
     assertThrows(TensorRuntimeException.class, () -> Power.of(1, GaussScalar.of(2, 7)));
   }
 }

@@ -19,7 +19,7 @@ class KroneckerDeltaTest {
   }
 
   @Test
-  public void testKroneckerDelta() {
+  void testKroneckerDelta() {
     final Scalar one = RealScalar.ONE;
     assertEquals(KroneckerDelta.of(), one);
     assertEquals(KroneckerDelta.of(1), one);
@@ -29,21 +29,21 @@ class KroneckerDeltaTest {
   }
 
   @Test
-  public void testFunction() {
+  void testFunction() {
     Tensor vector = Tensors.vector(0, 3, 255, 0, 255, -43, 3, 0, 255, 0, 225);
     Tensor res = vector.map(function(RealScalar.of(255)));
     assertEquals(res, Tensors.fromString("{0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0}"));
   }
 
   @Test
-  public void testStream() {
+  void testStream() {
     assertEquals(KroneckerDelta.of(Tensors.vector(3, 1, 3).stream()), RealScalar.ZERO);
     assertEquals(KroneckerDelta.of(Tensors.vector(3, 3, 3).stream()), RealScalar.ONE);
     assertEquals(KroneckerDelta.of(Tensors.empty().stream()), RealScalar.ONE);
   }
 
   @Test
-  public void testStream2() {
+  void testStream2() {
     assertEquals(KroneckerDelta.of("abc", "cde"), RealScalar.ZERO);
     assertEquals(KroneckerDelta.of("abc", "abc"), RealScalar.ONE);
     assertEquals(KroneckerDelta.of("abc"), RealScalar.ONE);

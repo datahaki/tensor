@@ -11,7 +11,7 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class HannPoissonWindowTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     ScalarUnaryOperator suo = HannPoissonWindow.of(RealScalar.of(1.3));
     Tolerance.CHOP.requireClose( //
         suo.apply(RealScalar.of(0.4)), //
@@ -22,7 +22,7 @@ class HannPoissonWindowTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> HannPoissonWindow.of(null));
   }
 }

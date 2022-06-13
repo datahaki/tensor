@@ -13,7 +13,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class NdMatchTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     NdMatch<String> ndMatch = Serialization.copy( //
         new NdMatch<>(new NdEntry<>(Tensors.vector(1, 2, 3), "abc"), RealScalar.TWO));
     assertEquals(ndMatch.location(), Tensors.vector(1, 2, 3));

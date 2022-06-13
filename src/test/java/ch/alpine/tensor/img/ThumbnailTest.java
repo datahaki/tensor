@@ -24,7 +24,7 @@ import ch.alpine.tensor.io.ResourceData;
 
 class ThumbnailTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor tensor = ResourceData.of("/io/image/rgba15x33.png");
     Tensor square = Thumbnail.of(tensor, 7);
     List<Integer> list = Dimensions.of(square);
@@ -32,7 +32,7 @@ class ThumbnailTest {
   }
 
   @Test
-  public void testAuGray() {
+  void testAuGray() {
     Tensor tensor1 = ResourceData.of("/io/image/album_au_gray.jpg");
     Tensor square1 = Thumbnail.of(tensor1, 64);
     List<Integer> list1 = Dimensions.of(square1);
@@ -46,7 +46,7 @@ class ThumbnailTest {
   }
 
   @Test
-  public void testAuGrayBufferedImage(@TempDir File tempDir) throws IOException {
+  void testAuGrayBufferedImage(@TempDir File tempDir) throws IOException {
     BufferedImage original = ResourceData.bufferedImage("/io/image/album_au_gray.jpg");
     BufferedImage expected = Thumbnail.of(original, 64);
     File file = new File(tempDir, "file.jpg");
@@ -56,7 +56,7 @@ class ThumbnailTest {
   }
 
   @Test
-  public void testAuGray1() {
+  void testAuGray1() {
     Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
     assertThrows(IllegalArgumentException.class, () -> Thumbnail.of(tensor, -3));
   }

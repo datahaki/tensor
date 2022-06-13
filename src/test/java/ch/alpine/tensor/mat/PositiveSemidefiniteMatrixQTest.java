@@ -12,18 +12,18 @@ import ch.alpine.tensor.sca.N;
 
 class PositiveSemidefiniteMatrixQTest {
   @Test
-  public void testDiagonal() {
+  void testDiagonal() {
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(DiagonalMatrix.of(3, 2, 0, 1)));
     assertFalse(PositiveSemidefiniteMatrixQ.ofHermitian(DiagonalMatrix.of(3, -2, 0, 1)));
   }
 
   @Test
-  public void testZeros() {
+  void testZeros() {
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(Array.zeros(4, 4)));
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(Tensors.fromString("{{10, I}, {-I, 10}}")));
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(Tensors.fromString("{{10, I}, {-I, 1/10}}")));
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(N.DOUBLE.of(Tensors.fromString("{{10, I}, {-I, 10}}"))));
@@ -31,12 +31,12 @@ class PositiveSemidefiniteMatrixQTest {
   }
 
   @Test
-  public void testVector() {
+  void testVector() {
     assertFalse(PositiveSemidefiniteMatrixQ.ofHermitian(Tensors.vector(1, 2, 3)));
   }
 
   @Test
-  public void testRectangular() {
+  void testRectangular() {
     assertFalse(PositiveSemidefiniteMatrixQ.ofHermitian(HilbertMatrix.of(2, 3)));
     assertFalse(PositiveSemidefiniteMatrixQ.ofHermitian(HilbertMatrix.of(3, 2)));
     assertFalse(PositiveSemidefiniteMatrixQ.ofHermitian(Array.zeros(3, 4)));

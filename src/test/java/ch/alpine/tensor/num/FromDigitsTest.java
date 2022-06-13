@@ -10,7 +10,7 @@ import ch.alpine.tensor.Tensors;
 
 class FromDigitsTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     assertEquals(FromDigits.of(Tensors.vector(1, 2, 3)), RealScalar.of(123));
     assertEquals(FromDigits.of(Tensors.vector(2, 12, 1)), RealScalar.of(321));
   }

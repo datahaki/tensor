@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 class LruCacheTest {
   @Test
-  public void testLru1() {
+  void testLru1() {
     Map<Integer, String> map = new LruCache<>(2);
     map.put(3, "1");
     map.put(4, "2");
@@ -43,14 +43,14 @@ class LruCacheTest {
   }
 
   @Test
-  public void testMax() {
+  void testMax() {
     Map<Integer, String> map = new LruCache<>(3);
     IntStream.range(0, 100).forEach(i -> map.put(i, "" + i));
     assertEquals(map.size(), 3);
   }
 
   @Test
-  public void testLruAccessOrder() {
+  void testLruAccessOrder() {
     Map<Integer, String> map = new LruCache<>(2);
     map.put(3, "3");
     map.put(4, "4");
@@ -60,7 +60,7 @@ class LruCacheTest {
   }
 
   @Test
-  public void testLruAccessOrder2() {
+  void testLruAccessOrder2() {
     Map<Integer, String> map = new LruCache<>(2);
     map.put(3, "3");
     map.put(4, "4");
@@ -71,7 +71,7 @@ class LruCacheTest {
   }
 
   @Test
-  public void testThreadSafe() {
+  void testThreadSafe() {
     Map<Integer, Integer> map = Collections.synchronizedMap(new LruCache<>(12));
     IntStream.range(0, 1024).boxed().parallel().forEach(index -> map.put(index % 32, index));
     assertEquals(map.size(), 12);
@@ -84,7 +84,7 @@ class LruCacheTest {
   // }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(IllegalArgumentException.class, () -> new LruCache<>(-1));
     assertThrows(IllegalArgumentException.class, () -> new LruCache<>(10, -0.2f));
     assertThrows(IllegalArgumentException.class, () -> new LruCache<>(10, 0f));

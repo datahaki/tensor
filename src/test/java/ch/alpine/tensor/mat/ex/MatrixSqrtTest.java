@@ -39,7 +39,7 @@ class MatrixSqrtTest {
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor a = Tensors.fromString("{{4, 10}, {0, 9}}");
     MatrixSqrt matrixSqrt = MatrixSqrt.of(a);
     _check(a, matrixSqrt);
@@ -47,7 +47,7 @@ class MatrixSqrtTest {
   }
 
   @RepeatedTest(5)
-  public void testIdentity(RepetitionInfo repetitionInfo) {
+  void testIdentity(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor x = IdentityMatrix.of(n);
     _check(x, MatrixSqrt.of(x));
@@ -55,7 +55,7 @@ class MatrixSqrtTest {
   }
 
   @Test
-  public void testTrapezoidalNormal() {
+  void testTrapezoidalNormal() {
     Random random = new Random(1);
     Distribution distribution = TrapezoidalDistribution.of(-3, -1, 1, 3);
     for (int n = 1; n < 7; ++n) {
@@ -66,7 +66,7 @@ class MatrixSqrtTest {
   }
 
   @Test
-  public void testRandomDiscreteUniform() {
+  void testRandomDiscreteUniform() {
     Random random = new Random(1);
     for (int n = 1; n < 10; ++n) {
       Tensor x = RandomVariate.of(DiscreteUniformDistribution.of(-200, 200), random, n, n);
@@ -77,7 +77,7 @@ class MatrixSqrtTest {
   }
 
   @Test
-  public void testRandomSymmetric() {
+  void testRandomSymmetric() {
     Random random = new Random(1);
     for (int n = 1; n < 5; ++n) {
       Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.of(0, 0.2), random, n, n));
@@ -88,7 +88,7 @@ class MatrixSqrtTest {
   }
 
   @Test
-  public void testRandomSymmetricQuantity() {
+  void testRandomSymmetricQuantity() {
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(0.2, "m"));
     Random random = new Random(1);
     for (int n = 1; n < 5; ++n) {
@@ -100,21 +100,21 @@ class MatrixSqrtTest {
   }
 
   @Test
-  public void testHermitian() {
+  void testHermitian() {
     Tensor matrix = Tensors.fromString("{{0, I}, {-I, 0}}");
     MatrixSqrt matrixSqrt = MatrixSqrt.ofHermitian(matrix);
     _check(matrix, matrixSqrt);
   }
 
   @Test
-  public void testSymNegativeDiagonal() {
+  void testSymNegativeDiagonal() {
     Tensor matrix = DiagonalMatrix.of(-1, -2, -3);
     _check(matrix, MatrixSqrt.of(matrix));
     _check(matrix, MatrixSqrt.ofSymmetric(matrix));
   }
 
   @Test
-  public void testZeros() {
+  void testZeros() {
     Tensor matrix = Array.zeros(2, 2);
     MatrixSqrt matrixSqrt = MatrixSqrt.of(matrix);
     assertEquals(matrixSqrt.sqrt(), Array.zeros(2, 2));
@@ -122,7 +122,7 @@ class MatrixSqrtTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Tensor matrix = Tensors.fromString("{{10[m^2], -2[m^2]}, {-2[m^2], 4[m^2]}}");
     MatrixSqrt matrixSqrt = MatrixSqrt.of(matrix);
     Tensor eye = Dot.of(matrixSqrt.sqrt(), matrixSqrt.sqrt_inverse());
@@ -130,7 +130,7 @@ class MatrixSqrtTest {
   }
 
   @Test
-  public void testComplexFail() {
+  void testComplexFail() {
     Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
     SymmetricMatrixQ.require(matrix);
     MatrixSqrt.of(matrix);
@@ -138,13 +138,13 @@ class MatrixSqrtTest {
   }
 
   @Test
-  public void testNonSquareFail() {
+  void testNonSquareFail() {
     assertThrows(IllegalArgumentException.class, () -> MatrixSqrt.of(RandomVariate.of(UniformDistribution.of(-2, 2), 2, 3)));
     assertThrows(IllegalArgumentException.class, () -> MatrixSqrt.of(HilbertMatrix.of(2, 3)));
   }
 
   @Test
-  public void testNonSymmetricFail() {
+  void testNonSymmetricFail() {
     assertThrows(TensorRuntimeException.class, () -> MatrixSqrt.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4)));
   }
 }

@@ -12,7 +12,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class RootsDegree1Test {
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     Tensor coeffs = Tensors.of(GaussScalar.of(4, 7), GaussScalar.of(5, 7));
     Tensor roots = Roots.of(coeffs);
     Tensor zeros = roots.map(Polynomial.of(coeffs));

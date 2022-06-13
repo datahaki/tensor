@@ -13,19 +13,19 @@ import ch.alpine.tensor.sca.pow.Power;
 
 class MathematicaFormTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     String string = MathematicaForm.of(Quantity.of(3, "m^2*s"));
     assertEquals(string, "Quantity[3, \"Meters\"^2*\"Seconds\"]");
   }
 
   @Test
-  public void testSimple2() {
+  void testSimple2() {
     String string = MathematicaForm.of(Tensors.of(Quantity.of(3, "A^2*V^-1")));
     assertEquals(string, "{Quantity[3, \"Amperes\"^2*\"Volts\"^-1]}");
   }
 
   @Test
-  public void testKeys() {
+  void testKeys() {
     for (String string : MathematicaForm.INSTANCE.getMap().keySet()) {
       boolean test = KnownUnitQ.SI().test(Unit.of(string));
       if (!test)
@@ -35,7 +35,7 @@ class MathematicaFormTest {
   }
 
   @Test
-  public void testSpecific() {
+  void testSpecific() {
     Map<String, String> map = MathematicaForm.INSTANCE.getMap();
     assertTrue(map.containsKey("kV"));
     assertTrue(map.containsKey("dN"));
@@ -43,7 +43,7 @@ class MathematicaFormTest {
   }
 
   @Test
-  public void testUnits() {
+  void testUnits() {
     Map<String, String> map = MathematicaForm.INSTANCE.getMap();
     for (String string : UnitSystem.SI().map().keySet())
       if (!map.containsKey(string))
@@ -51,7 +51,7 @@ class MathematicaFormTest {
   }
 
   @Test
-  public void testNamesUppercase() {
+  void testNamesUppercase() {
     for (String string : MathematicaForm.INSTANCE.getMap().values()) {
       String u = "" + string.charAt(0);
       assertEquals(u, u.toUpperCase());
@@ -59,7 +59,7 @@ class MathematicaFormTest {
   }
 
   @Test
-  public void testXibi() {
+  void testXibi() {
     assertEquals(QuantityMagnitude.SI().in("B").apply(Quantity.of(1, "KiB")), Power.of(1024, 1));
     assertEquals(QuantityMagnitude.SI().in("B").apply(Quantity.of(1, "MiB")), Power.of(1024, 2));
     assertEquals(QuantityMagnitude.SI().in("B").apply(Quantity.of(1, "GiB")), Power.of(1024, 3));

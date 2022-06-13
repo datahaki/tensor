@@ -22,7 +22,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class CsvFormatTest {
   @Test
-  public void testNonRect() throws Exception {
+  void testNonRect() throws Exception {
     Tensor s = Tensors.empty();
     s.append(Tensors.of(StringScalar.of("ksah   g d fkhjg")));
     s.append(Tensors.vector(1, 2, 3));
@@ -42,7 +42,7 @@ class CsvFormatTest {
   }
 
   @Test
-  public void testParse() {
+  void testParse() {
     Tensor t = XsvFormat.CSV.parse(Arrays.asList("10, 200, 3", "", "78", "-3, 2.3").stream());
     Tensor r = Tensors.fromString("{{10, 200, 3}, {}, {78}, {-3, 2.3}}");
     assertEquals(t, r);
@@ -50,7 +50,7 @@ class CsvFormatTest {
   }
 
   @Test
-  public void testParse2() {
+  void testParse2() {
     Tensor t = XsvFormat.CSV.parse(Arrays.asList("10, {200, 3}", "78", "-3, 2.3").stream());
     Tensor r = Tensors.fromString("{{10, {200, 3}}, {78}, {-3, 2.3}}");
     assertEquals(t, r);
@@ -58,7 +58,7 @@ class CsvFormatTest {
   }
 
   @Test
-  public void testSpacing() {
+  void testSpacing() {
     Tensor r = Tensors.fromString("{{10, {200, 3}}, {},  {78}, {-3, 2.3, 1-3*I}}");
     List<String> list = XsvFormat.CSV.of(r).collect(Collectors.toList());
     assertEquals(list.get(0), "10,{200, 3}");
@@ -68,7 +68,7 @@ class CsvFormatTest {
   }
 
   @Test
-  public void testCount2() throws IOException {
+  void testCount2() throws IOException {
     try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
       try (Stream<String> stream = ReadLine.of(inputStream)) {
         Tensor table = XsvFormat.CSV.parse(stream);
@@ -79,7 +79,7 @@ class CsvFormatTest {
   }
 
   @Test
-  public void testLibreofficeCalcFile() throws Exception {
+  void testLibreofficeCalcFile() throws Exception {
     try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
       Stream<String> stream = ReadLine.of(inputStream);
       Tensor table = XsvFormat.CSV.parse(stream);
@@ -89,7 +89,7 @@ class CsvFormatTest {
   }
 
   @Test
-  public void testMatlabFile() throws Exception {
+  void testMatlabFile() throws Exception {
     try (InputStream inputStream = getClass().getResource("/io/matlab_3x5.csv").openStream()) {
       Stream<String> stream = ReadLine.of(inputStream);
       Tensor table = XsvFormat.CSV.parse(stream);
@@ -98,7 +98,7 @@ class CsvFormatTest {
   }
 
   @Test
-  public void testGeditFile() throws Exception {
+  void testGeditFile() throws Exception {
     try (InputStream inputStream = getClass().getResource("/io/gedit_mixed.csv").openStream()) {
       Stream<String> stream = ReadLine.of(inputStream);
       Tensor table = XsvFormat.CSV.parse(stream);
@@ -107,7 +107,7 @@ class CsvFormatTest {
   }
 
   @Test
-  public void testStrict() {
+  void testStrict() {
     Tensor matrix = Tensors.of(Tensors.of( //
         StringScalar.of("PUT"), //
         RationalScalar.of(1, 2), //
@@ -118,7 +118,7 @@ class CsvFormatTest {
   }
 
   @Test
-  public void testStringWithComma() {
+  void testStringWithComma() {
     Tensor row = Tensors.of(StringTensor.vector("123", "[ , ]", "a"));
     Stream<String> stream = XsvFormat.CSV.of(row);
     List<String> list = stream.collect(Collectors.toList());
@@ -127,7 +127,7 @@ class CsvFormatTest {
   }
 
   @Test
-  public void testStringStrict() {
+  void testStringStrict() {
     Tensor row = Tensors.of(StringTensor.vector("123", "[ , ]", "a"));
     Stream<String> stream = XsvFormat.CSV.of(row.map(CsvFormat.strict()));
     List<String> list = stream.collect(Collectors.toList());
@@ -136,7 +136,7 @@ class CsvFormatTest {
   }
 
   @Test
-  public void testVectorWithComma() {
+  void testVectorWithComma() {
     Tensor row = StringTensor.vector(" 2  ,  3 ", "[ , ]", "` ;  ;  ,   ;`");
     Stream<String> stream = XsvFormat.CSV.of(row);
     List<String> list = stream.collect(Collectors.toList());

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class QRReflectionTest {
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(QRReflection.class.getModifiers()));
   }
 }

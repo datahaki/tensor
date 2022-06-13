@@ -14,7 +14,7 @@ import ch.alpine.tensor.alg.Array;
 
 class AnimationWriterTest {
   @Test
-  public void testColor(@TempDir File tempDir) throws Exception {
+  void testColor(@TempDir File tempDir) throws Exception {
     File file = new File(tempDir, "file.gif");
     try (AnimationWriter animationWriter = new GifAnimationWriter(file, 100, TimeUnit.MILLISECONDS)) {
       animationWriter.write(Array.zeros(3, 4));
@@ -24,7 +24,7 @@ class AnimationWriterTest {
   }
 
   @Test
-  public void testFailExtension() {
+  void testFailExtension() {
     try (AnimationWriter animationWriter = new GifAnimationWriter(null, 100, TimeUnit.MILLISECONDS)) { // extension unknown
       fail();
     } catch (Exception exception) {

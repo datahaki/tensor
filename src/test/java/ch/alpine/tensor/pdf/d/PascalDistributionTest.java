@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.pow.Power;
 
 class PascalDistributionTest {
   @Test
-  public void testPDF() {
+  void testPDF() {
     Scalar p = RationalScalar.of(2, 3);
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(5, p);
     PDF pdf = PDF.of(distribution);
@@ -38,7 +38,7 @@ class PascalDistributionTest {
   }
 
   @Test
-  public void testCDF() {
+  void testCDF() {
     Scalar p = RationalScalar.of(2, 3);
     Distribution distribution = PascalDistribution.of(5, p);
     CDF pdf = CDF.of(distribution);
@@ -48,7 +48,7 @@ class PascalDistributionTest {
   }
 
   @Test
-  public void testMean() {
+  void testMean() {
     Distribution distribution = PascalDistribution.of(5, RationalScalar.of(2, 3));
     assertTrue(distribution.toString().startsWith("PascalDistribution["));
     Scalar mean = Mean.of(distribution);
@@ -60,7 +60,7 @@ class PascalDistributionTest {
   }
 
   @Test
-  public void testVariance() {
+  void testVariance() {
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(11, RationalScalar.of(5, 17));
     Scalar mean = Mean.of(distribution);
     Scalar var = Variance.of(distribution);
@@ -72,7 +72,7 @@ class PascalDistributionTest {
   }
 
   @Test
-  public void testRandomVariate() {
+  void testRandomVariate() {
     Scalar p = RationalScalar.of(3, 4);
     Distribution distribution = PascalDistribution.of(5, p);
     Tensor tensor = RandomVariate.of(distribution, 2300);
@@ -83,7 +83,7 @@ class PascalDistributionTest {
   }
 
   @Test
-  public void testInverseCdf() {
+  void testInverseCdf() {
     Scalar p = RationalScalar.of(1, 5);
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(5, p);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -95,7 +95,7 @@ class PascalDistributionTest {
   }
 
   @Test
-  public void testCDFMathematica() {
+  void testCDFMathematica() {
     int n = 5;
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
     CDF cdf = CDF.of(distribution);
@@ -105,7 +105,7 @@ class PascalDistributionTest {
   }
 
   @Test
-  public void testInverseCDFMathematica() {
+  void testInverseCDFMathematica() {
     int n = 5;
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -115,7 +115,7 @@ class PascalDistributionTest {
   }
 
   @Test
-  public void testCDFInverseCDF() {
+  void testCDFInverseCDF() {
     int n = 5;
     PascalDistribution distribution = (PascalDistribution) PascalDistribution.of(n, RationalScalar.of(1, 4));
     CDF cdf = CDF.of(distribution);
@@ -129,13 +129,13 @@ class PascalDistributionTest {
   }
 
   @Test
-  public void testFailN() {
+  void testFailN() {
     assertThrows(IllegalArgumentException.class, () -> PascalDistribution.of(0, RealScalar.of(0.2)));
     assertThrows(IllegalArgumentException.class, () -> PascalDistribution.of(-3, RealScalar.of(0.2)));
   }
 
   @Test
-  public void testFailP() {
+  void testFailP() {
     assertThrows(TensorRuntimeException.class, () -> PascalDistribution.of(3, RealScalar.of(-0.2)));
     assertThrows(TensorRuntimeException.class, () -> PascalDistribution.of(3, RealScalar.of(1.2)));
   }

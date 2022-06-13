@@ -13,7 +13,7 @@ import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 
 class MatrixRankSvdTest {
   @Test
-  public void testZeros() {
+  void testZeros() {
     Tensor matrix = Array.zeros(9, 5);
     SingularValueDecomposition singularValueDecomposition = SingularValueDecomposition.of(matrix);
     int rank = MatrixRankSvd.of(singularValueDecomposition);
@@ -21,7 +21,7 @@ class MatrixRankSvdTest {
   }
 
   @Test
-  public void testNumeric() {
+  void testNumeric() {
     Tensor m = Tensors.of( //
         Tensors.vector(0, 1, 0), Tensors.vector(0, 1, 1e-40));
     assertEquals(MatrixRankSvd.of(m), 1);
@@ -29,7 +29,7 @@ class MatrixRankSvdTest {
   }
 
   @Test
-  public void testNumeric2() {
+  void testNumeric2() {
     Tensor m = Transpose.of(Tensors.of( //
         Tensors.vector(0, 1, 0), Tensors.vector(0, 1, 1e-40)));
     assertEquals(MatrixRankSvd.of(m), 1);

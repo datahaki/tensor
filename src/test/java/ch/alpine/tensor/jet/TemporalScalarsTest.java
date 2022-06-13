@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class TemporalScalarsTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor a = Tensors.of( //
         DateTimeScalar.of(LocalDateTime.of(1657, 11, 10, 4, 8)), //
         DateTimeScalar.of(LocalDateTime.of(1857, 10, 5, 7, 18)), //
@@ -40,7 +40,7 @@ class TemporalScalarsTest {
   }
 
   @Test
-  public void testParsing() {
+  void testParsing() {
     Tensor a = Tensors.of( //
         DateTimeScalar.of(LocalDateTime.of(1657, 11, 10, 4, 8)), //
         DateTimeScalar.of(LocalDateTime.of(1857, 10, 5, 7, 18)));
@@ -50,7 +50,7 @@ class TemporalScalarsTest {
   }
 
   @Test
-  public void testDuration() {
+  void testDuration() {
     Scalar scalar = TemporalScalars.seconds(Duration.ofDays(3));
     Duration duration = TemporalScalars.duration(scalar);
     assertEquals(duration, Duration.ofDays(3));

@@ -27,19 +27,19 @@ import ch.alpine.tensor.red.Total;
 
 class UnitSystemTest {
   @Test
-  public void testSize() {
+  void testSize() {
     Integers.requireLessEquals(463, UnitSystem.SI().map().size());
   }
 
   @Test
-  public void testExact() {
+  void testExact() {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(3, "Hz^-2*N*m^-1"));
     assertEquals(scalar, Quantity.of(3, "kg"));
     ExactScalarQ.require(scalar);
   }
 
   @Test
-  public void testScalar() {
+  void testScalar() {
     Scalar scalar = RealScalar.ONE;
     Scalar result = UnitSystem.SI().apply(scalar);
     assertEquals(result, scalar);
@@ -47,25 +47,25 @@ class UnitSystemTest {
   }
 
   @Test
-  public void testVoltage() {
+  void testVoltage() {
     Scalar normal = UnitSystem.SI().apply(Quantity.of(1, "V"));
     assertEquals(normal, Quantity.of(1, "A^-1*kg*m^2*s^-3"));
     ExactScalarQ.require(normal);
   }
 
   @Test
-  public void testMiles() {
+  void testMiles() {
     Scalar normal = UnitSystem.SI().apply(Quantity.of(125, "mi"));
     assertEquals(normal, Quantity.of(201168, "m"));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> UnitSystem.SI().apply(null));
   }
 
   @Test
-  public void testMore() {
+  void testMore() {
     Tensor tensor = Tensors.of( //
         Quantity.of(3, "Hz^-2*N*m^-1"), //
         Quantity.of(3.6, "km*h^-1"), //
@@ -78,7 +78,7 @@ class UnitSystemTest {
   }
 
   @Test
-  public void testElectric() {
+  void testElectric() {
     UnitSystem unitSystem = UnitSystem.SI();
     Scalar r1 = unitSystem.apply(Quantity.of(3, "Ohm"));
     Scalar r2 = unitSystem.apply(Quantity.of(3, "V*A^-1"));
@@ -86,7 +86,7 @@ class UnitSystemTest {
   }
 
   @Test
-  public void testCustom() {
+  void testCustom() {
     Properties properties = new Properties();
     properties.setProperty("EUR", "1.25[CHF]");
     properties.setProperty("Apples", "2[CHF]");
@@ -103,7 +103,7 @@ class UnitSystemTest {
   }
 
   @Test
-  public void testKnots() throws ClassNotFoundException, IOException {
+  void testKnots() throws ClassNotFoundException, IOException {
     UnitSystem unitSystem = Serialization.copy(UnitSystem.SI());
     Scalar r1 = unitSystem.apply(Quantity.of(1, "kn"));
     Unit unit = QuantityUnit.of(r1);
@@ -117,7 +117,7 @@ class UnitSystemTest {
   }
 
   @Test
-  public void testSmallSi() throws ClassNotFoundException, IOException {
+  void testSmallSi() throws ClassNotFoundException, IOException {
     Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/small.properties");
     assertFalse(properties.entrySet().isEmpty());
     UnitSystem unitSystem = Serialization.copy(SimpleUnitSystem.from(properties));
@@ -140,35 +140,35 @@ class UnitSystemTest {
   }
 
   @Test
-  public void testFail1() {
+  void testFail1() {
     Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/fail1.properties");
     assertFalse(properties.entrySet().isEmpty());
     assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
-  public void testFail2() {
+  void testFail2() {
     Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/fail2.properties");
     assertFalse(properties.entrySet().isEmpty());
     assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
-  public void testFail3() {
+  void testFail3() {
     Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/fail3.properties");
     assertFalse(properties.entrySet().isEmpty());
     assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
-  public void testFail4() {
+  void testFail4() {
     Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/fail4.properties");
     assertFalse(properties.entrySet().isEmpty());
     assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
-  public void testFail5() {
+  void testFail5() {
     Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/fail5.properties");
     assertFalse(properties.entrySet().isEmpty());
     assertThrows(IllegalArgumentException.class, () -> SimpleUnitSystem.from(properties));

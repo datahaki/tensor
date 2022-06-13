@@ -20,7 +20,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class ReverseTest {
   @Test
-  public void testRev() {
+  void testRev() {
     Tensor tensor = Tensors.vector(3, 2, 6, 5);
     Tensor rev = Reverse.of(tensor);
     Tensor res = Tensors.vector(5, 6, 2, 3);
@@ -28,7 +28,7 @@ class ReverseTest {
   }
 
   @Test
-  public void testReverse() {
+  void testReverse() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 100);
     int n = 5;
     Tensor m = RandomVariate.of(distribution, n, n, n, n);
@@ -41,12 +41,12 @@ class ReverseTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertEquals(Tensors.empty(), Reverse.of(Tensors.empty()));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> Reverse.of(RealScalar.ONE));
   }
 

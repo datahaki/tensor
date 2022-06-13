@@ -23,25 +23,25 @@ import ch.alpine.tensor.sca.N;
 
 class QuantityMagnitudeTest {
   @Test
-  public void testMagnitudeKgf() {
+  void testMagnitudeKgf() {
     Scalar scalar = QuantityMagnitude.SI().in("N").apply(Quantity.of(1, "kgf"));
     assertEquals(N.DOUBLE.apply(scalar).number().doubleValue(), 9.80665);
   }
 
   @Test
-  public void testInUnit() {
+  void testInUnit() {
     Scalar scalar = QuantityMagnitude.SI().in(Unit.of("K*m^2")).apply(Quantity.of(2, "K*km^2"));
     assertEquals(scalar, RealScalar.of(2_000_000));
   }
 
   @Test
-  public void testInString() {
+  void testInString() {
     Scalar scalar = QuantityMagnitude.SI().in("K*m^2*s").apply(Quantity.of(2, "K*km^2*s"));
     assertEquals(scalar, RealScalar.of(2_000_000));
   }
 
   @Test
-  public void testRad() throws ClassNotFoundException, IOException {
+  void testRad() throws ClassNotFoundException, IOException {
     QuantityMagnitude quantityMagnitude = Serialization.copy(QuantityMagnitude.SI());
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in(Unit.of("rad"));
     Chop._12.requireClose(scalarUnaryOperator.apply(Quantity.of(360, "deg")), RealScalar.of(Math.PI * 2));
@@ -51,21 +51,21 @@ class QuantityMagnitudeTest {
   }
 
   @Test
-  public void testSingleton() {
+  void testSingleton() {
     Scalar scalar = Quantity.of(3, "m^2*s");
     ScalarUnaryOperator suo = QuantityMagnitude.singleton("s*m^2");
     assertEquals(suo.apply(scalar), RealScalar.of(3));
   }
 
   @Test
-  public void testSingleton2() {
+  void testSingleton2() {
     Scalar scalar = RealScalar.of(3);
     ScalarUnaryOperator suo = QuantityMagnitude.singleton(Unit.ONE);
     assertEquals(suo.apply(scalar), RealScalar.of(3));
   }
 
   @Test
-  public void testConversionJ() {
+  void testConversionJ() {
     Scalar scalar = Quantity.of(6.241509125883258E9, "GeV");
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     ScalarUnaryOperator suo = quantityMagnitude.in("J");
@@ -74,7 +74,7 @@ class QuantityMagnitudeTest {
   }
 
   @Test
-  public void testConversionPa() {
+  void testConversionPa() {
     Scalar scalar = Quantity.of(RationalScalar.of(8896443230521L, 1290320000).reciprocal(), "psi");
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     ScalarUnaryOperator suo = quantityMagnitude.in("Pa");
@@ -84,7 +84,7 @@ class QuantityMagnitudeTest {
   }
 
   @Test
-  public void testConversionN() {
+  void testConversionN() {
     Scalar scalar = Quantity.of(RationalScalar.of(8896443230521L, 2000000000000L).reciprocal(), "lbf");
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in("N");
@@ -94,7 +94,7 @@ class QuantityMagnitudeTest {
   }
 
   @Test
-  public void testConversionMoWk() {
+  void testConversionMoWk() {
     Scalar scalar = Quantity.of(1, "mo");
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in("wk");
@@ -103,7 +103,7 @@ class QuantityMagnitudeTest {
   }
 
   @Test
-  public void testHorsepower() {
+  void testHorsepower() {
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("W");
     Scalar ps = scalarUnaryOperator.apply(Quantity.of(1.0, "PS"));
     Scalar hp = scalarUnaryOperator.apply(Quantity.of(1.0, "hp"));
@@ -112,7 +112,7 @@ class QuantityMagnitudeTest {
   }
 
   @Test
-  public void testHorsepowerKiloWatts() {
+  void testHorsepowerKiloWatts() {
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("kW");
     Scalar ps = scalarUnaryOperator.apply(Quantity.of(1.0, "PS"));
     Scalar hp = scalarUnaryOperator.apply(Quantity.of(1.0, "hp"));
@@ -121,14 +121,14 @@ class QuantityMagnitudeTest {
   }
 
   @Test
-  public void testKiloponds() {
+  void testKiloponds() {
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("N");
     Scalar kp = scalarUnaryOperator.apply(Quantity.of(1.0, "kp"));
     assertEquals(kp, RealScalar.of(9.80665));
   }
 
   @Test
-  public void testMetricTons() {
+  void testMetricTons() {
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("t");
     Scalar _1kg_in_tons = scalarUnaryOperator.apply(Quantity.of(1000, "g"));
     ExactScalarQ.require(_1kg_in_tons);
@@ -136,7 +136,7 @@ class QuantityMagnitudeTest {
   }
 
   @Test
-  public void testPercent() {
+  void testPercent() {
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("%");
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(2));
     assertEquals(scalar, RealScalar.of(200));
@@ -146,7 +146,7 @@ class QuantityMagnitudeTest {
   }
 
   @Test
-  public void testVolume() {
+  void testVolume() {
     Tolerance.CHOP.requireClose( //
         QuantityMagnitude.SI().in("L").apply(Quantity.of(1.0, "cup")), //
         DoubleScalar.of(0.2365882365));
@@ -162,7 +162,7 @@ class QuantityMagnitudeTest {
   }
 
   @Test
-  public void testFailConversion() {
+  void testFailConversion() {
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     Scalar quantity = Quantity.of(360, "kg");
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in("m");
@@ -170,12 +170,12 @@ class QuantityMagnitudeTest {
   }
 
   @Test
-  public void testFailInNull() {
+  void testFailInNull() {
     assertThrows(NullPointerException.class, () -> QuantityMagnitude.SI().in((Unit) null));
   }
 
   @Test
-  public void testFailNull() {
+  void testFailNull() {
     assertThrows(NullPointerException.class, () -> new QuantityMagnitude(null));
   }
 }

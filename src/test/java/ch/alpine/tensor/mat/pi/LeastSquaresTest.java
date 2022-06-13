@@ -41,7 +41,7 @@ import ch.alpine.tensor.sca.N;
 
 class LeastSquaresTest {
   @Test
-  public void testSquareExact() {
+  void testSquareExact() {
     Tensor matrix = HilbertMatrix.of(4, 4);
     Tensor pinv = PseudoInverse.of(matrix);
     assertEquals(pinv, Inverse.of(matrix));
@@ -49,7 +49,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testMixedUnitsVantHoff() {
+  void testMixedUnitsVantHoff() {
     // inspired by code by gjoel
     for (int deg = 0; deg <= 2; ++deg) {
       int degree = deg;
@@ -92,7 +92,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testEasy() {
+  void testEasy() {
     Tensor m = Transpose.of(IdentityMatrix.of(4).extract(0, 3));
     for (Tensor perm : Permutations.of(Range.of(0, 4))) {
       Tensor matrix = Tensor.of(perm.stream().map(Scalar.class::cast).map(s -> m.get(s.number().intValue())));
@@ -102,7 +102,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testMathematica() {
+  void testMathematica() {
     Tensor matrix = HilbertMatrix.of(2, 3);
     assertEquals(matrix, Tensors.fromString("{{1, 1/2, 1/3}, {1/2, 1/3, 1/4}}"));
     Tensor expect = Tensors.fromString("{{252/73, -(360/73)}, {-(198/73), 408/73}, {-(240/73), 468/73}}");
@@ -111,7 +111,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testMathematicaB() {
+  void testMathematicaB() {
     Tensor matrix = HilbertMatrix.of(2, 3);
     assertEquals(matrix, Tensors.fromString("{{1, 1/2, 1/3}, {1/2, 1/3, 1/4}}"));
     Tensor expect = Tensors.fromString( //
@@ -122,7 +122,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testFullRank() {
+  void testFullRank() {
     Tensor m = Tensors.matrix( //
         (i, j) -> RationalScalar.of(2 * i + 2 + j, 1 + 9 * i + j), 4, 3);
     Tensor b = Tensors.vector(1, 1, 1, 1);
@@ -135,7 +135,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testLowRank() {
+  void testLowRank() {
     Tensor m = Tensors.matrix( //
         (i, j) -> RationalScalar.of(2 * i + j, 9 + j), 4, 3);
     assertEquals(MatrixRank.of(m), 2);
@@ -145,7 +145,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testFullRankComplex() {
+  void testFullRankComplex() {
     Tensor m = Tensors.matrix( //
         (i, j) -> ComplexScalar.of( //
             RealScalar.of(i), RationalScalar.of(2 * i + 2 + j, 1 + 9 * i + j)),
@@ -160,14 +160,14 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testRankDeficient() {
+  void testRankDeficient() {
     assertEquals(LeastSquares.of(Array.zeros(3, 3), UnitVector.of(3, 1)), Array.zeros(3));
     assertEquals(LeastSquares.of(Array.zeros(3, 2), UnitVector.of(3, 1)), Array.zeros(2));
     assertEquals(LeastSquares.of(DiagonalMatrix.of(0, 1, 0), UnitVector.of(3, 0)), Array.zeros(3));
   }
 
   @Test
-  public void testFullRankComplex2() {
+  void testFullRankComplex2() {
     Tensor m = Tensors.matrix( //
         (i, j) -> ComplexScalar.of( //
             RealScalar.of(18 * i + j * 100), RationalScalar.of(2 * i + 2 + j, 1 + 9 * i + j)),
@@ -185,7 +185,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testRect() {
+  void testRect() {
     Distribution distribution = UniformDistribution.unit();
     Tensor matrix = RandomVariate.of(distribution, 10, 3);
     Tensor b = RandomVariate.of(distribution, 10, 2);
@@ -195,7 +195,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testLeastSquaresReal() {
+  void testLeastSquaresReal() {
     for (int n = 3; n < 6; ++n) {
       Tensor matrix = IdentityMatrix.of(n).add(RandomVariate.of(NormalDistribution.standard(), n, n));
       Tensor b = RandomVariate.of(NormalDistribution.standard(), n, 2);
@@ -206,7 +206,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testLeastSquaresComplexSquare() {
+  void testLeastSquaresComplexSquare() {
     Random random = new Random(3);
     for (int n = 3; n < 6; ++n) {
       Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
@@ -220,7 +220,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testLeastSquaresRect() {
+  void testLeastSquaresRect() {
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
@@ -240,7 +240,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testLeastSquaresSmallBig() {
+  void testLeastSquaresSmallBig() {
     for (int n = 3; n < 6; ++n) {
       int m = n + 3;
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
@@ -252,7 +252,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testComplexExact() {
+  void testComplexExact() {
     Tensor m = Tensors.fromString("{{1, 1/2 - I}, {1/2 + I, 1/3 + 3*I}, {1/3, 1/4}}");
     Tensor b = Tensors.fromString("{{2, 8 + I}, {3*I, -2}, {4 - I, 3}}");
     Tensor pinv = PseudoInverse.of(m);
@@ -272,7 +272,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testComplexExactQuantity() {
+  void testComplexExactQuantity() {
     Tensor m = Tensors.fromString("{{1, 1/2 - I}, {1/2 + I, 1/3 + 3*I}, {1/3, 1/4}}").map(Scalars.attach(Unit.of("A")));
     Tensor b = Tensors.fromString("{{2, 8 + I}, {3*I, -2}, {4 - I, 3}}").map(Scalars.attach(Unit.of("s")));
     Tensor pinv = PseudoInverse.of(m);
@@ -294,7 +294,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testComplexSmallBig() {
+  void testComplexSmallBig() {
     Tensor m = Tensors.fromString("{{1, 1/2 + I, 1/3}, {1/2 - I, 1/3 + 3*I, 1/4}}");
     Tensor b = Tensors.fromString("{{2, 3*I, 4 - I}, {8 + I, -2, 3}}");
     Tensor pinv = PseudoInverse.of(m);
@@ -316,7 +316,7 @@ class LeastSquaresTest {
   }
 
   @Test
-  public void testComplexSmallBigQuantity() {
+  void testComplexSmallBigQuantity() {
     Tensor m = Tensors.fromString("{{1, 1/2 + I, 1/3}, {1/2 - I, 1/3 + 3*I, 1/4}}").map(Scalars.attach(Unit.of("kg^-1")));
     Tensor b = Tensors.fromString("{{2, 3*I, 4 - I}, {8 + I, -2, 3}}").map(Scalars.attach(Unit.of("m")));
     Tensor pinv = PseudoInverse.of(m);

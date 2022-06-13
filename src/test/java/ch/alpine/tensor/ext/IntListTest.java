@@ -21,21 +21,21 @@ import org.junit.jupiter.api.Test;
 
 class IntListTest {
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     List<Integer> intList = IntList.wrap(new int[] {});
     assertEquals(intList.size(), 0);
     assertTrue(intList.isEmpty());
   }
 
   @Test
-  public void testConstructEmpty() {
+  void testConstructEmpty() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(1, 1);
     assertEquals(intList.size(), 0);
     assertTrue(intList.isEmpty());
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 });
     assertEquals(intList.size(), 6);
     assertFalse(intList.isEmpty());
@@ -44,7 +44,7 @@ class IntListTest {
   }
 
   @Test
-  public void testConstructFails() {
+  void testConstructFails() {
     assertThrows(NullPointerException.class, () -> IntList.wrap(null));
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(4, 6);
     assertEquals(intList.size(), 2);
@@ -52,7 +52,7 @@ class IntListTest {
   }
 
   @Test
-  public void testGetFail() {
+  void testGetFail() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 });
     assertThrows(IllegalArgumentException.class, () -> intList.get(-1));
     List<Integer> subList = intList.subList(2, 5);
@@ -61,7 +61,7 @@ class IntListTest {
   }
 
   @Test
-  public void testSublist() {
+  void testSublist() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 });
     intList = intList.subList(2, 5);
     assertEquals(intList.size(), 3);
@@ -77,7 +77,7 @@ class IntListTest {
   }
 
   @Test
-  public void testSublistFail0() {
+  void testSublistFail0() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     assertEquals(intList.subList(3, 3).size(), 0);
     assertThrows(IllegalArgumentException.class, () -> intList.subList(4, 4));
@@ -85,7 +85,7 @@ class IntListTest {
   }
 
   @Test
-  public void testSublistFail1() {
+  void testSublistFail1() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 });
     assertTrue(intList.subList(2, 2).isEmpty());
     assertThrows(IllegalArgumentException.class, () -> intList.subList(2, 7));
@@ -94,13 +94,13 @@ class IntListTest {
   }
 
   @Test
-  public void testSublistFail2() {
+  void testSublistFail2() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 });
     assertThrows(IllegalArgumentException.class, () -> intList.subList(1, -1));
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     List<Integer> intList = IntList.wrap(new int[] { 2, 3, 4 });
     assertEquals(intList, Arrays.asList(2, 3, 4));
     assertTrue(Arrays.asList(2, 3, 4).equals(intList));
@@ -112,7 +112,7 @@ class IntListTest {
   }
 
   @Test
-  public void testFor() {
+  void testFor() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     for (Integer val : intList) {
       assertEquals(val.intValue(), 2);
@@ -121,7 +121,7 @@ class IntListTest {
   }
 
   @Test
-  public void testContains() {
+  void testContains() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     assertFalse(intList.contains(1));
     assertTrue(intList.contains(2));
@@ -132,21 +132,21 @@ class IntListTest {
   }
 
   @Test
-  public void testContainsEmptyFail() {
+  void testContainsEmptyFail() {
     List<Integer> intList = IntList.wrap(new int[] {});
     assertFalse(intList.contains(5));
     assertThrows(NullPointerException.class, () -> intList.contains(null));
   }
 
   @Test
-  public void testContainsAll() {
+  void testContainsAll() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     assertFalse(intList.containsAll(Arrays.asList(1, 2)));
     assertTrue(intList.containsAll(Arrays.asList(2, 2, 4)));
   }
 
   @Test
-  public void testIndexOf() {
+  void testIndexOf() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     assertEquals(intList.indexOf(2), 0);
     assertEquals(intList.indexOf(3), 1);
@@ -156,7 +156,7 @@ class IntListTest {
   }
 
   @Test
-  public void testLastIndexOf() {
+  void testLastIndexOf() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 2, 4, 5 }).subList(2, 6);
     assertEquals(intList.lastIndexOf(2), 2);
     assertEquals(intList.lastIndexOf(3), 1);
@@ -166,7 +166,7 @@ class IntListTest {
   }
 
   @Test
-  public void testAddRemoveFail() {
+  void testAddRemoveFail() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 2, 4, 5 }).subList(2, 6);
     assertThrows(UnsupportedOperationException.class, () -> intList.add(3));
     assertThrows(UnsupportedOperationException.class, () -> intList.add(0, 0));
@@ -182,21 +182,21 @@ class IntListTest {
   }
 
   @Test
-  public void testHashCode() {
+  void testHashCode() {
     List<Integer> intList = IntList.wrap(new int[] { 2, 3, 4 });
     assertEquals(intList.hashCode(), Arrays.asList(2, 3, 4).hashCode());
     assertEquals(IntList.wrap(new int[] {}).hashCode(), Arrays.asList().hashCode());
   }
 
   @Test
-  public void testToArray() {
+  void testToArray() {
     List<Integer> intList = IntList.wrap(new int[] { 2, 3, 4 });
     ArrayList<Integer> arrayList = new ArrayList<>(intList);
     assertEquals(arrayList, Arrays.asList(2, 3, 4));
   }
 
   @Test
-  public void testInterator() {
+  void testInterator() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     Iterator<Integer> iterator = intList.iterator();
     assertTrue(iterator.hasNext());
@@ -211,7 +211,7 @@ class IntListTest {
   }
 
   @Test
-  public void testListIterator() {
+  void testListIterator() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     assertTrue(intList.listIterator(0).hasNext());
     assertTrue(intList.listIterator(2).hasNext());
@@ -221,7 +221,7 @@ class IntListTest {
   }
 
   @Test
-  public void testListIteratorPrevious() {
+  void testListIteratorPrevious() {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     ListIterator<Integer> listIterator = intList.listIterator(1);
     assertEquals(listIterator.previousIndex(), 0);
@@ -238,7 +238,7 @@ class IntListTest {
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     List<Integer> intList = IntList.wrap(new int[] { 0, 1, 2, 3, 4, 5 }).subList(2, 5);
     List<Integer> copy = Serialization.copy(intList);
     assertEquals(copy, Arrays.asList(2, 3, 4));
@@ -246,7 +246,7 @@ class IntListTest {
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     String s1 = Arrays.asList(10, 2, 0, -4).toString();
     String s2 = Integers.asList(new int[] { 10, 2, 0, -4 }).toString();
     assertEquals(s1, s2);

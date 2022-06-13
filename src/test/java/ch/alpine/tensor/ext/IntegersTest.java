@@ -12,43 +12,43 @@ import org.junit.jupiter.api.Test;
 
 class IntegersTest {
   @Test
-  public void testPositive() {
+  void testPositive() {
     for (int value : new int[] { 1, 2, Integer.MAX_VALUE })
       Integers.requirePositive(value);
   }
 
   @Test
-  public void testPositiveOrZero() {
+  void testPositiveOrZero() {
     for (int value : new int[] { 0, 1, 2, Integer.MAX_VALUE })
       Integers.requirePositiveOrZero(value);
   }
 
   @Test
-  public void testPositiveFail() {
+  void testPositiveFail() {
     for (int value : new int[] { Integer.MIN_VALUE, -3, -1, 0 })
       assertThrows(IllegalArgumentException.class, () -> Integers.requirePositive(value));
   }
 
   @Test
-  public void testPositiveOrZeroFail() {
+  void testPositiveOrZeroFail() {
     for (int value : new int[] { Integer.MIN_VALUE, -3, -1 })
       assertThrows(IllegalArgumentException.class, () -> Integers.requirePositiveOrZero(value));
   }
 
   @Test
-  public void testRequireLessThan() {
+  void testRequireLessThan() {
     Integers.requireLessThan(2, 3);
     assertThrows(IllegalArgumentException.class, () -> Integers.requireLessThan(3, 3));
   }
 
   @Test
-  public void testRequireLessEquals() {
+  void testRequireLessEquals() {
     Integers.requireLessEquals(3, 3);
     assertThrows(IllegalArgumentException.class, () -> Integers.requireLessEquals(4, 3));
   }
 
   @Test
-  public void testIsEven() {
+  void testIsEven() {
     assertTrue(Integers.isEven(-2));
     assertTrue(Integers.isEven(0));
     assertTrue(Integers.isEven(2));
@@ -56,7 +56,7 @@ class IntegersTest {
   }
 
   @Test
-  public void testIsEvenFalse() {
+  void testIsEvenFalse() {
     assertFalse(Integers.isEven(-3));
     assertFalse(Integers.isEven(-1));
     assertFalse(Integers.isEven(1));
@@ -65,13 +65,13 @@ class IntegersTest {
   }
 
   @Test
-  public void testCuriosity() {
+  void testCuriosity() {
     int value = -1;
     assertEquals(value & 1, 1);
   }
 
   @Test
-  public void testPowerOf2() {
+  void testPowerOf2() {
     assertTrue(Integers.isPowerOf2(1));
     assertTrue(Integers.isPowerOf2(2));
     assertFalse(Integers.isPowerOf2(3));
@@ -81,7 +81,7 @@ class IntegersTest {
   }
 
   @Test
-  public void testPowerOf2Fail() {
+  void testPowerOf2Fail() {
     assertThrows(IllegalArgumentException.class, () -> Integers.isPowerOf2(-3));
     assertThrows(IllegalArgumentException.class, () -> Integers.isPowerOf2(-2));
     assertThrows(IllegalArgumentException.class, () -> Integers.isPowerOf2(-1));
@@ -89,7 +89,7 @@ class IntegersTest {
   }
 
   @Test
-  public void testMisra3_3() {
+  void testMisra3_3() {
     int a = -5;
     int b = 3;
     int div = a / b;
@@ -99,7 +99,7 @@ class IntegersTest {
   }
 
   @Test
-  public void testMisra6_10_3_int() {
+  void testMisra6_10_3_int() {
     int a = Integer.MAX_VALUE;
     int b = Integer.MAX_VALUE;
     long c1 = a + b;
@@ -111,7 +111,7 @@ class IntegersTest {
   }
 
   @Test
-  public void testMisra6_10_3_short() {
+  void testMisra6_10_3_short() {
     short a = Short.MAX_VALUE;
     short b = Short.MAX_VALUE;
     int c1 = a + b;
@@ -119,7 +119,7 @@ class IntegersTest {
   }
 
   @Test
-  public void testMisra6_10_3_byte() {
+  void testMisra6_10_3_byte() {
     byte a = Byte.MAX_VALUE;
     byte b = Byte.MAX_VALUE;
     int c1 = a + b;
@@ -127,7 +127,7 @@ class IntegersTest {
   }
 
   @Test
-  public void testRequireEquals() {
+  void testRequireEquals() {
     assertEquals(3, Integers.requireEquals(3, 3));
     assertEquals(7, Integers.requireEquals(7, 7));
     assertThrows(IllegalArgumentException.class, () -> Integers.requireEquals(3, 4));
@@ -135,12 +135,12 @@ class IntegersTest {
   }
 
   @Test
-  public void testRequireEqualsMessage() {
+  void testRequireEqualsMessage() {
     assertThrows(Exception.class, () -> Integers.requireEquals(3, 4));
   }
 
   @Test
-  public void testIsPermutation() {
+  void testIsPermutation() {
     assertTrue(Integers.isPermutation(new int[] {}));
     assertTrue(Integers.isPermutation(new int[] { 2, 0, 1 }));
     assertTrue(Integers.isPermutation(new int[] { 2, 3, 1, 0 }));
@@ -150,23 +150,23 @@ class IntegersTest {
   }
 
   @Test
-  public void testRequirePermutation() {
+  void testRequirePermutation() {
     Integers.requirePermutation(new int[] { 0, 2, 1 });
     assertThrows(IllegalArgumentException.class, () -> Integers.requirePermutation(new int[] { 2, 3 }));
   }
 
   @Test
-  public void testRequirePermutationMessage() {
+  void testRequirePermutationMessage() {
     assertThrows(Exception.class, () -> Integers.requirePermutation(new int[] { 0, 2 }));
   }
 
   @Test
-  public void testRequirePermutationLong() {
+  void testRequirePermutationLong() {
     assertThrows(Exception.class, () -> Integers.requirePermutation(new int[20]));
   }
 
   @Test
-  public void testParity() {
+  void testParity() {
     assertEquals(Integers.parity(new int[] { 0, 1 }), 0);
     assertEquals(Integers.parity(new int[] { 1, 0 }), 1);
     assertEquals(Integers.parity(new int[] { 2, 0, 1 }), 0);
@@ -174,20 +174,20 @@ class IntegersTest {
   }
 
   @Test
-  public void testParityFail() {
+  void testParityFail() {
     assertThrows(IllegalArgumentException.class, () -> Integers.parity(new int[] { 0, 0 }));
     assertThrows(IllegalArgumentException.class, () -> Integers.parity(new int[] { 1, 1 }));
     assertThrows(IllegalArgumentException.class, () -> Integers.parity(new int[] { 2, 1 }));
   }
 
   @Test
-  public void testAsList() {
+  void testAsList() {
     assertEquals(Integers.asList(new int[] { 3, 4, 556 }), Arrays.asList(3, 4, 556));
     // assertEquals(Integers.asList(3, 4, 556), Arrays.asList(3, 4, 556));
   }
 
   @Test
-  public void testAsListNullFail() {
+  void testAsListNullFail() {
     assertThrows(NullPointerException.class, () -> Integers.asList(null));
   }
 }

@@ -13,19 +13,19 @@ import ch.alpine.tensor.qty.Quantity;
 
 class AbsTest {
   @Test
-  public void testReal() {
+  void testReal() {
     assertEquals(Abs.FUNCTION.apply(RealScalar.of(+3)), RealScalar.of(3));
     assertEquals(Abs.FUNCTION.apply(RealScalar.of(-3)), RealScalar.of(3));
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     assertEquals(Abs.FUNCTION.apply(ComplexScalar.of(3, 4)), RealScalar.of(5));
     assertEquals(Abs.FUNCTION.apply(ComplexScalar.of(4, 3)), RealScalar.of(5));
   }
 
   @Test
-  public void testBetween() {
+  void testBetween() {
     Scalar a = Quantity.of(+9, "s");
     Scalar b = Quantity.of(+5, "s");
     Scalar c = Quantity.of(-2, "s");
@@ -38,7 +38,7 @@ class AbsTest {
   }
 
   @Test
-  public void testNaN() {
+  void testNaN() {
     assertEquals(Abs.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
   }
 }

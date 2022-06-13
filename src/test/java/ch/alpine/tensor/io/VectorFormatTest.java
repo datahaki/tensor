@@ -20,7 +20,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 
 class VectorFormatTest {
   @Test
-  public void testVector() throws IOException {
+  void testVector() throws IOException {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream(128);
     Tensor tensor = Tensors.fromString("{2, 3, 4.125,\"abc\", 4/3[m*s^-1],xyz\",3+I/7,ethz}");
     ExportHelper.of(Extension.VECTOR, tensor, outputStream);
@@ -31,7 +31,7 @@ class VectorFormatTest {
   }
 
   @Test
-  public void testMatrix() throws IOException {
+  void testMatrix() throws IOException {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream(128);
     Tensor tensor = IdentityMatrix.of(3);
     ExportHelper.of(Extension.VECTOR, tensor, outputStream);
@@ -40,7 +40,7 @@ class VectorFormatTest {
   }
 
   @Test
-  public void testStrings() {
+  void testStrings() {
     Tensor tensor = VectorFormat.parse(Stream.of("ethz", "idsc", "tensor library"));
     VectorQ.requireLength(tensor, 3);
     assertEquals(tensor.Get(0), StringScalar.of("ethz"));
@@ -52,7 +52,7 @@ class VectorFormatTest {
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream(128);
     Tensor tensor = RealScalar.ONE;
     assertThrows(Exception.class, () -> ExportHelper.of(Extension.VECTOR, tensor, outputStream));

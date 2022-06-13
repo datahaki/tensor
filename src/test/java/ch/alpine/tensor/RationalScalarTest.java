@@ -19,7 +19,7 @@ import ch.alpine.tensor.sca.pow.Power;
 
 class RationalScalarTest {
   @Test
-  public void testAdd() {
+  void testAdd() {
     Scalar a = RationalScalar.of(3, 17);
     Scalar b = RationalScalar.of(4, 21);
     Scalar c = RationalScalar.of(131, 357);
@@ -32,25 +32,25 @@ class RationalScalarTest {
   }
 
   @Test
-  public void testReciprocal() {
+  void testReciprocal() {
     Scalar a = RationalScalar.of(3, -17);
     assertEquals(a.reciprocal(), RationalScalar.of(-17, 3));
   }
 
   @Test
-  public void testInvertFail() {
+  void testInvertFail() {
     assertThrows(ArithmeticException.class, () -> RationalScalar.of(0, 1).reciprocal());
   }
 
   @Test
-  public void testNegate() {
+  void testNegate() {
     Scalar scalar = RationalScalar.of(3, 17).negate();
     assertEquals(scalar, RationalScalar.of(3, -17));
     assertEquals(scalar.toString(), "-3/17");
   }
 
   @Test
-  public void testTensor() {
+  void testTensor() {
     Tensor a = Tensors.of( //
         RationalScalar.of(1, 2), //
         RationalScalar.of(3, 5), //
@@ -65,7 +65,7 @@ class RationalScalarTest {
   }
 
   @Test
-  public void testMultiply() {
+  void testMultiply() {
     Tensor a = Tensors.of( //
         RationalScalar.of(1, 2), //
         RationalScalar.of(3, 5), //
@@ -75,7 +75,7 @@ class RationalScalarTest {
   }
 
   @Test
-  public void testSolve() {
+  void testSolve() {
     Tensor a1 = Tensors.of( //
         RationalScalar.of(1, 2), //
         RationalScalar.of(3, 5) //
@@ -98,7 +98,7 @@ class RationalScalarTest {
   }
 
   @Test
-  public void testDouble1over3() {
+  void testDouble1over3() {
     Scalar r = RationalScalar.of(1, 3);
     double d = r.number().doubleValue();
     double e = 1.0 / 3.0;
@@ -106,7 +106,7 @@ class RationalScalarTest {
   }
 
   @Test
-  public void testDouble2over3() {
+  void testDouble2over3() {
     Scalar r = RationalScalar.of(2, 3);
     double d = r.number().doubleValue();
     double e = Math.nextUp(2.0 / 3.0);
@@ -114,7 +114,7 @@ class RationalScalarTest {
   }
 
   @Test
-  public void testPower() {
+  void testPower() {
     assertEquals(Power.of(RationalScalar.of(2, 3), 0), RealScalar.ONE);
     assertEquals(Power.of(RationalScalar.of(2, 3), 1), RationalScalar.of(2, 3));
     assertEquals(Power.of(RationalScalar.of(2, 3), 3), RationalScalar.of(2 * 2 * 2, 3 * 3 * 3));
@@ -122,27 +122,27 @@ class RationalScalarTest {
   }
 
   @Test
-  public void testPower2() {
+  void testPower2() {
     assertEquals(Power.of(RealScalar.ONE, new BigInteger("23847625384765238754826534")), RealScalar.ONE);
     assertEquals(Power.of(RealScalar.ONE, new BigInteger("-23847625384765238754826534")), RealScalar.ONE);
   }
 
   @Test
-  public void testPowerFractional() {
+  void testPowerFractional() {
     Scalar lhs = Power.of(RationalScalar.of(-2, 3), 1.3);
     Scalar rhs = Scalars.fromString(" -  0.3469764892956748` - 0.47757216669512637` *I ");
     Chop._13.requireClose(lhs, rhs);
   }
 
   @Test
-  public void testSerializable() throws Exception {
+  void testSerializable() throws Exception {
     Scalar scalar = RationalScalar.of(3, 5);
     assertEquals(scalar, Serialization.parse(Serialization.of(scalar)));
     assertEquals(scalar, Serialization.copy(scalar));
   }
 
   @Test
-  public void testSort() {
+  void testSort() {
     Tensor v = Tensors.of(RationalScalar.of(3, 4), RationalScalar.of(-1, 7), RealScalar.ZERO);
     Tensor s = Sort.of(v);
     Tensor r = Tensors.fromString("{-1/7, 0, 3/4}");
@@ -150,7 +150,7 @@ class RationalScalarTest {
   }
 
   @Test
-  public void testCompare() {
+  void testCompare() {
     assertTrue(Scalars.lessThan(RationalScalar.of(-3, 2), RealScalar.ZERO));
     assertFalse(Scalars.lessThan(RationalScalar.of(3, 2), RealScalar.ZERO));
     assertTrue(!Scalars.lessThan(RealScalar.ZERO, RationalScalar.of(-3, 2)));
@@ -161,7 +161,7 @@ class RationalScalarTest {
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     assertEquals(RationalScalar.of(0, 1), RealScalar.ZERO);
     assertEquals(RationalScalar.of(0, 1), DoubleScalar.of(0));
     assertEquals(RealScalar.ZERO, RationalScalar.of(0, 1));
@@ -170,7 +170,7 @@ class RationalScalarTest {
   }
 
   @Test
-  public void testNumber() {
+  void testNumber() {
     Scalar r = RealScalar.of(48962534765312235L);
     assertEquals(r.number().getClass(), Long.class);
     @SuppressWarnings("unused")
@@ -178,14 +178,14 @@ class RationalScalarTest {
   }
 
   @Test
-  public void testMixedDivision() {
+  void testMixedDivision() {
     Scalar zero = RealScalar.ZERO;
     Scalar eps = DoubleScalar.of(Math.nextUp(0.0));
     assertEquals(zero.divide(eps), zero);
   }
 
   @Test
-  public void testIsInteger() {
+  void testIsInteger() {
     assertTrue(((RationalScalar) RationalScalar.of(0, 990)).isInteger());
     assertTrue(((RationalScalar) RationalScalar.of(0, -10)).isInteger());
     assertTrue(((RationalScalar) RationalScalar.of(5, 1)).isInteger());
@@ -200,17 +200,17 @@ class RationalScalarTest {
   }
 
   @Test
-  public void testDivideZeroFail() {
+  void testDivideZeroFail() {
     assertThrows(ArithmeticException.class, () -> RealScalar.ONE.divide(RealScalar.ZERO));
   }
 
   @Test
-  public void testZeroUnderFail() {
+  void testZeroUnderFail() {
     assertThrows(ArithmeticException.class, () -> RealScalar.ZERO.under(RealScalar.ONE));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> RationalScalar.of(null, BigInteger.ONE));
     assertThrows(NullPointerException.class, () -> RationalScalar.of(BigInteger.ONE, null));
   }

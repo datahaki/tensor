@@ -15,35 +15,35 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 
 class MetricPrefixTest {
   @Test
-  public void testGiga() {
+  void testGiga() {
     assertEquals(MetricPrefix.GIGA.prefix("Hz"), "GHz");
     assertEquals(MetricPrefix.GIGA.english("Hertz"), "Gigahertz");
     assertEquals(MetricPrefix.GIGA.factor(), RealScalar.of(1_000_000_000));
   }
 
   @Test
-  public void testHecto() {
+  void testHecto() {
     assertEquals(MetricPrefix.HECTO.prefix("m"), "hm");
     assertEquals(MetricPrefix.HECTO.english("Meter"), "Hectometer");
     assertEquals(MetricPrefix.HECTO.factor(), RationalScalar.of(100, 1));
   }
 
   @Test
-  public void testMicro() {
+  void testMicro() {
     assertEquals(MetricPrefix.MICRO.prefix("s"), "us");
     assertEquals(MetricPrefix.MICRO.english("Seconds"), "Microseconds");
     assertEquals(MetricPrefix.MICRO.factor(), RationalScalar.of(1, 1_000_000));
   }
 
   @Test
-  public void testNull() {
+  void testNull() {
     assertEquals(MetricPrefix.NULL.prefix("A"), "A");
     assertEquals(MetricPrefix.NULL.english("Amperes"), "Amperes");
     assertEquals(MetricPrefix.NULL.factor(), RealScalar.ONE);
   }
 
   @Test
-  public void testUnique() {
+  void testUnique() {
     int n = MetricPrefix.values().length;
     // assertEquals(Stream.of(MetricPrefix.values()).map(MetricPrefix::english).distinct().count(), n);
     assertEquals(Stream.of(MetricPrefix.values()).map(MetricPrefix::factor).distinct().count(), n);
@@ -51,12 +51,12 @@ class MetricPrefixTest {
   }
 
   @Test
-  public void testExact() {
+  void testExact() {
     Stream.of(MetricPrefix.values()).map(MetricPrefix::factor).forEach(ExactScalarQ::require);
   }
 
   @Test
-  public void testPackage() {
+  void testPackage() {
     assertFalse(Modifier.isPublic(MetricPrefix.class.getModifiers()));
   }
 }

@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class GompertzMakehamDistributionTest {
   @Test
-  public void testPDF() throws ClassNotFoundException, IOException {
+  void testPDF() throws ClassNotFoundException, IOException {
     Distribution distribution = //
         Serialization.copy(GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2)));
     PDF pdf = PDF.of(distribution);
@@ -43,7 +43,7 @@ class GompertzMakehamDistributionTest {
   }
 
   @Test
-  public void testCDF() {
+  void testCDF() {
     Distribution distribution = //
         GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     CDF cdf = CDF.of(distribution);
@@ -57,7 +57,7 @@ class GompertzMakehamDistributionTest {
   }
 
   @Test
-  public void testRandomVariate() {
+  void testRandomVariate() {
     GompertzMakehamDistribution gmd = (GompertzMakehamDistribution) //
     GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     assertTrue(Scalars.isZero(gmd.protected_quantile(RealScalar.ZERO)));
@@ -67,7 +67,7 @@ class GompertzMakehamDistributionTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     Scalar rand = RandomVariate.of(distribution);
     assertInstanceOf(Quantity.class, rand);
@@ -85,7 +85,7 @@ class GompertzMakehamDistributionTest {
   }
 
   @Test
-  public void testQuantityPDF() {
+  void testQuantityPDF() {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     {
       Scalar prob = PDF.of(distribution).at(Quantity.of(-1, "m"));
@@ -97,21 +97,21 @@ class GompertzMakehamDistributionTest {
   }
 
   @Test
-  public void testVarianceFail() {
+  void testVarianceFail() {
     GompertzMakehamDistribution distribution = //
         (GompertzMakehamDistribution) GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     assertThrows(UnsupportedOperationException.class, () -> distribution.variance());
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     String string = distribution.toString();
     assertTrue(string.startsWith(GompertzMakehamDistribution.class.getSimpleName()));
   }
 
   @Test
-  public void testPdfUnitFail() {
+  void testPdfUnitFail() {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(Quantity.of(0.0, "m")), Quantity.of(0.03, "m^-1"));
@@ -120,7 +120,7 @@ class GompertzMakehamDistributionTest {
   }
 
   @Test
-  public void testCdfUnitFail() {
+  void testCdfUnitFail() {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     CDF cdf = CDF.of(distribution);
     Tolerance.CHOP.requireClose(cdf.p_lessEquals(Quantity.of(+0.1, "m")), RealScalar.of(0.003040820706232905));
@@ -134,7 +134,7 @@ class GompertzMakehamDistributionTest {
   }
 
   @Test
-  public void testInverseCDFFail() {
+  void testInverseCDFFail() {
     Distribution distribution = //
         GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -143,7 +143,7 @@ class GompertzMakehamDistributionTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> GompertzMakehamDistribution.of(RealScalar.of(0), RealScalar.of(0.2)));
     assertThrows(TensorRuntimeException.class, () -> GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0)));
     assertThrows(TensorRuntimeException.class, () -> GompertzMakehamDistribution.of(RealScalar.of(1e-300), RealScalar.of(1e-300)));

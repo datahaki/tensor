@@ -19,7 +19,7 @@ import ch.alpine.tensor.red.Entrywise;
 
 class InverseFourierTest {
   @RepeatedTest(10)
-  public void testRandom() {
+  void testRandom() {
     Distribution distribution = NormalDistribution.standard();
     for (int n = 0; n < 7; ++n) {
       Tensor vector = Entrywise.with(ComplexScalar::of).apply( //
@@ -30,17 +30,17 @@ class InverseFourierTest {
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(IllegalArgumentException.class, () -> InverseFourier.of(RealScalar.ONE));
   }
 
   @Test
-  public void testFailEmpty() {
+  void testFailEmpty() {
     assertThrows(IllegalArgumentException.class, () -> InverseFourier.of(Tensors.empty()));
   }
 
   @Test
-  public void testFailMatrix() {
+  void testFailMatrix() {
     assertThrows(ClassCastException.class, () -> InverseFourier.of(HilbertMatrix.of(4)));
   }
 }

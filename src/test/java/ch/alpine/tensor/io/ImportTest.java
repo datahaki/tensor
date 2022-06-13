@@ -23,7 +23,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ImportTest {
   @Test
-  public void testCsv() throws Exception {
+  void testCsv() throws Exception {
     String string = "/io/libreoffice_calc.csv";
     File file = new File(getClass().getResource(string).getFile());
     Tensor table = Import.of(file);
@@ -32,7 +32,7 @@ class ImportTest {
   }
 
   @Test
-  public void testCsvEmpty() throws Exception {
+  void testCsvEmpty() throws Exception {
     String string = "/io/empty.csv"; // file has byte length 0
     File file = new File(getClass().getResource(string).getFile());
     assertTrue(Tensors.isEmpty(Import.of(file)));
@@ -40,7 +40,7 @@ class ImportTest {
   }
 
   @Test
-  public void testCsvEmptyLine() throws Exception {
+  void testCsvEmptyLine() throws Exception {
     String string = "/io/emptyline.csv"; // file consist of a single line break character
     File file = new File(getClass().getResource(string).getFile());
     Tensor expected = Tensors.fromString("{{}}").unmodifiable();
@@ -49,13 +49,13 @@ class ImportTest {
   }
 
   @Test
-  public void testCsvFail() {
+  void testCsvFail() {
     File file = new File("/io/doesnotexist.csv");
     assertThrows(Exception.class, () -> Import.of(file));
   }
 
   @Test
-  public void testCsvGz() throws Exception {
+  void testCsvGz() throws Exception {
     String string = "/io/mathematica23.csv.gz";
     File file = new File(getClass().getResource(string).getFile());
     Tensor table = Import.of(file);
@@ -66,7 +66,7 @@ class ImportTest {
    * Import::of the file was not closed sufficiently fast to allow the deletion of
    * the file. */
   @Test
-  public void testCsvClosed(@TempDir File tempDir) throws IOException {
+  void testCsvClosed(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.csv");
     Export.of(file, Tensors.fromString("{{1, 2}, {3, 4}}"));
     assertTrue(file.isFile());
@@ -75,7 +75,7 @@ class ImportTest {
   }
 
   @Test
-  public void testImageClose(@TempDir File tempDir) throws Exception {
+  void testImageClose(@TempDir File tempDir) throws Exception {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4}}");
     File file = new File(tempDir, "file.png");
     Export.of(file, tensor);
@@ -85,7 +85,7 @@ class ImportTest {
   }
 
   @Test
-  public void testFolderCsvClosed(@TempDir File tempDir) throws IOException {
+  void testFolderCsvClosed(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.csv");
     Export.of(file, Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}}"));
     assertTrue(file.isFile());
@@ -95,14 +95,14 @@ class ImportTest {
   }
 
   @Test
-  public void testPng() throws Exception {
+  void testPng() throws Exception {
     File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
   }
 
   @Test
-  public void testPngClose(@TempDir File tempDir) throws Exception {
+  void testPngClose(@TempDir File tempDir) throws Exception {
     Tensor tensor = ResourceData.of("/io/image/rgba15x33.png");
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     File file = new File(tempDir, "file.png");
@@ -112,7 +112,7 @@ class ImportTest {
   }
 
   @Test
-  public void testJpg() throws Exception {
+  void testJpg() throws Exception {
     File file = new File(getClass().getResource("/io/image/rgb15x33.jpg").getFile());
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
@@ -120,7 +120,7 @@ class ImportTest {
   }
 
   @Test
-  public void testObject() throws ClassNotFoundException, DataFormatException, IOException {
+  void testObject() throws ClassNotFoundException, DataFormatException, IOException {
     // Export.object(UserHome.file("string.object"), "tensorlib.importtest");
     File file = new File(getClass().getResource("/io/string.object").getFile());
     String string = Import.object(file);
@@ -139,19 +139,19 @@ class ImportTest {
   }
 
   @Test
-  public void testUnknownFail() {
+  void testUnknownFail() {
     File file = new File(getClass().getResource("/io/extension.unknown").getFile());
     assertThrows(IllegalArgumentException.class, () -> Import.of(file));
   }
 
   @Test
-  public void testUnknownObjectFail() {
+  void testUnknownObjectFail() {
     File file = new File("doesnotexist.fileext");
     assertThrows(IOException.class, () -> Import.object(file));
   }
 
   @Test
-  public void testTensor(@TempDir File tempDir) throws Exception {
+  void testTensor(@TempDir File tempDir) throws Exception {
     File file = new File(tempDir, "file.object");
     Export.object(file, Tensors.vector(1, 2, 3, 4));
     Tensor vector = Import.object(file);
@@ -159,7 +159,7 @@ class ImportTest {
   }
 
   @Test
-  public void testProperties() throws FileNotFoundException, IOException {
+  void testProperties() throws FileNotFoundException, IOException {
     File file = new File(getClass().getResource("/io/simple.properties").getFile());
     Properties properties = Import.properties(file);
     assertEquals(Scalars.fromString(properties.get("maxTor").toString()), Quantity.of(3, "m*s"));

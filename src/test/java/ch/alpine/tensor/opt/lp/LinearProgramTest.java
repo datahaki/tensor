@@ -15,7 +15,7 @@ import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 /** Reference: "Linear and Integer Programming made Easy", 2016 */
 class LinearProgramTest {
   @Test
-  public void testP59a() {
+  void testP59a() {
     LinearProgram lpp = LinearProgram.of( //
         Objective.MAX, //
         Tensors.vector(2, 1), //
@@ -34,7 +34,7 @@ class LinearProgramTest {
   }
 
   @Test
-  public void testP60a() {
+  void testP60a() {
     LinearProgram linearProgram = LinearProgram.of( //
         Objective.MIN, Tensors.vector(-1, 1), //
         ConstraintType.LESS_EQUALS, //
@@ -47,7 +47,7 @@ class LinearProgramTest {
   }
 
   @Test
-  public void testP62() {
+  void testP62() {
     LinearProgram lpp = LinearProgram.of( //
         Objective.MIN, Tensors.vector(1, 2, 3), //
         ConstraintType.GREATER_EQUALS, //
@@ -68,7 +68,7 @@ class LinearProgramTest {
 
   // MATLAB linprog example
   @Test
-  public void testLinProgMatlab1() { // min c.x == -10/9
+  void testLinProgMatlab1() { // min c.x == -10/9
     Tensor c = Tensors.fromString("{-1,-1/3}");
     Tensor m = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");
     Tensor b = Tensors.fromString("{2[m], 1[m], 2[m], 1[m], -1[m], 2[m]}");
@@ -82,7 +82,7 @@ class LinearProgramTest {
 
   // MATLAB linprog example
   @Test
-  public void testMatlab1() { // min c.x == -10/9
+  void testMatlab1() { // min c.x == -10/9
     Tensor c = Tensors.fromString("{-1[m], -1/3[s]}");
     Tensor m = Tensors.fromString("{{1[m], 1[s]}, {1[m], 1/4[s]}, {1[m], -1[s]}, {-1/4[m], -1[s]}, {-1[m], -1[s]}, {-1[m], 1[s]}}");
     Tensor b = Tensors.vector(2, 1, 2, 1, -1, 2);
@@ -95,13 +95,13 @@ class LinearProgramTest {
   }
 
   @Test
-  public void testObjective() {
+  void testObjective() {
     assertEquals(Objective.MIN.flip(), Objective.MAX);
     assertEquals(Objective.MAX.flip(), Objective.MIN);
   }
 
   @Test
-  public void testConstraint() {
+  void testConstraint() {
     assertEquals(ConstraintType.LESS_EQUALS.flipInequality(), ConstraintType.GREATER_EQUALS);
     assertEquals(ConstraintType.GREATER_EQUALS.flipInequality(), ConstraintType.LESS_EQUALS);
     assertThrows(RuntimeException.class, () -> ConstraintType.EQUALS.flipInequality());

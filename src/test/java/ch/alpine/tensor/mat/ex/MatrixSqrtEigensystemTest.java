@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class MatrixSqrtEigensystemTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Random random = new Random(1);
     int n = 11;
     Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), random, n, n));
@@ -51,7 +51,7 @@ class MatrixSqrtEigensystemTest {
   }
 
   @Test
-  public void testNegative() {
+  void testNegative() {
     Tensor matrix = Tensors.fromString("{{-10[m^2], -2[m^2]}, {-2[m^2], 4[m^2]}}");
     MatrixSqrt matrixSqrt = new MatrixSqrtEigensystem(Eigensystem.ofSymmetric(matrix));
     assertTrue(Scalars.lessThan(Quantity.of(2, "m"), Matrix2Norm.bound(matrixSqrt.sqrt().map(Imag.FUNCTION))));
@@ -60,7 +60,7 @@ class MatrixSqrtEigensystemTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Tensor matrix = Tensors.fromString("{{10[m^2], -2[m^2]}, {-2[m^2], 4[m^2]}}");
     MatrixSqrtEigensystem matrixSqrtSymmetric = new MatrixSqrtEigensystem(Eigensystem.ofSymmetric(matrix));
     Tensor eye = Dot.of(matrixSqrtSymmetric.sqrt(), matrixSqrtSymmetric.sqrt_inverse());

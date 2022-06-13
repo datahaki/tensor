@@ -26,7 +26,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 
 class BSplineInterpolationTest {
   @Test
-  public void testVector() {
+  void testVector() {
     Tensor tensor = Tensors.vector(2, 6, 4, 9, 10, 3);
     for (int degree = 0; degree < 4; ++degree) {
       Interpolation interpolation = BSplineInterpolation.of(degree, tensor);
@@ -39,7 +39,7 @@ class BSplineInterpolationTest {
   }
 
   @Test
-  public void testMatrix1() {
+  void testMatrix1() {
     Tensor tensor = HilbertMatrix.of(10, 5);
     for (int degree = 0; degree < 4; ++degree) {
       Interpolation interpolation = BSplineInterpolation.of(degree, tensor);
@@ -60,7 +60,7 @@ class BSplineInterpolationTest {
   }
 
   @Test
-  public void testMatrix2() {
+  void testMatrix2() {
     Tensor tensor = HilbertMatrix.of(5, 10);
     for (int degree = 0; degree < 4; ++degree) {
       Interpolation interpolation = BSplineInterpolation.of(degree, tensor);
@@ -72,7 +72,7 @@ class BSplineInterpolationTest {
   }
 
   @Test
-  public void testAd() {
+  void testAd() {
     Tensor tensor = LeviCivitaTensor.of(3);
     for (int degree = 0; degree < 4; ++degree) {
       Interpolation interpolation = BSplineInterpolation.of(degree, tensor);
@@ -87,7 +87,7 @@ class BSplineInterpolationTest {
   }
 
   @Test
-  public void testSolve() {
+  void testSolve() {
     Tensor interp = Tensors.vector(1, 0, 3, 2);
     for (int degree = 0; degree < 4; ++degree) {
       Tensor tensor = BSplineInterpolation.solve(degree, interp);
@@ -99,7 +99,7 @@ class BSplineInterpolationTest {
   }
 
   @Test
-  public void testLinear() {
+  void testLinear() {
     for (int n = 1; n < 6; ++n) {
       Tensor tensor = BSplineInterpolation.matrix(1, n);
       assertEquals(tensor, IdentityMatrix.of(n));
@@ -108,7 +108,7 @@ class BSplineInterpolationTest {
   }
 
   @Test
-  public void testQuadratic() {
+  void testQuadratic() {
     for (int n = 1; n <= 6; ++n) {
       Tensor vector = Array.of(l -> RealScalar.ONE, n);
       Tensor tensor = BSplineInterpolation.matrix(2, n);
@@ -119,7 +119,7 @@ class BSplineInterpolationTest {
   }
 
   @Test
-  public void testCubic() {
+  void testCubic() {
     for (int n = 1; n <= 6; ++n) {
       Tensor vector = Array.of(l -> RealScalar.ONE, n);
       Tensor tensor = BSplineInterpolation.matrix(3, n);

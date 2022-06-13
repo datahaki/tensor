@@ -21,7 +21,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class DenmanBeaversDetTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     for (int n = 1; n < 10; ++n) {
       Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
       Tensor x2 = MatrixPower.of(x, 2);
@@ -38,7 +38,7 @@ class DenmanBeaversDetTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Tensor x2 = Tensors.fromString("{{6, 1+5*I}, {1-5*I, 11}}");
     HermitianMatrixQ.require(x2);
     DenmanBeaversDet denmanBeaversDet = new DenmanBeaversDet(x2, Tolerance.CHOP);
@@ -50,7 +50,7 @@ class DenmanBeaversDetTest {
 
   @SuppressWarnings("unused")
   @Test
-  public void testFail() throws IOException {
+  void testFail() throws IOException {
     Tensor matrix = ResourceData.of("/mat/dbd_fail.csv");
     try {
       new DenmanBeaversDet(matrix, Tolerance.CHOP);

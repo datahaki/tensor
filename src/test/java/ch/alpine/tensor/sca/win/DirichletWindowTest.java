@@ -17,7 +17,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class DirichletWindowTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     ScalarUnaryOperator scalarUnaryOperator = DirichletWindow.FUNCTION;
     assertEquals(scalarUnaryOperator.apply(RealScalar.of(+0.1)), RealScalar.ONE);
     assertEquals(scalarUnaryOperator.apply(RealScalar.of(+0.6)), RealScalar.ZERO);
@@ -26,21 +26,21 @@ class DirichletWindowTest {
   }
 
   @Test
-  public void testSemiExact() {
+  void testSemiExact() {
     Scalar scalar = DirichletWindow.FUNCTION.apply(RealScalar.of(0.5));
     assertTrue(Scalars.nonZero(scalar));
     ExactScalarQ.require(scalar);
   }
 
   @Test
-  public void testWindow() {
+  void testWindow() {
     ScalarUnaryOperator suo = DirichletWindow.FUNCTION;
     assertTrue(suo.equals(DirichletWindow.FUNCTION));
     assertEquals(suo, DirichletWindow.FUNCTION);
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> DirichletWindow.FUNCTION.apply(Quantity.of(0, "s")));
     assertThrows(TensorRuntimeException.class, () -> DirichletWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }

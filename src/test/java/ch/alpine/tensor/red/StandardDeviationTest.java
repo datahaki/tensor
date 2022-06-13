@@ -22,13 +22,13 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
 class StandardDeviationTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Scalar scalar = StandardDeviation.ofVector(Tensors.vector(1, 2, 6, 3, -2, 3, 10));
     assertEquals(scalar, Sqrt.of(RationalScalar.of(102, 7)));
   }
 
   @Test
-  public void testNormalize() {
+  void testNormalize() {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(StandardDeviation::ofVector);
     Tensor tensor = Tensors.vector(1, 5, 3, 7, 5, 2);
     Tensor result = tensorUnaryOperator.apply(tensor);
@@ -36,17 +36,17 @@ class StandardDeviationTest {
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> StandardDeviation.ofVector(RealScalar.ONE));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(ClassCastException.class, () -> StandardDeviation.ofVector(HilbertMatrix.of(3)));
   }
 
   @Test
-  public void testDistribution() {
+  void testDistribution() {
     Scalar scalar = StandardDeviation.of(UniformDistribution.of(10, 20));
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(2.8867513459481287));
   }

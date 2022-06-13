@@ -21,7 +21,7 @@ import ch.alpine.tensor.nrm.Normalize;
 
 class TotalTest {
   @Test
-  public void testTotal() {
+  void testTotal() {
     Tensor a = Tensors.vectorLong(7, 2);
     Tensor b = Tensors.vectorLong(3, 4);
     Tensor c = Tensors.vectorLong(2, 2);
@@ -34,32 +34,32 @@ class TotalTest {
   }
 
   @Test
-  public void testAddEmpty() {
+  void testAddEmpty() {
     Tensor a = Tensors.of(Tensors.empty());
     Tensor b = Total.of(a);
     assertEquals(b, Tensors.empty());
   }
 
   @Test
-  public void testExample() {
+  void testExample() {
     Tensor tensor = Total.of(Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}}"));
     assertEquals(tensor, Tensors.vector(9, 12));
   }
 
   @Test
-  public void testOfVectorSimple() {
+  void testOfVectorSimple() {
     Scalar scalar = Total.ofVector(Tensors.vector(1, 2, 3));
     assertEquals(scalar, RealScalar.of(6));
   }
 
   @Test
-  public void testOfVectorEmpty() {
+  void testOfVectorEmpty() {
     Scalar scalar = Total.ofVector(Tensors.empty());
     assertEquals(scalar, RealScalar.ZERO);
   }
 
   @Test
-  public void testOfVectorNormalize() throws ClassNotFoundException, IOException {
+  void testOfVectorNormalize() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);
     TensorUnaryOperator copy = Serialization.copy(tensorUnaryOperator);
     Tensor vector = copy.apply(Tensors.vector(1, 2, 3));
@@ -67,13 +67,13 @@ class TotalTest {
   }
 
   @Test
-  public void testOfVectorFail() {
+  void testOfVectorFail() {
     assertThrows(TensorRuntimeException.class, () -> Total.ofVector(RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> Total.ofVector(HilbertMatrix.of(3)));
   }
 
   @Test
-  public void testTotalScalarFail() {
+  void testTotalScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Total.of(RealScalar.ONE));
   }
 }

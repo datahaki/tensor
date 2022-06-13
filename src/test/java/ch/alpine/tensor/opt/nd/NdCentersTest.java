@@ -16,7 +16,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class NdCentersTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     CoordinateBoundingBox outer = CoordinateBounds.of(Tensors.vector(0.1, 0.3), Tensors.vector(2.4, 3.5));
     CoordinateBoundingBox inner = CoordinateBounds.of(Tensors.vector(1, 1), Tensors.vector(2, 3));
     for (NdCenters ndCenters : NdCenters.values())
@@ -28,7 +28,7 @@ class NdCentersTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     CoordinateBoundingBox outer = CoordinateBounds.of(Tensors.fromString("{0.1[m], 0.3[m]}"), Tensors.fromString("{2.4[m], 2.7[m]}"));
     CoordinateBoundingBox inner = CoordinateBounds.of(Tensors.fromString("{1[m], 1[m]}"), Tensors.fromString("{2[m], 3[m]}"));
     for (NdCenters ndCenters : NdCenters.values())
@@ -40,7 +40,7 @@ class NdCentersTest {
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     CoordinateBoundingBox inner = CoordinateBounds.of(Tensors.fromString("{1[m], 1[m]}"), Tensors.fromString("{2[m], 3[m]}"));
     for (NdCenters ndCenters : NdCenters.values())
       for (int count = 0; count < 10; ++count) {
@@ -50,19 +50,19 @@ class NdCentersTest {
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     for (NdCenters ndCenters : NdCenters.values())
       Serialization.copy(ndCenters);
   }
 
   @Test
-  public void testSerializableIf() throws ClassNotFoundException, IOException {
+  void testSerializableIf() throws ClassNotFoundException, IOException {
     for (NdCenters ndCenters : NdCenters.values())
       Serialization.copy(ndCenters.apply(Array.zeros(3)));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     for (NdCenters ndCenters : NdCenters.values())
       assertThrows(NullPointerException.class, () -> ndCenters.apply(null));
   }

@@ -13,7 +13,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 
 class PolygonalNumberTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor tensor = Range.of(0, 8).map(PolygonalNumber::of);
     Tensor expect = Tensors.vector(0, 1, 3, 6, 10, 15, 21, 28);
     assertEquals(tensor, expect);
@@ -21,7 +21,7 @@ class PolygonalNumberTest {
   }
 
   @Test
-  public void testBivar() {
+  void testBivar() {
     Tensor tensor = Range.of(0, 8).map(s -> PolygonalNumber.of(RealScalar.of(5), s));
     Tensor expect = Tensors.vector(0, 1, 5, 12, 22, 35, 51, 70);
     assertEquals(tensor, expect);

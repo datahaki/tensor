@@ -45,7 +45,7 @@ import ch.alpine.tensor.sca.N;
 
 class EigensystemTest {
   @Test
-  public void testExact() {
+  void testExact() {
     // TODO TENSOR ALG tune iterations of phase 1 based on cross checking accuracy to exact result
     int n = 6;
     Distribution distribution = UniformDistribution.of(-10, 10);
@@ -58,7 +58,7 @@ class EigensystemTest {
   }
 
   @RepeatedTest(12)
-  public void testPhase1Tuning(RepetitionInfo repetitionInfo) throws IOException {
+  void testPhase1Tuning(RepetitionInfo repetitionInfo) throws IOException {
     Distribution distribution = UniformDistribution.of(-2, 2);
     int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
@@ -79,7 +79,7 @@ class EigensystemTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Tensor matrix = Tensors.fromString("{{10[m], -2[m]}, {-2[m], 4[m]}}");
     SymmetricMatrixQ.require(matrix);
     {
@@ -96,7 +96,7 @@ class EigensystemTest {
 
   @ParameterizedTest
   @ValueSource(ints = { 8, 9 })
-  public void testQuantityLarge(int n) {
+  void testQuantityLarge(int n) {
     Tensor x = Symmetrize.of(RandomVariate.of(NormalDistribution.standard(), n, n)).map(s -> Quantity.of(s, "m"));
     Eigensystem eigensystem = Eigensystem.ofSymmetric(x);
     eigensystem.values().map(QuantityMagnitude.singleton("m"));
@@ -104,7 +104,7 @@ class EigensystemTest {
 
   @ParameterizedTest
   @ValueSource(ints = { 8, 9 })
-  public void testQuantityDegenerate(int n) {
+  void testQuantityDegenerate(int n) {
     int r = 4;
     Tensor v = Join.of( //
         RandomVariate.of(NormalDistribution.standard(), r), //
@@ -118,38 +118,38 @@ class EigensystemTest {
   }
 
   @Test
-  public void testQuantityMixed() {
+  void testQuantityMixed() {
     Tensor matrix = Tensors.fromString("{{10[m^2], 2[m*kg]}, {2[m*kg], 4[kg^2]}}");
     SymmetricMatrixQ.require(matrix);
     assertThrows(TensorRuntimeException.class, () -> Eigensystem.ofSymmetric(matrix));
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(TensorRuntimeException.class, () -> Eigensystem.ofSymmetric(Tensors.empty()));
   }
 
   @Test
-  public void testNonSymmetricFail() {
+  void testNonSymmetricFail() {
     assertThrows(TensorRuntimeException.class, () -> Eigensystem.ofSymmetric(Tensors.fromString("{{1, 2}, {3, 4}}")));
   }
 
   @Test
-  public void testComplexFail() {
+  void testComplexFail() {
     Tensor matrix = Tensors.fromString("{{I, 0}, {0, I}}");
     SymmetricMatrixQ.require(matrix);
     assertThrows(ClassCastException.class, () -> Eigensystem.ofSymmetric(matrix));
   }
 
   @Test
-  public void testComplex2Fail() {
+  void testComplex2Fail() {
     Tensor matrix = Tensors.fromString("{{0, I}, {I, 0}}");
     SymmetricMatrixQ.require(matrix);
     assertThrows(ClassCastException.class, () -> Eigensystem.ofSymmetric(matrix));
   }
 
   @Test
-  public void testNonSymmetric2Fail() {
+  void testNonSymmetric2Fail() {
     assertThrows(TensorRuntimeException.class, () -> Eigensystem.ofSymmetric(Array.zeros(2, 3)));
   }
 }

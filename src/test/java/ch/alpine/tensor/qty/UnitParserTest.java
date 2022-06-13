@@ -16,7 +16,7 @@ class UnitParserTest {
   }
 
   @Test
-  public void testLookup() {
+  void testLookup() {
     UnitParser.of("A*kg^-1*s^2");
     UnitParser.of("HaqiuytasdMAM");
     UnitParser.of("HaqiuytasdMAM*ASsdlfkjhKJG");
@@ -25,7 +25,7 @@ class UnitParserTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     _confirmFail("Haqiuyt asdMAM");
     _confirmFail("HaqiuytasdMAM2");
     _confirmFail("Haqiuyta2sdMAM");
@@ -38,7 +38,7 @@ class UnitParserTest {
   }
 
   @Test
-  public void testDubious() {
+  void testDubious() {
     assertEquals(UnitParser.of("*a"), UnitParser.of("a"));
     assertEquals(UnitParser.of("a*"), UnitParser.of("a"));
     assertEquals(UnitParser.of("a***"), UnitParser.of("a"));
@@ -46,7 +46,7 @@ class UnitParserTest {
   }
 
   @Test
-  public void testUnderscore() {
+  void testUnderscore() {
     Unit unit = UnitParser.of("V_AC");
     assertTrue(unit == UnitParser.of("V_AC"));
     assertTrue(UnitParser.of("____").equals(UnitParser.of("____")));
@@ -54,7 +54,7 @@ class UnitParserTest {
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(UnitParser.class.getModifiers()));
   }
 }

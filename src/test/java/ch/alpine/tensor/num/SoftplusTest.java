@@ -15,19 +15,19 @@ import ch.alpine.tensor.qty.Quantity;
 
 class SoftplusTest {
   @Test
-  public void testZero() {
+  void testZero() {
     Scalar s = Softplus.FUNCTION.apply(RealScalar.ZERO);
     assertEquals(s, RealScalar.of(0.6931471805599453));
   }
 
   @Test
-  public void testOuter() {
+  void testOuter() {
     assertEquals(Softplus.FUNCTION.apply(RealScalar.of(+1000000)), RealScalar.of(1000000));
     assertEquals(Softplus.FUNCTION.apply(RealScalar.of(-1000000)), RealScalar.of(0));
   }
 
   @Test
-  public void testTensor() {
+  void testTensor() {
     Scalar s0 = Softplus.FUNCTION.apply(RealScalar.ZERO);
     Scalar s1 = Softplus.FUNCTION.apply(RealScalar.ONE);
     Tensor tensor = Softplus.of(Tensors.vector(0, 1));
@@ -35,7 +35,7 @@ class SoftplusTest {
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> Softplus.FUNCTION.apply(Quantity.of(1, "s")));
   }
 }

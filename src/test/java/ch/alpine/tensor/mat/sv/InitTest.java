@@ -68,7 +68,7 @@ class InitTest {
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(Init.class.getModifiers()));
   }
 }

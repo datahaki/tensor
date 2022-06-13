@@ -47,30 +47,30 @@ class TimesTest {
   }
 
   @Test
-  public void testSingle() {
+  void testSingle() {
     assertEquals(Times.of(RealScalar.of(3)), RealScalar.of(3));
   }
 
   @Test
-  public void testProduct() {
+  void testProduct() {
     assertEquals(RealScalar.of(3).multiply(RealScalar.of(8)), RealScalar.of(3 * 8));
     assertEquals(Times.of(RealScalar.of(3), RealScalar.of(8), RealScalar.of(-4)), RealScalar.of(3 * 8 * -4));
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertEquals(Times.of(), RealScalar.ONE);
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     GaussScalar a = GaussScalar.of(3, 7);
     GaussScalar b = GaussScalar.of(4, 7);
     assertEquals(a.multiply(b), GaussScalar.of(12, 7));
   }
 
   @Test
-  public void testPmulEmpty() {
+  void testPmulEmpty() {
     Tensor a = Tensors.of(Tensors.empty());
     Tensor b = pmul(a);
     assertEquals(b, Tensors.empty());
@@ -78,14 +78,14 @@ class TimesTest {
   }
 
   @Test
-  public void testPmul1() {
+  void testPmul1() {
     Tensor a = Tensors.vectorLong(1, 2, 2, 5, 1);
     Tensor r = pmul(a);
     assertEquals(r, RealScalar.of(20));
   }
 
   @Test
-  public void testPmul2() {
+  void testPmul2() {
     Tensor a = Tensors.matrix(new Number[][] { { 1, 2 }, { 3, 4 }, { 5, 6 } });
     Tensor r = pmul(a);
     assertEquals(r, Tensors.vector(15, 48));
@@ -93,14 +93,14 @@ class TimesTest {
   }
 
   @Test
-  public void testPmul3() {
+  void testPmul3() {
     Tensor a = Tensors.matrix(new Number[][] { { 1., 2, 3 }, { 4, 5., 6 } });
     Tensor r = pmul(a);
     assertEquals(r, Tensors.vector(4, 10, 18));
   }
 
   @Test
-  public void testVectorMatrixEx1() {
+  void testVectorMatrixEx1() {
     Tensor mat = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}");
     Times.of(Tensors.vector(-2, 2), mat);
     Tensor factor = Tensors.vector(-2, 2, 2);
@@ -109,7 +109,7 @@ class TimesTest {
   }
 
   @Test
-  public void testVectorMatrixEx2() {
+  void testVectorMatrixEx2() {
     Tensor a = Tensors.of( //
         Tensors.vectorLong(1, 2, 3), //
         Tensors.vectorLong(3, -1, -1));
@@ -122,7 +122,7 @@ class TimesTest {
   }
 
   @Test
-  public void testVectorMatrix() {
+  void testVectorMatrix() {
     Tensor a = Tensors.of( //
         Tensors.vectorLong(new long[] { 1, 2, 3 }), //
         Tensors.fromString("{3,-1,-1}"));
@@ -134,7 +134,7 @@ class TimesTest {
   }
 
   @Test
-  public void testMatrixMatrix() {
+  void testMatrixMatrix() {
     Tensor a = Tensors.of( //
         Tensors.vectorLong(1, 2, 3), //
         Tensors.vectorLong(3, -1, -1));
@@ -146,7 +146,7 @@ class TimesTest {
   }
 
   @Test
-  public void testChain() {
+  void testChain() {
     Tensor tensor = Times.of( //
         Tensors.fromString("{1,2,3}"), //
         Tensors.fromString("{1,2,3}"), //
@@ -157,7 +157,7 @@ class TimesTest {
   }
 
   @Test
-  public void testSingleCopy() {
+  void testSingleCopy() {
     Tensor tensor = Tensors.fromString("{1,2,3}");
     Tensor result = Times.of(tensor);
     tensor.set(RealScalar.of(0), 0);
@@ -166,7 +166,7 @@ class TimesTest {
   }
 
   @Test
-  public void testDiagonalMatrix() {
+  void testDiagonalMatrix() {
     Distribution distribution = UniformDistribution.of(-10, 10);
     Tensor v = RandomVariate.of(distribution, 3);
     Tensor m = RandomVariate.of(distribution, 3, 4, 2);
@@ -174,23 +174,23 @@ class TimesTest {
   }
 
   @Test
-  public void testOperator() throws ClassNotFoundException, IOException {
+  void testOperator() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tuo = Times.operator(Tensors.vector(1, 2, 3));
     Serialization.copy(tuo).apply(Tensors.vector(3, 4, 5));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(IllegalArgumentException.class, () -> Times.of(Tensors.vector(1, 2, 3), Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
-  public void testTotalProdFail() {
+  void testTotalProdFail() {
     assertThrows(TensorRuntimeException.class, () -> pmul(RealScalar.ONE));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> Times.of(RealScalar.of(3), null, RealScalar.of(8)));
   }
 }

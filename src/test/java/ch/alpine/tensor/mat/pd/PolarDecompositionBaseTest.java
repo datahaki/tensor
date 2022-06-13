@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
 class PolarDecompositionBaseTest {
   @Test
-  public void testStrang() throws ClassNotFoundException, IOException {
+  void testStrang() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.fromString("{{3, 0}, {4, 5}}");
     PolarDecomposition polarDecomposition = Serialization.copy(PolarDecomposition.pu(matrix));
     Tensor s = polarDecomposition.getPositiveSemidefinite().multiply(Sqrt.FUNCTION.apply(RealScalar.of(5)));

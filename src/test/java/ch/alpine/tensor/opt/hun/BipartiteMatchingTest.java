@@ -35,7 +35,7 @@ class BipartiteMatchingTest {
   private static final int MAX = 7;
 
   @Test
-  public void testExactPrecision() {
+  void testExactPrecision() {
     Distribution distribution = DiscreteUniformDistribution.of(2, 50);
     for (int rows = 4; rows < MAX; ++rows)
       for (int cols = rows - 3; cols <= rows + 3; ++cols) {
@@ -62,7 +62,7 @@ class BipartiteMatchingTest {
   }
 
   @Test
-  public void testNumericPrecision() {
+  void testNumericPrecision() {
     Distribution distribution = UniformDistribution.of(2, 3);
     for (int rows = 4; rows < MAX; ++rows)
       for (int cols = rows - 3; cols <= rows + 3; ++cols) {
@@ -89,7 +89,7 @@ class BipartiteMatchingTest {
   }
 
   @Test
-  public void testNegative() {
+  void testNegative() {
     Distribution distribution = DiscreteUniformDistribution.of(-50, 50);
     for (int rows = 1; rows < MAX; ++rows)
       for (int cols = 1; cols < MAX; ++cols) {
@@ -99,7 +99,7 @@ class BipartiteMatchingTest {
   }
 
   @Test
-  public void testNegativeWithUnits() {
+  void testNegativeWithUnits() {
     Distribution distribution = UniformDistribution.of(Quantity.of(-9, "MYR"), Quantity.of(10, "MYR"));
     for (int rows = 1; rows < MAX; ++rows)
       for (int cols = 1; cols < MAX; ++cols) {
@@ -112,18 +112,18 @@ class BipartiteMatchingTest {
   }
 
   @Test
-  public void testMixedUnitsFail() {
+  void testMixedUnitsFail() {
     Tensor matrix = Tensors.matrix(new Scalar[][] { { Quantity.of(1, "MYR"), Quantity.of(1, "SGD") } });
     assertThrows(IllegalArgumentException.class, () -> BipartiteMatching.of(matrix));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> BipartiteMatching.of(Pi.VALUE));
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IllegalArgumentException.class, () -> BipartiteMatching.of(Tensors.empty()));
   }
 }

@@ -13,7 +13,7 @@ import ch.alpine.tensor.alg.Dimensions;
 
 class PrincipalComponentsTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor tensor = PrincipalComponents.of(Tensors.fromString("{{2, -5}, {3, 0}, {2, 5}, {2, 0}}"));
     assertEquals(Dimensions.of(tensor), Arrays.asList(4, 2));
   }

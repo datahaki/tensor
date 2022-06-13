@@ -81,7 +81,7 @@ class JacobiMethodTest {
   }
 
   @Test
-  public void testJacobiWithTensor1() {
+  void testJacobiWithTensor1() {
     Tensor tensor = Tensors.fromString("{{2, 3, 0, 1}, {3, 1, 7, 5}, {0, 7, 10, 9}, {1, 5, 9, 13}}");
     Eigensystem eigensystem = Eigensystem.ofSymmetric(tensor);
     Tensor expEigvl = Tensors.fromString("{ 23.853842147040694,  3.3039323944179757, 2.8422254585413294, -4}");
@@ -93,7 +93,7 @@ class JacobiMethodTest {
   }
 
   @Test
-  public void testJacobiWithTensor2() {
+  void testJacobiWithTensor2() {
     Tensor tensor = Tensors.fromString("{{0, 3, 0, 1}, {3, 0, 7, 5}, {0, 7, -2, 9}, {1, 5, 9, 0}}");
     Eigensystem eigensystem = Eigensystem.ofSymmetric(tensor);
     Tensor expEigvl = Tensors.fromString("{13.741843166529974899, 0.42515310634896474734, -5.4100072556794011520, -10.756989017199538494}");
@@ -107,7 +107,7 @@ class JacobiMethodTest {
   }
 
   @Test
-  public void testHilberts() {
+  void testHilberts() {
     for (int size = 1; size < 10; ++size) {
       Tensor matrix = HilbertMatrix.of(size);
       Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
@@ -118,7 +118,7 @@ class JacobiMethodTest {
   }
 
   @RepeatedTest(9)
-  public void testZeros(RepetitionInfo repetitionInfo) {
+  void testZeros(RepetitionInfo repetitionInfo) {
     int c = repetitionInfo.getCurrentRepetition();
     Tensor matrix = Array.zeros(c, c);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
@@ -131,7 +131,7 @@ class JacobiMethodTest {
   }
 
   @Test
-  public void testHilbert1() {
+  void testHilbert1() {
     Tensor matrix = HilbertMatrix.of(1);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor expected = Tensors.vector(1);
@@ -139,7 +139,7 @@ class JacobiMethodTest {
   }
 
   @Test
-  public void testHilbert2() {
+  void testHilbert2() {
     Tensor matrix = HilbertMatrix.of(2);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor expected = Tensors.vector(1.2675918792439982155, 0.065741454089335117813);
@@ -147,7 +147,7 @@ class JacobiMethodTest {
   }
 
   @Test
-  public void testHilbert3() {
+  void testHilbert3() {
     Tensor matrix = HilbertMatrix.of(3);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor expected = Tensors.vector(1.4083189271236539575, 0.12232706585390584656, 0.0026873403557735292310);
@@ -155,21 +155,21 @@ class JacobiMethodTest {
   }
 
   @Test
-  public void testChallenge1() {
+  void testChallenge1() {
     Tensor matrix = ResourceData.of("/mat/jacobi1.csv");
     Tolerance.CHOP.requireClose(matrix, IdentityMatrix.of(3));
     checkEquation(matrix, Eigensystem.ofSymmetric(matrix));
   }
 
   @Test
-  public void testChallenge2() {
+  void testChallenge2() {
     Tensor matrix = ResourceData.of("/mat/jacobi2.csv");
     Tolerance.CHOP.requireClose(matrix, IdentityMatrix.of(3));
     checkEquation(matrix, Eigensystem.ofSymmetric(matrix));
   }
 
   @Test
-  public void testDecimalScalar() {
+  void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     assertInstanceOf(DecimalScalar.class, eigensystem.vectors().Get(3, 3));
@@ -177,7 +177,7 @@ class JacobiMethodTest {
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertTrue(Modifier.isPublic(Eigensystem.class.getModifiers()));
     assertFalse(Modifier.isPublic(EigensystemImpl.class.getModifiers()));
   }

@@ -19,21 +19,21 @@ import ch.alpine.tensor.num.GaussScalar;
 
 class ColorDataGradientTest {
   @Test
-  public void testDimensions() {
+  void testDimensions() {
     Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
     assertEquals(Dimensions.of(tensor).get(1), Integer.valueOf(4));
     LinearColorDataGradient.of(tensor);
   }
 
   @Test
-  public void testSerializable() throws Exception {
+  void testSerializable() throws Exception {
     Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
     ColorDataGradient cdg = LinearColorDataGradient.of(tensor);
     Serialization.copy(cdg);
   }
 
   @Test
-  public void testModifiable() {
+  void testModifiable() {
     Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorscheme/_hue.csv");
     ColorDataGradient cdg = LinearColorDataGradient.of(tensor);
     cdg.apply(RealScalar.ONE).set(RealScalar.ONE, 1);
@@ -42,7 +42,7 @@ class ColorDataGradientTest {
   }
 
   @Test
-  public void testCustom() {
+  void testCustom() {
     ScalarTensorFunction template = ColorDataGradients.CLASSIC;
     ScalarTensorFunction custom = s -> {
       Tensor rgba = template.apply(s);
@@ -55,7 +55,7 @@ class ColorDataGradientTest {
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     Scalar scalar = GaussScalar.of(123, 251);
     assertThrows(TensorRuntimeException.class, () -> ColorDataGradients.ALPINE.apply(scalar));
   }

@@ -14,20 +14,20 @@ import ch.alpine.tensor.jet.Around;
 
 class ArcTanhTest {
   @Test
-  public void testReal() {
+  void testReal() {
     Scalar scalar = ArcTanh.of(RealScalar.of(0.5));
     assertEquals(scalar, RealScalar.of(0.5493061443340548));
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar scalar = ArcTanh.of(ComplexScalar.of(5, -9));
     // 0.0468657 - 1.48591 I
     assertEquals(scalar, ComplexScalar.of(0.04686573907359337, -1.4859071898107274));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Scalar scalar = Around.of(2, 3);
     assertThrows(TensorRuntimeException.class, () -> ArcTanh.FUNCTION.apply(scalar));
   }

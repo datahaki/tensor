@@ -11,7 +11,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class MatrixProductTest {
   @Test
-  public void testToString() throws ClassNotFoundException, IOException {
+  void testToString() throws ClassNotFoundException, IOException {
     MatrixProduct matrixProduct = Serialization.copy(MatrixProduct.INSTANCE);
     String string = matrixProduct.toString();
     assertTrue(string.startsWith("MatrixProduct"));

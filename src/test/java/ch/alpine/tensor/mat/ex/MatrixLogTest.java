@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class MatrixLogTest {
   @Test
-  public void testIdentityMatrix() {
+  void testIdentityMatrix() {
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = IdentityMatrix.of(n);
       assertEquals(MatrixLog.of(matrix), Array.zeros(n, n));
@@ -34,7 +34,7 @@ class MatrixLogTest {
   }
 
   @Test
-  public void testSymmetric() {
+  void testSymmetric() {
     for (int n = 1; n < 8; ++n) {
       Distribution distribution = NormalDistribution.of(0, 0.1 / n);
       Tensor matrix = Symmetrize.of(IdentityMatrix.of(n).add(RandomVariate.of(distribution, n, n)));
@@ -49,7 +49,7 @@ class MatrixLogTest {
   }
 
   @Test
-  public void testExp() {
+  void testExp() {
     for (int n = 2; n < 7; ++n) {
       Tensor x = RandomVariate.of(NormalDistribution.standard(), n, n);
       Tensor exp = MatrixExp.of(x);
@@ -60,7 +60,7 @@ class MatrixLogTest {
   }
 
   @Test
-  public void testDeque() {
+  void testDeque() {
     Deque<Integer> deque = new ArrayDeque<>();
     deque.add(3);
     deque.add(5);
@@ -70,14 +70,14 @@ class MatrixLogTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 4, 5);
     assertThrows(IllegalArgumentException.class, () -> MatrixLog.of(matrix));
   }
 
   @Test
-  public void test1x2Fail() {
+  void test1x2Fail() {
     for (int d = 1; d < 3; ++d) {
       Tensor matrix = IdentityMatrix.of(d + 1).extract(0, d);
       assertEquals(matrix.length(), d);
@@ -91,14 +91,14 @@ class MatrixLogTest {
   }
 
   @Test
-  public void test3x2Fail() {
+  void test3x2Fail() {
     Tensor matrix = Transpose.of(IdentityMatrix.of(3).extract(0, 2));
     assertEquals(matrix.length(), 3);
     assertThrows(IllegalArgumentException.class, () -> MatrixLog.of(matrix));
   }
 
   @Test
-  public void test_of() {
+  void test_of() {
     assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e20), 3, 3)));
     assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e100), 3, 3)));
     assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e200), 3, 3)));

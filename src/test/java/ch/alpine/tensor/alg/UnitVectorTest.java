@@ -10,12 +10,12 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 
 class UnitVectorTest {
   @Test
-  public void testRegular() {
+  void testRegular() {
     assertEquals(UnitVector.of(10, 3), IdentityMatrix.of(10).get(3));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(IllegalArgumentException.class, () -> UnitVector.of(0, 0));
     assertThrows(IllegalArgumentException.class, () -> UnitVector.of(-1, 0));
     assertThrows(IllegalArgumentException.class, () -> UnitVector.of(3, -1));

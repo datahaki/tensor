@@ -25,7 +25,7 @@ import ch.alpine.tensor.red.Entrywise;
 
 class MatlabExportTest {
   @Test
-  public void testScalar() {
+  void testScalar() {
     Stream<String> stream = MatlabExport.of(ComplexScalar.of(2, 3));
     List<String> list = stream.collect(Collectors.toList());
     assertTrue(list.contains("a=2+3*I;"));
@@ -33,7 +33,7 @@ class MatlabExportTest {
   }
 
   @Test
-  public void testScalar2() {
+  void testScalar2() {
     Scalar s = Scalars.fromString("-1/41+73333/12*I");
     Stream<String> stream = MatlabExport.of(s);
     List<String> list = stream.collect(Collectors.toList());
@@ -41,7 +41,7 @@ class MatlabExportTest {
   }
 
   @Test
-  public void testVector() {
+  void testVector() {
     Stream<String> stream = MatlabExport.of(Tensors.vector(1, 2, 3));
     List<String> list = stream.collect(Collectors.toList());
     assertTrue(list.contains("a=zeros([3, 1]);"));
@@ -49,7 +49,7 @@ class MatlabExportTest {
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     Tensor m = HilbertMatrix.of(3, 4);
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply(m, m);
     Stream<String> stream = MatlabExport.of(matrix);
@@ -58,7 +58,7 @@ class MatlabExportTest {
   }
 
   @Test
-  public void testLieAlgebras() {
+  void testLieAlgebras() {
     Tensor m = LeviCivitaTensor.of(3);
     Stream<String> stream = MatlabExport.of(m);
     List<String> list = stream.collect(Collectors.toList());
@@ -68,7 +68,7 @@ class MatlabExportTest {
   }
 
   @Test
-  public void testUnits() {
+  void testUnits() {
     ScalarUnaryOperator scalarUnaryOperator = //
         scalar -> scalar instanceof Quantity //
             ? ((Quantity) scalar).value()
@@ -87,7 +87,7 @@ class MatlabExportTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
     assertThrows(TensorRuntimeException.class, () -> MatlabExport.of(tensor));
   }

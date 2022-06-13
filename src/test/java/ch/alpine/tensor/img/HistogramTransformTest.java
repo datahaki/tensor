@@ -17,28 +17,28 @@ import ch.alpine.tensor.num.Pi;
 
 class HistogramTransformTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
     Tensor result = HistogramTransform.of(tensor);
     assertEquals(Dimensions.of(tensor), Dimensions.of(result));
   }
 
   @Test
-  public void testIdentity() {
+  void testIdentity() {
     Tensor tensor = Tensors.of(Range.of(0, 256));
     Tensor result = HistogramTransform.of(tensor);
     assertEquals(tensor, result);
   }
 
   @Test
-  public void testBlackAndWhite() {
+  void testBlackAndWhite() {
     Tensor tensor = Tensors.of(Tensors.vector(255, 0, 255, 0, 0));
     Tensor result = HistogramTransform.of(tensor);
     assertEquals(tensor, result);
   }
 
   @Test
-  public void testBlackAndWhiteWeak() {
+  void testBlackAndWhiteWeak() {
     Tensor tensor1 = Tensors.of(Tensors.vector(255, 0, 255, 0, 0));
     Tensor tensor2 = Tensors.of(Tensors.vector(101, 100, 101, 100, 100));
     Tensor result = HistogramTransform.of(tensor2);
@@ -46,29 +46,29 @@ class HistogramTransformTest {
   }
 
   @Test
-  public void testOutOfRankFail() {
+  void testOutOfRankFail() {
     Tensor tensor = Tensors.of(Tensors.vector(0, 256, 0, 3));
     assertThrows(ArrayIndexOutOfBoundsException.class, () -> HistogramTransform.of(tensor));
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     Tensor tensor = Tensors.of(Tensors.vector(0, -0.1, 3));
     assertThrows(TensorRuntimeException.class, () -> HistogramTransform.of(tensor));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> HistogramTransform.of(Pi.VALUE));
   }
 
   @Test
-  public void testVectorFail() {
+  void testVectorFail() {
     assertThrows(TensorRuntimeException.class, () -> HistogramTransform.of(Tensors.vector(1, 2, 3)));
   }
 
   @Test
-  public void testRank3Fail() {
+  void testRank3Fail() {
     assertThrows(TensorRuntimeException.class, () -> HistogramTransform.of(Array.zeros(2, 2, 2)));
   }
 }

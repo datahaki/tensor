@@ -35,51 +35,51 @@ class SingularValueDecompositionImplTest {
   }
 
   @Test
-  public void testResource() throws Exception {
+  void testResource() throws Exception {
     String string = getClass().getResource("/mat/svd0.mathematica").getPath();
     _check(Get.of(Paths.get(string).toFile()));
   }
 
   @Test
-  public void testCondition1() {
+  void testCondition1() {
     Tensor matrix = ResourceData.of("/mat/svd3.csv");
     InitTest.svd(matrix);
   }
 
   @Test
-  public void testCondition2() {
+  void testCondition2() {
     Tensor matrix = ResourceData.of("/mat/svd2.csv");
     InitTest.svd(matrix);
   }
 
   @Test
-  public void testCondition1UnitA() {
+  void testCondition1UnitA() {
     Tensor matrix = ResourceData.of("/mat/svd3.csv");
     InitTest.svd(matrix.map(s -> Quantity.of(s, "m")));
   }
 
   @Test
-  public void testCondition1UnitB() {
+  void testCondition1UnitB() {
     Tensor matrix = ResourceData.of("/mat/svd3.csv").map(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
     InitTest.svd(matrix);
   }
 
   @Test
-  public void testCondition2UnitA() {
+  void testCondition2UnitA() {
     Tensor matrix = ResourceData.of("/mat/svd2.csv").map(s -> Quantity.of(s, "m"));
     InitTest.svd(matrix);
   }
 
   @Test
-  public void testCondition2UnitB() {
+  void testCondition2UnitB() {
     Tensor matrix = ResourceData.of("/mat/svd2.csv").map(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
     InitTest.svd(matrix);
   }
 
   @Test
-  public void testEps() {
+  void testEps() {
     Tensor A = Tensors.fromString("{{1, 0}, {0, 1E-14}}");
     assertTrue(FiniteTensorQ.of(A));
     InitTest.svd(A.map(s -> Quantity.of(s, "kg")));
@@ -90,18 +90,18 @@ class SingularValueDecompositionImplTest {
   }
 
   @Test
-  public void testDecimalScalar() {
+  void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
     SingularValueDecomposition.of(matrix);
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(SingularValueDecompositionImpl.class.getModifiers()));
   }
 
   @Test
-  public void testUnit() {
+  void testUnit() {
     Tensor a = Tensors.fromString("{{1, 0}, {0, 0}}").map(s -> Quantity.of(s, "m"));
     SingularValueDecomposition svd = SingularValueDecomposition.of(a);
     ExactTensorQ.require(svd.values());

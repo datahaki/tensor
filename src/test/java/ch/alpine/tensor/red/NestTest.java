@@ -22,7 +22,7 @@ import ch.alpine.tensor.sca.tri.Cos;
 
 class NestTest {
   @Test
-  public void testPolynomial() {
+  void testPolynomial() {
     Tensor actual = Nest.of( //
         scalar -> Power.of(scalar.add(RealScalar.ONE), RealScalar.of(2)), RealScalar.of(1), 3);
     ExactTensorQ.require(actual);
@@ -30,21 +30,21 @@ class NestTest {
   }
 
   @Test
-  public void testSeries() {
+  void testSeries() {
     Tensor actual = Nest.of(Polynomial.of(Tensors.vector(1, 2, 1)), RealScalar.ONE, 3);
     ExactTensorQ.require(actual);
     assertEquals(RealScalar.of(676), actual);
   }
 
   @Test
-  public void testGamma() {
+  void testGamma() {
     Scalar expected = ComplexScalar.of(0.024484718696096586, -0.3838080212320521);
     Scalar actual = Nest.of(Gamma.FUNCTION, ComplexScalar.of(0.3, 0.9), 3);
     Chop._08.requireClose(expected, actual);
   }
 
   @Test
-  public void testCopy() {
+  void testCopy() {
     Tensor in = Array.zeros(2);
     Tensor re = Nest.of(null, in, 0);
     re.set(RealScalar.ONE::add, Tensor.ALL);
@@ -53,7 +53,7 @@ class NestTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(IllegalArgumentException.class, () -> Nest.of(Cos.FUNCTION, RealScalar.of(0.3), -1));
   }
 }

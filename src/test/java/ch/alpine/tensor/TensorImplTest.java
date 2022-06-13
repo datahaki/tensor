@@ -21,13 +21,13 @@ import ch.alpine.tensor.num.Pi;
 
 class TensorImplTest {
   @Test
-  public void testUnmodifiable() {
+  void testUnmodifiable() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     assertThrows(UnsupportedOperationException.class, () -> eye.flatten(0).forEach(e -> e.set(RealScalar.of(4), 2)));
   }
 
   @Test
-  public void testIteratorSize() {
+  void testIteratorSize() {
     int count = 0;
     for (Tensor scalar : Tensors.vector(4, 2, 6, 3, 8).unmodifiable()) {
       scalar.add(scalar);
@@ -37,14 +37,14 @@ class TensorImplTest {
   }
 
   @Test
-  public void testCopy() {
+  void testCopy() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable().copy();
     eye.flatten(0).forEach(e -> e.set(RealScalar.of(4), 2));
     assertEquals(eye.get(Tensor.ALL, 2), Tensors.vector(4, 4, 4, 4));
   }
 
   @Test
-  public void testIteratorUnmod() {
+  void testIteratorUnmod() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     for (Tensor unit : eye)
       assertThrows(UnsupportedOperationException.class, () -> unit.set(RealScalar.of(4), 2));
@@ -52,7 +52,7 @@ class TensorImplTest {
   }
 
   @Test
-  public void testIteratorUnmod2() {
+  void testIteratorUnmod2() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     Tensor rep = Tensors.empty();
     for (Tensor unit : eye)
@@ -61,14 +61,14 @@ class TensorImplTest {
   }
 
   @Test
-  public void testIteratorUnmod3() {
+  void testIteratorUnmod3() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     for (Tensor unit : eye)
       assertThrows(UnsupportedOperationException.class, () -> unit.append(RealScalar.ZERO));
   }
 
   @Test
-  public void testIteratorRemove() {
+  void testIteratorRemove() {
     Tensor tensor = IdentityMatrix.of(4);
     for (Iterator<Tensor> iterator = tensor.iterator(); iterator.hasNext();) {
       iterator.next();
@@ -78,7 +78,7 @@ class TensorImplTest {
   }
 
   @Test
-  public void testHashCode() {
+  void testHashCode() {
     List<Tensor> list = new ArrayList<>();
     list.add(RealScalar.ONE);
     list.add(Tensors.vector(2, 3, 4));
@@ -92,7 +92,7 @@ class TensorImplTest {
   }
 
   @Test
-  public void testIteratorCopy() {
+  void testIteratorCopy() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable().copy();
     for (Tensor unit : eye)
       unit.set(RealScalar.of(4), 2);
@@ -103,13 +103,13 @@ class TensorImplTest {
   }
 
   @Test
-  public void testExtract() {
+  void testExtract() {
     Tensor eye = IdentityMatrix.of(4).unmodifiable();
     eye.extract(2, 4).set(RealScalar.of(4), 1);
   }
 
   @Test
-  public void testExtract2() {
+  void testExtract2() {
     Tensor vector = Tensors.vector(1, 2, 3);
     Tensor slevel = vector.extract(1, 3);
     slevel.set(RealScalar.ONE::add, 0);
@@ -117,19 +117,19 @@ class TensorImplTest {
   }
 
   @Test
-  public void testArrayList() {
+  void testArrayList() {
     List<Tensor> list = Arrays.asList(RealScalar.of(2), RealScalar.of(3)).stream().map(Tensor.class::cast).collect(Collectors.toList());
     assertInstanceOf(ArrayList.class, list); // used in TensorParser
   }
 
   @Test
-  public void testSetFail() {
+  void testSetFail() {
     Tensor matrix = HilbertMatrix.of(3, 3);
     assertThrows(IllegalArgumentException.class, () -> matrix.set(Array.zeros(2), Tensor.ALL, 1));
   }
 
   @Test
-  public void testNonPublic() {
+  void testNonPublic() {
     assertEquals(TensorImpl.class.getModifiers(), 0);
   }
 }

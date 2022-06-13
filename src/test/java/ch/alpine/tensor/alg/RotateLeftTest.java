@@ -14,7 +14,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 
 class RotateLeftTest {
   @Test
-  public void testVector() {
+  void testVector() {
     Tensor vector = Tensors.vector(0, 1, 2, 3, 4).unmodifiable();
     assertEquals(RotateLeft.of(vector, -6), Tensors.vector(4, 0, 1, 2, 3));
     assertEquals(RotateLeft.of(vector, -1), Tensors.vector(4, 0, 1, 2, 3));
@@ -26,7 +26,7 @@ class RotateLeftTest {
   }
 
   @Test
-  public void testReferences() {
+  void testReferences() {
     Tensor matrix = HilbertMatrix.of(3);
     Tensor tensor = RotateLeft.of(matrix, 1);
     matrix.set(s -> RealScalar.ONE, Tensor.ALL, 1);
@@ -34,19 +34,19 @@ class RotateLeftTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertEquals(RotateLeft.of(Tensors.empty(), +1), Tensors.empty());
     assertEquals(RotateLeft.of(Tensors.empty(), +0), Tensors.empty());
     assertEquals(RotateLeft.of(Tensors.empty(), -1), Tensors.empty());
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> RotateLeft.of(RealScalar.ONE, 0));
   }
 
   @Test
-  public void testFailNull() {
+  void testFailNull() {
     assertThrows(NullPointerException.class, () -> RotateLeft.of(null, 0));
   }
 }

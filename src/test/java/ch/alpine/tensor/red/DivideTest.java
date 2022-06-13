@@ -10,7 +10,7 @@ import ch.alpine.tensor.RationalScalar;
 
 class DivideTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     assertTrue(Divide.nonZero(3, 0).isEmpty());
     assertEquals(Divide.nonZero(3, 5).get(), RationalScalar.of(3, 5));
   }

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class HungarianAlgorithmGraphTest {
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(HungarianAlgorithmGraph.class.getModifiers()));
   }
 }

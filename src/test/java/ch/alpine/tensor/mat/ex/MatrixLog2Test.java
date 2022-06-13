@@ -44,19 +44,19 @@ class MatrixLog2Test {
   }
 
   @Test
-  public void testIdentity() {
+  void testIdentity() {
     Tensor mlog = MatrixLog.of(IdentityMatrix.of(2));
     assertEquals(mlog, Array.zeros(2, 2));
   }
 
   @Test
-  public void testDiagonal() {
+  void testDiagonal() {
     Tensor mlog = MatrixLog.of(DiagonalMatrix.of(2, 3));
     assertEquals(mlog, DiagonalMatrix.of(Math.log(2), Math.log(3)));
   }
 
   @Test
-  public void testFull() {
+  void testFull() {
     Tensor matrix = Tensors.fromString("{{4, 2}, {-1, 1}}");
     Tensor mlog = MatrixLog.of(matrix);
     Tensor mathematica = Tensors.fromString( //
@@ -66,7 +66,7 @@ class MatrixLog2Test {
   }
 
   @Test
-  public void testUpper() {
+  void testUpper() {
     Tensor matrix = Tensors.fromString("{{4, 2}, {0, 1}}");
     Tensor mlog = MatrixLog.of(matrix);
     Tensor mathematica = Tensors.fromString( //
@@ -76,7 +76,7 @@ class MatrixLog2Test {
   }
 
   @Test
-  public void testLower() {
+  void testLower() {
     Tensor matrix = Tensors.fromString("{{4, 0}, {2, 1}}");
     Tensor mlog = MatrixLog.of(matrix);
     Tensor mathematica = Transpose.of(Tensors.fromString( //
@@ -86,7 +86,7 @@ class MatrixLog2Test {
   }
 
   @Test
-  public void testTraceZero() {
+  void testTraceZero() {
     Random random = new Random(3);
     Distribution distribution = NormalDistribution.of(0, 2);
     for (int index = 0; index < 10; ++index) {
@@ -99,7 +99,7 @@ class MatrixLog2Test {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Distribution distribution = NormalDistribution.standard();
     for (int index = 0; index < 10; ++index) {
       Tensor alg = Entrywise.with(ComplexScalar::of).apply( //
@@ -111,7 +111,7 @@ class MatrixLog2Test {
   }
 
   @Test
-  public void testComplexTraceZero() {
+  void testComplexTraceZero() {
     Distribution distribution = NormalDistribution.standard();
     for (int index = 0; index < 10; ++index) {
       Tensor alg = Entrywise.with(ComplexScalar::of).apply( //
@@ -125,7 +125,7 @@ class MatrixLog2Test {
   }
 
   @Test
-  public void test2x2() {
+  void test2x2() {
     for (int count = 0; count < 10; ++count) {
       Tensor x = RandomVariate.of(UniformDistribution.of(-1, 1), 2, 2);
       Tensor exp = MatrixExp.of(x);
@@ -136,14 +136,14 @@ class MatrixLog2Test {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 2, 3);
     assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(matrix));
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(MatrixLog2.class.getModifiers()));
   }
 }

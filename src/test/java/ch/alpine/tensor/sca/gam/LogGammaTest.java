@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.exp.Log;
 
 class LogGammaTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Distribution distribution = UniformDistribution.of(0.2, 4.5);
     for (int count = 0; count < 10; ++count) {
       Scalar x = RandomVariate.of(distribution);
@@ -30,7 +30,7 @@ class LogGammaTest {
   }
 
   @Test
-  public void testMathematica() {
+  void testMathematica() {
     _check( //
         ComplexScalar.of(3.2363893230567875, 2.665896822743508), //
         ComplexScalar.of(-0.21662285857756203, 3.028323956886318));
@@ -46,7 +46,7 @@ class LogGammaTest {
   }
 
   @Test
-  public void testNegativeMathematica() {
+  void testNegativeMathematica() {
     _check(ComplexScalar.of(-0.2, +0.3), ComplexScalar.of(+1.0734581009508424, -2.429743746722234)); // mathematica
     _check(ComplexScalar.of(-0.3, -0.2), ComplexScalar.of(+1.2259360301379854, +2.789379730848464)); // mathematica
     // not consistent with Mathematica
@@ -58,7 +58,7 @@ class LogGammaTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Distribution distribution = UniformDistribution.of(0.2, 3.5);
     for (int count = 0; count < 10; ++count) {
       Scalar re = RandomVariate.of(distribution);

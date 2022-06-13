@@ -19,7 +19,7 @@ import ch.alpine.tensor.Tensors;
 
 class TallyTest {
   @Test
-  public void testSome() {
+  void testSome() {
     Tensor tensor = Tensors.vector(4, 2, 3, 7, 2, 5, 4, 2, 2, 5);
     Map<Tensor, Long> map = Tally.of(tensor);
     assertEquals((long) map.get(RealScalar.of(2)), 4);
@@ -28,13 +28,13 @@ class TallyTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     Map<Tensor, Long> map = Tally.of(Tensors.empty());
     assertEquals(map, Collections.emptyMap());
   }
 
   @Test
-  public void testStreamScalar() {
+  void testStreamScalar() {
     Tensor tensor = Tensors.vector(4, 2, 3, 7, 2, 5, 4, 2, 2, 5);
     Map<Scalar, Long> map = Tally.of(tensor.stream().map(Scalar.class::cast));
     assertEquals((long) map.get(RealScalar.of(2)), 4);
@@ -43,7 +43,7 @@ class TallyTest {
   }
 
   @Test
-  public void testInfty() {
+  void testInfty() {
     Tensor tensor = Tensors.of( //
         DoubleScalar.POSITIVE_INFINITY, RealScalar.ONE, //
         DoubleScalar.NEGATIVE_INFINITY, //
@@ -55,7 +55,7 @@ class TallyTest {
   }
 
   @Test
-  public void testSorted() {
+  void testSorted() {
     Tensor vector = Tensors.vector(4, 2, 3, 7, 2, 5, 4, 2, 2, 5);
     NavigableMap<Tensor, Long> navigableMap = Tally.sorted(vector);
     Tensor keys = Tensor.of(navigableMap.keySet().stream());
@@ -63,13 +63,13 @@ class TallyTest {
   }
 
   @Test
-  public void testNumZero() {
+  void testNumZero() {
     Tensor vector = Tensors.vector(-0.0, 0.0, -0.0);
     assertEquals(Tally.of(vector).size(), 1);
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> Tally.of(RealScalar.of(3.1234)));
   }
 }

@@ -45,7 +45,7 @@ class PolarDecompositionTest {
   }
 
   @Test
-  public void testRectangle() {
+  void testRectangle() {
     Random random = new Random(2);
     int n = 5;
     for (int k = 1; k < n; ++k) {
@@ -59,7 +59,7 @@ class PolarDecompositionTest {
   }
 
   @Test
-  public void testSquare() {
+  void testSquare() {
     Random random = new Random(3);
     int d = 7;
     for (int k = 1; k < d; ++k) {
@@ -81,7 +81,7 @@ class PolarDecompositionTest {
   }
 
   @Test
-  public void testDet1Invariance() {
+  void testDet1Invariance() {
     Random random = new Random(5);
     int d = 7;
     for (int k = 1; k < d; ++k) {
@@ -97,7 +97,7 @@ class PolarDecompositionTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Tensor matrix = Tensors.fromString("{{1, 0, 1+2*I}, {-3*I, 1, 1}}");
     Tensor mmt = MatrixDotTranspose.of(matrix, Conjugate.of(matrix));
     HermitianMatrixQ.require(mmt);

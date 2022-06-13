@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.Abs;
 
 class ComplexHelperTest {
   @Test
-  public void testAdd() {
+  void testAdd() {
     Scalar a = Scalars.fromString("-13*I[m]");
     Scalar b = Scalars.fromString("-3/7[m]");
     Scalar c = a.add(b);
@@ -28,7 +28,7 @@ class ComplexHelperTest {
   }
 
   @Test
-  public void testPolar() {
+  void testPolar() {
     Scalar abs = Quantity.of(2, "V*m^-1");
     Scalar q = ComplexScalar.fromPolar(abs, RealScalar.ONE);
     assertInstanceOf(Quantity.class, q);
@@ -37,7 +37,7 @@ class ComplexHelperTest {
   }
 
   @Test
-  public void testUnder1() {
+  void testUnder1() {
     Scalar c = ComplexScalar.of(2, 3);
     Scalar q = Quantity.of(1, "V");
     Scalar cuq = c.under(q);
@@ -51,7 +51,7 @@ class ComplexHelperTest {
   }
 
   @Test
-  public void testUnder2() {
+  void testUnder2() {
     Scalar c = ComplexScalar.of(2, 3);
     Scalar q = Quantity.of(1, "V");
     Scalar quc = q.under(c);
@@ -65,7 +65,7 @@ class ComplexHelperTest {
   }
 
   @Test
-  public void testUnder3() {
+  void testUnder3() {
     Scalar q1 = Quantity.of(ComplexScalar.of(2, 3), "m");
     Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "V");
     Scalar quc = q1.under(q2);
@@ -79,7 +79,7 @@ class ComplexHelperTest {
   }
 
   @Test
-  public void testUnder4() {
+  void testUnder4() {
     Scalar q1 = Quantity.of(ComplexScalar.of(2, 3), "m");
     Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "m");
     Scalar quc = q1.under(q2);
@@ -93,7 +93,7 @@ class ComplexHelperTest {
   }
 
   @Test
-  public void testPlusQuantity() {
+  void testPlusQuantity() {
     Scalar c = ComplexScalar.of(2, 3);
     Scalar q = Quantity.of(0, "V");
     // Mathematica 12 does not resolve this
@@ -101,7 +101,7 @@ class ComplexHelperTest {
   }
 
   @Test
-  public void testSqrt() {
+  void testSqrt() {
     Distribution distribution = NormalDistribution.standard();
     for (int count = 0; count < 100; ++count) {
       Scalar re = RandomVariate.of(distribution);
@@ -114,7 +114,7 @@ class ComplexHelperTest {
   }
 
   @Test
-  public void testEpsilonP1() {
+  void testEpsilonP1() {
     Scalar re = RealScalar.of(4.9E-324);
     Scalar im = RealScalar.of(4.9E-324);
     Scalar scalar = ComplexScalar.of(re, im);
@@ -128,7 +128,7 @@ class ComplexHelperTest {
   }
 
   @Test
-  public void testEpsilonN1() {
+  void testEpsilonN1() {
     Scalar re = RealScalar.of(-4.9E-324);
     Scalar im = RealScalar.of(4.9E-324);
     Scalar scalar = ComplexScalar.of(re, im);
@@ -143,7 +143,7 @@ class ComplexHelperTest {
 
   @SuppressWarnings("unused")
   @Test
-  public void testEpsilon01() {
+  void testEpsilon01() {
     Scalar re = RealScalar.of(0);
     Scalar im = RealScalar.of(4.9E-324);
     Scalar scalar = ComplexScalar.of(re, im);
@@ -158,14 +158,14 @@ class ComplexHelperTest {
   }
 
   @Test
-  public void testPlusQuantityFail() {
+  void testPlusQuantityFail() {
     Scalar c = ComplexScalar.of(2, 3);
     Scalar q = Quantity.of(1, "V");
     assertThrows(TensorRuntimeException.class, () -> c.add(q));
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     Scalar c = Quantity.of(3, "m");
     Scalar r = Pi.VALUE;
     assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(c, r));

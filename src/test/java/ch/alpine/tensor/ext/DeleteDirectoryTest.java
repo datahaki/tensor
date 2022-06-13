@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 class DeleteDirectoryTest {
   @Test
-  public void testLayer0() throws IOException {
+  void testLayer0() throws IOException {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "0");
     folder.mkdir();
     DeleteDirectory deleteDirectory = DeleteDirectory.of(folder, 0, 1, DeleteDirectory.DELETE_FAIL_ABORTS);
@@ -20,7 +20,7 @@ class DeleteDirectoryTest {
   }
 
   @Test
-  public void testLayer1a() throws IOException {
+  void testLayer1a() throws IOException {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "1a");
     folder.mkdir();
     File sample1_txt = new File(folder, "sample1.txt");
@@ -36,7 +36,7 @@ class DeleteDirectoryTest {
   }
 
   @Test
-  public void testLayer1b() throws IOException {
+  void testLayer1b() throws IOException {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "1b");
     folder.mkdir();
     new File(folder, "sample1.txt").createNewFile();
@@ -48,7 +48,7 @@ class DeleteDirectoryTest {
   }
 
   @Test
-  public void testLayer2() throws IOException {
+  void testLayer2() throws IOException {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "2");
     folder.mkdir();
     new File(folder, "sample1.txt").createNewFile();
@@ -62,13 +62,13 @@ class DeleteDirectoryTest {
   }
 
   @Test
-  public void testNotFound() {
+  void testNotFound() {
     File folder = HomeDirectory.Downloads(getClass().getSimpleName() + "NotFound");
     assertThrows(Exception.class, () -> DeleteDirectory.of(folder, 1, 10));
   }
 
   @Test
-  public void testRenameDirectory() throws IOException {
+  void testRenameDirectory() throws IOException {
     File folder1 = HomeDirectory.Downloads(getClass().getSimpleName() + "NotFound1234");
     File folder2 = HomeDirectory.Downloads(getClass().getSimpleName() + "NotFound1235");
     folder1.mkdir();

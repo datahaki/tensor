@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class DagumDistributionTest {
   @Test
-  public void testCdf() throws ClassNotFoundException, IOException {
+  void testCdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(DagumDistribution.of(0.2, 0.3, 0.6));
     CDF cdf = CDF.of(distribution);
     Scalar scalar = cdf.p_lessThan(RealScalar.of(3));
@@ -33,7 +33,7 @@ class DagumDistributionTest {
   }
 
   @Test
-  public void testPdf() throws ClassNotFoundException, IOException {
+  void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(DagumDistribution.of(0.2, 0.3, 0.6));
     PDF pdf = PDF.of(distribution);
     Scalar scalar = pdf.at(RealScalar.of(2));
@@ -41,7 +41,7 @@ class DagumDistributionTest {
   }
 
   @Test
-  public void testInverseCdf() {
+  void testInverseCdf() {
     Distribution distribution = DagumDistribution.of(0.2, 0.3, 0.6);
     InverseCDF cdf = InverseCDF.of(distribution);
     Scalar scalar = cdf.quantile(RealScalar.of(0.75));
@@ -49,47 +49,47 @@ class DagumDistributionTest {
   }
 
   @Test
-  public void testMean() {
+  void testMean() {
     Distribution distribution = DagumDistribution.of(2.3, 1.2, 0.7);
     Scalar scalar = Mean.of(distribution);
     Chop._12.requireClose(scalar, RealScalar.of(7.579940034748095));
   }
 
   @Test
-  public void testVarianceFail() {
+  void testVarianceFail() {
     DagumDistribution distribution = (DagumDistribution) DagumDistribution.of(2.3, 1.2, 0.7);
     assertThrows(UnsupportedOperationException.class, () -> distribution.variance());
   }
 
   @Test
-  public void testMeanIndeterminate() {
+  void testMeanIndeterminate() {
     Distribution distribution = DagumDistribution.of(2.3, 1, 0.7);
     Scalar scalar = Mean.of(distribution);
     assertFalse(FiniteScalarQ.of(scalar));
   }
 
   @Test
-  public void testRandom() {
+  void testRandom() {
     Distribution distribution = DagumDistribution.of(0.2, 0.3, 0.6);
     Scalar mean = Mean.ofVector(RandomVariate.of(distribution, 100));
     Sign.requirePositive(mean);
   }
 
   @Test
-  public void testString() {
+  void testString() {
     Distribution distribution = DagumDistribution.of(1, 2, 3);
     assertEquals(distribution.toString(), "DagumDistribution[1, 2, 3]");
   }
 
   @Test
-  public void testFailNonPositive() {
+  void testFailNonPositive() {
     assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(0, 2, 3));
     assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(1, 0, 3));
     assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(1, 2, 0));
   }
 
   @Test
-  public void testFailNegative() {
+  void testFailNegative() {
     assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(-1, 2, 3));
     assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(1, -1, 3));
     assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(1, 2, -1));

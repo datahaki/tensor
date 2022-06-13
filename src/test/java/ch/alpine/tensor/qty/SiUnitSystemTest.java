@@ -21,19 +21,19 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 
 class SiUnitSystemTest {
   @Test
-  public void testInstances() {
+  void testInstances() {
     assertEquals(UnitSystem.SI(), SiUnitSystem.INSTANCE.unitSystem);
   }
 
   @Test
-  public void testBase() {
+  void testBase() {
     Set<String> base = UnitSystems.base(UnitSystem.SI());
     assertTrue(7 <= base.size());
     assertTrue(base.containsAll(Arrays.asList("A", "cd", "s", "K", "mol", "kg", "m")));
   }
 
   @Test
-  public void testExtension() {
+  void testExtension() {
     Map<String, Scalar> map = new HashMap<>(UnitSystem.SI().map());
     map.put("CHF", Quantity.of(3, "m"));
     UnitSystem unitSystem = SimpleUnitSystem.from(map);
@@ -66,55 +66,55 @@ class SiUnitSystemTest {
   }
 
   @Test
-  public void testMilli() {
+  void testMilli() {
     int checked = _check(Arrays.asList("min"), "m", RationalScalar.of(1, 1000));
     assertTrue(10 <= checked);
   }
 
   @Test
-  public void testMicro() {
+  void testMicro() {
     int checked = _check(Arrays.asList(), "u", RationalScalar.of(1, 1000000));
     assertTrue(4 <= checked);
   }
 
   @Test
-  public void testNano() {
+  void testNano() {
     int checked = _check(Arrays.asList("nmi"), "n", RationalScalar.of(1, 1000000000));
     assertTrue(3 <= checked);
   }
 
   @Test
-  public void testPico() {
+  void testPico() {
     int checked = _check(Arrays.asList("pt", "ppt", "ppm"), "p", RationalScalar.of(1, 1000000000000L));
     assertTrue(1 <= checked);
   }
 
   @Test
-  public void testKilo() {
+  void testKilo() {
     int checked = _check(Arrays.asList("kat", "kp"), "k", RealScalar.of(1000));
     assertTrue(8 <= checked);
   }
 
   @Test
-  public void testMega() {
+  void testMega() {
     int checked = _check(Arrays.asList(), "M", RealScalar.of(1000000));
     assertTrue(6 <= checked);
   }
 
   @Test
-  public void testGiga() {
+  void testGiga() {
     int checked = _check(Arrays.asList("Ga"), "G", RealScalar.of(1000000000));
     assertTrue(3 <= checked);
   }
 
   @Test
-  public void testTera() {
+  void testTera() {
     int checked = _check(Arrays.asList(), "T", RealScalar.of(1000000000000L));
     assertTrue(1 <= checked);
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     assertTrue(SiUnitSystem.INSTANCE.unitSystem.toString().startsWith("UnitSystem[{"));
   }
 }

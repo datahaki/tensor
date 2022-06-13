@@ -14,7 +14,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class TensorGetTest {
   @Test
-  public void testGetEmpty() {
+  void testGetEmpty() {
     assertEquals(Tensors.empty().get(), Tensors.empty());
     assertEquals(Tensors.empty().get(new int[] {}), Tensors.empty());
     assertEquals(Array.zeros(2, 3).get(), Array.zeros(2, 3));
@@ -22,12 +22,12 @@ class TensorGetTest {
   }
 
   @Test
-  public void testGetScalar() {
+  void testGetScalar() {
     assertInstanceOf(RealScalar.class, IdentityMatrix.of(10).Get(3, 4));
   }
 
   @Test
-  public void testGet() {
+  void testGet() {
     Tensor matrix = Tensors.matrixInt( //
         new int[][] { { 3, 4 }, { 1, 2 }, { 9, 8 } });
     assertEquals(matrix.get(0, 0), Tensors.fromString("3"));
@@ -40,7 +40,7 @@ class TensorGetTest {
   }
 
   @Test
-  public void testGetAllSimple() {
+  void testGetAllSimple() {
     Tensor a = Array.zeros(3, 4);
     Tensor c = a.get(Tensor.ALL, 2);
     c.set(RealScalar.ONE, 1);
@@ -48,7 +48,7 @@ class TensorGetTest {
   }
 
   @Test
-  public void testGetAll() {
+  void testGetAll() {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 2, 3, 4);
     assertEquals(matrix.get(), matrix);
     assertEquals(matrix.get(new int[] { Tensor.ALL }), matrix);
@@ -57,7 +57,7 @@ class TensorGetTest {
   }
 
   @Test
-  public void testGetAll1() {
+  void testGetAll1() {
     Tensor a = Array.zeros(3).unmodifiable();
     a.get().set(RealScalar.ONE, 1);
     // a.get(1).set(RealScalar.ONE, 1); // scalar is immutable
@@ -68,7 +68,7 @@ class TensorGetTest {
   }
 
   @Test
-  public void testGetAll2() {
+  void testGetAll2() {
     Tensor matrix = Array.zeros(3, 4).unmodifiable();
     matrix.get().set(RealScalar.ONE, 1);
     matrix.get(1).set(RealScalar.ONE, 1);
@@ -80,7 +80,7 @@ class TensorGetTest {
   }
 
   @Test
-  public void testGetAll3() {
+  void testGetAll3() {
     Tensor tensor = Array.zeros(3, 4, 3).unmodifiable();
     tensor.get().set(RealScalar.ONE, 1);
     tensor.get(1).set(RealScalar.ONE, 1);
@@ -90,7 +90,7 @@ class TensorGetTest {
   }
 
   @Test
-  public void testGetAllFail() {
+  void testGetAllFail() {
     Tensor matrix = Array.zeros(3, 4, 5);
     assertThrows(IndexOutOfBoundsException.class, () -> matrix.Get(Tensor.ALL));
   }

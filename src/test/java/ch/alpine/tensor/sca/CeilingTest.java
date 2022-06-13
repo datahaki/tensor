@@ -25,7 +25,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class CeilingTest {
   @Test
-  public void testCeiling() {
+  void testCeiling() {
     assertEquals(Ceiling.of(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(Ceiling.of(RationalScalar.of(-5, 2)), RationalScalar.of(-2, 1));
     assertEquals(Ceiling.of(RationalScalar.of(5, 2)), RationalScalar.of(3, 1));
@@ -35,7 +35,7 @@ class CeilingTest {
   }
 
   @Test
-  public void testHash() {
+  void testHash() {
     Tensor a = Tensors.of( //
         DoubleScalar.of(0.123), DoubleScalar.of(3.343), DoubleScalar.of(-0.123));
     Tensor b = a.map(Ceiling.FUNCTION);
@@ -45,7 +45,7 @@ class CeilingTest {
   }
 
   @Test
-  public void testGetCeiling() {
+  void testGetCeiling() {
     Tensor v = Tensors.vectorDouble(3.5, 5.6, 9.12);
     Scalar s = Ceiling.of(v.Get(1));
     RealScalar rs = (RealScalar) s;
@@ -53,7 +53,7 @@ class CeilingTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar c = Scalars.fromString("7-2*I");
     assertEquals(Ceiling.of(c), c);
     Scalar d = Scalars.fromString("6.1-2.1*I");
@@ -61,7 +61,7 @@ class CeilingTest {
   }
 
   @Test
-  public void testRational1() {
+  void testRational1() {
     Scalar s = RationalScalar.of(234534584545L, 13423656767L); // 17.4717
     assertEquals(Ceiling.intValueExact(s), 18);
     assertEquals(Ceiling.longValueExact(s), 18);
@@ -71,13 +71,13 @@ class CeilingTest {
   }
 
   @Test
-  public void testIntExactValueFail() {
+  void testIntExactValueFail() {
     assertThrows(TensorRuntimeException.class, () -> Ceiling.intValueExact(Quantity.of(1.2, "h")));
     assertThrows(TensorRuntimeException.class, () -> Ceiling.longValueExact(Quantity.of(2.3, "h*s")));
   }
 
   @Test
-  public void testRational2() {
+  void testRational2() {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
     Scalar r = Ceiling.of(s);
     assertEquals(r, RealScalar.of(55));
@@ -85,7 +85,7 @@ class CeilingTest {
   }
 
   @Test
-  public void testLarge() {
+  void testLarge() {
     BigInteger bi = new BigInteger("97826349587623498756234545976");
     Scalar s = RealScalar.of(bi);
     Scalar r = Ceiling.of(s);
@@ -94,7 +94,7 @@ class CeilingTest {
   }
 
   @Test
-  public void testMultiple() {
+  void testMultiple() {
     Scalar w = Quantity.of(2, "K");
     ScalarUnaryOperator suo = Ceiling.toMultipleOf(w);
     assertEquals(suo.apply(Quantity.of(3.9, "K")), w.multiply(RealScalar.of(2)));
@@ -104,7 +104,7 @@ class CeilingTest {
   }
 
   @Test
-  public void testDecimalPlacesP() {
+  void testDecimalPlacesP() {
     Scalar w = Quantity.of(1.00001, "K");
     Tolerance.CHOP.requireClose(Ceiling._1.apply(w), Quantity.of(1.1, "K"));
     Tolerance.CHOP.requireClose(Ceiling._2.apply(w), Quantity.of(1.01, "K"));
@@ -112,7 +112,7 @@ class CeilingTest {
   }
 
   @Test
-  public void testDecimalPlacesN() {
+  void testDecimalPlacesN() {
     Scalar w = Quantity.of(-1.99999, "K");
     Tolerance.CHOP.requireClose(Ceiling._1.apply(w), Quantity.of(-1.9, "K"));
     Tolerance.CHOP.requireClose(Ceiling._2.apply(w), Quantity.of(-1.99, "K"));
@@ -120,31 +120,31 @@ class CeilingTest {
   }
 
   @Test
-  public void testPositiveInfinity() {
+  void testPositiveInfinity() {
     Scalar scalar = DoubleScalar.POSITIVE_INFINITY;
     assertEquals(Ceiling.of(scalar), scalar);
   }
 
   @Test
-  public void testNegativeInfinity() {
+  void testNegativeInfinity() {
     Scalar scalar = DoubleScalar.NEGATIVE_INFINITY;
     assertEquals(Ceiling.of(scalar), scalar);
   }
 
   @Test
-  public void testNaN() {
+  void testNaN() {
     assertTrue(Double.isNaN(Ceiling.of(DoubleScalar.INDETERMINATE).number().doubleValue()));
     assertTrue(Double.isNaN(Ceiling._2.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar scalar = Quantity.of(2.1, "K");
     assertEquals(Ceiling.FUNCTION.apply(scalar), Quantity.of(3, "K"));
   }
 
   @Test
-  public void testTypeFail() {
+  void testTypeFail() {
     Scalar scalar = StringScalar.of("string");
     assertThrows(TensorRuntimeException.class, () -> Ceiling.of(scalar));
   }

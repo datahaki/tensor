@@ -20,7 +20,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class SingularValueListTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Distribution distribution = UniformDistribution.of(-1, 1);
     Tensor x = RandomVariate.of(distribution, 3, 4);
     Tensor matrix = MatrixDotTranspose.of(x, x);
@@ -31,7 +31,7 @@ class SingularValueListTest {
   }
 
   @Test
-  public void testMixedUnitFail() {
+  void testMixedUnitFail() {
     Distribution distribution = DiscreteUniformDistribution.of(1, 4);
     Tensor matrix = RandomVariate.of(distribution, 7, 2);
     matrix.set(s -> Quantity.of((Scalar) s, "s"), Tensor.ALL, 1);

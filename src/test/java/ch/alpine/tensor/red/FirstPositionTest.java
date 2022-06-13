@@ -17,7 +17,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class FirstPositionTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor tensor = Tensors.vector(5, 6, 7, 8, 9);
     assertEquals(FirstPosition.of(tensor, RealScalar.of(5)).getAsInt(), 0);
     assertEquals(FirstPosition.of(tensor, RealScalar.of(6)).getAsInt(), 1);
@@ -28,7 +28,7 @@ class FirstPositionTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Tensor tensor = Tensors.vector(5, 6, 7, 8, 9.0).map(s -> Quantity.of(s, "km"));
     assertFalse(FirstPosition.of(tensor, RealScalar.of(5)).isPresent());
     assertEquals(FirstPosition.of(tensor, Quantity.of(8, "km")).getAsInt(), 3);
@@ -37,33 +37,33 @@ class FirstPositionTest {
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     Tensor tensor = HilbertMatrix.of(10);
     assertEquals(FirstPosition.of(tensor, tensor.get(3)).getAsInt(), 3);
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     FirstPosition.of(Tensors.empty(), Pi.VALUE);
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> FirstPosition.of(RealScalar.of(7), RealScalar.of(7)));
   }
 
   @Test
-  public void testFailTensorNull() {
+  void testFailTensorNull() {
     assertThrows(NullPointerException.class, () -> FirstPosition.of(null, RealScalar.of(7)));
   }
 
   @Test
-  public void testFailElementNull() {
+  void testFailElementNull() {
     assertThrows(NullPointerException.class, () -> FirstPosition.of(Tensors.vector(5, 6, 7, 8, 9), null));
   }
 
   @Test
-  public void testFailEmptyNull() {
+  void testFailEmptyNull() {
     assertThrows(NullPointerException.class, () -> FirstPosition.of(Tensors.empty(), null));
   }
 }

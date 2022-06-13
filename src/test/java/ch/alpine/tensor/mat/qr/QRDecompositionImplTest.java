@@ -35,7 +35,7 @@ import ch.alpine.tensor.sca.N;
 
 class QRDecompositionImplTest {
   @Test
-  public void testDegenerate0Square() {
+  void testDegenerate0Square() {
     for (int n = 1; n < 6; ++n) {
       QRDecomposition qrDecomposition = QRDecomposition.of(Array.zeros(n, n));
       assertEquals(qrDecomposition.getQConjugateTranspose(), IdentityMatrix.of(n));
@@ -44,7 +44,7 @@ class QRDecompositionImplTest {
   }
 
   @Test
-  public void testDegenerate1Square() {
+  void testDegenerate1Square() {
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = DiagonalMatrix.with(UnitVector.of(n, 0));
       QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
@@ -54,7 +54,7 @@ class QRDecompositionImplTest {
   }
 
   @Test
-  public void testDegenerateRect() {
+  void testDegenerateRect() {
     for (int m = 1; m < 6; ++m) {
       int n = m + 2;
       QRDecomposition qrDecomposition = QRDecomposition.of(Array.zeros(n, m));
@@ -64,7 +64,7 @@ class QRDecompositionImplTest {
   }
 
   @Test
-  public void testDimensionsBigSmall() {
+  void testDimensionsBigSmall() {
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
@@ -79,7 +79,7 @@ class QRDecompositionImplTest {
   }
 
   @Test
-  public void testSmallBigVector() {
+  void testSmallBigVector() {
     for (int m = 4; m < 7; ++m) {
       int n = m - 2;
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
@@ -94,7 +94,7 @@ class QRDecompositionImplTest {
   }
 
   @Test
-  public void testPseudoInverseRankDeficient() {
+  void testPseudoInverseRankDeficient() {
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
       Tensor base = RandomVariate.of(NormalDistribution.standard(), n, m);
@@ -107,13 +107,13 @@ class QRDecompositionImplTest {
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     QRDecomposition qrDecomposition = QRDecomposition.of(HilbertMatrix.of(3, 2));
     assertTrue(qrDecomposition.toString().startsWith("QRDecomposition"));
   }
 
   @Test
-  public void testBic() {
+  void testBic() {
     Tensor matrix = ResourceData.of("/mat/bic1.csv");
     QRDecompositionImpl qrDecomposition = (QRDecompositionImpl) QRDecomposition.of(matrix);
     Tensor rs = Abs.of(Diagonal.of(qrDecomposition.getR()));
@@ -125,7 +125,7 @@ class QRDecompositionImplTest {
   }
 
   @Test
-  public void testDecimalScalar() {
+  void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
     Tensor tensor = qrDecomposition.getQ().dot(qrDecomposition.getR());
@@ -133,7 +133,7 @@ class QRDecompositionImplTest {
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertTrue(Modifier.isPublic(QRDecomposition.class.getModifiers()));
     assertFalse(Modifier.isPublic(QRDecompositionImpl.class.getModifiers()));
   }

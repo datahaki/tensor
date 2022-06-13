@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 class BoundedLinkedListTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(3);
     assertTrue(boundedLinkedList.add(0));
     assertTrue(boundedLinkedList.add(1));
@@ -36,7 +36,7 @@ class BoundedLinkedListTest {
   }
 
   @Test
-  public void testPoll() {
+  void testPoll() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(3);
     assertTrue(boundedLinkedList.add(0));
     assertTrue(boundedLinkedList.add(1));
@@ -47,7 +47,7 @@ class BoundedLinkedListTest {
   }
 
   @Test
-  public void testAddAll() {
+  void testAddAll() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(2);
     assertTrue(boundedLinkedList.add(0));
     assertTrue(boundedLinkedList.add(1));
@@ -56,7 +56,7 @@ class BoundedLinkedListTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(0);
     assertEquals(boundedLinkedList.size(), 0);
     assertFalse(boundedLinkedList.add(0));
@@ -65,7 +65,7 @@ class BoundedLinkedListTest {
   }
 
   @Test
-  public void testAddAtIndex() {
+  void testAddAtIndex() {
     LinkedList<String> linkedList = new BoundedLinkedList<>(3);
     linkedList.add(0, "3");
     linkedList.add(0, "2");
@@ -75,7 +75,7 @@ class BoundedLinkedListTest {
   }
 
   @Test
-  public void testAddLast() {
+  void testAddLast() {
     LinkedList<String> linkedList = new BoundedLinkedList<>(3);
     linkedList.addLast("0");
     linkedList.addLast("1");
@@ -85,7 +85,7 @@ class BoundedLinkedListTest {
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(2);
     assertTrue(boundedLinkedList.add(3));
     assertTrue(boundedLinkedList.add(4));
@@ -98,19 +98,19 @@ class BoundedLinkedListTest {
   }
 
   @Test
-  public void testAddAllFail() {
+  void testAddAllFail() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(7);
     assertThrows(UnsupportedOperationException.class, () -> boundedLinkedList.addAll(Arrays.asList(1, 2, 3, 4)));
   }
 
   @Test
-  public void testAddFirstFail() {
+  void testAddFirstFail() {
     BoundedLinkedList<Integer> boundedLinkedList = new BoundedLinkedList<>(7);
     assertThrows(UnsupportedOperationException.class, () -> boundedLinkedList.addFirst(4));
   }
 
   @Test
-  public void testFailNegativeSize() {
+  void testFailNegativeSize() {
     assertThrows(IllegalArgumentException.class, () -> new BoundedLinkedList<>(-1));
   }
 }

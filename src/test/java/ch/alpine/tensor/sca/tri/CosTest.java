@@ -17,14 +17,14 @@ import ch.alpine.tensor.qty.Quantity;
 
 class CosTest {
   @Test
-  public void testReal() {
+  void testReal() {
     Scalar c = Cos.of(RealScalar.of(2));
     Scalar s = DoubleScalar.of(Math.cos(2));
     assertEquals(c, s);
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar c = Cos.of(ComplexScalar.of(2, 3.));
     // -4.1896256909688072301 - 9.1092278937553365980 I
     Scalar s = Scalars.fromString("-4.189625690968807-9.109227893755337*I");
@@ -32,12 +32,12 @@ class CosTest {
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> Cos.of(Quantity.of(1, "deg")));
   }
 
   @Test
-  public void testStringFail() {
+  void testStringFail() {
     Scalar scalar = StringScalar.of("string");
     assertThrows(TensorRuntimeException.class, () -> Cos.of(scalar));
   }

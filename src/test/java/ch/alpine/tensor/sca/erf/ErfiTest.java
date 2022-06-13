@@ -11,14 +11,14 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class ErfiTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Scalar result = Erfi.FUNCTION.apply(ComplexScalar.of(1.2, 3.4));
     Scalar expect = ComplexScalar.of(4.9665206621382625E-6, 1.0000035775250082);
     Tolerance.CHOP.requireClose(result, expect);
   }
 
   @Test
-  public void testOf() {
+  void testOf() {
     Tensor vector = Tensors.vector(1, 2, 3, 4);
     Tolerance.CHOP.requireClose(vector.map(Erfi.FUNCTION), Erfi.of(vector));
   }

@@ -20,7 +20,7 @@ import ch.alpine.tensor.red.Entrywise;
 
 class FourierTest {
   @Test
-  public void test2() {
+  void test2() {
     Tensor vector = Tensors.fromString("{1 + 2*I, 3 + 11*I}");
     Tensor expect = Tensors.fromString("{2.828427124746190 + 9.19238815542512*I, -1.414213562373095 - 6.36396103067893*I}");
     Tolerance.CHOP.requireClose(Fourier.of(vector), expect);
@@ -28,7 +28,7 @@ class FourierTest {
   }
 
   @Test
-  public void test2Quantity() {
+  void test2Quantity() {
     Tensor vector = Tensors.fromString("{1 + 2*I[m], 3 + 11*I[m]}");
     Tensor expect = Tensors.fromString("{2.828427124746190 + 9.19238815542512*I[m], -1.414213562373095 - 6.36396103067893*I[m]}");
     Tolerance.CHOP.requireClose(Fourier.of(vector), expect);
@@ -36,7 +36,7 @@ class FourierTest {
   }
 
   @Test
-  public void test4() {
+  void test4() {
     Tensor vector = Tensors.vector(1, 2, 0, 0);
     Tensor tensor = Fourier.of(vector);
     Tensor expect = Tensors.fromString("{1.5, 0.5 + I, -0.5, 0.5 - I}");
@@ -48,7 +48,7 @@ class FourierTest {
   }
 
   @RepeatedTest(10)
-  public void testRandom() {
+  void testRandom() {
     Distribution distribution = NormalDistribution.standard();
     for (int n = 0; n < 7; ++n) {
       Tensor vector = Entrywise.with(ComplexScalar::of).apply( //
@@ -61,23 +61,23 @@ class FourierTest {
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(IllegalArgumentException.class, () -> Fourier.of(RealScalar.ONE));
   }
 
   @Test
-  public void testFailEmpty() {
+  void testFailEmpty() {
     assertThrows(IllegalArgumentException.class, () -> Fourier.of(Tensors.empty()));
   }
 
   @Test
-  public void test3Fail() {
+  void test3Fail() {
     Tensor vector = Tensors.vector(1, 2, 0);
     assertThrows(TensorRuntimeException.class, () -> Fourier.of(vector));
   }
 
   @Test
-  public void testFailMatrix() {
+  void testFailMatrix() {
     assertThrows(ClassCastException.class, () -> Fourier.of(HilbertMatrix.of(4)));
   }
 }

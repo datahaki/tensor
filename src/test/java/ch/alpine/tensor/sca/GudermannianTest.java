@@ -13,13 +13,13 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class GudermannianTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Scalar scalar = Gudermannian.FUNCTION.apply(RationalScalar.HALF);
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(0.48038107913372944860)); // mathematica
   }
 
   @Test
-  public void testListable() {
+  void testListable() {
     Tensor tensor = Gudermannian.of(Range.of(-3, 4));
     Tolerance.CHOP.requireClose(tensor, Reverse.of(tensor).negate());
   }

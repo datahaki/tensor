@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.Chop;
 class WindowFunctionsTest {
   @ParameterizedTest
   @EnumSource(WindowFunctions.class)
-  public void testSimple(WindowFunctions windowFunction) {
+  void testSimple(WindowFunctions windowFunction) {
     ScalarUnaryOperator suo = windowFunction.get();
     assertEquals(suo.apply(RealScalar.of(-0.500001)), RealScalar.ZERO);
     assertEquals(suo.apply(RealScalar.of(+0.500001)), RealScalar.ZERO);
@@ -35,13 +35,13 @@ class WindowFunctionsTest {
 
   @ParameterizedTest
   @EnumSource(WindowFunctions.class)
-  public void testSerializable(WindowFunctions windowFunction) throws ClassNotFoundException, IOException {
+  void testSerializable(WindowFunctions windowFunction) throws ClassNotFoundException, IOException {
     Serialization.copy(windowFunction.get());
   }
 
   @ParameterizedTest
   @EnumSource(WindowFunctions.class)
-  public void testSymmetry(WindowFunctions windowFunction) {
+  void testSymmetry(WindowFunctions windowFunction) {
     Distribution distribution = UniformDistribution.of(-0.6, 0.6);
     for (int count = 0; count < 10; ++count) {
       Scalar x = RandomVariate.of(distribution);
@@ -51,19 +51,19 @@ class WindowFunctionsTest {
 
   @ParameterizedTest
   @EnumSource(WindowFunctions.class)
-  public void testInsideFail(WindowFunctions windowFunction) {
+  void testInsideFail(WindowFunctions windowFunction) {
     assertThrows(TensorRuntimeException.class, () -> windowFunction.get().apply(Quantity.of(0.1, "s")));
   }
 
   @ParameterizedTest
   @EnumSource(WindowFunctions.class)
-  public void testOustideFail(WindowFunctions windowFunction) {
+  void testOustideFail(WindowFunctions windowFunction) {
     assertThrows(TensorRuntimeException.class, () -> windowFunction.get().apply(Quantity.of(1, "s")));
   }
 
   @ParameterizedTest
   @EnumSource(WindowFunctions.class)
-  public void testComplexFail(WindowFunctions windowFunction) {
+  void testComplexFail(WindowFunctions windowFunction) {
     Scalar x = ComplexScalar.of(0.1, 0.2);
     assertThrows(Exception.class, () -> windowFunction.get().apply(x));
   }

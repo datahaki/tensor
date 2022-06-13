@@ -17,7 +17,7 @@ import ch.alpine.tensor.alg.Array;
 
 class ColorFormatTest {
   @Test
-  public void testRandom() {
+  void testRandom() {
     Random random = new SecureRandom();
     for (int index = 0; index < 10; ++index) {
       int red = random.nextInt(256);
@@ -38,13 +38,13 @@ class ColorFormatTest {
   }
 
   @Test
-  public void testFailValue() {
+  void testFailValue() {
     ColorFormat.toColor(Tensors.vector(0, 0, 0, 255.9));
     assertThrows(IllegalArgumentException.class, () -> ColorFormat.toColor(Tensors.vector(0, 0, 0, 256)));
   }
 
   @Test
-  public void testFailLength() {
+  void testFailLength() {
     assertThrows(TensorRuntimeException.class, () -> ColorFormat.toColor(Array.zeros(3)));
     assertThrows(TensorRuntimeException.class, () -> ColorFormat.toColor(Array.zeros(5)));
   }

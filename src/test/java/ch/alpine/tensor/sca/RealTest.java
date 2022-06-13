@@ -14,7 +14,7 @@ import ch.alpine.tensor.io.StringScalar;
 
 class RealTest {
   @Test
-  public void testReal() {
+  void testReal() {
     Scalar scalar = Scalars.fromString("11");
     assertEquals(Real.FUNCTION.apply(scalar), RealScalar.of(11));
     assertEquals(Imag.FUNCTION.apply(scalar), RealScalar.of(0));
@@ -23,7 +23,7 @@ class RealTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar scalar = Scalars.fromString("11+3.5*I");
     assertEquals(Real.FUNCTION.apply(scalar), RealScalar.of(11));
     assertEquals(Imag.FUNCTION.apply(scalar), RealScalar.of(3.5));
@@ -32,7 +32,7 @@ class RealTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Scalar scalar = StringScalar.of("string");
     assertThrows(TensorRuntimeException.class, () -> Real.of(scalar));
   }

@@ -57,7 +57,7 @@ class MatrixTest {
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     _checkFail(RowReduce::of);
     _checkFail(MatrixRank::of);
     _checkFail(NullSpace::of);

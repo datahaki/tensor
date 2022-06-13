@@ -16,7 +16,7 @@ class NilpotentMatrixQTest {
   }
 
   @Test
-  public void test234() {
+  void test234() {
     // Reference: https://en.wikipedia.org/wiki/Nilpotent_matrix
     _check(Tensors.fromString("{{2,-1},{4,-2}}"));
     _check(Tensors.fromString("{{2,2,-2},{5,1,-3},{1,5,-3}}"));

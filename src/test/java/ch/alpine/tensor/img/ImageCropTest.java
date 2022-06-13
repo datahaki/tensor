@@ -18,14 +18,14 @@ import ch.alpine.tensor.io.ResourceData;
 
 class ImageCropTest {
   @Test
-  public void testSerialization() throws ClassNotFoundException, IOException {
+  void testSerialization() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tensorUnaryOperator = //
         ImageCrop.color(Tensors.vector(255, 255, 255, 255));
     Serialization.copy(tensorUnaryOperator);
   }
 
   @Test
-  public void testGrayscale() {
+  void testGrayscale() {
     TensorUnaryOperator tensorUnaryOperator = ImageCrop.color(RealScalar.ZERO);
     Tensor image = Tensors.fromString("{{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}");
     Tensor result = tensorUnaryOperator.apply(image);
@@ -33,7 +33,7 @@ class ImageCropTest {
   }
 
   @Test
-  public void testColor() throws ClassNotFoundException, IOException {
+  void testColor() throws ClassNotFoundException, IOException {
     Tensor image = Tensors.fromString("{{0, 0, 0}, {0, 1, 0}, {0, 0, 0}}");
     image = Raster.of(image, ColorDataGradients.CLASSIC);
     TensorUnaryOperator tensorUnaryOperator = Serialization.copy(ImageCrop.color(image.get(0, 0)));
@@ -42,7 +42,7 @@ class ImageCropTest {
   }
 
   @Test
-  public void testNoCropGrayscale() {
+  void testNoCropGrayscale() {
     TensorUnaryOperator imagecrop = ImageCrop.color(RealScalar.of(123));
     Tensor tensor = ResourceData.of("/io/image/gray15x9.png");
     Tensor result = imagecrop.apply(tensor);
@@ -50,7 +50,7 @@ class ImageCropTest {
   }
 
   @Test
-  public void testNoCropRgba() {
+  void testNoCropRgba() {
     TensorUnaryOperator imagecrop = ImageCrop.color(Tensors.vector(1, 2, 3, 4));
     Tensor tensor = ResourceData.of("/io/image/rgba15x33.png");
     Tensor result = imagecrop.apply(tensor);
@@ -58,7 +58,7 @@ class ImageCropTest {
   }
 
   @Test
-  public void testVectorFail() {
+  void testVectorFail() {
     TensorUnaryOperator tensorUnaryOperator = ImageCrop.color(RealScalar.ONE);
     assertThrows(TensorRuntimeException.class, () -> tensorUnaryOperator.apply(Tensors.vector(1, 2, 3)));
   }

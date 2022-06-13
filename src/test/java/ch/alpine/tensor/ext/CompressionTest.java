@@ -20,7 +20,7 @@ class CompressionTest {
   }
 
   @Test
-  public void testInflate() {
+  void testInflate() {
     byte[] bytes = createBytes(1000);
     byte[] comp = Compression.deflate(bytes);
     try {
@@ -33,7 +33,7 @@ class CompressionTest {
   }
 
   @Test
-  public void testInflateEmpty() {
+  void testInflateEmpty() {
     byte[] bytes = createBytes(0);
     byte[] comp = Compression.deflate(bytes);
     try {
@@ -45,12 +45,12 @@ class CompressionTest {
   }
 
   @Test
-  public void testInflateEmpty2() {
+  void testInflateEmpty2() {
     assertThrows(Exception.class, () -> Compression.inflate(new byte[0]));
   }
 
   @Test
-  public void testInflateCurrupt() {
+  void testInflateCurrupt() {
     byte[] bytes = createBytes(1000);
     byte[] comp = Compression.deflate(bytes);
     comp[comp.length - 6] = (byte) (comp[comp.length - 6] - 23);
@@ -61,7 +61,7 @@ class CompressionTest {
   }
 
   @Test
-  public void testInflateIncomplete() {
+  void testInflateIncomplete() {
     byte[] bytes = createBytes(1000);
     byte[] comp = Compression.deflate(bytes);
     assertThrows(Exception.class, () -> Compression.inflate(comp, 0, comp.length - 3));

@@ -36,7 +36,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class EqualizingDistributionTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(EqualizingDistribution.fromUnscaledPDF(Tensors.vector(3)));
     CDF cdf = CDF.of(distribution);
     Tensor domain = Subdivide.of(0, 1, 10);
@@ -52,7 +52,7 @@ class EqualizingDistributionTest {
   }
 
   @Test
-  public void testResample() {
+  void testResample() {
     Tensor vector = Tensors.vector(-3, 6, 10, 20, 22, 30);
     Distribution distribution = EqualizingDistribution.fromUnscaledPDF(Differences.of(vector));
     Tensor domain = Subdivide.of(0, 1, 10);
@@ -68,7 +68,7 @@ class EqualizingDistributionTest {
   }
 
   @Test
-  public void testCDFInverseCDF() {
+  void testCDFInverseCDF() {
     Distribution distribution = EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, 6, 10, 20, 0, 22, 30, 0));
     CDF cdf = CDF.of(distribution);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -80,27 +80,27 @@ class EqualizingDistributionTest {
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(TensorRuntimeException.class, () -> EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
   }
 
   @Test
-  public void testZeroFail() {
+  void testZeroFail() {
     assertThrows(ArithmeticException.class, () -> EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 0)));
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IndexOutOfBoundsException.class, () -> EqualizingDistribution.fromUnscaledPDF(Tensors.empty()));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> EqualizingDistribution.fromUnscaledPDF(RealScalar.ONE));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(ClassCastException.class, () -> EqualizingDistribution.fromUnscaledPDF(HilbertMatrix.of(10)));
   }
 }

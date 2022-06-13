@@ -34,7 +34,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class FrechetDistributionTest {
   @Test
-  public void testPDF() throws ClassNotFoundException, IOException {
+  void testPDF() throws ClassNotFoundException, IOException {
     Distribution distribution = //
         Serialization.copy(FrechetDistribution.of(RealScalar.of(1.3), RealScalar.of(1.2)));
     PDF pdf = PDF.of(distribution);
@@ -44,7 +44,7 @@ class FrechetDistributionTest {
   }
 
   @Test
-  public void testCDF() {
+  void testCDF() {
     Distribution distribution = FrechetDistribution.of(1.5, 1.3);
     CDF cdf = CDF.of(distribution);
     Scalar prob = cdf.p_lessEquals(RealScalar.of(2.3));
@@ -52,14 +52,14 @@ class FrechetDistributionTest {
   }
 
   @Test
-  public void testRandomVariate() {
+  void testRandomVariate() {
     FrechetDistribution gmd = (FrechetDistribution) FrechetDistribution.of(3, 0.2);
     assertTrue(Scalars.lessThan(gmd.randomVariate(0), RealScalar.of(0.1)));
     assertTrue(Scalars.lessThan(gmd.randomVariate(Math.nextDown(1.0)), RealScalar.of(42000)));
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Distribution distribution = FrechetDistribution.of(Quantity.of(1.3, ""), Quantity.of(1.4, "m^-1"));
     Scalar rand = RandomVariate.of(distribution);
     assertInstanceOf(Quantity.class, rand);
@@ -77,7 +77,7 @@ class FrechetDistributionTest {
   }
 
   @Test
-  public void testMean() {
+  void testMean() {
     Distribution distribution = //
         FrechetDistribution.of(Quantity.of(1.3, ""), Quantity.of(2.4, "m^-1"));
     Scalar mean = Expectation.mean(distribution);
@@ -85,7 +85,7 @@ class FrechetDistributionTest {
   }
 
   @Test
-  public void testMeanInf() {
+  void testMeanInf() {
     Distribution distribution = //
         FrechetDistribution.of(RealScalar.of(0.9), Quantity.of(2.4, "m^-1"));
     Scalar mean = Expectation.mean(distribution);
@@ -93,7 +93,7 @@ class FrechetDistributionTest {
   }
 
   @Test
-  public void testVariance() {
+  void testVariance() {
     Distribution distribution = //
         FrechetDistribution.of(Quantity.of(2.3, ""), Quantity.of(1.5, "m^-1"));
     Scalar var = Expectation.variance(distribution);
@@ -101,7 +101,7 @@ class FrechetDistributionTest {
   }
 
   @Test
-  public void testVarianceInf() {
+  void testVarianceInf() {
     Distribution distribution = //
         FrechetDistribution.of(RealScalar.of(1.3), Quantity.of(1.5, "m^-1"));
     Scalar var = Expectation.variance(distribution);
@@ -112,7 +112,7 @@ class FrechetDistributionTest {
   }
 
   @Test
-  public void testInverseCDF() {
+  void testInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
     Scalar x0 = inverseCDF.quantile(RealScalar.of(0.0));
     Scalar x1 = inverseCDF.quantile(RealScalar.of(0.1));
@@ -125,7 +125,7 @@ class FrechetDistributionTest {
   }
 
   @Test
-  public void testMarkov() {
+  void testMarkov() {
     Random random = new Random();
     Distribution distribution = FrechetDistribution.of(1.1 + random.nextDouble(), 0.1 + random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
@@ -133,19 +133,19 @@ class FrechetDistributionTest {
   }
 
   @Test
-  public void testInverseCDF_1() {
+  void testInverseCDF_1() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
     assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.0)));
   }
 
   @Test
-  public void testFailInverseCDF() {
+  void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(FrechetDistribution.of(1.5, 1.3));
     assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> FrechetDistribution.of(RealScalar.of(3), RealScalar.of(0)));
     assertThrows(TensorRuntimeException.class, () -> FrechetDistribution.of(RealScalar.of(0), RealScalar.of(2)));
     assertThrows(TensorRuntimeException.class, () -> FrechetDistribution.of(Quantity.of(2.3, "s"), Quantity.of(1.5, "m^-1")));

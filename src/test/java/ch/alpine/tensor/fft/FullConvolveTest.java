@@ -16,7 +16,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 
 class FullConvolveTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     TensorUnaryOperator tuo = FullConvolve.with(Tensors.vector(1, 2, 3));
     Tensor tensor = tuo.apply(HilbertMatrix.of(1, 8));
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 8));

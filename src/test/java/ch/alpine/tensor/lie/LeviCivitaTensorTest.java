@@ -22,31 +22,31 @@ class LeviCivitaTensorTest {
   }
 
   @Test
-  public void testRank0() {
+  void testRank0() {
     Tensor tensor = LeviCivitaTensor.of(0);
     assertEquals(tensor, RealScalar.ONE);
   }
 
   @Test
-  public void testRank1() {
+  void testRank1() {
     Tensor tensor = LeviCivitaTensor.of(1);
     assertEquals(tensor, Tensors.fromString("{1}"));
   }
 
   @Test
-  public void testRank2() {
+  void testRank2() {
     Tensor tensor = LeviCivitaTensor.of(2);
     assertEquals(tensor, Tensors.fromString("{{0, 1}, {-1, 0}}"));
   }
 
   @Test
-  public void testRank3() {
+  void testRank3() {
     Tensor tensor = LeviCivitaTensor.of(3);
     assertEquals(tensor, Tensors.fromString("{{{0, 0, 0}, {0, 0, 1}, {0, -1, 0}}, {{0, 0, -1}, {0, 0, 0}, {1, 0, 0}}, {{0, 1, 0}, {-1, 0, 0}, {0, 0, 0}}}"));
   }
 
   @Test
-  public void testAlternating() {
+  void testAlternating() {
     for (int n = 0; n < 5; ++n) {
       Tensor tensor = LeviCivitaTensor.of(n);
       assertEquals(tensor, TensorWedge.of(tensor));
@@ -57,7 +57,7 @@ class LeviCivitaTensorTest {
   }
 
   @Test
-  public void testRankNegativeFail() {
+  void testRankNegativeFail() {
     assertThrows(IllegalArgumentException.class, () -> LeviCivitaTensor.of(-1));
   }
 }

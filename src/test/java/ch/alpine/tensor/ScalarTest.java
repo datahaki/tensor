@@ -16,30 +16,30 @@ import ch.alpine.tensor.num.GaussScalar;
 
 class ScalarTest {
   @Test
-  public void testIsScalar() {
+  void testIsScalar() {
     assertInstanceOf(Scalar.class, DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
-  public void testLengthNegative() {
+  void testLengthNegative() {
     assertTrue(Scalar.LENGTH < 0);
   }
 
   @Test
-  public void testGet() {
+  void testGet() {
     Tensor t = RealScalar.of(3);
     Scalar s = (Scalar) t;
     assertEquals(t, s);
   }
 
   @Test
-  public void testUnmodifiable() {
+  void testUnmodifiable() {
     Scalar s = RealScalar.of(3);
     assertEquals(s.unmodifiable(), s);
   }
 
   @Test
-  public void testNumber() {
+  void testNumber() {
     Scalar zero = RealScalar.ZERO;
     assertEquals(zero.number().getClass(), Integer.class);
     long asd = (Integer) zero.number();
@@ -48,7 +48,7 @@ class ScalarTest {
   }
 
   @Test
-  public void testDimensions() {
+  void testDimensions() {
     Scalar a = DoubleScalar.of(3);
     assertEquals(Dimensions.of(a), Collections.emptyList());
     Scalar b = GaussScalar.of(3, 7);
@@ -56,14 +56,14 @@ class ScalarTest {
   }
 
   @Test
-  public void testFails() {
+  void testFails() {
     Scalar a = DoubleScalar.of(3);
     Scalar b = DoubleScalar.of(5);
     assertThrows(TensorRuntimeException.class, () -> a.dot(b));
   }
 
   @Test
-  public void testNumber2() {
+  void testNumber2() {
     Scalar a = DoubleScalar.of(3);
     Scalar b = DoubleScalar.of(5);
     Number na = a.number();
@@ -74,7 +74,7 @@ class ScalarTest {
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     assertFalse(Tensors.empty().equals(null));
     assertFalse(RealScalar.ZERO.equals(null));
     assertFalse(DoubleScalar.of(0.3).equals(null));
@@ -84,7 +84,7 @@ class ScalarTest {
   }
 
   @Test
-  public void testIteratorFail() {
+  void testIteratorFail() {
     assertThrows(Exception.class, () -> {
       for (Tensor entry : RealScalar.ZERO) {
         entry.copy();

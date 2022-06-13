@@ -20,7 +20,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 
 class ProjectionTest {
   @Test
-  public void testReal() throws ClassNotFoundException, IOException {
+  void testReal() throws ClassNotFoundException, IOException {
     Tensor projection = Serialization.copy(Projection.on(Tensors.vector(1, 0, 0))).apply(Tensors.vector(1, 1, 1));
     assertEquals(projection, UnitVector.of(3, 0));
     Tensor p2 = Projection.on(Tensors.vector(1, 1, 1)).apply(Tensors.vector(5, 6, 7));
@@ -29,7 +29,7 @@ class ProjectionTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     TensorUnaryOperator tensorUnaryOperator = Projection.on(Tensors.vector(1, 1, 1));
     Tensor p2 = tensorUnaryOperator.apply(Tensors.fromString("{5, I, 7}"));
     assertEquals(Tensors.fromString("{4 + I/3, 4 + I/3, 4 + I/3}"), p2);
@@ -38,7 +38,7 @@ class ProjectionTest {
   }
 
   @Test
-  public void testUV() {
+  void testUV() {
     Tensor u = Tensors.fromString("{1 + I, 3 - 2*I}");
     Tensor v = Tensors.fromString("{2 - 4*I, 1 + 7*I}");
     Tensor m_uv = Tensors.fromString("{-(47/35) + (9*I)/35, 53/35 - (54*I)/35}");
@@ -51,7 +51,7 @@ class ProjectionTest {
   }
 
   @Test
-  public void testVU() {
+  void testVU() {
     Tensor u = Tensors.fromString("{1 + I, 3 - 2*I}");
     Tensor v = Tensors.fromString("{2 - 4*I, 1 + 7*I}");
     Tensor m_vu = Tensors.fromString("{-2 + (4*I)/15, -(1/3) + (77*I)/15}");
@@ -64,18 +64,18 @@ class ProjectionTest {
   }
 
   @Test
-  public void testZeroFail() {
+  void testZeroFail() {
     assertThrows(TensorRuntimeException.class, () -> Projection.on(Tensors.vector(0, 0, 0)));
     assertThrows(TensorRuntimeException.class, () -> Projection.on(Tensors.vector(0.0, 0, 0)));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Projection.on(RealScalar.ONE));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(ClassCastException.class, () -> Projection.on(HilbertMatrix.of(2, 2)));
     assertThrows(IllegalArgumentException.class, () -> Projection.on(HilbertMatrix.of(3, 2)));
   }

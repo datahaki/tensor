@@ -42,14 +42,14 @@ class FourierMatrixTest {
   }
 
   @Test
-  public void testSeveral() {
+  void testSeveral() {
     Random random = new Random();
     int n = 1 + random.nextInt(20);
     checkFormat(n);
   }
 
   @Test
-  public void testNorm4() {
+  void testNorm4() {
     Tensor m = FourierMatrix.of(4);
     assertEquals(Matrix1Norm.of(m), RealScalar.of(2));
     assertEquals(Matrix1Norm.of(m), MatrixInfinityNorm.of(m));
@@ -58,7 +58,7 @@ class FourierMatrixTest {
   }
 
   @Test
-  public void testVandermonde() {
+  void testVandermonde() {
     for (int n = 1; n < 8; ++n) {
       Tensor vector = Subdivide.of(RealScalar.ZERO, Pi.TWO, n).multiply(ComplexScalar.I).map(Exp.FUNCTION).extract(0, n);
       Scalar scalar = Sqrt.FUNCTION.apply(RationalScalar.of(1, n));
@@ -74,14 +74,14 @@ class FourierMatrixTest {
   }
 
   @Test
-  public void testInverse() {
+  void testInverse() {
     _check(8);
     _check(10);
     _check(11);
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(IllegalArgumentException.class, () -> FourierMatrix.of(0));
     assertThrows(IllegalArgumentException.class, () -> FourierMatrix.of(-1));
   }

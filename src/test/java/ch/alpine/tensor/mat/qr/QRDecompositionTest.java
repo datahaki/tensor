@@ -73,7 +73,7 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testExampleP32() {
+  void testExampleP32() {
     Tensor A = Tensors.matrix(new Number[][] { //
         { -1, -1, 1 }, //
         { 1, 3, 3 }, //
@@ -83,13 +83,13 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testOnesMinusEye() {
+  void testOnesMinusEye() {
     Tensor matrix = ConstantArray.of(RealScalar.ONE, 3, 3).subtract(IdentityMatrix.of(3));
     _specialOps(matrix);
   }
 
   @Test
-  public void testRankDeficient() {
+  void testRankDeficient() {
     int r = 2;
     Distribution distribution = NormalDistribution.standard();
     Tensor m1 = RandomVariate.of(distribution, 7, r);
@@ -116,13 +116,13 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testRandomReal() {
+  void testRandomReal() {
     Tensor A = RandomVariate.of(UniformDistribution.unit(), 5, 3);
     _specialOps(A);
   }
 
   @Test
-  public void testRandomReal2() throws ClassNotFoundException, IOException {
+  void testRandomReal2() throws ClassNotFoundException, IOException {
     Tensor A = RandomVariate.of(UniformDistribution.unit(), 3, 5);
     QRDecomposition qrDecomposition = Serialization.copy(_specialOps(A));
     Chop.NONE.requireZero(qrDecomposition.det());
@@ -130,7 +130,7 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testRandomRealSquare() {
+  void testRandomRealSquare() {
     Random random = new Random(3);
     Distribution distribution = NormalDistribution.standard();
     for (int d = 1; d <= 10; ++d)
@@ -138,44 +138,44 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testDiag() {
+  void testDiag() {
     Tensor A = DiagonalMatrix.with(Tensors.vector(2, 3, 4));
     _specialOps(A);
   }
 
   @Test
-  public void testDiag2() {
+  void testDiag2() {
     Tensor A = DiagonalMatrix.of(2, -3, 0, 0, -1e-10, 0, 4e20);
     _specialOps(A);
   }
 
   @Test
-  public void testZeros() {
+  void testZeros() {
     Tensor A = Array.zeros(4, 3);
     _specialOps(A);
   }
 
   @Test
-  public void testRandomComplex1() {
+  void testRandomComplex1() {
     _specialOps(RandomVariate.of(ComplexNormalDistribution.STANDARD, 5, 3));
     _specialOps(RandomVariate.of(ComplexNormalDistribution.STANDARD, 3, 5));
   }
 
   @Test
-  public void testRandomComplex2() {
+  void testRandomComplex2() {
     _specialOps(RandomVariate.of(ComplexNormalDistribution.STANDARD, 4, 4));
     _specialOps(RandomVariate.of(ComplexNormalDistribution.STANDARD, 5, 5));
     _specialOps(RandomVariate.of(ComplexNormalDistribution.STANDARD, 6, 6));
   }
 
   @Test
-  public void testComplexDiagonal() {
+  void testComplexDiagonal() {
     Tensor matrix = DiagonalMatrix.of(ComplexScalar.of(2, 3), ComplexScalar.of(-6, -1));
     _specialOps(matrix);
   }
 
   @Test
-  public void testHilbert() {
+  void testHilbert() {
     Tensor matrix = HilbertMatrix.of(4, 7);
     _specialOps(matrix);
     QRDecomposition qr = QRDecomposition.of(matrix);
@@ -188,7 +188,7 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Tensor matrix = Tensors.fromString( //
         "{{ 12[s], -51[s], 4[s] }, { 6[s], 167[s], -68[s] }, { -4[s], 24[s], -41[s] } }");
     _specialOps(matrix);
@@ -198,7 +198,7 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testWikipedia() {
+  void testWikipedia() {
     Tensor matrix = Tensors.matrixInt( //
         new int[][] { { 12, -51, 4 }, { 6, 167, -68 }, { -4, 24, -41 } });
     _specialOps(matrix);
@@ -213,7 +213,7 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testMathematica1() {
+  void testMathematica1() {
     Tensor matrix = Tensors.fromString("{{1, 2}, {3, 4}, {5, 6}}");
     _specialOps(matrix);
     QRDecomposition qr = QRDecomposition.of(matrix, QRSignOperators.ORIENTATION);
@@ -223,20 +223,20 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testMathematica2() {
+  void testMathematica2() {
     Tensor matrix = Tensors.fromString("{{1., 2., 3.}, {4., 5., 6.}}");
     _specialOps(matrix);
   }
 
   @Test
-  public void testLower() {
+  void testLower() {
     Tensor matrix = Tensors.matrixInt( //
         new int[][] { { 0, -51, 4 }, { 6, 167, -68 }, { -4, 24, -41 } });
     _specialOps(matrix);
   }
 
   @Test
-  public void testQuantityMixed() {
+  void testQuantityMixed() {
     Tensor matrix = Tensors.fromString( //
         "{{ 12[s], -51[A], 4[m] }, { 6[s], 167[A], -68[m] }, { -4[s], 24[A], -41[m] } }");
     _specialOps(matrix);
@@ -246,14 +246,14 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testComplexMathematica() {
+  void testComplexMathematica() {
     Tensor matrix = Tensors.fromString("{{8 + I, 2 - 3 *I}, {3 + I, I}} ");
     _specialOps(matrix);
     _specialOps(N.DOUBLE.of(matrix));
   }
 
   @Test
-  public void testQuantityComplex() {
+  void testQuantityComplex() {
     Tensor matrix = Tensors.fromString( //
         "{{ 12+3*I[s], -51[A], 4[m] }, { 6[s], 167-7*I[A], -68[m] }, { -4*I[s], 24[A], -41-9*I[m] } }");
     _specialOps(matrix);
@@ -277,7 +277,7 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testDet() {
+  void testDet() {
     Distribution distribution = NormalDistribution.standard();
     for (int d = 2; d < 5; ++d)
       for (int count = 0; count < 10; ++count) {
@@ -286,7 +286,7 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testDetComplex() {
+  void testDetComplex() {
     Distribution distribution = ComplexNormalDistribution.STANDARD;
     for (int d = 2; d < 5; ++d)
       for (int count = 0; count < 10; ++count) {
@@ -295,7 +295,7 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testPreserveOrientation() {
+  void testPreserveOrientation() {
     Distribution distribution = NormalDistribution.standard();
     for (int d = 2; d < 5; ++d)
       for (int count = 0; count < 10; ++count) {
@@ -306,7 +306,7 @@ class QRDecompositionTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> QRDecomposition.of(IdentityMatrix.of(3), null));
   }
 }

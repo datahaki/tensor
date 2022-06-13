@@ -12,14 +12,14 @@ import ch.alpine.tensor.Tensors;
 
 class StringScalarQTest {
   @Test
-  public void testOf() {
+  void testOf() {
     assertFalse(RealScalar.ZERO instanceof StringScalar);
     assertFalse(Tensors.fromString("{hello}") instanceof StringScalar);
     assertInstanceOf(StringScalar.class, StringScalar.of("world"));
   }
 
   @Test
-  public void testAny() {
+  void testAny() {
     assertTrue(StringScalarQ.any(Tensors.of(RealScalar.ONE, StringScalar.of("world"))));
     assertFalse(StringScalarQ.any(Tensors.vector(1, 2, 3, 4)));
     assertFalse(StringScalarQ.any(Tensors.empty()));

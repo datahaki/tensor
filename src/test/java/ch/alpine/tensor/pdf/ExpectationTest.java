@@ -56,7 +56,7 @@ class ExpectationTest {
   }
 
   @Test
-  public void testExact() {
+  void testExact() {
     _check(DiscreteUniformDistribution.of(4, 10));
     _check(BernoulliDistribution.of(RationalScalar.of(2, 7)));
     _check(BinomialDistribution.of(10, RationalScalar.of(3, 7)));
@@ -65,7 +65,7 @@ class ExpectationTest {
   }
 
   @Test
-  public void testEmpiricalDistribution() {
+  void testEmpiricalDistribution() {
     int upper = 200;
     Tensor unscaledPDF = RandomVariate.of(DiscreteUniformDistribution.of(0, 10000), upper);
     Clip clip = Clips.interval(2, 8);
@@ -87,19 +87,19 @@ class ExpectationTest {
   }
 
   @Test
-  public void testNumeric() {
+  void testNumeric() {
     _check(PoissonDistribution.of(RationalScalar.of(4, 3)));
     _check(GeometricDistribution.of(RealScalar.of(0.3)));
     _check(CategoricalDistribution.fromUnscaledPDF(Tensors.vector(3, 0.2, 1, 0.4)));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(IllegalArgumentException.class, () -> Expectation.of(s -> s, NormalDistribution.standard()));
   }
 
   @Test
-  public void testFail2() {
+  void testFail2() {
     Distribution distribution = GompertzMakehamDistribution.of(RealScalar.of(1), RealScalar.of(2));
     assertThrows(UnsupportedOperationException.class, () -> Expectation.mean(distribution));
   }

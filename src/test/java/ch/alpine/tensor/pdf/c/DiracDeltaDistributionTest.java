@@ -23,7 +23,7 @@ import ch.alpine.tensor.red.Variance;
 
 class DiracDeltaDistributionTest {
   @Test
-  public void testProb() {
+  void testProb() {
     Distribution distribution = DiracDeltaDistribution.of(Pi.VALUE);
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(RealScalar.of(3)), RealScalar.of(0));
@@ -31,7 +31,7 @@ class DiracDeltaDistributionTest {
   }
 
   @Test
-  public void testCdf() {
+  void testCdf() {
     Distribution distribution = DiracDeltaDistribution.of(RealScalar.TWO);
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessThan(RealScalar.of(1)), RealScalar.ZERO);
@@ -43,7 +43,7 @@ class DiracDeltaDistributionTest {
   }
 
   @Test
-  public void testRandom() throws ClassNotFoundException, IOException {
+  void testRandom() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(DiracDeltaDistribution.of(Pi.VALUE));
     assertEquals(RandomVariate.of(distribution), Pi.VALUE);
     assertEquals(CentralMoment.of(distribution, 0), RealScalar.ONE);
@@ -52,13 +52,13 @@ class DiracDeltaDistributionTest {
   }
 
   @Test
-  public void testQuantile() {
+  void testQuantile() {
     Distribution distribution = DiracDeltaDistribution.of(RealScalar.TWO);
     assertEquals(Quantile.of(distribution).apply(RealScalar.ONE), RealScalar.TWO);
   }
 
   @Test
-  public void testMeanVar() {
+  void testMeanVar() {
     Distribution distribution = DiracDeltaDistribution.of(RealScalar.of(100));
     assertEquals(Mean.of(distribution), RealScalar.of(100));
     assertEquals(Variance.of(distribution), RealScalar.of(0));

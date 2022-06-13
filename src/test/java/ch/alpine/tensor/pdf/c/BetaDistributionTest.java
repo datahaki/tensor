@@ -18,7 +18,7 @@ import ch.alpine.tensor.red.Variance;
 
 class BetaDistributionTest {
   @Test
-  public void testPdf() throws ClassNotFoundException, IOException {
+  void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(BetaDistribution.of(2, 3));
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(0.4)), RealScalar.of(1.728));
@@ -27,14 +27,14 @@ class BetaDistributionTest {
   }
 
   @Test
-  public void testMeanVar() {
+  void testMeanVar() {
     Distribution distribution = BetaDistribution.of(5, 7.3);
     Tolerance.CHOP.requireClose(Mean.of(distribution), RealScalar.of(0.4065040650406504));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(0.018139737604968197));
   }
 
   @Test
-  public void testFailNonPositive() {
+  void testFailNonPositive() {
     assertThrows(TensorRuntimeException.class, () -> BetaDistribution.of(0, 3));
     assertThrows(TensorRuntimeException.class, () -> BetaDistribution.of(2, 0));
   }

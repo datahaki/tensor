@@ -14,7 +14,7 @@ import ch.alpine.tensor.mat.IdentityMatrix;
 
 class RotateRightTest {
   @Test
-  public void testVector() {
+  void testVector() {
     Tensor vector = Tensors.vector(0, 1, 2, 3, 4).unmodifiable();
     assertEquals(RotateRight.of(vector, +6), Tensors.vector(4, 0, 1, 2, 3));
     assertEquals(RotateRight.of(vector, +1), Tensors.vector(4, 0, 1, 2, 3));
@@ -26,7 +26,7 @@ class RotateRightTest {
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     int size = 5;
     for (int k = 0; k < size * 2; ++k) {
       Tensor matrix = RotateRight.of(IdentityMatrix.of(size), -k);
@@ -35,19 +35,19 @@ class RotateRightTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertEquals(RotateRight.of(Tensors.empty(), +1), Tensors.empty());
     assertEquals(RotateRight.of(Tensors.empty(), +0), Tensors.empty());
     assertEquals(RotateRight.of(Tensors.empty(), -1), Tensors.empty());
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> RotateRight.of(RealScalar.ONE, 0));
   }
 
   @Test
-  public void testFailNull() {
+  void testFailNull() {
     assertThrows(NullPointerException.class, () -> RotateRight.of(null, 0));
   }
 }

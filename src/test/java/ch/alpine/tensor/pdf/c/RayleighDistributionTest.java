@@ -26,7 +26,7 @@ import ch.alpine.tensor.red.Variance;
 
 class RayleighDistributionTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(RayleighDistribution.of(1.3));
     Tolerance.CHOP.requireClose( //
         PDF.of(distribution).at(RealScalar.of(0.7)), //
@@ -51,7 +51,7 @@ class RayleighDistributionTest {
   }
 
   @Test
-  public void testRandom() {
+  void testRandom() {
     RayleighDistribution distribution = (RayleighDistribution) RayleighDistribution.of(RealScalar.of(1.3));
     RandomVariate.of(distribution, 100);
     Scalar q0 = distribution.protected_quantile(RealScalar.ZERO);
@@ -61,7 +61,7 @@ class RayleighDistributionTest {
   }
 
   @Test
-  public void testSigmaFail() {
+  void testSigmaFail() {
     assertThrows(TensorRuntimeException.class, () -> RayleighDistribution.of(0));
     assertThrows(TensorRuntimeException.class, () -> RayleighDistribution.of(-1));
     assertThrows(TensorRuntimeException.class, () -> RayleighDistribution.of(Quantity.of(2, "m")));

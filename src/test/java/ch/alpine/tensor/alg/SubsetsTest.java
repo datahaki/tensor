@@ -18,7 +18,7 @@ import ch.alpine.tensor.num.Pi;
 
 class SubsetsTest {
   @Test
-  public void testCardinality() {
+  void testCardinality() {
     Tensor vector = Tensors.vector(3, 4, 5, 6);
     for (int k = 0; k <= vector.length(); ++k) {
       assertEquals(Subsets.stream(vector, k).count(), Binomial.of(4, k).number().intValue());
@@ -27,20 +27,20 @@ class SubsetsTest {
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     assertEquals(Subsets.of(Tensors.empty(), 0), Tensors.fromString("{{}}"));
     assertEquals(Subsets.of(Tensors.vector(1, 2, 3), 0), Tensors.fromString("{{}}"));
     assertEquals(Subsets.of(IdentityMatrix.of(2), 0), Tensors.fromString("{{}}"));
   }
 
   @Test
-  public void testOne() {
+  void testOne() {
     Tensor tensor = Subsets.of(Tensors.vector(2, 3, 4), 1);
     assertEquals(tensor, Tensors.fromString("{{2}, {3}, {4}}"));
   }
 
   @Test
-  public void testTwo() {
+  void testTwo() {
     Tensor tensor = Subsets.of(Tensors.vector(2, 3, 4), 2);
     assertEquals(tensor, Tensors.fromString("{{2, 3}, {2, 4}, {3, 4}}"));
     assertEquals( //
@@ -49,7 +49,7 @@ class SubsetsTest {
   }
 
   @Test
-  public void testThree() {
+  void testThree() {
     Tensor tensor = Subsets.of(Tensors.vector(2, 3, 4), 3);
     assertEquals(tensor, Tensors.fromString("{{2, 3, 4}}"));
   }
@@ -58,7 +58,7 @@ class SubsetsTest {
    * "Mathematische Raetsel und Spiele" Loyd/Garnder
    * p.118, Problem 86 */
   @Test
-  public void testDubletten() {
+  void testDubletten() {
     Scalar _96 = RealScalar.of(96);
     Tensor tensor = Tensors.vector(1, 2, 3, 5, 10, 20, 25, 50);
     Tensor solution = Tensors.empty();
@@ -77,17 +77,17 @@ class SubsetsTest {
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(IndexOutOfBoundsException.class, () -> Subsets.of(Tensors.vector(2, 3, 4), -1));
   }
 
   @Test
-  public void testNegative2Fail() {
+  void testNegative2Fail() {
     assertThrows(IndexOutOfBoundsException.class, () -> Subsets.of(Tensors.empty(), -1));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Subsets.of(Pi.HALF, 2));
   }
 }

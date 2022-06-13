@@ -16,7 +16,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class ScalarProductTest {
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     int prime = 677;
     GaussScalar gaussScalar = GaussScalar.of(432, prime);
     GaussScalar power = gaussScalar.power(RealScalar.of(-123));
@@ -32,14 +32,14 @@ class ScalarProductTest {
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     BinaryPower<Scalar> binaryPower = new BinaryPower<>(ScalarProduct.INSTANCE);
     BinaryPower<Scalar> copy = Serialization.copy(binaryPower);
     assertEquals(copy.raise(RealScalar.of(2), BigInteger.valueOf(3)), RealScalar.of(8));
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     assertThrows(NullPointerException.class, () -> ScalarProduct.INSTANCE.neutral(null));
   }
 }

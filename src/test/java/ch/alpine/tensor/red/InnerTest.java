@@ -11,7 +11,7 @@ import ch.alpine.tensor.num.Pi;
 
 class InnerTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     BiFunction<Scalar, Tensor, Scalar> ex = (s, ar) -> Pi.VALUE;
     Inner.with(ex);
   }

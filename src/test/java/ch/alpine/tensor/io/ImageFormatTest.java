@@ -26,7 +26,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class ImageFormatTest {
   @Test
-  public void testRGBAFile() throws Exception {
+  void testRGBAFile() throws Exception {
     Tensor tensor = TransposedImageFormatTest._readRGBA();
     String string = "/io/image/rgba15x33.png";
     File file = new File(getClass().getResource(string).getFile());
@@ -39,7 +39,7 @@ class ImageFormatTest {
   }
 
   @Test
-  public void testGray() {
+  void testGray() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 256);
     Tensor image = RandomVariate.of(distribution, 100, 200);
     Tensor bimap = ImageFormat.from(ImageFormat.of(image));
@@ -47,7 +47,7 @@ class ImageFormatTest {
   }
 
   @Test
-  public void testColor() {
+  void testColor() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 256);
     Tensor image = RandomVariate.of(distribution, 100, 200, 4);
     Tensor bimap = ImageFormat.from(ImageFormat.of(image));
@@ -55,7 +55,7 @@ class ImageFormatTest {
   }
 
   @Test
-  public void testGrayFile() throws Exception {
+  void testGrayFile() throws Exception {
     String string = "/io/image/gray15x9.png";
     File file = new File(getClass().getResource(string).getFile());
     BufferedImage bufferedImage = ImageIO.read(file);
@@ -69,7 +69,7 @@ class ImageFormatTest {
   }
 
   @Test
-  public void testGrayscale() {
+  void testGrayscale() {
     Tensor tensor = Tensors.of(Range.of(0, 256));
     BufferedImage bufferedImage = ImageFormat.of(tensor);
     WritableRaster writableRaster = bufferedImage.getRaster();

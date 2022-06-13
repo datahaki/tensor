@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.tri.ArcTanh;
 
 class BivariateEvaluationTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     List<BivariateEvaluation> list = Arrays.asList( //
         BetaDemo.INSTANCE, //
         GammaDemo.INSTANCE, //

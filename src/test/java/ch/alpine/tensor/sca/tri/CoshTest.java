@@ -22,7 +22,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class CoshTest {
   @Test
-  public void testReal() {
+  void testReal() {
     Scalar c = Cosh.FUNCTION.apply(RealScalar.of(2));
     Scalar s = DoubleScalar.of(Math.cosh(2));
     Scalar t = Cosh.of(RealScalar.of(2));
@@ -31,7 +31,7 @@ class CoshTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar c = Cosh.of(ComplexScalar.of(2, 3.));
     // -3.72455 + 0.511823 I
     Scalar s = Scalars.fromString("-3.7245455049153224+0.5118225699873846*I");
@@ -39,7 +39,7 @@ class CoshTest {
   }
 
   @Test
-  public void testDecimal() {
+  void testDecimal() {
     MathContext mc = MathContext.DECIMAL128;
     Scalar scalar = Cosh.of(DecimalScalar.of(new BigDecimal("1.2356", mc), mc.getPrecision()));
     assertInstanceOf(DecimalScalar.class, scalar);
@@ -47,12 +47,12 @@ class CoshTest {
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> Cosh.of(Quantity.of(1, "deg")));
   }
 
   @Test
-  public void testGaussScalarFail() {
+  void testGaussScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Cosh.of(GaussScalar.of(6, 7)));
   }
 }

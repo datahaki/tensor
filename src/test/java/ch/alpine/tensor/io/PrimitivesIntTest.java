@@ -17,14 +17,14 @@ import ch.alpine.tensor.Tensors;
 
 class PrimitivesIntTest {
   @Test
-  public void testToListInteger() {
+  void testToListInteger() {
     Tensor tensor = Tensors.vector(-2.5, -2.7, 4.3, 5.4, 6.2, 10.5);
     List<Integer> list = Primitives.toListInteger(tensor);
     assertEquals(Arrays.asList(-2, -2, 4, 5, 6, 10), list);
   }
 
   @Test
-  public void testToListInteger2() {
+  void testToListInteger2() {
     Tensor a = Tensors.vector(-2, -3, 4, 5, 6, 11);
     Tensor b = Tensors.vector(-2.5, -3.7, 4.3, 5.4, 6.2, 11.5);
     List<Integer> listA = Primitives.toListInteger(a);
@@ -34,7 +34,7 @@ class PrimitivesIntTest {
   }
 
   @Test
-  public void testToIntArray() {
+  void testToIntArray() {
     Tensor a = Tensors.vector(-2, -3, 4, 5, 6, 11);
     Tensor b = Tensors.vector(-2.5, -3.7, 4.3, 5.4, 6.2, 11.5);
     assertArrayEquals(Primitives.toIntArray(a), //
@@ -44,7 +44,7 @@ class PrimitivesIntTest {
   }
 
   @Test
-  public void testToIntArray2D() {
+  void testToIntArray2D() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, {4}, 5}, {6}}");
     int[][] array = Primitives.toIntArray2D(tensor);
     assertEquals(Tensors.vectorInt(array[0]), Tensors.vector(1, 2));
@@ -54,7 +54,7 @@ class PrimitivesIntTest {
   }
 
   @Test
-  public void testToIntArray2Dvector() {
+  void testToIntArray2Dvector() {
     Tensor tensor = Tensors.fromString("{1, 2, {3, {4}, 5}, {{6}, 7}}");
     int[][] array = Primitives.toIntArray2D(tensor);
     assertEquals(Tensors.vectorInt(array[0]), Tensors.vector(1));
@@ -65,7 +65,7 @@ class PrimitivesIntTest {
   }
 
   @Test
-  public void testToIntBuffer() {
+  void testToIntBuffer() {
     Tensor a = Tensors.vector(-2, -27, Math.PI);
     Tensor b = Tensors.vector(43, 54, 62, 105);
     IntBuffer intBuffer = Primitives.toIntBuffer(Tensors.of(a, b));
@@ -78,7 +78,7 @@ class PrimitivesIntTest {
   }
 
   @Test
-  public void testToIntArray2Dscalar() {
+  void testToIntArray2Dscalar() {
     assertThrows(NegativeArraySizeException.class, () -> Primitives.toIntArray2D(RealScalar.of(123.456)));
   }
 }

@@ -22,7 +22,7 @@ import ch.alpine.tensor.Tensors;
 
 class MathematicaFormatTest {
   @Test
-  public void testMathematica() {
+  void testMathematica() {
     int n = 20;
     int m = 10;
     Random random = new Random();
@@ -47,7 +47,7 @@ class MathematicaFormatTest {
   }
 
   @Test
-  public void testStrings() {
+  void testStrings() {
     String[] strings = new String[] { //
         "{{3 + 2*I}, I,-I,-1.0348772853950305 + 0.042973906265653894*I, ", //
         " -1.0348772853950305 - 0.042973906265653894*I, {}, ", //
@@ -58,7 +58,7 @@ class MathematicaFormatTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     String[] strings = new String[] { //
         "{{3 + I}, -1.0348772853950305 - 0.042973906265653894*I, {}, ", //
         " 0.1 + I, 0.1 - I, ", // <- these were manually added
@@ -70,20 +70,20 @@ class MathematicaFormatTest {
   }
 
   @Test
-  public void testBasic() throws IOException {
+  void testBasic() throws IOException {
     String string = getClass().getResource("/io/basic.mathematica").getPath();
     Tensor tensor = Get.of(Paths.get(string).toFile());
     checkNonString(tensor);
   }
 
   @Test
-  public void testBasicResource() {
+  void testBasicResource() {
     Tensor tensor = ResourceData.of("/io/basic.mathematica");
     checkNonString(tensor);
   }
 
   @Test
-  public void testExponent() throws IOException {
+  void testExponent() throws IOException {
     String string = getClass().getResource("/io/exponent.mathematica").getPath();
     Tensor tensor = Get.of(Paths.get(string).toFile());
     checkNonString(tensor);
@@ -91,7 +91,7 @@ class MathematicaFormatTest {
   }
 
   @Test
-  public void testExponent2() {
+  void testExponent2() {
     Tensor tensor = MathematicaFormat.parse(Stream.of("{1*^-10, 1*^10}"));
     checkNonString(tensor);
     String put = Put.string(tensor);
@@ -100,7 +100,7 @@ class MathematicaFormatTest {
   }
 
   @Test
-  public void testPrime() throws IOException {
+  void testPrime() throws IOException {
     String string = getClass().getResource("/io/prime.mathematica").getPath();
     // System.out.println(Paths.get(string).toFile());
     Tensor tensor = Get.of(Paths.get(string).toFile());

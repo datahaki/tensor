@@ -23,7 +23,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class ErlangDistributionTest {
   @Test
-  public void testPdf() throws ClassNotFoundException, IOException {
+  void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(ErlangDistribution.of(3, RealScalar.of(1.8)));
     PDF pdf = PDF.of(distribution);
     Scalar p = pdf.at(RealScalar.of(3.2));
@@ -33,21 +33,21 @@ class ErlangDistributionTest {
   }
 
   @Test
-  public void testMean() {
+  void testMean() {
     Distribution distribution = ErlangDistribution.of(5, Quantity.of(10, "m"));
     Scalar mean = Expectation.mean(distribution);
     assertEquals(mean, Scalars.fromString("1/2[m^-1]"));
   }
 
   @Test
-  public void testVariance() {
+  void testVariance() {
     Distribution distribution = ErlangDistribution.of(5, Quantity.of(10, "m"));
     Scalar var = Expectation.variance(distribution);
     assertEquals(var, Scalars.fromString("1/20[m^-2]"));
   }
 
   @Test
-  public void testQuantityPDF() {
+  void testQuantityPDF() {
     Distribution distribution = ErlangDistribution.of(4, Quantity.of(6, "m"));
     PDF pdf = PDF.of(distribution);
     {
@@ -62,13 +62,13 @@ class ErlangDistributionTest {
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     Distribution distribution = ErlangDistribution.of(5, Quantity.of(10, "m"));
     assertEquals(distribution.toString(), "ErlangDistribution[5, 10[m]]");
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(IllegalArgumentException.class, () -> ErlangDistribution.of(0, RealScalar.of(1.8)));
   }
 }

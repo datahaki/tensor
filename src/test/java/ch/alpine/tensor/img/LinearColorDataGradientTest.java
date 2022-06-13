@@ -17,14 +17,14 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class LinearColorDataGradientTest {
   @Test
-  public void testRandom() {
+  void testRandom() {
     ColorDataGradient colorDataGradient = //
         LinearColorDataGradient.of(RandomVariate.of(DiscreteUniformDistribution.of(0, 256), 123, 4));
     Subdivide.of(0, 1, 10).map(colorDataGradient);
   }
 
   @Test
-  public void testSingle() {
+  void testSingle() {
     ColorDataGradient colorDataGradient = //
         LinearColorDataGradient.of(Tensors.fromString("{{1, 2, 3, 4}}"));
     Tensor matrix = Subdivide.of(0, 1, 10).map(colorDataGradient);
@@ -32,27 +32,27 @@ class LinearColorDataGradientTest {
   }
 
   @Test
-  public void testCornerCaseLo() {
+  void testCornerCaseLo() {
     assertThrows(TensorRuntimeException.class, () -> LinearColorDataGradient.of(Tensors.fromString("{{0, 0, 0, 0}, {-0.1, 0, 0, 0}}")));
   }
 
   @Test
-  public void testCornerCase() {
+  void testCornerCase() {
     assertThrows(IllegalArgumentException.class, () -> LinearColorDataGradient.of(Tensors.fromString("{{0, 0, 0, 0}, {256, 256, 256, 256}}")));
   }
 
   @Test
-  public void testRangeFail() {
+  void testRangeFail() {
     assertThrows(IllegalArgumentException.class, () -> LinearColorDataGradient.of(Tensors.fromString("{{1, 2, 3, 4}, {1, 2, 3, 257}}")));
   }
 
   @Test
-  public void testVectorFail() {
+  void testVectorFail() {
     assertThrows(TensorRuntimeException.class, () -> LinearColorDataGradient.of(Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(TensorRuntimeException.class, () -> LinearColorDataGradient.of(Tensors.empty()));
   }
 }

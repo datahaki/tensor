@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 class BinaryPowerTest {
   @Test
-  public void testInteger() {
+  void testInteger() {
     GroupInterface<Integer> groupInterface = new GroupInterface<>() {
       @Override // from BinaryPower
       public Integer neutral(Integer integer) {
@@ -43,7 +43,7 @@ class BinaryPowerTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> new BinaryPower<>(null));
   }
 }

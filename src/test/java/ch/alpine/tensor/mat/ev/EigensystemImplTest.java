@@ -13,7 +13,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class EigensystemImplTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Distribution distribution = UniformDistribution.of(-1, 1);
     Tensor x = RandomVariate.of(distribution, 4, 3);
     Tensor matrix = MatrixDotTranspose.of(x, x);

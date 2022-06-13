@@ -35,7 +35,7 @@ class LowercaseETest {
   private static final String RESOURCE = "/io/lowercase_e.csv";
 
   @Test
-  public void testConventional() {
+  void testConventional() {
     Tensor tensor = ResourceData.of(RESOURCE);
     assertTrue(StringScalarQ.any(tensor));
     assertEquals(tensor.length(), 6);
@@ -52,7 +52,7 @@ class LowercaseETest {
   }
 
   @Test
-  public void testUppercase() throws IOException {
+  void testUppercase() throws IOException {
     Tensor tensor = importMatlabCsv(RESOURCE);
     assertFalse(StringScalarQ.any(tensor));
     assertEquals(tensor.length(), 6);

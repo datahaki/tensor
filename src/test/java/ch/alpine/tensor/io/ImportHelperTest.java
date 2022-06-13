@@ -22,7 +22,7 @@ import ch.alpine.tensor.sca.Unitize;
 
 class ImportHelperTest {
   @Test
-  public void testGif() throws Exception {
+  void testGif() throws Exception {
     String string = "/io/image/rgba7x3.gif"; // file consist of a single line break character
     File file = new File(getClass().getResource(string).getFile());
     Tensor tensor = Import.of(file);
@@ -37,14 +37,14 @@ class ImportHelperTest {
   }
 
   @Test
-  public void testExtensionMFail() {
+  void testExtensionMFail() {
     InputStream inputStream = new ByteArrayInputStream(new byte[128]);
     assertThrows(Exception.class, () -> ImportHelper.of(new Filename("some.m"), inputStream));
   }
 
   @SuppressWarnings("null")
   @Test
-  public void testSwitch() {
+  void testSwitch() {
     Extension extension = null;
     try {
       extension = Extension.valueOf("asd");
@@ -63,7 +63,7 @@ class ImportHelperTest {
   }
 
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertFalse(Modifier.isPublic(ImportHelper.class.getModifiers()));
   }
 }

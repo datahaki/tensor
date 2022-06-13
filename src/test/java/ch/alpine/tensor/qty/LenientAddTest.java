@@ -12,7 +12,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 
 class LenientAddTest {
   @Test
-  public void testDifferent() {
+  void testDifferent() {
     Scalar p = Quantity.of(3, "m");
     Scalar q = Quantity.of(0, "s");
     assertEquals(LenientAdd.of(p, q), p);
@@ -21,7 +21,7 @@ class LenientAddTest {
   }
 
   @Test
-  public void testZeros() {
+  void testZeros() {
     Scalar p = Quantity.of(0, "m");
     Scalar q = Quantity.of(0, "s");
     assertEquals(LenientAdd.of(p, q), RealScalar.ZERO);
@@ -30,7 +30,7 @@ class LenientAddTest {
   }
 
   @Test
-  public void testDifferentFail() {
+  void testDifferentFail() {
     Scalar p = Quantity.of(3, "m");
     Scalar q = Quantity.of(1, "s");
     assertThrows(TensorRuntimeException.class, () -> LenientAdd.of(p, q));

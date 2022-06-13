@@ -24,13 +24,13 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class FoldTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor fold = Fold.of(Tensor::dot, LeviCivitaTensor.of(4), IdentityMatrix.of(4));
     assertEquals(fold, RealScalar.ONE);
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     Tensor x = HilbertMatrix.of(3);
     Tensor fold = Fold.of(Tensor::dot, x, Tensors.empty());
     x.set(Scalar::zero, Tensor.ALL, Tensor.ALL);
@@ -39,12 +39,12 @@ class FoldTest {
   }
 
   @Test
-  public void testSingletonStream() {
+  void testSingletonStream() {
     assertEquals(Stream.of(Pi.VALUE).reduce(Scalar::add).get(), Pi.VALUE);
   }
 
   @Test
-  public void testDet() {
+  void testDet() {
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = RandomVariate.of(distribution, n, n);
@@ -53,12 +53,12 @@ class FoldTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> Fold.of(null, Pi.HALF, Tensors.empty()));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Fold.of(Tensor::dot, Pi.HALF, Pi.HALF));
   }
 }

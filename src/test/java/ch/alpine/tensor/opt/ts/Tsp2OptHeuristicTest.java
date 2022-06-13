@@ -22,7 +22,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class Tsp2OptHeuristicTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Distribution distribution = DiscreteUniformDistribution.of(-5, 5);
     Random random = new Random(1);
     for (int n = 1; n < 10; ++n) {
@@ -39,7 +39,7 @@ class Tsp2OptHeuristicTest {
   }
 
   @Test
-  public void testIterate() {
+  void testIterate() {
     Distribution distribution = UniformDistribution.of(-5, 5);
     int n = 11;
     Random random = new Random(1);
@@ -55,7 +55,7 @@ class Tsp2OptHeuristicTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> new Tsp2OptHeuristic(HilbertMatrix.of(2, 3), new Random(1)));
   }
 }

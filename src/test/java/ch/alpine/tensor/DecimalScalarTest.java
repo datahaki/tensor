@@ -35,7 +35,7 @@ class DecimalScalarTest {
   private static final String PI100 = "3.141592653589793238462643383279502884197169399375105820974944592307816406286208998628034825342117068";
 
   @Test
-  public void testUnderDouble() {
+  void testUnderDouble() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL128));
     Scalar d = s.under(Pi.TWO);
     assertInstanceOf(DoubleScalar.class, d);
@@ -44,7 +44,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testUnderRational() {
+  void testUnderRational() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL128));
     Scalar d = s.under(RationalScalar.of(1, 2));
     assertInstanceOf(DecimalScalar.class, d);
@@ -52,7 +52,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testUnderDecimal() {
+  void testUnderDecimal() {
     Scalar d1 = DecimalScalar.of(new BigDecimal("123.0123", MathContext.DECIMAL128));
     Scalar d2 = DecimalScalar.of(new BigDecimal("-11.233", MathContext.DECIMAL128));
     Scalar res = d1.under(d2);
@@ -61,21 +61,21 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testN() {
+  void testN() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL32));
     assertEquals(N.DECIMAL64.of(s), s);
     assertInstanceOf(DoubleScalar.class, N.DOUBLE.of(s));
   }
 
   @Test
-  public void testTrig() {
+  void testTrig() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL32));
     Chop._06.requireZero(Sin.of(s)); // decimal32 is similiar to float
     Tolerance.CHOP.requireClose(Cos.of(s), RealScalar.ONE.negate());
   }
 
   @Test
-  public void testPower() {
+  void testPower() {
     Scalar scalar = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL32));
     Scalar result = Power.of(scalar, 16);
     Scalar revers = Nest.of(Sqrt::of, result, 4);
@@ -83,14 +83,14 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testPowerFail() {
+  void testPowerFail() {
     Scalar scalar = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL32));
     Scalar res = Power.of(scalar, 1682374652836L);
     assertEquals(res, DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
-  public void testArg() {
+  void testArg() {
     Scalar a = Arg.of(DecimalScalar.of(BigDecimal.ONE.negate()));
     Scalar b = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL128));
     Chop._20.requireClose(a, b);
@@ -105,7 +105,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testPairs() {
+  void testPairs() {
     Tensor vector = Tensors.of( //
         DoubleScalar.of(-0.0), //
         DoubleScalar.of(1.0 / 3.0), //
@@ -133,7 +133,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testPrecision() {
+  void testPrecision() {
     Random random = new Random();
     for (int value = random.nextInt(83); value < 10000; value += 83) {
       DecimalScalar decimalScalar = (DecimalScalar) DecimalScalar.of(new BigDecimal("" + Math.sqrt(value)));
@@ -144,20 +144,20 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testPrecisionFunc() {
+  void testPrecisionFunc() {
     DecimalScalar scalar = (DecimalScalar) Scalars.fromString("123.123123123`50");
     assertEquals(scalar.precision(), 50);
   }
 
   @Test
-  public void testDecimalEmpty() {
+  void testDecimalEmpty() {
     Scalar value = Scalars.fromString(" 1.1234` + 12");
     assertInstanceOf(DoubleScalar.class, value);
     assertEquals(value, RealScalar.of(13.1234));
   }
 
   @Test
-  public void testComplexEmpty() {
+  void testComplexEmpty() {
     Scalar value = Scalars.fromString(" 1.1567572194352718` - 1.2351191805935866` * I ");
     assertInstanceOf(ComplexScalar.class, value);
     ComplexScalar complexScalar = (ComplexScalar) value;
@@ -166,12 +166,12 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     assertEquals(RealScalar.ZERO, DecimalScalar.of(BigDecimal.ZERO));
   }
 
   @Test
-  public void testAddMultiply() {
+  void testAddMultiply() {
     BigDecimal d = BigDecimal.ONE;
     Scalar sc1 = DecimalScalar.of(d);
     Scalar sc2 = sc1.add(sc1);
@@ -186,7 +186,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testDouble() {
+  void testDouble() {
     BigDecimal d = BigDecimal.ONE;
     Scalar sc1 = DecimalScalar.of(d);
     Scalar sc2 = sc1.add(sc1);
@@ -199,7 +199,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testReciprocal() {
+  void testReciprocal() {
     BigDecimal d = BigDecimal.ONE;
     Scalar sc1 = DecimalScalar.of(d);
     Scalar sc2 = sc1.add(sc1);
@@ -214,14 +214,14 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testReciprocal2() {
+  void testReciprocal2() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL32));
     DecimalScalar r = (DecimalScalar) s.reciprocal();
     assertTrue(7 <= r.number().precision());
   }
 
   @Test
-  public void testDivide() {
+  void testDivide() {
     BigDecimal d = BigDecimal.ONE;
     Scalar sc1 = DecimalScalar.of(d);
     Scalar sc2 = sc1.add(sc1);
@@ -236,14 +236,14 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testDivide2() {
+  void testDivide2() {
     Scalar s = DecimalScalar.of(new BigDecimal("123.345"));
     Scalar d = s.divide(RationalScalar.of(2, 7));
     assertEquals(d.toString(), "431.7075");
   }
 
   @Test
-  public void testDivide3() {
+  void testDivide3() {
     Scalar s = DecimalScalar.of(new BigDecimal(PI100, MathContext.DECIMAL128));
     Scalar d = s.divide(Pi.TWO);
     assertInstanceOf(DoubleScalar.class, d);
@@ -251,19 +251,19 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testDivideZero() {
+  void testDivideZero() {
     Scalar scalar = DecimalScalar.of(BigDecimal.ZERO);
     assertThrows(ArithmeticException.class, () -> scalar.reciprocal());
   }
 
   @Test
-  public void testDivideZero2() {
+  void testDivideZero2() {
     Scalar scalar = DecimalScalar.of(new BigDecimal("0", MathContext.UNLIMITED));
     assertThrows(ArithmeticException.class, () -> scalar.reciprocal());
   }
 
   @Test
-  public void testSqrt() {
+  void testSqrt() {
     // Mathematica N[Sqrt[2], 50] gives
     // ................1.4142135623730950488016887242096980785696718753769
     String expected = "1.414213562373095048801688724209698";
@@ -274,7 +274,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testSqrtNeg() {
+  void testSqrtNeg() {
     // Mathematica N[Sqrt[2], 50] gives
     // ................1.4142135623730950488016887242096980785696718753769
     String expected = "1.414213562373095048801688724209698";
@@ -286,12 +286,12 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testZero1() {
+  void testZero1() {
     assertEquals(RealScalar.of(BigDecimal.ONE).hashCode(), BigDecimal.ONE.hashCode());
   }
 
   @Test
-  public void testRound() {
+  void testRound() {
     assertEquals(Round.of(DecimalScalar.of(new BigDecimal("12.1"))), RealScalar.of(12));
     assertEquals(Round.of(DecimalScalar.of(new BigDecimal("12.99"))), RealScalar.of(13));
     assertEquals(Round.of(DecimalScalar.of(new BigDecimal("25"))), RealScalar.of(25));
@@ -299,21 +299,21 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testFloor() {
+  void testFloor() {
     assertEquals(Floor.of(DecimalScalar.of(new BigDecimal("12.99"))), RealScalar.of(12));
     assertEquals(Floor.of(DecimalScalar.of(new BigDecimal("25"))), RealScalar.of(25));
     assertTrue(Floor.of(DecimalScalar.of(new BigDecimal("12.99"))) instanceof RationalScalar);
   }
 
   @Test
-  public void testCeiling() {
+  void testCeiling() {
     assertEquals(Ceiling.of(DecimalScalar.of(new BigDecimal("12.1"))), RealScalar.of(13));
     assertEquals(Ceiling.of(DecimalScalar.of(new BigDecimal("25"))), RealScalar.of(25));
     assertInstanceOf(RationalScalar.class, Ceiling.of(DecimalScalar.of(new BigDecimal("12.99"))));
   }
 
   @Test
-  public void testCompare0() {
+  void testCompare0() {
     Scalar a = DecimalScalar.of(new BigDecimal("0.1"));
     Scalar b = DecimalScalar.of(new BigDecimal("0.2"));
     assertTrue(Scalars.lessThan(a, b));
@@ -321,7 +321,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testCompare1() {
+  void testCompare1() {
     Scalar dec = DecimalScalar.of(new BigDecimal("0.1"));
     Scalar alt = DoubleScalar.of(0.01);
     assertTrue(Scalars.lessThan(alt, dec));
@@ -329,7 +329,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testCompare2() {
+  void testCompare2() {
     Scalar dec = DecimalScalar.of(new BigDecimal("0.1"));
     Scalar alt = RationalScalar.of(1, 100);
     assertTrue(Scalars.lessThan(alt, dec));
@@ -337,7 +337,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testCompare3() {
+  void testCompare3() {
     assertTrue(Scalars.lessThan(DecimalScalar.of(new BigDecimal("-3")), RealScalar.ZERO));
     assertFalse(Scalars.lessThan(DecimalScalar.of(new BigDecimal("3")), RealScalar.ZERO));
     assertFalse(Scalars.lessThan(RealScalar.ZERO, DecimalScalar.of(new BigDecimal("-3"))));
@@ -345,7 +345,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     Scalar rs1 = RealScalar.ONE;
     Scalar ds1 = DecimalScalar.of(new BigDecimal("1.0000"));
     assertEquals(ds1, rs1);
@@ -353,7 +353,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testEqualsSpecial() {
+  void testEqualsSpecial() {
     Scalar ds1 = DecimalScalar.of(new BigDecimal("1.0234", MathContext.DECIMAL128));
     assertInstanceOf(DecimalScalar.class, ds1);
     assertFalse(ds1.equals(null));
@@ -362,7 +362,7 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testEqualsObject() {
+  void testEqualsObject() {
     Object object = DecimalScalar.of(new BigDecimal("1.0234", MathContext.DECIMAL128));
     assertFalse(object.equals("hello"));
   }
@@ -380,14 +380,14 @@ class DecimalScalarTest {
   }
 
   @Test
-  public void testEqualsTrue() {
+  void testEqualsTrue() {
     Object object = new ObjectExtension();
     final Scalar ds1 = DecimalScalar.of(new BigDecimal("1.0234", MathContext.DECIMAL128));
     assertTrue(ds1.equals(object));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> DecimalScalar.of((BigDecimal) null));
   }
 }

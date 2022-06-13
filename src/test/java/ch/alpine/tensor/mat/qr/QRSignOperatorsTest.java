@@ -13,19 +13,19 @@ import ch.alpine.tensor.ext.Serialization;
 
 class QRSignOperatorsTest {
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     for (QRSignOperator qrSignOperator : QRSignOperators.values())
       Serialization.copy(qrSignOperator);
   }
 
   @Test
-  public void testIsDetExact() {
+  void testIsDetExact() {
     assertTrue(QRSignOperators.STABILITY.isDetExact());
     assertFalse(QRSignOperators.ORIENTATION.isDetExact());
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertTrue(Modifier.isPublic(QRSignOperators.class.getModifiers()));
   }
 }

@@ -24,13 +24,13 @@ import ch.alpine.tensor.sca.Chop;
 
 class SimplexPivotsTest {
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     for (SimplexPivot simplexPivot : SimplexPivots.values())
       Serialization.copy(simplexPivot);
   }
 
   @Test
-  public void testP14() {
+  void testP14() {
     // x >= 0 that minimizes c.x subject to m.x <= b
     Tensor c = Tensors.fromString("{4[USD], 5[USD]}");
     Tensor m = Tensors.fromString("{{12[Wood], 8[Wood]}, {6[Iron], 9[Iron]}}");
@@ -63,7 +63,7 @@ class SimplexPivotsTest {
    * the reduced costs in any basic solution to this problem are always zero,
    * and every feasible solution is optimal */
   @Test
-  public void testUnique() {
+  void testUnique() {
     Tensor c = Array.zeros(2);
     Tensor A = Tensors.matrixInt(new int[][] { { 3, -1 }, { -3, 2 }, { 1, -1 } });
     Tensor b = Tensors.vector(-1, 2, -1);
@@ -73,7 +73,7 @@ class SimplexPivotsTest {
   }
 
   @Test
-  public void testUnique2() {
+  void testUnique2() {
     Tensor c = Array.zeros(2);
     Tensor A = Tensors.matrixInt(new int[][] { { 3, -1 }, { -3, 2 }, { 1, -1 } });
     Tensor b = Tensors.vector(-1, 2, -1);
@@ -92,7 +92,7 @@ class SimplexPivotsTest {
    * Related to Linear Programming
    * by WEIREN CHOU and R. J. DUFFIN */
   @Test
-  public void testAEV() {
+  void testAEV() {
     Tensor m = fromString( //
         "{1, 0, 0, 0, 0}", //
         "{1, 1,-1, 0, 0}", //
@@ -131,7 +131,7 @@ class SimplexPivotsTest {
    * by Papadimitriou and Steiglitz
    * pp. 30 */
   @Test
-  public void testP30() {
+  void testP30() {
     Tensor m = fromString( //
         "{1, 1, 1, 1, 0, 0, 0}", //
         "{1, 0, 0, 0, 1, 0, 0}", //
@@ -152,7 +152,7 @@ class SimplexPivotsTest {
    * by Papadimitriou and Steiglitz
    * pp. 51 */
   @Test
-  public void testCyclingP51() {
+  void testCyclingP51() {
     // Tensor m = fromString( //
     // "{1/4, -8,-1 , 9}", //
     // "{1/2,-12,-1/2, 3}", //

@@ -11,7 +11,7 @@ import ch.alpine.tensor.mat.re.Inverse;
 
 class Givens1Test {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Givens1 givens = new Givens1(4, RealScalar.of(0.3), 1, 2);
     Tensor matrix = givens.matrix();
     // System.out.println(Pretty.of(matrix.map(Round._2)));

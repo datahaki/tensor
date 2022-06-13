@@ -19,19 +19,19 @@ import ch.alpine.tensor.num.Pi;
 
 class NormalTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor tensor = Tensors.fromString("{{1}, 2}");
     Tensor result = Normal.of(tensor);
     assertEquals(tensor, result);
   }
 
   @Test
-  public void testScalar() {
+  void testScalar() {
     assertEquals(Normal.of(Pi.VALUE), Pi.VALUE);
   }
 
   @Test
-  public void testMixed() {
+  void testMixed() {
     Tensor mixed = Tensors.of( //
         SparseArray.of(RealScalar.ZERO, 3), Tensors.vector(1, 2), SparseArray.of(RealScalar.ZERO, 3));
     assertInstanceOf(SparseArray.class, mixed.get(0));
@@ -40,7 +40,7 @@ class NormalTest {
 
   @SuppressWarnings("unchecked")
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     Serialization.copy(new Normal((Function<Scalar, ? extends Tensor> & Serializable) s -> s.add(s)));
   }
 }

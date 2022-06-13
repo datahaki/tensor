@@ -23,7 +23,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class TensorsTest {
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     Tensor tensor = Tensors.empty();
     assertEquals(tensor, Tensors.empty());
     assertEquals(tensor, Tensors.vector());
@@ -32,13 +32,13 @@ class TensorsTest {
   }
 
   @Test
-  public void testReserveFail() {
+  void testReserveFail() {
     Tensors.reserve(0);
     assertThrows(IllegalArgumentException.class, () -> Tensors.reserve(-1));
   }
 
   @Test
-  public void testNorm() {
+  void testNorm() {
     Tensor vector = Tensors.vectorLong(2, 3, 4, 5);
     ExactTensorQ.require(vector);
     Scalar scalar = (Scalar) vector.dot(vector);
@@ -47,14 +47,14 @@ class TensorsTest {
   }
 
   @Test
-  public void testNorm2() {
+  void testNorm2() {
     Tensor a = Tensors.of(RationalScalar.of(2, 3), RationalScalar.of(4, 5));
     Scalar s = (Scalar) a.dot(a);
     assertEquals(s, RationalScalar.of(244, 225));
   }
 
   @Test
-  public void testNorm5() {
+  void testNorm5() {
     int n = 6;
     int m = 12;
     Random random = new Random();
@@ -67,7 +67,7 @@ class TensorsTest {
   }
 
   @Test
-  public void testInteger() {
+  void testInteger() {
     Tensor p = Tensors.vector(Arrays.asList(3, 4, -5, 6));
     Tensor q = Tensors.vector(3, 4, -5, 6);
     Tensor r = Tensors.vector(3.0, 4.0, -5.0, 6.0);
@@ -84,20 +84,20 @@ class TensorsTest {
   }
 
   @Test
-  public void testDoubleArray() {
+  void testDoubleArray() {
     double[] asd = new double[] { 3.2, -0.3, 1.0 };
     Tensors.vectorDouble(asd);
   }
 
   @Test
-  public void testDouble() {
+  void testDouble() {
     Tensor p = Tensors.vector(Arrays.asList(3.3, 4., 5.3, 6.));
     Tensor q = Tensors.vector(3.3, 4., 5.3, 6.);
     assertEquals(p, q);
   }
 
   @Test
-  public void testNumber() {
+  void testNumber() {
     Tensor p = Tensors.vector(Arrays.asList(3, 4, 5.3, 6));
     Tensor q = Tensors.vector(3, 4, 5.3, 6);
     assertInstanceOf(RationalScalar.class, p.Get(0));
@@ -105,7 +105,7 @@ class TensorsTest {
   }
 
   @Test
-  public void testIntArrays() {
+  void testIntArrays() {
     int[][] data = new int[][] { { 1, -2, 3 }, { 4, 9 } };
     Tensor actual = Tensors.matrixInt(data);
     Tensor expected = Tensors.fromString("{{1, -2, 3}, {4, 9}}");
@@ -113,7 +113,7 @@ class TensorsTest {
   }
 
   @Test
-  public void testLongArrays() {
+  void testLongArrays() {
     long[][] data = new long[][] { { 1, -2, 3 }, { 4, 9 }, { 0, 0, 0, 0, 0 }, {} };
     Tensor actual = Tensors.matrixLong(data);
     Tensor expected = Tensors.fromString("{{1, -2, 3}, {4, 9}, {0, 0, 0, 0, 0}, {}}");
@@ -121,7 +121,7 @@ class TensorsTest {
   }
 
   @Test
-  public void testVectorFloat() {
+  void testVectorFloat() {
     float[] fvalues = { 3.1f, 4.3f, -1.89f };
     double[] dvalues = { 3.1, 4.3, -1.89 };
     Chop._06.requireClose( //
@@ -130,7 +130,7 @@ class TensorsTest {
   }
 
   @Test
-  public void testMatrixFloat() {
+  void testMatrixFloat() {
     float[][] values = { { 3.1f, 4.3f, -1.89f }, { -3.6f, 9.3f } };
     Tensor tensor = Tensors.matrixFloat(values);
     assertEquals(tensor.length(), 2);
@@ -139,7 +139,7 @@ class TensorsTest {
   }
 
   @Test
-  public void testDoubleArrays() {
+  void testDoubleArrays() {
     double[][] data = new double[][] { { 1, -2, 3 }, { 4, 9 }, { 0, 0, 0, 0, 0 }, {} };
     Tensor actual = Tensors.matrixDouble(data);
     Tensor expected = Tensors.fromString("{{1, -2, 3}, {4, 9}, {0, 0, 0, 0, 0}, {}}");
@@ -147,7 +147,7 @@ class TensorsTest {
   }
 
   @Test
-  public void testNumberArrays() {
+  void testNumberArrays() {
     Number[][] data = new Number[][] { { 1, -2, 3 }, { 4, 9 }, { 0, 0, 0, 0, 0 }, {} };
     Tensor actual = Tensors.matrix(data);
     Tensor expected = Tensors.fromString("{{1, -2, 3}, {4, 9}, {0, 0, 0, 0, 0}, {}}");
@@ -155,7 +155,7 @@ class TensorsTest {
   }
 
   @Test
-  public void testScalarArrays() {
+  void testScalarArrays() {
     Scalar[][] data = new Scalar[][] { { RealScalar.ZERO, RealScalar.ONE }, {}, { ComplexScalar.of(2, 3) } };
     Tensor actual = Tensors.matrix(data);
     Tensor expected = Tensors.fromString("{{0, 1}, {}, {2+3*I}}");
@@ -163,14 +163,14 @@ class TensorsTest {
   }
 
   @Test
-  public void testNCopies() {
+  void testNCopies() {
     Tensor ncopies = Tensor.of(Collections.nCopies(6, RealScalar.of(3)).stream().map(Tensor.class::cast));
     ncopies.set(RealScalar.ZERO, 2);
     assertEquals(ncopies, Tensors.vector(3, 3, 0, 3, 3, 3));
   }
 
   @Test
-  public void testOfReferences() {
+  void testOfReferences() {
     Tensor vector = Tensors.vector(1, 2, 3);
     Tensor matrix = Tensors.of(vector);
     vector.set(RealScalar.of(4), 0);
@@ -179,7 +179,7 @@ class TensorsTest {
   }
 
   @Test
-  public void testOfComparison() {
+  void testOfComparison() {
     Tensor row = Tensors.vector(1, 2, 3);
     Tensor tensor = Tensors.of(RealScalar.of(1), row);
     tensor.set(RealScalar.of(4), 1, 1);
@@ -190,14 +190,14 @@ class TensorsTest {
   }
 
   @Test
-  public void testOfTensors() {
+  void testOfTensors() {
     Function<Tensor[], Tensor> ftensors = Tensors::of;
     assertEquals(ftensors.apply(new Tensor[] {}), Tensors.empty());
     assertEquals(ftensors.apply(new Scalar[] {}), Tensors.empty());
   }
 
   @Test
-  public void testOfScalars() {
+  void testOfScalars() {
     Function<Scalar[], Tensor> fscalars = Tensors::of;
     assertEquals(fscalars.apply(new Scalar[] {}), Tensors.empty());
   }

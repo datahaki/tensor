@@ -31,7 +31,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class SchattenNormTest {
   @Test
-  public void testFrobenius() throws ClassNotFoundException, IOException {
+  void testFrobenius() throws ClassNotFoundException, IOException {
     TensorScalarFunction tensorScalarFunction = Serialization.copy(SchattenNorm.of(2));
     Distribution distribution = UniformDistribution.of(-2, 2);
     Tensor design = RandomVariate.of(distribution, 5, 3);
@@ -42,7 +42,7 @@ class SchattenNormTest {
   }
 
   @Test
-  public void testExact() throws ClassNotFoundException, IOException {
+  void testExact() throws ClassNotFoundException, IOException {
     Random random = new Random(1);
     TensorScalarFunction tensorScalarFunction = Serialization.copy(SchattenNorm.of(1.2));
     Distribution distribution = DiscreteUniformDistribution.of(0, 2);
@@ -52,7 +52,7 @@ class SchattenNormTest {
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     Tensor matrix = Array.zeros(3, 2);
     for (Tensor p : Subdivide.of(1, 3, 6)) {
       TensorScalarFunction tensorScalarFunction = SchattenNorm.of((Scalar) p);
@@ -61,12 +61,12 @@ class SchattenNormTest {
   }
 
   @Test
-  public void testPOutsideRangeFail() {
+  void testPOutsideRangeFail() {
     assertThrows(TensorRuntimeException.class, () -> SchattenNorm.of(0.999));
   }
 
   @Test
-  public void testFormatFail() {
+  void testFormatFail() {
     TensorScalarFunction tensorScalarFunction = SchattenNorm.of(RationalScalar.of(3, 2));
     assertThrows(ClassCastException.class, () -> tensorScalarFunction.apply(LeviCivitaTensor.of(3)));
     assertThrows(TensorRuntimeException.class, () -> tensorScalarFunction.apply(Tensors.vector(1, 2, 3)));
@@ -75,7 +75,7 @@ class SchattenNormTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> SchattenNorm.of((Number) null));
     assertThrows(NullPointerException.class, () -> SchattenNorm.of((Scalar) null));
   }

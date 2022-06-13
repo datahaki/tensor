@@ -37,7 +37,7 @@ class CyclesGroupTest {
   }
 
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     _check(Cycles.of(Tensors.fromString("{{4, 2, 5}, {6, 3, 1, 7}}")), BigInteger.valueOf(6), //
         Cycles.of(Tensors.fromString("{{1, 6}, {3, 7}}")));
     _check(Cycles.of(Tensors.fromString("{{4, 2, 5}, {6, 3, 1, 7}}")), BigInteger.valueOf(-2), //
@@ -47,7 +47,7 @@ class CyclesGroupTest {
   }
 
   @Test
-  public void testForloop() {
+  void testForloop() {
     Tensor factor = Tensors.fromString("{{5, 9}, {7, 14, 13}, {18, 4, 10, 19, 6}, {20, 1}, {}}");
     Cycles cycles = Cycles.of(factor);
     Cycles cumprd = Cycles.identity();
@@ -81,7 +81,7 @@ class CyclesGroupTest {
   }
 
   @Test
-  public void testOrbit3() {
+  void testOrbit3() {
     Set<Cycles> set = new HashSet<>();
     set.add(Cycles.of("{{0, 1}}"));
     set.add(Cycles.of("{{0, 1, 2}}"));
@@ -101,7 +101,7 @@ class CyclesGroupTest {
   }
 
   @Test
-  public void testOrbit4() {
+  void testOrbit4() {
     Set<Cycles> set = new HashSet<>();
     set.add(Cycles.of("{{0, 1}}"));
     set.add(Cycles.of("{{0, 1, 2, 3}}"));
@@ -120,12 +120,12 @@ class CyclesGroupTest {
   }
 
   @Test
-  public void testGroupEx0() {
+  void testGroupEx0() {
     assertEquals(_group(Collections.singleton(Cycles.identity())).size(), 1);
   }
 
   @Test
-  public void testGroupEx1() {
+  void testGroupEx1() {
     Set<Cycles> gen = new HashSet<>();
     gen.add(Cycles.of("{{2, 10}, {4, 11}, {5, 7}}"));
     gen.add(Cycles.of("{{1, 4, 3}, {2, 5, 6}}"));
@@ -133,7 +133,7 @@ class CyclesGroupTest {
   }
 
   @Test
-  public void testGroupEx2() {
+  void testGroupEx2() {
     Cycles cycles = Cycles.of( //
         "{{1, 18, 25, 8, 11, 33, 45, 34, 19, 39, 4, 35, 46, 37, 10, 48, 7, 31, 6, 42, 36, 15, 29}, {2, 21, 14, 38, 26, 24, 41, 22, 12, 49}, {3, 28,  20, 50, 43, 23, 9, 5, 16, 44, 30, 27, 17}, {13, 40, 32, 47}}");
     int[] array = cycles.toTensor().stream().mapToInt(Tensor::length).toArray();
@@ -144,7 +144,7 @@ class CyclesGroupTest {
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     assertEquals(CyclesGroup.INSTANCE.toString(), "CyclesGroup");
   }
 }

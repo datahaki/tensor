@@ -20,19 +20,19 @@ import ch.alpine.tensor.sca.pow.Power;
 
 class PermanentTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Scalar scalar = Permanent.of(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}"));
     assertEquals(scalar, RealScalar.of(450)); // confirmed with mathematica
   }
 
   @Test
-  public void testHilbert() {
+  void testHilbert() {
     Scalar scalar = Permanent.of(HilbertMatrix.of(5));
     assertEquals(scalar, RationalScalar.of(32104903, 470400000)); // confirmed with mathematica
   }
 
   @RepeatedTest(4)
-  public void testMin(RepetitionInfo repetitionInfo) {
+  void testMin(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = ConstantArray.of(RationalScalar.of(1, n), n, n);
     Scalar scalar = Permanent.of(matrix);
@@ -40,7 +40,7 @@ class PermanentTest {
   }
 
   @Test
-  public void testFailAd() {
+  void testFailAd() {
     assertThrows(IllegalArgumentException.class, () -> Permanent.of(Tensors.empty()));
     assertThrows(IllegalArgumentException.class, () -> Permanent.of(Tensors.vector(1, 2, 3)));
     assertThrows(ClassCastException.class, () -> Permanent.of(Array.zeros(3, 3, 3)));

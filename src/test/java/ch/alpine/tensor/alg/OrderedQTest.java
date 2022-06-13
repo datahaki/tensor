@@ -18,13 +18,13 @@ import ch.alpine.tensor.sca.gam.Factorial;
 
 class OrderedQTest {
   @Test
-  public void testCornerCases() {
+  void testCornerCases() {
     assertTrue(OrderedQ.of(Tensors.empty()));
     assertTrue(OrderedQ.of(Tensors.vector(1123)));
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     assertTrue(OrderedQ.of(Tensors.vector(1, 2)));
     assertFalse(OrderedQ.of(Tensors.vector(2, 1)));
     assertFalse(OrderedQ.of(Tensors.vector(0, 3, 1)));
@@ -33,7 +33,7 @@ class OrderedQTest {
   }
 
   @Test
-  public void testPermutations() {
+  void testPermutations() {
     for (int index = 0; index < 5; ++index) {
       assertEquals(Permutations.stream(Range.of(0, index)).count(), Factorial.of(index).number().intValue());
       long count = Permutations.stream(Range.of(0, index)) //
@@ -44,30 +44,30 @@ class OrderedQTest {
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertFalse(OrderedQ.of(IdentityMatrix.of(4)));
     assertTrue(OrderedQ.of(Reverse.of(IdentityMatrix.of(4))));
   }
 
   @Test
-  public void testRequire() {
+  void testRequire() {
     OrderedQ.require(Tensors.vector(1, 1, 2, 4, 4, 4));
     assertThrows(TensorRuntimeException.class, () -> OrderedQ.require(Tensors.vector(0, 3, 1)));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> OrderedQ.of(Pi.VALUE));
   }
 
   @Test
-  public void testUncomparable1Fail() {
+  void testUncomparable1Fail() {
     Tensor tensor = Tensors.fromString("{3[s], 4[s], 2[m]}");
     assertThrows(TensorRuntimeException.class, () -> OrderedQ.of(tensor));
   }
 
   @Test
-  public void testUncomparable2Fail() {
+  void testUncomparable2Fail() {
     Tensor tensor = Tensors.fromString("{3[s], 1[s], 2[m]}");
     assertThrows(TensorRuntimeException.class, () -> OrderedQ.of(tensor));
   }

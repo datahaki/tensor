@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.Real;
 
 class RotateTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Rotate rotate = new Rotate(RealScalar.of(3), RealScalar.of(4), RealScalar.of(7), RealScalar.of(11));
     Scalar scalar = Scalars.fromString("(3+4*I)*(7+11*I)");
     assertEquals(rotate.re(), Real.FUNCTION.apply(scalar));

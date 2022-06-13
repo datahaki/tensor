@@ -31,7 +31,7 @@ class DotTest {
   }
 
   @Test
-  public void testDot1() {
+  void testDot1() {
     Tensor m1 = Tensors.matrix((i, j) -> RealScalar.of(2 + i - 3 * j), 3, 4);
     Tensor m2 = Tensors.matrix((i, j) -> RealScalar.of(8 + 2 * i + 9 * j), 4, 2);
     Tensor m3 = Tensors.matrix((i, j) -> RealScalar.of(-3 - 7 * i + j), 2, 7);
@@ -42,7 +42,7 @@ class DotTest {
   }
 
   @Test
-  public void testDot2() {
+  void testDot2() {
     Tensor m1 = Tensors.matrix((i, j) -> RealScalar.of(2 + i - 3 * j), 3, 4);
     Tensor m2 = Tensors.vector(i -> RealScalar.of(8 + 2 * i), 4);
     Tensor m3 = Tensors.vector(i -> RealScalar.of(2 + 2 * i), 3);
@@ -51,7 +51,7 @@ class DotTest {
   }
 
   @Test
-  public void testCopy() {
+  void testCopy() {
     Tensor in = Array.zeros(2);
     Tensor re = Dot.of(in);
     re.set(RealScalar.ONE::add, Tensor.ALL);
@@ -60,14 +60,14 @@ class DotTest {
   }
 
   @Test
-  public void testIdentity() {
+  void testIdentity() {
     Tensor m = IdentityMatrix.of(7);
     Tensor d = Dot.of(m, m, m, m);
     assertEquals(m, d);
   }
 
   @Test
-  public void testSimple1() {
+  void testSimple1() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor x = RandomVariate.of(distribution, 5);
     Tensor y = RandomVariate.of(distribution, 5);
@@ -76,7 +76,7 @@ class DotTest {
   }
 
   @Test
-  public void testSimple1Empty() {
+  void testSimple1Empty() {
     Tensor x = Tensors.empty();
     Tensor y = Tensors.empty();
     assertEquals(Dot.of(x), dot(x));
@@ -85,7 +85,7 @@ class DotTest {
   }
 
   @Test
-  public void testSimple1Fail() {
+  void testSimple1Fail() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor x = RandomVariate.of(distribution, 5);
     Tensor y = RandomVariate.of(distribution, 6);
@@ -93,7 +93,7 @@ class DotTest {
   }
 
   @Test
-  public void testSimple2() {
+  void testSimple2() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor x = RandomVariate.of(distribution, 3);
     Tensor y = RandomVariate.of(distribution, 4);
@@ -105,7 +105,7 @@ class DotTest {
   }
 
   @Test
-  public void testSimple2b() {
+  void testSimple2b() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor x = RandomVariate.of(distribution, 3);
     Tensor y = RandomVariate.of(distribution, 5);
@@ -116,7 +116,7 @@ class DotTest {
   }
 
   @Test
-  public void testSimple3() {
+  void testSimple3() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor x = RandomVariate.of(distribution, 3);
     Tensor y = RandomVariate.of(distribution, 4);
@@ -129,7 +129,7 @@ class DotTest {
   }
 
   @Test
-  public void testExampleP156() {
+  void testExampleP156() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor m1 = RandomVariate.of(distribution, 50, 10);
     Tensor m2 = RandomVariate.of(distribution, 10, 20);
@@ -140,7 +140,7 @@ class DotTest {
   }
 
   @Test
-  public void testExampleP159() {
+  void testExampleP159() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor m1 = RandomVariate.of(distribution, 6, 12);
     Tensor m2 = RandomVariate.of(distribution, 12, 20);
@@ -155,7 +155,7 @@ class DotTest {
   }
 
   @Test
-  public void testExample1() {
+  void testExample1() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor m1 = RandomVariate.of(distribution, 5, 5, 3);
     Tensor m2 = RandomVariate.of(distribution, 3, 2, 4);
@@ -166,7 +166,7 @@ class DotTest {
   }
 
   @Test
-  public void testExample2() {
+  void testExample2() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
     Tensor m1 = RandomVariate.of(distribution, 5, 5, 3, 7);
     Tensor mx = RandomVariate.of(distribution, 7);
@@ -178,14 +178,14 @@ class DotTest {
   }
 
   @Test
-  public void testCombine() {
+  void testCombine() {
     assertEquals(Dot.combine(Arrays.asList(2), Arrays.asList(2, 3, 4, 5)), Arrays.asList(3, 4, 5));
     assertEquals(Dot.combine(Arrays.asList(3), Arrays.asList(3)), Arrays.asList());
     assertEquals(Dot.combine(Arrays.asList(1, 2, 3), Arrays.asList(3, 4, 5)), Arrays.asList(1, 2, 4, 5));
   }
 
   @Test
-  public void testComparison() {
+  void testComparison() {
     Distribution distribution = NormalDistribution.standard();
     Tensor v = RandomVariate.of(distribution, 50);
     Tensor m1 = RandomVariate.of(distribution, 50, 3);
@@ -196,12 +196,12 @@ class DotTest {
   }
 
   @Test
-  public void testCombineFail() {
+  void testCombineFail() {
     assertThrows(IllegalArgumentException.class, () -> Dot.combine(Arrays.asList(2, 2), Arrays.asList(3, 4, 5)));
   }
 
   @Test
-  public void testDot0Fail() {
+  void testDot0Fail() {
     assertThrows(ArrayIndexOutOfBoundsException.class, () -> Dot.of());
   }
 }

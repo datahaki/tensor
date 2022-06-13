@@ -23,7 +23,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class GammaDistributionTest {
   @Test
-  public void testPdf() throws ClassNotFoundException, IOException {
+  void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(GammaDistribution.of(RealScalar.of(1.123), RealScalar.of(2.3)));
     PDF pdf = PDF.of(distribution);
     Chop._08.requireClose(pdf.at(RealScalar.of(0.78)), DoubleScalar.of(0.28770929331586703));
@@ -31,13 +31,13 @@ class GammaDistributionTest {
   }
 
   @Test
-  public void testExp() {
+  void testExp() {
     Distribution distribution = GammaDistribution.of(RealScalar.of(1.0), RealScalar.of(2.3));
     assertInstanceOf(ExponentialDistribution.class, distribution);
   }
 
   @Test
-  public void testMean() {
+  void testMean() {
     Scalar a = RealScalar.of(1.123);
     Scalar b = RealScalar.of(2.3);
     Distribution distribution = GammaDistribution.of(a, b);
@@ -46,7 +46,7 @@ class GammaDistributionTest {
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     Scalar a = RealScalar.of(1.123);
     Scalar b = RealScalar.of(2.3);
     Distribution distribution = GammaDistribution.of(a, b);
@@ -54,7 +54,7 @@ class GammaDistributionTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> GammaDistribution.of(RealScalar.of(-1.0), RealScalar.of(2.3)));
     assertThrows(TensorRuntimeException.class, () -> GammaDistribution.of(RealScalar.of(0.1), RealScalar.of(-2.3)));
   }

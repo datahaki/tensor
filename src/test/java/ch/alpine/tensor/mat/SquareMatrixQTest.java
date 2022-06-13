@@ -18,26 +18,26 @@ import ch.alpine.tensor.lie.LeviCivitaTensor;
 
 class SquareMatrixQTest {
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     assertTrue(SquareMatrixQ.of(IdentityMatrix.of(10)));
     assertTrue(SquareMatrixQ.of(IdentityMatrix.of(10).unmodifiable()));
     assertFalse(SquareMatrixQ.of(Array.zeros(3, 4)));
   }
 
   @Test
-  public void testOthers() {
+  void testOthers() {
     assertFalse(SquareMatrixQ.of(UnitVector.of(10, 3)));
     assertFalse(SquareMatrixQ.of(LeviCivitaTensor.of(3)));
     assertFalse(SquareMatrixQ.of(RealScalar.ONE));
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertFalse(SquareMatrixQ.of(Tensors.empty()));
   }
 
   @Test
-  public void testEmptyNested() {
+  void testEmptyNested() {
     Tensor tensor = Tensors.fromString("{{}}");
     assertTrue(MatrixQ.of(tensor));
     assertFalse(SquareMatrixQ.of(tensor));
@@ -45,33 +45,33 @@ class SquareMatrixQTest {
   }
 
   @Test
-  public void testRequire() {
+  void testRequire() {
     SquareMatrixQ.require(IdentityMatrix.of(10));
   }
 
   @Test
-  public void testNonArray() {
+  void testNonArray() {
     assertFalse(SquareMatrixQ.of(Tensors.fromString("{{1, 2}, {{3}, 4}}")));
   }
 
   @Test
-  public void testRequireScalar() {
+  void testRequireScalar() {
     assertThrows(TensorRuntimeException.class, () -> SquareMatrixQ.require(RealScalar.of(3)));
   }
 
   @Test
-  public void testRequireVector() {
+  void testRequireVector() {
     assertThrows(TensorRuntimeException.class, () -> SquareMatrixQ.require(Range.of(3, 10)));
   }
 
   @Test
-  public void testRequireMatrixNonSquare() {
+  void testRequireMatrixNonSquare() {
     assertFalse(SquareMatrixQ.of(HilbertMatrix.of(3, 4)));
     assertThrows(TensorRuntimeException.class, () -> SquareMatrixQ.require(HilbertMatrix.of(3, 4)));
   }
 
   @Test
-  public void testRequireRank3() {
+  void testRequireRank3() {
     assertFalse(SquareMatrixQ.of(LeviCivitaTensor.of(3)));
     assertThrows(TensorRuntimeException.class, () -> SquareMatrixQ.require(LeviCivitaTensor.of(3)));
   }

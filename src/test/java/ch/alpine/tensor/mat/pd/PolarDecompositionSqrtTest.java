@@ -47,7 +47,7 @@ class PolarDecompositionSqrtTest {
   }
 
   @Test
-  public void testRectangle() {
+  void testRectangle() {
     Random random = new Random(1);
     int n = 5;
     for (int k = 1; k < n; ++k) {
@@ -58,7 +58,7 @@ class PolarDecompositionSqrtTest {
   }
 
   @Test
-  public void testSquare() {
+  void testSquare() {
     Random random = new Random(3);
     int d = 7;
     for (int k = 1; k < d; ++k) {
@@ -80,7 +80,7 @@ class PolarDecompositionSqrtTest {
   }
 
   @Test
-  public void testDet1Invariance() {
+  void testDet1Invariance() {
     Random random = new Random(5);
     int d = 7;
     for (int k = 1; k < d; ++k) {
@@ -96,7 +96,7 @@ class PolarDecompositionSqrtTest {
   }
 
   @Test
-  public void testStrang() throws ClassNotFoundException, IOException {
+  void testStrang() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.fromString("{{3, 0}, {4, 5}}");
     PolarDecomposition polarDecomposition = Serialization.copy(PolarDecomposition.up(matrix));
     Tensor expect = Tensors.fromString("{{2, 1}, {1, 2}}").multiply(Sqrt.FUNCTION.apply(RealScalar.of(5)));
@@ -116,7 +116,7 @@ class PolarDecompositionSqrtTest {
   // }
 
   @Test
-  public void testSvd() {
+  void testSvd() {
     Random random = new Random(3);
     Tensor matrix = RandomVariate.of(CauchyDistribution.standard(), random, 5, 3);
     PolarDecomposition pd_qs = PolarDecomposition.up(matrix);

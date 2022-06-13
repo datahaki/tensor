@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.pow.Power;
 
 class QuantityTest {
   @Test
-  public void testFromString() {
+  void testFromString() {
     assertEquals(Scalars.fromString("-7[m*kg^-2]"), Quantity.of(-7, "m*kg^-2"));
     assertEquals(Scalars.fromString("3 [ m ]"), Quantity.of(3, "m"));
     assertEquals(Scalars.fromString("3 [ m *rad ]  "), Quantity.of(3, "m*rad"));
@@ -34,7 +34,7 @@ class QuantityTest {
   }
 
   @Test
-  public void testNumberUnit() {
+  void testNumberUnit() {
     Unit unit = Unit.of("m*s^-1");
     Scalar scalar = Quantity.of(3, unit);
     assertEquals(scalar, Scalars.fromString("3[m*s^-1]"));
@@ -50,7 +50,7 @@ class QuantityTest {
   }
 
   @Test
-  public void testStringScalar() {
+  void testStringScalar() {
     _check("-7[m][kg]");
     _check("-7[m]a");
     _check("-7[m*kg^-2");
@@ -59,7 +59,7 @@ class QuantityTest {
   }
 
   @Test
-  public void testPercent() {
+  void testPercent() {
     Scalar of = Quantity.of(50, "%");
     FiniteScalarQ.require(of);
     Scalar pr = Scalars.fromString("50[%]");
@@ -72,20 +72,20 @@ class QuantityTest {
   }
 
   @Test
-  public void testFromStringComplex() {
+  void testFromStringComplex() {
     Quantity quantity = (Quantity) Scalars.fromString("(-7+3*I)[kg^-2*m*s]");
     Scalar scalar = quantity.value();
     assertEquals(scalar, ComplexScalar.of(-7, 3));
   }
 
   @Test
-  public void testDecimal() {
+  void testDecimal() {
     Quantity quantity = (Quantity) Scalars.fromString("-7.23459823746593784659387465`13.0123[m*kg^-2]");
     assertInstanceOf(DecimalScalar.class, quantity.value());
   }
 
   @Test
-  public void testParseFail() {
+  void testParseFail() {
     assertThrows(IllegalArgumentException.class, () -> Quantity.of(3.14, "^2"));
     assertThrows(TensorRuntimeException.class, () -> Quantity.of(3.14, "m^2a"));
     assertThrows(TensorRuntimeException.class, () -> Quantity.of(3.14, "m^"));
@@ -94,18 +94,18 @@ class QuantityTest {
   }
 
   @Test
-  public void testNestFail() {
+  void testNestFail() {
     Scalar q1 = Quantity.of(3.14, "m");
     assertThrows(TensorRuntimeException.class, () -> Quantity.of(q1, "s"));
   }
 
   @Test
-  public void testNestEmptyFail() {
+  void testNestEmptyFail() {
     assertThrows(TensorRuntimeException.class, () -> Quantity.of(Quantity.of(2, "s"), ""));
   }
 
   @Test
-  public void testValue() {
+  void testValue() {
     Quantity quantity = (Quantity) Scalars.fromString("-7+3*I[kg^-2*m*s]");
     Scalar scalar = quantity.value();
     assertEquals(scalar, ComplexScalar.of(-7, 3));
@@ -113,7 +113,7 @@ class QuantityTest {
   }
 
   @Test
-  public void testRounding() {
+  void testRounding() {
     Scalar scalar = Scalars.fromString("-7.2+3.7*I[kg^-1*m^2*s]");
     assertFalse(ExactScalarQ.of(scalar));
     assertInstanceOf(Quantity.class, scalar);
@@ -125,26 +125,26 @@ class QuantityTest {
   }
 
   @Test
-  public void testUnitString() {
+  void testUnitString() {
     Quantity quantity = (Quantity) Scalars.fromString("-7+3*I[kg^-2*m*s]");
     String string = quantity.unit().toString();
     assertEquals(string, "kg^-2*m*s");
   }
 
   @Test
-  public void testEmptyPass() {
+  void testEmptyPass() {
     assertEquals(Quantity.of(3.14, ""), RealScalar.of(3.14));
   }
 
   @Test
-  public void testPowerZeroExact() {
+  void testPowerZeroExact() {
     Scalar scalar = Power.of(Quantity.of(3, "s^3*m^-1"), 0);
     ExactScalarQ.require(scalar);
     assertEquals(scalar, RealScalar.ONE);
   }
 
   @Test
-  public void testPowerZeroNumeric() {
+  void testPowerZeroNumeric() {
     Scalar scalar = Power.of(Quantity.of(Pi.HALF.negate(), "s^3*m^-1"), 0);
     assertEquals(scalar, RealScalar.ONE);
   }

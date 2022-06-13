@@ -10,26 +10,26 @@ import org.junit.jupiter.api.Test;
 
 class UserNameTest {
   @Test
-  public void testGetProperty() {
+  void testGetProperty() {
     String name = System.getProperty("user.name");
     assertFalse(name.isEmpty());
   }
 
   @Test
-  public void testUsername() {
+  void testUsername() {
     assertNotNull(UserName.get());
     assertFalse(UserName.get().isEmpty());
   }
 
   @Test
-  public void testIs() {
+  void testIs() {
     assertTrue(UserName.is(UserName.get()));
     assertFalse(UserName.is(""));
     assertFalse(UserName.is("&E T H!"));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> UserName.is(null));
   }
 }

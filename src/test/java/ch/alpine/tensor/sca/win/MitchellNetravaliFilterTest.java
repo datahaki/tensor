@@ -10,13 +10,13 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class MitchellNetravaliFilterTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Scalar scalar = MitchellNetravaliFilter.FUNCTION.apply(RealScalar.of(0.1));
     Tolerance.CHOP.requireClose(scalar, RealScalar.of(0.6435555555555554));
   }
 
   @Test
-  public void testSpecial() {
+  void testSpecial() {
     ScalarUnaryOperator scalarUnaryOperator = MitchellNetravaliFilter.of(0.5);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.ZERO);
     Tolerance.CHOP.requireClose(scalar, RealScalar.ONE);

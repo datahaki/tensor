@@ -13,14 +13,14 @@ import ch.alpine.tensor.alg.Array;
 
 class TransparentTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     assertEquals(Transparent.rgba(), Array.zeros(4));
     Transparent.rgba().set(RealScalar.ONE, 3);
     assertEquals(Transparent.rgba(), Array.zeros(4));
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(Transparent.class.getModifiers()));
   }
 }

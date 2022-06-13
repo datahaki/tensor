@@ -43,7 +43,7 @@ class DistributionTest {
   }
 
   @Test
-  public void testDiscrete() {
+  void testDiscrete() {
     _check(BernoulliDistribution.of(RationalScalar.of(2, 3)), 1000);
     _check(BinomialDistribution.of(10, RationalScalar.of(1, 4)), 1000);
     _check(BinomialDistribution.of(10, RationalScalar.of(7, 8)), 1000);
@@ -56,7 +56,7 @@ class DistributionTest {
   }
 
   @Test
-  public void testContinuous() {
+  void testContinuous() {
     _check(ExponentialDistribution.of(RealScalar.of(2.5)), 2500); // failed with 2000, 2300
     _check(ExponentialDistribution.of(RealScalar.of(10)), 3000);
     _check(NormalDistribution.of(RealScalar.of(100), RealScalar.of(10)), 1000);

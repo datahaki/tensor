@@ -36,7 +36,7 @@ import ch.alpine.tensor.sca.tri.Sinh;
 
 class JetScalarTest {
   @Test
-  public void testMultiply() throws ClassNotFoundException, IOException {
+  void testMultiply() throws ClassNotFoundException, IOException {
     Scalar s1 = Serialization.copy(JetScalar.of(Tensors.vector(4, 1, 2)));
     Scalar s2 = JetScalar.of(Tensors.vector(2, 3, -1));
     Scalar scalar = s1.multiply(s2);
@@ -46,7 +46,7 @@ class JetScalarTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar s1 = JetScalar.of(Tensors.of(ComplexScalar.of(7, 5), ComplexScalar.of(4, 2)));
     Scalar s2 = JetScalar.of(Tensors.of(ComplexScalar.of(-2, 3), ComplexScalar.of(1, -1)));
     Scalar s12 = s1.multiply(s2);
@@ -55,7 +55,7 @@ class JetScalarTest {
   }
 
   @Test
-  public void testReciprocal() {
+  void testReciprocal() {
     Scalar s1 = JetScalar.of(Tensors.vector(4, 1, 2));
     Scalar reciprocal = s1.reciprocal();
     assertEquals(((JetScalar) reciprocal).vector(), Tensors.fromString("{1/4, -1/16, -3/32}"));
@@ -64,7 +64,7 @@ class JetScalarTest {
   }
 
   @Test
-  public void testPower() {
+  void testPower() {
     Scalar s1 = JetScalar.of(Tensors.vector(4, 1, 2, -3));
     Scalar scalar = Power.of(s1, 5);
     JetScalar jetScalar = (JetScalar) scalar;
@@ -72,7 +72,7 @@ class JetScalarTest {
   }
 
   @Test
-  public void testMultiplex() {
+  void testMultiplex() {
     Scalar s1 = JetScalar.of(Tensors.vector(4, 1, 2, -3));
     ExactScalarQ.require(s1);
     Scalar s2 = N.DOUBLE.apply(s1);
@@ -80,14 +80,14 @@ class JetScalarTest {
   }
 
   @Test
-  public void testScalar() {
+  void testScalar() {
     Scalar s1 = JetScalar.of(RealScalar.of(3), 4);
     JetScalar jetScalar = (JetScalar) s1;
     assertEquals(jetScalar.vector(), Tensors.vector(3, 1, 0, 0));
   }
 
   @Test
-  public void testNegate() {
+  void testNegate() {
     Scalar s1 = JetScalar.of(Tensors.vector(4, 1, 2, -3));
     Scalar s2 = RealScalar.of(3);
     JetScalar jetScalar = (JetScalar) s2.multiply(s1);
@@ -95,14 +95,14 @@ class JetScalarTest {
   }
 
   @Test
-  public void testSqrt() {
+  void testSqrt() {
     Scalar s1 = JetScalar.of(Tensors.vector(4, 2, 1, -3));
     JetScalar scalar = (JetScalar) Sqrt.FUNCTION.apply(s1);
     Chop._10.requireClose(scalar.vector(), Tensors.vector(2, 0.5, 0.125, -0.84375));
   }
 
   @Test
-  public void testExp() {
+  void testExp() {
     Scalar s1 = JetScalar.of(Tensors.vector(4, 2, 0, -3));
     JetScalar scalar = (JetScalar) Exp.FUNCTION.apply(s1);
     Chop._10.requireClose(scalar.vector(), //
@@ -110,14 +110,14 @@ class JetScalarTest {
   }
 
   @Test
-  public void testLog() {
+  void testLog() {
     Scalar s1 = JetScalar.of(Tensors.vector(4, 2, 0, -3));
     JetScalar scalar = (JetScalar) Log.FUNCTION.apply(s1);
     Chop._10.requireClose(scalar.vector(), Tensors.vector(1.3862943611198906, 0.5, -0.25, -0.5));
   }
 
   @Test
-  public void testSin() {
+  void testSin() {
     Scalar s1 = JetScalar.of(Tensors.vector(4, 2, 0, -3));
     JetScalar scalar = (JetScalar) Sin.FUNCTION.apply(s1);
     Chop._10.requireClose(scalar.vector(), //
@@ -125,7 +125,7 @@ class JetScalarTest {
   }
 
   @Test
-  public void testSinh() {
+  void testSinh() {
     Scalar s1 = JetScalar.of(Tensors.vector(4, 2, 0, -3));
     JetScalar scalar = (JetScalar) Sinh.FUNCTION.apply(s1);
     Chop._10.requireClose(scalar.vector(), //
@@ -133,7 +133,7 @@ class JetScalarTest {
   }
 
   @Test
-  public void testAbsSquared() {
+  void testAbsSquared() {
     Scalar s1 = JetScalar.of(Tensors.vector(3, 1));
     JetScalar absSq = (JetScalar) AbsSquared.FUNCTION.apply(s1);
     JetScalar quadr = (JetScalar) s1.multiply(s1);
@@ -146,19 +146,19 @@ class JetScalarTest {
   // }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> JetScalar.of(RealScalar.of(2)));
   }
 
   @ParameterizedTest
   @ValueSource(ints = { 1, 2, 3 })
-  public void testJetScalarConstantFail(int n) {
+  void testJetScalarConstantFail(int n) {
     JetScalar jetScalar = JetScalar.of(RealScalar.of(2), n);
     assertThrows(TensorRuntimeException.class, () -> JetScalar.of(jetScalar, n));
   }
 
   @Test
-  public void testJetScalarHashSet() {
+  void testJetScalarHashSet() {
     Set<Scalar> set = new HashSet<>();
     for (int n = 3; n < 10; ++n)
       set.add(JetScalar.of(RealScalar.of(n), 3));
@@ -168,12 +168,12 @@ class JetScalarTest {
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(TensorRuntimeException.class, () -> JetScalar.of(HilbertMatrix.of(3)));
   }
 
   @Test
-  public void testNestFail() {
+  void testNestFail() {
     JetScalar js = JetScalar.of(RealScalar.of(2), 3);
     assertThrows(TensorRuntimeException.class, () -> JetScalar.of(Tensors.of(RealScalar.of(1), js)));
   }

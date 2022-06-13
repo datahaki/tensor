@@ -17,7 +17,7 @@ import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 
 class Matrix1NormTest {
   @Test
-  public void testOneInfNorm2() {
+  void testOneInfNorm2() {
     Tensor a = Tensors.vector(1, 2);
     Tensor b = Tensors.vector(3, 4);
     Tensor c = Tensors.of(a, b);
@@ -26,7 +26,7 @@ class Matrix1NormTest {
   }
 
   @Test
-  public void testTranspose() {
+  void testTranspose() {
     Distribution distribution = TrapezoidalDistribution.with(1, 2, 2);
     Tensor matrix = RandomVariate.of(distribution, 3, 6).map(Rationalize._3);
     Scalar mn1 = Matrix1Norm.of(matrix);

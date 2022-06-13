@@ -40,21 +40,21 @@ class KleeMintyCubeTest {
   }
 
   @RepeatedTest(5)
-  public void testKleeMinty(RepetitionInfo repetitionInfo) {
+  void testKleeMinty(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     _callKlee(n);
     _callKleeN(n);
   }
 
   @Test
-  public void testSmallCorners() {
+  void testSmallCorners() {
     KleeMintyCube kleeMintyCube = KleeMintyCube.of(3);
     Tensor sol = SimplexCorners.of(kleeMintyCube.linearProgram);
     assertEquals(sol, Tensors.fromString("{{0, 0, 125}}"));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> KleeMintyCube.of(0));
     assertThrows(TensorRuntimeException.class, () -> KleeMintyCube.of(-1));
   }

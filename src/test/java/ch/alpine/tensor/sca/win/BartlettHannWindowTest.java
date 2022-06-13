@@ -8,7 +8,7 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class BartlettHannWindowTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tolerance.CHOP.requireClose( //
         BartlettHannWindow.FUNCTION.apply(RealScalar.of(0.3)), //
         RealScalar.of(0.35857354213752));
