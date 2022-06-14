@@ -32,7 +32,7 @@ import ch.alpine.tensor.mat.SquareMatrixQ;
  * After importing the csv file using {@link Import}
  * the check StringScalarQ.any(tensor) should return false. */
 class LowercaseETest {
-  private static final String RESOURCE = "/io/lowercase_e.csv";
+  private static final String RESOURCE = "/ch/alpine/tensor/io/lowercase_e.csv";
 
   @Test
   void testConventional() {

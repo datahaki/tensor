@@ -51,7 +51,7 @@ class PrettyTest {
   void testRegressionV051() {
     Tensor tensor = Tensors.fromString("{1[A], {2, 3, 4, 5[s]}, {7, {8.1, 9.0}}, {{-1, 2, 3}, {4, 5, 6}}}");
     String string = Pretty.of(tensor);
-    String pty051 = ResourceData.object("/io/pretty.string");
+    String pty051 = ResourceData.object("/ch/alpine/tensor/io/pretty.string");
     assertEquals(string, pty051);
   }
 }

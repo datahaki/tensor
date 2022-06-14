@@ -18,7 +18,7 @@ import ch.alpine.tensor.num.Pi;
 class HistogramTransformTest {
   @Test
   void testSimple() {
-    Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/album_au_gray.jpg");
     Tensor result = HistogramTransform.of(tensor);
     assertEquals(Dimensions.of(tensor), Dimensions.of(result));
   }

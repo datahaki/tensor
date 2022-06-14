@@ -178,7 +178,7 @@ class BinomialTest {
   @Test
   void testBinomialTable() {
     Tensor tableb = Tensors.matrix((i, j) -> Binomial.of(i - 5, j - 5), 11, 11);
-    Tensor tensor = ResourceData.of("/alg/binomial11.csv");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/num/binomial11.csv");
     assertEquals(tableb, tensor);
   }
 

@@ -69,7 +69,7 @@ class CsvFormatTest {
 
   @Test
   void testCount2() throws IOException {
-    try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
+    try (InputStream inputStream = getClass().getResource("/ch/alpine/tensor/io/libreoffice_calc.csv").openStream()) {
       try (Stream<String> stream = ReadLine.of(inputStream)) {
         Tensor table = XsvFormat.CSV.parse(stream);
         assertEquals(Dimensions.of(table), Arrays.asList(4, 2));
@@ -80,7 +80,7 @@ class CsvFormatTest {
 
   @Test
   void testLibreofficeCalcFile() throws Exception {
-    try (InputStream inputStream = getClass().getResource("/io/libreoffice_calc.csv").openStream()) {
+    try (InputStream inputStream = getClass().getResource("/ch/alpine/tensor/io/libreoffice_calc.csv").openStream()) {
       Stream<String> stream = ReadLine.of(inputStream);
       Tensor table = XsvFormat.CSV.parse(stream);
       assertEquals(Dimensions.of(table), Arrays.asList(4, 2));
@@ -90,7 +90,7 @@ class CsvFormatTest {
 
   @Test
   void testMatlabFile() throws Exception {
-    try (InputStream inputStream = getClass().getResource("/io/matlab_3x5.csv").openStream()) {
+    try (InputStream inputStream = getClass().getResource("/ch/alpine/tensor/io/matlab_3x5.csv").openStream()) {
       Stream<String> stream = ReadLine.of(inputStream);
       Tensor table = XsvFormat.CSV.parse(stream);
       assertEquals(Dimensions.of(table), Arrays.asList(3, 5));
@@ -99,7 +99,7 @@ class CsvFormatTest {
 
   @Test
   void testGeditFile() throws Exception {
-    try (InputStream inputStream = getClass().getResource("/io/gedit_mixed.csv").openStream()) {
+    try (InputStream inputStream = getClass().getResource("/ch/alpine/tensor/io/gedit_mixed.csv").openStream()) {
       Stream<String> stream = ReadLine.of(inputStream);
       Tensor table = XsvFormat.CSV.parse(stream);
       assertEquals(table, Tensors.fromString("{{hello, blub}, {1, 4.22}, {-3, 0.323, asdf}, {}, {2, 1.223}, {3+8*I, 12, 33}}"));

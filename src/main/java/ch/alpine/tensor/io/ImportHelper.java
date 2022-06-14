@@ -3,6 +3,7 @@ package ch.alpine.tensor.io;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.Properties;
 import java.util.zip.DataFormatException;
 import java.util.zip.GZIPInputStream;
@@ -55,9 +56,9 @@ import ch.alpine.tensor.ext.ReadLine;
   /** @param inputStream
    * @return
    * @throws IOException */
-  public static Properties properties(InputStream inputStream) throws IOException {
+  public static Properties properties(Reader reader) throws IOException {
     Properties properties = new Properties();
-    properties.load(inputStream);
+    properties.load(reader);
     return properties;
   }
 }

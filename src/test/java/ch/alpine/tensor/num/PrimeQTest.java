@@ -18,7 +18,7 @@ import ch.alpine.tensor.io.ResourceData;
 class PrimeQTest {
   @Test
   void testPrimes() {
-    for (Tensor _x : ResourceData.of("/io/primes.vector")) {
+    for (Tensor _x : ResourceData.of("/ch/alpine/tensor/num/primes.vector")) {
       RationalScalar x = (RationalScalar) _x;
       assertTrue(x.numerator().isProbablePrime(100));
       assertTrue(PrimeQ.of(x));

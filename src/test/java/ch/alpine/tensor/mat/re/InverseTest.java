@@ -106,7 +106,7 @@ class InverseTest {
 
   @Test
   void testDet0() {
-    Tensor matrix = ResourceData.of("/mat/det0-matlab.csv"); // det(matrix) == 0
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/re/det0-matlab.csv"); // det(matrix) == 0
     assertNotNull(matrix);
     assertThrows(TensorRuntimeException.class, () -> Inverse.of(matrix));
     assertThrows(TensorRuntimeException.class, () -> Inverse.of(N.DOUBLE.of(matrix)));

@@ -4,9 +4,12 @@ package ch.alpine.tensor.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.Objects;
 import java.util.Properties;
@@ -30,6 +33,8 @@ import ch.alpine.tensor.ext.ObjectFormat;
  * @see Get */
 public enum Import {
   ;
+  private static final Charset CHARSET = Charset.forName("UTF-8");
+
   /** Supported extensions include
    * <ul>
    * <li>bmp for {@link ImageFormat}
@@ -62,12 +67,21 @@ public enum Import {
   }
 
   /** @param file
+   * @param charset
    * @return instance of {@link Properties} with key-value pairs specified in given file
    * @throws FileNotFoundException
    * @throws IOException */
-  public static Properties properties(File file) throws FileNotFoundException, IOException {
-    try (InputStream inputStream = new FileInputStream(file)) {
-      return ImportHelper.properties(inputStream);
+  public static Properties properties(File file, Charset charset) throws FileNotFoundException, IOException {
+    try (Reader reader = new FileReader(file, charset)) {
+      return ImportHelper.properties(reader);
     }
+  }
+
+  /** @param file
+   * @return
+   * @throws FileNotFoundException
+   * @throws IOException */
+  public static Properties properties(File file) throws FileNotFoundException, IOException {
+    return properties(file, CHARSET);
   }
 }

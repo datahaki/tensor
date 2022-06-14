@@ -194,7 +194,7 @@ class DetTest {
   // https://ch.mathworks.com/help/matlab/ref/det.html
   @Test
   void testMatlabEx() {
-    Tensor matrix = ResourceData.of("/mat/det0-matlab.csv");
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/re/det0-matlab.csv");
     Scalar det = Det.of(matrix);
     assertEquals(det, RealScalar.ZERO);
     // Matlab gives num == 1.0597e+05 !

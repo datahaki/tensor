@@ -46,7 +46,7 @@ class LanczosInterpolationTest {
 
   @Test
   void testImage() {
-    String string = "/io/image/gray15x9.png";
+    String string = "/ch/alpine/tensor/img/gray15x9.png";
     Tensor tensor = ResourceData.of(string);
     assertEquals(Dimensions.of(tensor), Arrays.asList(9, 15));
     Interpolation interpolation = LanczosInterpolation.of(tensor, 2);
@@ -58,7 +58,7 @@ class LanczosInterpolationTest {
 
   @Test
   void testImage3() {
-    String string = "/io/image/gray15x9.png";
+    String string = "/ch/alpine/tensor/img/gray15x9.png";
     Tensor tensor = ResourceData.of(string);
     assertEquals(Dimensions.of(tensor), Arrays.asList(9, 15));
     Interpolation interpolation = LanczosInterpolation.of(tensor);

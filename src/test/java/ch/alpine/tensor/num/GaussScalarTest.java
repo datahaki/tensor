@@ -312,7 +312,7 @@ class GaussScalarTest {
 
   @Test
   void testPrimes() {
-    Tensor tensor = ResourceData.of("/io/primes.vector");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/num/primes.vector");
     tensor.extract(3, tensor.length()).stream() //
         .parallel() //
         .map(Scalar.class::cast) //

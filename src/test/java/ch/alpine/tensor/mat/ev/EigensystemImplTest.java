@@ -2,6 +2,7 @@
 package ch.alpine.tensor.mat.ev;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.mat.MatrixDotTranspose;
@@ -13,6 +14,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class EigensystemImplTest {
   @Test
+  @Timeout(1)
   void testSimple() {
     Distribution distribution = UniformDistribution.of(-1, 1);
     Tensor x = RandomVariate.of(distribution, 4, 3);

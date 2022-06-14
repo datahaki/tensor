@@ -24,7 +24,7 @@ import ch.alpine.tensor.qty.Quantity;
 class ImportTest {
   @Test
   void testCsv() throws Exception {
-    String string = "/io/libreoffice_calc.csv";
+    String string = "/ch/alpine/tensor/io/libreoffice_calc.csv";
     File file = new File(getClass().getResource(string).getFile());
     Tensor table = Import.of(file);
     assertEquals(Dimensions.of(table), Arrays.asList(4, 2));
@@ -33,7 +33,7 @@ class ImportTest {
 
   @Test
   void testCsvEmpty() throws Exception {
-    String string = "/io/empty.csv"; // file has byte length 0
+    String string = "/ch/alpine/tensor/io/empty.csv"; // file has byte length 0
     File file = new File(getClass().getResource(string).getFile());
     assertTrue(Tensors.isEmpty(Import.of(file)));
     assertTrue(Tensors.isEmpty(ResourceData.of(string)));
@@ -41,7 +41,7 @@ class ImportTest {
 
   @Test
   void testCsvEmptyLine() throws Exception {
-    String string = "/io/emptyline.csv"; // file consist of a single line break character
+    String string = "/ch/alpine/tensor/io/emptyline.csv"; // file consist of a single line break character
     File file = new File(getClass().getResource(string).getFile());
     Tensor expected = Tensors.fromString("{{}}").unmodifiable();
     assertEquals(Import.of(file), expected);
@@ -50,13 +50,13 @@ class ImportTest {
 
   @Test
   void testCsvFail() {
-    File file = new File("/io/doesnotexist.csv");
+    File file = new File("/ch/alpine/tensor/io/doesnotexist.csv");
     assertThrows(Exception.class, () -> Import.of(file));
   }
 
   @Test
   void testCsvGz() throws Exception {
-    String string = "/io/mathematica23.csv.gz";
+    String string = "/ch/alpine/tensor/io/mathematica23.csv.gz";
     File file = new File(getClass().getResource(string).getFile());
     Tensor table = Import.of(file);
     assertEquals(table, Tensors.fromString("{{123/875+I, 9.3}, {-9, 5/8123123123123123, 1010101}}"));
@@ -96,14 +96,14 @@ class ImportTest {
 
   @Test
   void testPng() throws Exception {
-    File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());
+    File file = new File(getClass().getResource("/ch/alpine/tensor/img/rgba15x33.png").getFile());
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
   }
 
   @Test
   void testPngClose(@TempDir File tempDir) throws Exception {
-    Tensor tensor = ResourceData.of("/io/image/rgba15x33.png");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/rgba15x33.png");
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     File file = new File(tempDir, "file.png");
     Export.of(file, tensor);
@@ -113,7 +113,7 @@ class ImportTest {
 
   @Test
   void testJpg() throws Exception {
-    File file = new File(getClass().getResource("/io/image/rgb15x33.jpg").getFile());
+    File file = new File(getClass().getResource("/ch/alpine/tensor/img/rgb15x33.jpg").getFile());
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     assertEquals(Tensors.vector(180, 46, 47, 255), tensor.get(21, 3)); // verified with gimp
@@ -122,7 +122,7 @@ class ImportTest {
   @Test
   void testObject() throws ClassNotFoundException, DataFormatException, IOException {
     // Export.object(UserHome.file("string.object"), "tensorlib.importtest");
-    File file = new File(getClass().getResource("/io/string.object").getFile());
+    File file = new File(getClass().getResource("/ch/alpine/tensor/io/string.object").getFile());
     String string = Import.object(file);
     assertEquals(string, "tensorlib.importtest");
   }
@@ -140,7 +140,7 @@ class ImportTest {
 
   @Test
   void testUnknownFail() {
-    File file = new File(getClass().getResource("/io/extension.unknown").getFile());
+    File file = new File(getClass().getResource("/ch/alpine/tensor/io/extension.unknown").getFile());
     assertThrows(IllegalArgumentException.class, () -> Import.of(file));
   }
 
@@ -160,7 +160,7 @@ class ImportTest {
 
   @Test
   void testProperties() throws FileNotFoundException, IOException {
-    File file = new File(getClass().getResource("/io/simple.properties").getFile());
+    File file = new File(getClass().getResource("/ch/alpine/tensor/io/simple.properties").getFile());
     Properties properties = Import.properties(file);
     assertEquals(Scalars.fromString(properties.get("maxTor").toString()), Quantity.of(3, "m*s"));
   }

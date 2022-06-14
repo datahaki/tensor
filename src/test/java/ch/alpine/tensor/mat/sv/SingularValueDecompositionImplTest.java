@@ -36,44 +36,44 @@ class SingularValueDecompositionImplTest {
 
   @Test
   void testResource() throws Exception {
-    String string = getClass().getResource("/mat/svd0.mathematica").getPath();
+    String string = getClass().getResource("/ch/alpine/tensor/mat/sv/svd0.mathematica").getPath();
     _check(Get.of(Paths.get(string).toFile()));
   }
 
   @Test
   void testCondition1() {
-    Tensor matrix = ResourceData.of("/mat/svd3.csv");
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd3.csv");
     InitTest.svd(matrix);
   }
 
   @Test
   void testCondition2() {
-    Tensor matrix = ResourceData.of("/mat/svd2.csv");
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd2.csv");
     InitTest.svd(matrix);
   }
 
   @Test
   void testCondition1UnitA() {
-    Tensor matrix = ResourceData.of("/mat/svd3.csv");
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd3.csv");
     InitTest.svd(matrix.map(s -> Quantity.of(s, "m")));
   }
 
   @Test
   void testCondition1UnitB() {
-    Tensor matrix = ResourceData.of("/mat/svd3.csv").map(s -> Quantity.of(s, "m"));
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd3.csv").map(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
     InitTest.svd(matrix);
   }
 
   @Test
   void testCondition2UnitA() {
-    Tensor matrix = ResourceData.of("/mat/svd2.csv").map(s -> Quantity.of(s, "m"));
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd2.csv").map(s -> Quantity.of(s, "m"));
     InitTest.svd(matrix);
   }
 
   @Test
   void testCondition2UnitB() {
-    Tensor matrix = ResourceData.of("/mat/svd2.csv").map(s -> Quantity.of(s, "m"));
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd2.csv").map(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
     InitTest.svd(matrix);
   }

@@ -76,7 +76,7 @@ class XsvFormatTest {
 
   @Test
   void testImport() throws Exception {
-    String path = getClass().getResource("/io/qty/quantity0.csv").getPath();
+    String path = getClass().getResource("/ch/alpine/tensor/io/qty/quantity0.csv").getPath();
     Tensor tensor = XsvFormat.parse( //
         Files.readAllLines(Paths.get(path)).stream(), //
         string -> Tensors.fromString("{" + string + "}"));

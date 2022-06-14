@@ -44,7 +44,7 @@ class ImageCropTest {
   @Test
   void testNoCropGrayscale() {
     TensorUnaryOperator imagecrop = ImageCrop.color(RealScalar.of(123));
-    Tensor tensor = ResourceData.of("/io/image/gray15x9.png");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/gray15x9.png");
     Tensor result = imagecrop.apply(tensor);
     assertEquals(tensor, result);
   }
@@ -52,7 +52,7 @@ class ImageCropTest {
   @Test
   void testNoCropRgba() {
     TensorUnaryOperator imagecrop = ImageCrop.color(Tensors.vector(1, 2, 3, 4));
-    Tensor tensor = ResourceData.of("/io/image/rgba15x33.png");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/rgba15x33.png");
     Tensor result = imagecrop.apply(tensor);
     assertEquals(tensor, result);
   }

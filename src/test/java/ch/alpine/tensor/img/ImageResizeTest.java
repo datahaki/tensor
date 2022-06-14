@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.Chop;
 class ImageResizeTest {
   @Test
   void testImage1() throws Exception {
-    File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());
+    File file = new File(getClass().getResource("/ch/alpine/tensor/img/rgba15x33.png").getFile());
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     Tensor image = ImageResize.nearest(tensor, 2);
@@ -37,7 +37,7 @@ class ImageResizeTest {
 
   @Test
   void testImage2() throws Exception {
-    File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());
+    File file = new File(getClass().getResource("/ch/alpine/tensor/img/rgba15x33.png").getFile());
     Tensor tensor = Import.of(file);
     assertEquals(Dimensions.of(tensor), Arrays.asList(33, 15, 4));
     Tensor image = ImageResize.nearest(tensor, 2, 3);
@@ -46,7 +46,7 @@ class ImageResizeTest {
 
   @Test
   void testImage3() throws IOException {
-    File file = new File(getClass().getResource("/io/image/rgba15x33.png").getFile());
+    File file = new File(getClass().getResource("/ch/alpine/tensor/img/rgba15x33.png").getFile());
     Tensor tensor = Import.of(file);
     Tensor resize = ImageResize.of(tensor, new Dimension(40, 60));
     assertEquals(Dimensions.of(resize), Arrays.asList(60, 40, 4));
@@ -54,7 +54,7 @@ class ImageResizeTest {
 
   @Test
   void testFactor() {
-    Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/album_au_gray.jpg");
     ImageResize.of(tensor, Pi.VALUE);
     ImageResize.of(tensor, Pi.HALF);
     ImageResize.of(tensor, Pi.HALF.reciprocal());
@@ -62,13 +62,14 @@ class ImageResizeTest {
 
   @Test
   void testFactorNegativeFail() {
-    Tensor tensor = ResourceData.of("/io/image/album_au_gray.jpg");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/album_au_gray.jpg");
     assertThrows(IllegalArgumentException.class, () -> ImageResize.of(tensor, Pi.VALUE.negate()));
   }
 
   @Test
   void testBufferedImage() {
-    BufferedImage bufferedImage = ImageResize.of(ResourceData.bufferedImage("/io/image/album_au_gray.jpg"), 12, 3);
+    BufferedImage original = ResourceData.bufferedImage("/ch/alpine/tensor/img/album_au_gray.jpg");
+    BufferedImage bufferedImage = ImageResize.of(original, 12, 3);
     assertEquals(bufferedImage.getWidth(), 12);
     assertEquals(bufferedImage.getHeight(), 3);
     assertEquals(bufferedImage.getType(), BufferedImage.TYPE_BYTE_GRAY);

@@ -28,7 +28,7 @@ class ImageFormatTest {
   @Test
   void testRGBAFile() throws Exception {
     Tensor tensor = TransposedImageFormatTest._readRGBA();
-    String string = "/io/image/rgba15x33.png";
+    String string = "/ch/alpine/tensor/img/rgba15x33.png";
     File file = new File(getClass().getResource(string).getFile());
     BufferedImage bufferedImage = ImageIO.read(file);
     Tensor image = ImageFormat.from(bufferedImage);
@@ -56,7 +56,7 @@ class ImageFormatTest {
 
   @Test
   void testGrayFile() throws Exception {
-    String string = "/io/image/gray15x9.png";
+    String string = "/ch/alpine/tensor/img/gray15x9.png";
     File file = new File(getClass().getResource(string).getFile());
     BufferedImage bufferedImage = ImageIO.read(file);
     Tensor tensor = ImageFormat.from(bufferedImage);

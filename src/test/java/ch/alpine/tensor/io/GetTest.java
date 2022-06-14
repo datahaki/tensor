@@ -18,7 +18,7 @@ import ch.alpine.tensor.Tensor;
 class GetTest {
   @Test
   void testResource() throws IOException {
-    File file = new File(getClass().getResource("/io/basic.mathematica").getFile());
+    File file = new File(getClass().getResource("/ch/alpine/tensor/io/basic.mathematica").getFile());
     Tensor tensor = Get.of(file);
     assertNotNull(tensor);
     assertFalse(tensor instanceof Scalar);
@@ -28,14 +28,14 @@ class GetTest {
 
   @Test
   void testBinary() throws IOException { // this use is not as intended
-    File file = new File(getClass().getResource("/io/image/rgb7x11.bmp").getFile());
+    File file = new File(getClass().getResource("/ch/alpine/tensor/img/rgb7x11.bmp").getFile());
     Tensor tensor = Get.of(file);
     assertInstanceOf(StringScalar.class, tensor);
   }
 
   @Test
   void testMissing() {
-    File file = new File("/io/doesnotexist");
+    File file = new File("/ch/alpine/tensor/io/doesnotexist");
     assertThrows(Exception.class, () -> Get.of(file));
   }
 }

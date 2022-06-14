@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 class UnitParserTest {
   private static void _confirmFail(String string) {
@@ -43,6 +45,12 @@ class UnitParserTest {
     assertEquals(UnitParser.of("a*"), UnitParser.of("a"));
     assertEquals(UnitParser.of("a***"), UnitParser.of("a"));
     assertEquals(UnitParser.of("**a***b**"), UnitParser.of("a*b"));
+  }
+
+  @ParameterizedTest
+  @CsvFileSource(resources = "/ch/alpine/tensor/qty/unitmap.csv")
+  void testCsv(String input, String expect) {
+    assertEquals(UnitParser.of(input), UnitParser.of(expect));
   }
 
   @Test

@@ -52,8 +52,8 @@ class BenIsraelCohenTest {
 
   @Test
   void testMathematica() {
-    Tensor matrix = ResourceData.of("/mat/bic1.csv");
-    Tensor mathem = ResourceData.of("/mat/bic1pinv.csv");
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/pi/bic1.csv");
+    Tensor mathem = ResourceData.of("/ch/alpine/tensor/mat/pi/bic1pinv.csv");
     Tensor pinv = BenIsraelCohen.of(matrix);
     Tolerance.CHOP.requireClose(pinv, mathem);
     SingularValueDecomposition svd = SingularValueDecomposition.of(matrix);
@@ -111,7 +111,7 @@ class BenIsraelCohenTest {
 
   @Test
   void testExceedIters() {
-    Tensor matrix = ResourceData.of("/mat/bic_fail.csv");
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/pi/bic_fail.csv");
     MatrixQ.require(matrix);
     assertThrows(TensorRuntimeException.class, () -> BenIsraelCohen.of(matrix));
   }

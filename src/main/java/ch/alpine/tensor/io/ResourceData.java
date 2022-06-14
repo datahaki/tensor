@@ -3,6 +3,9 @@ package ch.alpine.tensor.io;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -31,6 +34,8 @@ import ch.alpine.tensor.ext.ReadLine;
  * @see Import */
 public enum ResourceData {
   ;
+  private static final Charset CHARSET = Charset.forName("UTF-8");
+
   /** Example use:
    * Interpolation interpolation = LinearInterpolation.of(ResourceData.of("/colorscheme/classic.csv"));
    * 
@@ -56,12 +61,18 @@ public enum ResourceData {
 
   /** @param string as path to resource
    * @return imported properties, or null if resource could not be loaded */
-  public static Properties properties(String string) {
+  public static Properties properties(String string, Charset charset) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
-      return ImportHelper.properties(inputStream);
+      try (Reader reader = new InputStreamReader(inputStream, charset)) {
+        return ImportHelper.properties(reader);
+      }
     } catch (Exception exception) {
       return null;
     }
+  }
+
+  public static Properties properties(String string) {
+    return properties(string, CHARSET);
   }
 
   /** Hint: function bypasses conversion of image to tensor. When the

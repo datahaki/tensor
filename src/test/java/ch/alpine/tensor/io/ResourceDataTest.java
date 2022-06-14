@@ -47,7 +47,7 @@ class ResourceDataTest {
 
   @Test
   void testPrimes() {
-    Tensor primes = ResourceData.of("/io/primes.vector");
+    Tensor primes = ResourceData.of("/ch/alpine/tensor/num/primes.vector");
     List<Integer> dimensions = Dimensions.of(primes);
     assertEquals(dimensions.size(), 1);
     assertTrue(500 < dimensions.get(0));
@@ -56,21 +56,21 @@ class ResourceDataTest {
 
   @Test
   void testPrimesLines() {
-    Tensor linesp = Tensor.of(ResourceData.lines("/io/primes.vector").stream().map(Scalars::fromString));
-    Tensor vector = ResourceData.of("/io/primes.vector");
+    Tensor linesp = Tensor.of(ResourceData.lines("/ch/alpine/tensor/num/primes.vector").stream().map(Scalars::fromString));
+    Tensor vector = ResourceData.of("/ch/alpine/tensor/num/primes.vector");
     assertEquals(linesp, vector);
   }
 
   @Test
   void testCsvGz() {
-    Tensor actual = ResourceData.of("/io/mathematica23.csv.gz");
+    Tensor actual = ResourceData.of("/ch/alpine/tensor/io/mathematica23.csv.gz");
     Tensor expected = Tensors.fromString("{{123/875+I, 9.3}, {-9, 5/8123123123123123, 1010101}}");
     assertEquals(expected, actual);
   }
 
   @Test
   void testBufferedImagePng() {
-    BufferedImage bufferedImage = ResourceData.bufferedImage("/io/image/rgba15x33.png");
+    BufferedImage bufferedImage = ResourceData.bufferedImage("/ch/alpine/tensor/img/rgba15x33.png");
     assertEquals(bufferedImage.getWidth(), 15);
     assertEquals(bufferedImage.getHeight(), 33);
     assertEquals(bufferedImage.getType(), BufferedImage.TYPE_4BYTE_ABGR);
@@ -78,7 +78,7 @@ class ResourceDataTest {
 
   @Test
   void testBufferedImageJpg() {
-    BufferedImage bufferedImage = ResourceData.bufferedImage("/io/image/rgb15x33.jpg");
+    BufferedImage bufferedImage = ResourceData.bufferedImage("/ch/alpine/tensor/img/rgb15x33.jpg");
     assertEquals(bufferedImage.getWidth(), 15);
     assertEquals(bufferedImage.getHeight(), 33);
     assertEquals(bufferedImage.getType(), BufferedImage.TYPE_3BYTE_BGR);
@@ -86,13 +86,13 @@ class ResourceDataTest {
 
   @Test
   void testJpg() {
-    Tensor image = ResourceData.of("/io/image/rgb15x33.jpg");
+    Tensor image = ResourceData.of("/ch/alpine/tensor/img/rgb15x33.jpg");
     assertEquals(Dimensions.of(image), Arrays.asList(33, 15, 4));
   }
 
   @Test
   void testBufferedImageBmp() {
-    BufferedImage bufferedImage = ResourceData.bufferedImage("/io/image/rgb7x11.bmp");
+    BufferedImage bufferedImage = ResourceData.bufferedImage("/ch/alpine/tensor/img/rgb7x11.bmp");
     assertEquals(bufferedImage.getWidth(), 7);
     assertEquals(bufferedImage.getHeight(), 11);
     assertEquals(bufferedImage.getType(), BufferedImage.TYPE_3BYTE_BGR);
@@ -105,46 +105,46 @@ class ResourceDataTest {
 
   @Test
   void testBmp() {
-    Tensor image = ResourceData.of("/io/image/rgb7x11.bmp");
+    Tensor image = ResourceData.of("/ch/alpine/tensor/img/rgb7x11.bmp");
     assertEquals(Dimensions.of(image), Arrays.asList(11, 7, 4));
     assertEquals(image.get(10, 4), Tensors.vector(0, 7, 95, 255));
   }
 
   @Test
   void testFailNull() {
-    assertNull(ResourceData.of("/number/exists.fail"));
-    assertNull(ResourceData.of("/number/exists.fail.bmp"));
+    assertNull(ResourceData.of("/ch/alpine/tensor/number/exists.fail"));
+    assertNull(ResourceData.of("/ch/alpine/tensor/number/exists.fail.bmp"));
   }
 
   @Test
   void testObjectNull() {
-    assertNull(ResourceData.object("/number/exists.fail"));
+    assertNull(ResourceData.object("/ch/alpine/tensor/number/exists.fail"));
   }
 
   @Test
   void testPropertiesFailNull() {
-    assertNull(ResourceData.properties("/number/exists.properties"));
+    assertNull(ResourceData.properties("/ch/alpine/tensor/number/exists.properties"));
   }
 
   @Test
   void testUnknownExtension() {
-    assertNull(ResourceData.of("/io/extension.unknown"));
+    assertNull(ResourceData.of("/ch/alpine/tensor/io/extension.unknown"));
   }
 
   @Test
   void testCorruptContent() {
-    assertNull(ResourceData.of("/io/corrupt.png"));
+    assertNull(ResourceData.of("/ch/alpine/tensor/io/corrupt.png"));
   }
 
   @Test
   void testLines() {
-    List<String> lines = ResourceData.lines("/io/basic.mathematica");
+    List<String> lines = ResourceData.lines("/ch/alpine/tensor/io/basic.mathematica");
     assertEquals(lines.size(), 7);
   }
 
   @Test
   void testLinesNull() {
-    List<String> lines = ResourceData.lines("/io/doesnotexist");
+    List<String> lines = ResourceData.lines("/ch/alpine/tensor/io/doesnotexist");
     assertNull(lines);
   }
 }

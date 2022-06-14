@@ -76,7 +76,7 @@ public interface Tensor extends Iterable<Tensor> {
    * Modifications to the copy do not effect the original instance.
    * A copy of an unmodifiable tensor is modifiable
    * 
-   * <p>Remark: the call tensor.get(), i.e. tensor.get(Arrays.asList()) with
+   * <p>Remark: the call tensor.get(), i.e. tensor.get(List.of()) with
    * an empty index list also returns a complete copy() of the tensor instance.
    * 
    * @return clone of this */

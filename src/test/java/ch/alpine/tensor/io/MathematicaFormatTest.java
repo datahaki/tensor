@@ -71,23 +71,23 @@ class MathematicaFormatTest {
 
   @Test
   void testBasic() throws IOException {
-    String string = getClass().getResource("/io/basic.mathematica").getPath();
+    String string = getClass().getResource("/ch/alpine/tensor/io/basic.mathematica").getPath();
     Tensor tensor = Get.of(Paths.get(string).toFile());
     checkNonString(tensor);
   }
 
   @Test
   void testBasicResource() {
-    Tensor tensor = ResourceData.of("/io/basic.mathematica");
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/io/basic.mathematica");
     checkNonString(tensor);
   }
 
   @Test
   void testExponent() throws IOException {
-    String string = getClass().getResource("/io/exponent.mathematica").getPath();
+    String string = getClass().getResource("/ch/alpine/tensor/io/exponent.mathematica").getPath();
     Tensor tensor = Get.of(Paths.get(string).toFile());
     checkNonString(tensor);
-    assertEquals(tensor, ResourceData.of("/io/exponent.mathematica"));
+    assertEquals(tensor, ResourceData.of("/ch/alpine/tensor/io/exponent.mathematica"));
   }
 
   @Test
@@ -101,7 +101,7 @@ class MathematicaFormatTest {
 
   @Test
   void testPrime() throws IOException {
-    String string = getClass().getResource("/io/prime.mathematica").getPath();
+    String string = getClass().getResource("/ch/alpine/tensor/io/decimals.mathematica").getPath();
     // System.out.println(Paths.get(string).toFile());
     Tensor tensor = Get.of(Paths.get(string).toFile());
     assertTrue(tensor.stream().anyMatch(scalar -> scalar instanceof DecimalScalar));
