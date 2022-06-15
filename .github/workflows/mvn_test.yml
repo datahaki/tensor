@@ -9,7 +9,7 @@ on:
     types:
       - opened
 jobs:
-  example_matrix:
+  os_matrix:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]

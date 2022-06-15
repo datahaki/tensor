@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +16,18 @@ class ReadLineTest {
   void testCount() throws IOException {
     try (InputStream inputStream = getClass().getResource("/ch/alpine/tensor/io/libreoffice_calc.csv").openStream()) {
       long count = ReadLine.of(inputStream).count();
+      assertEquals(count, 4);
+      assertEquals(inputStream.available(), 0);
+      inputStream.close();
+      assertThrows(Exception.class, () -> inputStream.available());
+    }
+  }
+
+  @Test
+  void testCharset() throws IOException {
+    try (InputStream inputStream = getClass().getResource("/ch/alpine/tensor/io/libreoffice_calc.csv").openStream()) {
+      Charset charset = Charset.forName("US-ASCII");
+      long count = ReadLine.of(inputStream, charset).count();
       assertEquals(count, 4);
       assertEquals(inputStream.available(), 0);
       inputStream.close();

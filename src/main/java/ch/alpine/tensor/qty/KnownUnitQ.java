@@ -58,16 +58,18 @@ public class KnownUnitQ implements Predicate<Unit>, Serializable {
     this.set = set;
   }
 
-  /** @param unit
-   * @return true if all atomic units of given unit are defined in unit system */
+  /** @param unit non-null
+   * @return true if all atomic units of given unit are defined in unit system
+   * @throws NullPointerException if given unit is null */
   @Override // from Predicate
   public boolean test(Unit unit) {
     return set.containsAll(unit.map().keySet());
   }
 
-  /** @param unit
-   * @return unit
-   * @throws Exception if given unit is not known to unit system */
+  /** @param unit non-null
+   * @return given unit
+   * @throws Exception if given unit is not known to unit system
+   * @throws NullPointerException if given unit is null */
   public Unit require(Unit unit) {
     if (test(unit))
       return unit;

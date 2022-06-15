@@ -4,6 +4,7 @@ package ch.alpine.tensor.ext;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.stream.Stream;
 
 /** inspired by
@@ -20,6 +21,16 @@ public enum ReadLine {
    * . ReadLine.of(inputStream).map(...).forEach(...)
    * }
    * </pre>
+   * 
+   * @param inputStream
+   * @param charset
+   * @return lines in given inputStream as stream of strings */
+  public static Stream<String> of(InputStream inputStream, Charset charset) {
+    // gjoel found that {@link Files#lines(Path)} was unsuitable on Windows
+    return new BufferedReader(new InputStreamReader(inputStream, charset)).lines();
+  }
+
+  /** uses the {@link Charset#defaultCharset() default charset}
    * 
    * @param inputStream
    * @return lines in given inputStream as stream of strings */

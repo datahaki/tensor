@@ -32,15 +32,14 @@ class VectorFormatTest {
 
   @Test
   void testMatrix() throws IOException {
-    ByteArrayOutputStream outputStream = new ByteArrayOutputStream(128);
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream(64);
     Tensor tensor = IdentityMatrix.of(3);
     ExportHelper.of(Extension.VECTOR, tensor, outputStream);
     byte[] array = outputStream.toByteArray();
-    if (System.getProperty("os.name").contains("Windows")) {
-      assertEquals(new String(array), "{1, 0, 0}\r\n{0, 1, 0}\r\n{0, 0, 1}\r\n");
-    } else {
-      assertEquals(new String(array), "{1, 0, 0}\n{0, 1, 0}\n{0, 0, 1}\n");
-    }
+    String expect = OperatingSystem.isWindows() //
+        ? "{1, 0, 0}\r\n{0, 1, 0}\r\n{0, 0, 1}\r\n"
+        : "{1, 0, 0}\n{0, 1, 0}\n{0, 0, 1}\n";
+    assertEquals(new String(array), expect);
   }
 
   @Test

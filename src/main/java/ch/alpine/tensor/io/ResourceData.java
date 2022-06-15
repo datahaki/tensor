@@ -34,8 +34,6 @@ import ch.alpine.tensor.ext.ReadLine;
  * @see Import */
 public enum ResourceData {
   ;
-  private static final Charset CHARSET = Charset.forName("UTF-8");
-
   /** Example use:
    * Interpolation interpolation = LinearInterpolation.of(ResourceData.of("/colorscheme/classic.csv"));
    * 
@@ -72,7 +70,7 @@ public enum ResourceData {
   }
 
   public static Properties properties(String string) {
-    return properties(string, CHARSET);
+    return properties(string, StaticHelper.CHARSET);
   }
 
   /** Hint: function bypasses conversion of image to tensor. When the

@@ -3,6 +3,7 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -144,5 +145,13 @@ class CsvFormatTest {
     assertEquals(list.get(0), " 2  ,  3 ");
     assertEquals(list.get(1), "[ , ]");
     assertEquals(list.get(2), "` ;  ;  ,   ;`");
+  }
+
+  @Test
+  void testImport() throws Exception {
+    File file = OperatingSystem.fileToResource("/ch/alpine/tensor/io/chinese.csv");
+    Tensor tensor = Import.of(file);
+    assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3));
+    assertEquals(tensor.Get(0, 0).toString().length(), 2);
   }
 }

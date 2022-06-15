@@ -33,8 +33,6 @@ import ch.alpine.tensor.ext.ObjectFormat;
  * @see Get */
 public enum Import {
   ;
-  private static final Charset CHARSET = Charset.forName("UTF-8");
-
   /** Supported extensions include
    * <ul>
    * <li>bmp for {@link ImageFormat}
@@ -82,6 +80,6 @@ public enum Import {
    * @throws FileNotFoundException
    * @throws IOException */
   public static Properties properties(File file) throws FileNotFoundException, IOException {
-    return properties(file, CHARSET);
+    return properties(file, StaticHelper.CHARSET);
   }
 }
