@@ -137,11 +137,11 @@ public class DurationScalar extends AbstractScalar implements AbsInterface, //
 
   @Override // from ArcTanInterface
   public Scalar arcTan(Scalar x) {
-    if (x instanceof DurationScalar ) {
+    if (x instanceof DurationScalar) {
       DurationScalar durationScalar = (DurationScalar) x;
       return ArcTan.of(durationScalar.seconds(), seconds());
     }
-    if (x instanceof RealScalar ) {
+    if (x instanceof RealScalar) {
       RealScalar realScalar = (RealScalar) x;
       return ArcTan.of(realScalar, seconds());
     }

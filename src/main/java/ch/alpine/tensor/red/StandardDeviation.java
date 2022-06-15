@@ -28,7 +28,7 @@ public enum StandardDeviation {
   /** @param distribution
    * @return Sqrt[Variance[distribution]] */
   public static Scalar of(Distribution distribution) {
-    if (distribution instanceof StandardDeviationInterface ) {
+    if (distribution instanceof StandardDeviationInterface) {
       StandardDeviationInterface standardDeviationInterface = (StandardDeviationInterface) distribution;
       return standardDeviationInterface.standardDeviation();
     }
