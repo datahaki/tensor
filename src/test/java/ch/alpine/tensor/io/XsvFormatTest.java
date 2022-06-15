@@ -4,7 +4,6 @@ package ch.alpine.tensor.io;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
@@ -14,12 +13,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
-
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
@@ -77,6 +74,9 @@ class XsvFormatTest {
   @Test
   public void testImport() throws Exception {
     String path = getClass().getResource("/io/qty/quantity0.csv").getPath();
+    if (System.getProperty("os.name").contains("Windows") && path.charAt(0) == '/') {
+      path = path.substring(1);
+    }
     Tensor tensor = XsvFormat.parse( //
         Files.readAllLines(Paths.get(path)).stream(), //
         string -> Tensors.fromString("{" + string + "}"));
