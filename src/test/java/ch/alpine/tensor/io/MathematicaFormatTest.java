@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Stream;
@@ -71,11 +71,8 @@ class MathematicaFormatTest {
 
   @Test
   void testBasic() throws IOException {
-    String string = getClass().getResource("/ch/alpine/tensor/io/basic.mathematica").getPath();
-    if (System.getProperty("os.name").contains("Windows") && string.charAt(0) == '/') {
-      string = string.substring(1);
-    }
-    Tensor tensor = Get.of(Paths.get(string).toFile());
+    File file = OperatingSystem.fileToResource("/ch/alpine/tensor/io/basic.mathematica");
+    Tensor tensor = Get.of(file);
     checkNonString(tensor);
   }
 
@@ -87,11 +84,8 @@ class MathematicaFormatTest {
 
   @Test
   void testExponent() throws IOException {
-    String string = getClass().getResource("/ch/alpine/tensor/io/exponent.mathematica").getPath();
-    if (System.getProperty("os.name").contains("Windows") && string.charAt(0) == '/') {
-      string = string.substring(1);
-    }
-    Tensor tensor = Get.of(Paths.get(string).toFile());
+    File file = OperatingSystem.fileToResource("/ch/alpine/tensor/io/exponent.mathematica");
+    Tensor tensor = Get.of(file);
     checkNonString(tensor);
     assertEquals(tensor, ResourceData.of("/ch/alpine/tensor/io/exponent.mathematica"));
   }
@@ -107,12 +101,8 @@ class MathematicaFormatTest {
 
   @Test
   void testPrime() throws IOException {
-    String string = getClass().getResource("/ch/alpine/tensor/io/decimals.mathematica").getPath();
-    if (System.getProperty("os.name").contains("Windows") && string.charAt(0) == '/') {
-      string = string.substring(1);
-    }
-    // System.out.println(Paths.get(string).toFile());
-    Tensor tensor = Get.of(Paths.get(string).toFile());
+    File file = OperatingSystem.fileToResource("/ch/alpine/tensor/io/decimals.mathematica");
+    Tensor tensor = Get.of(file);
     assertTrue(tensor.stream().anyMatch(scalar -> scalar instanceof DecimalScalar));
     checkNonString(tensor);
     assertEquals(tensor.toString(), Put.string(tensor));

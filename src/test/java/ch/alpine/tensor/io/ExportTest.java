@@ -128,8 +128,10 @@ class ExportTest {
 
   @Test
   void testExportPermissionFail() {
-    File file = new File("/some.csv");
-    assertThrows(FileNotFoundException.class, () -> Export.of(file, Tensors.vector(1, 2, 3)));
+    if (!OperatingSystem.isWindows()) {
+      File file = new File("/some.csv");
+      assertThrows(FileNotFoundException.class, () -> Export.of(file, Tensors.vector(1, 2, 3)));
+    }
   }
 
   @ParameterizedTest

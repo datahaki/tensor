@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
-import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +15,7 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.chq.FiniteTensorQ;
 import ch.alpine.tensor.io.Get;
+import ch.alpine.tensor.io.OperatingSystem;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -36,12 +36,7 @@ class SingularValueDecompositionImplTest {
 
   @Test
   void testResource() throws Exception {
-    String string = getClass().getResource("/ch/alpine/tensor/mat/sv/svd0.mathematica").getPath();
-    System.out.println(string);
-    if (System.getProperty("os.name").contains("Windows") && string.charAt(0) == '/') {
-      string = string.substring(1);
-    }
-    _check(Get.of(Paths.get(string).toFile()));
+    _check(Get.of(OperatingSystem.fileToResource("/ch/alpine/tensor/mat/sv/svd0.mathematica")));
   }
 
   @Test

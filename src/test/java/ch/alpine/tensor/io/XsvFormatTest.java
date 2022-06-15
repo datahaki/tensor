@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -76,12 +76,9 @@ class XsvFormatTest {
 
   @Test
   void testImport() throws Exception {
-    String path = getClass().getResource("/ch/alpine/tensor/io/qty/quantity0.csv").getPath();
-    if (System.getProperty("os.name").contains("Windows") && path.charAt(0) == '/') {
-      path = path.substring(1);
-    }
+    Path path = OperatingSystem.pathToResource("/ch/alpine/tensor/io/qty/quantity0.csv");
     Tensor tensor = XsvFormat.parse( //
-        Files.readAllLines(Paths.get(path)).stream(), //
+        Files.readAllLines(path).stream(), //
         string -> Tensors.fromString("{" + string + "}"));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 2));
     assertInstanceOf(Quantity.class, tensor.Get(0, 0));
