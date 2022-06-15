@@ -36,7 +36,11 @@ class VectorFormatTest {
     Tensor tensor = IdentityMatrix.of(3);
     ExportHelper.of(Extension.VECTOR, tensor, outputStream);
     byte[] array = outputStream.toByteArray();
-    assertEquals(new String(array), "{1, 0, 0}\n{0, 1, 0}\n{0, 0, 1}\n");
+    if (System.getProperty("os.name").contains("Windows")) {
+      assertEquals(new String(array), "{1, 0, 0}\r\n{0, 1, 0}\r\n{0, 0, 1}\r\n");
+    } else {
+      assertEquals(new String(array), "{1, 0, 0}\n{0, 1, 0}\n{0, 0, 1}\n");
+    }
   }
 
   @Test

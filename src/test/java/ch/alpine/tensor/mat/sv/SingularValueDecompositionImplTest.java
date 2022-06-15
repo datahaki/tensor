@@ -37,6 +37,9 @@ class SingularValueDecompositionImplTest {
   @Test
   void testResource() throws Exception {
     String string = getClass().getResource("/ch/alpine/tensor/mat/sv/svd0.mathematica").getPath();
+    if (System.getProperty("os.name").contains("Windows") && string.charAt(0) == '/') {
+      string = string.substring(1);
+    }
     _check(Get.of(Paths.get(string).toFile()));
   }
 
