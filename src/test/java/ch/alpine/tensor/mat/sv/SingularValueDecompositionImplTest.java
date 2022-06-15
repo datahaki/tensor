@@ -4,12 +4,9 @@ package ch.alpine.tensor.mat.sv;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.lang.reflect.Modifier;
 import java.nio.file.Paths;
-
 import org.junit.jupiter.api.Test;
-
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
@@ -37,6 +34,9 @@ class SingularValueDecompositionImplTest {
   @Test
   public void testResource() throws Exception {
     String string = getClass().getResource("/mat/svd0.mathematica").getPath();
+    if (System.getProperty("os.name").contains("Windows") && string.charAt(0) == '/') {
+      string = string.substring(1);
+    }
     _check(Get.of(Paths.get(string).toFile()));
   }
 

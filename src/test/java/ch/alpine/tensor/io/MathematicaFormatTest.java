@@ -4,15 +4,12 @@ package ch.alpine.tensor.io;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.Random;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Test;
-
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -72,6 +69,9 @@ class MathematicaFormatTest {
   @Test
   public void testBasic() throws IOException {
     String string = getClass().getResource("/io/basic.mathematica").getPath();
+    if (System.getProperty("os.name").contains("Windows") && string.charAt(0) == '/') {
+      string = string.substring(1);
+    }
     Tensor tensor = Get.of(Paths.get(string).toFile());
     checkNonString(tensor);
   }
@@ -85,6 +85,9 @@ class MathematicaFormatTest {
   @Test
   public void testExponent() throws IOException {
     String string = getClass().getResource("/io/exponent.mathematica").getPath();
+    if (System.getProperty("os.name").contains("Windows") && string.charAt(0) == '/') {
+      string = string.substring(1);
+    }
     Tensor tensor = Get.of(Paths.get(string).toFile());
     checkNonString(tensor);
     assertEquals(tensor, ResourceData.of("/io/exponent.mathematica"));
@@ -102,6 +105,9 @@ class MathematicaFormatTest {
   @Test
   public void testPrime() throws IOException {
     String string = getClass().getResource("/io/prime.mathematica").getPath();
+    if (System.getProperty("os.name").contains("Windows") && string.charAt(0) == '/') {
+      string = string.substring(1);
+    }
     // System.out.println(Paths.get(string).toFile());
     Tensor tensor = Get.of(Paths.get(string).toFile());
     assertTrue(tensor.stream().anyMatch(scalar -> scalar instanceof DecimalScalar));

@@ -3,15 +3,12 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.stream.Stream;
-
 import org.junit.jupiter.api.Test;
-
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
@@ -36,7 +33,11 @@ class VectorFormatTest {
     Tensor tensor = IdentityMatrix.of(3);
     ExportHelper.of(Extension.VECTOR, tensor, outputStream);
     byte[] array = outputStream.toByteArray();
-    assertEquals(new String(array), "{1, 0, 0}\n{0, 1, 0}\n{0, 0, 1}\n");
+    if (System.getProperty("os.name").contains("Windows")) {
+      assertEquals(new String(array), "{1, 0, 0}\r\n{0, 1, 0}\r\n{0, 0, 1}\r\n");
+    } else {
+      assertEquals(new String(array), "{1, 0, 0}\n{0, 1, 0}\n{0, 0, 1}\n");
+    }
   }
 
   @Test
