@@ -1,4 +1,4 @@
-name: mvn test
+name: mvn test with JDK 11
 on:
   push:
     paths:
@@ -9,8 +9,11 @@ on:
     types:
       - opened
 jobs:
-  CI:
-    runs-on: ubuntu-latest
+  example_matrix:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 17
@@ -21,3 +24,4 @@ jobs:
       - name: mvn test
         working-directory: .
         run: mvn test -B
+
