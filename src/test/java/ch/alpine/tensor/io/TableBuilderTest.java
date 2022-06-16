@@ -13,14 +13,14 @@ import ch.alpine.tensor.alg.Range;
 
 class TableBuilderTest {
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     TableBuilder tableBuilder = new TableBuilder();
     assertEquals(tableBuilder.getRowCount(), 0);
     assertEquals(tableBuilder.getTable(), Tensors.empty());
   }
 
   @Test
-  public void testAppendRow() {
+  void testAppendRow() {
     TableBuilder tableBuilder = new TableBuilder();
     tableBuilder.appendRow(RealScalar.ONE, Tensors.vector(2, 3, 4), RealScalar.of(5));
     assertEquals(tableBuilder.getRowCount(), 1);
@@ -37,7 +37,7 @@ class TableBuilderTest {
   }
 
   @Test
-  public void testModify() {
+  void testModify() {
     TableBuilder tableBuilder = new TableBuilder();
     tableBuilder.appendRow(Tensors.vector(1, 2, 3, 4));
     Tensor table = tableBuilder.getTable();
@@ -46,7 +46,7 @@ class TableBuilderTest {
   }
 
   @Test
-  public void testUnmodifiableWrapper() {
+  void testUnmodifiableWrapper() {
     TableBuilder tableBuilder = new TableBuilder();
     Tensor tensor = tableBuilder.getTable();
     assertEquals(tensor.length(), 0);
@@ -58,7 +58,7 @@ class TableBuilderTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     TableBuilder tableBuilder = new TableBuilder();
     assertEquals(tableBuilder.getRowCount(), 0);
     assertThrows(NullPointerException.class, () -> tableBuilder.appendRow((Tensor[]) null));

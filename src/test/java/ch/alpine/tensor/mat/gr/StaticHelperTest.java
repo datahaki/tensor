@@ -28,27 +28,27 @@ class StaticHelperTest {
   }
 
   @Test
-  public void testRequireUnit() {
+  void testRequireUnit() {
     Scalar scalar = RealScalar.of(1.0 + 1e-13);
     Scalar mapped = InfluenceMatrixSvd.requireUnit(scalar);
     Clips.unit().requireInside(mapped);
   }
 
   @Test
-  public void testRequireUnitFail() {
+  void testRequireUnitFail() {
     Scalar scalar = RealScalar.of(1.0 + 1e-5);
     assertThrows(TensorRuntimeException.class, () -> InfluenceMatrixSvd.requireUnit(scalar));
   }
 
   @Test
-  public void testUnitizeChop() {
+  void testUnitizeChop() {
     assertEquals(StaticHelperTest.unitize_chop(RealScalar.of(1e-13)), RealScalar.ZERO);
     assertEquals(StaticHelperTest.unitize_chop(RealScalar.of(1e-11)), RealScalar.ONE);
     assertEquals(StaticHelperTest.unitize_chop(RealScalar.of(123)), RealScalar.ONE);
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(StaticHelper.class.getModifiers()));
   }
 }

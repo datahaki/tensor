@@ -47,14 +47,14 @@ class UnitTest {
   }
 
   @Test
-  public void testString() {
+  void testString() {
     String check = "m*s^3";
     Unit unit = Unit.of(check);
     assertEquals(unit.toString(), check);
   }
 
   @Test
-  public void testSpaces() {
+  void testSpaces() {
     assertEquals(Unit.of(" m ").toString(), "m");
     assertEquals(Unit.of(" m ^ 3 ").toString(), "m^3");
     assertEquals(Unit.of(" m ^ 3 * rad ").toString(), "m^3*rad");
@@ -65,12 +65,12 @@ class UnitTest {
 
   @ParameterizedTest
   @ValueSource(strings = { "*", " * ", "**", "* * ", "  **  * " })
-  public void testSeparators(String string) {
+  void testSeparators(String string) {
     assertEquals(Unit.of(string), Unit.ONE);
   }
 
   @Test
-  public void testEqualsHash() {
+  void testEqualsHash() {
     Unit kg1 = Unit.of("kg");
     Unit kg2 = Unit.of("kg*m");
     Unit m = Unit.of("m");
@@ -81,34 +81,34 @@ class UnitTest {
   }
 
   @Test
-  public void testMultiplyZero() {
+  void testMultiplyZero() {
     Unit unit = Unit.of("kg");
     Unit gone = unit.multiply(RealScalar.ZERO);
     assertTrue(UnitQ.isOne(gone));
   }
 
   @Test
-  public void testMultiplyZero2() {
+  void testMultiplyZero2() {
     Unit unit = Unit.of("kg*m^-3");
     Unit gone = unit.multiply(RealScalar.ZERO);
     assertTrue(UnitQ.isOne(gone));
   }
 
   @Test
-  public void testMultiplyFail() {
+  void testMultiplyFail() {
     Unit kg1 = Unit.of("kg");
     Scalar q = Quantity.of(3, "m");
     assertThrows(TensorRuntimeException.class, () -> kg1.multiply(q));
   }
 
   @Test
-  public void testOneString() {
+  void testOneString() {
     assertEquals(Unit.ONE.toString(), "");
     assertTrue(Unit.ONE.map().isEmpty());
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     Map<String, Scalar> map = new HashMap<>();
     map.put("some", GaussScalar.of(1, 7));
     unit(map);
@@ -117,7 +117,7 @@ class UnitTest {
   }
 
   @Test
-  public void testQuantityExponentFail() {
+  void testQuantityExponentFail() {
     Map<String, Scalar> map = new HashMap<>();
     map.put("some", Quantity.of(1, "r"));
     assertThrows(TensorRuntimeException.class, () -> unit(map));
@@ -125,7 +125,7 @@ class UnitTest {
 
   // https://tinyurl.com/y44sj2et
   @Test
-  public void testRational() {
+  void testRational() {
     Unit uExact = Unit.of("m^6*bar*mol^-2*K^1/2");
     Unit uNumer = Unit.of("m^6*bar*mol^-2*K^0.5");
     assertEquals(uNumer, uExact);
@@ -134,12 +134,12 @@ class UnitTest {
   }
 
   @Test
-  public void testReference() {
+  void testReference() {
     assertTrue(Unit.of("m*s*") == Unit.of("s*m"));
   }
 
   @Test
-  public void testKeyCollision() {
+  void testKeyCollision() {
     Map<String, Scalar> map1 = new HashMap<>();
     map1.put("a", RealScalar.ONE);
     map1.put("b", RealScalar.ONE.negate());
@@ -150,12 +150,12 @@ class UnitTest {
 
   @ParameterizedTest
   @ValueSource(strings = { " m >", "| m ", "|", "^", "unknown-seeManual", "a+b", "b=c" })
-  public void testFail(String string) {
+  void testFail(String string) {
     assertThrows(IllegalArgumentException.class, () -> Unit.of(string));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> Unit.of((String) null));
     assertThrows(NullPointerException.class, () -> unit((Map<String, Scalar>) null));
   }

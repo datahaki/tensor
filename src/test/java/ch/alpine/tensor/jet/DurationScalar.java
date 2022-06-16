@@ -30,7 +30,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-public class DurationScalar extends AbstractScalar implements AbsInterface, //
+/* package */ class DurationScalar extends AbstractScalar implements AbsInterface, //
     ArcTanInterface, ChopInterface, Comparable<Scalar>, SignInterface, Serializable {
   public static final DurationScalar ZERO = new DurationScalar(Duration.ZERO);
 

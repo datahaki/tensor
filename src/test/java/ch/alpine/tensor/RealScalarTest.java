@@ -19,7 +19,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class RealScalarTest {
   @Test
-  public void testSerializable() throws Exception {
+  void testSerializable() throws Exception {
     Scalar a = RealScalar.ZERO;
     Scalar b = Serialization.parse(Serialization.of(a));
     assertEquals(a, b);
@@ -27,7 +27,7 @@ class RealScalarTest {
   }
 
   @Test
-  public void testSign() {
+  void testSign() {
     assertEquals(Sign.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(Sign.FUNCTION.apply(RealScalar.of(+5)), RealScalar.ONE);
     assertEquals(Sign.FUNCTION.apply(RealScalar.of(-5)), RealScalar.ONE.negate());
@@ -38,7 +38,7 @@ class RealScalarTest {
   }
 
   @Test
-  public void testCompare() {
+  void testCompare() {
     assertEquals(Scalars.compare(RealScalar.ZERO, RealScalar.ZERO), 0);
     {
       final Integer a = 0;
@@ -59,13 +59,13 @@ class RealScalarTest {
   }
 
   @Test
-  public void testCompareDouble() {
+  void testCompareDouble() {
     assertEquals(Double.compare(0.3, 0.4), Scalars.compare(DoubleScalar.of(0.3), DoubleScalar.of(0.4)));
     assertEquals(Double.compare(0.3, -4e10), Scalars.compare(DoubleScalar.of(0.3), DoubleScalar.of(-4e10)));
   }
 
   @Test
-  public void testCompareRational() {
+  void testCompareRational() {
     Scalar r1 = RationalScalar.of(1927365481254298736L, 1927365481254298737L);
     Scalar r2 = RationalScalar.of(1927365481254298741L, 1927365481254298739L);
     assertEquals(Scalars.compare(r1, r2), -1);
@@ -75,7 +75,7 @@ class RealScalarTest {
   }
 
   @Test
-  public void testNumber() {
+  void testNumber() {
     assertEquals(RealScalar.ZERO, RealScalar.of(0));
     assertEquals(RealScalar.ZERO, RealScalar.of(0.));
     assertEquals(DoubleScalar.of(3.0), RealScalar.of(3.));
@@ -88,7 +88,7 @@ class RealScalarTest {
   }
 
   @Test
-  public void testNumberByte() {
+  void testNumberByte() {
     assertTrue(RealScalar.of(-1).number().byteValue() == (byte) 255);
     assertTrue(RealScalar.of(0).number().byteValue() == (byte) 0);
     assertTrue(RealScalar.of(1).number().byteValue() == (byte) 1);
@@ -98,26 +98,26 @@ class RealScalarTest {
   }
 
   @Test
-  public void testNumberTypes() {
+  void testNumberTypes() {
     assertEquals(RealScalar.of((byte) 0xff), RealScalar.ONE.negate());
     assertEquals(RealScalar.of((short) 0xffff), RealScalar.ONE.negate());
   }
 
   @Test
-  public void testInvertInfinity() {
+  void testInvertInfinity() {
     assertEquals(DoubleScalar.POSITIVE_INFINITY.reciprocal(), RealScalar.ZERO);
     assertEquals(DoubleScalar.NEGATIVE_INFINITY.reciprocal(), RealScalar.ZERO);
   }
 
   @Test
-  public void testBigInteger() {
+  void testBigInteger() {
     Scalar scalar = RealScalar.of(new BigInteger("123"));
     assertInstanceOf(RationalScalar.class, scalar);
     assertEquals(scalar, RealScalar.of(123));
   }
 
   @Test
-  public void testMiscPrimitives() {
+  void testMiscPrimitives() {
     short vals = -312;
     assertEquals(RealScalar.of(vals), RealScalar.of(-312));
     ExactScalarQ.require(RealScalar.of(vals));
@@ -127,7 +127,7 @@ class RealScalarTest {
   }
 
   @Test
-  public void testMiscTypes() {
+  void testMiscTypes() {
     Short vals = -312;
     assertEquals(RealScalar.of(vals), RealScalar.of(-312));
     ExactScalarQ.require(RealScalar.of(vals));
@@ -139,7 +139,7 @@ class RealScalarTest {
   }
 
   @Test
-  public void testCreateFail() {
+  void testCreateFail() {
     Number number = new AtomicInteger(123);
     Scalar scalar = RealScalar.of(number.intValue());
     assertEquals(scalar, RealScalar.of(123));
@@ -147,7 +147,7 @@ class RealScalarTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> RealScalar.of((Number) null));
   }
 }

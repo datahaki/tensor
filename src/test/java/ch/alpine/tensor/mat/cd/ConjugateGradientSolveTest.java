@@ -18,7 +18,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ConjugateGradientSolveTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor matrix = Tensors.matrix(new Number[][] { //
         { 25, 15, -5 }, //
         { 15, 18, 0 }, //
@@ -32,7 +32,7 @@ class ConjugateGradientSolveTest {
   }
 
   @Test
-  public void testUnits1() {
+  void testUnits1() {
     ScalarUnaryOperator suo = s -> Quantity.of(s, "m^2");
     Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}").map(suo);
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
@@ -45,7 +45,7 @@ class ConjugateGradientSolveTest {
   }
 
   @Test
-  public void testUnits2() {
+  void testUnits2() {
     ScalarUnaryOperator suo = s -> Quantity.of(s, "m^2");
     Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}").map(suo);
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
@@ -58,7 +58,7 @@ class ConjugateGradientSolveTest {
   }
 
   @Test
-  public void testMixedUnits() {
+  void testMixedUnits() {
     Tensor matrix = Tensors.fromString("{{10[m^2], 1[m*kg]}, {1[m*kg], 10[kg^2]}}");
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     Tensor b = Tensors.fromString("{4[m], 3[kg]}");
@@ -70,7 +70,7 @@ class ConjugateGradientSolveTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     Tensor b = Tensors.fromString("{4[m], 3[kg]}");
@@ -84,7 +84,7 @@ class ConjugateGradientSolveTest {
   }
 
   @Test
-  public void testComplex2() {
+  void testComplex2() {
     Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     Tensor b = Tensors.fromString("{2+I/5[m], 3-I[kg]}");
@@ -99,18 +99,18 @@ class ConjugateGradientSolveTest {
   }
 
   @Test
-  public void testLengthMismatchFail() {
+  void testLengthMismatchFail() {
     assertThrows(IndexOutOfBoundsException.class, () -> ConjugateGradientSolve.of(IdentityMatrix.of(3), Tensors.vector(1, 2)));
     assertThrows(IllegalArgumentException.class, () -> ConjugateGradientSolve.of(IdentityMatrix.of(3), Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
-  public void testRhsMatrixFail() {
+  void testRhsMatrixFail() {
     assertThrows(ClassCastException.class, () -> ConjugateGradientSolve.of(IdentityMatrix.of(2), IdentityMatrix.of(2)));
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IllegalArgumentException.class, () -> ConjugateGradientSolve.of(Tensors.empty(), Tensors.vector(1)));
   }
 }

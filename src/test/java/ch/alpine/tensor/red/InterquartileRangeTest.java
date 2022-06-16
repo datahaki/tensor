@@ -26,31 +26,31 @@ import ch.alpine.tensor.sca.exp.Log;
 
 class InterquartileRangeTest {
   @Test
-  public void testSamples() {
+  void testSamples() {
     Tensor samples = Tensors.vector(0, 1, 2, 3, 10);
     assertEquals(InterquartileRange.of(samples), RealScalar.of(2)); // == 3 - 1
   }
 
   @Test
-  public void testMathematica() {
+  void testMathematica() {
     assertEquals(InterquartileRange.of(Tensors.vector(1, 3, 4, 2, 5, 6)), RealScalar.of(3));
   }
 
   @Test
-  public void testDistributionExp() { // continuous
+  void testDistributionExp() { // continuous
     Scalar lambda = RealScalar.of(5);
     Distribution distribution = ExponentialDistribution.of(lambda);
     Tolerance.CHOP.requireClose(InterquartileRange.of(distribution), Log.of(RealScalar.of(3)).divide(lambda));
   }
 
   @Test
-  public void testDistributionUniform() { // continuous
+  void testDistributionUniform() { // continuous
     Distribution distribution = UniformDistribution.of(22, 30);
     Tolerance.CHOP.requireClose(InterquartileRange.of(distribution), RealScalar.of(4));
   }
 
   @Test
-  public void testDistributionPoisson() { // discrete
+  void testDistributionPoisson() { // discrete
     Random random = new Random(123);
     // Mathematica: InterquartileRange[PoissonDistribution[10.5]] == 5
     Scalar lambda = RealScalar.of(10.5);
@@ -63,12 +63,12 @@ class InterquartileRangeTest {
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IllegalArgumentException.class, () -> InterquartileRange.of(Tensors.empty()));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(TensorRuntimeException.class, () -> InterquartileRange.of(IdentityMatrix.of(5)));
   }
 }

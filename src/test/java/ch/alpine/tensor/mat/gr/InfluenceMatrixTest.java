@@ -70,7 +70,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  public void testLeftKernel() throws ClassNotFoundException, IOException {
+  void testLeftKernel() throws ClassNotFoundException, IOException {
     Random random = new Random(2);
     Tensor design = RandomVariate.of(NormalDistribution.standard(), random, 10, 3);
     InfluenceMatrix influenceMatrix = Serialization.copy(InfluenceMatrix.of(design));
@@ -95,7 +95,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  public void testLeftImage() throws ClassNotFoundException, IOException {
+  void testLeftImage() throws ClassNotFoundException, IOException {
     int n = 10;
     Distribution distribution = NormalDistribution.standard();
     Tensor design = RandomVariate.of(distribution, n, 3);
@@ -133,14 +133,14 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  public void testBicChallenge() {
-    Tensor matrix = ResourceData.of("/mat/bic_fail.csv");
+  void testBicChallenge() {
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/pi/bic_fail.csv");
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(matrix);
     influenceMatrix.leverages();
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     int prime = 131797;
     Tensor vector = Tensor.of(IntStream.range(100, 110).mapToObj(i -> GaussScalar.of(3 * i, prime)));
     Tensor design = VandermondeMatrix.of(vector, 3);
@@ -159,7 +159,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  public void testGaussScalar3() throws ClassNotFoundException, IOException {
+  void testGaussScalar3() throws ClassNotFoundException, IOException {
     int n = 7;
     int m = 3;
     int prime = 6577;
@@ -178,7 +178,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  public void testGaussScalar5() throws ClassNotFoundException, IOException {
+  void testGaussScalar5() throws ClassNotFoundException, IOException {
     int n = 7;
     int m = 5;
     int prime = 7919;
@@ -200,14 +200,14 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  public void testSvdWithUnits() {
-    Tensor design = ResourceData.of("/mat/svd1.csv");
+  void testSvdWithUnits() {
+    Tensor design = ResourceData.of("/ch/alpine/tensor/mat/sv/svd1.csv");
     SingularValueDecomposition.of(design);
     InfluenceMatrix.of(design);
   }
 
   @Test
-  public void testComplex5x3() {
+  void testComplex5x3() {
     Tensor re = RandomVariate.of(NormalDistribution.standard(), 5, 3);
     Tensor im = RandomVariate.of(NormalDistribution.standard(), 5, 3);
     Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im);
@@ -220,7 +220,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  public void testComplex5x3Exact() {
+  void testComplex5x3Exact() {
     Distribution distribution = TriangularDistribution.with(0, 2);
     Tensor re = RandomVariate.of(distribution, 5, 3);
     Tensor im = RandomVariate.of(distribution, 5, 3);
@@ -233,7 +233,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  public void testComplex3x5() {
+  void testComplex3x5() {
     Tensor re = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     Tensor im = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im);
@@ -245,7 +245,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  public void testComplex3x5Exact() {
+  void testComplex3x5Exact() {
     Tensor re = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     Tensor im = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im).map(Rationalize._5);
@@ -257,7 +257,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  public void testZeroQuantity() {
+  void testZeroQuantity() {
     Tensor design = ConstantArray.of(Quantity.of(0, "m"), 4, 3);
     SingularValueDecomposition svd = SingularValueDecomposition.of(design);
     assertEquals(Unprotect.getUnitUnique(svd.getU()), Unit.ONE);
@@ -273,7 +273,7 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  public void testNumericZeroQuantity() {
+  void testNumericZeroQuantity() {
     Tensor design = ConstantArray.of(Quantity.of(0.0, "m"), 4, 3);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     Tensor matrix = SymmetricMatrixQ.require(influenceMatrix.matrix());
@@ -284,12 +284,12 @@ class InfluenceMatrixTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> InfluenceMatrix.of(null));
   }
 
   @Test
-  public void testModifierPublic() {
+  void testModifierPublic() {
     assertTrue(Modifier.isPublic(InfluenceMatrix.class.getModifiers()));
   }
 }

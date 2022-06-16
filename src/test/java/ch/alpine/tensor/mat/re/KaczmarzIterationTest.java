@@ -20,7 +20,7 @@ import ch.alpine.tensor.spa.SparseArray;
 
 class KaczmarzIterationTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Random random = new Random(10);
     int n = 3;
     Distribution distribution = UniformDistribution.of(-1, 1);
@@ -35,7 +35,7 @@ class KaczmarzIterationTest {
   }
 
   @Test
-  public void testSparse() {
+  void testSparse() {
     Random random = new Random(10);
     int n = 100;
     Distribution distribution = UniformDistribution.of(-1, 1);

@@ -17,7 +17,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 /** Reference: NR 2007 eq. (2.7.2) */
 class ShermanMorrisonTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Random random = new Random(3);
     Distribution distribution = NormalDistribution.standard();
     for (int n = 3; n < 8; ++n) {

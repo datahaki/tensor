@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.tri.Cos;
 
 class NestListTest {
   @Test
-  public void testLength() {
+  void testLength() {
     Tensor list = NestList.of(Cos::of, RealScalar.ONE, 4);
     assertEquals(list.length(), 5);
   }
@@ -30,13 +30,13 @@ class NestListTest {
   }
 
   @Test
-  public void testProduct() {
+  void testProduct() {
     Tensor tensor = NestList.of(RealScalar.of(3)::multiply, RealScalar.ONE, 5);
     assertEquals(tensor.toString(), "{1, 3, 9, 27, 81, 243}");
   }
 
   @Test
-  public void testClear() {
+  void testClear() {
     Tensor t = Tensors.vector(1, 2, 3);
     Tensor x = Tensors.vector(1, 2, 3);
     Tensor list = NestList.of(NestListTest::_clear, x, 3);
@@ -44,7 +44,7 @@ class NestListTest {
   }
 
   @Test
-  public void testReferences() {
+  void testReferences() {
     Tensor vector = Tensors.vector(1, 2, 3);
     Tensor list = NestList.of(f -> f, vector, 0);
     vector.set(RealScalar.ZERO, 0);
@@ -52,18 +52,18 @@ class NestListTest {
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     Tensor vector = NestList.of(Cos::of, RealScalar.ONE, 0);
     assertEquals(vector, Tensors.vector(1));
   }
 
   @Test
-  public void testNullOperator() {
+  void testNullOperator() {
     assertEquals(NestList.of(null, RealScalar.ONE, 0), Tensors.vector(1));
   }
 
   @Test
-  public void testMatrixPower() {
+  void testMatrixPower() {
     Distribution distribution = DiscreteUniformDistribution.of(-3, 4);
     Tensor matrix = RandomVariate.of(distribution, 3, 3);
     Tensor list = NestList.of(matrix::dot, IdentityMatrix.of(3), 5);
@@ -72,12 +72,12 @@ class NestListTest {
   }
 
   @Test
-  public void testFailNull() {
+  void testFailNull() {
     assertThrows(NullPointerException.class, () -> NestList.of(Cos::of, null, 0));
   }
 
   @Test
-  public void testFailNegative() {
+  void testFailNegative() {
     assertThrows(IllegalArgumentException.class, () -> NestList.of(Cos::of, RealScalar.ONE, -1));
     assertThrows(IllegalArgumentException.class, () -> NestList.of(Cos::of, RealScalar.ONE, -2));
   }

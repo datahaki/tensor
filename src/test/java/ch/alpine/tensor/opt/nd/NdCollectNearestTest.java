@@ -28,7 +28,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class NdCollectNearestTest {
   @RepeatedTest(9)
-  public void testSimple(RepetitionInfo repetitionInfo) {
+  void testSimple(RepetitionInfo repetitionInfo) {
     CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9));
     int n = repetitionInfo.getCurrentRepetition();
     NdMap<String> ndTreeMap = NdTreeMap.of(box, n);
@@ -66,7 +66,7 @@ class NdCollectNearestTest {
   }
 
   @Test
-  public void testClusterNearest() {
+  void testClusterNearest() {
     int maxDensity = 2;
     NdMap<String> m1 = new NdListMap<>();
     NdMap<String> m2 = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(-2, -1), Tensors.vector(2, 10)), maxDensity);
@@ -97,7 +97,7 @@ class NdCollectNearestTest {
 
   @ParameterizedTest
   @EnumSource(NdCenters.class)
-  public void testEmpty(NdCenters ndCenters) {
+  void testEmpty(NdCenters ndCenters) {
     NdMap<Void> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0), Tensors.vector(1)));
     NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2));
     NdMatch<Void> ndMatch = NdCollectNearest.of(ndMap, ndCenterInterface);
@@ -106,19 +106,19 @@ class NdCollectNearestTest {
 
   @ParameterizedTest
   @EnumSource(NdCenters.class)
-  public void testProtected(NdCenters ndCenters) {
+  void testProtected(NdCenters ndCenters) {
     NdCenterInterface ndCenterInterface = ndCenters.apply(Array.zeros(2));
     assertTrue(new NdCollectNearest<>(ndCenterInterface, 1).queue().isEmpty());
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> new NdCollectNearest<>(null, 1));
   }
 
   @ParameterizedTest
   @EnumSource(NdCenters.class)
-  public void testNonPositiveFail(NdCenters ndCenters) {
+  void testNonPositiveFail(NdCenters ndCenters) {
     NdCenterInterface ndCenterInterface = ndCenters.apply(Array.zeros(2));
     assertThrows(IllegalArgumentException.class, () -> new NdCollectNearest<>(ndCenterInterface, 0));
   }

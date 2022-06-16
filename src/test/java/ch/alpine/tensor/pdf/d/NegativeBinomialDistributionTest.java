@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.pow.Power;
 
 class NegativeBinomialDistributionTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(NegativeBinomialDistribution.of(4, RationalScalar.of(1, 3)));
     assertEquals(PDF.of(distribution).at(RealScalar.of(3)), RationalScalar.of(160, 2187));
     assertEquals(CDF.of(distribution).p_lessEquals(RealScalar.of(3)), RationalScalar.of(379, 2187));
@@ -44,7 +44,7 @@ class NegativeBinomialDistributionTest {
   }
 
   @Test
-  public void testPOne() {
+  void testPOne() {
     int k = 0;
     for (int n = 0; n < 4; ++n) {
       assertEquals(Power.of(RealScalar.ZERO, n), Boole.of(n == 0));
@@ -57,7 +57,7 @@ class NegativeBinomialDistributionTest {
   }
 
   @Test
-  public void testFails() {
+  void testFails() {
     assertThrows(IllegalArgumentException.class, () -> NegativeBinomialDistribution.of(-1, RationalScalar.HALF));
     assertThrows(TensorRuntimeException.class, () -> NegativeBinomialDistribution.of(2, RealScalar.ZERO));
     assertThrows(TensorRuntimeException.class, () -> NegativeBinomialDistribution.of(2, RealScalar.of(1.1)));

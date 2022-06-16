@@ -13,19 +13,19 @@ import ch.alpine.tensor.sca.Chop;
 
 class ExpcTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Scalar scalar = Expc.FUNCTION.apply(RealScalar.of(-1e-13));
     Chop._02.requireClose(scalar, RealScalar.ONE);
   }
 
   @Test
-  public void testEps() {
+  void testEps() {
     Scalar scalar = Expc.FUNCTION.apply(RealScalar.of(Double.MIN_VALUE));
     Tolerance.CHOP.requireClose(scalar, RealScalar.ONE);
   }
 
   @Test
-  public void testRandom() {
+  void testRandom() {
     Distribution distribution = UniformDistribution.of(0, 2e-12);
     for (int count = 0; count < 100; ++count) {
       Scalar mu = RandomVariate.of(distribution);
@@ -36,7 +36,7 @@ class ExpcTest {
   }
 
   @Test
-  public void test2ndCase() {
+  void test2ndCase() {
     Scalar scalar = Expc.FUNCTION.apply(RealScalar.of(2));
     Tolerance.CHOP.requireClose(scalar, RealScalar.of((Math.exp(2) - 1) * 0.5));
   }

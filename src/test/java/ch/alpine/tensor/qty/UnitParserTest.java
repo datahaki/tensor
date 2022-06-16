@@ -9,6 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.lang.reflect.Modifier;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 class UnitParserTest {
   private static void _confirmFail(String string) {
@@ -16,7 +18,7 @@ class UnitParserTest {
   }
 
   @Test
-  public void testLookup() {
+  void testLookup() {
     UnitParser.of("A*kg^-1*s^2");
     UnitParser.of("HaqiuytasdMAM");
     UnitParser.of("HaqiuytasdMAM*ASsdlfkjhKJG");
@@ -25,7 +27,7 @@ class UnitParserTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     _confirmFail("Haqiuyt asdMAM");
     _confirmFail("HaqiuytasdMAM2");
     _confirmFail("Haqiuyta2sdMAM");
@@ -38,15 +40,21 @@ class UnitParserTest {
   }
 
   @Test
-  public void testDubious() {
+  void testDubious() {
     assertEquals(UnitParser.of("*a"), UnitParser.of("a"));
     assertEquals(UnitParser.of("a*"), UnitParser.of("a"));
     assertEquals(UnitParser.of("a***"), UnitParser.of("a"));
     assertEquals(UnitParser.of("**a***b**"), UnitParser.of("a*b"));
   }
 
+  @ParameterizedTest
+  @CsvFileSource(resources = "/ch/alpine/tensor/qty/unitmap.csv")
+  void testCsv(String input, String expect) {
+    assertEquals(UnitParser.of(input), UnitParser.of(expect));
+  }
+
   @Test
-  public void testUnderscore() {
+  void testUnderscore() {
     Unit unit = UnitParser.of("V_AC");
     assertTrue(unit == UnitParser.of("V_AC"));
     assertTrue(UnitParser.of("____").equals(UnitParser.of("____")));
@@ -54,7 +62,7 @@ class UnitParserTest {
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(UnitParser.class.getModifiers()));
   }
 }

@@ -19,7 +19,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class GrahamScanTest {
   @Test
-  public void testColinear() {
+  void testColinear() {
     assertTrue(Scalars.isZero(GrahamScan.ccw( //
         Tensors.vector(1, 0), //
         Tensors.vector(2, 0), //
@@ -35,7 +35,7 @@ class GrahamScanTest {
   }
 
   @Test
-  public void testCcw() {
+  void testCcw() {
     assertTrue(Sign.isPositive(GrahamScan.ccw( //
         Tensors.vector(1, 0), //
         Tensors.vector(2, 0), //
@@ -51,7 +51,7 @@ class GrahamScanTest {
   }
 
   @Test
-  public void testCw() {
+  void testCw() {
     assertTrue(Sign.isNegative(GrahamScan.ccw( //
         Tensors.vector(1, 0), //
         Tensors.vector(2, 0), //
@@ -67,7 +67,7 @@ class GrahamScanTest {
   }
 
   @Test
-  public void testCluster() {
+  void testCluster() {
     Tensor tensor = Tensors.empty();
     tensor.append(Tensors.vector(1, 1));
     double variance = 1e-15;
@@ -83,7 +83,7 @@ class GrahamScanTest {
   }
 
   @Test
-  public void testClusterOnly() {
+  void testClusterOnly() {
     double variance = 1e-20;
     Distribution distribution = NormalDistribution.of(0.0, variance);
     Tensor tensor = RandomVariate.of(distribution, 5, 2);

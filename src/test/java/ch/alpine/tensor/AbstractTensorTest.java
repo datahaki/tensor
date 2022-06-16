@@ -11,7 +11,7 @@ import ch.alpine.tensor.alg.Array;
 
 class AbstractTensorTest {
   @Test
-  public void testHash() {
+  void testHash() {
     Tensor a = Tensors.vectorLong(7, 2);
     Tensor b = Tensors.vectorLong(7, 2);
     assertEquals(a, b);
@@ -20,14 +20,14 @@ class AbstractTensorTest {
   }
 
   @Test
-  public void testHashDifferent() {
+  void testHashDifferent() {
     Tensor a = Tensors.vectorLong(7, 2);
     Tensor b = Tensors.vectorLong(722, 18275);
     assertFalse(a.hashCode() == b.hashCode());
   }
 
   @Test
-  public void testHashCopy() {
+  void testHashCopy() {
     Tensor a = Tensors.of(Tensors.vectorLong(2, -81, 7, 2, 8), Tensors.vector(32, 3.123));
     Tensor b = a.copy();
     assertEquals(a, b);
@@ -35,7 +35,7 @@ class AbstractTensorTest {
   }
 
   @Test
-  public void testHashScalar() {
+  void testHashScalar() {
     Tensor c = DoubleScalar.of(3.14);
     Tensor d = DoubleScalar.of(3.14);
     assertEquals(c, d);
@@ -43,7 +43,7 @@ class AbstractTensorTest {
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     Tensor a = DoubleScalar.of(1.23);
     assertEquals(a, DoubleScalar.of(1.23));
     assertTrue(!a.equals(DoubleScalar.of(-1.23)));
@@ -60,7 +60,7 @@ class AbstractTensorTest {
   }
 
   @Test
-  public void testEmptyEquals() {
+  void testEmptyEquals() {
     Object empty = Tensors.empty();
     assertFalse(empty.equals(null));
     assertFalse(empty.equals(Integer.valueOf(123)));
@@ -68,13 +68,13 @@ class AbstractTensorTest {
   }
 
   @Test
-  public void testNotEquals() {
+  void testNotEquals() {
     assertFalse(Array.zeros(3, 2).equals(Array.zeros(2, 3)));
     assertFalse(Array.zeros(3, 2).equals(Array.zeros(3, 3)));
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     assertEquals(Tensors.vector(2, 3, 4).toString(), "{2, 3, 4}");
   }
 }

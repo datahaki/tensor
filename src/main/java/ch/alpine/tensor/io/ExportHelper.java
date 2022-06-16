@@ -1,9 +1,9 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.stream.Stream;
 import java.util.zip.GZIPOutputStream;
@@ -65,8 +65,8 @@ import ch.alpine.tensor.Tensor;
   // the use of BufferedOutputStream is motivated by
   // http://www.oracle.com/technetwork/articles/javase/perftuning-137844.html
   public static void lines(Stream<String> stream, OutputStream outputStream) {
-    try (PrintWriter printWriter = new PrintWriter(new BufferedOutputStream(outputStream))) {
+    try (PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(outputStream, StaticHelper.CHARSET))) {
       stream.sequential().forEach(printWriter::println);
-    }
+    } // writer close
   }
 }

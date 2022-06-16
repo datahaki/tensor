@@ -13,21 +13,21 @@ import ch.alpine.tensor.alg.Dimensions;
 
 class RasterTest {
   @Test
-  public void testSmall() {
+  void testSmall() {
     Tensor matrix = Tensors.fromString("{{0, 0.1}}");
     Tensor image = Raster.of(matrix, ColorDataGradients.CLASSIC);
     assertEquals(Dimensions.of(image), Arrays.asList(1, 2, 4));
   }
 
   @Test
-  public void testHue() {
+  void testHue() {
     Tensor matrix = Tensors.fromString("{{0, 0.1}, {1, 2}, {1.2, 0.2}}");
     Tensor image = Raster.of(matrix, HueColorData.DEFAULT);
     assertEquals(Dimensions.of(image), Arrays.asList(3, 2, 4));
   }
 
   @Test
-  public void testIndexed() {
+  void testIndexed() {
     Tensor matrix = Tensors.fromString("{{0, 1}, {3, 1}, {3, 2}}");
     for (ColorDataLists colorDataLists : ColorDataLists.values()) {
       Tensor image = matrix.map(colorDataLists.cyclic());

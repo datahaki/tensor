@@ -17,14 +17,14 @@ import ch.alpine.tensor.qty.Quantity;
 
 class UnitStepTest {
   @Test
-  public void testRealScalar() {
+  void testRealScalar() {
     assertEquals(UnitStep.of(RealScalar.of(-0.3)), RealScalar.ZERO);
     assertEquals(UnitStep.of(RealScalar.of(0)), RealScalar.ONE);
     assertEquals(UnitStep.of(RealScalar.of(0.134)), RealScalar.ONE);
   }
 
   @Test
-  public void testPredicateQuantity() {
+  void testPredicateQuantity() {
     assertEquals(UnitStep.of(Quantity.of(-0.3, "m")), RealScalar.ZERO);
     assertEquals(UnitStep.of(Quantity.of(0.0, "m")), RealScalar.ONE);
     assertEquals(UnitStep.of(Quantity.of(0, "m")), RealScalar.ONE);
@@ -32,18 +32,18 @@ class UnitStepTest {
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     assertEquals(UnitStep.FUNCTION.apply(GaussScalar.of(2, 7)), RealScalar.ONE);
   }
 
   @Test
-  public void testQuaternionFail() {
+  void testQuaternionFail() {
     Scalar scalar = Quaternion.of(RealScalar.of(-4), Tensors.vector(1, 2, 3));
     assertThrows(ClassCastException.class, () -> UnitStep.FUNCTION.apply(scalar));
   }
 
   @Test
-  public void testStringFail() {
+  void testStringFail() {
     Scalar scalar = StringScalar.of("abc");
     assertThrows(TensorRuntimeException.class, () -> UnitStep.FUNCTION.apply(scalar));
   }

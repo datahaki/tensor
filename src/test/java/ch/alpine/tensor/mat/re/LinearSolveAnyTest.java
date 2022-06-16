@@ -23,7 +23,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class LinearSolveAnyTest {
   @Test
-  public void testSome1() {
+  void testSome1() {
     Tensor m = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}, {7, 8, 9}}");
     Tensor b = Tensors.fromString("{1, 1, 1}");
     Tensor x = LinearSolve.any(m, b);
@@ -31,14 +31,14 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testDiag() {
+  void testDiag() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
     Tensor x = LinearSolve.any(DiagonalMatrix.with(vector), vector);
     assertEquals(x, Tensors.fromString("{1, 1, 0, 1, 1, 1}"));
   }
 
   @Test
-  public void testDiag2() {
+  void testDiag2() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
     Tensor m = Join.of(DiagonalMatrix.with(vector), Array.zeros(3, 6));
     Tensor b = Join.of(vector, Array.zeros(3));
@@ -47,7 +47,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testDiag2b() {
+  void testDiag2b() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
     // m is 6 x 9 matrix
     Tensor m = Join.of(1, DiagonalMatrix.with(vector), Array.zeros(6, 3));
@@ -58,7 +58,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testDiag3() {
+  void testDiag3() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
     Tensor m = Join.of(Array.zeros(3, 6), DiagonalMatrix.with(vector));
     Tensor b = Join.of(Array.zeros(3), vector);
@@ -67,7 +67,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testDiag3b() {
+  void testDiag3b() {
     Tensor vector = Tensors.vector(3, 2, 0, 5, 4, 7);
     Tensor m = Join.of(1, Array.zeros(6, 3), DiagonalMatrix.with(vector));
     Tensor b = Join.of(vector);
@@ -76,14 +76,14 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testSome2() {
+  void testSome2() {
     Tensor m = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}, {7, 8, 9}}");
     Tensor b = Tensors.fromString("{1, -2, 1}");
     assertThrows(TensorRuntimeException.class, () -> LinearSolve.any(m, b));
   }
 
   @Test
-  public void testAny() {
+  void testAny() {
     Tensor m = Tensors.fromString("{{1, 0, -1}, {0, 1, 0}, {1, 0, -1}}");
     Tensor b = Tensors.fromString("{0, 0, 0}");
     Tensor x = LinearSolve.any(m, b);
@@ -94,7 +94,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testConstants() {
+  void testConstants() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(RealScalar.ONE, n, k);
@@ -105,7 +105,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testConstantsMN() {
+  void testConstantsMN() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(RealScalar.of(1.0), n, k);
@@ -116,7 +116,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testConstantsVN() {
+  void testConstantsVN() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(RealScalar.ONE, n, k);
@@ -127,7 +127,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testConstantsUW() {
+  void testConstantsUW() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(Quantity.of(2, "m"), n, k);
@@ -138,7 +138,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testConstantsUWM() {
+  void testConstantsUWM() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(Quantity.of(2, "m"), n, k);
@@ -149,7 +149,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testConstantsN() {
+  void testConstantsN() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(RealScalar.of(1.0), n, k);
@@ -160,7 +160,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testConstantsNUW() {
+  void testConstantsNUW() {
     int n = 3;
     for (int k = 1; k < 6; ++k) {
       Tensor m = ConstantArray.of(Quantity.of(2.0, "m"), n, k);
@@ -171,7 +171,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testAny2() {
+  void testAny2() {
     Tensor m = Tensors.fromString("{{1}, {1}, {-1}}");
     Tensor b = Tensors.vector(2, 2, -2);
     Tensor x = LinearSolve.any(m, b);
@@ -180,7 +180,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testAnyN() {
+  void testAnyN() {
     Tensor m = Tensors.fromString("{{1}, {1}, {-5}}");
     Tensor b = Tensors.vector(-2, -2, 10);
     Tensor x = LinearSolve.any(m, b);
@@ -189,7 +189,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testLarge() {
+  void testLarge() {
     Distribution distribution = NormalDistribution.standard();
     Tensor m = RandomVariate.of(distribution, 2, 4);
     Tensor g = RandomVariate.of(distribution, 4);
@@ -199,7 +199,7 @@ class LinearSolveAnyTest {
   }
 
   @Test
-  public void testNoSolutionFail() {
+  void testNoSolutionFail() {
     assertThrows(TensorRuntimeException.class, () -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1)));
     assertThrows(TensorRuntimeException.class, () -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1.0)));
   }

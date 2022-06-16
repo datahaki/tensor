@@ -15,7 +15,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 
 class HarmonicMeanTest {
   @Test
-  public void testGeo1() {
+  void testGeo1() {
     Tensor a = HarmonicMean.ofVector(Tensors.vector(8, 27, 525));
     assertEquals(a, RationalScalar.of(113400, 6197));
     Tensor b = HarmonicMean.ofVector(Tensors.vector(8, -27, 3));
@@ -23,22 +23,22 @@ class HarmonicMeanTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertThrows(ArithmeticException.class, () -> HarmonicMean.ofVector(Tensors.empty()));
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     assertThrows(ArithmeticException.class, () -> HarmonicMean.ofVector(Tensors.vector(3, 0, 2)));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> HarmonicMean.ofVector(RealScalar.ONE));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(ClassCastException.class, () -> HarmonicMean.ofVector(HilbertMatrix.of(4)));
   }
 }

@@ -28,7 +28,7 @@ class MinTest {
   }
 
   @Test
-  public void testColumnwise() {
+  void testColumnwise() {
     Tensor matrix = Tensors.matrixInt(new int[][] { { 1, 3, 3 }, { 2, 2, 7 } });
     Tensor res = matrix.stream().reduce(Entrywise.min()).get();
     Tensor map = MapThread.of(MinTest::min, matrix.stream().collect(Collectors.toList()), 1);
@@ -37,7 +37,7 @@ class MinTest {
   }
 
   @Test
-  public void testRowwise() {
+  void testRowwise() {
     Tensor matrix = Tensors.matrixInt(new int[][] { { 8, 3, 3 }, { 2, 2, 7 } });
     Tensor map = Tensor.of(matrix.stream().map( //
         row -> row.stream().reduce(Min::of).get()));
@@ -45,7 +45,7 @@ class MinTest {
   }
 
   @Test
-  public void testElementWise() {
+  void testElementWise() {
     Tensor tensor = Tensors.matrixInt(new int[][] { { -8, 3, -3 }, { 2, -2, 7 } });
     Tensor capped = tensor.map(Min.function(RealScalar.ZERO));
     Tensor blub = Tensors.matrixInt(new int[][] { { -8, 0, -3 }, { 0, -2, 0 } });
@@ -53,7 +53,7 @@ class MinTest {
   }
 
   @Test
-  public void testSet() throws ClassNotFoundException, IOException {
+  void testSet() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.matrixInt(new int[][] { { -8, 3, -3 }, { 2, -2, 7 } });
     ScalarUnaryOperator _op = Min.function(RealScalar.ZERO);
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(_op);
@@ -63,21 +63,21 @@ class MinTest {
   }
 
   @Test
-  public void testGenericInteger() {
+  void testGenericInteger() {
     UnaryOperator<Integer> function = Min.function(100);
     assertEquals(function.apply(50), Integer.valueOf(50));
     assertEquals(function.apply(200), Integer.valueOf(100));
   }
 
   @Test
-  public void testGenericString() {
+  void testGenericString() {
     UnaryOperator<String> function = Min.function("math");
     assertEquals(function.apply("library"), "library");
     assertEquals(function.apply("tensor"), "math");
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Scalar string = StringScalar.of("string");
     Scalar gauss = GaussScalar.of(1, 3);
     assertThrows(TensorRuntimeException.class, () -> Min.of(string, gauss));

@@ -25,13 +25,13 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
 class BooleanScalarTest {
   @Test
-  public void testString() {
+  void testString() {
     Tensor logical = Tensors.of(BooleanScalar.of(true), BooleanScalar.of(false));
     assertEquals(logical.toString(), "{true, false}");
   }
 
   @Test
-  public void testPlus() {
+  void testPlus() {
     assertEquals(BooleanScalar.TRUE.add(BooleanScalar.TRUE), BooleanScalar.FALSE);
     assertEquals(BooleanScalar.FALSE.add(BooleanScalar.FALSE), BooleanScalar.FALSE);
     // ---
@@ -40,25 +40,25 @@ class BooleanScalarTest {
   }
 
   @Test
-  public void testNegate() {
+  void testNegate() {
     assertEquals(BooleanScalar.TRUE.negate(), BooleanScalar.TRUE);
     assertEquals(BooleanScalar.FALSE.negate(), BooleanScalar.FALSE);
   }
 
   @Test
-  public void testReciprocal() {
+  void testReciprocal() {
     assertEquals(BooleanScalar.TRUE.reciprocal(), BooleanScalar.TRUE);
     assertThrows(TensorRuntimeException.class, () -> BooleanScalar.FALSE.reciprocal());
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     assertEquals(BooleanScalar.TRUE.zero(), BooleanScalar.FALSE);
     assertEquals(BooleanScalar.FALSE.zero(), BooleanScalar.FALSE);
   }
 
   @Test
-  public void testMultiply() {
+  void testMultiply() {
     assertEquals(BooleanScalar.TRUE.multiply(BooleanScalar.TRUE), BooleanScalar.TRUE);
     assertEquals(BooleanScalar.FALSE.multiply(BooleanScalar.FALSE), BooleanScalar.FALSE);
     // ---
@@ -67,19 +67,19 @@ class BooleanScalarTest {
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     assertFalse(BooleanScalar.TRUE.equals(null));
   }
 
   @Test
-  public void testSort() {
+  void testSort() {
     Tensor logical = Tensors.of(BooleanScalar.TRUE, BooleanScalar.FALSE, BooleanScalar.FALSE, BooleanScalar.TRUE, BooleanScalar.TRUE);
     Tensor sorted = Sort.of(logical);
     assertEquals(sorted.toString(), "{false, false, true, true, true}");
   }
 
   @Test
-  public void testMapping() {
+  void testMapping() {
     Tensor values = RandomVariate.of(BinomialDistribution.of(10, RationalScalar.of(3, 7)), 200);
     Tensor result = values.map(s -> BooleanScalar.of(Scalars.lessThan(s, RealScalar.of(5))));
     Map<Tensor, Long> map = Tally.of(result);
@@ -88,7 +88,7 @@ class BooleanScalarTest {
   }
 
   @Test
-  public void testNumber() {
+  void testNumber() {
     Tensor values = RandomVariate.of(BinomialDistribution.of(10, RationalScalar.of(3, 7)), 200);
     Tensor result = Tensor.of(values.stream() //
         .map(Scalar.class::cast) //
@@ -98,13 +98,13 @@ class BooleanScalarTest {
   }
 
   @Test
-  public void testNumberType() {
+  void testNumberType() {
     assertInstanceOf(Integer.class, BooleanScalar.TRUE.number());
     assertInstanceOf(Integer.class, BooleanScalar.FALSE.number());
   }
 
   @Test
-  public void testAccumulate() {
+  void testAccumulate() {
     Tensor values = RandomVariate.of(BinomialDistribution.of(10, RationalScalar.of(3, 7)), 200);
     Tensor result = Tensor.of(values.stream() //
         .map(Scalar.class::cast) //
@@ -114,13 +114,13 @@ class BooleanScalarTest {
   }
 
   @Test
-  public void testExactNumberQ() {
+  void testExactNumberQ() {
     ExactScalarQ.require(BooleanScalar.FALSE);
     ExactScalarQ.require(BooleanScalar.TRUE);
   }
 
   @Test
-  public void testSqrt() {
+  void testSqrt() {
     assertEquals(Sqrt.of(BooleanScalar.FALSE), BooleanScalar.FALSE);
     assertEquals(Sqrt.of(BooleanScalar.TRUE), BooleanScalar.TRUE);
   }

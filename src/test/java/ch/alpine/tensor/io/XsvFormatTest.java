@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -39,7 +40,7 @@ class XsvFormatTest {
   }
 
   @Test
-  public void testCsvR() {
+  void testCsvR() {
     Random random = new Random();
     convertCheck( //
         Tensors.matrix((i, j) -> RationalScalar.of(random.nextInt(100) - 50, random.nextInt(100) + 1), 20, 4));
@@ -48,7 +49,7 @@ class XsvFormatTest {
   }
 
   @Test
-  public void testRandom(@TempDir File tempDir) throws IOException {
+  void testRandom(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.tsv");
     Tensor matrix = RandomVariate.of(DiscreteUniformDistribution.of(-10, 10), 6, 4);
     Export.of(file, matrix);
@@ -58,7 +59,7 @@ class XsvFormatTest {
 
   @ParameterizedTest
   @EnumSource(XsvFormat.class)
-  public void testVector(XsvFormat xsvFormat) {
+  void testVector(XsvFormat xsvFormat) {
     Tensor r = Tensors.fromString("{123, 456}");
     List<String> list = xsvFormat.of(r).collect(Collectors.toList());
     Tensor s = xsvFormat.parse(list.stream()); // [[123], [456]]
@@ -67,7 +68,7 @@ class XsvFormatTest {
 
   @ParameterizedTest
   @EnumSource(XsvFormat.class)
-  public void testScalar(XsvFormat xsvFormat) {
+  void testScalar(XsvFormat xsvFormat) {
     Tensor r = Scalars.fromString("123");
     List<String> list = xsvFormat.of(r).collect(Collectors.toList());
     Tensor s = xsvFormat.parse(list.stream());
@@ -75,10 +76,10 @@ class XsvFormatTest {
   }
 
   @Test
-  public void testImport() throws Exception {
-    String path = getClass().getResource("/io/qty/quantity0.csv").getPath();
+  void testImport() throws Exception {
+    Path path = OperatingSystem.pathOfResource("/ch/alpine/tensor/io/qty/quantity0.csv");
     Tensor tensor = XsvFormat.parse( //
-        Files.readAllLines(Paths.get(path)).stream(), //
+        Files.readAllLines(path).stream(), //
         string -> Tensors.fromString("{" + string + "}"));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 2));
     assertInstanceOf(Quantity.class, tensor.Get(0, 0));
@@ -87,8 +88,21 @@ class XsvFormatTest {
     assertInstanceOf(RealScalar.class, tensor.Get(1, 1));
   }
 
+  @ParameterizedTest
+  @ValueSource(strings = { "csv", "tsv" })
+  void testImport(String ext, @TempDir File folder) throws Exception {
+    File read = OperatingSystem.fileOfResource("/ch/alpine/tensor/io/chinese.csv");
+    Tensor tensor = Import.of(read);
+    assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3));
+    assertEquals(tensor.Get(0, 0).toString().length(), 2);
+    File file = new File(folder, "file." + ext);
+    Export.of(file, tensor);
+    Tensor actual = Import.of(file);
+    assertEquals(tensor, actual);
+  }
+
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertFalse(Modifier.isPublic(XsvFormat.class.getModifiers()));
   }
 }

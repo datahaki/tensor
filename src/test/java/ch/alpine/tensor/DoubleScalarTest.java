@@ -19,13 +19,13 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
 class DoubleScalarTest {
   @Test
-  public void testZero() {
+  void testZero() {
     assertEquals(RealScalar.ZERO, DoubleScalar.of(0));
     assertFalse(DoubleScalar.of(0) instanceof RationalScalar);
   }
 
   @Test
-  public void testAdd() {
+  void testAdd() {
     RealScalar.ZERO.hashCode();
     Tensor a = DoubleScalar.of(1.23);
     Tensor b = DoubleScalar.of(2.3);
@@ -35,14 +35,14 @@ class DoubleScalarTest {
   }
 
   @Test
-  public void testZeroReciprocal() {
+  void testZeroReciprocal() {
     Scalar nzero = DoubleScalar.of(0.0);
     assertEquals(nzero.reciprocal(), DoubleScalar.POSITIVE_INFINITY);
     assertEquals(DoubleScalar.POSITIVE_INFINITY.reciprocal(), nzero);
   }
 
   @Test
-  public void testChop() {
+  void testChop() {
     Scalar s = DoubleScalar.of(3.14);
     assertEquals(Chop._12.of(s), s);
     Scalar r = DoubleScalar.of(1e-14);
@@ -51,14 +51,14 @@ class DoubleScalarTest {
   }
 
   @Test
-  public void testEquality() {
+  void testEquality() {
     assertEquals(RealScalar.ONE, DoubleScalar.of(1));
     assertEquals(DoubleScalar.of(1), RationalScalar.of(1, 1));
     assertEquals(DoubleScalar.of(1), RealScalar.of(1));
   }
 
   @Test
-  public void testInf() {
+  void testInf() {
     Scalar inf = DoubleScalar.of(Double.POSITIVE_INFINITY);
     Scalar c = RealScalar.of(-2);
     assertEquals(inf.multiply(c), inf.negate());
@@ -68,28 +68,28 @@ class DoubleScalarTest {
   }
 
   @Test
-  public void testMin() {
+  void testMin() {
     Scalar a = RealScalar.of(3);
     Scalar b = RealScalar.of(7.2);
     assertEquals(Min.of(a, b), a);
   }
 
   @Test
-  public void testMax1() {
+  void testMax1() {
     Scalar a = RealScalar.of(3);
     Scalar b = RealScalar.of(7.2);
     assertEquals(Max.of(a, b), b);
   }
 
   @Test
-  public void testMax2() {
+  void testMax2() {
     Scalar a = RealScalar.of(0);
     Scalar b = RealScalar.of(7.2);
     assertEquals(Max.of(a, b), b);
   }
 
   @Test
-  public void testNegativeZero() {
+  void testNegativeZero() {
     Scalar d1 = DoubleScalar.of(0.0);
     Scalar d2 = DoubleScalar.of(-0.0);
     assertEquals(d1.toString(), "0.0");
@@ -106,34 +106,34 @@ class DoubleScalarTest {
   }
 
   @Test
-  public void testNegZeroString() {
+  void testNegZeroString() {
     Scalar scalar = Scalars.fromString("-0.0");
     assertInstanceOf(DoubleScalar.class, scalar);
     assertEquals(scalar.toString(), "0.0");
   }
 
   @Test
-  public void testNegZeroSort() {
+  void testNegZeroSort() {
     Tensor vector = Tensors.vectorDouble(0.0, -0.0, -0.0, 0.0, -0.0, 0.0);
     Tensor sorted = Sort.of(vector);
     assertEquals(vector.toString(), sorted.toString());
   }
 
   @Test
-  public void testDeleteDuplicates() {
+  void testDeleteDuplicates() {
     Tensor vector = DeleteDuplicates.of(Tensors.vectorDouble(0.0, -0.0, 0.0, -0.0));
     assertEquals(vector.length(), 1);
   }
 
   @Test
-  public void testNaN() {
+  void testNaN() {
     DoubleScalar nan = (DoubleScalar) DoubleScalar.INDETERMINATE;
     assertThrows(TensorRuntimeException.class, () -> nan.isNonNegative());
     assertThrows(TensorRuntimeException.class, () -> nan.signum());
   }
 
   @Test
-  public void testCompareFail() {
+  void testCompareFail() {
     Scalar a = RealScalar.of(7.2);
     Scalar b = GaussScalar.of(3, 5);
     assertThrows(TensorRuntimeException.class, () -> Max.of(a, b));
@@ -141,25 +141,25 @@ class DoubleScalarTest {
   }
 
   @Test
-  public void testValue() {
+  void testValue() {
     DoubleScalar doubleScalar = (DoubleScalar) DoubleScalar.of(3.14);
     assertEquals(doubleScalar.number(), 3.14);
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     assertFalse(DoubleScalar.of(3.14).equals(null));
     assertFalse(DoubleScalar.of(3.14).equals(ComplexScalar.of(1, 2)));
   }
 
   @Test
-  public void testObject() {
+  void testObject() {
     Object object = DoubleScalar.of(3.14);
     assertFalse(object.equals("hello"));
   }
 
   @Test
-  public void testSqrtNegZero() {
+  void testSqrtNegZero() {
     Scalar scalar = DoubleScalar.of(-0.0);
     assertEquals(scalar.toString(), "-0.0");
     AbstractRealScalar ars = (AbstractRealScalar) scalar;

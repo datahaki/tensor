@@ -13,19 +13,19 @@ import ch.alpine.tensor.Tensors;
 
 class RiffleTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor vector = Riffle.of(Tensors.vector(1, 2, 3, 4, 5), RealScalar.ZERO);
     assertEquals(vector, Tensors.vector(1, 0, 2, 0, 3, 0, 4, 0, 5));
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     Tensor vector = Riffle.of(Tensors.empty(), RealScalar.ZERO);
     assertTrue(Tensors.isEmpty(vector));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(IllegalArgumentException.class, () -> Riffle.of(RealScalar.ZERO, RealScalar.ZERO));
   }
 }

@@ -15,7 +15,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class StrassenTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     for (int count = 12; count < 25; count += 2) {
       Tensor a = RandomVariate.of(distribution, count, count);
@@ -27,7 +27,7 @@ class StrassenTest {
   }
 
   @Test
-  public void testHuge() {
+  void testHuge() {
     Distribution distribution = UniformDistribution.of(-10, 10);
     int count = 32;
     Tensor a = RandomVariate.of(distribution, count, count);

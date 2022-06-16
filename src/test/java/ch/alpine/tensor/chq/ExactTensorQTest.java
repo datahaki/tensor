@@ -14,7 +14,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 
 class ExactTensorQTest {
   @Test
-  public void testAll() {
+  void testAll() {
     assertTrue(ExactTensorQ.of(RationalScalar.HALF));
     assertTrue(ExactTensorQ.of(Tensors.vector(1, 2, 3)));
     assertTrue(ExactTensorQ.of(HilbertMatrix.of(3, 2)));
@@ -22,7 +22,7 @@ class ExactTensorQTest {
   }
 
   @Test
-  public void testRequireAll() {
+  void testRequireAll() {
     ExactTensorQ.require(Tensors.fromString("{{9/8, 3/2[s]}, 1/2+3/4*I}"));
     assertThrows(TensorRuntimeException.class, () -> ExactTensorQ.require(Tensors.vector(1, 2, 3, 0.7)));
   }

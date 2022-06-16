@@ -19,7 +19,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ScalarsTest {
   @Test
-  public void testRequireZero() {
+  void testRequireZero() {
     assertEquals(Scalars.requireZero(Quantity.of(0, "A")), Quantity.of(0, "A"));
     assertThrows(TensorRuntimeException.class, () -> Scalars.requireZero(Quantity.of(1, "A")));
     assertThrows(TensorRuntimeException.class, () -> Scalars.requireZero(RealScalar.ONE));
@@ -35,7 +35,7 @@ class ScalarsTest {
 
   @ParameterizedTest
   @ValueSource(strings = { "123", "  123  ", "3 /  4", "0" })
-  public void testParseRationalScalar(String string) {
+  void testParseRationalScalar(String string) {
     checkInvariant(string, RationalScalar.class);
   }
 
@@ -47,12 +47,12 @@ class ScalarsTest {
       " ( I ) ", //
       "123123*I", //
       "123E-123*I" })
-  public void testParseComplexScalar(String string) {
+  void testParseComplexScalar(String string) {
     checkInvariant(string, ComplexScalarImpl.class);
   }
 
   @Test
-  public void testParse() {
+  void testParse() {
     checkInvariant("34.23123", DoubleScalar.class);
     checkInvariant("asndbvf", StringScalar.class);
     checkInvariant("asn.dbv.f", StringScalar.class);
@@ -60,19 +60,19 @@ class ScalarsTest {
   }
 
   @Test
-  public void testParseSpecific() {
+  void testParseSpecific() {
     assertEquals(Scalars.fromString("+002.5"), DoubleScalar.of(+2.5));
     assertEquals(Scalars.fromString("-002.5"), DoubleScalar.of(-2.5));
   }
 
   @Test
-  public void testSpacing() {
+  void testSpacing() {
     checkInvariant("-1.0348772853950305  +  0.042973906265653894 * I", ComplexScalarImpl.class);
     checkInvariant("-1.0348772853950305  -  0.042973906265653894 * I", ComplexScalarImpl.class);
   }
 
   @Test
-  public void testIntegerPattern() {
+  void testIntegerPattern() {
     String n1 = "-123123";
     String n2 = "123123";
     Pattern pattern = Pattern.compile("-?\\d+");
@@ -84,7 +84,7 @@ class ScalarsTest {
   }
 
   @Test
-  public void testRationalPattern() {
+  void testRationalPattern() {
     String n1 = "-123/123";
     String n2 = "1231/23";
     String n3 = "123123";
@@ -99,7 +99,7 @@ class ScalarsTest {
   }
 
   @Test
-  public void testParseComplex() {
+  void testParseComplex() {
     checkInvariant(ComplexScalar.of(-1e-14, -1e-15).toString(), ComplexScalarImpl.class);
     checkInvariant(ComplexScalar.of(+1e-14, -1e-15).toString(), ComplexScalarImpl.class);
     checkInvariant(ComplexScalar.of(-1e+14, -1e-15).toString(), ComplexScalarImpl.class);
@@ -119,7 +119,7 @@ class ScalarsTest {
   }
 
   @Test
-  public void testImagUnit() {
+  void testImagUnit() {
     assertEquals("I", ComplexScalar.I.toString());
     assertEquals("-I", ComplexScalar.I.negate().toString());
     assertEquals("2+I", RealScalar.of(2).add(ComplexScalar.I).toString());
@@ -134,7 +134,7 @@ class ScalarsTest {
   }
 
   @Test
-  public void testNumber() {
+  void testNumber() {
     Number a = 123;
     Number b = 123.0;
     assertFalse(a.equals(b));
@@ -148,20 +148,20 @@ class ScalarsTest {
   }
 
   @Test
-  public void testStatic() {
+  void testStatic() {
     assertTrue(Scalars.compare(RealScalar.of(2), RealScalar.of(3)) < 0);
     assertTrue(Scalars.compare(RealScalar.of(5), RealScalar.of(1)) > 0);
     assertTrue(Scalars.compare(RealScalar.of(8), RealScalar.of(8)) == 0);
   }
 
   @Test
-  public void testExtreme() {
+  void testExtreme() {
     checkInvariant(DoubleScalar.NEGATIVE_INFINITY.toString(), DoubleScalar.class);
     checkInvariant(DoubleScalar.POSITIVE_INFINITY.toString(), DoubleScalar.class);
   }
 
   @Test
-  public void testCompare() {
+  void testCompare() {
     checkCmp(0, 0);
     checkCmp(1, 0);
     checkCmp(1.1, 1.1);
@@ -176,39 +176,39 @@ class ScalarsTest {
   }
 
   @Test
-  public void testLessThan() {
+  void testLessThan() {
     assertFalse(Scalars.lessThan(RealScalar.of(2), RealScalar.of(2)));
     assertTrue(Scalars.lessThan(RealScalar.of(2), RealScalar.of(3)));
     assertTrue(Scalars.lessThan(RealScalar.of(-3), RealScalar.ZERO));
   }
 
   @Test
-  public void testLessEquals() {
+  void testLessEquals() {
     assertTrue(Scalars.lessEquals(RealScalar.of(2), RealScalar.of(2)));
     assertTrue(Scalars.lessEquals(RealScalar.of(2), RealScalar.of(3)));
     assertTrue(Scalars.lessEquals(RealScalar.of(-3), RealScalar.ZERO));
   }
 
   @Test
-  public void testIntValueExact() {
+  void testIntValueExact() {
     assertEquals(Scalars.intValueExact(RealScalar.of(123)), 123);
     assertEquals(Scalars.intValueExact(RealScalar.of(Integer.MIN_VALUE)), Integer.MIN_VALUE);
     assertEquals(Scalars.intValueExact(RealScalar.of(Integer.MAX_VALUE)), Integer.MAX_VALUE);
   }
 
   @Test
-  public void testIntValueExactFail() {
+  void testIntValueExactFail() {
     assertThrows(ArithmeticException.class, () -> Scalars.intValueExact(RealScalar.of(Long.MIN_VALUE)));
     assertThrows(ArithmeticException.class, () -> Scalars.intValueExact(RealScalar.of(Long.MAX_VALUE)));
   }
 
   @Test
-  public void testIntValueExactFractionFail() {
+  void testIntValueExactFractionFail() {
     assertThrows(TensorRuntimeException.class, () -> Scalars.intValueExact(RationalScalar.of(2, 3)));
   }
 
   @Test
-  public void testLongValueExact() {
+  void testLongValueExact() {
     assertEquals(Scalars.longValueExact(RealScalar.of(123)), 123);
     assertEquals(Scalars.longValueExact(RealScalar.of(123)), 123L);
     assertEquals(Scalars.longValueExact(RealScalar.of(Long.MIN_VALUE)), Long.MIN_VALUE);
@@ -216,7 +216,7 @@ class ScalarsTest {
   }
 
   @Test
-  public void testExample() {
+  void testExample() {
     Scalar s = Scalars.fromString("(3+2)*I/(-1+4)+8-I");
     Scalar c = ComplexScalar.of(RealScalar.of(8), RationalScalar.of(2, 3));
     assertEquals(c, s);
@@ -234,12 +234,12 @@ class ScalarsTest {
       "3**4", //
       "3//4", //
   })
-  public void testParseFail(String string) {
+  void testParseFail(String string) {
     assertInstanceOf(StringScalar.class, Scalars.fromString(string));
   }
 
   @Test
-  public void testDivides() {
+  void testDivides() {
     assertTrue(Scalars.divides(RealScalar.of(3), RealScalar.of(9)));
     assertFalse(Scalars.divides(RealScalar.of(9), RealScalar.of(3)));
     assertFalse(Scalars.divides(RealScalar.of(2), RealScalar.of(9)));
@@ -248,7 +248,7 @@ class ScalarsTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar c2 = ComplexScalar.of(2, 3);
     Scalar c1 = c2.multiply(RealScalar.of(3));
     assertFalse(Scalars.divides(c1, c2));
@@ -256,7 +256,7 @@ class ScalarsTest {
   }
 
   @Test
-  public void testGaussian() {
+  void testGaussian() {
     Scalar c1 = ComplexScalar.of(3, 1);
     Scalar c2 = ComplexScalar.of(2, -1);
     assertFalse(Scalars.divides(c1, c2));
@@ -264,26 +264,26 @@ class ScalarsTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     assertTrue(Scalars.divides(Quantity.of(3, "m"), Quantity.of(9, "m")));
     assertFalse(Scalars.divides(Quantity.of(3, "m"), Quantity.of(7, "m")));
     assertFalse(Scalars.divides(Quantity.of(7, "m"), Quantity.of(3, "m")));
   }
 
   @Test
-  public void testQuantityIncompatible() {
+  void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(6, "m");
     Scalar qs2 = Quantity.of(3, "s");
     assertThrows(TensorRuntimeException.class, () -> Scalars.divides(qs1, qs2));
   }
 
   @Test
-  public void testBigIntegerExactNullFail() {
+  void testBigIntegerExactNullFail() {
     assertThrows(TensorRuntimeException.class, () -> Scalars.bigIntegerValueExact(null));
   }
 
   @Test
-  public void testOptionalBigIntegerNullFail() {
+  void testOptionalBigIntegerNullFail() {
     assertThrows(NullPointerException.class, () -> Scalars.optionalBigInteger(null));
   }
 }

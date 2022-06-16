@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class PadBaseTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     assertFalse(Modifier.isPublic(PadBase.class.getModifiers()));
   }
 }

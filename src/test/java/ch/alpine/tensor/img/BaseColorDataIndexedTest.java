@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class BaseColorDataIndexedTest {
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertEquals(BaseColorDataIndexed.class.getModifiers() & 1, 0);
   }
 }

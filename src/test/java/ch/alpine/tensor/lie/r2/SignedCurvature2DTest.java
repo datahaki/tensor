@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class SignedCurvature2DTest {
   @Test
-  public void testCounterClockwise() {
+  void testCounterClockwise() {
     Tensor a = Tensors.vector(1, 0);
     Tensor b = Tensors.vector(0, 1);
     Tensor c = Tensors.vector(-1, 0);
@@ -25,7 +25,7 @@ class SignedCurvature2DTest {
   }
 
   @Test
-  public void testStraight() {
+  void testStraight() {
     Tensor a = Tensors.vector(1, 1);
     Tensor b = Tensors.vector(2, 2);
     Tensor c = Tensors.vector(5, 5);
@@ -33,7 +33,7 @@ class SignedCurvature2DTest {
   }
 
   @Test
-  public void testSingular1() {
+  void testSingular1() {
     Tensor a = Tensors.vector(1, 1);
     Tensor b = Tensors.vector(1, 1);
     Tensor c = Tensors.vector(2, 2);
@@ -41,7 +41,7 @@ class SignedCurvature2DTest {
   }
 
   @Test
-  public void testSingular2() {
+  void testSingular2() {
     Tensor a = Tensors.vector(1, 1);
     Tensor b = Tensors.vector(2, 2);
     Tensor c = Tensors.vector(1, 1);
@@ -49,7 +49,7 @@ class SignedCurvature2DTest {
   }
 
   @Test
-  public void testSingular3() {
+  void testSingular3() {
     Tensor a = Tensors.vector(1, 1);
     Tensor b = Tensors.vector(1, 1);
     Tensor c = Tensors.vector(1, 1);
@@ -57,7 +57,7 @@ class SignedCurvature2DTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Tensor a = Tensors.fromString("{1[m], 0[m]}");
     Tensor b = Tensors.fromString("{0[m], 1[m]}");
     Tensor c = Tensors.fromString("{-1[m], 0[m]}");
@@ -66,7 +66,7 @@ class SignedCurvature2DTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Tensor a = Tensors.vector(1, 1, 0);
     Tensor b = Tensors.vector(1, 2, 1);
     Tensor c = Tensors.vector(1, 3, 2);

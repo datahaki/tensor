@@ -31,7 +31,7 @@ import ch.alpine.tensor.sca.exp.Exp;
 
 class LogNormalDistributionTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     LogNormalDistribution distribution = (LogNormalDistribution) Serialization.copy( //
         LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(2, 3)));
     Tolerance.CHOP.requireClose(Mean.of(distribution), Exp.FUNCTION.apply(RationalScalar.of(13, 18)));
@@ -64,7 +64,7 @@ class LogNormalDistributionTest {
   }
 
   @Test
-  public void testMean() {
+  void testMean() {
     Distribution distribution = LogNormalDistribution.of(RationalScalar.of(4, 5), RationalScalar.of(2, 3));
     Scalar value = Mean.ofVector(RandomVariate.of(distribution, 200));
     Clips.interval(2.25, 3.5).requireInside(value);
@@ -76,7 +76,7 @@ class LogNormalDistributionTest {
   }
 
   @Test
-  public void testCDFInverseCDF() {
+  void testCDFInverseCDF() {
     Distribution distribution = LogNormalDistribution.of(3, 0.2);
     CDF cdf = CDF.of(distribution);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -88,13 +88,13 @@ class LogNormalDistributionTest {
   }
 
   @Test
-  public void testKurtosis() {
+  void testKurtosis() {
     Tolerance.CHOP.requireClose(Kurtosis.of(LogNormalDistribution.of(3, 0.2)), RealScalar.of(3.678365777175438));
     Tolerance.CHOP.requireClose(Kurtosis.of(LogNormalDistribution.of(3, 1.2)), RealScalar.of(518.1684050407332));
   }
 
   @Test
-  public void testMarkov() {
+  void testMarkov() {
     Random random = new Random();
     Distribution distribution = LogNormalDistribution.of(random.nextDouble() - 0.5, 0.1 + random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
@@ -102,19 +102,19 @@ class LogNormalDistributionTest {
   }
 
   @Test
-  public void testSigmaNonPositiveFail() {
+  void testSigmaNonPositiveFail() {
     assertThrows(TensorRuntimeException.class, () -> LogNormalDistribution.of(RationalScalar.HALF, RealScalar.ZERO));
     assertThrows(TensorRuntimeException.class, () -> LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(-2, 3)));
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> LogNormalDistribution.of(Quantity.of(RationalScalar.HALF, "m"), RationalScalar.of(2, 3)));
     assertThrows(TensorRuntimeException.class, () -> LogNormalDistribution.of(RationalScalar.of(2, 3), Quantity.of(RationalScalar.HALF, "m")));
   }
 
   @Test
-  public void testStandardString() {
+  void testStandardString() {
     assertEquals(LogNormalDistribution.standard().toString(), "LogNormalDistribution[0, 1]");
   }
 }

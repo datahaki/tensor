@@ -17,7 +17,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ClipPointTest {
   @Test
-  public void testZeroWidth() {
+  void testZeroWidth() {
     Clip clip = Clips.interval(2, 2);
     assertEquals(clip.apply(RealScalar.of(3)), RealScalar.of(2));
     assertTrue(clip.isInside(RealScalar.of(2)));
@@ -26,7 +26,7 @@ class ClipPointTest {
   }
 
   @Test
-  public void testRescaleZeroWidth() {
+  void testRescaleZeroWidth() {
     Clip clip = Clips.interval(2, 2);
     assertEquals(clip.rescale(RealScalar.of(-1)), RealScalar.ZERO);
     assertEquals(clip.rescale(RealScalar.ZERO), RealScalar.ZERO);
@@ -37,7 +37,7 @@ class ClipPointTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar value = Quantity.of(3, "s");
     Clip clip = Clips.interval(value, value);
     assertEquals(clip.apply(Quantity.of(2, "s")), value);
@@ -47,7 +47,7 @@ class ClipPointTest {
   }
 
   @Test
-  public void testVector() {
+  void testVector() {
     Scalar value = Quantity.of(2, "m*s^-1");
     Clip clip = Clips.interval(value, value);
     Tensor vector = Tensors.fromString("{1[m*s^-1], 5[m*s^-1], 2[m*s^-1]}");
@@ -56,7 +56,7 @@ class ClipPointTest {
   }
 
   @Test
-  public void testRescale() {
+  void testRescale() {
     Scalar value = Quantity.of(2, "m*s^-1");
     Clip clip = Clips.interval(value, value);
     assertEquals(clip.rescale(Quantity.of(4, "m*s^-1")), RealScalar.ZERO);
@@ -64,7 +64,7 @@ class ClipPointTest {
   }
 
   @Test
-  public void testRescaleFail() {
+  void testRescaleFail() {
     Scalar value = Quantity.of(2, "m*s^-1");
     Clip clip = Clips.interval(value, value);
     assertEquals(clip.requireInside(value), value);
@@ -72,7 +72,7 @@ class ClipPointTest {
   }
 
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertEquals(ClipPoint.class.getModifiers(), 0);
   }
 }

@@ -79,6 +79,6 @@ public class EqualizingDistribution implements UnivariateDistribution, Serializa
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), categoricalDistribution);
+    return String.format("EqualizingDistribution[%s]", categoricalDistribution);
   }
 }

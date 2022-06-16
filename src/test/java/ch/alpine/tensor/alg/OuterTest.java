@@ -17,7 +17,7 @@ import ch.alpine.tensor.nrm.Hypot;
 
 class OuterTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor a = Tensors.vector(1, 2);
     Tensor b = Tensors.vector(3, 4, 5);
     Tensor tensor = Outer.of(TensorProduct::of, a, b);
@@ -26,14 +26,14 @@ class OuterTest {
   }
 
   @Test
-  public void testScalar() {
+  void testScalar() {
     Tensor tensor = Outer.of(Hypot::of, Tensors.vector(12, 3), Tensors.vector(1, 7, 9, 0));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 4));
     assertEquals(tensor.get(0).extract(2, 4), Tensors.vector(15, 12));
   }
 
   @Test
-  public void testScalarDivide() {
+  void testScalarDivide() {
     Tensor result = Outer.of(Scalar::divide, Tensors.vector(12, 3), Tensors.vector(1, 7, 9, 2));
     assertEquals(Dimensions.of(result), Arrays.asList(2, 4));
     ExactTensorQ.require(result);
@@ -42,7 +42,7 @@ class OuterTest {
   }
 
   @Test
-  public void testMixed() {
+  void testMixed() {
     Tensor result = Outer.of(Tensor::multiply, HilbertMatrix.of(2), Tensors.vector(1, 7, 9));
     assertEquals(Dimensions.of(result), Arrays.asList(2, 3, 2));
     ExactTensorQ.require(result);
@@ -51,7 +51,7 @@ class OuterTest {
   }
 
   @Test
-  public void testAppend() {
+  void testAppend() {
     Tensor matrix = HilbertMatrix.of(2);
     Tensor tensor = Outer.of(Tensor::append, matrix, Tensors.vector(1, 7, 9));
     assertEquals(matrix, HilbertMatrix.of(2));

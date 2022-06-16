@@ -41,7 +41,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
 class QuaternionTest {
   @Test
-  public void testContructQuantity() {
+  void testContructQuantity() {
     Quaternion quaternion = Quaternion.of(Quantity.of(3, "m"), Tensors.fromString("{2[m],3[m],4[m]}"));
     assertEquals(quaternion.multiply(quaternion.one()), quaternion);
     assertEquals(quaternion.one().multiply(quaternion), quaternion);
@@ -58,7 +58,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Quaternion q1 = Quaternion.of( //
         ComplexScalar.of(1, 2), //
         ComplexScalar.of(2, 3), ComplexScalar.of(-1, 8), ComplexScalar.of(7, 9));
@@ -81,7 +81,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testNoRef() {
+  void testNoRef() {
     Tensor xya = Tensors.vector(1, 2, 3);
     Quaternion quaternion = Quaternion.of(RealScalar.ONE, xya);
     xya.set(Scalar::zero, Tensor.ALL);
@@ -90,7 +90,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testContruct() {
+  void testContruct() {
     Scalar c1 = ComplexScalar.of(1, 3);
     Scalar q1 = Quaternion.of(1, 3, 0, 0);
     assertEquals(q1, q1);
@@ -98,7 +98,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testAdd() {
+  void testAdd() {
     Scalar q1 = Quaternion.of(1, 3, -2, 2);
     Scalar qr = Quaternion.of(9, 3, -1, 3);
     Scalar qb = Quaternion.of(10, 6, -3, 5);
@@ -109,7 +109,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testAbs() {
+  void testAbs() {
     Quaternion quaternion = Quaternion.of(2, 0, -6, 3);
     Scalar norm = quaternion.abs();
     assertEquals(norm, RealScalar.of(7));
@@ -118,7 +118,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testMultiply() {
+  void testMultiply() {
     Scalar q1 = Quaternion.of(2, 0, -6, 3);
     Scalar q2 = Quaternion.of(1, 3, -2, 2);
     assertEquals(q1.multiply(q2), Quaternion.of(-16, 0, -1, 25));
@@ -128,7 +128,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testMultiplyComplex() {
+  void testMultiplyComplex() {
     Scalar c1 = ComplexScalar.of(2, 3);
     Scalar q1 = Quaternion.of(7, 9, -6, 4);
     Scalar r1 = c1.multiply(q1);
@@ -136,7 +136,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testReciprocal() {
+  void testReciprocal() {
     Scalar q1 = Quaternion.of(2, 0, -6, 3);
     Scalar q2 = Quaternion.of(1, 3, -2, 2);
     assertEquals(q1.reciprocal().multiply(q1), Quaternion.ONE);
@@ -144,13 +144,13 @@ class QuaternionTest {
   }
 
   @Test
-  public void testConjugate() {
+  void testConjugate() {
     Scalar s = Conjugate.of(Quaternion.of(1, 2, 3, 4));
     assertEquals(s, Quaternion.of(1, -2, -3, -4));
   }
 
   @Test
-  public void testSqrt() {
+  void testSqrt() {
     Tensor arg = RandomVariate.of(NormalDistribution.standard(), 4);
     Scalar q = Quaternion.of(arg.Get(0), arg.extract(1, 4));
     Scalar r = Sqrt.of(q);
@@ -159,7 +159,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testSqrt0() {
+  void testSqrt0() {
     Tensor arg = RandomVariate.of(NormalDistribution.standard(), 4);
     Scalar q = Quaternion.of(RealScalar.ZERO, arg.extract(1, 4));
     Scalar r = Sqrt.of(q);
@@ -168,7 +168,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testSome() {
+  void testSome() {
     Scalar q1 = Quaternion.of(1, 23, 4, 5);
     Scalar q2 = Quaternion.of(1, 2, 4, 5);
     Scalar q3 = Quaternion.of(1, 23, 3, 5);
@@ -185,7 +185,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testNormVsAbs() {
+  void testNormVsAbs() {
     Distribution distribution = CauchyDistribution.standard();
     Tensor vec = RandomVariate.of(distribution, 4);
     Scalar q1 = _createQ(vec);
@@ -195,7 +195,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testExactScalarQ() {
+  void testExactScalarQ() {
     Scalar q1 = Quaternion.of(1, 3, -2, 2);
     ExactScalarQ.require(q1);
     Scalar q2 = Quaternion.of(1, 3, -2., 2);
@@ -203,14 +203,14 @@ class QuaternionTest {
   }
 
   @Test
-  public void testOne() {
+  void testOne() {
     Scalar scalar = Quaternion.of(11, 33, -28, 29);
     assertEquals(scalar.one().multiply(scalar), scalar);
     assertEquals(scalar.multiply(scalar.one()), scalar);
   }
 
   @Test
-  public void testN() {
+  void testN() {
     Scalar q1 = Quaternion.of(1, 3, -2, 2);
     ExactScalarQ.require(q1);
     Scalar n1 = N.DOUBLE.apply(q1);
@@ -219,7 +219,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testN2() {
+  void testN2() {
     Scalar q1 = Quaternion.of(1, 3, -2, 2);
     ExactScalarQ.require(q1);
     Scalar n1 = N.DECIMAL64.apply(q1);
@@ -228,7 +228,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testExpLog() {
+  void testExpLog() {
     Quaternion quaternion = Quaternion.of(0.1, 0.3, 0.2, -0.3);
     Quaternion exp = quaternion.exp();
     Quaternion log = exp.log();
@@ -236,7 +236,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testExpLogRandom() {
+  void testExpLogRandom() {
     Distribution distribution = NormalDistribution.of(0, 0.3);
     Quaternion quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
     Quaternion exp = quaternion.exp();
@@ -245,7 +245,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testLogExpRandom() {
+  void testLogExpRandom() {
     Distribution distribution = NormalDistribution.of(0, 2.3);
     Quaternion quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
     Quaternion log = quaternion.log();
@@ -254,7 +254,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testSignAbsRandom() {
+  void testSignAbsRandom() {
     Distribution distribution = LogNormalDistribution.standard();
     Quaternion quaternion = Quaternion.of(RandomVariate.of(distribution), RandomVariate.of(distribution, 3));
     Scalar sign = Sign.FUNCTION.apply(quaternion);
@@ -263,7 +263,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testRound() {
+  void testRound() {
     Quaternion quaternion = Quaternion.of(3.9, 2.3, 1.8, -1.3);
     assertEquals(Round.FUNCTION.apply(quaternion), Quaternion.of(4, 2, 2, -1));
     assertEquals(Ceiling.FUNCTION.apply(quaternion), Quaternion.of(4, 3, 2, -1));
@@ -271,7 +271,7 @@ class QuaternionTest {
   }
 
   @Test
-  public void testDivideUnder() {
+  void testDivideUnder() {
     Quaternion q1 = RandomQuaternion.get();
     Quaternion q2 = RandomQuaternion.get();
     if (RandomQuaternion.nonCommute(q1, q2)) {
@@ -284,34 +284,34 @@ class QuaternionTest {
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(TensorRuntimeException.class, () -> Quaternion.of(RealScalar.ONE, HilbertMatrix.of(3, 3)));
     assertThrows(TensorRuntimeException.class, () -> Quaternion.of(RealScalar.ONE, RealScalar.of(4)));
   }
 
   @Test
-  public void testNull1Fail() {
+  void testNull1Fail() {
     assertThrows(NullPointerException.class, () -> Quaternion.of(null, Tensors.vector(1, 2, 3)));
     assertThrows(NullPointerException.class, () -> Quaternion.of(RealScalar.ONE, null));
   }
 
   @Test
-  public void testNull2Fail() {
+  void testNull2Fail() {
     assertThrows(NullPointerException.class, () -> Quaternion.of(null, RealScalar.ONE, RealScalar.of(2), RealScalar.of(8)));
   }
 
   @Test
-  public void testNull2bFail() {
+  void testNull2bFail() {
     assertThrows(NullPointerException.class, () -> Quaternion.of(RealScalar.ONE, null, RealScalar.of(2), RealScalar.of(8)));
   }
 
   @Test
-  public void testNull3Fail() {
+  void testNull3Fail() {
     assertThrows(NullPointerException.class, () -> Quaternion.of(1, null, 2, 3));
   }
 
   @Test
-  public void testFormatFail() {
+  void testFormatFail() {
     assertThrows(TensorRuntimeException.class, () -> Quaternion.of(RealScalar.ONE, Tensors.vector(1, 2, 3, 4)));
   }
 }

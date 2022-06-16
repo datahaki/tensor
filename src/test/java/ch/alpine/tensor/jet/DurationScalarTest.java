@@ -11,6 +11,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Random;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
@@ -36,7 +37,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
 
 class DurationScalarTest {
   @Test
-  public void testAddSubtract() throws ClassNotFoundException, IOException {
+  void testAddSubtract() throws ClassNotFoundException, IOException {
     DurationScalar d1 = DurationScalar.of(Duration.ofDays(213));
     DurationScalar d2 = DurationScalar.of(Duration.ofDays(113));
     DurationScalar d3 = DurationScalar.of(Duration.ofDays(100));
@@ -50,7 +51,8 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testAdd() {
+  @Disabled
+  void testAdd() {
     DateTimeScalar ofs = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DurationScalar len = DurationScalar.of(Duration.ofDays(100));
     assertEquals(ofs.add(len), len.add(ofs));
@@ -64,7 +66,7 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testSubdivide() {
+  void testSubdivide() {
     DurationScalar d1 = DurationScalar.of(Duration.ofDays(213));
     DurationScalar d2 = DurationScalar.of(Duration.ofDays(113).negated());
     Subdivide.of(d1, d2, 41);
@@ -72,7 +74,7 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testMultiply() {
+  void testMultiply() {
     DurationScalar d1 = DurationScalar.of(Duration.ofDays(100));
     DurationScalar d2 = d1.multiply(RealScalar.of(3));
     DurationScalar d3 = DurationScalar.of(Duration.ofDays(300));
@@ -86,13 +88,13 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testReciprocalFail() {
+  void testReciprocalFail() {
     DurationScalar d1 = DurationScalar.of(Duration.ofDays(0));
     assertThrows(ArithmeticException.class, () -> d1.reciprocal());
   }
 
   @Test
-  public void testDivideP() {
+  void testDivideP() {
     DurationScalar d1 = DurationScalar.of(Duration.ofSeconds(100));
     Scalar d2 = d1.divide(RealScalar.of(3));
     DurationScalar d3 = DurationScalar.of(Duration.ofSeconds(33, 1_000_000_000 / 3));
@@ -100,7 +102,7 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testDivideN() {
+  void testDivideN() {
     DurationScalar d1 = DurationScalar.of(Duration.ofSeconds(100).negated());
     Scalar d2 = d1.divide(RealScalar.of(3));
     DurationScalar d3 = DurationScalar.of(Duration.ofSeconds(33, 1_000_000_000 / 3 + 1).negated());
@@ -108,21 +110,21 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testDivideZero() {
+  void testDivideZero() {
     assertThrows(ArithmeticException.class, () -> DurationScalar.ZERO.divide(DurationScalar.ZERO));
     DurationScalar d1 = DurationScalar.of(Duration.ofSeconds(100).negated());
     assertThrows(ArithmeticException.class, () -> d1.divide(DurationScalar.ZERO));
   }
 
   @Test
-  public void testUnderP() {
+  void testUnderP() {
     DurationScalar d1 = DurationScalar.of(Duration.ofSeconds(200));
     Scalar under = d1.under(RealScalar.of(300));
     assertEquals(under, RationalScalar.of(3, 2));
   }
 
   @Test
-  public void testMultiplyRational() {
+  void testMultiplyRational() {
     DurationScalar d1 = DurationScalar.of(Duration.ofSeconds(100, 50));
     DurationScalar d2 = d1.multiply(RationalScalar.HALF);
     DurationScalar d3 = DurationScalar.of(Duration.ofSeconds(50, 25));
@@ -130,7 +132,7 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testAbs() {
+  void testAbs() {
     DurationScalar len = DurationScalar.of(Duration.ofDays(-100));
     Scalar scalar = Abs.FUNCTION.apply(len);
     assertEquals(scalar, DurationScalar.of(Duration.ofDays(+100)));
@@ -140,7 +142,8 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testToStringParse() {
+  @Disabled
+  void testToStringParse() {
     DurationScalar ds = DurationScalar.of(Duration.ofSeconds(245234, 123_236_987));
     String string = ds.toString();
     assertEquals(string, "PT68H7M14.123236987S");
@@ -149,7 +152,8 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testNegateToStringParse() {
+  @Disabled
+  void testNegateToStringParse() {
     DurationScalar ds = DurationScalar.of(Duration.ofSeconds(245234, 123_236_987).negated());
     String string = ds.toString();
     assertEquals(string, "PT-68H-7M-14.123236987S");
@@ -158,13 +162,13 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testFromSeconds() {
+  void testFromSeconds() {
     assertEquals(DurationScalar.fromSeconds(RealScalar.ONE).toString(), "PT1S");
     assertEquals(DurationScalar.fromSeconds(Pi.VALUE).toString(), "PT3.141592653S");
   }
 
   @Test
-  public void testClip() {
+  void testClip() {
     DurationScalar dt1 = DurationScalar.of(Duration.ofDays(-100));
     assertTrue(Sign.isNegative(dt1));
     DurationScalar dt2 = DurationScalar.of(Duration.ofDays(50));
@@ -178,7 +182,7 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testLinearSolve() {
+  void testLinearSolve() {
     Random random = new Random(1);
     int n = 5;
     Tensor lhs = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, n);
@@ -189,12 +193,12 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testSeconds() {
+  void testSeconds() {
     assertEquals(DurationScalar.of(Duration.ofDays(-1)).seconds(), RealScalar.of(-24 * 60 * 60));
   }
 
   @Test
-  public void testLinearSolve2() {
+  void testLinearSolve2() {
     DurationScalar ds1 = DurationScalar.fromSeconds(RealScalar.of(3));
     DurationScalar ds2 = DurationScalar.fromSeconds(RealScalar.of(3.123));
     DurationScalar ds3 = DurationScalar.fromSeconds(RealScalar.of(10));
@@ -210,7 +214,7 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testInverseFail() {
+  void testInverseFail() {
     // failure because of reciprocal
     Random random = new Random();
     int n = 2;
@@ -219,31 +223,31 @@ class DurationScalarTest {
   }
 
   @Test
-  public void testNEquals() {
+  void testNEquals() {
     assertFalse(DurationScalar.of(Duration.ofSeconds(100)).equals(RationalScalar.HALF));
   }
 
   @Test
-  public void testExactScalar() {
+  void testExactScalar() {
     ExactScalarQ.require(DurationScalar.of(Duration.ofDays(-100)));
   }
 
   @Test
-  public void testArcTan() {
+  void testArcTan() {
     Scalar atan1 = ArcTan.of(DurationScalar.of(Duration.ofDays(-100)), DurationScalar.of(Duration.ofDays(200)));
     Scalar atan2 = ArcTan.of(-100, 200);
     Tolerance.CHOP.requireClose(atan1, atan2);
   }
 
   @Test
-  public void testMultiplyFail() {
+  void testMultiplyFail() {
     DurationScalar d1 = DurationScalar.of(Duration.ofDays(213));
     DurationScalar d2 = DurationScalar.of(Duration.ofDays(113));
     assertThrows(TensorRuntimeException.class, () -> d1.multiply(d2));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> DurationScalar.of(null));
   }
 }

@@ -28,7 +28,7 @@ class QuantityCompareTest {
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     _checkEquals(Quantity.of(2, "m"), RealScalar.of(2), false);
     _checkEquals(Quantity.of(0, "m"), RealScalar.of(0.0), false);
     _checkEquals(Quantity.of(0, "s"), RealScalar.of(0), false);
@@ -36,21 +36,21 @@ class QuantityCompareTest {
   }
 
   @Test
-  public void testEquals2() {
+  void testEquals2() {
     _checkEquals(RationalScalar.of(0, 1), Quantity.of(0, "m"), false);
     _checkEquals(DoubleScalar.of(0.0), Quantity.of(0, "m"), false);
     _checkEquals(DecimalScalar.of(new BigDecimal("0.0")), Quantity.of(0, "m"), false);
   }
 
   @Test
-  public void testEquals3() {
+  void testEquals3() {
     Scalar s1 = Quantity.of(2, "m");
     Scalar s2 = Quantity.of(2, "m^1.0");
     _checkEquals(s1, s2, true);
   }
 
   @Test
-  public void testCompareEquals() {
+  void testCompareEquals() {
     Scalar q1 = Quantity.of(0, "s");
     Scalar q2 = Quantity.of(0, "rad");
     assertFalse(q1.equals(q2));
@@ -59,7 +59,7 @@ class QuantityCompareTest {
   }
 
   @Test
-  public void testIsZero() {
+  void testIsZero() {
     Scalar qs1 = Quantity.of(2, "m");
     Scalar qs2 = Quantity.of(3, "m");
     Scalar qs3 = Quantity.of(5, "m");
@@ -71,7 +71,7 @@ class QuantityCompareTest {
   }
 
   @Test
-  public void testPredicate() {
+  void testPredicate() {
     assertTrue(_isNonNegative(Quantity.of(3, "m^2")));
     assertTrue(_isNonNegative(Quantity.of(0, "s*kg")));
     assertFalse(_isNonNegative(Quantity.of(-3, "m")));
@@ -85,23 +85,23 @@ class QuantityCompareTest {
   }
 
   @Test
-  public void testCompare() {
+  void testCompare() {
     _checkCompareTo(Quantity.of(2, "m"), Quantity.of(3, "m"), Integer.compare(2, 3));
     _checkCompareTo(Quantity.of(-3, "m*s"), Quantity.of(7, "s*m"), Integer.compare(-3, 7));
   }
 
   @Test
-  public void testCompareFail() {
+  void testCompareFail() {
     assertThrows(Exception.class, () -> _checkCompareTo(Quantity.of(2, "m"), Quantity.of(2, "kg"), Integer.compare(2, 2)));
   }
 
   @Test
-  public void testCompareFail2() {
+  void testCompareFail2() {
     assertThrows(TensorRuntimeException.class, () -> Scalars.compare(DoubleScalar.of(3.14), Quantity.of(0, "m*s")));
   }
 
   @Test
-  public void testDistinct() {
+  void testDistinct() {
     Scalar qs0 = Quantity.of(0, Unit.ONE);
     Scalar qs1 = Quantity.of(0, "m");
     Scalar qs2 = Quantity.of(0, "kg");

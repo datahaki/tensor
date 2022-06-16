@@ -27,7 +27,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ArcTanTest {
   @Test
-  public void testReal() {
+  void testReal() {
     Scalar s = RealScalar.of(-3);
     Scalar r = ArcTan.FUNCTION.apply(s);
     assertEquals(r, ArcTan.of(s));
@@ -36,13 +36,13 @@ class ArcTanTest {
   }
 
   @Test
-  public void testRealZero() {
+  void testRealZero() {
     assertEquals(ArcTan.of(RealScalar.ZERO, RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(ArcTan.of(0, 0), RealScalar.ZERO);
   }
 
   @Test
-  public void testNumber() {
+  void testNumber() {
     assertEquals(ArcTan.of(2, 0), RealScalar.ZERO);
     assertEquals(ArcTan.of(-3, 0), RealScalar.of(Math.PI));
     assertEquals(ArcTan.of(0, 4), RealScalar.of(Math.PI / 2));
@@ -50,14 +50,14 @@ class ArcTanTest {
   }
 
   @Test
-  public void testComplexReal() {
+  void testComplexReal() {
     Scalar r = ArcTan.of(ComplexScalar.of(2, 3), RealScalar.of(12));
     // 1.39519 - 0.247768 I
     assertEquals(r, Scalars.fromString("1.3951860877095887-0.24776768676598088*I"));
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar s = ComplexScalar.of(5, -7);
     Scalar r = ArcTan.FUNCTION.apply(s);
     assertEquals(r, ArcTan.of(s));
@@ -66,7 +66,7 @@ class ArcTanTest {
   }
 
   @Test
-  public void testComplex2() {
+  void testComplex2() {
     Scalar x = ComplexScalar.of(4, -1);
     Scalar y = ComplexScalar.of(1, 2);
     Scalar r = ArcTan.of(x, y);
@@ -75,7 +75,7 @@ class ArcTanTest {
   }
 
   @Test
-  public void testComplexZeroP() {
+  void testComplexZeroP() {
     Scalar x = RealScalar.ZERO;
     Scalar y = ComplexScalar.of(1, 2);
     Scalar r = ArcTan.of(x, y);
@@ -83,7 +83,7 @@ class ArcTanTest {
   }
 
   @Test
-  public void testComplexZeroN() {
+  void testComplexZeroN() {
     Scalar x = RealScalar.ZERO;
     Scalar y = ComplexScalar.of(-1, 2);
     Scalar r = ArcTan.of(x, y);
@@ -91,7 +91,7 @@ class ArcTanTest {
   }
 
   @Test
-  public void testCornerCases() {
+  void testCornerCases() {
     assertEquals(ArcTan.of(RealScalar.of(-5), RealScalar.ZERO), Pi.VALUE);
     assertEquals(ArcTan.of(RealScalar.ZERO, RealScalar.ZERO), RealScalar.ZERO);
   }
@@ -99,7 +99,7 @@ class ArcTanTest {
   // Mathematica doesn't do this:
   // ArcTan[Quantity[12, "Meters"], Quantity[4, "Meters"]] is not evaluated
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar qs1 = Quantity.of(12, "m");
     Scalar qs2 = Quantity.of(4, "m");
     {
@@ -111,7 +111,7 @@ class ArcTanTest {
   }
 
   @Test
-  public void testQuantityZeroX() {
+  void testQuantityZeroX() {
     Scalar qs0 = Quantity.of(0, "m");
     Scalar qs1 = Quantity.of(12, "m");
     {
@@ -127,7 +127,7 @@ class ArcTanTest {
   }
 
   @Test
-  public void testAntiSymmetry() {
+  void testAntiSymmetry() {
     Distribution distribution = TriangularDistribution.with(0, 1);
     Distribution scaling = UniformDistribution.of(0.1, 2);
     for (int count = 0; count < 10; ++count) {
@@ -143,19 +143,19 @@ class ArcTanTest {
   }
 
   @Test
-  public void testDoubleNaNFail() {
+  void testDoubleNaNFail() {
     assertThrows(TensorRuntimeException.class, () -> ArcTan.FUNCTION.apply(ComplexScalar.of(Double.NaN, Double.NaN)));
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> ArcTan.of(Quantity.of(12, "m"), Quantity.of(4, "s")));
     assertThrows(TensorRuntimeException.class, () -> ArcTan.of(Quantity.of(12, "m"), RealScalar.of(4)));
     assertThrows(TensorRuntimeException.class, () -> ArcTan.of(RealScalar.of(12), Quantity.of(4, "s")));
   }
 
   @Test
-  public void testGaussScalarFail() {
+  void testGaussScalarFail() {
     Tensor tensor = Tensors.fromString("{0.3, 1/3, 3+4*I, 1.2+3.4*I}");
     for (Tensor _x : tensor) {
       Scalar x = (Scalar) _x;

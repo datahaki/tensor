@@ -39,7 +39,7 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testSingle() {
+  void testSingle() {
     Scalar lambda = RealScalar.of(2);
     Distribution distribution = PoissonDistribution.of(lambda);
     PDF pdf = PDF.of(distribution);
@@ -54,7 +54,7 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testConvergence() {
+  void testConvergence() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(2));
     PDF pdf = PDF.of(distribution);
     Tensor prob = values(pdf, 16);
@@ -64,7 +64,7 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testValues() {
+  void testValues() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(3));
     PDF pdf = PDF.of(distribution);
     pdf.at(RealScalar.of(30));
@@ -74,7 +74,7 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testPDF() {
+  void testPDF() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(10.5));
     CDF cdf = CDF.of(distribution);
     Scalar scalar = cdf.p_lessThan(RealScalar.of(50));
@@ -82,7 +82,7 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testPDF2() {
+  void testPDF2() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(1.5));
     CDF cdf = CDF.of(distribution);
     Scalar scalar = cdf.p_lessThan(RealScalar.of(50));
@@ -90,7 +90,7 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testInverseCDF() {
+  void testInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(PoissonDistribution.of(RealScalar.of(5.5)));
     Scalar x0 = inverseCDF.quantile(RealScalar.of(0.0));
     Scalar x1 = inverseCDF.quantile(RealScalar.of(0.1));
@@ -100,7 +100,7 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testCDFMathematica() {
+  void testCDFMathematica() {
     int n = 5;
     Distribution distribution = PoissonDistribution.of(RationalScalar.of(1, 4));
     CDF cdf = CDF.of(distribution);
@@ -111,7 +111,7 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testInverseCDFMathematica() {
+  void testInverseCDFMathematica() {
     Distribution distribution = PoissonDistribution.of(RationalScalar.of(1, 4));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar actual = inverseCDF.quantile(RealScalar.of(0.9735009788392561));
@@ -120,7 +120,7 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testMarkov() {
+  void testMarkov() {
     Random random = new Random();
     Distribution distribution = PoissonDistribution.of(0.1 + 10 * random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
@@ -128,25 +128,25 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(5.5));
     String string = distribution.toString();
     assertEquals(string, "PoissonDistribution[5.5]");
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> PoissonDistribution.of(Quantity.of(3, "m")));
   }
 
   @Test
-  public void testFailLambda() {
+  void testFailLambda() {
     assertThrows(TensorRuntimeException.class, () -> PoissonDistribution.of(RealScalar.ZERO));
     assertThrows(TensorRuntimeException.class, () -> PoissonDistribution.of(RealScalar.of(-0.1)));
   }
 
   @Test
-  public void testLarge() {
+  void testLarge() {
     Distribution distribution = PoissonDistribution.of(RealScalar.of(700));
     PDF pdf = PDF.of(distribution);
     assertTrue(Scalars.isZero(pdf.at(RealScalar.of(140.123))));
@@ -159,7 +159,7 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testNextDownOne() {
+  void testNextDownOne() {
     Scalar last = RealScalar.of(Math.nextDown(1.0));
     for (int lambda = 1; lambda < 700; lambda += 30) {
       Distribution distribution = PoissonDistribution.of(lambda);
@@ -180,7 +180,7 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testNumericsPoisson() {
+  void testNumericsPoisson() {
     _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(0.1)));
     _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(1.0)));
     _checkDiscreteCDFNumerics(PoissonDistribution.of(RealScalar.of(70)));
@@ -188,7 +188,7 @@ class PoissonDistributionTest {
   }
 
   @Test
-  public void testFailPoisson() {
+  void testFailPoisson() {
     assertThrows(TensorRuntimeException.class, () -> PoissonDistribution.of(RealScalar.of(800)));
   }
 }

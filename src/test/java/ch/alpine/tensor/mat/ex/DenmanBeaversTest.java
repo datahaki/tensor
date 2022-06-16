@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class DenmanBeaversTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Random random = new Random(3);
     Distribution distribution = NormalDistribution.standard();
     for (int n = 2; n < 6; ++n) {

@@ -16,14 +16,14 @@ import ch.alpine.tensor.Tensors;
 
 class PrimitivesDoubleTest {
   @Test
-  public void testToListDouble() {
+  void testToListDouble() {
     Tensor a = Tensors.vector(-2.5, -2.7, 4.3, 5.4, 6.2, 10.5);
     List<Double> listA = Primitives.toListDouble(a);
     assertEquals(a, Tensors.vector(listA));
   }
 
   @Test
-  public void testToDoubleArray() {
+  void testToDoubleArray() {
     Tensor tensor = Tensors.vector(Double.NaN, Math.PI, Double.POSITIVE_INFINITY);
     double[] array = Primitives.toDoubleArray(tensor);
     assertEquals(array.length, 3);
@@ -33,7 +33,7 @@ class PrimitivesDoubleTest {
   }
 
   @Test
-  public void testToDoubleArray2D() {
+  void testToDoubleArray2D() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, {4}, 5}, {6}}");
     double[][] array = Primitives.toDoubleArray2D(tensor);
     assertEquals(Tensors.vectorDouble(array[0]), Tensors.vector(1, 2));
@@ -43,7 +43,7 @@ class PrimitivesDoubleTest {
   }
 
   @Test
-  public void testToDoubleArray2Dvector() {
+  void testToDoubleArray2Dvector() {
     Tensor tensor = Tensors.fromString("{1, 2, {3, {4}, 5}, {{6}, 7}}");
     double[][] array = Primitives.toDoubleArray2D(tensor);
     assertEquals(Tensors.vectorDouble(array[0]), Tensors.vector(1));
@@ -54,7 +54,7 @@ class PrimitivesDoubleTest {
   }
 
   @Test
-  public void testToDoubleBuffer() {
+  void testToDoubleBuffer() {
     Tensor a = Tensors.vector(-2.5, -2.7, Math.PI);
     Tensor b = Tensors.vector(4.3, 5.4, 6.2, 10.5);
     DoubleBuffer doubleBuffer = Primitives.toDoubleBuffer(Tensors.of(a, b));
@@ -66,7 +66,7 @@ class PrimitivesDoubleTest {
   }
 
   @Test
-  public void testToDoubleArray2Dscalar() {
+  void testToDoubleArray2Dscalar() {
     assertThrows(NegativeArraySizeException.class, () -> Primitives.toDoubleArray2D(RealScalar.of(123.456)));
   }
 }

@@ -84,6 +84,6 @@ public class PoissonBinomialDistribution implements Distribution, //
   // }
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), p_vector);
+    return String.format("PoissonBinomialDistribution[%s]", Tensors.message(p_vector));
   }
 }

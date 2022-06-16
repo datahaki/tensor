@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class BipartitionImplTest {
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(BipartitionImpl.class.getModifiers()));
   }
 }

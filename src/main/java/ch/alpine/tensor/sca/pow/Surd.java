@@ -36,6 +36,6 @@ public class Surd implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%d]", getClass().getSimpleName(), n);
+    return String.format("Surd[%d]", n);
   }
 }

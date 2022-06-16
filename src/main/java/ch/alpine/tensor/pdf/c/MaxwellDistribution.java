@@ -87,6 +87,6 @@ public class MaxwellDistribution implements Distribution, CDF, PDF, MeanInterfac
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), sigma);
+    return String.format("MaxwellDistribution[%s]", sigma);
   }
 }

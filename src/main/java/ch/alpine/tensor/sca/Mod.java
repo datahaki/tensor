@@ -67,6 +67,6 @@ public class Mod implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s]", getClass().getSimpleName(), n, d);
+    return String.format("Mod[%s, %s]", n, d);
   }
 }

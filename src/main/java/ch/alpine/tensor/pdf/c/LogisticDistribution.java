@@ -75,6 +75,6 @@ public class LogisticDistribution extends AbstractContinuousDistribution impleme
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s]", getClass().getSimpleName(), a, b);
+    return String.format("LogisticDistribution[%s, %s]", a, b);
   }
 }

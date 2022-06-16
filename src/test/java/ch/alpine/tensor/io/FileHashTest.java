@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensors;
 
 class FileHashTest {
   @Test
-  public void testSimple(@TempDir File tempDir) throws IOException, NoSuchAlgorithmException {
+  void testSimple(@TempDir File tempDir) throws IOException, NoSuchAlgorithmException {
     File file = new File(tempDir, "file.png");
     Export.of(file, Tensors.fromString("{{{0,128,255,255}}}"));
     String string = FileHash.string(file, MessageDigest.getInstance("MD5"));

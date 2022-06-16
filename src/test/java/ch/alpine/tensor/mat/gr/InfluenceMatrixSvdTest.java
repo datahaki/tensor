@@ -30,7 +30,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class InfluenceMatrixSvdTest {
   @RepeatedTest(3)
-  public void testRankDeficient(RepetitionInfo repetitionInfo) {
+  void testRankDeficient(RepetitionInfo repetitionInfo) {
     int n = 7;
     int _m = repetitionInfo.getTotalRepetitions() + 2;
     Distribution distribution = NormalDistribution.standard();
@@ -47,7 +47,7 @@ class InfluenceMatrixSvdTest {
     Tolerance.CHOP.requireClose(influenceMatrix.matrix(), influenceMatrixSvd.matrix());
   }
 
-  public void testSvdWithQuantity() {
+  void testSvdWithQuantity() {
     int n = 4;
     int _m = 4;
     Distribution distribution = DiscreteUniformDistribution.of(-20, 20);
@@ -73,7 +73,7 @@ class InfluenceMatrixSvdTest {
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(InfluenceMatrixSvd.class.getModifiers()));
   }
 }

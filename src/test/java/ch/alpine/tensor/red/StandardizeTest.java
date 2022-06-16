@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class StandardizeTest {
   @Test
-  public void testNumeric() {
+  void testNumeric() {
     Tensor tensor = Standardize.ofVector(Tensors.vector(6.5, 3.8, 6.6, 5.7, 6.0, 6.4, 5.3));
     Chop._12.requireAllZero(Mean.of(tensor));
     Chop._12.requireClose(Variance.ofVector(tensor), RealScalar.ONE);
@@ -24,32 +24,32 @@ class StandardizeTest {
   }
 
   @Test
-  public void testExact1() {
+  void testExact1() {
     Tensor tensor = Standardize.ofVector(Tensors.vector(1, 2, 3));
     ExactTensorQ.require(tensor);
     assertEquals(tensor, Tensors.vector(-1, 0, 1));
   }
 
   @Test
-  public void testExact2() {
+  void testExact2() {
     Tensor tensor = Standardize.ofVector(Tensors.vector(1, 3, 5));
     ExactTensorQ.require(tensor);
     assertEquals(tensor, Tensors.vector(-1, 0, 1));
   }
 
   @Test
-  public void testLengthShort() {
+  void testLengthShort() {
     assertThrows(ArithmeticException.class, () -> Standardize.ofVector(Tensors.empty()));
     assertThrows(ArithmeticException.class, () -> Standardize.ofVector(Tensors.vector(2)));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Standardize.ofVector(RealScalar.of(84.312)));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(ClassCastException.class, () -> Standardize.ofVector(HilbertMatrix.of(5)));
   }
 }

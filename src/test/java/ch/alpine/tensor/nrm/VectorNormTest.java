@@ -23,7 +23,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class VectorNormTest {
   @Test
-  public void testOdd() {
+  void testOdd() {
     Tensor tensor = Tensors.vector(2.3, 1.0, 3.2);
     Scalar n = VectorNorm.of(1.5).apply(tensor);
     // 4.7071
@@ -31,20 +31,20 @@ class VectorNormTest {
   }
 
   @Test
-  public void testNormP() {
+  void testNormP() {
     Scalar n = VectorNorm.of(1.23).apply(Tensors.vector(1, 2, 3));
     assertEquals(n, RealScalar.of(4.982125211204371));
   }
 
   @Test
-  public void testNormalize() {
+  void testNormalize() {
     TensorScalarFunction vni = VectorNorm.of(2.6);
     Tensor nrm = Normalize.with(vni).apply(Tensors.vector(1, 2, 3));
     Chop._15.requireClose(vni.apply(nrm), RealScalar.ONE);
   }
 
   @Test
-  public void testNormalize2() {
+  void testNormalize2() {
     Distribution distribution = NormalDistribution.standard();
     TensorScalarFunction vni = VectorNorm.of(3.4);
     Tensor vector = RandomVariate.of(distribution, 1000);
@@ -54,7 +54,7 @@ class VectorNormTest {
   }
 
   @Test
-  public void testQuantity1() {
+  void testQuantity1() {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(4, "m");
     Tensor vec = Tensors.of(qs1, qs2);
@@ -64,7 +64,7 @@ class VectorNormTest {
   }
 
   @Test
-  public void testQuantity2() {
+  void testQuantity2() {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(4, "m");
     Tensor vec = Tensors.of(qs1, qs2);
@@ -74,31 +74,31 @@ class VectorNormTest {
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     TensorScalarFunction tensorScalarFunction = VectorNorm.of(3);
     String string = tensorScalarFunction.toString();
     assertTrue(string.startsWith("VectorNorm["));
   }
 
   @Test
-  public void testNormPFail() {
+  void testNormPFail() {
     assertThrows(TensorRuntimeException.class, () -> VectorNorm.of(0.99));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     TensorScalarFunction tensorScalarFunction = VectorNorm.of(2.6);
     assertThrows(ClassCastException.class, () -> tensorScalarFunction.apply(IdentityMatrix.of(2)));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     TensorScalarFunction tensorScalarFunction = VectorNorm.of(2.6);
     assertThrows(TensorRuntimeException.class, () -> tensorScalarFunction.apply(RealScalar.of(12)));
   }
 
   @Test
-  public void testPNullFail() {
+  void testPNullFail() {
     assertThrows(NullPointerException.class, () -> VectorNorm.of((Number) null));
     assertThrows(NullPointerException.class, () -> VectorNorm.of((Scalar) null));
   }

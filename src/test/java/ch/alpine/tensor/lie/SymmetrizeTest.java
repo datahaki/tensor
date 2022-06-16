@@ -29,7 +29,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class SymmetrizeTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Distribution distribution = UniformDistribution.unit();
     Tensor tensor = RandomVariate.of(distribution, 3, 3, 3);
     Tensor symmet = Symmetrize.of(tensor);
@@ -44,7 +44,7 @@ class SymmetrizeTest {
   }
 
   @Test
-  public void testMatrixExplicit() {
+  void testMatrixExplicit() {
     Distribution distribution = UniformDistribution.unit();
     Tensor tensor = RandomVariate.of(distribution, 3, 3);
     Tensor symmet = Symmetrize.of(tensor);
@@ -52,7 +52,7 @@ class SymmetrizeTest {
   }
 
   @Test
-  public void testMatrixExact() {
+  void testMatrixExact() {
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     Tensor tensor = RandomVariate.of(distribution, 3, 3);
     Tensor symmet = Symmetrize.of(tensor);
@@ -61,18 +61,18 @@ class SymmetrizeTest {
   }
 
   @Test
-  public void testScalar() {
+  void testScalar() {
     Tensor tensor = Symmetrize.of(RealScalar.ONE);
     assertEquals(tensor, RealScalar.ONE);
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertEquals(Symmetrize.of(Tensors.empty()), Tensors.empty());
   }
 
   @Test
-  public void testVector() {
+  void testVector() {
     Tensor vector = Tensors.vector(1, 2, 3, 4);
     Tensor tensor = Symmetrize.of(vector);
     assertEquals(tensor, vector);
@@ -81,7 +81,7 @@ class SymmetrizeTest {
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     Distribution distribution = NormalDistribution.standard();
     Tensor tensor = RandomVariate.of(distribution, 9, 9);
     SymmetricMatrixQ.require(Symmetrize.of(tensor));
@@ -89,20 +89,20 @@ class SymmetrizeTest {
   }
 
   @Test
-  public void testRectangularFail() {
+  void testRectangularFail() {
     Distribution distribution = UniformDistribution.unit();
     assertThrows(IllegalArgumentException.class, () -> Symmetrize.of(RandomVariate.of(distribution, 3, 2)));
     assertThrows(IllegalArgumentException.class, () -> Symmetrize.of(RandomVariate.of(distribution, 3, 3, 2)));
   }
 
   @Test
-  public void testNonArrayFail() {
+  void testNonArrayFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
     assertThrows(TensorRuntimeException.class, () -> Symmetrize.of(tensor));
   }
 
   @Test
-  public void test01() {
+  void test01() {
     Tensor tensor = Array.of(Tensors::vector, 3, 3); // results in dimensions [3 x 3 x 2]
     assertFalse(SymmetricMatrixQ.of(tensor.get(Tensor.ALL, Tensor.ALL, 0)));
     Tensor symmetrize01 = Symmetrize._01(tensor);

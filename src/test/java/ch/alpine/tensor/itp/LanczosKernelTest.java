@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class LanczosKernelTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     LanczosKernel lanczosKernel = LanczosKernel._3;
     assertEquals(lanczosKernel.semi(), 3);
     for (Tensor _x : Range.of(-5, 5 + 1)) {
@@ -29,7 +29,7 @@ class LanczosKernelTest {
   }
 
   @Test
-  public void testIntermediate() {
+  void testIntermediate() {
     LanczosKernel lanczosKernel = LanczosKernel._3;
     Scalar apply = lanczosKernel.apply(RationalScalar.HALF);
     Chop._14.requireClose(apply, RealScalar.of(0.6079271018540267));

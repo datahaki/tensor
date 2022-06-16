@@ -45,7 +45,7 @@ import ch.alpine.tensor.sca.N;
 
 class PseudoInverseTest {
   @Test
-  public void testHilbertSquare() {
+  void testHilbertSquare() {
     for (int n = 1; n < 8; ++n) {
       Tensor matrix = HilbertMatrix.of(n);
       Tensor result = PseudoInverse.usingSvd(matrix);
@@ -56,7 +56,7 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testMixedUnitsVantHoff() {
+  void testMixedUnitsVantHoff() {
     // inspired by code by gjoel
     for (int deg = 0; deg <= 2; ++deg) {
       int degree = deg;
@@ -68,21 +68,21 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     Tensor vector = Tensor.of(IntStream.range(100, 110).mapToObj(i -> GaussScalar.of(3 * i, 239873)));
     Tensor design = VandermondeMatrix.of(vector, 3);
     PseudoInverse.of(design);
   }
 
   @Test
-  public void testMathematica() {
+  void testMathematica() {
     Tensor expect = Tensors.fromString("{{252/73, -(198/73), -(240/73)}, {-(360/73), 408/73, 468/73}}");
     assertEquals(PseudoInverse.of(HilbertMatrix.of(3, 2)), expect);
     assertEquals(PseudoInverse.of(HilbertMatrix.of(2, 3)), Transpose.of(expect));
   }
 
   @Test
-  public void testHilbertRect() {
+  void testHilbertRect() {
     for (int m = 2; m < 6; ++m) {
       int n = m + 2;
       Tensor matrix = HilbertMatrix.of(n, m);
@@ -98,7 +98,7 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testHilbert46() {
+  void testHilbert46() {
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = HilbertMatrix.of(n, 6);
       Tensor result = PseudoInverse.usingSvd(matrix);
@@ -108,7 +108,7 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testMathematica1() {
+  void testMathematica1() {
     Tensor matrix = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}}");
     assertEquals(MatrixRank.of(matrix), 2);
     Tensor res1 = PseudoInverse.usingSvd(matrix);
@@ -120,7 +120,7 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testMathematica2() {
+  void testMathematica2() {
     Tensor matrix = Transpose.of(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}}"));
     Tensor result = PseudoInverse.usingSvd(matrix);
     Tensor actual = Transpose.of(Tensors.fromString("{{-(29/60), -(11/45), -(1/180), 7/30}, {-(1/30), -(1/90), 1/90, 1/30}, {5/12, 2/9, 1/36, -(1/6)}}"));
@@ -128,7 +128,7 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Random random = new Random(3);
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(1, "m"));
     for (int n = 1; n < 7; ++n) {
@@ -140,7 +140,7 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testRectangular() {
+  void testRectangular() {
     Distribution distribution = NormalDistribution.of(Quantity.of(0, "m"), Quantity.of(1, "m"));
     for (int m = 5; m < 12; ++m) {
       int n = m + 3;
@@ -153,7 +153,7 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testCDecRhs() {
+  void testCDecRhs() {
     Random random = new Random(1);
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     Tensor matrix = RandomVariate.of(distribution, random, 5, 2);
@@ -165,7 +165,7 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testCDecRhs2() {
+  void testCDecRhs2() {
     Random random = new Random(2);
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     Tensor matrix = RandomVariate.of(distribution, random, 2, 5);
@@ -177,7 +177,7 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testComplexRectangular() {
+  void testComplexRectangular() {
     Distribution distribution = NormalDistribution.standard(); // of(Quantity.of(0, "m"), Quantity.of(1, "m"));
     for (int m = 3; m < 9; ++m) {
       int n = m + 3;
@@ -192,21 +192,21 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testComplexExact() {
+  void testComplexExact() {
     Tensor expect = Tensors.fromString("{{-(1/3) - I/3, 1/6 - I/6, 1/6 + I/6}, {1/6 - I/3, 5/12 + I/12, -(1/12) - I/12}}");
     Tensor matrix = Tensors.fromString("{{-1 + I, 0}, {-I, 2}, {2 - I, 2 * I}}");
     assertEquals(PseudoInverse.of(matrix), expect);
   }
 
   @Test
-  public void testDecimalScalar() {
+  void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
     Tensor pseudo = PseudoInverse.of(matrix);
     assertInstanceOf(DecimalScalar.class, pseudo.Get(1, 2));
   }
 
   @Test
-  public void testPseudoInverseIdempotent() {
+  void testPseudoInverseIdempotent() {
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), n, m);
@@ -217,7 +217,7 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testRankDeficient() {
+  void testRankDeficient() {
     int r = 2;
     Distribution distribution = NormalDistribution.standard();
     Tensor m1 = RandomVariate.of(distribution, 7, r);
@@ -245,7 +245,7 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor sequence = RandomVariate.of(NormalDistribution.standard(), 10, 3);
     Tensor point = RandomVariate.of(NormalDistribution.standard(), 3);
     Tensor matrix = Tensor.of(sequence.stream().map(point.negate()::add));
@@ -259,7 +259,7 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testQR() {
+  void testQR() {
     Distribution distribution = UniformDistribution.unit();
     for (int count = 0; count < 10; ++count) {
       Tensor vector = RandomVariate.of(distribution, 10);
@@ -272,27 +272,27 @@ class PseudoInverseTest {
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     Tensor tensor = Tensors.empty();
     assertThrows(IllegalArgumentException.class, () -> PseudoInverse.of(tensor));
     assertThrows(IllegalArgumentException.class, () -> PseudoInverse.usingSvd(tensor));
   }
 
   @Test
-  public void testVectorFail() {
+  void testVectorFail() {
     Tensor tensor = Tensors.vector(1, 2, 3, 4);
     assertThrows(TensorRuntimeException.class, () -> PseudoInverse.of(tensor));
     assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingSvd(tensor));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> PseudoInverse.of(RealScalar.ONE));
     assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingSvd(RealScalar.ONE));
   }
 
   @Test
-  public void testEmptyMatrixFail() {
+  void testEmptyMatrixFail() {
     Tensor tensor = Tensors.of(Tensors.empty());
     assertThrows(IllegalArgumentException.class, () -> PseudoInverse.of(tensor));
     assertThrows(IllegalArgumentException.class, () -> PseudoInverse.usingSvd(tensor));

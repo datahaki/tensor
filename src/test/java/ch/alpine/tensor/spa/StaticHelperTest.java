@@ -37,7 +37,7 @@ import ch.alpine.tensor.red.Times;
 
 class StaticHelperTest {
   @Test
-  public void testSparseBinary() {
+  void testSparseBinary() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
     Tensor b = Tensors.fromString("{{3,0,0,7,0},{0,0,0,0,0},{0,4,0,3,0}}");
     Tensor sa = TestHelper.of(a);
@@ -65,7 +65,7 @@ class StaticHelperTest {
   }
 
   @Test
-  public void testSparseWedge() {
+  void testSparseWedge() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4},{0,0,0,0,0},{0,0,0,0,0}}");
     Tensor s = TestHelper.of(a);
     Tensor tw_s = TensorWedge.of(s);
@@ -75,14 +75,14 @@ class StaticHelperTest {
   }
 
   @Test
-  public void testSparseTranspose() {
+  void testSparseTranspose() {
     Tensor a = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4},{0,0,0,0,0}}");
     Tensor s = TestHelper.of(a);
     assertEquals(Transpose.of(a), Transpose.of(s));
   }
 
   @Test
-  public void testGenerateFail() {
+  void testGenerateFail() {
     SparseArray.of(RealScalar.ZERO, 2, 3);
     assertEquals(SparseArray.of(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(SparseArray.of(GaussScalar.of(0, 7)), GaussScalar.of(0, 7));
@@ -91,13 +91,13 @@ class StaticHelperTest {
   }
 
   @Test
-  public void testPMulFullSparse() {
+  void testPMulFullSparse() {
     Tensor tensor = Times.of(HilbertMatrix.of(3), LeviCivitaTensor.of(3));
     tensor.toString();
   }
 
   @Test
-  public void testPMulSparseFull() {
+  void testPMulSparseFull() {
     Tensor tensor = Times.of(IdentityMatrix.sparse(3), HilbertMatrix.of(3));
     tensor.toString();
   }
@@ -131,7 +131,7 @@ class StaticHelperTest {
   }
 
   @Test
-  public void testDot() {
+  void testDot() {
     _check(_random(7), _random(7));
     _check(_random(8), _random(8, 2));
     _check(_random(5, 6), _random(6));
@@ -139,7 +139,7 @@ class StaticHelperTest {
   }
 
   @Test
-  public void testDotZeroX() {
+  void testDotZeroX() {
     _check(Array.zeros(7), _random(7));
     _check(Array.zeros(8), _random(8, 2));
     _check(Array.zeros(5, 6), _random(6));
@@ -147,7 +147,7 @@ class StaticHelperTest {
   }
 
   @Test
-  public void testDotXZero() {
+  void testDotXZero() {
     _check(_random(7), Array.zeros(7));
     _check(_random(8), Array.zeros(8, 2));
     _check(_random(5, 6), Array.zeros(6));
@@ -155,7 +155,7 @@ class StaticHelperTest {
   }
 
   @Test
-  public void testFallbackFail() {
+  void testFallbackFail() {
     Tensor tensor = SparseArray.of(RealScalar.ZERO, 3);
     assertThrows(ArithmeticException.class, () -> tensor.divide(Quantity.of(0, "")));
     assertThrows(ArithmeticException.class, () -> tensor.divide(Quantity.of(0, "s*m")));
@@ -163,13 +163,13 @@ class StaticHelperTest {
   }
 
   @Test
-  public void testArraysAsListSerialization() throws ClassNotFoundException, IOException {
+  void testArraysAsListSerialization() throws ClassNotFoundException, IOException {
     Serialization.copy(Arrays.asList(3, 4, 5, 6));
     assertThrows(Exception.class, () -> Serialization.copy(Arrays.asList(3, 4, 5, 6).subList(1, 3)));
   }
 
   @Test
-  public void testArrayListSerialization() throws ClassNotFoundException, IOException {
+  void testArrayListSerialization() throws ClassNotFoundException, IOException {
     List<Integer> list = new ArrayList<>();
     list.add(3);
     list.add(4);
@@ -180,7 +180,7 @@ class StaticHelperTest {
   }
 
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertEquals(StaticHelper.class.getModifiers() & 1, 0);
   }
 }

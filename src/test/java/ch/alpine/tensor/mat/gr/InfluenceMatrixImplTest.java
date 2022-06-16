@@ -38,7 +38,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class InfluenceMatrixImplTest {
   @Test
-  public void testExactRankDefficient7x5() {
+  void testExactRankDefficient7x5() {
     Random random = new Random(3);
     int n = 7;
     int _m = 5;
@@ -70,7 +70,7 @@ class InfluenceMatrixImplTest {
   }
 
   @Test
-  public void testMixedQuantity() {
+  void testMixedQuantity() {
     Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}");
     Tensor design = VandermondeMatrix.of(x, 2);
     Tensor influe = design.dot(PseudoInverse.of(design));
@@ -87,7 +87,7 @@ class InfluenceMatrixImplTest {
   }
 
   @Test
-  public void testExact3() throws ClassNotFoundException, IOException {
+  void testExact3() throws ClassNotFoundException, IOException {
     int n = 7;
     int m = 3;
     Distribution distribution = DiscreteUniformDistribution.of(-20, 20);
@@ -109,7 +109,7 @@ class InfluenceMatrixImplTest {
   }
 
   @Test
-  public void testExact5() throws ClassNotFoundException, IOException {
+  void testExact5() throws ClassNotFoundException, IOException {
     int n = 7;
     int m = 5;
     Distribution distribution = DiscreteUniformDistribution.of(-20, 20);
@@ -131,7 +131,7 @@ class InfluenceMatrixImplTest {
   }
 
   @Test
-  public void testUseMatrixFalse() {
+  void testUseMatrixFalse() {
     Distribution distribution = LogNormalDistribution.standard();
     Tensor design = RandomVariate.of(distribution, 10, 2);
     InfluenceMatrixImpl influenceMatrixImpl = (InfluenceMatrixImpl) InfluenceMatrix.of(design);
@@ -140,7 +140,7 @@ class InfluenceMatrixImplTest {
   }
 
   @Test
-  public void testUseMatrixTrue() {
+  void testUseMatrixTrue() {
     Distribution distribution = LogNormalDistribution.standard();
     Tensor design = RandomVariate.of(distribution, 8, 7);
     InfluenceMatrixImpl influenceMatrixImpl = (InfluenceMatrixImpl) InfluenceMatrix.of(design);
@@ -149,7 +149,7 @@ class InfluenceMatrixImplTest {
   }
 
   @Test
-  public void testModifierNonPublic() {
+  void testModifierNonPublic() {
     assertFalse(Modifier.isPublic(InfluenceMatrixImpl.class.getModifiers()));
   }
 }

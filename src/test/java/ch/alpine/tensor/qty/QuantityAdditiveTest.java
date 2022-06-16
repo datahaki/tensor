@@ -23,14 +23,14 @@ class QuantityAdditiveTest {
   }
 
   @Test
-  public void testMixFail() {
+  void testMixFail() {
     assertThrows(TensorRuntimeException.class, () -> Quantity.of(0, "m").add(Quantity.of(0, "kg")));
     assertThrows(TensorRuntimeException.class, () -> Quantity.of(0, "m").add(Quantity.of(2, "kg")));
     assertThrows(TensorRuntimeException.class, () -> Quantity.of(0, "m").add(Quantity.of(2, "")));
   }
 
   @Test
-  public void testPlusUnits3() {
+  void testPlusUnits3() {
     Scalar s1 = Quantity.of(0, "m"); //
     Scalar s2 = Quantity.of(0.0, "m");
     _checkPlusSymmetry(s1, s2);
@@ -38,21 +38,21 @@ class QuantityAdditiveTest {
   }
 
   @Test
-  public void testPlusUnits4() {
+  void testPlusUnits4() {
     Scalar s1 = Quantity.of(0, "m"); //
     Scalar s2 = Quantity.of(0.0, "");
     assertThrows(TensorRuntimeException.class, () -> s1.add(s2));
   }
 
   @Test
-  public void testPlusUnits5() {
+  void testPlusUnits5() {
     Scalar s1 = Quantity.of(0.0, "m"); //
     Scalar s2 = RealScalar.ZERO;
     assertThrows(TensorRuntimeException.class, () -> s1.add(s2));
   }
 
   @Test
-  public void testPlusMix() {
+  void testPlusMix() {
     Scalar s1 = Quantity.of(0, "m"); //
     Scalar s2 = Quantity.of(2, "kg");
     assertThrows(TensorRuntimeException.class, () -> s1.add(s2));
@@ -60,7 +60,7 @@ class QuantityAdditiveTest {
   }
 
   @Test
-  public void testPlusMix2() {
+  void testPlusMix2() {
     Scalar s1 = Quantity.of(3, "m"); //
     Scalar s2 = Quantity.of(0, "kg");
     assertThrows(TensorRuntimeException.class, () -> s1.add(s2));
@@ -68,7 +68,7 @@ class QuantityAdditiveTest {
   }
 
   @Test
-  public void testPlusMix3() {
+  void testPlusMix3() {
     Scalar s1 = Quantity.of(0, "m"); //
     Scalar s2 = Quantity.of(0, "kg");
     assertThrows(TensorRuntimeException.class, () -> s1.add(s2));
@@ -76,7 +76,7 @@ class QuantityAdditiveTest {
   }
 
   @Test
-  public void testPlusMixFail() {
+  void testPlusMixFail() {
     Scalar s1 = Quantity.of(1.0, "m"); //
     Scalar s2 = GaussScalar.of(0, 7);
     assertThrows(TensorRuntimeException.class, () -> s1.add(s2));
@@ -84,7 +84,7 @@ class QuantityAdditiveTest {
   }
 
   @Test
-  public void testPlusMixZeroFail() {
+  void testPlusMixZeroFail() {
     Scalar s1 = Quantity.of(0.0, "m"); //
     Scalar s2 = GaussScalar.of(0, 7);
     assertThrows(TensorRuntimeException.class, () -> s1.add(s2));
@@ -92,7 +92,7 @@ class QuantityAdditiveTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar s1 = ComplexScalar.of(1, 2);
     Scalar s2 = Quantity.of(0, "m*s");
     assertThrows(TensorRuntimeException.class, () -> s1.add(s2));
@@ -100,7 +100,7 @@ class QuantityAdditiveTest {
   }
 
   @Test
-  public void testAddDifferent() {
+  void testAddDifferent() {
     Scalar s1 = Quantity.of(200, "g"); //
     Scalar s2 = Quantity.of(1, "kg");
     Scalar sum = Total.ofVector(Tensors.of(s1, s2).map(UnitSystem.SI()));
@@ -108,7 +108,7 @@ class QuantityAdditiveTest {
   }
 
   @Test
-  public void testPlusFail() {
+  void testPlusFail() {
     assertThrows(TensorRuntimeException.class, () -> Quantity.of(2, "m").add(Quantity.of(2, "kg")));
     assertThrows(Exception.class, () -> _checkPlusSymmetry( //
         Quantity.of(ComplexScalar.of(1, 2), "m"), //

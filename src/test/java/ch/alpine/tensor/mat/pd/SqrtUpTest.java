@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class SqrtUpTest {
   @Test
-  public void testRectangle() {
+  void testRectangle() {
     Random random = new Random(2);
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, n, n);

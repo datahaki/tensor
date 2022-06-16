@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class LanczosInterpolationTest {
   @Test
-  public void testVector() {
+  void testVector() {
     Tensor vector = Tensors.vector(-1, 0, 3, 2, 0, -4, 2);
     for (int size = 1; size < 5; ++size) {
       Interpolation interpolation = LanczosInterpolation.of(vector, size);
@@ -38,15 +38,15 @@ class LanczosInterpolationTest {
   }
 
   @Test
-  public void testGetEmpty() {
+  void testGetEmpty() {
     Interpolation interpolation = LanczosInterpolation.of(LeviCivitaTensor.of(3));
     Tensor tensor = interpolation.get(Tensors.empty());
     assertThrows(UnsupportedOperationException.class, () -> tensor.set(t -> t.append(RealScalar.ONE), Tensor.ALL));
   }
 
   @Test
-  public void testImage() {
-    String string = "/io/image/gray15x9.png";
+  void testImage() {
+    String string = "/ch/alpine/tensor/img/gray15x9.png";
     Tensor tensor = ResourceData.of(string);
     assertEquals(Dimensions.of(tensor), Arrays.asList(9, 15));
     Interpolation interpolation = LanczosInterpolation.of(tensor, 2);
@@ -57,8 +57,8 @@ class LanczosInterpolationTest {
   }
 
   @Test
-  public void testImage3() {
-    String string = "/io/image/gray15x9.png";
+  void testImage3() {
+    String string = "/ch/alpine/tensor/img/gray15x9.png";
     Tensor tensor = ResourceData.of(string);
     assertEquals(Dimensions.of(tensor), Arrays.asList(9, 15));
     Interpolation interpolation = LanczosInterpolation.of(tensor);
@@ -69,7 +69,7 @@ class LanczosInterpolationTest {
   }
 
   @Test
-  public void testUseCase() {
+  void testUseCase() {
     Tensor tensor = Range.of(1, 11);
     Interpolation interpolation = LanczosInterpolation.of(tensor);
     Distribution distribution = DiscreteUniformDistribution.of(0, (tensor.length() - 1) * 3 + 1);
@@ -84,7 +84,7 @@ class LanczosInterpolationTest {
   }
 
   @Test
-  public void test1D() {
+  void test1D() {
     Interpolation interpolation = LanczosInterpolation.of(Tensors.vector(10, 20, 30, 40));
     TestHelper.checkMatch(interpolation);
     TestHelper.checkMatchExact(interpolation);
@@ -92,7 +92,7 @@ class LanczosInterpolationTest {
   }
 
   @Test
-  public void test2D() {
+  void test2D() {
     Distribution distribution = UniformDistribution.unit();
     Interpolation interpolation = LanczosInterpolation.of(RandomVariate.of(distribution, 3, 5));
     TestHelper.checkMatch(interpolation);
@@ -101,12 +101,12 @@ class LanczosInterpolationTest {
   }
 
   @Test
-  public void testFailNull() {
+  void testFailNull() {
     assertThrows(NullPointerException.class, () -> LanczosInterpolation.of(null, 3));
   }
 
   @Test
-  public void testFailSemi() {
+  void testFailSemi() {
     Tensor vector = Tensors.vector(-1, 0, 3, 2, 0, -4, 2);
     assertThrows(TensorRuntimeException.class, () -> LanczosInterpolation.of(vector, 0));
     assertThrows(TensorRuntimeException.class, () -> LanczosInterpolation.of(vector, -1));

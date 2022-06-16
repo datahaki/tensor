@@ -27,7 +27,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ModTest {
   @Test
-  public void testOffset() {
+  void testOffset() {
     Mod mod = Mod.function(4, -2);
     assertEquals(mod.apply(RealScalar.ONE), RealScalar.ONE);
     assertEquals(mod.apply(RealScalar.ONE.negate()), RealScalar.ONE.negate());
@@ -37,7 +37,7 @@ class ModTest {
   }
 
   @Test
-  public void testPi() {
+  void testPi() {
     Mod mod = Mod.function(2 * Math.PI, -Math.PI);
     assertEquals(mod.apply(RealScalar.ONE), RealScalar.ONE);
     assertEquals(mod.apply(RealScalar.ONE.negate()), RealScalar.ONE.negate());
@@ -49,27 +49,27 @@ class ModTest {
   }
 
   @Test
-  public void testPart() {
+  void testPart() {
     Mod mod = Mod.function(3, 1);
     assertEquals(mod.apply(RealScalar.ZERO), RealScalar.of(3));
   }
 
   @Test
-  public void testPartInteger() {
+  void testPartInteger() {
     Mod mod = Mod.function(3);
     assertEquals(mod.apply(RealScalar.of(5)), RealScalar.of(2));
     assertEquals(mod.apply(RealScalar.of(3)), RealScalar.ZERO);
   }
 
   @Test
-  public void testPartDouble() {
+  void testPartDouble() {
     Mod mod = Mod.function(2.3);
     assertEquals(mod.apply(RealScalar.of(5)), RealScalar.of(5 - 2.3 - 2.3));
     assertEquals(mod.apply(RealScalar.of(2.3)), RealScalar.ZERO);
   }
 
   @Test
-  public void testRational1() {
+  void testRational1() {
     Scalar m = RationalScalar.of( //
         new BigInteger("816345827635482763548726354817635487162354876135284765"), //
         new BigInteger("89354817623548127345928347902837409827304897917"));
@@ -91,7 +91,7 @@ class ModTest {
   }
 
   @Test
-  public void testRational2() {
+  void testRational2() {
     Scalar m = RationalScalar.of( //
         new BigInteger("816345827635482763548726354817635487162354876135284765"), //
         new BigInteger("89354817623548127345928347902837409827917"));
@@ -111,14 +111,14 @@ class ModTest {
   }
 
   @Test
-  public void testTemplate() {
+  void testTemplate() {
     Mod mod = Mod.function(RealScalar.of(5));
     assertEquals(mod.of(RealScalar.of(6)), RealScalar.ONE);
     assertEquals(mod.of(Tensors.vector(-1, 3, 6)), Tensors.vector(4, 3, 1));
   }
 
   @Test
-  public void testNegative() {
+  void testNegative() {
     Mod mod = Mod.function(RealScalar.of(-5));
     @SuppressWarnings("unused")
     Scalar m = mod.apply(RealScalar.of(2));
@@ -127,7 +127,7 @@ class ModTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     // Mathematica Mod[10, 2 + 3 I] == -2 I
     Mod mod = Mod.function(ComplexScalar.of(2, 3));
     Scalar res = mod.apply(RealScalar.of(10));
@@ -136,7 +136,7 @@ class ModTest {
   }
 
   @Test
-  public void testDecimal1() {
+  void testDecimal1() {
     Scalar pi = DecimalScalar.of(new BigDecimal("3.141592653589793238462643383279502884197169399375105820974944592"));
     Mod mod = Mod.function(pi);
     Scalar re = mod.apply(RealScalar.of(100));
@@ -165,14 +165,14 @@ class ModTest {
   }
 
   @Test
-  public void testComplexSet() {
+  void testComplexSet() {
     _checkComplexSet(ComplexScalar.of(2, 3), 13);
     // _checkComplexSet(ComplexScalar.of(1, 3), 13); // not consistent with Mathematica
     // _checkComplexSet(ComplexScalar.of(2, 4), 13);
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar qs1 = Quantity.of(5, "s");
     Scalar qs2 = Quantity.of(3, "s");
     Scalar qs3 = Quantity.of(2, "s");
@@ -181,35 +181,35 @@ class ModTest {
   }
 
   @Test
-  public void testQuantityIncompatible() {
+  void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(5, "m");
     Scalar qs2 = Quantity.of(3, "s");
     assertThrows(TensorRuntimeException.class, () -> Mod.function(qs2).apply(qs1));
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     String string = Mod.function(3, 0).toString();
     assertTrue(string.startsWith("Mod"));
   }
 
   @Test
-  public void testNull1Fail() {
+  void testNull1Fail() {
     assertThrows(NullPointerException.class, () -> Mod.function(RealScalar.ONE, null));
   }
 
   @Test
-  public void testNull2Fail() {
+  void testNull2Fail() {
     assertThrows(NullPointerException.class, () -> Mod.function(null, RealScalar.ONE));
   }
 
   @Test
-  public void testZeroAFail() {
+  void testZeroAFail() {
     assertThrows(TensorRuntimeException.class, () -> Mod.function(RealScalar.ZERO));
   }
 
   @Test
-  public void testZeroBFail() {
+  void testZeroBFail() {
     assertThrows(TensorRuntimeException.class, () -> Mod.function(RealScalar.ZERO, RealScalar.ONE));
   }
 }

@@ -16,7 +16,7 @@ class LeastAbsoluteDeviationsTest {
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     Distribution distribution = TriangularDistribution.with(0, 1);
     Tensor matrix = RandomVariate.of(distribution, 8, 4);
     Tensor b = RandomVariate.of(distribution, 8);

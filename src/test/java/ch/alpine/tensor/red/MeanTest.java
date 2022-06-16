@@ -19,13 +19,13 @@ import ch.alpine.tensor.sca.Chop;
 
 class MeanTest {
   @Test
-  public void testSome() {
+  void testSome() {
     assertEquals(Mean.of(Tensors.vector(3, 5)), RealScalar.of(4));
     assertEquals(Mean.of(Tensors.vector(3., 5., 0, 0)), RealScalar.of(2));
   }
 
   @Test
-  public void testLimitTheorem() {
+  void testLimitTheorem() {
     Random random = new Random();
     Tensor tensor = Array.of(l -> RealScalar.of(100 + 100 * random.nextGaussian()), 10000);
     Scalar mean1 = Mean.ofVector(tensor);
@@ -35,18 +35,18 @@ class MeanTest {
   }
 
   @Test
-  public void testEmpty1() {
+  void testEmpty1() {
     assertThrows(ArithmeticException.class, () -> Mean.of(Tensors.empty()));
   }
 
   @Test
-  public void testEmpty3() {
+  void testEmpty3() {
     Tensor nestedEmpty = Tensors.of(Tensors.empty());
     assertEquals(Mean.of(nestedEmpty), Tensors.empty());
   }
 
   @Test
-  public void testDistribution() {
+  void testDistribution() {
     assertEquals(Mean.of(UniformDistribution.unit()), RationalScalar.of(1, 2));
   }
 }

@@ -13,33 +13,33 @@ import ch.alpine.tensor.Tensors;
 
 class MatrixFormTest {
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertEquals(MatrixForm.of(Tensors.empty()), "");
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     Tensor matrix = Tensors.fromString("{{1, 2, 321341234}, {2, 44, 12333}}");
     String string = MatrixForm.of(matrix);
     assertEquals(string, "1  2 321341234\n2 44     12333");
   }
 
   @Test
-  public void testMatrixBracket() {
+  void testMatrixBracket() {
     Tensor matrix = Tensors.fromString("{{1, 2, 321341234}, {2, 44, 12333}}");
     String string = MatrixForm.of(matrix, "  ", "[ ", " ]");
     assertEquals(string, "[ 1   2  321341234 ]\n[ 2  44      12333 ]");
   }
 
   @Test
-  public void testMatrixSeparator() {
+  void testMatrixSeparator() {
     Tensor matrix = Tensors.fromString("{{1, 2, 321341234}, {2, 44, 12333}}");
     String string = MatrixForm.of(matrix, "|", "", "");
     assertEquals(string, "1| 2|321341234\n2|44|    12333");
   }
 
   @Test
-  public void test3Form() {
+  void test3Form() {
     Tensor matrix = Tensors.fromString("{{{1, 2}, 321341234}, {2, {44, 12333}}}");
     String string = MatrixForm.of(matrix, "  ", "[ ", " ]");
     String string2 = "[ {1, 2}    321341234 ]\n[      2  {44, 12333} ]";
@@ -47,7 +47,7 @@ class MatrixFormTest {
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> MatrixForm.of(RealScalar.ONE));
   }
 }

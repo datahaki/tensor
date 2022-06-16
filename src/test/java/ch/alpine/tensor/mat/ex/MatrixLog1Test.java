@@ -14,7 +14,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class MatrixLog1Test {
   @Test
-  public void test1x1() {
+  void test1x1() {
     for (int count = 0; count < 10; ++count) {
       Tensor x = RandomVariate.of(UniformDistribution.of(-10, 6), 1, 1);
       Tensor exp = MatrixExp.of(x);
@@ -25,7 +25,7 @@ class MatrixLog1Test {
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(MatrixLog1.class.getModifiers()));
   }
 }

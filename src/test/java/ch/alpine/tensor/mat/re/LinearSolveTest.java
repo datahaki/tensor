@@ -28,7 +28,7 @@ class LinearSolveTest {
   private static final Random RANDOM = new Random();
 
   @Test
-  public void testSolveCR() {
+  void testSolveCR() {
     int n = 5 + RANDOM.nextInt(6);
     Tensor A = Tensors.matrix((i, j) -> //
     ComplexScalar.of( //
@@ -45,7 +45,7 @@ class LinearSolveTest {
   }
 
   @Test
-  public void testSolveRC() {
+  void testSolveRC() {
     int n = 5 + RANDOM.nextInt(6);
     Tensor A = Tensors.matrix((i, j) -> //
     RationalScalar.of(RANDOM.nextInt(100), RANDOM.nextInt(100) + 1), n, n);
@@ -62,7 +62,7 @@ class LinearSolveTest {
   }
 
   @Test
-  public void testSolveDC() {
+  void testSolveDC() {
     Random random = new Random(123);
     int n = 7;
     Tensor A = Tensors.matrix((i, j) -> DoubleScalar.of(4 * random.nextGaussian() - 2), n, n);
@@ -76,7 +76,7 @@ class LinearSolveTest {
   }
 
   @Test
-  public void testGauss() {
+  void testGauss() {
     Tensor vec1 = Tensors.vectorDouble(0, 2, 5.3);
     Tensor vec2 = Tensors.vectorDouble(-1.0, 3.1, 0.3);
     Tensor vec3 = Tensors.vectorDouble(2.0, 0.4, 0.3);
@@ -101,7 +101,7 @@ class LinearSolveTest {
   }
 
   @Test
-  public void testIdentity() {
+  void testIdentity() {
     int n = 5;
     Tensor A = Tensors.matrix((i, j) -> //
     RationalScalar.of(RANDOM.nextInt(100) - 50, RANDOM.nextInt(100) + 1), n, n);
@@ -115,14 +115,14 @@ class LinearSolveTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     Tensor m = Tensors.matrix(new Number[][] { {} });
     Tensor b = Tensors.vector(new Number[] {});
     assertThrows(IllegalArgumentException.class, () -> LinearSolve.of(m, b));
   }
 
   @Test
-  public void testEps() {
+  void testEps() {
     Tensor m = Tensors.matrixDouble(new double[][] { { Double.MIN_VALUE } });
     Tensor b = Tensors.vectorDouble(new double[] { Double.MIN_VALUE });
     Tensor r = LinearSolve.of(m, b);
@@ -131,7 +131,7 @@ class LinearSolveTest {
   }
 
   @Test
-  public void testQuantity1() {
+  void testQuantity1() {
     final Scalar one = Quantity.of(1, "m");
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(4, "m");
@@ -148,7 +148,7 @@ class LinearSolveTest {
   }
 
   @Test
-  public void testQuantity2() {
+  void testQuantity2() {
     Scalar qs1 = Quantity.of(3, "m");
     Scalar qs2 = Quantity.of(4, "s");
     Tensor mat = Tensors.matrix(new Scalar[][] { { qs1 } });

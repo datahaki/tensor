@@ -23,14 +23,14 @@ import ch.alpine.tensor.nrm.Vector2Norm;
 
 class GrayscaleColorDataTest {
   @Test
-  public void testColor() {
+  void testColor() {
     assertEquals(ColorFormat.toColor(GrayscaleColorData.DEFAULT.apply(RealScalar.ZERO)), Color.BLACK);
     assertEquals(ColorFormat.toColor(GrayscaleColorData.DEFAULT.apply(RationalScalar.HALF)), Color.GRAY);
     assertEquals(ColorFormat.toColor(GrayscaleColorData.DEFAULT.apply(RealScalar.ONE)), Color.WHITE);
   }
 
   @Test
-  public void testApply() {
+  void testApply() {
     Tensor tensor = ColorDataGradients.GRAYSCALE.apply(RealScalar.of(0.3));
     assertFalse(ExactTensorQ.of(tensor));
     tensor.set(RealScalar.ONE, 1);
@@ -39,20 +39,20 @@ class GrayscaleColorDataTest {
   }
 
   @Test
-  public void testTransparent() {
+  void testTransparent() {
     Tensor vector = GrayscaleColorData.DEFAULT.apply(DoubleScalar.POSITIVE_INFINITY);
     assertTrue(Scalars.isZero(Vector2Norm.of(vector)));
     assertEquals(vector, Array.zeros(4));
   }
 
   @Test
-  public void testColorData() {
+  void testColorData() {
     ColorDataGradient colorDataGradient = ColorDataGradients.GRAYSCALE.deriveWithOpacity(RealScalar.of(0.5));
     assertEquals(colorDataGradient.apply(RealScalar.ZERO), Tensors.vector(0, 0, 0, 128));
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     Serialization.copy(GrayscaleColorData.DEFAULT);
   }
 }

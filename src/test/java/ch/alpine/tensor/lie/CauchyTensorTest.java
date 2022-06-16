@@ -22,19 +22,19 @@ class CauchyTensorTest {
   }
 
   @Test
-  public void testHilbert() {
+  void testHilbert() {
     for (int n = 1; n < 6; ++n)
       _check(n);
   }
 
   @Test
-  public void testRank() {
+  void testRank() {
     assertTrue(ArrayQ.ofRank(CauchyTensor.of(Tensors.vector(1, 2, 3, 4), 3), 3));
     assertTrue(ArrayQ.ofRank(CauchyTensor.of(Tensors.vector(1, 2, 3), 4), 4));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(IllegalArgumentException.class, () -> CauchyTensor.of(RealScalar.ONE, 1));
     assertThrows(ClassCastException.class, () -> CauchyTensor.of(Tensors.fromString("{{1, 2}}"), 1));
   }

@@ -10,17 +10,17 @@ import ch.alpine.tensor.Tensors;
 
 class TensorExtractTest {
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertEquals(TensorExtract.of(Tensors.empty(), 0, t -> t), Tensors.empty());
   }
 
   @Test
-  public void testRadiusFail() {
+  void testRadiusFail() {
     assertThrows(IllegalArgumentException.class, () -> TensorExtract.of(Tensors.empty(), -1, t -> t));
   }
 
   @Test
-  public void testFunctionNullFail() {
+  void testFunctionNullFail() {
     assertThrows(NullPointerException.class, () -> TensorExtract.of(Tensors.empty(), 2, null));
   }
 }

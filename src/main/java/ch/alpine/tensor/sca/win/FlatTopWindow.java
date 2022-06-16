@@ -30,6 +30,6 @@ public enum FlatTopWindow implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return getClass().getSimpleName();
+    return "FlatTopWindow";
   }
 }

@@ -91,6 +91,6 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), Tensors.message(pdf));
+    return String.format("CategoricalDistribution[%s]", Tensors.message(pdf));
   }
 }

@@ -31,7 +31,7 @@ import ch.alpine.tensor.red.Variance;
 
 class CategoricalDistributionTest {
   @Test
-  public void testPDF() {
+  void testPDF() {
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(RealScalar.of(0)), RealScalar.ZERO);
@@ -40,7 +40,7 @@ class CategoricalDistributionTest {
   }
 
   @Test
-  public void testP_Equals() {
+  void testP_Equals() {
     CategoricalDistribution categoricalDistribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1, 5));
     assertEquals(categoricalDistribution.p_equals(0), RationalScalar.of(0, 1));
     assertEquals(categoricalDistribution.p_equals(1), RationalScalar.of(9, 15));
@@ -49,7 +49,7 @@ class CategoricalDistributionTest {
   }
 
   @Test
-  public void testCDF() {
+  void testCDF() {
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1));
     CDF pdf = CDF.of(distribution);
     assertEquals(pdf.p_lessEquals(RealScalar.of(-0.1)), RealScalar.ZERO);
@@ -62,7 +62,7 @@ class CategoricalDistributionTest {
   }
 
   @Test
-  public void testCDF2() {
+  void testCDF2() {
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1));
     CDF pdf = CDF.of(distribution);
     assertEquals(pdf.p_lessThan(RealScalar.of(-0.1)), RealScalar.ZERO);
@@ -75,7 +75,7 @@ class CategoricalDistributionTest {
   }
 
   @Test
-  public void testRandomVariate() {
+  void testRandomVariate() {
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 2, 1, 0, 3, 0));
     Map<Tensor, Long> map = Tally.of(RandomVariate.of(distribution, 100));
     assertFalse(map.containsKey(RealScalar.ZERO));
@@ -89,7 +89,7 @@ class CategoricalDistributionTest {
   }
 
   @Test
-  public void testNextDown() {
+  void testNextDown() {
     AbstractDiscreteDistribution distribution = //
         CategoricalDistribution.fromUnscaledPDF(Tensors.vector(Math.PI, 2., 1., 1.123123, 3., 0, 0, 0));
     Scalar s = distribution.quantile(RealScalar.of(Math.nextDown(1.0)));
@@ -97,7 +97,7 @@ class CategoricalDistributionTest {
   }
 
   @Test
-  public void testRandomVariateNeedle1() {
+  void testRandomVariateNeedle1() {
     AbstractDiscreteDistribution distribution = //
         CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 2, 1, 0, 3, 0));
     assertEquals(distribution.quantile(RealScalar.of(0)), RealScalar.ONE);
@@ -105,7 +105,7 @@ class CategoricalDistributionTest {
   }
 
   @Test
-  public void testRandomVariateNeedle2() {
+  void testRandomVariateNeedle2() {
     AbstractDiscreteDistribution distribution = //
         CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
     assertEquals(distribution.quantile(RealScalar.of(0)), RealScalar.of(2));
@@ -115,7 +115,7 @@ class CategoricalDistributionTest {
   }
 
   @Test
-  public void testVariance() {
+  void testVariance() {
     Distribution distribution = //
         CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
     Scalar var = Variance.of(distribution);
@@ -127,7 +127,7 @@ class CategoricalDistributionTest {
   }
 
   @Test
-  public void testInverseCDF() {
+  void testInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 3, 1)));
     Scalar x0 = inverseCDF.quantile(RealScalar.ZERO);
     Scalar x1 = inverseCDF.quantile(RealScalar.of(0.5));
@@ -139,7 +139,7 @@ class CategoricalDistributionTest {
   }
 
   @Test
-  public void testInverseCDFOne() {
+  void testInverseCDFOne() {
     AbstractDiscreteDistribution distribution = //
         CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0, 0, 0));
     assertEquals(distribution.quantile(RealScalar.of(1)), RealScalar.of(4));
@@ -149,61 +149,61 @@ class CategoricalDistributionTest {
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 9, 1));
     assertTrue(distribution.toString().startsWith("CategoricalDistribution["));
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.fromString("{1[m], 2[m]}"));
     assertEquals(PDF.of(distribution).at(RealScalar.of(0)), RationalScalar.of(1, 3));
     assertEquals(PDF.of(distribution).at(RealScalar.of(1)), RationalScalar.of(2, 3));
   }
 
   @Test
-  public void testMarkov() {
+  void testMarkov() {
     Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(1, 2, 3, 2, 4, 0, 2));
     TestMarkovChebyshev.markov(distribution);
     TestMarkovChebyshev.chebyshev(distribution);
   }
 
   @Test
-  public void testFailInverseCDF() {
+  void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 3, 1)));
     assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
     assertThrows(NullPointerException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
-  public void testWrongReference() {
+  void testWrongReference() {
     AbstractDiscreteDistribution distribution = //
         CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 1, 0, 1, 0));
     assertThrows(TensorRuntimeException.class, () -> distribution.quantile(RealScalar.of(Math.nextDown(0.0))));
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(TensorRuntimeException.class, () -> CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
   }
 
   @Test
-  public void testZeroFail() {
+  void testZeroFail() {
     assertThrows(ArithmeticException.class, () -> CategoricalDistribution.fromUnscaledPDF(Tensors.vector(0, 0, 0)));
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IndexOutOfBoundsException.class, () -> CategoricalDistribution.fromUnscaledPDF(Tensors.empty()));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> CategoricalDistribution.fromUnscaledPDF(RealScalar.ONE));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(ClassCastException.class, () -> CategoricalDistribution.fromUnscaledPDF(HilbertMatrix.of(10)));
   }
 }

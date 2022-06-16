@@ -31,7 +31,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class StaticHelperTest {
   @Test
-  public void testPolynomial() {
+  void testPolynomial() {
     Tensor coeffs = Tensors.vector(2, 1, 3, 4);
     Polynomial f0 = Polynomial.of(coeffs);
     Polynomial f1 = f0.derivative();
@@ -43,7 +43,7 @@ class StaticHelperTest {
   }
 
   @Test
-  public void testPolynomialRandom() {
+  void testPolynomialRandom() {
     Tensor c0 = RandomVariate.of(DiscreteUniformDistribution.of(-3, 3), 4);
     Polynomial f0 = Polynomial.of(c0);
     Polynomial f1 = f0.derivative();
@@ -69,7 +69,7 @@ class StaticHelperTest {
   };
 
   @Test
-  public void testDistributions() {
+  void testDistributions() {
     for (Distribution distribution : DISTRIBUTIONS) {
       CDF cdf = CDF.of(distribution);
       PDF pdf = PDF.of(distribution);

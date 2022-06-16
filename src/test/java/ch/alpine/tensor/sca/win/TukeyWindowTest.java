@@ -24,7 +24,7 @@ import ch.alpine.tensor.red.Tally;
 
 class TukeyWindowTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     ScalarUnaryOperator suo = TukeyWindow.of(RealScalar.of(0.45));
     Tolerance.CHOP.requireClose( //
         suo.apply(RealScalar.of(0.4)), //
@@ -35,7 +35,7 @@ class TukeyWindowTest {
   }
 
   @Test
-  public void testSmall() {
+  void testSmall() {
     Tensor tensor = Tensors.of(RationalScalar.of(-1, 6), RealScalar.ZERO, RealScalar.of(0.01), RationalScalar.of(1, 6));
     Tensor mapped = tensor.map(TukeyWindow.FUNCTION);
     Map<Tensor, Long> map = Tally.of(mapped);
@@ -43,7 +43,7 @@ class TukeyWindowTest {
   }
 
   @Test
-  public void testNumerical() {
+  void testNumerical() {
     ScalarUnaryOperator scalarUnaryOperator = TukeyWindow.FUNCTION;
     assertEquals(scalarUnaryOperator.apply(RealScalar.of(0.12)), RealScalar.ONE);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(0.22));
@@ -51,26 +51,26 @@ class TukeyWindowTest {
   }
 
   @Test
-  public void testSemiExact() {
+  void testSemiExact() {
     Scalar scalar = TukeyWindow.FUNCTION.apply(RealScalar.of(0.5));
     assertTrue(Scalars.isZero(scalar));
   }
 
   @Test
-  public void testOutside() {
+  void testOutside() {
     Scalar scalar = TukeyWindow.FUNCTION.apply(RealScalar.of(-0.52));
     assertEquals(scalar, RealScalar.ZERO);
     ExactScalarQ.require(scalar);
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> TukeyWindow.FUNCTION.apply(Quantity.of(0, "s")));
     assertThrows(TensorRuntimeException.class, () -> TukeyWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> TukeyWindow.of(null));
   }
 }

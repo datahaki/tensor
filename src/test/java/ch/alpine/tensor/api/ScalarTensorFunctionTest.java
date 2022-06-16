@@ -14,12 +14,12 @@ import ch.alpine.tensor.ext.Serialization;
 
 class ScalarTensorFunctionTest {
   @Test
-  public void testFunctionalInterface() {
+  void testFunctionalInterface() {
     assertNotNull(ScalarTensorFunction.class.getAnnotation(FunctionalInterface.class));
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     ScalarTensorFunction tensorScalarFunction = s -> Tensors.of(s, s, s);
     ScalarTensorFunction copy = Serialization.copy(tensorScalarFunction);
     assertEquals(copy.apply(RealScalar.ONE), Tensors.vector(1, 1, 1));

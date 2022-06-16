@@ -31,7 +31,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
 class PolarDecompositionSvdTest {
   @Test
-  public void testSvd() {
+  void testSvd() {
     Random random = new Random(3);
     Tensor matrix = RandomVariate.of(CauchyDistribution.standard(), random, 5, 3);
     PolarDecomposition pd_qs = PolarDecomposition.pu(matrix);
@@ -41,7 +41,7 @@ class PolarDecompositionSvdTest {
   }
 
   @Test
-  public void testStrang() throws ClassNotFoundException, IOException {
+  void testStrang() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.fromString("{{3, 0}, {4, 5}}");
     PolarDecompositionSvd polarDecompositionSvd = Serialization.copy(PolarDecompositionSvd.up(matrix));
     Tensor q = polarDecompositionSvd.getUnitary();
@@ -59,7 +59,7 @@ class PolarDecompositionSvdTest {
   }
 
   @Test
-  public void testTransposeUsingSvd() {
+  void testTransposeUsingSvd() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 3);
     PolarDecompositionSvd polarDecompositionSvd = PolarDecompositionSvd.pu(matrix);
     Tensor result = polarDecompositionSvd.getUnitary();
@@ -68,7 +68,7 @@ class PolarDecompositionSvdTest {
   }
 
   @Test
-  public void testMatrixExp() {
+  void testMatrixExp() {
     for (int d = 2; d < 5; ++d) {
       Tensor matrix = MatrixExp.of(TensorWedge.of(RandomVariate.of(UniformDistribution.unit(), d, d)));
       OrthogonalMatrixQ.require(matrix);
@@ -79,7 +79,7 @@ class PolarDecompositionSvdTest {
   }
 
   @Test
-  public void testDiag() {
+  void testDiag() {
     Tensor matrix = DiagonalMatrix.of(2, -2);
     Tensor rdetp1 = DiagonalMatrix.of(1, +1);
     PolarDecompositionSvd polarDecompositionSvd = PolarDecompositionSvd.pu(matrix);
@@ -88,7 +88,7 @@ class PolarDecompositionSvdTest {
   }
 
   @Test
-  public void testAlternatives() {
+  void testAlternatives() {
     for (int d = 2; d < 10; ++d) {
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), d, d);
       PolarDecompositionSvd polarDecompositionSvd = PolarDecompositionSvd.pu(matrix);

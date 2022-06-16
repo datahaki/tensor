@@ -23,7 +23,7 @@ class VectorNormsTest {
   };
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     for (TensorScalarFunction norm : VALUES) {
       assertThrows(NoSuchElementException.class, () -> norm.apply(Tensors.empty()));
       assertThrows(TensorRuntimeException.class, () -> norm.apply(RealScalar.ONE));
@@ -32,14 +32,14 @@ class VectorNormsTest {
   }
 
   @Test
-  public void testOk1() {
+  void testOk1() {
     Tensor v = Tensors.vector(0, 0, 0, 0);
     for (TensorScalarFunction norm : VALUES)
       assertEquals(v, NormalizeUnlessZero.with(norm).apply(v));
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     for (TensorScalarFunction norm : VALUES) {
       TensorUnaryOperator tensorUnaryOperator = NormalizeUnlessZero.with(norm);
       Tensor tensor = Tensors.empty();

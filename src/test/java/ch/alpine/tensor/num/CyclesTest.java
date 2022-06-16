@@ -17,13 +17,13 @@ import ch.alpine.tensor.ext.Serialization;
 
 class CyclesTest {
   @Test
-  public void testSingleton() throws ClassNotFoundException, IOException {
+  void testSingleton() throws ClassNotFoundException, IOException {
     Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));
     assertEquals(cycles.toTensor(), Tensors.of(Tensors.vector(5, 9)));
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor _input = Tensors.fromString("{{5, 9}, {7, 14, 13}, {18, 4, 10, 19, 6}, {20, 1}, {}}");
     Cycles cycles = Cycles.of(_input);
     Tensor tensor = cycles.toTensor();
@@ -33,7 +33,7 @@ class CyclesTest {
   }
 
   @Test
-  public void testInverse() {
+  void testInverse() {
     Cycles cycles = Cycles.of(Tensors.fromString("{{1, 20}, {4, 10, 19, 6, 18}, {5, 9}, {7, 14, 13}}"));
     assertEquals(cycles.inverse().toTensor(), //
         Tensors.fromString("{{1, 20}, {4, 18, 6, 19, 10}, {5, 9}, {7, 13, 14}}"));
@@ -55,7 +55,7 @@ class CyclesTest {
   }
 
   @Test
-  public void testCombine() {
+  void testCombine() {
     assertEquals(_combo("{{1, 2, 3}}", "{{3, 4}}"), "{{1, 2, 4, 3}}");
     assertEquals(_combo("{{1, 2}, {4, 5}}", "{{3, 4}}"), "{{1, 2}, {3, 4, 5}}");
     assertEquals(_combo("{{1, 2}, {4, 5}}", "{{3, 4, 5}}"), "{{1, 2}, {3, 4}}");
@@ -67,48 +67,48 @@ class CyclesTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertEquals(Cycles.of(Tensors.empty()).toTensor(), Tensors.empty());
     assertEquals(Cycles.of(Tensors.empty()), Cycles.identity());
   }
 
   @Test
-  public void testNonEquals() throws ClassNotFoundException, IOException {
+  void testNonEquals() throws ClassNotFoundException, IOException {
     Object cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));
     assertFalse(cycles.equals(Pi.VALUE));
   }
 
   @Test
-  public void testReplace() {
+  void testReplace() {
     assertEquals(Cycles.of(Tensors.fromString("{{2, 3, 4, 6}}")).replace(4), 6);
     assertEquals(Cycles.of(Tensors.fromString("{{2, 3, 4, 6}}")).replace(1), 1);
   }
 
   @Test
-  public void testReplaceFail() {
+  void testReplaceFail() {
     Cycles cycles = Cycles.of(Tensors.fromString("{{2, 3, 4, 6}}"));
     assertEquals(cycles.replace(0), 0);
     assertThrows(IllegalArgumentException.class, () -> cycles.replace(-1));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Cycles.of(Tensors.fromString("{3}")));
   }
 
   @Test
-  public void testDuplicateFail() {
+  void testDuplicateFail() {
     assertThrows(TensorRuntimeException.class, () -> Cycles.of(Tensors.fromString("{{5, 5}, {3}, {2, 2, 2}}")));
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(TensorRuntimeException.class, () -> Cycles.of(Tensors.fromString("{{-3}}")));
     assertThrows(TensorRuntimeException.class, () -> Cycles.of(Tensors.fromString("{{3, -0.1}}")));
   }
 
   @Test
-  public void testPowerFail() {
+  void testPowerFail() {
     Cycles cycles = Cycles.of(Tensors.fromString("{{1, 20}, {4, 10, 19, 6, 18}, {5, 9}, {7, 14, 13}}"));
     assertThrows(TensorRuntimeException.class, () -> cycles.power(Pi.HALF));
   }

@@ -17,7 +17,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 
 class CubicInterpolationTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Interpolation interpolation = CubicInterpolation.of(Tensors.vector(1, 0, 0, 2, 0));
     Tensor tensor = Subdivide.of(0, 4, 8);
     Tensor values = tensor.map(interpolation::At);
@@ -25,13 +25,13 @@ class CubicInterpolationTest {
   }
 
   @Test
-  public void testSingle() {
+  void testSingle() {
     Interpolation interpolation = CubicInterpolation.of(Tensors.vector(3));
     assertEquals(interpolation.At(RealScalar.ZERO), RealScalar.of(3));
   }
 
   @Test
-  public void testTuple() {
+  void testTuple() {
     Interpolation interpolation = CubicInterpolation.of(Tensors.vector(3, 5));
     Scalar scalar = interpolation.At(RationalScalar.HALF);
     assertEquals(scalar, RealScalar.of(4));
@@ -39,7 +39,7 @@ class CubicInterpolationTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(NullPointerException.class, () -> CubicInterpolation.of(null));
     assertThrows(TensorRuntimeException.class, () -> CubicInterpolation.of(Tensors.vector()));
   }

@@ -27,7 +27,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ObjectFormatTest {
   @Test
-  public void testSome() throws Exception {
+  void testSome() throws Exception {
     Tensor inp = Tensors.fromString("{1, {2, 3, {4.3}}, 1}");
     byte[] bytes = ObjectFormat.of(inp);
     Tensor ten = ObjectFormat.parse(bytes);
@@ -35,7 +35,7 @@ class ObjectFormatTest {
   }
 
   @Test
-  public void testNull() throws Exception {
+  void testNull() throws Exception {
     final Object put = null;
     byte[] bytes = ObjectFormat.of(put);
     Object get = ObjectFormat.parse(bytes);
@@ -44,7 +44,7 @@ class ObjectFormatTest {
   }
 
   @Test
-  public void testUnderClear() throws ClassNotFoundException, IOException, DataFormatException {
+  void testUnderClear() throws ClassNotFoundException, IOException, DataFormatException {
     Scalar q1 = Quantity.of(ComplexScalar.of(RationalScalar.of(2, 7), RationalScalar.HALF.negate()), "m");
     Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "m");
     Scalar quc = q1.under(q2);
@@ -65,7 +65,7 @@ class ObjectFormatTest {
   }
 
   @Test
-  public void testUnderMix() throws ClassNotFoundException, IOException, DataFormatException {
+  void testUnderMix() throws ClassNotFoundException, IOException, DataFormatException {
     Scalar q1 = Quantity.of(ComplexScalar.of(RationalScalar.of(2, 7), RationalScalar.HALF.negate()), "CHF");
     Scalar q2 = Quantity.of(ComplexScalar.of(-1, 7), "m");
     Scalar quc = q1.under(q2);
@@ -86,7 +86,7 @@ class ObjectFormatTest {
   }
 
   @Test
-  public void testExportImportObject(@TempDir File tempDir) throws IOException, ClassNotFoundException, DataFormatException {
+  void testExportImportObject(@TempDir File tempDir) throws IOException, ClassNotFoundException, DataFormatException {
     Tensor tensor = HilbertMatrix.of(3, 4);
     File file = new File(tempDir, "file.random");
     Export.object(file, tensor);

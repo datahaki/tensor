@@ -20,17 +20,17 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 
 class TensorWedgeTest {
   @Test
-  public void testLength0() {
+  void testLength0() {
     assertEquals(TensorWedge.of(), RealScalar.ONE);
   }
 
   @Test
-  public void testFailEmpty() {
+  void testFailEmpty() {
     assertEquals(TensorWedge.of(Tensors.empty()), Tensors.empty());
   }
 
   @Test
-  public void testVectors() {
+  void testVectors() {
     Tensor x = Tensors.vector(5, 7, 6);
     Tensor y = Tensors.vector(1, 2, -4);
     Tensor xy = TensorWedge.of(x, y);
@@ -39,7 +39,7 @@ class TensorWedgeTest {
   }
 
   @Test
-  public void testVectorSequence() {
+  void testVectorSequence() {
     Tensor x = Tensors.vector(6, 2, -1);
     Tensor y = Tensors.vector(3, 4, 5);
     Tensor z = Tensors.vector(1, 2, 3);
@@ -51,7 +51,7 @@ class TensorWedgeTest {
   }
 
   @Test
-  public void testAntisymmetric() {
+  void testAntisymmetric() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 4, 4);
     Tensor skewsy = TensorWedge.of(matrix);
     assertTrue(AntisymmetricMatrixQ.of(skewsy));
@@ -59,33 +59,33 @@ class TensorWedgeTest {
   }
 
   @Test
-  public void testCreate() {
+  void testCreate() {
     Tensor matrix = Tensors.fromString("{{1, 2}, {0, 4}}");
     Tensor wedged = TensorWedge.of(matrix);
     assertEquals(wedged, Tensors.fromString("{{0, 1}, {-1, 0}}"));
   }
 
   @Test
-  public void testVector() {
+  void testVector() {
     Tensor vector = RandomVariate.of(NormalDistribution.standard(), 10);
     Tensor skewsy = TensorWedge.of(vector);
     assertEquals(vector, skewsy);
   }
 
   @Test
-  public void testScalar() {
+  void testScalar() {
     Tensor scalar = RealScalar.of(3.14);
     assertEquals(scalar, TensorWedge.of(scalar));
   }
 
   @Test
-  public void testAlternating() {
+  void testAlternating() {
     Tensor alt = LeviCivitaTensor.of(3);
     assertEquals(alt, TensorWedge.of(alt));
   }
 
   @Test
-  public void testSome() {
+  void testSome() {
     Tensor x = Tensors.vector(2, 3, 4);
     Tensor y = Tensors.vector(1, 1, 1);
     Tensor xy = TensorWedge.of(x, y);
@@ -95,7 +95,7 @@ class TensorWedgeTest {
   }
 
   @Test
-  public void testCross() {
+  void testCross() {
     Tensor vector = Tensors.vector(2, 3, 4);
     Tensor matrix = Cross.skew3(vector);
     assertTrue(AntisymmetricMatrixQ.of(matrix));
@@ -103,23 +103,23 @@ class TensorWedgeTest {
   }
 
   @Test
-  public void testFailIrrectangular() {
+  void testFailIrrectangular() {
     Tensor matrix = Tensors.fromString("{{1, 2}, {0, 4, 3}}");
     assertThrows(TensorRuntimeException.class, () -> TensorWedge.of(matrix));
   }
 
   @Test
-  public void testFailRectangularMatrix() {
+  void testFailRectangularMatrix() {
     assertThrows(IllegalArgumentException.class, () -> TensorWedge.of(HilbertMatrix.of(3, 4)));
   }
 
   @Test
-  public void testFailRectangularArray() {
+  void testFailRectangularArray() {
     assertThrows(IllegalArgumentException.class, () -> TensorWedge.of(Array.zeros(2, 2, 3)));
   }
 
   @Test
-  public void testFailLength() {
+  void testFailLength() {
     TensorWedge.of(Array.zeros(3), Array.zeros(3));
     assertThrows(IllegalArgumentException.class, () -> TensorWedge.of(Array.zeros(3), Array.zeros(4)));
   }

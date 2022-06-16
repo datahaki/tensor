@@ -10,7 +10,7 @@ import ch.alpine.tensor.Tensor;
 
 class StringTensorTest {
   @Test
-  public void testVector() {
+  void testVector() {
     Tensor tensor = StringTensor.vector("IDSC", "ETH-Z", "ch");
     assertInstanceOf(StringScalar.class, tensor.Get(0));
     assertEquals(tensor.Get(0).toString(), "IDSC");

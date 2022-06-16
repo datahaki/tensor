@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test;
 
 class MergeIllegalTest {
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     Serialization.copy(MergeIllegal.operator());
   }
 
   @Test
-  public void testCollisionFail() {
+  void testCollisionFail() {
     assertThrows(IllegalStateException.class, () -> MergeIllegal.operator().apply(null, null));
   }
 }

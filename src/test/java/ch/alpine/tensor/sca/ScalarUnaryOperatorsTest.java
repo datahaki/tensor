@@ -88,7 +88,7 @@ class ScalarUnaryOperatorsTest {
   };
 
   @Test
-  public void testFailNull() {
+  void testFailNull() {
     for (ScalarUnaryOperator scalarUnaryOperator : ARRAY) {
       try {
         scalarUnaryOperator.apply(null);

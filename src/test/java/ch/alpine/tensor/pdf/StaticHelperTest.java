@@ -9,7 +9,7 @@ import ch.alpine.tensor.RealScalar;
 
 class StaticHelperTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     assertTrue(StaticHelper.isFinished(RealScalar.ZERO, RealScalar.ONE));
   }
 }

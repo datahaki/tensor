@@ -29,7 +29,7 @@ class TrigonometryInterfaceTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     for (Tensor _value : Tensors.vector(-2.323, -1, -0.3, 0, 0.2, 1.2, 3., 4.456)) {
       Scalar value = (Scalar) _value;
       _check(value, Sin::of, Math::sin);
@@ -40,14 +40,14 @@ class TrigonometryInterfaceTest {
   }
 
   @Test
-  public void testQuantityDegree() {
+  void testQuantityDegree() {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(180, "deg"));
     Chop._13.requireClose(Sin.of(scalar), RealScalar.ZERO);
     Chop._13.requireClose(Cos.of(scalar), RealScalar.ONE.negate());
   }
 
   @Test
-  public void testNaN() {
+  void testNaN() {
     assertEquals(Sin.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
     assertEquals(Cos.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
     assertEquals(Tan.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
@@ -65,7 +65,7 @@ class TrigonometryInterfaceTest {
   }
 
   @Test
-  public void testFails() {
+  void testFails() {
     assertThrows(TensorRuntimeException.class, () -> Sin.of(Quantity.of(1.2, "m")));
     assertThrows(TensorRuntimeException.class, () -> Sin.of(GaussScalar.of(2, 7)));
   }

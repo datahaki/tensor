@@ -118,6 +118,6 @@ public final class Mahalanobis implements InfluenceMatrix, Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), Tensors.message(design));
+    return String.format("Mahalanobis[%s]", Tensors.message(design));
   }
 }

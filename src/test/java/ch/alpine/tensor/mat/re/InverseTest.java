@@ -43,7 +43,7 @@ import ch.alpine.tensor.sca.N;
 
 class InverseTest {
   @Test
-  public void testInverse() {
+  void testInverse() {
     int n = 25;
     Tensor A = RandomVariate.of(NormalDistribution.standard(), n, n);
     Tensor Ai = Inverse.of(A);
@@ -53,7 +53,7 @@ class InverseTest {
   }
 
   @Test
-  public void testInverseNoAbs() {
+  void testInverseNoAbs() {
     int n = 12;
     int p = 20357;
     Random random = new SecureRandom();
@@ -73,7 +73,7 @@ class InverseTest {
   }
 
   @Test
-  public void testGeneralIdentity() {
+  void testGeneralIdentity() {
     Tensor A = HilbertMatrix.of(3, 3);
     Tensor b = UnitVector.of(3, 1);
     Tensor x = LinearSolve.of(A, b);
@@ -82,14 +82,14 @@ class InverseTest {
   }
 
   @Test
-  public void testFourier() {
+  void testFourier() {
     Tensor inv1 = Inverse.of(FourierMatrix.of(5), Pivots.FIRST_NON_ZERO);
     Tensor inv2 = Inverse.of(FourierMatrix.of(5), Pivots.ARGMAX_ABS);
     Tolerance.CHOP.requireClose(inv1, inv2);
   }
 
   @Test
-  public void testGaussian() {
+  void testGaussian() {
     int prime = 3121;
     Distribution distribution = DiscreteUniformDistribution.of(0, prime);
     Scalar one = GaussScalar.of(1, prime);
@@ -105,33 +105,33 @@ class InverseTest {
   }
 
   @Test
-  public void testDet0() {
-    Tensor matrix = ResourceData.of("/mat/det0-matlab.csv"); // det(matrix) == 0
+  void testDet0() {
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/re/det0-matlab.csv"); // det(matrix) == 0
     assertNotNull(matrix);
     assertThrows(TensorRuntimeException.class, () -> Inverse.of(matrix));
     assertThrows(TensorRuntimeException.class, () -> Inverse.of(N.DOUBLE.of(matrix)));
   }
 
   @Test
-  public void testZeroFail() {
+  void testZeroFail() {
     Tensor matrix = DiagonalMatrix.of(1, 2, 0, 3);
     assertThrows(TensorRuntimeException.class, () -> Inverse.of(matrix));
     assertThrows(TensorRuntimeException.class, () -> Inverse.of(matrix, Pivots.FIRST_NON_ZERO));
   }
 
   @Test
-  public void testFailNonSquare() {
+  void testFailNonSquare() {
     assertThrows(IllegalArgumentException.class, () -> Inverse.of(HilbertMatrix.of(3, 4)));
     assertThrows(IllegalArgumentException.class, () -> Inverse.of(HilbertMatrix.of(4, 3)));
   }
 
   @Test
-  public void testFailRank3() {
+  void testFailRank3() {
     assertThrows(ClassCastException.class, () -> Inverse.of(LeviCivitaTensor.of(3)));
   }
 
   @Test
-  public void testQuantity1() {
+  void testQuantity1() {
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(2, "m");
     Scalar qs3 = Quantity.of(3, "rad");
@@ -151,7 +151,7 @@ class InverseTest {
   }
 
   @Test
-  public void testQuantity2() {
+  void testQuantity2() {
     Tensor matrix = Tensors.fromString( //
         "{{1[m^2], 2[m*rad], 3[kg*m]}, {4[m*rad], 2[rad^2], 2[kg*rad]}, {5[kg*m], 1[kg*rad], 7[kg^2]}}");
     final Tensor eye = IdentityMatrix.of(3).unmodifiable();
@@ -170,7 +170,7 @@ class InverseTest {
   }
 
   @Test
-  public void testQuantity3() { // confirmed with Mathematica 12
+  void testQuantity3() { // confirmed with Mathematica 12
     Tensor matrix = Tensors.fromString("{{1[m], 1[s]}, {1[m], 2[s]}}");
     Tensor tensor = Inverse.of(matrix);
     // {{Quantity[2, 1/("Meters")], Quantity[-1, 1/("Meters")]}, {Quantity[-1, 1/("Seconds")], Quantity[1, 1/("Seconds")]}}
@@ -185,7 +185,7 @@ class InverseTest {
   }
 
   @Test
-  public void testQuantity4() { // confirmed with Mathematica 12
+  void testQuantity4() { // confirmed with Mathematica 12
     Tensor matrix = Tensors.fromString("{{1[m], 1[m]}, {1[s], 2[s]}}");
     Tensor tensor = Inverse.of(matrix);
     // {{Quantity[2, 1/("Meters")], Quantity[-1, 1/("Meters")]}, {Quantity[-1, 1/("Seconds")], Quantity[1, 1/("Seconds")]}}
@@ -198,13 +198,13 @@ class InverseTest {
   }
 
   @Test
-  public void testMixed2x2() {
+  void testMixed2x2() {
     Tensor matrix = Tensors.fromString("{{60[m^2], 30[m*rad]}, {30[m*rad], 20[rad^2]}}");
     Inverse.of(matrix);
   }
 
   @Test
-  public void testMixed3x3() {
+  void testMixed3x3() {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
     SymmetricMatrixQ.require(matrix);
@@ -219,7 +219,7 @@ class InverseTest {
   }
 
   @Test
-  public void testDecimalScalarInverse() {
+  void testDecimalScalarInverse() {
     Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
     Tensor invers = Inverse.of(matrix);
     Scalar detmat = Det.of(matrix);

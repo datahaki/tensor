@@ -14,7 +14,7 @@ import ch.alpine.tensor.Tensors;
 
 class FactorialTest {
   @Test
-  public void testRealScalar() {
+  void testRealScalar() {
     assertEquals(Factorial.of(RealScalar.of(0)), RealScalar.of(1));
     assertEquals(Factorial.of(RealScalar.of(1)), RealScalar.of(1));
     assertEquals(Factorial.of(RealScalar.of(2)), RealScalar.of(2));
@@ -24,31 +24,31 @@ class FactorialTest {
   }
 
   @Test
-  public void testOf1() {
+  void testOf1() {
     Scalar result = Factorial.of(RealScalar.of(3));
     assertEquals(result, RealScalar.of(6));
   }
 
   @Test
-  public void testOf2() {
+  void testOf2() {
     Tensor result = Factorial.of(Tensors.vector(0, 1, 2, 3, 4));
     assertEquals(result, Tensors.vector(1, 1, 2, 6, 24));
   }
 
   @Test
-  public void testOfInteger() {
+  void testOfInteger() {
     assertEquals(Factorial.of(0), RealScalar.ONE);
     assertEquals(Factorial.of(1), RealScalar.ONE);
     assertEquals(Factorial.of(2), RealScalar.of(2));
   }
 
   @Test
-  public void testLarge() {
+  void testLarge() {
     Factorial.of(RealScalar.of(1000));
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     Scalar result = Tensors.vector(2, 3, 4, 3).stream() //
         .map(Scalar.class::cast) //
         .map(Factorial.FUNCTION) //
@@ -57,12 +57,12 @@ class FactorialTest {
   }
 
   @Test
-  public void testNegativeOneFail() {
+  void testNegativeOneFail() {
     assertThrows(IllegalArgumentException.class, () -> Factorial.of(RealScalar.of(-1)));
   }
 
   @Test
-  public void testNumericFail() {
+  void testNumericFail() {
     assertThrows(TensorRuntimeException.class, () -> Factorial.of(RealScalar.of(1.2)));
   }
 }

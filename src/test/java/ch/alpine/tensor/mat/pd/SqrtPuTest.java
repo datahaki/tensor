@@ -11,7 +11,7 @@ import ch.alpine.tensor.mat.UnitaryMatrixQ;
 
 class SqrtPuTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     SqrtPu sqrtPu = new SqrtPu(HilbertMatrix.of(3));
     UnitaryMatrixQ.require(sqrtPu.getUnitary());
     assertTrue(PositiveSemidefiniteMatrixQ.ofHermitian(sqrtPu.getPositiveSemidefinite()));

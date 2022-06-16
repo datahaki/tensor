@@ -28,14 +28,14 @@ import ch.alpine.tensor.pdf.d.BinomialDistribution;
 
 class BasisTransformTest {
   @Test
-  public void testDimensions() {
+  void testDimensions() {
     int n = 3;
     Tensor s = BasisTransform.ofForm(Array.zeros(n, n, n, n), Array.zeros(n, n + 2));
     assertEquals(Dimensions.of(s), Arrays.asList(5, 5, 5, 5));
   }
 
   @Test
-  public void testFormRank2() {
+  void testFormRank2() {
     int n = 4;
     Distribution distribution = BinomialDistribution.of(80, 0.3);
     Tensor form = RandomVariate.of(distribution, n, n);
@@ -45,7 +45,7 @@ class BasisTransformTest {
   }
 
   @Test
-  public void testForm() {
+  void testForm() {
     int rows = 6;
     int cols = 8;
     Random random = new Random(4);
@@ -59,7 +59,7 @@ class BasisTransformTest {
   }
 
   @Test
-  public void testStream() {
+  void testStream() {
     int n = 5;
     Integer[] asd = new Integer[n];
     IntStream.range(0, n).forEach(i -> asd[i] = (i + 1) % n);
@@ -68,7 +68,7 @@ class BasisTransformTest {
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     Random random = new Random(3);
     int n = 5;
     Distribution distribution = BinomialDistribution.of(10, 0.3);
@@ -84,7 +84,7 @@ class BasisTransformTest {
   }
 
   @Test
-  public void testAd() {
+  void testAd() {
     Tensor v = HilbertMatrix.of(3);
     Tensor _a = LeviCivitaTensor.of(3).negate();
     Tensor ad = BasisTransform.of(_a, 1, v);
@@ -93,25 +93,25 @@ class BasisTransformTest {
   }
 
   @Test
-  public void testAdTypeFail() {
+  void testAdTypeFail() {
     Tensor v = HilbertMatrix.of(3);
     assertThrows(IllegalArgumentException.class, () -> BasisTransform.of(Array.zeros(3, 3, 3), -1, v));
   }
 
   @Test
-  public void testAdInverseFail() {
+  void testAdInverseFail() {
     Tensor v = Array.zeros(3);
     assertThrows(IllegalArgumentException.class, () -> BasisTransform.of(Array.zeros(3, 3, 3), 1, v));
   }
 
   @Test
-  public void testFormVectorFail() {
+  void testFormVectorFail() {
     int n = 3;
     assertThrows(IndexOutOfBoundsException.class, () -> BasisTransform.ofForm(Array.zeros(n, n, n), Array.zeros(n)));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(TensorRuntimeException.class, () -> BasisTransform.ofMatrix(IdentityMatrix.of(3), DiagonalMatrix.of(1, 1, 0)));
   }
 }

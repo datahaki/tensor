@@ -29,7 +29,7 @@ import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 
 class NdCollectRadiusTest {
   @Test
-  public void testClusterRadius() {
+  void testClusterRadius() {
     int maxDensity = 2;
     NdMap<String> m1 = new NdListMap<>();
     NdMap<String> m2 = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(-2, -1), Tensors.vector(2, 10)), maxDensity);
@@ -69,7 +69,7 @@ class NdCollectRadiusTest {
 
   @ParameterizedTest
   @EnumSource(NdCenters.class)
-  public void testEmpty(NdCenters ndCenters) {
+  void testEmpty(NdCenters ndCenters) {
     NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2, 4.3));
     Scalar radius = RealScalar.of(4);
     NdCollectRadius<Object> ndCollectRadius = new NdCollectRadius<>(ndCenterInterface, radius);
@@ -77,12 +77,12 @@ class NdCollectRadiusTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> new NdCollectRadius<>(null, Pi.VALUE));
   }
 
   @Test
-  public void testNonPositiveFail() {
+  void testNonPositiveFail() {
     NdCenterInterface ndCenterInterface = NdCenters.VECTOR_INFINITY_NORM.apply(Array.zeros(2));
     assertThrows(TensorRuntimeException.class, () -> new NdCollectRadius<>(ndCenterInterface, RealScalar.ONE.negate()));
   }

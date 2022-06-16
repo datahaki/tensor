@@ -10,7 +10,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class MatrixAbsTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor matrix = Symmetrize.of(RandomVariate.of(UniformDistribution.of(-1, 1), 5, 5));
     MatrixAbs.ofSymmetric(matrix);
     MatrixAbs.ofHermitian(matrix);

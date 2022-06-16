@@ -87,6 +87,6 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%d, %s]", getClass().getSimpleName(), n, p);
+    return String.format("BinomialDistribution[%d, %s]", n, p);
   }
 }

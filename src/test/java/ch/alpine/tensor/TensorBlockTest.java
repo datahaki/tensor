@@ -13,14 +13,14 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 
 class TensorBlockTest {
   @Test
-  public void testBlock() {
+  void testBlock() {
     Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);
     assertEquals(a.block(Arrays.asList(2), Arrays.asList(2)), Tensors.vector(3, 4));
     assertThrows(IllegalArgumentException.class, () -> a.block(Arrays.asList(1), Arrays.asList(2, 1)));
   }
 
   @Test
-  public void testBlock2() {
+  void testBlock2() {
     Tensor array = Array.zeros(5, 5);
     Tensor refs = array;
     refs.block(Arrays.asList(1, 2), Arrays.asList(2, 3)).set(RealScalar.ONE::add, Tensor.ALL, Tensor.ALL);
@@ -29,7 +29,7 @@ class TensorBlockTest {
   }
 
   @Test
-  public void testNonRefs() {
+  void testNonRefs() {
     Tensor a = Tensors.vector(1, 2, 3, 4, 5, 6);
     Tensor b = a.block(Arrays.asList(2), Arrays.asList(3));
     b.set(Array.zeros(3), Tensor.ALL);
@@ -37,7 +37,7 @@ class TensorBlockTest {
   }
 
   @Test
-  public void testRefs2d() {
+  void testRefs2d() {
     Tensor a = HilbertMatrix.of(5, 6);
     Tensor b = a.block(Arrays.asList(1, 2), Arrays.asList(3, 4));
     b.set(Array.zeros(3, 4), Tensor.ALL, Tensor.ALL);

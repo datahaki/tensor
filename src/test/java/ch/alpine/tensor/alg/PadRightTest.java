@@ -18,7 +18,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class PadRightTest {
   @Test
-  public void testVectorLo() throws ClassNotFoundException, IOException {
+  void testVectorLo() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tuo = Serialization.copy(PadRight.zeros(10));
     Tensor vector = Tensors.vector(1, 2, 3, 4, 5, 6);
     Tensor result = tuo.apply(vector);
@@ -27,7 +27,7 @@ class PadRightTest {
   }
 
   @Test
-  public void testVectorHi() {
+  void testVectorHi() {
     TensorUnaryOperator tuo = PadRight.zeros(4);
     Tensor vector = Tensors.vector(1, 2, 3, 4, 5, 6);
     Tensor result = tuo.apply(vector);
@@ -35,7 +35,7 @@ class PadRightTest {
   }
 
   @Test
-  public void testMatrixRegular() {
+  void testMatrixRegular() {
     TensorUnaryOperator tuo = PadRight.zeros(2, 4);
     Tensor vector = Tensors.fromString("{{1, 2, 3}}");
     Tensor result = tuo.apply(vector);
@@ -43,7 +43,7 @@ class PadRightTest {
   }
 
   @Test
-  public void testMatrixIrregular1() {
+  void testMatrixIrregular1() {
     TensorUnaryOperator tuo = PadRight.zeros(3, 4);
     Tensor vector = Tensors.fromString("{{1, 2, 3}, {4, 5}}");
     Tensor result = tuo.apply(vector);
@@ -51,7 +51,7 @@ class PadRightTest {
   }
 
   @Test
-  public void testMatrixIrregular2() {
+  void testMatrixIrregular2() {
     TensorUnaryOperator tuo = PadRight.zeros(1, 2);
     Tensor vector = Tensors.fromString("{{1, 2, 3}, {4, 5}}");
     Tensor result = tuo.apply(vector);
@@ -59,7 +59,7 @@ class PadRightTest {
   }
 
   @Test
-  public void testMatrixIrregular3() {
+  void testMatrixIrregular3() {
     TensorUnaryOperator tuo = PadRight.zeros(2, 2);
     Tensor vector = Tensors.fromString("{{1}, {2}, {4, 5}}");
     Tensor result = tuo.apply(vector);
@@ -67,12 +67,12 @@ class PadRightTest {
   }
 
   @Test
-  public void testSerialization() throws ClassNotFoundException, IOException {
+  void testSerialization() throws ClassNotFoundException, IOException {
     Serialization.copy(PadRight.zeros());
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar element = Quantity.of(2, "Apples");
     TensorUnaryOperator tuo = PadRight.with(element, 3);
     Tensor tensor = tuo.apply(Tensors.fromString("{1[A], 2[V]}"));
@@ -80,13 +80,13 @@ class PadRightTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     TensorUnaryOperator tuo = PadRight.zeros(2, 2, 6);
     assertThrows(TensorRuntimeException.class, () -> tuo.apply(Tensors.fromString("{{1}, {2}, {4, 5}}")));
   }
 
   @Test
-  public void testFail2() {
+  void testFail2() {
     assertThrows(IllegalArgumentException.class, () -> PadRight.zeros(-2));
     assertThrows(IllegalArgumentException.class, () -> PadRight.zeros(1, -2));
   }

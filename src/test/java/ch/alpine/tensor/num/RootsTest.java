@@ -35,19 +35,19 @@ class RootsTest {
   private static final int LIMIT = 20;
 
   @Test
-  public void testConstantUniform() {
+  void testConstantUniform() {
     Tensor roots = Roots.of(Tensors.vector(2));
     assertTrue(Tensors.isEmpty(roots));
   }
 
   @Test
-  public void testZeros() {
+  void testZeros() {
     Tensor roots = Roots.of(Tensors.vector(0, 0, 1, 0));
     assertEquals(roots, Array.zeros(2));
   }
 
   @Test
-  public void testUnitVector() {
+  void testUnitVector() {
     for (int length = 1; length < 10; ++length) {
       Tensor coeffs = UnitVector.of(length, length - 1);
       assertEquals(Roots.of(coeffs), Array.zeros(length - 1));
@@ -55,7 +55,7 @@ class RootsTest {
   }
 
   @Test
-  public void testUnitVectorPlus() {
+  void testUnitVectorPlus() {
     for (int length = 1; length < 10; ++length) {
       Tensor coeffs = UnitVector.of(length + 3, length - 1);
       assertEquals(Roots.of(coeffs), Array.zeros(length - 1));
@@ -63,7 +63,7 @@ class RootsTest {
   }
 
   @Test
-  public void testUniform5() {
+  void testUniform5() {
     Distribution distribution = UniformDistribution.of(-5, 5);
     for (int length = 1; length <= 4; ++length)
       for (int index = 0; index < LIMIT; ++index) {
@@ -83,7 +83,7 @@ class RootsTest {
   }
 
   @Test
-  public void testUniform10() {
+  void testUniform10() {
     Distribution distribution = UniformDistribution.of(-10, 10);
     for (int length = 1; length <= 4; ++length)
       for (int index = 0; index < LIMIT; ++index) {
@@ -103,7 +103,7 @@ class RootsTest {
   }
 
   @Test
-  public void testNormal() {
+  void testNormal() {
     Distribution distribution = NormalDistribution.of(0, 0.3);
     for (int length = 1; length <= 4; ++length)
       for (int index = 0; index < LIMIT; ++index) {
@@ -115,7 +115,7 @@ class RootsTest {
   }
 
   @Test
-  public void testRandomReal() {
+  void testRandomReal() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 4; ++length)
       for (int index = 0; index < LIMIT; ++index) {
@@ -133,7 +133,7 @@ class RootsTest {
   }
 
   @Test
-  public void testRandomRealQuantity() {
+  void testRandomRealQuantity() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 4; ++length)
       for (int index = 0; index < LIMIT; ++index) {
@@ -151,7 +151,7 @@ class RootsTest {
   }
 
   @Test
-  public void testRandomComplex() {
+  void testRandomComplex() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 4; ++length)
       for (int index = 0; index < LIMIT; ++index) {
@@ -171,7 +171,7 @@ class RootsTest {
   }
 
   @Test
-  public void testRandomComplexQuantity() {
+  void testRandomComplexQuantity() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 4; ++length)
       for (int index = 0; index < LIMIT; ++index) {
@@ -190,7 +190,7 @@ class RootsTest {
   }
 
   @Test
-  public void testRealUniqueRoots() {
+  void testRealUniqueRoots() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 3; ++length)
       for (int index = 0; index < LIMIT; ++index) {
@@ -206,7 +206,7 @@ class RootsTest {
   }
 
   @Test
-  public void testRealTripleRoot() {
+  void testRealTripleRoot() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 3; ++length)
       for (int index = 0; index < LIMIT; ++index) {
@@ -221,7 +221,7 @@ class RootsTest {
   }
 
   @Test
-  public void testRealTripleRoot1() {
+  void testRealTripleRoot1() {
     Distribution distribution = NormalDistribution.of(Quantity.of(1, "m"), Quantity.of(0.5, "m"));
     for (int index = 0; index < LIMIT; ++index) {
       Tensor zeros = ConstantArray.of(RandomVariate.of(distribution), 3);
@@ -235,14 +235,14 @@ class RootsTest {
   }
 
   @Test
-  public void testSpecific() {
+  void testSpecific() {
     Tensor coeffs = Tensors.fromString("{-1.7577173839803[m^3], 4.36938808469565[m^2], -3.620519887265771[m], 1.0}");
     Tensor roots = Roots.of(coeffs);
     Tolerance.CHOP.requireClose(roots, ConstantArray.of(Scalars.fromString("1.2068399624219235[m]"), 3));
   }
 
   @Test
-  public void testComplexTripleRoot() {
+  void testComplexTripleRoot() {
     Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 3; ++length)
       for (int index = 0; index < LIMIT; ++index) {
@@ -263,28 +263,28 @@ class RootsTest {
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Roots.of(RealScalar.ONE));
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IndexOutOfBoundsException.class, () -> Roots.of(Tensors.empty()));
   }
 
   @Test
-  public void testOnes() {
+  void testOnes() {
     Tensor coeffs = Tensors.vector(0);
     assertThrows(IndexOutOfBoundsException.class, () -> Roots.of(coeffs));
   }
 
   @Test
-  public void testConstantZeroFail() {
+  void testConstantZeroFail() {
     assertThrows(IndexOutOfBoundsException.class, () -> Roots.of(Tensors.vector(0)));
   }
 
   @Test
-  public void testZerosFail() {
+  void testZerosFail() {
     for (int n = 0; n < 10; ++n) {
       int fn = n;
       assertThrows(IndexOutOfBoundsException.class, () -> Roots.of(Array.zeros(fn)));
@@ -292,12 +292,12 @@ class RootsTest {
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(ClassCastException.class, () -> Roots.of(HilbertMatrix.of(2, 3)));
   }
 
   @Test
-  public void testNotImplemented() {
+  void testNotImplemented() {
     assertThrows(TensorRuntimeException.class, () -> Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6)));
   }
 }

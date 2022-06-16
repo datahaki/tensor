@@ -47,7 +47,7 @@ class GramSchmidtTest {
 
   @RepeatedTest(3)
   // RepetitionInfo repetitionInfo
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 5, 4);
     QRDecomposition qrDecomposition = Serialization.copy(GramSchmidt.of(matrix));
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
@@ -56,7 +56,7 @@ class GramSchmidtTest {
   }
 
   @Test
-  public void testRankDeficientLeastSquares() {
+  void testRankDeficientLeastSquares() {
     Random random = new Random(1); // 5 yields sigma = {0,1,2}
     Distribution distribution = TrapezoidalDistribution.with(0, 1, 2);
     Tensor m1 = RandomVariate.of(distribution, random, 8, 4);
@@ -73,7 +73,7 @@ class GramSchmidtTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 5, 4).map(s -> Quantity.of(s, "m"));
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
@@ -82,7 +82,7 @@ class GramSchmidtTest {
   }
 
   @Test
-  public void testRect() {
+  void testRect() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
@@ -94,7 +94,7 @@ class GramSchmidtTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Tensor re = RandomVariate.of(NormalDistribution.standard(), 5, 3);
     Tensor im = RandomVariate.of(NormalDistribution.standard(), 5, 3);
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
@@ -105,7 +105,7 @@ class GramSchmidtTest {
   }
 
   @Test
-  public void testComplexLarge() {
+  void testComplexLarge() {
     Tensor re = RandomVariate.of(NormalDistribution.standard(), 100, 20);
     Tensor im = RandomVariate.of(NormalDistribution.standard(), 100, 20);
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
@@ -116,7 +116,7 @@ class GramSchmidtTest {
   }
 
   @Test
-  public void testMixedUnits() {
+  void testMixedUnits() {
     Tensor x = Tensors.fromString("{100[K], 110.0[K], 130[K], 133[K]}");
     Tensor design = VandermondeMatrix.of(x, 2);
     QRDecomposition qrDecomposition = GramSchmidt.of(design);
@@ -125,7 +125,7 @@ class GramSchmidtTest {
   }
 
   @Test
-  public void testDet() {
+  void testDet() {
     Random random = new Random(5);
     for (int n = 2; n < 6; ++n) {
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, n, n);
@@ -139,7 +139,7 @@ class GramSchmidtTest {
   }
 
   @Test
-  public void testPInv2x2() {
+  void testPInv2x2() {
     Random random = new Random(2);
     for (int n = 0; n < 6; ++n) {
       Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, 2 + n, 2 + n / 2);
@@ -152,7 +152,7 @@ class GramSchmidtTest {
 
   @ParameterizedTest
   @ValueSource(ints = { 0, 1, 2, 3, 4, 5 })
-  public void testPInv(int n) {
+  void testPInv(int n) {
     Random random = new Random(1); // 5 yields sigma = {0,1,2}
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), random, 3 + n, 3);
     int m = Unprotect.dimension1(matrix);
@@ -174,13 +174,13 @@ class GramSchmidtTest {
   }
 
   @Test
-  public void testDetRect1() {
+  void testDetRect1() {
     QRDecomposition qrDecomposition = GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 3, 2));
     assertEquals(qrDecomposition.det(), RealScalar.ZERO);
   }
 
   @Test
-  public void testDetRect2() {
+  void testDetRect2() {
     assertEquals(GramSchmidt.of(RandomVariate.of(NormalDistribution.standard(), 2, 3)).det(), RealScalar.ZERO);
   }
 }

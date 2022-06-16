@@ -36,7 +36,7 @@ import ch.alpine.tensor.sca.Mod;
 
 class PolynomialTest {
   @Test
-  public void testGauss() {
+  void testGauss() {
     Scalar scalar1 = Polynomial.of(Tensors.of( //
         GaussScalar.of(2, 7), GaussScalar.of(4, 7), GaussScalar.of(5, 7))) //
         .apply(GaussScalar.of(6, 7));
@@ -47,7 +47,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testAccumulate() {
+  void testAccumulate() {
     Tensor coeffs = Tensors.vector(2, 1, -3, 2, 3, 0, 2);
     Tensor accumu = Accumulate.of(coeffs);
     assertEquals(Polynomial.of(coeffs).apply(RealScalar.ONE), Total.of(coeffs));
@@ -60,7 +60,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testPlus() {
+  void testPlus() {
     Polynomial p1 = Polynomial.of(Tensors.vector(1, 5, 2, 10));
     assertEquals(p1, p1.moment(0));
     assertThrows(IllegalArgumentException.class, () -> p1.moment(-1));
@@ -74,19 +74,19 @@ class PolynomialTest {
   }
 
   @Test
-  public void testDegree() {
+  void testDegree() {
     assertEquals(Polynomial.of(Tensors.vector(3, 0, 0)).degree(), 0);
     assertEquals(Polynomial.of(Tensors.vector(0, 0, 0)).degree(), -1);
   }
 
   @Test
-  public void testChop() {
+  void testChop() {
     Polynomial polynomial = Polynomial.of(Tensors.vector(1, 0, 0, 1e-11)).chop(Chop._10);
     assertEquals(polynomial.coeffs(), UnitVector.of(2, 0));
   }
 
   @Test
-  public void testLastNonZero() {
+  void testLastNonZero() {
     assertEquals(Polynomial.of(Tensors.vector(3, 2, 0, 6, 0, 0)).coeffs(), Tensors.vector(3, 2, 0, 6));
     assertEquals(Polynomial.of(Tensors.vector(3)).coeffs(), Tensors.vector(3));
     assertEquals(Polynomial.of(Tensors.vector(0)).coeffs(), Tensors.vector(0));
@@ -95,7 +95,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar qs1 = Quantity.of(-4, "m*s");
     Scalar qs2 = Quantity.of(3, "m");
     Scalar val = Quantity.of(2, "s");
@@ -104,7 +104,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testAccelerationConstant() {
+  void testAccelerationConstant() {
     Scalar c0 = Quantity.of(3, "m*s^-1");
     Polynomial polynomial = Polynomial.of(Tensors.of(c0));
     Tensor roots = polynomial.roots();
@@ -118,7 +118,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testAcceleration() {
+  void testAcceleration() {
     Scalar qs0 = Quantity.of(3, "m*s^-1");
     Scalar qs1 = Quantity.of(-4, "m*s^-2");
     Polynomial polynomial = Polynomial.of(Tensors.of(qs0, qs1));
@@ -144,7 +144,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testNeutral() {
+  void testNeutral() {
     Scalar qs0 = Quantity.of(3, "m*s^-1");
     Scalar qs1 = Quantity.of(-4, "m*s^-2");
     Polynomial p1 = Polynomial.of(Tensors.of(qs0, qs1));
@@ -154,7 +154,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testIntegralOne() {
+  void testIntegralOne() {
     Scalar qs0 = Quantity.of(3, "m*s^-1");
     // Scalar val = Quantity.of(2, "s");
     Polynomial polynomial = Polynomial.of(Tensors.of(qs0));
@@ -165,7 +165,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testMoment() {
+  void testMoment() {
     Scalar qs0 = Quantity.of(3, "m*s^-1");
     Scalar qs1 = Quantity.of(-4, "m*s^-2");
     // Scalar val = Quantity.of(2, "s");
@@ -191,14 +191,14 @@ class PolynomialTest {
   }
 
   @Test
-  public void testMomentCoeffs1() {
+  void testMomentCoeffs1() {
     Polynomial polynomial = Polynomial.of(Tensors.vector(3));
     Polynomial p2 = polynomial.moment(3);
     assertEquals(p2.coeffs(), Tensors.vector(0, 0, 0, 3));
   }
 
   @Test
-  public void testQuaternionLinear() {
+  void testQuaternionLinear() {
     Quaternion qs1 = Quaternion.of(1, 2, 3, 4);
     Quaternion qs2 = Quaternion.of(2, 5, -1, 0);
     assertTrue(RandomQuaternion.nonCommute(qs1, qs2));
@@ -213,7 +213,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testQuaternionLinearMany() {
+  void testQuaternionLinearMany() {
     for (int index = 0; index < 10; ++index) {
       Scalar qs1 = RandomQuaternion.get();
       Scalar qs2 = RandomQuaternion.get();
@@ -227,7 +227,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testQuaternionQuadratic() {
+  void testQuaternionQuadratic() {
     Scalar qs1 = Quaternion.of(1, 2, 3, 4);
     Scalar qs2 = Quaternion.of(2, 5, -1, 0);
     Scalar qs3 = Quaternion.of(-3, 7, 10, -11);
@@ -242,17 +242,17 @@ class PolynomialTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> Polynomial.of(null));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(TensorRuntimeException.class, () -> Polynomial.of(HilbertMatrix.of(3)));
   }
 
   @Test
-  public void testDerivativeSimple() {
+  void testDerivativeSimple() {
     Polynomial coeffs = Polynomial.of(Tensors.vector(-3, 4, -5, 8, 1));
     Polynomial result = coeffs.derivative();
     ExactTensorQ.require(result.coeffs());
@@ -260,12 +260,12 @@ class PolynomialTest {
   }
 
   @Test
-  public void testDerivativeEmpty() {
+  void testDerivativeEmpty() {
     assertEquals(Polynomial.of(Tensors.vector(3)).derivative().coeffs(), Tensors.vector(0));
   }
 
   @Test
-  public void testDerLinEx() {
+  void testDerLinEx() {
     // Tensor coeffs = ;
     Polynomial polynomial = Polynomial.of(Tensors.fromString("{-13[bar], 0.27[K^-1*bar]}"));
     assertEquals(QuantityUnit.of(polynomial.apply(Quantity.of(3, "K"))), Unit.of("bar"));
@@ -277,7 +277,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testDerivativeLinear() {
+  void testDerivativeLinear() {
     Polynomial polynomial = Polynomial.of(Tensors.of(Quantity.of(3, "m"), Quantity.of(2, "m*s^-1")));
     Scalar position = polynomial.apply(Quantity.of(10, "s"));
     assertEquals(position, Quantity.of(23, "m"));
@@ -298,7 +298,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testDerivativeGaussScalar() {
+  void testDerivativeGaussScalar() {
     GaussScalar a = GaussScalar.of(3, 17);
     GaussScalar b = GaussScalar.of(4, 17);
     GaussScalar x = GaussScalar.of(5, 17);
@@ -322,7 +322,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testDerivativeQuadr() {
+  void testDerivativeQuadr() {
     Polynomial polynomial = Polynomial.of(Tensors.of(Quantity.of(3, "m"), Quantity.of(2, "m*s^-2")));
     Scalar position = polynomial.apply(Quantity.of(10, "s^2"));
     assertEquals(position, Quantity.of(23, "m"));
@@ -343,7 +343,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testIntegralCoeff() {
+  void testIntegralCoeff() {
     Polynomial coeffs = Polynomial.of(Tensors.vector(2, 6, 3, 9, 0, 3));
     Polynomial integr = coeffs.integral();
     Polynomial result = integr.derivative();
@@ -351,7 +351,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testMultiplyCoeff() {
+  void testMultiplyCoeff() {
     Polynomial c1 = Polynomial.of(Tensors.vector(2, 6, 3, 9, 0, 3));
     assertEquals(c1.getUnitDomain(), Unit.ONE);
     assertEquals(c1.getUnitValue(), Unit.ONE);
@@ -382,7 +382,7 @@ class PolynomialTest {
   }
 
   @Test
-  public void testMultiplyCoeffUnits() {
+  void testMultiplyCoeffUnits() {
     Polynomial c1 = Polynomial.of(Tensors.fromString("{1[m^-1],3[m^-2]}"));
     Polynomial c2 = Polynomial.of(Tensors.fromString("{2[m^-1],3[m^-2],-3[m^-3]}"));
     assertEquals(c2.getUnitDomain(), Unit.of("m"));
@@ -400,27 +400,27 @@ class PolynomialTest {
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     assertNotEquals(Polynomial.of(Tensors.vector(1, 2, 3)), "abc");
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IndexOutOfBoundsException.class, () -> Polynomial.of(Tensors.empty()));
   }
 
   @Test
-  public void testDerivativeScalarFail() {
+  void testDerivativeScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Polynomial.of(RealScalar.ONE));
   }
 
   @Test
-  public void testDerivativeMatrixFail() {
+  void testDerivativeMatrixFail() {
     assertThrows(TensorRuntimeException.class, () -> Polynomial.of(HilbertMatrix.of(4, 5)));
   }
 
   @Test
-  public void testUnstructuredFail() {
+  void testUnstructuredFail() {
     assertThrows(TensorRuntimeException.class, () -> Polynomial.of(Tensors.fromString("{2, {1}}")));
   }
 }

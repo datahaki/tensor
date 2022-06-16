@@ -37,7 +37,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class HistogramDistributionTest {
   @Test
-  public void testPdf() {
+  void testPdf() {
     Distribution distribution = //
         HistogramDistribution.of(Tensors.vector(-3, -3, -2, -2, 10), RealScalar.of(2));
     PDF pdf = PDF.of(distribution);
@@ -58,7 +58,7 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testFreedman() {
+  void testFreedman() {
     Tensor samples = Tensors.vector(-4, -3, -3, -2, -2, 10);
     Distribution distribution = HistogramDistribution.of(samples, BinningMethod.IQR);
     PDF pdf = PDF.of(distribution);
@@ -67,14 +67,14 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testFreedmanMin() {
+  void testFreedmanMin() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(3, 4));
     assertTrue(distribution.toString().startsWith("HistogramDistribution"));
     assertThrows(TensorRuntimeException.class, () -> HistogramDistribution.of(Tensors.vector(3, 3)));
   }
 
   @Test
-  public void testScott() {
+  void testScott() {
     Tensor samples = Tensors.vector(-4, -3, -3, -2, -2, 10);
     Distribution distribution = HistogramDistribution.of(samples, BinningMethod.VARIANCE);
     PDF pdf = PDF.of(distribution);
@@ -83,7 +83,7 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Tensor vector = QuantityTensor.of(Tensors.vector(1, 1.7, 2, 3, 3.9, 4, 4.1), "m");
     Scalar width = Quantity.of(0.7, "m");
     Distribution distribution = //
@@ -104,7 +104,7 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testMean() {
+  void testMean() {
     Tensor vector = QuantityTensor.of(Tensors.vector(1, 2, 3), "m");
     Distribution distribution = //
         HistogramDistribution.of(vector, Quantity.of(1, "m"));
@@ -113,7 +113,7 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testVariance() {
+  void testVariance() {
     Tensor vector = QuantityTensor.of(Tensors.vector(1, 2, 3), "m");
     Distribution distribution = HistogramDistribution.of(vector, Quantity.of(1, "m"));
     assertEquals( //
@@ -123,7 +123,7 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testVariance1() {
+  void testVariance1() {
     assertEquals( //
         Expectation.variance(HistogramDistribution.of(Tensors.vector(0.5), RealScalar.of(1))), //
         RationalScalar.of(1, 12));
@@ -133,7 +133,7 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testVariance2() {
+  void testVariance2() {
     assertEquals( //
         Expectation.variance(HistogramDistribution.of(Tensors.vector(0.5, 1.5), RealScalar.of(1))), //
         Expectation.variance(UniformDistribution.of(0, 2)));
@@ -143,25 +143,25 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testVarianceIr1() {
+  void testVarianceIr1() {
     assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(0.5, 1.5, 1.5), RealScalar.of(1))), RationalScalar.of(11, 36));
     assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(2.5, 1.5, 1.5), RealScalar.of(1))), RationalScalar.of(11, 36));
   }
 
   @Test
-  public void testVarianceIr2() {
+  void testVarianceIr2() {
     assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(4.5, 4.5, 2.5), RealScalar.of(2))), RationalScalar.of(11, 9));
     assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(2.5, 1.5, 1.5), RealScalar.of(2))), RationalScalar.of(11, 9));
   }
 
   @Test
-  public void testVarianceIr3() {
+  void testVarianceIr3() {
     assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(4.5, 4.5, 2.5, 10.5), RealScalar.of(2))), RationalScalar.of(28, 3));
     assertEquals(Expectation.variance(HistogramDistribution.of(Tensors.vector(2.5, 1.5, 1.5, 10.5), RealScalar.of(2))), RationalScalar.of(52, 3));
   }
 
   @Test
-  public void testCDF() {
+  void testCDF() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(0.5, 1.5, 1.5, 2.2), RealScalar.of(1));
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessThan(RationalScalar.of(0, 1)), RationalScalar.of(0, 1));
@@ -172,7 +172,7 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testQuantityCDF() {
+  void testQuantityCDF() {
     Random random = new Random(3);
     Tensor samples = QuantityTensor.of(RandomVariate.of(UniformDistribution.of(100, 120), random, 100), "kg");
     HistogramDistribution distribution = (HistogramDistribution) HistogramDistribution.of(samples, Quantity.of(2, "kg"));
@@ -190,7 +190,7 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testInverseCDF() {
+  void testInverseCDF() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(0.5, 1.5, 1.5, 2.2), RealScalar.of(1));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     {
@@ -216,7 +216,7 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testInverseCDF2() {
+  void testInverseCDF2() {
     Tensor vector = QuantityTensor.of(Tensors.vector(1, 2, 3), "m");
     Distribution distribution = HistogramDistribution.of(vector, Quantity.of(2, "m"));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -238,7 +238,7 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testInverseCDFOne() {
+  void testInverseCDFOne() {
     Tensor vector = QuantityTensor.of(Tensors.vector(1, 2, 3), "m");
     Distribution distribution = HistogramDistribution.of(vector, Quantity.of(2, "m"));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -246,7 +246,7 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testCDFInverseCDF() {
+  void testCDFInverseCDF() {
     Tensor samples = QuantityTensor.of(Tensors.vector(-6, -3.5, -1.3, 1, 2, 0, 3, 0, 3, 0), "m");
     HistogramDistribution distribution = (HistogramDistribution) HistogramDistribution.of(samples, Quantity.of(2, "m"));
     Clip clip = distribution.support();
@@ -263,19 +263,19 @@ class HistogramDistributionTest {
   }
 
   @Test
-  public void testMarkov() {
+  void testMarkov() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(1, 2, 0, 3, 2, 0, 1, 2));
     TestMarkovChebyshev.markov(distribution);
     TestMarkovChebyshev.chebyshev(distribution);
   }
 
   @Test
-  public void testFailEmpty() {
+  void testFailEmpty() {
     assertThrows(NoSuchElementException.class, () -> HistogramDistribution.of(Tensors.empty(), RealScalar.of(2)));
   }
 
   @Test
-  public void testFailWidth() {
+  void testFailWidth() {
     assertThrows(ArithmeticException.class, () -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.ZERO));
     assertThrows(TensorRuntimeException.class, () -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.of(-2)));
   }

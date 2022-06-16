@@ -16,7 +16,7 @@ import ch.alpine.tensor.Tensors;
 class NdInsideRadiusTest {
   @ParameterizedTest
   @EnumSource(NdCenters.class)
-  public void testSimple(NdCenters ndCenters) {
+  void testSimple(NdCenters ndCenters) {
     NdMap<Void> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0), Tensors.vector(1)));
     ndMap.insert(Tensors.vector(0), null);
     ndMap.insert(Tensors.vector(0.9), null);
@@ -28,7 +28,7 @@ class NdInsideRadiusTest {
 
   @ParameterizedTest
   @EnumSource(NdCenters.class)
-  public void testExact(NdCenters ndCenters) {
+  void testExact(NdCenters ndCenters) {
     NdMap<Void> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0), Tensors.vector(4)));
     ndMap.insert(Tensors.vector(0), null);
     ndMap.insert(Tensors.vector(4), null);
@@ -43,7 +43,7 @@ class NdInsideRadiusTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> new NdInsideRadius<>(null, RealScalar.ONE));
   }
 
@@ -57,7 +57,7 @@ class NdInsideRadiusTest {
   }
 
   @Test
-  public void testEffective() {
+  void testEffective() {
     boolean found = false;
     CallCount callCount = new CallCount();
     found = found || callCount.query();
@@ -68,7 +68,7 @@ class NdInsideRadiusTest {
   }
 
   @Test
-  public void testEffective2() {
+  void testEffective2() {
     boolean found = false;
     CallCount callCount = new CallCount();
     if (!found)

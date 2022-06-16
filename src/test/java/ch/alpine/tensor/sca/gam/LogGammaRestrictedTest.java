@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class LogGammaRestrictedTest {
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> LogGammaRestricted.FUNCTION.apply(null));
   }
 }

@@ -16,39 +16,39 @@ import ch.alpine.tensor.num.Pi;
 
 class NormalizeTotalTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor tensor = NormalizeTotal.FUNCTION.apply(Tensors.vector(2, -3, 4, 5));
     assertEquals(tensor, Tensors.fromString("{1/4, -3/8, 1/2, 5/8}"));
   }
 
   @Test
-  public void testUnitVector() {
+  void testUnitVector() {
     Tensor tensor = NormalizeTotal.FUNCTION.apply(Tensors.vector(2, 0.0, 4, 5).map(Scalar::reciprocal));
     assertEquals(tensor, UnitVector.of(4, 1));
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertThrows(TensorRuntimeException.class, () -> NormalizeTotal.FUNCTION.apply(Tensors.empty()));
   }
 
   @Test
-  public void testZeroFail() {
+  void testZeroFail() {
     assertThrows(ArithmeticException.class, () -> NormalizeTotal.FUNCTION.apply(Tensors.vector(2, -2, 1, -1)));
   }
 
   @Test
-  public void testZeroNumericFail() {
+  void testZeroNumericFail() {
     assertThrows(TensorRuntimeException.class, () -> NormalizeTotal.FUNCTION.apply(Tensors.vectorDouble(2, -2, 1, -1)));
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> NormalizeTotal.FUNCTION.apply(Pi.TWO));
   }
 
   @Test
-  public void testFailMatrix() {
+  void testFailMatrix() {
     assertThrows(ClassCastException.class, () -> NormalizeTotal.FUNCTION.apply(HilbertMatrix.of(3)));
   }
 }

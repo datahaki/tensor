@@ -27,7 +27,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class QRMathematicaTest {
   @Test
-  public void testSkinny() {
+  void testSkinny() {
     Tensor b = Transpose.of(IdentityMatrix.of(9).extract(0, 4));
     assertEquals(Dimensions.of(b), Arrays.asList(9, 4));
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 9, 4);
@@ -38,7 +38,7 @@ class QRMathematicaTest {
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor a = Tensors.fromString("{{1, 2, 3}, {1, 0, 0}, {0, 1, 0}, {0, 0, 1}}");
     assertEquals(Dimensions.of(a), Arrays.asList(4, 3));
     QRDecomposition qr = QRDecomposition.of(a);
@@ -56,7 +56,7 @@ class QRMathematicaTest {
   }
 
   @Test
-  public void testDet() {
+  void testDet() {
     Distribution distribution = UniformDistribution.unit();
     for (int n = 3; n < 6; ++n) {
       Tensor matrix = RandomVariate.of(distribution, n, n);
@@ -66,7 +66,7 @@ class QRMathematicaTest {
   }
 
   @Test
-  public void testRectangularBigSmall() {
+  void testRectangularBigSmall() {
     Distribution distribution = NormalDistribution.standard();
     for (int m = 3; m < 6; ++m) {
       int n = m + 3;
@@ -86,7 +86,7 @@ class QRMathematicaTest {
   }
 
   @Test
-  public void testRectangularSmallBig() {
+  void testRectangularSmallBig() {
     Distribution distribution = NormalDistribution.standard();
     for (int n = 3; n < 6; ++n) {
       int m = n + 3;
@@ -105,7 +105,7 @@ class QRMathematicaTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> QRMathematica.wrap(null));
   }
 }

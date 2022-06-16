@@ -16,34 +16,34 @@ import ch.alpine.tensor.sca.Clips;
 
 class LastTest {
   @Test
-  public void testScalarReturn() {
+  void testScalarReturn() {
     Scalar scalar = Last.of(Range.of(1, 4));
     assertEquals(scalar, RealScalar.of(3));
   }
 
   @Test
-  public void testUseCase() {
+  void testUseCase() {
     Clip clip = Clips.interval(RealScalar.of(2), Last.of(Range.of(1, 4)));
     clip.requireInside(RealScalar.of(3));
   }
 
   @Test
-  public void testLast() {
+  void testLast() {
     assertEquals(Last.of(Tensors.vector(3, 2, 6, 4)), RealScalar.of(4));
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     assertEquals(Last.of(IdentityMatrix.of(4)), UnitVector.of(4, 3));
   }
 
   @Test
-  public void testFailEmpty() {
+  void testFailEmpty() {
     assertThrows(IndexOutOfBoundsException.class, () -> Last.of(Tensors.empty()));
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> Last.of(RealScalar.of(99)));
   }
 }

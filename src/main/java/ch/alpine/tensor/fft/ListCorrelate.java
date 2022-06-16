@@ -70,6 +70,6 @@ public class ListCorrelate implements TensorUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), mask);
+    return String.format("ListCorrelate[%s]", mask);
   }
 }

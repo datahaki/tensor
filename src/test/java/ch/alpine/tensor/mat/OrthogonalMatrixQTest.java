@@ -21,21 +21,21 @@ import ch.alpine.tensor.sca.Chop;
 
 class OrthogonalMatrixQTest {
   @Test
-  public void testExact() {
+  void testExact() {
     Tensor matrix = Tensors.fromString("{{1, 1, 1, -1}, {-1, 1, 1, 1}}").multiply(RationalScalar.of(1, 2));
     assertTrue(OrthogonalMatrixQ.of(matrix));
     OrthogonalMatrixQ.require(matrix, Chop.NONE);
   }
 
   @Test
-  public void testDetNegative() {
+  void testDetNegative() {
     Tensor matrix = DiagonalMatrix.of(-1, 1, 1, -1, -1);
     OrthogonalMatrixQ.require(matrix);
     assertEquals(Det.of(matrix), RealScalar.ONE.negate());
   }
 
   @Test
-  public void testCornerCase() {
+  void testCornerCase() {
     assertFalse(OrthogonalMatrixQ.of(RealScalar.of(1)));
     assertFalse(OrthogonalMatrixQ.of(Tensors.vector(1, 0, 0)));
     assertFalse(OrthogonalMatrixQ.of(Tensors.vector(1, 0, 2)));
@@ -44,13 +44,13 @@ class OrthogonalMatrixQTest {
   }
 
   @Test
-  public void testRequireChop() {
+  void testRequireChop() {
     OrthogonalMatrixQ.require(IdentityMatrix.of(4), Chop.NONE);
     assertThrows(TensorRuntimeException.class, () -> OrthogonalMatrixQ.require(HilbertMatrix.of(3), Chop.NONE));
   }
 
   @Test
-  public void testRequire() {
+  void testRequire() {
     OrthogonalMatrixQ.require(IdentityMatrix.of(4));
     assertThrows(TensorRuntimeException.class, () -> OrthogonalMatrixQ.require(HilbertMatrix.of(3)));
   }

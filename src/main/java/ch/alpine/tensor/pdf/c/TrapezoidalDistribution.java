@@ -2,7 +2,6 @@
 package ch.alpine.tensor.pdf.c;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -176,7 +175,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
     ScalarUnaryOperator n_mean = centered //
         ? s -> s.subtract(mean)
         : s -> s;
-    List<Optional<Scalar>> list = Arrays.asList( //
+    List<Optional<Scalar>> list = List.of( //
         contrib(a, b, n_mean, order), //
         contrib(b, c, n_mean, order), //
         contrib(c, d, n_mean, order));
@@ -209,6 +208,6 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s, %s, %s]", getClass().getSimpleName(), a, b, c, d);
+    return String.format("TrapezoidalDistribution[%s, %s, %s, %s]", a, b, c, d);
   }
 }

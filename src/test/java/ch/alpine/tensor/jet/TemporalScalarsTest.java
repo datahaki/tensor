@@ -3,12 +3,14 @@ package ch.alpine.tensor.jet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -16,7 +18,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class TemporalScalarsTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor a = Tensors.of( //
         DateTimeScalar.of(LocalDateTime.of(1657, 11, 10, 4, 8)), //
         DateTimeScalar.of(LocalDateTime.of(1857, 10, 5, 7, 18)), //
@@ -38,12 +40,19 @@ class TemporalScalarsTest {
   }
 
   @Test
-  public void testParsing() {
+  void testParsing() {
     Tensor a = Tensors.of( //
         DateTimeScalar.of(LocalDateTime.of(1657, 11, 10, 4, 8)), //
         DateTimeScalar.of(LocalDateTime.of(1857, 10, 5, 7, 18)));
     Tensor recv = Tensors.fromString(a.toString(), TemporalScalars::fromString);
     assertEquals(a, recv);
     ExactTensorQ.require(a);
+  }
+
+  @Test
+  void testDuration() {
+    Scalar scalar = TemporalScalars.seconds(Duration.ofDays(3));
+    Duration duration = TemporalScalars.duration(scalar);
+    assertEquals(duration, Duration.ofDays(3));
   }
 }

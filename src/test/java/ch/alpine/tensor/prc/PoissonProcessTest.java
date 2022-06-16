@@ -10,7 +10,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class PoissonProcessTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Random random = new Random(1);
     PoissonProcess poissonProcess = new PoissonProcess(Quantity.of(0.2, "s^-1"));
     Tensor e0 = poissonProcess.next(random);

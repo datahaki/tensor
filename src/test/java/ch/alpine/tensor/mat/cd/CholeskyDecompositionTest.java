@@ -60,7 +60,7 @@ class CholeskyDecompositionTest {
   }
 
   @Test
-  public void testRosetta1() {
+  void testRosetta1() {
     // +5 0 0
     // +3 3 0
     // -1 1 3
@@ -89,7 +89,7 @@ class CholeskyDecompositionTest {
   }
 
   @Test
-  public void testWikiEn() throws Exception {
+  void testWikiEn() throws Exception {
     CholeskyDecomposition cd = //
         checkDecomp(Tensors.matrix(new Number[][] { //
             { 4, 12, -16 }, //
@@ -108,7 +108,7 @@ class CholeskyDecompositionTest {
   }
 
   @Test
-  public void testMathematica1() {
+  void testMathematica1() {
     checkDecomp(Tensors.matrix(new Number[][] { //
         { 2, 1 }, //
         { 1, 2 } //
@@ -116,34 +116,34 @@ class CholeskyDecompositionTest {
   }
 
   @Test
-  public void testMathematica2() {
+  void testMathematica2() {
     checkDecomp(Tensors.fromString("{{4, 3, 2, 1}, {3, 4, 3, 2}, {2, 3, 4, 3}, {+1, 2, 3, 4}}"));
     checkDecomp(Tensors.fromString("{{4, 3, 2, I}, {3, 4, 3, 2}, {2, 3, 4, 3}, {-I, 2, 3, 4}}"));
     checkDecomp(Tensors.fromString("{{4, 3, 2, I}, {3, 4, 3, 2}, {2, 3, 4, 3}, {-I, 2, 3, 0}}"));
   }
 
   @Test
-  public void testFail1() {
+  void testFail1() {
     assertThrows(TensorRuntimeException.class, () -> checkDecomp(Tensors.fromString("{{4, 2}, {1, 4}}")));
   }
 
   @Test
-  public void testFail2() {
+  void testFail2() {
     assertThrows(TensorRuntimeException.class, () -> checkDecomp(Tensors.fromString("{{4, I}, {I, 4}}")));
   }
 
   @Test
-  public void testHilbert1() {
+  void testHilbert1() {
     checkDecomp(HilbertMatrix.of(10));
   }
 
   @Test
-  public void testHilbertN1() {
+  void testHilbertN1() {
     checkDecomp(N.DOUBLE.of(HilbertMatrix.of(16)));
   }
 
   @Test
-  public void testDiag() {
+  void testDiag() {
     checkDecomp(DiagonalMatrix.of(1, -2, 3, -4));
     checkDecomp(DiagonalMatrix.of(0, -2, 3, -4));
     checkDecomp(DiagonalMatrix.of(0, -2, 3, -4));
@@ -154,19 +154,19 @@ class CholeskyDecompositionTest {
   }
 
   @Test
-  public void testZeros1() {
+  void testZeros1() {
     checkDecomp(Array.zeros(1, 1));
     checkDecomp(Array.zeros(5, 5));
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     checkDecomp(Tensors.fromString("{{10, I}, {-I, 10}}"));
     checkDecomp(N.DOUBLE.of(Tensors.fromString("{{10, I}, {-I, 10}}")));
   }
 
   @Test
-  public void testQuantity1() {
+  void testQuantity1() {
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(2, "m");
     Tensor ve1 = Tensors.of(qs2, qs1);
@@ -184,7 +184,7 @@ class CholeskyDecompositionTest {
   }
 
   @Test
-  public void testQuantity2() {
+  void testQuantity2() {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
     {
@@ -227,7 +227,7 @@ class CholeskyDecompositionTest {
    * L = CholeskyDecomposition[A]
    * ConjugateTranspose[L] . L */
   @Test
-  public void testQuantityComplex() {
+  void testQuantityComplex() {
     Tensor matrix = Tensors.fromString("{{10[m^2], I[m*kg]}, {-I[m*kg], 10[kg^2]}}");
     assertTrue(PositiveDefiniteMatrixQ.ofHermitian(matrix));
     // System.out.println(MathematicaForm.of(matrix));
@@ -248,7 +248,7 @@ class CholeskyDecompositionTest {
 
   @ParameterizedTest
   @ValueSource(ints = { 1, 2, 3 })
-  public void testRankDeficient(int r) {
+  void testRankDeficient(int r) {
     int n = 7;
     int _m = 5;
     Distribution distribution = NormalDistribution.standard();
@@ -275,7 +275,7 @@ class CholeskyDecompositionTest {
   }
 
   @Test
-  public void testRectFail() {
+  void testRectFail() {
     Tensor matrix = Tensors.fromString("{{10, I}}");
     assertThrows(IllegalArgumentException.class, () -> CholeskyDecomposition.of(matrix));
   }

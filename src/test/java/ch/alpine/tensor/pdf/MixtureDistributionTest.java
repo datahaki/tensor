@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class MixtureDistributionTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Distribution d = BernoulliDistribution.of(RationalScalar.HALF);
     Distribution d1 = Serialization.copy(MixtureDistribution.of(Tensors.vector(1, 2, 3), d, d, d));
     Distribution d2 = BernoulliDistribution.of(RationalScalar.HALF);
@@ -34,7 +34,7 @@ class MixtureDistributionTest {
   }
 
   @Test
-  public void testNormal() {
+  void testNormal() {
     Distribution d1 = MixtureDistribution.of(Tensors.vector(1, 2, 3), //
         NormalDistribution.of(0, 1), //
         NormalDistribution.of(3, 1), //
@@ -51,7 +51,7 @@ class MixtureDistributionTest {
   }
 
   @Test
-  public void testFailNegative() {
+  void testFailNegative() {
     assertThrows(TensorRuntimeException.class, () -> MixtureDistribution.of(Tensors.vector(1, -2, 3), //
         NormalDistribution.of(0, 1), //
         NormalDistribution.of(3, 1), //
@@ -59,7 +59,7 @@ class MixtureDistributionTest {
   }
 
   @Test
-  public void testFailLength() {
+  void testFailLength() {
     assertThrows(IllegalArgumentException.class, () -> MixtureDistribution.of(Tensors.vector(1, 3), //
         NormalDistribution.of(0, 1), //
         NormalDistribution.of(3, 1), //

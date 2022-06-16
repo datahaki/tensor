@@ -85,6 +85,6 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), lambda);
+    return String.format("PoissonDistribution[%s]", lambda);
   }
 }

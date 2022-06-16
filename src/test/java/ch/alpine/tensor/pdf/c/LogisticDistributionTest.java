@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,6 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.jet.DateTimeScalar;
-import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -35,7 +33,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class LogisticDistributionTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(LogisticDistribution.of(2, 3));
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(1.2)), RealScalar.of(0.0818692348913425));
@@ -51,7 +49,7 @@ class LogisticDistributionTest {
   }
 
   @Test
-  public void testRandomMeanVar() {
+  void testRandomMeanVar() {
     Distribution distribution = LogisticDistribution.of(3, 2);
     RandomVariate.of(distribution, 100);
     Tolerance.CHOP.requireClose(ExactScalarQ.require(Mean.of(distribution)), RealScalar.of(3));
@@ -60,7 +58,7 @@ class LogisticDistributionTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Distribution distribution = LogisticDistribution.of(Quantity.of(2, "m"), Quantity.of(3, "m"));
     Scalar scalar = Variance.of(distribution);
     QuantityMagnitude.singleton("m^2").apply(scalar);
@@ -69,9 +67,9 @@ class LogisticDistributionTest {
   }
 
   @Test
-  public void testDateTimeScalar() {
+  void testDateTimeScalar() {
     DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
-    DurationScalar durationScalar = DurationScalar.of(Duration.ofMinutes(123));
+    Scalar durationScalar = Quantity.of(123, "s");
     Distribution distribution = LogisticDistribution.of(dateTimeScalar, durationScalar);
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTimeScalar.class, scalar);
@@ -83,31 +81,31 @@ class LogisticDistributionTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> LogisticDistribution.of(null, RealScalar.ONE));
     assertThrows(NullPointerException.class, () -> LogisticDistribution.of(RealScalar.ONE, null));
   }
 
   @Test
-  public void testZeroFail() {
+  void testZeroFail() {
     assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 
   @Test
-  public void testComplexFail() {
+  void testComplexFail() {
     assertThrows(ClassCastException.class, () -> LogisticDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> LogisticDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
     assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
     assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
   @Test
-  public void testNegativeSigmaFail() {
+  void testNegativeSigmaFail() {
     LogisticDistribution.of(5, 1);
     assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(5, -1));
   }

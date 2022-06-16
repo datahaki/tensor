@@ -19,28 +19,28 @@ import ch.alpine.tensor.red.Nest;
 
 class ImageRotateTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor tensor = ImageRotate.of(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
     assertEquals(tensor, Tensors.fromString("{{3, 6}, {2, 5}, {1, 4}}"));
     assertEquals(ImageRotate.of(tensor), Tensors.fromString("{{6, 5, 4}, {3, 2, 1}}"));
   }
 
   @Test
-  public void testCw() {
+  void testCw() {
     Tensor tensor = ImageRotate.cw(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
     assertEquals(tensor, Tensors.fromString("{{4, 1}, {5, 2}, {6, 3}}"));
     assertEquals(ImageRotate.cw(tensor), Tensors.fromString("{{6, 5, 4}, {3, 2, 1}}"));
   }
 
   @Test
-  public void test180() {
+  void test180() {
     Tensor tensor = ImageRotate._180(Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
     assertEquals(tensor, Tensors.fromString("{{6, 5, 4}, {3, 2, 1}}"));
     assertEquals(ImageRotate._180(tensor), Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}"));
   }
 
   @Test
-  public void test4Identity() {
+  void test4Identity() {
     Tensor tensor = RandomVariate.of(DiscreteUniformDistribution.of(-3, 3), 4, 6);
     assertEquals(Nest.of(ImageRotate::of, tensor, 4), tensor);
     assertEquals(Nest.of(ImageRotate::cw, tensor, 4), tensor);
@@ -48,7 +48,7 @@ class ImageRotateTest {
   }
 
   @Test
-  public void testCwCcw() {
+  void testCwCcw() {
     Tensor tensor = RandomVariate.of(DiscreteUniformDistribution.of(-3, 3), 4, 6);
     for (int count = 0; count < 4; ++count) {
       Tensor next = ImageRotate.of(tensor);
@@ -58,19 +58,19 @@ class ImageRotateTest {
   }
 
   @Test
-  public void testRank3() {
+  void testRank3() {
     ImageRotate.cw(LeviCivitaTensor.of(3));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> ImageRotate.of(Pi.HALF));
     assertThrows(TensorRuntimeException.class, () -> ImageRotate.cw(Pi.HALF));
     assertThrows(TensorRuntimeException.class, () -> ImageRotate._180(Pi.HALF));
   }
 
   @Test
-  public void testVectorFail() {
+  void testVectorFail() {
     Tensor vector = Range.of(1, 4);
     VectorQ.requireLength(vector, 3);
     assertThrows(IllegalArgumentException.class, () -> ImageRotate.of(vector));
@@ -79,7 +79,7 @@ class ImageRotateTest {
   }
 
   @Test
-  public void testUnstructuredFail() {
+  void testUnstructuredFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
     assertThrows(TensorRuntimeException.class, () -> ImageRotate.of(tensor));
     assertThrows(TensorRuntimeException.class, () -> ImageRotate.cw(tensor));

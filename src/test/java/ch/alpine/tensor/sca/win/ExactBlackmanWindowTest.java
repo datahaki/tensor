@@ -8,7 +8,7 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class ExactBlackmanWindowTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tolerance.CHOP.requireClose( //
         ExactBlackmanWindow.FUNCTION.apply(RealScalar.of(0.2)), //
         RealScalar.of(0.5178645059151086));

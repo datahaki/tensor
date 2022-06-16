@@ -19,7 +19,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class MitchellNetravaliKernelTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(MitchellNetravaliKernel.of( //
         RationalScalar.of(1, 5), //
         RationalScalar.of(1, 3)));
@@ -30,7 +30,7 @@ class MitchellNetravaliKernelTest {
   }
 
   @Test
-  public void testDirect() {
+  void testDirect() {
     ScalarUnaryOperator mnk = MitchellNetravaliKernel.of(0.2, 1 / 3.0);
     Tolerance.CHOP.requireClose(mnk.apply(RealScalar.of(0.4)), RealScalar.of(0.6581333333333335));
     Tolerance.CHOP.requireClose(mnk.apply(RealScalar.of(-0.4)), RealScalar.of(0.6581333333333335));

@@ -28,12 +28,12 @@ import ch.alpine.tensor.qty.UnitQ;
 
 class UnprotectTest {
   @Test
-  public void testUsingNullFail() {
+  void testUsingNullFail() {
     assertThrows(NullPointerException.class, () -> Unprotect.using(null));
   }
 
   @Test
-  public void testUsingEmpty() {
+  void testUsingEmpty() {
     assertEquals(Unprotect.using(new LinkedList<>()), Tensors.empty());
     assertEquals(Unprotect.using(new LinkedList<>()), Tensors.unmodifiableEmpty());
     assertEquals(Unprotect.using(Arrays.asList()), Tensors.empty());
@@ -41,14 +41,14 @@ class UnprotectTest {
   }
 
   @Test
-  public void testUsingListScalar() {
+  void testUsingListScalar() {
     List<Tensor> list = Arrays.asList(RealScalar.of(4), RealScalar.of(5));
     Tensor tensor = Unprotect.using(list);
     assertEquals(tensor, Tensors.vector(4, 5));
   }
 
   @Test
-  public void testUsingCopyOnWrite() {
+  void testUsingCopyOnWrite() {
     List<Tensor> list = new CopyOnWriteArrayList<>();
     Tensor tensor = Unprotect.using(list);
     tensor.append(RealScalar.of(2));
@@ -57,19 +57,19 @@ class UnprotectTest {
   }
 
   @Test
-  public void testUsingNCopies() {
+  void testUsingNCopies() {
     Tensor tensor = Unprotect.using(Collections.nCopies(5, RealScalar.of(2)));
     assertEquals(tensor, Tensors.vector(2, 2, 2, 2, 2));
     assertThrows(UnsupportedOperationException.class, () -> tensor.append(RealScalar.ONE));
   }
 
   @Test
-  public void testEmptyLinkedListUnmodifiable() {
+  void testEmptyLinkedListUnmodifiable() {
     assertThrows(UnsupportedOperationException.class, () -> Unprotect.using(new LinkedList<>()).unmodifiable().append(RealScalar.ZERO));
   }
 
   @Test
-  public void testByref() {
+  void testByref() {
     Tensor beg = Tensors.vector(1, 2, 3);
     Tensor byref = Unprotect.byRef(beg, beg, beg);
     byref.set(RealScalar.ZERO, 0, 0);
@@ -78,7 +78,7 @@ class UnprotectTest {
   }
 
   @Test
-  public void testByrefFail() {
+  void testByrefFail() {
     Tensor beg = Tensors.vector(1, 2, 3);
     Tensor byref = Unprotect.byRef(beg, null, beg);
     byref.get(0);
@@ -88,34 +88,34 @@ class UnprotectTest {
   }
 
   @Test
-  public void testDimension1() {
+  void testDimension1() {
     assertTrue(Unprotect.dimension1(Tensors.vector(1, 2, 3)) == Scalar.LENGTH);
     assertTrue(Unprotect.dimension1(HilbertMatrix.of(2, 4)) == 4);
     assertTrue(Unprotect.dimension1(Array.zeros(2, 3, 4)) == 3);
   }
 
   @Test
-  public void testDimension1Hint() {
+  void testDimension1Hint() {
     Tensor tensor = Tensors.fromString("{{0, 2, 3}, {0, 2, 3, 5}, {{}}}");
     assertEquals(Unprotect.dimension1Hint(tensor), 3);
     assertThrows(TensorRuntimeException.class, () -> Unprotect.dimension1(tensor));
   }
 
   @Test
-  public void testDimension1Vector() {
+  void testDimension1Vector() {
     Tensor vector = Tensors.vector(1, 2, 3);
     assertEquals(Unprotect.dimension1(vector), Unprotect.dimension1Hint(vector));
   }
 
   @Test
-  public void testDimension1Empty() {
+  void testDimension1Empty() {
     int dim1 = Unprotect.dimension1(Tensors.empty());
     assertEquals(dim1, Scalar.LENGTH);
     assertEquals(dim1, Unprotect.dimension1Hint(Tensors.empty()));
   }
 
   @Test
-  public void testWithoutUnit() {
+  void testWithoutUnit() {
     assertEquals(Unprotect.withoutUnit(Pi.VALUE), Pi.VALUE);
     assertEquals(Unprotect.withoutUnit(Quantity.of(3, "h*km")), RealScalar.of(3));
     assertEquals(Unprotect.withoutUnit(Quantity.of(ComplexScalar.I, "h*km")), ComplexScalar.I);
@@ -127,7 +127,7 @@ class UnprotectTest {
   }
 
   @Test
-  public void testIsUnitUnique() {
+  void testIsUnitUnique() {
     assertTrue(Unprotect.isUnitUnique(Tensors.fromString("{{1,2,3}}")));
     assertTrue(Unprotect.isUnitUnique(Tensors.fromString("{{1[m],2[m],3[m]}}")));
     assertFalse(Unprotect.isUnitUnique(Tensors.fromString("{{1[m],2,3[m]}}")));
@@ -135,40 +135,40 @@ class UnprotectTest {
   }
 
   @Test
-  public void testGetUnitUnique() {
+  void testGetUnitUnique() {
     assertEquals(Unprotect.getUnitUnique(Range.of(1, 10)), Unit.of(""));
     assertEquals(Unprotect.getUnitUnique(Tensors.fromString("{{1[m],2[m],3[m]}}")), Unit.of("m"));
     assertEquals(Unprotect.getUnitUnique(DiagonalMatrix.of(3, Quantity.of(1, "s^2*m^-1"))), Unit.of("s^2*m^-1"));
   }
 
   @Test
-  public void testOne() {
+  void testOne() {
     Tensor tensor = Tensors.vector(2, 3, 4);
     Unit unit = Unprotect.getUnitUnique(tensor);
     assertTrue(UnitQ.isOne(unit));
   }
 
   @Test
-  public void testGetUnitUniqueFail1() {
+  void testGetUnitUniqueFail1() {
     assertThrows(IllegalArgumentException.class, () -> Unprotect.getUnitUnique(Tensors.fromString("{{1[m],2[s],3[m]}}")));
   }
 
   @Test
-  public void testGetUnitUniqueFail2() {
+  void testGetUnitUniqueFail2() {
     Tensor tensor = Tensors.fromString("{1[m], 2[s]}");
     assertFalse(StringScalarQ.any(tensor));
     assertThrows(IllegalArgumentException.class, () -> Unprotect.getUnitUnique(tensor));
   }
 
   @Test
-  public void testDimension1Fail() {
+  void testDimension1Fail() {
     Tensor unstruct = Tensors.fromString("{{-1, 0, 1, 2}, {3, 4, 5}}");
     assertEquals(unstruct.length(), 2);
     assertThrows(TensorRuntimeException.class, () -> Unprotect.dimension1(unstruct));
   }
 
   @Test
-  public void testDimension1HintFail() {
+  void testDimension1HintFail() {
     assertThrows(TensorRuntimeException.class, () -> Unprotect.dimension1(RealScalar.ONE));
     assertThrows(TensorRuntimeException.class, () -> Unprotect.dimension1Hint(RealScalar.ONE));
   }

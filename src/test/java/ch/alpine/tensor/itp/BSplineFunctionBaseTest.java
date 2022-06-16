@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class BSplineFunctionBaseTest {
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertEquals(BSplineFunctionBase.class.getModifiers() & 1, 1);
   }
 }

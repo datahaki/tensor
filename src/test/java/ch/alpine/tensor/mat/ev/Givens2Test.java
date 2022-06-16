@@ -13,7 +13,7 @@ import ch.alpine.tensor.mat.re.Inverse;
 
 class Givens2Test {
   @Test
-  public void testProduct() {
+  void testProduct() {
     Scalar theta1 = RealScalar.of(0.2);
     Scalar theta2 = RealScalar.of(0.3);
     int n = 4;

@@ -44,7 +44,7 @@ class HypotTest {
   }
 
   @Test
-  public void testBasic() {
+  void testBasic() {
     checkPair(1e-300, 1e-300);
     checkPair(0, 1e-300);
     checkPair(0, 0);
@@ -64,7 +64,7 @@ class HypotTest {
   }
 
   @Test
-  public void testExact3() {
+  void testExact3() {
     int[][] array = new int[][] { //
         { 1, 4, 8 }, { 2, 3, 6 }, { 2, 5, 14 }, { 2, 6, 9 }, { 2, 8, 16 }, //
         { 2, 10, 11 }, { 3, 4, 12 }, { 4, 6, 12 }, { 4, 12, 18 }, { 4, 13, 16 }, //
@@ -75,7 +75,7 @@ class HypotTest {
   }
 
   @Test
-  public void testTuple() {
+  void testTuple() {
     int[][] array = new int[][] { //
         { 3, 4 }, { 5, 12 }, { 6, 8 }, { 7, 24 }, { 8, 15 }, { 9, 12 }, { 10, 24 }, //
         { 12, 16 }, { 15, 20 }, { 16, 30 }, { 18, 24 }, { 20, 21 } };
@@ -84,7 +84,7 @@ class HypotTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar c1 = ComplexScalar.of(1, -5);
     Scalar c2 = ComplexScalar.of(2, 4);
     Scalar pair = Hypot.of(c1, c2);
@@ -96,7 +96,7 @@ class HypotTest {
   }
 
   @Test
-  public void testNaNdivNaN() {
+  void testNaNdivNaN() {
     Scalar s1 = DoubleScalar.INDETERMINATE;
     Scalar s2 = DoubleScalar.INDETERMINATE;
     Scalar s3 = s1.divide(s2);
@@ -104,7 +104,7 @@ class HypotTest {
   }
 
   @Test
-  public void testInfNan() {
+  void testInfNan() {
     Scalar s1 = DoubleScalar.POSITIVE_INFINITY;
     assertFalse(Scalars.isZero(s1));
     Scalar s2 = DoubleScalar.INDETERMINATE;
@@ -122,33 +122,33 @@ class HypotTest {
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> Hypot.ofVector(RealScalar.ONE));
   }
 
   @Test
-  public void testWithOne0() {
+  void testWithOne0() {
     Scalar scalar = Hypot.withOne(RealScalar.ZERO);
     assertEquals(scalar, RealScalar.ONE);
     ExactScalarQ.require(scalar);
   }
 
   @Test
-  public void testWithOne1() {
+  void testWithOne1() {
     Tolerance.CHOP.requireClose( //
         Hypot.withOne(RealScalar.of(5)), //
         Sqrt.FUNCTION.apply(RealScalar.of(5 * 5 + 1)));
   }
 
   @Test
-  public void testWithOne2() {
+  void testWithOne2() {
     Tolerance.CHOP.requireClose( //
         Hypot.withOne(RealScalar.of(0.5)), //
         Sqrt.FUNCTION.apply(RealScalar.of(0.25 + 1)));
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar qs1 = Quantity.of(3, "m");
     Scalar qs2 = Quantity.of(4, "m");
     Scalar qs3 = Quantity.of(5, "m");
@@ -156,14 +156,14 @@ class HypotTest {
   }
 
   @Test
-  public void testQuantityZero() {
+  void testQuantityZero() {
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(0, "m");
     assertEquals(Hypot.of(qs1, qs2), qs1);
   }
 
   @Test
-  public void testQuantity2() {
+  void testQuantity2() {
     Scalar s1 = Quantity.of(-3, "m");
     Scalar s2 = Quantity.of(-4, "m");
     Scalar sum = s1.add(s2);
@@ -178,7 +178,7 @@ class HypotTest {
   }
 
   @Test
-  public void testMixedUnitFail() {
+  void testMixedUnitFail() {
     assertThrows(TensorRuntimeException.class, () -> Hypot.of(Quantity.of(2, "m"), Quantity.of(3, "s")));
   }
 }

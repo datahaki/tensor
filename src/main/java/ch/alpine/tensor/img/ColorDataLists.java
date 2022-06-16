@@ -56,7 +56,7 @@ public enum ColorDataLists {
   _251, //
   ;
 
-  private final Tensor tensor = ResourceData.of("/colorlist/" + name().substring(1) + ".csv");
+  private final Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/colorlist/" + name().substring(1) + ".csv");
   private final ColorDataIndexed cyclic = new CyclicColorDataIndexed(tensor);
   private final ColorDataIndexed strict = new StrictColorDataIndexed(tensor);
 

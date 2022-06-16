@@ -16,7 +16,7 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class CauchyWindowTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     ScalarUnaryOperator suo = CauchyWindow.of(RealScalar.of(1.6));
     Tolerance.CHOP.requireClose( //
         suo.apply(RealScalar.of(0.4)), //
@@ -27,14 +27,14 @@ class CauchyWindowTest {
   }
 
   @Test
-  public void testExact() {
+  void testExact() {
     Scalar scalar = CauchyWindow.of(RationalScalar.of(7, 8)).apply(RationalScalar.of(2, 5));
     ExactScalarQ.require(scalar);
     assertFalse(Scalars.isZero(scalar));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> CauchyWindow.of(null));
   }
 }

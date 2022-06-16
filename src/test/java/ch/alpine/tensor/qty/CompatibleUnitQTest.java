@@ -20,7 +20,7 @@ import ch.alpine.tensor.num.GaussScalar;
 
 class CompatibleUnitQTest {
   @Test
-  public void testCompatibleUnitQ() {
+  void testCompatibleUnitQ() {
     assertTrue(CompatibleUnitQ.SI().with(Unit.of("kgf^2*L^-3")).test(Quantity.of(2, "N^2*m^-9")));
     assertTrue(CompatibleUnitQ.SI().with(Unit.of("cup")).test(Quantity.of(2, "L")));
     assertTrue(CompatibleUnitQ.SI().with(Unit.of("m^2*kg*s^-3")).test(Quantity.of(3, "W")));
@@ -29,7 +29,7 @@ class CompatibleUnitQTest {
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     Predicate<Scalar> predicate = Serialization.copy(CompatibleUnitQ.SI().with(Unit.of("N*s")));
     String string = predicate.toString();
     assertTrue(string.startsWith("CompatibleUnitQ["));
@@ -37,7 +37,7 @@ class CompatibleUnitQTest {
   }
 
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     CompatibleUnitQ compatibleUnitQ = Serialization.copy(CompatibleUnitQ.SI());
     assertTrue(compatibleUnitQ.with(Unit.of("m*s^-1")).test(Quantity.of(2, "km*ms^-1")));
     assertTrue(CompatibleUnitQ.SI().with(Unit.of("PS^2")).test(Quantity.of(2, "W^2")));
@@ -46,20 +46,20 @@ class CompatibleUnitQTest {
   }
 
   @Test
-  public void testAssignable() {
+  void testAssignable() {
     assertFalse(Quantity.class.isAssignableFrom(RealScalar.ONE.getClass()));
     assertTrue(Quantity.class.isAssignableFrom(Quantity.of(1, "s").getClass()));
   }
 
   @Test
-  public void testOne() {
+  void testOne() {
     GaussScalar s = GaussScalar.of(2, 13);
     assertTrue(CompatibleUnitQ.SI().with(Unit.ONE).test(s));
     assertTrue(CompatibleUnitQ.SI().with("").test(s));
   }
 
   @Test
-  public void testNonReal() {
+  void testNonReal() {
     GaussScalar s = GaussScalar.of(2, 13);
     Scalar q1 = Quantity.of(s, "fiction");
     Scalar q2 = Quantity.of(GaussScalar.of(3, 13), "end^2");
@@ -81,7 +81,7 @@ class CompatibleUnitQTest {
   }
 
   @Test
-  public void testTime() {
+  void testTime() {
     Predicate<Scalar> predicate = CompatibleUnitQ.SI().with(Unit.of("h"));
     assertTrue(predicate.test(Quantity.of(0, "K^0*Hz^-1")));
     assertTrue(predicate.test(Quantity.of(1, "F*S^-1")));
@@ -94,13 +94,13 @@ class CompatibleUnitQTest {
   }
 
   @Test
-  public void testWithFail() {
+  void testWithFail() {
     assertThrows(NullPointerException.class, () -> CompatibleUnitQ.SI().with((Unit) null));
     assertThrows(NullPointerException.class, () -> CompatibleUnitQ.SI().with((String) null));
   }
 
   @Test
-  public void testInNullFail() {
+  void testInNullFail() {
     assertThrows(NullPointerException.class, () -> CompatibleUnitQ.in(null));
   }
 }

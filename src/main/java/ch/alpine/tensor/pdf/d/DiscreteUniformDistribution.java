@@ -102,6 +102,6 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%d, %d]", getClass().getSimpleName(), min, max);
+    return String.format("DiscreteUniformDistribution[%d, %d]", min, max);
   }
 }

@@ -45,7 +45,7 @@ class DiscreteDistributionTest {
   };
 
   @Test
-  public void testInverseCDF() {
+  void testInverseCDF() {
     for (Distribution distribution : DISTRIBUTIONS)
       if (distribution instanceof InverseCDF) {
         InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -60,7 +60,7 @@ class DiscreteDistributionTest {
   }
 
   @Test
-  public void testInverseCDFIncreasing() {
+  void testInverseCDFIncreasing() {
     for (Distribution distribution : DISTRIBUTIONS)
       if (distribution instanceof InverseCDF) {
         InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -72,7 +72,7 @@ class DiscreteDistributionTest {
   }
 
   @Test
-  public void testMean() {
+  void testMean() {
     for (Distribution distribution : DISTRIBUTIONS) {
       RandomVariate.of(distribution);
       Scalar scalar = Mean.of(distribution);
@@ -81,7 +81,7 @@ class DiscreteDistributionTest {
   }
 
   @Test
-  public void testVariance() {
+  void testVariance() {
     for (Distribution distribution : DISTRIBUTIONS) {
       Scalar scalar = Variance.of(distribution);
       FiniteScalarQ.require(scalar);

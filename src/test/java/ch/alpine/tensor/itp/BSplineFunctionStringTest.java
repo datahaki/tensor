@@ -36,7 +36,7 @@ import ch.alpine.tensor.sca.Clips;
 // {(1 - t)^3, 4 - 6 t^2 + 3 t^3, 1 + 3 t + 3 t^2 - 3 t^3, t^3}/6
 class BSplineFunctionStringTest {
   @Test
-  public void testConstant() {
+  void testConstant() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(0, Tensors.vector(2, 1, 5, 0, -2));
     assertEquals(bSplineFunction.apply(RealScalar.of(0)), RealScalar.of(2));
     assertEquals(bSplineFunction.apply(RealScalar.of(0.3333)), RealScalar.of(2));
@@ -52,7 +52,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testLinear() {
+  void testLinear() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(1, Tensors.vector(2, 1, 5, 0, -2));
     assertEquals(bSplineFunction.apply(RealScalar.of(0)), RealScalar.of(2));
     assertEquals(bSplineFunction.apply(RationalScalar.of(1, 2)), RationalScalar.of(3, 2));
@@ -68,7 +68,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testLinearCurve() {
+  void testLinearCurve() {
     Tensor control = Tensors.fromString("{{2, 3}, {1, 0}, {5, 7}, {0, 0}, {-2, 3}}");
     assertTrue(MatrixQ.of(control));
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(1, control);
@@ -77,7 +77,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testQuadratic() {
+  void testQuadratic() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(2, Tensors.vector(2, 1, 5, 0, -2));
     assertEquals(bSplineFunction.apply(RealScalar.of(0)), RealScalar.of(2));
     assertEquals(bSplineFunction.apply(RealScalar.of(1)), RationalScalar.of(5, 3));
@@ -86,7 +86,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testQuadraticSymmetry() {
+  void testQuadraticSymmetry() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(2, Tensors.vector(0, 1, 2, 3));
     Tensor r1 = bSplineFunction.apply(RealScalar.of(0.5));
     Tensor r2 = bSplineFunction.apply(RealScalar.of(1.5));
@@ -97,7 +97,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testCubic() {
+  void testCubic() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, Tensors.vector(2, 1, 5, 0, -2));
     assertEquals(bSplineFunction.apply(RealScalar.of(0)), RealScalar.of(2));
     assertEquals(bSplineFunction.apply(RationalScalar.HALF), RationalScalar.of(173, 96));
@@ -106,7 +106,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testCubicLinear() {
+  void testCubicLinear() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, Tensors.vector(2, 1, 0, -1, -2));
     assertEquals(bSplineFunction.apply(RealScalar.of(0)), RealScalar.of(2));
     assertEquals(bSplineFunction.apply(RealScalar.of(1)), RationalScalar.of(13, 12));
@@ -116,7 +116,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testSymmetric() {
+  void testSymmetric() {
     Tensor control = Tensors.vector(1, 5, 3, -1, 0);
     int n = control.length() - 1;
     for (int degree = 0; degree <= 5; ++degree) {
@@ -129,7 +129,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Tensor control = Tensors.fromString("{2[m], 7[m], 3[m]}");
     Clip clip = Clips.interval(2, 7);
     int n = control.length() - 1;
@@ -144,7 +144,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testSingleton() {
+  void testSingleton() {
     for (int degree = 0; degree < 4; ++degree) {
       ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(degree, Tensors.vector(99));
       assertEquals(bSplineFunction.apply(RealScalar.ZERO), RealScalar.of(99));
@@ -153,7 +153,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testIndex() {
+  void testIndex() {
     for (int degree = 0; degree <= 5; ++degree)
       for (int length = 2; length <= 6; ++length) {
         ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(degree, IdentityMatrix.of(length));
@@ -167,7 +167,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testSerializable() throws Exception {
+  void testSerializable() throws Exception {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, Tensors.vector(2, 1, 0, -1, -2));
     Tensor value0 = bSplineFunction.apply(RealScalar.of(2.3));
     ScalarTensorFunction copy = Serialization.copy(bSplineFunction);
@@ -176,7 +176,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testSymmetry() {
+  void testSymmetry() {
     Distribution distribution = DiscreteUniformDistribution.of(-4, 7);
     int n = 20;
     Tensor domain = Subdivide.of(0, n - 1, 31);
@@ -193,7 +193,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testBasisWeights1a() {
+  void testBasisWeights1a() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(1, UnitVector.of(3, 1));
     Tensor limitMask = Range.of(1, 2).map(bSplineFunction);
     ExactTensorQ.require(limitMask);
@@ -201,7 +201,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testBasisWeights2() {
+  void testBasisWeights2() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(2, UnitVector.of(5, 2));
     Tensor limitMask = Range.of(1, 4).map(bSplineFunction);
     ExactTensorQ.require(limitMask);
@@ -209,7 +209,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testBasisWeights3a() {
+  void testBasisWeights3a() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, UnitVector.of(7, 3));
     Tensor limitMask = Range.of(2, 5).map(bSplineFunction);
     ExactTensorQ.require(limitMask);
@@ -217,7 +217,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testBasisWeights3b() {
+  void testBasisWeights3b() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, UnitVector.of(5, 2));
     Tensor limitMask = Range.of(1, 4).map(bSplineFunction);
     ExactTensorQ.require(limitMask);
@@ -225,7 +225,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testBasisWeights4() {
+  void testBasisWeights4() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(4, UnitVector.of(9, 4));
     Tensor limitMask = Range.of(2, 7).map(bSplineFunction);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
@@ -234,7 +234,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testBasisWeights5a() {
+  void testBasisWeights5a() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(5, UnitVector.of(11, 5));
     Tensor limitMask = Range.of(3, 8).map(bSplineFunction);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
@@ -243,7 +243,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testBasisWeights5b() {
+  void testBasisWeights5b() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(5, UnitVector.of(9, 4));
     Tensor limitMask = Range.of(2, 7).map(bSplineFunction);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
@@ -252,7 +252,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testBasisWeights5c() {
+  void testBasisWeights5c() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(5, UnitVector.of(7, 3));
     Tensor limitMask = Range.of(1, 6).map(bSplineFunction);
     assertEquals(Total.of(limitMask), RealScalar.ONE);
@@ -261,7 +261,7 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IllegalArgumentException.class, () -> BSplineFunctionString.of(-2, Tensors.empty()));
     assertThrows(IllegalArgumentException.class, () -> BSplineFunctionString.of(-1, Tensors.empty()));
     assertThrows(TensorRuntimeException.class, () -> BSplineFunctionString.of(-0, Tensors.empty()));
@@ -270,12 +270,12 @@ class BSplineFunctionStringTest {
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(IllegalArgumentException.class, () -> BSplineFunctionString.of(-1, Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
-  public void testOutsideFail() {
+  void testOutsideFail() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, Tensors.vector(2, 1, 0, -1, -2));
     bSplineFunction.apply(RealScalar.of(4));
     assertThrows(TensorRuntimeException.class, () -> bSplineFunction.apply(RealScalar.of(-0.1)));

@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.tri.Sin;
 
 class PiTest {
   @Test
-  public void testTrigonometry() {
+  void testTrigonometry() {
     Scalar pi = Pi.in(100);
     Scalar sin_pi = Sin.of(pi);
     Scalar cos_pi = Cos.of(pi);
@@ -27,25 +27,25 @@ class PiTest {
   }
 
   @Test
-  public void testTwo2() {
+  void testTwo2() {
     assertEquals(Pi.HALF.multiply(RealScalar.of(2)), Pi.VALUE);
     assertEquals(Pi.VALUE.divide(RealScalar.of(2)), Pi.HALF);
   }
 
   @Test
-  public void testTwo3() {
+  void testTwo3() {
     assertEquals(Pi.TWO.divide(RealScalar.of(2)), Pi.VALUE);
     assertEquals(Pi.VALUE.multiply(RealScalar.of(2)), Pi.TWO);
   }
 
   @Test
-  public void testTwo4() {
+  void testTwo4() {
     assertEquals(Pi.HALF.multiply(RealScalar.of(4)), Pi.TWO);
     assertEquals(Pi.TWO.divide(RealScalar.of(4)), Pi.HALF);
   }
 
   @Test
-  public void testString() {
+  void testString() {
     Scalar pi = Pi.in(110);
     assertInstanceOf(DecimalScalar.class, pi);
     String PI99 = "3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706";
@@ -53,7 +53,7 @@ class PiTest {
   }
 
   @Test
-  public void test500() {
+  void test500() {
     Random random = new Random();
     Scalar pi = Pi.in(400 + random.nextInt(200));
     assertInstanceOf(DecimalScalar.class, pi);
@@ -62,7 +62,7 @@ class PiTest {
   }
 
   @Test
-  public void testDoublePrecision() {
+  void testDoublePrecision() {
     assertEquals(Pi.VALUE.number().doubleValue(), Math.PI);
     assertEquals(Pi.HALF.number().doubleValue(), Math.PI * 0.5);
     assertEquals(Pi.TWO.number().doubleValue(), Math.PI / 0.5);

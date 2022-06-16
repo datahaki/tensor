@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class TensorsPredicateTest {
   @Test
-  public void testIsEmpty() {
+  void testIsEmpty() {
     assertFalse(Tensors.isEmpty(RealScalar.ONE));
     assertTrue(Tensors.isEmpty(Tensors.empty()));
     assertTrue(Tensors.isEmpty(Tensors.vector()));
@@ -16,7 +16,7 @@ class TensorsPredicateTest {
   }
 
   @Test
-  public void testNonEmpty() {
+  void testNonEmpty() {
     assertTrue(Tensors.nonEmpty(RealScalar.ONE));
     assertFalse(Tensors.nonEmpty(Tensors.empty()));
     assertFalse(Tensors.nonEmpty(Tensors.vector()));
@@ -24,7 +24,7 @@ class TensorsPredicateTest {
   }
 
   @Test
-  public void testIsUnmodifiable() {
+  void testIsUnmodifiable() {
     Tensor canwrite = Tensors.vector(1, 2, 3);
     Tensor readonly = canwrite.unmodifiable();
     assertFalse(Tensors.isUnmodifiable(canwrite));

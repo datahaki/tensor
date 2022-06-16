@@ -21,14 +21,14 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ArrayQTest {
   @Test
-  public void testScalar() {
+  void testScalar() {
     assertTrue(ArrayQ.of(RealScalar.ONE));
     assertTrue(ArrayQ.of(ComplexScalar.fromPolar(3.7, 9.8)));
     assertTrue(ArrayQ.of(Quantity.of(4, "m")));
   }
 
   @Test
-  public void testIsArray() {
+  void testIsArray() {
     Tensor d = DoubleScalar.of(0.12);
     assertTrue(ArrayQ.of(d));
     assertTrue(ArrayQ.of(Tensors.empty()));
@@ -41,7 +41,7 @@ class ArrayQTest {
 
   @ParameterizedTest
   @ValueSource(ints = { 0, 1, 2, 3, 4 })
-  public void testOfRank(int rank) {
+  void testOfRank(int rank) {
     assertEquals(rank == 0, ArrayQ.ofRank(RealScalar.ONE, rank));
     assertEquals(rank == 1, ArrayQ.ofRank(Tensors.vector(1, 2, 3), rank));
     assertEquals(rank == 2, ArrayQ.ofRank(HilbertMatrix.of(2, 3), rank));
@@ -49,13 +49,13 @@ class ArrayQTest {
   }
 
   @Test
-  public void testRequire() {
+  void testRequire() {
     Tensor tensor = Tensors.fromString("{{1, 2}, 3}");
     assertThrows(TensorRuntimeException.class, () -> ArrayQ.require(tensor));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> ArrayQ.of(null));
   }
 }

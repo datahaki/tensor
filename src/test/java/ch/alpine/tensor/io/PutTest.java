@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensors;
 
 class PutTest {
   @Test
-  public void testUnstructured(@TempDir File tempDir) throws IOException {
+  void testUnstructured(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.put");
     Tensor tensor = Tensors.fromString("{{2, 3.123+3*I, 34.1231}, {556, 3/456, -323/2, {3, 8.45`}}}");
     Put.of(file, tensor.unmodifiable());
@@ -24,7 +24,7 @@ class PutTest {
   }
 
   @Test
-  public void testNullFail(@TempDir File tempDir) {
+  void testNullFail(@TempDir File tempDir) {
     File file = new File(tempDir, "file.put");
     assertThrows(Exception.class, () -> Put.of(file, null));
   }

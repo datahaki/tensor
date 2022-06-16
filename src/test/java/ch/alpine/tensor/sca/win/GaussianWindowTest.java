@@ -17,21 +17,21 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class GaussianWindowTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Scalar apply = GaussianWindow.FUNCTION.apply(RealScalar.of(0.2));
     Scalar exact = RealScalar.of(0.80073740291680804078);
     Tolerance.CHOP.requireClose(apply, exact);
   }
 
   @Test
-  public void testOutside() throws ClassNotFoundException, IOException {
+  void testOutside() throws ClassNotFoundException, IOException {
     Scalar scalar = Serialization.copy(GaussianWindow.FUNCTION).apply(RealScalar.of(-0.52));
     assertEquals(scalar, RealScalar.ZERO);
     assertEquals(GaussianWindow.FUNCTION.toString(), "GaussianWindow[3/10]");
   }
 
   @Test
-  public void testCustom() throws ClassNotFoundException, IOException {
+  void testCustom() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator copy = Serialization.copy(GaussianWindow.of(RationalScalar.of(2, 10)));
     Scalar apply = copy.apply(RealScalar.of(0.4));
     Scalar exact = RealScalar.of(0.13533528323661262);
@@ -39,12 +39,12 @@ class GaussianWindowTest {
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     assertEquals(GaussianWindow.FUNCTION.toString(), "GaussianWindow[3/10]");
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> GaussianWindow.of(null));
   }
 }

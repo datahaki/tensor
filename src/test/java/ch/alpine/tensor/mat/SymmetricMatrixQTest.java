@@ -18,18 +18,18 @@ import ch.alpine.tensor.sca.Chop;
 
 class SymmetricMatrixQTest {
   @Test
-  public void testHilbert() {
+  void testHilbert() {
     SymmetricMatrixQ.require(HilbertMatrix.of(7));
     assertTrue(SymmetricMatrixQ.of(HilbertMatrix.of(10)));
   }
 
   @Test
-  public void testHilbert2() {
+  void testHilbert2() {
     assertFalse(SymmetricMatrixQ.of(HilbertMatrix.of(2, 3)));
   }
 
   @Test
-  public void testNumeric() {
+  void testNumeric() {
     Tensor matrix = Tensors.fromString("{{1, 2.000000000000001}, {2, 1}}");
     SymmetricMatrixQ.require(matrix);
     assertFalse(SymmetricMatrixQ.of(matrix, Chop.NONE));
@@ -37,39 +37,39 @@ class SymmetricMatrixQTest {
   }
 
   @Test
-  public void testVector() {
+  void testVector() {
     assertFalse(SymmetricMatrixQ.of(Tensors.vector(1, 2, 3)));
   }
 
   @Test
-  public void testNaN() {
+  void testNaN() {
     assertFalse(SymmetricMatrixQ.of(ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3)));
   }
 
   @Test
-  public void testScalar() {
+  void testScalar() {
     assertFalse(SymmetricMatrixQ.of(RealScalar.ONE));
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertFalse(SymmetricMatrixQ.of(Tensors.empty()));
   }
 
   @Test
-  public void testFailNull() {
+  void testFailNull() {
     assertThrows(NullPointerException.class, () -> SymmetricMatrixQ.of(null));
   }
 
   @Test
-  public void testRequire() {
+  void testRequire() {
     SymmetricMatrixQ.require(IdentityMatrix.of(3));
     assertThrows(TensorRuntimeException.class, () -> SymmetricMatrixQ.require(Tensors.vector(1, 2, 3)));
     assertThrows(TensorRuntimeException.class, () -> SymmetricMatrixQ.require(Cross.skew3(Tensors.vector(1, 2, 3))));
   }
 
   @Test
-  public void testRequireEmptyFail() {
+  void testRequireEmptyFail() {
     assertThrows(TensorRuntimeException.class, () -> SymmetricMatrixQ.require(Tensors.empty()));
   }
 }

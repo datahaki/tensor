@@ -13,21 +13,21 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class InfluenceMatrixQTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor matrix = Tensors.fromString("{{1, 0}, {2, 3}}");
     assertFalse(InfluenceMatrixQ.of(matrix));
     assertThrows(TensorRuntimeException.class, () -> InfluenceMatrixQ.require(matrix));
   }
 
   @Test
-  public void testChop() {
+  void testChop() {
     Tensor matrix = Tensors.fromString("{{1, 0}, {2, 3}}");
     assertFalse(InfluenceMatrixQ.of(matrix, Tolerance.CHOP));
     assertThrows(TensorRuntimeException.class, () -> InfluenceMatrixQ.require(matrix, Tolerance.CHOP));
   }
 
   @Test
-  public void testProblem0() {
+  void testProblem0() {
     Tensor design = Tensors.fromString( //
         "{{-304[m], -144[m], 16[m]}, {-19[m], -9[m], 1[m]}, {285[m], 135[m], -15[m]}, {-152[m], -72[m], 8[m]}}");
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
@@ -35,7 +35,7 @@ class InfluenceMatrixQTest {
   }
 
   @Test
-  public void testProblem1() {
+  void testProblem1() {
     Tensor design = Tensors.fromString( //
         "{{0[m], 0[m], 0[m]}, {0[m], -228[m], 0[m]}, {0[m], -266[m], 0[m]}, {0[m], 342[m], 0[m]}}");
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
@@ -43,7 +43,7 @@ class InfluenceMatrixQTest {
   }
 
   @Test
-  public void testProblem2() {
+  void testProblem2() {
     Tensor design = Tensors.fromString( //
         "{{0[m], 0[m], 0[m]}, {0[m], 30[m], -285[m]}, {0[m], -32[m], 304[m]}, {0[m], 10[m], -95[m]}}");
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);

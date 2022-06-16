@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
 
 class AngleVectorTest {
   @Test
-  public void testNumeric() {
+  void testNumeric() {
     for (int count = 0; count < 12; ++count) {
       Scalar scalar = N.DOUBLE.of(RationalScalar.of(count, 12));
       Tensor tensor = AngleVector.turns(scalar);
@@ -37,7 +37,7 @@ class AngleVectorTest {
   }
 
   @Test
-  public void testNorm() {
+  void testNorm() {
     Distribution distribution = UniformDistribution.of(Pi.VALUE.negate(), Pi.VALUE);
     for (int index = 0; index < 10; ++index) {
       Scalar angle = RandomVariate.of(distribution).negate(); // prevent angle == -pi
@@ -49,7 +49,7 @@ class AngleVectorTest {
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     Scalar angle = RealScalar.ONE;
     Tensor vector = AngleVector.of(angle);
     Tensor matrix = RotationMatrix.of(angle);
@@ -57,7 +57,7 @@ class AngleVectorTest {
   }
 
   @Test
-  public void testRotation() {
+  void testRotation() {
     ExactTensorQ.require(AngleVector.turns(RationalScalar.of(-2, 2)));
     assertEquals(AngleVector.turns(RationalScalar.of(-2, 2)), Tensors.vector(+1, 0));
     assertEquals(AngleVector.turns(RationalScalar.of(0, 2)), Tensors.vector(+1, 0));
@@ -66,7 +66,7 @@ class AngleVectorTest {
   }
 
   @Test
-  public void testRotationOfEquivalence() {
+  void testRotationOfEquivalence() {
     Distribution distribution = NormalDistribution.standard();
     for (int count = 0; count < 10; ++count) {
       Scalar fraction = RandomVariate.of(distribution);
@@ -75,7 +75,7 @@ class AngleVectorTest {
   }
 
   @Test
-  public void testModify() {
+  void testModify() {
     Tensor o1 = AngleVector.turns(RealScalar.ZERO);
     assertEquals(o1, UnitVector.of(2, 0));
     o1.set(RealScalar.of(3), 0);
@@ -84,7 +84,7 @@ class AngleVectorTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(TensorRuntimeException.class, () -> AngleVector.of(null));
   }
 }

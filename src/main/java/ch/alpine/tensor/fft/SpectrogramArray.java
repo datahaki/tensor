@@ -135,6 +135,6 @@ public class SpectrogramArray implements TensorUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%d, %d]", getClass().getSimpleName(), windowLength, offset);
+    return String.format("SpectrogramArray[%d, %d]", windowLength, offset);
   }
 }

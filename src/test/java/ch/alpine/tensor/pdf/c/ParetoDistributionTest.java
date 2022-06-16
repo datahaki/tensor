@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class ParetoDistributionTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(1.8)));
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(4.0)), RealScalar.of(0.16619372965993448));
@@ -46,7 +46,7 @@ class ParetoDistributionTest {
   }
 
   @Test
-  public void testMeanVariance() {
+  void testMeanVariance() {
     Distribution distribution = ParetoDistribution.of(2.3, 7.8);
     Scalar mean = Mean.of(distribution);
     Scalar varc = Variance.of(distribution);
@@ -65,32 +65,32 @@ class ParetoDistributionTest {
   }
 
   @Test
-  public void testMeanVarianceIndeterminate() {
+  void testMeanVarianceIndeterminate() {
     Distribution distribution = ParetoDistribution.of(2.3, 1);
     assertFalse(FiniteScalarQ.of(Mean.of(distribution)));
     assertFalse(FiniteScalarQ.of(Variance.of(distribution)));
   }
 
   @Test
-  public void testMarkov() {
+  void testMarkov() {
     Random random = new Random();
     Distribution distribution = ParetoDistribution.of(1.1 + random.nextDouble(), 1.1 + random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(TensorRuntimeException.class, () -> ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(0)));
     assertThrows(TensorRuntimeException.class, () -> ParetoDistribution.of(RealScalar.of(0), RealScalar.of(3)));
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> ParetoDistribution.of(RealScalar.of(3.3), Quantity.of(2.3, "m")));
   }
 
   @Test
-  public void testKQuantityFail() {
+  void testKQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> ParetoDistribution.of(Quantity.of(2.3, "m"), RealScalar.of(3.3)));
   }
 }

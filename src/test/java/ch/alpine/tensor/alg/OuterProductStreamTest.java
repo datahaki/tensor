@@ -9,13 +9,13 @@ import org.junit.jupiter.api.Test;
 
 class OuterProductStreamTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     long count = OuterProductStream.of(Size.of(Arrays.asList(3, 4)), new int[] { 1, 0 }).count();
     assertEquals(count, 12);
   }
 
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertEquals(OuterProductStream.class.getModifiers(), 0);
   }
 }

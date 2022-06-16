@@ -19,32 +19,32 @@ import ch.alpine.tensor.sca.Round;
 
 class CsvHelperTest {
   @Test
-  public void testFraction() {
+  void testFraction() {
     Scalar scalar = CsvHelper.FUNCTION.apply(RationalScalar.of(1, 2));
     assertEquals(scalar.toString(), "0.5");
   }
 
   @Test
-  public void testInteger() {
+  void testInteger() {
     Scalar scalar = CsvHelper.FUNCTION.apply(RealScalar.of(-2345891274545L));
     assertEquals(scalar.toString(), "-2345891274545");
   }
 
   @Test
-  public void testString1() {
+  void testString1() {
     Scalar scalar = StringScalar.of("abc!");
     assertEquals(CsvHelper.FUNCTION.apply(scalar).toString(), "\"abc!\"");
   }
 
   @Test
-  public void testString2() {
+  void testString2() {
     String string = "\"abc!\"";
     Scalar scalar = StringScalar.of(string);
     assertEquals(CsvHelper.FUNCTION.apply(scalar).toString(), string);
   }
 
   @Test
-  public void testDecimal() {
+  void testDecimal() {
     Scalar scalar = (Scalar) DoubleScalar.of(0.25).map(Round._6);
     assertInstanceOf(DecimalScalar.class, scalar);
     scalar = CsvHelper.FUNCTION.apply(scalar);
@@ -52,44 +52,44 @@ class CsvHelperTest {
   }
 
   @Test
-  public void testQuotes() {
+  void testQuotes() {
     Scalar inQuotes = StringScalar.of("\"abc\"");
     assertEquals(CsvHelper.wrap(StringScalar.of("abc")), inQuotes);
     assertEquals(CsvHelper.wrap(inQuotes), inQuotes);
   }
 
   @Test
-  public void testSingleInQuotes() {
+  void testSingleInQuotes() {
     Scalar inQuotes = StringScalar.of("\"a\"");
     assertEquals(CsvHelper.wrap(StringScalar.of("a")), inQuotes);
     assertEquals(CsvHelper.wrap(inQuotes), inQuotes);
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     Scalar inQuotes = StringScalar.of("\"\"");
     assertEquals(CsvHelper.wrap(StringScalar.of("")), inQuotes);
     assertEquals(CsvHelper.wrap(inQuotes), inQuotes);
   }
 
   @Test
-  public void testComplexFail() {
+  void testComplexFail() {
     assertThrows(TensorRuntimeException.class, () -> CsvHelper.FUNCTION.apply(ComplexScalar.of(3, 4)));
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> CsvHelper.FUNCTION.apply(Quantity.of(3, "s")));
   }
 
   @Test
-  public void testFailSingleQuote() {
+  void testFailSingleQuote() {
     CsvHelper.requireQuotesFree("");
     assertThrows(StringIndexOutOfBoundsException.class, () -> CsvHelper.wrap(StringScalar.of("\"")));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(IllegalArgumentException.class, () -> CsvHelper.wrap(StringScalar.of("\"abc\"\"")));
     assertThrows(IllegalArgumentException.class, () -> CsvHelper.wrap(StringScalar.of("abc\"")));
     assertThrows(IllegalArgumentException.class, () -> CsvHelper.wrap(StringScalar.of("\"abc")));

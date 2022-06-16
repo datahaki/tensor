@@ -9,7 +9,6 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.jet.DurationScalar;
 import ch.alpine.tensor.mat.ex.MatrixPower;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.num.GaussScalar;
@@ -55,7 +54,7 @@ public enum IdentityMatrix {
   }
 
   /** function provides the neutral multiplicative element for a matrix
-   * with entries of type {@link GaussScalar}, {@link DurationScalar}, etc.
+   * with entries of type {@link GaussScalar}, etc.
    * 
    * @param matrix square
    * @return

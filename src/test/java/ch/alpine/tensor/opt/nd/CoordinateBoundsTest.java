@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class CoordinateBoundsTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     // CoordinateBoundingBox[{{0, 1}, {1, 2}, {2, 1}, {3, 2}, {4, 1}}]
     Tensor tensor = Tensors.fromString("{{0, 1}, {1, 2}, {2, 1}, {3, 2}, {4, 1}}");
     CoordinateBoundingBox box = CoordinateBounds.of(tensor);
@@ -29,45 +29,45 @@ class CoordinateBoundsTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Tensor tensor = Tensors.fromString("{{1, 9, 3}, {4, 5}}");
     assertThrows(IllegalArgumentException.class, () -> CoordinateBounds.of(tensor));
   }
 
   @Test
-  public void testFailEmpty() {
+  void testFailEmpty() {
     // assertThrows(TensorRuntimeException.class, () -> CoordinateBoundingBox.of(Tensors.empty()));
     assertThrows(NoSuchElementException.class, () -> CoordinateBounds.of(Tensors.empty()));
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> CoordinateBounds.of(RealScalar.ZERO));
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     Serialization.copy(CoordinateBounds.of(Tensors.vector(2, 3, 9), Tensors.vector(12, 23, 11)));
   }
 
   @Test
-  public void testNulls() {
+  void testNulls() {
     assertThrows(NullPointerException.class, () -> CoordinateBounds.of(null, Tensors.vector(3)));
     assertThrows(NullPointerException.class, () -> CoordinateBounds.of(Tensors.vector(3), null));
   }
 
   @Test
-  public void testFail0() {
+  void testFail0() {
     assertThrows(IllegalArgumentException.class, () -> CoordinateBounds.of(Tensors.vector(-2, -3), Tensors.vector(8, 9, 3)));
   }
 
   @Test
-  public void testFail2() {
+  void testFail2() {
     assertThrows(TensorRuntimeException.class, () -> CoordinateBounds.of(Tensors.vector(-2, 10), Tensors.vector(8, 9)));
   }
 
   @Test
-  public void testFail3() {
+  void testFail3() {
     CoordinateBounds.of(Tensors.vector(0), Tensors.fromString("{2}"));
     assertThrows(TensorRuntimeException.class, () -> CoordinateBounds.of(Tensors.vector(0), Tensors.fromString("{2[m]}")));
   }

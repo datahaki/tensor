@@ -21,13 +21,13 @@ import ch.alpine.tensor.red.Variance;
 
 class StandardNormalDistributionTest {
   @Test
-  public void testPdfZero() {
+  void testPdfZero() {
     Scalar x = StandardNormalDistribution.INSTANCE.at(RealScalar.ZERO);
     assertTrue(x.toString().startsWith("0.398942280"));
   }
 
   @Test
-  public void testPdfOneSymmetric() {
+  void testPdfOneSymmetric() {
     Scalar x = StandardNormalDistribution.INSTANCE.at(RealScalar.ONE);
     Scalar xn = StandardNormalDistribution.INSTANCE.at(RealScalar.ONE.negate());
     assertTrue(x.toString().startsWith("0.241970724"));
@@ -35,7 +35,7 @@ class StandardNormalDistributionTest {
   }
 
   @Test
-  public void testCdf() {
+  void testCdf() {
     CDF cdf = StandardNormalDistribution.INSTANCE;
     Tolerance.CHOP.requireClose(cdf.p_lessEquals(RealScalar.ZERO), RealScalar.of(0.5));
     Scalar p = cdf.p_lessThan(RealScalar.of(0.3));
@@ -45,14 +45,14 @@ class StandardNormalDistributionTest {
   }
 
   @Test
-  public void testQuantile() {
+  void testQuantile() {
     Tolerance.CHOP.requireClose( //
         StandardNormalDistribution.INSTANCE.quantile(RealScalar.of(0.6307)), //
         RealScalar.of(0.3337078836526057));
   }
 
   @Test
-  public void testInverseCDF() {
+  void testInverseCDF() {
     Distribution distribution = StandardNormalDistribution.INSTANCE;
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
@@ -60,7 +60,7 @@ class StandardNormalDistributionTest {
   }
 
   @Test
-  public void testMeanVar() {
+  void testMeanVar() {
     Distribution distribution = NormalDistribution.standard();
     assertEquals(Mean.of(distribution), RealScalar.ZERO);
     assertEquals(Variance.of(distribution), RealScalar.ONE);
@@ -73,7 +73,7 @@ class StandardNormalDistributionTest {
   }
 
   @Test
-  public void testKurtosis() {
+  void testKurtosis() {
     Distribution distribution = NormalDistribution.standard();
     assertEquals(Kurtosis.of(distribution), RealScalar.of(3));
   }

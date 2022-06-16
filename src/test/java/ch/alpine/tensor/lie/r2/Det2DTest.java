@@ -16,31 +16,31 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 
 class Det2DTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     assertEquals(Det2D.of(Tensors.vector(1, 0), Tensors.vector(0, 1)), RealScalar.ONE);
     assertEquals(Det2D.of(Tensors.vector(1, 1), Tensors.vector(0, 1)), RealScalar.ONE);
     assertEquals(Det2D.of(Tensors.vector(1, 2), Tensors.vector(0, 1)), RealScalar.ONE);
   }
 
   @Test
-  public void testMore() {
+  void testMore() {
     assertEquals(Det2D.of(Tensors.vector(0, 1), Tensors.vector(1, 1)), RealScalar.ONE.negate());
   }
 
   @Test
-  public void testArea() {
+  void testArea() {
     Scalar det = Det2D.of(UnitVector.of(2, 0), UnitVector.of(2, 1));
     assertEquals(det, RealScalar.ONE);
     assertTrue(ExactScalarQ.of(det));
   }
 
   @Test
-  public void testFailP() {
+  void testFailP() {
     assertThrows(IllegalArgumentException.class, () -> Det2D.of(Tensors.vector(1, 0), Tensors.vector(0, 1, 0)));
   }
 
   @Test
-  public void testFailQ() {
+  void testFailQ() {
     assertThrows(TensorRuntimeException.class, () -> Det2D.of(Tensors.vector(1, 0, 0), Tensors.vector(0, 1)));
   }
 }

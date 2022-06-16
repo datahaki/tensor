@@ -18,13 +18,13 @@ import ch.alpine.tensor.sca.Chop;
 
 class FrobeniusNormTest {
   @Test
-  public void testVector() {
+  void testVector() {
     Scalar norm = FrobeniusNorm.of(Tensors.vector(3, 4));
     assertEquals(norm, RealScalar.of(5));
   }
 
   @Test
-  public void testBetween() {
+  void testBetween() {
     Tensor t1 = Tensors.fromString("{0, {1, 2}, 3}");
     Tensor t2 = Tensors.fromString("{2, {-1, 0}, 8}");
     Scalar d1 = FrobeniusNorm.between(t1, t2);
@@ -33,19 +33,19 @@ class FrobeniusNormTest {
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     Scalar norm = FrobeniusNorm.of(IdentityMatrix.of(4));
     assertEquals(norm, RealScalar.of(2));
   }
 
   @Test
-  public void testMatrixComplex() {
+  void testMatrixComplex() {
     Scalar norm = FrobeniusNorm.of(FourierMatrix.of(25));
     assertInstanceOf(RealScalar.class, norm);
   }
 
   @Test
-  public void testRank3() {
+  void testRank3() {
     Scalar expected = RealScalar.of(2.449489742783178);
     Scalar norm = FrobeniusNorm.of(LeviCivitaTensor.of(3));
     Chop._14.requireClose(norm, expected);

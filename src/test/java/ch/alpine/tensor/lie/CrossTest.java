@@ -37,7 +37,7 @@ class CrossTest {
   }
 
   @Test
-  public void testUnits() {
+  void testUnits() {
     Tensor v1 = UnitVector.of(3, 0);
     Tensor v2 = UnitVector.of(3, 1);
     Tensor v3 = UnitVector.of(3, 2);
@@ -50,7 +50,7 @@ class CrossTest {
   }
 
   @Test
-  public void testNormal() {
+  void testNormal() {
     Distribution distribution = NormalDistribution.standard();
     for (int c = 0; c < 10; ++c) {
       Tensor a = RandomVariate.of(distribution, 3);
@@ -60,7 +60,7 @@ class CrossTest {
   }
 
   @Test
-  public void testUniform() {
+  void testUniform() {
     Distribution distribution = DiscreteUniformDistribution.of(-10, 10);
     for (int c = 0; c < 10; ++c) {
       Tensor a = RandomVariate.of(distribution, 3);
@@ -70,7 +70,7 @@ class CrossTest {
   }
 
   @Test
-  public void testGauss() {
+  void testGauss() {
     Tensor v1 = Tensors.of( //
         GaussScalar.of(3, 7), //
         GaussScalar.of(4, 7), //
@@ -88,12 +88,12 @@ class CrossTest {
   }
 
   @Test
-  public void testSkew3LengthFail() {
+  void testSkew3LengthFail() {
     assertThrows(TensorRuntimeException.class, () -> Cross.skew3(Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
-  public void testFailLength2() {
+  void testFailLength2() {
     Tensor v1 = UnitVector.of(3, 0);
     Tensor v2 = UnitVector.of(2, 1);
     assertThrows(TensorRuntimeException.class, () -> Cross.of(v1, v2));
@@ -101,7 +101,7 @@ class CrossTest {
   }
 
   @Test
-  public void testFailLength4() {
+  void testFailLength4() {
     Tensor v1 = UnitVector.of(4, 0);
     Tensor v2 = UnitVector.of(3, 1);
     assertThrows(TensorRuntimeException.class, () -> Cross.of(v1, v2));
@@ -109,36 +109,36 @@ class CrossTest {
   }
 
   @Test
-  public void test2DSimple() {
+  void test2DSimple() {
     // Cross[{1, 2}] == {-2, 1}
     assertEquals(Cross.of(Tensors.vector(1, 2)), Tensors.vector(-2, 1));
   }
 
   @Test
-  public void test2DRotation() {
+  void test2DRotation() {
     Tensor x = Tensors.vector(1, 2);
     Tensor mat = Tensors.fromString("{{0, -1}, {1, 0}}");
     assertEquals(Cross.of(x), mat.dot(x));
   }
 
   @Test
-  public void test2DApply() {
+  void test2DApply() {
     Tensor tensor = Tensor.of(HilbertMatrix.of(10, 2).stream().map(Cross::of));
     assertEquals(Dimensions.of(tensor), Arrays.asList(10, 2));
   }
 
   @Test
-  public void test2DFail() {
+  void test2DFail() {
     assertThrows(ClassCastException.class, () -> Cross.of(HilbertMatrix.of(2)));
   }
 
   @Test
-  public void test2DFail2() {
+  void test2DFail2() {
     assertThrows(TensorRuntimeException.class, () -> Cross.of(Tensors.vector(1, 2, 3)));
   }
 
   @Test
-  public void test2DFailNull() {
+  void test2DFailNull() {
     assertThrows(NullPointerException.class, () -> Cross.of(null));
   }
 }

@@ -47,14 +47,14 @@ class NullSpaceTest {
   }
 
   @RepeatedTest(10)
-  public void testZerosUsingSvd(RepetitionInfo repetitionInfo) {
+  void testZerosUsingSvd(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     _checkZeros(Array.zeros(n, n));
     _checkZeros(N.DOUBLE.of(Array.zeros(n, n)));
   }
 
   @Test
-  public void testRowReduce() {
+  void testRowReduce() {
     Tensor m = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}}");
     Tensor r = NullSpace.of(m);
     for (Tensor v : r)
@@ -64,7 +64,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testZeros2() {
+  void testZeros2() {
     Tensor m = Array.zeros(5, 5);
     Tensor r = NullSpace.of(m);
     assertEquals(r, IdentityMatrix.of(5));
@@ -72,7 +72,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testIdentity() {
+  void testIdentity() {
     Tensor m = IdentityMatrix.of(5);
     Tensor r = NullSpace.of(m);
     assertEquals(r, Tensors.empty());
@@ -80,7 +80,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testIdentityReversed() {
+  void testIdentityReversed() {
     Tensor m = Reverse.of(IdentityMatrix.of(5));
     Tensor r = NullSpace.of(m);
     assertEquals(r, Tensors.empty());
@@ -88,7 +88,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testWikipediaKernel() {
+  void testWikipediaKernel() {
     Tensor A = Tensors.matrix(new Number[][] { //
         { 1, 0, -3, 0, 2, -8 }, //
         { 0, 1, 5, 0, -1, 4 }, //
@@ -103,7 +103,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testSome1() {
+  void testSome1() {
     Tensor A = Tensors.matrix(new Number[][] { //
         { -1, -2, -1 }, //
         { -3, 1, 5 }, //
@@ -120,7 +120,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testSome2() {
+  void testSome2() {
     Tensor A = Tensors.matrix(new Number[][] { //
         { 1, 0, -3, 0, 2, -8 }, //
         { 0, 0, 1, 0, -1, 4 }, //
@@ -135,7 +135,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testSome3() {
+  void testSome3() {
     Tensor A = Tensors.matrix(new Number[][] { //
         { 0, 0, 0, 0, 0, 0 }, //
         { 0, 0, 1, 0, -1, 4 }, //
@@ -150,13 +150,13 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testSingleVector() {
+  void testSingleVector() {
     Tensor nullsp = NullSpace.of(Tensors.of(Tensors.vector(0.0, 1.0)));
     Chop._12.requireClose(nullsp, Tensors.of(Tensors.vector(1.0, 0.0)));
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     // {{17/101-32/101*I, 0, 1, -99/101+20/101*I},
     // {106/505-253/505*I, 1, 0, -89/101+19/101*I}}
     Tensor m = Tensors.fromString("{{1+3*I, 2, 3, 4+I}, {5, 6+I, 7, 8}}");
@@ -170,7 +170,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testMatsim() {
+  void testMatsim() {
     Tensor matrix = Tensors.matrixDouble(new double[][] { //
         { 1.0, -0.2, -0.8 }, //
         { -0.2, 1.0, -0.8 }, //
@@ -182,7 +182,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Tensor mat = Tensors.of(QuantityTensor.of(Tensors.vector(1, 2), "m"));
     Tensor nul = NullSpace.of(mat);
     assertEquals(nul, Tensors.fromString("{{1, -1/2}}"));
@@ -190,7 +190,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testQuantityMixed() {
+  void testQuantityMixed() {
     Tensor mat = Tensors.of( //
         Tensors.of(Quantity.of(-2, "m"), Quantity.of(1, "kg"), Quantity.of(3, "s")));
     Tensor nul = NullSpace.of(mat);
@@ -198,7 +198,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testQuantityMixed2() {
+  void testQuantityMixed2() {
     Tensor mat = Tensors.of( //
         Tensors.of(Quantity.of(-2, "m"), Quantity.of(1, "kg"), Quantity.of(3, "s")), //
         Tensors.of(Quantity.of(-4, "m"), Quantity.of(2, "kg"), Quantity.of(6, "s")), //
@@ -210,7 +210,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testRectangle2x3() {
+  void testRectangle2x3() {
     Tensor matrix = Tensors.fromString("{{1, 0, 0}, {0, 0, 0}}");
     Tensor tensor = NullSpace.of(matrix);
     assertEquals(tensor.get(0), UnitVector.of(3, 1));
@@ -219,7 +219,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testRectangle3x2() {
+  void testRectangle3x2() {
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}");
     Tensor tensor = NullSpace.of(matrix);
     assertEquals(tensor.get(0), UnitVector.of(2, 1));
@@ -228,7 +228,7 @@ class NullSpaceTest {
 
   @ParameterizedTest
   @ValueSource(ints = { 3, 4, 5 })
-  public void testZeros(int d) {
+  void testZeros(int d) {
     Tensor matrix = Array.zeros(3, d);
     Tensor id = IdentityMatrix.of(d);
     assertEquals(id, NullSpace.of(matrix));
@@ -236,7 +236,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testExtended() {
+  void testExtended() {
     Distribution distribution = CauchyDistribution.of(-1, 2);
     Random random = new Random(1344343);
     int n = 10;
@@ -264,7 +264,7 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     int prime = 7879;
     Random random = new Random();
     Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), 3, 7);
@@ -275,24 +275,24 @@ class NullSpaceTest {
   }
 
   @Test
-  public void testDecimalScalar() {
+  void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(3, 5).map(N.DECIMAL128);
     Tensor ns = NullSpace.of(matrix);
     Tolerance.CHOP.requireAllZero(matrix.dot(Transpose.of(ns)));
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> NullSpace.of(RealScalar.ONE));
   }
 
   @Test
-  public void testFailVector() {
+  void testFailVector() {
     assertThrows(TensorRuntimeException.class, () -> NullSpace.of(Tensors.vector(1, 2, 3, 1)));
   }
 
   @Test
-  public void testFailRank3() {
+  void testFailRank3() {
     assertThrows(ClassCastException.class, () -> NullSpace.of(LeviCivitaTensor.of(3)));
   }
 }

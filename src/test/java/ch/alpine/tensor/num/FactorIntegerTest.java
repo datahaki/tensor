@@ -22,26 +22,26 @@ class FactorIntegerTest {
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     Map<BigInteger, Integer> map = FactorInteger.of(BigInteger.valueOf(0));
     // System.out.println(map);
     assertEquals(map, Collections.singletonMap(BigInteger.ZERO, 1));
   }
 
   @Test
-  public void testOne() {
+  void testOne() {
     Map<BigInteger, Integer> map = FactorInteger.of(BigInteger.ONE);
     assertEquals(map, Collections.singletonMap(BigInteger.ONE, 1));
   }
 
   @Test
-  public void testTwo() {
+  void testTwo() {
     Map<BigInteger, Integer> map = FactorInteger.of(BigInteger.valueOf(2));
     assertEquals(map, Collections.singletonMap(BigInteger.valueOf(2), 1));
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     Map<BigInteger, Integer> map = FactorInteger.of(BigInteger.valueOf(144002631));
     assertEquals(map.size(), 4);
     assertEquals(map.get(BigInteger.valueOf(3)), (Integer) 1);
@@ -51,7 +51,7 @@ class FactorIntegerTest {
   }
 
   @Test
-  public void testRandom() {
+  void testRandom() {
     Random random = new Random();
     for (int count = 0; count < 10; ++count) {
       BigInteger n = new BigInteger(32 + count, random);
@@ -60,7 +60,7 @@ class FactorIntegerTest {
   }
 
   @Test
-  public void testSmall() {
+  void testSmall() {
     for (int count = 0; count < 100; ++count) {
       BigInteger n = BigInteger.valueOf(count);
       _check(n);
@@ -68,7 +68,7 @@ class FactorIntegerTest {
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(IllegalArgumentException.class, () -> FactorInteger.of(BigInteger.valueOf(-3)));
   }
 }

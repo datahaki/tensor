@@ -17,13 +17,13 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class GaussianEliminationTest {
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     int modifiers = GaussianElimination.class.getModifiers();
     assertEquals(modifiers & 0x1, 0x1); // non public but package
   }
 
   @Test
-  public void testPivots() {
+  void testPivots() {
     Tensor matrix = HilbertMatrix.of(3);
     Tensor rhs = Tensors.vector(-1, -2, 3);
     Tensor ge1 = GaussianElimination.of(matrix, rhs, Pivots.ARGMAX_ABS);
@@ -35,7 +35,7 @@ class GaussianEliminationTest {
   }
 
   @Test
-  public void testDeterminant() {
+  void testDeterminant() {
     for (int n = 4; n < 7; ++n) {
       Tensor matrix = RandomVariate.of(DiscreteUniformDistribution.of(-20, 100), n, n);
       GaussianElimination gaussianElimination = //
@@ -48,13 +48,13 @@ class GaussianEliminationTest {
   }
 
   @Test
-  public void testRecreateError1() {
+  void testRecreateError1() {
     assertThrows(IllegalArgumentException.class, () -> LinearSolve.of(HilbertMatrix.of(4, 5), UnitVector.of(4, 3)));
     assertThrows(IllegalArgumentException.class, () -> LinearSolve.of(HilbertMatrix.of(5, 4), UnitVector.of(4, 3)));
   }
 
   @Test
-  public void testRecreateError2() {
+  void testRecreateError2() {
     assertThrows(IllegalArgumentException.class, () -> LinearSolve.of(HilbertMatrix.of(4, 4), UnitVector.of(5, 3)));
   }
 }

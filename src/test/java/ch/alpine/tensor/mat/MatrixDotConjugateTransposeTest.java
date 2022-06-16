@@ -17,13 +17,13 @@ import ch.alpine.tensor.red.Entrywise;
 
 class MatrixDotConjugateTransposeTest {
   @Test
-  public void testDimensions() {
+  void testDimensions() {
     Tensor tensor = MatrixDotConjugateTranspose.of(HilbertMatrix.of(2, 3));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 2));
   }
 
   @Test
-  public void testDotIdentity() {
+  void testDotIdentity() {
     Tensor re = RandomVariate.of(NormalDistribution.standard(), 2, 4);
     Tensor im = RandomVariate.of(NormalDistribution.standard(), 2, 4);
     Tensor tensor = Entrywise.with(ComplexScalar::of).apply(re, im);

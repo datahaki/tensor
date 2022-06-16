@@ -22,7 +22,7 @@ import ch.alpine.tensor.mat.re.RowReduce;
 
 class ToeplitzMatrixTest {
   @Test
-  public void testSquare() {
+  void testSquare() {
     Tensor matrix = ToeplitzMatrix.of(Tensors.vector(1, 2, 3, 4, 5));
     assertTrue(SquareMatrixQ.of(matrix));
     assertEquals(matrix.get(0), Range.of(3, 6));
@@ -31,47 +31,47 @@ class ToeplitzMatrixTest {
   }
 
   @Test
-  public void testSymmetric() {
+  void testSymmetric() {
     SymmetricMatrixQ.require(ToeplitzMatrix.of(Tensors.vector(5, 4, 3, 4, 5)));
   }
 
   @Test
-  public void testRank2() {
+  void testRank2() {
     Tensor matrix = ToeplitzMatrix.of(Tensors.vector(0, 1, 0, 1, 0));
     SymmetricMatrixQ.require(matrix);
     assertEquals(RowReduce.of(matrix), Tensors.fromString("{{1, 0, 1}, {0, 1, 0}, {0, 0, 0}}"));
   }
 
   @Test
-  public void testFullRank() {
+  void testFullRank() {
     Tensor matrix = RowReduce.of(ToeplitzMatrix.of(Tensors.vector(1, 2, 3, 5, 9)));
     assertEquals(matrix, IdentityMatrix.of(3));
   }
 
   @Test
-  public void testRankDeficient() {
+  void testRankDeficient() {
     Tensor matrix = ToeplitzMatrix.of(Tensors.vector(1, 2, 3, 4, 5));
     assertEquals(Det.of(matrix), RealScalar.of(0));
     assertEquals(NullSpace.of(matrix), Tensors.fromString("{{1, -2, 1}}"));
   }
 
   @Test
-  public void testFailEven() {
+  void testFailEven() {
     assertThrows(TensorRuntimeException.class, () -> ToeplitzMatrix.of(Tensors.vector(1, 2)));
   }
 
   @Test
-  public void testFailEmpty() {
+  void testFailEmpty() {
     assertThrows(TensorRuntimeException.class, () -> ToeplitzMatrix.of(Tensors.empty()));
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> ToeplitzMatrix.of(RealScalar.of(5)));
   }
 
   @Test
-  public void testFailMatrix() {
+  void testFailMatrix() {
     assertThrows(ClassCastException.class, () -> ToeplitzMatrix.of(HilbertMatrix.of(5)));
   }
 }

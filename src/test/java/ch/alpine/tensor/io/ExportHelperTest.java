@@ -26,7 +26,7 @@ import ch.alpine.tensor.nrm.FrobeniusNorm;
 
 class ExportHelperTest {
   @Test
-  public void testGif(@TempDir File tempDir) throws IOException {
+  void testGif(@TempDir File tempDir) throws IOException {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(128);
     Tensor image = Tensors.fromString("{{{255, 2, 3, 255}, {0, 0, 0, 0}, {91, 120, 230, 255}, {0, 0, 0, 0}}}");
     ExportHelper.of(Extension.GIF, image, byteArrayOutputStream);
@@ -41,7 +41,7 @@ class ExportHelperTest {
   }
 
   @Test
-  public void testGif2() throws IOException {
+  void testGif2() throws IOException {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream(128);
     Tensor row1 = Tensors.fromString("{{255, 2, 3, 255}, {0, 0, 0, 0}, {91, 120, 230, 255}, {0, 0, 0, 0}}");
     Tensor image = Tensors.of(row1, row1);
@@ -55,19 +55,19 @@ class ExportHelperTest {
   }
 
   @Test
-  public void testFileExtensionFail() throws IOException {
+  void testFileExtensionFail() throws IOException {
     OutputStream outputStream = new ByteArrayOutputStream(512);
     ExportHelper.of(Extension.VECTOR, Tensors.empty(), outputStream);
   }
 
   @Test
-  public void testGzFail() {
+  void testGzFail() {
     OutputStream outputStream = new ByteArrayOutputStream(512);
     assertThrows(Exception.class, () -> ExportHelper.of(Extension.GZ, Tensors.empty(), outputStream));
   }
 
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertFalse(Modifier.isPublic(ExportHelper.class.getModifiers()));
   }
 }

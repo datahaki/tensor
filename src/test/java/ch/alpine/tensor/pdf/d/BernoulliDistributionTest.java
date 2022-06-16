@@ -27,7 +27,7 @@ import ch.alpine.tensor.sca.N;
 
 class BernoulliDistributionTest {
   @Test
-  public void testEquals() {
+  void testEquals() {
     Scalar p = RationalScalar.of(1, 3);
     Distribution distribution = BernoulliDistribution.of(p);
     PDF pdf = PDF.of(distribution);
@@ -38,7 +38,7 @@ class BernoulliDistributionTest {
   }
 
   @Test
-  public void testLessThan() {
+  void testLessThan() {
     Scalar p = RationalScalar.of(1, 3);
     Distribution distribution = BernoulliDistribution.of(p);
     CDF cdf = CDF.of(distribution);
@@ -48,7 +48,7 @@ class BernoulliDistributionTest {
   }
 
   @Test
-  public void testLessEquals() {
+  void testLessEquals() {
     Scalar p = RationalScalar.of(1, 3);
     Distribution distribution = BernoulliDistribution.of(p);
     CDF cdf = CDF.of(distribution);
@@ -58,7 +58,7 @@ class BernoulliDistributionTest {
   }
 
   @Test
-  public void testSample() {
+  void testSample() {
     final Scalar p = RationalScalar.of(1, 3);
     Distribution distribution = BernoulliDistribution.of(p);
     Tensor list = RandomVariate.of(distribution, 2000);
@@ -71,7 +71,7 @@ class BernoulliDistributionTest {
   }
 
   @Test
-  public void testMarkov() {
+  void testMarkov() {
     TestMarkovChebyshev.markov(BernoulliDistribution.of(0));
     TestMarkovChebyshev.markov(BernoulliDistribution.of(1));
     TestMarkovChebyshev.markov(BernoulliDistribution.of(0.5));
@@ -80,7 +80,7 @@ class BernoulliDistributionTest {
   }
 
   @Test
-  public void testNumber() {
+  void testNumber() {
     Distribution distribution = BernoulliDistribution.of(0.5);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertEquals(inverseCDF.quantile(RealScalar.of(0.50)), RealScalar.ZERO);
@@ -90,13 +90,13 @@ class BernoulliDistributionTest {
   }
 
   @Test
-  public void testFailP() {
+  void testFailP() {
     assertThrows(TensorRuntimeException.class, () -> BernoulliDistribution.of(RationalScalar.of(-1, 3)));
     assertThrows(TensorRuntimeException.class, () -> BernoulliDistribution.of(RationalScalar.of(4, 3)));
   }
 
   @Test
-  public void testFailPNumber() {
+  void testFailPNumber() {
     assertThrows(TensorRuntimeException.class, () -> BernoulliDistribution.of(-1e-10));
     assertThrows(TensorRuntimeException.class, () -> BernoulliDistribution.of(1.0001));
   }

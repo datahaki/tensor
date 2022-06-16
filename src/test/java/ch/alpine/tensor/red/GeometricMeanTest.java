@@ -16,7 +16,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class GeometricMeanTest {
   @Test
-  public void testGeo1() {
+  void testGeo1() {
     assertEquals(GeometricMean.of(Tensors.vectorDouble(4, 9)), RealScalar.of(6));
     Tensor a = GeometricMean.of(Tensors.vectorDouble(8, 27, 525));
     // 48.4029
@@ -24,7 +24,7 @@ class GeometricMeanTest {
   }
 
   @Test
-  public void testGeo2() {
+  void testGeo2() {
     Tensor a = Tensors.matrixDouble(new double[][] { { 5, 10 }, { 2, 1 }, { 4, 3 }, { 12, 15 } });
     Tensor b = GeometricMean.of(a);
     // {4.68069, 4.60578}
@@ -33,17 +33,17 @@ class GeometricMeanTest {
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> GeometricMean.of(RealScalar.ONE));
   }
 
   @Test
-  public void testFailEmpty() {
+  void testFailEmpty() {
     assertThrows(ArithmeticException.class, () -> GeometricMean.of(Tensors.empty()));
   }
 
   @Test
-  public void testFailMatrix() {
+  void testFailMatrix() {
     Tensor mean = GeometricMean.of(HilbertMatrix.of(4));
     Tensor expected = Tensors.vector(0.4518010018049224, 0.3021375397356768, 0.2295748846661433, 0.18575057999133598);
     Chop._14.requireClose(mean, expected);

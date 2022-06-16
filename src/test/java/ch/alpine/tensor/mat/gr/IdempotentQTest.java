@@ -14,14 +14,14 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 
 class IdempotentQTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor matrix = Tensors.of(UnitVector.of(2, 1), UnitVector.of(2, 1));
     assertTrue(IdempotentQ.of(matrix));
     assertFalse(IdempotentQ.of(HilbertMatrix.of(2, 3)));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> IdempotentQ.of(null));
   }
 }

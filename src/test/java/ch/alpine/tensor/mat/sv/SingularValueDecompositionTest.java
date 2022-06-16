@@ -36,7 +36,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class SingularValueDecompositionTest {
   @Test
-  public void testSvd1() {
+  void testSvd1() {
     Random random = new Random(3);
     Tensor mat = RandomVariate.of(NormalDistribution.standard(), random, 8, 5);
     SingularValueDecomposition svd = InitTest.svd(mat);
@@ -44,7 +44,7 @@ class SingularValueDecompositionTest {
   }
 
   @Test
-  public void testSvd1Units() {
+  void testSvd1Units() {
     Random random = new Random(3);
     Tensor mat = RandomVariate.of(NormalDistribution.of(Quantity.of(1, "s"), Quantity.of(2, "s")), random, 8, 5);
     SingularValueDecomposition svd = InitTest.svd(mat);
@@ -52,7 +52,7 @@ class SingularValueDecompositionTest {
   }
 
   @Test
-  public void testSvd2() {
+  void testSvd2() {
     Tensor mat = RandomVariate.of(NormalDistribution.standard(), 10, 3);
     Tensor B = Tensors.matrixLong(new long[][] { //
         { 1, 2, 3 }, { 0, 0, 4 }, { 0, 0, 0 } });
@@ -66,7 +66,7 @@ class SingularValueDecompositionTest {
   }
 
   @Test
-  public void testSvd3() {
+  void testSvd3() {
     Tensor mat = RandomVariate.of(NormalDistribution.standard(), 20, 4);
     Tensor B = Tensors.matrixLong(new long[][] { //
         { 1, 2, 3, -1 }, { 0, 0, 4, 2 }, { 0, 0, 0, 1 }, { 0, 0, 0, 0 } });
@@ -81,7 +81,7 @@ class SingularValueDecompositionTest {
   }
 
   @Test
-  public void testSvdNull() {
+  void testSvdNull() {
     int n = 20;
     Tensor mat = RandomVariate.of(NormalDistribution.standard(), n, 4);
     Tensor B = Tensors.matrixLong(new long[][] { //
@@ -96,7 +96,7 @@ class SingularValueDecompositionTest {
   }
 
   @Test
-  public void testSvd4() {
+  void testSvd4() {
     Random random = new Random(1);
     int n = 11;
     Tensor mat = RandomVariate.of(NormalDistribution.standard(), random, n, n);
@@ -107,7 +107,7 @@ class SingularValueDecompositionTest {
   }
 
   @Test
-  public void testSvdR1() {
+  void testSvdR1() {
     Random random = new Random(1);
     int n = 15;
     Tensor matrix = Tensors.matrix((r, c) -> RationalScalar.of(random.nextInt(1000) - 500, random.nextInt(1000) + 1), n, n);
@@ -117,7 +117,7 @@ class SingularValueDecompositionTest {
   }
 
   @Test
-  public void testSvdR2() {
+  void testSvdR2() {
     Random random = new Random(1);
     Tensor mat = Tensors.matrix((r, c) -> RationalScalar.of(random.nextInt(100) - 50, random.nextInt(100) + 1), 20, 4);
     Tensor B = Tensors.matrix(new Scalar[][] { //
@@ -131,7 +131,7 @@ class SingularValueDecompositionTest {
   }
 
   @Test
-  public void testSo3() {
+  void testSo3() {
     Tensor ad = LeviCivitaTensor.of(3);
     Tensor sk = ad.dot(Tensors.vector(1, 1, 1));
     SingularValueDecomposition svd = InitTest.svd(sk);
@@ -139,28 +139,28 @@ class SingularValueDecompositionTest {
   }
 
   @Test
-  public void testFullConstant() {
+  void testFullConstant() {
     Tensor d = Tensors.matrix((i, j) -> RealScalar.of(1e-10), 10, 10);
     SingularValueDecomposition svd = InitTest.svd(d);
     assertEquals(MatrixRankSvd.of(svd), 1);
   }
 
   @Test
-  public void testHilbert1() {
+  void testHilbert1() {
     Tensor d = HilbertMatrix.of(200, 20);
     SingularValueDecomposition svd = InitTest.svd(d);
     assertTrue(13 <= MatrixRankSvd.of(svd));
   }
 
   @Test
-  public void testHilbert2() {
+  void testHilbert2() {
     Tensor d = HilbertMatrix.of(100, 10);
     SingularValueDecomposition svd = InitTest.svd(d);
     assertEquals(10, MatrixRankSvd.of(svd));
   }
 
   @Test
-  public void testJordan1() {
+  void testJordan1() {
     Tensor d = DiagonalMatrix.with(Tensors.vector(1e-10, 1, 1, 1, 1e-10));
     IntStream.range(0, 4).forEach(j -> d.set(RealScalar.of(1e-10), j, j + 1));
     SingularValueDecomposition svd = InitTest.svd(d);
@@ -168,14 +168,14 @@ class SingularValueDecompositionTest {
   }
 
   @Test
-  public void testJordan2() {
+  void testJordan2() {
     Tensor d = DiagonalMatrix.with(Tensors.vector(1, 1, 1, 1, 1));
     IntStream.range(0, 4).forEach(j -> d.set(RealScalar.of(1e-10), j + 1, j));
     InitTest.svd(d);
   }
 
   @Test
-  public void testScdR3() {
+  void testScdR3() {
     int n = 10;
     int k = 8;
     Tensor mat = Array.zeros(n, n);
@@ -187,13 +187,13 @@ class SingularValueDecompositionTest {
   }
 
   @Test
-  public void testEye() {
+  void testEye() {
     assertEquals(MatrixRankSvd.of(IdentityMatrix.of(10)), 10);
     assertEquals(MatrixRankSvd.of(DiagonalMatrix.with(Tensors.vector(1, 1, 1, 1, 0, 0))), 4);
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> SingularValueDecomposition.of(RealScalar.ONE));
     assertThrows(TensorRuntimeException.class, () -> SingularValueDecomposition.of(Tensors.vector(1, 2, 3)));
     assertThrows(ClassCastException.class, () -> SingularValueDecomposition.of(Tensors.fromString("{{1, 2}, {2, {3}}}")));
@@ -201,7 +201,7 @@ class SingularValueDecompositionTest {
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertTrue(Modifier.isPublic(SingularValueDecomposition.class.getModifiers()));
   }
 }

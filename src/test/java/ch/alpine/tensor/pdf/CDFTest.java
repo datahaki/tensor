@@ -10,13 +10,13 @@ import ch.alpine.tensor.pdf.c.ErlangDistribution;
 
 class CDFTest {
   @Test
-  public void testCDFFail() {
+  void testCDFFail() {
     Distribution distribution = ErlangDistribution.of(3, RealScalar.of(0.3));
     assertThrows(IllegalArgumentException.class, () -> CDF.of(distribution));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> CDF.of(null));
   }
 }

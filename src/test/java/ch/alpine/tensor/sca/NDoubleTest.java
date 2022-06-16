@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class NDoubleTest {
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(NDouble.class.getModifiers()));
   }
 }

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 class BigDecimalTest {
   @Test
-  public void testPrecision() {
+  void testPrecision() {
     BigDecimal value = new BigDecimal(new BigInteger("12333"), new MathContext(100, RoundingMode.HALF_EVEN));
     value = new BigDecimal("12333", new MathContext(100, RoundingMode.HALF_EVEN));
     value.precision();
@@ -22,7 +22,7 @@ class BigDecimalTest {
   }
 
   @Test
-  public void testMultiply() {
+  void testMultiply() {
     BigDecimal a = new BigDecimal("19.2134534512334534343");
     assertEquals(a.precision(), 21);
     BigDecimal b = new BigDecimal("33.8375654545222327883");
@@ -37,7 +37,7 @@ class BigDecimalTest {
   }
 
   @Test
-  public void testDivide() {
+  void testDivide() {
     BigDecimal a = new BigDecimal("0.0002134534512334534343");
     BigDecimal b = new BigDecimal("33333.8375654545222327883");
     BigDecimal ab2 = a.divide(b, MathContext.DECIMAL128);
@@ -45,7 +45,7 @@ class BigDecimalTest {
   }
 
   @Test
-  public void testSqrt() {
+  void testSqrt() {
     MathContext mc = MathContext.DECIMAL128;
     BigDecimal b = new BigDecimal("29.1373503383756545452223278558123399996876");
     assertEquals(b.precision(), 42);

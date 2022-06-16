@@ -20,7 +20,7 @@ import ch.alpine.tensor.num.GaussScalar;
 
 class RotationMatrixTest {
   @Test
-  public void testPointThree() {
+  void testPointThree() {
     Tensor matrix = RotationMatrix.of(RealScalar.of(0.3));
     Tensor eye = matrix.dot(Transpose.of(matrix));
     assertEquals(eye, IdentityMatrix.of(2));
@@ -30,7 +30,7 @@ class RotationMatrixTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Tensor matrix = RotationMatrix.of(ComplexScalar.of(1, 2));
     Tolerance.CHOP.requireClose(matrix.Get(0, 0), ComplexScalar.of(2.0327230070196655294, -3.0518977991518000575));
     Tolerance.CHOP.requireClose(matrix.Get(0, 1), ComplexScalar.of(-3.1657785132161681467, -1.9596010414216058971));
@@ -38,14 +38,14 @@ class RotationMatrixTest {
   }
 
   @Test
-  public void testNumber() {
+  void testNumber() {
     Tensor matrix = RotationMatrix.of(0.2);
     assertFalse(Tolerance.CHOP.isClose(matrix, IdentityMatrix.of(2)));
     Tolerance.CHOP.requireClose(matrix.dot(RotationMatrix.of(-0.2)), IdentityMatrix.of(2));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> RotationMatrix.of(GaussScalar.of(2, 7)));
   }
 }

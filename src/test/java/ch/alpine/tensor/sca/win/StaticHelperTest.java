@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class StaticHelperTest {
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(StaticHelper.class.getModifiers()));
   }
 }

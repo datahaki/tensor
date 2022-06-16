@@ -26,7 +26,7 @@ class QuaternionToRotationMatrixTest {
   private static final Tensor ID3 = IdentityMatrix.of(3);
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     Quaternion quaternion = Quaternion.of(0.240810, -0.761102, -0.355923, -0.485854);
     Tensor matrix = QuaternionToRotationMatrix.of(quaternion);
     assertTrue(OrthogonalMatrixQ.of(matrix));
@@ -36,7 +36,7 @@ class QuaternionToRotationMatrixTest {
   }
 
   @Test
-  public void testRandom() {
+  void testRandom() {
     Distribution distribution = NormalDistribution.standard();
     for (int index = 0; index < 10; ++index) {
       Tensor wxyz = RandomVariate.of(distribution, 4);
@@ -51,7 +51,7 @@ class QuaternionToRotationMatrixTest {
   }
 
   @Test
-  public void testQuaternionVector() {
+  void testQuaternionVector() {
     Random random = new SecureRandom();
     for (int index = 0; index < 10; ++index) {
       Quaternion quaternion = Quaternion.of(random.nextGaussian(), random.nextGaussian(), random.nextGaussian(), random.nextGaussian());
@@ -69,7 +69,7 @@ class QuaternionToRotationMatrixTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> QuaternionToRotationMatrix.of(Quaternion.of(0, 0, 0, 0)));
     assertThrows(TensorRuntimeException.class, () -> QuaternionToRotationMatrix.of(Quaternion.of(0.0, 0.0, 0.0, 0.0)));
   }

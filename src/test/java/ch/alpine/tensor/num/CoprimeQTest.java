@@ -16,7 +16,7 @@ class CoprimeQTest {
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     _check(3, 9, false);
     _check(2, 3, true);
     _check(1, 7, true);

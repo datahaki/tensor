@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.N;
 
 class RationalizeTest {
   @Test
-  public void testBasics1000() {
+  void testBasics1000() {
     final Scalar max = RealScalar.of(1000);
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(max);
     // assertEquals(Rationalize.of(RealScalar.of(Math.PI), RealScalar.of(102)).toString(), "311/99");
@@ -62,14 +62,14 @@ class RationalizeTest {
   }
 
   @Test
-  public void testLong() {
+  void testLong() {
     RandomVariate.of(UniformDistribution.of(-20, 20), 1000).stream() //
         .map(Scalar.class::cast) //
         .forEach(RationalizeTest::betterEquals);
   }
 
   @Test
-  public void testBasics5() {
+  void testBasics5() {
     final Scalar max = RealScalar.of(5);
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(max);
     Scalar tenth = RealScalar.of(0.1);
@@ -78,7 +78,7 @@ class RationalizeTest {
   }
 
   @Test
-  public void testBasics4() {
+  void testBasics4() {
     final Scalar max = RealScalar.of(4);
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(max);
     Scalar tenth = RealScalar.of(0.1);
@@ -87,7 +87,7 @@ class RationalizeTest {
   }
 
   @Test
-  public void testRational() {
+  void testRational() {
     Scalar THND = RealScalar.of(1000);
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(THND);
     // final Scalar THND = RealScalar.of(1000);
@@ -107,7 +107,7 @@ class RationalizeTest {
   }
 
   @Test
-  public void testSol1() {
+  void testSol1() {
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(RealScalar.of(6));
     Scalar tenth = RealScalar.of(0.1);
     // double comp = 1/6.0; // 0.1666...
@@ -117,7 +117,7 @@ class RationalizeTest {
   }
 
   @Test
-  public void testRoundConsistency() {
+  void testRoundConsistency() {
     Tensor vector = Tensors.vectorDouble(-2.5, -2, -1.5, -1, -0.5, 0, 0.1, 0.5, 1, 1.5, 2, 2.5);
     List<Long> round = vector.stream() //
         .map(RealScalar.class::cast) //
@@ -136,7 +136,7 @@ class RationalizeTest {
   }
 
   @Test
-  public void testDenominator() {
+  void testDenominator() {
     Random random = new Random();
     Distribution distribution = UniformDistribution.of(-0.5, 0.5);
     for (Tensor scalar : RandomVariate.of(distribution, 100)) {
@@ -146,7 +146,7 @@ class RationalizeTest {
   }
 
   @Test
-  public void testRationalize() {
+  void testRationalize() {
     assertEquals(Rationalize._1.apply(DoubleScalar.of(12.435)), RationalScalar.of(124, 10));
     assertEquals(Rationalize._2.apply(DoubleScalar.of(12.435)), RationalScalar.of(311, 25));
     assertEquals(Rationalize._3.apply(DoubleScalar.of(12.435)), RationalScalar.of(12435, 1000));
@@ -155,12 +155,12 @@ class RationalizeTest {
   }
 
   @Test
-  public void testFailPositive() {
+  void testFailPositive() {
     assertThrows(TensorRuntimeException.class, () -> Rationalize.withDenominatorLessEquals(RealScalar.ZERO));
   }
 
   @Test
-  public void testFailIntegerQ() {
+  void testFailIntegerQ() {
     assertThrows(TensorRuntimeException.class, () -> Rationalize.withDenominatorLessEquals(RealScalar.of(1.23)));
   }
 }

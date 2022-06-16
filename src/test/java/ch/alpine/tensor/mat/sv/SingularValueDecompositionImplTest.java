@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Modifier;
-import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
@@ -16,6 +15,7 @@ import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.chq.FiniteTensorQ;
 import ch.alpine.tensor.io.Get;
+import ch.alpine.tensor.io.OperatingSystem;
 import ch.alpine.tensor.io.ResourceData;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -35,51 +35,50 @@ class SingularValueDecompositionImplTest {
   }
 
   @Test
-  public void testResource() throws Exception {
-    String string = getClass().getResource("/mat/svd0.mathematica").getPath();
-    _check(Get.of(Paths.get(string).toFile()));
+  void testResource() throws Exception {
+    _check(Get.of(OperatingSystem.fileOfResource("/ch/alpine/tensor/mat/sv/svd0.mathematica")));
   }
 
   @Test
-  public void testCondition1() {
-    Tensor matrix = ResourceData.of("/mat/svd3.csv");
+  void testCondition1() {
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd3.csv");
     InitTest.svd(matrix);
   }
 
   @Test
-  public void testCondition2() {
-    Tensor matrix = ResourceData.of("/mat/svd2.csv");
+  void testCondition2() {
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd2.csv");
     InitTest.svd(matrix);
   }
 
   @Test
-  public void testCondition1UnitA() {
-    Tensor matrix = ResourceData.of("/mat/svd3.csv");
+  void testCondition1UnitA() {
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd3.csv");
     InitTest.svd(matrix.map(s -> Quantity.of(s, "m")));
   }
 
   @Test
-  public void testCondition1UnitB() {
-    Tensor matrix = ResourceData.of("/mat/svd3.csv").map(s -> Quantity.of(s, "m"));
+  void testCondition1UnitB() {
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd3.csv").map(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
     InitTest.svd(matrix);
   }
 
   @Test
-  public void testCondition2UnitA() {
-    Tensor matrix = ResourceData.of("/mat/svd2.csv").map(s -> Quantity.of(s, "m"));
+  void testCondition2UnitA() {
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd2.csv").map(s -> Quantity.of(s, "m"));
     InitTest.svd(matrix);
   }
 
   @Test
-  public void testCondition2UnitB() {
-    Tensor matrix = ResourceData.of("/mat/svd2.csv").map(s -> Quantity.of(s, "m"));
+  void testCondition2UnitB() {
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/sv/svd2.csv").map(s -> Quantity.of(s, "m"));
     matrix.append(matrix.get(0));
     InitTest.svd(matrix);
   }
 
   @Test
-  public void testEps() {
+  void testEps() {
     Tensor A = Tensors.fromString("{{1, 0}, {0, 1E-14}}");
     assertTrue(FiniteTensorQ.of(A));
     InitTest.svd(A.map(s -> Quantity.of(s, "kg")));
@@ -90,18 +89,18 @@ class SingularValueDecompositionImplTest {
   }
 
   @Test
-  public void testDecimalScalar() {
+  void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5, 3).map(N.DECIMAL128);
     SingularValueDecomposition.of(matrix);
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(SingularValueDecompositionImpl.class.getModifiers()));
   }
 
   @Test
-  public void testUnit() {
+  void testUnit() {
     Tensor a = Tensors.fromString("{{1, 0}, {0, 0}}").map(s -> Quantity.of(s, "m"));
     SingularValueDecomposition svd = SingularValueDecomposition.of(a);
     ExactTensorQ.require(svd.values());

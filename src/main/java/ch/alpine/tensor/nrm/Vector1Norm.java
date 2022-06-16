@@ -28,7 +28,10 @@ public enum Vector1Norm {
     return stream.map(Abs.FUNCTION).reduce(Scalar::add).orElseThrow();
   }
 
-  /** @param v1 vector
+  /** inspired by
+   * <a href="https://reference.wolfram.com/language/ref/ManhattanDistance.html">ManhattanDistance</a>
+   * 
+   * @param v1 vector
    * @param v2 vector
    * @return 1-norm of vector difference || v1 - v2 || */
   public static Scalar between(Tensor v1, Tensor v2) {

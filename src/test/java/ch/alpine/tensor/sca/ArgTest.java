@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
 
 class ArgTest {
   @Test
-  public void testArg() {
+  void testArg() {
     Scalar scalar = ComplexScalar.of(RationalScalar.of(-2, 3), RationalScalar.of(-5, 100));
     assertEquals(Arg.of(scalar).toString(), "-3.066732805879026");
     assertEquals(Arg.of(RealScalar.ZERO), RealScalar.ZERO);
@@ -34,14 +34,14 @@ class ArgTest {
   }
 
   @Test
-  public void testDecimal() {
+  void testDecimal() {
     MathContext mc = MathContext.DECIMAL128;
     assertEquals(Arg.of(DecimalScalar.of(new BigDecimal("3.14", mc), mc.getPrecision())), RealScalar.ZERO);
     assertEquals(Arg.of(DecimalScalar.of(new BigDecimal("-112.14", mc), mc.getPrecision())), RealScalar.of(Math.PI));
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Unit unit = Unit.of("s*m^3");
     Scalar s = Quantity.of(ComplexScalar.of(3, 4), unit);
     Scalar a = Arg.of(s);
@@ -50,17 +50,17 @@ class ArgTest {
   }
 
   @Test
-  public void testNaN() {
+  void testNaN() {
     assertEquals(Arg.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
   }
 
   @Test
-  public void testQuaternionFail() {
+  void testQuaternionFail() {
     assertThrows(TensorRuntimeException.class, () -> Arg.FUNCTION.apply(Quaternion.of(1, 2, 3, 4)));
   }
 
   @Test
-  public void testGaussScalarFail() {
+  void testGaussScalarFail() {
     Scalar scalar = GaussScalar.of(1, 7);
     assertThrows(TensorRuntimeException.class, () -> Arg.of(scalar));
   }

@@ -23,7 +23,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class FloorTest {
   @Test
-  public void testFloor() {
+  void testFloor() {
     assertEquals(Floor.of(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(Floor.of(RationalScalar.of(-5, 2)), RationalScalar.of(-3, 1));
     assertEquals(Floor.of(RationalScalar.of(5, 2)), RationalScalar.of(2, 1));
@@ -33,7 +33,7 @@ class FloorTest {
   }
 
   @Test
-  public void testHash() {
+  void testHash() {
     Tensor a = Tensors.of( //
         DoubleScalar.of(0.123), DoubleScalar.of(3.343), DoubleScalar.of(-0.123));
     Tensor b = a.map(Floor.FUNCTION);
@@ -43,7 +43,7 @@ class FloorTest {
   }
 
   @Test
-  public void testGetFloor() {
+  void testGetFloor() {
     Tensor v = Tensors.vectorDouble(3.5, 5.6, 9.12);
     Scalar s = Floor.of(v.Get(1));
     RealScalar rs = (RealScalar) s;
@@ -51,7 +51,7 @@ class FloorTest {
   }
 
   @Test
-  public void testLarge() {
+  void testLarge() {
     Scalar scalar = DoubleScalar.of(1e30);
     Scalar r = Round.of(scalar);
     Scalar f = Floor.of(scalar);
@@ -60,7 +60,7 @@ class FloorTest {
   }
 
   @Test
-  public void testRational1() {
+  void testRational1() {
     Scalar s = RationalScalar.of(234534584545L, 13423656767L); // 17.4717
     assertEquals(Floor.intValueExact(s), 17);
     assertEquals(Floor.longValueExact(s), 17);
@@ -70,13 +70,13 @@ class FloorTest {
   }
 
   @Test
-  public void testIntExactValueFail() {
+  void testIntExactValueFail() {
     assertThrows(TensorRuntimeException.class, () -> Floor.intValueExact(Quantity.of(1.2, "h")));
     assertThrows(TensorRuntimeException.class, () -> Floor.longValueExact(Quantity.of(4.5, "km*h^-1")));
   }
 
   @Test
-  public void testRational2() {
+  void testRational2() {
     Scalar s = RationalScalar.of(734534584545L, 13423656767L); // 54.7194
     Scalar r = Floor.of(s);
     assertEquals(r, RealScalar.of(54));
@@ -84,7 +84,7 @@ class FloorTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar c = Scalars.fromString("7-2*I");
     assertEquals(Floor.of(c), c);
     Scalar d = Scalars.fromString("7.9-1.1*I");
@@ -92,13 +92,13 @@ class FloorTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar scalar = Quantity.of(210.9, "K");
     assertEquals(Floor.FUNCTION.apply(scalar), Quantity.of(210, "K"));
   }
 
   @Test
-  public void testMultiple() {
+  void testMultiple() {
     Scalar w = Quantity.of(2, "K");
     ScalarUnaryOperator suo = Floor.toMultipleOf(w);
     assertEquals(suo.apply(Quantity.of(3.9, "K")), w);
@@ -108,25 +108,25 @@ class FloorTest {
   }
 
   @Test
-  public void testPositiveInfinity() {
+  void testPositiveInfinity() {
     Scalar scalar = DoubleScalar.POSITIVE_INFINITY;
     assertEquals(Floor.FUNCTION.apply(scalar), scalar);
   }
 
   @Test
-  public void testNegativeInfinity() {
+  void testNegativeInfinity() {
     Scalar scalar = DoubleScalar.NEGATIVE_INFINITY;
     assertEquals(Floor.FUNCTION.apply(scalar), scalar);
   }
 
   @Test
-  public void testNaN() {
+  void testNaN() {
     assertTrue(Double.isNaN(Floor.FUNCTION.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
     assertTrue(Double.isNaN(Floor._2.apply(DoubleScalar.INDETERMINATE).number().doubleValue()));
   }
 
   @Test
-  public void testDecimalPlacesP() {
+  void testDecimalPlacesP() {
     Scalar w = Quantity.of(1.99999, "K");
     Tolerance.CHOP.requireClose(Floor._1.apply(w), Quantity.of(1.9, "K"));
     Tolerance.CHOP.requireClose(Floor._2.apply(w), Quantity.of(1.99, "K"));
@@ -134,7 +134,7 @@ class FloorTest {
   }
 
   @Test
-  public void testDecimalPlacesN() {
+  void testDecimalPlacesN() {
     Scalar w = Quantity.of(-1.00000001, "K");
     Tolerance.CHOP.requireClose(Floor._1.apply(w), Quantity.of(-1.1, "K"));
     Tolerance.CHOP.requireClose(Floor._2.apply(w), Quantity.of(-1.01, "K"));
@@ -142,7 +142,7 @@ class FloorTest {
   }
 
   @Test
-  public void testTypeFail() {
+  void testTypeFail() {
     assertThrows(TensorRuntimeException.class, () -> Floor.of(StringScalar.of("some")));
   }
 }

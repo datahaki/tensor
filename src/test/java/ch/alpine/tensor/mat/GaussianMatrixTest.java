@@ -22,7 +22,7 @@ import ch.alpine.tensor.alg.Reverse;
  * ] */
 class GaussianMatrixTest {
   @RepeatedTest(4)
-  public void testSmall(RepetitionInfo repetitionInfo) {
+  void testSmall(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = GaussianMatrix.of(n);
     int size = 2 * n + 1;
@@ -32,7 +32,7 @@ class GaussianMatrixTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(ArithmeticException.class, () -> GaussianMatrix.of(0));
     assertThrows(IllegalArgumentException.class, () -> GaussianMatrix.of(-1));
   }

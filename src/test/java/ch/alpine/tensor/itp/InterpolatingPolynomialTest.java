@@ -38,7 +38,7 @@ class InterpolatingPolynomialTest {
   private static final ScalarUnaryOperator MINUS_ONE = RealScalar.ONE.negate()::add;
 
   @Test
-  public void testScaleInvariant() {
+  void testScaleInvariant() {
     Tensor suppor = Tensors.vector(2, 2.3, 4);
     Tensor values = Tensors.vector(6, -7, 20);
     ScalarUnaryOperator suo1 = InterpolatingPolynomial.of(suppor).scalarUnaryOperator(values);
@@ -51,7 +51,7 @@ class InterpolatingPolynomialTest {
   }
 
   @Test
-  public void testPermutationInvariant() {
+  void testPermutationInvariant() {
     Tensor suppor = Tensors.vector(2, 2.3, 4);
     Tensor values = Tensors.vector(6, -7, 20);
     ScalarUnaryOperator suo1 = InterpolatingPolynomial.of(suppor).scalarUnaryOperator(values);
@@ -66,7 +66,7 @@ class InterpolatingPolynomialTest {
   }
 
   @Test
-  public void testScaleInvariantMatrix() {
+  void testScaleInvariantMatrix() {
     Tensor suppor = Tensors.vector(2, 2.3, 4);
     Tensor values = Tensors.fromString("{{2,-3}, {-7, 5}, {5, 9}}");
     ScalarTensorFunction suo1 = InterpolatingPolynomial.of(suppor).scalarTensorFunction(values);
@@ -80,7 +80,7 @@ class InterpolatingPolynomialTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Tensor suppor = Tensors.fromString("{2[m], 2.3[m], 4[m]}");
     Tensor values = Tensors.fromString("{6[s], -7[s], 20[s]}");
     ScalarUnaryOperator suo1 = InterpolatingPolynomial.of(suppor).scalarUnaryOperator(values);
@@ -90,7 +90,7 @@ class InterpolatingPolynomialTest {
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     int prime = 7211;
     Tensor suppor = Tensors.of(GaussScalar.of(53, prime), GaussScalar.of(519, prime), GaussScalar.of(6322, prime));
     Tensor values = Tensors.of(GaussScalar.of(2233, prime), GaussScalar.of(719, prime), GaussScalar.of(32, prime));
@@ -105,7 +105,7 @@ class InterpolatingPolynomialTest {
   }
 
   @Test
-  public void testDegreesUnits() {
+  void testDegreesUnits() {
     Tensor xdata = Tensors.vector(10, 11, 14, 20).map(s -> Quantity.of(s, "K"));
     Tensor ydata = Tensors.vector(5, -2, 1, 9).map(s -> Quantity.of(s, "bar"));
     for (int degree = 0; degree <= 3; ++degree) {
@@ -119,7 +119,7 @@ class InterpolatingPolynomialTest {
   }
 
   @Test
-  public void testDegreesUnitsNumeric() {
+  void testDegreesUnitsNumeric() {
     Tensor xdata = Tensors.vector(10, 11, 14, 20).map(s -> Quantity.of(s, "K")).map(N.DOUBLE);
     Tensor ydata = Tensors.vector(5, -2, 1, 9).map(s -> Quantity.of(s, "bar")).map(N.DOUBLE);
     for (int degree = 0; degree <= 3; ++degree) {
@@ -131,7 +131,7 @@ class InterpolatingPolynomialTest {
   }
 
   @Test
-  public void testScalarLengthFail() throws ClassNotFoundException, IOException {
+  void testScalarLengthFail() throws ClassNotFoundException, IOException {
     InterpolatingPolynomial interpolatingPolynomial = //
         Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
     assertThrows(TensorRuntimeException.class, () -> interpolatingPolynomial.scalarUnaryOperator(Tensors.vector(1, 2)));
@@ -139,7 +139,7 @@ class InterpolatingPolynomialTest {
   }
 
   @Test
-  public void testTensorLengthFail() throws ClassNotFoundException, IOException {
+  void testTensorLengthFail() throws ClassNotFoundException, IOException {
     InterpolatingPolynomial interpolatingPolynomial = //
         Serialization.copy(InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, Tensors.vector(1, 2, 3)));
     assertThrows(IllegalArgumentException.class, () -> interpolatingPolynomial.scalarTensorFunction(Tensors.vector(1, 2)));
@@ -147,7 +147,7 @@ class InterpolatingPolynomialTest {
   }
 
   @Test
-  public void testKnotsNonVectorFail() {
+  void testKnotsNonVectorFail() {
     assertThrows(ClassCastException.class, () -> InterpolatingPolynomial.of(LinearBinaryAverage.INSTANCE, IdentityMatrix.of(3)));
   }
 }

@@ -9,12 +9,12 @@ import ch.alpine.tensor.RealScalar;
 
 class BooleTest {
   @Test
-  public void testTrue() {
+  void testTrue() {
     assertEquals(Boole.of(true), RealScalar.ONE);
   }
 
   @Test
-  public void testFalse() {
+  void testFalse() {
     assertEquals(Boole.of(false), RealScalar.ZERO);
   }
 }

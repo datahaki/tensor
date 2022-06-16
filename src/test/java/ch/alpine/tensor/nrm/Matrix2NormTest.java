@@ -33,7 +33,7 @@ import ch.alpine.tensor.sca.Imag;
 
 class Matrix2NormTest {
   @Test
-  public void testMatrix1() {
+  void testMatrix1() {
     Tensor matrix = Tensors.matrix(new Number[][] { { 1, 2, 3 }, { 9, -3, 0 } });
     Scalar nrm = Matrix2Norm.of(matrix);
     assertEquals(nrm, Matrix2Norm.of(Transpose.of(matrix)));
@@ -42,7 +42,7 @@ class Matrix2NormTest {
   }
 
   @Test
-  public void testMatrix2() {
+  void testMatrix2() {
     Tensor matrix = Tensors.fromString("{{}}");
     assertThrows(IllegalArgumentException.class, () -> Matrix2Norm.of(matrix));
   }
@@ -58,7 +58,7 @@ class Matrix2NormTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Unit unit = Unit.of("m*K^1/2");
     for (int n = 2; n < 6; ++n) {
       _check(HilbertMatrix.of(n));
@@ -69,7 +69,7 @@ class Matrix2NormTest {
   }
 
   @Test
-  public void testNonSquareQuantity() {
+  void testNonSquareQuantity() {
     for (int n = 3; n < 6; ++n) {
       _check(RandomVariate.of(NormalDistribution.standard(), n - 2, n).map(s -> Quantity.of(s, "m")));
       _check(RandomVariate.of(UniformDistribution.of(-0.05, 0.05), n - 2, n).map(s -> Quantity.of(s, "m*s")));
@@ -78,7 +78,7 @@ class Matrix2NormTest {
   }
 
   @Test
-  public void testNonSquareQuantity2() {
+  void testNonSquareQuantity2() {
     for (int n = 3; n < 6; ++n) {
       _check(RandomVariate.of(NormalDistribution.standard(), n, n - 2).map(s -> Quantity.of(s, "m")));
       _check(RandomVariate.of(UniformDistribution.of(-0.05, 0.05), n, n - 2).map(s -> Quantity.of(s, "m^-2")));
@@ -87,7 +87,7 @@ class Matrix2NormTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Distribution distribution = LogisticDistribution.of(2, 3);
     Tensor re = RandomVariate.of(distribution, 5, 3);
     Tensor im = RandomVariate.of(distribution, 5, 3);
@@ -99,20 +99,20 @@ class Matrix2NormTest {
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     assertEquals(Matrix2Norm.bound(Array.zeros(2, 3)), RealScalar.ZERO);
     assertEquals(Matrix2Norm.bound(Array.zeros(3, 2)), RealScalar.ZERO);
   }
 
   @Test
-  public void testNonMatrixFail() {
+  void testNonMatrixFail() {
     assertThrows(TensorRuntimeException.class, () -> Matrix2Norm.bound(RealScalar.of(2)));
     assertThrows(TensorRuntimeException.class, () -> Matrix2Norm.bound(Tensors.vector(1, 2, 3)));
     assertThrows(ClassCastException.class, () -> Matrix2Norm.bound(LehmerTensor.of(3)));
   }
 
   @Test
-  public void testNonArray() {
+  void testNonArray() {
     assertThrows(IllegalArgumentException.class, () -> Matrix2Norm.bound(Tensors.fromString("{{1, 2, 3}, {4, 5}}")));
   }
 }
