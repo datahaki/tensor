@@ -3,14 +3,19 @@ package ch.alpine.tensor.pdf.c;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -55,6 +60,17 @@ class DiracDeltaDistributionTest {
   void testQuantile() {
     Distribution distribution = DiracDeltaDistribution.of(RealScalar.TWO);
     assertEquals(Quantile.of(distribution).apply(RealScalar.ONE), RealScalar.TWO);
+  }
+
+  @Test
+  void testDateTime() {
+    Scalar d1 = DateTimeScalar.of(LocalDateTime.of(2022, 11, 13, 10, 12));
+    Scalar d2 = DateTimeScalar.of(LocalDateTime.of(2022, 11, 13, 10, 13));
+    Distribution distribution = DiracDeltaDistribution.of(d1);
+    PDF pdf = PDF.of(distribution);
+    assertTrue(Scalars.isZero(pdf.at(d2)));
+    CDF cdf = CDF.of(distribution);
+    assertEquals(cdf.p_lessThan(d2), RealScalar.ONE);
   }
 
   @Test

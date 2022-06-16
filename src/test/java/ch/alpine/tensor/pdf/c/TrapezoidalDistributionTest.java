@@ -302,8 +302,9 @@ class TrapezoidalDistributionTest {
     PDF pdf = PDF.of(distribution);
     Scalar t = DateTimeScalar.of(LocalDateTime.of(2022, 1, 6, 8, 06));
     pdf.at(t);
-    // CDF cdf = CDF.of(distribution);
-    // Scalar p_lessEquals = cdf.p_lessEquals(t);
+    CDF cdf = CDF.of(distribution);
+    Scalar p_lessEquals = cdf.p_lessEquals(t);
+    System.out.println(p_lessEquals);
     // Chop._01.requireClose(RationalScalar.HALF, p_lessEquals);
   }
 

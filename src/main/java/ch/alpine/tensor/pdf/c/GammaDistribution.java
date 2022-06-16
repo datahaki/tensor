@@ -26,8 +26,8 @@ import ch.alpine.tensor.sca.pow.Power;
  * <a href="https://reference.wolfram.com/language/ref/GammaDistribution.html">GammaDistribution</a> */
 public class GammaDistribution implements Distribution, //
     MeanInterface, PDF, VarianceInterface, Serializable {
-  /** @param alpha positive
-   * @param beta positive
+  /** @param alpha positive real
+   * @param beta positive real
    * @return */
   public static Distribution of(Scalar alpha, Scalar beta) {
     if (Scalars.lessEquals(alpha, RealScalar.ZERO) || //

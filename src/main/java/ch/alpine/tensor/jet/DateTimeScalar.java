@@ -14,7 +14,10 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 
-/** Addition of two instances of {@link DateTimeScalar} results in an exception.
+/** encodes an absolute point in a local calendar by wrapping an instance of
+ * {@link LocalDateTime}
+ * 
+ * Addition of two instances of {@link DateTimeScalar} results in an exception.
  * Subtraction of two instances of {@link DateTimeScalar} results in a {@link Quantity}.
  * Negation of a {@link DateTimeScalar} results in an exception.
  * 

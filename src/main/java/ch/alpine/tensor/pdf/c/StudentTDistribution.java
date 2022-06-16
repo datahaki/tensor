@@ -27,8 +27,7 @@ public class StudentTDistribution implements Distribution, //
    * @param v positive real
    * @return */
   public static Distribution of(Scalar mu, Scalar sigma, Scalar v) {
-    // TODO TENSOR check with DTScalar, and DurationScalar
-    Scalars.compare(mu, sigma); // assert that parameters have identical units
+    Scalars.compare(mu, mu.add(sigma));
     return new StudentTDistribution( //
         mu, //
         Sign.requirePositive(sigma), //
