@@ -20,7 +20,7 @@ import ch.alpine.tensor.lie.Permutations;
 
 class SparseEntryVisitorTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
     SparseArray sparseArray = (SparseArray) TestHelper.of(tensor);
     sparseArray.set(RealScalar.ZERO, 2, 0);
@@ -30,7 +30,7 @@ class SparseEntryVisitorTest {
   }
 
   @Test
-  public void testTransposeMatrix() {
+  void testTransposeMatrix() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
     SparseArray sparseArray = (SparseArray) TestHelper.of(tensor);
     sparseArray.set(s -> RealScalar.ZERO, 2, 0);
@@ -41,7 +41,7 @@ class SparseEntryVisitorTest {
   }
 
   @Test
-  public void testTransposeAd() {
+  void testTransposeAd() {
     Tensor tensor = Tensors.fromString("{{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}},{{0,1,0,0,6},{2,0,0,9,8},{2,1,0,5,3}}}");
     SparseArray sparseArray = (SparseArray) TestHelper.of(tensor);
     Tensor transp = Transpose.of(sparseArray);
@@ -50,7 +50,7 @@ class SparseEntryVisitorTest {
   }
 
   @Test
-  public void testTransposeAd3() {
+  void testTransposeAd3() {
     Tensor tensor = Tensors.fromString("{{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}},{{0,1,0,0,6},{2,0,0,9,8},{2,1,0,5,3}}}");
     SparseArray sparseArray = (SparseArray) TestHelper.of(tensor);
     for (Tensor perm : Permutations.of(Range.of(0, 3))) {

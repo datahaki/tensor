@@ -36,12 +36,12 @@ class CirclePointsTest {
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     assertEquals(CirclePoints.of(0), Tensors.empty());
   }
 
   @Test
-  public void testExact() {
+  void testExact() {
     ExactTensorQ.require(CirclePoints.of(2));
     ExactTensorQ.require(CirclePoints.of(4));
     Tolerance.CHOP.requireClose(CirclePoints.of(4), numeric(4));
@@ -53,13 +53,13 @@ class CirclePointsTest {
   }
 
   @Test
-  public void testNumeric() {
+  void testNumeric() {
     for (int count = 0; count <= 32; ++count)
       Tolerance.CHOP.requireClose(CirclePoints.of(count), numeric(count));
   }
 
   @Test
-  public void testNorm() {
+  void testNorm() {
     int n = 5;
     Tensor tensor = CirclePoints.of(n);
     assertEquals(Dimensions.of(tensor), Arrays.asList(n, 2));
@@ -68,7 +68,7 @@ class CirclePointsTest {
   }
 
   @Test
-  public void testFirst() {
+  void testFirst() {
     int n = 5;
     Tensor tensor = CirclePoints.of(n);
     assertEquals(tensor.get(0), Tensors.vector(1, 0));
@@ -76,21 +76,21 @@ class CirclePointsTest {
   }
 
   @Test
-  public void testSmall() {
+  void testSmall() {
     assertEquals(CirclePoints.of(0), Tensors.empty());
     assertEquals(CirclePoints.of(1), Tensors.fromString("{{1, 0}}"));
     assertEquals(Chop._14.of(CirclePoints.of(2)), Tensors.fromString("{{1, 0}, {-1, 0}}"));
   }
 
   @Test
-  public void testCirclePoints() {
+  void testCirclePoints() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, CirclePoints.of(10));
     Tensor polygon = Subdivide.of(0, 9, 20).map(bSplineFunction::apply);
     assertTrue(MatrixQ.of(polygon));
   }
 
   @Test
-  public void testFailNegative() {
+  void testFailNegative() {
     assertThrows(IllegalArgumentException.class, () -> CirclePoints.of(-1));
   }
 }

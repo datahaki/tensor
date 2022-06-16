@@ -10,7 +10,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 
 class TensorDotTest {
   @Test
-  public void testDotEmpty() {
+  void testDotEmpty() {
     Tensor a = Tensors.empty().dot(Tensors.empty());
     assertInstanceOf(Scalar.class, a);
     assertEquals(a, RealScalar.ZERO);
@@ -20,7 +20,7 @@ class TensorDotTest {
   }
 
   @Test
-  public void testDot2() {
+  void testDot2() {
     Tensor tensor = Tensors.of(Tensors.empty());
     Tensor sca = tensor.dot(Tensors.empty());
     ExactTensorQ.require(sca);
@@ -28,14 +28,14 @@ class TensorDotTest {
   }
 
   @Test
-  public void testDot3() {
+  void testDot3() {
     Tensor tensor = Tensors.of(Tensors.empty(), Tensors.empty());
     Tensor sca = tensor.dot(Tensors.empty());
     assertEquals(sca, Tensors.vectorLong(0, 0));
   }
 
   @Test
-  public void testDot4() {
+  void testDot4() {
     Tensor c = Tensors.vectorLong(1, 2, 6);
     Tensor d = Tensors.vectorLong(3, 4, 5);
     assertInstanceOf(RationalScalar.class, c.dot(d));
@@ -43,7 +43,7 @@ class TensorDotTest {
   }
 
   @Test
-  public void testDot5() {
+  void testDot5() {
     Tensor c = Tensors.vectorDouble(1, 2, 6.);
     Tensor d = Tensors.vectorLong(3, 4, 5);
     assertInstanceOf(DoubleScalar.class, c.dot(d));
@@ -51,7 +51,7 @@ class TensorDotTest {
   }
 
   @Test
-  public void testDot6() {
+  void testDot6() {
     Tensor a = Tensors.vectorLong(7, 2);
     Tensor b = Tensors.vectorLong(3, 4);
     Tensor c = Tensors.vectorLong(2, 2);
@@ -63,21 +63,21 @@ class TensorDotTest {
   }
 
   @Test
-  public void testDotIrregularExample() {
+  void testDotIrregularExample() {
     Tensor a = Tensors.vector(1, 2);
     Tensor b = Tensors.fromString("{{3, {4}}, {5, {6}}}");
     assertEquals(a.dot(b), Tensors.fromString("{13, {16}}"));
   }
 
   @Test
-  public void testDotIrregularRight() {
+  void testDotIrregularRight() {
     Tensor a = Tensors.vector(1, 2, 3);
     Tensor b = Tensors.fromString("{{1, {2}}, {2, {3}}, {4, {5}}}");
     assertEquals(a.dot(b), Tensors.fromString("{17, {23}}"));
   }
 
   @Test
-  public void testDotIrregularLeft() {
+  void testDotIrregularLeft() {
     Tensor a = Tensors.fromString("{{1, 2, 3}, {{2, 3, 4}, {5, 6, 7}}}");
     Tensor b = Tensors.vector(4, 5, 6);
     Tensor c = a.dot(b);

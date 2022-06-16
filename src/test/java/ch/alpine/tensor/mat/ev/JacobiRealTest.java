@@ -30,7 +30,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class JacobiRealTest {
   @Test
-  public void testRandom() {
+  void testRandom() {
     Random random = new Random(1);
     Distribution distribution = UniformDistribution.of(-10, 10);
     for (int d = 2; d < 10; ++d)
@@ -44,7 +44,7 @@ class JacobiRealTest {
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor matrix = HilbertMatrix.of(4).unmodifiable();
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tensor vs = eigensystem.vectors();
@@ -64,7 +64,7 @@ class JacobiRealTest {
   }
 
   @Test
-  public void testOneStep() {
+  void testOneStep() {
     Tensor matrix = HilbertMatrix.of(4).unmodifiable();
     JacobiReal jacobiReal = new JacobiReal(matrix);
     Scalar[][] A = jacobiReal.H;
@@ -98,7 +98,7 @@ class JacobiRealTest {
   }
 
   @Test
-  public void testEmulation() {
+  void testEmulation() {
     Tensor matrix = HilbertMatrix.of(4).unmodifiable();
     int p = 1;
     int q = 2;
@@ -121,14 +121,14 @@ class JacobiRealTest {
   }
 
   @Test
-  public void testEpsDouble() {
+  void testEpsDouble() {
     double dbl_ulp = Math.ulp(1.0);
     float flt_ulp = Math.ulp(1);
     assertTrue(dbl_ulp < flt_ulp);
   }
 
   @Test
-  public void testPackage() {
+  void testPackage() {
     assertFalse(Modifier.isPublic(JacobiReal.class.getModifiers()));
   }
 }

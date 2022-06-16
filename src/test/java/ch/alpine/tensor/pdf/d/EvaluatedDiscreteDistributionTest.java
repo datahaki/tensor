@@ -19,7 +19,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class EvaluatedDiscreteDistributionTest {
   @Test
-  public void testBinomial() {
+  void testBinomial() {
     for (int n = 10; n < 1200; n += 10) {
       EvaluatedDiscreteDistribution distribution = //
           (EvaluatedDiscreteDistribution) BinomialDistribution.of(n, RealScalar.of(0.333));
@@ -33,7 +33,7 @@ class EvaluatedDiscreteDistributionTest {
   }
 
   @Test
-  public void testBernoulli() {
+  void testBernoulli() {
     Scalar p = RationalScalar.of(1, 3);
     EvaluatedDiscreteDistribution distribution = //
         (EvaluatedDiscreteDistribution) BernoulliDistribution.of(p);
@@ -43,7 +43,7 @@ class EvaluatedDiscreteDistributionTest {
   }
 
   @Test
-  public void testPoisson() {
+  void testPoisson() {
     EvaluatedDiscreteDistribution evaluatedDiscreteDistribution = //
         (EvaluatedDiscreteDistribution) PoissonDistribution.of(RealScalar.of(5.5));
     NavigableMap<Scalar, Scalar> navigableMap = evaluatedDiscreteDistribution.inverse_cdf();

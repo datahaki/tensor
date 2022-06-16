@@ -12,31 +12,31 @@ import ch.alpine.tensor.Scalar;
 
 class UnitQTest {
   @Test
-  public void testZero() {
+  void testZero() {
     Unit unit = Unit.of("m^0*s^-0");
     assertTrue(UnitQ.isOne(unit));
   }
 
   @Test
-  public void testDouble() {
+  void testDouble() {
     assertEquals(Unit.of("m*m^3"), Unit.of("m*m^2*m"));
     assertTrue(UnitQ.isOne(Unit.of("m*m^-1")));
     assertTrue(UnitQ.isOne(Unit.of("s^2*m*s^-1*m^-1*s^-1")));
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertTrue(UnitQ.isOne(Unit.of("")));
     assertTrue(UnitQ.isOne(Unit.ONE));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(NullPointerException.class, () -> UnitQ.isOne(null));
   }
 
   @Test
-  public void testWeightPercent() {
+  void testWeightPercent() {
     Scalar scalar = Quantity.of(2, "kg").divide(Quantity.of(10, "kg"));
     Scalar wtp = UnitConvert.SI().to("mass%").apply(scalar);
     assertEquals(wtp, Quantity.of(20, "mass%"));

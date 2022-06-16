@@ -21,21 +21,21 @@ import ch.alpine.tensor.qty.Unit;
 
 class SignTest {
   @Test
-  public void testSome() {
+  void testSome() {
     assertEquals(Sign.FUNCTION.apply(DoubleScalar.of(-345)), RealScalar.of(-1));
     assertEquals(Sign.FUNCTION.apply(DoubleScalar.of(9324.5)), RealScalar.of(1));
     assertEquals(Sign.FUNCTION.apply(RealScalar.ZERO), RealScalar.ZERO);
   }
 
   @Test
-  public void testDiff() {
+  void testDiff() {
     assertEquals(Sign.FUNCTION.apply(RealScalar.of(3 - 9)), RealScalar.ONE.negate());
     assertEquals(Sign.FUNCTION.apply(RealScalar.of(3 - 3)), RealScalar.ZERO);
     assertEquals(Sign.FUNCTION.apply(RealScalar.of(9 - 3)), RealScalar.ONE);
   }
 
   @Test
-  public void testDoubleNegZero() {
+  void testDoubleNegZero() {
     Scalar d1 = DoubleScalar.of(-0.0);
     Sign.requirePositiveOrZero(d1);
     assertEquals(d1.toString(), "-0.0");
@@ -45,7 +45,7 @@ class SignTest {
   }
 
   @Test
-  public void testInfinity() {
+  void testInfinity() {
     assertEquals(Sign.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY), RealScalar.of(+1));
     assertEquals(Sign.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), RealScalar.of(-1));
     assertTrue(Sign.isPositive(DoubleScalar.POSITIVE_INFINITY));
@@ -53,7 +53,7 @@ class SignTest {
   }
 
   @Test
-  public void testIsNegative() {
+  void testIsNegative() {
     Unit apples = Unit.of("Apples");
     assertTrue(Sign.isNegative(Quantity.of(-2, apples)));
     assertFalse(Sign.isNegative(Quantity.of(0, apples)));
@@ -61,7 +61,7 @@ class SignTest {
   }
 
   @Test
-  public void testIsPositive() {
+  void testIsPositive() {
     assertFalse(Sign.isPositive(Quantity.of(-2, "V*A")));
     assertFalse(Sign.isPositive(Quantity.of(0, "V*A")));
     assertTrue(Sign.isPositive(Quantity.of(2, "V*A")));
@@ -71,7 +71,7 @@ class SignTest {
   }
 
   @Test
-  public void testIsPositiveOrZero() {
+  void testIsPositiveOrZero() {
     Unit apples = Unit.of("Apples");
     assertFalse(Sign.isPositiveOrZero(Quantity.of(-2, apples)));
     assertTrue(Sign.isPositiveOrZero(Quantity.of(0, apples)));
@@ -79,7 +79,7 @@ class SignTest {
   }
 
   @Test
-  public void testIsNegativeOrZero() {
+  void testIsNegativeOrZero() {
     assertTrue(Sign.isNegativeOrZero(Quantity.of(-2, "V*A")));
     assertTrue(Sign.isNegativeOrZero(Quantity.of(0, "V*A")));
     assertFalse(Sign.isNegativeOrZero(Quantity.of(2, "V*A")));
@@ -89,7 +89,7 @@ class SignTest {
   }
 
   @Test
-  public void testRequireNonNegative() {
+  void testRequireNonNegative() {
     Sign.requirePositiveOrZero(RealScalar.ZERO);
     Sign.requirePositiveOrZero(RealScalar.ONE);
     Sign.requirePositiveOrZero(Quantity.of(2, "m*s^-2"));
@@ -98,7 +98,7 @@ class SignTest {
   }
 
   @Test
-  public void testRequirePositive() {
+  void testRequirePositive() {
     Sign.requirePositive(RealScalar.ONE);
     Sign.requirePositive(Quantity.of(2, "m*s^-2"));
     assertThrows(TensorRuntimeException.class, () -> Sign.requirePositive(RealScalar.ZERO));
@@ -107,7 +107,7 @@ class SignTest {
   }
 
   @Test
-  public void testNaN() {
+  void testNaN() {
     assertEquals(Sign.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
   }
 
@@ -124,7 +124,7 @@ class SignTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     _checkSignIntFail(ComplexScalar.of(2, 3));
     _checkSignIntFail(Quaternion.of(RealScalar.of(-4), Tensors.vector(1, 2, 3)));
     // _checkFailAll(DoubleScalar.INDETERMINATE);

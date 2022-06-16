@@ -30,20 +30,20 @@ import ch.alpine.tensor.spa.SparseArray;
 
 class TransposeTest {
   @Test
-  public void testScalar() {
+  void testScalar() {
     Tensor scalar = DoubleScalar.NEGATIVE_INFINITY;
     assertEquals(Transpose.of(scalar, new int[] {}), scalar);
   }
 
   @Test
-  public void testVector() {
+  void testVector() {
     Tensor v = Tensors.vector(2, 3, 4, 5);
     Tensor r = Transpose.of(v, 0);
     assertEquals(v, r);
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     // [[0, 1, 2, 3], [4, 5, 6, 7], [8, 9, 10, 11]]
     Tensor m = Tensors.matrix((i, j) -> RealScalar.of(i * 4 + j), 3, 4);
     Tensor t = Transpose.of(m, 1, 0);
@@ -53,14 +53,14 @@ class TransposeTest {
   }
 
   @Test
-  public void testMatrixWithVectors() {
+  void testMatrixWithVectors() {
     Tensor tensor = Tensors.fromString("{{1, {2, 2}}, {{3}, 4}, {5, {6}}}");
     Tensor transp = Transpose.of(tensor);
     assertEquals(transp, Tensors.fromString("{{1, {3}, 5}, {{2, 2}, 4, {6}}}"));
   }
 
   @Test
-  public void testTranspose2() {
+  void testTranspose2() {
     // [[[0, 1, 2], [3, 4, 5]], [[6, 7, 8], [9, 10, 11]]]
     Tensor m = Partition.of(Tensors.matrix((i, j) -> RealScalar.of(i * 3 + j), 4, 3), 2);
     Tensor t = Transpose.of(m, 0, 1, 2);
@@ -71,7 +71,7 @@ class TransposeTest {
    * Dimensions[Transpose[m, {3, 2, 1}]] == {5, 3, 2}
    * Dimensions[Transpose[m, {2, 3, 1}]] == {5, 2, 3} */
   @Test
-  public void testTranspose3() {
+  void testTranspose3() {
     Tensor m = Partition.of(Tensors.matrix((i, j) -> RationalScalar.of(i * 5 + j, 1), 6, 5), 3);
     assertEquals(m, Tensors.fromString( //
         "{{{0, 1, 2, 3, 4}, {5, 6, 7, 8, 9}, {10, 11, 12, 13, 14}}, {{15, 16, 17, 18, 19}, {20, 21, 22, 23, 24}, {25, 26, 27, 28, 29}}}"));
@@ -91,7 +91,7 @@ class TransposeTest {
   }
 
   @Test
-  public void testModify() {
+  void testModify() {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 2 }, { 2, 4 } });
     Tensor mt = Transpose.of(m);
     mt.set(i -> RealScalar.ZERO, 1, 1);
@@ -99,12 +99,12 @@ class TransposeTest {
   }
 
   @Test
-  public void testZeros() {
+  void testZeros() {
     assertEquals(Array.zeros(2, 10), Transpose.of(Array.zeros(10, 2)));
   }
 
   @Test
-  public void testRep() {
+  void testRep() {
     Integer[] input = new Integer[] { 3, 2, 6, 0 };
     int[] copy = Stream.of(input).mapToInt(Integer::intValue).toArray();
     assertEquals(copy[0], 3);
@@ -112,7 +112,7 @@ class TransposeTest {
   }
 
   @Test
-  public void testFirstDimensions() {
+  void testFirstDimensions() {
     Tensor randn = RandomVariate.of(NormalDistribution.standard(), 3, 4, 5);
     assertEquals(Transpose.of(randn, 0), randn);
     assertEquals(Transpose.of(randn, 0, 1), randn);
@@ -122,7 +122,7 @@ class TransposeTest {
   }
 
   @Test
-  public void testIdentity() {
+  void testIdentity() {
     Tensor randn = RandomVariate.of(ExponentialDistribution.standard(), 3, 4, 2);
     assertEquals(randn, Transpose.of(randn, new int[] {}));
     assertEquals(Tensors.empty(), Transpose.of(Tensors.empty(), new int[] {}));
@@ -130,7 +130,7 @@ class TransposeTest {
   }
 
   @Test
-  public void testComparison() {
+  void testComparison() {
     Tensor randn = RandomVariate.of(NormalDistribution.standard(), 6, 5, 4);
     ArrayQ.require(randn);
     Tensor trans = Transpose.of(randn, 1, 2, 0);
@@ -138,21 +138,21 @@ class TransposeTest {
   }
 
   @Test
-  public void testIncomplete() {
+  void testIncomplete() {
     Tensor randn = RandomVariate.of(NormalDistribution.standard(), 2, 5, 4, 3);
     Tensor array = Transpose.of(randn, 1, 2, 0);
     assertEquals(Transpose.of(randn, 1, 2, 0, 3), array);
   }
 
   @Test
-  public void testSingle() {
+  void testSingle() {
     Tensor randn = RandomVariate.of(NormalDistribution.standard(), 2, 5, 4, 3);
     Tensor array = Transpose.of(randn, 0);
     assertEquals(Transpose.of(randn, 0, 1, 2, 3), array);
   }
 
   @Test
-  public void testMix() {
+  void testMix() {
     Tensor b0 = Tensors.fromString("{{0, 0, 1}, {0, 0, 0}, {0, 0, 0}}");
     Tensor b1 = Tensors.fromString("{{0, 0, 0}, {0, 0, 1}, {0, 0, 0}}");
     Tensor b2 = LeviCivitaTensor.of(3).get(2).negate();
@@ -164,7 +164,7 @@ class TransposeTest {
   }
 
   @Test
-  public void testNonArray() {
+  void testNonArray() {
     Tensor tensor = Tensors.fromString("{{0, 1, {2, 3, 4}}, {5, 6, 7}}");
     // mathematica gives ............... {{0, 5}, {1, 6}, {{2, 3, 4}, 7}}
     Tensor correct = Tensors.fromString("{{0, 5}, {1, 6}, {{2, 3, 4}, 7}}");
@@ -174,7 +174,7 @@ class TransposeTest {
   }
 
   @Test
-  public void testDotT() {
+  void testDotT() {
     Distribution distribution = NegativeBinomialDistribution.of(3, 0.7);
     Tensor a = RandomVariate.of(distribution, 2, 4);
     Tensor b = RandomVariate.of(distribution, 4, 3);
@@ -182,7 +182,7 @@ class TransposeTest {
   }
 
   @Test
-  public void testFallback() {
+  void testFallback() {
     Tensor tensor = SparseArray.of(Quantity.of(0, "kg"), 3, 4);
     tensor.set(Quantity.of(3, "kg"), 1, 2);
     Tensor result = Transpose.of(tensor);

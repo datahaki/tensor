@@ -22,18 +22,18 @@ import ch.alpine.tensor.spa.SparseArray;
 
 class IdentityMatrixTest {
   @Test
-  public void testOneQuantity() {
+  void testOneQuantity() {
     Tensor matrix = DiagonalMatrix.of(2, Quantity.of(1, "s"));
     assertEquals(matrix, Tensors.fromString("{{1[s], 0[s]}, {0[s], 1[s]}}"));
   }
 
   @Test
-  public void testHilbertMatrix() {
+  void testHilbertMatrix() {
     assertEquals(IdentityMatrix.of(HilbertMatrix.of(3)), IdentityMatrix.of(3));
   }
 
   @Test
-  public void testSparse() {
+  void testSparse() {
     int n = 7;
     Tensor matrix = IdentityMatrix.sparse(n);
     assertInstanceOf(SparseArray.class, matrix);
@@ -57,7 +57,7 @@ class IdentityMatrixTest {
   }
 
   @Test
-  public void testDateTimeScalar() {
+  void testDateTimeScalar() {
     Scalar dts1 = DateTimeScalar.of(LocalDateTime.of(2000, 11, 3, 4, 5));
     Scalar dts2 = DateTimeScalar.of(LocalDateTime.of(2001, 10, 5, 4, 8));
     Scalar dts3 = DateTimeScalar.of(LocalDateTime.of(2002, 12, 7, 4, 11));
@@ -68,33 +68,33 @@ class IdentityMatrixTest {
   }
 
   @Test
-  public void testSparseFail() {
+  void testSparseFail() {
     assertThrows(IllegalArgumentException.class, () -> IdentityMatrix.sparse(0));
     assertThrows(IllegalArgumentException.class, () -> IdentityMatrix.sparse(-1));
   }
 
   @Test
-  public void testFailZero() {
+  void testFailZero() {
     assertThrows(IllegalArgumentException.class, () -> IdentityMatrix.of(0));
   }
 
   @Test
-  public void testFailNegative() {
+  void testFailNegative() {
     assertThrows(IllegalArgumentException.class, () -> IdentityMatrix.of(-3));
   }
 
   @Test
-  public void testFailOneZero() {
+  void testFailOneZero() {
     assertThrows(IllegalArgumentException.class, () -> DiagonalMatrix.of(0, Quantity.of(1, "s")));
   }
 
   @Test
-  public void testFailOneNegative() {
+  void testFailOneNegative() {
     assertThrows(IllegalArgumentException.class, () -> DiagonalMatrix.of(-3, Quantity.of(1, "s")));
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IllegalArgumentException.class, () -> IdentityMatrix.of(Tensors.empty()));
     assertThrows(IllegalArgumentException.class, () -> IdentityMatrix.of(Tensors.fromString("{{}}")));
     assertThrows(ClassCastException.class, () -> IdentityMatrix.of(LehmerTensor.of(3)));

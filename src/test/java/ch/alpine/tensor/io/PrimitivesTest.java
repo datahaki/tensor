@@ -12,7 +12,7 @@ import ch.alpine.tensor.Tensors;
 
 class PrimitivesTest {
   @Test
-  public void testByteArray() {
+  void testByteArray() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, -1, {{256}}}");
     byte[] array = Primitives.toByteArray(tensor);
     assertEquals(array[0], 1);
@@ -23,7 +23,7 @@ class PrimitivesTest {
   }
 
   @Test
-  public void testByteBuffer() {
+  void testByteBuffer() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, -1, {{256}}}");
     ByteBuffer byteBuffer = Primitives.toByteBuffer(tensor);
     assertEquals(byteBuffer.get() & 0xff, 1);

@@ -8,7 +8,7 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class BohmanWindowTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tolerance.CHOP.requireClose(BohmanWindow.FUNCTION.apply(RealScalar.of(0.3)), RealScalar.of(0.1791238937062839));
   }
 }

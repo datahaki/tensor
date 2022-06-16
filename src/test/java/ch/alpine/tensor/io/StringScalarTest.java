@@ -19,7 +19,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 
 class StringScalarTest {
   @Test
-  public void testStrings() {
+  void testStrings() {
     Tensor a = StringScalar.of("asd");
     Tensor b = StringScalar.of("x");
     Tensor d = Tensors.of(a, b, a, b);
@@ -28,14 +28,14 @@ class StringScalarTest {
   }
 
   @Test
-  public void testHashCode() {
+  void testHashCode() {
     assertEquals( //
         StringScalar.of("asd").hashCode(), //
         StringScalar.of("asd").hashCode());
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     assertEquals(StringScalar.of("3.14"), StringScalar.of("3.14"));
     assertFalse(StringScalar.of("3.14").equals(null));
     assertFalse(StringScalar.of("3.14").equals(StringScalar.of("3.141")));
@@ -43,13 +43,13 @@ class StringScalarTest {
   }
 
   @Test
-  public void testCurrentStandard() {
+  void testCurrentStandard() {
     String string = "{Hello, World}";
     assertTrue(string.equals(Tensors.fromString(string).toString()));
   }
 
   @Test
-  public void testFailOp() {
+  void testFailOp() {
     assertThrows(TensorRuntimeException.class, () -> StringScalar.of("asd").reciprocal());
     assertThrows(TensorRuntimeException.class, () -> StringScalar.of("asd").negate());
     assertThrows(TensorRuntimeException.class, () -> StringScalar.of("asd").number());
@@ -58,24 +58,24 @@ class StringScalarTest {
   }
 
   @Test
-  public void testMultiplyFail() {
+  void testMultiplyFail() {
     assertThrows(TensorRuntimeException.class, () -> ComplexScalar.I.multiply(StringScalar.of("asd")));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> StringScalar.of(null));
   }
 
   @Test
-  public void testOneFail() {
+  void testOneFail() {
     Scalar scalar = StringScalar.of("abc");
     assertThrows(TensorRuntimeException.class, () -> scalar.zero());
     assertThrows(TensorRuntimeException.class, () -> scalar.one());
   }
 
   @Test
-  public void testNonExact() {
+  void testNonExact() {
     assertTrue(ExactScalarQ.of(StringScalar.of("abc")));
   }
 }

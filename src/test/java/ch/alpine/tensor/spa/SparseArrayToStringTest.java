@@ -11,7 +11,7 @@ import ch.alpine.tensor.Tensors;
 
 class SparseArrayToStringTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
     Tensor sparse = TestHelper.of(tensor);
     String string = sparse.toString();
@@ -19,7 +19,7 @@ class SparseArrayToStringTest {
   }
 
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertEquals(SparseArrayToString.class.getModifiers() & 1, 0);
   }
 }

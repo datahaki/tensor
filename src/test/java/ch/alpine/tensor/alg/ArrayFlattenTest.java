@@ -19,7 +19,7 @@ import ch.alpine.tensor.num.Pi;
 
 class ArrayFlattenTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor[][] blocks = new Tensor[2][2];
     blocks[0][0] = DiagonalMatrix.of(2, RealScalar.of(1));
     blocks[0][1] = DiagonalMatrix.of(2, RealScalar.of(2));
@@ -35,7 +35,7 @@ class ArrayFlattenTest {
   }
 
   @Test
-  public void testRect() {
+  void testRect() {
     Tensor[][] blocks = new Tensor[][] { //
         { HilbertMatrix.of(2, 3), IdentityMatrix.of(2) }, //
         { IdentityMatrix.of(4), HilbertMatrix.of(4, 1) }, //
@@ -46,7 +46,7 @@ class ArrayFlattenTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> ArrayFlatten.of(null));
   }
 }

@@ -23,7 +23,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class VandermondeSolveTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor x = Tensors.vector(2, 3);
     Tensor q = Tensors.vector(4, 7);
     Tensor ref = LinearSolve.of(Transpose.of(VandermondeMatrix.of(x)), q);
@@ -34,7 +34,7 @@ class VandermondeSolveTest {
   }
 
   @Test
-  public void testMixedUnits() {
+  void testMixedUnits() {
     for (int degree = 0; degree <= 5; ++degree) {
       Tensor x = Tensors.fromString("{100[K], 110.0[K], 120[K], 133[K], 140[K], 150[K]}").extract(0, degree + 1);
       Tensor q = Tensors.fromString("{10[], 20[K], 22[K^2], 23[K^3], 25[K^4], 26.0[K^5]}").extract(0, degree + 1);
@@ -45,7 +45,7 @@ class VandermondeSolveTest {
   }
 
   @Test
-  public void testNumeric() {
+  void testNumeric() {
     Random random = new Random(3);
     Distribution distribution = NormalDistribution.standard();
     for (int n = 1; n < 10; ++n) {
@@ -58,21 +58,21 @@ class VandermondeSolveTest {
   }
 
   @Test
-  public void testSingularFail() {
+  void testSingularFail() {
     Tensor x = Tensors.vector(2, 3, 2);
     Tensor q = Tensors.vector(4, 7, 6);
     assertThrows(TensorRuntimeException.class, () -> VandermondeSolve.of(x, q));
   }
 
   @Test
-  public void testLengthFail() {
+  void testLengthFail() {
     Tensor x = Tensors.vector(2, 3);
     Tensor q = Tensors.vector(4, 7, 6);
     assertThrows(TensorRuntimeException.class, () -> VandermondeSolve.of(x, q));
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     int prime = 7817;
     Tensor x = Tensors.of( //
         GaussScalar.of(1210, prime), //
@@ -90,7 +90,7 @@ class VandermondeSolveTest {
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IndexOutOfBoundsException.class, () -> VandermondeSolve.of(Tensors.empty(), Tensors.empty()));
   }
 }

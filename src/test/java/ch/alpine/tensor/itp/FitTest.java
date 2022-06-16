@@ -28,7 +28,7 @@ import ch.alpine.tensor.red.Mean;
 
 class FitTest {
   @Test
-  public void testDegree0() {
+  void testDegree0() {
     Tensor ydata = Tensors.vector(5, -2);
     Polynomial polynomial = Fit.polynomial(Tensors.vector(10, 11), ydata, 0);
     assertEquals(polynomial.coeffs().toString(), "{3/2}");
@@ -36,7 +36,7 @@ class FitTest {
   }
 
   @Test
-  public void testDegree1() throws ClassNotFoundException, IOException {
+  void testDegree1() throws ClassNotFoundException, IOException {
     Polynomial polynomial = Serialization.copy(Fit.polynomial(Tensors.vector(10, 11), Tensors.vector(5, -2), 1));
     ExactTensorQ.require(polynomial.coeffs());
     assertEquals(polynomial.coeffs().toString(), "{75, -7}");
@@ -48,7 +48,7 @@ class FitTest {
   }
 
   @Test
-  public void testQuaternionDeg1() {
+  void testQuaternionDeg1() {
     Tensor xdata = Tensors.of(RandomQuaternion.get(), RandomQuaternion.get());
     Tensor ydata = Tensors.of(RandomQuaternion.get(), RandomQuaternion.get());
     Polynomial polynomial = Fit.polynomial(xdata, ydata, 1);
@@ -59,7 +59,7 @@ class FitTest {
   }
 
   @Test
-  public void testMixedUnits() {
+  void testMixedUnits() {
     ScalarUnaryOperator pascal = QuantityMagnitude.SI().in("Pa");
     ScalarUnaryOperator kelvin = QuantityMagnitude.SI().in("K");
     for (int degree = 0; degree <= 4; ++degree) {
@@ -85,7 +85,7 @@ class FitTest {
   }
 
   @Test
-  public void testLinear() {
+  void testLinear() {
     Random random = new Random(2);
     Polynomial polynomial = Polynomial.of(Tensors.vector(-2., 3., 0.5));
     Distribution distribution = TriangularDistribution.of(-2, 1, 2);
@@ -98,12 +98,12 @@ class FitTest {
   }
 
   @Test
-  public void testDegreeLargeFail() {
+  void testDegreeLargeFail() {
     assertThrows(IllegalArgumentException.class, () -> Fit.polynomial(Tensors.vector(10, 11), Tensors.vector(5, -2), 2));
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(IllegalArgumentException.class, () -> Fit.polynomial(Tensors.vector(10, 11), Tensors.vector(5, -2), -1));
   }
 }

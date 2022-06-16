@@ -24,14 +24,14 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class RandomVariateTest {
   @Test
-  public void testVarying() {
+  void testVarying() {
     Distribution distribution = NormalDistribution.standard();
     Set<Tensor> set = RandomVariate.of(distribution, 1000).stream().collect(Collectors.toSet());
     assertTrue(970 < set.size());
   }
 
   @Test
-  public void testSame() {
+  void testSame() {
     Distribution distribution = NormalDistribution.standard();
     assertEquals( //
         RandomVariate.of(distribution, new Random(10), 1000), //
@@ -41,14 +41,14 @@ class RandomVariateTest {
   }
 
   @Test
-  public void testFormatArray() {
+  void testFormatArray() {
     Distribution distribution = DiscreteUniformDistribution.of(2, 11);
     Tensor array = RandomVariate.of(distribution, 3, 4, 5);
     assertEquals(Dimensions.of(array), Arrays.asList(3, 4, 5));
   }
 
   @Test
-  public void testFormatList() {
+  void testFormatList() {
     Distribution distribution = DiscreteUniformDistribution.of(2, 11);
     List<Integer> list = Arrays.asList(3, 4, 5);
     Tensor array = RandomVariate.of(distribution, list);
@@ -56,7 +56,7 @@ class RandomVariateTest {
   }
 
   @Test
-  public void testFormatList1() {
+  void testFormatList1() {
     Distribution distribution = BinomialDistribution.of(3, RationalScalar.of(1, 2));
     Tensor array = RandomVariate.of(distribution, 1);
     assertEquals(Dimensions.of(array), Arrays.asList(1));

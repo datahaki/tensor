@@ -14,35 +14,35 @@ import ch.alpine.tensor.Tensors;
 
 class MeanFilterTest {
   @Test
-  public void testId() {
+  void testId() {
     Tensor vector1 = Tensors.vector(1, 2, 3, 4, 5, 6);
     Tensor result1 = MeanFilter.of(vector1, 0);
     assertEquals(vector1, result1);
   }
 
   @Test
-  public void testMean1() {
+  void testMean1() {
     Tensor vector1 = Tensors.vector(1, 4, 4, 1);
     Tensor result1 = MeanFilter.of(vector1, 1);
     assertEquals(Tensors.vector(2.5, 3, 3, 2.5), result1);
   }
 
   @Test
-  public void testMean2() {
+  void testMean2() {
     Tensor vector2 = Tensors.vector(5, 10, 15, 20, 25, 30, 40, 45, 50);
     Tensor result2 = MeanFilter.of(vector2, 2);
     assertEquals(Tensors.vector(10, 12.5, 15, 20, 26, 32, 38, 41.25, 45), result2);
   }
 
   @Test
-  public void testMean3() {
+  void testMean3() {
     Tensor vector1 = Tensors.vector(-3, 3, 6, 0, 0, 3, -3, -9);
     Tensor result1 = MeanFilter.of(vector1, 1);
     assertEquals(Tensors.vector(0, 2, 3, 2, 1, 0, -3, -6), result1);
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     Tensor input = Tensors.empty();
     Tensor result = MeanFilter.of(input, 2);
     input.append(RealScalar.ZERO);
@@ -50,7 +50,7 @@ class MeanFilterTest {
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     Tensor matrix = Tensors.fromString("{{1, 2, 3, 2, 1, 0, 0, 1, 0}, {3, 3, 3, 2, 2, 2, 1, 1, 1}, {0, 0, 0, 0, 0, 0, 0, 0, 0}}");
     assertEquals(MeanFilter.of(matrix, 0), matrix);
     Tensor result = MeanFilter.of(matrix, 1);
@@ -60,12 +60,12 @@ class MeanFilterTest {
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> MeanFilter.of(RealScalar.of(3), 1));
   }
 
   @Test
-  public void testNonArrayFail() {
+  void testNonArrayFail() {
     Tensor matrix = Tensors.fromString("{{1, 2, 3, 3, {3, 2, 3}}, {3}, {0, 0, 0}}");
     matrix.flatten(-1).forEach(RationalScalar.class::cast); // test if parsing went ok
     MeanFilter.of(matrix, 0);
@@ -73,7 +73,7 @@ class MeanFilterTest {
   }
 
   @Test
-  public void testRadiusFail() {
+  void testRadiusFail() {
     assertThrows(IllegalArgumentException.class, () -> MeanFilter.of(Tensors.vector(1, 2, 3, 4), -1));
   }
 }

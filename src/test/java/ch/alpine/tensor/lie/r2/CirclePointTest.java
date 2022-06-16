@@ -21,12 +21,12 @@ import ch.alpine.tensor.sca.Chop;
 
 class CirclePointTest {
   @Test
-  public void testNonPublic() {
+  void testNonPublic() {
     assertFalse(Modifier.isPublic(CirclePoint.class.getModifiers()));
   }
 
   @Test
-  public void testExact() {
+  void testExact() {
     for (int count = 0; count < 12; ++count) {
       Scalar scalar = RationalScalar.of(count, 12);
       Optional<Tensor> optional = CirclePoint.INSTANCE.turns(scalar);
@@ -38,7 +38,7 @@ class CirclePointTest {
   }
 
   @Test
-  public void testModify() {
+  void testModify() {
     Optional<Tensor> o1 = CirclePoint.INSTANCE.turns(RealScalar.ZERO);
     assertEquals(o1.get(), UnitVector.of(2, 0));
     o1.get().set(RealScalar.of(3), 0);

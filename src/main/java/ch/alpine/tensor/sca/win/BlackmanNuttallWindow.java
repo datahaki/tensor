@@ -27,6 +27,6 @@ public enum BlackmanNuttallWindow implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return getClass().getSimpleName();
+    return "BlackmanNuttallWindow";
   }
 }

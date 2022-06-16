@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.N;
 
 class CholeskyDecompositionImplTest {
   @Test
-  public void testSolveQuantity() throws ClassNotFoundException, IOException {
+  void testSolveQuantity() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.fromString( //
         "{{60[m^2], 30[m*rad], 20[kg*m]}, {30[m*rad], 20[rad^2], 15[kg*rad]}, {20[kg*m], 15[kg*rad], 12[kg^2]}}");
     CholeskyDecomposition choleskyDecomposition = //
@@ -44,7 +44,7 @@ class CholeskyDecompositionImplTest {
   }
 
   @Test
-  public void testGaussScalar() throws ClassNotFoundException, IOException {
+  void testGaussScalar() throws ClassNotFoundException, IOException {
     int n = 7;
     int prime = 7879;
     Random random = new Random(1);
@@ -68,7 +68,7 @@ class CholeskyDecompositionImplTest {
   }
 
   @Test
-  public void testDecimalScalar() {
+  void testDecimalScalar() {
     Tensor matrix = HilbertMatrix.of(5).map(N.DECIMAL128);
     CholeskyDecomposition choleskyDecomposition = CholeskyDecomposition.of(matrix);
     Tensor result = Dot.of( //
@@ -80,7 +80,7 @@ class CholeskyDecompositionImplTest {
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertTrue(Modifier.isPublic(CholeskyDecomposition.class.getModifiers()));
     assertFalse(Modifier.isPublic(CholeskyDecompositionImpl.class.getModifiers()));
   }

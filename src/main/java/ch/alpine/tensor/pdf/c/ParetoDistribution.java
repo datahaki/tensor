@@ -79,6 +79,6 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s]", getClass().getSimpleName(), k, alpha);
+    return String.format("ParetoDistribution[%s, %s]", k, alpha);
   }
 }

@@ -31,7 +31,7 @@ import ch.alpine.tensor.sca.pow.Power;
 
 class IntervalTest {
   @Test
-  public void testInverse1() {
+  void testInverse1() {
     Tensor matrix = Tensors.of( //
         Tensors.of(RealScalar.of(3), Interval.of(Clips.interval(RationalScalar.of(9, 10), RationalScalar.of(11, 10)))), //
         Tensors.of(RealScalar.of(2), RealScalar.of(1)));
@@ -42,7 +42,7 @@ class IntervalTest {
   }
 
   @Test
-  public void testInverse2() {
+  void testInverse2() {
     Tensor matrix = Tensors.of( //
         Tensors.of(RealScalar.of(3), Interval.of(Clips.interval(RationalScalar.of(9, 10), RationalScalar.of(11, 10)))), //
         Tensors.of(RealScalar.of(2), Interval.of(Clips.interval(RationalScalar.of(9, 10), RationalScalar.of(11, 10)))));
@@ -53,19 +53,19 @@ class IntervalTest {
   }
 
   @Test
-  public void testAbs() {
+  void testAbs() {
     assertEquals(Abs.FUNCTION.apply(Interval.of(-4, 1)), Interval.of(0, 4));
     assertEquals(Abs.FUNCTION.apply(Interval.of(-4, -2)), Interval.of(2, 4));
   }
 
   @Test
-  public void testAbsSquared() {
+  void testAbsSquared() {
     assertEquals(AbsSquared.FUNCTION.apply(Interval.of(-4, 1)), Interval.of(0, 16));
     assertEquals(AbsSquared.FUNCTION.apply(Interval.of(-4, -2)), Interval.of(4, 16));
   }
 
   @Test
-  public void testExact() {
+  void testExact() {
     assertTrue(ExactScalarQ.of(Interval.of(-4, 1)));
     assertFalse(ExactScalarQ.of(Interval.of(-4.3, 1.4)));
     assertFalse(ExactScalarQ.of(Interval.of(-4, 1.3)));
@@ -73,7 +73,7 @@ class IntervalTest {
   }
 
   @Test
-  public void testRound() {
+  void testRound() {
     Scalar scalar = Interval.of(2.3, 5.6);
     Round.FUNCTION.apply(scalar);
     Ceiling.FUNCTION.apply(scalar);
@@ -82,29 +82,29 @@ class IntervalTest {
   }
 
   @Test
-  public void testReciprocalFail() {
+  void testReciprocalFail() {
     assertThrows(TensorRuntimeException.class, () -> Interval.of(-2.3, 5.6).reciprocal());
   }
 
   @Test
-  public void testPowerFail() {
+  void testPowerFail() {
     assertThrows(TensorRuntimeException.class, () -> Power.of(Interval.of(-2.3, 5.6), 2.3));
   }
 
   @Test
-  public void testNumberFail() {
+  void testNumberFail() {
     assertThrows(TensorRuntimeException.class, () -> Interval.of(-2.3, 5.6).number());
   }
 
   @Test
-  public void testExp() {
+  void testExp() {
     Exp.FUNCTION.apply(Interval.of(-4, 1));
     Log.FUNCTION.apply(Interval.of(2, 3));
     Interval.of(-4, 1).hashCode();
   }
 
   @Test
-  public void testPower() {
+  void testPower() {
     Power.of(Interval.of(-4, 1), 7);
   }
 }

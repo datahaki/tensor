@@ -21,7 +21,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class EntrywiseTest {
   @Test
-  public void testMax() {
+  void testMax() {
     Entrywise entrywise = Entrywise.with(Max::of);
     Tensor result = entrywise.of(Tensors.of( //
         Tensors.vector(3, 2, 3), Tensors.vector(-2, 1, 4), Tensors.vector(-3, 4, 0)));
@@ -29,13 +29,13 @@ class EntrywiseTest {
   }
 
   @Test
-  public void testHelpOf() {
+  void testHelpOf() {
     assertEquals(Entrywise.with(Max::of).of(Tensors.of(Tensors.vector(1, 2, 3), Tensors.vector(5, 0, 4))), Tensors.vector(5, 2, 4));
     assertEquals(Entrywise.with(Min::of).of(Tensors.of(Tensors.vector(1, 2, 3), Tensors.vector(5, 0, 4))), Tensors.vector(1, 0, 3));
   }
 
   @Test
-  public void testStreamReduce() {
+  void testStreamReduce() {
     Tensor box = Tensors.fromString("{{0, 7}, {0, 8}, {1, 5}, {2, 7}}");
     Tensor max = box.stream().reduce(Entrywise.max()).get();
     Tensor min = box.stream().reduce(Entrywise.min()).get();
@@ -44,7 +44,7 @@ class EntrywiseTest {
   }
 
   @Test
-  public void testMaxSimple() {
+  void testMaxSimple() {
     Entrywise entrywise = Entrywise.max();
     Tensor result = entrywise.apply( //
         Tensors.vector(3, 2, 3), Tensors.vector(-2, 1, 4));
@@ -52,7 +52,7 @@ class EntrywiseTest {
   }
 
   @Test
-  public void testMinSimple() throws ClassNotFoundException, IOException {
+  void testMinSimple() throws ClassNotFoundException, IOException {
     Entrywise entrywise = Serialization.copy(Entrywise.min());
     Tensor result = entrywise.apply( //
         Tensors.vector(3, 2, 3), Tensors.vector(-2, 1, 4));
@@ -60,7 +60,7 @@ class EntrywiseTest {
   }
 
   @Test
-  public void testMaxScalar() throws ClassNotFoundException, IOException {
+  void testMaxScalar() throws ClassNotFoundException, IOException {
     Entrywise entrywise = Serialization.copy(Entrywise.max());
     Tensor result = entrywise.apply( //
         RealScalar.of(3), RealScalar.of(5));
@@ -68,7 +68,7 @@ class EntrywiseTest {
   }
 
   @Test
-  public void testMinScalar() {
+  void testMinScalar() {
     Entrywise entrywise = Entrywise.min();
     Tensor result = entrywise.apply( //
         RealScalar.of(3), RealScalar.of(5));
@@ -76,7 +76,7 @@ class EntrywiseTest {
   }
 
   @Test
-  public void testSingle() {
+  void testSingle() {
     Tensor single = Tensors.vector(3, 2, 3);
     Entrywise entrywise = Entrywise.with(Max::of);
     Tensor result = entrywise.of(single);
@@ -84,7 +84,7 @@ class EntrywiseTest {
   }
 
   @Test
-  public void testAdd() {
+  void testAdd() {
     Distribution distribution = UniformDistribution.unit();
     Tensor a = RandomVariate.of(distribution, 7, 9);
     Tensor b = RandomVariate.of(distribution, 7, 9);
@@ -94,7 +94,7 @@ class EntrywiseTest {
   }
 
   @Test
-  public void testMultiply() {
+  void testMultiply() {
     Distribution distribution = UniformDistribution.unit();
     Tensor a = RandomVariate.of(distribution, 7, 9);
     Tensor b = RandomVariate.of(distribution, 7, 9);
@@ -104,26 +104,26 @@ class EntrywiseTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     Entrywise entrywise = Entrywise.with(Max::of);
     assertThrows(NoSuchElementException.class, () -> entrywise.of(Tensors.empty()));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Entrywise entrywise = Entrywise.max();
     assertThrows(IllegalArgumentException.class, () -> entrywise.apply(Tensors.vector(3, 2, 3), Tensors.vector(-2, 1)));
   }
 
   @Test
-  public void testScalarTensorFail() {
+  void testScalarTensorFail() {
     Entrywise entrywise = Entrywise.max();
     assertThrows(TensorRuntimeException.class, () -> entrywise.apply(Tensors.vector(3, 2, 3), RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> entrywise.apply(RealScalar.ONE, Tensors.vector(3, 2, 3)));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> Entrywise.with(null));
   }
 }

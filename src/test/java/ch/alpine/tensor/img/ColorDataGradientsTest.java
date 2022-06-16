@@ -31,21 +31,21 @@ import ch.alpine.tensor.sca.Chop;
 class ColorDataGradientsTest {
   @ParameterizedTest
   @EnumSource(ColorDataGradients.class)
-  public void testDimensions(ColorDataGradient colorDataGradient) {
+  void testDimensions(ColorDataGradient colorDataGradient) {
     assertEquals(Dimensions.of(colorDataGradient.apply(RealScalar.ZERO)), Arrays.asList(4));
     assertEquals(Dimensions.of(colorDataGradient.apply(RealScalar.ONE)), Arrays.asList(4));
   }
 
   @ParameterizedTest
   @EnumSource(ColorDataGradients.class)
-  public void testQuantity(ColorDataGradient colorDataGradient) {
+  void testQuantity(ColorDataGradient colorDataGradient) {
     Scalar scalar = Quantity.of(Double.POSITIVE_INFINITY, "s");
     assertThrows(Exception.class, () -> colorDataGradient.apply(scalar));
   }
 
   @ParameterizedTest
   @EnumSource(ColorDataGradients.class)
-  public void testUnmodified(ColorDataGradient colorDataGradient) {
+  void testUnmodified(ColorDataGradient colorDataGradient) {
     Scalar nan = DoubleScalar.INDETERMINATE;
     Tensor copy = colorDataGradient.apply(nan);
     colorDataGradient.apply(nan).set(RealScalar.ONE::add, 1);
@@ -54,7 +54,7 @@ class ColorDataGradientsTest {
   }
 
   @Test
-  public void testDeriveWithOpacity() {
+  void testDeriveWithOpacity() {
     ColorDataGradient colorDataGradient1 = ColorDataGradients.CLASSIC.deriveWithOpacity(RealScalar.ONE);
     ColorDataGradient colorDataGradient2 = ColorDataGradients.CLASSIC.deriveWithOpacity(RationalScalar.HALF);
     Tensor rgba1 = colorDataGradient1.apply(RealScalar.of(0.5));
@@ -66,12 +66,12 @@ class ColorDataGradientsTest {
 
   @ParameterizedTest
   @EnumSource(ColorDataGradients.class)
-  public void testDeriveWithOpacityAll(ColorDataGradient colorDataGradient) throws ClassNotFoundException, IOException {
+  void testDeriveWithOpacityAll(ColorDataGradient colorDataGradient) throws ClassNotFoundException, IOException {
     Serialization.copy(colorDataGradient.deriveWithOpacity(RealScalar.of(0.2)));
   }
 
   @Test
-  public void testStrict() {
+  void testStrict() {
     int count = 0;
     for (ColorDataGradients colorDataGradients : ColorDataGradients.values()) {
       Tensor tableRgba = colorDataGradients.getTableRgba();
@@ -84,21 +84,21 @@ class ColorDataGradientsTest {
   }
 
   @Test
-  public void testSunset() {
+  void testSunset() {
     Tensor t1 = Reverse.of(ColorDataGradients.SUNSET.getTableRgba());
     Tensor t2 = ColorDataGradients.SUNSET_REVERSED.getTableRgba();
     assertEquals(t1, t2);
   }
 
   @Test
-  public void testGrayscaleTable() {
+  void testGrayscaleTable() {
     assertNull(ColorDataGradients.HUE.getTableRgba());
     assertNull(ColorDataGradients.GRAYSCALE.getTableRgba());
   }
 
   @ParameterizedTest
   @EnumSource(ColorDataGradients.class)
-  public void testFail(ColorDataGradient colorDataGradient) {
+  void testFail(ColorDataGradient colorDataGradient) {
     colorDataGradient.apply(RealScalar.of(0.5));
     colorDataGradient.apply(RealScalar.of(0.99));
     if (colorDataGradient.equals(ColorDataGradients.HUE)) {

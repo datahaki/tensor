@@ -18,7 +18,7 @@ import ch.alpine.tensor.num.Pi;
 
 class UnitSimplifyTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Set<Unit> set = new HashSet<>();
     set.add(Unit.of("kW"));
     set.add(Unit.of("kW*h^-1"));
@@ -33,7 +33,7 @@ class UnitSimplifyTest {
   }
 
   @Test
-  public void testPartsPer() {
+  void testPartsPer() {
     assertEquals(QuantityMagnitude.SI().in("ppt").apply(Quantity.of(1, "ppb")), RealScalar.of(1000));
     assertEquals(QuantityMagnitude.SI().in("ppb").apply(Quantity.of(1, "ppm")), RealScalar.of(1000));
     assertEquals(QuantityMagnitude.SI().in("ppm").apply(Quantity.of(1, "%")), RealScalar.of(10000));
@@ -41,20 +41,20 @@ class UnitSimplifyTest {
   }
 
   @Test
-  public void testProperties() {
+  void testProperties() {
     Set<String> set = ResourceData.properties("/ch/alpine/tensor/qty/simplify1.properties").stringPropertyNames();
     UnitSimplify.from(UnitSystem.SI(), set);
     assertEquals(set.size(), 4);
   }
 
   @Test
-  public void testNonUnitFail() {
+  void testNonUnitFail() {
     Set<String> set = ResourceData.properties("/ch/alpine/tensor/qty/simplify2.properties").stringPropertyNames();
     assertThrows(IllegalArgumentException.class, () -> UnitSimplify.from(UnitSystem.SI(), set));
   }
 
   @Test
-  public void testDuplicateFail() {
+  void testDuplicateFail() {
     Set<Unit> set = new HashSet<>();
     set.add(Unit.of("kW"));
     set.add(Unit.of("W"));
@@ -62,7 +62,7 @@ class UnitSimplifyTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> UnitSimplify.of(UnitSystem.SI(), null));
     assertThrows(NullPointerException.class, () -> UnitSimplify.of(null, new HashSet<>()));
   }

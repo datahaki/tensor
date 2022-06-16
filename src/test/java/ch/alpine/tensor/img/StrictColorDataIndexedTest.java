@@ -18,7 +18,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class StrictColorDataIndexedTest {
   @Test
-  public void testColors2() {
+  void testColors2() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(tensor);
     assertEquals(colorDataIndexed.apply(RealScalar.of(1.9)), tensor.get(1));
@@ -31,7 +31,7 @@ class StrictColorDataIndexedTest {
   }
 
   @Test
-  public void testColors3() {
+  void testColors3() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}}");
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(tensor);
     assertEquals(colorDataIndexed.apply(RealScalar.of(1.9)), tensor.get(1));
@@ -46,7 +46,7 @@ class StrictColorDataIndexedTest {
   }
 
   @Test
-  public void testDerive() throws ClassNotFoundException, IOException {
+  void testDerive() throws ClassNotFoundException, IOException {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
     ColorDataIndexed colorDataIndexed = Serialization.copy(StrictColorDataIndexed.of(tensor));
     colorDataIndexed = colorDataIndexed.deriveWithAlpha(255);
@@ -57,13 +57,13 @@ class StrictColorDataIndexedTest {
   }
 
   @Test
-  public void testEmpty() throws ClassNotFoundException, IOException {
+  void testEmpty() throws ClassNotFoundException, IOException {
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(Tensors.empty());
     Serialization.copy(colorDataIndexed.deriveWithAlpha(128));
   }
 
   @Test
-  public void testColors() {
+  void testColors() {
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(Color.BLUE, Color.RED, Color.BLACK);
     assertEquals(colorDataIndexed.getColor(0), Color.BLUE);
     assertEquals(colorDataIndexed.getColor(1), Color.RED);
@@ -72,7 +72,7 @@ class StrictColorDataIndexedTest {
   }
 
   @Test
-  public void testFails() {
+  void testFails() {
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(Color.BLUE, Color.RED);
     assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(1, "m")));
     assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(Double.NaN, "m")));
@@ -80,18 +80,18 @@ class StrictColorDataIndexedTest {
   }
 
   @Test
-  public void testFailCreate() {
+  void testFailCreate() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}}");
     assertThrows(TensorRuntimeException.class, () -> StrictColorDataIndexed.of(tensor));
   }
 
   @Test
-  public void testFailCreateScalar() {
+  void testFailCreateScalar() {
     assertThrows(TensorRuntimeException.class, () -> StrictColorDataIndexed.of(RealScalar.ONE));
   }
 
   @Test
-  public void testFailExtract() {
+  void testFailExtract() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
     ColorDataIndexed colorDataIndexed = StrictColorDataIndexed.of(tensor);
     assertThrows(ArrayIndexOutOfBoundsException.class, () -> colorDataIndexed.getColor(-1));

@@ -12,7 +12,7 @@ import ch.alpine.tensor.alg.ConstantArray;
 
 class MatrixExpSeriesTest {
   @Test
-  public void testNaNFail() {
+  void testNaNFail() {
     Tensor matrix = ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3);
     assertThrows(TensorRuntimeException.class, () -> MatrixExpSeries.FUNCTION.apply(matrix));
   }

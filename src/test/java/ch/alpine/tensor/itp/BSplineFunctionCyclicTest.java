@@ -28,7 +28,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class BSplineFunctionCyclicTest {
   @Test
-  public void testDegree0() {
+  void testDegree0() {
     ScalarTensorFunction scalarTensorFunction = BSplineFunctionCyclic.of(0, Tensors.vector(1, 2, 3));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(-0.1)), RealScalar.of(1));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(0.0)), RealScalar.of(1));
@@ -44,7 +44,7 @@ class BSplineFunctionCyclicTest {
   }
 
   @Test
-  public void testDegree1() {
+  void testDegree1() {
     ScalarTensorFunction scalarTensorFunction = BSplineFunctionCyclic.of(1, Tensors.vector(3, 4, 5));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(-0.5)), RealScalar.of(4.0));
     assertEquals(scalarTensorFunction.apply(RealScalar.of(0.0)), RealScalar.of(3));
@@ -58,7 +58,7 @@ class BSplineFunctionCyclicTest {
   }
 
   @Test
-  public void testCyclic() {
+  void testCyclic() {
     Random random = new Random();
     Distribution distribution = DiscreteUniformDistribution.of(-50, 50);
     for (int n = 1; n < 10; ++n)
@@ -78,7 +78,7 @@ class BSplineFunctionCyclicTest {
   }
 
   @Test
-  public void testExact() {
+  void testExact() {
     Distribution distribution = UniformDistribution.of(0, 3);
     ScalarUnaryOperator scalarUnaryOperator = Round.toMultipleOf(RationalScalar.of(1, 7));
     for (int degree = 0; degree < 5; ++degree) {
@@ -91,7 +91,7 @@ class BSplineFunctionCyclicTest {
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IllegalArgumentException.class, () -> BSplineFunctionCyclic.of(-2, Tensors.empty()));
     assertThrows(IllegalArgumentException.class, () -> BSplineFunctionCyclic.of(-1, Tensors.empty()));
     assertThrows(TensorRuntimeException.class, () -> BSplineFunctionCyclic.of(+0, Tensors.empty()));
@@ -100,7 +100,7 @@ class BSplineFunctionCyclicTest {
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(IllegalArgumentException.class, () -> BSplineFunctionString.of(-1, Tensors.vector(1, 2, 3, 4)));
   }
 }

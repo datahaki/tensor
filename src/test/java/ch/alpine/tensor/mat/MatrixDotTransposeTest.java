@@ -17,7 +17,7 @@ import ch.alpine.tensor.pdf.c.NormalDistribution;
 
 class MatrixDotTransposeTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor matrix = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     Tensor tensor = Dot.of(matrix, Transpose.of(matrix));
     Tensor result = MatrixDotTranspose.of(matrix, matrix);
@@ -25,7 +25,7 @@ class MatrixDotTransposeTest {
   }
 
   @Test
-  public void testTwo() {
+  void testTwo() {
     Tensor a = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     Tensor b = RandomVariate.of(NormalDistribution.standard(), 3, 5);
     Tensor tensor = Dot.of(a, Transpose.of(b));
@@ -34,7 +34,7 @@ class MatrixDotTransposeTest {
   }
 
   @Test
-  public void testRank3() {
+  void testRank3() {
     Tensor a = RandomVariate.of(NormalDistribution.standard(), 4, 3);
     Tensor b = LeviCivitaTensor.of(3);
     Tensor tensor = Dot.of(a, Transpose.of(b));
@@ -43,21 +43,21 @@ class MatrixDotTransposeTest {
   }
 
   @Test
-  public void testVectorFail() {
+  void testVectorFail() {
     assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(Tensors.vector(2, 1), Tensors.vector(3, 7)));
     assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(Tensors.vector(2, 1), HilbertMatrix.of(2, 3)));
     assertThrows(IllegalArgumentException.class, () -> MatrixDotTranspose.of(HilbertMatrix.of(2), Tensors.vector(3, 7)));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(RealScalar.ONE, RealScalar.ONE));
     assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(RealScalar.ONE, HilbertMatrix.of(2, 3)));
     assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(HilbertMatrix.of(2), RealScalar.ONE));
   }
 
   @Test
-  public void testThreeFail() {
+  void testThreeFail() {
     Tensor a = RandomVariate.of(NormalDistribution.standard(), 3, 5, 4);
     Tensor b = RandomVariate.of(NormalDistribution.standard(), 2, 4);
     // Tolerance.CHOP.requireClose(a.dot(Transpose.of(b)), MatrixDotTranspose.of(a, b));

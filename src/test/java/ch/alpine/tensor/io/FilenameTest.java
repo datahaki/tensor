@@ -25,7 +25,7 @@ import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 class FilenameTest {
   @Test
-  public void testImageWriter(@TempDir File tempDir) throws IOException {
+  void testImageWriter(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.jpg");
     try (OutputStream outputStream = new FileOutputStream(file)) {
       Iterator<ImageWriter> iterator = ImageIO.getImageWritersByFormatName("jpeg");
@@ -45,25 +45,25 @@ class FilenameTest {
   }
 
   @Test
-  public void testFailSpacing() {
+  void testFailSpacing() {
     Filename filename = new Filename("dir/title.bmp ");
     assertThrows(IllegalArgumentException.class, () -> filename.extension());
   }
 
   @Test
-  public void testFailExtension() {
+  void testFailExtension() {
     Filename filename = new Filename("dir/title.ext");
     assertThrows(IllegalArgumentException.class, () -> filename.extension());
   }
 
   @Test
-  public void testFailNoExt() {
+  void testFailNoExt() {
     Filename filename = new Filename("dir/mybmp");
     assertThrows(IllegalArgumentException.class, () -> filename.extension());
   }
 
   @Test
-  public void testFailTruncate() {
+  void testFailTruncate() {
     Filename filename = new Filename("dir/mybmp");
     assertThrows(StringIndexOutOfBoundsException.class, () -> filename.truncate());
   }

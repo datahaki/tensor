@@ -21,19 +21,19 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ColorDataListsTest {
   @Test
-  public void testApply() {
+  void testApply() {
     ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();
     assertEquals(colorDataIndexed.apply(RealScalar.of(2.3)), Tensors.fromString("{143, 176, 50, 255}"));
   }
 
   @Test
-  public void testGetColor() {
+  void testGetColor() {
     ColorDataIndexed colorDataIndexed = ColorDataLists._097.cyclic();
     assertEquals(colorDataIndexed.getColor(2), new Color(143, 176, 50, 255));
   }
 
   @Test
-  public void testQuantityTransparent() {
+  void testQuantityTransparent() {
     ColorDataIndexed colorDataIndexed = ColorDataLists._103.cyclic();
     assertThrows(TensorRuntimeException.class, () -> colorDataIndexed.apply(Quantity.of(2, "s")));
     assertThrows(TensorRuntimeException.class, () -> colorDataIndexed.apply(Quantity.of(Double.NaN, "s")));
@@ -41,7 +41,7 @@ class ColorDataListsTest {
 
   @ParameterizedTest
   @EnumSource(ColorDataLists.class)
-  public void testInfinityTransparentCyclic(ColorDataLists colorDataLists) {
+  void testInfinityTransparentCyclic(ColorDataLists colorDataLists) {
     ColorDataIndexed colorDataIndexed = colorDataLists.cyclic();
     assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
     assertEquals(colorDataIndexed.apply(DoubleScalar.NEGATIVE_INFINITY), Array.zeros(4));
@@ -50,7 +50,7 @@ class ColorDataListsTest {
 
   @ParameterizedTest
   @EnumSource(ColorDataLists.class)
-  public void testInfinityTransparentStrict(ColorDataLists colorDataLists) {
+  void testInfinityTransparentStrict(ColorDataLists colorDataLists) {
     ColorDataIndexed colorDataIndexed = colorDataLists.strict();
     assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
     assertEquals(colorDataIndexed.apply(DoubleScalar.NEGATIVE_INFINITY), Array.zeros(4));
@@ -59,7 +59,7 @@ class ColorDataListsTest {
 
   @ParameterizedTest
   @ValueSource(ints = { 0, 10, 128, 255 })
-  public void testDerive(int alpha) {
+  void testDerive(int alpha) {
     ColorDataIndexed master = ColorDataLists._112.cyclic();
     ColorDataIndexed colorDataIndexed = master.deriveWithAlpha(alpha);
     Color color = colorDataIndexed.getColor(3);
@@ -67,13 +67,13 @@ class ColorDataListsTest {
   }
 
   @Test
-  public void testFailNeg() {
+  void testFailNeg() {
     ColorDataIndexed colorDataIndexed = ColorDataLists._058.cyclic();
     colorDataIndexed.apply(RealScalar.of(-0.3));
   }
 
   @Test
-  public void testSize() {
+  void testSize() {
     ColorDataLists colorDataLists = ColorDataLists._097;
     assertEquals(colorDataLists.cyclic().length(), 16);
     assertTrue(21 <= ColorDataLists.values().length);
@@ -81,14 +81,14 @@ class ColorDataListsTest {
 
   @ParameterizedTest
   @EnumSource(ColorDataLists.class)
-  public void testSizeCyclic(ColorDataLists colorDataLists) {
+  void testSizeCyclic(ColorDataLists colorDataLists) {
     assertTrue(1 < colorDataLists.cyclic().length());
     assertTrue(colorDataLists.cyclic().length() < 100);
   }
 
   @ParameterizedTest
   @EnumSource(ColorDataLists.class)
-  public void testSizeStrict(ColorDataLists colorDataLists) {
+  void testSizeStrict(ColorDataLists colorDataLists) {
     assertTrue(1 < colorDataLists.strict().length());
     assertTrue(colorDataLists.strict().length() < 100);
   }

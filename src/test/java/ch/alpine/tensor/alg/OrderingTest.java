@@ -1,12 +1,11 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,7 @@ import ch.alpine.tensor.pdf.d.BinomialDistribution;
 
 class OrderingTest {
   @Test
-  public void testVector() throws ClassNotFoundException, IOException {
+  void testVector() throws ClassNotFoundException, IOException {
     Tensor vector = Tensors.vector(4, 2, 3, 0, 1);
     int[] array = Serialization.copy(Ordering.INCREASING).of(vector);
     Tensor ascending = Tensor.of( //
@@ -36,7 +35,7 @@ class OrderingTest {
   }
 
   @Test
-  public void testRandomExact() {
+  void testRandomExact() {
     Distribution d = BinomialDistribution.of(12, RationalScalar.of(1, 3));
     Tensor vector = RandomVariate.of(d, 100);
     int[] array = Ordering.INCREASING.of(vector);
@@ -46,7 +45,7 @@ class OrderingTest {
   }
 
   @Test
-  public void testRandomNumeric() {
+  void testRandomNumeric() {
     Distribution d = LogNormalDistribution.standard();
     Tensor vector = RandomVariate.of(d, 100);
     int[] array = Ordering.INCREASING.of(vector);
@@ -56,7 +55,7 @@ class OrderingTest {
   }
 
   @Test
-  public void testRandomNumericDecreasing() {
+  void testRandomNumericDecreasing() {
     Distribution d = CauchyDistribution.standard();
     Tensor vector = RandomVariate.of(d, 100);
     int[] array = Ordering.DECREASING.of(vector);
@@ -66,20 +65,20 @@ class OrderingTest {
   }
 
   @Test
-  public void testEnum() {
+  void testEnum() {
     assertEquals(Ordering.valueOf("INCREASING"), Ordering.INCREASING);
     assertEquals(Ordering.valueOf("DECREASING"), Ordering.DECREASING);
   }
 
   @Test
-  public void testSerializable() throws Exception {
+  void testSerializable() throws Exception {
     Ordering a = Ordering.DECREASING;
     Ordering b = Serialization.copy(a);
     assertEquals(a, b);
   }
 
   @Test
-  public void testSingleton() {
+  void testSingleton() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}}");
     int[] array = Ordering.DECREASING.of(tensor);
     assertEquals(array.length, 1);
@@ -87,19 +86,19 @@ class OrderingTest {
   }
 
   @Test
-  public void testIntegerToTensor() {
+  void testIntegerToTensor() {
     Integer[] a = { 2, 3, 4 };
     assertEquals(Tensors.vector(a), Tensors.vector(1, 2, 3).map(RealScalar.ONE::add));
   }
 
   @Test
-  public void testMatrix() {
-    assertTrue(Arrays.equals(Ordering.INCREASING.of(HilbertMatrix.of(4)), new int[] { 3, 2, 1, 0 }));
-    assertTrue(Arrays.equals(Ordering.DECREASING.of(HilbertMatrix.of(4)), new int[] { 0, 1, 2, 3 }));
+  void testMatrix() {
+    assertArrayEquals(Ordering.INCREASING.of(HilbertMatrix.of(4)), new int[] { 3, 2, 1, 0 });
+    assertArrayEquals(Ordering.DECREASING.of(HilbertMatrix.of(4)), new int[] { 0, 1, 2, 3 });
   }
 
   @Test
-  public void testIndex() {
+  void testIndex() {
     Tensor vector = Tensors.vector(2, 5, 4, 1, 0, 3);
     int[] array = Ordering.INCREASING.of(vector);
     assertEquals(Tensors.vectorInt(array), Tensors.vector(4, 3, 0, 5, 2, 1));
@@ -110,7 +109,7 @@ class OrderingTest {
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Ordering.INCREASING.of(Pi.HALF));
   }
 }

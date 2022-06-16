@@ -87,6 +87,6 @@ public class ChiSquareDistribution implements UnivariateDistribution, Serializab
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), nu);
+    return String.format("ChiSquareDistribution[%s]", nu);
   }
 }

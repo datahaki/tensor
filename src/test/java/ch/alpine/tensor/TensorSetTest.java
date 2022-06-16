@@ -22,7 +22,7 @@ import ch.alpine.tensor.red.Total;
 
 class TensorSetTest {
   @Test
-  public void testSetScalar() {
+  void testSetScalar() {
     Tensor eye = IdentityMatrix.of(5);
     Tensor cpy = eye.copy();
     assertEquals(eye, cpy);
@@ -32,7 +32,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetTensor0() {
+  void testSetTensor0() {
     Tensor eye = HilbertMatrix.of(3);
     Tensor matrix = eye.copy();
     assertEquals(eye, matrix);
@@ -42,7 +42,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetTensor0Total() {
+  void testSetTensor0Total() {
     Tensor eye = HilbertMatrix.of(3);
     Tensor matrix = eye.copy();
     assertEquals(eye, matrix);
@@ -53,7 +53,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetTensor1() {
+  void testSetTensor1() {
     Tensor eye = HilbertMatrix.of(3);
     Tensor cpy = eye.copy();
     assertEquals(eye, cpy);
@@ -63,7 +63,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetNotByRef() {
+  void testSetNotByRef() {
     Tensor a = Tensors.vector(1);
     Tensor row = Tensors.vector(1, 2, 3, 4);
     a.set(row, 0);
@@ -73,7 +73,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetAllLast() {
+  void testSetAllLast() {
     Tensor a = Tensors.vector(0, 1, 3, 4);
     Tensor row = Tensors.vector(5, 6, 7, 8);
     a.set(row, Tensor.ALL);
@@ -81,7 +81,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetMultiAll0() {
+  void testSetMultiAll0() {
     Tensor a = Array.zeros(2, 3);
     Tensor b = Array.zeros(2, 1);
     a.set(b, Tensor.ALL, 2);
@@ -90,7 +90,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetMultiAll1() {
+  void testSetMultiAll1() {
     Tensor a = Array.zeros(2, 3, 4, 5);
     Tensor b = Array.zeros(3, 5, 1);
     a.set(b, 1, Tensor.ALL, 2, Tensor.ALL);
@@ -100,7 +100,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetMultiAll2() {
+  void testSetMultiAll2() {
     Tensor a = Array.zeros(2, 3, 4, 5);
     Tensor b = Array.zeros(2, 4, 1);
     a.set(b, Tensor.ALL, 2, Tensor.ALL, 2);
@@ -110,7 +110,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetAllFail() {
+  void testSetAllFail() {
     Tensor a = Tensors.vector(0, 1, 3, 4);
     Tensor c = a.copy();
     assertThrows(IllegalArgumentException.class, () -> a.set(Tensors.vector(5, 6, 7, 8, 9), Tensor.ALL));
@@ -120,7 +120,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSet333() {
+  void testSet333() {
     Tensor ad = Array.zeros(3, 3, 3);
     Tensor mat = HilbertMatrix.of(3);
     ad.set(mat, Tensor.ALL, 2);
@@ -129,7 +129,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetSelf() {
+  void testSetSelf() {
     Tensor a = Tensors.vector(1); // 1
     assertTrue(TensorRank.of(a) == 1);
     a.set(a, 0);
@@ -145,14 +145,14 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetAllSelfVector() {
+  void testSetAllSelfVector() {
     Tensor a = Range.of(10, 20);
     a.set(a, Tensor.ALL);
     assertEquals(a, Range.of(10, 20));
   }
 
   @Test
-  public void testSetAllSelfMatrix() {
+  void testSetAllSelfMatrix() {
     Tensor a = HilbertMatrix.of(3, 5);
     a.set(a, Tensor.ALL);
     assertEquals(a, HilbertMatrix.of(3, 5));
@@ -161,7 +161,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetAllSelfUnstructured() {
+  void testSetAllSelfUnstructured() {
     Tensor a = Tensors.fromString("{{1, 2}, {3+I, 4, 5, 6}, {}}");
     Tensor c = a.copy().unmodifiable();
     a.set(a, Tensor.ALL);
@@ -171,7 +171,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetFunctionAllLast() {
+  void testSetFunctionAllLast() {
     Tensor a = Tensors.vector(0, 1, 3, 4, 9);
     a.set(RealScalar.ONE::add, Tensor.ALL);
     Tensor b = Tensors.vector(1, 2, 4, 5, 10);
@@ -179,7 +179,7 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetAll() {
+  void testSetAll() {
     Tensor matrix = HilbertMatrix.of(4, 6);
     List<Integer> l1 = Dimensions.of(matrix);
     Tensor column = Tensors.vector(3, 2, 1, 0);
@@ -190,14 +190,14 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetAllBlob() {
+  void testSetAllBlob() {
     Tensor vector = Tensors.vector(3, 4, 5, 6);
     vector.set(HilbertMatrix.of(2), 2);
     assertEquals(vector.toString(), "{3, 4, {{1, 1/2}, {1/2, 1/3}}, 6}");
   }
 
   @Test
-  public void testSetFunctionAll() {
+  void testSetFunctionAll() {
     Tensor matrix = HilbertMatrix.of(4, 6);
     Tensor column = Tensors.vector(3, 4, 5, 6);
     matrix.set(Scalar::reciprocal, Tensor.ALL, 2);
@@ -205,13 +205,13 @@ class TensorSetTest {
   }
 
   @Test
-  public void testSetTensorLevel0() {
+  void testSetTensorLevel0() {
     Tensor vector = Tensors.vector(2, 3, 4);
     assertThrows(IllegalArgumentException.class, () -> vector.set(RealScalar.ONE));
   }
 
   @Test
-  public void testSetFunctionLevel0() {
+  void testSetFunctionLevel0() {
     Tensor vector = Tensors.vector(2, 3, 4);
     assertThrows(IllegalArgumentException.class, () -> vector.set(t -> RealScalar.ONE));
   }

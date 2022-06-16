@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class ChiSquareDistributionTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(ChiSquareDistribution.of(2.3));
     PDF pdf = PDF.of(distribution);
     Scalar scalar = pdf.at(RealScalar.of(1.4));
@@ -37,33 +37,33 @@ class ChiSquareDistributionTest {
   }
 
   @Test
-  public void testCdfFails() {
+  void testCdfFails() {
     CDF cdf = CDF.of(ChiSquareDistribution.of(3));
     assertThrows(UnsupportedOperationException.class, () -> cdf.p_lessThan(RealScalar.TWO));
     assertThrows(UnsupportedOperationException.class, () -> cdf.p_lessEquals(RealScalar.TWO));
   }
 
   @Test
-  public void testInverseCdfFails() {
+  void testInverseCdfFails() {
     InverseCDF cdf = InverseCDF.of(ChiSquareDistribution.of(3));
     assertThrows(UnsupportedOperationException.class, () -> cdf.quantile(RationalScalar.HALF));
   }
 
   @Test
-  public void testRandomFails() {
+  void testRandomFails() {
     Distribution distribution = ChiSquareDistribution.of(3);
     assertThrows(UnsupportedOperationException.class, () -> RandomVariate.of(distribution));
   }
 
   @Test
-  public void testFails() {
+  void testFails() {
     assertThrows(TensorRuntimeException.class, () -> ChiSquareDistribution.of(0));
     assertThrows(TensorRuntimeException.class, () -> ChiSquareDistribution.of(-2.3));
     assertThrows(TensorRuntimeException.class, () -> ChiSquareDistribution.of(Quantity.of(2, "m")));
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     Distribution distribution = ChiSquareDistribution.of(RationalScalar.of(3, 2));
     assertEquals(distribution.toString(), "ChiSquareDistribution[3/2]");
   }

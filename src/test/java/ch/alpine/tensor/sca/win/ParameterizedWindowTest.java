@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class ParameterizedWindowTest {
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(ParameterizedWindow.class.getModifiers()));
   }
 }

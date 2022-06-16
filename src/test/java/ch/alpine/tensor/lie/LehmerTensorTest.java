@@ -17,7 +17,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 
 class LehmerTensorTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor lehmer = LehmerTensor.of(3);
     ExactTensorQ.require(lehmer);
     assertEquals(TensorRank.of(lehmer), 3);
@@ -25,14 +25,14 @@ class LehmerTensorTest {
   }
 
   @Test
-  public void testEquivalent() {
+  void testEquivalent() {
     Tensor lehmer1 = LehmerTensor.of(3);
     Tensor lehmer2 = LehmerTensor.of(Range.of(1, 4));
     assertEquals(lehmer1, lehmer2);
   }
 
   @Test
-  public void testNegativeFail() {
+  void testNegativeFail() {
     assertThrows(NoSuchElementException.class, () -> LehmerTensor.of(0));
     assertThrows(IllegalArgumentException.class, () -> LehmerTensor.of(-1));
   }

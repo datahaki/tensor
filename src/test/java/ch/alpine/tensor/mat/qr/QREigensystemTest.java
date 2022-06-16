@@ -12,7 +12,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class QREigensystemTest {
   @Test
-  public void testSymmetric() {
+  void testSymmetric() {
     Tensor matrix = Tensors.fromString("{{52, 30, 49, 28}, {30, 50, 8, 44}, {49, 8, 46, 16}, {28, 44, 16, 22}}");
     QREigensystem qrEigensystem = new QREigensystem(matrix, Chop._12);
     // System.out.println(Pretty.of(qrEigensystem.qrDecomposition.getR().map(Round._2)));

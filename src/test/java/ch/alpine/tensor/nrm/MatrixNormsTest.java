@@ -21,7 +21,7 @@ class MatrixNormsTest {
   };
 
   @Test
-  public void testZero() {
+  void testZero() {
     for (TensorScalarFunction norm : VALUES) {
       assertEquals(norm.apply(Array.zeros(1, 1)), RealScalar.ZERO);
       assertEquals(norm.apply(Array.zeros(5, 3)), RealScalar.ZERO);
@@ -29,7 +29,7 @@ class MatrixNormsTest {
   }
 
   @Test
-  public void testFails() {
+  void testFails() {
     for (TensorScalarFunction norm : VALUES) {
       assertThrows(TensorRuntimeException.class, () -> norm.apply(RealScalar.ONE));
       assertThrows(Exception.class, () -> norm.apply(Tensors.empty()));

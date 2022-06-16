@@ -13,18 +13,18 @@ import ch.alpine.tensor.qty.Quantity;
 
 class NuttallWindowTest {
   @Test
-  public void testZero() {
+  void testZero() {
     ScalarUnaryOperator scalarUnaryOperator = NuttallWindow.FUNCTION;
     assertEquals(scalarUnaryOperator.apply(RealScalar.ZERO), RealScalar.ONE);
   }
 
   @Test
-  public void testOutside() {
+  void testOutside() {
     assertEquals(NuttallWindow.FUNCTION.apply(RealScalar.of(-0.52)), RealScalar.ZERO);
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> NuttallWindow.FUNCTION.apply(Quantity.of(0, "s")));
     assertThrows(TensorRuntimeException.class, () -> NuttallWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }

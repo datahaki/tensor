@@ -19,31 +19,31 @@ import ch.alpine.tensor.qty.Quantity;
 
 class MathematicaNumberQTest {
   @Test
-  public void testRealFinite() {
+  void testRealFinite() {
     assertTrue(MathematicaNumberQ.of(RealScalar.of(0.)));
     assertTrue(MathematicaNumberQ.of(RealScalar.ZERO));
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     assertTrue(MathematicaNumberQ.of(ComplexScalar.of(0., 0.3)));
     assertTrue(MathematicaNumberQ.of(ComplexScalar.of(0., 2)));
   }
 
   @Test
-  public void testComplexCorner() {
+  void testComplexCorner() {
     assertFalse(MathematicaNumberQ.of(ComplexScalar.of(Double.POSITIVE_INFINITY, 0.3)));
     assertFalse(MathematicaNumberQ.of(ComplexScalar.of(0., Double.NaN)));
   }
 
   @Test
-  public void testGauss() {
+  void testGauss() {
     assertTrue(MathematicaNumberQ.of(GaussScalar.of(3, 7)));
     assertTrue(MathematicaNumberQ.of(GaussScalar.of(0, 7)));
   }
 
   @Test
-  public void testCorner() {
+  void testCorner() {
     assertFalse(MathematicaNumberQ.of(DoubleScalar.POSITIVE_INFINITY));
     assertFalse(MathematicaNumberQ.of(DoubleScalar.NEGATIVE_INFINITY));
     assertFalse(MathematicaNumberQ.of(RealScalar.of(Double.NaN)));
@@ -51,37 +51,37 @@ class MathematicaNumberQTest {
   }
 
   @Test
-  public void testCornerFloat() {
+  void testCornerFloat() {
     assertFalse(MathematicaNumberQ.of(RealScalar.of(Float.POSITIVE_INFINITY)));
     assertFalse(MathematicaNumberQ.of(RealScalar.of(Float.POSITIVE_INFINITY)));
     assertFalse(MathematicaNumberQ.of(RealScalar.of(Float.NaN)));
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     assertFalse(MathematicaNumberQ.of(Quantity.of(3, "m")));
     assertFalse(MathematicaNumberQ.of(Quantity.of(3.14, "m")));
   }
 
   @Test
-  public void testAll() {
+  void testAll() {
     assertTrue(MathematicaNumberQ.all(Tensors.fromString("{1, 3}")));
     assertFalse(MathematicaNumberQ.all(Tensors.fromString("{1, 3[m]}")));
   }
 
   @Test
-  public void testRequire() {
+  void testRequire() {
     Scalar scalar = MathematicaNumberQ.require(RealScalar.of(123.456));
     assertEquals(scalar, RealScalar.of(123.456));
   }
 
   @Test
-  public void testRequireFail() {
+  void testRequireFail() {
     assertThrows(TensorRuntimeException.class, () -> MathematicaNumberQ.require(Quantity.of(6, "apples")));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> MathematicaNumberQ.of(null));
   }
 }

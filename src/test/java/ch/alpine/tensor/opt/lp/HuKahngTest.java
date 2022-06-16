@@ -29,7 +29,7 @@ import ch.alpine.tensor.sca.Chop;
  * by T.C. Hu, Andrew B. Kahng, 2016 */
 class HuKahngTest {
   @Test
-  public void testP14() {
+  void testP14() {
     // x >= 0 that minimizes c.x subject to m.x <= b
     Tensor c = Tensors.fromString("{4[USD], 5[USD]}");
     Tensor m = Tensors.fromString("{{12[Wood], 8[Wood]}, {6[Iron], 9[Iron]}}");
@@ -58,7 +58,7 @@ class HuKahngTest {
   }
 
   @Test
-  public void testP18_2() {
+  void testP18_2() {
     Tensor c = Tensors.fromString("{12[USD], 10[USD], 1[USD]}");
     Tensor m = Tensors.fromString("{{11[lb], 10[lb], 9[lb]}}");
     Tensor b = Tensors.fromString("{20[lb]}");
@@ -79,7 +79,7 @@ class HuKahngTest {
   }
 
   @Test
-  public void testP18_3() {
+  void testP18_3() {
     Tensor c = Tensors.vector(1, 1, 1);
     Tensor m = Tensors.matrixInt(new int[][] { { 6, 3, 1 }, { 4, 5, 6 } });
     Tensor b = Tensors.vector(15, 15);
@@ -91,7 +91,7 @@ class HuKahngTest {
   }
 
   @Test
-  public void testP21() {
+  void testP21() {
     Tensor c = Tensors.fromString("{1[USD], 1[USD], 1[USD]}");
     Tensor m = Tensors.fromString("{{4[ap], 1[ap], 3[ap]}, {1[or], 4[or], 2[or]}}");
     Tensor b = Tensors.fromString("{15[ap], 15[or]}");
@@ -114,7 +114,7 @@ class HuKahngTest {
   }
 
   @Test
-  public void testP23() {
+  void testP23() {
     Tensor c = Tensors.fromString("{15[USD], 7[USD], 4[USD], 6[USD]}");
     Tensor m = Tensors.fromString("{{3[va], 1[va], 0[va], -1[va]}, {1[vb], 1[vb], 1[vb], 2[vb]}}");
     Tensor b = Tensors.fromString("{3[va], 5[vb]}");
@@ -136,7 +136,7 @@ class HuKahngTest {
   }
 
   @Test
-  public void testP42() {
+  void testP42() {
     Tensor c = Array.zeros(4);
     Tensor m = Tensors.matrixInt(new int[][] { { 4, 1, 0, 0 }, { 8, 0, 2, 0 }, { 10, 0, 1, 3 } });
     Tensor b = Tensors.vector(3, 4, 5);
@@ -146,7 +146,7 @@ class HuKahngTest {
   }
 
   @Test
-  public void testP44() {
+  void testP44() {
     Tensor c = Tensors.vector(1, 1, 2, 1);
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 0, 2, -2 }, { 0, 1, 1, 4 } });
     Tensor b = Tensors.vector(2, 6);
@@ -164,7 +164,7 @@ class HuKahngTest {
   }
 
   @Test
-  public void testP45() {
+  void testP45() {
     Tensor c = Tensors.vector(1, 2);
     Tensor A = Tensors.matrixInt(new int[][] { { -1, 1 }, { 0, 1 }, { 1, 1 }, { 4, 1 } });
     Tensor b = Tensors.vector(6, 8, 12, 36);
@@ -183,7 +183,7 @@ class HuKahngTest {
   }
 
   @Test
-  public void testP71_1() {
+  void testP71_1() {
     LinearProgram lpp = LinearProgram.of( //
         Objective.MIN, Tensors.vector(3, 3), //
         ConstraintType.GREATER_EQUALS, //
@@ -194,7 +194,7 @@ class HuKahngTest {
   }
 
   @Test
-  public void testP71_2() {
+  void testP71_2() {
     LinearProgram lpp = LinearProgram.of( //
         Objective.MIN, Tensors.vector(4, 1, 1), //
         ConstraintType.GREATER_EQUALS, //
@@ -205,7 +205,7 @@ class HuKahngTest {
   }
 
   @Test
-  public void testP72_3() {
+  void testP72_3() {
     LinearProgram lpd = LinearProgram.of( //
         Objective.MAX, Tensors.vector(-5, -35, -20), //
         ConstraintType.LESS_EQUALS, //
@@ -222,7 +222,7 @@ class HuKahngTest {
   }
 
   @Test
-  public void testP72_4() {
+  void testP72_4() {
     LinearProgram lpd = LinearProgram.of( //
         Objective.MAX, Tensors.vector(-2, -1, 0), //
         ConstraintType.LESS_EQUALS, //
@@ -239,7 +239,7 @@ class HuKahngTest {
   }
 
   @Test
-  public void testP72_5() {
+  void testP72_5() {
     LinearProgram lpd = LinearProgram.of( //
         Objective.MAX, Tensors.vector(-4, -12, -18), //
         ConstraintType.GREATER_EQUALS, //

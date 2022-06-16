@@ -13,13 +13,13 @@ import ch.alpine.tensor.sca.Chop;
 
 class ArcSinTest {
   @Test
-  public void testReal() {
+  void testReal() {
     assertEquals(ArcSin.of(Scalars.fromString("1")), RealScalar.of(Math.asin(1)));
     assertEquals(ArcSin.of(Scalars.fromString("-1")), RealScalar.of(Math.asin(-1)));
   }
 
   @Test
-  public void testRealOutside() {
+  void testRealOutside() {
     Scalar s = RealScalar.of(3);
     Scalar r = ArcSin.of(s);
     // 1.5707963267948966192 - 1.7627471740390860505 I
@@ -27,7 +27,7 @@ class ArcSinTest {
   }
 
   @Test
-  public void testRealOutsideNeg() {
+  void testRealOutsideNeg() {
     Scalar s = RealScalar.of(-3);
     Scalar r = ArcSin.FUNCTION.apply(s);
     assertEquals(r, ArcSin.of(s));
@@ -36,7 +36,7 @@ class ArcSinTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar s = ComplexScalar.of(5, -7);
     Scalar r = ArcSin.FUNCTION.apply(s);
     assertEquals(r, ArcSin.of(s));

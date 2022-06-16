@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class PoissonBinomialDistributionTest {
   @Test
-  public void testEmpty() throws ClassNotFoundException, IOException {
+  void testEmpty() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(PoissonBinomialDistribution.of(Tensors.empty()));
     Tensor samples = RandomVariate.of(distribution, 10);
     assertEquals(samples, Array.zeros(10));
@@ -34,7 +34,7 @@ class PoissonBinomialDistributionTest {
   }
 
   @Test
-  public void testZeros() {
+  void testZeros() {
     Distribution distribution = PoissonBinomialDistribution.of(Array.zeros(4));
     Tensor samples = RandomVariate.of(distribution, 10);
     assertEquals(samples, Array.zeros(10));
@@ -43,7 +43,7 @@ class PoissonBinomialDistributionTest {
   }
 
   @Test
-  public void testOnes() {
+  void testOnes() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1));
     Tensor samples = RandomVariate.of(distribution, 10);
     assertEquals(samples, Array.of(l -> RealScalar.of(4), 10));
@@ -52,7 +52,7 @@ class PoissonBinomialDistributionTest {
   }
 
   @Test
-  public void testMixed() {
+  void testMixed() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 0, 0.2, 0.3, 0.4, 0.5, 1, 0, 0));
     RandomVariate.of(distribution, 10);
     Chop._12.requireClose(Mean.of(distribution), RealScalar.of(3.4));
@@ -62,25 +62,25 @@ class PoissonBinomialDistributionTest {
   }
 
   @Test
-  public void testProbFail() {
+  void testProbFail() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1));
     assertTrue(distribution.toString().startsWith("PoissonBinomialDistribution["));
   }
 
   @Test
-  public void testCdfFail() {
+  void testCdfFail() {
     Distribution distribution = PoissonBinomialDistribution.of(Tensors.vector(0.1, 0.3, 1, 0.1, 0.5));
     assertThrows(IllegalArgumentException.class, () -> CDF.of(distribution));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(IllegalArgumentException.class, () -> PoissonBinomialDistribution.of(RealScalar.ZERO));
     assertThrows(ClassCastException.class, () -> PoissonBinomialDistribution.of(IdentityMatrix.of(3)));
   }
 
   @Test
-  public void testFailInvalid() {
+  void testFailInvalid() {
     assertThrows(TensorRuntimeException.class, () -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, 2, 0)));
     assertThrows(TensorRuntimeException.class, () -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, -1, 1)));
   }

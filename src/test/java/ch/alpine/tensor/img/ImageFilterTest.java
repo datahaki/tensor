@@ -23,7 +23,7 @@ class ImageFilterTest {
   private static final TensorScalarFunction MAX = block -> (Scalar) block.flatten(-1).reduce(Max::of).get();
 
   @Test
-  public void testMin() {
+  void testMin() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 256);
     Tensor tensor = RandomVariate.of(distribution, 20, 30);
     Tensor filter = MinFilter.of(tensor, 3);
@@ -32,7 +32,7 @@ class ImageFilterTest {
   }
 
   @Test
-  public void testMax() {
+  void testMax() {
     Distribution distribution = DiscreteUniformDistribution.of(0, 256);
     Tensor tensor = RandomVariate.of(distribution, 10, 15);
     Tensor filter = MaxFilter.of(tensor, 3);
@@ -41,23 +41,23 @@ class ImageFilterTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     Tensor result = ImageFilter.of(Tensors.empty(), 3, MAX);
     assertEquals(result, Tensors.empty());
   }
 
   @Test
-  public void testRadiusFail() {
+  void testRadiusFail() {
     assertThrows(IllegalArgumentException.class, () -> ImageFilter.of(Tensors.empty(), -1, MAX));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> ImageFilter.of(RealScalar.ONE, 1, MAX));
   }
 
   @Test
-  public void testFunctionNullFail() {
+  void testFunctionNullFail() {
     assertThrows(NullPointerException.class, () -> ImageFilter.of(Tensors.empty(), 3, null));
   }
 }

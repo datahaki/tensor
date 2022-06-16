@@ -112,6 +112,6 @@ public class UniformDistribution extends AbstractContinuousDistribution //
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s]", getClass().getSimpleName(), clip.min(), clip.max());
+    return String.format("UniformDistribution[%s, %s]", clip.min(), clip.max());
   }
 }

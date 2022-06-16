@@ -43,7 +43,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class MatrixExpTest {
   @Test
-  public void testZeros() {
+  void testZeros() {
     Tensor zeros = Array.zeros(7, 7);
     Tensor eye = MatrixExp.of(zeros);
     assertEquals(eye, IdentityMatrix.of(7));
@@ -51,7 +51,7 @@ class MatrixExpTest {
   }
 
   @Test
-  public void testExp() {
+  void testExp() {
     Random random = new Random();
     double val = random.nextGaussian() * 0.1;
     double va2 = random.nextGaussian() * 0.1;
@@ -65,7 +65,7 @@ class MatrixExpTest {
   }
 
   @Test
-  public void testExp1() {
+  void testExp1() {
     Tensor mat = Tensors.fromString("{{1}}");
     Tensor exp = MatrixExp.of(mat);
     Scalar exp1 = exp.Get(0, 0);
@@ -76,7 +76,7 @@ class MatrixExpTest {
   }
 
   @Test
-  public void testExp2() {
+  void testExp2() {
     int n = 10;
     Distribution distribution = NormalDistribution.standard();
     Tensor A = RandomVariate.of(distribution, n, n);
@@ -86,7 +86,7 @@ class MatrixExpTest {
   }
 
   @Test
-  public void testGoldenThompsonInequality() {
+  void testGoldenThompsonInequality() {
     Tensor a = Tensors.fromString("{{2, I}, {-I, 2}}");
     Tensor b = Tensors.fromString("{{2, 1-I}, {1+I, 2}}");
     assertTrue(HermitianMatrixQ.of(a));
@@ -98,7 +98,7 @@ class MatrixExpTest {
   }
 
   @Test
-  public void testExact() {
+  void testExact() {
     Tensor mat = Tensors.matrixInt(new int[][] { { 0, 2, 3 }, { 0, 0, -1 }, { 0, 0, 0 } });
     Tensor result = MatrixExp.of(mat);
     ExactTensorQ.require(result);
@@ -108,7 +108,7 @@ class MatrixExpTest {
   }
 
   @Test
-  public void testChallenge() {
+  void testChallenge() {
     // Cleve Moler and Charles van Loan p.8
     Tensor mat = Tensors.matrixInt(new int[][] { { -49, 24 }, { -64, 31 } });
     Tensor A = Tensors.matrixInt(new int[][] { { 1, 3 }, { 2, 4 } });
@@ -146,7 +146,7 @@ class MatrixExpTest {
   // }
 
   @Test
-  public void testLarge() {
+  void testLarge() {
     // without scaling, the loop of the series requires ~300 steps
     // with scaling, the loop requires only ~20 steps
     Tensor tensor = MatrixExp.of(Tensors.fromString("{{100, 100}, {100, 100}}"));
@@ -155,7 +155,7 @@ class MatrixExpTest {
   }
 
   @RepeatedTest(5)
-  public void testNoScale() {
+  void testNoScale() {
     Distribution distribution = NormalDistribution.of(0, 6);
     Tensor matrix = RandomVariate.of(distribution, 2, 2);
     Tensor exp1 = MatrixExp.of(matrix);
@@ -164,7 +164,7 @@ class MatrixExpTest {
   }
 
   @RepeatedTest(5)
-  public void testNoScaleComplex() {
+  void testNoScaleComplex() {
     Distribution distribution = NormalDistribution.of(0, 5);
     Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
         RandomVariate.of(distribution, 2, 2), //
@@ -175,7 +175,7 @@ class MatrixExpTest {
   }
 
   @Test
-  public void testComplex1() {
+  void testComplex1() {
     Tensor matrix = ConstantArray.of(Scalars.fromString("-10-1*I"), 2, 2);
     Tensor tensor1 = MatrixExp.of(matrix); // 19
     Tensor tensor2 = MatrixExpSeries.FUNCTION.apply(matrix); // 94
@@ -183,7 +183,7 @@ class MatrixExpTest {
   }
 
   @Test
-  public void testComplex2() {
+  void testComplex2() {
     Tensor matrix = ConstantArray.of(Scalars.fromString("-10.0-1.0*I"), 3, 3);
     Tensor tensor1 = MatrixExp.of(matrix); // 19
     Tensor tensor2 = MatrixExpSeries.FUNCTION.apply(matrix); // 119
@@ -191,7 +191,7 @@ class MatrixExpTest {
   }
 
   @RepeatedTest(5)
-  public void testHermitian(RepetitionInfo repetitionInfo) {
+  void testHermitian(RepetitionInfo repetitionInfo) {
     Distribution distribution = TriangularDistribution.with(0, 1);
     int n = repetitionInfo.getCurrentRepetition();
     Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
@@ -206,18 +206,18 @@ class MatrixExpTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(IllegalArgumentException.class, () -> MatrixExp.of(Array.zeros(4, 3)));
     assertThrows(IllegalArgumentException.class, () -> MatrixExp.of(Array.zeros(3, 4)));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> MatrixExp.of(RealScalar.ONE));
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(TensorRuntimeException.class, () -> MatrixExp.of(Tensors.empty()));
   }
 }

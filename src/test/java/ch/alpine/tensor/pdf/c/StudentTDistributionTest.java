@@ -24,7 +24,7 @@ import ch.alpine.tensor.red.Variance;
 
 class StudentTDistributionTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(StudentTDistribution.of(2, 3, 5));
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose( //
@@ -34,32 +34,32 @@ class StudentTDistributionTest {
   }
 
   @Test
-  public void testMeanVar() {
+  void testMeanVar() {
     Distribution distribution = StudentTDistribution.of(5, 4, 3);
     assertEquals(ExactScalarQ.require(Mean.of(distribution)), RealScalar.of(5));
     assertEquals(ExactScalarQ.require(Variance.of(distribution)), RealScalar.of(48));
   }
 
   @Test
-  public void testMeanVarSpecial() {
+  void testMeanVarSpecial() {
     assertFalse(FiniteScalarQ.of(Mean.of(StudentTDistribution.of(5, 4, 0.5))));
     assertFalse(FiniteScalarQ.of(Variance.of(StudentTDistribution.of(5, 4, 1.5))));
   }
 
   @Test
-  public void testComplexFail() {
+  void testComplexFail() {
     assertThrows(ClassCastException.class, () -> StudentTDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE, RealScalar.ONE));
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> StudentTDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km"), RealScalar.ONE));
     assertThrows(TensorRuntimeException.class, () -> StudentTDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m"), RealScalar.ONE));
     assertThrows(TensorRuntimeException.class, () -> StudentTDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m"), RealScalar.ONE));
   }
 
   @Test
-  public void testNegativeSigmaFail() {
+  void testNegativeSigmaFail() {
     NormalDistribution.of(5, 1);
     assertThrows(TensorRuntimeException.class, () -> StudentTDistribution.of(5, -1, 1));
   }

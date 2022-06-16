@@ -47,7 +47,7 @@ class NormalizeTest {
   }
 
   @Test
-  public void testVector1() {
+  void testVector1() {
     Tensor vector = Tensors.vector(3, 3, 3, 3);
     Tensor n = Vector2Norm.NORMALIZE.apply(vector);
     assertEquals(n.toString(), "{1/2, 1/2, 1/2, 1/2}");
@@ -56,19 +56,19 @@ class NormalizeTest {
   }
 
   @Test
-  public void testVectorNumeric() {
+  void testVectorNumeric() {
     Distribution distribution = LogisticDistribution.of(1, 100);
     _checkNormalizeAllNorms(RandomVariate.of(distribution, 1000));
   }
 
   @Test
-  public void testVectorExact() {
+  void testVectorExact() {
     Distribution distribution = NegativeBinomialDistribution.of(3, RationalScalar.of(2, 3));
     _checkNormalizeAllNorms(RandomVariate.of(distribution, 1000));
   }
 
   @Test
-  public void testNorm1Documentation() {
+  void testNorm1Documentation() {
     Tensor vector = Tensors.vector(2, -3, 1);
     Tensor result = Normalize.with(Vector1Norm::of).apply(vector);
     assertEquals(result, Tensors.fromString("{1/3, -1/2, 1/6}"));
@@ -76,7 +76,7 @@ class NormalizeTest {
   }
 
   @Test
-  public void testNormInfinityDocumentation() {
+  void testNormInfinityDocumentation() {
     Tensor vector = Tensors.vector(2, -3, 1);
     Tensor result = Normalize.with(VectorInfinityNorm::of).apply(vector);
     assertEquals(result, Tensors.fromString("{2/3, -1, 1/3}"));
@@ -84,7 +84,7 @@ class NormalizeTest {
   }
 
   @Test
-  public void testEps() {
+  void testEps() {
     Tensor vector = Tensors.vector(0, Double.MIN_VALUE, 0);
     assertEquals(Normalize.with(Vector1Norm::of).apply(vector), Tensors.vector(0, 1, 0));
     assertEquals(Normalize.with(Vector2Norm::of).apply(vector), Tensors.vector(0, 1, 0));
@@ -92,7 +92,7 @@ class NormalizeTest {
   }
 
   @Test
-  public void testEps2() {
+  void testEps2() {
     _checkNormalizeAllNorms(Tensors.vector(0, -Double.MIN_VALUE, 0, 0, 0));
     _checkNormalizeAllNorms(Tensors.vector(0, 0, Double.MIN_VALUE));
     _checkNormalizeAllNorms(Tensors.vector(0, Double.MIN_VALUE, Double.MIN_VALUE));
@@ -100,7 +100,7 @@ class NormalizeTest {
   }
 
   @Test
-  public void testNorm1() {
+  void testNorm1() {
     Tensor v = Tensors.vector(1, 1, 1);
     Tensor n = Normalize.with(Vector1Norm::of).apply(v);
     assertEquals(n, Tensors.fromString("{1/3, 1/3, 1/3}"));
@@ -108,7 +108,7 @@ class NormalizeTest {
   }
 
   @Test
-  public void testNormInf() {
+  void testNormInf() {
     Tensor d = Tensors.vector(1, 1, 1).multiply(RealScalar.of(2));
     Tensor n = Normalize.with(VectorInfinityNorm::of).apply(d);
     assertEquals(n, Tensors.vector(1, 1, 1));
@@ -118,7 +118,7 @@ class NormalizeTest {
   }
 
   @Test
-  public void testComplex() throws ClassNotFoundException, IOException {
+  void testComplex() throws ClassNotFoundException, IOException {
     TensorUnaryOperator normalize = Serialization.copy(Vector2Norm.NORMALIZE);
     Tensor vector = Tensors.fromString("{1+I, 2*I, -3-9.2*I}");
     Tensor s = normalize.apply(vector);
@@ -127,7 +127,7 @@ class NormalizeTest {
   }
 
   @Test
-  public void testComplex2() {
+  void testComplex2() {
     Tensor vector = Tensors.fromString("{3*I, 4}");
     Tensor s = Vector2Norm.NORMALIZE.apply(vector);
     assertEquals(Projection.on(vector).apply(s), s);
@@ -137,13 +137,13 @@ class NormalizeTest {
   }
 
   @Test
-  public void testQuantityTensor() {
+  void testQuantityTensor() {
     Tensor vector = QuantityTensor.of(Tensors.vector(2, 3, 4), "m*s^-1");
     _checkNormalizeAllNorms(vector);
   }
 
   @Test
-  public void testDecimalScalar() {
+  void testDecimalScalar() {
     Tensor vector = Range.of(3, 6).map(N.DECIMAL128);
     Tensor tensor = Vector2Norm.NORMALIZE.apply(vector);
     Scalar scalar = Vector2Norm.of(tensor);
@@ -151,7 +151,7 @@ class NormalizeTest {
   }
 
   @Test
-  public void testNormalizeTotal() {
+  void testNormalizeTotal() {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);
     assertTrue(tensorUnaryOperator.toString().startsWith("Normalize"));
     Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2));
@@ -160,20 +160,20 @@ class NormalizeTest {
   }
 
   @Test
-  public void testInconsistentFail() {
+  void testInconsistentFail() {
     Distribution distribution = UniformDistribution.of(3, 5);
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(v -> RandomVariate.of(distribution));
     assertThrows(TensorRuntimeException.class, () -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2)));
   }
 
   @Test
-  public void testNormalizeTotalFail() {
+  void testNormalizeTotalFail() {
     TensorUnaryOperator tensorUnaryOperator = Normalize.with(Total::ofVector);
     assertThrows(ArithmeticException.class, () -> tensorUnaryOperator.apply(Tensors.vector(-1, 3, -2)));
   }
 
   @Test
-  public void testNormalizeNullFail() {
+  void testNormalizeNullFail() {
     TensorScalarFunction tensorScalarFunction = null;
     assertThrows(NullPointerException.class, () -> Normalize.with(tensorScalarFunction));
   }

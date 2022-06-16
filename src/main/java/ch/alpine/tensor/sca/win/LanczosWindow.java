@@ -21,6 +21,6 @@ public enum LanczosWindow implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return getClass().getSimpleName();
+    return "LanczosWindow";
   }
 }

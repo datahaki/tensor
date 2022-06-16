@@ -10,7 +10,7 @@ import ch.alpine.tensor.RealScalar;
 
 class NumeratorTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     assertEquals(Numerator.FUNCTION.apply(RationalScalar.of(+2, 3)), RealScalar.of(+2));
     assertEquals(Numerator.FUNCTION.apply(RationalScalar.of(-2, 3)), RealScalar.of(-2));
     assertEquals(Numerator.FUNCTION.apply(Pi.HALF), Pi.HALF);

@@ -52,7 +52,7 @@ class UnivariateDistributionTest {
   };
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     for (Distribution distribution : DISTRIBUTIONS) {
       RandomVariate.of(distribution);
       InverseCDF inverseCDF = InverseCDF.of(distribution);
@@ -67,7 +67,7 @@ class UnivariateDistributionTest {
   }
 
   @Test
-  public void testInverseCDFIncreasing() {
+  void testInverseCDFIncreasing() {
     for (Distribution distribution : DISTRIBUTIONS) {
       InverseCDF inverseCDF = InverseCDF.of(distribution);
       Sign.requirePositiveOrZero(InterquartileRange.of(distribution));

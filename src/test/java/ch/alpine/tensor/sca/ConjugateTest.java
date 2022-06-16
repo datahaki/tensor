@@ -15,7 +15,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ConjugateTest {
   @Test
-  public void testQuantity1() {
+  void testQuantity1() {
     Scalar scalar = Scalars.fromString("0+0*I[m*s]");
     assertInstanceOf(Quantity.class, scalar);
     assertEquals(Real.of(scalar).toString(), "0[m*s]");
@@ -24,7 +24,7 @@ class ConjugateTest {
   }
 
   @Test
-  public void testQuantity2() {
+  void testQuantity2() {
     Scalar scalar = Scalars.fromString("3+5*I[m*s]");
     assertInstanceOf(Quantity.class, scalar);
     assertEquals(Real.of(scalar), Quantity.of(3, "m*s"));
@@ -33,7 +33,7 @@ class ConjugateTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> Conjugate.of(StringScalar.of("asd")));
   }
 }

@@ -20,13 +20,13 @@ import ch.alpine.tensor.red.Total;
 
 class NormalizeUnlessZeroTest {
   @Test
-  public void testNormalizeNaN() {
+  void testNormalizeNaN() {
     Tensor vector = Tensors.of(RealScalar.ONE, DoubleScalar.INDETERMINATE, RealScalar.ONE);
     assertThrows(TensorRuntimeException.class, () -> NormalizeUnlessZero.with(Vector2Norm::of).apply(vector));
   }
 
   @Test
-  public void testNormalizeTotal() {
+  void testNormalizeTotal() {
     TensorUnaryOperator tensorUnaryOperator = NormalizeUnlessZero.with(Total::ofVector);
     assertTrue(tensorUnaryOperator.toString().startsWith("NormalizeUnlessZero"));
     Tensor tensor = tensorUnaryOperator.apply(Tensors.vector(-1, 3, 2));
@@ -38,7 +38,7 @@ class NormalizeUnlessZeroTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     TensorUnaryOperator tuo = NormalizeUnlessZero.with(Vector2Norm::of);
     Tensor one = Tensors.of(Quantity.of(2, "m"));
     assertEquals(tuo.apply(one), Tensors.vector(1));
@@ -47,21 +47,21 @@ class NormalizeUnlessZeroTest {
   }
 
   @Test
-  public void testUnitless() {
+  void testUnitless() {
     TensorUnaryOperator tuo = NormalizeUnlessZero.with(Vector2Norm::of);
     Tensor one = Tensors.of(Quantity.of(0, "m"), Quantity.of(0, "m"));
     assertEquals(tuo.apply(one), Array.zeros(2));
   }
 
   @Test
-  public void testMixedUnit1Fail() {
+  void testMixedUnit1Fail() {
     TensorUnaryOperator tuo = NormalizeUnlessZero.with(Vector2Norm::of);
     Tensor one = Tensors.of(Quantity.of(0, "m"), Quantity.of(1, "s"));
     assertThrows(TensorRuntimeException.class, () -> tuo.apply(one));
   }
 
   @Test
-  public void testMixedUnit2Fail() {
+  void testMixedUnit2Fail() {
     TensorUnaryOperator tuo = NormalizeUnlessZero.with(Vector2Norm::of);
     Tensor one = Tensors.of(Quantity.of(0, "m"), Quantity.of(0, "s"));
     assertThrows(TensorRuntimeException.class, () -> tuo.apply(one));

@@ -11,7 +11,7 @@ import ch.alpine.tensor.ext.Lists;
  * simply use the following pattern:
  * <pre>
  * Tensor tensor = Array.zeros(8, 8);
- * tensor.block(Arrays.asList(2, 2), Arrays.asList(4, 4)).set(HilbertMatrix.of(4), Tensor.ALL, Tensor.ALL);
+ * tensor.block(List.of(2, 2), List.of(4, 4)).set(HilbertMatrix.of(4), Tensor.ALL, Tensor.ALL);
  * </pre>
  * 
  * <p>inspired by

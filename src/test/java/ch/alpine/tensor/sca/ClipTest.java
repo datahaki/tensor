@@ -22,7 +22,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ClipTest {
   @Test
-  public void testApply() {
+  void testApply() {
     Scalar min = RealScalar.of(-3);
     Scalar max = RealScalar.of(10);
     Clip clip = Clips.interval(min, max);
@@ -33,7 +33,7 @@ class ClipTest {
   }
 
   @Test
-  public void testVector() {
+  void testVector() {
     Scalar min = RealScalar.of(-3);
     Scalar max = RealScalar.of(10);
     Clip clip = Clips.interval(min, max);
@@ -42,20 +42,20 @@ class ClipTest {
   }
 
   @Test
-  public void testUnit() {
+  void testUnit() {
     assertEquals(Clips.unit().apply(RealScalar.of(-0.1)), RealScalar.ZERO);
     assertEquals(Clips.unit().apply(RealScalar.of(0.1)), RealScalar.of(0.1));
     assertEquals(Clips.unit().apply(RealScalar.of(1.1)), RealScalar.ONE);
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Clips.interval(5, 5);
     assertThrows(TensorRuntimeException.class, () -> Clips.interval(2, -3));
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar min = Quantity.of(-3, "m");
     Scalar max = Quantity.of(2, "m");
     Clip clip = Clips.interval(min, max);
@@ -66,7 +66,7 @@ class ClipTest {
   }
 
   @Test
-  public void testQuantityInside() {
+  void testQuantityInside() {
     Scalar min = Quantity.of(-3, "m");
     Scalar max = Quantity.of(2, "m");
     Clip clip = Clips.interval(min, max);
@@ -78,7 +78,7 @@ class ClipTest {
   }
 
   @Test
-  public void testRescaleQuantity() {
+  void testRescaleQuantity() {
     Scalar min = Quantity.of(-3, "m");
     Scalar max = Quantity.of(2, "m");
     Clip clip = Clips.interval(min, max);
@@ -92,7 +92,7 @@ class ClipTest {
   }
 
   @Test
-  public void testRescale() {
+  void testRescale() {
     Scalar min = RealScalar.of(5);
     Scalar max = RealScalar.of(25);
     Clip clip = Clips.interval(min, max);
@@ -103,7 +103,7 @@ class ClipTest {
   }
 
   @Test
-  public void testClipMinMax() {
+  void testClipMinMax() {
     Clip clip = Clips.interval(3, 5);
     assertEquals(clip.min(), RealScalar.of(3));
     assertEquals(clip.max(), RealScalar.of(5));
@@ -111,28 +111,28 @@ class ClipTest {
   }
 
   @Test
-  public void testClipOutside() {
+  void testClipOutside() {
     Clip clip = Clips.interval(3, 5);
     assertEquals(clip.requireInside(RealScalar.of(3.9)), RealScalar.of(3.9));
     assertThrows(TensorRuntimeException.class, () -> clip.requireInside(RealScalar.of(2.9)));
   }
 
   @Test
-  public void testClipInfty() {
+  void testClipInfty() {
     Clip clip = Clips.interval(DoubleScalar.NEGATIVE_INFINITY, DoubleScalar.POSITIVE_INFINITY);
     Tensor tensor = RandomVariate.of(NormalDistribution.standard(), 2, 3, 4);
     assertEquals(tensor.map(clip), tensor);
   }
 
   @Test
-  public void testClipInftyQuantity() {
+  void testClipInftyQuantity() {
     Clip clip = Clips.interval(Quantity.of(Double.NEGATIVE_INFINITY, "V"), Quantity.of(Double.POSITIVE_INFINITY, "V"));
     Tensor tensor = RandomVariate.of(NormalDistribution.standard(), 2, 3, 4).map(s -> Quantity.of(s, "V"));
     assertEquals(tensor.map(clip), tensor);
   }
 
   @Test
-  public void testQuantityOutside() {
+  void testQuantityOutside() {
     Scalar min = Quantity.of(-3, "m");
     Scalar max = Quantity.of(2, "m");
     Clip clip = Clips.interval(min, max);
@@ -143,7 +143,7 @@ class ClipTest {
   }
 
   @Test
-  public void testEps() {
+  void testEps() {
     Clip clip = Clips.interval(0, Double.MIN_VALUE);
     assertEquals(clip.rescale(RealScalar.of(Double.MIN_VALUE)), RealScalar.ONE);
     assertEquals(clip.rescale(Pi.VALUE), RealScalar.ONE);

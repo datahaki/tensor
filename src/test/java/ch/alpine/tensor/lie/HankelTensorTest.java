@@ -16,25 +16,25 @@ import ch.alpine.tensor.mat.SymmetricMatrixQ;
 
 class HankelTensorTest {
   @Test
-  public void testRank2() {
+  void testRank2() {
     Tensor tensor = HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5), 2);
     SymmetricMatrixQ.require(tensor);
   }
 
   @Test
-  public void testRank3a() {
+  void testRank3a() {
     Tensor tensor = HankelTensor.of(Tensors.vector(1, 2, 3, 4), 3);
     tensor.stream().forEach(SymmetricMatrixQ::require);
   }
 
   @Test
-  public void testRank3b() {
+  void testRank3b() {
     Tensor tensor = HankelTensor.of(Tensors.vector(0, 1, 2, 3, 4, 5, 6), 3);
     tensor.stream().forEach(SymmetricMatrixQ::require);
   }
 
   @Test
-  public void testRank4() {
+  void testRank4() {
     Tensor tensor = HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5), 4);
     Dimensions dimensions = new Dimensions(tensor);
     assertTrue(dimensions.isArray());
@@ -42,13 +42,13 @@ class HankelTensorTest {
   }
 
   @Test
-  public void testFailVector() {
+  void testFailVector() {
     assertThrows(IllegalArgumentException.class, () -> HankelTensor.of(RealScalar.ONE, 1));
     assertThrows(ClassCastException.class, () -> HankelTensor.of(Tensors.fromString("{{1, 2}}"), 1));
   }
 
   @Test
-  public void testFailRank() {
+  void testFailRank() {
     assertThrows(TensorRuntimeException.class, () -> HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5, 6), 2));
   }
 }

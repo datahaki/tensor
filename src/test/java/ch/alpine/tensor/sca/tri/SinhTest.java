@@ -23,7 +23,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class SinhTest {
   @Test
-  public void testReal() {
+  void testReal() {
     Scalar i = RealScalar.of(2);
     Scalar c = Sinh.FUNCTION.apply(i);
     Scalar s = DoubleScalar.of(Math.sinh(2));
@@ -32,7 +32,7 @@ class SinhTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar c = Sinh.of(ComplexScalar.of(2, 3.));
     // -3.59056 + 0.530921 I
     Scalar s = Scalars.fromString("-3.59056458998578+0.5309210862485197*I");
@@ -40,7 +40,7 @@ class SinhTest {
   }
 
   @Test
-  public void testDecimal() {
+  void testDecimal() {
     MathContext mc = MathContext.DECIMAL128;
     Scalar scalar = Sinh.of(DecimalScalar.of(new BigDecimal("1.2356", MathContext.DECIMAL128), mc.getPrecision()));
     assertInstanceOf(DecimalScalar.class, scalar);
@@ -48,12 +48,12 @@ class SinhTest {
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> Sinh.of(Quantity.of(1, "deg")));
   }
 
   @Test
-  public void testGaussScalarFail() {
+  void testGaussScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Sinh.of(GaussScalar.of(6, 7)));
   }
 }

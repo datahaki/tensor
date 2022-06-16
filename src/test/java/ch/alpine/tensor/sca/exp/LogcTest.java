@@ -14,13 +14,13 @@ import ch.alpine.tensor.sca.Chop;
 
 class LogcTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Scalar scalar = Logc.FUNCTION.apply(RealScalar.of(1 + 1e-13));
     Chop._08.requireClose(scalar, RealScalar.ONE);
   }
 
   @Test
-  public void testFraction() {
+  void testFraction() {
     Scalar dl1 = RandomVariate.of(NormalDistribution.standard());
     Scalar dl2 = RandomVariate.of(NormalDistribution.standard());
     Scalar l1 = Exp.FUNCTION.apply(dl1);
@@ -36,7 +36,7 @@ class LogcTest {
   }
 
   @Test
-  public void testRandom() {
+  void testRandom() {
     Distribution distribution = UniformDistribution.of(0, 2e-10);
     for (int count = 0; count < 100; ++count) {
       Scalar mu = RealScalar.ONE.add(RandomVariate.of(distribution));

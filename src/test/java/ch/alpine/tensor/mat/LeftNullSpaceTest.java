@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.N;
 
 class LeftNullSpaceTest {
   @Test
-  public void testRankDeficient() {
+  void testRankDeficient() {
     Tensor matrix = Tensors.fromString("{{0, 1}, {0, 1}, {0, 1}, {0, 1}}");
     Tensor nullsp = LeftNullSpace.of(matrix);
     assertEquals(Dimensions.of(nullsp), Arrays.asList(3, 4));
@@ -40,7 +40,7 @@ class LeftNullSpaceTest {
   }
 
   @Test
-  public void testMaxRank() {
+  void testMaxRank() {
     Tensor matrix = Tensors.fromString("{{0, 1}, {2, 1}, {0, 1}, {0, 1}}");
     Tensor nullsp = LeftNullSpace.of(matrix);
     assertEquals(Dimensions.of(nullsp), Arrays.asList(2, 4));
@@ -48,7 +48,7 @@ class LeftNullSpaceTest {
   }
 
   @Test
-  public void testRankDeficientTranspose() {
+  void testRankDeficientTranspose() {
     Tensor matrix = Tensors.fromString("{{0, 0, 0, 0}, {1, 1, 1, 1}}");
     Tensor nullsp = LeftNullSpace.of(matrix);
     assertEquals(Dimensions.of(nullsp), Arrays.asList(1, 2));
@@ -56,7 +56,7 @@ class LeftNullSpaceTest {
   }
 
   @Test
-  public void testMaxRankTranspose() {
+  void testMaxRankTranspose() {
     Tensor matrix = Tensors.fromString("{{0, 2, 0, 0}, {1, 1, 1, 1}}");
     Tensor nullsp = LeftNullSpace.of(matrix);
     assertEquals(Dimensions.of(nullsp), Arrays.asList(0));
@@ -80,7 +80,7 @@ class LeftNullSpaceTest {
   }
 
   @Test
-  public void testBulk() {
+  void testBulk() {
     _check(Tensors.fromString("{{0, 0}}"));
     _check(Tensors.fromString("{{0, 1}}"));
     _check(Tensors.fromString("{{1, 0, 3}}"));
@@ -96,7 +96,7 @@ class LeftNullSpaceTest {
   }
 
   @Test
-  public void testRandom() {
+  void testRandom() {
     Distribution distribution = NormalDistribution.standard();
     Tensor x = RandomVariate.of(distribution, 3);
     Tensor y = RandomVariate.of(distribution, 7);
@@ -105,7 +105,7 @@ class LeftNullSpaceTest {
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     Random random = new Random();
     int prime = 7741;
     int dim1 = 6;
@@ -122,7 +122,7 @@ class LeftNullSpaceTest {
   }
 
   @Test
-  public void testRectangle3x2G() {
+  void testRectangle3x2G() {
     ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}").map(suo);
     Tensor tensor = NullSpace.usingRowReduce(matrix);
@@ -130,7 +130,7 @@ class LeftNullSpaceTest {
   }
 
   @Test
-  public void testRectangle2x3G() {
+  void testRectangle2x3G() {
     ScalarUnaryOperator suo = scalar -> GaussScalar.of(scalar.number().longValue(), 7);
     Tensor matrix = Tensors.fromString("{{1, 0, 0}, {0, 0, 0}}").map(suo);
     Tensor tensor = NullSpace.usingRowReduce(matrix);
@@ -139,7 +139,7 @@ class LeftNullSpaceTest {
   }
 
   @Test
-  public void testLeftGaussScalar() {
+  void testLeftGaussScalar() {
     int prime = 7879;
     Random random = new Random();
     Tensor matrix = Tensors.matrix((i, j) -> GaussScalar.of(random.nextInt(), prime), 7, 4);

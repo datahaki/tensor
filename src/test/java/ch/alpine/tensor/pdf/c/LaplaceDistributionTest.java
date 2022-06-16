@@ -31,7 +31,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class LaplaceDistributionTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(LaplaceDistribution.of(2, 5));
     PDF pdf = PDF.of(distribution);
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(-3)), RealScalar.of(0.036787944117144235));
@@ -46,7 +46,7 @@ class LaplaceDistributionTest {
   }
 
   @Test
-  public void testRandomMeanVar() {
+  void testRandomMeanVar() {
     Distribution distribution = LaplaceDistribution.of(3, 2);
     RandomVariate.of(distribution, 100);
     assertEquals(ExactScalarQ.require(Mean.of(distribution)), RealScalar.of(3));
@@ -54,7 +54,7 @@ class LaplaceDistributionTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Distribution distribution = LaplaceDistribution.of(Quantity.of(3, "kg"), Quantity.of(2, "kg"));
     RandomVariate.of(distribution, 100);
     assertEquals(ExactScalarQ.require(Mean.of(distribution)), Quantity.of(3, "kg"));
@@ -62,7 +62,7 @@ class LaplaceDistributionTest {
   }
 
   @Test
-  public void testDateTimeScalar() {
+  void testDateTimeScalar() {
     DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
     Scalar durationScalar = Quantity.of(123, "s");
     Distribution distribution = LaplaceDistribution.of(dateTimeScalar, durationScalar);
@@ -76,19 +76,19 @@ class LaplaceDistributionTest {
   }
 
   @Test
-  public void testComplexFail() {
+  void testComplexFail() {
     assertThrows(ClassCastException.class, () -> LaplaceDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
     assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
     assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
   @Test
-  public void testNegativeSigmaFail() {
+  void testNegativeSigmaFail() {
     LaplaceDistribution.of(5, 1);
     assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(5, -1));
   }

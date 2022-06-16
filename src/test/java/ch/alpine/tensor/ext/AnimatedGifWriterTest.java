@@ -12,7 +12,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 class AnimatedGifWriterTest {
   @Test
-  public void testColor(@TempDir File tempDir) throws IOException {
+  void testColor(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.gif");
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
@@ -27,7 +27,7 @@ class AnimatedGifWriterTest {
   }
 
   @Test
-  public void testColorNonLoop(@TempDir File tempDir) throws IOException {
+  void testColorNonLoop(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.gif");
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, false)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_INT_ARGB));
@@ -42,7 +42,7 @@ class AnimatedGifWriterTest {
   }
 
   @Test
-  public void testGray(@TempDir File tempDir) throws IOException {
+  void testGray(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.gif");
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
       animatedGifWriter.write(new BufferedImage(2, 3, BufferedImage.TYPE_BYTE_GRAY));
@@ -52,7 +52,7 @@ class AnimatedGifWriterTest {
   }
 
   @Test
-  public void testEmpty(@TempDir File tempDir) throws IOException {
+  void testEmpty(@TempDir File tempDir) throws IOException {
     File file = new File(tempDir, "file.gif");
     try (AnimatedGifWriter animatedGifWriter = AnimatedGifWriter.of(file, 100, true)) {
       // ---

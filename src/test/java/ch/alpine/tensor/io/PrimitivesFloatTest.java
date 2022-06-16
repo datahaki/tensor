@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensors;
 
 class PrimitivesFloatTest {
   @Test
-  public void testToListFloat() {
+  void testToListFloat() {
     Tensor tensor = Tensors.vector(-2.5f, -2.7f);
     List<Float> list = Primitives.toListFloat(tensor);
     assertEquals(list.get(0), -2.5f);
@@ -24,7 +24,7 @@ class PrimitivesFloatTest {
   }
 
   @Test
-  public void testToFloatArray() {
+  void testToFloatArray() {
     Tensor a = Tensors.vector(-2.5f, -2.7f);
     Tensor b = Tensors.vector(4.3f, 5.4f, 6.2f, 10.5f);
     float[] array = Primitives.toFloatArray(Tensors.of(a, b));
@@ -38,7 +38,7 @@ class PrimitivesFloatTest {
   }
 
   @Test
-  public void testToFloatArray2D() {
+  void testToFloatArray2D() {
     Tensor a = Tensors.vector(-2.5f, -2.7f);
     Tensor b = Tensors.vector(4.3f, 5.4f, 6.2f, 10.5f);
     float[][] array = Primitives.toFloatArray2D(Tensors.of(a, b));
@@ -54,7 +54,7 @@ class PrimitivesFloatTest {
   }
 
   @Test
-  public void testToFloatBuffer() {
+  void testToFloatBuffer() {
     Tensor a = Tensors.vector(-2.5f, -2.7f);
     Tensor b = Tensors.vector(4.3f, 5.4f, 6.2f, 10.5f);
     FloatBuffer floatBuffer = Primitives.toFloatBuffer(Tensors.of(a, b));
@@ -66,7 +66,7 @@ class PrimitivesFloatTest {
   }
 
   @Test
-  public void testToFloatArray2Dscalar() {
+  void testToFloatArray2Dscalar() {
     assertThrows(NegativeArraySizeException.class, () -> Primitives.toFloatArray2D(RealScalar.of(123.456)));
   }
 }

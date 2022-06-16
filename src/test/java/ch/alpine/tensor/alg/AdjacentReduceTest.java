@@ -19,7 +19,7 @@ class AdjacentReduceTest {
   }
 
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Tensor tensor = Range.of(0, 5);
     int length = tensor.length();
     Tensor result = Serialization.copy(new Some()).apply(tensor);

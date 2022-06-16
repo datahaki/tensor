@@ -26,34 +26,34 @@ import ch.alpine.tensor.sca.Chop;
 
 class LogTest {
   @Test
-  public void testOne() {
+  void testOne() {
     Scalar scalar = Log.of(RealScalar.ONE);
     assertTrue(Scalars.isZero(scalar));
   }
 
   @Test
-  public void testLog() {
+  void testLog() {
     Scalar scalar = DoubleScalar.of(-3);
     Chop._14.requireClose(Log.of(scalar), Scalars.fromString("1.0986122886681098+3.141592653589793*I"));
     assertEquals(Log.of(RealScalar.ZERO), DoubleScalar.NEGATIVE_INFINITY);
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar s = ComplexScalar.of(2, 3);
     Scalar r = Scalars.fromString("1.2824746787307681+0.982793723247329*I"); // mathematica
     Chop._14.requireClose(Log.of(s), r);
   }
 
   @Test
-  public void testRational() {
+  void testRational() {
     Scalar rem = Scalars.fromString("1/10000000000");
     Scalar ratio = RealScalar.ONE.add(rem);
     assertEquals(Log.of(ratio).toString(), "" + Math.log1p(rem.number().doubleValue()));
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(RealScalar.of(2));
     ScalarUnaryOperator copy = Serialization.copy(scalarUnaryOperator);
     Scalar scalar = copy.apply(RealScalar.of(4));
@@ -61,14 +61,14 @@ class LogTest {
   }
 
   @Test
-  public void testBaseNumber() {
+  void testBaseNumber() {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(2);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(64));
     assertEquals(scalar, RealScalar.of(6));
   }
 
   @Test
-  public void testStrangeBase() {
+  void testStrangeBase() {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(0.1);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(3));
     // Mathematica ............................ -0.47712125471966243730
@@ -76,7 +76,7 @@ class LogTest {
   }
 
   @Test
-  public void testNegativeBase() {
+  void testNegativeBase() {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(-0.1);
     Scalar scalar = scalarUnaryOperator.apply(RealScalar.of(3));
     // Mathematica ................. -0.1667368328837891, -0.22749179210112070I
@@ -85,7 +85,7 @@ class LogTest {
   }
 
   @Test
-  public void testBaseZero() {
+  void testBaseZero() {
     ScalarUnaryOperator scalarUnaryOperator = Log.base(0);
     assertEquals(scalarUnaryOperator.apply(RealScalar.of(+4)), RealScalar.ZERO);
     assertEquals(scalarUnaryOperator.apply(RealScalar.of(-4)), RealScalar.ZERO);
@@ -95,23 +95,23 @@ class LogTest {
   }
 
   @Test
-  public void testNaN() {
+  void testNaN() {
     assertEquals(Log.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
   }
 
   @Test
-  public void testBaseOneFail() {
+  void testBaseOneFail() {
     assertThrows(TensorRuntimeException.class, () -> Log.base(1));
   }
 
   @Test
-  public void testFailQuantity() {
+  void testFailQuantity() {
     Scalar scalar = Quantity.of(2, "m");
     assertThrows(TensorRuntimeException.class, () -> Log.of(scalar));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
     assertThrows(TensorRuntimeException.class, () -> Log.of(scalar));
   }

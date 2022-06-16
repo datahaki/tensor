@@ -14,68 +14,68 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 
 class ScalarParserTest {
   @Test
-  public void testDouble() {
+  void testDouble() {
     assertEquals(ScalarParser.of("3.14`30.123"), ScalarParser.of("3.14"));
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar scalar = ScalarParser.of("3.14`30.123+2.12`99.322*I");
     assertEquals(scalar, ComplexScalar.of(3.14, 2.12));
   }
 
   @Test
-  public void testDivisions() {
+  void testDivisions() {
     Scalar scalar = ScalarParser.of("40*3/4/5/6");
     assertEquals(scalar, ComplexScalar.of(1, 0));
     ExactScalarQ.require(scalar);
   }
 
   @Test
-  public void testMix() {
+  void testMix() {
     Scalar scalar = ScalarParser.of("80*3/4/2*5/6");
     assertEquals(scalar, ComplexScalar.of(25, 0));
     ExactScalarQ.require(scalar);
   }
 
   @Test
-  public void testImagFormat() {
+  void testImagFormat() {
     assertEquals(ScalarParser.imagToString(RealScalar.of(2.13)), "2.13*I");
     assertEquals(ScalarParser.imagToString(RealScalar.of(-2.13)), "-2.13*I");
   }
 
   @Test
-  public void testImagFormatI() {
+  void testImagFormatI() {
     assertEquals(ScalarParser.imagToString(RealScalar.ONE), "I");
     assertEquals(ScalarParser.imagToString(RealScalar.ONE.negate()), "-I");
   }
 
   @Test
-  public void testRational1() {
+  void testRational1() {
     Scalar z = ComplexScalar.of(RationalScalar.of(1, 2), RationalScalar.of(1, 3));
     assertEquals(Scalars.fromString(z.toString()), z);
   }
 
   @Test
-  public void testRational2() {
+  void testRational2() {
     Scalar z = ComplexScalar.of(RationalScalar.of(1, 2), RationalScalar.of(-1, 3));
     assertEquals(Scalars.fromString(z.toString()), z);
   }
 
   @Test
-  public void testDecimal() {
+  void testDecimal() {
     assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of(new BigDecimal("1"))).toString(), "I");
     assertEquals(ComplexScalar.of(RealScalar.ZERO, DecimalScalar.of(new BigDecimal("-1"))).toString(), "-I");
   }
 
   @Test
-  public void testDoubleImag() {
+  void testDoubleImag() {
     assertEquals(ComplexScalar.of(RealScalar.ZERO, DoubleScalar.of(1)).toString(), "1.0*I");
     assertEquals(ComplexScalar.of(RealScalar.ZERO, DoubleScalar.of(-1)).toString(), "-1.0*I");
   }
 
   @Test
-  public void testBrackets() {
+  void testBrackets() {
     Scalar s1 = ScalarParser.of(" (1)+(2)");
     Scalar s2 = ScalarParser.of(" ((3))+0");
     Scalar s3 = ScalarParser.of(" (1+2) ");
@@ -87,21 +87,21 @@ class ScalarParserTest {
   }
 
   @Test
-  public void testTrimVsStrip() {
+  void testTrimVsStrip() {
     String string = "    asdb  \u0000 ";
     assertEquals(string.trim().length(), 4);
     assertEquals(string.strip().length(), 7);
   }
 
   @Test
-  public void testIsBlank() {
+  void testIsBlank() {
     String string = "    \u0000 ";
     assertTrue(string.trim().isEmpty());
     assertFalse(string.isBlank());
   }
 
   @Test
-  public void testAbcFail() {
+  void testAbcFail() {
     assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("(3"));
     assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("3)"));
     assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("314abc34"));
@@ -115,12 +115,12 @@ class ScalarParserTest {
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(IllegalArgumentException.class, () -> ScalarParser.of("3.14[m]"));
   }
 
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertEquals(ScalarParser.class.getModifiers() & 1, 0);
   }
 }

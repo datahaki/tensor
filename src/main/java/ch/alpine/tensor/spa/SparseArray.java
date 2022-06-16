@@ -312,7 +312,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return getClass().getSimpleName() + '[' + visit(new SparseArrayToString()) + ", " + Tensors.vector(size) + ", " + fallback + ']';
+    return "SparseArray" + '[' + visit(new SparseArrayToString()) + ", " + Tensors.vector(size) + ", " + fallback + ']';
   }
 
   /** @param sparseEntryVisitor

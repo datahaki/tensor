@@ -47,6 +47,6 @@ public final class BinaryPower<T> implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), groupInterface);
+    return String.format("BinaryPower[%s]", groupInterface);
   }
 }

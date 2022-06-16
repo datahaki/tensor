@@ -26,7 +26,7 @@ class ExtendedGCDTest {
   }
 
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Function<Tensor, ExtendedGCD> function = ExtendedGCD.function();
     Tensor vector = Tensors.vector(12334 * 5, 32332 * 5);
     ExtendedGCD extendedGCD = Serialization.copy(function.apply(vector));
@@ -35,7 +35,7 @@ class ExtendedGCDTest {
   }
 
   @Test
-  public void testGCD() {
+  void testGCD() {
     Distribution distribution = DiscreteUniformDistribution.of(-10000, 10000);
     for (int index = 0; index <= 100; ++index) {
       Scalar a = RandomVariate.of(distribution);
@@ -47,7 +47,7 @@ class ExtendedGCDTest {
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     int prime = 379;
     Scalar a = GaussScalar.of(4 * 3, prime);
     Scalar b = GaussScalar.of(16 * 3, prime);

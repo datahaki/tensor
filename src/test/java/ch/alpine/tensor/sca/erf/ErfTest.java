@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class ErfTest {
   @Test
-  public void testMathematica() {
+  void testMathematica() {
     Tensor xs = Subdivide.of(-2, 2., 20);
     double[] values = new double[] { //
         -0.9953222650189527, -0.9890905016357308, -0.976348383344644, //
@@ -37,13 +37,13 @@ class ErfTest {
   }
 
   @Test
-  public void testLimits() {
+  void testLimits() {
     assertEquals(Erf.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY), RealScalar.ONE);
     assertEquals(Erf.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), RealScalar.ONE.negate());
   }
 
   @Test
-  public void testMathematica2() {
+  void testMathematica2() {
     Tensor xs = Subdivide.of(1.5, 5., 20);
     double[] values = new double[] { //
         0.9661051464753108, 0.9821544715266071, 0.9911110300560857, //
@@ -58,7 +58,7 @@ class ErfTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar scalar = ComplexScalar.of(1.2, 1.4);
     Scalar expect = ComplexScalar.of(1.294669945215742, -0.4089868112498779); // Mathematica
     Scalar result = Erf.FUNCTION.apply(scalar);
@@ -66,7 +66,7 @@ class ErfTest {
   }
 
   @Test
-  public void testComplexNeg() {
+  void testComplexNeg() {
     Scalar scalar = ComplexScalar.of(-1.2, 1.4);
     Scalar expect = ComplexScalar.of(-1.294669945215742, -0.4089868112498779); // Mathematica
     Scalar result = Erf.FUNCTION.apply(scalar);

@@ -19,7 +19,7 @@ import ch.alpine.tensor.num.Pi;
 
 class ConstantArrayTest {
   @Test
-  public void testRepmat() {
+  void testRepmat() {
     Tensor vector = Tensors.vector(1, 2, 3);
     Tensor repmat = ConstantArray.of(vector, 2, 3, 4);
     assertTrue(Tensors.isUnmodifiable(repmat));
@@ -33,7 +33,7 @@ class ConstantArrayTest {
   }
 
   @Test
-  public void testSingle() {
+  void testSingle() {
     Tensor vector = Tensors.vector(1, 2, 3);
     Tensor repmat = ConstantArray.of(vector);
     assertTrue(Tensors.isUnmodifiable(repmat));
@@ -42,26 +42,26 @@ class ConstantArrayTest {
   }
 
   @Test
-  public void testScalar() {
+  void testScalar() {
     Tensor repmat = ConstantArray.of(RealScalar.ZERO);
     assertInstanceOf(Scalar.class, repmat);
   }
 
   @Test
-  public void testScalar1() {
+  void testScalar1() {
     Tensor repmat = ConstantArray.of(Pi.VALUE, Arrays.asList());
     assertInstanceOf(Scalar.class, repmat);
   }
 
   @Test
-  public void testZeros() {
+  void testZeros() {
     Tensor repmat = ConstantArray.of(RealScalar.ZERO, 2, 4, 1);
     Tensor zeros = Array.zeros(2, 4, 1);
     assertEquals(repmat, zeros);
   }
 
   @Test
-  public void testNCopies() {
+  void testNCopies() {
     Tensor tensor = ConstantArray.of(Tensors.vector(1, 2, 3), 6);
     assertTrue(Tensors.isUnmodifiable(tensor));
     assertEquals(tensor.length(), 6);
@@ -72,7 +72,7 @@ class ConstantArrayTest {
   }
 
   @Test
-  public void testNCopiesScalar() {
+  void testNCopiesScalar() {
     Tensor tensor = ConstantArray.of(RealScalar.of(3), 6);
     assertTrue(Tensors.isUnmodifiable(tensor));
     assertEquals(tensor.length(), 6);
@@ -83,12 +83,12 @@ class ConstantArrayTest {
   }
 
   @Test
-  public void testFailNull() {
+  void testFailNull() {
     assertThrows(NullPointerException.class, () -> ConstantArray.of(null, 6, 3));
   }
 
   @Test
-  public void testFailNegative() {
+  void testFailNegative() {
     Tensor repmat = ConstantArray.of(RealScalar.ONE, 6, 0, 3);
     assertEquals(Dimensions.of(repmat), Arrays.asList(6, 0));
     assertEquals(repmat, Tensors.fromString("{{}, {}, {}, {}, {}, {}}"));

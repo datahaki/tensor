@@ -25,25 +25,25 @@ import ch.alpine.tensor.sca.Chop;
 
 class PowerTest {
   @Test
-  public void testInteger() {
+  void testInteger() {
     assertEquals(Power.of(2, 4), RealScalar.of(16));
     assertEquals(Power.of(-4, 5), RealScalar.of(-1024));
   }
 
   @Test
-  public void testSqrtExactHalfPos() {
+  void testSqrtExactHalfPos() {
     Scalar scalar = Power.function(RationalScalar.HALF).apply(RealScalar.of(4));
     assertEquals(ExactScalarQ.require(scalar), RealScalar.of(2));
   }
 
   @Test
-  public void testSqrtExactHalfNeg() {
+  void testSqrtExactHalfNeg() {
     Scalar scalar = Power.function(RationalScalar.HALF.negate()).apply(RealScalar.of(9));
     assertEquals(ExactScalarQ.require(scalar), RationalScalar.of(1, 3));
   }
 
   @Test
-  public void testExponentZero() {
+  void testExponentZero() {
     assertEquals(Power.of(+2, 0), RealScalar.ONE);
     assertEquals(Power.of(+1, 0), RealScalar.ONE);
     assertEquals(Power.of(+0, 0), RealScalar.ONE);
@@ -52,31 +52,31 @@ class PowerTest {
   }
 
   @Test
-  public void testNumberScalar() {
+  void testNumberScalar() {
     Scalar scalar = Power.of(2, RationalScalar.of(2, 3));
     Chop._13.requireClose(scalar, Scalars.fromString("1.5874010519681994`"));
   }
 
   @Test
-  public void testSqrt() {
+  void testSqrt() {
     assertEquals(Power.of(2, 0.5), Sqrt.of(RealScalar.of(2)));
     assertEquals(Power.of(14, 0.5), Sqrt.of(RealScalar.of(14)));
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     assertEquals(Power.of(0, +0), RealScalar.ONE);
     assertEquals(Power.of(0, +1), RealScalar.ZERO);
     assertEquals(Power.of(0, +2), RealScalar.ZERO);
   }
 
   @Test
-  public void testZeroFail() {
+  void testZeroFail() {
     assertThrows(ArithmeticException.class, () -> Power.of(0, -2));
   }
 
   @Test
-  public void testNegativeOne() {
+  void testNegativeOne() {
     assertEquals(Power.of(-1, 0), RealScalar.ONE);
     assertEquals(Power.of(-1, 1), RealScalar.ONE.negate());
     assertEquals(Power.of(-1, 2), RealScalar.ONE);
@@ -84,43 +84,43 @@ class PowerTest {
   }
 
   @Test
-  public void testZeroComplex() {
+  void testZeroComplex() {
     assertEquals(Power.of(RealScalar.ZERO, Scalars.fromString("0.1+3*I")), RealScalar.ZERO);
     assertEquals(Power.of(RealScalar.ZERO, Scalars.fromString("0.1-3*I/2")), RealScalar.ZERO);
   }
 
   @Test
-  public void testZeroComplex1Fail() {
+  void testZeroComplex1Fail() {
     assertThrows(TensorRuntimeException.class, () -> Power.of(RealScalar.ZERO, ComplexScalar.I));
   }
 
   @Test
-  public void testZeroComplex2Fail() {
+  void testZeroComplex2Fail() {
     assertThrows(TensorRuntimeException.class, () -> Power.of(RealScalar.ZERO, Scalars.fromString("-0.1+3*I")));
   }
 
   @Test
-  public void testNegative() {
+  void testNegative() {
     assertEquals(Power.of(2, -4), RealScalar.of(16).reciprocal());
     assertEquals(Power.of(-4, -5), RealScalar.of(-1024).reciprocal());
   }
 
   @Test
-  public void testNegativeFractional() {
+  void testNegativeFractional() {
     Scalar result = Power.of(-2.2, 1.3);
     Scalar gndtru = Scalars.fromString("-1.6382047104755275 - 2.254795345529229* I");
     assertEquals(result, gndtru);
   }
 
   @Test
-  public void testNegativeFractionalNeg() {
+  void testNegativeFractionalNeg() {
     Scalar result = Power.of(-2.2, -1.3);
     Scalar gndtru = Scalars.fromString("-0.21089641642663778` + 0.290274014661784` *I ");
     assertEquals(result, gndtru);
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar a = ComplexScalar.of(2, +3);
     Scalar b = ComplexScalar.of(4, -2);
     Scalar c = Power.of(a, b);
@@ -129,32 +129,32 @@ class PowerTest {
   }
 
   @Test
-  public void testFunction() {
+  void testFunction() {
     assertEquals(RealScalar.of(7).map(Power.function(0.5)), Sqrt.of(RealScalar.of(7)));
     assertEquals(Power.function(0.5).apply(RealScalar.of(7)), Sqrt.of(RealScalar.of(7)));
   }
 
   @Test
-  public void testTypeFail() {
+  void testTypeFail() {
     Scalar scalar = StringScalar.of("some");
     assertThrows(TensorRuntimeException.class, () -> Power.of(scalar, 0));
   }
 
   @Test
-  public void testDecimal() {
+  void testDecimal() {
     MathContext mc = MathContext.DECIMAL128;
     Scalar d1 = DecimalScalar.of(new BigDecimal("1.234", mc), mc.getPrecision());
     assertEquals(Power.of(d1, 2.34), DoubleScalar.of(Math.pow(1.234, 2.34)));
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     Scalar scalar = GaussScalar.of(6, 31);
     assertThrows(TensorRuntimeException.class, () -> Power.of(scalar, 3.13));
   }
 
   @Test
-  public void testQuantity1() {
+  void testQuantity1() {
     Scalar qs1 = Quantity.of(9, "m^2");
     Scalar res = Power.of(qs1, RealScalar.of(3));
     Scalar act = Quantity.of(729, "m^6");
@@ -165,7 +165,7 @@ class PowerTest {
   }
 
   @Test
-  public void testQuantity2() {
+  void testQuantity2() {
     Scalar qs1 = Quantity.of(-2, "m^-3*rad");
     Scalar res = Power.of(qs1, RealScalar.of(3));
     Scalar act = Quantity.of(-8, "m^-9*rad^3");
@@ -173,14 +173,14 @@ class PowerTest {
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     Scalar qs1 = Quantity.of(2, "cd");
     Scalar qs2 = Quantity.of(4, "cd");
     assertThrows(TensorRuntimeException.class, () -> Power.of(qs1, qs2));
   }
 
   @Test
-  public void testNaN() {
+  void testNaN() {
     assertEquals(Power.of(Double.NaN, Double.NaN).toString(), "NaN");
     assertEquals(Power.of(1, Double.NaN).toString(), "NaN");
     assertEquals(Power.of(Double.NaN, 1).toString(), "NaN");
@@ -189,12 +189,12 @@ class PowerTest {
   }
 
   @Test
-  public void testFailNullNumber() {
+  void testFailNullNumber() {
     assertThrows(NullPointerException.class, () -> Power.function((Number) null));
   }
 
   @Test
-  public void testFailNullScalar() {
+  void testFailNullScalar() {
     assertThrows(NullPointerException.class, () -> Power.function((Scalar) null));
   }
 }

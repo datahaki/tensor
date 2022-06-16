@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class NdCollectBaseTest {
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertEquals(NdCollectBase.class.getModifiers() & 1, 1);
   }
 }

@@ -112,6 +112,6 @@ public class Binomial implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%d]", getClass().getSimpleName(), n);
+    return String.format("Binomial[%d]", n);
   }
 }

@@ -17,7 +17,7 @@ class InverseErfTest {
   public static final Chop CHOP_04 = Chop.below(1e-04);
 
   @Test
-  public void testSymmetry() {
+  void testSymmetry() {
     Scalar v1 = InverseErf.FUNCTION.apply(RealScalar.of(0.3));
     Tolerance.CHOP.requireClose(v1, RealScalar.of(0.2724627147267544));
     Scalar v2 = InverseErf.FUNCTION.apply(RealScalar.of(-0.3));
@@ -25,13 +25,13 @@ class InverseErfTest {
   }
 
   @Test
-  public void testCorners() {
+  void testCorners() {
     assertEquals(InverseErf.of(RealScalar.of(-1)), DoubleScalar.NEGATIVE_INFINITY);
     assertEquals(InverseErf.of(RealScalar.of(+1)), DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> InverseErf.FUNCTION.apply(RealScalar.of(+1.3)));
     assertThrows(TensorRuntimeException.class, () -> InverseErf.FUNCTION.apply(RealScalar.of(-1.1)));
   }

@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class BinomialRandomVariateTest {
   @Test
-  public void testDivert() {
+  void testDivert() {
     assertEquals(BinomialDistribution.of(1200, DoubleScalar.of(0.5)).getClass(), BinomialRandomVariate.class);
     assertEquals(BinomialDistribution.of(1200, RationalScalar.of(1, 2)).getClass(), BinomialDistribution.class);
     assertEquals(BinomialDistribution.of(12000, DoubleScalar.of(0.1)).getClass(), BinomialRandomVariate.class);
@@ -34,7 +34,7 @@ class BinomialRandomVariateTest {
   }
 
   @Test
-  public void testRandom() throws ClassNotFoundException, IOException {
+  void testRandom() throws ClassNotFoundException, IOException {
     int n = 200;
     Distribution distribution = Serialization.copy(new BinomialRandomVariate(n, RealScalar.of(0.4)));
     Scalar value = RandomVariate.of(distribution);
@@ -47,7 +47,7 @@ class BinomialRandomVariateTest {
   }
 
   @Test
-  public void testRandomVector() {
+  void testRandomVector() {
     int n = 200;
     Distribution distribution = new BinomialRandomVariate(n, RealScalar.of(0.4));
     Tensor tensor = RandomVariate.of(distribution, 100);
@@ -56,7 +56,7 @@ class BinomialRandomVariateTest {
   }
 
   @Test
-  public void testCorner() {
+  void testCorner() {
     Distribution distribution1 = BinomialDistribution.of(10, RealScalar.ONE);
     Distribution distribution2 = new BinomialRandomVariate(10, RealScalar.ONE);
     Scalar s1 = RandomVariate.of(distribution1);
@@ -66,12 +66,12 @@ class BinomialRandomVariateTest {
   }
 
   @Test
-  public void testPDFFail() {
+  void testPDFFail() {
     assertThrows(IllegalArgumentException.class, () -> PDF.of(BinomialDistribution.of(1200, DoubleScalar.of(0.5))));
   }
 
   @Test
-  public void testCDFFail() {
+  void testCDFFail() {
     assertThrows(IllegalArgumentException.class, () -> CDF.of(BinomialDistribution.of(1200, DoubleScalar.of(0.5))));
   }
 }

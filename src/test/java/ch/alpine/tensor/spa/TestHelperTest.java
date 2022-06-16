@@ -25,7 +25,7 @@ class TestHelperTest {
   }
 
   @Test
-  public void testBlock() {
+  void testBlock() {
     assertInstanceOf(SparseArray.class, sparse);
     int dimension1 = Unprotect.dimension1(tensor);
     for (int ofs0 = 0; ofs0 <= tensor.length(); ++ofs0)
@@ -43,7 +43,7 @@ class TestHelperTest {
   }
 
   @Test
-  public void testBlockFail() {
+  void testBlockFail() {
     _checkBlockFail(Arrays.asList(-1), Arrays.asList(0));
     _checkBlockFail(Arrays.asList(6), Arrays.asList(0));
     // _checkBlockFail(Arrays.asList(0, -1), Arrays.asList(0, 0));
@@ -57,7 +57,7 @@ class TestHelperTest {
   }
 
   @Test
-  public void testExtract() {
+  void testExtract() {
     assertInstanceOf(SparseArray.class, sparse);
     for (int ofs0 = 0; ofs0 <= tensor.length(); ++ofs0)
       for (int len0 = ofs0; len0 <= tensor.length(); ++len0)
@@ -70,7 +70,7 @@ class TestHelperTest {
   }
 
   @Test
-  public void testExtractFail() {
+  void testExtractFail() {
     _checkExtractFail(-1, 2);
     _checkExtractFail(3, 2);
     _checkExtractFail(3, 6);

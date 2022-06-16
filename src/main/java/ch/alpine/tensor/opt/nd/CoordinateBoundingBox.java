@@ -33,6 +33,13 @@ public class CoordinateBoundingBox implements Serializable {
     return new CoordinateBoundingBox(stream.collect(Collectors.toList()));
   }
 
+  /** @param clips
+   * @return */
+  @SafeVarargs
+  public static CoordinateBoundingBox of(Clip... clips) {
+    return new CoordinateBoundingBox(List.of(clips));
+  }
+
   // ---
   private final List<Clip> list;
 
@@ -104,14 +111,19 @@ public class CoordinateBoundingBox implements Serializable {
   }
 
   // ---
+  /** @return stream of all clips */
+  public Stream<Clip> stream() {
+    return list.stream();
+  }
+
   /** @return lower left corner of bounding box */
   public Tensor min() {
-    return Tensor.of(list.stream().map(Clip::min));
+    return Tensor.of(stream().map(Clip::min));
   }
 
   /** @return upper right corner of bounding box */
   public Tensor max() {
-    return Tensor.of(list.stream().map(Clip::max));
+    return Tensor.of(stream().map(Clip::max));
   }
 
   // ---

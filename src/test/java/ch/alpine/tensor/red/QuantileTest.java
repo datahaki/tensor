@@ -34,7 +34,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class QuantileTest {
   @Test
-  public void testMultiple() throws ClassNotFoundException, IOException {
+  void testMultiple() throws ClassNotFoundException, IOException {
     Tensor vector = Tensors.vector(0, 2, 1, 4, 3);
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(Quantile.of(vector));
     Tensor q = Tensors.fromString("{0, 1/5, 2/5, 3/5, 4/5, 1}").map(scalarUnaryOperator);
@@ -43,7 +43,7 @@ class QuantileTest {
   }
 
   @Test
-  public void testScalar() {
+  void testScalar() {
     Tensor vector = Tensors.vector(0, 2, 1, 4, 3);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(vector);
     Tensor p = scalarUnaryOperator.apply(RealScalar.of(0.71233));
@@ -51,7 +51,7 @@ class QuantileTest {
   }
 
   @Test
-  public void testSorted() throws ClassNotFoundException, IOException {
+  void testSorted() throws ClassNotFoundException, IOException {
     Tensor vector = Sort.of(Tensors.vector(0, 2, 1, 4, 3));
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(Quantile.ofSorted(vector));
     Tensor q = Tensors.fromString("{0, 1/5, 2/5, 3/5, 4/5, 1}").map(scalarUnaryOperator);
@@ -60,20 +60,20 @@ class QuantileTest {
   }
 
   @Test
-  public void testBounds() {
+  void testBounds() {
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(Tensors.vector(0, 2, 1, 4, 3));
     assertThrows(IndexOutOfBoundsException.class, () -> scalarUnaryOperator.apply(RealScalar.of(1.01)));
     assertThrows(IndexOutOfBoundsException.class, () -> scalarUnaryOperator.apply(RealScalar.of(-0.01)));
   }
 
   @Test
-  public void testFailSorted() {
+  void testFailSorted() {
     Tensor vector = Tensors.vector(0, 2, 1, 4, 3);
     assertThrows(TensorRuntimeException.class, () -> Quantile.ofSorted(vector));
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(4, "m");
     Scalar qs3 = Quantity.of(2, "m");
@@ -86,7 +86,7 @@ class QuantileTest {
   }
 
   @Test
-  public void testLimitTheorem() {
+  void testLimitTheorem() {
     Random random = new SecureRandom();
     Tensor tensor = Array.of(l -> RealScalar.of(random.nextDouble()), 2000);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
@@ -97,7 +97,7 @@ class QuantileTest {
   }
 
   @Test
-  public void testDistribution() {
+  void testDistribution() {
     ScalarUnaryOperator suo = Quantile.of(UniformDistribution.of(5, 10));
     assertThrows(TensorRuntimeException.class, () -> suo.apply(RationalScalar.of(-1, 5)));
     assertEquals(suo.apply(RationalScalar.of(0, 5)), RealScalar.of(5));
@@ -108,12 +108,12 @@ class QuantileTest {
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IllegalArgumentException.class, () -> Quantile.of(Tensors.empty()));
   }
 
   @Test
-  public void testFailComplex() {
+  void testFailComplex() {
     Tensor tensor = Tensors.vector(-3, 2, 1, 100);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
     Tensor weight = Tensors.of(RealScalar.ONE, ComplexScalar.of(1, 2));
@@ -121,7 +121,7 @@ class QuantileTest {
   }
 
   @Test
-  public void testFailQuantity() {
+  void testFailQuantity() {
     Tensor tensor = Tensors.vector(-3, 2, 1, 100);
     ScalarUnaryOperator scalarUnaryOperator = Quantile.of(tensor);
     assertThrows(TensorRuntimeException.class, () -> scalarUnaryOperator.apply(Quantity.of(0, "m")));
@@ -129,12 +129,12 @@ class QuantileTest {
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> Quantile.of(Pi.VALUE));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     Tensor matrix = Reverse.of(IdentityMatrix.of(7));
     OrderedQ.require(matrix);
     assertThrows(TensorRuntimeException.class, () -> Quantile.of(matrix));
@@ -142,13 +142,13 @@ class QuantileTest {
   }
 
   @Test
-  public void testEmptyVectorFail() {
+  void testEmptyVectorFail() {
     assertThrows(IllegalArgumentException.class, () -> Quantile.of(Tensors.empty()));
     assertThrows(IllegalArgumentException.class, () -> Quantile.ofSorted(Tensors.empty()));
   }
 
   @Test
-  public void testFailNull() {
+  void testFailNull() {
     assertThrows(NullPointerException.class, () -> Quantile.of((Tensor) null));
     assertThrows(NullPointerException.class, () -> Quantile.of((Distribution) null));
   }

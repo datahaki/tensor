@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 class StaticHelperTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     BigInteger p1 = BigInteger.valueOf(7829);
     BigInteger p2 = BigInteger.valueOf(7829);
     assertFalse(p1 == p2);

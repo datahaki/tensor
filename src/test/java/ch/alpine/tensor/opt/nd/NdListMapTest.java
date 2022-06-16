@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class NdListMapTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     NdMap<String> m1 = new NdListMap<>();
     m1.insert(Tensors.vector(1, 0), "p2");
     m1.insert(Tensors.vector(1, 5), "p4");
@@ -85,7 +85,7 @@ class NdListMapTest {
   }
 
   @RepeatedTest(4)
-  public void testOne(RepetitionInfo repetitionInfo) {
+  void testOne(RepetitionInfo repetitionInfo) {
     int dim = repetitionInfo.getCurrentRepetition();
     _checkCenter(Tensors.vector(0.3, .3), 1, dim);
     _checkCenter(Tensors.vector(0.1, .3), 1, dim);
@@ -94,7 +94,7 @@ class NdListMapTest {
   }
 
   @RepeatedTest(4)
-  public void testFew(RepetitionInfo repetitionInfo) {
+  void testFew(RepetitionInfo repetitionInfo) {
     int dim = repetitionInfo.getCurrentRepetition();
     _checkCenter(Tensors.vector(0.3, .3), 3, dim);
     _checkCenter(Tensors.vector(0.1, .3), 3, dim);
@@ -103,7 +103,7 @@ class NdListMapTest {
   }
 
   @RepeatedTest(4)
-  public void testMany(RepetitionInfo repetitionInfo) {
+  void testMany(RepetitionInfo repetitionInfo) {
     int dim = repetitionInfo.getCurrentRepetition();
     _checkCenter(Tensors.vector(0.3, .3), 20, dim);
     _checkCenter(Tensors.vector(0.1, .3), 20, dim);
@@ -112,7 +112,7 @@ class NdListMapTest {
   }
 
   @RepeatedTest(4)
-  public void testMost(RepetitionInfo repetitionInfo) {
+  void testMost(RepetitionInfo repetitionInfo) {
     int dim = repetitionInfo.getCurrentRepetition();
     _checkCenter(Tensors.vector(0.3, .3), 60, dim);
     _checkCenter(Tensors.vector(0.1, .3), 60, dim);
@@ -121,7 +121,7 @@ class NdListMapTest {
   }
 
   @RepeatedTest(4)
-  public void testAll(RepetitionInfo repetitionInfo) {
+  void testAll(RepetitionInfo repetitionInfo) {
     int dim = repetitionInfo.getCurrentRepetition();
     _checkCenter(Tensors.vector(0.3, .3), 160, dim);
     _checkCenter(Tensors.vector(0.1, .3), 160, dim);

@@ -62,6 +62,6 @@ public class PascalDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%d, %s]", getClass().getSimpleName(), n, p);
+    return String.format("PascalDistribution[%d, %s]", n, p);
   }
 }

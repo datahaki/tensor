@@ -20,14 +20,14 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class KurtosisTest {
   @Test
-  public void testMathematica() {
+  void testMathematica() {
     Tensor tensor = Tensors.vector(10, 2, 3, 4, 1);
     Scalar result = Kurtosis.of(tensor);
     assertEquals(result, Scalars.fromString("697/250")); // confirmed in mathematica
   }
 
   @Test
-  public void testTrapezoidal() {
+  void testTrapezoidal() {
     Distribution distribution = TrapezoidalDistribution.of(4, 5, 7, 10);
     Scalar scalar = Kurtosis.of(distribution);
     Scalar check = CentralMoment.of(distribution, 4).divide(Variance.of(distribution)).divide(Variance.of(distribution));
@@ -36,7 +36,7 @@ class KurtosisTest {
   }
 
   @Test
-  public void testUniform() {
+  void testUniform() {
     Distribution distribution = UniformDistribution.of(-3, -1);
     Scalar scalar = Kurtosis.of(distribution);
     Scalar check = CentralMoment.of(distribution, 4).divide(Variance.of(distribution)).divide(Variance.of(distribution));
@@ -46,12 +46,12 @@ class KurtosisTest {
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> Kurtosis.of(RealScalar.ONE));
   }
 
   @Test
-  public void testFailMatrix() {
+  void testFailMatrix() {
     assertThrows(ClassCastException.class, () -> Kurtosis.of(HilbertMatrix.of(3)));
   }
 }

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class SparseEntryTransposeTest {
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertEquals(SparseEntryTranspose.class.getModifiers() & 1, 0);
   }
 }

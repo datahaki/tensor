@@ -14,14 +14,14 @@ import ch.alpine.tensor.sca.Conjugate;
 
 class NnzTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
     SparseArray sparseArray = (SparseArray) TestHelper.of(tensor);
     assertEquals(Nnz.of(sparseArray), 8);
   }
 
   @Test
-  public void testSubtraction() {
+  void testSubtraction() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
     Tensor raw = TestHelper.of(tensor);
     SparseArray sparse = (SparseArray) raw;
@@ -34,7 +34,7 @@ class NnzTest {
   }
 
   @Test
-  public void testSome() {
+  void testSome() {
     Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{0,0,0,0,0},{0,2,0,0,4}}");
     Tensor sparse = TestHelper.of(tensor);
     sparse.set(Tensors.vector(1, 2, 3, 4, 5), 1);

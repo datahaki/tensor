@@ -46,7 +46,7 @@ class TrapezoidalDistributionTest {
   final Random random = new Random();
 
   @Test
-  public void testPositive() {
+  void testPositive() {
     Scalar a = RationalScalar.of(random.nextInt(100), 1);
     Scalar b = a.add(RealScalar.of(random.nextDouble() * 10));
     Scalar c = b.add(RealScalar.of(random.nextDouble() * 10));
@@ -59,7 +59,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testPDF() throws ClassNotFoundException, IOException {
+  void testPDF() throws ClassNotFoundException, IOException {
     Scalar a = RationalScalar.of(1, 1);
     Scalar b = RationalScalar.of(2, 1);
     Scalar c = RationalScalar.of(3, 1);
@@ -77,7 +77,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testCDFPositive() {
+  void testCDFPositive() {
     Scalar a = RealScalar.of(1);
     Scalar b = RealScalar.of(2);
     Scalar c = RealScalar.of(3);
@@ -90,7 +90,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testMean() {
+  void testMean() {
     Scalar a = RandomVariate.of(DiscreteUniformDistribution.of(0, 100));
     Distribution paramDist = UniformDistribution.of(0, 10);
     Scalar b = a.add(RandomVariate.of(paramDist));
@@ -105,7 +105,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testVariance() {
+  void testVariance() {
     // values confirmed with Mathematica
     assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 3, 4)), RationalScalar.of(5, 12));
     assertEquals(Variance.of(TrapezoidalDistribution.of(1, 2, 4, 4)), RationalScalar.of(253, 450));
@@ -115,7 +115,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Distribution distribution = //
         TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(5, "m"));
     Scalar mean = Mean.of(distribution);
@@ -149,7 +149,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testQuantity2() {
+  void testQuantity2() {
     Distribution distribution = //
         TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(4, "m"));
     Scalar mean = Mean.of(distribution);
@@ -192,7 +192,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testCDFInverseCDF() {
+  void testCDFInverseCDF() {
     TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of( //
         Quantity.of(1, "m"), Quantity.of(5, "m"), Quantity.of(7, "m"), Quantity.of(11, "m"));
     Clip clip = Clips.interval(Quantity.of(1, "m"), Quantity.of(11, "m"));
@@ -207,7 +207,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testCDFInverseCDF2() {
+  void testCDFInverseCDF2() {
     TrapezoidalDistribution distribution = (TrapezoidalDistribution) TrapezoidalDistribution.of( //
         Quantity.of(1, "m"), Quantity.of(5, "m"), Quantity.of(5, "m"), Quantity.of(11, "m"));
     Clip clip = Clips.interval(Quantity.of(1, "m"), Quantity.of(11, "m"));
@@ -226,7 +226,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testBSpline2() {
+  void testBSpline2() {
     Distribution distribution = TrapezoidalDistribution.of(0.5, 1.5, 1.5, 2.5);
     CDF cdf = CDF.of(distribution);
     Tensor sequence = Tensors.vector(0, 0, 1, 1);
@@ -236,7 +236,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testMarkov() {
+  void testMarkov() {
     Random random = new Random();
     Distribution distribution = TrapezoidalDistribution.of( //
         0 + random.nextDouble(), //
@@ -247,7 +247,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testExactFail() {
+  void testExactFail() {
     Distribution distribution = TrapezoidalDistribution.of(Quantity.of(1, "m"), Quantity.of(2, "m"), Quantity.of(3, "m"), Quantity.of(3, "m"));
     TestMarkovChebyshev.chebyshev(distribution);
     TestMarkovChebyshev.markov(distribution);
@@ -260,7 +260,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testObviousMean() {
+  void testObviousMean() {
     Distribution distribution = TrapezoidalDistribution.of(4, 5, 6, 7);
     Scalar mean = Mean.of(distribution);
     assertEquals(mean, RationalScalar.of(11, 2));
@@ -271,7 +271,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testTriangularVar() {
+  void testTriangularVar() {
     Distribution distribution = TrapezoidalDistribution.of(4, 5, 5, 7);
     Scalar mean = Mean.of(distribution);
     assertEquals(mean, RationalScalar.of(16, 3));
@@ -282,7 +282,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testWithMean() {
+  void testWithMean() {
     Distribution distribution = TrapezoidalDistribution.with(4, 3, 2);
     Scalar mean = Mean.of(distribution);
     Tolerance.CHOP.requireClose(mean, RealScalar.of(4));
@@ -291,7 +291,7 @@ class TrapezoidalDistributionTest {
 
   @Test
   @Disabled
-  public void testDateTimeScalar() {
+  void testDateTimeScalar() {
     DateTimeScalar a = DateTimeScalar.of(LocalDateTime.of(2022, 1, 2, 12, 02));
     DateTimeScalar b = DateTimeScalar.of(LocalDateTime.of(2022, 1, 4, 11, 05));
     DateTimeScalar c = DateTimeScalar.of(LocalDateTime.of(2022, 1, 7, 19, 06));
@@ -308,7 +308,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testNumericFail() {
+  void testNumericFail() {
     TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
     TrapezoidalDistribution.of(Quantity.of(2., "m"), Quantity.of(2., "m"), Quantity.of(3., "m"), Quantity.of(3., "m"));
     assertThrows(TensorRuntimeException.class,
@@ -319,7 +319,7 @@ class TrapezoidalDistributionTest {
   }
 
   @Test
-  public void testCenterFail() {
+  void testCenterFail() {
     assertThrows(TensorRuntimeException.class,
         () -> TrapezoidalDistribution.of(Quantity.of(1., "m"), Quantity.of(3., "m"), Quantity.of(2., "m"), Quantity.of(9., "m")));
   }

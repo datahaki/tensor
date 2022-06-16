@@ -1,0 +1,9 @@
+*a,a
+a*,a
+a***,a
+**a***b**,a*b
+*ab,ab
+ab*,ab
+ab***,ab
+**ab***bb**,ab*bb
+b^(3+0)**a,a*b*b*b

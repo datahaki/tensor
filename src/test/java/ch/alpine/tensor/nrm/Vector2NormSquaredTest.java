@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class Vector2NormSquaredTest {
   @Test
-  public void testBetween() {
+  void testBetween() {
     Tensor v1 = Tensors.vector(1, 2, 5);
     Tensor v2 = Tensors.vector(0, -2, 10);
     Scalar n1 = Vector2NormSquared.between(v1, v2);
@@ -27,13 +27,13 @@ class Vector2NormSquaredTest {
   }
 
   @Test
-  public void testExact() {
+  void testExact() {
     Scalar norm = Vector2NormSquared.of(Tensors.vector(3, 4));
     assertEquals(ExactScalarQ.require(norm), RealScalar.of(9 + 16));
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertThrows(NoSuchElementException.class, () -> Vector2NormSquared.of(Tensors.empty()));
   }
 }

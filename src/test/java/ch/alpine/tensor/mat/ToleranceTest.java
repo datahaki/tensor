@@ -13,7 +13,7 @@ import ch.alpine.tensor.Scalars;
 
 class ToleranceTest {
   @Test
-  public void testTrue() {
+  void testTrue() {
     Scalar scalar = Scalars.fromString("1E-20");
     assertEquals(scalar, DoubleScalar.of(1E-20));
     Tolerance.CHOP.requireZero(scalar);
@@ -22,7 +22,7 @@ class ToleranceTest {
   }
 
   @Test
-  public void testFalse() {
+  void testFalse() {
     Scalar scalar = Scalars.fromString("1E-8");
     assertFalse(Tolerance.CHOP.isZero(scalar));
     assertFalse(Tolerance.CHOP.allZero(scalar));

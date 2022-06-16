@@ -16,14 +16,14 @@ import ch.alpine.tensor.qty.Quantity;
 
 class InvertUnlessZeroTest {
   @Test
-  public void testVector() {
+  void testVector() {
     Tensor tensor = InvertUnlessZero.of(Tensors.vector(1, 0, 2));
     assertEquals(tensor, Tensors.vector(1, 0, 0.5));
     ExactTensorQ.require(tensor);
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar scalar = Quantity.of(-2, "m");
     Scalar invert = InvertUnlessZero.FUNCTION.apply(scalar);
     ExactScalarQ.require(invert);
@@ -31,7 +31,7 @@ class InvertUnlessZeroTest {
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     Scalar scalar = Quantity.of(0, "m");
     Scalar invert = InvertUnlessZero.FUNCTION.apply(scalar);
     ExactScalarQ.require(invert);

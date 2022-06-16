@@ -23,6 +23,9 @@ import ch.alpine.tensor.Tensors;
  * 1.2630135948105083*^17
  * 3.5849905564258352*^-18
  * </pre> */
+// TODO TENSOR 20220615 does not work for general unicode, for example mathematica
+// ... exports a string consisting of the 2 Chinese characters hanzi as:
+// "\:6c49\:5b57"
 public enum MathematicaFormat {
   ;
   private static final String EXPONENT_JAVA = "E";

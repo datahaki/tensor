@@ -10,13 +10,13 @@ import org.junit.jupiter.api.Test;
 
 class StaticHelperTest {
   @Test
-  public void testStringLastIndex() {
+  void testStringLastIndex() {
     String string = "{ { } } ";
     assertEquals(string.lastIndexOf(Tensor.CLOSING_BRACKET, 2), -1);
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(StaticHelper.class.getModifiers()));
   }
 }

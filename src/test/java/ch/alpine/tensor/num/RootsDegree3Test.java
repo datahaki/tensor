@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.Imag;
 
 class RootsDegree3Test {
   @Test
-  public void testSteer() {
+  void testSteer() {
     Scalar c = RealScalar.of(+0.8284521034333863);
     Scalar a = RealScalar.of(-0.33633373640449604);
     Tensor coeffs = Tensors.of(RealScalar.ZERO, c, RealScalar.ZERO, a);
@@ -37,7 +37,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testCubicChallenge2() {
+  void testCubicChallenge2() {
     Tensor coeffs = Tensors.vector(1.5583019232667707, 0.08338030361650195, 0.5438230916311243, 1.1822223716596811);
     ScalarUnaryOperator polynomial = Polynomial.of(coeffs);
     // roots obtained by Mathematica:
@@ -54,7 +54,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testOrdering1() {
+  void testOrdering1() {
     Tensor coeffs = Tensors.vector(4, 5, 0, 1);
     Tensor actual = Roots.of(coeffs);
     Tensor expect = Tensors.fromString("{-0.72407555138628, 0.36203777569313966-2.322329445424682*I, 0.36203777569314005+2.322329445424681*I}");
@@ -62,7 +62,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testOrdering2() {
+  void testOrdering2() {
     Tensor coeffs = Tensors.vector(-4, 5, 0, 1);
     Tensor actual = Roots.of(coeffs);
     Tensor expect = Tensors.fromString("{-0.3620377756931403-2.3223294454246814*I, -0.3620377756931403+2.3223294454246814*I, 0.7240755513862799}");
@@ -70,7 +70,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testOrdering3() {
+  void testOrdering3() {
     Tensor coeffs = Tensors.vector(-4, -5, 0, 1);
     Tensor actual = Roots.of(coeffs);
     Tensor expect = Tensors.fromString("{-1.5615528128088303, -1, 2.56155281280883}");
@@ -78,14 +78,14 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testRoots3() {
+  void testRoots3() {
     Tensor roots = Tensors.vector(0.27349919995262256, 0.28215588800565544, 0.3056009752969802);
     Tensor coeffs = CoefficientList.of(roots);
     Chop._12.requireClose(roots, Sort.of(RootsDegree3.of(coeffs)));
   }
 
   @Test
-  public void testTriple1() {
+  void testTriple1() {
     // {0.22765732048577852, 0.22765732048577852, 0.22765732048577852}
     Tensor roots = Tensors.vector(2.146361758590232, 2.146361758590232, 2.146361758590232);
     Tensor coeffs = CoefficientList.of(roots);
@@ -94,7 +94,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testTriple2() {
+  void testTriple2() {
     Tensor roots = Tensors.vector(0.22765732048577852, 0.22765732048577852, 0.22765732048577852);
     Tensor coeffs = CoefficientList.of(roots);
     Tensor r2 = RootsDegree3.of(coeffs);
@@ -108,7 +108,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testCubic() {
+  void testCubic() {
     Tensor coeffs = Tensors.vector(2, 3, 4, 5);
     Tensor roots = Roots.of(coeffs);
     ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
@@ -119,7 +119,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testMonomial() {
+  void testMonomial() {
     Tensor coeffs = Tensors.vector(0, 0, 0, 10);
     Tensor roots = Roots.of(coeffs);
     ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
@@ -130,7 +130,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testMonomialShiftedP() {
+  void testMonomialShiftedP() {
     Tensor coeffs = Tensors.vector(1, 3, 3, 1);
     Tensor roots = Roots.of(coeffs);
     assertEquals(roots, Tensors.vector(-1, -1, -1));
@@ -142,7 +142,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testMonomialShiftedN() {
+  void testMonomialShiftedN() {
     Tensor coeffs = Tensors.vector(1, -3, 3, -1);
     Tensor roots = Roots.of(coeffs);
     assertEquals(roots, Tensors.vector(1, 1, 1));
@@ -154,7 +154,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testMonomialQuadShift() {
+  void testMonomialQuadShift() {
     Tensor coeffs = Tensors.vector(1, 1, -1, -1);
     Tensor roots = Roots.of(coeffs);
     Map<Tensor, Long> map = Tally.of(roots);
@@ -168,7 +168,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testCubicQuantity() {
+  void testCubicQuantity() {
     Tensor coeffs = Tensors.fromString("{2[m^-5], 3[m^-4], 4[m^-3], 5[m^-2]}");
     Tensor roots = Roots.of(coeffs);
     ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
@@ -179,7 +179,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testCubicNumerics() {
+  void testCubicNumerics() {
     Tensor coeffs = Tensors.vector(0.7480756509468256, -0.11264914570345713, 0.5215628590156208, -0.8016542468533115);
     Tensor roots = Roots.of(coeffs);
     ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
@@ -190,7 +190,7 @@ class RootsDegree3Test {
   }
 
   @Test
-  public void testCubicChallenge() {
+  void testCubicChallenge() {
     Tensor coeffs = Tensors.vector(1.8850384838238452, -0.07845356111460325, -0.6128180724984655, -1.5845220466594934);
     Tensor roots = Roots.of(coeffs);
     Scalar m0 = Scalars.fromString("-0.6590816994450482 - 0.9180824258012533 * I");

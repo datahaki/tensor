@@ -15,41 +15,41 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 
 class ArgMinTest {
   @Test
-  public void testDocumentation() {
+  void testDocumentation() {
     assertEquals(ArgMin.of(Tensors.vector(3, 4, 1, 2, 3)), 2);
     assertEquals(ArgMin.of(Tensors.vector(1, 4, 1, 2, 3)), 0);
   }
 
   @Test
-  public void testMin() {
+  void testMin() {
     assertEquals(1, ArgMin.of(Tensors.vectorDouble(3., 0.6, 8, 0.6, 100)));
     assertEquals(2, ArgMin.of(Tensors.vectorDouble(3, 3., 0.6, 8, 0.6, 8)));
   }
 
   @Test
-  public void testMinComparatorIncr() {
+  void testMinComparatorIncr() {
     assertEquals(1, ArgMin.of(Tensors.vectorDouble(3., 0.6, 8, 0.6, 100)));
     assertEquals(2, ArgMin.of(Tensors.vectorDouble(3, 3., 0.6, 8, 0.6, 8)));
   }
 
   @Test
-  public void testMinComparatorDecr() {
+  void testMinComparatorDecr() {
     assertEquals(4, ArgMin.of(Tensors.vectorDouble(3., 0.6, 8, 0.6, 100), Collections.reverseOrder()));
     assertEquals(3, ArgMin.of(Tensors.vectorDouble(3, 3., 0.6, 8, 0.6, 8), Collections.reverseOrder()));
   }
 
   @Test
-  public void testComparatorNullFail() {
+  void testComparatorNullFail() {
     assertThrows(NullPointerException.class, () -> ArgMin.of(Tensors.empty(), null));
   }
 
   @Test
-  public void testScalar() {
+  void testScalar() {
     assertThrows(TensorRuntimeException.class, () -> ArgMin.of(RealScalar.ONE));
   }
 
   @Test
-  public void testFailMatrix() {
+  void testFailMatrix() {
     assertThrows(ClassCastException.class, () -> ArgMin.of(HilbertMatrix.of(6)));
   }
 }

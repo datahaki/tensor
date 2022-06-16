@@ -26,7 +26,7 @@ class BigDecimalMathTest {
   }
 
   @Test
-  public void testSqrtSimple() {
+  void testSqrtSimple() {
     _check(new BigDecimal("4767655423.1", new MathContext(2, RoundingMode.HALF_EVEN)), MathContext.DECIMAL32);
     _check(new BigDecimal("5423.1", new MathContext(2, RoundingMode.HALF_EVEN)), MathContext.DECIMAL32);
     _check(new BigDecimal("0.000001235423", new MathContext(2, RoundingMode.HALF_EVEN)), MathContext.DECIMAL32);
@@ -38,21 +38,21 @@ class BigDecimalMathTest {
   }
 
   @Test
-  public void testSqrtExact() {
+  void testSqrtExact() {
     BigDecimal bd1 = new BigDecimal(BigInteger.valueOf(25 * 25));
     Object object = BigDecimalMath.sqrt(bd1, MathContext.DECIMAL32);
     assertFalse(object.equals(RationalScalar.of(25, 1))); // gives false
   }
 
   @Test
-  public void testSqrtComparable() {
+  void testSqrtComparable() {
     BigDecimal bd1 = new BigDecimal(BigInteger.valueOf(25 * 25));
     Comparable<BigDecimal> rt1 = BigDecimalMath.sqrt(bd1, MathContext.DECIMAL32);
     assertEquals(rt1.compareTo(new BigDecimal("25")), 0);
   }
 
   @Test
-  public void testSqrtTwo() {
+  void testSqrtTwo() {
     BigDecimal bd1 = new BigDecimal("2");
     BigDecimal rt1 = BigDecimalMath.sqrt(bd1, new MathContext(100, RoundingMode.HALF_EVEN));
     // mathematica N[Sqrt[2], 100] gives
@@ -61,7 +61,7 @@ class BigDecimalMathTest {
   }
 
   @Test
-  public void testSqrtSome() {
+  void testSqrtSome() {
     BigDecimal bigDecimal = new BigDecimal("0.5138888888888888888888888888888885");
     assertEquals(bigDecimal.precision(), 34);
     // BigDecimalMath.sqrt(bigDecimal,
@@ -71,31 +71,31 @@ class BigDecimalMathTest {
   }
 
   @Test
-  public void testSqrtZero() {
+  void testSqrtZero() {
     BigDecimal bd1 = new BigDecimal("0");
     BigDecimal rt1 = BigDecimalMath.sqrt(bd1, MathContext.DECIMAL64);
     assertEquals(rt1.compareTo(BigDecimal.ZERO), 0);
   }
 
   @Test
-  public void testSqrtNegative() {
+  void testSqrtNegative() {
     assertThrows(IllegalArgumentException.class, () -> BigDecimalMath.sqrt(new BigDecimal("-2340"), MathContext.DECIMAL64));
   }
 
   @Test
-  public void testExpZero() {
+  void testExpZero() {
     BigDecimal bd1 = BigDecimalMath.exp(BigDecimal.ZERO, MathContext.DECIMAL128);
     assertEquals(bd1, BigDecimal.ONE);
   }
 
   @Test
-  public void testExp() {
+  void testExp() {
     BigDecimal bd1 = BigDecimalMath.exp(BigDecimal.ONE, MathContext.DECIMAL128);
     assertEquals(bd1.toString(), "2.718281828459045235360287471352662"); // mathematica N[Exp[1], 34]
   }
 
   @Test
-  public void testSin() {
+  void testSin() {
     // mathematica: 0.90929742682568169539601986591174484270225497144789
     // ............ 0.9092974268256816953960198659117451
     Scalar s0 = Sin.of(RealScalar.of(2));
@@ -104,7 +104,7 @@ class BigDecimalMathTest {
   }
 
   @Test
-  public void testSinh() {
+  void testSinh() {
     // mathematica: 0.90929742682568169539601986591174484270225497144789
     // ............ 0.9092974268256816953960198659117451
     Scalar s0 = Sinh.of(RealScalar.of(2));
@@ -113,14 +113,14 @@ class BigDecimalMathTest {
   }
 
   @Test
-  public void testCos() {
+  void testCos() {
     Scalar s0 = Cos.of(RealScalar.of(2));
     BigDecimal bd1 = BigDecimalMath.cos(BigDecimal.valueOf(2), MathContext.DECIMAL128);
     Chop._13.requireClose(s0, RealScalar.of(bd1.doubleValue()));
   }
 
   @Test
-  public void testCosh() {
+  void testCosh() {
     Scalar s0 = Cosh.of(RealScalar.of(2));
     BigDecimal bd1 = BigDecimalMath.cosh(BigDecimal.valueOf(2), MathContext.DECIMAL128);
     Chop._13.requireClose(s0, RealScalar.of(bd1.doubleValue()));

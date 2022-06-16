@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class CoefficientListTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor zeros = Tensors.vector(3);
     Tensor coeffs = CoefficientList.of(zeros);
     Chop.NONE.requireZero(Polynomial.of(coeffs).apply(RealScalar.of(3)));
@@ -26,7 +26,7 @@ class CoefficientListTest {
   }
 
   @Test
-  public void testQuantityD1() {
+  void testQuantityD1() {
     Tensor zeros = Tensors.fromString("{3[m]}");
     Tensor coeffs = CoefficientList.of(zeros);
     Scalar result = Polynomial.of(coeffs).apply(Quantity.of(3, "m"));
@@ -37,7 +37,7 @@ class CoefficientListTest {
   }
 
   @Test
-  public void testQuantityD2() {
+  void testQuantityD2() {
     Tensor zeros = Tensors.fromString("{3[m], 4[m]}");
     Tensor coeffs = CoefficientList.of(zeros);
     Chop.NONE.requireZero(Polynomial.of(coeffs).apply(Quantity.of(3, "m")));
@@ -48,7 +48,7 @@ class CoefficientListTest {
   }
 
   @Test
-  public void testQuantityD3() {
+  void testQuantityD3() {
     Tensor zeros = Tensors.fromString("{3[m], 4[m], 6[m]}");
     Tensor coeffs = CoefficientList.of(zeros);
     assertEquals(coeffs, Tensors.fromString("{-72[m^3], 54[m^2], -13[m], 1}"));
@@ -60,7 +60,7 @@ class CoefficientListTest {
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(IndexOutOfBoundsException.class, () -> CoefficientList.of(Tensors.empty()));
   }
 }

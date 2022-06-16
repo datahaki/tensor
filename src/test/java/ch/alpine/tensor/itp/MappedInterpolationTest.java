@@ -15,7 +15,7 @@ import ch.alpine.tensor.sca.Floor;
 
 class MappedInterpolationTest {
   @Test
-  public void testFloor() throws ClassNotFoundException, IOException {
+  void testFloor() throws ClassNotFoundException, IOException {
     Interpolation interpolation = //
         Serialization.copy(MappedInterpolation.of(Tensors.vector(10, 20, 30, 40), Floor.FUNCTION));
     assertEquals(interpolation.get(Tensors.vector(2.8)), RealScalar.of(30));
@@ -23,12 +23,12 @@ class MappedInterpolationTest {
   }
 
   @Test
-  public void testFailNull() {
+  void testFailNull() {
     assertThrows(NullPointerException.class, () -> MappedInterpolation.of(null, Floor.FUNCTION));
   }
 
   @Test
-  public void testFailFunctionNull() {
+  void testFailFunctionNull() {
     assertThrows(NullPointerException.class, () -> MappedInterpolation.of(Tensors.vector(3, 4, 5), null));
   }
 }

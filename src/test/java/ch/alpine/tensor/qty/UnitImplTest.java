@@ -20,7 +20,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class UnitImplTest {
   @Test
-  public void testMap() {
+  void testMap() {
     Unit unit = Unit.of("kg^2*m^-1");
     assertEquals(unit.map().get("kg"), RealScalar.of(2));
     assertEquals(unit.map().get("m"), RealScalar.of(-1));
@@ -28,7 +28,7 @@ class UnitImplTest {
   }
 
   @Test
-  public void testMap2() {
+  void testMap2() {
     Unit unit = Unit.of("kg^2*m^-1*s");
     assertEquals(unit.map().get("kg"), RealScalar.of(2));
     assertEquals(unit.map().get("m"), RealScalar.of(-1));
@@ -37,13 +37,13 @@ class UnitImplTest {
   }
 
   @Test
-  public void testMultiplyFail() {
+  void testMultiplyFail() {
     Unit unit = Unit.of("kg^2*m^-1");
     assertThrows(TensorRuntimeException.class, () -> unit.multiply(Quantity.of(3, "s")));
   }
 
   @Test
-  public void testSerializationEquals() throws ClassNotFoundException, IOException {
+  void testSerializationEquals() throws ClassNotFoundException, IOException {
     Unit unit1 = Unit.of("kg^2*m^-1*K*ABC");
     Unit unit2 = Serialization.copy(unit1);
     assertEquals(unit1, unit2);
@@ -54,7 +54,7 @@ class UnitImplTest {
   }
 
   @Test
-  public void testCachedEquals() {
+  void testCachedEquals() {
     Unit unit1 = Unit.of("kg^2/3*m^-3*K");
     Unit unit2 = Unit.of("kg^2/3*m^-3*K");
     assertTrue(unit1 == unit2);
@@ -64,13 +64,13 @@ class UnitImplTest {
   }
 
   @Test
-  public void testUnmodifiableMap() {
+  void testUnmodifiableMap() {
     Unit unit = Unit.of("kg^2*m^-1");
     assertThrows(UnsupportedOperationException.class, () -> unit.map().clear());
   }
 
   @Test
-  public void testReference1() {
+  void testReference1() {
     NavigableMap<String, Scalar> m1 = new TreeMap<>();
     m1.put("some", RealScalar.ONE);
     m1.put("kgt", RealScalar.TWO.negate());
@@ -81,20 +81,20 @@ class UnitImplTest {
   }
 
   @Test
-  public void testReference2() {
+  void testReference2() {
     assertTrue(UnitImpl.create(Collections.emptyNavigableMap()) == //
         UnitImpl.create(Collections.emptyNavigableMap()));
   }
 
   @Test
-  public void testEqualsMerged() {
+  void testEqualsMerged() {
     Unit unit = Unit.of("m^2*m^-1*kg*m^1");
     assertEquals(unit, Unit.of("kg****m ** m*  "));
     assertEquals(unit.toString(), "kg*m^2");
   }
 
   @Test
-  public void testEqualsNull() {
+  void testEqualsNull() {
     assertFalse(Unit.ONE.equals(null));
     assertFalse(Unit.of("m").equals(null));
   }

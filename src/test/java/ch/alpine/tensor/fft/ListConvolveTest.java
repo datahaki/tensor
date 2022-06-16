@@ -23,7 +23,7 @@ import ch.alpine.tensor.mat.HilbertMatrix;
 
 class ListConvolveTest {
   @Test
-  public void testVector1() {
+  void testVector1() {
     Tensor kernel = Tensors.vector(0, -1, 3);
     Tensor tensor = ArrayPad.of(Tensors.vector(1, 6, 0, 0, -1), //
         Arrays.asList(kernel.length() - 1), Arrays.asList(kernel.length() - 1));
@@ -33,7 +33,7 @@ class ListConvolveTest {
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     Tensor kernel = Tensors.fromString("{{2, 1, 3}, {0, 1, -1}}");
     Tensor tensor = Tensors.fromString("{{0, 0, 1, 0, -2, 1, 2}, {2, 0, 1, 0, -2, 1, 2}, {3, 2, 3, 3, 45, 3, 2}}");
     Tensor result = ListConvolve.of(kernel, tensor);
@@ -42,7 +42,7 @@ class ListConvolveTest {
   }
 
   @Test
-  public void testLastLayer() {
+  void testLastLayer() {
     Tensor kernel = Tensors.vector(1, -1);
     Tensor matrix = Tensors.matrixInt(new int[][] { //
         { 2, 1, 3, 0, 1 }, //
@@ -52,7 +52,7 @@ class ListConvolveTest {
   }
 
   @Test
-  public void testOperator() {
+  void testOperator() {
     Tensor kernel = Tensors.vector(1, -1);
     Tensor matrix = Tensors.matrixInt(new int[][] { //
         { 2, 1, 3, 0, 1 }, //
@@ -63,7 +63,7 @@ class ListConvolveTest {
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     Tensor kernel = Tensors.of(Tensors.vector(1, -1));
     UnaryOperator<Tensor> uo = ListConvolve.with(kernel);
     UnaryOperator<Tensor> cp = Serialization.copy(uo);
@@ -77,7 +77,7 @@ class ListConvolveTest {
   }
 
   @Test
-  public void testSameSame() {
+  void testSameSame() {
     Tensor kernel = HilbertMatrix.of(3);
     Tensor matrix = ListConvolve.of(kernel, kernel);
     // confirmed with Mathematica ListConvolve[HilbertMatrix[3], HilbertMatrix[3]]
@@ -85,7 +85,7 @@ class ListConvolveTest {
   }
 
   @Test
-  public void testOutsideMathematica() {
+  void testOutsideMathematica() {
     Tensor kernel = Tensors.vector(1, -1);
     Tensor matrix = Tensors.matrixInt(new int[][] { //
         { 2, 1, 3, 0, 1 }, //
@@ -97,7 +97,7 @@ class ListConvolveTest {
   }
 
   @Test
-  public void testRankFail() {
+  void testRankFail() {
     Tensor kernel = HilbertMatrix.of(2);
     Tensor matrix = Tensors.matrixInt(new int[][] { //
         { 2, 1, 3, 0, 1 }, //
@@ -108,7 +108,7 @@ class ListConvolveTest {
   }
 
   @Test
-  public void testConvolveNullFail() {
+  void testConvolveNullFail() {
     assertThrows(NullPointerException.class, () -> ListConvolve.with(null));
   }
 }

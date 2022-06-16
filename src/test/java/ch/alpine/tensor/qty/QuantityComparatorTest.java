@@ -21,28 +21,28 @@ import ch.alpine.tensor.ext.Serialization;
 
 class QuantityComparatorTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.SI());
     Tensor sorted = Sort.ofVector(Tensors.fromString("{4[h], 300[s], 2[min], 180[s]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{2[min], 180[s], 300[s], 4[h]}"));
   }
 
   @Test
-  public void testUnitless() throws ClassNotFoundException, IOException {
+  void testUnitless() throws ClassNotFoundException, IOException {
     Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.SI());
     Tensor sorted = Sort.ofVector(Tensors.fromString("{4[rad], 300[deg], 2, 180[rad], -1[rad]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{-1[rad], 2, 4[rad], 300[deg], 180[rad]}"));
   }
 
   @Test
-  public void testUnknown() throws ClassNotFoundException, IOException {
+  void testUnknown() throws ClassNotFoundException, IOException {
     Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.SI());
     Tensor sorted = Sort.ofVector(Tensors.fromString("{4[fun], 300[fun], 2[fun], 180[fun]}"), comparator);
     assertEquals(sorted, Tensors.fromString("{2[fun], 4[fun], 180[fun], 300[fun]}"));
   }
 
   @Test
-  public void testEmpty() throws ClassNotFoundException, IOException {
+  void testEmpty() throws ClassNotFoundException, IOException {
     UnitSystem unitSystem = Serialization.copy(SimpleUnitSystem.from(new Properties()));
     Comparator<Scalar> comparator = Serialization.copy(QuantityComparator.of(unitSystem));
     Tensor sorted = Sort.ofVector(Tensors.fromString("{4[fun], 300[fun], 2[fun], 180[fun]}"), comparator);
@@ -50,14 +50,14 @@ class QuantityComparatorTest {
   }
 
   @Test
-  public void testIncompatibleFail() {
+  void testIncompatibleFail() {
     Comparator<Scalar> comparator = QuantityComparator.SI();
     Tensor vector = Tensors.fromString("{4[h], 300[s], 2[km], 180[s]}");
     assertThrows(TensorRuntimeException.class, () -> Sort.ofVector(vector, comparator));
   }
 
   @Test
-  public void testInequality() {
+  void testInequality() {
     QuantityComparator quantityComparator = QuantityComparator.SI();
     assertFalse(quantityComparator.lessThan(Quantity.of(5, "days"), Quantity.of(10, "h")));
     assertFalse(quantityComparator.lessEquals(Quantity.of(5, "days"), Quantity.of(10, "h")));
@@ -66,7 +66,7 @@ class QuantityComparatorTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> QuantityComparator.of(null));
   }
 }

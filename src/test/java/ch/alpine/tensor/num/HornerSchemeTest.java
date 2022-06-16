@@ -18,7 +18,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 
 class HornerSchemeTest {
   @Test
-  public void testHorner1() {
+  void testHorner1() {
     Tensor coeffs = Tensors.vector(-3, 4);
     Scalar actual = Polynomial.of(coeffs).apply(RealScalar.of(2));
     Scalar expected = RealScalar.of(-3 + 2 * 4);
@@ -27,7 +27,7 @@ class HornerSchemeTest {
   }
 
   @Test
-  public void testHorner2() {
+  void testHorner2() {
     Tensor coeffs = Tensors.vector(-3, 4, -5);
     Scalar x = RealScalar.of(2);
     Scalar actual = Polynomial.of(coeffs).apply(x);
@@ -38,7 +38,7 @@ class HornerSchemeTest {
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertTrue(Modifier.isPublic(Polynomial.class.getModifiers()));
     assertTrue(Modifier.isPublic(FromDigits.class.getModifiers()));
     assertFalse(Modifier.isPublic(HornerScheme.class.getModifiers()));

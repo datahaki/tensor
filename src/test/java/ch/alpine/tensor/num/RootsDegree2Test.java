@@ -13,13 +13,13 @@ import ch.alpine.tensor.sca.Chop;
 
 class RootsDegree2Test {
   @Test
-  public void testZerosQuantity() {
+  void testZerosQuantity() {
     Tensor roots = Roots.of(Tensors.fromString("{0, 0, 1[m^-2], 0[m^-3]}"));
     assertEquals(roots, Tensors.fromString("{0[m^2], 0[m^2]}"));
   }
 
   @Test
-  public void testQuadraticQuantity() {
+  void testQuadraticQuantity() {
     Tensor coeffs = Tensors.fromString("{21, - 10 [s^-1], +1 [s^-2], 0, 0, 0}");
     Tensor roots = Roots.of(coeffs);
     assertEquals(roots, Tensors.fromString("{3[s], 7[s]}"));
@@ -27,7 +27,7 @@ class RootsDegree2Test {
   }
 
   @Test
-  public void testQuadraticComplexQuantity() {
+  void testQuadraticComplexQuantity() {
     Tensor coeffs = Tensors.fromString("{1, 0 [s^-1], 1 [s^-2]}");
     Tensor roots = Roots.of(coeffs);
     assertEquals(roots, Tensors.fromString("{-I[s], I[s]}"));
@@ -35,7 +35,7 @@ class RootsDegree2Test {
   }
 
   @Test
-  public void testPseudoCubicQuantity() {
+  void testPseudoCubicQuantity() {
     Tensor coeffs = Tensors.fromString("{0, 21, - 10 [s^-1], +1 [s^-2], 0, 0, 0}");
     Tensor roots = Roots.of(coeffs);
     assertEquals(Sort.of(roots), Tensors.fromString("{0[s], 3[s], 7[s]}"));
@@ -43,7 +43,7 @@ class RootsDegree2Test {
   }
 
   @Test
-  public void testPseudoQuarticQuantity() {
+  void testPseudoQuarticQuantity() {
     Tensor coeffs = Tensors.fromString("{0, 0, 21, - 10 [s^-1], +1 [s^-2], 0, 0, 0}");
     Tensor roots = Roots.of(coeffs);
     assertEquals(Sort.of(roots), Tensors.fromString("{0[s], 0[s], 3[s], 7[s]}"));
@@ -51,7 +51,7 @@ class RootsDegree2Test {
   }
 
   @Test
-  public void testChallenge() {
+  void testChallenge() {
     Tensor coeffs = Tensors.vector(-0.45461391407082863, -0.44401256484994056, -0.43798541191338114);
     Tensor roots = Roots.of(coeffs);
     Tensor zeros = roots.map(Polynomial.of(coeffs));
@@ -59,7 +59,7 @@ class RootsDegree2Test {
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     Tensor coeffs = Tensors.of(GaussScalar.of(3, 7), GaussScalar.of(2, 7), GaussScalar.of(2, 7));
     Tensor roots = Roots.of(coeffs);
     Tensor zeros = roots.map(Polynomial.of(coeffs));

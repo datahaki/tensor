@@ -9,19 +9,19 @@ import org.junit.jupiter.api.Test;
 
 class QuantityParserTest {
   @Test
-  public void testSome() {
+  void testSome() {
     Scalar scalar = QuantityParser.of("3.25[]");
     assertInstanceOf(DoubleScalar.class, scalar);
     assertEquals(scalar, RealScalar.of(3.25));
   }
 
   @Test
-  public void testBug() {
+  void testBug() {
     assertThrows(IllegalArgumentException.class, () -> QuantityParser.of("1[m2]"));
   }
 
   @Test
-  public void testNestedFail() {
+  void testNestedFail() {
     assertThrows(IllegalArgumentException.class, () -> QuantityParser.of("1[s][m]"));
   }
 }

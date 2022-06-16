@@ -26,7 +26,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class RSolveTest {
   @Test
-  public void testSimple2x2() {
+  void testSimple2x2() {
     Tensor r = Tensors.fromString("{{2,5},{3,0}}");
     Tensor rhs = Tensors.vector(1, 2);
     Tensor expect = LinearSolve.of(r, rhs);
@@ -36,7 +36,7 @@ class RSolveTest {
   }
 
   @Test
-  public void testSimple3x3() {
+  void testSimple3x3() {
     Tensor r = Tensors.fromString("{{2,5,1},{2,0,3},{4,0,0}}");
     Tensor rhs = Tensors.vector(1, 2, 3);
     Tensor expect = LinearSolve.of(r, rhs);
@@ -46,7 +46,7 @@ class RSolveTest {
   }
 
   @Test
-  public void testSimple4x4() {
+  void testSimple4x4() {
     Tensor r = Tensors.fromString("{{2,5,1,7},{2,0,3,0},{4,0,0,0},{0,3,0,0}}");
     Tensor rhs = Tensors.vector(1, 2, 3, 4);
     Tensor expect = LinearSolve.of(r, rhs);
@@ -56,7 +56,7 @@ class RSolveTest {
   }
 
   @Test
-  public void testGs() {
+  void testGs() {
     Random random = new Random(1);
     Distribution distribution = UniformDistribution.unit();
     for (int n = 2; n < 8; ++n) {
@@ -69,7 +69,7 @@ class RSolveTest {
   }
 
   @Test
-  public void testLeastSquaresWithGramSchmidt() {
+  void testLeastSquaresWithGramSchmidt() {
     Random random = new Random(1);
     Distribution distribution = UniformDistribution.of(-2, 2);
     int n = 10;
@@ -85,7 +85,7 @@ class RSolveTest {
 
   @ParameterizedTest
   @EnumSource(Pivots.class)
-  public void testQuantity2(Pivot pivot) {
+  void testQuantity2(Pivot pivot) {
     Tensor matrix = UpperTriangularize.of(Tensors.fromString( //
         "{{1[m^2], 2[m*rad], 3[kg*m]}, {4[m*rad], 2[rad^2], 2[kg*rad]}, {5[kg*m], 1[kg*rad], 7[kg^2]}}"));
     final Tensor eye = IdentityMatrix.of(3).unmodifiable();
@@ -95,7 +95,7 @@ class RSolveTest {
   }
 
   @Test
-  public void testQuantity3() { // confirmed with Mathematica 12
+  void testQuantity3() { // confirmed with Mathematica 12
     Tensor matrix = Tensors.fromString("{{1[m], 1[s]}, {0[m], 2[s]}}");
     Tensor sol1 = Inverse.of(matrix);
     Tensor sol2 = RSolve.of(matrix, new int[] { 0, 1 }, IdentityMatrix.of(2));

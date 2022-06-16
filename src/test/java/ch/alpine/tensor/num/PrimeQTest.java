@@ -17,8 +17,8 @@ import ch.alpine.tensor.io.ResourceData;
 
 class PrimeQTest {
   @Test
-  public void testPrimes() {
-    for (Tensor _x : ResourceData.of("/io/primes.vector")) {
+  void testPrimes() {
+    for (Tensor _x : ResourceData.of("/ch/alpine/tensor/num/primes.vector")) {
       RationalScalar x = (RationalScalar) _x;
       assertTrue(x.numerator().isProbablePrime(100));
       assertTrue(PrimeQ.of(x));
@@ -27,13 +27,13 @@ class PrimeQTest {
   }
 
   @Test
-  public void testMathematica() {
+  void testMathematica() {
     BigInteger bigInteger = BigInteger.valueOf(3371149052237L);
     assertTrue(PrimeQ.of(bigInteger));
   }
 
   @Test
-  public void testPrimeFail() {
+  void testPrimeFail() {
     assertThrows(IllegalArgumentException.class, () -> PrimeQ.require(BigInteger.TEN));
     assertThrows(TensorRuntimeException.class, () -> PrimeQ.require(Pi.HALF));
     assertThrows(TensorRuntimeException.class, () -> PrimeQ.require(RationalScalar.of(2, 3)));
@@ -41,7 +41,7 @@ class PrimeQTest {
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertTrue(Modifier.isPublic(PrimeQ.class.getModifiers()));
   }
 }

@@ -35,7 +35,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class GumbelDistributionTest {
   @Test
-  public void testPDF() {
+  void testPDF() {
     Distribution distribution = //
         GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     PDF pdf = PDF.of(distribution);
@@ -45,7 +45,7 @@ class GumbelDistributionTest {
   }
 
   @Test
-  public void testCDF() {
+  void testCDF() {
     Distribution distribution = //
         GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     CDF cdf = CDF.of(distribution);
@@ -55,7 +55,7 @@ class GumbelDistributionTest {
   }
 
   @Test
-  public void testRandomVariate() {
+  void testRandomVariate() {
     GumbelDistribution gmd = (GumbelDistribution) //
     GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     assertTrue(Scalars.lessThan(gmd.protected_quantile(RealScalar.ZERO), RealScalar.of(4.5)));
@@ -71,7 +71,7 @@ class GumbelDistributionTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Distribution distribution = GumbelDistribution.of(Quantity.of(0.3, "m^-1"), Quantity.of(0.4, "m^-1"));
     Scalar rand = RandomVariate.of(distribution);
     assertInstanceOf(Quantity.class, rand);
@@ -89,7 +89,7 @@ class GumbelDistributionTest {
   }
 
   @Test
-  public void testMean() {
+  void testMean() {
     Distribution distribution = //
         GumbelDistribution.of(Quantity.of(-0.3, "m^-1"), Quantity.of(0.4, "m^-1"));
     Scalar mean = Expectation.mean(distribution);
@@ -97,7 +97,7 @@ class GumbelDistributionTest {
   }
 
   @Test
-  public void testVariance() {
+  void testVariance() {
     Distribution distribution = //
         GumbelDistribution.of(Quantity.of(-1.3, "m^-1"), Quantity.of(1.5, "m^-1"));
     Scalar var = Expectation.variance(distribution);
@@ -105,7 +105,7 @@ class GumbelDistributionTest {
   }
 
   @Test
-  public void testCentralMoment() {
+  void testCentralMoment() {
     Distribution distribution = //
         GumbelDistribution.of(Quantity.of(-1.3, "m^-1"), Quantity.of(1.5, "m^-1"));
     assertEquals(CentralMoment.of(distribution, 0), RealScalar.ONE);
@@ -116,14 +116,14 @@ class GumbelDistributionTest {
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     Distribution distribution = //
         GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     assertEquals(distribution.toString(), "GumbelDistribution[3, 0.2]");
   }
 
   @Test
-  public void testDateTimeScalar() {
+  void testDateTimeScalar() {
     DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.now());
     Scalar durationScalar = Quantity.of(123, "s");
     Distribution distribution = GumbelDistribution.of(dateTimeScalar, durationScalar);
@@ -137,19 +137,19 @@ class GumbelDistributionTest {
   }
 
   @Test
-  public void testBetaNonPositiveFail() {
+  void testBetaNonPositiveFail() {
     assertThrows(TensorRuntimeException.class, () -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0)));
     assertThrows(TensorRuntimeException.class, () -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(-1)));
   }
 
   @Test
-  public void testComplexFail() {
+  void testComplexFail() {
     assertThrows(ClassCastException.class, () -> GumbelDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> GumbelDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> GumbelDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
     assertThrows(TensorRuntimeException.class, () -> GumbelDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
     assertThrows(TensorRuntimeException.class, () -> GumbelDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));

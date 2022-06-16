@@ -16,7 +16,7 @@ import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
 
 class LinearProgrammingTest {
   @Test
-  public void testCase4() {
+  void testCase4() {
     Tensor m = Tensors.matrixInt(new int[][] { { 1, 5, 1, 0, 0 }, { 2, 1, 0, 1, 0 }, { 1, 1, 0, 0, 1 } });
     Tensor b = Tensors.vector(40, 20, 12);
     LinearProgram linearProgram = LinearProgram.of( //
@@ -31,7 +31,7 @@ class LinearProgrammingTest {
   }
 
   @Test
-  public void testCase4max() {
+  void testCase4max() {
     LinearProgram lpd = LinearProgram.of( //
         Objective.MAX, Tensors.vector(3, 5), //
         ConstraintType.LESS_EQUALS, //
@@ -48,7 +48,7 @@ class LinearProgrammingTest {
 
   // MATLAB linprog example
   @Test
-  public void testMatlab1() { // min c.x == -10/9
+  void testMatlab1() { // min c.x == -10/9
     Tensor m = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");
     Tensor b = Tensors.vector(2, 1, 2, 1, -1, 2);
     LinearProgram lpd = LinearProgram.of( //
@@ -73,7 +73,7 @@ class LinearProgrammingTest {
 
   // MATLAB linprog example
   @Test
-  public void testMatlab1max() { // max c.x == min -c.x == -10/9
+  void testMatlab1max() { // max c.x == min -c.x == -10/9
     Tensor m = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}}");
     Tensor b = Tensors.vector(2, 1, 2, 1, -1, 2);
     LinearProgram lpd = LinearProgram.of( //
@@ -98,7 +98,7 @@ class LinearProgrammingTest {
 
   // MATLAB linprog example
   @Test
-  public void testMatlab2() {
+  void testMatlab2() {
     Tensor A = Tensors.fromString("{{1, 1}, {1, 1/4}, {1, -1}, {-1/4, -1}, {-1, -1}, {-1, 1}, {1, 1/4}}");
     Tensor b = Tensors.fromString("{2, 1, 2, 1, -1, 2, 1/2}");
     LinearProgram lpd = LinearProgram.of( //

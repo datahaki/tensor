@@ -18,32 +18,32 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class ConjugateTransposeTest {
   @Test
-  public void testExample1() {
+  void testExample1() {
     Tensor m1 = Tensors.fromString("{{1, 5+I}, {2, 3}}");
     Tensor m2 = Tensors.fromString("{{1, 2}, {5-I, 3}}");
     assertEquals(ConjugateTranspose.of(m1), m2);
   }
 
   @Test
-  public void testExample2() {
+  void testExample2() {
     Tensor m1 = Tensors.fromString("{{1+2*I, 5+I}, {2, 3}}");
     Tensor m2 = Tensors.fromString("{{1-2*I, 2}, {5-I, 3}}");
     assertEquals(ConjugateTranspose.of(m1), m2);
   }
 
   @Test
-  public void testRank3() {
+  void testRank3() {
     Tensor tensor = ConjugateTranspose.of(RandomVariate.of(UniformDistribution.unit(), 2, 3, 4));
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 2, 4));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> ConjugateTranspose.of(RealScalar.ONE));
   }
 
   @Test
-  public void testVectorFail() {
+  void testVectorFail() {
     assertThrows(TensorRuntimeException.class, () -> ConjugateTranspose.of(Tensors.vector(1, 2, 3)));
   }
 }

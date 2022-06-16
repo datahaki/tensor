@@ -17,7 +17,7 @@ import ch.alpine.tensor.num.Pi;
 
 class ScalarArrayTest {
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     Scalar[] array = ScalarArray.ofVector(Tensors.empty());
     Tensor tensor = Tensors.of(array);
     assertEquals(Tensors.empty(), tensor);
@@ -25,7 +25,7 @@ class ScalarArrayTest {
   }
 
   @Test
-  public void testMatrix() {
+  void testMatrix() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
     Scalar[][] array = ScalarArray.ofMatrix(tensor);
     Tensor matrix = Tensors.matrix(array);
@@ -34,17 +34,17 @@ class ScalarArrayTest {
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> ScalarArray.ofVector(Pi.HALF));
   }
 
   @Test
-  public void testVectorFail() {
+  void testVectorFail() {
     assertThrows(ClassCastException.class, () -> ScalarArray.ofVector(HilbertMatrix.of(3)));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(ClassCastException.class, () -> ScalarArray.ofMatrix(Array.zeros(2, 2, 2)));
   }
 }

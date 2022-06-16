@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.AbsSquared;
 
 class SqrtTest {
   @Test
-  public void testNegative() {
+  void testNegative() {
     ScalarUnaryOperator suo = Rationalize.withDenominatorLessEquals(RealScalar.of(10000));
     Scalar n2 = RealScalar.of(-2);
     Scalar sr = Sqrt.FUNCTION.apply(n2);
@@ -34,7 +34,7 @@ class SqrtTest {
   }
 
   @Test
-  public void testMixingTemplates() {
+  void testMixingTemplates() {
     {
       Scalar tensor = RealScalar.of(-2);
       Sqrt.of(tensor);
@@ -50,7 +50,7 @@ class SqrtTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar scalar = ComplexScalar.of(0, 2);
     Scalar root = Sqrt.FUNCTION.apply(scalar);
     Scalar res = ComplexScalar.of(1, 1);
@@ -58,12 +58,12 @@ class SqrtTest {
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     assertEquals(RealScalar.ZERO, Sqrt.FUNCTION.apply(RealScalar.ZERO));
   }
 
   @Test
-  public void testRational() {
+  void testRational() {
     assertEquals(Sqrt.of(RationalScalar.of(16, 25)).toString(), "4/5");
     Scalar scalar = Sqrt.of(RationalScalar.of(-16, 25));
     assertInstanceOf(ComplexScalar.class, scalar);
@@ -71,53 +71,53 @@ class SqrtTest {
   }
 
   @Test
-  public void testReal() {
+  void testReal() {
     assertEquals(Sqrt.of(RationalScalar.of(-16, 25)).toString(), "4/5*I");
     assertEquals(Sqrt.FUNCTION.apply(RealScalar.of(16 / 25.)), Scalars.fromString("4/5"));
     assertEquals(Sqrt.FUNCTION.apply(RealScalar.of(-16 / 25.)), Scalars.fromString("4/5*I"));
   }
 
   @Test
-  public void testTensor() {
+  void testTensor() {
     Tensor vector = Sqrt.of(Tensors.vector(1, 4, 9, 16));
     assertEquals(vector, Tensors.vector(1, 2, 3, 4));
   }
 
   @Test
-  public void testPositiveInfty() {
+  void testPositiveInfty() {
     assertEquals( //
         Sqrt.of(DoubleScalar.POSITIVE_INFINITY), //
         DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
-  public void testNegativeInfty() {
+  void testNegativeInfty() {
     assertEquals( //
         Sqrt.of(DoubleScalar.NEGATIVE_INFINITY), //
         ComplexScalar.of(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar qs1 = Quantity.of(9, "m^2");
     Scalar qs2 = Quantity.of(3, "m");
     assertEquals(Sqrt.of(qs1), qs2);
   }
 
   @Test
-  public void testQuantity2() {
+  void testQuantity2() {
     Scalar qs1 = Quantity.of(9, "m*s^2");
     Scalar qs2 = Quantity.of(3, "m^1/2*s");
     assertEquals(Sqrt.of(qs1), qs2);
   }
 
   @Test
-  public void testNaN() {
+  void testNaN() {
     assertEquals(Sqrt.FUNCTION.apply(DoubleScalar.INDETERMINATE).toString(), "NaN");
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Scalar scalar = StringScalar.of("string");
     assertThrows(TensorRuntimeException.class, () -> Sqrt.of(scalar));
   }

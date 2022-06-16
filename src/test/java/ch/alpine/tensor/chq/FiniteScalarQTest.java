@@ -28,44 +28,44 @@ import ch.alpine.tensor.sca.Round;
 
 class FiniteScalarQTest {
   @Test
-  public void testRealFinite() {
+  void testRealFinite() {
     assertTrue(FiniteScalarQ.of(RealScalar.of(0.)));
     assertTrue(FiniteScalarQ.of(RealScalar.ZERO));
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     assertTrue(FiniteScalarQ.of(ComplexScalar.of(0., 0.3)));
     assertTrue(FiniteScalarQ.of(ComplexScalar.of(0., 2)));
   }
 
   @Test
-  public void testComplexCorner() {
+  void testComplexCorner() {
     assertFalse(FiniteScalarQ.of(ComplexScalar.of(Double.POSITIVE_INFINITY, 0.3)));
     assertFalse(FiniteScalarQ.of(ComplexScalar.of(0., Double.NaN)));
   }
 
   @Test
-  public void testGauss() {
+  void testGauss() {
     assertTrue(FiniteScalarQ.of(GaussScalar.of(3, 7)));
     assertTrue(FiniteScalarQ.of(GaussScalar.of(0, 7)));
   }
 
   @Test
-  public void testCorner() {
+  void testCorner() {
     assertFalse(FiniteScalarQ.of(DoubleScalar.POSITIVE_INFINITY));
     assertFalse(FiniteScalarQ.of(DoubleScalar.NEGATIVE_INFINITY));
     assertFalse(FiniteScalarQ.of(RealScalar.of(Double.NaN)));
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     assertTrue(FiniteScalarQ.of(Quantity.of(3, "m")));
     assertTrue(FiniteScalarQ.of(Quantity.of(3.1415, "m")));
   }
 
   @Test
-  public void testTrue() {
+  void testTrue() {
     assertTrue(FiniteScalarQ.of(Pi.HALF));
     assertTrue(FiniteScalarQ.of(RationalScalar.HALF));
     assertTrue(FiniteScalarQ.of(Scalars.fromString("2+3*I")));
@@ -77,7 +77,7 @@ class FiniteScalarQTest {
   }
 
   @Test
-  public void testFalse() {
+  void testFalse() {
     assertFalse(FiniteScalarQ.of(DoubleScalar.POSITIVE_INFINITY));
     assertFalse(FiniteScalarQ.of(DoubleScalar.NEGATIVE_INFINITY));
     assertFalse(FiniteScalarQ.of(DoubleScalar.INDETERMINATE));
@@ -93,13 +93,13 @@ class FiniteScalarQTest {
   }
 
   @Test
-  public void testDecimalScalar() {
+  void testDecimalScalar() {
     assertTrue(FiniteScalarQ.of(DecimalScalar.of(BigDecimal.ONE)));
     assertTrue(FiniteScalarQ.of(DecimalScalar.of(new BigDecimal("0.001"))));
   }
 
   @Test
-  public void testJetScalar() {
+  void testJetScalar() {
     assertTrue(FiniteScalarQ.of(JetScalar.of(Pi.VALUE, 3)));
   }
 
@@ -114,7 +114,7 @@ class FiniteScalarQTest {
   }
 
   @Test
-  public void testComplexBranching() {
+  void testComplexBranching() {
     Scalar scalar = ComplexScalar.of(Double.NaN, Double.NaN);
     assertInstanceOf(ComplexScalar.class, scalar);
     assertFalse(FiniteScalarQ.of(scalar));
@@ -125,7 +125,7 @@ class FiniteScalarQTest {
   }
 
   @Test
-  public void testInvariance() {
+  void testInvariance() {
     Scalar scalar = Scalars.fromString("NaN+2*I[m*s]");
     assertEquals(scalar.toString(), "NaN+2*I[m*s]");
     assertInstanceOf(Quantity.class, scalar);
@@ -133,13 +133,13 @@ class FiniteScalarQTest {
   }
 
   @Test
-  public void testRequireThrow() {
+  void testRequireThrow() {
     FiniteScalarQ.require(Pi.VALUE);
     assertThrows(TensorRuntimeException.class, () -> FiniteScalarQ.require(DoubleScalar.POSITIVE_INFINITY));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> FiniteScalarQ.of(null));
   }
 }

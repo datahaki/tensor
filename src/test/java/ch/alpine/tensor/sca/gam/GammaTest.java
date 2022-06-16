@@ -24,13 +24,13 @@ import ch.alpine.tensor.sca.Chop;
 
 class GammaTest {
   @Test
-  public void testFactorial() {
+  void testFactorial() {
     for (int index = 0; index < 20; ++index)
       assertEquals(Gamma.of(RealScalar.of(index + 1)), Factorial.of(RealScalar.of(index)));
   }
 
   @Test
-  public void testPositiveMathematica() {
+  void testPositiveMathematica() {
     Scalar expect = ComplexScalar.of(0.25437472214867807, -1.9167734838293429);
     Scalar z = ComplexScalar.of(4.2, 3.4);
     Scalar result = Gamma.FUNCTION.apply(z);
@@ -38,7 +38,7 @@ class GammaTest {
   }
 
   @Test
-  public void testNegativeMathematica() {
+  void testNegativeMathematica() {
     Scalar expect = ComplexScalar.of(-0.00004914938770081672, -0.00043368292844823665);
     Scalar z = ComplexScalar.of(-2.2, -3.3);
     Scalar result = Gamma.FUNCTION.apply(z);
@@ -46,7 +46,7 @@ class GammaTest {
   }
 
   @Test
-  public void testGammaNumPos() {
+  void testGammaNumPos() {
     Chop._08.requireClose(Gamma.of(RealScalar.of(3.0)), RealScalar.of(2));
     Chop._08.requireClose(Gamma.of(RealScalar.of(4.0)), RealScalar.of(6));
     Chop._08.requireClose(Gamma.of(RealScalar.of(5.0)), RealScalar.of(24));
@@ -55,7 +55,7 @@ class GammaTest {
   }
 
   @Test
-  public void testGammaNum() {
+  void testGammaNum() {
     Chop._08.requireClose(Gamma.of(RealScalar.of(2.0)), RealScalar.of(1));
     Chop._08.requireClose(Gamma.of(RealScalar.of(1.0)), RealScalar.of(1));
     Chop._08.requireClose(Gamma.of(RealScalar.of(-1.2)), RealScalar.of(4.850957140522099));
@@ -64,48 +64,48 @@ class GammaTest {
   }
 
   @Test
-  public void testLargeInt() {
+  void testLargeInt() {
     assertEquals(Gamma.of(RealScalar.of(-1000.2)), RealScalar.ZERO);
     assertEquals(Gamma.of(RealScalar.of(1000.2)), DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
-  public void testLargeNegativeInteger() {
+  void testLargeNegativeInteger() {
     assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(-100000000000L)));
   }
 
   @Test
-  public void testLargeNegativeIntegerDouble() {
+  void testLargeNegativeIntegerDouble() {
     assertThrows(TensorRuntimeException.class, () -> Gamma.of(DecimalScalar.of(new BigDecimal("-100000000000.0"))));
   }
 
   @Test
-  public void testLargeNegative() {
+  void testLargeNegative() {
     assertEquals(Gamma.of(RealScalar.of(-23764528364522.345)), RealScalar.ZERO);
   }
 
   @Test
-  public void testLargePoistive() {
+  void testLargePoistive() {
     assertEquals(Gamma.of(RealScalar.of(1000000000000L)), DoubleScalar.POSITIVE_INFINITY);
     assertEquals(Gamma.of(RealScalar.of(23764528364522.345)), DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
-  public void testComplex1() {
+  void testComplex1() {
     Scalar result = Gamma.of(ComplexScalar.of(1.1, 0.3));
     Scalar actual = ComplexScalar.of(0.886904759534451, -0.10608824042449128);
     Tolerance.CHOP.requireClose(result, actual);
   }
 
   @Test
-  public void testComplex2() {
+  void testComplex2() {
     Scalar result = Gamma.of(ComplexScalar.of(0, 1));
     Scalar actual = ComplexScalar.of(-0.15494982830181073, -0.4980156681183565);
     Tolerance.CHOP.requireClose(result, actual);
   }
 
   @Test
-  public void testNest1() {
+  void testNest1() {
     Scalar seed = Scalars.fromString("-1.0894117647058823-0.07745098039215685*I");
     seed = Nest.of(Gamma.FUNCTION, seed, 3);
     // Mathematica gives
@@ -115,7 +115,7 @@ class GammaTest {
   }
 
   @Test
-  public void testNest2() {
+  void testNest2() {
     Scalar seed = Scalars.fromString("-1.0486274509803923-0.028431372549019604*I");
     seed = Gamma.of(seed);
     seed = Gamma.of(seed);
@@ -124,7 +124,7 @@ class GammaTest {
   }
 
   @Test
-  public void testMathematica() {
+  void testMathematica() {
     Scalar z = ComplexScalar.of(3.2363893230567875, 2.665896822743508);
     Scalar result = Gamma.FUNCTION.apply(z);
     Scalar expect = ComplexScalar.of(-0.8000736272450161, 0.09101285585260227);
@@ -132,27 +132,27 @@ class GammaTest {
   }
 
   @Test
-  public void testInt0Fail() {
+  void testInt0Fail() {
     assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(0)));
   }
 
   @Test
-  public void testIntN1Fail() {
+  void testIntN1Fail() {
     assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(-1)));
   }
 
   @Test
-  public void testDouble0Fail() {
+  void testDouble0Fail() {
     assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(0.0)));
   }
 
   @Test
-  public void testDoubleN1Fail() {
+  void testDoubleN1Fail() {
     assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(-1.0)));
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> Gamma.of(Quantity.of(3, "m*s")));
     assertThrows(TensorRuntimeException.class, () -> Gamma.of(Quantity.of(-2, "m"))); // <- fails for the wrong reason
     assertThrows(TensorRuntimeException.class, () -> Gamma.of(Quantity.of(-2.12, "m^2")));

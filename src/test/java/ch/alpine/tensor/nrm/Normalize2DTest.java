@@ -21,7 +21,7 @@ class Normalize2DTest {
   }
 
   @Test
-  public void testUp() {
+  void testUp() {
     double eps = Math.nextUp(0.0);
     assertEquals(unlessZero(RealScalar.of(eps), RealScalar.ZERO), Vector2Norm.NORMALIZE.apply(Tensors.vector(1, 0)));
     assertEquals(unlessZero(RealScalar.ZERO, RealScalar.of(eps)), Vector2Norm.NORMALIZE.apply(Tensors.vector(0, 1)));
@@ -29,7 +29,7 @@ class Normalize2DTest {
   }
 
   @Test
-  public void testDown() {
+  void testDown() {
     double eps = Math.nextDown(0.0);
     Tensor vec = unlessZero(RealScalar.of(eps), RealScalar.ZERO);
     assertEquals(vec, Tensors.vector(-1, 0));
@@ -37,33 +37,33 @@ class Normalize2DTest {
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     Tensor res = unlessZero(RealScalar.ZERO, RealScalar.ZERO);
     assertEquals(res, Array.zeros(2));
   }
 
   @Test
-  public void testUp2() {
+  void testUp2() {
     double eps = Math.nextUp(0.0);
     Tensor vec = unlessZero(RealScalar.of(eps), RealScalar.of(eps));
     Chop._12.requireClose(Vector2Norm.of(vec), RealScalar.ONE);
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Tensor vector = Tensors.vectorDouble(0.0, 0.0);
     NormalizeUnlessZero.with(Vector2Norm::of).apply(vector);
     assertThrows(TensorRuntimeException.class, () -> Vector2Norm.NORMALIZE.apply(vector));
   }
 
   @Test
-  public void testNumberQFail1() {
+  void testNumberQFail1() {
     assertThrows(TensorRuntimeException.class, () -> unlessZero(DoubleScalar.POSITIVE_INFINITY, RealScalar.ZERO));
     assertThrows(TensorRuntimeException.class, () -> unlessZero(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
   }
 
   @Test
-  public void testNumberQFail2() {
+  void testNumberQFail2() {
     assertThrows(TensorRuntimeException.class, () -> unlessZero(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));
     assertThrows(TensorRuntimeException.class, () -> unlessZero(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
   }

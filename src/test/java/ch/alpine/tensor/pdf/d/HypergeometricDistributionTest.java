@@ -22,7 +22,7 @@ import ch.alpine.tensor.red.Variance;
 
 class HypergeometricDistributionTest {
   @Test
-  public void testPdf() {
+  void testPdf() {
     PDF pdf = PDF.of(HypergeometricDistribution.of(10, 50, 100));
     Scalar sum = RealScalar.ZERO;
     for (int c = 0; c <= 10; ++c)
@@ -31,7 +31,7 @@ class HypergeometricDistributionTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     // int N, int n, int m_n
     // 0 < N && N <= m_n && 0 <= n && n <= m_n
     assertThrows(IllegalArgumentException.class, () -> HypergeometricDistribution.of(0, 50, 100)); // violates 0 < N
@@ -41,7 +41,7 @@ class HypergeometricDistributionTest {
   }
 
   @Test
-  public void testSpecialCase() {
+  void testSpecialCase() {
     PDF pdf = PDF.of(HypergeometricDistribution.of(10, 0, 100));
     assertEquals(pdf.at(RealScalar.of(-1)), RealScalar.ZERO);
     assertEquals(pdf.at(RealScalar.of(0)), RealScalar.ONE);
@@ -50,7 +50,7 @@ class HypergeometricDistributionTest {
   }
 
   @Test
-  public void testInverseCDF1() {
+  void testInverseCDF1() {
     Distribution distribution = HypergeometricDistribution.of(10, 0, 100);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar r = inverseCDF.quantile(RealScalar.ONE);
@@ -58,46 +58,46 @@ class HypergeometricDistributionTest {
   }
 
   @Test
-  public void testInverseCDF2() {
+  void testInverseCDF2() {
     Distribution distribution = HypergeometricDistribution.of(10, 5, 100);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertEquals(inverseCDF.quantile(RealScalar.ONE), RealScalar.of(5)); // confirmed with Mathematica
   }
 
   @Test
-  public void testInverseCDF3() {
+  void testInverseCDF3() {
     Distribution distribution = HypergeometricDistribution.of(6, 10, 100);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertEquals(inverseCDF.quantile(RealScalar.ONE), RealScalar.of(6)); // confirmed with Mathematica
   }
 
   @Test
-  public void testOutside() {
+  void testOutside() {
     PDF pdf = PDF.of(HypergeometricDistribution.of(10, 50, 100));
     assertEquals(pdf.at(RealScalar.of(-1)), RealScalar.ZERO);
     assertEquals(pdf.at(RealScalar.of(11)), RealScalar.ZERO);
   }
 
   @Test
-  public void testMean() {
+  void testMean() {
     Scalar mean = Mean.of(HypergeometricDistribution.of(10, 50, 100));
     assertEquals(mean, RealScalar.of(5));
   }
 
   @Test
-  public void testVariance() {
+  void testVariance() {
     Scalar variance = Variance.of(HypergeometricDistribution.of(10, 50, 100));
     assertEquals(variance, Scalars.fromString("25/11"));
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     Distribution distribution = HypergeometricDistribution.of(10, 50, 100);
     assertEquals(distribution.toString(), "HypergeometricDistribution[10, 50, 100]");
   }
 
   @Test
-  public void testCDFMathematica() {
+  void testCDFMathematica() {
     int n = 5;
     Distribution distribution = HypergeometricDistribution.of(10, 50, 100);
     CDF cdf = CDF.of(distribution);
@@ -108,7 +108,7 @@ class HypergeometricDistributionTest {
   }
 
   @Test
-  public void testInverseCDFMathematica() {
+  void testInverseCDFMathematica() {
     Distribution distribution = HypergeometricDistribution.of(10, 50, 100);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar actual = inverseCDF.quantile(RationalScalar.of(23263, 2970916));
@@ -117,7 +117,7 @@ class HypergeometricDistributionTest {
   }
 
   @Test
-  public void testCDFInverseCDF() {
+  void testCDFInverseCDF() {
     int n = 10;
     Distribution distribution = HypergeometricDistribution.of(10, 50, 100);
     CDF cdf = CDF.of(distribution);

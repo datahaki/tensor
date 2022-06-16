@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.Chop;
 class MahalanobisTest {
   @ParameterizedTest
   @ValueSource(ints = { 1, 2, 3 })
-  public void testRankDeficientQuantity(int r) {
+  void testRankDeficientQuantity(int r) {
     int n = 7;
     int _m = 5;
     Distribution distribution = NormalDistribution.standard();
@@ -56,7 +56,7 @@ class MahalanobisTest {
 
   @ParameterizedTest
   @ValueSource(ints = { 7, 8 })
-  public void testExact(int n) throws ClassNotFoundException, IOException {
+  void testExact(int n) throws ClassNotFoundException, IOException {
     Distribution distribution = DiscreteUniformDistribution.of(-1000, 1000);
     Tensor design = RandomVariate.of(distribution, n, 3);
     ExactTensorQ.require(design);
@@ -82,12 +82,12 @@ class MahalanobisTest {
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(TensorRuntimeException.class, () -> new Mahalanobis(Tensors.empty()));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> new Mahalanobis(null));
   }
 }

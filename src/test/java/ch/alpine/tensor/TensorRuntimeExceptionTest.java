@@ -13,43 +13,43 @@ import ch.alpine.tensor.num.Pi;
 
 class TensorRuntimeExceptionTest {
   @Test
-  public void testFull() throws ClassNotFoundException, IOException {
+  void testFull() throws ClassNotFoundException, IOException {
     Exception exception = Serialization.copy(TensorRuntimeException.of(Tensors.vector(1, 2), Tensors.vector(9, 3)));
     assertEquals(exception.getMessage(), "{1, 2}; {9, 3}");
   }
 
   @Test
-  public void testFullScalar() {
+  void testFullScalar() {
     Exception exception = TensorRuntimeException.of(Tensors.vector(1, 2), RationalScalar.HALF, Tensors.empty());
     assertEquals(exception.getMessage(), "{1, 2}; 1/2; {}");
   }
 
   @Test
-  public void testShort() {
+  void testShort() {
     Exception exception = TensorRuntimeException.of(Array.zeros(20, 10, 5), RealScalar.ONE);
     assertEquals(exception.getMessage(), "T[20, 10, 5]; 1");
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     Exception exception = TensorRuntimeException.of();
     assertEquals(exception.getMessage(), "");
   }
 
   @Test
-  public void testSerializable() throws Exception {
+  void testSerializable() throws Exception {
     Exception exception = Serialization.copy(TensorRuntimeException.of(RealScalar.ONE));
     assertEquals(exception.getMessage(), "1");
   }
 
   @Test
-  public void testMessage() {
+  void testMessage() {
     Exception exception = TensorRuntimeException.of(Pi.VALUE);
     assertEquals(exception.getMessage(), "3.141592653589793");
   }
 
   @Test
-  public void testNull() {
+  void testNull() {
     Exception exception = TensorRuntimeException.of(Tensors.vector(4, 7, 1, 1), null, RealScalar.ONE);
     assertEquals(exception.getMessage(), "{4, 7, 1, 1}; null; 1");
   }

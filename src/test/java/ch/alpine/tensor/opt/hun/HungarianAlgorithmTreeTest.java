@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class HungarianAlgorithmTreeTest {
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(HungarianAlgorithmTree.class.getModifiers()));
   }
 }

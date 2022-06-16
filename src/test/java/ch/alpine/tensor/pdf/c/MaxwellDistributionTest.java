@@ -24,7 +24,7 @@ import ch.alpine.tensor.red.Variance;
 
 class MaxwellDistributionTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     Distribution distribution = Serialization.copy(MaxwellDistribution.of(1.3));
     Tolerance.CHOP.requireClose( //
         PDF.of(distribution).at(RealScalar.of(0.7)), //
@@ -46,7 +46,7 @@ class MaxwellDistributionTest {
   }
 
   @Test
-  public void testMarkov() {
+  void testMarkov() {
     Random random = new Random();
     Distribution distribution = MaxwellDistribution.of(0.1 + random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
@@ -54,7 +54,7 @@ class MaxwellDistributionTest {
   }
 
   @Test
-  public void testSigmaFail() {
+  void testSigmaFail() {
     assertThrows(TensorRuntimeException.class, () -> MaxwellDistribution.of(0));
     assertThrows(TensorRuntimeException.class, () -> MaxwellDistribution.of(-1));
     assertThrows(TensorRuntimeException.class, () -> MaxwellDistribution.of(Quantity.of(2, "m")));

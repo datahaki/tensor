@@ -11,14 +11,14 @@ import ch.alpine.tensor.sca.Chop;
 
 class BlackmanWindowTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Scalar result = BlackmanWindow.FUNCTION.apply(RealScalar.of(0.2));
     Scalar expect = RealScalar.of(0.50978713763747791812); // checked with Mathematica
     Chop._12.requireClose(result, expect);
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertEquals(BlackmanWindow.FUNCTION.apply(RealScalar.of(-0.51)), RealScalar.ZERO);
   }
 }

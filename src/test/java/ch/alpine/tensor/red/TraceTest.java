@@ -44,7 +44,7 @@ class TraceTest {
 
   // from wikipedia
   @Test
-  public void testViete() {
+  void testViete() {
     Tensor matrix = Tensors.fromString("{{60, 30, 20}, {30, 20, 15}, {20, 15, 12}}");
     Eigensystem eigensystem = Eigensystem.ofSymmetric(matrix);
     Tolerance.CHOP.requireClose(Trace.of(matrix), Total.of(eigensystem.values())); // 1. Viete
@@ -62,7 +62,7 @@ class TraceTest {
   }
 
   @Test
-  public void testDetExpIsExpTrace() {
+  void testDetExpIsExpTrace() {
     Distribution distribution = NormalDistribution.of(0, 0.3);
     for (int n = 1; n < 5; ++n)
       for (int count = 0; count < 5; ++count) {
@@ -74,7 +74,7 @@ class TraceTest {
   }
 
   @Test
-  public void testIdentityMatrix() {
+  void testIdentityMatrix() {
     for (int n = 3; n < 8; ++n) {
       assertEquals(Trace.of(IdentityMatrix.of(n), 0, 1), RealScalar.of(n));
       assertEquals(Trace.of(IdentityMatrix.sparse(n), 0, 1), RealScalar.of(n));
@@ -82,7 +82,7 @@ class TraceTest {
   }
 
   @Test
-  public void testSparse() {
+  void testSparse() {
     Tensor tensor = SparseArray.of(Quantity.of(0, "m"), 3, 4, 3);
     Tensor traced = Trace.of(tensor, 0, 2);
     assertInstanceOf(SparseArray.class, traced);
@@ -90,30 +90,30 @@ class TraceTest {
   }
 
   @Test
-  public void testMatrix1X1() {
+  void testMatrix1X1() {
     assertEquals(Trace.of(Tensors.fromString("{{3+2*I}}")), ComplexScalar.of(3, 2));
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertThrows(IndexOutOfBoundsException.class, () -> Trace.of(Tensors.empty())); // mathematica gives 0 == Tr[{}]
     assertThrows(IllegalArgumentException.class, () -> Trace.of(Tensors.fromString("{{}}"))); // mathematica gives 0 == Tr[{{}}]
   }
 
   @Test
-  public void testDimensionsFail() {
+  void testDimensionsFail() {
     assertThrows(IndexOutOfBoundsException.class, () -> Trace.of(RealScalar.ONE));
     assertThrows(IndexOutOfBoundsException.class, () -> Trace.of(Tensors.vector(1, 2, 3)));
     assertThrows(ClassCastException.class, () -> Trace.of(LeviCivitaTensor.of(3)));
   }
 
   @Test
-  public void testParamFail() {
+  void testParamFail() {
     assertThrows(IllegalArgumentException.class, () -> Trace.of(HilbertMatrix.of(3, 3), 0, 0));
   }
 
   @Test
-  public void testFormatFail() {
+  void testFormatFail() {
     assertThrows(IllegalArgumentException.class, () -> Trace.of(HilbertMatrix.of(3, 4), 0, 1));
   }
 }

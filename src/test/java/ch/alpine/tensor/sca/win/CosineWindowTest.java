@@ -11,7 +11,7 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class CosineWindowTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     ScalarUnaryOperator connesWindow = CosineWindow.of(RealScalar.of(1.6));
     Tolerance.CHOP.requireClose( //
         connesWindow.apply(RealScalar.of(0.4)), //
@@ -21,7 +21,7 @@ class CosineWindowTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> CosineWindow.of(null));
   }
 }

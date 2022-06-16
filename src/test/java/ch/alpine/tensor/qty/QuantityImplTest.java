@@ -26,57 +26,57 @@ import ch.alpine.tensor.sca.tri.ArcTan;
 
 class QuantityImplTest {
   @Test
-  public void testSerializable() throws Exception {
+  void testSerializable() throws Exception {
     Quantity quantity = (Quantity) Scalars.fromString("-7+3*I[kg^-2*m*s]");
     Quantity copy = Serialization.copy(quantity);
     assertEquals(quantity, copy);
   }
 
   @Test
-  public void testSign() {
+  void testSign() {
     Scalar value = ComplexScalar.of(1, 2);
     Scalar result = Sign.FUNCTION.apply(Quantity.of(value, "m*s^-2"));
     Tolerance.CHOP.requireClose(Sign.FUNCTION.apply(value), result);
   }
 
   @Test
-  public void testOneGuarantee() {
+  void testOneGuarantee() {
     Scalar scalar = Quantity.of(123, "m*s^-2*K^1/2");
     assertEquals(scalar.multiply(scalar.one()), scalar);
     assertEquals(scalar.one().multiply(scalar), scalar);
   }
 
   @Test
-  public void testExactIntFail() {
+  void testExactIntFail() {
     Scalar scalar = Quantity.of(10, "m");
     assertThrows(TensorRuntimeException.class, () -> Scalars.intValueExact(scalar));
   }
 
   @Test
-  public void testNumberFail() {
+  void testNumberFail() {
     Scalar scalar = Quantity.of(11, "m*s");
     assertThrows(TensorRuntimeException.class, () -> scalar.number());
   }
 
   @Test
-  public void testEquals() {
+  void testEquals() {
     assertFalse(Quantity.of(10, "m").equals(Quantity.of(2, "m")));
     assertFalse(Quantity.of(10, "m").equals(Quantity.of(10, "kg")));
   }
 
   @Test
-  public void testEqualsObject() {
+  void testEqualsObject() {
     Object object = Quantity.of(10, "m");
     assertFalse(object.equals("s"));
   }
 
   @Test
-  public void testEqualsZero() {
+  void testEqualsZero() {
     assertFalse(Quantity.of(0, "m").equals(RealScalar.ZERO));
   }
 
   @Test
-  public void testArg() { // checked with Mathematica
+  void testArg() { // checked with Mathematica
     Scalar scalar = Quantity.of(ComplexScalar.of(2, 1), "m");
     Scalar arg = Arg.FUNCTION.apply(scalar);
     Tolerance.CHOP.requireClose(arg, ArcTan.FUNCTION.apply(RationalScalar.HALF));
@@ -84,14 +84,14 @@ class QuantityImplTest {
   }
 
   @Test
-  public void testHashCode() {
+  void testHashCode() {
     assertEquals( //
         Quantity.of(10.2, "m^-1*kg").hashCode(), //
         Quantity.of(10.2, "kg*m^-1").hashCode());
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     Scalar q1 = Quantity.of(3, "m*s");
     Scalar q2 = Quantity.of(7, "s*m");
     Scalar s3 = q1.divide(q2);
@@ -100,23 +100,23 @@ class QuantityImplTest {
   }
 
   @Test
-  public void testPowerQuantityQuantityFail() {
+  void testPowerQuantityQuantityFail() {
     Scalar scalar = Scalars.fromString("-7+3*I[kg^-2*m*s]");
     assertThrows(TensorRuntimeException.class, () -> Power.of(scalar, Quantity.of(3, "s")));
   }
 
   @Test
-  public void testPowerRealQuantityFail() {
+  void testPowerRealQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> Power.of(RealScalar.ONE, Quantity.of(3, "s")));
   }
 
   @Test
-  public void testPowerDoubleQuantityFail() {
+  void testPowerDoubleQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> Power.of(Pi.VALUE, Quantity.of(3, "s")));
   }
 
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(QuantityImpl.class.getModifiers()));
   }
 }

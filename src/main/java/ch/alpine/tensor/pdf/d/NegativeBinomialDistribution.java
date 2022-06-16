@@ -71,6 +71,6 @@ public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution 
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%d, %s]", getClass().getSimpleName(), n, p);
+    return String.format("NegativeBinomialDistribution[%d, %s]", n, p);
   }
 }

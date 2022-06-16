@@ -9,7 +9,7 @@ import ch.alpine.tensor.mat.Tolerance;
 
 class PoissonWindowTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     ScalarUnaryOperator suo = PoissonWindow.of(RealScalar.of(1.6));
     Tolerance.CHOP.requireClose( //
         suo.apply(RealScalar.of(0.4)), //

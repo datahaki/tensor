@@ -24,17 +24,17 @@ import ch.alpine.tensor.num.Pi;
 
 class DimensionsTest {
   @Test
-  public void testScalar() {
+  void testScalar() {
     assertTrue(Dimensions.of(DoubleScalar.of(0.123)).isEmpty());
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertEquals(Dimensions.of(Tensors.empty()), Arrays.asList(0));
   }
 
   @Test
-  public void testVectors() {
+  void testVectors() {
     Tensor a = Tensors.vectorLong(1, 2, 3);
     assertEquals(Dimensions.of(a), Arrays.asList(3));
     Tensor b = Tensors.vectorLong(1, 2, 2);
@@ -43,7 +43,7 @@ class DimensionsTest {
   }
 
   @Test
-  public void testDimensions4() {
+  void testDimensions4() {
     Tensor a = Tensors.vectorLong(1, 2);
     Tensor b = Tensors.vectorLong(3, 4, 5);
     Tensor c = Tensors.vectorLong(6);
@@ -56,7 +56,7 @@ class DimensionsTest {
   }
 
   @Test
-  public void testDimensions5() {
+  void testDimensions5() {
     Tensor a = DoubleScalar.of(2.32123);
     Tensor b = Tensors.vectorLong(3, 2);
     Tensor c = DoubleScalar.of(1.23);
@@ -65,14 +65,14 @@ class DimensionsTest {
   }
 
   @Test
-  public void testIsEmpty() {
+  void testIsEmpty() {
     assertTrue(Tensors.isEmpty(Tensors.empty()));
     assertFalse(Tensors.isEmpty(RealScalar.ONE));
     assertFalse(Tensors.isEmpty(Tensors.vector(3, 4)));
   }
 
   @Test
-  public void testDepth() {
+  void testDepth() {
     assertEquals(new Dimensions(RealScalar.ONE).maxDepth(), 0);
     assertEquals(new Dimensions(UnitVector.of(3, 2)).maxDepth(), 1);
     assertEquals(new Dimensions(HilbertMatrix.of(2, 3)).maxDepth(), 2);
@@ -81,7 +81,7 @@ class DimensionsTest {
   }
 
   @Test
-  public void testLengths() throws ClassNotFoundException, IOException {
+  void testLengths() throws ClassNotFoundException, IOException {
     Tensor tensor = Tensors.fromString("{{{2, 3}, {{}}}, {4, 5, 7}, 3}");
     Dimensions dimensions = Serialization.copy(new Dimensions(tensor));
     assertEquals(dimensions.lengths(0), new HashSet<>(Arrays.asList(3)));
@@ -91,20 +91,20 @@ class DimensionsTest {
   }
 
   @Test
-  public void testIntEquality() {
+  void testIntEquality() {
     List<Integer> list = Dimensions.of(HilbertMatrix.of(3));
     assertTrue(list.get(0) == list.get(1));
   }
 
   @Test
-  public void testScalar2() {
+  void testScalar2() {
     Dimensions dimensions = new Dimensions(Pi.VALUE);
     assertTrue(dimensions.isArray());
     assertEquals(dimensions.list(), Arrays.asList());
   }
 
   @Test
-  public void testLengthsFail() {
+  void testLengthsFail() {
     Tensor tensor = Tensors.fromString("{{{2, 3}, {{}}}, {4, 5, 7}, 3}");
     Dimensions dimensions = new Dimensions(tensor);
     assertThrows(IndexOutOfBoundsException.class, () -> dimensions.lengths(-1));

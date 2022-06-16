@@ -12,13 +12,13 @@ import ch.alpine.tensor.ext.Serialization;
 
 class NdCenterBaseTest {
   @Test
-  public void test1Norm() throws Exception {
+  void test1Norm() throws Exception {
     for (NdCenters ndCenters : NdCenters.values())
       Serialization.copy(ndCenters.apply(Tensors.vector(1, 2, 3)));
   }
 
   @Test
-  public void testInfinityNorm() throws Exception {
+  void testInfinityNorm() throws Exception {
     NdCenterInterface ndCenterInterface = NdCenters.VECTOR_INFINITY_NORM.apply(Tensors.vector(1, 2, 3));
     Scalar distance = ndCenterInterface.distance(Tensors.vector(100, 100, 100));
     assertEquals(distance, RealScalar.of(99));

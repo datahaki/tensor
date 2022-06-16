@@ -48,7 +48,7 @@ import ch.alpine.tensor.sca.tri.Tanh;
  * scalar unary operators */
 class ScalarUnaryOperatorTest {
   @Test
-  public void testFunctionalInterface() {
+  void testFunctionalInterface() {
     assertNotNull(ScalarUnaryOperator.class.getAnnotation(FunctionalInterface.class));
   }
 
@@ -150,14 +150,14 @@ class ScalarUnaryOperatorTest {
   }
 
   @Test
-  public void testTrinity() {
+  void testTrinity() {
     _checkOps(DoubleScalar.INDETERMINATE);
     _checkOps(DoubleScalar.POSITIVE_INFINITY);
     _checkOps(DoubleScalar.NEGATIVE_INFINITY);
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator scalarUnaryOperator = t -> t;
     ScalarUnaryOperator copy = Serialization.copy(scalarUnaryOperator);
     assertEquals(copy.apply(ComplexScalar.I), ComplexScalar.I);

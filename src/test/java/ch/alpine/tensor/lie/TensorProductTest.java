@@ -18,37 +18,37 @@ import ch.alpine.tensor.qty.Quantity;
 
 class TensorProductTest {
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     assertEquals(TensorProduct.of(Tensors.empty(), LeviCivitaTensor.of(3)), Tensors.empty());
     assertEquals(TensorProduct.of(Tensors.empty(), Quantity.of(2, "s")), Tensors.empty());
   }
 
   @Test
-  public void testScalar() {
+  void testScalar() {
     Tensor s = TensorProduct.of(Quantity.of(3, "m*s"), Quantity.of(4, "s"));
     assertEquals(s, Quantity.of(12, "s^2*m"));
   }
 
   @Test
-  public void testVectors() {
+  void testVectors() {
     Tensor tensor = TensorProduct.of(Tensors.vector(1, 2, 3), Tensors.vector(-1, 2));
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 2));
   }
 
   @Test
-  public void testFour1() {
+  void testFour1() {
     Tensor tensor = TensorProduct.of(Tensors.vector(1, 2), LeviCivitaTensor.of(3));
     assertEquals(Dimensions.of(tensor), Arrays.asList(2, 3, 3, 3));
   }
 
   @Test
-  public void testFour2() {
+  void testFour2() {
     Tensor tensor = TensorProduct.of(LeviCivitaTensor.of(3), Tensors.vector(1, 2));
     assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3, 3, 2));
   }
 
   @Test
-  public void testScalarTensor() {
+  void testScalarTensor() {
     Tensor a = HilbertMatrix.of(3, 4);
     Scalar b = RealScalar.of(3);
     assertEquals(TensorProduct.of(a, b), a.multiply(b));
@@ -56,12 +56,12 @@ class TensorProductTest {
   }
 
   @Test
-  public void testLength0() {
+  void testLength0() {
     assertEquals(TensorProduct.of(), RealScalar.ONE);
   }
 
   @Test
-  public void testLength1() {
+  void testLength1() {
     Tensor x = Tensors.vector(2, 3, 4);
     assertEquals(TensorProduct.of(x), x);
     Tensor y = Tensors.vector(1, 1, 1);
@@ -73,7 +73,7 @@ class TensorProductTest {
   }
 
   @Test
-  public void testLength2() {
+  void testLength2() {
     Tensor x = Tensors.vector(2, 3, 4);
     Tensor y = Tensors.vector(5, 7, 6);
     Tensor product = TensorProduct.of(x, y);
@@ -82,7 +82,7 @@ class TensorProductTest {
   }
 
   @Test
-  public void testLength2b() {
+  void testLength2b() {
     Tensor x = HilbertMatrix.of(2);
     Tensor y = HilbertMatrix.of(3);
     Tensor product = TensorProduct.of(x, y);
@@ -91,7 +91,7 @@ class TensorProductTest {
   }
 
   @Test
-  public void testLength3() {
+  void testLength3() {
     Tensor x = Tensors.vector(2, 1, 4);
     Tensor y = Tensors.vector(3, -1, 1);
     Tensor z = Tensors.vector(1, -1, -2);

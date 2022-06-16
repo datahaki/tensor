@@ -3,6 +3,7 @@ package ch.alpine.tensor.io;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.Properties;
 import java.util.zip.DataFormatException;
 import java.util.zip.GZIPInputStream;
@@ -31,11 +32,11 @@ import ch.alpine.tensor.ext.ReadLine;
 
   private static Tensor of(Extension extension, InputStream inputStream) throws IOException {
     return switch (extension) {
-    case CSV -> XsvFormat.CSV.parse(ReadLine.of(inputStream));
+    case CSV -> XsvFormat.CSV.parse(ReadLine.of(inputStream, StaticHelper.CHARSET));
     case MATHEMATICA -> Get.of(inputStream);
     case BMP, GIF, JPG, PNG -> ImageFormat.from(ImageIO.read(inputStream));
-    case TSV -> XsvFormat.TSV.parse(ReadLine.of(inputStream));
-    case VECTOR -> VectorFormat.parse(ReadLine.of(inputStream));
+    case TSV -> XsvFormat.TSV.parse(ReadLine.of(inputStream, StaticHelper.CHARSET));
+    case VECTOR -> VectorFormat.parse(ReadLine.of(inputStream, StaticHelper.CHARSET));
     default -> throw new UnsupportedOperationException(extension.name());
     };
   }
@@ -52,12 +53,12 @@ import ch.alpine.tensor.ext.ReadLine;
     return ObjectFormat.parse(bytes);
   }
 
-  /** @param inputStream
+  /** @param reader
    * @return
    * @throws IOException */
-  public static Properties properties(InputStream inputStream) throws IOException {
+  public static Properties properties(Reader reader) throws IOException {
     Properties properties = new Properties();
-    properties.load(inputStream);
+    properties.load(reader);
     return properties;
   }
 }

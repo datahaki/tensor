@@ -19,20 +19,20 @@ import ch.alpine.tensor.sca.Chop;
 
 class ErfcTest {
   @Test
-  public void testCompare() {
+  void testCompare() {
     Tensor x = Subdivide.of(-0.6, 0.6, 50);
     Chop._07.requireClose(Erfc.of(x), x.map(ErfcRestricted.FUNCTION));
   }
 
   @Test
-  public void testLimits() {
+  void testLimits() {
     assertEquals(Erfc.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY), RealScalar.ZERO);
     assertEquals(Erfc.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), RealScalar.of(2));
     Chop._06.requireClose(Erfc.FUNCTION.apply(RealScalar.ZERO), RealScalar.ONE);
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar scalar = ComplexScalar.of(1.2, 1.4);
     Scalar expect = ComplexScalar.of(-0.29466994521574197, 0.4089868112498779); // Mathematica
     Scalar result = Erfc.FUNCTION.apply(scalar);
@@ -40,7 +40,7 @@ class ErfcTest {
   }
 
   @Test
-  public void testComplexNegative() {
+  void testComplexNegative() {
     Scalar scalar = ComplexScalar.of(-1.2, 1.4);
     Scalar expect = ComplexScalar.of(2.294669945215742, 0.4089868112498779); // Mathematica
     Scalar result = Erfc.FUNCTION.apply(scalar);
@@ -48,7 +48,7 @@ class ErfcTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(TensorRuntimeException.class, () -> ErfcRestricted.FUNCTION.apply(GaussScalar.of(6, 7)));
   }
 }

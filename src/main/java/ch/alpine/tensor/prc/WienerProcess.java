@@ -27,6 +27,6 @@ import ch.alpine.tensor.Tensor;
 
   @Override
   public String toString() {
-    return String.format("%s[%s, %s]", getClass().getSimpleName(), mu, sigma);
+    return String.format("WienerProcess[%s, %s]", mu, sigma);
   }
 }

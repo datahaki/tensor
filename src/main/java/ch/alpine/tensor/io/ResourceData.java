@@ -3,6 +3,9 @@ package ch.alpine.tensor.io;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -56,12 +59,18 @@ public enum ResourceData {
 
   /** @param string as path to resource
    * @return imported properties, or null if resource could not be loaded */
-  public static Properties properties(String string) {
+  public static Properties properties(String string, Charset charset) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
-      return ImportHelper.properties(inputStream);
+      try (Reader reader = new InputStreamReader(inputStream, charset)) {
+        return ImportHelper.properties(reader);
+      }
     } catch (Exception exception) {
       return null;
     }
+  }
+
+  public static Properties properties(String string) {
+    return properties(string, StaticHelper.CHARSET);
   }
 
   /** Hint: function bypasses conversion of image to tensor. When the

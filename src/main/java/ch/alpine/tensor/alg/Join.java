@@ -1,7 +1,6 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.Arrays;
 import java.util.List;
 
 import ch.alpine.tensor.Tensor;
@@ -32,7 +31,7 @@ public enum Join {
    * @throws Exception if any of the given tensors is a Scalar */
   @SafeVarargs
   public static Tensor of(int level, Tensor... tensors) {
-    return of(level, Arrays.asList(tensors));
+    return of(level, List.of(tensors));
   }
 
   /** Example:
@@ -45,7 +44,7 @@ public enum Join {
    * @throws Exception if any of the given tensors is a scalar */
   @SafeVarargs
   public static Tensor of(Tensor... tensors) {
-    return of(0, Arrays.asList(tensors));
+    return of(0, List.of(tensors));
   }
 
   /** @param level

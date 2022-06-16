@@ -14,7 +14,7 @@ import ch.alpine.tensor.ext.Serialization;
 
 class SoftThresholdTest {
   @Test
-  public void testSimple() throws ClassNotFoundException, IOException {
+  void testSimple() throws ClassNotFoundException, IOException {
     ScalarUnaryOperator deadzone = Serialization.copy(SoftThreshold.of(Clips.interval(-2, 1)));
     assertEquals(deadzone.apply(RealScalar.of(3)), RealScalar.of(2));
     assertEquals(deadzone.apply(RealScalar.of(-3)), RealScalar.of(-1));
@@ -25,7 +25,7 @@ class SoftThresholdTest {
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> SoftThreshold.of(null));
   }
 }

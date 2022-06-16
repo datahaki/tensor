@@ -21,7 +21,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class Vector1NormTest {
   @Test
-  public void testQuantity1() {
+  void testQuantity1() {
     Scalar qs1 = Quantity.of(-3, "m");
     Scalar qs2 = Quantity.of(-4, "m");
     Scalar qs3 = Quantity.of(7, "m");
@@ -30,7 +30,7 @@ class Vector1NormTest {
   }
 
   @Test
-  public void testQuantity2() {
+  void testQuantity2() {
     Tensor vec = Tensors.of( //
         Quantity.of(-3, "m"), //
         Quantity.of(-4, "m") //
@@ -39,7 +39,7 @@ class Vector1NormTest {
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     Tensor vec = Tensors.of( //
         Quantity.of(-3, "m"), //
         RealScalar.ZERO, //
@@ -49,7 +49,7 @@ class Vector1NormTest {
   }
 
   @Test
-  public void testBetween() {
+  void testBetween() {
     Distribution distribution = NegativeBinomialDistribution.of(3, 0.8);
     Tensor a = RandomVariate.of(distribution, 7);
     Tensor b = RandomVariate.of(distribution, 7);
@@ -59,7 +59,7 @@ class Vector1NormTest {
   }
 
   @Test
-  public void testEmptyStreamFail() {
+  void testEmptyStreamFail() {
     assertThrows(NoSuchElementException.class, () -> Vector1Norm.of(Stream.of()));
   }
 }

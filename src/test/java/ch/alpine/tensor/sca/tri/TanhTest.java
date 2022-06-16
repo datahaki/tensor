@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Chop;
 
 class TanhTest {
   @Test
-  public void testReal() {
+  void testReal() {
     Scalar i = RealScalar.of(2);
     Scalar c = Tanh.FUNCTION.apply(i);
     Scalar s = DoubleScalar.of(Math.tanh(2));
@@ -26,14 +26,14 @@ class TanhTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Scalar c = Tanh.of(ComplexScalar.of(2, 3.));
     Scalar s = Scalars.fromString("0.965385879022133 - 0.009884375038322494*I"); // Mathematica
     Chop._13.requireClose(c, s);
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Scalar scalar = GaussScalar.of(3, 11);
     assertThrows(TensorRuntimeException.class, () -> Tanh.of(scalar));
   }

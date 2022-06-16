@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.Imag;
 
 class InverseSteerCubicTest {
   @Test
-  public void testSteer() {
+  void testSteer() {
     Scalar c = RealScalar.of(+0.8284521034333863);
     Scalar a = RealScalar.of(-0.33633373640449604);
     Tensor coeffs = Tensors.of(RealScalar.ZERO, c, RealScalar.ZERO, a);
@@ -32,7 +32,7 @@ class InverseSteerCubicTest {
   }
 
   @Test
-  public void testCubicOp() {
+  void testCubicOp() {
     Scalar b = RealScalar.of(+0.8284521034333863);
     Scalar d = RealScalar.of(-0.33633373640449604);
     InverseSteerCubic inverseSteerCubic = new InverseSteerCubic(b, d);

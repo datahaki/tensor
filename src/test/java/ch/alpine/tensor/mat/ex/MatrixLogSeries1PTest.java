@@ -12,7 +12,7 @@ import ch.alpine.tensor.alg.ConstantArray;
 
 class MatrixLogSeries1PTest {
   @Test
-  public void testSeries1p() {
+  void testSeries1p() {
     MatrixLogSeries1P.FUNCTION.apply(Array.zeros(3, 3));
     MatrixLogSeries1P.FUNCTION.apply(ConstantArray.of(RealScalar.ZERO, 3, 3));
     assertThrows(TensorRuntimeException.class, () -> MatrixLogSeries1P.FUNCTION.apply(ConstantArray.of(RealScalar.ONE, 3, 3)));

@@ -37,7 +37,7 @@ import ch.alpine.tensor.sca.win.WindowFunctions;
 
 class SpectrogramArrayTest {
   @Test
-  public void testDimension() throws ClassNotFoundException, IOException {
+  void testDimension() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tensorUnaryOperator = Serialization.copy(SpectrogramArray.of(8, 8));
     Tensor tensor = tensorUnaryOperator.apply(Range.of(0, 128));
     assertEquals(Dimensions.of(tensor), Arrays.asList(16, 8));
@@ -45,7 +45,7 @@ class SpectrogramArrayTest {
   }
 
   @Test
-  public void testMathematicaDefault() {
+  void testMathematicaDefault() {
     Tensor tensor = Tensor.of(IntStream.range(0, 200) //
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(RealScalar::of));
@@ -56,7 +56,7 @@ class SpectrogramArrayTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Tensor tensor = Tensor.of(IntStream.range(0, 500) //
         .mapToDouble(i -> Math.cos(i * 0.25 + (i / 20.0) * (i / 20.0))) //
         .mapToObj(d -> Quantity.of(d, "m")));
@@ -71,19 +71,19 @@ class SpectrogramArrayTest {
   }
 
   @Test
-  public void testStaticOps() {
+  void testStaticOps() {
     SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), HannWindow.FUNCTION);
     SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(100, "s^-1"), 10, TukeyWindow.FUNCTION);
   }
 
   @Test
-  public void testStaticOpsFail() {
+  void testStaticOpsFail() {
     assertThrows(IllegalArgumentException.class, () -> SpectrogramArray.of(Quantity.of(0, "s"), Quantity.of(100, "s^-1"), NuttallWindow.FUNCTION));
     assertThrows(IllegalArgumentException.class, () -> SpectrogramArray.of(Quantity.of(1, "s"), Quantity.of(0.100, "s^-1"), BlackmanHarrisWindow.FUNCTION));
   }
 
   @RepeatedTest(7)
-  public void testPreallocate(RepetitionInfo repetitionInfo) {
+  void testPreallocate(RepetitionInfo repetitionInfo) {
     int windowLength = repetitionInfo.getCurrentRepetition();
     for (int offset = 1; offset <= windowLength; ++offset) {
       TensorUnaryOperator tensorUnaryOperator = SpectrogramArray.of(windowLength, offset);
@@ -95,51 +95,51 @@ class SpectrogramArrayTest {
   }
 
   @Test
-  public void testHighestOneBit() {
+  void testHighestOneBit() {
     int highestOneBit = Integer.highestOneBit(64 + 3);
     assertEquals(highestOneBit, 64);
   }
 
   @Test
-  public void testIterate() {
+  void testIterate() {
     List<Integer> list = IntStream.iterate(0, i -> i + 10).limit(10).boxed().collect(Collectors.toList());
     assertEquals(list, Arrays.asList(0, 10, 20, 30, 40, 50, 60, 70, 80, 90));
   }
 
   @Test
-  public void testFailWindowLength() {
+  void testFailWindowLength() {
     assertThrows(IllegalArgumentException.class, () -> SpectrogramArray.of(0, 8));
   }
 
   @Test
-  public void testFailWindowLengthOffset() {
+  void testFailWindowLengthOffset() {
     assertThrows(IllegalArgumentException.class, () -> SpectrogramArray.of(4, 8));
   }
 
   @Test
-  public void testFailOffset() {
+  void testFailOffset() {
     assertThrows(IllegalArgumentException.class, () -> SpectrogramArray.of(4, 0));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> SpectrogramArray.half_abs(null, HammingWindow.FUNCTION));
   }
 
   @Test
-  public void testDimensionsFail() {
+  void testDimensionsFail() {
     TensorUnaryOperator tensorUnaryOperator = SpectrogramArray.of(32, 8);
     assertThrows(TensorRuntimeException.class, () -> tensorUnaryOperator.apply(RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> tensorUnaryOperator.apply(HilbertMatrix.of(32)));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> SpectrogramArray.of(RealScalar.ONE));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(ClassCastException.class, () -> SpectrogramArray.of(HilbertMatrix.of(32)));
   }
 }

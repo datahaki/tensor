@@ -13,14 +13,14 @@ import ch.alpine.tensor.sca.Chop;
 
 class PDFTest {
   @Test
-  public void testExponentialDistribution() {
+  void testExponentialDistribution() {
     PDF pdf = PDF.of(ExponentialDistribution.of(RationalScalar.of(3, 2)));
     Scalar density = pdf.at(RealScalar.of(3));
     Chop._15.requireClose(density, RealScalar.of(0.016663494807363458));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> PDF.of(null));
   }
 }

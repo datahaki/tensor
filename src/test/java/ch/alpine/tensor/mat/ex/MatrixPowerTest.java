@@ -61,18 +61,18 @@ class MatrixPowerTest {
   }
 
   @Test
-  public void testHilbert() {
+  void testHilbert() {
     checkLow(HilbertMatrix.of(4));
   }
 
   @Test
-  public void testFourier() {
+  void testFourier() {
     checkLow(FourierMatrix.of(3));
     checkLow(FourierMatrix.of(6));
   }
 
   @Test
-  public void testMathematicaEx() {
+  void testMathematicaEx() {
     assertEquals( //
         MatrixPower.of(Tensors.fromString("{{1, 1}, {1, 2}}"), 10), //
         Tensors.fromString("{{4181, 6765}, {6765, 10946}}") //
@@ -80,7 +80,7 @@ class MatrixPowerTest {
   }
 
   @Test
-  public void testMathematicaInv2() {
+  void testMathematicaInv2() {
     assertEquals( //
         MatrixPower.of(Tensors.fromString("{{1, 1}, {1, 2}}"), -2), //
         Tensors.fromString("{{5, -3}, {-3, 2}}") //
@@ -103,7 +103,7 @@ class MatrixPowerTest {
   }
 
   @Test
-  public void testSet() {
+  void testSet() {
     assertEquals(powerOf(3, 5), 243);
     assertEquals(powerOf(2, 21), 2097152);
     assertEquals(powerOf(5, 6), 15625);
@@ -111,7 +111,7 @@ class MatrixPowerTest {
   }
 
   @Test
-  public void testIdentityMatrix() {
+  void testIdentityMatrix() {
     for (int n = 1; n < 6; ++n) {
       Tensor matrix = IdentityMatrix.of(n);
       Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
@@ -120,14 +120,14 @@ class MatrixPowerTest {
   }
 
   @Test
-  public void testNegativeDiagonal() {
+  void testNegativeDiagonal() {
     Tensor matrix = DiagonalMatrix.of(-1, -2, -3);
     Tensor sqrt = MatrixPower.ofSymmetric(matrix, RationalScalar.HALF);
     Tolerance.CHOP.requireClose(sqrt.dot(sqrt), matrix);
   }
 
   @RepeatedTest(9)
-  public void testSymmetric(RepetitionInfo repetitionInfo) {
+  void testSymmetric(RepetitionInfo repetitionInfo) {
     int n = repetitionInfo.getCurrentRepetition();
     Distribution distribution = NormalDistribution.standard();
     Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
@@ -149,13 +149,13 @@ class MatrixPowerTest {
   }
 
   @Test
-  public void testComplexDiagnoal() {
+  void testComplexDiagnoal() {
     Tensor tensor = MatrixPower.ofSymmetric(DiagonalMatrix.of(-1, 4), RationalScalar.HALF);
     Tolerance.CHOP.requireClose(tensor, Tensors.fromString("{{I, 0}, {0, 2}}"));
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Tensor tensor = MatrixPower.ofSymmetric(Tensors.fromString("{{3, 4}, {4, -5.}}"), RealScalar.of(0.345));
     Tensor re = Tensors.fromString("{{1.58297621781119750, +0.28292717088123903}, {+0.2829271708812389, 1.0171218760487195}}");
     Tensor im = Tensors.fromString("{{0.24891109223875751, -0.60092453470790870}, {-0.6009245347079087, 1.4507601616545749}}");
@@ -165,7 +165,7 @@ class MatrixPowerTest {
 
   @ParameterizedTest
   @ValueSource(ints = { 3, 4, 5 })
-  public void testGaussian(int n) {
+  void testGaussian(int n) {
     int prime = 7879;
     Distribution distribution = DiscreteUniformDistribution.of(0, prime);
     Scalar one = GaussScalar.of(1, prime);
@@ -177,23 +177,23 @@ class MatrixPowerTest {
   }
 
   @Test
-  public void testHermitian() {
+  void testHermitian() {
     Tensor matrix = Tensors.fromString("{{0, I}, {-I, 0}}");
     MatrixPower.ofHermitian(matrix, RealScalar.of(2.3));
   }
 
   @Test
-  public void testNonSymmetricFail() {
+  void testNonSymmetricFail() {
     assertThrows(TensorRuntimeException.class, () -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), RationalScalar.HALF));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> MatrixPower.ofSymmetric(null, RationalScalar.HALF));
   }
 
   @Test
-  public void testFailZero() {
+  void testFailZero() {
     Tensor matrix = Array.zeros(2, 3);
     assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, -1));
     assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, 0));
@@ -201,7 +201,7 @@ class MatrixPowerTest {
   }
 
   @Test
-  public void testFailOne() {
+  void testFailOne() {
     Tensor matrix = HilbertMatrix.of(3, 2);
     assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, -1));
     assertThrows(IllegalArgumentException.class, () -> MatrixPower.of(matrix, 0));
@@ -209,7 +209,7 @@ class MatrixPowerTest {
   }
 
   @Test
-  public void testFailAd() {
+  void testFailAd() {
     assertThrows(ClassCastException.class, () -> MatrixPower.of(LeviCivitaTensor.of(3), 1));
   }
 }

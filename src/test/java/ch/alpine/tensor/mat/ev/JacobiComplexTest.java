@@ -45,7 +45,7 @@ class JacobiComplexTest {
   }
 
   @RepeatedTest(5)
-  public void testHermitian(RepetitionInfo repetitionInfo) {
+  void testHermitian(RepetitionInfo repetitionInfo) {
     Distribution distribution = TriangularDistribution.with(0, 1);
     int n = repetitionInfo.getCurrentRepetition();
     Tensor real = Symmetrize.of(RandomVariate.of(distribution, n, n));
@@ -64,7 +64,7 @@ class JacobiComplexTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Tensor matrix = Tensors.fromString("{{2, 3-3*I}, {3+3*I, 5}}");
     HermitianMatrixQ.require(matrix);
     Scalar det = Det.of(matrix);
@@ -79,14 +79,14 @@ class JacobiComplexTest {
   }
 
   @Test
-  public void testComplexUnits() {
+  void testComplexUnits() {
     Tensor matrix = Tensors.fromString("{{2[m], 3-3*I[m]}, {3+3*I[m], 5[m]}}");
     Eigensystem eigensystem = Eigensystem.ofHermitian(matrix);
     _check(matrix, eigensystem);
   }
 
   @RepeatedTest(5)
-  public void testRealComparison(RepetitionInfo repetitionInfo) {
+  void testRealComparison(RepetitionInfo repetitionInfo) {
     Distribution distribution = TriangularDistribution.with(0, 1);
     int n = repetitionInfo.getCurrentRepetition();
     Tensor matrix = Symmetrize.of(RandomVariate.of(distribution, n, n));
@@ -98,7 +98,7 @@ class JacobiComplexTest {
   }
 
   @Test
-  public void testPackage() {
+  void testPackage() {
     assertFalse(Modifier.isPublic(JacobiComplex.class.getModifiers()));
   }
 }

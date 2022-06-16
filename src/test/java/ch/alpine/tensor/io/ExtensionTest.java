@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 class ExtensionTest {
   @Test
-  public void testTruncate() {
+  void testTruncate() {
     Filename filename = new Filename("dir/some.bmp.gz");
     assertEquals(filename.extension(), Extension.GZ);
     Filename truncate = filename.truncate();
@@ -19,24 +19,24 @@ class ExtensionTest {
   }
 
   @Test
-  public void testExtension() {
+  void testExtension() {
     Filename filename = new Filename("dir/some.gif");
     assertEquals(filename.extension(), Extension.GIF);
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     assertEquals(Extension.of("bMp"), Extension.BMP);
     assertEquals(Extension.of("gz"), Extension.GZ);
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(IllegalArgumentException.class, () -> Extension.of("unknown"));
   }
 
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertFalse(Modifier.isPublic(Extension.class.getModifiers()));
   }
 }

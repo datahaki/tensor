@@ -13,7 +13,7 @@ import ch.alpine.tensor.ext.ArgMin;
  * ArgMax.EMPTY */
 class ArgEmptyTest {
   @Test
-  public void testConvention() {
+  void testConvention() {
     assertEquals(ArgMin.EMPTY, -1);
     assertEquals(ArgMax.EMPTY, -1);
   }

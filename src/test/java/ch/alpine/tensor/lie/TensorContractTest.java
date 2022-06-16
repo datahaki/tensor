@@ -18,7 +18,7 @@ import ch.alpine.tensor.chq.ExactTensorQ;
 
 class TensorContractTest {
   @Test
-  public void testRank3() {
+  void testRank3() {
     Tensor vector = TensorContract.of(LeviCivitaTensor.of(3), 0, 2);
     assertTrue(VectorQ.ofLength(vector, 3));
     assertEquals(vector, Array.zeros(3));
@@ -26,12 +26,12 @@ class TensorContractTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     assertThrows(IndexOutOfBoundsException.class, () -> TensorContract.of(LeviCivitaTensor.of(3), 0, 3));
   }
 
   @Test
-  public void testContraction() {
+  void testContraction() {
     Tensor array = Array.of(Tensors::vector, 2, 3, 2, 4);
     assertThrows(IllegalArgumentException.class, () -> TensorContract.of(array, 0, 3));
     Tensor tensor = TensorContract.of(array, 0, 2);

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 class QRDecompositionBaseTest {
   @Test
-  public void testPackageVisibility() {
+  void testPackageVisibility() {
     assertFalse(Modifier.isPublic(QRDecompositionBase.class.getModifiers()));
   }
 }

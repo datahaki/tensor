@@ -22,14 +22,14 @@ import ch.alpine.tensor.sca.tri.Sin;
 
 class FindRootTest {
   @Test
-  public void testJackpot() {
+  void testJackpot() {
     FindRoot findRoot = FindRoot.of(x -> x, Chop._12);
     Chop._10.requireClose(findRoot.inside(Clips.interval(-1, 1)), RealScalar.ZERO);
     Chop._10.requireClose(findRoot.inside(Clips.interval(-1.0, 1.0)), RealScalar.ZERO);
   }
 
   @Test
-  public void testSimple() {
+  void testSimple() {
     FindRoot findRoot = FindRoot.of(Cos.FUNCTION, Chop._12);
     Chop._10.requireClose(findRoot.inside(Clips.interval(0.0, 4.0)), Pi.HALF);
     Chop._10.requireClose(findRoot.inside(Clips.interval(1.0, 4.0)), Pi.HALF);
@@ -38,7 +38,7 @@ class FindRootTest {
   }
 
   @Test
-  public void testSimple2() {
+  void testSimple2() {
     FindRoot findRoot = FindRoot.of(z -> Cos.FUNCTION.apply(z).negate(), Chop._12);
     Chop._10.requireClose(findRoot.inside(Clips.interval(0.0, 4.0)), Pi.HALF);
     Chop._10.requireClose(findRoot.inside(Clips.interval(1.0, 4.0)), Pi.HALF);
@@ -47,7 +47,7 @@ class FindRootTest {
   }
 
   @Test
-  public void testInitZero() {
+  void testInitZero() {
     FindRoot findRoot = FindRoot.of(z -> Sin.FUNCTION.apply(z).negate(), Chop._12);
     Chop._10.requireClose(findRoot.inside(Clips.interval(0.0, 4.0)), RealScalar.ZERO);
     Chop._10.requireClose(findRoot.inside(Clips.interval(RealScalar.of(0.5), Pi.VALUE)), Pi.VALUE);
@@ -64,7 +64,7 @@ class FindRootTest {
   }
 
   @Test
-  public void testTs() {
+  void testTs() {
     FindRoot findRoot = FindRoot.of(FindRootTest::func);
     Scalar x = findRoot.inside(Clips.interval(0.001, 0.499));
     Tolerance.CHOP.requireClose(x, RealScalar.of(0.01024075603728308));
@@ -74,19 +74,19 @@ class FindRootTest {
   }
 
   @Test
-  public void testLinear2() {
+  void testLinear2() {
     Scalar scalar = FindRoot.linear(Clips.interval(10, 11), RealScalar.of(5), RealScalar.of(-2));
     assertEquals(scalar, RationalScalar.of(75, 7));
   }
 
   @Test
-  public void testOther() {
+  void testOther() {
     Scalar scalar = FindRoot.linear(Clips.interval(5, 6), RealScalar.of(2), RealScalar.of(-1));
     assertEquals(scalar, RationalScalar.of(5 * 3 + 2, 3));
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     FindRoot findRoot = FindRoot.of(s -> Sign.isPositiveOrZero(s) //
         ? RealScalar.ONE
         : RealScalar.ONE.negate());

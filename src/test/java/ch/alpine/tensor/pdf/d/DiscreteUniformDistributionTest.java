@@ -22,7 +22,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class DiscreteUniformDistributionTest {
   @Test
-  public void testPdf() throws ClassNotFoundException, IOException {
+  void testPdf() throws ClassNotFoundException, IOException {
     Distribution distribution = //
         Serialization.copy(DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(11)));
     PDF pdf = PDF.of(distribution);
@@ -36,7 +36,7 @@ class DiscreteUniformDistributionTest {
   }
 
   @Test
-  public void testLessThan() {
+  void testLessThan() {
     Distribution distribution = DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(11));
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessThan(RealScalar.of(2)), RationalScalar.of(0, 10 - 3 + 1));
@@ -50,7 +50,7 @@ class DiscreteUniformDistributionTest {
   }
 
   @Test
-  public void testLessEquals() {
+  void testLessEquals() {
     Distribution distribution = DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(11));
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessEquals(RealScalar.of(2)), RationalScalar.of(0, 10 - 3 + 1));
@@ -63,13 +63,13 @@ class DiscreteUniformDistributionTest {
   }
 
   @Test
-  public void testEqualMinMax() {
+  void testEqualMinMax() {
     DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(4));
     DiscreteUniformDistribution.of(10, 11);
   }
 
   @Test
-  public void testInverseCDF() {
+  void testInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(DiscreteUniformDistribution.of(0, 10));
     Scalar s = inverseCDF.quantile(RationalScalar.of(1, 2));
     assertTrue(Clips.interval(4, 5).isInside(s));
@@ -78,13 +78,13 @@ class DiscreteUniformDistributionTest {
   }
 
   @Test
-  public void testToString() {
+  void testToString() {
     Distribution distribution = DiscreteUniformDistribution.of(3, 10);
     assertEquals(distribution.toString(), "DiscreteUniformDistribution[3, 10]");
   }
 
   @Test
-  public void testFailQuantile() {
+  void testFailQuantile() {
     Distribution distribution = DiscreteUniformDistribution.of(3, 10);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
@@ -92,19 +92,19 @@ class DiscreteUniformDistributionTest {
   }
 
   @Test
-  public void testFailsOrder() {
+  void testFailsOrder() {
     assertThrows(IllegalArgumentException.class, () -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(2)));
     assertThrows(IllegalArgumentException.class, () -> DiscreteUniformDistribution.of(3, 2));
     assertThrows(IllegalArgumentException.class, () -> DiscreteUniformDistribution.of(3, 3));
   }
 
   @Test
-  public void testFailsInt() {
+  void testFailsInt() {
     assertThrows(TensorRuntimeException.class, () -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(4.5)));
   }
 
   @Test
-  public void testRandomVariate() {
+  void testRandomVariate() {
     AbstractDiscreteDistribution distribution = //
         (AbstractDiscreteDistribution) DiscreteUniformDistribution.of(10, 100);
     assertEquals(distribution.quantile(RealScalar.of(Math.nextDown(1.0))), RealScalar.of(99));

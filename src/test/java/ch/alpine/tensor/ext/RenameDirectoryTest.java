@@ -21,17 +21,17 @@ class RenameDirectoryTest {
   }
 
   @Test
-  public void testFailSrcDoesNotExist() {
+  void testFailSrcDoesNotExist() {
     assertThrows(RuntimeException.class, () -> wrap(HomeDirectory.file("DOESNOTEXIST"), HomeDirectory.file()));
   }
 
   @Test
-  public void testDstAlreadyExist() {
+  void testDstAlreadyExist() {
     assertThrows(RuntimeException.class, () -> wrap(HomeDirectory.Documents(), HomeDirectory.Pictures()));
   }
 
   @Test
-  public void testSimple() throws Exception {
+  void testSimple() throws Exception {
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();
@@ -42,7 +42,7 @@ class RenameDirectoryTest {
   }
 
   @Test
-  public void testCreateParent() throws Exception {
+  void testCreateParent() throws Exception {
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();
@@ -56,7 +56,7 @@ class RenameDirectoryTest {
 
   @Test
   @EnabledOnOs(OS.LINUX)
-  public void testRenameToFail() {
+  void testRenameToFail() {
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();
@@ -67,7 +67,7 @@ class RenameDirectoryTest {
 
   @Test
   @EnabledOnOs(OS.LINUX)
-  public void testCreateParentFail() {
+  void testCreateParentFail() {
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();

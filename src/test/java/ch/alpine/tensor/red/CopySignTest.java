@@ -11,7 +11,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class CopySignTest {
   @Test
-  public void testNonZero() {
+  void testNonZero() {
     assertEquals(Math.copySign(+2.0, +3.0), +2.0);
     assertEquals(Math.copySign(+2.0, -3.0), -2.0);
     assertEquals(Math.copySign(-2.0, +3.0), +2.0);
@@ -23,7 +23,7 @@ class CopySignTest {
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     assertEquals(Math.copySign(+2.0, +0.0), +2.0);
     assertEquals(Math.copySign(+2.0, -0.0), -2.0);
     assertEquals(Math.copySign(-2.0, +0.0), +2.0);
@@ -35,7 +35,7 @@ class CopySignTest {
   }
 
   @Test
-  public void testQuantity1() {
+  void testQuantity1() {
     Scalar qs1 = Quantity.of(5, "s");
     Scalar qs2 = Quantity.of(-3, "m");
     Scalar qs3 = CopySign.of(qs1, qs2);
@@ -43,7 +43,7 @@ class CopySignTest {
   }
 
   @Test
-  public void testQuantity2() {
+  void testQuantity2() {
     Scalar qs1 = Quantity.of(5, "s");
     Scalar qs2 = RealScalar.of(-3);
     Scalar qs3 = CopySign.of(qs1, qs2);

@@ -22,21 +22,21 @@ import ch.alpine.tensor.sca.Sign;
 
 class BinningMethodTest {
   @Test
-  public void testRice() {
+  void testRice() {
     Scalar width = BinningMethod.RICE.apply(Tensors.vector(2, 4, 3, 6));
     ExactScalarQ.require(width);
     assertEquals(width, RealScalar.ONE);
   }
 
   @Test
-  public void testRoot() {
+  void testRoot() {
     Scalar width = BinningMethod.SQRT.apply(Tensors.vector(2, 4, 3, 6));
     assertEquals(width, RealScalar.of(2));
   }
 
   @ParameterizedTest
   @EnumSource(BinningMethod.class)
-  public void testQuantity(BinningMethod binningMethod) {
+  void testQuantity(BinningMethod binningMethod) {
     Tensor samples = QuantityTensor.of(Tensors.vector(1, 2, 3, 1, 2, 3, 7, 2, 9, 3, 3), "Apples");
     Scalar width = binningMethod.apply(samples);
     assertInstanceOf(Quantity.class, width);
@@ -46,7 +46,7 @@ class BinningMethodTest {
 
   @ParameterizedTest
   @EnumSource(BinningMethod.class)
-  public void testFail(BinningMethod binningMethod) {
+  void testFail(BinningMethod binningMethod) {
     assertThrows(Exception.class, () -> binningMethod.apply(Tensors.empty()));
   }
 }

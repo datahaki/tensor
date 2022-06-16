@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class ScalarSummaryStatisticsTest {
   @Test
-  public void testMembers() {
+  void testMembers() {
     ScalarSummaryStatistics scalarSummaryStatistics = Tensors.vector(1, 4, 2, 8, 3, 10) //
         .stream().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     assertEquals(scalarSummaryStatistics.getSum(), RealScalar.of(28));
@@ -35,7 +35,7 @@ class ScalarSummaryStatisticsTest {
   }
 
   @Test
-  public void testMembersParallel() {
+  void testMembersParallel() {
     ScalarSummaryStatistics scalarSummaryStatistics = Tensors.vector(1, 4, 2, 8, 3, 10) //
         .stream().parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     assertEquals(scalarSummaryStatistics.getSum(), RealScalar.of(28));
@@ -46,7 +46,7 @@ class ScalarSummaryStatisticsTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     ScalarSummaryStatistics stats = Tensors.fromString("{3[s], 11[s], 6[s], 4[s]}").stream() //
         .parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     assertEquals(stats.getSum(), Quantity.of(24, "s"));
@@ -59,7 +59,7 @@ class ScalarSummaryStatisticsTest {
   }
 
   @Test
-  public void testCollector() {
+  void testCollector() {
     ScalarSummaryStatistics stats = Tensors.vector(1, 4, 2, 8, 3, 10).stream() //
         .parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     assertEquals(stats.getSum(), RealScalar.of(28));
@@ -71,7 +71,7 @@ class ScalarSummaryStatisticsTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     ScalarSummaryStatistics stats = Tensors.empty().stream() //
         .parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     assertEquals(stats.getSum(), null);
@@ -84,7 +84,7 @@ class ScalarSummaryStatisticsTest {
   }
 
   @Test
-  public void testEmptyCombine() {
+  void testEmptyCombine() {
     IntSummaryStatistics iss1 = new IntSummaryStatistics();
     IntSummaryStatistics iss2 = new IntSummaryStatistics();
     iss1.combine(iss2);
@@ -94,7 +94,7 @@ class ScalarSummaryStatisticsTest {
   }
 
   @Test
-  public void testSemiCombine() {
+  void testSemiCombine() {
     IntSummaryStatistics iss1 = new IntSummaryStatistics();
     IntSummaryStatistics iss2 = Arrays.asList(3, 2).stream() //
         .mapToInt(Integer::intValue) //
@@ -107,7 +107,7 @@ class ScalarSummaryStatisticsTest {
   }
 
   @Test
-  public void testRandom() {
+  void testRandom() {
     Tensor vector = RandomVariate.of(UniformDistribution.unit(), 100);
     ScalarSummaryStatistics ss1 = vector.stream().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
     ScalarSummaryStatistics ss2 = vector.stream().parallel().map(Scalar.class::cast).collect(ScalarSummaryStatistics.collector());
@@ -117,7 +117,7 @@ class ScalarSummaryStatisticsTest {
   }
 
   @Test
-  public void testGaussian() {
+  void testGaussian() {
     Tensor vector = Tensors.of( //
         GaussScalar.of(2, 7), //
         GaussScalar.of(3, 7), //

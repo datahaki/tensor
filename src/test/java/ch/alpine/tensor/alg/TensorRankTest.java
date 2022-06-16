@@ -13,20 +13,20 @@ import ch.alpine.tensor.Tensors;
 
 class TensorRankTest {
   @Test
-  public void testRank0() {
+  void testRank0() {
     Tensor a = DoubleScalar.of(2.32123);
     assertEquals(TensorRank.of(a), 0);
   }
 
   @Test
-  public void testRank1() {
+  void testRank1() {
     Tensor a = Tensors.empty();
     assertEquals(TensorRank.of(a), 1);
     assertEquals(TensorRank.of(Tensors.vector(1, 2, 3)), 1);
   }
 
   @Test
-  public void testRank12() {
+  void testRank12() {
     Tensor a = Tensors.vectorLong(3, 2, 3);
     assertEquals(TensorRank.of(a), 1);
     Tensor b = Tensors.vectorLong(3, 2, 9);
@@ -35,7 +35,7 @@ class TensorRankTest {
   }
 
   @Test
-  public void testRank01() {
+  void testRank01() {
     Tensor a = DoubleScalar.of(2.32123);
     assertEquals(TensorRank.of(a), 0);
     Tensor b = Tensors.vectorLong(3, 2);
@@ -47,7 +47,7 @@ class TensorRankTest {
   }
 
   @Test
-  public void testRank11() {
+  void testRank11() {
     Tensor a = Tensors.vectorLong(1, 3, 2);
     Tensor b = Tensors.vectorLong(3, 2);
     Tensor c = Tensors.of(a, b);
@@ -55,19 +55,19 @@ class TensorRankTest {
   }
 
   @Test
-  public void testRank3() {
+  void testRank3() {
     assertEquals(TensorRank.of(Array.zeros(5, 4, 3)), 3);
   }
 
   @Test
-  public void testOfArray() {
+  void testOfArray() {
     assertEquals(TensorRank.ofArray(Tensors.fromString("{1, 2}")), 1);
     assertEquals(TensorRank.ofArray(Tensors.fromString("123")), 0);
     assertEquals(TensorRank.ofArray(Tensors.fromString("{{1, 2}}")), 2);
   }
 
   @Test
-  public void testOfArrayFail() {
+  void testOfArrayFail() {
     assertThrows(TensorRuntimeException.class, () -> TensorRank.ofArray(Tensors.fromString("{{1}, 2}")));
     assertThrows(TensorRuntimeException.class, () -> TensorRank.ofArray(Tensors.fromString("{{1, 2}, {2}}")));
   }

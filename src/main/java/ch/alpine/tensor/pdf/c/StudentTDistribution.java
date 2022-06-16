@@ -80,6 +80,6 @@ public class StudentTDistribution implements Distribution, //
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s, %s]", getClass().getSimpleName(), mu, sigma, v);
+    return String.format("StudentTDistribution[%s, %s, %s]", mu, sigma, v);
   }
 }

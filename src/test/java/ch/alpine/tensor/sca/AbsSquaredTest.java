@@ -25,7 +25,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class AbsSquaredTest {
   @Test
-  public void testAbsAndSquared() {
+  void testAbsAndSquared() {
     Tensor tensor = Tensors.of( //
         Quaternion.of(1, 2, 3, 4), //
         RationalScalar.HALF, RationalScalar.of(2, 7), RealScalar.TWO, //
@@ -40,14 +40,14 @@ class AbsSquaredTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar qs1 = Scalars.fromString("3+4*I[s^2*m^-1]");
     Scalar qs2 = AbsSquared.FUNCTION.apply(qs1);
     assertEquals(qs2.toString(), "25[m^-2*s^4]");
   }
 
   @Test
-  public void testTensor() {
+  void testTensor() {
     Tensor qs1 = Tensors.fromString("{3+4*I[s^2*m^-1]}");
     Tensor qs2 = AbsSquared.of(qs1);
     ExactTensorQ.require(qs2);
@@ -55,13 +55,13 @@ class AbsSquaredTest {
   }
 
   @Test
-  public void testBetween() {
+  void testBetween() {
     assertEquals(AbsSquared.between(RealScalar.of(101), RealScalar.of(103)), RealScalar.of(4));
     assertEquals(AbsSquared.between(RealScalar.of(104), RealScalar.of(101)), RealScalar.of(9));
   }
 
   @Test
-  public void testNonConjugate() {
+  void testNonConjugate() {
     GaussScalar a = GaussScalar.of(3, 12347);
     GaussScalar b = GaussScalar.of(3962, 12347);
     Scalar scalar = b.subtract(a);
@@ -69,18 +69,18 @@ class AbsSquaredTest {
   }
 
   @Test
-  public void testInfinity() {
+  void testInfinity() {
     assertEquals(AbsSquared.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY), DoubleScalar.POSITIVE_INFINITY);
     assertEquals(AbsSquared.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY), DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     assertEquals(AbsSquared.FUNCTION.apply(GaussScalar.of(2, 3)), GaussScalar.of(-5, 3));
   }
 
   @Test
-  public void testStringFail() {
+  void testStringFail() {
     assertThrows(TensorRuntimeException.class, () -> AbsSquared.FUNCTION.apply(StringScalar.of("idsc")));
   }
 }

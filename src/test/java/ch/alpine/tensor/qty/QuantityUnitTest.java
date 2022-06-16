@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.Clips;
 
 class QuantityUnitTest {
   @Test
-  public void testParsecs() {
+  void testParsecs() {
     // QuantityMagnitude[Quantity[1*^-12, "Parsecs"], "Kilometers"]
     ScalarUnaryOperator scalarUnaryOperator = QuantityMagnitude.SI().in("km");
     Scalar scalar = scalarUnaryOperator.apply(Quantity.of(1e-12, "pc"));
@@ -26,41 +26,41 @@ class QuantityUnitTest {
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     assertEquals(QuantityUnit.of(Quantity.of(2, "m*V")), Unit.of("m*V"));
     assertEquals(QuantityUnit.of(Quantity.of(3, "kg*V^-2")), Unit.of("V^-1*kg*V^-1"));
     assertEquals(QuantityUnit.of(Quantity.of(4, "tpf")), Unit.of("tpf"));
   }
 
   @Test
-  public void testScalar() {
+  void testScalar() {
     assertEquals(QuantityUnit.of(RealScalar.ONE), Unit.ONE);
     assertEquals(QuantityUnit.of(GaussScalar.of(2, 5)), Unit.ONE);
     assertEquals(QuantityUnit.of(StringScalar.of("abc[s]")), Unit.ONE);
   }
 
   @Test
-  public void testPercent() {
+  void testPercent() {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(1000000, "%^3"));
     ExactScalarQ.require(scalar);
     assertEquals(scalar, RealScalar.ONE);
   }
 
   @Test
-  public void testBytes() {
+  void testBytes() {
     Scalar scalar = UnitSystem.SI().apply(Quantity.of(10, "KiB"));
     ExactScalarQ.require(scalar);
     assertEquals(scalar, Quantity.of(10240, "B"));
   }
 
   @Test
-  public void testClips() {
+  void testClips() {
     assertEquals(QuantityUnit.of(Clips.positive(3)), Unit.ONE);
     assertEquals(QuantityUnit.of(Clips.absolute(Quantity.of(3, "m^3"))), Unit.of("m^3"));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> QuantityUnit.of((Scalar) null));
     assertThrows(NullPointerException.class, () -> QuantityUnit.of((Clip) null));
   }

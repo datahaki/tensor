@@ -29,7 +29,7 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class QRSvdTest {
   @Test
-  public void testSquare() {
+  void testSquare() {
     Tensor matrix = HilbertMatrix.of(6);
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
     SingularValueDecomposition approximateSvd = QRSvd.of(qrDecomposition);
@@ -39,7 +39,7 @@ class QRSvdTest {
   }
 
   @RepeatedTest(3)
-  public void testRect5x2() throws ClassNotFoundException, IOException {
+  void testRect5x2() throws ClassNotFoundException, IOException {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 5, 2);
     QRDecomposition qrDecomposition = QRDecomposition.of(matrix);
     List<Integer> list = Dimensions.of(qrDecomposition.getR());
@@ -53,7 +53,7 @@ class QRSvdTest {
   }
 
   @RepeatedTest(3)
-  public void testRect5x3() {
+  void testRect5x3() {
     Tensor matrix = RandomVariate.of(UniformDistribution.unit(), 5, 3);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     assertEquals(Dimensions.of(qrDecomposition.getR()), Arrays.asList(3, 3));
@@ -64,7 +64,7 @@ class QRSvdTest {
   }
 
   @RepeatedTest(3)
-  public void testMatrix6x4() {
+  void testMatrix6x4() {
     Tensor matrix = RandomVariate.of(TriangularDistribution.with(0.2, 1), 6, 4);
     SingularValueDecomposition svd = QRSvd.of(matrix);
     Tensor v1 = SingularValueList.of(matrix);
@@ -74,7 +74,7 @@ class QRSvdTest {
     Tolerance.CHOP.requireClose(approx, matrix);
   }
 
-  public void testMatrix6x4NonTrivial() {
+  void testMatrix6x4NonTrivial() {
     Random random = new Random(3);
     Tensor matrix = RandomVariate.of(LogNormalDistribution.standard(), random, 6, 4);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
@@ -87,7 +87,7 @@ class QRSvdTest {
     Tolerance.CHOP.requireClose(approx, matrix);
   }
 
-  public void testMatrix60x4NonTrivial() {
+  void testMatrix60x4NonTrivial() {
     Random random = new Random(2);
     Tensor matrix = RandomVariate.of(LogNormalDistribution.standard(), random, 6, 4);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);

@@ -14,7 +14,7 @@ import ch.alpine.tensor.num.Pi;
 
 class AppendTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Tensor x = Tensors.vector(1, 2, 3);
     Tensor y = Tensors.vector(4, 5, 6);
     Tensor tensor = Append.of(x, y);
@@ -25,7 +25,7 @@ class AppendTest {
   }
 
   @Test
-  public void testLast() {
+  void testLast() {
     Tensor x = Tensors.vector(1, 2, 3);
     Tensor y = Tensors.vector(4, 5, 6);
     Tensor tensor = Append.of(x, y);
@@ -34,18 +34,18 @@ class AppendTest {
   }
 
   @Test
-  public void testEmpty() {
+  void testEmpty() {
     Tensor tensor = Append.of(Tensors.empty().unmodifiable(), RealScalar.ONE);
     assertEquals(tensor, Tensors.vector(1));
   }
 
   @Test
-  public void testScalarFail() {
+  void testScalarFail() {
     assertThrows(TensorRuntimeException.class, () -> Append.of(RealScalar.ONE, Pi.TWO));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> Append.of(null, Tensors.vector(1)));
     assertThrows(NullPointerException.class, () -> Append.of(Tensors.vector(1), null));
   }

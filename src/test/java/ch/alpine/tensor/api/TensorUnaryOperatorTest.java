@@ -13,12 +13,12 @@ import ch.alpine.tensor.ext.Serialization;
 
 class TensorUnaryOperatorTest {
   @Test
-  public void testFunctionalInterface() {
+  void testFunctionalInterface() {
     assertNotNull(TensorUnaryOperator.class.getAnnotation(FunctionalInterface.class));
   }
 
   @Test
-  public void testSerializable() throws ClassNotFoundException, IOException {
+  void testSerializable() throws ClassNotFoundException, IOException {
     TensorUnaryOperator tensorUnaryOperator = t -> t;
     TensorUnaryOperator copy = Serialization.copy(tensorUnaryOperator);
     assertEquals(copy.apply(Tensors.vector(1, 2, 3)), Tensors.vector(1, 2, 3));

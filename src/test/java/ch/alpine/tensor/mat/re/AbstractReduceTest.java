@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 class AbstractReduceTest {
   @Test
-  public void testVisibility() {
+  void testVisibility() {
     assertEquals(AbstractReduce.class.getModifiers() & 1, 0);
   }
 }

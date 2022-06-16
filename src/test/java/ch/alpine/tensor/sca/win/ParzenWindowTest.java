@@ -18,34 +18,34 @@ import ch.alpine.tensor.qty.Quantity;
 
 class ParzenWindowTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     assertEquals(ParzenWindow.FUNCTION.apply(RationalScalar.of(1, 10)), RationalScalar.of(101, 125));
     assertEquals(ParzenWindow.FUNCTION.apply(RationalScalar.of(3, 10)), RationalScalar.of(16, 125));
   }
 
   @Test
-  public void testSemiExact() {
+  void testSemiExact() {
     Scalar scalar = ParzenWindow.FUNCTION.apply(RationalScalar.HALF);
     assertTrue(Scalars.isZero(scalar));
     ExactScalarQ.require(scalar);
   }
 
   @Test
-  public void testOutside() {
+  void testOutside() {
     Scalar scalar = ParzenWindow.FUNCTION.apply(RealScalar.of(-0.52));
     assertEquals(scalar, RealScalar.ZERO);
     ExactScalarQ.require(scalar);
   }
 
   @Test
-  public void testExact() {
+  void testExact() {
     Scalar scalar = ParzenWindow.FUNCTION.apply(RationalScalar.of(2, 5));
     ExactScalarQ.require(scalar);
     assertFalse(Scalars.isZero(scalar));
   }
 
   @Test
-  public void testQuantityFail() {
+  void testQuantityFail() {
     assertThrows(TensorRuntimeException.class, () -> ParzenWindow.FUNCTION.apply(Quantity.of(0, "s")));
     assertThrows(TensorRuntimeException.class, () -> ParzenWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }

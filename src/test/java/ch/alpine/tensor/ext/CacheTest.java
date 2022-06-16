@@ -19,7 +19,7 @@ import ch.alpine.tensor.num.Pi;
 
 class CacheTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     Function<Object, Double> function = Cache.of(k -> Math.random(), 3);
     double double1 = function.apply("eth");
     double double2 = function.apply("eth");
@@ -27,13 +27,13 @@ class CacheTest {
   }
 
   @Test
-  public void testInception() {
+  void testInception() {
     Function<Object, Double> memo1 = Cache.of(k -> Math.random(), 32);
     assertThrows(IllegalArgumentException.class, () -> Cache.of(memo1, 32));
   }
 
   @Test
-  public void testMap() {
+  void testMap() {
     Function<String, Integer> function = Cache.of(k -> 1, 768);
     IntStream.range(0, 26).parallel().forEach(c1 -> {
       char chr1 = (char) (65 + c1);
@@ -62,7 +62,7 @@ class CacheTest {
   }
 
   @Test
-  public void testSingle() {
+  void testSingle() {
     ScalarStringFunc scalarStringFunc = new ScalarStringFunc();
     Cache<Scalar, String> cache = Cache.of(scalarStringFunc, 1);
     assertEquals(cache.size(), 0);
@@ -92,7 +92,7 @@ class CacheTest {
   }
 
   @Test
-  public void testTensor() {
+  void testTensor() {
     TensorStringFunc tensorStringFunc = new TensorStringFunc();
     Tensor tensor = Tensors.fromString( //
         "{{-0.32499999999999907, 0.4708333333333343, 0.7853981633974483}, {1, 0, 1}, {-1, 1, 0}, {-0.5, -1, 0}, {0.4, 1, 0}}");
@@ -108,7 +108,7 @@ class CacheTest {
   }
 
   @Test
-  public void testValueNull() {
+  void testValueNull() {
     Cache<Tensor, String> cache = Cache.of(t -> t.equals(RealScalar.ZERO) ? null : t.toString(), 10);
     assertEquals(cache.apply(RealScalar.ONE), "1");
     assertNull(cache.apply(RealScalar.ZERO));
@@ -116,7 +116,7 @@ class CacheTest {
   }
 
   @Test
-  public void testTensor2() {
+  void testTensor2() {
     TensorStringFunc tensorStringFunc = new TensorStringFunc();
     Tensor tensor = Tensors.fromString( //
         "{{-0.32499999999999907, 0.4708333333333343, 0.7853981633974483}, {+Infinity}, {-Infinity, abc, 1[m*K^1/2]}, {-0.5, -1, 0}}");
@@ -155,7 +155,7 @@ class CacheTest {
   }
 
   @Test
-  public void testDelayed() {
+  void testDelayed() {
     DelayedStringFunc delayedStringFunc = new DelayedStringFunc();
     Tensor tensor = Tensors.fromString( //
         "{{-0.32499999999999907, 0.4708333333333343, 0.7853981633974483}, {+Infinity, 0, 1/3}, {-Infinity, abc, 1[m*K^1/2]}}");
@@ -168,12 +168,12 @@ class CacheTest {
   }
 
   @Test
-  public void testFailNull() {
+  void testFailNull() {
     assertThrows(NullPointerException.class, () -> Cache.of(null, 32));
   }
 
   @Test
-  public void testFailNegative() {
+  void testFailNegative() {
     assertThrows(IllegalArgumentException.class, () -> Cache.of(Function.identity(), -1));
   }
 }

@@ -113,7 +113,7 @@ public class ScalarSummaryStatistics implements Consumer<Scalar> {
 
   @Override // from Object
   public String toString() {
-    return getClass().getSimpleName() + //
+    return "ScalarSummaryStatistics" + //
         "{count=" + getCount() + //
         ", sum=" + getSum() + //
         ", min=" + getMin() + //

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class DoubleTest {
   @Test
-  public void testZeros() {
+  void testZeros() {
     final double d1 = 0.0;
     final double d2 = -0.0;
     assertFalse(Double.valueOf(d1).equals(Double.valueOf(d2)));
@@ -24,7 +24,7 @@ class DoubleTest {
   }
 
   @Test
-  public void testReciprocal() {
+  void testReciprocal() {
     double e1 = 1e-300;
     double e2 = 1e-200;
     double l2 = 1e200;

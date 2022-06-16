@@ -29,7 +29,7 @@ class SincTest {
   }
 
   @Test
-  public void testDouble() {
+  void testDouble() {
     double value = .01;
     Scalar c = checkBoth(RealScalar.of(value));
     Scalar s = DoubleScalar.of(Math.sin(value) / value);
@@ -37,7 +37,7 @@ class SincTest {
   }
 
   @Test
-  public void testReal() {
+  void testReal() {
     checkBoth(RealScalar.of(0.5));
     checkBoth(RealScalar.of(0.1));
     checkBoth(RealScalar.of(0.05));
@@ -49,7 +49,7 @@ class SincTest {
   }
 
   @Test
-  public void testReal2() {
+  void testReal2() {
     checkBoth(RealScalar.of(-0.5));
     checkBoth(RealScalar.of(-0.1));
     checkBoth(RealScalar.of(-0.05));
@@ -61,13 +61,13 @@ class SincTest {
   }
 
   @Test
-  public void testZero() {
+  void testZero() {
     assertEquals(Sinc.of(RealScalar.ZERO), RealScalar.ONE);
     assertEquals(Sinc.FUNCTION.apply(RealScalar.ZERO), RealScalar.ONE);
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     checkBoth(Sinc.of(ComplexScalar.of(2, 3.0)));
     checkBoth(Sinc.of(ComplexScalar.of(-0.002, 0.03)));
     checkBoth(Sinc.of(ComplexScalar.of(0.002, -0.003)));
@@ -79,7 +79,7 @@ class SincTest {
   }
 
   @Test
-  public void testThreshold() {
+  void testThreshold() {
     Scalar res1 = Sinc.of(THRESHOLD);
     double val1 = THRESHOLD.number().doubleValue();
     double val0 = val1;
@@ -90,35 +90,35 @@ class SincTest {
   }
 
   @Test
-  public void testMin() {
+  void testMin() {
     Scalar eps = DoubleScalar.of(Double.MIN_VALUE);
     Tolerance.CHOP.requireClose(Sinc.FUNCTION.apply(eps), RealScalar.ONE);
   }
 
   @Test
-  public void testEps() {
+  void testEps() {
     Scalar eps = DoubleScalar.of(1e-12);
     Tolerance.CHOP.requireClose(Sinc.FUNCTION.apply(eps), RealScalar.ONE);
   }
 
   @Test
-  public void testInfinity() {
+  void testInfinity() {
     Tolerance.CHOP.requireZero(Sinc.FUNCTION.apply(DoubleScalar.POSITIVE_INFINITY));
     Tolerance.CHOP.requireZero(Sinc.FUNCTION.apply(DoubleScalar.NEGATIVE_INFINITY));
   }
 
   @Test
-  public void testNan() {
+  void testNan() {
     assertFalse(FiniteScalarQ.of(Sinc.FUNCTION.apply(DoubleScalar.INDETERMINATE)));
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     assertThrows(TensorRuntimeException.class, () -> Sinc.FUNCTION.apply(Quantity.of(0, "m")));
   }
 
   @Test
-  public void testTypeFail() {
+  void testTypeFail() {
     assertThrows(TensorRuntimeException.class, () -> Sinc.of(StringScalar.of("some")));
   }
 }

@@ -29,7 +29,7 @@ class MaxTest {
   }
 
   @Test
-  public void testColumnwise1() {
+  void testColumnwise1() {
     Tensor matrix = Tensors.matrixInt(new int[][] { { 1, 3, 3 }, { 2, 2, 7 } });
     Tensor res = matrix.stream().reduce(Entrywise.max()).get();
     Tensor map = MapThread.of(MaxTest::max, matrix.stream().collect(Collectors.toList()), 1);
@@ -38,7 +38,7 @@ class MaxTest {
   }
 
   @Test
-  public void testRowwise() {
+  void testRowwise() {
     Tensor matrix = Tensors.matrixInt(new int[][] { { 8, 3, 3 }, { 2, 2, 7 } });
     Tensor res = Tensor.of(matrix.stream().map( //
         row -> row.stream().reduce(Max::of).get()));
@@ -46,7 +46,7 @@ class MaxTest {
   }
 
   @Test
-  public void testElementWise() {
+  void testElementWise() {
     Tensor tensor = Tensors.matrixInt(new int[][] { { -8, 3, -3 }, { 2, -2, 7 } });
     Tensor capped = tensor.map(Max.function(RealScalar.ZERO));
     Tensor blub = Tensors.matrixInt(new int[][] { { 0, 3, 0 }, { 2, 0, 7 } });
@@ -54,7 +54,7 @@ class MaxTest {
   }
 
   @Test
-  public void testSet() throws ClassNotFoundException, IOException {
+  void testSet() throws ClassNotFoundException, IOException {
     Tensor matrix = Tensors.matrixInt(new int[][] { { -8, 3, -3 }, { 2, -2, 7 } });
     ScalarUnaryOperator _op = Max.function(RealScalar.ZERO);
     ScalarUnaryOperator scalarUnaryOperator = Serialization.copy(_op);
@@ -64,21 +64,21 @@ class MaxTest {
   }
 
   @Test
-  public void testGenericInteger() {
+  void testGenericInteger() {
     UnaryOperator<Integer> function = Max.function(100);
     assertEquals(function.apply(50), Integer.valueOf(100));
     assertEquals(function.apply(200), Integer.valueOf(200));
   }
 
   @Test
-  public void testGenericString() {
+  void testGenericString() {
     UnaryOperator<String> function = Max.function("math");
     assertEquals(function.apply("library"), "math");
     assertEquals(function.apply("tensor"), "tensor");
   }
 
   @Test
-  public void testMaxNaN() {
+  void testMaxNaN() {
     assertThrows(TensorRuntimeException.class, () -> Max.of(DoubleScalar.of(1), DoubleScalar.INDETERMINATE));
     assertThrows(TensorRuntimeException.class, () -> Max.of(DoubleScalar.INDETERMINATE, DoubleScalar.of(1)));
     assertThrows(TensorRuntimeException.class, () -> Max.of(RealScalar.of(1), DoubleScalar.INDETERMINATE));
@@ -86,7 +86,7 @@ class MaxTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Scalar string = StringScalar.of("string");
     Scalar gauss = GaussScalar.of(1, 3);
     assertThrows(TensorRuntimeException.class, () -> Max.of(string, gauss));

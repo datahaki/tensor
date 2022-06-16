@@ -17,7 +17,7 @@ import ch.alpine.tensor.qty.Quantity;
 
 class CyclicColorDataIndexedTest {
   @Test
-  public void testCustom() {
+  void testCustom() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
     ColorDataIndexed colorDataIndexed = CyclicColorDataIndexed.of(tensor);
     assertEquals(colorDataIndexed.apply(RealScalar.of(1.9 - 20)), tensor.get(1));
@@ -36,7 +36,7 @@ class CyclicColorDataIndexedTest {
   }
 
   @Test
-  public void testDerive() {
+  void testDerive() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3, 4}, {5, 6, 7, 8}}");
     ColorDataIndexed colorDataIndexed = CyclicColorDataIndexed.of(tensor);
     colorDataIndexed = colorDataIndexed.deriveWithAlpha(255);
@@ -47,7 +47,7 @@ class CyclicColorDataIndexedTest {
   }
 
   @Test
-  public void testColors() {
+  void testColors() {
     ColorDataIndexed colorDataIndexed = CyclicColorDataIndexed.of(Color.BLUE, Color.RED, Color.BLACK);
     assertEquals(colorDataIndexed.getColor(-3), Color.BLUE);
     assertEquals(colorDataIndexed.getColor(-2), Color.RED);
@@ -58,7 +58,7 @@ class CyclicColorDataIndexedTest {
   }
 
   @Test
-  public void testCornerCase() {
+  void testCornerCase() {
     ColorDataIndexed colorDataIndexed = CyclicColorDataIndexed.of(Color.BLUE, Color.RED);
     assertEquals(ColorFormat.toColor(colorDataIndexed.apply(RealScalar.of(0.2))), Color.BLUE);
     assertEquals(ColorFormat.toColor(colorDataIndexed.apply(RealScalar.of(1.2))), Color.RED);
@@ -67,7 +67,7 @@ class CyclicColorDataIndexedTest {
   }
 
   @Test
-  public void testFails() {
+  void testFails() {
     ColorDataIndexed colorDataIndexed = CyclicColorDataIndexed.of(Color.BLUE, Color.RED);
     assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(1, "m")));
     assertThrows(Exception.class, () -> colorDataIndexed.apply(Quantity.of(Double.NaN, "m")));
@@ -75,17 +75,17 @@ class CyclicColorDataIndexedTest {
   }
 
   @Test
-  public void testFailEmpty() {
+  void testFailEmpty() {
     assertThrows(TensorRuntimeException.class, () -> CyclicColorDataIndexed.of(Tensors.empty()));
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> CyclicColorDataIndexed.of(RealScalar.ZERO));
   }
 
   @Test
-  public void testFailRGB() {
+  void testFailRGB() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}}");
     assertThrows(TensorRuntimeException.class, () -> CyclicColorDataIndexed.of(tensor));
   }

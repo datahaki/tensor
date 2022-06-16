@@ -23,6 +23,10 @@ import ch.alpine.tensor.Tensor;
  * file extension. Mathematica also does not define an extension
  * for this format.
  * 
+ * <p>Quote from Mathematica:
+ * "Put by default uses the character encoding "PrintableASCII" when
+ * creating a file."
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/Put.html">Put</a> */
 public enum Put {

@@ -22,42 +22,42 @@ import ch.alpine.tensor.sca.N;
 
 class MeanDeviationTest {
   @Test
-  public void testMathematica1() {
+  void testMathematica1() {
     Scalar value = MeanDeviation.ofVector(Tensors.fromString("{1, 2, 3, 7}"));
     assertEquals(value, RationalScalar.of(15, 8));
   }
 
   @Test
-  public void testMathematica2() {
+  void testMathematica2() {
     Scalar value = MeanDeviation.ofVector(Tensors.fromString("{1, 2, 3, 7/11}"));
     assertEquals(value, RationalScalar.of(37, 44));
     Chop._14.requireClose(N.DOUBLE.apply(value), RealScalar.of(0.84090909090909090909090909091));
   }
 
   @Test
-  public void testArray() {
+  void testArray() {
     Scalar value = MeanDeviation.ofVector(RandomVariate.of(UniformDistribution.unit(), 10000));
     Clip clip = Clips.interval(0.23, 0.27);
     clip.requireInside(value);
   }
 
   @Test
-  public void testVectorFail() {
+  void testVectorFail() {
     assertThrows(TensorRuntimeException.class, () -> MeanDeviation.ofVector(RealScalar.ONE));
   }
 
   @Test
-  public void testEmptyFail() {
+  void testEmptyFail() {
     assertThrows(ArithmeticException.class, () -> MeanDeviation.ofVector(Tensors.empty()));
   }
 
   @Test
-  public void testMatrixFail() {
+  void testMatrixFail() {
     assertThrows(ClassCastException.class, () -> MeanDeviation.ofVector(HilbertMatrix.of(3, 4)));
   }
 
   @Test
-  public void testTensorFail() {
+  void testTensorFail() {
     assertThrows(ClassCastException.class, () -> MeanDeviation.ofVector(LeviCivitaTensor.of(3)));
   }
 }

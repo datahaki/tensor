@@ -29,7 +29,7 @@ import ch.alpine.tensor.sca.Sign;
 
 class DateTimeScalarTest {
   @Test
-  public void test1() throws ClassNotFoundException, IOException {
+  void test1() throws ClassNotFoundException, IOException {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2021, 1, 10, 6, 30));
     Serialization.copy(dt1);
@@ -44,7 +44,7 @@ class DateTimeScalarTest {
 
   @SuppressWarnings("unlikely-arg-type")
   @Test
-  public void testSpecific() {
+  void testSpecific() {
     LocalDateTime ldt1 = LocalDateTime.of(2020, 12, 20, 4, 30);
     LocalDateTime ldt2 = LocalDateTime.of(2020, 12, 21, 4, 30);
     DateTimeScalar dt1 = DateTimeScalar.of(ldt1);
@@ -62,7 +62,7 @@ class DateTimeScalarTest {
   }
 
   @Test
-  public void testSubdivide() {
+  void testSubdivide() {
     LocalDateTime ldt1 = LocalDateTime.of(2020, 12, 20, 4, 30);
     LocalDateTime ldt2 = LocalDateTime.of(2020, 12, 21, 4, 30);
     DateTimeScalar dt1 = DateTimeScalar.of(ldt1);
@@ -71,7 +71,7 @@ class DateTimeScalarTest {
   }
 
   @Test
-  public void test2() {
+  void test2() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2021, 1, 10, 6, 30));
     Scalar scalar1 = dt2.subtract(dt1);
@@ -84,7 +84,7 @@ class DateTimeScalarTest {
   }
 
   @Test
-  public void testToStringParse() {
+  void testToStringParse() {
     DateTimeScalar dts = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30, 3, 125_239_876));
     String string = dts.toString();
     assertEquals(string, "2020-12-20T04:30:03.125239876");
@@ -93,7 +93,7 @@ class DateTimeScalarTest {
   }
 
   @Test
-  public void testClip() {
+  void testClip() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2017, 12, 20, 4, 30));
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 21, 4, 30));
     Clip clip = Clips.interval(dt1, dt2);
@@ -104,7 +104,7 @@ class DateTimeScalarTest {
   }
 
   @Test
-  public void testExact() {
+  void testExact() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2017, 12, 20, 4, 30));
     ExactScalarQ.require(dt1);
     Scalar ds = Quantity.of(3, "days");
@@ -114,7 +114,7 @@ class DateTimeScalarTest {
   }
 
   @Test
-  public void testAddFail1() {
+  void testAddFail1() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DateTimeScalar dt2 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 21, 4, 30));
     assertFalse(dt1.equals(RealScalar.ONE));
@@ -131,7 +131,7 @@ class DateTimeScalarTest {
   }
 
   @Test
-  public void testAddFail2() {
+  void testAddFail2() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     assertThrows(TensorRuntimeException.class, () -> dt1.add(RealScalar.of(3)));
     assertThrows(TensorRuntimeException.class, () -> dt1.add(ComplexScalar.I));
@@ -139,14 +139,14 @@ class DateTimeScalarTest {
   }
 
   @Test
-  public void testAddSubtractFail1() {
+  void testAddSubtractFail1() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     assertThrows(TensorRuntimeException.class, () -> dt1.subtract(Pi.VALUE));
     assertThrows(TensorRuntimeException.class, () -> dt1.subtract(Tensors.vector(1, 2, 3)));
   }
 
   @Test
-  public void testNullFail() {
+  void testNullFail() {
     assertThrows(NullPointerException.class, () -> DateTimeScalar.of(null));
   }
 }

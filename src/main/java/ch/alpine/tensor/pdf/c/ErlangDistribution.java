@@ -64,6 +64,6 @@ public class ErlangDistribution implements Distribution, MeanInterface, PDF, Var
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s]", getClass().getSimpleName(), k, lambda);
+    return String.format("ErlangDistribution[%s, %s]", k, lambda);
   }
 }

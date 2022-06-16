@@ -18,14 +18,14 @@ import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 class VarianceTest {
   @Test
-  public void testVariance() {
+  void testVariance() {
     Tensor A = Tensors.vector(1, 2, 5, 7);
     assertEquals(Mean.of(A), RationalScalar.of(15, 4));
     assertEquals(Variance.ofVector(A), RationalScalar.of(91, 12));
   }
 
   @Test
-  public void testVariance2() {
+  void testVariance2() {
     Tensor A = Tensors.of( //
         Tensors.vector(1, 2, 5, 7), //
         Tensors.vector(1, 2, 5) //
@@ -36,30 +36,30 @@ class VarianceTest {
   }
 
   @Test
-  public void testComplex() {
+  void testComplex() {
     Tensor vector = Tensors.of(ComplexScalar.of(1, 7), ComplexScalar.of(2, -3), ComplexScalar.of(3, 2));
     Tensor v = Variance.ofVector(vector);
     assertEquals(v, RealScalar.of(26));
   }
 
   @Test
-  public void testDistribution() {
+  void testDistribution() {
     assertEquals(Variance.of(UniformDistribution.unit()), RationalScalar.of(1, 12));
   }
 
   @Test
-  public void testFailScalar() {
+  void testFailScalar() {
     assertThrows(TensorRuntimeException.class, () -> Variance.ofVector(RealScalar.ONE));
   }
 
   @Test
-  public void testFailLength() {
+  void testFailLength() {
     assertThrows(ArithmeticException.class, () -> Variance.ofVector(Tensors.empty()));
     assertThrows(ArithmeticException.class, () -> Variance.ofVector(Tensors.vector(3)));
   }
 
   @Test
-  public void testFailMatrix() {
+  void testFailMatrix() {
     assertThrows(ClassCastException.class, () -> Variance.ofVector(HilbertMatrix.of(5)));
   }
 }

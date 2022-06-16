@@ -12,13 +12,13 @@ import ch.alpine.tensor.sca.Abs;
 
 class TensorStreamTest {
   @Test
-  public void testStream() {
+  void testStream() {
     Tensor row = IdentityMatrix.of(5).stream().skip(2).findFirst().get();
     assertEquals(row, UnitVector.of(5, 2));
   }
 
   @Test
-  public void testReduction() {
+  void testReduction() {
     Tensor a = Tensors.vectorDouble(2., 1.123, 0.3123);
     assertTrue(a.flatten(-1) //
         .map(Scalar.class::cast) //
@@ -28,7 +28,7 @@ class TensorStreamTest {
   }
 
   @Test
-  public void testNorm3() {
+  void testNorm3() {
     Tensor a = Tensors.vectorLong(2, -3, 4, -1);
     double ods = a.flatten(0) //
         .map(Scalar.class::cast) //
@@ -41,7 +41,7 @@ class TensorStreamTest {
   }
 
   @Test
-  public void testNorm4() {
+  void testNorm4() {
     Tensor a = Tensors.vectorLong(2, -3, 4, -1);
     double ods = a.flatten(0) //
         .map(s -> (Scalar) s) //

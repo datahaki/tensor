@@ -11,7 +11,7 @@ import ch.alpine.tensor.Scalars;
 
 class ArcCoshTest {
   @Test
-  public void testArcCosh() {
+  void testArcCosh() {
     Scalar s = ComplexScalar.of(5, -7);
     Scalar r = ArcCosh.of(s);
     // 2.84629 - 0.953732 I

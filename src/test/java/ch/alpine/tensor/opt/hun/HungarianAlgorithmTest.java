@@ -51,7 +51,7 @@ class HungarianAlgorithmTest {
   }
 
   @Test
-  public void testExample1() {
+  void testExample1() {
     Tensor matrix = Tensors.matrixInt(new int[][] { //
         { 2, 3, 6, 2, 1, 8 }, //
         { 1, 5, 4, 6, 8, 6 }, //
@@ -62,7 +62,7 @@ class HungarianAlgorithmTest {
   }
 
   @Test
-  public void testExample2() {
+  void testExample2() {
     Tensor matrix = Tensors.matrixInt(new int[][] { //
         { 8, 2, 3, 6, 2, 1, 8 }, //
         { 6, 1, 5, 4, 6, 8, 6 }, //
@@ -73,7 +73,7 @@ class HungarianAlgorithmTest {
   }
 
   @Test
-  public void testExample3() {
+  void testExample3() {
     Tensor matrix = Tensors.matrixInt(new int[][] { //
         { 2, 3, 2 }, //
         { 1, 5, 4 }, //
@@ -84,7 +84,7 @@ class HungarianAlgorithmTest {
   }
 
   @Test
-  public void testExample4() {
+  void testExample4() {
     Tensor matrix = Tensors.matrixInt(new int[][] { //
         { 8, 2, 3, 6, 2 }, //
         { 6, 1, 5, 4, 6 }, //
@@ -106,7 +106,7 @@ class HungarianAlgorithmTest {
   private static final Random RANDOM = new Random();
 
   @Test
-  public void testRandom() throws ClassNotFoundException, IOException {
+  void testRandom() throws ClassNotFoundException, IOException {
     Distribution distribution = UniformDistribution.unit();
     int row = 40 + RANDOM.nextInt(25);
     _check3(RandomVariate.of(distribution, row, 53));
@@ -114,7 +114,7 @@ class HungarianAlgorithmTest {
   }
 
   @Test
-  public void testDiscreteRandom() throws ClassNotFoundException, IOException {
+  void testDiscreteRandom() throws ClassNotFoundException, IOException {
     Distribution distribution = DiscreteUniformDistribution.of(-20, 100);
     int row = 40 + RANDOM.nextInt(25);
     _check3(RandomVariate.of(distribution, row, 53));

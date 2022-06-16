@@ -19,7 +19,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 
 class QuantityMultiplicativeTest {
   @Test
-  public void testMultiplyScalar() {
+  void testMultiplyScalar() {
     Scalar qs1 = Quantity.of(3, "m");
     Scalar qs2 = Quantity.of(4, "m");
     Scalar qs3 = Quantity.of(5, "m");
@@ -29,14 +29,14 @@ class QuantityMultiplicativeTest {
   }
 
   @Test
-  public void testMultiply() {
+  void testMultiply() {
     Scalar qs1 = Quantity.of(3, "m");
     Scalar qs2 = Quantity.of(-2, "s");
     assertEquals(qs1.multiply(qs2).toString(), "-6[m*s]");
   }
 
   @Test
-  public void testDivide() {
+  void testDivide() {
     Scalar qs1 = Quantity.of(12, "m");
     Scalar qs2 = Quantity.of(4, "m");
     Scalar qs3 = Quantity.of(3, "m^0");
@@ -45,7 +45,7 @@ class QuantityMultiplicativeTest {
   }
 
   @Test
-  public void testReciprocal() {
+  void testReciprocal() {
     Scalar qs1 = Quantity.of(4, "m");
     assertEquals(qs1.reciprocal().toString(), "1/4[m^-1]");
   }
@@ -56,7 +56,7 @@ class QuantityMultiplicativeTest {
   }
 
   @Test
-  public void testDivisionUnder() {
+  void testDivisionUnder() {
     _checkDivision(Quantity.of(1, "m"), Quantity.of(2, "s"));
     _checkDivision(Quantity.of(1, "m"), DoubleScalar.of(2.0));
     _checkDivision(Quantity.of(1, "m"), RealScalar.of(2));
@@ -79,21 +79,21 @@ class QuantityMultiplicativeTest {
   }
 
   @Test
-  public void testDivision1() {
+  void testDivision1() {
     Scalar quantity = Quantity.of(0, "m");
     Scalar eps = DoubleScalar.of(Math.nextUp(0.0));
     assertTrue(Scalars.isZero(quantity.divide(eps)));
   }
 
   @Test
-  public void testDivision2() {
+  void testDivision2() {
     Scalar zero = DoubleScalar.of(0.0);
     Scalar eps = Quantity.of(Math.nextUp(0.0), "m");
     assertTrue(Scalars.isZero(zero.divide(eps)));
   }
 
   @Test
-  public void testDivision3() {
+  void testDivision3() {
     Scalar s1 = ComplexScalar.of(1, 2);
     Scalar s2 = Quantity.of(3, "m");
     assertEquals(s1.divide(s2), s2.under(s1));

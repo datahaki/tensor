@@ -34,6 +34,6 @@ public enum ParzenWindow implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return getClass().getSimpleName();
+    return "ParzenWindow";
   }
 }

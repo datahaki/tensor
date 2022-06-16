@@ -32,10 +32,10 @@ import ch.alpine.tensor.mat.SquareMatrixQ;
  * After importing the csv file using {@link Import}
  * the check StringScalarQ.any(tensor) should return false. */
 class LowercaseETest {
-  private static final String RESOURCE = "/io/lowercase_e.csv";
+  private static final String RESOURCE = "/ch/alpine/tensor/io/lowercase_e.csv";
 
   @Test
-  public void testConventional() {
+  void testConventional() {
     Tensor tensor = ResourceData.of(RESOURCE);
     assertTrue(StringScalarQ.any(tensor));
     assertEquals(tensor.length(), 6);
@@ -52,7 +52,7 @@ class LowercaseETest {
   }
 
   @Test
-  public void testUppercase() throws IOException {
+  void testUppercase() throws IOException {
     Tensor tensor = importMatlabCsv(RESOURCE);
     assertFalse(StringScalarQ.any(tensor));
     assertEquals(tensor.length(), 6);

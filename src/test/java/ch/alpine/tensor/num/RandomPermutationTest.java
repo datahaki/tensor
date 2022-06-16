@@ -1,11 +1,11 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
@@ -26,7 +26,7 @@ import ch.alpine.tensor.red.StandardDeviation;
 
 class RandomPermutationTest {
   @Test
-  public void testSimple() {
+  void testSimple() {
     for (int count = 0; count < 10; ++count) {
       int[] sigma = RandomPermutation.of(count);
       Integers.requirePermutation(sigma);
@@ -36,14 +36,14 @@ class RandomPermutationTest {
   }
 
   @Test
-  public void testCycles() {
+  void testCycles() {
     Cycles cycles1 = RandomPermutation.cycles(6);
     Cycles cycles2 = RandomPermutation.cycles(9);
     cycles1.combine(cycles2);
   }
 
   @Test
-  public void testComplete2() {
+  void testComplete2() {
     Random random = new Random(345);
     Set<Cycles> set = new TreeSet<>();
     for (int count = 0; count < 8 && set.size() < 2; ++count)
@@ -53,7 +53,7 @@ class RandomPermutationTest {
   }
 
   @Test
-  public void testComplete3() {
+  void testComplete3() {
     Random random = new Random(345);
     Set<Cycles> set = new HashSet<>();
     for (int count = 0; count < 120 && set.size() < 6; ++count)
@@ -62,7 +62,7 @@ class RandomPermutationTest {
   }
 
   @Test
-  public void testComplete4() {
+  void testComplete4() {
     Random random = new Random(345);
     Set<Cycles> set = new HashSet<>();
     for (int count = 0; count < 480 && set.size() < 24; ++count)
@@ -71,7 +71,7 @@ class RandomPermutationTest {
   }
 
   @Test
-  public void testTally() {
+  void testTally() {
     Random random = new Random(2);
     Map<Cycles, Long> map = Stream.generate(() -> RandomPermutation.cycles(3, random)) //
         .limit(200) //
@@ -81,12 +81,12 @@ class RandomPermutationTest {
   }
 
   @Test
-  public void testCycles0() {
+  void testCycles0() {
     assertEquals(RandomPermutation.cycles(0), Cycles.identity());
   }
 
   @Test
-  public void testSameCycles() {
+  void testSameCycles() {
     int seed = new Random().nextInt();
     Cycles c1 = RandomPermutation.cycles(123, new Random(seed));
     Cycles c2 = RandomPermutation.cycles(123, new Random(seed));
@@ -94,15 +94,15 @@ class RandomPermutationTest {
   }
 
   @Test
-  public void testSameArrays() {
+  void testSameArrays() {
     int seed = new Random().nextInt();
     int[] c1 = RandomPermutation.of(123, new Random(seed));
     int[] c2 = RandomPermutation.of(123, new Random(seed));
-    assertTrue(Arrays.equals(c1, c2));
+    assertArrayEquals(c1, c2);
   }
 
   @Test
-  public void testFails() {
+  void testFails() {
     assertThrows(IllegalArgumentException.class, () -> RandomPermutation.cycles(-1));
     assertThrows(IllegalArgumentException.class, () -> RandomPermutation.of(-1));
   }

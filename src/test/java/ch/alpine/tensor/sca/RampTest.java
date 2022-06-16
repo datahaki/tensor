@@ -15,19 +15,19 @@ import ch.alpine.tensor.qty.Quantity;
 
 class RampTest {
   @Test
-  public void testRealScalar() {
+  void testRealScalar() {
     assertEquals(Ramp.of(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(Ramp.FUNCTION.apply(RealScalar.of(-6)), RealScalar.ZERO);
     assertEquals(Ramp.of(RealScalar.of(26)), RealScalar.of(26));
   }
 
   @Test
-  public void testInfty() {
+  void testInfty() {
     assertEquals(Ramp.of(DoubleScalar.POSITIVE_INFINITY), DoubleScalar.POSITIVE_INFINITY);
   }
 
   @Test
-  public void testQuantity() {
+  void testQuantity() {
     Scalar qs1 = Quantity.of(1, "m");
     Scalar qs2 = Quantity.of(-2, "m");
     assertEquals(Ramp.of(qs1), qs1);
@@ -35,7 +35,7 @@ class RampTest {
   }
 
   @Test
-  public void testGaussScalar() {
+  void testGaussScalar() {
     for (int index = -10; index < 15; ++index) {
       Scalar qs1 = GaussScalar.of(index, 13);
       assertEquals(Ramp.of(qs1), qs1);
@@ -43,7 +43,7 @@ class RampTest {
   }
 
   @Test
-  public void testFail() {
+  void testFail() {
     Scalar scalar = Around.of(2, 3);
     assertThrows(ClassCastException.class, () -> Ramp.FUNCTION.apply(scalar));
   }
