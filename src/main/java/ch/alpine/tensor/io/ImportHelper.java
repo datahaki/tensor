@@ -53,7 +53,7 @@ import ch.alpine.tensor.ext.ReadLine;
     return ObjectFormat.parse(bytes);
   }
 
-  /** @param inputStream
+  /** @param reader
    * @return
    * @throws IOException */
   public static Properties properties(Reader reader) throws IOException {

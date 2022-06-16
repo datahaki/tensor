@@ -161,7 +161,7 @@ class ImportTest {
   @Test
   void testProperties() throws FileNotFoundException, IOException {
     File file = new File(getClass().getResource("/ch/alpine/tensor/io/simple.properties").getFile());
-    Properties properties = Import.properties(file);
+    Properties properties = Import.properties(file, StaticHelper.CHARSET);
     assertEquals(Scalars.fromString(properties.get("maxTor").toString()), Quantity.of(3, "m*s"));
   }
 }

@@ -71,7 +71,7 @@ class MathematicaFormatTest {
 
   @Test
   void testBasic() throws IOException {
-    File file = OperatingSystem.fileToResource("/ch/alpine/tensor/io/basic.mathematica");
+    File file = OperatingSystem.fileOfResource("/ch/alpine/tensor/io/basic.mathematica");
     Tensor tensor = Get.of(file);
     checkNonString(tensor);
   }
@@ -84,7 +84,7 @@ class MathematicaFormatTest {
 
   @Test
   void testExponent() throws IOException {
-    File file = OperatingSystem.fileToResource("/ch/alpine/tensor/io/exponent.mathematica");
+    File file = OperatingSystem.fileOfResource("/ch/alpine/tensor/io/exponent.mathematica");
     Tensor tensor = Get.of(file);
     checkNonString(tensor);
     assertEquals(tensor, ResourceData.of("/ch/alpine/tensor/io/exponent.mathematica"));
@@ -101,7 +101,7 @@ class MathematicaFormatTest {
 
   @Test
   void testPrime() throws IOException {
-    File file = OperatingSystem.fileToResource("/ch/alpine/tensor/io/decimals.mathematica");
+    File file = OperatingSystem.fileOfResource("/ch/alpine/tensor/io/decimals.mathematica");
     Tensor tensor = Get.of(file);
     assertTrue(tensor.stream().anyMatch(scalar -> scalar instanceof DecimalScalar));
     checkNonString(tensor);

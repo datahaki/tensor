@@ -2,9 +2,7 @@
 
 # ch.alpine.tensor
 
-Library for tensor computations in Java 17, version `1.0.6`.
-
-Library for tensor computations in Java 11, version `1.0.6-jdk-11`.
+Library for tensor computations in Java.
 
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions
@@ -283,10 +281,11 @@ Predefined color lists
 
 ## Integration
 
-Specify `repository` and `dependency` of the tensor library in the `pom.xml` file of your maven project:
+From time to time, a version is deployed and made available for maven integration. Specify `repository` and `dependency` of the tensor library in the `pom.xml` file of your maven project:
 
 ```xml
 <repositories>
+  <!-- other repositories -->
   <repository>
     <id>tensor-mvn-repo</id>
     <url>https://raw.github.com/datahaki/tensor/mvn-repo/</url>
@@ -298,14 +297,19 @@ Specify `repository` and `dependency` of the tensor library in the `pom.xml` fil
 </repositories>
 
 <dependencies>
+  <!-- other dependencies -->
   <dependency>
     <groupId>ch.alpine</groupId>
     <artifactId>tensor</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.6</version>
   </dependency>
 </dependencies>
 ```
 
-When using Java 11, change the reference to `<version>1.0.6-jdk-11</version>`.
+For Java 17, for `version` use `1.0.6` .
+
+For Java 11, for `version` use `1.0.6-jdk-11`.
 
 The source code is attached to every release.
+
+The branch `master` always contains the latest features for Java 17, and does not correspond to the most recent deployed version generally.

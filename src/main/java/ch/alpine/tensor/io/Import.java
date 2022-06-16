@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -65,21 +66,13 @@ public enum Import {
   }
 
   /** @param file
-   * @param charset
+   * @param charset for instance Charset.forName("UTF-8")
    * @return instance of {@link Properties} with key-value pairs specified in given file
    * @throws FileNotFoundException
    * @throws IOException */
   public static Properties properties(File file, Charset charset) throws FileNotFoundException, IOException {
-    try (Reader reader = new FileReader(file, charset)) {
+    try (Reader reader = new BufferedReader(new FileReader(file, charset))) {
       return ImportHelper.properties(reader);
     }
-  }
-
-  /** @param file
-   * @return
-   * @throws FileNotFoundException
-   * @throws IOException */
-  public static Properties properties(File file) throws FileNotFoundException, IOException {
-    return properties(file, StaticHelper.CHARSET);
   }
 }

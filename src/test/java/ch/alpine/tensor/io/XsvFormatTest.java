@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
@@ -76,7 +77,7 @@ class XsvFormatTest {
 
   @Test
   void testImport() throws Exception {
-    Path path = OperatingSystem.pathToResource("/ch/alpine/tensor/io/qty/quantity0.csv");
+    Path path = OperatingSystem.pathOfResource("/ch/alpine/tensor/io/qty/quantity0.csv");
     Tensor tensor = XsvFormat.parse( //
         Files.readAllLines(path).stream(), //
         string -> Tensors.fromString("{" + string + "}"));
@@ -85,6 +86,19 @@ class XsvFormatTest {
     assertInstanceOf(Quantity.class, tensor.Get(0, 1));
     assertInstanceOf(Quantity.class, tensor.Get(1, 0));
     assertInstanceOf(RealScalar.class, tensor.Get(1, 1));
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = { "csv", "tsv" })
+  void testImport(String ext, @TempDir File folder) throws Exception {
+    File read = OperatingSystem.fileOfResource("/ch/alpine/tensor/io/chinese.csv");
+    Tensor tensor = Import.of(read);
+    assertEquals(Dimensions.of(tensor), Arrays.asList(3, 3));
+    assertEquals(tensor.Get(0, 0).toString().length(), 2);
+    File file = new File(folder, "file." + ext);
+    Export.of(file, tensor);
+    Tensor actual = Import.of(file);
+    assertEquals(tensor, actual);
   }
 
   @Test

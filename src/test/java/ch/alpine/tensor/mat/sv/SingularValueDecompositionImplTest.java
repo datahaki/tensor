@@ -36,7 +36,7 @@ class SingularValueDecompositionImplTest {
 
   @Test
   void testResource() throws Exception {
-    _check(Get.of(OperatingSystem.fileToResource("/ch/alpine/tensor/mat/sv/svd0.mathematica")));
+    _check(Get.of(OperatingSystem.fileOfResource("/ch/alpine/tensor/mat/sv/svd0.mathematica")));
   }
 
   @Test

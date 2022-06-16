@@ -6,11 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
@@ -52,6 +54,15 @@ class VectorFormatTest {
     assertEquals(tensor.Get(0).toString(), "ethz");
     assertEquals(tensor.Get(1).toString(), "idsc");
     assertEquals(tensor.Get(2).toString(), "tensor library");
+  }
+
+  @Test
+  void testUnicode(@TempDir File folder) throws IOException {
+    Tensor tensor = Tensors.fromString("{\u3000\u4678,\"abc}");
+    File file = new File(folder, "file.vector");
+    Export.of(file, tensor);
+    Tensor actual = Import.of(file);
+    assertEquals(tensor, actual);
   }
 
   @Test

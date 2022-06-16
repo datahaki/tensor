@@ -24,7 +24,7 @@ public enum OperatingSystem {
    * 
    * @param name of resource, for instance "/ch/alpine/tensor/mat/sv/svd0.mathematica"
    * @return path to resource */
-  public static Path pathToResource(String name) {
+  public static Path pathOfResource(String name) {
     String string = OperatingSystem.class.getResource(name).getPath();
     return Paths.get(OperatingSystem.isWindows() && string.charAt(0) == '/' //
         ? string.substring(1)
@@ -37,7 +37,7 @@ public enum OperatingSystem {
    * 
    * @param name of resource, for instance "/ch/alpine/tensor/mat/sv/svd0.mathematica"
    * @return absolute file to resource */
-  public static File fileToResource(String name) {
-    return pathToResource(name).toFile();
+  public static File fileOfResource(String name) {
+    return pathOfResource(name).toFile();
   }
 }
