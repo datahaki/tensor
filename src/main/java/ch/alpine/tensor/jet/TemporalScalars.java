@@ -12,8 +12,10 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.qty.UnitSystem;
 import ch.alpine.tensor.sca.Floor;
 
+/** @see UnitSystem#SI() */
 public enum TemporalScalars {
   ;
   /** parsing function
@@ -54,7 +56,7 @@ public enum TemporalScalars {
    * @return quantity with value equals to the number of seconds encoded in given duration and unit "s" */
   public static Scalar seconds(Duration duration) {
     Scalar seconds = RealScalar.of(duration.getSeconds());
-    Scalar faction = RationalScalar.of(duration.getNano(), 1_000_000_000);
+    Scalar faction = RationalScalar.of(duration.getNano(), NANOS_LONG);
     return Quantity.of(seconds.add(faction), UNIT_S);
   }
 }

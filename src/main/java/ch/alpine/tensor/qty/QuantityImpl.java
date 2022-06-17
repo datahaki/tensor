@@ -164,6 +164,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
       if (unit.equals(quantity.unit()))
         return ofUnit(value.add(quantity.value()));
     }
+    // TODO TENSOR ALG
     if (scalar instanceof DateTimeScalar) {
       DateTimeScalar dateTimeScalar = (DateTimeScalar) scalar;
       return dateTimeScalar.add(this);

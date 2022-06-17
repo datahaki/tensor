@@ -29,7 +29,7 @@ import ch.alpine.tensor.sca.pow.Power;
 public class FrechetDistribution implements UnivariateDistribution, Serializable {
   private static final double NEXT_DOWN_ONE = Math.nextDown(1.0);
 
-  /** @param alpha positive
+  /** @param alpha positive real
    * @param beta positive, may be instance of {@link Quantity}
    * @return */
   public static Distribution of(Scalar alpha, Scalar beta) {

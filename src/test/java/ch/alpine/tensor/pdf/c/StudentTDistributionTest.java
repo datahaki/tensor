@@ -6,21 +6,27 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.PDF;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Variance;
+import ch.alpine.tensor.sca.Sign;
 
 class StudentTDistributionTest {
   @Test
@@ -44,6 +50,18 @@ class StudentTDistributionTest {
   void testMeanVarSpecial() {
     assertFalse(FiniteScalarQ.of(Mean.of(StudentTDistribution.of(5, 4, 0.5))));
     assertFalse(FiniteScalarQ.of(Variance.of(StudentTDistribution.of(5, 4, 1.5))));
+  }
+
+  @Test
+  void testDateTime() {
+    DateTimeScalar mu = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    Distribution distribution = StudentTDistribution.of(mu, Quantity.of(100_000, "s"), RealScalar.of(2));
+    PDF pdf = PDF.of(distribution);
+    Scalar x = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 33));
+    Scalar scalar = pdf.at(x);
+    Sign.requirePositive(scalar);
+    Unit unit = QuantityUnit.of(scalar);
+    assertEquals(unit, Unit.of("s^-1"));
   }
 
   @Test

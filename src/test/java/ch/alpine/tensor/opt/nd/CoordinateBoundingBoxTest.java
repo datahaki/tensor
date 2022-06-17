@@ -45,13 +45,14 @@ class CoordinateBoundingBoxTest {
   }
 
   @Test
-  void testSame() {
+  void testSame() throws ClassNotFoundException, IOException {
     Clip clip = Clips.absolute(1);
     CoordinateBoundingBox coordinateBoundingBox = CoordinateBoundingBox.of(clip, clip);
     CoordinateBoundingBox lo = coordinateBoundingBox.splitLo(1);
     assertEquals(lo.getClip(0), clip);
     assertTrue(lo.getClip(0) == clip);
     assertEquals(lo.getClip(1), Clips.interval(-1, 0));
+    Serialization.copy(coordinateBoundingBox);
   }
 
   @Test

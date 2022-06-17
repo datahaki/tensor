@@ -281,9 +281,18 @@ Predefined color lists
 
 ## Integration
 
-From time to time, a version is deployed and made available for maven integration. Specify `repository` and `dependency` of the tensor library in the `pom.xml` file of your maven project:
+From time to time, a version is deployed and made available for maven integration. Specify `repository` and `dependency` of the library `tensor` in the `pom.xml` file of your maven project:
 
 ```xml
+<dependencies>
+  <!-- other dependencies -->
+  <dependency>
+    <groupId>ch.alpine</groupId>
+    <artifactId>tensor</artifactId>
+    <version>1.0.6</version>
+  </dependency>
+</dependencies>
+
 <repositories>
   <!-- other repositories -->
   <repository>
@@ -295,6 +304,7 @@ From time to time, a version is deployed and made available for maven integratio
     </snapshots>
   </repository>
 </repositories>
+<<<<<<< HEAD
 
 <dependencies>
   <!-- other dependencies -->
@@ -304,6 +314,8 @@ From time to time, a version is deployed and made available for maven integratio
     <version>1.0.6-jdk-11</version>
   </dependency>
 </dependencies>
+=======
+>>>>>>> master
 ```
 
 For Java 17, for `version` use `1.0.6` .

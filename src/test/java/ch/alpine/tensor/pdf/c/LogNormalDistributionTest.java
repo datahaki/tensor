@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -99,6 +101,12 @@ class LogNormalDistributionTest {
     Distribution distribution = LogNormalDistribution.of(random.nextDouble() - 0.5, 0.1 + random.nextDouble());
     TestMarkovChebyshev.markov(distribution);
     TestMarkovChebyshev.chebyshev(distribution);
+  }
+
+  @Test
+  void testDateTime() {
+    DateTimeScalar mu = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
+    assertThrows(TensorRuntimeException.class, () -> LogNormalDistribution.of(mu, Quantity.of(3, "s")));
   }
 
   @Test
