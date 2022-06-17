@@ -304,18 +304,6 @@ From time to time, a version is deployed and made available for maven integratio
     </snapshots>
   </repository>
 </repositories>
-<<<<<<< HEAD
-
-<dependencies>
-  <!-- other dependencies -->
-  <dependency>
-    <groupId>ch.alpine</groupId>
-    <artifactId>tensor</artifactId>
-    <version>1.0.6-jdk-11</version>
-  </dependency>
-</dependencies>
-=======
->>>>>>> master
 ```
 
 For Java 17, for `version` use `1.0.6` .
