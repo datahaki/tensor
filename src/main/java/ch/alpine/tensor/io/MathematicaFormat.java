@@ -16,16 +16,21 @@ import ch.alpine.tensor.Tensors;
  * <code>expr = Get["filePath"]</code>
  * 
  * <p>String expressions may also be compatible with Java,
- * for instance to define an array of type int[][], or double[][]
+ * 
+ * Careful: does not work for general unicode, for example mathematica
+ * exports a string consisting of the 2 Chinese characters hanzi as:
+ * "\:6c49\:5b57"
  * 
  * <p>The following string notation is incompatible with Java
  * <pre>
  * 1.2630135948105083*^17
  * 3.5849905564258352*^-18
+ * </pre>
+ * and are converted to
+ * <pre>
+ * 1.2630135948105083E17
+ * 3.5849905564258352E-18
  * </pre> */
-// TODO TENSOR 20220615 does not work for general unicode, for example mathematica
-// ... exports a string consisting of the 2 Chinese characters hanzi as:
-// "\:6c49\:5b57"
 public enum MathematicaFormat {
   ;
   private static final String EXPONENT_JAVA = "E";

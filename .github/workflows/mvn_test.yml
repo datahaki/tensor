@@ -3,11 +3,6 @@ on:
   push:
     paths:
       - '**'
-  pull_request:
-    branches:
-      - main
-    types:
-      - opened
 jobs:
   os_matrix:
     strategy:

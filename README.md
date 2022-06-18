@@ -4,6 +4,8 @@
 
 Library for tensor computations in Java.
 
+![](https://github.com/datahaki/tensor/actions/workflows/mvn_test.yml/badge.svg)
+
 The tensor library was developed with the following objectives in mind
 * support for exact precision using integer fractions
 * support for calculation with physical units

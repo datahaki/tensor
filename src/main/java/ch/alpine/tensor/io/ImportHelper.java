@@ -32,11 +32,11 @@ import ch.alpine.tensor.ext.ReadLine;
 
   private static Tensor of(Extension extension, InputStream inputStream) throws IOException {
     return switch (extension) {
-    case CSV -> XsvFormat.CSV.parse(ReadLine.of(inputStream, StaticHelper.CHARSET));
+    case CSV -> XsvFormat.CSV.parse(ReadLine.of(inputStream));
     case MATHEMATICA -> Get.of(inputStream);
     case BMP, GIF, JPG, PNG -> ImageFormat.from(ImageIO.read(inputStream));
-    case TSV -> XsvFormat.TSV.parse(ReadLine.of(inputStream, StaticHelper.CHARSET));
-    case VECTOR -> VectorFormat.parse(ReadLine.of(inputStream, StaticHelper.CHARSET));
+    case TSV -> XsvFormat.TSV.parse(ReadLine.of(inputStream));
+    case VECTOR -> VectorFormat.parse(ReadLine.of(inputStream));
     default -> throw new UnsupportedOperationException(extension.name());
     };
   }

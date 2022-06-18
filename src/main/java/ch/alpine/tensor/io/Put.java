@@ -17,7 +17,10 @@ import ch.alpine.tensor.Tensor;
  * Mathematica and the tensor library.
  * 
  * <p>file is readable in Mathematica where the file is
- * imported using Mathematica::Get.
+ * imported using Mathematica::Get
+ * <pre>
+ * Get[file, CharacterEncoding -> "UTF8"]
+ * </pre>
  * 
  * <p>the format does not specify or require any particular
  * file extension. Mathematica also does not define an extension

@@ -5,6 +5,6 @@ import java.nio.charset.Charset;
 
 /* package */ enum StaticHelper {
   ;
-  /** UTF-8 is the default charset for modern java versions */
+  /** As of Java 18, the default charset is UTF-8. */
   public static final Charset CHARSET = Charset.forName("UTF-8");
 }
