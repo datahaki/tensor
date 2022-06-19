@@ -14,7 +14,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarTensorFunction;
@@ -110,7 +110,7 @@ class BSplineInterpolationTest {
   @Test
   void testQuadratic() {
     for (int n = 1; n <= 6; ++n) {
-      Tensor vector = Array.of(l -> RealScalar.ONE, n);
+      Tensor vector = ConstantArray.of(RealScalar.ONE, n);
       Tensor tensor = BSplineInterpolation.matrix(2, n);
       assertEquals(Dimensions.of(tensor), Arrays.asList(n, n));
       assertEquals(tensor.dot(vector), vector);
@@ -121,7 +121,7 @@ class BSplineInterpolationTest {
   @Test
   void testCubic() {
     for (int n = 1; n <= 6; ++n) {
-      Tensor vector = Array.of(l -> RealScalar.ONE, n);
+      Tensor vector = ConstantArray.of(RealScalar.ONE, n);
       Tensor tensor = BSplineInterpolation.matrix(3, n);
       assertEquals(Dimensions.of(tensor), Arrays.asList(n, n));
       assertEquals(tensor.dot(vector), vector);

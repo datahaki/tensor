@@ -12,10 +12,8 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Differences;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.itp.Fit;
-import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Clip;
@@ -188,10 +186,9 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
   private Optional<Scalar> contrib(Scalar lo, Scalar hi, ScalarUnaryOperator map, int order) {
     if (lo.equals(hi))
       return Optional.empty();
-    Tensor xdata = Tensors.of(lo, hi).map(map);
-    Tensor ydata = Tensors.of(lo, hi).map(this::at);
-    Polynomial iab = Fit.polynomial(xdata, ydata, 1).moment(order).integral();
-    return Optional.of(Differences.of(xdata.map(iab)).Get(0));
+    Tensor domain = Tensors.of(lo, hi);
+    Tensor xdata = domain.map(map);
+    return Optional.of(Fit.polynomial(xdata, domain.map(this::at), 1).moment(order, xdata.Get(0), xdata.Get(1)));
   }
 
   @Override // from AbstractContinuousDistribution

@@ -8,6 +8,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** <pre>
+ * Erf[z] == -Erf[-z]
  * Erf[z] == 1 - Erfc[z]
  * </pre>
  * 

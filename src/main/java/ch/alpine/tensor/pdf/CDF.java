@@ -36,7 +36,10 @@ public interface CDF {
    * @return P(X < x), i.e. probability of random variable X < x */
   Scalar p_lessThan(Scalar x);
 
-  /** @param x
+  /** For discrete distributions {@link #p_lessEquals(Scalar)} corresponds to
+   * Mathematica::CDF[distribution, x]
+   * 
+   * @param x
    * @return P(X <= x), i.e. probability of random variable X <= x */
   Scalar p_lessEquals(Scalar x);
 }
