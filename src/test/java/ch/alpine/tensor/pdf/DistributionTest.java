@@ -10,11 +10,13 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.pdf.c.BirnbaumSaundersDistribution;
 import ch.alpine.tensor.pdf.c.ExponentialDistribution;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
+import ch.alpine.tensor.pdf.d.BorelTannerDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.pdf.d.GeometricDistribution;
 import ch.alpine.tensor.pdf.d.HypergeometricDistribution;
@@ -43,24 +45,64 @@ class DistributionTest {
   }
 
   @Test
-  void testDiscrete() {
+  void testBernoulliDistribution() {
     _check(BernoulliDistribution.of(RationalScalar.of(2, 3)), 1000);
-    _check(BinomialDistribution.of(10, RationalScalar.of(1, 4)), 1000);
-    _check(BinomialDistribution.of(10, RationalScalar.of(7, 8)), 1000);
-    _check(DiscreteUniformDistribution.of(RealScalar.of(10), RealScalar.of(30)), 1000);
-    _check(GeometricDistribution.of(RealScalar.of(0.7)), 3000);
-    _check(GeometricDistribution.of(RealScalar.of(0.1)), 2500);
-    _check(HypergeometricDistribution.of(10, 40, 100), 1000); //
-    _check(HypergeometricDistribution.of(10, 20, 31), 1000);
-    _check(PoissonDistribution.of(RealScalar.of(2.5)), 1000);
   }
 
   @Test
-  void testContinuous() {
-    _check(ExponentialDistribution.of(RealScalar.of(2.5)), 2500); // failed with 2000, 2300
-    _check(ExponentialDistribution.of(RealScalar.of(10)), 3000);
-    _check(NormalDistribution.of(RealScalar.of(100), RealScalar.of(10)), 1000);
-    _check(UniformDistribution.of(RealScalar.of(10), RealScalar.of(30)), 1000);
-    _check(UniformDistribution.of(RealScalar.of(-100), RealScalar.of(-99)), 1000);
+  void testBinomialDistribution() {
+    _check(BinomialDistribution.of(10, RationalScalar.of(1, 4)), 1000);
+    _check(BinomialDistribution.of(10, RationalScalar.of(7, 8)), 1000);
+  }
+
+  @Test
+  void testDiscreteUniform() {
+    _check(DiscreteUniformDistribution.of(10, 30), 1000);
+  }
+
+  @Test
+  void testGeometricDistribution() {
+    _check(GeometricDistribution.of(0.7), 3000);
+    _check(GeometricDistribution.of(0.1), 2500);
+  }
+
+  @Test
+  void testHypergeometricDistribution() {
+    _check(HypergeometricDistribution.of(10, 40, 100), 1000); //
+    _check(HypergeometricDistribution.of(10, 20, 31), 1000);
+  }
+
+  @Test
+  void testPoissonDistribution() {
+    _check(PoissonDistribution.of(2.5), 1000);
+  }
+
+  @Test
+  void testBorelTannerDistribution() {
+    _check(BorelTannerDistribution.of(0.3, 10), 1000);
+    _check(BorelTannerDistribution.of(0.8, 10), 1000);
+  }
+
+  @Test
+  void testExponentialDistribution() {
+    _check(ExponentialDistribution.of(2.5), 3000); // failed with 2000, 2300, 2500
+    _check(ExponentialDistribution.of(10), 3000);
+  }
+
+  @Test
+  void testNormalDistribution() {
+    _check(NormalDistribution.of(100, 10), 1000);
+  }
+
+  @Test
+  void testUniformDistribution() {
+    _check(UniformDistribution.of(10, 30), 1000);
+    _check(UniformDistribution.of(-100, -99), 1000);
+  }
+
+  @Test
+  void testBirnbaumSaundersDistribution() {
+    _check(BirnbaumSaundersDistribution.of(1, 2), 1000);
+    _check(BirnbaumSaundersDistribution.of(0.3, 0.7), 1000);
   }
 }
