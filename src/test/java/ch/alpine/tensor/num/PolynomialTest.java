@@ -62,8 +62,8 @@ class PolynomialTest {
   @Test
   void testPlus() {
     Polynomial p1 = Polynomial.of(Tensors.vector(1, 5, 2, 10));
-    assertEquals(p1, p1.moment(0));
-    assertThrows(IllegalArgumentException.class, () -> p1.moment(-1));
+    assertEquals(p1, p1.gain(0));
+    assertThrows(IllegalArgumentException.class, () -> p1.gain(-1));
     Polynomial p2 = Polynomial.of(Tensors.vector(3, 8));
     assertEquals(p1.degree(), 3);
     assertEquals(p2.degree(), 1);
@@ -117,12 +117,26 @@ class PolynomialTest {
     derivative.apply(t);
   }
 
+  /** Careful:
+   * does not give the multiplicative neutral element!
+   * 
+   * @return polynomial x -> x where units of domain and values are identical as this polynomial */
+  /* package */ static Polynomial series01(Tensor coeffs) {
+    Polynomial polynomial = Polynomial.of(coeffs);
+    Tensor c01 = coeffs.extract(0, 2);
+    c01.set(Scalar::zero, 0);
+    Scalar b = coeffs.Get(1);
+    Unit unit = polynomial.getUnitValue().add(polynomial.getUnitDomain().negate());
+    c01.set(Quantity.of(b.one(), unit), 1);
+    return Polynomial.of(c01);
+  }
+
   @Test
   void testAcceleration() {
     Scalar qs0 = Quantity.of(3, "m*s^-1");
     Scalar qs1 = Quantity.of(-4, "m*s^-2");
     Polynomial polynomial = Polynomial.of(Tensors.of(qs0, qs1));
-    assertEquals(polynomial.coeffs(), polynomial.moment(0).coeffs());
+    assertEquals(polynomial.coeffs(), polynomial.gain(0).coeffs());
     Tensor roots = polynomial.roots();
     assertEquals(roots, Tensors.fromString("{3/4[s]}"));
     assertEquals(polynomial.getUnitDomain(), Unit.of("s"));
@@ -132,11 +146,11 @@ class PolynomialTest {
     Scalar result = polynomial.apply(val);
     assertEquals(result, Scalars.fromString("-5[m*s^-1]"));
     assertEquals(polynomial.getUnitValue(), Unit.of("m*s^-1"));
-    Polynomial integral = polynomial.integral();
+    Polynomial integral = polynomial.antiderivative();
     assertEquals(integral.getUnitDomain(), Unit.of("s"));
     Scalar scalar = integral.apply(val);
     assertEquals(scalar, Quantity.of(-2, "m"));
-    Polynomial identity = polynomial.identity();
+    Polynomial identity = series01(polynomial.coeffs());
     assertEquals(identity.coeffs(), Tensors.fromString("{0[m*s^-1], 1[m*s^-2]}"));
     assertEquals(identity.getUnitDomain(), Unit.of("s"));
     assertEquals(identity.getUnitValue(), Unit.of("m*s^-1"));
@@ -158,7 +172,7 @@ class PolynomialTest {
     Scalar qs0 = Quantity.of(3, "m*s^-1");
     // Scalar val = Quantity.of(2, "s");
     Polynomial polynomial = Polynomial.of(Tensors.of(qs0));
-    Polynomial integral = polynomial.integral();
+    Polynomial integral = polynomial.antiderivative();
     // integral.apply(val);
     integral.coeffs();
     // System.out.println();
@@ -170,22 +184,22 @@ class PolynomialTest {
     Scalar qs1 = Quantity.of(-4, "m*s^-2");
     // Scalar val = Quantity.of(2, "s");
     Polynomial polynomial = Polynomial.of(Tensors.of(qs0, qs1));
-    assertEquals(polynomial, polynomial.moment(0));
+    assertEquals(polynomial, polynomial.gain(0));
     assertEquals(polynomial.getUnitDomain(), Unit.of("s"));
     assertEquals(polynomial.coeffs(), Tensors.fromString("{3[m*s^-1], -4[m*s^-2]}"));
-    Polynomial shift1 = polynomial.moment(1);
+    Polynomial shift1 = polynomial.gain(1);
     assertEquals(shift1.coeffs(), Tensors.fromString("{0[m], 3[m*s^-1], -4[m*s^-2]}"));
     assertEquals(shift1.getUnitDomain(), Unit.of("s"));
     assertEquals(shift1.getUnitValue(), Unit.of("m"));
-    Polynomial shift2 = polynomial.moment(2);
+    Polynomial shift2 = polynomial.gain(2);
     assertEquals(shift2.coeffs(), Tensors.fromString("{0[m*s], 0[m], 3[m*s^-1], -4[m*s^-2]}"));
     assertEquals(shift2.getUnitDomain(), Unit.of("s"));
     assertEquals(shift2.getUnitValue(), Unit.of("m*s"));
     for (int i = 0; i < 5; ++i) {
-      Polynomial expect = polynomial.moment(i);
+      Polynomial expect = polynomial.gain(i);
       Polynomial init = polynomial;
       for (int j = 0; j < i; ++j)
-        init = init.moment(1);
+        init = init.gain(1);
       assertEquals(expect, init);
     }
   }
@@ -193,7 +207,7 @@ class PolynomialTest {
   @Test
   void testMomentCoeffs1() {
     Polynomial polynomial = Polynomial.of(Tensors.vector(3));
-    Polynomial p2 = polynomial.moment(3);
+    Polynomial p2 = polynomial.gain(3);
     assertEquals(p2.coeffs(), Tensors.vector(0, 0, 0, 3));
   }
 
@@ -345,7 +359,7 @@ class PolynomialTest {
   @Test
   void testIntegralCoeff() {
     Polynomial coeffs = Polynomial.of(Tensors.vector(2, 6, 3, 9, 0, 3));
-    Polynomial integr = coeffs.integral();
+    Polynomial integr = coeffs.antiderivative();
     Polynomial result = integr.derivative();
     assertEquals(coeffs, result);
   }
@@ -396,7 +410,21 @@ class PolynomialTest {
     }
     Tensor coeffs = c2.coeffs();
     coeffs.set(Scalar::zero, 0);
-    assertEquals(c2.derivative().integral().coeffs(), coeffs);
+    assertEquals(c2.derivative().antiderivative().coeffs(), coeffs);
+  }
+
+  @Test
+  void testGain() {
+    Scalar qs1 = Quantity.of(-4, "m*s");
+    Scalar qs2 = Quantity.of(3, "m");
+    Polynomial polynomial = Polynomial.of(Tensors.of(qs1, qs2));
+    assertEquals(polynomial.gain(3), polynomial.gain(1).gain(1).gain(1));
+    Unit unit1 = polynomial.getUnitDomain();
+    Unit unit2 = polynomial.gain(3).getUnitDomain();
+    assertEquals(unit1, unit2);
+    assertEquals(unit1, Unit.of("s"));
+    Scalar scalar = polynomial.moment(2, Quantity.of(1, "s"), Quantity.of(2, "s"));
+    assertEquals(scalar, Scalars.fromString("23/12[m*s^4]"));
   }
 
   @Test

@@ -37,7 +37,6 @@ import ch.alpine.tensor.sca.Chop;
  * @implSpec
  * This class is immutable and thread-safe. */
 // TODO TENSOR ALG f[g[x]]
-// TODO TENSOR DOC document functions better, e.g. moment, identity
 public class Polynomial extends HornerScheme {
   /** polynomial evaluation
    * 
@@ -147,8 +146,8 @@ public class Polynomial extends HornerScheme {
         : Times.of(coeffs.extract(1, length), Range.of(1, length)));
   }
 
-  /** @return polynomial that is an integral function to this polynomial */
-  public Polynomial integral() {
+  /** @return polynomial that is an indefinite integral of this polynomial */
+  public Polynomial antiderivative() {
     int length = coeffs.length();
     Tensor tensor = Tensors.reserve(length + 1);
     Scalar a = coeffs.Get(0);
@@ -163,14 +162,14 @@ public class Polynomial extends HornerScheme {
 
   /** Example:
    * <pre>
-   * {3[m*s^-1], -4[m*s^-2]} . moment(2) == {0[m*s], 0[m], 3[m*s^-1], -4[m*s^-2]}
+   * {3[m*s^-1], -4[m*s^-2]} . gain(2) == {0[m*s], 0[m], 3[m*s^-1], -4[m*s^-2]}
    * </pre>
    * 
    * @param order non-negative
    * @return this times x^order
-   * @throws Exception if given order is negative */
-  // TODO TENSOR API misnomer, since moment is intergal[x^n, dP]
-  public Polynomial moment(int order) {
+   * @throws Exception if given order is negative
+   * @see #moment(int, Scalar, Scalar) */
+  public Polynomial gain(int order) {
     Unit unit = coeffs.length() == 1 //
         ? Unit.ONE
         : getUnitDomain();
@@ -180,25 +179,20 @@ public class Polynomial extends HornerScheme {
     return of(_coeffs);
   }
 
+  /** @param order
+   * @param x_lo
+   * @param x_hi
+   * @return Integrate[ x ^ order * this(x), {x_lo, z_hi}] */
+  public Scalar moment(int order, Scalar x_lo, Scalar x_hi) {
+    Polynomial polynomial = gain(order).antiderivative();
+    return polynomial.apply(x_hi).subtract(polynomial.apply(x_lo));
+  }
+
   /** @param scalar
    * @param unit
    * @return scalar.zero() * Quantity(scalar.one(), unit) */
   private static Scalar zero(Scalar scalar, Unit unit) {
     return Quantity.of(scalar.one().zero(), QuantityUnit.of(scalar).add(unit));
-  }
-
-  /** Remark:
-   * identity does not give the multiplicative neutral element!
-   * 
-   * @return x -> x where units of domain and values are identical as this polynomial */
-  // TODO TENSOR API misnomer since units of input and output may not be "identical"
-  public Polynomial identity() {
-    Tensor c01 = coeffs.extract(0, 2);
-    c01.set(Scalar::zero, 0);
-    Scalar b = coeffs.Get(1);
-    Unit unit = getUnitValue().add(getUnitDomain().negate());
-    c01.set(Quantity.of(b.one(), unit), 1);
-    return of(c01);
   }
 
   /** @param polynomial
