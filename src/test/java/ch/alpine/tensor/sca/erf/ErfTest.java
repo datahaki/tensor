@@ -13,6 +13,8 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.sca.Chop;
 
 class ErfTest {
@@ -71,5 +73,13 @@ class ErfTest {
     Scalar expect = ComplexScalar.of(-1.294669945215742, -0.4089868112498779); // Mathematica
     Scalar result = Erf.FUNCTION.apply(scalar);
     Tolerance.CHOP.requireClose(expect, result);
+  }
+
+  @Test
+  void testOdd() {
+    Tensor x = RandomVariate.of(NormalDistribution.standard(), 10);
+    Tensor z1 = x.map(Erf.FUNCTION);
+    Tensor z2 = x.map(y -> Erf.FUNCTION.apply(y.negate()).negate());
+    Tolerance.CHOP.requireClose(z1, z2);
   }
 }
