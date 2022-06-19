@@ -3,6 +3,7 @@ package ch.alpine.tensor.mat.pi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -26,12 +27,12 @@ class LagrangeMultiplierTest {
     Tensor eqs = RandomVariate.of(distribution, 3, n);
     Tensor target = RandomVariate.of(NormalDistribution.standard(), n);
     Tensor rhs = RandomVariate.of(distribution, 3);
-    LagrangeMultiplier lagrangeMultiplier = new LagrangeMultiplier(IdentityMatrix.of(n), target, eqs, rhs);
+    LagrangeMultiplier lagrangeMultiplier = new LagrangeMultiplier(IdentityMatrix.of(n), eqs);
     HermitianMatrixQ.require(lagrangeMultiplier.matrix());
-    VectorQ.require(lagrangeMultiplier.b());
-    Tensor sol1 = lagrangeMultiplier.usingCholesky();
-    Tensor sol2 = lagrangeMultiplier.usingSvd();
-    Tensor sol3 = lagrangeMultiplier.solve();
+    VectorQ.require(lagrangeMultiplier.b(target, rhs));
+    Tensor sol1 = lagrangeMultiplier.usingCholesky(target, rhs);
+    Tensor sol2 = lagrangeMultiplier.usingSvd(target, rhs);
+    Tensor sol3 = lagrangeMultiplier.solve(target, rhs);
     assertEquals(sol1.length(), n);
     Chop._08.requireClose(sol1, sol2);
     Tolerance.CHOP.requireClose(sol1, sol3);
@@ -47,14 +48,15 @@ class LagrangeMultiplierTest {
     Tensor eqs = eqsMul.dot(eqsPre);
     Tensor target = RandomVariate.of(NormalDistribution.standard(), n);
     Tensor rhs = RandomVariate.of(distribution, 3);
-    LagrangeMultiplier lagrangeMultiplier = new LagrangeMultiplier(IdentityMatrix.of(n), target, eqs, rhs);
+    LagrangeMultiplier lagrangeMultiplier = new LagrangeMultiplier(IdentityMatrix.of(n), eqs);
     HermitianMatrixQ.require(lagrangeMultiplier.matrix());
-    VectorQ.require(lagrangeMultiplier.b());
-    assertThrows(Exception.class, () -> lagrangeMultiplier.usingCholesky());
-    Tensor sol2 = lagrangeMultiplier.usingSvd();
-    Tensor sol3 = lagrangeMultiplier.solve();
+    VectorQ.require(lagrangeMultiplier.b(target, rhs));
+    assertThrows(Exception.class, () -> lagrangeMultiplier.usingCholesky(target, rhs));
+    Tensor sol2 = lagrangeMultiplier.usingSvd(target, rhs);
+    Tensor sol3 = lagrangeMultiplier.solve(target, rhs);
     Tolerance.CHOP.requireClose(sol2, sol3);
     assertEquals(sol2.length(), n);
+    assertTrue(lagrangeMultiplier.toString().startsWith("LagrangeMultiplier["));
   }
 
   @Test
@@ -62,7 +64,7 @@ class LagrangeMultiplierTest {
     Tensor eqs = RandomVariate.of(NormalDistribution.standard(), 3, 10);
     Tensor target = RandomVariate.of(NormalDistribution.standard(), 9);
     Tensor rhs = RandomVariate.of(NormalDistribution.standard(), 3);
-    assertThrows(Exception.class, () -> new LagrangeMultiplier(IdentityMatrix.of(10), target, eqs, rhs));
+    assertThrows(Exception.class, () -> new LagrangeMultiplier(IdentityMatrix.of(10), eqs).b(target, rhs));
   }
 
   @Test
@@ -70,6 +72,6 @@ class LagrangeMultiplierTest {
     Tensor eqs = RandomVariate.of(NormalDistribution.standard(), 3, 10);
     Tensor target = RandomVariate.of(NormalDistribution.standard(), 10);
     Tensor rhs = RandomVariate.of(NormalDistribution.standard(), 2);
-    assertThrows(Exception.class, () -> new LagrangeMultiplier(IdentityMatrix.of(10), target, eqs, rhs));
+    assertThrows(Exception.class, () -> new LagrangeMultiplier(IdentityMatrix.of(10), eqs).b(target, rhs));
   }
 }
