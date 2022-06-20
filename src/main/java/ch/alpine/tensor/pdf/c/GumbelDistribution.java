@@ -47,6 +47,17 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
     this.beta = beta;
   }
 
+  @Override // from CDF
+  public Scalar p_lessThan(Scalar x) {
+    return RealScalar.ONE.subtract(Exp.FUNCTION.apply( //
+        Exp.FUNCTION.apply(x.subtract(alpha).divide(beta)).negate()));
+  }
+
+  @Override // from AbstractContinuousDistribution
+  protected Scalar protected_quantile(Scalar p) {
+    return alpha.add(beta.multiply(Log.FUNCTION.apply(Log.FUNCTION.apply(RealScalar.ONE.subtract(p)).negate())));
+  }
+
   @Override // from MeanInterface
   public Scalar mean() {
     return alpha.subtract(Gamma.EULER.multiply(beta));
@@ -61,17 +72,6 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
   public Scalar at(Scalar x) {
     Scalar map = x.subtract(alpha).divide(beta);
     return Exp.FUNCTION.apply(map.subtract(Exp.FUNCTION.apply(map))).divide(beta);
-  }
-
-  @Override // from CDF
-  public Scalar p_lessThan(Scalar x) {
-    return RealScalar.ONE.subtract(Exp.FUNCTION.apply( //
-        Exp.FUNCTION.apply(x.subtract(alpha).divide(beta)).negate()));
-  }
-
-  @Override // from AbstractContinuousDistribution
-  protected Scalar protected_quantile(Scalar p) {
-    return alpha.add(beta.multiply(Log.FUNCTION.apply(Log.FUNCTION.apply(RealScalar.ONE.subtract(p)).negate())));
   }
 
   @Override // from Object

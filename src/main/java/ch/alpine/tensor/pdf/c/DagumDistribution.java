@@ -51,7 +51,7 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
   private final ScalarUnaryOperator power_arn;
   private final ScalarUnaryOperator power_pn;
   private final ScalarUnaryOperator power_an;
-  private final Scalar power_pan_b;
+  private final Scalar pa_power_pan_b;
   private final ScalarUnaryOperator power_pa1;
 
   private DagumDistribution(Scalar p, Scalar a, Scalar b) {
@@ -65,7 +65,7 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
     power_prn = Power.function(p.reciprocal().negate());
     power_arn = Power.function(a.reciprocal().negate());
     pa = p.multiply(a);
-    power_pan_b = Power.function(pa.negate()).apply(b);
+    pa_power_pan_b = Power.of(b, pa.negate()).multiply(pa); // pa * b^(-pa)
     power_pa1 = Power.function(pa.subtract(RealScalar.ONE));
   }
 
@@ -77,7 +77,7 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
   @Override // from PDF
   public Scalar at(Scalar x) {
     return Times.of( //
-        pa, power_pan_b, power_pa1.apply(x), //
+        pa_power_pan_b, power_pa1.apply(x), //
         power_p1n.apply(power_a.apply(x.divide(b)).add(RealScalar.ONE)) //
     );
   }

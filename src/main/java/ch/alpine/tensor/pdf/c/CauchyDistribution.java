@@ -68,7 +68,7 @@ public class CauchyDistribution extends AbstractContinuousDistribution implement
     return DoubleScalar.INDETERMINATE;
   }
 
-  @Override
+  @Override // from AbstractContinuousDistribution
   protected Scalar protected_quantile(Scalar p) {
     return Tan.FUNCTION.apply(p.add(p).subtract(RealScalar.ONE).multiply(Pi.HALF)).multiply(b).add(a);
   }

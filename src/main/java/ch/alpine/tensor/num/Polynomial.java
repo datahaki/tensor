@@ -20,6 +20,7 @@ import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clip;
 
 /** Evaluation of a polynomial using horner scheme.
  * 
@@ -179,13 +180,20 @@ public class Polynomial extends HornerScheme {
     return of(_coeffs);
   }
 
-  /** @param order
+  /** @param order non-negative
    * @param x_lo
    * @param x_hi
    * @return Integrate[ x ^ order * this(x), {x_lo, z_hi}] */
   public Scalar moment(int order, Scalar x_lo, Scalar x_hi) {
     Polynomial polynomial = gain(order).antiderivative();
     return polynomial.apply(x_hi).subtract(polynomial.apply(x_lo));
+  }
+
+  /** @param order non-negative
+   * @param clip
+   * @return */
+  public Scalar moment(int order, Clip clip) {
+    return moment(order, clip.min(), clip.max());
   }
 
   /** @param scalar

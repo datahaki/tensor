@@ -79,9 +79,9 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int k) {
-    return k <= n //
-        ? table.Get(k)
+  protected Scalar protected_p_equals(int x) {
+    return x <= n //
+        ? table.Get(x)
         : RealScalar.ZERO;
   }
 

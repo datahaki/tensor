@@ -70,9 +70,9 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int i) {
-    return i <= N && i <= n //
-        ? binomial_n.over(i).multiply(binomial_m.over(N - i)).divide(binomial_m_n.over(N))
+  protected Scalar protected_p_equals(int x) {
+    return x <= N && x <= n //
+        ? binomial_n.over(x).multiply(binomial_m.over(N - x)).divide(binomial_m_n.over(N))
         : RealScalar.ZERO;
   }
 

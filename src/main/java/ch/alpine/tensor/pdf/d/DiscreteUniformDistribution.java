@@ -82,8 +82,8 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int n) {
-    return n < max //
+  protected Scalar protected_p_equals(int x) {
+    return x < max //
         ? p
         : RealScalar.ZERO;
   }

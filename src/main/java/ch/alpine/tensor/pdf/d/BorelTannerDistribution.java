@@ -36,12 +36,14 @@ public class BorelTannerDistribution extends EvaluatedDiscreteDistribution {
   private final Scalar alpha;
   private final Scalar n;
   private final Scalar o_alpha;
+  private final Scalar logAlpha;
   private final int _n;
 
   private BorelTannerDistribution(Scalar alpha, int n) {
     this.alpha = alpha;
     this.n = RealScalar.of(n);
     o_alpha = RealScalar.ONE.subtract(alpha);
+    logAlpha = Log.FUNCTION.apply(alpha);
     _n = n;
     build(Tolerance.CHOP);
   }
@@ -68,7 +70,7 @@ public class BorelTannerDistribution extends EvaluatedDiscreteDistribution {
     Scalar s0 = LogGamma.FUNCTION.apply(x_n.add(RealScalar.ONE)).negate();
     Scalar s1 = x.multiply(alpha).negate();
     Scalar s2 = Log.FUNCTION.apply(x).multiply(x_n.subtract(RealScalar.ONE));
-    Scalar s3 = Log.FUNCTION.apply(alpha).multiply(x_n);
+    Scalar s3 = logAlpha.multiply(x_n);
     return n.multiply(Exp.FUNCTION.apply(s0.add(s1).add(s2).add(s3)));
   }
 

@@ -16,6 +16,7 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.chq.ExactScalarQ;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
@@ -126,6 +127,26 @@ class PascalDistributionTest {
       Scalar q = inverseCDF.quantile(p);
       assertEquals(x, q);
     }
+  }
+
+  @Test
+  void testLargeExact() {
+    Distribution distribution = PascalDistribution.of(5, RationalScalar.of(1, 7));
+    PDF pdf = PDF.of(distribution);
+    Scalar scalar = pdf.at(RealScalar.of(30));
+    Scalar expect = Scalars.fromString("96463967285551476768768/3219905755813179726837607"); // Mathematica
+    assertEquals(scalar, expect);
+    pdf.at(RealScalar.of(2000));
+  }
+
+  @Test
+  void testLargeNumeric() {
+    Distribution distribution = PascalDistribution.of(5, 1.0 / 7);
+    PDF pdf = PDF.of(distribution);
+    Scalar scalar = pdf.at(RealScalar.of(30));
+    Scalar expect = Scalars.fromString("96463967285551476768768/3219905755813179726837607"); // Mathematica
+    Tolerance.CHOP.requireClose(scalar, expect);
+    pdf.at(RealScalar.of(200000));
   }
 
   @Test
