@@ -13,9 +13,9 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
-import ch.alpine.tensor.itp.Fit;
 import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
@@ -30,7 +30,7 @@ class VandermondeSolveTest {
     Tensor cmp = VandermondeSolve.of(x, q);
     ExactTensorQ.require(cmp);
     assertEquals(ref, cmp);
-    Fit.polynomial(x, q, 1);
+    Polynomial.fit(x, q, 1);
   }
 
   @Test

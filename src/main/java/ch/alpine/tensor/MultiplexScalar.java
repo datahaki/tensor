@@ -38,7 +38,7 @@ public abstract class MultiplexScalar extends AbstractScalar {
    * @return whether all scalar components satisfy given predicate */
   public abstract boolean allMatch(Predicate<Scalar> predicate);
 
-  @Override
+  @Override // from Scalar
   public final Number number() {
     throw TensorRuntimeException.of(this);
   }

@@ -110,7 +110,7 @@ public class FindRoot implements Serializable {
 
   /** Function is equivalent to
    * <pre>
-   * Fit.polynomial(Tensors.of(clip.min(), clip.max()), Tensors.of(y0, y1), 1).roots().Get(0);
+   * Polynomial.fit(Tensors.of(clip.min(), clip.max()), Tensors.of(y0, y1), 1).roots().Get(0);
    * </pre>
    * 
    * Functionality is implemented explicitly for speed.
