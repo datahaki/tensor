@@ -3,6 +3,7 @@ package ch.alpine.tensor.api;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 
@@ -161,5 +162,45 @@ class ScalarUnaryOperatorTest {
     ScalarUnaryOperator scalarUnaryOperator = t -> t;
     ScalarUnaryOperator copy = Serialization.copy(scalarUnaryOperator);
     assertEquals(copy.apply(ComplexScalar.I), ComplexScalar.I);
+  }
+
+  @Test
+  void testCompose() {
+    ScalarUnaryOperator suo = Sin.FUNCTION.compose(Tan.FUNCTION);
+    Scalar s1 = suo.apply(RealScalar.of(0.3));
+    Scalar s2 = Sin.FUNCTION.apply(Tan.FUNCTION.apply(RealScalar.of(0.3)));
+    assertEquals(s1, s2);
+  }
+
+  @Test
+  void testComposeFail() {
+    assertThrows(Exception.class, () -> Sin.FUNCTION.compose(null));
+    assertThrows(Exception.class, () -> Sin.FUNCTION.andThen(null));
+  }
+
+  @Test
+  void testChain() throws ClassNotFoundException, IOException {
+    ScalarUnaryOperator suo = ScalarUnaryOperator.chain(Sin.FUNCTION, Tan.FUNCTION);
+    Serialization.copy(suo);
+    suo.apply(RealScalar.of(0.2));
+  }
+
+  @Test
+  void testChainEmpty() {
+    ScalarUnaryOperator suo1 = ScalarUnaryOperator.chain();
+    ScalarUnaryOperator suo2 = ScalarUnaryOperator.chain();
+    assertEquals(suo1, suo2);
+  }
+
+  @Test
+  void testChainFail() {
+    assertThrows(Exception.class, () -> ScalarUnaryOperator.chain(Sin.FUNCTION, null));
+  }
+
+  @Test
+  void test() {
+    ScalarUnaryOperator suo = ScalarUnaryOperator.chain(RealScalar.of(3)::add, RealScalar.of(5)::multiply);
+    Scalar scalar = suo.apply(RealScalar.of(2));
+    assertEquals(scalar, RealScalar.of((2 + 3) * 5));
   }
 }
