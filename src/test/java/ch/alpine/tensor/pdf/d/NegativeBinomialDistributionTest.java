@@ -11,8 +11,11 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.num.Boole;
 import ch.alpine.tensor.pdf.CDF;
@@ -41,6 +44,26 @@ class NegativeBinomialDistributionTest {
     assertEquals(inverseCDF.quantile(RealScalar.of(1 - 1e-8)), RealScalar.of(64));
     assertEquals(inverseCDF.quantile(RealScalar.of(1 - 1e-9)), RealScalar.of(70));
     assertEquals(inverseCDF.quantile(RealScalar.of(1 - 1e-10)), RealScalar.of(76));
+  }
+
+  @Test
+  void testLargeExact() {
+    Distribution distribution = NegativeBinomialDistribution.of(5, RationalScalar.of(1, 7));
+    PDF pdf = PDF.of(distribution);
+    Scalar scalar = pdf.at(RealScalar.of(30));
+    Scalar expect = Scalars.fromString("10252524100968730205960011776/378818692265664781682717625943"); // Mathematica
+    assertEquals(scalar, expect);
+    pdf.at(RealScalar.of(2000));
+  }
+
+  @Test
+  void testLargeNumeric() {
+    Distribution distribution = NegativeBinomialDistribution.of(5, 1.0 / 7);
+    PDF pdf = PDF.of(distribution);
+    Scalar scalar = pdf.at(RealScalar.of(30));
+    Scalar expect = Scalars.fromString("10252524100968730205960011776/378818692265664781682717625943"); // Mathematica
+    Tolerance.CHOP.requireClose(scalar, expect);
+    pdf.at(RealScalar.of(200000));
   }
 
   @Test

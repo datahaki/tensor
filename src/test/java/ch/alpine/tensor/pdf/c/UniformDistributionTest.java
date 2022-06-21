@@ -16,8 +16,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
+import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
@@ -172,6 +174,18 @@ class UniformDistributionTest {
     assertEquals(variance, Variance.of(d2));
     assertEquals(variance, CentralMoment.of(d1, 2));
     assertEquals(variance, CentralMoment.of(d2, 2));
+  }
+
+  @Test
+  void testMoment() {
+    Clip clip = Clips.absoluteOne();
+    Polynomial polynomial = Polynomial.of(Tensors.fromString("{1/2, 0}"));
+    Distribution distribution = UniformDistribution.of(clip);
+    for (int order = 0; order < 10; ++order) {
+      Scalar cm1 = polynomial.moment(order, clip);
+      Scalar cm2 = CentralMoment.of(distribution, order);
+      assertEquals(cm1, cm2);
+    }
   }
 
   @Test

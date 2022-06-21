@@ -74,9 +74,9 @@ public class GeometricDistribution extends AbstractDiscreteDistribution implemen
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int n) {
-    // PDF[GeometricDistribution[p], n] == (1 - p) ^ n * p
-    return p.multiply(Power.of(_1_p, n));
+  protected Scalar protected_p_equals(int x) {
+    // PDF[GeometricDistribution[p], x] == (1 - p) ^ x * p
+    return p.multiply(Power.of(_1_p, x));
   }
 
   @Override // from CDF

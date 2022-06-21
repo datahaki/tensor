@@ -41,6 +41,14 @@ class DagumDistributionTest {
   }
 
   @Test
+  void testPdf2() throws ClassNotFoundException, IOException {
+    Distribution distribution = Serialization.copy(DagumDistribution.of(0.2, 0.3, 0.7));
+    PDF pdf = PDF.of(distribution);
+    Scalar scalar = pdf.at(RealScalar.of(2));
+    Chop._12.requireClose(scalar, RealScalar.of(0.011343268588747504));
+  }
+
+  @Test
   void testInverseCdf() {
     Distribution distribution = DagumDistribution.of(0.2, 0.3, 0.6);
     InverseCDF cdf = InverseCDF.of(distribution);

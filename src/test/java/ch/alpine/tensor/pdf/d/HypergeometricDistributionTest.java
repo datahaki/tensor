@@ -28,6 +28,7 @@ class HypergeometricDistributionTest {
     for (int c = 0; c <= 10; ++c)
       sum = sum.add(pdf.at(RealScalar.of(c)));
     assertEquals(sum, RealScalar.ONE);
+    assertEquals(pdf.at(RealScalar.of(100000)), RealScalar.ZERO);
   }
 
   @Test

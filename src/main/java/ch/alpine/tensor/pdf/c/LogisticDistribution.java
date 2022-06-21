@@ -12,6 +12,7 @@ import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
+import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.exp.Exp;
 import ch.alpine.tensor.sca.exp.Log;
@@ -43,16 +44,19 @@ public class LogisticDistribution extends AbstractContinuousDistribution impleme
     this.b = b;
   }
 
+  private Scalar transform(Scalar x) {
+    return Exp.FUNCTION.apply(a.subtract(x).divide(b));
+  }
+
   @Override // from PDF
   public Scalar at(Scalar x) {
-    Scalar exp = Exp.FUNCTION.apply(a.subtract(x).divide(b));
-    Scalar sum = RealScalar.ONE.add(exp);
-    return exp.divide(b).divide(sum.multiply(sum));
+    Scalar exp = transform(x);
+    return Times.of(b, RealScalar.ONE.add(exp), RealScalar.ONE.add(exp.reciprocal())).reciprocal();
   }
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
-    return RealScalar.ONE.add(Exp.FUNCTION.apply(a.subtract(x).divide(b))).reciprocal();
+    return RealScalar.ONE.add(transform(x)).reciprocal();
   }
 
   @Override // from AbstractContinuousDistribution

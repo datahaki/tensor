@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.pdf.d;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -26,9 +27,14 @@ class BorelTannerDistributionTest {
     Distribution distribution = Serialization.copy(BorelTannerDistribution.of(0.3, 5));
     assertTrue(distribution.toString().startsWith("BorelTannerDistribution["));
     PDF pdf = PDF.of(distribution);
+    assertEquals(RealScalar.ZERO, pdf.at(RealScalar.of(-1)));
+    assertEquals(RealScalar.ZERO, pdf.at(RealScalar.of(0)));
+    assertEquals(RealScalar.ZERO, pdf.at(RealScalar.of(4)));
     Tolerance.CHOP.requireClose(pdf.at(RealScalar.of(10)), RealScalar.of(0.05040940672246232));
     Tolerance.CHOP.requireClose(Mean.of(distribution), RealScalar.of(7.142857142857143));
     Tolerance.CHOP.requireClose(Variance.of(distribution), RealScalar.of(4.373177842565599));
+    Tolerance.CHOP.requireZero(pdf.at(RealScalar.of(1000))); // ~1E-221 !
+    assertEquals(RealScalar.ZERO, pdf.at(RealScalar.of(1000000)));
   }
 
   @Test

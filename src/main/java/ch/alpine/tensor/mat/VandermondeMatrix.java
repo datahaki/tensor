@@ -5,7 +5,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.NestList;
 import ch.alpine.tensor.ext.Integers;
-import ch.alpine.tensor.itp.Fit;
 
 /** Given a vector with entries {x0, x1, ..., xn}, the Vandermonde matrix
  * is the square matrix of the form
@@ -25,9 +24,7 @@ import ch.alpine.tensor.itp.Fit;
  * NR 2007
  * 
  * "Linear Algebra and Learning from Data", p.180
- * by Gilbert Strang, 2019
- * 
- * @see Fit */
+ * by Gilbert Strang, 2019 */
 public enum VandermondeMatrix {
   ;
   /** @param vector

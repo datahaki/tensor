@@ -14,6 +14,10 @@ import ch.alpine.tensor.sca.pow.Power;
 /** Quote: "the distribution of the number of failures in a sequence of trials with success
  * probability p before n successes occur."
  * 
+ * Careful:
+ * when p is specified in exact precision then the PDF evaluated at great integers
+ * results in increasingly complex expressions.
+ * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/NegativeBinomialDistribution.html">NegativeBinomialDistribution</a> */
 public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution {
@@ -55,8 +59,8 @@ public class NegativeBinomialDistribution extends EvaluatedDiscreteDistribution 
   }
 
   @Override // from AbstractDiscreteDistribution
-  protected Scalar protected_p_equals(int k) {
-    return pn.multiply(Power.of(_1_p, k)).multiply(Binomial.of(n - 1 + k, n - 1));
+  protected Scalar protected_p_equals(int x) {
+    return pn.multiply(Power.of(_1_p, x)).multiply(Binomial.of(n - 1 + x, n - 1));
   }
 
   @Override // from MeanInterface

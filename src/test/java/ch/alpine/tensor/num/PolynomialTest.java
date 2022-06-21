@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.util.Random;
+
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RandomQuaternion;
@@ -23,13 +26,19 @@ import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.jet.JetScalar;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.TriangularDistribution;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.qty.QuantityMagnitude;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
+import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.red.Total;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Mod;
@@ -430,6 +439,86 @@ class PolynomialTest {
   @Test
   void testEquals() {
     assertNotEquals(Polynomial.of(Tensors.vector(1, 2, 3)), "abc");
+  }
+
+  @Test
+  void testDegree0() {
+    Tensor ydata = Tensors.vector(5, -2);
+    Polynomial polynomial = Polynomial.fit(Tensors.vector(10, 11), ydata, 0);
+    assertEquals(polynomial.coeffs().toString(), "{3/2}");
+    assertEquals(Mean.of(ydata), RationalScalar.of(3, 2));
+  }
+
+  @Test
+  void testDegree1() throws ClassNotFoundException, IOException {
+    Polynomial polynomial = Serialization.copy(Polynomial.fit(Tensors.vector(10, 11), Tensors.vector(5, -2), 1));
+    ExactTensorQ.require(polynomial.coeffs());
+    assertEquals(polynomial.coeffs().toString(), "{75, -7}");
+    Tensor roots = polynomial.roots();
+    assertEquals(roots.toString(), "{75/7}");
+    // ScalarUnaryOperator series = Polynomial.of(coeffs);
+    assertEquals(polynomial.apply(RealScalar.of(10)), RealScalar.of(5));
+    assertEquals(polynomial.apply(RealScalar.of(11)), RealScalar.of(-2));
+  }
+
+  @Test
+  void testQuaternionDeg1() {
+    Tensor xdata = Tensors.of(RandomQuaternion.get(), RandomQuaternion.get());
+    Tensor ydata = Tensors.of(RandomQuaternion.get(), RandomQuaternion.get());
+    Polynomial polynomial = Polynomial.fit(xdata, ydata, 1);
+    ExactTensorQ.require(polynomial.coeffs());
+    // ScalarUnaryOperator series = Polynomial.of(coeffs);
+    for (int index = 0; index < xdata.length(); ++index)
+      assertEquals(polynomial.apply(xdata.Get(index)), ydata.Get(index));
+  }
+
+  @Test
+  void testMixedUnits() {
+    ScalarUnaryOperator pascal = QuantityMagnitude.SI().in("Pa");
+    ScalarUnaryOperator kelvin = QuantityMagnitude.SI().in("K");
+    for (int degree = 0; degree <= 4; ++degree) {
+      Tensor x = Tensors.fromString("{100[K], 110.0[K], 120[K], 133[K], 140[K], 150[K]}");
+      Tensor y = Tensors.fromString("{10[bar], 20[bar], 22[bar], 23[bar], 25[bar], 26.0[bar]}");
+      Polynomial f0 = Polynomial.fit(x, y, degree);
+      if (1 == f0.coeffs().length()) {
+        Polynomial f1 = f0.derivative();
+        assertEquals(f0.coeffs().length(), f1.coeffs().length());
+      } else
+        if (1 < f0.coeffs().length()) {
+          Polynomial f1 = f0.derivative();
+          if (f0.coeffs().length() != 2)
+            assertEquals(f0.coeffs().length(), f1.coeffs().length() + 1);
+        }
+      ScalarUnaryOperator x_to_y = Polynomial.fit(x, y, degree);
+      Scalar pressure = x_to_y.apply(Quantity.of(103, "K"));
+      pascal.apply(pressure);
+      ScalarUnaryOperator y_to_x = Polynomial.fit(y, x, degree);
+      Scalar temperat = y_to_x.apply(Quantity.of(15, "bar"));
+      kelvin.apply(temperat);
+    }
+  }
+
+  @Test
+  void testLinear() {
+    Random random = new Random(2);
+    Polynomial polynomial = Polynomial.of(Tensors.vector(-2., 3., 0.5));
+    Distribution distribution = TriangularDistribution.of(-2, 1, 2);
+    for (int n = 5; n < 10; ++n) {
+      Tensor xdata = RandomVariate.of(distribution, random, n);
+      Tensor ydata = xdata.map(polynomial);
+      Polynomial fit = Polynomial.fit(xdata, ydata, 4);
+      assertEquals(fit.degree(), polynomial.degree());
+    }
+  }
+
+  @Test
+  void testDegreeLargeFail() {
+    assertThrows(IllegalArgumentException.class, () -> Polynomial.fit(Tensors.vector(10, 11), Tensors.vector(5, -2), 2));
+  }
+
+  @Test
+  void testNegativeFail() {
+    assertThrows(IllegalArgumentException.class, () -> Polynomial.fit(Tensors.vector(10, 11), Tensors.vector(5, -2), -1));
   }
 
   @Test

@@ -36,7 +36,7 @@ public abstract class AbstractDiscreteDistribution implements DiscreteDistributi
    * @return */
   protected abstract Scalar protected_quantile(Scalar p);
 
-  /** @param n with lowerBound() <= n
-   * @return P(X == n), i.e. probability of random variable X == n */
-  protected abstract Scalar protected_p_equals(int n);
+  /** @param x with lowerBound() <= x
+   * @return P(X == x), i.e. probability of random variable X == x */
+  protected abstract Scalar protected_p_equals(int x);
 }

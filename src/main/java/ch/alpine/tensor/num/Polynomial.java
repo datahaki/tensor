@@ -13,13 +13,19 @@ import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.fft.FullConvolve;
-import ch.alpine.tensor.itp.Fit;
+import ch.alpine.tensor.itp.InterpolatingPolynomial;
+import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.mat.VandermondeMatrix;
+import ch.alpine.tensor.mat.pi.LeastSquares;
+import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityUnit;
 import ch.alpine.tensor.qty.Unit;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Chop;
+import ch.alpine.tensor.sca.Clip;
 
 /** Evaluation of a polynomial using horner scheme.
  * 
@@ -32,11 +38,10 @@ import ch.alpine.tensor.sca.Chop;
  * In Matlab, there exists
  * <a href="https://www.mathworks.com/help/matlab/ref/polyval.html">polyval</a>.
  * 
- * @see Fit#polynomial(Tensor, Tensor, int)
+ * @see #fit(Tensor, Tensor, int)
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-// TODO TENSOR ALG f[g[x]]
 public class Polynomial extends HornerScheme {
   /** polynomial evaluation
    * 
@@ -53,6 +58,24 @@ public class Polynomial extends HornerScheme {
   public static Polynomial of(Tensor coeffs) {
     VectorQ.require(coeffs);
     return new Polynomial(truncate(coeffs, Scalars::isZero));
+  }
+
+  /** inspired by
+   * <a href="https://reference.wolfram.com/language/ref/Fit.html">Fit</a>
+   * 
+   * @param xdata vector
+   * @param ydata vector
+   * @param degree of polynomial non-negative strictly less than xdata.length(), for instance
+   * degree == 1 will return a linear polynomial
+   * @return polynomial function with coefficients to polynomial as vector of length degree + 1
+   * @see Polynomial
+   * @see LeastSquares
+   * @see InterpolatingPolynomial */
+  public static Polynomial fit(Tensor xdata, Tensor ydata, int degree) {
+    int excess = Integers.requirePositiveOrZero(xdata.length() - degree - 1);
+    return new Polynomial(truncate(excess == 0 //
+        ? LinearSolve.of(VandermondeMatrix.of(xdata), ydata)
+        : LeastSquares.of(VandermondeMatrix.of(xdata, degree), ydata), Tolerance.CHOP::isZero));
   }
 
   private static int lastNonZero(Tensor coeffs) {
@@ -179,13 +202,20 @@ public class Polynomial extends HornerScheme {
     return of(_coeffs);
   }
 
-  /** @param order
+  /** @param order non-negative
    * @param x_lo
    * @param x_hi
    * @return Integrate[ x ^ order * this(x), {x_lo, z_hi}] */
   public Scalar moment(int order, Scalar x_lo, Scalar x_hi) {
     Polynomial polynomial = gain(order).antiderivative();
     return polynomial.apply(x_hi).subtract(polynomial.apply(x_lo));
+  }
+
+  /** @param order non-negative
+   * @param clip
+   * @return */
+  public Scalar moment(int order, Clip clip) {
+    return moment(order, clip.min(), clip.max());
   }
 
   /** @param scalar
@@ -215,6 +245,8 @@ public class Polynomial extends HornerScheme {
     return of(coeffs.multiply(scalar));
   }
 
+  /** @param chop
+   * @return polynomial with close-to-zero leading coefficients dropped */
   public Polynomial chop(Chop chop) {
     return new Polynomial(truncate(coeffs, chop::isZero));
   }

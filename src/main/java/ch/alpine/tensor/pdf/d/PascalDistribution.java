@@ -10,7 +10,11 @@ import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.pow.Power;
 
-/** inspired by
+/** Careful:
+ * when p is specified in exact precision then the PDF evaluated at great integers
+ * results in increasingly complex expressions.
+ * 
+ * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/PascalDistribution.html">PascalDistribution</a> */
 public class PascalDistribution extends EvaluatedDiscreteDistribution {
   /** @param n positive number of successes
