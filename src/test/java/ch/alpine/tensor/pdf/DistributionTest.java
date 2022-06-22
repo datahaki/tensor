@@ -102,7 +102,7 @@ class DistributionTest {
 
   @Test
   void testBirnbaumSaundersDistribution() {
-    _check(BirnbaumSaundersDistribution.of(1, 2), 1000);
-    _check(BirnbaumSaundersDistribution.of(0.3, 0.7), 1000);
+    _check(BirnbaumSaundersDistribution.of(1, 2), 1400);
+    _check(BirnbaumSaundersDistribution.of(0.3, 0.7), 1400);
   }
 }
