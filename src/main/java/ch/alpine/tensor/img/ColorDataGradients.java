@@ -55,6 +55,8 @@ public enum ColorDataGradients implements ColorDataGradient {
   TEMPERATURE_LIGHT,
   /** blue to red, symmetric */
   THERMOMETER,
+  /** brown red yellow green blue */
+  SOUTH_WEST,
   /** red-brown, white, cyan */
   BROWN_CYAN,
   /** pink, yellow, cyan */
