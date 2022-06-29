@@ -69,6 +69,8 @@ public enum ResourceData {
     }
   }
 
+  /** @param string
+   * @return instance of {@link Properties} from parsing resource in UTF-8 encoding */
   public static Properties properties(String string) {
     return properties(string, StaticHelper.CHARSET);
   }

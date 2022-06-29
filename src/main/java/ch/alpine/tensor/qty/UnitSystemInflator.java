@@ -12,7 +12,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.PackageTestAccess;
 
 /* package */ class UnitSystemInflator {
-  /* package */ static final char INFLATOR = '_';
+  public static final char INFLATOR = '_';
 
   /** @param properties
    * @return */

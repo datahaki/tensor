@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -21,5 +22,12 @@ class NilpotentMatrixQTest {
     _check(Tensors.fromString("{{2,-1},{4,-2}}"));
     _check(Tensors.fromString("{{2,2,-2},{5,1,-3},{1,5,-3}}"));
     _check(Tensors.fromString("{{2,2,2,-3},{6,1,1,-4},{1,6,1,-4},{1,1,6,-4}}"));
+  }
+
+  @Test
+  void testNope() {
+    assertFalse(NilpotentMatrixQ.of(IdentityMatrix.of(3)));
+    assertFalse(NilpotentMatrixQ.of(DiagonalMatrix.of(3, 0)));
+    assertFalse(NilpotentMatrixQ.of(DiagonalMatrix.of(3, -3)));
   }
 }
