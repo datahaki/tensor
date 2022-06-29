@@ -5,15 +5,13 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/ReadLine.html">ReadLine</a> */
 public enum ReadLine {
   ;
-  /** As of Java 18, the default charset is UTF-8. */
-  private static final Charset CHARSET = Charset.forName("UTF-8");
-
   /** Hint: even after completion of a terminal operation on the returned {@link Stream}
    * the given {@link InputStream} is not necessarily closed. Therefore, use
    * try-with-resources statement on input stream.
@@ -38,6 +36,6 @@ public enum ReadLine {
    * @param inputStream
    * @return lines in given inputStream as stream of strings */
   public static Stream<String> of(InputStream inputStream) {
-    return of(inputStream, CHARSET);
+    return of(inputStream, StandardCharsets.UTF_8);
   }
 }

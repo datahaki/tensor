@@ -74,7 +74,7 @@ public enum Import {
   }
 
   /** @param file
-   * @param charset for instance Charset.forName("UTF-8")
+   * @param charset for instance StandardCharsets.UTF_8
    * @return instance of {@link Properties} with key-value pairs specified in given file
    * @throws FileNotFoundException
    * @throws IOException */

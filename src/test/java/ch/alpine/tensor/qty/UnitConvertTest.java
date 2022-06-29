@@ -120,6 +120,14 @@ class UnitConvertTest {
   }
 
   @Test
+  void testSome() {
+    Scalar scalar = Quantity.of(3, "deg");
+    Scalar degree = UnitConvert.SI().to("deg").apply(scalar);
+    ExactScalarQ.require(degree);
+    assertEquals(scalar, degree);
+  }
+
+  @Test
   void testNaNToPerc() {
     Scalar scalar = UnitConvert.SI().to("%").apply(DoubleScalar.INDETERMINATE);
     assertEquals(scalar.toString(), Quantity.of(DoubleScalar.INDETERMINATE, "%").toString());
