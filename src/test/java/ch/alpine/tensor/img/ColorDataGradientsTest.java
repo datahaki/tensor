@@ -2,13 +2,11 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Objects;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -73,14 +71,15 @@ class ColorDataGradientsTest {
   @Test
   void testStrict() {
     int count = 0;
-    for (ColorDataGradients colorDataGradients : ColorDataGradients.values()) {
-      Tensor tableRgba = colorDataGradients.getTableRgba();
-      if (Objects.nonNull(tableRgba)) {
+    for (ColorDataGradients colorDataGradients : ColorDataGradients.values())
+      try {
+        Tensor tableRgba = colorDataGradients.getTableRgba();
         LinearColorDataGradient.of(tableRgba);
         ++count;
+      } catch (Exception exception) {
+        // ---
       }
-    }
-    assertTrue(33 <= count);
+    assertTrue(34 <= count);
   }
 
   @Test
@@ -92,8 +91,8 @@ class ColorDataGradientsTest {
 
   @Test
   void testGrayscaleTable() {
-    assertNull(ColorDataGradients.HUE.getTableRgba());
-    assertNull(ColorDataGradients.GRAYSCALE.getTableRgba());
+    assertThrows(RuntimeException.class, () -> ColorDataGradients.HUE.getTableRgba());
+    assertThrows(RuntimeException.class, () -> ColorDataGradients.GRAYSCALE.getTableRgba());
   }
 
   @ParameterizedTest

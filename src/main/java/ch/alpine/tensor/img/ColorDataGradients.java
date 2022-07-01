@@ -122,8 +122,8 @@ public enum ColorDataGradients implements ColorDataGradient {
     return colorDataGradient.deriveWithOpacity(opacity);
   }
 
-  /** @return n x 4 table with entries between 0 and 255, or null
-   * if this color data gradient is not backed by such a table */
+  /** @return n x 4 table with entries between 0 and 255
+   * @throws Exception if this color data gradient is not backed by such a table */
   public Tensor getTableRgba() {
     return ResourceData.of("/ch/alpine/tensor/img/colorscheme/" + name().toLowerCase() + ".csv");
   }

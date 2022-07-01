@@ -146,8 +146,8 @@ class CacheTest {
     public String apply(Tensor t) {
       try {
         Thread.sleep(1);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
+      } catch (InterruptedException interruptedException) {
+        throw new RuntimeException(interruptedException);
       }
       ++count;
       return t.toString();

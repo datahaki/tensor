@@ -38,39 +38,43 @@ public enum ResourceData {
    * Interpolation interpolation = LinearInterpolation.of(ResourceData.of("/colorscheme/classic.csv"));
    * 
    * @param string as path to resource
-   * @return imported tensor, or null if resource could not be loaded */
+   * @return imported tensor
+   * @throws Exception if resource could not be loaded */
   public static Tensor of(String string) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
       return ImportHelper.of(new Filename(string), inputStream);
     } catch (Exception exception) {
-      return null;
+      throw new RuntimeException(exception);
     }
   }
 
   /** @param string as path to resource
-   * @return imported object, or null if resource could not be loaded */
+   * @return imported object
+   * @throws Exception if resource could not be loaded */
   public static <T> T object(String string) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
       return ImportHelper.object(inputStream);
     } catch (Exception exception) {
-      return null;
+      throw new RuntimeException(exception);
     }
   }
 
   /** @param string as path to resource
-   * @return imported properties, or null if resource could not be loaded */
+   * @return imported properties
+   * @throws Exception if resource could not be loaded */
   public static Properties properties(String string, Charset charset) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
       try (Reader reader = new InputStreamReader(inputStream, charset)) {
         return ImportHelper.properties(reader);
       }
     } catch (Exception exception) {
-      return null;
+      throw new RuntimeException(exception);
     }
   }
 
   /** @param string
-   * @return instance of {@link Properties} from parsing resource in UTF-8 encoding */
+   * @return instance of {@link Properties} from parsing resource in UTF-8 encoding
+   * @throws Exception if resource could not be loaded */
   public static Properties properties(String string) {
     return properties(string, StaticHelper.CHARSET);
   }
@@ -79,12 +83,13 @@ public enum ResourceData {
    * image is needed as a {@link Tensor}, rather use {@link #of(String)}
    * 
    * @param string as path to resource
-   * @return imported image, or null if resource could not be loaded */
+   * @return imported image
+   * @throws Exception if resource could not be loaded */
   public static BufferedImage bufferedImage(String string) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
       return ImageIO.read(inputStream);
     } catch (Exception exception) {
-      return null;
+      throw new RuntimeException(exception);
     }
   }
 
@@ -92,12 +97,13 @@ public enum ResourceData {
    * of strings would leave the file open until the stream is processed.
    * 
    * @param string
-   * @return list of lines in resource or null if resource could not be loaded */
+   * @return list of lines in resource
+   * @throws Exception if resource could not be loaded */
   public static List<String> lines(String string) {
     try (InputStream inputStream = ResourceData.class.getResourceAsStream(string)) {
       return ReadLine.of(inputStream).collect(Collectors.toList());
     } catch (Exception exception) {
-      return null;
+      throw new RuntimeException(exception);
     }
   }
 }

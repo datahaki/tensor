@@ -22,7 +22,7 @@ class HannWindowTest {
     ScalarUnaryOperator suo = HannWindow.of(RealScalar.of(0.8));
     Tolerance.CHOP.requireClose( //
         suo.apply(RealScalar.of(0.4)), //
-        RealScalar.of(0.6381966011250106));
+        RealScalar.of(0.6381966011250106)); // == GOLDEN_ANGLE + 0.3
     Tolerance.CHOP.requireClose( //
         suo.apply(RealScalar.of(0.5)), //
         RealScalar.of(0.6));
