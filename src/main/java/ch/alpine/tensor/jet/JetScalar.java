@@ -44,12 +44,13 @@ import ch.alpine.tensor.sca.tri.TrigonometryInterface;
  * 
  * automatic differentiation
  * 
- * The JetScalar is used to test the consistency between the {@link CDF} and {@link PDF}
+ * Applications:
+ * JetScalar is used to test the consistency between the {@link CDF} and {@link PDF}
  * of {@link UnivariateDistribution}s.
+ * JetScalar validates Hermite subdivision in repo sophus.
  * 
  * @implSpec
  * This class is immutable and thread-safe. */
-// TODO TENSOR JET general makeover and more tests
 public class JetScalar extends MultiplexScalar implements //
     AbsInterface, ExpInterface, LogInterface, PowerInterface, //
     SignInterface, SqrtInterface, TrigonometryInterface, //
@@ -62,11 +63,15 @@ public class JetScalar extends MultiplexScalar implements //
     return new JetScalar(VectorQ.require(vector).copy());
   }
 
-  // TODO TENSOR JET important: Distinguish between constants with value js == {v,0,...}
-  // ... and variables with value js == {v,1,0,...}
-  /** @param scalar
+  /** constructor for variables
+   * 
+   * Remark: do not use constructor for constants
+   * which would have the form J{x, 0, 0, 0, ...}
+   * 
+   * @param scalar x
    * @param n strictly positive
-   * @return J{scalar, 1, 0, 0, ...} */
+   * @return vector {f[x], f'[x], f''[x], ...} where f = identity therefore
+   * J{x, 1, 0, 0, ...} */
   public static JetScalar of(Scalar scalar, int n) {
     if (scalar instanceof JetScalar)
       throw TensorRuntimeException.of(scalar);

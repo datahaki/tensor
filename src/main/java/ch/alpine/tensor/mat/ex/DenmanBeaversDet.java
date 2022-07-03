@@ -44,6 +44,7 @@ import ch.alpine.tensor.sca.pow.Power;
     Tensor id = StaticHelper.IDENTITY_MATRIX.apply(n);
     Tensor id2 = id.multiply(HALF);
     ScalarUnaryOperator power = Power.function(RationalScalar.of(-1, n << 1));
+    // Incomplete square root cascade
     for (; count < MAX_ITERATIONS; ++count) {
       /** the publication suggests to use |Det(mk)^(-1/2n)|
        * which would just take a detour via complex numbers!? */
@@ -72,8 +73,7 @@ import ch.alpine.tensor.sca.pow.Power;
     return Inverse.of(yk);
   }
 
-  // TODO TENSOR DOC what is mk?
-  /** @return */
+  /** @return M_k from p.1118 */
   public Tensor mk() {
     return mk;
   }

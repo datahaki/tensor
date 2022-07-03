@@ -29,6 +29,12 @@ class UnitaryMatrixQTest {
   }
 
   @Test
+  void testNonSquare() {
+    assertFalse(UnitaryMatrixQ.of(HilbertMatrix.of(2, 3)));
+    assertFalse(UnitaryMatrixQ.of(HilbertMatrix.of(3, 2)));
+  }
+
+  @Test
   void testFourier() {
     assertTrue(UnitaryMatrixQ.of(FourierMatrix.of(11)));
   }

@@ -20,14 +20,16 @@ import ch.alpine.tensor.sca.pow.Power;
  * 
  * @see DirichletDistribution */
 public class BetaDistribution implements Distribution, MeanInterface, PDF, VarianceInterface, Serializable {
-  /** @param a1 positive
+  /** Remark:
+   * for a1 == 1 OR a2 == 1 the distribution does not require the beta function
+   * 
+   * @param a1 positive
    * @param a2 positive
    * @return */
   public static Distribution of(Scalar a1, Scalar a2) {
     if (Scalars.lessEquals(a1, RealScalar.ZERO) || //
         Scalars.lessEquals(a2, RealScalar.ZERO))
       throw TensorRuntimeException.of(a1, a2);
-    // TODO TENSOR PDF for a1 == 1 OR a2 == 1 the distribution does not require the beta function
     return new BetaDistribution(a1, a2);
   }
 

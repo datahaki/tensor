@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
@@ -24,6 +26,7 @@ import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
+import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.AbsSquared;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
@@ -170,6 +173,20 @@ class JetScalarTest {
   @Test
   void testMatrixFail() {
     assertThrows(TensorRuntimeException.class, () -> JetScalar.of(HilbertMatrix.of(3)));
+  }
+
+  @Test
+  void testPolynomial() {
+    Polynomial p0 = Polynomial.of(Tensors.vector(2, -3, -2, 5, -2, -1));
+    Polynomial p1 = p0.derivative();
+    Polynomial p2 = p1.derivative();
+    List<Polynomial> ps = List.of(p0, p1, p2);
+    Scalar x = RealScalar.of(4);
+    Tensor fs = Tensor.of(ps.stream().map(p -> p.apply(x)));
+    JetScalar xj = JetScalar.of(x, 3);
+    JetScalar fj = (JetScalar) p0.apply(xj);
+    assertEquals(fs, fj.vector());
+    ExactScalarQ.require(fj);
   }
 
   @Test

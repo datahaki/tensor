@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -30,12 +29,12 @@ import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
+import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.TrapezoidalDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
 
@@ -95,9 +94,7 @@ class GramSchmidtTest {
 
   @Test
   void testComplex() {
-    Tensor re = RandomVariate.of(NormalDistribution.standard(), 5, 3);
-    Tensor im = RandomVariate.of(NormalDistribution.standard(), 5, 3);
-    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
+    Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, 5, 3);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, res);
@@ -106,9 +103,7 @@ class GramSchmidtTest {
 
   @Test
   void testComplexLarge() {
-    Tensor re = RandomVariate.of(NormalDistribution.standard(), 100, 20);
-    Tensor im = RandomVariate.of(NormalDistribution.standard(), 100, 20);
-    Tensor matrix = Entrywise.with(ComplexScalar::of).apply(re, im);
+    Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, 100, 20);
     QRDecomposition qrDecomposition = GramSchmidt.of(matrix);
     Tensor res = qrDecomposition.getQ().dot(qrDecomposition.getR());
     Tolerance.CHOP.requireClose(matrix, res);
@@ -171,6 +166,7 @@ class GramSchmidtTest {
     Tensor pinv1 = gramSchmidt.pseudoInverse();
     Tensor pinv2 = PseudoInverse.of(SingularValueDecomposition.of(matrix));
     pinv1.add(pinv2);
+    UnitaryMatrixQ.require(gramSchmidt.getQConjugateTranspose());
   }
 
   @Test

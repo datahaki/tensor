@@ -26,6 +26,8 @@ import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.TensorComparator;
+import ch.alpine.tensor.ext.ArgMax;
+import ch.alpine.tensor.ext.ArgMin;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.MergeIllegal;
 import ch.alpine.tensor.ext.PackageTestAccess;
@@ -192,6 +194,34 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     Builder<Tensor> builder = Stream.builder();
     cycleInterate(builder);
     return Tensor.of(builder.build());
+  }
+
+  /** inspired by
+   * <a href="https://reference.wolfram.com/language/ref/PermutationMin.html">PermutationMin</a>
+   * 
+   * @return */
+  public int min() {
+    return navigableMap.isEmpty() //
+        ? ArgMin.EMPTY
+        : navigableMap.firstKey();
+  }
+
+  /** inspired by
+   * <a href="https://reference.wolfram.com/language/ref/PermutationMax.html">PermutationMax</a>
+   * 
+   * @return */
+  public int max() {
+    return navigableMap.isEmpty() //
+        ? ArgMax.EMPTY
+        : navigableMap.lastKey();
+  }
+
+  /** inspired by
+   * <a href="https://reference.wolfram.com/language/ref/PermutationLength.html">PermutationLength</a>
+   * 
+   * @return */
+  public int length() {
+    return navigableMap.size();
   }
 
   @Override // from Comparable

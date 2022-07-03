@@ -40,6 +40,7 @@ import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Rationalize;
+import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
@@ -208,9 +209,7 @@ class InfluenceMatrixTest {
 
   @Test
   void testComplex5x3() {
-    Tensor re = RandomVariate.of(NormalDistribution.standard(), 5, 3);
-    Tensor im = RandomVariate.of(NormalDistribution.standard(), 5, 3);
-    Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im);
+    Tensor design = RandomVariate.of(ComplexNormalDistribution.STANDARD, 5, 3);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(5));
     Tensor matrix = influenceMatrix.matrix();
@@ -234,9 +233,7 @@ class InfluenceMatrixTest {
 
   @Test
   void testComplex3x5() {
-    Tensor re = RandomVariate.of(NormalDistribution.standard(), 3, 5);
-    Tensor im = RandomVariate.of(NormalDistribution.standard(), 3, 5);
-    Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im);
+    Tensor design = RandomVariate.of(ComplexNormalDistribution.STANDARD, 3, 5);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(3));
     Tensor matrix = influenceMatrix.matrix();
@@ -246,9 +243,7 @@ class InfluenceMatrixTest {
 
   @Test
   void testComplex3x5Exact() {
-    Tensor re = RandomVariate.of(NormalDistribution.standard(), 3, 5);
-    Tensor im = RandomVariate.of(NormalDistribution.standard(), 3, 5);
-    Tensor design = Entrywise.with(ComplexScalar::of).apply(re, im).map(Rationalize._5);
+    Tensor design = RandomVariate.of(ComplexNormalDistribution.STANDARD, 3, 5).map(Rationalize._5);
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
     assertEquals(Imag.of(influenceMatrix.leverages()), Array.zeros(3));
     Tensor matrix = influenceMatrix.matrix();

@@ -4,8 +4,12 @@ package ch.alpine.tensor.spa;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-import org.junit.jupiter.api.Test;
+import java.util.concurrent.TimeUnit;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
@@ -39,5 +43,15 @@ class NnzTest {
     Tensor sparse = TestHelper.of(tensor);
     sparse.set(Tensors.vector(1, 2, 3, 4, 5), 1);
     sparse.toString();
+  }
+
+  @Test
+  @Timeout(value = 100, unit = TimeUnit.MILLISECONDS)
+  void testLarge() {
+    int size = 1000000;
+    Tensor tensor = SparseArray.of(RealScalar.ZERO, size, size, size);
+    tensor.set(RealScalar.ONE, size - 2, size - 3, size - 4);
+    int nnz = Nnz.of((SparseArray) tensor);
+    assertEquals(nnz, 1);
   }
 }

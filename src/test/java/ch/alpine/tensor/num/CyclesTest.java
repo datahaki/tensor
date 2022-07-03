@@ -17,9 +17,27 @@ import ch.alpine.tensor.ext.Serialization;
 
 class CyclesTest {
   @Test
+  void testZeroAllowed() throws ClassNotFoundException, IOException {
+    Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{0}}")));
+    assertEquals(cycles.min(), -1);
+    assertEquals(cycles.max(), -1);
+    assertEquals(cycles.length(), 0);
+  }
+
+  @Test
+  void testZeroOne() throws ClassNotFoundException, IOException {
+    Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{0, 1}}")));
+    assertEquals(cycles.min(), 0);
+    assertEquals(cycles.max(), 1);
+    assertEquals(cycles.length(), 2);
+  }
+
+  @Test
   void testSingleton() throws ClassNotFoundException, IOException {
     Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));
     assertEquals(cycles.toTensor(), Tensors.of(Tensors.vector(5, 9)));
+    assertEquals(cycles.min(), 5);
+    assertEquals(cycles.max(), 9);
   }
 
   @Test

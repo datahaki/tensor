@@ -28,12 +28,8 @@ public enum BinCounts {
     NavigableMap<Tensor, Long> navigableMap = Tally.sorted(Floor.of(vector));
     Sign.requirePositiveOrZero((Scalar) navigableMap.firstKey());
     int length = Scalars.intValueExact((Scalar) navigableMap.lastKey()) + 1;
-    return Tensors.vector(index -> {
-      Scalar key = RealScalar.of(index);
-      return navigableMap.containsKey(key) //
-          ? RealScalar.of(navigableMap.get(key))
-          : RealScalar.ZERO;
-    }, length);
+    return Tensors.vector(index -> //
+    RealScalar.of(navigableMap.getOrDefault(RealScalar.of(index), 0L)), length);
   }
 
   /** counts elements in the intervals:

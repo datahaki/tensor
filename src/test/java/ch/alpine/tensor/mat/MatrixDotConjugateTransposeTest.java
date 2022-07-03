@@ -7,13 +7,11 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
+import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.c.NormalDistribution;
-import ch.alpine.tensor.red.Entrywise;
 
 class MatrixDotConjugateTransposeTest {
   @Test
@@ -24,9 +22,7 @@ class MatrixDotConjugateTransposeTest {
 
   @Test
   void testDotIdentity() {
-    Tensor re = RandomVariate.of(NormalDistribution.standard(), 2, 4);
-    Tensor im = RandomVariate.of(NormalDistribution.standard(), 2, 4);
-    Tensor tensor = Entrywise.with(ComplexScalar::of).apply(re, im);
+    Tensor tensor = RandomVariate.of(ComplexNormalDistribution.STANDARD, 2, 4);
     Tensor result = MatrixDotConjugateTranspose.of(tensor);
     Tensor expect = Dot.of(tensor, ConjugateTranspose.of(tensor));
     Tolerance.CHOP.requireClose(result, expect);
