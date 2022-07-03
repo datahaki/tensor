@@ -57,7 +57,7 @@ public class LinearProgram implements Serializable {
         c.length());
   }
 
-  public static enum Objective {
+  public enum Objective {
     MIN, MAX;
 
     public Objective flip() {
@@ -65,7 +65,7 @@ public class LinearProgram implements Serializable {
     }
   }
 
-  public static enum ConstraintType {
+  public enum ConstraintType {
     EQUALS, LESS_EQUALS, GREATER_EQUALS;
 
     public ConstraintType flipInequality() {
@@ -77,7 +77,7 @@ public class LinearProgram implements Serializable {
     }
   }
 
-  public static enum Variables {
+  public enum Variables {
     NON_NEGATIVE, UNRESTRICTED;
   }
 

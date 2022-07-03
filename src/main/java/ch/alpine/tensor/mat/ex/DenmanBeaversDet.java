@@ -9,6 +9,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.re.GaussianElimination;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -71,11 +72,14 @@ import ch.alpine.tensor.sca.pow.Power;
     return Inverse.of(yk);
   }
 
-  public int count() {
-    return count;
-  }
-
+  // TODO TENSOR DOC what is mk?
+  /** @return */
   public Tensor mk() {
     return mk;
+  }
+
+  @PackageTestAccess
+  /* package */ int count() {
+    return count;
   }
 }

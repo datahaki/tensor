@@ -32,7 +32,7 @@ import ch.alpine.tensor.sca.exp.Log;
     return 1 << Ceiling.longValueExact(LOG2.apply(norm.add(norm.one())));
   }
 
-  /** @param matrix hermitian
+  /** @param eigensystem
    * @param scalarUnaryOperator applied to eigenvalues
    * @return resulting matrix is basis of given matrix
    * @throws Exception if input is not a real symmetric matrix */

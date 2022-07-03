@@ -13,6 +13,7 @@ import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.nrm.Matrix2Norm;
 import ch.alpine.tensor.qty.Quantity;
+import ch.alpine.tensor.sca.InvertUnlessZero;
 import ch.alpine.tensor.sca.N;
 
 /** implementation also operates on matrices with mixed units, for example:
@@ -38,7 +39,7 @@ import ch.alpine.tensor.sca.N;
     this.matrix = matrix;
   }
 
-  /** @return */
+  /** @return pseudo inverse of given matrix */
   public Tensor pseudoInverse() {
     Scalar sigma = N.DOUBLE.apply(Matrix2Norm.bound(matrix.map(Unprotect::withoutUnit)));
     FiniteScalarQ.require(sigma); // fail fast
@@ -62,6 +63,8 @@ import ch.alpine.tensor.sca.N;
     return ai.subtract(dots).add(ai);
   }
 
+  /** UnitNegate also appears in {@link InvertUnlessZero}
+   * yet we do not place the function in the global scope */
   private static enum UnitNegate implements ScalarUnaryOperator {
     FUNCTION;
 

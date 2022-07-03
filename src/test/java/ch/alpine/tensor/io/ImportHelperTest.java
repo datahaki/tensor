@@ -18,6 +18,9 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Flatten;
+import ch.alpine.tensor.alg.OrderedQ;
+import ch.alpine.tensor.red.Mean;
 import ch.alpine.tensor.sca.Unitize;
 
 class ImportHelperTest {
@@ -34,6 +37,16 @@ class ImportHelperTest {
     Tensor tensor2 = tensor.get(Tensor.ALL, Tensor.ALL, 3);
     Tensor units = Unitize.of(tensor2);
     assertEquals(units.flatten(-1).reduce(Tensor::add).get(), RealScalar.of(9));
+  }
+
+  @Test
+  void testTiff() {
+    Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/rgb14x11.tiff");
+    assertEquals(Dimensions.of(tensor), Arrays.asList(11, 14, 4));
+    Tensor rgba = Flatten.of(tensor, 1);
+    assertEquals(Dimensions.of(rgba), Arrays.asList(11 * 14, 4));
+    Tensor mean = Mean.of(rgba);
+    OrderedQ.require(mean);
   }
 
   @Test

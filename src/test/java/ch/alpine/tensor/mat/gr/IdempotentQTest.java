@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.UnitVector;
+import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
 class IdempotentQTest {
@@ -17,6 +18,11 @@ class IdempotentQTest {
   void testSimple() {
     Tensor matrix = Tensors.of(UnitVector.of(2, 1), UnitVector.of(2, 1));
     assertTrue(IdempotentQ.of(matrix));
+  }
+
+  @Test
+  void testFalse() {
+    assertFalse(IdempotentQ.of(DiagonalMatrix.of(1, 2)));
     assertFalse(IdempotentQ.of(HilbertMatrix.of(2, 3)));
   }
 

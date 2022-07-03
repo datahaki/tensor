@@ -206,6 +206,12 @@ class MatrixExpTest {
   }
 
   @Test
+  void testSparse() {
+    int n = 3;
+    assertEquals(MatrixExp.of(IdentityMatrix.sparse(n)), MatrixExp.of(IdentityMatrix.of(n)));
+  }
+
+  @Test
   void testFail() {
     assertThrows(IllegalArgumentException.class, () -> MatrixExp.of(Array.zeros(4, 3)));
     assertThrows(IllegalArgumentException.class, () -> MatrixExp.of(Array.zeros(3, 4)));

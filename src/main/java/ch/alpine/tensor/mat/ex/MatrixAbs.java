@@ -11,10 +11,16 @@ import ch.alpine.tensor.sca.Abs;
  * by Gilbert Strang, 2019 */
 public enum MatrixAbs {
   ;
+  /** @param matrix
+   * @return matrix with eigenvalues as absolute values of eigenvalues of given matrix
+   * @see Abs */
   public static Tensor ofSymmetric(Tensor matrix) {
     return StaticHelper.mapEv(Eigensystem.ofSymmetric(matrix, Tolerance.CHOP), Abs.FUNCTION);
   }
 
+  /** @param matrix
+   * @return matrix with eigenvalues as absolute values of eigenvalues of given matrix
+   * @see Abs */
   public static Tensor ofHermitian(Tensor matrix) {
     return StaticHelper.mapEv(Eigensystem.ofHermitian(matrix, Tolerance.CHOP), Abs.FUNCTION);
   }
