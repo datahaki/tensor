@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.spa.SparseArray;
 
 /** utility to exchange data with Wolfram Mathematica
  * 
@@ -39,9 +40,16 @@ public enum MathematicaFormat {
   /** @param tensor
    * @return strings parsed by Mathematica as given tensor */
   public static Stream<String> of(Tensor tensor) {
-    String string = tensor.toString() //
-        .replace(EXPONENT_JAVA, EXPONENT_MATH) //
-        .replace("}, {", "},\n{"); // <- introduce new line
+    final String string;
+    if (tensor instanceof SparseArray sparseArray)
+      string = sparseArray.toString(1) //
+          .replace(EXPONENT_JAVA, EXPONENT_MATH) //
+          .replace(", {", ",\n{"); // <- introduce new line
+    else
+      // TODO TENSOR does not handle nested SparseArray`s
+      string = tensor.toString() //
+          .replace(EXPONENT_JAVA, EXPONENT_MATH) //
+          .replace("}, {", "},\n{"); // <- introduce new line
     return Stream.of(string.split("\n"));
   }
 

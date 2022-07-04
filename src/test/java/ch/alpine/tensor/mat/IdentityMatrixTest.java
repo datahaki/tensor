@@ -13,7 +13,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.ext.Timing;
 import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.lie.LehmerTensor;
 import ch.alpine.tensor.mat.gr.IdempotentQ;
@@ -37,9 +36,7 @@ class IdentityMatrixTest {
     int n = 7;
     Tensor matrix = IdentityMatrix.sparse(n);
     assertInstanceOf(SparseArray.class, matrix);
-    Timing timing0 = Timing.started();
     Tensor square = matrix.dot(matrix);
-    timing0.stop();
     assertInstanceOf(SparseArray.class, square);
     assertEquals(square, matrix);
     assertEquals(square, IdentityMatrix.of(n));

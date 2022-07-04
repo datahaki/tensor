@@ -7,8 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.lie.LeviCivitaTensor;
+import ch.alpine.tensor.mat.IdentityMatrix;
 
 class MathematicaFormatTest {
   @Test
@@ -106,5 +110,21 @@ class MathematicaFormatTest {
     assertTrue(tensor.stream().anyMatch(scalar -> scalar instanceof DecimalScalar));
     checkNonString(tensor);
     assertEquals(tensor.toString(), Put.string(tensor));
+  }
+
+  @Test
+  void testSparse() {
+    Tensor sparse = LeviCivitaTensor.of(3);
+    List<String> list = MathematicaFormat.of(sparse).collect(Collectors.toList());
+    assertEquals(list.get(0), "SparseArray[{{1, 2, 3}->1,");
+  }
+
+  @Test
+  void testSparseNested() {
+    Tensor tensor = Tensors.fromString("{{2, 3.123+3*I, 34.1231}, {556, 3/456, -323/2, {3, 8.45`}}}");
+    tensor.set(IdentityMatrix.sparse(3), 0, 2);
+    List<String> list = MathematicaFormat.of(tensor.unmodifiable()).collect(Collectors.toList());
+    assertFalse(list.isEmpty());
+    // list.forEach(System.out::println);
   }
 }

@@ -2,6 +2,7 @@
 package ch.alpine.tensor.spa;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -21,5 +22,11 @@ class SparseArrayToStringTest {
   @Test
   void testVisibility() {
     assertEquals(SparseArrayToString.class.getModifiers() & 1, 0);
+  }
+
+  @Test
+  void testFail() {
+    assertThrows(Exception.class, () -> new SparseArrayToString(-1));
+    assertThrows(Exception.class, () -> new SparseArrayToString(2));
   }
 }

@@ -310,9 +310,16 @@ public class SparseArray extends AbstractTensor implements Serializable {
     };
   }
 
+  /** @param ofs 0, or 1 for Mathematica index convention
+   * @return
+   * @throws Exception if ofs is outside valid range */
+  public String toString(int ofs) {
+    return "SparseArray" + '[' + visit(new SparseArrayToString(ofs)) + ", " + Tensors.vector(size) + ", " + fallback + ']';
+  }
+
   @Override // from Object
   public String toString() {
-    return "SparseArray" + '[' + visit(new SparseArrayToString()) + ", " + Tensors.vector(size) + ", " + fallback + ']';
+    return toString(0);
   }
 
   /** @param sparseEntryVisitor

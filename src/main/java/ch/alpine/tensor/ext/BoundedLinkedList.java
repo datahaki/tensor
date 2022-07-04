@@ -8,8 +8,13 @@ import java.util.LinkedList;
 
 /** @param <E> the type of elements held in this collection
  * 
+ * Applications:
+ * {@link BoundedLinkedList} is used in FIR, and IIR filters
+ * in repository sophus.
+ * 
  * implements {@link Serializable}
  * 
+ * @implSpec
  * implementation is not thread safe */
 public class BoundedLinkedList<E> extends LinkedList<E> {
   private final int maxSize;
