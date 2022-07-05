@@ -3,8 +3,6 @@
 package ch.alpine.tensor;
 
 import java.math.BigDecimal;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.ext.Cache;
@@ -14,11 +12,6 @@ import ch.alpine.tensor.sca.tri.ArcTan;
 
 /* package */ enum StaticHelper {
   ;
-  private static final String OPENING_BRACKET_STRING = Character.toString(Tensor.OPENING_BRACKET);
-  private static final String CLOSING_BRACKET_STRING = Character.toString(Tensor.CLOSING_BRACKET);
-  public static final Collector<CharSequence, ?, String> EMBRACE = //
-      Collectors.joining(", ", OPENING_BRACKET_STRING, CLOSING_BRACKET_STRING);
-  // ---
   /** code from java.lang.Double */
   private static final String Digits = "(\\p{Digit}+)";
   private static final String HexDigits = "(\\p{XDigit}+)";

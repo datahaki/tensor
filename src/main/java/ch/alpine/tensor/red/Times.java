@@ -1,8 +1,8 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import java.util.Arrays;
 import java.util.function.BinaryOperator;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
@@ -59,7 +59,7 @@ public enum Times {
   public static Tensor of(Tensor... tensors) {
     if (tensors.length == 1)
       return tensors[0].copy();
-    return Stream.of(tensors).reduce(BINARY_OPERATOR).orElse(RealScalar.ONE);
+    return Arrays.stream(tensors).reduce(BINARY_OPERATOR).orElse(RealScalar.ONE);
   }
 
   /** @param a
@@ -73,6 +73,6 @@ public enum Times {
    * @param scalars
    * @return product of scalars, or {@link RealScalar#ONE} if no scalars are present */
   public static Scalar of(Scalar... scalars) {
-    return Stream.of(scalars).reduce(Scalar::multiply).orElse(RealScalar.ONE);
+    return Arrays.stream(scalars).reduce(Scalar::multiply).orElse(RealScalar.ONE);
   }
 }

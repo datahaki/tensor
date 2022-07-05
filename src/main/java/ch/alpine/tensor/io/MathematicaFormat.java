@@ -1,9 +1,12 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import java.util.Arrays;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.spa.SparseArray;
@@ -34,23 +37,28 @@ import ch.alpine.tensor.spa.SparseArray;
  * </pre> */
 public enum MathematicaFormat {
   ;
+  private static final String OPENING_BRACKET_STRING = Character.toString(Tensor.OPENING_BRACKET);
+  private static final String CLOSING_BRACKET_STRING = Character.toString(Tensor.CLOSING_BRACKET);
+  public static final Collector<CharSequence, ?, String> EMBRACE = //
+      Collectors.joining(", ", OPENING_BRACKET_STRING, CLOSING_BRACKET_STRING);
   private static final String EXPONENT_JAVA = "E";
   private static final String EXPONENT_MATH = "*^";
+
+  private static String recur(Tensor tensor) {
+    if (tensor instanceof Scalar)
+      return tensor.toString();
+    if (tensor instanceof SparseArray sparseArray)
+      return sparseArray.toString(1);
+    return tensor.stream().map(MathematicaFormat::recur).collect(EMBRACE);
+  }
 
   /** @param tensor
    * @return strings parsed by Mathematica as given tensor */
   public static Stream<String> of(Tensor tensor) {
-    final String string;
-    if (tensor instanceof SparseArray sparseArray)
-      string = sparseArray.toString(1) //
-          .replace(EXPONENT_JAVA, EXPONENT_MATH) //
-          .replace(", {", ",\n{"); // <- introduce new line
-    else
-      // TODO TENSOR does not handle nested SparseArray`s
-      string = tensor.toString() //
-          .replace(EXPONENT_JAVA, EXPONENT_MATH) //
-          .replace("}, {", "},\n{"); // <- introduce new line
-    return Stream.of(string.split("\n"));
+    return Arrays.stream(recur(tensor) //
+        .replace(EXPONENT_JAVA, EXPONENT_MATH) //
+        .replace(", {", ",\n{") // <- introduce new line
+        .split("\n"));
   }
 
   /** @param stream of strings of Mathematica encoded tensor

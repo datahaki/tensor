@@ -2,10 +2,10 @@
 // adapted by jph
 package ch.alpine.tensor.opt.hun;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -29,8 +29,8 @@ import ch.alpine.tensor.red.Min;
 
   public HungarianAlgorithm(Tensor _matrix) {
     super(_matrix);
-    Scalar[] xLabel = Stream.of(matrix) //
-        .map(vector -> Stream.of(vector).reduce(Min::of).orElseThrow()) //
+    Scalar[] xLabel = Arrays.stream(matrix) //
+        .map(vector -> Arrays.stream(vector).reduce(Min::of).orElseThrow()) //
         .toArray(Scalar[]::new);
     hungarianAlgorithmTree = new HungarianAlgorithmTree(xLabel, yMatch, matrix);
     setInitialMatching(xLabel);

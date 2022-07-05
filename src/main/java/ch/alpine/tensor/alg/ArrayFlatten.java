@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.stream.Stream;
+import java.util.Arrays;
 
 import ch.alpine.tensor.Tensor;
 
@@ -25,7 +25,7 @@ public enum ArrayFlatten {
    * @param tensors
    * @return */
   public static Tensor of(Tensor[][] tensors) {
-    return Tensor.of(Stream.of(tensors) //
+    return Tensor.of(Arrays.stream(tensors) //
         .map(tensor -> Join.of(1, tensor)) //
         .flatMap(Tensor::stream));
   }

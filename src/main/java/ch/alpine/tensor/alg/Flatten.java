@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
-import java.util.stream.Stream;
+import java.util.Arrays;
 
 import ch.alpine.tensor.Tensor;
 
@@ -33,7 +33,7 @@ public enum Flatten {
   public static Tensor of(Tensor... tensors) {
     // input and output share references to scalar instances only
     // therefore Tensor::copy is not necessary
-    return Tensor.of(Stream.of(tensors).flatMap(tensor -> tensor.flatten(-1)));
+    return Tensor.of(Arrays.stream(tensors).flatMap(tensor -> tensor.flatten(-1)));
   }
 
   /** Special case of {@link Flatten#of(Tensor...)}

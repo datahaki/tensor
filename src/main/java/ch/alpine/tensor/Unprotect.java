@@ -1,10 +1,10 @@
 // code by jph
 package ch.alpine.tensor;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.io.TableBuilder;
 import ch.alpine.tensor.qty.Quantity;
@@ -35,7 +35,7 @@ public enum Unprotect {
    * @return It That Must Not Be Described
    * @see Tensors#of(Tensor...) */
   public static Tensor byRef(Tensor... tensors) {
-    return Tensor.of(Stream.of(tensors));
+    return Tensor.of(Arrays.stream(tensors));
   }
 
   // ---

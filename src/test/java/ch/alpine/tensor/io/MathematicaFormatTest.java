@@ -123,7 +123,7 @@ class MathematicaFormatTest {
   void testSparseNested() {
     Tensor tensor = Tensors.fromString("{{2, 3.123+3*I, 34.1231}, {556, 3/456, -323/2, {3, 8.45`}}}");
     tensor.set(IdentityMatrix.sparse(3), 0, 2);
-    List<String> list = MathematicaFormat.of(tensor.unmodifiable()).collect(Collectors.toList());
+    List<String> list = MathematicaFormat.of(tensor).collect(Collectors.toList());
     assertFalse(list.isEmpty());
     // list.forEach(System.out::println);
   }
