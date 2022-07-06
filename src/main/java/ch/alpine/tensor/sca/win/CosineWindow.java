@@ -31,4 +31,9 @@ public class CosineWindow extends ParameterizedWindow {
   protected Scalar evaluate(Scalar x) {
     return power.apply(Cos.FUNCTION.apply(x.multiply(Pi.VALUE)));
   }
+
+  @Override
+  protected String title() {
+    return "CosineWindow";
+  }
 }

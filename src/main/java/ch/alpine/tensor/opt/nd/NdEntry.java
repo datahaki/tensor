@@ -27,6 +27,6 @@ public class NdEntry<V> implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s]", NdEntry.class.getSimpleName(), location, value);
+    return String.format("NdEntry[%s, %s]", location, value);
   }
 }

@@ -76,7 +76,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", InfluenceMatrix.class.getSimpleName(), Tensors.message(matrix()));
+    return String.format("InfluenceMatrix[%s]", Tensors.message(matrix()));
   }
 
   /** @return whether image(vector) is computed as the product vector . design . d_pinv,

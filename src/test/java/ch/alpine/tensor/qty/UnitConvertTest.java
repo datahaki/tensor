@@ -136,6 +136,12 @@ class UnitConvertTest {
   }
 
   @Test
+  void test_kW_over_W() {
+    Scalar scalar = Quantity.of(1, "kW*W^-1");
+    System.out.println(UnitSystem.SI().apply(scalar));
+  }
+
+  @Test
   void testFail() {
     Scalar mass = Quantity.of(200, "g"); // gram
     Scalar a = Quantity.of(981, "cm*s^-2");

@@ -29,4 +29,9 @@ public class WelchWindow extends ParameterizedWindow {
     Scalar x_a = x.divide(alpha);
     return RealScalar.ONE.subtract(x_a.multiply(x_a).multiply(_4));
   }
+
+  @Override
+  protected String title() {
+    return "WelchWindow";
+  }
 }

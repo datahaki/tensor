@@ -37,8 +37,6 @@ import ch.alpine.tensor.mat.ConjugateTranspose;
 
   @Override // from Object
   public final String toString() {
-    return String.format("%s[%s]", //
-        QRDecomposition.class.getSimpleName(), //
-        Tensors.message(getQ(), getR()));
+    return String.format("QRDecomposition[%s]", Tensors.message(getQ(), getR()));
   }
 }

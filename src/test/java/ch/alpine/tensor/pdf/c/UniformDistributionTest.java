@@ -194,6 +194,12 @@ class UniformDistributionTest {
   }
 
   @Test
+  void testInfiniteFail() {
+    Clip clip = Clips.positive(Double.POSITIVE_INFINITY);
+    assertThrows(TensorRuntimeException.class, () -> UniformDistribution.of(clip));
+  }
+
+  @Test
   void testQuantileFail() {
     Distribution distribution = UniformDistribution.of(Quantity.of(3, "g"), Quantity.of(6, "g"));
     InverseCDF inverseCDF = InverseCDF.of(distribution);

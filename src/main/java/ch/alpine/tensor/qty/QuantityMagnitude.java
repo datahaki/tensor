@@ -87,7 +87,7 @@ public class QuantityMagnitude implements Serializable {
 
     @Override // from Object
     public String toString() {
-      return String.format("%s[%s, %s]", QuantityMagnitude.class.getSimpleName(), unitSystem, unit);
+      return String.format("QuantityMagnitude[%s, %s]", unitSystem, unit);
     }
   }
 }

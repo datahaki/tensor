@@ -175,6 +175,12 @@ class ClipsTest {
   }
 
   @Test
+  void testClipsCover() {
+    Clip clip3 = Clips.cover(Clips.interval(0, 1), Clips.interval(5, 6));
+    assertEquals(clip3, Clips.interval(0, 6));
+  }
+
+  @Test
   void testPositiveFail() {
     assertThrows(TensorRuntimeException.class, () -> Clips.positive(Quantity.of(-1, "kg")));
   }

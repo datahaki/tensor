@@ -62,7 +62,7 @@ public class CompatibleUnitQ implements Serializable {
 
     @Override // from Object
     public String toString() {
-      return String.format("%s[%s]", CompatibleUnitQ.class.getSimpleName(), base);
+      return String.format("CompatibleUnitQ[%s]", base);
     }
   }
 }

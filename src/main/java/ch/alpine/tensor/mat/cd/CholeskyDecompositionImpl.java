@@ -81,8 +81,6 @@ import ch.alpine.tensor.sca.Conjugate;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", //
-        CholeskyDecomposition.class.getSimpleName(), //
-        Tensors.message(diagonal(), getL()));
+    return String.format("CholeskyDecomposition[%s]", Tensors.message(diagonal(), getL()));
   }
 }

@@ -19,12 +19,15 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
         : RealScalar.ZERO;
   }
 
+  @Override // from Object
+  public final String toString() {
+    return String.format("%s[%s]", title(), alpha);
+  }
+
   /** @param x guaranteed to be in the interval [-1/2, 1/2]
    * @return */
   protected abstract Scalar evaluate(Scalar x);
 
-  @Override // from Object
-  public final String toString() {
-    return String.format("%s[%s]", getClass().getSimpleName(), alpha);
-  }
+  /** @return getClass().getSimpleName() */
+  protected abstract String title();
 }

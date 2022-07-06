@@ -155,8 +155,6 @@ import ch.alpine.tensor.sca.Sign;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", //
-        SingularValueDecomposition.class.getSimpleName(), //
-        Tensors.message(getU(), values(), getV()));
+    return String.format("SingularValueDecomposition[%s]", Tensors.message(getU(), values(), getV()));
   }
 }

@@ -38,4 +38,9 @@ import ch.alpine.tensor.itp.MitchellNetravaliKernel;
   protected Scalar evaluate(Scalar x) {
     return scalarUnaryOperator.apply(_4.multiply(x));
   }
+
+  @Override
+  protected String title() {
+    return "MitchellNetravaliFilter";
+  }
 }

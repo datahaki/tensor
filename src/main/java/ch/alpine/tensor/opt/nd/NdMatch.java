@@ -35,6 +35,6 @@ public class NdMatch<V> implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s, %s]", NdMatch.class.getSimpleName(), ndEntry, distance);
+    return String.format("NdMatch[%s, %s]", ndEntry, distance);
   }
 }

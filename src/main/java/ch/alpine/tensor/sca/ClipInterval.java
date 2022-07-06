@@ -88,6 +88,6 @@ import ch.alpine.tensor.TensorRuntimeException;
 
   @Override // from Object
   public final String toString() {
-    return String.format("%s[%s, %s]", Clip.class.getSimpleName(), min(), max());
+    return String.format("Clip[%s, %s]", min(), max());
   }
 }

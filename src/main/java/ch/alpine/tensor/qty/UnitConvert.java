@@ -72,7 +72,7 @@ public class UnitConvert implements Serializable {
 
     @Override // from Object
     public String toString() {
-      return String.format("%s[%s, %s]", UnitConvert.class.getSimpleName(), unitSystem, unit);
+      return String.format("UnitConvert[%s, %s]", unitSystem, unit);
     }
   }
 }
