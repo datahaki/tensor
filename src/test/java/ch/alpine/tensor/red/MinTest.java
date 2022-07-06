@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.MapThread;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
@@ -80,7 +80,7 @@ class MinTest {
   void testFail() {
     Scalar string = StringScalar.of("string");
     Scalar gauss = GaussScalar.of(1, 3);
-    assertThrows(TensorRuntimeException.class, () -> Min.of(string, gauss));
-    assertThrows(TensorRuntimeException.class, () -> Min.of(gauss, string));
+    assertThrows(Throw.class, () -> Min.of(string, gauss));
+    assertThrows(Throw.class, () -> Min.of(gauss, string));
   }
 }

@@ -14,8 +14,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -65,8 +65,8 @@ class TukeyWindowTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> TukeyWindow.FUNCTION.apply(Quantity.of(0, "s")));
-    assertThrows(TensorRuntimeException.class, () -> TukeyWindow.FUNCTION.apply(Quantity.of(2, "s")));
+    assertThrows(Throw.class, () -> TukeyWindow.FUNCTION.apply(Quantity.of(0, "s")));
+    assertThrows(Throw.class, () -> TukeyWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 
   @Test

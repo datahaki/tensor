@@ -5,7 +5,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.qty.Quantity;
 
 /** implementation consistent with Mathematica
@@ -55,7 +55,7 @@ import ch.alpine.tensor.qty.Quantity;
   public static Scalar require(Scalar scalar) {
     if (of(scalar))
       return scalar;
-    throw TensorRuntimeException.of(scalar);
+    throw Throw.of(scalar);
   }
 
   /** @param tensor

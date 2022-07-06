@@ -5,11 +5,11 @@ import java.io.Serializable;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ArrayFlatten;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
@@ -91,6 +91,6 @@ public final class LagrangeMultiplier implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("LagrangeMultiplier[%s]", Tensors.message(matrix));
+    return MathematicaFormat.of("LagrangeMultiplier", matrix);
   }
 }

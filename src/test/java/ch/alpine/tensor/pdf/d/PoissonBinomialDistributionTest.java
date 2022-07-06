@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -81,7 +81,7 @@ class PoissonBinomialDistributionTest {
 
   @Test
   void testFailInvalid() {
-    assertThrows(TensorRuntimeException.class, () -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, 2, 0)));
-    assertThrows(TensorRuntimeException.class, () -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, -1, 1)));
+    assertThrows(Throw.class, () -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, 2, 0)));
+    assertThrows(Throw.class, () -> PoissonBinomialDistribution.of(Tensors.vector(1, 1, 1, 1, -1, 1)));
   }
 }

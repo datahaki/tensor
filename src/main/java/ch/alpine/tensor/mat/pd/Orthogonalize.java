@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat.pd;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.PadRight;
@@ -60,7 +60,7 @@ public enum Orthogonalize {
     int k = matrix.length();
     int n = Unprotect.dimension1Hint(matrix);
     if (n < k) // case is forbidden to avoid confusion (despite functionally permissive)
-      throw TensorRuntimeException.of(matrix);
+      throw Throw.of(matrix);
     return k < n //
         ? PolarDecompositionSvd.pu(ConjugateTranspose.of(matrix)).getConjugateTransposeUnitary()
         : PolarDecompositionSvd.pu(matrix).getUnitaryWithDetOne();

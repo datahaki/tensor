@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Chop;
 
@@ -70,6 +70,6 @@ class SignedCurvature2DTest {
     Tensor a = Tensors.vector(1, 1, 0);
     Tensor b = Tensors.vector(1, 2, 1);
     Tensor c = Tensors.vector(1, 3, 2);
-    assertThrows(TensorRuntimeException.class, () -> SignedCurvature2D.of(a, b, c));
+    assertThrows(Throw.class, () -> SignedCurvature2D.of(a, b, c));
   }
 }

@@ -4,14 +4,10 @@ package ch.alpine.tensor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.alg.Numel;
 import ch.alpine.tensor.alg.Outer;
 import ch.alpine.tensor.io.StringScalar;
 
@@ -195,36 +191,5 @@ public enum Tensors {
   /** @return singleton instance of unmodifiable empty tensor */
   public static Tensor unmodifiableEmpty() {
     return UNMODIFIABLE_EMPTY;
-  }
-
-  // ---
-  private static final int MAX_NUMEL = 12;
-  private static final int MAX_LENGTH = 64;
-
-  /** @param tensors
-   * @return compact, possibly abbreviated expressions of given tensors */
-  public static String message(Tensor... tensors) {
-    return Arrays.stream(tensors).map(Tensors::format).collect(Collectors.joining("; "));
-  }
-
-  private static String format(Tensor tensor) {
-    if (Objects.isNull(tensor))
-      return "null";
-    return Numel.of(tensor) <= MAX_NUMEL //
-        ? formatContent(tensor)
-        : "T" + Dimensions.of(tensor);
-  }
-
-  /** function causes out of memory exception for large tensors
-   * and therefore should only be invoked for small tensors.
-   * 
-   * @param tensor
-   * @return */
-  private static String formatContent(Tensor tensor) {
-    String string = tensor.toString();
-    int length = string.length();
-    return MAX_LENGTH < length //
-        ? "T" + Dimensions.of(tensor) + "=" + string.substring(0, MAX_LENGTH) + " ..."
-        : string;
   }
 }

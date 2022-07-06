@@ -39,7 +39,7 @@ public class TukeyWindow extends ParameterizedWindow {
         : RationalScalar.HALF.add(RationalScalar.HALF.multiply(Sin.FUNCTION.apply(x.multiply(pi_a))));
   }
 
-  @Override
+  @Override // from ParameterizedWindow
   protected String title() {
     return "TukeyWindow";
   }

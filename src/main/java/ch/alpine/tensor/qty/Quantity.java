@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ArgInterface;
@@ -78,7 +78,7 @@ public interface Quantity extends Scalar, //
   static Scalar of(Scalar value, Unit unit) {
     if (value instanceof Quantity || //
         value instanceof StringScalar)
-      throw TensorRuntimeException.of(value);
+      throw Throw.of(value);
     return QuantityImpl.of( //
         Objects.requireNonNull(value), //
         unit);

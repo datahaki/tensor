@@ -14,7 +14,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.jet.DateTimeScalar;
@@ -82,14 +82,14 @@ class LaplaceDistributionTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
-    assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
-    assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+    assertThrows(Throw.class, () -> LaplaceDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    assertThrows(Throw.class, () -> LaplaceDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    assertThrows(Throw.class, () -> LaplaceDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
   @Test
   void testNegativeSigmaFail() {
     LaplaceDistribution.of(5, 1);
-    assertThrows(TensorRuntimeException.class, () -> LaplaceDistribution.of(5, -1));
+    assertThrows(Throw.class, () -> LaplaceDistribution.of(5, -1));
   }
 }

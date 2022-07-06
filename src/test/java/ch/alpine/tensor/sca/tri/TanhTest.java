@@ -11,7 +11,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.sca.Chop;
 
@@ -35,6 +35,6 @@ class TanhTest {
   @Test
   void testFail() {
     Scalar scalar = GaussScalar.of(3, 11);
-    assertThrows(TensorRuntimeException.class, () -> Tanh.of(scalar));
+    assertThrows(Throw.class, () -> Tanh.of(scalar));
   }
 }

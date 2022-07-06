@@ -8,6 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Clips;
@@ -102,6 +103,6 @@ public class DiscreteUniformDistribution extends AbstractDiscreteDistribution im
 
   @Override // from Object
   public String toString() {
-    return String.format("DiscreteUniformDistribution[%d, %d]", min, max);
+    return MathematicaFormat.of("DiscreteUniformDistribution", min, max);
   }
 }

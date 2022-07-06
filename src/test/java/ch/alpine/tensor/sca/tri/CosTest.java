@@ -11,7 +11,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -33,12 +33,12 @@ class CosTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> Cos.of(Quantity.of(1, "deg")));
+    assertThrows(Throw.class, () -> Cos.of(Quantity.of(1, "deg")));
   }
 
   @Test
   void testStringFail() {
     Scalar scalar = StringScalar.of("string");
-    assertThrows(TensorRuntimeException.class, () -> Cos.of(scalar));
+    assertThrows(Throw.class, () -> Cos.of(scalar));
   }
 }

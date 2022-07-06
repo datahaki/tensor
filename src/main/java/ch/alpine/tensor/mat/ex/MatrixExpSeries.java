@@ -3,7 +3,7 @@ package ch.alpine.tensor.mat.ex;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
@@ -34,6 +34,6 @@ import ch.alpine.tensor.sca.N;
       if (sum.equals(sum = sum.add(nxt)))
         return sum;
     }
-    throw TensorRuntimeException.of(matrix); // insufficient convergence
+    throw Throw.of(matrix); // insufficient convergence
   }
 }

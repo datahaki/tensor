@@ -4,6 +4,7 @@ package ch.alpine.tensor.pdf.d;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.itp.BernsteinBasis;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
@@ -87,6 +88,6 @@ public class BinomialDistribution extends EvaluatedDiscreteDistribution implemen
 
   @Override // from Object
   public String toString() {
-    return String.format("BinomialDistribution[%d, %s]", n, p);
+    return MathematicaFormat.of("BinomialDistribution", n, p);
   }
 }

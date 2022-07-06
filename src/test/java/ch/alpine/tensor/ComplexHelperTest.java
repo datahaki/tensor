@@ -97,7 +97,7 @@ class ComplexHelperTest {
     Scalar c = ComplexScalar.of(2, 3);
     Scalar q = Quantity.of(0, "V");
     // Mathematica 12 does not resolve this
-    assertThrows(TensorRuntimeException.class, () -> c.add(q));
+    assertThrows(Throw.class, () -> c.add(q));
   }
 
   @Test
@@ -161,14 +161,14 @@ class ComplexHelperTest {
   void testPlusQuantityFail() {
     Scalar c = ComplexScalar.of(2, 3);
     Scalar q = Quantity.of(1, "V");
-    assertThrows(TensorRuntimeException.class, () -> c.add(q));
+    assertThrows(Throw.class, () -> c.add(q));
   }
 
   @Test
   void testQuantityFail() {
     Scalar c = Quantity.of(3, "m");
     Scalar r = Pi.VALUE;
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(c, r));
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(r, c));
+    assertThrows(Throw.class, () -> ComplexScalar.of(c, r));
+    assertThrows(Throw.class, () -> ComplexScalar.of(r, c));
   }
 }

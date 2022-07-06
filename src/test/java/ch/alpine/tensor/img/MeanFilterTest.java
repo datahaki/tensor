@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 
 class MeanFilterTest {
   @Test
@@ -61,7 +61,7 @@ class MeanFilterTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> MeanFilter.of(RealScalar.of(3), 1));
+    assertThrows(Throw.class, () -> MeanFilter.of(RealScalar.of(3), 1));
   }
 
   @Test

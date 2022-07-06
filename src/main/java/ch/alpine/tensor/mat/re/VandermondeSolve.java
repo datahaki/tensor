@@ -4,8 +4,8 @@ package ch.alpine.tensor.mat.re;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.qty.LenientAdd;
 
@@ -47,7 +47,7 @@ public enum VandermondeSolve {
         t = xx.multiply(t).add(b);
       }
       if (Scalars.isZero(t))
-        throw TensorRuntimeException.of(x, q);
+        throw Throw.of(x, q);
       w.append(s.divide(t));
     }
     return w;

@@ -14,8 +14,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.GaussScalar;
@@ -86,7 +86,7 @@ class SortTest {
     Tensor vector = Tensors.of( //
         Quantity.of(0, "m"), Quantity.of(9, "m"), //
         Quantity.of(-3, "m"), Quantity.of(0, "s"), RealScalar.ZERO);
-    assertThrows(TensorRuntimeException.class, () -> Sort.of(vector));
+    assertThrows(Throw.class, () -> Sort.of(vector));
   }
 
   @Test
@@ -124,7 +124,7 @@ class SortTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Sort.of(RealScalar.of(3.12)));
+    assertThrows(Throw.class, () -> Sort.of(RealScalar.of(3.12)));
   }
 
   @Test

@@ -8,8 +8,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.KurtosisInterface;
@@ -41,7 +41,7 @@ public class LogNormalDistribution implements UnivariateDistribution, KurtosisIn
     if (mu instanceof RealScalar && //
         sigma instanceof RealScalar)
       return new LogNormalDistribution(mu, sigma);
-    throw TensorRuntimeException.of(mu, sigma);
+    throw Throw.of(mu, sigma);
   }
 
   /** @param mu any real number

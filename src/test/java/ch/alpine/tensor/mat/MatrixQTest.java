@@ -11,8 +11,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 
@@ -71,7 +71,7 @@ class MatrixQTest {
 
   @Test
   void testElseThrow() {
-    assertThrows(TensorRuntimeException.class, () -> MatrixQ.require(Tensors.vector(1, 2, 3)));
+    assertThrows(Throw.class, () -> MatrixQ.require(Tensors.vector(1, 2, 3)));
   }
 
   @Test
@@ -88,6 +88,6 @@ class MatrixQTest {
   @Test
   void testRequireSize() {
     MatrixQ.requireSize(IdentityMatrix.of(3), 3, 3);
-    assertThrows(TensorRuntimeException.class, () -> MatrixQ.requireSize(IdentityMatrix.of(3), 3, 4));
+    assertThrows(Throw.class, () -> MatrixQ.requireSize(IdentityMatrix.of(3), 3, 4));
   }
 }

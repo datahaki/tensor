@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
@@ -66,8 +66,8 @@ class SimplexMethodTest {
     lpd.requireFeasible(Tensors.vector(3, 4));
     lpd.requireFeasible(Tensors.vector(1, 3));
     lpd.requireFeasible(Tensors.vector(0, 1));
-    assertThrows(TensorRuntimeException.class, () -> lpd.requireFeasible(Tensors.vector(-3, 3)));
-    assertThrows(TensorRuntimeException.class, () -> lpd.requireFeasible(Tensors.vector(3, 3)));
+    assertThrows(Throw.class, () -> lpd.requireFeasible(Tensors.vector(-3, 3)));
+    assertThrows(Throw.class, () -> lpd.requireFeasible(Tensors.vector(3, 3)));
     Tensor xd = LinearProgramming.of(lpp);
     assertEquals(xp.dot(lpd.c), xd.dot(lpp.c));
   }
@@ -90,8 +90,8 @@ class SimplexMethodTest {
     lpd.requireFeasible(Tensors.vector(3, 4));
     lpd.requireFeasible(Tensors.vector(1, 3));
     lpd.requireFeasible(Tensors.vector(2, 0));
-    assertThrows(TensorRuntimeException.class, () -> lpd.requireFeasible(Tensors.vector(0, 0)));
-    assertThrows(TensorRuntimeException.class, () -> lpd.requireFeasible(Tensors.vector(3, 3)));
+    assertThrows(Throw.class, () -> lpd.requireFeasible(Tensors.vector(0, 0)));
+    assertThrows(Throw.class, () -> lpd.requireFeasible(Tensors.vector(3, 3)));
   }
 
   @Test
@@ -126,7 +126,7 @@ class SimplexMethodTest {
     // TestHelper.check(lpp, lpd);
     Tensor sols = SimplexCorners.of(lpd);
     assertEquals(sols, Tensors.empty());
-    assertThrows(TensorRuntimeException.class, () -> LinearProgramming.of(lpd));
+    assertThrows(Throw.class, () -> LinearProgramming.of(lpd));
   }
 
   // unbounded
@@ -138,7 +138,7 @@ class SimplexMethodTest {
         Objective.MAX, Tensors.vector(1, -1), //
         ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
     assertTrue(lpd.isCanonicDual());
-    assertThrows(TensorRuntimeException.class, () -> LinearProgramming.of(lpd));
+    assertThrows(Throw.class, () -> LinearProgramming.of(lpd));
   }
 
   @Test
@@ -202,7 +202,7 @@ class SimplexMethodTest {
     Tensor b = Tensors.vector(-10000, -30000);
     LinearProgram linearProgram = //
         LinearProgram.of(Objective.MIN, c, ConstraintType.LESS_EQUALS, m, b, Variables.NON_NEGATIVE);
-    assertThrows(TensorRuntimeException.class, () -> LinearProgramming.of(linearProgram));
+    assertThrows(Throw.class, () -> LinearProgramming.of(linearProgram));
     // MATLAB
     // A=[[-2, -7.5, -3];[-20, -5, -10]];
     // b=[-10000;-30000]

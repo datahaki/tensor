@@ -4,7 +4,7 @@ package ch.alpine.tensor.mat;
 import java.util.List;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ArrayQ;
 import ch.alpine.tensor.alg.Dimensions;
 
@@ -38,7 +38,7 @@ public enum MatrixQ {
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;
-    throw TensorRuntimeException.of(tensor);
+    throw Throw.of(tensor);
   }
 
   /** @param tensor
@@ -49,6 +49,6 @@ public enum MatrixQ {
   public static Tensor requireSize(Tensor tensor, int rows, int cols) {
     if (ofSize(tensor, rows, cols))
       return tensor;
-    throw TensorRuntimeException.of(tensor);
+    throw Throw.of(tensor);
   }
 }

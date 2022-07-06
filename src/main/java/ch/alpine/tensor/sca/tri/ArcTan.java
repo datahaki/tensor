@@ -7,7 +7,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.sca.exp.Log;
 
@@ -69,7 +69,7 @@ public enum ArcTan implements ScalarUnaryOperator {
     if (y instanceof ArcTanInterface arcTanInterface)
       return arcTanInterface.arcTan(x);
     // return FUNCTION.apply(y.divide(x));
-    throw TensorRuntimeException.of(x, y);
+    throw Throw.of(x, y);
   }
 
   /** @param x

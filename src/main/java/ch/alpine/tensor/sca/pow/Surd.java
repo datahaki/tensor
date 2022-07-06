@@ -4,6 +4,7 @@ package ch.alpine.tensor.sca.pow;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Sign;
 
 /** gives the real-valued n-th root of x
@@ -36,6 +37,6 @@ public class Surd implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return String.format("Surd[%d]", n);
+    return MathematicaFormat.of("Surd", n);
   }
 }

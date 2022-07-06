@@ -11,8 +11,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -85,6 +85,6 @@ class AngleVectorTest {
 
   @Test
   void testNullFail() {
-    assertThrows(TensorRuntimeException.class, () -> AngleVector.of(null));
+    assertThrows(Throw.class, () -> AngleVector.of(null));
   }
 }

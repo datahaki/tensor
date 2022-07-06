@@ -154,6 +154,6 @@ public interface Scalar extends Tensor {
    * equal numerically, for instance (double)2.0 == (int)2.
    * 
    * @return this representation as {@link Number}
-   * @throws TensorRuntimeException if scalar type does not support method */
+   * @throws Throw if scalar type does not support method */
   Number number();
 }

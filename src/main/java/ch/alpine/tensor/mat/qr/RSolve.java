@@ -3,8 +3,8 @@ package ch.alpine.tensor.mat.qr;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.UpperTriangularize;
@@ -50,6 +50,6 @@ import ch.alpine.tensor.sca.Abs;
     Scalar min = (Scalar) diag.stream().reduce(Min::of).orElseThrow();
     if (Tolerance.CHOP.isZero(min) || //
         Tolerance.CHOP.isZero(min.divide(max)))
-      throw TensorRuntimeException.of(max, min);
+      throw Throw.of(max, min);
   }
 }

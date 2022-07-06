@@ -5,7 +5,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.FiniteScalarQ;
@@ -51,7 +51,7 @@ import ch.alpine.tensor.sca.N;
     for (int count = 0; count < MAX_ITERATIONS; ++count)
       if (Tolerance.CHOP.isClose(ai, ai = refine(ai)))
         return ai;
-    throw TensorRuntimeException.of(matrix);
+    throw Throw.of(matrix);
   }
 
   /** @param ai matrix that approximates the pseudo inverse of given matrix

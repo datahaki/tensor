@@ -22,8 +22,8 @@ import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.TensorComparator;
 import ch.alpine.tensor.ext.ArgMax;
@@ -79,7 +79,7 @@ public class Cycles implements Comparable<Cycles>, Serializable {
     boolean allMatch = map.values().stream().allMatch(tally -> 1 == tally);
     if (value && allMatch)
       return tensor.stream().filter(cycle -> 1 < cycle.length()); //
-    throw TensorRuntimeException.of(tensor);
+    throw Throw.of(tensor);
   }
 
   private static NavigableMap<Integer, Integer> map(Stream<Tensor> stream) {

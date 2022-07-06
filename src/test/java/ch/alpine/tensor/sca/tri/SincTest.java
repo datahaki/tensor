@@ -11,7 +11,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -114,11 +114,11 @@ class SincTest {
 
   @Test
   void testQuantity() {
-    assertThrows(TensorRuntimeException.class, () -> Sinc.FUNCTION.apply(Quantity.of(0, "m")));
+    assertThrows(Throw.class, () -> Sinc.FUNCTION.apply(Quantity.of(0, "m")));
   }
 
   @Test
   void testTypeFail() {
-    assertThrows(TensorRuntimeException.class, () -> Sinc.of(StringScalar.of("some")));
+    assertThrows(Throw.class, () -> Sinc.of(StringScalar.of("some")));
   }
 }

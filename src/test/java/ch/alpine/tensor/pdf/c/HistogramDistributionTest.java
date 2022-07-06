@@ -19,8 +19,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -72,7 +72,7 @@ class HistogramDistributionTest {
   void testFreedmanMin() {
     Distribution distribution = HistogramDistribution.of(Tensors.vector(3, 4));
     assertTrue(distribution.toString().startsWith("HistogramDistribution"));
-    assertThrows(TensorRuntimeException.class, () -> HistogramDistribution.of(Tensors.vector(3, 3)));
+    assertThrows(Throw.class, () -> HistogramDistribution.of(Tensors.vector(3, 3)));
   }
 
   @Test
@@ -273,7 +273,7 @@ class HistogramDistributionTest {
     Scalar d5 = DateTimeScalar.of(LocalDateTime.of(2022, 11, 13, 10, 20));
     Scalar d6 = DateTimeScalar.of(LocalDateTime.of(2022, 11, 13, 10, 21));
     Tensor samples = Tensors.of(d1, d2, d3, d4, d5, d6);
-    assertThrows(TensorRuntimeException.class, () -> HistogramDistribution.of(samples, Quantity.of(2, "s")));
+    assertThrows(Throw.class, () -> HistogramDistribution.of(samples, Quantity.of(2, "s")));
   }
 
   @Test
@@ -291,6 +291,6 @@ class HistogramDistributionTest {
   @Test
   void testFailWidth() {
     assertThrows(ArithmeticException.class, () -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.ZERO));
-    assertThrows(TensorRuntimeException.class, () -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.of(-2)));
+    assertThrows(Throw.class, () -> HistogramDistribution.of(Tensors.vector(1, 2, 3), RealScalar.of(-2)));
   }
 }

@@ -4,6 +4,7 @@ package ch.alpine.tensor.sca.win;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /* package */ abstract class ParameterizedWindow implements ScalarUnaryOperator {
   protected final Scalar alpha;
@@ -21,7 +22,7 @@ import ch.alpine.tensor.api.ScalarUnaryOperator;
 
   @Override // from Object
   public final String toString() {
-    return String.format("%s[%s]", title(), alpha);
+    return MathematicaFormat.of(title(), alpha);
   }
 
   /** @param x guaranteed to be in the interval [-1/2, 1/2]

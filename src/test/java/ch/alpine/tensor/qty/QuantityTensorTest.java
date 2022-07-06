@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 
 class QuantityTensorTest {
   @Test
@@ -46,7 +46,7 @@ class QuantityTensorTest {
   @Test
   void testFail() {
     Scalar q = Quantity.of(1, "s");
-    assertThrows(TensorRuntimeException.class, () -> QuantityTensor.of(q, Unit.of("m*kg^2")));
-    assertThrows(TensorRuntimeException.class, () -> QuantityTensor.of(Tensors.of(q, q), Unit.of("m*kg^2")));
+    assertThrows(Throw.class, () -> QuantityTensor.of(q, Unit.of("m*kg^2")));
+    assertThrows(Throw.class, () -> QuantityTensor.of(Tensors.of(q, q), Unit.of("m*kg^2")));
   }
 }

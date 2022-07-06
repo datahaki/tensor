@@ -43,11 +43,6 @@ public enum FileHash {
   public static String string(File file, MessageDigest messageDigest) throws FileNotFoundException, IOException {
     byte[] data = of(file, messageDigest);
     ByteBuffer byteBuffer = ByteBuffer.wrap(data);
-    // if ((data.length % 8) == 0) {
-    // return IntStream.range(0, data.length / 8) //
-    // .mapToObj(i -> String.format("%16x", byteBuffer.getLong())) //
-    // .collect(Collectors.joining());
-    // }
     return IntStream.range(0, data.length) //
         .mapToObj(i -> String.format("%02x", byteBuffer.get())) //
         .collect(Collectors.joining());

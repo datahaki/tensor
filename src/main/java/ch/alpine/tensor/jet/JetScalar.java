@@ -12,8 +12,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.TensorComparator;
@@ -59,7 +59,7 @@ public class JetScalar extends MultiplexScalar implements //
    * @return */
   public static JetScalar of(Tensor vector) {
     if (vector.stream().anyMatch(JetScalar.class::isInstance))
-      throw TensorRuntimeException.of(vector);
+      throw Throw.of(vector);
     return new JetScalar(VectorQ.require(vector).copy());
   }
 
@@ -74,7 +74,7 @@ public class JetScalar extends MultiplexScalar implements //
    * J{x, 1, 0, 0, ...} */
   public static JetScalar of(Scalar scalar, int n) {
     if (scalar instanceof JetScalar)
-      throw TensorRuntimeException.of(scalar);
+      throw Throw.of(scalar);
     if (n == 1)
       return new JetScalar(Tensors.of(scalar));
     Tensor vector = UnitVector.of(n, 1);

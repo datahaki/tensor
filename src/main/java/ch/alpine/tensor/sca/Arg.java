@@ -5,7 +5,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ArgInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.lie.Quaternion;
@@ -29,7 +29,7 @@ public enum Arg implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ArgInterface argInterface)
       return argInterface.arg();
-    throw TensorRuntimeException.of(scalar);
+    throw Throw.of(scalar);
   }
 
   /** @param tensor

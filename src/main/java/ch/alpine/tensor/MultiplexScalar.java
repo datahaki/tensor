@@ -40,6 +40,6 @@ public abstract class MultiplexScalar extends AbstractScalar {
 
   @Override // from Scalar
   public final Number number() {
-    throw TensorRuntimeException.of(this);
+    throw Throw.of(this);
   }
 }

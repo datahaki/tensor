@@ -4,7 +4,7 @@ package ch.alpine.tensor.red;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.nrm.NormalizeTotal;
 
@@ -31,7 +31,7 @@ public enum Total {
    * 
    * @param tensor
    * @return total sum of tensor entries at first level, or 0 if tensor is empty
-   * @throws TensorRuntimeException if input tensor is a scalar */
+   * @throws Throw if input tensor is a scalar */
   public static Tensor of(Tensor tensor) {
     return tensor.stream().reduce(Tensor::add).orElse(RealScalar.ZERO);
   }
@@ -48,7 +48,7 @@ public enum Total {
    * 
    * @param vector
    * @return total sum of vector entries
-   * @throws TensorRuntimeException if input is not a vector */
+   * @throws Throw if input is not a vector */
   public static Scalar ofVector(Tensor vector) {
     return (Scalar) of(vector);
   }

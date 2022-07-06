@@ -8,9 +8,10 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ChopInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.red.Entrywise;
 
@@ -124,7 +125,7 @@ public class Chop implements ScalarUnaryOperator {
    * @throws Exception if {@link #apply(Scalar)} evaluates to non zero */
   public void requireZero(Scalar scalar) {
     if (!isZero(scalar))
-      throw TensorRuntimeException.of(scalar);
+      throw Throw.of(scalar);
   }
 
   /** @param scalar
@@ -132,7 +133,7 @@ public class Chop implements ScalarUnaryOperator {
    * @throws Exception if given scalar is zero based on chop */
   public Scalar requireNonZero(Scalar scalar) {
     if (isZero(scalar))
-      throw TensorRuntimeException.of(scalar);
+      throw Throw.of(scalar);
     return scalar;
   }
 
@@ -140,7 +141,7 @@ public class Chop implements ScalarUnaryOperator {
    * @throws Exception if {@link #allZero(Tensor)} evaluates to false */
   public void requireAllZero(Tensor tensor) {
     if (!allZero(tensor))
-      throw TensorRuntimeException.of(tensor);
+      throw Throw.of(tensor);
   }
 
   /** Careful:
@@ -187,7 +188,7 @@ public class Chop implements ScalarUnaryOperator {
   private Scalar _requireClose(Scalar lhs, Scalar rhs) {
     if (isClose(lhs, rhs))
       return null; // never to be used
-    throw TensorRuntimeException.of(lhs, rhs, lhs.subtract(rhs));
+    throw Throw.of(lhs, rhs, lhs.subtract(rhs));
   }
 
   /** @param tensor
@@ -199,6 +200,6 @@ public class Chop implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return String.format("Chop[%e]", threshold);
+    return MathematicaFormat.of("Chop", threshold);
   }
 }

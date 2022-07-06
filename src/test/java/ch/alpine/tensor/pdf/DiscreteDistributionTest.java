@@ -11,8 +11,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.pdf.d.BernoulliDistribution;
 import ch.alpine.tensor.pdf.d.BinomialDistribution;
@@ -52,7 +52,7 @@ class DiscreteDistributionTest {
         Scalar scalar = Median.of(distribution);
         FiniteScalarQ.require(scalar);
         IntegerQ.require(scalar);
-        assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+        assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
         assertThrows(Exception.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
         FiniteScalarQ.require(inverseCDF.quantile(RealScalar.ZERO));
         FiniteScalarQ.require(inverseCDF.quantile(RealScalar.of(Math.nextDown(1))));

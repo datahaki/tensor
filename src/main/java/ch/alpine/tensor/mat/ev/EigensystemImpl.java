@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Ordering;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /** container class to host results of unsorted {@link Eigensystem} and convert
  * to {@link Eigensystem} with eigenvalues sorted in decreasing order. */
@@ -36,6 +36,6 @@ import ch.alpine.tensor.alg.Ordering;
 
   @Override // from Object
   public String toString() {
-    return String.format("Eigensystem[%s]", Tensors.message(values(), vectors()));
+    return MathematicaFormat.of("Eigensystem", values(), vectors());
   }
 }

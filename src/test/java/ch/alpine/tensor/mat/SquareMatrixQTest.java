@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.UnitVector;
@@ -56,23 +56,23 @@ class SquareMatrixQTest {
 
   @Test
   void testRequireScalar() {
-    assertThrows(TensorRuntimeException.class, () -> SquareMatrixQ.require(RealScalar.of(3)));
+    assertThrows(Throw.class, () -> SquareMatrixQ.require(RealScalar.of(3)));
   }
 
   @Test
   void testRequireVector() {
-    assertThrows(TensorRuntimeException.class, () -> SquareMatrixQ.require(Range.of(3, 10)));
+    assertThrows(Throw.class, () -> SquareMatrixQ.require(Range.of(3, 10)));
   }
 
   @Test
   void testRequireMatrixNonSquare() {
     assertFalse(SquareMatrixQ.of(HilbertMatrix.of(3, 4)));
-    assertThrows(TensorRuntimeException.class, () -> SquareMatrixQ.require(HilbertMatrix.of(3, 4)));
+    assertThrows(Throw.class, () -> SquareMatrixQ.require(HilbertMatrix.of(3, 4)));
   }
 
   @Test
   void testRequireRank3() {
     assertFalse(SquareMatrixQ.of(LeviCivitaTensor.of(3)));
-    assertThrows(TensorRuntimeException.class, () -> SquareMatrixQ.require(LeviCivitaTensor.of(3)));
+    assertThrows(Throw.class, () -> SquareMatrixQ.require(LeviCivitaTensor.of(3)));
   }
 }

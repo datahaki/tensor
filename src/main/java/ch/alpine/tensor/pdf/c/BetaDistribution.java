@@ -6,7 +6,7 @@ import java.io.Serializable;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
@@ -29,7 +29,7 @@ public class BetaDistribution implements Distribution, MeanInterface, PDF, Varia
   public static Distribution of(Scalar a1, Scalar a2) {
     if (Scalars.lessEquals(a1, RealScalar.ZERO) || //
         Scalars.lessEquals(a2, RealScalar.ZERO))
-      throw TensorRuntimeException.of(a1, a2);
+      throw Throw.of(a1, a2);
     return new BetaDistribution(a1, a2);
   }
 

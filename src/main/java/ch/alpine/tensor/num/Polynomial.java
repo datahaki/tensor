@@ -15,6 +15,7 @@ import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.fft.FullConvolve;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.itp.InterpolatingPolynomial;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.VandermondeMatrix;
@@ -271,6 +272,6 @@ public class Polynomial extends HornerScheme {
 
   @Override // from Object
   public String toString() {
-    return String.format("Polynomial[%s]", coeffs);
+    return MathematicaFormat.of("Polynomial", coeffs);
   }
 }

@@ -34,7 +34,7 @@ public class HannPoissonWindow extends ParameterizedWindow {
     return RealScalar.ONE.add(Cos.FUNCTION.apply(Pi.TWO.multiply(x))).divide(den.add(den));
   }
 
-  @Override
+  @Override // from ParameterizedWindow
   protected String title() {
     return "HannPoissonWindow";
   }

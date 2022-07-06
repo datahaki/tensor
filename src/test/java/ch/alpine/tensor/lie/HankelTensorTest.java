@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 
@@ -49,6 +49,6 @@ class HankelTensorTest {
 
   @Test
   void testFailRank() {
-    assertThrows(TensorRuntimeException.class, () -> HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5, 6), 2));
+    assertThrows(Throw.class, () -> HankelTensor.of(Tensors.vector(1, 2, 3, 4, 5, 6), 2));
   }
 }

@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -47,7 +47,7 @@ class ReverseTest {
 
   @Test
   void testFail() {
-    assertThrows(TensorRuntimeException.class, () -> Reverse.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Reverse.of(RealScalar.ONE));
   }
 
   private static Tensor nestRank(Tensor tensor, UnaryOperator<Tensor> operator) {

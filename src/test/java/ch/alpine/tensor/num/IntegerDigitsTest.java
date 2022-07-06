@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 
 class IntegerDigitsTest {
   @Test
@@ -50,11 +50,11 @@ class IntegerDigitsTest {
 
   @Test
   void testPrecisionFail() {
-    assertThrows(TensorRuntimeException.class, () -> IntegerDigits.of(RealScalar.of(1.0)));
+    assertThrows(Throw.class, () -> IntegerDigits.of(RealScalar.of(1.0)));
   }
 
   @Test
   void testRationalFail() {
-    assertThrows(TensorRuntimeException.class, () -> IntegerDigits.of(RationalScalar.of(10, 3)));
+    assertThrows(Throw.class, () -> IntegerDigits.of(RationalScalar.of(10, 3)));
   }
 }

@@ -3,8 +3,8 @@ package ch.alpine.tensor.lie;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 
 /** implementation consistent with Mathematica:
  * 
@@ -28,7 +28,7 @@ public enum Cross {
   public static Tensor of(Tensor vector) {
     if (vector.length() == 2)
       return Tensors.of(vector.Get(1).negate(), vector.Get(0));
-    throw TensorRuntimeException.of(vector);
+    throw Throw.of(vector);
   }
 
   /** @param a vector with 3 entries
@@ -52,7 +52,7 @@ public enum Cross {
           a2.multiply(b0).subtract(a0.multiply(b2)), //
           a0.multiply(b1).subtract(a1.multiply(b0)));
     }
-    throw TensorRuntimeException.of(a, b);
+    throw Throw.of(a, b);
   }
 
   /** gives skew matrix based on 3 vector entries
@@ -71,7 +71,7 @@ public enum Cross {
    * @return skew symmetric 3 x 3 matrix representing cross product mapping */
   public static Tensor skew3(Tensor vector) {
     if (vector.length() != 3)
-      throw TensorRuntimeException.of(vector);
+      throw Throw.of(vector);
     Scalar a0 = vector.Get(0);
     Scalar a1 = vector.Get(1);
     Scalar a2 = vector.Get(2);

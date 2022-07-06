@@ -18,8 +18,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -113,8 +113,8 @@ class ExponentialDistributionTest {
 
   @Test
   void testFailL() {
-    assertThrows(TensorRuntimeException.class, () -> ExponentialDistribution.of(RealScalar.ZERO));
-    assertThrows(TensorRuntimeException.class, () -> ExponentialDistribution.of(RealScalar.of(-0.1)));
+    assertThrows(Throw.class, () -> ExponentialDistribution.of(RealScalar.ZERO));
+    assertThrows(Throw.class, () -> ExponentialDistribution.of(RealScalar.of(-0.1)));
   }
 
   @Test
@@ -209,7 +209,7 @@ class ExponentialDistributionTest {
   @Test
   void testFailInverseCDF() {
     InverseCDF inverseCDF = InverseCDF.of(ExponentialDistribution.of(Quantity.of(3, "")));
-    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test

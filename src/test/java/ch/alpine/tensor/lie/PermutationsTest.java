@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.io.StringTensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -103,11 +103,11 @@ class PermutationsTest {
 
   @Test
   void testTensorScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Permutations.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Permutations.of(RealScalar.ONE));
   }
 
   @Test
   void testStreamScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Permutations.stream(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Permutations.stream(RealScalar.ONE));
   }
 }

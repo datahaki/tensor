@@ -4,6 +4,7 @@ package ch.alpine.tensor.pdf.d;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Chop;
@@ -66,6 +67,6 @@ public class PascalDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return String.format("PascalDistribution[%d, %s]", n, p);
+    return MathematicaFormat.of("PascalDistribution", n, p);
   }
 }

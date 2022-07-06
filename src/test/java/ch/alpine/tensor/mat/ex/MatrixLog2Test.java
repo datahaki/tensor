@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.DiagonalMatrix;
@@ -127,7 +127,7 @@ class MatrixLog2Test {
   void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 2, 3);
-    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(matrix));
+    assertThrows(Throw.class, () -> MatrixLog.of(matrix));
   }
 
   @Test

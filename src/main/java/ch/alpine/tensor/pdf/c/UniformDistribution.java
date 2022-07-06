@@ -8,6 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.chq.FiniteScalarQ;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.KurtosisInterface;
@@ -121,6 +122,6 @@ public class UniformDistribution extends AbstractContinuousDistribution //
 
   @Override // from Object
   public String toString() {
-    return String.format("UniformDistribution[%s, %s]", clip.min(), clip.max());
+    return MathematicaFormat.of("UniformDistribution", clip.min(), clip.max());
   }
 }

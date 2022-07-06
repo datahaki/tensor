@@ -11,7 +11,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.pdf.Distribution;
@@ -143,7 +143,7 @@ public class Around extends MultiplexScalar implements //
   @Override // from PowerInterface
   public Scalar power(Scalar exponent) {
     if (exponent instanceof Around)
-      throw TensorRuntimeException.of(this, exponent);
+      throw Throw.of(this, exponent);
     Scalar scalar = Power.of(mean, exponent);
     return of(scalar, Abs.FUNCTION.apply(scalar.divide(mean).multiply(sigma).multiply(exponent)));
   }

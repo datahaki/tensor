@@ -4,6 +4,7 @@ package ch.alpine.tensor.opt.nd;
 import java.io.Serializable;
 
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /** immutable */
 public class NdEntry<V> implements Serializable {
@@ -27,6 +28,6 @@ public class NdEntry<V> implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("NdEntry[%s, %s]", location, value);
+    return MathematicaFormat.of("NdEntry", location, value);
   }
 }

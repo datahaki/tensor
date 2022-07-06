@@ -5,7 +5,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** gives the exponential of a {@link Scalar} that implements {@link ExpInterface}.
@@ -23,7 +23,7 @@ public enum Exp implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ExpInterface expInterface)
       return expInterface.exp();
-    throw TensorRuntimeException.of(scalar);
+    throw Throw.of(scalar);
   }
 
   /** @param tensor

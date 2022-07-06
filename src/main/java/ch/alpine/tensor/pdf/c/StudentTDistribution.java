@@ -9,6 +9,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
@@ -79,6 +80,6 @@ public class StudentTDistribution implements Distribution, //
 
   @Override // from Object
   public String toString() {
-    return String.format("StudentTDistribution[%s, %s, %s]", mu, sigma, v);
+    return MathematicaFormat.of("StudentTDistribution", mu, sigma, v);
   }
 }

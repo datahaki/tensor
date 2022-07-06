@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Integers;
 
 /** inspired by
@@ -33,7 +33,7 @@ public enum MapThread {
     if (Integers.requirePositiveOrZero(level) == 0)
       return function.apply(list);
     if (list.stream().map(Tensor::length).distinct().skip(1).findAny().isPresent())
-      throw TensorRuntimeException.of(list.toArray(Tensor[]::new));
+      throw Throw.of(list.toArray(Object[]::new));
     return list.isEmpty() //
         ? Tensors.empty()
         : Tensor.of(IntStream.range(0, list.get(0).length()) //

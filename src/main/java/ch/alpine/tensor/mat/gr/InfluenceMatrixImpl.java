@@ -7,9 +7,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.UpperEvaluation;
 import ch.alpine.tensor.red.Diagonal;
 import ch.alpine.tensor.sca.Conjugate;
@@ -76,7 +76,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
 
   @Override // from Object
   public String toString() {
-    return String.format("InfluenceMatrix[%s]", Tensors.message(matrix()));
+    return MathematicaFormat.of("InfluenceMatrix", matrix());
   }
 
   /** @return whether image(vector) is computed as the product vector . design . d_pinv,

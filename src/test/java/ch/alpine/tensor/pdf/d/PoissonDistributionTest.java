@@ -14,8 +14,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -136,13 +136,13 @@ class PoissonDistributionTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> PoissonDistribution.of(Quantity.of(3, "m")));
+    assertThrows(Throw.class, () -> PoissonDistribution.of(Quantity.of(3, "m")));
   }
 
   @Test
   void testFailLambda() {
-    assertThrows(TensorRuntimeException.class, () -> PoissonDistribution.of(RealScalar.ZERO));
-    assertThrows(TensorRuntimeException.class, () -> PoissonDistribution.of(RealScalar.of(-0.1)));
+    assertThrows(Throw.class, () -> PoissonDistribution.of(RealScalar.ZERO));
+    assertThrows(Throw.class, () -> PoissonDistribution.of(RealScalar.of(-0.1)));
   }
 
   @Test
@@ -189,6 +189,6 @@ class PoissonDistributionTest {
 
   @Test
   void testFailPoisson() {
-    assertThrows(TensorRuntimeException.class, () -> PoissonDistribution.of(RealScalar.of(800)));
+    assertThrows(Throw.class, () -> PoissonDistribution.of(RealScalar.of(800)));
   }
 }

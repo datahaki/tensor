@@ -4,8 +4,8 @@ package ch.alpine.tensor.img;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.itp.Interpolation;
 import ch.alpine.tensor.itp.LinearInterpolation;
@@ -32,7 +32,7 @@ public class LinearColorDataGradient implements ColorDataGradient {
    * @throws Exception if tensor is empty, or is not of the above form */
   public static ColorDataGradient of(Tensor tensor) {
     if (Tensors.isEmpty(tensor))
-      throw TensorRuntimeException.of(tensor);
+      throw Throw.of(tensor);
     tensor.stream().forEach(ColorFormat::toColor);
     return new LinearColorDataGradient(tensor.map(CLIP::requireInside));
   }

@@ -3,6 +3,7 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -18,9 +19,11 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
@@ -126,5 +129,23 @@ class MathematicaFormatTest {
     List<String> list = MathematicaFormat.of(tensor).collect(Collectors.toList());
     assertFalse(list.isEmpty());
     // list.forEach(System.out::println);
+  }
+
+  @Test
+  void testOf() {
+    String string = MathematicaFormat.of("Function", 12);
+    assertEquals(string, "Function[12]");
+  }
+
+  @Test
+  void testFail() {
+    assertThrows(Exception.class, () -> MathematicaFormat.of(null));
+    assertThrows(Exception.class, () -> MathematicaFormat.of(null, 12));
+  }
+
+  @Test
+  void testSmallMatrix() {
+    String string = Throw.of(RealScalar.of(3), 12).getMessage();
+    assertEquals(string, "Throw[3, 12]");
   }
 }

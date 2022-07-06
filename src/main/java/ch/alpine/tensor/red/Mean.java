@@ -4,7 +4,7 @@ package ch.alpine.tensor.red;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
@@ -28,7 +28,7 @@ public enum Mean {
    * @param tensor non-empty
    * @return average of entries in tensor
    * @throws ArithmeticException if tensor is empty
-   * @throws TensorRuntimeException if tensor is a {@link Scalar} */
+   * @throws Throw if tensor is a {@link Scalar} */
   public static Tensor of(Tensor tensor) {
     return Total.of(tensor).divide(RealScalar.of(tensor.length()));
   }

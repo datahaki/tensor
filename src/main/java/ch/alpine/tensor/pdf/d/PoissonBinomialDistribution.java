@@ -10,6 +10,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.RandomVariateInterface;
@@ -84,6 +85,6 @@ public class PoissonBinomialDistribution implements Distribution, //
   // }
   @Override // from Object
   public String toString() {
-    return String.format("PoissonBinomialDistribution[%s]", Tensors.message(p_vector));
+    return MathematicaFormat.of("PoissonBinomialDistribution", p_vector);
   }
 }

@@ -12,8 +12,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Rescale;
@@ -56,8 +56,8 @@ class BSplineInterpolationTest {
         Tensor vvalue = interpolation.get(Tensors.vector(3));
         assertEquals(vvalue, tensor.get(3));
       }
-      assertThrows(TensorRuntimeException.class, () -> interpolation.at(RealScalar.of(-0.1)));
-      assertThrows(TensorRuntimeException.class, () -> interpolation.at(RealScalar.of(9.1)));
+      assertThrows(Throw.class, () -> interpolation.at(RealScalar.of(-0.1)));
+      assertThrows(Throw.class, () -> interpolation.at(RealScalar.of(9.1)));
       interpolation.get(Tensors.vector(1));
       interpolation.get(Tensors.vector(1, 2));
     }

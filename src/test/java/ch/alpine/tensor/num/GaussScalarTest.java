@@ -20,8 +20,8 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Sort;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.ArgMax;
@@ -126,15 +126,15 @@ class GaussScalarTest {
       }
     }
     assertEquals(count, 6);
-    assertThrows(TensorRuntimeException.class, () -> Sqrt.of(GaussScalar.of(2, 11)));
+    assertThrows(Throw.class, () -> Sqrt.of(GaussScalar.of(2, 11)));
   }
 
   @Test
   void testSqrt5() {
     assertEquals(Sqrt.of(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
     assertEquals(Sqrt.of(GaussScalar.of(1, 5)), GaussScalar.of(1, 5));
-    assertThrows(TensorRuntimeException.class, () -> Sqrt.of(GaussScalar.of(2, 5)));
-    assertThrows(TensorRuntimeException.class, () -> Sqrt.of(GaussScalar.of(3, 5)));
+    assertThrows(Throw.class, () -> Sqrt.of(GaussScalar.of(2, 5)));
+    assertThrows(Throw.class, () -> Sqrt.of(GaussScalar.of(3, 5)));
   }
 
   @Test
@@ -220,7 +220,7 @@ class GaussScalarTest {
     GaussScalar gaussScalar = GaussScalar.of(3, 107);
     assertEquals(gaussScalar.number(), BigInteger.valueOf(3));
     assertEquals(gaussScalar.prime(), BigInteger.valueOf(107));
-    assertThrows(TensorRuntimeException.class, () -> Power.of(gaussScalar, Pi.HALF));
+    assertThrows(Throw.class, () -> Power.of(gaussScalar, Pi.HALF));
   }
 
   @Test
@@ -263,11 +263,11 @@ class GaussScalarTest {
   void testBinaryOpFail() {
     GaussScalar gs1 = GaussScalar.of(432, 677);
     GaussScalar gs2 = GaussScalar.of(4, 13);
-    assertThrows(TensorRuntimeException.class, () -> gs1.multiply(gs2));
-    assertThrows(TensorRuntimeException.class, () -> gs1.add(gs2));
-    assertThrows(TensorRuntimeException.class, () -> gs1.divide(gs2));
-    assertThrows(TensorRuntimeException.class, () -> gs1.under(gs2));
-    assertThrows(TensorRuntimeException.class, () -> gs1.compareTo(gs2));
+    assertThrows(Throw.class, () -> gs1.multiply(gs2));
+    assertThrows(Throw.class, () -> gs1.add(gs2));
+    assertThrows(Throw.class, () -> gs1.divide(gs2));
+    assertThrows(Throw.class, () -> gs1.under(gs2));
+    assertThrows(Throw.class, () -> gs1.compareTo(gs2));
   }
 
   @Test

@@ -12,7 +12,7 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ArrayQ;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Flatten;
@@ -44,7 +44,7 @@ public enum MatlabExport {
   public static Stream<String> of(Tensor tensor, Function<Scalar, String> function) {
     Dimensions dimensions = new Dimensions(tensor);
     if (!dimensions.isArray())
-      throw TensorRuntimeException.of(tensor);
+      throw Throw.of(tensor);
     List<String> list = new LinkedList<>();
     list.add("function a=anonymous");
     list.add("% auto-generated code. do not modify.");

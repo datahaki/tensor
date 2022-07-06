@@ -4,7 +4,7 @@ package ch.alpine.tensor.mat.re;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.qty.LenientAdd;
@@ -36,7 +36,7 @@ public class GaussianElimination extends AbstractReduce {
   /** @param matrix square and invertible
    * @param b tensor with first dimension identical to size of matrix
    * @param pivot
-   * @throws TensorRuntimeException if matrix m is singular */
+   * @throws Throw if matrix m is singular */
   public static Tensor of(Tensor matrix, Tensor b, Pivot pivot) {
     return new GaussianElimination(matrix, b, pivot).solve();
   }
@@ -58,7 +58,7 @@ public class GaussianElimination extends AbstractReduce {
       pivot(c0, c0);
       Scalar piv = lhs[ind(c0)].Get(c0);
       if (Scalars.isZero(piv))
-        throw TensorRuntimeException.of(matrix, piv);
+        throw Throw.of(matrix, piv);
       eliminate(c0, piv);
     }
   }

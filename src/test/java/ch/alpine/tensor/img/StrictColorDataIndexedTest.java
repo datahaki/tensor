@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -82,12 +82,12 @@ class StrictColorDataIndexedTest {
   @Test
   void testFailCreate() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}}");
-    assertThrows(TensorRuntimeException.class, () -> StrictColorDataIndexed.of(tensor));
+    assertThrows(Throw.class, () -> StrictColorDataIndexed.of(tensor));
   }
 
   @Test
   void testFailCreateScalar() {
-    assertThrows(TensorRuntimeException.class, () -> StrictColorDataIndexed.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> StrictColorDataIndexed.of(RealScalar.ONE));
   }
 
   @Test

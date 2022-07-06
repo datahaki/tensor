@@ -14,8 +14,8 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
@@ -116,7 +116,7 @@ class BinomialTest {
 
   @Test
   void testFailN() {
-    assertThrows(TensorRuntimeException.class, () -> Binomial.of(RealScalar.of(10.21)));
+    assertThrows(Throw.class, () -> Binomial.of(RealScalar.of(10.21)));
     assertThrows(IllegalArgumentException.class, () -> Binomial.of(-1));
   }
 
@@ -152,7 +152,7 @@ class BinomialTest {
 
   @Test
   void testLargeFail() {
-    assertThrows(TensorRuntimeException.class, () -> Binomial.of(RealScalar.of(-123412341234324L), RealScalar.ZERO));
+    assertThrows(Throw.class, () -> Binomial.of(RealScalar.of(-123412341234324L), RealScalar.ZERO));
   }
 
   @Test
@@ -206,6 +206,6 @@ class BinomialTest {
 
   @Test
   void testGaussScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Binomial.of(GaussScalar.of(3, 5), GaussScalar.of(2, 5)));
+    assertThrows(Throw.class, () -> Binomial.of(GaussScalar.of(3, 5), GaussScalar.of(2, 5)));
   }
 }

@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
@@ -49,7 +49,7 @@ class FirstPositionTest {
 
   @Test
   void testFailScalar() {
-    assertThrows(TensorRuntimeException.class, () -> FirstPosition.of(RealScalar.of(7), RealScalar.of(7)));
+    assertThrows(Throw.class, () -> FirstPosition.of(RealScalar.of(7), RealScalar.of(7)));
   }
 
   @Test

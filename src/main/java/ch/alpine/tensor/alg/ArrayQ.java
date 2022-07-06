@@ -3,7 +3,7 @@ package ch.alpine.tensor.alg;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.MatrixQ;
 
 /** ArrayQ is <em>not</em> consistent with Mathematica for scalar input:
@@ -47,6 +47,6 @@ public enum ArrayQ {
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;
-    throw TensorRuntimeException.of(tensor);
+    throw Throw.of(tensor);
   }
 }

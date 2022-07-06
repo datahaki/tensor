@@ -34,7 +34,7 @@ public class GaussianWindow extends ParameterizedWindow {
     return Exp.FUNCTION.apply(ratio.multiply(ratio).multiply(HALF_NEGATE));
   }
 
-  @Override
+  @Override // from ParameterizedWindow
   protected String title() {
     return "GaussianWindow";
   }

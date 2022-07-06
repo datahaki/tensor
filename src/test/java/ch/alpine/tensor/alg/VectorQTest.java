@@ -12,8 +12,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
@@ -59,16 +59,16 @@ class VectorQTest {
 
   @Test
   void testRequireFail() {
-    assertThrows(TensorRuntimeException.class, () -> VectorQ.requireLength(Tensors.vector(1, 2, 3), 4));
-    assertThrows(TensorRuntimeException.class, () -> VectorQ.requireLength(Tensors.vector(1, 2, 3), -3));
-    assertThrows(TensorRuntimeException.class, () -> VectorQ.requireLength(RealScalar.ZERO, Scalar.LENGTH));
+    assertThrows(Throw.class, () -> VectorQ.requireLength(Tensors.vector(1, 2, 3), 4));
+    assertThrows(Throw.class, () -> VectorQ.requireLength(Tensors.vector(1, 2, 3), -3));
+    assertThrows(Throw.class, () -> VectorQ.requireLength(RealScalar.ZERO, Scalar.LENGTH));
   }
 
   @Test
   void testEnsure() {
     Tensor empty = VectorQ.require(Tensors.empty());
     assertTrue(Tensors.isEmpty(empty));
-    assertThrows(TensorRuntimeException.class, () -> VectorQ.require(HilbertMatrix.of(3)));
+    assertThrows(Throw.class, () -> VectorQ.require(HilbertMatrix.of(3)));
   }
 
   @Test

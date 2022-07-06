@@ -32,7 +32,7 @@ public class CosineWindow extends ParameterizedWindow {
     return power.apply(Cos.FUNCTION.apply(x.multiply(Pi.VALUE)));
   }
 
-  @Override
+  @Override // from ParameterizedWindow
   protected String title() {
     return "CosineWindow";
   }

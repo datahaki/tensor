@@ -10,7 +10,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ChopInterface;
 import ch.alpine.tensor.api.SignInterface;
@@ -74,7 +74,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
   @Override // from Scalar
   public DurationScalar multiply(Scalar scalar) {
     if (scalar instanceof DurationScalar) // condition inserted for clarity
-      throw TensorRuntimeException.of(this, scalar);
+      throw Throw.of(this, scalar);
     return fromSeconds(seconds().multiply(scalar));
   }
 
@@ -91,7 +91,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
       return durationScalar.seconds().divide(seconds());
     if (scalar instanceof RealScalar realScalar)
       return realScalar.divide(seconds());
-    throw TensorRuntimeException.of(this, scalar);
+    throw Throw.of(this, scalar);
   }
 
   @Override // from Scalar
@@ -106,7 +106,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
 
   @Override // from Scalar
   public Number number() {
-    throw TensorRuntimeException.of(this);
+    throw Throw.of(this);
   }
 
   @Override // from Scalar
@@ -125,7 +125,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
       return new DurationScalar(duration.plus(durationScalar.duration));
     if (scalar instanceof DateTimeScalar)
       return scalar.add(this);
-    throw TensorRuntimeException.of(this, scalar);
+    throw Throw.of(this, scalar);
   }
 
   @Override // from AbsInterface
@@ -139,12 +139,12 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
       return ArcTan.of(durationScalar.seconds(), seconds());
     if (x instanceof RealScalar realScalar)
       return ArcTan.of(realScalar, seconds());
-    throw TensorRuntimeException.of(x, this);
+    throw Throw.of(x, this);
   }
 
   @Override // from AbsInterface
   public Scalar absSquared() {
-    throw TensorRuntimeException.of(this);
+    throw Throw.of(this);
   }
 
   @Override // from ChopInterface
@@ -158,7 +158,7 @@ import ch.alpine.tensor.sca.tri.ArcTanInterface;
   public int compareTo(Scalar scalar) {
     if (scalar instanceof DurationScalar durationScalar)
       return duration.compareTo(durationScalar.duration);
-    throw TensorRuntimeException.of(this, scalar);
+    throw Throw.of(this, scalar);
   }
 
   @Override // from SignInterface

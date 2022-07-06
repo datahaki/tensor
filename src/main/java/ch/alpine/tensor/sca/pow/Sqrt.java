@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca.pow;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** <pre>
@@ -19,7 +19,7 @@ public enum Sqrt implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof SqrtInterface sqrtInterface)
       return sqrtInterface.sqrt();
-    throw TensorRuntimeException.of(scalar);
+    throw Throw.of(scalar);
   }
 
   /** @param tensor

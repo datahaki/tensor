@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Transpose;
@@ -81,7 +81,7 @@ class MatrixLogTest {
     for (int d = 1; d < 3; ++d) {
       Tensor matrix = IdentityMatrix.of(d + 1).extract(0, d);
       assertEquals(matrix.length(), d);
-      assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(matrix));
+      assertThrows(Throw.class, () -> MatrixLog.of(matrix));
     }
     for (int d = 3; d < 4; ++d) {
       Tensor matrix = IdentityMatrix.of(d + 1).extract(0, d);
@@ -99,10 +99,10 @@ class MatrixLogTest {
 
   @Test
   void test_of() {
-    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e20), 3, 3)));
-    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e100), 3, 3)));
-    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e200), 3, 3)));
-    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.POSITIVE_INFINITY, 3, 3)));
-    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3)));
+    assertThrows(Throw.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e20), 3, 3)));
+    assertThrows(Throw.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e100), 3, 3)));
+    assertThrows(Throw.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.of(1e200), 3, 3)));
+    assertThrows(Throw.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.POSITIVE_INFINITY, 3, 3)));
+    assertThrows(Throw.class, () -> MatrixLog.of(ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3)));
   }
 }

@@ -52,10 +52,10 @@ class ComplexScalarTest {
 
   @Test
   void testConstructFail() {
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(Quaternion.ONE, RealScalar.ONE));
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.of(RealScalar.ONE, Quaternion.ONE));
+    assertThrows(Throw.class, () -> ComplexScalar.of(RealScalar.ONE, ComplexScalar.I));
+    assertThrows(Throw.class, () -> ComplexScalar.of(ComplexScalar.I, RealScalar.ONE));
+    assertThrows(Throw.class, () -> ComplexScalar.of(Quaternion.ONE, RealScalar.ONE));
+    assertThrows(Throw.class, () -> ComplexScalar.of(RealScalar.ONE, Quaternion.ONE));
   }
 
   @Test
@@ -67,14 +67,14 @@ class ComplexScalarTest {
 
   @Test
   void testPolarFail() {
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.fromPolar(RealScalar.ONE, ComplexScalar.I));
+    assertThrows(Throw.class, () -> ComplexScalar.fromPolar(RealScalar.ONE, ComplexScalar.I));
     assertThrows(ClassCastException.class, () -> ComplexScalar.fromPolar(ComplexScalar.I, RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> ComplexScalar.fromPolar(ComplexScalar.I, ComplexScalar.I));
   }
 
   @Test
   void testPolarQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.fromPolar(RealScalar.ONE, Quantity.of(1.3, "m")));
+    assertThrows(Throw.class, () -> ComplexScalar.fromPolar(RealScalar.ONE, Quantity.of(1.3, "m")));
   }
 
   @Test
@@ -85,7 +85,7 @@ class ComplexScalarTest {
 
   @Test
   void testPolarNumberFail() {
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.fromPolar(-1, 3));
+    assertThrows(Throw.class, () -> ComplexScalar.fromPolar(-1, 3));
   }
 
   @Test
@@ -140,7 +140,7 @@ class ComplexScalarTest {
 
   @Test
   void testUnitFail() {
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.unit(ComplexScalar.of(-1, 3)));
-    assertThrows(TensorRuntimeException.class, () -> ComplexScalar.unit(Quantity.of(3, "s")));
+    assertThrows(Throw.class, () -> ComplexScalar.unit(ComplexScalar.of(-1, 3)));
+    assertThrows(Throw.class, () -> ComplexScalar.unit(Quantity.of(3, "s")));
   }
 }

@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 
 class FactorialTest {
   @Test
@@ -63,6 +63,6 @@ class FactorialTest {
 
   @Test
   void testNumericFail() {
-    assertThrows(TensorRuntimeException.class, () -> Factorial.of(RealScalar.of(1.2)));
+    assertThrows(Throw.class, () -> Factorial.of(RealScalar.of(1.2)));
   }
 }

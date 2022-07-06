@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 
 /** StringScalar represents a string.
  * 
@@ -47,45 +47,45 @@ public class StringScalar extends AbstractScalar implements //
 
   @Override // from Scalar
   public Scalar reciprocal() {
-    throw TensorRuntimeException.of(this);
+    throw Throw.of(this);
   }
 
   @Override // from Scalar
   public Scalar multiply(Scalar scalar) {
-    throw TensorRuntimeException.of(this, scalar);
+    throw Throw.of(this, scalar);
   }
 
   @Override // from Scalar
   public Scalar negate() {
-    throw TensorRuntimeException.of(this);
+    throw Throw.of(this);
   }
 
   @Override // from Scalar
   public Scalar zero() {
-    throw TensorRuntimeException.of(this);
+    throw Throw.of(this);
   }
 
   @Override // from Scalar
   public Scalar one() {
-    throw TensorRuntimeException.of(this);
+    throw Throw.of(this);
   }
 
   @Override // from Scalar
   public Number number() {
-    throw TensorRuntimeException.of(this);
+    throw Throw.of(this);
   }
 
   // ---
   @Override // from AbstractScalar
   protected Scalar plus(Scalar scalar) {
-    throw TensorRuntimeException.of(this, scalar);
+    throw Throw.of(this, scalar);
   }
 
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
     if (scalar instanceof StringScalar stringScalar)
       return string.compareTo(stringScalar.string);
-    throw TensorRuntimeException.of(this, scalar);
+    throw Throw.of(this, scalar);
   }
 
   // ---

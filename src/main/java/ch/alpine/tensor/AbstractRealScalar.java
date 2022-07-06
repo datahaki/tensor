@@ -65,7 +65,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
           number().doubleValue(), // y
           x.number().doubleValue())); // x
     // return ArcTan.FUNCTION.apply(divide(x)); // ArcTan[x, y] == ArcTan[ y / x ]
-    throw TensorRuntimeException.of(this, x);
+    throw Throw.of(this, x);
   }
 
   @Override // from ArgInterface
@@ -97,7 +97,7 @@ public abstract class AbstractRealScalar extends AbstractScalar implements RealS
       if (exponent instanceof ComplexEmbedding complexEmbedding)
         if (Sign.isPositive(complexEmbedding.real()))
           return zero();
-      throw TensorRuntimeException.of(this, exponent);
+      throw Throw.of(this, exponent);
     }
     if (exponent instanceof RealScalar) {
       double result = Math.pow(number().doubleValue(), exponent.number().doubleValue());

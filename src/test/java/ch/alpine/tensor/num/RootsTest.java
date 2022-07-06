@@ -12,8 +12,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Last;
@@ -261,7 +261,7 @@ class RootsTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Roots.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Roots.of(RealScalar.ONE));
   }
 
   @Test
@@ -295,6 +295,6 @@ class RootsTest {
 
   @Test
   void testNotImplemented() {
-    assertThrows(TensorRuntimeException.class, () -> Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6)));
+    assertThrows(Throw.class, () -> Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6)));
   }
 }

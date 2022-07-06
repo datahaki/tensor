@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
@@ -35,6 +35,6 @@ class MitchellNetravaliKernelTest {
     Tolerance.CHOP.requireClose(mnk.apply(RealScalar.of(0.4)), RealScalar.of(0.6581333333333335));
     Tolerance.CHOP.requireClose(mnk.apply(RealScalar.of(-0.4)), RealScalar.of(0.6581333333333335));
     Tolerance.CHOP.requireZero(mnk.apply(RealScalar.of(2.4)));
-    assertThrows(TensorRuntimeException.class, () -> mnk.apply(Quantity.of(1, "m")));
+    assertThrows(Throw.class, () -> mnk.apply(Quantity.of(1, "m")));
   }
 }

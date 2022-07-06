@@ -9,7 +9,7 @@ import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ConjugateInterface;
 import ch.alpine.tensor.api.RoundingInterface;
@@ -78,7 +78,7 @@ public class GaussScalar extends AbstractScalar implements //
       return ComplexScalar.of( //
           multiply(complexScalar.real()), //
           multiply(complexScalar.imag()));
-    throw TensorRuntimeException.of(this, scalar);
+    throw Throw.of(this, scalar);
   }
 
   @Override // from AbstractScalar
@@ -126,7 +126,7 @@ public class GaussScalar extends AbstractScalar implements //
   protected GaussScalar plus(Scalar scalar) {
     if (scalar instanceof GaussScalar gaussScalar)
       return in(value.add(requireCommonPrime(gaussScalar)), prime);
-    throw TensorRuntimeException.of(this, scalar);
+    throw Throw.of(this, scalar);
   }
 
   // ---
@@ -144,13 +144,13 @@ public class GaussScalar extends AbstractScalar implements //
   public int compareTo(Scalar scalar) {
     if (scalar instanceof GaussScalar gaussScalar)
       return value.compareTo(requireCommonPrime(gaussScalar));
-    throw TensorRuntimeException.of(this, scalar);
+    throw Throw.of(this, scalar);
   }
 
   private BigInteger requireCommonPrime(GaussScalar gaussScalar) {
     if (prime.equals(gaussScalar.prime))
       return gaussScalar.value;
-    throw TensorRuntimeException.of(this, gaussScalar);
+    throw Throw.of(this, gaussScalar);
   }
 
   @Override // from ConjugateInterface
@@ -190,7 +190,7 @@ public class GaussScalar extends AbstractScalar implements //
     if (Objects.nonNull(gaussScalar))
       return gaussScalar;
     // examples of gauss scalars without sqrt: 2 mod 5, 3 mod 5, 6 mod 11, etc.
-    throw TensorRuntimeException.of(this); // sqrt of this does not exist
+    throw Throw.of(this); // sqrt of this does not exist
   }
 
   // ---

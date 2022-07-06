@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 
@@ -26,7 +26,7 @@ class VectorNormsTest {
   void testEmptyFail() {
     for (TensorScalarFunction norm : VALUES) {
       assertThrows(NoSuchElementException.class, () -> norm.apply(Tensors.empty()));
-      assertThrows(TensorRuntimeException.class, () -> norm.apply(RealScalar.ONE));
+      assertThrows(Throw.class, () -> norm.apply(RealScalar.ONE));
       assertThrows(ClassCastException.class, () -> norm.apply(Tensors.fromString("{{1, 2}, {3}}")));
     }
   }

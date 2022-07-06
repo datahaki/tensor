@@ -15,7 +15,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.jet.DateTimeScalar;
@@ -44,8 +44,8 @@ class LogisticDistributionTest {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar quantile = inverseCDF.quantile(p_lessEquals);
     Tolerance.CHOP.requireClose(quantile, x);
-    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
+    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
   @Test
@@ -88,7 +88,7 @@ class LogisticDistributionTest {
 
   @Test
   void testZeroFail() {
-    assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(RealScalar.ONE, RealScalar.ZERO));
+    assertThrows(Throw.class, () -> LogisticDistribution.of(RealScalar.ONE, RealScalar.ZERO));
   }
 
   @Test
@@ -99,14 +99,14 @@ class LogisticDistributionTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
-    assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
-    assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+    assertThrows(Throw.class, () -> LogisticDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    assertThrows(Throw.class, () -> LogisticDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    assertThrows(Throw.class, () -> LogisticDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
   @Test
   void testNegativeSigmaFail() {
     LogisticDistribution.of(5, 1);
-    assertThrows(TensorRuntimeException.class, () -> LogisticDistribution.of(5, -1));
+    assertThrows(Throw.class, () -> LogisticDistribution.of(5, -1));
   }
 }

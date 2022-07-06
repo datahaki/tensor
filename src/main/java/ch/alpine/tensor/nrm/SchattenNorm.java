@@ -6,6 +6,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorScalarFunction;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.sv.SingularValueList;
 
 /** Quote from Wikipedia: "The Schatten p-norms arise when applying the p-norm to the
@@ -49,6 +50,6 @@ public class SchattenNorm implements TensorScalarFunction {
 
   @Override // from Object
   public String toString() {
-    return String.format("SchattenNorm[%s]", p);
+    return MathematicaFormat.of("SchattenNorm", p);
   }
 }

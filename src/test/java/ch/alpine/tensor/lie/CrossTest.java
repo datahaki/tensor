@@ -9,8 +9,8 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -89,23 +89,23 @@ class CrossTest {
 
   @Test
   void testSkew3LengthFail() {
-    assertThrows(TensorRuntimeException.class, () -> Cross.skew3(Tensors.vector(1, 2, 3, 4)));
+    assertThrows(Throw.class, () -> Cross.skew3(Tensors.vector(1, 2, 3, 4)));
   }
 
   @Test
   void testFailLength2() {
     Tensor v1 = UnitVector.of(3, 0);
     Tensor v2 = UnitVector.of(2, 1);
-    assertThrows(TensorRuntimeException.class, () -> Cross.of(v1, v2));
-    assertThrows(TensorRuntimeException.class, () -> Cross.of(v2, v1));
+    assertThrows(Throw.class, () -> Cross.of(v1, v2));
+    assertThrows(Throw.class, () -> Cross.of(v2, v1));
   }
 
   @Test
   void testFailLength4() {
     Tensor v1 = UnitVector.of(4, 0);
     Tensor v2 = UnitVector.of(3, 1);
-    assertThrows(TensorRuntimeException.class, () -> Cross.of(v1, v2));
-    assertThrows(TensorRuntimeException.class, () -> Cross.of(v2, v1));
+    assertThrows(Throw.class, () -> Cross.of(v1, v2));
+    assertThrows(Throw.class, () -> Cross.of(v2, v1));
   }
 
   @Test
@@ -134,7 +134,7 @@ class CrossTest {
 
   @Test
   void test2DFail2() {
-    assertThrows(TensorRuntimeException.class, () -> Cross.of(Tensors.vector(1, 2, 3)));
+    assertThrows(Throw.class, () -> Cross.of(Tensors.vector(1, 2, 3)));
   }
 
   @Test

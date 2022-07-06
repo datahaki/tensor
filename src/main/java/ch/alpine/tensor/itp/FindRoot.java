@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.Tolerance;
@@ -83,7 +83,7 @@ public class FindRoot implements Serializable {
     final Scalar s0 = Sign.FUNCTION.apply(y0); // s0 is never 0
     final Scalar s1 = Sign.FUNCTION.apply(y1); // s1 is never 0
     if (s0.equals(s1))
-      throw TensorRuntimeException.of(clip.min(), clip.max(), y0, y1);
+      throw Throw.of(clip.min(), clip.max(), y0, y1);
     // ---
     for (int index = 0; index < MAX_ITERATIONS; ++index) {
       Scalar xn = index % 2 == 0 //
@@ -105,7 +105,7 @@ public class FindRoot implements Serializable {
         y1 = yn;
       }
     }
-    throw TensorRuntimeException.of(clip.min(), clip.max(), y0, y1);
+    throw Throw.of(clip.min(), clip.max(), y0, y1);
   }
 
   /** Function is equivalent to

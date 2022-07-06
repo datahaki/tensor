@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 
 class MatrixFormTest {
   @Test
@@ -48,6 +48,6 @@ class MatrixFormTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> MatrixForm.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> MatrixForm.of(RealScalar.ONE));
   }
 }

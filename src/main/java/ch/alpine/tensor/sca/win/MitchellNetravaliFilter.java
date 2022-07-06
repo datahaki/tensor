@@ -34,12 +34,12 @@ import ch.alpine.tensor.itp.MitchellNetravaliKernel;
     scalarUnaryOperator = MitchellNetravaliKernel.of(RealScalar.ONE.subtract(c.add(c)), c);
   }
 
-  @Override
+  @Override // from ParameterizedWindow
   protected Scalar evaluate(Scalar x) {
     return scalarUnaryOperator.apply(_4.multiply(x));
   }
 
-  @Override
+  @Override // from ParameterizedWindow
   protected String title() {
     return "MitchellNetravaliFilter";
   }

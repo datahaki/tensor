@@ -6,6 +6,7 @@ import java.io.Serializable;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
@@ -64,6 +65,6 @@ public class ErlangDistribution implements Distribution, MeanInterface, PDF, Var
 
   @Override // from Object
   public String toString() {
-    return String.format("ErlangDistribution[%s, %s]", k, lambda);
+    return MathematicaFormat.of("ErlangDistribution", k, lambda);
   }
 }

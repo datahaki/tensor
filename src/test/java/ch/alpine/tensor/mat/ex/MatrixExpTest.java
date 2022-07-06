@@ -18,8 +18,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Transpose;
@@ -219,11 +219,11 @@ class MatrixExpTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> MatrixExp.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> MatrixExp.of(RealScalar.ONE));
   }
 
   @Test
   void testEmptyFail() {
-    assertThrows(TensorRuntimeException.class, () -> MatrixExp.of(Tensors.empty()));
+    assertThrows(Throw.class, () -> MatrixExp.of(Tensors.empty()));
   }
 }

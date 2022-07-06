@@ -14,7 +14,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.CDF;
@@ -157,14 +157,14 @@ class NormalDistributionTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
-    assertThrows(TensorRuntimeException.class, () -> NormalDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
-    assertThrows(TensorRuntimeException.class, () -> NormalDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+    assertThrows(Throw.class, () -> NormalDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    assertThrows(Throw.class, () -> NormalDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    assertThrows(Throw.class, () -> NormalDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 
   @Test
   void testNegativeSigmaFail() {
     NormalDistribution.of(5, 1);
-    assertThrows(TensorRuntimeException.class, () -> NormalDistribution.of(5, -1));
+    assertThrows(Throw.class, () -> NormalDistribution.of(5, -1));
   }
 }

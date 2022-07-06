@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.num.Pi;
@@ -29,7 +29,7 @@ class NormalizeTotalTest {
 
   @Test
   void testEmpty() {
-    assertThrows(TensorRuntimeException.class, () -> NormalizeTotal.FUNCTION.apply(Tensors.empty()));
+    assertThrows(Throw.class, () -> NormalizeTotal.FUNCTION.apply(Tensors.empty()));
   }
 
   @Test
@@ -39,12 +39,12 @@ class NormalizeTotalTest {
 
   @Test
   void testZeroNumericFail() {
-    assertThrows(TensorRuntimeException.class, () -> NormalizeTotal.FUNCTION.apply(Tensors.vectorDouble(2, -2, 1, -1)));
+    assertThrows(Throw.class, () -> NormalizeTotal.FUNCTION.apply(Tensors.vectorDouble(2, -2, 1, -1)));
   }
 
   @Test
   void testFailScalar() {
-    assertThrows(TensorRuntimeException.class, () -> NormalizeTotal.FUNCTION.apply(Pi.TWO));
+    assertThrows(Throw.class, () -> NormalizeTotal.FUNCTION.apply(Pi.TWO));
   }
 
   @Test

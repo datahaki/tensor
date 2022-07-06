@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Objects;
 
+import ch.alpine.tensor.io.MathematicaFormat;
+
 /** exponentiation with integer exponents
  * 
  * implementation uses exponentiation by squaring
@@ -47,6 +49,6 @@ public final class BinaryPower<T> implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("BinaryPower[%s]", groupInterface);
+    return MathematicaFormat.of("BinaryPower", groupInterface);
   }
 }

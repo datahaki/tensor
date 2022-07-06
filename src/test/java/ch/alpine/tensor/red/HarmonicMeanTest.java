@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
 class HarmonicMeanTest {
@@ -34,7 +34,7 @@ class HarmonicMeanTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> HarmonicMean.ofVector(RealScalar.ONE));
+    assertThrows(Throw.class, () -> HarmonicMean.ofVector(RealScalar.ONE));
   }
 
   @Test

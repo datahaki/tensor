@@ -44,7 +44,7 @@ public interface ComplexScalar extends Scalar, //
    * @throws Exception if re or im are {@link ComplexScalar} */
   static Scalar of(Scalar re, Scalar im) {
     if (re instanceof MultiplexScalar || im instanceof MultiplexScalar)
-      throw TensorRuntimeException.of(re, im);
+      throw Throw.of(re, im);
     return ComplexScalarImpl.of(Objects.requireNonNull(re), im);
   }
 
@@ -73,7 +73,7 @@ public interface ComplexScalar extends Scalar, //
    * @return Exp[I * angle], i.e. complex number on unit circle with given argument */
   static Scalar unit(Scalar arg) {
     if (arg instanceof ComplexScalar)
-      throw TensorRuntimeException.of(arg);
+      throw Throw.of(arg);
     return ComplexScalarImpl.of(Cos.FUNCTION.apply(arg), Sin.FUNCTION.apply(arg));
   }
 }

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -28,7 +28,7 @@ class HammingWindowTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> HammingWindow.FUNCTION.apply(Quantity.of(0, "s")));
-    assertThrows(TensorRuntimeException.class, () -> HammingWindow.FUNCTION.apply(Quantity.of(2, "s")));
+    assertThrows(Throw.class, () -> HammingWindow.FUNCTION.apply(Quantity.of(0, "s")));
+    assertThrows(Throw.class, () -> HammingWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 }

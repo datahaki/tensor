@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
@@ -39,11 +39,11 @@ class ConjugateTransposeTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> ConjugateTranspose.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> ConjugateTranspose.of(RealScalar.ONE));
   }
 
   @Test
   void testVectorFail() {
-    assertThrows(TensorRuntimeException.class, () -> ConjugateTranspose.of(Tensors.vector(1, 2, 3)));
+    assertThrows(Throw.class, () -> ConjugateTranspose.of(Tensors.vector(1, 2, 3)));
   }
 }

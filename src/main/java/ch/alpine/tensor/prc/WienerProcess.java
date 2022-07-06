@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/WienerProcess.html">WienerProcess</a> */
@@ -27,6 +28,6 @@ import ch.alpine.tensor.Tensor;
 
   @Override
   public String toString() {
-    return String.format("WienerProcess[%s, %s]", mu, sigma);
+    return MathematicaFormat.of("WienerProcess", mu, sigma);
   }
 }

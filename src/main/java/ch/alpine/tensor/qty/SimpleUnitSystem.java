@@ -14,8 +14,9 @@ import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Cache;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.sca.pow.Power;
 
@@ -74,7 +75,7 @@ public class SimpleUnitSystem implements UnitSystem {
   // helper function
   private static Scalar requireNumeric(Scalar scalar) {
     if (scalar instanceof StringScalar)
-      throw TensorRuntimeException.of(scalar);
+      throw Throw.of(scalar);
     return scalar;
   }
 
@@ -172,6 +173,6 @@ public class SimpleUnitSystem implements UnitSystem {
 
   @Override // from Object
   public String toString() {
-    return String.format("UnitSystem[%s]", map());
+    return MathematicaFormat.of("UnitSystem", map);
   }
 }

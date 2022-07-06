@@ -4,6 +4,7 @@ package ch.alpine.tensor.pdf.d;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.Distribution;
 
@@ -78,6 +79,6 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return String.format("HypergeometricDistribution[%d, %d, %d]", N, n, m_n);
+    return MathematicaFormat.of("HypergeometricDistribution", N, n, m_n);
   }
 }

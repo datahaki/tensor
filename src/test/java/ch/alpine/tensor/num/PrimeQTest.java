@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.ResourceData;
 
 class PrimeQTest {
@@ -35,8 +35,8 @@ class PrimeQTest {
   @Test
   void testPrimeFail() {
     assertThrows(IllegalArgumentException.class, () -> PrimeQ.require(BigInteger.TEN));
-    assertThrows(TensorRuntimeException.class, () -> PrimeQ.require(Pi.HALF));
-    assertThrows(TensorRuntimeException.class, () -> PrimeQ.require(RationalScalar.of(2, 3)));
+    assertThrows(Throw.class, () -> PrimeQ.require(Pi.HALF));
+    assertThrows(Throw.class, () -> PrimeQ.require(RationalScalar.of(2, 3)));
     assertThrows(IllegalArgumentException.class, () -> PrimeQ.require(RationalScalar.of(200, 1)));
   }
 

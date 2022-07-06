@@ -15,8 +15,8 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.qty.Quantity;
@@ -62,12 +62,12 @@ class ExpTest {
   @Test
   void testFailQuantity() {
     Scalar scalar = Quantity.of(2, "m");
-    assertThrows(TensorRuntimeException.class, () -> Exp.of(scalar));
+    assertThrows(Throw.class, () -> Exp.of(scalar));
   }
 
   @Test
   void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
-    assertThrows(TensorRuntimeException.class, () -> Exp.of(scalar));
+    assertThrows(Throw.class, () -> Exp.of(scalar));
   }
 }

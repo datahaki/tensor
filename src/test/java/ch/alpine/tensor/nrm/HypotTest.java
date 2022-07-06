@@ -16,8 +16,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
@@ -123,7 +123,7 @@ class HypotTest {
 
   @Test
   void testFailScalar() {
-    assertThrows(TensorRuntimeException.class, () -> Hypot.ofVector(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Hypot.ofVector(RealScalar.ONE));
   }
 
   @Test
@@ -179,6 +179,6 @@ class HypotTest {
 
   @Test
   void testMixedUnitFail() {
-    assertThrows(TensorRuntimeException.class, () -> Hypot.of(Quantity.of(2, "m"), Quantity.of(3, "s")));
+    assertThrows(Throw.class, () -> Hypot.of(Quantity.of(2, "m"), Quantity.of(3, "s")));
   }
 }

@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ArrayReshape;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
@@ -27,7 +27,7 @@ import ch.alpine.tensor.io.StringScalar;
         "{Infinity, 0, 0, 2.1342134E-300, -Infinity, NaN, 0, 136458123548175/23947236498726349876239876234}");
     boolean status = tensor.stream().anyMatch(s -> s instanceof StringScalar);
     if (status)
-      throw TensorRuntimeException.of(tensor);
+      throw Throw.of(tensor);
     Export.of(HomeDirectory.file("me_vector2.m"), tensor);
   }
 

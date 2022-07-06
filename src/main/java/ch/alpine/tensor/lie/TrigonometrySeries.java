@@ -3,7 +3,7 @@ package ch.alpine.tensor.lie;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Chop;
@@ -35,7 +35,7 @@ import ch.alpine.tensor.sca.Chop;
       if (chop.isClose(xn0, xn1))
         return xn1;
     }
-    throw TensorRuntimeException.of(x);
+    throw Throw.of(x);
   }
 
   /** @param x
@@ -52,7 +52,7 @@ import ch.alpine.tensor.sca.Chop;
       if (chop.isClose(xn0, xn1))
         return xn1;
     }
-    throw TensorRuntimeException.of(x);
+    throw Throw.of(x);
   }
 
   /** @param x
@@ -72,7 +72,7 @@ import ch.alpine.tensor.sca.Chop;
       if (chop.isClose(xn0, xn1))
         return xn1;
     }
-    throw TensorRuntimeException.of(x);
+    throw Throw.of(x);
   }
 
   /** @param x
@@ -89,6 +89,6 @@ import ch.alpine.tensor.sca.Chop;
       if (chop.isClose(xn0, xn1))
         return xn1;
     }
-    throw TensorRuntimeException.of(x);
+    throw Throw.of(x);
   }
 }

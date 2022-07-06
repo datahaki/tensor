@@ -12,7 +12,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -46,7 +46,7 @@ class ParzenWindowTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> ParzenWindow.FUNCTION.apply(Quantity.of(0, "s")));
-    assertThrows(TensorRuntimeException.class, () -> ParzenWindow.FUNCTION.apply(Quantity.of(2, "s")));
+    assertThrows(Throw.class, () -> ParzenWindow.FUNCTION.apply(Quantity.of(0, "s")));
+    assertThrows(Throw.class, () -> ParzenWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 }

@@ -2,7 +2,7 @@
 package ch.alpine.tensor.spa;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 
 /** <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/SparseArrayQ.html">SparseArrayQ</a> */
@@ -20,6 +20,6 @@ public enum SparseArrayQ {
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;
-    throw TensorRuntimeException.of(tensor);
+    throw Throw.of(tensor);
   }
 }

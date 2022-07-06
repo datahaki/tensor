@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.ComplexNormalDistribution;
@@ -67,7 +67,7 @@ class FourierTest {
   @Test
   void test3Fail() {
     Tensor vector = Tensors.vector(1, 2, 0);
-    assertThrows(TensorRuntimeException.class, () -> Fourier.of(vector));
+    assertThrows(Throw.class, () -> Fourier.of(vector));
   }
 
   @Test

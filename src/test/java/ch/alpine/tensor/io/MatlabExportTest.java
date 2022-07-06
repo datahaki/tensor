@@ -15,8 +15,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -89,6 +89,6 @@ class MatlabExportTest {
   @Test
   void testFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
-    assertThrows(TensorRuntimeException.class, () -> MatlabExport.of(tensor));
+    assertThrows(Throw.class, () -> MatlabExport.of(tensor));
   }
 }

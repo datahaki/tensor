@@ -3,7 +3,7 @@ package ch.alpine.tensor.alg;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Integers;
 
 /** inspired by
@@ -30,7 +30,7 @@ public enum VectorQ {
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;
-    throw TensorRuntimeException.of(tensor);
+    throw Throw.of(tensor);
   }
 
   /** @param tensor
@@ -41,6 +41,6 @@ public enum VectorQ {
     if (tensor.length() == length && //
         tensor.stream().allMatch(Scalar.class::isInstance))
       return tensor;
-    throw TensorRuntimeException.of(tensor);
+    throw Throw.of(tensor);
   }
 }

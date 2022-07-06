@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Cache;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /** Predicate determines if unit is defined by a given unit system.
  * 
@@ -78,6 +79,6 @@ public class KnownUnitQ implements Predicate<Unit>, Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("KnownUnitQ[size=%s]", set.size());
+    return MathematicaFormat.of("KnownUnitQ", set);
   }
 }

@@ -4,7 +4,7 @@ package ch.alpine.tensor.mat.ex;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Integers;
 
@@ -27,6 +27,6 @@ import ch.alpine.tensor.ext.Integers;
       if (sum.equals(sum = sum.add(nxt.divide(den))))
         return sum;
     }
-    throw TensorRuntimeException.of(x); // insufficient convergence
+    throw Throw.of(x); // insufficient convergence
   }
 }

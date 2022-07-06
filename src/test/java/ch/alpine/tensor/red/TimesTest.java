@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.api.TensorUnaryOperator;
@@ -41,7 +41,7 @@ class TimesTest {
    * 
    * @param tensor
    * @return total pointwise product of tensor entries at first level, or 1 if tensor is empty
-   * @throws TensorRuntimeException if input tensor is a scalar */
+   * @throws Throw if input tensor is a scalar */
   private static Tensor pmul(Tensor tensor) {
     return Times.of(tensor.stream().toArray(Tensor[]::new));
   }
@@ -186,7 +186,7 @@ class TimesTest {
 
   @Test
   void testTotalProdFail() {
-    assertThrows(TensorRuntimeException.class, () -> pmul(RealScalar.ONE));
+    assertThrows(Throw.class, () -> pmul(RealScalar.ONE));
   }
 
   @Test

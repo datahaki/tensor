@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 public class NdMatch<V> implements Serializable {
   private final NdEntry<V> ndEntry;
@@ -35,6 +36,6 @@ public class NdMatch<V> implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("NdMatch[%s, %s]", ndEntry, distance);
+    return MathematicaFormat.of("NdMatch", ndEntry, distance);
   }
 }

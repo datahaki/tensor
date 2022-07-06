@@ -18,8 +18,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.ext.Serialization;
@@ -105,7 +105,7 @@ class ColorDataGradientsTest {
     } else {
       assertThrows(IndexOutOfBoundsException.class, () -> colorDataGradient.apply(RealScalar.of(-0.1)));
       assertThrows(IndexOutOfBoundsException.class, () -> colorDataGradient.apply(RealScalar.of(1.1)));
-      assertThrows(TensorRuntimeException.class, () -> colorDataGradient.apply(ComplexScalar.of(0.5, 0.5)));
+      assertThrows(Throw.class, () -> colorDataGradient.apply(ComplexScalar.of(0.5, 0.5)));
     }
   }
 }

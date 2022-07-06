@@ -15,7 +15,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -101,18 +101,18 @@ class LogTest {
 
   @Test
   void testBaseOneFail() {
-    assertThrows(TensorRuntimeException.class, () -> Log.base(1));
+    assertThrows(Throw.class, () -> Log.base(1));
   }
 
   @Test
   void testFailQuantity() {
     Scalar scalar = Quantity.of(2, "m");
-    assertThrows(TensorRuntimeException.class, () -> Log.of(scalar));
+    assertThrows(Throw.class, () -> Log.of(scalar));
   }
 
   @Test
   void testFail() {
     Scalar scalar = GaussScalar.of(6, 7);
-    assertThrows(TensorRuntimeException.class, () -> Log.of(scalar));
+    assertThrows(Throw.class, () -> Log.of(scalar));
   }
 }

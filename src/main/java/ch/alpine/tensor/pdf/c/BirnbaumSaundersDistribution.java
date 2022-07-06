@@ -7,7 +7,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.erf.Erfc;
@@ -29,7 +30,7 @@ public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution
     if (Scalars.lessThan(RealScalar.ZERO, alpha) && //
         Scalars.lessThan(RealScalar.ZERO, lambda))
       return new BirnbaumSaundersDistribution(alpha, lambda);
-    throw TensorRuntimeException.of(alpha, lambda);
+    throw Throw.of(alpha, lambda);
   }
 
   /** @param alpha any real number
@@ -92,6 +93,6 @@ public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution
 
   @Override
   public String toString() {
-    return String.format("BirnbaumSaundersDistribution[%s, %s]", alpha, lambda);
+    return MathematicaFormat.of("BirnbaumSaundersDistribution", alpha, lambda);
   }
 }

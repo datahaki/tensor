@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Cache;
 import ch.alpine.tensor.ext.MergeIllegal;
 
@@ -62,7 +62,7 @@ import ch.alpine.tensor.ext.MergeIllegal;
   @Override // from Unit
   public Unit multiply(Scalar scalar) {
     if (scalar instanceof Quantity)
-      throw TensorRuntimeException.of(scalar);
+      throw Throw.of(scalar);
     NavigableMap<String, Scalar> map = new TreeMap<>();
     for (Entry<String, Scalar> entry : navigableMap.entrySet()) {
       Scalar value = entry.getValue().multiply(scalar);

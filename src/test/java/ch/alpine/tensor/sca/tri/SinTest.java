@@ -11,7 +11,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -35,11 +35,11 @@ class SinTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> Sin.of(Quantity.of(1, "deg")));
+    assertThrows(Throw.class, () -> Sin.of(Quantity.of(1, "deg")));
   }
 
   @Test
   void testStringScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Sin.of(StringScalar.of("some")));
+    assertThrows(Throw.class, () -> Sin.of(StringScalar.of("some")));
   }
 }

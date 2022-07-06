@@ -2,6 +2,7 @@
 package ch.alpine.tensor.io;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -9,6 +10,8 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Numel;
 import ch.alpine.tensor.spa.SparseArray;
 
 /** utility to exchange data with Wolfram Mathematica
@@ -41,8 +44,11 @@ public enum MathematicaFormat {
   private static final String CLOSING_BRACKET_STRING = Character.toString(Tensor.CLOSING_BRACKET);
   public static final Collector<CharSequence, ?, String> EMBRACE = //
       Collectors.joining(", ", OPENING_BRACKET_STRING, CLOSING_BRACKET_STRING);
+  // ---
   private static final String EXPONENT_JAVA = "E";
   private static final String EXPONENT_MATH = "*^";
+  // ---
+  // public static final Collector<CharSequence, ?, String> BRACKET = ;
 
   private static String recur(Tensor tensor) {
     if (tensor instanceof Scalar)
@@ -74,6 +80,43 @@ public enum MathematicaFormat {
   private static String join(String string) {
     return string.endsWith("\\") //
         ? string.substring(0, string.length() - 1)
+        : string;
+  }
+
+  /** @param string non-null
+   * @param objects
+   * @return */
+  @SafeVarargs
+  public static String of(String string, Object... objects) {
+    return Arrays.stream(objects) //
+        .map(object -> object instanceof Tensor tensor //
+            ? MathematicaFormat.format(tensor)
+            : String.valueOf(object)) //
+        .collect(Collectors.joining(", ", string.toString() + "[", "]"));
+  }
+
+  // ---
+  private static final int MAX_NUMEL = 12;
+  private static final int MAX_LENGTH = 64;
+
+  private static String format(Tensor tensor) {
+    if (Objects.isNull(tensor))
+      return "null";
+    return Numel.of(tensor) <= MAX_NUMEL //
+        ? formatContent(tensor)
+        : "T" + Dimensions.of(tensor);
+  }
+
+  /** function causes out of memory exception for large tensors
+   * and therefore should only be invoked for small tensors.
+   * 
+   * @param tensor
+   * @return */
+  private static String formatContent(Tensor tensor) {
+    String string = tensor.toString();
+    int length = string.length();
+    return MAX_LENGTH < length //
+        ? "T" + Dimensions.of(tensor) + "=" + string.substring(0, MAX_LENGTH) + " ..."
         : string;
   }
 }

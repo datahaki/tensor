@@ -7,6 +7,7 @@ import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.InvertUnlessZero;
 
 /** @throws Exception if input is not a vector, or is empty
@@ -44,6 +45,6 @@ public class NormalizeUnlessZero implements TensorUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return String.format("NormalizeUnlessZero[%s]", tensorScalarFunction);
+    return MathematicaFormat.of("NormalizeUnlessZero", tensorScalarFunction);
   }
 }

@@ -13,8 +13,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
@@ -52,7 +52,7 @@ class MixtureDistributionTest {
 
   @Test
   void testFailNegative() {
-    assertThrows(TensorRuntimeException.class, () -> MixtureDistribution.of(Tensors.vector(1, -2, 3), //
+    assertThrows(Throw.class, () -> MixtureDistribution.of(Tensors.vector(1, -2, 3), //
         NormalDistribution.of(0, 1), //
         NormalDistribution.of(3, 1), //
         NormalDistribution.of(10, 1)));

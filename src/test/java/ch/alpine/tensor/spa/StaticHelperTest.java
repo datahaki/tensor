@@ -19,8 +19,8 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.Serialization;
@@ -87,7 +87,7 @@ class StaticHelperTest {
     assertEquals(SparseArray.of(RealScalar.ZERO), RealScalar.ZERO);
     assertEquals(SparseArray.of(GaussScalar.of(0, 7)), GaussScalar.of(0, 7));
     assertThrows(IllegalArgumentException.class, () -> SparseArray.of(RealScalar.ZERO, 2, -3));
-    assertThrows(TensorRuntimeException.class, () -> SparseArray.of(RealScalar.ONE, 2, 3));
+    assertThrows(Throw.class, () -> SparseArray.of(RealScalar.ONE, 2, 3));
   }
 
   @Test
@@ -159,7 +159,7 @@ class StaticHelperTest {
     Tensor tensor = SparseArray.of(RealScalar.ZERO, 3);
     assertThrows(ArithmeticException.class, () -> tensor.divide(Quantity.of(0, "")));
     assertThrows(ArithmeticException.class, () -> tensor.divide(Quantity.of(0, "s*m")));
-    assertThrows(TensorRuntimeException.class, () -> tensor.multiply(DoubleScalar.POSITIVE_INFINITY));
+    assertThrows(Throw.class, () -> tensor.multiply(DoubleScalar.POSITIVE_INFINITY));
   }
 
   @Test

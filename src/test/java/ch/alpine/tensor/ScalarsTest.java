@@ -21,8 +21,8 @@ class ScalarsTest {
   @Test
   void testRequireZero() {
     assertEquals(Scalars.requireZero(Quantity.of(0, "A")), Quantity.of(0, "A"));
-    assertThrows(TensorRuntimeException.class, () -> Scalars.requireZero(Quantity.of(1, "A")));
-    assertThrows(TensorRuntimeException.class, () -> Scalars.requireZero(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Scalars.requireZero(Quantity.of(1, "A")));
+    assertThrows(Throw.class, () -> Scalars.requireZero(RealScalar.ONE));
   }
 
   void checkInvariant(String string, Class<?> cls) {
@@ -204,7 +204,7 @@ class ScalarsTest {
 
   @Test
   void testIntValueExactFractionFail() {
-    assertThrows(TensorRuntimeException.class, () -> Scalars.intValueExact(RationalScalar.of(2, 3)));
+    assertThrows(Throw.class, () -> Scalars.intValueExact(RationalScalar.of(2, 3)));
   }
 
   @Test
@@ -274,12 +274,12 @@ class ScalarsTest {
   void testQuantityIncompatible() {
     Scalar qs1 = Quantity.of(6, "m");
     Scalar qs2 = Quantity.of(3, "s");
-    assertThrows(TensorRuntimeException.class, () -> Scalars.divides(qs1, qs2));
+    assertThrows(Throw.class, () -> Scalars.divides(qs1, qs2));
   }
 
   @Test
   void testBigIntegerExactNullFail() {
-    assertThrows(TensorRuntimeException.class, () -> Scalars.bigIntegerValueExact(null));
+    assertThrows(Throw.class, () -> Scalars.bigIntegerValueExact(null));
   }
 
   @Test

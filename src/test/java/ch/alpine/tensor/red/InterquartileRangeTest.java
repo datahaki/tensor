@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
@@ -69,6 +69,6 @@ class InterquartileRangeTest {
 
   @Test
   void testMatrixFail() {
-    assertThrows(TensorRuntimeException.class, () -> InterquartileRange.of(IdentityMatrix.of(5)));
+    assertThrows(Throw.class, () -> InterquartileRange.of(IdentityMatrix.of(5)));
   }
 }

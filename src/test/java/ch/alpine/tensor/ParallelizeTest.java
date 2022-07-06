@@ -43,7 +43,7 @@ class ParallelizeTest {
 
   @Test
   void testDotFail() {
-    assertThrows(TensorRuntimeException.class, () -> Parallelize.dot(RealScalar.ONE, RealScalar.ZERO));
+    assertThrows(Throw.class, () -> Parallelize.dot(RealScalar.ONE, RealScalar.ZERO));
     assertThrows(IllegalArgumentException.class, () -> Parallelize.dot(Tensors.vector(1, 2, 3), HilbertMatrix.of(4)));
   }
 }

@@ -12,8 +12,8 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -68,12 +68,12 @@ class TotalTest {
 
   @Test
   void testOfVectorFail() {
-    assertThrows(TensorRuntimeException.class, () -> Total.ofVector(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Total.ofVector(RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> Total.ofVector(HilbertMatrix.of(3)));
   }
 
   @Test
   void testTotalScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Total.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Total.of(RealScalar.ONE));
   }
 }

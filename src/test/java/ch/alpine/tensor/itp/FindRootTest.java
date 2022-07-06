@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.red.Times;
@@ -34,7 +34,7 @@ class FindRootTest {
     Chop._10.requireClose(findRoot.inside(Clips.interval(0.0, 4.0)), Pi.HALF);
     Chop._10.requireClose(findRoot.inside(Clips.interval(1.0, 4.0)), Pi.HALF);
     Chop._10.requireClose(findRoot.inside(Clips.interval(1.0, 2.0)), Pi.HALF);
-    assertThrows(TensorRuntimeException.class, () -> findRoot.inside(Clips.interval(0.0, 1.0)));
+    assertThrows(Throw.class, () -> findRoot.inside(Clips.interval(0.0, 1.0)));
   }
 
   @Test
@@ -43,7 +43,7 @@ class FindRootTest {
     Chop._10.requireClose(findRoot.inside(Clips.interval(0.0, 4.0)), Pi.HALF);
     Chop._10.requireClose(findRoot.inside(Clips.interval(1.0, 4.0)), Pi.HALF);
     Chop._10.requireClose(findRoot.inside(Clips.interval(1.0, 2.0)), Pi.HALF);
-    assertThrows(TensorRuntimeException.class, () -> findRoot.inside(Clips.interval(0.0, 1.0)));
+    assertThrows(Throw.class, () -> findRoot.inside(Clips.interval(0.0, 1.0)));
   }
 
   @Test
@@ -52,7 +52,7 @@ class FindRootTest {
     Chop._10.requireClose(findRoot.inside(Clips.interval(0.0, 4.0)), RealScalar.ZERO);
     Chop._10.requireClose(findRoot.inside(Clips.interval(RealScalar.of(0.5), Pi.VALUE)), Pi.VALUE);
     Chop._10.requireClose(findRoot.inside(Clips.interval(1.0, 4.0)), Pi.VALUE);
-    assertThrows(TensorRuntimeException.class, () -> findRoot.inside(Clips.interval(1.0, 2.0)));
+    assertThrows(Throw.class, () -> findRoot.inside(Clips.interval(1.0, 2.0)));
   }
 
   public static Scalar func(Scalar c) {

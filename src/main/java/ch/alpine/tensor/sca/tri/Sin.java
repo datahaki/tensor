@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca.tri;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** <pre>
@@ -24,7 +24,7 @@ public enum Sin implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof TrigonometryInterface trigonometryInterface)
       return trigonometryInterface.sin();
-    throw TensorRuntimeException.of(scalar);
+    throw Throw.of(scalar);
   }
 
   /** @param tensor

@@ -8,6 +8,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
@@ -79,6 +80,6 @@ public class LogisticDistribution extends AbstractContinuousDistribution impleme
 
   @Override // from Object
   public String toString() {
-    return String.format("LogisticDistribution[%s, %s]", a, b);
+    return MathematicaFormat.of("LogisticDistribution", a, b);
   }
 }

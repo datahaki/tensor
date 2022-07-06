@@ -14,7 +14,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
@@ -62,8 +62,8 @@ class GeometricDistributionTest {
 
   @Test
   void testFailP() {
-    assertThrows(TensorRuntimeException.class, () -> GeometricDistribution.of(RealScalar.ZERO));
-    assertThrows(TensorRuntimeException.class, () -> GeometricDistribution.of(RealScalar.of(1.1)));
+    assertThrows(Throw.class, () -> GeometricDistribution.of(RealScalar.ZERO));
+    assertThrows(Throw.class, () -> GeometricDistribution.of(RealScalar.of(1.1)));
   }
 
   @Test
@@ -127,8 +127,8 @@ class GeometricDistributionTest {
   void testFailQuantile() {
     Distribution distribution = GeometricDistribution.of(RealScalar.of(0.2));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
@@ -144,7 +144,7 @@ class GeometricDistributionTest {
 
   @Test
   void testQuantity() {
-    assertThrows(TensorRuntimeException.class, () -> GeometricDistribution.of(Quantity.of(2, "s")));
+    assertThrows(Throw.class, () -> GeometricDistribution.of(Quantity.of(2, "s")));
     final Scalar p = RationalScalar.of(1, 19);
     GeometricDistribution distribution = (GeometricDistribution) GeometricDistribution.of(p);
     try {
@@ -153,7 +153,7 @@ class GeometricDistributionTest {
     } catch (Exception exception) {
       // ---
     }
-    assertThrows(TensorRuntimeException.class, () -> CDF.of(distribution).p_lessEquals(Quantity.of(-2, "s")));
+    assertThrows(Throw.class, () -> CDF.of(distribution).p_lessEquals(Quantity.of(-2, "s")));
   }
 
   private static void _checkCDFNumerics(Distribution distribution) {

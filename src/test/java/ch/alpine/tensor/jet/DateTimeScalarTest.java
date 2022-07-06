@@ -16,8 +16,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -36,9 +36,9 @@ class DateTimeScalarTest {
     Scalar scalar2 = dt2.subtract(dt1);
     assertInstanceOf(Quantity.class, scalar2);
     assertEquals(dt1.add(scalar2), dt2);
-    assertThrows(TensorRuntimeException.class, () -> dt1.negate());
-    assertThrows(TensorRuntimeException.class, () -> dt1.multiply(RealScalar.of(-1)));
-    assertThrows(TensorRuntimeException.class, () -> dt1.subtract(RationalScalar.HALF));
+    assertThrows(Throw.class, () -> dt1.negate());
+    assertThrows(Throw.class, () -> dt1.multiply(RealScalar.of(-1)));
+    assertThrows(Throw.class, () -> dt1.subtract(RationalScalar.HALF));
     assertEquals(dt2.subtract(dt1.multiply(RealScalar.of(1))), scalar2);
   }
 
@@ -151,11 +151,11 @@ class DateTimeScalarTest {
     assertFalse(dt1.equals(dt2));
     assertEquals(dt1.compareTo(dt2), -1);
     assertEquals(dt2.compareTo(dt1), +1);
-    assertThrows(TensorRuntimeException.class, () -> dt1.add(dt2));
-    assertThrows(TensorRuntimeException.class, () -> dt1.negate().add(dt2.negate()));
-    assertThrows(TensorRuntimeException.class, () -> dt1.multiply(Pi.TWO));
-    assertThrows(TensorRuntimeException.class, () -> dt1.reciprocal());
-    assertThrows(TensorRuntimeException.class, () -> dt1.number());
+    assertThrows(Throw.class, () -> dt1.add(dt2));
+    assertThrows(Throw.class, () -> dt1.negate().add(dt2.negate()));
+    assertThrows(Throw.class, () -> dt1.multiply(Pi.TWO));
+    assertThrows(Throw.class, () -> dt1.reciprocal());
+    assertThrows(Throw.class, () -> dt1.number());
     assertEquals(dt1.zero(), Quantity.of(0, "s"));
     assertEquals(dt1.one(), RealScalar.ONE);
   }
@@ -163,16 +163,16 @@ class DateTimeScalarTest {
   @Test
   void testAddFail2() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
-    assertThrows(TensorRuntimeException.class, () -> dt1.add(RealScalar.of(3)));
-    assertThrows(TensorRuntimeException.class, () -> dt1.add(ComplexScalar.I));
-    assertThrows(TensorRuntimeException.class, () -> dt1.compareTo(ComplexScalar.I));
+    assertThrows(Throw.class, () -> dt1.add(RealScalar.of(3)));
+    assertThrows(Throw.class, () -> dt1.add(ComplexScalar.I));
+    assertThrows(Throw.class, () -> dt1.compareTo(ComplexScalar.I));
   }
 
   @Test
   void testAddSubtractFail1() {
     DateTimeScalar dt1 = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
-    assertThrows(TensorRuntimeException.class, () -> dt1.subtract(Pi.VALUE));
-    assertThrows(TensorRuntimeException.class, () -> dt1.subtract(Tensors.vector(1, 2, 3)));
+    assertThrows(Throw.class, () -> dt1.subtract(Pi.VALUE));
+    assertThrows(Throw.class, () -> dt1.subtract(Tensors.vector(1, 2, 3)));
   }
 
   @Test

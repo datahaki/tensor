@@ -10,8 +10,8 @@ import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.opt.lp.LinearProgram.ConstraintType;
 import ch.alpine.tensor.opt.lp.LinearProgram.Objective;
 import ch.alpine.tensor.opt.lp.LinearProgram.Variables;
@@ -55,7 +55,7 @@ class KleeMintyCubeTest {
 
   @Test
   void testFail() {
-    assertThrows(TensorRuntimeException.class, () -> KleeMintyCube.of(0));
-    assertThrows(TensorRuntimeException.class, () -> KleeMintyCube.of(-1));
+    assertThrows(Throw.class, () -> KleeMintyCube.of(0));
+    assertThrows(Throw.class, () -> KleeMintyCube.of(-1));
   }
 }

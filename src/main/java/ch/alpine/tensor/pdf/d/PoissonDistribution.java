@@ -5,9 +5,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Last;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.exp.Exp;
 
@@ -32,9 +33,9 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution {
    * @return */
   public static Distribution of(Scalar lambda) {
     if (Scalars.lessEquals(lambda, RealScalar.ZERO))
-      throw TensorRuntimeException.of(lambda);
+      throw Throw.of(lambda);
     if (Scalars.lessThan(LAMBDA_MAX, lambda))
-      throw TensorRuntimeException.of(lambda);
+      throw Throw.of(lambda);
     return new PoissonDistribution(lambda);
   }
 
@@ -85,6 +86,6 @@ public class PoissonDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return String.format("PoissonDistribution[%s]", lambda);
+    return MathematicaFormat.of("PoissonDistribution", lambda);
   }
 }

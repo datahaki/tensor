@@ -7,7 +7,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
@@ -60,7 +60,7 @@ import ch.alpine.tensor.sca.pow.Power;
       if (isClose)
         return;
     }
-    throw TensorRuntimeException.of(matrix);
+    throw Throw.of(matrix);
   }
 
   @Override // from MatrixSqrt

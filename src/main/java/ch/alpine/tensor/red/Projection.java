@@ -4,7 +4,7 @@ package ch.alpine.tensor.red;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.sca.Conjugate;
 
@@ -36,7 +36,7 @@ public class Projection implements TensorUnaryOperator {
     vc = Conjugate.of(vector);
     Scalar scalar = (Scalar) vc.dot(vector);
     if (Scalars.isZero(scalar))
-      throw TensorRuntimeException.of(vector);
+      throw Throw.of(vector);
     vs = vector.divide(scalar);
   }
 

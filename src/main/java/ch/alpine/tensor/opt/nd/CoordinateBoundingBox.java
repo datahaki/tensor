@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.sca.Clip;
 import ch.alpine.tensor.sca.Clips;
@@ -78,7 +78,7 @@ public class CoordinateBoundingBox implements Serializable {
   public Tensor requireInside(Tensor vector) {
     if (isInside(vector))
       return vector;
-    throw TensorRuntimeException.of(vector);
+    throw Throw.of(vector);
   }
 
   // ---

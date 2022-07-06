@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.num.Pi;
 
@@ -15,7 +15,7 @@ class QuantityFailTest {
   @Test
   void testStringScalarFail() {
     Unit unit = Unit.of("a");
-    assertThrows(TensorRuntimeException.class, () -> Quantity.of(StringScalar.of("123"), unit));
+    assertThrows(Throw.class, () -> Quantity.of(StringScalar.of("123"), unit));
   }
 
   @Test

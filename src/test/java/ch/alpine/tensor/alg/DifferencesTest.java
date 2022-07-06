@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.Pi;
 
 class DifferencesTest {
@@ -61,6 +61,6 @@ class DifferencesTest {
 
   @Test
   void testScalar() {
-    assertThrows(TensorRuntimeException.class, () -> Differences.of(Pi.TWO));
+    assertThrows(Throw.class, () -> Differences.of(Pi.TWO));
   }
 }

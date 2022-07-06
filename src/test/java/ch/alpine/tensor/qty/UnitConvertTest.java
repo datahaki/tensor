@@ -14,7 +14,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -138,7 +138,7 @@ class UnitConvertTest {
   @Test
   void test_kW_over_W() {
     Scalar scalar = Quantity.of(1, "kW*W^-1");
-    System.out.println(UnitSystem.SI().apply(scalar));
+    assertEquals(UnitSystem.SI().apply(scalar), RealScalar.of(1000));
   }
 
   @Test
@@ -146,7 +146,7 @@ class UnitConvertTest {
     Scalar mass = Quantity.of(200, "g"); // gram
     Scalar a = Quantity.of(981, "cm*s^-2");
     Scalar force = mass.multiply(a);
-    assertThrows(TensorRuntimeException.class, () -> UnitConvert.SI().to(Unit.of("m")).apply(force));
+    assertThrows(Throw.class, () -> UnitConvert.SI().to(Unit.of("m")).apply(force));
   }
 
   @Test

@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HilbertMatrix;
 
 class MapThreadTest {
@@ -39,6 +39,6 @@ class MapThreadTest {
   void testFail() {
     List<Tensor> list = Arrays.asList(HilbertMatrix.of(2, 3), HilbertMatrix.of(3, 3));
     MapThread.of(l -> ComplexScalar.I, list, 0);
-    assertThrows(TensorRuntimeException.class, () -> MapThread.of(l -> ComplexScalar.I, list, 1));
+    assertThrows(Throw.class, () -> MapThread.of(l -> ComplexScalar.I, list, 1));
   }
 }

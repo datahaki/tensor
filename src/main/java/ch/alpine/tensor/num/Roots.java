@@ -6,8 +6,8 @@ import java.util.Comparator;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Real;
@@ -67,7 +67,7 @@ public enum Roots {
     case 3: // a + b*x + c*x^2 + d*x^3 == 0
       return RootsDegree3.of(coeffs);
     default:
-      throw TensorRuntimeException.of(coeffs);
+      throw Throw.of(coeffs);
     }
   }
 

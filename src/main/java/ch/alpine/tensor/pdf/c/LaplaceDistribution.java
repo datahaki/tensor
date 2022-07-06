@@ -7,6 +7,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Sign;
@@ -74,6 +75,6 @@ public class LaplaceDistribution extends AbstractContinuousDistribution implemen
 
   @Override // from Object
   public String toString() {
-    return String.format("LaplaceDistribution[%s, %s]", mean, beta);
+    return MathematicaFormat.of("LaplaceDistribution", mean, beta);
   }
 }

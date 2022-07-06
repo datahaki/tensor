@@ -9,7 +9,7 @@ import java.awt.Color;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.ComplexScalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 
 class ColorDataIndexedTest {
   @Test
@@ -21,7 +21,7 @@ class ColorDataIndexedTest {
   @Test
   void testFailComplex() {
     ColorDataIndexed colorDataIndexed = ColorDataLists._058.cyclic();
-    assertThrows(TensorRuntimeException.class, () -> colorDataIndexed.apply(ComplexScalar.of(3, 4)));
+    assertThrows(Throw.class, () -> colorDataIndexed.apply(ComplexScalar.of(3, 4)));
   }
 
   @Test

@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.lie.Cross;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
@@ -42,6 +42,6 @@ class AntisymmetricMatrixQTest {
   @Test
   void testRequire() {
     AntisymmetricMatrixQ.require(Tensors.fromString("{{0, 2}, {-2, 0}}"));
-    assertThrows(TensorRuntimeException.class, () -> AntisymmetricMatrixQ.require(Tensors.fromString("{{0, 2}, {-1, 0}}")));
+    assertThrows(Throw.class, () -> AntisymmetricMatrixQ.require(Tensors.fromString("{{0, 2}, {-1, 0}}")));
   }
 }

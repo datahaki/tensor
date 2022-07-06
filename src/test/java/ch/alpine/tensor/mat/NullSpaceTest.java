@@ -16,8 +16,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
@@ -215,7 +215,7 @@ class NullSpaceTest {
     Tensor tensor = NullSpace.of(matrix);
     assertEquals(tensor.get(0), UnitVector.of(3, 1));
     assertEquals(tensor.get(1), UnitVector.of(3, 2));
-    assertThrows(TensorRuntimeException.class, () -> Det.of(matrix));
+    assertThrows(Throw.class, () -> Det.of(matrix));
   }
 
   @Test
@@ -223,7 +223,7 @@ class NullSpaceTest {
     Tensor matrix = Tensors.fromString("{{1, 0}, {0, 0}, {0, 0}}");
     Tensor tensor = NullSpace.of(matrix);
     assertEquals(tensor.get(0), UnitVector.of(2, 1));
-    assertThrows(TensorRuntimeException.class, () -> Det.of(matrix));
+    assertThrows(Throw.class, () -> Det.of(matrix));
   }
 
   @ParameterizedTest
@@ -283,12 +283,12 @@ class NullSpaceTest {
 
   @Test
   void testFailScalar() {
-    assertThrows(TensorRuntimeException.class, () -> NullSpace.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> NullSpace.of(RealScalar.ONE));
   }
 
   @Test
   void testFailVector() {
-    assertThrows(TensorRuntimeException.class, () -> NullSpace.of(Tensors.vector(1, 2, 3, 1)));
+    assertThrows(Throw.class, () -> NullSpace.of(Tensors.vector(1, 2, 3, 1)));
   }
 
   @Test

@@ -6,9 +6,9 @@ import java.io.Serializable;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
-import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.nrm.Hypot;
 import ch.alpine.tensor.red.CopySign;
 import ch.alpine.tensor.sca.Chop;
@@ -34,7 +34,7 @@ import ch.alpine.tensor.sca.Sign;
       for (int iteration = 0; iteration <= MAX_ITERATIONS; ++iteration) {
         int l = levelW(i, init.chop);
         if (!Unprotect.getUnitUnique(w).equals(Unprotect.getUnitUnique(r)))
-          throw TensorRuntimeException.of(w, r);
+          throw Throw.of(w, r);
         if (l == i)
           break;
         if (iteration == MAX_ITERATIONS)
@@ -155,6 +155,6 @@ import ch.alpine.tensor.sca.Sign;
 
   @Override // from Object
   public String toString() {
-    return String.format("SingularValueDecomposition[%s]", Tensors.message(getU(), values(), getV()));
+    return MathematicaFormat.of("SingularValueDecomposition", getU(), values(), getV());
   }
 }

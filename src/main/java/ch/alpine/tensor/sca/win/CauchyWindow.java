@@ -30,7 +30,7 @@ public class CauchyWindow extends ParameterizedWindow {
     return RealScalar.ONE.divide(RealScalar.ONE.add(x_a.multiply(x_a).multiply(_4)));
   }
 
-  @Override
+  @Override // from ParameterizedWindow
   protected String title() {
     return "CauchyWindow";
   }

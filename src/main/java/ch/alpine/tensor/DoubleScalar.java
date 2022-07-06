@@ -148,16 +148,16 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   @Override // from Comparable<Scalar>
   public int compareTo(Scalar scalar) {
     if (Double.isNaN(value))
-      throw TensorRuntimeException.of(this, scalar);
+      throw Throw.of(this, scalar);
     if (scalar instanceof RealScalar) {
       double other = scalar.number().doubleValue();
       if (Double.isNaN(other))
-        throw TensorRuntimeException.of(this, scalar);
+        throw Throw.of(this, scalar);
       if (value == other) // +0.0 == -0.0
         return 0;
       return Double.compare(value, other);
     }
-    throw TensorRuntimeException.of(this, scalar);
+    throw Throw.of(this, scalar);
   }
 
   @Override // from RoundingInterface
@@ -203,7 +203,7 @@ public final class DoubleScalar extends AbstractRealScalar implements //
   @Override // from AbstractRealScalar
   protected int signum() {
     if (Double.isNaN(value))
-      throw TensorRuntimeException.of(this);
+      throw Throw.of(this);
     return value < 0 ? -1 : (0 == value ? 0 : 1);
   }
 

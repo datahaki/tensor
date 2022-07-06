@@ -4,8 +4,9 @@ package ch.alpine.tensor.pdf.d;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.exp.Exp;
@@ -22,7 +23,7 @@ public class BorelTannerDistribution extends EvaluatedDiscreteDistribution {
     if (Scalars.lessThan(RealScalar.ZERO, alpha) && //
         Scalars.lessThan(alpha, RealScalar.ONE))
       return new BorelTannerDistribution(alpha, Integers.requirePositive(n));
-    throw TensorRuntimeException.of(alpha);
+    throw Throw.of(alpha);
   }
 
   /** @param alpha inside open interval (0, 1)
@@ -76,6 +77,6 @@ public class BorelTannerDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return String.format("BorelTannerDistribution[%s, %d]", alpha, _n);
+    return MathematicaFormat.of("BorelTannerDistribution", alpha, _n);
   }
 }

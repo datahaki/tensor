@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.mat.AntisymmetricMatrixQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -105,7 +105,7 @@ class TensorWedgeTest {
   @Test
   void testFailIrrectangular() {
     Tensor matrix = Tensors.fromString("{{1, 2}, {0, 4, 3}}");
-    assertThrows(TensorRuntimeException.class, () -> TensorWedge.of(matrix));
+    assertThrows(Throw.class, () -> TensorWedge.of(matrix));
   }
 
   @Test

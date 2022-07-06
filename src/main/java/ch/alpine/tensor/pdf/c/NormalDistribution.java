@@ -8,6 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
@@ -123,6 +124,6 @@ public class NormalDistribution implements UnivariateDistribution, //
 
   @Override // from Object
   public String toString() {
-    return String.format("NormalDistribution[%s, %s]", mean, sigma);
+    return MathematicaFormat.of("NormalDistribution", mean, sigma);
   }
 }

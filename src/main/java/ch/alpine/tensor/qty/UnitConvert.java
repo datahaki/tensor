@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/UnitConvert.html">UnitConvert</a> */
@@ -72,7 +73,7 @@ public class UnitConvert implements Serializable {
 
     @Override // from Object
     public String toString() {
-      return String.format("UnitConvert[%s, %s]", unitSystem, unit);
+      return MathematicaFormat.of("UnitConvert", unitSystem, unit);
     }
   }
 }

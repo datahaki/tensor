@@ -16,8 +16,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -72,8 +72,8 @@ class CeilingTest {
 
   @Test
   void testIntExactValueFail() {
-    assertThrows(TensorRuntimeException.class, () -> Ceiling.intValueExact(Quantity.of(1.2, "h")));
-    assertThrows(TensorRuntimeException.class, () -> Ceiling.longValueExact(Quantity.of(2.3, "h*s")));
+    assertThrows(Throw.class, () -> Ceiling.intValueExact(Quantity.of(1.2, "h")));
+    assertThrows(Throw.class, () -> Ceiling.longValueExact(Quantity.of(2.3, "h*s")));
   }
 
   @Test
@@ -146,6 +146,6 @@ class CeilingTest {
   @Test
   void testTypeFail() {
     Scalar scalar = StringScalar.of("string");
-    assertThrows(TensorRuntimeException.class, () -> Ceiling.of(scalar));
+    assertThrows(Throw.class, () -> Ceiling.of(scalar));
   }
 }

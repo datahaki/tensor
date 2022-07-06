@@ -19,8 +19,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -150,14 +150,14 @@ class JetScalarTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> JetScalar.of(RealScalar.of(2)));
+    assertThrows(Throw.class, () -> JetScalar.of(RealScalar.of(2)));
   }
 
   @ParameterizedTest
   @ValueSource(ints = { 1, 2, 3 })
   void testJetScalarConstantFail(int n) {
     JetScalar jetScalar = JetScalar.of(RealScalar.of(2), n);
-    assertThrows(TensorRuntimeException.class, () -> JetScalar.of(jetScalar, n));
+    assertThrows(Throw.class, () -> JetScalar.of(jetScalar, n));
   }
 
   @Test
@@ -172,7 +172,7 @@ class JetScalarTest {
 
   @Test
   void testMatrixFail() {
-    assertThrows(TensorRuntimeException.class, () -> JetScalar.of(HilbertMatrix.of(3)));
+    assertThrows(Throw.class, () -> JetScalar.of(HilbertMatrix.of(3)));
   }
 
   @Test
@@ -192,6 +192,6 @@ class JetScalarTest {
   @Test
   void testNestFail() {
     JetScalar js = JetScalar.of(RealScalar.of(2), 3);
-    assertThrows(TensorRuntimeException.class, () -> JetScalar.of(Tensors.of(RealScalar.of(1), js)));
+    assertThrows(Throw.class, () -> JetScalar.of(Tensors.of(RealScalar.of(1), js)));
   }
 }

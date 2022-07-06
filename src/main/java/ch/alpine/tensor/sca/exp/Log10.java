@@ -6,7 +6,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** logarithm to base 10
@@ -34,7 +34,7 @@ public enum Log10 implements ScalarUnaryOperator {
     }
     if (scalar instanceof ComplexScalar z)
       return Log.FUNCTION.apply(z).divide(LOG10);
-    throw TensorRuntimeException.of(scalar);
+    throw Throw.of(scalar);
   }
 
   /** @param tensor

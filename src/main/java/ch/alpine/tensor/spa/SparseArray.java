@@ -21,8 +21,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.ext.Integers;
@@ -163,7 +163,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
           ? tensor.copy()
           : StaticHelper.of(fallback, list, tensor));
     else
-      throw TensorRuntimeException.of(tensor);
+      throw Throw.of(tensor);
   }
 
   @Override // from Tensor

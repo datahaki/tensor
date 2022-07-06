@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
@@ -52,13 +52,13 @@ class WindowFunctionsTest {
   @ParameterizedTest
   @EnumSource(WindowFunctions.class)
   void testInsideFail(WindowFunctions windowFunction) {
-    assertThrows(TensorRuntimeException.class, () -> windowFunction.get().apply(Quantity.of(0.1, "s")));
+    assertThrows(Throw.class, () -> windowFunction.get().apply(Quantity.of(0.1, "s")));
   }
 
   @ParameterizedTest
   @EnumSource(WindowFunctions.class)
   void testOustideFail(WindowFunctions windowFunction) {
-    assertThrows(TensorRuntimeException.class, () -> windowFunction.get().apply(Quantity.of(1, "s")));
+    assertThrows(Throw.class, () -> windowFunction.get().apply(Quantity.of(1, "s")));
   }
 
   @ParameterizedTest

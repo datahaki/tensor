@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
@@ -64,9 +64,9 @@ class ImageRotateTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> ImageRotate.of(Pi.HALF));
-    assertThrows(TensorRuntimeException.class, () -> ImageRotate.cw(Pi.HALF));
-    assertThrows(TensorRuntimeException.class, () -> ImageRotate._180(Pi.HALF));
+    assertThrows(Throw.class, () -> ImageRotate.of(Pi.HALF));
+    assertThrows(Throw.class, () -> ImageRotate.cw(Pi.HALF));
+    assertThrows(Throw.class, () -> ImageRotate._180(Pi.HALF));
   }
 
   @Test
@@ -81,8 +81,8 @@ class ImageRotateTest {
   @Test
   void testUnstructuredFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
-    assertThrows(TensorRuntimeException.class, () -> ImageRotate.of(tensor));
-    assertThrows(TensorRuntimeException.class, () -> ImageRotate.cw(tensor));
-    assertThrows(TensorRuntimeException.class, () -> ImageRotate._180(tensor));
+    assertThrows(Throw.class, () -> ImageRotate.of(tensor));
+    assertThrows(Throw.class, () -> ImageRotate.cw(tensor));
+    assertThrows(Throw.class, () -> ImageRotate._180(tensor));
   }
 }

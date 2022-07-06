@@ -8,7 +8,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.io.ScalarArray;
@@ -59,7 +59,7 @@ import ch.alpine.tensor.sca.Abs;
               eliminate(p, q);
         }
     }
-    throw TensorRuntimeException.of();
+    throw Throw.of();
   }
 
   /** @param p

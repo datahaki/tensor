@@ -7,7 +7,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.sca.Real;
@@ -48,7 +48,7 @@ public enum Gamma implements ScalarUnaryOperator {
     if (z.equals(round)) { // ..., -2, -1, 0, 1, 2, ...
       z = round;
       if (Scalars.lessEquals(z, RealScalar.ZERO)) // ..., -2, -1, 0
-        throw TensorRuntimeException.of(z); // ComplexInfinity
+        throw Throw.of(z); // ComplexInfinity
       try {
         return Factorial.of(Math.subtractExact(Scalars.intValueExact(round), 1));
       } catch (Exception exception) {

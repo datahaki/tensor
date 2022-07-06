@@ -14,8 +14,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Differences;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.Subdivide;
@@ -81,7 +81,7 @@ class EqualizingDistributionTest {
 
   @Test
   void testNegativeFail() {
-    assertThrows(TensorRuntimeException.class, () -> EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
+    assertThrows(Throw.class, () -> EqualizingDistribution.fromUnscaledPDF(Tensors.vector(0, -9, 1)));
   }
 
   @Test
@@ -96,7 +96,7 @@ class EqualizingDistributionTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> EqualizingDistribution.fromUnscaledPDF(RealScalar.ONE));
+    assertThrows(Throw.class, () -> EqualizingDistribution.fromUnscaledPDF(RealScalar.ONE));
   }
 
   @Test

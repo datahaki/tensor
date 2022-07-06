@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactScalarQ;
 
@@ -41,6 +41,6 @@ class Det2DTest {
 
   @Test
   void testFailQ() {
-    assertThrows(TensorRuntimeException.class, () -> Det2D.of(Tensors.vector(1, 0, 0), Tensors.vector(0, 1)));
+    assertThrows(Throw.class, () -> Det2D.of(Tensors.vector(1, 0, 0), Tensors.vector(0, 1)));
   }
 }

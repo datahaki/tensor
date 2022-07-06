@@ -12,8 +12,8 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.re.Det;
@@ -46,12 +46,12 @@ class OrthogonalMatrixQTest {
   @Test
   void testRequireChop() {
     OrthogonalMatrixQ.require(IdentityMatrix.of(4), Chop.NONE);
-    assertThrows(TensorRuntimeException.class, () -> OrthogonalMatrixQ.require(HilbertMatrix.of(3), Chop.NONE));
+    assertThrows(Throw.class, () -> OrthogonalMatrixQ.require(HilbertMatrix.of(3), Chop.NONE));
   }
 
   @Test
   void testRequire() {
     OrthogonalMatrixQ.require(IdentityMatrix.of(4));
-    assertThrows(TensorRuntimeException.class, () -> OrthogonalMatrixQ.require(HilbertMatrix.of(3)));
+    assertThrows(Throw.class, () -> OrthogonalMatrixQ.require(HilbertMatrix.of(3)));
   }
 }

@@ -6,8 +6,8 @@ import java.util.stream.IntStream;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 
 /* package */ abstract class QRDecompositionBase implements QRDecomposition {
@@ -37,6 +37,6 @@ import ch.alpine.tensor.mat.ConjugateTranspose;
 
   @Override // from Object
   public final String toString() {
-    return String.format("QRDecomposition[%s]", Tensors.message(getQ(), getR()));
+    return MathematicaFormat.of("QRDecomposition", getQ(), getR());
   }
 }

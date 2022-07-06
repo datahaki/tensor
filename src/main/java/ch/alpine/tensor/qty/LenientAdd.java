@@ -6,7 +6,7 @@ import java.util.function.BinaryOperator;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
 import ch.alpine.tensor.mat.re.GaussianElimination;
@@ -47,7 +47,7 @@ public enum LenientAdd {
             : Quantity.of(sum, q_unit); // 0[m] + 3[s] == 3[s]; 0 + 3[s] == 3[s]; 0[m] + 3 == 3
       if (q_zero)
         return Quantity.of(sum, p_unit); // 3[m] + 0[s] == 3[m]; 3 + 0[s] == 3; 3[m] + 0 == 3[m]
-      throw TensorRuntimeException.of(p, q);
+      throw Throw.of(p, q);
     }
     return p.add(q);
   }

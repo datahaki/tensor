@@ -15,8 +15,8 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
@@ -223,8 +223,8 @@ class PseudoInverseTest {
     Tensor matrix = m1.dot(m2);
     assertEquals(MatrixRank.of(matrix), r);
     {
-      assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingQR(matrix));
-      assertThrows(TensorRuntimeException.class, () -> LeastSquares.usingQR(matrix, br));
+      assertThrows(Throw.class, () -> PseudoInverse.usingQR(matrix));
+      assertThrows(Throw.class, () -> LeastSquares.usingQR(matrix, br));
       Tensor ls1 = LeastSquares.of(matrix, br);
       Tensor ls2 = PseudoInverse.of(matrix).dot(br);
       Tolerance.CHOP.requireClose(ls1, ls2);
@@ -232,8 +232,8 @@ class PseudoInverseTest {
     {
       Tensor m = Transpose.of(matrix);
       Tensor b = RandomVariate.of(distribution, 4);
-      assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingQR(m));
-      assertThrows(TensorRuntimeException.class, () -> LeastSquares.usingQR(m, b));
+      assertThrows(Throw.class, () -> PseudoInverse.usingQR(m));
+      assertThrows(Throw.class, () -> LeastSquares.usingQR(m, b));
       Tensor ls1 = LeastSquares.of(m, b);
       Tensor ls2 = PseudoInverse.of(m).dot(b);
       Tolerance.CHOP.requireClose(ls1, ls2);
@@ -277,14 +277,14 @@ class PseudoInverseTest {
   @Test
   void testVectorFail() {
     Tensor tensor = Tensors.vector(1, 2, 3, 4);
-    assertThrows(TensorRuntimeException.class, () -> PseudoInverse.of(tensor));
-    assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingSvd(tensor));
+    assertThrows(Throw.class, () -> PseudoInverse.of(tensor));
+    assertThrows(Throw.class, () -> PseudoInverse.usingSvd(tensor));
   }
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> PseudoInverse.of(RealScalar.ONE));
-    assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingSvd(RealScalar.ONE));
+    assertThrows(Throw.class, () -> PseudoInverse.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> PseudoInverse.usingSvd(RealScalar.ONE));
   }
 
   @Test

@@ -5,7 +5,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** gives the logarithm of a {@link Scalar} that implements {@link LogInterface}
@@ -23,7 +23,7 @@ public enum Log implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof LogInterface logInterface)
       return logInterface.log();
-    throw TensorRuntimeException.of(scalar);
+    throw Throw.of(scalar);
   }
 
   /** @param tensor
@@ -43,7 +43,7 @@ public enum Log implements ScalarUnaryOperator {
   public static ScalarUnaryOperator base(Scalar base) {
     Scalar log_b = FUNCTION.apply(base);
     if (Scalars.isZero(log_b))
-      throw TensorRuntimeException.of(base);
+      throw Throw.of(base);
     return scalar -> FUNCTION.apply(scalar).divide(log_b);
   }
 

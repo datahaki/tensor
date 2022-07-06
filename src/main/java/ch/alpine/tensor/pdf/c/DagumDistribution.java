@@ -8,6 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Sign;
@@ -107,6 +108,6 @@ public class DagumDistribution extends AbstractContinuousDistribution implements
 
   @Override // from Object
   public String toString() {
-    return String.format("DagumDistribution[%s, %s, %s]", p, a, b);
+    return MathematicaFormat.of("DagumDistribution", p, a, b);
   }
 }

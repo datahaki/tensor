@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat.gr;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
@@ -34,7 +34,7 @@ public enum InfluenceMatrixQ {
   public static Tensor require(Tensor matrix, Chop chop) {
     if (of(matrix, chop))
       return matrix;
-    throw TensorRuntimeException.of(matrix);
+    throw Throw.of(matrix);
   }
 
   /** @param matrix

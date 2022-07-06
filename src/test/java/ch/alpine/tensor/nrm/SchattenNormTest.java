@@ -13,8 +13,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.alg.Transpose;
@@ -62,16 +62,16 @@ class SchattenNormTest {
 
   @Test
   void testPOutsideRangeFail() {
-    assertThrows(TensorRuntimeException.class, () -> SchattenNorm.of(0.999));
+    assertThrows(Throw.class, () -> SchattenNorm.of(0.999));
   }
 
   @Test
   void testFormatFail() {
     TensorScalarFunction tensorScalarFunction = SchattenNorm.of(RationalScalar.of(3, 2));
     assertThrows(ClassCastException.class, () -> tensorScalarFunction.apply(LeviCivitaTensor.of(3)));
-    assertThrows(TensorRuntimeException.class, () -> tensorScalarFunction.apply(Tensors.vector(1, 2, 3)));
+    assertThrows(Throw.class, () -> tensorScalarFunction.apply(Tensors.vector(1, 2, 3)));
     assertThrows(IllegalArgumentException.class, () -> tensorScalarFunction.apply(Tensors.empty()));
-    assertThrows(TensorRuntimeException.class, () -> tensorScalarFunction.apply(Pi.HALF));
+    assertThrows(Throw.class, () -> tensorScalarFunction.apply(Pi.HALF));
   }
 
   @Test

@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
@@ -166,13 +166,13 @@ public class LinearProgram implements Serializable {
   public Tensor requireFeasible(Tensor x) {
     if (variables.equals(Variables.NON_NEGATIVE) && //
         !StaticHelper.isNonNegative(x))
-      throw TensorRuntimeException.of(c, A, b, x);
+      throw Throw.of(c, A, b, x);
     if (constraintType.equals(ConstraintType.LESS_EQUALS) && //
         !StaticHelper.isNonNegative(b.subtract(A.dot(x))))
-      throw TensorRuntimeException.of(c, A, b, x);
+      throw Throw.of(c, A, b, x);
     if (constraintType.equals(ConstraintType.GREATER_EQUALS) && //
         !StaticHelper.isNonNegative(A.dot(x).subtract(b)))
-      throw TensorRuntimeException.of(c, A, b, x);
+      throw Throw.of(c, A, b, x);
     return x;
   }
 

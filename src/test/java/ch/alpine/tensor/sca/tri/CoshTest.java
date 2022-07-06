@@ -16,7 +16,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -48,11 +48,11 @@ class CoshTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> Cosh.of(Quantity.of(1, "deg")));
+    assertThrows(Throw.class, () -> Cosh.of(Quantity.of(1, "deg")));
   }
 
   @Test
   void testGaussScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Cosh.of(GaussScalar.of(6, 7)));
+    assertThrows(Throw.class, () -> Cosh.of(GaussScalar.of(6, 7)));
   }
 }

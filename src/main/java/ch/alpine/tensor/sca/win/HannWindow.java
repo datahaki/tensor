@@ -30,7 +30,7 @@ public class HannWindow extends ParameterizedWindow {
     return StaticHelper.deg1(alpha, a1, x);
   }
 
-  @Override
+  @Override // from ParameterizedWindow
   protected String title() {
     return "HannWindow";
   }

@@ -4,8 +4,8 @@ package ch.alpine.tensor.lie;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 
 /** Reference:
  * http://www.euclideanspace.com/maths/geometry/rotations/conversions/quaternionToMatrix/index.htm */
@@ -17,7 +17,7 @@ public enum QuaternionToRotationMatrix {
   public static Tensor of(Quaternion quaternion) {
     Scalar abs = quaternion.abs();
     if (Scalars.isZero(abs))
-      throw TensorRuntimeException.of(quaternion);
+      throw Throw.of(quaternion);
     Quaternion unit = quaternion.divide(abs); // normalize
     Scalar q_w = unit.w();
     Tensor xyz = unit.xyz();

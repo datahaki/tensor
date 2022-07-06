@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -36,25 +36,25 @@ class NormalizeFailTest {
   @Test
   void testNormalizePositiveInfinity() {
     Tensor vector = Tensors.of(DoubleScalar.POSITIVE_INFINITY, RealScalar.ONE);
-    assertThrows(TensorRuntimeException.class, () -> Vector2Norm.NORMALIZE.apply(vector));
-    assertThrows(TensorRuntimeException.class, () -> NormalizeUnlessZero.with(Vector2Norm::of).apply(vector));
+    assertThrows(Throw.class, () -> Vector2Norm.NORMALIZE.apply(vector));
+    assertThrows(Throw.class, () -> NormalizeUnlessZero.with(Vector2Norm::of).apply(vector));
   }
 
   @Test
   void testNormalizeNegativeInfinity() {
     Tensor vector = Tensors.of(DoubleScalar.NEGATIVE_INFINITY, RealScalar.ONE, DoubleScalar.POSITIVE_INFINITY);
-    assertThrows(TensorRuntimeException.class, () -> Vector2Norm.NORMALIZE.apply(vector));
+    assertThrows(Throw.class, () -> Vector2Norm.NORMALIZE.apply(vector));
   }
 
   @Test
   void testNormalizeNaN() {
     Tensor vector = Tensors.of(RealScalar.ONE, DoubleScalar.INDETERMINATE, RealScalar.ONE);
-    assertThrows(TensorRuntimeException.class, () -> Vector2Norm.NORMALIZE.apply(vector));
+    assertThrows(Throw.class, () -> Vector2Norm.NORMALIZE.apply(vector));
   }
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Vector2Norm.NORMALIZE.apply(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Vector2Norm.NORMALIZE.apply(RealScalar.ONE));
   }
 
   @Test

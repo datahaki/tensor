@@ -12,8 +12,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.qty.Quantity;
@@ -72,19 +72,19 @@ class Vector2NormTest {
         Quantity.of(-4, "m^2"), //
         RealScalar.ZERO //
     );
-    assertThrows(TensorRuntimeException.class, () -> Vector2Norm.of(vec));
+    assertThrows(Throw.class, () -> Vector2Norm.of(vec));
   }
 
   @Test
   void testQuantityMixedFail1() {
     Tensor vector = Tensors.fromString("{0[m^2], 0[s*rad]}");
-    assertThrows(TensorRuntimeException.class, () -> Vector2Norm.of(vector));
+    assertThrows(Throw.class, () -> Vector2Norm.of(vector));
   }
 
   @Test
   void testQuantityMixedFail2() {
     Tensor vector = Tensors.fromString("{0[m^2], 0[m]}");
-    assertThrows(TensorRuntimeException.class, () -> Vector2Norm.of(vector));
+    assertThrows(Throw.class, () -> Vector2Norm.of(vector));
   }
 
   @Test

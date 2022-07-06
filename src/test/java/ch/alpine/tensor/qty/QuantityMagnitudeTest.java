@@ -13,7 +13,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -166,7 +166,7 @@ class QuantityMagnitudeTest {
     QuantityMagnitude quantityMagnitude = QuantityMagnitude.SI();
     Scalar quantity = Quantity.of(360, "kg");
     ScalarUnaryOperator scalarUnaryOperator = quantityMagnitude.in("m");
-    assertThrows(TensorRuntimeException.class, () -> scalarUnaryOperator.apply(quantity));
+    assertThrows(Throw.class, () -> scalarUnaryOperator.apply(quantity));
   }
 
   @Test

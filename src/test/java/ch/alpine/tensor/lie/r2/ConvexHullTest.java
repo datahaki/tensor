@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.pdf.Distribution;
@@ -124,9 +124,9 @@ class ConvexHullTest {
   @Test
   void testFail() {
     Distribution distribution = UniformDistribution.unit();
-    assertThrows(TensorRuntimeException.class, () -> ConvexHull.of(RandomVariate.of(distribution, 5, 2, 3)));
-    assertThrows(TensorRuntimeException.class, () -> ConvexHull.of(Array.zeros(3, 3, 3)));
-    assertThrows(TensorRuntimeException.class, () -> ConvexHull.of(Tensors.fromString("{{{1}, 2}}")));
+    assertThrows(Throw.class, () -> ConvexHull.of(RandomVariate.of(distribution, 5, 2, 3)));
+    assertThrows(Throw.class, () -> ConvexHull.of(Array.zeros(3, 3, 3)));
+    assertThrows(Throw.class, () -> ConvexHull.of(Tensors.fromString("{{{1}, 2}}")));
     assertThrows(ClassCastException.class, () -> ConvexHull.of(Tensors.fromString("{{2, 3}, {{1}, 2}}")));
   }
 
@@ -135,6 +135,6 @@ class ConvexHullTest {
     Tensor bad1 = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
     assertThrows(IllegalArgumentException.class, () -> ConvexHull.of(bad1));
     Tensor bad2 = Tensors.fromString("{{1, 2, 3}, {3, 4}}");
-    assertThrows(TensorRuntimeException.class, () -> ConvexHull.of(bad2));
+    assertThrows(Throw.class, () -> ConvexHull.of(bad2));
   }
 }

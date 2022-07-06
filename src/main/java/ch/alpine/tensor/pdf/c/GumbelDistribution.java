@@ -7,6 +7,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Sign;
@@ -76,6 +77,6 @@ public class GumbelDistribution extends AbstractContinuousDistribution implement
 
   @Override // from Object
   public final String toString() {
-    return String.format("GumbelDistribution[%s, %s]", alpha, beta);
+    return MathematicaFormat.of("GumbelDistribution", alpha, beta);
   }
 }
