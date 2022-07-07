@@ -1,8 +1,8 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
-/** common base class for {@link ContinuousDistribution} and {@link DiscreteDistribution} */
-/** continuous distribution defined over non-discrete subset of the set of real numbers
+/** common base class for {@link ContinuousDistribution} and {@link DiscreteDistribution}
+ * continuous distribution defined over non-discrete subset of the set of real numbers
  * 
  * CauchyDistribution
  * DagumDistribution

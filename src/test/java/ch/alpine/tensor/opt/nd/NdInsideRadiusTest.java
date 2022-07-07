@@ -15,7 +15,7 @@ import ch.alpine.tensor.Tensors;
 
 class NdInsideRadiusTest {
   @ParameterizedTest
-  @EnumSource(NdCenters.class)
+  @EnumSource
   void testSimple(NdCenters ndCenters) {
     NdMap<Void> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0), Tensors.vector(1)));
     ndMap.insert(Tensors.vector(0), null);
@@ -27,7 +27,7 @@ class NdInsideRadiusTest {
   }
 
   @ParameterizedTest
-  @EnumSource(NdCenters.class)
+  @EnumSource
   void testExact(NdCenters ndCenters) {
     NdMap<Void> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0), Tensors.vector(4)));
     ndMap.insert(Tensors.vector(0), null);

@@ -40,7 +40,7 @@ class ColorDataListsTest {
   }
 
   @ParameterizedTest
-  @EnumSource(ColorDataLists.class)
+  @EnumSource
   void testInfinityTransparentCyclic(ColorDataLists colorDataLists) {
     ColorDataIndexed colorDataIndexed = colorDataLists.cyclic();
     assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
@@ -49,7 +49,7 @@ class ColorDataListsTest {
   }
 
   @ParameterizedTest
-  @EnumSource(ColorDataLists.class)
+  @EnumSource
   void testInfinityTransparentStrict(ColorDataLists colorDataLists) {
     ColorDataIndexed colorDataIndexed = colorDataLists.strict();
     assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
@@ -80,14 +80,14 @@ class ColorDataListsTest {
   }
 
   @ParameterizedTest
-  @EnumSource(ColorDataLists.class)
+  @EnumSource
   void testSizeCyclic(ColorDataLists colorDataLists) {
     assertTrue(1 < colorDataLists.cyclic().length());
     assertTrue(colorDataLists.cyclic().length() < 100);
   }
 
   @ParameterizedTest
-  @EnumSource(ColorDataLists.class)
+  @EnumSource
   void testSizeStrict(ColorDataLists colorDataLists) {
     assertTrue(1 < colorDataLists.strict().length());
     assertTrue(colorDataLists.strict().length() < 100);

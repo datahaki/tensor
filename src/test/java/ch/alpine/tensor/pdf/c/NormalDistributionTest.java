@@ -150,6 +150,13 @@ class NormalDistributionTest {
   }
 
   @Test
+  void testVarZero() {
+    Distribution distribution = NormalDistribution.of(3, 0);
+    assertEquals(Mean.of(distribution), RealScalar.of(3));
+    assertEquals(RandomVariate.of(distribution), RealScalar.of(3));
+  }
+
+  @Test
   void testComplexFail() {
     assertThrows(ClassCastException.class, () -> NormalDistribution.of(ComplexScalar.of(1, 2), RealScalar.ONE));
     assertThrows(ClassCastException.class, () -> NormalDistribution.of(RealScalar.ONE, ComplexScalar.of(1, 2)));

@@ -35,7 +35,7 @@ class BinningMethodTest {
   }
 
   @ParameterizedTest
-  @EnumSource(BinningMethod.class)
+  @EnumSource
   void testQuantity(BinningMethod binningMethod) {
     Tensor samples = QuantityTensor.of(Tensors.vector(1, 2, 3, 1, 2, 3, 7, 2, 9, 3, 3), "Apples");
     Scalar width = binningMethod.apply(samples);
@@ -45,7 +45,7 @@ class BinningMethodTest {
   }
 
   @ParameterizedTest
-  @EnumSource(BinningMethod.class)
+  @EnumSource
   void testFail(BinningMethod binningMethod) {
     assertThrows(Exception.class, () -> binningMethod.apply(Tensors.empty()));
   }

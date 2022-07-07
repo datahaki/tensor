@@ -110,8 +110,14 @@ class LogNormalDistributionTest {
   }
 
   @Test
+  void testSigmaZero() {
+    Distribution distribution = LogNormalDistribution.of(RationalScalar.HALF, RealScalar.ZERO);
+    assertEquals(Mean.of(distribution), Exp.FUNCTION.apply(RationalScalar.HALF));
+    assertEquals(distribution.toString(), "LogDiracDeltaDistribution[1/2]");
+  }
+
+  @Test
   void testSigmaNonPositiveFail() {
-    assertThrows(Throw.class, () -> LogNormalDistribution.of(RationalScalar.HALF, RealScalar.ZERO));
     assertThrows(Throw.class, () -> LogNormalDistribution.of(RationalScalar.HALF, RationalScalar.of(-2, 3)));
   }
 

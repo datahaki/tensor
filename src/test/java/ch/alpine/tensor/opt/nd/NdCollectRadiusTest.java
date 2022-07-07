@@ -68,7 +68,7 @@ class NdCollectRadiusTest {
   }
 
   @ParameterizedTest
-  @EnumSource(NdCenters.class)
+  @EnumSource
   void testEmpty(NdCenters ndCenters) {
     NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2, 4.3));
     Scalar radius = RealScalar.of(4);

@@ -2,7 +2,6 @@
 package ch.alpine.tensor.io;
 
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,8 +46,6 @@ public enum MathematicaFormat {
   // ---
   private static final String EXPONENT_JAVA = "E";
   private static final String EXPONENT_MATH = "*^";
-  // ---
-  // public static final Collector<CharSequence, ?, String> BRACKET = ;
 
   private static String recur(Tensor tensor) {
     if (tensor instanceof Scalar)
@@ -99,9 +96,9 @@ public enum MathematicaFormat {
   private static final int MAX_NUMEL = 12;
   private static final int MAX_LENGTH = 64;
 
+  /** @param tensor non-null
+   * @return */
   private static String format(Tensor tensor) {
-    if (Objects.isNull(tensor))
-      return "null";
     return Numel.of(tensor) <= MAX_NUMEL //
         ? formatContent(tensor)
         : "T" + Dimensions.of(tensor);

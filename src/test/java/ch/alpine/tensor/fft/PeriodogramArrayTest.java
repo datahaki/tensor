@@ -40,7 +40,7 @@ class PeriodogramArrayTest {
   }
 
   @ParameterizedTest
-  @EnumSource(WindowFunctions.class)
+  @EnumSource
   void testWindow(WindowFunctions windowFunctions) throws ClassNotFoundException, IOException {
     TensorUnaryOperator tuo = Serialization.copy(PeriodogramArray.of(4, 1, windowFunctions.get()));
     Tensor res = tuo.apply(Tensors.vector(0, 1, 0, -1, 0, 1, 0, -1));

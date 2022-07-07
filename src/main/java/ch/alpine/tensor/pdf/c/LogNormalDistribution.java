@@ -52,26 +52,26 @@ public class LogNormalDistribution implements UnivariateDistribution, KurtosisIn
     return new LogNormalDistribution(RealScalar.of(mu), RealScalar.of(sigma));
   }
 
-  /** @return LogNormalDistribution[0, 1] */
+  /** @return LogNormalDistribution[0, 1] also known as Gibrat distribution */
   public static Distribution standard() {
     return STANDARD;
   }
 
   // ---
   private final Scalar mu;
-  private final NormalDistribution normalDistribution;
+  private final UnivariateDistribution univariateDistribution;
   private final Scalar variance;
 
   private LogNormalDistribution(Scalar mu, Scalar sigma) {
     this.mu = mu;
-    normalDistribution = (NormalDistribution) NormalDistribution.of(mu, sigma);
-    variance = normalDistribution.variance();
+    univariateDistribution = (UnivariateDistribution) NormalDistribution.of(mu, sigma);
+    variance = univariateDistribution.variance();
   }
 
   @Override // from CDF
   public Scalar p_lessThan(Scalar x) {
     return Sign.isPositive(x) //
-        ? normalDistribution.p_lessThan(Log.FUNCTION.apply(x))
+        ? univariateDistribution.p_lessThan(Log.FUNCTION.apply(x))
         : RealScalar.ZERO;
   }
 
@@ -83,13 +83,13 @@ public class LogNormalDistribution implements UnivariateDistribution, KurtosisIn
   @Override // from PDF
   public Scalar at(Scalar x) {
     return Sign.isPositive(x) //
-        ? normalDistribution.at(Log.FUNCTION.apply(x)).divide(x)
+        ? univariateDistribution.at(Log.FUNCTION.apply(x)).divide(x)
         : RealScalar.ZERO;
   }
 
   @Override // from RandomVariateInterface
   public Scalar randomVariate(Random random) {
-    return Exp.FUNCTION.apply(normalDistribution.randomVariate(random));
+    return Exp.FUNCTION.apply(univariateDistribution.randomVariate(random));
   }
 
   @Override // from MeanInterface
@@ -111,11 +111,11 @@ public class LogNormalDistribution implements UnivariateDistribution, KurtosisIn
 
   @Override // from InverseCDF
   public Scalar quantile(Scalar p) {
-    return Exp.FUNCTION.apply(normalDistribution.quantile(p));
+    return Exp.FUNCTION.apply(univariateDistribution.quantile(p));
   }
 
   @Override // from Object
   public String toString() {
-    return "Log" + normalDistribution.toString();
+    return "Log" + univariateDistribution.toString();
   }
 }

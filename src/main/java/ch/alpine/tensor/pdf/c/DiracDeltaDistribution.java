@@ -9,6 +9,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Boole;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
@@ -72,5 +73,10 @@ public class DiracDeltaDistribution implements UnivariateDistribution, CentralMo
   @Override // from CentralMomentInterface
   public Scalar centralMoment(int order) {
     return Boole.of(order == 0);
+  }
+
+  @Override // from Object
+  public String toString() {
+    return MathematicaFormat.of("DiracDeltaDistribution", value);
   }
 }

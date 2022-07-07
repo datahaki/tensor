@@ -32,10 +32,13 @@ public class NormalDistribution implements UnivariateDistribution, //
    * 
    * @param mean
    * @param sigma standard deviation
-   * @return instance of NormalDistribution with given characteristics */
+   * @return instance of NormalDistribution with given characteristics,
+   * or DiracDeltaDistribution if sigma is zero */
   public static Distribution of(Scalar mean, Scalar sigma) {
     Scalars.compare(mean, mean.add(sigma)); // assert that parameters are non-complex with identical units
-    return new NormalDistribution(mean, sigma);
+    return Scalars.isZero(sigma) //
+        ? DiracDeltaDistribution.of(mean)
+        : new NormalDistribution(mean, sigma);
   }
 
   /** @param mean
