@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.img;
 
+import java.util.Optional;
+
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.io.ResourceData;
@@ -109,7 +111,7 @@ public enum ColorDataGradients implements ColorDataGradient {
   }
 
   private ColorDataGradients() {
-    colorDataGradient = new LinearColorDataGradient(getTableRgba());
+    colorDataGradient = new LinearColorDataGradient(_tableRgba());
   }
 
   @Override // from ColorDataGradient
@@ -124,7 +126,15 @@ public enum ColorDataGradients implements ColorDataGradient {
 
   /** @return n x 4 table with entries between 0 and 255
    * @throws Exception if this color data gradient is not backed by such a table */
-  public Tensor getTableRgba() {
+  private Tensor _tableRgba() {
     return ResourceData.of("/ch/alpine/tensor/img/colorscheme/" + name().toLowerCase() + ".csv");
+  }
+
+  /** @return n x 4 table with entries between 0 and 255, or empty
+   * if this color data gradient is not backed by such a table */
+  public Optional<Tensor> queryTableRgba() {
+    return colorDataGradient instanceof LinearColorDataGradient //
+        ? Optional.of(_tableRgba())
+        : Optional.empty();
   }
 }

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -71,28 +72,28 @@ class ColorDataGradientsTest {
   @Test
   void testStrict() {
     int count = 0;
-    for (ColorDataGradients colorDataGradients : ColorDataGradients.values())
-      try {
-        Tensor tableRgba = colorDataGradients.getTableRgba();
+    for (ColorDataGradients colorDataGradients : ColorDataGradients.values()) {
+      Optional<Tensor> optional = colorDataGradients.queryTableRgba();
+      if (optional.isPresent()) {
+        Tensor tableRgba = optional.get();
         LinearColorDataGradient.of(tableRgba);
         ++count;
-      } catch (Exception exception) {
-        // ---
       }
+    }
     assertTrue(34 <= count);
   }
 
   @Test
   void testSunset() {
-    Tensor t1 = Reverse.of(ColorDataGradients.SUNSET.getTableRgba());
-    Tensor t2 = ColorDataGradients.SUNSET_REVERSED.getTableRgba();
+    Tensor t1 = Reverse.of(ColorDataGradients.SUNSET.queryTableRgba().orElseThrow());
+    Tensor t2 = ColorDataGradients.SUNSET_REVERSED.queryTableRgba().orElseThrow();
     assertEquals(t1, t2);
   }
 
   @Test
   void testGrayscaleTable() {
-    assertThrows(RuntimeException.class, () -> ColorDataGradients.HUE.getTableRgba());
-    assertThrows(RuntimeException.class, () -> ColorDataGradients.GRAYSCALE.getTableRgba());
+    assertThrows(RuntimeException.class, () -> ColorDataGradients.HUE.queryTableRgba().orElseThrow());
+    assertThrows(RuntimeException.class, () -> ColorDataGradients.GRAYSCALE.queryTableRgba().orElseThrow());
   }
 
   @ParameterizedTest

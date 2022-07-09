@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.sca.Clips;
 
 class RangeTest {
   @Test
@@ -50,5 +52,17 @@ class RangeTest {
   void testBigIntegerNullFail() {
     assertThrows(NullPointerException.class, () -> Range.of(new BigInteger("123"), null));
     assertThrows(NullPointerException.class, () -> Range.of(null, new BigInteger("123")));
+  }
+
+  @Test
+  void testClip() {
+    assertEquals(Range.of(Clips.unit()), Tensors.vector(0, 1));
+    assertEquals(Range.of(Clips.interval(3, 3)), Tensors.vector(3));
+  }
+
+  @Test
+  void testClipFail() {
+    assertThrows(Throw.class, () -> Range.of(Clips.interval(3, 3.4)));
+    assertThrows(Throw.class, () -> Range.of(Clips.interval(3.4, 4)));
   }
 }
