@@ -3,7 +3,6 @@ package ch.alpine.tensor.alg;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -127,92 +126,41 @@ public enum Array {
   }
 
   // ---
-  /** traverses the indices of a hypothetical array of given dimensions and invokes
-   * the provided consumer with current index.
+  /** traverses the indices of a hypothetical array of given dimensions
    * 
-   * @param consumer maps given index to {@link Tensor}, or {@link Scalar}
+   * Example:
+   * Array.stream(2, 1, 3) gives the following lists of integers
+   * [0, 0, 0]
+   * [0, 0, 1]
+   * [0, 0, 2]
+   * [1, 0, 0]
+   * [1, 0, 1]
+   * [1, 0, 2]
+   * 
    * @param dimensions with non-negative entries
+   * @return stream of unmodifiable lists of integers
    * @throws Exception if any dimension is negative */
   @SafeVarargs
-  public static void forEach(Consumer<List<Integer>> consumer, int... dimensions) {
-    forEach(consumer, Integers.asList(dimensions));
-  }
-
-  /** @param consumer maps given index to {@link Tensor}, or {@link Scalar}
-   * @param dimensions with non-negative entries
-   * @throws Exception if any dimension is negative */
-  public static void forEach(Consumer<List<Integer>> consumer, List<Integer> dimensions) {
-    dimensions.forEach(Integers::requirePositiveOrZero);
-    forEach(consumer, 0, dimensions, new ArrayList<>(dimensions));
-  }
-
-  // helper function
-  private static void forEach(Consumer<List<Integer>> consumer, int level, List<Integer> dimensions, List<Integer> index) {
-    if (level == dimensions.size())
-      consumer.accept(index);
-    else
-      IntStream.range(0, dimensions.get(level)).forEach(count -> {
-        index.set(level, count);
-        forEach(consumer, level + 1, dimensions, index);
-      });
-  }
-
-  /** @param dimensions
-   * @return */
   public static Stream<List<Integer>> stream(int... dimensions) {
     return stream(Integers.asList(dimensions));
   }
 
-  /** @param dimensions
-   * @return */
+  /** @param dimensions with non-negative entries
+   * @return stream of unmodifiable lists of integers
+   * @throws Exception if any dimension is negative */
   public static Stream<List<Integer>> stream(List<Integer> dimensions) {
     dimensions.forEach(Integers::requirePositiveOrZero);
-    if (dimensions.isEmpty())
-      return Stream.of();
-    return stream( //
-        IntStream.range(0, dimensions.get(0)).mapToObj(i -> {
-          List<Integer> list = new ArrayList<>(1);
-          list.add(i);
-          return list;
-        }), //
-        dimensions.subList(1, dimensions.size()));
+    return recur(Stream.of(new int[dimensions.size()]), 0, dimensions) //
+        .map(int[]::clone) //
+        .map(Integers::asList);
   }
 
-  // helper function
-  private static Stream<List<Integer>> stream(Stream<List<Integer>> stream, List<Integer> dimensions) {
-    return dimensions.isEmpty() //
+  private static Stream<int[]> recur(Stream<int[]> stream, int level, List<Integer> dimensions) {
+    return level == dimensions.size() //
         ? stream
-        : stream(stream.flatMap(list -> IntStream.range(0, dimensions.get(0)).mapToObj(i -> {
-          List<Integer> result = new ArrayList<>(list.size() + 1);
-          result.addAll(list);
-          result.add(i);
-          return result;
-        })), dimensions.subList(1, dimensions.size()));
+        : recur(stream.flatMap(array -> IntStream.range(0, dimensions.get(level)).mapToObj(i -> {
+          array[level] = i;
+          return array;
+        })), level + 1, dimensions);
   }
-  // public static Stream<List<Integer>> stream2(int... dimensions) {
-  // return stream2(Integers.asList(dimensions));
-  // }
-  //
-  // public static Stream<List<Integer>> stream2(List<Integer> dimensions) {
-  // dimensions.forEach(Integers::requirePositiveOrZero);
-  // if (dimensions.isEmpty())
-  // return Stream.of();
-  // int[] array = new int[dimensions.size()];
-  // return stream2( //
-  // IntStream.range(0, dimensions.get(0)).mapToObj(i -> {
-  // array[0] = i;
-  // return Integers.asList(array);
-  // }), //
-  // 1, array, dimensions);
-  // }
-  //
-  // // helper function
-  // private static Stream<List<Integer>> stream2(Stream<List<Integer>> stream, int level, int[] array, List<Integer> dimensions) {
-  // if (level == dimensions.size())
-  // return stream;
-  // return stream2(stream.flatMap(list -> IntStream.range(0, dimensions.get(level)).mapToObj(i -> {
-  // array[level] = i;
-  // return Integers.asList(array);
-  // })), level + 1, array, dimensions);
-  // }
 }

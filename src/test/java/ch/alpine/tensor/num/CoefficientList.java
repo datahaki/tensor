@@ -30,9 +30,8 @@ import ch.alpine.tensor.red.Times;
         .reduce(TensorProduct::of) //
         .orElseThrow();
     Tensor coeffs = Reverse.of(FoldList.of(Times::of, roots.map(Scalar::zero))).append(first.one().zero());
-    Array.forEach( //
-        list -> coeffs.set(box.get(list)::add, list.stream().mapToInt(i -> i).sum()), //
-        Dimensions.of(box));
+    Array.stream(Dimensions.of(box)) //
+        .forEach(list -> coeffs.set(box.get(list)::add, list.stream().mapToInt(i -> i).sum()));
     return coeffs;
   }
 
