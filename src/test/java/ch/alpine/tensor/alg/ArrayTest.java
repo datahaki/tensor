@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -137,5 +138,17 @@ class ArrayTest {
   void testForEachFail() {
     Set<List<Integer>> set = new HashSet<>();
     assertThrows(IllegalArgumentException.class, () -> Array.forEach(set::add, 2, -1, 4));
+  }
+
+  @Test
+  void testSi() {
+    List<List<Integer>> list = Array.stream(2, 3, 4).collect(Collectors.toList());
+    assertEquals(list.size(), 24);
+  }
+
+  @Test
+  void testStreamForEach() {
+    long count = Array.stream(2, 3, 4).distinct().count();
+    assertEquals(count, 24);
   }
 }

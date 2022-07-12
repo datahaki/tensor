@@ -156,4 +156,63 @@ public enum Array {
         forEach(consumer, level + 1, dimensions, index);
       });
   }
+
+  /** @param dimensions
+   * @return */
+  public static Stream<List<Integer>> stream(int... dimensions) {
+    return stream(Integers.asList(dimensions));
+  }
+
+  /** @param dimensions
+   * @return */
+  public static Stream<List<Integer>> stream(List<Integer> dimensions) {
+    dimensions.forEach(Integers::requirePositiveOrZero);
+    if (dimensions.isEmpty())
+      return Stream.of();
+    return stream( //
+        IntStream.range(0, dimensions.get(0)).mapToObj(i -> {
+          List<Integer> list = new ArrayList<>(1);
+          list.add(i);
+          return list;
+        }), //
+        dimensions.subList(1, dimensions.size()));
+  }
+
+  // helper function
+  private static Stream<List<Integer>> stream(Stream<List<Integer>> stream, List<Integer> dimensions) {
+    return dimensions.isEmpty() //
+        ? stream
+        : stream(stream.flatMap(list -> IntStream.range(0, dimensions.get(0)).mapToObj(i -> {
+          List<Integer> result = new ArrayList<>(list.size() + 1);
+          result.addAll(list);
+          result.add(i);
+          return result;
+        })), dimensions.subList(1, dimensions.size()));
+  }
+  // public static Stream<List<Integer>> stream2(int... dimensions) {
+  // return stream2(Integers.asList(dimensions));
+  // }
+  //
+  // public static Stream<List<Integer>> stream2(List<Integer> dimensions) {
+  // dimensions.forEach(Integers::requirePositiveOrZero);
+  // if (dimensions.isEmpty())
+  // return Stream.of();
+  // int[] array = new int[dimensions.size()];
+  // return stream2( //
+  // IntStream.range(0, dimensions.get(0)).mapToObj(i -> {
+  // array[0] = i;
+  // return Integers.asList(array);
+  // }), //
+  // 1, array, dimensions);
+  // }
+  //
+  // // helper function
+  // private static Stream<List<Integer>> stream2(Stream<List<Integer>> stream, int level, int[] array, List<Integer> dimensions) {
+  // if (level == dimensions.size())
+  // return stream;
+  // return stream2(stream.flatMap(list -> IntStream.range(0, dimensions.get(level)).mapToObj(i -> {
+  // array[level] = i;
+  // return Integers.asList(array);
+  // })), level + 1, array, dimensions);
+  // }
 }

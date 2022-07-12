@@ -7,7 +7,6 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
 import ch.alpine.tensor.mat.re.GaussianElimination;
 import ch.alpine.tensor.mat.re.RowReduce;
@@ -35,21 +34,36 @@ public enum LenientAdd {
    * @param q
    * @return p + q */
   public static Scalar of(Scalar p, Scalar q) {
-    Unit p_unit = QuantityUnit.of(p);
-    Unit q_unit = QuantityUnit.of(q);
-    if (!p_unit.equals(q_unit)) {
-      boolean p_zero = Scalars.isZero(p);
-      boolean q_zero = Scalars.isZero(q);
-      Scalar sum = Unprotect.withoutUnit(p).add(Unprotect.withoutUnit(q));
-      if (p_zero)
-        return q_zero //
-            ? sum // drop both units 0[m] + 0[s] == 0; 0[m] + 0 == 0
-            : Quantity.of(sum, q_unit); // 0[m] + 3[s] == 3[s]; 0 + 3[s] == 3[s]; 0[m] + 3 == 3
-      if (q_zero)
-        return Quantity.of(sum, p_unit); // 3[m] + 0[s] == 3[m]; 3 + 0[s] == 3; 3[m] + 0 == 3[m]
-      throw Throw.of(p, q);
+    final Scalar mpv;
+    final Unit mpu;
+    if (p instanceof Quantity qp) {
+      mpv = qp.value();
+      mpu = qp.unit();
+    } else {
+      mpv = p;
+      mpu = Unit.ONE;
     }
-    return p.add(q);
+    final Scalar mqv;
+    final Unit mqu;
+    if (q instanceof Quantity qq) {
+      mqv = qq.value();
+      mqu = qq.unit();
+    } else {
+      mqv = q;
+      mqu = Unit.ONE;
+    }
+    if (mpu.equals(mqu))
+      return p.add(q);
+    boolean p_zero = Scalars.isZero(p);
+    boolean q_zero = Scalars.isZero(q);
+    Scalar sum = mpv.add(mqv);
+    if (p_zero)
+      return q_zero //
+          ? sum // drop both units 0[m] + 0[s] == 0; 0[m] + 0 == 0
+          : Quantity.of(sum, mqu); // 0[m] + 3[s] == 3[s]; 0 + 3[s] == 3[s]; 0[m] + 3 == 3
+    if (q_zero)
+      return Quantity.of(sum, mpu); // 3[m] + 0[s] == 3[m]; 3 + 0[s] == 3; 3[m] + 0 == 3[m]
+    throw Throw.of(p, q);
   }
 
   /** @param p

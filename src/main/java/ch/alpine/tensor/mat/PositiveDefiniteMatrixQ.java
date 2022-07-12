@@ -13,17 +13,9 @@ import ch.alpine.tensor.sca.Sign;
 public enum PositiveDefiniteMatrixQ {
   ;
   /** @param tensor
-   * @param chop
-   * @return true if tensor is a positive definite matrix
-   * @throws Throw if result cannot be established */
-  public static boolean ofHermitian(Tensor tensor, Chop chop) {
-    return StaticHelper.definite(tensor, chop, Sign::isPositive);
-  }
-
-  /** @param tensor
    * @return true if tensor is a positive definite matrix
    * @throws Throw if result cannot be established */
   public static boolean ofHermitian(Tensor tensor) {
-    return ofHermitian(tensor, Tolerance.CHOP);
+    return StaticHelper.definite(tensor, Chop.NONE, Sign::isPositive);
   }
 }
