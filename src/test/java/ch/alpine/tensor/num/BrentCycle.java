@@ -1,3 +1,4 @@
+// code by jph
 package ch.alpine.tensor.num;
 
 enum BrentCycle {

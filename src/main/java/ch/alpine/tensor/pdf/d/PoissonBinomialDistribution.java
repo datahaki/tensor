@@ -39,9 +39,9 @@ public class PoissonBinomialDistribution implements Distribution, //
       Scalar p = Clips.unit().requireInside((Scalar) _p);
       if (RealScalar.ONE.equals(p))
         ++lowerBound;
-      else
-        if (Scalars.nonZero(p))
-          p_result.append(p);
+      else //
+      if (Scalars.nonZero(p))
+        p_result.append(p);
     }
     return new PoissonBinomialDistribution(lowerBound, p_result);
   }
@@ -79,10 +79,6 @@ public class PoissonBinomialDistribution implements Distribution, //
         .orElse(RealScalar.ZERO);
   }
 
-  // @Override // from DiscreteDistribution
-  // public int lowerBound() {
-  // return lowerBound;
-  // }
   @Override // from Object
   public String toString() {
     return MathematicaFormat.of("PoissonBinomialDistribution", p_vector);

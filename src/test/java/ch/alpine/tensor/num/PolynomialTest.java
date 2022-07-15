@@ -483,12 +483,12 @@ class PolynomialTest {
       if (1 == f0.coeffs().length()) {
         Polynomial f1 = f0.derivative();
         assertEquals(f0.coeffs().length(), f1.coeffs().length());
-      } else
-        if (1 < f0.coeffs().length()) {
-          Polynomial f1 = f0.derivative();
-          if (f0.coeffs().length() != 2)
-            assertEquals(f0.coeffs().length(), f1.coeffs().length() + 1);
-        }
+      } else //
+      if (1 < f0.coeffs().length()) {
+        Polynomial f1 = f0.derivative();
+        if (f0.coeffs().length() != 2)
+          assertEquals(f0.coeffs().length(), f1.coeffs().length() + 1);
+      }
       ScalarUnaryOperator x_to_y = Polynomial.fit(x, y, degree);
       Scalar pressure = x_to_y.apply(Quantity.of(103, "K"));
       pascal.apply(pressure);
