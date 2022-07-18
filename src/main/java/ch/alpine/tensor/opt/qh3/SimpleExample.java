@@ -17,7 +17,7 @@ public class SimpleExample {
     Vector3d[] vertices = hull.getVertices();
     for (int i = 0; i < vertices.length; i++) {
       Vector3d pnt = vertices[i];
-      System.out.println(pnt.x + " " + pnt.y + " " + pnt.z);
+      System.out.println(pnt.xyz);
     }
     System.out.println("Faces:");
     int[][] faceIndices = hull.getFaces();

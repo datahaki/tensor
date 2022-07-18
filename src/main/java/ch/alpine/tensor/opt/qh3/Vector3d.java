@@ -34,11 +34,7 @@ public class Vector3d {
   /** Precision of a double. */
   static private final double DOUBLE_PREC = 2.2204460492503131e-16;
   /** First element */
-  public Scalar x;
-  /** Second element */
-  public Scalar y;
-  /** Third element */
-  public Scalar z;
+  public Tensor xyz;
 
   /** Creates a 3-vector and initializes its elements to 0. */
   public Vector3d() {
@@ -71,7 +67,7 @@ public class Vector3d {
    * @return element value throws ArrayIndexOutOfBoundsException
    * if i is not in the range 0 to 2. */
   public Scalar get(int i) {
-    return toTensor().Get(i);
+    return xyz.Get(i);
   }
 
   /** Sets a single element of this vector.
@@ -82,30 +78,16 @@ public class Vector3d {
    * @return element value throws ArrayIndexOutOfBoundsException
    * if i is not in the range 0 to 2. */
   public void set(int i, Scalar value) {
-    switch (i) {
-    case 0: {
-      x = value;
-      break;
-    }
-    case 1: {
-      y = value;
-      break;
-    }
-    case 2: {
-      z = value;
-      break;
-    }
-    default: {
-      throw new ArrayIndexOutOfBoundsException(i);
-    }
-    }
+    if (xyz == null)
+      xyz = Array.zeros(3);
+    xyz.set(value, i);
   }
 
   /** Sets the values of this vector to those of v1.
    *
    * @param v1 vector whose values are copied */
   public void set(Vector3d v1) {
-    set(v1.toTensor());
+    set(v1.xyz);
   }
 
   /** Adds vector v1 to v2 and places the result in this vector.
@@ -113,14 +95,14 @@ public class Vector3d {
    * @param v1 left-hand vector
    * @param v2 right-hand vector */
   public void add(Vector3d v1, Vector3d v2) {
-    set(v1.toTensor().add(v2.toTensor()));
+    set(v1.xyz.add(v2.xyz));
   }
 
   /** Adds this vector to v1 and places the result in this vector.
    *
    * @param v1 right-hand vector */
   public void add(Vector3d v1) {
-    set(toTensor().add(v1.toTensor()));
+    set(xyz.add(v1.xyz));
   }
 
   /** Subtracts vector v1 from v2 and places the result in this vector.
@@ -128,21 +110,21 @@ public class Vector3d {
    * @param v1 left-hand vector
    * @param v2 right-hand vector */
   public void sub(Vector3d v1, Vector3d v2) {
-    set(v1.toTensor().subtract(v2.toTensor()));
+    set(v1.xyz.subtract(v2.xyz));
   }
 
   /** Subtracts v1 from this vector and places the result in this vector.
    *
    * @param v1 right-hand vector */
   public void sub(Vector3d v1) {
-    set(toTensor().subtract(v1.toTensor()));
+    set(xyz.subtract(v1.xyz));
   }
 
   /** Scales the elements of this vector by <code>s</code>.
    *
    * @param s scaling factor */
   public void scale(Scalar s) {
-    set(toTensor().multiply(s));
+    set(xyz.multiply(s));
   }
 
   /** Scales the elements of vector v1 by <code>s</code> and places
@@ -151,7 +133,7 @@ public class Vector3d {
    * @param s scaling factor
    * @param v1 vector to be scaled */
   public void scale(Scalar s, Vector3d v1) {
-    set(v1.toTensor().multiply(s));
+    set(v1.xyz.multiply(s));
   }
 
   /** Returns the 2 norm of this vector. This is the square root of the
@@ -159,7 +141,7 @@ public class Vector3d {
    *
    * @return vector 2 norm */
   public Scalar norm() {
-    return Vector2Norm.of(toTensor());
+    return Vector2Norm.of(xyz);
   }
 
   /** Returns the square of the 2 norm of this vector. This
@@ -167,14 +149,14 @@ public class Vector3d {
    *
    * @return square of the 2 norm */
   public Scalar normSquared() {
-    return Vector2NormSquared.of(toTensor());
+    return Vector2NormSquared.of(xyz);
   }
 
   /** Returns the Euclidean distance between this vector and vector v.
    *
    * @return distance between this vector and v */
   public Scalar distance(Vector3d v) {
-    return Vector2Norm.between(toTensor(), v.toTensor());
+    return Vector2Norm.between(xyz, v.xyz);
   }
 
   /** Returns the squared of the Euclidean distance between this vector
@@ -182,7 +164,7 @@ public class Vector3d {
    *
    * @return squared distance between this vector and v */
   public Scalar distanceSquared(Vector3d v) {
-    return Vector2NormSquared.between(toTensor(), v.toTensor());
+    return Vector2NormSquared.between(xyz, v.xyz);
   }
 
   /** Returns the dot product of this vector and v1.
@@ -190,17 +172,17 @@ public class Vector3d {
    * @param v1 right-hand vector
    * @return dot product */
   public Scalar dot(Vector3d v1) {
-    return (Scalar) toTensor().dot(v1.toTensor());
+    return (Scalar) xyz.dot(v1.xyz);
   }
 
   /** Normalizes this vector in place. */
   public void normalize() {
-    Scalar scalar = Vector2NormSquared.of(toTensor());
+    Scalar scalar = Vector2NormSquared.of(xyz);
     double lenSqr = scalar.number().doubleValue();
     double err = lenSqr - 1;
     if (err > (2 * DOUBLE_PREC) || err < -(2 * DOUBLE_PREC)) {
       double len = Math.sqrt(lenSqr);
-      set(toTensor().divide(RealScalar.of(len)));
+      set(xyz.divide(RealScalar.of(len)));
     }
   }
 
@@ -215,9 +197,7 @@ public class Vector3d {
    * @param y value for second element
    * @param z value for third element */
   public void set(Scalar x, Scalar y, Scalar z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
+    xyz = Tensors.of(x, y, z);
   }
 
   /** Computes the cross product of v1 and v2 and places the result
@@ -226,11 +206,11 @@ public class Vector3d {
    * @param v1 left-hand vector
    * @param v2 right-hand vector */
   public void cross(Vector3d v1, Vector3d v2) {
-    set(Cross.of(v1.toTensor(), v2.toTensor()));
+    set(Cross.of(v1.xyz, v2.xyz));
   }
 
   private void set(Tensor tensor) {
-    set(tensor.Get(0), tensor.Get(1), tensor.Get(2));
+    xyz = tensor;
   }
 
   /** Sets the elements of this vector to uniformly distributed
@@ -251,10 +231,6 @@ public class Vector3d {
    * @return string representation */
   @Override
   public String toString() {
-    return x + " " + y + " " + z;
-  }
-
-  Tensor toTensor() {
-    return Tensors.of(x, y, z);
+    return xyz.toString();
   }
 }

@@ -15,6 +15,7 @@ import java.util.Random;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.io.ScalarArray;
@@ -100,9 +101,9 @@ public class QuickHull3DTest {
   }
 
   private void randomlyPerturb(Vector3d pnt, Scalar tol) {
-    pnt.x = pnt.x.add(RealScalar.of(rand.nextDouble() - 0.5).multiply(tol));
-    pnt.y = pnt.y.add(RealScalar.of(rand.nextDouble() - 0.5).multiply(tol));
-    pnt.z = pnt.z.add(RealScalar.of(rand.nextDouble() - 0.5).multiply(tol));
+    pnt.xyz.set(s -> s.add(RealScalar.of(rand.nextDouble() - 0.5).multiply(tol)), Tensor.ALL);
+    // pnt.y = pnt.y.add(RealScalar.of(rand.nextDouble() - 0.5).multiply(tol));
+    // pnt.z = pnt.z.add(RealScalar.of(rand.nextDouble() - 0.5).multiply(tol));
   }
 
   /** Returns the coordinates for <code>num</code> randomly
@@ -123,9 +124,9 @@ public class QuickHull3DTest {
       for (int i = 0; i < num; i++) {
         pnt.set(base);
         randomlyPerturb(pnt, tol);
-        coords[i * 3 + 0] = pnt.x;
-        coords[i * 3 + 1] = pnt.y;
-        coords[i * 3 + 2] = pnt.z;
+        coords[i * 3 + 0] = pnt.xyz.Get(0);
+        coords[i * 3 + 1] = pnt.xyz.Get(1);
+        coords[i * 3 + 2] = pnt.xyz.Get(2);
       }
     } else if (dimen == 1) {
       Vector3d u = new Vector3d();
@@ -136,9 +137,9 @@ public class QuickHull3DTest {
         pnt.scale(RealScalar.of(a), u);
         pnt.add(base);
         randomlyPerturb(pnt, tol);
-        coords[i * 3 + 0] = pnt.x;
-        coords[i * 3 + 1] = pnt.y;
-        coords[i * 3 + 2] = pnt.z;
+        coords[i * 3 + 0] = pnt.xyz.Get(0);
+        coords[i * 3 + 1] = pnt.xyz.Get(1);
+        coords[i * 3 + 2] = pnt.xyz.Get(2);
       }
     } else // dimen == 2
     {
@@ -152,9 +153,9 @@ public class QuickHull3DTest {
         pnt.sub(perp);
         pnt.add(base);
         randomlyPerturb(pnt, tol);
-        coords[i * 3 + 0] = pnt.x;
-        coords[i * 3 + 1] = pnt.y;
-        coords[i * 3 + 2] = pnt.z;
+        coords[i * 3 + 0] = pnt.xyz.Get(0);
+        coords[i * 3 + 1] = pnt.xyz.Get(1);
+        coords[i * 3 + 2] = pnt.xyz.Get(2);
       }
     }
     return coords;
@@ -172,9 +173,9 @@ public class QuickHull3DTest {
     for (int i = 0; i < num;) {
       pnt.setRandom(radius.negate(), radius, rand);
       if (Scalars.lessEquals(pnt.norm(), radius)) {
-        coords[i * 3 + 0] = pnt.x;
-        coords[i * 3 + 1] = pnt.y;
-        coords[i * 3 + 2] = pnt.z;
+        coords[i * 3 + 0] = pnt.xyz.Get(0);
+        coords[i * 3 + 1] = pnt.xyz.Get(1);
+        coords[i * 3 + 2] = pnt.xyz.Get(2);
         i++;
       }
     }
