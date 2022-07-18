@@ -12,6 +12,14 @@ package ch.alpine.tensor.opt.qh3;
 
 import java.util.Random;
 
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.io.ScalarArray;
+import ch.alpine.tensor.red.Times;
+
 /** Testing class for QuickHull3D. Running the command
  * <pre>
  * java quickhull3d.QuickHull3DTest
@@ -28,7 +36,7 @@ import java.util.Random;
  *
  * @author John E. Lloyd, Fall 2004 */
 public class QuickHull3DTest {
-  static private final double DOUBLE_PREC = 2.2204460492503131e-16;
+  static private final Scalar DOUBLE_PREC = RealScalar.of(2.2204460492503131e-16);
   static boolean triangulate = false;
   static boolean doTesting = true;
   static boolean doTiming = false;
@@ -39,7 +47,7 @@ public class QuickHull3DTest {
   Random rand; // random number generator
   static boolean testRotation = true;
   static int degeneracyTest = VERTEX_DEGENERACY;
-  static double epsScale = 2.0;
+  static Scalar epsScale = RealScalar.of(2.0);
 
   /** Creates a testing object. */
   public QuickHull3DTest() {
@@ -81,20 +89,20 @@ public class QuickHull3DTest {
    * @param num number of points to produce
    * @param range coordinate values will lie between -range and range
    * @return array of coordinate values */
-  public double[] randomPoints(int num, double range) {
-    double[] coords = new double[num * 3];
+  public Scalar[] randomPoints(int num, Scalar range) {
+    Scalar[] coords = ScalarArray.ofVector(Array.zeros(num * 3));
     for (int i = 0; i < num; i++) {
       for (int k = 0; k < 3; k++) {
-        coords[i * 3 + k] = 2 * range * (rand.nextDouble() - 0.5);
+        coords[i * 3 + k] = range.add(range).multiply(RealScalar.of(rand.nextDouble() - 0.5));
       }
     }
     return coords;
   }
 
-  private void randomlyPerturb(Point3d pnt, double tol) {
-    pnt.x += tol * (rand.nextDouble() - 0.5);
-    pnt.y += tol * (rand.nextDouble() - 0.5);
-    pnt.z += tol * (rand.nextDouble() - 0.5);
+  private void randomlyPerturb(Point3d pnt, Scalar tol) {
+    pnt.x = pnt.x.add(RealScalar.of(rand.nextDouble() - 0.5).multiply(tol));
+    pnt.y = pnt.y.add(RealScalar.of(rand.nextDouble() - 0.5).multiply(tol));
+    pnt.z = pnt.z.add(RealScalar.of(rand.nextDouble() - 0.5).multiply(tol));
   }
 
   /** Returns the coordinates for <code>num</code> randomly
@@ -105,12 +113,12 @@ public class QuickHull3DTest {
    * @param dimen dimensionality of degeneracy: 0 = coincident,
    * 1 = colinear, 2 = coplaner.
    * @return array of coordinate values */
-  public double[] randomDegeneratePoints(int num, int dimen) {
-    double[] coords = new double[num * 3];
+  public Scalar[] randomDegeneratePoints(int num, int dimen) {
+    Scalar[] coords = ScalarArray.ofVector(Array.zeros(num * 3));
     Point3d pnt = new Point3d();
     Point3d base = new Point3d();
-    base.setRandom(-1, 1, rand);
-    double tol = DOUBLE_PREC;
+    base.setRandom(RealScalar.of(-1), RealScalar.of(1), rand);
+    Scalar tol = DOUBLE_PREC;
     if (dimen == 0) {
       for (int i = 0; i < num; i++) {
         pnt.set(base);
@@ -121,11 +129,11 @@ public class QuickHull3DTest {
       }
     } else if (dimen == 1) {
       Vector3d u = new Vector3d();
-      u.setRandom(-1, 1, rand);
+      u.setRandom(RealScalar.of(-1), RealScalar.of(1), rand);
       u.normalize();
       for (int i = 0; i < num; i++) {
         double a = 2 * (rand.nextDouble() - 0.5);
-        pnt.scale(a, u);
+        pnt.scale(RealScalar.of(a), u);
         pnt.add(base);
         randomlyPerturb(pnt, tol);
         coords[i * 3 + 0] = pnt.x;
@@ -135,11 +143,11 @@ public class QuickHull3DTest {
     } else // dimen == 2
     {
       Vector3d nrm = new Vector3d();
-      nrm.setRandom(-1, 1, rand);
+      nrm.setRandom(RealScalar.of(-1), RealScalar.of(1), rand);
       nrm.normalize();
       for (int i = 0; i < num; i++) { // compute a random point and project it to the plane
         Vector3d perp = new Vector3d();
-        pnt.setRandom(-1, 1, rand);
+        pnt.setRandom(RealScalar.of(-1), RealScalar.of(1), rand);
         perp.scale(pnt.dot(nrm), nrm);
         pnt.sub(perp);
         pnt.add(base);
@@ -158,12 +166,12 @@ public class QuickHull3DTest {
    * @param num number of points to produce
    * @param radius radius of the sphere
    * @return array of coordinate values */
-  public double[] randomSphericalPoints(int num, double radius) {
-    double[] coords = new double[num * 3];
+  public Scalar[] randomSphericalPoints(int num, Scalar radius) {
+    Scalar[] coords = ScalarArray.ofVector(Array.zeros(num * 3));
     Point3d pnt = new Point3d();
     for (int i = 0; i < num;) {
-      pnt.setRandom(-radius, radius, rand);
-      if (pnt.norm() <= radius) {
+      pnt.setRandom(radius.negate(), radius, rand);
+      if (Scalars.lessEquals(pnt.norm(), radius)) {
         coords[i * 3 + 0] = pnt.x;
         coords[i * 3 + 1] = pnt.y;
         coords[i * 3 + 2] = pnt.z;
@@ -186,15 +194,15 @@ public class QuickHull3DTest {
    * @param max maximum absolute value to which the coordinates
    * are clipped
    * @return array of coordinate values */
-  public double[] randomCubedPoints(int num, double range, double max) {
-    double[] coords = new double[num * 3];
+  public Scalar[] randomCubedPoints(int num, Scalar range, Scalar max) {
+    Scalar[] coords = ScalarArray.ofVector(Array.zeros(num * 3));
     for (int i = 0; i < num; i++) {
       for (int k = 0; k < 3; k++) {
-        double x = 2 * range * (rand.nextDouble() - 0.5);
-        if (x > max) {
+        Scalar x = range.add(range).multiply(RealScalar.of(rand.nextDouble() - 0.5));
+        if (Scalars.lessThan(max, x)) { // x > max
           x = max;
-        } else if (x < -max) {
-          x = -max;
+        } else if (Scalars.lessThan(x, max.negate())) {
+          x = max.negate();
         }
         coords[i * 3 + k] = x;
       }
@@ -202,13 +210,13 @@ public class QuickHull3DTest {
     return coords;
   }
 
-  private double[] shuffleCoords(double[] coords) {
+  private Scalar[] shuffleCoords(Scalar[] coords) {
     int num = coords.length / 3;
     for (int i = 0; i < num; i++) {
       int i1 = rand.nextInt(num);
       int i2 = rand.nextInt(num);
       for (int k = 0; k < 3; k++) {
-        double tmp = coords[i1 * 3 + k];
+        Scalar tmp = coords[i1 * 3 + k];
         coords[i1 * 3 + k] = coords[i2 * 3 + k];
         coords[i2 * 3 + k] = tmp;
       }
@@ -225,19 +233,19 @@ public class QuickHull3DTest {
    * @param width distance between each point along a particular
    * direction
    * @return array of coordinate values */
-  public double[] randomGridPoints(int gridSize, double width) {
+  public Scalar[] randomGridPoints(int gridSize, Scalar width) {
     // gridSize gives the number of points across a given dimension
     // any given coordinate indexed by i has value
     // (i/(gridSize-1) - 0.5)*width
     int num = gridSize * gridSize * gridSize;
-    double[] coords = new double[num * 3];
+    Scalar[] coords = ScalarArray.ofVector(Array.zeros(num * 3));
     int idx = 0;
     for (int i = 0; i < gridSize; i++) {
       for (int j = 0; j < gridSize; j++) {
         for (int k = 0; k < gridSize; k++) {
-          coords[idx * 3 + 0] = (i / (double) (gridSize - 1) - 0.5) * width;
-          coords[idx * 3 + 1] = (j / (double) (gridSize - 1) - 0.5) * width;
-          coords[idx * 3 + 2] = (k / (double) (gridSize - 1) - 0.5) * width;
+          coords[idx * 3 + 0] = RealScalar.of(i / (double) (gridSize - 1) - 0.5).multiply(width);
+          coords[idx * 3 + 1] = RealScalar.of(j / (double) (gridSize - 1) - 0.5).multiply(width);
+          coords[idx * 3 + 2] = RealScalar.of(k / (double) (gridSize - 1) - 0.5).multiply(width);
           idx++;
         }
       }
@@ -283,7 +291,7 @@ public class QuickHull3DTest {
 
   int cnt = 0;
 
-  void singleTest(double[] coords, int[][] checkFaces) throws Exception {
+  void singleTest(Scalar[] coords, int[][] checkFaces) throws Exception {
     QuickHull3D hull = new QuickHull3D();
     hull.setDebug(debugEnable);
     hull.build(coords, coords.length / 3);
@@ -302,28 +310,29 @@ public class QuickHull3DTest {
     }
   }
 
-  double[] addDegeneracy(int type, double[] coords, QuickHull3D hull) {
+  Scalar[] addDegeneracy(int type, Scalar[] coords, QuickHull3D hull) {
     int numv = coords.length / 3;
     int[][] faces = hull.getFaces();
-    double[] coordsx = new double[coords.length + faces.length * 3];
+    Scalar[] coordsx = ScalarArray.ofVector(Array.zeros(coords.length + faces.length * 3));
     for (int i = 0; i < coords.length; i++) {
       coordsx[i] = coords[i];
     }
-    double[] lam = new double[3];
-    double eps = hull.getDistanceTolerance();
+    Scalar[] lam = ScalarArray.ofVector(Array.zeros(3));
+    Scalar eps = hull.getDistanceTolerance();
     for (int i = 0; i < faces.length; i++) {
       // random point on an edge
-      lam[0] = rand.nextDouble();
-      lam[1] = 1 - lam[0];
-      lam[2] = 0.0;
+      lam[0] = RealScalar.of(rand.nextDouble());
+      lam[1] = RealScalar.ONE.subtract(lam[0]);
+      lam[2] = RealScalar.ZERO;
       if (type == VERTEX_DEGENERACY && (i % 2 == 0)) {
-        lam[0] = 1.0;
-        lam[1] = lam[2] = 0;
+        lam[0] = RealScalar.ONE;
+        lam[1] = lam[2] = RealScalar.ZERO;
       }
       for (int j = 0; j < 3; j++) {
         int vtxi = faces[i][j];
         for (int k = 0; k < 3; k++) {
-          coordsx[numv * 3 + k] += lam[j] * coords[vtxi * 3 + k] + epsScale * eps * (rand.nextDouble() - 0.5);
+          coordsx[numv * 3 + k] = coordsx[numv * 3 + k]
+              .add(lam[j].add(coords[vtxi * 3 + k]).add(Times.of(epsScale, eps, RealScalar.of(rand.nextDouble() - 0.5))));
         }
       }
       numv++;
@@ -332,8 +341,8 @@ public class QuickHull3DTest {
     return coordsx;
   }
 
-  void degenerateTest(QuickHull3D hull, double[] coords) throws Exception {
-    double[] coordsx = addDegeneracy(degeneracyTest, coords, hull);
+  void degenerateTest(QuickHull3D hull, Scalar[] coords) throws Exception {
+    Scalar[] coordsx = addDegeneracy(degeneracyTest, coords, hull);
     QuickHull3D xhull = new QuickHull3D();
     xhull.setDebug(debugEnable);
     try {
@@ -352,7 +361,7 @@ public class QuickHull3DTest {
     }
   }
 
-  void rotateCoords(double[] res, double[] xyz, double roll, double pitch, double yaw) {
+  void rotateCoords(Scalar[] res, Scalar[] xyz, double roll, double pitch, double yaw) {
     double sroll = Math.sin(roll);
     double croll = Math.cos(roll);
     double spitch = Math.sin(pitch);
@@ -370,20 +379,20 @@ public class QuickHull3DTest {
     double m22 = cpitch * cyaw;
     double x, y, z;
     for (int i = 0; i < xyz.length - 2; i += 3) {
-      res[i + 0] = m00 * xyz[i + 0] + m01 * xyz[i + 1] + m02 * xyz[i + 2];
-      res[i + 1] = m10 * xyz[i + 0] + m11 * xyz[i + 1] + m12 * xyz[i + 2];
-      res[i + 2] = m20 * xyz[i + 0] + m21 * xyz[i + 1] + m22 * xyz[i + 2];
+      res[i + 0] = RealScalar.of(m00).multiply(xyz[i + 0]).add(RealScalar.of(m01).multiply(xyz[i + 1])).add(RealScalar.of(m02).multiply(xyz[i + 2]));
+      res[i + 1] = RealScalar.of(m10).multiply(xyz[i + 0]).add(RealScalar.of(m11).multiply(xyz[i + 1])).add(RealScalar.of(m12).multiply(xyz[i + 2]));
+      res[i + 2] = RealScalar.of(m20).multiply(xyz[i + 0]).add(RealScalar.of(m21).multiply(xyz[i + 1])).add(RealScalar.of(m22).multiply(xyz[i + 2]));
     }
   }
 
-  void printCoords(double[] coords) {
+  void printCoords(Scalar[] coords) {
     int nump = coords.length / 3;
     for (int i = 0; i < nump; i++) {
       System.out.println(coords[i * 3 + 0] + ", " + coords[i * 3 + 1] + ", " + coords[i * 3 + 2] + ", ");
     }
   }
 
-  void testException(double[] coords, String msg) {
+  void testException(Scalar[] coords, String msg) {
     QuickHull3D hull = new QuickHull3D();
     Exception ex = null;
     try {
@@ -406,14 +415,18 @@ public class QuickHull3DTest {
     }
   }
 
-  void test(double[] coords, int[][] checkFaces) throws Exception {
-    double[][] rpyList = new double[][] { { 0, 0, 0 }, { 10, 20, 30 }, { -45, 60, 91 }, { 125, 67, 81 } };
-    double[] xcoords = new double[coords.length];
+  void test(Scalar[] coords, int[][] checkFaces) throws Exception {
+    Scalar[][] rpyList = ScalarArray.ofMatrix(Tensors.matrixDouble( //
+        new double[][] { { 0, 0, 0 }, { 10, 20, 30 }, { -45, 60, 91 }, { 125, 67, 81 } }));
+    Scalar[] xcoords = ScalarArray.ofVector(Array.zeros(coords.length));
     singleTest(coords, checkFaces);
     if (testRotation) {
       for (int i = 0; i < rpyList.length; i++) {
-        double[] rpy = rpyList[i];
-        rotateCoords(xcoords, coords, Math.toRadians(rpy[0]), Math.toRadians(rpy[1]), Math.toRadians(rpy[2]));
+        Scalar[] rpy = rpyList[i];
+        rotateCoords(xcoords, coords, //
+            Math.toRadians(rpy[0].number().doubleValue()), //
+            Math.toRadians(rpy[1].number().doubleValue()), //
+            Math.toRadians(rpy[2].number().doubleValue()));
         singleTest(xcoords, checkFaces);
       }
     }
@@ -423,7 +436,7 @@ public class QuickHull3DTest {
    * and prints <code>Passed</code> to System.out if all is well. */
   public void explicitAndRandomTests() {
     try {
-      double[] coords = null;
+      Scalar[] coords = null;
       System.out.println("Testing degenerate input ...");
       for (int dimen = 0; dimen < 3; dimen++) {
         for (int i = 0; i < 10; i++) {
@@ -439,36 +452,38 @@ public class QuickHull3DTest {
       }
       System.out.println("Explicit tests ...");
       // test cases furnished by Mariano Zelke, Berlin
-      coords = new double[] { 21, 0, 0, 0, 21, 0, 0, 0, 0, 18, 2, 6, 1, 18, 5, 2, 1, 3, 14, 3, 10, 4, 14, 14, 3, 4, 10, 10, 6, 12, 5, 10, 15, };
+      coords = ScalarArray.ofVector(Tensors.vectorDouble( //
+          21, 0, 0, 0, 21, 0, 0, 0, 0, 18, 2, 6, 1, 18, 5, 2, 1, 3, 14, 3, 10, 4, 14, 14, 3, 4, 10, 10, 6, 12, 5, 10, 15));
       test(coords, null);
-      coords = new double[] { 0.0, 0.0, 0.0, 21.0, 0.0, 0.0, 0.0, 21.0, 0.0, 2.0, 1.0, 2.0, 17.0, 2.0, 3.0, 1.0, 19.0, 6.0, 4.0, 3.0, 5.0, 13.0, 4.0, 5.0, 3.0,
-          15.0, 8.0, 6.0, 5.0, 6.0, 9.0, 6.0, 11.0, };
+      coords = ScalarArray.ofVector(Tensors.vectorDouble( //
+          0.0, 0.0, 0.0, 21.0, 0.0, 0.0, 0.0, 21.0, 0.0, 2.0, 1.0, 2.0, 17.0, 2.0, 3.0, 1.0, 19.0, 6.0, 4.0, 3.0, 5.0, 13.0, 4.0, 5.0, 3.0, 15.0, 8.0, 6.0, 5.0,
+          6.0, 9.0, 6.0, 11.0));
       test(coords, null);
       System.out.println("Testing 20 to 200 random points ...");
       for (int n = 20; n < 200; n += 10) { // System.out.println (n);
         for (int i = 0; i < 10; i++) {
-          coords = randomPoints(n, 1.0);
+          coords = randomPoints(n, RealScalar.of(1.0));
           test(coords, null);
         }
       }
       System.out.println("Testing 20 to 200 random points in a sphere ...");
       for (int n = 20; n < 200; n += 10) { // System.out.println (n);
         for (int i = 0; i < 10; i++) {
-          coords = randomSphericalPoints(n, 1.0);
+          coords = randomSphericalPoints(n, RealScalar.of(1.0));
           test(coords, null);
         }
       }
       System.out.println("Testing 20 to 200 random points clipped to a cube ...");
       for (int n = 20; n < 200; n += 10) { // System.out.println (n);
         for (int i = 0; i < 10; i++) {
-          coords = randomCubedPoints(n, 1.0, 0.5);
+          coords = randomCubedPoints(n, RealScalar.of(1.0), RealScalar.of(0.5));
           test(coords, null);
         }
       }
       System.out.println("Testing 8 to 1000 randomly shuffled points on a grid ...");
       for (int n = 2; n <= 10; n++) { // System.out.println (n*n*n);
         for (int i = 0; i < 10; i++) {
-          coords = randomGridPoints(n, 4.0);
+          coords = randomGridPoints(n, RealScalar.of(4.0));
           test(coords, null);
         }
       }
@@ -487,13 +502,13 @@ public class QuickHull3DTest {
     QuickHull3D hull = new QuickHull3D();
     System.out.println("warming up ... ");
     for (int i = 0; i < 2; i++) {
-      double[] coords = randomSphericalPoints(10000, 1.0);
+      Scalar[] coords = randomSphericalPoints(10000, RealScalar.of(1.0));
       hull.build(coords);
     }
     int cnt = 10;
     for (int i = 0; i < 4; i++) {
       n *= 10;
-      double[] coords = randomSphericalPoints(n, 1.0);
+      Scalar[] coords = randomSphericalPoints(n, RealScalar.of(1.0));
       t0 = System.currentTimeMillis();
       for (int k = 0; k < cnt; k++) {
         hull.build(coords);

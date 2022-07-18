@@ -11,6 +11,14 @@
  * software. */
 package ch.alpine.tensor.opt.qh3;
 
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.nrm.Vector2NormSquared;
+import ch.alpine.tensor.sca.Abs;
+import ch.alpine.tensor.sca.pow.Sqrt;
+
 /** Basic triangular face used to form the hull.
  *
  * <p>The information stored for each face consists of a planar
@@ -22,9 +30,9 @@ package ch.alpine.tensor.opt.qh3;
 class Face {
   HalfEdge he0;
   private Vector3d normal;
-  double area;
+  Scalar area;
   private Point3d centroid;
-  double planeOffset;
+  Scalar planeOffset;
   int index;
   int numVerts;
   Face next;
@@ -41,20 +49,20 @@ class Face {
       centroid.add(he.head().pnt);
       he = he.next;
     } while (he != he0);
-    centroid.scale(1 / (double) numVerts);
+    centroid.scale(RealScalar.of(1 / (double) numVerts));
   }
 
-  public void computeNormal(Vector3d normal, double minArea) {
+  public void computeNormal(Vector3d normal, Scalar minArea) {
     computeNormal(normal);
-    if (area < minArea) {
+    if (Scalars.lessThan(area, minArea)) { // area < minArea
       // make the normal more robust by removing
       // components parallel to the longest edge
       HalfEdge hedgeMax = null;
-      double lenSqrMax = 0;
+      Scalar lenSqrMax = RealScalar.ZERO;
       HalfEdge hedge = he0;
       do {
-        double lenSqr = hedge.lengthSquared();
-        if (lenSqr > lenSqrMax) {
+        Scalar lenSqr = hedge.lengthSquared();
+        if (Scalars.lessThan(lenSqrMax, lenSqr)) { // lenSqr > lenSqrMax
           hedgeMax = hedge;
           lenSqrMax = lenSqr;
         }
@@ -62,14 +70,14 @@ class Face {
       } while (hedge != he0);
       Point3d p2 = hedgeMax.head().pnt;
       Point3d p1 = hedgeMax.tail().pnt;
-      double lenMax = Math.sqrt(lenSqrMax);
-      double ux = (p2.x - p1.x) / lenMax;
-      double uy = (p2.y - p1.y) / lenMax;
-      double uz = (p2.z - p1.z) / lenMax;
-      double dot = normal.x * ux + normal.y * uy + normal.z * uz;
-      normal.x -= dot * ux;
-      normal.y -= dot * uy;
-      normal.z -= dot * uz;
+      Scalar lenMax = Sqrt.FUNCTION.apply(lenSqrMax);
+      Scalar ux = p2.x.subtract(p1.x).divide(lenMax);
+      Scalar uy = p2.y.subtract(p1.y).divide(lenMax);
+      Scalar uz = p2.z.subtract(p1.z).divide(lenMax);
+      Scalar dot = normal.x.multiply(ux).add(normal.y.multiply(uy)).add(normal.z.multiply(uz));
+      normal.x = normal.x.subtract(ux.multiply(dot));
+      normal.y = normal.y.subtract(uy.multiply(dot));
+      normal.z = normal.z.subtract(uz.multiply(dot));
       normal.normalize();
     }
   }
@@ -79,28 +87,28 @@ class Face {
     HalfEdge he2 = he1.next;
     Point3d p0 = he0.head().pnt;
     Point3d p2 = he1.head().pnt;
-    double d2x = p2.x - p0.x;
-    double d2y = p2.y - p0.y;
-    double d2z = p2.z - p0.z;
+    Scalar d2x = p2.x.subtract(p0.x);
+    Scalar d2y = p2.y.subtract(p0.y);
+    Scalar d2z = p2.z.subtract(p0.z);
     normal.setZero();
     numVerts = 2;
     while (he2 != he0) {
-      double d1x = d2x;
-      double d1y = d2y;
-      double d1z = d2z;
+      Scalar d1x = d2x;
+      Scalar d1y = d2y;
+      Scalar d1z = d2z;
       p2 = he2.head().pnt;
-      d2x = p2.x - p0.x;
-      d2y = p2.y - p0.y;
-      d2z = p2.z - p0.z;
-      normal.x += d1y * d2z - d1z * d2y;
-      normal.y += d1z * d2x - d1x * d2z;
-      normal.z += d1x * d2y - d1y * d2x;
+      d2x = p2.x.subtract(p0.x);
+      d2y = p2.y.subtract(p0.y);
+      d2z = p2.z.subtract(p0.z);
+      normal.x = normal.x.add(d1y.multiply(d2z).subtract(d1z.multiply(d2y)));
+      normal.y = normal.y.add(d1z.multiply(d2x).subtract(d1x.multiply(d2z)));
+      normal.z = normal.z.add(d1x.multiply(d2y).subtract(d1y.multiply(d2x)));
       he1 = he2;
       he2 = he2.next;
       numVerts++;
     }
     area = normal.norm();
-    normal.scale(1 / area);
+    normal.scale(area.reciprocal());
   }
 
   private void computeNormalAndCentroid() {
@@ -118,14 +126,14 @@ class Face {
     }
   }
 
-  private void computeNormalAndCentroid(double minArea) {
+  private void computeNormalAndCentroid(Scalar minArea) {
     computeNormal(normal, minArea);
     computeCentroid(centroid);
     planeOffset = normal.dot(centroid);
   }
 
   public static Face createTriangle(Vertex v0, Vertex v1, Vertex v2) {
-    return createTriangle(v0, v1, v2, 0);
+    return createTriangle(v0, v1, v2, RealScalar.ZERO);
   }
 
   /** Constructs a triangule Face from vertices v0, v1, and v2.
@@ -133,7 +141,7 @@ class Face {
    * @param v0 first vertex
    * @param v1 second vertex
    * @param v2 third vertex */
-  public static Face createTriangle(Vertex v0, Vertex v1, Vertex v2, double minArea) {
+  public static Face createTriangle(Vertex v0, Vertex v1, Vertex v2, Scalar minArea) {
     Face face = new Face();
     HalfEdge he0 = new HalfEdge(v0, face);
     HalfEdge he1 = new HalfEdge(v1, face);
@@ -219,8 +227,9 @@ class Face {
    *
    * @param p the point
    * @return distance from the point to the plane */
-  public double distanceToPlane(Point3d p) {
-    return normal.x * p.x + normal.y * p.y + normal.z * p.z - planeOffset;
+  public Scalar distanceToPlane(Point3d p) {
+    return (Scalar) normal.toTensor().dot(p.toTensor()).subtract(planeOffset);
+    // return normal.x * p.x + normal.y * p.y + normal.z * p.z - planeOffset;
   }
 
   /** Returns the normal of the plane associated with this face.
@@ -297,7 +306,7 @@ class Face {
   void checkConsistency() {
     // do a sanity check on the face
     HalfEdge hedge = he0;
-    double maxd = 0;
+    Scalar maxd = RealScalar.ZERO;
     int numv = 0;
     if (numVerts < 3) {
       throw new InternalErrorException("degenerate face: " + getVertexString());
@@ -320,8 +329,8 @@ class Face {
       } else if (oppFace.mark == DELETED) {
         throw new InternalErrorException("face " + getVertexString() + ": " + "opposite face " + oppFace.getVertexString() + " not on hull");
       }
-      double d = Math.abs(distanceToPlane(hedge.head().pnt));
-      if (d > maxd) {
+      Scalar d = Abs.FUNCTION.apply(distanceToPlane(hedge.head().pnt));
+      if (Scalars.lessThan(maxd, d)) { // d > maxd
         maxd = d;
       }
       numv++;
@@ -373,26 +382,26 @@ class Face {
     return numDiscarded;
   }
 
-  private double areaSquared(HalfEdge hedge0, HalfEdge hedge1) {
+  private Scalar areaSquared(HalfEdge hedge0, HalfEdge hedge1) {
     // return the squared area of the triangle defined
     // by the half edge hedge0 and the point at the
     // head of hedge1.
     Point3d p0 = hedge0.tail().pnt;
     Point3d p1 = hedge0.head().pnt;
     Point3d p2 = hedge1.head().pnt;
-    double dx1 = p1.x - p0.x;
-    double dy1 = p1.y - p0.y;
-    double dz1 = p1.z - p0.z;
-    double dx2 = p2.x - p0.x;
-    double dy2 = p2.y - p0.y;
-    double dz2 = p2.z - p0.z;
-    double x = dy1 * dz2 - dz1 * dy2;
-    double y = dz1 * dx2 - dx1 * dz2;
-    double z = dx1 * dy2 - dy1 * dx2;
-    return x * x + y * y + z * z;
+    Scalar dx1 = p1.x.subtract(p0.x);
+    Scalar dy1 = p1.y.subtract(p0.y);
+    Scalar dz1 = p1.z.subtract(p0.z);
+    Scalar dx2 = p2.x.subtract(p0.x);
+    Scalar dy2 = p2.y.subtract(p0.y);
+    Scalar dz2 = p2.z.subtract(p0.z);
+    Scalar x = dy1.multiply(dz2).subtract(dz1.multiply(dy2));
+    Scalar y = dz1.multiply(dx2).subtract(dx1.multiply(dz2));
+    Scalar z = dx1.multiply(dy2).subtract(dy1.multiply(dx2));
+    return Vector2NormSquared.of(Tensors.of(x, y, z)); // x * x + y * y + z * z;
   }
 
-  public void triangulate(FaceList newFaces, double minArea) {
+  public void triangulate(FaceList newFaces, Scalar minArea) {
     HalfEdge hedge;
     if (numVertices() < 4) {
       return;

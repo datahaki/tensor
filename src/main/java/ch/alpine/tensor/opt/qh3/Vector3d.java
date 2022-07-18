@@ -12,6 +12,18 @@ package ch.alpine.tensor.opt.qh3;
 
 import java.util.Random;
 
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Array;
+import ch.alpine.tensor.lie.Cross;
+import ch.alpine.tensor.nrm.Vector2Norm;
+import ch.alpine.tensor.nrm.Vector2NormSquared;
+import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.c.UniformDistribution;
+
 /** A three-element vector. This class is actually a reduced version of the
  * Vector3d class contained in the author's matlib package (which was partly
  * inspired by javax.vecmath). Only a mininal number of methods
@@ -22,11 +34,11 @@ public class Vector3d {
   /** Precision of a double. */
   static private final double DOUBLE_PREC = 2.2204460492503131e-16;
   /** First element */
-  public double x;
+  public Scalar x;
   /** Second element */
-  public double y;
+  public Scalar y;
   /** Third element */
-  public double z;
+  public Scalar z;
 
   /** Creates a 3-vector and initializes its elements to 0. */
   public Vector3d() {
@@ -44,7 +56,7 @@ public class Vector3d {
    * @param x first element
    * @param y second element
    * @param z third element */
-  public Vector3d(double x, double y, double z) {
+  public Vector3d(Scalar x, Scalar y, Scalar z) {
     set(x, y, z);
   }
 
@@ -54,7 +66,7 @@ public class Vector3d {
    * @param i element index
    * @return element value throws ArrayIndexOutOfBoundsException
    * if i is not in the range 0 to 2. */
-  public double get(int i) {
+  public Scalar get(int i) {
     switch (i) {
     case 0: {
       return x;
@@ -78,7 +90,7 @@ public class Vector3d {
    * @param value element value
    * @return element value throws ArrayIndexOutOfBoundsException
    * if i is not in the range 0 to 2. */
-  public void set(int i, double value) {
+  public void set(int i, Scalar value) {
     switch (i) {
     case 0: {
       x = value;
@@ -112,18 +124,18 @@ public class Vector3d {
    * @param v1 left-hand vector
    * @param v2 right-hand vector */
   public void add(Vector3d v1, Vector3d v2) {
-    x = v1.x + v2.x;
-    y = v1.y + v2.y;
-    z = v1.z + v2.z;
+    x = v1.x.add(v2.x);
+    y = v1.y.add(v2.y);
+    z = v1.z.add(v2.z);
   }
 
   /** Adds this vector to v1 and places the result in this vector.
    *
    * @param v1 right-hand vector */
   public void add(Vector3d v1) {
-    x += v1.x;
-    y += v1.y;
-    z += v1.z;
+    x = x.add(v1.x);
+    y = y.add(v1.y);
+    z = z.add(v1.z);
   }
 
   /** Subtracts vector v1 from v2 and places the result in this vector.
@@ -131,27 +143,27 @@ public class Vector3d {
    * @param v1 left-hand vector
    * @param v2 right-hand vector */
   public void sub(Vector3d v1, Vector3d v2) {
-    x = v1.x - v2.x;
-    y = v1.y - v2.y;
-    z = v1.z - v2.z;
+    x = v1.x.subtract(v2.x);
+    y = v1.y.subtract(v2.y);
+    z = v1.z.subtract(v2.z);
   }
 
   /** Subtracts v1 from this vector and places the result in this vector.
    *
    * @param v1 right-hand vector */
   public void sub(Vector3d v1) {
-    x -= v1.x;
-    y -= v1.y;
-    z -= v1.z;
+    x = x.subtract(v1.x);
+    y = y.subtract(v1.y);
+    z = z.subtract(v1.z);
   }
 
   /** Scales the elements of this vector by <code>s</code>.
    *
    * @param s scaling factor */
-  public void scale(double s) {
-    x = s * x;
-    y = s * y;
-    z = s * z;
+  public void scale(Scalar s) {
+    x = x.multiply(s);
+    y = y.multiply(s);
+    z = z.multiply(s);
   }
 
   /** Scales the elements of vector v1 by <code>s</code> and places
@@ -159,74 +171,82 @@ public class Vector3d {
    *
    * @param s scaling factor
    * @param v1 vector to be scaled */
-  public void scale(double s, Vector3d v1) {
-    x = s * v1.x;
-    y = s * v1.y;
-    z = s * v1.z;
+  public void scale(Scalar s, Vector3d v1) {
+    x = v1.x.multiply(s);
+    y = v1.y.multiply(s);
+    z = v1.z.multiply(s);
   }
 
   /** Returns the 2 norm of this vector. This is the square root of the
    * sum of the squares of the elements.
    *
    * @return vector 2 norm */
-  public double norm() {
-    return Math.sqrt(x * x + y * y + z * z);
+  public Scalar norm() {
+    return Vector2Norm.of(Tensors.of(x, y, z));
+    // return Math.sqrt(x * x + y * y + z * z);
   }
 
   /** Returns the square of the 2 norm of this vector. This
    * is the sum of the squares of the elements.
    *
    * @return square of the 2 norm */
-  public double normSquared() {
-    return x * x + y * y + z * z;
+  public Scalar normSquared() {
+    return Vector2NormSquared.of(Tensors.of(x, y, z));
+    // return x * x + y * y + z * z;
   }
 
   /** Returns the Euclidean distance between this vector and vector v.
    *
    * @return distance between this vector and v */
-  public double distance(Vector3d v) {
-    double dx = x - v.x;
-    double dy = y - v.y;
-    double dz = z - v.z;
-    return Math.sqrt(dx * dx + dy * dy + dz * dz);
+  public Scalar distance(Vector3d v) {
+    return Vector2Norm.between(toTensor(), v.toTensor());
+    // double dx = x - v.x;
+    // double dy = y - v.y;
+    // double dz = z - v.z;
+    // return Math.sqrt(dx * dx + dy * dy + dz * dz);
   }
 
   /** Returns the squared of the Euclidean distance between this vector
    * and vector v.
    *
    * @return squared distance between this vector and v */
-  public double distanceSquared(Vector3d v) {
-    double dx = x - v.x;
-    double dy = y - v.y;
-    double dz = z - v.z;
-    return (dx * dx + dy * dy + dz * dz);
+  public Scalar distanceSquared(Vector3d v) {
+    return Vector2NormSquared.between(toTensor(), v.toTensor());
+    // double dx = x - v.x;
+    // double dy = y - v.y;
+    // double dz = z - v.z;
+    // return (dx * dx + dy * dy + dz * dz);
   }
 
   /** Returns the dot product of this vector and v1.
    *
    * @param v1 right-hand vector
    * @return dot product */
-  public double dot(Vector3d v1) {
-    return x * v1.x + y * v1.y + z * v1.z;
+  public Scalar dot(Vector3d v1) {
+    return (Scalar) toTensor().dot(v1.toTensor());
+    // return x * v1.x + y * v1.y + z * v1.z;
   }
 
   /** Normalizes this vector in place. */
   public void normalize() {
-    double lenSqr = x * x + y * y + z * z;
+    Scalar scalar = Vector2NormSquared.of(toTensor());
+    double lenSqr = scalar.number().doubleValue();
     double err = lenSqr - 1;
     if (err > (2 * DOUBLE_PREC) || err < -(2 * DOUBLE_PREC)) {
       double len = Math.sqrt(lenSqr);
-      x /= len;
-      y /= len;
-      z /= len;
+      set(toTensor().divide(RealScalar.of(len)));
+      // x /= len;
+      // y /= len;
+      // z /= len;
     }
   }
 
   /** Sets the elements of this vector to zero. */
   public void setZero() {
-    x = 0;
-    y = 0;
-    z = 0;
+    set(Array.zeros(3));
+    // x = 0;
+    // y = 0;
+    // z = 0;
   }
 
   /** Sets the elements of this vector to the prescribed values.
@@ -234,7 +254,7 @@ public class Vector3d {
    * @param x value for first element
    * @param y value for second element
    * @param z value for third element */
-  public void set(double x, double y, double z) {
+  public void set(Scalar x, Scalar y, Scalar z) {
     this.x = x;
     this.y = y;
     this.z = z;
@@ -246,12 +266,18 @@ public class Vector3d {
    * @param v1 left-hand vector
    * @param v2 right-hand vector */
   public void cross(Vector3d v1, Vector3d v2) {
-    double tmpx = v1.y * v2.z - v1.z * v2.y;
-    double tmpy = v1.z * v2.x - v1.x * v2.z;
-    double tmpz = v1.x * v2.y - v1.y * v2.x;
-    x = tmpx;
-    y = tmpy;
-    z = tmpz;
+    Tensor tensor = Cross.of(v1.toTensor(), v2.toTensor());
+    // double tmpx = v1.y * v2.z - v1.z * v2.y;
+    // double tmpy = v1.z * v2.x - v1.x * v2.z;
+    // double tmpz = v1.x * v2.y - v1.y * v2.x;
+    // x = tmpx;
+    // y = tmpy;
+    // z = tmpz;
+    set(tensor);
+  }
+
+  private void set(Tensor tensor) {
+    set(tensor.Get(0), tensor.Get(1), tensor.Get(2));
   }
 
   /** Sets the elements of this vector to uniformly distributed
@@ -261,18 +287,25 @@ public class Vector3d {
    * @param lower lower random value (inclusive)
    * @param upper upper random value (exclusive)
    * @param generator random number generator */
-  protected void setRandom(double lower, double upper, Random generator) {
-    double range = upper - lower;
-    x = generator.nextDouble() * range + lower;
-    y = generator.nextDouble() * range + lower;
-    z = generator.nextDouble() * range + lower;
+  protected void setRandom(Scalar lower, Scalar upper, Random generator) {
+    Distribution distribution = UniformDistribution.of(lower, upper);
+    set(RandomVariate.of(distribution, generator, 3));
+    // double range = upper - lower;
+    // x = generator.nextDouble() * range + lower;
+    // y = generator.nextDouble() * range + lower;
+    // z = generator.nextDouble() * range + lower;
   }
 
   /** Returns a string representation of this vector, consisting
    * of the x, y, and z coordinates.
    *
    * @return string representation */
+  @Override
   public String toString() {
     return x + " " + y + " " + z;
+  }
+
+  Tensor toTensor() {
+    return Tensors.of(x, y, z);
   }
 }

@@ -10,6 +10,9 @@
  * software. */
 package ch.alpine.tensor.opt.qh3;
 
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+
 /** A three-element spatial point.
  *
  * The only difference between a point and a vector is in the
@@ -36,7 +39,11 @@ public class Point3d extends Vector3d {
    * @param x first element
    * @param y second element
    * @param z third element */
-  public Point3d(double x, double y, double z) {
+  public Point3d(Scalar x, Scalar y, Scalar z) {
     set(x, y, z);
+  }
+
+  public Point3d(Number x, Number y, Number z) {
+    this(RealScalar.of(x), RealScalar.of(y), RealScalar.of(z));
   }
 }

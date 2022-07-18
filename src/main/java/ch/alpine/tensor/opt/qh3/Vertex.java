@@ -1,5 +1,7 @@
 package ch.alpine.tensor.opt.qh3;
 
+import ch.alpine.tensor.Scalar;
+
 /** Represents vertices of the hull, as well as the points from
  * which it is formed.
  *
@@ -23,7 +25,7 @@ class Vertex {
 
   /** Constructs a vertex with the specified coordinates
    * and index. */
-  public Vertex(double x, double y, double z, int idx) {
+  public Vertex(Scalar x, Scalar y, Scalar z, int idx) {
     pnt = new Point3d(x, y, z);
     index = idx;
   }

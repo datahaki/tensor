@@ -1,5 +1,8 @@
 package ch.alpine.tensor.opt.qh3;
 
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+
 class QhullTest {
   static double[] coords = new double[] {};
   static int[][] faces = new int[][] {};
@@ -9,7 +12,7 @@ class QhullTest {
     QuickHull3DTest tester = new QuickHull3DTest();
     hull = new QuickHull3D();
     for (int i = 0; i < 100; i++) {
-      double[] pnts = tester.randomCubedPoints(100, 1.0, 0.5);
+      Scalar[] pnts = tester.randomCubedPoints(100, RealScalar.of(1.0), RealScalar.of(0.5));
       // hull.setFromQhull(pnts, pnts.length / 3, /* triangulated= */false);
       // pnts = tester.addDegeneracy(QuickHull3DTest.VERTEX_DEGENERACY, pnts, hull);
       // // hull = new QuickHull3D ();

@@ -11,6 +11,9 @@
  * software. */
 package ch.alpine.tensor.opt.qh3;
 
+import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Scalar;
+
 /** Represents the half-edges that surround each
  * face in a counter-clockwise direction.
  *
@@ -125,31 +128,28 @@ class HalfEdge {
   public String getVertexString() {
     if (tail() != null) {
       return "" + tail().index + "-" + head().index;
-    } else {
-      return "?-" + head().index;
     }
+    return "?-" + head().index;
   }
 
   /** Returns the length of this half-edge.
    *
    * @return half-edge length */
-  public double length() {
+  public Scalar length() {
     if (tail() != null) {
       return head().pnt.distance(tail().pnt);
-    } else {
-      return -1;
     }
+    return RealScalar.of(-1);
   }
 
   /** Returns the length squared of this half-edge.
    *
    * @return half-edge length squared */
-  public double lengthSquared() {
+  public Scalar lengthSquared() {
     if (tail() != null) {
       return head().pnt.distanceSquared(tail().pnt);
-    } else {
-      return -1;
     }
+    return RealScalar.of(-1);
   }
   // /**
   // * Computes nrml . (del0 X del1), where del0 and del1

@@ -8,8 +8,9 @@ public class SimpleExample {
   /** Run for a simple demonstration of QuickHull3D. */
   public static void main(String[] args) {
     // x y z coordinates of 6 points
-    Point3d[] points = new Point3d[] { new Point3d(0.0, 0.0, 0.0), new Point3d(1.0, 0.5, 0.0), new Point3d(2.0, 0.0, 0.0), new Point3d(0.5, 0.5, 0.5),
-        new Point3d(0.0, 0.0, 2.0), new Point3d(0.1, 0.2, 0.3), new Point3d(0.0, 2.0, 0.0), };
+    Point3d[] points = new Point3d[] { //
+        new Point3d(0.0, 0.0, 0.0), new Point3d(1.0, 0.5, 0.0), new Point3d(2.0, 0.0, 0.0), new Point3d(0.5, 0.5, 0.5), new Point3d(0.0, 0.0, 2.0),
+        new Point3d(0.1, 0.2, 0.3), new Point3d(0.0, 2.0, 0.0), };
     QuickHull3D hull = new QuickHull3D();
     hull.build(points);
     System.out.println("Vertices:");
