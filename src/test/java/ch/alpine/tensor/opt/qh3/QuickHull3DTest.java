@@ -99,7 +99,7 @@ public class QuickHull3DTest {
     return coords;
   }
 
-  private void randomlyPerturb(Point3d pnt, Scalar tol) {
+  private void randomlyPerturb(Vector3d pnt, Scalar tol) {
     pnt.x = pnt.x.add(RealScalar.of(rand.nextDouble() - 0.5).multiply(tol));
     pnt.y = pnt.y.add(RealScalar.of(rand.nextDouble() - 0.5).multiply(tol));
     pnt.z = pnt.z.add(RealScalar.of(rand.nextDouble() - 0.5).multiply(tol));
@@ -115,8 +115,8 @@ public class QuickHull3DTest {
    * @return array of coordinate values */
   public Scalar[] randomDegeneratePoints(int num, int dimen) {
     Scalar[] coords = ScalarArray.ofVector(Array.zeros(num * 3));
-    Point3d pnt = new Point3d();
-    Point3d base = new Point3d();
+    Vector3d pnt = new Vector3d();
+    Vector3d base = new Vector3d();
     base.setRandom(RealScalar.of(-1), RealScalar.of(1), rand);
     Scalar tol = DOUBLE_PREC;
     if (dimen == 0) {
@@ -168,7 +168,7 @@ public class QuickHull3DTest {
    * @return array of coordinate values */
   public Scalar[] randomSphericalPoints(int num, Scalar radius) {
     Scalar[] coords = ScalarArray.ofVector(Array.zeros(num * 3));
-    Point3d pnt = new Point3d();
+    Vector3d pnt = new Vector3d();
     for (int i = 0; i < num;) {
       pnt.setRandom(radius.negate(), radius, rand);
       if (Scalars.lessEquals(pnt.norm(), radius)) {
@@ -260,7 +260,7 @@ public class QuickHull3DTest {
       throw new Exception("Error: " + faceIndices.length + " faces vs. " + checkFaces.length);
     }
     // translate face indices back into original indices
-    Point3d[] pnts = hull.getVertices();
+    Vector3d[] pnts = hull.getVertices();
     int[] vtxIndices = hull.getVertexPointIndices();
     for (int j = 0; j < faceIndices.length; j++) {
       int[] idxs = faceIndices[j];
@@ -331,8 +331,9 @@ public class QuickHull3DTest {
       for (int j = 0; j < 3; j++) {
         int vtxi = faces[i][j];
         for (int k = 0; k < 3; k++) {
+          // coordsx[numv * 3 + k] += lam[j] * coords[vtxi * 3 + k] + epsScale * eps * (rand.nextDouble() - 0.5);
           coordsx[numv * 3 + k] = coordsx[numv * 3 + k]
-              .add(lam[j].add(coords[vtxi * 3 + k]).add(Times.of(epsScale, eps, RealScalar.of(rand.nextDouble() - 0.5))));
+              .add(lam[j].multiply(coords[vtxi * 3 + k]).add(Times.of(epsScale, eps, RealScalar.of(rand.nextDouble() - 0.5))));
         }
       }
       numv++;
@@ -416,17 +417,16 @@ public class QuickHull3DTest {
   }
 
   void test(Scalar[] coords, int[][] checkFaces) throws Exception {
-    Scalar[][] rpyList = ScalarArray.ofMatrix(Tensors.matrixDouble( //
-        new double[][] { { 0, 0, 0 }, { 10, 20, 30 }, { -45, 60, 91 }, { 125, 67, 81 } }));
+    double[][] rpyList = new double[][] { { 0, 0, 0 }, { 10, 20, 30 }, { -45, 60, 91 }, { 125, 67, 81 } };
     Scalar[] xcoords = ScalarArray.ofVector(Array.zeros(coords.length));
     singleTest(coords, checkFaces);
     if (testRotation) {
       for (int i = 0; i < rpyList.length; i++) {
-        Scalar[] rpy = rpyList[i];
+        double[] rpy = rpyList[i];
         rotateCoords(xcoords, coords, //
-            Math.toRadians(rpy[0].number().doubleValue()), //
-            Math.toRadians(rpy[1].number().doubleValue()), //
-            Math.toRadians(rpy[2].number().doubleValue()));
+            Math.toRadians(rpy[0]), //
+            Math.toRadians(rpy[1]), //
+            Math.toRadians(rpy[2]));
         singleTest(xcoords, checkFaces);
       }
     }
@@ -460,29 +460,37 @@ public class QuickHull3DTest {
           6.0, 9.0, 6.0, 11.0));
       test(coords, null);
       System.out.println("Testing 20 to 200 random points ...");
-      for (int n = 20; n < 200; n += 10) { // System.out.println (n);
-        for (int i = 0; i < 10; i++) {
+      for (int n = 20; n < 200; n += 10) { //
+        System.out.println(n);
+        // for (int i = 0; i < 10; i++)
+        {
           coords = randomPoints(n, RealScalar.of(1.0));
           test(coords, null);
         }
       }
       System.out.println("Testing 20 to 200 random points in a sphere ...");
-      for (int n = 20; n < 200; n += 10) { // System.out.println (n);
-        for (int i = 0; i < 10; i++) {
+      for (int n = 20; n < 200; n += 10) {
+        System.out.println(n);
+        // for (int i = 0; i < 10; i++)
+        {
           coords = randomSphericalPoints(n, RealScalar.of(1.0));
           test(coords, null);
         }
       }
       System.out.println("Testing 20 to 200 random points clipped to a cube ...");
-      for (int n = 20; n < 200; n += 10) { // System.out.println (n);
-        for (int i = 0; i < 10; i++) {
+      for (int n = 20; n < 200; n += 10) { //
+        System.out.println(n);
+        // for (int i = 0; i < 10; i++)
+        {
           coords = randomCubedPoints(n, RealScalar.of(1.0), RealScalar.of(0.5));
           test(coords, null);
         }
       }
       System.out.println("Testing 8 to 1000 randomly shuffled points on a grid ...");
-      for (int n = 2; n <= 10; n++) { // System.out.println (n*n*n);
-        for (int i = 0; i < 10; i++) {
+      for (int n = 2; n <= 10; n++) { //
+        System.out.println(n * n * n);
+        // for (int i = 0; i < 10; i++)
+        {
           coords = randomGridPoints(n, RealScalar.of(4.0));
           test(coords, null);
         }

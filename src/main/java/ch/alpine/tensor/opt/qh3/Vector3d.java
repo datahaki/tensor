@@ -60,6 +60,10 @@ public class Vector3d {
     set(x, y, z);
   }
 
+  public Vector3d(Number x, Number y, Number z) {
+    this(RealScalar.of(x), RealScalar.of(y), RealScalar.of(z));
+  }
+
   /** Gets a single element of this vector.
    * Elements 0, 1, and 2 correspond to x, y, and z.
    *
@@ -67,20 +71,7 @@ public class Vector3d {
    * @return element value throws ArrayIndexOutOfBoundsException
    * if i is not in the range 0 to 2. */
   public Scalar get(int i) {
-    switch (i) {
-    case 0: {
-      return x;
-    }
-    case 1: {
-      return y;
-    }
-    case 2: {
-      return z;
-    }
-    default: {
-      throw new ArrayIndexOutOfBoundsException(i);
-    }
-    }
+    return toTensor().Get(i);
   }
 
   /** Sets a single element of this vector.
@@ -114,9 +105,7 @@ public class Vector3d {
    *
    * @param v1 vector whose values are copied */
   public void set(Vector3d v1) {
-    x = v1.x;
-    y = v1.y;
-    z = v1.z;
+    set(v1.toTensor());
   }
 
   /** Adds vector v1 to v2 and places the result in this vector.
@@ -124,18 +113,14 @@ public class Vector3d {
    * @param v1 left-hand vector
    * @param v2 right-hand vector */
   public void add(Vector3d v1, Vector3d v2) {
-    x = v1.x.add(v2.x);
-    y = v1.y.add(v2.y);
-    z = v1.z.add(v2.z);
+    set(v1.toTensor().add(v2.toTensor()));
   }
 
   /** Adds this vector to v1 and places the result in this vector.
    *
    * @param v1 right-hand vector */
   public void add(Vector3d v1) {
-    x = x.add(v1.x);
-    y = y.add(v1.y);
-    z = z.add(v1.z);
+    set(toTensor().add(v1.toTensor()));
   }
 
   /** Subtracts vector v1 from v2 and places the result in this vector.
@@ -143,27 +128,21 @@ public class Vector3d {
    * @param v1 left-hand vector
    * @param v2 right-hand vector */
   public void sub(Vector3d v1, Vector3d v2) {
-    x = v1.x.subtract(v2.x);
-    y = v1.y.subtract(v2.y);
-    z = v1.z.subtract(v2.z);
+    set(v1.toTensor().subtract(v2.toTensor()));
   }
 
   /** Subtracts v1 from this vector and places the result in this vector.
    *
    * @param v1 right-hand vector */
   public void sub(Vector3d v1) {
-    x = x.subtract(v1.x);
-    y = y.subtract(v1.y);
-    z = z.subtract(v1.z);
+    set(toTensor().subtract(v1.toTensor()));
   }
 
   /** Scales the elements of this vector by <code>s</code>.
    *
    * @param s scaling factor */
   public void scale(Scalar s) {
-    x = x.multiply(s);
-    y = y.multiply(s);
-    z = z.multiply(s);
+    set(toTensor().multiply(s));
   }
 
   /** Scales the elements of vector v1 by <code>s</code> and places
@@ -172,9 +151,7 @@ public class Vector3d {
    * @param s scaling factor
    * @param v1 vector to be scaled */
   public void scale(Scalar s, Vector3d v1) {
-    x = v1.x.multiply(s);
-    y = v1.y.multiply(s);
-    z = v1.z.multiply(s);
+    set(v1.toTensor().multiply(s));
   }
 
   /** Returns the 2 norm of this vector. This is the square root of the
@@ -182,8 +159,7 @@ public class Vector3d {
    *
    * @return vector 2 norm */
   public Scalar norm() {
-    return Vector2Norm.of(Tensors.of(x, y, z));
-    // return Math.sqrt(x * x + y * y + z * z);
+    return Vector2Norm.of(toTensor());
   }
 
   /** Returns the square of the 2 norm of this vector. This
@@ -191,8 +167,7 @@ public class Vector3d {
    *
    * @return square of the 2 norm */
   public Scalar normSquared() {
-    return Vector2NormSquared.of(Tensors.of(x, y, z));
-    // return x * x + y * y + z * z;
+    return Vector2NormSquared.of(toTensor());
   }
 
   /** Returns the Euclidean distance between this vector and vector v.
@@ -200,10 +175,6 @@ public class Vector3d {
    * @return distance between this vector and v */
   public Scalar distance(Vector3d v) {
     return Vector2Norm.between(toTensor(), v.toTensor());
-    // double dx = x - v.x;
-    // double dy = y - v.y;
-    // double dz = z - v.z;
-    // return Math.sqrt(dx * dx + dy * dy + dz * dz);
   }
 
   /** Returns the squared of the Euclidean distance between this vector
@@ -212,10 +183,6 @@ public class Vector3d {
    * @return squared distance between this vector and v */
   public Scalar distanceSquared(Vector3d v) {
     return Vector2NormSquared.between(toTensor(), v.toTensor());
-    // double dx = x - v.x;
-    // double dy = y - v.y;
-    // double dz = z - v.z;
-    // return (dx * dx + dy * dy + dz * dz);
   }
 
   /** Returns the dot product of this vector and v1.
@@ -224,7 +191,6 @@ public class Vector3d {
    * @return dot product */
   public Scalar dot(Vector3d v1) {
     return (Scalar) toTensor().dot(v1.toTensor());
-    // return x * v1.x + y * v1.y + z * v1.z;
   }
 
   /** Normalizes this vector in place. */
@@ -235,18 +201,12 @@ public class Vector3d {
     if (err > (2 * DOUBLE_PREC) || err < -(2 * DOUBLE_PREC)) {
       double len = Math.sqrt(lenSqr);
       set(toTensor().divide(RealScalar.of(len)));
-      // x /= len;
-      // y /= len;
-      // z /= len;
     }
   }
 
   /** Sets the elements of this vector to zero. */
   public void setZero() {
     set(Array.zeros(3));
-    // x = 0;
-    // y = 0;
-    // z = 0;
   }
 
   /** Sets the elements of this vector to the prescribed values.
@@ -266,14 +226,7 @@ public class Vector3d {
    * @param v1 left-hand vector
    * @param v2 right-hand vector */
   public void cross(Vector3d v1, Vector3d v2) {
-    Tensor tensor = Cross.of(v1.toTensor(), v2.toTensor());
-    // double tmpx = v1.y * v2.z - v1.z * v2.y;
-    // double tmpy = v1.z * v2.x - v1.x * v2.z;
-    // double tmpz = v1.x * v2.y - v1.y * v2.x;
-    // x = tmpx;
-    // y = tmpy;
-    // z = tmpz;
-    set(tensor);
+    set(Cross.of(v1.toTensor(), v2.toTensor()));
   }
 
   private void set(Tensor tensor) {
@@ -290,10 +243,6 @@ public class Vector3d {
   protected void setRandom(Scalar lower, Scalar upper, Random generator) {
     Distribution distribution = UniformDistribution.of(lower, upper);
     set(RandomVariate.of(distribution, generator, 3));
-    // double range = upper - lower;
-    // x = generator.nextDouble() * range + lower;
-    // y = generator.nextDouble() * range + lower;
-    // z = generator.nextDouble() * range + lower;
   }
 
   /** Returns a string representation of this vector, consisting

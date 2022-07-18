@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalar;
  * @author John E. Lloyd, Fall 2004 */
 class Vertex {
   /** Spatial point associated with this vertex. */
-  Point3d pnt;
+  Vector3d pnt;
   /** Back index into an array. */
   int index;
   /** List forward link. */
@@ -20,13 +20,13 @@ class Vertex {
 
   /** Constructs a vertex and sets its coordinates to 0. */
   public Vertex() {
-    pnt = new Point3d();
+    pnt = new Vector3d();
   }
 
   /** Constructs a vertex with the specified coordinates
    * and index. */
   public Vertex(Scalar x, Scalar y, Scalar z, int idx) {
-    pnt = new Point3d(x, y, z);
+    pnt = new Vector3d(x, y, z);
     index = idx;
   }
 }

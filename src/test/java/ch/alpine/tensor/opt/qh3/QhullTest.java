@@ -12,6 +12,7 @@ class QhullTest {
     QuickHull3DTest tester = new QuickHull3DTest();
     hull = new QuickHull3D();
     for (int i = 0; i < 100; i++) {
+      // System.out.println(i);
       Scalar[] pnts = tester.randomCubedPoints(100, RealScalar.of(1.0), RealScalar.of(0.5));
       // hull.setFromQhull(pnts, pnts.length / 3, /* triangulated= */false);
       // pnts = tester.addDegeneracy(QuickHull3DTest.VERTEX_DEGENERACY, pnts, hull);

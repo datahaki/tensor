@@ -15,6 +15,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -31,7 +32,7 @@ class Face {
   HalfEdge he0;
   private Vector3d normal;
   Scalar area;
-  private Point3d centroid;
+  private Vector3d centroid;
   Scalar planeOffset;
   int index;
   int numVerts;
@@ -42,7 +43,7 @@ class Face {
   int mark = VISIBLE;
   Vertex outside;
 
-  public void computeCentroid(Point3d centroid) {
+  public void computeCentroid(Vector3d centroid) {
     centroid.setZero();
     HalfEdge he = he0;
     do {
@@ -68,8 +69,8 @@ class Face {
         }
         hedge = hedge.next;
       } while (hedge != he0);
-      Point3d p2 = hedgeMax.head().pnt;
-      Point3d p1 = hedgeMax.tail().pnt;
+      Vector3d p2 = hedgeMax.head().pnt;
+      Vector3d p1 = hedgeMax.tail().pnt;
       Scalar lenMax = Sqrt.FUNCTION.apply(lenSqrMax);
       Scalar ux = p2.x.subtract(p1.x).divide(lenMax);
       Scalar uy = p2.y.subtract(p1.y).divide(lenMax);
@@ -85,8 +86,8 @@ class Face {
   public void computeNormal(Vector3d normal) {
     HalfEdge he1 = he0.next;
     HalfEdge he2 = he1.next;
-    Point3d p0 = he0.head().pnt;
-    Point3d p2 = he1.head().pnt;
+    Vector3d p0 = he0.head().pnt;
+    Vector3d p2 = he1.head().pnt;
     Scalar d2x = p2.x.subtract(p0.x);
     Scalar d2y = p2.y.subtract(p0.y);
     Scalar d2z = p2.z.subtract(p0.z);
@@ -122,7 +123,7 @@ class Face {
       he = he.next;
     } while (he != he0);
     if (numv != numVerts) {
-      throw new InternalErrorException("face " + getVertexString() + " numVerts=" + numVerts + " should be " + numv);
+      throw Throw.of("face " + getVertexString() + " numVerts=" + numVerts + " should be " + numv);
     }
   }
 
@@ -180,7 +181,7 @@ class Face {
 
   public Face() {
     normal = new Vector3d();
-    centroid = new Point3d();
+    centroid = new Vector3d();
     mark = VISIBLE;
   }
 
@@ -227,7 +228,7 @@ class Face {
    *
    * @param p the point
    * @return distance from the point to the plane */
-  public Scalar distanceToPlane(Point3d p) {
+  public Scalar distanceToPlane(Vector3d p) {
     return (Scalar) normal.toTensor().dot(p.toTensor()).subtract(planeOffset);
     // return normal.x * p.x + normal.y * p.y + normal.z * p.z - planeOffset;
   }
@@ -239,7 +240,7 @@ class Face {
     return normal;
   }
 
-  public Point3d getCentroid() {
+  public Vector3d getCentroid() {
     return centroid;
   }
 
@@ -309,25 +310,24 @@ class Face {
     Scalar maxd = RealScalar.ZERO;
     int numv = 0;
     if (numVerts < 3) {
-      throw new InternalErrorException("degenerate face: " + getVertexString());
+      throw Throw.of("degenerate face: " + getVertexString());
     }
     do {
       HalfEdge hedgeOpp = hedge.getOpposite();
       if (hedgeOpp == null) {
-        throw new InternalErrorException("face " + getVertexString() + ": " + "unreflected half edge " + hedge.getVertexString());
+        throw Throw.of("face " + getVertexString() + ": " + "unreflected half edge " + hedge.getVertexString());
       } else if (hedgeOpp.getOpposite() != hedge) {
-        throw new InternalErrorException("face " + getVertexString() + ": " + "opposite half edge " + hedgeOpp.getVertexString() + " has opposite "
+        throw Throw.of("face " + getVertexString() + ": " + "opposite half edge " + hedgeOpp.getVertexString() + " has opposite "
             + hedgeOpp.getOpposite().getVertexString());
       }
       if (hedgeOpp.head() != hedge.tail() || hedge.head() != hedgeOpp.tail()) {
-        throw new InternalErrorException(
-            "face " + getVertexString() + ": " + "half edge " + hedge.getVertexString() + " reflected by " + hedgeOpp.getVertexString());
+        throw Throw.of("face " + getVertexString() + ": " + "half edge " + hedge.getVertexString() + " reflected by " + hedgeOpp.getVertexString());
       }
       Face oppFace = hedgeOpp.face;
       if (oppFace == null) {
-        throw new InternalErrorException("face " + getVertexString() + ": " + "no face on half edge " + hedgeOpp.getVertexString());
+        throw Throw.of("face " + getVertexString() + ": " + "no face on half edge " + hedgeOpp.getVertexString());
       } else if (oppFace.mark == DELETED) {
-        throw new InternalErrorException("face " + getVertexString() + ": " + "opposite face " + oppFace.getVertexString() + " not on hull");
+        throw Throw.of("face " + getVertexString() + ": " + "opposite face " + oppFace.getVertexString() + " not on hull");
       }
       Scalar d = Abs.FUNCTION.apply(distanceToPlane(hedge.head().pnt));
       if (Scalars.lessThan(maxd, d)) { // d > maxd
@@ -337,7 +337,7 @@ class Face {
       hedge = hedge.next;
     } while (hedge != he0);
     if (numv != numVerts) {
-      throw new InternalErrorException("face " + getVertexString() + " numVerts=" + numVerts + " should be " + numv);
+      throw Throw.of("face " + getVertexString() + " numVerts=" + numVerts + " should be " + numv);
     }
   }
 
@@ -386,9 +386,9 @@ class Face {
     // return the squared area of the triangle defined
     // by the half edge hedge0 and the point at the
     // head of hedge1.
-    Point3d p0 = hedge0.tail().pnt;
-    Point3d p1 = hedge0.head().pnt;
-    Point3d p2 = hedge1.head().pnt;
+    Vector3d p0 = hedge0.tail().pnt;
+    Vector3d p1 = hedge0.head().pnt;
+    Vector3d p2 = hedge1.head().pnt;
     Scalar dx1 = p1.x.subtract(p0.x);
     Scalar dy1 = p1.y.subtract(p0.y);
     Scalar dz1 = p1.z.subtract(p0.z);

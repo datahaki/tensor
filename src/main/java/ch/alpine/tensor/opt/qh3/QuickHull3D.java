@@ -266,7 +266,7 @@ public class QuickHull3D {
    * @throws IllegalArgumentException the number of input points is less
    * than four, or the points appear to be coincident, colinear, or
    * coplanar. */
-  public QuickHull3D(Point3d[] points) throws IllegalArgumentException {
+  public QuickHull3D(Vector3d[] points) throws IllegalArgumentException {
     build(points, points.length);
   }
 
@@ -353,7 +353,7 @@ public class QuickHull3D {
    * @throws IllegalArgumentException the number of input points is less
    * than four, or the points appear to be coincident, colinear, or
    * coplanar. */
-  public void build(Point3d[] points) throws IllegalArgumentException {
+  public void build(Vector3d[] points) throws IllegalArgumentException {
     build(points, points.length);
   }
 
@@ -364,7 +364,7 @@ public class QuickHull3D {
    * @throws IllegalArgumentException the number of input points is less
    * than four or greater then the length of <code>points</code>, or the
    * points appear to be coincident, colinear, or coplanar. */
-  public void build(Point3d[] points, int nump) throws IllegalArgumentException {
+  public void build(Vector3d[] points, int nump) throws IllegalArgumentException {
     if (nump < 4) {
       throw new IllegalArgumentException("Less than four input points specified");
     }
@@ -430,7 +430,7 @@ public class QuickHull3D {
     }
   }
 
-  protected void setPoints(Point3d[] pnts, int nump) {
+  protected void setPoints(Vector3d[] pnts, int nump) {
     for (int i = 0; i < nump; i++) {
       Vertex vtx = pointBuffer[i];
       vtx.pnt.set(pnts[i]);
@@ -447,7 +447,7 @@ public class QuickHull3D {
     max.set(pointBuffer[0].pnt);
     min.set(pointBuffer[0].pnt);
     for (int i = 1; i < numPoints; i++) {
-      Point3d pnt = pointBuffer[i].pnt;
+      Vector3d pnt = pointBuffer[i].pnt;
       if (Scalars.lessThan(max.x, pnt.x)) { // pnt.x > max.x
         max.x = pnt.x;
         maxVtxs[0] = pointBuffer[i];
@@ -613,8 +613,8 @@ public class QuickHull3D {
    * @return array of vertex points
    * @see QuickHull3D#getVertices(double[])
    * @see QuickHull3D#getFaces() */
-  public Point3d[] getVertices() {
-    Point3d[] vtxs = new Point3d[numVertices];
+  public Vector3d[] getVertices() {
+    Vector3d[] vtxs = new Vector3d[numVertices];
     for (int i = 0; i < numVertices; i++) {
       vtxs[i] = pointBuffer[vertexPointIndices[i]].pnt;
     }
@@ -631,7 +631,7 @@ public class QuickHull3D {
    * @see QuickHull3D#getFaces() */
   public int getVertices(Scalar[] coords) {
     for (int i = 0; i < numVertices; i++) {
-      Point3d pnt = pointBuffer[vertexPointIndices[i]].pnt;
+      Vector3d pnt = pointBuffer[vertexPointIndices[i]].pnt;
       coords[i * 3 + 0] = pnt.x;
       coords[i * 3 + 1] = pnt.y;
       coords[i * 3 + 2] = pnt.z;
@@ -750,7 +750,7 @@ public class QuickHull3D {
       indexFlags |= INDEXED_FROM_ONE;
     }
     for (int i = 0; i < numVertices; i++) {
-      Point3d pnt = pointBuffer[vertexPointIndices[i]].pnt;
+      Vector3d pnt = pointBuffer[vertexPointIndices[i]].pnt;
       ps.println("v " + pnt.x + " " + pnt.y + " " + pnt.z);
     }
     for (Iterator fi = faces.iterator(); fi.hasNext();) {
@@ -893,7 +893,7 @@ public class QuickHull3D {
     return false;
   }
 
-  protected void calculateHorizon(Point3d eyePnt, HalfEdge edge0, Face face, Vector horizon) {
+  protected void calculateHorizon(Vector3d eyePnt, HalfEdge edge0, Face face, Vector horizon) {
     // oldFaces.add (face);
     deleteFacePoints(face, null);
     face.mark = Face.DELETED;
@@ -1139,7 +1139,7 @@ public class QuickHull3D {
     }
     // check point inclusion
     for (int i = 0; i < numPoints; i++) {
-      Point3d pnt = pointBuffer[i].pnt;
+      Vector3d pnt = pointBuffer[i].pnt;
       for (Iterator it = faces.iterator(); it.hasNext();) {
         Face face = (Face) it.next();
         if (face.mark == Face.VISIBLE) {
