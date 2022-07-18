@@ -58,7 +58,8 @@ public class LinearProgram implements Serializable {
   }
 
   public enum Objective {
-    MIN, MAX;
+    MIN,
+    MAX;
 
     public Objective flip() {
       return values()[1 - ordinal()];
@@ -66,7 +67,9 @@ public class LinearProgram implements Serializable {
   }
 
   public enum ConstraintType {
-    EQUALS, LESS_EQUALS, GREATER_EQUALS;
+    EQUALS,
+    LESS_EQUALS,
+    GREATER_EQUALS;
 
     public ConstraintType flipInequality() {
       return switch (this) {
@@ -78,7 +81,8 @@ public class LinearProgram implements Serializable {
   }
 
   public enum Variables {
-    NON_NEGATIVE, UNRESTRICTED;
+    NON_NEGATIVE,
+    UNRESTRICTED;
   }
 
   // ---

@@ -13,25 +13,24 @@ import ch.alpine.tensor.Tensors;
 /** implementation for comma- or tab- separated values file format */
 /* package */ enum XsvFormat {
   /** comma separated values format */
-  CSV(",") {
+  CSV(',') {
     @Override
     Tensor embrace(String string) {
       return Tensors.fromString(Tensor.OPENING_BRACKET + string + Tensor.CLOSING_BRACKET);
     }
   },
   /** tab separated values file format */
-  TSV("\t") {
+  TSV('\t') {
     @Override
     Tensor embrace(String string) {
       return Tensors.fromString(Tensor.OPENING_BRACKET + string.replace('\t', ',') + Tensor.CLOSING_BRACKET);
     }
-  }, //
-  ;
+  };
 
   private final Collector<CharSequence, ?, String> collector;
 
-  private XsvFormat(String delimiter) {
-    collector = Collectors.joining(delimiter);
+  private XsvFormat(int delimiter) {
+    collector = Collectors.joining(Character.toString(delimiter));
   }
 
   /** In Mathematica the csv file is imported using
