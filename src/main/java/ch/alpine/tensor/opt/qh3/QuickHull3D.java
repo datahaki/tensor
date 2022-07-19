@@ -448,40 +448,38 @@ public class QuickHull3D {
     min.set(pointBuffer[0].pnt);
     for (int i = 1; i < numPoints; i++) {
       Vector3d pnt = pointBuffer[i].pnt;
-      if (Scalars.lessThan(max.xyz.Get(0), pnt.xyz.Get(0))) { // pnt.x > max.x
-        max.set(0, pnt.xyz.Get(0));
+      if (Scalars.lessThan(max.x, pnt.x)) { // pnt.x > max.x
+        max.x = pnt.x;
         maxVtxs[0] = pointBuffer[i];
-      } else if (Scalars.lessThan(pnt.xyz.Get(0), min.xyz.Get(0))) { // pnt.x < min.x
-        // min.x = pnt.x;
-        min.set(0, pnt.xyz.Get(0));
+      } else if (Scalars.lessThan(pnt.x, min.x)) { // pnt.x < min.x
+        min.x = pnt.x;
         minVtxs[0] = pointBuffer[i];
       }
-      if (Scalars.lessThan(max.xyz.Get(1), pnt.xyz.Get(1))) { // pnt.y > max.y
-        max.set(1, pnt.xyz.Get(1));
+      if (Scalars.lessThan(max.y, pnt.y)) { // pnt.y > max.y
+        max.y = pnt.y;
         maxVtxs[1] = pointBuffer[i];
-      } else if (Scalars.lessThan(pnt.xyz.Get(1), min.xyz.Get(1))) { // pnt.y < min.y
-        min.set(1, pnt.xyz.Get(1));
+      } else if (Scalars.lessThan(pnt.y, min.y)) { // pnt.y < min.y
+        min.y = pnt.y;
         minVtxs[1] = pointBuffer[i];
       }
-      if (Scalars.lessThan(max.xyz.Get(2), pnt.xyz.Get(2))) { // pnt.z > max.z
-        max.set(2, pnt.xyz.Get(2));
+      if (Scalars.lessThan(max.z, pnt.z)) { // pnt.z > max.z
+        max.z = pnt.z;
         maxVtxs[2] = pointBuffer[i];
-      } else if (Scalars.lessThan(pnt.xyz.Get(2), min.xyz.Get(2))) { // pnt.z < min.z
-        min.set(2, pnt.xyz.Get(2));
+      } else if (Scalars.lessThan(pnt.z, min.z)) { // pnt.z < min.z
+        min.z = pnt.z;
         minVtxs[2] = pointBuffer[i];
       }
     }
     // this epsilon formula comes from QuickHull, and I'm
     // not about to quibble.
-    charLength = max.xyz.subtract(min.xyz).stream().map(Scalar.class::cast).reduce(Max::of).orElseThrow();
-    // Max.of(max.xyz.subtract(min.x), max.y.subtract(min.y));
+    charLength = Max.of(max.x.subtract(min.x), max.y.subtract(min.y));
     // charLength = Math.max(max.x - min.x, max.y - min.y);
-    // charLength = Max.of(max.z.subtract(min.z), charLength);
+    charLength = Max.of(max.z.subtract(min.z), charLength);
     if (explicitTolerance == AUTOMATIC_TOLERANCE) {
       tolerance = Times.of(DOUBLE_PREC, RealScalar.of(3), //
-          Max.of(Abs.FUNCTION.apply(max.xyz.Get(0)), Abs.FUNCTION.apply(min.xyz.Get(0))) //
-              .add(Max.of(Abs.FUNCTION.apply(max.xyz.Get(1)), Abs.FUNCTION.apply(min.xyz.Get(1)))) //
-              .add(Max.of(Abs.FUNCTION.apply(max.xyz.Get(2)), Abs.FUNCTION.apply(min.xyz.Get(2)))));
+          Max.of(Abs.FUNCTION.apply(max.x), Abs.FUNCTION.apply(min.x)) //
+              .add(Max.of(Abs.FUNCTION.apply(max.y), Abs.FUNCTION.apply(min.y))) //
+              .add(Max.of(Abs.FUNCTION.apply(max.z), Abs.FUNCTION.apply(min.z))));
     } else {
       tolerance = explicitTolerance;
     }
@@ -634,9 +632,9 @@ public class QuickHull3D {
   public int getVertices(Scalar[] coords) {
     for (int i = 0; i < numVertices; i++) {
       Vector3d pnt = pointBuffer[vertexPointIndices[i]].pnt;
-      coords[i * 3 + 0] = pnt.xyz.Get(0);
-      coords[i * 3 + 1] = pnt.xyz.Get(1);
-      coords[i * 3 + 2] = pnt.xyz.Get(2);
+      coords[i * 3 + 0] = pnt.x;
+      coords[i * 3 + 1] = pnt.y;
+      coords[i * 3 + 2] = pnt.z;
     }
     return numVertices;
   }
@@ -753,7 +751,7 @@ public class QuickHull3D {
     }
     for (int i = 0; i < numVertices; i++) {
       Vector3d pnt = pointBuffer[vertexPointIndices[i]].pnt;
-      ps.println("v " + pnt.xyz);
+      ps.println("v " + pnt.x + " " + pnt.y + " " + pnt.z);
     }
     for (Iterator fi = faces.iterator(); fi.hasNext();) {
       Face face = (Face) fi.next();

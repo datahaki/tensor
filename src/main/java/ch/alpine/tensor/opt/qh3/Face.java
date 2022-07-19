@@ -14,9 +14,8 @@ package ch.alpine.tensor.opt.qh3;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
-import ch.alpine.tensor.lie.Cross;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.pow.Sqrt;
@@ -73,12 +72,13 @@ class Face {
       Vector3d p2 = hedgeMax.head().pnt;
       Vector3d p1 = hedgeMax.tail().pnt;
       Scalar lenMax = Sqrt.FUNCTION.apply(lenSqrMax);
-      Tensor u = p2.xyz.subtract(p1.xyz).divide(lenMax);
-      // Scalar ux = p2.x.subtract(p1.x).divide(lenMax);
-      // Scalar uy = p2.y.subtract(p1.y).divide(lenMax);
-      // Scalar uz = p2.z.subtract(p1.z).divide(lenMax);
-      Scalar dot = (Scalar) normal.xyz.dot(u);
-      normal.xyz = normal.xyz.subtract(u.multiply(dot));
+      Scalar ux = p2.x.subtract(p1.x).divide(lenMax);
+      Scalar uy = p2.y.subtract(p1.y).divide(lenMax);
+      Scalar uz = p2.z.subtract(p1.z).divide(lenMax);
+      Scalar dot = normal.x.multiply(ux).add(normal.y.multiply(uy)).add(normal.z.multiply(uz));
+      normal.x = normal.x.subtract(ux.multiply(dot));
+      normal.y = normal.y.subtract(uy.multiply(dot));
+      normal.z = normal.z.subtract(uz.multiply(dot));
       normal.normalize();
     }
   }
@@ -88,22 +88,22 @@ class Face {
     HalfEdge he2 = he1.next;
     Vector3d p0 = he0.head().pnt;
     Vector3d p2 = he1.head().pnt;
-    Tensor d2 = p2.xyz.subtract(p0.xyz);
-    // Scalar d2y = p2.y.subtract(p0.y);
-    // Scalar d2z = p2.z.subtract(p0.z);
+    Scalar d2x = p2.x.subtract(p0.x);
+    Scalar d2y = p2.y.subtract(p0.y);
+    Scalar d2z = p2.z.subtract(p0.z);
     normal.setZero();
     numVerts = 2;
     while (he2 != he0) {
-      Tensor d1 = d2;
-      // Scalar d1y = d2y;
-      // Scalar d1z = d2z;
+      Scalar d1x = d2x;
+      Scalar d1y = d2y;
+      Scalar d1z = d2z;
       p2 = he2.head().pnt;
-      d2 = p2.xyz.subtract(p0.xyz);
-      // d2y = p2.y.subtract(p0.y);
-      // d2z = p2.z.subtract(p0.z);
-      normal.xyz = normal.xyz.add(Cross.of(d1, d2));
-      // normal.y = normal.y.add(d1z.multiply(d2x).subtract(d1x.multiply(d2z)));
-      // normal.z = normal.z.add(d1x.multiply(d2y).subtract(d1y.multiply(d2x)));
+      d2x = p2.x.subtract(p0.x);
+      d2y = p2.y.subtract(p0.y);
+      d2z = p2.z.subtract(p0.z);
+      normal.x = normal.x.add(d1y.multiply(d2z).subtract(d1z.multiply(d2y)));
+      normal.y = normal.y.add(d1z.multiply(d2x).subtract(d1x.multiply(d2z)));
+      normal.z = normal.z.add(d1x.multiply(d2y).subtract(d1y.multiply(d2x)));
       he1 = he2;
       he2 = he2.next;
       numVerts++;
@@ -229,7 +229,7 @@ class Face {
    * @param p the point
    * @return distance from the point to the plane */
   public Scalar distanceToPlane(Vector3d p) {
-    return (Scalar) normal.xyz.dot(p.xyz).subtract(planeOffset);
+    return (Scalar) normal.toTensor().dot(p.toTensor()).subtract(planeOffset);
     // return normal.x * p.x + normal.y * p.y + normal.z * p.z - planeOffset;
   }
 
@@ -389,20 +389,16 @@ class Face {
     Vector3d p0 = hedge0.tail().pnt;
     Vector3d p1 = hedge0.head().pnt;
     Vector3d p2 = hedge1.head().pnt;
-    Tensor d1 = p1.xyz.subtract(p0.xyz);
-    // Scalar dx1 = p1.x.subtract(p0.x);
-    // Scalar dy1 = p1.y.subtract(p0.y);
-    // Scalar dz1 = p1.z.subtract(p0.z);
-    Tensor d2 = p2.xyz.subtract(p0.xyz);
-    // Scalar dx2 = p2.x.subtract(p0.x);
-    // Scalar dy2 = p2.y.subtract(p0.y);
-    // Scalar dz2 = p2.z.subtract(p0.z);
-    Tensor cr = Cross.of(d1, d2);
-    // Scalar x = dy1.multiply(dz2).subtract(dz1.multiply(dy2));
-    // Scalar y = dz1.multiply(dx2).subtract(dx1.multiply(dz2));
-    // Scalar z = dx1.multiply(dy2).subtract(dy1.multiply(dx2));
-    // return Vector2NormSquared.of(Tensors.of(x, y, z)); // x * x + y * y + z * z;
-    return Vector2NormSquared.of(cr);
+    Scalar dx1 = p1.x.subtract(p0.x);
+    Scalar dy1 = p1.y.subtract(p0.y);
+    Scalar dz1 = p1.z.subtract(p0.z);
+    Scalar dx2 = p2.x.subtract(p0.x);
+    Scalar dy2 = p2.y.subtract(p0.y);
+    Scalar dz2 = p2.z.subtract(p0.z);
+    Scalar x = dy1.multiply(dz2).subtract(dz1.multiply(dy2));
+    Scalar y = dz1.multiply(dx2).subtract(dx1.multiply(dz2));
+    Scalar z = dx1.multiply(dy2).subtract(dy1.multiply(dx2));
+    return Vector2NormSquared.of(Tensors.of(x, y, z)); // x * x + y * y + z * z;
   }
 
   public void triangulate(FaceList newFaces, Scalar minArea) {
