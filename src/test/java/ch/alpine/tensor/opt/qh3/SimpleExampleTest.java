@@ -25,14 +25,14 @@ class SimpleExampleTest {
     ConvexHull3D hull = new ConvexHull3D();
     hull.build(points);
     System.out.println("Vertices:");
-    Vector3d[] vertices = hull.getVertices();
-    for (int i = 0; i < vertices.length; i++) {
-      Vector3d pnt = vertices[i];
-      System.out.println(pnt.x + " " + pnt.y + " " + pnt.z);
+    Tensor vertices = hull.getVertices();
+    for (int i = 0; i < vertices.length(); i++) {
+      Tensor pnt = vertices.get(i);
+      System.out.println(pnt);
     }
     System.out.println("Faces:");
     int[][] faceIndices = hull.getFaces();
-    for (int i = 0; i < vertices.length; i++) {
+    for (int i = 0; i < vertices.length(); i++) {
       for (int k = 0; k < faceIndices[i].length; k++) {
         System.out.print(faceIndices[i][k] + " ");
       }

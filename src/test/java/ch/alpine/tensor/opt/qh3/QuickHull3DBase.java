@@ -262,7 +262,6 @@ class QuickHull3DBase {
       throw new Exception("Error: " + faceIndices.length + " faces vs. " + checkFaces.length);
     }
     // translate face indices back into original indices
-    Vector3d[] pnts = hull.getVertices();
     int[] vtxIndices = hull.getVertexPointIndices();
     for (int j = 0; j < faceIndices.length; j++) {
       int[] idxs = faceIndices[j];

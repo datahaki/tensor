@@ -71,7 +71,12 @@ public class Vector3d {
    * @return element value throws ArrayIndexOutOfBoundsException
    * if i is not in the range 0 to 2. */
   public Scalar get(int i) {
-    return toTensor().Get(i);
+    return switch (i) {
+    case 0 -> x;
+    case 1 -> y;
+    case 2 -> z;
+    default -> throw new IllegalArgumentException("Unexpected value: " + i);
+    };
   }
 
   /** Sets a single element of this vector.
@@ -190,7 +195,7 @@ public class Vector3d {
    * @param v1 right-hand vector
    * @return dot product */
   public Scalar dot(Vector3d v1) {
-    return (Scalar) toTensor().dot(v1.toTensor());
+    return x.multiply(v1.x).add(y.multiply(v1.y)).add(z.multiply(v1.z));
   }
 
   /** Normalizes this vector in place. */

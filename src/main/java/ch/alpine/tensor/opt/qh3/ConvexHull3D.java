@@ -10,8 +10,6 @@
  * software. */
 package ch.alpine.tensor.opt.qh3;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -77,7 +75,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * }
  * </pre>
  * As a convenience, there are also build
- * and {@link #getVertices2() getVertex} methods which
+ * and {@link #getVertices() getVertex} methods which
  * pass point information using an array of doubles.
  *
  * <h3><a name=distTol>Robustness</h3> Because this algorithm uses floating
@@ -235,10 +233,10 @@ public class ConvexHull3D {
 
   private HalfEdge findHalfEdge(Vertex tail, Vertex head) {
     // brute force ... OK, since setHull is not used much
-    for (Iterator<Face> it = faces.iterator(); it.hasNext();) {
-      HalfEdge he = it.next().findEdge(tail, head);
-      if (he != null)
-        return he;
+    for (Iterator<Face> iterator = faces.iterator(); iterator.hasNext();) {
+      HalfEdge halfEdge = iterator.next().findEdge(tail, head);
+      if (halfEdge != null)
+        return halfEdge;
     }
     return null;
   }
@@ -249,27 +247,15 @@ public class ConvexHull3D {
     computeMaxAndMin();
     for (int i = 0; i < numf; i++) {
       Face face = Face.create(pointBuffer, faceIndices[i]);
-      HalfEdge he = face.he0;
+      HalfEdge halfEdge = face.halfEdge;
       do {
-        HalfEdge heOpp = findHalfEdge(he.head(), he.tail());
+        HalfEdge heOpp = findHalfEdge(halfEdge.head(), halfEdge.tail());
         if (heOpp != null) {
-          he.setOpposite(heOpp);
+          halfEdge.setOpposite(heOpp);
         }
-        he = he.next;
-      } while (he != face.he0);
+        halfEdge = halfEdge.next;
+      } while (halfEdge != face.halfEdge);
       faces.add(face);
-    }
-  }
-
-  private void printQhullErrors(Process proc) throws IOException {
-    boolean wrote = false;
-    InputStream es = proc.getErrorStream();
-    while (es.available() > 0) {
-      System.out.write(es.read());
-      wrote = true;
-    }
-    if (wrote) {
-      System.out.println("");
     }
   }
 
@@ -339,8 +325,8 @@ public class ConvexHull3D {
   public void triangulate() {
     Scalar minArea = Times.of(RealScalar.of(1000), charLength, DOUBLE_PREC);
     newFaces.clear();
-    for (Iterator<Face> it = faces.iterator(); it.hasNext();) {
-      Face face = it.next();
+    for (Iterator<Face> iterator = faces.iterator(); iterator.hasNext();) {
+      Face face = iterator.next();
       if (face.mark == Face.VISIBLE) {
         face.triangulate(newFaces, minArea);
         // splitFace (face);
@@ -350,15 +336,6 @@ public class ConvexHull3D {
       faces.add(face);
     }
   }
-  // private void splitFace (Face face)
-  // {
-  // Face newFace = face.split();
-  // if (newFace != null)
-  // { newFaces.add (newFace);
-  // splitFace (newFace);
-  // splitFace (face);
-  // }
-  // }
 
   protected void initBuffers(int nump) {
     if (pointBuffer.length < nump) {
@@ -567,18 +544,9 @@ public class ConvexHull3D {
   /** Returns the vertex points in this hull.
    *
    * @return array of vertex points
-   * @see ConvexHull3D#getVertices2()
+   * @see ConvexHull3D#getVertices()
    * @see ConvexHull3D#getFaces() */
-  @Deprecated
-  public Vector3d[] getVertices() {
-    Vector3d[] vtxs = new Vector3d[numVertices];
-    for (int i = 0; i < numVertices; i++) {
-      vtxs[i] = pointBuffer[vertexPointIndices[i]].pnt;
-    }
-    return vtxs;
-  }
-
-  public Tensor getVertices2() {
+  public Tensor getVertices() {
     Tensor tensor = Tensors.reserve(numVertices);
     for (int i = 0; i < numVertices; i++)
       tensor.append(pointBuffer[vertexPointIndices[i]].pnt.toTensor());
@@ -616,7 +584,6 @@ public class ConvexHull3D {
    *
    * @return array of integer arrays, giving the vertex
    * indices for each face.
-   * @see ConvexHull3D#getVertices()
    * @see ConvexHull3D#getFaces(int) */
   public int[][] getFaces() {
     return getFaces(0);
@@ -635,13 +602,12 @@ public class ConvexHull3D {
    * @param indexFlags specifies index characteristics (0 results
    * in the default)
    * @return array of integer arrays, giving the vertex
-   * indices for each face.
-   * @see ConvexHull3D#getVertices() */
+   * indices for each face. */
   public int[][] getFaces(int indexFlags) {
     int[][] allFaces = new int[faces.size()][];
     int k = 0;
-    for (Iterator<Face> it = faces.iterator(); it.hasNext();) {
-      Face face = it.next();
+    for (Iterator<Face> iterator = faces.iterator(); iterator.hasNext();) {
+      Face face = iterator.next();
       allFaces[k] = new int[face.numVertices()];
       getFaceIndices(allFaces[k], face, indexFlags);
       k++;
@@ -649,50 +615,11 @@ public class ConvexHull3D {
     return allFaces;
   }
 
-  /** Prints the vertices and faces of this hull to the stream ps.
-   *
-   * <p> This is done using the Alias Wavefront .obj file format, with
-   * the vertices printed first (each preceding by the letter
-   * <code>v</code>), followed by the vertex indices for each face (each
-   * preceded by the letter <code>f</code>).
-   *
-   * <p>By default, the face indices are numbered with respect to the
-   * hull vertices (as opposed to the input points), with a lowest index
-   * of 1, and are arranged counter-clockwise. However, this
-   * can be changed by setting {@link #POINT_RELATIVE POINT_RELATIVE},
-   * {@link #INDEXED_FROM_ONE INDEXED_FROM_ZERO}, or {@link #CLOCKWISE
-   * CLOCKWISE} in the indexFlags parameter.
-   *
-   * @param ps stream used for printing
-   * @param indexFlags specifies index characteristics
-   * (0 results in the default).
-   * @see ConvexHull3D#getVertices()
-   * @see ConvexHull3D#getFaces() */
-  private void print(PrintStream ps, int indexFlags) {
-    if ((indexFlags & INDEXED_FROM_ZERO) == 0) {
-      indexFlags |= INDEXED_FROM_ONE;
-    }
-    for (int i = 0; i < numVertices; i++) {
-      Vector3d pnt = pointBuffer[vertexPointIndices[i]].pnt;
-      ps.println("v " + pnt.x + " " + pnt.y + " " + pnt.z);
-    }
-    for (Iterator<Face> fi = faces.iterator(); fi.hasNext();) {
-      Face face = fi.next();
-      int[] indices = new int[face.numVertices()];
-      getFaceIndices(indices, face, indexFlags);
-      ps.print("f");
-      for (int k = 0; k < indices.length; k++) {
-        ps.print(" " + indices[k]);
-      }
-      ps.println("");
-    }
-  }
-
   private void getFaceIndices(int[] indices, Face face, int flags) {
     boolean ccw = ((flags & CLOCKWISE) == 0);
     boolean indexedFromOne = ((flags & INDEXED_FROM_ONE) != 0);
     boolean pointRelative = ((flags & POINT_RELATIVE) != 0);
-    HalfEdge hedge = face.he0;
+    HalfEdge hedge = face.halfEdge;
     int k = 0;
     do {
       int idx = hedge.head().index;
@@ -704,7 +631,7 @@ public class ConvexHull3D {
       }
       indices[k++] = idx;
       hedge = (ccw ? hedge.next : hedge.prev);
-    } while (hedge != face.he0);
+    } while (hedge != face.halfEdge);
   }
 
   private void resolveUnclaimedPoints(FaceList newFaces) {
@@ -766,7 +693,7 @@ public class ConvexHull3D {
   }
 
   private boolean doAdjacentMerge(Face face, int mergeType) {
-    HalfEdge hedge = face.he0;
+    HalfEdge hedge = face.halfEdge;
     boolean convex = true;
     Scalar ntolerance = tolerance.negate();
     do {
@@ -808,7 +735,7 @@ public class ConvexHull3D {
         return true;
       }
       hedge = hedge.next;
-    } while (hedge != face.he0);
+    } while (hedge != face.halfEdge);
     if (!convex) {
       face.mark = Face.NON_CONVEX;
     }
@@ -856,8 +783,8 @@ public class ConvexHull3D {
     newFaces.clear();
     HalfEdge hedgeSidePrev = null;
     HalfEdge hedgeSideBegin = null;
-    for (Iterator<HalfEdge> it = horizon.iterator(); it.hasNext();) {
-      HalfEdge horizonHe = it.next();
+    for (Iterator<HalfEdge> iterator = horizon.iterator(); iterator.hasNext();) {
+      HalfEdge horizonHe = iterator.next();
       HalfEdge hedgeSide = addAdjoiningFace(eyeVtx, horizonHe);
       if (debug) {
         System.out.println("new face: " + hedgeSide.face.getVertexString());
@@ -956,10 +883,10 @@ public class ConvexHull3D {
     }
     // remove inactive faces and mark active vertices
     numFaces = 0;
-    for (Iterator<Face> it = faces.iterator(); it.hasNext();) {
-      Face face = it.next();
+    for (Iterator<Face> iterator = faces.iterator(); iterator.hasNext();) {
+      Face face = iterator.next();
       if (face.mark != Face.VISIBLE) {
-        it.remove();
+        iterator.remove();
       } else {
         markFaceVertices(face, 0);
         numFaces++;
@@ -976,9 +903,9 @@ public class ConvexHull3D {
     }
   }
 
-  private boolean checkFaceConvexity(Face face, Scalar tol, PrintStream ps) {
+  private static boolean checkFaceConvexity(Face face, Scalar tol, PrintStream ps) {
     Scalar dist;
-    HalfEdge he = face.he0;
+    HalfEdge he = face.halfEdge;
     do {
       face.checkConsistency();
       // make sure edge is convex
@@ -1003,15 +930,15 @@ public class ConvexHull3D {
         return false;
       }
       he = he.next;
-    } while (he != face.he0);
+    } while (he != face.halfEdge);
     return true;
   }
 
   private boolean checkFaces(Scalar tol, PrintStream ps) {
     // check edge convexity
     boolean convex = true;
-    for (Iterator<Face> it = faces.iterator(); it.hasNext();) {
-      Face face = it.next();
+    for (Iterator<Face> iterator = faces.iterator(); iterator.hasNext();) {
+      Face face = iterator.next();
       if (face.mark == Face.VISIBLE) {
         if (!checkFaceConvexity(face, tol, ps)) {
           convex = false;
@@ -1064,8 +991,8 @@ public class ConvexHull3D {
     // check point inclusion
     for (int i = 0; i < numPoints; i++) {
       Vector3d pnt = pointBuffer[i].pnt;
-      for (Iterator<Face> it = faces.iterator(); it.hasNext();) {
-        Face face = it.next();
+      for (Iterator<Face> iterator = faces.iterator(); iterator.hasNext();) {
+        Face face = iterator.next();
         if (face.mark == Face.VISIBLE) {
           dist = face.distanceToPlane(pnt);
           if (Scalars.lessThan(pointTol, dist)) { // dist > pointTol
