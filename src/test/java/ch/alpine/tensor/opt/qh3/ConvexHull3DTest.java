@@ -16,11 +16,11 @@ import ch.alpine.tensor.io.ScalarArray;
  *
  * <p>If the option <code>-timing</code> is supplied,
  * then timing information is produced instead. */
-class QuickHull3DTest {
+class ConvexHull3DTest {
   @Test
   void test() {
     QuickHull3DBase tester = new QuickHull3DBase();
-    if (QuickHull3DBase.doTiming) {
+    if (tester.doTiming) {
       tester.timingTests();
     }
   }
@@ -69,7 +69,7 @@ class QuickHull3DTest {
     System.out.println("Testing 20 to 200 random points ...");
     for (int n = 20; n < 200; n += 10) { //
       System.out.println(n);
-      Scalar[] coords = tester.randomPoints(n, RealScalar.of(1.0));
+      Tensor coords = tester.randomPoints(n, RealScalar.of(1.0));
       tester.test(coords, null);
     }
   }
@@ -80,7 +80,7 @@ class QuickHull3DTest {
     System.out.println("Testing 20 to 200 random points in a sphere ...");
     for (int n = 20; n < 200; n += 10) {
       System.out.println(n);
-      Scalar[] coords = tester.randomSphericalPoints(n, RealScalar.of(1.0));
+      Tensor coords = tester.randomSphericalPoints(n, RealScalar.of(1.0));
       tester.test(coords, null);
     }
   }

@@ -13,13 +13,15 @@ package ch.alpine.tensor.opt.qh3;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.List;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Abs;
@@ -75,7 +77,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * }
  * </pre>
  * As a convenience, there are also {@link #build(double[]) build}
- * and {@link #getVertices(double[]) getVertex} methods which
+ * and {@link #getVertices2() getVertex} methods which
  * pass point information using an array of doubles.
  *
  * <h3><a name=distTol>Robustness</h3> Because this algorithm uses floating
@@ -103,7 +105,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  *
  * <h3>Merged Faces</h3> The merging of faces means that the faces returned by
  * QuickHull3D may be convex polygons instead of triangles. If triangles are
- * desired, the application may {@link #triangulate triangulate} the faces, but
+ * desired, the application may triangulate the faces, but
  * it should be noted that this may result in triangles which are very small or
  * thin and hence difficult to perform reliable convexity tests on. In other
  * words, triangulating a merged face is likely to restore the numerical
@@ -120,7 +122,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * IllegalArgumentException will be thrown.
  *
  * @author John E. Lloyd, Fall 2004 */
-public class QuickHull3D {
+public class ConvexHull3D {
   /** Specifies that (on output) vertex indices for a face should be
    * listed in clockwise order. */
   public static final int CLOCKWISE = 0x1;
@@ -145,8 +147,8 @@ public class QuickHull3D {
   private Face[] discardedFaces = new Face[3];
   private Vertex[] maxVtxs = new Vertex[3];
   private Vertex[] minVtxs = new Vertex[3];
-  protected Vector faces = new Vector(16);
-  protected Vector horizon = new Vector(16);
+  protected List<Face> faces = new ArrayList<>(16);
+  protected List<HalfEdge> horizon = new ArrayList<>(16);
   private FaceList newFaces = new FaceList();
   private VertexList unclaimed = new VertexList();
   private VertexList claimed = new VertexList();
@@ -159,7 +161,7 @@ public class QuickHull3D {
   /** Returns true if debugging is enabled.
    *
    * @return true is debugging is enabled
-   * @see QuickHull3D#setDebug */
+   * @see ConvexHull3D#setDebug */
   public boolean getDebug() {
     return debug;
   }
@@ -183,7 +185,7 @@ public class QuickHull3D {
    * points, but it can be set explicitly by the application.
    *
    * @return distance tolerance
-   * @see QuickHull3D#setExplicitDistanceTolerance */
+   * @see ConvexHull3D#setExplicitDistanceTolerance */
   public Scalar getDistanceTolerance() {
     return tolerance;
   }
@@ -243,11 +245,10 @@ public class QuickHull3D {
 
   private HalfEdge findHalfEdge(Vertex tail, Vertex head) {
     // brute force ... OK, since setHull is not used much
-    for (Iterator it = faces.iterator(); it.hasNext();) {
-      HalfEdge he = ((Face) it.next()).findEdge(tail, head);
-      if (he != null) {
+    for (Iterator<Face> it = faces.iterator(); it.hasNext();) {
+      HalfEdge he = it.next().findEdge(tail, head);
+      if (he != null)
         return he;
-      }
     }
     return null;
   }
@@ -348,8 +349,8 @@ public class QuickHull3D {
   public void triangulate() {
     Scalar minArea = Times.of(RealScalar.of(1000), charLength, DOUBLE_PREC);
     newFaces.clear();
-    for (Iterator it = faces.iterator(); it.hasNext();) {
-      Face face = (Face) it.next();
+    for (Iterator<Face> it = faces.iterator(); it.hasNext();) {
+      Face face = it.next();
       if (face.mark == Face.VISIBLE) {
         face.triangulate(newFaces, minArea);
         // splitFace (face);
@@ -576,8 +577,9 @@ public class QuickHull3D {
   /** Returns the vertex points in this hull.
    *
    * @return array of vertex points
-   * @see QuickHull3D#getVertices(double[])
-   * @see QuickHull3D#getFaces() */
+   * @see ConvexHull3D#getVertices2()
+   * @see ConvexHull3D#getFaces() */
+  @Deprecated
   public Vector3d[] getVertices() {
     Vector3d[] vtxs = new Vector3d[numVertices];
     for (int i = 0; i < numVertices; i++) {
@@ -586,22 +588,11 @@ public class QuickHull3D {
     return vtxs;
   }
 
-  /** Returns the coordinates of the vertex points of this hull.
-   *
-   * @param coords returns the x, y, z coordinates of each vertex.
-   * This length of this array must be at least three times
-   * the number of vertices.
-   * @return the number of vertices
-   * @see QuickHull3D#getVertices()
-   * @see QuickHull3D#getFaces() */
-  public int getVertices(Scalar[] coords) {
-    for (int i = 0; i < numVertices; i++) {
-      Vector3d pnt = pointBuffer[vertexPointIndices[i]].pnt;
-      coords[i * 3 + 0] = pnt.x;
-      coords[i * 3 + 1] = pnt.y;
-      coords[i * 3 + 2] = pnt.z;
-    }
-    return numVertices;
+  public Tensor getVertices2() {
+    Tensor tensor = Tensors.reserve(numVertices);
+    for (int i = 0; i < numVertices; i++)
+      tensor.append(pointBuffer[vertexPointIndices[i]].pnt.toTensor());
+    return tensor;
   }
 
   /** Returns an array specifing the index of each hull vertex
@@ -635,8 +626,8 @@ public class QuickHull3D {
    *
    * @return array of integer arrays, giving the vertex
    * indices for each face.
-   * @see QuickHull3D#getVertices()
-   * @see QuickHull3D#getFaces(int) */
+   * @see ConvexHull3D#getVertices()
+   * @see ConvexHull3D#getFaces(int) */
   public int[][] getFaces() {
     return getFaces(0);
   }
@@ -655,12 +646,12 @@ public class QuickHull3D {
    * in the default)
    * @return array of integer arrays, giving the vertex
    * indices for each face.
-   * @see QuickHull3D#getVertices() */
+   * @see ConvexHull3D#getVertices() */
   public int[][] getFaces(int indexFlags) {
     int[][] allFaces = new int[faces.size()][];
     int k = 0;
-    for (Iterator it = faces.iterator(); it.hasNext();) {
-      Face face = (Face) it.next();
+    for (Iterator<Face> it = faces.iterator(); it.hasNext();) {
+      Face face = it.next();
       allFaces[k] = new int[face.numVertices()];
       getFaceIndices(allFaces[k], face, indexFlags);
       k++;
@@ -684,9 +675,9 @@ public class QuickHull3D {
    * {@link #print(PrintStream,int) print(ps,indexFlags)}.
    *
    * @param ps stream used for printing
-   * @see QuickHull3D#print(PrintStream,int)
-   * @see QuickHull3D#getVertices()
-   * @see QuickHull3D#getFaces() */
+   * @see ConvexHull3D#print(PrintStream,int)
+   * @see ConvexHull3D#getVertices()
+   * @see ConvexHull3D#getFaces() */
   public void print(PrintStream ps) {
     print(ps, 0);
   }
@@ -708,8 +699,8 @@ public class QuickHull3D {
    * @param ps stream used for printing
    * @param indexFlags specifies index characteristics
    * (0 results in the default).
-   * @see QuickHull3D#getVertices()
-   * @see QuickHull3D#getFaces() */
+   * @see ConvexHull3D#getVertices()
+   * @see ConvexHull3D#getFaces() */
   public void print(PrintStream ps, int indexFlags) {
     if ((indexFlags & INDEXED_FROM_ZERO) == 0) {
       indexFlags |= INDEXED_FROM_ONE;
@@ -718,8 +709,8 @@ public class QuickHull3D {
       Vector3d pnt = pointBuffer[vertexPointIndices[i]].pnt;
       ps.println("v " + pnt.x + " " + pnt.y + " " + pnt.z);
     }
-    for (Iterator fi = faces.iterator(); fi.hasNext();) {
-      Face face = (Face) fi.next();
+    for (Iterator<Face> fi = faces.iterator(); fi.hasNext();) {
+      Face face = fi.next();
       int[] indices = new int[face.numVertices()];
       getFaceIndices(indices, face, indexFlags);
       ps.print("f");
@@ -814,7 +805,6 @@ public class QuickHull3D {
     do {
       Face oppFace = hedge.oppositeFace();
       boolean merge = false;
-      Scalar dist1, dist2;
       if (mergeType == NONCONVEX) { // then merge faces if they are definitively non-convex
         if (Scalars.lessThan(ntolerance, oppFaceDistance(hedge)) || Scalars.lessThan(ntolerance, oppFaceDistance(hedge.opposite))) {
           merge = true;
@@ -824,7 +814,7 @@ public class QuickHull3D {
         // wrt to the larger face; otherwise, just mark
         // the face non-convex for the second pass.
         if (Scalars.lessThan(oppFace.area, face.area)) {
-          if (Scalars.lessThan(ntolerance, (dist1 = oppFaceDistance(hedge)))) {
+          if (Scalars.lessThan(ntolerance, oppFaceDistance(hedge))) {
             merge = true;
           } else if (Scalars.lessThan(ntolerance, oppFaceDistance(hedge.opposite))) {
             convex = false;
@@ -858,7 +848,7 @@ public class QuickHull3D {
     return false;
   }
 
-  protected void calculateHorizon(Vector3d eyePnt, HalfEdge edge0, Face face, Vector horizon) {
+  protected void calculateHorizon(Vector3d eyePnt, HalfEdge edge0, Face face, List<HalfEdge> horizon) {
     // oldFaces.add (face);
     deleteFacePoints(face, null);
     face.mark = Face.DELETED;
@@ -895,12 +885,12 @@ public class QuickHull3D {
     return face.getEdge(0);
   }
 
-  protected void addNewFaces(FaceList newFaces, Vertex eyeVtx, Vector horizon) {
+  protected void addNewFaces(FaceList newFaces, Vertex eyeVtx, List<HalfEdge> horizon) {
     newFaces.clear();
     HalfEdge hedgeSidePrev = null;
     HalfEdge hedgeSideBegin = null;
-    for (Iterator it = horizon.iterator(); it.hasNext();) {
-      HalfEdge horizonHe = (HalfEdge) it.next();
+    for (Iterator<HalfEdge> it = horizon.iterator(); it.hasNext();) {
+      HalfEdge horizonHe = it.next();
       HalfEdge hedgeSide = addAdjoiningFace(eyeVtx, horizonHe);
       if (debug) {
         System.out.println("new face: " + hedgeSide.face.getVertexString());
@@ -948,8 +938,9 @@ public class QuickHull3D {
     // as determined by the larger face
     for (Face face = newFaces.first(); face != null; face = face.next) {
       if (face.mark == Face.VISIBLE) {
-        while (doAdjacentMerge(face, NONCONVEX_WRT_LARGER_FACE))
-          ;
+        while (doAdjacentMerge(face, NONCONVEX_WRT_LARGER_FACE)) {
+          // ---
+        }
       }
     }
     // second merge pass ... merge faces which are non-convex
@@ -957,8 +948,9 @@ public class QuickHull3D {
     for (Face face = newFaces.first(); face != null; face = face.next) {
       if (face.mark == Face.NON_CONVEX) {
         face.mark = Face.VISIBLE;
-        while (doAdjacentMerge(face, NONCONVEX))
-          ;
+        while (doAdjacentMerge(face, NONCONVEX)) {
+          // ---
+        }
       }
     }
     resolveUnclaimedPoints(newFaces);
@@ -997,8 +989,8 @@ public class QuickHull3D {
     }
     // remove inactive faces and mark active vertices
     numFaces = 0;
-    for (Iterator it = faces.iterator(); it.hasNext();) {
-      Face face = (Face) it.next();
+    for (Iterator<Face> it = faces.iterator(); it.hasNext();) {
+      Face face = it.next();
       if (face.mark != Face.VISIBLE) {
         it.remove();
       } else {
@@ -1051,8 +1043,8 @@ public class QuickHull3D {
   protected boolean checkFaces(Scalar tol, PrintStream ps) {
     // check edge convexity
     boolean convex = true;
-    for (Iterator it = faces.iterator(); it.hasNext();) {
-      Face face = (Face) it.next();
+    for (Iterator<Face> it = faces.iterator(); it.hasNext();) {
+      Face face = it.next();
       if (face.mark == Face.VISIBLE) {
         if (!checkFaceConvexity(face, tol, ps)) {
           convex = false;
@@ -1063,15 +1055,15 @@ public class QuickHull3D {
   }
 
   /** Checks the correctness of the hull using the distance tolerance
-   * returned by {@link QuickHull3D#getDistanceTolerance
+   * returned by {@link ConvexHull3D#getDistanceTolerance
    * getDistanceTolerance}; see
-   * {@link QuickHull3D#check(PrintStream,double)
+   * {@link ConvexHull3D#check(PrintStream,double)
    * check(PrintStream,double)} for details.
    *
    * @param ps print stream for diagnostic messages; may be
    * set to <code>null</code> if no messages are desired.
    * @return true if the hull is valid
-   * @see QuickHull3D#check(PrintStream,double) */
+   * @see ConvexHull3D#check(PrintStream,double) */
   public boolean check(PrintStream ps) {
     return check(ps, getDistanceTolerance());
   }
@@ -1093,7 +1085,7 @@ public class QuickHull3D {
    * set to <code>null</code> if no messages are desired.
    * @param tol distance tolerance
    * @return true if the hull is valid
-   * @see QuickHull3D#check(PrintStream) */
+   * @see ConvexHull3D#check(PrintStream) */
   public boolean check(PrintStream ps, Scalar tol) {
     // check to make sure all edges are fully connected
     // and that the edges are convex
@@ -1105,8 +1097,8 @@ public class QuickHull3D {
     // check point inclusion
     for (int i = 0; i < numPoints; i++) {
       Vector3d pnt = pointBuffer[i].pnt;
-      for (Iterator it = faces.iterator(); it.hasNext();) {
-        Face face = (Face) it.next();
+      for (Iterator<Face> it = faces.iterator(); it.hasNext();) {
+        Face face = it.next();
         if (face.mark == Face.VISIBLE) {
           dist = face.distanceToPlane(pnt);
           if (Scalars.lessThan(pointTol, dist)) { // dist > pointTol

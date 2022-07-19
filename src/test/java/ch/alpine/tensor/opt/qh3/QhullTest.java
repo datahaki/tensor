@@ -9,9 +9,9 @@ import ch.alpine.tensor.Scalar;
 class QhullTest {
   @Test
   void testSimple() {
-    QuickHull3D hull = new QuickHull3D();
+    ConvexHull3D hull = new ConvexHull3D();
     QuickHull3DBase tester = new QuickHull3DBase();
-    hull = new QuickHull3D();
+    hull = new ConvexHull3D();
     for (int i = 0; i < 100; i++) {
       Scalar[] pnts = tester.randomCubedPoints(100, RealScalar.of(1.0), RealScalar.of(0.5));
       hull.build(pnts);

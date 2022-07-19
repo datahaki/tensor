@@ -22,7 +22,7 @@ class SimpleExampleTest {
         Tensors.vector(0.0, 0.0, 2.0), //
         Tensors.vector(0.1, 0.2, 0.3), //
         Tensors.vector(0.0, 2.0, 0.0));
-    QuickHull3D hull = new QuickHull3D();
+    ConvexHull3D hull = new ConvexHull3D();
     hull.build(points);
     System.out.println("Vertices:");
     Vector3d[] vertices = hull.getVertices();

@@ -8,7 +8,7 @@ import ch.alpine.tensor.Scalar;
  * @author John E. Lloyd, Fall 2004 */
 class Vertex {
   /** Spatial point associated with this vertex. */
-  Vector3d pnt;
+  final Vector3d pnt;
   /** Back index into an array. */
   int index;
   /** List forward link. */

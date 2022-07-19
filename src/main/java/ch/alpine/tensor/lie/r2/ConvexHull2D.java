@@ -15,7 +15,7 @@ import ch.alpine.tensor.sca.Chop;
  * 
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ConvexHull.html">ConvexHull</a> */
-public enum ConvexHull {
+public enum ConvexHull2D {
   ;
   /** default distance threshold below which to identify two points as one */
   private static final Chop CHOP_DEFAULT = Chop._15;

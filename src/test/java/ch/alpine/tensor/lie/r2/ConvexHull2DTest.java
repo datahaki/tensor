@@ -22,23 +22,23 @@ import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.red.Tally;
 import ch.alpine.tensor.sca.Chop;
 
-class ConvexHullTest {
+class ConvexHull2DTest {
   @Test
   void testEmpty() {
-    assertEquals(ConvexHull.of(Tensors.empty()), Tensors.empty());
+    assertEquals(ConvexHull2D.of(Tensors.empty()), Tensors.empty());
   }
 
   @Test
   void testSingle() {
     Tensor v = Tensors.of(Tensors.vector(-1.3, 2.5));
-    assertEquals(ConvexHull.of(v), v);
+    assertEquals(ConvexHull2D.of(v), v);
   }
 
   @Test
   void testSingleCopies() {
     Tensor vec = Tensors.vector(-1.3, 2.5);
     Tensor v = Array.of(l -> vec, 4);
-    assertEquals(ConvexHull.of(v), Tensors.of(vec));
+    assertEquals(ConvexHull2D.of(v), Tensors.of(vec));
   }
 
   @Test
@@ -47,7 +47,7 @@ class ConvexHullTest {
         Tensors.vector(-1.3, 2.5), //
         Tensors.vector(1, 10) //
     );
-    Tensor hull = ConvexHull.of(v);
+    Tensor hull = ConvexHull2D.of(v);
     assertEquals(hull, v);
   }
 
@@ -68,7 +68,7 @@ class ConvexHullTest {
         { 2, 2 }, //
         { 2, 2 }, //
         { 2, 2 } }); //
-    Tensor actual = ConvexHull.of(points.unmodifiable());
+    Tensor actual = ConvexHull2D.of(points.unmodifiable());
     Tensor expected = Tensors.fromString("{{0, -1}, {3, -1}, {2, 2}, {-1, 2}}");
     assertEquals(expected, actual);
   }
@@ -82,7 +82,7 @@ class ConvexHullTest {
     Tensor ve1 = Tensors.of(qs1, qs2);
     Tensor ve2 = Tensors.of(qs3, qs4);
     Tensor mat = Tensors.of(ve2, ve1);
-    Tensor hull = ConvexHull.of(mat);
+    Tensor hull = ConvexHull2D.of(mat);
     assertEquals(hull, mat);
   }
 
@@ -92,7 +92,7 @@ class ConvexHullTest {
     Tensor cube = Tensors.fromString("{{0, 0}, {1, 0}, {1, 1}, {0, 1}}");
     Distribution distribution = NormalDistribution.of(0.5, variance);
     Tensor join = Join.of(cube, RandomVariate.of(distribution, 100, 2));
-    Tensor hull = ConvexHull.of(join);
+    Tensor hull = ConvexHull2D.of(join);
     assertEquals(hull, cube);
   }
 
@@ -105,36 +105,36 @@ class ConvexHullTest {
     double variance = 1e-15;
     Distribution distribution = NormalDistribution.of(0.5, variance);
     Tensor joined = Join.of(cube, RandomVariate.of(distribution, 100, 2));
-    Tensor hull = ConvexHull.of(joined);
+    Tensor hull = ConvexHull2D.of(joined);
     assertEquals(hull, cube);
   }
 
   @Test
   void testStream() {
-    ConvexHull.of(Stream.empty(), Chop._10);
+    ConvexHull2D.of(Stream.empty(), Chop._10);
   }
 
   @Test
   void testConvexHull() {
     Tensor tensor = CirclePoints.of(6);
-    Tensor hull = ConvexHull.of(tensor);
+    Tensor hull = ConvexHull2D.of(tensor);
     assertEquals(Tally.of(tensor), Tally.of(hull));
   }
 
   @Test
   void testFail() {
     Distribution distribution = UniformDistribution.unit();
-    assertThrows(Throw.class, () -> ConvexHull.of(RandomVariate.of(distribution, 5, 2, 3)));
-    assertThrows(Throw.class, () -> ConvexHull.of(Array.zeros(3, 3, 3)));
-    assertThrows(Throw.class, () -> ConvexHull.of(Tensors.fromString("{{{1}, 2}}")));
-    assertThrows(ClassCastException.class, () -> ConvexHull.of(Tensors.fromString("{{2, 3}, {{1}, 2}}")));
+    assertThrows(Throw.class, () -> ConvexHull2D.of(RandomVariate.of(distribution, 5, 2, 3)));
+    assertThrows(Throw.class, () -> ConvexHull2D.of(Array.zeros(3, 3, 3)));
+    assertThrows(Throw.class, () -> ConvexHull2D.of(Tensors.fromString("{{{1}, 2}}")));
+    assertThrows(ClassCastException.class, () -> ConvexHull2D.of(Tensors.fromString("{{2, 3}, {{1}, 2}}")));
   }
 
   @Test
   void testFailMore() {
     Tensor bad1 = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
-    assertThrows(IllegalArgumentException.class, () -> ConvexHull.of(bad1));
+    assertThrows(IllegalArgumentException.class, () -> ConvexHull2D.of(bad1));
     Tensor bad2 = Tensors.fromString("{{1, 2, 3}, {3, 4}}");
-    assertThrows(Throw.class, () -> ConvexHull.of(bad2));
+    assertThrows(Throw.class, () -> ConvexHull2D.of(bad2));
   }
 }

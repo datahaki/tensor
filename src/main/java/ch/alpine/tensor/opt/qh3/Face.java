@@ -29,17 +29,17 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  *
  * @author John E. Lloyd, Fall 2004 */
 class Face {
+  static final int VISIBLE = 1;
+  static final int NON_CONVEX = 2;
+  static final int DELETED = 3;
+  // ---
   HalfEdge he0;
   private Vector3d normal;
   Scalar area;
   private Vector3d centroid;
-  Scalar planeOffset;
-  int index;
-  int numVerts;
+  private Scalar planeOffset;
+  private int numVerts;
   Face next;
-  static final int VISIBLE = 1;
-  static final int NON_CONVEX = 2;
-  static final int DELETED = 3;
   int mark = VISIBLE;
   Vertex outside;
 
@@ -382,7 +382,7 @@ class Face {
     return numDiscarded;
   }
 
-  private Scalar areaSquared(HalfEdge hedge0, HalfEdge hedge1) {
+  private static Scalar areaSquared(HalfEdge hedge0, HalfEdge hedge1) {
     // return the squared area of the triangle defined
     // by the half edge hedge0 and the point at the
     // head of hedge1.
@@ -407,7 +407,7 @@ class Face {
       return;
     }
     Vertex v0 = he0.head();
-    Face prevFace = null;
+    // Face prevFace = null;
     hedge = he0.next;
     HalfEdge oppPrev = hedge.opposite;
     Face face0 = null;
