@@ -1,18 +1,27 @@
 package ch.alpine.tensor.opt.qh3;
 
+import org.junit.jupiter.api.Test;
+
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
+
 /** Simple example usage of QuickHull3D. Run as the command
  * <pre>
  * java quickhull3d.SimpleExample
  * </pre> */
-public class SimpleExample {
+class SimpleExampleTest {
   /** Run for a simple demonstration of QuickHull3D. */
-  public static void main(String[] args) {
+  @Test
+  void test() {
     // x y z coordinates of 6 points
-    Vector3d[] points = new Vector3d[] { //
-        new Vector3d(0.0, 0.0, 0.0), new Vector3d(1.0, 0.5, 0.0), //
-        new Vector3d(2.0, 0.0, 0.0), new Vector3d(0.5, 0.5, 0.5), //
-        new Vector3d(0.0, 0.0, 2.0), new Vector3d(0.1, 0.2, 0.3), //
-        new Vector3d(0.0, 2.0, 0.0), };
+    Tensor points = Tensors.of( //
+        Tensors.vector(0.0, 0.0, 0.0), //
+        Tensors.vector(1.0, 0.5, 0.0), //
+        Tensors.vector(2.0, 0.0, 0.0), //
+        Tensors.vector(0.5, 0.5, 0.5), //
+        Tensors.vector(0.0, 0.0, 2.0), //
+        Tensors.vector(0.1, 0.2, 0.3), //
+        Tensors.vector(0.0, 2.0, 0.0));
     QuickHull3D hull = new QuickHull3D();
     hull.build(points);
     System.out.println("Vertices:");

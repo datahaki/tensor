@@ -19,6 +19,7 @@ import java.util.Vector;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.red.Max;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Abs;
@@ -37,8 +38,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * href=http://www.qhull.org>qhull</a>.
  *
  * <p>A hull is constructed by providing a set of points
- * to either a constructor or a
- * {@link #build(Point3d[]) build} method. After
+ * to a build method. After
  * the hull is built, its vertices and faces can be retrieved
  * using {@link #getVertices()
  * getVertices} and {@link #getFaces() getFaces}.
@@ -241,35 +241,6 @@ public class QuickHull3D {
     return null;
   }
 
-  /** Creates an empty convex hull object. */
-  public QuickHull3D() {
-  }
-
-  /** Creates a convex hull object and initializes it to the convex hull
-   * of a set of points whose coordinates are given by an
-   * array of doubles.
-   *
-   * @param coords x, y, and z coordinates of each input
-   * point. The length of this array will be three times
-   * the the number of input points.
-   * @throws IllegalArgumentException the number of input points is less
-   * than four, or the points appear to be coincident, colinear, or
-   * coplanar. */
-  public QuickHull3D(Scalar[] coords) throws IllegalArgumentException {
-    build(coords, coords.length / 3);
-  }
-
-  /** Creates a convex hull object and initializes it to the convex hull
-   * of a set of points.
-   *
-   * @param points input points.
-   * @throws IllegalArgumentException the number of input points is less
-   * than four, or the points appear to be coincident, colinear, or
-   * coplanar. */
-  public QuickHull3D(Vector3d[] points) throws IllegalArgumentException {
-    build(points, points.length);
-  }
-
   private HalfEdge findHalfEdge(Vertex tail, Vertex head) {
     // brute force ... OK, since setHull is not used much
     for (Iterator it = faces.iterator(); it.hasNext();) {
@@ -335,7 +306,7 @@ public class QuickHull3D {
    * than four or greater than 1/3 the length of <code>coords</code>,
    * or the points appear to be coincident, colinear, or
    * coplanar. */
-  public void build(Scalar[] coords, int nump) throws IllegalArgumentException {
+  private void build(Scalar[] coords, int nump) throws IllegalArgumentException {
     if (nump < 4) {
       throw new IllegalArgumentException("Less than four input points specified");
     }
@@ -353,23 +324,17 @@ public class QuickHull3D {
    * @throws IllegalArgumentException the number of input points is less
    * than four, or the points appear to be coincident, colinear, or
    * coplanar. */
-  public void build(Vector3d[] points) throws IllegalArgumentException {
-    build(points, points.length);
-  }
-
   /** Constructs the convex hull of a set of points.
-   *
-   * @param points input points
-   * @param nump number of input points
-   * @throws IllegalArgumentException the number of input points is less
-   * than four or greater then the length of <code>points</code>, or the
-   * points appear to be coincident, colinear, or coplanar. */
-  public void build(Vector3d[] points, int nump) throws IllegalArgumentException {
+  *
+  * @param points input points
+  * @param nump number of input points
+  * @throws IllegalArgumentException the number of input points is less
+  * than four or greater then the length of <code>points</code>, or the
+  * points appear to be coincident, colinear, or coplanar. */
+  public void build(Tensor points) throws IllegalArgumentException {
+    int nump = points.length();
     if (nump < 4) {
       throw new IllegalArgumentException("Less than four input points specified");
-    }
-    if (points.length < nump) {
-      throw new IllegalArgumentException("Point array too small for specified number of points");
     }
     initBuffers(nump);
     setPoints(points, nump);
@@ -430,10 +395,10 @@ public class QuickHull3D {
     }
   }
 
-  protected void setPoints(Vector3d[] pnts, int nump) {
+  protected void setPoints(Tensor pnts, int nump) {
     for (int i = 0; i < nump; i++) {
       Vertex vtx = pointBuffer[i];
-      vtx.pnt.set(pnts[i]);
+      vtx.pnt.set(pnts.get(i));
       vtx.index = i;
     }
   }

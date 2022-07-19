@@ -229,7 +229,7 @@ public class Vector3d {
     set(Cross.of(v1.toTensor(), v2.toTensor()));
   }
 
-  private void set(Tensor tensor) {
+  void set(Tensor tensor) {
     set(tensor.Get(0), tensor.Get(1), tensor.Get(2));
   }
 

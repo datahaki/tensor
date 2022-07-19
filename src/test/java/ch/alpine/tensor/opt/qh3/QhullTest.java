@@ -14,13 +14,13 @@ class QhullTest {
     hull = new QuickHull3D();
     for (int i = 0; i < 100; i++) {
       Scalar[] pnts = tester.randomCubedPoints(100, RealScalar.of(1.0), RealScalar.of(0.5));
-      hull.build(pnts, pnts.length / 3);
+      hull.build(pnts);
       hull.triangulate();
       if (!hull.check(System.out)) {
         System.out.println("failed for QuickHull3D triangulated");
       }
       // hull = new QuickHull3D ();
-      hull.build(pnts, pnts.length / 3);
+      hull.build(pnts);
       if (!hull.check(System.out)) {
         System.out.println("failed for QuickHull3D regular");
       }
