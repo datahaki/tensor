@@ -197,8 +197,8 @@ class QuickHull3DBase {
    * @param max maximum absolute value to which the coordinates
    * are clipped
    * @return array of coordinate values */
-  public Scalar[] randomCubedPoints(int num, Scalar range, Scalar max) {
-    Scalar[] coords = ScalarArray.ofVector(Array.zeros(num * 3));
+  public Tensor randomCubedPoints(int num, Scalar range, Scalar max) {
+    Tensor coords = Array.zeros(num, 3);
     for (int i = 0; i < num; i++) {
       for (int k = 0; k < 3; k++) {
         Scalar x = range.add(range).multiply(RealScalar.of(random.nextDouble() - 0.5));
@@ -207,7 +207,8 @@ class QuickHull3DBase {
         } else if (Scalars.lessThan(x, max.negate())) {
           x = max.negate();
         }
-        coords[i * 3 + k] = x;
+        coords.set(x, i, k);
+        // [i * 3 + k] = x;
       }
     }
     return coords;

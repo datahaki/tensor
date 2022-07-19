@@ -4,7 +4,7 @@ package ch.alpine.tensor.opt.qh3;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
 
 class QhullTest {
   @Test
@@ -13,7 +13,7 @@ class QhullTest {
     QuickHull3DBase tester = new QuickHull3DBase();
     hull = new ConvexHull3D();
     for (int i = 0; i < 100; i++) {
-      Scalar[] pnts = tester.randomCubedPoints(100, RealScalar.of(1.0), RealScalar.of(0.5));
+      Tensor pnts = tester.randomCubedPoints(100, RealScalar.of(1.0), RealScalar.of(0.5));
       hull.build(pnts);
       hull.triangulate();
       if (!hull.check(System.out)) {

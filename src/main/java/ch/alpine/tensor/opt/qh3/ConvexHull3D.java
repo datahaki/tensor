@@ -76,7 +76,7 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  * System.out.println ("");
  * }
  * </pre>
- * As a convenience, there are also {@link #build(double[]) build}
+ * As a convenience, there are also build
  * and {@link #getVertices2() getVertex} methods which
  * pass point information using an array of doubles.
  *
@@ -123,6 +123,8 @@ import ch.alpine.tensor.sca.pow.Sqrt;
  *
  * @author John E. Lloyd, Fall 2004 */
 public class ConvexHull3D {
+  /** Precision of a double. */
+  static private final Scalar DOUBLE_PREC = RealScalar.of(2.2204460492503131e-16);
   /** Specifies that (on output) vertex indices for a face should be
    * listed in clockwise order. */
   public static final int CLOCKWISE = 0x1;
@@ -158,6 +160,16 @@ public class ConvexHull3D {
   protected Scalar explicitTolerance = AUTOMATIC_TOLERANCE;
   protected Scalar tolerance;
 
+  public static int[][] of(Tensor tensor) {
+    ConvexHull3D hull = new ConvexHull3D();
+    hull.build(tensor);
+    return hull.getFaces(POINT_RELATIVE);
+  }
+
+  ConvexHull3D() {
+    // ---
+  }
+
   /** Returns true if debugging is enabled.
    *
    * @return true is debugging is enabled
@@ -173,9 +185,6 @@ public class ConvexHull3D {
     debug = enable;
   }
 
-  /** Precision of a double. */
-  static private final Scalar DOUBLE_PREC = RealScalar.of(2.2204460492503131e-16);
-
   /** Returns the distance tolerance that was used for the most recently
    * computed hull. The distance tolerance is used to determine when
    * faces are unambiguously convex with respect to each other, and when
@@ -188,25 +197,6 @@ public class ConvexHull3D {
    * @see ConvexHull3D#setExplicitDistanceTolerance */
   public Scalar getDistanceTolerance() {
     return tolerance;
-  }
-
-  /** Sets an explicit distance tolerance for convexity tests.
-   * If {@link #AUTOMATIC_TOLERANCE AUTOMATIC_TOLERANCE}
-   * is specified (the default), then the tolerance will be computed
-   * automatically from the point data.
-   *
-   * @param tol explicit tolerance
-   * @see #getDistanceTolerance */
-  public void setExplicitDistanceTolerance(Scalar tol) {
-    explicitTolerance = tol;
-  }
-
-  /** Returns the explicit distance tolerance.
-   *
-   * @return explicit tolerance
-   * @see #setExplicitDistanceTolerance */
-  public Scalar getExplicitDistanceTolerance() {
-    return explicitTolerance;
   }
 
   private void addPointToFace(Vertex vtx, Face face) {
@@ -661,29 +651,6 @@ public class ConvexHull3D {
 
   /** Prints the vertices and faces of this hull to the stream ps.
    *
-   * <p>
-   * This is done using the Alias Wavefront .obj file
-   * format, with the vertices printed first (each preceding by
-   * the letter <code>v</code>), followed by the vertex indices
-   * for each face (each
-   * preceded by the letter <code>f</code>).
-   *
-   * <p>The face indices are numbered with respect to the hull vertices
-   * (as opposed to the input points), with a lowest index of 1, and are
-   * arranged counter-clockwise. More control over the index format can
-   * be obtained using
-   * {@link #print(PrintStream,int) print(ps,indexFlags)}.
-   *
-   * @param ps stream used for printing
-   * @see ConvexHull3D#print(PrintStream,int)
-   * @see ConvexHull3D#getVertices()
-   * @see ConvexHull3D#getFaces() */
-  public void print(PrintStream ps) {
-    print(ps, 0);
-  }
-
-  /** Prints the vertices and faces of this hull to the stream ps.
-   *
    * <p> This is done using the Alias Wavefront .obj file format, with
    * the vertices printed first (each preceding by the letter
    * <code>v</code>), followed by the vertex indices for each face (each
@@ -701,7 +668,7 @@ public class ConvexHull3D {
    * (0 results in the default).
    * @see ConvexHull3D#getVertices()
    * @see ConvexHull3D#getFaces() */
-  public void print(PrintStream ps, int indexFlags) {
+  private void print(PrintStream ps, int indexFlags) {
     if ((indexFlags & INDEXED_FROM_ZERO) == 0) {
       indexFlags |= INDEXED_FROM_ONE;
     }
@@ -740,7 +707,7 @@ public class ConvexHull3D {
     } while (hedge != face.he0);
   }
 
-  protected void resolveUnclaimedPoints(FaceList newFaces) {
+  private void resolveUnclaimedPoints(FaceList newFaces) {
     Vertex vtxNext = unclaimed.first();
     for (Vertex vtx = vtxNext; vtx != null; vtx = vtxNext) {
       vtxNext = vtx.next;
@@ -771,7 +738,7 @@ public class ConvexHull3D {
     }
   }
 
-  protected void deleteFacePoints(Face face, Face absorbingFace) {
+  private void deleteFacePoints(Face face, Face absorbingFace) {
     Vertex faceVtxs = removeAllPointsFromFace(face);
     if (faceVtxs != null) {
       if (absorbingFace == null) {
@@ -794,7 +761,7 @@ public class ConvexHull3D {
   private static final int NONCONVEX_WRT_LARGER_FACE = 1;
   private static final int NONCONVEX = 2;
 
-  protected Scalar oppFaceDistance(HalfEdge he) {
+  private static Scalar oppFaceDistance(HalfEdge he) {
     return he.face.distanceToPlane(he.opposite.face.getCentroid());
   }
 
@@ -848,7 +815,7 @@ public class ConvexHull3D {
     return false;
   }
 
-  protected void calculateHorizon(Vector3d eyePnt, HalfEdge edge0, Face face, List<HalfEdge> horizon) {
+  private void calculateHorizon(Vector3d eyePnt, HalfEdge edge0, Face face, List<HalfEdge> horizon) {
     // oldFaces.add (face);
     deleteFacePoints(face, null);
     face.mark = Face.DELETED;
@@ -885,7 +852,7 @@ public class ConvexHull3D {
     return face.getEdge(0);
   }
 
-  protected void addNewFaces(FaceList newFaces, Vertex eyeVtx, List<HalfEdge> horizon) {
+  private void addNewFaces(FaceList newFaces, Vertex eyeVtx, List<HalfEdge> horizon) {
     newFaces.clear();
     HalfEdge hedgeSidePrev = null;
     HalfEdge hedgeSideBegin = null;
@@ -906,7 +873,7 @@ public class ConvexHull3D {
     hedgeSideBegin.next.setOpposite(hedgeSidePrev);
   }
 
-  protected Vertex nextPointToAdd() {
+  private Vertex nextPointToAdd() {
     if (!claimed.isEmpty()) {
       Face eyeFace = claimed.first().face;
       Vertex eyeVtx = null;
@@ -923,7 +890,7 @@ public class ConvexHull3D {
     return null;
   }
 
-  protected void addPointToHull(Vertex eyeVtx) {
+  private void addPointToHull(Vertex eyeVtx) {
     horizon.clear();
     unclaimed.clear();
     if (debug) {
@@ -956,7 +923,7 @@ public class ConvexHull3D {
     resolveUnclaimedPoints(newFaces);
   }
 
-  protected void buildHull() {
+  private void buildHull() {
     int cnt = 0;
     Vertex eyeVtx;
     computeMaxAndMin();
@@ -974,7 +941,7 @@ public class ConvexHull3D {
     }
   }
 
-  private void markFaceVertices(Face face, int mark) {
+  private static void markFaceVertices(Face face, int mark) {
     HalfEdge he0 = face.getFirstEdge();
     HalfEdge he = he0;
     do {
@@ -983,7 +950,7 @@ public class ConvexHull3D {
     } while (he != he0);
   }
 
-  protected void reindexFacesAndVertices() {
+  private void reindexFacesAndVertices() {
     for (int i = 0; i < numPoints; i++) {
       pointBuffer[i].index = -1;
     }
@@ -1009,7 +976,7 @@ public class ConvexHull3D {
     }
   }
 
-  protected boolean checkFaceConvexity(Face face, Scalar tol, PrintStream ps) {
+  private boolean checkFaceConvexity(Face face, Scalar tol, PrintStream ps) {
     Scalar dist;
     HalfEdge he = face.he0;
     do {
@@ -1040,7 +1007,7 @@ public class ConvexHull3D {
     return true;
   }
 
-  protected boolean checkFaces(Scalar tol, PrintStream ps) {
+  private boolean checkFaces(Scalar tol, PrintStream ps) {
     // check edge convexity
     boolean convex = true;
     for (Iterator<Face> it = faces.iterator(); it.hasNext();) {

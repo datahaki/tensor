@@ -91,7 +91,7 @@ class ConvexHull3DTest {
     System.out.println("Testing 20 to 200 random points clipped to a cube ...");
     for (int n = 20; n < 200; n += 10) { //
       System.out.println(n);
-      Scalar[] coords = tester.randomCubedPoints(n, RealScalar.of(1.0), RealScalar.of(0.5));
+      Tensor coords = tester.randomCubedPoints(n, RealScalar.of(1.0), RealScalar.of(0.5));
       tester.test(coords, null);
     }
   }
