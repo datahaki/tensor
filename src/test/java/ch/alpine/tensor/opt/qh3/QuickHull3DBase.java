@@ -11,13 +11,17 @@
 package ch.alpine.tensor.opt.qh3;
 
 import java.util.Random;
+import java.util.stream.IntStream;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.io.ScalarArray;
+import ch.alpine.tensor.num.RandomPermutation;
 import ch.alpine.tensor.red.Times;
 
 /** Testing class for QuickHull3D. Running the command
@@ -233,25 +237,23 @@ class QuickHull3DBase {
    * @param width distance between each point along a particular
    * direction
    * @return array of coordinate values */
-  public Scalar[] randomGridPoints(int gridSize, Scalar width) {
+  public Tensor randomGridPoints(int gridSize, Scalar width) {
     // gridSize gives the number of points across a given dimension
     // any given coordinate indexed by i has value
     // (i/(gridSize-1) - 0.5)*width
-    int num = gridSize * gridSize * gridSize;
-    Scalar[] coords = ScalarArray.ofVector(Array.zeros(num * 3));
-    int idx = 0;
+    Tensor coords = Tensors.empty();
     for (int i = 0; i < gridSize; i++) {
       for (int j = 0; j < gridSize; j++) {
         for (int k = 0; k < gridSize; k++) {
-          coords[idx * 3 + 0] = RealScalar.of(i / (double) (gridSize - 1) - 0.5).multiply(width);
-          coords[idx * 3 + 1] = RealScalar.of(j / (double) (gridSize - 1) - 0.5).multiply(width);
-          coords[idx * 3 + 2] = RealScalar.of(k / (double) (gridSize - 1) - 0.5).multiply(width);
-          idx++;
+          coords.append(Tensors.of( //
+              RealScalar.of(i / (double) (gridSize - 1) - 0.5).multiply(width), //
+              RealScalar.of(j / (double) (gridSize - 1) - 0.5).multiply(width), //
+              RealScalar.of(k / (double) (gridSize - 1) - 0.5).multiply(width)));
         }
       }
     }
-    shuffleCoords(coords);
-    return coords;
+    int[] index = RandomPermutation.of(coords.length());
+    return Tensor.of(IntStream.of(index).mapToObj(coords::get));
   }
 
   void explicitFaceCheck(QuickHull3D hull, int[][] checkFaces) throws Exception {

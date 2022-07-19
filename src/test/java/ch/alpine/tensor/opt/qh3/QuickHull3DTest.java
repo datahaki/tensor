@@ -4,7 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.io.ScalarArray;
 
 /** Runs a set of tests on the QuickHull3D class, and
@@ -100,8 +102,8 @@ class QuickHull3DTest {
     System.out.println("Testing 8 to 1000 randomly shuffled points on a grid ...");
     for (int n = 2; n <= 10; n++) { //
       System.out.println(n * n * n);
-      Scalar[] coords = tester.randomGridPoints(n, RealScalar.of(4.0));
-      tester.test(coords, null);
+      Tensor coords2 = tester.randomGridPoints(n, RealScalar.of(4.0));
+      tester.test(ScalarArray.ofVector(Flatten.of(coords2)), null);
     }
     System.out.println("\nPassed\n");
   }

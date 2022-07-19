@@ -325,12 +325,12 @@ public class QuickHull3D {
    * than four, or the points appear to be coincident, colinear, or
    * coplanar. */
   /** Constructs the convex hull of a set of points.
-  *
-  * @param points input points
-  * @param nump number of input points
-  * @throws IllegalArgumentException the number of input points is less
-  * than four or greater then the length of <code>points</code>, or the
-  * points appear to be coincident, colinear, or coplanar. */
+   *
+   * @param points input points
+   * @param nump number of input points
+   * @throws IllegalArgumentException the number of input points is less
+   * than four or greater then the length of <code>points</code>, or the
+   * points appear to be coincident, colinear, or coplanar. */
   public void build(Tensor points) throws IllegalArgumentException {
     int nump = points.length();
     if (nump < 4) {
