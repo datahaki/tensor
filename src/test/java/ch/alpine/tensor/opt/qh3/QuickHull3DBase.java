@@ -23,6 +23,7 @@ import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.num.RandomPermutation;
+import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.red.Times;
@@ -55,7 +56,7 @@ class QuickHull3DBase {
   static int degeneracyTest = VERTEX_DEGENERACY;
   static Scalar epsScale = RealScalar.of(2.0);
   // ---
-  private final Random random; // random number generator
+  final Random random; // random number generator
 
   /** Creates a testing object. */
   public QuickHull3DBase() {
@@ -107,6 +108,18 @@ class QuickHull3DBase {
     pnt.z = pnt.z.add(RealScalar.of(random.nextDouble() - 0.5).multiply(tol));
   }
 
+  /** Sets the elements of this vector to uniformly distributed
+   * random values in a specified range, using a supplied
+   * random number generator.
+   *
+   * @param lower lower random value (inclusive)
+   * @param upper upper random value (exclusive)
+   * @param generator random number generator */
+  protected static void setRandom(Vector3d v, Scalar lower, Scalar upper, Random generator) {
+    Distribution distribution = UniformDistribution.of(lower, upper);
+    v.set(RandomVariate.of(distribution, generator, 3));
+  }
+
   /** Returns the coordinates for <code>num</code> randomly
    * chosen points which are degenerate which respect
    * to the specified dimensionality.
@@ -119,7 +132,7 @@ class QuickHull3DBase {
     Scalar[] coords = ScalarArray.ofVector(Array.zeros(num * 3));
     Vector3d pnt = new Vector3d();
     Vector3d base = new Vector3d();
-    base.setRandom(RealScalar.of(-1), RealScalar.of(1), random);
+    setRandom(base, RealScalar.of(-1), RealScalar.of(1), random);
     Scalar tol = DOUBLE_PREC;
     if (dimen == 0) {
       for (int i = 0; i < num; i++) {
@@ -131,7 +144,7 @@ class QuickHull3DBase {
       }
     } else if (dimen == 1) {
       Vector3d u = new Vector3d();
-      u.setRandom(RealScalar.of(-1), RealScalar.of(1), random);
+      setRandom(u, RealScalar.of(-1), RealScalar.of(1), random);
       u.normalize();
       for (int i = 0; i < num; i++) {
         double a = 2 * (random.nextDouble() - 0.5);
@@ -145,11 +158,11 @@ class QuickHull3DBase {
     } else // dimen == 2
     {
       Vector3d nrm = new Vector3d();
-      nrm.setRandom(RealScalar.of(-1), RealScalar.of(1), random);
+      setRandom(nrm, RealScalar.of(-1), RealScalar.of(1), random);
       nrm.normalize();
       for (int i = 0; i < num; i++) { // compute a random point and project it to the plane
         Vector3d perp = new Vector3d();
-        pnt.setRandom(RealScalar.of(-1), RealScalar.of(1), random);
+        setRandom(pnt, RealScalar.of(-1), RealScalar.of(1), random);
         perp.scale(pnt.dot(nrm), nrm);
         pnt.sub(perp);
         pnt.add(base);
@@ -170,14 +183,11 @@ class QuickHull3DBase {
    * @return array of coordinate values */
   public Tensor randomSphericalPoints(int num, Scalar radius) {
     Tensor coords = Tensors.empty();
-    Vector3d pnt = new Vector3d();
     for (int i = 0; i < num;) {
-      pnt.setRandom(radius.negate(), radius, random);
+      Vector3d pnt = new Vector3d();
+      setRandom(pnt, radius.negate(), radius, random);
       if (Scalars.lessEquals(pnt.norm(), radius)) {
         coords.append(pnt.toTensor());
-        // coords[i * 3 + 0] = pnt.x;
-        // coords[i * 3 + 1] = pnt.y;
-        // coords[i * 3 + 2] = pnt.z;
         i++;
       }
     }

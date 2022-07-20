@@ -6,8 +6,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Flatten;
 import ch.alpine.tensor.io.ScalarArray;
+import ch.alpine.tensor.pdf.Distribution;
+import ch.alpine.tensor.pdf.RandomVariate;
+import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 
 /** Runs a set of tests on the QuickHull3D class, and
  * prints <code>Passed</code> if all is well.
@@ -67,9 +69,19 @@ class ConvexHull3DTest {
   void test3() throws Exception {
     QuickHull3DBase tester = new QuickHull3DBase();
     System.out.println("Testing 20 to 200 random points ...");
-    for (int n = 20; n < 200; n += 10) { //
-      System.out.println(n);
+    for (int n = 20; n < 200; n += 10) {
       Tensor coords = tester.randomPoints(n, RealScalar.of(1.0));
+      tester.test(coords, null);
+    }
+  }
+
+  @Test
+  void test3b() throws Exception {
+    QuickHull3DBase tester = new QuickHull3DBase();
+    System.out.println("Testing 20 to 200 exact random points ...");
+    Distribution distribution = DiscreteUniformDistribution.of(-3, 3);
+    for (int n = 20; n < 200; n += 10) {
+      Tensor coords = RandomVariate.of(distribution, tester.random, n, 3);
       tester.test(coords, null);
     }
   }
@@ -79,7 +91,6 @@ class ConvexHull3DTest {
     QuickHull3DBase tester = new QuickHull3DBase();
     System.out.println("Testing 20 to 200 random points in a sphere ...");
     for (int n = 20; n < 200; n += 10) {
-      System.out.println(n);
       Tensor coords = tester.randomSphericalPoints(n, RealScalar.of(1.0));
       tester.test(coords, null);
     }
@@ -89,8 +100,7 @@ class ConvexHull3DTest {
   void test5() throws Exception {
     QuickHull3DBase tester = new QuickHull3DBase();
     System.out.println("Testing 20 to 200 random points clipped to a cube ...");
-    for (int n = 20; n < 200; n += 10) { //
-      System.out.println(n);
+    for (int n = 20; n < 200; n += 10) {
       Tensor coords = tester.randomCubedPoints(n, RealScalar.of(1.0), RealScalar.of(0.5));
       tester.test(coords, null);
     }
@@ -100,11 +110,9 @@ class ConvexHull3DTest {
   void test6() throws Exception {
     QuickHull3DBase tester = new QuickHull3DBase();
     System.out.println("Testing 8 to 1000 randomly shuffled points on a grid ...");
-    for (int n = 2; n <= 10; n++) { //
-      System.out.println(n * n * n);
-      Tensor coords2 = tester.randomGridPoints(n, RealScalar.of(4.0));
-      tester.test(ScalarArray.ofVector(Flatten.of(coords2)), null);
+    for (int n = 2; n <= 10; n++) {
+      Tensor coords = tester.randomGridPoints(n, RealScalar.of(4.0));
+      tester.test(coords, null);
     }
-    System.out.println("\nPassed\n");
   }
 }

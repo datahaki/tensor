@@ -10,19 +10,13 @@
  * software. */
 package ch.alpine.tensor.opt.qh3;
 
-import java.util.Random;
-
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
-import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.lie.Cross;
 import ch.alpine.tensor.nrm.Vector2Norm;
 import ch.alpine.tensor.nrm.Vector2NormSquared;
-import ch.alpine.tensor.pdf.Distribution;
-import ch.alpine.tensor.pdf.RandomVariate;
-import ch.alpine.tensor.pdf.c.UniformDistribution;
 
 /** A three-element vector. This class is actually a reduced version of the
  * Vector3d class contained in the author's matlib package (which was partly
@@ -60,10 +54,6 @@ public class Vector3d {
     set(x, y, z);
   }
 
-  public Vector3d(Number x, Number y, Number z) {
-    this(RealScalar.of(x), RealScalar.of(y), RealScalar.of(z));
-  }
-
   /** Gets a single element of this vector.
    * Elements 0, 1, and 2 correspond to x, y, and z.
    *
@@ -88,21 +78,10 @@ public class Vector3d {
    * if i is not in the range 0 to 2. */
   public void set(int i, Scalar value) {
     switch (i) {
-    case 0: {
-      x = value;
-      break;
-    }
-    case 1: {
-      y = value;
-      break;
-    }
-    case 2: {
-      z = value;
-      break;
-    }
-    default: {
-      throw new ArrayIndexOutOfBoundsException(i);
-    }
+    case 0 -> x = value;
+    case 1 -> y = value;
+    case 2 -> z = value;
+    default -> throw new ArrayIndexOutOfBoundsException(i);
     }
   }
 
@@ -110,7 +89,7 @@ public class Vector3d {
    *
    * @param v1 vector whose values are copied */
   public void set(Vector3d v1) {
-    set(v1.toTensor());
+    set(v1.x, v1.y, v1.z);
   }
 
   /** Adds vector v1 to v2 and places the result in this vector.
@@ -211,7 +190,9 @@ public class Vector3d {
 
   /** Sets the elements of this vector to zero. */
   public void setZero() {
-    set(Array.zeros(3));
+    x = RealScalar.ZERO;
+    y = RealScalar.ZERO;
+    z = RealScalar.ZERO;
   }
 
   /** Sets the elements of this vector to the prescribed values.
@@ -236,18 +217,6 @@ public class Vector3d {
 
   void set(Tensor tensor) {
     set(tensor.Get(0), tensor.Get(1), tensor.Get(2));
-  }
-
-  /** Sets the elements of this vector to uniformly distributed
-   * random values in a specified range, using a supplied
-   * random number generator.
-   *
-   * @param lower lower random value (inclusive)
-   * @param upper upper random value (exclusive)
-   * @param generator random number generator */
-  protected void setRandom(Scalar lower, Scalar upper, Random generator) {
-    Distribution distribution = UniformDistribution.of(lower, upper);
-    set(RandomVariate.of(distribution, generator, 3));
   }
 
   /** Returns a string representation of this vector, consisting
