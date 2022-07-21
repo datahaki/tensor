@@ -20,7 +20,8 @@ import java.util.function.Function;
 public class Cache<K, V> implements Function<K, V>, Serializable {
   /** @param function non-null, may also return null
    * @param maxSize non-negative
-   * @return */
+   * @return
+   * @throws Exception if given function is instance of Cache */
   public static <K, V> Cache<K, V> of(Function<K, V> function, int maxSize) {
     if (function instanceof Cache)
       throw new IllegalArgumentException();
@@ -57,6 +58,8 @@ public class Cache<K, V> implements Function<K, V>, Serializable {
 
   /** removes all of the mappings from this cache */
   public void clear() {
-    map.clear();
+    synchronized (map) {
+      map.clear();
+    }
   }
 }

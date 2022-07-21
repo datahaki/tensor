@@ -71,7 +71,7 @@ public enum Roots {
     }
   }
 
-  /* package */ static enum ComplexComparator implements Comparator<Scalar> {
+  /* package */ enum ComplexComparator implements Comparator<Scalar> {
     INSTANCE;
 
     @Override // from Comparator

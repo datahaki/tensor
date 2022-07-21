@@ -138,24 +138,24 @@ public class ConvexHull3D {
   /** Specifies that the distance tolerance should be
    * computed automatically from the input point data. */
   public static final Scalar AUTOMATIC_TOLERANCE = RealScalar.of(-1);
-  protected int findIndex = -1;
+  protected final int findIndex = -1;
   // estimated size of the point set
   protected Scalar charLength;
   protected boolean debug = false;
   protected Vertex[] pointBuffer = new Vertex[0];
   protected int[] vertexPointIndices = new int[0];
-  private Face[] discardedFaces = new Face[3];
-  private Vertex[] maxVtxs = new Vertex[3];
-  private Vertex[] minVtxs = new Vertex[3];
-  protected List<Face> faces = new ArrayList<>(16);
-  protected List<HalfEdge> horizon = new ArrayList<>(16);
-  private FaceList newFaces = new FaceList();
-  private VertexList unclaimed = new VertexList();
-  private VertexList claimed = new VertexList();
+  private final Face[] discardedFaces = new Face[3];
+  private final Vertex[] maxVtxs = new Vertex[3];
+  private final Vertex[] minVtxs = new Vertex[3];
+  protected final List<Face> faces = new ArrayList<>(16);
+  protected final List<HalfEdge> horizon = new ArrayList<>(16);
+  private final FaceList newFaces = new FaceList();
+  private final VertexList unclaimed = new VertexList();
+  private final VertexList claimed = new VertexList();
   protected int numVertices;
   protected int numFaces;
   protected int numPoints;
-  protected Scalar explicitTolerance = AUTOMATIC_TOLERANCE;
+  protected final Scalar explicitTolerance = AUTOMATIC_TOLERANCE;
   protected Scalar tolerance;
 
   public static int[][] of(Tensor tensor) {

@@ -18,8 +18,8 @@ import ch.alpine.tensor.io.ScalarArray;
   private final int rows;
   private final int cols;
   protected final Scalar[][] matrix;
-  protected int[] xMatch;
-  protected int[] yMatch;
+  protected final int[] xMatch;
+  protected final int[] yMatch;
   protected int matchCount = 0;
 
   /** @param _matrix with entries of unique unit */

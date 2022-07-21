@@ -46,15 +46,15 @@ import ch.alpine.tensor.sca.Clips;
  * @author John E. Lloyd, Fall 2004 */
 class QuickHull3DBase {
   private static final Scalar DOUBLE_PREC = RealScalar.of(2.2204460492503131e-16);
-  boolean triangulate = false;
-  boolean doTiming = false;
-  static boolean debugEnable = false;
+  final boolean triangulate = false;
+  final boolean doTiming = false;
+  static final boolean debugEnable = false;
   static final int NO_DEGENERACY = 0;
   static final int EDGE_DEGENERACY = 1;
   static final int VERTEX_DEGENERACY = 2;
-  static boolean testRotation = true;
-  static int degeneracyTest = VERTEX_DEGENERACY;
-  static Scalar epsScale = RealScalar.of(2.0);
+  static final boolean testRotation = true;
+  static final int degeneracyTest = VERTEX_DEGENERACY;
+  static final Scalar epsScale = RealScalar.of(2.0);
   // ---
   final Random random; // random number generator
 
@@ -352,7 +352,7 @@ class QuickHull3DBase {
     return coordsx;
   }
 
-  void degenerateTest(ConvexHull3D hull, Scalar[] coords) throws Exception {
+  void degenerateTest(ConvexHull3D hull, Scalar[] coords) {
     Scalar[] coordsx = addDegeneracy(degeneracyTest, coords, hull);
     ConvexHull3D xhull = new ConvexHull3D();
     xhull.setDebug(debugEnable);

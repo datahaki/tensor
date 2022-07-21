@@ -65,7 +65,7 @@ import ch.alpine.tensor.sca.N;
 
   /** UnitNegate also appears in {@link InvertUnlessZero}
    * yet we do not place the function in the global scope */
-  private static enum UnitNegate implements ScalarUnaryOperator {
+  private enum UnitNegate implements ScalarUnaryOperator {
     FUNCTION;
 
     @Override

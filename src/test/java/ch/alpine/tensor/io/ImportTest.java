@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
@@ -159,7 +158,7 @@ class ImportTest {
   }
 
   @Test
-  void testProperties() throws FileNotFoundException, IOException {
+  void testProperties() throws IOException {
     File file = new File(getClass().getResource("/ch/alpine/tensor/io/simple.properties").getFile());
     Properties properties = Import.properties(file);
     assertEquals(Scalars.fromString(properties.get("maxTor").toString()), Quantity.of(3, "m*s"));

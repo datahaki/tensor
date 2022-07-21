@@ -72,7 +72,7 @@ import ch.alpine.tensor.sca.Abs;
     return H[p][p];
   }
 
-  private final Scalar sumAbs_offDiagonal() {
+  private Scalar sumAbs_offDiagonal() {
     Scalar sum = H[0][0].zero(); // preserve unit
     for (int p = 0; p < n - 1; ++p)
       for (int q = p + 1; q < n; ++q)

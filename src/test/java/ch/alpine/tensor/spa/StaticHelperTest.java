@@ -103,7 +103,7 @@ class StaticHelperTest {
   }
 
   private final Distribution distribution = CategoricalDistribution.fromUnscaledPDF(Tensors.vector(10, 1, 0, 1, 1));
-  private Random random = new Random(3);
+  private final Random random = new Random(3);
 
   private Tensor _random(int... size) {
     return RandomVariate.of(distribution, random, size);

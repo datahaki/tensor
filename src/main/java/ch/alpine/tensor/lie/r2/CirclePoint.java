@@ -18,7 +18,7 @@ import ch.alpine.tensor.sca.tri.Sin;
 
   private final Map<Scalar, Tensor> map = new HashMap<>();
 
-  private CirclePoint() {
+  CirclePoint() {
     map.put(RationalScalar.of(0, 12), Tensors.vector(+1, +0));
     map.put(RationalScalar.of(1, 12), Tensors.of(Cos.FUNCTION.apply(Pi.VALUE.multiply(RationalScalar.of(1, 6))), RationalScalar.HALF));
     map.put(RationalScalar.of(2, 12), Tensors.of(RationalScalar.HALF, Sin.FUNCTION.apply(Pi.VALUE.multiply(RationalScalar.of(2, 6)))));

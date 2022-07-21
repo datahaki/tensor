@@ -109,7 +109,7 @@ public class SimpleUnitSystem implements UnitSystem {
         : new FactorProduct(StaticHelper.multiply(product, UnitImpl.create(navigableMap)));
   }
 
-  private static interface Factor {
+  private interface Factor {
     /** @param quantity
      * @return */
     Scalar times(Quantity quantity);
@@ -119,7 +119,7 @@ public class SimpleUnitSystem implements UnitSystem {
     Unit dimensions(Unit unit);
   }
 
-  private static enum FactorIdentity implements Factor {
+  private enum FactorIdentity implements Factor {
     INSTANCE;
 
     @Override // from Factor

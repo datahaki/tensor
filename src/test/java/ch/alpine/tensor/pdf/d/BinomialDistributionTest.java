@@ -239,8 +239,6 @@ class BinomialDistributionTest {
     Distribution d2 = BinomialDistribution.of(3, RationalScalar.of(1, 2));
     Distribution d3 = BinomialDistribution.of(3, RationalScalar.of(1, 3));
     Distribution d4 = NormalDistribution.of(1, 2);
-    // assertEquals(d1, d2);
-    // assertEquals(d1.hashCode(), d2.hashCode());
     assertFalse(d1.equals(d3));
     assertFalse(d1.hashCode() == d3.hashCode());
     assertFalse(d1.equals(d4));

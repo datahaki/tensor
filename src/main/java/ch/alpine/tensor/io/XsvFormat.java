@@ -29,7 +29,7 @@ import ch.alpine.tensor.Tensors;
 
   private final Collector<CharSequence, ?, String> collector;
 
-  private XsvFormat(int delimiter) {
+  XsvFormat(int delimiter) {
     collector = Collectors.joining(Character.toString(delimiter));
   }
 

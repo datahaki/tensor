@@ -32,9 +32,9 @@ class Face {
   static final int DELETED = 3;
   // ---
   HalfEdge halfEdge;
-  private Vector3d normal;
+  private final Vector3d normal;
   Scalar area;
-  private Vector3d centroid;
+  private final Vector3d centroid;
   private Scalar planeOffset;
   private int numVerts;
   Face next;

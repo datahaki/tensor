@@ -106,11 +106,11 @@ public enum ColorDataGradients implements ColorDataGradient {
 
   private final ColorDataGradient colorDataGradient;
 
-  private ColorDataGradients(ColorDataGradient colorDataGradient) {
+  ColorDataGradients(ColorDataGradient colorDataGradient) {
     this.colorDataGradient = colorDataGradient;
   }
 
-  private ColorDataGradients() {
+  ColorDataGradients() {
     colorDataGradient = new LinearColorDataGradient(_tableRgba());
   }
 

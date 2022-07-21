@@ -33,6 +33,6 @@ public class Normal implements TensorUnaryOperator {
   public Tensor apply(Tensor tensor) {
     return tensor instanceof Scalar scalar //
         ? function.apply(scalar)
-        : Tensor.of(tensor.stream().map(this::apply));
+        : Tensor.of(tensor.stream().map(this));
   }
 }

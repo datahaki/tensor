@@ -72,6 +72,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor unmodifiable() {
+    // TODO TENSOR should be possible
     throw new UnsupportedOperationException();
   }
 

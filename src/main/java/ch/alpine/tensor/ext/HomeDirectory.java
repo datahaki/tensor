@@ -7,7 +7,7 @@ import java.io.File;
  * <a href="https://reference.wolfram.com/language/ref/$HomeDirectory.html">$HomeDirectory</a> */
 public enum HomeDirectory {
   ;
-  private static final File user_home() {
+  private static File user_home() {
     try {
       return new File(System.getProperty("user.home"));
     } catch (Exception exception) { // security exception, null pointer

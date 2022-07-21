@@ -53,7 +53,7 @@ public enum WindowFunctions implements Supplier<ScalarUnaryOperator> {
 
   private final ScalarUnaryOperator scalarUnaryOperator;
 
-  private WindowFunctions(ScalarUnaryOperator scalarUnaryOperator) {
+  WindowFunctions(ScalarUnaryOperator scalarUnaryOperator) {
     this.scalarUnaryOperator = scalarUnaryOperator;
   }
 

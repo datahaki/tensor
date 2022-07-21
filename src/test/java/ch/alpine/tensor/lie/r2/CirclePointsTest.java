@@ -85,7 +85,7 @@ class CirclePointsTest {
   @Test
   void testCirclePoints() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, CirclePoints.of(10));
-    Tensor polygon = Subdivide.of(0, 9, 20).map(bSplineFunction::apply);
+    Tensor polygon = Subdivide.of(0, 9, 20).map(bSplineFunction);
     assertTrue(MatrixQ.of(polygon));
   }
 

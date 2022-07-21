@@ -34,7 +34,7 @@ import ch.alpine.tensor.sca.pow.Power;
   private final Scalar factor;
   private final String english;
 
-  private MetricPrefix(String prefix, int exponent) {
+  MetricPrefix(String prefix, int exponent) {
     factor = Power.of(10, exponent);
     this.prefix = prefix;
     english = name().charAt(0) + name().substring(1).toLowerCase();
