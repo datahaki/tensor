@@ -34,6 +34,7 @@ public class DeleteDirectory {
    * @return
    * @throws Exception if given directory does not exist, or criteria are not met */
   public static DeleteDirectory of(File directory, int max_nested, long max_delete) throws IOException {
+    // TODO TENSOR IMPL restrict to permitted extensions, e.g. html, png
     return of(directory, max_nested, max_delete, 0);
   }
 
