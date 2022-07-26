@@ -80,9 +80,8 @@ import ch.alpine.tensor.io.StringScalar;
           head = tail + 1;
           break;
         }
-        default: {
-          // ---
-        }
+        default:
+          break;
         }
         ++tail;
       }
