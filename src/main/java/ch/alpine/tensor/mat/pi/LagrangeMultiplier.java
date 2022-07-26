@@ -82,7 +82,7 @@ public final class LagrangeMultiplier implements Serializable {
   }
 
   /** robust solver in case rank of eye or eqs is not maximal
-   * but slower than {@link #usingCholesky()}.
+   * but slower than {@link #usingCholesky(Tensor, Tensor)}.
    * 
    * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target */
   public Tensor usingSvd(Tensor target, Tensor rhs) {

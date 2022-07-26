@@ -70,7 +70,6 @@ import ch.alpine.tensor.sca.Sign;
    * 
    * for input of square matrix, the function returns a matrix with determinant +1
    * 
-   * @param matrix of size n x m with m <= n
    * @return matrix of size n x m of which the transpose satisfies {@link OrthogonalMatrixQ} */
   @PackageTestAccess
   Tensor getUnitaryWithDetOne2() {

@@ -28,9 +28,8 @@ public enum QRSignOperators implements QRSignOperator {
    * <p>Attention: Function fails on general matrices!
    * Use function to correct small deviations in an "almost"-orthogonal matrix
    * 
-   * <p>Careful: when using "preserveOrientation" {@link #det()} of the returned
-   * instance of {@link QRDecomposition} gives the determinant of the matrix
-   * only up to sign! */
+   * <p>Careful: when using "preserveOrientation" {@link QRDecomposition#det()}
+   * gives the determinant of the matrix only up to sign! */
   ORIENTATION {
     @Override // from QRSignOperator
     public Scalar sign(Scalar xk) {

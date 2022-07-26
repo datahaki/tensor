@@ -62,7 +62,7 @@ public enum ExactScalarQ {
   }
 
   /** @param tensor
-   * @return true if any scalar entry in given tensor satisfies the predicate {@link #of(Tensor)} */
+   * @return true if any scalar entry in given tensor satisfies the predicate {@link #of(Scalar)} */
   public static boolean any(Tensor tensor) {
     return tensor.flatten(-1).map(Scalar.class::cast).anyMatch(ExactScalarQ::of);
   }

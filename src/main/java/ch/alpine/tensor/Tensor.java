@@ -159,7 +159,7 @@ public interface Tensor extends Iterable<Tensor> {
    * 
    * @param tensor of which a copy replaces the existing element(s) at given index of this instance
    * @param index non-empty list
-   * @throws Execption if index is empty
+   * @throws Exception if index is empty
    * @throws Exception if this instance is unmodifiable
    * @see #set(Tensor, int...) */
   void set(Tensor tensor, List<Integer> index);

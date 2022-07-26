@@ -55,8 +55,7 @@ public class FindRoot implements Serializable {
   private final Chop chop;
 
   /** @param function
-   * @param chop
-   * @param predicate for instance Sign::isPositive */
+   * @param chop */
   private FindRoot(ScalarUnaryOperator function, Chop chop) {
     this.function = function;
     this.chop = chop;

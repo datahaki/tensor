@@ -24,7 +24,7 @@ import ch.alpine.tensor.sca.Sign;
   /** cols x cols */
   private final Tensor v;
 
-  /** @param matrix with cols <= rows */
+  /** @param init */
   public SingularValueDecompositionImpl(Init init) {
     u = init.u;
     v = init.v;

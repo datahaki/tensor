@@ -1,7 +1,9 @@
 // code by jph
 package ch.alpine.tensor.pdf;
 
-/** common base class for {@link ContinuousDistribution} and {@link DiscreteDistribution}
+import ch.alpine.tensor.pdf.c.AbstractContinuousDistribution;
+
+/** common base class for {@link AbstractContinuousDistribution} and {@link DiscreteDistribution}
  * continuous distribution defined over non-discrete subset of the set of real numbers
  * 
  * CauchyDistribution

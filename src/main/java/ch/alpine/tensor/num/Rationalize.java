@@ -77,7 +77,6 @@ public class Rationalize implements ScalarUnaryOperator {
    * we just keep the last partial product of these matrices."
    * 
    * @param scalar for instance Math.PI, or 2./3.
-   * @param max denominator
    * @return approximation of given scalar as {@link RationalScalar} with denominator bounded by max */
   @Override
   public Scalar apply(final Scalar scalar) {

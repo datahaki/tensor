@@ -36,7 +36,7 @@ public enum OrthogonalMatrixQ {
 
   /** @param tensor
    * @param chop
-   * @return
+   * @return given tensor
    * @throws Exception if given tensor is not an orthogonal matrix */
   public static Tensor require(Tensor tensor, Chop chop) {
     if (of(tensor, chop))
@@ -45,8 +45,7 @@ public enum OrthogonalMatrixQ {
   }
 
   /** @param tensor
-   * @param chop
-   * @return
+   * @return given tensor
    * @throws Exception if given tensor is not an orthogonal matrix */
   public static Tensor require(Tensor tensor) {
     if (of(tensor))

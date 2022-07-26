@@ -1,10 +1,12 @@
 // code by jph
 package ch.alpine.tensor.num;
 
+import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.lie.Quaternion;
 
-/** instantiated by {@link Scalars#binaryPower(Scalar)} */
+/** implementation computes integer powers of {@link ComplexScalar},
+ * {@link Quaternion}, etc. */
 public enum ScalarProduct implements GroupInterface<Scalar> {
   INSTANCE;
 

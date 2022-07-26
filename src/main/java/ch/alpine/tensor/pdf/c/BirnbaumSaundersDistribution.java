@@ -34,7 +34,7 @@ public class BirnbaumSaundersDistribution extends AbstractContinuousDistribution
   }
 
   /** @param alpha any real number
-   * @param beta positive
+   * @param lambda positive
    * @return */
   public static Distribution of(Number alpha, Number lambda) {
     return of(RealScalar.of(alpha), RealScalar.of(lambda));

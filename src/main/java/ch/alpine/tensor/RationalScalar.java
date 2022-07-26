@@ -56,7 +56,7 @@ public final class RationalScalar extends AbstractRealScalar implements //
 
   /** private constructor is only called from of(...)
    * 
-   * @param value */
+   * @param bigFraction */
   private RationalScalar(BigFraction bigFraction) {
     this.bigFraction = bigFraction;
   }

@@ -53,7 +53,7 @@ public enum Import {
   }
 
   /** import function for Java objects that implement {@link Serializable}
-   * and were stored with {@link Export#object(File, Serializable)}.
+   * and were stored with {@link Export#object(File, Object)}.
    * 
    * @param file
    * @return object prior to serialization, non-null

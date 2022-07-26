@@ -14,9 +14,9 @@ public enum FiniteTensorQ {
     return tensor.flatten(-1).map(Scalar.class::cast).allMatch(FiniteScalarQ::of);
   }
 
-  /** @param scalar
-   * @return given scalar
-   * @throws Exception if given scalar is not a finite scalar */
+  /** @param tensor
+   * @return given tensor
+   * @throws Exception if not all scalar entries in given tensor satisfy {@link FiniteScalarQ} */
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;

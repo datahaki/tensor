@@ -11,7 +11,7 @@ import ch.alpine.tensor.sca.Chop;
  * used if the interface is not implemented. */
 @FunctionalInterface
 public interface ChopInterface {
-  /** @param threshold
+  /** @param chop
    * @return {@link Scalar#zero()} if Scalar has numeric precision and
    * absolute value is strictly below threshold defined by {@link Chop#threshold()} */
   Scalar chop(Chop chop);

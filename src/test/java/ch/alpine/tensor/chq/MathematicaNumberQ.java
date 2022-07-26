@@ -51,7 +51,7 @@ import ch.alpine.tensor.qty.Quantity;
 
   /** @param scalar
    * @return given scalar
-   * @throws Exception if given scalar does not satisfy {@link #of(Tensor)} */
+   * @throws Exception if given scalar does not satisfy {@link #of(Scalar)} */
   public static Scalar require(Scalar scalar) {
     if (of(scalar))
       return scalar;
@@ -59,7 +59,7 @@ import ch.alpine.tensor.qty.Quantity;
   }
 
   /** @param tensor
-   * @return whether all scalar entries in given tensor satisfy the predicate {@link MathematicaNumberQ#of(Tensor)} */
+   * @return whether all scalar entries in given tensor satisfy the predicate {@link #of(Scalar)}} */
   public static boolean all(Tensor tensor) {
     return tensor.flatten(-1).map(Scalar.class::cast).allMatch(MathematicaNumberQ::of);
   }
