@@ -112,8 +112,8 @@ public enum Clips {
   // helper function
   private static Clip create(Scalar min, Scalar max) {
     Scalar width = max.subtract(min);
-    if (min.equals(max))
-      return new ClipPoint(min, width);
-    return new ClipInterval(min, max, Sign.requirePositive(width));
+    return min.equals(max) //
+        ? new ClipPoint(min, width)
+        : new ClipInterval(min, max, Sign.requirePositive(width));
   }
 }

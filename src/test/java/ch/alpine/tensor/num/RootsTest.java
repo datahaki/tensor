@@ -12,8 +12,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Last;
@@ -23,12 +23,12 @@ import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 
 class RootsTest {
@@ -152,12 +152,9 @@ class RootsTest {
 
   @Test
   void testRandomComplex() {
-    Distribution distribution = NormalDistribution.standard();
     for (int length = 1; length <= 4; ++length)
       for (int index = 0; index < LIMIT; ++index) {
-        Tensor coeffs = Entrywise.with(ComplexScalar::of).apply( //
-            RandomVariate.of(distribution, length), //
-            RandomVariate.of(distribution, length));
+        Tensor coeffs = RandomVariate.of(ComplexNormalDistribution.STANDARD, length);
         Tensor roots = Roots.of(coeffs);
         ScalarUnaryOperator scalarUnaryOperator = Polynomial.of(coeffs);
         Tensor tensor = roots.map(scalarUnaryOperator);
@@ -264,7 +261,7 @@ class RootsTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Roots.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Roots.of(RealScalar.ONE));
   }
 
   @Test
@@ -298,6 +295,6 @@ class RootsTest {
 
   @Test
   void testNotImplemented() {
-    assertThrows(TensorRuntimeException.class, () -> Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6)));
+    assertThrows(Throw.class, () -> Roots.of(Tensors.vector(1, 2, 3, 4, 5, 6)));
   }
 }

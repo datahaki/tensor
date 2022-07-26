@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -63,15 +63,15 @@ class ClipIntervalTest {
 
   @Test
   void testUnits0() {
-    assertThrows(TensorRuntimeException.class, () -> Clips.interval(RealScalar.of(0), Quantity.of(0, "m")));
-    assertThrows(TensorRuntimeException.class, () -> Clips.interval(Quantity.of(0, "m"), RealScalar.of(0)));
+    assertThrows(Throw.class, () -> Clips.interval(RealScalar.of(0), Quantity.of(0, "m")));
+    assertThrows(Throw.class, () -> Clips.interval(Quantity.of(0, "m"), RealScalar.of(0)));
   }
 
   @Test
   void testUnits1() {
-    assertThrows(TensorRuntimeException.class, () -> Clips.interval(RealScalar.of(0), Quantity.of(2, "m")));
-    assertThrows(TensorRuntimeException.class, () -> Clips.interval(Quantity.of(0, "m"), RealScalar.of(2)));
-    assertThrows(TensorRuntimeException.class, () -> Clips.interval(Quantity.of(-2, "m"), RealScalar.of(0)));
+    assertThrows(Throw.class, () -> Clips.interval(RealScalar.of(0), Quantity.of(2, "m")));
+    assertThrows(Throw.class, () -> Clips.interval(Quantity.of(0, "m"), RealScalar.of(2)));
+    assertThrows(Throw.class, () -> Clips.interval(Quantity.of(-2, "m"), RealScalar.of(0)));
   }
 
   @Test

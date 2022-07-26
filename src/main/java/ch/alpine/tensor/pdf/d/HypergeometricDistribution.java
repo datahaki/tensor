@@ -4,6 +4,8 @@ package ch.alpine.tensor.pdf.d;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.pdf.Distribution;
 
@@ -21,9 +23,10 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
    * @param m_n population size
    * @return */
   public static Distribution of(int N, int n, int m_n) {
-    // (0 < N && N <= m_n && 0 <= n && n <= m_n)
-    if (N <= 0 || m_n < N || n < 0 || m_n < n)
-      throw new IllegalArgumentException(String.format("N=%d n=%d m_n=%d", N, n, m_n));
+    Integers.requirePositive(N); // 0 < N
+    Integers.requireLessEquals(N, m_n); // N <= m_n
+    Integers.requirePositiveOrZero(n); // 0 <= n
+    Integers.requireLessEquals(n, m_n); // n <= m_n
     return new HypergeometricDistribution(N, n, m_n);
   }
 
@@ -31,7 +34,6 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
   private final int N;
   private final int n;
   private final int m_n;
-  private final int m;
   private final Binomial binomial_n;
   private final Binomial binomial_m;
   private final Binomial binomial_m_n;
@@ -40,7 +42,7 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
     this.N = N;
     this.n = n;
     this.m_n = m_n;
-    this.m = m_n - n;
+    int m = m_n - n;
     binomial_n = Binomial.of(n);
     binomial_m = Binomial.of(m);
     binomial_m_n = Binomial.of(m_n);
@@ -78,6 +80,6 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return String.format("HypergeometricDistribution[%d, %d, %d]", N, n, m_n);
+    return MathematicaFormat.concise("HypergeometricDistribution", N, n, m_n);
   }
 }

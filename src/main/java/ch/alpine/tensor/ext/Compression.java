@@ -57,9 +57,9 @@ public enum Compression {
       byteArrayOutputStream.write(buffer, 0, length);
       if (inflater.finished())
         break;
-      else
-        if (length == 0)
-          throw new DataFormatException();
+      else //
+      if (length == 0)
+        throw new DataFormatException();
     }
     inflater.end();
     return byteArrayOutputStream.toByteArray();

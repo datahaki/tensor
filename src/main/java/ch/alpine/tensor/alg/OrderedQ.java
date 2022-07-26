@@ -4,7 +4,7 @@ package ch.alpine.tensor.alg;
 import java.util.Iterator;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/OrderedQ.html">OrderedQ</a> */
@@ -35,6 +35,6 @@ public enum OrderedQ {
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;
-    throw TensorRuntimeException.of(tensor);
+    throw new Throw(tensor);
   }
 }

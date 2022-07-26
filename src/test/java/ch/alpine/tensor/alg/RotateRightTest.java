@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.IdentityMatrix;
 
 class RotateRightTest {
@@ -43,7 +43,7 @@ class RotateRightTest {
 
   @Test
   void testFailScalar() {
-    assertThrows(TensorRuntimeException.class, () -> RotateRight.of(RealScalar.ONE, 0));
+    assertThrows(Throw.class, () -> RotateRight.of(RealScalar.ONE, 0));
   }
 
   @Test

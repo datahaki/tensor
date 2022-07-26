@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.io;
 
-import java.util.stream.Stream;
+import java.util.Arrays;
 
 import ch.alpine.tensor.Tensor;
 
@@ -18,6 +18,6 @@ public enum StringTensor {
    * @return */
   @SafeVarargs
   public static Tensor vector(String... strings) {
-    return Tensor.of(Stream.of(strings).map(StringScalar::of));
+    return Tensor.of(Arrays.stream(strings).map(StringScalar::of));
   }
 }

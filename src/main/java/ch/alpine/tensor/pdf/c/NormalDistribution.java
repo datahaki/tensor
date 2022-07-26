@@ -8,6 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
@@ -31,10 +32,13 @@ public class NormalDistribution implements UnivariateDistribution, //
    * 
    * @param mean
    * @param sigma standard deviation
-   * @return instance of NormalDistribution with given characteristics */
+   * @return instance of NormalDistribution with given characteristics,
+   * or DiracDeltaDistribution if sigma is zero */
   public static Distribution of(Scalar mean, Scalar sigma) {
     Scalars.compare(mean, mean.add(sigma)); // assert that parameters are non-complex with identical units
-    return new NormalDistribution(mean, sigma);
+    return Scalars.isZero(sigma) //
+        ? DiracDeltaDistribution.of(mean)
+        : new NormalDistribution(mean, sigma);
   }
 
   /** @param mean
@@ -123,6 +127,6 @@ public class NormalDistribution implements UnivariateDistribution, //
 
   @Override // from Object
   public String toString() {
-    return String.format("NormalDistribution[%s, %s]", mean, sigma);
+    return MathematicaFormat.concise("NormalDistribution", mean, sigma);
   }
 }

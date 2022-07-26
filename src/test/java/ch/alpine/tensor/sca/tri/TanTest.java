@@ -11,7 +11,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.sca.Chop;
 
@@ -35,6 +35,6 @@ class TanTest {
   @Test
   void testTypeFail() {
     Scalar scalar = StringScalar.of("some");
-    assertThrows(TensorRuntimeException.class, () -> Tan.of(scalar));
+    assertThrows(Throw.class, () -> Tan.of(scalar));
   }
 }

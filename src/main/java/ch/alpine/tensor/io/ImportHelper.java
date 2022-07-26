@@ -40,6 +40,7 @@ import ch.alpine.tensor.ext.ReadLine;
     case GIF:
     case JPG:
     case PNG:
+    case TIFF:
       return ImageFormat.from(ImageIO.read(inputStream));
     case TSV:
       return XsvFormat.TSV.parse(ReadLine.of(inputStream));

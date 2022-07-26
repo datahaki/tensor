@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 /* package */ enum StaticHelper {
   ;
-  /** @param bufferedImage
+  /** @param type
    * @return either byte_gray or int_argb */
   public static int type(int type) {
     return type == BufferedImage.TYPE_BYTE_GRAY //

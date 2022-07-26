@@ -4,11 +4,21 @@ package ch.alpine.tensor.spa;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-import org.junit.jupiter.api.Test;
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+import java.util.zip.DataFormatException;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.io.TempDir;
+
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Transpose;
+import ch.alpine.tensor.io.Export;
+import ch.alpine.tensor.io.Import;
 import ch.alpine.tensor.mat.MatrixDotConjugateTranspose;
 import ch.alpine.tensor.sca.Conjugate;
 
@@ -39,5 +49,26 @@ class NnzTest {
     Tensor sparse = TestHelper.of(tensor);
     sparse.set(Tensors.vector(1, 2, 3, 4, 5), 1);
     sparse.toString();
+  }
+
+  @Test
+  @Timeout(value = 100, unit = TimeUnit.MILLISECONDS)
+  void testLarge() {
+    int size = 1000000;
+    Tensor tensor = SparseArray.of(RealScalar.ZERO, size, size, size);
+    tensor.set(RealScalar.ONE, size - 2, size - 3, size - 4);
+    int nnz = Nnz.of((SparseArray) tensor);
+    assertEquals(nnz, 1);
+  }
+
+  @Test
+  void testObject(@TempDir File folder) throws IOException, ClassNotFoundException, DataFormatException {
+    Tensor tensor = Tensors.fromString("{{1,0,3,0,0},{5,6,8,0,0},{0,2,9,0,4}}");
+    Tensor raw = TestHelper.of(tensor);
+    SparseArray sparse = (SparseArray) raw;
+    File file = new File(folder, "sparse.object");
+    Export.object(file, sparse);
+    SparseArray object = Import.object(file);
+    assertEquals(sparse, object);
   }
 }

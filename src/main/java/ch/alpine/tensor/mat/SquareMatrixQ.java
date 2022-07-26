@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 
 /** consistent with Mathematica, in particular SquareMatrixQ[{}] == false
@@ -23,6 +23,6 @@ public enum SquareMatrixQ {
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;
-    throw TensorRuntimeException.of(tensor);
+    throw new Throw(tensor);
   }
 }

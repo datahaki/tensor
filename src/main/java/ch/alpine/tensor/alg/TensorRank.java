@@ -2,7 +2,7 @@
 package ch.alpine.tensor.alg;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 
 /** implementation consistent with Mathematica
  * 
@@ -31,6 +31,6 @@ public enum TensorRank {
     Dimensions dimensions = new Dimensions(tensor);
     if (dimensions.isArray())
       return dimensions.list().size();
-    throw TensorRuntimeException.of(tensor);
+    throw new Throw(tensor);
   }
 }

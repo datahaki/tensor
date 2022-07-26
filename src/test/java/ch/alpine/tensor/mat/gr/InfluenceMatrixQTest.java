@@ -1,14 +1,15 @@
 // code by jph
 package ch.alpine.tensor.mat.gr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 
 class InfluenceMatrixQTest {
@@ -16,14 +17,14 @@ class InfluenceMatrixQTest {
   void testSimple() {
     Tensor matrix = Tensors.fromString("{{1, 0}, {2, 3}}");
     assertFalse(InfluenceMatrixQ.of(matrix));
-    assertThrows(TensorRuntimeException.class, () -> InfluenceMatrixQ.require(matrix));
+    assertThrows(Throw.class, () -> InfluenceMatrixQ.require(matrix));
   }
 
   @Test
   void testChop() {
     Tensor matrix = Tensors.fromString("{{1, 0}, {2, 3}}");
     assertFalse(InfluenceMatrixQ.of(matrix, Tolerance.CHOP));
-    assertThrows(TensorRuntimeException.class, () -> InfluenceMatrixQ.require(matrix, Tolerance.CHOP));
+    assertThrows(Throw.class, () -> InfluenceMatrixQ.require(matrix, Tolerance.CHOP));
   }
 
   @Test
@@ -31,7 +32,8 @@ class InfluenceMatrixQTest {
     Tensor design = Tensors.fromString( //
         "{{-304[m], -144[m], 16[m]}, {-19[m], -9[m], 1[m]}, {285[m], 135[m], -15[m]}, {-152[m], -72[m], 8[m]}}");
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    InfluenceMatrixQ.require(influenceMatrix.matrix());
+    Tensor tensor = InfluenceMatrixQ.require(influenceMatrix.matrix());
+    assertEquals(tensor, influenceMatrix.matrix());
   }
 
   @Test

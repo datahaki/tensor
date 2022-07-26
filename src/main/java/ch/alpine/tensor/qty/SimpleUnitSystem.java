@@ -14,8 +14,9 @@ import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Cache;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.sca.pow.Power;
 
@@ -74,7 +75,7 @@ public class SimpleUnitSystem implements UnitSystem {
   // helper function
   private static Scalar requireNumeric(Scalar scalar) {
     if (scalar instanceof StringScalar)
-      throw TensorRuntimeException.of(scalar);
+      throw new Throw(scalar);
     return scalar;
   }
 
@@ -108,7 +109,7 @@ public class SimpleUnitSystem implements UnitSystem {
         : new FactorProduct(StaticHelper.multiply(product, UnitImpl.create(navigableMap)));
   }
 
-  private static interface Factor {
+  private interface Factor {
     /** @param quantity
      * @return */
     Scalar times(Quantity quantity);
@@ -118,7 +119,7 @@ public class SimpleUnitSystem implements UnitSystem {
     Unit dimensions(Unit unit);
   }
 
-  private static enum FactorIdentity implements Factor {
+  private enum FactorIdentity implements Factor {
     INSTANCE;
 
     @Override // from Factor
@@ -174,6 +175,6 @@ public class SimpleUnitSystem implements UnitSystem {
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", UnitSystem.class.getSimpleName(), map());
+    return MathematicaFormat.concise("UnitSystem", map);
   }
 }

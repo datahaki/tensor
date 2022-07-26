@@ -15,7 +15,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
@@ -115,8 +115,8 @@ class GompertzMakehamDistributionTest {
     Distribution distribution = GompertzMakehamDistribution.of(Quantity.of(0.3, "m^-1"), RealScalar.of(0.1));
     PDF pdf = PDF.of(distribution);
     assertEquals(pdf.at(Quantity.of(0.0, "m")), Quantity.of(0.03, "m^-1"));
-    assertThrows(TensorRuntimeException.class, () -> pdf.at(Quantity.of(-1, "m^2")));
-    assertThrows(TensorRuntimeException.class, () -> pdf.at(Quantity.of(+1, "m^2")));
+    assertThrows(Throw.class, () -> pdf.at(Quantity.of(-1, "m^2")));
+    assertThrows(Throw.class, () -> pdf.at(Quantity.of(+1, "m^2")));
   }
 
   @Test
@@ -126,8 +126,8 @@ class GompertzMakehamDistributionTest {
     Tolerance.CHOP.requireClose(cdf.p_lessEquals(Quantity.of(+0.1, "m")), RealScalar.of(0.003040820706232905));
     assertEquals(cdf.p_lessEquals(Quantity.of(+0.0, "m")), RealScalar.ZERO);
     assertEquals(cdf.p_lessEquals(Quantity.of(-0.1, "m")), RealScalar.ZERO);
-    assertThrows(TensorRuntimeException.class, () -> cdf.p_lessEquals(Quantity.of(-1, "m^2")));
-    assertThrows(TensorRuntimeException.class, () -> cdf.p_lessEquals(Quantity.of(+1, "m^2")));
+    assertThrows(Throw.class, () -> cdf.p_lessEquals(Quantity.of(-1, "m^2")));
+    assertThrows(Throw.class, () -> cdf.p_lessEquals(Quantity.of(+1, "m^2")));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     Scalar quantile = inverseCDF.quantile(RationalScalar.of(1, 8));
     Tolerance.CHOP.requireClose(quantile, Scalars.fromString("2.8271544195740326[m]"));
@@ -138,14 +138,14 @@ class GompertzMakehamDistributionTest {
     Distribution distribution = //
         GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0.2));
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
+    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(+1.1)));
   }
 
   @Test
   void testFail() {
-    assertThrows(TensorRuntimeException.class, () -> GompertzMakehamDistribution.of(RealScalar.of(0), RealScalar.of(0.2)));
-    assertThrows(TensorRuntimeException.class, () -> GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0)));
-    assertThrows(TensorRuntimeException.class, () -> GompertzMakehamDistribution.of(RealScalar.of(1e-300), RealScalar.of(1e-300)));
+    assertThrows(Throw.class, () -> GompertzMakehamDistribution.of(RealScalar.of(0), RealScalar.of(0.2)));
+    assertThrows(Throw.class, () -> GompertzMakehamDistribution.of(RealScalar.of(3), RealScalar.of(0)));
+    assertThrows(Throw.class, () -> GompertzMakehamDistribution.of(RealScalar.of(1e-300), RealScalar.of(1e-300)));
   }
 }

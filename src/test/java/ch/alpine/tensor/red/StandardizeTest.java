@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.sca.Chop;
@@ -45,7 +45,7 @@ class StandardizeTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Standardize.ofVector(RealScalar.of(84.312)));
+    assertThrows(Throw.class, () -> Standardize.ofVector(RealScalar.of(84.312)));
   }
 
   @Test

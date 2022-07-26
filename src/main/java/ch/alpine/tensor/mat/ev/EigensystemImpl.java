@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Ordering;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /** container class to host results of unsorted {@link Eigensystem} and convert
  * to {@link Eigensystem} with eigenvalues sorted in decreasing order. */
@@ -14,9 +14,7 @@ import ch.alpine.tensor.alg.Ordering;
   private final Tensor d;
   private final Tensor V;
 
-  /** @param matrix symmetric, non-empty, and real valued
-   * @param chop for symmetry check
-   * @throws Exception if input is not a real symmetric matrix */
+  /** @param eigensystem */
   public EigensystemImpl(Eigensystem eigensystem) {
     Tensor values = eigensystem.values();
     int[] ordering = Ordering.DECREASING.of(values);
@@ -36,8 +34,6 @@ import ch.alpine.tensor.alg.Ordering;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", //
-        Eigensystem.class.getSimpleName(), //
-        Tensors.message(values(), vectors()));
+    return MathematicaFormat.concise("Eigensystem", values(), vectors());
   }
 }

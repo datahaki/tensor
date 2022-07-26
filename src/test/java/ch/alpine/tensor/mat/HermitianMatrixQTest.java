@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -9,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.sca.Chop;
@@ -47,12 +48,16 @@ class HermitianMatrixQTest {
 
   @Test
   void testRequire() {
-    HermitianMatrixQ.require(HilbertMatrix.of(10));
-    assertThrows(TensorRuntimeException.class, () -> HermitianMatrixQ.require(Tensors.vector(1, 2, 3)));
+    assertEquals(HermitianMatrixQ.require(HilbertMatrix.of(10)), HilbertMatrix.of(10));
+  }
+
+  @Test
+  void testRequireFail() {
+    assertThrows(Throw.class, () -> HermitianMatrixQ.require(Tensors.vector(1, 2, 3)));
   }
 
   @Test
   void testRequireChop() {
-    assertThrows(TensorRuntimeException.class, () -> HermitianMatrixQ.require(Tensors.vector(1, 2, 3), Chop._02));
+    assertThrows(Throw.class, () -> HermitianMatrixQ.require(Tensors.vector(1, 2, 3), Chop._02));
   }
 }

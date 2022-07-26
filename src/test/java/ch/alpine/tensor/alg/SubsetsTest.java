@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Binomial;
@@ -88,6 +88,6 @@ class SubsetsTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Subsets.of(Pi.HALF, 2));
+    assertThrows(Throw.class, () -> Subsets.of(Pi.HALF, 2));
   }
 }

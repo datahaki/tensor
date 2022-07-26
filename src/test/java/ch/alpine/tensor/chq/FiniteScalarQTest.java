@@ -18,7 +18,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.jet.JetScalar;
 import ch.alpine.tensor.num.Binomial;
 import ch.alpine.tensor.num.GaussScalar;
@@ -129,13 +129,25 @@ class FiniteScalarQTest {
     Scalar scalar = Scalars.fromString("NaN+2*I[m*s]");
     assertEquals(scalar.toString(), "NaN+2*I[m*s]");
     assertInstanceOf(Quantity.class, scalar);
-    assertThrows(TensorRuntimeException.class, () -> FiniteScalarQ.require(scalar));
+    assertThrows(Throw.class, () -> FiniteScalarQ.require(scalar));
   }
 
   @Test
   void testRequireThrow() {
     FiniteScalarQ.require(Pi.VALUE);
-    assertThrows(TensorRuntimeException.class, () -> FiniteScalarQ.require(DoubleScalar.POSITIVE_INFINITY));
+    assertThrows(Throw.class, () -> FiniteScalarQ.require(DoubleScalar.POSITIVE_INFINITY));
+  }
+
+  private static boolean isNaN(Scalar scalar) {
+    return !scalar.equals(scalar);
+  }
+
+  @Test
+  void testIsNaN() {
+    assertTrue(isNaN(ComplexScalar.of(Double.NaN, Double.NaN)));
+    assertTrue(isNaN(RealScalar.of(Double.NaN)));
+    assertTrue(isNaN(Quantity.of(Double.NaN, "s")));
+    assertFalse(isNaN(RealScalar.of(Double.POSITIVE_INFINITY)));
   }
 
   @Test

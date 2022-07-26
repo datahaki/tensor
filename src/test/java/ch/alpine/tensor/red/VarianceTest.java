@@ -10,8 +10,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
@@ -49,7 +49,7 @@ class VarianceTest {
 
   @Test
   void testFailScalar() {
-    assertThrows(TensorRuntimeException.class, () -> Variance.ofVector(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Variance.ofVector(RealScalar.ONE));
   }
 
   @Test

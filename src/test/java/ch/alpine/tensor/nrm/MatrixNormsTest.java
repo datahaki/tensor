@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
@@ -31,9 +31,9 @@ class MatrixNormsTest {
   @Test
   void testFails() {
     for (TensorScalarFunction norm : VALUES) {
-      assertThrows(TensorRuntimeException.class, () -> norm.apply(RealScalar.ONE));
+      assertThrows(Throw.class, () -> norm.apply(RealScalar.ONE));
       assertThrows(Exception.class, () -> norm.apply(Tensors.empty()));
-      assertThrows(TensorRuntimeException.class, () -> norm.apply(Tensors.vector(1, 2, 3)));
+      assertThrows(Throw.class, () -> norm.apply(Tensors.vector(1, 2, 3)));
       assertThrows(Exception.class, () -> norm.apply(LeviCivitaTensor.of(3)));
       assertThrows(Exception.class, () -> norm.apply(Tensors.fromString("{{1, 2}, {3}}")));
     }

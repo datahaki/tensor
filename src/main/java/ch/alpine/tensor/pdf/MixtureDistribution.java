@@ -30,8 +30,9 @@ public class MixtureDistribution implements Distribution, PDF, CDF, MeanInterfac
    * @return
    * @throws Exception if weights vectors not not have the same length as list */
   public static Distribution of(Tensor weights, List<Distribution> list) {
-    Integers.requirePositive(list.size());
     Integers.requireEquals(weights.length(), list.size());
+    if (list.isEmpty())
+      throw new IllegalArgumentException();
     return new MixtureDistribution(weights, list);
   }
 

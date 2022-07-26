@@ -21,8 +21,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.ext.Integers;
@@ -72,6 +72,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
 
   @Override // from Tensor
   public Tensor unmodifiable() {
+    // TODO TENSOR should be possible
     throw new UnsupportedOperationException();
   }
 
@@ -163,7 +164,7 @@ public class SparseArray extends AbstractTensor implements Serializable {
           ? tensor.copy()
           : StaticHelper.of(fallback, list, tensor));
     else
-      throw TensorRuntimeException.of(tensor);
+      throw new Throw(tensor);
   }
 
   @Override // from Tensor
@@ -312,9 +313,16 @@ public class SparseArray extends AbstractTensor implements Serializable {
     };
   }
 
+  /** @param ofs 0, or 1 for Mathematica index convention
+   * @return
+   * @throws Exception if ofs is outside valid range */
+  public String toString(int ofs) {
+    return "SparseArray" + '[' + visit(new SparseArrayToString(ofs)) + ", " + Tensors.vector(size) + ", " + fallback + ']';
+  }
+
   @Override // from Object
   public String toString() {
-    return "SparseArray" + '[' + visit(new SparseArrayToString()) + ", " + Tensors.vector(size) + ", " + fallback + ']';
+    return toString(0);
   }
 
   /** @param sparseEntryVisitor

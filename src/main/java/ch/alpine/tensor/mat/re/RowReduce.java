@@ -1,8 +1,8 @@
 // code by jph
 package ch.alpine.tensor.mat.re;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -34,7 +34,7 @@ public class RowReduce extends AbstractReduce {
   }
 
   private Tensor solve() {
-    int m = Integers.requirePositiveOrZero(Stream.of(lhs) //
+    int m = Integers.requirePositiveOrZero(Arrays.stream(lhs) //
         .mapToInt(Tensor::length) //
         .max().getAsInt());
     for (int c0 = 0, j = 0; c0 < lhs.length && j < m; ++j) {

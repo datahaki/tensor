@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -33,6 +33,6 @@ class SinhcInverseTest {
 
   @Test
   void testFail() {
-    assertThrows(TensorRuntimeException.class, () -> SinhcInverse.FUNCTION.apply(Quantity.of(0, "m")));
+    assertThrows(Throw.class, () -> SinhcInverse.FUNCTION.apply(Quantity.of(0, "m")));
   }
 }

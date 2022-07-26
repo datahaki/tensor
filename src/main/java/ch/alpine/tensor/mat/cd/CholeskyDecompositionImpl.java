@@ -7,10 +7,10 @@ import java.io.Serializable;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.qty.LenientAdd;
 import ch.alpine.tensor.sca.Chop;
@@ -81,8 +81,6 @@ import ch.alpine.tensor.sca.Conjugate;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%s]", //
-        CholeskyDecomposition.class.getSimpleName(), //
-        Tensors.message(diagonal(), getL()));
+    return MathematicaFormat.concise("CholeskyDecomposition", diagonal(), getL());
   }
 }

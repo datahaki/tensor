@@ -11,7 +11,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
@@ -22,7 +22,7 @@ class HannWindowTest {
     ScalarUnaryOperator suo = HannWindow.of(RealScalar.of(0.8));
     Tolerance.CHOP.requireClose( //
         suo.apply(RealScalar.of(0.4)), //
-        RealScalar.of(0.6381966011250106));
+        RealScalar.of(0.6381966011250106)); // == GOLDEN_ANGLE + 0.3
     Tolerance.CHOP.requireClose( //
         suo.apply(RealScalar.of(0.5)), //
         RealScalar.of(0.6));
@@ -72,7 +72,7 @@ class HannWindowTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> HannWindow.FUNCTION.apply(Quantity.of(2, "s")));
+    assertThrows(Throw.class, () -> HannWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 
   @Test

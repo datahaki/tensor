@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactTensorQ;
 
 class MaxFilterTest {
@@ -63,7 +63,7 @@ class MaxFilterTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> MaxFilter.of(RealScalar.of(3), 1));
+    assertThrows(Throw.class, () -> MaxFilter.of(RealScalar.of(3), 1));
   }
 
   @Test

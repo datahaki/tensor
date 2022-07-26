@@ -17,8 +17,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.mat.IdentityMatrix;
@@ -214,14 +214,14 @@ class AroundTest {
 
   @Test
   void testFail() {
-    assertThrows(TensorRuntimeException.class, () -> Around.of(2, -3));
+    assertThrows(Throw.class, () -> Around.of(2, -3));
   }
 
   @Test
   void testNumberFail() {
     Scalar scalar = Around.of(2, 3);
     assertEquals(scalar.toString(), "2\u00B13");
-    assertThrows(TensorRuntimeException.class, () -> scalar.number());
+    assertThrows(Throw.class, () -> scalar.number());
   }
 
   @Test
@@ -233,7 +233,7 @@ class AroundTest {
 
   @Test
   void testSpecialCase() {
-    assertThrows(TensorRuntimeException.class, () -> Around.of(Quantity.of(1, "m"), RealScalar.ZERO));
+    assertThrows(Throw.class, () -> Around.of(Quantity.of(1, "m"), RealScalar.ZERO));
   }
 
   @Test
@@ -277,7 +277,7 @@ class AroundTest {
 
   @Test
   void testPowerFail() {
-    assertThrows(TensorRuntimeException.class, () -> Power.of(Around.of(-3, 2), Around.of(9, 12)));
+    assertThrows(Throw.class, () -> Power.of(Around.of(-3, 2), Around.of(9, 12)));
   }
 
   @Test

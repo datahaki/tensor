@@ -2,7 +2,7 @@
 package ch.alpine.tensor.mat;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.sca.Chop;
 
 /** Mathematica definition:
@@ -33,7 +33,7 @@ public enum UnitaryMatrixQ {
   public static Tensor require(Tensor tensor, Chop chop) {
     if (of(tensor, chop))
       return tensor;
-    throw TensorRuntimeException.of(tensor);
+    throw new Throw(tensor);
   }
 
   /** @param tensor

@@ -11,8 +11,7 @@ import ch.alpine.tensor.Tensor;
  * <p>inspired by
  * <a href="https://reference.wolfram.com/language/ref/ExtendedGCD.html">ExtendedGCD</a> */
 public interface ExtendedGCD {
-  /** @param one
-   * @return */
+  /** @return */
   static Function<Tensor, ExtendedGCD> function() {
     return new ExtendedGCDWrap()::function;
   }

@@ -14,8 +14,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -35,12 +35,12 @@ class ColorDataListsTest {
   @Test
   void testQuantityTransparent() {
     ColorDataIndexed colorDataIndexed = ColorDataLists._103.cyclic();
-    assertThrows(TensorRuntimeException.class, () -> colorDataIndexed.apply(Quantity.of(2, "s")));
-    assertThrows(TensorRuntimeException.class, () -> colorDataIndexed.apply(Quantity.of(Double.NaN, "s")));
+    assertThrows(Throw.class, () -> colorDataIndexed.apply(Quantity.of(2, "s")));
+    assertThrows(Throw.class, () -> colorDataIndexed.apply(Quantity.of(Double.NaN, "s")));
   }
 
   @ParameterizedTest
-  @EnumSource(ColorDataLists.class)
+  @EnumSource
   void testInfinityTransparentCyclic(ColorDataLists colorDataLists) {
     ColorDataIndexed colorDataIndexed = colorDataLists.cyclic();
     assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
@@ -49,7 +49,7 @@ class ColorDataListsTest {
   }
 
   @ParameterizedTest
-  @EnumSource(ColorDataLists.class)
+  @EnumSource
   void testInfinityTransparentStrict(ColorDataLists colorDataLists) {
     ColorDataIndexed colorDataIndexed = colorDataLists.strict();
     assertEquals(colorDataIndexed.apply(DoubleScalar.INDETERMINATE), Array.zeros(4));
@@ -80,14 +80,14 @@ class ColorDataListsTest {
   }
 
   @ParameterizedTest
-  @EnumSource(ColorDataLists.class)
+  @EnumSource
   void testSizeCyclic(ColorDataLists colorDataLists) {
     assertTrue(1 < colorDataLists.cyclic().length());
     assertTrue(colorDataLists.cyclic().length() < 100);
   }
 
   @ParameterizedTest
-  @EnumSource(ColorDataLists.class)
+  @EnumSource
   void testSizeStrict(ColorDataLists colorDataLists) {
     assertTrue(1 < colorDataLists.strict().length());
     assertTrue(colorDataLists.strict().length() < 100);

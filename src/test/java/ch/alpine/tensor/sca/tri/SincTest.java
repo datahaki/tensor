@@ -11,7 +11,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -81,8 +81,7 @@ class SincTest {
   @Test
   void testThreshold() {
     Scalar res1 = Sinc.of(THRESHOLD);
-    double val1 = THRESHOLD.number().doubleValue();
-    double val0 = val1;
+    double val0 = THRESHOLD.number().doubleValue();
     for (int count = 0; count < 100; ++count)
       val0 = Math.nextDown(val0);
     Scalar res0 = Sinc.of(DoubleScalar.of(val0));
@@ -114,11 +113,11 @@ class SincTest {
 
   @Test
   void testQuantity() {
-    assertThrows(TensorRuntimeException.class, () -> Sinc.FUNCTION.apply(Quantity.of(0, "m")));
+    assertThrows(Throw.class, () -> Sinc.FUNCTION.apply(Quantity.of(0, "m")));
   }
 
   @Test
   void testTypeFail() {
-    assertThrows(TensorRuntimeException.class, () -> Sinc.of(StringScalar.of("some")));
+    assertThrows(Throw.class, () -> Sinc.of(StringScalar.of("some")));
   }
 }

@@ -9,8 +9,8 @@ import java.util.Random;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.chq.ExactTensorQ;
 import ch.alpine.tensor.mat.VandermondeMatrix;
@@ -61,14 +61,14 @@ class VandermondeSolveTest {
   void testSingularFail() {
     Tensor x = Tensors.vector(2, 3, 2);
     Tensor q = Tensors.vector(4, 7, 6);
-    assertThrows(TensorRuntimeException.class, () -> VandermondeSolve.of(x, q));
+    assertThrows(Throw.class, () -> VandermondeSolve.of(x, q));
   }
 
   @Test
   void testLengthFail() {
     Tensor x = Tensors.vector(2, 3);
     Tensor q = Tensors.vector(4, 7, 6);
-    assertThrows(TensorRuntimeException.class, () -> VandermondeSolve.of(x, q));
+    assertThrows(Throw.class, () -> VandermondeSolve.of(x, q));
   }
 
   @Test

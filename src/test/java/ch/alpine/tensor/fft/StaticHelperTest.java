@@ -25,7 +25,7 @@ import ch.alpine.tensor.sca.win.WindowFunctions;
 
 class StaticHelperTest {
   @ParameterizedTest
-  @EnumSource(WindowFunctions.class)
+  @EnumSource
   void testSimple(WindowFunctions windowFunctions) {
     int[] lengths = new int[] { 1, 2, 3, 4, 10, 32 };
     for (int windowLength : lengths) {

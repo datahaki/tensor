@@ -7,7 +7,7 @@ import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 
@@ -25,7 +25,7 @@ import ch.alpine.tensor.chq.FiniteScalarQ;
   @Override // from ScalarTensorFunction
   public final Tensor apply(Scalar scalar) {
     if (scalar instanceof MultiplexScalar)
-      throw TensorRuntimeException.of(scalar);
+      throw new Throw(scalar);
     return FiniteScalarQ.of(scalar) //
         ? tensor.get(toInt(scalar))
         : Transparent.rgba();

@@ -29,4 +29,9 @@ public class HannWindow extends ParameterizedWindow {
   protected Scalar evaluate(Scalar x) {
     return StaticHelper.deg1(alpha, a1, x);
   }
+
+  @Override // from ParameterizedWindow
+  protected String title() {
+    return "HannWindow";
+  }
 }

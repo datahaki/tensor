@@ -11,8 +11,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.Subdivide;
@@ -264,9 +264,9 @@ class BSplineFunctionStringTest {
   void testEmptyFail() {
     assertThrows(IllegalArgumentException.class, () -> BSplineFunctionString.of(-2, Tensors.empty()));
     assertThrows(IllegalArgumentException.class, () -> BSplineFunctionString.of(-1, Tensors.empty()));
-    assertThrows(TensorRuntimeException.class, () -> BSplineFunctionString.of(-0, Tensors.empty()));
-    assertThrows(TensorRuntimeException.class, () -> BSplineFunctionString.of(+1, Tensors.empty()));
-    assertThrows(TensorRuntimeException.class, () -> BSplineFunctionString.of(+2, Tensors.empty()));
+    assertThrows(Throw.class, () -> BSplineFunctionString.of(-0, Tensors.empty()));
+    assertThrows(Throw.class, () -> BSplineFunctionString.of(+1, Tensors.empty()));
+    assertThrows(Throw.class, () -> BSplineFunctionString.of(+2, Tensors.empty()));
   }
 
   @Test
@@ -278,8 +278,8 @@ class BSplineFunctionStringTest {
   void testOutsideFail() {
     ScalarTensorFunction bSplineFunction = BSplineFunctionString.of(3, Tensors.vector(2, 1, 0, -1, -2));
     bSplineFunction.apply(RealScalar.of(4));
-    assertThrows(TensorRuntimeException.class, () -> bSplineFunction.apply(RealScalar.of(-0.1)));
-    assertThrows(TensorRuntimeException.class, () -> bSplineFunction.apply(RealScalar.of(5.1)));
-    assertThrows(TensorRuntimeException.class, () -> bSplineFunction.apply(RealScalar.of(4.1)));
+    assertThrows(Throw.class, () -> bSplineFunction.apply(RealScalar.of(-0.1)));
+    assertThrows(Throw.class, () -> bSplineFunction.apply(RealScalar.of(5.1)));
+    assertThrows(Throw.class, () -> bSplineFunction.apply(RealScalar.of(4.1)));
   }
 }

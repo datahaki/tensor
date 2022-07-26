@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.ext.Lists;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /** reference implementation of the interface Tensor */
 /* package */ class TensorImpl extends AbstractTensor implements Serializable {
@@ -174,6 +175,6 @@ import ch.alpine.tensor.ext.Lists;
 
   @Override // from Object
   public String toString() {
-    return list.stream().map(Tensor::toString).collect(StaticHelper.EMBRACE);
+    return list.stream().map(Tensor::toString).collect(MathematicaFormat.EMBRACE);
   }
 }

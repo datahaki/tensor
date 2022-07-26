@@ -7,7 +7,7 @@ import java.io.File;
  * <a href="https://reference.wolfram.com/language/ref/$HomeDirectory.html">$HomeDirectory</a> */
 public enum HomeDirectory {
   ;
-  private static final File user_home() {
+  private static File user_home() {
     try {
       return new File(System.getProperty("user.home"));
     } catch (Exception exception) { // security exception, null pointer
@@ -96,8 +96,8 @@ public enum HomeDirectory {
   }
 
   private static File concat(File file, String[] strings) {
-    for (int index = 0; index < strings.length; ++index)
-      file = new File(file, strings[index]);
+    for (String string : strings)
+      file = new File(file, string);
     return file;
   }
 }

@@ -10,7 +10,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.ext.Serialization;
@@ -57,6 +57,6 @@ class ColorDataGradientTest {
   @Test
   void testGaussScalar() {
     Scalar scalar = GaussScalar.of(123, 251);
-    assertThrows(TensorRuntimeException.class, () -> ColorDataGradients.ALPINE.apply(scalar));
+    assertThrows(Throw.class, () -> ColorDataGradients.ALPINE.apply(scalar));
   }
 }

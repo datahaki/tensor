@@ -14,8 +14,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
@@ -144,14 +144,14 @@ class ArcTanTest {
 
   @Test
   void testDoubleNaNFail() {
-    assertThrows(TensorRuntimeException.class, () -> ArcTan.FUNCTION.apply(ComplexScalar.of(Double.NaN, Double.NaN)));
+    assertThrows(Throw.class, () -> ArcTan.FUNCTION.apply(ComplexScalar.of(Double.NaN, Double.NaN)));
   }
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> ArcTan.of(Quantity.of(12, "m"), Quantity.of(4, "s")));
-    assertThrows(TensorRuntimeException.class, () -> ArcTan.of(Quantity.of(12, "m"), RealScalar.of(4)));
-    assertThrows(TensorRuntimeException.class, () -> ArcTan.of(RealScalar.of(12), Quantity.of(4, "s")));
+    assertThrows(Throw.class, () -> ArcTan.of(Quantity.of(12, "m"), Quantity.of(4, "s")));
+    assertThrows(Throw.class, () -> ArcTan.of(Quantity.of(12, "m"), RealScalar.of(4)));
+    assertThrows(Throw.class, () -> ArcTan.of(RealScalar.of(12), Quantity.of(4, "s")));
   }
 
   @Test
@@ -159,8 +159,8 @@ class ArcTanTest {
     Tensor tensor = Tensors.fromString("{0.3, 1/3, 3+4*I, 1.2+3.4*I}");
     for (Tensor _x : tensor) {
       Scalar x = (Scalar) _x;
-      assertThrows(TensorRuntimeException.class, () -> ArcTan.of(x, GaussScalar.of(1, 7)));
-      assertThrows(TensorRuntimeException.class, () -> ArcTan.of(GaussScalar.of(1, 7), x));
+      assertThrows(Throw.class, () -> ArcTan.of(x, GaussScalar.of(1, 7)));
+      assertThrows(Throw.class, () -> ArcTan.of(GaussScalar.of(1, 7), x));
     }
   }
 }

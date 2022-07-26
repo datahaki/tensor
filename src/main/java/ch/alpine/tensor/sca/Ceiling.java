@@ -6,7 +6,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
@@ -42,7 +42,7 @@ public enum Ceiling implements ScalarUnaryOperator {
 
   /** @param scalar instance if {@link RealScalar}
    * @return best integer scalar approximation to ceiling of scalar
-   * @throws TensorRuntimeException if scalar is Infinity, or NaN */
+   * @throws Throw if scalar is Infinity, or NaN */
   @Override
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof RoundingInterface)
@@ -51,7 +51,7 @@ public enum Ceiling implements ScalarUnaryOperator {
       MultiplexScalar multiplexScalar = (MultiplexScalar) scalar;
       return multiplexScalar.eachMap(FUNCTION);
     }
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** Examples:

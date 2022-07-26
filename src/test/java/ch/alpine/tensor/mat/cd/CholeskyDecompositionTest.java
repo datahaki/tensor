@@ -14,8 +14,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.TensorMap;
 import ch.alpine.tensor.alg.Transpose;
@@ -124,12 +124,12 @@ class CholeskyDecompositionTest {
 
   @Test
   void testFail1() {
-    assertThrows(TensorRuntimeException.class, () -> checkDecomp(Tensors.fromString("{{4, 2}, {1, 4}}")));
+    assertThrows(Throw.class, () -> checkDecomp(Tensors.fromString("{{4, 2}, {1, 4}}")));
   }
 
   @Test
   void testFail2() {
-    assertThrows(TensorRuntimeException.class, () -> checkDecomp(Tensors.fromString("{{4, I}, {I, 4}}")));
+    assertThrows(Throw.class, () -> checkDecomp(Tensors.fromString("{{4, I}, {I, 4}}")));
   }
 
   @Test
@@ -259,7 +259,7 @@ class CholeskyDecompositionTest {
     Tensor matrix = m1.dot(m2);
     assertEquals(MatrixRank.of(matrix), r);
     {
-      assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingCholesky(matrix));
+      assertThrows(Throw.class, () -> PseudoInverse.usingCholesky(matrix));
       Tensor ls1 = LeastSquares.of(matrix, br);
       Tensor ls2 = PseudoInverse.of(matrix).dot(br);
       Tolerance.CHOP.requireClose(ls1, ls2);
@@ -267,7 +267,7 @@ class CholeskyDecompositionTest {
     {
       Tensor m = Transpose.of(matrix);
       Tensor b = RandomVariate.of(distribution, _m);
-      assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingCholesky(m));
+      assertThrows(Throw.class, () -> PseudoInverse.usingCholesky(m));
       Tensor ls1 = LeastSquares.of(m, b);
       Tensor ls2 = PseudoInverse.of(m).dot(b);
       Tolerance.CHOP.requireClose(ls1, ls2);

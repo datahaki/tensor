@@ -6,9 +6,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
 import ch.alpine.tensor.qty.Quantity;
@@ -91,6 +91,6 @@ public class CategoricalDistribution extends EvaluatedDiscreteDistribution {
 
   @Override // from Object
   public String toString() {
-    return String.format("CategoricalDistribution[%s]", Tensors.message(pdf));
+    return MathematicaFormat.concise("CategoricalDistribution", pdf);
   }
 }

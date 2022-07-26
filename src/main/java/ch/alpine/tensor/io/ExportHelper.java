@@ -49,6 +49,7 @@ import ch.alpine.tensor.Tensor;
       break;
     case GIF:
     case PNG:
+    case TIFF:
       ImageIO.write(ImageFormat.of(tensor), extension.name(), outputStream);
       break;
     case TSV:

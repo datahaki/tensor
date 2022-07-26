@@ -4,7 +4,7 @@ package ch.alpine.tensor.api;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.lie.Quaternion;
 
@@ -24,7 +24,7 @@ public interface AbsInterface {
    * </pre>
    * 
    * @return non-negative distance from zero of this
-   * @throws TensorRuntimeException if absolute value is not defined
+   * @throws Throw if absolute value is not defined
    * in the case of {@link StringScalar} for instance */
   Scalar abs();
 

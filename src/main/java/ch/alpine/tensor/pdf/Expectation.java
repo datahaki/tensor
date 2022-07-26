@@ -20,7 +20,7 @@ import ch.alpine.tensor.sca.AbsSquared;
  * <a href="https://reference.wolfram.com/language/ref/Expectation.html">Expectation</a> */
 public enum Expectation {
   ;
-  /** @param scalarUnaryOperator
+  /** @param function
    * @param distribution
    * @return */
   public static <T extends Tensor> T of(Function<Scalar, T> function, Distribution distribution) {

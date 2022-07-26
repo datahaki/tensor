@@ -17,8 +17,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.chq.ExactTensorQ;
@@ -108,15 +108,15 @@ class InverseTest {
   void testDet0() {
     Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/re/det0-matlab.csv"); // det(matrix) == 0
     assertNotNull(matrix);
-    assertThrows(TensorRuntimeException.class, () -> Inverse.of(matrix));
-    assertThrows(TensorRuntimeException.class, () -> Inverse.of(N.DOUBLE.of(matrix)));
+    assertThrows(Throw.class, () -> Inverse.of(matrix));
+    assertThrows(Throw.class, () -> Inverse.of(N.DOUBLE.of(matrix)));
   }
 
   @Test
   void testZeroFail() {
     Tensor matrix = DiagonalMatrix.of(1, 2, 0, 3);
-    assertThrows(TensorRuntimeException.class, () -> Inverse.of(matrix));
-    assertThrows(TensorRuntimeException.class, () -> Inverse.of(matrix, Pivots.FIRST_NON_ZERO));
+    assertThrows(Throw.class, () -> Inverse.of(matrix));
+    assertThrows(Throw.class, () -> Inverse.of(matrix, Pivots.FIRST_NON_ZERO));
   }
 
   @Test

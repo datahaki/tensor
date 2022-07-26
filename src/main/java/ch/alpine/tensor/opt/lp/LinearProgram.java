@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
@@ -57,16 +57,19 @@ public class LinearProgram implements Serializable {
         c.length());
   }
 
-  public static enum Objective {
-    MIN, MAX;
+  public enum Objective {
+    MIN,
+    MAX;
 
     public Objective flip() {
       return values()[1 - ordinal()];
     }
   }
 
-  public static enum ConstraintType {
-    EQUALS, LESS_EQUALS, GREATER_EQUALS;
+  public enum ConstraintType {
+    EQUALS,
+    LESS_EQUALS,
+    GREATER_EQUALS;
 
     public ConstraintType flipInequality() {
       switch (this) {
@@ -80,8 +83,9 @@ public class LinearProgram implements Serializable {
     }
   }
 
-  public static enum Variables {
-    NON_NEGATIVE, UNRESTRICTED;
+  public enum Variables {
+    NON_NEGATIVE,
+    UNRESTRICTED
   }
 
   // ---
@@ -169,13 +173,13 @@ public class LinearProgram implements Serializable {
   public Tensor requireFeasible(Tensor x) {
     if (variables.equals(Variables.NON_NEGATIVE) && //
         !StaticHelper.isNonNegative(x))
-      throw TensorRuntimeException.of(c, A, b, x);
+      throw new Throw(c, A, b, x);
     if (constraintType.equals(ConstraintType.LESS_EQUALS) && //
         !StaticHelper.isNonNegative(b.subtract(A.dot(x))))
-      throw TensorRuntimeException.of(c, A, b, x);
+      throw new Throw(c, A, b, x);
     if (constraintType.equals(ConstraintType.GREATER_EQUALS) && //
         !StaticHelper.isNonNegative(A.dot(x).subtract(b)))
-      throw TensorRuntimeException.of(c, A, b, x);
+      throw new Throw(c, A, b, x);
     return x;
   }
 

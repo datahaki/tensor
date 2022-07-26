@@ -3,7 +3,6 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -100,7 +99,7 @@ class ResourceDataTest {
 
   @Test
   void testBufferedImageBmpNull() {
-    assertNull(ResourceData.bufferedImage("/doesnotexist.jpg"));
+    assertThrows(RuntimeException.class, () -> ResourceData.bufferedImage("/doesnotexist.jpg"));
   }
 
   @Test
@@ -112,28 +111,28 @@ class ResourceDataTest {
 
   @Test
   void testFailNull() {
-    assertNull(ResourceData.of("/ch/alpine/tensor/number/exists.fail"));
-    assertNull(ResourceData.of("/ch/alpine/tensor/number/exists.fail.bmp"));
+    assertThrows(RuntimeException.class, () -> ResourceData.of("/ch/alpine/tensor/number/exists.fail"));
+    assertThrows(RuntimeException.class, () -> ResourceData.of("/ch/alpine/tensor/number/exists.fail.bmp"));
   }
 
   @Test
   void testObjectNull() {
-    assertNull(ResourceData.object("/ch/alpine/tensor/number/exists.fail"));
+    assertThrows(RuntimeException.class, () -> ResourceData.object("/ch/alpine/tensor/number/exists.fail"));
   }
 
   @Test
   void testPropertiesFailNull() {
-    assertNull(ResourceData.properties("/ch/alpine/tensor/number/exists.properties"));
+    assertThrows(RuntimeException.class, () -> ResourceData.properties("/ch/alpine/tensor/number/exists.properties"));
   }
 
   @Test
   void testUnknownExtension() {
-    assertNull(ResourceData.of("/ch/alpine/tensor/io/extension.unknown"));
+    assertThrows(RuntimeException.class, () -> ResourceData.of("/ch/alpine/tensor/io/extension.unknown"));
   }
 
   @Test
   void testCorruptContent() {
-    assertNull(ResourceData.of("/ch/alpine/tensor/io/corrupt.png"));
+    assertThrows(RuntimeException.class, () -> ResourceData.of("/ch/alpine/tensor/io/corrupt.png"));
   }
 
   @Test
@@ -144,7 +143,6 @@ class ResourceDataTest {
 
   @Test
   void testLinesNull() {
-    List<String> lines = ResourceData.lines("/ch/alpine/tensor/io/doesnotexist");
-    assertNull(lines);
+    assertThrows(RuntimeException.class, () -> ResourceData.lines("/ch/alpine/tensor/io/doesnotexist"));
   }
 }

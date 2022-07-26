@@ -30,4 +30,9 @@ public class PoissonWindow extends ParameterizedWindow {
   protected Scalar evaluate(Scalar x) {
     return Exp.FUNCTION.apply(Abs.FUNCTION.apply(x).multiply(n2a));
   }
+
+  @Override // from ParameterizedWindow
+  protected String title() {
+    return "PoissonWindow";
+  }
 }

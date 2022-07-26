@@ -21,7 +21,7 @@ public enum UpperEvaluation {
    * @param ps of length n
    * @param qs of length n
    * @param function mapping i-th element of sequence and j to matrix element (i, j)
-   * @param mapping from matrix element (i, j) to matrix element (j, i)
+   * @param flip mapping from matrix element (i, j) to matrix element (j, i)
    * @return matrix of size n x n */
   public static Tensor of(Tensor ps, Tensor qs, //
       BiFunction<Tensor, Tensor, Scalar> function, //

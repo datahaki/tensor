@@ -14,8 +14,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.GaussScalar;
@@ -36,12 +36,7 @@ class SortTest {
 
   @Test
   void testSortRows() {
-    Comparator<Tensor> comparator = new Comparator<>() {
-      @Override
-      public int compare(Tensor o1, Tensor o2) {
-        return Scalars.compare(o1.Get(0), o2.Get(0));
-      }
-    };
+    Comparator<Tensor> comparator = (o1, o2) -> Scalars.compare(o1.Get(0), o2.Get(0));
     Tensor a = Tensors.fromString("{{4, 1}, {2, 8}, {9, 0}, {3, 5}}");
     Tensor s = Sort.of(a, comparator);
     assertEquals(s, Tensors.fromString("{{2, 8}, {3, 5}, {4, 1}, {9, 0}}"));
@@ -59,12 +54,7 @@ class SortTest {
 
   @Test
   void testStringScalar() {
-    Comparator<GaussScalar> comparator = new Comparator<>() {
-      @Override
-      public int compare(GaussScalar o1, GaussScalar o2) {
-        return o1.prime().compareTo(o2.prime());
-      }
-    };
+    Comparator<GaussScalar> comparator = (o1, o2) -> o1.prime().compareTo(o2.prime());
     Scalar qs1 = GaussScalar.of(-3, 7);
     Scalar qs2 = GaussScalar.of(-3, 17);
     Tensor vec = Tensors.of(qs2, qs1);
@@ -86,7 +76,7 @@ class SortTest {
     Tensor vector = Tensors.of( //
         Quantity.of(0, "m"), Quantity.of(9, "m"), //
         Quantity.of(-3, "m"), Quantity.of(0, "s"), RealScalar.ZERO);
-    assertThrows(TensorRuntimeException.class, () -> Sort.of(vector));
+    assertThrows(Throw.class, () -> Sort.of(vector));
   }
 
   @Test
@@ -124,7 +114,7 @@ class SortTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Sort.of(RealScalar.of(3.12)));
+    assertThrows(Throw.class, () -> Sort.of(RealScalar.of(3.12)));
   }
 
   @Test

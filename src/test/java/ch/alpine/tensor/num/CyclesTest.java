@@ -11,15 +11,33 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 
 class CyclesTest {
   @Test
+  void testZeroAllowed() throws ClassNotFoundException, IOException {
+    Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{0}}")));
+    assertEquals(cycles.min(), -1);
+    assertEquals(cycles.max(), -1);
+    assertEquals(cycles.length(), 0);
+  }
+
+  @Test
+  void testZeroOne() throws ClassNotFoundException, IOException {
+    Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{0, 1}}")));
+    assertEquals(cycles.min(), 0);
+    assertEquals(cycles.max(), 1);
+    assertEquals(cycles.length(), 2);
+  }
+
+  @Test
   void testSingleton() throws ClassNotFoundException, IOException {
     Cycles cycles = Serialization.copy(Cycles.of(Tensors.fromString("{{5, 9}, {7}, {}}")));
     assertEquals(cycles.toTensor(), Tensors.of(Tensors.vector(5, 9)));
+    assertEquals(cycles.min(), 5);
+    assertEquals(cycles.max(), 9);
   }
 
   @Test
@@ -93,23 +111,23 @@ class CyclesTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Cycles.of(Tensors.fromString("{3}")));
+    assertThrows(Throw.class, () -> Cycles.of(Tensors.fromString("{3}")));
   }
 
   @Test
   void testDuplicateFail() {
-    assertThrows(TensorRuntimeException.class, () -> Cycles.of(Tensors.fromString("{{5, 5}, {3}, {2, 2, 2}}")));
+    assertThrows(Throw.class, () -> Cycles.of(Tensors.fromString("{{5, 5}, {3}, {2, 2, 2}}")));
   }
 
   @Test
   void testNegativeFail() {
-    assertThrows(TensorRuntimeException.class, () -> Cycles.of(Tensors.fromString("{{-3}}")));
-    assertThrows(TensorRuntimeException.class, () -> Cycles.of(Tensors.fromString("{{3, -0.1}}")));
+    assertThrows(Throw.class, () -> Cycles.of(Tensors.fromString("{{-3}}")));
+    assertThrows(Throw.class, () -> Cycles.of(Tensors.fromString("{{3, -0.1}}")));
   }
 
   @Test
   void testPowerFail() {
     Cycles cycles = Cycles.of(Tensors.fromString("{{1, 20}, {4, 10, 19, 6, 18}, {5, 9}, {7, 14, 13}}"));
-    assertThrows(TensorRuntimeException.class, () -> cycles.power(Pi.HALF));
+    assertThrows(Throw.class, () -> cycles.power(Pi.HALF));
   }
 }

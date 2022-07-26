@@ -2,11 +2,9 @@
 package ch.alpine.tensor.itp;
 
 import java.io.Serializable;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.alg.Transpose;
@@ -17,11 +15,7 @@ import ch.alpine.tensor.mat.re.LinearSolve;
 /** BSplineInterpolation defines a parametric curve that interpolates
  * the given control points at integer values.
  * 
- * <p>The input to {@link #get(Tensor)} is required to be of the form
- * <pre>
- * get({x_0, i_1, ..., i_n})
- * </pre>
- * where x_0 is a real number, and i_1, ..., i_n are integers. */
+ * <p>The input to {@link #get(Tensor)} is required to be non-empty. */
 public class BSplineInterpolation extends AbstractInterpolation implements Serializable {
   /** @param degree of b-spline basis functions: 1 for linear, 2 for quadratic, etc.
    * @param control points with at least one element
@@ -47,19 +41,21 @@ public class BSplineInterpolation extends AbstractInterpolation implements Seria
   }
 
   // ---
+  private final int degree;
   private final ScalarTensorFunction scalarTensorFunction;
 
   private BSplineInterpolation(int degree, Tensor control) {
+    this.degree = degree;
     scalarTensorFunction = BSplineFunctionString.of(degree, solve(degree, control));
   }
 
   @Override // from Interpolation
   public Tensor get(Tensor index) {
-    return at(index.Get(0)).get(index.stream() //
-        .skip(1) //
-        .map(Scalar.class::cast) //
-        .map(Scalars::intValueExact) //
-        .collect(Collectors.toList()));
+    Tensor interp = at(index.Get(0));
+    // TODO TENSOR IMPL can be improved by truncating data to a neighborhood
+    return index.length() == 1 //
+        ? interp
+        : of(degree, interp).get(Tensor.of(index.stream().skip(1)));
   }
 
   @Override // from Interpolation

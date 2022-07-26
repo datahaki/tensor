@@ -17,8 +17,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.fft.FourierMatrix;
@@ -28,6 +28,7 @@ import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
+import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -179,12 +180,13 @@ class MatrixPowerTest {
   @Test
   void testHermitian() {
     Tensor matrix = Tensors.fromString("{{0, I}, {-I, 0}}");
-    MatrixPower.ofHermitian(matrix, RealScalar.of(2.3));
+    Tensor hermitian = MatrixPower.ofHermitian(matrix, RealScalar.of(2.3));
+    SquareMatrixQ.require(hermitian);
   }
 
   @Test
   void testNonSymmetricFail() {
-    assertThrows(TensorRuntimeException.class, () -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), RationalScalar.HALF));
+    assertThrows(Throw.class, () -> MatrixPower.ofSymmetric(RandomVariate.of(UniformDistribution.of(-2, 2), 4, 4), RationalScalar.HALF));
   }
 
   @Test

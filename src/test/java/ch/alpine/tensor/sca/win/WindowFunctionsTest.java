@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.Distribution;
@@ -24,9 +24,9 @@ import ch.alpine.tensor.sca.Chop;
 
 class WindowFunctionsTest {
   @ParameterizedTest
-  @EnumSource(WindowFunctions.class)
-  void testSimple(WindowFunctions windowFunction) {
-    ScalarUnaryOperator suo = windowFunction.get();
+  @EnumSource
+  void testSimple(WindowFunctions windowFunctions) {
+    ScalarUnaryOperator suo = windowFunctions.get();
     assertEquals(suo.apply(RealScalar.of(-0.500001)), RealScalar.ZERO);
     assertEquals(suo.apply(RealScalar.of(+0.500001)), RealScalar.ZERO);
     Chop._15.requireClose(suo.apply(RealScalar.ZERO), RealScalar.ONE);
@@ -34,37 +34,37 @@ class WindowFunctionsTest {
   }
 
   @ParameterizedTest
-  @EnumSource(WindowFunctions.class)
-  void testSerializable(WindowFunctions windowFunction) throws ClassNotFoundException, IOException {
-    Serialization.copy(windowFunction.get());
+  @EnumSource
+  void testSerializable(WindowFunctions windowFunctions) throws ClassNotFoundException, IOException {
+    Serialization.copy(windowFunctions.get());
   }
 
   @ParameterizedTest
-  @EnumSource(WindowFunctions.class)
-  void testSymmetry(WindowFunctions windowFunction) {
+  @EnumSource
+  void testSymmetry(WindowFunctions windowFunctions) {
     Distribution distribution = UniformDistribution.of(-0.6, 0.6);
     for (int count = 0; count < 10; ++count) {
       Scalar x = RandomVariate.of(distribution);
-      Chop._15.requireClose(windowFunction.get().apply(x), windowFunction.get().apply(x.negate()));
+      Chop._15.requireClose(windowFunctions.get().apply(x), windowFunctions.get().apply(x.negate()));
     }
   }
 
   @ParameterizedTest
-  @EnumSource(WindowFunctions.class)
-  void testInsideFail(WindowFunctions windowFunction) {
-    assertThrows(TensorRuntimeException.class, () -> windowFunction.get().apply(Quantity.of(0.1, "s")));
+  @EnumSource
+  void testInsideFail(WindowFunctions windowFunctions) {
+    assertThrows(Throw.class, () -> windowFunctions.get().apply(Quantity.of(0.1, "s")));
   }
 
   @ParameterizedTest
-  @EnumSource(WindowFunctions.class)
-  void testOustideFail(WindowFunctions windowFunction) {
-    assertThrows(TensorRuntimeException.class, () -> windowFunction.get().apply(Quantity.of(1, "s")));
+  @EnumSource
+  void testOustideFail(WindowFunctions windowFunctions) {
+    assertThrows(Throw.class, () -> windowFunctions.get().apply(Quantity.of(1, "s")));
   }
 
   @ParameterizedTest
-  @EnumSource(WindowFunctions.class)
-  void testComplexFail(WindowFunctions windowFunction) {
+  @EnumSource
+  void testComplexFail(WindowFunctions windowFunctions) {
     Scalar x = ComplexScalar.of(0.1, 0.2);
-    assertThrows(Exception.class, () -> windowFunction.get().apply(x));
+    assertThrows(Exception.class, () -> windowFunctions.get().apply(x));
   }
 }

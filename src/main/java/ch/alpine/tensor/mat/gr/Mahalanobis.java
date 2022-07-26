@@ -7,7 +7,7 @@ import java.util.Objects;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.mat.ConjugateTranspose;
 import ch.alpine.tensor.mat.PositiveDefiniteMatrixQ;
@@ -118,6 +118,6 @@ public final class Mahalanobis implements InfluenceMatrix, Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("Mahalanobis[%s]", Tensors.message(design));
+    return MathematicaFormat.concise("Mahalanobis", design);
   }
 }

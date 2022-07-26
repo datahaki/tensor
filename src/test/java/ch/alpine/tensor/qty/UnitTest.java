@@ -22,7 +22,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.MergeIllegal;
 import ch.alpine.tensor.num.GaussScalar;
 
@@ -30,7 +30,7 @@ class UnitTest {
   public static Scalar requireNonZero(Scalar scalar) {
     if (scalar instanceof Quantity || //
         Scalars.isZero(scalar))
-      throw TensorRuntimeException.of(scalar);
+      throw new Throw(scalar);
     return scalar;
   }
 
@@ -98,7 +98,7 @@ class UnitTest {
   void testMultiplyFail() {
     Unit kg1 = Unit.of("kg");
     Scalar q = Quantity.of(3, "m");
-    assertThrows(TensorRuntimeException.class, () -> kg1.multiply(q));
+    assertThrows(Throw.class, () -> kg1.multiply(q));
   }
 
   @Test
@@ -113,14 +113,14 @@ class UnitTest {
     map.put("some", GaussScalar.of(1, 7));
     unit(map);
     map.put("zero", GaussScalar.of(0, 7));
-    assertThrows(TensorRuntimeException.class, () -> unit(map));
+    assertThrows(Throw.class, () -> unit(map));
   }
 
   @Test
   void testQuantityExponentFail() {
     Map<String, Scalar> map = new HashMap<>();
     map.put("some", Quantity.of(1, "r"));
-    assertThrows(TensorRuntimeException.class, () -> unit(map));
+    assertThrows(Throw.class, () -> unit(map));
   }
 
   // https://tinyurl.com/y44sj2et

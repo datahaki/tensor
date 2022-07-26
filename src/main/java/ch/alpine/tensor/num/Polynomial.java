@@ -15,6 +15,7 @@ import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.alg.VectorQ;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.fft.FullConvolve;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.itp.InterpolatingPolynomial;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.VandermondeMatrix;
@@ -132,10 +133,6 @@ public class Polynomial extends HornerScheme {
    * <li>verification of polynomial reproduction by Hermite subdivision schemes
    * <ul>
    * 
-   * @param coeffs of polynomial
-   * @return evaluation of first derivative of polynomial with given coefficients
-   * @throws Exception if input is not a vector
-   * 
    * Hint: ordering of coefficients is <em>reversed</em> compared to
    * MATLAB::polyval, MATLAB::polyfit, etc. !
    * 
@@ -151,9 +148,7 @@ public class Polynomial extends HornerScheme {
    * {0.27[K^-1*bar], 0.0[K^-2*bar]}
    * in order to preserve the units of the domain.
    * 
-   * @param coeffs
-   * @return coefficients of polynomial that is the derivative of the polynomial defined by given coeffs
-   * @throws Exception if given coeffs is not a vector */
+   * @return polynomial that is the derivative of this polynomial */
   public Polynomial derivative() {
     int length = coeffs.length();
     if (length == 2) {
@@ -271,6 +266,6 @@ public class Polynomial extends HornerScheme {
 
   @Override // from Object
   public String toString() {
-    return String.format("Polynomial[%s]", coeffs);
+    return MathematicaFormat.concise("Polynomial", coeffs);
   }
 }

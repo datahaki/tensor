@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.alg;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class Dot {
 
   @PackageTestAccess
   Dot(Tensor... tensors) {
-    List<Node> list = Stream.of(tensors) //
+    List<Node> list = Arrays.stream(tensors) //
         .map(tensor -> new Node(tensor, Dimensions.of(tensor))) //
         .collect(Collectors.toList());
     for (int index = 0; index < list.size() && 1 < list.size();) {

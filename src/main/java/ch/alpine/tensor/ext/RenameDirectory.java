@@ -8,12 +8,8 @@ import java.io.File;
 public enum RenameDirectory {
   ;
   /** @param origin existing directory
-   * @param target directory that will be created
-   * @throws Exception if origin is not an existing directory
-   * @throws Exception if target already exists
-   * @throws Exception if parent directory of target cannot be created
-   * @throws Exception if origin cannot be renamed to target */
-  public static void of(File origin, File target) throws Exception {
+   * @param target directory that will be created */
+  public static void of(File origin, File target) {
     if (!origin.isDirectory())
       throw new IllegalArgumentException("does not exist: " + origin);
     if (target.exists())

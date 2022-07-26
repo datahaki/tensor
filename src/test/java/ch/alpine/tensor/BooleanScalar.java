@@ -41,7 +41,7 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
   @Override // from Scalar
   public Scalar reciprocal() {
     if (!value)
-      throw TensorRuntimeException.of(this);
+      throw new Throw(this);
     return this;
   }
 
@@ -69,7 +69,7 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
       BooleanScalar booleanScalar = (BooleanScalar) scalar;
       return of(Boolean.logicalAnd(value, booleanScalar.value));
     }
-    throw TensorRuntimeException.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from AbstractScalar
@@ -78,7 +78,7 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
       BooleanScalar booleanScalar = (BooleanScalar) scalar;
       return of(Boolean.logicalXor(value, booleanScalar.value));
     }
-    throw TensorRuntimeException.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from Comparable
@@ -87,7 +87,7 @@ import ch.alpine.tensor.sca.pow.SqrtInterface;
       BooleanScalar booleanScalar = (BooleanScalar) scalar;
       return Boolean.compare(value, booleanScalar.value);
     }
-    throw TensorRuntimeException.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from SqrtInterface

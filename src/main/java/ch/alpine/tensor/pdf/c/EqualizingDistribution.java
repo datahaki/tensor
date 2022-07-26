@@ -9,6 +9,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.itp.LinearBinaryAverage;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.Expectation;
@@ -79,6 +80,6 @@ public class EqualizingDistribution implements UnivariateDistribution, Serializa
 
   @Override // from Object
   public String toString() {
-    return String.format("EqualizingDistribution[%s]", categoricalDistribution);
+    return MathematicaFormat.concise("EqualizingDistribution", categoricalDistribution);
   }
 }

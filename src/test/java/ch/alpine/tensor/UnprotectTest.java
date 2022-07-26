@@ -98,7 +98,7 @@ class UnprotectTest {
   void testDimension1Hint() {
     Tensor tensor = Tensors.fromString("{{0, 2, 3}, {0, 2, 3, 5}, {{}}}");
     assertEquals(Unprotect.dimension1Hint(tensor), 3);
-    assertThrows(TensorRuntimeException.class, () -> Unprotect.dimension1(tensor));
+    assertThrows(Throw.class, () -> Unprotect.dimension1(tensor));
   }
 
   @Test
@@ -164,12 +164,12 @@ class UnprotectTest {
   void testDimension1Fail() {
     Tensor unstruct = Tensors.fromString("{{-1, 0, 1, 2}, {3, 4, 5}}");
     assertEquals(unstruct.length(), 2);
-    assertThrows(TensorRuntimeException.class, () -> Unprotect.dimension1(unstruct));
+    assertThrows(Throw.class, () -> Unprotect.dimension1(unstruct));
   }
 
   @Test
   void testDimension1HintFail() {
-    assertThrows(TensorRuntimeException.class, () -> Unprotect.dimension1(RealScalar.ONE));
-    assertThrows(TensorRuntimeException.class, () -> Unprotect.dimension1Hint(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Unprotect.dimension1(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Unprotect.dimension1Hint(RealScalar.ONE));
   }
 }

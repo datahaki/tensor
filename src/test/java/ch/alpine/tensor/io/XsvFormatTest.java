@@ -58,7 +58,7 @@ class XsvFormatTest {
   }
 
   @ParameterizedTest
-  @EnumSource(XsvFormat.class)
+  @EnumSource
   void testVector(XsvFormat xsvFormat) {
     Tensor r = Tensors.fromString("{123, 456}");
     List<String> list = xsvFormat.of(r).collect(Collectors.toList());
@@ -67,7 +67,7 @@ class XsvFormatTest {
   }
 
   @ParameterizedTest
-  @EnumSource(XsvFormat.class)
+  @EnumSource
   void testScalar(XsvFormat xsvFormat) {
     Tensor r = Scalars.fromString("123");
     List<String> list = xsvFormat.of(r).collect(Collectors.toList());

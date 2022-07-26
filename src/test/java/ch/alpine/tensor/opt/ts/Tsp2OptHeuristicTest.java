@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.mat.HilbertMatrix;
@@ -56,6 +56,6 @@ class Tsp2OptHeuristicTest {
 
   @Test
   void testFail() {
-    assertThrows(TensorRuntimeException.class, () -> new Tsp2OptHeuristic(HilbertMatrix.of(2, 3), new Random(1)));
+    assertThrows(Throw.class, () -> new Tsp2OptHeuristic(HilbertMatrix.of(2, 3), new Random(1)));
   }
 }

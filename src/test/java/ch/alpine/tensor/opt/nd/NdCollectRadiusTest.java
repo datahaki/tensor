@@ -18,8 +18,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
@@ -68,7 +68,7 @@ class NdCollectRadiusTest {
   }
 
   @ParameterizedTest
-  @EnumSource(NdCenters.class)
+  @EnumSource
   void testEmpty(NdCenters ndCenters) {
     NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2, 4.3));
     Scalar radius = RealScalar.of(4);
@@ -84,6 +84,6 @@ class NdCollectRadiusTest {
   @Test
   void testNonPositiveFail() {
     NdCenterInterface ndCenterInterface = NdCenters.VECTOR_INFINITY_NORM.apply(Array.zeros(2));
-    assertThrows(TensorRuntimeException.class, () -> new NdCollectRadius<>(ndCenterInterface, RealScalar.ONE.negate()));
+    assertThrows(Throw.class, () -> new NdCollectRadius<>(ndCenterInterface, RealScalar.ONE.negate()));
   }
 }

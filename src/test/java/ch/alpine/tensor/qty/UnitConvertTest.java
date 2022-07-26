@@ -14,7 +14,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -120,6 +120,14 @@ class UnitConvertTest {
   }
 
   @Test
+  void testSome() {
+    Scalar scalar = Quantity.of(3, "deg");
+    Scalar degree = UnitConvert.SI().to("deg").apply(scalar);
+    ExactScalarQ.require(degree);
+    assertEquals(scalar, degree);
+  }
+
+  @Test
   void testNaNToPerc() {
     Scalar scalar = UnitConvert.SI().to("%").apply(DoubleScalar.INDETERMINATE);
     assertEquals(scalar.toString(), Quantity.of(DoubleScalar.INDETERMINATE, "%").toString());
@@ -128,11 +136,17 @@ class UnitConvertTest {
   }
 
   @Test
+  void test_kW_over_W() {
+    Scalar scalar = Quantity.of(1, "kW*W^-1");
+    assertEquals(UnitSystem.SI().apply(scalar), RealScalar.of(1000));
+  }
+
+  @Test
   void testFail() {
     Scalar mass = Quantity.of(200, "g"); // gram
     Scalar a = Quantity.of(981, "cm*s^-2");
     Scalar force = mass.multiply(a);
-    assertThrows(TensorRuntimeException.class, () -> UnitConvert.SI().to(Unit.of("m")).apply(force));
+    assertThrows(Throw.class, () -> UnitConvert.SI().to(Unit.of("m")).apply(force));
   }
 
   @Test

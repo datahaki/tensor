@@ -4,15 +4,10 @@ package ch.alpine.tensor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-import ch.alpine.tensor.alg.Dimensions;
-import ch.alpine.tensor.alg.Numel;
 import ch.alpine.tensor.alg.Outer;
 import ch.alpine.tensor.io.StringScalar;
 
@@ -41,7 +36,7 @@ public enum Tensors {
   /** @param tensors array
    * @return concatenation of copies of given {@link Tensor}s or {@link Scalar}s */
   public static Tensor of(Tensor... tensors) {
-    return Tensor.of(Stream.of(tensors).map(Tensor::copy));
+    return Tensor.of(Arrays.stream(tensors).map(Tensor::copy));
   }
 
   /** Hint: function does not check scalar arguments for null
@@ -49,7 +44,7 @@ public enum Tensors {
    * @param scalars array
    * @return vector of references to given {@link Scalar}s */
   public static Tensor of(Scalar... scalars) {
-    return Tensor.of(Stream.of(scalars));
+    return Tensor.of(Arrays.stream(scalars));
   }
 
   /** Example:
@@ -60,7 +55,7 @@ public enum Tensors {
    * @param numbers array
    * @return vector of numbers as {@link RealScalar}s */
   public static Tensor vector(Number... numbers) {
-    return Tensor.of(Stream.of(numbers).map(RealScalar::of));
+    return Tensor.of(Arrays.stream(numbers).map(RealScalar::of));
   }
 
   /** @param list
@@ -113,37 +108,37 @@ public enum Tensors {
   /** @param data
    * @return matrix with dimensions and {@link Scalar} entries as array data */
   public static Tensor matrix(Scalar[][] data) {
-    return Tensor.of(Stream.of(data).map(Tensors::of));
+    return Tensor.of(Arrays.stream(data).map(Tensors::of));
   }
 
   /** @param data
    * @return matrix with dimensions and {@link RealScalar} entries */
   public static Tensor matrix(Number[][] data) {
-    return Tensor.of(Stream.of(data).map(Tensors::vector));
+    return Tensor.of(Arrays.stream(data).map(Tensors::vector));
   }
 
   /** @param data
    * @return matrix with dimensions and {@link RationalScalar} entries as array data */
   public static Tensor matrixInt(int[][] data) {
-    return Tensor.of(Stream.of(data).map(Tensors::vectorInt));
+    return Tensor.of(Arrays.stream(data).map(Tensors::vectorInt));
   }
 
   /** @param data
    * @return matrix with dimensions and {@link RationalScalar} entries as array data */
   public static Tensor matrixLong(long[][] data) {
-    return Tensor.of(Stream.of(data).map(Tensors::vectorLong));
+    return Tensor.of(Arrays.stream(data).map(Tensors::vectorLong));
   }
 
   /** @param values
    * @return tensor of {@link DoubleScalar} with given values */
   public static Tensor matrixFloat(float[][] values) {
-    return Tensor.of(Stream.of(values).map(Tensors::vectorFloat));
+    return Tensor.of(Arrays.stream(values).map(Tensors::vectorFloat));
   }
 
   /** @param data
    * @return matrix with dimensions and {@link DoubleScalar} entries as array data */
   public static Tensor matrixDouble(double[][] data) {
-    return Tensor.of(Stream.of(data).map(Tensors::vectorDouble));
+    return Tensor.of(Arrays.stream(data).map(Tensors::vectorDouble));
   }
 
   /** Example:
@@ -196,36 +191,5 @@ public enum Tensors {
   /** @return singleton instance of unmodifiable empty tensor */
   public static Tensor unmodifiableEmpty() {
     return UNMODIFIABLE_EMPTY;
-  }
-
-  // ---
-  private static final int MAX_NUMEL = 12;
-  private static final int MAX_LENGTH = 64;
-
-  /** @param tensors
-   * @return compact, possibly abbreviated expressions of given tensors */
-  public static String message(Tensor... tensors) {
-    return Stream.of(tensors).map(Tensors::format).collect(Collectors.joining("; "));
-  }
-
-  private static String format(Tensor tensor) {
-    if (Objects.isNull(tensor))
-      return "null";
-    return Numel.of(tensor) <= MAX_NUMEL //
-        ? formatContent(tensor)
-        : "T" + Dimensions.of(tensor);
-  }
-
-  /** function causes out of memory exception for large tensors
-   * and therefore should only be invoked for small tensors.
-   * 
-   * @param tensor
-   * @return */
-  private static String formatContent(Tensor tensor) {
-    String string = tensor.toString();
-    int length = string.length();
-    return MAX_LENGTH < length //
-        ? "T" + Dimensions.of(tensor) + "=" + string.substring(0, MAX_LENGTH) + " ..."
-        : string;
   }
 }

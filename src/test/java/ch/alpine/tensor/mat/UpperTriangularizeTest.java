@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.Distribution;
@@ -98,7 +98,7 @@ class UpperTriangularizeTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> UpperTriangularize.of(RealScalar.ONE, 0));
+    assertThrows(Throw.class, () -> UpperTriangularize.of(RealScalar.ONE, 0));
   }
 
   @Test

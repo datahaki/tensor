@@ -20,8 +20,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.Pi;
@@ -71,7 +71,7 @@ class ChopTest {
   @Test
   void testRequireNonZero() {
     assertEquals(Chop._06.requireNonZero(Pi.TWO), Pi.TWO);
-    assertThrows(TensorRuntimeException.class, () -> Chop._06.requireNonZero(RealScalar.of(1e-10)));
+    assertThrows(Throw.class, () -> Chop._06.requireNonZero(RealScalar.of(1e-10)));
   }
 
   @Test
@@ -136,7 +136,7 @@ class ChopTest {
   @Test
   void testRequireCloseScalar() {
     Chop._06.requireClose(RealScalar.of(2), RealScalar.of(2.000000001));
-    assertThrows(TensorRuntimeException.class, () -> Chop._06.requireClose(RealScalar.of(2), RealScalar.of(2.1)));
+    assertThrows(Throw.class, () -> Chop._06.requireClose(RealScalar.of(2), RealScalar.of(2.1)));
   }
 
   @Test
@@ -157,7 +157,7 @@ class ChopTest {
     try {
       Chop._40.requireClose(b1, b2);
     } catch (Exception exception) {
-      assertEquals(exception.getMessage(), "3; 4; -1");
+      assertEquals(exception.getMessage(), "Throw[3, 4, -1]");
     }
   }
 
@@ -165,15 +165,15 @@ class ChopTest {
   void testRequireZero() {
     Chop._04.requireZero(RealScalar.of(1e-8));
     Chop._04.requireAllZero(RealScalar.of(1e-8));
-    assertThrows(TensorRuntimeException.class, () -> Chop._04.requireZero(RealScalar.of(1e-2)));
-    assertThrows(TensorRuntimeException.class, () -> Chop._04.requireAllZero(RealScalar.of(1e-2)));
+    assertThrows(Throw.class, () -> Chop._04.requireZero(RealScalar.of(1e-2)));
+    assertThrows(Throw.class, () -> Chop._04.requireAllZero(RealScalar.of(1e-2)));
   }
 
   @Test
   void testRequireAllZero() {
     Tensor tensor = Tensors.vector(0, 0, 0, 1e-5);
     Chop._04.requireAllZero(tensor);
-    assertThrows(TensorRuntimeException.class, () -> Chop._06.requireAllZero(tensor));
+    assertThrows(Throw.class, () -> Chop._06.requireAllZero(tensor));
   }
 
   @Test

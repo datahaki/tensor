@@ -48,12 +48,12 @@ import java.util.regex.Pattern;
           if (c == ADD || c == SUBTRACT) {
             if (index == 0 || chars[index - 1] != 'E')
               plusMinus.add(index);
-          } else
-            if (c == MULTIPLY)
-              times = index;
-            else
-              if (c == DIVIDE)
-                divide = index;
+          } else //
+          if (c == MULTIPLY)
+            times = index;
+          else //
+          if (c == DIVIDE)
+            divide = index;
         }
         if (c == CLOSING_BRACKET)
           --level;

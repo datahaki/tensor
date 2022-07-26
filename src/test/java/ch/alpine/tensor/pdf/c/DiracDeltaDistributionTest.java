@@ -71,6 +71,7 @@ class DiracDeltaDistributionTest {
     assertTrue(Scalars.isZero(pdf.at(d2)));
     CDF cdf = CDF.of(distribution);
     assertEquals(cdf.p_lessThan(d2), RealScalar.ONE);
+    assertEquals(distribution.toString(), "DiracDeltaDistribution[2022-11-13T10:12]");
   }
 
   @Test

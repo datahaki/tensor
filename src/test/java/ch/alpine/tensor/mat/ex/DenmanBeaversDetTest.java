@@ -50,8 +50,8 @@ class DenmanBeaversDetTest {
 
   @SuppressWarnings("unused")
   @Test
-  void testFail() throws IOException {
-    Tensor matrix = ResourceData.of("/mat/dbd_fail.csv");
+  void testFail() {
+    Tensor matrix = ResourceData.of("/ch/alpine/tensor/mat/ex/dbd_fail.csv");
     try {
       new DenmanBeaversDet(matrix, Tolerance.CHOP);
     } catch (Exception exception) {

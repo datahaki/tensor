@@ -8,7 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.lie.Quaternion;
@@ -37,7 +37,7 @@ public enum Sign implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof SignInterface)
       return ((SignInterface) scalar).sign();
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor
@@ -93,7 +93,7 @@ public enum Sign implements ScalarUnaryOperator {
   public static Scalar requirePositive(Scalar scalar) {
     if (isPositive(scalar))
       return scalar;
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** Remark: Functionality inspired by {@link Objects#requireNonNull(Object)}
@@ -104,6 +104,6 @@ public enum Sign implements ScalarUnaryOperator {
   public static Scalar requirePositiveOrZero(Scalar scalar) {
     if (isPositiveOrZero(scalar))
       return scalar;
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 }

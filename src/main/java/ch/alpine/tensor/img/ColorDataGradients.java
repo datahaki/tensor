@@ -1,6 +1,8 @@
 // code by jph
 package ch.alpine.tensor.img;
 
+import java.util.Optional;
+
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.io.ResourceData;
@@ -55,6 +57,8 @@ public enum ColorDataGradients implements ColorDataGradient {
   TEMPERATURE_LIGHT,
   /** blue to red, symmetric */
   THERMOMETER,
+  /** brown red yellow green blue */
+  SOUTH_WEST,
   /** red-brown, white, cyan */
   BROWN_CYAN,
   /** pink, yellow, cyan */
@@ -102,12 +106,12 @@ public enum ColorDataGradients implements ColorDataGradient {
 
   private final ColorDataGradient colorDataGradient;
 
-  private ColorDataGradients(ColorDataGradient colorDataGradient) {
+  ColorDataGradients(ColorDataGradient colorDataGradient) {
     this.colorDataGradient = colorDataGradient;
   }
 
-  private ColorDataGradients() {
-    colorDataGradient = new LinearColorDataGradient(getTableRgba());
+  ColorDataGradients() {
+    colorDataGradient = new LinearColorDataGradient(_tableRgba());
   }
 
   @Override // from ColorDataGradient
@@ -120,9 +124,17 @@ public enum ColorDataGradients implements ColorDataGradient {
     return colorDataGradient.deriveWithOpacity(opacity);
   }
 
-  /** @return n x 4 table with entries between 0 and 255, or null
-   * if this color data gradient is not backed by such a table */
-  public Tensor getTableRgba() {
+  /** @return n x 4 table with entries between 0 and 255
+   * @throws Exception if this color data gradient is not backed by such a table */
+  private Tensor _tableRgba() {
     return ResourceData.of("/ch/alpine/tensor/img/colorscheme/" + name().toLowerCase() + ".csv");
+  }
+
+  /** @return n x 4 table with entries between 0 and 255, or empty
+   * if this color data gradient is not backed by such a table */
+  public Optional<Tensor> queryTableRgba() {
+    return colorDataGradient instanceof LinearColorDataGradient //
+        ? Optional.of(_tableRgba())
+        : Optional.empty();
   }
 }

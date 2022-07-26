@@ -7,12 +7,13 @@ import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.chq.ScalarQ;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.red.Times;
 
 /** The tensor library permits correlation with a kernel of lower rank than tensor.
@@ -57,7 +58,7 @@ public class FullCorrelate implements TensorUnaryOperator {
   public Tensor apply(Tensor tensor) {
     List<Integer> size = Dimensions.of(tensor);
     if (size.size() <= level)
-      throw TensorRuntimeException.of(kernel, tensor);
+      throw new Throw(kernel, tensor);
     List<Integer> dimensions = IntStream.range(0, mask.size()) //
         .map(index -> size.get(index) + mask.get(index) - 1) //
         .mapToObj(Integers::requirePositive) //
@@ -74,6 +75,6 @@ public class FullCorrelate implements TensorUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return String.format("FullCorrelate[%s]", mask);
+    return MathematicaFormat.concise("FullCorrelate", kernel);
   }
 }

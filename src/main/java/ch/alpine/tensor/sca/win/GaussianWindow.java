@@ -33,4 +33,9 @@ public class GaussianWindow extends ParameterizedWindow {
     Scalar ratio = x.divide(alpha);
     return Exp.FUNCTION.apply(ratio.multiply(ratio).multiply(HALF_NEGATE));
   }
+
+  @Override // from ParameterizedWindow
+  protected String title() {
+    return "GaussianWindow";
+  }
 }

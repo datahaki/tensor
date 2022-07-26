@@ -7,7 +7,7 @@ import java.util.Objects;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** Power exponentiates a given scalar by an exponent.
@@ -89,6 +89,6 @@ public enum Power {
   private static Scalar evaluate(Scalar scalar, Scalar exponent) {
     if (scalar instanceof PowerInterface)
       return ((PowerInterface) scalar).power(exponent);
-    throw TensorRuntimeException.of(scalar, exponent);
+    throw new Throw(scalar, exponent);
   }
 }

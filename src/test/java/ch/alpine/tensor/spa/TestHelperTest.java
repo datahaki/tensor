@@ -15,8 +15,8 @@ import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Unprotect;
 
 class TestHelperTest {
-  Tensor tensor = Tensors.fromString("{{1,0,3,0,0,7},{0,0,0,0,0,9},{0,2,0,0,4,0},{0,0,0,0,0,0},{0,0,0,8,0,1}}");
-  Tensor sparse = TestHelper.of(tensor);
+  final Tensor tensor = Tensors.fromString("{{1,0,3,0,0,7},{0,0,0,0,0,9},{0,2,0,0,4,0},{0,0,0,0,0,0},{0,0,0,8,0,1}}");
+  final Tensor sparse = TestHelper.of(tensor);
 
   private void _checkBlock(List<Integer> ofs, List<Integer> len) {
     Tensor block1 = tensor.block(ofs, len);

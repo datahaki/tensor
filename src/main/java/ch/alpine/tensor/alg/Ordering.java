@@ -24,7 +24,7 @@ public enum Ordering {
   DECREASING(tensor -> IntStream.range(0, tensor.length()).boxed() //
       .sorted((i, j) -> TensorComparator.INSTANCE.compare(tensor.get(j), tensor.get(i))));
 
-  private static interface OrderingInterface {
+  private interface OrderingInterface {
     /** @param tensor
      * @return stream of indices i[:] so that tensor[i[0]], tensor[i[1]], ... is ordered */
     Stream<Integer> stream(Tensor tensor);
@@ -33,7 +33,7 @@ public enum Ordering {
   // ---
   private final OrderingInterface orderingInterface;
 
-  private Ordering(OrderingInterface orderingInterface) {
+  Ordering(OrderingInterface orderingInterface) {
     this.orderingInterface = orderingInterface;
   }
 

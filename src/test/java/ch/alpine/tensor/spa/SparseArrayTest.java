@@ -15,8 +15,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
@@ -110,7 +110,7 @@ class SparseArrayTest {
     Tensor sparse = SparseArray.of(GaussScalar.of(0, 5), 5, 4, 8);
     assertThrows(UnsupportedOperationException.class, () -> sparse.unmodifiable());
     assertThrows(UnsupportedOperationException.class, () -> sparse.append(Array.zeros(4, 8)));
-    assertThrows(TensorRuntimeException.class, () -> sparse.map(RealScalar.ONE::add));
+    assertThrows(Throw.class, () -> sparse.map(RealScalar.ONE::add));
   }
 
   @Test
@@ -218,7 +218,7 @@ class SparseArrayTest {
     sparse.set(RealScalar.TWO::add, 1);
     assertEquals(sparse, Tensors.vector(2, 3, 4, 1, 1));
     assertInstanceOf(SparseArray.class, sparse);
-    assertThrows(TensorRuntimeException.class, () -> sparse.set(Tensors.vector(3), 2));
+    assertThrows(Throw.class, () -> sparse.set(Tensors.vector(3), 2));
   }
 
   @Test
@@ -322,8 +322,8 @@ class SparseArrayTest {
     Tensor sparse = TestHelper.of(tensor);
     sparse.set(Tensors.vector(1, 2, 3, 4, 5), 2);
     sparse.set(Array.zeros(5), 2);
-    assertThrows(TensorRuntimeException.class, () -> sparse.set(Array.zeros(5, 2), 2));
-    assertThrows(TensorRuntimeException.class, () -> sparse.set(Tensors.fromString("{1,2,{3},4,5}"), 2));
+    assertThrows(Throw.class, () -> sparse.set(Array.zeros(5, 2), 2));
+    assertThrows(Throw.class, () -> sparse.set(Tensors.fromString("{1,2,{3},4,5}"), 2));
   }
 
   @Test
@@ -366,7 +366,7 @@ class SparseArrayTest {
   @Test
   void testFallbackScalarFail() {
     assertEquals(SparseArray.of(Quantity.of(0, "A")), Quantity.of(0, "A"));
-    assertThrows(TensorRuntimeException.class, () -> SparseArray.of(Pi.VALUE));
+    assertThrows(Throw.class, () -> SparseArray.of(Pi.VALUE));
   }
 
   @Test

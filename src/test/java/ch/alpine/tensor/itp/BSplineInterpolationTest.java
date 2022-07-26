@@ -12,17 +12,22 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Rescale;
+import ch.alpine.tensor.alg.Reverse;
+import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.api.ScalarTensorFunction;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.chq.ExactTensorQ;
+import ch.alpine.tensor.img.ColorDataGradients;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
+import ch.alpine.tensor.sca.tri.Sin;
 
 class BSplineInterpolationTest {
   @Test
@@ -51,11 +56,10 @@ class BSplineInterpolationTest {
         Tensor vvalue = interpolation.get(Tensors.vector(3));
         assertEquals(vvalue, tensor.get(3));
       }
-      assertThrows(TensorRuntimeException.class, () -> interpolation.at(RealScalar.of(-0.1)));
-      assertThrows(TensorRuntimeException.class, () -> interpolation.at(RealScalar.of(9.1)));
+      assertThrows(Throw.class, () -> interpolation.at(RealScalar.of(-0.1)));
+      assertThrows(Throw.class, () -> interpolation.at(RealScalar.of(9.1)));
       interpolation.get(Tensors.vector(1));
       interpolation.get(Tensors.vector(1, 2));
-      assertThrows(TensorRuntimeException.class, () -> interpolation.get(Tensors.vector(1, 1.8)));
     }
   }
 
@@ -128,7 +132,18 @@ class BSplineInterpolationTest {
       ExactTensorQ.require(tensor);
     }
   }
-  // TODO TENSOR
-  // Table[Sin[j^2 + i], {i, 0, Pi, Pi/5}, {j, 0, Pi, Pi/5}];
-  // see ListDensityPlot help
+
+  @Test
+  void testListDensityPlot() {
+    Tensor d = Subdivide.of(0, Math.PI, 5);
+    Tensor matrix = Tensors.matrix((i, j) -> Sin.FUNCTION.apply(d.Get(j).multiply(d.Get(j)).add(d.Get(i))), 6, 6);
+    for (int degree = 0; degree < 5; ++degree) {
+      Interpolation interpolation = BSplineInterpolation.of(degree, matrix);
+      Tensor x = Subdivide.of(0, 5, 10);
+      Tensor y = Reverse.of(x);
+      Tensor eval = Tensors.matrix((i, j) -> interpolation.get( //
+          Tensors.of(y.Get(i), x.Get(j))), x.length(), x.length());
+      Rescale.of(eval).map(ColorDataGradients.SOUTH_WEST);
+    }
+  }
 }

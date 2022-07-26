@@ -9,7 +9,7 @@ import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.AbsSquared;
@@ -169,7 +169,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
       DateTimeScalar dateTimeScalar = (DateTimeScalar) scalar;
       return dateTimeScalar.add(this);
     }
-    throw TensorRuntimeException.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   // ---
@@ -190,7 +190,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
       if (unit.equals(quantity.unit()))
         return ArcTan.of(quantity.value(), value);
     }
-    throw TensorRuntimeException.of(this, x);
+    throw new Throw(this, x);
   }
 
   @Override // from ArgInterface
@@ -249,7 +249,7 @@ import ch.alpine.tensor.sca.tri.ArcTan;
       if (unit.equals(quantity.unit()))
         return Scalars.compare(value, quantity.value());
     }
-    throw TensorRuntimeException.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   // ---

@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.num.Pi;
@@ -37,7 +37,7 @@ class HodgeDualTest {
         product = TensorContract.of(product, 0, rank - index);
       return product.divide(Factorial.of(rank));
     }
-    throw TensorRuntimeException.of(tensor);
+    throw new Throw(tensor);
   }
 
   @Test
@@ -90,7 +90,7 @@ class HodgeDualTest {
 
   @Test
   void testScalar1() {
-    assertThrows(TensorRuntimeException.class, () -> HodgeDual.of(Tensors.vector(1, 2, 3), 0));
+    assertThrows(Throw.class, () -> HodgeDual.of(Tensors.vector(1, 2, 3), 0));
   }
 
   @Test
@@ -107,7 +107,7 @@ class HodgeDualTest {
   @Test
   void testEmpty() {
     assertTrue(new Dimensions(Tensors.empty()).isArray());
-    assertThrows(TensorRuntimeException.class, () -> HodgeDual.of(Tensors.empty(), 0));
+    assertThrows(Throw.class, () -> HodgeDual.of(Tensors.empty(), 0));
   }
 
   @Test
@@ -119,8 +119,8 @@ class HodgeDualTest {
   @Test
   void testNonArrayFail() {
     Tensor vector = Tensors.fromString("{{1, 2}, {3, 4, 5}}");
-    assertThrows(TensorRuntimeException.class, () -> HodgeDual.of(vector, 2));
-    assertThrows(TensorRuntimeException.class, () -> HodgeDual.of(vector, 3));
+    assertThrows(Throw.class, () -> HodgeDual.of(vector, 2));
+    assertThrows(Throw.class, () -> HodgeDual.of(vector, 3));
   }
 
   @Test

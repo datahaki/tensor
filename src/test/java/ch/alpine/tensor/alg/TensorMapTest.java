@@ -13,8 +13,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.io.ResourceData;
@@ -98,6 +98,6 @@ class TensorMapTest {
   @Test
   void testNegativeFail() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {4, 5, 6}}");
-    assertThrows(TensorRuntimeException.class, () -> TensorMap.of(Total::of, tensor, -1));
+    assertThrows(Throw.class, () -> TensorMap.of(Total::of, tensor, -1));
   }
 }

@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 
 /** utilities for {@link UnitSystem}s */
 public enum UnitSystems {
@@ -70,7 +70,7 @@ public enum UnitSystems {
       Scalar value = entry.getValue();
       if (map.containsKey(key)) {
         if (!map.get(key).equals(value))
-          throw TensorRuntimeException.of(map.get(key), value);
+          throw new Throw(map.get(key), value);
       } else
         map.put(key, value);
     }

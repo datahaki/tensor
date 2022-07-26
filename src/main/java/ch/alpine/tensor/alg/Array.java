@@ -3,7 +3,6 @@ package ch.alpine.tensor.alg;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
@@ -127,33 +126,41 @@ public enum Array {
   }
 
   // ---
-  /** traverses the indices of a hypothetical array of given dimensions and invokes
-   * the provided consumer with current index.
+  /** traverses the indices of a hypothetical array of given dimensions
    * 
-   * @param consumer maps given index to {@link Tensor}, or {@link Scalar}
+   * Example:
+   * Array.stream(2, 1, 3) gives the following lists of integers
+   * [0, 0, 0]
+   * [0, 0, 1]
+   * [0, 0, 2]
+   * [1, 0, 0]
+   * [1, 0, 1]
+   * [1, 0, 2]
+   * 
    * @param dimensions with non-negative entries
+   * @return stream of unmodifiable lists of integers
    * @throws Exception if any dimension is negative */
   @SafeVarargs
-  public static void forEach(Consumer<List<Integer>> consumer, int... dimensions) {
-    forEach(consumer, Integers.asList(dimensions));
+  public static Stream<List<Integer>> stream(int... dimensions) {
+    return stream(Integers.asList(dimensions));
   }
 
-  /** @param consumer maps given index to {@link Tensor}, or {@link Scalar}
-   * @param dimensions with non-negative entries
+  /** @param dimensions with non-negative entries
+   * @return stream of unmodifiable lists of integers
    * @throws Exception if any dimension is negative */
-  public static void forEach(Consumer<List<Integer>> consumer, List<Integer> dimensions) {
+  public static Stream<List<Integer>> stream(List<Integer> dimensions) {
     dimensions.forEach(Integers::requirePositiveOrZero);
-    forEach(consumer, 0, dimensions, new ArrayList<>(dimensions));
+    return recur(Stream.of(new int[dimensions.size()]), 0, dimensions) //
+        .map(int[]::clone) //
+        .map(Integers::asList);
   }
 
-  // helper function
-  private static void forEach(Consumer<List<Integer>> consumer, int level, List<Integer> dimensions, List<Integer> index) {
-    if (level == dimensions.size())
-      consumer.accept(index);
-    else
-      IntStream.range(0, dimensions.get(level)).forEach(count -> {
-        index.set(level, count);
-        forEach(consumer, level + 1, dimensions, index);
-      });
+  private static Stream<int[]> recur(Stream<int[]> stream, int level, List<Integer> dimensions) {
+    return level == dimensions.size() //
+        ? stream
+        : recur(stream.flatMap(array -> IntStream.range(0, dimensions.get(level)).mapToObj(i -> {
+          array[level] = i;
+          return array;
+        })), level + 1, dimensions);
   }
 }

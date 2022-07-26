@@ -5,7 +5,7 @@ package ch.alpine.tensor.ext;
  * <a href="https://reference.wolfram.com/language/ref/$UserName.html">$UserName</a> */
 public enum UserName {
   ;
-  private static final String user_name() {
+  private static String user_name() {
     try {
       return System.getProperty("user.name");
     } catch (Exception exception) { // security exception, null pointer

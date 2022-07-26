@@ -8,7 +8,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.UnitVector;
 import ch.alpine.tensor.io.ScalarArray;
@@ -54,12 +54,12 @@ import ch.alpine.tensor.sca.Abs;
               Scalars.lessEquals(g, DBL_EPSILON.multiply(Abs.FUNCTION.apply(diag(q))))) {
             H[p][q] = hpq.zero();
             H[q][p] = hpq.zero();
-          } else
-            if (Scalars.lessThan(tresh, apq))
-              eliminate(p, q);
+          } else //
+          if (Scalars.lessThan(tresh, apq))
+            eliminate(p, q);
         }
     }
-    throw TensorRuntimeException.of();
+    throw new Throw();
   }
 
   /** @param p
@@ -72,7 +72,7 @@ import ch.alpine.tensor.sca.Abs;
     return H[p][p];
   }
 
-  private final Scalar sumAbs_offDiagonal() {
+  private Scalar sumAbs_offDiagonal() {
     Scalar sum = H[0][0].zero(); // preserve unit
     for (int p = 0; p < n - 1; ++p)
       for (int q = p + 1; q < n; ++q)

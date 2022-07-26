@@ -3,7 +3,7 @@ package ch.alpine.tensor.chq;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.InexactScalarMarker;
 
 /** @see InexactScalarMarker
@@ -11,7 +11,7 @@ import ch.alpine.tensor.api.InexactScalarMarker;
 public enum ExactTensorQ {
   ;
   /** @param tensor
-   * @return true if all scalar entries in given tensor satisfy the predicate {@link ExactScalarQ#of(Tensor)} */
+   * @return true if all scalar entries in given tensor satisfy the predicate {@link ExactScalarQ#of(Scalar)} */
   public static boolean of(Tensor tensor) {
     return tensor.flatten(-1).map(Scalar.class::cast).allMatch(ExactScalarQ::of);
   }
@@ -22,6 +22,6 @@ public enum ExactTensorQ {
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;
-    throw TensorRuntimeException.of(tensor);
+    throw new Throw(tensor);
   }
 }

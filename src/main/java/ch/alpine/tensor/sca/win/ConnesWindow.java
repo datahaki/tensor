@@ -31,4 +31,9 @@ public class ConnesWindow extends ParameterizedWindow {
     Scalar xa2 = x_a.multiply(x_a);
     return RealScalar.ONE.add(xa2.multiply(N8)).add(xa2.multiply(xa2).multiply(_16));
   }
+
+  @Override // from ParameterizedWindow
+  protected String title() {
+    return "ConnesWindow";
+  }
 }

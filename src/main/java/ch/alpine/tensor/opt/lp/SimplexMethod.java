@@ -6,8 +6,8 @@ package ch.alpine.tensor.opt.lp;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.alg.Array;
@@ -67,7 +67,7 @@ import ch.alpine.tensor.sca.Sign;
     m = tab.length() - 1;
     n = Unprotect.dimension1Hint(tab) - 1;
     if (!StaticHelper.isInsideRange(ind, n) || ind.length() != m)
-      throw TensorRuntimeException.of(ind);
+      throw new Throw(ind);
     while (true) {
       /* the tests pass for "c = tab.get(m)" as well!? */
       Tensor c = tab.get(m).extract(0, n);
@@ -85,7 +85,7 @@ import ch.alpine.tensor.sca.Sign;
           if (i != p)
             tab.set(row -> LenientAdd.of(row, tab_p.multiply(row.Get(j).negate())), i);
       } else
-        /** "[...] if we have all c_j >= 0 in the tableau in the minimization
+        /* "[...] if we have all c_j >= 0 in the tableau in the minimization
          * problem, then the current value of z is optimum."
          * Reference:
          * "Linear and Integer Programming made Easy"

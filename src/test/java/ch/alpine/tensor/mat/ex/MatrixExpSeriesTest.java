@@ -7,13 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ConstantArray;
 
 class MatrixExpSeriesTest {
   @Test
   void testNaNFail() {
     Tensor matrix = ConstantArray.of(DoubleScalar.INDETERMINATE, 3, 3);
-    assertThrows(TensorRuntimeException.class, () -> MatrixExpSeries.FUNCTION.apply(matrix));
+    assertThrows(Throw.class, () -> MatrixExpSeries.FUNCTION.apply(matrix));
   }
 }

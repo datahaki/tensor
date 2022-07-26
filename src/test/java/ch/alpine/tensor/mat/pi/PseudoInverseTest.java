@@ -11,13 +11,12 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
@@ -33,13 +32,13 @@ import ch.alpine.tensor.mat.VandermondeMatrix;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.MatrixRank;
 import ch.alpine.tensor.num.GaussScalar;
+import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.pdf.d.DiscreteUniformDistribution;
 import ch.alpine.tensor.qty.Quantity;
-import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
@@ -178,12 +177,9 @@ class PseudoInverseTest {
 
   @Test
   void testComplexRectangular() {
-    Distribution distribution = NormalDistribution.standard(); // of(Quantity.of(0, "m"), Quantity.of(1, "m"));
     for (int m = 3; m < 9; ++m) {
       int n = m + 3;
-      Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
-          RandomVariate.of(distribution, n, m), //
-          RandomVariate.of(distribution, n, m));
+      Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, n, m);
       Tensor piqr = PseudoInverse.usingQR(matrix);
       Tolerance.CHOP.requireClose(Dot.of(piqr, matrix), IdentityMatrix.of(m));
       Tensor pbic = PseudoInverse.of(matrix);
@@ -227,8 +223,8 @@ class PseudoInverseTest {
     Tensor matrix = m1.dot(m2);
     assertEquals(MatrixRank.of(matrix), r);
     {
-      assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingQR(matrix));
-      assertThrows(TensorRuntimeException.class, () -> LeastSquares.usingQR(matrix, br));
+      assertThrows(Throw.class, () -> PseudoInverse.usingQR(matrix));
+      assertThrows(Throw.class, () -> LeastSquares.usingQR(matrix, br));
       Tensor ls1 = LeastSquares.of(matrix, br);
       Tensor ls2 = PseudoInverse.of(matrix).dot(br);
       Tolerance.CHOP.requireClose(ls1, ls2);
@@ -236,8 +232,8 @@ class PseudoInverseTest {
     {
       Tensor m = Transpose.of(matrix);
       Tensor b = RandomVariate.of(distribution, 4);
-      assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingQR(m));
-      assertThrows(TensorRuntimeException.class, () -> LeastSquares.usingQR(m, b));
+      assertThrows(Throw.class, () -> PseudoInverse.usingQR(m));
+      assertThrows(Throw.class, () -> LeastSquares.usingQR(m, b));
       Tensor ls1 = LeastSquares.of(m, b);
       Tensor ls2 = PseudoInverse.of(m).dot(b);
       Tolerance.CHOP.requireClose(ls1, ls2);
@@ -281,14 +277,14 @@ class PseudoInverseTest {
   @Test
   void testVectorFail() {
     Tensor tensor = Tensors.vector(1, 2, 3, 4);
-    assertThrows(TensorRuntimeException.class, () -> PseudoInverse.of(tensor));
-    assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingSvd(tensor));
+    assertThrows(Throw.class, () -> PseudoInverse.of(tensor));
+    assertThrows(Throw.class, () -> PseudoInverse.usingSvd(tensor));
   }
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> PseudoInverse.of(RealScalar.ONE));
-    assertThrows(TensorRuntimeException.class, () -> PseudoInverse.usingSvd(RealScalar.ONE));
+    assertThrows(Throw.class, () -> PseudoInverse.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> PseudoInverse.usingSvd(RealScalar.ONE));
   }
 
   @Test

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Dot;
@@ -102,7 +102,7 @@ class QRDecompositionImplTest {
       Tensor matrix = Dot.of(base, mult);
       QRDecompositionImpl qrDecompositionImpl = //
           new QRDecompositionImpl(matrix, IdentityMatrix.of(n), QRSignOperators.STABILITY);
-      assertThrows(TensorRuntimeException.class, () -> qrDecompositionImpl.pseudoInverse());
+      assertThrows(Throw.class, () -> qrDecompositionImpl.pseudoInverse());
     }
   }
 
@@ -121,7 +121,7 @@ class QRDecompositionImplTest {
     double thres = max.number().doubleValue() * 1e-12;
     Chop chop = Chop.below(thres);
     chop.requireAllZero(rs.stream().reduce(Min::of).get());
-    assertThrows(TensorRuntimeException.class, () -> qrDecomposition.pseudoInverse());
+    assertThrows(Throw.class, () -> qrDecomposition.pseudoInverse());
   }
 
   @Test

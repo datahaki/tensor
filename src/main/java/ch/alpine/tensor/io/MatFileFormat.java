@@ -13,5 +13,5 @@ package ch.alpine.tensor.io;
  * For export to MATLAB see {@link MatlabExport}.
  * There is no import from MATLAB built in the tensor library. */
 /* package */ enum MatFileFormat {
-  NOT_SUPPORTED;
+  NOT_SUPPORTED
 }

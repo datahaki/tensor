@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.alg.Range;
@@ -119,7 +119,7 @@ class BipartiteMatchingTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> BipartiteMatching.of(Pi.VALUE));
+    assertThrows(Throw.class, () -> BipartiteMatching.of(Pi.VALUE));
   }
 
   @Test

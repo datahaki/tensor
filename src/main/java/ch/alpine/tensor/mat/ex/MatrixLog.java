@@ -8,7 +8,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.lie.Symmetrize;
 import ch.alpine.tensor.mat.PositiveDefiniteMatrixQ;
@@ -75,7 +75,7 @@ public enum MatrixLog {
       matrix = denmanBeaversDet.sqrt();
       rem = matrix.subtract(id);
     }
-    throw TensorRuntimeException.of(matrix);
+    throw new Throw(matrix);
   }
 
   /** Hint: use {@link Symmetrize} on result for extra precision

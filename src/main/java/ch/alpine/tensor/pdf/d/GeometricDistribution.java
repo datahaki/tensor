@@ -6,7 +6,8 @@ import java.io.Serializable;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Ceiling;
 import ch.alpine.tensor.sca.Clips;
@@ -27,7 +28,7 @@ public class GeometricDistribution extends AbstractDiscreteDistribution implemen
     if (p.equals(RealScalar.ONE))
       return BinomialDistribution.of(0, p);
     if (Scalars.lessEquals(p, RealScalar.ZERO) || Scalars.lessEquals(RealScalar.ONE, p))
-      throw TensorRuntimeException.of(p);
+      throw new Throw(p);
     return new GeometricDistribution(p);
   }
 
@@ -95,6 +96,6 @@ public class GeometricDistribution extends AbstractDiscreteDistribution implemen
 
   @Override // from Object
   public String toString() {
-    return String.format("GeometricDistribution[%s]", p);
+    return MathematicaFormat.concise("GeometricDistribution", p);
   }
 }

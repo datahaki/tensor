@@ -1,11 +1,17 @@
 // code by jph
 package ch.alpine.tensor.io;
 
+import java.util.Arrays;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.alg.Dimensions;
+import ch.alpine.tensor.alg.Numel;
+import ch.alpine.tensor.spa.SparseArray;
 
 /** utility to exchange data with Wolfram Mathematica
  * 
@@ -33,16 +39,31 @@ import ch.alpine.tensor.Tensors;
  * </pre> */
 public enum MathematicaFormat {
   ;
+  private static final String OPENING_BRACKET_STRING = Character.toString(Tensor.OPENING_BRACKET);
+  private static final String CLOSING_BRACKET_STRING = Character.toString(Tensor.CLOSING_BRACKET);
+  public static final Collector<CharSequence, ?, String> EMBRACE = //
+      Collectors.joining(", ", OPENING_BRACKET_STRING, CLOSING_BRACKET_STRING);
+  // ---
   private static final String EXPONENT_JAVA = "E";
   private static final String EXPONENT_MATH = "*^";
+
+  private static String recur(Tensor tensor) {
+    if (tensor instanceof Scalar)
+      return tensor.toString();
+    if (tensor instanceof SparseArray) {
+      SparseArray sparseArray = (SparseArray) tensor;
+      return sparseArray.toString(1);
+    }
+    return tensor.stream().map(MathematicaFormat::recur).collect(EMBRACE);
+  }
 
   /** @param tensor
    * @return strings parsed by Mathematica as given tensor */
   public static Stream<String> of(Tensor tensor) {
-    String string = tensor.toString() //
+    return Arrays.stream(recur(tensor) //
         .replace(EXPONENT_JAVA, EXPONENT_MATH) //
-        .replace("}, {", "},\n{"); // <- introduce new line
-    return Stream.of(string.split("\n"));
+        .replace(", {", ",\n{") // <- introduce new line
+        .split("\n"));
   }
 
   /** @param stream of strings of Mathematica encoded tensor
@@ -58,6 +79,43 @@ public enum MathematicaFormat {
   private static String join(String string) {
     return string.endsWith("\\") //
         ? string.substring(0, string.length() - 1)
+        : string;
+  }
+
+  /** @param string non-null
+   * @param objects
+   * @return */
+  @SafeVarargs
+  public static String concise(String string, Object... objects) {
+    return Arrays.stream(objects) //
+        .map(object -> object instanceof Tensor //
+            ? MathematicaFormat.format((Tensor) object)
+            : String.valueOf(object)) //
+        .collect(Collectors.joining(", ", string.toString() + "[", "]"));
+  }
+
+  // ---
+  private static final int MAX_NUMEL = 12;
+  private static final int MAX_LENGTH = 64;
+
+  /** @param tensor non-null
+   * @return */
+  private static String format(Tensor tensor) {
+    return Numel.of(tensor) <= MAX_NUMEL //
+        ? formatContent(tensor)
+        : "T" + Dimensions.of(tensor);
+  }
+
+  /** function causes out of memory exception for large tensors
+   * and therefore should only be invoked for small tensors.
+   * 
+   * @param tensor
+   * @return */
+  private static String formatContent(Tensor tensor) {
+    String string = tensor.toString();
+    int length = string.length();
+    return MAX_LENGTH < length //
+        ? "T" + Dimensions.of(tensor) + "=" + string.substring(0, MAX_LENGTH) + " ..."
         : string;
   }
 }

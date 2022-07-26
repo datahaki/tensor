@@ -31,11 +31,11 @@ import java.util.TreeMap;
   private FactorInteger(BigInteger n) {
     if (n.equals(BigInteger.ZERO))
       map.put(BigInteger.ZERO, 1);
+    else //
+    if (n.equals(BigInteger.ONE))
+      map.put(BigInteger.ONE, 1);
     else
-      if (n.equals(BigInteger.ONE))
-        map.put(BigInteger.ONE, 1);
-      else
-        recur(n);
+      recur(n);
   }
 
   private void recur(BigInteger n) {
@@ -45,7 +45,7 @@ import java.util.TreeMap;
       BigInteger d = divisor(n);
       recur(d);
       n = n.divide(d);
-      if (BigInteger.ONE.compareTo(n) == -1) // is 1 < n ?
+      if (BigInteger.ONE.compareTo(n) < 0) // is 1 < n ?
         recur(n);
     }
   }
@@ -69,7 +69,7 @@ import java.util.TreeMap;
       if (i == k) {
         y = xi;
         k = 2 * k;
-        if (BigInteger.valueOf(k).compareTo(n) == +1)
+        if (BigInteger.valueOf(k).compareTo(n) > 0)
           xi = random(n);
       }
     }

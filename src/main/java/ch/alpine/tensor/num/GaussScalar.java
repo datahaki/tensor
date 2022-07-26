@@ -9,7 +9,7 @@ import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ConjugateInterface;
 import ch.alpine.tensor.api.RoundingInterface;
@@ -80,7 +80,7 @@ public class GaussScalar extends AbstractScalar implements //
           multiply(complexScalar.real()), //
           multiply(complexScalar.imag()));
     }
-    throw TensorRuntimeException.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from AbstractScalar
@@ -131,7 +131,7 @@ public class GaussScalar extends AbstractScalar implements //
   protected GaussScalar plus(Scalar scalar) {
     if (scalar instanceof GaussScalar)
       return in(value.add(requireCommonPrime((GaussScalar) scalar)), prime);
-    throw TensorRuntimeException.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   // ---
@@ -149,13 +149,13 @@ public class GaussScalar extends AbstractScalar implements //
   public int compareTo(Scalar scalar) {
     if (scalar instanceof GaussScalar)
       return value.compareTo(requireCommonPrime((GaussScalar) scalar));
-    throw TensorRuntimeException.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   private BigInteger requireCommonPrime(GaussScalar gaussScalar) {
     if (prime.equals(gaussScalar.prime))
       return gaussScalar.value;
-    throw TensorRuntimeException.of(this, gaussScalar);
+    throw new Throw(this, gaussScalar);
   }
 
   @Override // from ConjugateInterface
@@ -195,7 +195,7 @@ public class GaussScalar extends AbstractScalar implements //
     if (Objects.nonNull(gaussScalar))
       return gaussScalar;
     // examples of gauss scalars without sqrt: 2 mod 5, 3 mod 5, 6 mod 11, etc.
-    throw TensorRuntimeException.of(this); // sqrt of this does not exist
+    throw new Throw(this); // sqrt of this does not exist
   }
 
   // ---

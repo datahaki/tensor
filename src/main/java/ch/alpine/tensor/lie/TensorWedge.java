@@ -1,7 +1,7 @@
 // code by jph
 package ch.alpine.tensor.lie;
 
-import java.util.stream.Stream;
+import java.util.Arrays;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
@@ -48,7 +48,7 @@ public enum TensorWedge {
   /** @param tensors of any rank with dimensions [n, n, ..., n]
    * @return alternating tensor product of a and b */
   public static Tensor of(Tensor... tensors) {
-    Scalar scalar = Multinomial.of(Stream.of(tensors).mapToInt(TensorRank::of).toArray());
+    Scalar scalar = Multinomial.of(Arrays.stream(tensors).mapToInt(TensorRank::of).toArray());
     return of(TensorProduct.of(tensors)).multiply(scalar);
   }
 }

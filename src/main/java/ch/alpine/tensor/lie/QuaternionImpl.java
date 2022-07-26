@@ -14,8 +14,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Append;
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.chq.ExactScalarQ;
@@ -96,7 +96,7 @@ import ch.alpine.tensor.sca.tri.Sin;
     }
     if (scalar instanceof RealScalar)
       return new QuaternionImpl(w.add(scalar), xyz);
-    throw TensorRuntimeException.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from Scalar

@@ -15,7 +15,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.jet.DateTimeScalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -138,8 +138,8 @@ class GumbelDistributionTest {
 
   @Test
   void testBetaNonPositiveFail() {
-    assertThrows(TensorRuntimeException.class, () -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0)));
-    assertThrows(TensorRuntimeException.class, () -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(-1)));
+    assertThrows(Throw.class, () -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(0)));
+    assertThrows(Throw.class, () -> GumbelDistribution.of(RealScalar.of(3), RealScalar.of(-1)));
   }
 
   @Test
@@ -150,8 +150,8 @@ class GumbelDistributionTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> GumbelDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
-    assertThrows(TensorRuntimeException.class, () -> GumbelDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
-    assertThrows(TensorRuntimeException.class, () -> GumbelDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
+    assertThrows(Throw.class, () -> GumbelDistribution.of(Quantity.of(3, "m"), Quantity.of(2, "km")));
+    assertThrows(Throw.class, () -> GumbelDistribution.of(Quantity.of(0, "s"), Quantity.of(2, "m")));
+    assertThrows(Throw.class, () -> GumbelDistribution.of(Quantity.of(0, ""), Quantity.of(2, "m")));
   }
 }

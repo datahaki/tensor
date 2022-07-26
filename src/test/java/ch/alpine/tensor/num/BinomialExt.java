@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.Cache;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.red.Min;
 import ch.alpine.tensor.sca.Sign;
 
@@ -59,6 +60,6 @@ import ch.alpine.tensor.sca.Sign;
 
   @Override // from Object
   public String toString() {
-    return String.format("%s[%d]", getClass().getSimpleName(), n);
+    return MathematicaFormat.concise("BinomialExt", n);
   }
 }

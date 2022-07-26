@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
@@ -82,7 +82,7 @@ class PadRightTest {
   @Test
   void testFail() {
     TensorUnaryOperator tuo = PadRight.zeros(2, 2, 6);
-    assertThrows(TensorRuntimeException.class, () -> tuo.apply(Tensors.fromString("{{1}, {2}, {4, 5}}")));
+    assertThrows(Throw.class, () -> tuo.apply(Tensors.fromString("{{1}, {2}, {4, 5}}")));
   }
 
   @Test

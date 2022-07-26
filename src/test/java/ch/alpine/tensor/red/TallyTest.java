@@ -14,8 +14,8 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 
 class TallyTest {
   @Test
@@ -70,6 +70,6 @@ class TallyTest {
 
   @Test
   void testFail() {
-    assertThrows(TensorRuntimeException.class, () -> Tally.of(RealScalar.of(3.1234)));
+    assertThrows(Throw.class, () -> Tally.of(RealScalar.of(3.1234)));
   }
 }

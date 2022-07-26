@@ -15,8 +15,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
@@ -239,8 +239,6 @@ class BinomialDistributionTest {
     Distribution d2 = BinomialDistribution.of(3, RationalScalar.of(1, 2));
     Distribution d3 = BinomialDistribution.of(3, RationalScalar.of(1, 3));
     Distribution d4 = NormalDistribution.of(1, 2);
-    // assertEquals(d1, d2);
-    // assertEquals(d1.hashCode(), d2.hashCode());
     assertFalse(d1.equals(d3));
     assertFalse(d1.hashCode() == d3.hashCode());
     assertFalse(d1.equals(d4));
@@ -314,9 +312,9 @@ class BinomialDistributionTest {
   @Test
   void testFailP() {
     BinomialDistribution.of(3, RealScalar.ZERO);
-    assertThrows(TensorRuntimeException.class, () -> BinomialDistribution.of(10, RationalScalar.of(-1, 3)));
+    assertThrows(Throw.class, () -> BinomialDistribution.of(10, RationalScalar.of(-1, 3)));
     BinomialDistribution.of(3, RealScalar.ONE);
-    assertThrows(TensorRuntimeException.class, () -> BinomialDistribution.of(10, RationalScalar.of(4, 3)));
-    assertThrows(TensorRuntimeException.class, () -> BinomialDistribution.of(10, Quantity.of(0.2, "s")));
+    assertThrows(Throw.class, () -> BinomialDistribution.of(10, RationalScalar.of(4, 3)));
+    assertThrows(Throw.class, () -> BinomialDistribution.of(10, Quantity.of(0.2, "s")));
   }
 }

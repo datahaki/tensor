@@ -11,7 +11,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
@@ -49,6 +49,6 @@ class ErfcTest {
 
   @Test
   void testFail() {
-    assertThrows(TensorRuntimeException.class, () -> ErfcRestricted.FUNCTION.apply(GaussScalar.of(6, 7)));
+    assertThrows(Throw.class, () -> ErfcRestricted.FUNCTION.apply(GaussScalar.of(6, 7)));
   }
 }

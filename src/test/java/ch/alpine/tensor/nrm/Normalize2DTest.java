@@ -10,8 +10,8 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.sca.Chop;
 
@@ -53,18 +53,18 @@ class Normalize2DTest {
   void testFail() {
     Tensor vector = Tensors.vectorDouble(0.0, 0.0);
     NormalizeUnlessZero.with(Vector2Norm::of).apply(vector);
-    assertThrows(TensorRuntimeException.class, () -> Vector2Norm.NORMALIZE.apply(vector));
+    assertThrows(Throw.class, () -> Vector2Norm.NORMALIZE.apply(vector));
   }
 
   @Test
   void testNumberQFail1() {
-    assertThrows(TensorRuntimeException.class, () -> unlessZero(DoubleScalar.POSITIVE_INFINITY, RealScalar.ZERO));
-    assertThrows(TensorRuntimeException.class, () -> unlessZero(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
+    assertThrows(Throw.class, () -> unlessZero(DoubleScalar.POSITIVE_INFINITY, RealScalar.ZERO));
+    assertThrows(Throw.class, () -> unlessZero(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
   }
 
   @Test
   void testNumberQFail2() {
-    assertThrows(TensorRuntimeException.class, () -> unlessZero(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));
-    assertThrows(TensorRuntimeException.class, () -> unlessZero(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
+    assertThrows(Throw.class, () -> unlessZero(RealScalar.ZERO, DoubleScalar.POSITIVE_INFINITY));
+    assertThrows(Throw.class, () -> unlessZero(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
   }
 }

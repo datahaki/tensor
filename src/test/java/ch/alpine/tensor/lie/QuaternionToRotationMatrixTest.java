@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.OrthogonalMatrixQ;
 import ch.alpine.tensor.mat.re.Det;
@@ -70,7 +70,7 @@ class QuaternionToRotationMatrixTest {
 
   @Test
   void testFail() {
-    assertThrows(TensorRuntimeException.class, () -> QuaternionToRotationMatrix.of(Quaternion.of(0, 0, 0, 0)));
-    assertThrows(TensorRuntimeException.class, () -> QuaternionToRotationMatrix.of(Quaternion.of(0.0, 0.0, 0.0, 0.0)));
+    assertThrows(Throw.class, () -> QuaternionToRotationMatrix.of(Quaternion.of(0, 0, 0, 0)));
+    assertThrows(Throw.class, () -> QuaternionToRotationMatrix.of(Quaternion.of(0.0, 0.0, 0.0, 0.0)));
   }
 }

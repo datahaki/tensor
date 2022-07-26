@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.red;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
@@ -26,7 +27,7 @@ public enum KroneckerDelta {
    * @return RealScalar.ONE if there are no two objects are distinct,
    * otherwise RealScalar.ZERO */
   public static Scalar of(Object... objects) {
-    return of(Stream.of(objects));
+    return of(Arrays.stream(objects));
   }
 
   /** @param stream

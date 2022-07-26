@@ -12,8 +12,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.io.Pretty;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -83,17 +83,17 @@ class IntervalTest {
 
   @Test
   void testReciprocalFail() {
-    assertThrows(TensorRuntimeException.class, () -> Interval.of(-2.3, 5.6).reciprocal());
+    assertThrows(Throw.class, () -> Interval.of(-2.3, 5.6).reciprocal());
   }
 
   @Test
   void testPowerFail() {
-    assertThrows(TensorRuntimeException.class, () -> Power.of(Interval.of(-2.3, 5.6), 2.3));
+    assertThrows(Throw.class, () -> Power.of(Interval.of(-2.3, 5.6), 2.3));
   }
 
   @Test
   void testNumberFail() {
-    assertThrows(TensorRuntimeException.class, () -> Interval.of(-2.3, 5.6).number());
+    assertThrows(Throw.class, () -> Interval.of(-2.3, 5.6).number());
   }
 
   @Test

@@ -18,8 +18,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Accumulate;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.alg.UnitVector;
@@ -121,7 +121,7 @@ class PolynomialTest {
     Scalar t = Quantity.of(2, "kg");
     Scalar scalar = polynomial.apply(t);
     assertEquals(scalar, c0);
-    assertThrows(TensorRuntimeException.class, () -> polynomial.apply(GaussScalar.of(2, 7)));
+    assertThrows(Throw.class, () -> polynomial.apply(GaussScalar.of(2, 7)));
     Polynomial derivative = polynomial.derivative();
     derivative.apply(t);
   }
@@ -271,7 +271,7 @@ class PolynomialTest {
 
   @Test
   void testMatrixFail() {
-    assertThrows(TensorRuntimeException.class, () -> Polynomial.of(HilbertMatrix.of(3)));
+    assertThrows(Throw.class, () -> Polynomial.of(HilbertMatrix.of(3)));
   }
 
   @Test
@@ -296,7 +296,7 @@ class PolynomialTest {
     assertEquals(derivative.coeffs(), Tensors.fromString("{0.27[K^-1*bar], 0.0[K^-2*bar]}"));
     // ScalarUnaryOperator derivative = Polynomial.of(coeffs_d1);
     assertEquals(QuantityUnit.of(derivative.apply(Quantity.of(3, "K"))), Unit.of("bar*K^-1"));
-    assertThrows(TensorRuntimeException.class, () -> derivative.apply(Quantity.of(3, "bar")));
+    assertThrows(Throw.class, () -> derivative.apply(Quantity.of(3, "bar")));
   }
 
   @Test
@@ -308,14 +308,14 @@ class PolynomialTest {
     {
       assertEquals(d1.coeffs(), Tensors.fromString("{2[m*s^-1], 0[m*s^-2]}"));
       ExactTensorQ.require(d1.coeffs());
-      assertThrows(TensorRuntimeException.class, () -> d1.apply(Quantity.of(4, "A")));
+      assertThrows(Throw.class, () -> d1.apply(Quantity.of(4, "A")));
       assertEquals(d1.apply(Quantity.of(4, "s")), Quantity.of(2, "m*s^-1"));
     }
     Polynomial d2 = d1.derivative();
     {
       assertEquals(d2.coeffs(), Tensors.fromString("{0[m*s^-2], 0[m*s^-3]}"));
       ExactTensorQ.require(d2.coeffs());
-      assertThrows(TensorRuntimeException.class, () -> d2.apply(Quantity.of(4, "A")));
+      assertThrows(Throw.class, () -> d2.apply(Quantity.of(4, "A")));
       assertEquals(d2.apply(Quantity.of(4, "s")), Quantity.of(0, "m*s^-2"));
     }
   }
@@ -332,14 +332,14 @@ class PolynomialTest {
     {
       assertEquals(d1.coeffs(), Tensors.of(b, b.zero()));
       ExactTensorQ.require(d1.coeffs());
-      assertThrows(TensorRuntimeException.class, () -> d1.apply(Quantity.of(4, "A")));
+      assertThrows(Throw.class, () -> d1.apply(Quantity.of(4, "A")));
       assertEquals(d1.apply(x), b);
     }
     Polynomial d2 = d1.derivative();
     {
       assertEquals(d2.coeffs(), Tensors.of(b.zero(), b.zero()));
       ExactTensorQ.require(d2.coeffs());
-      assertThrows(TensorRuntimeException.class, () -> d2.apply(Quantity.of(4, "A")));
+      assertThrows(Throw.class, () -> d2.apply(Quantity.of(4, "A")));
       assertEquals(d2.apply(x), b.zero());
     }
   }
@@ -353,14 +353,14 @@ class PolynomialTest {
     {
       assertEquals(d1.coeffs(), Tensors.fromString("{2[m*s^-2], 0[m*s^-4]}"));
       ExactTensorQ.require(d1.coeffs());
-      assertThrows(TensorRuntimeException.class, () -> d1.apply(Quantity.of(4, "A")));
+      assertThrows(Throw.class, () -> d1.apply(Quantity.of(4, "A")));
       assertEquals(d1.apply(Quantity.of(4, "s^2")), Quantity.of(2, "m*s^-2"));
     }
     Polynomial d2 = d1.derivative();
     {
       assertEquals(d2.coeffs(), Tensors.fromString("{0[m*s^-4], 0[m*s^-6]}"));
       ExactTensorQ.require(d2.coeffs());
-      assertThrows(TensorRuntimeException.class, () -> d2.apply(Quantity.of(4, "A")));
+      assertThrows(Throw.class, () -> d2.apply(Quantity.of(4, "A")));
       assertEquals(d2.apply(Quantity.of(4, "s^2")), Quantity.of(0, "m*s^-4"));
     }
   }
@@ -483,12 +483,12 @@ class PolynomialTest {
       if (1 == f0.coeffs().length()) {
         Polynomial f1 = f0.derivative();
         assertEquals(f0.coeffs().length(), f1.coeffs().length());
-      } else
-        if (1 < f0.coeffs().length()) {
-          Polynomial f1 = f0.derivative();
-          if (f0.coeffs().length() != 2)
-            assertEquals(f0.coeffs().length(), f1.coeffs().length() + 1);
-        }
+      } else //
+      if (1 < f0.coeffs().length()) {
+        Polynomial f1 = f0.derivative();
+        if (f0.coeffs().length() != 2)
+          assertEquals(f0.coeffs().length(), f1.coeffs().length() + 1);
+      }
       ScalarUnaryOperator x_to_y = Polynomial.fit(x, y, degree);
       Scalar pressure = x_to_y.apply(Quantity.of(103, "K"));
       pascal.apply(pressure);
@@ -528,16 +528,16 @@ class PolynomialTest {
 
   @Test
   void testDerivativeScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Polynomial.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Polynomial.of(RealScalar.ONE));
   }
 
   @Test
   void testDerivativeMatrixFail() {
-    assertThrows(TensorRuntimeException.class, () -> Polynomial.of(HilbertMatrix.of(4, 5)));
+    assertThrows(Throw.class, () -> Polynomial.of(HilbertMatrix.of(4, 5)));
   }
 
   @Test
   void testUnstructuredFail() {
-    assertThrows(TensorRuntimeException.class, () -> Polynomial.of(Tensors.fromString("{2, {1}}")));
+    assertThrows(Throw.class, () -> Polynomial.of(Tensors.fromString("{2, {1}}")));
   }
 }

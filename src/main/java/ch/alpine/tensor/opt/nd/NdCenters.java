@@ -54,5 +54,5 @@ public enum NdCenters implements Function<Tensor, NdCenterInterface> {
         }
       };
     }
-  };
+  }
 }

@@ -25,7 +25,7 @@ public enum MathematicaForm {
       Collectors.joining(", ", OPENING_BRACKET_STRING, CLOSING_BRACKET_STRING);
   private final Map<String, String> map = new HashMap<>();
 
-  private MathematicaForm() {
+  MathematicaForm() {
     Set<String> block = ResourceData.properties("/ch/alpine/tensor/qty/si.properties").stringPropertyNames();
     Properties properties = ResourceData.properties("/ch/alpine/tensor/qty/names.properties");
     for (String key : properties.stringPropertyNames()) {

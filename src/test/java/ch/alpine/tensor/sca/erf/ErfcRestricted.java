@@ -4,8 +4,8 @@ package ch.alpine.tensor.sca.erf;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.sca.Abs;
@@ -33,6 +33,6 @@ import ch.alpine.tensor.sca.Abs;
   public Scalar apply(Scalar scalar) {
     if (Scalars.lessThan(Abs.of(scalar), DoubleScalar.of(0.7))) // error < 10^-9
       return POLYNOMIAL.apply(scalar);
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 }

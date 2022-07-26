@@ -18,8 +18,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
@@ -156,11 +156,11 @@ class RationalizeTest {
 
   @Test
   void testFailPositive() {
-    assertThrows(TensorRuntimeException.class, () -> Rationalize.withDenominatorLessEquals(RealScalar.ZERO));
+    assertThrows(Throw.class, () -> Rationalize.withDenominatorLessEquals(RealScalar.ZERO));
   }
 
   @Test
   void testFailIntegerQ() {
-    assertThrows(TensorRuntimeException.class, () -> Rationalize.withDenominatorLessEquals(RealScalar.of(1.23)));
+    assertThrows(Throw.class, () -> Rationalize.withDenominatorLessEquals(RealScalar.of(1.23)));
   }
 }

@@ -159,7 +159,7 @@ public interface Tensor extends Iterable<Tensor> {
    * 
    * @param tensor of which a copy replaces the existing element(s) at given index of this instance
    * @param index non-empty list
-   * @throws Execption if index is empty
+   * @throws Exception if index is empty
    * @throws Exception if this instance is unmodifiable
    * @see #set(Tensor, int...) */
   void set(Tensor tensor, List<Integer> index);
@@ -204,7 +204,8 @@ public interface Tensor extends Iterable<Tensor> {
    * @return this
    * @throws Exception if given tensor is null
    * @throws Exception if this tensor is an instance of {@link Scalar}
-   * @throws Exception if this tensor is {@link #unmodifiable()} */
+   * @throws Exception if this tensor is {@link #unmodifiable()}
+   * @see Tensors#reserve(int) */
   Tensor append(Tensor tensor);
 
   /** function is <em>not</em> Mathematica compliant:

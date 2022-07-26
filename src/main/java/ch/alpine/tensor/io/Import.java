@@ -53,7 +53,7 @@ public enum Import {
   }
 
   /** import function for Java objects that implement {@link Serializable}
-   * and were stored with {@link Export#object(File, Serializable)}.
+   * and were stored with {@link Export#object(File, Object)}.
    * 
    * @param file
    * @return object prior to serialization, non-null
@@ -65,8 +65,16 @@ public enum Import {
     return Objects.requireNonNull(ObjectFormat.parse(Files.readAllBytes(file.toPath())));
   }
 
+  /** @param file in UTF-8 encoding
+   * @return instance of {@link Properties} with key-value pairs specified in given file
+   * @throws FileNotFoundException
+   * @throws IOException */
+  public static Properties properties(File file) throws FileNotFoundException, IOException {
+    return properties(file, StaticHelper.CHARSET);
+  }
+
   /** @param file
-   * @param charset for instance Charset.forName("UTF-8")
+   * @param charset for instance StandardCharsets.UTF_8
    * @return instance of {@link Properties} with key-value pairs specified in given file
    * @throws FileNotFoundException
    * @throws IOException */

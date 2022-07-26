@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.QuantityTensor;
 import ch.alpine.tensor.qty.Unit;
@@ -118,19 +118,19 @@ class RescaleTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Rescale.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> Rescale.of(RealScalar.ONE));
   }
 
   @Test
   void testQuantityMixedFail() {
     Tensor vector = Tensors.of(Quantity.of(1, "s"), Quantity.of(2, "m"));
-    assertThrows(TensorRuntimeException.class, () -> Rescale.of(vector));
+    assertThrows(Throw.class, () -> Rescale.of(vector));
   }
 
   @Test
   void testQuantityZeroFail() {
     Tensor vector = Tensors.of(Quantity.of(0, ""), Quantity.of(0, "m"));
-    assertThrows(TensorRuntimeException.class, () -> Rescale.of(vector));
+    assertThrows(Throw.class, () -> Rescale.of(vector));
   }
 
   @Test

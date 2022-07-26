@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
@@ -91,15 +91,15 @@ class DagumDistributionTest {
 
   @Test
   void testFailNonPositive() {
-    assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(0, 2, 3));
-    assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(1, 0, 3));
-    assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(1, 2, 0));
+    assertThrows(Throw.class, () -> DagumDistribution.of(0, 2, 3));
+    assertThrows(Throw.class, () -> DagumDistribution.of(1, 0, 3));
+    assertThrows(Throw.class, () -> DagumDistribution.of(1, 2, 0));
   }
 
   @Test
   void testFailNegative() {
-    assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(-1, 2, 3));
-    assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(1, -1, 3));
-    assertThrows(TensorRuntimeException.class, () -> DagumDistribution.of(1, 2, -1));
+    assertThrows(Throw.class, () -> DagumDistribution.of(-1, 2, 3));
+    assertThrows(Throw.class, () -> DagumDistribution.of(1, -1, 3));
+    assertThrows(Throw.class, () -> DagumDistribution.of(1, 2, -1));
   }
 }

@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dot;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.lie.LeviCivitaTensor;
@@ -44,16 +44,16 @@ class MatrixDotTransposeTest {
 
   @Test
   void testVectorFail() {
-    assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(Tensors.vector(2, 1), Tensors.vector(3, 7)));
-    assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(Tensors.vector(2, 1), HilbertMatrix.of(2, 3)));
+    assertThrows(Throw.class, () -> MatrixDotTranspose.of(Tensors.vector(2, 1), Tensors.vector(3, 7)));
+    assertThrows(Throw.class, () -> MatrixDotTranspose.of(Tensors.vector(2, 1), HilbertMatrix.of(2, 3)));
     assertThrows(IllegalArgumentException.class, () -> MatrixDotTranspose.of(HilbertMatrix.of(2), Tensors.vector(3, 7)));
   }
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(RealScalar.ONE, RealScalar.ONE));
-    assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(RealScalar.ONE, HilbertMatrix.of(2, 3)));
-    assertThrows(TensorRuntimeException.class, () -> MatrixDotTranspose.of(HilbertMatrix.of(2), RealScalar.ONE));
+    assertThrows(Throw.class, () -> MatrixDotTranspose.of(RealScalar.ONE, RealScalar.ONE));
+    assertThrows(Throw.class, () -> MatrixDotTranspose.of(RealScalar.ONE, HilbertMatrix.of(2, 3)));
+    assertThrows(Throw.class, () -> MatrixDotTranspose.of(HilbertMatrix.of(2), RealScalar.ONE));
   }
 
   @Test

@@ -9,6 +9,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.sca.Floor;
 
 /** A typical application of {@code LanczosInterpolation} is image resizing.
@@ -67,7 +68,7 @@ public class LanczosInterpolation extends AbstractInterpolation implements Seria
   }
 
   private Tensor flow(Tensor tensor, int count, Scalar value) {
-    return tensor.get(Math.min(Math.max(0, count), tensor.length() - 1)) //
+    return tensor.get(Integers.clip(0, tensor.length() - 1).applyAsInt(count)) //
         .multiply(lanczosKernel.apply(value.subtract(RealScalar.of(count))));
   }
 }

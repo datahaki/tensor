@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import ch.alpine.tensor.Scalar;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /** inspired by
  * <a href="https://reference.wolfram.com/language/ref/CompatibleUnitQ.html">CompatibleUnitQ</a> */
@@ -62,7 +63,7 @@ public class CompatibleUnitQ implements Serializable {
 
     @Override // from Object
     public String toString() {
-      return String.format("%s[%s]", CompatibleUnitQ.class.getSimpleName(), base);
+      return MathematicaFormat.concise("CompatibleUnitQ", base);
     }
   }
 }

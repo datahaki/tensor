@@ -33,6 +33,6 @@ public enum IntegerQ {
   public static Scalar require(Scalar scalar) {
     if (of(scalar))
       return scalar;
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 }

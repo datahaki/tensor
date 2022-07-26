@@ -9,6 +9,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Boole;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
@@ -19,7 +20,8 @@ import ch.alpine.tensor.sca.Clips;
  * https://en.wikipedia.org/wiki/Dirac_delta_function */
 public class DiracDeltaDistribution implements UnivariateDistribution, CentralMomentInterface, Serializable {
   /** @param value
-   * @return */
+   * @return distribution with entire concentration at given value, i.e.
+   * all random variates give the constant value */
   public static Distribution of(Scalar value) {
     return new DiracDeltaDistribution(Objects.requireNonNull(value));
   }
@@ -72,5 +74,10 @@ public class DiracDeltaDistribution implements UnivariateDistribution, CentralMo
   @Override // from CentralMomentInterface
   public Scalar centralMoment(int order) {
     return Boole.of(order == 0);
+  }
+
+  @Override // from Object
+  public String toString() {
+    return MathematicaFormat.concise("DiracDeltaDistribution", value);
   }
 }

@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.lie.Cross;
 import ch.alpine.tensor.sca.Chop;
@@ -33,7 +33,7 @@ class SymmetricMatrixQTest {
     Tensor matrix = Tensors.fromString("{{1, 2.000000000000001}, {2, 1}}");
     SymmetricMatrixQ.require(matrix);
     assertFalse(SymmetricMatrixQ.of(matrix, Chop.NONE));
-    assertThrows(TensorRuntimeException.class, () -> SymmetricMatrixQ.require(matrix, Chop.NONE));
+    assertThrows(Throw.class, () -> SymmetricMatrixQ.require(matrix, Chop.NONE));
   }
 
   @Test
@@ -64,12 +64,12 @@ class SymmetricMatrixQTest {
   @Test
   void testRequire() {
     SymmetricMatrixQ.require(IdentityMatrix.of(3));
-    assertThrows(TensorRuntimeException.class, () -> SymmetricMatrixQ.require(Tensors.vector(1, 2, 3)));
-    assertThrows(TensorRuntimeException.class, () -> SymmetricMatrixQ.require(Cross.skew3(Tensors.vector(1, 2, 3))));
+    assertThrows(Throw.class, () -> SymmetricMatrixQ.require(Tensors.vector(1, 2, 3)));
+    assertThrows(Throw.class, () -> SymmetricMatrixQ.require(Cross.skew3(Tensors.vector(1, 2, 3))));
   }
 
   @Test
   void testRequireEmptyFail() {
-    assertThrows(TensorRuntimeException.class, () -> SymmetricMatrixQ.require(Tensors.empty()));
+    assertThrows(Throw.class, () -> SymmetricMatrixQ.require(Tensors.empty()));
   }
 }

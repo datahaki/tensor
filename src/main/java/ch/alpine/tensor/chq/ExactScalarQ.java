@@ -7,7 +7,7 @@ import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.InexactScalarMarker;
 import ch.alpine.tensor.mat.re.RowReduce;
 import ch.alpine.tensor.mat.sv.SingularValueDecomposition;
@@ -60,11 +60,11 @@ public enum ExactScalarQ {
   public static Scalar require(Scalar scalar) {
     if (of(scalar))
       return scalar;
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor
-   * @return true if any scalar entry in given tensor satisfies the predicate {@link #of(Tensor)} */
+   * @return true if any scalar entry in given tensor satisfies the predicate {@link #of(Scalar)} */
   public static boolean any(Tensor tensor) {
     return tensor.flatten(-1).map(Scalar.class::cast).anyMatch(ExactScalarQ::of);
   }

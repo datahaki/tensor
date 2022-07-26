@@ -12,8 +12,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.SignInterface;
 import ch.alpine.tensor.lie.TensorProduct;
@@ -70,7 +70,7 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
   @Override
   public Scalar reciprocal() {
     if (clip.isInside(zero()))
-      throw TensorRuntimeException.of(this);
+      throw new Throw(this);
     return of( //
         clip.max().reciprocal(), //
         clip.min().reciprocal());
@@ -159,7 +159,7 @@ import ch.alpine.tensor.sca.pow.PowerInterface;
     Optional<BigInteger> optional = Scalars.optionalBigInteger(exponent);
     if (optional.isPresent())
       return BINARY_POWER.raise(this, optional.orElseThrow());
-    throw TensorRuntimeException.of(this);
+    throw new Throw(this);
   }
 
   @Override // from SignInterface

@@ -5,12 +5,13 @@ import java.io.Serializable;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.ArrayFlatten;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
 import ch.alpine.tensor.ext.Integers;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.ConjugateTranspose;
+import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
 
 /** Solves the linear system
@@ -20,8 +21,8 @@ import ch.alpine.tensor.mat.cd.CholeskyDecomposition;
  * with
  * 
  * matrix=
- * [eye eqs^t]
- * [eqs 0]
+ * [square linear^t]
+ * [linear 0]
  * 
  * b=[target;rhs]
  * 
@@ -30,18 +31,23 @@ public final class LagrangeMultiplier implements Serializable {
   private final int n;
   private final Tensor matrix;
 
-  /** @param eye hermite matrix of dimensions n x n
-   * @param eqs matrix of dimensions d x n */
-  public LagrangeMultiplier(Tensor eye, Tensor eqs) {
-    n = eye.length();
-    int d = eqs.length();
-    Scalar zero = eye.Get(0, 0).zero();
+  /** @param square hermite matrix of dimensions n x n
+   * @param linear matrix of dimensions d x n
+   * @see HermitianMatrixQ */
+  public LagrangeMultiplier(Tensor square, Tensor linear) {
+    n = square.length();
+    int d = linear.length();
+    Scalar zero = square.Get(0, 0).zero();
     matrix = ArrayFlatten.of(new Tensor[][] { //
-        { eye, ConjugateTranspose.of(eqs) }, //
-        { eqs, ConstantArray.of(zero, d, d) } }); // Array.zeros(d, d)
+        { square, ConjugateTranspose.of(linear) }, //
+        { linear, ConstantArray.of(zero, d, d) } }); // Array.zeros(d, d)
   }
 
-  /** @return */
+  /** matrix=
+   * [square linear^t]
+   * [linear 0]
+   * 
+   * @return square matrix of the form above */
   public Tensor matrix() {
     return matrix;
   }
@@ -76,7 +82,7 @@ public final class LagrangeMultiplier implements Serializable {
   }
 
   /** robust solver in case rank of eye or eqs is not maximal
-   * but slower than {@link #usingCholesky()}.
+   * but slower than {@link #usingCholesky(Tensor, Tensor)}.
    * 
    * @return vector x of length n that satisfies eqs.x == rhs and is close to eye.x ~ target */
   public Tensor usingSvd(Tensor target, Tensor rhs) {
@@ -85,6 +91,6 @@ public final class LagrangeMultiplier implements Serializable {
 
   @Override // from Object
   public String toString() {
-    return String.format("LagrangeMultiplier[%s]", Tensors.message(matrix));
+    return MathematicaFormat.concise("LagrangeMultiplier", matrix);
   }
 }

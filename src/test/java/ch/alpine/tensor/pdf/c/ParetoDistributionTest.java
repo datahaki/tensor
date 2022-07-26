@@ -15,7 +15,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.mat.Tolerance;
@@ -80,17 +80,17 @@ class ParetoDistributionTest {
 
   @Test
   void testNegativeFail() {
-    assertThrows(TensorRuntimeException.class, () -> ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(0)));
-    assertThrows(TensorRuntimeException.class, () -> ParetoDistribution.of(RealScalar.of(0), RealScalar.of(3)));
+    assertThrows(Throw.class, () -> ParetoDistribution.of(RealScalar.of(2.3), RealScalar.of(0)));
+    assertThrows(Throw.class, () -> ParetoDistribution.of(RealScalar.of(0), RealScalar.of(3)));
   }
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> ParetoDistribution.of(RealScalar.of(3.3), Quantity.of(2.3, "m")));
+    assertThrows(Throw.class, () -> ParetoDistribution.of(RealScalar.of(3.3), Quantity.of(2.3, "m")));
   }
 
   @Test
   void testKQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> ParetoDistribution.of(Quantity.of(2.3, "m"), RealScalar.of(3.3)));
+    assertThrows(Throw.class, () -> ParetoDistribution.of(Quantity.of(2.3, "m"), RealScalar.of(3.3)));
   }
 }

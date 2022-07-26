@@ -48,7 +48,7 @@ class BooleanScalarTest {
   @Test
   void testReciprocal() {
     assertEquals(BooleanScalar.TRUE.reciprocal(), BooleanScalar.TRUE);
-    assertThrows(TensorRuntimeException.class, () -> BooleanScalar.FALSE.reciprocal());
+    assertThrows(Throw.class, () -> BooleanScalar.FALSE.reciprocal());
   }
 
   @Test

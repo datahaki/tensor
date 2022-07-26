@@ -4,7 +4,7 @@ package ch.alpine.tensor.mat.ex;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.LinearSolve;
 
@@ -27,6 +27,6 @@ import ch.alpine.tensor.mat.re.LinearSolve;
         return xp;
       xp = xn;
     }
-    throw TensorRuntimeException.of(matrix);
+    throw new Throw(matrix);
   }
 }

@@ -2,13 +2,12 @@
 package ch.alpine.tensor.img;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,8 +19,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Reverse;
 import ch.alpine.tensor.ext.Serialization;
@@ -74,26 +73,27 @@ class ColorDataGradientsTest {
   void testStrict() {
     int count = 0;
     for (ColorDataGradients colorDataGradients : ColorDataGradients.values()) {
-      Tensor tableRgba = colorDataGradients.getTableRgba();
-      if (Objects.nonNull(tableRgba)) {
+      Optional<Tensor> optional = colorDataGradients.queryTableRgba();
+      if (optional.isPresent()) {
+        Tensor tableRgba = optional.get();
         LinearColorDataGradient.of(tableRgba);
         ++count;
       }
     }
-    assertTrue(33 <= count);
+    assertTrue(34 <= count);
   }
 
   @Test
   void testSunset() {
-    Tensor t1 = Reverse.of(ColorDataGradients.SUNSET.getTableRgba());
-    Tensor t2 = ColorDataGradients.SUNSET_REVERSED.getTableRgba();
+    Tensor t1 = Reverse.of(ColorDataGradients.SUNSET.queryTableRgba().orElseThrow());
+    Tensor t2 = ColorDataGradients.SUNSET_REVERSED.queryTableRgba().orElseThrow();
     assertEquals(t1, t2);
   }
 
   @Test
   void testGrayscaleTable() {
-    assertNull(ColorDataGradients.HUE.getTableRgba());
-    assertNull(ColorDataGradients.GRAYSCALE.getTableRgba());
+    assertThrows(RuntimeException.class, () -> ColorDataGradients.HUE.queryTableRgba().orElseThrow());
+    assertThrows(RuntimeException.class, () -> ColorDataGradients.GRAYSCALE.queryTableRgba().orElseThrow());
   }
 
   @ParameterizedTest
@@ -106,7 +106,7 @@ class ColorDataGradientsTest {
     } else {
       assertThrows(IndexOutOfBoundsException.class, () -> colorDataGradient.apply(RealScalar.of(-0.1)));
       assertThrows(IndexOutOfBoundsException.class, () -> colorDataGradient.apply(RealScalar.of(1.1)));
-      assertThrows(TensorRuntimeException.class, () -> colorDataGradient.apply(ComplexScalar.of(0.5, 0.5)));
+      assertThrows(Throw.class, () -> colorDataGradient.apply(ComplexScalar.of(0.5, 0.5)));
     }
   }
 }

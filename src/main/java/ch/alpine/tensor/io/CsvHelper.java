@@ -6,7 +6,7 @@ import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.IntegerQ;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.N;
@@ -27,9 +27,9 @@ import ch.alpine.tensor.sca.N;
     if (scalar instanceof DecimalScalar)
       return N.DOUBLE.apply(scalar);
     if (scalar instanceof ComplexScalar)
-      throw TensorRuntimeException.of(scalar);
+      throw new Throw(scalar);
     if (scalar instanceof Quantity)
-      throw TensorRuntimeException.of(scalar);
+      throw new Throw(scalar);
     return scalar;
   }
 

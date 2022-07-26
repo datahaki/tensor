@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactTensorQ;
 
 class MedianFilterTest {
@@ -90,7 +90,7 @@ class MedianFilterTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> MedianFilter.of(RealScalar.of(3), 1));
+    assertThrows(Throw.class, () -> MedianFilter.of(RealScalar.of(3), 1));
   }
 
   @Test

@@ -7,8 +7,9 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.ext.PackageTestAccess;
 import ch.alpine.tensor.mat.HermitianMatrixQ;
 import ch.alpine.tensor.mat.re.GaussianElimination;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -43,8 +44,9 @@ import ch.alpine.tensor.sca.pow.Power;
     Tensor id = StaticHelper.IDENTITY_MATRIX.apply(n);
     Tensor id2 = id.multiply(HALF);
     ScalarUnaryOperator power = Power.function(RationalScalar.of(-1, n << 1));
+    // Incomplete square root cascade
     for (; count < MAX_ITERATIONS; ++count) {
-      /** the publication suggests to use |Det(mk)^(-1/2n)|
+      /* the publication suggests to use |Det(mk)^(-1/2n)|
        * which would just take a detour via complex numbers!? */
       GaussianElimination gaussianElimination = new GaussianElimination(mk, id, Pivots.ARGMAX_ABS);
       Scalar gk = power.apply(Abs.FUNCTION.apply(gaussianElimination.det()));
@@ -58,7 +60,7 @@ import ch.alpine.tensor.sca.pow.Power;
       if (isClose)
         return;
     }
-    throw TensorRuntimeException.of(matrix);
+    throw new Throw(matrix);
   }
 
   @Override // from MatrixSqrt
@@ -71,11 +73,13 @@ import ch.alpine.tensor.sca.pow.Power;
     return Inverse.of(yk);
   }
 
-  public int count() {
-    return count;
-  }
-
+  /** @return M_k from p.1118 */
   public Tensor mk() {
     return mk;
+  }
+
+  @PackageTestAccess
+  /* package */ int count() {
+    return count;
   }
 }

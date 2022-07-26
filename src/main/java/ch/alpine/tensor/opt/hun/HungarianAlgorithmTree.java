@@ -5,7 +5,6 @@ package ch.alpine.tensor.opt.hun;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
@@ -26,13 +25,13 @@ import ch.alpine.tensor.red.Min;
   public HungarianAlgorithmTree(Scalar[] xLabel, int[] yMatch, Scalar[][] matrix) {
     int dim = xLabel.length;
     this.xLabel = xLabel;
-    this.yLabel = Stream.of(xLabel).map(Scalar::zero).toArray(Scalar[]::new);
+    this.yLabel = Arrays.stream(xLabel).map(Scalar::zero).toArray(Scalar[]::new);
     this.yMatch = yMatch;
     this.matrix = matrix;
     bipartition = BipartitionImpl.empty(dim);
     escapeFromY = new int[dim];
     escapeFromX = new int[dim];
-    alpha = Stream.of(xLabel).map(Scalar::zero).toArray(Scalar[]::new);
+    alpha = Arrays.stream(xLabel).map(Scalar::zero).toArray(Scalar[]::new);
     resetEscape();
   }
 

@@ -13,7 +13,7 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.num.Pi;
@@ -141,7 +141,7 @@ class ClipsTest {
 
   @Test
   void testIntersectionFail() {
-    assertThrows(TensorRuntimeException.class, () -> Clips.intersection(Clips.interval(2, 3), Clips.interval(5, 10)));
+    assertThrows(Throw.class, () -> Clips.intersection(Clips.interval(2, 3), Clips.interval(5, 10)));
   }
 
   @Test
@@ -155,16 +155,16 @@ class ClipsTest {
   void testCoverFail0() {
     Clip c1 = Clips.positive(Quantity.of(0, "m"));
     Clip c2 = Clips.positive(Quantity.of(0, "s"));
-    assertThrows(TensorRuntimeException.class, () -> Clips.cover(c1, c2));
-    assertThrows(TensorRuntimeException.class, () -> Clips.intersection(c1, c2));
+    assertThrows(Throw.class, () -> Clips.cover(c1, c2));
+    assertThrows(Throw.class, () -> Clips.intersection(c1, c2));
   }
 
   @Test
   void testCoverFail1() {
     Clip c1 = Clips.positive(Quantity.of(1, "m"));
     Clip c2 = Clips.positive(Quantity.of(2, "s"));
-    assertThrows(TensorRuntimeException.class, () -> Clips.cover(c1, c2));
-    assertThrows(TensorRuntimeException.class, () -> Clips.intersection(c1, c2));
+    assertThrows(Throw.class, () -> Clips.cover(c1, c2));
+    assertThrows(Throw.class, () -> Clips.intersection(c1, c2));
   }
 
   @Test
@@ -175,41 +175,47 @@ class ClipsTest {
   }
 
   @Test
+  void testClipsCover() {
+    Clip clip = Clips.cover(Clips.interval(0, 1), Clips.interval(5, 6));
+    assertEquals(clip, Clips.interval(0, 6));
+  }
+
+  @Test
   void testPositiveFail() {
-    assertThrows(TensorRuntimeException.class, () -> Clips.positive(Quantity.of(-1, "kg")));
+    assertThrows(Throw.class, () -> Clips.positive(Quantity.of(-1, "kg")));
   }
 
   @Test
   void testNaNFail() {
-    assertThrows(TensorRuntimeException.class, () -> Clips.interval(DoubleScalar.INDETERMINATE, DoubleScalar.INDETERMINATE));
-    assertThrows(TensorRuntimeException.class, () -> Clips.interval(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
-    assertThrows(TensorRuntimeException.class, () -> Clips.interval(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
+    assertThrows(Throw.class, () -> Clips.interval(DoubleScalar.INDETERMINATE, DoubleScalar.INDETERMINATE));
+    assertThrows(Throw.class, () -> Clips.interval(RealScalar.ZERO, DoubleScalar.INDETERMINATE));
+    assertThrows(Throw.class, () -> Clips.interval(DoubleScalar.INDETERMINATE, RealScalar.ZERO));
   }
 
   @Test
   void testAbsoluteFail() {
-    assertThrows(TensorRuntimeException.class, () -> Clips.absolute(Quantity.of(-1, "kg")));
+    assertThrows(Throw.class, () -> Clips.absolute(Quantity.of(-1, "kg")));
   }
 
   @Test
   void testInsideFail() {
-    assertThrows(TensorRuntimeException.class, () -> Clips.unit().isInside(Quantity.of(0.5, "m")));
+    assertThrows(Throw.class, () -> Clips.unit().isInside(Quantity.of(0.5, "m")));
   }
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> Clips.unit().apply(Quantity.of(-5, "m")));
-    assertThrows(TensorRuntimeException.class, () -> Clips.absoluteOne().apply(Quantity.of(-5, "m")));
+    assertThrows(Throw.class, () -> Clips.unit().apply(Quantity.of(-5, "m")));
+    assertThrows(Throw.class, () -> Clips.absoluteOne().apply(Quantity.of(-5, "m")));
   }
 
   @Test
   void testQuantityMixedZero() {
-    assertThrows(TensorRuntimeException.class, () -> Clips.interval(Quantity.of(0, "m"), Quantity.of(0, "")));
+    assertThrows(Throw.class, () -> Clips.interval(Quantity.of(0, "m"), Quantity.of(0, "")));
   }
 
   @Test
   void testQuantityMixedUnitsFail() {
-    assertThrows(TensorRuntimeException.class, () -> Clips.interval(Quantity.of(2, "m"), Quantity.of(3, "kg")));
+    assertThrows(Throw.class, () -> Clips.interval(Quantity.of(2, "m"), Quantity.of(3, "kg")));
   }
 
   @Test

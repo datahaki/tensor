@@ -8,8 +8,8 @@ import java.util.stream.IntStream;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.mat.ConjugateTranspose;
@@ -54,7 +54,7 @@ public enum Transpose {
   public static Tensor of(Tensor tensor) {
     int length = Unprotect.dimension1(tensor);
     if (length == Scalar.LENGTH)
-      throw TensorRuntimeException.of(tensor);
+      throw new Throw(tensor);
     return tensor instanceof SparseArray //
         ? of(tensor, 1, 0)
         : Tensors.vector(i -> tensor.get(Tensor.ALL, i), length);

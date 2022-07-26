@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
@@ -87,8 +87,8 @@ class DiscreteUniformDistributionTest {
   void testFailQuantile() {
     Distribution distribution = DiscreteUniformDistribution.of(3, 10);
     InverseCDF inverseCDF = InverseCDF.of(distribution);
-    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
-    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
+    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
@@ -100,7 +100,7 @@ class DiscreteUniformDistributionTest {
 
   @Test
   void testFailsInt() {
-    assertThrows(TensorRuntimeException.class, () -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(4.5)));
+    assertThrows(Throw.class, () -> DiscreteUniformDistribution.of(RealScalar.of(3), RealScalar.of(4.5)));
   }
 
   @Test

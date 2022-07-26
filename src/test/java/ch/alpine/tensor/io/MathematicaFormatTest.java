@@ -3,12 +3,15 @@ package ch.alpine.tensor.io;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -16,9 +19,13 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DecimalScalar;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RationalScalar;
+import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.lie.LeviCivitaTensor;
+import ch.alpine.tensor.mat.IdentityMatrix;
 
 class MathematicaFormatTest {
   @Test
@@ -106,5 +113,39 @@ class MathematicaFormatTest {
     assertTrue(tensor.stream().anyMatch(scalar -> scalar instanceof DecimalScalar));
     checkNonString(tensor);
     assertEquals(tensor.toString(), Put.string(tensor));
+  }
+
+  @Test
+  void testSparse() {
+    Tensor sparse = LeviCivitaTensor.of(3);
+    List<String> list = MathematicaFormat.of(sparse).collect(Collectors.toList());
+    assertEquals(list.get(0), "SparseArray[{{1, 2, 3}->1,");
+  }
+
+  @Test
+  void testSparseNested() {
+    Tensor tensor = Tensors.fromString("{{2, 3.123+3*I, 34.1231}, {556, 3/456, -323/2, {3, 8.45`}}}");
+    tensor.set(IdentityMatrix.sparse(3), 0, 2);
+    List<String> list = MathematicaFormat.of(tensor).collect(Collectors.toList());
+    assertFalse(list.isEmpty());
+    // list.forEach(System.out::println);
+  }
+
+  @Test
+  void testOf() {
+    String string = MathematicaFormat.concise("Function", 12);
+    assertEquals(string, "Function[12]");
+  }
+
+  @Test
+  void testFail() {
+    assertThrows(Exception.class, () -> MathematicaFormat.of(null));
+    assertThrows(Exception.class, () -> MathematicaFormat.concise(null, 12));
+  }
+
+  @Test
+  void testSmallMatrix() {
+    String string = new Throw(RealScalar.of(3), 12).getMessage();
+    assertEquals(string, "Throw[3, 12]");
   }
 }

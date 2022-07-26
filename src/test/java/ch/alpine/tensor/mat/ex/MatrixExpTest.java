@@ -18,8 +18,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Transpose;
@@ -206,6 +206,12 @@ class MatrixExpTest {
   }
 
   @Test
+  void testSparse() {
+    int n = 3;
+    assertEquals(MatrixExp.of(IdentityMatrix.sparse(n)), MatrixExp.of(IdentityMatrix.of(n)));
+  }
+
+  @Test
   void testFail() {
     assertThrows(IllegalArgumentException.class, () -> MatrixExp.of(Array.zeros(4, 3)));
     assertThrows(IllegalArgumentException.class, () -> MatrixExp.of(Array.zeros(3, 4)));
@@ -213,11 +219,11 @@ class MatrixExpTest {
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> MatrixExp.of(RealScalar.ONE));
+    assertThrows(Throw.class, () -> MatrixExp.of(RealScalar.ONE));
   }
 
   @Test
   void testEmptyFail() {
-    assertThrows(TensorRuntimeException.class, () -> MatrixExp.of(Tensors.empty()));
+    assertThrows(Throw.class, () -> MatrixExp.of(Tensors.empty()));
   }
 }

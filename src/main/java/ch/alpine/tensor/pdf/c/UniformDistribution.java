@@ -7,6 +7,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
+import ch.alpine.tensor.chq.FiniteScalarQ;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.KurtosisInterface;
@@ -32,24 +34,32 @@ public class UniformDistribution extends AbstractContinuousDistribution //
    * 
    * @param min < max
    * @param max
-   * @return uniform distribution over the half-open interval [min, max) */
+   * @return uniform distribution over the half-open interval [min, max)
+   * @throws Exception if max - min is not finite
+   * @see FiniteScalarQ */
   public static Distribution of(Scalar min, Scalar max) {
     return of(Clips.interval(min, max));
   }
 
   /** @param min < max
    * @param max
-   * @return uniform distribution over the half-open interval [min, max) */
+   * @return uniform distribution over the half-open interval [min, max)
+   * @throws Exception if max - min is not finite
+   * @see FiniteScalarQ */
   public static Distribution of(Number min, Number max) {
     return of(Clips.interval(min, max));
   }
 
   /** @param clip
-   * @return uniform distribution over the half-open interval [clip.min(), clip.max()) */
+   * @return uniform distribution over the half-open interval [clip.min(), clip.max())
+   * @throws Exception if {@link Clip#width()} is not finite
+   * @see FiniteScalarQ */
   public static Distribution of(Clip clip) {
-    return Scalars.isZero(clip.width()) //
-        ? DiracDeltaDistribution.of(clip.min())
-        : new UniformDistribution(clip);
+    Scalar width = clip.width();
+    if (Scalars.isZero(width))
+      return DiracDeltaDistribution.of(clip.min());
+    FiniteScalarQ.require(width);
+    return new UniformDistribution(clip);
   }
 
   /** @return uniform distribution over the half-open unit interval [0, 1) */
@@ -112,6 +122,6 @@ public class UniformDistribution extends AbstractContinuousDistribution //
 
   @Override // from Object
   public String toString() {
-    return String.format("UniformDistribution[%s, %s]", clip.min(), clip.max());
+    return MathematicaFormat.concise("UniformDistribution", clip.min(), clip.max());
   }
 }

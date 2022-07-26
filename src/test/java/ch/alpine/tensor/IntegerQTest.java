@@ -30,7 +30,7 @@ class IntegerQTest {
 
   @Test
   void testRequireFail() {
-    assertThrows(TensorRuntimeException.class, () -> IntegerQ.require(RealScalar.of(0.2)));
+    assertThrows(Throw.class, () -> IntegerQ.require(RealScalar.of(0.2)));
   }
 
   @Test

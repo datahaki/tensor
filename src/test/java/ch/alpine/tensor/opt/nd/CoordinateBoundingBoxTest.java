@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.qty.Quantity;
@@ -130,7 +130,7 @@ class CoordinateBoundingBoxTest {
   void testFail1() {
     CoordinateBoundingBox box = CoordinateBounds.of(Tensors.vector(2, 3), Tensors.vector(12, 23));
     box.requireInside(Tensors.vector(4, 3));
-    assertThrows(TensorRuntimeException.class, () -> box.requireInside(Tensors.vector(14, 3)));
+    assertThrows(Throw.class, () -> box.requireInside(Tensors.vector(14, 3)));
   }
 
   @Test

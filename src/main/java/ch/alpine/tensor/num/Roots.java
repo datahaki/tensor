@@ -6,8 +6,8 @@ import java.util.Comparator;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Last;
 import ch.alpine.tensor.sca.Imag;
 import ch.alpine.tensor.sca.Real;
@@ -62,16 +62,16 @@ public enum Roots {
       return roots.append(roots.Get(0).zero());
     }
     switch (degree) {
-    case 2: // a + b*x + c*x^2 == 0
-      return RootsDegree2.of(coeffs);
-    case 3: // a + b*x + c*x^2 + d*x^3 == 0
-      return RootsDegree3.of(coeffs);
+    case 2:
+      return RootsDegree2.of(coeffs); // a + b*x + c*x^2 == 0
+    case 3:
+      return RootsDegree3.of(coeffs); // a + b*x + c*x^2 + d*x^3 == 0
     default:
-      throw TensorRuntimeException.of(coeffs);
+      throw new Throw(coeffs);
     }
   }
 
-  /* package */ static enum ComplexComparator implements Comparator<Scalar> {
+  /* package */ enum ComplexComparator implements Comparator<Scalar> {
     INSTANCE;
 
     @Override // from Comparator

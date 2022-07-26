@@ -4,7 +4,8 @@ package ch.alpine.tensor.sca;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /** clip to an interval of non-zero width
  * 
@@ -50,7 +51,7 @@ import ch.alpine.tensor.TensorRuntimeException;
   public final Scalar requireInside(Scalar scalar) {
     if (isInside(scalar))
       return scalar;
-    throw TensorRuntimeException.of(min, max, scalar);
+    throw new Throw(min, max, scalar);
   }
 
   @Override // from Clip
@@ -91,6 +92,6 @@ import ch.alpine.tensor.TensorRuntimeException;
 
   @Override // from Object
   public final String toString() {
-    return String.format("%s[%s, %s]", Clip.class.getSimpleName(), min(), max());
+    return MathematicaFormat.concise("Clip", min(), max());
   }
 }

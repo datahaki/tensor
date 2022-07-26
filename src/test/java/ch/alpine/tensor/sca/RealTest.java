@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 
 class RealTest {
@@ -34,6 +34,6 @@ class RealTest {
   @Test
   void testFail() {
     Scalar scalar = StringScalar.of("string");
-    assertThrows(TensorRuntimeException.class, () -> Real.of(scalar));
+    assertThrows(Throw.class, () -> Real.of(scalar));
   }
 }

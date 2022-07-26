@@ -6,7 +6,7 @@ import java.util.Objects;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.MultiplexScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.InexactScalarMarker;
 
 /** predicate that checks whether given scalar is finite.
@@ -47,6 +47,6 @@ public enum FiniteScalarQ {
   public static Scalar require(Scalar scalar) {
     if (of(scalar))
       return scalar;
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 }

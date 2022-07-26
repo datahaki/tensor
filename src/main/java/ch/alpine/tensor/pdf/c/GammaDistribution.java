@@ -6,7 +6,8 @@ import java.io.Serializable;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.PDF;
@@ -32,7 +33,7 @@ public class GammaDistribution implements Distribution, //
   public static Distribution of(Scalar alpha, Scalar beta) {
     if (Scalars.lessEquals(alpha, RealScalar.ZERO) || //
         Scalars.lessEquals(beta, RealScalar.ZERO))
-      throw TensorRuntimeException.of(alpha, beta);
+      throw new Throw(alpha, beta);
     if (alpha.equals(RealScalar.ONE))
       return ExponentialDistribution.of(beta.reciprocal());
     return new GammaDistribution(alpha, beta);
@@ -69,6 +70,6 @@ public class GammaDistribution implements Distribution, //
 
   @Override // from Object
   public String toString() {
-    return String.format("GammaDistribution[%s, %s]", alpha, beta);
+    return MathematicaFormat.concise("GammaDistribution", alpha, beta);
   }
 }

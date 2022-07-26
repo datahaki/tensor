@@ -115,7 +115,7 @@ import ch.alpine.tensor.sca.tri.Sinh;
       ComplexEmbedding z = (ComplexEmbedding) scalar;
       return of(re.add(z.real()), im.add(z.imag()));
     }
-    throw TensorRuntimeException.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   // ---

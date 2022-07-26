@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Clips;
 import ch.alpine.tensor.sca.InvertUnlessZero;
@@ -37,7 +37,7 @@ class StaticHelperTest {
   @Test
   void testRequireUnitFail() {
     Scalar scalar = RealScalar.of(1.0 + 1e-5);
-    assertThrows(TensorRuntimeException.class, () -> InfluenceMatrixSvd.requireUnit(scalar));
+    assertThrows(Throw.class, () -> InfluenceMatrixSvd.requireUnit(scalar));
   }
 
   @Test

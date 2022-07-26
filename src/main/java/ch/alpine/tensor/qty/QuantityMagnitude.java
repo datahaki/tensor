@@ -6,8 +6,9 @@ import java.util.Collections;
 import java.util.Objects;
 
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /** Quote from Mathematica::QuantityMagnitude
  * "gives the amount of the specified quantity"
@@ -81,13 +82,13 @@ public class QuantityMagnitude implements Serializable {
     public Scalar apply(Scalar scalar) {
       Scalar result = unitSystem.apply(StaticHelper.multiply(scalar, base));
       if (result instanceof Quantity)
-        throw TensorRuntimeException.of(result);
+        throw new Throw(result);
       return result;
     }
 
     @Override // from Object
     public String toString() {
-      return String.format("%s[%s, %s]", QuantityMagnitude.class.getSimpleName(), unitSystem, unit);
+      return MathematicaFormat.concise("QuantityMagnitude", unitSystem, unit);
     }
   }
 }

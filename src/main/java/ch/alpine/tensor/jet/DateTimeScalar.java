@@ -10,7 +10,7 @@ import ch.alpine.tensor.AbstractScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.qty.Unit;
 
@@ -51,29 +51,29 @@ public class DateTimeScalar extends AbstractScalar implements //
       Scalar scalar = (Scalar) tensor;
       return new DateTimeScalar(localDateTime.minus(TemporalScalars.duration(scalar)));
     }
-    throw TensorRuntimeException.of(this, tensor);
+    throw new Throw(this, tensor);
   }
 
   @Override // from AbstractScalar
   public Scalar multiply(Scalar scalar) {
     if (scalar.equals(one()))
       return this;
-    throw TensorRuntimeException.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from Scalar
   public Scalar negate() {
-    throw TensorRuntimeException.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Scalar
   public Scalar reciprocal() {
-    throw TensorRuntimeException.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Scalar
   public Number number() {
-    throw TensorRuntimeException.of(this);
+    throw new Throw(this);
   }
 
   @Override // from Scalar
@@ -95,7 +95,7 @@ public class DateTimeScalar extends AbstractScalar implements //
   public int compareTo(Scalar scalar) {
     if (scalar instanceof DateTimeScalar)
       return localDateTime.compareTo(((DateTimeScalar) scalar).localDateTime);
-    throw TensorRuntimeException.of(this, scalar);
+    throw new Throw(this, scalar);
   }
 
   @Override // from Object

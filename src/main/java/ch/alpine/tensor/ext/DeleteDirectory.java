@@ -34,6 +34,7 @@ public class DeleteDirectory {
    * @return
    * @throws Exception if given directory does not exist, or criteria are not met */
   public static DeleteDirectory of(File directory, int max_nested, long max_delete) throws IOException {
+    // TODO TENSOR IMPL restrict to permitted extensions, e.g. html, png
     return of(directory, max_nested, max_delete, 0);
   }
 
@@ -83,9 +84,9 @@ public class DeleteDirectory {
       boolean file_delete = file.delete();
       if (!file_delete && delete_fail_aborts) // abort criteria 4)
         throw new IOException("cannot delete " + file.getAbsolutePath());
-    } else
-      if (!file.canWrite()) // abort criteria 3)
-        throw new IOException("cannot write " + file.getAbsolutePath());
+    } else //
+    if (!file.canWrite()) // abort criteria 3)
+      throw new IOException("cannot write " + file.getAbsolutePath());
   }
 
   /** @return number of deleted files including directories */

@@ -1,4 +1,4 @@
-// code by jph
+// code by axkr, jph
 package ch.alpine.tensor.io;
 
 import java.io.File;
@@ -26,7 +26,7 @@ public enum OperatingSystem {
    * @return path to resource */
   public static Path pathOfResource(String name) {
     String string = OperatingSystem.class.getResource(name).getPath();
-    return Paths.get(OperatingSystem.isWindows() && string.charAt(0) == '/' //
+    return Paths.get(isWindows() && string.charAt(0) == '/' //
         ? string.substring(1)
         : string);
   }

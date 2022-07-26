@@ -7,9 +7,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.chq.FiniteScalarQ;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /** our implementation is <em>not</em> consistent with Mathematica for negative, and complex n.
  * 
@@ -34,7 +35,7 @@ public class Mod implements ScalarUnaryOperator {
    * @return remainder on division by n with offset d */
   public static Mod function(Scalar n, Scalar d) {
     if (Scalars.isZero(n))
-      throw TensorRuntimeException.of(n);
+      throw new Throw(n);
     return new Mod(n, Objects.requireNonNull(d));
   }
 
@@ -67,6 +68,6 @@ public class Mod implements ScalarUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return String.format("Mod[%s, %s]", n, d);
+    return MathematicaFormat.concise("Mod", n, d);
   }
 }

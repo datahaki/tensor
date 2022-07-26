@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
 
@@ -25,7 +25,7 @@ class NuttallWindowTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> NuttallWindow.FUNCTION.apply(Quantity.of(0, "s")));
-    assertThrows(TensorRuntimeException.class, () -> NuttallWindow.FUNCTION.apply(Quantity.of(2, "s")));
+    assertThrows(Throw.class, () -> NuttallWindow.FUNCTION.apply(Quantity.of(0, "s")));
+    assertThrows(Throw.class, () -> NuttallWindow.FUNCTION.apply(Quantity.of(2, "s")));
   }
 }

@@ -6,9 +6,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorScalarFunction;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.pow.Power;
 
@@ -46,7 +47,7 @@ public class VectorNorm implements TensorScalarFunction {
 
   private VectorNorm(Scalar p) {
     if (Scalars.lessThan(p, RealScalar.ONE))
-      throw TensorRuntimeException.of(p);
+      throw new Throw(p);
     p_power = Power.function(p);
     this.p = p;
     p_reciprocal = p.reciprocal();
@@ -65,6 +66,6 @@ public class VectorNorm implements TensorScalarFunction {
 
   @Override // from Object
   public String toString() {
-    return String.format("VectorNorm[%s]", p);
+    return MathematicaFormat.concise("VectorNorm", p);
   }
 }

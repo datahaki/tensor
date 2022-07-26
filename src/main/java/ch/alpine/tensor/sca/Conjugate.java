@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ConjugateInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.mat.ConjugateTranspose;
@@ -24,7 +24,7 @@ public enum Conjugate implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ConjugateInterface)
       return ((ConjugateInterface) scalar).conjugate();
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

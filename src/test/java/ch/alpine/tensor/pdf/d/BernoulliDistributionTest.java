@@ -14,7 +14,7 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.pdf.CDF;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.InverseCDF;
@@ -85,19 +85,19 @@ class BernoulliDistributionTest {
     InverseCDF inverseCDF = InverseCDF.of(distribution);
     assertEquals(inverseCDF.quantile(RealScalar.of(0.50)), RealScalar.ZERO);
     assertEquals(inverseCDF.quantile(RealScalar.of(0.51)), RealScalar.ONE);
-    assertThrows(TensorRuntimeException.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
+    assertThrows(Throw.class, () -> inverseCDF.quantile(RealScalar.of(-0.1)));
     assertThrows(NullPointerException.class, () -> inverseCDF.quantile(RealScalar.of(1.1)));
   }
 
   @Test
   void testFailP() {
-    assertThrows(TensorRuntimeException.class, () -> BernoulliDistribution.of(RationalScalar.of(-1, 3)));
-    assertThrows(TensorRuntimeException.class, () -> BernoulliDistribution.of(RationalScalar.of(4, 3)));
+    assertThrows(Throw.class, () -> BernoulliDistribution.of(RationalScalar.of(-1, 3)));
+    assertThrows(Throw.class, () -> BernoulliDistribution.of(RationalScalar.of(4, 3)));
   }
 
   @Test
   void testFailPNumber() {
-    assertThrows(TensorRuntimeException.class, () -> BernoulliDistribution.of(-1e-10));
-    assertThrows(TensorRuntimeException.class, () -> BernoulliDistribution.of(1.0001));
+    assertThrows(Throw.class, () -> BernoulliDistribution.of(-1e-10));
+    assertThrows(Throw.class, () -> BernoulliDistribution.of(1.0001));
   }
 }

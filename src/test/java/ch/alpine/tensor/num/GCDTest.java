@@ -10,8 +10,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.qty.Quantity;
 
 class GCDTest {
@@ -67,7 +67,7 @@ class GCDTest {
 
   @Test
   void testNumericFail() {
-    assertThrows(TensorRuntimeException.class, () -> GCD.of(RealScalar.of(0.3), RealScalar.of(+60)));
-    assertThrows(TensorRuntimeException.class, () -> GCD.of(RealScalar.of(123), RealScalar.of(0.2)));
+    assertThrows(Throw.class, () -> GCD.of(RealScalar.of(0.3), RealScalar.of(+60)));
+    assertThrows(Throw.class, () -> GCD.of(RealScalar.of(123), RealScalar.of(0.2)));
   }
 }

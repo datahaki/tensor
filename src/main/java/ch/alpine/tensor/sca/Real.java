@@ -3,7 +3,7 @@ package ch.alpine.tensor.sca;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ComplexEmbedding;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
@@ -20,7 +20,7 @@ public enum Real implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof ComplexEmbedding)
       return ((ComplexEmbedding) scalar).real();
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

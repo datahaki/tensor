@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.lie.Permutations;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.num.Pi;
@@ -52,23 +52,23 @@ class OrderedQTest {
   @Test
   void testRequire() {
     OrderedQ.require(Tensors.vector(1, 1, 2, 4, 4, 4));
-    assertThrows(TensorRuntimeException.class, () -> OrderedQ.require(Tensors.vector(0, 3, 1)));
+    assertThrows(Throw.class, () -> OrderedQ.require(Tensors.vector(0, 3, 1)));
   }
 
   @Test
   void testScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> OrderedQ.of(Pi.VALUE));
+    assertThrows(Throw.class, () -> OrderedQ.of(Pi.VALUE));
   }
 
   @Test
   void testUncomparable1Fail() {
     Tensor tensor = Tensors.fromString("{3[s], 4[s], 2[m]}");
-    assertThrows(TensorRuntimeException.class, () -> OrderedQ.of(tensor));
+    assertThrows(Throw.class, () -> OrderedQ.of(tensor));
   }
 
   @Test
   void testUncomparable2Fail() {
     Tensor tensor = Tensors.fromString("{3[s], 1[s], 2[m]}");
-    assertThrows(TensorRuntimeException.class, () -> OrderedQ.of(tensor));
+    assertThrows(Throw.class, () -> OrderedQ.of(tensor));
   }
 }

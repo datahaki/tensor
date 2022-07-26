@@ -99,7 +99,7 @@ public enum Scalars {
   public static Scalar requireZero(Scalar scalar) {
     if (isZero(scalar))
       return scalar;
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** bi-predicate that tests if m divides n, i.e. "m|n"
@@ -188,7 +188,7 @@ public enum Scalars {
       if (rationalScalar.isInteger())
         return rationalScalar.numerator();
     }
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** exact conversion to type {@code BigInteger}

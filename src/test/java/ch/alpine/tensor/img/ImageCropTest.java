@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.TensorUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.io.ResourceData;
@@ -60,6 +60,6 @@ class ImageCropTest {
   @Test
   void testVectorFail() {
     TensorUnaryOperator tensorUnaryOperator = ImageCrop.color(RealScalar.ONE);
-    assertThrows(TensorRuntimeException.class, () -> tensorUnaryOperator.apply(Tensors.vector(1, 2, 3)));
+    assertThrows(Throw.class, () -> tensorUnaryOperator.apply(Tensors.vector(1, 2, 3)));
   }
 }

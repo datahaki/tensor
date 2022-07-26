@@ -1,13 +1,11 @@
 // code by jph
 package ch.alpine.tensor.mat.pd;
 
-import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.io.MathematicaFormat;
 
 /* package */ abstract class PolarDecompositionBase implements PolarDecomposition {
   @Override // from Object
   public final String toString() {
-    return String.format("%s[%s]", //
-        PolarDecomposition.class.getSimpleName(), //
-        Tensors.message(getPositiveSemidefinite(), getUnitary()));
+    return MathematicaFormat.concise("PolarDecomposition", getPositiveSemidefinite(), getUnitary());
   }
 }

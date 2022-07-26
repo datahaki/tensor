@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Range;
 import ch.alpine.tensor.io.ResourceData;
@@ -108,7 +108,7 @@ class LanczosInterpolationTest {
   @Test
   void testFailSemi() {
     Tensor vector = Tensors.vector(-1, 0, 3, 2, 0, -4, 2);
-    assertThrows(TensorRuntimeException.class, () -> LanczosInterpolation.of(vector, 0));
-    assertThrows(TensorRuntimeException.class, () -> LanczosInterpolation.of(vector, -1));
+    assertThrows(Throw.class, () -> LanczosInterpolation.of(vector, 0));
+    assertThrows(Throw.class, () -> LanczosInterpolation.of(vector, -1));
   }
 }

@@ -4,7 +4,7 @@ package ch.alpine.tensor.sca;
 import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.AbsInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.lie.Quaternion;
@@ -22,7 +22,7 @@ public enum AbsSquared implements ScalarUnaryOperator {
   public Scalar apply(Scalar scalar) {
     if (scalar instanceof AbsInterface)
       return ((AbsInterface) scalar).absSquared();
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

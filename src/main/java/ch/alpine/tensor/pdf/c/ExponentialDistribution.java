@@ -8,6 +8,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.StandardDeviationInterface;
@@ -121,6 +122,6 @@ public class ExponentialDistribution implements UnivariateDistribution, //
 
   @Override // from Object
   public String toString() {
-    return String.format("ExponentialDistribution[%s]", lambda);
+    return MathematicaFormat.concise("ExponentialDistribution", lambda);
   }
 }

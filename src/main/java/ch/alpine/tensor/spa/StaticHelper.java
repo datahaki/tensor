@@ -16,11 +16,11 @@ import ch.alpine.tensor.alg.Array;
    * fallback as {@link Scalar} if tensor equals to fallback */
   public static Tensor of(Scalar fallback, List<Integer> size, Tensor tensor) {
     Tensor sparseArray = SparseArray.of(fallback, size.stream().mapToInt(i -> i).toArray());
-    Array.forEach(list -> {
+    Array.stream(size).forEach(list -> {
       Scalar entry = (Scalar) tensor.get(list); // entry is scalar due to dimension check above
       if (!fallback.equals(entry))
         sparseArray.set(entry, list);
-    }, size);
+    });
     return sparseArray;
   }
 }

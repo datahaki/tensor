@@ -11,8 +11,8 @@ import java.util.function.UnaryOperator;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.ArrayPad;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.TensorMap;
@@ -104,7 +104,7 @@ class ListConvolveTest {
         { 0, 1, -1, 3, 3 }, //
         { 0, 1, -1, 3, 3 } });
     ListConvolve.of(kernel, matrix);
-    assertThrows(TensorRuntimeException.class, () -> ListConvolve.of(kernel, matrix.get(0)));
+    assertThrows(Throw.class, () -> ListConvolve.of(kernel, matrix.get(0)));
   }
 
   @Test

@@ -6,7 +6,8 @@ import java.io.Serializable;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.qty.Quantity;
 import ch.alpine.tensor.sca.Sign;
@@ -21,7 +22,7 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
    * @return */
   public static Distribution of(Scalar lambda, Scalar xi) {
     if (Scalars.lessEquals(xi, RealScalar.ZERO))
-      throw TensorRuntimeException.of(xi);
+      throw new Throw(xi);
     return new GompertzMakehamDistribution(Sign.requirePositive(lambda), xi);
   }
 
@@ -42,7 +43,7 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
     this.xi = xi;
     lambda_xi = lambda.multiply(xi);
     if (Scalars.isZero(lambda_xi))
-      throw TensorRuntimeException.of(lambda, xi);
+      throw new Throw(lambda, xi);
   }
 
   @Override // from PDF
@@ -82,6 +83,6 @@ public class GompertzMakehamDistribution extends AbstractContinuousDistribution 
 
   @Override // from Object
   public String toString() {
-    return String.format("GompertzMakehamDistribution[%s, %s]", lambda, xi);
+    return MathematicaFormat.concise("GompertzMakehamDistribution", lambda, xi);
   }
 }

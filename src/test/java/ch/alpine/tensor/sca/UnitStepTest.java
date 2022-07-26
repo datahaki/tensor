@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.lie.Quaternion;
 import ch.alpine.tensor.num.GaussScalar;
@@ -45,6 +45,6 @@ class UnitStepTest {
   @Test
   void testStringFail() {
     Scalar scalar = StringScalar.of("abc");
-    assertThrows(TensorRuntimeException.class, () -> UnitStep.FUNCTION.apply(scalar));
+    assertThrows(Throw.class, () -> UnitStep.FUNCTION.apply(scalar));
   }
 }

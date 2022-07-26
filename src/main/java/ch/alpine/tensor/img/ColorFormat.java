@@ -7,8 +7,8 @@ import java.util.stream.IntStream;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.io.ImageFormat;
 
 /** mappings between {@link Tensor}, {@link Color}, and 0xAA:RR:GG:BB integer
@@ -43,7 +43,7 @@ public enum ColorFormat {
    * @throws Exception if either color value is outside the allowed range [0, ..., 255] */
   public static Color toColor(Tensor vector) {
     if (vector.length() != 4)
-      throw TensorRuntimeException.of(vector);
+      throw new Throw(vector);
     return new Color( //
         vector.Get(0).number().intValue(), //
         vector.Get(1).number().intValue(), //

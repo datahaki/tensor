@@ -18,8 +18,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Subdivide;
 import ch.alpine.tensor.chq.ExactScalarQ;
 import ch.alpine.tensor.ext.Serialization;
@@ -53,13 +53,13 @@ class DurationScalarTest {
   void testAdd() {
     DateTimeScalar ofs = DateTimeScalar.of(LocalDateTime.of(2020, 12, 20, 4, 30));
     DurationScalar len = DurationScalar.of(Duration.ofDays(100));
-    assertThrows(TensorRuntimeException.class, () -> ofs.add(RealScalar.TWO));
-    assertThrows(TensorRuntimeException.class, () -> len.add(RealScalar.TWO));
-    assertThrows(TensorRuntimeException.class, () -> len.compareTo(RealScalar.TWO));
-    assertThrows(TensorRuntimeException.class, () -> len.number());
-    assertThrows(TensorRuntimeException.class, () -> len.absSquared());
-    assertThrows(TensorRuntimeException.class, () -> len.divide(ComplexScalar.I));
-    assertThrows(TensorRuntimeException.class, () -> len.under(ComplexScalar.I));
+    assertThrows(Throw.class, () -> ofs.add(RealScalar.TWO));
+    assertThrows(Throw.class, () -> len.add(RealScalar.TWO));
+    assertThrows(Throw.class, () -> len.compareTo(RealScalar.TWO));
+    assertThrows(Throw.class, () -> len.number());
+    assertThrows(Throw.class, () -> len.absSquared());
+    assertThrows(Throw.class, () -> len.divide(ComplexScalar.I));
+    assertThrows(Throw.class, () -> len.under(ComplexScalar.I));
   }
 
   @Test
@@ -177,7 +177,7 @@ class DurationScalarTest {
     Random random = new Random(1);
     int n = 5;
     Tensor lhs = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, n);
-    assertThrows(TensorRuntimeException.class, () -> Inverse.of(lhs));
+    assertThrows(Throw.class, () -> Inverse.of(lhs));
     Tensor rhs = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, 2 * n);
     Tensor sol = LinearSolve.of(lhs, rhs);
     Chop._05.requireClose(lhs.dot(sol), rhs);
@@ -201,7 +201,7 @@ class DurationScalarTest {
     Tensor sol = LinearSolve.of(lhs, rhs);
     Tensor err = lhs.dot(sol).subtract(rhs);
     Chop._05.requireAllZero(err);
-    assertThrows(TensorRuntimeException.class, () -> Inverse.of(lhs));
+    assertThrows(Throw.class, () -> Inverse.of(lhs));
   }
 
   @Test
@@ -210,7 +210,7 @@ class DurationScalarTest {
     Random random = new Random();
     int n = 2;
     Tensor matrix = Tensors.matrix((i, j) -> DurationScalar.of(Duration.ofSeconds(random.nextInt(), random.nextInt())), n, n);
-    assertThrows(TensorRuntimeException.class, () -> Inverse.of(matrix));
+    assertThrows(Throw.class, () -> Inverse.of(matrix));
   }
 
   @Test
@@ -234,7 +234,7 @@ class DurationScalarTest {
   void testMultiplyFail() {
     DurationScalar d1 = DurationScalar.of(Duration.ofDays(213));
     DurationScalar d2 = DurationScalar.of(Duration.ofDays(113));
-    assertThrows(TensorRuntimeException.class, () -> d1.multiply(d2));
+    assertThrows(Throw.class, () -> d1.multiply(d2));
   }
 
   @Test

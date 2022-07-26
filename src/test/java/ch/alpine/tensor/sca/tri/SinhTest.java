@@ -16,7 +16,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.qty.Quantity;
@@ -49,11 +49,11 @@ class SinhTest {
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> Sinh.of(Quantity.of(1, "deg")));
+    assertThrows(Throw.class, () -> Sinh.of(Quantity.of(1, "deg")));
   }
 
   @Test
   void testGaussScalarFail() {
-    assertThrows(TensorRuntimeException.class, () -> Sinh.of(GaussScalar.of(6, 7)));
+    assertThrows(Throw.class, () -> Sinh.of(GaussScalar.of(6, 7)));
   }
 }

@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.VectorQ;
@@ -26,7 +26,7 @@ public enum LinearSolve {
    * @param matrix square of {@link Scalar}s that implement absolute value abs()
    * @param b tensor with first dimension identical to size of matrix
    * @return x with matrix.dot(x) == b
-   * @throws TensorRuntimeException if matrix m is singular */
+   * @throws Throw if matrix m is singular */
   public static Tensor of(Tensor matrix, Tensor b) {
     return GaussianElimination.of(matrix, b, Pivots.ARGMAX_ABS);
   }
@@ -38,7 +38,7 @@ public enum LinearSolve {
    * @param b tensor with first dimension identical to size of matrix
    * @param pivot
    * @return x with matrix.dot(x) == b
-   * @throws TensorRuntimeException if given matrix is singular */
+   * @throws Throw if given matrix is singular */
   public static Tensor of(Tensor matrix, Tensor b, Pivot pivot) {
     return GaussianElimination.of(matrix, b, pivot);
   }
@@ -58,7 +58,7 @@ public enum LinearSolve {
    * @param matrix
    * @param b vector
    * @return x with matrix.x == b
-   * @throws TensorRuntimeException if such an x does not exist
+   * @throws Throw if such an x does not exist
    * @see ExactTensorQ
    * @see LeastSquares */
   public static Tensor any(Tensor matrix, Tensor b) {
@@ -92,7 +92,7 @@ public enum LinearSolve {
     }
     for (; row < matrix.length(); ++row)
       if (Scalars.nonZero(reduce.Get(row, last)))
-        throw TensorRuntimeException.of(matrix, b);
+        throw new Throw(matrix, b);
     return x;
   }
 }

@@ -9,8 +9,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.Unprotect;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Join;
@@ -58,7 +58,7 @@ import ch.alpine.tensor.sca.Sign;
       if (Sign.isNegative(c.Get(j))) {
         int argmax = ArgMax.of(tab.get(Tensor.ALL, j).extract(0, m));
         if (!Sign.isPositive(tab.Get(argmax, j)))
-          throw TensorRuntimeException.of(tab); // problem unbounded
+          throw new Throw(tab); // problem unbounded
         Integer pivot = null;
         Scalar min = null;
         for (int i = 0; i < m; ++i)

@@ -5,8 +5,8 @@ import java.io.IOException;
 
 import ch.alpine.tensor.Parallelize;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.ext.HomeDirectory;
 import ch.alpine.tensor.ext.Timing;
@@ -43,7 +43,7 @@ import ch.alpine.tensor.sca.Chop;
         Tensor cp = Parallelize.dot(a, b);
         s_par.stop();
         if (!Chop._12.isClose(cs, cp))
-          throw TensorRuntimeException.of(cs);
+          throw new Throw(cs);
       }
       timing.append(Tensors.vector(s_ser.nanoSeconds() / trials, s_par.nanoSeconds() / trials));
     }

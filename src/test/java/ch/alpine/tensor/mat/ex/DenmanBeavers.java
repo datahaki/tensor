@@ -6,7 +6,7 @@ import java.io.Serializable;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -31,7 +31,7 @@ import ch.alpine.tensor.mat.re.Inverse;
       yk = yn;
       zk = zn;
     }
-    throw TensorRuntimeException.of(a);
+    throw new Throw(a);
   }
 
   @Override

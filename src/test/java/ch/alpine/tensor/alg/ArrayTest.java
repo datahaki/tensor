@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -121,7 +122,7 @@ class ArrayTest {
   @Test
   void testForEach() {
     Set<List<Integer>> set = new HashSet<>();
-    Array.forEach(set::add, 2, 3, 4);
+    Array.stream(2, 3, 4).forEach(set::add);
     assertEquals(set.size(), 2 * 3 * 4);
   }
 
@@ -136,6 +137,37 @@ class ArrayTest {
   @Test
   void testForEachFail() {
     Set<List<Integer>> set = new HashSet<>();
-    assertThrows(IllegalArgumentException.class, () -> Array.forEach(set::add, 2, -1, 4));
+    assertThrows(IllegalArgumentException.class, () -> Array.stream(2, -1, 4).forEach(set::add));
+  }
+
+  @Test
+  void testSi() {
+    List<List<Integer>> list = Array.stream(2, 3, 4).collect(Collectors.toList());
+    assertEquals(list.size(), 24);
+  }
+
+  @Test
+  void testStreamForEach() {
+    long count = Array.stream(2, 3, 4).distinct().count();
+    assertEquals(count, 24);
+  }
+
+  @Test
+  void testStreamEmptyOne() {
+    List<List<Integer>> list = Array.stream().collect(Collectors.toList());
+    assertEquals(list.size(), 1);
+    assertTrue(list.get(0).isEmpty());
+  }
+
+  @Test
+  void testStreamDimZero() {
+    List<List<Integer>> list = Array.stream(2, 0, 1).collect(Collectors.toList());
+    assertTrue(list.isEmpty());
+  }
+
+  @Test
+  void testStreamDimEx() {
+    List<List<Integer>> list = Array.stream(2, 1, 3).distinct().collect(Collectors.toList());
+    assertEquals(list.size(), 6);
   }
 }

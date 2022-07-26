@@ -63,7 +63,7 @@ class AbstractTensorTest {
   void testEmptyEquals() {
     Object empty = Tensors.empty();
     assertFalse(empty.equals(null));
-    assertFalse(empty.equals(Integer.valueOf(123)));
+    assertFalse(empty.equals(123));
     assertFalse(empty.equals(RealScalar.of(2)));
   }
 

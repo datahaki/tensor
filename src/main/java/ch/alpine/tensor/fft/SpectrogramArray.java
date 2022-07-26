@@ -11,6 +11,7 @@ import ch.alpine.tensor.alg.PadRight;
 import ch.alpine.tensor.alg.Partition;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.red.Times;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Round;
@@ -135,6 +136,6 @@ public class SpectrogramArray implements TensorUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return String.format("SpectrogramArray[%d, %d]", windowLength, offset);
+    return MathematicaFormat.concise("SpectrogramArray", windowLength, offset, tensorUnaryOperator);
   }
 }

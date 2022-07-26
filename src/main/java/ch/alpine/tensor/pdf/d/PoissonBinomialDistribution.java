@@ -10,6 +10,7 @@ import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.MeanInterface;
 import ch.alpine.tensor.pdf.RandomVariateInterface;
@@ -38,9 +39,9 @@ public class PoissonBinomialDistribution implements Distribution, //
       Scalar p = Clips.unit().requireInside((Scalar) _p);
       if (RealScalar.ONE.equals(p))
         ++lowerBound;
-      else
-        if (Scalars.nonZero(p))
-          p_result.append(p);
+      else //
+      if (Scalars.nonZero(p))
+        p_result.append(p);
     }
     return new PoissonBinomialDistribution(lowerBound, p_result);
   }
@@ -78,12 +79,8 @@ public class PoissonBinomialDistribution implements Distribution, //
         .orElse(RealScalar.ZERO);
   }
 
-  // @Override // from DiscreteDistribution
-  // public int lowerBound() {
-  // return lowerBound;
-  // }
   @Override // from Object
   public String toString() {
-    return String.format("PoissonBinomialDistribution[%s]", Tensors.message(p_vector));
+    return MathematicaFormat.concise("PoissonBinomialDistribution", p_vector);
   }
 }

@@ -8,7 +8,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.sca.exp.Exp;
@@ -27,7 +28,7 @@ public class ChiSquareDistribution implements UnivariateDistribution, Serializab
   public static Distribution of(Scalar nu) {
     if (Scalars.lessThan(RealScalar.ZERO, nu))
       return new ChiSquareDistribution(nu);
-    throw TensorRuntimeException.of(nu);
+    throw new Throw(nu);
   }
 
   /** @param nu positive real
@@ -87,6 +88,6 @@ public class ChiSquareDistribution implements UnivariateDistribution, Serializab
 
   @Override // from Object
   public String toString() {
-    return String.format("ChiSquareDistribution[%s]", nu);
+    return MathematicaFormat.concise("ChiSquareDistribution", nu);
   }
 }

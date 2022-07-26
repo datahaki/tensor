@@ -54,7 +54,7 @@ import ch.alpine.tensor.Scalars;
   }
 
   /** @param map
-   * @param key satisfies {@link requireAtomic}
+   * @param key satisfies check "requireAtomic"
    * @param exponent non-zero */
   public static void merge(Map<String, Scalar> map, String key, Scalar exponent) {
     if (map.containsKey(key)) {

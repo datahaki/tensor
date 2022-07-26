@@ -59,7 +59,7 @@ class ScalarTest {
   void testFails() {
     Scalar a = DoubleScalar.of(3);
     Scalar b = DoubleScalar.of(5);
-    assertThrows(TensorRuntimeException.class, () -> a.dot(b));
+    assertThrows(Throw.class, () -> a.dot(b));
   }
 
   @Test

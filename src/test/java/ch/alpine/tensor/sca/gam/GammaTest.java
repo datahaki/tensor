@@ -15,7 +15,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.chq.FiniteScalarQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.qty.Quantity;
@@ -71,12 +71,12 @@ class GammaTest {
 
   @Test
   void testLargeNegativeInteger() {
-    assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(-100000000000L)));
+    assertThrows(Throw.class, () -> Gamma.of(RealScalar.of(-100000000000L)));
   }
 
   @Test
   void testLargeNegativeIntegerDouble() {
-    assertThrows(TensorRuntimeException.class, () -> Gamma.of(DecimalScalar.of(new BigDecimal("-100000000000.0"))));
+    assertThrows(Throw.class, () -> Gamma.of(DecimalScalar.of(new BigDecimal("-100000000000.0"))));
   }
 
   @Test
@@ -133,28 +133,28 @@ class GammaTest {
 
   @Test
   void testInt0Fail() {
-    assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(0)));
+    assertThrows(Throw.class, () -> Gamma.of(RealScalar.of(0)));
   }
 
   @Test
   void testIntN1Fail() {
-    assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(-1)));
+    assertThrows(Throw.class, () -> Gamma.of(RealScalar.of(-1)));
   }
 
   @Test
   void testDouble0Fail() {
-    assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(0.0)));
+    assertThrows(Throw.class, () -> Gamma.of(RealScalar.of(0.0)));
   }
 
   @Test
   void testDoubleN1Fail() {
-    assertThrows(TensorRuntimeException.class, () -> Gamma.of(RealScalar.of(-1.0)));
+    assertThrows(Throw.class, () -> Gamma.of(RealScalar.of(-1.0)));
   }
 
   @Test
   void testQuantityFail() {
-    assertThrows(TensorRuntimeException.class, () -> Gamma.of(Quantity.of(3, "m*s")));
-    assertThrows(TensorRuntimeException.class, () -> Gamma.of(Quantity.of(-2, "m"))); // <- fails for the wrong reason
-    assertThrows(TensorRuntimeException.class, () -> Gamma.of(Quantity.of(-2.12, "m^2")));
+    assertThrows(Throw.class, () -> Gamma.of(Quantity.of(3, "m*s")));
+    assertThrows(Throw.class, () -> Gamma.of(Quantity.of(-2, "m"))); // <- fails for the wrong reason
+    assertThrows(Throw.class, () -> Gamma.of(Quantity.of(-2.12, "m^2")));
   }
 }

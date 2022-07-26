@@ -14,8 +14,8 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.io.StringScalar;
 import ch.alpine.tensor.mat.Tolerance;
@@ -71,8 +71,8 @@ class FloorTest {
 
   @Test
   void testIntExactValueFail() {
-    assertThrows(TensorRuntimeException.class, () -> Floor.intValueExact(Quantity.of(1.2, "h")));
-    assertThrows(TensorRuntimeException.class, () -> Floor.longValueExact(Quantity.of(4.5, "km*h^-1")));
+    assertThrows(Throw.class, () -> Floor.intValueExact(Quantity.of(1.2, "h")));
+    assertThrows(Throw.class, () -> Floor.longValueExact(Quantity.of(4.5, "km*h^-1")));
   }
 
   @Test
@@ -143,6 +143,6 @@ class FloorTest {
 
   @Test
   void testTypeFail() {
-    assertThrows(TensorRuntimeException.class, () -> Floor.of(StringScalar.of("some")));
+    assertThrows(Throw.class, () -> Floor.of(StringScalar.of("some")));
   }
 }

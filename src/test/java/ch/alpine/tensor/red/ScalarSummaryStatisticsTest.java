@@ -13,8 +13,8 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.num.GaussScalar;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
@@ -128,6 +128,6 @@ class ScalarSummaryStatisticsTest {
     Scalar sum = sss1.getSum();
     assertEquals(sum, GaussScalar.of(4, 7));
     assertEquals(sss1.getCount(), 4);
-    assertThrows(TensorRuntimeException.class, () -> sss1.getAverage());
+    assertThrows(Throw.class, () -> sss1.getAverage());
   }
 }

@@ -8,8 +8,9 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.UnivariateDistribution;
 import ch.alpine.tensor.qty.Quantity;
@@ -34,7 +35,7 @@ public class FrechetDistribution implements UnivariateDistribution, Serializable
    * @return */
   public static Distribution of(Scalar alpha, Scalar beta) {
     if (Scalars.lessEquals(alpha, RealScalar.ZERO))
-      throw TensorRuntimeException.of(alpha);
+      throw new Throw(alpha);
     return new FrechetDistribution(alpha, Sign.requirePositive(beta));
   }
 
@@ -112,6 +113,6 @@ public class FrechetDistribution implements UnivariateDistribution, Serializable
 
   @Override // from Object
   public final String toString() {
-    return String.format("FrechetDistribution[%s, %s]", alpha, beta);
+    return MathematicaFormat.concise("FrechetDistribution", alpha, beta);
   }
 }

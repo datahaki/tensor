@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 
 class TensorRankTest {
   @Test
@@ -68,7 +68,7 @@ class TensorRankTest {
 
   @Test
   void testOfArrayFail() {
-    assertThrows(TensorRuntimeException.class, () -> TensorRank.ofArray(Tensors.fromString("{{1}, 2}")));
-    assertThrows(TensorRuntimeException.class, () -> TensorRank.ofArray(Tensors.fromString("{{1, 2}, {2}}")));
+    assertThrows(Throw.class, () -> TensorRank.ofArray(Tensors.fromString("{{1}, 2}")));
+    assertThrows(Throw.class, () -> TensorRank.ofArray(Tensors.fromString("{{1, 2}, {2}}")));
   }
 }

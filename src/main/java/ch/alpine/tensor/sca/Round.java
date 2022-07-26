@@ -8,7 +8,7 @@ import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.RoundingInterface;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.qty.Quantity;
@@ -52,7 +52,7 @@ public enum Round implements ScalarUnaryOperator {
       MultiplexScalar multiplexScalar = (MultiplexScalar) scalar;
       return multiplexScalar.eachMap(FUNCTION);
     }
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** Examples:

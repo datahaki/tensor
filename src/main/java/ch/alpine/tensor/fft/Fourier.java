@@ -6,8 +6,8 @@ import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.ext.Integers;
 import ch.alpine.tensor.io.ScalarArray;
 import ch.alpine.tensor.qty.Quantity;
@@ -40,7 +40,7 @@ public enum Fourier {
   public static Tensor of(Tensor vector, int b) {
     int n = vector.length();
     if (!Integers.isPowerOf2(n))
-      throw TensorRuntimeException.of(vector); // vector length is not a power of two
+      throw new Throw(vector); // vector length is not a power of two
     Scalar[] array = ScalarArray.ofVector(vector);
     for (int j = 0, i = 0; i < n; ++i) {
       if (j > i) {

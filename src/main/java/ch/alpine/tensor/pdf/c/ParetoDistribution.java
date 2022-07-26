@@ -7,7 +7,8 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.Sign;
 import ch.alpine.tensor.sca.pow.Power;
@@ -21,7 +22,7 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
   public static Distribution of(Scalar k, Scalar alpha) {
     if (Scalars.lessThan(RealScalar.ZERO, k))
       return new ParetoDistribution(k, Sign.requirePositive(alpha));
-    throw TensorRuntimeException.of(k);
+    throw new Throw(k);
   }
 
   /** @param k strictly positive real number
@@ -79,6 +80,6 @@ public class ParetoDistribution extends AbstractContinuousDistribution implement
 
   @Override // from Object
   public String toString() {
-    return String.format("ParetoDistribution[%s, %s]", k, alpha);
+    return MathematicaFormat.concise("ParetoDistribution", k, alpha);
   }
 }

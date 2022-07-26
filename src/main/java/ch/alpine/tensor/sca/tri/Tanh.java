@@ -6,7 +6,7 @@ import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 
 /** <pre>
@@ -38,7 +38,7 @@ public enum Tanh implements ScalarUnaryOperator {
       return DoubleScalar.of(Math.tanh(scalar.number().doubleValue()));
     if (scalar instanceof ComplexScalar)
       return Sinh.FUNCTION.apply(scalar).divide(Cosh.FUNCTION.apply(scalar));
-    throw TensorRuntimeException.of(scalar);
+    throw new Throw(scalar);
   }
 
   /** @param tensor

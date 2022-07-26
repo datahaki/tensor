@@ -6,7 +6,8 @@ import java.io.Serializable;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Pi;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.sca.exp.Exp;
@@ -21,7 +22,7 @@ public class RayleighDistribution extends AbstractContinuousDistribution impleme
   public static Distribution of(Scalar sigma) {
     if (Scalars.lessThan(RealScalar.ZERO, sigma))
       return new RayleighDistribution(sigma);
-    throw TensorRuntimeException.of(sigma);
+    throw new Throw(sigma);
   }
 
   /** @param sigma positive
@@ -73,6 +74,6 @@ public class RayleighDistribution extends AbstractContinuousDistribution impleme
 
   @Override // from Object
   public String toString() {
-    return String.format("RayleighDistribution[%s]", sigma);
+    return MathematicaFormat.concise("RayleighDistribution", sigma);
   }
 }

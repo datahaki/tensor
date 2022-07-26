@@ -8,6 +8,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.alg.VectorQ;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.sca.Floor;
 import ch.alpine.tensor.sca.Mod;
 
@@ -16,7 +17,7 @@ import ch.alpine.tensor.sca.Mod;
     return new ExtendedGCDImpl(vector);
   }
 
-  private class ExtendedGCDImpl implements ExtendedGCD, Serializable {
+  private static class ExtendedGCDImpl implements ExtendedGCD, Serializable {
     private final Scalar a;
     private final Scalar b;
     private final Scalar x;
@@ -51,7 +52,7 @@ import ch.alpine.tensor.sca.Mod;
 
     @Override
     public String toString() {
-      return String.format("%s[%s*%s+%s*%s==%s]", ExtendedGCD.class.getSimpleName(), a, x, b, y, gcd);
+      return MathematicaFormat.concise("ExtendedGCD", a, x, b, y, gcd);
     }
   }
 }

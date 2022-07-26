@@ -28,20 +28,20 @@ public enum RandomVariate {
    * random sequence for two successive program executions. */
   private static final Random RANDOM = new SecureRandom();
 
-  /** @param randomVariateInterface
+  /** @param distribution
    * @param random
-   * @return random variate from given interface */
+   * @return random variate from given distribution */
   public static Scalar of(Distribution distribution, Random random) {
     return _of((RandomVariateInterface) distribution, random); // terminal
   }
 
-  /** @param randomVariateInterface
-   * @return random variate from given interface */
+  /** @param distribution
+   * @return random variate from given distribution */
   public static Scalar of(Distribution distribution) {
     return of(distribution, RANDOM); // of # interface, random
   }
 
-  /** @param randomVariateInterface
+  /** @param distribution
    * @param random
    * @param dimensions
    * @return array of random variates from given interface with given dimensions */
@@ -50,14 +50,14 @@ public enum RandomVariate {
     return Array.fill(() -> _of(randomVariateInterface, random), dimensions); // terminal
   }
 
-  /** @param randomVariateInterface
+  /** @param distribution
    * @param dimensions
    * @return array of random variates with given dimensions */
   public static Tensor of(Distribution distribution, List<Integer> dimensions) {
     return of(distribution, RANDOM, dimensions); // of # interface, random, list
   }
 
-  /** @param randomVariateInterface
+  /** @param distribution
    * @param random
    * @param dimensions
    * @return array of random variates from given interface with given dimensions */
@@ -65,7 +65,7 @@ public enum RandomVariate {
     return of(distribution, random, Integers.asList(dimensions)); // of # interface, random, list
   }
 
-  /** @param randomVariateInterface
+  /** @param distribution
    * @param dimensions
    * @return array of random variates with given dimensions */
   public static Tensor of(Distribution distribution, int... dimensions) {

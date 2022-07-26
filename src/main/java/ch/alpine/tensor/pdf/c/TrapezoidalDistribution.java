@@ -10,9 +10,10 @@ import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.num.Polynomial;
 import ch.alpine.tensor.pdf.CentralMomentInterface;
 import ch.alpine.tensor.pdf.Distribution;
@@ -39,7 +40,7 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
    * @throws Exception unless a <= b <= c <= d and a < d */
   public static Distribution of(Scalar a, Scalar b, Scalar c, Scalar d) {
     if (Scalars.lessThan(c, b) || Scalars.lessEquals(d, a))
-      throw TensorRuntimeException.of(b, c);
+      throw new Throw(b, c);
     return new TrapezoidalDistribution(a, b, c, d);
   }
 
@@ -205,6 +206,6 @@ public class TrapezoidalDistribution extends AbstractContinuousDistribution //
 
   @Override // from Object
   public String toString() {
-    return String.format("TrapezoidalDistribution[%s, %s, %s, %s]", a, b, c, d);
+    return MathematicaFormat.concise("TrapezoidalDistribution", a, b, c, d);
   }
 }

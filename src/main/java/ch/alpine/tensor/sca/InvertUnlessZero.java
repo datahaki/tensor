@@ -41,7 +41,8 @@ public enum InvertUnlessZero implements ScalarUnaryOperator {
   @Override
   public Scalar apply(Scalar scalar) {
     if (Scalars.isZero(scalar)) {
-      // BenIsraelCohen.UnitNegate:
+      /* UnitNegate also appears in BenIsraelCohen
+       * yet we do not place the function in the global scope */
       if (scalar instanceof Quantity) {
         Quantity quantity = (Quantity) scalar;
         return Quantity.of(quantity.value(), quantity.unit().negate());

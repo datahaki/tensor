@@ -31,7 +31,7 @@ class RenameDirectoryTest {
   }
 
   @Test
-  void testSimple() throws Exception {
+  void testSimple() {
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();
@@ -42,7 +42,7 @@ class RenameDirectoryTest {
   }
 
   @Test
-  void testCreateParent() throws Exception {
+  void testCreateParent() {
     File folder1 = HomeDirectory.Documents(getClass().getSimpleName());
     assertFalse(folder1.exists());
     folder1.mkdir();

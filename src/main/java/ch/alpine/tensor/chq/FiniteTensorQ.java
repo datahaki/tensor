@@ -3,7 +3,7 @@ package ch.alpine.tensor.chq;
 
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 
 /** @see FiniteScalarQ */
 public enum FiniteTensorQ {
@@ -14,12 +14,12 @@ public enum FiniteTensorQ {
     return tensor.flatten(-1).map(Scalar.class::cast).allMatch(FiniteScalarQ::of);
   }
 
-  /** @param scalar
-   * @return given scalar
-   * @throws Exception if given scalar is not a finite scalar */
+  /** @param tensor
+   * @return given tensor
+   * @throws Exception if not all scalar entries in given tensor satisfy {@link FiniteScalarQ} */
   public static Tensor require(Tensor tensor) {
     if (of(tensor))
       return tensor;
-    throw TensorRuntimeException.of(tensor);
+    throw new Throw(tensor);
   }
 }

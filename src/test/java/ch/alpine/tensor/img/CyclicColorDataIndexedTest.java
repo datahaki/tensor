@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.DoubleScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.qty.Quantity;
 
 class CyclicColorDataIndexedTest {
@@ -76,17 +76,17 @@ class CyclicColorDataIndexedTest {
 
   @Test
   void testFailEmpty() {
-    assertThrows(TensorRuntimeException.class, () -> CyclicColorDataIndexed.of(Tensors.empty()));
+    assertThrows(Throw.class, () -> CyclicColorDataIndexed.of(Tensors.empty()));
   }
 
   @Test
   void testFailScalar() {
-    assertThrows(TensorRuntimeException.class, () -> CyclicColorDataIndexed.of(RealScalar.ZERO));
+    assertThrows(Throw.class, () -> CyclicColorDataIndexed.of(RealScalar.ZERO));
   }
 
   @Test
   void testFailRGB() {
     Tensor tensor = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}}");
-    assertThrows(TensorRuntimeException.class, () -> CyclicColorDataIndexed.of(tensor));
+    assertThrows(Throw.class, () -> CyclicColorDataIndexed.of(tensor));
   }
 }

@@ -9,6 +9,7 @@ import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.api.TensorScalarFunction;
 import ch.alpine.tensor.api.TensorUnaryOperator;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.sca.Abs;
 import ch.alpine.tensor.sca.Chop;
@@ -96,6 +97,6 @@ public class Normalize implements TensorUnaryOperator {
 
   @Override // from Object
   public String toString() {
-    return String.format("Normalize[%s]", tensorScalarFunction);
+    return MathematicaFormat.concise("Normalize", tensorScalarFunction);
   }
 }

@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Scalars;
 import ch.alpine.tensor.ext.PackageTestAccess;
+import ch.alpine.tensor.io.MathematicaFormat;
 import ch.alpine.tensor.itp.LinearInterpolation;
 import ch.alpine.tensor.pdf.c.DiracDeltaDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
@@ -85,9 +86,7 @@ public class TruncatedDistribution implements Distribution, //
 
   @Override // from Object
   public String toString() {
-    return String.format("TruncatedDistribution[%s, %s]", //
-        univariateDistribution, //
-        clip);
+    return MathematicaFormat.concise("TruncatedDistribution", univariateDistribution, clip);
   }
 
   @PackageTestAccess

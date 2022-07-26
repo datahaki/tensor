@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 
 class JoinTest {
   @Test
@@ -114,16 +114,16 @@ class JoinTest {
   @Test
   void testFailScalar() {
     // in Mathematica Join that involves scalars is not defined!
-    assertThrows(TensorRuntimeException.class, () -> Join.of(RealScalar.of(2)));
+    assertThrows(Throw.class, () -> Join.of(RealScalar.of(2)));
   }
 
   @Test
   void testFailScalarTwo() {
-    assertThrows(TensorRuntimeException.class, () -> Join.of(RealScalar.of(2), RealScalar.of(3)));
+    assertThrows(Throw.class, () -> Join.of(RealScalar.of(2), RealScalar.of(3)));
   }
 
   @Test
   void testFailVectorScalar() {
-    assertThrows(TensorRuntimeException.class, () -> Join.of(Tensors.vector(0, 1, 2), RealScalar.of(3)));
+    assertThrows(Throw.class, () -> Join.of(Tensors.vector(0, 1, 2), RealScalar.of(3)));
   }
 }

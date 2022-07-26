@@ -8,23 +8,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.lang.reflect.Modifier;
 import java.util.Random;
 
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import ch.alpine.tensor.ComplexScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Transpose;
 import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.Tolerance;
+import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
-import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.red.Trace;
 import ch.alpine.tensor.sca.Chop;
 
@@ -98,48 +98,36 @@ class MatrixLog2Test {
     }
   }
 
-  @Test
+  @RepeatedTest(10)
   void testComplex() {
-    Distribution distribution = NormalDistribution.standard();
-    for (int index = 0; index < 10; ++index) {
-      Tensor alg = Entrywise.with(ComplexScalar::of).apply( //
-          RandomVariate.of(distribution, 2, 2), //
-          RandomVariate.of(distribution, 2, 2));
-      _checkExpLog(alg);
-      _checkLogExp(alg);
-    }
+    Tensor alg = RandomVariate.of(ComplexNormalDistribution.STANDARD, 2, 2);
+    _checkExpLog(alg);
+    _checkLogExp(alg);
   }
 
-  @Test
+  @RepeatedTest(10)
   void testComplexTraceZero() {
-    Distribution distribution = NormalDistribution.standard();
-    for (int index = 0; index < 10; ++index) {
-      Tensor alg = Entrywise.with(ComplexScalar::of).apply( //
-          RandomVariate.of(distribution, 2, 2), //
-          RandomVariate.of(distribution, 2, 2));
-      alg.set(alg.Get(0, 0).negate(), 1, 1);
-      assertEquals(Trace.of(alg), RealScalar.ZERO);
-      _checkExpLog(alg);
-      _checkLogExp(alg);
-    }
+    Tensor alg = RandomVariate.of(ComplexNormalDistribution.STANDARD, 2, 2);
+    alg.set(alg.Get(0, 0).negate(), 1, 1);
+    assertEquals(Trace.of(alg), RealScalar.ZERO);
+    _checkExpLog(alg);
+    _checkLogExp(alg);
   }
 
-  @Test
+  @RepeatedTest(10)
   void test2x2() {
-    for (int count = 0; count < 10; ++count) {
-      Tensor x = RandomVariate.of(UniformDistribution.of(-1, 1), 2, 2);
-      Tensor exp = MatrixExp.of(x);
-      Tensor log = MatrixLog._of(exp);
-      Tensor cmp = MatrixLog2.of(exp);
-      Chop._04.requireClose(log, cmp);
-    }
+    Tensor x = RandomVariate.of(UniformDistribution.of(-1, 1), 2, 2);
+    Tensor exp = MatrixExp.of(x);
+    Tensor log = MatrixLog._of(exp);
+    Tensor cmp = MatrixLog2.of(exp);
+    Chop._04.requireClose(log, cmp);
   }
 
   @Test
   void testFail() {
     Distribution distribution = NormalDistribution.of(0, 2);
     Tensor matrix = RandomVariate.of(distribution, 2, 3);
-    assertThrows(TensorRuntimeException.class, () -> MatrixLog.of(matrix));
+    assertThrows(Throw.class, () -> MatrixLog.of(matrix));
   }
 
   @Test

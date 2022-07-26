@@ -13,25 +13,24 @@ import ch.alpine.tensor.Tensors;
 /** implementation for comma- or tab- separated values file format */
 /* package */ enum XsvFormat {
   /** comma separated values format */
-  CSV(",") {
+  CSV(',') {
     @Override
     Tensor embrace(String string) {
       return Tensors.fromString(Tensor.OPENING_BRACKET + string + Tensor.CLOSING_BRACKET);
     }
   },
   /** tab separated values file format */
-  TSV("\t") {
+  TSV('\t') {
     @Override
     Tensor embrace(String string) {
       return Tensors.fromString(Tensor.OPENING_BRACKET + string.replace('\t', ',') + Tensor.CLOSING_BRACKET);
     }
-  }, //
-  ;
+  };
 
   private final Collector<CharSequence, ?, String> collector;
 
-  private XsvFormat(String delimiter) {
-    collector = Collectors.joining(delimiter);
+  XsvFormat(int delimiter) {
+    collector = Collectors.joining(Character.toString(delimiter));
   }
 
   /** In Mathematica the csv file is imported using
@@ -60,7 +59,7 @@ import ch.alpine.tensor.Tensors;
    * @param stream of lines of file
    * @return tensor with rows defined by the entries of the input stream */
   public Tensor parse(Stream<String> stream) {
-    return parse(stream, this::embrace);
+    return parse(stream.parallel(), this::embrace);
   }
 
   /** Default function for parsing:
@@ -70,7 +69,7 @@ import ch.alpine.tensor.Tensors;
    * @param function that parses a row to a tensor
    * @return */
   public static Tensor parse(Stream<String> stream, Function<String, Tensor> function) {
-    return Tensor.of(stream.parallel().map(function).sequential());
+    return Tensor.of(stream.map(function).sequential());
   }
 
   // helper function

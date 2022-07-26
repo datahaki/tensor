@@ -30,12 +30,12 @@ import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
 import ch.alpine.tensor.mat.re.LinearSolve;
 import ch.alpine.tensor.mat.re.MatrixRank;
+import ch.alpine.tensor.pdf.ComplexNormalDistribution;
 import ch.alpine.tensor.pdf.Distribution;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.NormalDistribution;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 import ch.alpine.tensor.qty.Unit;
-import ch.alpine.tensor.red.Entrywise;
 import ch.alpine.tensor.sca.Chop;
 import ch.alpine.tensor.sca.N;
 
@@ -209,9 +209,7 @@ class LeastSquaresTest {
   void testLeastSquaresComplexSquare() {
     Random random = new Random(3);
     for (int n = 3; n < 6; ++n) {
-      Tensor matrix = Entrywise.with(ComplexScalar::of).apply( //
-          RandomVariate.of(NormalDistribution.standard(), random, n, n), //
-          RandomVariate.of(NormalDistribution.standard(), random, n, n));
+      Tensor matrix = RandomVariate.of(ComplexNormalDistribution.STANDARD, random, n, n);
       Tensor b = RandomVariate.of(NormalDistribution.standard(), random, n, 3);
       Tensor sol = LinearSolve.of(matrix, b);
       Tolerance.CHOP.requireClose(sol, LeastSquares.of(matrix, b));

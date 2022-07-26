@@ -96,7 +96,7 @@ class NdCollectNearestTest {
   }
 
   @ParameterizedTest
-  @EnumSource(NdCenters.class)
+  @EnumSource
   void testEmpty(NdCenters ndCenters) {
     NdMap<Void> ndMap = NdTreeMap.of(CoordinateBounds.of(Tensors.vector(0), Tensors.vector(1)));
     NdCenterInterface ndCenterInterface = ndCenters.apply(Tensors.vector(0.2));
@@ -105,7 +105,7 @@ class NdCollectNearestTest {
   }
 
   @ParameterizedTest
-  @EnumSource(NdCenters.class)
+  @EnumSource
   void testProtected(NdCenters ndCenters) {
     NdCenterInterface ndCenterInterface = ndCenters.apply(Array.zeros(2));
     assertTrue(new NdCollectNearest<>(ndCenterInterface, 1).queue().isEmpty());
@@ -117,7 +117,7 @@ class NdCollectNearestTest {
   }
 
   @ParameterizedTest
-  @EnumSource(NdCenters.class)
+  @EnumSource
   void testNonPositiveFail(NdCenters ndCenters) {
     NdCenterInterface ndCenterInterface = ndCenters.apply(Array.zeros(2));
     assertThrows(IllegalArgumentException.class, () -> new NdCollectNearest<>(ndCenterInterface, 0));

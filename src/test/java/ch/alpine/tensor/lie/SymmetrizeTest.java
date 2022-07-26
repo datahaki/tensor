@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RationalScalar;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.Dimensions;
 import ch.alpine.tensor.alg.Transpose;
@@ -98,7 +98,7 @@ class SymmetrizeTest {
   @Test
   void testNonArrayFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, {3}}");
-    assertThrows(TensorRuntimeException.class, () -> Symmetrize.of(tensor));
+    assertThrows(Throw.class, () -> Symmetrize.of(tensor));
   }
 
   @Test

@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
 import ch.alpine.tensor.Tensor;
-import ch.alpine.tensor.TensorRuntimeException;
 import ch.alpine.tensor.Tensors;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
 import ch.alpine.tensor.alg.ConstantArray;
 import ch.alpine.tensor.alg.Join;
@@ -54,7 +54,7 @@ class LinearSolveAnyTest {
     Tensor b = Join.of(vector);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
-    assertThrows(TensorRuntimeException.class, () -> Det.of(m));
+    assertThrows(Throw.class, () -> Det.of(m));
   }
 
   @Test
@@ -79,7 +79,7 @@ class LinearSolveAnyTest {
   void testSome2() {
     Tensor m = Tensors.fromString("{{1, 2, 3}, {5, 6, 7}, {7, 8, 9}}");
     Tensor b = Tensors.fromString("{1, -2, 1}");
-    assertThrows(TensorRuntimeException.class, () -> LinearSolve.any(m, b));
+    assertThrows(Throw.class, () -> LinearSolve.any(m, b));
   }
 
   @Test
@@ -176,7 +176,7 @@ class LinearSolveAnyTest {
     Tensor b = Tensors.vector(2, 2, -2);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
-    assertThrows(TensorRuntimeException.class, () -> Det.of(m)); // fail is consistent with Mathematica 12
+    assertThrows(Throw.class, () -> Det.of(m)); // fail is consistent with Mathematica 12
   }
 
   @Test
@@ -185,7 +185,7 @@ class LinearSolveAnyTest {
     Tensor b = Tensors.vector(-2, -2, 10);
     Tensor x = LinearSolve.any(m, b);
     assertEquals(m.dot(x), b);
-    assertThrows(TensorRuntimeException.class, () -> Det.of(m)); // fail is consistent with Mathematica 12
+    assertThrows(Throw.class, () -> Det.of(m)); // fail is consistent with Mathematica 12
   }
 
   @Test
@@ -200,7 +200,7 @@ class LinearSolveAnyTest {
 
   @Test
   void testNoSolutionFail() {
-    assertThrows(TensorRuntimeException.class, () -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1)));
-    assertThrows(TensorRuntimeException.class, () -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1.0)));
+    assertThrows(Throw.class, () -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1)));
+    assertThrows(Throw.class, () -> LinearSolve.any(Tensors.fromString("{{0}}"), Tensors.vector(1.0)));
   }
 }

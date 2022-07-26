@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
 import ch.alpine.tensor.Scalar;
-import ch.alpine.tensor.TensorRuntimeException;
+import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.api.ScalarUnaryOperator;
 import ch.alpine.tensor.ext.Serialization;
 import ch.alpine.tensor.num.GaussScalar;
@@ -55,14 +55,14 @@ class SimpleUnitSystemTest {
   void testFailValue1() {
     Properties properties = new Properties();
     properties.setProperty("cent", "1/100a[FRA]");
-    assertThrows(TensorRuntimeException.class, () -> SimpleUnitSystem.from(properties));
+    assertThrows(Throw.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test
   void testFailValue2() {
     Properties properties = new Properties();
     properties.setProperty("cent", "b/100a");
-    assertThrows(TensorRuntimeException.class, () -> SimpleUnitSystem.from(properties));
+    assertThrows(Throw.class, () -> SimpleUnitSystem.from(properties));
   }
 
   @Test

@@ -128,16 +128,16 @@ class DoubleScalarTest {
   @Test
   void testNaN() {
     DoubleScalar nan = (DoubleScalar) DoubleScalar.INDETERMINATE;
-    assertThrows(TensorRuntimeException.class, () -> nan.isNonNegative());
-    assertThrows(TensorRuntimeException.class, () -> nan.signum());
+    assertThrows(Throw.class, () -> nan.isNonNegative());
+    assertThrows(Throw.class, () -> nan.signum());
   }
 
   @Test
   void testCompareFail() {
     Scalar a = RealScalar.of(7.2);
     Scalar b = GaussScalar.of(3, 5);
-    assertThrows(TensorRuntimeException.class, () -> Max.of(a, b));
-    assertThrows(TensorRuntimeException.class, () -> Max.of(b, a));
+    assertThrows(Throw.class, () -> Max.of(a, b));
+    assertThrows(Throw.class, () -> Max.of(b, a));
   }
 
   @Test
