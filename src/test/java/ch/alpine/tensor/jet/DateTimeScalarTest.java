@@ -115,7 +115,7 @@ class DateTimeScalarTest {
 
   @Test
   void testPiSeconds() {
-    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.of(2013, 11, 30, 4, 54, 00));
+    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.of(2013, 11, 30, 4, 54, 0));
     Scalar scalar = Quantity.of(Pi.in(30), "s");
     Scalar result = dateTimeScalar.add(scalar);
     assertEquals(result.toString(), "2013-11-30T04:54:03.141592653");
@@ -125,7 +125,7 @@ class DateTimeScalarTest {
 
   @Test
   void testPiHours() {
-    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.of(2013, 11, 30, 4, 54, 00));
+    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.of(2013, 11, 30, 4, 54, 0));
     Scalar scalar = Quantity.of(Pi.in(30), "h");
     Scalar result = dateTimeScalar.add(scalar);
     assertEquals(result.toString(), "2013-11-30T08:02:29.733552923");
@@ -135,7 +135,7 @@ class DateTimeScalarTest {
 
   @Test
   void testPiDays() {
-    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.of(2013, 11, 30, 4, 54, 00));
+    DateTimeScalar dateTimeScalar = DateTimeScalar.of(LocalDateTime.of(2013, 11, 30, 4, 54, 0));
     Scalar scalar = Quantity.of(Pi.in(30), "days");
     Scalar result = dateTimeScalar.add(scalar);
     assertEquals(result.toString(), "2013-12-03T08:17:53.605270158");

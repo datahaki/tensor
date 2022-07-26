@@ -77,6 +77,9 @@ import ch.alpine.tensor.io.StringScalar;
           closing_allowInsertNonBlank = false;
           head = tail + 1;
         }
+        default -> {
+          // ---
+        }
         }
         ++tail;
       }

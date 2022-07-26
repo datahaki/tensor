@@ -21,13 +21,12 @@ import ch.alpine.tensor.sca.Chop;
   /** @param x
    * @return sine of x */
   public Scalar sin(Scalar x) {
-    Scalar xn0 = x.zero();
     Scalar xn1 = x;
     Scalar add = x;
     final Scalar x2 = x.multiply(x);
     int count = 0;
     for (int index = 1; index < MAX_ITERATIONS;) {
-      xn0 = xn1;
+      Scalar xn0 = xn1;
       add = add.multiply(x2).divide(RealScalar.of(++index * ++index));
       xn1 = Integers.isEven(++count) //
           ? xn1.add(add)
@@ -41,12 +40,11 @@ import ch.alpine.tensor.sca.Chop;
   /** @param x
    * @return hyperbolic sine of x */
   public Scalar sinh(Scalar x) {
-    Scalar xn0 = x.zero();
     Scalar xn1 = x;
     Scalar add = x;
     final Scalar x2 = x.multiply(x);
     for (int index = 1; index < MAX_ITERATIONS;) {
-      xn0 = xn1;
+      Scalar xn0 = xn1;
       add = add.multiply(x2).divide(RealScalar.of(++index * ++index));
       xn1 = xn1.add(add);
       if (chop.isClose(xn0, xn1))
@@ -58,13 +56,12 @@ import ch.alpine.tensor.sca.Chop;
   /** @param x
    * @return cosine of x */
   public Scalar cos(Scalar x) {
-    Scalar xn0 = x.zero();
     Scalar xn1 = x.one();
     Scalar add = x.one();
     final Scalar x2 = x.multiply(x);
     int count = 0;
     for (int index = 0; index < MAX_ITERATIONS;) {
-      xn0 = xn1;
+      Scalar xn0 = xn1;
       add = add.multiply(x2).divide(RealScalar.of(++index * ++index));
       xn1 = Integers.isEven(++count) //
           ? xn1.add(add)
@@ -78,12 +75,11 @@ import ch.alpine.tensor.sca.Chop;
   /** @param x
    * @return hyperbolic cosine of x */
   public Scalar cosh(Scalar x) {
-    Scalar xn0 = x.zero();
     Scalar xn1 = x.one();
     Scalar add = x.one();
     final Scalar x2 = x.multiply(x);
     for (int index = 0; index < MAX_ITERATIONS;) {
-      xn0 = xn1;
+      Scalar xn0 = xn1;
       add = add.multiply(x2).divide(RealScalar.of(++index * ++index));
       xn1 = xn1.add(add);
       if (chop.isClose(xn0, xn1))

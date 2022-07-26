@@ -32,7 +32,7 @@ class CirclePointTest {
       Optional<Tensor> optional = CirclePoint.INSTANCE.turns(scalar);
       assertTrue(optional.isPresent());
       Tensor vector = optional.get();
-      assertTrue(0 < vector.stream().map(Scalar.class::cast).filter(ExactScalarQ::of).count());
+      assertTrue(vector.stream().map(Scalar.class::cast).anyMatch(ExactScalarQ::of));
       Chop._14.requireClose(vector, AngleVector.of(scalar.multiply(Pi.TWO)));
     }
   }

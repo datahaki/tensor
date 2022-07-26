@@ -42,9 +42,9 @@ public class Pretty {
     if (ArrayQ.of(tensor))
       stringBuilder.append(array(tensor));
     else {
-      stringBuilder.append(spaces(level++) + OPENING);
+      stringBuilder.append(spaces(level++)).append(OPENING);
       tensor.stream().forEach(this::branch);
-      stringBuilder.append(spaces(--level) + CLOSING);
+      stringBuilder.append(spaces(--level)).append(CLOSING);
     }
   }
 
@@ -58,9 +58,9 @@ public class Pretty {
           .collect(Collectors.joining("", spaces(level) + "[", CLOSING));
     default:
       StringBuilder stringBuilder = new StringBuilder();
-      stringBuilder.append(spaces(level++) + OPENING);
+      stringBuilder.append(spaces(level++)).append(OPENING);
       tensor.stream().map(this::array).forEach(stringBuilder::append);
-      stringBuilder.append(spaces(--level) + CLOSING);
+      stringBuilder.append(spaces(--level)).append(CLOSING);
       return stringBuilder.toString();
     }
   }

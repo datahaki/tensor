@@ -17,7 +17,7 @@ import ch.alpine.tensor.sca.Mod;
     return new ExtendedGCDImpl(vector);
   }
 
-  private class ExtendedGCDImpl implements ExtendedGCD, Serializable {
+  private static class ExtendedGCDImpl implements ExtendedGCD, Serializable {
     private final Scalar a;
     private final Scalar b;
     private final Scalar x;

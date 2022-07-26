@@ -45,7 +45,7 @@ import java.util.TreeMap;
       BigInteger d = divisor(n);
       recur(d);
       n = n.divide(d);
-      if (BigInteger.ONE.compareTo(n) == -1) // is 1 < n ?
+      if (BigInteger.ONE.compareTo(n) < 0) // is 1 < n ?
         recur(n);
     }
   }
@@ -69,7 +69,7 @@ import java.util.TreeMap;
       if (i == k) {
         y = xi;
         k = 2 * k;
-        if (BigInteger.valueOf(k).compareTo(n) == +1)
+        if (BigInteger.valueOf(k).compareTo(n) > 0)
           xi = random(n);
       }
     }

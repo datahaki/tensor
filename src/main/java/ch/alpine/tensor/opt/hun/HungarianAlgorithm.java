@@ -24,6 +24,7 @@ import ch.alpine.tensor.red.Min;
 /* package */ class HungarianAlgorithm extends HungarianAlgorithmGraph {
   private transient final HungarianAlgorithmTree hungarianAlgorithmTree;
   private transient final Set<Integer> freeX = new HashSet<>();
+  // TODO TENSOR freeY is never read
   private transient final Set<Integer> freeY = new HashSet<>();
   private int iterations = 0;
 

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamException;
+import java.io.Serial;
 import java.io.Serializable;
 
 import ch.alpine.tensor.Tensor;
@@ -14,16 +15,19 @@ import ch.alpine.tensor.Tensors;
   Tensor handled = Tensors.vector(99, 100);
   Tensor value;
 
+  @Serial
   private void writeObject(ObjectOutputStream out) throws IOException {
     out.writeObject(handled);
     out.writeObject(Tensors.vector(1, 2, 3));
   }
 
+  @Serial
   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
     handled = (Tensor) in.readObject();
     value = (Tensor) in.readObject();
   }
 
+  @Serial
   @SuppressWarnings({ "unused", "static-method" })
   private void readObjectNoData() throws ObjectStreamException {
     System.out.println("no data");

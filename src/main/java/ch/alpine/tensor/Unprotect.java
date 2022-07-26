@@ -4,7 +4,6 @@ package ch.alpine.tensor;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import ch.alpine.tensor.io.TableBuilder;
 import ch.alpine.tensor.qty.Quantity;
@@ -107,8 +106,7 @@ public enum Unprotect {
         .map(Scalar.class::cast) //
         .map(QuantityUnit::of) //
         .distinct() //
-        .limit(2) //
-        .collect(Collectors.toList());
+        .limit(2).toList();
     if (list.size() == 1)
       return list.get(0);
     // list has at most 2 elements, so list.toString() is acceptable

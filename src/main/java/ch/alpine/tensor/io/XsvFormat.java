@@ -59,7 +59,7 @@ import ch.alpine.tensor.Tensors;
    * @param stream of lines of file
    * @return tensor with rows defined by the entries of the input stream */
   public Tensor parse(Stream<String> stream) {
-    return parse(stream, this::embrace);
+    return parse(stream.parallel(), this::embrace);
   }
 
   /** Default function for parsing:
@@ -69,7 +69,7 @@ import ch.alpine.tensor.Tensors;
    * @param function that parses a row to a tensor
    * @return */
   public static Tensor parse(Stream<String> stream, Function<String, Tensor> function) {
-    return Tensor.of(stream.parallel().map(function).sequential());
+    return Tensor.of(stream.map(function).sequential());
   }
 
   // helper function

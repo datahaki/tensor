@@ -290,15 +290,15 @@ class TrapezoidalDistributionTest {
   @Test
   @Disabled
   void testDateTimeScalar() {
-    DateTimeScalar a = DateTimeScalar.of(LocalDateTime.of(2022, 1, 2, 12, 02));
-    DateTimeScalar b = DateTimeScalar.of(LocalDateTime.of(2022, 1, 4, 11, 05));
-    DateTimeScalar c = DateTimeScalar.of(LocalDateTime.of(2022, 1, 7, 19, 06));
-    DateTimeScalar d = DateTimeScalar.of(LocalDateTime.of(2022, 1, 8, 05, 07));
+    DateTimeScalar a = DateTimeScalar.of(LocalDateTime.of(2022, 1, 2, 12, 2));
+    DateTimeScalar b = DateTimeScalar.of(LocalDateTime.of(2022, 1, 4, 11, 5));
+    DateTimeScalar c = DateTimeScalar.of(LocalDateTime.of(2022, 1, 7, 19, 6));
+    DateTimeScalar d = DateTimeScalar.of(LocalDateTime.of(2022, 1, 8, 5, 7));
     Distribution distribution = TrapezoidalDistribution.of(a, b, c, d);
     Scalar scalar = RandomVariate.of(distribution);
     assertInstanceOf(DateTimeScalar.class, scalar);
     PDF pdf = PDF.of(distribution);
-    Scalar t = DateTimeScalar.of(LocalDateTime.of(2022, 1, 6, 8, 06));
+    Scalar t = DateTimeScalar.of(LocalDateTime.of(2022, 1, 6, 8, 6));
     pdf.at(t);
     CDF cdf = CDF.of(distribution);
     Scalar p_lessEquals = cdf.p_lessEquals(t);
