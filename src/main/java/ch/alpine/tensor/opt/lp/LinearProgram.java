@@ -82,7 +82,7 @@ public class LinearProgram implements Serializable {
 
   public enum Variables {
     NON_NEGATIVE,
-    UNRESTRICTED;
+    UNRESTRICTED
   }
 
   // ---

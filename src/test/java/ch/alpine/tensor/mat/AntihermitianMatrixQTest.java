@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,7 +23,7 @@ class AntihermitianMatrixQTest {
   @Test
   void test2x2() {
     Tensor matrix = Tensors.fromString("{{0,1+2*I},{-1+2*I,0}}");
-    AntihermitianMatrixQ.require(matrix);
+    assertEquals(AntihermitianMatrixQ.require(matrix), matrix);
   }
 
   @Test

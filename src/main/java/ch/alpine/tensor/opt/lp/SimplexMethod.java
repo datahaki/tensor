@@ -85,7 +85,7 @@ import ch.alpine.tensor.sca.Sign;
           if (i != p)
             tab.set(row -> LenientAdd.of(row, tab_p.multiply(row.Get(j).negate())), i);
       } else
-        /** "[...] if we have all c_j >= 0 in the tableau in the minimization
+        /* "[...] if we have all c_j >= 0 in the tableau in the minimization
          * problem, then the current value of z is optimum."
          * Reference:
          * "Linear and Integer Programming made Easy"

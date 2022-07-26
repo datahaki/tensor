@@ -96,8 +96,8 @@ public enum HomeDirectory {
   }
 
   private static File concat(File file, String[] strings) {
-    for (int index = 0; index < strings.length; ++index)
-      file = new File(file, strings[index]);
+    for (String string : strings)
+      file = new File(file, string);
     return file;
   }
 }

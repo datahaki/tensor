@@ -33,7 +33,7 @@ import ch.alpine.tensor.io.StringScalar;
       boolean closing_allowInsertNonBlank = false;
       for (char chr : string.toCharArray()) {
         switch (chr) {
-        case Tensor.OPENING_BRACKET: {
+        case Tensor.OPENING_BRACKET -> {
           if (opening_disallow)
             throw new IllegalStateException();
           if (deque.isEmpty() && !string.substring(head, tail).isBlank()) // "a{1, 2}"
@@ -42,9 +42,8 @@ import ch.alpine.tensor.io.StringScalar;
           closing_forceInsert = false;
           closing_allowInsertNonBlank = true;
           head = tail + 1;
-          break;
         }
-        case COMMA: {
+        case COMMA -> {
           String substring = string.substring(head, tail);
           if (comma_stripBlank) {
             if (!substring.isBlank()) // "{{}a, 1}"
@@ -56,9 +55,8 @@ import ch.alpine.tensor.io.StringScalar;
           closing_forceInsert = true;
           closing_allowInsertNonBlank = false;
           head = tail + 1;
-          break;
         }
-        case Tensor.CLOSING_BRACKET: {
+        case Tensor.CLOSING_BRACKET -> {
           String substring = string.substring(head, tail); // any expression before '}'
           if (closing_forceInsert) { // insert expression between ',' and '}'
             deque.peek().add(function.apply(substring.strip()));
@@ -78,10 +76,7 @@ import ch.alpine.tensor.io.StringScalar;
             deque.peek().add(Unprotect.using(last));
           closing_allowInsertNonBlank = false;
           head = tail + 1;
-          break;
         }
-        default:
-          break;
         }
         ++tail;
       }

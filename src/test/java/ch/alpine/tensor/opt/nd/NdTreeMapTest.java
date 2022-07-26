@@ -67,14 +67,11 @@ class NdTreeMapTest {
     for (int count = 0; count < 1000; ++count)
       ndTreeMap.insert(RandomVariate.of(distribution, 2), null);
     for (int count = 0; count < 20; ++count) {
-      new Thread(new Runnable() {
-        @Override
-        public void run() {
-          Tensor center = RandomVariate.of(distribution, 2);
-          NdCenterInterface distancer = NdCenters.VECTOR_2_NORM.apply(center);
-          Collection<NdMatch<Void>> cluster = NdCollectNearest.of(ndTreeMap, distancer, 100);
-          assertEquals(cluster.size(), 100);
-        }
+      new Thread(() -> {
+        Tensor center = RandomVariate.of(distribution, 2);
+        NdCenterInterface distancer = NdCenters.VECTOR_2_NORM.apply(center);
+        Collection<NdMatch<Void>> cluster = NdCollectNearest.of(ndTreeMap, distancer, 100);
+        assertEquals(cluster.size(), 100);
       }).start();
     }
   }

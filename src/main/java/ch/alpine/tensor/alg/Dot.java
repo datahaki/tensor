@@ -102,31 +102,13 @@ public class Dot {
         dimensions2.stream().skip(1)).collect(Collectors.toList());
   }
 
-  private static class Node {
-    private final Tensor tensor;
-    private final List<Integer> dimensions;
-
-    public Node(Tensor tensor, List<Integer> dimensions) {
-      this.tensor = tensor;
-      this.dimensions = dimensions;
-    }
-
+  private record Node(Tensor tensor, List<Integer> dimensions) {
     public Node dot(Node node) {
       return new Node(tensor.dot(node.tensor), combine(dimensions, node.dimensions));
     }
   }
 
-  private static class Entry {
-    private final List<Integer> dimensions;
-    private final int m;
-    private final int k;
-
-    public Entry(List<Integer> dimensions, int m, int k) {
-      this.dimensions = dimensions;
-      this.m = m;
-      this.k = k;
-    }
-
+  private record Entry(List<Integer> dimensions, int m, int k) {
     public int product(Entry entry) {
       return m + entry.m + Stream.concat(dimensions.stream(), entry.dimensions.stream().skip(1)) //
           .reduce(Math::multiplyExact).orElseThrow();

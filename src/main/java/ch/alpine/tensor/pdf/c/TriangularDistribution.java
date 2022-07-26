@@ -38,9 +38,8 @@ public enum TriangularDistribution {
    * @param sigma standard deviation, strictly positive
    * @return */
   public static Distribution with(Scalar mean, Scalar sigma) {
-    Scalar b = mean;
     Scalar d = sigma.multiply(Sqrt.FUNCTION.apply(RealScalar.of(6)));
-    return of(b.subtract(d), b, b.add(d));
+    return of(mean.subtract(d), mean, mean.add(d));
   }
 
   /** @param mean

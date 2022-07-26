@@ -61,14 +61,11 @@ public enum Roots {
       Tensor roots = unsorted(coeffs.extract(1, coeffs.length()));
       return roots.append(roots.Get(0).zero());
     }
-    switch (degree) {
-    case 2: // a + b*x + c*x^2 == 0
-      return RootsDegree2.of(coeffs);
-    case 3: // a + b*x + c*x^2 + d*x^3 == 0
-      return RootsDegree3.of(coeffs);
-    default:
-      throw new Throw(coeffs);
-    }
+    return switch (degree) {
+    case 2 -> RootsDegree2.of(coeffs); // a + b*x + c*x^2 == 0
+    case 3 -> RootsDegree3.of(coeffs); // a + b*x + c*x^2 + d*x^3 == 0
+    default -> throw new Throw(coeffs);
+    };
   }
 
   /* package */ enum ComplexComparator implements Comparator<Scalar> {

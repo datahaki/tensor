@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat.gr;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -31,7 +32,8 @@ class InfluenceMatrixQTest {
     Tensor design = Tensors.fromString( //
         "{{-304[m], -144[m], 16[m]}, {-19[m], -9[m], 1[m]}, {285[m], 135[m], -15[m]}, {-152[m], -72[m], 8[m]}}");
     InfluenceMatrix influenceMatrix = InfluenceMatrix.of(design);
-    InfluenceMatrixQ.require(influenceMatrix.matrix());
+    Tensor tensor = InfluenceMatrixQ.require(influenceMatrix.matrix());
+    assertEquals(tensor, influenceMatrix.matrix());
   }
 
   @Test

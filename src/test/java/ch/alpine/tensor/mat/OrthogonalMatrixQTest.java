@@ -45,7 +45,8 @@ class OrthogonalMatrixQTest {
 
   @Test
   void testRequireChop() {
-    OrthogonalMatrixQ.require(IdentityMatrix.of(4), Chop.NONE);
+    Tensor tensor = OrthogonalMatrixQ.require(IdentityMatrix.of(4), Chop.NONE);
+    assertEquals(tensor, IdentityMatrix.of(4));
     assertThrows(Throw.class, () -> OrthogonalMatrixQ.require(HilbertMatrix.of(3), Chop.NONE));
   }
 

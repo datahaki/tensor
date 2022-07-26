@@ -81,8 +81,7 @@ class SincTest {
   @Test
   void testThreshold() {
     Scalar res1 = Sinc.of(THRESHOLD);
-    double val1 = THRESHOLD.number().doubleValue();
-    double val0 = val1;
+    double val0 = THRESHOLD.number().doubleValue();
     for (int count = 0; count < 100; ++count)
       val0 = Math.nextDown(val0);
     Scalar res0 = Sinc.of(DoubleScalar.of(val0));

@@ -54,8 +54,7 @@ public enum MathematicaForm {
 
   public static String of(Tensor tensor) {
     if (tensor instanceof Scalar) {
-      if (tensor instanceof Quantity) {
-        Quantity quantity = (Quantity) tensor;
+      if (tensor instanceof Quantity quantity) {
         String unit = quantity.unit().map().entrySet() //
             .stream() //
             .map(MathematicaForm::of) //

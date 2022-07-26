@@ -28,6 +28,7 @@ import ch.alpine.tensor.mat.DiagonalMatrix;
 import ch.alpine.tensor.mat.HilbertMatrix;
 import ch.alpine.tensor.mat.IdentityMatrix;
 import ch.alpine.tensor.mat.MatrixQ;
+import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.mat.SymmetricMatrixQ;
 import ch.alpine.tensor.mat.Tolerance;
 import ch.alpine.tensor.mat.re.Inverse;
@@ -179,7 +180,8 @@ class MatrixPowerTest {
   @Test
   void testHermitian() {
     Tensor matrix = Tensors.fromString("{{0, I}, {-I, 0}}");
-    MatrixPower.ofHermitian(matrix, RealScalar.of(2.3));
+    Tensor hermitian = MatrixPower.ofHermitian(matrix, RealScalar.of(2.3));
+    SquareMatrixQ.require(hermitian);
   }
 
   @Test

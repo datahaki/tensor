@@ -93,15 +93,7 @@ public class TruncatedDistribution implements Distribution, //
     return clip_cdf;
   }
 
-  private static final class RV_S implements Distribution, RandomVariateInterface, Serializable {
-    private final RandomVariateInterface randomVariateInterface;
-    private final Clip clip;
-
-    private RV_S(RandomVariateInterface randomVariateInterface, Clip clip) {
-      this.randomVariateInterface = randomVariateInterface;
-      this.clip = clip;
-    }
-
+  private record RV_S(RandomVariateInterface randomVariateInterface, Clip clip) implements Distribution, RandomVariateInterface, Serializable {
     @Override // from RandomVariateInterface
     public Scalar randomVariate(Random random) {
       return Stream.generate(() -> randomVariateInterface.randomVariate(random)) //

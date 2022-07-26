@@ -25,8 +25,8 @@ class DotTest {
   private static Tensor dot(Tensor tensor, Tensor... v) {
     if (v.length == 0)
       return tensor.copy();
-    for (int index = 0; index < v.length; ++index)
-      tensor = tensor.dot(v[index]);
+    for (Tensor value : v)
+      tensor = tensor.dot(value);
     return tensor;
   }
 

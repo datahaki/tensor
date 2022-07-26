@@ -34,7 +34,6 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
   private final int N;
   private final int n;
   private final int m_n;
-  private final int m;
   private final Binomial binomial_n;
   private final Binomial binomial_m;
   private final Binomial binomial_m_n;
@@ -43,7 +42,7 @@ public class HypergeometricDistribution extends EvaluatedDiscreteDistribution {
     this.N = N;
     this.n = n;
     this.m_n = m_n;
-    this.m = m_n - n;
+    int m = m_n - n;
     binomial_n = Binomial.of(n);
     binomial_m = Binomial.of(m);
     binomial_m_n = Binomial.of(m_n);

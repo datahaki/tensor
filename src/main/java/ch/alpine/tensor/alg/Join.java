@@ -58,7 +58,7 @@ public enum Join {
   // helper function called in base case of more general function of(...)
   private static Tensor flatten(List<Tensor> list) {
     return Tensor.of(list.stream() //
-        .flatMap(tensor -> tensor.stream()) //
+        .flatMap(Tensor::stream) //
         .map(Tensor::copy));
   }
 }

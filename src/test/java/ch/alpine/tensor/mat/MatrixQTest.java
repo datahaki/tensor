@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -87,7 +88,14 @@ class MatrixQTest {
 
   @Test
   void testRequireSize() {
-    MatrixQ.requireSize(IdentityMatrix.of(3), 3, 3);
+    Tensor tensor = MatrixQ.requireSize(HilbertMatrix.of(3, 4), 3, 4);
+    assertEquals(tensor, HilbertMatrix.of(3, 4));
+  }
+
+  @Test
+  void testRequireSizeFail() {
+    Tensor tensor = MatrixQ.requireSize(IdentityMatrix.of(3), 3, 3);
+    assertEquals(tensor, IdentityMatrix.of(3));
     assertThrows(Throw.class, () -> MatrixQ.requireSize(IdentityMatrix.of(3), 3, 4));
   }
 }

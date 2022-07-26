@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.lie.Symmetrize;
+import ch.alpine.tensor.mat.SquareMatrixQ;
 import ch.alpine.tensor.pdf.RandomVariate;
 import ch.alpine.tensor.pdf.c.UniformDistribution;
 
@@ -12,7 +13,9 @@ class MatrixAbsTest {
   @Test
   void testSimple() {
     Tensor matrix = Symmetrize.of(RandomVariate.of(UniformDistribution.of(-1, 1), 5, 5));
-    MatrixAbs.ofSymmetric(matrix);
-    MatrixAbs.ofHermitian(matrix);
+    Tensor symmetric = MatrixAbs.ofSymmetric(matrix);
+    SquareMatrixQ.require(symmetric);
+    Tensor hermitian = MatrixAbs.ofHermitian(matrix);
+    SquareMatrixQ.require(hermitian);
   }
 }

@@ -46,7 +46,7 @@ import ch.alpine.tensor.sca.pow.Power;
     ScalarUnaryOperator power = Power.function(RationalScalar.of(-1, n << 1));
     // Incomplete square root cascade
     for (; count < MAX_ITERATIONS; ++count) {
-      /** the publication suggests to use |Det(mk)^(-1/2n)|
+      /* the publication suggests to use |Det(mk)^(-1/2n)|
        * which would just take a detour via complex numbers!? */
       GaussianElimination gaussianElimination = new GaussianElimination(mk, id, Pivots.ARGMAX_ABS);
       Scalar gk = power.apply(Abs.FUNCTION.apply(gaussianElimination.det()));

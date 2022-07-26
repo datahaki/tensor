@@ -35,6 +35,6 @@ public enum SimplexPivots implements SimplexPivot {
       return pivot;
     }
   },
-  /** p.50 greatest increment method NOT YET IMPLEMENTED */
-  /** p.50 all variable gradient method NOT YET IMPLEMENTED */
+  /* p.50 greatest increment method NOT YET IMPLEMENTED */
+  /* p.50 all variable gradient method NOT YET IMPLEMENTED */
 }

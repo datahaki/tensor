@@ -1,6 +1,7 @@
 // code by jph
 package ch.alpine.tensor.mat;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import ch.alpine.tensor.RealScalar;
+import ch.alpine.tensor.Tensor;
 import ch.alpine.tensor.Tensors;
 import ch.alpine.tensor.Throw;
 import ch.alpine.tensor.alg.Array;
@@ -41,7 +43,8 @@ class AntisymmetricMatrixQTest {
 
   @Test
   void testRequire() {
-    AntisymmetricMatrixQ.require(Tensors.fromString("{{0, 2}, {-2, 0}}"));
+    Tensor matrix = Tensors.fromString("{{0, 2}, {-2, 0}}");
+    assertEquals(AntisymmetricMatrixQ.require(matrix), matrix);
     assertThrows(Throw.class, () -> AntisymmetricMatrixQ.require(Tensors.fromString("{{0, 2}, {-1, 0}}")));
   }
 }

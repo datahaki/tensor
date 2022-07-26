@@ -56,7 +56,8 @@ class ImageResizeTest {
   @Test
   void testFactor() {
     Tensor tensor = ResourceData.of("/ch/alpine/tensor/img/album_au_gray.jpg");
-    ImageResize.of(tensor, Pi.VALUE);
+    Tensor dimens = ImageResize.of(tensor, Pi.VALUE);
+    assertEquals(Dimensions.of(dimens), Arrays.asList(314, 418));
     ImageResize.of(tensor, Pi.HALF);
     ImageResize.of(tensor, Pi.HALF.reciprocal());
   }

@@ -50,6 +50,12 @@ class ArrayQTest {
 
   @Test
   void testRequire() {
+    Tensor tensor = Tensors.fromString("{{1, 2}, {3, 4}}");
+    assertEquals(tensor, ArrayQ.require(tensor));
+  }
+
+  @Test
+  void testRequireFail() {
     Tensor tensor = Tensors.fromString("{{1, 2}, 3}");
     assertThrows(Throw.class, () -> ArrayQ.require(tensor));
   }
